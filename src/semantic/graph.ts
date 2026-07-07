@@ -58,6 +58,10 @@ export interface Graph3DCamera {
   origin: readonly [number, number];
 }
 
+export interface Graph3DDebugSettings {
+  depthOverlay: boolean;
+}
+
 export interface Graph3DObject {
   id: string;
   type: "graph-3d";
@@ -71,6 +75,7 @@ export interface Graph3DObject {
   width: number;
   height: number;
   occludedAxisLightness: number;
+  debug: Graph3DDebugSettings;
   camera: Graph3DCamera;
 }
 
@@ -123,8 +128,10 @@ export type GraphSceneObject =
 type CreateGraph2DObjectInput = Omit<Graph2DObject, "type">;
 type CreateAxis2DObjectInput = Omit<Axis2DObject, "type">;
 type CreateGraph3DObjectInput =
-  Omit<Graph3DObject, "occludedAxisLightness" | "type"> &
-  Partial<Pick<Graph3DObject, "occludedAxisLightness">>;
+  Omit<Graph3DObject, "debug" | "occludedAxisLightness" | "type"> &
+  Partial<Pick<Graph3DObject, "occludedAxisLightness">> & {
+    debug?: Partial<Graph3DDebugSettings>;
+  };
 type CreateAxis3DObjectInput = Omit<Axis3DObject, "type">;
 
 interface CreateParabolaCurveInput {
@@ -190,7 +197,10 @@ export function createGraph3DObject(
       input.occludedAxisLightness ?? DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
       0,
       100
-    )
+    ),
+    debug: {
+      depthOverlay: input.debug?.depthOverlay ?? false
+    }
   };
 }
 
