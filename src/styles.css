@@ -97,10 +97,27 @@ h2 {
 .panel-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   min-height: 3rem;
   border-bottom: 1px solid #e3e8ef;
   padding: 0.8rem 1rem;
   background: #f4f7fb;
+}
+
+.compile-button {
+  border: 1px solid #1f6371;
+  border-radius: 6px;
+  padding: 0.45rem 0.7rem;
+  color: #ffffff;
+  background: #1f6371;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.compile-button:hover {
+  background: #174b55;
 }
 
 .json-source {
@@ -155,6 +172,20 @@ h2 {
 
 .object-preview__math .katex-display {
   margin: 0;
+}
+
+.compiled-source {
+  min-height: 8rem;
+  max-height: 18rem;
+  margin: 0;
+  overflow: auto;
+  border-top: 1px solid #d9e0e8;
+  padding: 1rem;
+  color: #202632;
+  background: #ffffff;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
 }
 
 @media (max-width: 760px) {

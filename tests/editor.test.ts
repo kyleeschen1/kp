@@ -5,6 +5,7 @@ import {
   createInitialEditorDocument,
   renderEditorDocument
 } from "../src/editor/editor.ts";
+import { compileDocumentAsset } from "../src/editor/compile-client.ts";
 import { createEditorState } from "../src/editor/state.ts";
 
 test("initial editor document contains a 3x3 identity matrix", () => {
@@ -28,6 +29,8 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-kp-object="identity-3x3"/);
   assert.match(html, /class="katex/);
   assert.match(html, /&quot;type&quot;: &quot;matrix&quot;/);
+  assert.match(html, /data-action="compile-document"/);
+  assert.match(html, /id="compiled-source"/);
 });
 
 test("createEditorState stores the current semantic document", () => {
@@ -36,4 +39,22 @@ test("createEditorState stores the current semantic document", () => {
 
   assert.equal(state.document, document);
   assert.equal(state.selectedObjectId, "identity-3x3");
+});
+
+test("compileDocumentAsset posts the semantic document and returns HTML", async () => {
+  const document = createInitialEditorDocument();
+  const html = await compileDocumentAsset(document, async (input, init) => {
+    assert.equal(input, "/api/compile");
+    assert.equal(init?.method, "POST");
+    assert.equal(init?.body, JSON.stringify(document));
+
+    return new Response("<!doctype html><html></html>", {
+      headers: {
+        "content-type": "text/html"
+      },
+      status: 200
+    });
+  });
+
+  assert.equal(html, "<!doctype html><html></html>");
 });

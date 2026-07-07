@@ -48,6 +48,7 @@ export function renderEditorDocument(document: KpDocument): string {
         <section class="editor-panel" aria-labelledby="source-title">
           <div class="panel-header">
             <h2 id="source-title">Semantic JSON</h2>
+            <button class="compile-button" type="button" data-action="compile-document">Compile</button>
           </div>
           <pre class="json-source"><code>${escapeHtml(JSON.stringify(document, null, 2))}</code></pre>
         </section>
@@ -56,6 +57,7 @@ export function renderEditorDocument(document: KpDocument): string {
             <h2 id="preview-title">Rendered Asset</h2>
           </div>
           <div class="preview-stage">${renderedObjects}</div>
+          <pre class="compiled-source" id="compiled-source" aria-live="polite"></pre>
         </section>
       </div>
     </section>
