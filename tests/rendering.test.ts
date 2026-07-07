@@ -1,4 +1,5 @@
 import { strict as assert } from "node:assert";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { createDefaultLatexRenderer } from "../src/rendering/default-latex.ts";
@@ -205,6 +206,10 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.doesNotMatch(svg, /class="graph-base-grid"/);
   assert.match(svg, /class="graph-axis__segment"/);
   assert.match(svg, /data-kp-depth="/);
+  assert.match(svg, /data-kp-axis-visibility-layer="hidden"/);
+  assert.match(svg, /data-kp-axis-visibility-layer="visible"/);
+  assert.match(svg, /data-kp-visibility="hidden"/);
+  assert.match(svg, /data-kp-visibility="visible"/);
   assert.match(svg, /data-kp-axis-extended-domain="-3.900,3.900"/);
   assert.match(svg, /data-kp-axis-extended-domain="-3.250,3.250"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-stroke-ratio="1.5"/);
@@ -212,6 +217,7 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /graph-axis--base-plane/);
   assert.match(svg, /graph-axis--subtle/);
   assert.match(svg, /class="graph-surface__quad"/);
+  assert.match(svg, /data-kp-surface-depth="/);
   assert.match(svg, /data-kp-cell="0,0"/);
   assert.match(svg, /data-kp-facing="front"/);
   assert.match(svg, /data-kp-facing="back"/);
@@ -222,12 +228,48 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   const surfaceFillHues = [...svg.matchAll(/class="graph-surface__quad"[^>]+fill="hsl\((\d+) /g)].map(
     (match) => Number(match[1])
   );
+  const surfaceFills = [...svg.matchAll(/class="graph-surface__quad"[^>]+data-kp-facing="(front|back)"[^>]+fill="hsl\((\d+) (\d+)% (\d+)%\)"/g)].map(
+    (match) => ({
+      facing: match[1],
+      hue: Number(match[2]),
+      lightness: Number(match[4])
+    })
+  );
+  const frontLightness = surfaceFills
+    .filter((fill) => fill.facing === "front")
+    .map((fill) => fill.lightness);
+  const backLightness = surfaceFills
+    .filter((fill) => fill.facing === "back")
+    .map((fill) => fill.lightness);
+  const surfaceDepths = [...svg.matchAll(/data-kp-surface-depth="(-?\d+(?:\.\d+)?)"/g)].map(
+    (match) => Number(match[1])
+  );
 
   assert.ok(surfaceFillHues.length > 0);
   assert.ok(surfaceFillHues.every((hue) => hue >= 184 && hue <= 224));
+  assert.ok(frontLightness.length > 0);
+  assert.ok(backLightness.length > 0);
+  assert.ok(
+    backLightness.every((lightness) => lightness > Math.min(...frontLightness))
+  );
+  assert.ok(surfaceFills.every((fill) => fill.hue >= 184 && fill.hue <= 224));
+  assert.ok(surfaceDepths.length > 0);
+  assert.ok(
+    surfaceDepths.every(
+      (depth, index) => index === 0 || depth >= surfaceDepths[index - 1]!
+    )
+  );
   assert.ok(
     svg.indexOf('class="graph-surface__quad"') <
       svg.indexOf('class="graph-surface__line')
+  );
+  assert.ok(
+    svg.indexOf('data-kp-axis-visibility-layer="hidden"') <
+      svg.indexOf('class="graph-surface__quad"')
+  );
+  assert.ok(
+    svg.indexOf('class="graph-surface__quad"') <
+      svg.indexOf('data-kp-axis-visibility-layer="visible"')
   );
   assert.ok(
     svg.indexOf('graph-axis--x') < svg.indexOf('class="graph-surface__quad"')
@@ -235,7 +277,14 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.ok(
     svg.indexOf('graph-axis--y') < svg.indexOf('class="graph-surface__quad"')
   );
-  assert.ok(
-    svg.indexOf('class="graph-surface__quad"') < svg.indexOf('graph-axis--z')
+});
+
+test("3D surface quads are fully opaque in the stylesheet", () => {
+  const css = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
+
+  assert.match(css, /\.graph-surface__quad\s*{[^}]*opacity:\s*1;/s);
+  assert.match(
+    css,
+    /\.graph-surface__quad\[data-kp-facing="back"\]\s*{[^}]*opacity:\s*1;/s
   );
 });

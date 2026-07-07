@@ -186,20 +186,22 @@ data-kp-render-node="rn-saddle-orbit-graph-svg"
 data-kp-type="graph-3d"
 ```
 
-The 3D SVG uses semantic layers to make the axes feel integrated with the drawing. The x/y axes render first as segmented depth-aware lines, filled surface cells render above them, and the z-axis renders last as a subtler reference axis. This lets the surface visually cover parts of the base plane in SVG without a WebGL z-buffer. The axes extend 15% past their domains and carry a `data-kp-stroke-ratio="1.5"` marker because they are intentionally thicker than mesh lines.
+The 3D SVG uses semantic layers to make the axes feel integrated with the drawing. Axes are sampled into short projected segments and classified against the projected surface mesh. Hidden axis segments render before the opaque surface; visible axis segments render after it. This lets the surface cover axis pieces that are behind the mesh while letting nearer pieces poke through without a WebGL depth buffer. The axes extend 15% past their domains and carry a `data-kp-stroke-ratio="1.5"` marker because they are intentionally thicker than mesh lines.
 
 ```html
 <g class="graph-axis graph-axis--3d graph-axis--x graph-axis--base-plane"
   data-kp-object="saddle-orbit-x-axis"
   data-kp-axis-extended-domain="-3.900,3.900"
-  data-kp-axis-extension-ratio="0.15">
+  data-kp-axis-extension-ratio="0.15"
+  data-kp-axis-visibility-layer="visible">
   <line class="graph-axis__segment"
     data-kp-depth="0"
+    data-kp-visibility="visible"
     data-kp-stroke-ratio="1.5" />
 </g>
 ```
 
-The saddle surface renders as filled SVG quadrilateral cells with mesh lines overlaid. Each cell preserves semantic identity and records its grid coordinate and camera-facing side:
+The saddle surface renders as filled SVG quadrilateral cells with mesh lines overlaid. Each cell preserves semantic identity and records its grid coordinate, camera-facing side, and projected average depth:
 
 ```html
 data-kp-object="saddle-surface"
@@ -207,6 +209,7 @@ data-kp-render-node="rn-saddle-surface-svg-quads"
 data-kp-type="surface-3d"
 data-kp-cell="0,0"
 data-kp-facing="front"
+data-kp-surface-depth="-1.234"
 ```
 
 Cell fill colors use the analytic saddle derivatives:
@@ -217,7 +220,7 @@ dz/dy = -y / 2
 normal = normalize([-dz/dx, -dz/dy, 1])
 ```
 
-The renderer compares that normal with the current camera direction to classify front-facing and back-facing cells, then applies a light direction to vary brightness. Both sides currently use blue-family fills so overlapping projected regions do not blend yellow into the top surface.
+The renderer compares that normal with the current camera direction to classify front-facing and back-facing cells, then applies a light direction to vary brightness. Surface quads are fully opaque. Both sides use blue-family fills, and the back-facing underside is lighter than the darkest front-facing color so projected overlap does not blend yellow or muddy the top surface.
 
 ```html
 data-kp-object="saddle-surface"

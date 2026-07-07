@@ -282,11 +282,11 @@ h2 {
   stroke: #ffffff;
   stroke-opacity: 0.18;
   stroke-width: 0.6;
-  opacity: 0.9;
+  opacity: 1;
 }
 
 .graph-surface__quad[data-kp-facing="back"] {
-  opacity: 0.84;
+  opacity: 1;
 }
 
 .graph-surface__line--column {
