@@ -150,9 +150,11 @@ h2 {
 }
 
 .preview-stage {
-  display: grid;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.25rem;
   min-height: 24rem;
-  place-items: center;
   padding: 2rem;
   background:
     linear-gradient(#e7edf4 1px, transparent 1px),
@@ -189,6 +191,51 @@ h2 {
 
 .object-preview__math .katex-display {
   margin: 0;
+}
+
+.object-preview__graph {
+  padding: 1rem;
+}
+
+.graph-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.graph-svg__background {
+  fill: #f8fbff;
+  stroke: #d5dee9;
+}
+
+.graph-axis line {
+  stroke: #465365;
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+
+.graph-axis text,
+.graph-curve text {
+  fill: #293241;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.graph-axis--x text {
+  transform: translate(-20px, -10px);
+}
+
+.graph-axis--y text {
+  transform: translate(10px, 22px);
+}
+
+.graph-curve path {
+  fill: none;
+  stroke: #c43b57;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 4;
 }
 
 .compiled-source {
