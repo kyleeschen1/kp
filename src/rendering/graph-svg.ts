@@ -411,7 +411,7 @@ function renderAxisArrow3D(
   const opacity = axisOpacity(line.visibility, depthWeight);
   const fillColor = axisStrokeColor(line.visibility, graph);
 
-  return `<polygon class="graph-axis__arrow" data-kp-axis-arrow="${arrowEnd}" data-kp-visibility="${line.visibility}" data-kp-visibility-source="depth-buffer" data-kp-depth-weight="${formatNumber(depthWeight)}" data-kp-axis-tip="${formatPoint(endpoint)}" data-kp-axis-endpoint="${formatPoint(endpoint)}" data-kp-arrow-length="${formatNumber(arrowLength)}" fill="${fillColor}" opacity="${formatNumber(opacity)}" points="${formatPoints(points)}" />`;
+  return `<polygon class="graph-axis__arrow" data-kp-axis-arrow="${arrowEnd}" data-kp-visibility="${line.visibility}" data-kp-visibility-source="depth-buffer" data-kp-axis-arrow-visibility-source="endpoint-segment" data-kp-axis-arrow-end-segment-visibility="${line.visibility}" data-kp-depth-weight="${formatNumber(depthWeight)}" data-kp-axis-tip="${formatPoint(endpoint)}" data-kp-axis-endpoint="${formatPoint(endpoint)}" data-kp-arrow-length="${formatNumber(arrowLength)}" fill="${fillColor}" opacity="${formatNumber(opacity)}" points="${formatPoints(points)}" />`;
 }
 
 function axisOcclusionTreatment(visibility: AxisVisibility): "muted" | "strong" {

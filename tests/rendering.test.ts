@@ -329,6 +329,8 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-occlusion-treatment="strong"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-visibility-source="depth-buffer"/);
   assert.match(svg, /class="graph-axis__arrow"[^>]+data-kp-visibility-source="depth-buffer"/);
+  assert.match(svg, /class="graph-axis__arrow"[^>]+data-kp-axis-arrow-visibility-source="endpoint-segment"/);
+  assert.match(svg, /class="graph-axis__arrow"[^>]+data-kp-axis-arrow-end-segment-visibility="(?:hidden|visible)"/);
   assert.doesNotMatch(svg, /<line class="graph-axis__segment"/);
   assert.match(svg, /<polygon class="graph-axis__segment"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-visibility="hidden"[^>]+fill="#5d7583"/);
