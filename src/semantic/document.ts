@@ -10,6 +10,7 @@ export type KpSemanticObject = MatrixObject;
 interface CreateKpDocumentInput {
   id: string;
   title: string;
+  objects?: readonly KpSemanticObject[];
 }
 
 export function createKpDocument(input: CreateKpDocumentInput): KpDocument {
@@ -17,7 +18,7 @@ export function createKpDocument(input: CreateKpDocumentInput): KpDocument {
     id: input.id,
     title: input.title,
     version: 1,
-    objects: []
+    objects: input.objects ?? []
   };
 }
 import type { MatrixObject } from "./matrix.ts";
