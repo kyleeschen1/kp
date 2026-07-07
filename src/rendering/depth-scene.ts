@@ -56,6 +56,14 @@ export interface DepthSurfaceOverlap {
   triangleIndices: readonly [number, number];
 }
 
+export interface DepthSurfaceOverlapCandidate {
+  triangleIndices: readonly [number, number];
+}
+
+export interface DepthSurfaceOverlapCandidateOptions {
+  cellSize?: number;
+}
+
 export type DepthSurfaceOverlapDepthOrder =
   | "ambiguous"
   | "left-front"
@@ -89,6 +97,7 @@ export interface VisibilitySegment extends ProjectedLineSegment {
 
 const DEFAULT_VISIBILITY_SUBDIVISION_DEPTH = 6;
 const DEFAULT_BOUNDARY_ITERATIONS = 12;
+const DEFAULT_OVERLAP_BIN_CELL_SIZE = 64;
 
 export function buildDepthScene(input: DepthSceneInput): DepthScene {
   const buffer = new DepthBuffer({
@@ -157,6 +166,31 @@ export function detectDepthSurfaceOverlaps(
   }
 
   return overlaps;
+}
+
+export function candidateDepthSurfaceOverlapPairs(
+  leftSurface: ProjectedDepthSurface,
+  rightSurface: ProjectedDepthSurface,
+  options: DepthSurfaceOverlapCandidateOptions = {}
+): readonly DepthSurfaceOverlapCandidate[] {
+  const cellSize = options.cellSize ?? DEFAULT_OVERLAP_BIN_CELL_SIZE;
+  const rightIndex = triangleBinIndex(rightSurface.triangles, cellSize);
+
+  return leftSurface.triangles.flatMap((leftTriangle, leftTriangleIndex) => {
+    const candidateRightIndices = new Set<number>();
+
+    for (const key of triangleBinKeys(leftTriangle, cellSize)) {
+      for (const rightTriangleIndex of rightIndex.get(key) ?? []) {
+        candidateRightIndices.add(rightTriangleIndex);
+      }
+    }
+
+    return [...candidateRightIndices]
+      .sort((left, right) => left - right)
+      .map((rightTriangleIndex) => ({
+        triangleIndices: [leftTriangleIndex, rightTriangleIndex] as const
+      }));
+  });
 }
 
 export function classifyProjectedLineVisibility(
@@ -239,9 +273,17 @@ function detectSurfacePairOverlaps(
   leftSurface: ProjectedDepthSurface,
   rightSurface: ProjectedDepthSurface
 ): readonly DepthSurfaceOverlap[] {
-  return leftSurface.triangles.flatMap((leftTriangle, leftTriangleIndex) =>
-    rightSurface.triangles.flatMap((rightTriangle, rightTriangleIndex) =>
-      projectedTrianglesOverlap(leftTriangle, rightTriangle)
+  return candidateDepthSurfaceOverlapPairs(leftSurface, rightSurface).flatMap(
+    (candidate) => {
+      const [leftTriangleIndex, rightTriangleIndex] = candidate.triangleIndices;
+      const leftTriangle = leftSurface.triangles[leftTriangleIndex];
+      const rightTriangle = rightSurface.triangles[rightTriangleIndex];
+
+      if (leftTriangle === undefined || rightTriangle === undefined) {
+        return [];
+      }
+
+      return projectedTrianglesOverlap(leftTriangle, rightTriangle)
         ? [
             {
               ...classifyDepthSurfaceOverlap(
@@ -260,9 +302,61 @@ function detectSurfacePairOverlaps(
               ] as const
             }
           ]
-        : []
-    )
+        : [];
+    }
   );
+}
+
+function triangleBinIndex(
+  triangles: readonly ProjectedTriangle[],
+  cellSize: number
+): ReadonlyMap<string, readonly number[]> {
+  const index = new Map<string, number[]>();
+
+  triangles.forEach((triangle, triangleIndex) => {
+    for (const key of triangleBinKeys(triangle, cellSize)) {
+      const indices = index.get(key) ?? [];
+
+      indices.push(triangleIndex);
+      index.set(key, indices);
+    }
+  });
+
+  return index;
+}
+
+function triangleBinKeys(
+  triangle: ProjectedTriangle,
+  cellSize: number
+): readonly string[] {
+  const bounds = triangleProjectedBounds(triangle);
+  const minColumn = Math.floor(bounds.minX / cellSize);
+  const maxColumn = Math.floor(bounds.maxX / cellSize);
+  const minRow = Math.floor(bounds.minY / cellSize);
+  const maxRow = Math.floor(bounds.maxY / cellSize);
+  const keys: string[] = [];
+
+  for (let row = minRow; row <= maxRow; row += 1) {
+    for (let column = minColumn; column <= maxColumn; column += 1) {
+      keys.push(`${column},${row}`);
+    }
+  }
+
+  return keys;
+}
+
+function triangleProjectedBounds(
+  triangle: ProjectedTriangle
+): { maxX: number; maxY: number; minX: number; minY: number } {
+  const xs = triangle.points.map((point) => point.x);
+  const ys = triangle.points.map((point) => point.y);
+
+  return {
+    maxX: Math.max(...xs),
+    maxY: Math.max(...ys),
+    minX: Math.min(...xs),
+    minY: Math.min(...ys)
+  };
 }
 
 function classifyDepthSurfaceOverlap(

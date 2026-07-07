@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   buildDepthScene,
+  candidateDepthSurfaceOverlapPairs,
   classifyProjectedPointDepth,
   classifyProjectedLineVisibility,
   depthSceneDiagnostics,
@@ -280,6 +281,58 @@ test("detectDepthSurfaceOverlaps reports projected overlaps between surface grou
       triangleIndices: [0, 0]
     }
   ]);
+});
+
+test("candidateDepthSurfaceOverlapPairs limits overlap checks to shared bins", () => {
+  const leftSurface = {
+    surfaceId: "left-surface",
+    triangles: [
+      {
+        points: [
+          { x: 0, y: 0, depth: 1 },
+          { x: 4, y: 0, depth: 1 },
+          { x: 0, y: 4, depth: 1 }
+        ] as const
+      },
+      {
+        points: [
+          { x: 100, y: 100, depth: 1 },
+          { x: 104, y: 100, depth: 1 },
+          { x: 100, y: 104, depth: 1 }
+        ] as const
+      }
+    ]
+  };
+  const rightSurface = {
+    surfaceId: "right-surface",
+    triangles: [
+      {
+        points: [
+          { x: 1, y: 1, depth: 2 },
+          { x: 5, y: 1, depth: 2 },
+          { x: 1, y: 5, depth: 2 }
+        ] as const
+      },
+      {
+        points: [
+          { x: 200, y: 200, depth: 2 },
+          { x: 204, y: 200, depth: 2 },
+          { x: 200, y: 204, depth: 2 }
+        ] as const
+      }
+    ]
+  };
+
+  assert.deepEqual(
+    candidateDepthSurfaceOverlapPairs(leftSurface, rightSurface, {
+      cellSize: 16
+    }),
+    [
+      {
+        triangleIndices: [0, 0]
+      }
+    ]
+  );
 });
 
 test("detectDepthSurfaceOverlaps marks overlapping depth ranges as ambiguous", () => {
