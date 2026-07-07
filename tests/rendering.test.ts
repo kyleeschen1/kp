@@ -249,6 +249,25 @@ test("sampleSaddleSurface samples z = (x^2 - y^2) / 4 as a grid", () => {
   });
 });
 
+test("sampleSaddleSurface samples parameterized saddle surfaces", () => {
+  const surface = createSaddleSurface3D({
+    id: "flat-saddle-surface",
+    graphId: "saddle-orbit-graph",
+    denominator: 8,
+    xDomain: [-2, 2],
+    yDomain: [-2, 2],
+    xSampleCount: 3,
+    ySampleCount: 3
+  });
+  const grid = sampleSaddleSurface(surface);
+
+  assert.deepEqual(grid[1]?.[2], {
+    x: 2,
+    y: 0,
+    z: 0.5
+  });
+});
+
 test("sampleSaddleSurface samples expression-backed 3D surfaces", () => {
   const scene = createGraphSceneFromLatexEquation({
     idPrefix: "x-sheet",

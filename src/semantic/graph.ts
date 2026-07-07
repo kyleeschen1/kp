@@ -9,7 +9,11 @@ import {
   variable,
   type MathExpression
 } from "../math/expression.ts";
-import { saddleSurfaceExpression } from "../math/surface-examples.ts";
+import {
+  DEFAULT_SADDLE_DENOMINATOR,
+  createSaddleSurfaceExpression,
+  saddleSurfaceExpression
+} from "../math/surface-examples.ts";
 
 export type NumericDomain = readonly [number, number];
 
@@ -117,12 +121,18 @@ export interface Curve3DObject {
   sampleCount: number;
 }
 
+export interface SaddleSurfaceParameterization {
+  kind: "saddle";
+  denominator: number;
+}
+
 export interface Surface3DObject {
   id: string;
   type: "surface-3d";
   graphId: string;
   label: string;
   equation: string;
+  parameterization?: SaddleSurfaceParameterization;
   expression: MathExpression;
   xDomain: NumericDomain;
   yDomain: NumericDomain;
@@ -165,6 +175,7 @@ interface CreateTimeSpiralCurveInput {
 interface CreateSaddleSurfaceInput {
   id: string;
   graphId: string;
+  denominator?: number;
   xDomain: NumericDomain;
   yDomain: NumericDomain;
   xSampleCount: number;
@@ -274,12 +285,23 @@ export function createSaddleWeaveCurve3D(
 export function createSaddleSurface3D(
   input: CreateSaddleSurfaceInput
 ): Surface3DObject {
+  const { denominator: rawDenominator, ...surfaceInput } = input;
+  const denominator = rawDenominator ?? DEFAULT_SADDLE_DENOMINATOR;
+  const denominatorText = formatNumber(denominator);
+
   return {
-    ...input,
+    ...surfaceInput,
     type: "surface-3d",
-    label: "z = (x^2 - y^2) / 4",
-    equation: "z = (x^2 - y^2) / 4",
-    expression: saddleSurfaceExpression
+    label: `z = (x^2 - y^2) / ${denominatorText}`,
+    equation: `z = (x^2 - y^2) / ${denominatorText}`,
+    parameterization: {
+      kind: "saddle",
+      denominator
+    },
+    expression:
+      denominator === DEFAULT_SADDLE_DENOMINATOR
+        ? saddleSurfaceExpression
+        : createSaddleSurfaceExpression(denominator)
   };
 }
 
@@ -377,4 +399,10 @@ export function createDefaultGraph3DScene(): readonly GraphSceneObject[] {
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
+}
+
+function formatNumber(value: number): string {
+  return Number.isInteger(value)
+    ? String(value)
+    : value.toFixed(6).replace(/0+$/, "").replace(/\.$/, "");
 }

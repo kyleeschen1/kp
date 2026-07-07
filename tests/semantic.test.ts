@@ -314,12 +314,36 @@ test("createSaddleSurface3D creates the z = (x^2 - y^2) / 4 surface", () => {
     graphId: "saddle-orbit-graph",
     label: "z = (x^2 - y^2) / 4",
     equation: "z = (x^2 - y^2) / 4",
+    parameterization: {
+      kind: "saddle",
+      denominator: 4
+    },
     xDomain: [-3, 3],
     yDomain: [-3, 3],
     xSampleCount: 13,
     ySampleCount: 13
   });
   assert.equal(expressionToLatex(expression), "\\frac{x^{2} - y^{2}}{4}");
+});
+
+test("createSaddleSurface3D creates a parameterized saddle surface", () => {
+  const surface = createSaddleSurface3D({
+    id: "flat-saddle-surface",
+    graphId: "saddle-orbit-graph",
+    denominator: 8,
+    xDomain: [-3, 3],
+    yDomain: [-3, 3],
+    xSampleCount: 13,
+    ySampleCount: 13
+  });
+
+  assert.equal(surface.label, "z = (x^2 - y^2) / 8");
+  assert.equal(surface.equation, "z = (x^2 - y^2) / 8");
+  assert.deepEqual(surface.parameterization, {
+    kind: "saddle",
+    denominator: 8
+  });
+  assert.equal(expressionToLatex(surface.expression), "\\frac{x^{2} - y^{2}}{8}");
 });
 
 test("createTimeSpiralCurve3D creates a time-visible spiral curve", () => {

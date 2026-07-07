@@ -13,6 +13,8 @@ import {
   type NumericScope
 } from "./expression.ts";
 
+export const DEFAULT_SADDLE_DENOMINATOR = 4;
+
 export interface SaddleSurfaceInput {
   x: number;
   y: number;
@@ -23,10 +25,21 @@ export interface SaddleSurfaceGradient {
   dy: number;
 }
 
-export const saddleSurfaceExpression: MathExpression = divide(
-  add(power(variable("x"), 2), negate(power(variable("y"), 2))),
-  constant(4)
-);
+export function createSaddleSurfaceExpression(
+  denominator = DEFAULT_SADDLE_DENOMINATOR
+): MathExpression {
+  if (!Number.isFinite(denominator) || denominator <= 0) {
+    throw new Error("Saddle surface denominator must be positive.");
+  }
+
+  return divide(
+    add(power(variable("x"), 2), negate(power(variable("y"), 2))),
+    constant(denominator)
+  );
+}
+
+export const saddleSurfaceExpression: MathExpression =
+  createSaddleSurfaceExpression();
 
 export const saddleSurfaceLatex = expressionToLatex(saddleSurfaceExpression);
 
