@@ -7,5 +7,5 @@
     "types": ["node"],
     "allowImportingTsExtensions": true
   },
-  "include": ["server", "scripts", "tests", "vite.config.ts"]
+  "include": ["server", "scripts", "vite.config.ts"]
 }

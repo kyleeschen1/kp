@@ -2,6 +2,7 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import { createDefaultLatexRenderer } from "../src/rendering/default-latex.ts";
+import { renderLatexToHtml } from "../src/rendering/katex-adapter.ts";
 import {
   defaultLatexRenderer,
   matrixToLatex
@@ -50,4 +51,11 @@ test("matrixToLatex renders a matrix with a default bmatrix representation", () 
     String.raw`I_3 = \begin{bmatrix}1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1\end{bmatrix}`
   );
   assert.equal(defaultLatexRenderer.render(matrix), matrixToLatex(matrix));
+});
+
+test("renderLatexToHtml renders KaTeX HTML for a LaTeX string", () => {
+  const html = renderLatexToHtml(String.raw`I_3 = \begin{bmatrix}1\end{bmatrix}`);
+
+  assert.match(html, /class="katex"/);
+  assert.match(html, /aria-hidden="true"/);
 });
