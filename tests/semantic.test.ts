@@ -58,3 +58,27 @@ test("identityMatrix creates a square identity matrix object", () => {
     ]
   });
 });
+
+test("createMatrixObject rejects ragged matrices", () => {
+  assert.throws(
+    () =>
+      createMatrixObject({
+        id: "bad",
+        label: "B",
+        rows: [[1], [2, 3]]
+      }),
+    /Matrix bad must be rectangular/
+  );
+});
+
+test("identityMatrix rejects non-positive sizes", () => {
+  assert.throws(
+    () =>
+      identityMatrix({
+        id: "bad-identity",
+        label: "I_0",
+        size: 0
+      }),
+    /Identity matrix bad-identity size must be a positive integer/
+  );
+});
