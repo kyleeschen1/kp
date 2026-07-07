@@ -31,6 +31,7 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /&quot;type&quot;: &quot;matrix&quot;/);
   assert.match(html, /data-action="compile-document"/);
   assert.match(html, /id="compiled-source"/);
+  assert.match(html, /No validation issues/);
 });
 
 test("createEditorState stores the current semantic document", () => {

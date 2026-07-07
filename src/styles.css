@@ -120,6 +120,23 @@ h2 {
   background: #174b55;
 }
 
+.validation-status {
+  margin: 0;
+  border-bottom: 1px solid #e3e8ef;
+  padding: 0.7rem 1rem;
+  font-size: 0.85rem;
+}
+
+.validation-status--ok {
+  color: #215c45;
+  background: #e8f7f0;
+}
+
+.validation-status--error {
+  color: #8b2c2c;
+  background: #fff0f0;
+}
+
 .json-source {
   min-height: 24rem;
   max-height: calc(100vh - 9rem);

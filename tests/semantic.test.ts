@@ -2,7 +2,9 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import { createKpDocument } from "../src/semantic/document.ts";
+import type { KpDocument } from "../src/semantic/document.ts";
 import { createMatrixObject, identityMatrix } from "../src/semantic/matrix.ts";
+import { validateKpDocument } from "../src/semantic/validation.ts";
 
 test("createKpDocument creates a JSON-compatible semantic document", () => {
   const document = createKpDocument({
@@ -81,4 +83,27 @@ test("identityMatrix rejects non-positive sizes", () => {
       }),
     /Identity matrix bad-identity size must be a positive integer/
   );
+});
+
+test("validateKpDocument reports matrix shape issues", () => {
+  const document = {
+    id: "bad-document",
+    title: "Bad document",
+    version: 1,
+    objects: [
+      {
+        id: "bad",
+        type: "matrix",
+        label: "B",
+        rows: [[1], [2, 3]]
+      }
+    ]
+  } as unknown as KpDocument;
+
+  assert.deepEqual(validateKpDocument(document), [
+    {
+      path: "objects[0].rows",
+      message: "Matrix bad must be rectangular."
+    }
+  ]);
 });

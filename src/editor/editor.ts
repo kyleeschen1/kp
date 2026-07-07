@@ -2,6 +2,7 @@ import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import { defaultLatexRenderer } from "../rendering/matrix-latex.ts";
 import { createKpDocument, type KpDocument } from "../semantic/document.ts";
 import { identityMatrix } from "../semantic/matrix.ts";
+import { validateKpDocument } from "../semantic/validation.ts";
 
 export function createInitialEditorDocument(): KpDocument {
   return createKpDocument({
@@ -18,6 +19,16 @@ export function createInitialEditorDocument(): KpDocument {
 }
 
 export function renderEditorDocument(document: KpDocument): string {
+  const validationIssues = validateKpDocument(document);
+  const validationHtml =
+    validationIssues.length === 0
+      ? `<p class="validation-status validation-status--ok">No validation issues</p>`
+      : `<ul class="validation-status validation-status--error">${validationIssues
+          .map(
+            (issue) =>
+              `<li><strong>${escapeHtml(issue.path)}</strong>: ${escapeHtml(issue.message)}</li>`
+          )
+          .join("")}</ul>`;
   const renderedObjects = document.objects
     .map((object) => {
       const latex = defaultLatexRenderer.render(object);
@@ -50,6 +61,7 @@ export function renderEditorDocument(document: KpDocument): string {
             <h2 id="source-title">Semantic JSON</h2>
             <button class="compile-button" type="button" data-action="compile-document">Compile</button>
           </div>
+          ${validationHtml}
           <pre class="json-source"><code>${escapeHtml(JSON.stringify(document, null, 2))}</code></pre>
         </section>
         <section class="editor-panel" aria-labelledby="preview-title">
