@@ -5,7 +5,7 @@ export interface KpDocument {
   objects: readonly KpSemanticObject[];
 }
 
-export type KpSemanticObject = never;
+export type KpSemanticObject = MatrixObject;
 
 interface CreateKpDocumentInput {
   id: string;
@@ -20,3 +20,4 @@ export function createKpDocument(input: CreateKpDocumentInput): KpDocument {
     objects: []
   };
 }
+import type { MatrixObject } from "./matrix.ts";

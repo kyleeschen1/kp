@@ -2,6 +2,7 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import { createKpDocument } from "../src/semantic/document.ts";
+import { createMatrixObject } from "../src/semantic/matrix.ts";
 
 test("createKpDocument creates a JSON-compatible semantic document", () => {
   const document = createKpDocument({
@@ -16,4 +17,25 @@ test("createKpDocument creates a JSON-compatible semantic document", () => {
     objects: []
   });
   assert.equal(JSON.parse(JSON.stringify(document)).id, "lesson-identity");
+});
+
+test("createMatrixObject creates a semantic matrix object", () => {
+  const matrix = createMatrixObject({
+    id: "A",
+    label: "A",
+    rows: [
+      [1, 2],
+      [3, 4]
+    ]
+  });
+
+  assert.deepEqual(matrix, {
+    id: "A",
+    type: "matrix",
+    label: "A",
+    rows: [
+      [1, 2],
+      [3, 4]
+    ]
+  });
 });
