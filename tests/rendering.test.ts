@@ -360,6 +360,8 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /class="graph-surface__edge-outline"[^>]+data-kp-visibility-source="depth-buffer"/);
   assert.match(svg, /data-kp-edge-visibility="hidden"/);
   assert.match(svg, /data-kp-edge-visibility="visible"/);
+  assert.match(svg, /data-kp-edge-split-source="analytic-surface\+depth-buffer"/);
+  assert.match(svg, /data-kp-edge-analytic-split-count="0"/);
   assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-edge-outline-hidden"/);
   assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-edge-outline-visible"/);
   assert.match(svg, /data-kp-surface-depth="/);

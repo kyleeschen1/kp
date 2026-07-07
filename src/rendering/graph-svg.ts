@@ -75,6 +75,11 @@ interface SurfaceEdgeSegment3D extends ProjectedLine3D {
   visibility: AxisVisibility;
 }
 
+interface SurfaceEdgeSegments3DResult {
+  analyticSplitCount: number;
+  segments: readonly SurfaceEdgeSegment3D[];
+}
+
 interface CurveSegment3D extends ProjectedLine3D {
   visibility: AxisVisibility;
 }
@@ -227,7 +232,7 @@ export function renderGraph3DToSvg(
   return `
     <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
       <rect class="graph-svg__background" x="0" y="0" width="${graph.width}" height="${graph.height}" rx="8" />
-      ${renderedSurfaces.map((surface) => renderSurface3D(surface, graph, depthScene)).join("")}
+      ${renderedSurfaces.map((surface) => renderSurface3D(surface, graph, depthScene, renderedSurfaces)).join("")}
       ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, renderedSurfaces, "hidden")).join("")}
       ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, renderedSurfaces, "visible")).join("")}
       ${curves.map((curve) => renderCurve3D(curve, graph, depthScene)).join("")}
@@ -625,14 +630,17 @@ function surfaceDepthQuads3D(surface: RenderedSurface3D): readonly ProjectedQuad
 function renderSurface3D(
   renderedSurface: RenderedSurface3D,
   graph: Graph3DObject,
-  depthScene: DepthScene
+  depthScene: DepthScene,
+  surfaces: readonly RenderedSurface3D[]
 ): string {
   const { surface, grid, quads } = renderedSurface;
-  const edgeSegments = surfaceEdgeSegments3D(
+  const edgeResult = surfaceEdgeSegments3D(
     renderedSurface,
     graph,
-    depthScene
+    depthScene,
+    surfaces
   );
+  const edgeSegments = edgeResult.segments;
   const rowPaths = grid.map((row) =>
     renderSurfacePath(row, graph, "graph-surface__line--row")
   );
@@ -645,12 +653,12 @@ function renderSurface3D(
 
   return `
     <g class="graph-surface" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg" data-kp-type="surface-3d">
-      ${renderSurfaceEdgeOutline(surface, edgeSegments, graph, "hidden")}
+      ${renderSurfaceEdgeOutline(surface, edgeSegments, graph, "hidden", edgeResult.analyticSplitCount)}
       <g class="graph-surface__quads" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-quads" data-kp-type="surface-3d" data-kp-depth-order="back-to-front">
         ${surfaceQuadsBackToFront(quads).map((quad) => renderSurfaceQuad(surface, quad)).join("")}
       </g>
       ${wireframe}
-      ${renderSurfaceEdgeOutline(surface, edgeSegments, graph, "visible")}
+      ${renderSurfaceEdgeOutline(surface, edgeSegments, graph, "visible", edgeResult.analyticSplitCount)}
     </g>
   `;
 }
@@ -703,7 +711,8 @@ function renderSurfaceEdgeOutline(
   surface: Surface3DObject,
   edgeSegments: readonly SurfaceEdgeSegment3D[],
   graph: Graph3DObject,
-  visibility: AxisVisibility
+  visibility: AxisVisibility,
+  analyticSplitCount: number
 ): string {
   const matchingSegments = edgeSegments.filter(
     (segment) => segment.visibility === visibility
@@ -713,7 +722,7 @@ function renderSurfaceEdgeOutline(
     return "";
   }
 
-  return `<g class="graph-surface__edge-outline-layer" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-edge-outline-${visibility}" data-kp-type="surface-3d" data-kp-edge-visibility="${visibility}">
+  return `<g class="graph-surface__edge-outline-layer" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-edge-outline-${visibility}" data-kp-type="surface-3d" data-kp-edge-visibility="${visibility}" data-kp-edge-split-source="analytic-surface+depth-buffer" data-kp-edge-analytic-split-count="${analyticSplitCount}">
     ${matchingSegments.map((segment, index) => renderSurfaceEdgeSegment(surface, segment, graph, index)).join("")}
   </g>`;
 }
@@ -736,22 +745,37 @@ function renderSurfaceEdgeSegment(
 function surfaceEdgeSegments3D(
   renderedSurface: RenderedSurface3D,
   graph: Graph3DObject,
-  depthScene: DepthScene
-): readonly SurfaceEdgeSegment3D[] {
+  depthScene: DepthScene,
+  surfaces: readonly RenderedSurface3D[]
+): SurfaceEdgeSegments3DResult {
   const perimeter = surfacePerimeterPoints(renderedSurface.grid);
 
   if (perimeter.length < 2) {
-    return [];
+    return {
+      analyticSplitCount: 0,
+      segments: []
+    };
   }
 
-  return perimeter.flatMap((from, index) => {
+  let analyticSplitCount = 0;
+  const segments = perimeter.flatMap((from, index) => {
     const to = perimeter[(index + 1) % perimeter.length];
 
     if (to === undefined) {
       return [];
     }
 
-    const breakpoints = sampleDomain([0, 1], SURFACE_EDGE_SEGMENT_SUBDIVISIONS + 1);
+    const analyticBreakpoints = surfaceEdgeAnalyticSplitTs3D(
+      renderedSurface,
+      surfaces,
+      { from, to }
+    );
+    const breakpoints = sortedUniqueNumbers([
+      ...sampleDomain([0, 1], SURFACE_EDGE_SEGMENT_SUBDIVISIONS + 1),
+      ...analyticBreakpoints
+    ]);
+
+    analyticSplitCount += analyticBreakpoints.length;
 
     return breakpoints.flatMap((start, breakpointIndex) => {
       const end = breakpoints[breakpointIndex + 1];
@@ -770,6 +794,30 @@ function surfaceEdgeSegments3D(
       return segmentProjectedLineByVisibility(depthScene, projectedLine);
     });
   });
+
+  return {
+    analyticSplitCount,
+    segments
+  };
+}
+
+function surfaceEdgeAnalyticSplitTs3D(
+  renderedSurface: RenderedSurface3D,
+  surfaces: readonly RenderedSurface3D[],
+  line: GraphLine3D
+): readonly number[] {
+  return sortedUniqueNumbers(
+    surfaces.flatMap((surface) =>
+      surface.surface.id === renderedSurface.surface.id
+        ? []
+        : findLineSurfaceIntersections(
+            line,
+            surface.surface.expression
+          ).flatMap((intersection) =>
+            intersection.t > 0 && intersection.t < 1 ? [intersection.t] : []
+          )
+    )
+  );
 }
 
 function surfacePerimeterPoints(
