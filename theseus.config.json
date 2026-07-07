@@ -1,0 +1,9 @@
+{
+  "projectId": "kp",
+  "graphRoot": "docs/theseus/nodes",
+  "eventsRoot": "docs/theseus/events",
+  "sourceRoots": [
+    "src",
+    "docs"
+  ]
+}

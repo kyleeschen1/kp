@@ -1,0 +1,23 @@
+{
+  "name": "kinetic-press",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "dev": "node --disable-warning=ExperimentalWarning scripts/dev.ts",
+    "dev:client": "vite",
+    "dev:server": "node --disable-warning=ExperimentalWarning --watch server/main.ts",
+    "build": "npm run typecheck && vite build",
+    "typecheck": "tsc --project tsconfig.app.json --noEmit && tsc --project tsconfig.node.json --noEmit",
+    "test": "node --disable-warning=ExperimentalWarning --test server/*.test.ts",
+    "preview": "vite preview --port 8000 --strictPort"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.1.3"
+  }
+}
