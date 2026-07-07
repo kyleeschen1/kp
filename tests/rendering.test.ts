@@ -544,6 +544,22 @@ test("renderGraph3DToSvg exposes depth-scene counts for multiple surfaces", () =
   assert.match(svg, /data-kp-object="second-saddle-surface"/);
 });
 
+test("renderGraph3DToSvg orders opaque surface quads back to front", () => {
+  const scene = createDefaultGraph3DScene();
+  const svg = renderGraph3DToSvg(scene, scene[0] as Graph3DObject);
+  const depths = Array.from(
+    svg.matchAll(
+      /class="graph-surface__quad"[^>]+data-kp-surface-depth="([^"]+)"/g
+    ),
+    (match) => Number(match[1])
+  );
+  const sortedDepths = [...depths].sort((left, right) => left - right);
+
+  assert.ok(depths.length > 0);
+  assert.deepEqual(depths, sortedDepths);
+  assert.match(svg, /data-kp-depth-order="back-to-front"/);
+});
+
 test("3D surface quads are fully opaque in the stylesheet", () => {
   const css = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
 

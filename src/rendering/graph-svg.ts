@@ -632,8 +632,8 @@ function renderSurface3D(
   return `
     <g class="graph-surface" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg" data-kp-type="surface-3d">
       ${renderSurfaceEdgeOutline(surface, edgeSegments, graph, "hidden")}
-      <g class="graph-surface__quads" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-quads" data-kp-type="surface-3d">
-        ${quads.map((quad) => renderSurfaceQuad(surface, quad)).join("")}
+      <g class="graph-surface__quads" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-quads" data-kp-type="surface-3d" data-kp-depth-order="back-to-front">
+        ${surfaceQuadsBackToFront(quads).map((quad) => renderSurfaceQuad(surface, quad)).join("")}
       </g>
       <g class="graph-surface__wireframe" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-wireframe" data-kp-type="surface-3d">
         ${rowPaths.join("")}
@@ -642,6 +642,14 @@ function renderSurface3D(
       ${renderSurfaceEdgeOutline(surface, edgeSegments, graph, "visible")}
     </g>
   `;
+}
+
+function surfaceQuadsBackToFront(
+  quads: readonly SurfaceQuad3D[]
+): readonly SurfaceQuad3D[] {
+  return [...quads].sort(
+    (left, right) => left.averageDepth - right.averageDepth
+  );
 }
 
 function renderSurfaceQuad(surface: Surface3DObject, quad: SurfaceQuad3D): string {
