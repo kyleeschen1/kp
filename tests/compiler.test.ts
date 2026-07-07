@@ -11,7 +11,10 @@ test("compileHtmlFragment compiles semantic JSON into rendered HTML", () => {
   const fragment = compileHtmlFragment(createInitialEditorDocument());
 
   assert.match(fragment, /data-kp-object="identity-3x3"/);
+  assert.match(fragment, /data-kp-object="parabola-graph"/);
+  assert.match(fragment, /data-kp-object="curve-y-equals-x-squared"/);
   assert.match(fragment, /class="katex/);
+  assert.match(fragment, /class="graph-svg"/);
 });
 
 test("compileHtmlDocument wraps rendered HTML as a standalone asset", () => {
@@ -20,4 +23,5 @@ test("compileHtmlDocument wraps rendered HTML as a standalone asset", () => {
   assert.match(html, /^<!doctype html>/);
   assert.match(html, /<title>Identity Matrix<\/title>/);
   assert.match(html, /data-kp-document="identity-matrix-demo"/);
+  assert.match(html, /data-kp-render-node="rn-curve-y-equals-x-squared-svg-path"/);
 });
