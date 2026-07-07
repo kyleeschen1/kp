@@ -390,6 +390,17 @@ h2 {
   font-weight: 700;
 }
 
+.graph-debug-overlay {
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.graph-debug-overlay__cell {
+  stroke: #ffffff;
+  stroke-opacity: 0.28;
+  stroke-width: 0.5;
+}
+
 .graph-curve--3d path {
   stroke: #b62f61;
   stroke-width: 3.5;

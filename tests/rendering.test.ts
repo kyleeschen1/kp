@@ -320,7 +320,11 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(customSvg, /data-kp-occluded-axis-lightness="50"/);
   assert.match(customSvg, /class="graph-axis__segment"[^>]+data-kp-visibility="hidden"[^>]+fill="#6a8595"/);
   assert.match(debugSvg, /data-kp-debug-depth-overlay="true"/);
-  assert.doesNotMatch(debugSvg, /class="graph-debug-overlay"/);
+  assert.match(debugSvg, /class="graph-debug-overlay graph-debug-overlay--depth"/);
+  assert.match(debugSvg, /data-kp-debug-overlay="depth-buffer"/);
+  assert.match(debugSvg, /data-kp-debug-sample-columns="28"/);
+  assert.match(debugSvg, /data-kp-debug-sample-rows="21"/);
+  assert.match(debugSvg, /class="graph-debug-overlay__cell"/);
   assert.match(svg, /class="graph-axis__arrow"/);
   assert.match(svg, /data-kp-axis-arrow="negative-end"/);
   assert.match(svg, /data-kp-axis-arrow="positive-end"/);

@@ -117,6 +117,7 @@ const SURFACE_EDGE_OCCLUDED_OPACITY = 0.5;
 const CURVE_VISIBLE_OPACITY = 0.88;
 const CURVE_OCCLUDED_OPACITY = 0.38;
 const SURFACE_DEPTH_BUFFER_SCALE = 1;
+const DEPTH_DEBUG_OVERLAY_CELL_SIZE = 20;
 
 type AxisArrowEnd = "negative-end" | "positive-end";
 
@@ -215,6 +216,9 @@ export function renderGraph3DToSvg(
   );
   const depthScene = buildSurfaceDepthScene3D(graph, renderedSurfaces);
   const depthDiagnostics = depthSceneDiagnostics(depthScene);
+  const debugOverlay = graph.debug.depthOverlay
+    ? renderDepthDebugOverlay3D(graph, depthScene)
+    : "";
 
   // Axes are drawn in two semantic layers: hidden pieces under the opaque
   // surface, then visible pieces above it. This gives SVG a lightweight
@@ -226,6 +230,7 @@ export function renderGraph3DToSvg(
       ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, "hidden")).join("")}
       ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, "visible")).join("")}
       ${curves.map((curve) => renderCurve3D(curve, graph, depthScene)).join("")}
+      ${debugOverlay}
     </svg>
   `;
 }
@@ -242,6 +247,65 @@ function renderDepthDiagnosticsAttributes(
     `data-kp-depth-triangle-count="${diagnostics.triangleCount}"`,
     `data-kp-depth-overlap-count="${diagnostics.overlapCount}"`
   ].join(" ");
+}
+
+function renderDepthDebugOverlay3D(
+  graph: Graph3DObject,
+  depthScene: DepthScene
+): string {
+  const sampleColumns = Math.max(
+    1,
+    Math.ceil(graph.width / DEPTH_DEBUG_OVERLAY_CELL_SIZE)
+  );
+  const sampleRows = Math.max(
+    1,
+    Math.ceil(graph.height / DEPTH_DEBUG_OVERLAY_CELL_SIZE)
+  );
+  const cellWidth = graph.width / sampleColumns;
+  const cellHeight = graph.height / sampleRows;
+  const cells = Array.from({ length: sampleRows }, (_, rowIndex) =>
+    Array.from({ length: sampleColumns }, (_, columnIndex) =>
+      renderDepthDebugCell3D(
+        graph,
+        depthScene,
+        rowIndex,
+        columnIndex,
+        cellWidth,
+        cellHeight
+      )
+    ).join("")
+  ).join("");
+
+  return `
+    <g class="graph-debug-overlay graph-debug-overlay--depth" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-depth-debug-overlay" data-kp-type="graph-3d" data-kp-debug-overlay="depth-buffer" data-kp-debug-sample-columns="${sampleColumns}" data-kp-debug-sample-rows="${sampleRows}" aria-hidden="true">
+      ${cells}
+    </g>
+  `;
+}
+
+function renderDepthDebugCell3D(
+  graph: Graph3DObject,
+  depthScene: DepthScene,
+  rowIndex: number,
+  columnIndex: number,
+  cellWidth: number,
+  cellHeight: number
+): string {
+  const x = columnIndex * cellWidth;
+  const y = rowIndex * cellHeight;
+  const depth = depthScene.buffer.depthAtPoint({
+    x: x + cellWidth / 2,
+    y: y + cellHeight / 2
+  });
+
+  if (depth === undefined) {
+    return "";
+  }
+
+  const depthWeight = lineDepthWeight(graph, depth);
+  const opacity = 0.1 + depthWeight * 0.22;
+
+  return `<rect class="graph-debug-overlay__cell" x="${formatNumber(x)}" y="${formatNumber(y)}" width="${formatNumber(cellWidth)}" height="${formatNumber(cellHeight)}" data-kp-debug-cell="${rowIndex},${columnIndex}" data-kp-depth="${formatNumber(depth)}" data-kp-depth-weight="${formatNumber(depthWeight)}" fill="#e4572e" opacity="${formatNumber(opacity)}" />`;
 }
 
 function renderAxis(axis: Axis2DObject, graph: Graph2DObject): string {
