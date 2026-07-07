@@ -12,7 +12,7 @@
     "dev:server": "node --disable-warning=ExperimentalWarning --watch server/main.ts",
     "build": "npm run typecheck && vite build",
     "typecheck": "tsc --project tsconfig.app.json --noEmit && tsc --project tsconfig.node.json --noEmit",
-    "test": "node --disable-warning=ExperimentalWarning --test server/*.test.ts",
+    "test": "node --disable-warning=ExperimentalWarning --test server/*.test.ts tests/*.test.ts",
     "preview": "vite preview --port 8000 --strictPort"
   },
   "devDependencies": {
