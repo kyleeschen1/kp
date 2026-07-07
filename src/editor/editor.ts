@@ -33,9 +33,10 @@ export function renderEditorDocument(document: KpDocument): string {
     .map((object) => {
       const latex = defaultLatexRenderer.render(object);
       const html = renderLatexToHtml(latex);
+      const renderNodeId = `rn-${object.id}-default-latex`;
 
       return `
-        <article class="object-preview" data-kp-object="${escapeHtml(object.id)}" data-kp-type="${escapeHtml(object.type)}">
+        <article class="object-preview" data-kp-object="${escapeHtml(object.id)}" data-kp-render-node="${escapeHtml(renderNodeId)}" data-kp-type="${escapeHtml(object.type)}">
           <div class="object-preview__meta">
             <span>${escapeHtml(object.type)}</span>
             <strong>${escapeHtml(object.id)}</strong>

@@ -27,6 +27,7 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   const html = renderEditorDocument(createInitialEditorDocument());
 
   assert.match(html, /data-kp-object="identity-3x3"/);
+  assert.match(html, /data-kp-render-node="rn-identity-3x3-default-latex"/);
   assert.match(html, /class="katex/);
   assert.match(html, /&quot;type&quot;: &quot;matrix&quot;/);
   assert.match(html, /data-action="compile-document"/);
