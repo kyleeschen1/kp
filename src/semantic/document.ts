@@ -1,3 +1,6 @@
+import type { Axis2DObject, Curve2DObject, Graph2DObject } from "./graph.ts";
+import type { MatrixObject } from "./matrix.ts";
+
 export interface KpDocument {
   id: string;
   title: string;
@@ -5,7 +8,11 @@ export interface KpDocument {
   objects: readonly KpSemanticObject[];
 }
 
-export type KpSemanticObject = MatrixObject;
+export type KpSemanticObject =
+  | Axis2DObject
+  | Curve2DObject
+  | Graph2DObject
+  | MatrixObject;
 
 interface CreateKpDocumentInput {
   id: string;
@@ -21,4 +28,3 @@ export function createKpDocument(input: CreateKpDocumentInput): KpDocument {
     objects: input.objects ?? []
   };
 }
-import type { MatrixObject } from "./matrix.ts";

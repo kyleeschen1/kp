@@ -3,6 +3,12 @@ import test from "node:test";
 
 import { createKpDocument } from "../src/semantic/document.ts";
 import type { KpDocument } from "../src/semantic/document.ts";
+import {
+  createAxis2DObject,
+  createDefaultGraphScene,
+  createGraph2DObject,
+  createParabolaCurve2D
+} from "../src/semantic/graph.ts";
 import { createMatrixObject, identityMatrix } from "../src/semantic/matrix.ts";
 import { validateKpDocument } from "../src/semantic/validation.ts";
 
@@ -106,4 +112,80 @@ test("validateKpDocument reports matrix shape issues", () => {
       message: "Matrix bad must be rectangular."
     }
   ]);
+});
+
+test("createGraph2DObject creates a semantic graph object", () => {
+  const graph = createGraph2DObject({
+    id: "parabola-graph",
+    label: "Parabola graph",
+    xAxisId: "parabola-x-axis",
+    yAxisId: "parabola-y-axis",
+    xDomain: [-3, 3],
+    yDomain: [-1, 9],
+    width: 520,
+    height: 360
+  });
+
+  assert.deepEqual(graph, {
+    id: "parabola-graph",
+    type: "graph-2d",
+    label: "Parabola graph",
+    xAxisId: "parabola-x-axis",
+    yAxisId: "parabola-y-axis",
+    xDomain: [-3, 3],
+    yDomain: [-1, 9],
+    width: 520,
+    height: 360
+  });
+});
+
+test("createAxis2DObject creates semantic axis objects", () => {
+  const axis = createAxis2DObject({
+    id: "parabola-x-axis",
+    graphId: "parabola-graph",
+    label: "x",
+    orientation: "x",
+    domain: [-3, 3],
+    tickStep: 1
+  });
+
+  assert.deepEqual(axis, {
+    id: "parabola-x-axis",
+    type: "axis-2d",
+    graphId: "parabola-graph",
+    label: "x",
+    orientation: "x",
+    domain: [-3, 3],
+    tickStep: 1
+  });
+});
+
+test("createParabolaCurve2D creates the x^2 = y curve object", () => {
+  const curve = createParabolaCurve2D({
+    id: "curve-y-equals-x-squared",
+    graphId: "parabola-graph",
+    xDomain: [-3, 3],
+    sampleCount: 121
+  });
+
+  assert.deepEqual(curve, {
+    id: "curve-y-equals-x-squared",
+    type: "curve-2d",
+    graphId: "parabola-graph",
+    label: "x^2 = y",
+    equation: "y = x^2",
+    xDomain: [-3, 3],
+    sampleCount: 121
+  });
+});
+
+test("createDefaultGraphScene creates graph, axes, and curve objects", () => {
+  const scene = createDefaultGraphScene();
+
+  assert.deepEqual(
+    scene.map((object) => object.type),
+    ["graph-2d", "axis-2d", "axis-2d", "curve-2d"]
+  );
+  assert.equal(scene[0]?.id, "parabola-graph");
+  assert.equal(scene[3]?.id, "curve-y-equals-x-squared");
 });

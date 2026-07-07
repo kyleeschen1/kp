@@ -1,6 +1,15 @@
 import type { KpSemanticObject } from "../semantic/document.ts";
 
 type SemanticObjectType = KpSemanticObject["type"];
+type DefaultLatexObjectRendererByType = {
+  [ObjectType in KpSemanticObject as ObjectType["type"]]: DefaultLatexObjectRenderer<ObjectType>;
+};
+type AnyDefaultLatexObjectRenderer =
+  DefaultLatexObjectRendererByType[SemanticObjectType];
+type RegisteredLatexRenderer = {
+  type: SemanticObjectType;
+  render: (object: KpSemanticObject) => string;
+};
 
 export interface DefaultLatexObjectRenderer<
   ObjectType extends KpSemanticObject = KpSemanticObject
@@ -14,10 +23,16 @@ export interface DefaultLatexRenderer {
 }
 
 export function createDefaultLatexRenderer(
-  renderers: readonly DefaultLatexObjectRenderer[]
+  renderers: readonly AnyDefaultLatexObjectRenderer[]
 ): DefaultLatexRenderer {
-  const renderersByType = new Map<SemanticObjectType, DefaultLatexObjectRenderer>(
-    renderers.map((renderer) => [renderer.type, renderer])
+  const renderersByType = new Map<SemanticObjectType, RegisteredLatexRenderer>(
+    renderers.map((renderer) => [
+      renderer.type,
+      {
+        type: renderer.type,
+        render: (object) => renderer.render(object as never)
+      }
+    ])
   );
 
   return {

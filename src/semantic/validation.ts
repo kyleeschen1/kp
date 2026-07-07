@@ -16,6 +16,10 @@ function validateObject(
   path: string
 ): readonly ValidationIssue[] {
   switch (object.type) {
+    case "axis-2d":
+    case "curve-2d":
+    case "graph-2d":
+      return [];
     case "matrix":
       return validateMatrixObject(object, path);
   }
