@@ -4,6 +4,7 @@ import {
   compileGradient,
   type CompiledExpression
 } from "../math/expression.ts";
+import { createSaddleSurfaceExpression } from "../math/surface-examples.ts";
 import {
   buildDepthScene,
   depthSceneDiagnostics,
@@ -42,6 +43,17 @@ export { projectGraphPoint3D } from "./projection.ts";
 export interface GraphPoint {
   x: number;
   y: number;
+}
+
+export interface SaddleSurfaceMorphInput {
+  targetDenominator: number;
+  progress: number;
+}
+
+export interface SaddleSurfaceMorphSample {
+  denominator: number;
+  progress: number;
+  grid: readonly (readonly GraphPoint3D[])[];
 }
 
 interface SurfaceQuad3D {
@@ -178,6 +190,40 @@ export function sampleSaddleSurface(
 ): readonly (readonly GraphPoint3D[])[] {
   const evaluateSurface = compileExpression(surface.expression);
 
+  return sampleSurfaceGrid(surface, evaluateSurface);
+}
+
+export function sampleSaddleSurfaceMorph(
+  surface: Surface3DObject,
+  input: SaddleSurfaceMorphInput
+): SaddleSurfaceMorphSample {
+  if (surface.parameterization?.kind !== "saddle") {
+    throw new Error(`Surface ${surface.id} is not a parameterized saddle.`);
+  }
+
+  const progress = clamp(input.progress, 0, 1);
+  const denominator = roundCoordinate(
+    lerp(
+      surface.parameterization.denominator,
+      input.targetDenominator,
+      progress
+    )
+  );
+  const evaluateSurface = compileExpression(
+    createSaddleSurfaceExpression(denominator)
+  );
+
+  return {
+    denominator,
+    progress,
+    grid: sampleSurfaceGrid(surface, evaluateSurface)
+  };
+}
+
+function sampleSurfaceGrid(
+  surface: Surface3DObject,
+  evaluateSurface: CompiledExpression
+): readonly (readonly GraphPoint3D[])[] {
   return sampleDomain(surface.yDomain, surface.ySampleCount).map((y) =>
     sampleDomain(surface.xDomain, surface.xSampleCount).map((x) => ({
       x: roundCoordinate(x),
@@ -1322,6 +1368,10 @@ function formatDomain(domain: NumericDomain): string {
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(max, Math.max(min, value));
+}
+
+function lerp(start: number, end: number, progress: number): number {
+  return start + (end - start) * progress;
 }
 
 function escapeHtml(value: string): string {

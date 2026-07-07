@@ -10,6 +10,7 @@ import {
   renderGraph3DToSvg,
   renderGraphToSvg,
   sampleParabolaCurve,
+  sampleSaddleSurfaceMorph,
   sampleSaddleSurface,
   sampleTimeSpiralCurve
 } from "../src/rendering/graph-svg.ts";
@@ -266,6 +267,31 @@ test("sampleSaddleSurface samples parameterized saddle surfaces", () => {
     y: 0,
     z: 0.5
   });
+});
+
+test("sampleSaddleSurfaceMorph samples interpolated saddle denominators", () => {
+  const surface = createSaddleSurface3D({
+    id: "saddle-surface",
+    graphId: "saddle-orbit-graph",
+    denominator: 4,
+    xDomain: [-2, 2],
+    yDomain: [-2, 2],
+    xSampleCount: 3,
+    ySampleCount: 3
+  });
+  const sample = sampleSaddleSurfaceMorph(surface, {
+    targetDenominator: 8,
+    progress: 0.5
+  });
+
+  assert.equal(sample.denominator, 6);
+  assert.equal(sample.progress, 0.5);
+  assert.deepEqual(sample.grid[1]?.[2], {
+    x: 2,
+    y: 0,
+    z: 0.667
+  });
+  assert.equal(surface.parameterization?.denominator, 4);
 });
 
 test("sampleSaddleSurface samples expression-backed 3D surfaces", () => {
