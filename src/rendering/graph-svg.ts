@@ -53,6 +53,7 @@ interface ProjectedLine3D {
 }
 
 interface ProjectedAxisSegment3D extends ProjectedLine3D {
+  isPositiveEnd: boolean;
   visibility: AxisVisibility;
 }
 
@@ -66,7 +67,7 @@ type AxisVisibility = "hidden" | "visible";
 const AXIS_EXTENSION_RATIO = 0.15;
 const AXIS_OCCLUSION_SEGMENT_COUNT = 96;
 const SURFACE_MESH_STROKE_WIDTH = 1.25;
-const AXIS_TO_MESH_STROKE_RATIO = 1.5;
+const AXIS_TO_MESH_STROKE_RATIO = 2;
 const SURFACE_DEPTH_EPSILON = 0.015;
 
 export function projectGraphPoint(
@@ -186,8 +187,8 @@ export function renderGraph3DToSvg(
   return `
     <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
       <rect class="graph-svg__background" x="0" y="0" width="${graph.width}" height="${graph.height}" rx="8" />
-      ${axes.map((axis) => renderAxis3D(axis, graph, renderedSurfaces, "hidden")).join("")}
       ${renderedSurfaces.map((surface) => renderSurface3D(surface, graph)).join("")}
+      ${axes.map((axis) => renderAxis3D(axis, graph, renderedSurfaces, "hidden")).join("")}
       ${axes.map((axis) => renderAxis3D(axis, graph, renderedSurfaces, "visible")).join("")}
       ${curves.map((curve) => renderCurve3D(curve, graph)).join("")}
     </svg>
@@ -235,24 +236,79 @@ function renderAxis3D(
     visibilityLayer === "visible"
       ? `<text x="${formatNumber(line.to.x)}" y="${formatNumber(line.to.y)}">${escapeHtml(axis.label)}</text>`
       : "";
+  const arrowSegment = segments.find((segment) => segment.isPositiveEnd);
+  const arrowMarkerId =
+    arrowSegment === undefined ? undefined : axisArrowMarkerId(axis, visibilityLayer);
 
   return `
     <g class="graph-axis graph-axis--3d graph-axis--${axis.orientation} ${axisRole}" data-kp-object="${escapeHtml(axis.id)}" data-kp-render-node="rn-${escapeHtml(axis.id)}-svg-line-${visibilityLayer}" data-kp-type="axis-3d" data-kp-axis-extended-domain="${formatDomain(extendedDomain)}" data-kp-axis-extension-ratio="${AXIS_EXTENSION_RATIO}" data-kp-axis-visibility-layer="${visibilityLayer}">
-      ${segments.map((segment) => renderAxisSegment3D(segment, graph)).join("")}
+      ${arrowSegment === undefined ? "" : renderAxisArrowMarker3D(axis, arrowSegment, graph, arrowMarkerId!)}
+      ${segments.map((segment) => renderAxisSegment3D(axis, segment, graph, arrowMarkerId)).join("")}
       ${label}
     </g>
   `;
 }
 
 function renderAxisSegment3D(
+  axis: Axis3DObject,
   line: ProjectedAxisSegment3D,
-  graph: Graph3DObject
+  graph: Graph3DObject,
+  arrowMarkerId: string | undefined
 ): string {
   const depthWeight = lineDepthWeight(graph, line.averageDepth);
   const strokeWidth = SURFACE_MESH_STROKE_WIDTH * AXIS_TO_MESH_STROKE_RATIO;
-  const opacity = 0.62 + depthWeight * 0.22;
+  const treatment = axisOcclusionTreatment(line.visibility);
+  const opacity =
+    line.visibility === "hidden"
+      ? 0.28 + depthWeight * 0.16
+      : 0.78 + depthWeight * 0.17;
+  const stroke = axisStrokeColor(axis, line.visibility);
+  const markerEnd =
+    line.isPositiveEnd && arrowMarkerId !== undefined
+      ? ` marker-end="url(#${escapeHtml(arrowMarkerId)})"`
+      : "";
 
-  return `<line class="graph-axis__segment" x1="${formatNumber(line.from.x)}" y1="${formatNumber(line.from.y)}" x2="${formatNumber(line.to.x)}" y2="${formatNumber(line.to.y)}" data-kp-depth="${formatNumber(line.averageDepth)}" data-kp-depth-weight="${formatNumber(depthWeight)}" data-kp-visibility="${line.visibility}" data-kp-stroke-ratio="${AXIS_TO_MESH_STROKE_RATIO}" style="stroke-width: ${formatNumber(strokeWidth)}; opacity: ${formatNumber(opacity)};" />`;
+  return `<line class="graph-axis__segment" x1="${formatNumber(line.from.x)}" y1="${formatNumber(line.from.y)}" x2="${formatNumber(line.to.x)}" y2="${formatNumber(line.to.y)}" data-kp-depth="${formatNumber(line.averageDepth)}" data-kp-depth-weight="${formatNumber(depthWeight)}" data-kp-visibility="${line.visibility}" data-kp-occlusion-treatment="${treatment}" data-kp-stroke-ratio="${AXIS_TO_MESH_STROKE_RATIO}" style="stroke: ${stroke}; stroke-width: ${formatNumber(strokeWidth)}; opacity: ${formatNumber(opacity)};"${markerEnd} />`;
+}
+
+function renderAxisArrowMarker3D(
+  axis: Axis3DObject,
+  line: ProjectedAxisSegment3D,
+  graph: Graph3DObject,
+  markerId: string
+): string {
+  const depthWeight = lineDepthWeight(graph, line.to.depth);
+  const markerSize = 4 + depthWeight * 4;
+  const markerMidpoint = markerSize / 2;
+  const opacity =
+    line.visibility === "hidden"
+      ? 0.28 + depthWeight * 0.16
+      : 0.78 + depthWeight * 0.17;
+  const stroke = axisStrokeColor(axis, line.visibility);
+
+  return `<defs><marker class="graph-axis__arrow" id="${escapeHtml(markerId)}" data-kp-axis-arrow="positive-end" data-kp-visibility="${line.visibility}" data-kp-depth-weight="${formatNumber(depthWeight)}" markerWidth="${formatNumber(markerSize)}" markerHeight="${formatNumber(markerSize)}" refX="${formatNumber(markerSize)}" refY="${formatNumber(markerMidpoint)}" viewBox="0 0 ${formatNumber(markerSize)} ${formatNumber(markerSize)}" orient="auto" markerUnits="strokeWidth"><path d="M 0 0 L ${formatNumber(markerSize)} ${formatNumber(markerMidpoint)} L 0 ${formatNumber(markerSize)} z" fill="${stroke}" opacity="${formatNumber(opacity)}" /></marker></defs>`;
+}
+
+function axisArrowMarkerId(
+  axis: Axis3DObject,
+  visibility: AxisVisibility
+): string {
+  return `graph-axis-arrow-${axis.id}-${visibility}`;
+}
+
+function axisOcclusionTreatment(visibility: AxisVisibility): "muted" | "strong" {
+  return visibility === "hidden" ? "muted" : "strong";
+}
+
+function axisStrokeColor(
+  axis: Axis3DObject,
+  visibility: AxisVisibility
+): string {
+  if (visibility === "hidden") {
+    return axis.orientation === "z" ? "#7f968b" : "#7d8b98";
+  }
+
+  return axis.orientation === "z" ? "#2b6f59" : "#31485d";
 }
 
 function renderCurve(curve: Curve2DObject, graph: Graph2DObject): string {
@@ -542,6 +598,7 @@ function axisSegments3D(
     return [
       {
         ...projectedLine,
+        isPositiveEnd: index === breakpoints.length - 2,
         visibility: isAxisPointHiddenBySurface(midpoint, surfaces)
           ? "hidden"
           : "visible"
@@ -654,7 +711,7 @@ function lineDepthWeight(graph: Graph3DObject, depth: number): number {
 
   const normalizedDepth = (depth - minDepth) / (maxDepth - minDepth);
 
-  return clamp(1 - normalizedDepth, 0, 1);
+  return clamp(normalizedDepth, 0, 1);
 }
 
 function graphDepthRange(graph: Graph3DObject): NumericDomain {

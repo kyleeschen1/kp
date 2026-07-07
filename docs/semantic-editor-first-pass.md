@@ -186,7 +186,7 @@ data-kp-render-node="rn-saddle-orbit-graph-svg"
 data-kp-type="graph-3d"
 ```
 
-The 3D SVG uses semantic layers to make the axes feel integrated with the drawing. Axes are sampled into short projected segments and classified against the projected surface mesh. Hidden axis segments render before the opaque surface; visible axis segments render after it. This lets the surface cover axis pieces that are behind the mesh while letting nearer pieces poke through without a WebGL depth buffer. The axes extend 15% past their domains and carry a `data-kp-stroke-ratio="1.5"` marker because they are intentionally thicker than mesh lines.
+The 3D SVG uses semantic layers to make the axes feel integrated with the drawing. Axes are sampled into short projected segments and classified against the projected surface mesh. Surface cells render first, then hidden axis segments render as muted annotations, and visible axis segments render as stronger strokes. This intentionally fakes occlusion: behind-surface axis pieces stay visible but subdued instead of disappearing. The axes extend 15% past their domains and carry a `data-kp-stroke-ratio="2"` marker because they are intentionally twice as thick as mesh lines. Positive axis ends receive depth-scaled SVG arrowheads.
 
 ```html
 <g class="graph-axis graph-axis--3d graph-axis--x graph-axis--base-plane"
@@ -197,7 +197,12 @@ The 3D SVG uses semantic layers to make the axes feel integrated with the drawin
   <line class="graph-axis__segment"
     data-kp-depth="0"
     data-kp-visibility="visible"
-    data-kp-stroke-ratio="1.5" />
+    data-kp-occlusion-treatment="strong"
+    data-kp-stroke-ratio="2"
+    marker-end="url(#graph-axis-arrow-saddle-orbit-x-axis-visible)" />
+  <marker class="graph-axis__arrow"
+    data-kp-axis-arrow="positive-end"
+    data-kp-depth-weight="0.5" />
 </g>
 ```
 

@@ -212,8 +212,13 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /data-kp-visibility="visible"/);
   assert.match(svg, /data-kp-axis-extended-domain="-3.900,3.900"/);
   assert.match(svg, /data-kp-axis-extended-domain="-3.250,3.250"/);
-  assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-stroke-ratio="1.5"/);
-  assert.match(svg, /class="graph-axis__segment"[^>]+style="stroke-width: 1.875;/);
+  assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-stroke-ratio="2"/);
+  assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-occlusion-treatment="muted"/);
+  assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-occlusion-treatment="strong"/);
+  assert.match(svg, /class="graph-axis__segment"[^>]+style="stroke: #[0-9a-f]{6}; stroke-width: 2.500;/);
+  assert.match(svg, /class="graph-axis__arrow"/);
+  assert.match(svg, /data-kp-axis-arrow="positive-end"/);
+  assert.match(svg, /marker-end="url\(#graph-axis-arrow-/);
   assert.match(svg, /graph-axis--base-plane/);
   assert.match(svg, /graph-axis--subtle/);
   assert.match(svg, /class="graph-surface__quad"/);
@@ -244,6 +249,9 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   const surfaceDepths = [...svg.matchAll(/data-kp-surface-depth="(-?\d+(?:\.\d+)?)"/g)].map(
     (match) => Number(match[1])
   );
+  const arrowSizes = [...svg.matchAll(/class="graph-axis__arrow"[^>]+markerWidth="(\d+(?:\.\d+)?)"/g)].map(
+    (match) => Number(match[1])
+  );
 
   assert.ok(surfaceFillHues.length > 0);
   assert.ok(surfaceFillHues.every((hue) => hue >= 184 && hue <= 224));
@@ -259,23 +267,19 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
       (depth, index) => index === 0 || depth >= surfaceDepths[index - 1]!
     )
   );
+  assert.ok(arrowSizes.length > 0);
+  assert.ok(arrowSizes.every((size) => size >= 4 && size <= 8));
   assert.ok(
     svg.indexOf('class="graph-surface__quad"') <
       svg.indexOf('class="graph-surface__line')
   );
   assert.ok(
-    svg.indexOf('data-kp-axis-visibility-layer="hidden"') <
-      svg.indexOf('class="graph-surface__quad"')
-  );
-  assert.ok(
     svg.indexOf('class="graph-surface__quad"') <
+      svg.indexOf('data-kp-axis-visibility-layer="hidden"')
+  );
+  assert.ok(
+    svg.indexOf('data-kp-axis-visibility-layer="hidden"') <
       svg.indexOf('data-kp-axis-visibility-layer="visible"')
-  );
-  assert.ok(
-    svg.indexOf('graph-axis--x') < svg.indexOf('class="graph-surface__quad"')
-  );
-  assert.ok(
-    svg.indexOf('graph-axis--y') < svg.indexOf('class="graph-surface__quad"')
   );
 });
 
