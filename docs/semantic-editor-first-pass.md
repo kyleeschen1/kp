@@ -135,18 +135,18 @@ The first 3D graph object family mirrors the 2D graph interface with one additio
   id: string;
   type: "curve-3d";
   graphId: string;
-  label: "tilted orbit over time";
+  label: "time spiral";
   equation: {
-    x: "2.4 cos(t)";
+    x: "2.2 cos(t)";
     y: "1.3 sin(t)";
-    z: "0.9 sin(t + pi / 6)";
+    z: "0.18 (t - 2 pi)";
   };
   tDomain: [number, number];
   sampleCount: number;
 }
 ```
 
-`createDefaultGraph3DScene()` creates `saddle-orbit-graph`, `saddle-orbit-x-axis`, `saddle-orbit-y-axis`, `saddle-orbit-z-axis`, `saddle-surface`, and `tilted-orbit-curve`.
+`createDefaultGraph3DScene()` creates `saddle-orbit-graph`, `saddle-orbit-x-axis`, `saddle-orbit-y-axis`, `saddle-orbit-z-axis`, `saddle-surface`, and `time-spiral-curve`.
 
 ## Rendering
 
@@ -178,13 +178,33 @@ data-kp-render-node="rn-curve-y-equals-x-squared-svg-path"
 data-kp-type="curve-2d"
 ```
 
-3D graph objects render through the same SVG semantic metadata model. The current renderer uses a pure TypeScript orthographic projection from 3D graph coordinates into SVG coordinates. The 3D graph owns the SVG container, while axes, the saddle surface wireframe, and the tilted orbit curve render inside it:
+3D graph objects render through the same SVG semantic metadata model. The current renderer uses a pure TypeScript orthographic projection from 3D graph coordinates into SVG coordinates. The 3D graph owns the SVG container, while axes, the saddle surface, and the time spiral render inside it:
 
 ```html
 data-kp-object="saddle-orbit-graph"
 data-kp-render-node="rn-saddle-orbit-graph-svg"
 data-kp-type="graph-3d"
 ```
+
+The saddle surface renders as filled SVG quadrilateral cells with mesh lines overlaid. Each cell preserves semantic identity and records its grid coordinate and camera-facing side:
+
+```html
+data-kp-object="saddle-surface"
+data-kp-render-node="rn-saddle-surface-svg-quads"
+data-kp-type="surface-3d"
+data-kp-cell="0,0"
+data-kp-facing="front"
+```
+
+Cell fill colors use the analytic saddle derivatives:
+
+```text
+dz/dx = x / 2
+dz/dy = -y / 2
+normal = normalize([-dz/dx, -dz/dy, 1])
+```
+
+The renderer compares that normal with the current camera direction to color front-facing and back-facing cells differently, then applies a light direction to vary brightness.
 
 ```html
 data-kp-object="saddle-surface"
@@ -193,8 +213,8 @@ data-kp-type="surface-3d"
 ```
 
 ```html
-data-kp-object="tilted-orbit-curve"
-data-kp-render-node="rn-tilted-orbit-curve-svg-path"
+data-kp-object="time-spiral-curve"
+data-kp-render-node="rn-time-spiral-curve-svg-path"
 data-kp-type="curve-3d"
 ```
 
@@ -208,8 +228,8 @@ Input is a `KpDocument` JSON body. Output is a standalone HTML asset containing 
 
 - Only matrix objects, one 2D graph family, and one 3D graph family are supported.
 - Curve rendering supports `y = x^2`; it is not a general equation parser.
-- 3D rendering supports the built-in saddle surface and tilted orbit curve; it is not a general 3D equation parser.
-- The 3D renderer is SVG projection only. It has semantic metadata and export-friendly output, but no WebGL z-buffer, lighting model, or interactive camera controls.
+- 3D rendering supports the built-in saddle surface and time spiral curve; it is not a general 3D equation parser.
+- The 3D renderer is SVG projection only. It has semantic metadata, filled surface cells, derivative shading, and export-friendly output, but no WebGL z-buffer or interactive camera controls.
 - Validation is structural and narrow.
 - The compiled HTML asset does not yet inline the full editor stylesheet or KaTeX CSS.
 - The editor JSON is read-only.

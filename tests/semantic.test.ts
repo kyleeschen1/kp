@@ -12,7 +12,7 @@ import {
   createGraph3DObject,
   createParabolaCurve2D,
   createSaddleSurface3D,
-  createTiltedOrbitCurve3D
+  createTimeSpiralCurve3D
 } from "../src/semantic/graph.ts";
 import { createMatrixObject, identityMatrix } from "../src/semantic/matrix.ts";
 import { validateKpDocument } from "../src/semantic/validation.ts";
@@ -198,7 +198,7 @@ test("createDefaultGraphScene creates graph, axes, and curve objects", () => {
 test("createGraph3DObject creates a semantic graph object with a third axis", () => {
   const graph = createGraph3DObject({
     id: "saddle-orbit-graph",
-    label: "Saddle surface and tilted orbit",
+    label: "Saddle surface and time spiral",
     xAxisId: "saddle-orbit-x-axis",
     yAxisId: "saddle-orbit-y-axis",
     zAxisId: "saddle-orbit-z-axis",
@@ -218,7 +218,7 @@ test("createGraph3DObject creates a semantic graph object with a third axis", ()
   assert.deepEqual(graph, {
     id: "saddle-orbit-graph",
     type: "graph-3d",
-    label: "Saddle surface and tilted orbit",
+    label: "Saddle surface and time spiral",
     xAxisId: "saddle-orbit-x-axis",
     yAxisId: "saddle-orbit-y-axis",
     zAxisId: "saddle-orbit-z-axis",
@@ -280,25 +280,25 @@ test("createSaddleSurface3D creates the z = (x^2 - y^2) / 4 surface", () => {
   });
 });
 
-test("createTiltedOrbitCurve3D creates an orbit-like parametric curve", () => {
-  const curve = createTiltedOrbitCurve3D({
-    id: "tilted-orbit-curve",
+test("createTimeSpiralCurve3D creates a time-visible spiral curve", () => {
+  const curve = createTimeSpiralCurve3D({
+    id: "time-spiral-curve",
     graphId: "saddle-orbit-graph",
-    tDomain: [0, Math.PI * 2],
+    tDomain: [0, Math.PI * 4],
     sampleCount: 145
   });
 
   assert.deepEqual(curve, {
-    id: "tilted-orbit-curve",
+    id: "time-spiral-curve",
     type: "curve-3d",
     graphId: "saddle-orbit-graph",
-    label: "tilted orbit over time",
+    label: "time spiral",
     equation: {
-      x: "2.4 cos(t)",
+      x: "2.2 cos(t)",
       y: "1.3 sin(t)",
-      z: "0.9 sin(t + pi / 6)"
+      z: "0.18 (t - 2 pi)"
     },
-    tDomain: [0, Math.PI * 2],
+    tDomain: [0, Math.PI * 4],
     sampleCount: 145
   });
 });
@@ -319,7 +319,7 @@ test("createDefaultGraph3DScene creates graph, axes, surface, and curve objects"
   );
   assert.equal(scene[0]?.id, "saddle-orbit-graph");
   assert.equal(scene[4]?.id, "saddle-surface");
-  assert.equal(scene[5]?.id, "tilted-orbit-curve");
+  assert.equal(scene[5]?.id, "time-spiral-curve");
 });
 
 test("validateKpDocument reports graph reference issues", () => {
@@ -389,7 +389,7 @@ test("validateKpDocument reports 3D graph reference issues", () => {
           origin: [280, 244]
         }
       }),
-      createTiltedOrbitCurve3D({
+      createTimeSpiralCurve3D({
         id: "orphan-curve-3d",
         graphId: "missing-graph",
         tDomain: [0, Math.PI * 2],

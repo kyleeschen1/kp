@@ -9,7 +9,7 @@ import {
   renderGraphToSvg,
   sampleParabolaCurve,
   sampleSaddleSurface,
-  sampleTiltedOrbitCurve
+  sampleTimeSpiralCurve
 } from "../src/rendering/graph-svg.ts";
 import { renderLatexToHtml } from "../src/rendering/katex-adapter.ts";
 import {
@@ -22,7 +22,7 @@ import {
   createDefaultGraph3DScene,
   createParabolaCurve2D,
   createSaddleSurface3D,
-  createTiltedOrbitCurve3D,
+  createTimeSpiralCurve3D,
   type Graph3DObject,
   type Graph2DObject
 } from "../src/semantic/graph.ts";
@@ -136,23 +136,32 @@ test("projectGraphPoint3D maps graph coordinates into projected SVG coordinates"
   });
 });
 
-test("sampleTiltedOrbitCurve samples an orbit-like 3D curve", () => {
-  const curve = createTiltedOrbitCurve3D({
-    id: "tilted-orbit-curve",
+test("sampleTimeSpiralCurve samples a time-visible 3D spiral", () => {
+  const curve = createTimeSpiralCurve3D({
+    id: "time-spiral-curve",
     graphId: "saddle-orbit-graph",
-    tDomain: [0, Math.PI / 2],
-    sampleCount: 2
+    tDomain: [0, Math.PI * 4],
+    sampleCount: 3
   });
 
-  const points = sampleTiltedOrbitCurve(curve);
+  const points = sampleTimeSpiralCurve(curve);
 
-  assert.equal(points.length, 2);
+  assert.equal(points.length, 3);
   assert.deepEqual(points[0], {
-    x: 2.4,
+    x: 2.2,
     y: 0,
-    z: 0.45
+    z: -1.131
   });
-  assert.ok(Math.abs((points[1]?.z ?? 0) - 0.779) < 0.001);
+  assert.deepEqual(points[1], {
+    x: 2.2,
+    y: 0,
+    z: 0
+  });
+  assert.deepEqual(points[2], {
+    x: 2.2,
+    y: 0,
+    z: 1.131
+  });
 });
 
 test("sampleSaddleSurface samples z = (x^2 - y^2) / 4 as a grid", () => {
@@ -191,9 +200,18 @@ test("renderGraph3DToSvg renders axes, surface, and curve with semantic metadata
   assert.match(svg, /data-kp-object="saddle-orbit-y-axis"/);
   assert.match(svg, /data-kp-object="saddle-orbit-z-axis"/);
   assert.match(svg, /data-kp-object="saddle-surface"/);
-  assert.match(svg, /data-kp-object="tilted-orbit-curve"/);
+  assert.match(svg, /data-kp-object="time-spiral-curve"/);
+  assert.match(svg, /class="graph-surface__quad"/);
+  assert.match(svg, /data-kp-cell="0,0"/);
+  assert.match(svg, /data-kp-facing="front"/);
+  assert.match(svg, /data-kp-facing="back"/);
+  assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-quads"/);
   assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-wireframe"/);
-  assert.match(svg, /data-kp-render-node="rn-tilted-orbit-curve-svg-path"/);
+  assert.match(svg, /data-kp-render-node="rn-time-spiral-curve-svg-path"/);
   assert.match(svg, /z = \(x\^2 - y\^2\) \/ 4/);
-  assert.match(svg, /tilted orbit over time/);
+  assert.match(svg, /time spiral/);
+  assert.ok(
+    svg.indexOf('class="graph-surface__quad"') <
+      svg.indexOf('class="graph-surface__line')
+  );
 });

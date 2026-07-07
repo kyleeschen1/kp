@@ -79,9 +79,9 @@ export interface Curve3DObject {
   graphId: string;
   label: string;
   equation: {
-    x: "2.4 cos(t)";
+    x: "2.2 cos(t)";
     y: "1.3 sin(t)";
-    z: "0.9 sin(t + pi / 6)";
+    z: "0.18 (t - 2 pi)";
   };
   tDomain: NumericDomain;
   sampleCount: number;
@@ -120,7 +120,7 @@ interface CreateParabolaCurveInput {
   sampleCount: number;
 }
 
-interface CreateTiltedOrbitCurveInput {
+interface CreateTimeSpiralCurveInput {
   id: string;
   graphId: string;
   tDomain: NumericDomain;
@@ -183,17 +183,17 @@ export function createAxis3DObject(
   };
 }
 
-export function createTiltedOrbitCurve3D(
-  input: CreateTiltedOrbitCurveInput
+export function createTimeSpiralCurve3D(
+  input: CreateTimeSpiralCurveInput
 ): Curve3DObject {
   return {
     ...input,
     type: "curve-3d",
-    label: "tilted orbit over time",
+    label: "time spiral",
     equation: {
-      x: "2.4 cos(t)",
+      x: "2.2 cos(t)",
       y: "1.3 sin(t)",
-      z: "0.9 sin(t + pi / 6)"
+      z: "0.18 (t - 2 pi)"
     }
   };
 }
@@ -249,7 +249,7 @@ export function createDefaultGraphScene(): readonly GraphSceneObject[] {
 export function createDefaultGraph3DScene(): readonly GraphSceneObject[] {
   const graph = createGraph3DObject({
     id: "saddle-orbit-graph",
-    label: "Saddle surface and tilted orbit",
+    label: "Saddle surface and time spiral",
     xAxisId: "saddle-orbit-x-axis",
     yAxisId: "saddle-orbit-y-axis",
     zAxisId: "saddle-orbit-z-axis",
@@ -297,10 +297,10 @@ export function createDefaultGraph3DScene(): readonly GraphSceneObject[] {
     xSampleCount: 13,
     ySampleCount: 13
   });
-  const curve = createTiltedOrbitCurve3D({
-    id: "tilted-orbit-curve",
+  const curve = createTimeSpiralCurve3D({
+    id: "time-spiral-curve",
     graphId: graph.id,
-    tDomain: [0, Math.PI * 2],
+    tDomain: [0, Math.PI * 4],
     sampleCount: 145
   });
 

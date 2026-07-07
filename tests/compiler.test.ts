@@ -15,7 +15,8 @@ test("compileHtmlFragment compiles semantic JSON into rendered HTML", () => {
   assert.match(fragment, /data-kp-object="curve-y-equals-x-squared"/);
   assert.match(fragment, /data-kp-object="saddle-orbit-graph"/);
   assert.match(fragment, /data-kp-object="saddle-surface"/);
-  assert.match(fragment, /data-kp-object="tilted-orbit-curve"/);
+  assert.match(fragment, /data-kp-object="time-spiral-curve"/);
+  assert.match(fragment, /class="graph-surface__quad"/);
   assert.match(fragment, /class="katex/);
   assert.match(fragment, /class="graph-svg"/);
 });
@@ -27,6 +28,7 @@ test("compileHtmlDocument wraps rendered HTML as a standalone asset", () => {
   assert.match(html, /<title>Identity Matrix<\/title>/);
   assert.match(html, /data-kp-document="identity-matrix-demo"/);
   assert.match(html, /data-kp-render-node="rn-curve-y-equals-x-squared-svg-path"/);
+  assert.match(html, /data-kp-render-node="rn-saddle-surface-svg-quads"/);
   assert.match(html, /data-kp-render-node="rn-saddle-surface-svg-wireframe"/);
-  assert.match(html, /data-kp-render-node="rn-tilted-orbit-curve-svg-path"/);
+  assert.match(html, /data-kp-render-node="rn-time-spiral-curve-svg-path"/);
 });

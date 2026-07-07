@@ -40,7 +40,7 @@ test("initial editor document contains a 3x3 identity matrix", () => {
   assert.equal(document.objects[4]?.id, "curve-y-equals-x-squared");
   assert.equal(document.objects[5]?.id, "saddle-orbit-graph");
   assert.equal(document.objects[9]?.id, "saddle-surface");
-  assert.equal(document.objects[10]?.id, "tilted-orbit-curve");
+  assert.equal(document.objects[10]?.id, "time-spiral-curve");
 });
 
 test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () => {
@@ -57,7 +57,7 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-kp-object="saddle-orbit-y-axis"/);
   assert.match(html, /data-kp-object="saddle-orbit-z-axis"/);
   assert.match(html, /data-kp-object="saddle-surface"/);
-  assert.match(html, /data-kp-object="tilted-orbit-curve"/);
+  assert.match(html, /data-kp-object="time-spiral-curve"/);
   assert.match(html, /class="katex/);
   assert.match(html, /class="graph-svg"/);
   assert.match(html, /&quot;type&quot;: &quot;matrix&quot;/);

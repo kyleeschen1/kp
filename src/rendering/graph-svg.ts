@@ -20,6 +20,26 @@ export interface ProjectedGraphPoint3D extends GraphPoint {
   depth: number;
 }
 
+interface SurfaceQuad3D {
+  rowIndex: number;
+  columnIndex: number;
+  corners: readonly [
+    GraphPoint3D,
+    GraphPoint3D,
+    GraphPoint3D,
+    GraphPoint3D
+  ];
+  projectedCorners: readonly [
+    ProjectedGraphPoint3D,
+    ProjectedGraphPoint3D,
+    ProjectedGraphPoint3D,
+    ProjectedGraphPoint3D
+  ];
+  averageDepth: number;
+  facing: "back" | "front";
+  fill: string;
+}
+
 export function projectGraphPoint(
   graph: Graph2DObject,
   point: GraphPoint
@@ -67,13 +87,13 @@ export function sampleParabolaCurve(curve: Curve2DObject): readonly GraphPoint[]
   });
 }
 
-export function sampleTiltedOrbitCurve(
+export function sampleTimeSpiralCurve(
   curve: Curve3DObject
 ): readonly GraphPoint3D[] {
   return sampleDomain(curve.tDomain, curve.sampleCount).map((t) => ({
-    x: roundCoordinate(2.4 * Math.cos(t)),
+    x: roundCoordinate(2.2 * Math.cos(t)),
     y: roundCoordinate(1.3 * Math.sin(t)),
-    z: roundCoordinate(0.9 * Math.sin(t + Math.PI / 6))
+    z: roundCoordinate(0.18 * (t - Math.PI * 2))
   }));
 }
 
@@ -201,7 +221,7 @@ function renderCurve(curve: Curve2DObject, graph: Graph2DObject): string {
 }
 
 function renderCurve3D(curve: Curve3DObject, graph: Graph3DObject): string {
-  const points = sampleTiltedOrbitCurve(curve).map((point) =>
+  const points = sampleTimeSpiralCurve(curve).map((point) =>
     projectGraphPoint3D(graph, point)
   );
   const pathData = pointsToPathData(points);
@@ -220,6 +240,7 @@ function renderCurve3D(curve: Curve3DObject, graph: Graph3DObject): string {
 
 function renderSurface3D(surface: Surface3DObject, graph: Graph3DObject): string {
   const grid = sampleSaddleSurface(surface);
+  const quads = createSaddleSurfaceQuads(surface, graph, grid);
   const rowPaths = grid.map((row) =>
     renderSurfacePath(row, graph, "graph-surface__line--row")
   );
@@ -228,12 +249,25 @@ function renderSurface3D(surface: Surface3DObject, graph: Graph3DObject): string
   );
 
   return `
-    <g class="graph-surface" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-wireframe" data-kp-type="surface-3d">
-      ${rowPaths.join("")}
-      ${columnPaths.join("")}
+    <g class="graph-surface" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg" data-kp-type="surface-3d">
+      <g class="graph-surface__quads" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-quads" data-kp-type="surface-3d">
+        ${quads.map((quad) => renderSurfaceQuad(surface, quad)).join("")}
+      </g>
+      <g class="graph-surface__wireframe" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-wireframe" data-kp-type="surface-3d">
+        ${rowPaths.join("")}
+        ${columnPaths.join("")}
+      </g>
       <text x="18" y="26">${escapeHtml(surface.label)}</text>
     </g>
   `;
+}
+
+function renderSurfaceQuad(surface: Surface3DObject, quad: SurfaceQuad3D): string {
+  const points = quad.projectedCorners
+    .map((point) => `${formatNumber(point.x)},${formatNumber(point.y)}`)
+    .join(" ");
+
+  return `<polygon class="graph-surface__quad" points="${points}" data-kp-object="${escapeHtml(surface.id)}" data-kp-cell="${quad.rowIndex},${quad.columnIndex}" data-kp-facing="${quad.facing}" data-kp-type="surface-3d" fill="${quad.fill}" />`;
 }
 
 function renderSurfacePath(
@@ -249,6 +283,149 @@ function renderSurfacePath(
   }
 
   return `<path class="graph-surface__line ${className}" d="${pathData}" />`;
+}
+
+function createSaddleSurfaceQuads(
+  surface: Surface3DObject,
+  graph: Graph3DObject,
+  grid: readonly (readonly GraphPoint3D[])[]
+): readonly SurfaceQuad3D[] {
+  const quads: SurfaceQuad3D[] = [];
+
+  for (let rowIndex = 0; rowIndex < grid.length - 1; rowIndex += 1) {
+    const row = grid[rowIndex];
+    const nextRow = grid[rowIndex + 1];
+
+    if (row === undefined || nextRow === undefined) {
+      continue;
+    }
+
+    for (let columnIndex = 0; columnIndex < row.length - 1; columnIndex += 1) {
+      const topLeft = row[columnIndex];
+      const topRight = row[columnIndex + 1];
+      const bottomRight = nextRow[columnIndex + 1];
+      const bottomLeft = nextRow[columnIndex];
+
+      if (
+        topLeft === undefined ||
+        topRight === undefined ||
+        bottomRight === undefined ||
+        bottomLeft === undefined
+      ) {
+        continue;
+      }
+
+      const corners = [
+        topLeft,
+        topRight,
+        bottomRight,
+        bottomLeft
+      ] as const;
+      const projectedCorners = [
+        projectGraphPoint3D(graph, topLeft),
+        projectGraphPoint3D(graph, topRight),
+        projectGraphPoint3D(graph, bottomRight),
+        projectGraphPoint3D(graph, bottomLeft)
+      ] as const;
+      const center = averageGraphPoint3D(corners);
+      const normal = saddleSurfaceNormalAt(center);
+      const facing = classifySurfaceFacing(graph, normal);
+
+      quads.push({
+        rowIndex,
+        columnIndex,
+        corners,
+        projectedCorners,
+        averageDepth:
+          projectedCorners.reduce((sum, point) => sum + point.depth, 0) /
+          projectedCorners.length,
+        facing,
+        fill: surfaceQuadFill(surface, center, normal, facing)
+      });
+    }
+  }
+
+  return quads.sort((left, right) => right.averageDepth - left.averageDepth);
+}
+
+function saddleSurfaceNormalAt(point: GraphPoint): GraphPoint3D {
+  const dzDx = point.x / 2;
+  const dzDy = -point.y / 2;
+
+  return normalizePoint3D({
+    x: -dzDx,
+    y: -dzDy,
+    z: 1
+  });
+}
+
+function classifySurfaceFacing(
+  graph: Graph3DObject,
+  normal: GraphPoint3D
+): "back" | "front" {
+  const cameraDirection = graphCameraDirection(graph);
+
+  return dotPoint3D(normal, cameraDirection) >= 0 ? "front" : "back";
+}
+
+function surfaceQuadFill(
+  surface: Surface3DObject,
+  center: GraphPoint3D,
+  normal: GraphPoint3D,
+  facing: "back" | "front"
+): string {
+  const maxX = Math.max(Math.abs(surface.xDomain[0]), Math.abs(surface.xDomain[1]));
+  const maxY = Math.max(Math.abs(surface.yDomain[0]), Math.abs(surface.yDomain[1]));
+  const zSpan = Math.max((Math.max(maxX, maxY) ** 2) / 4, 1);
+  const normalizedHeight = clamp((center.z + zSpan) / (zSpan * 2), 0, 1);
+  const light = normalizePoint3D({ x: -0.35, y: -0.45, z: 0.82 });
+  const brightness = clamp(0.45 + Math.max(0, dotPoint3D(normal, light)) * 0.4, 0.35, 0.9);
+  const hue = facing === "front"
+    ? 184 + Math.round(normalizedHeight * 18)
+    : 24 + Math.round(normalizedHeight * 14);
+  const saturation = facing === "front" ? 54 : 62;
+  const lightness = Math.round((facing === "front" ? 42 : 48) + brightness * 20);
+
+  return `hsl(${hue} ${saturation}% ${lightness}%)`;
+}
+
+function graphCameraDirection(graph: Graph3DObject): GraphPoint3D {
+  const azimuth = degreesToRadians(graph.camera.azimuthDegrees);
+  const elevation = degreesToRadians(graph.camera.elevationDegrees);
+
+  return normalizePoint3D({
+    x: Math.sin(azimuth) * Math.cos(elevation),
+    y: Math.cos(azimuth) * Math.cos(elevation),
+    z: Math.sin(elevation)
+  });
+}
+
+function averageGraphPoint3D(
+  points: readonly [GraphPoint3D, GraphPoint3D, GraphPoint3D, GraphPoint3D]
+): GraphPoint3D {
+  return {
+    x: points.reduce((sum, point) => sum + point.x, 0) / points.length,
+    y: points.reduce((sum, point) => sum + point.y, 0) / points.length,
+    z: points.reduce((sum, point) => sum + point.z, 0) / points.length
+  };
+}
+
+function dotPoint3D(left: GraphPoint3D, right: GraphPoint3D): number {
+  return left.x * right.x + left.y * right.y + left.z * right.z;
+}
+
+function normalizePoint3D(point: GraphPoint3D): GraphPoint3D {
+  const length = Math.hypot(point.x, point.y, point.z);
+
+  if (length === 0) {
+    return { x: 0, y: 0, z: 0 };
+  }
+
+  return {
+    x: point.x / length,
+    y: point.y / length,
+    z: point.z / length
+  };
 }
 
 function axisLine3D(
@@ -318,11 +495,17 @@ function degreesToRadians(value: number): number {
 }
 
 function roundCoordinate(value: number): number {
-  return Number(value.toFixed(12));
+  const rounded = Number(value.toFixed(3));
+
+  return Object.is(rounded, -0) ? 0 : rounded;
 }
 
 function formatNumber(value: number): string {
   return Number.isInteger(value) ? String(value) : value.toFixed(3);
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
 }
 
 function escapeHtml(value: string): string {
