@@ -24,6 +24,7 @@ import {
   createDefaultGraphScene,
   createDefaultGraph3DScene,
   createParabolaCurve2D,
+  createSaddleWeaveCurve3D,
   createSaddleSurface3D,
   createTimeSpiralCurve3D,
   type Curve3DObject,
@@ -557,15 +558,15 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
 test("renderGraph3DToSvg depth-classifies 3D curve segments when present", () => {
   const scene = createDefaultGraph3DScene();
   const graph = scene[0] as Graph3DObject;
-  const curve = createTimeSpiralCurve3D({
-    id: "time-spiral-curve",
+  const curve = createSaddleWeaveCurve3D({
+    id: "saddle-weave-curve",
     graphId: graph.id,
-    tDomain: [0, Math.PI * 4],
-    sampleCount: 24
+    tDomain: [-3, 3],
+    sampleCount: 48
   });
   const svg = renderGraph3DToSvg([...scene, curve], graph);
 
-  assert.match(svg, /data-kp-object="time-spiral-curve"/);
+  assert.match(svg, /data-kp-object="saddle-weave-curve"/);
   assert.match(svg, /class="graph-curve__segment"/);
   assert.match(svg, /class="graph-curve__segment"[^>]+data-kp-visibility-source="depth-buffer"/);
   assert.match(svg, /class="graph-curve__segment"[^>]+data-kp-visibility="hidden"/);

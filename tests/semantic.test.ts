@@ -12,6 +12,7 @@ import {
   createGraph2DObject,
   createGraph3DObject,
   createParabolaCurve2D,
+  createSaddleWeaveCurve3D,
   createSaddleSurface3D,
   createTimeSpiralCurve3D
 } from "../src/semantic/graph.ts";
@@ -348,6 +349,36 @@ test("createTimeSpiralCurve3D creates a time-visible spiral curve", () => {
   assert.equal(
     expressionToLatex(expressions.z),
     "0.18 \\left(t - 6.283185\\right)"
+  );
+});
+
+test("createSaddleWeaveCurve3D creates a saddle depth test curve", () => {
+  const curve = createSaddleWeaveCurve3D({
+    id: "saddle-weave-curve",
+    graphId: "saddle-orbit-graph",
+    tDomain: [-3, 3],
+    sampleCount: 121
+  });
+  const { expressions, ...curveMetadata } = curve;
+
+  assert.deepEqual(curveMetadata, {
+    id: "saddle-weave-curve",
+    type: "curve-3d",
+    graphId: "saddle-orbit-graph",
+    label: "saddle weave",
+    equation: {
+      x: "t",
+      y: "0",
+      z: "t^2 / 4 + 0.25 sin(2t)"
+    },
+    tDomain: [-3, 3],
+    sampleCount: 121
+  });
+  assert.equal(expressionToLatex(expressions.x), "t");
+  assert.equal(expressionToLatex(expressions.y), "0");
+  assert.equal(
+    expressionToLatex(expressions.z),
+    "\\frac{t^{2}}{4} + 0.25 \\sin\\left(2 t\\right)"
   );
 });
 

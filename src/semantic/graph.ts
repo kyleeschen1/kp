@@ -2,6 +2,7 @@ import {
   add,
   constant,
   cos,
+  divide,
   multiply,
   power,
   sin,
@@ -243,6 +244,29 @@ export function createTimeSpiralCurve3D(
       x: multiply(constant(2.2), cos(variable("t"))),
       y: multiply(constant(1.3), sin(variable("t"))),
       z: multiply(constant(0.18), add(variable("t"), constant(-Math.PI * 2)))
+    }
+  };
+}
+
+export function createSaddleWeaveCurve3D(
+  input: CreateTimeSpiralCurveInput
+): Curve3DObject {
+  return {
+    ...input,
+    type: "curve-3d",
+    label: "saddle weave",
+    equation: {
+      x: "t",
+      y: "0",
+      z: "t^2 / 4 + 0.25 sin(2t)"
+    },
+    expressions: {
+      x: variable("t"),
+      y: constant(0),
+      z: add(
+        divide(power(variable("t"), 2), constant(4)),
+        multiply(constant(0.25), sin(multiply(constant(2), variable("t"))))
+      )
     }
   };
 }
