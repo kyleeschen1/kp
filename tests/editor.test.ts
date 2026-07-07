@@ -10,9 +10,14 @@ import {
   addLatexEquationGraph,
   createEditorState,
   updateGraph3DAzimuth,
-  updateGraph3DOccludedAxisLightness
+  updateGraph3DOccludedAxisLightness,
+  updateSaddleSurfaceDenominator
 } from "../src/editor/state.ts";
-import type { Graph2DObject, Graph3DObject } from "../src/semantic/graph.ts";
+import type {
+  Graph2DObject,
+  Graph3DObject,
+  Surface3DObject
+} from "../src/semantic/graph.ts";
 
 test("initial editor document contains a 3x3 identity matrix", () => {
   const document = createInitialEditorDocument();
@@ -74,9 +79,12 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-action="compile-document"/);
   assert.match(html, /data-action="set-graph-azimuth"/);
   assert.match(html, /data-action="set-graph-occluded-axis-lightness"/);
+  assert.match(html, /data-action="set-saddle-denominator"/);
   assert.match(html, /data-kp-graph-rotation-axis="z"/);
   assert.match(html, /data-kp-graph-color-target="occluded-axis"/);
+  assert.match(html, /data-kp-graph-surface-parameter="saddle-denominator"/);
   assert.match(html, /data-graph-id="saddle-orbit-graph"/);
+  assert.match(html, /data-surface-id="saddle-surface"/);
   assert.match(html, /type="range"/);
   assert.match(html, /min="-180"/);
   assert.match(html, /max="180"/);
@@ -84,6 +92,9 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /min="0"/);
   assert.match(html, /max="100"/);
   assert.match(html, /value="44"/);
+  assert.match(html, /min="1"/);
+  assert.match(html, /max="16"/);
+  assert.match(html, /value="4"/);
   assert.match(html, /#5d7583/);
   assert.match(html, /id="compiled-source"/);
   assert.match(html, /No validation issues/);
@@ -167,6 +178,35 @@ test("updateGraph3DOccludedAxisLightness updates the semantic graph render setti
   assert.equal(originalGraph?.occludedAxisLightness, 44);
   assert.equal(nextGraph?.occludedAxisLightness, 42);
   assert.equal(clampedGraph?.occludedAxisLightness, 100);
+});
+
+test("updateSaddleSurfaceDenominator updates a parameterized saddle surface", () => {
+  const document = createInitialEditorDocument();
+  const nextDocument = updateSaddleSurfaceDenominator(
+    document,
+    "saddle-surface",
+    8
+  );
+  const clampedDocument = updateSaddleSurfaceDenominator(
+    document,
+    "saddle-surface",
+    80
+  );
+  const originalSurface = document.objects.find(
+    (object): object is Surface3DObject => object.id === "saddle-surface"
+  );
+  const nextSurface = nextDocument.objects.find(
+    (object): object is Surface3DObject => object.id === "saddle-surface"
+  );
+  const clampedSurface = clampedDocument.objects.find(
+    (object): object is Surface3DObject => object.id === "saddle-surface"
+  );
+
+  assert.notEqual(nextDocument, document);
+  assert.equal(originalSurface?.parameterization?.denominator, 4);
+  assert.equal(nextSurface?.parameterization?.denominator, 8);
+  assert.equal(nextSurface?.equation, "z = (x^2 - y^2) / 8");
+  assert.equal(clampedSurface?.parameterization?.denominator, 16);
 });
 
 test("compileDocumentAsset posts the semantic document and returns HTML", async () => {

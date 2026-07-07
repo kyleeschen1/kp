@@ -9,12 +9,14 @@ import { compileDocumentAsset } from "./editor/compile-client.ts";
 import {
   addLatexEquationGraph,
   updateGraph3DAzimuth,
-  updateGraph3DOccludedAxisLightness
+  updateGraph3DOccludedAxisLightness,
+  updateSaddleSurfaceDenominator
 } from "./editor/state.ts";
 import { occludedAxisColor, renderGraph3DToSvg } from "./rendering/graph-svg.ts";
 import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
-  type Graph3DObject
+  type Graph3DObject,
+  type Surface3DObject
 } from "./semantic/graph.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
@@ -54,6 +56,9 @@ appRoot.addEventListener("input", (event) => {
       return;
     case "set-graph-occluded-axis-lightness":
       updateGraphOccludedAxisLightnessFromInput(event.target);
+      return;
+    case "set-saddle-denominator":
+      updateSaddleDenominatorFromInput(event.target);
       return;
   }
 });
@@ -154,6 +159,41 @@ function updateGraphOccludedAxisLightnessFromInput(input: HTMLInputElement): voi
     );
 }
 
+function updateSaddleDenominatorFromInput(input: HTMLInputElement): void {
+  const graphId = input.dataset["graphId"];
+  const surfaceId = input.dataset["surfaceId"];
+  const denominator = Number(input.value);
+
+  if (
+    graphId === undefined ||
+    surfaceId === undefined ||
+    !Number.isFinite(denominator)
+  ) {
+    return;
+  }
+
+  editorDocument = updateSaddleSurfaceDenominator(
+    editorDocument,
+    surfaceId,
+    denominator
+  );
+  renderSemanticJson();
+  renderGraph3DPreview(graphId);
+
+  const surface = findSaddleSurface(surfaceId);
+  const nextDenominator = surface?.parameterization?.denominator;
+
+  if (nextDenominator === undefined) {
+    return;
+  }
+
+  input.value = formatNumber(nextDenominator);
+  input
+    .closest(".graph-control")
+    ?.querySelector<HTMLOutputElement>(".graph-control__value")
+    ?.replaceChildren(document.createTextNode(formatNumber(nextDenominator)));
+}
+
 function renderSemanticJson(): void {
   const semanticJson = appRoot.querySelector<HTMLElement>(
     '[data-role="semantic-json"]'
@@ -180,6 +220,15 @@ function findGraph3D(graphId: string): Graph3DObject | undefined {
   return editorDocument.objects.find(
     (object): object is Graph3DObject =>
       object.type === "graph-3d" && object.id === graphId
+  );
+}
+
+function findSaddleSurface(surfaceId: string): Surface3DObject | undefined {
+  return editorDocument.objects.find(
+    (object): object is Surface3DObject =>
+      object.type === "surface-3d" &&
+      object.id === surfaceId &&
+      object.parameterization?.kind === "saddle"
   );
 }
 

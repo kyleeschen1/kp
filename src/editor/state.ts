@@ -1,5 +1,12 @@
 import type { KpDocument, KpSemanticObject } from "../semantic/document.ts";
 import { createGraphSceneFromLatexEquation } from "../semantic/equation-graph.ts";
+import {
+  createSaddleSurface3D,
+  type Surface3DObject
+} from "../semantic/graph.ts";
+
+export const SADDLE_DENOMINATOR_MIN = 1;
+export const SADDLE_DENOMINATOR_MAX = 16;
 
 export interface EditorState {
   document: KpDocument;
@@ -60,6 +67,33 @@ export function updateGraph3DOccludedAxisLightness(
   };
 }
 
+export function updateSaddleSurfaceDenominator(
+  document: KpDocument,
+  surfaceId: string,
+  denominator: number
+): KpDocument {
+  const nextDenominator = clamp(
+    denominator,
+    SADDLE_DENOMINATOR_MIN,
+    SADDLE_DENOMINATOR_MAX
+  );
+
+  return {
+    ...document,
+    objects: document.objects.map((object): KpSemanticObject => {
+      if (
+        object.type !== "surface-3d" ||
+        object.id !== surfaceId ||
+        object.parameterization?.kind !== "saddle"
+      ) {
+        return object;
+      }
+
+      return rebuildSaddleSurface(object, nextDenominator);
+    })
+  };
+}
+
 export function addLatexEquationGraph(
   document: KpDocument,
   latex: string
@@ -85,6 +119,21 @@ function nextEquationGraphIndex(document: KpDocument): number {
   });
 
   return Math.max(0, ...existingIndices) + 1;
+}
+
+function rebuildSaddleSurface(
+  surface: Surface3DObject,
+  denominator: number
+): Surface3DObject {
+  return createSaddleSurface3D({
+    id: surface.id,
+    graphId: surface.graphId,
+    denominator,
+    xDomain: surface.xDomain,
+    yDomain: surface.yDomain,
+    xSampleCount: surface.xSampleCount,
+    ySampleCount: surface.ySampleCount
+  });
 }
 
 function clamp(value: number, min: number, max: number): number {

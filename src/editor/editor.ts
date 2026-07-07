@@ -3,6 +3,10 @@ import {
   renderGraph3DToSvg,
   renderGraphToSvg
 } from "../rendering/graph-svg.ts";
+import {
+  SADDLE_DENOMINATOR_MAX,
+  SADDLE_DENOMINATOR_MIN
+} from "./state.ts";
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import { defaultLatexRenderer } from "../rendering/matrix-latex.ts";
 import {
@@ -15,7 +19,7 @@ import {
   createDefaultGraph3DScene,
   createDefaultGraphScene
 } from "../semantic/graph.ts";
-import type { Graph3DObject } from "../semantic/graph.ts";
+import type { Graph3DObject, Surface3DObject } from "../semantic/graph.ts";
 import { identityMatrix } from "../semantic/matrix.ts";
 import { validateKpDocument } from "../semantic/validation.ts";
 
@@ -104,7 +108,7 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
       return renderPreviewArticle(
         object,
         "rn-" + object.id + "-svg-preview",
-        `${renderGraph3DControls(object)}<div class="object-preview__graph">${renderGraph3DToSvg(document.objects, object)}</div>`
+        `${renderGraph3DControls(object, document.objects)}<div class="object-preview__graph">${renderGraph3DToSvg(document.objects, object)}</div>`
       );
     case "matrix": {
       const latex = defaultLatexRenderer.render(object);
@@ -119,9 +123,13 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
   }
 }
 
-function renderGraph3DControls(graph: Graph3DObject): string {
+function renderGraph3DControls(
+  graph: Graph3DObject,
+  objects: readonly KpSemanticObject[]
+): string {
   const azimuthInputId = "control-" + graph.id + "-azimuth";
   const occludedAxisInputId = "control-" + graph.id + "-occluded-axis-lightness";
+  const saddleSurface = findSaddleSurfaceForGraph(objects, graph.id);
   const azimuth = formatNumber(graph.camera.azimuthDegrees);
   const occludedAxisLightness =
     graph.occludedAxisLightness ?? DEFAULT_OCCLUDED_AXIS_LIGHTNESS;
@@ -140,8 +148,38 @@ function renderGraph3DControls(graph: Graph3DObject): string {
         <input class="graph-control__range" id="${escapeHtml(occludedAxisInputId)}" type="range" min="0" max="100" step="1" value="${formattedOccludedAxisLightness}" data-action="set-graph-occluded-axis-lightness" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-color-target="occluded-axis" aria-label="Set occluded axis lightness" />
         <output class="graph-control__value" for="${escapeHtml(occludedAxisInputId)}">${escapeHtml(occludedAxisHex)}</output>
       </label>
+      ${saddleSurface === undefined ? "" : renderSaddleDenominatorControl(graph, saddleSurface)}
     </div>
   `;
+}
+
+function renderSaddleDenominatorControl(
+  graph: Graph3DObject,
+  surface: Surface3DObject
+): string {
+  const inputId = "control-" + surface.id + "-saddle-denominator";
+  const denominator = surface.parameterization?.denominator ?? 4;
+  const formattedDenominator = formatNumber(denominator);
+
+  return `
+      <label class="graph-control" for="${escapeHtml(inputId)}">
+        <span class="graph-control__label">saddle denominator</span>
+        <input class="graph-control__range" id="${escapeHtml(inputId)}" type="range" min="${SADDLE_DENOMINATOR_MIN}" max="${SADDLE_DENOMINATOR_MAX}" step="0.25" value="${formattedDenominator}" data-action="set-saddle-denominator" data-graph-id="${escapeHtml(graph.id)}" data-surface-id="${escapeHtml(surface.id)}" data-kp-graph-surface-parameter="saddle-denominator" aria-label="Set saddle denominator" />
+        <output class="graph-control__value" for="${escapeHtml(inputId)}">${formattedDenominator}</output>
+      </label>
+  `;
+}
+
+function findSaddleSurfaceForGraph(
+  objects: readonly KpSemanticObject[],
+  graphId: string
+): Surface3DObject | undefined {
+  return objects.find(
+    (object): object is Surface3DObject =>
+      object.type === "surface-3d" &&
+      object.graphId === graphId &&
+      object.parameterization?.kind === "saddle"
+  );
 }
 
 function renderPreviewArticle(
