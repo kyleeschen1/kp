@@ -2,6 +2,7 @@ import { strict as assert } from "node:assert";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
+import { add, constant, power, variable } from "../src/math/expression.ts";
 import { createDefaultLatexRenderer } from "../src/rendering/default-latex.ts";
 import {
   projectGraphPoint,
@@ -25,6 +26,7 @@ import {
   createParabolaCurve2D,
   createSaddleSurface3D,
   createTimeSpiralCurve3D,
+  type Curve3DObject,
   type Curve2DObject,
   type Graph3DObject,
   type Graph2DObject,
@@ -191,6 +193,33 @@ test("sampleTimeSpiralCurve samples a time-visible 3D spiral", () => {
     y: 0,
     z: 1.131
   });
+});
+
+test("sampleTimeSpiralCurve samples expression-backed 3D curves", () => {
+  const curve: Curve3DObject = {
+    ...createTimeSpiralCurve3D({
+      id: "expression-curve",
+      graphId: "saddle-orbit-graph",
+      tDomain: [-1, 1],
+      sampleCount: 3
+    }),
+    equation: {
+      x: "t",
+      y: "t^2",
+      z: "t + 1"
+    },
+    expressions: {
+      x: variable("t"),
+      y: power(variable("t"), 2),
+      z: add(variable("t"), constant(1))
+    }
+  };
+
+  assert.deepEqual(sampleTimeSpiralCurve(curve), [
+    { x: -1, y: 1, z: 0 },
+    { x: 0, y: 0, z: 1 },
+    { x: 1, y: 1, z: 2 }
+  ]);
 });
 
 test("sampleSaddleSurface samples z = (x^2 - y^2) / 4 as a grid", () => {

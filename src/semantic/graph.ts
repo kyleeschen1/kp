@@ -1,5 +1,10 @@
 import {
+  add,
+  constant,
+  cos,
+  multiply,
   power,
+  sin,
   variable,
   type MathExpression
 } from "../math/expression.ts";
@@ -90,16 +95,23 @@ export interface Axis3DObject {
   tickStep: number;
 }
 
+export interface ParametricCurve3DExpressions {
+  x: MathExpression;
+  y: MathExpression;
+  z: MathExpression;
+}
+
 export interface Curve3DObject {
   id: string;
   type: "curve-3d";
   graphId: string;
   label: string;
   equation: {
-    x: "2.2 cos(t)";
-    y: "1.3 sin(t)";
-    z: "0.18 (t - 2 pi)";
+    x: string;
+    y: string;
+    z: string;
   };
+  expressions: ParametricCurve3DExpressions;
   tDomain: NumericDomain;
   sampleCount: number;
 }
@@ -226,6 +238,11 @@ export function createTimeSpiralCurve3D(
       x: "2.2 cos(t)",
       y: "1.3 sin(t)",
       z: "0.18 (t - 2 pi)"
+    },
+    expressions: {
+      x: multiply(constant(2.2), cos(variable("t"))),
+      y: multiply(constant(1.3), sin(variable("t"))),
+      z: multiply(constant(0.18), add(variable("t"), constant(-Math.PI * 2)))
     }
   };
 }

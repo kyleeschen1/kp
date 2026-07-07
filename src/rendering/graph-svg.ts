@@ -158,11 +158,19 @@ export function sampleParabolaCurve(curve: Curve2DObject): readonly GraphPoint[]
 export function sampleTimeSpiralCurve(
   curve: Curve3DObject
 ): readonly GraphPoint3D[] {
-  return sampleDomain(curve.tDomain, curve.sampleCount).map((t) => ({
-    x: roundCoordinate(2.2 * Math.cos(t)),
-    y: roundCoordinate(1.3 * Math.sin(t)),
-    z: roundCoordinate(0.18 * (t - Math.PI * 2))
-  }));
+  const evaluateX = compileExpression(curve.expressions.x);
+  const evaluateY = compileExpression(curve.expressions.y);
+  const evaluateZ = compileExpression(curve.expressions.z);
+
+  return sampleDomain(curve.tDomain, curve.sampleCount).map((t) => {
+    const scope = { t };
+
+    return {
+      x: roundCoordinate(evaluateX(scope)),
+      y: roundCoordinate(evaluateY(scope)),
+      z: roundCoordinate(evaluateZ(scope))
+    };
+  });
 }
 
 export function sampleSaddleSurface(

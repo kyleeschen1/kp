@@ -328,8 +328,9 @@ test("createTimeSpiralCurve3D creates a time-visible spiral curve", () => {
     tDomain: [0, Math.PI * 4],
     sampleCount: 145
   });
+  const { expressions, ...curveMetadata } = curve;
 
-  assert.deepEqual(curve, {
+  assert.deepEqual(curveMetadata, {
     id: "time-spiral-curve",
     type: "curve-3d",
     graphId: "saddle-orbit-graph",
@@ -342,6 +343,12 @@ test("createTimeSpiralCurve3D creates a time-visible spiral curve", () => {
     tDomain: [0, Math.PI * 4],
     sampleCount: 145
   });
+  assert.equal(expressionToLatex(expressions.x), "2.2 \\cos\\left(t\\right)");
+  assert.equal(expressionToLatex(expressions.y), "1.3 \\sin\\left(t\\right)");
+  assert.equal(
+    expressionToLatex(expressions.z),
+    "0.18 \\left(t - 6.283185\\right)"
+  );
 });
 
 test("createDefaultGraph3DScene creates graph, axes, and surface objects", () => {
