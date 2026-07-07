@@ -247,11 +247,6 @@ h2 {
   stroke: #d9ded7;
 }
 
-.graph-base-grid__line {
-  stroke: #a8b2aa;
-  stroke-linecap: round;
-}
-
 .graph-svg--3d .graph-axis line {
   stroke: #394756;
   stroke-width: 2.4;
@@ -287,11 +282,11 @@ h2 {
   stroke: #ffffff;
   stroke-opacity: 0.18;
   stroke-width: 0.6;
-  opacity: 0.74;
+  opacity: 0.9;
 }
 
 .graph-surface__quad[data-kp-facing="back"] {
-  opacity: 0.58;
+  opacity: 0.84;
 }
 
 .graph-surface__line--column {

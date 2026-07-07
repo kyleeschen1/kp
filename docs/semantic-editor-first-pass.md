@@ -146,7 +146,7 @@ The first 3D graph object family mirrors the 2D graph interface with one additio
 }
 ```
 
-`createDefaultGraph3DScene()` creates `saddle-orbit-graph`, `saddle-orbit-x-axis`, `saddle-orbit-y-axis`, `saddle-orbit-z-axis`, `saddle-surface`, and `time-spiral-curve`.
+`createDefaultGraph3DScene()` currently creates `saddle-orbit-graph`, `saddle-orbit-x-axis`, `saddle-orbit-y-axis`, `saddle-orbit-z-axis`, and `saddle-surface`. The time spiral semantic object and renderer still exist, but the default editor scene omits it while the 3D surface/axis rendering is being refined.
 
 ## Rendering
 
@@ -178,7 +178,7 @@ data-kp-render-node="rn-curve-y-equals-x-squared-svg-path"
 data-kp-type="curve-2d"
 ```
 
-3D graph objects render through the same SVG semantic metadata model. The current renderer uses a pure TypeScript orthographic projection from 3D graph coordinates into SVG coordinates. The 3D graph owns the SVG container, while axes, the saddle surface, and the time spiral render inside it:
+3D graph objects render through the same SVG semantic metadata model. The current renderer uses a pure TypeScript orthographic projection from 3D graph coordinates into SVG coordinates. The 3D graph owns the SVG container, while axes and the saddle surface render inside it:
 
 ```html
 data-kp-object="saddle-orbit-graph"
@@ -186,14 +186,16 @@ data-kp-render-node="rn-saddle-orbit-graph-svg"
 data-kp-type="graph-3d"
 ```
 
-The 3D SVG uses semantic layers to make the axes feel integrated with the drawing. A projected base-plane grid renders first, x/y axes render as segmented depth-aware lines over that grid, filled surface cells render above them, and the z-axis renders last as a subtler reference axis. This lets the surface visually cover parts of the base plane in SVG without a WebGL z-buffer.
+The 3D SVG uses semantic layers to make the axes feel integrated with the drawing. The x/y axes render first as segmented depth-aware lines, filled surface cells render above them, and the z-axis renders last as a subtler reference axis. This lets the surface visually cover parts of the base plane in SVG without a WebGL z-buffer. The axes extend 15% past their domains and carry a `data-kp-stroke-ratio="1.5"` marker because they are intentionally thicker than mesh lines.
 
 ```html
-<g class="graph-base-grid"
-  data-kp-object="saddle-orbit-graph"
-  data-kp-render-node="rn-saddle-orbit-graph-svg-base-grid"
-  data-kp-type="graph-3d">
-  <line class="graph-base-grid__line" data-kp-depth="0" />
+<g class="graph-axis graph-axis--3d graph-axis--x graph-axis--base-plane"
+  data-kp-object="saddle-orbit-x-axis"
+  data-kp-axis-extended-domain="-3.900,3.900"
+  data-kp-axis-extension-ratio="0.15">
+  <line class="graph-axis__segment"
+    data-kp-depth="0"
+    data-kp-stroke-ratio="1.5" />
 </g>
 ```
 
@@ -215,18 +217,12 @@ dz/dy = -y / 2
 normal = normalize([-dz/dx, -dz/dy, 1])
 ```
 
-The renderer compares that normal with the current camera direction to color front-facing and back-facing cells differently, then applies a light direction to vary brightness.
+The renderer compares that normal with the current camera direction to classify front-facing and back-facing cells, then applies a light direction to vary brightness. Both sides currently use blue-family fills so overlapping projected regions do not blend yellow into the top surface.
 
 ```html
 data-kp-object="saddle-surface"
 data-kp-render-node="rn-saddle-surface-svg-wireframe"
 data-kp-type="surface-3d"
-```
-
-```html
-data-kp-object="time-spiral-curve"
-data-kp-render-node="rn-time-spiral-curve-svg-path"
-data-kp-type="curve-3d"
 ```
 
 ## Compile Path
@@ -239,8 +235,8 @@ Input is a `KpDocument` JSON body. Output is a standalone HTML asset containing 
 
 - Only matrix objects, one 2D graph family, and one 3D graph family are supported.
 - Curve rendering supports `y = x^2`; it is not a general equation parser.
-- 3D rendering supports the built-in saddle surface and time spiral curve; it is not a general 3D equation parser.
-- The 3D renderer is SVG projection only. It has semantic metadata, filled surface cells, derivative shading, and export-friendly output, but no WebGL z-buffer or interactive camera controls.
+- 3D rendering supports the built-in saddle surface and optional time spiral curve; it is not a general 3D equation parser.
+- The 3D renderer is SVG projection only. It has semantic metadata, filled surface cells, derivative shading, extended axes, and export-friendly output, but no WebGL z-buffer or interactive camera controls.
 - Validation is structural and narrow.
 - The compiled HTML asset does not yet inline the full editor stylesheet or KaTeX CSS.
 - The editor JSON is read-only.

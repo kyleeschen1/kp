@@ -249,7 +249,7 @@ export function createDefaultGraphScene(): readonly GraphSceneObject[] {
 export function createDefaultGraph3DScene(): readonly GraphSceneObject[] {
   const graph = createGraph3DObject({
     id: "saddle-orbit-graph",
-    label: "Saddle surface and time spiral",
+    label: "Saddle surface",
     xAxisId: "saddle-orbit-x-axis",
     yAxisId: "saddle-orbit-y-axis",
     zAxisId: "saddle-orbit-z-axis",
@@ -297,12 +297,5 @@ export function createDefaultGraph3DScene(): readonly GraphSceneObject[] {
     xSampleCount: 13,
     ySampleCount: 13
   });
-  const curve = createTimeSpiralCurve3D({
-    id: "time-spiral-curve",
-    graphId: graph.id,
-    tDomain: [0, Math.PI * 4],
-    sampleCount: 145
-  });
-
-  return [graph, xAxis, yAxis, zAxis, surface, curve];
+  return [graph, xAxis, yAxis, zAxis, surface];
 }

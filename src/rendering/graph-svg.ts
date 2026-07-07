@@ -51,6 +51,10 @@ interface GraphLine3D {
   to: GraphPoint3D;
 }
 
+const AXIS_EXTENSION_RATIO = 0.15;
+const SURFACE_MESH_STROKE_WIDTH = 1.25;
+const AXIS_TO_MESH_STROKE_RATIO = 1.5;
+
 export function projectGraphPoint(
   graph: Graph2DObject,
   point: GraphPoint
@@ -166,7 +170,6 @@ export function renderGraph3DToSvg(
   return `
     <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
       <rect class="graph-svg__background" x="0" y="0" width="${graph.width}" height="${graph.height}" rx="8" />
-      ${renderBaseGrid3D(graph)}
       ${basePlaneAxes.map((axis) => renderAxis3D(axis, graph)).join("")}
       ${surfaces.map((surface) => renderSurface3D(surface, graph)).join("")}
       ${verticalAxes.map((axis) => renderAxis3D(axis, graph)).join("")}
@@ -200,54 +203,31 @@ function renderAxis(axis: Axis2DObject, graph: Graph2DObject): string {
 }
 
 function renderAxis3D(axis: Axis3DObject, graph: Graph3DObject): string {
-  const line = projectLine3D(graph, axisLine3D(axis, graph));
-  const segments = axisSegments3D(axis).map((segment) =>
+  const extendedDomain = extendDomain(axis.domain, AXIS_EXTENSION_RATIO);
+  const line = projectLine3D(graph, axisLine3D(axis, extendedDomain));
+  const segments = axisSegments3D(axis, extendedDomain).map((segment) =>
     projectLine3D(graph, segment)
   );
   const axisRole =
     axis.orientation === "z" ? "graph-axis--subtle" : "graph-axis--base-plane";
 
   return `
-    <g class="graph-axis graph-axis--3d graph-axis--${axis.orientation} ${axisRole}" data-kp-object="${escapeHtml(axis.id)}" data-kp-render-node="rn-${escapeHtml(axis.id)}-svg-line" data-kp-type="axis-3d">
-      ${segments.map((segment) => renderLine3D(segment, graph, "graph-axis__segment")).join("")}
+    <g class="graph-axis graph-axis--3d graph-axis--${axis.orientation} ${axisRole}" data-kp-object="${escapeHtml(axis.id)}" data-kp-render-node="rn-${escapeHtml(axis.id)}-svg-line" data-kp-type="axis-3d" data-kp-axis-extended-domain="${formatDomain(extendedDomain)}" data-kp-axis-extension-ratio="${AXIS_EXTENSION_RATIO}">
+      ${segments.map((segment) => renderAxisSegment3D(segment, graph)).join("")}
       <text x="${formatNumber(line.to.x)}" y="${formatNumber(line.to.y)}">${escapeHtml(axis.label)}</text>
     </g>
   `;
 }
 
-function renderBaseGrid3D(graph: Graph3DObject): string {
-  const gridLines = [
-    ...axisBreakpoints(graph.yDomain, 1).map((y) =>
-      projectLine3D(graph, {
-        from: { x: graph.xDomain[0], y, z: 0 },
-        to: { x: graph.xDomain[1], y, z: 0 }
-      })
-    ),
-    ...axisBreakpoints(graph.xDomain, 1).map((x) =>
-      projectLine3D(graph, {
-        from: { x, y: graph.yDomain[0], z: 0 },
-        to: { x, y: graph.yDomain[1], z: 0 }
-      })
-    )
-  ];
-
-  return `
-    <g class="graph-base-grid" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg-base-grid" data-kp-type="graph-3d">
-      ${gridLines.map((line) => renderLine3D(line, graph, "graph-base-grid__line")).join("")}
-    </g>
-  `;
-}
-
-function renderLine3D(
+function renderAxisSegment3D(
   line: ProjectedLine3D,
-  graph: Graph3DObject,
-  className: string
+  graph: Graph3DObject
 ): string {
   const depthWeight = lineDepthWeight(graph, line.averageDepth);
-  const strokeWidth = 0.55 + depthWeight * 1.35;
-  const opacity = 0.2 + depthWeight * 0.5;
+  const strokeWidth = SURFACE_MESH_STROKE_WIDTH * AXIS_TO_MESH_STROKE_RATIO;
+  const opacity = 0.62 + depthWeight * 0.22;
 
-  return `<line class="${escapeHtml(className)}" x1="${formatNumber(line.from.x)}" y1="${formatNumber(line.from.y)}" x2="${formatNumber(line.to.x)}" y2="${formatNumber(line.to.y)}" data-kp-depth="${formatNumber(line.averageDepth)}" data-kp-depth-weight="${formatNumber(depthWeight)}" style="stroke-width: ${formatNumber(strokeWidth)}; opacity: ${formatNumber(opacity)};" />`;
+  return `<line class="graph-axis__segment" x1="${formatNumber(line.from.x)}" y1="${formatNumber(line.from.y)}" x2="${formatNumber(line.to.x)}" y2="${formatNumber(line.to.y)}" data-kp-depth="${formatNumber(line.averageDepth)}" data-kp-depth-weight="${formatNumber(depthWeight)}" data-kp-stroke-ratio="${AXIS_TO_MESH_STROKE_RATIO}" style="stroke-width: ${formatNumber(strokeWidth)}; opacity: ${formatNumber(opacity)};" />`;
 }
 
 function renderCurve(curve: Curve2DObject, graph: Graph2DObject): string {
@@ -436,10 +416,10 @@ function surfaceQuadFill(
   const light = normalizePoint3D({ x: -0.35, y: -0.45, z: 0.82 });
   const brightness = clamp(0.45 + Math.max(0, dotPoint3D(normal, light)) * 0.4, 0.35, 0.9);
   const hue = facing === "front"
-    ? 184 + Math.round(normalizedHeight * 18)
-    : 24 + Math.round(normalizedHeight * 14);
-  const saturation = facing === "front" ? 54 : 62;
-  const lightness = Math.round((facing === "front" ? 42 : 48) + brightness * 20);
+    ? 188 + Math.round(normalizedHeight * 18)
+    : 206 + Math.round(normalizedHeight * 18);
+  const saturation = facing === "front" ? 58 : 48;
+  const lightness = Math.round((facing === "front" ? 42 : 36) + brightness * 20);
 
   return `hsl(${hue} ${saturation}% ${lightness}%)`;
 }
@@ -494,8 +474,11 @@ function projectLine3D(graph: Graph3DObject, line: GraphLine3D): ProjectedLine3D
   };
 }
 
-function axisSegments3D(axis: Axis3DObject): readonly GraphLine3D[] {
-  const breakpoints = axisBreakpoints(axis.domain, axis.tickStep);
+function axisSegments3D(
+  axis: Axis3DObject,
+  domain: NumericDomain
+): readonly GraphLine3D[] {
+  const breakpoints = axisBreakpoints(domain, axis.tickStep);
 
   return breakpoints.flatMap((start, index) => {
     const end = breakpoints[index + 1];
@@ -528,6 +511,16 @@ function axisSegments3D(axis: Axis3DObject): readonly GraphLine3D[] {
         ];
     }
   });
+}
+
+function extendDomain(
+  domain: NumericDomain,
+  extensionRatio: number
+): NumericDomain {
+  const [min, max] = domain;
+  const extension = (max - min) * extensionRatio;
+
+  return [roundCoordinate(min - extension), roundCoordinate(max + extension)];
 }
 
 function axisBreakpoints(
@@ -578,23 +571,23 @@ function graphDepthRange(graph: Graph3DObject): NumericDomain {
 
 function axisLine3D(
   axis: Axis3DObject,
-  graph: Graph3DObject
+  domain: NumericDomain
 ): GraphLine3D {
   switch (axis.orientation) {
     case "x":
       return {
-        from: { x: graph.xDomain[0], y: 0, z: 0 },
-        to: { x: graph.xDomain[1], y: 0, z: 0 }
+        from: { x: domain[0], y: 0, z: 0 },
+        to: { x: domain[1], y: 0, z: 0 }
       };
     case "y":
       return {
-        from: { x: 0, y: graph.yDomain[0], z: 0 },
-        to: { x: 0, y: graph.yDomain[1], z: 0 }
+        from: { x: 0, y: domain[0], z: 0 },
+        to: { x: 0, y: domain[1], z: 0 }
       };
     case "z":
       return {
-        from: { x: 0, y: 0, z: graph.zDomain[0] },
-        to: { x: 0, y: 0, z: graph.zDomain[1] }
+        from: { x: 0, y: 0, z: domain[0] },
+        to: { x: 0, y: 0, z: domain[1] }
       };
   }
 }
@@ -650,6 +643,10 @@ function roundCoordinate(value: number): number {
 
 function formatNumber(value: number): string {
   return Number.isInteger(value) ? String(value) : value.toFixed(3);
+}
+
+function formatDomain(domain: NumericDomain): string {
+  return `${formatNumber(domain[0])},${formatNumber(domain[1])}`;
 }
 
 function clamp(value: number, min: number, max: number): number {

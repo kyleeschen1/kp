@@ -190,7 +190,7 @@ test("sampleSaddleSurface samples z = (x^2 - y^2) / 4 as a grid", () => {
   });
 });
 
-test("renderGraph3DToSvg renders axes, surface, and curve with semantic metadata", () => {
+test("renderGraph3DToSvg renders axes and surface with semantic metadata", () => {
   const scene = createDefaultGraph3DScene();
   const svg = renderGraph3DToSvg(scene, scene[0] as Graph3DObject);
 
@@ -200,12 +200,15 @@ test("renderGraph3DToSvg renders axes, surface, and curve with semantic metadata
   assert.match(svg, /data-kp-object="saddle-orbit-y-axis"/);
   assert.match(svg, /data-kp-object="saddle-orbit-z-axis"/);
   assert.match(svg, /data-kp-object="saddle-surface"/);
-  assert.match(svg, /data-kp-object="time-spiral-curve"/);
-  assert.match(svg, /class="graph-base-grid"/);
-  assert.match(svg, /class="graph-base-grid__line"/);
-  assert.match(svg, /data-kp-render-node="rn-saddle-orbit-graph-svg-base-grid"/);
+  assert.doesNotMatch(svg, /data-kp-object="time-spiral-curve"/);
+  assert.doesNotMatch(svg, /time spiral/);
+  assert.doesNotMatch(svg, /class="graph-base-grid"/);
   assert.match(svg, /class="graph-axis__segment"/);
   assert.match(svg, /data-kp-depth="/);
+  assert.match(svg, /data-kp-axis-extended-domain="-3.900,3.900"/);
+  assert.match(svg, /data-kp-axis-extended-domain="-3.250,3.250"/);
+  assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-stroke-ratio="1.5"/);
+  assert.match(svg, /class="graph-axis__segment"[^>]+style="stroke-width: 1.875;/);
   assert.match(svg, /graph-axis--base-plane/);
   assert.match(svg, /graph-axis--subtle/);
   assert.match(svg, /class="graph-surface__quad"/);
@@ -214,16 +217,17 @@ test("renderGraph3DToSvg renders axes, surface, and curve with semantic metadata
   assert.match(svg, /data-kp-facing="back"/);
   assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-quads"/);
   assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-wireframe"/);
-  assert.match(svg, /data-kp-render-node="rn-time-spiral-curve-svg-path"/);
   assert.match(svg, /z = \(x\^2 - y\^2\) \/ 4/);
-  assert.match(svg, /time spiral/);
+
+  const surfaceFillHues = [...svg.matchAll(/class="graph-surface__quad"[^>]+fill="hsl\((\d+) /g)].map(
+    (match) => Number(match[1])
+  );
+
+  assert.ok(surfaceFillHues.length > 0);
+  assert.ok(surfaceFillHues.every((hue) => hue >= 184 && hue <= 224));
   assert.ok(
     svg.indexOf('class="graph-surface__quad"') <
       svg.indexOf('class="graph-surface__line')
-  );
-  assert.ok(
-    svg.indexOf('class="graph-base-grid"') <
-      svg.indexOf('class="graph-surface__quad"')
   );
   assert.ok(
     svg.indexOf('graph-axis--x') < svg.indexOf('class="graph-surface__quad"')

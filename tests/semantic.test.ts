@@ -303,23 +303,15 @@ test("createTimeSpiralCurve3D creates a time-visible spiral curve", () => {
   });
 });
 
-test("createDefaultGraph3DScene creates graph, axes, surface, and curve objects", () => {
+test("createDefaultGraph3DScene creates graph, axes, and surface objects", () => {
   const scene = createDefaultGraph3DScene();
 
   assert.deepEqual(
     scene.map((object) => object.type),
-    [
-      "graph-3d",
-      "axis-3d",
-      "axis-3d",
-      "axis-3d",
-      "surface-3d",
-      "curve-3d"
-    ]
+    ["graph-3d", "axis-3d", "axis-3d", "axis-3d", "surface-3d"]
   );
   assert.equal(scene[0]?.id, "saddle-orbit-graph");
   assert.equal(scene[4]?.id, "saddle-surface");
-  assert.equal(scene[5]?.id, "time-spiral-curve");
 });
 
 test("validateKpDocument reports graph reference issues", () => {
