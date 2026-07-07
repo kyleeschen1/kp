@@ -212,16 +212,22 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /data-kp-visibility="visible"/);
   assert.match(svg, /data-kp-axis-extended-domain="-3.900,3.900"/);
   assert.match(svg, /data-kp-axis-extended-domain="-3.250,3.250"/);
+  assert.match(svg, /data-kp-camera-azimuth-degrees="35"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-stroke-ratio="2"/);
+  assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-stroke-extra-px="1"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-occlusion-treatment="muted"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-occlusion-treatment="strong"/);
-  assert.match(svg, /class="graph-axis__segment"[^>]+style="stroke: #[0-9a-f]{6}; stroke-width: 2.500;/);
+  assert.match(svg, /class="graph-axis__segment"[^>]+style="stroke: #000000; stroke-width: 3.500;/);
   assert.match(svg, /class="graph-axis__arrow"/);
+  assert.match(svg, /data-kp-axis-arrow="negative-end"/);
   assert.match(svg, /data-kp-axis-arrow="positive-end"/);
+  assert.match(svg, /marker-start="url\(#graph-axis-arrow-/);
   assert.match(svg, /marker-end="url\(#graph-axis-arrow-/);
   assert.match(svg, /graph-axis--base-plane/);
   assert.match(svg, /graph-axis--subtle/);
   assert.match(svg, /class="graph-surface__quad"/);
+  assert.match(svg, /class="graph-surface__edge-outline"/);
+  assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-edge-outline"/);
   assert.match(svg, /data-kp-surface-depth="/);
   assert.match(svg, /data-kp-cell="0,0"/);
   assert.match(svg, /data-kp-facing="front"/);
@@ -252,6 +258,12 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   const arrowSizes = [...svg.matchAll(/class="graph-axis__arrow"[^>]+markerWidth="(\d+(?:\.\d+)?)"/g)].map(
     (match) => Number(match[1])
   );
+  const hiddenAxisOpacities = [...svg.matchAll(/data-kp-visibility="hidden"[^>]+opacity: (\d+(?:\.\d+)?);/g)].map(
+    (match) => Number(match[1])
+  );
+  const visibleAxisOpacities = [...svg.matchAll(/data-kp-visibility="visible"[^>]+opacity: (\d+(?:\.\d+)?);/g)].map(
+    (match) => Number(match[1])
+  );
 
   assert.ok(surfaceFillHues.length > 0);
   assert.ok(surfaceFillHues.every((hue) => hue >= 184 && hue <= 224));
@@ -269,6 +281,10 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   );
   assert.ok(arrowSizes.length > 0);
   assert.ok(arrowSizes.every((size) => size >= 4 && size <= 8));
+  assert.ok(hiddenAxisOpacities.length > 0);
+  assert.ok(visibleAxisOpacities.length > 0);
+  assert.ok(hiddenAxisOpacities.every((opacity) => opacity >= 0.84));
+  assert.ok(visibleAxisOpacities.every((opacity) => opacity >= 0.92));
   assert.ok(
     svg.indexOf('class="graph-surface__quad"') <
       svg.indexOf('class="graph-surface__line')

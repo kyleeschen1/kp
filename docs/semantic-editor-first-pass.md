@@ -186,7 +186,7 @@ data-kp-render-node="rn-saddle-orbit-graph-svg"
 data-kp-type="graph-3d"
 ```
 
-The 3D SVG uses semantic layers to make the axes feel integrated with the drawing. Axes are sampled into short projected segments and classified against the projected surface mesh. Surface cells render first, then hidden axis segments render as muted annotations, and visible axis segments render as stronger strokes. This intentionally fakes occlusion: behind-surface axis pieces stay visible but subdued instead of disappearing. The axes extend 15% past their domains and carry a `data-kp-stroke-ratio="2"` marker because they are intentionally twice as thick as mesh lines. Positive axis ends receive depth-scaled SVG arrowheads.
+The 3D SVG uses semantic layers to make the axes feel integrated with the drawing. Axes are sampled into short projected segments and classified against the projected surface mesh. Surface cells render first, then hidden axis segments render as slightly muted annotations, and visible axis segments render as stronger strokes. This intentionally fakes occlusion: behind-surface axis pieces stay visible but subdued instead of disappearing. The axes extend 15% past their domains, render in black, and carry `data-kp-stroke-ratio="2"` plus `data-kp-stroke-extra-px="1"` because they are intentionally thicker than mesh lines. Both axis ends receive depth-scaled SVG arrowheads.
 
 ```html
 <g class="graph-axis graph-axis--3d graph-axis--x graph-axis--base-plane"
@@ -199,14 +199,19 @@ The 3D SVG uses semantic layers to make the axes feel integrated with the drawin
     data-kp-visibility="visible"
     data-kp-occlusion-treatment="strong"
     data-kp-stroke-ratio="2"
-    marker-end="url(#graph-axis-arrow-saddle-orbit-x-axis-visible)" />
+    data-kp-stroke-extra-px="1"
+    marker-start="url(#graph-axis-arrow-saddle-orbit-x-axis-visible-negative-end)"
+    marker-end="url(#graph-axis-arrow-saddle-orbit-x-axis-visible-positive-end)" />
+  <marker class="graph-axis__arrow"
+    data-kp-axis-arrow="negative-end"
+    data-kp-depth-weight="0.5" />
   <marker class="graph-axis__arrow"
     data-kp-axis-arrow="positive-end"
     data-kp-depth-weight="0.5" />
 </g>
 ```
 
-The saddle surface renders as filled SVG quadrilateral cells with mesh lines overlaid. Each cell preserves semantic identity and records its grid coordinate, camera-facing side, and projected average depth:
+The saddle surface renders as filled SVG quadrilateral cells with mesh lines overlaid and a dark blue projected perimeter outline for contrast. Each cell preserves semantic identity and records its grid coordinate, camera-facing side, and projected average depth:
 
 ```html
 data-kp-object="saddle-surface"
@@ -233,6 +238,22 @@ data-kp-render-node="rn-saddle-surface-svg-wireframe"
 data-kp-type="surface-3d"
 ```
 
+```html
+data-kp-object="saddle-surface"
+data-kp-render-node="rn-saddle-surface-svg-edge-outline"
+data-kp-type="surface-3d"
+```
+
+The editor exposes the graph camera azimuth as a z-rotation range control. Moving the slider updates the semantic document's `camera.azimuthDegrees`, refreshes the JSON pane, and re-renders the matching 3D SVG preview.
+
+```html
+data-action="set-graph-azimuth"
+data-graph-id="saddle-orbit-graph"
+data-kp-graph-rotation-axis="z"
+```
+
+For future surface animation, triangles are the better transform-only primitive. Any projected 2D triangle can be mapped exactly to another projected triangle with one affine matrix, while arbitrary quadrilateral deformation cannot generally be represented by translate/rotate/scale/skew alone. The likely path is to keep semantic surfaces as surfaces, triangulate internally for animation, and recompute depth ordering, normals, and occlusion when the graph rotates or the surface morphs.
+
 ## Compile Path
 
 The backend exposes `POST /api/compile`.
@@ -244,7 +265,7 @@ Input is a `KpDocument` JSON body. Output is a standalone HTML asset containing 
 - Only matrix objects, one 2D graph family, and one 3D graph family are supported.
 - Curve rendering supports `y = x^2`; it is not a general equation parser.
 - 3D rendering supports the built-in saddle surface and optional time spiral curve; it is not a general 3D equation parser.
-- The 3D renderer is SVG projection only. It has semantic metadata, filled surface cells, derivative shading, extended axes, and export-friendly output, but no WebGL z-buffer or interactive camera controls.
+- The 3D renderer is SVG projection only. It has semantic metadata, filled surface cells, derivative shading, extended axes, a z-rotation slider, and export-friendly output, but no WebGL z-buffer.
 - Validation is structural and narrow.
 - The compiled HTML asset does not yet inline the full editor stylesheet or KaTeX CSS.
 - The editor JSON is read-only.

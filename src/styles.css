@@ -197,6 +197,36 @@ h2 {
   padding: 1rem;
 }
 
+.graph-controls {
+  border-bottom: 1px solid #e3e8ef;
+  padding: 0.75rem 0.9rem;
+  background: #f8fafc;
+}
+
+.graph-control {
+  display: grid;
+  grid-template-columns: auto minmax(8rem, 1fr) 4rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.graph-control__label,
+.graph-control__value {
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.graph-control__value {
+  text-align: right;
+}
+
+.graph-control__range {
+  width: 100%;
+  accent-color: #1f6371;
+}
+
 .graph-svg {
   display: block;
   width: 100%;
@@ -292,6 +322,15 @@ h2 {
 .graph-surface__line--column {
   stroke: #7b8f63;
   opacity: 0.42;
+}
+
+.graph-surface__edge-outline {
+  fill: none;
+  stroke: #0f3d5e;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.6;
+  opacity: 0.95;
 }
 
 .graph-surface text {

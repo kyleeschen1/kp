@@ -6,7 +6,8 @@ import {
   renderEditorDocument
 } from "../src/editor/editor.ts";
 import { compileDocumentAsset } from "../src/editor/compile-client.ts";
-import { createEditorState } from "../src/editor/state.ts";
+import { createEditorState, updateGraph3DAzimuth } from "../src/editor/state.ts";
+import type { Graph3DObject } from "../src/semantic/graph.ts";
 
 test("initial editor document contains a 3x3 identity matrix", () => {
   const document = createInitialEditorDocument();
@@ -61,7 +62,15 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /&quot;type&quot;: &quot;matrix&quot;/);
   assert.match(html, /&quot;type&quot;: &quot;graph-2d&quot;/);
   assert.match(html, /&quot;type&quot;: &quot;graph-3d&quot;/);
+  assert.match(html, /data-role="semantic-json"/);
   assert.match(html, /data-action="compile-document"/);
+  assert.match(html, /data-action="set-graph-azimuth"/);
+  assert.match(html, /data-kp-graph-rotation-axis="z"/);
+  assert.match(html, /data-graph-id="saddle-orbit-graph"/);
+  assert.match(html, /type="range"/);
+  assert.match(html, /min="-180"/);
+  assert.match(html, /max="180"/);
+  assert.match(html, /value="35"/);
   assert.match(html, /id="compiled-source"/);
   assert.match(html, /No validation issues/);
   assert.ok(
@@ -80,6 +89,21 @@ test("createEditorState stores the current semantic document", () => {
 
   assert.equal(state.document, document);
   assert.equal(state.selectedObjectId, "identity-3x3");
+});
+
+test("updateGraph3DAzimuth updates the semantic graph camera without mutating the source document", () => {
+  const document = createInitialEditorDocument();
+  const nextDocument = updateGraph3DAzimuth(document, "saddle-orbit-graph", 92);
+  const originalGraph = document.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+  const nextGraph = nextDocument.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+
+  assert.notEqual(nextDocument, document);
+  assert.equal(originalGraph?.camera.azimuthDegrees, 35);
+  assert.equal(nextGraph?.camera.azimuthDegrees, 92);
 });
 
 test("compileDocumentAsset posts the semantic document and returns HTML", async () => {

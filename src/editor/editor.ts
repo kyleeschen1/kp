@@ -7,6 +7,7 @@ import {
   type KpSemanticObject
 } from "../semantic/document.ts";
 import { createDefaultGraph3DScene, createDefaultGraphScene } from "../semantic/graph.ts";
+import type { Graph3DObject } from "../semantic/graph.ts";
 import { identityMatrix } from "../semantic/matrix.ts";
 import { validateKpDocument } from "../semantic/validation.ts";
 
@@ -57,7 +58,7 @@ export function renderEditorDocument(document: KpDocument): string {
             <button class="compile-button" type="button" data-action="compile-document">Compile</button>
           </div>
           ${validationHtml}
-          <pre class="json-source"><code>${escapeHtml(JSON.stringify(document, null, 2))}</code></pre>
+          <pre class="json-source"><code data-role="semantic-json">${escapeHtml(JSON.stringify(document, null, 2))}</code></pre>
         </section>
         <section class="editor-panel" aria-labelledby="preview-title">
           <div class="panel-header">
@@ -89,7 +90,7 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
       return renderPreviewArticle(
         object,
         "rn-" + object.id + "-svg-preview",
-        `<div class="object-preview__graph">${renderGraph3DToSvg(document.objects, object)}</div>`
+        `${renderGraph3DControls(object)}<div class="object-preview__graph">${renderGraph3DToSvg(document.objects, object)}</div>`
       );
     case "matrix": {
       const latex = defaultLatexRenderer.render(object);
@@ -102,6 +103,21 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
       );
     }
   }
+}
+
+function renderGraph3DControls(graph: Graph3DObject): string {
+  const inputId = "control-" + graph.id + "-azimuth";
+  const azimuth = formatNumber(graph.camera.azimuthDegrees);
+
+  return `
+    <div class="graph-controls" data-kp-object="${escapeHtml(graph.id)}" data-kp-type="graph-view-controls">
+      <label class="graph-control" for="${escapeHtml(inputId)}">
+        <span class="graph-control__label">z rotation</span>
+        <input class="graph-control__range" id="${escapeHtml(inputId)}" type="range" min="-180" max="180" step="1" value="${azimuth}" data-action="set-graph-azimuth" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-rotation-axis="z" aria-label="Rotate graph around z-axis" />
+        <output class="graph-control__value" for="${escapeHtml(inputId)}">${azimuth} deg</output>
+      </label>
+    </div>
+  `;
 }
 
 function renderPreviewArticle(
@@ -125,4 +141,8 @@ function escapeHtml(value: string): string {
     ">",
     "&gt;"
   ).replaceAll('"', "&quot;");
+}
+
+function formatNumber(value: number): string {
+  return Number.isInteger(value) ? String(value) : value.toFixed(3);
 }
