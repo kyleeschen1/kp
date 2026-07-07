@@ -34,6 +34,16 @@ export interface DepthScene {
   triangleCount: number;
 }
 
+export interface DepthSceneDiagnostics {
+  bufferHeight: number;
+  bufferScale: number;
+  bufferWidth: number;
+  depthCellCount: number;
+  overlapCount: number;
+  surfaceCount: number;
+  triangleCount: number;
+}
+
 export interface ProjectedDepthSurface {
   surfaceId: string;
   triangles: readonly ProjectedTriangle[];
@@ -96,6 +106,18 @@ export function projectedQuadsToDepthTriangles(
   quads: readonly ProjectedQuad[]
 ): readonly ProjectedTriangle[] {
   return quads.flatMap((quad) => splitProjectedQuadToTriangles(quad));
+}
+
+export function depthSceneDiagnostics(scene: DepthScene): DepthSceneDiagnostics {
+  return {
+    bufferHeight: scene.buffer.height,
+    bufferScale: scene.buffer.scale,
+    bufferWidth: scene.buffer.width,
+    depthCellCount: scene.buffer.width * scene.buffer.height,
+    overlapCount: scene.overlapCount,
+    surfaceCount: scene.surfaceCount,
+    triangleCount: scene.triangleCount
+  };
 }
 
 export function detectDepthSurfaceOverlaps(

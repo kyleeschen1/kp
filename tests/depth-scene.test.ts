@@ -5,6 +5,7 @@ import {
   buildDepthScene,
   classifyProjectedPointDepth,
   classifyProjectedLineVisibility,
+  depthSceneDiagnostics,
   detectDepthSurfaceOverlaps,
   findVisibilityBoundary,
   projectedQuadsToDepthTriangles,
@@ -62,6 +63,36 @@ test("buildDepthScene rasterizes projected triangles and classifies lines", () =
     }),
     "visible"
   );
+});
+
+test("depthSceneDiagnostics returns renderer-facing depth metadata", () => {
+  const scene = buildDepthScene({
+    logicalWidth: 4,
+    logicalHeight: 3,
+    scale: 2,
+    surfaceCount: 2,
+    overlapCount: 5,
+    triangles: [
+      {
+        points: [
+          { x: 0, y: 0, depth: 2 },
+          { x: 3, y: 0, depth: 2 },
+          { x: 0, y: 2, depth: 2 }
+        ]
+      }
+    ]
+  });
+
+  assert.equal(typeof depthSceneDiagnostics, "function");
+  assert.deepEqual(depthSceneDiagnostics(scene), {
+    bufferHeight: 6,
+    bufferScale: 2,
+    bufferWidth: 8,
+    depthCellCount: 48,
+    overlapCount: 5,
+    surfaceCount: 2,
+    triangleCount: 1
+  });
 });
 
 test("classifyProjectedPointDepth reports signed depth delta against the scene", () => {
