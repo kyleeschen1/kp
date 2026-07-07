@@ -31,6 +31,7 @@ test("compileHtmlDocument wraps rendered HTML as a standalone asset", () => {
   assert.match(html, /data-kp-document="identity-matrix-demo"/);
   assert.match(html, /data-kp-render-node="rn-curve-y-equals-x-squared-svg-path"/);
   assert.match(html, /data-kp-render-node="rn-saddle-surface-svg-quads"/);
-  assert.match(html, /data-kp-render-node="rn-saddle-surface-svg-wireframe"/);
+  assert.match(html, /data-kp-render-budget-status="ok"/);
+  assert.doesNotMatch(html, /data-kp-render-node="rn-saddle-surface-svg-wireframe"/);
   assert.doesNotMatch(html, /data-kp-render-node="rn-time-spiral-curve-svg-path"/);
 });

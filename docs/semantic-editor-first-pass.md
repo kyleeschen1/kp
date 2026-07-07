@@ -123,8 +123,13 @@ The first 3D graph object family mirrors the 2D graph interface with one additio
   id: string;
   type: "surface-3d";
   graphId: string;
-  label: "z = (x^2 - y^2) / 4";
-  equation: "z = (x^2 - y^2) / 4";
+  label: string;
+  equation: string;
+  parameterization?: {
+    kind: "saddle";
+    denominator: number;
+  };
+  expression: MathExpression;
   xDomain: [number, number];
   yDomain: [number, number];
   xSampleCount: number;
@@ -139,16 +144,43 @@ The first 3D graph object family mirrors the 2D graph interface with one additio
   graphId: string;
   label: "time spiral";
   equation: {
-    x: "2.2 cos(t)";
-    y: "1.3 sin(t)";
-    z: "0.18 (t - 2 pi)";
+    x: string;
+    y: string;
+    z: string;
+  };
+  expressions: {
+    x: MathExpression;
+    y: MathExpression;
+    z: MathExpression;
   };
   tDomain: [number, number];
   sampleCount: number;
 }
 ```
 
-`createDefaultGraph3DScene()` currently creates `saddle-orbit-graph`, `saddle-orbit-x-axis`, `saddle-orbit-y-axis`, `saddle-orbit-z-axis`, and `saddle-surface`. The time spiral semantic object and renderer still exist, but the default editor scene omits it while the 3D surface/axis rendering is being refined.
+`createDefaultGraph3DScene()` currently creates `saddle-orbit-graph`,
+`saddle-orbit-x-axis`, `saddle-orbit-y-axis`, `saddle-orbit-z-axis`, and
+`saddle-surface`. The default saddle has `{ kind: "saddle", denominator: 4 }`.
+The time spiral and saddle-weave 3D curve factories still exist for targeted
+renderer tests, but the default editor scene omits 3D curves while the
+surface/axis renderer is being refined.
+
+Animation is represented as a nonvisual semantic intent object:
+
+```ts
+{
+  id: string;
+  type: "animation-intent";
+  label: string;
+  targetId: string;
+  targetType: "surface-3d";
+  property: "saddle.denominator";
+  from: number;
+  to: number;
+  durationMs: number;
+  easing: "ease-in-out" | "linear";
+}
+```
 
 ## Rendering
 
@@ -235,6 +267,17 @@ data-kp-depth-overlap-count="0"
 data-kp-visibility-source="depth-buffer"
 ```
 
+The SVG root also records the current software-depth performance budget. The
+default scene is currently within budget:
+
+```html
+data-kp-render-budget-status="ok"
+data-kp-render-budget-depth-cell-count="235200"
+data-kp-render-budget-max-depth-cell-count="300000"
+data-kp-render-budget-depth-triangle-count="288"
+data-kp-render-budget-max-depth-triangle-count="800"
+```
+
 This is not exact computational geometry. It does not split SVG shapes at every
 surface crossing analytically. It uses projected depth-delta refinement plus
 adaptive subdivision rather than solving every line/surface intersection in
@@ -266,7 +309,8 @@ data-kp-surface-depth="-1.234"
 ```
 
 Cell fill colors use the executable saddle expression and its automatically
-differentiated partials from `src/math/surface-examples.ts`:
+differentiated partials from `src/math/surface-examples.ts`. The default
+parameterization is:
 
 ```latex
 \frac{x^{2} - y^{2}}{4}
@@ -338,7 +382,11 @@ data-kp-render-node="rn-saddle-surface-svg-edge-outline"
 data-kp-type="surface-3d"
 ```
 
-The editor exposes the graph camera azimuth as a z-rotation range control. Moving the slider updates the semantic document's `camera.azimuthDegrees`, refreshes the JSON pane, and re-renders the matching 3D SVG preview.
+The editor exposes the graph camera azimuth and saddle denominator as range
+controls. Moving either slider updates the semantic document, refreshes the JSON
+pane, and re-renders the matching 3D SVG preview. The denominator slider rebuilds
+the surface's label, equation text, parameter metadata, and executable
+`MathExpression` together.
 
 ```html
 data-action="set-graph-azimuth"
@@ -346,7 +394,21 @@ data-graph-id="saddle-orbit-graph"
 data-kp-graph-rotation-axis="z"
 ```
 
-For future surface animation, triangles are the better transform-only primitive. Any projected 2D triangle can be mapped exactly to another projected triangle with one affine matrix, while arbitrary quadrilateral deformation cannot generally be represented by translate/rotate/scale/skew alone. The likely path is to keep semantic surfaces as surfaces, triangulate internally for animation, and recompute depth ordering, normals, and occlusion when the graph rotates or the surface morphs.
+```html
+data-action="set-saddle-denominator"
+data-graph-id="saddle-orbit-graph"
+data-surface-id="saddle-surface"
+data-kp-graph-surface-parameter="saddle-denominator"
+```
+
+For future surface animation, triangles are the better transform-only primitive.
+Any projected 2D triangle can be mapped exactly to another projected triangle
+with one affine matrix, while arbitrary quadrilateral deformation cannot
+generally be represented by translate/rotate/scale/skew alone. The current
+prototype has deterministic JS tween helpers that sample number frames and saddle
+denominator morph grids from an `animation-intent`; live playback should drive
+the same frame math from `requestAnimationFrame`, then recompute depth ordering,
+normals, and occlusion for the visible SVG state.
 
 ## Compile Path
 
@@ -359,7 +421,8 @@ Input is a `KpDocument` JSON body. Output is a standalone HTML asset containing 
 - Only matrix objects, one 2D graph family, and one 3D graph family are supported.
 - Equation parsing is intentionally narrow and only supports explicit `y = f(x)` curves and `z = f(x,y)` surfaces.
 - Implicit equations, inequalities, piecewise definitions, full TeX macro expansion, and contouring are not supported yet.
-- The 3D renderer is SVG projection only. It has semantic metadata, filled surface cells, derivative shading, extended axes, a z-rotation slider, a lightweight software depth scene for axis/border/curve visibility, and export-friendly output, but no WebGL z-buffer.
+- The 3D renderer is SVG projection only. It has semantic metadata, filled surface cells, derivative shading, extended axes, z-rotation and saddle-denominator sliders, a lightweight software depth scene for axis/border/curve visibility, performance-budget metadata, and export-friendly output, but no WebGL z-buffer.
+- Animation has semantic intents, deterministic tween frame sampling, and saddle morph grid sampling, but no live playback loop or DOM patching yet.
 - Validation is structural and narrow.
 - The compiled HTML asset does not yet inline the full editor stylesheet or KaTeX CSS.
 - The editor JSON is read-only.
