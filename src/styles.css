@@ -78,6 +78,56 @@ h2 {
   white-space: nowrap;
 }
 
+.equation-entry {
+  display: grid;
+  grid-template-columns: auto minmax(12rem, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 1180px;
+  margin: 0 auto 1rem;
+  border: 1px solid #d4dee8;
+  border-radius: 8px;
+  padding: 0.75rem;
+  background: #ffffff;
+}
+
+.equation-entry__label {
+  color: #334155;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.equation-entry__input {
+  min-width: 0;
+  border: 1px solid #b7c7d6;
+  border-radius: 6px;
+  padding: 0.52rem 0.65rem;
+  color: #172033;
+  background: #fbfdff;
+}
+
+.equation-entry__button {
+  border: 1px solid #1f6371;
+  border-radius: 6px;
+  padding: 0.52rem 0.78rem;
+  color: #ffffff;
+  background: #1f6371;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.equation-entry__button:hover {
+  background: #174b55;
+}
+
+.equation-entry__error {
+  grid-column: 2 / 4;
+  min-height: 1rem;
+  color: #8b2c2c;
+  font-size: 0.78rem;
+}
+
 .editor-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
@@ -205,7 +255,7 @@ h2 {
 
 .graph-control {
   display: grid;
-  grid-template-columns: auto minmax(8rem, 1fr) 4rem;
+  grid-template-columns: auto minmax(8rem, 1fr) 5.25rem;
   align-items: center;
   gap: 0.75rem;
 }
@@ -325,12 +375,13 @@ h2 {
 }
 
 .graph-surface__edge-outline {
-  fill: none;
-  stroke: #0f3d5e;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 2.6;
+  fill: #0f3d5e;
+  stroke: none;
   opacity: 0.95;
+}
+
+.graph-surface__edge-outline[data-kp-edge-visibility="hidden"] {
+  opacity: 0.5;
 }
 
 .graph-surface text {
@@ -371,6 +422,14 @@ h2 {
   .editor-header {
     align-items: start;
     flex-direction: column;
+  }
+
+  .equation-entry {
+    grid-template-columns: 1fr;
+  }
+
+  .equation-entry__error {
+    grid-column: 1;
   }
 
   .editor-grid {

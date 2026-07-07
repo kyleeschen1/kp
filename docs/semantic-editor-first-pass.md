@@ -5,6 +5,8 @@ This pass establishes the smallest working Kinetic Press editor loop:
 ```text
 semantic JSON
   -> default LaTeX representation
+  -> executable math expression
+  -> automatic differentiation
   -> KaTeX HTML
   -> graph SVG
   -> 3D graph SVG projection
@@ -186,7 +188,7 @@ data-kp-render-node="rn-saddle-orbit-graph-svg"
 data-kp-type="graph-3d"
 ```
 
-The 3D SVG uses semantic layers to make the axes feel integrated with the drawing. Axes are sampled into short projected segments and classified against the projected surface mesh. Surface cells render first, then hidden axis segments render as slightly muted annotations, and visible axis segments render as stronger strokes. This intentionally fakes occlusion: behind-surface axis pieces stay visible but subdued instead of disappearing. The axes extend 15% past their domains, render in black, and carry `data-kp-stroke-ratio="2"` plus `data-kp-stroke-extra-px="1"` because they are intentionally thicker than mesh lines. Both axis ends receive depth-scaled SVG arrowheads.
+The 3D SVG uses semantic layers to make axes, borders, and curves feel integrated with the drawing. Mathematical objects first become projected geometry. Opaque surface quads write depth into a shared software depth scene, and line-like objects query that scene for visibility. Surface cells render first, then hidden line segments render as muted annotations, and visible line segments render as stronger strokes. This intentionally fakes occlusion: behind-surface pieces stay visible but subdued instead of disappearing. The axes extend 15% past their domains, render in black when visible, and carry `data-kp-stroke-ratio="2"` plus `data-kp-stroke-extra-px="1"` because they are intentionally thicker than mesh lines. Both axis ends receive depth-scaled SVG polygon arrowheads.
 
 ```html
 <g class="graph-axis graph-axis--3d graph-axis--x graph-axis--base-plane"
@@ -194,21 +196,62 @@ The 3D SVG uses semantic layers to make the axes feel integrated with the drawin
   data-kp-axis-extended-domain="-3.900,3.900"
   data-kp-axis-extension-ratio="0.15"
   data-kp-axis-visibility-layer="visible">
-  <line class="graph-axis__segment"
+  <polygon class="graph-axis__segment"
     data-kp-depth="0"
     data-kp-visibility="visible"
+    data-kp-visibility-source="depth-buffer"
     data-kp-occlusion-treatment="strong"
     data-kp-stroke-ratio="2"
-    data-kp-stroke-extra-px="1"
-    marker-start="url(#graph-axis-arrow-saddle-orbit-x-axis-visible-negative-end)"
-    marker-end="url(#graph-axis-arrow-saddle-orbit-x-axis-visible-positive-end)" />
-  <marker class="graph-axis__arrow"
+    data-kp-stroke-extra-px="1" />
+  <polygon class="graph-axis__arrow"
     data-kp-axis-arrow="negative-end"
+    data-kp-visibility-source="depth-buffer"
     data-kp-depth-weight="0.5" />
-  <marker class="graph-axis__arrow"
+  <polygon class="graph-axis__arrow"
     data-kp-axis-arrow="positive-end"
+    data-kp-visibility-source="depth-buffer"
     data-kp-depth-weight="0.5" />
 </g>
+```
+
+The current occlusion pass builds a small software depth scene before emitting
+SVG. Each opaque surface quad is split into two projected triangles and
+rasterized into a `Float32Array`. The convention is larger depth means closer to
+the camera. Axes, arrows, surface perimeter outlines, and 3D curve segments use
+one adaptive projected-line visibility helper. If endpoint visibility changes,
+the helper first refines the signed depth-delta crossing with binary search; if
+the endpoints agree but the midpoint differs, it recursively splits the segment
+to catch pass-through cases. A segment-budget fallback can trade exactness for a
+bounded SVG segment count. This keeps SVG as the semantic/event surface while
+giving line-like objects one shared visibility source:
+
+```html
+data-kp-depth-buffer-scale="1"
+data-kp-depth-buffer-width="560"
+data-kp-depth-buffer-height="420"
+data-kp-depth-surface-count="1"
+data-kp-depth-triangle-count="288"
+data-kp-depth-overlap-count="0"
+data-kp-visibility-source="depth-buffer"
+```
+
+This is not exact computational geometry. It does not split SVG shapes at every
+surface crossing analytically. It uses projected depth-delta refinement plus
+adaptive subdivision rather than solving every line/surface intersection in
+graph space. For multiple surfaces, the renderer records projected triangle
+overlap counts as metadata so ambiguous regions can be debugged before full
+surface/surface splitting exists. It is the current pragmatic bridge between
+hand-authored SVG semantics and future deeper geometry kernels.
+
+The generic renderer boundary is now:
+
+```text
+semantic math object
+  -> executable samples
+  -> projected geometry
+  -> depth writers: projected surface triangles
+  -> depth queries: projected axes, borders, curves, arrows
+  -> SVG with semantic metadata
 ```
 
 The saddle surface renders as filled SVG quadrilateral cells with mesh lines overlaid and a dark blue projected perimeter outline for contrast. Each cell preserves semantic identity and records its grid coordinate, camera-facing side, and projected average depth:
@@ -222,15 +265,66 @@ data-kp-facing="front"
 data-kp-surface-depth="-1.234"
 ```
 
-Cell fill colors use the analytic saddle derivatives:
+Cell fill colors use the executable saddle expression and its automatically
+differentiated partials from `src/math/surface-examples.ts`:
+
+```latex
+\frac{x^{2} - y^{2}}{4}
+```
+
+The renderer samples `z` values by evaluating that expression, then computes
+normals from the compiled gradient:
 
 ```text
-dz/dx = x / 2
-dz/dy = -y / 2
 normal = normalize([-dz/dx, -dz/dy, 1])
 ```
 
 The renderer compares that normal with the current camera direction to classify front-facing and back-facing cells, then applies a light direction to vary brightness. Surface quads are fully opaque. Both sides use blue-family fills, and the back-facing underside is lighter than the darkest front-facing color so projected overlap does not blend yellow or muddy the top surface.
+
+## Executable Math and AD
+
+The first automatic differentiation slice lives in `src/math/expression.ts`.
+It introduces a dependency-free expression AST that can be interpreted several
+ways:
+
+- render a default LaTeX representation;
+- compile an allocation-light numeric evaluator closure;
+- symbolically differentiate with respect to named variables;
+- compile gradients as reusable numeric closures.
+
+This is deliberately a TypeScript-first foundation. The intended Wasm boundary
+is bulk numeric geometry, not per-point DOM work: TypeScript should keep
+semantic JSON, editor state, LaTeX, and SVG/WebGL rendering, while a future Wasm
+module can evaluate expression bytecode, derivatives, intersections, overlap,
+and visibility over typed arrays.
+
+## LaTeX Equation Input
+
+The editor now has a small equation input path for graphable math. This is not
+a full TeX parser. It accepts a compact math subset:
+
+- numbers, variables, `+`, `-`, `*`, `/`, `^`, and `=`;
+- grouped expressions with `{...}` and `(...)`;
+- `\frac{...}{...}`;
+- `\sin(...)`, `\cos(...)`, and `\sqrt{...}`.
+
+The pipeline is:
+
+```text
+LaTeX equation string
+  -> tokenizer
+  -> parse AST
+  -> MathExpression AST
+  -> explicit equation classifier
+  -> semantic graph scene
+  -> expression-backed SVG sampling
+```
+
+`y = f(x)` creates a 2D graph scene with x/y axes and an expression-backed
+curve. `z = f(x,y)` creates a 3D graph scene with x/y/z axes and an
+expression-backed surface. The renderer samples those curve and surface
+objects from their stored `MathExpression`, so generated equations use the same
+evaluation and AD machinery as the built-in saddle.
 
 ```html
 data-kp-object="saddle-surface"
@@ -263,9 +357,9 @@ Input is a `KpDocument` JSON body. Output is a standalone HTML asset containing 
 ## Current Limits
 
 - Only matrix objects, one 2D graph family, and one 3D graph family are supported.
-- Curve rendering supports `y = x^2`; it is not a general equation parser.
-- 3D rendering supports the built-in saddle surface and optional time spiral curve; it is not a general 3D equation parser.
-- The 3D renderer is SVG projection only. It has semantic metadata, filled surface cells, derivative shading, extended axes, a z-rotation slider, and export-friendly output, but no WebGL z-buffer.
+- Equation parsing is intentionally narrow and only supports explicit `y = f(x)` curves and `z = f(x,y)` surfaces.
+- Implicit equations, inequalities, piecewise definitions, full TeX macro expansion, and contouring are not supported yet.
+- The 3D renderer is SVG projection only. It has semantic metadata, filled surface cells, derivative shading, extended axes, a z-rotation slider, a lightweight software depth scene for axis/border/curve visibility, and export-friendly output, but no WebGL z-buffer.
 - Validation is structural and narrow.
 - The compiled HTML asset does not yet inline the full editor stylesheet or KaTeX CSS.
 - The editor JSON is read-only.

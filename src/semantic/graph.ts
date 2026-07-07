@@ -1,4 +1,13 @@
+import {
+  power,
+  variable,
+  type MathExpression
+} from "../math/expression.ts";
+import { saddleSurfaceExpression } from "../math/surface-examples.ts";
+
 export type NumericDomain = readonly [number, number];
+
+export const DEFAULT_OCCLUDED_AXIS_LIGHTNESS = 44;
 
 export interface GraphPoint2D {
   x: number;
@@ -36,7 +45,8 @@ export interface Curve2DObject {
   type: "curve-2d";
   graphId: string;
   label: string;
-  equation: "y = x^2";
+  equation: string;
+  expression: MathExpression;
   xDomain: NumericDomain;
   sampleCount: number;
 }
@@ -60,6 +70,7 @@ export interface Graph3DObject {
   zDomain: NumericDomain;
   width: number;
   height: number;
+  occludedAxisLightness: number;
   camera: Graph3DCamera;
 }
 
@@ -92,7 +103,8 @@ export interface Surface3DObject {
   type: "surface-3d";
   graphId: string;
   label: string;
-  equation: "z = (x^2 - y^2) / 4";
+  equation: string;
+  expression: MathExpression;
   xDomain: NumericDomain;
   yDomain: NumericDomain;
   xSampleCount: number;
@@ -110,7 +122,9 @@ export type GraphSceneObject =
 
 type CreateGraph2DObjectInput = Omit<Graph2DObject, "type">;
 type CreateAxis2DObjectInput = Omit<Axis2DObject, "type">;
-type CreateGraph3DObjectInput = Omit<Graph3DObject, "type">;
+type CreateGraph3DObjectInput =
+  Omit<Graph3DObject, "occludedAxisLightness" | "type"> &
+  Partial<Pick<Graph3DObject, "occludedAxisLightness">>;
 type CreateAxis3DObjectInput = Omit<Axis3DObject, "type">;
 
 interface CreateParabolaCurveInput {
@@ -161,7 +175,8 @@ export function createParabolaCurve2D(
     ...input,
     type: "curve-2d",
     label: "x^2 = y",
-    equation: "y = x^2"
+    equation: "y = x^2",
+    expression: power(variable("x"), 2)
   };
 }
 
@@ -170,7 +185,12 @@ export function createGraph3DObject(
 ): Graph3DObject {
   return {
     ...input,
-    type: "graph-3d"
+    type: "graph-3d",
+    occludedAxisLightness: clamp(
+      input.occludedAxisLightness ?? DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
+      0,
+      100
+    )
   };
 }
 
@@ -205,7 +225,8 @@ export function createSaddleSurface3D(
     ...input,
     type: "surface-3d",
     label: "z = (x^2 - y^2) / 4",
-    equation: "z = (x^2 - y^2) / 4"
+    equation: "z = (x^2 - y^2) / 4",
+    expression: saddleSurfaceExpression
   };
 }
 
@@ -258,6 +279,7 @@ export function createDefaultGraph3DScene(): readonly GraphSceneObject[] {
     zDomain: [-2.5, 2.5],
     width: 560,
     height: 420,
+    occludedAxisLightness: DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
     camera: {
       azimuthDegrees: 35,
       elevationDegrees: 30,
@@ -298,4 +320,8 @@ export function createDefaultGraph3DScene(): readonly GraphSceneObject[] {
     ySampleCount: 13
   });
   return [graph, xAxis, yAxis, zAxis, surface];
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
 }

@@ -6,8 +6,13 @@ import {
   renderEditorDocument
 } from "../src/editor/editor.ts";
 import { compileDocumentAsset } from "../src/editor/compile-client.ts";
-import { createEditorState, updateGraph3DAzimuth } from "../src/editor/state.ts";
-import type { Graph3DObject } from "../src/semantic/graph.ts";
+import {
+  addLatexEquationGraph,
+  createEditorState,
+  updateGraph3DAzimuth,
+  updateGraph3DOccludedAxisLightness
+} from "../src/editor/state.ts";
+import type { Graph2DObject, Graph3DObject } from "../src/semantic/graph.ts";
 
 test("initial editor document contains a 3x3 identity matrix", () => {
   const document = createInitialEditorDocument();
@@ -63,14 +68,23 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /&quot;type&quot;: &quot;graph-2d&quot;/);
   assert.match(html, /&quot;type&quot;: &quot;graph-3d&quot;/);
   assert.match(html, /data-role="semantic-json"/);
+  assert.match(html, /data-role="equation-input"/);
+  assert.match(html, /data-action="add-equation-graph"/);
+  assert.match(html, /data-role="equation-error"/);
   assert.match(html, /data-action="compile-document"/);
   assert.match(html, /data-action="set-graph-azimuth"/);
+  assert.match(html, /data-action="set-graph-occluded-axis-lightness"/);
   assert.match(html, /data-kp-graph-rotation-axis="z"/);
+  assert.match(html, /data-kp-graph-color-target="occluded-axis"/);
   assert.match(html, /data-graph-id="saddle-orbit-graph"/);
   assert.match(html, /type="range"/);
   assert.match(html, /min="-180"/);
   assert.match(html, /max="180"/);
   assert.match(html, /value="35"/);
+  assert.match(html, /min="0"/);
+  assert.match(html, /max="100"/);
+  assert.match(html, /value="44"/);
+  assert.match(html, /#5d7583/);
   assert.match(html, /id="compiled-source"/);
   assert.match(html, /No validation issues/);
   assert.ok(
@@ -80,6 +94,27 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.ok(
     html.indexOf('data-kp-object="parabola-graph"') <
       html.indexOf('data-kp-object="saddle-orbit-graph"')
+  );
+});
+
+test("addLatexEquationGraph appends a generated graph scene", () => {
+  const document = createInitialEditorDocument();
+  const nextDocument = addLatexEquationGraph(document, "y = x^2 + 1");
+  const generatedGraph = nextDocument.objects.find(
+    (object): object is Graph2DObject => object.id === "equation-1-graph"
+  );
+
+  assert.notEqual(nextDocument, document);
+  assert.equal(document.objects.some((object) => object.id === "equation-1-graph"), false);
+  assert.equal(generatedGraph?.type, "graph-2d");
+  assert.deepEqual(
+    nextDocument.objects.slice(-4).map((object) => object.id),
+    [
+      "equation-1-graph",
+      "equation-1-x-axis",
+      "equation-1-y-axis",
+      "equation-1-curve"
+    ]
   );
 });
 
@@ -104,6 +139,34 @@ test("updateGraph3DAzimuth updates the semantic graph camera without mutating th
   assert.notEqual(nextDocument, document);
   assert.equal(originalGraph?.camera.azimuthDegrees, 35);
   assert.equal(nextGraph?.camera.azimuthDegrees, 92);
+});
+
+test("updateGraph3DOccludedAxisLightness updates the semantic graph render setting", () => {
+  const document = createInitialEditorDocument();
+  const nextDocument = updateGraph3DOccludedAxisLightness(
+    document,
+    "saddle-orbit-graph",
+    42
+  );
+  const clampedDocument = updateGraph3DOccludedAxisLightness(
+    document,
+    "saddle-orbit-graph",
+    142
+  );
+  const originalGraph = document.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+  const nextGraph = nextDocument.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+  const clampedGraph = clampedDocument.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+
+  assert.notEqual(nextDocument, document);
+  assert.equal(originalGraph?.occludedAxisLightness, 44);
+  assert.equal(nextGraph?.occludedAxisLightness, 42);
+  assert.equal(clampedGraph?.occludedAxisLightness, 100);
 });
 
 test("compileDocumentAsset posts the semantic document and returns HTML", async () => {

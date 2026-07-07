@@ -1,4 +1,8 @@
-import { renderGraph3DToSvg, renderGraphToSvg } from "../rendering/graph-svg.ts";
+import {
+  occludedAxisColor,
+  renderGraph3DToSvg,
+  renderGraphToSvg
+} from "../rendering/graph-svg.ts";
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import { defaultLatexRenderer } from "../rendering/matrix-latex.ts";
 import {
@@ -6,7 +10,11 @@ import {
   type KpDocument,
   type KpSemanticObject
 } from "../semantic/document.ts";
-import { createDefaultGraph3DScene, createDefaultGraphScene } from "../semantic/graph.ts";
+import {
+  DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
+  createDefaultGraph3DScene,
+  createDefaultGraphScene
+} from "../semantic/graph.ts";
 import type { Graph3DObject } from "../semantic/graph.ts";
 import { identityMatrix } from "../semantic/matrix.ts";
 import { validateKpDocument } from "../semantic/validation.ts";
@@ -51,6 +59,12 @@ export function renderEditorDocument(document: KpDocument): string {
         </div>
         <span class="status-pill">JSON to HTML</span>
       </header>
+      <div class="equation-entry" data-role="equation-entry">
+        <label class="equation-entry__label" for="equation-input">Equation</label>
+        <input class="equation-entry__input" id="equation-input" type="text" value="z = \\frac{x^2-y^2}{4}" data-role="equation-input" aria-describedby="equation-error" />
+        <button class="equation-entry__button" type="button" data-action="add-equation-graph">Graph</button>
+        <output class="equation-entry__error" id="equation-error" data-role="equation-error" aria-live="polite"></output>
+      </div>
       <div class="editor-grid">
         <section class="editor-panel" aria-labelledby="source-title">
           <div class="panel-header">
@@ -106,15 +120,25 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
 }
 
 function renderGraph3DControls(graph: Graph3DObject): string {
-  const inputId = "control-" + graph.id + "-azimuth";
+  const azimuthInputId = "control-" + graph.id + "-azimuth";
+  const occludedAxisInputId = "control-" + graph.id + "-occluded-axis-lightness";
   const azimuth = formatNumber(graph.camera.azimuthDegrees);
+  const occludedAxisLightness =
+    graph.occludedAxisLightness ?? DEFAULT_OCCLUDED_AXIS_LIGHTNESS;
+  const formattedOccludedAxisLightness = formatNumber(occludedAxisLightness);
+  const occludedAxisHex = occludedAxisColor(occludedAxisLightness);
 
   return `
     <div class="graph-controls" data-kp-object="${escapeHtml(graph.id)}" data-kp-type="graph-view-controls">
-      <label class="graph-control" for="${escapeHtml(inputId)}">
+      <label class="graph-control" for="${escapeHtml(azimuthInputId)}">
         <span class="graph-control__label">z rotation</span>
-        <input class="graph-control__range" id="${escapeHtml(inputId)}" type="range" min="-180" max="180" step="1" value="${azimuth}" data-action="set-graph-azimuth" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-rotation-axis="z" aria-label="Rotate graph around z-axis" />
-        <output class="graph-control__value" for="${escapeHtml(inputId)}">${azimuth} deg</output>
+        <input class="graph-control__range" id="${escapeHtml(azimuthInputId)}" type="range" min="-180" max="180" step="1" value="${azimuth}" data-action="set-graph-azimuth" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-rotation-axis="z" aria-label="Rotate graph around z-axis" />
+        <output class="graph-control__value" for="${escapeHtml(azimuthInputId)}">${azimuth} deg</output>
+      </label>
+      <label class="graph-control" for="${escapeHtml(occludedAxisInputId)}">
+        <span class="graph-control__label">occluded axes</span>
+        <input class="graph-control__range" id="${escapeHtml(occludedAxisInputId)}" type="range" min="0" max="100" step="1" value="${formattedOccludedAxisLightness}" data-action="set-graph-occluded-axis-lightness" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-color-target="occluded-axis" aria-label="Set occluded axis lightness" />
+        <output class="graph-control__value" for="${escapeHtml(occludedAxisInputId)}">${escapeHtml(occludedAxisHex)}</output>
       </label>
     </div>
   `;

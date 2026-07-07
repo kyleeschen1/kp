@@ -6,9 +6,16 @@ import {
   renderEditorDocument
 } from "./editor/editor.ts";
 import { compileDocumentAsset } from "./editor/compile-client.ts";
-import { updateGraph3DAzimuth } from "./editor/state.ts";
-import { renderGraph3DToSvg } from "./rendering/graph-svg.ts";
-import type { Graph3DObject } from "./semantic/graph.ts";
+import {
+  addLatexEquationGraph,
+  updateGraph3DAzimuth,
+  updateGraph3DOccludedAxisLightness
+} from "./editor/state.ts";
+import { occludedAxisColor, renderGraph3DToSvg } from "./rendering/graph-svg.ts";
+import {
+  DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
+  type Graph3DObject
+} from "./semantic/graph.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -26,11 +33,14 @@ appRoot.addEventListener("click", (event) => {
     return;
   }
 
-  if (event.target.dataset["action"] !== "compile-document") {
-    return;
+  switch (event.target.dataset["action"]) {
+    case "compile-document":
+      void compileDocument();
+      return;
+    case "add-equation-graph":
+      addEquationGraphFromInput();
+      return;
   }
-
-  void compileDocument();
 });
 
 appRoot.addEventListener("input", (event) => {
@@ -38,11 +48,14 @@ appRoot.addEventListener("input", (event) => {
     return;
   }
 
-  if (event.target.dataset["action"] !== "set-graph-azimuth") {
-    return;
+  switch (event.target.dataset["action"]) {
+    case "set-graph-azimuth":
+      updateGraphAzimuthFromInput(event.target);
+      return;
+    case "set-graph-occluded-axis-lightness":
+      updateGraphOccludedAxisLightnessFromInput(event.target);
+      return;
   }
-
-  updateGraphAzimuthFromInput(event.target);
 });
 
 async function compileDocument(): Promise<void> {
@@ -58,6 +71,29 @@ async function compileDocument(): Promise<void> {
     if (compiledSource !== null) {
       compiledSource.textContent =
         error instanceof Error ? error.message : "Compile request failed.";
+    }
+  }
+}
+
+function addEquationGraphFromInput(): void {
+  const input = appRoot.querySelector<HTMLInputElement>(
+    '[data-role="equation-input"]'
+  );
+  const errorOutput = appRoot.querySelector<HTMLOutputElement>(
+    '[data-role="equation-error"]'
+  );
+
+  if (input === null) {
+    return;
+  }
+
+  try {
+    editorDocument = addLatexEquationGraph(editorDocument, input.value);
+    appRoot.innerHTML = renderEditorDocument(editorDocument);
+  } catch (error: unknown) {
+    if (errorOutput !== null) {
+      errorOutput.textContent =
+        error instanceof Error ? error.message : "Equation could not be parsed.";
     }
   }
 }
@@ -82,6 +118,39 @@ function updateGraphAzimuthFromInput(input: HTMLInputElement): void {
     ?.querySelector<HTMLOutputElement>(".graph-control__value")
     ?.replaceChildren(
       document.createTextNode(`${formatNumber(azimuthDegrees)} deg`)
+    );
+}
+
+function updateGraphOccludedAxisLightnessFromInput(input: HTMLInputElement): void {
+  const graphId = input.dataset["graphId"];
+  const lightness = Number(input.value);
+
+  if (graphId === undefined || !Number.isFinite(lightness)) {
+    return;
+  }
+
+  editorDocument = updateGraph3DOccludedAxisLightness(
+    editorDocument,
+    graphId,
+    lightness
+  );
+  renderSemanticJson();
+  renderGraph3DPreview(graphId);
+
+  const graph = findGraph3D(graphId);
+  if (graph === undefined) {
+    return;
+  }
+
+  const occludedAxisLightness =
+    graph.occludedAxisLightness ?? DEFAULT_OCCLUDED_AXIS_LIGHTNESS;
+
+  input.value = formatNumber(occludedAxisLightness);
+  input
+    .closest(".graph-control")
+    ?.querySelector<HTMLOutputElement>(".graph-control__value")
+    ?.replaceChildren(
+      document.createTextNode(occludedAxisColor(occludedAxisLightness))
     );
 }
 

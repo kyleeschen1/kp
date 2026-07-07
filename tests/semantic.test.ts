@@ -1,6 +1,7 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
+import { expressionToLatex } from "../src/math/expression.ts";
 import { createKpDocument } from "../src/semantic/document.ts";
 import type { KpDocument } from "../src/semantic/document.ts";
 import {
@@ -172,8 +173,9 @@ test("createParabolaCurve2D creates the x^2 = y curve object", () => {
     xDomain: [-3, 3],
     sampleCount: 121
   });
+  const { expression, ...curveMetadata } = curve;
 
-  assert.deepEqual(curve, {
+  assert.deepEqual(curveMetadata, {
     id: "curve-y-equals-x-squared",
     type: "curve-2d",
     graphId: "parabola-graph",
@@ -182,6 +184,7 @@ test("createParabolaCurve2D creates the x^2 = y curve object", () => {
     xDomain: [-3, 3],
     sampleCount: 121
   });
+  assert.equal(expressionToLatex(expression), "x^{2}");
 });
 
 test("createDefaultGraphScene creates graph, axes, and curve objects", () => {
@@ -207,6 +210,7 @@ test("createGraph3DObject creates a semantic graph object with a third axis", ()
     zDomain: [-2.5, 2.5],
     width: 560,
     height: 420,
+    occludedAxisLightness: 44,
     camera: {
       azimuthDegrees: 35,
       elevationDegrees: 30,
@@ -227,6 +231,7 @@ test("createGraph3DObject creates a semantic graph object with a third axis", ()
     zDomain: [-2.5, 2.5],
     width: 560,
     height: 420,
+    occludedAxisLightness: 44,
     camera: {
       azimuthDegrees: 35,
       elevationDegrees: 30,
@@ -266,8 +271,9 @@ test("createSaddleSurface3D creates the z = (x^2 - y^2) / 4 surface", () => {
     xSampleCount: 13,
     ySampleCount: 13
   });
+  const { expression, ...surfaceMetadata } = surface;
 
-  assert.deepEqual(surface, {
+  assert.deepEqual(surfaceMetadata, {
     id: "saddle-surface",
     type: "surface-3d",
     graphId: "saddle-orbit-graph",
@@ -278,6 +284,7 @@ test("createSaddleSurface3D creates the z = (x^2 - y^2) / 4 surface", () => {
     xSampleCount: 13,
     ySampleCount: 13
   });
+  assert.equal(expressionToLatex(expression), "\\frac{x^{2} - y^{2}}{4}");
 });
 
 test("createTimeSpiralCurve3D creates a time-visible spiral curve", () => {
@@ -312,6 +319,12 @@ test("createDefaultGraph3DScene creates graph, axes, and surface objects", () =>
   );
   assert.equal(scene[0]?.id, "saddle-orbit-graph");
   assert.equal(scene[4]?.id, "saddle-surface");
+  assert.equal(
+    scene[0]?.type === "graph-3d"
+      ? scene[0].occludedAxisLightness
+      : undefined,
+    44
+  );
 });
 
 test("validateKpDocument reports graph reference issues", () => {

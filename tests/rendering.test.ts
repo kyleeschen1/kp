@@ -17,6 +17,7 @@ import {
   defaultLatexRenderer,
   matrixToLatex
 } from "../src/rendering/matrix-latex.ts";
+import { createGraphSceneFromLatexEquation } from "../src/semantic/equation-graph.ts";
 import type { KpSemanticObject } from "../src/semantic/document.ts";
 import {
   createDefaultGraphScene,
@@ -24,10 +25,17 @@ import {
   createParabolaCurve2D,
   createSaddleSurface3D,
   createTimeSpiralCurve3D,
+  type Curve2DObject,
   type Graph3DObject,
-  type Graph2DObject
+  type Graph2DObject,
+  type Surface3DObject
 } from "../src/semantic/graph.ts";
 import { createMatrixObject, identityMatrix } from "../src/semantic/matrix.ts";
+
+interface SvgPoint {
+  x: number;
+  y: number;
+}
 
 test("default LaTeX renderer dispatches by semantic object type", () => {
   const renderer = createDefaultLatexRenderer([
@@ -106,6 +114,26 @@ test("sampleParabolaCurve samples y = x^2 across the curve domain", () => {
     { x: -1, y: 1 },
     { x: 0, y: 0 },
     { x: 1, y: 1 }
+  ]);
+});
+
+test("sampleParabolaCurve samples expression-backed 2D curves", () => {
+  const scene = createGraphSceneFromLatexEquation({
+    idPrefix: "shifted-parabola",
+    latex: "y = x^2 + 1"
+  });
+  const curve = scene.find(
+    (object): object is Curve2DObject => object.type === "curve-2d"
+  );
+
+  if (curve === undefined) {
+    throw new Error("Expected generated 2D curve.");
+  }
+
+  assert.deepEqual(sampleParabolaCurve({ ...curve, xDomain: [-1, 1], sampleCount: 3 }), [
+    { x: -1, y: 2 },
+    { x: 0, y: 1 },
+    { x: 1, y: 2 }
   ]);
 });
 
@@ -191,9 +219,56 @@ test("sampleSaddleSurface samples z = (x^2 - y^2) / 4 as a grid", () => {
   });
 });
 
+test("sampleSaddleSurface samples expression-backed 3D surfaces", () => {
+  const scene = createGraphSceneFromLatexEquation({
+    idPrefix: "x-sheet",
+    latex: "z = x^2"
+  });
+  const surface = scene.find(
+    (object): object is Surface3DObject => object.type === "surface-3d"
+  );
+
+  if (surface === undefined) {
+    throw new Error("Expected generated 3D surface.");
+  }
+
+  const grid = sampleSaddleSurface({
+    ...surface,
+    xDomain: [-1, 1],
+    yDomain: [-1, 1],
+    xSampleCount: 3,
+    ySampleCount: 3
+  });
+
+  assert.deepEqual(grid[0]?.[0], {
+    x: -1,
+    y: -1,
+    z: 1
+  });
+  assert.deepEqual(grid[0]?.[1], {
+    x: 0,
+    y: -1,
+    z: 0
+  });
+  assert.deepEqual(grid[0]?.[2], {
+    x: 1,
+    y: -1,
+    z: 1
+  });
+});
+
 test("renderGraph3DToSvg renders axes and surface with semantic metadata", () => {
   const scene = createDefaultGraph3DScene();
   const svg = renderGraph3DToSvg(scene, scene[0] as Graph3DObject);
+  const customScene = scene.map((object) =>
+    object.type === "graph-3d"
+      ? {
+          ...object,
+          occludedAxisLightness: 50
+        }
+      : object
+  );
+  const customSvg = renderGraph3DToSvg(customScene, customScene[0] as Graph3DObject);
 
   assert.match(svg, /<svg/);
   assert.match(svg, /data-kp-object="saddle-orbit-graph"/);
@@ -204,6 +279,7 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.doesNotMatch(svg, /data-kp-object="time-spiral-curve"/);
   assert.doesNotMatch(svg, /time spiral/);
   assert.doesNotMatch(svg, /class="graph-base-grid"/);
+  assert.doesNotMatch(svg, /<text\b/);
   assert.match(svg, /class="graph-axis__segment"/);
   assert.match(svg, /data-kp-depth="/);
   assert.match(svg, /data-kp-axis-visibility-layer="hidden"/);
@@ -213,28 +289,46 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /data-kp-axis-extended-domain="-3.900,3.900"/);
   assert.match(svg, /data-kp-axis-extended-domain="-3.250,3.250"/);
   assert.match(svg, /data-kp-camera-azimuth-degrees="35"/);
+  assert.match(svg, /data-kp-occluded-axis-lightness="44"/);
+  assert.match(svg, /data-kp-depth-buffer-scale="1"/);
+  assert.match(svg, /data-kp-depth-buffer-width="560"/);
+  assert.match(svg, /data-kp-depth-buffer-height="420"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-stroke-ratio="2"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-stroke-extra-px="1"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-occlusion-treatment="muted"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-occlusion-treatment="strong"/);
-  assert.match(svg, /class="graph-axis__segment"[^>]+style="stroke: #000000; stroke-width: 3.500;/);
+  assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-visibility-source="depth-buffer"/);
+  assert.match(svg, /class="graph-axis__arrow"[^>]+data-kp-visibility-source="depth-buffer"/);
+  assert.doesNotMatch(svg, /<line class="graph-axis__segment"/);
+  assert.match(svg, /<polygon class="graph-axis__segment"/);
+  assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-visibility="hidden"[^>]+fill="#5d7583"/);
+  assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-visibility="visible"[^>]+fill="#000000"/);
+  assert.match(customSvg, /data-kp-occluded-axis-lightness="50"/);
+  assert.match(customSvg, /class="graph-axis__segment"[^>]+data-kp-visibility="hidden"[^>]+fill="#6a8595"/);
   assert.match(svg, /class="graph-axis__arrow"/);
   assert.match(svg, /data-kp-axis-arrow="negative-end"/);
   assert.match(svg, /data-kp-axis-arrow="positive-end"/);
-  assert.match(svg, /marker-start="url\(#graph-axis-arrow-/);
-  assert.match(svg, /marker-end="url\(#graph-axis-arrow-/);
+  assert.doesNotMatch(svg, /<marker class="graph-axis__arrow"/);
+  assert.doesNotMatch(svg, /marker-(?:start|end)=/);
+  assert.match(svg, /<polygon class="graph-axis__arrow"/);
   assert.match(svg, /graph-axis--base-plane/);
   assert.match(svg, /graph-axis--subtle/);
   assert.match(svg, /class="graph-surface__quad"/);
+  assert.match(svg, /data-kp-lighting-model="ambient-diffuse-depth-haze"/);
+  assert.match(svg, /data-kp-depth-haze="/);
   assert.match(svg, /class="graph-surface__edge-outline"/);
-  assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-edge-outline"/);
+  assert.match(svg, /class="graph-surface__edge-outline"[^>]+data-kp-visibility-source="depth-buffer"/);
+  assert.match(svg, /data-kp-edge-visibility="hidden"/);
+  assert.match(svg, /data-kp-edge-visibility="visible"/);
+  assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-edge-outline-hidden"/);
+  assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-edge-outline-visible"/);
   assert.match(svg, /data-kp-surface-depth="/);
   assert.match(svg, /data-kp-cell="0,0"/);
   assert.match(svg, /data-kp-facing="front"/);
   assert.match(svg, /data-kp-facing="back"/);
   assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-quads"/);
   assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-wireframe"/);
-  assert.match(svg, /z = \(x\^2 - y\^2\) \/ 4/);
+  assert.doesNotMatch(svg, /z = \(x\^2 - y\^2\) \/ 4/);
 
   const surfaceFillHues = [...svg.matchAll(/class="graph-surface__quad"[^>]+fill="hsl\((\d+) /g)].map(
     (match) => Number(match[1])
@@ -246,6 +340,13 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
       lightness: Number(match[4])
     })
   );
+  const surfaceOpacityByFacing = [...svg.matchAll(/class="graph-surface__quad"[^>]+data-kp-facing="(front|back)"[^>]+fill-opacity="(\d+(?:\.\d+)?)"[^>]+opacity="(\d+(?:\.\d+)?)"/g)].map(
+    (match) => ({
+      facing: match[1],
+      fillOpacity: Number(match[2]),
+      opacity: Number(match[3])
+    })
+  );
   const frontLightness = surfaceFills
     .filter((fill) => fill.facing === "front")
     .map((fill) => fill.lightness);
@@ -255,39 +356,123 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   const surfaceDepths = [...svg.matchAll(/data-kp-surface-depth="(-?\d+(?:\.\d+)?)"/g)].map(
     (match) => Number(match[1])
   );
-  const arrowSizes = [...svg.matchAll(/class="graph-axis__arrow"[^>]+markerWidth="(\d+(?:\.\d+)?)"/g)].map(
+  const surfaceDepthHazes = [...svg.matchAll(/data-kp-depth-haze="(\d+(?:\.\d+)?)"/g)].map(
     (match) => Number(match[1])
   );
-  const hiddenAxisOpacities = [...svg.matchAll(/data-kp-visibility="hidden"[^>]+opacity: (\d+(?:\.\d+)?);/g)].map(
+  const axisStrips = [...svg.matchAll(/<polygon class="graph-axis__segment"[^>]+points="([^"]+)"/g)].map(
+    (match) => parseSvgPoints(match[1]!)
+  );
+  const axisStripWidths = axisStrips.flatMap((points) => [
+    distanceBetween(points[0]!, points[3]!),
+    distanceBetween(points[1]!, points[2]!)
+  ]);
+  const edgeStrips = [...svg.matchAll(/<polygon class="graph-surface__edge-outline"[^>]+points="([^"]+)"/g)].map(
+    (match) => parseSvgPoints(match[1]!)
+  );
+  const edgeStripWidths = edgeStrips.flatMap((points) => [
+    distanceBetween(points[0]!, points[3]!),
+    distanceBetween(points[1]!, points[2]!)
+  ]);
+  const arrowLengths = [...svg.matchAll(/class="graph-axis__arrow"[^>]+data-kp-arrow-length="(\d+(?:\.\d+)?)"/g)].map(
     (match) => Number(match[1])
   );
-  const visibleAxisOpacities = [...svg.matchAll(/data-kp-visibility="visible"[^>]+opacity: (\d+(?:\.\d+)?);/g)].map(
+  const hiddenArrowLengths = [...svg.matchAll(/class="graph-axis__arrow"[^>]+data-kp-visibility="hidden"[^>]+data-kp-arrow-length="(\d+(?:\.\d+)?)"/g)].map(
     (match) => Number(match[1])
   );
+  const hiddenAxisOpacities = [...svg.matchAll(/<polygon class="graph-axis__segment"[^>]+data-kp-visibility="hidden"[^>]+opacity="(\d+(?:\.\d+)?)"/g)].map(
+    (match) => Number(match[1])
+  );
+  const visibleAxisOpacities = [...svg.matchAll(/<polygon class="graph-axis__segment"[^>]+data-kp-visibility="visible"[^>]+opacity="(\d+(?:\.\d+)?)"/g)].map(
+    (match) => Number(match[1])
+  );
+  const hiddenArrowOpacities = [...svg.matchAll(/<polygon class="graph-axis__arrow"[^>]+data-kp-axis-arrow="(?:negative|positive)-end"[^>]+data-kp-visibility="hidden"[^>]+opacity="(\d+(?:\.\d+)?)"/g)].map(
+    (match) => Number(match[1])
+  );
+  const hiddenArrowFills = [...svg.matchAll(/<polygon class="graph-axis__arrow"[^>]+data-kp-axis-arrow="(?:negative|positive)-end"[^>]+data-kp-visibility="hidden"[^>]+fill="([^"]+)"/g)].map(
+    (match) => match[1]
+  );
+  const arrowTipChecks = [...svg.matchAll(/<polygon class="graph-axis__arrow"[^>]+data-kp-axis-tip="([^"]+)"[^>]+data-kp-axis-endpoint="([^"]+)"[^>]+points="([^"]+)"/g)].map(
+    (match) => ({
+      tip: parsePointPair(match[1]!),
+      endpoint: parsePointPair(match[2]!),
+      points: parseSvgPoints(match[3]!)
+    })
+  );
+  const arrowBaseWidths = arrowTipChecks.map((check) =>
+    distanceBetween(check.points[1]!, check.points[2]!)
+  );
+  const edgeSegmentCount = [...svg.matchAll(/data-kp-edge-segment="/g)].length;
 
   assert.ok(surfaceFillHues.length > 0);
   assert.ok(surfaceFillHues.every((hue) => hue >= 184 && hue <= 224));
   assert.ok(frontLightness.length > 0);
   assert.ok(backLightness.length > 0);
+  assert.ok(surfaceOpacityByFacing.some((surface) => surface.facing === "front"));
+  assert.ok(surfaceOpacityByFacing.some((surface) => surface.facing === "back"));
+  assert.ok(
+    surfaceOpacityByFacing.every(
+      (surface) => surface.fillOpacity === 1 && surface.opacity === 1
+    )
+  );
   assert.ok(
     backLightness.every((lightness) => lightness > Math.min(...frontLightness))
   );
   assert.ok(surfaceFills.every((fill) => fill.hue >= 184 && fill.hue <= 224));
   assert.ok(surfaceDepths.length > 0);
+  assert.ok(surfaceDepthHazes.length > 0);
+  assert.ok(surfaceDepthHazes.every((haze) => haze >= 0 && haze <= 1));
   assert.ok(
     surfaceDepths.every(
       (depth, index) => index === 0 || depth >= surfaceDepths[index - 1]!
     )
   );
-  assert.ok(arrowSizes.length > 0);
-  assert.ok(arrowSizes.every((size) => size >= 4 && size <= 8));
+  assert.ok(axisStrips.length > 0);
+  assert.ok(axisStrips.every((points) => points.length === 4));
+  assert.ok(axisStripWidths.length > 0);
+  assert.ok(axisStripWidths.every((width) => width >= 1.75 && width <= 3.5));
+  assert.ok(Math.max(...axisStripWidths) > Math.min(...axisStripWidths));
+  assert.ok(edgeStrips.length > 0);
+  assert.ok(edgeStrips.every((points) => points.length === 4));
+  assert.ok(edgeStripWidths.length > 0);
+  assert.ok(edgeStripWidths.every((width) => width >= 1.3 && width <= 2.6));
+  assert.ok(Math.max(...edgeStripWidths) > Math.min(...edgeStripWidths));
+  assert.ok(arrowLengths.length > 0);
+  assert.ok(arrowLengths.every((length) => length >= 8 && length <= 16));
+  assert.ok(hiddenArrowLengths.length > 0);
+  assert.ok(hiddenArrowLengths.every((length) => length <= 14));
+  assert.ok(arrowBaseWidths.length > 0);
+  assert.ok(arrowBaseWidths.every((width) => width >= 9.5 && width <= 21));
   assert.ok(hiddenAxisOpacities.length > 0);
   assert.ok(visibleAxisOpacities.length > 0);
-  assert.ok(hiddenAxisOpacities.every((opacity) => opacity >= 0.84));
+  assert.ok(hiddenAxisOpacities.every((opacity) => opacity === 1));
   assert.ok(visibleAxisOpacities.every((opacity) => opacity >= 0.92));
+  assert.ok(hiddenArrowOpacities.length > 0);
+  assert.ok(hiddenArrowOpacities.every((opacity) => opacity === 1));
+  assert.ok(hiddenArrowFills.every((fill) => fill === "#5d7583"));
+  assert.ok(arrowTipChecks.length > 0);
+  assert.ok(
+    arrowTipChecks.every((check) => {
+      const [firstPoint] = check.points;
+
+      return (
+        firstPoint !== undefined &&
+        pointsAreAlmostEqual(firstPoint, check.tip) &&
+        pointsAreAlmostEqual(check.tip, check.endpoint)
+      );
+    })
+  );
+  assert.ok(edgeSegmentCount > 48);
+  assert.ok(
+    svg.indexOf('data-kp-edge-visibility="hidden"') <
+      svg.indexOf('class="graph-surface__quad"')
+  );
   assert.ok(
     svg.indexOf('class="graph-surface__quad"') <
       svg.indexOf('class="graph-surface__line')
+  );
+  assert.ok(
+    svg.indexOf('class="graph-surface__quad"') <
+      svg.indexOf('data-kp-edge-visibility="visible"')
   );
   assert.ok(
     svg.indexOf('class="graph-surface__quad"') <
@@ -299,6 +484,46 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   );
 });
 
+test("renderGraph3DToSvg depth-classifies 3D curve segments when present", () => {
+  const scene = createDefaultGraph3DScene();
+  const graph = scene[0] as Graph3DObject;
+  const curve = createTimeSpiralCurve3D({
+    id: "time-spiral-curve",
+    graphId: graph.id,
+    tDomain: [0, Math.PI * 4],
+    sampleCount: 24
+  });
+  const svg = renderGraph3DToSvg([...scene, curve], graph);
+
+  assert.match(svg, /data-kp-object="time-spiral-curve"/);
+  assert.match(svg, /class="graph-curve__segment"/);
+  assert.match(svg, /class="graph-curve__segment"[^>]+data-kp-visibility-source="depth-buffer"/);
+  assert.match(svg, /class="graph-curve__segment"[^>]+data-kp-visibility="hidden"/);
+  assert.match(svg, /class="graph-curve__segment"[^>]+data-kp-visibility="visible"/);
+});
+
+test("renderGraph3DToSvg exposes depth-scene counts for multiple surfaces", () => {
+  const scene = createDefaultGraph3DScene();
+  const graph = scene[0] as Graph3DObject;
+  const secondSurface = createSaddleSurface3D({
+    id: "second-saddle-surface",
+    graphId: graph.id,
+    xDomain: [-2, 2],
+    yDomain: [-2, 2],
+    xSampleCount: 13,
+    ySampleCount: 13
+  });
+  const svg = renderGraph3DToSvg([...scene, secondSurface], graph);
+  const overlapMatch = svg.match(/data-kp-depth-overlap-count="(\d+)"/);
+
+  assert.match(svg, /data-kp-depth-surface-count="2"/);
+  assert.match(svg, /data-kp-depth-triangle-count="576"/);
+  assert.notEqual(overlapMatch, null);
+  assert.ok(Number(overlapMatch?.[1]) > 0);
+  assert.match(svg, /data-kp-object="saddle-surface"/);
+  assert.match(svg, /data-kp-object="second-saddle-surface"/);
+});
+
 test("3D surface quads are fully opaque in the stylesheet", () => {
   const css = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
 
@@ -307,4 +532,28 @@ test("3D surface quads are fully opaque in the stylesheet", () => {
     css,
     /\.graph-surface__quad\[data-kp-facing="back"\]\s*{[^}]*opacity:\s*1;/s
   );
+  assert.match(css, /\.graph-surface__edge-outline\s*{[^}]*fill:\s*#0f3d5e;/s);
 });
+
+function parseSvgPoints(value: string): readonly SvgPoint[] {
+  return value.trim().split(/\s+/).map(parsePointPair);
+}
+
+function parsePointPair(value: string): SvgPoint {
+  const [rawX, rawY] = value.split(",");
+  const x = Number(rawX);
+  const y = Number(rawY);
+
+  assert.ok(Number.isFinite(x));
+  assert.ok(Number.isFinite(y));
+
+  return { x, y };
+}
+
+function distanceBetween(left: SvgPoint, right: SvgPoint): number {
+  return Number(Math.hypot(left.x - right.x, left.y - right.y).toFixed(3));
+}
+
+function pointsAreAlmostEqual(left: SvgPoint, right: SvgPoint): boolean {
+  return Math.abs(left.x - right.x) <= 0.001 && Math.abs(left.y - right.y) <= 0.001;
+}
