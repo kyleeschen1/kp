@@ -189,3 +189,47 @@ test("createDefaultGraphScene creates graph, axes, and curve objects", () => {
   assert.equal(scene[0]?.id, "parabola-graph");
   assert.equal(scene[3]?.id, "curve-y-equals-x-squared");
 });
+
+test("validateKpDocument reports graph reference issues", () => {
+  const document = createKpDocument({
+    id: "bad-graph-document",
+    title: "Bad graph",
+    objects: [
+      createGraph2DObject({
+        id: "bad-graph",
+        label: "Bad graph",
+        xAxisId: "missing-x-axis",
+        yAxisId: "missing-y-axis",
+        xDomain: [3, -3],
+        yDomain: [-1, 9],
+        width: 520,
+        height: 360
+      }),
+      createParabolaCurve2D({
+        id: "orphan-curve",
+        graphId: "missing-graph",
+        xDomain: [-3, 3],
+        sampleCount: 121
+      })
+    ]
+  });
+
+  assert.deepEqual(validateKpDocument(document), [
+    {
+      path: "objects[0].xDomain",
+      message: "Graph bad-graph xDomain must increase from min to max."
+    },
+    {
+      path: "objects[0].xAxisId",
+      message: "Graph bad-graph references missing x-axis missing-x-axis."
+    },
+    {
+      path: "objects[0].yAxisId",
+      message: "Graph bad-graph references missing y-axis missing-y-axis."
+    },
+    {
+      path: "objects[1].graphId",
+      message: "Curve orphan-curve references missing graph missing-graph."
+    }
+  ]);
+});
