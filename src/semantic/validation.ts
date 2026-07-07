@@ -21,12 +21,20 @@ function validateObject(
   switch (object.type) {
     case "axis-2d":
       return validateAxisObject(object, path, objectsById);
+    case "axis-3d":
+      return validateAxis3DObject(object, path, objectsById);
     case "curve-2d":
       return validateCurveObject(object, path, objectsById);
+    case "curve-3d":
+      return validateCurve3DObject(object, path, objectsById);
     case "graph-2d":
       return validateGraphObject(object, path, objectsById);
+    case "graph-3d":
+      return validateGraph3DObject(object, path, objectsById);
     case "matrix":
       return validateMatrixObject(object, path);
+    case "surface-3d":
+      return validateSurface3DObject(object, path, objectsById);
   }
 }
 
@@ -59,6 +67,44 @@ function validateGraphObject(
   return issues;
 }
 
+function validateGraph3DObject(
+  object: Extract<KpSemanticObject, { type: "graph-3d" }>,
+  path: string,
+  objectsById: ReadonlyMap<string, KpSemanticObject>
+): readonly ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+
+  issues.push(...validateDomain(`${path}.xDomain`, object.xDomain, `Graph ${object.id} xDomain`));
+  issues.push(...validateDomain(`${path}.yDomain`, object.yDomain, `Graph ${object.id} yDomain`));
+  issues.push(...validateDomain(`${path}.zDomain`, object.zDomain, `Graph ${object.id} zDomain`));
+
+  const xAxis = objectsById.get(object.xAxisId);
+  if (xAxis?.type !== "axis-3d" || xAxis.orientation !== "x") {
+    issues.push({
+      path: `${path}.xAxisId`,
+      message: `Graph ${object.id} references missing x-axis ${object.xAxisId}.`
+    });
+  }
+
+  const yAxis = objectsById.get(object.yAxisId);
+  if (yAxis?.type !== "axis-3d" || yAxis.orientation !== "y") {
+    issues.push({
+      path: `${path}.yAxisId`,
+      message: `Graph ${object.id} references missing y-axis ${object.yAxisId}.`
+    });
+  }
+
+  const zAxis = objectsById.get(object.zAxisId);
+  if (zAxis?.type !== "axis-3d" || zAxis.orientation !== "z") {
+    issues.push({
+      path: `${path}.zAxisId`,
+      message: `Graph ${object.id} references missing z-axis ${object.zAxisId}.`
+    });
+  }
+
+  return issues;
+}
+
 function validateAxisObject(
   object: Extract<KpSemanticObject, { type: "axis-2d" }>,
   path: string,
@@ -69,6 +115,32 @@ function validateAxisObject(
   issues.push(...validateDomain(`${path}.domain`, object.domain, `Axis ${object.id} domain`));
 
   if (objectsById.get(object.graphId)?.type !== "graph-2d") {
+    issues.push({
+      path: `${path}.graphId`,
+      message: `Axis ${object.id} references missing graph ${object.graphId}.`
+    });
+  }
+
+  if (!Number.isFinite(object.tickStep) || object.tickStep <= 0) {
+    issues.push({
+      path: `${path}.tickStep`,
+      message: `Axis ${object.id} tickStep must be positive.`
+    });
+  }
+
+  return issues;
+}
+
+function validateAxis3DObject(
+  object: Extract<KpSemanticObject, { type: "axis-3d" }>,
+  path: string,
+  objectsById: ReadonlyMap<string, KpSemanticObject>
+): readonly ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+
+  issues.push(...validateDomain(`${path}.domain`, object.domain, `Axis ${object.id} domain`));
+
+  if (objectsById.get(object.graphId)?.type !== "graph-3d") {
     issues.push({
       path: `${path}.graphId`,
       message: `Axis ${object.id} references missing graph ${object.graphId}.`
@@ -111,6 +183,67 @@ function validateCurveObject(
   return issues;
 }
 
+function validateCurve3DObject(
+  object: Extract<KpSemanticObject, { type: "curve-3d" }>,
+  path: string,
+  objectsById: ReadonlyMap<string, KpSemanticObject>
+): readonly ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+
+  issues.push(...validateDomain(`${path}.tDomain`, object.tDomain, `Curve ${object.id} tDomain`));
+
+  if (objectsById.get(object.graphId)?.type !== "graph-3d") {
+    issues.push({
+      path: `${path}.graphId`,
+      message: `Curve ${object.id} references missing graph ${object.graphId}.`
+    });
+  }
+
+  if (!Number.isInteger(object.sampleCount) || object.sampleCount < 2) {
+    issues.push({
+      path: `${path}.sampleCount`,
+      message: `Curve ${object.id} sampleCount must be an integer of at least 2.`
+    });
+  }
+
+  return issues;
+}
+
+function validateSurface3DObject(
+  object: Extract<KpSemanticObject, { type: "surface-3d" }>,
+  path: string,
+  objectsById: ReadonlyMap<string, KpSemanticObject>
+): readonly ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+
+  issues.push(...validateDomain(`${path}.xDomain`, object.xDomain, `Surface ${object.id} xDomain`));
+  issues.push(...validateDomain(`${path}.yDomain`, object.yDomain, `Surface ${object.id} yDomain`));
+
+  if (objectsById.get(object.graphId)?.type !== "graph-3d") {
+    issues.push({
+      path: `${path}.graphId`,
+      message: `Surface ${object.id} references missing graph ${object.graphId}.`
+    });
+  }
+
+  issues.push(
+    ...validateSampleCount(
+      `${path}.xSampleCount`,
+      object.xSampleCount,
+      `Surface ${object.id} xSampleCount`
+    )
+  );
+  issues.push(
+    ...validateSampleCount(
+      `${path}.ySampleCount`,
+      object.ySampleCount,
+      `Surface ${object.id} ySampleCount`
+    )
+  );
+
+  return issues;
+}
+
 function validateMatrixObject(
   object: Extract<KpSemanticObject, { type: "matrix" }>,
   path: string
@@ -140,6 +273,23 @@ function validateMatrixObject(
       {
         path: `${path}.rows`,
         message: `Matrix ${object.id} must be rectangular.`
+      }
+    ];
+  }
+
+  return [];
+}
+
+function validateSampleCount(
+  path: string,
+  value: number,
+  label: string
+): readonly ValidationIssue[] {
+  if (!Number.isInteger(value) || value < 2) {
+    return [
+      {
+        path,
+        message: `${label} must be an integer of at least 2.`
       }
     ];
   }

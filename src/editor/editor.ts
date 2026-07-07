@@ -1,4 +1,4 @@
-import { renderGraphToSvg } from "../rendering/graph-svg.ts";
+import { renderGraph3DToSvg, renderGraphToSvg } from "../rendering/graph-svg.ts";
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import { defaultLatexRenderer } from "../rendering/matrix-latex.ts";
 import {
@@ -6,7 +6,7 @@ import {
   type KpDocument,
   type KpSemanticObject
 } from "../semantic/document.ts";
-import { createDefaultGraphScene } from "../semantic/graph.ts";
+import { createDefaultGraph3DScene, createDefaultGraphScene } from "../semantic/graph.ts";
 import { identityMatrix } from "../semantic/matrix.ts";
 import { validateKpDocument } from "../semantic/validation.ts";
 
@@ -20,7 +20,8 @@ export function createInitialEditorDocument(): KpDocument {
         label: "I_3",
         size: 3
       }),
-      ...createDefaultGraphScene()
+      ...createDefaultGraphScene(),
+      ...createDefaultGraph3DScene()
     ]
   });
 }
@@ -73,13 +74,22 @@ export function renderEditorDocument(document: KpDocument): string {
 function renderObjectPreview(object: KpSemanticObject, document: KpDocument): string {
   switch (object.type) {
     case "axis-2d":
+    case "axis-3d":
     case "curve-2d":
+    case "curve-3d":
+    case "surface-3d":
       return "";
     case "graph-2d":
       return renderPreviewArticle(
         object,
         "rn-" + object.id + "-svg-preview",
         `<div class="object-preview__graph">${renderGraphToSvg(document.objects, object)}</div>`
+      );
+    case "graph-3d":
+      return renderPreviewArticle(
+        object,
+        "rn-" + object.id + "-svg-preview",
+        `<div class="object-preview__graph">${renderGraph3DToSvg(document.objects, object)}</div>`
       );
     case "matrix": {
       const latex = defaultLatexRenderer.render(object);

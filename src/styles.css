@@ -230,12 +230,65 @@ h2 {
   transform: translate(10px, 22px);
 }
 
+.graph-axis--3d text {
+  transform: none;
+}
+
 .graph-curve path {
   fill: none;
   stroke: #c43b57;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 4;
+}
+
+.graph-svg--3d .graph-svg__background {
+  fill: #fffdf8;
+  stroke: #d9ded7;
+}
+
+.graph-svg--3d .graph-axis line {
+  stroke: #394756;
+  stroke-width: 2.4;
+}
+
+.graph-svg--3d .graph-axis--z line {
+  stroke: #2b6f59;
+}
+
+.graph-svg--3d .graph-axis text {
+  fill: #24313d;
+  font-size: 16px;
+}
+
+.graph-surface__line {
+  fill: none;
+  stroke: #53798a;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.25;
+  opacity: 0.52;
+}
+
+.graph-surface__line--column {
+  stroke: #7b8f63;
+  opacity: 0.42;
+}
+
+.graph-surface text {
+  fill: #2f4550;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.graph-curve--3d path {
+  stroke: #b62f61;
+  stroke-width: 3.5;
+}
+
+.graph-curve--3d text {
+  fill: #5b2640;
+  font-size: 15px;
 }
 
 .compiled-source {

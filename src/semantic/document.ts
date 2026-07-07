@@ -1,4 +1,12 @@
-import type { Axis2DObject, Curve2DObject, Graph2DObject } from "./graph.ts";
+import type {
+  Axis2DObject,
+  Axis3DObject,
+  Curve2DObject,
+  Curve3DObject,
+  Graph2DObject,
+  Graph3DObject,
+  Surface3DObject
+} from "./graph.ts";
 import type { MatrixObject } from "./matrix.ts";
 
 export interface KpDocument {
@@ -10,8 +18,12 @@ export interface KpDocument {
 
 export type KpSemanticObject =
   | Axis2DObject
+  | Axis3DObject
   | Curve2DObject
+  | Curve3DObject
   | Graph2DObject
+  | Graph3DObject
+  | Surface3DObject
   | MatrixObject;
 
 interface CreateKpDocumentInput {

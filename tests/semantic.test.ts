@@ -5,9 +5,14 @@ import { createKpDocument } from "../src/semantic/document.ts";
 import type { KpDocument } from "../src/semantic/document.ts";
 import {
   createAxis2DObject,
+  createAxis3DObject,
   createDefaultGraphScene,
+  createDefaultGraph3DScene,
   createGraph2DObject,
-  createParabolaCurve2D
+  createGraph3DObject,
+  createParabolaCurve2D,
+  createSaddleSurface3D,
+  createTiltedOrbitCurve3D
 } from "../src/semantic/graph.ts";
 import { createMatrixObject, identityMatrix } from "../src/semantic/matrix.ts";
 import { validateKpDocument } from "../src/semantic/validation.ts";
@@ -190,6 +195,133 @@ test("createDefaultGraphScene creates graph, axes, and curve objects", () => {
   assert.equal(scene[3]?.id, "curve-y-equals-x-squared");
 });
 
+test("createGraph3DObject creates a semantic graph object with a third axis", () => {
+  const graph = createGraph3DObject({
+    id: "saddle-orbit-graph",
+    label: "Saddle surface and tilted orbit",
+    xAxisId: "saddle-orbit-x-axis",
+    yAxisId: "saddle-orbit-y-axis",
+    zAxisId: "saddle-orbit-z-axis",
+    xDomain: [-3, 3],
+    yDomain: [-3, 3],
+    zDomain: [-2.5, 2.5],
+    width: 560,
+    height: 420,
+    camera: {
+      azimuthDegrees: 35,
+      elevationDegrees: 30,
+      scale: 58,
+      origin: [280, 244]
+    }
+  });
+
+  assert.deepEqual(graph, {
+    id: "saddle-orbit-graph",
+    type: "graph-3d",
+    label: "Saddle surface and tilted orbit",
+    xAxisId: "saddle-orbit-x-axis",
+    yAxisId: "saddle-orbit-y-axis",
+    zAxisId: "saddle-orbit-z-axis",
+    xDomain: [-3, 3],
+    yDomain: [-3, 3],
+    zDomain: [-2.5, 2.5],
+    width: 560,
+    height: 420,
+    camera: {
+      azimuthDegrees: 35,
+      elevationDegrees: 30,
+      scale: 58,
+      origin: [280, 244]
+    }
+  });
+});
+
+test("createAxis3DObject creates semantic axis objects", () => {
+  const axis = createAxis3DObject({
+    id: "saddle-orbit-z-axis",
+    graphId: "saddle-orbit-graph",
+    label: "z",
+    orientation: "z",
+    domain: [-2.5, 2.5],
+    tickStep: 1
+  });
+
+  assert.deepEqual(axis, {
+    id: "saddle-orbit-z-axis",
+    type: "axis-3d",
+    graphId: "saddle-orbit-graph",
+    label: "z",
+    orientation: "z",
+    domain: [-2.5, 2.5],
+    tickStep: 1
+  });
+});
+
+test("createSaddleSurface3D creates the z = (x^2 - y^2) / 4 surface", () => {
+  const surface = createSaddleSurface3D({
+    id: "saddle-surface",
+    graphId: "saddle-orbit-graph",
+    xDomain: [-3, 3],
+    yDomain: [-3, 3],
+    xSampleCount: 13,
+    ySampleCount: 13
+  });
+
+  assert.deepEqual(surface, {
+    id: "saddle-surface",
+    type: "surface-3d",
+    graphId: "saddle-orbit-graph",
+    label: "z = (x^2 - y^2) / 4",
+    equation: "z = (x^2 - y^2) / 4",
+    xDomain: [-3, 3],
+    yDomain: [-3, 3],
+    xSampleCount: 13,
+    ySampleCount: 13
+  });
+});
+
+test("createTiltedOrbitCurve3D creates an orbit-like parametric curve", () => {
+  const curve = createTiltedOrbitCurve3D({
+    id: "tilted-orbit-curve",
+    graphId: "saddle-orbit-graph",
+    tDomain: [0, Math.PI * 2],
+    sampleCount: 145
+  });
+
+  assert.deepEqual(curve, {
+    id: "tilted-orbit-curve",
+    type: "curve-3d",
+    graphId: "saddle-orbit-graph",
+    label: "tilted orbit over time",
+    equation: {
+      x: "2.4 cos(t)",
+      y: "1.3 sin(t)",
+      z: "0.9 sin(t + pi / 6)"
+    },
+    tDomain: [0, Math.PI * 2],
+    sampleCount: 145
+  });
+});
+
+test("createDefaultGraph3DScene creates graph, axes, surface, and curve objects", () => {
+  const scene = createDefaultGraph3DScene();
+
+  assert.deepEqual(
+    scene.map((object) => object.type),
+    [
+      "graph-3d",
+      "axis-3d",
+      "axis-3d",
+      "axis-3d",
+      "surface-3d",
+      "curve-3d"
+    ]
+  );
+  assert.equal(scene[0]?.id, "saddle-orbit-graph");
+  assert.equal(scene[4]?.id, "saddle-surface");
+  assert.equal(scene[5]?.id, "tilted-orbit-curve");
+});
+
 test("validateKpDocument reports graph reference issues", () => {
   const document = createKpDocument({
     id: "bad-graph-document",
@@ -230,6 +362,78 @@ test("validateKpDocument reports graph reference issues", () => {
     {
       path: "objects[1].graphId",
       message: "Curve orphan-curve references missing graph missing-graph."
+    }
+  ]);
+});
+
+test("validateKpDocument reports 3D graph reference issues", () => {
+  const document = createKpDocument({
+    id: "bad-graph-3d-document",
+    title: "Bad 3D graph",
+    objects: [
+      createGraph3DObject({
+        id: "bad-graph-3d",
+        label: "Bad 3D graph",
+        xAxisId: "missing-x-axis",
+        yAxisId: "missing-y-axis",
+        zAxisId: "missing-z-axis",
+        xDomain: [-3, 3],
+        yDomain: [3, -3],
+        zDomain: [-2.5, 2.5],
+        width: 560,
+        height: 420,
+        camera: {
+          azimuthDegrees: 35,
+          elevationDegrees: 30,
+          scale: 58,
+          origin: [280, 244]
+        }
+      }),
+      createTiltedOrbitCurve3D({
+        id: "orphan-curve-3d",
+        graphId: "missing-graph",
+        tDomain: [0, Math.PI * 2],
+        sampleCount: 145
+      }),
+      createSaddleSurface3D({
+        id: "bad-surface-3d",
+        graphId: "missing-graph",
+        xDomain: [-3, 3],
+        yDomain: [-3, 3],
+        xSampleCount: 1,
+        ySampleCount: 13
+      })
+    ]
+  });
+
+  assert.deepEqual(validateKpDocument(document), [
+    {
+      path: "objects[0].yDomain",
+      message: "Graph bad-graph-3d yDomain must increase from min to max."
+    },
+    {
+      path: "objects[0].xAxisId",
+      message: "Graph bad-graph-3d references missing x-axis missing-x-axis."
+    },
+    {
+      path: "objects[0].yAxisId",
+      message: "Graph bad-graph-3d references missing y-axis missing-y-axis."
+    },
+    {
+      path: "objects[0].zAxisId",
+      message: "Graph bad-graph-3d references missing z-axis missing-z-axis."
+    },
+    {
+      path: "objects[1].graphId",
+      message: "Curve orphan-curve-3d references missing graph missing-graph."
+    },
+    {
+      path: "objects[2].graphId",
+      message: "Surface bad-surface-3d references missing graph missing-graph."
+    },
+    {
+      path: "objects[2].xSampleCount",
+      message: "Surface bad-surface-3d xSampleCount must be an integer of at least 2."
     }
   ]);
 });
