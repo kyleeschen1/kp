@@ -35,6 +35,7 @@ import {
   type NumericDomain,
   type Surface3DObject
 } from "../semantic/graph.ts";
+import { findLineSurfaceIntersections } from "./graph-space-intersections.ts";
 
 export { projectGraphPoint3D } from "./projection.ts";
 
@@ -227,8 +228,8 @@ export function renderGraph3DToSvg(
     <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
       <rect class="graph-svg__background" x="0" y="0" width="${graph.width}" height="${graph.height}" rx="8" />
       ${renderedSurfaces.map((surface) => renderSurface3D(surface, graph, depthScene)).join("")}
-      ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, "hidden")).join("")}
-      ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, "visible")).join("")}
+      ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, renderedSurfaces, "hidden")).join("")}
+      ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, renderedSurfaces, "visible")).join("")}
       ${curves.map((curve) => renderCurve3D(curve, graph, depthScene)).join("")}
       ${debugOverlay}
     </svg>
@@ -336,19 +337,29 @@ function renderAxis3D(
   axis: Axis3DObject,
   graph: Graph3DObject,
   depthScene: DepthScene,
+  surfaces: readonly RenderedSurface3D[],
   visibilityLayer: AxisVisibility
 ): string {
   const extendedDomain = extendDomain(axis.domain, AXIS_EXTENSION_RATIO);
-  const segments = axisSegments3D(axis, extendedDomain, graph, depthScene).filter(
-    (segment) => segment.visibility === visibilityLayer
+  const analyticSplitValues = axisSurfaceSplitValues3D(
+    axis,
+    extendedDomain,
+    surfaces
   );
+  const segments = axisSegments3D(
+    axis,
+    extendedDomain,
+    graph,
+    depthScene,
+    analyticSplitValues
+  ).filter((segment) => segment.visibility === visibilityLayer);
   const axisRole =
     axis.orientation === "z" ? "graph-axis--subtle" : "graph-axis--base-plane";
   const negativeArrowSegment = segments.find((segment) => segment.isNegativeEnd);
   const positiveArrowSegment = segments.find((segment) => segment.isPositiveEnd);
 
   return `
-    <g class="graph-axis graph-axis--3d graph-axis--${axis.orientation} ${axisRole}" data-kp-object="${escapeHtml(axis.id)}" data-kp-render-node="rn-${escapeHtml(axis.id)}-svg-line-${visibilityLayer}" data-kp-type="axis-3d" data-kp-axis-extended-domain="${formatDomain(extendedDomain)}" data-kp-axis-extension-ratio="${AXIS_EXTENSION_RATIO}" data-kp-axis-visibility-layer="${visibilityLayer}">
+    <g class="graph-axis graph-axis--3d graph-axis--${axis.orientation} ${axisRole}" data-kp-object="${escapeHtml(axis.id)}" data-kp-render-node="rn-${escapeHtml(axis.id)}-svg-line-${visibilityLayer}" data-kp-type="axis-3d" data-kp-axis-extended-domain="${formatDomain(extendedDomain)}" data-kp-axis-extension-ratio="${AXIS_EXTENSION_RATIO}" data-kp-axis-visibility-layer="${visibilityLayer}" data-kp-axis-split-source="analytic-surface+depth-buffer" data-kp-axis-analytic-split-count="${analyticSplitValues.length}">
       ${segments.map((segment) => renderAxisSegment3D(segment, graph)).join("")}
       ${negativeArrowSegment === undefined ? "" : renderAxisArrow3D(negativeArrowSegment, graph, "negative-end")}
       ${positiveArrowSegment === undefined ? "" : renderAxisArrow3D(positiveArrowSegment, graph, "positive-end")}
@@ -1067,9 +1078,13 @@ function axisSegments3D(
   axis: Axis3DObject,
   domain: NumericDomain,
   graph: Graph3DObject,
-  depthScene: DepthScene
+  depthScene: DepthScene,
+  analyticSplitValues: readonly number[]
 ): readonly ProjectedAxisSegment3D[] {
-  const breakpoints = sampleDomain(domain, AXIS_OCCLUSION_SEGMENT_COUNT + 1);
+  const breakpoints = sortedUniqueNumbers([
+    ...sampleDomain(domain, AXIS_OCCLUSION_SEGMENT_COUNT + 1),
+    ...analyticSplitValues
+  ]);
 
   return breakpoints.flatMap((start, index) => {
     const end = breakpoints[index + 1];
@@ -1093,6 +1108,42 @@ function axisSegments3D(
         segmentIndex === visibilitySegments.length - 1
     }));
   });
+}
+
+function axisSurfaceSplitValues3D(
+  axis: Axis3DObject,
+  domain: NumericDomain,
+  surfaces: readonly RenderedSurface3D[]
+): readonly number[] {
+  const line = axisLine3D(axis, domain);
+  const [min, max] = domain;
+
+  return sortedUniqueNumbers(
+    surfaces.flatMap((surface) =>
+      findLineSurfaceIntersections(line, surface.surface.expression).flatMap(
+        (intersection) =>
+          intersection.t > 0 && intersection.t < 1
+            ? [min + (max - min) * intersection.t]
+            : []
+      )
+    )
+  );
+}
+
+function sortedUniqueNumbers(values: readonly number[]): readonly number[] {
+  const tolerance = 0.000_001;
+
+  return [...values]
+    .sort((left, right) => left - right)
+    .reduce<number[]>((uniqueValues, value) => {
+      const previous = uniqueValues[uniqueValues.length - 1];
+
+      if (previous === undefined || Math.abs(previous - value) > tolerance) {
+        uniqueValues.push(value);
+      }
+
+      return uniqueValues;
+    }, []);
 }
 
 function extendDomain(
