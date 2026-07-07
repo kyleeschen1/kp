@@ -274,12 +274,25 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
       ? {
           ...object,
           debug: {
+            ...object.debug,
             depthOverlay: true
           }
         }
       : object
   );
   const debugSvg = renderGraph3DToSvg(debugScene, debugScene[0] as Graph3DObject);
+  const meshScene = scene.map((object) =>
+    object.type === "graph-3d"
+      ? {
+          ...object,
+          debug: {
+            ...object.debug,
+            surfaceMesh: true
+          }
+        }
+      : object
+  );
+  const meshSvg = renderGraph3DToSvg(meshScene, meshScene[0] as Graph3DObject);
 
   assert.match(svg, /<svg/);
   assert.match(svg, /data-kp-object="saddle-orbit-graph"/);
@@ -302,6 +315,7 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /data-kp-camera-azimuth-degrees="35"/);
   assert.match(svg, /data-kp-occluded-axis-lightness="44"/);
   assert.match(svg, /data-kp-debug-depth-overlay="false"/);
+  assert.match(svg, /data-kp-debug-surface-mesh="false"/);
   assert.doesNotMatch(svg, /class="graph-debug-overlay"/);
   assert.match(svg, /data-kp-depth-buffer-scale="1"/);
   assert.match(svg, /data-kp-depth-buffer-width="560"/);
@@ -325,6 +339,10 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(debugSvg, /data-kp-debug-sample-columns="28"/);
   assert.match(debugSvg, /data-kp-debug-sample-rows="21"/);
   assert.match(debugSvg, /class="graph-debug-overlay__cell"/);
+  assert.match(meshSvg, /data-kp-debug-surface-mesh="true"/);
+  assert.match(meshSvg, /data-kp-render-node="rn-saddle-surface-svg-wireframe"/);
+  assert.match(meshSvg, /data-kp-surface-mesh="debug"/);
+  assert.match(meshSvg, /class="graph-surface__line/);
   assert.match(svg, /class="graph-axis__arrow"/);
   assert.match(svg, /data-kp-axis-arrow="negative-end"/);
   assert.match(svg, /data-kp-axis-arrow="positive-end"/);
@@ -347,7 +365,8 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /data-kp-facing="front"/);
   assert.match(svg, /data-kp-facing="back"/);
   assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-quads"/);
-  assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-wireframe"/);
+  assert.doesNotMatch(svg, /data-kp-render-node="rn-saddle-surface-svg-wireframe"/);
+  assert.doesNotMatch(svg, /class="graph-surface__line/);
   assert.doesNotMatch(svg, /z = \(x\^2 - y\^2\) \/ 4/);
 
   const surfaceFillHues = [...svg.matchAll(/class="graph-surface__quad"[^>]+fill="hsl\((\d+) /g)].map(
@@ -485,10 +504,6 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.ok(
     svg.indexOf('data-kp-edge-visibility="hidden"') <
       svg.indexOf('class="graph-surface__quad"')
-  );
-  assert.ok(
-    svg.indexOf('class="graph-surface__quad"') <
-      svg.indexOf('class="graph-surface__line')
   );
   assert.ok(
     svg.indexOf('class="graph-surface__quad"') <

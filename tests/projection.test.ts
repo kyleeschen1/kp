@@ -22,7 +22,8 @@ const graph: Graph3DObject = {
   height: 160,
   occludedAxisLightness: 44,
   debug: {
-    depthOverlay: false
+    depthOverlay: false,
+    surfaceMesh: false
   },
   camera: {
     azimuthDegrees: 0,

@@ -224,7 +224,7 @@ export function renderGraph3DToSvg(
   // surface, then visible pieces above it. This gives SVG a lightweight
   // substitute for depth-buffered axis occlusion.
   return `
-    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
+    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
       <rect class="graph-svg__background" x="0" y="0" width="${graph.width}" height="${graph.height}" rx="8" />
       ${renderedSurfaces.map((surface) => renderSurface3D(surface, graph, depthScene)).join("")}
       ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, "hidden")).join("")}
@@ -628,6 +628,9 @@ function renderSurface3D(
   const columnPaths = transposeGrid(grid).map((column) =>
     renderSurfacePath(column, graph, "graph-surface__line--column")
   );
+  const wireframe = graph.debug.surfaceMesh
+    ? renderSurfaceWireframe(surface, rowPaths, columnPaths)
+    : "";
 
   return `
     <g class="graph-surface" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg" data-kp-type="surface-3d">
@@ -635,11 +638,21 @@ function renderSurface3D(
       <g class="graph-surface__quads" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-quads" data-kp-type="surface-3d" data-kp-depth-order="back-to-front">
         ${surfaceQuadsBackToFront(quads).map((quad) => renderSurfaceQuad(surface, quad)).join("")}
       </g>
-      <g class="graph-surface__wireframe" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-wireframe" data-kp-type="surface-3d">
-        ${rowPaths.join("")}
-        ${columnPaths.join("")}
-      </g>
+      ${wireframe}
       ${renderSurfaceEdgeOutline(surface, edgeSegments, graph, "visible")}
+    </g>
+  `;
+}
+
+function renderSurfaceWireframe(
+  surface: Surface3DObject,
+  rowPaths: readonly string[],
+  columnPaths: readonly string[]
+): string {
+  return `
+    <g class="graph-surface__wireframe" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-wireframe" data-kp-type="surface-3d" data-kp-surface-mesh="debug">
+      ${rowPaths.join("")}
+      ${columnPaths.join("")}
     </g>
   `;
 }

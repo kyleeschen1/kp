@@ -60,6 +60,7 @@ export interface Graph3DCamera {
 
 export interface Graph3DDebugSettings {
   depthOverlay: boolean;
+  surfaceMesh: boolean;
 }
 
 export interface Graph3DObject {
@@ -199,7 +200,8 @@ export function createGraph3DObject(
       100
     ),
     debug: {
-      depthOverlay: input.debug?.depthOverlay ?? false
+      depthOverlay: input.debug?.depthOverlay ?? false,
+      surfaceMesh: input.debug?.surfaceMesh ?? false
     }
   };
 }
