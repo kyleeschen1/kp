@@ -92,6 +92,7 @@ export function renderEditorDocument(document: KpDocument): string {
 
 function renderObjectPreview(object: KpSemanticObject, document: KpDocument): string {
   switch (object.type) {
+    case "animation-intent":
     case "axis-2d":
     case "axis-3d":
     case "curve-2d":

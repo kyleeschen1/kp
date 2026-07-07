@@ -19,6 +19,8 @@ function validateObject(
   objectsById: ReadonlyMap<string, KpSemanticObject>
 ): readonly ValidationIssue[] {
   switch (object.type) {
+    case "animation-intent":
+      return validateAnimationIntent(object, path, objectsById);
     case "axis-2d":
       return validateAxisObject(object, path, objectsById);
     case "axis-3d":
@@ -99,6 +101,53 @@ function validateGraph3DObject(
     issues.push({
       path: `${path}.zAxisId`,
       message: `Graph ${object.id} references missing z-axis ${object.zAxisId}.`
+    });
+  }
+
+  return issues;
+}
+
+function validateAnimationIntent(
+  object: Extract<KpSemanticObject, { type: "animation-intent" }>,
+  path: string,
+  objectsById: ReadonlyMap<string, KpSemanticObject>
+): readonly ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const target = objectsById.get(object.targetId);
+
+  if (target?.type !== object.targetType) {
+    issues.push({
+      path: `${path}.targetId`,
+      message: `Animation ${object.id} references missing surface ${object.targetId}.`
+    });
+  } else if (
+    object.property === "saddle.denominator" &&
+    target.parameterization?.kind !== "saddle"
+  ) {
+    issues.push({
+      path: `${path}.property`,
+      message: `Animation ${object.id} target ${object.targetId} is not a parameterized saddle.`
+    });
+  }
+
+  if (!Number.isFinite(object.durationMs) || object.durationMs <= 0) {
+    issues.push({
+      path: `${path}.durationMs`,
+      message: `Animation ${object.id} durationMs must be positive.`
+    });
+  }
+
+  if (!Number.isFinite(object.from) || object.from <= 0) {
+    issues.push({
+      path: `${path}.from`,
+      message: `Animation ${object.id} from must be positive.`
+    });
+  }
+
+  if (!Number.isFinite(object.to) || object.to <= 0) {
+    issues.push({
+      path: `${path}.to`,
+      message: `Animation ${object.id} to must be positive.`
     });
   }
 

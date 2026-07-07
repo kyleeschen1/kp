@@ -1,3 +1,4 @@
+import type { SaddleDenominatorAnimationIntent } from "./animation.ts";
 import type {
   Axis2DObject,
   Axis3DObject,
@@ -17,6 +18,7 @@ export interface KpDocument {
 }
 
 export type KpSemanticObject =
+  | SaddleDenominatorAnimationIntent
   | Axis2DObject
   | Axis3DObject
   | Curve2DObject

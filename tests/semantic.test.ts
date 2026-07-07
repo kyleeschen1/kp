@@ -1,6 +1,9 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
+import {
+  createSaddleDenominatorAnimationIntent
+} from "../src/semantic/animation.ts";
 import { expressionToLatex } from "../src/math/expression.ts";
 import { createKpDocument } from "../src/semantic/document.ts";
 import type { KpDocument } from "../src/semantic/document.ts";
@@ -430,6 +433,30 @@ test("createDefaultGraph3DScene creates graph, axes, and surface objects", () =>
   );
 });
 
+test("createSaddleDenominatorAnimationIntent creates a semantic animation intent", () => {
+  const intent = createSaddleDenominatorAnimationIntent({
+    id: "flatten-saddle",
+    label: "flatten saddle",
+    targetId: "saddle-surface",
+    fromDenominator: 4,
+    toDenominator: 8,
+    durationMs: 900
+  });
+
+  assert.deepEqual(intent, {
+    id: "flatten-saddle",
+    type: "animation-intent",
+    label: "flatten saddle",
+    targetId: "saddle-surface",
+    targetType: "surface-3d",
+    property: "saddle.denominator",
+    from: 4,
+    to: 8,
+    durationMs: 900,
+    easing: "ease-in-out"
+  });
+});
+
 test("validateKpDocument reports graph reference issues", () => {
   const document = createKpDocument({
     id: "bad-graph-document",
@@ -470,6 +497,34 @@ test("validateKpDocument reports graph reference issues", () => {
     {
       path: "objects[1].graphId",
       message: "Curve orphan-curve references missing graph missing-graph."
+    }
+  ]);
+});
+
+test("validateKpDocument reports animation intent issues", () => {
+  const document = createKpDocument({
+    id: "bad-animation-document",
+    title: "Bad animation",
+    objects: [
+      createSaddleDenominatorAnimationIntent({
+        id: "bad-animation",
+        label: "bad animation",
+        targetId: "missing-surface",
+        fromDenominator: 4,
+        toDenominator: 8,
+        durationMs: 0
+      })
+    ]
+  });
+
+  assert.deepEqual(validateKpDocument(document), [
+    {
+      path: "objects[0].targetId",
+      message: "Animation bad-animation references missing surface missing-surface."
+    },
+    {
+      path: "objects[0].durationMs",
+      message: "Animation bad-animation durationMs must be positive."
     }
   ]);
 });
