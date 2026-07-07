@@ -247,13 +247,26 @@ h2 {
   stroke: #d9ded7;
 }
 
+.graph-base-grid__line {
+  stroke: #a8b2aa;
+  stroke-linecap: round;
+}
+
 .graph-svg--3d .graph-axis line {
   stroke: #394756;
   stroke-width: 2.4;
 }
 
+.graph-svg--3d .graph-axis--base-plane line {
+  stroke: #405366;
+}
+
 .graph-svg--3d .graph-axis--z line {
   stroke: #2b6f59;
+}
+
+.graph-svg--3d .graph-axis--subtle line {
+  stroke: #4d8a72;
 }
 
 .graph-svg--3d .graph-axis text {

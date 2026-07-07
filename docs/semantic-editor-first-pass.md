@@ -186,6 +186,17 @@ data-kp-render-node="rn-saddle-orbit-graph-svg"
 data-kp-type="graph-3d"
 ```
 
+The 3D SVG uses semantic layers to make the axes feel integrated with the drawing. A projected base-plane grid renders first, x/y axes render as segmented depth-aware lines over that grid, filled surface cells render above them, and the z-axis renders last as a subtler reference axis. This lets the surface visually cover parts of the base plane in SVG without a WebGL z-buffer.
+
+```html
+<g class="graph-base-grid"
+  data-kp-object="saddle-orbit-graph"
+  data-kp-render-node="rn-saddle-orbit-graph-svg-base-grid"
+  data-kp-type="graph-3d">
+  <line class="graph-base-grid__line" data-kp-depth="0" />
+</g>
+```
+
 The saddle surface renders as filled SVG quadrilateral cells with mesh lines overlaid. Each cell preserves semantic identity and records its grid coordinate and camera-facing side:
 
 ```html

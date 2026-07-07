@@ -201,6 +201,13 @@ test("renderGraph3DToSvg renders axes, surface, and curve with semantic metadata
   assert.match(svg, /data-kp-object="saddle-orbit-z-axis"/);
   assert.match(svg, /data-kp-object="saddle-surface"/);
   assert.match(svg, /data-kp-object="time-spiral-curve"/);
+  assert.match(svg, /class="graph-base-grid"/);
+  assert.match(svg, /class="graph-base-grid__line"/);
+  assert.match(svg, /data-kp-render-node="rn-saddle-orbit-graph-svg-base-grid"/);
+  assert.match(svg, /class="graph-axis__segment"/);
+  assert.match(svg, /data-kp-depth="/);
+  assert.match(svg, /graph-axis--base-plane/);
+  assert.match(svg, /graph-axis--subtle/);
   assert.match(svg, /class="graph-surface__quad"/);
   assert.match(svg, /data-kp-cell="0,0"/);
   assert.match(svg, /data-kp-facing="front"/);
@@ -213,5 +220,18 @@ test("renderGraph3DToSvg renders axes, surface, and curve with semantic metadata
   assert.ok(
     svg.indexOf('class="graph-surface__quad"') <
       svg.indexOf('class="graph-surface__line')
+  );
+  assert.ok(
+    svg.indexOf('class="graph-base-grid"') <
+      svg.indexOf('class="graph-surface__quad"')
+  );
+  assert.ok(
+    svg.indexOf('graph-axis--x') < svg.indexOf('class="graph-surface__quad"')
+  );
+  assert.ok(
+    svg.indexOf('graph-axis--y') < svg.indexOf('class="graph-surface__quad"')
+  );
+  assert.ok(
+    svg.indexOf('class="graph-surface__quad"') < svg.indexOf('graph-axis--z')
   );
 });
