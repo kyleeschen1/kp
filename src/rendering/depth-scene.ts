@@ -50,9 +50,16 @@ export interface ProjectedDepthSurface {
 }
 
 export interface DepthSurfaceOverlap {
+  depthOrder: DepthSurfaceOverlapDepthOrder;
+  frontSurfaceId?: string;
   surfaceIds: readonly [string, string];
   triangleIndices: readonly [number, number];
 }
+
+export type DepthSurfaceOverlapDepthOrder =
+  | "ambiguous"
+  | "left-front"
+  | "right-front";
 
 export interface SegmentProjectedLineOptions {
   maxDepth?: number;
@@ -237,6 +244,12 @@ function detectSurfacePairOverlaps(
       projectedTrianglesOverlap(leftTriangle, rightTriangle)
         ? [
             {
+              ...classifyDepthSurfaceOverlap(
+                leftSurface,
+                leftTriangle,
+                rightSurface,
+                rightTriangle
+              ),
               surfaceIds: [
                 leftSurface.surfaceId,
                 rightSurface.surfaceId
@@ -250,6 +263,45 @@ function detectSurfacePairOverlaps(
         : []
     )
   );
+}
+
+function classifyDepthSurfaceOverlap(
+  leftSurface: ProjectedDepthSurface,
+  leftTriangle: ProjectedTriangle,
+  rightSurface: ProjectedDepthSurface,
+  rightTriangle: ProjectedTriangle
+): Pick<DepthSurfaceOverlap, "depthOrder" | "frontSurfaceId"> {
+  const leftRange = triangleDepthRange(leftTriangle);
+  const rightRange = triangleDepthRange(rightTriangle);
+
+  if (leftRange.min > rightRange.max) {
+    return {
+      depthOrder: "left-front",
+      frontSurfaceId: leftSurface.surfaceId
+    };
+  }
+
+  if (rightRange.min > leftRange.max) {
+    return {
+      depthOrder: "right-front",
+      frontSurfaceId: rightSurface.surfaceId
+    };
+  }
+
+  return {
+    depthOrder: "ambiguous"
+  };
+}
+
+function triangleDepthRange(
+  triangle: ProjectedTriangle
+): { max: number; min: number } {
+  const depths = triangle.points.map((point) => point.depth);
+
+  return {
+    max: Math.max(...depths),
+    min: Math.min(...depths)
+  };
 }
 
 function findDepthDeltaBoundaryPoint(

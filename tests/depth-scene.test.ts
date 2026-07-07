@@ -274,7 +274,46 @@ test("detectDepthSurfaceOverlaps reports projected overlaps between surface grou
 
   assert.deepEqual(overlaps, [
     {
+      depthOrder: "right-front",
+      frontSurfaceId: "back-surface",
       surfaceIds: ["front-surface", "back-surface"],
+      triangleIndices: [0, 0]
+    }
+  ]);
+});
+
+test("detectDepthSurfaceOverlaps marks overlapping depth ranges as ambiguous", () => {
+  const overlaps = detectDepthSurfaceOverlaps([
+    {
+      surfaceId: "left-surface",
+      triangles: [
+        {
+          points: [
+            { x: 0, y: 0, depth: 1 },
+            { x: 4, y: 0, depth: 3 },
+            { x: 0, y: 4, depth: 2 }
+          ]
+        }
+      ]
+    },
+    {
+      surfaceId: "right-surface",
+      triangles: [
+        {
+          points: [
+            { x: 1, y: 1, depth: 2 },
+            { x: 5, y: 1, depth: 4 },
+            { x: 1, y: 5, depth: 1 }
+          ]
+        }
+      ]
+    }
+  ]);
+
+  assert.deepEqual(overlaps, [
+    {
+      depthOrder: "ambiguous",
+      surfaceIds: ["left-surface", "right-surface"],
       triangleIndices: [0, 0]
     }
   ]);
