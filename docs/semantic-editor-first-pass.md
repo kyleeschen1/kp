@@ -6,6 +6,7 @@ This pass establishes the smallest working Kinetic Press editor loop:
 semantic JSON
   -> default LaTeX representation
   -> KaTeX HTML
+  -> graph SVG
   -> rendered editor preview
   -> compiled HTML asset
 ```
@@ -36,6 +37,48 @@ The first semantic object is `MatrixObject`:
 
 `identityMatrix({ id: "identity-3x3", label: "I_3", size: 3 })` creates the initial rendered object.
 
+The first graph object family is:
+
+```ts
+{
+  id: string;
+  type: "graph-2d";
+  label: string;
+  xAxisId: string;
+  yAxisId: string;
+  xDomain: [number, number];
+  yDomain: [number, number];
+  width: number;
+  height: number;
+}
+```
+
+```ts
+{
+  id: string;
+  type: "axis-2d";
+  graphId: string;
+  label: string;
+  orientation: "x" | "y";
+  domain: [number, number];
+  tickStep: number;
+}
+```
+
+```ts
+{
+  id: string;
+  type: "curve-2d";
+  graphId: string;
+  label: "x^2 = y";
+  equation: "y = x^2";
+  xDomain: [number, number];
+  sampleCount: number;
+}
+```
+
+`createDefaultGraphScene()` creates `parabola-graph`, `parabola-x-axis`, `parabola-y-axis`, and `curve-y-equals-x-squared`.
+
 ## Rendering
 
 Mathematical semantic objects render through a default LaTeX protocol. The matrix renderer emits:
@@ -52,6 +95,20 @@ data-kp-render-node="rn-identity-3x3-default-latex"
 data-kp-type="matrix"
 ```
 
+Graph objects render as SVG. The graph object owns the visible SVG container, while axis and curve semantic objects are rendered inside that graph with their own metadata:
+
+```html
+data-kp-object="parabola-graph"
+data-kp-render-node="rn-parabola-graph-svg"
+data-kp-type="graph-2d"
+```
+
+```html
+data-kp-object="curve-y-equals-x-squared"
+data-kp-render-node="rn-curve-y-equals-x-squared-svg-path"
+data-kp-type="curve-2d"
+```
+
 ## Compile Path
 
 The backend exposes `POST /api/compile`.
@@ -60,7 +117,8 @@ Input is a `KpDocument` JSON body. Output is a standalone HTML asset containing 
 
 ## Current Limits
 
-- Only matrix objects are supported.
+- Only matrix objects and one 2D graph family are supported.
+- Curve rendering supports `y = x^2`; it is not a general equation parser.
 - Validation is structural and narrow.
 - The compiled HTML asset does not yet inline the full editor stylesheet or KaTeX CSS.
 - The editor JSON is read-only.
