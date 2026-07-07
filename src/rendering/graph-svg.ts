@@ -25,6 +25,10 @@ import {
   type ProjectedGraphPoint3D
 } from "./projection.ts";
 import {
+  evaluateGraph3DRenderBudget,
+  type Graph3DRenderBudgetResult
+} from "./performance-budget.ts";
+import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   type Axis2DObject,
   type Axis3DObject,
@@ -276,6 +280,12 @@ export function renderGraph3DToSvg(
   );
   const depthScene = buildSurfaceDepthScene3D(graph, renderedSurfaces);
   const depthDiagnostics = depthSceneDiagnostics(depthScene);
+  const renderBudget = evaluateGraph3DRenderBudget({
+    depthCellCount: depthDiagnostics.depthCellCount,
+    depthTriangleCount: depthDiagnostics.triangleCount,
+    overlapCount: depthDiagnostics.overlapCount,
+    surfaceCount: depthDiagnostics.surfaceCount
+  });
   const debugOverlay = graph.debug.depthOverlay
     ? renderDepthDebugOverlay3D(graph, depthScene)
     : "";
@@ -284,7 +294,7 @@ export function renderGraph3DToSvg(
   // surface, then visible pieces above it. This gives SVG a lightweight
   // substitute for depth-buffered axis occlusion.
   return `
-    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
+    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} ${renderPerformanceBudgetAttributes(renderBudget)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
       <rect class="graph-svg__background" x="0" y="0" width="${graph.width}" height="${graph.height}" rx="8" />
       ${renderedSurfaces.map((surface) => renderSurface3D(surface, graph, depthScene, renderedSurfaces)).join("")}
       ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, renderedSurfaces, "hidden")).join("")}
@@ -306,6 +316,23 @@ function renderDepthDiagnosticsAttributes(
     `data-kp-depth-surface-count="${diagnostics.surfaceCount}"`,
     `data-kp-depth-triangle-count="${diagnostics.triangleCount}"`,
     `data-kp-depth-overlap-count="${diagnostics.overlapCount}"`
+  ].join(" ");
+}
+
+function renderPerformanceBudgetAttributes(
+  result: Graph3DRenderBudgetResult
+): string {
+  return [
+    `data-kp-render-budget-status="${result.status}"`,
+    `data-kp-render-budget-depth-cell-count="${result.cost.depthCellCount}"`,
+    `data-kp-render-budget-max-depth-cell-count="${result.budget.maxDepthCellCount}"`,
+    `data-kp-render-budget-depth-triangle-count="${result.cost.depthTriangleCount}"`,
+    `data-kp-render-budget-max-depth-triangle-count="${result.budget.maxDepthTriangleCount}"`,
+    `data-kp-render-budget-surface-count="${result.cost.surfaceCount}"`,
+    `data-kp-render-budget-max-surface-count="${result.budget.maxSurfaceCount}"`,
+    `data-kp-render-budget-overlap-count="${result.cost.overlapCount}"`,
+    `data-kp-render-budget-max-overlap-count="${result.budget.maxOverlapCount}"`,
+    `data-kp-render-budget-issue-count="${result.issues.length}"`
   ].join(" ");
 }
 
