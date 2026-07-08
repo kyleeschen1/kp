@@ -4,6 +4,7 @@ import {
   DEFAULT_GRAPH_3D_LIGHT_SETTINGS,
   createSaddleSurface3D,
   type Graph3DLightSettings,
+  type Graph3DSurfaceMode,
   type Surface3DObject
 } from "../semantic/graph.ts";
 
@@ -15,6 +16,11 @@ export const GRAPH_3D_LIGHT_PRESET_IDS = [
   "raking",
   "flat"
 ] as const;
+export const GRAPH_3D_SURFACE_MODE_IDS: readonly Graph3DSurfaceMode[] = [
+  "mesh",
+  "donut",
+  "hyperplanes"
+];
 
 export type Graph3DLightPresetId = typeof GRAPH_3D_LIGHT_PRESET_IDS[number];
 export type Graph3DLightScalarSetting =
@@ -101,6 +107,26 @@ export function updateGraph3DOccludedAxisLightness(
       return {
         ...object,
         occludedAxisLightness: nextLightness
+      };
+    })
+  };
+}
+
+export function updateGraph3DSurfaceMode(
+  document: KpDocument,
+  graphId: string,
+  surfaceMode: Graph3DSurfaceMode
+): KpDocument {
+  return {
+    ...document,
+    objects: document.objects.map((object): KpSemanticObject => {
+      if (object.type !== "graph-3d" || object.id !== graphId) {
+        return object;
+      }
+
+      return {
+        ...object,
+        surfaceMode
       };
     })
   };

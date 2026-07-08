@@ -16,6 +16,7 @@ import {
   updateGraph3DOccludedAxisLightness,
   updateGraph3DShadowEnabled,
   updateGraph3DShadowOpacity,
+  updateGraph3DSurfaceMode,
   updateSaddleSurfaceDenominator
 } from "../src/editor/state.ts";
 import type {
@@ -88,8 +89,14 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-action="set-graph-shadow-enabled"/);
   assert.match(html, /data-action="set-graph-shadow-opacity"/);
   assert.match(html, /data-action="set-graph-occluded-axis-lightness"/);
+  assert.match(html, /data-action="set-graph-surface-mode"/);
   assert.match(html, /data-action="set-saddle-denominator"/);
+  assert.match(html, /class="graph-controls__foldout"[^>]*data-kp-controls-foldout="render-settings"/);
+  assert.doesNotMatch(html, /class="graph-controls__foldout"[^>]*open/);
   assert.match(html, /data-kp-graph-rotation-axis="z"/);
+  assert.match(html, /data-kp-graph-surface-mode="mesh"/);
+  assert.match(html, /value="donut"/);
+  assert.match(html, /value="hyperplanes"/);
   assert.match(html, /data-kp-graph-light-preset="studio"/);
   assert.match(html, /value="raking"/);
   assert.match(html, /value="flat"/);
@@ -132,6 +139,18 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.ok(
     html.indexOf('data-kp-object="parabola-graph"') <
       html.indexOf('data-kp-object="saddle-orbit-graph"')
+  );
+  assert.ok(
+    html.indexOf('data-action="set-graph-azimuth"') <
+      html.indexOf('data-kp-controls-foldout="render-settings"')
+  );
+  assert.ok(
+    html.indexOf('data-kp-controls-foldout="render-settings"') <
+      html.indexOf('data-action="set-graph-surface-mode"')
+  );
+  assert.ok(
+    html.indexOf('data-kp-controls-foldout="render-settings"') <
+      html.indexOf('data-action="set-graph-light-preset"')
   );
 });
 
@@ -297,6 +316,25 @@ test("updateGraph3DOccludedAxisLightness updates the semantic graph render setti
   assert.equal(originalGraph?.occludedAxisLightness, 44);
   assert.equal(nextGraph?.occludedAxisLightness, 42);
   assert.equal(clampedGraph?.occludedAxisLightness, 100);
+});
+
+test("updateGraph3DSurfaceMode updates the semantic graph render mode", () => {
+  const document = createInitialEditorDocument();
+  const nextDocument = updateGraph3DSurfaceMode(
+    document,
+    "saddle-orbit-graph",
+    "hyperplanes"
+  );
+  const originalGraph = document.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+  const nextGraph = nextDocument.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+
+  assert.notEqual(nextDocument, document);
+  assert.equal(originalGraph?.surfaceMode, "mesh");
+  assert.equal(nextGraph?.surfaceMode, "hyperplanes");
 });
 
 test("updateSaddleSurfaceDenominator updates a parameterized saddle surface", () => {

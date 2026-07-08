@@ -412,10 +412,12 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.doesNotMatch(svg, /<text\b/);
   assert.match(svg, /class="graph-axis__segment"/);
   assert.match(svg, /data-kp-depth="/);
-  assert.match(svg, /data-kp-axis-visibility-layer="hidden"/);
   assert.match(svg, /data-kp-axis-visibility-layer="visible"/);
+  assert.match(svg, /data-kp-axis-visibility-layer="hidden"/);
   assert.match(svg, /data-kp-axis-split-source="analytic-surface\+depth-buffer"/);
   assert.match(svg, /data-kp-axis-analytic-split-count="1"/);
+  assert.match(svg, /data-kp-axis-occlusion-segment-count="256"/);
+  assert.match(svg, /data-kp-axis-visibility-split-depth="10"/);
   assert.match(svg, /data-kp-visibility="hidden"/);
   assert.match(svg, /data-kp-visibility="visible"/);
   assert.match(svg, /data-kp-axis-extended-domain="-3.900,3.900"/);
@@ -453,7 +455,9 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-occlusion-treatment="strong"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-visibility-source="depth-buffer"/);
   assert.match(svg, /class="graph-axis__arrow"[^>]+data-kp-visibility-source="depth-buffer"/);
-  assert.match(svg, /class="graph-axis__arrow"[^>]+data-kp-axis-arrow-visibility-source="endpoint-segment"/);
+  assert.match(svg, /class="graph-axis__arrow"[^>]+data-kp-axis-arrow-visibility-source="arrow-footprint-depth-buffer"/);
+  assert.match(svg, /class="graph-axis__arrow"[^>]+data-kp-axis-arrow-occlusion-policy="fully-unobstructed-or-muted"/);
+  assert.match(svg, /class="graph-axis__arrow"[^>]+data-kp-axis-arrow-obstruction="(?:none|partial)"/);
   assert.match(svg, /class="graph-axis__arrow"[^>]+data-kp-axis-arrow-end-segment-visibility="(?:hidden|visible)"/);
   assert.doesNotMatch(svg, /<line class="graph-axis__segment"/);
   assert.match(svg, /<polygon class="graph-axis__segment"/);
@@ -471,6 +475,8 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(meshSvg, /data-kp-render-node="rn-saddle-surface-svg-wireframe"/);
   assert.match(meshSvg, /data-kp-surface-mesh="debug"/);
   assert.match(meshSvg, /class="graph-surface__line/);
+  assert.match(meshSvg, /class="graph-surface__line[^"]*"[^>]+data-kp-smoothing="catmull-rom"/);
+  assert.match(meshSvg, /class="graph-surface__line[^"]*"[^>]+d="[^"]+\sC\s/);
   assert.match(shadowDebugSvg, /data-kp-debug-shadow-overlay="true"/);
   assert.match(shadowDebugSvg, /class="graph-debug-overlay graph-debug-overlay--shadow"/);
   assert.match(shadowDebugSvg, /data-kp-debug-overlay="shadow-projection"/);
@@ -485,6 +491,17 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /graph-axis--base-plane/);
   assert.match(svg, /graph-axis--subtle/);
   assert.match(svg, /class="graph-surface__quad"/);
+  assert.doesNotMatch(svg, /class="graph-surface__grid-layer"/);
+  assert.doesNotMatch(svg, /data-kp-render-node="rn-saddle-surface-svg-grid-(?:hidden|visible)"/);
+  assert.doesNotMatch(svg, /class="graph-surface__grid-line/);
+  assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-mesh"/);
+  assert.match(svg, /data-kp-surface-mesh="visible"/);
+  assert.match(svg, /data-kp-mesh-visibility-split-depth="10"/);
+  assert.match(svg, /class="graph-surface__mesh-line/);
+  assert.match(svg, /class="graph-surface__mesh-line[^"]*"[^>]+data-kp-visibility-split-depth="10"/);
+  assert.match(svg, /class="graph-surface__mesh-line[^"]*"[^>]+data-kp-smoothing="ad-gradient-bezier"/);
+  assert.match(svg, /class="graph-surface__mesh-line[^"]*"[^>]+data-kp-derivative-source="automatic-differentiation"/);
+  assert.match(svg, /class="graph-surface__mesh-line[^"]*"[^>]+d="[^"]+\sC\s/);
   assert.match(svg, /class="graph-surface-shadow-layer"/);
   assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-shadow-layer"/);
   assert.match(svg, /class="graph-surface__shadow"/);
@@ -501,12 +518,27 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /data-kp-depth-haze="/);
   assert.match(svg, /class="graph-surface__edge-outline"/);
   assert.match(svg, /class="graph-surface__edge-outline"[^>]+data-kp-visibility-source="depth-buffer"/);
-  assert.match(svg, /data-kp-edge-visibility="hidden"/);
   assert.match(svg, /data-kp-edge-visibility="visible"/);
+  assert.doesNotMatch(svg, /data-kp-edge-visibility="hidden"/);
   assert.match(svg, /data-kp-edge-split-source="analytic-surface\+depth-buffer"/);
+  assert.match(svg, /data-kp-edge-subdivisions="12"/);
+  assert.match(svg, /data-kp-edge-visibility-split-depth="10"/);
+  assert.match(svg, /data-kp-edge-batch="compound-path"/);
+  assert.match(svg, /data-kp-edge-candidate-source="surface-mesh"/);
+  assert.match(svg, /data-kp-edge-boundary-source="mesh-edge"/);
+  assert.match(svg, /class="graph-surface__edge-outline"[^>]+data-kp-visual-edge="true"/);
+  assert.match(svg, /class="graph-surface__edge-outline"[^>]+data-kp-visibility-split-depth="10"/);
+  assert.match(svg, /class="graph-surface__edge-outline"[^>]+data-kp-edge-segment-count="\d+"/);
+  assert.match(svg, /class="graph-surface__edge-outline"[^>]+data-kp-visual-edge-source="mesh-edge"/);
+  assert.match(svg, /class="graph-surface__edge-outline"[^>]+data-kp-geometry="screen-space-bezier"/);
+  assert.match(svg, /class="graph-surface__edge-outline"[^>]+data-kp-smoothing="ad-gradient-bezier"/);
+  assert.match(svg, /class="graph-surface__edge-outline"[^>]+data-kp-derivative-source="automatic-differentiation"/);
+  assert.doesNotMatch(svg, /data-kp-visual-edge-source="mesh-empty-neighbor"/);
+  assert.doesNotMatch(svg, /class="graph-surface__edge-outline"[^>]+data-kp-width-(?:from|to)=/);
+  assert.doesNotMatch(svg, /class="graph-surface__edge-outline"[^>]+data-kp-max-width=/);
   assert.match(svg, /data-kp-edge-analytic-split-count="0"/);
-  assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-edge-outline-hidden"/);
   assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-edge-outline-visible"/);
+  assert.doesNotMatch(svg, /data-kp-render-node="rn-saddle-surface-svg-edge-outline-hidden"/);
   assert.match(svg, /data-kp-surface-depth="/);
   assert.match(svg, /data-kp-cell="0,0"/);
   assert.match(svg, /data-kp-facing="front"/);
@@ -558,13 +590,12 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
     distanceBetween(points[0]!, points[3]!),
     distanceBetween(points[1]!, points[2]!)
   ]);
-  const edgeStrips = [...svg.matchAll(/<polygon class="graph-surface__edge-outline"[^>]+points="([^"]+)"/g)].map(
-    (match) => parseSvgPoints(match[1]!)
+  const edgePaths = [...svg.matchAll(/<path class="graph-surface__edge-outline"[^>]+d="([^"]+)"/g)].map(
+    (match) => match[1] ?? ""
   );
-  const edgeStripWidths = edgeStrips.flatMap((points) => [
-    distanceBetween(points[0]!, points[3]!),
-    distanceBetween(points[1]!, points[2]!)
-  ]);
+  const meshPaths = [...svg.matchAll(/<path class="graph-surface__mesh-line[^"]*"[^>]+d="([^"]+)"/g)].map(
+    (match) => match[1] ?? ""
+  );
   const arrowLengths = [...svg.matchAll(/class="graph-axis__arrow"[^>]+data-kp-arrow-length="(\d+(?:\.\d+)?)"/g)].map(
     (match) => Number(match[1])
   );
@@ -583,6 +614,12 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   const hiddenArrowFills = [...svg.matchAll(/<polygon class="graph-axis__arrow"[^>]+data-kp-axis-arrow="(?:negative|positive)-end"[^>]+data-kp-visibility="hidden"[^>]+fill="([^"]+)"/g)].map(
     (match) => match[1]
   );
+  const arrowObstructions = [...svg.matchAll(/<polygon class="graph-axis__arrow"[^>]+data-kp-visibility="(hidden|visible)"[^>]+data-kp-axis-arrow-obstruction="(none|partial)"/g)].map(
+    (match) => ({
+      visibility: match[1],
+      obstruction: match[2]
+    })
+  );
   const arrowTipChecks = [...svg.matchAll(/<polygon class="graph-axis__arrow"[^>]+data-kp-axis-tip="([^"]+)"[^>]+data-kp-axis-endpoint="([^"]+)"[^>]+points="([^"]+)"/g)].map(
     (match) => ({
       tip: parsePointPair(match[1]!),
@@ -593,7 +630,10 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   const arrowBaseWidths = arrowTipChecks.map((check) =>
     distanceBetween(check.points[1]!, check.points[2]!)
   );
-  const edgeSegmentCount = [...svg.matchAll(/data-kp-edge-segment="/g)].length;
+  const gridLineCount = [...svg.matchAll(/class="graph-surface__grid-line/g)].length;
+  const edgeSegmentCounts = [...svg.matchAll(/data-kp-edge-segment-count="(\d+)"/g)].map(
+    (match) => Number(match[1])
+  );
   const shadowQuadCount = [...svg.matchAll(/class="graph-surface__shadow"/g)].length;
 
   assert.ok(surfaceFillHues.length > 0);
@@ -627,11 +667,17 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.ok(axisStripWidths.length > 0);
   assert.ok(axisStripWidths.every((width) => width >= 1.75 && width <= 3.5));
   assert.ok(Math.max(...axisStripWidths) > Math.min(...axisStripWidths));
-  assert.ok(edgeStrips.length > 0);
-  assert.ok(edgeStrips.every((points) => points.length === 4));
-  assert.ok(edgeStripWidths.length > 0);
-  assert.ok(edgeStripWidths.every((width) => width >= 1.3 && width <= 2.6));
-  assert.ok(Math.max(...edgeStripWidths) > Math.min(...edgeStripWidths));
+  assert.equal(gridLineCount, 0);
+  assert.ok(meshPaths.length > 0);
+  assert.ok(meshPaths.every((path) => path.includes(" C ")));
+  assert.ok(edgePaths.length > 0);
+  assert.ok(edgePaths.length <= 4);
+  assert.ok(
+    edgePaths.every((path) =>
+      /^M [\s\S]+ C [\s\S]+$/.test(path)
+    )
+  );
+  assert.ok(edgePaths.some((path) => [...path.matchAll(/\sC\s/g)].length > 48));
   assert.equal(shadowQuadCount, 144);
   assert.ok(arrowLengths.length > 0);
   assert.ok(arrowLengths.every((length) => length >= 8 && length <= 16));
@@ -641,11 +687,19 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.ok(arrowBaseWidths.every((width) => width >= 9.5 && width <= 21));
   assert.ok(hiddenAxisOpacities.length > 0);
   assert.ok(visibleAxisOpacities.length > 0);
-  assert.ok(hiddenAxisOpacities.every((opacity) => opacity === 1));
+  assert.ok(hiddenAxisOpacities.every((opacity) => opacity >= 0.45 && opacity <= 0.75));
   assert.ok(visibleAxisOpacities.every((opacity) => opacity >= 0.92));
   assert.ok(hiddenArrowOpacities.length > 0);
-  assert.ok(hiddenArrowOpacities.every((opacity) => opacity === 1));
+  assert.ok(hiddenArrowOpacities.every((opacity) => opacity >= 0.45 && opacity <= 0.75));
   assert.ok(hiddenArrowFills.every((fill) => fill === "#5d7583"));
+  assert.deepEqual(arrowObstructions.length, arrowLengths.length);
+  assert.ok(
+    arrowObstructions.every((arrow) =>
+      arrow.visibility === "visible"
+        ? arrow.obstruction === "none"
+        : arrow.obstruction === "partial"
+    )
+  );
   assert.ok(arrowTipChecks.length > 0);
   assert.ok(
     arrowTipChecks.every((check) => {
@@ -658,21 +712,18 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
       );
     })
   );
-  assert.ok(edgeSegmentCount > 48);
-  assert.ok(
-    svg.indexOf('data-kp-edge-visibility="hidden"') <
-      svg.indexOf('class="graph-surface__quad"')
-  );
+  assert.ok(edgeSegmentCounts.length > 0);
+  assert.ok(edgeSegmentCounts.some((count) => count > 48));
   assert.ok(
     svg.indexOf('class="graph-surface__quad"') <
+      svg.indexOf('class="graph-surface__mesh-line')
+  );
+  assert.ok(
+    svg.indexOf('class="graph-surface__mesh-line') <
       svg.indexOf('data-kp-edge-visibility="visible"')
   );
   assert.ok(
     svg.indexOf('class="graph-surface__quad"') <
-      svg.indexOf('data-kp-axis-visibility-layer="hidden"')
-  );
-  assert.ok(
-    svg.indexOf('data-kp-axis-visibility-layer="hidden"') <
       svg.indexOf('data-kp-axis-visibility-layer="visible"')
   );
 });
@@ -693,6 +744,47 @@ test("renderGraph3DToSvg depth-classifies 3D curve segments when present", () =>
   assert.match(svg, /class="graph-curve__segment"[^>]+data-kp-visibility-source="depth-buffer"/);
   assert.match(svg, /class="graph-curve__segment"[^>]+data-kp-visibility="hidden"/);
   assert.match(svg, /class="graph-curve__segment"[^>]+data-kp-visibility="visible"/);
+});
+
+test("renderGraph3DToSvg renders alternate generated surface modes", () => {
+  const scene = createDefaultGraph3DScene();
+  const donutScene = scene.map((object) =>
+    object.type === "graph-3d"
+      ? {
+          ...object,
+          surfaceMode: "donut" as const
+        }
+      : object
+  );
+  const hyperplaneScene = scene.map((object) =>
+    object.type === "graph-3d"
+      ? {
+          ...object,
+          surfaceMode: "hyperplanes" as const
+        }
+      : object
+  );
+  const donutSvg = renderGraph3DToSvg(donutScene, donutScene[0] as Graph3DObject);
+  const hyperplaneSvg = renderGraph3DToSvg(
+    hyperplaneScene,
+    hyperplaneScene[0] as Graph3DObject
+  );
+
+  assert.match(donutSvg, /data-kp-surface-mode="donut"/);
+  assert.match(donutSvg, /data-kp-generated-surface="torus"/);
+  assert.match(donutSvg, /data-kp-object="saddle-orbit-graph-donut"/);
+  assert.match(donutSvg, /class="graph-surface__quad"/);
+  assert.match(donutSvg, /class="graph-surface__mesh-line/);
+  assert.doesNotMatch(donutSvg, /data-kp-object="saddle-surface"/);
+
+  assert.match(hyperplaneSvg, /data-kp-surface-mode="hyperplanes"/);
+  assert.match(hyperplaneSvg, /data-kp-generated-surface="hyperplane-positive"/);
+  assert.match(hyperplaneSvg, /data-kp-generated-surface="hyperplane-negative"/);
+  assert.match(hyperplaneSvg, /data-kp-object="saddle-orbit-graph-hyperplane-positive"/);
+  assert.match(hyperplaneSvg, /data-kp-object="saddle-orbit-graph-hyperplane-negative"/);
+  assert.match(hyperplaneSvg, /class="graph-surface__edge-outline"/);
+  assert.match(hyperplaneSvg, /class="graph-axis__segment"[^>]+data-kp-visibility="hidden"/);
+  assert.doesNotMatch(hyperplaneSvg, /data-kp-object="saddle-surface"/);
 });
 
 test("renderGraph3DToSvg exposes depth-scene counts for multiple surfaces", () => {
@@ -733,15 +825,23 @@ test("renderGraph3DToSvg orders opaque surface quads back to front", () => {
   assert.match(svg, /data-kp-depth-order="back-to-front"/);
 });
 
-test("3D surface quads are fully opaque in the stylesheet", () => {
+test("3D surface mesh lines and simple borders are styled separately from quads", () => {
   const css = readFileSync(new URL("../src/styles.css", import.meta.url), "utf8");
 
+  assert.match(css, /\.graph-surface__quad\s*{[^}]*stroke:\s*none;/s);
   assert.match(css, /\.graph-surface__quad\s*{[^}]*opacity:\s*1;/s);
   assert.match(
     css,
     /\.graph-surface__quad\[data-kp-facing="back"\]\s*{[^}]*opacity:\s*1;/s
   );
-  assert.match(css, /\.graph-surface__edge-outline\s*{[^}]*fill:\s*#0f3d5e;/s);
+  assert.match(css, /\.graph-surface__mesh-line\s*{[^}]*stroke:\s*#dce9ee;/s);
+  assert.match(css, /\.graph-surface__mesh-line\s*{[^}]*stroke-opacity:\s*0\.55;/s);
+  assert.match(css, /\.graph-surface__mesh-line\s*{[^}]*stroke-width:\s*0\.35;/s);
+  assert.match(css, /\.graph-surface__mesh-line\s*{[^}]*opacity:\s*1;/s);
+  assert.match(css, /\.graph-surface__edge-outline\s*{[^}]*fill:\s*none;/s);
+  assert.match(css, /\.graph-surface__edge-outline\s*{[^}]*stroke:\s*#0f3d5e;/s);
+  assert.match(css, /\.graph-surface__edge-outline\s*{[^}]*stroke-width:\s*1;/s);
+  assert.doesNotMatch(css, /\.graph-surface__grid-line\b/);
 });
 
 function parseSvgPoints(value: string): readonly SvgPoint[] {

@@ -1,5 +1,6 @@
 import type { KpSemanticObject } from "../semantic/document.ts";
 import {
+  constant,
   compileExpression,
   compileGradient,
   type CompiledExpression
@@ -7,6 +8,7 @@ import {
 import { createSaddleSurfaceExpression } from "../math/surface-examples.ts";
 import {
   buildDepthScene,
+  classifyProjectedPointDepth,
   depthSceneDiagnostics,
   detectDepthSurfaceOverlaps,
   projectedQuadsToDepthTriangles,
@@ -15,7 +17,10 @@ import {
   type DepthSceneDiagnostics,
   type ProjectedDepthSurface
 } from "./depth-scene.ts";
-import type { ProjectedQuad } from "./geometry.ts";
+import {
+  interpolateProjectedPoint,
+  type ProjectedQuad
+} from "./geometry.ts";
 import {
   graphCameraDirection,
   projectGraphLine3D,
@@ -40,6 +45,7 @@ import {
   type Curve3DObject,
   type Graph2DObject,
   type Graph3DObject,
+  type Graph3DSurfaceMode,
   type GraphPoint3D,
   type NumericDomain,
   type Surface3DObject
@@ -107,18 +113,48 @@ interface SurfaceShadowDebugSample {
 
 interface RenderedSurface3D {
   surface: Surface3DObject;
+  drawBorder: boolean;
+  evaluateSurface?: CompiledExpression;
+  generatedSurface?: GeneratedSurface3DKind;
+  gradient?: SurfaceGradientEvaluators;
   grid: readonly (readonly GraphPoint3D[])[];
   quads: readonly SurfaceQuad3D[];
   shadowQuads: readonly SurfaceShadowQuad3D[];
 }
 
+type GeneratedSurface3DKind =
+  | "hyperplane-negative"
+  | "hyperplane-positive"
+  | "torus";
+type SurfaceLineDirection = "x" | "y";
+type SurfaceVisualBoundary = "mesh-edge";
+
 interface SurfaceEdgeSegment3D extends ProjectedLine3D {
+  direction: SurfaceLineDirection | undefined;
+  graphFrom: GraphPoint3D;
+  graphTo: GraphPoint3D;
+  visualBoundary: SurfaceVisualBoundary;
   visibility: AxisVisibility;
 }
 
 interface SurfaceEdgeSegments3DResult {
   analyticSplitCount: number;
   segments: readonly SurfaceEdgeSegment3D[];
+}
+
+interface SurfaceMeshEdge3D {
+  line: GraphLine3D;
+  visualBoundary: SurfaceVisualBoundary;
+}
+
+interface SurfaceMeshLineSegment3D extends ProjectedLine3D {
+  direction: SurfaceLineDirection | undefined;
+  graphFrom: GraphPoint3D;
+  graphTo: GraphPoint3D;
+  lineIndex: number;
+  meshAxis: "column" | "row";
+  segmentIndex: string;
+  visibility: AxisVisibility;
 }
 
 interface CurveSegment3D extends ProjectedLine3D {
@@ -131,12 +167,29 @@ interface ProjectedStrip3D {
   toWidth: number;
 }
 
+interface ProjectedAxisArrowGeometry3D {
+  arrowLength: number;
+  depthPoints: readonly [
+    ProjectedGraphPoint3D,
+    ProjectedGraphPoint3D,
+    ProjectedGraphPoint3D
+  ];
+  points: readonly [GraphPoint, GraphPoint, GraphPoint];
+}
+
 type ProjectedLine3D = ProjectedGraphLine3D;
 
 interface ProjectedAxisSegment3D extends ProjectedLine3D {
   isNegativeEnd: boolean;
   isPositiveEnd: boolean;
   visibility: AxisVisibility;
+}
+
+type AxisArrowObstruction = "none" | "partial";
+
+interface ProjectedAxisArrow3D extends ProjectedAxisSegment3D {
+  obstruction: AxisArrowObstruction;
+  segmentVisibility: AxisVisibility;
 }
 
 interface SurfaceGradientEvaluators {
@@ -147,16 +200,17 @@ interface SurfaceGradientEvaluators {
 type AxisVisibility = "hidden" | "visible";
 
 const AXIS_EXTENSION_RATIO = 0.15;
-const AXIS_OCCLUSION_SEGMENT_COUNT = 96;
+const AXIS_OCCLUSION_SEGMENT_COUNT = 256;
+const GRAPH_INTERSECTION_VISIBILITY_SPLIT_DEPTH = 10;
 const SURFACE_MESH_STROKE_WIDTH = 1.25;
 const AXIS_TO_MESH_STROKE_RATIO = 2;
 const AXIS_STROKE_EXTRA_PX = 1;
 const VISIBLE_AXIS_STROKE_COLOR = "#000000";
 const OCCLUDED_AXIS_HUE_DEGREES = 202;
 const OCCLUDED_AXIS_SATURATION_PERCENT = 17;
-const SURFACE_EDGE_OUTLINE_WIDTH = 2.6;
-const SURFACE_EDGE_OUTLINE_COLOR = "#0f3d5e";
-const SURFACE_EDGE_SEGMENT_SUBDIVISIONS = 4;
+const SURFACE_EDGE_SEGMENT_SUBDIVISIONS = 12;
+const AXIS_SURFACE_CONTACT_EPSILON = 0.12;
+const AXIS_ARROW_CLEARANCE_EPSILON = 0.12;
 const THIN_QUAD_MIN_DEPTH_WIDTH_RATIO = 0.5;
 const AXIS_ARROW_BASE_WIDTH_RATIO = 6;
 const SURFACE_EDGE_VISIBLE_OPACITY = 0.95;
@@ -300,9 +354,8 @@ export function renderGraph3DToSvg(
     (object): object is Surface3DObject =>
       object.type === "surface-3d" && object.graphId === graph.id
   );
-  const renderedSurfaces = surfaces.map((surface) =>
-    prepareSurface3D(surface, graph)
-  );
+  const surfaceMode = graphSurfaceMode(graph);
+  const renderedSurfaces = prepareGraphSurfaces3D(surfaces, graph, surfaceMode);
   const depthScene = buildSurfaceDepthScene3D(graph, renderedSurfaces);
   const depthDiagnostics = depthSceneDiagnostics(depthScene);
   const surfaceQuadCount = renderedSurfaces.reduce(
@@ -330,7 +383,7 @@ export function renderGraph3DToSvg(
   // surface, then visible pieces above it. This gives SVG a lightweight
   // substitute for depth-buffered axis occlusion.
   return `
-    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" ${renderLightAttributes(graph)} data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" data-kp-debug-shadow-overlay="${graph.debug.shadowOverlay ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} ${renderShadowAttributes(renderedSurfaces, graph)} ${renderPerformanceBudgetAttributes(renderBudget)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
+    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-surface-mode="${surfaceMode}" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" ${renderLightAttributes(graph)} data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" data-kp-debug-shadow-overlay="${graph.debug.shadowOverlay ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} ${renderShadowAttributes(renderedSurfaces, graph)} ${renderPerformanceBudgetAttributes(renderBudget)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
       <rect class="graph-svg__background" x="0" y="0" width="${graph.width}" height="${graph.height}" rx="8" />
       ${renderedSurfaces.map((surface) => renderSurfaceShadowLayer3D(surface, graph)).join("")}
       ${renderedSurfaces.map((surface) => renderSurface3D(surface, graph, depthScene, renderedSurfaces)).join("")}
@@ -532,25 +585,72 @@ function renderAxis3D(
     extendedDomain,
     surfaces
   );
-  const segments = axisSegments3D(
+  const allSegments = axisSegments3D(
     axis,
     extendedDomain,
     graph,
     depthScene,
     analyticSplitValues
-  ).filter((segment) => segment.visibility === visibilityLayer);
+  );
+  const segments = allSegments.filter(
+    (segment) => segment.visibility === visibilityLayer
+  );
   const axisRole =
     axis.orientation === "z" ? "graph-axis--subtle" : "graph-axis--base-plane";
-  const negativeArrowSegment = segments.find((segment) => segment.isNegativeEnd);
-  const positiveArrowSegment = segments.find((segment) => segment.isPositiveEnd);
+  const negativeArrowSegment = axisArrowSegment3D(
+    allSegments,
+    graph,
+    depthScene,
+    "negative-end"
+  );
+  const positiveArrowSegment = axisArrowSegment3D(
+    allSegments,
+    graph,
+    depthScene,
+    "positive-end"
+  );
 
   return `
-    <g class="graph-axis graph-axis--3d graph-axis--${axis.orientation} ${axisRole}" data-kp-object="${escapeHtml(axis.id)}" data-kp-render-node="rn-${escapeHtml(axis.id)}-svg-line-${visibilityLayer}" data-kp-type="axis-3d" data-kp-axis-extended-domain="${formatDomain(extendedDomain)}" data-kp-axis-extension-ratio="${AXIS_EXTENSION_RATIO}" data-kp-axis-visibility-layer="${visibilityLayer}" data-kp-axis-split-source="analytic-surface+depth-buffer" data-kp-axis-analytic-split-count="${analyticSplitValues.length}">
+    <g class="graph-axis graph-axis--3d graph-axis--${axis.orientation} ${axisRole}" data-kp-object="${escapeHtml(axis.id)}" data-kp-render-node="rn-${escapeHtml(axis.id)}-svg-line-${visibilityLayer}" data-kp-type="axis-3d" data-kp-axis-extended-domain="${formatDomain(extendedDomain)}" data-kp-axis-extension-ratio="${AXIS_EXTENSION_RATIO}" data-kp-axis-visibility-layer="${visibilityLayer}" data-kp-axis-split-source="analytic-surface+depth-buffer" data-kp-axis-analytic-split-count="${analyticSplitValues.length}" data-kp-axis-occlusion-segment-count="${AXIS_OCCLUSION_SEGMENT_COUNT}" data-kp-axis-visibility-split-depth="${GRAPH_INTERSECTION_VISIBILITY_SPLIT_DEPTH}">
       ${segments.map((segment) => renderAxisSegment3D(segment, graph)).join("")}
-      ${negativeArrowSegment === undefined ? "" : renderAxisArrow3D(negativeArrowSegment, graph, "negative-end")}
-      ${positiveArrowSegment === undefined ? "" : renderAxisArrow3D(positiveArrowSegment, graph, "positive-end")}
+      ${negativeArrowSegment === undefined || negativeArrowSegment.visibility !== visibilityLayer ? "" : renderAxisArrow3D(negativeArrowSegment, graph, "negative-end")}
+      ${positiveArrowSegment === undefined || positiveArrowSegment.visibility !== visibilityLayer ? "" : renderAxisArrow3D(positiveArrowSegment, graph, "positive-end")}
     </g>
   `;
+}
+
+function axisArrowSegment3D(
+  segments: readonly ProjectedAxisSegment3D[],
+  graph: Graph3DObject,
+  depthScene: DepthScene,
+  arrowEnd: AxisArrowEnd
+): ProjectedAxisArrow3D | undefined {
+  const segment = segments.find((candidate) =>
+    arrowEnd === "negative-end"
+      ? candidate.isNegativeEnd
+      : candidate.isPositiveEnd
+  );
+
+  if (segment === undefined) {
+    return undefined;
+  }
+
+  const obstruction = axisArrowObstruction(
+    segment,
+    graph,
+    depthScene,
+    arrowEnd
+  );
+  const visibility = segment.visibility === "visible" && obstruction === "none"
+    ? "visible"
+    : "hidden";
+
+  return {
+    ...segment,
+    obstruction,
+    segmentVisibility: segment.visibility,
+    visibility
+  };
 }
 
 function renderAxisSegment3D(
@@ -570,29 +670,17 @@ function renderAxisSegment3D(
 }
 
 function renderAxisArrow3D(
-  line: ProjectedAxisSegment3D,
+  line: ProjectedAxisArrow3D,
   graph: Graph3DObject,
   arrowEnd: AxisArrowEnd
 ): string {
   const endpoint = arrowEnd === "negative-end" ? line.from : line.to;
   const depthWeight = lineDepthWeight(graph, endpoint.depth);
-  const arrowLength = axisArrowLength(line.visibility, depthWeight);
-  const endpointWidth = depthScaledWidth(
-    graph,
-    endpoint.depth,
-    SURFACE_MESH_STROKE_WIDTH * AXIS_TO_MESH_STROKE_RATIO +
-      AXIS_STROKE_EXTRA_PX
-  );
-  const points = axisArrowPoints(
-    line,
-    arrowEnd,
-    arrowLength,
-    endpointWidth * AXIS_ARROW_BASE_WIDTH_RATIO
-  );
+  const geometry = axisArrowGeometry3D(line, graph, arrowEnd, line.visibility);
   const opacity = axisOpacity(line.visibility, depthWeight);
   const fillColor = axisStrokeColor(line.visibility, graph);
 
-  return `<polygon class="graph-axis__arrow" data-kp-axis-arrow="${arrowEnd}" data-kp-visibility="${line.visibility}" data-kp-visibility-source="depth-buffer" data-kp-axis-arrow-visibility-source="endpoint-segment" data-kp-axis-arrow-end-segment-visibility="${line.visibility}" data-kp-depth-weight="${formatNumber(depthWeight)}" data-kp-axis-tip="${formatPoint(endpoint)}" data-kp-axis-endpoint="${formatPoint(endpoint)}" data-kp-arrow-length="${formatNumber(arrowLength)}" fill="${fillColor}" opacity="${formatNumber(opacity)}" points="${formatPoints(points)}" />`;
+  return `<polygon class="graph-axis__arrow" data-kp-axis-arrow="${arrowEnd}" data-kp-visibility="${line.visibility}" data-kp-visibility-source="depth-buffer" data-kp-axis-arrow-visibility-source="arrow-footprint-depth-buffer" data-kp-axis-arrow-occlusion-policy="fully-unobstructed-or-muted" data-kp-axis-arrow-obstruction="${line.obstruction}" data-kp-axis-arrow-end-segment-visibility="${line.segmentVisibility}" data-kp-depth-weight="${formatNumber(depthWeight)}" data-kp-axis-tip="${formatPoint(endpoint)}" data-kp-axis-endpoint="${formatPoint(endpoint)}" data-kp-arrow-length="${formatNumber(geometry.arrowLength)}" fill="${fillColor}" opacity="${formatNumber(opacity)}" points="${formatPoints(geometry.points)}" />`;
 }
 
 function axisOcclusionTreatment(visibility: AxisVisibility): "muted" | "strong" {
@@ -601,7 +689,7 @@ function axisOcclusionTreatment(visibility: AxisVisibility): "muted" | "strong" 
 
 function axisOpacity(visibility: AxisVisibility, depthWeight: number): number {
   return visibility === "hidden"
-    ? 1
+    ? 0.62
     : 0.92 + depthWeight * 0.06;
 }
 
@@ -743,7 +831,8 @@ function curveSegments3D(
 
     return segmentProjectedLineByVisibility(
       depthScene,
-      projectGraphLine3D(graph, { from, to })
+      projectGraphLine3D(graph, { from, to }),
+      { maxDepth: GRAPH_INTERSECTION_VISIBILITY_SPLIT_DEPTH }
     );
   });
 }
@@ -760,22 +849,140 @@ function renderCurveSegment3D(
     ? CURVE_OCCLUDED_OPACITY
     : CURVE_VISIBLE_OPACITY;
 
-  return `<path class="graph-curve__segment" d="${pathData}" data-kp-object="${escapeHtml(curve.id)}" data-kp-curve-segment="${index}" data-kp-visibility="${segment.visibility}" data-kp-visibility-source="depth-buffer" data-kp-depth="${formatNumber(segment.averageDepth)}" data-kp-depth-weight="${formatNumber(depthWeight)}" data-kp-type="curve-3d" opacity="${formatNumber(opacity)}" />`;
+  return `<path class="graph-curve__segment" d="${pathData}" data-kp-object="${escapeHtml(curve.id)}" data-kp-curve-segment="${index}" data-kp-visibility="${segment.visibility}" data-kp-visibility-source="depth-buffer" data-kp-visibility-split-depth="${GRAPH_INTERSECTION_VISIBILITY_SPLIT_DEPTH}" data-kp-depth="${formatNumber(segment.averageDepth)}" data-kp-depth-weight="${formatNumber(depthWeight)}" data-kp-type="curve-3d" opacity="${formatNumber(opacity)}" />`;
+}
+
+function graphSurfaceMode(graph: Graph3DObject): Graph3DSurfaceMode {
+  return graph.surfaceMode ?? "mesh";
+}
+
+function prepareGraphSurfaces3D(
+  surfaces: readonly Surface3DObject[],
+  graph: Graph3DObject,
+  surfaceMode: Graph3DSurfaceMode
+): readonly RenderedSurface3D[] {
+  switch (surfaceMode) {
+    case "mesh":
+      return surfaces.map((surface) => prepareSurface3D(surface, graph));
+    case "donut":
+      return [prepareGeneratedSurface3D(
+        graph,
+        "torus",
+        `${graph.id}-donut`,
+        "donut",
+        "parametric torus",
+        sampleTorusSurfaceGrid()
+      )];
+    case "hyperplanes":
+      return [
+        prepareGeneratedSurface3D(
+          graph,
+          "hyperplane-positive",
+          `${graph.id}-hyperplane-positive`,
+          "z = x / 2",
+          "z = x / 2",
+          sampleHyperplaneSurfaceGrid(0.5)
+        ),
+        prepareGeneratedSurface3D(
+          graph,
+          "hyperplane-negative",
+          `${graph.id}-hyperplane-negative`,
+          "z = -x / 2",
+          "z = -x / 2",
+          sampleHyperplaneSurfaceGrid(-0.5)
+        )
+      ];
+  }
 }
 
 function prepareSurface3D(
   surface: Surface3DObject,
   graph: Graph3DObject
 ): RenderedSurface3D {
-  const grid = sampleSaddleSurface(surface);
-  const quads = createSaddleSurfaceQuads(surface, graph, grid);
+  const evaluateSurface = compileExpression(surface.expression);
+  const gradient = compileSurfaceGradient(surface);
+  const grid = sampleSurfaceGrid(surface, evaluateSurface);
+  const quads = createSurfaceQuads(surface, graph, grid, (center) =>
+    saddleSurfaceNormalAt(center, gradient)
+  );
 
   return {
     surface,
+    drawBorder: true,
+    evaluateSurface,
+    gradient,
     grid,
     quads,
     shadowQuads: createSurfaceShadowQuads(graph, quads)
   };
+}
+
+function prepareGeneratedSurface3D(
+  graph: Graph3DObject,
+  generatedSurface: GeneratedSurface3DKind,
+  id: string,
+  label: string,
+  equation: string,
+  grid: readonly (readonly GraphPoint3D[])[]
+): RenderedSurface3D {
+  const firstRow = grid[0] ?? [];
+  const surface: Surface3DObject = {
+    id,
+    type: "surface-3d",
+    graphId: graph.id,
+    label,
+    equation,
+    expression: constant(0),
+    xDomain: graph.xDomain,
+    yDomain: graph.yDomain,
+    xSampleCount: firstRow.length,
+    ySampleCount: grid.length
+  };
+  const quads = createSurfaceQuads(surface, graph, grid, (_center, corners) =>
+    surfaceQuadNormal(corners)
+  );
+
+  return {
+    surface,
+    drawBorder: generatedSurface !== "torus",
+    generatedSurface,
+    grid,
+    quads,
+    shadowQuads: createSurfaceShadowQuads(graph, quads)
+  };
+}
+
+function sampleTorusSurfaceGrid(): readonly (readonly GraphPoint3D[])[] {
+  const majorRadius = 1.55;
+  const minorRadius = 0.62;
+  const uValues = sampleDomain([0, Math.PI * 2], 25);
+  const vValues = sampleDomain([0, Math.PI * 2], 13);
+
+  return vValues.map((v) =>
+    uValues.map((u) => {
+      const tubeRadius = majorRadius + minorRadius * Math.cos(v);
+
+      return {
+        x: roundCoordinate(tubeRadius * Math.cos(u)),
+        y: roundCoordinate(tubeRadius * Math.sin(u)),
+        z: roundCoordinate(minorRadius * Math.sin(v))
+      };
+    })
+  );
+}
+
+function sampleHyperplaneSurfaceGrid(
+  slope: number
+): readonly (readonly GraphPoint3D[])[] {
+  const domain: NumericDomain = [-2.4, 2.4];
+
+  return sampleDomain(domain, 13).map((y) =>
+    sampleDomain(domain, 13).map((x) => ({
+      x: roundCoordinate(x),
+      y: roundCoordinate(y),
+      z: roundCoordinate(slope * x)
+    }))
+  );
 }
 
 function buildSurfaceDepthScene3D(
@@ -823,26 +1030,37 @@ function renderSurface3D(
     surfaces
   );
   const edgeSegments = edgeResult.segments;
+  const meshSegments = surfaceMeshLineSegments3D(
+    renderedSurface,
+    graph,
+    depthScene
+  );
   const rowPaths = grid.map((row) =>
-    renderSurfacePath(row, graph, "graph-surface__line--row")
+    renderSurfaceDebugPath(row, graph, "graph-surface__line--row")
   );
   const columnPaths = transposeGrid(grid).map((column) =>
-    renderSurfacePath(column, graph, "graph-surface__line--column")
+    renderSurfaceDebugPath(column, graph, "graph-surface__line--column")
   );
   const wireframe = graph.debug.surfaceMesh
     ? renderSurfaceWireframe(surface, rowPaths, columnPaths)
     : "";
 
   return `
-    <g class="graph-surface" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg" data-kp-type="surface-3d">
-      ${renderSurfaceEdgeOutline(surface, edgeSegments, graph, "hidden", edgeResult.analyticSplitCount)}
+    <g class="graph-surface" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg" data-kp-type="surface-3d"${renderGeneratedSurfaceAttribute(renderedSurface)}>
       <g class="graph-surface__quads" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-quads" data-kp-type="surface-3d" data-kp-depth-order="back-to-front">
         ${surfaceQuadsBackToFront(quads).map((quad) => renderSurfaceQuad(surface, quad, graph)).join("")}
       </g>
+      ${renderSurfaceMesh(renderedSurface, meshSegments, graph)}
       ${wireframe}
-      ${renderSurfaceEdgeOutline(surface, edgeSegments, graph, "visible", edgeResult.analyticSplitCount)}
+      ${renderSurfaceEdgeOutline(renderedSurface, edgeSegments, graph, "visible", edgeResult.analyticSplitCount)}
     </g>
   `;
+}
+
+function renderGeneratedSurfaceAttribute(surface: RenderedSurface3D): string {
+  return surface.generatedSurface === undefined
+    ? ""
+    : ` data-kp-generated-surface="${surface.generatedSurface}"`;
 }
 
 function renderSurfaceShadowLayer3D(
@@ -948,28 +1166,70 @@ function renderSurfaceQuad(
   return `<polygon class="graph-surface__quad" points="${points}" data-kp-object="${escapeHtml(surface.id)}" data-kp-cell="${quad.rowIndex},${quad.columnIndex}" data-kp-facing="${quad.facing}" data-kp-surface-depth="${formatNumber(quad.averageDepth)}" data-kp-depth-haze="${formatNumber(quad.depthHaze)}" data-kp-lighting-model="ambient-diffuse-specular-rim-depth-haze" ${renderLightAttributes(graph)} data-kp-type="surface-3d" fill="${quad.fill}" fill-opacity="1" opacity="1" />`;
 }
 
-function renderSurfacePath(
+function renderSurfaceDebugPath(
   points: readonly GraphPoint3D[],
   graph: Graph3DObject,
   className: string
 ): string {
   const projectedPoints = points.map((point) => projectGraphPoint3D(graph, point));
-  const pathData = pointsToPathData(projectedPoints);
+  const pathData = pointsToSmoothPathData(projectedPoints);
 
   if (pathData.length === 0) {
     return "";
   }
 
-  return `<path class="graph-surface__line ${className}" d="${pathData}" />`;
+  return `<path class="graph-surface__line ${className}" d="${pathData}" data-kp-smoothing="catmull-rom" />`;
+}
+
+function renderSurfaceMesh(
+  renderedSurface: RenderedSurface3D,
+  segments: readonly SurfaceMeshLineSegment3D[],
+  graph: Graph3DObject
+): string {
+  if (segments.length === 0) {
+    return "";
+  }
+
+  const { surface } = renderedSurface;
+  const smoothingAttributes = renderedSurface.gradient === undefined
+    ? ' data-kp-smoothing="projected-line"'
+    : ' data-kp-smoothing="ad-gradient-bezier" data-kp-derivative-source="automatic-differentiation"';
+
+  return `<g class="graph-surface__mesh" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-mesh" data-kp-type="surface-3d" data-kp-surface-mesh="visible" data-kp-mesh-visibility-split-depth="${GRAPH_INTERSECTION_VISIBILITY_SPLIT_DEPTH}"${smoothingAttributes}>
+    ${segments.map((segment, index) => renderSurfaceMeshSegment(renderedSurface, segment, graph, index)).join("")}
+  </g>`;
+}
+
+function renderSurfaceMeshSegment(
+  renderedSurface: RenderedSurface3D,
+  segment: SurfaceMeshLineSegment3D,
+  graph: Graph3DObject,
+  index: number
+): string {
+  const { pathData, geometry, smoothingAttributes } = surfaceSegmentPathData(
+    renderedSurface,
+    segment.graphFrom,
+    segment.graphTo,
+    graph,
+    segment.direction
+  );
+  const { surface } = renderedSurface;
+
+  if (pathData.length === 0) {
+    return "";
+  }
+
+  return `<path class="graph-surface__mesh-line graph-surface__mesh-line--${segment.meshAxis}" d="${pathData}" data-kp-object="${escapeHtml(surface.id)}" data-kp-mesh-segment="${index}" data-kp-mesh-line="${segment.meshAxis}-${segment.lineIndex}" data-kp-mesh-line-segment="${segment.segmentIndex}"${segment.direction === undefined ? "" : ` data-kp-line-direction="${segment.direction}"`} data-kp-visibility="${segment.visibility}" data-kp-visibility-source="depth-buffer" data-kp-visibility-split-depth="${GRAPH_INTERSECTION_VISIBILITY_SPLIT_DEPTH}"${smoothingAttributes} data-kp-geometry="${geometry}" data-kp-type="surface-3d" />`;
 }
 
 function renderSurfaceEdgeOutline(
-  surface: Surface3DObject,
+  renderedSurface: RenderedSurface3D,
   edgeSegments: readonly SurfaceEdgeSegment3D[],
   graph: Graph3DObject,
   visibility: AxisVisibility,
   analyticSplitCount: number
 ): string {
+  const { surface } = renderedSurface;
   const matchingSegments = edgeSegments.filter(
     (segment) => segment.visibility === visibility
   );
@@ -978,24 +1238,58 @@ function renderSurfaceEdgeOutline(
     return "";
   }
 
-  return `<g class="graph-surface__edge-outline-layer" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-edge-outline-${visibility}" data-kp-type="surface-3d" data-kp-edge-visibility="${visibility}" data-kp-edge-split-source="analytic-surface+depth-buffer" data-kp-edge-analytic-split-count="${analyticSplitCount}">
-    ${matchingSegments.map((segment, index) => renderSurfaceEdgeSegment(surface, segment, graph, index)).join("")}
+  return `<g class="graph-surface__edge-outline-layer" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-edge-outline-${visibility}" data-kp-type="surface-3d" data-kp-edge-visibility="${visibility}" data-kp-edge-candidate-source="surface-mesh" data-kp-edge-split-source="analytic-surface+depth-buffer" data-kp-edge-boundary-source="mesh-edge" data-kp-edge-analytic-split-count="${analyticSplitCount}" data-kp-edge-subdivisions="${SURFACE_EDGE_SEGMENT_SUBDIVISIONS}" data-kp-edge-visibility-split-depth="${GRAPH_INTERSECTION_VISIBILITY_SPLIT_DEPTH}">
+    ${renderSurfaceEdgePathBatch(renderedSurface, matchingSegments, graph, visibility)}
   </g>`;
 }
 
-function renderSurfaceEdgeSegment(
-  surface: Surface3DObject,
-  segment: SurfaceEdgeSegment3D,
+function renderSurfaceEdgePathBatch(
+  renderedSurface: RenderedSurface3D,
+  segments: readonly SurfaceEdgeSegment3D[],
   graph: Graph3DObject,
-  index: number
+  visibility: AxisVisibility
 ): string {
-  const depthWeight = lineDepthWeight(graph, segment.averageDepth);
-  const strip = projectedStrip3D(segment, graph, SURFACE_EDGE_OUTLINE_WIDTH);
-  const opacity = segment.visibility === "hidden"
+  const pathParts = segments
+    .map((segment) => ({
+      segment,
+      path: surfaceSegmentPathData(
+        renderedSurface,
+        segment.graphFrom,
+        segment.graphTo,
+        graph,
+        segment.direction
+      )
+    }))
+    .filter(({ path }) => path.pathData.length > 0);
+
+  if (pathParts.length === 0) {
+    return "";
+  }
+
+  const { surface } = renderedSurface;
+  const depths = pathParts.map(({ segment }) => segment.averageDepth);
+  const averageDepth =
+    depths.reduce((sum, depth) => sum + depth, 0) / depths.length;
+  const minDepth = Math.min(...depths);
+  const maxDepth = Math.max(...depths);
+  const depthWeight = lineDepthWeight(graph, averageDepth);
+  const opacity = visibility === "hidden"
     ? SURFACE_EDGE_OCCLUDED_OPACITY
     : SURFACE_EDGE_VISIBLE_OPACITY;
+  const geometries = uniqueStrings(pathParts.map(({ path }) => path.geometry));
+  const geometry = geometries.length === 1 ? geometries[0] : "mixed";
+  const smoothingValues = uniqueStrings(
+    pathParts.map(({ path }) => path.smoothingAttributes)
+  );
+  const smoothingAttributes =
+    smoothingValues.length === 1 ? smoothingValues[0] : "";
+  const visualEdgeSources = uniqueStrings(
+    pathParts.map(({ segment }) => segment.visualBoundary)
+  );
+  const visualEdgeSource = visualEdgeSources.join(",");
+  const pathData = pathParts.map(({ path }) => path.pathData).join(" ");
 
-  return `<polygon class="graph-surface__edge-outline" points="${formatPoints(strip.points)}" data-kp-object="${escapeHtml(surface.id)}" data-kp-edge-segment="${index}" data-kp-edge-visibility="${segment.visibility}" data-kp-visibility-source="depth-buffer" data-kp-depth="${formatNumber(segment.averageDepth)}" data-kp-depth-weight="${formatNumber(depthWeight)}" data-kp-max-width="${formatNumber(SURFACE_EDGE_OUTLINE_WIDTH)}" data-kp-width-from="${formatNumber(strip.fromWidth)}" data-kp-width-to="${formatNumber(strip.toWidth)}" data-kp-geometry="screen-space-quad" data-kp-type="surface-3d" fill="${SURFACE_EDGE_OUTLINE_COLOR}" opacity="${formatNumber(opacity)}" />`;
+  return `<path class="graph-surface__edge-outline" d="${pathData}" data-kp-object="${escapeHtml(surface.id)}" data-kp-edge-batch="compound-path" data-kp-edge-segment-count="${pathParts.length}" data-kp-edge-visibility="${visibility}" data-kp-visibility-source="depth-buffer" data-kp-visibility-split-depth="${GRAPH_INTERSECTION_VISIBILITY_SPLIT_DEPTH}" data-kp-visual-edge="true" data-kp-visual-edge-source="${escapeHtml(visualEdgeSource)}" data-kp-depth="${formatNumber(averageDepth)}" data-kp-depth-range="${formatNumber(minDepth)},${formatNumber(maxDepth)}" data-kp-depth-weight="${formatNumber(depthWeight)}" data-kp-geometry="${geometry}"${smoothingAttributes} data-kp-type="surface-3d" opacity="${formatNumber(opacity)}" />`;
 }
 
 function surfaceEdgeSegments3D(
@@ -1004,9 +1298,16 @@ function surfaceEdgeSegments3D(
   depthScene: DepthScene,
   surfaces: readonly RenderedSurface3D[]
 ): SurfaceEdgeSegments3DResult {
-  const perimeter = surfacePerimeterPoints(renderedSurface.grid);
+  if (!renderedSurface.drawBorder) {
+    return {
+      analyticSplitCount: 0,
+      segments: []
+    };
+  }
 
-  if (perimeter.length < 2) {
+  const meshEdges = surfaceMeshEdges3D(renderedSurface.quads);
+
+  if (meshEdges.length === 0) {
     return {
       analyticSplitCount: 0,
       segments: []
@@ -1014,17 +1315,11 @@ function surfaceEdgeSegments3D(
   }
 
   let analyticSplitCount = 0;
-  const segments = perimeter.flatMap((from, index) => {
-    const to = perimeter[(index + 1) % perimeter.length];
-
-    if (to === undefined) {
-      return [];
-    }
-
+  const segments = meshEdges.flatMap((edge) => {
     const analyticBreakpoints = surfaceEdgeAnalyticSplitTs3D(
       renderedSurface,
       surfaces,
-      { from, to }
+      edge.line
     );
     const breakpoints = sortedUniqueNumbers([
       ...sampleDomain([0, 1], SURFACE_EDGE_SEGMENT_SUBDIVISIONS + 1),
@@ -1040,14 +1335,48 @@ function surfaceEdgeSegments3D(
         return [];
       }
 
-      const segmentStart = interpolateGraphPoint3D(from, to, start);
-      const segmentEnd = interpolateGraphPoint3D(from, to, end);
+      const segmentStart = interpolateGraphPoint3D(edge.line.from, edge.line.to, start);
+      const segmentEnd = interpolateGraphPoint3D(edge.line.from, edge.line.to, end);
       const projectedLine = projectGraphLine3D(graph, {
         from: segmentStart,
         to: segmentEnd
       });
 
-      return segmentProjectedLineByVisibility(depthScene, projectedLine);
+      return segmentProjectedLineByVisibility(
+        depthScene,
+        projectedLine,
+        { maxDepth: GRAPH_INTERSECTION_VISIBILITY_SPLIT_DEPTH }
+      )
+        .filter((segment) =>
+          segment.visibility === "visible"
+        )
+        .map((segment) => {
+          const graphFrom = graphPointAtProjectedLinePoint(
+            renderedSurface,
+            segmentStart,
+            segmentEnd,
+            projectedLine,
+            segment.from
+          );
+          const graphTo = graphPointAtProjectedLinePoint(
+            renderedSurface,
+            segmentStart,
+            segmentEnd,
+            projectedLine,
+            segment.to
+          );
+
+          return {
+            ...segment,
+            direction:
+              renderedSurface.gradient === undefined
+                ? undefined
+                : surfaceLineDirection(graphFrom, graphTo),
+            graphFrom,
+            graphTo,
+            visualBoundary: edge.visualBoundary
+          };
+        });
     });
   });
 
@@ -1057,14 +1386,153 @@ function surfaceEdgeSegments3D(
   };
 }
 
+function surfaceMeshLineSegments3D(
+  renderedSurface: RenderedSurface3D,
+  graph: Graph3DObject,
+  depthScene: DepthScene
+): readonly SurfaceMeshLineSegment3D[] {
+  const rowSegments = renderedSurface.grid.flatMap((row, rowIndex) =>
+    surfaceMeshPolylineSegments3D(
+      renderedSurface,
+      graph,
+      depthScene,
+      row,
+      "x",
+      "row",
+      rowIndex
+    )
+  );
+  const columnSegments = transposeGrid(renderedSurface.grid).flatMap(
+    (column, columnIndex) =>
+      surfaceMeshPolylineSegments3D(
+        renderedSurface,
+        graph,
+        depthScene,
+        column,
+        "y",
+        "column",
+        columnIndex
+      )
+  );
+
+  return [...rowSegments, ...columnSegments];
+}
+
+function surfaceMeshPolylineSegments3D(
+  renderedSurface: RenderedSurface3D,
+  graph: Graph3DObject,
+  depthScene: DepthScene,
+  points: readonly GraphPoint3D[],
+  direction: SurfaceLineDirection,
+  meshAxis: SurfaceMeshLineSegment3D["meshAxis"],
+  lineIndex: number
+): readonly SurfaceMeshLineSegment3D[] {
+  return points.flatMap((from, pointIndex) => {
+    const to = points[pointIndex + 1];
+
+    if (to === undefined) {
+      return [];
+    }
+
+    const projectedLine = projectGraphLine3D(graph, { from, to });
+
+    return segmentProjectedLineByVisibility(
+      depthScene,
+      projectedLine,
+      { maxDepth: GRAPH_INTERSECTION_VISIBILITY_SPLIT_DEPTH }
+    )
+      .filter((segment) => segment.visibility === "visible")
+      .map((segment, visibilitySegmentIndex) => ({
+        ...segment,
+        direction:
+          renderedSurface.gradient === undefined
+            ? undefined
+            : direction,
+        graphFrom: graphPointAtProjectedLinePoint(
+          renderedSurface,
+          from,
+          to,
+          projectedLine,
+          segment.from
+        ),
+        graphTo: graphPointAtProjectedLinePoint(
+          renderedSurface,
+          from,
+          to,
+          projectedLine,
+          segment.to
+        ),
+        lineIndex,
+        meshAxis,
+        segmentIndex: `${pointIndex}-${visibilitySegmentIndex}`
+      }));
+  });
+}
+
+function surfaceMeshEdges3D(
+  quads: readonly SurfaceQuad3D[]
+): readonly SurfaceMeshEdge3D[] {
+  const edges = new Map<string, { count: number; line: GraphLine3D }>();
+
+  for (const quad of quads) {
+    for (const line of surfaceQuadEdges3D(quad)) {
+      const key = graphLineKey3D(line);
+      const existingEdge = edges.get(key);
+
+      if (existingEdge === undefined) {
+        edges.set(key, { count: 1, line });
+      } else {
+        existingEdge.count += 1;
+      }
+    }
+  }
+
+  return [...edges.values()]
+    .filter((edge) => edge.count === 1)
+    .map((edge) => ({
+      line: edge.line,
+      visualBoundary: "mesh-edge" as const
+    }));
+}
+
+function surfaceQuadEdges3D(quad: SurfaceQuad3D): readonly GraphLine3D[] {
+  const [topLeft, topRight, bottomRight, bottomLeft] = quad.corners;
+
+  return [
+    { from: topLeft, to: topRight },
+    { from: topRight, to: bottomRight },
+    { from: bottomRight, to: bottomLeft },
+    { from: bottomLeft, to: topLeft }
+  ];
+}
+
+function graphLineKey3D(line: GraphLine3D): string {
+  return [graphPointKey3D(line.from), graphPointKey3D(line.to)]
+    .sort()
+    .join("|");
+}
+
+function graphPointKey3D(point: GraphPoint3D): string {
+  return [
+    roundCoordinate(point.x),
+    roundCoordinate(point.y),
+    roundCoordinate(point.z)
+  ].join(",");
+}
+
 function surfaceEdgeAnalyticSplitTs3D(
   renderedSurface: RenderedSurface3D,
   surfaces: readonly RenderedSurface3D[],
   line: GraphLine3D
 ): readonly number[] {
+  if (renderedSurface.evaluateSurface === undefined) {
+    return [];
+  }
+
   return sortedUniqueNumbers(
     surfaces.flatMap((surface) =>
-      surface.surface.id === renderedSurface.surface.id
+      surface.surface.id === renderedSurface.surface.id ||
+      surface.evaluateSurface === undefined
         ? []
         : findLineSurfaceIntersections(
             line,
@@ -1076,37 +1544,21 @@ function surfaceEdgeAnalyticSplitTs3D(
   );
 }
 
-function surfacePerimeterPoints(
-  grid: readonly (readonly GraphPoint3D[])[]
-): readonly GraphPoint3D[] {
-  const firstRow = grid[0];
-  const lastRow = grid[grid.length - 1];
-
-  if (firstRow === undefined || lastRow === undefined) {
-    return [];
-  }
-
-  const rightColumn = grid
-    .slice(1)
-    .map((row) => row[row.length - 1])
-    .filter((point) => point !== undefined);
-  const bottomRow = [...lastRow.slice(0, -1)].reverse();
-  const leftColumn = grid
-    .slice(1, -1)
-    .reverse()
-    .map((row) => row[0])
-    .filter((point) => point !== undefined);
-
-  return [...firstRow, ...rightColumn, ...bottomRow, ...leftColumn];
-}
-
-function createSaddleSurfaceQuads(
+function createSurfaceQuads(
   surface: Surface3DObject,
   graph: Graph3DObject,
-  grid: readonly (readonly GraphPoint3D[])[]
+  grid: readonly (readonly GraphPoint3D[])[],
+  normalAt: (
+    center: GraphPoint3D,
+    corners: readonly [
+      GraphPoint3D,
+      GraphPoint3D,
+      GraphPoint3D,
+      GraphPoint3D
+    ]
+  ) => GraphPoint3D
 ): readonly SurfaceQuad3D[] {
   const quads: SurfaceQuad3D[] = [];
-  const gradient = compileSurfaceGradient(surface);
   const viewDirection = graphCameraDirection(graph);
 
   for (let rowIndex = 0; rowIndex < grid.length - 1; rowIndex += 1) {
@@ -1145,7 +1597,7 @@ function createSaddleSurfaceQuads(
         projectGraphPoint3D(graph, bottomLeft)
       ] as const;
       const center = averageGraphPoint3D(corners);
-      const normal = saddleSurfaceNormalAt(center, gradient);
+      const normal = normalAt(center, corners);
       const facing = classifySurfaceFacing(graph, normal);
       const depthHaze = 1 - lineDepthWeight(
         graph,
@@ -1194,6 +1646,24 @@ function saddleSurfaceNormalAt(
   });
 }
 
+function surfaceQuadNormal(
+  corners: readonly [
+    GraphPoint3D,
+    GraphPoint3D,
+    GraphPoint3D,
+    GraphPoint3D
+  ]
+): GraphPoint3D {
+  const [topLeft, topRight, _bottomRight, bottomLeft] = corners;
+
+  return normalizePoint3D(
+    crossPoint3D(
+      subtractPoint3D(topRight, topLeft),
+      subtractPoint3D(bottomLeft, topLeft)
+    )
+  );
+}
+
 function compileSurfaceGradient(
   surface: Surface3DObject
 ): SurfaceGradientEvaluators {
@@ -1235,6 +1705,181 @@ function interpolateGraphPoint3D(
     y: from.y + (to.y - from.y) * t,
     z: from.z + (to.z - from.z) * t
   };
+}
+
+function surfaceBezierSegmentPathData(
+  from: GraphPoint3D,
+  to: GraphPoint3D,
+  graph: Graph3DObject,
+  gradient: SurfaceGradientEvaluators,
+  direction: SurfaceLineDirection
+): string {
+  const projectedFrom = projectGraphPoint3D(graph, from);
+
+  return [
+    `M ${formatNumber(projectedFrom.x)} ${formatNumber(projectedFrom.y)}`,
+    surfaceBezierSegmentCommand(from, to, graph, gradient, direction)
+  ].join(" ");
+}
+
+function surfaceSegmentPathData(
+  renderedSurface: RenderedSurface3D,
+  from: GraphPoint3D,
+  to: GraphPoint3D,
+  graph: Graph3DObject,
+  direction: SurfaceLineDirection | undefined
+): {
+  geometry: "screen-space-bezier" | "screen-space-line";
+  pathData: string;
+  smoothingAttributes: string;
+} {
+  if (renderedSurface.gradient !== undefined && direction !== undefined) {
+    return {
+      geometry: "screen-space-bezier",
+      pathData: surfaceBezierSegmentPathData(
+        from,
+        to,
+        graph,
+        renderedSurface.gradient,
+        direction
+      ),
+      smoothingAttributes:
+        ' data-kp-smoothing="ad-gradient-bezier" data-kp-derivative-source="automatic-differentiation"'
+    };
+  }
+
+  return {
+    geometry: "screen-space-line",
+    pathData: pointsToPathData([
+      projectGraphPoint3D(graph, from),
+      projectGraphPoint3D(graph, to)
+    ]),
+    smoothingAttributes: ""
+  };
+}
+
+function surfaceBezierSegmentCommand(
+  from: GraphPoint3D,
+  to: GraphPoint3D,
+  graph: Graph3DObject,
+  gradient: SurfaceGradientEvaluators,
+  direction: SurfaceLineDirection
+): string {
+  const [control1, control2] = surfaceBezierControlPoints(
+    from,
+    to,
+    gradient,
+    direction
+  );
+  const projectedControl1 = projectGraphPoint3D(graph, control1);
+  const projectedControl2 = projectGraphPoint3D(graph, control2);
+  const projectedTo = projectGraphPoint3D(graph, to);
+
+  return `C ${formatNumber(projectedControl1.x)} ${formatNumber(projectedControl1.y)} ${formatNumber(projectedControl2.x)} ${formatNumber(projectedControl2.y)} ${formatNumber(projectedTo.x)} ${formatNumber(projectedTo.y)}`;
+}
+
+function surfaceBezierControlPoints(
+  from: GraphPoint3D,
+  to: GraphPoint3D,
+  gradient: SurfaceGradientEvaluators,
+  direction: SurfaceLineDirection
+): readonly [GraphPoint3D, GraphPoint3D] {
+  const parameterDelta = direction === "x" ? to.x - from.x : to.y - from.y;
+  const fromTangent = surfaceLineTangentAt(from, gradient, direction);
+  const toTangent = surfaceLineTangentAt(to, gradient, direction);
+
+  return [
+    addScaledGraphPoint3D(from, fromTangent, parameterDelta / 3),
+    addScaledGraphPoint3D(to, toTangent, -parameterDelta / 3)
+  ];
+}
+
+function surfaceLineTangentAt(
+  point: GraphPoint3D,
+  gradient: SurfaceGradientEvaluators,
+  direction: SurfaceLineDirection
+): GraphPoint3D {
+  const scope = { x: point.x, y: point.y };
+  const dz = direction === "x" ? gradient.dx(scope) : gradient.dy(scope);
+  const safeDz = Number.isFinite(dz) ? dz : 0;
+
+  return direction === "x"
+    ? { x: 1, y: 0, z: safeDz }
+    : { x: 0, y: 1, z: safeDz };
+}
+
+function addScaledGraphPoint3D(
+  point: GraphPoint3D,
+  direction: GraphPoint3D,
+  scale: number
+): GraphPoint3D {
+  return {
+    x: point.x + direction.x * scale,
+    y: point.y + direction.y * scale,
+    z: point.z + direction.z * scale
+  };
+}
+
+function surfaceLineDirection(
+  from: GraphPoint3D,
+  to: GraphPoint3D
+): SurfaceLineDirection {
+  return Math.abs(to.x - from.x) >= Math.abs(to.y - from.y) ? "x" : "y";
+}
+
+// Depth segmentation happens in projected space; rebuild graph-space endpoints
+// so Bezier handles still follow the analytic surface instead of the split line.
+function graphPointAtProjectedLinePoint(
+  renderedSurface: RenderedSurface3D,
+  from: GraphPoint3D,
+  to: GraphPoint3D,
+  projectedLine: ProjectedLine3D,
+  projectedPoint: ProjectedGraphPoint3D
+): GraphPoint3D {
+  const t = projectedLineT(projectedLine, projectedPoint);
+
+  return renderedSurface.evaluateSurface === undefined
+    ? interpolateGraphPoint3D(from, to, t)
+    : surfacePointAtLineT(renderedSurface.evaluateSurface, from, to, t);
+}
+
+function surfacePointAtLineT(
+  evaluateSurface: CompiledExpression,
+  from: GraphPoint3D,
+  to: GraphPoint3D,
+  t: number
+): GraphPoint3D {
+  const x = from.x + (to.x - from.x) * t;
+  const y = from.y + (to.y - from.y) * t;
+
+  return {
+    x,
+    y,
+    z: evaluateSurface({ x, y })
+  };
+}
+
+function projectedLineT(
+  line: ProjectedLine3D,
+  point: ProjectedGraphPoint3D
+): number {
+  const dx = line.to.x - line.from.x;
+  const dy = line.to.y - line.from.y;
+  const dz = line.to.depth - line.from.depth;
+  const denominator = dx * dx + dy * dy + dz * dz;
+
+  if (denominator === 0) {
+    return 0;
+  }
+
+  return clamp(
+    ((point.x - line.from.x) * dx +
+      (point.y - line.from.y) * dy +
+      (point.depth - line.from.depth) * dz) /
+      denominator,
+    0,
+    1
+  );
 }
 
 function projectedStrip3D(
@@ -1293,14 +1938,42 @@ function projectedStrip3D(
   };
 }
 
-function axisArrowPoints(
+function axisArrowObstruction(
   line: ProjectedAxisSegment3D,
+  graph: Graph3DObject,
+  depthScene: DepthScene,
+  arrowEnd: AxisArrowEnd
+): AxisArrowObstruction {
+  if (line.visibility === "hidden") {
+    return "partial";
+  }
+
+  const geometry = axisArrowGeometry3D(line, graph, arrowEnd, "visible");
+
+  return axisArrowFootprintSamples(geometry.depthPoints).every((point) =>
+    axisArrowSampleIsUnobstructed(depthScene, point)
+  )
+    ? "none"
+    : "partial";
+}
+
+function axisArrowGeometry3D(
+  line: ProjectedAxisSegment3D,
+  graph: Graph3DObject,
   arrowEnd: AxisArrowEnd,
-  arrowLength: number,
-  baseWidth: number
-): readonly [GraphPoint, GraphPoint, GraphPoint] {
+  visibility: AxisVisibility
+): ProjectedAxisArrowGeometry3D {
   const tip = arrowEnd === "negative-end" ? line.from : line.to;
   const innerPoint = arrowEnd === "negative-end" ? line.to : line.from;
+  const depthWeight = lineDepthWeight(graph, tip.depth);
+  const arrowLength = axisArrowLength(visibility, depthWeight);
+  const endpointWidth = depthScaledWidth(
+    graph,
+    tip.depth,
+    SURFACE_MESH_STROKE_WIDTH * AXIS_TO_MESH_STROKE_RATIO +
+      AXIS_STROKE_EXTRA_PX
+  );
+  const baseWidth = endpointWidth * AXIS_ARROW_BASE_WIDTH_RATIO;
   const dx = tip.x - innerPoint.x;
   const dy = tip.y - innerPoint.y;
   const length = Math.hypot(dx, dy);
@@ -1313,18 +1986,64 @@ function axisArrowPoints(
     x: tip.x - directionX * arrowLength,
     y: tip.y - directionY * arrowLength
   };
-
-  return [
+  const baseDepth = length === 0
+    ? tip.depth
+    : tip.depth + (innerPoint.depth - tip.depth) * (arrowLength / length);
+  const depthPoints = [
     tip,
     {
       x: baseCenter.x + normalX * halfBaseWidth,
-      y: baseCenter.y + normalY * halfBaseWidth
+      y: baseCenter.y + normalY * halfBaseWidth,
+      depth: baseDepth
     },
     {
       x: baseCenter.x - normalX * halfBaseWidth,
-      y: baseCenter.y - normalY * halfBaseWidth
+      y: baseCenter.y - normalY * halfBaseWidth,
+      depth: baseDepth
     }
+  ] as const;
+
+  return {
+    arrowLength,
+    depthPoints,
+    points: [
+      { x: depthPoints[0].x, y: depthPoints[0].y },
+      { x: depthPoints[1].x, y: depthPoints[1].y },
+      { x: depthPoints[2].x, y: depthPoints[2].y }
+    ]
+  };
+}
+
+function axisArrowFootprintSamples(
+  points: ProjectedAxisArrowGeometry3D["depthPoints"]
+): readonly ProjectedGraphPoint3D[] {
+  const weights: readonly (readonly [number, number, number])[] = [
+    [1, 0, 0],
+    [0, 1, 0],
+    [0, 0, 1],
+    [0.5, 0.5, 0],
+    [0.5, 0, 0.5],
+    [0, 0.5, 0.5],
+    [1 / 3, 1 / 3, 1 / 3]
   ];
+
+  return weights.map(([a, b, c]) => ({
+    x: points[0].x * a + points[1].x * b + points[2].x * c,
+    y: points[0].y * a + points[1].y * b + points[2].y * c,
+    depth: points[0].depth * a + points[1].depth * b + points[2].depth * c
+  }));
+}
+
+function axisArrowSampleIsUnobstructed(
+  depthScene: DepthScene,
+  point: ProjectedGraphPoint3D
+): boolean {
+  const depth = classifyProjectedPointDepth(depthScene, point);
+
+  return (
+    depth.delta === undefined ||
+    depth.delta > AXIS_ARROW_CLEARANCE_EPSILON
+  );
 }
 
 function depthScaledWidth(
@@ -1342,6 +2061,22 @@ function depthScaledWidth(
 
 function dotPoint3D(left: GraphPoint3D, right: GraphPoint3D): number {
   return left.x * right.x + left.y * right.y + left.z * right.z;
+}
+
+function crossPoint3D(left: GraphPoint3D, right: GraphPoint3D): GraphPoint3D {
+  return {
+    x: left.y * right.z - left.z * right.y,
+    y: left.z * right.x - left.x * right.z,
+    z: left.x * right.y - left.y * right.x
+  };
+}
+
+function subtractPoint3D(left: GraphPoint3D, right: GraphPoint3D): GraphPoint3D {
+  return {
+    x: left.x - right.x,
+    y: left.y - right.y,
+    z: left.z - right.z
+  };
 }
 
 function normalizePoint3D(point: GraphPoint3D): GraphPoint3D {
@@ -1370,7 +2105,7 @@ function axisSegments3D(
     ...analyticSplitValues
   ]);
 
-  return breakpoints.flatMap((start, index) => {
+  const segments = breakpoints.flatMap((start, index) => {
     const end = breakpoints[index + 1];
 
     if (end === undefined) {
@@ -1381,7 +2116,8 @@ function axisSegments3D(
     const projectedLine = projectGraphLine3D(graph, line);
     const visibilitySegments = segmentProjectedLineByVisibility(
       depthScene,
-      projectedLine
+      projectedLine,
+      { maxDepth: GRAPH_INTERSECTION_VISIBILITY_SPLIT_DEPTH }
     );
 
     return visibilitySegments.map((segment, segmentIndex) => ({
@@ -1391,6 +2127,49 @@ function axisSegments3D(
         index === breakpoints.length - 2 &&
         segmentIndex === visibilitySegments.length - 1
     }));
+  });
+
+  return axisSegmentsWithSurfaceContactOcclusion(segments, depthScene);
+}
+
+function axisSegmentsWithSurfaceContactOcclusion(
+  segments: readonly ProjectedAxisSegment3D[],
+  depthScene: DepthScene
+): readonly ProjectedAxisSegment3D[] {
+  return segments.map((segment, index) => {
+    const previousSegment = segments[index - 1];
+    const nextSegment = segments[index + 1];
+
+    // A contact segment sitting exactly on the surface should not flash black
+    // when both sides of the same axis are already behind the surface.
+    if (
+      segment.visibility === "visible" &&
+      previousSegment?.visibility === "hidden" &&
+      nextSegment?.visibility === "hidden" &&
+      axisSegmentTouchesSurface(segment, depthScene)
+    ) {
+      return {
+        ...segment,
+        visibility: "hidden"
+      };
+    }
+
+    return segment;
+  });
+}
+
+function axisSegmentTouchesSurface(
+  segment: ProjectedAxisSegment3D,
+  depthScene: DepthScene
+): boolean {
+  return [0, 0.5, 1].some((t) => {
+    const point = interpolateProjectedPoint(segment.from, segment.to, t);
+    const depth = classifyProjectedPointDepth(depthScene, point);
+
+    return (
+      depth.delta !== undefined &&
+      Math.abs(depth.delta) <= AXIS_SURFACE_CONTACT_EPSILON
+    );
   });
 }
 
@@ -1428,6 +2207,10 @@ function sortedUniqueNumbers(values: readonly number[]): readonly number[] {
 
       return uniqueValues;
     }, []);
+}
+
+function uniqueStrings(values: readonly string[]): readonly string[] {
+  return [...new Set(values)];
 }
 
 function extendDomain(
@@ -1500,6 +2283,53 @@ function pointsToPathData(points: readonly GraphPoint[]): string {
       (point) => `L ${formatNumber(point.x)} ${formatNumber(point.y)}`
     )
   ].join(" ");
+}
+
+function pointsToSmoothPathData(points: readonly GraphPoint[]): string {
+  const firstPoint = points[0];
+
+  if (firstPoint === undefined) {
+    return "";
+  }
+
+  if (points.length < 3) {
+    return pointsToPathData(points);
+  }
+
+  const commands = [
+    `M ${formatNumber(firstPoint.x)} ${formatNumber(firstPoint.y)}`
+  ];
+
+  for (let index = 0; index < points.length - 1; index += 1) {
+    const p0 = points[index - 1] ?? points[index];
+    const p1 = points[index];
+    const p2 = points[index + 1];
+    const p3 = points[index + 2] ?? p2;
+
+    if (
+      p0 === undefined ||
+      p1 === undefined ||
+      p2 === undefined ||
+      p3 === undefined
+    ) {
+      continue;
+    }
+
+    const control1 = {
+      x: p1.x + (p2.x - p0.x) / 6,
+      y: p1.y + (p2.y - p0.y) / 6
+    };
+    const control2 = {
+      x: p2.x - (p3.x - p1.x) / 6,
+      y: p2.y - (p3.y - p1.y) / 6
+    };
+
+    commands.push(
+      `C ${formatNumber(control1.x)} ${formatNumber(control1.y)} ${formatNumber(control2.x)} ${formatNumber(control2.y)} ${formatNumber(p2.x)} ${formatNumber(p2.y)}`
+    );
+  }
+
+  return commands.join(" ");
 }
 
 function formatPoints(points: readonly GraphPoint[]): string {

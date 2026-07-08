@@ -253,6 +253,25 @@ h2 {
   background: #f8fafc;
 }
 
+.graph-controls__foldout {
+  margin-top: 0.6rem;
+  border-top: 1px solid #e3e8ef;
+  padding-top: 0.55rem;
+}
+
+.graph-controls__summary {
+  color: #334155;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.graph-controls__foldout-body {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 0.65rem;
+}
+
 .graph-control {
   display: grid;
   grid-template-columns: auto minmax(8rem, 1fr) 5.25rem;
@@ -379,13 +398,21 @@ h2 {
 }
 
 .graph-surface__quad {
-  stroke: #ffffff;
-  stroke-opacity: 0.18;
-  stroke-width: 0.6;
+  stroke: none;
   opacity: 1;
 }
 
 .graph-surface__quad[data-kp-facing="back"] {
+  opacity: 1;
+}
+
+.graph-surface__mesh-line {
+  fill: none;
+  stroke: #dce9ee;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-opacity: 0.55;
+  stroke-width: 0.35;
   opacity: 1;
 }
 
@@ -395,8 +422,11 @@ h2 {
 }
 
 .graph-surface__edge-outline {
-  fill: #0f3d5e;
-  stroke: none;
+  fill: none;
+  stroke: #0f3d5e;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1;
   opacity: 0.95;
 }
 

@@ -102,6 +102,8 @@ export interface Graph3DLightSettings {
   rim: number;
 }
 
+export type Graph3DSurfaceMode = "mesh" | "donut" | "hyperplanes";
+
 export interface Graph3DObject {
   id: string;
   type: "graph-3d";
@@ -114,6 +116,7 @@ export interface Graph3DObject {
   zDomain: NumericDomain;
   width: number;
   height: number;
+  surfaceMode: Graph3DSurfaceMode;
   occludedAxisLightness: number;
   debug: Graph3DDebugSettings;
   shadow: Graph3DShadowSettings;
@@ -185,9 +188,14 @@ type CreateAxis2DObjectInput = Omit<Axis2DObject, "type">;
 type CreateGraph3DObjectInput =
   Omit<
     Graph3DObject,
-    "debug" | "light" | "occludedAxisLightness" | "shadow" | "type"
+    | "debug"
+    | "light"
+    | "occludedAxisLightness"
+    | "shadow"
+    | "surfaceMode"
+    | "type"
   > &
-  Partial<Pick<Graph3DObject, "occludedAxisLightness">> & {
+  Partial<Pick<Graph3DObject, "occludedAxisLightness" | "surfaceMode">> & {
     debug?: Partial<Graph3DDebugSettings>;
     shadow?: Partial<Graph3DShadowSettings>;
     light?: Partial<Graph3DLightSettings> & {
@@ -256,6 +264,7 @@ export function createGraph3DObject(
   return {
     ...input,
     type: "graph-3d",
+    surfaceMode: input.surfaceMode ?? "mesh",
     occludedAxisLightness: clamp(
       input.occludedAxisLightness ?? DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
       0,

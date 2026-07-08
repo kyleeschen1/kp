@@ -7,6 +7,7 @@ import {
 } from "./editor/editor.ts";
 import { compileDocumentAsset } from "./editor/compile-client.ts";
 import {
+  GRAPH_3D_SURFACE_MODE_IDS,
   applyGraph3DLightPreset,
   addLatexEquationGraph,
   findGraph3DLightPresetId,
@@ -15,6 +16,7 @@ import {
   updateGraph3DOccludedAxisLightness,
   updateGraph3DShadowEnabled,
   updateGraph3DShadowOpacity,
+  updateGraph3DSurfaceMode,
   updateSaddleSurfaceDenominator,
   type Graph3DLightPresetId,
   type Graph3DLightScalarSetting
@@ -59,6 +61,11 @@ appRoot.addEventListener("change", (event) => {
 
   if (event.target.dataset["action"] === "set-graph-light-preset") {
     updateGraphLightPresetFromSelect(event.target);
+    return;
+  }
+
+  if (event.target.dataset["action"] === "set-graph-surface-mode") {
+    updateGraphSurfaceModeFromSelect(event.target);
   }
 });
 
@@ -200,6 +207,28 @@ function updateGraphLightPresetFromSelect(select: HTMLSelectElement): void {
   renderSemanticJson();
   renderGraph3DPreview(graphId);
   syncGraphLightControls(graphId);
+}
+
+function updateGraphSurfaceModeFromSelect(select: HTMLSelectElement): void {
+  const graphId = select.dataset["graphId"];
+  const surfaceMode = select.value;
+
+  if (
+    graphId === undefined ||
+    !isGraph3DSurfaceMode(surfaceMode)
+  ) {
+    return;
+  }
+
+  editorDocument = updateGraph3DSurfaceMode(
+    editorDocument,
+    graphId,
+    surfaceMode
+  );
+  renderSemanticJson();
+  renderGraph3DPreview(graphId);
+  select.dataset["kpGraphSurfaceMode"] = surfaceMode;
+  setGraphControlOutput(select, surfaceMode);
 }
 
 function updateGraphLightSettingFromInput(input: HTMLInputElement): void {
@@ -411,6 +440,17 @@ function isGraph3DLightScalarSetting(
     value === "depthHaze" ||
     value === "specular" ||
     value === "rim"
+  );
+}
+
+function isGraph3DSurfaceMode(
+  value: string | undefined
+): value is typeof GRAPH_3D_SURFACE_MODE_IDS[number] {
+  return (
+    value !== undefined &&
+    GRAPH_3D_SURFACE_MODE_IDS.includes(
+      value as typeof GRAPH_3D_SURFACE_MODE_IDS[number]
+    )
   );
 }
 

@@ -5,6 +5,7 @@ import {
 } from "../rendering/graph-svg.ts";
 import {
   GRAPH_3D_LIGHT_PRESET_IDS,
+  GRAPH_3D_SURFACE_MODE_IDS,
   findGraph3DLightPresetId,
   SADDLE_DENOMINATOR_MAX,
   SADDLE_DENOMINATOR_MIN,
@@ -21,7 +22,8 @@ import {
 import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   createDefaultGraph3DScene,
-  createDefaultGraphScene
+  createDefaultGraphScene,
+  type Graph3DSurfaceMode
 } from "../semantic/graph.ts";
 import type { Graph3DObject, Surface3DObject } from "../semantic/graph.ts";
 import { identityMatrix } from "../semantic/matrix.ts";
@@ -148,22 +150,54 @@ function renderGraph3DControls(
         <input class="graph-control__range" id="${escapeHtml(azimuthInputId)}" type="range" min="-180" max="180" step="1" value="${azimuth}" data-action="set-graph-azimuth" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-rotation-axis="z" aria-label="Rotate graph around z-axis" />
         <output class="graph-control__value" for="${escapeHtml(azimuthInputId)}">${azimuth} deg</output>
       </label>
-      <label class="graph-control" for="${escapeHtml(occludedAxisInputId)}">
-        <span class="graph-control__label">occluded axes</span>
-        <input class="graph-control__range" id="${escapeHtml(occludedAxisInputId)}" type="range" min="0" max="100" step="1" value="${formattedOccludedAxisLightness}" data-action="set-graph-occluded-axis-lightness" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-color-target="occluded-axis" aria-label="Set occluded axis lightness" />
-        <output class="graph-control__value" for="${escapeHtml(occludedAxisInputId)}">${escapeHtml(occludedAxisHex)}</output>
-      </label>
-      ${renderGraphLightPresetControl(graph)}
-      ${renderGraphLightScalarControl(graph, "ambient", "ambient light")}
-      ${renderGraphLightScalarControl(graph, "diffuse", "diffuse light")}
-      ${renderGraphLightScalarControl(graph, "depthHaze", "depth haze")}
-      ${renderGraphLightScalarControl(graph, "specular", "specular")}
-      ${renderGraphLightScalarControl(graph, "rim", "rim")}
-      ${renderGraphShadowEnabledControl(graph)}
-      ${renderGraphShadowOpacityControl(graph)}
-      ${saddleSurface === undefined ? "" : renderSaddleDenominatorControl(graph, saddleSurface)}
+      <details class="graph-controls__foldout" data-kp-controls-foldout="render-settings">
+        <summary class="graph-controls__summary">Render settings</summary>
+        <div class="graph-controls__foldout-body">
+          ${renderGraphSurfaceModeControl(graph)}
+          <label class="graph-control" for="${escapeHtml(occludedAxisInputId)}">
+            <span class="graph-control__label">occluded axes</span>
+            <input class="graph-control__range" id="${escapeHtml(occludedAxisInputId)}" type="range" min="0" max="100" step="1" value="${formattedOccludedAxisLightness}" data-action="set-graph-occluded-axis-lightness" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-color-target="occluded-axis" aria-label="Set occluded axis lightness" />
+            <output class="graph-control__value" for="${escapeHtml(occludedAxisInputId)}">${escapeHtml(occludedAxisHex)}</output>
+          </label>
+          ${renderGraphLightPresetControl(graph)}
+          ${renderGraphLightScalarControl(graph, "ambient", "ambient light")}
+          ${renderGraphLightScalarControl(graph, "diffuse", "diffuse light")}
+          ${renderGraphLightScalarControl(graph, "depthHaze", "depth haze")}
+          ${renderGraphLightScalarControl(graph, "specular", "specular")}
+          ${renderGraphLightScalarControl(graph, "rim", "rim")}
+          ${renderGraphShadowEnabledControl(graph)}
+          ${renderGraphShadowOpacityControl(graph)}
+          ${saddleSurface === undefined ? "" : renderSaddleDenominatorControl(graph, saddleSurface)}
+        </div>
+      </details>
     </div>
   `;
+}
+
+function renderGraphSurfaceModeControl(graph: Graph3DObject): string {
+  const inputId = `control-${graph.id}-surface-mode`;
+  const options = GRAPH_3D_SURFACE_MODE_IDS.map((mode) =>
+    renderGraphSurfaceModeOption(mode, graph.surfaceMode)
+  ).join("");
+
+  return `
+      <label class="graph-control" for="${escapeHtml(inputId)}">
+        <span class="graph-control__label">surface mode</span>
+        <select class="graph-control__select" id="${escapeHtml(inputId)}" data-action="set-graph-surface-mode" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-surface-mode="${escapeHtml(graph.surfaceMode)}" aria-label="Set graph surface mode">
+          ${options}
+        </select>
+        <output class="graph-control__value" for="${escapeHtml(inputId)}">${escapeHtml(graph.surfaceMode)}</output>
+      </label>
+  `;
+}
+
+function renderGraphSurfaceModeOption(
+  mode: Graph3DSurfaceMode,
+  selectedMode: Graph3DSurfaceMode
+): string {
+  const selected = mode === selectedMode ? " selected" : "";
+
+  return `<option value="${escapeHtml(mode)}"${selected}>${escapeHtml(mode)}</option>`;
 }
 
 function renderGraphLightPresetControl(graph: Graph3DObject): string {

@@ -24,6 +24,7 @@ const graph: Graph3DObject = {
   zDomain: [-1, 1],
   width: 200,
   height: 160,
+  surfaceMode: "mesh",
   occludedAxisLightness: 44,
   debug: {
     depthOverlay: false,

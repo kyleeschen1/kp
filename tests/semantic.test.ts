@@ -235,6 +235,7 @@ test("createGraph3DObject creates a semantic graph object with a third axis", ()
     zDomain: [-2.5, 2.5],
     width: 560,
     height: 420,
+    surfaceMode: "mesh",
     occludedAxisLightness: 44,
     debug: {
       depthOverlay: false,
@@ -360,6 +361,30 @@ test("createGraph3DObject preserves explicit graph light settings", () => {
     specular: 1,
     rim: 0
   });
+});
+
+test("createGraph3DObject preserves explicit graph surface mode", () => {
+  const graph = createGraph3DObject({
+    id: "mode-graph",
+    label: "Mode graph",
+    xAxisId: "mode-x-axis",
+    yAxisId: "mode-y-axis",
+    zAxisId: "mode-z-axis",
+    xDomain: [-1, 1],
+    yDomain: [-1, 1],
+    zDomain: [-1, 1],
+    width: 300,
+    height: 220,
+    surfaceMode: "donut",
+    camera: {
+      azimuthDegrees: 35,
+      elevationDegrees: 30,
+      scale: 30,
+      origin: [150, 110]
+    }
+  });
+
+  assert.equal(graph.surfaceMode, "donut");
 });
 
 test("createAxis3DObject creates semantic axis objects", () => {
@@ -514,6 +539,10 @@ test("createDefaultGraph3DScene creates graph, axes, and surface objects", () =>
       surfaceMesh: false,
       shadowOverlay: false
     }
+  );
+  assert.equal(
+    scene[0]?.type === "graph-3d" ? scene[0].surfaceMode : undefined,
+    "mesh"
   );
 });
 
