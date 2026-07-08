@@ -17,33 +17,78 @@ export interface KatexTransitionOptions {
 }
 
 type MatchMediaLike = typeof window.matchMedia;
+type KatexSnapshotTokens = typeof snapshotKatexTokens;
+type CreateKatexTransitionPlan = typeof createKatexTransitionPlan;
+type CreateKatexTextureAtlas = typeof createKatexTextureAtlas;
+
+interface KatexWebGLRendererModule {
+  createKatexWebGLRenderer(
+    canvas: HTMLCanvasElement,
+    plan: KatexTransitionPlan,
+    atlas: KatexTextureAtlas
+  ): { render(progress: number): void; dispose(): void };
+}
+
+export interface __KatexTransitionControllerDependencies {
+  snapshotKatexTokens: KatexSnapshotTokens;
+  createKatexTransitionPlan: CreateKatexTransitionPlan;
+  createKatexTextureAtlas: CreateKatexTextureAtlas;
+  importKatexWebGLRenderer: () => Promise<KatexWebGLRendererModule>;
+  document: Document;
+  matchMedia: MatchMediaLike | undefined;
+  now: () => number;
+  requestAnimationFrame: (callback: FrameRequestCallback) => number;
+  setTimeout: (callback: () => void, delay: number) => number;
+  scrollX: number;
+  scrollY: number;
+}
 
 const DEFAULT_DURATION_MS = 550;
+const FALLBACK_DURATION_PROPERTY = "--katex-transition-duration";
 
 export async function transitionKatexEquations(
   sourceEl: HTMLElement,
   targetEl: HTMLElement,
   options: KatexTransitionOptions = {}
 ): Promise<KatexTransitionResult> {
-  const startedAt = performance.now();
+  return transitionKatexEquationsWithDependencies(
+    sourceEl,
+    targetEl,
+    options,
+    createDefaultDependencies()
+  );
+}
+
+async function transitionKatexEquationsWithDependencies(
+  sourceEl: HTMLElement,
+  targetEl: HTMLElement,
+  options: KatexTransitionOptions,
+  dependencies: __KatexTransitionControllerDependencies
+): Promise<KatexTransitionResult> {
+  const startedAt = dependencies.now();
   const durationMs = options.durationMs ?? DEFAULT_DURATION_MS;
   const bounds = combinedBounds(sourceEl, targetEl);
-  const sourceSnapshot = snapshotKatexTokens(sourceEl, { overlayRect: bounds });
-  const targetSnapshot = snapshotKatexTokens(targetEl, { overlayRect: bounds });
-  const plan = createKatexTransitionPlan(sourceSnapshot.tokens, targetSnapshot.tokens);
+  const sourceSnapshot = dependencies.snapshotKatexTokens(sourceEl, {
+    overlayRect: bounds
+  });
+  const targetSnapshot = dependencies.snapshotKatexTokens(targetEl, {
+    overlayRect: bounds
+  });
+  const plan = dependencies.createKatexTransitionPlan(
+    sourceSnapshot.tokens,
+    targetSnapshot.tokens
+  );
 
   if (
     options.forceFallback === true ||
-    prefersReducedKatexMotion(
-      typeof window.matchMedia === "function" ? window.matchMedia.bind(window) : undefined
-    )
+    prefersReducedKatexMotion(dependencies.matchMedia)
   ) {
-    await runCssFallback(sourceEl, targetEl, durationMs);
+    await runCssFallback(sourceEl, targetEl, durationMs, dependencies);
 
     return summarizeKatexTransitionResult(
       plan,
       "css-fallback",
-      performance.now() - startedAt,
+      dependencies.now() - startedAt,
       0,
       options.forceFallback === true ? "forced-fallback" : "reduced-motion"
     );
@@ -56,39 +101,43 @@ export async function transitionKatexEquations(
   try {
     const namespaced = namespacePlanForAtlas(plan);
 
-    atlas = await createKatexTextureAtlas(namespaced.atlasTokens);
-    overlay = createOverlayCanvas(bounds, atlas.pixelRatio);
+    atlas = await dependencies.createKatexTextureAtlas(namespaced.atlasTokens);
+    overlay = createOverlayCanvas(bounds, atlas.pixelRatio, dependencies);
 
-    const { createKatexWebGLRenderer } = await import(
-      "./katex-webgl-transition.ts"
-    );
+    const { createKatexWebGLRenderer } =
+      await dependencies.importKatexWebGLRenderer();
 
     renderer = createKatexWebGLRenderer(overlay, namespaced.plan, atlas);
 
-    document.body.append(overlay);
+    dependencies.document.body.append(overlay);
     sourceEl.classList.add("katex-transition-source-hidden");
     targetEl.classList.add("katex-transition-target-hidden");
-    await animate(durationMs, options.easing ?? easeInOut, (progress) => {
-      renderer?.render(progress);
-    });
+    await animate(
+      durationMs,
+      options.easing ?? easeInOut,
+      (progress) => {
+        renderer?.render(progress);
+      },
+      dependencies
+    );
 
     targetEl.classList.remove("katex-transition-target-hidden");
 
     return summarizeKatexTransitionResult(
       plan,
       "webgl",
-      performance.now() - startedAt,
+      dependencies.now() - startedAt,
       atlas.pages.length
     );
   } catch (error: unknown) {
     sourceEl.classList.remove("katex-transition-source-hidden");
     targetEl.classList.remove("katex-transition-target-hidden");
-    await runCssFallback(sourceEl, targetEl, durationMs);
+    await runCssFallback(sourceEl, targetEl, durationMs, dependencies);
 
     return summarizeKatexTransitionResult(
       plan,
       "css-fallback",
-      performance.now() - startedAt,
+      dependencies.now() - startedAt,
       atlas?.pages.length ?? 0,
       error instanceof Error ? error.message : "webgl-transition-failed"
     );
@@ -99,6 +148,34 @@ export async function transitionKatexEquations(
     targetEl.classList.remove("katex-transition-target-hidden");
   }
 }
+
+const defaultDependencies: __KatexTransitionControllerDependencies =
+  createDefaultDependencies();
+
+function createDefaultDependencies(): __KatexTransitionControllerDependencies {
+  return {
+    snapshotKatexTokens,
+    createKatexTransitionPlan,
+    createKatexTextureAtlas,
+    importKatexWebGLRenderer: () => import("./katex-webgl-transition.ts"),
+    document: globalThis.document as Document,
+    matchMedia:
+      typeof globalThis.matchMedia === "function"
+        ? globalThis.matchMedia.bind(globalThis)
+        : undefined,
+    now: () => globalThis.performance.now(),
+    requestAnimationFrame: (callback) => globalThis.requestAnimationFrame(callback),
+    setTimeout: (callback, delay) =>
+      globalThis.setTimeout(callback, delay) as unknown as number,
+    scrollX: globalThis.scrollX ?? 0,
+    scrollY: globalThis.scrollY ?? 0
+  };
+}
+
+export const __katexTransitionControllerInternals = {
+  defaultDependencies,
+  transitionKatexEquationsWithDependencies
+};
 
 export function prefersReducedKatexMotion(
   matchMedia: MatchMediaLike | undefined
@@ -211,15 +288,16 @@ function combinedBounds(sourceEl: HTMLElement, targetEl: HTMLElement): KatexToke
 
 function createOverlayCanvas(
   bounds: KatexTokenRect,
-  pixelRatio: number
+  pixelRatio: number,
+  dependencies: __KatexTransitionControllerDependencies
 ): HTMLCanvasElement {
-  const canvas = document.createElement("canvas");
+  const canvas = dependencies.document.createElement("canvas");
 
   canvas.className = "katex-transition-overlay";
   canvas.width = Math.max(1, Math.ceil(bounds.width * pixelRatio));
   canvas.height = Math.max(1, Math.ceil(bounds.height * pixelRatio));
-  canvas.style.left = `${bounds.left + window.scrollX}px`;
-  canvas.style.top = `${bounds.top + window.scrollY}px`;
+  canvas.style.left = `${bounds.left + dependencies.scrollX}px`;
+  canvas.style.top = `${bounds.top + dependencies.scrollY}px`;
   canvas.style.width = `${bounds.width}px`;
   canvas.style.height = `${bounds.height}px`;
 
@@ -229,29 +307,34 @@ function createOverlayCanvas(
 function animate(
   durationMs: number,
   easing: (progress: number) => number,
-  render: (progress: number) => void
+  render: (progress: number) => void,
+  dependencies: __KatexTransitionControllerDependencies
 ): Promise<void> {
   if (durationMs <= 0) {
     render(easing(1));
     return Promise.resolve();
   }
 
-  const startedAt = performance.now();
+  const startedAt = dependencies.now();
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     function tick(now: number): void {
-      const progress = Math.min((now - startedAt) / durationMs, 1);
+      try {
+        const progress = Math.min((now - startedAt) / durationMs, 1);
 
-      render(easing(progress));
+        render(easing(progress));
 
-      if (progress < 1) {
-        requestAnimationFrame(tick);
-      } else {
-        resolve();
+        if (progress < 1) {
+          dependencies.requestAnimationFrame(tick);
+        } else {
+          resolve();
+        }
+      } catch (error) {
+        reject(error);
       }
     }
 
-    requestAnimationFrame(tick);
+    dependencies.requestAnimationFrame(tick);
   });
 }
 
@@ -264,13 +347,38 @@ function easeInOut(progress: number): number {
 async function runCssFallback(
   sourceEl: HTMLElement,
   targetEl: HTMLElement,
-  durationMs: number
+  durationMs: number,
+  dependencies: __KatexTransitionControllerDependencies
 ): Promise<void> {
+  const duration = Math.max(0, durationMs);
+
+  sourceEl.style.setProperty(FALLBACK_DURATION_PROPERTY, `${duration}ms`);
+  targetEl.style.setProperty(FALLBACK_DURATION_PROPERTY, `${duration}ms`);
   sourceEl.classList.add("katex-transition-fallback-source");
   targetEl.classList.add("katex-transition-fallback-target");
 
-  await new Promise((resolve) => window.setTimeout(resolve, Math.max(0, durationMs)));
-
-  sourceEl.classList.remove("katex-transition-fallback-source");
-  targetEl.classList.remove("katex-transition-fallback-target");
+  try {
+    await new Promise<void>((resolve, reject) => {
+      dependencies.requestAnimationFrame(() => {
+        try {
+          sourceEl.classList.add("katex-transition-fallback-active");
+          targetEl.classList.add("katex-transition-fallback-active");
+          dependencies.setTimeout(resolve, duration);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
+  } finally {
+    sourceEl.classList.remove(
+      "katex-transition-fallback-source",
+      "katex-transition-fallback-active"
+    );
+    targetEl.classList.remove(
+      "katex-transition-fallback-target",
+      "katex-transition-fallback-active"
+    );
+    sourceEl.style.removeProperty(FALLBACK_DURATION_PROPERTY);
+    targetEl.style.removeProperty(FALLBACK_DURATION_PROPERTY);
+  }
 }

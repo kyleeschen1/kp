@@ -260,13 +260,21 @@ h2 {
 }
 
 .katex-transition-fallback-source {
+  opacity: 1;
+  transition: opacity var(--katex-transition-duration, 160ms) ease;
+}
+
+.katex-transition-fallback-source.katex-transition-fallback-active {
   opacity: 0;
-  transition: opacity 160ms ease;
 }
 
 .katex-transition-fallback-target {
+  opacity: 0;
+  transition: opacity var(--katex-transition-duration, 160ms) ease;
+}
+
+.katex-transition-fallback-target.katex-transition-fallback-active {
   opacity: 1;
-  transition: opacity 160ms ease;
 }
 
 .object-preview__graph {
