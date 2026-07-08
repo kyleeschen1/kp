@@ -92,3 +92,28 @@ test("createKatexTransitionPlan prefers tokens in the same row bucket", () => {
     ]
   );
 });
+
+test("createKatexTransitionPlan ignores empty-text tokens entirely", () => {
+  const source = [
+    token("s-empty", "", "mord", 0, 20),
+    token("s-x", "x", "mord", 10, 20)
+  ];
+  const target = [
+    token("t-x", "x", "mord", 10, 20),
+    token("t-empty", "", "mord", 20, 20)
+  ];
+
+  const plan = createKatexTransitionPlan(source, target);
+
+  assert.deepEqual(
+    plan.matched.map((match) => [match.source.id, match.target.id]),
+    [["s-x", "t-x"]]
+  );
+  assert.equal(plan.sourceOnly.length, 0);
+  assert.equal(plan.targetOnly.length, 0);
+  assert.equal(plan.diagnostics.sourceTokenCount, 1);
+  assert.equal(plan.diagnostics.targetTokenCount, 1);
+  assert.equal(plan.diagnostics.matchedCount, 1);
+  assert.equal(plan.diagnostics.sourceOnlyCount, 0);
+  assert.equal(plan.diagnostics.targetOnlyCount, 0);
+});

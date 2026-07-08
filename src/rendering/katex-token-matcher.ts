@@ -14,12 +14,14 @@ export function createKatexTransitionPlan(
   sourceTokens: readonly KatexMotionToken[],
   targetTokens: readonly KatexMotionToken[]
 ): KatexTransitionPlan {
+  const matchableSourceTokens = sourceTokens.filter((source) => source.text.length > 0);
+  const matchableTargetTokens = targetTokens.filter((target) => target.text.length > 0);
   const matched: Array<{ source: KatexMotionToken; target: KatexMotionToken }> = [];
   const usedTargets = new Set<string>();
   let ambiguousGroupCount = 0;
 
-  for (const source of sourceTokens) {
-    const candidates = targetTokens
+  for (const source of matchableSourceTokens) {
+    const candidates = matchableTargetTokens
       .map((target, targetIndex): MatchCandidate => ({
         source,
         target,
@@ -51,10 +53,10 @@ export function createKatexTransitionPlan(
   }
 
   const usedSources = new Set(matched.map((match) => match.source.id));
-  const sourceOnly = sourceTokens
+  const sourceOnly = matchableSourceTokens
     .filter((source) => !usedSources.has(source.id))
     .map((source) => ({ source }));
-  const targetOnly = targetTokens
+  const targetOnly = matchableTargetTokens
     .filter((target) => !usedTargets.has(target.id))
     .map((target) => ({ target }));
 
@@ -63,8 +65,8 @@ export function createKatexTransitionPlan(
     sourceOnly,
     targetOnly,
     diagnostics: {
-      sourceTokenCount: sourceTokens.length,
-      targetTokenCount: targetTokens.length,
+      sourceTokenCount: matchableSourceTokens.length,
+      targetTokenCount: matchableTargetTokens.length,
       matchedCount: matched.length,
       sourceOnlyCount: sourceOnly.length,
       targetOnlyCount: targetOnly.length,
