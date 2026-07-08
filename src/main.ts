@@ -46,7 +46,10 @@ import {
   type Surface3DObject
 } from "./semantic/graph.ts";
 import { projectDashboardData } from "./project-dashboard/data.ts";
-import { renderProjectDashboard } from "./project-dashboard/render.ts";
+import {
+  getProjectDashboardSearchQuery,
+  renderProjectDashboard
+} from "./project-dashboard/render.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -56,6 +59,7 @@ if (app === null) {
 
 const appRoot = app;
 let editorDocument = createInitialEditorDocument();
+let projectDashboardQuery = "";
 type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
 let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
@@ -158,6 +162,9 @@ appRoot.addEventListener("input", (event) => {
     case "set-equation-motion-beat":
       setEquationMotionBeat(event.target);
       return;
+    case "filter-project-dashboard":
+      filterProjectDashboardFromInput(event.target);
+      return;
   }
 });
 
@@ -208,9 +215,25 @@ function renderEditor(): void {
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);
 }
 
-function renderProjectDashboardView(): void {
+function renderProjectDashboardView(query = projectDashboardQuery): void {
+  projectDashboardQuery = query;
   disposeGraph3DWebGL(appRoot);
-  appRoot.innerHTML = renderProjectDashboard(projectDashboardData);
+  appRoot.innerHTML = renderProjectDashboard(projectDashboardData, { query });
+}
+
+function filterProjectDashboardFromInput(input: HTMLInputElement): void {
+  const query = getProjectDashboardSearchQuery(input);
+
+  renderProjectDashboardView(query);
+
+  const nextInput = appRoot.querySelector<HTMLInputElement>(
+    '[data-action="filter-project-dashboard"]'
+  );
+
+  if (nextInput !== null) {
+    nextInput.focus();
+    nextInput.setSelectionRange(query.length, query.length);
+  }
 }
 
 function hydrateGraph3DWebGL(

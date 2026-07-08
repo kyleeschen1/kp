@@ -137,6 +137,37 @@ h2 {
   background: #fff0f0;
 }
 
+.project-dashboard__toolbar {
+  max-width: 1180px;
+  margin: 0 auto 1rem;
+  border: 1px solid #d9e0e8;
+  border-radius: 8px;
+  padding: 0.75rem;
+  background: #ffffff;
+}
+
+.project-dashboard__search {
+  display: grid;
+  grid-template-columns: auto minmax(12rem, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.project-dashboard__search span {
+  color: #334155;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.project-dashboard__search input {
+  min-width: 0;
+  border: 1px solid #b7c7d6;
+  border-radius: 6px;
+  padding: 0.52rem 0.65rem;
+  color: #172033;
+  background: #fbfdff;
+}
+
 .project-dashboard__grid {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 0.9fr);
@@ -180,14 +211,22 @@ h2 {
   padding: 0.85rem;
 }
 
-.project-work-lane {
+.project-dashboard__gallery-groups {
+  display: grid;
+  gap: 0.85rem;
+  padding: 0.85rem;
+}
+
+.project-work-lane,
+.project-gallery-group {
   overflow: hidden;
   border: 1px solid #d4dee8;
   border-radius: 8px;
   background: #fbfdff;
 }
 
-.project-work-lane__header {
+.project-work-lane__header,
+.project-gallery-group__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -197,14 +236,16 @@ h2 {
   background: #f4f7fb;
 }
 
-.project-work-lane__header h3 {
+.project-work-lane__header h3,
+.project-gallery-group__header h3 {
   margin: 0;
   color: #293241;
   font-size: 0.85rem;
   line-height: 1.2;
 }
 
-.project-work-lane__header span {
+.project-work-lane__header span,
+.project-gallery-group__header span {
   color: #526173;
   font-size: 0.75rem;
   font-weight: 700;
@@ -286,7 +327,8 @@ h2 {
 }
 
 .project-card__blockers strong,
-.project-card__related strong {
+.project-card__related strong,
+.project-card__interfaces strong {
   display: block;
   margin-bottom: 0.35rem;
   font-size: 0.72rem;
@@ -297,6 +339,30 @@ h2 {
 .project-card__blockers ul {
   margin: 0;
   padding-left: 1rem;
+}
+
+.project-card__interfaces {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+  color: #405365;
+  font-size: 0.78rem;
+}
+
+.project-card__interfaces strong {
+  flex-basis: 100%;
+  margin-bottom: 0;
+}
+
+.project-card__interfaces span {
+  border: 1px solid #d4dee8;
+  border-radius: 999px;
+  padding: 0.18rem 0.44rem;
+  color: #334155;
+  background: #f8fafc;
+  font-weight: 700;
 }
 
 .project-card__related {
@@ -928,6 +994,10 @@ h2 {
   }
 
   .equation-entry {
+    grid-template-columns: 1fr;
+  }
+
+  .project-dashboard__search {
     grid-template-columns: 1fr;
   }
 

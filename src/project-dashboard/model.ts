@@ -68,6 +68,11 @@ export interface ProjectCardStatusGroup {
   readonly cards: readonly ProjectCard[];
 }
 
+export interface ProjectGalleryKindGroup {
+  readonly kind: ProjectGalleryKind;
+  readonly items: readonly ProjectGalleryItem[];
+}
+
 export const PROJECT_DASHBOARD_STATUS_ORDER: readonly ProjectDashboardStatus[] = [
   "active",
   "planned",
@@ -80,6 +85,13 @@ export const PROJECT_DASHBOARD_PRIORITY_ORDER: readonly ProjectDashboardPriority
   "high",
   "medium",
   "low"
+];
+
+export const PROJECT_GALLERY_KIND_ORDER: readonly ProjectGalleryKind[] = [
+  "animation",
+  "visual",
+  "semantic-object",
+  "protocol-api"
 ];
 
 export function collectProjectDashboardIds(
@@ -131,6 +143,36 @@ export function groupProjectCardsByStatus(
   }));
 }
 
+export function groupProjectGalleryItemsByKind(
+  items: readonly ProjectGalleryItem[]
+): readonly ProjectGalleryKindGroup[] {
+  return PROJECT_GALLERY_KIND_ORDER.map((kind) => ({
+    kind,
+    items: [...items.filter((item) => item.kind === kind)].sort(
+      compareProjectGalleryItems
+    )
+  }));
+}
+
+export function filterProjectDashboardData(
+  data: ProjectDashboardData,
+  query: string
+): ProjectDashboardData {
+  const normalizedQuery = normalizeSearchText(query);
+
+  if (normalizedQuery.length === 0) {
+    return data;
+  }
+
+  return {
+    cards: filterCards(data.cards, normalizedQuery),
+    gallery: data.gallery.filter((item) => galleryItemMatches(item, normalizedQuery)),
+    reportThemes: data.reportThemes.filter((theme) =>
+      reportThemeMatches(theme, normalizedQuery)
+    )
+  };
+}
+
 function collectCardIds(cards: readonly ProjectCard[]): readonly string[] {
   return cards.flatMap((card) => [
     card.id,
@@ -165,4 +207,99 @@ function compareProjectCards(left: ProjectCard, right: ProjectCard): number {
   }
 
   return left.title.localeCompare(right.title);
+}
+
+function compareProjectGalleryItems(
+  left: ProjectGalleryItem,
+  right: ProjectGalleryItem
+): number {
+  return left.title.localeCompare(right.title);
+}
+
+function filterCards(
+  cards: readonly ProjectCard[],
+  normalizedQuery: string
+): readonly ProjectCard[] {
+  return cards.flatMap((card) => {
+    const matchingChildren = filterCards(card.children ?? [], normalizedQuery);
+
+    if (cardMatches(card, normalizedQuery)) {
+      return [
+        matchingChildren.length > 0
+          ? { ...card, children: matchingChildren }
+          : card
+      ];
+    }
+
+    if (matchingChildren.length > 0) {
+      return [{ ...card, children: matchingChildren }];
+    }
+
+    return [];
+  });
+}
+
+function cardMatches(card: ProjectCard, normalizedQuery: string): boolean {
+  return textFieldsMatch(
+    [
+      card.id,
+      card.title,
+      card.category,
+      card.status,
+      card.priority,
+      card.summary,
+      ...card.tags,
+      ...(card.blockers ?? [])
+    ],
+    normalizedQuery
+  );
+}
+
+function galleryItemMatches(
+  item: ProjectGalleryItem,
+  normalizedQuery: string
+): boolean {
+  return textFieldsMatch(
+    [
+      item.id,
+      item.title,
+      item.kind,
+      item.status,
+      item.summary,
+      ...item.tags,
+      ...item.domains,
+      ...(item.interfaces ?? [])
+    ],
+    normalizedQuery
+  );
+}
+
+function reportThemeMatches(
+  theme: ProjectReportTheme,
+  normalizedQuery: string
+): boolean {
+  return textFieldsMatch(
+    [
+      theme.id,
+      theme.title,
+      theme.status,
+      theme.scope,
+      ...theme.questions,
+      ...theme.tags
+    ],
+    normalizedQuery
+  );
+}
+
+function textFieldsMatch(
+  fields: readonly string[],
+  normalizedQuery: string
+): boolean {
+  return fields.some((field) =>
+    normalizeSearchText(field).includes(normalizedQuery)
+  );
+}
+
+function normalizeSearchText(value: string): string {
+  return value.trim().toLowerCase().replace(/\s+/g, " ");
 }

@@ -127,6 +127,54 @@ export const projectDashboardData: ProjectDashboardData = {
       relatedIds: ["work-graph-surface-morphs"]
     },
     {
+      id: "visual-table",
+      title: "Table",
+      kind: "visual",
+      status: "planned",
+      summary:
+        "A dense visual surface for structured rows, computed values, diagnostics, and future spreadsheet-like lenses.",
+      tags: ["table", "data", "lens"],
+      domains: ["data", "math", "programming"],
+      interfaces: ["row selectors", "column selectors", "cell lenses"],
+      relatedIds: ["work-semantic-object-registry"]
+    },
+    {
+      id: "visual-network",
+      title: "Network",
+      kind: "visual",
+      status: "planned",
+      summary:
+        "A graph-of-objects view for dependencies, semantic links, execution traces, and project knowledge relationships.",
+      tags: ["network", "links", "relationships"],
+      domains: ["project", "programming", "knowledge graph"],
+      interfaces: ["node selectors", "edge selectors", "layout lens"],
+      relatedIds: ["work-project-dashboard-v1"]
+    },
+    {
+      id: "visual-code",
+      title: "Code",
+      kind: "visual",
+      status: "planned",
+      summary:
+        "A programming visual that can render source ranges, AST anchors, diagnostics, execution traces, and refactors.",
+      tags: ["code", "programming", "source"],
+      domains: ["programming", "rust", "typescript"],
+      interfaces: ["source range selectors", "AST lenses", "diagnostic overlays"],
+      relatedIds: ["work-semantic-object-registry"]
+    },
+    {
+      id: "visual-timeline",
+      title: "Timeline",
+      kind: "visual",
+      status: "planned",
+      summary:
+        "A visual surface for composed animation tracks, markers, scroll clocks, and lifecycle inspection.",
+      tags: ["timeline", "animation", "scroll"],
+      domains: ["runtime", "authoring"],
+      interfaces: ["track markers", "scroll clock", "playhead lens"],
+      relatedIds: ["work-rendering-time-protocol"]
+    },
+    {
       id: "semantic-matrix",
       title: "Matrix",
       kind: "semantic-object",
@@ -169,7 +217,7 @@ export const projectDashboardData: ProjectDashboardData = {
       status: "active",
       summary:
         "The shared KP API for resolving object state plus time into deterministic frames across render backends.",
-      tags: ["clock", "playhead", "sampler", "render-index"],
+      tags: ["clock", "playhead", "sampler", "render-index", "timeline"],
       domains: ["runtime", "authoring"],
       interfaces: ["KpClock", "KpPlayhead", "KpSampler", "KpRendererAdapter"],
       relatedIds: ["work-rendering-time-protocol"]

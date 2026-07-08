@@ -4,7 +4,9 @@ import test from "node:test";
 import { projectDashboardData } from "../src/project-dashboard/data.ts";
 import {
   collectProjectDashboardIds,
+  filterProjectDashboardData,
   groupProjectCardsByStatus,
+  groupProjectGalleryItemsByKind,
   validateProjectDashboardData
 } from "../src/project-dashboard/model.ts";
 import { renderProjectDashboard } from "../src/project-dashboard/render.ts";
@@ -124,4 +126,74 @@ test("renderProjectDashboard renders work lanes, blockers, children, and related
 
   assert.equal(html.includes(phaseChildId), true);
   assert.equal(html.includes(topLevelChildId), false);
+});
+
+test("groupProjectGalleryItemsByKind groups gallery items by kind", () => {
+  const groups = groupProjectGalleryItemsByKind(projectDashboardData.gallery);
+
+  assert.deepEqual(
+    groups.map((group) => group.kind),
+    ["animation", "visual", "semantic-object", "protocol-api"]
+  );
+  assert.deepEqual(
+    groups
+      .find((group) => group.kind === "animation")
+      ?.items.map((item) => item.id),
+    ["animation-cancelation", "animation-final-crossfade"]
+  );
+  assert.deepEqual(
+    groups
+      .find((group) => group.kind === "visual")
+      ?.items.map((item) => item.id),
+    [
+      "visual-code",
+      "visual-network",
+      "visual-table",
+      "visual-timeline",
+      "visual-webgl-graph"
+    ]
+  );
+});
+
+test("filterProjectDashboardData finds cards and gallery items by text facets", () => {
+  const interfaceResult = filterProjectDashboardData(
+    projectDashboardData,
+    "KpSampler"
+  );
+  assert.deepEqual(
+    interfaceResult.gallery.map((item) => item.id),
+    ["gallery-rendering-time-api"]
+  );
+
+  const statusResult = filterProjectDashboardData(projectDashboardData, "blocked");
+  assert.deepEqual(
+    statusResult.cards.map((card) => card.id),
+    ["work-graph-surface-morphs"]
+  );
+
+  const domainResult = filterProjectDashboardData(
+    projectDashboardData,
+    "linear algebra"
+  );
+  assert.deepEqual(
+    domainResult.gallery.map((item) => item.id),
+    ["semantic-matrix", "semantic-vector"]
+  );
+});
+
+test("renderProjectDashboard renders searchable grouped galleries", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    query: "timeline"
+  });
+
+  assert.match(html, /data-action="filter-project-dashboard"/);
+  assert.match(html, /value="timeline"/);
+  assert.match(html, /data-kp-gallery-kind="animation"/);
+  assert.match(html, /data-kp-gallery-kind="visual"/);
+  assert.match(html, /data-kp-gallery-kind="semantic-object"/);
+  assert.match(html, /data-kp-gallery-kind="protocol-api"/);
+  assert.match(html, /Visuals/);
+  assert.match(html, /Timeline/);
+  assert.match(html, /scroll clock/);
+  assert.doesNotMatch(html, /Equation cancelation/);
 });
