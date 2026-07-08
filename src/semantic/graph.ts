@@ -103,6 +103,23 @@ export interface Graph3DLightSettings {
 }
 
 export type Graph3DSurfaceMode = "mesh" | "donut" | "hyperplanes";
+export const GRAPH_3D_SURFACE_QUALITY_IDS = [
+  "interactive",
+  "balanced",
+  "high"
+] as const;
+export type Graph3DSurfaceQuality =
+  typeof GRAPH_3D_SURFACE_QUALITY_IDS[number];
+
+export interface Graph3DSurfaceResolution {
+  xSampleCount: number;
+  ySampleCount: number;
+  torusUSampleCount: number;
+  torusVSampleCount: number;
+}
+
+export const DEFAULT_GRAPH_3D_SURFACE_QUALITY: Graph3DSurfaceQuality =
+  "balanced";
 
 export interface Graph3DObject {
   id: string;
@@ -117,6 +134,7 @@ export interface Graph3DObject {
   width: number;
   height: number;
   surfaceMode: Graph3DSurfaceMode;
+  surfaceQuality: Graph3DSurfaceQuality;
   occludedAxisLightness: number;
   debug: Graph3DDebugSettings;
   shadow: Graph3DShadowSettings;
@@ -193,9 +211,15 @@ type CreateGraph3DObjectInput =
     | "occludedAxisLightness"
     | "shadow"
     | "surfaceMode"
+    | "surfaceQuality"
     | "type"
   > &
-  Partial<Pick<Graph3DObject, "occludedAxisLightness" | "surfaceMode">> & {
+  Partial<
+    Pick<
+      Graph3DObject,
+      "occludedAxisLightness" | "surfaceMode" | "surfaceQuality"
+    >
+  > & {
     debug?: Partial<Graph3DDebugSettings>;
     shadow?: Partial<Graph3DShadowSettings>;
     light?: Partial<Graph3DLightSettings> & {
@@ -265,6 +289,7 @@ export function createGraph3DObject(
     ...input,
     type: "graph-3d",
     surfaceMode: input.surfaceMode ?? "mesh",
+    surfaceQuality: input.surfaceQuality ?? DEFAULT_GRAPH_3D_SURFACE_QUALITY,
     occludedAxisLightness: clamp(
       input.occludedAxisLightness ?? DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
       0,
@@ -314,6 +339,34 @@ export function createGraph3DObject(
       )
     }
   };
+}
+
+export function graph3DSurfaceResolution(
+  quality: Graph3DSurfaceQuality
+): Graph3DSurfaceResolution {
+  switch (quality) {
+    case "interactive":
+      return {
+        xSampleCount: 13,
+        ySampleCount: 13,
+        torusUSampleCount: 25,
+        torusVSampleCount: 13
+      };
+    case "balanced":
+      return {
+        xSampleCount: 21,
+        ySampleCount: 21,
+        torusUSampleCount: 37,
+        torusVSampleCount: 19
+      };
+    case "high":
+      return {
+        xSampleCount: 33,
+        ySampleCount: 33,
+        torusUSampleCount: 49,
+        torusVSampleCount: 25
+      };
+  }
 }
 
 export function createAxis3DObject(
@@ -448,6 +501,7 @@ export function createDefaultGraph3DScene(): readonly GraphSceneObject[] {
       origin: [280, 244]
     }
   });
+  const surfaceResolution = graph3DSurfaceResolution(graph.surfaceQuality);
   const xAxis = createAxis3DObject({
     id: "saddle-orbit-x-axis",
     graphId: graph.id,
@@ -477,8 +531,8 @@ export function createDefaultGraph3DScene(): readonly GraphSceneObject[] {
     graphId: graph.id,
     xDomain: graph.xDomain,
     yDomain: graph.yDomain,
-    xSampleCount: 13,
-    ySampleCount: 13
+    xSampleCount: surfaceResolution.xSampleCount,
+    ySampleCount: surfaceResolution.ySampleCount
   });
   return [graph, xAxis, yAxis, zAxis, surface];
 }

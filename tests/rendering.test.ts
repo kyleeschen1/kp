@@ -424,6 +424,9 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /data-kp-axis-extended-domain="-3.900,3.900"/);
   assert.match(svg, /data-kp-axis-extended-domain="-3.250,3.250"/);
   assert.match(svg, /data-kp-camera-azimuth-degrees="35"/);
+  assert.match(svg, /data-kp-surface-quality="balanced"/);
+  assert.match(svg, /data-kp-surface-x-sample-count="21"/);
+  assert.match(svg, /data-kp-surface-y-sample-count="21"/);
   assert.match(svg, /data-kp-occluded-axis-lightness="44"/);
   assert.match(svg, /data-kp-light-direction="-0.350,-0.450,0.820"/);
   assert.match(svg, /data-kp-light-ambient="0.450"/);
@@ -440,15 +443,15 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /data-kp-depth-buffer-height="420"/);
   assert.match(svg, /data-kp-depth-cell-count="235200"/);
   assert.match(svg, /data-kp-shadow-plane-z="-2.500"/);
-  assert.match(svg, /data-kp-shadow-quad-count="144"/);
+  assert.match(svg, /data-kp-shadow-quad-count="400"/);
   assert.match(svg, /data-kp-shadow-enabled="true"/);
   assert.match(svg, /data-kp-shadow-opacity="0.160"/);
   assert.match(svg, /data-kp-render-budget-status="ok"/);
   assert.match(svg, /data-kp-render-budget-depth-cell-count="235200"/);
   assert.match(svg, /data-kp-render-budget-max-depth-cell-count="300000"/);
-  assert.match(svg, /data-kp-render-budget-depth-triangle-count="288"/);
+  assert.match(svg, /data-kp-render-budget-depth-triangle-count="800"/);
   assert.match(svg, /data-kp-render-budget-max-depth-triangle-count="800"/);
-  assert.match(svg, /data-kp-render-budget-lighting-operation-count="864"/);
+  assert.match(svg, /data-kp-render-budget-lighting-operation-count="2400"/);
   assert.match(svg, /data-kp-render-budget-max-lighting-operation-count="8000"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-stroke-ratio="2"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-stroke-extra-px="1"/);
@@ -679,7 +682,7 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
     )
   );
   assert.ok(edgePaths.some((path) => [...path.matchAll(/\sC\s/g)].length > 48));
-  assert.equal(shadowQuadCount, 144);
+  assert.equal(shadowQuadCount, 400);
   assert.ok(arrowLengths.length > 0);
   assert.ok(arrowLengths.every((length) => length >= 8 && length <= 16));
   assert.ok(hiddenArrowLengths.length > 0);
@@ -803,7 +806,7 @@ test("renderGraph3DToSvg exposes depth-scene counts for multiple surfaces", () =
   const overlapMatch = svg.match(/data-kp-depth-overlap-count="(\d+)"/);
 
   assert.match(svg, /data-kp-depth-surface-count="2"/);
-  assert.match(svg, /data-kp-depth-triangle-count="576"/);
+  assert.match(svg, /data-kp-depth-triangle-count="1600"/);
   assert.notEqual(overlapMatch, null);
   assert.ok(Number(overlapMatch?.[1]) > 0);
   assert.match(svg, /data-kp-object="saddle-surface"/);

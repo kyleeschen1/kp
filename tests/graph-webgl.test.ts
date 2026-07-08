@@ -68,9 +68,9 @@ test("WebGL scene model retains default graph axes and surface topology", () => 
   );
   assert.equal(model.surfaces.length, 1);
   assert.equal(surface?.id, "saddle-surface");
-  assert.equal(surface?.grid.length, 13);
-  assert.equal(surface?.grid[0]?.length, 13);
-  assert.equal(surface?.quads.length, 144);
+  assert.equal(surface?.grid.length, 21);
+  assert.equal(surface?.grid[0]?.length, 21);
+  assert.equal(surface?.quads.length, 400);
   assert.equal(firstQuad?.corners.length, 4);
   assert.deepEqual(firstQuad?.gridCell, {
     columnIndex: 0,
@@ -97,9 +97,9 @@ test("WebGL scene model mirrors generated donut and hyperplane surface modes", (
   assert.equal(donutModel.surfaceMode, "donut");
   assert.equal(donutModel.surfaces.length, 1);
   assert.equal(donutSurface?.id, "saddle-orbit-graph-donut");
-  assert.equal(donutSurface?.grid.length, 13);
-  assert.equal(donutSurface?.grid[0]?.length, 25);
-  assert.equal(donutSurface?.quads.length, 288);
+  assert.equal(donutSurface?.grid.length, 19);
+  assert.equal(donutSurface?.grid[0]?.length, 37);
+  assert.equal(donutSurface?.quads.length, 648);
 
   assert.equal(hyperplaneModel.surfaceMode, "hyperplanes");
   assert.equal(hyperplaneModel.surfaces.length, 2);
@@ -110,9 +110,9 @@ test("WebGL scene model mirrors generated donut and hyperplane surface modes", (
       "saddle-orbit-graph-hyperplane-negative"
     ]
   );
-  assert.equal(hyperplaneModel.surfaces[0]?.grid.length, 13);
-  assert.equal(hyperplaneModel.surfaces[0]?.grid[0]?.length, 13);
-  assert.equal(hyperplaneModel.surfaces[0]?.quads.length, 144);
+  assert.equal(hyperplaneModel.surfaces[0]?.grid.length, 21);
+  assert.equal(hyperplaneModel.surfaces[0]?.grid[0]?.length, 21);
+  assert.equal(hyperplaneModel.surfaces[0]?.quads.length, 400);
   assert.equal(hyperplaneScene.surfaceMeshes.length, 2);
   assert.equal(hyperplaneScene.surfaceMeshLines.length, 2);
   assert.equal(hyperplaneScene.surfaceBorderObjects.length, 2);
@@ -134,12 +134,12 @@ test("WebGL Three scene builds retained geometry for surfaces, mesh lines, and a
   assert.equal(threeScene.root.userData["kpObject"], "saddle-orbit-graph");
   assert.equal(threeScene.surfaceMeshes.length, 1);
   assert.equal(surfaceMesh?.userData["kpObject"], "saddle-surface");
-  assert.equal(surfacePositions?.count, 576);
-  assert.equal(surfaceMesh?.geometry.index?.count, 864);
+  assert.equal(surfacePositions?.count, 1600);
+  assert.equal(surfaceMesh?.geometry.index?.count, 2400);
   assert.equal(threeScene.surfaceMeshLines.length, 1);
-  assert.equal(meshLinePositions?.count, 624);
+  assert.equal(meshLinePositions?.count, 1680);
   assert.equal(threeScene.surfaceBorderObjects.length, 1);
-  assert.equal(threeScene.surfaceBorderObjects[0]?.children.length, 48);
+  assert.equal(threeScene.surfaceBorderObjects[0]?.children.length, 80);
   assert.equal(threeScene.axisObjects.length, 3);
   assert.deepEqual(
     threeScene.axisObjects.map((axisObject) => axisObject.userData["kpAxis"]),

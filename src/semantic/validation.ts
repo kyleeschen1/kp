@@ -1,4 +1,5 @@
 import type { KpDocument, KpSemanticObject } from "./document.ts";
+import { GRAPH_3D_SURFACE_QUALITY_IDS } from "./graph.ts";
 
 export interface ValidationIssue {
   path: string;
@@ -101,6 +102,17 @@ function validateGraph3DObject(
     issues.push({
       path: `${path}.zAxisId`,
       message: `Graph ${object.id} references missing z-axis ${object.zAxisId}.`
+    });
+  }
+
+  if (
+    !GRAPH_3D_SURFACE_QUALITY_IDS.includes(
+      object.surfaceQuality as typeof GRAPH_3D_SURFACE_QUALITY_IDS[number]
+    )
+  ) {
+    issues.push({
+      path: `${path}.surfaceQuality`,
+      message: `Graph ${object.id} surfaceQuality must be interactive, balanced, or high.`
     });
   }
 

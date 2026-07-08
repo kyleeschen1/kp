@@ -51,6 +51,7 @@ import {
   type Graph3DObject,
   type Graph3DSurfaceMode,
   type GraphPoint3D,
+  graph3DSurfaceResolution,
   type NumericDomain,
   type Surface3DObject
 } from "../semantic/graph.ts";
@@ -359,6 +360,7 @@ export function renderGraph3DToSvg(
       object.type === "surface-3d" && object.graphId === graph.id
   );
   const surfaceMode = graphSurfaceMode(graph);
+  const surfaceResolution = graph3DSurfaceResolution(graph.surfaceQuality);
   const renderedSurfaces = prepareGraphSurfaces3D(surfaces, graph, surfaceMode);
   const depthScene = buildSurfaceDepthScene3D(graph, renderedSurfaces);
   const depthDiagnostics = depthSceneDiagnostics(depthScene);
@@ -387,7 +389,7 @@ export function renderGraph3DToSvg(
   // surface, then visible pieces above it. This gives SVG a lightweight
   // substitute for depth-buffered axis occlusion.
   return `
-    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-surface-mode="${surfaceMode}" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" ${renderLightAttributes(graph)} data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" data-kp-debug-shadow-overlay="${graph.debug.shadowOverlay ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} ${renderShadowAttributes(renderedSurfaces, graph)} ${renderPerformanceBudgetAttributes(renderBudget)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
+    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-surface-mode="${surfaceMode}" data-kp-surface-quality="${graph.surfaceQuality}" data-kp-surface-x-sample-count="${surfaceResolution.xSampleCount}" data-kp-surface-y-sample-count="${surfaceResolution.ySampleCount}" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" ${renderLightAttributes(graph)} data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" data-kp-debug-shadow-overlay="${graph.debug.shadowOverlay ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} ${renderShadowAttributes(renderedSurfaces, graph)} ${renderPerformanceBudgetAttributes(renderBudget)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
       <rect class="graph-svg__background" x="0" y="0" width="${graph.width}" height="${graph.height}" rx="8" />
       ${renderedSurfaces.map((surface) => renderSurfaceShadowLayer3D(surface, graph)).join("")}
       ${renderedSurfaces.map((surface) => renderSurface3D(surface, graph, depthScene, renderedSurfaces)).join("")}
@@ -868,7 +870,7 @@ function prepareGraphSurfaces3D(
         `${graph.id}-donut`,
         "donut",
         "parametric torus",
-        sampleTorusSurfaceGrid()
+        sampleTorusSurfaceGrid(graph3DSurfaceResolution(graph.surfaceQuality))
       )];
     case "hyperplanes":
       return [
@@ -878,7 +880,10 @@ function prepareGraphSurfaces3D(
           `${graph.id}-hyperplane-positive`,
           "z = x / 2",
           "z = x / 2",
-          sampleHyperplaneSurfaceGrid(0.5)
+          sampleHyperplaneSurfaceGrid(
+            0.5,
+            graph3DSurfaceResolution(graph.surfaceQuality)
+          )
         ),
         prepareGeneratedSurface3D(
           graph,
@@ -886,7 +891,10 @@ function prepareGraphSurfaces3D(
           `${graph.id}-hyperplane-negative`,
           "z = -x / 2",
           "z = -x / 2",
-          sampleHyperplaneSurfaceGrid(-0.5)
+          sampleHyperplaneSurfaceGrid(
+            -0.5,
+            graph3DSurfaceResolution(graph.surfaceQuality)
+          )
         )
       ];
   }
@@ -896,15 +904,16 @@ function prepareSurface3D(
   surface: Surface3DObject,
   graph: Graph3DObject
 ): RenderedSurface3D {
-  const evaluateSurface = compileExpression(surface.expression);
-  const gradient = compileSurfaceGradient(surface);
-  const grid = sampleSurfaceGrid(surface, evaluateSurface);
-  const quads = createSurfaceQuads(surface, graph, grid, (center) =>
+  const resolvedSurface = surfaceWithGraphResolution(surface, graph);
+  const evaluateSurface = compileExpression(resolvedSurface.expression);
+  const gradient = compileSurfaceGradient(resolvedSurface);
+  const grid = sampleSurfaceGrid(resolvedSurface, evaluateSurface);
+  const quads = createSurfaceQuads(resolvedSurface, graph, grid, (center) =>
     saddleSurfaceNormalAt(center, gradient)
   );
 
   return {
-    surface,
+    surface: resolvedSurface,
     drawBorder: true,
     evaluateSurface,
     gradient,
@@ -949,11 +958,26 @@ function prepareGeneratedSurface3D(
   };
 }
 
-export function sampleTorusSurfaceGrid(): readonly (readonly GraphPoint3D[])[] {
+function surfaceWithGraphResolution(
+  surface: Surface3DObject,
+  graph: Graph3DObject
+): Surface3DObject {
+  const resolution = graph3DSurfaceResolution(graph.surfaceQuality);
+
+  return {
+    ...surface,
+    xSampleCount: resolution.xSampleCount,
+    ySampleCount: resolution.ySampleCount
+  };
+}
+
+export function sampleTorusSurfaceGrid(
+  resolution = graph3DSurfaceResolution("interactive")
+): readonly (readonly GraphPoint3D[])[] {
   const majorRadius = 1.55;
   const minorRadius = 0.62;
-  const uValues = sampleDomain([0, Math.PI * 2], 25);
-  const vValues = sampleDomain([0, Math.PI * 2], 13);
+  const uValues = sampleDomain([0, Math.PI * 2], resolution.torusUSampleCount);
+  const vValues = sampleDomain([0, Math.PI * 2], resolution.torusVSampleCount);
 
   return vValues.map((v) =>
     uValues.map((u) => {
@@ -969,12 +993,13 @@ export function sampleTorusSurfaceGrid(): readonly (readonly GraphPoint3D[])[] {
 }
 
 export function sampleHyperplaneSurfaceGrid(
-  slope: number
+  slope: number,
+  resolution = graph3DSurfaceResolution("interactive")
 ): readonly (readonly GraphPoint3D[])[] {
   const domain: NumericDomain = [-2.4, 2.4];
 
-  return sampleDomain(domain, 13).map((y) =>
-    sampleDomain(domain, 13).map((x) => ({
+  return sampleDomain(domain, resolution.ySampleCount).map((y) =>
+    sampleDomain(domain, resolution.xSampleCount).map((x) => ({
       x: roundCoordinate(x),
       y: roundCoordinate(y),
       z: roundCoordinate(slope * x)

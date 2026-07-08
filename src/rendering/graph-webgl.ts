@@ -6,6 +6,7 @@ import type {
   GraphPoint3D,
   Surface3DObject
 } from "../semantic/graph.ts";
+import { graph3DSurfaceResolution } from "../semantic/graph.ts";
 import {
   renderGraph3DToSvg,
   sampleHyperplaneSurfaceGrid,
@@ -101,9 +102,15 @@ export function renderGraph3DWebGLShell(
 }
 
 function createMeshSurfaceModel(
-  surface: Surface3DObject
+  surface: Surface3DObject,
+  graph: Graph3DObject
 ): Graph3DWebGLSurfaceModel {
-  const grid = sampleSaddleSurface(surface);
+  const resolution = graph3DSurfaceResolution(graph.surfaceQuality);
+  const grid = sampleSaddleSurface({
+    ...surface,
+    xSampleCount: resolution.xSampleCount,
+    ySampleCount: resolution.ySampleCount
+  });
 
   return createGridSurfaceModel(surface.id, surface.label, grid, true);
 }
@@ -115,13 +122,13 @@ function createSurfaceModels(
 ): readonly Graph3DWebGLSurfaceModel[] {
   switch (surfaceMode) {
     case "mesh":
-      return surfaces.map(createMeshSurfaceModel);
+      return surfaces.map((surface) => createMeshSurfaceModel(surface, graph));
     case "donut":
       return [
         createGridSurfaceModel(
           `${graph.id}-donut`,
           "donut",
-          sampleTorusSurfaceGrid(),
+          sampleTorusSurfaceGrid(graph3DSurfaceResolution(graph.surfaceQuality)),
           false
         )
       ];
@@ -130,13 +137,19 @@ function createSurfaceModels(
         createGridSurfaceModel(
           `${graph.id}-hyperplane-positive`,
           "z = x / 2",
-          sampleHyperplaneSurfaceGrid(0.5),
+          sampleHyperplaneSurfaceGrid(
+            0.5,
+            graph3DSurfaceResolution(graph.surfaceQuality)
+          ),
           true
         ),
         createGridSurfaceModel(
           `${graph.id}-hyperplane-negative`,
           "z = -x / 2",
-          sampleHyperplaneSurfaceGrid(-0.5),
+          sampleHyperplaneSurfaceGrid(
+            -0.5,
+            graph3DSurfaceResolution(graph.surfaceQuality)
+          ),
           true
         )
       ];

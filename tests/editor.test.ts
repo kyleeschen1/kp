@@ -16,6 +16,7 @@ import {
   updateGraph3DOccludedAxisLightness,
   updateGraph3DShadowEnabled,
   updateGraph3DShadowOpacity,
+  updateGraph3DSurfaceQuality,
   updateGraph3DSurfaceMode,
   updateSaddleSurfaceDenominator
 } from "../src/editor/state.ts";
@@ -95,13 +96,17 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-action="set-graph-shadow-opacity"/);
   assert.match(html, /data-action="set-graph-occluded-axis-lightness"/);
   assert.match(html, /data-action="set-graph-surface-mode"/);
+  assert.match(html, /data-action="set-graph-surface-quality"/);
   assert.match(html, /data-action="set-saddle-denominator"/);
   assert.match(html, /class="graph-controls__foldout"[^>]*data-kp-controls-foldout="render-settings"/);
   assert.doesNotMatch(html, /class="graph-controls__foldout"[^>]*open/);
   assert.match(html, /data-kp-graph-rotation-axis="z"/);
   assert.match(html, /data-kp-graph-surface-mode="mesh"/);
+  assert.match(html, /data-kp-graph-surface-quality="balanced"/);
   assert.match(html, /value="donut"/);
   assert.match(html, /value="hyperplanes"/);
+  assert.match(html, /value="interactive"/);
+  assert.match(html, /value="high"/);
   assert.match(html, /data-kp-graph-light-preset="studio"/);
   assert.match(html, /value="raking"/);
   assert.match(html, /value="flat"/);
@@ -152,6 +157,10 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.ok(
     html.indexOf('data-kp-controls-foldout="render-settings"') <
       html.indexOf('data-action="set-graph-surface-mode"')
+  );
+  assert.ok(
+    html.indexOf('data-action="set-graph-surface-mode"') <
+      html.indexOf('data-action="set-graph-surface-quality"')
   );
   assert.ok(
     html.indexOf('data-kp-controls-foldout="render-settings"') <
@@ -340,6 +349,25 @@ test("updateGraph3DSurfaceMode updates the semantic graph render mode", () => {
   assert.notEqual(nextDocument, document);
   assert.equal(originalGraph?.surfaceMode, "mesh");
   assert.equal(nextGraph?.surfaceMode, "hyperplanes");
+});
+
+test("updateGraph3DSurfaceQuality updates the semantic graph render quality", () => {
+  const document = createInitialEditorDocument();
+  const nextDocument = updateGraph3DSurfaceQuality(
+    document,
+    "saddle-orbit-graph",
+    "interactive"
+  );
+  const originalGraph = document.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+  const nextGraph = nextDocument.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+
+  assert.notEqual(nextDocument, document);
+  assert.equal(originalGraph?.surfaceQuality, "balanced");
+  assert.equal(nextGraph?.surfaceQuality, "interactive");
 });
 
 test("updateSaddleSurfaceDenominator updates a parameterized saddle surface", () => {

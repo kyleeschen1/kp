@@ -7,6 +7,7 @@ import {
   createGraph2DObject,
   createGraph3DObject,
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
+  graph3DSurfaceResolution,
   type Curve2DObject,
   type GraphSceneObject,
   type Surface3DObject
@@ -99,6 +100,7 @@ function create3DSurfaceScene(
       origin: [280, 244]
     }
   });
+  const surfaceResolution = graph3DSurfaceResolution(graph.surfaceQuality);
   const xAxis = createAxis3DObject({
     id: graph.xAxisId,
     graphId: graph.id,
@@ -132,8 +134,8 @@ function create3DSurfaceScene(
     expression,
     xDomain: graph.xDomain,
     yDomain: graph.yDomain,
-    xSampleCount: 13,
-    ySampleCount: 13
+    xSampleCount: surfaceResolution.xSampleCount,
+    ySampleCount: surfaceResolution.ySampleCount
   };
 
   return [graph, xAxis, yAxis, zAxis, surface];

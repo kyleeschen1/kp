@@ -4,9 +4,12 @@ import {
   DEFAULT_GRAPH_3D_LIGHT_SETTINGS,
   createSaddleSurface3D,
   type Graph3DLightSettings,
+  type Graph3DSurfaceQuality,
   type Graph3DSurfaceMode,
   type Surface3DObject
 } from "../semantic/graph.ts";
+
+export { GRAPH_3D_SURFACE_QUALITY_IDS } from "../semantic/graph.ts";
 
 export const SADDLE_DENOMINATOR_MIN = 1;
 export const SADDLE_DENOMINATOR_MAX = 16;
@@ -127,6 +130,26 @@ export function updateGraph3DSurfaceMode(
       return {
         ...object,
         surfaceMode
+      };
+    })
+  };
+}
+
+export function updateGraph3DSurfaceQuality(
+  document: KpDocument,
+  graphId: string,
+  surfaceQuality: Graph3DSurfaceQuality
+): KpDocument {
+  return {
+    ...document,
+    objects: document.objects.map((object): KpSemanticObject => {
+      if (object.type !== "graph-3d" || object.id !== graphId) {
+        return object;
+      }
+
+      return {
+        ...object,
+        surfaceQuality
       };
     })
   };

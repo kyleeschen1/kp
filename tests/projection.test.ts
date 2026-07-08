@@ -25,6 +25,7 @@ const graph: Graph3DObject = {
   width: 200,
   height: 160,
   surfaceMode: "mesh",
+  surfaceQuality: "balanced",
   occludedAxisLightness: 44,
   debug: {
     depthOverlay: false,

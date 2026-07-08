@@ -17,7 +17,9 @@ import {
   createParabolaCurve2D,
   createSaddleWeaveCurve3D,
   createSaddleSurface3D,
-  createTimeSpiralCurve3D
+  createTimeSpiralCurve3D,
+  graph3DSurfaceResolution,
+  type Graph3DObject
 } from "../src/semantic/graph.ts";
 import { createMatrixObject, identityMatrix } from "../src/semantic/matrix.ts";
 import { validateKpDocument } from "../src/semantic/validation.ts";
@@ -236,6 +238,7 @@ test("createGraph3DObject creates a semantic graph object with a third axis", ()
     width: 560,
     height: 420,
     surfaceMode: "mesh",
+    surfaceQuality: "balanced",
     occludedAxisLightness: 44,
     debug: {
       depthOverlay: false,
@@ -260,6 +263,27 @@ test("createGraph3DObject creates a semantic graph object with a third axis", ()
       scale: 58,
       origin: [280, 244]
     }
+  });
+});
+
+test("graph3DSurfaceResolution maps quality levels to shared sample counts", () => {
+  assert.deepEqual(graph3DSurfaceResolution("interactive"), {
+    xSampleCount: 13,
+    ySampleCount: 13,
+    torusUSampleCount: 25,
+    torusVSampleCount: 13
+  });
+  assert.deepEqual(graph3DSurfaceResolution("balanced"), {
+    xSampleCount: 21,
+    ySampleCount: 21,
+    torusUSampleCount: 37,
+    torusVSampleCount: 19
+  });
+  assert.deepEqual(graph3DSurfaceResolution("high"), {
+    xSampleCount: 33,
+    ySampleCount: 33,
+    torusUSampleCount: 49,
+    torusVSampleCount: 25
   });
 });
 
@@ -544,6 +568,34 @@ test("createDefaultGraph3DScene creates graph, axes, and surface objects", () =>
     scene[0]?.type === "graph-3d" ? scene[0].surfaceMode : undefined,
     "mesh"
   );
+  assert.equal(
+    scene[0]?.type === "graph-3d" ? scene[0].surfaceQuality : undefined,
+    "balanced"
+  );
+});
+
+test("validateKpDocument reports invalid graph surface quality", () => {
+  const scene = createDefaultGraph3DScene();
+  const document = createKpDocument({
+    id: "bad-graph-quality-document",
+    title: "Bad graph quality",
+    objects: scene.map((object) =>
+      object.type === "graph-3d"
+        ? ({
+            ...object,
+            surfaceQuality: "ultra"
+          } as unknown as Graph3DObject)
+        : object
+    )
+  });
+
+  assert.deepEqual(validateKpDocument(document), [
+    {
+      path: "objects[0].surfaceQuality",
+      message:
+        "Graph saddle-orbit-graph surfaceQuality must be interactive, balanced, or high."
+    }
+  ]);
 });
 
 test("createSaddleDenominatorAnimationIntent creates a semantic animation intent", () => {

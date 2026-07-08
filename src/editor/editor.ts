@@ -6,6 +6,7 @@ import { renderGraph3DWebGLShell } from "../rendering/graph-webgl.ts";
 import {
   GRAPH_3D_LIGHT_PRESET_IDS,
   GRAPH_3D_SURFACE_MODE_IDS,
+  GRAPH_3D_SURFACE_QUALITY_IDS,
   findGraph3DLightPresetId,
   SADDLE_DENOMINATOR_MAX,
   SADDLE_DENOMINATOR_MIN,
@@ -154,6 +155,7 @@ function renderGraph3DControls(
         <summary class="graph-controls__summary">Render settings</summary>
         <div class="graph-controls__foldout-body">
           ${renderGraphSurfaceModeControl(graph)}
+          ${renderGraphSurfaceQualityControl(graph)}
           <label class="graph-control" for="${escapeHtml(occludedAxisInputId)}">
             <span class="graph-control__label">occluded axes</span>
             <input class="graph-control__range" id="${escapeHtml(occludedAxisInputId)}" type="range" min="0" max="100" step="1" value="${formattedOccludedAxisLightness}" data-action="set-graph-occluded-axis-lightness" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-color-target="occluded-axis" aria-label="Set occluded axis lightness" />
@@ -198,6 +200,32 @@ function renderGraphSurfaceModeOption(
   const selected = mode === selectedMode ? " selected" : "";
 
   return `<option value="${escapeHtml(mode)}"${selected}>${escapeHtml(mode)}</option>`;
+}
+
+function renderGraphSurfaceQualityControl(graph: Graph3DObject): string {
+  const inputId = `control-${graph.id}-surface-quality`;
+  const options = GRAPH_3D_SURFACE_QUALITY_IDS.map((quality) =>
+    renderGraphSurfaceQualityOption(quality, graph.surfaceQuality)
+  ).join("");
+
+  return `
+      <label class="graph-control" for="${escapeHtml(inputId)}">
+        <span class="graph-control__label">surface detail</span>
+        <select class="graph-control__select" id="${escapeHtml(inputId)}" data-action="set-graph-surface-quality" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-surface-quality="${escapeHtml(graph.surfaceQuality)}" aria-label="Set graph surface detail">
+          ${options}
+        </select>
+        <output class="graph-control__value" for="${escapeHtml(inputId)}">${escapeHtml(graph.surfaceQuality)}</output>
+      </label>
+  `;
+}
+
+function renderGraphSurfaceQualityOption(
+  quality: Graph3DObject["surfaceQuality"],
+  selectedQuality: Graph3DObject["surfaceQuality"]
+): string {
+  const selected = quality === selectedQuality ? " selected" : "";
+
+  return `<option value="${escapeHtml(quality)}"${selected}>${escapeHtml(quality)}</option>`;
 }
 
 function renderGraphLightPresetControl(graph: Graph3DObject): string {

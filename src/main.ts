@@ -8,6 +8,7 @@ import {
 import { compileDocumentAsset } from "./editor/compile-client.ts";
 import {
   GRAPH_3D_SURFACE_MODE_IDS,
+  GRAPH_3D_SURFACE_QUALITY_IDS,
   applyGraph3DLightPreset,
   addLatexEquationGraph,
   findGraph3DLightPresetId,
@@ -16,6 +17,7 @@ import {
   updateGraph3DOccludedAxisLightness,
   updateGraph3DShadowEnabled,
   updateGraph3DShadowOpacity,
+  updateGraph3DSurfaceQuality,
   updateGraph3DSurfaceMode,
   updateSaddleSurfaceDenominator,
   type Graph3DLightPresetId,
@@ -30,6 +32,7 @@ import type { KpSemanticObject } from "./semantic/document.ts";
 import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   type Graph3DObject,
+  type Graph3DSurfaceQuality,
   type Surface3DObject
 } from "./semantic/graph.ts";
 
@@ -74,6 +77,11 @@ appRoot.addEventListener("change", (event) => {
 
   if (event.target.dataset["action"] === "set-graph-surface-mode") {
     updateGraphSurfaceModeFromSelect(event.target);
+    return;
+  }
+
+  if (event.target.dataset["action"] === "set-graph-surface-quality") {
+    updateGraphSurfaceQualityFromSelect(event.target);
   }
 });
 
@@ -293,6 +301,28 @@ function updateGraphSurfaceModeFromSelect(select: HTMLSelectElement): void {
   renderGraph3DPreview(graphId);
   select.dataset["kpGraphSurfaceMode"] = surfaceMode;
   setGraphControlOutput(select, surfaceMode);
+}
+
+function updateGraphSurfaceQualityFromSelect(select: HTMLSelectElement): void {
+  const graphId = select.dataset["graphId"];
+  const surfaceQuality = select.value;
+
+  if (
+    graphId === undefined ||
+    !isGraph3DSurfaceQuality(surfaceQuality)
+  ) {
+    return;
+  }
+
+  editorDocument = updateGraph3DSurfaceQuality(
+    editorDocument,
+    graphId,
+    surfaceQuality
+  );
+  renderSemanticJson();
+  renderGraph3DPreview(graphId);
+  select.dataset["kpGraphSurfaceQuality"] = surfaceQuality;
+  setGraphControlOutput(select, surfaceQuality);
 }
 
 function updateGraphLightSettingFromInput(input: HTMLInputElement): void {
@@ -533,6 +563,15 @@ function isGraph3DSurfaceMode(
     GRAPH_3D_SURFACE_MODE_IDS.includes(
       value as typeof GRAPH_3D_SURFACE_MODE_IDS[number]
     )
+  );
+}
+
+function isGraph3DSurfaceQuality(
+  value: string | undefined
+): value is Graph3DSurfaceQuality {
+  return (
+    value !== undefined &&
+    GRAPH_3D_SURFACE_QUALITY_IDS.includes(value as Graph3DSurfaceQuality)
   );
 }
 

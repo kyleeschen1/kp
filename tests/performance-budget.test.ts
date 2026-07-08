@@ -11,18 +11,18 @@ import { DEFAULT_GRAPH_3D_LIGHT_SETTINGS } from "../src/semantic/graph.ts";
 test("estimateGraph3DLightingOperationCount counts active per-quad lighting work", () => {
   assert.equal(
     estimateGraph3DLightingOperationCount(
-      144,
+      400,
       DEFAULT_GRAPH_3D_LIGHT_SETTINGS
     ),
-    864
+    2400
   );
   assert.equal(
-    estimateGraph3DLightingOperationCount(144, {
+    estimateGraph3DLightingOperationCount(400, {
       ...DEFAULT_GRAPH_3D_LIGHT_SETTINGS,
       specular: 0,
       rim: 0
     }),
-    432
+    1200
   );
 });
 
@@ -30,8 +30,8 @@ test("evaluateGraph3DRenderBudget accepts the default 3D renderer scale", () => 
   assert.deepEqual(
     evaluateGraph3DRenderBudget({
       depthCellCount: 235_200,
-      depthTriangleCount: 288,
-      lightingOperationCount: 864,
+      depthTriangleCount: 800,
+      lightingOperationCount: 2400,
       overlapCount: 0,
       surfaceCount: 1
     }),
@@ -39,8 +39,8 @@ test("evaluateGraph3DRenderBudget accepts the default 3D renderer scale", () => 
       budget: DEFAULT_GRAPH_3D_RENDER_BUDGET,
       cost: {
         depthCellCount: 235_200,
-        depthTriangleCount: 288,
-        lightingOperationCount: 864,
+        depthTriangleCount: 800,
+        lightingOperationCount: 2400,
         overlapCount: 0,
         surfaceCount: 1
       },
