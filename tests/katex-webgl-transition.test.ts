@@ -183,6 +183,27 @@ test("createKatexWebGLRenderer cleans up partial initialization failures", () =>
   assert.deepEqual(gl.deletedProgramIds, [1]);
 });
 
+test("createKatexWebGLRenderer deletes partial texture when atlas upload fails", () => {
+  const source = token("s-minus", 10, 20, 8, 12);
+  const gl = new FakeWebGLRenderingContext();
+
+  gl.failTexImage2DOnTextureId = 2;
+
+  assert.throws(
+    () =>
+      createKatexWebGLRenderer(
+        fakeCanvas(gl, 200, 100),
+        transitionPlan({ sourceOnly: [{ source }] }),
+        textureAtlas([regionFor(source.id), regionFor("unused", { page: 1 })])
+      ),
+    /texture upload failed/
+  );
+
+  assert.deepEqual(gl.deletedTextureIds, [2, 1]);
+  assert.deepEqual(gl.deletedProgramIds, [1]);
+  assert.deepEqual(gl.deletedBufferIds, []);
+});
+
 test("createKatexWebGLRenderer deletes vertex shader when fragment shader compilation fails", () => {
   const source = token("s-minus", 10, 20, 8, 12);
   const gl = new FakeWebGLRenderingContext();
@@ -355,6 +376,7 @@ class FakeWebGLRenderingContext {
   failCreateBuffer = false;
   failCreateProgram = false;
   failFragmentShaderCompile = false;
+  failTexImage2DOnTextureId: number | undefined;
   uniform1fCalls = new Map<string, number[]>();
   uniform1iCalls = new Map<string, number[]>();
   uniform2fCalls = new Map<string, number[][]>();
@@ -486,7 +508,11 @@ class FakeWebGLRenderingContext {
 
   shaderSource(): void {}
 
-  texImage2D(): void {}
+  texImage2D(): void {
+    if (this.currentTexture?.id === this.failTexImage2DOnTextureId) {
+      throw new Error("texture upload failed");
+    }
+  }
 
   texParameteri(): void {}
 
