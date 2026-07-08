@@ -69,7 +69,10 @@ export function renderEditorDocument(document: KpDocument): string {
           <p class="eyebrow">Semantic Editor</p>
           <h1>${escapeHtml(document.title)}</h1>
         </div>
-        <span class="status-pill">JSON to HTML</span>
+        <div class="editor-header__actions">
+          <button class="editor-header__button" type="button" data-action="show-project-dashboard">Project Dashboard</button>
+          <span class="status-pill">JSON to HTML</span>
+        </div>
       </header>
       <div class="equation-entry" data-role="equation-entry">
         <label class="equation-entry__label" for="equation-input">Equation</label>

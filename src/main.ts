@@ -45,6 +45,8 @@ import {
   type Graph3DViewMode,
   type Surface3DObject
 } from "./semantic/graph.ts";
+import { projectDashboardData } from "./project-dashboard/data.ts";
+import { renderProjectDashboard } from "./project-dashboard/render.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -83,6 +85,12 @@ appRoot.addEventListener("click", (event) => {
   }
 
   switch (button.dataset["action"]) {
+    case "show-project-dashboard":
+      renderProjectDashboardView();
+      return;
+    case "show-editor":
+      renderEditor();
+      return;
     case "compile-document":
       void compileDocument();
       return;
@@ -198,6 +206,11 @@ function renderEditor(): void {
   appRoot.innerHTML = renderEditorDocument(editorDocument);
   hydrateEquationMotionDemos(appRoot);
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);
+}
+
+function renderProjectDashboardView(): void {
+  disposeGraph3DWebGL(appRoot);
+  appRoot.innerHTML = renderProjectDashboard(projectDashboardData);
 }
 
 function hydrateGraph3DWebGL(

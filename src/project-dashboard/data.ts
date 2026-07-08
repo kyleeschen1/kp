@@ -1,0 +1,205 @@
+import type { ProjectDashboardData } from "./model.ts";
+
+export const projectDashboardData: ProjectDashboardData = {
+  cards: [
+    {
+      id: "work-rendering-time-protocol",
+      title: "Rendering/time protocol",
+      category: "ts-api",
+      status: "active",
+      priority: "critical",
+      summary:
+        "Define the shared clock, playhead, sampler, selector, and render-index contract across equations, graphs, simulations, and code.",
+      tags: ["protocol", "timeline", "rendering", "identity"],
+      relatedIds: [
+        "gallery-rendering-time-api",
+        "animation-cancelation",
+        "visual-webgl-graph"
+      ]
+    },
+    {
+      id: "work-equation-cancelation",
+      title: "Equation cancelation animation",
+      category: "animation",
+      status: "active",
+      priority: "high",
+      summary:
+        "Treat cancelation as a semantic transformation where related tokens overlap, dissolve, and then leave the remaining equation to shift.",
+      tags: ["equation", "katex", "cancelation", "semantic-motion"],
+      relatedIds: ["animation-cancelation", "semantic-equation"]
+    },
+    {
+      id: "work-equation-final-simplify",
+      title: "Equation final simplify crossfade",
+      category: "animation",
+      status: "active",
+      priority: "high",
+      summary:
+        "Resolve the 7 - 3 to 4 simplification with a slight shrink and fade instead of a heavy liquid WebGL effect.",
+      tags: ["equation", "simplification", "katex"],
+      relatedIds: ["animation-final-crossfade", "semantic-equation"]
+    },
+    {
+      id: "work-graph-surface-morphs",
+      title: "Graph surface morphs",
+      category: "visual",
+      status: "planned",
+      priority: "high",
+      summary:
+        "Expose graph surface-mode morphs through the same playhead and sampler vocabulary as equation transitions.",
+      tags: ["graph", "webgl", "surface", "timeline"],
+      relatedIds: ["visual-webgl-graph", "gallery-rendering-time-api"]
+    },
+    {
+      id: "work-semantic-object-registry",
+      title: "Semantic object registry",
+      category: "semantic-object",
+      status: "planned",
+      priority: "critical",
+      summary:
+        "Move toward namespaced object records with render, select, transform, execute, compare, diagnose, and link capabilities.",
+      tags: ["objects", "selectors", "capabilities", "registry"],
+      relatedIds: ["semantic-matrix", "semantic-equation", "semantic-vector"]
+    },
+    {
+      id: "work-project-dashboard-v1",
+      title: "Project dashboard v1",
+      category: "todo",
+      status: "active",
+      priority: "critical",
+      summary:
+        "Build the prototype dashboard that tracks work, blockers, report-card themes, and object galleries from one shared data set.",
+      tags: ["dashboard", "operations", "codex", "planning"],
+      children: [
+        {
+          id: "work-project-dashboard-v1-phase-1",
+          title: "Phase 1 prototype shell",
+          category: "todo",
+          status: "active",
+          priority: "critical",
+          summary:
+            "Add typed seed data and a button-accessible dashboard shell while keeping the current editor as the default page.",
+          tags: ["dashboard", "phase-1"],
+          relatedIds: ["report-dashboard-operations"]
+        }
+      ],
+      relatedIds: ["report-dashboard-operations"]
+    }
+  ],
+  gallery: [
+    {
+      id: "animation-cancelation",
+      title: "Equation cancelation",
+      kind: "animation",
+      status: "active",
+      summary:
+        "A semantic animation type where inverse terms collapse out of an equation before the remaining tokens settle.",
+      tags: ["equation", "cancelation", "particles"],
+      domains: ["math", "katex"],
+      interfaces: ["sample(progress)", "semantic token lifecycle"],
+      relatedIds: ["work-equation-cancelation"]
+    },
+    {
+      id: "animation-final-crossfade",
+      title: "Final simplify crossfade",
+      kind: "animation",
+      status: "active",
+      summary:
+        "A compact simplification style where source expression tokens slightly shrink and fade into the evaluated result.",
+      tags: ["equation", "simplification", "crossfade"],
+      domains: ["math", "katex"],
+      interfaces: ["sample(progress)", "simplify-into relation"],
+      relatedIds: ["work-equation-final-simplify"]
+    },
+    {
+      id: "visual-webgl-graph",
+      title: "WebGL graph",
+      kind: "visual",
+      status: "active",
+      summary:
+        "Interactive graph rendering with retained 3D scene data, surface modes, lighting, and future timeline-controlled morphs.",
+      tags: ["graph", "webgl", "surface"],
+      domains: ["graphs", "calculus"],
+      interfaces: ["camera controls", "surface mode", "render shell"],
+      relatedIds: ["work-graph-surface-morphs"]
+    },
+    {
+      id: "semantic-matrix",
+      title: "Matrix",
+      kind: "semantic-object",
+      status: "active",
+      summary:
+        "A structured linear-algebra object with stable row, column, and entry identity for rendering and future operations.",
+      tags: ["matrix", "linear-algebra", "selectors"],
+      domains: ["math", "linear algebra"],
+      interfaces: ["latex render", "entry selectors"],
+      relatedIds: ["work-semantic-object-registry"]
+    },
+    {
+      id: "semantic-equation",
+      title: "Equation",
+      kind: "semantic-object",
+      status: "active",
+      summary:
+        "A symbolic object whose authored operations emit lifecycle-aware transitions for KaTeX and future render backends.",
+      tags: ["equation", "transform", "selectors"],
+      domains: ["math", "algebra"],
+      interfaces: ["subtractBothSides", "simplifySide", "token selectors"],
+      relatedIds: ["work-semantic-object-registry"]
+    },
+    {
+      id: "semantic-vector",
+      title: "Vector",
+      kind: "semantic-object",
+      status: "planned",
+      summary:
+        "A planned semantic object for coordinate, geometric, and transformation views.",
+      tags: ["vector", "linear-algebra"],
+      domains: ["math", "linear algebra"],
+      interfaces: ["component selectors", "geometric render"],
+      relatedIds: ["work-semantic-object-registry"]
+    },
+    {
+      id: "gallery-rendering-time-api",
+      title: "Rendering/time API",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "The shared KP API for resolving object state plus time into deterministic frames across render backends.",
+      tags: ["clock", "playhead", "sampler", "render-index"],
+      domains: ["runtime", "authoring"],
+      interfaces: ["KpClock", "KpPlayhead", "KpSampler", "KpRendererAdapter"],
+      relatedIds: ["work-rendering-time-protocol"]
+    }
+  ],
+  reportThemes: [
+    {
+      id: "report-animation-protocol",
+      title: "Animation protocol maturity",
+      status: "planned",
+      scope:
+        "Assess whether equation, graph, simulation, and programming animations share the same lifecycle and time model.",
+      questions: [
+        "Can each animation be sampled at arbitrary progress?",
+        "Does rewind use the same timeline as forward playback?",
+        "Are semantic selectors preserved across render backends?"
+      ],
+      tags: ["animation", "protocol", "quality"],
+      relatedIds: ["work-rendering-time-protocol", "animation-cancelation"]
+    },
+    {
+      id: "report-dashboard-operations",
+      title: "Dashboard operations",
+      status: "active",
+      scope:
+        "Track whether the dashboard is giving the user useful project state, blockers, and reprioritization handles.",
+      questions: [
+        "Are active tasks visible and current?",
+        "Can Codex update statuses after completing work?",
+        "Do gallery entries expose the right interfaces and test points?"
+      ],
+      tags: ["dashboard", "codex", "project-health"],
+      relatedIds: ["work-project-dashboard-v1"]
+    }
+  ]
+};

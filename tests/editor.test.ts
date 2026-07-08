@@ -162,6 +162,8 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-role="equation-input"/);
   assert.match(html, /data-action="add-equation-graph"/);
   assert.match(html, /data-role="equation-error"/);
+  assert.match(html, /data-action="show-project-dashboard"/);
+  assert.match(html, />Project Dashboard</);
   assert.match(html, /data-action="compile-document"/);
   assert.match(html, /data-action="set-graph-azimuth"/);
   assert.match(html, /data-action="set-graph-light-preset"/);
