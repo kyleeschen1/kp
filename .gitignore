@@ -25,6 +25,9 @@ lerna-debug.log*
 # Coverage
 coverage/
 
+# Local linked worktrees
+.worktrees/
+
 # Editor and OS files
 .DS_Store
 .idea/
