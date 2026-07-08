@@ -63,6 +63,25 @@ export interface ProjectDashboardData {
   readonly reportThemes: readonly ProjectReportTheme[];
 }
 
+export interface ProjectCardStatusGroup {
+  readonly status: ProjectDashboardStatus;
+  readonly cards: readonly ProjectCard[];
+}
+
+export const PROJECT_DASHBOARD_STATUS_ORDER: readonly ProjectDashboardStatus[] = [
+  "active",
+  "planned",
+  "blocked",
+  "done"
+];
+
+export const PROJECT_DASHBOARD_PRIORITY_ORDER: readonly ProjectDashboardPriority[] = [
+  "critical",
+  "high",
+  "medium",
+  "low"
+];
+
 export function collectProjectDashboardIds(
   data: ProjectDashboardData
 ): readonly string[] {
@@ -101,6 +120,17 @@ export function validateProjectDashboardData(
   return issues;
 }
 
+export function groupProjectCardsByStatus(
+  cards: readonly ProjectCard[]
+): readonly ProjectCardStatusGroup[] {
+  return PROJECT_DASHBOARD_STATUS_ORDER.map((status) => ({
+    status,
+    cards: [...cards.filter((card) => card.status === status)].sort(
+      compareProjectCards
+    )
+  }));
+}
+
 function collectCardIds(cards: readonly ProjectCard[]): readonly string[] {
   return cards.flatMap((card) => [
     card.id,
@@ -123,4 +153,16 @@ function validateRelatedIds(
       issues.push(`${sourceId} references missing related id: ${relatedId}`);
     }
   }
+}
+
+function compareProjectCards(left: ProjectCard, right: ProjectCard): number {
+  const priorityDelta =
+    PROJECT_DASHBOARD_PRIORITY_ORDER.indexOf(left.priority) -
+    PROJECT_DASHBOARD_PRIORITY_ORDER.indexOf(right.priority);
+
+  if (priorityDelta !== 0) {
+    return priorityDelta;
+  }
+
+  return left.title.localeCompare(right.title);
 }

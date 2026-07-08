@@ -43,11 +43,14 @@ export const projectDashboardData: ProjectDashboardData = {
       id: "work-graph-surface-morphs",
       title: "Graph surface morphs",
       category: "visual",
-      status: "planned",
+      status: "blocked",
       priority: "high",
       summary:
         "Expose graph surface-mode morphs through the same playhead and sampler vocabulary as equation transitions.",
       tags: ["graph", "webgl", "surface", "timeline"],
+      blockers: [
+        "Needs shared playhead protocol before graph morph playback can be unified"
+      ],
       relatedIds: ["visual-webgl-graph", "gallery-rendering-time-api"]
     },
     {
@@ -75,7 +78,7 @@ export const projectDashboardData: ProjectDashboardData = {
           id: "work-project-dashboard-v1-phase-1",
           title: "Phase 1 prototype shell",
           category: "todo",
-          status: "active",
+          status: "done",
           priority: "critical",
           summary:
             "Add typed seed data and a button-accessible dashboard shell while keeping the current editor as the default page.",
