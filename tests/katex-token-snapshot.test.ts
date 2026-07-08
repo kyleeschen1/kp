@@ -5,9 +5,13 @@ import {
   createLocalTokenRect,
   normalizeKatexTokenText,
   normalizeKatexTokenSignature,
-  assignKatexTokenRows
+  assignKatexTokenRows,
+  snapshotKatexTokens
 } from "../src/rendering/katex-token-snapshot.ts";
-import type { KatexMotionToken } from "../src/rendering/katex-transition-types.ts";
+import type {
+  KatexMotionToken,
+  KatexTokenRect
+} from "../src/rendering/katex-transition-types.ts";
 
 test("normalizeKatexTokenText collapses whitespace and ignores empty content", () => {
   assert.equal(normalizeKatexTokenText("  x  "), "x");
@@ -21,6 +25,13 @@ test("normalizeKatexTokenSignature keeps stable KaTeX class names", () => {
     "mathnormal mord size3"
   );
   assert.equal(normalizeKatexTokenSignature("mbin mspace"), "mbin mspace");
+});
+
+test("normalizeKatexTokenSignature ignores reset-size variants", () => {
+  assert.equal(
+    normalizeKatexTokenSignature("mord mathnormal reset-size12 sizing"),
+    "mathnormal mord"
+  );
 });
 
 test("createLocalTokenRect maps viewport rects into overlay-local coordinates", () => {
@@ -52,6 +63,67 @@ test("assignKatexTokenRows groups nearby token tops into row buckets", () => {
   );
 });
 
+test("assignKatexTokenRows assigns row ids in visual top order", () => {
+  const tokens: KatexMotionToken[] = [
+    token("high-a", 40),
+    token("low-a", 10),
+    token("low-b", 12),
+    token("high-b", 41)
+  ];
+
+  assert.deepEqual(
+    assignKatexTokenRows(tokens, 6).map((entry) => [entry.id, entry.row]),
+    [
+      ["high-a", 1],
+      ["low-a", 0],
+      ["low-b", 0],
+      ["high-b", 1]
+    ]
+  );
+});
+
+test("snapshotKatexTokens emits normalized motion leaf tokens", () => {
+  const emitted = fakeElement("mord mathnormal reset-size12 sizing", "  x  ", {
+    left: 130,
+    top: 90,
+    width: 12,
+    height: 14
+  });
+  const candidates = [
+    fakeElement("mord", "parent", rect(120, 80, 20, 14), [
+      fakeElement("mord", "child", rect(121, 81, 5, 5))
+    ]),
+    fakeElement("not-motion", "z", rect(140, 90, 10, 10)),
+    fakeElement("mord", "   ", rect(150, 90, 10, 10)),
+    fakeElement("mord", "y", rect(160, 90, 0, 10)),
+    emitted
+  ];
+  const queriedSelectors: string[] = [];
+  const root = {
+    getBoundingClientRect: () => rect(100, 50, 200, 120),
+    querySelectorAll: (selector: string) => {
+      queriedSelectors.push(selector);
+      return candidates;
+    }
+  } as unknown as Element;
+
+  const snapshot = snapshotKatexTokens(root);
+
+  assert.deepEqual(queriedSelectors, [".katex-html span"]);
+  assert.deepEqual(snapshot.bounds, rect(100, 50, 200, 120));
+  assert.equal(snapshot.tokens.length, 1);
+  assert.equal(snapshot.tokens[0]?.element, emitted);
+  assert.deepEqual(snapshot.tokens[0], {
+    id: "katex-token-2",
+    text: "x",
+    signature: "mathnormal mord",
+    rect: rect(130, 90, 12, 14),
+    localRect: rect(30, 40, 12, 14),
+    row: 0,
+    element: emitted
+  });
+});
+
 function token(id: string, top: number): KatexMotionToken {
   return {
     id,
@@ -61,4 +133,27 @@ function token(id: string, top: number): KatexMotionToken {
     localRect: { left: 0, top, width: 10, height: 12 },
     row: 0
   };
+}
+
+function fakeElement(
+  className: string,
+  textContent: string,
+  elementRect: KatexTokenRect,
+  children: HTMLElement[] = []
+): HTMLElement {
+  return {
+    className,
+    textContent,
+    children,
+    getBoundingClientRect: () => elementRect
+  } as unknown as HTMLElement;
+}
+
+function rect(
+  left: number,
+  top: number,
+  width: number,
+  height: number
+): KatexTokenRect {
+  return { left, top, width, height };
 }

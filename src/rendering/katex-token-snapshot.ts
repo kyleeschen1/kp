@@ -22,8 +22,6 @@ const NOISY_CLASS_NAMES = new Set([
   "vlist-t",
   "vlist-r",
   "vlist-s",
-  "reset-size6",
-  "reset-size5",
   "sizing"
 ]);
 
@@ -81,7 +79,7 @@ export function normalizeKatexTokenText(text: string): string {
 export function normalizeKatexTokenSignature(className: string): string {
   return className
     .split(/\s+/)
-    .filter((name) => name.length > 0 && !NOISY_CLASS_NAMES.has(name))
+    .filter((name) => name.length > 0 && !isNoisyClassName(name))
     .sort()
     .join(" ");
 }
@@ -102,17 +100,26 @@ export function assignKatexTokenRows(
   tokens: readonly KatexMotionToken[],
   rowTolerancePx: number
 ): readonly KatexMotionToken[] {
-  const sortedRows: number[] = [];
+  const rowTops: number[] = [];
+  const rowByTokenIndex = new Map<number, number>();
 
-  return tokens.map((token) => {
-    const rowIndex = findRowIndex(sortedRows, token.rect.top, rowTolerancePx);
+  tokens
+    .map((token, index) => ({ token, index }))
+    .sort((a, b) => a.token.rect.top - b.token.rect.top)
+    .forEach(({ token, index }) => {
+      const rowIndex = findRowIndex(rowTops, token.rect.top, rowTolerancePx);
 
-    if (rowIndex === sortedRows.length) {
-      sortedRows.push(token.rect.top);
-    }
+      if (rowIndex === rowTops.length) {
+        rowTops.push(token.rect.top);
+      }
 
-    return { ...token, row: rowIndex };
-  });
+      rowByTokenIndex.set(index, rowIndex);
+    });
+
+  return tokens.map((token, index) => ({
+    ...token,
+    row: rowByTokenIndex.get(index) ?? 0
+  }));
 }
 
 function findRowIndex(
@@ -123,6 +130,10 @@ function findRowIndex(
   const index = rowTops.findIndex((rowTop) => Math.abs(rowTop - top) <= tolerance);
 
   return index === -1 ? rowTops.length : index;
+}
+
+function isNoisyClassName(name: string): boolean {
+  return NOISY_CLASS_NAMES.has(name) || /^reset-size\d+$/.test(name);
 }
 
 function isMotionElement(element: HTMLElement): boolean {
