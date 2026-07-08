@@ -13,6 +13,13 @@ import {
   sampleSaddleSurface,
   sampleTorusSurfaceGrid
 } from "./graph-svg.ts";
+import {
+  createGraphSurfaceModeTransition,
+  graphSurfaceMorphTargetFromGrid,
+  type GraphSurfaceModeTransition,
+  type GraphSurfaceMorphRole,
+  type GraphSurfaceMorphTarget
+} from "./graph-transitions.ts";
 
 export const GRAPH_3D_WEBGL_RENDERER_KIND = "graph-3d-webgl";
 
@@ -41,6 +48,7 @@ export interface Graph3DWebGLSceneModel {
   camera: Graph3DObject["camera"];
   graph: Graph3DObject;
   surfaceMode: Graph3DSurfaceMode;
+  surfaceTransitions: readonly GraphSurfaceModeTransition[];
   surfaces: readonly Graph3DWebGLSurfaceModel[];
 }
 
@@ -49,6 +57,7 @@ export interface Graph3DWebGLSurfaceModel {
   grid: readonly (readonly GraphPoint3D[])[];
   id: string;
   label: string;
+  morphTarget: GraphSurfaceMorphTarget;
   quads: readonly Graph3DWebGLSurfaceQuad[];
 }
 
@@ -79,6 +88,10 @@ export function createGraph3DWebGLSceneModel(
     camera: graph.camera,
     graph,
     surfaceMode,
+    surfaceTransitions: graphSurfaceTransitionModes(surfaceMode).map(
+      (targetMode) =>
+        createGraphSurfaceModeTransition(objects, graph, surfaceMode, targetMode)
+    ),
     surfaces: createSurfaceModels(surfaces, graph, surfaceMode)
   };
 }
@@ -112,7 +125,7 @@ function createMeshSurfaceModel(
     ySampleCount: resolution.ySampleCount
   });
 
-  return createGridSurfaceModel(surface.id, surface.label, grid, true);
+  return createGridSurfaceModel(surface.id, surface.label, grid, true, "mesh", "mesh");
 }
 
 function createSurfaceModels(
@@ -129,7 +142,9 @@ function createSurfaceModels(
           `${graph.id}-donut`,
           "donut",
           sampleTorusSurfaceGrid(graph3DSurfaceResolution(graph.surfaceQuality)),
-          false
+          false,
+          "donut",
+          "donut"
         )
       ];
     case "hyperplanes":
@@ -141,7 +156,9 @@ function createSurfaceModels(
             0.5,
             graph3DSurfaceResolution(graph.surfaceQuality)
           ),
-          true
+          true,
+          "hyperplanes",
+          "hyperplane-positive"
         ),
         createGridSurfaceModel(
           `${graph.id}-hyperplane-negative`,
@@ -150,7 +167,9 @@ function createSurfaceModels(
             -0.5,
             graph3DSurfaceResolution(graph.surfaceQuality)
           ),
-          true
+          true,
+          "hyperplanes",
+          "hyperplane-negative"
         )
       ];
   }
@@ -160,15 +179,26 @@ function createGridSurfaceModel(
   id: string,
   label: string,
   grid: readonly (readonly GraphPoint3D[])[],
-  drawBorder: boolean
+  drawBorder: boolean,
+  mode: Graph3DSurfaceMode,
+  role: GraphSurfaceMorphRole
 ): Graph3DWebGLSurfaceModel {
   return {
     drawBorder,
     grid,
     id,
     label,
+    morphTarget: graphSurfaceMorphTargetFromGrid(id, mode, role, grid),
     quads: surfaceQuadsFromGrid(grid)
   };
+}
+
+function graphSurfaceTransitionModes(
+  surfaceMode: Graph3DSurfaceMode
+): readonly Graph3DSurfaceMode[] {
+  return (["mesh", "donut", "hyperplanes"] as const).filter(
+    (mode) => mode !== surfaceMode
+  );
 }
 
 function surfaceQuadsFromGrid(

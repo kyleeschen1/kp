@@ -252,6 +252,10 @@ function createSurfaceMesh(surface: Graph3DWebGLSurfaceModel): Mesh {
   mesh.name = `${surface.id}-surface`;
   mesh.userData = {
     kpObject: surface.id,
+    kpMorphRole: surface.morphTarget.role,
+    kpMorphUSampleCount: surface.morphTarget.uSampleCount,
+    kpMorphVSampleCount: surface.morphTarget.vSampleCount,
+    kpMorphVertexCount: surface.morphTarget.vertices.length,
     kpRendererRole: "surface"
   };
 

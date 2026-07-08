@@ -96,10 +96,21 @@ test("WebGL scene model mirrors generated donut and hyperplane surface modes", (
 
   assert.equal(donutModel.surfaceMode, "donut");
   assert.equal(donutModel.surfaces.length, 1);
+  assert.equal(donutModel.surfaceTransitions.length, 2);
   assert.equal(donutSurface?.id, "saddle-orbit-graph-donut");
   assert.equal(donutSurface?.grid.length, 19);
   assert.equal(donutSurface?.grid[0]?.length, 37);
   assert.equal(donutSurface?.quads.length, 648);
+  assert.equal(donutSurface?.morphTarget.role, "donut");
+  assert.equal(donutSurface?.morphTarget.vertices.length, 703);
+  assert.equal(
+    donutModel.surfaceTransitions[0]?.channels[0]?.source.vertices.length,
+    777
+  );
+  assert.equal(
+    donutModel.surfaceTransitions[0]?.channels[0]?.target.vertices.length,
+    777
+  );
 
   assert.equal(hyperplaneModel.surfaceMode, "hyperplanes");
   assert.equal(hyperplaneModel.surfaces.length, 2);
@@ -134,6 +145,10 @@ test("WebGL Three scene builds retained geometry for surfaces, mesh lines, and a
   assert.equal(threeScene.root.userData["kpObject"], "saddle-orbit-graph");
   assert.equal(threeScene.surfaceMeshes.length, 1);
   assert.equal(surfaceMesh?.userData["kpObject"], "saddle-surface");
+  assert.equal(surfaceMesh?.userData["kpMorphRole"], "mesh");
+  assert.equal(surfaceMesh?.userData["kpMorphVertexCount"], 441);
+  assert.equal(surfaceMesh?.userData["kpMorphUSampleCount"], 21);
+  assert.equal(surfaceMesh?.userData["kpMorphVSampleCount"], 21);
   assert.equal(surfacePositions?.count, 1600);
   assert.equal(surfaceMesh?.geometry.index?.count, 2400);
   assert.equal(threeScene.surfaceMeshLines.length, 1);
