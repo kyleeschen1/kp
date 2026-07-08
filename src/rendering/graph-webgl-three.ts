@@ -1,5 +1,7 @@
 import {
   BufferGeometry,
+  ConeGeometry,
+  CylinderGeometry,
   DoubleSide,
   Float32BufferAttribute,
   Group,
@@ -9,6 +11,7 @@ import {
   MeshBasicMaterial,
   OrthographicCamera,
   Scene,
+  Vector3,
   WebGLRenderer
 } from "three";
 import type { KpSemanticObject } from "../semantic/document.ts";
@@ -25,13 +28,20 @@ import {
 } from "./graph-webgl.ts";
 
 export interface Graph3DWebGLThreeScene {
-  axisLines: readonly LineSegments[];
+  axisObjects: readonly Group[];
   root: Group;
   scene: Scene;
   surfaceMeshLines: readonly LineSegments[];
   surfaceMeshes: readonly Mesh[];
 }
 
+const AXIS_ARROW_LENGTH = 0.24;
+const AXIS_ARROW_RADIUS = 0.075;
+const AXIS_HALO_ARROW_RADIUS = 0.115;
+const AXIS_HALO_RADIUS = 0.032;
+const AXIS_RADIUS = 0.018;
+const GRAPH_BACKGROUND_COLOR = 0xfffdf8;
+const THREE_Y_AXIS = new Vector3(0, 1, 0);
 const activeGraph3DWebGLRenderers = new WeakMap<HTMLElement, WebGLRenderer>();
 
 export function createGraph3DWebGLThreeScene(
@@ -41,7 +51,7 @@ export function createGraph3DWebGLThreeScene(
   const root = new Group();
   const surfaceMeshes: Mesh[] = [];
   const surfaceMeshLines: LineSegments[] = [];
-  const axisLines: LineSegments[] = [];
+  const axisObjects: Group[] = [];
 
   root.name = `${model.graph.id}-webgl-root`;
   root.position.set(
@@ -67,14 +77,14 @@ export function createGraph3DWebGLThreeScene(
   }
 
   for (const axis of model.axes) {
-    const axisLine = createAxisLine(axis);
+    const axisObject = createAxisObject(axis);
 
-    axisLines.push(axisLine);
-    root.add(axisLine);
+    axisObjects.push(axisObject);
+    root.add(axisObject);
   }
 
   return {
-    axisLines,
+    axisObjects,
     root,
     scene,
     surfaceMeshLines,
@@ -295,31 +305,146 @@ function createSurfaceMeshLines(
   return lines;
 }
 
-function createAxisLine(axis: Axis3DObject): LineSegments {
+function createAxisObject(axis: Axis3DObject): Group {
   const [min, max] = axis.domain;
-  const geometry = new BufferGeometry();
-  const positions = [
-    ...graphPointToThreePosition(axisPoint(axis, min)),
-    ...graphPointToThreePosition(axisPoint(axis, max))
-  ];
+  const start = vectorFromGraphPoint(axisPoint(axis, min));
+  const end = vectorFromGraphPoint(axisPoint(axis, max));
+  const direction = end.clone().sub(start).normalize();
+  const minDirection = direction.clone().multiplyScalar(-1);
+  const foregroundColor = axis.orientation === "z" ? 0x2b6f59 : 0x394756;
+  const shaftStart = start
+    .clone()
+    .add(direction.clone().multiplyScalar(AXIS_ARROW_LENGTH));
+  const shaftEnd = end
+    .clone()
+    .sub(direction.clone().multiplyScalar(AXIS_ARROW_LENGTH));
+  const group = new Group();
 
-  geometry.setAttribute("position", new Float32BufferAttribute(positions, 3));
-
-  const material = new LineBasicMaterial({
-    color: axis.orientation === "z" ? 0x2b6f59 : 0x394756,
-    depthTest: true,
-    transparent: false
-  });
-  const line = new LineSegments(geometry, material);
-
-  line.name = `${axis.id}-axis`;
-  line.userData = {
+  group.name = `${axis.id}-axis`;
+  group.userData = {
     kpAxis: axis.orientation,
     kpObject: axis.id,
     kpRendererRole: "axis"
   };
+  group.add(
+    createAxisShaftMesh(
+      shaftStart,
+      shaftEnd,
+      AXIS_HALO_RADIUS,
+      GRAPH_BACKGROUND_COLOR,
+      "halo-shaft"
+    ),
+    createAxisArrowMesh(
+      start,
+      minDirection,
+      AXIS_HALO_ARROW_RADIUS,
+      GRAPH_BACKGROUND_COLOR,
+      "halo-min-arrow"
+    ),
+    createAxisArrowMesh(
+      end,
+      direction,
+      AXIS_HALO_ARROW_RADIUS,
+      GRAPH_BACKGROUND_COLOR,
+      "halo-max-arrow"
+    ),
+    createAxisShaftMesh(
+      shaftStart,
+      shaftEnd,
+      AXIS_RADIUS,
+      foregroundColor,
+      "axis-shaft"
+    ),
+    createAxisArrowMesh(
+      start,
+      minDirection,
+      AXIS_ARROW_RADIUS,
+      foregroundColor,
+      "axis-min-arrow"
+    ),
+    createAxisArrowMesh(
+      end,
+      direction,
+      AXIS_ARROW_RADIUS,
+      foregroundColor,
+      "axis-max-arrow"
+    )
+  );
 
-  return line;
+  return group;
+}
+
+function createAxisShaftMesh(
+  start: Vector3,
+  end: Vector3,
+  radius: number,
+  color: number,
+  layer: string
+): Mesh {
+  const direction = end.clone().sub(start);
+  const length = direction.length();
+  const geometry = new CylinderGeometry(radius, radius, length, 16);
+  const mesh = new Mesh(
+    geometry,
+    createAxisMaterial(color, !layer.startsWith("halo"))
+  );
+
+  orientMeshAlongDirection(
+    mesh,
+    start.clone().lerp(end, 0.5),
+    direction.normalize()
+  );
+  mesh.userData = {
+    kpAxisLayer: layer
+  };
+
+  return mesh;
+}
+
+function createAxisArrowMesh(
+  tip: Vector3,
+  direction: Vector3,
+  radius: number,
+  color: number,
+  layer: string
+): Mesh {
+  const unitDirection = direction.clone().normalize();
+  const geometry = new ConeGeometry(radius, AXIS_ARROW_LENGTH, 24);
+  const mesh = new Mesh(
+    geometry,
+    createAxisMaterial(color, !layer.startsWith("halo"))
+  );
+
+  orientMeshAlongDirection(
+    mesh,
+    tip.clone().sub(unitDirection.clone().multiplyScalar(AXIS_ARROW_LENGTH / 2)),
+    unitDirection
+  );
+  mesh.userData = {
+    kpAxisLayer: layer
+  };
+
+  return mesh;
+}
+
+function createAxisMaterial(
+  color: number,
+  depthWrite: boolean
+): MeshBasicMaterial {
+  return new MeshBasicMaterial({
+    color,
+    depthTest: true,
+    depthWrite
+  });
+}
+
+function orientMeshAlongDirection(
+  mesh: Mesh,
+  center: Vector3,
+  direction: Vector3
+): void {
+  mesh.position.copy(center);
+  mesh.quaternion.setFromUnitVectors(THREE_Y_AXIS, direction);
 }
 
 function axisPoint(axis: Axis3DObject, value: number): GraphPoint3D {
@@ -337,6 +462,10 @@ function graphPointToThreePosition(
   point: GraphPoint3D
 ): readonly [number, number, number] {
   return [point.x, point.z, point.y];
+}
+
+function vectorFromGraphPoint(point: GraphPoint3D): Vector3 {
+  return new Vector3(...graphPointToThreePosition(point));
 }
 
 function degreesToRadians(degrees: number): number {

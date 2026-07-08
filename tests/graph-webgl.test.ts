@@ -129,14 +129,24 @@ test("WebGL Three scene builds retained geometry for surfaces, mesh lines, and a
   assert.equal(surfaceMesh?.geometry.index?.count, 864);
   assert.equal(threeScene.surfaceMeshLines.length, 1);
   assert.equal(meshLinePositions?.count, 624);
-  assert.equal(threeScene.axisLines.length, 3);
+  assert.equal(threeScene.axisObjects.length, 3);
   assert.deepEqual(
-    threeScene.axisLines.map((axisLine) => axisLine.userData["kpAxis"]),
+    threeScene.axisObjects.map((axisObject) => axisObject.userData["kpAxis"]),
     ["x", "y", "z"]
   );
-  assert.equal(
-    threeScene.axisLines[0]?.geometry.getAttribute("position").count,
-    2
+  assert.equal(threeScene.axisObjects[0]?.children.length, 6);
+  assert.deepEqual(
+    threeScene.axisObjects[0]?.children.map(
+      (child) => child.userData["kpAxisLayer"]
+    ),
+    [
+      "halo-shaft",
+      "halo-min-arrow",
+      "halo-max-arrow",
+      "axis-shaft",
+      "axis-min-arrow",
+      "axis-max-arrow"
+    ]
   );
 });
 
