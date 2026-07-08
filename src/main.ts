@@ -22,12 +22,8 @@ import {
   type Graph3DLightScalarSetting
 } from "./editor/state.ts";
 import { occludedAxisColor } from "./rendering/graph-svg.ts";
-import {
-  disposeGraph3DWebGLShell,
-  disposeGraph3DWebGLShells,
-  hydrateGraph3DWebGLShells,
-  renderGraph3DWebGLShell
-} from "./rendering/graph-webgl.ts";
+import { renderGraph3DWebGLShell } from "./rendering/graph-webgl.ts";
+import type { KpSemanticObject } from "./semantic/document.ts";
 import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   type Graph3DObject,
@@ -42,6 +38,9 @@ if (app === null) {
 
 const appRoot = app;
 let editorDocument = createInitialEditorDocument();
+type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
+let graph3DWebGLClient: Graph3DWebGLClient | undefined;
+let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
 
 renderEditor();
 
@@ -143,9 +142,46 @@ function addEquationGraphFromInput(): void {
 }
 
 function renderEditor(): void {
-  disposeGraph3DWebGLShells(appRoot);
+  disposeGraph3DWebGL(appRoot);
   appRoot.innerHTML = renderEditorDocument(editorDocument);
-  hydrateGraph3DWebGLShells(appRoot, editorDocument.objects);
+  hydrateGraph3DWebGL(appRoot, editorDocument.objects);
+}
+
+function hydrateGraph3DWebGL(
+  root: ParentNode,
+  objects: readonly KpSemanticObject[]
+): void {
+  const rootNode = root instanceof Node ? root : undefined;
+
+  void loadGraph3DWebGLClient().then((client) => {
+    if (rootNode !== undefined && !rootNode.isConnected) {
+      return;
+    }
+
+    client.hydrateGraph3DWebGLShells(root, objects);
+  });
+}
+
+function disposeGraph3DWebGL(root: ParentNode): void {
+  graph3DWebGLClient?.disposeGraph3DWebGLShells(root);
+}
+
+function disposeGraph3DWebGLShell(shell: HTMLElement): void {
+  graph3DWebGLClient?.disposeGraph3DWebGLShell(shell);
+}
+
+function loadGraph3DWebGLClient(): Promise<Graph3DWebGLClient> {
+  if (graph3DWebGLClientPromise === undefined) {
+    graph3DWebGLClientPromise = import("./rendering/graph-webgl-three.ts").then(
+      (client) => {
+        graph3DWebGLClient = client;
+
+        return client;
+      }
+    );
+  }
+
+  return graph3DWebGLClientPromise;
 }
 
 function updateGraphAzimuthFromInput(input: HTMLInputElement): void {
@@ -376,7 +412,7 @@ function renderGraph3DPreview(graphId: string): void {
     editorDocument.objects,
     graph
   );
-  hydrateGraph3DWebGLShells(graphContainer, editorDocument.objects);
+  hydrateGraph3DWebGL(graphContainer, editorDocument.objects);
 }
 
 function findGraph3D(graphId: string): Graph3DObject | undefined {

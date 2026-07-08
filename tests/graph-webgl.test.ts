@@ -1,13 +1,16 @@
 import { strict as assert } from "node:assert";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
-  createGraph3DWebGLCamera,
   createGraph3DWebGLSceneModel,
-  createGraph3DWebGLThreeScene,
   createGraph3DWebGLRendererDescriptor,
   GRAPH_3D_WEBGL_RENDERER_KIND
 } from "../src/rendering/graph-webgl.ts";
+import {
+  createGraph3DWebGLCamera,
+  createGraph3DWebGLThreeScene
+} from "../src/rendering/graph-webgl-three.ts";
 import {
   createDefaultGraph3DScene,
   type Graph3DObject
@@ -30,6 +33,15 @@ test("WebGL graph renderer exposes a stable renderer descriptor", () => {
     kind: "graph-3d-webgl",
     status: "available"
   });
+});
+
+test("WebGL shell renderer does not import Three.js directly", () => {
+  const source = readFileSync(
+    new URL("../src/rendering/graph-webgl.ts", import.meta.url),
+    "utf8"
+  );
+
+  assert.doesNotMatch(source, /from "three"/);
 });
 
 test("WebGL scene model retains default graph axes and surface topology", () => {
