@@ -243,6 +243,32 @@ h2 {
   margin: 0;
 }
 
+.katex-transition-overlay {
+  position: absolute;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.katex-transition-source-hidden,
+.katex-transition-target-hidden {
+  color: transparent;
+}
+
+.katex-transition-source-hidden *,
+.katex-transition-target-hidden * {
+  color: transparent !important;
+}
+
+.katex-transition-fallback-source {
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.katex-transition-fallback-target {
+  opacity: 1;
+  transition: opacity 160ms ease;
+}
+
 .object-preview__graph {
   padding: 1rem;
 }
