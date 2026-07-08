@@ -202,7 +202,11 @@ Visual smoke cases:
   support and visual fidelity.
 - Add optional semantic token IDs or author aliases after the arbitrary-KaTeX
   heuristic path works.
-- Evaluate whether Three.js is worth using for this 2D compositor, or whether a
-  tiny direct WebGL renderer is better for bundle size.
 - Add performance budgets after measuring token count, texture atlas size, and
   frame time on slower devices.
+
+## Implementation Note
+
+The V1 implementation uses a small direct WebGL compositor for screen-space
+token quads. It does not use Three.js for equation transitions because the
+renderer does not need scene graph, camera, lighting, or depth behavior.
