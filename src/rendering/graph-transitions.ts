@@ -1,5 +1,6 @@
 import type { KpSemanticObject } from "../semantic/document.ts";
 import type {
+  Axis3DObject,
   Graph3DObject,
   Graph3DSurfaceMode,
   Graph3DSurfaceResolution,
@@ -55,6 +56,72 @@ export interface GraphSurfaceModeTransition {
   readonly targetMode: Graph3DSurfaceMode;
   readonly uSampleCount: number;
   readonly vSampleCount: number;
+}
+
+export interface Graph3DTo2DAxisTransition {
+  readonly axisId: string;
+  readonly orientation: Axis3DObject["orientation"];
+  readonly sourceOpacity: number;
+  readonly targetOpacity: number;
+  readonly targetVisibility: "hidden" | "visible";
+}
+
+export interface Graph3DTo2DTransitionDescriptor {
+  readonly axes: readonly Graph3DTo2DAxisTransition[];
+  readonly camera: {
+    readonly from: Graph3DObject["camera"];
+    readonly target: Graph3DObject["camera"];
+    readonly targetPlane: "xy";
+  };
+  readonly flatten: {
+    readonly fromZScale: number;
+    readonly targetZ: number;
+    readonly toZScale: number;
+  };
+  readonly graphId: string;
+  readonly kind: "graph-3d-to-2d";
+}
+
+export function createGraph3DTo2DTransitionDescriptor(
+  objects: readonly KpSemanticObject[],
+  graph: Graph3DObject
+): Graph3DTo2DTransitionDescriptor {
+  const axes = objects
+    .filter(
+      (object): object is Axis3DObject =>
+        object.type === "axis-3d" && object.graphId === graph.id
+    )
+    .map((axis): Graph3DTo2DAxisTransition => {
+      const targetVisibility = axis.orientation === "z" ? "hidden" : "visible";
+
+      return {
+        axisId: axis.id,
+        orientation: axis.orientation,
+        sourceOpacity: 1,
+        targetOpacity: targetVisibility === "hidden" ? 0 : 1,
+        targetVisibility
+      };
+    });
+
+  return {
+    axes,
+    camera: {
+      from: graph.camera,
+      target: {
+        ...graph.camera,
+        azimuthDegrees: 0,
+        elevationDegrees: -90
+      },
+      targetPlane: "xy"
+    },
+    flatten: {
+      fromZScale: 1,
+      targetZ: 0,
+      toZScale: 0
+    },
+    graphId: graph.id,
+    kind: "graph-3d-to-2d"
+  };
 }
 
 export function createGraphSurfaceModeTransition(

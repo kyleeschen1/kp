@@ -2,6 +2,7 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import {
+  createGraph3DTo2DTransitionDescriptor,
   createGraphSurfaceModeTransition,
   createGraphSurfaceMorphTargets
 } from "../src/rendering/graph-transitions.ts";
@@ -80,4 +81,37 @@ test("createGraphSurfaceMorphTargets exposes current mode uv topology", () => {
   assert.equal(target?.vSampleCount, 19);
   assert.equal(target?.vertices.length, 703);
   assert.equal(target?.uv.length, 703);
+});
+
+test("createGraph3DTo2DTransitionDescriptor faces the xy plane and fades z", () => {
+  const scene = createDefaultGraph3DScene();
+  const graph = scene[0] as Graph3DObject;
+  const descriptor = createGraph3DTo2DTransitionDescriptor(scene, graph);
+
+  assert.equal(descriptor.kind, "graph-3d-to-2d");
+  assert.equal(descriptor.graphId, "saddle-orbit-graph");
+  assert.deepEqual(descriptor.camera.from, graph.camera);
+  assert.deepEqual(descriptor.camera.target, {
+    ...graph.camera,
+    azimuthDegrees: 0,
+    elevationDegrees: -90
+  });
+  assert.equal(descriptor.camera.targetPlane, "xy");
+  assert.deepEqual(descriptor.flatten, {
+    fromZScale: 1,
+    targetZ: 0,
+    toZScale: 0
+  });
+  assert.deepEqual(
+    descriptor.axes.map((axis) => ({
+      orientation: axis.orientation,
+      targetOpacity: axis.targetOpacity,
+      targetVisibility: axis.targetVisibility
+    })),
+    [
+      { orientation: "x", targetOpacity: 1, targetVisibility: "visible" },
+      { orientation: "y", targetOpacity: 1, targetVisibility: "visible" },
+      { orientation: "z", targetOpacity: 0, targetVisibility: "hidden" }
+    ]
+  );
 });
