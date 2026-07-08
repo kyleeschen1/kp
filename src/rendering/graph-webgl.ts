@@ -29,6 +29,12 @@ export function createGraph3DWebGLRendererDescriptor(): Graph3DWebGLRendererDesc
   };
 }
 
+export function canReuseGraph3DWebGLShell(
+  status: string | undefined
+): boolean {
+  return status === "ready";
+}
+
 export interface Graph3DWebGLSceneModel {
   axes: readonly Axis3DObject[];
   camera: Graph3DObject["camera"];

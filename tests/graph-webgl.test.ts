@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
+  canReuseGraph3DWebGLShell,
   createGraph3DWebGLSceneModel,
   createGraph3DWebGLRendererDescriptor,
   GRAPH_3D_WEBGL_RENDERER_KIND
@@ -42,6 +43,13 @@ test("WebGL shell renderer does not import Three.js directly", () => {
   );
 
   assert.doesNotMatch(source, /from "three"/);
+});
+
+test("WebGL shell reuse is limited to already-ready canvas shells", () => {
+  assert.equal(canReuseGraph3DWebGLShell("ready"), true);
+  assert.equal(canReuseGraph3DWebGLShell("pending"), false);
+  assert.equal(canReuseGraph3DWebGLShell("fallback"), false);
+  assert.equal(canReuseGraph3DWebGLShell(undefined), false);
 });
 
 test("WebGL scene model retains default graph axes and surface topology", () => {

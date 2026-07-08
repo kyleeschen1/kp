@@ -22,7 +22,10 @@ import {
   type Graph3DLightScalarSetting
 } from "./editor/state.ts";
 import { occludedAxisColor } from "./rendering/graph-svg.ts";
-import { renderGraph3DWebGLShell } from "./rendering/graph-webgl.ts";
+import {
+  canReuseGraph3DWebGLShell,
+  renderGraph3DWebGLShell
+} from "./rendering/graph-webgl.ts";
 import type { KpSemanticObject } from "./semantic/document.ts";
 import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
@@ -159,6 +162,19 @@ function hydrateGraph3DWebGL(
     }
 
     client.hydrateGraph3DWebGLShells(root, objects);
+  });
+}
+
+function hydrateGraph3DWebGLShell(
+  shell: HTMLElement,
+  objects: readonly KpSemanticObject[]
+): void {
+  void loadGraph3DWebGLClient().then((client) => {
+    if (!shell.isConnected) {
+      return;
+    }
+
+    client.hydrateGraph3DWebGLShell(shell, objects);
   });
 }
 
@@ -403,6 +419,14 @@ function renderGraph3DPreview(graphId: string): void {
   }
 
   const existingShell = graphContainer.querySelector<HTMLElement>(".graph-webgl");
+
+  if (
+    existingShell !== null &&
+    canReuseGraph3DWebGLShell(existingShell.dataset["kpWebglStatus"])
+  ) {
+    hydrateGraph3DWebGLShell(existingShell, editorDocument.objects);
+    return;
+  }
 
   if (existingShell !== null) {
     disposeGraph3DWebGLShell(existingShell);
