@@ -92,6 +92,8 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-kp-graph-light-setting="ambient"/);
   assert.match(html, /data-kp-graph-light-setting="diffuse"/);
   assert.match(html, /data-kp-graph-light-setting="depthHaze"/);
+  assert.match(html, /data-kp-graph-light-setting="specular"/);
+  assert.match(html, /data-kp-graph-light-setting="rim"/);
   assert.match(html, /data-kp-graph-color-target="occluded-axis"/);
   assert.match(html, /data-kp-graph-surface-parameter="saddle-denominator"/);
   assert.match(html, /data-graph-id="saddle-orbit-graph"/);
@@ -105,6 +107,8 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /step="0.01"/);
   assert.match(html, /value="0.450"/);
   assert.match(html, /value="0.400"/);
+  assert.match(html, /value="0.120"/);
+  assert.match(html, /value="0.080"/);
   assert.match(html, /max="100"/);
   assert.match(html, /value="44"/);
   assert.match(html, /min="1"/);

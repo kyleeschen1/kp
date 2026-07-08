@@ -411,6 +411,8 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /data-kp-light-ambient="0.450"/);
   assert.match(svg, /data-kp-light-diffuse="0.400"/);
   assert.match(svg, /data-kp-light-depth-haze="1"/);
+  assert.match(svg, /data-kp-light-specular="0.120"/);
+  assert.match(svg, /data-kp-light-rim="0.080"/);
   assert.match(svg, /data-kp-debug-depth-overlay="false"/);
   assert.match(svg, /data-kp-debug-surface-mesh="false"/);
   assert.doesNotMatch(svg, /class="graph-debug-overlay"/);
@@ -456,11 +458,13 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /graph-axis--base-plane/);
   assert.match(svg, /graph-axis--subtle/);
   assert.match(svg, /class="graph-surface__quad"/);
-  assert.match(svg, /data-kp-lighting-model="ambient-diffuse-depth-haze"/);
+  assert.match(svg, /data-kp-lighting-model="ambient-diffuse-specular-rim-depth-haze"/);
   assert.match(svg, /class="graph-surface__quad"[^>]+data-kp-light-direction="-0.350,-0.450,0.820"/);
   assert.match(svg, /class="graph-surface__quad"[^>]+data-kp-light-ambient="0.450"/);
   assert.match(svg, /class="graph-surface__quad"[^>]+data-kp-light-diffuse="0.400"/);
   assert.match(svg, /class="graph-surface__quad"[^>]+data-kp-light-depth-haze="1"/);
+  assert.match(svg, /class="graph-surface__quad"[^>]+data-kp-light-specular="0.120"/);
+  assert.match(svg, /class="graph-surface__quad"[^>]+data-kp-light-rim="0.080"/);
   assert.match(svg, /data-kp-depth-haze="/);
   assert.match(svg, /class="graph-surface__edge-outline"/);
   assert.match(svg, /class="graph-surface__edge-outline"[^>]+data-kp-visibility-source="depth-buffer"/);

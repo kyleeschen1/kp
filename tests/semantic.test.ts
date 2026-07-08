@@ -244,7 +244,9 @@ test("createGraph3DObject creates a semantic graph object with a third axis", ()
       direction: { x: -0.35, y: -0.45, z: 0.82 },
       ambient: 0.45,
       diffuse: 0.4,
-      depthHaze: 1
+      depthHaze: 1,
+      specular: 0.12,
+      rim: 0.08
     },
     camera: {
       azimuthDegrees: 35,
@@ -301,7 +303,9 @@ test("createGraph3DObject preserves explicit graph light settings", () => {
       direction: { x: 0, y: -0.25, z: 1 },
       ambient: 0.35,
       diffuse: 0.55,
-      depthHaze: 0.5
+      depthHaze: 0.5,
+      specular: 2,
+      rim: -1
     },
     camera: {
       azimuthDegrees: 35,
@@ -315,7 +319,9 @@ test("createGraph3DObject preserves explicit graph light settings", () => {
     direction: { x: 0, y: -0.25, z: 1 },
     ambient: 0.35,
     diffuse: 0.55,
-    depthHaze: 0.5
+    depthHaze: 0.5,
+    specular: 1,
+    rim: 0
   });
 });
 

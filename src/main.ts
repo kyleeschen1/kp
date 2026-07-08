@@ -352,7 +352,13 @@ function isGraph3DLightPresetId(
 function isGraph3DLightScalarSetting(
   value: string | undefined
 ): value is Graph3DLightScalarSetting {
-  return value === "ambient" || value === "diffuse" || value === "depthHaze";
+  return (
+    value === "ambient" ||
+    value === "diffuse" ||
+    value === "depthHaze" ||
+    value === "specular" ||
+    value === "rim"
+  );
 }
 
 function formatNumber(value: number): string {

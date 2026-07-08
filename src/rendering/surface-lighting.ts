@@ -7,6 +7,8 @@ export interface SurfaceLight {
   ambient: number;
   diffuse: number;
   depthHaze: number;
+  specular: number;
+  rim: number;
 }
 
 export interface SurfaceQuadFillInput {
@@ -15,6 +17,7 @@ export interface SurfaceQuadFillInput {
   facing: SurfaceFacing;
   light: SurfaceLight;
   normal: GraphPoint3D;
+  viewDirection: GraphPoint3D;
   xDomain: NumericDomain;
   yDomain: NumericDomain;
 }
@@ -23,7 +26,9 @@ export const DEFAULT_SURFACE_LIGHT: SurfaceLight = {
   direction: { x: -0.35, y: -0.45, z: 0.82 },
   ambient: 0.45,
   diffuse: 0.4,
-  depthHaze: 1
+  depthHaze: 1,
+  specular: 0.12,
+  rim: 0.08
 };
 
 export function surfaceQuadFill(input: SurfaceQuadFillInput): string {
@@ -31,11 +36,22 @@ export function surfaceQuadFill(input: SurfaceQuadFillInput): string {
   const maxY = Math.max(Math.abs(input.yDomain[0]), Math.abs(input.yDomain[1]));
   const zSpan = Math.max((Math.max(maxX, maxY) ** 2) / 4, 1);
   const normalizedHeight = clamp((input.center.z + zSpan) / (zSpan * 2), 0, 1);
+  const normal = normalizePoint3D(input.normal);
   const lightDirection = normalizePoint3D(input.light.direction);
+  const viewDirection = normalizePoint3D(input.viewDirection);
+  const diffuseAlignment = Math.max(0, dotPoint3D(normal, lightDirection));
+  const specularAlignment = diffuseAlignment === 0
+    ? 0
+    : Math.max(
+        0,
+        dotPoint3D(reflectPoint3D(lightDirection, normal), viewDirection)
+      );
+  const rimAlignment = 1 - Math.abs(dotPoint3D(normal, viewDirection));
   const brightness = clamp(
     input.light.ambient +
-      Math.max(0, dotPoint3D(input.normal, lightDirection)) *
-        input.light.diffuse,
+      diffuseAlignment * input.light.diffuse +
+      Math.pow(specularAlignment, 16) * input.light.specular +
+      Math.pow(rimAlignment, 2) * input.light.rim,
     0,
     0.9
   );
@@ -73,6 +89,16 @@ function normalizePoint3D(point: GraphPoint3D): GraphPoint3D {
 
 function dotPoint3D(left: GraphPoint3D, right: GraphPoint3D): number {
   return left.x * right.x + left.y * right.y + left.z * right.z;
+}
+
+function reflectPoint3D(vector: GraphPoint3D, normal: GraphPoint3D): GraphPoint3D {
+  const scale = 2 * dotPoint3D(normal, vector);
+
+  return normalizePoint3D({
+    x: scale * normal.x - vector.x,
+    y: scale * normal.y - vector.y,
+    z: scale * normal.z - vector.z
+  });
 }
 
 function clamp(value: number, min: number, max: number): number {

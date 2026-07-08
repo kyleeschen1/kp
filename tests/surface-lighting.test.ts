@@ -14,6 +14,7 @@ test("surfaceQuadFill computes the default front-facing lighting color", () => {
       facing: "front",
       light: DEFAULT_SURFACE_LIGHT,
       normal: { x: 0, y: 0, z: 1 },
+      viewDirection: { x: 0, y: 0, z: 1 },
       xDomain: [-3, 3],
       yDomain: [-3, 3]
     }),
@@ -29,6 +30,7 @@ test("surfaceQuadFill keeps back-facing cells in a lighter blue family", () => {
       facing: "back",
       light: DEFAULT_SURFACE_LIGHT,
       normal: { x: 0, y: 0, z: 1 },
+      viewDirection: { x: 0, y: 0, z: 1 },
       xDomain: [-3, 3],
       yDomain: [-3, 3]
     }),
@@ -46,12 +48,61 @@ test("surfaceQuadFill uses custom ambient and diffuse intensity", () => {
         direction: { x: -0.35, y: -0.45, z: 0.82 },
         ambient: 0.2,
         diffuse: 0,
-        depthHaze: 1
+        depthHaze: 1,
+        specular: 0,
+        rim: 0
       },
       normal: { x: 0, y: 0, z: 1 },
+      viewDirection: { x: 0, y: 0, z: 1 },
       xDomain: [-3, 3],
       yDomain: [-3, 3]
     }),
     "hsl(197 58% 46%)"
+  );
+});
+
+test("surfaceQuadFill adds specular brightness when light reflects toward the viewer", () => {
+  assert.equal(
+    surfaceQuadFill({
+      center: { x: 0, y: 0, z: 0 },
+      depthHaze: 0,
+      facing: "front",
+      light: {
+        direction: { x: 0, y: 0, z: 1 },
+        ambient: 0,
+        diffuse: 0,
+        depthHaze: 1,
+        specular: 0.4,
+        rim: 0
+      },
+      normal: { x: 0, y: 0, z: 1 },
+      viewDirection: { x: 0, y: 0, z: 1 },
+      xDomain: [-3, 3],
+      yDomain: [-3, 3]
+    }),
+    "hsl(197 58% 50%)"
+  );
+});
+
+test("surfaceQuadFill adds rim brightness at grazing view angles", () => {
+  assert.equal(
+    surfaceQuadFill({
+      center: { x: 0, y: 0, z: 0 },
+      depthHaze: 0,
+      facing: "front",
+      light: {
+        direction: { x: 0, y: 0, z: 1 },
+        ambient: 0,
+        diffuse: 0,
+        depthHaze: 1,
+        specular: 0,
+        rim: 0.4
+      },
+      normal: { x: 1, y: 0, z: 0 },
+      viewDirection: { x: 0, y: 0, z: 1 },
+      xDomain: [-3, 3],
+      yDomain: [-3, 3]
+    }),
+    "hsl(197 58% 50%)"
   );
 });

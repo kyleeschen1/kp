@@ -17,7 +17,12 @@ export const GRAPH_3D_LIGHT_PRESET_IDS = [
 ] as const;
 
 export type Graph3DLightPresetId = typeof GRAPH_3D_LIGHT_PRESET_IDS[number];
-export type Graph3DLightScalarSetting = "ambient" | "diffuse" | "depthHaze";
+export type Graph3DLightScalarSetting =
+  | "ambient"
+  | "diffuse"
+  | "depthHaze"
+  | "specular"
+  | "rim";
 
 export const GRAPH_3D_LIGHT_PRESETS: Record<
   Graph3DLightPresetId,
@@ -28,13 +33,17 @@ export const GRAPH_3D_LIGHT_PRESETS: Record<
     direction: { x: -0.85, y: -0.25, z: 0.45 },
     ambient: 0.3,
     diffuse: 0.65,
-    depthHaze: 1
+    depthHaze: 1,
+    specular: 0.22,
+    rim: 0.12
   },
   flat: {
     direction: { x: -0.35, y: -0.45, z: 0.82 },
     ambient: 0.65,
     diffuse: 0.08,
-    depthHaze: 0.35
+    depthHaze: 0.35,
+    specular: 0.02,
+    rim: 0.02
   }
 };
 
@@ -201,7 +210,9 @@ function cloneLightSettings(light: Graph3DLightSettings): Graph3DLightSettings {
     direction: { ...light.direction },
     ambient: light.ambient,
     diffuse: light.diffuse,
-    depthHaze: light.depthHaze
+    depthHaze: light.depthHaze,
+    specular: light.specular,
+    rim: light.rim
   };
 }
 
@@ -215,7 +226,9 @@ function graph3DLightSettingsEqual(
     left.direction.z === right.direction.z &&
     left.ambient === right.ambient &&
     left.diffuse === right.diffuse &&
-    left.depthHaze === right.depthHaze
+    left.depthHaze === right.depthHaze &&
+    left.specular === right.specular &&
+    left.rim === right.rim
   );
 }
 

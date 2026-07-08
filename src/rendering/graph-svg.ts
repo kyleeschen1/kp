@@ -344,7 +344,9 @@ function renderLightAttributes(graph: Graph3DObject): string {
     `data-kp-light-direction="${formatPoint3D(graph.light.direction)}"`,
     `data-kp-light-ambient="${formatNumber(graph.light.ambient)}"`,
     `data-kp-light-diffuse="${formatNumber(graph.light.diffuse)}"`,
-    `data-kp-light-depth-haze="${formatNumber(graph.light.depthHaze)}"`
+    `data-kp-light-depth-haze="${formatNumber(graph.light.depthHaze)}"`,
+    `data-kp-light-specular="${formatNumber(graph.light.specular)}"`,
+    `data-kp-light-rim="${formatNumber(graph.light.rim)}"`
   ].join(" ");
 }
 
@@ -786,7 +788,7 @@ function renderSurfaceQuad(
     .map((point) => `${formatNumber(point.x)},${formatNumber(point.y)}`)
     .join(" ");
 
-  return `<polygon class="graph-surface__quad" points="${points}" data-kp-object="${escapeHtml(surface.id)}" data-kp-cell="${quad.rowIndex},${quad.columnIndex}" data-kp-facing="${quad.facing}" data-kp-surface-depth="${formatNumber(quad.averageDepth)}" data-kp-depth-haze="${formatNumber(quad.depthHaze)}" data-kp-lighting-model="ambient-diffuse-depth-haze" ${renderLightAttributes(graph)} data-kp-type="surface-3d" fill="${quad.fill}" fill-opacity="1" opacity="1" />`;
+  return `<polygon class="graph-surface__quad" points="${points}" data-kp-object="${escapeHtml(surface.id)}" data-kp-cell="${quad.rowIndex},${quad.columnIndex}" data-kp-facing="${quad.facing}" data-kp-surface-depth="${formatNumber(quad.averageDepth)}" data-kp-depth-haze="${formatNumber(quad.depthHaze)}" data-kp-lighting-model="ambient-diffuse-specular-rim-depth-haze" ${renderLightAttributes(graph)} data-kp-type="surface-3d" fill="${quad.fill}" fill-opacity="1" opacity="1" />`;
 }
 
 function renderSurfacePath(
@@ -948,6 +950,7 @@ function createSaddleSurfaceQuads(
 ): readonly SurfaceQuad3D[] {
   const quads: SurfaceQuad3D[] = [];
   const gradient = compileSurfaceGradient(surface);
+  const viewDirection = graphCameraDirection(graph);
 
   for (let rowIndex = 0; rowIndex < grid.length - 1; rowIndex += 1) {
     const row = grid[rowIndex];
@@ -1007,6 +1010,7 @@ function createSaddleSurfaceQuads(
           facing,
           light: graph.light,
           normal,
+          viewDirection,
           xDomain: surface.xDomain,
           yDomain: surface.yDomain
         }),

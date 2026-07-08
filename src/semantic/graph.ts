@@ -23,7 +23,9 @@ export const DEFAULT_GRAPH_3D_LIGHT_SETTINGS: Graph3DLightSettings = {
   direction: { x: -0.35, y: -0.45, z: 0.82 },
   ambient: 0.45,
   diffuse: 0.4,
-  depthHaze: 1
+  depthHaze: 1,
+  specular: 0.12,
+  rim: 0.08
 };
 
 export interface GraphPoint2D {
@@ -85,6 +87,8 @@ export interface Graph3DLightSettings {
   ambient: number;
   diffuse: number;
   depthHaze: number;
+  specular: number;
+  rim: number;
 }
 
 export interface Graph3DObject {
@@ -260,6 +264,16 @@ export function createGraph3DObject(
       ),
       depthHaze: clamp(
         input.light?.depthHaze ?? DEFAULT_GRAPH_3D_LIGHT_SETTINGS.depthHaze,
+        0,
+        1
+      ),
+      specular: clamp(
+        input.light?.specular ?? DEFAULT_GRAPH_3D_LIGHT_SETTINGS.specular,
+        0,
+        1
+      ),
+      rim: clamp(
+        input.light?.rim ?? DEFAULT_GRAPH_3D_LIGHT_SETTINGS.rim,
         0,
         1
       )

@@ -157,6 +157,8 @@ function renderGraph3DControls(
       ${renderGraphLightScalarControl(graph, "ambient", "ambient light")}
       ${renderGraphLightScalarControl(graph, "diffuse", "diffuse light")}
       ${renderGraphLightScalarControl(graph, "depthHaze", "depth haze")}
+      ${renderGraphLightScalarControl(graph, "specular", "specular")}
+      ${renderGraphLightScalarControl(graph, "rim", "rim")}
       ${saddleSurface === undefined ? "" : renderSaddleDenominatorControl(graph, saddleSurface)}
     </div>
   `;
