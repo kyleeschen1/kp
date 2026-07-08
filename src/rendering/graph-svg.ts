@@ -298,7 +298,7 @@ export function renderGraph3DToSvg(
   // surface, then visible pieces above it. This gives SVG a lightweight
   // substitute for depth-buffered axis occlusion.
   return `
-    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} ${renderPerformanceBudgetAttributes(renderBudget)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
+    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" ${renderLightAttributes(graph)} data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} ${renderPerformanceBudgetAttributes(renderBudget)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
       <rect class="graph-svg__background" x="0" y="0" width="${graph.width}" height="${graph.height}" rx="8" />
       ${renderedSurfaces.map((surface) => renderSurface3D(surface, graph, depthScene, renderedSurfaces)).join("")}
       ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, renderedSurfaces, "hidden")).join("")}
@@ -337,6 +337,15 @@ function renderPerformanceBudgetAttributes(
     `data-kp-render-budget-overlap-count="${result.cost.overlapCount}"`,
     `data-kp-render-budget-max-overlap-count="${result.budget.maxOverlapCount}"`,
     `data-kp-render-budget-issue-count="${result.issues.length}"`
+  ].join(" ");
+}
+
+function renderLightAttributes(graph: Graph3DObject): string {
+  return [
+    `data-kp-light-direction="${formatPoint3D(graph.light.direction)}"`,
+    `data-kp-light-ambient="${formatNumber(graph.light.ambient)}"`,
+    `data-kp-light-diffuse="${formatNumber(graph.light.diffuse)}"`,
+    `data-kp-light-depth-haze="${formatNumber(graph.light.depthHaze)}"`
   ].join(" ");
 }
 
@@ -740,7 +749,7 @@ function renderSurface3D(
     <g class="graph-surface" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg" data-kp-type="surface-3d">
       ${renderSurfaceEdgeOutline(surface, edgeSegments, graph, "hidden", edgeResult.analyticSplitCount)}
       <g class="graph-surface__quads" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-quads" data-kp-type="surface-3d" data-kp-depth-order="back-to-front">
-        ${surfaceQuadsBackToFront(quads).map((quad) => renderSurfaceQuad(surface, quad)).join("")}
+        ${surfaceQuadsBackToFront(quads).map((quad) => renderSurfaceQuad(surface, quad, graph)).join("")}
       </g>
       ${wireframe}
       ${renderSurfaceEdgeOutline(surface, edgeSegments, graph, "visible", edgeResult.analyticSplitCount)}
@@ -769,12 +778,16 @@ function surfaceQuadsBackToFront(
   );
 }
 
-function renderSurfaceQuad(surface: Surface3DObject, quad: SurfaceQuad3D): string {
+function renderSurfaceQuad(
+  surface: Surface3DObject,
+  quad: SurfaceQuad3D,
+  graph: Graph3DObject
+): string {
   const points = quad.projectedCorners
     .map((point) => `${formatNumber(point.x)},${formatNumber(point.y)}`)
     .join(" ");
 
-  return `<polygon class="graph-surface__quad" points="${points}" data-kp-object="${escapeHtml(surface.id)}" data-kp-cell="${quad.rowIndex},${quad.columnIndex}" data-kp-facing="${quad.facing}" data-kp-surface-depth="${formatNumber(quad.averageDepth)}" data-kp-depth-haze="${formatNumber(quad.depthHaze)}" data-kp-lighting-model="ambient-diffuse-depth-haze" data-kp-type="surface-3d" fill="${quad.fill}" fill-opacity="1" opacity="1" />`;
+  return `<polygon class="graph-surface__quad" points="${points}" data-kp-object="${escapeHtml(surface.id)}" data-kp-cell="${quad.rowIndex},${quad.columnIndex}" data-kp-facing="${quad.facing}" data-kp-surface-depth="${formatNumber(quad.averageDepth)}" data-kp-depth-haze="${formatNumber(quad.depthHaze)}" data-kp-lighting-model="ambient-diffuse-depth-haze" ${renderLightAttributes(graph)} data-kp-type="surface-3d" fill="${quad.fill}" fill-opacity="1" opacity="1" />`;
 }
 
 function renderSurfacePath(
@@ -1335,6 +1348,10 @@ function formatPoints(points: readonly GraphPoint[]): string {
 
 function formatPoint(point: GraphPoint): string {
   return `${formatNumber(point.x)},${formatNumber(point.y)}`;
+}
+
+function formatPoint3D(point: GraphPoint3D): string {
+  return `${formatNumber(point.x)},${formatNumber(point.y)},${formatNumber(point.z)}`;
 }
 
 function sampleDomain(
