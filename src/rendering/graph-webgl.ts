@@ -7,7 +7,9 @@ import {
   LineSegments,
   Mesh,
   MeshBasicMaterial,
-  Scene
+  OrthographicCamera,
+  Scene,
+  WebGLRenderer
 } from "three";
 import type { KpSemanticObject } from "../semantic/document.ts";
 import type {
@@ -66,6 +68,8 @@ export interface Graph3DWebGLThreeScene {
   surfaceMeshes: readonly Mesh[];
 }
 
+const activeGraph3DWebGLRenderers = new WeakMap<HTMLElement, WebGLRenderer>();
+
 export function createGraph3DWebGLSceneModel(
   objects: readonly KpSemanticObject[],
   graph: Graph3DObject
@@ -120,6 +124,13 @@ export function createGraph3DWebGLThreeScene(
   const axisLines: LineSegments[] = [];
 
   root.name = `${model.graph.id}-webgl-root`;
+  root.position.set(
+    (model.graph.camera.origin[0] - model.graph.width / 2) /
+      model.graph.camera.scale,
+    (model.graph.height / 2 - model.graph.camera.origin[1]) /
+      model.graph.camera.scale,
+    0
+  );
   root.userData = {
     kpObject: model.graph.id,
     kpRenderer: GRAPH_3D_WEBGL_RENDERER_KIND
@@ -149,6 +160,115 @@ export function createGraph3DWebGLThreeScene(
     surfaceMeshLines,
     surfaceMeshes
   };
+}
+
+export function createGraph3DWebGLCamera(
+  graph: Graph3DObject
+): OrthographicCamera {
+  const scale = Math.max(graph.camera.scale, 1);
+  const viewWidth = graph.width / scale;
+  const viewHeight = graph.height / scale;
+  const domainRadius =
+    Math.max(
+      graph.xDomain[1] - graph.xDomain[0],
+      graph.yDomain[1] - graph.yDomain[0],
+      graph.zDomain[1] - graph.zDomain[0]
+    ) * 4;
+  const radius = Math.max(domainRadius, 16);
+  const azimuth = degreesToRadians(graph.camera.azimuthDegrees);
+  const elevation = degreesToRadians(graph.camera.elevationDegrees);
+  const horizontalRadius = radius * Math.cos(elevation);
+  const camera = new OrthographicCamera(
+    -viewWidth / 2,
+    viewWidth / 2,
+    viewHeight / 2,
+    -viewHeight / 2,
+    0.1,
+    radius * 4
+  );
+
+  camera.position.set(
+    horizontalRadius * Math.cos(azimuth),
+    radius * Math.sin(elevation),
+    horizontalRadius * Math.sin(azimuth)
+  );
+  camera.up.set(0, 1, 0);
+  camera.lookAt(0, 0, 0);
+  camera.updateProjectionMatrix();
+
+  return camera;
+}
+
+export function hydrateGraph3DWebGLShells(
+  root: ParentNode,
+  objects: readonly KpSemanticObject[]
+): void {
+  root
+    .querySelectorAll<HTMLElement>(".graph-webgl")
+    .forEach((shell) => hydrateGraph3DWebGLShell(shell, objects));
+}
+
+export function hydrateGraph3DWebGLShell(
+  shell: HTMLElement,
+  objects: readonly KpSemanticObject[]
+): boolean {
+  const graphId = shell.dataset["kpObject"];
+  const canvas = shell.querySelector<HTMLCanvasElement>(".graph-webgl__canvas");
+  const graph = objects.find(
+    (object): object is Graph3DObject =>
+      object.type === "graph-3d" && object.id === graphId
+  );
+
+  if (graphId === undefined || canvas === null || graph === undefined) {
+    return false;
+  }
+
+  disposeGraph3DWebGLShell(shell);
+
+  try {
+    const model = createGraph3DWebGLSceneModel(objects, graph);
+    const threeScene = createGraph3DWebGLThreeScene(model);
+    const camera = createGraph3DWebGLCamera(graph);
+    const renderer = new WebGLRenderer({
+      antialias: true,
+      canvas
+    });
+
+    renderer.setClearColor(0xfffdf8, 1);
+    renderer.setPixelRatio(graph3DWebGLPixelRatio());
+    renderer.setSize(graph.width, graph.height, false);
+    renderer.render(threeScene.scene, camera);
+
+    activeGraph3DWebGLRenderers.set(shell, renderer);
+    canvas.setAttribute("aria-hidden", "false");
+    shell.dataset["kpWebglStatus"] = "ready";
+    shell.dataset["kpWebglError"] = "";
+
+    return true;
+  } catch (error: unknown) {
+    shell.dataset["kpWebglStatus"] = "fallback";
+    shell.dataset["kpWebglError"] =
+      error instanceof Error ? error.message : "WebGL render failed.";
+
+    return false;
+  }
+}
+
+export function disposeGraph3DWebGLShell(shell: HTMLElement): void {
+  const renderer = activeGraph3DWebGLRenderers.get(shell);
+
+  if (renderer === undefined) {
+    return;
+  }
+
+  renderer.dispose();
+  activeGraph3DWebGLRenderers.delete(shell);
+}
+
+export function disposeGraph3DWebGLShells(root: ParentNode): void {
+  root
+    .querySelectorAll<HTMLElement>(".graph-webgl")
+    .forEach((shell) => disposeGraph3DWebGLShell(shell));
 }
 
 function createMeshSurfaceModel(
@@ -351,6 +471,14 @@ function graphPointToThreePosition(
   point: GraphPoint3D
 ): readonly [number, number, number] {
   return [point.x, point.z, point.y];
+}
+
+function degreesToRadians(degrees: number): number {
+  return (degrees * Math.PI) / 180;
+}
+
+function graph3DWebGLPixelRatio(): number {
+  return Math.min(window.devicePixelRatio || 1, 2);
 }
 
 function escapeHtml(value: string): string {

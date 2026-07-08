@@ -22,7 +22,12 @@ import {
   type Graph3DLightScalarSetting
 } from "./editor/state.ts";
 import { occludedAxisColor } from "./rendering/graph-svg.ts";
-import { renderGraph3DWebGLShell } from "./rendering/graph-webgl.ts";
+import {
+  disposeGraph3DWebGLShell,
+  disposeGraph3DWebGLShells,
+  hydrateGraph3DWebGLShells,
+  renderGraph3DWebGLShell
+} from "./rendering/graph-webgl.ts";
 import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   type Graph3DObject,
@@ -38,7 +43,7 @@ if (app === null) {
 const appRoot = app;
 let editorDocument = createInitialEditorDocument();
 
-appRoot.innerHTML = renderEditorDocument(editorDocument);
+renderEditor();
 
 appRoot.addEventListener("click", (event) => {
   if (!(event.target instanceof HTMLButtonElement)) {
@@ -128,13 +133,19 @@ function addEquationGraphFromInput(): void {
 
   try {
     editorDocument = addLatexEquationGraph(editorDocument, input.value);
-    appRoot.innerHTML = renderEditorDocument(editorDocument);
+    renderEditor();
   } catch (error: unknown) {
     if (errorOutput !== null) {
       errorOutput.textContent =
         error instanceof Error ? error.message : "Equation could not be parsed.";
     }
   }
+}
+
+function renderEditor(): void {
+  disposeGraph3DWebGLShells(appRoot);
+  appRoot.innerHTML = renderEditorDocument(editorDocument);
+  hydrateGraph3DWebGLShells(appRoot, editorDocument.objects);
 }
 
 function updateGraphAzimuthFromInput(input: HTMLInputElement): void {
@@ -355,10 +366,17 @@ function renderGraph3DPreview(graphId: string): void {
     return;
   }
 
+  const existingShell = graphContainer.querySelector<HTMLElement>(".graph-webgl");
+
+  if (existingShell !== null) {
+    disposeGraph3DWebGLShell(existingShell);
+  }
+
   graphContainer.innerHTML = renderGraph3DWebGLShell(
     editorDocument.objects,
     graph
   );
+  hydrateGraph3DWebGLShells(graphContainer, editorDocument.objects);
 }
 
 function findGraph3D(graphId: string): Graph3DObject | undefined {

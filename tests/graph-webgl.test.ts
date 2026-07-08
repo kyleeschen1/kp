@@ -2,6 +2,7 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import {
+  createGraph3DWebGLCamera,
   createGraph3DWebGLSceneModel,
   createGraph3DWebGLThreeScene,
   createGraph3DWebGLRendererDescriptor,
@@ -85,4 +86,17 @@ test("WebGL Three scene builds retained geometry for surfaces, mesh lines, and a
     threeScene.axisLines[0]?.geometry.getAttribute("position").count,
     2
   );
+});
+
+test("WebGL camera derives an orthographic view from graph dimensions and camera settings", () => {
+  const scene = createDefaultGraph3DScene();
+  const graph = scene[0] as Graph3DObject;
+  const camera = createGraph3DWebGLCamera(graph);
+
+  assert.equal(camera.type, "OrthographicCamera");
+  assert.equal(camera.left, -graph.width / (2 * graph.camera.scale));
+  assert.equal(camera.right, graph.width / (2 * graph.camera.scale));
+  assert.equal(camera.top, graph.height / (2 * graph.camera.scale));
+  assert.equal(camera.bottom, -graph.height / (2 * graph.camera.scale));
+  assert.ok(camera.position.length() > 0);
 });
