@@ -184,7 +184,12 @@ function renderEquationMotionDemo(): string {
   ];
   const stateHtml = states
     .map((state) =>
-      renderEquationMotionState(state.step, state.latex, state.annotations)
+      renderEquationMotionState(
+        state.step,
+        state.latex,
+        state.annotations,
+        state.step === 0
+      )
     )
     .join("");
   const maxStep = states.length - 1;
@@ -205,10 +210,11 @@ function renderEquationMotionDemo(): string {
 function renderEquationMotionState(
   step: number,
   latex: string,
-  annotations: readonly EquationMotionAnnotation[]
+  annotations: readonly EquationMotionAnnotation[],
+  active: boolean
 ): string {
   return `
-    <div class="equation-motion__state" data-kp-equation-motion-state="${step}" data-kp-equation-motion-latex="${escapeHtml(latex)}">
+    <div class="equation-motion__state${active ? " equation-motion__state--active" : ""}" data-kp-equation-motion-state="${step}" data-kp-equation-motion-active="${active ? "true" : "false"}" data-kp-equation-motion-latex="${escapeHtml(latex)}" aria-hidden="${active ? "false" : "true"}">
       <div class="equation-motion__formula">${renderLatexToHtml(latex)}</div>
       <!-- Motion anchors are per-state measurement hooks; IDs repeat, so playback measures one state root at a time. -->
       <div class="equation-motion__motion-anchors" aria-hidden="true">

@@ -1,5 +1,115 @@
 import { expect, test } from "@playwright/test";
 
+test("editor equation motion demo uses semantic playback plans", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  const demo = page.locator("[data-kp-equation-motion-demo]");
+  const next = demo.locator('[data-action="equation-motion-next"]');
+  const rewind = demo.locator('[data-action="equation-motion-rewind"]');
+
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "0");
+  await expect(demo.locator('[data-kp-equation-motion-state="0"]')).toBeVisible();
+  await expect(demo.locator('[data-kp-equation-motion-state="1"]')).toBeHidden();
+  await expect(rewind).toBeDisabled();
+  await expect(next).toBeEnabled();
+
+  await next.click();
+
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-last-renderer",
+    "operation-plan"
+  );
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-latest-source",
+    "0"
+  );
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-latest-target",
+    "1"
+  );
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-progress", "1");
+  await expect(demo.locator('[data-kp-equation-motion-state="1"]')).toBeVisible();
+  await expect(demo.locator('[data-kp-equation-motion-state="0"]')).toBeHidden();
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-source-anchor-count",
+    "5"
+  );
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-target-anchor-count",
+    "9"
+  );
+  await expect(rewind).toBeEnabled();
+  await expect(next).toBeEnabled();
+
+  await next.click();
+
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "2");
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-latest-source",
+    "1"
+  );
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-latest-target",
+    "2"
+  );
+  await expect(demo.locator('[data-kp-equation-motion-state="2"]')).toBeVisible();
+
+  await next.click();
+
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "3");
+  await expect(demo.locator('[data-kp-equation-motion-state="3"]')).toBeVisible();
+  await expect(next).toBeDisabled();
+  await expect(rewind).toBeEnabled();
+
+  await rewind.click();
+
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "2");
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-latest-source",
+    "3"
+  );
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-latest-target",
+    "2"
+  );
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-progress", "1");
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-plan-progress",
+    "0"
+  );
+  await expect(demo.locator('[data-kp-equation-motion-state="2"]')).toBeVisible();
+  await expect(demo.locator('[data-kp-equation-motion-state="3"]')).toBeHidden();
+  await expect(next).toBeEnabled();
+  await expect(rewind).toBeEnabled();
+
+  const scrubbedProgress = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.5);
+
+    return {
+      progress: demoElement.dataset["kpEquationMotionProgress"],
+      sourceCount: demoElement.dataset["kpEquationMotionSourceAnchorCount"],
+      targetCount: demoElement.dataset["kpEquationMotionTargetAnchorCount"]
+    };
+  });
+
+  expect(scrubbedProgress).toEqual({
+    progress: "0.5",
+    sourceCount: "3",
+    targetCount: "5"
+  });
+});
+
 test("KaTeX WebGL transition blanks DOM during overlay and reveals target", async ({
   page
 }) => {
@@ -393,6 +503,10 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
 
 declare global {
   interface Window {
+    __kpEquationMotionSetProgress?: (
+      demo: HTMLElement,
+      progress: number
+    ) => void;
     __kpKatexTransitionPromise?: Promise<{
       renderer: string;
       sourceTokenCount: number;

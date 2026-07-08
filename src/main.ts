@@ -7,6 +7,11 @@ import {
 } from "./editor/editor.ts";
 import { compileDocumentAsset } from "./editor/compile-client.ts";
 import {
+  hydrateEquationMotionDemos,
+  setEquationMotionProgress,
+  stepEquationMotionDemo
+} from "./editor/equation-motion-demo-controller.ts";
+import {
   GRAPH_3D_SURFACE_MODE_IDS,
   GRAPH_3D_SURFACE_QUALITY_IDS,
   GRAPH_3D_VIEW_MODE_IDS,
@@ -52,19 +57,42 @@ type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
 let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
 
+declare global {
+  interface Window {
+    __kpEquationMotionSetProgress?: (
+      demo: HTMLElement,
+      progress: number
+    ) => void;
+  }
+}
+
+window.__kpEquationMotionSetProgress = setEquationMotionProgress;
+
 renderEditor();
 
 appRoot.addEventListener("click", (event) => {
-  if (!(event.target instanceof HTMLButtonElement)) {
+  if (!(event.target instanceof Element)) {
     return;
   }
 
-  switch (event.target.dataset["action"]) {
+  const button = event.target.closest<HTMLButtonElement>("button[data-action]");
+
+  if (button === null) {
+    return;
+  }
+
+  switch (button.dataset["action"]) {
     case "compile-document":
       void compileDocument();
       return;
     case "add-equation-graph":
       addEquationGraphFromInput();
+      return;
+    case "equation-motion-next":
+      stepEquationMotionDemo(button, 1);
+      return;
+    case "equation-motion-rewind":
+      stepEquationMotionDemo(button, -1);
       return;
   }
 });
@@ -164,6 +192,7 @@ function addEquationGraphFromInput(): void {
 function renderEditor(): void {
   disposeGraph3DWebGL(appRoot);
   appRoot.innerHTML = renderEditorDocument(editorDocument);
+  hydrateEquationMotionDemos(appRoot);
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);
 }
 

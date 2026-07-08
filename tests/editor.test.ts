@@ -30,12 +30,15 @@ import type {
 
 function extractEquationMotionStateBlock(html: string, state: number): string {
   const stateAttribute = `data-kp-equation-motion-state="${state}"`;
-  const stateStart = html.indexOf(stateAttribute);
+  const stateAttributeStart = html.indexOf(stateAttribute);
+  assert.notEqual(stateAttributeStart, -1);
+
+  const stateStart = html.lastIndexOf("<div", stateAttributeStart);
   assert.notEqual(stateStart, -1);
 
   const nextStateStart = html.indexOf(
     "data-kp-equation-motion-state=\"",
-    stateStart + stateAttribute.length
+    stateAttributeStart + stateAttribute.length
   );
 
   return html.slice(
@@ -93,6 +96,22 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-kp-equation-motion-state="1"/);
   assert.match(html, /data-kp-equation-motion-state="2"/);
   assert.match(html, /data-kp-equation-motion-state="3"/);
+  assert.match(
+    extractEquationMotionStateBlock(html, 0),
+    /equation-motion__state--active/
+  );
+  assert.match(
+    extractEquationMotionStateBlock(html, 0),
+    /data-kp-equation-motion-active="true"[^>]*aria-hidden="false"/
+  );
+  assert.match(
+    extractEquationMotionStateBlock(html, 1),
+    /data-kp-equation-motion-active="false"[^>]*aria-hidden="true"/
+  );
+  assert.doesNotMatch(
+    extractEquationMotionStateBlock(html, 1),
+    /equation-motion__state--active/
+  );
   assert.match(html, /data-kp-equation-motion-latex="x \+ 3 = 7"/);
   assert.match(html, /data-kp-equation-motion-latex="x \+ 3 - 3 = 7 - 3"/);
   assert.match(html, /data-kp-equation-motion-latex="x = 7 - 3"/);
