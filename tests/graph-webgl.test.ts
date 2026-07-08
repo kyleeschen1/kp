@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createGraph3DWebGLSceneModel,
+  createGraph3DWebGLThreeScene,
   createGraph3DWebGLRendererDescriptor,
   GRAPH_3D_WEBGL_RENDERER_KIND
 } from "../src/rendering/graph-webgl.ts";
@@ -54,4 +55,34 @@ test("WebGL scene model retains default graph axes and surface topology", () => 
     columnIndex: 0,
     rowIndex: 0
   });
+});
+
+test("WebGL Three scene builds retained geometry for surfaces, mesh lines, and axes", () => {
+  const scene = createDefaultGraph3DScene();
+  const graph = scene[0] as Graph3DObject;
+  const model = createGraph3DWebGLSceneModel(scene, graph);
+  const threeScene = createGraph3DWebGLThreeScene(model);
+  const surfaceMesh = threeScene.surfaceMeshes[0];
+  const meshLines = threeScene.surfaceMeshLines[0];
+  const surfacePositions = surfaceMesh?.geometry.getAttribute("position");
+  const meshLinePositions = meshLines?.geometry.getAttribute("position");
+
+  assert.equal(threeScene.scene.children.length, 1);
+  assert.equal(threeScene.root.children.length, 5);
+  assert.equal(threeScene.root.userData["kpObject"], "saddle-orbit-graph");
+  assert.equal(threeScene.surfaceMeshes.length, 1);
+  assert.equal(surfaceMesh?.userData["kpObject"], "saddle-surface");
+  assert.equal(surfacePositions?.count, 576);
+  assert.equal(surfaceMesh?.geometry.index?.count, 864);
+  assert.equal(threeScene.surfaceMeshLines.length, 1);
+  assert.equal(meshLinePositions?.count, 624);
+  assert.equal(threeScene.axisLines.length, 3);
+  assert.deepEqual(
+    threeScene.axisLines.map((axisLine) => axisLine.userData["kpAxis"]),
+    ["x", "y", "z"]
+  );
+  assert.equal(
+    threeScene.axisLines[0]?.geometry.getAttribute("position").count,
+    2
+  );
 });
