@@ -151,6 +151,7 @@ test("renderGraphToSvg renders graph, axes, and curve with semantic metadata", (
   assert.match(svg, /data-kp-object="parabola-y-axis"/);
   assert.match(svg, /data-kp-object="curve-y-equals-x-squared"/);
   assert.match(svg, /data-kp-render-node="rn-curve-y-equals-x-squared-svg-path"/);
+  assert.match(svg, /<g class="graph-curve"[^>]+data-kp-object="curve-y-equals-x-squared"[\s\S]*<path d="M [^"]+\sC\s[^"]+" data-kp-smoothing="catmull-rom" \/>/);
   assert.match(svg, /x\^2 = y/);
 });
 

@@ -38,6 +38,10 @@ import {
   surfaceQuadFill as surfaceQuadLightingFill
 } from "./surface-lighting.ts";
 import {
+  catmullRomToBezierPathCommands,
+  type SmoothPathCommand
+} from "./graph-smoothing.ts";
+import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   type Axis2DObject,
   type Axis3DObject,
@@ -776,22 +780,15 @@ function renderCurve(curve: Curve2DObject, graph: Graph2DObject): string {
   const points = sampleParabolaCurve(curve).map((point) =>
     projectGraphPoint(graph, point)
   );
-  const [firstPoint, ...remainingPoints] = points;
+  const pathData = pointsToSmoothPathData(points);
 
-  if (firstPoint === undefined) {
+  if (pathData.length === 0) {
     return "";
   }
 
-  const pathData = [
-    `M ${formatNumber(firstPoint.x)} ${formatNumber(firstPoint.y)}`,
-    ...remainingPoints.map(
-      (point) => `L ${formatNumber(point.x)} ${formatNumber(point.y)}`
-    )
-  ].join(" ");
-
   return `
     <g class="graph-curve" data-kp-object="${escapeHtml(curve.id)}" data-kp-render-node="rn-${escapeHtml(curve.id)}-svg-path" data-kp-type="curve-2d">
-      <path d="${pathData}" />
+      <path d="${pathData}" data-kp-smoothing="catmull-rom" />
       <text x="18" y="26">${escapeHtml(curve.label)}</text>
     </g>
   `;
@@ -2286,50 +2283,22 @@ function pointsToPathData(points: readonly GraphPoint[]): string {
 }
 
 function pointsToSmoothPathData(points: readonly GraphPoint[]): string {
-  const firstPoint = points[0];
+  return smoothPathCommandsToPathData(catmullRomToBezierPathCommands(points));
+}
 
-  if (firstPoint === undefined) {
-    return "";
-  }
-
-  if (points.length < 3) {
-    return pointsToPathData(points);
-  }
-
-  const commands = [
-    `M ${formatNumber(firstPoint.x)} ${formatNumber(firstPoint.y)}`
-  ];
-
-  for (let index = 0; index < points.length - 1; index += 1) {
-    const p0 = points[index - 1] ?? points[index];
-    const p1 = points[index];
-    const p2 = points[index + 1];
-    const p3 = points[index + 2] ?? p2;
-
-    if (
-      p0 === undefined ||
-      p1 === undefined ||
-      p2 === undefined ||
-      p3 === undefined
-    ) {
-      continue;
-    }
-
-    const control1 = {
-      x: p1.x + (p2.x - p0.x) / 6,
-      y: p1.y + (p2.y - p0.y) / 6
-    };
-    const control2 = {
-      x: p2.x - (p3.x - p1.x) / 6,
-      y: p2.y - (p3.y - p1.y) / 6
-    };
-
-    commands.push(
-      `C ${formatNumber(control1.x)} ${formatNumber(control1.y)} ${formatNumber(control2.x)} ${formatNumber(control2.y)} ${formatNumber(p2.x)} ${formatNumber(p2.y)}`
-    );
-  }
-
-  return commands.join(" ");
+function smoothPathCommandsToPathData(
+  commands: readonly SmoothPathCommand[]
+): string {
+  return commands
+    .map((command) => {
+      switch (command.kind) {
+        case "move":
+          return `M ${formatNumber(command.point.x)} ${formatNumber(command.point.y)}`;
+        case "cubic":
+          return `C ${formatNumber(command.control1.x)} ${formatNumber(command.control1.y)} ${formatNumber(command.control2.x)} ${formatNumber(command.control2.y)} ${formatNumber(command.point.x)} ${formatNumber(command.point.y)}`;
+      }
+    })
+    .join(" ");
 }
 
 function formatPoints(points: readonly GraphPoint[]): string {
