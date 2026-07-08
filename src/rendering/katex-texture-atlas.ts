@@ -21,6 +21,9 @@ export function packKatexTextureRegions(
   tokens: readonly KatexMotionToken[],
   options: KatexAtlasPackingOptions
 ): readonly KatexAtlasRegion[] {
+  validatePackingOptions(options);
+  assertUniqueTokenIds(tokens);
+
   const regions: KatexAtlasRegion[] = [];
   let page = 0;
   let cursorX = options.padding;
@@ -28,6 +31,8 @@ export function packKatexTextureRegions(
   let rowHeight = 0;
 
   for (const token of tokens) {
+    validateTokenDimensions(token);
+
     const width = Math.ceil(token.localRect.width * options.pixelRatio);
     const height = Math.ceil(token.localRect.height * options.pixelRatio);
     const paddedWidth = width + options.padding * 2;
@@ -74,6 +79,8 @@ export async function createKatexTextureAtlas(
   tokens: readonly KatexMotionToken[],
   options: KatexTextureCaptureOptions = {}
 ): Promise<KatexTextureAtlas> {
+  assertTokensHaveElements(tokens);
+
   const pixelRatio = options.pixelRatio ?? window.devicePixelRatio ?? 1;
   const width = options.maxTextureSize ?? 2048;
   const height = options.maxTextureSize ?? 2048;
@@ -133,9 +140,12 @@ async function captureElementImage(
     throw new Error("Expected a KaTeX token clone to be an HTMLElement.");
   }
 
+  const existingStyle = clone.getAttribute("style");
+  const captureStyle = `${copyComputedTextStyle(element)};display:inline-block;margin:0;transform:scale(${pixelRatio});transform-origin:top left;`;
+
   clone.setAttribute(
     "style",
-    `${copyComputedTextStyle(element)};display:inline-block;margin:0;transform:scale(${pixelRatio});transform-origin:top left;`
+    existingStyle === null ? captureStyle : `${existingStyle};${captureStyle}`
   );
 
   const svg = `
@@ -167,4 +177,45 @@ function copyComputedTextStyle(element: Element): string {
     `white-space:${style.whiteSpace}`,
     `line-height:${style.lineHeight}`
   ].join(";");
+}
+
+function validatePackingOptions(options: KatexAtlasPackingOptions): void {
+  assertPositiveFinite(options.width, "Invalid KaTeX texture atlas width.");
+  assertPositiveFinite(options.height, "Invalid KaTeX texture atlas height.");
+  assertPositiveFinite(options.pixelRatio, "Invalid KaTeX texture atlas pixelRatio.");
+
+  if (!Number.isFinite(options.padding) || options.padding < 0) {
+    throw new Error("Invalid KaTeX texture atlas padding.");
+  }
+}
+
+function validateTokenDimensions(token: KatexMotionToken): void {
+  assertPositiveFinite(token.localRect.width, `Invalid KaTeX token ${token.id} width.`);
+  assertPositiveFinite(token.localRect.height, `Invalid KaTeX token ${token.id} height.`);
+}
+
+function assertPositiveFinite(value: number, message: string): void {
+  if (!Number.isFinite(value) || value <= 0) {
+    throw new Error(message);
+  }
+}
+
+function assertUniqueTokenIds(tokens: readonly KatexMotionToken[]): void {
+  const ids = new Set<string>();
+
+  for (const token of tokens) {
+    if (ids.has(token.id)) {
+      throw new Error(`Duplicate KaTeX token id ${token.id}.`);
+    }
+
+    ids.add(token.id);
+  }
+}
+
+function assertTokensHaveElements(tokens: readonly KatexMotionToken[]): void {
+  for (const token of tokens) {
+    if (token.element === undefined) {
+      throw new Error(`KaTeX token ${token.id} is missing an element for texture capture.`);
+    }
+  }
 }
