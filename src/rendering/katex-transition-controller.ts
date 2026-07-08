@@ -14,6 +14,7 @@ export interface KatexTransitionOptions {
   durationMs?: number | undefined;
   easing?: ((progress: number) => number) | undefined;
   forceFallback?: boolean | undefined;
+  beforeCleanup?: (() => void | Promise<void>) | undefined;
 }
 
 type MatchMediaLike = typeof window.matchMedia;
@@ -45,6 +46,7 @@ export interface __KatexTransitionControllerDependencies {
 
 const DEFAULT_DURATION_MS = 550;
 const FALLBACK_DURATION_PROPERTY = "--katex-transition-duration";
+const HANDOFF_FADE_MS = 240;
 
 export async function transitionKatexEquations(
   sourceEl: HTMLElement,
@@ -121,7 +123,10 @@ async function transitionKatexEquationsWithDependencies(
       dependencies
     );
 
+    await runBeforeCleanup(options.beforeCleanup, dependencies);
     targetEl.classList.remove("katex-transition-target-hidden");
+    await waitForNextFrame(dependencies);
+    await fadeOverlayBeforeRemoval(overlay, dependencies);
 
     return summarizeKatexTransitionResult(
       plan,
@@ -147,6 +152,41 @@ async function transitionKatexEquationsWithDependencies(
     sourceEl.classList.remove("katex-transition-source-hidden");
     targetEl.classList.remove("katex-transition-target-hidden");
   }
+}
+
+async function runBeforeCleanup(
+  beforeCleanup: (() => void | Promise<void>) | undefined,
+  dependencies: __KatexTransitionControllerDependencies
+): Promise<void> {
+  if (beforeCleanup === undefined) {
+    return;
+  }
+
+  await beforeCleanup();
+  await waitForNextFrame(dependencies);
+}
+
+function waitForNextFrame(
+  dependencies: __KatexTransitionControllerDependencies
+): Promise<void> {
+  return new Promise((resolve) => {
+    dependencies.requestAnimationFrame(() => resolve());
+  });
+}
+
+function fadeOverlayBeforeRemoval(
+  overlay: HTMLCanvasElement,
+  dependencies: __KatexTransitionControllerDependencies
+): Promise<void> {
+  overlay.dataset["kpKatexTransitionOverlayState"] = "handoff-fade";
+  overlay.style.setProperty(
+    "--katex-transition-handoff-duration",
+    `${HANDOFF_FADE_MS}ms`
+  );
+
+  return new Promise((resolve) => {
+    dependencies.setTimeout(resolve, HANDOFF_FADE_MS);
+  });
 }
 
 const defaultDependencies: __KatexTransitionControllerDependencies =

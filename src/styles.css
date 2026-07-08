@@ -243,10 +243,125 @@ h2 {
   margin: 0;
 }
 
+.object-preview--equation-motion {
+  overflow: hidden;
+}
+
+.equation-motion {
+  display: grid;
+  gap: 1rem;
+  padding: 1.2rem;
+}
+
+.equation-motion__stage {
+  display: grid;
+  min-height: 7rem;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #e0e7ef;
+  border-radius: 6px;
+  background: #fbfdff;
+}
+
+.equation-motion__state {
+  grid-area: 1 / 1;
+  max-width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.equation-motion__state[data-kp-equation-motion-active="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.object-preview--equation-motion[data-kp-equation-motion-handoff="true"] .equation-motion__state {
+  transition: none;
+}
+
+.equation-motion__state .katex-display {
+  margin: 0;
+}
+
+.equation-motion__measure {
+  grid-area: 1 / 1;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.equation-motion__measure .katex-display {
+  margin: 0;
+}
+
+.equation-motion__controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.equation-motion__button {
+  border: 1px solid #1f6371;
+  border-radius: 6px;
+  padding: 0.48rem 0.72rem;
+  color: #ffffff;
+  background: #1f6371;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.equation-motion__button:hover:not(:disabled) {
+  background: #174b55;
+}
+
+.equation-motion__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.equation-motion__token-hidden {
+  color: transparent !important;
+}
+
+.equation-motion-choreography {
+  position: absolute;
+  z-index: 31;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.equation-motion-choreography[data-kp-equation-motion-overlay-state="handoff-fade"] {
+  opacity: 0;
+  transition: opacity var(--equation-motion-handoff-duration, 240ms) ease-out;
+}
+
+.equation-motion-choreography__group {
+  position: absolute;
+  inset: 0;
+}
+
+.equation-motion-choreography__ghost {
+  position: absolute;
+  display: inline-block;
+  will-change: filter, opacity, transform;
+}
+
+.equation-motion-choreography__ghost > * {
+  display: inline-block;
+}
+
 .katex-transition-overlay {
   position: absolute;
   z-index: 30;
+  opacity: 1;
   pointer-events: none;
+}
+
+.katex-transition-overlay[data-kp-katex-transition-overlay-state="handoff-fade"] {
+  opacity: 0;
+  transition: opacity var(--katex-transition-handoff-duration, 240ms) ease-out;
 }
 
 .katex-transition-source-hidden,

@@ -1,0 +1,53 @@
+<h2>KaTeX-to-WebGL Equation Transitions</h2>
+<p class="subtitle">First decision: what is the unit of motion?</p>
+
+<div class="mockup">
+  <div class="mockup-header">Proposed runtime pipeline</div>
+  <div class="mockup-body">
+    <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:14px;align-items:center">
+      <div class="placeholder" style="min-height:96px">
+        <strong>1. Semantic HTML</strong><br>
+        KaTeX source and target are already laid out in the DOM for accessibility.
+      </div>
+      <div style="font-weight:700;color:#64748b">-&gt;</div>
+      <div class="placeholder" style="min-height:96px">
+        <strong>2. Snapshot</strong><br>
+        Measure source and target token boxes, baselines, styles, and stable IDs.
+      </div>
+      <div style="font-weight:700;color:#64748b">-&gt;</div>
+      <div class="placeholder" style="min-height:96px">
+        <strong>3. WebGL Overlay</strong><br>
+        Hide visual HTML during motion; animate textured quads in screen space.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="semantic-tokens" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Semantic Tokens</h3>
+      <p>Add stable token IDs while rendering math, then map those IDs onto KaTeX spans. Best for meaningful matches like "same x", "same row", or "same denominator". Recommended for V1 if we control the math source.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="katex-dom-groups" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>KaTeX DOM Groups</h3>
+      <p>Group existing KaTeX spans by class/text/order after render. Faster to prototype, but brittle when KaTeX changes markup or when repeated symbols need semantic identity.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="large-texture-blocks" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Large Texture Blocks</h3>
+      <p>Rasterize whole subexpressions, rows, or equation lines. Highest visual fidelity at first, but less expressive: fewer tokens can independently move or match.</p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="label">Recommendation</div>
+  <p>Use semantic tokens for identity and matching, but allow fallback block textures for complex KaTeX constructs that are hard to split safely.</p>
+</div>

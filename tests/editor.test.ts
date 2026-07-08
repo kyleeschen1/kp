@@ -44,10 +44,6 @@ test("initial editor document contains a 3x3 identity matrix", () => {
   assert.deepEqual(
     document.objects.slice(1).map((object) => object.type),
     [
-      "graph-2d",
-      "axis-2d",
-      "axis-2d",
-      "curve-2d",
       "graph-3d",
       "axis-3d",
       "axis-3d",
@@ -55,10 +51,18 @@ test("initial editor document contains a 3x3 identity matrix", () => {
       "surface-3d"
     ]
   );
-  assert.equal(document.objects[1]?.id, "parabola-graph");
-  assert.equal(document.objects[4]?.id, "curve-y-equals-x-squared");
-  assert.equal(document.objects[5]?.id, "saddle-orbit-graph");
-  assert.equal(document.objects[9]?.id, "saddle-surface");
+  assert.equal(
+    document.objects.some((object) => object.id === "parabola-graph"),
+    false
+  );
+  assert.equal(
+    document.objects.some(
+      (object) => object.id === "curve-y-equals-x-squared"
+    ),
+    false
+  );
+  assert.equal(document.objects[1]?.id, "saddle-orbit-graph");
+  assert.equal(document.objects[5]?.id, "saddle-surface");
 });
 
 test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () => {
@@ -66,10 +70,24 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
 
   assert.match(html, /data-kp-object="identity-3x3"/);
   assert.match(html, /data-kp-render-node="rn-identity-3x3-default-latex"/);
-  assert.match(html, /data-kp-object="parabola-graph"/);
-  assert.match(html, /data-kp-object="parabola-x-axis"/);
-  assert.match(html, /data-kp-object="parabola-y-axis"/);
-  assert.match(html, /data-kp-object="curve-y-equals-x-squared"/);
+  assert.doesNotMatch(html, /data-kp-object="parabola-graph"/);
+  assert.doesNotMatch(html, /data-kp-object="parabola-x-axis"/);
+  assert.doesNotMatch(html, /data-kp-object="parabola-y-axis"/);
+  assert.doesNotMatch(html, /data-kp-object="curve-y-equals-x-squared"/);
+  assert.match(html, /data-kp-equation-motion-demo/);
+  assert.match(html, /data-kp-equation-motion-step="0"/);
+  assert.match(html, /data-kp-equation-motion-state="0"/);
+  assert.match(html, /data-kp-equation-motion-state="1"/);
+  assert.match(html, /data-kp-equation-motion-state="2"/);
+  assert.match(html, /data-kp-equation-motion-measure="transfer-target"/);
+  assert.match(html, /data-kp-equation-motion-latex="x \+ 3 = 7"/);
+  assert.match(html, /data-kp-equation-motion-latex="x = 7 - 3"/);
+  assert.match(html, /data-kp-equation-motion-latex="x = 4"/);
+  assert.match(html, /data-action="equation-motion-next"/);
+  assert.match(html, /data-action="equation-motion-rewind"/);
+  assert.match(html, /data-action="equation-motion-replay"/);
+  assert.match(html, /data-kp-equation-motion-active="true"/);
+  assert.match(html, /data-kp-equation-motion-active="false"/);
   assert.match(html, /data-kp-object="saddle-orbit-graph"/);
   assert.match(html, /data-kp-object="saddle-orbit-x-axis"/);
   assert.match(html, /data-kp-object="saddle-orbit-y-axis"/);
@@ -77,14 +95,14 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-kp-object="saddle-surface"/);
   assert.doesNotMatch(html, /data-kp-object="time-spiral-curve"/);
   assert.match(html, /class="katex/);
-  assert.match(html, /class="graph-svg"/);
+  assert.match(html, /class="graph-svg graph-svg--3d"/);
   assert.match(html, /class="graph-webgl"/);
   assert.match(html, /data-kp-renderer="webgl"/);
   assert.match(html, /data-kp-webgl-backend="three"/);
   assert.match(html, /class="graph-webgl__canvas"/);
   assert.match(html, /data-kp-renderer-fallback="svg"/);
   assert.match(html, /&quot;type&quot;: &quot;matrix&quot;/);
-  assert.match(html, /&quot;type&quot;: &quot;graph-2d&quot;/);
+  assert.doesNotMatch(html, /&quot;type&quot;: &quot;graph-2d&quot;/);
   assert.match(html, /&quot;type&quot;: &quot;graph-3d&quot;/);
   assert.match(html, /data-role="semantic-json"/);
   assert.match(html, /data-role="equation-input"/);
@@ -149,27 +167,35 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /No validation issues/);
   assert.ok(
     html.indexOf('data-kp-object="identity-3x3"') <
-      html.indexOf('data-kp-object="parabola-graph"')
+      html.indexOf("data-kp-equation-motion-demo")
   );
   assert.ok(
-    html.indexOf('data-kp-object="parabola-graph"') <
+    html.indexOf("data-kp-equation-motion-demo") <
       html.indexOf('data-kp-object="saddle-orbit-graph"')
   );
+  const azimuthIndex = html.indexOf('data-action="set-graph-azimuth"');
+  const viewModeIndex = html.indexOf('data-action="set-graph-view-mode"');
+  const surfaceModeIndex = html.indexOf('data-action="set-graph-surface-mode"');
+  const foldoutIndex = html.indexOf('data-kp-controls-foldout="render-settings"');
+  const surfaceQualityIndex = html.indexOf(
+    'data-action="set-graph-surface-quality"'
+  );
+  const lightPresetIndex = html.indexOf('data-action="set-graph-light-preset"');
+
   assert.ok(
-    html.indexOf('data-action="set-graph-azimuth"') <
-      html.indexOf('data-kp-controls-foldout="render-settings"')
+    azimuthIndex < viewModeIndex
   );
   assert.ok(
-    html.indexOf('data-kp-controls-foldout="render-settings"') <
-      html.indexOf('data-action="set-graph-surface-mode"')
+    viewModeIndex < surfaceModeIndex
   );
   assert.ok(
-    html.indexOf('data-action="set-graph-surface-mode"') <
-      html.indexOf('data-action="set-graph-surface-quality"')
+    surfaceModeIndex < foldoutIndex
   );
   assert.ok(
-    html.indexOf('data-kp-controls-foldout="render-settings"') <
-      html.indexOf('data-action="set-graph-light-preset"')
+    foldoutIndex < surfaceQualityIndex
+  );
+  assert.ok(
+    foldoutIndex < lightPresetIndex
   );
 });
 

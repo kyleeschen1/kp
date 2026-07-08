@@ -181,6 +181,49 @@ test("transitionKatexEquations namespaces duplicate source and target atlas ids"
   ]);
 });
 
+test("transitionKatexEquations runs beforeCleanup before removing the WebGL overlay", async () => {
+  const source = fakeElement("source");
+  const target = fakeElement("target");
+  const overlay = fakeCanvas();
+  const handoffStates: Array<{
+    overlayRemoveCount: number;
+    sourceClasses: string[];
+    targetClasses: string[];
+  }> = [];
+  const deps = fakeDependencies({
+    sourceTokens: [token("shared", "x", source)],
+    targetTokens: [token("shared", "x", target)],
+    createdCanvases: [overlay]
+  });
+
+  await __katexTransitionControllerInternals.transitionKatexEquationsWithDependencies(
+    source,
+    target,
+    {
+      durationMs: 0,
+      beforeCleanup() {
+        handoffStates.push({
+          overlayRemoveCount: overlay.removeCount,
+          sourceClasses: Array.from(source.classList.values()),
+          targetClasses: Array.from(target.classList.values())
+        });
+      }
+    },
+    deps
+  );
+
+  assert.deepEqual(handoffStates, [
+    {
+      overlayRemoveCount: 0,
+      sourceClasses: ["katex-transition-source-hidden"],
+      targetClasses: ["katex-transition-target-hidden"]
+    }
+  ]);
+  assert.equal(overlay.dataset["kpKatexTransitionOverlayState"], "handoff-fade");
+  assert.ok(deps.timeoutDelays.includes(240));
+  assert.equal(overlay.removeCount, 1);
+});
+
 function token(id: string, text = id, element?: Element): KatexMotionToken {
   const token: KatexMotionToken = {
     id,
@@ -213,11 +256,13 @@ function fakeElement(name: string) {
 }
 
 function fakeCanvas(): HTMLCanvasElement & {
+  dataset: DOMStringMap;
   style: ReturnType<typeof fakeStyle>;
   removeCount: number;
 } {
   const canvas = {
     className: "",
+    dataset: {} as DOMStringMap,
     width: 0,
     height: 0,
     style: fakeStyle(),
@@ -226,6 +271,7 @@ function fakeCanvas(): HTMLCanvasElement & {
       canvas.removeCount += 1;
     }
   } as unknown as HTMLCanvasElement & {
+    dataset: DOMStringMap;
     style: ReturnType<typeof fakeStyle>;
     removeCount: number;
   };
