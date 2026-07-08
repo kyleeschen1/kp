@@ -1,0 +1,116 @@
+import type {
+  KatexMotionToken,
+  KatexTransitionPlan
+} from "./katex-transition-types.ts";
+
+interface MatchCandidate {
+  source: KatexMotionToken;
+  target: KatexMotionToken;
+  score: number;
+  targetIndex: number;
+}
+
+export function createKatexTransitionPlan(
+  sourceTokens: readonly KatexMotionToken[],
+  targetTokens: readonly KatexMotionToken[]
+): KatexTransitionPlan {
+  const matched: Array<{ source: KatexMotionToken; target: KatexMotionToken }> = [];
+  const usedTargets = new Set<string>();
+  let ambiguousGroupCount = 0;
+
+  for (const source of sourceTokens) {
+    const candidates = targetTokens
+      .map((target, targetIndex): MatchCandidate => ({
+        source,
+        target,
+        targetIndex,
+        score: scoreCandidate(source, target)
+      }))
+      .filter((candidate) => candidate.score > 0 && !usedTargets.has(candidate.target.id))
+      .sort(compareCandidates);
+
+    if (candidates.length === 0) {
+      continue;
+    }
+
+    if (
+      candidates.length > 1 &&
+      candidates[0] !== undefined &&
+      candidates[1] !== undefined &&
+      candidates[0].score === candidates[1].score
+    ) {
+      ambiguousGroupCount += 1;
+    }
+
+    const best = candidates[0];
+
+    if (best !== undefined) {
+      matched.push({ source: best.source, target: best.target });
+      usedTargets.add(best.target.id);
+    }
+  }
+
+  const usedSources = new Set(matched.map((match) => match.source.id));
+  const sourceOnly = sourceTokens
+    .filter((source) => !usedSources.has(source.id))
+    .map((source) => ({ source }));
+  const targetOnly = targetTokens
+    .filter((target) => !usedTargets.has(target.id))
+    .map((target) => ({ target }));
+
+  return {
+    matched,
+    sourceOnly,
+    targetOnly,
+    diagnostics: {
+      sourceTokenCount: sourceTokens.length,
+      targetTokenCount: targetTokens.length,
+      matchedCount: matched.length,
+      sourceOnlyCount: sourceOnly.length,
+      targetOnlyCount: targetOnly.length,
+      ambiguousGroupCount
+    }
+  };
+}
+
+function scoreCandidate(
+  source: KatexMotionToken,
+  target: KatexMotionToken
+): number {
+  if (source.text.length === 0 || target.text.length === 0) {
+    return 0;
+  }
+
+  if (source.text !== target.text) {
+    return 0;
+  }
+
+  const signatureScore = source.signature === target.signature ? 100 : 60;
+  const rowPenalty = Math.min(Math.abs(source.row - target.row), 6) * 4;
+
+  return Math.max(signatureScore - rowPenalty, 1);
+}
+
+function compareCandidates(a: MatchCandidate, b: MatchCandidate): number {
+  if (a.score !== b.score) {
+    return b.score - a.score;
+  }
+
+  const aDistance = tokenDistance(a.source, a.target);
+  const bDistance = tokenDistance(b.source, b.target);
+
+  if (aDistance !== bDistance) {
+    return aDistance - bDistance;
+  }
+
+  return a.targetIndex - b.targetIndex;
+}
+
+function tokenDistance(source: KatexMotionToken, target: KatexMotionToken): number {
+  const sourceCenterX = source.localRect.left + source.localRect.width / 2;
+  const sourceCenterY = source.localRect.top + source.localRect.height / 2;
+  const targetCenterX = target.localRect.left + target.localRect.width / 2;
+  const targetCenterY = target.localRect.top + target.localRect.height / 2;
+
+  return Math.hypot(targetCenterX - sourceCenterX, targetCenterY - sourceCenterY);
+}
