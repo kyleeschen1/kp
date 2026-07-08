@@ -401,6 +401,13 @@ data-surface-id="saddle-surface"
 data-kp-graph-surface-parameter="saddle-denominator"
 ```
 
+The accepted renderer direction is broader than graph objects. Anything with a
+coordinate system should adapt into a shared internal coordinate-scene render
+model. A 2D graph, physics demo, or geometric construction can render as a flat
+3D scene on `z = 0`, with z-axis, z-rotation, depth, lighting, and shadows
+disabled until the scene is promoted to spatial mode. See
+`docs/design-decisions/2026-07-07-coordinate-scene-render-model.md`.
+
 For future surface animation, triangles are the better transform-only primitive.
 Any projected 2D triangle can be mapped exactly to another projected triangle
 with one affine matrix, while arbitrary quadrilateral deformation cannot
