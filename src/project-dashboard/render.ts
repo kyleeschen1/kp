@@ -202,10 +202,15 @@ function renderReportTheme(
   visibleIds: ReadonlySet<string>
 ): string {
   return `
-    <article class="project-card" id="${escapeHtml(theme.id)}" data-kp-project-report-theme="${escapeHtml(theme.id)}">
-      ${renderMeta(theme.status, "report")}
+    <article class="project-card project-card--report" id="${escapeHtml(theme.id)}" data-kp-project-report-theme="${escapeHtml(theme.id)}">
+      ${renderMeta(theme.status, theme.grade ?? "Not reviewed")}
       <h3>${escapeHtml(theme.title)}</h3>
       <p>${escapeHtml(theme.scope)}</p>
+      ${renderReportReviewSummary(theme)}
+      ${renderReportQuestions(theme.questions)}
+      ${renderReportEvidence(theme.evidence)}
+      ${renderReportList("Risks", theme.risks)}
+      ${renderReportList("Next Actions", theme.recommendedNextActions)}
       ${renderTags(theme.tags)}
       ${renderRelatedLinks(theme.relatedIds ?? [], titles, visibleIds)}
     </article>
@@ -242,6 +247,72 @@ function renderInterfaces(interfaces: readonly string[]): string {
     <div class="project-card__interfaces">
       <strong>Interfaces</strong>
       ${interfaces.map((entry) => `<span>${escapeHtml(entry)}</span>`).join("")}
+    </div>
+  `;
+}
+
+function renderReportReviewSummary(theme: ProjectReportTheme): string {
+  return `
+    <dl class="project-report__summary">
+      <div>
+        <dt>Grade</dt>
+        <dd>${escapeHtml(theme.grade ?? "Not reviewed")}</dd>
+      </div>
+      <div>
+        <dt>Last reviewed</dt>
+        <dd>${escapeHtml(theme.lastReviewedOn ?? "Not reviewed")}</dd>
+      </div>
+    </dl>
+  `;
+}
+
+function renderReportQuestions(questions: readonly string[]): string {
+  return renderReportList("Questions", questions);
+}
+
+function renderReportEvidence(
+  evidence: readonly ProjectReportTheme["evidence"][number][]
+): string {
+  if (evidence.length === 0) {
+    return `
+      <div class="project-report__section">
+        <strong>Evidence</strong>
+        <p>No evidence recorded</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="project-report__section">
+      <strong>Evidence</strong>
+      <ul>
+        ${evidence
+          .map(
+            (entry) =>
+              `<li><a href="${escapeHtml(entry.href)}">${escapeHtml(entry.label)}</a></li>`
+          )
+          .join("")}
+      </ul>
+    </div>
+  `;
+}
+
+function renderReportList(label: string, items: readonly string[]): string {
+  if (items.length === 0) {
+    return `
+      <div class="project-report__section">
+        <strong>${escapeHtml(label)}</strong>
+        <p>None recorded</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="project-report__section">
+      <strong>${escapeHtml(label)}</strong>
+      <ul>
+        ${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+      </ul>
     </div>
   `;
 }

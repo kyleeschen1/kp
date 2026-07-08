@@ -228,6 +228,8 @@ export const projectDashboardData: ProjectDashboardData = {
       id: "report-animation-protocol",
       title: "Animation protocol maturity",
       status: "planned",
+      grade: "B-",
+      lastReviewedOn: "2026-07-08",
       scope:
         "Assess whether equation, graph, simulation, and programming animations share the same lifecycle and time model.",
       questions: [
@@ -235,19 +237,136 @@ export const projectDashboardData: ProjectDashboardData = {
         "Does rewind use the same timeline as forward playback?",
         "Are semantic selectors preserved across render backends?"
       ],
+      evidence: [
+        {
+          label: "Rendering/time protocol design",
+          href: "docs/superpowers/specs/2026-07-08-rendering-time-protocol-design.md"
+        },
+        {
+          label: "Operation-first equation motion design",
+          href: "docs/superpowers/specs/2026-07-08-operation-first-equation-motion-design.md"
+        }
+      ],
+      risks: [
+        "Graph playback still needs the shared playhead contract.",
+        "Programming animation has selectors in concept but no implementation slice yet."
+      ],
+      recommendedNextActions: [
+        "Adapt graph surface morphs to the shared playhead.",
+        "Add one programming object render-node registration slice."
+      ],
       tags: ["animation", "protocol", "quality"],
       relatedIds: ["work-rendering-time-protocol", "animation-cancelation"]
+    },
+    {
+      id: "report-semantic-object-api",
+      title: "Semantic object API",
+      status: "planned",
+      grade: "C+",
+      lastReviewedOn: "2026-07-08",
+      scope:
+        "Assess whether the object model has stable records, selectors, capabilities, and migration space for math, graph, and code objects.",
+      questions: [
+        "Are selectors semantic rather than renderer-derived?",
+        "Can object definitions expose optional capabilities cleanly?",
+        "Can invalid and partial instructional objects still be represented?"
+      ],
+      evidence: [
+        {
+          label: "Structured instructional objects design",
+          href: "docs/superpowers/specs/2026-07-08-structured-instructional-objects-design.md"
+        }
+      ],
+      risks: [
+        "Current runtime still uses the older closed semantic object union.",
+        "Capability loading is designed but not implemented."
+      ],
+      recommendedNextActions: [
+        "Introduce a lightweight object-definition registry shell.",
+        "Register Matrix and Equation definitions through the new API first."
+      ],
+      tags: ["semantic-objects", "selectors", "capabilities"],
+      relatedIds: ["work-semantic-object-registry", "semantic-matrix", "semantic-equation"]
+    },
+    {
+      id: "report-graph-rendering",
+      title: "Graph rendering",
+      status: "planned",
+      grade: "B",
+      lastReviewedOn: "2026-07-08",
+      scope:
+        "Assess graph rendering quality, mode coverage, semantic identity, and readiness for unified timeline playback.",
+      questions: [
+        "Do graph renderers expose stable roles and ids?",
+        "Can morph targets be sampled deterministically?",
+        "Are 3D-to-2D and surface-mode transitions ready for a common playhead?"
+      ],
+      evidence: [
+        {
+          label: "Graph rendering next plan",
+          href: "docs/superpowers/plans/2026-07-08-graph-rendering-next/README.md"
+        }
+      ],
+      risks: [
+        "Surface morphs have samplers but no public dashboard scrubber.",
+        "2D and 3D graph paths are not yet one visual protocol."
+      ],
+      recommendedNextActions: [
+        "Expose graph morph progress through the rendering/time protocol.",
+        "Add a dashboard gallery preview for surface modes after search stabilizes."
+      ],
+      tags: ["graph", "webgl", "morph", "rendering"],
+      relatedIds: ["work-graph-surface-morphs", "visual-webgl-graph"]
+    },
+    {
+      id: "report-programming-readiness",
+      title: "Programming object readiness",
+      status: "planned",
+      scope:
+        "Assess whether KP can represent code objects, source ranges, diagnostics, execution traces, and refactors in the same object/time protocol.",
+      questions: [
+        "What is the first code-domain object slice?",
+        "Can source ranges register stable selectors?",
+        "Can execution or refactor timelines share the same sampler contract?"
+      ],
+      evidence: [],
+      risks: [
+        "No code-domain object implementation exists yet.",
+        "The code-domain parser and selector strategy are still unspecified."
+      ],
+      recommendedNextActions: [
+        "Define a minimal SourceFile semantic object.",
+        "Render static source range selectors before attempting execution animation."
+      ],
+      tags: ["programming", "code", "source", "execution"],
+      relatedIds: ["visual-code", "gallery-rendering-time-api"]
     },
     {
       id: "report-dashboard-operations",
       title: "Dashboard operations",
       status: "active",
+      grade: "B",
+      lastReviewedOn: "2026-07-08",
       scope:
         "Track whether the dashboard is giving the user useful project state, blockers, and reprioritization handles.",
       questions: [
         "Are active tasks visible and current?",
         "Can Codex update statuses after completing work?",
         "Do gallery entries expose the right interfaces and test points?"
+      ],
+      evidence: [
+        {
+          label: "Project dashboard v1 plan",
+          href: "docs/superpowers/plans/2026-07-08-project-dashboard-v1/README.md"
+        }
+      ],
+      risks: [
+        "Browser edits are not persistent in v1.",
+        "Card status updates still require Codex to edit seed data."
+      ],
+      recommendedNextActions: [
+        "Define the dashboard write protocol.",
+        "Add browser coverage for dashboard navigation and editor return."
       ],
       tags: ["dashboard", "codex", "project-health"],
       relatedIds: ["work-project-dashboard-v1"]

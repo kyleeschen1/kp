@@ -197,3 +197,44 @@ test("renderProjectDashboard renders searchable grouped galleries", () => {
   assert.match(html, /scroll clock/);
   assert.doesNotMatch(html, /Equation cancelation/);
 });
+
+test("project dashboard report themes include reviewed and unreviewed assessment fields", () => {
+  const animationTheme = projectDashboardData.reportThemes.find(
+    (theme) => theme.id === "report-animation-protocol"
+  );
+  const programmingTheme = projectDashboardData.reportThemes.find(
+    (theme) => theme.id === "report-programming-readiness"
+  );
+
+  assert.equal(animationTheme?.grade, "B-");
+  assert.equal(animationTheme?.lastReviewedOn, "2026-07-08");
+  assert.ok(animationTheme?.evidence.some((entry) => entry.href.includes("rendering-time-protocol")));
+  assert.ok(animationTheme?.risks.some((risk) => risk.includes("Graph playback")));
+  assert.ok(
+    animationTheme?.recommendedNextActions.some((action) =>
+      action.includes("shared playhead")
+    )
+  );
+
+  assert.equal(programmingTheme?.grade, undefined);
+  assert.equal(programmingTheme?.lastReviewedOn, undefined);
+  assert.ok(programmingTheme?.risks.some((risk) => risk.includes("code-domain")));
+});
+
+test("renderProjectDashboard renders report card evidence, risks, review metadata, and next actions", () => {
+  const html = renderProjectDashboard(projectDashboardData);
+
+  assert.match(html, /data-kp-project-report-theme="report-animation-protocol"/);
+  assert.match(html, /Grade/);
+  assert.match(html, /B-/);
+  assert.match(html, /Last reviewed/);
+  assert.match(html, /2026-07-08/);
+  assert.match(html, /Evidence/);
+  assert.match(html, /href="docs\/superpowers\/specs\/2026-07-08-rendering-time-protocol-design\.md"/);
+  assert.match(html, /Risks/);
+  assert.match(html, /Graph playback still needs the shared playhead contract/);
+  assert.match(html, /Next Actions/);
+  assert.match(html, /Adapt graph surface morphs to the shared playhead/);
+  assert.match(html, /Programming object readiness/);
+  assert.match(html, /Not reviewed/);
+});

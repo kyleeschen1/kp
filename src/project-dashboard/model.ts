@@ -51,10 +51,20 @@ export interface ProjectReportTheme {
   readonly id: string;
   readonly title: string;
   readonly status: ProjectDashboardStatus;
+  readonly grade?: string;
+  readonly lastReviewedOn?: string;
   readonly scope: string;
   readonly questions: readonly string[];
+  readonly evidence: readonly ProjectReportEvidence[];
+  readonly risks: readonly string[];
+  readonly recommendedNextActions: readonly string[];
   readonly tags: readonly string[];
   readonly relatedIds?: readonly string[];
+}
+
+export interface ProjectReportEvidence {
+  readonly label: string;
+  readonly href: string;
 }
 
 export interface ProjectDashboardData {
@@ -283,8 +293,13 @@ function reportThemeMatches(
       theme.id,
       theme.title,
       theme.status,
+      theme.grade ?? "",
+      theme.lastReviewedOn ?? "",
       theme.scope,
       ...theme.questions,
+      ...theme.evidence.flatMap((entry) => [entry.label, entry.href]),
+      ...theme.risks,
+      ...theme.recommendedNextActions,
       ...theme.tags
     ],
     normalizedQuery
