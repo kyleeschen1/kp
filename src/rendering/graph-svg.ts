@@ -29,6 +29,10 @@ import {
   type Graph3DRenderBudgetResult
 } from "./performance-budget.ts";
 import {
+  DEFAULT_SURFACE_LIGHT,
+  surfaceQuadFill as surfaceQuadLightingFill
+} from "./surface-lighting.ts";
+import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   type Axis2DObject,
   type Axis3DObject,
@@ -985,7 +989,15 @@ function createSaddleSurfaceQuads(
           projectedCorners.reduce((sum, point) => sum + point.depth, 0) /
           projectedCorners.length,
         facing,
-        fill: surfaceQuadFill(surface, center, normal, facing, depthHaze),
+        fill: surfaceQuadLightingFill({
+          center,
+          depthHaze,
+          facing,
+          light: DEFAULT_SURFACE_LIGHT,
+          normal,
+          xDomain: surface.xDomain,
+          yDomain: surface.yDomain
+        }),
         depthHaze
       });
     }
@@ -1028,36 +1040,6 @@ function classifySurfaceFacing(
   const cameraDirection = graphCameraDirection(graph);
 
   return dotPoint3D(normal, cameraDirection) >= 0 ? "front" : "back";
-}
-
-function surfaceQuadFill(
-  surface: Surface3DObject,
-  center: GraphPoint3D,
-  normal: GraphPoint3D,
-  facing: "back" | "front",
-  depthHaze: number
-): string {
-  const maxX = Math.max(Math.abs(surface.xDomain[0]), Math.abs(surface.xDomain[1]));
-  const maxY = Math.max(Math.abs(surface.yDomain[0]), Math.abs(surface.yDomain[1]));
-  const zSpan = Math.max((Math.max(maxX, maxY) ** 2) / 4, 1);
-  const normalizedHeight = clamp((center.z + zSpan) / (zSpan * 2), 0, 1);
-  const light = normalizePoint3D({ x: -0.35, y: -0.45, z: 0.82 });
-  const brightness = clamp(0.45 + Math.max(0, dotPoint3D(normal, light)) * 0.4, 0.35, 0.9);
-  const hue = facing === "front"
-    ? 188 + Math.round(normalizedHeight * 18)
-    : 206 + Math.round(normalizedHeight * 18);
-  const baseSaturation = facing === "front" ? 58 : 48;
-  const baseLightness = facing === "front"
-    ? 42 + brightness * 20
-    : 62 + brightness * 10;
-  const saturation = Math.round(
-    clamp(baseSaturation - depthHaze * 8, 34, 64)
-  );
-  const lightness = Math.round(
-    clamp(baseLightness + depthHaze * 6, 35, 78)
-  );
-
-  return `hsl(${hue} ${saturation}% ${lightness}%)`;
 }
 
 function averageGraphPoint3D(
