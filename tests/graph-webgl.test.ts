@@ -58,6 +58,46 @@ test("WebGL scene model retains default graph axes and surface topology", () => 
   });
 });
 
+test("WebGL scene model mirrors generated donut and hyperplane surface modes", () => {
+  const scene = createDefaultGraph3DScene();
+  const graph = scene[0] as Graph3DObject;
+  const donutGraph: Graph3DObject = {
+    ...graph,
+    surfaceMode: "donut"
+  };
+  const hyperplaneGraph: Graph3DObject = {
+    ...graph,
+    surfaceMode: "hyperplanes"
+  };
+  const donutModel = createGraph3DWebGLSceneModel(scene, donutGraph);
+  const hyperplaneModel = createGraph3DWebGLSceneModel(scene, hyperplaneGraph);
+  const donutSurface = donutModel.surfaces[0];
+  const hyperplaneScene = createGraph3DWebGLThreeScene(hyperplaneModel);
+
+  assert.equal(donutModel.surfaceMode, "donut");
+  assert.equal(donutModel.surfaces.length, 1);
+  assert.equal(donutSurface?.id, "saddle-orbit-graph-donut");
+  assert.equal(donutSurface?.grid.length, 13);
+  assert.equal(donutSurface?.grid[0]?.length, 25);
+  assert.equal(donutSurface?.quads.length, 288);
+
+  assert.equal(hyperplaneModel.surfaceMode, "hyperplanes");
+  assert.equal(hyperplaneModel.surfaces.length, 2);
+  assert.deepEqual(
+    hyperplaneModel.surfaces.map((surface) => surface.id),
+    [
+      "saddle-orbit-graph-hyperplane-positive",
+      "saddle-orbit-graph-hyperplane-negative"
+    ]
+  );
+  assert.equal(hyperplaneModel.surfaces[0]?.grid.length, 13);
+  assert.equal(hyperplaneModel.surfaces[0]?.grid[0]?.length, 13);
+  assert.equal(hyperplaneModel.surfaces[0]?.quads.length, 144);
+  assert.equal(hyperplaneScene.surfaceMeshes.length, 2);
+  assert.equal(hyperplaneScene.surfaceMeshLines.length, 2);
+  assert.equal(hyperplaneScene.root.children.length, 7);
+});
+
 test("WebGL Three scene builds retained geometry for surfaces, mesh lines, and axes", () => {
   const scene = createDefaultGraph3DScene();
   const graph = scene[0] as Graph3DObject;

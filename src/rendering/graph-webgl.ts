@@ -19,7 +19,12 @@ import type {
   GraphPoint3D,
   Surface3DObject
 } from "../semantic/graph.ts";
-import { renderGraph3DToSvg, sampleSaddleSurface } from "./graph-svg.ts";
+import {
+  renderGraph3DToSvg,
+  sampleHyperplaneSurfaceGrid,
+  sampleSaddleSurface,
+  sampleTorusSurfaceGrid
+} from "./graph-svg.ts";
 
 export const GRAPH_3D_WEBGL_RENDERER_KIND = "graph-3d-webgl";
 
@@ -89,10 +94,7 @@ export function createGraph3DWebGLSceneModel(
     camera: graph.camera,
     graph,
     surfaceMode,
-    surfaces:
-      surfaceMode === "mesh"
-        ? surfaces.map(createMeshSurfaceModel)
-        : []
+    surfaces: createSurfaceModels(surfaces, graph, surfaceMode)
   };
 }
 
@@ -276,10 +278,50 @@ function createMeshSurfaceModel(
 ): Graph3DWebGLSurfaceModel {
   const grid = sampleSaddleSurface(surface);
 
+  return createGridSurfaceModel(surface.id, surface.label, grid);
+}
+
+function createSurfaceModels(
+  surfaces: readonly Surface3DObject[],
+  graph: Graph3DObject,
+  surfaceMode: Graph3DSurfaceMode
+): readonly Graph3DWebGLSurfaceModel[] {
+  switch (surfaceMode) {
+    case "mesh":
+      return surfaces.map(createMeshSurfaceModel);
+    case "donut":
+      return [
+        createGridSurfaceModel(
+          `${graph.id}-donut`,
+          "donut",
+          sampleTorusSurfaceGrid()
+        )
+      ];
+    case "hyperplanes":
+      return [
+        createGridSurfaceModel(
+          `${graph.id}-hyperplane-positive`,
+          "z = x / 2",
+          sampleHyperplaneSurfaceGrid(0.5)
+        ),
+        createGridSurfaceModel(
+          `${graph.id}-hyperplane-negative`,
+          "z = -x / 2",
+          sampleHyperplaneSurfaceGrid(-0.5)
+        )
+      ];
+  }
+}
+
+function createGridSurfaceModel(
+  id: string,
+  label: string,
+  grid: readonly (readonly GraphPoint3D[])[]
+): Graph3DWebGLSurfaceModel {
   return {
     grid,
-    id: surface.id,
-    label: surface.label,
+    id,
+    label,
     quads: surfaceQuadsFromGrid(grid)
   };
 }

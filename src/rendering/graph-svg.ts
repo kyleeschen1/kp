@@ -952,7 +952,7 @@ function prepareGeneratedSurface3D(
   };
 }
 
-function sampleTorusSurfaceGrid(): readonly (readonly GraphPoint3D[])[] {
+export function sampleTorusSurfaceGrid(): readonly (readonly GraphPoint3D[])[] {
   const majorRadius = 1.55;
   const minorRadius = 0.62;
   const uValues = sampleDomain([0, Math.PI * 2], 25);
@@ -971,7 +971,7 @@ function sampleTorusSurfaceGrid(): readonly (readonly GraphPoint3D[])[] {
   );
 }
 
-function sampleHyperplaneSurfaceGrid(
+export function sampleHyperplaneSurfaceGrid(
   slope: number
 ): readonly (readonly GraphPoint3D[])[] {
   const domain: NumericDomain = [-2.4, 2.4];
