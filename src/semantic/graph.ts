@@ -85,6 +85,7 @@ export interface Graph3DCamera {
 export interface Graph3DDebugSettings {
   depthOverlay: boolean;
   surfaceMesh: boolean;
+  shadowOverlay: boolean;
 }
 
 export interface Graph3DShadowSettings {
@@ -262,7 +263,8 @@ export function createGraph3DObject(
     ),
     debug: {
       depthOverlay: input.debug?.depthOverlay ?? false,
-      surfaceMesh: input.debug?.surfaceMesh ?? false
+      surfaceMesh: input.debug?.surfaceMesh ?? false,
+      shadowOverlay: input.debug?.shadowOverlay ?? false
     },
     shadow: {
       enabled:

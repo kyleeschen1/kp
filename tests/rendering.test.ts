@@ -384,6 +384,21 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
       : object
   );
   const meshSvg = renderGraph3DToSvg(meshScene, meshScene[0] as Graph3DObject);
+  const shadowDebugScene = scene.map((object) =>
+    object.type === "graph-3d"
+      ? {
+          ...object,
+          debug: {
+            ...object.debug,
+            shadowOverlay: true
+          }
+        }
+      : object
+  );
+  const shadowDebugSvg = renderGraph3DToSvg(
+    shadowDebugScene,
+    shadowDebugScene[0] as Graph3DObject
+  );
 
   assert.match(svg, /<svg/);
   assert.match(svg, /data-kp-object="saddle-orbit-graph"/);
@@ -415,6 +430,7 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /data-kp-light-rim="0.080"/);
   assert.match(svg, /data-kp-debug-depth-overlay="false"/);
   assert.match(svg, /data-kp-debug-surface-mesh="false"/);
+  assert.match(svg, /data-kp-debug-shadow-overlay="false"/);
   assert.doesNotMatch(svg, /class="graph-debug-overlay"/);
   assert.match(svg, /data-kp-depth-buffer-scale="1"/);
   assert.match(svg, /data-kp-depth-buffer-width="560"/);
@@ -455,6 +471,11 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(meshSvg, /data-kp-render-node="rn-saddle-surface-svg-wireframe"/);
   assert.match(meshSvg, /data-kp-surface-mesh="debug"/);
   assert.match(meshSvg, /class="graph-surface__line/);
+  assert.match(shadowDebugSvg, /data-kp-debug-shadow-overlay="true"/);
+  assert.match(shadowDebugSvg, /class="graph-debug-overlay graph-debug-overlay--shadow"/);
+  assert.match(shadowDebugSvg, /data-kp-debug-overlay="shadow-projection"/);
+  assert.match(shadowDebugSvg, /data-kp-debug-shadow-sample-count="12"/);
+  assert.match(shadowDebugSvg, /class="graph-debug-overlay__shadow-quad"/);
   assert.match(svg, /class="graph-axis__arrow"/);
   assert.match(svg, /data-kp-axis-arrow="negative-end"/);
   assert.match(svg, /data-kp-axis-arrow="positive-end"/);

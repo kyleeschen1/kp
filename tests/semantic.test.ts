@@ -238,7 +238,8 @@ test("createGraph3DObject creates a semantic graph object with a third axis", ()
     occludedAxisLightness: 44,
     debug: {
       depthOverlay: false,
-      surfaceMesh: false
+      surfaceMesh: false,
+      shadowOverlay: false
     },
     shadow: {
       enabled: true,
@@ -305,7 +306,8 @@ test("createGraph3DObject preserves explicit graph debug settings", () => {
     height: 220,
     debug: {
       depthOverlay: true,
-      surfaceMesh: true
+      surfaceMesh: true,
+      shadowOverlay: true
     },
     camera: {
       azimuthDegrees: 35,
@@ -317,7 +319,8 @@ test("createGraph3DObject preserves explicit graph debug settings", () => {
 
   assert.deepEqual(graph.debug, {
     depthOverlay: true,
-    surfaceMesh: true
+    surfaceMesh: true,
+    shadowOverlay: true
   });
 });
 
@@ -508,7 +511,8 @@ test("createDefaultGraph3DScene creates graph, axes, and surface objects", () =>
     scene[0]?.type === "graph-3d" ? scene[0].debug : undefined,
     {
       depthOverlay: false,
-      surfaceMesh: false
+      surfaceMesh: false,
+      shadowOverlay: false
     }
   );
 });

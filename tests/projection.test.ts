@@ -27,7 +27,8 @@ const graph: Graph3DObject = {
   occludedAxisLightness: 44,
   debug: {
     depthOverlay: false,
-    surfaceMesh: false
+    surfaceMesh: false,
+    shadowOverlay: false
   },
   shadow: DEFAULT_GRAPH_3D_SHADOW_SETTINGS,
   light: DEFAULT_GRAPH_3D_LIGHT_SETTINGS,

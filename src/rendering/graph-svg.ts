@@ -100,6 +100,11 @@ interface SurfaceShadowQuad3D {
   ];
 }
 
+interface SurfaceShadowDebugSample {
+  surface: Surface3DObject;
+  quad: SurfaceShadowQuad3D;
+}
+
 interface RenderedSurface3D {
   surface: Surface3DObject;
   grid: readonly (readonly GraphPoint3D[])[];
@@ -317,12 +322,15 @@ export function renderGraph3DToSvg(
   const debugOverlay = graph.debug.depthOverlay
     ? renderDepthDebugOverlay3D(graph, depthScene)
     : "";
+  const shadowDebugOverlay = graph.debug.shadowOverlay
+    ? renderShadowDebugOverlay3D(renderedSurfaces)
+    : "";
 
   // Axes are drawn in two semantic layers: hidden pieces under the opaque
   // surface, then visible pieces above it. This gives SVG a lightweight
   // substitute for depth-buffered axis occlusion.
   return `
-    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" ${renderLightAttributes(graph)} data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} ${renderShadowAttributes(renderedSurfaces, graph)} ${renderPerformanceBudgetAttributes(renderBudget)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
+    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" ${renderLightAttributes(graph)} data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" data-kp-debug-shadow-overlay="${graph.debug.shadowOverlay ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} ${renderShadowAttributes(renderedSurfaces, graph)} ${renderPerformanceBudgetAttributes(renderBudget)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
       <rect class="graph-svg__background" x="0" y="0" width="${graph.width}" height="${graph.height}" rx="8" />
       ${renderedSurfaces.map((surface) => renderSurfaceShadowLayer3D(surface, graph)).join("")}
       ${renderedSurfaces.map((surface) => renderSurface3D(surface, graph, depthScene, renderedSurfaces)).join("")}
@@ -330,6 +338,7 @@ export function renderGraph3DToSvg(
       ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, renderedSurfaces, "visible")).join("")}
       ${curves.map((curve) => renderCurve3D(curve, graph, depthScene)).join("")}
       ${debugOverlay}
+      ${shadowDebugOverlay}
     </svg>
   `;
 }
@@ -427,6 +436,38 @@ function renderDepthDebugOverlay3D(
       ${cells}
     </g>
   `;
+}
+
+function renderShadowDebugOverlay3D(
+  surfaces: readonly RenderedSurface3D[]
+): string {
+  const samples = surfaces.flatMap((surface) =>
+    surface.shadowQuads.map((quad): SurfaceShadowDebugSample => ({
+      surface: surface.surface,
+      quad
+    }))
+  ).slice(0, 12);
+
+  if (samples.length === 0) {
+    return "";
+  }
+
+  return `
+    <g class="graph-debug-overlay graph-debug-overlay--shadow" data-kp-debug-overlay="shadow-projection" data-kp-debug-shadow-sample-count="${samples.length}">
+      ${samples.map((sample, index) => renderShadowDebugSample(sample, index)).join("")}
+    </g>
+  `;
+}
+
+function renderShadowDebugSample(
+  sample: SurfaceShadowDebugSample,
+  index: number
+): string {
+  const points = sample.quad.projectedCorners
+    .map((point) => `${formatNumber(point.x)},${formatNumber(point.y)}`)
+    .join(" ");
+
+  return `<polygon class="graph-debug-overlay__shadow-quad" points="${points}" data-kp-object="${escapeHtml(sample.surface.id)}" data-kp-debug-shadow-sample="${index}" data-kp-cell="${sample.quad.rowIndex},${sample.quad.columnIndex}" fill="none" stroke="#be123c" stroke-width="1.200" opacity="0.850" />`;
 }
 
 function renderDepthDebugCell3D(
