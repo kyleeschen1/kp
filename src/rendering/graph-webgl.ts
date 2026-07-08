@@ -108,10 +108,17 @@ export function renderGraph3DWebGLShell(
     <div class="graph-webgl" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-webgl-shell" data-kp-type="graph-3d" data-kp-renderer="webgl" data-kp-webgl-backend="${descriptor.backend}" data-kp-webgl-status="pending">
       <canvas class="graph-webgl__canvas" width="${width}" height="${height}" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-webgl-canvas" data-kp-type="graph-3d" aria-hidden="true"></canvas>
       <div class="graph-webgl__fallback" data-kp-renderer-fallback="svg">
-        ${renderGraph3DToSvg(objects, graph)}
+        ${renderGraph3DWebGLFallback(objects, graph)}
       </div>
     </div>
   `;
+}
+
+export function renderGraph3DWebGLFallback(
+  objects: readonly KpSemanticObject[],
+  graph: Graph3DObject
+): string {
+  return renderGraph3DToSvg(objects, graph);
 }
 
 function createMeshSurfaceModel(

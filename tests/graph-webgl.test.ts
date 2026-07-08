@@ -6,7 +6,8 @@ import {
   canReuseGraph3DWebGLShell,
   createGraph3DWebGLSceneModel,
   createGraph3DWebGLRendererDescriptor,
-  GRAPH_3D_WEBGL_RENDERER_KIND
+  GRAPH_3D_WEBGL_RENDERER_KIND,
+  renderGraph3DWebGLFallback
 } from "../src/rendering/graph-webgl.ts";
 import {
   createGraph3DWebGLCamera,
@@ -50,6 +51,21 @@ test("WebGL shell reuse is limited to already-ready canvas shells", () => {
   assert.equal(canReuseGraph3DWebGLShell("pending"), false);
   assert.equal(canReuseGraph3DWebGLShell("fallback"), false);
   assert.equal(canReuseGraph3DWebGLShell(undefined), false);
+});
+
+test("WebGL fallback renderer mirrors graph surface state metadata", () => {
+  const scene = createDefaultGraph3DScene();
+  const graph = scene[0] as Graph3DObject;
+  const html = renderGraph3DWebGLFallback(scene, {
+    ...graph,
+    surfaceMode: "donut",
+    surfaceQuality: "high"
+  });
+
+  assert.match(html, /data-kp-surface-mode="donut"/);
+  assert.match(html, /data-kp-surface-quality="high"/);
+  assert.match(html, /data-kp-surface-x-sample-count="33"/);
+  assert.match(html, /data-kp-surface-y-sample-count="33"/);
 });
 
 test("WebGL scene model retains default graph axes and surface topology", () => {

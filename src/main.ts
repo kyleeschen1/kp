@@ -26,6 +26,7 @@ import {
 import { occludedAxisColor } from "./rendering/graph-svg.ts";
 import {
   canReuseGraph3DWebGLShell,
+  renderGraph3DWebGLFallback,
   renderGraph3DWebGLShell
 } from "./rendering/graph-webgl.ts";
 import type { KpSemanticObject } from "./semantic/document.ts";
@@ -454,6 +455,19 @@ function renderGraph3DPreview(graphId: string): void {
     existingShell !== null &&
     canReuseGraph3DWebGLShell(existingShell.dataset["kpWebglStatus"])
   ) {
+    const fallback = existingShell.querySelector<HTMLElement>(
+      ".graph-webgl__fallback"
+    );
+
+    if (fallback !== null) {
+      // The fallback is hidden while WebGL is ready, but it remains the semantic
+      // SVG source for metadata, accessibility, and screenshot verification.
+      fallback.innerHTML = renderGraph3DWebGLFallback(
+        editorDocument.objects,
+        graph
+      );
+    }
+
     hydrateGraph3DWebGLShell(existingShell, editorDocument.objects);
     return;
   }
