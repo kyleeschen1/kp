@@ -108,12 +108,18 @@ export async function createKatexTextureAtlas(
       continue;
     }
 
-    const image = await captureElementImage(token.element, token.rect, pixelRatio);
     const context = page.getContext("2d");
 
     if (context === null) {
       throw new Error("Could not create a 2D atlas canvas context.");
     }
+
+    if (shouldPaintStructuralToken(token)) {
+      drawStructuralToken(context, token, region, pixelRatio);
+      continue;
+    }
+
+    const image = await captureElementImage(token.element, token.rect, pixelRatio);
 
     context.drawImage(image, region.x, region.y, region.width, region.height);
   }
@@ -141,7 +147,14 @@ async function captureElementImage(
   }
 
   const existingStyle = clone.getAttribute("style");
-  const captureStyle = `${copyComputedTextStyle(element)};display:inline-block;margin:0;transform:scale(${pixelRatio});transform-origin:top left;`;
+  const captureStyle = [
+    copyComputedTextStyle(element),
+    copyComputedBoxStyle(element, rect),
+    `display:inline-block`,
+    `margin:0`,
+    `transform:scale(${pixelRatio})`,
+    `transform-origin:top left`
+  ].join(";");
 
   clone.setAttribute(
     "style",
@@ -151,7 +164,7 @@ async function captureElementImage(
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
       <foreignObject width="100%" height="100%">
-        <div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block">${clone.outerHTML}</div>
+        <div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;margin:0">${clone.outerHTML}</div>
       </foreignObject>
     </svg>
   `;
@@ -177,6 +190,98 @@ function copyComputedTextStyle(element: Element): string {
     `white-space:${style.whiteSpace}`,
     `line-height:${style.lineHeight}`
   ].join(";");
+}
+
+function copyComputedBoxStyle(
+  element: Element,
+  rect: DOMRect | { width: number; height: number }
+): string {
+  const style = window.getComputedStyle(element);
+
+  return [
+    `box-sizing:${style.boxSizing}`,
+    `width:${rect.width}px`,
+    `height:${rect.height}px`,
+    `background:${style.background}`,
+    `border-top:${style.borderTopWidth} ${style.borderTopStyle} ${style.borderTopColor}`,
+    `border-right:${style.borderRightWidth} ${style.borderRightStyle} ${style.borderRightColor}`,
+    `border-bottom:${style.borderBottomWidth} ${style.borderBottomStyle} ${style.borderBottomColor}`,
+    `border-left:${style.borderLeftWidth} ${style.borderLeftStyle} ${style.borderLeftColor}`
+  ].join(";");
+}
+
+function shouldPaintStructuralToken(token: KatexMotionToken): boolean {
+  return (
+    token.text.startsWith("structural:") &&
+    token.element?.querySelector("svg") === null
+  );
+}
+
+function drawStructuralToken(
+  context: CanvasRenderingContext2D,
+  token: KatexMotionToken,
+  region: KatexAtlasRegion,
+  pixelRatio: number
+): void {
+  if (token.element === undefined) {
+    return;
+  }
+
+  const style = window.getComputedStyle(token.element);
+
+  if (hasClassName(token.element, "rule")) {
+    context.save();
+    context.fillStyle =
+      style.borderTopColor ||
+      style.borderRightColor ||
+      style.backgroundColor ||
+      style.color ||
+      "#000";
+    context.fillRect(region.x, region.y, region.width, region.height);
+    context.restore();
+    return;
+  }
+
+  const borderWidth = Number.parseFloat(style.borderBottomWidth);
+  const lineHeight = Math.max(
+    1,
+    Math.min(
+      region.height,
+      Number.isFinite(borderWidth)
+        ? Math.ceil(borderWidth * pixelRatio)
+        : region.height
+    )
+  );
+  const lineTop = region.y + Math.max(0, region.height - lineHeight);
+  const lineColor = style.borderBottomColor || style.color || "#000";
+
+  context.save();
+  if (
+    style.borderBottomStyle === "dashed" ||
+    style.borderBottomStyle === "dotted"
+  ) {
+    const dashLength =
+      style.borderBottomStyle === "dotted"
+        ? Math.max(1, lineHeight)
+        : Math.max(4, lineHeight * 4);
+    const gapLength = Math.max(2, lineHeight * 3);
+
+    context.strokeStyle = lineColor;
+    context.lineWidth = lineHeight;
+    context.setLineDash([dashLength, gapLength]);
+    context.beginPath();
+    context.moveTo(region.x, lineTop + lineHeight / 2);
+    context.lineTo(region.x + region.width, lineTop + lineHeight / 2);
+    context.stroke();
+  } else {
+    context.fillStyle = lineColor;
+    context.fillRect(region.x, lineTop, region.width, lineHeight);
+  }
+  context.restore();
+}
+
+function hasClassName(element: Element, className: string): boolean {
+  return element.className.split(/\s+/).includes(className);
 }
 
 function validatePackingOptions(options: KatexAtlasPackingOptions): void {

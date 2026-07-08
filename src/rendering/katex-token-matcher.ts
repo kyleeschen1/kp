@@ -98,21 +98,5 @@ function compareCandidates(a: MatchCandidate, b: MatchCandidate): number {
     return b.score - a.score;
   }
 
-  const aDistance = tokenDistance(a.source, a.target);
-  const bDistance = tokenDistance(b.source, b.target);
-
-  if (aDistance !== bDistance) {
-    return aDistance - bDistance;
-  }
-
   return a.targetIndex - b.targetIndex;
-}
-
-function tokenDistance(source: KatexMotionToken, target: KatexMotionToken): number {
-  const sourceCenterX = source.localRect.left + source.localRect.width / 2;
-  const sourceCenterY = source.localRect.top + source.localRect.height / 2;
-  const targetCenterX = target.localRect.left + target.localRect.width / 2;
-  const targetCenterY = target.localRect.top + target.localRect.height / 2;
-
-  return Math.hypot(targetCenterX - sourceCenterX, targetCenterY - sourceCenterY);
 }

@@ -124,6 +124,33 @@ test("snapshotKatexTokens emits normalized motion leaf tokens", () => {
   });
 });
 
+test("snapshotKatexTokens emits structural KaTeX tokens", () => {
+  const structuralElements = [
+    fakeElement("frac-line", "", rect(130, 92, 38, 2)),
+    fakeElement("hline", "", rect(130, 102, 38, 2)),
+    fakeElement("hdashline", "", rect(130, 112, 38, 2)),
+    fakeElement("mord rule", "", rect(130, 122, 20, 6)),
+    fakeElement("hide-tail", "", rect(130, 132, 18, 20))
+  ];
+  const root = {
+    getBoundingClientRect: () => rect(100, 50, 200, 120),
+    querySelectorAll: () => structuralElements
+  } as unknown as Element;
+
+  const snapshot = snapshotKatexTokens(root);
+
+  assert.deepEqual(
+    snapshot.tokens.map((entry) => [entry.text, entry.signature]),
+    [
+      ["structural:frac-line", "frac-line"],
+      ["structural:hline", "hline"],
+      ["structural:hdashline", "hdashline"],
+      ["structural:rule", "mord rule"],
+      ["structural:hide-tail", "hide-tail"]
+    ]
+  );
+});
+
 function token(id: string, top: number): KatexMotionToken {
   return {
     id,

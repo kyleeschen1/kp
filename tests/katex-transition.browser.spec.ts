@@ -8,13 +8,26 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
     const katexAdapterPath = "/src/rendering/katex-adapter.ts";
     const katexTransitionControllerPath =
       "/src/rendering/katex-transition-controller.ts";
-    const [{ renderLatexToHtml }, { transitionKatexEquations }] =
+    const katexTokenSnapshotPath = "/src/rendering/katex-token-snapshot.ts";
+    const katexTextureAtlasPath = "/src/rendering/katex-texture-atlas.ts";
+    const [
+      { renderLatexToHtml },
+      { transitionKatexEquations },
+      { snapshotKatexTokens },
+      { createKatexTextureAtlas }
+    ] =
       await Promise.all([
         import(katexAdapterPath) as Promise<
           typeof import("../src/rendering/katex-adapter.ts")
         >,
         import(katexTransitionControllerPath) as Promise<
           typeof import("../src/rendering/katex-transition-controller.ts")
+        >,
+        import(katexTokenSnapshotPath) as Promise<
+          typeof import("../src/rendering/katex-token-snapshot.ts")
+        >,
+        import(katexTextureAtlasPath) as Promise<
+          typeof import("../src/rendering/katex-texture-atlas.ts")
         >
       ]);
     const host = document.createElement("section");
@@ -22,7 +35,7 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
     host.setAttribute("data-testid", "katex-transition-host");
     host.innerHTML = `
       <div data-testid="source">${renderLatexToHtml(String.raw`x + x = 2x`)}</div>
-      <div data-testid="target">${renderLatexToHtml(String.raw`\\frac{x^2 - 1}{x - 1} = x + 1`)}</div>
+      <div data-testid="target">${renderLatexToHtml(String.raw`\frac{x^2 - 1}{x - 1} = x + 1`)}</div>
     `;
     document.body.append(host);
 
@@ -31,6 +44,146 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
 
     if (source === null || target === null) {
       throw new Error("Expected source and target KaTeX nodes.");
+    }
+
+    if (
+      target.querySelector(".mfrac") === null ||
+      target.querySelector(".frac-line") === null
+    ) {
+      throw new Error("Expected the target KaTeX equation to render a fraction.");
+    }
+
+    const assertStructuralAtlasPixels = async (
+      root: HTMLElement,
+      tokenText: string,
+      description: string,
+      options: { expectTransparentGaps?: boolean } = {}
+    ) => {
+      const snapshot = snapshotKatexTokens(root);
+      const token = snapshot.tokens.find((entry) => entry.text === tokenText);
+
+      if (token === undefined) {
+        throw new Error(`Expected the KaTeX snapshot to include ${description}.`);
+      }
+
+      const structuralAtlas = await createKatexTextureAtlas([token], {
+        maxTextureSize: 256,
+        pixelRatio: 1
+      });
+      const region = structuralAtlas.regions.get(token.id);
+      const page =
+        region === undefined ? undefined : structuralAtlas.pages[region.page];
+      const context = page?.getContext("2d");
+
+      if (region === undefined || context == null) {
+        throw new Error(`Expected a texture atlas region for ${description}.`);
+      }
+
+      const pixels = context.getImageData(
+        region.x,
+        region.y,
+        region.width,
+        region.height
+      ).data;
+      const hasPixels = Array.from(pixels).some(
+        (value, index) => index % 4 === 3 && value > 0
+      );
+
+      if (!hasPixels) {
+        throw new Error(`Expected the ${description} texture to contain pixels.`);
+      }
+
+      if (options.expectTransparentGaps === true) {
+        let densestRow = 0;
+        let densestRowOpaquePixels = 0;
+
+        for (let y = 0; y < region.height; y += 1) {
+          let opaquePixels = 0;
+
+          for (let x = 0; x < region.width; x += 1) {
+            const alpha = pixels[(y * region.width + x) * 4 + 3] ?? 0;
+
+            if (alpha > 0) {
+              opaquePixels += 1;
+            }
+          }
+
+          if (opaquePixels > densestRowOpaquePixels) {
+            densestRow = y;
+            densestRowOpaquePixels = opaquePixels;
+          }
+        }
+
+        const transparentGapCount = Array.from({ length: region.width }).filter(
+          (_, x) => {
+            const alpha = pixels[(densestRow * region.width + x) * 4 + 3] ?? 0;
+
+            return alpha === 0;
+          }
+        ).length;
+
+        if (transparentGapCount === 0) {
+          throw new Error(`Expected the ${description} texture to contain gaps.`);
+        }
+      }
+    };
+
+    await assertStructuralAtlasPixels(
+      target,
+      "structural:frac-line",
+      "fraction rule"
+    );
+
+    for (const structuralCase of [
+      {
+        latex: String.raw`\sqrt{x}`,
+        selector: ".hide-tail svg",
+        tokenText: "structural:hide-tail",
+        description: "radical svg"
+      },
+      {
+        latex: String.raw`\begin{array}{c}a\\\hline b\end{array}`,
+        selector: ".hline",
+        tokenText: "structural:hline",
+        description: "array horizontal line"
+      },
+      {
+        latex: String.raw`\begin{array}{c}a\\\hdashline b\end{array}`,
+        selector: ".hdashline",
+        tokenText: "structural:hdashline",
+        description: "array dashed line",
+        expectTransparentGaps: true
+      },
+      {
+        latex: String.raw`\rule{1em}{0.2em}`,
+        selector: ".rule",
+        tokenText: "structural:rule",
+        description: "rule"
+      }
+    ]) {
+      const fixture = document.createElement("div");
+
+      fixture.style.position = "absolute";
+      fixture.style.left = "-10000px";
+      fixture.style.top = "0";
+      fixture.innerHTML = renderLatexToHtml(structuralCase.latex);
+      document.body.append(fixture);
+
+      if (fixture.querySelector(structuralCase.selector) === null) {
+        throw new Error(
+          `Expected KaTeX to render ${structuralCase.description}.`
+        );
+      }
+
+      await assertStructuralAtlasPixels(
+        fixture,
+        structuralCase.tokenText,
+        structuralCase.description,
+        structuralCase.expectTransparentGaps === true
+          ? { expectTransparentGaps: true }
+          : {}
+      );
+      fixture.remove();
     }
 
     target.style.position = "absolute";

@@ -93,6 +93,27 @@ test("createKatexTransitionPlan prefers tokens in the same row bucket", () => {
   );
 });
 
+test("createKatexTransitionPlan preserves stable order for equivalent repeated tokens", () => {
+  const source = [
+    token("s-left", "x", "mord", 90, 20),
+    token("s-right", "x", "mord", 0, 20)
+  ];
+  const target = [
+    token("t-left", "x", "mord", 0, 20),
+    token("t-right", "x", "mord", 90, 20)
+  ];
+
+  const plan = createKatexTransitionPlan(source, target);
+
+  assert.deepEqual(
+    plan.matched.map((match) => [match.source.id, match.target.id]),
+    [
+      ["s-left", "t-left"],
+      ["s-right", "t-right"]
+    ]
+  );
+});
+
 test("createKatexTransitionPlan ignores empty-text tokens entirely", () => {
   const source = [
     token("s-empty", "", "mord", 0, 20),
