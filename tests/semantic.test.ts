@@ -240,6 +240,12 @@ test("createGraph3DObject creates a semantic graph object with a third axis", ()
       depthOverlay: false,
       surfaceMesh: false
     },
+    light: {
+      direction: { x: -0.35, y: -0.45, z: 0.82 },
+      ambient: 0.45,
+      diffuse: 0.4,
+      depthHaze: 1
+    },
     camera: {
       azimuthDegrees: 35,
       elevationDegrees: 30,
@@ -276,6 +282,40 @@ test("createGraph3DObject preserves explicit graph debug settings", () => {
   assert.deepEqual(graph.debug, {
     depthOverlay: true,
     surfaceMesh: true
+  });
+});
+
+test("createGraph3DObject preserves explicit graph light settings", () => {
+  const graph = createGraph3DObject({
+    id: "lit-graph",
+    label: "Lit graph",
+    xAxisId: "lit-x-axis",
+    yAxisId: "lit-y-axis",
+    zAxisId: "lit-z-axis",
+    xDomain: [-1, 1],
+    yDomain: [-1, 1],
+    zDomain: [-1, 1],
+    width: 300,
+    height: 220,
+    light: {
+      direction: { x: 0, y: -0.25, z: 1 },
+      ambient: 0.35,
+      diffuse: 0.55,
+      depthHaze: 0.5
+    },
+    camera: {
+      azimuthDegrees: 35,
+      elevationDegrees: 30,
+      scale: 30,
+      origin: [150, 110]
+    }
+  });
+
+  assert.deepEqual(graph.light, {
+    direction: { x: 0, y: -0.25, z: 1 },
+    ambient: 0.35,
+    diffuse: 0.55,
+    depthHaze: 0.5
   });
 });
 

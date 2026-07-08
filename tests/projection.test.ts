@@ -6,7 +6,10 @@ import {
   projectGraphLine3D,
   projectGraphPoint3D
 } from "../src/rendering/projection.ts";
-import type { Graph3DObject } from "../src/semantic/graph.ts";
+import {
+  DEFAULT_GRAPH_3D_LIGHT_SETTINGS,
+  type Graph3DObject
+} from "../src/semantic/graph.ts";
 
 const graph: Graph3DObject = {
   id: "projection-test-graph",
@@ -25,6 +28,7 @@ const graph: Graph3DObject = {
     depthOverlay: false,
     surfaceMesh: false
   },
+  light: DEFAULT_GRAPH_3D_LIGHT_SETTINGS,
   camera: {
     azimuthDegrees: 0,
     elevationDegrees: 0,

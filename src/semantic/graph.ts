@@ -19,6 +19,13 @@ export type NumericDomain = readonly [number, number];
 
 export const DEFAULT_OCCLUDED_AXIS_LIGHTNESS = 44;
 
+export const DEFAULT_GRAPH_3D_LIGHT_SETTINGS: Graph3DLightSettings = {
+  direction: { x: -0.35, y: -0.45, z: 0.82 },
+  ambient: 0.45,
+  diffuse: 0.4,
+  depthHaze: 1
+};
+
 export interface GraphPoint2D {
   x: number;
   y: number;
@@ -73,6 +80,13 @@ export interface Graph3DDebugSettings {
   surfaceMesh: boolean;
 }
 
+export interface Graph3DLightSettings {
+  direction: GraphPoint3D;
+  ambient: number;
+  diffuse: number;
+  depthHaze: number;
+}
+
 export interface Graph3DObject {
   id: string;
   type: "graph-3d";
@@ -87,6 +101,7 @@ export interface Graph3DObject {
   height: number;
   occludedAxisLightness: number;
   debug: Graph3DDebugSettings;
+  light: Graph3DLightSettings;
   camera: Graph3DCamera;
 }
 
@@ -152,9 +167,12 @@ export type GraphSceneObject =
 type CreateGraph2DObjectInput = Omit<Graph2DObject, "type">;
 type CreateAxis2DObjectInput = Omit<Axis2DObject, "type">;
 type CreateGraph3DObjectInput =
-  Omit<Graph3DObject, "debug" | "occludedAxisLightness" | "type"> &
+  Omit<Graph3DObject, "debug" | "light" | "occludedAxisLightness" | "type"> &
   Partial<Pick<Graph3DObject, "occludedAxisLightness">> & {
     debug?: Partial<Graph3DDebugSettings>;
+    light?: Partial<Graph3DLightSettings> & {
+      direction?: GraphPoint3D;
+    };
   };
 type CreateAxis3DObjectInput = Omit<Axis3DObject, "type">;
 
@@ -226,6 +244,25 @@ export function createGraph3DObject(
     debug: {
       depthOverlay: input.debug?.depthOverlay ?? false,
       surfaceMesh: input.debug?.surfaceMesh ?? false
+    },
+    light: {
+      direction:
+        input.light?.direction ?? DEFAULT_GRAPH_3D_LIGHT_SETTINGS.direction,
+      ambient: clamp(
+        input.light?.ambient ?? DEFAULT_GRAPH_3D_LIGHT_SETTINGS.ambient,
+        0,
+        1
+      ),
+      diffuse: clamp(
+        input.light?.diffuse ?? DEFAULT_GRAPH_3D_LIGHT_SETTINGS.diffuse,
+        0,
+        1
+      ),
+      depthHaze: clamp(
+        input.light?.depthHaze ?? DEFAULT_GRAPH_3D_LIGHT_SETTINGS.depthHaze,
+        0,
+        1
+      )
     }
   };
 }
