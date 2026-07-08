@@ -81,7 +81,7 @@ export const projectDashboardData: ProjectDashboardData = {
       id: "work-project-dashboard-v1",
       title: "Project dashboard v1",
       category: "todo",
-      status: "active",
+      status: "done",
       priority: "critical",
       summary:
         "Build the prototype dashboard that tracks work, blockers, report-card themes, and object galleries from one shared data set.",
@@ -140,6 +140,17 @@ export const projectDashboardData: ProjectDashboardData = {
           summary:
             "Document and expose the source-backed write protocol for keeping dashboard cards current.",
           tags: ["dashboard", "phase-5", "codex-update"],
+          relatedIds: ["report-dashboard-operations"]
+        },
+        {
+          id: "work-project-dashboard-v1-phase-6",
+          title: "Phase 6 browser verification",
+          category: "todo",
+          status: "done",
+          priority: "high",
+          summary:
+            "Add browser coverage for the dashboard round trip, editor rehydration, equation scrubbing, and graph control updates.",
+          tags: ["dashboard", "phase-6", "browser-verification", "codex-update"],
           relatedIds: ["report-dashboard-operations"]
         }
       ],
@@ -419,15 +430,19 @@ export const projectDashboardData: ProjectDashboardData = {
         {
           label: "Project dashboard v1 write protocol",
           href: "docs/superpowers/specs/2026-07-08-project-dashboard-v1-design.md"
+        },
+        {
+          label: "Project dashboard browser spec",
+          href: "tests/project-dashboard.browser.spec.ts"
         }
       ],
       risks: [
         "Browser edits are not persistent in v1.",
-        "Card status updates still require Codex to edit seed data."
+        "Card status updates still require Codex to edit seed data until persistent editing lands."
       ],
       recommendedNextActions: [
-        "Apply the write protocol after each committed dashboard phase.",
-        "Add browser coverage for dashboard navigation and editor return."
+        "Choose the next dashboard slice: persistent writeback, richer gallery previews, or report-card generation.",
+        "Apply the write protocol after each future dashboard-related commit."
       ],
       tags: ["dashboard", "codex", "project-health"],
       relatedIds: ["work-project-dashboard-v1"]

@@ -260,9 +260,16 @@ test("project dashboard v1 card records completed Codex phase updates", () => {
   const reportCardPhase = dashboardCard?.children?.find(
     (card) => card.id === "work-project-dashboard-v1-phase-4"
   );
+  const browserVerificationPhase = dashboardCard?.children?.find(
+    (card) => card.id === "work-project-dashboard-v1-phase-6"
+  );
 
+  assert.equal(dashboardCard?.status, "done");
   assert.equal(reportCardPhase?.status, "done");
   assert.equal(reportCardPhase?.priority, "high");
   assert.ok(reportCardPhase?.tags.includes("codex-update"));
   assert.match(reportCardPhase?.summary ?? "", /report-card themes/);
+  assert.equal(browserVerificationPhase?.status, "done");
+  assert.ok(browserVerificationPhase?.tags.includes("browser-verification"));
+  assert.match(browserVerificationPhase?.summary ?? "", /dashboard round trip/);
 });
