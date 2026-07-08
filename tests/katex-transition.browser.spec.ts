@@ -1,5 +1,144 @@
 import { expect, test } from "@playwright/test";
 
+test("editor equation motion demo uses semantic playback plans", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  const demo = page.locator("[data-kp-equation-motion-demo]");
+  const next = demo.locator('[data-action="equation-motion-next"]');
+  const rewind = demo.locator('[data-action="equation-motion-rewind"]');
+
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "0");
+  await expect(demo.locator('[data-kp-equation-motion-state="0"]')).toBeVisible();
+  await expect(demo.locator('[data-kp-equation-motion-state="1"]')).toBeHidden();
+  await expect(rewind).toBeDisabled();
+  await expect(next).toBeEnabled();
+
+  const visibleTokenBox = await demo
+    .locator('[data-kp-equation-motion-state="0"] [data-kp-motion-id="lhs.x"]')
+    .evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+
+      return {
+        inVisibleFormula:
+          element.closest(".equation-motion__formula") !== null &&
+          element.closest(".equation-motion__motion-anchors") === null,
+        opacity: style.opacity,
+        text: element.textContent?.trim(),
+        visibility: style.visibility,
+        width: rect.width,
+        height: rect.height
+      };
+    });
+
+  expect(visibleTokenBox).toEqual({
+    inVisibleFormula: true,
+    opacity: "1",
+    text: "x",
+    visibility: "visible",
+    width: expect.any(Number),
+    height: expect.any(Number)
+  });
+  expect(visibleTokenBox.width).toBeGreaterThan(0);
+  expect(visibleTokenBox.height).toBeGreaterThan(0);
+
+  await next.click();
+
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-last-renderer",
+    "operation-plan"
+  );
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-latest-source",
+    "0"
+  );
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-latest-target",
+    "1"
+  );
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-progress", "1");
+  await expect(demo.locator('[data-kp-equation-motion-state="1"]')).toBeVisible();
+  await expect(demo.locator('[data-kp-equation-motion-state="0"]')).toBeHidden();
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-source-anchor-count",
+    "5"
+  );
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-target-anchor-count",
+    "9"
+  );
+  await expect(rewind).toBeEnabled();
+  await expect(next).toBeEnabled();
+
+  await next.click();
+
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "2");
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-latest-source",
+    "1"
+  );
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-latest-target",
+    "2"
+  );
+  await expect(demo.locator('[data-kp-equation-motion-state="2"]')).toBeVisible();
+
+  await next.click();
+
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "3");
+  await expect(demo.locator('[data-kp-equation-motion-state="3"]')).toBeVisible();
+  await expect(next).toBeDisabled();
+  await expect(rewind).toBeEnabled();
+
+  await rewind.click();
+
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "2");
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-latest-source",
+    "3"
+  );
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-latest-target",
+    "2"
+  );
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-progress", "1");
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-plan-progress",
+    "0"
+  );
+  await expect(demo.locator('[data-kp-equation-motion-state="2"]')).toBeVisible();
+  await expect(demo.locator('[data-kp-equation-motion-state="3"]')).toBeHidden();
+  await expect(next).toBeEnabled();
+  await expect(rewind).toBeEnabled();
+
+  const scrubbedProgress = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.5);
+
+    return {
+      progress: demoElement.dataset["kpEquationMotionProgress"],
+      sourceCount: demoElement.dataset["kpEquationMotionSourceAnchorCount"],
+      targetCount: demoElement.dataset["kpEquationMotionTargetAnchorCount"]
+    };
+  });
+
+  expect(scrubbedProgress).toEqual({
+    progress: "0.5",
+    sourceCount: "3",
+    targetCount: "5"
+  });
+});
+
 test("KaTeX WebGL transition blanks DOM during overlay and reveals target", async ({
   page
 }) => {
@@ -391,411 +530,12 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
   await expect(page.locator('[data-testid="target"] .katex')).toBeVisible();
 });
 
-test("editor equation motion demo advances, rewinds, and replays transitions", async ({
-  page
-}) => {
-  await page.goto("/");
-
-  const demo = page.locator("[data-kp-equation-motion-demo]");
-  const next = demo.getByRole("button", { name: "Next" });
-  const rewind = demo.getByRole("button", { name: "Rewind" });
-  const replay = demo.getByRole("button", { name: "Replay" });
-
-  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "0");
-  await expect(
-    demo.locator('[data-kp-equation-motion-measure="transfer-target"]')
-  ).toHaveText(/x\s*=\s*7\s*−?\s*-?\s*3/);
-  await expect(rewind).toBeDisabled();
-  await expect(replay).toBeDisabled();
-  await expect(next).toBeEnabled();
-
-  await page.evaluate(() => {
-    const demo = document.querySelector<HTMLElement>(
-      "[data-kp-equation-motion-demo]"
-    );
-
-    if (demo === null) {
-      throw new Error("Expected the equation motion demo.");
-    }
-
-    window.__kpEquationMotionHandoffPromise = new Promise(
-      (resolve, reject) => {
-        let observer: MutationObserver | undefined;
-        let sawOverlay = false;
-        let settled = false;
-        let timeout: number | undefined;
-        const finish = (state: {
-          step: string | undefined;
-          handoff: string | undefined;
-          overlayPresent: boolean;
-        }) => {
-          if (settled) {
-            return;
-          }
-
-          settled = true;
-          if (timeout !== undefined) {
-            clearTimeout(timeout);
-          }
-          observer?.disconnect();
-          resolve(state);
-        };
-        const fail = (error: Error) => {
-          if (settled) {
-            return;
-          }
-
-          settled = true;
-          if (timeout !== undefined) {
-            clearTimeout(timeout);
-          }
-          observer?.disconnect();
-          reject(error);
-        };
-        const inspectHandoff = () => {
-          const overlay = document.querySelector(
-            '[data-kp-equation-motion-choreography="transfer-3"]'
-          );
-
-          if (overlay !== null) {
-            sawOverlay = true;
-            if (demo.dataset["kpEquationMotionStep"] === "1") {
-              finish({
-                step: demo.dataset["kpEquationMotionStep"],
-                handoff: demo.dataset["kpEquationMotionHandoff"],
-                overlayPresent: true
-              });
-            }
-            return;
-          }
-
-          if (sawOverlay && demo.dataset["kpEquationMotionStep"] === "1") {
-            fail(
-              new Error(
-                "Equation motion step changed after choreography overlay cleanup."
-              )
-            );
-          }
-        };
-
-        timeout = window.setTimeout(() => {
-          fail(new Error("Expected equation motion handoff before cleanup."));
-        }, 5_000);
-        observer = new MutationObserver(inspectHandoff);
-        observer.observe(document.body, {
-          attributeFilter: [
-            "data-kp-equation-motion-step",
-            "data-kp-equation-motion-handoff"
-          ],
-          attributes: true,
-          childList: true,
-          subtree: true
-        });
-        inspectHandoff();
-      }
-    );
-  });
-
-  await next.click();
-  await expect(demo).toHaveAttribute("data-kp-equation-motion-busy", "true");
-  await expect(
-    page.locator(
-      '[data-kp-equation-motion-choreography="transfer-3"]'
-    )
-  ).toBeVisible();
-  await expect(
-    page.locator(
-      '[data-kp-equation-motion-choreography="transfer-3"][data-kp-equation-motion-measured-from="transfer-target"]'
-    )
-  ).toBeVisible();
-  await expect(
-    page.locator('[data-kp-equation-motion-role="moving-3"]')
-  ).toHaveText("3");
-  await expect(
-    page.locator('[data-kp-equation-motion-role="persisting-equals"]')
-  ).toHaveText("=");
-  await expect(
-    page.locator('[data-kp-equation-motion-role="persisting-seven"]')
-  ).toHaveText("7");
-  await expect(
-    page.locator('[data-kp-equation-motion-role="vanishing-plus"]')
-  ).toHaveText("+");
-  await expect(
-    page.locator('[data-kp-equation-motion-role="appearing-minus"]')
-  ).toHaveText(/[-−]/);
-  await setEquationMotionAnimationsCurrentTime(page, 220);
-  await expectEquationMotionRolesAlignedWithState(page, "0", [
-    { role: "persisting-x", text: "x" },
-    { role: "persisting-equals", text: "=" },
-    { role: "persisting-seven", text: "7" }
-  ]);
-  await resumeEquationMotionAnimations(page);
-  await page.waitForTimeout(650);
-  await expect(
-    page.locator(
-      '[data-kp-equation-motion-choreography="transfer-3"]'
-    )
-  ).toBeVisible();
-  await expect(
-    page.locator('[data-kp-equation-motion-role="moving-3"]')
-  ).toBeVisible();
-  await expect(
-    page.locator('[data-kp-equation-motion-role="persisting-equals"]')
-  ).toBeVisible();
-  await expect(
-    page.locator('[data-kp-equation-motion-role="persisting-seven"]')
-  ).toBeVisible();
-  await expect(
-    page.locator('[data-kp-equation-motion-role="appearing-minus"]')
-  ).toBeVisible();
-  await expect(
-    page.locator('[data-kp-equation-motion-role="vanishing-plus"]')
-  ).toHaveCSS("opacity", "0");
-  await expect(next).toBeDisabled();
-  const transferHandoff = await page.evaluate(() => {
-    if (window.__kpEquationMotionHandoffPromise === undefined) {
-      throw new Error("Expected an equation motion handoff promise.");
-    }
-
-    return window.__kpEquationMotionHandoffPromise;
-  });
-
-  expect(transferHandoff).toEqual({
-    step: "1",
-    handoff: "true",
-    overlayPresent: true
-  });
-  const transferOverlay = page.locator(
-    '[data-kp-equation-motion-choreography="transfer-3"]'
-  );
-
-  await expect(transferOverlay).toHaveAttribute(
-    "data-kp-equation-motion-overlay-state",
-    "handoff-fade"
-  );
-  await expectStableEquationMotionHandoff(page, {
-    persistentRoles: [
-      "persisting-x",
-      "persisting-equals",
-      "persisting-seven",
-      "moving-3",
-      "appearing-minus"
-    ],
-    settledRoles: [
-      "settled-x",
-      "settled-equals",
-      "settled-seven",
-      "settled-minus",
-      "settled-3"
-    ]
-  });
-  await expect(
-    page.locator('[data-kp-equation-motion-role="persisting-x"]')
-  ).toHaveText("x");
-  await expect(
-    page.locator('[data-kp-equation-motion-role="persisting-equals"]')
-  ).toHaveText("=");
-  await expect(
-    page.locator('[data-kp-equation-motion-role="persisting-seven"]')
-  ).toHaveText("7");
-  await expect(
-    page.locator('[data-kp-equation-motion-role="appearing-minus"]')
-  ).toHaveText(/[-−]/);
-  await expect(
-    page.locator('[data-kp-equation-motion-role="moving-3"]')
-  ).toHaveText("3");
-  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1", {
-    timeout: 5_000
-  });
-  await expect(demo).toHaveAttribute(
-    "data-kp-equation-motion-last-renderer",
-    "custom-transfer"
-  );
-  await expect(demo).toHaveAttribute(
-    "data-kp-equation-motion-latest-source",
-    "0"
-  );
-  await expect(demo).toHaveAttribute(
-    "data-kp-equation-motion-latest-target",
-    "1"
-  );
-  await expect(rewind).toBeEnabled();
-  await expect(replay).toBeEnabled();
-  await expect(next).toBeEnabled();
-
-  await page.evaluate(() => {
-    const demo = document.querySelector<HTMLElement>(
-      "[data-kp-equation-motion-demo]"
-    );
-
-    if (demo === null) {
-      throw new Error("Expected the equation motion demo.");
-    }
-
-    window.__kpEquationMotionMeltHandoffPromise = new Promise(
-      (resolve, reject) => {
-        let observer: MutationObserver | undefined;
-        let sawOverlay = false;
-        let settled = false;
-        let timeout: number | undefined;
-        const finish = (state: {
-          step: string | undefined;
-          handoff: string | undefined;
-          overlayPresent: boolean;
-        }) => {
-          if (settled) {
-            return;
-          }
-
-          settled = true;
-          if (timeout !== undefined) {
-            clearTimeout(timeout);
-          }
-          observer?.disconnect();
-          resolve(state);
-        };
-        const fail = (error: Error) => {
-          if (settled) {
-            return;
-          }
-
-          settled = true;
-          if (timeout !== undefined) {
-            clearTimeout(timeout);
-          }
-          observer?.disconnect();
-          reject(error);
-        };
-        const inspectHandoff = () => {
-          const overlay = document.querySelector(
-            '[data-kp-equation-motion-choreography="melt-right-side"]'
-          );
-
-          if (overlay !== null) {
-            sawOverlay = true;
-            if (demo.dataset["kpEquationMotionStep"] === "2") {
-              finish({
-                step: demo.dataset["kpEquationMotionStep"],
-                handoff: demo.dataset["kpEquationMotionHandoff"],
-                overlayPresent: true
-              });
-            }
-            return;
-          }
-
-          if (sawOverlay && demo.dataset["kpEquationMotionStep"] === "2") {
-            fail(
-              new Error(
-                "Equation motion melt step changed after choreography overlay cleanup."
-              )
-            );
-          }
-        };
-
-        timeout = window.setTimeout(() => {
-          fail(new Error("Expected equation motion melt handoff before cleanup."));
-        }, 5_000);
-        observer = new MutationObserver(inspectHandoff);
-        observer.observe(document.body, {
-          attributeFilter: [
-            "data-kp-equation-motion-step",
-            "data-kp-equation-motion-handoff"
-          ],
-          attributes: true,
-          childList: true,
-          subtree: true
-        });
-        inspectHandoff();
-      }
-    );
-  });
-
-  await next.click();
-  await expect(
-    page.locator(
-      '[data-kp-equation-motion-choreography="melt-right-side"]'
-    )
-  ).toBeVisible();
-  await expect(
-    page.locator('[data-kp-equation-motion-role="melting-right-side"]')
-  ).toBeVisible();
-  await expect(
-    page.locator('[data-kp-equation-motion-role="appearing-result"]')
-  ).toHaveText("4");
-  await setEquationMotionAnimationsCurrentTime(page, 220);
-  await expectEquationMotionRolesAlignedWithState(page, "1", [
-    { role: "persisting-x", text: "x" },
-    { role: "persisting-equals", text: "=" }
-  ]);
-  await resumeEquationMotionAnimations(page);
-  const meltHandoff = await page.evaluate(() => {
-    if (window.__kpEquationMotionMeltHandoffPromise === undefined) {
-      throw new Error("Expected an equation motion melt handoff promise.");
-    }
-
-    return window.__kpEquationMotionMeltHandoffPromise;
-  });
-
-  expect(meltHandoff).toEqual({
-    step: "2",
-    handoff: "true",
-    overlayPresent: true
-  });
-  const meltOverlay = page.locator(
-    '[data-kp-equation-motion-choreography="melt-right-side"]'
-  );
-
-  await expect(meltOverlay).toHaveAttribute(
-    "data-kp-equation-motion-overlay-state",
-    "handoff-fade"
-  );
-  await expectStableEquationMotionHandoff(page, {
-    persistentRoles: ["persisting-x", "persisting-equals", "appearing-result"],
-    settledRoles: ["settled-x", "settled-equals", "settled-4"]
-  });
-  await expect(
-    page.locator('[data-kp-equation-motion-role="persisting-x"]')
-  ).toHaveText("x");
-  await expect(
-    page.locator('[data-kp-equation-motion-role="persisting-equals"]')
-  ).toHaveText("=");
-  await expect(
-    page.locator('[data-kp-equation-motion-role="appearing-result"]')
-  ).toHaveText("4");
-  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "2", {
-    timeout: 5_000
-  });
-  await expect(demo).toHaveAttribute(
-    "data-kp-equation-motion-last-renderer",
-    "custom-melt"
-  );
-  await expect(next).toBeDisabled();
-
-  await rewind.click();
-  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1", {
-    timeout: 5_000
-  });
-  await expect(demo).toHaveAttribute(
-    "data-kp-equation-motion-latest-source",
-    "2"
-  );
-  await expect(demo).toHaveAttribute(
-    "data-kp-equation-motion-latest-target",
-    "1"
-  );
-
-  await replay.click();
-  await expect(demo).toHaveAttribute(
-    "data-kp-equation-motion-transition-count",
-    "4",
-    { timeout: 5_000 }
-  );
-  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");
-  await expect(page.locator(".katex-transition-overlay")).toHaveCount(0);
-});
-
 declare global {
   interface Window {
+    __kpEquationMotionSetProgress?: (
+      demo: HTMLElement,
+      progress: number
+    ) => void;
     __kpKatexTransitionPromise?: Promise<{
       renderer: string;
       sourceTokenCount: number;
@@ -808,155 +548,5 @@ declare global {
       nonTransparentPixelCount: number;
       maxAlpha: number;
     }>;
-    __kpEquationMotionHandoffPromise?: Promise<{
-      step: string | undefined;
-      handoff: string | undefined;
-      overlayPresent: boolean;
-    }>;
-    __kpEquationMotionMeltHandoffPromise?: Promise<{
-      step: string | undefined;
-      handoff: string | undefined;
-      overlayPresent: boolean;
-    }>;
-  }
-}
-
-async function expectStableEquationMotionHandoff(
-  page: import("@playwright/test").Page,
-  roles: {
-    persistentRoles: readonly string[];
-    settledRoles: readonly string[];
-  }
-): Promise<void> {
-  const state = await page.evaluate(({ persistentRoles, settledRoles }) => {
-    const persistentGroupOpacities = Object.fromEntries(
-      persistentRoles.map((role) => {
-        const token = document.querySelector(
-          `[data-kp-equation-motion-role="${role}"]`
-        );
-        const group = token?.closest(".equation-motion-choreography__group");
-
-        return [
-          role,
-          group instanceof HTMLElement ? getComputedStyle(group).opacity : null
-        ];
-      })
-    );
-    const settledRoleCounts = Object.fromEntries(
-      settledRoles.map((role) => [
-        role,
-        document.querySelectorAll(`[data-kp-equation-motion-role="${role}"]`)
-          .length
-      ])
-    );
-
-    return { persistentGroupOpacities, settledRoleCounts };
-  }, roles);
-
-  expect(state.persistentGroupOpacities).toEqual(
-    Object.fromEntries(roles.persistentRoles.map((role) => [role, "1"]))
-  );
-  expect(state.settledRoleCounts).toEqual(
-    Object.fromEntries(roles.settledRoles.map((role) => [role, 0]))
-  );
-}
-
-async function setEquationMotionAnimationsCurrentTime(
-  page: import("@playwright/test").Page,
-  currentTimeMs: number
-): Promise<void> {
-  await page.evaluate((currentTime) => {
-    for (const animation of document.getAnimations()) {
-      const effect = animation.effect;
-
-      if (
-        effect instanceof KeyframeEffect &&
-        effect.target instanceof Element &&
-        effect.target.closest(".equation-motion-choreography") !== null
-      ) {
-        animation.pause();
-        animation.currentTime = currentTime;
-      }
-    }
-  }, currentTimeMs);
-}
-
-async function resumeEquationMotionAnimations(
-  page: import("@playwright/test").Page
-): Promise<void> {
-  await page.evaluate(() => {
-    for (const animation of document.getAnimations()) {
-      const effect = animation.effect;
-
-      if (
-        effect instanceof KeyframeEffect &&
-        effect.target instanceof Element &&
-        effect.target.closest(".equation-motion-choreography") !== null
-      ) {
-        animation.play();
-      }
-    }
-  });
-}
-
-async function expectEquationMotionRolesAlignedWithState(
-  page: import("@playwright/test").Page,
-  stateIndex: string,
-  roles: readonly { role: string; text: string }[]
-): Promise<void> {
-  const deltas = await page.evaluate(
-    ({ stateIndex, roles }) => {
-      const normalize = (text: string | null) =>
-        (text ?? "").replace(/\s+/g, " ").replace("\u2212", "-").trim();
-      const rectOf = (element: Element) => {
-        const rect = element.getBoundingClientRect();
-
-        return {
-          left: rect.left,
-          top: rect.top
-        };
-      };
-      const sourceState = document.querySelector(
-        `[data-kp-equation-motion-state="${stateIndex}"]`
-      );
-
-      if (!(sourceState instanceof HTMLElement)) {
-        throw new Error(`Expected equation motion state ${stateIndex}.`);
-      }
-
-      return roles.map(({ role, text }) => {
-        const ghost = document.querySelector(
-          `[data-kp-equation-motion-role="${role}"]`
-        );
-        const sourceToken = Array.from(
-          sourceState.querySelectorAll(".katex-html span")
-        ).find((element) => {
-          const hasTextChild = Array.from(element.children).some(
-            (child) => normalize(child.textContent).length > 0
-          );
-
-          return !hasTextChild && normalize(element.textContent) === text;
-        });
-
-        if (!(ghost instanceof HTMLElement) || sourceToken === undefined) {
-          throw new Error(`Expected ${role} and source token ${text}.`);
-        }
-
-        const ghostRect = rectOf(ghost);
-        const sourceRect = rectOf(sourceToken);
-
-        return {
-          role,
-          dx: Math.abs(ghostRect.left - sourceRect.left),
-          dy: Math.abs(ghostRect.top - sourceRect.top)
-        };
-      });
-    },
-    { stateIndex, roles }
-  );
-
-  for (const delta of deltas) {
-    expect(delta.dx, `${delta.role} horizontal drift`).toBeLessThanOrEqual(1);
-    expect(delta.dy, `${delta.role} vertical drift`).toBeLessThanOrEqual(1);
   }
 }

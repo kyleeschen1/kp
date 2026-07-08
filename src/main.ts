@@ -7,6 +7,11 @@ import {
 } from "./editor/editor.ts";
 import { compileDocumentAsset } from "./editor/compile-client.ts";
 import {
+  hydrateEquationMotionDemos,
+  setEquationMotionProgress,
+  stepEquationMotionDemo
+} from "./editor/equation-motion-demo-controller.ts";
+import {
   GRAPH_3D_SURFACE_MODE_IDS,
   GRAPH_3D_SURFACE_QUALITY_IDS,
   GRAPH_3D_VIEW_MODE_IDS,
@@ -49,41 +54,34 @@ if (app === null) {
 const appRoot = app;
 let editorDocument = createInitialEditorDocument();
 type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
-type KatexTransitionController = typeof import("./rendering/katex-transition-controller.ts");
-type EquationMotionChoreographyModule = typeof import("./rendering/equation-motion-choreography.ts");
-type EquationMotionChoreographyKind =
-  import("./rendering/equation-motion-choreography.ts").EquationMotionChoreographyKind;
-type EquationMotionAction =
-  | "equation-motion-next"
-  | "equation-motion-rewind"
-  | "equation-motion-replay";
-
-interface EquationMotionTransition {
-  readonly sourceStep: number;
-  readonly targetStep: number;
-}
-
-const EQUATION_MOTION_MIN_STEP = 0;
-const EQUATION_MOTION_MAX_STEP = 2;
-const EQUATION_MOTION_DURATION_MS = 950;
-
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
 let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
-let katexTransitionControllerPromise:
-  | Promise<KatexTransitionController>
-  | undefined;
-let equationMotionChoreographyPromise:
-  | Promise<EquationMotionChoreographyModule>
-  | undefined;
+
+declare global {
+  interface Window {
+    __kpEquationMotionSetProgress?: (
+      demo: HTMLElement,
+      progress: number
+    ) => void;
+  }
+}
+
+window.__kpEquationMotionSetProgress = setEquationMotionProgress;
 
 renderEditor();
 
 appRoot.addEventListener("click", (event) => {
-  if (!(event.target instanceof HTMLButtonElement)) {
+  if (!(event.target instanceof Element)) {
     return;
   }
 
-  switch (event.target.dataset["action"]) {
+  const button = event.target.closest<HTMLButtonElement>("button[data-action]");
+
+  if (button === null) {
+    return;
+  }
+
+  switch (button.dataset["action"]) {
     case "compile-document":
       void compileDocument();
       return;
@@ -91,9 +89,10 @@ appRoot.addEventListener("click", (event) => {
       addEquationGraphFromInput();
       return;
     case "equation-motion-next":
+      stepEquationMotionDemo(button, 1);
+      return;
     case "equation-motion-rewind":
-    case "equation-motion-replay":
-      handleEquationMotionAction(event.target);
+      stepEquationMotionDemo(button, -1);
       return;
   }
 });
@@ -190,330 +189,10 @@ function addEquationGraphFromInput(): void {
   }
 }
 
-function handleEquationMotionAction(button: HTMLButtonElement): void {
-  const action = button.dataset["action"];
-  const demo = button.closest<HTMLElement>("[data-kp-equation-motion-demo]");
-
-  if (!isEquationMotionAction(action) || demo === null) {
-    return;
-  }
-
-  if (demo.dataset["kpEquationMotionBusy"] === "true") {
-    return;
-  }
-
-  const transition = createEquationMotionTransition(demo, action);
-
-  if (transition === undefined) {
-    updateEquationMotionControls(demo);
-    return;
-  }
-
-  void runEquationMotionTransition(demo, transition);
-}
-
-function isEquationMotionAction(
-  action: string | undefined
-): action is EquationMotionAction {
-  return (
-    action === "equation-motion-next" ||
-    action === "equation-motion-rewind" ||
-    action === "equation-motion-replay"
-  );
-}
-
-function createEquationMotionTransition(
-  demo: HTMLElement,
-  action: EquationMotionAction
-): EquationMotionTransition | undefined {
-  const currentStep = readEquationMotionStep(
-    demo.dataset["kpEquationMotionStep"],
-    EQUATION_MOTION_MIN_STEP
-  );
-
-  if (action === "equation-motion-next") {
-    if (currentStep >= EQUATION_MOTION_MAX_STEP) {
-      return undefined;
-    }
-
-    return {
-      sourceStep: currentStep,
-      targetStep: currentStep + 1
-    };
-  }
-
-  if (action === "equation-motion-rewind") {
-    if (currentStep <= EQUATION_MOTION_MIN_STEP) {
-      return undefined;
-    }
-
-    return {
-      sourceStep: currentStep,
-      targetStep: currentStep - 1
-    };
-  }
-
-  const latestSource = readEquationMotionStep(
-    demo.dataset["kpEquationMotionLatestSource"]
-  );
-  const latestTarget = readEquationMotionStep(
-    demo.dataset["kpEquationMotionLatestTarget"]
-  );
-
-  if (latestSource === undefined || latestTarget === undefined) {
-    return undefined;
-  }
-
-  return {
-    sourceStep: latestSource,
-    targetStep: latestTarget
-  };
-}
-
-async function runEquationMotionTransition(
-  demo: HTMLElement,
-  transition: EquationMotionTransition
-): Promise<void> {
-  const source = findEquationMotionState(demo, transition.sourceStep);
-  const target = findEquationMotionState(demo, transition.targetStep);
-
-  if (source === undefined || target === undefined) {
-    return;
-  }
-
-  demo.dataset["kpEquationMotionBusy"] = "true";
-  updateEquationMotionControls(demo);
-
-  let revealedTarget = false;
-  const revealTargetStep = () => {
-    if (revealedTarget || !demo.isConnected) {
-      return;
-    }
-
-    revealedTarget = true;
-    revealEquationMotionTargetStep(demo, transition.targetStep);
-  };
-
-  try {
-    const animationTarget =
-      findEquationMotionMeasurementTarget(demo, transition) ?? target;
-    const result = await runEquationMotionAnimation(
-      source,
-      animationTarget,
-      transition,
-      revealTargetStep
-    );
-
-    if (!demo.isConnected) {
-      return;
-    }
-
-    revealTargetStep();
-    clearEquationMotionHandoff(demo);
-    demo.dataset["kpEquationMotionLatestSource"] = String(transition.sourceStep);
-    demo.dataset["kpEquationMotionLatestTarget"] = String(transition.targetStep);
-    demo.dataset["kpEquationMotionLastRenderer"] = result.renderer;
-    demo.dataset["kpEquationMotionTransitionCount"] = String(
-      readEquationMotionCount(demo.dataset["kpEquationMotionTransitionCount"]) +
-        1
-    );
-  } finally {
-    if (demo.isConnected) {
-      clearEquationMotionHandoff(demo);
-      demo.dataset["kpEquationMotionBusy"] = "false";
-      updateEquationMotionControls(demo);
-    }
-  }
-}
-
-function findEquationMotionMeasurementTarget(
-  demo: HTMLElement,
-  transition: EquationMotionTransition
-): HTMLElement | undefined {
-  if (transition.sourceStep === 0 && transition.targetStep === 1) {
-    return findEquationMotionMeasure(demo, "transfer-target");
-  }
-
-  return undefined;
-}
-
-function findEquationMotionMeasure(
-  demo: HTMLElement,
-  measure: string
-): HTMLElement | undefined {
-  return (
-    demo.querySelector<HTMLElement>(
-      `[data-kp-equation-motion-measure="${measure}"]`
-    ) ?? undefined
-  );
-}
-
-async function runEquationMotionAnimation(
-  source: HTMLElement,
-  target: HTMLElement,
-  transition: EquationMotionTransition,
-  beforeCleanup: () => void
-): Promise<{ renderer: string }> {
-  const choreographyKind = equationMotionChoreographyKind(transition);
-
-  if (choreographyKind !== undefined) {
-    const choreography = await loadEquationMotionChoreography();
-
-    return choreography.runEquationMotionChoreography(
-      source,
-      target,
-      choreographyKind,
-      { durationMs: EQUATION_MOTION_DURATION_MS, beforeCleanup }
-    );
-  }
-
-  const controller = await loadKatexTransitionController();
-
-  return controller.transitionKatexEquations(source, target, {
-    durationMs: EQUATION_MOTION_DURATION_MS,
-    beforeCleanup
-  });
-}
-
-function equationMotionChoreographyKind(
-  transition: EquationMotionTransition
-): EquationMotionChoreographyKind | undefined {
-  if (transition.sourceStep === 0 && transition.targetStep === 1) {
-    return "transfer-3";
-  }
-
-  if (transition.sourceStep === 1 && transition.targetStep === 2) {
-    return "melt-right-side";
-  }
-
-  return undefined;
-}
-
-function findEquationMotionState(
-  demo: HTMLElement,
-  step: number
-): HTMLElement | undefined {
-  return (
-    demo.querySelector<HTMLElement>(
-      `[data-kp-equation-motion-state="${step}"]`
-    ) ?? undefined
-  );
-}
-
-function setEquationMotionActiveStep(demo: HTMLElement, step: number): void {
-  demo.dataset["kpEquationMotionStep"] = String(step);
-  demo
-    .querySelectorAll<HTMLElement>("[data-kp-equation-motion-state]")
-    .forEach((state) => {
-      const active = state.dataset["kpEquationMotionState"] === String(step);
-
-      state.dataset["kpEquationMotionActive"] = active ? "true" : "false";
-      state.setAttribute("aria-hidden", active ? "false" : "true");
-    });
-}
-
-function revealEquationMotionTargetStep(demo: HTMLElement, step: number): void {
-  demo.dataset["kpEquationMotionHandoff"] = "true";
-  setEquationMotionActiveStep(demo, step);
-}
-
-function clearEquationMotionHandoff(demo: HTMLElement): void {
-  delete demo.dataset["kpEquationMotionHandoff"];
-}
-
-function updateEquationMotionControls(demo: HTMLElement): void {
-  const busy = demo.dataset["kpEquationMotionBusy"] === "true";
-  const currentStep = readEquationMotionStep(
-    demo.dataset["kpEquationMotionStep"],
-    EQUATION_MOTION_MIN_STEP
-  );
-  const hasReplay =
-    readEquationMotionStep(demo.dataset["kpEquationMotionLatestSource"]) !==
-      undefined &&
-    readEquationMotionStep(demo.dataset["kpEquationMotionLatestTarget"]) !==
-      undefined;
-
-  setEquationMotionButtonDisabled(
-    demo,
-    "equation-motion-next",
-    busy || currentStep >= EQUATION_MOTION_MAX_STEP
-  );
-  setEquationMotionButtonDisabled(
-    demo,
-    "equation-motion-rewind",
-    busy || currentStep <= EQUATION_MOTION_MIN_STEP
-  );
-  setEquationMotionButtonDisabled(
-    demo,
-    "equation-motion-replay",
-    busy || !hasReplay
-  );
-}
-
-function setEquationMotionButtonDisabled(
-  demo: HTMLElement,
-  action: EquationMotionAction,
-  disabled: boolean
-): void {
-  const button = demo.querySelector<HTMLButtonElement>(
-    `[data-action="${action}"]`
-  );
-
-  if (button !== null) {
-    button.disabled = disabled;
-  }
-}
-
-function readEquationMotionStep(
-  value: string | undefined,
-  fallback: number
-): number;
-function readEquationMotionStep(value: string | undefined): number | undefined;
-function readEquationMotionStep(
-  value: string | undefined,
-  fallback?: number
-): number | undefined {
-  const parsed = value === undefined ? Number.NaN : Number.parseInt(value, 10);
-
-  if (!Number.isInteger(parsed)) {
-    return fallback;
-  }
-
-  return Math.min(
-    EQUATION_MOTION_MAX_STEP,
-    Math.max(EQUATION_MOTION_MIN_STEP, parsed)
-  );
-}
-
-function readEquationMotionCount(value: string | undefined): number {
-  const parsed = value === undefined ? Number.NaN : Number(value);
-
-  return Number.isInteger(parsed) && parsed >= 0 ? parsed : 0;
-}
-
-function loadKatexTransitionController(): Promise<KatexTransitionController> {
-  if (katexTransitionControllerPromise === undefined) {
-    katexTransitionControllerPromise = import(
-      "./rendering/katex-transition-controller.ts"
-    );
-  }
-
-  return katexTransitionControllerPromise;
-}
-
-function loadEquationMotionChoreography(): Promise<EquationMotionChoreographyModule> {
-  if (equationMotionChoreographyPromise === undefined) {
-    equationMotionChoreographyPromise = import(
-      "./rendering/equation-motion-choreography.ts"
-    );
-  }
-
-  return equationMotionChoreographyPromise;
-}
-
 function renderEditor(): void {
   disposeGraph3DWebGL(appRoot);
   appRoot.innerHTML = renderEditorDocument(editorDocument);
+  hydrateEquationMotionDemos(appRoot);
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);
 }
 

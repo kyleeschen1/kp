@@ -17,6 +17,10 @@ import {
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import { defaultLatexRenderer } from "../rendering/matrix-latex.ts";
 import {
+  createEquationOperationTransition,
+  type EquationMotionAnnotation
+} from "../math/equation-transform.ts";
+import {
   createKpDocument,
   type KpDocument,
   type KpSemanticObject
@@ -24,31 +28,12 @@ import {
 import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   createDefaultGraph3DScene,
+  createDefaultGraphScene,
   type Graph3DSurfaceMode
 } from "../semantic/graph.ts";
 import type { Graph3DObject, Surface3DObject } from "../semantic/graph.ts";
 import { identityMatrix } from "../semantic/matrix.ts";
 import { validateKpDocument } from "../semantic/validation.ts";
-
-const EQUATION_MOTION_TRANSFER_TARGET_LATEX = String.raw`x = 7 - 3`;
-
-const EQUATION_MOTION_STEPS = [
-  {
-    index: 0,
-    label: "Start",
-    latex: String.raw`x + 3 = 7`
-  },
-  {
-    index: 1,
-    label: "Subtract 3",
-    latex: EQUATION_MOTION_TRANSFER_TARGET_LATEX
-  },
-  {
-    index: 2,
-    label: "Solved",
-    latex: String.raw`x = 4`
-  }
-] as const;
 
 export function createInitialEditorDocument(): KpDocument {
   return createKpDocument({
@@ -60,6 +45,7 @@ export function createInitialEditorDocument(): KpDocument {
         label: "I_3",
         size: 3
       }),
+      ...createDefaultGraphScene(),
       ...createDefaultGraph3DScene()
     ]
   });
@@ -76,16 +62,8 @@ export function renderEditorDocument(document: KpDocument): string {
               `<li><strong>${escapeHtml(issue.path)}</strong>: ${escapeHtml(issue.message)}</li>`
           )
           .join("")}</ul>`;
-  const renderedPreviews = document.objects
+  const renderedObjects = document.objects
     .map((object) => renderObjectPreview(object, document))
-    .filter((preview) => preview.length > 0);
-  const [firstPreview, ...remainingPreviews] = renderedPreviews;
-  const renderedObjects = [
-    firstPreview,
-    renderEquationMotionDemo(),
-    ...remainingPreviews
-  ]
-    .filter((preview): preview is string => preview !== undefined)
     .join("");
 
   return `
@@ -116,58 +94,11 @@ export function renderEditorDocument(document: KpDocument): string {
           <div class="panel-header">
             <h2 id="preview-title">Rendered Asset</h2>
           </div>
-          <div class="preview-stage">${renderedObjects}</div>
+          <div class="preview-stage">${renderedObjects}${renderEquationMotionDemo()}</div>
           <pre class="compiled-source" id="compiled-source" aria-live="polite"></pre>
         </section>
       </div>
     </section>
-  `;
-}
-
-function renderEquationMotionDemo(): string {
-  const stateNodes = EQUATION_MOTION_STEPS.map((step) =>
-    renderEquationMotionState(step)
-  ).join("");
-
-  return `
-    <article class="object-preview object-preview--equation-motion" data-kp-equation-motion-demo data-kp-equation-motion-step="0" data-kp-equation-motion-busy="false" data-kp-equation-motion-transition-count="0">
-      <div class="object-preview__meta">
-        <span>Equation Motion</span>
-        <span>KaTeX WebGL</span>
-      </div>
-      <div class="equation-motion">
-        <div class="equation-motion__stage" aria-live="polite">
-          ${stateNodes}
-          ${renderEquationMotionMeasurements()}
-        </div>
-        <div class="equation-motion__controls" aria-label="Equation motion controls">
-          <button class="equation-motion__button" type="button" data-action="equation-motion-rewind" disabled>Rewind</button>
-          <button class="equation-motion__button" type="button" data-action="equation-motion-next">Next</button>
-          <button class="equation-motion__button" type="button" data-action="equation-motion-replay" disabled>Replay</button>
-        </div>
-      </div>
-    </article>
-  `;
-}
-
-function renderEquationMotionMeasurements(): string {
-  return `
-    <div class="equation-motion__measure" data-kp-equation-motion-measure="transfer-target" aria-hidden="true">
-      ${renderLatexToHtml(EQUATION_MOTION_TRANSFER_TARGET_LATEX)}
-    </div>
-  `;
-}
-
-function renderEquationMotionState(
-  step: typeof EQUATION_MOTION_STEPS[number]
-): string {
-  const active = step.index === 0;
-  const html = renderLatexToHtml(step.latex);
-
-  return `
-    <div class="equation-motion__state" data-kp-equation-motion-state="${step.index}" data-kp-equation-motion-active="${active ? "true" : "false"}" data-kp-equation-motion-latex="${escapeHtml(step.latex)}" aria-hidden="${active ? "false" : "true"}" aria-label="${escapeHtml(step.label)}">
-      ${html}
-    </div>
   `;
 }
 
@@ -205,6 +136,97 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
   }
 }
 
+function renderEquationMotionDemo(): string {
+  const subtractBothSides = createEquationOperationTransition({
+    sourceLatex: "x + 3 = 7",
+    operation: {
+      kind: "subtractBothSides",
+      valueLatex: "3"
+    }
+  });
+  const simplifyLeft = createEquationOperationTransition({
+    sourceLatex: subtractBothSides.targetLatex,
+    operation: {
+      kind: "simplifySide",
+      side: "left",
+      rule: "cancel-additive-inverse"
+    }
+  });
+  const simplifyRight = createEquationOperationTransition({
+    sourceLatex: simplifyLeft.targetLatex,
+    operation: {
+      kind: "simplifySide",
+      side: "right",
+      rule: "evaluate-constant-difference"
+    }
+  });
+  const states = [
+    {
+      step: 0,
+      latex: subtractBothSides.sourceLatex,
+      annotations: subtractBothSides.sourceAnnotations
+    },
+    {
+      step: 1,
+      latex: subtractBothSides.targetLatex,
+      annotations: subtractBothSides.targetAnnotations
+    },
+    {
+      step: 2,
+      latex: simplifyLeft.targetLatex,
+      annotations: simplifyLeft.targetAnnotations
+    },
+    {
+      step: 3,
+      latex: simplifyRight.targetLatex,
+      annotations: simplifyRight.targetAnnotations
+    }
+  ];
+  const stateHtml = states
+    .map((state) =>
+      renderEquationMotionState(
+        state.step,
+        state.latex,
+        state.annotations,
+        state.step === 0
+      )
+    )
+    .join("");
+  const maxStep = states.length - 1;
+
+  return `
+    <section class="equation-motion" data-kp-equation-motion-demo data-kp-equation-motion-step="0" data-kp-equation-motion-max-step="${maxStep}">
+      <div class="equation-motion__controls">
+        <button type="button" data-action="equation-motion-rewind">Rewind</button>
+        <button type="button" data-action="equation-motion-next">Next</button>
+      </div>
+      <div class="equation-motion__stage">
+        ${stateHtml}
+      </div>
+    </section>
+  `;
+}
+
+function renderEquationMotionState(
+  step: number,
+  latex: string,
+  annotations: readonly EquationMotionAnnotation[],
+  active: boolean
+): string {
+  return `
+    <div class="equation-motion__state${active ? " equation-motion__state--active" : ""}" data-kp-equation-motion-state="${step}" data-kp-equation-motion-active="${active ? "true" : "false"}" data-kp-equation-motion-latex="${escapeHtml(latex)}" aria-hidden="${active ? "false" : "true"}">
+      <!-- Motion IDs live on visible token wrappers so measurement reads rendered boxes, not sidecar anchors. -->
+      <div class="equation-motion__formula" aria-label="${escapeHtml(latex)}">
+        ${annotations.map(renderEquationMotionAnchor).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderEquationMotionAnchor(annotation: EquationMotionAnnotation): string {
+  return `<span class="equation-motion__motion-anchor" data-kp-motion-id="${escapeHtml(annotation.motionId)}">${renderLatexToHtml(annotation.text, { displayMode: false })}</span>`;
+}
+
 function renderGraph3DControls(
   graph: Graph3DObject,
   objects: readonly KpSemanticObject[]
@@ -225,11 +247,11 @@ function renderGraph3DControls(
         <input class="graph-control__range" id="${escapeHtml(azimuthInputId)}" type="range" min="-180" max="180" step="1" value="${azimuth}" data-action="set-graph-azimuth" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-rotation-axis="z" aria-label="Rotate graph around z-axis" />
         <output class="graph-control__value" for="${escapeHtml(azimuthInputId)}">${azimuth} deg</output>
       </label>
-      ${renderGraphViewModeControl(graph)}
-      ${renderGraphSurfaceModeControl(graph)}
       <details class="graph-controls__foldout" data-kp-controls-foldout="render-settings">
         <summary class="graph-controls__summary">Render settings</summary>
         <div class="graph-controls__foldout-body">
+          ${renderGraphViewModeControl(graph)}
+          ${renderGraphSurfaceModeControl(graph)}
           ${renderGraphSurfaceQualityControl(graph)}
           <label class="graph-control" for="${escapeHtml(occludedAxisInputId)}">
             <span class="graph-control__label">occluded axes</span>

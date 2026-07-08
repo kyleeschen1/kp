@@ -306,6 +306,32 @@ Browser tests:
 - Fallback visual matching still works for generic non-semantic transitions, but
   reports that it used heuristic identity.
 
+## Implementation Notes
+
+As of July 8, 2026, the first operation-first path is implemented for the
+`x + 3 = 7` demo:
+
+- `src/math/equation-transform.ts` encodes the supported semantic operations
+  and lifecycle annotations for `subtractBothSides(3)`, `simplifySide(left)`,
+  and `simplifySide(right)`.
+- `src/rendering/equation-motion-plan.ts`,
+  `src/rendering/equation-motion-sampler.ts`, and
+  `src/rendering/equation-motion-player.ts` compile, sample, and play a
+  normalized plan. The compiler rejects duplicate token identity and lifecycle
+  endpoint mismatches. Rewind samples the same plan backward rather than using
+  a separate reverse choreography.
+- `src/rendering/equation-motion-dom.ts` measures visible annotated token
+  wrappers by `data-kp-motion-id` and rejects duplicate IDs inside one measured
+  state.
+- `src/editor/equation-motion-demo-controller.ts` wires the editor demo to the
+  semantic operations, validates rendered state LaTeX against each operation's
+  derived target, and measures only the source and target state roots so IDs may
+  repeat across states.
+- The public progress contract is directional: progress `0` means the latest
+  transition source and progress `1` means the latest transition target. The
+  demo also exposes canonical plan progress for diagnostics because reverse
+  transitions are sampled against the lower-step-to-higher-step plan.
+
 ## Open Follow-Up Work
 
 - Decide how much of the existing math parser can produce annotated token trees

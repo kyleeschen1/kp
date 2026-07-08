@@ -1,8 +1,11 @@
 import katex from "katex";
 
-export function renderLatexToHtml(latex: string): string {
+export function renderLatexToHtml(
+  latex: string,
+  options: { readonly displayMode?: boolean } = {}
+): string {
   return katex.renderToString(latex, {
-    displayMode: true,
+    displayMode: options.displayMode ?? true,
     output: "html",
     throwOnError: false
   });
