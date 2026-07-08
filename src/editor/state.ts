@@ -154,6 +154,54 @@ export function updateGraph3DLightSetting(
   };
 }
 
+export function updateGraph3DShadowEnabled(
+  document: KpDocument,
+  graphId: string,
+  enabled: boolean
+): KpDocument {
+  return {
+    ...document,
+    objects: document.objects.map((object): KpSemanticObject => {
+      if (object.type !== "graph-3d" || object.id !== graphId) {
+        return object;
+      }
+
+      return {
+        ...object,
+        shadow: {
+          ...object.shadow,
+          enabled
+        }
+      };
+    })
+  };
+}
+
+export function updateGraph3DShadowOpacity(
+  document: KpDocument,
+  graphId: string,
+  opacity: number
+): KpDocument {
+  const nextOpacity = clamp(opacity, 0, 1);
+
+  return {
+    ...document,
+    objects: document.objects.map((object): KpSemanticObject => {
+      if (object.type !== "graph-3d" || object.id !== graphId) {
+        return object;
+      }
+
+      return {
+        ...object,
+        shadow: {
+          ...object.shadow,
+          opacity: nextOpacity
+        }
+      };
+    })
+  };
+}
+
 export function findGraph3DLightPresetId(
   light: Graph3DLightSettings
 ): Graph3DLightPresetId | undefined {

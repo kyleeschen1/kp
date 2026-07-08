@@ -8,6 +8,7 @@ import {
 } from "../src/rendering/projection.ts";
 import {
   DEFAULT_GRAPH_3D_LIGHT_SETTINGS,
+  DEFAULT_GRAPH_3D_SHADOW_SETTINGS,
   type Graph3DObject
 } from "../src/semantic/graph.ts";
 
@@ -28,6 +29,7 @@ const graph: Graph3DObject = {
     depthOverlay: false,
     surfaceMesh: false
   },
+  shadow: DEFAULT_GRAPH_3D_SHADOW_SETTINGS,
   light: DEFAULT_GRAPH_3D_LIGHT_SETTINGS,
   camera: {
     azimuthDegrees: 0,

@@ -14,6 +14,8 @@ import {
   updateGraph3DAzimuth,
   updateGraph3DLightSetting,
   updateGraph3DOccludedAxisLightness,
+  updateGraph3DShadowEnabled,
+  updateGraph3DShadowOpacity,
   updateSaddleSurfaceDenominator
 } from "../src/editor/state.ts";
 import type {
@@ -83,6 +85,8 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-action="set-graph-azimuth"/);
   assert.match(html, /data-action="set-graph-light-preset"/);
   assert.match(html, /data-action="set-graph-light-setting"/);
+  assert.match(html, /data-action="set-graph-shadow-enabled"/);
+  assert.match(html, /data-action="set-graph-shadow-opacity"/);
   assert.match(html, /data-action="set-graph-occluded-axis-lightness"/);
   assert.match(html, /data-action="set-saddle-denominator"/);
   assert.match(html, /data-kp-graph-rotation-axis="z"/);
@@ -94,11 +98,14 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-kp-graph-light-setting="depthHaze"/);
   assert.match(html, /data-kp-graph-light-setting="specular"/);
   assert.match(html, /data-kp-graph-light-setting="rim"/);
+  assert.match(html, /data-kp-graph-shadow-setting="enabled"/);
+  assert.match(html, /data-kp-graph-shadow-setting="opacity"/);
   assert.match(html, /data-kp-graph-color-target="occluded-axis"/);
   assert.match(html, /data-kp-graph-surface-parameter="saddle-denominator"/);
   assert.match(html, /data-graph-id="saddle-orbit-graph"/);
   assert.match(html, /data-surface-id="saddle-surface"/);
   assert.match(html, /type="range"/);
+  assert.match(html, /type="checkbox" checked/);
   assert.match(html, /min="-180"/);
   assert.match(html, /max="180"/);
   assert.match(html, /value="35"/);
@@ -109,6 +116,7 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /value="0.400"/);
   assert.match(html, /value="0.120"/);
   assert.match(html, /value="0.080"/);
+  assert.match(html, /value="0.160"/);
   assert.match(html, /max="100"/);
   assert.match(html, /value="44"/);
   assert.match(html, /min="1"/);
@@ -169,6 +177,48 @@ test("updateGraph3DAzimuth updates the semantic graph camera without mutating th
   assert.notEqual(nextDocument, document);
   assert.equal(originalGraph?.camera.azimuthDegrees, 35);
   assert.equal(nextGraph?.camera.azimuthDegrees, 92);
+});
+
+test("updateGraph3DShadowEnabled updates the semantic graph shadow toggle", () => {
+  const document = createInitialEditorDocument();
+  const nextDocument = updateGraph3DShadowEnabled(
+    document,
+    "saddle-orbit-graph",
+    false
+  );
+  const originalGraph = document.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+  const nextGraph = nextDocument.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+
+  assert.notEqual(nextDocument, document);
+  assert.equal(originalGraph?.shadow.enabled, true);
+  assert.equal(nextGraph?.shadow.enabled, false);
+});
+
+test("updateGraph3DShadowOpacity updates the semantic graph shadow opacity", () => {
+  const document = createInitialEditorDocument();
+  const nextDocument = updateGraph3DShadowOpacity(
+    document,
+    "saddle-orbit-graph",
+    0.4
+  );
+  const clampedDocument = updateGraph3DShadowOpacity(
+    document,
+    "saddle-orbit-graph",
+    2
+  );
+  const nextGraph = nextDocument.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+  const clampedGraph = clampedDocument.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+
+  assert.equal(nextGraph?.shadow.opacity, 0.4);
+  assert.equal(clampedGraph?.shadow.opacity, 1);
 });
 
 test("applyGraph3DLightPreset updates semantic graph light settings", () => {

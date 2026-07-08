@@ -159,6 +159,8 @@ function renderGraph3DControls(
       ${renderGraphLightScalarControl(graph, "depthHaze", "depth haze")}
       ${renderGraphLightScalarControl(graph, "specular", "specular")}
       ${renderGraphLightScalarControl(graph, "rim", "rim")}
+      ${renderGraphShadowEnabledControl(graph)}
+      ${renderGraphShadowOpacityControl(graph)}
       ${saddleSurface === undefined ? "" : renderSaddleDenominatorControl(graph, saddleSurface)}
     </div>
   `;
@@ -207,6 +209,33 @@ function renderGraphLightScalarControl(
       <label class="graph-control" for="${escapeHtml(inputId)}">
         <span class="graph-control__label">${escapeHtml(label)}</span>
         <input class="graph-control__range" id="${escapeHtml(inputId)}" type="range" min="0" max="1" step="0.01" value="${value}" data-action="set-graph-light-setting" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-light-setting="${escapeHtml(setting)}" aria-label="Set ${escapeHtml(label)}" />
+        <output class="graph-control__value" for="${escapeHtml(inputId)}">${value}</output>
+      </label>
+  `;
+}
+
+function renderGraphShadowEnabledControl(graph: Graph3DObject): string {
+  const inputId = `control-${graph.id}-shadow-enabled`;
+  const checked = graph.shadow.enabled ? " checked" : "";
+  const value = graph.shadow.enabled ? "on" : "off";
+
+  return `
+      <label class="graph-control" for="${escapeHtml(inputId)}">
+        <span class="graph-control__label">shadow</span>
+        <input class="graph-control__checkbox" id="${escapeHtml(inputId)}" type="checkbox"${checked} data-action="set-graph-shadow-enabled" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-shadow-setting="enabled" aria-label="Toggle graph shadow" />
+        <output class="graph-control__value" for="${escapeHtml(inputId)}">${value}</output>
+      </label>
+  `;
+}
+
+function renderGraphShadowOpacityControl(graph: Graph3DObject): string {
+  const inputId = `control-${graph.id}-shadow-opacity`;
+  const value = formatNumber(graph.shadow.opacity);
+
+  return `
+      <label class="graph-control" for="${escapeHtml(inputId)}">
+        <span class="graph-control__label">shadow opacity</span>
+        <input class="graph-control__range" id="${escapeHtml(inputId)}" type="range" min="0" max="1" step="0.01" value="${value}" data-action="set-graph-shadow-opacity" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-shadow-setting="opacity" aria-label="Set graph shadow opacity" />
         <output class="graph-control__value" for="${escapeHtml(inputId)}">${value}</output>
       </label>
   `;

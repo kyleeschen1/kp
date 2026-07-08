@@ -19,6 +19,11 @@ export type NumericDomain = readonly [number, number];
 
 export const DEFAULT_OCCLUDED_AXIS_LIGHTNESS = 44;
 
+export const DEFAULT_GRAPH_3D_SHADOW_SETTINGS: Graph3DShadowSettings = {
+  enabled: true,
+  opacity: 0.16
+};
+
 export const DEFAULT_GRAPH_3D_LIGHT_SETTINGS: Graph3DLightSettings = {
   direction: { x: -0.35, y: -0.45, z: 0.82 },
   ambient: 0.45,
@@ -82,6 +87,11 @@ export interface Graph3DDebugSettings {
   surfaceMesh: boolean;
 }
 
+export interface Graph3DShadowSettings {
+  enabled: boolean;
+  opacity: number;
+}
+
 export interface Graph3DLightSettings {
   direction: GraphPoint3D;
   ambient: number;
@@ -105,6 +115,7 @@ export interface Graph3DObject {
   height: number;
   occludedAxisLightness: number;
   debug: Graph3DDebugSettings;
+  shadow: Graph3DShadowSettings;
   light: Graph3DLightSettings;
   camera: Graph3DCamera;
 }
@@ -171,9 +182,13 @@ export type GraphSceneObject =
 type CreateGraph2DObjectInput = Omit<Graph2DObject, "type">;
 type CreateAxis2DObjectInput = Omit<Axis2DObject, "type">;
 type CreateGraph3DObjectInput =
-  Omit<Graph3DObject, "debug" | "light" | "occludedAxisLightness" | "type"> &
+  Omit<
+    Graph3DObject,
+    "debug" | "light" | "occludedAxisLightness" | "shadow" | "type"
+  > &
   Partial<Pick<Graph3DObject, "occludedAxisLightness">> & {
     debug?: Partial<Graph3DDebugSettings>;
+    shadow?: Partial<Graph3DShadowSettings>;
     light?: Partial<Graph3DLightSettings> & {
       direction?: GraphPoint3D;
     };
@@ -248,6 +263,15 @@ export function createGraph3DObject(
     debug: {
       depthOverlay: input.debug?.depthOverlay ?? false,
       surfaceMesh: input.debug?.surfaceMesh ?? false
+    },
+    shadow: {
+      enabled:
+        input.shadow?.enabled ?? DEFAULT_GRAPH_3D_SHADOW_SETTINGS.enabled,
+      opacity: clamp(
+        input.shadow?.opacity ?? DEFAULT_GRAPH_3D_SHADOW_SETTINGS.opacity,
+        0,
+        1
+      )
     },
     light: {
       direction:

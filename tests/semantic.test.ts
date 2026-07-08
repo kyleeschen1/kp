@@ -240,6 +240,10 @@ test("createGraph3DObject creates a semantic graph object with a third axis", ()
       depthOverlay: false,
       surfaceMesh: false
     },
+    shadow: {
+      enabled: true,
+      opacity: 0.16
+    },
     light: {
       direction: { x: -0.35, y: -0.45, z: 0.82 },
       ambient: 0.45,
@@ -254,6 +258,36 @@ test("createGraph3DObject creates a semantic graph object with a third axis", ()
       scale: 58,
       origin: [280, 244]
     }
+  });
+});
+
+test("createGraph3DObject preserves explicit graph shadow settings", () => {
+  const graph = createGraph3DObject({
+    id: "shadow-graph",
+    label: "Shadow graph",
+    xAxisId: "shadow-x-axis",
+    yAxisId: "shadow-y-axis",
+    zAxisId: "shadow-z-axis",
+    xDomain: [-1, 1],
+    yDomain: [-1, 1],
+    zDomain: [-1, 1],
+    width: 300,
+    height: 220,
+    shadow: {
+      enabled: false,
+      opacity: 2
+    },
+    camera: {
+      azimuthDegrees: 35,
+      elevationDegrees: 30,
+      scale: 30,
+      origin: [150, 110]
+    }
+  });
+
+  assert.deepEqual(graph.shadow, {
+    enabled: false,
+    opacity: 1
   });
 });
 

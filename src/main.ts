@@ -13,6 +13,8 @@ import {
   updateGraph3DAzimuth,
   updateGraph3DLightSetting,
   updateGraph3DOccludedAxisLightness,
+  updateGraph3DShadowEnabled,
+  updateGraph3DShadowOpacity,
   updateSaddleSurfaceDenominator,
   type Graph3DLightPresetId,
   type Graph3DLightScalarSetting
@@ -74,6 +76,12 @@ appRoot.addEventListener("input", (event) => {
       return;
     case "set-graph-light-setting":
       updateGraphLightSettingFromInput(event.target);
+      return;
+    case "set-graph-shadow-enabled":
+      updateGraphShadowEnabledFromInput(event.target);
+      return;
+    case "set-graph-shadow-opacity":
+      updateGraphShadowOpacityFromInput(event.target);
       return;
     case "set-saddle-denominator":
       updateSaddleDenominatorFromInput(event.target);
@@ -216,6 +224,51 @@ function updateGraphLightSettingFromInput(input: HTMLInputElement): void {
   renderSemanticJson();
   renderGraph3DPreview(graphId);
   syncGraphLightControls(graphId);
+}
+
+function updateGraphShadowEnabledFromInput(input: HTMLInputElement): void {
+  const graphId = input.dataset["graphId"];
+
+  if (graphId === undefined) {
+    return;
+  }
+
+  editorDocument = updateGraph3DShadowEnabled(
+    editorDocument,
+    graphId,
+    input.checked
+  );
+  renderSemanticJson();
+  renderGraph3DPreview(graphId);
+  setGraphControlOutput(input, input.checked ? "on" : "off");
+}
+
+function updateGraphShadowOpacityFromInput(input: HTMLInputElement): void {
+  const graphId = input.dataset["graphId"];
+  const opacity = Number(input.value);
+
+  if (graphId === undefined || !Number.isFinite(opacity)) {
+    return;
+  }
+
+  editorDocument = updateGraph3DShadowOpacity(
+    editorDocument,
+    graphId,
+    opacity
+  );
+  renderSemanticJson();
+  renderGraph3DPreview(graphId);
+
+  const graph = findGraph3D(graphId);
+  const nextOpacity = graph?.shadow.opacity;
+
+  if (nextOpacity === undefined) {
+    return;
+  }
+
+  const value = formatNumber(nextOpacity);
+  input.value = value;
+  setGraphControlOutput(input, value);
 }
 
 function updateSaddleDenominatorFromInput(input: HTMLInputElement): void {

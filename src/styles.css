@@ -281,6 +281,13 @@ h2 {
   accent-color: #1f6371;
 }
 
+.graph-control__checkbox {
+  justify-self: start;
+  width: 1rem;
+  height: 1rem;
+  accent-color: #1f6371;
+}
+
 .graph-control__select {
   border: 1px solid #cbd5e1;
   border-radius: 6px;

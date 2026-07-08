@@ -359,7 +359,9 @@ function renderShadowAttributes(
 
   return [
     `data-kp-shadow-plane-z="${formatNumber(graph.zDomain[0])}"`,
-    `data-kp-shadow-quad-count="${shadowQuadCount}"`
+    `data-kp-shadow-quad-count="${shadowQuadCount}"`,
+    `data-kp-shadow-enabled="${graph.shadow.enabled ? "true" : "false"}"`,
+    `data-kp-shadow-opacity="${formatNumber(graph.shadow.opacity)}"`
   ].join(" ");
 }
 
@@ -814,20 +816,21 @@ function renderSurfaceShadowLayer3D(
 
   return `
     <g class="graph-surface-shadow-layer" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-shadow-layer" data-kp-type="surface-3d" data-kp-shadow-plane-z="${formatNumber(graph.zDomain[0])}" data-kp-shadow-quad-count="${shadowQuads.length}" data-kp-shadow-projection="light-to-z-plane">
-      ${shadowQuads.map((quad) => renderSurfaceShadowQuad(surface, quad)).join("")}
+      ${shadowQuads.map((quad) => renderSurfaceShadowQuad(surface, quad, graph)).join("")}
     </g>
   `;
 }
 
 function renderSurfaceShadowQuad(
   surface: Surface3DObject,
-  quad: SurfaceShadowQuad3D
+  quad: SurfaceShadowQuad3D,
+  graph: Graph3DObject
 ): string {
   const points = quad.projectedCorners
     .map((point) => `${formatNumber(point.x)},${formatNumber(point.y)}`)
     .join(" ");
 
-  return `<polygon class="graph-surface__shadow" points="${points}" data-kp-object="${escapeHtml(surface.id)}" data-kp-shadow-caster="${escapeHtml(surface.id)}" data-kp-cell="${quad.rowIndex},${quad.columnIndex}" data-kp-shadow-projection="light-to-z-plane" data-kp-type="surface-3d" fill="#0f172a" opacity="0.160" />`;
+  return `<polygon class="graph-surface__shadow" points="${points}" data-kp-object="${escapeHtml(surface.id)}" data-kp-shadow-caster="${escapeHtml(surface.id)}" data-kp-cell="${quad.rowIndex},${quad.columnIndex}" data-kp-shadow-projection="light-to-z-plane" data-kp-type="surface-3d" fill="#0f172a" opacity="${formatNumber(graph.shadow.opacity)}" />`;
 }
 
 function renderSurfaceWireframe(
@@ -847,6 +850,10 @@ function createSurfaceShadowQuads(
   graph: Graph3DObject,
   quads: readonly SurfaceQuad3D[]
 ): readonly SurfaceShadowQuad3D[] {
+  if (!graph.shadow.enabled) {
+    return [];
+  }
+
   const planeZ = graph.zDomain[0];
 
   return quads.flatMap((quad) => {

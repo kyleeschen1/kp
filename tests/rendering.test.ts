@@ -422,6 +422,8 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /data-kp-depth-cell-count="235200"/);
   assert.match(svg, /data-kp-shadow-plane-z="-2.500"/);
   assert.match(svg, /data-kp-shadow-quad-count="144"/);
+  assert.match(svg, /data-kp-shadow-enabled="true"/);
+  assert.match(svg, /data-kp-shadow-opacity="0.160"/);
   assert.match(svg, /data-kp-render-budget-status="ok"/);
   assert.match(svg, /data-kp-render-budget-depth-cell-count="235200"/);
   assert.match(svg, /data-kp-render-budget-max-depth-cell-count="300000"/);
@@ -467,6 +469,7 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /class="graph-surface__shadow"/);
   assert.match(svg, /data-kp-shadow-caster="saddle-surface"/);
   assert.match(svg, /data-kp-shadow-projection="light-to-z-plane"/);
+  assert.match(svg, /class="graph-surface__shadow"[^>]+opacity="0.160"/);
   assert.match(svg, /data-kp-lighting-model="ambient-diffuse-specular-rim-depth-haze"/);
   assert.match(svg, /class="graph-surface__quad"[^>]+data-kp-light-direction="-0.350,-0.450,0.820"/);
   assert.match(svg, /class="graph-surface__quad"[^>]+data-kp-light-ambient="0.450"/);
