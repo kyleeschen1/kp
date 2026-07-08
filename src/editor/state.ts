@@ -1,14 +1,42 @@
 import type { KpDocument, KpSemanticObject } from "../semantic/document.ts";
 import { createGraphSceneFromLatexEquation } from "../semantic/equation-graph.ts";
 import {
+  DEFAULT_GRAPH_3D_LIGHT_SETTINGS,
   createSaddleSurface3D,
+  type Graph3DLightSettings,
   type Surface3DObject
 } from "../semantic/graph.ts";
 
 export const SADDLE_DENOMINATOR_MIN = 1;
 export const SADDLE_DENOMINATOR_MAX = 16;
 
+export const GRAPH_3D_LIGHT_PRESET_IDS = [
+  "studio",
+  "raking",
+  "flat"
+] as const;
+
+export type Graph3DLightPresetId = typeof GRAPH_3D_LIGHT_PRESET_IDS[number];
 export type Graph3DLightScalarSetting = "ambient" | "diffuse" | "depthHaze";
+
+export const GRAPH_3D_LIGHT_PRESETS: Record<
+  Graph3DLightPresetId,
+  Graph3DLightSettings
+> = {
+  studio: DEFAULT_GRAPH_3D_LIGHT_SETTINGS,
+  raking: {
+    direction: { x: -0.85, y: -0.25, z: 0.45 },
+    ambient: 0.3,
+    diffuse: 0.65,
+    depthHaze: 1
+  },
+  flat: {
+    direction: { x: -0.35, y: -0.45, z: 0.82 },
+    ambient: 0.65,
+    diffuse: 0.08,
+    depthHaze: 0.35
+  }
+};
 
 export interface EditorState {
   document: KpDocument;
@@ -69,6 +97,28 @@ export function updateGraph3DOccludedAxisLightness(
   };
 }
 
+export function applyGraph3DLightPreset(
+  document: KpDocument,
+  graphId: string,
+  presetId: Graph3DLightPresetId
+): KpDocument {
+  const preset = GRAPH_3D_LIGHT_PRESETS[presetId];
+
+  return {
+    ...document,
+    objects: document.objects.map((object): KpSemanticObject => {
+      if (object.type !== "graph-3d" || object.id !== graphId) {
+        return object;
+      }
+
+      return {
+        ...object,
+        light: cloneLightSettings(preset)
+      };
+    })
+  };
+}
+
 export function updateGraph3DLightSetting(
   document: KpDocument,
   graphId: string,
@@ -93,6 +143,14 @@ export function updateGraph3DLightSetting(
       };
     })
   };
+}
+
+export function findGraph3DLightPresetId(
+  light: Graph3DLightSettings
+): Graph3DLightPresetId | undefined {
+  return GRAPH_3D_LIGHT_PRESET_IDS.find((presetId) =>
+    graph3DLightSettingsEqual(light, GRAPH_3D_LIGHT_PRESETS[presetId])
+  );
 }
 
 export function updateSaddleSurfaceDenominator(
@@ -136,6 +194,29 @@ export function addLatexEquationGraph(
     ...document,
     objects: [...document.objects, ...objects]
   };
+}
+
+function cloneLightSettings(light: Graph3DLightSettings): Graph3DLightSettings {
+  return {
+    direction: { ...light.direction },
+    ambient: light.ambient,
+    diffuse: light.diffuse,
+    depthHaze: light.depthHaze
+  };
+}
+
+function graph3DLightSettingsEqual(
+  left: Graph3DLightSettings,
+  right: Graph3DLightSettings
+): boolean {
+  return (
+    left.direction.x === right.direction.x &&
+    left.direction.y === right.direction.y &&
+    left.direction.z === right.direction.z &&
+    left.ambient === right.ambient &&
+    left.diffuse === right.diffuse &&
+    left.depthHaze === right.depthHaze
+  );
 }
 
 function nextEquationGraphIndex(document: KpDocument): number {

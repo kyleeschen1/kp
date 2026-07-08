@@ -7,11 +7,14 @@ import {
 } from "./editor/editor.ts";
 import { compileDocumentAsset } from "./editor/compile-client.ts";
 import {
+  applyGraph3DLightPreset,
   addLatexEquationGraph,
+  findGraph3DLightPresetId,
   updateGraph3DAzimuth,
   updateGraph3DLightSetting,
   updateGraph3DOccludedAxisLightness,
   updateSaddleSurfaceDenominator,
+  type Graph3DLightPresetId,
   type Graph3DLightScalarSetting
 } from "./editor/state.ts";
 import { occludedAxisColor, renderGraph3DToSvg } from "./rendering/graph-svg.ts";
@@ -44,6 +47,16 @@ appRoot.addEventListener("click", (event) => {
     case "add-equation-graph":
       addEquationGraphFromInput();
       return;
+  }
+});
+
+appRoot.addEventListener("change", (event) => {
+  if (!(event.target instanceof HTMLSelectElement)) {
+    return;
+  }
+
+  if (event.target.dataset["action"] === "set-graph-light-preset") {
+    updateGraphLightPresetFromSelect(event.target);
   }
 });
 
@@ -164,6 +177,23 @@ function updateGraphOccludedAxisLightnessFromInput(input: HTMLInputElement): voi
   );
 }
 
+function updateGraphLightPresetFromSelect(select: HTMLSelectElement): void {
+  const graphId = select.dataset["graphId"];
+  const presetId = select.value;
+
+  if (
+    graphId === undefined ||
+    !isGraph3DLightPresetId(presetId)
+  ) {
+    return;
+  }
+
+  editorDocument = applyGraph3DLightPreset(editorDocument, graphId, presetId);
+  renderSemanticJson();
+  renderGraph3DPreview(graphId);
+  syncGraphLightControls(graphId);
+}
+
 function updateGraphLightSettingFromInput(input: HTMLInputElement): void {
   const graphId = input.dataset["graphId"];
   const setting = input.dataset["kpGraphLightSetting"];
@@ -185,19 +215,7 @@ function updateGraphLightSettingFromInput(input: HTMLInputElement): void {
   );
   renderSemanticJson();
   renderGraph3DPreview(graphId);
-
-  const graph = findGraph3D(graphId);
-  const nextValue = graph?.light[setting];
-
-  if (nextValue === undefined) {
-    return;
-  }
-
-  input.value = formatNumber(nextValue);
-  input
-    .closest(".graph-control")
-    ?.querySelector<HTMLOutputElement>(".graph-control__value")
-    ?.replaceChildren(document.createTextNode(formatNumber(nextValue)));
+  syncGraphLightControls(graphId);
 }
 
 function updateSaddleDenominatorFromInput(input: HTMLInputElement): void {
@@ -273,12 +291,62 @@ function findSaddleSurface(surfaceId: string): Surface3DObject | undefined {
   );
 }
 
+function syncGraphLightControls(graphId: string): void {
+  const graph = findGraph3D(graphId);
+  const preview = findGraphPreview(graphId);
+
+  if (graph === undefined || preview === undefined) {
+    return;
+  }
+
+  preview
+    .querySelectorAll<HTMLInputElement>('[data-action="set-graph-light-setting"]')
+    .forEach((input) => {
+      const setting = input.dataset["kpGraphLightSetting"];
+
+      if (!isGraph3DLightScalarSetting(setting)) {
+        return;
+      }
+
+      const value = formatNumber(graph.light[setting]);
+      input.value = value;
+      setGraphControlOutput(input, value);
+    });
+
+  const selectedPreset = findGraph3DLightPresetId(graph.light) ?? "custom";
+  const select = preview.querySelector<HTMLSelectElement>(
+    '[data-action="set-graph-light-preset"]'
+  );
+
+  if (select !== null) {
+    select.value = selectedPreset;
+    select.dataset["kpGraphLightPreset"] = selectedPreset;
+    setGraphControlOutput(select, selectedPreset);
+  }
+}
+
+function setGraphControlOutput(
+  control: HTMLInputElement | HTMLSelectElement,
+  value: string
+): void {
+  control
+    .closest(".graph-control")
+    ?.querySelector<HTMLOutputElement>(".graph-control__value")
+    ?.replaceChildren(document.createTextNode(value));
+}
+
 function findGraphPreview(graphId: string): HTMLElement | undefined {
   return Array.from(appRoot.querySelectorAll<HTMLElement>(".object-preview")).find(
     (element) =>
       element.dataset["kpObject"] === graphId &&
       element.dataset["kpType"] === "graph-3d"
   );
+}
+
+function isGraph3DLightPresetId(
+  value: string | undefined
+): value is Graph3DLightPresetId {
+  return value === "studio" || value === "raking" || value === "flat";
 }
 
 function isGraph3DLightScalarSetting(

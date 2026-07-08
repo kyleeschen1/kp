@@ -7,6 +7,8 @@ import {
 } from "../src/editor/editor.ts";
 import { compileDocumentAsset } from "../src/editor/compile-client.ts";
 import {
+  GRAPH_3D_LIGHT_PRESETS,
+  applyGraph3DLightPreset,
   addLatexEquationGraph,
   createEditorState,
   updateGraph3DAzimuth,
@@ -79,10 +81,14 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-role="equation-error"/);
   assert.match(html, /data-action="compile-document"/);
   assert.match(html, /data-action="set-graph-azimuth"/);
+  assert.match(html, /data-action="set-graph-light-preset"/);
   assert.match(html, /data-action="set-graph-light-setting"/);
   assert.match(html, /data-action="set-graph-occluded-axis-lightness"/);
   assert.match(html, /data-action="set-saddle-denominator"/);
   assert.match(html, /data-kp-graph-rotation-axis="z"/);
+  assert.match(html, /data-kp-graph-light-preset="studio"/);
+  assert.match(html, /value="raking"/);
+  assert.match(html, /value="flat"/);
   assert.match(html, /data-kp-graph-light-setting="ambient"/);
   assert.match(html, /data-kp-graph-light-setting="diffuse"/);
   assert.match(html, /data-kp-graph-light-setting="depthHaze"/);
@@ -159,6 +165,25 @@ test("updateGraph3DAzimuth updates the semantic graph camera without mutating th
   assert.notEqual(nextDocument, document);
   assert.equal(originalGraph?.camera.azimuthDegrees, 35);
   assert.equal(nextGraph?.camera.azimuthDegrees, 92);
+});
+
+test("applyGraph3DLightPreset updates semantic graph light settings", () => {
+  const document = createInitialEditorDocument();
+  const nextDocument = applyGraph3DLightPreset(
+    document,
+    "saddle-orbit-graph",
+    "raking"
+  );
+  const originalGraph = document.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+  const nextGraph = nextDocument.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+
+  assert.notEqual(nextDocument, document);
+  assert.deepEqual(originalGraph?.light, GRAPH_3D_LIGHT_PRESETS.studio);
+  assert.deepEqual(nextGraph?.light, GRAPH_3D_LIGHT_PRESETS.raking);
 });
 
 test("updateGraph3DLightSetting updates scalar graph light settings", () => {

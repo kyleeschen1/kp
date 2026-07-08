@@ -272,9 +272,22 @@ h2 {
   text-align: right;
 }
 
-.graph-control__range {
+.graph-control__range,
+.graph-control__select {
   width: 100%;
+}
+
+.graph-control__range {
   accent-color: #1f6371;
+}
+
+.graph-control__select {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1f2937;
+  font: inherit;
+  padding: 0.25rem 0.35rem;
 }
 
 .graph-svg {

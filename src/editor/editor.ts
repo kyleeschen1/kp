@@ -4,8 +4,11 @@ import {
   renderGraphToSvg
 } from "../rendering/graph-svg.ts";
 import {
+  GRAPH_3D_LIGHT_PRESET_IDS,
+  findGraph3DLightPresetId,
   SADDLE_DENOMINATOR_MAX,
   SADDLE_DENOMINATOR_MIN,
+  type Graph3DLightPresetId,
   type Graph3DLightScalarSetting
 } from "./state.ts";
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
@@ -150,12 +153,44 @@ function renderGraph3DControls(
         <input class="graph-control__range" id="${escapeHtml(occludedAxisInputId)}" type="range" min="0" max="100" step="1" value="${formattedOccludedAxisLightness}" data-action="set-graph-occluded-axis-lightness" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-color-target="occluded-axis" aria-label="Set occluded axis lightness" />
         <output class="graph-control__value" for="${escapeHtml(occludedAxisInputId)}">${escapeHtml(occludedAxisHex)}</output>
       </label>
+      ${renderGraphLightPresetControl(graph)}
       ${renderGraphLightScalarControl(graph, "ambient", "ambient light")}
       ${renderGraphLightScalarControl(graph, "diffuse", "diffuse light")}
       ${renderGraphLightScalarControl(graph, "depthHaze", "depth haze")}
       ${saddleSurface === undefined ? "" : renderSaddleDenominatorControl(graph, saddleSurface)}
     </div>
   `;
+}
+
+function renderGraphLightPresetControl(graph: Graph3DObject): string {
+  const inputId = `control-${graph.id}-light-preset`;
+  const selectedPresetId = findGraph3DLightPresetId(graph.light);
+  const selectedValue = selectedPresetId ?? "custom";
+  const options = [
+    `<option value="custom"${selectedValue === "custom" ? " selected" : ""}>custom</option>`,
+    ...GRAPH_3D_LIGHT_PRESET_IDS.map((presetId) =>
+      renderGraphLightPresetOption(presetId, selectedValue)
+    )
+  ].join("");
+
+  return `
+      <label class="graph-control" for="${escapeHtml(inputId)}">
+        <span class="graph-control__label">light preset</span>
+        <select class="graph-control__select" id="${escapeHtml(inputId)}" data-action="set-graph-light-preset" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-light-preset="${escapeHtml(selectedValue)}" aria-label="Set graph light preset">
+          ${options}
+        </select>
+        <output class="graph-control__value" for="${escapeHtml(inputId)}">${escapeHtml(selectedValue)}</output>
+      </label>
+  `;
+}
+
+function renderGraphLightPresetOption(
+  presetId: Graph3DLightPresetId,
+  selectedValue: string
+): string {
+  const selected = presetId === selectedValue ? " selected" : "";
+
+  return `<option value="${escapeHtml(presetId)}"${selected}>${escapeHtml(presetId)}</option>`;
 }
 
 function renderGraphLightScalarControl(
