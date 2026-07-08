@@ -1,8 +1,8 @@
 import {
   occludedAxisColor,
-  renderGraph3DToSvg,
   renderGraphToSvg
 } from "../rendering/graph-svg.ts";
+import { renderGraph3DWebGLShell } from "../rendering/graph-webgl.ts";
 import {
   GRAPH_3D_LIGHT_PRESET_IDS,
   GRAPH_3D_SURFACE_MODE_IDS,
@@ -114,8 +114,8 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
     case "graph-3d":
       return renderPreviewArticle(
         object,
-        "rn-" + object.id + "-svg-preview",
-        `${renderGraph3DControls(object, document.objects)}<div class="object-preview__graph">${renderGraph3DToSvg(document.objects, object)}</div>`
+        "rn-" + object.id + "-webgl-preview",
+        `${renderGraph3DControls(object, document.objects)}<div class="object-preview__graph">${renderGraph3DWebGLShell(document.objects, object)}</div>`
       );
     case "matrix": {
       const latex = defaultLatexRenderer.render(object);

@@ -6,7 +6,7 @@ import type {
   GraphPoint3D,
   Surface3DObject
 } from "../semantic/graph.ts";
-import { sampleSaddleSurface } from "./graph-svg.ts";
+import { renderGraph3DToSvg, sampleSaddleSurface } from "./graph-svg.ts";
 
 export const GRAPH_3D_WEBGL_RENDERER_KIND = "graph-3d-webgl";
 
@@ -73,6 +73,24 @@ export function createGraph3DWebGLSceneModel(
   };
 }
 
+export function renderGraph3DWebGLShell(
+  objects: readonly KpSemanticObject[],
+  graph: Graph3DObject
+): string {
+  const descriptor = createGraph3DWebGLRendererDescriptor();
+  const width = graph.width;
+  const height = graph.height;
+
+  return `
+    <div class="graph-webgl" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-webgl-shell" data-kp-type="graph-3d" data-kp-renderer="webgl" data-kp-webgl-backend="${descriptor.backend}" data-kp-webgl-status="pending">
+      <canvas class="graph-webgl__canvas" width="${width}" height="${height}" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-webgl-canvas" data-kp-type="graph-3d" aria-hidden="true"></canvas>
+      <div class="graph-webgl__fallback" data-kp-renderer-fallback="svg">
+        ${renderGraph3DToSvg(objects, graph)}
+      </div>
+    </div>
+  `;
+}
+
 function createMeshSurfaceModel(
   surface: Surface3DObject
 ): Graph3DWebGLSurfaceModel {
@@ -125,4 +143,12 @@ function surfaceQuadsFromGrid(
   }
 
   return quads;
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
 }

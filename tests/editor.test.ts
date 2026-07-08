@@ -75,6 +75,11 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.doesNotMatch(html, /data-kp-object="time-spiral-curve"/);
   assert.match(html, /class="katex/);
   assert.match(html, /class="graph-svg"/);
+  assert.match(html, /class="graph-webgl"/);
+  assert.match(html, /data-kp-renderer="webgl"/);
+  assert.match(html, /data-kp-webgl-backend="three"/);
+  assert.match(html, /class="graph-webgl__canvas"/);
+  assert.match(html, /data-kp-renderer-fallback="svg"/);
   assert.match(html, /&quot;type&quot;: &quot;matrix&quot;/);
   assert.match(html, /&quot;type&quot;: &quot;graph-2d&quot;/);
   assert.match(html, /&quot;type&quot;: &quot;graph-3d&quot;/);

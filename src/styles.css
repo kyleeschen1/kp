@@ -323,6 +323,29 @@ h2 {
   overflow: visible;
 }
 
+.graph-webgl {
+  position: relative;
+  width: 100%;
+}
+
+.graph-webgl__canvas {
+  display: none;
+  width: 100%;
+  height: auto;
+}
+
+.graph-webgl__fallback {
+  width: 100%;
+}
+
+.graph-webgl[data-kp-webgl-status="ready"] .graph-webgl__canvas {
+  display: block;
+}
+
+.graph-webgl[data-kp-webgl-status="ready"] .graph-webgl__fallback {
+  display: none;
+}
+
 .graph-svg__background {
   fill: #f8fbff;
   stroke: #d5dee9;

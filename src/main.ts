@@ -21,7 +21,8 @@ import {
   type Graph3DLightPresetId,
   type Graph3DLightScalarSetting
 } from "./editor/state.ts";
-import { occludedAxisColor, renderGraph3DToSvg } from "./rendering/graph-svg.ts";
+import { occludedAxisColor } from "./rendering/graph-svg.ts";
+import { renderGraph3DWebGLShell } from "./rendering/graph-webgl.ts";
 import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   type Graph3DObject,
@@ -354,7 +355,10 @@ function renderGraph3DPreview(graphId: string): void {
     return;
   }
 
-  graphContainer.innerHTML = renderGraph3DToSvg(editorDocument.objects, graph);
+  graphContainer.innerHTML = renderGraph3DWebGLShell(
+    editorDocument.objects,
+    graph
+  );
 }
 
 function findGraph3D(graphId: string): Graph3DObject | undefined {
