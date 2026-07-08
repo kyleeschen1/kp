@@ -3,6 +3,8 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: ".",
   testMatch: "**/*.browser.spec.ts",
+  // Local linked worktrees can contain their own Playwright install and specs.
+  testIgnore: "**/.worktrees/**",
   outputDir: "/tmp/kp-playwright-test-results",
   timeout: 30_000,
   use: {
