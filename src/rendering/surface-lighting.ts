@@ -4,6 +4,9 @@ export type SurfaceFacing = "back" | "front";
 
 export interface SurfaceLight {
   direction: GraphPoint3D;
+  ambient: number;
+  diffuse: number;
+  depthHaze: number;
 }
 
 export interface SurfaceQuadFillInput {
@@ -17,7 +20,10 @@ export interface SurfaceQuadFillInput {
 }
 
 export const DEFAULT_SURFACE_LIGHT: SurfaceLight = {
-  direction: { x: -0.35, y: -0.45, z: 0.82 }
+  direction: { x: -0.35, y: -0.45, z: 0.82 },
+  ambient: 0.45,
+  diffuse: 0.4,
+  depthHaze: 1
 };
 
 export function surfaceQuadFill(input: SurfaceQuadFillInput): string {
@@ -27,8 +33,10 @@ export function surfaceQuadFill(input: SurfaceQuadFillInput): string {
   const normalizedHeight = clamp((input.center.z + zSpan) / (zSpan * 2), 0, 1);
   const lightDirection = normalizePoint3D(input.light.direction);
   const brightness = clamp(
-    0.45 + Math.max(0, dotPoint3D(input.normal, lightDirection)) * 0.4,
-    0.35,
+    input.light.ambient +
+      Math.max(0, dotPoint3D(input.normal, lightDirection)) *
+        input.light.diffuse,
+    0,
     0.9
   );
   const hue = input.facing === "front"
@@ -38,11 +46,12 @@ export function surfaceQuadFill(input: SurfaceQuadFillInput): string {
   const baseLightness = input.facing === "front"
     ? 42 + brightness * 20
     : 62 + brightness * 10;
+  const haze = input.depthHaze * input.light.depthHaze;
   const saturation = Math.round(
-    clamp(baseSaturation - input.depthHaze * 8, 34, 64)
+    clamp(baseSaturation - haze * 8, 34, 64)
   );
   const lightness = Math.round(
-    clamp(baseLightness + input.depthHaze * 6, 35, 78)
+    clamp(baseLightness + haze * 6, 35, 78)
   );
 
   return `hsl(${hue} ${saturation}% ${lightness}%)`;

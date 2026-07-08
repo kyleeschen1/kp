@@ -29,7 +29,6 @@ import {
   type Graph3DRenderBudgetResult
 } from "./performance-budget.ts";
 import {
-  DEFAULT_SURFACE_LIGHT,
   surfaceQuadFill as surfaceQuadLightingFill
 } from "./surface-lighting.ts";
 import {
@@ -1006,7 +1005,7 @@ function createSaddleSurfaceQuads(
           center,
           depthHaze,
           facing,
-          light: DEFAULT_SURFACE_LIGHT,
+          light: graph.light,
           normal,
           xDomain: surface.xDomain,
           yDomain: surface.yDomain

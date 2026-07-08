@@ -344,6 +344,22 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
       : object
   );
   const customSvg = renderGraph3DToSvg(customScene, customScene[0] as Graph3DObject);
+  const lowLightScene = scene.map((object) =>
+    object.type === "graph-3d"
+      ? {
+          ...object,
+          light: {
+            ...object.light,
+            ambient: 0.2,
+            diffuse: 0
+          }
+        }
+      : object
+  );
+  const lowLightSvg = renderGraph3DToSvg(
+    lowLightScene,
+    lowLightScene[0] as Graph3DObject
+  );
   const debugScene = scene.map((object) =>
     object.type === "graph-3d"
       ? {
@@ -492,6 +508,12 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   const surfaceDepthHazes = [...svg.matchAll(/data-kp-depth-haze="(\d+(?:\.\d+)?)"/g)].map(
     (match) => Number(match[1])
   );
+  const defaultSurfaceQuadFills = [...svg.matchAll(/class="graph-surface__quad"[^>]+fill="([^"]+)"/g)].map(
+    (match) => match[1]
+  );
+  const lowLightSurfaceQuadFills = [...lowLightSvg.matchAll(/class="graph-surface__quad"[^>]+fill="([^"]+)"/g)].map(
+    (match) => match[1]
+  );
   const axisStrips = [...svg.matchAll(/<polygon class="graph-axis__segment"[^>]+points="([^"]+)"/g)].map(
     (match) => parseSvgPoints(match[1]!)
   );
@@ -554,6 +576,9 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.ok(surfaceDepths.length > 0);
   assert.ok(surfaceDepthHazes.length > 0);
   assert.ok(surfaceDepthHazes.every((haze) => haze >= 0 && haze <= 1));
+  assert.ok(defaultSurfaceQuadFills.length > 0);
+  assert.deepEqual(lowLightSurfaceQuadFills.length, defaultSurfaceQuadFills.length);
+  assert.notDeepEqual(lowLightSurfaceQuadFills, defaultSurfaceQuadFills);
   assert.ok(
     surfaceDepths.every(
       (depth, index) => index === 0 || depth >= surfaceDepths[index - 1]!

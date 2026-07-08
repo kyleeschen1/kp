@@ -35,3 +35,23 @@ test("surfaceQuadFill keeps back-facing cells in a lighter blue family", () => {
     "hsl(215 46% 71%)"
   );
 });
+
+test("surfaceQuadFill uses custom ambient and diffuse intensity", () => {
+  assert.equal(
+    surfaceQuadFill({
+      center: { x: 0, y: 0, z: 0 },
+      depthHaze: 0,
+      facing: "front",
+      light: {
+        direction: { x: -0.35, y: -0.45, z: 0.82 },
+        ambient: 0.2,
+        diffuse: 0,
+        depthHaze: 1
+      },
+      normal: { x: 0, y: 0, z: 1 },
+      xDomain: [-3, 3],
+      yDomain: [-3, 3]
+    }),
+    "hsl(197 58% 46%)"
+  );
+});
