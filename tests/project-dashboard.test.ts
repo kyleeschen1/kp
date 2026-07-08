@@ -238,3 +238,31 @@ test("renderProjectDashboard renders report card evidence, risks, review metadat
   assert.match(html, /Programming object readiness/);
   assert.match(html, /Not reviewed/);
 });
+
+test("renderProjectDashboard renders the data contract for dashboard writes", () => {
+  const html = renderProjectDashboard(projectDashboardData);
+
+  assert.match(html, /data-kp-project-dashboard-contract/);
+  assert.match(html, /Data contract/);
+  assert.match(html, /src\/project-dashboard\/data\.ts/);
+  assert.match(html, /Browser edits are not persisted in V1/);
+  assert.match(html, /Codex completion rule/);
+  assert.match(
+    html,
+    /href="docs\/superpowers\/specs\/2026-07-08-project-dashboard-v1-design\.md"/
+  );
+});
+
+test("project dashboard v1 card records completed Codex phase updates", () => {
+  const dashboardCard = projectDashboardData.cards.find(
+    (card) => card.id === "work-project-dashboard-v1"
+  );
+  const reportCardPhase = dashboardCard?.children?.find(
+    (card) => card.id === "work-project-dashboard-v1-phase-4"
+  );
+
+  assert.equal(reportCardPhase?.status, "done");
+  assert.equal(reportCardPhase?.priority, "high");
+  assert.ok(reportCardPhase?.tags.includes("codex-update"));
+  assert.match(reportCardPhase?.summary ?? "", /report-card themes/);
+});

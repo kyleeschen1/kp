@@ -1,5 +1,18 @@
 import type { ProjectDashboardData } from "./model.ts";
 
+export const projectDashboardDataContract = {
+  sourceFile: "src/project-dashboard/data.ts",
+  designDocHref:
+    "docs/superpowers/specs/2026-07-08-project-dashboard-v1-design.md",
+  completionRule:
+    "When Codex completes a phase, update the matching work card or child card, refresh blockers and report evidence, run dashboard verification, then commit the data change with the phase.",
+  notes: [
+    "Browser edits are not persisted in V1.",
+    "Priority, status, blocker, report-card, and gallery changes are made in the typed source file.",
+    "Persistent browser editing is deferred until the dashboard records move to structured docs or JSON with validation."
+  ]
+} as const;
+
 export const projectDashboardData: ProjectDashboardData = {
   cards: [
     {
@@ -83,6 +96,50 @@ export const projectDashboardData: ProjectDashboardData = {
           summary:
             "Add typed seed data and a button-accessible dashboard shell while keeping the current editor as the default page.",
           tags: ["dashboard", "phase-1"],
+          relatedIds: ["report-dashboard-operations"]
+        },
+        {
+          id: "work-project-dashboard-v1-phase-2",
+          title: "Phase 2 work cards",
+          category: "todo",
+          status: "done",
+          priority: "high",
+          summary:
+            "Render grouped work cards with status lanes, priorities, blockers, children, and related links.",
+          tags: ["dashboard", "phase-2", "codex-update"],
+          relatedIds: ["report-dashboard-operations"]
+        },
+        {
+          id: "work-project-dashboard-v1-phase-3",
+          title: "Phase 3 object galleries",
+          category: "todo",
+          status: "done",
+          priority: "high",
+          summary:
+            "Add searchable animation, visual, semantic object, and protocol API galleries.",
+          tags: ["dashboard", "phase-3", "codex-update"],
+          relatedIds: ["report-dashboard-operations"]
+        },
+        {
+          id: "work-project-dashboard-v1-phase-4",
+          title: "Phase 4 report cards",
+          category: "todo",
+          status: "done",
+          priority: "high",
+          summary:
+            "Add report-card themes with evidence, risks, review metadata, and recommended next actions.",
+          tags: ["dashboard", "phase-4", "codex-update"],
+          relatedIds: ["report-dashboard-operations"]
+        },
+        {
+          id: "work-project-dashboard-v1-phase-5",
+          title: "Phase 5 write protocol",
+          category: "todo",
+          status: "done",
+          priority: "high",
+          summary:
+            "Document and expose the source-backed write protocol for keeping dashboard cards current.",
+          tags: ["dashboard", "phase-5", "codex-update"],
           relatedIds: ["report-dashboard-operations"]
         }
       ],
@@ -358,6 +415,10 @@ export const projectDashboardData: ProjectDashboardData = {
         {
           label: "Project dashboard v1 plan",
           href: "docs/superpowers/plans/2026-07-08-project-dashboard-v1/README.md"
+        },
+        {
+          label: "Project dashboard v1 write protocol",
+          href: "docs/superpowers/specs/2026-07-08-project-dashboard-v1-design.md"
         }
       ],
       risks: [
@@ -365,7 +426,7 @@ export const projectDashboardData: ProjectDashboardData = {
         "Card status updates still require Codex to edit seed data."
       ],
       recommendedNextActions: [
-        "Define the dashboard write protocol.",
+        "Apply the write protocol after each committed dashboard phase.",
         "Add browser coverage for dashboard navigation and editor return."
       ],
       tags: ["dashboard", "codex", "project-health"],

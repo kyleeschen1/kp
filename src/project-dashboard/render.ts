@@ -5,6 +5,7 @@ import type {
   ProjectGalleryItem,
   ProjectReportTheme
 } from "./model.ts";
+import { projectDashboardDataContract } from "./data.ts";
 import {
   collectProjectDashboardIds,
   filterProjectDashboardData,
@@ -43,6 +44,7 @@ export function renderProjectDashboard(
         </label>
       </div>
       ${renderDataStatus(issues)}
+      ${renderDataContract()}
       <div class="project-dashboard__grid">
         <section class="project-dashboard__section" aria-labelledby="project-dashboard-work-title">
           <div class="project-dashboard__section-header">
@@ -153,6 +155,39 @@ function renderDataStatus(issues: readonly string[]): string {
     <ul class="project-dashboard__status project-dashboard__status--error">
       ${issues.map((issue) => `<li>${escapeHtml(issue)}</li>`).join("")}
     </ul>
+  `;
+}
+
+function renderDataContract(): string {
+  return `
+    <section class="project-dashboard__section project-dashboard__contract" data-kp-project-dashboard-contract aria-labelledby="project-dashboard-contract-title">
+      <div class="project-dashboard__section-header">
+        <h2 id="project-dashboard-contract-title">Data contract</h2>
+        <span>V1 source</span>
+      </div>
+      <article class="project-card project-card--contract">
+        <div class="project-card__interfaces">
+          <strong>Canonical source</strong>
+          <a href="${escapeHtml(projectDashboardDataContract.sourceFile)}">${escapeHtml(projectDashboardDataContract.sourceFile)}</a>
+        </div>
+        <div class="project-card__interfaces">
+          <strong>Codex completion rule</strong>
+          <span>${escapeHtml(projectDashboardDataContract.completionRule)}</span>
+        </div>
+        <div class="project-card__blockers" data-kp-dashboard-contract-notes>
+          <strong>V1 notes</strong>
+          <ul>
+            ${projectDashboardDataContract.notes
+              .map((note) => `<li>${escapeHtml(note)}</li>`)
+              .join("")}
+          </ul>
+        </div>
+        <div class="project-card__related">
+          <strong>Design</strong>
+          <a href="${escapeHtml(projectDashboardDataContract.designDocHref)}">Project dashboard V1 write protocol</a>
+        </div>
+      </article>
+    </section>
   `;
 }
 
