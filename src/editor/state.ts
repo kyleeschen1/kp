@@ -8,6 +8,8 @@ import {
 export const SADDLE_DENOMINATOR_MIN = 1;
 export const SADDLE_DENOMINATOR_MAX = 16;
 
+export type Graph3DLightScalarSetting = "ambient" | "diffuse" | "depthHaze";
+
 export interface EditorState {
   document: KpDocument;
   selectedObjectId: string | null;
@@ -62,6 +64,32 @@ export function updateGraph3DOccludedAxisLightness(
       return {
         ...object,
         occludedAxisLightness: nextLightness
+      };
+    })
+  };
+}
+
+export function updateGraph3DLightSetting(
+  document: KpDocument,
+  graphId: string,
+  setting: Graph3DLightScalarSetting,
+  value: number
+): KpDocument {
+  const nextValue = clamp(value, 0, 1);
+
+  return {
+    ...document,
+    objects: document.objects.map((object): KpSemanticObject => {
+      if (object.type !== "graph-3d" || object.id !== graphId) {
+        return object;
+      }
+
+      return {
+        ...object,
+        light: {
+          ...object.light,
+          [setting]: nextValue
+        }
       };
     })
   };

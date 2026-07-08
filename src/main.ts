@@ -9,8 +9,10 @@ import { compileDocumentAsset } from "./editor/compile-client.ts";
 import {
   addLatexEquationGraph,
   updateGraph3DAzimuth,
+  updateGraph3DLightSetting,
   updateGraph3DOccludedAxisLightness,
-  updateSaddleSurfaceDenominator
+  updateSaddleSurfaceDenominator,
+  type Graph3DLightScalarSetting
 } from "./editor/state.ts";
 import { occludedAxisColor, renderGraph3DToSvg } from "./rendering/graph-svg.ts";
 import {
@@ -56,6 +58,9 @@ appRoot.addEventListener("input", (event) => {
       return;
     case "set-graph-occluded-axis-lightness":
       updateGraphOccludedAxisLightnessFromInput(event.target);
+      return;
+    case "set-graph-light-setting":
+      updateGraphLightSettingFromInput(event.target);
       return;
     case "set-saddle-denominator":
       updateSaddleDenominatorFromInput(event.target);
@@ -156,7 +161,43 @@ function updateGraphOccludedAxisLightnessFromInput(input: HTMLInputElement): voi
     ?.querySelector<HTMLOutputElement>(".graph-control__value")
     ?.replaceChildren(
       document.createTextNode(occludedAxisColor(occludedAxisLightness))
-    );
+  );
+}
+
+function updateGraphLightSettingFromInput(input: HTMLInputElement): void {
+  const graphId = input.dataset["graphId"];
+  const setting = input.dataset["kpGraphLightSetting"];
+  const value = Number(input.value);
+
+  if (
+    graphId === undefined ||
+    !isGraph3DLightScalarSetting(setting) ||
+    !Number.isFinite(value)
+  ) {
+    return;
+  }
+
+  editorDocument = updateGraph3DLightSetting(
+    editorDocument,
+    graphId,
+    setting,
+    value
+  );
+  renderSemanticJson();
+  renderGraph3DPreview(graphId);
+
+  const graph = findGraph3D(graphId);
+  const nextValue = graph?.light[setting];
+
+  if (nextValue === undefined) {
+    return;
+  }
+
+  input.value = formatNumber(nextValue);
+  input
+    .closest(".graph-control")
+    ?.querySelector<HTMLOutputElement>(".graph-control__value")
+    ?.replaceChildren(document.createTextNode(formatNumber(nextValue)));
 }
 
 function updateSaddleDenominatorFromInput(input: HTMLInputElement): void {
@@ -238,6 +279,12 @@ function findGraphPreview(graphId: string): HTMLElement | undefined {
       element.dataset["kpObject"] === graphId &&
       element.dataset["kpType"] === "graph-3d"
   );
+}
+
+function isGraph3DLightScalarSetting(
+  value: string | undefined
+): value is Graph3DLightScalarSetting {
+  return value === "ambient" || value === "diffuse" || value === "depthHaze";
 }
 
 function formatNumber(value: number): string {

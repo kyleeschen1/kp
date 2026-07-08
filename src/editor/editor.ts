@@ -5,7 +5,8 @@ import {
 } from "../rendering/graph-svg.ts";
 import {
   SADDLE_DENOMINATOR_MAX,
-  SADDLE_DENOMINATOR_MIN
+  SADDLE_DENOMINATOR_MIN,
+  type Graph3DLightScalarSetting
 } from "./state.ts";
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import { defaultLatexRenderer } from "../rendering/matrix-latex.ts";
@@ -149,8 +150,28 @@ function renderGraph3DControls(
         <input class="graph-control__range" id="${escapeHtml(occludedAxisInputId)}" type="range" min="0" max="100" step="1" value="${formattedOccludedAxisLightness}" data-action="set-graph-occluded-axis-lightness" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-color-target="occluded-axis" aria-label="Set occluded axis lightness" />
         <output class="graph-control__value" for="${escapeHtml(occludedAxisInputId)}">${escapeHtml(occludedAxisHex)}</output>
       </label>
+      ${renderGraphLightScalarControl(graph, "ambient", "ambient light")}
+      ${renderGraphLightScalarControl(graph, "diffuse", "diffuse light")}
+      ${renderGraphLightScalarControl(graph, "depthHaze", "depth haze")}
       ${saddleSurface === undefined ? "" : renderSaddleDenominatorControl(graph, saddleSurface)}
     </div>
+  `;
+}
+
+function renderGraphLightScalarControl(
+  graph: Graph3DObject,
+  setting: Graph3DLightScalarSetting,
+  label: string
+): string {
+  const inputId = `control-${graph.id}-light-${setting}`;
+  const value = formatNumber(graph.light[setting]);
+
+  return `
+      <label class="graph-control" for="${escapeHtml(inputId)}">
+        <span class="graph-control__label">${escapeHtml(label)}</span>
+        <input class="graph-control__range" id="${escapeHtml(inputId)}" type="range" min="0" max="1" step="0.01" value="${value}" data-action="set-graph-light-setting" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-light-setting="${escapeHtml(setting)}" aria-label="Set ${escapeHtml(label)}" />
+        <output class="graph-control__value" for="${escapeHtml(inputId)}">${value}</output>
+      </label>
   `;
 }
 

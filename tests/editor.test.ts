@@ -10,6 +10,7 @@ import {
   addLatexEquationGraph,
   createEditorState,
   updateGraph3DAzimuth,
+  updateGraph3DLightSetting,
   updateGraph3DOccludedAxisLightness,
   updateSaddleSurfaceDenominator
 } from "../src/editor/state.ts";
@@ -78,9 +79,13 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-role="equation-error"/);
   assert.match(html, /data-action="compile-document"/);
   assert.match(html, /data-action="set-graph-azimuth"/);
+  assert.match(html, /data-action="set-graph-light-setting"/);
   assert.match(html, /data-action="set-graph-occluded-axis-lightness"/);
   assert.match(html, /data-action="set-saddle-denominator"/);
   assert.match(html, /data-kp-graph-rotation-axis="z"/);
+  assert.match(html, /data-kp-graph-light-setting="ambient"/);
+  assert.match(html, /data-kp-graph-light-setting="diffuse"/);
+  assert.match(html, /data-kp-graph-light-setting="depthHaze"/);
   assert.match(html, /data-kp-graph-color-target="occluded-axis"/);
   assert.match(html, /data-kp-graph-surface-parameter="saddle-denominator"/);
   assert.match(html, /data-graph-id="saddle-orbit-graph"/);
@@ -90,6 +95,10 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /max="180"/);
   assert.match(html, /value="35"/);
   assert.match(html, /min="0"/);
+  assert.match(html, /max="1"/);
+  assert.match(html, /step="0.01"/);
+  assert.match(html, /value="0.450"/);
+  assert.match(html, /value="0.400"/);
   assert.match(html, /max="100"/);
   assert.match(html, /value="44"/);
   assert.match(html, /min="1"/);
@@ -150,6 +159,37 @@ test("updateGraph3DAzimuth updates the semantic graph camera without mutating th
   assert.notEqual(nextDocument, document);
   assert.equal(originalGraph?.camera.azimuthDegrees, 35);
   assert.equal(nextGraph?.camera.azimuthDegrees, 92);
+});
+
+test("updateGraph3DLightSetting updates scalar graph light settings", () => {
+  const document = createInitialEditorDocument();
+  const nextDocument = updateGraph3DLightSetting(
+    document,
+    "saddle-orbit-graph",
+    "ambient",
+    0.2
+  );
+  const clampedDocument = updateGraph3DLightSetting(
+    document,
+    "saddle-orbit-graph",
+    "diffuse",
+    2
+  );
+  const originalGraph = document.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+  const nextGraph = nextDocument.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+  const clampedGraph = clampedDocument.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+
+  assert.notEqual(nextDocument, document);
+  assert.equal(originalGraph?.light.ambient, 0.45);
+  assert.equal(nextGraph?.light.ambient, 0.2);
+  assert.equal(nextGraph?.light.diffuse, 0.4);
+  assert.equal(clampedGraph?.light.diffuse, 1);
 });
 
 test("updateGraph3DOccludedAxisLightness updates the semantic graph render setting", () => {
