@@ -25,6 +25,7 @@ import {
   type ProjectedGraphPoint3D
 } from "./projection.ts";
 import {
+  estimateGraph3DLightingOperationCount,
   evaluateGraph3DRenderBudget,
   type Graph3DRenderBudgetResult
 } from "./performance-budget.ts";
@@ -283,9 +284,17 @@ export function renderGraph3DToSvg(
   );
   const depthScene = buildSurfaceDepthScene3D(graph, renderedSurfaces);
   const depthDiagnostics = depthSceneDiagnostics(depthScene);
+  const surfaceQuadCount = renderedSurfaces.reduce(
+    (count, surface) => count + surface.quads.length,
+    0
+  );
   const renderBudget = evaluateGraph3DRenderBudget({
     depthCellCount: depthDiagnostics.depthCellCount,
     depthTriangleCount: depthDiagnostics.triangleCount,
+    lightingOperationCount: estimateGraph3DLightingOperationCount(
+      surfaceQuadCount,
+      graph.light
+    ),
     overlapCount: depthDiagnostics.overlapCount,
     surfaceCount: depthDiagnostics.surfaceCount
   });
@@ -331,6 +340,8 @@ function renderPerformanceBudgetAttributes(
     `data-kp-render-budget-max-depth-cell-count="${result.budget.maxDepthCellCount}"`,
     `data-kp-render-budget-depth-triangle-count="${result.cost.depthTriangleCount}"`,
     `data-kp-render-budget-max-depth-triangle-count="${result.budget.maxDepthTriangleCount}"`,
+    `data-kp-render-budget-lighting-operation-count="${result.cost.lightingOperationCount}"`,
+    `data-kp-render-budget-max-lighting-operation-count="${result.budget.maxLightingOperationCount}"`,
     `data-kp-render-budget-surface-count="${result.cost.surfaceCount}"`,
     `data-kp-render-budget-max-surface-count="${result.budget.maxSurfaceCount}"`,
     `data-kp-render-budget-overlap-count="${result.cost.overlapCount}"`,

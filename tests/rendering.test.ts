@@ -425,6 +425,8 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /data-kp-render-budget-max-depth-cell-count="300000"/);
   assert.match(svg, /data-kp-render-budget-depth-triangle-count="288"/);
   assert.match(svg, /data-kp-render-budget-max-depth-triangle-count="800"/);
+  assert.match(svg, /data-kp-render-budget-lighting-operation-count="864"/);
+  assert.match(svg, /data-kp-render-budget-max-lighting-operation-count="8000"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-stroke-ratio="2"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-stroke-extra-px="1"/);
   assert.match(svg, /class="graph-axis__segment"[^>]+data-kp-occlusion-treatment="muted"/);
