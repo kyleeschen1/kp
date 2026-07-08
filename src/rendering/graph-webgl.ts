@@ -38,6 +38,7 @@ export interface Graph3DWebGLSceneModel {
 }
 
 export interface Graph3DWebGLSurfaceModel {
+  drawBorder: boolean;
   grid: readonly (readonly GraphPoint3D[])[];
   id: string;
   label: string;
@@ -98,7 +99,7 @@ function createMeshSurfaceModel(
 ): Graph3DWebGLSurfaceModel {
   const grid = sampleSaddleSurface(surface);
 
-  return createGridSurfaceModel(surface.id, surface.label, grid);
+  return createGridSurfaceModel(surface.id, surface.label, grid, true);
 }
 
 function createSurfaceModels(
@@ -114,7 +115,8 @@ function createSurfaceModels(
         createGridSurfaceModel(
           `${graph.id}-donut`,
           "donut",
-          sampleTorusSurfaceGrid()
+          sampleTorusSurfaceGrid(),
+          false
         )
       ];
     case "hyperplanes":
@@ -122,12 +124,14 @@ function createSurfaceModels(
         createGridSurfaceModel(
           `${graph.id}-hyperplane-positive`,
           "z = x / 2",
-          sampleHyperplaneSurfaceGrid(0.5)
+          sampleHyperplaneSurfaceGrid(0.5),
+          true
         ),
         createGridSurfaceModel(
           `${graph.id}-hyperplane-negative`,
           "z = -x / 2",
-          sampleHyperplaneSurfaceGrid(-0.5)
+          sampleHyperplaneSurfaceGrid(-0.5),
+          true
         )
       ];
   }
@@ -136,9 +140,11 @@ function createSurfaceModels(
 function createGridSurfaceModel(
   id: string,
   label: string,
-  grid: readonly (readonly GraphPoint3D[])[]
+  grid: readonly (readonly GraphPoint3D[])[],
+  drawBorder: boolean
 ): Graph3DWebGLSurfaceModel {
   return {
+    drawBorder,
     grid,
     id,
     label,

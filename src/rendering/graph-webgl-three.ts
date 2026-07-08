@@ -31,6 +31,7 @@ export interface Graph3DWebGLThreeScene {
   axisObjects: readonly Group[];
   root: Group;
   scene: Scene;
+  surfaceBorderObjects: readonly Group[];
   surfaceMeshLines: readonly LineSegments[];
   surfaceMeshes: readonly Mesh[];
 }
@@ -41,6 +42,8 @@ const AXIS_HALO_ARROW_RADIUS = 0.115;
 const AXIS_HALO_RADIUS = 0.032;
 const AXIS_RADIUS = 0.018;
 const GRAPH_BACKGROUND_COLOR = 0xfffdf8;
+const SURFACE_BORDER_COLOR = 0x315e6d;
+const SURFACE_BORDER_RADIUS = 0.012;
 const THREE_Y_AXIS = new Vector3(0, 1, 0);
 const activeGraph3DWebGLRenderers = new WeakMap<HTMLElement, WebGLRenderer>();
 
@@ -49,6 +52,7 @@ export function createGraph3DWebGLThreeScene(
 ): Graph3DWebGLThreeScene {
   const scene = new Scene();
   const root = new Group();
+  const surfaceBorderObjects: Group[] = [];
   const surfaceMeshes: Mesh[] = [];
   const surfaceMeshLines: LineSegments[] = [];
   const axisObjects: Group[] = [];
@@ -74,6 +78,13 @@ export function createGraph3DWebGLThreeScene(
     surfaceMeshes.push(mesh);
     surfaceMeshLines.push(meshLines);
     root.add(mesh, meshLines);
+
+    if (surface.drawBorder) {
+      const borderObject = createSurfaceBorderObject(surface);
+
+      surfaceBorderObjects.push(borderObject);
+      root.add(borderObject);
+    }
   }
 
   for (const axis of model.axes) {
@@ -87,6 +98,7 @@ export function createGraph3DWebGLThreeScene(
     axisObjects,
     root,
     scene,
+    surfaceBorderObjects,
     surfaceMeshLines,
     surfaceMeshes
   };
@@ -303,6 +315,110 @@ function createSurfaceMeshLines(
   };
 
   return lines;
+}
+
+function createSurfaceBorderObject(surface: Graph3DWebGLSurfaceModel): Group {
+  const group = new Group();
+  const material = new MeshBasicMaterial({
+    color: SURFACE_BORDER_COLOR,
+    depthTest: true,
+    depthWrite: true
+  });
+
+  group.name = `${surface.id}-border`;
+  group.userData = {
+    kpObject: surface.id,
+    kpRendererRole: "surface-border"
+  };
+
+  for (const [start, end] of surfaceBorderSegments(surface.grid)) {
+    group.add(createSurfaceBorderSegmentMesh(start, end, material));
+  }
+
+  return group;
+}
+
+function surfaceBorderSegments(
+  grid: readonly (readonly GraphPoint3D[])[]
+): readonly (readonly [GraphPoint3D, GraphPoint3D])[] {
+  const segments: [GraphPoint3D, GraphPoint3D][] = [];
+  const firstRow = grid[0];
+  const lastRow = grid[grid.length - 1];
+  const columnCount = firstRow?.length ?? 0;
+
+  if (firstRow !== undefined) {
+    pushRowSegments(segments, firstRow);
+  }
+
+  if (lastRow !== undefined && lastRow !== firstRow) {
+    pushRowSegments(segments, lastRow);
+  }
+
+  for (let rowIndex = 0; rowIndex < grid.length - 1; rowIndex += 1) {
+    const row = grid[rowIndex];
+    const nextRow = grid[rowIndex + 1];
+
+    if (row === undefined || nextRow === undefined) {
+      continue;
+    }
+
+    const first = row[0];
+    const nextFirst = nextRow[0];
+    const last = row[columnCount - 1];
+    const nextLast = nextRow[columnCount - 1];
+
+    if (first !== undefined && nextFirst !== undefined) {
+      segments.push([first, nextFirst]);
+    }
+
+    if (last !== undefined && nextLast !== undefined) {
+      segments.push([last, nextLast]);
+    }
+  }
+
+  return segments;
+}
+
+function pushRowSegments(
+  segments: [GraphPoint3D, GraphPoint3D][],
+  row: readonly GraphPoint3D[]
+): void {
+  for (let columnIndex = 0; columnIndex < row.length - 1; columnIndex += 1) {
+    const start = row[columnIndex];
+    const end = row[columnIndex + 1];
+
+    if (start !== undefined && end !== undefined) {
+      segments.push([start, end]);
+    }
+  }
+}
+
+function createSurfaceBorderSegmentMesh(
+  startPoint: GraphPoint3D,
+  endPoint: GraphPoint3D,
+  material: MeshBasicMaterial
+): Mesh {
+  const start = vectorFromGraphPoint(startPoint);
+  const end = vectorFromGraphPoint(endPoint);
+  const direction = end.clone().sub(start);
+  const geometry = new CylinderGeometry(
+    SURFACE_BORDER_RADIUS,
+    SURFACE_BORDER_RADIUS,
+    direction.length(),
+    10
+  );
+  const mesh = new Mesh(geometry, material);
+
+  orientMeshAlongDirection(
+    mesh,
+    start.clone().lerp(end, 0.5),
+    direction.normalize()
+  );
+  mesh.userData = {
+    kpRendererRole: "surface-border-segment"
+  };
+
+  return mesh;
 }
 
 function createAxisObject(axis: Axis3DObject): Group {

@@ -107,7 +107,8 @@ test("WebGL scene model mirrors generated donut and hyperplane surface modes", (
   assert.equal(hyperplaneModel.surfaces[0]?.quads.length, 144);
   assert.equal(hyperplaneScene.surfaceMeshes.length, 2);
   assert.equal(hyperplaneScene.surfaceMeshLines.length, 2);
-  assert.equal(hyperplaneScene.root.children.length, 7);
+  assert.equal(hyperplaneScene.surfaceBorderObjects.length, 2);
+  assert.equal(hyperplaneScene.root.children.length, 9);
 });
 
 test("WebGL Three scene builds retained geometry for surfaces, mesh lines, and axes", () => {
@@ -121,7 +122,7 @@ test("WebGL Three scene builds retained geometry for surfaces, mesh lines, and a
   const meshLinePositions = meshLines?.geometry.getAttribute("position");
 
   assert.equal(threeScene.scene.children.length, 1);
-  assert.equal(threeScene.root.children.length, 5);
+  assert.equal(threeScene.root.children.length, 6);
   assert.equal(threeScene.root.userData["kpObject"], "saddle-orbit-graph");
   assert.equal(threeScene.surfaceMeshes.length, 1);
   assert.equal(surfaceMesh?.userData["kpObject"], "saddle-surface");
@@ -129,6 +130,8 @@ test("WebGL Three scene builds retained geometry for surfaces, mesh lines, and a
   assert.equal(surfaceMesh?.geometry.index?.count, 864);
   assert.equal(threeScene.surfaceMeshLines.length, 1);
   assert.equal(meshLinePositions?.count, 624);
+  assert.equal(threeScene.surfaceBorderObjects.length, 1);
+  assert.equal(threeScene.surfaceBorderObjects[0]?.children.length, 48);
   assert.equal(threeScene.axisObjects.length, 3);
   assert.deepEqual(
     threeScene.axisObjects.map((axisObject) => axisObject.userData["kpAxis"]),
