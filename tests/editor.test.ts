@@ -123,6 +123,11 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-kp-motion-id="rhs\.4"/);
   assert.match(extractEquationMotionStateBlock(html, 0), /data-kp-motion-id="lhs\.plus"/);
   assert.match(extractEquationMotionStateBlock(html, 3), /data-kp-motion-id="rhs\.4"/);
+  assert.match(
+    extractEquationMotionStateBlock(html, 0),
+    /class="equation-motion__formula"[^>]*aria-label="x \+ 3 = 7"[\s\S]*data-kp-motion-id="lhs\.x"/
+  );
+  assert.doesNotMatch(html, /equation-motion__motion-anchors/);
   assert.doesNotMatch(
     extractEquationMotionStateBlock(html, 2),
     /data-kp-motion-id="lhs\.plus"/

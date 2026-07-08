@@ -302,21 +302,15 @@ h2 {
 }
 
 .equation-motion__formula {
-  display: grid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28em;
   min-height: 5rem;
-  place-items: center;
 }
 
-.equation-motion__formula .katex-display {
+.equation-motion__formula .katex {
   margin: 0;
-}
-
-.equation-motion__motion-anchors {
-  position: absolute;
-  left: 0;
-  top: 0;
-  opacity: 0;
-  pointer-events: none;
 }
 
 .equation-motion__motion-anchor {

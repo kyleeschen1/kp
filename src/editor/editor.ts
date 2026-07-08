@@ -215,9 +215,8 @@ function renderEquationMotionState(
 ): string {
   return `
     <div class="equation-motion__state${active ? " equation-motion__state--active" : ""}" data-kp-equation-motion-state="${step}" data-kp-equation-motion-active="${active ? "true" : "false"}" data-kp-equation-motion-latex="${escapeHtml(latex)}" aria-hidden="${active ? "false" : "true"}">
-      <div class="equation-motion__formula">${renderLatexToHtml(latex)}</div>
-      <!-- Motion anchors are per-state measurement hooks; IDs repeat, so playback measures one state root at a time. -->
-      <div class="equation-motion__motion-anchors" aria-hidden="true">
+      <!-- Motion IDs live on visible token wrappers so measurement reads rendered boxes, not sidecar anchors. -->
+      <div class="equation-motion__formula" aria-label="${escapeHtml(latex)}">
         ${annotations.map(renderEquationMotionAnchor).join("")}
       </div>
     </div>
@@ -225,7 +224,7 @@ function renderEquationMotionState(
 }
 
 function renderEquationMotionAnchor(annotation: EquationMotionAnnotation): string {
-  return `<span class="equation-motion__motion-anchor" data-kp-motion-id="${escapeHtml(annotation.motionId)}">${escapeHtml(annotation.text)}</span>`;
+  return `<span class="equation-motion__motion-anchor" data-kp-motion-id="${escapeHtml(annotation.motionId)}">${renderLatexToHtml(annotation.text, { displayMode: false })}</span>`;
 }
 
 function renderGraph3DControls(

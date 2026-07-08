@@ -15,6 +15,35 @@ test("editor equation motion demo uses semantic playback plans", async ({
   await expect(rewind).toBeDisabled();
   await expect(next).toBeEnabled();
 
+  const visibleTokenBox = await demo
+    .locator('[data-kp-equation-motion-state="0"] [data-kp-motion-id="lhs.x"]')
+    .evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+
+      return {
+        inVisibleFormula:
+          element.closest(".equation-motion__formula") !== null &&
+          element.closest(".equation-motion__motion-anchors") === null,
+        opacity: style.opacity,
+        text: element.textContent?.trim(),
+        visibility: style.visibility,
+        width: rect.width,
+        height: rect.height
+      };
+    });
+
+  expect(visibleTokenBox).toEqual({
+    inVisibleFormula: true,
+    opacity: "1",
+    text: "x",
+    visibility: "visible",
+    width: expect.any(Number),
+    height: expect.any(Number)
+  });
+  expect(visibleTokenBox.width).toBeGreaterThan(0);
+  expect(visibleTokenBox.height).toBeGreaterThan(0);
+
   await next.click();
 
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");

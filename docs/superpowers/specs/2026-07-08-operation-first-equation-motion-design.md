@@ -317,10 +317,12 @@ As of July 8, 2026, the first operation-first path is implemented for the
 - `src/rendering/equation-motion-plan.ts`,
   `src/rendering/equation-motion-sampler.ts`, and
   `src/rendering/equation-motion-player.ts` compile, sample, and play a
-  normalized plan. Rewind samples the same plan backward rather than using a
-  separate reverse choreography.
-- `src/rendering/equation-motion-dom.ts` measures annotated tokens by
-  `data-kp-motion-id` and rejects duplicate IDs inside one measured state.
+  normalized plan. The compiler rejects duplicate token identity and lifecycle
+  endpoint mismatches. Rewind samples the same plan backward rather than using
+  a separate reverse choreography.
+- `src/rendering/equation-motion-dom.ts` measures visible annotated token
+  wrappers by `data-kp-motion-id` and rejects duplicate IDs inside one measured
+  state.
 - `src/editor/equation-motion-demo-controller.ts` wires the editor demo to the
   semantic operations, validates rendered state LaTeX against each operation's
   derived target, and measures only the source and target state roots so IDs may

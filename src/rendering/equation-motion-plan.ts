@@ -50,6 +50,7 @@ type LifecycleTiming = {
 export function createEquationMotionPlan(
   transition: EquationTransition
 ): EquationMotionPlan {
+  validateUniqueTokenIdentity(transition.tokens);
   const tokens = transition.tokens.map((transitionToken) => {
     if (
       transitionToken.sourceMotionId === undefined &&
@@ -59,6 +60,7 @@ export function createEquationMotionPlan(
         `Motion token ${transitionToken.id} has no sourceMotionId or targetMotionId`
       );
     }
+    validateLifecycleEndpoints(transitionToken);
 
     return {
       id: transitionToken.id,
@@ -86,6 +88,74 @@ export function createEquationMotionPlan(
     tokens,
     tracks: tokens.map((token) => trackForToken(token))
   };
+}
+
+function validateUniqueTokenIdentity(
+  tokens: readonly EquationTransition["tokens"][number][]
+): void {
+  const tokenIds = new Set<string>();
+  const sourceMotionIds = new Set<string>();
+  const targetMotionIds = new Set<string>();
+
+  for (const token of tokens) {
+    if (tokenIds.has(token.id)) {
+      throw new Error(`Duplicate equation motion token id ${token.id}`);
+    }
+    tokenIds.add(token.id);
+
+    if (token.sourceMotionId !== undefined) {
+      if (sourceMotionIds.has(token.sourceMotionId)) {
+        throw new Error(`Duplicate source motion id ${token.sourceMotionId}`);
+      }
+      sourceMotionIds.add(token.sourceMotionId);
+    }
+
+    if (token.targetMotionId !== undefined) {
+      if (targetMotionIds.has(token.targetMotionId)) {
+        throw new Error(`Duplicate target motion id ${token.targetMotionId}`);
+      }
+      targetMotionIds.add(token.targetMotionId);
+    }
+  }
+}
+
+function validateLifecycleEndpoints(
+  token: EquationTransition["tokens"][number]
+): void {
+  const hasSource = token.sourceMotionId !== undefined;
+  const hasTarget = token.targetMotionId !== undefined;
+
+  switch (token.lifecycle) {
+    case "persist":
+    case "move":
+    case "group-wrap":
+    case "group-unwrap":
+      if (!hasSource || !hasTarget) {
+        throw new Error(
+          `Motion token ${token.id} lifecycle ${token.lifecycle} requires both sourceMotionId and targetMotionId`
+        );
+      }
+      return;
+    case "enter":
+    case "inverse-enter":
+      if (hasSource || !hasTarget) {
+        throw new Error(
+          `Motion token ${token.id} lifecycle ${token.lifecycle} requires only targetMotionId`
+        );
+      }
+      return;
+    case "exit":
+    case "cancel":
+    case "simplify-into":
+      if (!hasSource || hasTarget) {
+        throw new Error(
+          `Motion token ${token.id} lifecycle ${token.lifecycle} requires only sourceMotionId`
+        );
+      }
+      return;
+    default:
+      return assertNever(token.lifecycle);
+  }
 }
 
 function validateAnnotationCoverage(

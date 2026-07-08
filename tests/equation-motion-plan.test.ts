@@ -297,6 +297,173 @@ test("createEquationMotionPlan rejects target tokens that reference unannotated 
   );
 });
 
+test("createEquationMotionPlan rejects duplicate token ids and motion ids", () => {
+  const duplicateTokenIdTransition: EquationTransition = {
+    sourceLatex: "x + y = 1",
+    targetLatex: "x + y = 1",
+    operation: {
+      kind: "subtractBothSides",
+      valueLatex: "0"
+    },
+    tokens: [
+      {
+        id: "term",
+        lifecycle: "persist",
+        label: "x",
+        sourceMotionId: "x.source",
+        targetMotionId: "x.target"
+      },
+      {
+        id: "term",
+        lifecycle: "persist",
+        label: "y",
+        sourceMotionId: "y.source",
+        targetMotionId: "y.target"
+      }
+    ],
+    sourceAnnotations: [
+      { motionId: "x.source", text: "x" },
+      { motionId: "y.source", text: "y" }
+    ],
+    targetAnnotations: [
+      { motionId: "x.target", text: "x" },
+      { motionId: "y.target", text: "y" }
+    ]
+  };
+  const duplicateSourceMotionIdTransition: EquationTransition = {
+    sourceLatex: "x + x = 1",
+    targetLatex: "x + x = 1",
+    operation: {
+      kind: "subtractBothSides",
+      valueLatex: "0"
+    },
+    tokens: [
+      {
+        id: "x.first",
+        lifecycle: "persist",
+        label: "x",
+        sourceMotionId: "x.source",
+        targetMotionId: "x.first.target"
+      },
+      {
+        id: "x.second",
+        lifecycle: "persist",
+        label: "x",
+        sourceMotionId: "x.source",
+        targetMotionId: "x.second.target"
+      }
+    ],
+    sourceAnnotations: [{ motionId: "x.source", text: "x" }],
+    targetAnnotations: [
+      { motionId: "x.first.target", text: "x" },
+      { motionId: "x.second.target", text: "x" }
+    ]
+  };
+  const duplicateTargetMotionIdTransition: EquationTransition = {
+    sourceLatex: "x + y = 1",
+    targetLatex: "x + y = 1",
+    operation: {
+      kind: "subtractBothSides",
+      valueLatex: "0"
+    },
+    tokens: [
+      {
+        id: "x",
+        lifecycle: "persist",
+        label: "x",
+        sourceMotionId: "x.source",
+        targetMotionId: "target.term"
+      },
+      {
+        id: "y",
+        lifecycle: "persist",
+        label: "y",
+        sourceMotionId: "y.source",
+        targetMotionId: "target.term"
+      }
+    ],
+    sourceAnnotations: [
+      { motionId: "x.source", text: "x" },
+      { motionId: "y.source", text: "y" }
+    ],
+    targetAnnotations: [{ motionId: "target.term", text: "x" }]
+  };
+
+  assert.throws(
+    () => createEquationMotionPlan(duplicateTokenIdTransition),
+    /Duplicate equation motion token id term/
+  );
+  assert.throws(
+    () => createEquationMotionPlan(duplicateSourceMotionIdTransition),
+    /Duplicate source motion id x\.source/
+  );
+  assert.throws(
+    () => createEquationMotionPlan(duplicateTargetMotionIdTransition),
+    /Duplicate target motion id target\.term/
+  );
+});
+
+test("createEquationMotionPlan rejects lifecycle endpoint mismatches", () => {
+  const baseTransition = (
+    token: EquationTransition["tokens"][number]
+  ): EquationTransition => ({
+    sourceLatex: "x = 1",
+    targetLatex: "x = 1",
+    operation: {
+      kind: "subtractBothSides",
+      valueLatex: "0"
+    },
+    tokens: [token],
+    sourceAnnotations:
+      token.sourceMotionId === undefined
+        ? []
+        : [{ motionId: token.sourceMotionId, text: token.label }],
+    targetAnnotations:
+      token.targetMotionId === undefined
+        ? []
+        : [{ motionId: token.targetMotionId, text: token.label }]
+  });
+
+  assert.throws(
+    () =>
+      createEquationMotionPlan(
+        baseTransition({
+          id: "x",
+          lifecycle: "persist",
+          label: "x",
+          sourceMotionId: "x"
+        })
+      ),
+    /Motion token x lifecycle persist requires both sourceMotionId and targetMotionId/
+  );
+  assert.throws(
+    () =>
+      createEquationMotionPlan(
+        baseTransition({
+          id: "entered",
+          lifecycle: "enter",
+          label: "x",
+          sourceMotionId: "source.x",
+          targetMotionId: "target.x"
+        })
+      ),
+    /Motion token entered lifecycle enter requires only targetMotionId/
+  );
+  assert.throws(
+    () =>
+      createEquationMotionPlan(
+        baseTransition({
+          id: "cancelled",
+          lifecycle: "cancel",
+          label: "x",
+          sourceMotionId: "source.x",
+          targetMotionId: "target.x"
+        })
+      ),
+    /Motion token cancelled lifecycle cancel requires only sourceMotionId/
+  );
+});
+
 test("createEquationMotionPlan returns independent track poses", () => {
   const transition = createEquationOperationTransition({
     sourceLatex: "x + 3 = 7",
