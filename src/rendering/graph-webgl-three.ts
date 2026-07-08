@@ -45,7 +45,22 @@ const GRAPH_BACKGROUND_COLOR = 0xfffdf8;
 const SURFACE_BORDER_COLOR = 0x315e6d;
 const SURFACE_BORDER_RADIUS = 0.012;
 const THREE_Y_AXIS = new Vector3(0, 1, 0);
-const activeGraph3DWebGLRenderers = new WeakMap<HTMLElement, WebGLRenderer>();
+interface ActiveGraph3DWebGLRenderer {
+  animationFrameId?: number;
+  renderer: WebGLRenderer;
+  scene?: Scene;
+}
+
+export interface Graph3DWebGLHydrationOptions {
+  previousObjects?: readonly KpSemanticObject[] | undefined;
+  transitionDurationMs?: number;
+}
+
+const GRAPH_3D_WEBGL_TRANSITION_DURATION_MS = 650;
+const activeGraph3DWebGLRenderers = new WeakMap<
+  HTMLElement,
+  ActiveGraph3DWebGLRenderer
+>();
 
 export function createGraph3DWebGLThreeScene(
   model: Graph3DWebGLSceneModel
@@ -105,9 +120,10 @@ export function createGraph3DWebGLThreeScene(
 }
 
 export function createGraph3DWebGLCamera(
-  graph: Graph3DObject
+  graph: Graph3DObject,
+  cameraSettings: Graph3DObject["camera"] = graph.camera
 ): OrthographicCamera {
-  const scale = Math.max(graph.camera.scale, 1);
+  const scale = Math.max(cameraSettings.scale, 1);
   const viewWidth = graph.width / scale;
   const viewHeight = graph.height / scale;
   const domainRadius =
@@ -117,8 +133,8 @@ export function createGraph3DWebGLCamera(
       graph.zDomain[1] - graph.zDomain[0]
     ) * 4;
   const radius = Math.max(domainRadius, 16);
-  const azimuth = degreesToRadians(graph.camera.azimuthDegrees);
-  const elevation = degreesToRadians(graph.camera.elevationDegrees);
+  const azimuth = degreesToRadians(cameraSettings.azimuthDegrees);
+  const elevation = degreesToRadians(cameraSettings.elevationDegrees);
   const horizontalRadius = radius * Math.cos(elevation);
   const camera = new OrthographicCamera(
     -viewWidth / 2,
@@ -143,16 +159,18 @@ export function createGraph3DWebGLCamera(
 
 export function hydrateGraph3DWebGLShells(
   root: ParentNode,
-  objects: readonly KpSemanticObject[]
+  objects: readonly KpSemanticObject[],
+  options: Graph3DWebGLHydrationOptions = {}
 ): void {
   root
     .querySelectorAll<HTMLElement>(".graph-webgl")
-    .forEach((shell) => hydrateGraph3DWebGLShell(shell, objects));
+    .forEach((shell) => hydrateGraph3DWebGLShell(shell, objects, options));
 }
 
 export function hydrateGraph3DWebGLShell(
   shell: HTMLElement,
-  objects: readonly KpSemanticObject[]
+  objects: readonly KpSemanticObject[],
+  options: Graph3DWebGLHydrationOptions = {}
 ): boolean {
   const graphId = shell.dataset["kpObject"];
   const canvas = shell.querySelector<HTMLCanvasElement>(".graph-webgl__canvas");
@@ -168,23 +186,42 @@ export function hydrateGraph3DWebGLShell(
   disposeGraph3DWebGLShell(shell);
 
   try {
-    const model = createGraph3DWebGLSceneModel(objects, graph);
-    const threeScene = createGraph3DWebGLThreeScene(model);
-    const camera = createGraph3DWebGLCamera(graph);
+    const shouldAnimate = shouldAnimateGraph3DTransition(
+      graph,
+      options.previousObjects
+    );
+    const model = createGraph3DWebGLSceneModel(objects, graph, {
+      previousObjects: options.previousObjects,
+      transitionProgress: shouldAnimate ? 0 : 1
+    });
     const renderer = new WebGLRenderer({
       antialias: true,
       canvas
     });
+    const activeRenderer: ActiveGraph3DWebGLRenderer = { renderer };
 
     renderer.setClearColor(0xfffdf8, 1);
     renderer.setPixelRatio(graph3DWebGLPixelRatio());
     renderer.setSize(graph.width, graph.height, false);
-    renderer.render(threeScene.scene, camera);
 
-    activeGraph3DWebGLRenderers.set(shell, renderer);
+    activeGraph3DWebGLRenderers.set(shell, activeRenderer);
     canvas.setAttribute("aria-hidden", "false");
     shell.dataset["kpWebglStatus"] = "ready";
     shell.dataset["kpWebglError"] = "";
+    renderGraph3DWebGLFrame(activeRenderer, graph, model);
+
+    if (shouldAnimate) {
+      shell.dataset["kpWebglTransition"] = "running";
+      activeRenderer.animationFrameId = animateGraph3DWebGLTransition(
+        shell,
+        activeRenderer,
+        objects,
+        graph,
+        options
+      );
+    } else {
+      shell.dataset["kpWebglTransition"] = "static";
+    }
 
     return true;
   } catch (error: unknown) {
@@ -196,14 +233,129 @@ export function hydrateGraph3DWebGLShell(
   }
 }
 
-export function disposeGraph3DWebGLShell(shell: HTMLElement): void {
-  const renderer = activeGraph3DWebGLRenderers.get(shell);
+function shouldAnimateGraph3DTransition(
+  graph: Graph3DObject,
+  previousObjects: readonly KpSemanticObject[] | undefined
+): boolean {
+  const previousGraph = previousObjects?.find(
+    (object): object is Graph3DObject =>
+      object.type === "graph-3d" && object.id === graph.id
+  );
 
-  if (renderer === undefined) {
+  return (
+    previousGraph !== undefined &&
+    (previousGraph.surfaceMode !== graph.surfaceMode ||
+      previousGraph.viewMode !== graph.viewMode)
+  );
+}
+
+function animateGraph3DWebGLTransition(
+  shell: HTMLElement,
+  activeRenderer: ActiveGraph3DWebGLRenderer,
+  objects: readonly KpSemanticObject[],
+  graph: Graph3DObject,
+  options: Graph3DWebGLHydrationOptions
+): number {
+  const durationMs =
+    options.transitionDurationMs ?? GRAPH_3D_WEBGL_TRANSITION_DURATION_MS;
+  const startedAt = performance.now();
+
+  const tick = (timestamp: number): void => {
+    if (!shell.isConnected) {
+      return;
+    }
+
+    const progress = clamp((timestamp - startedAt) / durationMs, 0, 1);
+    const easedProgress = easeInOutCubic(progress);
+    const model = createGraph3DWebGLSceneModel(objects, graph, {
+      previousObjects: options.previousObjects,
+      transitionProgress: easedProgress
+    });
+
+    renderGraph3DWebGLFrame(activeRenderer, graph, model);
+
+    if (progress < 1) {
+      const activeRenderer = activeGraph3DWebGLRenderers.get(shell);
+
+      if (activeRenderer !== undefined) {
+        activeRenderer.animationFrameId = requestAnimationFrame(tick);
+      }
+
+      return;
+    }
+
+    shell.dataset["kpWebglTransition"] = "complete";
+  };
+
+  return requestAnimationFrame(tick);
+}
+
+function renderGraph3DWebGLFrame(
+  activeRenderer: ActiveGraph3DWebGLRenderer,
+  graph: Graph3DObject,
+  model: Graph3DWebGLSceneModel
+): void {
+  const threeScene = createGraph3DWebGLThreeScene(model);
+  const camera = createGraph3DWebGLCamera(graph, model.camera);
+
+  if (activeRenderer.scene !== undefined) {
+    disposeGraph3DWebGLThreeScene(activeRenderer.scene);
+  }
+
+  activeRenderer.renderer.render(threeScene.scene, camera);
+  activeRenderer.scene = threeScene.scene;
+}
+
+function disposeGraph3DWebGLThreeScene(scene: Scene): void {
+  const disposedMaterials = new WeakSet<{ dispose: () => void }>();
+  const disposedGeometries = new WeakSet<{ dispose: () => void }>();
+
+  scene.traverse((object) => {
+    const candidate = object as {
+      geometry?: { dispose: () => void };
+      material?: { dispose: () => void } | readonly { dispose: () => void }[];
+    };
+
+    if (
+      candidate.geometry !== undefined &&
+      !disposedGeometries.has(candidate.geometry)
+    ) {
+      candidate.geometry.dispose();
+      disposedGeometries.add(candidate.geometry);
+    }
+
+    const materials =
+      candidate.material === undefined
+        ? []
+        : Array.isArray(candidate.material)
+          ? candidate.material
+          : [candidate.material];
+
+    for (const material of materials) {
+      if (!disposedMaterials.has(material)) {
+        material.dispose();
+        disposedMaterials.add(material);
+      }
+    }
+  });
+}
+
+export function disposeGraph3DWebGLShell(shell: HTMLElement): void {
+  const activeRenderer = activeGraph3DWebGLRenderers.get(shell);
+
+  if (activeRenderer === undefined) {
     return;
   }
 
-  renderer.dispose();
+  if (activeRenderer.animationFrameId !== undefined) {
+    cancelAnimationFrame(activeRenderer.animationFrameId);
+  }
+
+  if (activeRenderer.scene !== undefined) {
+    disposeGraph3DWebGLThreeScene(activeRenderer.scene);
+  }
+
+  activeRenderer.renderer.dispose();
   activeGraph3DWebGLRenderers.delete(shell);
 }
 
@@ -590,6 +742,16 @@ function vectorFromGraphPoint(point: GraphPoint3D): Vector3 {
 
 function degreesToRadians(degrees: number): number {
   return (degrees * Math.PI) / 180;
+}
+
+function easeInOutCubic(progress: number): number {
+  return progress < 0.5
+    ? 4 * progress * progress * progress
+    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
 }
 
 function graph3DWebGLPixelRatio(): number {

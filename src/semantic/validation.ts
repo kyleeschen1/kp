@@ -1,5 +1,8 @@
 import type { KpDocument, KpSemanticObject } from "./document.ts";
-import { GRAPH_3D_SURFACE_QUALITY_IDS } from "./graph.ts";
+import {
+  GRAPH_3D_SURFACE_QUALITY_IDS,
+  GRAPH_3D_VIEW_MODE_IDS
+} from "./graph.ts";
 
 export interface ValidationIssue {
   path: string;
@@ -113,6 +116,17 @@ function validateGraph3DObject(
     issues.push({
       path: `${path}.surfaceQuality`,
       message: `Graph ${object.id} surfaceQuality must be interactive, balanced, or high.`
+    });
+  }
+
+  if (
+    !GRAPH_3D_VIEW_MODE_IDS.includes(
+      object.viewMode as typeof GRAPH_3D_VIEW_MODE_IDS[number]
+    )
+  ) {
+    issues.push({
+      path: `${path}.viewMode`,
+      message: `Graph ${object.id} viewMode must be 3d or xy.`
     });
   }
 

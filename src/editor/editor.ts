@@ -7,6 +7,7 @@ import {
   GRAPH_3D_LIGHT_PRESET_IDS,
   GRAPH_3D_SURFACE_MODE_IDS,
   GRAPH_3D_SURFACE_QUALITY_IDS,
+  GRAPH_3D_VIEW_MODE_IDS,
   findGraph3DLightPresetId,
   SADDLE_DENOMINATOR_MAX,
   SADDLE_DENOMINATOR_MIN,
@@ -154,6 +155,7 @@ function renderGraph3DControls(
       <details class="graph-controls__foldout" data-kp-controls-foldout="render-settings">
         <summary class="graph-controls__summary">Render settings</summary>
         <div class="graph-controls__foldout-body">
+          ${renderGraphViewModeControl(graph)}
           ${renderGraphSurfaceModeControl(graph)}
           ${renderGraphSurfaceQualityControl(graph)}
           <label class="graph-control" for="${escapeHtml(occludedAxisInputId)}">
@@ -174,6 +176,32 @@ function renderGraph3DControls(
       </details>
     </div>
   `;
+}
+
+function renderGraphViewModeControl(graph: Graph3DObject): string {
+  const inputId = `control-${graph.id}-view-mode`;
+  const options = GRAPH_3D_VIEW_MODE_IDS.map((mode) =>
+    renderGraphViewModeOption(mode, graph.viewMode)
+  ).join("");
+
+  return `
+      <label class="graph-control" for="${escapeHtml(inputId)}">
+        <span class="graph-control__label">view</span>
+        <select class="graph-control__select" id="${escapeHtml(inputId)}" data-action="set-graph-view-mode" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-view-mode="${escapeHtml(graph.viewMode)}" aria-label="Set graph view mode">
+          ${options}
+        </select>
+        <output class="graph-control__value" for="${escapeHtml(inputId)}">${escapeHtml(graph.viewMode)}</output>
+      </label>
+  `;
+}
+
+function renderGraphViewModeOption(
+  mode: Graph3DObject["viewMode"],
+  selectedMode: Graph3DObject["viewMode"]
+): string {
+  const selected = mode === selectedMode ? " selected" : "";
+
+  return `<option value="${escapeHtml(mode)}"${selected}>${escapeHtml(mode)}</option>`;
 }
 
 function renderGraphSurfaceModeControl(graph: Graph3DObject): string {

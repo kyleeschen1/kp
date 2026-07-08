@@ -3,6 +3,7 @@ import type {
   Axis3DObject,
   Graph3DObject,
   Graph3DSurfaceMode,
+  Graph3DViewMode,
   GraphPoint3D,
   Surface3DObject
 } from "../semantic/graph.ts";
@@ -14,8 +15,11 @@ import {
   sampleTorusSurfaceGrid
 } from "./graph-svg.ts";
 import {
+  createGraph3DTo2DTransitionDescriptor,
   createGraphSurfaceModeTransition,
   graphSurfaceMorphTargetFromGrid,
+  interpolateGraphSurfaceModeTransition,
+  type Graph3DTo2DTransitionDescriptor,
   type GraphSurfaceModeTransition,
   type GraphSurfaceMorphRole,
   type GraphSurfaceMorphTarget
@@ -48,8 +52,16 @@ export interface Graph3DWebGLSceneModel {
   camera: Graph3DObject["camera"];
   graph: Graph3DObject;
   surfaceMode: Graph3DSurfaceMode;
+  surfaceTransition?: GraphSurfaceModeTransition | undefined;
   surfaceTransitions: readonly GraphSurfaceModeTransition[];
   surfaces: readonly Graph3DWebGLSurfaceModel[];
+  viewMode: Graph3DViewMode;
+  viewTransition?: Graph3DTo2DTransitionDescriptor | undefined;
+}
+
+export interface Graph3DWebGLSceneModelOptions {
+  previousObjects?: readonly KpSemanticObject[] | undefined;
+  transitionProgress?: number;
 }
 
 export interface Graph3DWebGLSurfaceModel {
@@ -71,9 +83,10 @@ export interface Graph3DWebGLSurfaceQuad {
 
 export function createGraph3DWebGLSceneModel(
   objects: readonly KpSemanticObject[],
-  graph: Graph3DObject
+  graph: Graph3DObject,
+  options: Graph3DWebGLSceneModelOptions = {}
 ): Graph3DWebGLSceneModel {
-  const axes = objects.filter(
+  const allAxes = objects.filter(
     (object): object is Axis3DObject =>
       object.type === "axis-3d" && object.graphId === graph.id
   );
@@ -82,17 +95,60 @@ export function createGraph3DWebGLSceneModel(
       object.type === "surface-3d" && object.graphId === graph.id
   );
   const surfaceMode = graph.surfaceMode ?? "mesh";
+  const viewMode = graph.viewMode ?? "3d";
+  const previousGraph = options.previousObjects?.find(
+    (object): object is Graph3DObject =>
+      object.type === "graph-3d" && object.id === graph.id
+  );
+  const progress = clamp(options.transitionProgress ?? 1, 0, 1);
+  const surfaceTransition =
+    previousGraph !== undefined && previousGraph.surfaceMode !== surfaceMode
+      ? createGraphSurfaceModeTransition(
+          objects,
+          graph,
+          previousGraph.surfaceMode,
+          surfaceMode
+        )
+      : undefined;
+  const viewTransition =
+    viewMode === "xy"
+      ? createGraph3DTo2DTransitionDescriptor(objects, graph)
+      : undefined;
+  const viewProgress =
+    viewMode === "xy"
+      ? previousGraph?.viewMode === "3d"
+        ? progress
+        : 1
+      : 0;
+  const axes =
+    viewProgress >= 1
+      ? allAxes.filter((axis) => axis.orientation !== "z")
+      : allAxes;
+  const surfaceModels =
+    surfaceTransition === undefined
+      ? createSurfaceModels(surfaces, graph, surfaceMode)
+      : createSurfaceModelsFromMorphTransition(surfaceTransition, progress);
 
   return {
     axes,
-    camera: graph.camera,
+    camera:
+      viewTransition === undefined
+        ? graph.camera
+        : interpolateCamera(
+            graph.camera,
+            viewTransition.camera.target,
+            viewProgress
+          ),
     graph,
     surfaceMode,
+    surfaceTransition,
     surfaceTransitions: graphSurfaceTransitionModes(surfaceMode).map(
       (targetMode) =>
         createGraphSurfaceModeTransition(objects, graph, surfaceMode, targetMode)
     ),
-    surfaces: createSurfaceModels(surfaces, graph, surfaceMode)
+    surfaces: applyViewProgressToSurfaceModels(surfaceModels, viewProgress),
+    viewMode,
+    viewTransition
   };
 }
 
@@ -200,6 +256,97 @@ function createGridSurfaceModel(
   };
 }
 
+function createSurfaceModelsFromMorphTransition(
+  transition: GraphSurfaceModeTransition,
+  progress: number
+): readonly Graph3DWebGLSurfaceModel[] {
+  const frame = interpolateGraphSurfaceModeTransition(transition, progress);
+
+  return frame.channels.map((channel) =>
+    createGridSurfaceModel(
+      channel.surfaceId,
+      channel.role,
+      gridFromVertices(
+        channel.vertices,
+        channel.uSampleCount,
+        channel.vSampleCount
+      ),
+      channel.role !== "donut",
+      channel.mode,
+      channel.role
+    )
+  );
+}
+
+function applyViewProgressToSurfaceModels(
+  surfaces: readonly Graph3DWebGLSurfaceModel[],
+  viewProgress: number
+): readonly Graph3DWebGLSurfaceModel[] {
+  if (viewProgress <= 0) {
+    return surfaces;
+  }
+
+  const zScale = 1 - viewProgress;
+
+  return surfaces.map((surface) =>
+    createGridSurfaceModel(
+      surface.id,
+      surface.label,
+      surface.grid.map((row) =>
+        row.map((point) => ({
+          ...point,
+          z: point.z * zScale
+        }))
+      ),
+      surface.drawBorder,
+      surface.morphTarget.mode,
+      surface.morphTarget.role
+    )
+  );
+}
+
+function gridFromVertices(
+  vertices: readonly GraphPoint3D[],
+  uSampleCount: number,
+  vSampleCount: number
+): readonly (readonly GraphPoint3D[])[] {
+  return Array.from({ length: vSampleCount }, (_, rowIndex) =>
+    vertices.slice(rowIndex * uSampleCount, (rowIndex + 1) * uSampleCount)
+  );
+}
+
+function interpolateCamera(
+  source: Graph3DObject["camera"],
+  target: Graph3DObject["camera"],
+  progress: number
+): Graph3DObject["camera"] {
+  return {
+    azimuthDegrees: interpolateNumber(
+      source.azimuthDegrees,
+      target.azimuthDegrees,
+      progress
+    ),
+    elevationDegrees: interpolateNumber(
+      source.elevationDegrees,
+      target.elevationDegrees,
+      progress
+    ),
+    origin: [
+      interpolateNumber(source.origin[0], target.origin[0], progress),
+      interpolateNumber(source.origin[1], target.origin[1], progress)
+    ],
+    scale: interpolateNumber(source.scale, target.scale, progress)
+  };
+}
+
+function interpolateNumber(
+  source: number,
+  target: number,
+  progress: number
+): number {
+  return source + (target - source) * progress;
+}
+
 function graphSurfaceTransitionModes(
   surfaceMode: Graph3DSurfaceMode
 ): readonly Graph3DSurfaceMode[] {
@@ -255,4 +402,8 @@ function escapeHtml(value: string): string {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
 }

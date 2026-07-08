@@ -9,6 +9,7 @@ import { compileDocumentAsset } from "./editor/compile-client.ts";
 import {
   GRAPH_3D_SURFACE_MODE_IDS,
   GRAPH_3D_SURFACE_QUALITY_IDS,
+  GRAPH_3D_VIEW_MODE_IDS,
   applyGraph3DLightPreset,
   addLatexEquationGraph,
   findGraph3DLightPresetId,
@@ -19,6 +20,7 @@ import {
   updateGraph3DShadowOpacity,
   updateGraph3DSurfaceQuality,
   updateGraph3DSurfaceMode,
+  updateGraph3DViewMode,
   updateSaddleSurfaceDenominator,
   type Graph3DLightPresetId,
   type Graph3DLightScalarSetting
@@ -34,6 +36,7 @@ import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   type Graph3DObject,
   type Graph3DSurfaceQuality,
+  type Graph3DViewMode,
   type Surface3DObject
 } from "./semantic/graph.ts";
 
@@ -83,6 +86,11 @@ appRoot.addEventListener("change", (event) => {
 
   if (event.target.dataset["action"] === "set-graph-surface-quality") {
     updateGraphSurfaceQualityFromSelect(event.target);
+    return;
+  }
+
+  if (event.target.dataset["action"] === "set-graph-view-mode") {
+    updateGraphViewModeFromSelect(event.target);
   }
 });
 
@@ -161,7 +169,8 @@ function renderEditor(): void {
 
 function hydrateGraph3DWebGL(
   root: ParentNode,
-  objects: readonly KpSemanticObject[]
+  objects: readonly KpSemanticObject[],
+  previousObjects?: readonly KpSemanticObject[]
 ): void {
   const rootNode = root instanceof Node ? root : undefined;
 
@@ -170,20 +179,21 @@ function hydrateGraph3DWebGL(
       return;
     }
 
-    client.hydrateGraph3DWebGLShells(root, objects);
+    client.hydrateGraph3DWebGLShells(root, objects, { previousObjects });
   });
 }
 
 function hydrateGraph3DWebGLShell(
   shell: HTMLElement,
-  objects: readonly KpSemanticObject[]
+  objects: readonly KpSemanticObject[],
+  previousObjects?: readonly KpSemanticObject[]
 ): void {
   void loadGraph3DWebGLClient().then((client) => {
     if (!shell.isConnected) {
       return;
     }
 
-    client.hydrateGraph3DWebGLShell(shell, objects);
+    client.hydrateGraph3DWebGLShell(shell, objects, { previousObjects });
   });
 }
 
@@ -293,13 +303,15 @@ function updateGraphSurfaceModeFromSelect(select: HTMLSelectElement): void {
     return;
   }
 
+  const previousObjects = editorDocument.objects;
+
   editorDocument = updateGraph3DSurfaceMode(
     editorDocument,
     graphId,
     surfaceMode
   );
   renderSemanticJson();
-  renderGraph3DPreview(graphId);
+  renderGraph3DPreview(graphId, previousObjects);
   select.dataset["kpGraphSurfaceMode"] = surfaceMode;
   setGraphControlOutput(select, surfaceMode);
 }
@@ -324,6 +336,26 @@ function updateGraphSurfaceQualityFromSelect(select: HTMLSelectElement): void {
   renderGraph3DPreview(graphId);
   select.dataset["kpGraphSurfaceQuality"] = surfaceQuality;
   setGraphControlOutput(select, surfaceQuality);
+}
+
+function updateGraphViewModeFromSelect(select: HTMLSelectElement): void {
+  const graphId = select.dataset["graphId"];
+  const viewMode = select.value;
+
+  if (
+    graphId === undefined ||
+    !isGraph3DViewMode(viewMode)
+  ) {
+    return;
+  }
+
+  const previousObjects = editorDocument.objects;
+
+  editorDocument = updateGraph3DViewMode(editorDocument, graphId, viewMode);
+  renderSemanticJson();
+  renderGraph3DPreview(graphId, previousObjects);
+  select.dataset["kpGraphViewMode"] = viewMode;
+  setGraphControlOutput(select, viewMode);
 }
 
 function updateGraphLightSettingFromInput(input: HTMLInputElement): void {
@@ -440,7 +472,10 @@ function renderSemanticJson(): void {
   }
 }
 
-function renderGraph3DPreview(graphId: string): void {
+function renderGraph3DPreview(
+  graphId: string,
+  previousObjects?: readonly KpSemanticObject[]
+): void {
   const graph = findGraph3D(graphId);
   const preview = findGraphPreview(graphId);
   const graphContainer = preview?.querySelector<HTMLElement>(".object-preview__graph");
@@ -468,7 +503,11 @@ function renderGraph3DPreview(graphId: string): void {
       );
     }
 
-    hydrateGraph3DWebGLShell(existingShell, editorDocument.objects);
+    hydrateGraph3DWebGLShell(
+      existingShell,
+      editorDocument.objects,
+      previousObjects
+    );
     return;
   }
 
@@ -480,7 +519,7 @@ function renderGraph3DPreview(graphId: string): void {
     editorDocument.objects,
     graph
   );
-  hydrateGraph3DWebGL(graphContainer, editorDocument.objects);
+  hydrateGraph3DWebGL(graphContainer, editorDocument.objects, previousObjects);
 }
 
 function findGraph3D(graphId: string): Graph3DObject | undefined {
@@ -586,6 +625,15 @@ function isGraph3DSurfaceQuality(
   return (
     value !== undefined &&
     GRAPH_3D_SURFACE_QUALITY_IDS.includes(value as Graph3DSurfaceQuality)
+  );
+}
+
+function isGraph3DViewMode(
+  value: string | undefined
+): value is Graph3DViewMode {
+  return (
+    value !== undefined &&
+    GRAPH_3D_VIEW_MODE_IDS.includes(value as Graph3DViewMode)
   );
 }
 

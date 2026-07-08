@@ -239,6 +239,7 @@ test("createGraph3DObject creates a semantic graph object with a third axis", ()
     height: 420,
     surfaceMode: "mesh",
     surfaceQuality: "balanced",
+    viewMode: "3d",
     occludedAxisLightness: 44,
     debug: {
       depthOverlay: false,

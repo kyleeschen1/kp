@@ -146,6 +146,50 @@ test("WebGL scene model mirrors generated donut and hyperplane surface modes", (
   assert.equal(hyperplaneScene.root.children.length, 9);
 });
 
+test("WebGL scene model samples surface morph frames from previous graph state", () => {
+  const scene = createDefaultGraph3DScene();
+  const graph = scene[0] as Graph3DObject;
+  const targetGraph: Graph3DObject = {
+    ...graph,
+    surfaceMode: "donut"
+  };
+  const model = createGraph3DWebGLSceneModel(
+    scene.map((object) => (object.id === graph.id ? targetGraph : object)),
+    targetGraph,
+    {
+      previousObjects: scene,
+      transitionProgress: 0.5
+    }
+  );
+  const surface = model.surfaces[0];
+
+  assert.equal(model.surfaceTransition?.sourceMode, "mesh");
+  assert.equal(model.surfaceTransition?.targetMode, "donut");
+  assert.equal(surface?.grid.length, 21);
+  assert.equal(surface?.grid[0]?.length, 37);
+  assert.equal(surface?.morphTarget.vertices.length, 777);
+});
+
+test("WebGL scene model exposes front-facing 2D graph view", () => {
+  const scene = createDefaultGraph3DScene();
+  const graph: Graph3DObject = {
+    ...(scene[0] as Graph3DObject),
+    viewMode: "xy"
+  };
+  const model = createGraph3DWebGLSceneModel(scene, graph);
+  const surface = model.surfaces[0];
+
+  assert.equal(model.viewMode, "xy");
+  assert.equal(model.viewTransition?.kind, "graph-3d-to-2d");
+  assert.equal(model.camera.azimuthDegrees, 0);
+  assert.equal(model.camera.elevationDegrees, -90);
+  assert.deepEqual(
+    model.axes.map((axis) => axis.orientation),
+    ["x", "y"]
+  );
+  assert.ok(surface?.grid.flat().every((point) => point.z === 0));
+});
+
 test("WebGL Three scene builds retained geometry for surfaces, mesh lines, and axes", () => {
   const scene = createDefaultGraph3DScene();
   const graph = scene[0] as Graph3DObject;

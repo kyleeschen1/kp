@@ -4,7 +4,8 @@ import test from "node:test";
 import {
   createGraph3DTo2DTransitionDescriptor,
   createGraphSurfaceModeTransition,
-  createGraphSurfaceMorphTargets
+  createGraphSurfaceMorphTargets,
+  interpolateGraphSurfaceModeTransition
 } from "../src/rendering/graph-transitions.ts";
 import {
   createDefaultGraph3DScene,
@@ -81,6 +82,32 @@ test("createGraphSurfaceMorphTargets exposes current mode uv topology", () => {
   assert.equal(target?.vSampleCount, 19);
   assert.equal(target?.vertices.length, 703);
   assert.equal(target?.uv.length, 703);
+});
+
+test("interpolateGraphSurfaceModeTransition samples visible intermediate vertices", () => {
+  const scene = createDefaultGraph3DScene();
+  const graph = scene[0] as Graph3DObject;
+  const transition = createGraphSurfaceModeTransition(
+    scene,
+    graph,
+    "mesh",
+    "donut"
+  );
+  const frame = interpolateGraphSurfaceModeTransition(transition, 0.5);
+  const source = transition.channels[0]?.source.vertices[10];
+  const target = transition.channels[0]?.target.vertices[10];
+  const midpoint = frame.channels[0]?.vertices[10];
+
+  assert.equal(frame.progress, 0.5);
+  assert.equal(frame.channels.length, 1);
+  assert.equal(frame.channels[0]?.role, "donut");
+  assert.equal(frame.channels[0]?.vertices.length, 777);
+  assert.ok(source !== undefined);
+  assert.ok(target !== undefined);
+  assert.ok(midpoint !== undefined);
+  assert.ok(Math.abs(midpoint.x - (source.x + target.x) / 2) < 1e-12);
+  assert.ok(Math.abs(midpoint.y - (source.y + target.y) / 2) < 1e-12);
+  assert.ok(Math.abs(midpoint.z - (source.z + target.z) / 2) < 1e-12);
 });
 
 test("createGraph3DTo2DTransitionDescriptor faces the xy plane and fades z", () => {

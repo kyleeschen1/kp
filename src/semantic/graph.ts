@@ -103,11 +103,13 @@ export interface Graph3DLightSettings {
 }
 
 export type Graph3DSurfaceMode = "mesh" | "donut" | "hyperplanes";
+export type Graph3DViewMode = "3d" | "xy";
 export const GRAPH_3D_SURFACE_QUALITY_IDS = [
   "interactive",
   "balanced",
   "high"
 ] as const;
+export const GRAPH_3D_VIEW_MODE_IDS = ["3d", "xy"] as const;
 export type Graph3DSurfaceQuality =
   typeof GRAPH_3D_SURFACE_QUALITY_IDS[number];
 
@@ -135,6 +137,7 @@ export interface Graph3DObject {
   height: number;
   surfaceMode: Graph3DSurfaceMode;
   surfaceQuality: Graph3DSurfaceQuality;
+  viewMode: Graph3DViewMode;
   occludedAxisLightness: number;
   debug: Graph3DDebugSettings;
   shadow: Graph3DShadowSettings;
@@ -212,12 +215,16 @@ type CreateGraph3DObjectInput =
     | "shadow"
     | "surfaceMode"
     | "surfaceQuality"
+    | "viewMode"
     | "type"
   > &
   Partial<
     Pick<
       Graph3DObject,
-      "occludedAxisLightness" | "surfaceMode" | "surfaceQuality"
+      | "occludedAxisLightness"
+      | "surfaceMode"
+      | "surfaceQuality"
+      | "viewMode"
     >
   > & {
     debug?: Partial<Graph3DDebugSettings>;
@@ -290,6 +297,7 @@ export function createGraph3DObject(
     type: "graph-3d",
     surfaceMode: input.surfaceMode ?? "mesh",
     surfaceQuality: input.surfaceQuality ?? DEFAULT_GRAPH_3D_SURFACE_QUALITY,
+    viewMode: input.viewMode ?? "3d",
     occludedAxisLightness: clamp(
       input.occludedAxisLightness ?? DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
       0,

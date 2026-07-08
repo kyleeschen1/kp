@@ -6,10 +6,14 @@ import {
   type Graph3DLightSettings,
   type Graph3DSurfaceQuality,
   type Graph3DSurfaceMode,
+  type Graph3DViewMode,
   type Surface3DObject
 } from "../semantic/graph.ts";
 
-export { GRAPH_3D_SURFACE_QUALITY_IDS } from "../semantic/graph.ts";
+export {
+  GRAPH_3D_SURFACE_QUALITY_IDS,
+  GRAPH_3D_VIEW_MODE_IDS
+} from "../semantic/graph.ts";
 
 export const SADDLE_DENOMINATOR_MIN = 1;
 export const SADDLE_DENOMINATOR_MAX = 16;
@@ -150,6 +154,26 @@ export function updateGraph3DSurfaceQuality(
       return {
         ...object,
         surfaceQuality
+      };
+    })
+  };
+}
+
+export function updateGraph3DViewMode(
+  document: KpDocument,
+  graphId: string,
+  viewMode: Graph3DViewMode
+): KpDocument {
+  return {
+    ...document,
+    objects: document.objects.map((object): KpSemanticObject => {
+      if (object.type !== "graph-3d" || object.id !== graphId) {
+        return object;
+      }
+
+      return {
+        ...object,
+        viewMode
       };
     })
   };

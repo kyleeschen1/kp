@@ -58,6 +58,23 @@ export interface GraphSurfaceModeTransition {
   readonly vSampleCount: number;
 }
 
+export interface GraphSurfaceMorphFrame {
+  readonly channels: readonly GraphSurfaceMorphFrameChannel[];
+  readonly progress: number;
+  readonly sourceMode: Graph3DSurfaceMode;
+  readonly targetMode: Graph3DSurfaceMode;
+}
+
+export interface GraphSurfaceMorphFrameChannel {
+  readonly channelIndex: number;
+  readonly mode: Graph3DSurfaceMode;
+  readonly role: GraphSurfaceMorphRole;
+  readonly surfaceId: string;
+  readonly uSampleCount: number;
+  readonly vertices: readonly GraphPoint3D[];
+  readonly vSampleCount: number;
+}
+
 export interface Graph3DTo2DAxisTransition {
   readonly axisId: string;
   readonly orientation: Axis3DObject["orientation"];
@@ -239,6 +256,32 @@ export function graphSurfaceMorphTargetFromGrid(
   };
 }
 
+export function interpolateGraphSurfaceModeTransition(
+  transition: GraphSurfaceModeTransition,
+  progress: number
+): GraphSurfaceMorphFrame {
+  const clampedProgress = clamp(progress, 0, 1);
+
+  return {
+    channels: transition.channels.map((channel) => ({
+      channelIndex: channel.channelIndex,
+      mode: transition.targetMode,
+      role: channel.target.role,
+      surfaceId: channel.target.surfaceId,
+      uSampleCount: channel.target.uSampleCount,
+      vSampleCount: channel.target.vSampleCount,
+      vertices: interpolateSurfaceVertices(
+        channel.source.vertices,
+        channel.target.vertices,
+        clampedProgress
+      )
+    })),
+    progress: clampedProgress,
+    sourceMode: transition.sourceMode,
+    targetMode: transition.targetMode
+  };
+}
+
 function createGraphSurfaceMorphChannel(
   channelIndex: number,
   source: GraphSurfaceMorphTarget,
@@ -260,6 +303,37 @@ function createGraphSurfaceMorphChannel(
     source,
     target
   };
+}
+
+function interpolateSurfaceVertices(
+  source: readonly GraphPoint3D[],
+  target: readonly GraphPoint3D[],
+  progress: number
+): readonly GraphPoint3D[] {
+  const vertexCount = Math.min(source.length, target.length);
+
+  return Array.from({ length: vertexCount }, (_, index) => {
+    const sourcePoint = source[index];
+    const targetPoint = target[index];
+
+    if (sourcePoint === undefined || targetPoint === undefined) {
+      return { x: 0, y: 0, z: 0 };
+    }
+
+    return {
+      x: interpolate(sourcePoint.x, targetPoint.x, progress),
+      y: interpolate(sourcePoint.y, targetPoint.y, progress),
+      z: interpolate(sourcePoint.z, targetPoint.z, progress)
+    };
+  });
+}
+
+function interpolate(source: number, target: number, progress: number): number {
+  return source + (target - source) * progress;
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
 }
 
 function transitionResolution(

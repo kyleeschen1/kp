@@ -7,6 +7,7 @@ import {
 } from "../src/editor/editor.ts";
 import { compileDocumentAsset } from "../src/editor/compile-client.ts";
 import {
+  GRAPH_3D_VIEW_MODE_IDS,
   GRAPH_3D_LIGHT_PRESETS,
   applyGraph3DLightPreset,
   addLatexEquationGraph,
@@ -18,6 +19,7 @@ import {
   updateGraph3DShadowOpacity,
   updateGraph3DSurfaceQuality,
   updateGraph3DSurfaceMode,
+  updateGraph3DViewMode,
   updateSaddleSurfaceDenominator
 } from "../src/editor/state.ts";
 import type {
@@ -97,12 +99,15 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-action="set-graph-occluded-axis-lightness"/);
   assert.match(html, /data-action="set-graph-surface-mode"/);
   assert.match(html, /data-action="set-graph-surface-quality"/);
+  assert.match(html, /data-action="set-graph-view-mode"/);
   assert.match(html, /data-action="set-saddle-denominator"/);
   assert.match(html, /class="graph-controls__foldout"[^>]*data-kp-controls-foldout="render-settings"/);
   assert.doesNotMatch(html, /class="graph-controls__foldout"[^>]*open/);
   assert.match(html, /data-kp-graph-rotation-axis="z"/);
   assert.match(html, /data-kp-graph-surface-mode="mesh"/);
   assert.match(html, /data-kp-graph-surface-quality="balanced"/);
+  assert.match(html, /data-kp-graph-view-mode="3d"/);
+  assert.match(html, /value="xy"/);
   assert.match(html, /value="donut"/);
   assert.match(html, /value="hyperplanes"/);
   assert.match(html, /value="interactive"/);
@@ -368,6 +373,26 @@ test("updateGraph3DSurfaceQuality updates the semantic graph render quality", ()
   assert.notEqual(nextDocument, document);
   assert.equal(originalGraph?.surfaceQuality, "balanced");
   assert.equal(nextGraph?.surfaceQuality, "interactive");
+});
+
+test("updateGraph3DViewMode updates the semantic graph projection mode", () => {
+  const document = createInitialEditorDocument();
+  const nextDocument = updateGraph3DViewMode(
+    document,
+    "saddle-orbit-graph",
+    "xy"
+  );
+  const originalGraph = document.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+  const nextGraph = nextDocument.objects.find(
+    (object): object is Graph3DObject => object.type === "graph-3d"
+  );
+
+  assert.deepEqual(GRAPH_3D_VIEW_MODE_IDS, ["3d", "xy"]);
+  assert.notEqual(nextDocument, document);
+  assert.equal(originalGraph?.viewMode, "3d");
+  assert.equal(nextGraph?.viewMode, "xy");
 });
 
 test("updateSaddleSurfaceDenominator updates a parameterized saddle surface", () => {
