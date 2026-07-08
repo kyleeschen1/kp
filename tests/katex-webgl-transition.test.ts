@@ -183,6 +183,48 @@ test("createKatexWebGLRenderer cleans up partial initialization failures", () =>
   assert.deepEqual(gl.deletedProgramIds, [1]);
 });
 
+test("createKatexWebGLRenderer deletes vertex shader when fragment shader compilation fails", () => {
+  const source = token("s-minus", 10, 20, 8, 12);
+  const gl = new FakeWebGLRenderingContext();
+
+  gl.failFragmentShaderCompile = true;
+
+  assert.throws(
+    () =>
+      createKatexWebGLRenderer(
+        fakeCanvas(gl, 200, 100),
+        transitionPlan({ sourceOnly: [{ source }] }),
+        textureAtlas([regionFor(source.id)])
+      ),
+    /fragment compile failed/
+  );
+
+  assert.deepEqual(gl.deletedShaderIds, [2, 1]);
+  assert.deepEqual(gl.deletedProgramIds, []);
+  assert.deepEqual(gl.deletedTextureIds, []);
+});
+
+test("createKatexWebGLRenderer deletes compiled shaders when program creation fails", () => {
+  const source = token("s-minus", 10, 20, 8, 12);
+  const gl = new FakeWebGLRenderingContext();
+
+  gl.failCreateProgram = true;
+
+  assert.throws(
+    () =>
+      createKatexWebGLRenderer(
+        fakeCanvas(gl, 200, 100),
+        transitionPlan({ sourceOnly: [{ source }] }),
+        textureAtlas([regionFor(source.id)])
+      ),
+    /Could not create a WebGL program/
+  );
+
+  assert.deepEqual(gl.deletedShaderIds, [1, 2]);
+  assert.deepEqual(gl.deletedProgramIds, []);
+  assert.deepEqual(gl.deletedTextureIds, []);
+});
+
 function token(
   id: string,
   left: number,
@@ -306,10 +348,13 @@ class FakeWebGLRenderingContext {
   createdTextures: FakeResource[] = [];
   deletedBufferIds: number[] = [];
   deletedProgramIds: number[] = [];
+  deletedShaderIds: number[] = [];
   deletedTextureIds: number[] = [];
   drawArraysCalls: Array<[number, number, number]> = [];
   drawTextureIds: number[] = [];
   failCreateBuffer = false;
+  failCreateProgram = false;
+  failFragmentShaderCompile = false;
   uniform1fCalls = new Map<string, number[]>();
   uniform1iCalls = new Map<string, number[]>();
   uniform2fCalls = new Map<string, number[][]>();
@@ -355,6 +400,10 @@ class FakeWebGLRenderingContext {
   }
 
   createProgram(): WebGLProgram | null {
+    if (this.failCreateProgram) {
+      return null;
+    }
+
     return { id: ++this.programId } as unknown as WebGLProgram;
   }
 
@@ -382,7 +431,11 @@ class FakeWebGLRenderingContext {
     }
   }
 
-  deleteShader(): void {}
+  deleteShader(shader: WebGLShader | null): void {
+    if (shader !== null) {
+      this.deletedShaderIds.push((shader as unknown as FakeResource).id);
+    }
+  }
 
   deleteTexture(texture: WebGLTexture | null): void {
     if (texture !== null) {
@@ -415,11 +468,14 @@ class FakeWebGLRenderingContext {
   }
 
   getShaderInfoLog(): string | null {
-    return null;
+    return this.failFragmentShaderCompile ? "fragment compile failed" : null;
   }
 
-  getShaderParameter(): boolean {
-    return true;
+  getShaderParameter(shader: WebGLShader, _parameter: number): boolean {
+    return !(
+      this.failFragmentShaderCompile &&
+      (shader as unknown as FakeResource).id === 2
+    );
   }
 
   getUniformLocation(_program: WebGLProgram, name: string): WebGLUniformLocation | null {

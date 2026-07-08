@@ -198,39 +198,57 @@ function clamp(value: number, minimum: number, maximum: number): number {
 }
 
 function createProgram(gl: WebGLRenderingContext): KatexWebGLProgramInfo {
-  const vertexShader = compileShader(
-    gl,
-    gl.VERTEX_SHADER,
-    `
-      attribute vec2 a_position;
-      attribute vec2 a_texCoord;
-      uniform vec2 u_resolution;
-      varying vec2 v_texCoord;
-      void main() {
-        vec2 zeroToOne = a_position / u_resolution;
-        vec2 clipSpace = zeroToOne * 2.0 - 1.0;
-        gl_Position = vec4(clipSpace * vec2(1.0, -1.0), 0.0, 1.0);
-        v_texCoord = a_texCoord;
-      }
-    `
-  );
-  const fragmentShader = compileShader(
-    gl,
-    gl.FRAGMENT_SHADER,
-    `
-      precision mediump float;
-      uniform sampler2D u_texture;
-      uniform float u_opacity;
-      varying vec2 v_texCoord;
-      void main() {
-        vec4 color = texture2D(u_texture, v_texCoord);
-        gl_FragColor = vec4(color.rgb, color.a * u_opacity);
-      }
-    `
-  );
+  let vertexShader: WebGLShader | undefined;
+  let fragmentShader: WebGLShader | undefined;
+
+  try {
+    vertexShader = compileShader(
+      gl,
+      gl.VERTEX_SHADER,
+      `
+        attribute vec2 a_position;
+        attribute vec2 a_texCoord;
+        uniform vec2 u_resolution;
+        varying vec2 v_texCoord;
+        void main() {
+          vec2 zeroToOne = a_position / u_resolution;
+          vec2 clipSpace = zeroToOne * 2.0 - 1.0;
+          gl_Position = vec4(clipSpace * vec2(1.0, -1.0), 0.0, 1.0);
+          v_texCoord = a_texCoord;
+        }
+      `
+    );
+    fragmentShader = compileShader(
+      gl,
+      gl.FRAGMENT_SHADER,
+      `
+        precision mediump float;
+        uniform sampler2D u_texture;
+        uniform float u_opacity;
+        varying vec2 v_texCoord;
+        void main() {
+          vec4 color = texture2D(u_texture, v_texCoord);
+          gl_FragColor = vec4(color.rgb, color.a * u_opacity);
+        }
+      `
+    );
+  } catch (error) {
+    if (vertexShader !== undefined) {
+      gl.deleteShader(vertexShader);
+    }
+
+    if (fragmentShader !== undefined) {
+      gl.deleteShader(fragmentShader);
+    }
+
+    throw error;
+  }
+
   const program = gl.createProgram();
 
   if (program === null) {
+    gl.deleteShader(vertexShader);
+    gl.deleteShader(fragmentShader);
     throw new Error("Could not create a WebGL program for KaTeX transitions.");
   }
 
