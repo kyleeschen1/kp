@@ -41,22 +41,93 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
     // The overlay only lives for the animation window, so record its state in-page.
     window.__kpKatexTransitionOverlayPromise = new Promise((resolve, reject) => {
       let observer: MutationObserver | undefined;
-      const timeout = window.setTimeout(() => {
+      let pixelSamplingStarted = false;
+      let timeout: number | undefined;
+      const rejectWithError = (error: Error) => {
+        if (timeout !== undefined) {
+          clearTimeout(timeout);
+        }
+
         observer?.disconnect();
-        reject(new Error("Expected the KaTeX transition overlay to appear."));
-      }, 5_000);
-      const assertOverlayState = () => {
-        const overlay = document.querySelector<HTMLElement>(
-          ".katex-transition-overlay"
+        reject(error);
+      };
+      timeout = window.setTimeout(() => {
+        rejectWithError(
+          new Error("Expected the KaTeX transition overlay to appear.")
         );
+      }, 5_000);
+      const settleWithOverlayState = (
+        overlayVisible: boolean,
+        sourceHidden: boolean,
+        targetHidden: boolean,
+        nonTransparentPixelCount: number,
+        maxAlpha: number
+      ) => {
+        if (timeout !== undefined) {
+          clearTimeout(timeout);
+        }
+
+        observer?.disconnect();
+        resolve({
+          overlayVisible,
+          sourceHidden,
+          targetHidden,
+          nonTransparentPixelCount,
+          maxAlpha
+        });
+      };
+      const sampleOverlayPixels = (overlay: HTMLCanvasElement) => {
+        const gl = overlay.getContext("webgl");
+
+        if (gl === null) {
+          throw new Error("Expected the KaTeX transition overlay to use WebGL.");
+        }
+
+        gl.finish();
+
+        const pixels = new Uint8Array(overlay.width * overlay.height * 4);
+        let maxAlpha = 0;
+        let nonTransparentPixelCount = 0;
+
+        gl.readPixels(
+          0,
+          0,
+          overlay.width,
+          overlay.height,
+          gl.RGBA,
+          gl.UNSIGNED_BYTE,
+          pixels
+        );
+
+        for (let index = 3; index < pixels.length; index += 4) {
+          const alpha = pixels[index] ?? 0;
+
+          maxAlpha = Math.max(maxAlpha, alpha);
+
+          if (alpha > 0) {
+            nonTransparentPixelCount += 1;
+          }
+
+          if (nonTransparentPixelCount >= 16) {
+            break;
+          }
+        }
+
+        return { maxAlpha, nonTransparentPixelCount };
+      };
+      const assertOverlayState = () => {
+        const overlay = document.querySelector(".katex-transition-overlay");
+
+        if (!(overlay instanceof HTMLCanvasElement)) {
+          return;
+        }
+
         const rect = overlay?.getBoundingClientRect();
-        const style = overlay === null ? undefined : getComputedStyle(overlay);
+        const style = getComputedStyle(overlay);
         const overlayVisible =
-          overlay !== null &&
           rect !== undefined &&
           rect.width > 0 &&
           rect.height > 0 &&
-          style !== undefined &&
           style.display !== "none" &&
           style.visibility !== "hidden";
         const sourceHidden = source.classList.contains(
@@ -66,10 +137,56 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
           "katex-transition-target-hidden"
         );
 
-        if (overlayVisible && sourceHidden && targetHidden) {
-          clearTimeout(timeout);
-          observer?.disconnect();
-          resolve({ overlayVisible, sourceHidden, targetHidden });
+        if (
+          overlayVisible &&
+          sourceHidden &&
+          targetHidden &&
+          !pixelSamplingStarted
+        ) {
+          pixelSamplingStarted = true;
+
+          const sampleVisibleOverlay = () => {
+            const activeOverlay = document.querySelector(
+              ".katex-transition-overlay"
+            );
+
+            if (!(activeOverlay instanceof HTMLCanvasElement)) {
+              rejectWithError(
+                new Error(
+                  "Expected the KaTeX transition overlay to render WebGL pixels before removal."
+                )
+              );
+              return;
+            }
+
+            let pixelSample: ReturnType<typeof sampleOverlayPixels>;
+
+            try {
+              pixelSample = sampleOverlayPixels(activeOverlay);
+            } catch (error) {
+              rejectWithError(
+                error instanceof Error
+                  ? error
+                  : new Error("Could not sample the KaTeX WebGL overlay.")
+              );
+              return;
+            }
+
+            if (pixelSample.nonTransparentPixelCount > 0) {
+              settleWithOverlayState(
+                overlayVisible,
+                sourceHidden,
+                targetHidden,
+                pixelSample.nonTransparentPixelCount,
+                pixelSample.maxAlpha
+              );
+              return;
+            }
+
+            requestAnimationFrame(sampleVisibleOverlay);
+          };
+
+          requestAnimationFrame(sampleVisibleOverlay);
         }
       };
 
@@ -99,8 +216,12 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
   expect(overlayState).toEqual({
     overlayVisible: true,
     sourceHidden: true,
-    targetHidden: true
+    targetHidden: true,
+    nonTransparentPixelCount: expect.any(Number),
+    maxAlpha: expect.any(Number)
   });
+  expect(overlayState.nonTransparentPixelCount).toBeGreaterThan(0);
+  expect(overlayState.maxAlpha).toBeGreaterThan(0);
 
   const result = await page.evaluate(() => {
     if (window.__kpKatexTransitionPromise === undefined) {
@@ -110,7 +231,7 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
     return window.__kpKatexTransitionPromise;
   });
 
-  expect(result.renderer).toMatch(/webgl|css-fallback/);
+  expect(result.renderer).toBe("webgl");
   expect(result.sourceTokenCount).toBeGreaterThan(0);
   expect(result.targetTokenCount).toBeGreaterThan(0);
   await expect(page.locator(".katex-transition-overlay")).toHaveCount(0);
@@ -128,6 +249,8 @@ declare global {
       overlayVisible: boolean;
       sourceHidden: boolean;
       targetHidden: boolean;
+      nonTransparentPixelCount: number;
+      maxAlpha: number;
     }>;
   }
 }
