@@ -45,6 +45,10 @@ import {
   type Surface3DObject
 } from "../semantic/graph.ts";
 import { findLineSurfaceIntersections } from "./graph-space-intersections.ts";
+import {
+  projectQuadToShadowPlane,
+  type GraphQuad3D
+} from "./surface-shadow.ts";
 
 export { projectGraphPoint3D } from "./projection.ts";
 
@@ -85,10 +89,22 @@ interface SurfaceQuad3D {
   depthHaze: number;
 }
 
+interface SurfaceShadowQuad3D {
+  rowIndex: number;
+  columnIndex: number;
+  projectedCorners: readonly [
+    ProjectedGraphPoint3D,
+    ProjectedGraphPoint3D,
+    ProjectedGraphPoint3D,
+    ProjectedGraphPoint3D
+  ];
+}
+
 interface RenderedSurface3D {
   surface: Surface3DObject;
   grid: readonly (readonly GraphPoint3D[])[];
   quads: readonly SurfaceQuad3D[];
+  shadowQuads: readonly SurfaceShadowQuad3D[];
 }
 
 interface SurfaceEdgeSegment3D extends ProjectedLine3D {
@@ -306,8 +322,9 @@ export function renderGraph3DToSvg(
   // surface, then visible pieces above it. This gives SVG a lightweight
   // substitute for depth-buffered axis occlusion.
   return `
-    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" ${renderLightAttributes(graph)} data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} ${renderPerformanceBudgetAttributes(renderBudget)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
+    <svg class="graph-svg graph-svg--3d" data-kp-object="${escapeHtml(graph.id)}" data-kp-render-node="rn-${escapeHtml(graph.id)}-svg" data-kp-type="graph-3d" data-kp-camera-azimuth-degrees="${formatNumber(graph.camera.azimuthDegrees)}" data-kp-occluded-axis-lightness="${formatNumber(graphOccludedAxisLightness(graph))}" ${renderLightAttributes(graph)} data-kp-debug-depth-overlay="${graph.debug.depthOverlay ? "true" : "false"}" data-kp-debug-surface-mesh="${graph.debug.surfaceMesh ? "true" : "false"}" ${renderDepthDiagnosticsAttributes(depthDiagnostics)} ${renderShadowAttributes(renderedSurfaces, graph)} ${renderPerformanceBudgetAttributes(renderBudget)} viewBox="0 0 ${graph.width} ${graph.height}" role="img" aria-label="${escapeHtml(graph.label)}">
       <rect class="graph-svg__background" x="0" y="0" width="${graph.width}" height="${graph.height}" rx="8" />
+      ${renderedSurfaces.map((surface) => renderSurfaceShadowLayer3D(surface, graph)).join("")}
       ${renderedSurfaces.map((surface) => renderSurface3D(surface, graph, depthScene, renderedSurfaces)).join("")}
       ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, renderedSurfaces, "hidden")).join("")}
       ${axes.map((axis) => renderAxis3D(axis, graph, depthScene, renderedSurfaces, "visible")).join("")}
@@ -328,6 +345,21 @@ function renderDepthDiagnosticsAttributes(
     `data-kp-depth-surface-count="${diagnostics.surfaceCount}"`,
     `data-kp-depth-triangle-count="${diagnostics.triangleCount}"`,
     `data-kp-depth-overlap-count="${diagnostics.overlapCount}"`
+  ].join(" ");
+}
+
+function renderShadowAttributes(
+  surfaces: readonly RenderedSurface3D[],
+  graph: Graph3DObject
+): string {
+  const shadowQuadCount = surfaces.reduce(
+    (count, surface) => count + surface.shadowQuads.length,
+    0
+  );
+
+  return [
+    `data-kp-shadow-plane-z="${formatNumber(graph.zDomain[0])}"`,
+    `data-kp-shadow-quad-count="${shadowQuadCount}"`
   ].join(" ");
 }
 
@@ -698,7 +730,8 @@ function prepareSurface3D(
   return {
     surface,
     grid,
-    quads
+    quads,
+    shadowQuads: createSurfaceShadowQuads(graph, quads)
   };
 }
 
@@ -769,6 +802,34 @@ function renderSurface3D(
   `;
 }
 
+function renderSurfaceShadowLayer3D(
+  renderedSurface: RenderedSurface3D,
+  graph: Graph3DObject
+): string {
+  const { surface, shadowQuads } = renderedSurface;
+
+  if (shadowQuads.length === 0) {
+    return "";
+  }
+
+  return `
+    <g class="graph-surface-shadow-layer" data-kp-object="${escapeHtml(surface.id)}" data-kp-render-node="rn-${escapeHtml(surface.id)}-svg-shadow-layer" data-kp-type="surface-3d" data-kp-shadow-plane-z="${formatNumber(graph.zDomain[0])}" data-kp-shadow-quad-count="${shadowQuads.length}" data-kp-shadow-projection="light-to-z-plane">
+      ${shadowQuads.map((quad) => renderSurfaceShadowQuad(surface, quad)).join("")}
+    </g>
+  `;
+}
+
+function renderSurfaceShadowQuad(
+  surface: Surface3DObject,
+  quad: SurfaceShadowQuad3D
+): string {
+  const points = quad.projectedCorners
+    .map((point) => `${formatNumber(point.x)},${formatNumber(point.y)}`)
+    .join(" ");
+
+  return `<polygon class="graph-surface__shadow" points="${points}" data-kp-object="${escapeHtml(surface.id)}" data-kp-shadow-caster="${escapeHtml(surface.id)}" data-kp-cell="${quad.rowIndex},${quad.columnIndex}" data-kp-shadow-projection="light-to-z-plane" data-kp-type="surface-3d" fill="#0f172a" opacity="0.160" />`;
+}
+
 function renderSurfaceWireframe(
   surface: Surface3DObject,
   rowPaths: readonly string[],
@@ -780,6 +841,43 @@ function renderSurfaceWireframe(
       ${columnPaths.join("")}
     </g>
   `;
+}
+
+function createSurfaceShadowQuads(
+  graph: Graph3DObject,
+  quads: readonly SurfaceQuad3D[]
+): readonly SurfaceShadowQuad3D[] {
+  const planeZ = graph.zDomain[0];
+
+  return quads.flatMap((quad) => {
+    const projectedQuad = projectQuadToShadowPlane({
+      corners: quad.corners,
+      lightDirection: graph.light.direction,
+      planeZ
+    });
+
+    if (projectedQuad === undefined) {
+      return [];
+    }
+
+    return [{
+      rowIndex: quad.rowIndex,
+      columnIndex: quad.columnIndex,
+      projectedCorners: projectGraphQuad3D(graph, projectedQuad)
+    }];
+  });
+}
+
+function projectGraphQuad3D(
+  graph: Graph3DObject,
+  quad: GraphQuad3D
+): SurfaceShadowQuad3D["projectedCorners"] {
+  return [
+    projectGraphPoint3D(graph, quad[0]),
+    projectGraphPoint3D(graph, quad[1]),
+    projectGraphPoint3D(graph, quad[2]),
+    projectGraphPoint3D(graph, quad[3])
+  ];
 }
 
 function surfaceQuadsBackToFront(

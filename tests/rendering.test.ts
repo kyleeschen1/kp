@@ -420,6 +420,8 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /data-kp-depth-buffer-width="560"/);
   assert.match(svg, /data-kp-depth-buffer-height="420"/);
   assert.match(svg, /data-kp-depth-cell-count="235200"/);
+  assert.match(svg, /data-kp-shadow-plane-z="-2.500"/);
+  assert.match(svg, /data-kp-shadow-quad-count="144"/);
   assert.match(svg, /data-kp-render-budget-status="ok"/);
   assert.match(svg, /data-kp-render-budget-depth-cell-count="235200"/);
   assert.match(svg, /data-kp-render-budget-max-depth-cell-count="300000"/);
@@ -460,6 +462,11 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.match(svg, /graph-axis--base-plane/);
   assert.match(svg, /graph-axis--subtle/);
   assert.match(svg, /class="graph-surface__quad"/);
+  assert.match(svg, /class="graph-surface-shadow-layer"/);
+  assert.match(svg, /data-kp-render-node="rn-saddle-surface-svg-shadow-layer"/);
+  assert.match(svg, /class="graph-surface__shadow"/);
+  assert.match(svg, /data-kp-shadow-caster="saddle-surface"/);
+  assert.match(svg, /data-kp-shadow-projection="light-to-z-plane"/);
   assert.match(svg, /data-kp-lighting-model="ambient-diffuse-specular-rim-depth-haze"/);
   assert.match(svg, /class="graph-surface__quad"[^>]+data-kp-light-direction="-0.350,-0.450,0.820"/);
   assert.match(svg, /class="graph-surface__quad"[^>]+data-kp-light-ambient="0.450"/);
@@ -563,6 +570,7 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
     distanceBetween(check.points[1]!, check.points[2]!)
   );
   const edgeSegmentCount = [...svg.matchAll(/data-kp-edge-segment="/g)].length;
+  const shadowQuadCount = [...svg.matchAll(/class="graph-surface__shadow"/g)].length;
 
   assert.ok(surfaceFillHues.length > 0);
   assert.ok(surfaceFillHues.every((hue) => hue >= 184 && hue <= 224));
@@ -600,6 +608,7 @@ test("renderGraph3DToSvg renders axes and surface with semantic metadata", () =>
   assert.ok(edgeStripWidths.length > 0);
   assert.ok(edgeStripWidths.every((width) => width >= 1.3 && width <= 2.6));
   assert.ok(Math.max(...edgeStripWidths) > Math.min(...edgeStripWidths));
+  assert.equal(shadowQuadCount, 144);
   assert.ok(arrowLengths.length > 0);
   assert.ok(arrowLengths.every((length) => length >= 8 && length <= 16));
   assert.ok(hiddenArrowLengths.length > 0);
