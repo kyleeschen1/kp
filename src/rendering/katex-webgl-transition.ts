@@ -27,6 +27,7 @@ interface KatexWebGLProgramInfo {
   texCoordLocation: number;
   resolutionLocation: WebGLUniformLocation;
   opacityLocation: WebGLUniformLocation;
+  textureLocation: WebGLUniformLocation;
 }
 
 export function createKatexQuadFrame(
@@ -95,24 +96,56 @@ export function createKatexWebGLRenderer(
     throw new Error("WebGL is unavailable for KaTeX transitions.");
   }
 
-  const programInfo = createProgram(gl);
-  const textures = atlas.pages.map((page) => createTexture(gl, page));
-  const buffer = gl.createBuffer();
+  let programInfo: KatexWebGLProgramInfo | undefined;
+  let buffer: WebGLBuffer | null = null;
+  const textures: WebGLTexture[] = [];
 
-  if (buffer === null) {
-    throw new Error("Could not create a WebGL buffer for KaTeX transitions.");
+  try {
+    programInfo = createProgram(gl);
+
+    for (const page of atlas.pages) {
+      textures.push(createTexture(gl, page));
+    }
+
+    buffer = gl.createBuffer();
+
+    if (buffer === null) {
+      throw new Error("Could not create a WebGL buffer for KaTeX transitions.");
+    }
+  } catch (error) {
+    for (const texture of textures) {
+      gl.deleteTexture(texture);
+    }
+
+    if (buffer !== null) {
+      gl.deleteBuffer(buffer);
+    }
+
+    if (programInfo !== undefined) {
+      gl.deleteProgram(programInfo.program);
+    }
+
+    throw error;
   }
 
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
+  let disposed = false;
+
   return {
     render(progress) {
+      if (disposed) {
+        return;
+      }
+
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.useProgram(programInfo.program);
       gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.uniform1i(programInfo.textureLocation, 0);
 
       const frame = createKatexQuadFrame(plan, atlas.regions, progress);
 
@@ -123,10 +156,16 @@ export function createKatexWebGLRenderer(
           continue;
         }
 
-        drawQuad(gl, programInfo, texture, canvas, quad);
+        drawQuad(gl, programInfo, texture, canvas, quad, atlas.pixelRatio);
       }
     },
     dispose() {
+      if (disposed) {
+        return;
+      }
+
+      disposed = true;
+
       for (const texture of textures) {
         gl.deleteTexture(texture);
       }
@@ -208,13 +247,19 @@ function createProgram(gl: WebGLRenderingContext): KatexWebGLProgramInfo {
     throw new Error(message);
   }
 
-  return {
-    program,
-    positionLocation: getAttribLocation(gl, program, "a_position"),
-    texCoordLocation: getAttribLocation(gl, program, "a_texCoord"),
-    resolutionLocation: getUniformLocation(gl, program, "u_resolution"),
-    opacityLocation: getUniformLocation(gl, program, "u_opacity")
-  };
+  try {
+    return {
+      program,
+      positionLocation: getAttribLocation(gl, program, "a_position"),
+      texCoordLocation: getAttribLocation(gl, program, "a_texCoord"),
+      resolutionLocation: getUniformLocation(gl, program, "u_resolution"),
+      opacityLocation: getUniformLocation(gl, program, "u_opacity"),
+      textureLocation: getUniformLocation(gl, program, "u_texture")
+    };
+  } catch (error) {
+    gl.deleteProgram(program);
+    throw error;
+  }
 }
 
 function compileShader(
@@ -294,13 +339,14 @@ function drawQuad(
   programInfo: KatexWebGLProgramInfo,
   texture: WebGLTexture,
   canvas: HTMLCanvasElement,
-  quad: KatexQuad
+  quad: KatexQuad,
+  pixelRatio: number
 ): void {
   const { left, top, width, height } = quad.rect;
-  const x0 = left;
-  const x1 = left + width;
-  const y0 = top;
-  const y1 = top + height;
+  const x0 = left * pixelRatio;
+  const x1 = (left + width) * pixelRatio;
+  const y0 = top * pixelRatio;
+  const y1 = (top + height) * pixelRatio;
   const { u0, v0, u1, v1 } = quad.region;
   const vertices = new Float32Array([
     x0,
