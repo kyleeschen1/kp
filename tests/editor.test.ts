@@ -28,6 +28,22 @@ import type {
   Surface3DObject
 } from "../src/semantic/graph.ts";
 
+function extractEquationMotionStateBlock(html: string, state: number): string {
+  const stateAttribute = `data-kp-equation-motion-state="${state}"`;
+  const stateStart = html.indexOf(stateAttribute);
+  assert.notEqual(stateStart, -1);
+
+  const nextStateStart = html.indexOf(
+    "data-kp-equation-motion-state=\"",
+    stateStart + stateAttribute.length
+  );
+
+  return html.slice(
+    stateStart,
+    nextStateStart === -1 ? undefined : nextStateStart
+  );
+}
+
 test("initial editor document contains a 3x3 identity matrix", () => {
   const document = createInitialEditorDocument();
 
@@ -64,6 +80,34 @@ test("initial editor document contains a 3x3 identity matrix", () => {
 test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () => {
   const html = renderEditorDocument(createInitialEditorDocument());
 
+  assert.match(html, /data-kp-equation-motion-demo/);
+  assert.match(html, /data-kp-equation-motion-step="0"/);
+  assert.match(html, /data-kp-equation-motion-max-step="3"/);
+  assert.match(html, /data-action="equation-motion-rewind"/);
+  assert.match(html, /data-action="equation-motion-next"/);
+  assert.equal(
+    html.match(/data-kp-equation-motion-state="/g)?.length,
+    4
+  );
+  assert.match(html, /data-kp-equation-motion-state="0"/);
+  assert.match(html, /data-kp-equation-motion-state="1"/);
+  assert.match(html, /data-kp-equation-motion-state="2"/);
+  assert.match(html, /data-kp-equation-motion-state="3"/);
+  assert.match(html, /data-kp-equation-motion-latex="x \+ 3 = 7"/);
+  assert.match(html, /data-kp-equation-motion-latex="x \+ 3 - 3 = 7 - 3"/);
+  assert.match(html, /data-kp-equation-motion-latex="x = 7 - 3"/);
+  assert.match(html, /data-kp-equation-motion-latex="x = 4"/);
+  assert.match(html, /data-kp-motion-id="lhs\.x"/);
+  assert.match(html, /data-kp-motion-id="lhs\.plus"/);
+  assert.match(html, /data-kp-motion-id="equals"/);
+  assert.match(html, /data-kp-motion-id="rhs\.7"/);
+  assert.match(html, /data-kp-motion-id="rhs\.4"/);
+  assert.match(extractEquationMotionStateBlock(html, 0), /data-kp-motion-id="lhs\.plus"/);
+  assert.match(extractEquationMotionStateBlock(html, 3), /data-kp-motion-id="rhs\.4"/);
+  assert.doesNotMatch(
+    extractEquationMotionStateBlock(html, 2),
+    /data-kp-motion-id="lhs\.plus"/
+  );
   assert.match(html, /data-kp-object="identity-3x3"/);
   assert.match(html, /data-kp-render-node="rn-identity-3x3-default-latex"/);
   assert.match(html, /data-kp-object="parabola-graph"/);
@@ -170,6 +214,18 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.ok(
     html.indexOf('data-kp-controls-foldout="render-settings"') <
       html.indexOf('data-action="set-graph-light-preset"')
+  );
+  assert.ok(
+    html.indexOf('data-kp-equation-motion-state="0"') <
+      html.indexOf('data-kp-equation-motion-state="1"')
+  );
+  assert.ok(
+    html.indexOf('data-kp-equation-motion-state="1"') <
+      html.indexOf('data-kp-equation-motion-state="2"')
+  );
+  assert.ok(
+    html.indexOf('data-kp-equation-motion-state="2"') <
+      html.indexOf('data-kp-equation-motion-state="3"')
   );
 });
 

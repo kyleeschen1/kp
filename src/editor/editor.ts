@@ -17,6 +17,10 @@ import {
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import { defaultLatexRenderer } from "../rendering/matrix-latex.ts";
 import {
+  createEquationOperationTransition,
+  type EquationMotionAnnotation
+} from "../math/equation-transform.ts";
+import {
   createKpDocument,
   type KpDocument,
   type KpSemanticObject
@@ -90,7 +94,7 @@ export function renderEditorDocument(document: KpDocument): string {
           <div class="panel-header">
             <h2 id="preview-title">Rendered Asset</h2>
           </div>
-          <div class="preview-stage">${renderedObjects}</div>
+          <div class="preview-stage">${renderedObjects}${renderEquationMotionDemo()}</div>
           <pre class="compiled-source" id="compiled-source" aria-live="polite"></pre>
         </section>
       </div>
@@ -130,6 +134,92 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
       );
     }
   }
+}
+
+function renderEquationMotionDemo(): string {
+  const subtractBothSides = createEquationOperationTransition({
+    sourceLatex: "x + 3 = 7",
+    operation: {
+      kind: "subtractBothSides",
+      valueLatex: "3"
+    }
+  });
+  const simplifyLeft = createEquationOperationTransition({
+    sourceLatex: subtractBothSides.targetLatex,
+    operation: {
+      kind: "simplifySide",
+      side: "left",
+      rule: "cancel-additive-inverse"
+    }
+  });
+  const simplifyRight = createEquationOperationTransition({
+    sourceLatex: simplifyLeft.targetLatex,
+    operation: {
+      kind: "simplifySide",
+      side: "right",
+      rule: "evaluate-constant-difference"
+    }
+  });
+  const states = [
+    {
+      step: 0,
+      latex: subtractBothSides.sourceLatex,
+      annotations: subtractBothSides.sourceAnnotations
+    },
+    {
+      step: 1,
+      latex: subtractBothSides.targetLatex,
+      annotations: subtractBothSides.targetAnnotations
+    },
+    {
+      step: 2,
+      latex: simplifyLeft.targetLatex,
+      annotations: simplifyLeft.targetAnnotations
+    },
+    {
+      step: 3,
+      latex: simplifyRight.targetLatex,
+      annotations: simplifyRight.targetAnnotations
+    }
+  ];
+  const stateHtml = states
+    .map((state) =>
+      renderEquationMotionState(state.step, state.latex, state.annotations)
+    )
+    .join("");
+  const maxStep = states.length - 1;
+
+  return `
+    <section class="equation-motion" data-kp-equation-motion-demo data-kp-equation-motion-step="0" data-kp-equation-motion-max-step="${maxStep}">
+      <div class="equation-motion__controls">
+        <button type="button" data-action="equation-motion-rewind">Rewind</button>
+        <button type="button" data-action="equation-motion-next">Next</button>
+      </div>
+      <div class="equation-motion__stage">
+        ${stateHtml}
+      </div>
+    </section>
+  `;
+}
+
+function renderEquationMotionState(
+  step: number,
+  latex: string,
+  annotations: readonly EquationMotionAnnotation[]
+): string {
+  return `
+    <div class="equation-motion__state" data-kp-equation-motion-state="${step}" data-kp-equation-motion-latex="${escapeHtml(latex)}">
+      <div class="equation-motion__formula">${renderLatexToHtml(latex)}</div>
+      <!-- Motion anchors are per-state measurement hooks; IDs repeat, so playback measures one state root at a time. -->
+      <div class="equation-motion__motion-anchors" aria-hidden="true">
+        ${annotations.map(renderEquationMotionAnchor).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderEquationMotionAnchor(annotation: EquationMotionAnnotation): string {
+  return `<span class="equation-motion__motion-anchor" data-kp-motion-id="${escapeHtml(annotation.motionId)}">${escapeHtml(annotation.text)}</span>`;
 }
 
 function renderGraph3DControls(
