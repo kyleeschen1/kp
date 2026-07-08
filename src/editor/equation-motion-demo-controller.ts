@@ -3,8 +3,20 @@ import {
   type EquationOperation
 } from "../math/equation-transform.ts";
 import { measureAnnotatedEquationMotionTokens } from "../rendering/equation-motion-dom.ts";
-import { createEquationMotionPlan } from "../rendering/equation-motion-plan.ts";
+import {
+  createEquationMotionPlan,
+  type EquationMotionPlan,
+  type MotionPose
+} from "../rendering/equation-motion-plan.ts";
 import { createEquationMotionPlayer } from "../rendering/equation-motion-player.ts";
+import {
+  createEquationCancelParticleRenderer,
+  type EquationCancelParticleRenderer
+} from "../rendering/equation-cancel-particles-webgl.ts";
+import type {
+  EquationMotionFrame,
+  EquationMotionFrameToken
+} from "../rendering/equation-motion-sampler.ts";
 
 // Semantic operations are the playback contract; DOM LaTeX is validated against them.
 const EQUATION_MOTION_DEMO_OPERATIONS: readonly EquationOperation[] = [
@@ -23,6 +35,62 @@ const EQUATION_MOTION_DEMO_OPERATIONS: readonly EquationOperation[] = [
     rule: "evaluate-constant-difference"
   }
 ];
+const EQUATION_MOTION_ANIMATION_DURATION_MS = 420;
+// A semantic command can contain beats; shifts finish before new tokens enter so rewind naturally reverses that order.
+const EQUATION_MOTION_BEAT_COUNT = 20;
+const EQUATION_MOTION_SHIFT_END_BEAT = 8;
+const EQUATION_MOTION_ENTER_INITIAL_SCALE = 0.82;
+const EQUATION_MOTION_CANCEL_MEET_BEAT = 8;
+const EQUATION_MOTION_CANCEL_COLLAPSE_END_BEAT = 10;
+const EQUATION_MOTION_CANCEL_SHIFT_START_BEAT = 14;
+const EQUATION_MOTION_FINAL_SIMPLIFY_MEET_BEAT = 8;
+const EQUATION_MOTION_FINAL_SIMPLIFY_FADE_END_BEAT = 14;
+const EQUATION_MOTION_FINAL_SIMPLIFY_MIN_SCALE = 0.9;
+const activeAnimationFrames = new WeakMap<HTMLElement, number>();
+const activeRenderContexts = new WeakMap<HTMLElement, EquationMotionRenderContext>();
+const cancellationParticleRenderers = new WeakMap<
+  HTMLCanvasElement,
+  EquationCancelParticleRenderer
+>();
+
+interface EquationMotionRenderContext {
+  readonly key: string;
+  readonly planSourceStep: number;
+  readonly planTargetStep: number;
+  readonly planSourceState: HTMLElement;
+  readonly planTargetState: HTMLElement;
+  readonly planSourceTokens: ReadonlyMap<string, StableMotionToken>;
+  readonly planTargetTokens: ReadonlyMap<string, StableMotionToken>;
+}
+
+interface StableMotionToken {
+  readonly motionId: string;
+  readonly text: string;
+  readonly element: HTMLElement;
+  readonly localRect: {
+    readonly left: number;
+    readonly top: number;
+    readonly width: number;
+    readonly height: number;
+  };
+}
+
+interface MotionPoint {
+  readonly x: number;
+  readonly y: number;
+}
+
+interface CancellationMotionGroup {
+  readonly tokenIds: ReadonlySet<string>;
+  readonly midpoint: MotionPoint;
+  readonly particleCount: number;
+}
+
+interface FinalSimplifyMotionGroup {
+  readonly sourceTokenIds: ReadonlySet<string>;
+  readonly targetTokenId: string;
+  readonly midpoint: MotionPoint;
+}
 
 export function hydrateEquationMotionDemos(root: ParentNode): void {
   root
@@ -60,6 +128,7 @@ export function setEquationMotionProgress(
   demo: HTMLElement,
   progress: number
 ): void {
+  cancelEquationMotionAnimation(demo);
   const transition = readLatestEquationMotionTransition(demo);
 
   if (transition === undefined) {
@@ -75,10 +144,10 @@ export function setEquationMotionProgress(
     render: (frame) => {
       renderEquationMotionFrame(
         demo,
+        plan,
         transition.sourceStep,
         transition.targetStep,
-        frame.progress,
-        frame.tokens.length
+        frame
       );
     }
   });
@@ -91,37 +160,72 @@ export function setEquationMotionProgress(
   player.setProgress(canonicalProgress);
 }
 
+export function setEquationMotionBeat(input: HTMLInputElement): void {
+  const demo = input.closest<HTMLElement>("[data-kp-equation-motion-demo]");
+
+  if (demo === null) {
+    return;
+  }
+
+  const beatCount = readEquationMotionBeatCount(demo);
+  const beat = clampNumber(Number(input.value), 0, beatCount);
+
+  setEquationMotionProgress(demo, beat / beatCount);
+  syncEquationMotionScrubber(demo, beat, beatCount);
+}
+
 function playEquationMotionDemoTransition(
   demo: HTMLElement,
   sourceStep: number,
   targetStep: number
 ): void {
+  cancelEquationMotionAnimation(demo);
   const plan = createDemoEquationMotionTransition(demo, sourceStep, targetStep);
   const player = createEquationMotionPlayer(plan, {
     render: (frame) => {
       renderEquationMotionFrame(
         demo,
+        plan,
         sourceStep,
         targetStep,
-        frame.progress,
-        frame.tokens.length
+        frame
       );
     }
   });
 
   demo.dataset["kpEquationMotionLatestSource"] = String(sourceStep);
   demo.dataset["kpEquationMotionLatestTarget"] = String(targetStep);
+  demo.dataset["kpEquationMotionAnimating"] = "true";
 
-  if (sourceStep < targetStep) {
-    player.setProgress(0);
-    player.playTo(1, { steps: 4 });
-  } else {
-    player.setProgress(1);
-    player.rewindTo(0, { steps: 4 });
-  }
+  const startProgress = sourceStep < targetStep ? 0 : 1;
+  const targetProgress = sourceStep < targetStep ? 1 : 0;
+  const delta = targetProgress - startProgress;
+  const startTime = window.performance.now();
 
-  demo.dataset["kpEquationMotionStep"] = String(targetStep);
-  syncEquationMotionActiveState(demo, targetStep);
+  player.setProgress(startProgress);
+
+  const tick = (now: number): void => {
+    const elapsed = now - startTime;
+    const timeProgress = clampNumber(
+      elapsed / EQUATION_MOTION_ANIMATION_DURATION_MS,
+      0,
+      1
+    );
+    const easedProgress = easeInOut(timeProgress);
+
+    player.setProgress(startProgress + delta * easedProgress);
+
+    if (timeProgress < 1) {
+      activeAnimationFrames.set(demo, window.requestAnimationFrame(tick));
+      return;
+    }
+
+    activeAnimationFrames.delete(demo);
+    delete demo.dataset["kpEquationMotionAnimating"];
+    syncEquationMotionActiveState(demo, targetStep);
+  };
+
+  activeAnimationFrames.set(demo, window.requestAnimationFrame(tick));
 }
 
 function createDemoEquationMotionTransition(
@@ -167,40 +271,138 @@ function createDemoEquationMotionTransition(
 
 function renderEquationMotionFrame(
   demo: HTMLElement,
+  plan: EquationMotionPlan,
   sourceStep: number,
   targetStep: number,
-  progress: number,
-  sampledTokenCount: number
+  frame: EquationMotionFrame
 ): void {
-  const sourceState = findEquationMotionState(demo, sourceStep);
-  const targetState = findEquationMotionState(demo, targetStep);
+  const context = getEquationMotionRenderContext(demo, sourceStep, targetStep);
 
-  if (sourceState === undefined || targetState === undefined) {
+  if (context === undefined) {
     return;
   }
 
-  const sourceTokens = measureAnnotatedEquationMotionTokens(sourceState);
-  const targetTokens = measureAnnotatedEquationMotionTokens(targetState);
+  const frameTokens = indexFrameTokens(frame.tokens);
   const directionalProgress =
-    sourceStep < targetStep ? progress : 1 - progress;
+    sourceStep < targetStep ? frame.progress : 1 - frame.progress;
+  const cancellationGroup = createCancellationMotionGroup(plan, context);
+  const finalSimplifyGroup = createFinalSimplifyMotionGroup(plan, context);
+  const layoutProgress =
+    cancellationGroup === undefined
+      ? layoutShiftProgress(frame.progress)
+      : postCancellationLayoutShiftProgress(frame.progress);
 
   demo.dataset["kpEquationMotionLastRenderer"] = "operation-plan";
   demo.dataset["kpEquationMotionPlanProgress"] =
-    formatEquationMotionProgress(progress);
+    formatEquationMotionProgress(frame.progress);
   demo.dataset["kpEquationMotionProgress"] =
     formatEquationMotionProgress(directionalProgress);
   demo.dataset["kpEquationMotionSampledTokenCount"] =
-    String(sampledTokenCount);
+    String(frame.tokens.length);
   demo.dataset["kpEquationMotionSourceAnchorCount"] =
-    String(sourceTokens.length);
+    String(countContextTokensForStep(context, sourceStep));
   demo.dataset["kpEquationMotionTargetAnchorCount"] =
-    String(targetTokens.length);
+    String(countContextTokensForStep(context, targetStep));
+  syncEquationMotionScrubber(
+    demo,
+    directionalProgress * readEquationMotionBeatCount(demo)
+  );
+
+  if (cancellationGroup === undefined) {
+    delete demo.dataset["kpEquationMotionCancelMode"];
+    clearCancellationParticles(demo);
+  } else {
+    demo.dataset["kpEquationMotionCancelMode"] = "particle-dissolve";
+    renderCancellationParticles(
+      context.planSourceState,
+      cancellationGroup,
+      frame.progress
+    );
+  }
+
+  delete demo.dataset["kpEquationMotionLiquidMode"];
+  clearLiquidMerge(demo);
+
+  for (const token of plan.tokens) {
+    const frameToken = frameTokens.get(token.id);
+
+    if (frameToken === undefined) {
+      continue;
+    }
+
+    const sourceToken =
+      token.sourceMotionId === undefined
+        ? undefined
+        : context.planSourceTokens.get(token.sourceMotionId);
+    const targetToken =
+      token.targetMotionId === undefined
+        ? undefined
+        : context.planTargetTokens.get(token.targetMotionId);
+
+    if (sourceToken !== undefined && targetToken !== undefined) {
+      applyEquationMotionTokenStyle(
+        sourceToken.element,
+        {
+          ...frameToken.pose,
+          x:
+            frameToken.pose.x +
+            (targetToken.localRect.left - sourceToken.localRect.left) *
+              layoutProgress,
+          y:
+            frameToken.pose.y +
+            (targetToken.localRect.top - sourceToken.localRect.top) *
+              layoutProgress
+        },
+        "visible"
+      );
+      applyEquationMotionTokenStyle(
+        targetToken.element,
+        hiddenTokenPose(),
+        "hidden"
+      );
+      continue;
+    }
+
+    if (sourceToken !== undefined) {
+      applyEquationMotionTokenStyle(
+        sourceToken.element,
+        token.lifecycle === "cancel" &&
+          cancellationGroup?.tokenIds.has(token.id) === true
+          ? cancellationTokenPose(sourceToken, cancellationGroup, frame.progress)
+          : token.lifecycle === "simplify-into" &&
+              finalSimplifyGroup?.sourceTokenIds.has(token.id) === true
+            ? finalSimplifySourceTokenPose(
+                sourceToken,
+                finalSimplifyGroup,
+                frame.progress
+              )
+          : frameToken.pose,
+        "visible"
+      );
+    }
+
+    if (targetToken !== undefined) {
+      applyEquationMotionTokenStyle(
+        targetToken.element,
+        token.id === finalSimplifyGroup?.targetTokenId
+          ? finalSimplifyTargetTokenPose(frameToken.pose, frame.progress)
+          : addedObjectPose(frameToken.pose, frame.progress),
+        "visible"
+      );
+    }
+  }
 }
 
 function syncEquationMotionActiveState(
   demo: HTMLElement,
   activeStep: number
 ): void {
+  activeRenderContexts.delete(demo);
+  resetEquationMotionVisualState(demo);
+  delete demo.dataset["kpEquationMotionCancelMode"];
+  clearCancellationParticles(demo);
+  delete demo.dataset["kpEquationMotionLiquidMode"];
+  clearLiquidMerge(demo);
   const nextActiveStep = clampNumber(
     activeStep,
     0,
@@ -222,6 +424,158 @@ function syncEquationMotionActiveState(
   syncEquationMotionControls(demo, nextActiveStep);
 }
 
+function getEquationMotionRenderContext(
+  demo: HTMLElement,
+  sourceStep: number,
+  targetStep: number
+): EquationMotionRenderContext | undefined {
+  const planSourceStep = Math.min(sourceStep, targetStep);
+  const planTargetStep = Math.max(sourceStep, targetStep);
+  const key = `${planSourceStep}:${planTargetStep}`;
+  const existingContext = activeRenderContexts.get(demo);
+
+  if (existingContext?.key === key) {
+    return existingContext;
+  }
+
+  resetEquationMotionVisualState(demo);
+
+  const planSourceState = findEquationMotionState(demo, planSourceStep);
+  const planTargetState = findEquationMotionState(demo, planTargetStep);
+
+  if (planSourceState === undefined || planTargetState === undefined) {
+    return undefined;
+  }
+
+  const context: EquationMotionRenderContext = {
+    key,
+    planSourceStep,
+    planTargetStep,
+    planSourceState,
+    planTargetState,
+    planSourceTokens: indexStableMotionTokens(
+      measureAnnotatedEquationMotionTokens(planSourceState)
+    ),
+    planTargetTokens: indexStableMotionTokens(
+      measureAnnotatedEquationMotionTokens(planTargetState)
+    )
+  };
+
+  prepareEquationMotionTransitionLayers(demo, planSourceState, planTargetState);
+  activeRenderContexts.set(demo, context);
+
+  return context;
+}
+
+function cancelEquationMotionAnimation(demo: HTMLElement): void {
+  const activeFrame = activeAnimationFrames.get(demo);
+
+  if (activeFrame !== undefined) {
+    window.cancelAnimationFrame(activeFrame);
+    activeAnimationFrames.delete(demo);
+  }
+
+  delete demo.dataset["kpEquationMotionAnimating"];
+}
+
+function prepareEquationMotionTransitionLayers(
+  demo: HTMLElement,
+  sourceState: HTMLElement,
+  targetState: HTMLElement
+): void {
+  demo
+    .querySelectorAll<HTMLElement>("[data-kp-equation-motion-state]")
+    .forEach((state) => {
+      const isTransitionLayer = state === sourceState || state === targetState;
+
+      state.style.opacity = isTransitionLayer ? "1" : "";
+      state.style.visibility = isTransitionLayer ? "visible" : "";
+      state.setAttribute("aria-hidden", isTransitionLayer ? "false" : "true");
+      state
+        .querySelectorAll<HTMLElement>("[data-kp-motion-id]")
+        .forEach((element) => {
+          if (isTransitionLayer) {
+            applyEquationMotionTokenStyle(element, hiddenTokenPose(), "hidden");
+          } else {
+            resetEquationMotionTokenStyle(element);
+          }
+        });
+    });
+}
+
+function resetEquationMotionVisualState(demo: HTMLElement): void {
+  demo
+    .querySelectorAll<HTMLElement>("[data-kp-equation-motion-state]")
+    .forEach((state) => {
+      state.style.opacity = "";
+      state.style.visibility = "";
+      state
+        .querySelectorAll<HTMLElement>("[data-kp-motion-id]")
+        .forEach(resetEquationMotionTokenStyle);
+    });
+}
+
+function applyEquationMotionTokenStyle(
+  element: HTMLElement,
+  pose: MotionPose,
+  visibility: "hidden" | "visible"
+): void {
+  const visible = visibility === "visible" && pose.opacity > 0.001;
+
+  element.style.opacity = formatEquationMotionProgress(pose.opacity);
+  element.style.transform = `translate(${formatPixel(pose.x)}, ${formatPixel(
+    pose.y
+  )}) scale(${formatEquationMotionProgress(pose.scale)})`;
+  element.style.transformOrigin = "center";
+  element.style.visibility = visible ? "visible" : "hidden";
+  element.style.willChange = "opacity, transform";
+}
+
+function resetEquationMotionTokenStyle(element: HTMLElement): void {
+  element.style.opacity = "";
+  element.style.transform = "";
+  element.style.transformOrigin = "";
+  element.style.visibility = "";
+  element.style.willChange = "";
+}
+
+function indexStableMotionTokens(
+  tokens: ReturnType<typeof measureAnnotatedEquationMotionTokens>
+): Map<string, StableMotionToken> {
+  return new Map(
+    tokens.map((token) => [
+      token.motionId,
+      {
+        motionId: token.motionId,
+        text: token.text,
+        element: token.element,
+        localRect: { ...token.localRect }
+      }
+    ])
+  );
+}
+
+function indexFrameTokens(
+  tokens: readonly EquationMotionFrameToken[]
+): Map<string, EquationMotionFrameToken> {
+  return new Map(tokens.map((token) => [token.tokenId, token]));
+}
+
+function countContextTokensForStep(
+  context: EquationMotionRenderContext,
+  step: number
+): number {
+  if (step === context.planSourceStep) {
+    return context.planSourceTokens.size;
+  }
+
+  if (step === context.planTargetStep) {
+    return context.planTargetTokens.size;
+  }
+
+  return 0;
+}
+
 function syncEquationMotionControls(
   demo: HTMLElement,
   activeStep: number
@@ -241,6 +595,51 @@ function syncEquationMotionControls(
   if (next !== null) {
     next.disabled = activeStep >= maxStep;
   }
+
+  const progress = normalizeProgress(
+    readNumberDataset(demo.dataset["kpEquationMotionProgress"]) ?? 0
+  );
+
+  syncEquationMotionScrubber(demo, progress * readEquationMotionBeatCount(demo));
+}
+
+function syncEquationMotionScrubber(
+  demo: HTMLElement,
+  beatValue: number,
+  beatCount = readEquationMotionBeatCount(demo)
+): void {
+  const beat = Math.round(clampNumber(beatValue, 0, beatCount));
+  const scrubber = demo.querySelector<HTMLInputElement>(
+    '[data-action="set-equation-motion-beat"]'
+  );
+  const output = demo.querySelector<HTMLOutputElement>(
+    '[data-role="equation-motion-beat-output"]'
+  );
+
+  if (scrubber !== null) {
+    scrubber.max = String(beatCount);
+    scrubber.value = String(beat);
+  }
+
+  if (output !== null) {
+    output.value = String(beat);
+    output.textContent = `${beat}/${beatCount}`;
+  }
+}
+
+function readEquationMotionBeatCount(demo: HTMLElement): number {
+  const scrubber = demo.querySelector<HTMLInputElement>(
+    '[data-action="set-equation-motion-beat"]'
+  );
+  const configuredBeatCount =
+    readIntegerDataset(scrubber?.dataset["kpEquationMotionBeats"]) ??
+    readIntegerDataset(scrubber?.max);
+
+  if (configuredBeatCount === undefined || configuredBeatCount <= 0) {
+    return EQUATION_MOTION_BEAT_COUNT;
+  }
+
+  return configuredBeatCount;
 }
 
 function readLatestEquationMotionTransition(
@@ -307,6 +706,16 @@ function readIntegerDataset(value: string | undefined): number | undefined {
   return Number.isInteger(parsed) ? parsed : undefined;
 }
 
+function readNumberDataset(value: string | undefined): number | undefined {
+  if (value === undefined || value.trim() === "") {
+    return undefined;
+  }
+
+  const parsed = Number(value);
+
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
 function clampNumber(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
@@ -323,10 +732,403 @@ function normalizeProgress(progress: number): number {
   return clampNumber(progress, 0, 1);
 }
 
+function hiddenTokenPose(): MotionPose {
+  return { opacity: 0, x: 0, y: 0, scale: 1 };
+}
+
+function createCancellationMotionGroup(
+  plan: EquationMotionPlan,
+  context: EquationMotionRenderContext
+): CancellationMotionGroup | undefined {
+  const cancelEntries = plan.tokens.flatMap((token) => {
+    if (token.lifecycle !== "cancel" || token.sourceMotionId === undefined) {
+      return [];
+    }
+
+    const sourceToken = context.planSourceTokens.get(token.sourceMotionId);
+
+    return sourceToken === undefined ? [] : [{ tokenId: token.id, sourceToken }];
+  });
+
+  if (cancelEntries.length === 0) {
+    return undefined;
+  }
+
+  const bounds = cancelEntries.reduce(
+    (nextBounds, entry) => {
+      const center = stableTokenCenter(entry.sourceToken);
+
+      return {
+        minX: Math.min(nextBounds.minX, center.x),
+        maxX: Math.max(nextBounds.maxX, center.x),
+        minY: Math.min(nextBounds.minY, center.y),
+        maxY: Math.max(nextBounds.maxY, center.y)
+      };
+    },
+    {
+      minX: Number.POSITIVE_INFINITY,
+      maxX: Number.NEGATIVE_INFINITY,
+      minY: Number.POSITIVE_INFINITY,
+      maxY: Number.NEGATIVE_INFINITY
+    }
+  );
+
+  return {
+    tokenIds: new Set(cancelEntries.map((entry) => entry.tokenId)),
+    midpoint: {
+      x: (bounds.minX + bounds.maxX) / 2,
+      y: (bounds.minY + bounds.maxY) / 2
+    },
+    particleCount: cancelEntries.length * 6
+  };
+}
+
+function cancellationTokenPose(
+  token: StableMotionToken,
+  group: CancellationMotionGroup,
+  progress: number
+): MotionPose {
+  const center = stableTokenCenter(token);
+  const targetX = group.midpoint.x - center.x;
+  const targetY = group.midpoint.y - center.y;
+  const moveProgress = easeInOut(
+    progressBetweenBeats(progress, 0, EQUATION_MOTION_CANCEL_MEET_BEAT)
+  );
+  const collapseProgress = easeIn(
+    progressBetweenBeats(
+      progress,
+      EQUATION_MOTION_CANCEL_MEET_BEAT,
+      EQUATION_MOTION_CANCEL_COLLAPSE_END_BEAT
+    )
+  );
+  const scale = clampNumber(1 - collapseProgress, 0, 1);
+
+  return {
+    opacity: scale,
+    x: targetX * moveProgress,
+    y: targetY * moveProgress,
+    scale
+  };
+}
+
+function renderCancellationParticles(
+  state: HTMLElement,
+  group: CancellationMotionGroup,
+  progress: number
+): void {
+  const rawParticleProgress = progressBetweenBeats(
+    progress,
+    EQUATION_MOTION_CANCEL_MEET_BEAT,
+    EQUATION_MOTION_CANCEL_COLLAPSE_END_BEAT
+  );
+  const particleProgress = easeOut(rawParticleProgress);
+  const particleOpacity =
+    rawParticleProgress <= 0 || rawParticleProgress >= 1
+      ? 0
+      : 1 - rawParticleProgress;
+  const canvas = findOrCreateCancellationParticleCanvas(state);
+  const renderer = findOrCreateCancellationParticleRenderer(canvas);
+  const pixelRatio = window.devicePixelRatio || 1;
+  const bounds = state.getBoundingClientRect();
+
+  syncCancellationParticleCanvas(canvas, bounds, pixelRatio);
+  canvas.dataset["kpEquationMotionParticleRenderer"] = "webgl";
+  canvas.dataset["kpEquationMotionParticleCount"] = String(group.particleCount);
+
+  renderer.render({
+    width: canvas.width,
+    height: canvas.height,
+    pixelRatio,
+    origin: {
+      x: group.midpoint.x * pixelRatio,
+      y: group.midpoint.y * pixelRatio
+    },
+    progress: particleProgress,
+    opacity: particleOpacity,
+    particleCount: group.particleCount
+  });
+}
+
+function findOrCreateCancellationParticleCanvas(
+  state: HTMLElement
+): HTMLCanvasElement {
+  const existingCanvas = state.querySelector<HTMLCanvasElement>(
+    "[data-kp-equation-motion-webgl-particles]"
+  );
+
+  if (existingCanvas !== null) {
+    return existingCanvas;
+  }
+
+  const canvas = document.createElement("canvas");
+
+  canvas.className = "equation-motion__particle-canvas";
+  canvas.dataset["kpEquationMotionWebglParticles"] = "true";
+  state.append(canvas);
+
+  return canvas;
+}
+
+function findOrCreateCancellationParticleRenderer(
+  canvas: HTMLCanvasElement
+): EquationCancelParticleRenderer {
+  const existingRenderer = cancellationParticleRenderers.get(canvas);
+
+  if (existingRenderer !== undefined) {
+    return existingRenderer;
+  }
+
+  const renderer = createEquationCancelParticleRenderer(canvas);
+
+  cancellationParticleRenderers.set(canvas, renderer);
+
+  return renderer;
+}
+
+function syncCancellationParticleCanvas(
+  canvas: HTMLCanvasElement,
+  bounds: DOMRect,
+  pixelRatio: number
+): void {
+  const width = Math.max(1, Math.ceil(bounds.width * pixelRatio));
+  const height = Math.max(1, Math.ceil(bounds.height * pixelRatio));
+
+  if (canvas.width !== width) {
+    canvas.width = width;
+  }
+
+  if (canvas.height !== height) {
+    canvas.height = height;
+  }
+
+  canvas.style.width = `${bounds.width}px`;
+  canvas.style.height = `${bounds.height}px`;
+}
+
+function disposeCancellationParticleCanvas(canvas: HTMLCanvasElement): void {
+  const renderer = cancellationParticleRenderers.get(canvas);
+
+  if (renderer !== undefined) {
+    renderer.dispose();
+    cancellationParticleRenderers.delete(canvas);
+  }
+
+  canvas.remove();
+}
+
+function clearCancellationParticles(demo: HTMLElement): void {
+  demo
+    .querySelectorAll<HTMLCanvasElement>(
+      "[data-kp-equation-motion-webgl-particles]"
+    )
+    .forEach(disposeCancellationParticleCanvas);
+  demo
+    .querySelectorAll<HTMLElement>(
+      "[data-kp-equation-motion-particles], [data-kp-equation-motion-particle]"
+    )
+    .forEach((element) => element.remove());
+}
+
+function createFinalSimplifyMotionGroup(
+  plan: EquationMotionPlan,
+  context: EquationMotionRenderContext
+): FinalSimplifyMotionGroup | undefined {
+  const sourceEntries = plan.tokens.flatMap((token) => {
+    if (
+      token.lifecycle !== "simplify-into" ||
+      token.sourceMotionId === undefined
+    ) {
+      return [];
+    }
+
+    const sourceToken = context.planSourceTokens.get(token.sourceMotionId);
+
+    return sourceToken === undefined
+      ? []
+      : [{ tokenId: token.id, sourceToken }];
+  });
+  const targetEntry = plan.tokens.find(
+    (token) => token.lifecycle === "enter" && token.targetMotionId !== undefined
+  );
+  const targetToken =
+    targetEntry?.targetMotionId === undefined
+      ? undefined
+      : context.planTargetTokens.get(targetEntry.targetMotionId);
+
+  if (
+    sourceEntries.length === 0 ||
+    targetEntry === undefined ||
+    targetToken === undefined
+  ) {
+    return undefined;
+  }
+
+  const bounds = sourceEntries.reduce(
+    (nextBounds, entry) => {
+      const center = stableTokenCenter(entry.sourceToken);
+
+      return {
+        minX: Math.min(nextBounds.minX, center.x),
+        maxX: Math.max(nextBounds.maxX, center.x),
+        minY: Math.min(nextBounds.minY, center.y),
+        maxY: Math.max(nextBounds.maxY, center.y)
+      };
+    },
+    {
+      minX: Number.POSITIVE_INFINITY,
+      maxX: Number.NEGATIVE_INFINITY,
+      minY: Number.POSITIVE_INFINITY,
+      maxY: Number.NEGATIVE_INFINITY
+    }
+  );
+
+  return {
+    sourceTokenIds: new Set(sourceEntries.map((entry) => entry.tokenId)),
+    targetTokenId: targetEntry.id,
+    midpoint: {
+      x: (bounds.minX + bounds.maxX) / 2,
+      y: (bounds.minY + bounds.maxY) / 2
+    }
+  };
+}
+
+function finalSimplifySourceTokenPose(
+  token: StableMotionToken,
+  group: FinalSimplifyMotionGroup,
+  progress: number
+): MotionPose {
+  const center = stableTokenCenter(token);
+  const moveProgress = easeInOut(
+    progressBetweenBeats(progress, 0, EQUATION_MOTION_FINAL_SIMPLIFY_MEET_BEAT)
+  );
+  const fadeProgress = easeInOut(
+    progressBetweenBeats(
+      progress,
+      EQUATION_MOTION_FINAL_SIMPLIFY_MEET_BEAT,
+      EQUATION_MOTION_FINAL_SIMPLIFY_FADE_END_BEAT
+    )
+  );
+
+  return {
+    opacity: 1 - fadeProgress,
+    x: (group.midpoint.x - center.x) * moveProgress,
+    y: (group.midpoint.y - center.y) * moveProgress,
+    scale: interpolateNumber(
+      1,
+      EQUATION_MOTION_FINAL_SIMPLIFY_MIN_SCALE,
+      fadeProgress
+    )
+  };
+}
+
+function finalSimplifyTargetTokenPose(
+  pose: MotionPose,
+  progress: number
+): MotionPose {
+  const revealProgress = easeInOut(
+    progressBetweenBeats(
+      progress,
+      EQUATION_MOTION_FINAL_SIMPLIFY_MEET_BEAT,
+      EQUATION_MOTION_FINAL_SIMPLIFY_FADE_END_BEAT
+    )
+  );
+
+  return {
+    ...pose,
+    opacity: revealProgress,
+    scale: interpolateNumber(
+      EQUATION_MOTION_FINAL_SIMPLIFY_MIN_SCALE,
+      pose.scale,
+      revealProgress
+    )
+  };
+}
+
+function clearLiquidMerge(demo: HTMLElement): void {
+  demo
+    .querySelectorAll<HTMLCanvasElement>(
+      "[data-kp-equation-motion-liquid-merge]"
+    )
+    .forEach((canvas) => canvas.remove());
+}
+
+function stableTokenCenter(token: StableMotionToken): MotionPoint {
+  return {
+    x: token.localRect.left + token.localRect.width / 2,
+    y: token.localRect.top + token.localRect.height / 2
+  };
+}
+
+function layoutShiftProgress(progress: number): number {
+  return easeInOut(
+    progressBetweenBeats(progress, 0, EQUATION_MOTION_SHIFT_END_BEAT)
+  );
+}
+
+function postCancellationLayoutShiftProgress(progress: number): number {
+  return easeInOut(
+    progressBetweenBeats(
+      progress,
+      EQUATION_MOTION_CANCEL_SHIFT_START_BEAT,
+      EQUATION_MOTION_BEAT_COUNT
+    )
+  );
+}
+
+function addedObjectPose(pose: MotionPose, progress: number): MotionPose {
+  const entryProgress = easeOut(
+    progressBetweenBeats(
+      progress,
+      EQUATION_MOTION_SHIFT_END_BEAT,
+      EQUATION_MOTION_BEAT_COUNT
+    )
+  );
+
+  return {
+    ...pose,
+    opacity: pose.opacity * entryProgress,
+    scale: interpolateNumber(
+      EQUATION_MOTION_ENTER_INITIAL_SCALE,
+      pose.scale,
+      entryProgress
+    )
+  };
+}
+
+function progressBetweenBeats(
+  progress: number,
+  startBeat: number,
+  endBeat: number
+): number {
+  const beat = normalizeProgress(progress) * EQUATION_MOTION_BEAT_COUNT;
+
+  return clampNumber((beat - startBeat) / (endBeat - startBeat), 0, 1);
+}
+
+function easeInOut(progress: number): number {
+  return (1 - Math.cos(Math.PI * progress)) / 2;
+}
+
+function easeIn(progress: number): number {
+  return progress * progress;
+}
+
+function easeOut(progress: number): number {
+  return 1 - (1 - progress) * (1 - progress);
+}
+
+function interpolateNumber(from: number, to: number, progress: number): number {
+  return from + (to - from) * progress;
+}
+
 function formatEquationMotionProgress(progress: number): string {
   if (Number.isInteger(progress)) {
     return String(progress);
   }
 
   return String(Number(progress.toFixed(6)));
+}
+
+function formatPixel(value: number): string {
+  return `${formatEquationMotionProgress(value)}px`;
 }

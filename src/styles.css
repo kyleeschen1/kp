@@ -254,6 +254,7 @@ h2 {
 
 .equation-motion__controls {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   gap: 0.5rem;
   border-bottom: 1px solid #e3e8ef;
@@ -277,6 +278,32 @@ h2 {
   color: #64748b;
   background: #e2e8f0;
   cursor: default;
+}
+
+.equation-motion__scrubber {
+  display: grid;
+  flex: 1 1 12rem;
+  grid-template-columns: auto minmax(6rem, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  color: #526173;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.equation-motion__scrubber input {
+  width: 100%;
+  accent-color: #1f6371;
+}
+
+.equation-motion__beat-output {
+  min-width: 3.25rem;
+  color: #334155;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  text-transform: none;
 }
 
 .equation-motion__stage {
@@ -311,6 +338,13 @@ h2 {
 
 .equation-motion__formula .katex {
   margin: 0;
+}
+
+.equation-motion__particle-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
 }
 
 .equation-motion__motion-anchor {
@@ -356,13 +390,14 @@ h2 {
 }
 
 .graph-controls {
+  display: grid;
+  gap: 0.6rem;
   border-bottom: 1px solid #e3e8ef;
   padding: 0.75rem 0.9rem;
   background: #f8fafc;
 }
 
 .graph-controls__foldout {
-  margin-top: 0.6rem;
   border-top: 1px solid #e3e8ef;
   padding-top: 0.55rem;
 }

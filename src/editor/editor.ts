@@ -28,7 +28,6 @@ import {
 import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   createDefaultGraph3DScene,
-  createDefaultGraphScene,
   type Graph3DSurfaceMode
 } from "../semantic/graph.ts";
 import type { Graph3DObject, Surface3DObject } from "../semantic/graph.ts";
@@ -45,7 +44,6 @@ export function createInitialEditorDocument(): KpDocument {
         label: "I_3",
         size: 3
       }),
-      ...createDefaultGraphScene(),
       ...createDefaultGraph3DScene()
     ]
   });
@@ -62,9 +60,7 @@ export function renderEditorDocument(document: KpDocument): string {
               `<li><strong>${escapeHtml(issue.path)}</strong>: ${escapeHtml(issue.message)}</li>`
           )
           .join("")}</ul>`;
-  const renderedObjects = document.objects
-    .map((object) => renderObjectPreview(object, document))
-    .join("");
+  const renderedObjects = renderPreviewStage(document);
 
   return `
     <section class="editor-shell" aria-label="Kinetic Press editor">
@@ -94,12 +90,33 @@ export function renderEditorDocument(document: KpDocument): string {
           <div class="panel-header">
             <h2 id="preview-title">Rendered Asset</h2>
           </div>
-          <div class="preview-stage">${renderedObjects}${renderEquationMotionDemo()}</div>
+          <div class="preview-stage">${renderedObjects}</div>
           <pre class="compiled-source" id="compiled-source" aria-live="polite"></pre>
         </section>
       </div>
     </section>
   `;
+}
+
+function renderPreviewStage(document: KpDocument): string {
+  let renderedEquationMotionDemo = false;
+  const renderedObjects = document.objects.map((object) => {
+    const preview = renderObjectPreview(object, document);
+
+    if (!renderedEquationMotionDemo && object.type === "matrix") {
+      renderedEquationMotionDemo = true;
+
+      return preview + renderEquationMotionDemo();
+    }
+
+    return preview;
+  });
+
+  if (!renderedEquationMotionDemo) {
+    renderedObjects.unshift(renderEquationMotionDemo());
+  }
+
+  return renderedObjects.join("");
 }
 
 function renderObjectPreview(object: KpSemanticObject, document: KpDocument): string {
@@ -198,6 +215,11 @@ function renderEquationMotionDemo(): string {
     <section class="equation-motion" data-kp-equation-motion-demo data-kp-equation-motion-step="0" data-kp-equation-motion-max-step="${maxStep}">
       <div class="equation-motion__controls">
         <button type="button" data-action="equation-motion-rewind">Rewind</button>
+        <label class="equation-motion__scrubber">
+          <span>Beat</span>
+          <input type="range" data-action="set-equation-motion-beat" min="0" max="20" step="1" value="0" data-kp-equation-motion-beats="20" aria-label="Scrub equation motion beat" />
+          <output class="equation-motion__beat-output" data-role="equation-motion-beat-output">0/20</output>
+        </label>
         <button type="button" data-action="equation-motion-next">Next</button>
       </div>
       <div class="equation-motion__stage">
@@ -247,11 +269,11 @@ function renderGraph3DControls(
         <input class="graph-control__range" id="${escapeHtml(azimuthInputId)}" type="range" min="-180" max="180" step="1" value="${azimuth}" data-action="set-graph-azimuth" data-graph-id="${escapeHtml(graph.id)}" data-kp-graph-rotation-axis="z" aria-label="Rotate graph around z-axis" />
         <output class="graph-control__value" for="${escapeHtml(azimuthInputId)}">${azimuth} deg</output>
       </label>
+      ${renderGraphViewModeControl(graph)}
+      ${renderGraphSurfaceModeControl(graph)}
       <details class="graph-controls__foldout" data-kp-controls-foldout="render-settings">
         <summary class="graph-controls__summary">Render settings</summary>
         <div class="graph-controls__foldout-body">
-          ${renderGraphViewModeControl(graph)}
-          ${renderGraphSurfaceModeControl(graph)}
           ${renderGraphSurfaceQualityControl(graph)}
           <label class="graph-control" for="${escapeHtml(occludedAxisInputId)}">
             <span class="graph-control__label">occluded axes</span>

@@ -8,6 +8,7 @@ import {
 import { compileDocumentAsset } from "./editor/compile-client.ts";
 import {
   hydrateEquationMotionDemos,
+  setEquationMotionBeat,
   setEquationMotionProgress,
   stepEquationMotionDemo
 } from "./editor/equation-motion-demo-controller.ts";
@@ -145,6 +146,9 @@ appRoot.addEventListener("input", (event) => {
       return;
     case "set-saddle-denominator":
       updateSaddleDenominatorFromInput(event.target);
+      return;
+    case "set-equation-motion-beat":
+      setEquationMotionBeat(event.target);
       return;
   }
 });

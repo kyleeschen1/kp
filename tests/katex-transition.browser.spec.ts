@@ -8,12 +8,15 @@ test("editor equation motion demo uses semantic playback plans", async ({
   const demo = page.locator("[data-kp-equation-motion-demo]");
   const next = demo.locator('[data-action="equation-motion-next"]');
   const rewind = demo.locator('[data-action="equation-motion-rewind"]');
+  const beatScrubber = demo.locator('[data-action="set-equation-motion-beat"]');
 
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "0");
   await expect(demo.locator('[data-kp-equation-motion-state="0"]')).toBeVisible();
   await expect(demo.locator('[data-kp-equation-motion-state="1"]')).toBeHidden();
   await expect(rewind).toBeDisabled();
   await expect(next).toBeEnabled();
+  await expect(beatScrubber).toHaveAttribute("max", "20");
+  await expect(beatScrubber).toHaveValue("0");
 
   const visibleTokenBox = await demo
     .locator('[data-kp-equation-motion-state="0"] [data-kp-motion-id="lhs.x"]')
@@ -44,9 +47,181 @@ test("editor equation motion demo uses semantic playback plans", async ({
   expect(visibleTokenBox.width).toBeGreaterThan(0);
   expect(visibleTokenBox.height).toBeGreaterThan(0);
 
+  const earlyBeatState = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    const scrubber = demoElement.querySelector<HTMLInputElement>(
+      '[data-action="set-equation-motion-beat"]'
+    );
+
+    if (scrubber === null) {
+      throw new Error("Expected equation motion beat scrubber.");
+    }
+
+    scrubber.value = "6";
+    scrubber.dispatchEvent(new Event("input", { bubbles: true }));
+
+    const movingToken = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="0"] [data-kp-motion-id="lhs.x"]'
+    );
+    const targetState = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="1"]'
+    );
+    const enteringToken = targetState?.querySelector<HTMLElement>(
+      '[data-kp-motion-id="lhs.inverse.minus"]'
+    );
+    const output = demoElement.querySelector<HTMLOutputElement>(
+      '[data-role="equation-motion-beat-output"]'
+    );
+
+    if (
+      movingToken === null ||
+      targetState === null ||
+      enteringToken === undefined ||
+      enteringToken === null ||
+      output === null
+    ) {
+      throw new Error("Expected moving, entering, and beat output nodes.");
+    }
+
+    const enteringStyle = getComputedStyle(enteringToken);
+
+    return {
+      progress: demoElement.dataset["kpEquationMotionProgress"],
+      beatOutput: output.textContent,
+      movingTransform: movingToken.style.transform,
+      enteringOpacity: Number(enteringStyle.opacity),
+      enteringVisibility: enteringStyle.visibility
+    };
+  });
+
+  expect(earlyBeatState).toEqual({
+    progress: "0.3",
+    beatOutput: "6/20",
+    movingTransform: expect.any(String),
+    enteringOpacity: 0,
+    enteringVisibility: "hidden"
+  });
+  expect(earlyBeatState.movingTransform).not.toBe("");
+  expect(earlyBeatState.movingTransform).not.toBe("none");
+
+  const scrubbedVisualState = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.5);
+
+    const sourceState = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="0"]'
+    );
+    const targetState = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="1"]'
+    );
+    const enteringToken = targetState?.querySelector<HTMLElement>(
+      '[data-kp-motion-id="lhs.inverse.minus"]'
+    );
+
+    if (
+      sourceState === null ||
+      targetState === null ||
+      enteringToken === undefined ||
+      enteringToken === null
+    ) {
+      throw new Error("Expected source, target, and entering token nodes.");
+    }
+
+    const targetStyle = getComputedStyle(targetState);
+    const enteringStyle = getComputedStyle(enteringToken);
+
+    return {
+      progress: demoElement.dataset["kpEquationMotionProgress"],
+      targetStateVisibility: targetStyle.visibility,
+      enteringOpacity: Number(enteringStyle.opacity),
+      enteringTransform: enteringStyle.transform
+    };
+  });
+
+  expect(scrubbedVisualState.progress).toBe("0.5");
+  expect(scrubbedVisualState.targetStateVisibility).toBe("visible");
+  expect(scrubbedVisualState.enteringOpacity).toBeGreaterThan(0);
+  expect(scrubbedVisualState.enteringOpacity).toBeLessThan(1);
+  expect(scrubbedVisualState.enteringTransform).not.toBe("none");
+
+  const repeatedProgressState = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    const movingToken = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="0"] [data-kp-motion-id="lhs.x"]'
+    );
+
+    if (movingToken === null) {
+      throw new Error("Expected moving lhs.x token.");
+    }
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.5);
+    const firstTransform = movingToken.style.transform;
+    const firstRectLeft = movingToken.getBoundingClientRect().left;
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.5);
+    const secondTransform = movingToken.style.transform;
+    const secondRectLeft = movingToken.getBoundingClientRect().left;
+
+    return {
+      firstTransform,
+      secondTransform,
+      rectDelta: Math.abs(secondRectLeft - firstRectLeft)
+    };
+  });
+
+  expect(repeatedProgressState.secondTransform).toBe(
+    repeatedProgressState.firstTransform
+  );
+  expect(repeatedProgressState.rectDelta).toBeLessThan(0.01);
+
   await next.click();
 
+  const animatedProgress = await page.waitForFunction(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+    const progress = Number(demoElement?.dataset["kpEquationMotionProgress"]);
+
+    if (
+      demoElement?.dataset["kpEquationMotionAnimating"] === "true" &&
+      Number.isFinite(progress) &&
+      progress >= 0 &&
+      progress < 1
+    ) {
+      return progress;
+    }
+
+    if (demoElement?.dataset["kpEquationMotionStep"] === "1") {
+      return 1;
+    }
+
+    return false;
+  });
+
+  expect(await animatedProgress.jsonValue()).toEqual(expect.any(Number));
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");
+  await expect(demo).not.toHaveAttribute("data-kp-equation-motion-animating", "true");
   await expect(demo).toHaveAttribute(
     "data-kp-equation-motion-last-renderer",
     "operation-plan"
@@ -75,6 +250,256 @@ test("editor equation motion demo uses semantic playback plans", async ({
 
   await next.click();
 
+  const cancellationMotionState = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    const scrubber = demoElement.querySelector<HTMLInputElement>(
+      '[data-action="set-equation-motion-beat"]'
+    );
+    const cancelMotionIds = [
+      "lhs.plus",
+      "lhs.3",
+      "lhs.inverse.minus",
+      "lhs.inverse.3"
+    ] as const;
+
+    if (scrubber === null) {
+      throw new Error("Expected equation motion beat scrubber.");
+    }
+
+    const parseInlineTransform = (transform: string) => {
+      const translate = transform.match(
+        /translate\(([-0-9.]+)px, ([-0-9.]+)px\)/
+      );
+      const scale = transform.match(/scale\(([-0-9.]+)\)/);
+
+      return {
+        x: translate === null ? 0 : Number(translate[1]),
+        y: translate === null ? 0 : Number(translate[2]),
+        scale: scale === null ? 1 : Number(scale[1])
+      };
+    };
+    const sourceToken = (motionId: string): HTMLElement => {
+      const token = demoElement.querySelector<HTMLElement>(
+        `[data-kp-equation-motion-state="1"] [data-kp-motion-id="${motionId}"]`
+      );
+
+      if (token === null) {
+        throw new Error(`Expected source token ${motionId}.`);
+      }
+
+      return token;
+    };
+    const snapshotToken = (motionId: string) => {
+      const token = sourceToken(motionId);
+      const rect = token.getBoundingClientRect();
+      const style = getComputedStyle(token);
+
+      return {
+        motionId,
+        center: {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2
+        },
+        opacity: Number(style.opacity),
+        transform: parseInlineTransform(token.style.transform),
+        visibility: style.visibility
+      };
+    };
+    const sampleBeat = (beat: number) => {
+      scrubber.value = String(beat);
+      scrubber.dispatchEvent(new Event("input", { bubbles: true }));
+
+      return {
+        progress: demoElement.dataset["kpEquationMotionProgress"],
+        cancelMode: demoElement.dataset["kpEquationMotionCancelMode"],
+        xToken: snapshotToken("lhs.x"),
+        cancelTokens: cancelMotionIds.map(snapshotToken),
+        domParticleCount: demoElement.querySelectorAll(
+          "[data-kp-equation-motion-particle]"
+        ).length,
+        webglParticles: (() => {
+          const canvas = demoElement.querySelector<HTMLCanvasElement>(
+            "[data-kp-equation-motion-webgl-particles]"
+          );
+
+          if (canvas === null) {
+            return {
+              exists: false,
+              renderer: undefined,
+              particleCount: 0,
+              nonTransparentPixelCount: 0,
+              maxAlpha: 0
+            };
+          }
+
+          const gl = canvas.getContext("webgl");
+
+          if (gl === null) {
+            throw new Error("Expected cancellation particles to use WebGL.");
+          }
+
+          gl.finish();
+
+          const pixels = new Uint8Array(canvas.width * canvas.height * 4);
+          let maxAlpha = 0;
+          let nonTransparentPixelCount = 0;
+
+          gl.readPixels(
+            0,
+            0,
+            canvas.width,
+            canvas.height,
+            gl.RGBA,
+            gl.UNSIGNED_BYTE,
+            pixels
+          );
+
+          for (let index = 3; index < pixels.length; index += 4) {
+            const alpha = pixels[index] ?? 0;
+
+            maxAlpha = Math.max(maxAlpha, alpha);
+
+            if (alpha > 0) {
+              nonTransparentPixelCount += 1;
+            }
+
+            if (nonTransparentPixelCount >= 32) {
+              break;
+            }
+          }
+
+          return {
+            exists: true,
+            renderer: canvas.dataset["kpEquationMotionParticleRenderer"],
+            particleCount: Number(
+              canvas.dataset["kpEquationMotionParticleCount"] ?? 0
+            ),
+            nonTransparentPixelCount,
+            maxAlpha
+          };
+        })()
+      };
+    };
+    const distance = (
+      a: { readonly x: number; readonly y: number },
+      b: { readonly x: number; readonly y: number }
+    ): number => Math.hypot(a.x - b.x, a.y - b.y);
+
+    const start = sampleBeat(0);
+    const cancelBounds = start.cancelTokens.reduce(
+      (bounds, token) => ({
+        minX: Math.min(bounds.minX, token.center.x),
+        maxX: Math.max(bounds.maxX, token.center.x),
+        minY: Math.min(bounds.minY, token.center.y),
+        maxY: Math.max(bounds.maxY, token.center.y)
+      }),
+      {
+        minX: Number.POSITIVE_INFINITY,
+        maxX: Number.NEGATIVE_INFINITY,
+        minY: Number.POSITIVE_INFINITY,
+        maxY: Number.NEGATIVE_INFINITY
+      }
+    );
+    const midpoint = {
+      x: (cancelBounds.minX + cancelBounds.maxX) / 2,
+      y: (cancelBounds.minY + cancelBounds.maxY) / 2
+    };
+    const startDistances = new Map(
+      start.cancelTokens.map((token) => [
+        token.motionId,
+        distance(token.center, midpoint)
+      ])
+    );
+    const moveProgress = (1 - Math.cos(Math.PI * (6 / 8))) / 2;
+    const overlap = sampleBeat(6);
+    const fullyOverlapped = sampleBeat(8);
+    const dissolve = sampleBeat(9);
+    const collapsed = sampleBeat(10);
+    const pause = sampleBeat(12);
+    const shifted = sampleBeat(16);
+
+    return {
+      midpoint,
+      overlap,
+      fullyOverlapped,
+      dissolve,
+      collapsed,
+      pause,
+      shifted,
+      overlapTokensMovedCloser: overlap.cancelTokens.every(
+        (token) =>
+          distance(token.center, midpoint) <
+          (startDistances.get(token.motionId) ?? 0) - 0.5
+      ),
+      overlapTokensMovedStraight: overlap.cancelTokens.every((token) => {
+        const startToken = start.cancelTokens.find(
+          (candidate) => candidate.motionId === token.motionId
+        );
+
+        if (startToken === undefined) {
+          return false;
+        }
+
+        const expected = {
+          x: startToken.center.x + (midpoint.x - startToken.center.x) * moveProgress,
+          y: startToken.center.y + (midpoint.y - startToken.center.y) * moveProgress
+        };
+
+        return distance(token.center, expected) < 1.5;
+      }),
+      fullyOverlappedAtMidpoint: fullyOverlapped.cancelTokens.every(
+        (token) => distance(token.center, midpoint) < 1.5
+      ),
+      webglParticlesVisible:
+        dissolve.webglParticles.exists &&
+        dissolve.webglParticles.renderer === "webgl" &&
+        dissolve.webglParticles.particleCount > 0 &&
+        dissolve.webglParticles.nonTransparentPixelCount > 0 &&
+        dissolve.webglParticles.maxAlpha > 0,
+      collapsedAtMidpoint: collapsed.cancelTokens.every(
+        (token) => distance(token.center, midpoint) < 1.5
+      ),
+      collapsedToNothing: collapsed.cancelTokens.every(
+        (token) =>
+          token.transform.scale === 0 &&
+          token.opacity === 0 &&
+          token.visibility === "hidden"
+      ),
+      survivorHeldDuringPause:
+        Math.abs(pause.xToken.transform.x) < 0.01 &&
+        Math.abs(pause.xToken.transform.y) < 0.01,
+      survivorShiftedAfterPause:
+        Math.abs(shifted.xToken.transform.x) > 0.5 ||
+        Math.abs(shifted.xToken.transform.y) > 0.5
+    };
+  });
+
+  expect(cancellationMotionState.overlap.cancelMode).toBe("particle-dissolve");
+  expect(cancellationMotionState.overlap.progress).toBe("0.3");
+  expect(cancellationMotionState.overlapTokensMovedCloser).toBe(true);
+  expect(cancellationMotionState.overlapTokensMovedStraight).toBe(true);
+  expect(cancellationMotionState.fullyOverlapped.progress).toBe("0.4");
+  expect(cancellationMotionState.fullyOverlappedAtMidpoint).toBe(true);
+  expect(cancellationMotionState.dissolve.progress).toBe("0.45");
+  expect(cancellationMotionState.dissolve.domParticleCount).toBe(0);
+  expect(cancellationMotionState.webglParticlesVisible).toBe(true);
+  expect(cancellationMotionState.collapsed.progress).toBe("0.5");
+  expect(cancellationMotionState.collapsedAtMidpoint).toBe(true);
+  expect(cancellationMotionState.collapsedToNothing).toBe(true);
+  expect(cancellationMotionState.pause.progress).toBe("0.6");
+  expect(cancellationMotionState.survivorHeldDuringPause).toBe(true);
+  expect(cancellationMotionState.shifted.progress).toBe("0.8");
+  expect(cancellationMotionState.survivorShiftedAfterPause).toBe(true);
+
+  await next.click();
+
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "2");
   await expect(demo).toHaveAttribute(
     "data-kp-equation-motion-latest-source",
@@ -85,6 +510,180 @@ test("editor equation motion demo uses semantic playback plans", async ({
     "2"
   );
   await expect(demo.locator('[data-kp-equation-motion-state="2"]')).toBeVisible();
+
+  await next.click();
+
+  const finalCrossfadeState = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    const sourceIds = ["rhs.7", "rhs.inverse.minus", "rhs.inverse.3"] as const;
+    const scrubber = demoElement.querySelector<HTMLInputElement>(
+      '[data-action="set-equation-motion-beat"]'
+    );
+
+    if (scrubber === null) {
+      throw new Error("Expected equation motion beat scrubber.");
+    }
+
+    const parseInlineTransform = (transform: string) => {
+      const translate = transform.match(
+        /translate\(([-0-9.]+)px, ([-0-9.]+)px\)/
+      );
+      const scale = transform.match(/scale\(([-0-9.]+)\)/);
+
+      return {
+        x: translate === null ? 0 : Number(translate[1]),
+        y: translate === null ? 0 : Number(translate[2]),
+        scale: scale === null ? 1 : Number(scale[1])
+      };
+    };
+    const sourceToken = (motionId: string): HTMLElement => {
+      const token = demoElement.querySelector<HTMLElement>(
+        `[data-kp-equation-motion-state="2"] [data-kp-motion-id="${motionId}"]`
+      );
+
+      if (token === null) {
+        throw new Error(`Expected final source token ${motionId}.`);
+      }
+
+      return token;
+    };
+    const snapshotSourceToken = (motionId: string) => {
+      const token = sourceToken(motionId);
+      const rect = token.getBoundingClientRect();
+
+      return {
+        motionId,
+        center: {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2
+        },
+        opacity: Number(getComputedStyle(token).opacity),
+        transform: parseInlineTransform(token.style.transform)
+      };
+    };
+    const targetToken = (): HTMLElement => {
+      const token = demoElement.querySelector<HTMLElement>(
+        '[data-kp-equation-motion-state="3"] [data-kp-motion-id="rhs.4"]'
+      );
+
+      if (token === null) {
+        throw new Error("Expected final target token rhs.4.");
+      }
+
+      return token;
+    };
+    const snapshotTargetToken = () => {
+      const token = targetToken();
+      const rect = token.getBoundingClientRect();
+      const style = getComputedStyle(token);
+
+      return {
+        center: {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2
+        },
+        opacity: Number(style.opacity),
+        transform: parseInlineTransform(token.style.transform),
+        visibility: style.visibility
+      };
+    };
+    const sampleBeat = (beat: number) => {
+      scrubber.value = String(beat);
+      scrubber.dispatchEvent(new Event("input", { bubbles: true }));
+
+      const canvas = demoElement.querySelector<HTMLCanvasElement>(
+        "[data-kp-equation-motion-liquid-merge]"
+      );
+
+      return {
+        progress: demoElement.dataset["kpEquationMotionProgress"],
+        liquidMode: demoElement.dataset["kpEquationMotionLiquidMode"],
+        sourceTokens: sourceIds.map(snapshotSourceToken),
+        targetToken: snapshotTargetToken(),
+        liquidCanvasExists: canvas !== null
+      };
+    };
+    const distance = (
+      a: { readonly x: number; readonly y: number },
+      b: { readonly x: number; readonly y: number }
+    ): number => Math.hypot(a.x - b.x, a.y - b.y);
+
+    const start = sampleBeat(0);
+    const sourceBounds = start.sourceTokens.reduce(
+      (bounds, token) => ({
+        minX: Math.min(bounds.minX, token.center.x),
+        maxX: Math.max(bounds.maxX, token.center.x),
+        minY: Math.min(bounds.minY, token.center.y),
+        maxY: Math.max(bounds.maxY, token.center.y)
+      }),
+      {
+        minX: Number.POSITIVE_INFINITY,
+        maxX: Number.NEGATIVE_INFINITY,
+        minY: Number.POSITIVE_INFINITY,
+        maxY: Number.NEGATIVE_INFINITY
+      }
+    );
+    const midpoint = {
+      x: (sourceBounds.minX + sourceBounds.maxX) / 2,
+      y: (sourceBounds.minY + sourceBounds.maxY) / 2
+    };
+    const startDistances = new Map(
+      start.sourceTokens.map((token) => [
+        token.motionId,
+        distance(token.center, midpoint)
+      ])
+    );
+    const converging = sampleBeat(6);
+    const crossfade = sampleBeat(10);
+
+    return {
+      midpoint,
+      converging,
+      crossfade,
+      sourceTokensMovedCloser: converging.sourceTokens.every(
+        (token) => {
+          const startDistance = startDistances.get(token.motionId) ?? 0;
+          const convergingDistance = distance(token.center, midpoint);
+
+          return startDistance <= 0.5
+            ? convergingDistance <= startDistance + 0.5
+            : convergingDistance < startDistance - 0.5;
+        }
+      ),
+      sourceTokensCrossfading:
+        crossfade.sourceTokens.every(
+          (token) =>
+            distance(token.center, midpoint) < 1.5 &&
+            token.opacity > 0 &&
+            token.opacity < 1 &&
+            token.transform.scale > 0.85 &&
+            token.transform.scale < 1
+        ),
+      targetCrossfading:
+        distance(crossfade.targetToken.center, midpoint) < 1.5 &&
+        crossfade.targetToken.opacity > 0 &&
+        crossfade.targetToken.opacity < 1 &&
+        crossfade.targetToken.transform.scale > 0.85 &&
+        crossfade.targetToken.transform.scale < 1 &&
+        crossfade.targetToken.visibility === "visible",
+      noLiquidRenderer:
+        crossfade.liquidMode === undefined && !crossfade.liquidCanvasExists
+    };
+  });
+
+  expect(finalCrossfadeState.converging.progress).toBe("0.3");
+  expect(finalCrossfadeState.sourceTokensMovedCloser).toBe(true);
+  expect(finalCrossfadeState.crossfade.progress).toBe("0.5");
+  expect(finalCrossfadeState.sourceTokensCrossfading).toBe(true);
+  expect(finalCrossfadeState.targetCrossfading).toBe(true);
+  expect(finalCrossfadeState.noLiquidRenderer).toBe(true);
 
   await next.click();
 
