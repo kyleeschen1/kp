@@ -449,18 +449,22 @@ test("editor equation motion demo uses semantic playback plans", async ({
       renderer: overlay.dataset["kpEquationMotionArtifactRenderer"],
       sourceTokenId: overlay.dataset["kpEquationMotionArtifactSource"],
       targetTokenId: overlay.dataset["kpEquationMotionArtifactTarget"],
+      particleCount: Number(
+        overlay.dataset["kpEquationMotionArtifactParticleCount"] ?? 0
+      ),
       nonTransparentPixelCount,
       maxAlpha
     };
   });
 
   expect(radicalArtifactState).toEqual({
-    mode: "texture-blend",
+    mode: "pixel-flow",
     fallbackReason: undefined,
     overlayConnected: true,
-    renderer: "webgl",
+    renderer: "webgl-pixel-flow",
     sourceTokenId: "radical.rewrite-power-as-root.source.exponent",
     targetTokenId: "radical.rewrite-power-as-root.target.radical",
+    particleCount: 1024,
     nonTransparentPixelCount: expect.any(Number),
     maxAlpha: expect.any(Number)
   });
