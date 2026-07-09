@@ -136,6 +136,7 @@ export async function createKatexTextureAtlas(
 
 export function measureKatexTextureCaptureRect(element: Element): KatexTokenRect {
   const rects = [element, ...Array.from(element.querySelectorAll("*"))]
+    .filter(isCaptureRectElement)
     .filter(isVisibleCaptureElement)
     .map((entry) => entry.getBoundingClientRect())
     .filter((rect) => rect.width > 0 && rect.height > 0);
@@ -168,7 +169,10 @@ async function captureElementImage(
     `left:${elementRect.left - rect.left}px`,
     `top:${elementRect.top - rect.top}px`,
     `display:inline-block`,
-    `margin:0`
+    `margin:0`,
+    `opacity:1`,
+    `visibility:visible`,
+    `transform:none`
   ].join(";");
 
   appendInlineStyle(clone, captureStyle);
@@ -193,6 +197,10 @@ async function captureElementImage(
   });
 
   return image;
+}
+
+function isCaptureRectElement(element: Element): boolean {
+  return !(element instanceof SVGElement && element.ownerSVGElement !== null);
 }
 
 function isVisibleCaptureElement(element: Element): boolean {

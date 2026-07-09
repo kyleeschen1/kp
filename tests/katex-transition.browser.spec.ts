@@ -348,6 +348,125 @@ test("editor equation motion demo uses semantic playback plans", async ({
     1
   );
 
+  const radicalArtifactState = await page.evaluate(async () => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.5);
+
+    const overlay = await new Promise<HTMLCanvasElement>((resolve, reject) => {
+      const existingOverlay = demoElement.querySelector<HTMLCanvasElement>(
+        '[data-kp-equation-motion-artifact-overlay][data-kp-equation-motion-artifact-ready="true"]'
+      );
+
+      if (existingOverlay !== null) {
+        resolve(existingOverlay);
+        return;
+      }
+
+      const observer = new MutationObserver(() => {
+        const nextOverlay = demoElement.querySelector<HTMLCanvasElement>(
+          '[data-kp-equation-motion-artifact-overlay][data-kp-equation-motion-artifact-ready="true"]'
+        );
+
+        if (nextOverlay !== null) {
+          window.clearTimeout(timeout);
+          observer.disconnect();
+          resolve(nextOverlay);
+        }
+      });
+      const timeout = window.setTimeout(() => {
+        observer.disconnect();
+        reject(new Error("Expected radical artifact texture overlay."));
+      }, 5_000);
+
+      observer.observe(demoElement, {
+        attributeFilter: ["data-kp-equation-motion-artifact-ready"],
+        attributes: true,
+        childList: true,
+        subtree: true
+      });
+      void Promise.resolve().then(() => {
+        const nextOverlay = demoElement.querySelector<HTMLCanvasElement>(
+          '[data-kp-equation-motion-artifact-overlay][data-kp-equation-motion-artifact-ready="true"]'
+        );
+
+        if (nextOverlay !== null) {
+          window.clearTimeout(timeout);
+          observer.disconnect();
+          resolve(nextOverlay);
+        }
+      });
+    });
+
+    await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
+
+    const gl = overlay.getContext("webgl");
+
+    if (gl === null) {
+      throw new Error("Expected radical artifact overlay to use WebGL.");
+    }
+
+    gl.finish();
+
+    const pixels = new Uint8Array(overlay.width * overlay.height * 4);
+    let maxAlpha = 0;
+    let nonTransparentPixelCount = 0;
+
+    gl.readPixels(
+      0,
+      0,
+      overlay.width,
+      overlay.height,
+      gl.RGBA,
+      gl.UNSIGNED_BYTE,
+      pixels
+    );
+
+    for (let index = 3; index < pixels.length; index += 4) {
+      const alpha = pixels[index] ?? 0;
+
+      maxAlpha = Math.max(maxAlpha, alpha);
+
+      if (alpha > 0) {
+        nonTransparentPixelCount += 1;
+      }
+
+      if (nonTransparentPixelCount >= 32) {
+        break;
+      }
+    }
+
+    return {
+      mode: demoElement.dataset["kpEquationMotionArtifactMode"],
+      fallbackReason: demoElement.dataset["kpEquationMotionArtifactFallbackReason"],
+      overlayConnected: overlay.isConnected,
+      renderer: overlay.dataset["kpEquationMotionArtifactRenderer"],
+      sourceTokenId: overlay.dataset["kpEquationMotionArtifactSource"],
+      targetTokenId: overlay.dataset["kpEquationMotionArtifactTarget"],
+      nonTransparentPixelCount,
+      maxAlpha
+    };
+  });
+
+  expect(radicalArtifactState).toEqual({
+    mode: "texture-blend",
+    fallbackReason: undefined,
+    overlayConnected: true,
+    renderer: "webgl",
+    sourceTokenId: "radical.rewrite-power-as-root.source.exponent",
+    targetTokenId: "radical.rewrite-power-as-root.target.radical",
+    nonTransparentPixelCount: expect.any(Number),
+    maxAlpha: expect.any(Number)
+  });
+  expect(radicalArtifactState.nonTransparentPixelCount).toBeGreaterThan(0);
+  expect(radicalArtifactState.maxAlpha).toBeGreaterThan(0);
+
   await animationSelect.selectOption("fixture-fraction-make-inline-to-stacked");
   await next.click();
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");

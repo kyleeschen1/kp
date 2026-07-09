@@ -16,6 +16,19 @@ import {
   createEquationCancelParticleRenderer,
   type EquationCancelParticleRenderer
 } from "../rendering/equation-cancel-particles-webgl.ts";
+import {
+  createKatexArtifactTextureBlendRenderer,
+  type KatexArtifactTextureBlendPlan
+} from "../rendering/katex-artifact-texture-blend.ts";
+import {
+  createKatexTextureAtlas,
+  measureKatexTextureCaptureRect
+} from "../rendering/katex-texture-atlas.ts";
+import type {
+  KatexMotionToken,
+  KatexTokenRect
+} from "../rendering/katex-transition-types.ts";
+import type { KatexWebGLRenderer } from "../rendering/katex-webgl-transition.ts";
 import type {
   EquationMotionFrame,
   EquationMotionFrameToken
@@ -40,6 +53,10 @@ const EQUATION_MOTION_DEMO_BEAT_LABEL_COUNT = 50;
 const activeAnimations = new WeakMap<HTMLElement, ActiveEquationMotionAnimation>();
 const pausedAnimations = new WeakMap<HTMLElement, PausedEquationMotionAnimation>();
 const activeRenderContexts = new WeakMap<HTMLElement, EquationMotionRenderContext>();
+const artifactTextureBlendContexts = new WeakMap<
+  HTMLElement,
+  EquationArtifactTextureBlendContext
+>();
 const cancellationParticleRenderers = new WeakMap<
   HTMLCanvasElement,
   EquationCancelParticleRenderer
@@ -89,6 +106,17 @@ interface FinalSimplifyMotionGroup {
   readonly targetTokenId: string;
   readonly midpoint: MotionPoint;
   readonly maxDistance: number;
+}
+
+interface EquationArtifactTextureBlendContext {
+  readonly key: string;
+  readonly sourceMotionId: string;
+  readonly targetMotionId: string;
+  readonly canvas: HTMLCanvasElement;
+  rendererPromise: Promise<KatexWebGLRenderer | undefined>;
+  renderer: KatexWebGLRenderer | undefined;
+  disposed: boolean;
+  lastProgress: number;
 }
 
 interface ActiveEquationMotionAnimation {
@@ -633,6 +661,12 @@ function renderEquationMotionFrame(
     sourceStep < targetStep ? frame.progress : 1 - frame.progress;
   const cancellationGroup = createCancellationMotionGroup(plan, context);
   const finalSimplifyGroup = createFinalSimplifyMotionGroup(plan, context);
+  const artifactBlendMotionIds = renderArtifactTextureBlend(
+    demo,
+    plan,
+    context,
+    frame.progress
+  );
   const collapseScale = readEquationMotionCollapseScale(demo);
 
   demo.dataset["kpEquationMotionLastRenderer"] = "operation-plan";
@@ -685,9 +719,41 @@ function renderEquationMotionFrame(
     if (sourceToken !== undefined && targetToken !== undefined) {
       applyEquationMotionTokenStyle(
         sourceToken.element,
-        frameToken.pose,
-        "visible"
+        token.sourceMotionId !== undefined &&
+          artifactBlendMotionIds.has(token.sourceMotionId)
+          ? hiddenTokenPose()
+          : frameToken.pose,
+        token.sourceMotionId !== undefined &&
+          artifactBlendMotionIds.has(token.sourceMotionId)
+          ? "hidden"
+          : "visible"
       );
+      applyEquationMotionTokenStyle(
+        targetToken.element,
+        hiddenTokenPose(),
+        "hidden"
+      );
+      continue;
+    }
+
+    if (
+      sourceToken !== undefined &&
+      token.sourceMotionId !== undefined &&
+      artifactBlendMotionIds.has(token.sourceMotionId)
+    ) {
+      applyEquationMotionTokenStyle(
+        sourceToken.element,
+        hiddenTokenPose(),
+        "hidden"
+      );
+      continue;
+    }
+
+    if (
+      targetToken !== undefined &&
+      token.targetMotionId !== undefined &&
+      artifactBlendMotionIds.has(token.targetMotionId)
+    ) {
       applyEquationMotionTokenStyle(
         targetToken.element,
         hiddenTokenPose(),
@@ -870,6 +936,7 @@ function prepareEquationMotionTransitionLayers(
 }
 
 function resetEquationMotionVisualState(demo: HTMLElement): void {
+  clearArtifactTextureBlend(demo);
   demo
     .querySelectorAll<HTMLElement>("[data-kp-equation-motion-state]")
     .forEach((state) => {
@@ -903,6 +970,252 @@ function resetEquationMotionTokenStyle(element: HTMLElement): void {
   element.style.transformOrigin = "";
   element.style.visibility = "";
   element.style.willChange = "";
+}
+
+function renderArtifactTextureBlend(
+  demo: HTMLElement,
+  plan: EquationMotionPlan,
+  context: EquationMotionRenderContext,
+  progress: number
+): ReadonlySet<string> {
+  const blendPlan = createRadicalArtifactTextureBlendPlan(plan, context);
+
+  if (blendPlan === undefined || progress <= 0 || progress >= 1) {
+    clearArtifactTextureBlend(demo);
+    return new Set();
+  }
+
+  const renderContext = findOrCreateArtifactTextureBlendContext(
+    demo,
+    context,
+    blendPlan
+  );
+
+  renderContext.lastProgress = progress;
+  demo.dataset["kpEquationMotionArtifactMode"] = "texture-blend";
+  delete demo.dataset["kpEquationMotionArtifactFallbackReason"];
+
+  if (renderContext.renderer !== undefined) {
+    renderContext.renderer.render(progress);
+    renderContext.canvas.dataset["kpEquationMotionArtifactReady"] = "true";
+  }
+
+  return new Set([blendPlan.sourceMotionId, blendPlan.targetMotionId]);
+}
+
+function createRadicalArtifactTextureBlendPlan(
+  plan: EquationMotionPlan,
+  context: EquationMotionRenderContext
+):
+  | {
+      readonly key: string;
+      readonly sourceMotionId: string;
+      readonly targetMotionId: string;
+      readonly texturePlan: KatexArtifactTextureBlendPlan;
+      readonly sourceAtlasToken: KatexMotionToken;
+      readonly targetAtlasToken: KatexMotionToken;
+    }
+  | undefined {
+  const sourceMotionId = "radical.rewrite-power-as-root.source.exponent";
+  const targetMotionId = "radical.rewrite-power-as-root.target.radical";
+
+  if (
+    !plan.tokens.some((token) => token.sourceMotionId === sourceMotionId) ||
+    !plan.tokens.some((token) => token.targetMotionId === targetMotionId)
+  ) {
+    return undefined;
+  }
+
+  const sourceToken = context.planSourceTokens.get(sourceMotionId);
+  const targetToken = context.planTargetTokens.get(targetMotionId);
+  const stage = findEquationMotionStage(context.planSourceState);
+
+  if (sourceToken === undefined || targetToken === undefined || stage === undefined) {
+    return undefined;
+  }
+
+  const stageRect = stage.getBoundingClientRect();
+  const sourceCaptureRect = measureKatexTextureCaptureRect(sourceToken.element);
+  const targetCaptureRect = measureKatexTextureCaptureRect(targetToken.element);
+  const sourceLocalRect = viewportRectToLocalRect(sourceCaptureRect, stageRect);
+  const targetLocalRect = viewportRectToLocalRect(targetCaptureRect, stageRect);
+
+  return {
+    key: `${context.key}:radical-artifact-texture-blend`,
+    sourceMotionId,
+    targetMotionId,
+    texturePlan: {
+      id: "radical.rewrite-power-as-root.artifact-texture-blend",
+      kind: "artifact-texture-blend",
+      source: {
+        tokenId: sourceMotionId,
+        rect: sourceLocalRect
+      },
+      target: {
+        tokenId: targetMotionId,
+        rect: targetLocalRect
+      },
+      start: 0,
+      end: 1,
+      easing: "ease-in-out"
+    },
+    sourceAtlasToken: artifactAtlasToken(
+      sourceMotionId,
+      sourceCaptureRect,
+      sourceToken.element
+    ),
+    targetAtlasToken: artifactAtlasToken(
+      targetMotionId,
+      targetCaptureRect,
+      targetToken.element
+    )
+  };
+}
+
+function findOrCreateArtifactTextureBlendContext(
+  demo: HTMLElement,
+  context: EquationMotionRenderContext,
+  plan: NonNullable<ReturnType<typeof createRadicalArtifactTextureBlendPlan>>
+): EquationArtifactTextureBlendContext {
+  const existingContext = artifactTextureBlendContexts.get(demo);
+
+  if (existingContext?.key === plan.key) {
+    return existingContext;
+  }
+
+  clearArtifactTextureBlend(demo);
+  const stage = findEquationMotionStage(context.planSourceState);
+
+  if (stage === undefined) {
+    throw new Error("Expected equation motion stage for artifact texture blend.");
+  }
+
+  const canvas = document.createElement("canvas");
+  const stageRect = stage.getBoundingClientRect();
+  const pixelRatio = window.devicePixelRatio || 1;
+  const renderContext: EquationArtifactTextureBlendContext = {
+    key: plan.key,
+    sourceMotionId: plan.sourceMotionId,
+    targetMotionId: plan.targetMotionId,
+    canvas,
+    renderer: undefined,
+    rendererPromise: Promise.resolve(undefined),
+    disposed: false,
+    lastProgress: 0
+  };
+
+  canvas.className = "equation-motion__artifact-canvas";
+  canvas.dataset["kpEquationMotionArtifactOverlay"] = "true";
+  canvas.dataset["kpEquationMotionArtifactRenderer"] = "webgl";
+  canvas.dataset["kpEquationMotionArtifactSource"] = plan.sourceMotionId;
+  canvas.dataset["kpEquationMotionArtifactTarget"] = plan.targetMotionId;
+  syncArtifactTextureBlendCanvas(canvas, stageRect, pixelRatio);
+  stage.append(canvas);
+
+  const rendererPromise = createKatexTextureAtlas(
+    [plan.sourceAtlasToken, plan.targetAtlasToken],
+    { pixelRatio }
+  )
+    .then((atlas) => {
+      if (renderContext.disposed) {
+        return undefined;
+      }
+
+      const renderer = createKatexArtifactTextureBlendRenderer(
+        canvas,
+        plan.texturePlan,
+        atlas
+      );
+
+      renderContext.renderer = renderer;
+      renderer.render(renderContext.lastProgress);
+      canvas.dataset["kpEquationMotionArtifactReady"] = "true";
+
+      return renderer;
+    })
+    .catch((error: unknown) => {
+      if (!renderContext.disposed) {
+        demo.dataset["kpEquationMotionArtifactFallbackReason"] =
+          error instanceof Error ? error.message : "Unknown artifact texture error.";
+        clearArtifactTextureBlend(demo);
+      }
+
+      return undefined;
+    });
+
+  renderContext.rendererPromise = rendererPromise;
+  artifactTextureBlendContexts.set(demo, renderContext);
+
+  return renderContext;
+}
+
+function clearArtifactTextureBlend(demo: HTMLElement): void {
+  const context = artifactTextureBlendContexts.get(demo);
+
+  if (context !== undefined) {
+    context.disposed = true;
+    context.renderer?.dispose();
+    context.canvas.remove();
+    artifactTextureBlendContexts.delete(demo);
+  }
+
+  delete demo.dataset["kpEquationMotionArtifactMode"];
+  demo
+    .querySelectorAll<HTMLCanvasElement>(
+      "[data-kp-equation-motion-artifact-overlay]"
+    )
+    .forEach((canvas) => canvas.remove());
+}
+
+function syncArtifactTextureBlendCanvas(
+  canvas: HTMLCanvasElement,
+  bounds: DOMRect,
+  pixelRatio: number
+): void {
+  const width = Math.max(1, Math.ceil(bounds.width * pixelRatio));
+  const height = Math.max(1, Math.ceil(bounds.height * pixelRatio));
+
+  canvas.width = width;
+  canvas.height = height;
+  canvas.style.width = `${bounds.width}px`;
+  canvas.style.height = `${bounds.height}px`;
+}
+
+function artifactAtlasToken(
+  id: string,
+  rect: KatexTokenRect,
+  element: HTMLElement
+): KatexMotionToken {
+  return {
+    id,
+    text: id,
+    signature: "artifact-texture-blend",
+    rect,
+    localRect: {
+      left: 0,
+      top: 0,
+      width: rect.width,
+      height: rect.height
+    },
+    row: 0,
+    element
+  };
+}
+
+function viewportRectToLocalRect(
+  rect: KatexTokenRect,
+  containerRect: DOMRect
+): KatexTokenRect {
+  return {
+    left: rect.left - containerRect.left,
+    top: rect.top - containerRect.top,
+    width: rect.width,
+    height: rect.height
+  };
+}
+
+function findEquationMotionStage(state: HTMLElement): HTMLElement | undefined {
+  return state.closest<HTMLElement>(".equation-motion__stage") ?? undefined;
 }
 
 function indexStableMotionTokens(

@@ -1211,6 +1211,7 @@ h2 {
   min-height: 8rem;
   place-items: center;
   padding: 1.5rem;
+  position: relative;
 }
 
 .equation-motion__state {
@@ -1249,6 +1250,13 @@ h2 {
   inset: 0;
   pointer-events: none;
   z-index: 2;
+}
+
+.equation-motion__artifact-canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
 }
 
 .equation-motion__motion-anchor {
