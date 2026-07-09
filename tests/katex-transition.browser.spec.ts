@@ -29,10 +29,10 @@ test("editor equation motion demo uses semantic playback plans", async ({
   await expect(beatScrubber).toHaveValue("0");
   await expect(durationSlider).toHaveAttribute("min", "200");
   await expect(durationSlider).toHaveAttribute("max", "3000");
-  await expect(durationSlider).toHaveValue("900");
+  await expect(durationSlider).toHaveValue("1200");
   await expect(
     demo.locator('[data-role="equation-motion-duration-output"]')
-  ).toHaveText("900 ms");
+  ).toHaveText("1200 ms");
   await expect(collapseScaleSlider).toHaveAttribute("min", "5");
   await expect(collapseScaleSlider).toHaveAttribute("max", "50");
   await expect(collapseScaleSlider).toHaveValue("35");

@@ -122,7 +122,7 @@ test("semantic beat compiler exposes the current equation demo timeline", () => 
       ["introduced-token-enter", 25, 50, "ease-out"],
       ["cancel-meet", 0, 20, "ease-in-out"],
       ["cancel-collapse", 20, 25, "ease-out"],
-      ["post-cancel-layout-shift", 35, 50, "ease-in-out"],
+      ["post-cancel-layout-shift", 30, 50, "ease-in-out"],
       ["final-simplify-meet", 0, 20, "ease-in-out"],
       ["final-simplify-collapse", 20, 25, "ease-out"],
       ["final-simplify-reveal", 25, 35, "ease-in-out"]
@@ -143,6 +143,14 @@ test("semantic beat compiler exposes the current equation demo timeline", () => 
       "layout-shift"
     ),
     (1 - Math.cos(Math.PI * 0.6)) / 2
+  );
+  assert.equal(
+    progressBetweenSemanticBeat(
+      linearEquationDemoBeatTimeline,
+      0.8,
+      "post-cancel-layout-shift"
+    ),
+    0.5
   );
 });
 

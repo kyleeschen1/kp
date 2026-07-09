@@ -78,7 +78,7 @@ export const linearEquationDemoBeatTimeline = compileSemanticBeatTimeline({
     },
     {
       id: "post-cancel-layout-shift",
-      startBeat: 35,
+      startBeat: 30,
       endBeat: 50,
       easing: "ease-in-out",
       summary: "Remaining tokens settle after cancellation."
