@@ -5,6 +5,7 @@ import {
   createEquationOperationTransition,
   type EquationTransition
 } from "../src/math/equation-transform.ts";
+import { findEquationAnimationCatalogEntry } from "../src/editor/equation-animation-catalog.ts";
 import {
   findKatexTransformFixture
 } from "../src/rendering/katex-transform-fixtures.ts";
@@ -542,6 +543,110 @@ test("visual artifact lifecycle records map to visual-only artifact corresponden
       ]
     ]
   );
+});
+
+test("fixture fraction animation fades slash and fraction line artifacts", () => {
+  const entry = findEquationAnimationCatalogEntry(
+    "fixture-fraction-make-inline-to-stacked"
+  );
+  const plan = createEquationMotionPlan(entry.transitions[0]!);
+
+  assert.deepEqual(summarizeTokenLifecycles(plan), [
+    ["fraction.make.inline-to-stacked.x", "move"],
+    ["fraction.make.inline-to-stacked.slash", "exit"],
+    ["fraction.make.inline-to-stacked.3", "move"],
+    ["fraction.make.inline-to-stacked.frac-line", "enter"]
+  ]);
+  assert.deepEqual(trackFor(plan, "fraction.make.inline-to-stacked.slash"), {
+    tokenId: "fraction.make.inline-to-stacked.slash",
+    lifecycle: "exit",
+    visualLifecycle: "exit",
+    start: 0,
+    end: 1,
+    easing: "ease-in-out",
+    from: { opacity: 1, x: 0, y: 0, scale: 1 },
+    to: { opacity: 0, x: 0, y: 0, scale: 1 }
+  });
+  assert.equal(
+    trackFor(plan, "fraction.make.inline-to-stacked.frac-line").from.opacity,
+    0
+  );
+});
+
+test("fixture script animation fades the nonpersistent dot operator", () => {
+  const entry = findEquationAnimationCatalogEntry(
+    "fixture-script-combine-factor-as-power"
+  );
+  const plan = createEquationMotionPlan(entry.transitions[0]!);
+
+  assert.deepEqual(summarizeTokenLifecycles(plan), [
+    ["script.combine-factor-as-power.base", "persist"],
+    ["script.combine-factor-as-power.dot", "exit"],
+    ["script.combine-factor-as-power.factor", "simplify-into"],
+    ["script.combine-factor-as-power.exponent", "enter"]
+  ]);
+  assert.deepEqual(trackFor(plan, "script.combine-factor-as-power.dot"), {
+    tokenId: "script.combine-factor-as-power.dot",
+    lifecycle: "exit",
+    visualLifecycle: "exit",
+    start: 0,
+    end: 1,
+    easing: "ease-in-out",
+    from: { opacity: 1, x: 0, y: 0, scale: 1 },
+    to: { opacity: 0, x: 0, y: 0, scale: 1 }
+  });
+});
+
+test("fixture function wrap stages moved x, parentheses, and delayed f entry", () => {
+  const entry = findEquationAnimationCatalogEntry("fixture-wrapper-function-wrap");
+  const plan = createEquationMotionPlan(entry.transitions[0]!);
+
+  assert.deepEqual(summarizeTokenLifecycles(plan), [
+    ["wrapper.function.wrap.x", "group-wrap"],
+    ["wrapper.function.wrap.f", "enter"],
+    ["wrapper.function.wrap.open-paren", "enter"],
+    ["wrapper.function.wrap.close-paren", "enter"]
+  ]);
+  assert.deepEqual(trackFor(plan, "wrapper.function.wrap.x"), {
+    tokenId: "wrapper.function.wrap.x",
+    lifecycle: "group-wrap",
+    visualLifecycle: "wrap",
+    start: 0,
+    end: 0.4,
+    easing: "ease-in-out",
+    from: { opacity: 1, x: 0, y: 0, scale: 1 },
+    to: { opacity: 1, x: 0, y: 0, scale: 1 }
+  });
+  assert.deepEqual(trackFor(plan, "wrapper.function.wrap.open-paren"), {
+    tokenId: "wrapper.function.wrap.open-paren",
+    lifecycle: "enter",
+    visualLifecycle: "enter",
+    start: 0.42,
+    end: 0.7,
+    easing: "ease-in-out",
+    from: { opacity: 0, x: -8, y: 0, scale: 1 },
+    to: { opacity: 1, x: 0, y: 0, scale: 1 }
+  });
+  assert.deepEqual(trackFor(plan, "wrapper.function.wrap.close-paren"), {
+    tokenId: "wrapper.function.wrap.close-paren",
+    lifecycle: "enter",
+    visualLifecycle: "enter",
+    start: 0.42,
+    end: 0.7,
+    easing: "ease-in-out",
+    from: { opacity: 0, x: 8, y: 0, scale: 1 },
+    to: { opacity: 1, x: 0, y: 0, scale: 1 }
+  });
+  assert.deepEqual(trackFor(plan, "wrapper.function.wrap.f"), {
+    tokenId: "wrapper.function.wrap.f",
+    lifecycle: "enter",
+    visualLifecycle: "enter",
+    start: 0.5,
+    end: 0.78,
+    easing: "ease-out",
+    from: { opacity: 0, x: -10, y: 0, scale: 0.35 },
+    to: { opacity: 1, x: 0, y: 0, scale: 1 }
+  });
 });
 
 test("createEquationMotionPlan rejects tokens without source or target motion ids", () => {

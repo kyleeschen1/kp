@@ -1,4 +1,5 @@
 import {
+  type EquationTokenEntryEffect,
   type EquationTokenLifecycle,
   type EquationTransition
 } from "../math/equation-transform.ts";
@@ -25,6 +26,8 @@ export interface EquationMotionPlan {
 export interface EquationMotionToken {
   readonly id: string;
   readonly lifecycle: EquationTokenLifecycle;
+  readonly entryEffect?: EquationTokenEntryEffect | undefined;
+  readonly motion?: LifecycleTiming | undefined;
   readonly correspondenceRelation: SelectorCorrespondenceRelationId;
   readonly semanticLifecycle: SemanticSelectorLifecycle;
   readonly visualLifecycle: VisualTokenLifecycle;
@@ -90,6 +93,12 @@ export function createEquationMotionPlan(
         transitionToken.lifecycle
       ),
       label: transitionToken.label,
+      ...(transitionToken.entryEffect === undefined
+        ? {}
+        : { entryEffect: transitionToken.entryEffect }),
+      ...(transitionToken.motion === undefined
+        ? {}
+        : { motion: cloneTiming(transitionToken.motion) }),
       ...(transitionToken.sourceMotionId === undefined
         ? {}
         : { sourceMotionId: transitionToken.sourceMotionId }),
@@ -245,7 +254,7 @@ function validateAnnotationCoverage(
 }
 
 function trackForToken(token: EquationMotionToken): EquationMotionTrack {
-  const timing = timingForLifecycle(token.lifecycle);
+  const timing = token.motion ?? timingForLifecycle(token.lifecycle);
 
   return {
     tokenId: token.id,
@@ -393,6 +402,13 @@ function timingForLifecycle(lifecycle: EquationTokenLifecycle): LifecycleTiming 
         to: identityPose()
       };
     case "exit":
+      return {
+        start: 0,
+        end: 1,
+        easing: "ease-in-out",
+        from: identityPose(),
+        to: fadeOutPose()
+      };
     case "move":
     case "group-wrap":
     case "group-unwrap":
@@ -430,4 +446,14 @@ function fadeInPose(): MotionPose {
 
 function clonePose(pose: MotionPose): MotionPose {
   return { ...pose };
+}
+
+function cloneTiming(timing: LifecycleTiming): LifecycleTiming {
+  return {
+    start: timing.start,
+    end: timing.end,
+    easing: timing.easing,
+    from: clonePose(timing.from),
+    to: clonePose(timing.to)
+  };
 }

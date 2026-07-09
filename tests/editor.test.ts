@@ -394,12 +394,13 @@ test("renderEditorDocument renders selected fixture animation", () => {
   assert.match(html, /data-kp-equation-motion-latex="\\frac\{x\}\{3\}"/);
   assert.match(
     html,
-    /data-kp-motion-id="fraction\.make\.inline-to-stacked\.source\.expression"/
+    /data-kp-motion-id="fraction\.make\.inline-to-stacked\.source\.slash"/
   );
   assert.match(
     html,
-    /data-kp-motion-id="fraction\.make\.inline-to-stacked\.target\.expression"/
+    /class="frac-line" data-kp-motion-id="fraction\.make\.inline-to-stacked\.target\.frac-line"/
   );
+  assert.doesNotMatch(html, /structural:frac-line/);
 });
 
 test("addLatexEquationGraph appends a generated graph scene", () => {

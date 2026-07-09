@@ -21,7 +21,9 @@ import {
   DEFAULT_EQUATION_ANIMATION_ID,
   equationAnimationCatalogEntries,
   findEquationAnimationCatalogEntry,
-  type EquationAnimationCatalogEntry
+  type EquationAnimationCatalogEntry,
+  type EquationAnimationState,
+  type EquationAnimationStructuralMotionAnnotation
 } from "./equation-animation-catalog.ts";
 import {
   createKpDocument,
@@ -209,9 +211,7 @@ function renderEquationMotionDemo(equationAnimationId: string | undefined): stri
   const stateHtml = animation.states
     .map((state) =>
       renderEquationMotionState(
-        state.step,
-        state.latex,
-        state.annotations,
+        state,
         state.step === 0
       )
     )
@@ -287,19 +287,35 @@ function renderEquationAnimationSelector(
 }
 
 function renderEquationMotionState(
-  step: number,
-  latex: string,
-  annotations: readonly EquationMotionAnnotation[],
+  state: EquationAnimationState,
   active: boolean
 ): string {
+  const formulaHtml = renderEquationMotionFormula(state);
+
   return `
-    <div class="equation-motion__state${active ? " equation-motion__state--active" : ""}" data-kp-equation-motion-state="${step}" data-kp-equation-motion-active="${active ? "true" : "false"}" data-kp-equation-motion-latex="${escapeHtml(latex)}" aria-hidden="${active ? "false" : "true"}">
+    <div class="equation-motion__state${active ? " equation-motion__state--active" : ""}" data-kp-equation-motion-state="${state.step}" data-kp-equation-motion-active="${active ? "true" : "false"}" data-kp-equation-motion-latex="${escapeHtml(state.latex)}" aria-hidden="${active ? "false" : "true"}">
       <!-- Motion IDs live on visible token wrappers so measurement reads rendered boxes, not sidecar anchors. -->
-      <div class="equation-motion__formula" aria-label="${escapeHtml(latex)}">
-        ${annotations.map(renderEquationMotionAnchor).join("")}
+      <div class="equation-motion__formula" aria-label="${escapeHtml(state.latex)}">
+        ${formulaHtml}
       </div>
     </div>
   `;
+}
+
+function renderEquationMotionFormula(state: EquationAnimationState): string {
+  if (state.renderLatex === undefined) {
+    return state.annotations.map(renderEquationMotionAnchor).join("");
+  }
+
+  const html = renderLatexToHtml(state.renderLatex, {
+    displayMode: false,
+    trust: true
+  });
+
+  return applyStructuralMotionAnnotations(
+    html,
+    state.structuralMotionAnnotations ?? []
+  );
 }
 
 function renderEquationMotionAnchor(annotation: EquationMotionAnnotation): string {
@@ -308,6 +324,22 @@ function renderEquationMotionAnchor(annotation: EquationMotionAnnotation): strin
     : "";
 
   return `<span class="equation-motion__motion-anchor" data-kp-motion-id="${escapeHtml(annotation.motionId)}"${operatorAttribute}>${renderLatexToHtml(annotation.text, { displayMode: false })}</span>`;
+}
+
+function applyStructuralMotionAnnotations(
+  html: string,
+  annotations: readonly EquationAnimationStructuralMotionAnnotation[]
+): string {
+  return annotations.reduce(
+    (nextHtml, annotation) =>
+      annotation.selector === "frac-line"
+        ? nextHtml.replace(
+            'class="frac-line"',
+            `class="frac-line" data-kp-motion-id="${escapeHtml(annotation.motionId)}"`
+          )
+        : nextHtml,
+    html
+  );
 }
 
 function isBinaryOperatorToken(text: string): boolean {

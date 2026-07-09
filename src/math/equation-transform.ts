@@ -24,6 +24,29 @@ export type EquationTokenLifecycle =
   | "group-wrap"
   | "group-unwrap";
 
+export type EquationTokenEasingName =
+  | "linear"
+  | "ease-in"
+  | "ease-out"
+  | "ease-in-out";
+
+export type EquationTokenEntryEffect = "shared" | "direct";
+
+export interface EquationTokenMotionPose {
+  readonly opacity: number;
+  readonly x: number;
+  readonly y: number;
+  readonly scale: number;
+}
+
+export interface EquationTokenMotionTiming {
+  readonly start: number;
+  readonly end: number;
+  readonly easing: EquationTokenEasingName;
+  readonly from: EquationTokenMotionPose;
+  readonly to: EquationTokenMotionPose;
+}
+
 export type EquationOperation =
   | {
       readonly kind: "subtractBothSides";
@@ -52,6 +75,8 @@ export type EquationTransitionToken = {
   readonly id: SemanticId;
   readonly lifecycle: EquationTokenLifecycle;
   readonly label: string;
+  readonly motion?: EquationTokenMotionTiming;
+  readonly entryEffect?: EquationTokenEntryEffect;
   readonly sourceMotionId?: SemanticId;
   readonly targetMotionId?: SemanticId;
   readonly sourceLatex?: string;

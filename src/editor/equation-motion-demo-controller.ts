@@ -436,7 +436,9 @@ function renderEquationMotionFrame(
               frame.progress,
               collapseScale
             )
-          : addedObjectPose(frameToken.pose, frame.progress),
+          : token.entryEffect === "direct"
+            ? frameToken.pose
+            : addedObjectPose(frameToken.pose, frame.progress),
         "visible"
       );
     }
