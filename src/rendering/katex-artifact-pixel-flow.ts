@@ -10,10 +10,17 @@ export interface KatexArtifactPixelFlowEndpoint {
 }
 
 export interface KatexArtifactPixelFlowSourceMotion {
-  readonly kind: "bounce-collapse-emitter";
-  readonly bounceStrength: number;
-  readonly bounceEnd: number;
+  readonly kind: "depth-retreat-emitter";
+  readonly liftScale: number;
+  readonly liftEnd: number;
   readonly collapseEnd: number;
+  readonly streamPointScale: number;
+}
+
+export interface KatexArtifactPixelFlowTargetMotion {
+  readonly kind: "behind-token-embrace";
+  readonly embraceStart: number;
+  readonly embraceScale: number;
 }
 
 export interface KatexArtifactPixelFlowPlan {
@@ -23,6 +30,7 @@ export interface KatexArtifactPixelFlowPlan {
   readonly target: KatexArtifactPixelFlowEndpoint;
   readonly particleCount: number;
   readonly sourceMotion?: KatexArtifactPixelFlowSourceMotion | undefined;
+  readonly targetMotion?: KatexArtifactPixelFlowTargetMotion | undefined;
   readonly start: number;
   readonly end: number;
   readonly easing: EasingName;
@@ -48,6 +56,7 @@ export interface KatexArtifactPixelFlowFrameParticle {
   readonly y: number;
   readonly opacity: number;
   readonly pointSize: number;
+  readonly depthScale: number;
 }
 
 export interface KatexArtifactPixelFlowFrame {
@@ -71,9 +80,14 @@ interface KatexArtifactPixelFlowProgramInfo {
   readonly progressLocation: WebGLUniformLocation;
   readonly sourceMotionEnabledLocation: WebGLUniformLocation;
   readonly sourceMidpointLocation: WebGLUniformLocation;
-  readonly bounceStrengthLocation: WebGLUniformLocation;
-  readonly bounceEndLocation: WebGLUniformLocation;
+  readonly liftScaleLocation: WebGLUniformLocation;
+  readonly liftEndLocation: WebGLUniformLocation;
   readonly collapseEndLocation: WebGLUniformLocation;
+  readonly streamPointScaleLocation: WebGLUniformLocation;
+  readonly targetMotionEnabledLocation: WebGLUniformLocation;
+  readonly targetMidpointLocation: WebGLUniformLocation;
+  readonly embraceStartLocation: WebGLUniformLocation;
+  readonly embraceScaleLocation: WebGLUniformLocation;
   readonly pixelRatioLocation: WebGLUniformLocation;
   readonly colorLocation: WebGLUniformLocation;
 }
@@ -141,86 +155,149 @@ export function createKatexArtifactPixelFlowFrame(
   progress: number
 ): KatexArtifactPixelFlowFrame {
   const localProgress = sampleKatexArtifactPixelFlowProgress(plan, progress);
-  const pointSize = 2.2 + Math.sin(localProgress * Math.PI) * 0.7;
+  const basePointSize = 2.2 + Math.sin(localProgress * Math.PI) * 0.7;
 
   return {
     progress: localProgress,
-    particles: particles.map((particle) => ({
-      ...sampleParticleFramePoint(plan, particle, localProgress),
-      opacity: clamp01(particle.alpha),
-      pointSize
-    }))
+    particles: particles.map((particle) => {
+      const pose = sampleParticleFramePose(plan, particle, localProgress);
+
+      return {
+        x: pose.x,
+        y: pose.y,
+        opacity: clamp01(particle.alpha),
+        pointSize: basePointSize * pose.depthScale * pose.pointSizeScale,
+        depthScale: pose.depthScale
+      };
+    })
   };
 }
 
-function sampleParticleFramePoint(
+function sampleParticleFramePose(
   plan: KatexArtifactPixelFlowPlan,
   particle: KatexArtifactPixelFlowParticle,
   progress: number
-): { readonly x: number; readonly y: number } {
-  // Source motion lets notation collapse into an emitter before the target
-  // artifact is drawn, while preserving the same scrub/rewind clock.
+): {
+  readonly x: number;
+  readonly y: number;
+  readonly depthScale: number;
+  readonly pointSizeScale: number;
+} {
+  // Source/target motions encode visual depth while keeping the same
+  // reversible scrub clock as ordinary artifact pixel flow.
   const sourceMotion = plan.sourceMotion;
+  const targetMotion = plan.targetMotion;
 
-  if (sourceMotion === undefined) {
+  if (sourceMotion === undefined && targetMotion === undefined) {
     return {
       x: lerp(particle.sourceX, particle.targetX, progress),
-      y: lerp(particle.sourceY, particle.targetY, progress)
+      y: lerp(particle.sourceY, particle.targetY, progress),
+      depthScale: 1,
+      pointSizeScale: 1
     };
   }
 
-  const midpoint = {
+  const sourceMidpoint = {
     x: endpointMidpointX(plan.source),
     y: endpointMidpointY(plan.source)
   };
-  const bounced = {
-    x:
-      particle.sourceX +
-      (particle.sourceX - midpoint.x) * sourceMotion.bounceStrength,
-    y:
-      particle.sourceY +
-      (particle.sourceY - midpoint.y) * sourceMotion.bounceStrength
+  const targetMidpoint = {
+    x: endpointMidpointX(plan.target),
+    y: endpointMidpointY(plan.target)
   };
 
-  if (progress <= sourceMotion.bounceEnd) {
-    const bounceProgress =
-      sourceMotion.bounceEnd <= 0
+  if (sourceMotion !== undefined && progress <= sourceMotion.liftEnd) {
+    const liftProgress =
+      sourceMotion.liftEnd <= 0
         ? 1
-        : clamp01(progress / sourceMotion.bounceEnd);
-    const easedBounceProgress = easedProgress("ease-in-out", bounceProgress);
+        : clamp01(progress / sourceMotion.liftEnd);
+    const easedLiftProgress = easedProgress("ease-in-out", liftProgress);
 
     return {
-      x: lerp(particle.sourceX, bounced.x, easedBounceProgress),
-      y: lerp(particle.sourceY, bounced.y, easedBounceProgress)
+      x: particle.sourceX,
+      y: particle.sourceY,
+      depthScale: lerp(1, sourceMotion.liftScale, easedLiftProgress),
+      pointSizeScale: 1
     };
   }
 
-  if (progress <= sourceMotion.collapseEnd) {
+  if (sourceMotion !== undefined && progress <= sourceMotion.collapseEnd) {
     const collapseProgress =
-      sourceMotion.collapseEnd <= sourceMotion.bounceEnd
+      sourceMotion.collapseEnd <= sourceMotion.liftEnd
         ? 1
         : clamp01(
-            (progress - sourceMotion.bounceEnd) /
-              (sourceMotion.collapseEnd - sourceMotion.bounceEnd)
+            (progress - sourceMotion.liftEnd) /
+              (sourceMotion.collapseEnd - sourceMotion.liftEnd)
           );
+    const easedCollapseProgress = easedProgress("ease-in-out", collapseProgress);
 
     return {
-      x: lerp(bounced.x, midpoint.x, collapseProgress),
-      y: lerp(bounced.y, midpoint.y, collapseProgress)
+      x: lerp(particle.sourceX, sourceMidpoint.x, easedCollapseProgress),
+      y: lerp(particle.sourceY, sourceMidpoint.y, easedCollapseProgress),
+      depthScale: lerp(sourceMotion.liftScale, 1, easedCollapseProgress),
+      pointSizeScale: 1
+    };
+  }
+
+  const streamStart = sourceMotion?.collapseEnd ?? 0;
+  const streamEnd = targetMotion?.embraceStart ?? 1;
+  const streamSource = sourceMotion === undefined
+    ? { x: particle.sourceX, y: particle.sourceY }
+    : sourceMidpoint;
+
+  if (progress <= streamEnd) {
+    const streamProgress =
+      streamEnd <= streamStart
+        ? 1
+        : clamp01((progress - streamStart) / (streamEnd - streamStart));
+    const easedStreamProgress = easedProgress("ease-in-out", streamProgress);
+
+    return {
+      x: lerp(streamSource.x, particle.targetX, easedStreamProgress),
+      y: lerp(streamSource.y, particle.targetY, easedStreamProgress),
+      depthScale: 1,
+      pointSizeScale: sourceMotion?.streamPointScale ?? 1
+    };
+  }
+
+  if (targetMotion !== undefined) {
+    const embraceProgress =
+      targetMotion.embraceStart >= 1
+        ? 1
+        : clamp01((progress - targetMotion.embraceStart) / (1 - targetMotion.embraceStart));
+    const easedEmbraceProgress = easedProgress("ease-in-out", embraceProgress);
+    const embracedTarget = {
+      x:
+        targetMidpoint.x +
+        (particle.targetX - targetMidpoint.x) * targetMotion.embraceScale,
+      y:
+        targetMidpoint.y +
+        (particle.targetY - targetMidpoint.y) * targetMotion.embraceScale
+    };
+
+    return {
+      x: lerp(particle.targetX, embracedTarget.x, easedEmbraceProgress),
+      y: lerp(particle.targetY, embracedTarget.y, easedEmbraceProgress),
+      depthScale: lerp(1, targetMotion.embraceScale, easedEmbraceProgress),
+      pointSizeScale: lerp(
+        sourceMotion?.streamPointScale ?? 1,
+        1,
+        easedEmbraceProgress
+      )
     };
   }
 
   const streamProgress =
-    sourceMotion.collapseEnd >= 1
+    streamEnd <= streamStart
       ? 1
-      : clamp01(
-          (progress - sourceMotion.collapseEnd) / (1 - sourceMotion.collapseEnd)
-        );
+      : clamp01((progress - streamStart) / (streamEnd - streamStart));
   const easedStreamProgress = easedProgress("ease-in-out", streamProgress);
 
   return {
-    x: lerp(midpoint.x, particle.targetX, easedStreamProgress),
-    y: lerp(midpoint.y, particle.targetY, easedStreamProgress)
+    x: lerp(streamSource.x, particle.targetX, easedStreamProgress),
+    y: lerp(streamSource.y, particle.targetY, easedStreamProgress),
+    depthScale: 1,
+    pointSizeScale: sourceMotion?.streamPointScale ?? 1
   };
 }
 
@@ -388,16 +465,37 @@ export function createKatexArtifactPixelFlowRenderer(
         endpointMidpointY(plan.source, atlas.pixelRatio)
       );
       gl.uniform1f(
-        programInfo.bounceStrengthLocation,
-        plan.sourceMotion?.bounceStrength ?? 0
+        programInfo.liftScaleLocation,
+        plan.sourceMotion?.liftScale ?? 1
       );
       gl.uniform1f(
-        programInfo.bounceEndLocation,
-        plan.sourceMotion?.bounceEnd ?? 0
+        programInfo.liftEndLocation,
+        plan.sourceMotion?.liftEnd ?? 0
       );
       gl.uniform1f(
         programInfo.collapseEndLocation,
         plan.sourceMotion?.collapseEnd ?? 0
+      );
+      gl.uniform1f(
+        programInfo.streamPointScaleLocation,
+        plan.sourceMotion?.streamPointScale ?? 1
+      );
+      gl.uniform1f(
+        programInfo.targetMotionEnabledLocation,
+        plan.targetMotion === undefined ? 0 : 1
+      );
+      gl.uniform2f(
+        programInfo.targetMidpointLocation,
+        endpointMidpointX(plan.target, atlas.pixelRatio),
+        endpointMidpointY(plan.target, atlas.pixelRatio)
+      );
+      gl.uniform1f(
+        programInfo.embraceStartLocation,
+        plan.targetMotion?.embraceStart ?? 1
+      );
+      gl.uniform1f(
+        programInfo.embraceScaleLocation,
+        plan.targetMotion?.embraceScale ?? 1
       );
       gl.uniform1f(programInfo.pixelRatioLocation, atlas.pixelRatio);
       gl.uniform3f(programInfo.colorLocation, 31 / 255, 99 / 255, 113 / 255);
@@ -493,11 +591,18 @@ function createProgram(
         uniform float u_progress;
         uniform float u_sourceMotionEnabled;
         uniform vec2 u_sourceMidpoint;
-        uniform float u_bounceStrength;
-        uniform float u_bounceEnd;
+        uniform float u_liftScale;
+        uniform float u_liftEnd;
         uniform float u_collapseEnd;
+        uniform float u_streamPointScale;
+        uniform float u_targetMotionEnabled;
+        uniform vec2 u_targetMidpoint;
+        uniform float u_embraceStart;
+        uniform float u_embraceScale;
         uniform float u_pixelRatio;
         varying float v_alpha;
+        varying float v_depthScale;
+        varying float v_pointSizeScale;
 
         float clampUnit(float value) {
           return clamp(value, 0.0, 1.0);
@@ -507,48 +612,122 @@ function createProgram(
           return (1.0 - cos(value * 3.14159265359)) / 2.0;
         }
 
+        float streamStart() {
+          return u_sourceMotionEnabled < 0.5 ? 0.0 : u_collapseEnd;
+        }
+
+        float streamEnd() {
+          return u_targetMotionEnabled < 0.5 ? 1.0 : u_embraceStart;
+        }
+
+        vec2 streamSource() {
+          return u_sourceMotionEnabled < 0.5 ? a_source : u_sourceMidpoint;
+        }
+
+        vec2 embracedTarget() {
+          return u_targetMidpoint + (a_target - u_targetMidpoint) * u_embraceScale;
+        }
+
         vec2 samplePosition() {
-          if (u_sourceMotionEnabled < 0.5) {
-            return mix(a_source, a_target, u_progress);
+          if (u_sourceMotionEnabled > 0.5 && u_progress <= u_liftEnd) {
+            return a_source;
           }
 
-          vec2 bounced = a_source +
-            (a_source - u_sourceMidpoint) * u_bounceStrength;
-
-          if (u_progress <= u_bounceEnd) {
-            float bounceProgress = u_bounceEnd <= 0.0001
-              ? 1.0
-              : clampUnit(u_progress / u_bounceEnd);
-
-            return mix(a_source, bounced, easeInOut(bounceProgress));
-          }
-
-          if (u_progress <= u_collapseEnd) {
-            float collapseProgress = u_collapseEnd <= u_bounceEnd
+          if (u_sourceMotionEnabled > 0.5 && u_progress <= u_collapseEnd) {
+            float collapseProgress = u_collapseEnd <= u_liftEnd
               ? 1.0
               : clampUnit(
-                (u_progress - u_bounceEnd) / (u_collapseEnd - u_bounceEnd)
+                (u_progress - u_liftEnd) / (u_collapseEnd - u_liftEnd)
               );
 
-            return mix(bounced, u_sourceMidpoint, collapseProgress);
+            return mix(a_source, u_sourceMidpoint, easeInOut(collapseProgress));
           }
 
-          float streamProgress = u_collapseEnd >= 1.0
-            ? 1.0
-            : clampUnit((u_progress - u_collapseEnd) / (1.0 - u_collapseEnd));
+          if (u_progress <= streamEnd()) {
+            float flowProgress = streamEnd() <= streamStart()
+              ? 1.0
+              : clampUnit((u_progress - streamStart()) / (streamEnd() - streamStart()));
 
-          return mix(u_sourceMidpoint, a_target, easeInOut(streamProgress));
+            return mix(streamSource(), a_target, easeInOut(flowProgress));
+          }
+
+          if (u_targetMotionEnabled > 0.5) {
+            float embraceProgress = u_embraceStart >= 1.0
+              ? 1.0
+              : clampUnit((u_progress - u_embraceStart) / (1.0 - u_embraceStart));
+
+            return mix(a_target, embracedTarget(), easeInOut(embraceProgress));
+          }
+
+          float streamProgress = streamEnd() <= streamStart()
+            ? 1.0
+            : clampUnit((u_progress - streamStart()) / (streamEnd() - streamStart()));
+
+          return mix(streamSource(), a_target, easeInOut(streamProgress));
+        }
+
+        float sampleDepthScale() {
+          if (u_sourceMotionEnabled > 0.5 && u_progress <= u_liftEnd) {
+            float liftProgress = u_liftEnd <= 0.0001
+              ? 1.0
+              : clampUnit(u_progress / u_liftEnd);
+
+            return mix(1.0, u_liftScale, easeInOut(liftProgress));
+          }
+
+          if (u_sourceMotionEnabled > 0.5 && u_progress <= u_collapseEnd) {
+            float collapseProgress = u_collapseEnd <= u_liftEnd
+              ? 1.0
+              : clampUnit(
+                (u_progress - u_liftEnd) / (u_collapseEnd - u_liftEnd)
+              );
+
+            return mix(u_liftScale, 1.0, easeInOut(collapseProgress));
+          }
+
+          if (u_targetMotionEnabled > 0.5 && u_progress > u_embraceStart) {
+            float embraceProgress = u_embraceStart >= 1.0
+              ? 1.0
+              : clampUnit((u_progress - u_embraceStart) / (1.0 - u_embraceStart));
+
+            return mix(1.0, u_embraceScale, easeInOut(embraceProgress));
+          }
+
+          return 1.0;
+        }
+
+        float samplePointSizeScale() {
+          if (u_sourceMotionEnabled > 0.5 && u_progress > u_collapseEnd) {
+            if (u_targetMotionEnabled > 0.5 && u_progress > u_embraceStart) {
+              float embraceProgress = u_embraceStart >= 1.0
+                ? 1.0
+                : clampUnit((u_progress - u_embraceStart) / (1.0 - u_embraceStart));
+
+              return mix(u_streamPointScale, 1.0, easeInOut(embraceProgress));
+            }
+
+            return u_streamPointScale;
+          }
+
+          return 1.0;
         }
 
         void main() {
           vec2 position = samplePosition();
+          float depthScale = sampleDepthScale();
+          float pointSizeScale = samplePointSizeScale();
           vec2 zeroToOne = position / u_resolution;
           vec2 clipSpace = zeroToOne * 2.0 - 1.0;
 
           gl_Position = vec4(clipSpace * vec2(1.0, -1.0), 0.0, 1.0);
-          gl_PointSize = (2.2 + sin(u_progress * 3.14159265359) * 0.8 + a_seed * 0.12) *
+          gl_PointSize =
+            (2.2 + sin(u_progress * 3.14159265359) * 0.8 + a_seed * 0.12) *
+            depthScale *
+            pointSizeScale *
             u_pixelRatio;
           v_alpha = a_alpha;
+          v_depthScale = depthScale;
+          v_pointSizeScale = pointSizeScale;
         }
       `
     );
@@ -559,6 +738,8 @@ function createProgram(
         precision mediump float;
         uniform vec3 u_color;
         varying float v_alpha;
+        varying float v_depthScale;
+        varying float v_pointSizeScale;
 
         void main() {
           vec2 centeredPoint = gl_PointCoord - vec2(0.5);
@@ -569,7 +750,8 @@ function createProgram(
           }
 
           float edge = smoothstep(0.5, 0.12, radius);
-          gl_FragColor = vec4(u_color, v_alpha * edge * 0.92);
+          float depthAlpha = mix(0.86, 1.0, clamp(v_depthScale - 1.0, 0.0, 1.0));
+          gl_FragColor = vec4(u_color, v_alpha * edge * depthAlpha * v_pointSizeScale);
         }
       `
     );
@@ -622,9 +804,22 @@ function createProgram(
         "u_sourceMotionEnabled"
       ),
       sourceMidpointLocation: getUniformLocation(gl, program, "u_sourceMidpoint"),
-      bounceStrengthLocation: getUniformLocation(gl, program, "u_bounceStrength"),
-      bounceEndLocation: getUniformLocation(gl, program, "u_bounceEnd"),
+      liftScaleLocation: getUniformLocation(gl, program, "u_liftScale"),
+      liftEndLocation: getUniformLocation(gl, program, "u_liftEnd"),
       collapseEndLocation: getUniformLocation(gl, program, "u_collapseEnd"),
+      streamPointScaleLocation: getUniformLocation(
+        gl,
+        program,
+        "u_streamPointScale"
+      ),
+      targetMotionEnabledLocation: getUniformLocation(
+        gl,
+        program,
+        "u_targetMotionEnabled"
+      ),
+      targetMidpointLocation: getUniformLocation(gl, program, "u_targetMidpoint"),
+      embraceStartLocation: getUniformLocation(gl, program, "u_embraceStart"),
+      embraceScaleLocation: getUniformLocation(gl, program, "u_embraceScale"),
       pixelRatioLocation: getUniformLocation(gl, program, "u_pixelRatio"),
       colorLocation: getUniformLocation(gl, program, "u_color")
     };

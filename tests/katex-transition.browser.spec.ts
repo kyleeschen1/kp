@@ -442,14 +442,25 @@ test("editor equation motion demo uses semantic playback plans", async ({
       }
     }
 
+    const persistentX = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="0"] [data-kp-motion-id="radical.rewrite-power-as-root.source.x"]'
+    );
+
+    if (persistentX === null) {
+      throw new Error("Expected persistent radical source x token.");
+    }
+
     return {
       mode: demoElement.dataset["kpEquationMotionArtifactMode"],
       fallbackReason: demoElement.dataset["kpEquationMotionArtifactFallbackReason"],
       overlayConnected: overlay.isConnected,
+      overlayZIndex: window.getComputedStyle(overlay).zIndex,
+      persistentXTokenZIndex: window.getComputedStyle(persistentX).zIndex,
       renderer: overlay.dataset["kpEquationMotionArtifactRenderer"],
       sourceTokenId: overlay.dataset["kpEquationMotionArtifactSource"],
       targetTokenId: overlay.dataset["kpEquationMotionArtifactTarget"],
       sourceMotion: overlay.dataset["kpEquationMotionArtifactSourceMotion"],
+      targetMotion: overlay.dataset["kpEquationMotionArtifactTargetMotion"],
       particleCount: Number(
         overlay.dataset["kpEquationMotionArtifactParticleCount"] ?? 0
       ),
@@ -462,10 +473,13 @@ test("editor equation motion demo uses semantic playback plans", async ({
     mode: "pixel-flow",
     fallbackReason: undefined,
     overlayConnected: true,
+    overlayZIndex: "1",
+    persistentXTokenZIndex: "2",
     renderer: "webgl-pixel-flow",
     sourceTokenId: "radical.rewrite-power-as-root.source.exponent",
     targetTokenId: "radical.rewrite-power-as-root.target.radical",
-    sourceMotion: "bounce-collapse-emitter",
+    sourceMotion: "depth-retreat-emitter",
+    targetMotion: "behind-token-embrace",
     particleCount: 1024,
     nonTransparentPixelCount: expect.any(Number),
     maxAlpha: expect.any(Number)

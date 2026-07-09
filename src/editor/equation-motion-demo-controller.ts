@@ -1057,10 +1057,16 @@ function createRadicalArtifactPixelFlowPlan(
       },
       particleCount: 1024,
       sourceMotion: {
-        kind: "bounce-collapse-emitter",
-        bounceStrength: 0.55,
-        bounceEnd: 0.25,
-        collapseEnd: 0.45
+        kind: "depth-retreat-emitter",
+        liftScale: 1.16,
+        liftEnd: 0.22,
+        collapseEnd: 0.42,
+        streamPointScale: 0.42
+      },
+      targetMotion: {
+        kind: "behind-token-embrace",
+        embraceStart: 0.84,
+        embraceScale: 1.08
       },
       start: 0,
       end: 1,
@@ -1121,6 +1127,8 @@ function findOrCreateArtifactPixelFlowContext(
   );
   canvas.dataset["kpEquationMotionArtifactSourceMotion"] =
     plan.pixelFlowPlan.sourceMotion?.kind ?? "direct";
+  canvas.dataset["kpEquationMotionArtifactTargetMotion"] =
+    plan.pixelFlowPlan.targetMotion?.kind ?? "direct";
   syncArtifactPixelFlowCanvas(canvas, stageRect, pixelRatio);
   stage.append(canvas);
 

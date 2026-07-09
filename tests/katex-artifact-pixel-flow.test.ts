@@ -80,32 +80,51 @@ test("createKatexArtifactPixelFlowFrame interpolates particles with no semantic 
   assert.ok((frame.particles[0]?.pointSize ?? 0) > 0);
 });
 
-test("createKatexArtifactPixelFlowFrame can bounce source pixels then collapse them to an emitter", () => {
+test("createKatexArtifactPixelFlowFrame can lift source pixels in depth, retract to an emitter, and embrace the target", () => {
   const particles = pairKatexArtifactPixelFlowPoints(
     [{ x: 16, y: 10, alpha: 1 }],
-    [{ x: 40, y: 10, alpha: 1 }],
+    [{ x: 46, y: 10, alpha: 1 }],
     1
   );
   const plan = pixelFlowPlan({
     start: 0,
     end: 1,
     sourceMotion: {
-      kind: "bounce-collapse-emitter",
-      bounceStrength: 0.5,
-      bounceEnd: 0.25,
-      collapseEnd: 0.45
+      kind: "depth-retreat-emitter",
+      liftScale: 1.18,
+      liftEnd: 0.22,
+      collapseEnd: 0.42,
+      streamPointScale: 0.45
+    },
+    targetMotion: {
+      kind: "behind-token-embrace",
+      embraceStart: 0.82,
+      embraceScale: 1.08
     }
   });
-  const bounced = createKatexArtifactPixelFlowFrame(plan, particles, 0.25);
-  const collapsed = createKatexArtifactPixelFlowFrame(plan, particles, 0.45);
-  const streaming = createKatexArtifactPixelFlowFrame(plan, particles, 0.725);
+  const lifted = createKatexArtifactPixelFlowFrame(plan, particles, 0.22);
+  const collapsed = createKatexArtifactPixelFlowFrame(plan, particles, 0.42);
+  const streaming = createKatexArtifactPixelFlowFrame(plan, particles, 0.62);
+  const embracing = createKatexArtifactPixelFlowFrame(plan, particles, 0.91);
 
-  assert.equal(bounced.particles[0]?.x, 19);
-  assert.equal(bounced.particles[0]?.y, 10);
+  assert.equal(lifted.particles[0]?.x, 16);
+  assert.equal(lifted.particles[0]?.y, 10);
+  assert.ok((lifted.particles[0]?.depthScale ?? 0) > 1);
+  assert.ok(
+    (lifted.particles[0]?.pointSize ?? 0) >
+      (collapsed.particles[0]?.pointSize ?? 0)
+  );
   assert.equal(collapsed.particles[0]?.x, 10);
   assert.equal(collapsed.particles[0]?.y, 10);
-  assert.ok(Math.abs((streaming.particles[0]?.x ?? 0) - 25) < 1e-9);
+  assert.equal(collapsed.particles[0]?.depthScale, 1);
+  assert.ok(Math.abs((streaming.particles[0]?.x ?? 0) - 28) < 1e-9);
   assert.ok(Math.abs((streaming.particles[0]?.y ?? 0) - 10) < 1e-9);
+  assert.ok(
+    (streaming.particles[0]?.pointSize ?? 0) <
+      (collapsed.particles[0]?.pointSize ?? 0)
+  );
+  assert.ok((embracing.particles[0]?.x ?? 0) > 46);
+  assert.ok((embracing.particles[0]?.depthScale ?? 0) > 1);
 });
 
 function pixelFlowPlan(overrides: {
@@ -113,10 +132,18 @@ function pixelFlowPlan(overrides: {
   readonly end?: number | undefined;
   readonly sourceMotion?:
     | {
-        readonly kind: "bounce-collapse-emitter";
-        readonly bounceStrength: number;
-        readonly bounceEnd: number;
+        readonly kind: "depth-retreat-emitter";
+        readonly liftScale: number;
+        readonly liftEnd: number;
         readonly collapseEnd: number;
+        readonly streamPointScale: number;
+      }
+    | undefined;
+  readonly targetMotion?:
+    | {
+        readonly kind: "behind-token-embrace";
+        readonly embraceStart: number;
+        readonly embraceScale: number;
       }
     | undefined;
 }) {
@@ -135,6 +162,7 @@ function pixelFlowPlan(overrides: {
     start: overrides.start ?? 0,
     end: overrides.end ?? 1,
     easing: "linear" as const,
-    sourceMotion: overrides.sourceMotion
+    sourceMotion: overrides.sourceMotion,
+    targetMotion: overrides.targetMotion
   };
 }
