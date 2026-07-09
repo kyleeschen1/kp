@@ -8,6 +8,9 @@ test("editor equation motion demo uses semantic playback plans", async ({
   const demo = page.locator("[data-kp-equation-motion-demo]");
   const next = demo.locator('[data-action="equation-motion-next"]');
   const rewind = demo.locator('[data-action="equation-motion-rewind"]');
+  const animationSelect = demo.locator(
+    '[data-action="set-equation-motion-animation"]'
+  );
   const beatScrubber = demo.locator('[data-action="set-equation-motion-beat"]');
   const durationSlider = demo.locator(
     '[data-action="set-equation-motion-duration"]'
@@ -17,6 +20,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
   );
 
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "0");
+  await expect(animationSelect).toHaveValue("linear-equation-solve-x");
   await expect(demo.locator('[data-kp-equation-motion-state="0"]')).toBeVisible();
   await expect(demo.locator('[data-kp-equation-motion-state="1"]')).toBeHidden();
   await expect(rewind).toBeDisabled();
@@ -35,6 +39,57 @@ test("editor equation motion demo uses semantic playback plans", async ({
   await expect(
     demo.locator('[data-role="equation-motion-collapse-scale-output"]')
   ).toHaveText("35%");
+
+  const fixtureAnimations = [
+    {
+      id: "fixture-fraction-make-inline-to-stacked",
+      sourceLatex: "x / 3",
+      targetLatex: "\\frac{x}{3}"
+    },
+    {
+      id: "fixture-radical-rewrite-power-as-root",
+      sourceLatex: "x^{1/2}",
+      targetLatex: "\\sqrt{x}"
+    },
+    {
+      id: "fixture-wrapper-function-wrap",
+      sourceLatex: "x",
+      targetLatex: "f(x)"
+    },
+    {
+      id: "fixture-script-combine-factor-as-power",
+      sourceLatex: "x \\cdot x",
+      targetLatex: "x^2"
+    },
+    {
+      id: "fixture-matrix-bracket-change-delimiter",
+      sourceLatex: "\\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}",
+      targetLatex: "\\begin{pmatrix}1 & 0 \\\\ 0 & 1\\end{pmatrix}"
+    }
+  ] as const;
+
+  for (const animation of fixtureAnimations) {
+    await animationSelect.selectOption(animation.id);
+    await expect(demo).toHaveAttribute(
+      "data-kp-equation-animation-id",
+      animation.id
+    );
+    await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "0");
+    await expect(demo).toHaveAttribute("data-kp-equation-motion-max-step", "1");
+    await expect(
+      demo.locator('[data-kp-equation-motion-state="0"]')
+    ).toHaveAttribute("data-kp-equation-motion-latex", animation.sourceLatex);
+    await expect(
+      demo.locator('[data-kp-equation-motion-state="1"]')
+    ).toHaveAttribute("data-kp-equation-motion-latex", animation.targetLatex);
+  }
+
+  await animationSelect.selectOption("linear-equation-solve-x");
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-animation-id",
+    "linear-equation-solve-x"
+  );
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-max-step", "3");
 
   await durationSlider.evaluate((element) => {
     const input = element as HTMLInputElement;
