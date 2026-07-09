@@ -13,7 +13,7 @@ import { renderProjectDashboard } from "../src/project-dashboard/render.ts";
 
 test("project dashboard seed data exposes work, gallery, and report records", () => {
   assert.ok(projectDashboardData.cards.length >= 6);
-  assert.ok(projectDashboardData.gallery.length >= 4);
+  assert.ok(projectDashboardData.gallery.length >= 11);
   assert.ok(projectDashboardData.reportThemes.length >= 2);
   assert.ok(
     projectDashboardData.cards.some(
@@ -23,6 +23,11 @@ test("project dashboard seed data exposes work, gallery, and report records", ()
   assert.ok(
     projectDashboardData.gallery.some(
       (item) => item.id === "animation-cancelation"
+    )
+  );
+  assert.ok(
+    projectDashboardData.gallery.some(
+      (item) => item.id === "transform-subtract-both-sides"
     )
   );
   assert.ok(
@@ -133,7 +138,7 @@ test("groupProjectGalleryItemsByKind groups gallery items by kind", () => {
 
   assert.deepEqual(
     groups.map((group) => group.kind),
-    ["animation", "visual", "semantic-object", "protocol-api"]
+    ["animation", "semantic-transform", "visual", "semantic-object", "protocol-api"]
   );
   assert.deepEqual(
     groups
@@ -151,6 +156,20 @@ test("groupProjectGalleryItemsByKind groups gallery items by kind", () => {
       "visual-table",
       "visual-timeline",
       "visual-webgl-graph"
+    ]
+  );
+  assert.deepEqual(
+    groups
+      .find((group) => group.kind === "semantic-transform")
+      ?.items.map((item) => item.id),
+    [
+      "transform-cancel-additive-inverse",
+      "transform-compute-hessian",
+      "transform-compute-jacobian",
+      "transform-evaluate-constant-expression",
+      "transform-matrix-multiply",
+      "transform-rename-variable",
+      "transform-subtract-both-sides"
     ]
   );
 });
@@ -177,7 +196,24 @@ test("filterProjectDashboardData finds cards and gallery items by text facets", 
   );
   assert.deepEqual(
     domainResult.gallery.map((item) => item.id),
-    ["semantic-matrix", "semantic-vector"]
+    ["transform-matrix-multiply", "semantic-matrix", "semantic-vector"]
+  );
+
+  const transformResult = filterProjectDashboardData(
+    projectDashboardData,
+    "SemanticTransformation"
+  );
+  assert.deepEqual(
+    transformResult.gallery.map((item) => item.id),
+    [
+      "transform-subtract-both-sides",
+      "transform-cancel-additive-inverse",
+      "transform-evaluate-constant-expression",
+      "transform-matrix-multiply",
+      "transform-compute-jacobian",
+      "transform-compute-hessian",
+      "transform-rename-variable"
+    ]
   );
 });
 
@@ -189,9 +225,11 @@ test("renderProjectDashboard renders searchable grouped galleries", () => {
   assert.match(html, /data-action="filter-project-dashboard"/);
   assert.match(html, /value="timeline"/);
   assert.match(html, /data-kp-gallery-kind="animation"/);
+  assert.match(html, /data-kp-gallery-kind="semantic-transform"/);
   assert.match(html, /data-kp-gallery-kind="visual"/);
   assert.match(html, /data-kp-gallery-kind="semantic-object"/);
   assert.match(html, /data-kp-gallery-kind="protocol-api"/);
+  assert.match(html, /Semantic Transformations/);
   assert.match(html, /Visuals/);
   assert.match(html, /Timeline/);
   assert.match(html, /scroll clock/);

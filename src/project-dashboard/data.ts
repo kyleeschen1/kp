@@ -183,6 +183,102 @@ export const projectDashboardData: ProjectDashboardData = {
       relatedIds: ["work-equation-final-simplify"]
     },
     {
+      id: "transform-subtract-both-sides",
+      title: "subtractBothSides",
+      kind: "semantic-transform",
+      status: "active",
+      summary:
+        "SemanticTransformation that introduces an inverse term on each side while preserving equation balance and selector provenance.",
+      tags: ["equation", "algebra", "correspondence"],
+      domains: ["math", "katex"],
+      interfaces: ["SemanticTransformation", "CorrespondenceMap", "subtractBothSides(term)"],
+      relatedIds: [
+        "work-rendering-time-protocol",
+        "work-equation-cancelation",
+        "semantic-equation"
+      ]
+    },
+    {
+      id: "transform-cancel-additive-inverse",
+      title: "cancelAdditiveInverse",
+      kind: "semantic-transform",
+      status: "active",
+      summary:
+        "SemanticTransformation that identifies additive inverse selectors and hands them to the cancelation visual motif.",
+      tags: ["equation", "cancelation", "correspondence"],
+      domains: ["math", "katex"],
+      interfaces: ["SemanticTransformation", "CorrespondenceMap", "cancelled-by relation"],
+      relatedIds: [
+        "work-equation-cancelation",
+        "animation-cancelation",
+        "semantic-equation"
+      ]
+    },
+    {
+      id: "transform-evaluate-constant-expression",
+      title: "evaluateConstantExpression",
+      kind: "semantic-transform",
+      status: "active",
+      summary:
+        "SemanticTransformation that evaluates a constant expression group into a simplified target object with explicit provenance.",
+      tags: ["equation", "simplification", "execute"],
+      domains: ["math", "katex"],
+      interfaces: ["SemanticTransformation", "CorrespondenceMap", "simplify-into relation"],
+      relatedIds: [
+        "work-equation-final-simplify",
+        "animation-final-crossfade",
+        "semantic-equation"
+      ]
+    },
+    {
+      id: "transform-matrix-multiply",
+      title: "matrixMultiply",
+      kind: "semantic-transform",
+      status: "planned",
+      summary:
+        "SemanticTransformation that composes row-column dot products into a matrix product with nested step provenance.",
+      tags: ["matrix", "dot product", "composition"],
+      domains: ["math", "linear algebra"],
+      interfaces: ["SemanticTransformation", "Matrix.execute", "dot-product substeps"],
+      relatedIds: ["work-semantic-object-registry", "semantic-matrix"]
+    },
+    {
+      id: "transform-compute-jacobian",
+      title: "computeJacobian",
+      kind: "semantic-transform",
+      status: "planned",
+      summary:
+        "SemanticTransformation that derives a vector-valued function's local linear map and links it to matrix and graph views.",
+      tags: ["calculus", "linearization", "matrix"],
+      domains: ["math", "calculus"],
+      interfaces: ["SemanticTransformation", "Function.derive", "matrix view"],
+      relatedIds: ["work-semantic-object-registry", "semantic-matrix"]
+    },
+    {
+      id: "transform-compute-hessian",
+      title: "computeHessian",
+      kind: "semantic-transform",
+      status: "planned",
+      summary:
+        "SemanticTransformation that derives a second-derivative matrix and curvature evidence from a scalar function.",
+      tags: ["calculus", "curvature", "matrix"],
+      domains: ["math", "calculus"],
+      interfaces: ["SemanticTransformation", "Function.derive", "curvature view"],
+      relatedIds: ["work-semantic-object-registry", "semantic-matrix"]
+    },
+    {
+      id: "transform-rename-variable",
+      title: "renameVariable",
+      kind: "semantic-transform",
+      status: "planned",
+      summary:
+        "SemanticTransformation that preserves binding and reference identity while labels change across programming views.",
+      tags: ["programming", "refactor", "identity"],
+      domains: ["programming", "typescript", "rust"],
+      interfaces: ["SemanticTransformation", "SourceFile.select", "binding correspondence"],
+      relatedIds: ["work-semantic-object-registry", "visual-code"]
+    },
+    {
       id: "visual-webgl-graph",
       title: "WebGL graph",
       kind: "visual",

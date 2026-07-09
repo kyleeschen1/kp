@@ -18,6 +18,7 @@ export type ProjectDashboardPriority = "critical" | "high" | "medium" | "low";
 
 export type ProjectGalleryKind =
   | "animation"
+  | "semantic-transform"
   | "visual"
   | "semantic-object"
   | "protocol-api";
@@ -99,6 +100,7 @@ export const PROJECT_DASHBOARD_PRIORITY_ORDER: readonly ProjectDashboardPriority
 
 export const PROJECT_GALLERY_KIND_ORDER: readonly ProjectGalleryKind[] = [
   "animation",
+  "semantic-transform",
   "visual",
   "semantic-object",
   "protocol-api"
