@@ -8,6 +8,7 @@ import {
   constant,
   differentiate,
   divide,
+  evaluateConstantExpression,
   expressionToLatex,
   negate,
   power,
@@ -51,6 +52,21 @@ test("symbolic differentiation produces executable partial derivatives", () => {
   assert.equal(partialY(scope), -1);
   assert.equal(gradientX(scope), 1.5);
   assert.equal(gradientY(scope), -1);
+});
+
+test("constant expressions evaluate only when every dependency is numeric", () => {
+  assert.equal(
+    evaluateConstantExpression(add(constant(10), negate(constant(2)))),
+    8
+  );
+  assert.equal(
+    evaluateConstantExpression(add(variable("x"), constant(1))),
+    undefined
+  );
+  assert.equal(
+    evaluateConstantExpression(divide(constant(1), constant(0))),
+    undefined
+  );
 });
 
 test("saddle surface example shares one expression across latex, eval, and AD", () => {

@@ -4,10 +4,12 @@ import {
   type SelectorCorrespondenceRelationId
 } from "../semantic/correspondence.ts";
 import { parseLatexEquation } from "./equation-classifier.ts";
+import { evaluateConstantExpression } from "./expression.ts";
 import {
   parseLatexExpression,
   type ParsedLatexExpression
 } from "./latex-parser.ts";
+import { parsedLatexExpressionToMathExpression } from "./latex-to-expression.ts";
 
 export type SemanticId = string;
 
@@ -310,6 +312,21 @@ export const createEquationOperationTransition = (
     });
   }
 
+  if (
+    operation.kind === "simplifySide" &&
+    operation.side === "right" &&
+    operation.rule === "evaluate-constant-difference"
+  ) {
+    const generatedTransition = createSimpleEvaluateConstantDifferenceTransition(
+      input.sourceLatex,
+      operation
+    );
+
+    if (generatedTransition !== undefined) {
+      return generatedTransition;
+    }
+  }
+
   throw new Error("Unsupported equation operation transition.");
 };
 
@@ -570,6 +587,95 @@ function createSimpleCancelAdditiveInverseTransition(
   });
 }
 
+function createSimpleEvaluateConstantDifferenceTransition(
+  sourceLatex: string,
+  operation: Extract<EquationOperation, { kind: "simplifySide" }>
+): EquationTransition | undefined {
+  const equation = parseLatexEquation(sourceLatex);
+
+  if (
+    equation.left.kind !== "identifier" ||
+    equation.right.kind !== "binary" ||
+    equation.right.operator !== "-" ||
+    equation.right.left.kind !== "number" ||
+    equation.right.right.kind !== "number"
+  ) {
+    return undefined;
+  }
+
+  const result = evaluateConstantExpression(
+    parsedLatexExpressionToMathExpression(equation.right)
+  );
+
+  if (result === undefined) {
+    return undefined;
+  }
+
+  const lhsLabel = equation.left.name;
+  const rhsLabel = formatParsedNumber(equation.right.left);
+  const rhsValueLabel = formatParsedNumber(equation.right.right);
+  const resultLabel = formatNumberValue(result);
+  const lhsId = `lhs.${motionIdSegment(lhsLabel)}`;
+  const rhsId = `rhs.${motionIdSegment(rhsLabel)}`;
+  const rhsValueId = `rhs.inverse.${motionIdSegment(rhsValueLabel)}`;
+  const resultId = `rhs.${motionIdSegment(resultLabel)}`;
+  const tokens: EquationTransitionToken[] = [
+    dynamicToken(lhsId, "persist", lhsLabel, lhsId, lhsId),
+    dynamicToken("equals", "persist", "=", "equals", "equals"),
+    dynamicToken(rhsId, "simplify-into", rhsLabel, rhsId, undefined),
+    dynamicToken(
+      "rhs.inverse.minus",
+      "simplify-into",
+      "-",
+      "rhs.inverse.minus",
+      undefined
+    ),
+    dynamicToken(
+      rhsValueId,
+      "simplify-into",
+      rhsValueLabel,
+      rhsValueId,
+      undefined
+    ),
+    dynamicToken(resultId, "enter", resultLabel, undefined, resultId)
+  ];
+
+  return transition({
+    sourceLatex,
+    targetLatex: `${lhsLabel} = ${resultLabel}`,
+    operation,
+    tokens,
+    correspondenceMap: {
+      id: `equation.evaluate-constant-difference.${motionIdSegment(sourceLatex)}`,
+      records: [
+        identityRecord(lhsId),
+        identityRecord("equals"),
+        correspondenceRecord(
+          "fan-in.rhs.constant-difference",
+          "fan-in",
+          [rhsId, "rhs.inverse.minus", rhsValueId],
+          [resultId],
+          `${rhsLabel} - ${rhsValueLabel} simplifies to ${resultLabel}`
+        )
+      ]
+    },
+    selectorPaths: {
+      source: {
+        [lhsId]: "equation.left",
+        equals: "equation.relation",
+        [rhsId]: "equation.right.left",
+        "rhs.inverse.minus": "equation.right.operator",
+        [rhsValueId]: "equation.right.right"
+      },
+      target: {
+        [lhsId]: "equation.left",
+        equals: "equation.relation",
+        [resultId]: "equation.right"
+      }
+    }
+  });
+}
+
 function transition(input: {
   sourceLatex: string;
   targetLatex: string;
@@ -654,11 +760,20 @@ function annotationsFor(
 function formatParsedNumber(
   expression: Extract<ParsedLatexExpression, { kind: "number" }>
 ): string {
-  return String(expression.value);
+  return formatNumberValue(expression.value);
+}
+
+function formatNumberValue(value: number): string {
+  return String(value);
 }
 
 function motionIdSegment(value: string): string {
-  return value.trim().replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const trimmed = value.trim();
+  const normalized = trimmed.startsWith("-")
+    ? `minus-${trimmed.slice(1)}`
+    : trimmed;
+
+  return normalized.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
 function textForMotionId(motionId: SemanticId): string {

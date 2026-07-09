@@ -439,6 +439,53 @@ test("createEquationOperationTransition creates right simplification motion toke
   assertAnnotationsCoverReferencedMotionIds(transition);
 });
 
+test("createEquationOperationTransition generalizes right constant difference simplification", () => {
+  const transition = createEquationOperationTransition({
+    sourceLatex: "y = 10 - 2",
+    operation: {
+      kind: "simplifySide",
+      side: "right",
+      rule: "evaluate-constant-difference"
+    }
+  });
+
+  assert.equal(transition.sourceLatex, "y = 10 - 2");
+  assert.equal(transition.targetLatex, "y = 8");
+  assert.deepEqual(summarizeTokens(transition), [
+    ["lhs.y", "persist", "lhs.y", "lhs.y"],
+    ["equals", "persist", "equals", "equals"],
+    ["rhs.10", "simplify-into", "rhs.10", undefined],
+    ["rhs.inverse.minus", "simplify-into", "rhs.inverse.minus", undefined],
+    ["rhs.inverse.2", "simplify-into", "rhs.inverse.2", undefined],
+    ["rhs.8", "enter", undefined, "rhs.8"]
+  ]);
+  assert.deepEqual(requireSelectorPaths(transition), {
+    source: {
+      "lhs.y": "equation.left",
+      equals: "equation.relation",
+      "rhs.10": "equation.right.left",
+      "rhs.inverse.minus": "equation.right.operator",
+      "rhs.inverse.2": "equation.right.right"
+    },
+    target: {
+      "lhs.y": "equation.left",
+      equals: "equation.relation",
+      "rhs.8": "equation.right"
+    }
+  });
+  assert.deepEqual(summarizeCorrespondence(transition), [
+    ["identity.lhs.y", "identity", ["lhs.y"], ["lhs.y"]],
+    ["identity.equals", "identity", ["equals"], ["equals"]],
+    [
+      "fan-in.rhs.constant-difference",
+      "fan-in",
+      ["rhs.10", "rhs.inverse.minus", "rhs.inverse.2"],
+      ["rhs.8"]
+    ]
+  ]);
+  assertAnnotationsCoverReferencedMotionIds(transition);
+});
+
 test("createEquationOperationTransition rejects unsupported source and operation pairs", () => {
   assert.throws(
     () =>

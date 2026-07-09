@@ -181,6 +181,14 @@ export function cos(value: MathExpression): MathExpression {
   return { kind: "cos", value };
 }
 
+export function evaluateConstantExpression(
+  expression: MathExpression
+): number | undefined {
+  const value = evaluateConstantExpressionValue(expression);
+
+  return value === undefined || !Number.isFinite(value) ? undefined : value;
+}
+
 export function differentiate(
   expression: MathExpression,
   variableName: string
@@ -311,6 +319,76 @@ export function compileGradient(
 
 export function expressionToLatex(expression: MathExpression): string {
   return expressionToLatexWithPrecedence(expression, 0);
+}
+
+function evaluateConstantExpressionValue(
+  expression: MathExpression
+): number | undefined {
+  switch (expression.kind) {
+    case "constant":
+      return expression.value;
+    case "variable":
+      return undefined;
+    case "add":
+      return evaluateConstantList(
+        expression.terms,
+        0,
+        (sum, value) => sum + value
+      );
+    case "multiply":
+      return evaluateConstantList(
+        expression.factors,
+        1,
+        (product, value) => product * value
+      );
+    case "divide": {
+      const numerator = evaluateConstantExpressionValue(expression.numerator);
+      const denominator = evaluateConstantExpressionValue(expression.denominator);
+
+      if (
+        numerator === undefined ||
+        denominator === undefined ||
+        denominator === 0
+      ) {
+        return undefined;
+      }
+
+      return numerator / denominator;
+    }
+    case "power": {
+      const base = evaluateConstantExpressionValue(expression.base);
+
+      return base === undefined ? undefined : base ** expression.exponent;
+    }
+    case "negate": {
+      const value = evaluateConstantExpressionValue(expression.value);
+
+      return value === undefined ? undefined : -value;
+    }
+    case "cos":
+    case "sin":
+      return undefined;
+  }
+}
+
+function evaluateConstantList(
+  expressions: readonly MathExpression[],
+  initialValue: number,
+  combine: (current: number, value: number) => number
+): number | undefined {
+  let result = initialValue;
+
+  for (const expression of expressions) {
+    const value = evaluateConstantExpressionValue(expression);
+
+    if (value === undefined) {
+      return undefined;
+    }
+
+    result = combine(result, value);
+  }
+
+  return result;
 }
 
 function expressionToLatexWithPrecedence(
