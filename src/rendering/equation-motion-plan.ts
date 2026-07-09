@@ -87,9 +87,11 @@ export function createEquationMotionPlan(
       );
     }
     validateLifecycleEndpoints(transitionToken);
-    const correspondenceRelation = correspondenceRelationForLifecycle(
-      transitionToken.lifecycle
-    );
+    const correspondenceRelation =
+      explicitVisualOnlyRelationForToken(
+        transitionToken,
+        transition.correspondenceMap
+      ) ?? correspondenceRelationForLifecycle(transitionToken.lifecycle);
 
     return {
       id: transitionToken.id,
@@ -172,6 +174,36 @@ export function applyMeasuredMotionDeltas(
       };
     })
   };
+}
+
+function explicitVisualOnlyRelationForToken(
+  token: EquationTransition["tokens"][number],
+  map: CorrespondenceMap | undefined
+): Extract<SelectorCorrespondenceRelationId, "artifact" | "focus"> | undefined {
+  if (map === undefined) {
+    return undefined;
+  }
+
+  const sourceMotionIds =
+    token.sourceMotionId === undefined ? [] : [token.sourceMotionId];
+  const targetMotionIds =
+    token.targetMotionId === undefined ? [] : [token.targetMotionId];
+  const record = map.records.find(
+    (candidate) =>
+      (candidate.relation === "artifact" || candidate.relation === "focus") &&
+      sourceMotionIds.every((motionId) =>
+        candidate.sourceSelectorIds.includes(motionId)
+      ) &&
+      targetMotionIds.every((motionId) =>
+        candidate.targetSelectorIds.includes(motionId)
+      )
+  );
+
+  if (record?.relation === "artifact" || record?.relation === "focus") {
+    return record.relation;
+  }
+
+  return undefined;
 }
 
 function validateUniqueTokenIdentity(

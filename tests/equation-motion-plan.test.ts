@@ -650,6 +650,163 @@ test("fixture function wrap stages moved x, parentheses, and delayed f entry", (
   });
 });
 
+test("fixture matrix bracket swap preserves entry identity and swaps bracket artifacts", () => {
+  const entry = findEquationAnimationCatalogEntry(
+    "fixture-matrix-bracket-change-delimiter"
+  );
+  const transition = entry.transitions[0];
+
+  assert.ok(transition, "expected matrix bracket transition");
+  assert.deepEqual(
+    transition.tokens.map((token) => [
+      token.id,
+      token.lifecycle,
+      token.sourceMotionId,
+      token.targetMotionId
+    ]),
+    [
+      [
+        "matrix.bracket.change-delimiter.entry.r0.c0",
+        "persist",
+        "matrix.bracket.change-delimiter.source.entry.r0.c0",
+        "matrix.bracket.change-delimiter.target.entry.r0.c0"
+      ],
+      [
+        "matrix.bracket.change-delimiter.entry.r0.c1",
+        "persist",
+        "matrix.bracket.change-delimiter.source.entry.r0.c1",
+        "matrix.bracket.change-delimiter.target.entry.r0.c1"
+      ],
+      [
+        "matrix.bracket.change-delimiter.entry.r1.c0",
+        "persist",
+        "matrix.bracket.change-delimiter.source.entry.r1.c0",
+        "matrix.bracket.change-delimiter.target.entry.r1.c0"
+      ],
+      [
+        "matrix.bracket.change-delimiter.entry.r1.c1",
+        "persist",
+        "matrix.bracket.change-delimiter.source.entry.r1.c1",
+        "matrix.bracket.change-delimiter.target.entry.r1.c1"
+      ],
+      [
+        "matrix.bracket.change-delimiter.source.left-bracket",
+        "exit",
+        "matrix.bracket.change-delimiter.source.left-bracket",
+        undefined
+      ],
+      [
+        "matrix.bracket.change-delimiter.source.right-bracket",
+        "exit",
+        "matrix.bracket.change-delimiter.source.right-bracket",
+        undefined
+      ],
+      [
+        "matrix.bracket.change-delimiter.target.left-bracket",
+        "enter",
+        undefined,
+        "matrix.bracket.change-delimiter.target.left-bracket"
+      ],
+      [
+        "matrix.bracket.change-delimiter.target.right-bracket",
+        "enter",
+        undefined,
+        "matrix.bracket.change-delimiter.target.right-bracket"
+      ]
+    ]
+  );
+
+  const plan = createEquationMotionPlan(transition);
+
+  assert.deepEqual(summarizeSemanticVisualLifecycles(plan), [
+    [
+      "matrix.bracket.change-delimiter.entry.r0.c0",
+      "identity-preserved",
+      "persist"
+    ],
+    [
+      "matrix.bracket.change-delimiter.entry.r0.c1",
+      "identity-preserved",
+      "persist"
+    ],
+    [
+      "matrix.bracket.change-delimiter.entry.r1.c0",
+      "identity-preserved",
+      "persist"
+    ],
+    [
+      "matrix.bracket.change-delimiter.entry.r1.c1",
+      "identity-preserved",
+      "persist"
+    ],
+    [
+      "matrix.bracket.change-delimiter.source.left-bracket",
+      "removed",
+      "exit"
+    ],
+    [
+      "matrix.bracket.change-delimiter.source.right-bracket",
+      "removed",
+      "exit"
+    ],
+    [
+      "matrix.bracket.change-delimiter.target.left-bracket",
+      "visual-only",
+      "enter"
+    ],
+    [
+      "matrix.bracket.change-delimiter.target.right-bracket",
+      "visual-only",
+      "enter"
+    ]
+  ]);
+  assert.deepEqual(
+    plan.correspondenceMap.records.map((record) => [
+      record.relation,
+      record.sourceSelectorIds,
+      record.targetSelectorIds
+    ]),
+    [
+      [
+        "identity",
+        ["matrix.bracket.change-delimiter.source.entry.r0.c0"],
+        ["matrix.bracket.change-delimiter.target.entry.r0.c0"]
+      ],
+      [
+        "identity",
+        ["matrix.bracket.change-delimiter.source.entry.r0.c1"],
+        ["matrix.bracket.change-delimiter.target.entry.r0.c1"]
+      ],
+      [
+        "identity",
+        ["matrix.bracket.change-delimiter.source.entry.r1.c0"],
+        ["matrix.bracket.change-delimiter.target.entry.r1.c0"]
+      ],
+      [
+        "identity",
+        ["matrix.bracket.change-delimiter.source.entry.r1.c1"],
+        ["matrix.bracket.change-delimiter.target.entry.r1.c1"]
+      ],
+      [
+        "removal",
+        [
+          "matrix.bracket.change-delimiter.source.left-bracket",
+          "matrix.bracket.change-delimiter.source.right-bracket"
+        ],
+        []
+      ],
+      [
+        "artifact",
+        [],
+        [
+          "matrix.bracket.change-delimiter.target.left-bracket",
+          "matrix.bracket.change-delimiter.target.right-bracket"
+        ]
+      ]
+    ]
+  );
+});
+
 test("applyMeasuredMotionDeltas encodes measured layout into sampled tracks", () => {
   const transition = createEquationOperationTransition({
     sourceLatex: "x + 3 = 7",

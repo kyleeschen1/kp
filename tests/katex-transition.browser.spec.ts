@@ -84,6 +84,49 @@ test("editor equation motion demo uses semantic playback plans", async ({
     ).toHaveAttribute("data-kp-equation-motion-latex", animation.targetLatex);
   }
 
+  await animationSelect.selectOption("fixture-matrix-bracket-change-delimiter");
+  const matrixMotionIds = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    return {
+      source: Array.from(
+        demoElement.querySelectorAll(
+          '[data-kp-equation-motion-state="0"] [data-kp-motion-id]'
+        )
+      ).map((element) => element.getAttribute("data-kp-motion-id")),
+      target: Array.from(
+        demoElement.querySelectorAll(
+          '[data-kp-equation-motion-state="1"] [data-kp-motion-id]'
+        )
+      ).map((element) => element.getAttribute("data-kp-motion-id"))
+    };
+  });
+
+  expect(matrixMotionIds.source).toContain(
+    "matrix.bracket.change-delimiter.source.entry.r0.c0"
+  );
+  expect(matrixMotionIds.source).toContain(
+    "matrix.bracket.change-delimiter.source.left-bracket"
+  );
+  expect(matrixMotionIds.target).toContain(
+    "matrix.bracket.change-delimiter.target.entry.r1.c1"
+  );
+  expect(matrixMotionIds.target).toContain(
+    "matrix.bracket.change-delimiter.target.right-bracket"
+  );
+  expect(matrixMotionIds.source).not.toContain(
+    "matrix.bracket.change-delimiter.source.expression"
+  );
+  expect(matrixMotionIds.target).not.toContain(
+    "matrix.bracket.change-delimiter.target.expression"
+  );
+
   await animationSelect.selectOption("fixture-fraction-make-inline-to-stacked");
   await next.click();
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");

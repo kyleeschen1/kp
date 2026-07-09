@@ -403,6 +403,40 @@ test("renderEditorDocument renders selected fixture animation", () => {
   assert.doesNotMatch(html, /structural:frac-line/);
 });
 
+test("renderEditorDocument renders matrix bracket swap with persistent entry anchors", () => {
+  const html = renderEditorDocument(createInitialEditorDocument(), {
+    equationAnimationId: "fixture-matrix-bracket-change-delimiter"
+  });
+
+  assert.match(
+    html,
+    /data-kp-equation-animation-id="fixture-matrix-bracket-change-delimiter"/
+  );
+  assert.match(html, /data-kp-equation-motion-max-step="1"/);
+  assert.match(
+    html,
+    /option value="fixture-matrix-bracket-change-delimiter" selected>Matrix bracket swap/
+  );
+  assert.match(
+    extractEquationMotionStateBlock(html, 0),
+    /data-kp-motion-id="matrix\.bracket\.change-delimiter\.source\.entry\.r0\.c0"/
+  );
+  assert.match(
+    extractEquationMotionStateBlock(html, 0),
+    /data-kp-motion-id="matrix\.bracket\.change-delimiter\.source\.left-bracket"/
+  );
+  assert.match(
+    extractEquationMotionStateBlock(html, 1),
+    /data-kp-motion-id="matrix\.bracket\.change-delimiter\.target\.entry\.r1\.c1"/
+  );
+  assert.match(
+    extractEquationMotionStateBlock(html, 1),
+    /data-kp-motion-id="matrix\.bracket\.change-delimiter\.target\.right-bracket"/
+  );
+  assert.doesNotMatch(html, /matrix\.bracket\.change-delimiter\.source\.expression/);
+  assert.doesNotMatch(html, /matrix\.bracket\.change-delimiter\.target\.expression/);
+});
+
 test("addLatexEquationGraph appends a generated graph scene", () => {
   const document = createInitialEditorDocument();
   const nextDocument = addLatexEquationGraph(document, "y = x^2 + 1");

@@ -260,11 +260,83 @@ function fixtureAnimationRenderMetadata(
     };
   }
 
+  if (fixtureId === "matrix.bracket.change-delimiter") {
+    return {
+      renderLatex:
+        side === "source"
+          ? matrixBracketSwapLatex(
+              "[",
+              "]",
+              [
+                [`${fixtureId}.source.entry.r0.c0`, "1"],
+                [`${fixtureId}.source.entry.r0.c1`, "0"]
+              ],
+              [
+                [`${fixtureId}.source.entry.r1.c0`, "0"],
+                [`${fixtureId}.source.entry.r1.c1`, "1"]
+              ],
+              `${fixtureId}.source.left-bracket`,
+              `${fixtureId}.source.right-bracket`
+            )
+          : matrixBracketSwapLatex(
+              "(",
+              ")",
+              [
+                [`${fixtureId}.target.entry.r0.c0`, "1"],
+                [`${fixtureId}.target.entry.r0.c1`, "0"]
+              ],
+              [
+                [`${fixtureId}.target.entry.r1.c0`, "0"],
+                [`${fixtureId}.target.entry.r1.c1`, "1"]
+              ],
+              `${fixtureId}.target.left-bracket`,
+              `${fixtureId}.target.right-bracket`
+            )
+    };
+  }
+
   return {};
 }
 
 function motionDataLatex(motionId: string, latex: string): string {
   return `\\htmlData{kp-motion-id=${motionId}}{${latex}}`;
+}
+
+function matrixBracketSwapLatex(
+  leftDelimiter: "[" | "(",
+  rightDelimiter: "]" | ")",
+  firstRow: readonly [
+    readonly [motionId: string, latex: string],
+    readonly [motionId: string, latex: string]
+  ],
+  secondRow: readonly [
+    readonly [motionId: string, latex: string],
+    readonly [motionId: string, latex: string]
+  ],
+  leftMotionId: string,
+  rightMotionId: string
+): string {
+  const leftLatex = leftDelimiter === "[" ? "\\Bigl[" : "\\Bigl(";
+  const rightLatex = rightDelimiter === "]" ? "\\Bigr]" : "\\Bigr)";
+  const renderRow = (
+    row: readonly [
+      readonly [motionId: string, latex: string],
+      readonly [motionId: string, latex: string]
+    ]
+  ): string =>
+    row
+      .map(([motionId, latex]) => motionDataLatex(motionId, latex))
+      .join(" & ");
+
+  return [
+    motionDataLatex(leftMotionId, leftLatex),
+    "\\begin{matrix}",
+    renderRow(firstRow),
+    "\\\\",
+    renderRow(secondRow),
+    "\\end{matrix}",
+    motionDataLatex(rightMotionId, rightLatex)
+  ].join("");
 }
 
 function createFixtureEquationTransition(
@@ -280,6 +352,10 @@ function createFixtureEquationTransition(
 
   if (fixture.id === "wrapper.function.wrap") {
     return createFunctionWrapFixtureTransition(fixture);
+  }
+
+  if (fixture.id === "matrix.bracket.change-delimiter") {
+    return createMatrixBracketSwapFixtureTransition(fixture);
   }
 
   const sourceMotionId = `${fixture.id}.source.expression`;
@@ -635,6 +711,138 @@ function createFunctionWrapFixtureTransition(
         [targetOpen]: `${fixture.id}.target.tokens.1`,
         [targetX]: `${fixture.id}.target.tokens.2`,
         [targetClose]: `${fixture.id}.target.tokens.3`
+      }
+    }
+  };
+}
+
+function createMatrixBracketSwapFixtureTransition(
+  fixture: KatexTransformFixture
+): EquationTransition {
+  const sourceLeft = `${fixture.id}.source.left-bracket`;
+  const sourceRight = `${fixture.id}.source.right-bracket`;
+  const targetLeft = `${fixture.id}.target.left-bracket`;
+  const targetRight = `${fixture.id}.target.right-bracket`;
+  const entries = [
+    ["entry.r0.c0", "1"],
+    ["entry.r0.c1", "0"],
+    ["entry.r1.c0", "0"],
+    ["entry.r1.c1", "1"]
+  ] as const;
+  const sourceEntryIds = Object.fromEntries(
+    entries.map(([selector]) => [
+      selector,
+      `${fixture.id}.source.${selector}`
+    ])
+  ) as Record<(typeof entries)[number][0], string>;
+  const targetEntryIds = Object.fromEntries(
+    entries.map(([selector]) => [
+      selector,
+      `${fixture.id}.target.${selector}`
+    ])
+  ) as Record<(typeof entries)[number][0], string>;
+
+  return {
+    sourceLatex: fixture.source.latex,
+    targetLatex: fixture.target.latex,
+    operation: fixtureOperation(fixture),
+    tokens: [
+      ...entries.map(([selector, latex]) =>
+        fixtureTransitionToken(
+          `${fixture.id}.${selector}`,
+          "persist",
+          latex,
+          sourceEntryIds[selector],
+          targetEntryIds[selector]
+        )
+      ),
+      fixtureTransitionToken(
+        sourceLeft,
+        "exit",
+        "[",
+        sourceLeft,
+        undefined
+      ),
+      fixtureTransitionToken(
+        sourceRight,
+        "exit",
+        "]",
+        sourceRight,
+        undefined
+      ),
+      fixtureTransitionToken(
+        targetLeft,
+        "enter",
+        "(",
+        undefined,
+        targetLeft
+      ),
+      fixtureTransitionToken(
+        targetRight,
+        "enter",
+        ")",
+        undefined,
+        targetRight
+      )
+    ],
+    sourceAnnotations: [
+      { motionId: sourceLeft, text: "[" },
+      ...entries.map(([selector, latex]) => ({
+        motionId: sourceEntryIds[selector],
+        text: latex
+      })),
+      { motionId: sourceRight, text: "]" }
+    ],
+    targetAnnotations: [
+      { motionId: targetLeft, text: "(" },
+      ...entries.map(([selector, latex]) => ({
+        motionId: targetEntryIds[selector],
+        text: latex
+      })),
+      { motionId: targetRight, text: ")" }
+    ],
+    correspondenceMap: {
+      id: `${fixture.id}.fixture-animation`,
+      records: [
+        ...entries.map(([selector]) => ({
+          id: `${fixture.id}.identity.${selector}`,
+          relation: "identity" as const,
+          sourceSelectorIds: [sourceEntryIds[selector]],
+          targetSelectorIds: [targetEntryIds[selector]],
+          summary: `${selector} matrix entry persists while delimiters change`
+        })),
+        {
+          id: `${fixture.id}.removal.source-brackets`,
+          relation: "removal",
+          sourceSelectorIds: [sourceLeft, sourceRight],
+          targetSelectorIds: [],
+          summary: "source square brackets fade because delimiter style changes"
+        },
+        {
+          id: `${fixture.id}.artifact.target-brackets`,
+          relation: "artifact",
+          sourceSelectorIds: [],
+          targetSelectorIds: [targetLeft, targetRight],
+          summary: "target parentheses enter as delimiter artifacts"
+        }
+      ]
+    },
+    selectorPaths: {
+      source: {
+        [sourceLeft]: `${fixture.id}.source.tokens.0`,
+        [sourceEntryIds["entry.r0.c0"]]: `${fixture.id}.source.tokens.1`,
+        [sourceEntryIds["entry.r0.c1"]]: `${fixture.id}.source.tokens.2`,
+        [sourceEntryIds["entry.r1.c0"]]: `${fixture.id}.source.tokens.3`,
+        [sourceEntryIds["entry.r1.c1"]]: `${fixture.id}.source.tokens.4`,
+        [sourceRight]: `${fixture.id}.source.tokens.5`
+      },
+      target: {
+        [targetLeft]: `${fixture.id}.target.tokens.0`,
+        [targetEntryIds["entry.r0.c0"]]: `${fixture.id}.target.tokens.1`,
+        [targetEntryIds["entry.r0.c1"]]: `${fixture.id}.target.tokens.2`,
+        [targetEntryIds["entry.r1.c0"]]: `${fixture.id}.target.tokens.3`,
+        [targetEntryIds["entry.r1.c1"]]: `${fixture.id}.target.tokens.4`,
+        [targetRight]: `${fixture.id}.target.tokens.5`
       }
     }
   };
