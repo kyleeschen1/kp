@@ -84,6 +84,16 @@ test("editor equation motion demo uses semantic playback plans", async ({
     ).toHaveAttribute("data-kp-equation-motion-latex", animation.targetLatex);
   }
 
+  await animationSelect.selectOption("fixture-fraction-make-inline-to-stacked");
+  await next.click();
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");
+  await expect(demo.locator('[data-kp-equation-motion-state="1"]')).toBeVisible();
+  await expect(demo.locator('[data-kp-equation-motion-state="0"]')).toBeHidden();
+  await rewind.click();
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "0");
+  await expect(demo.locator('[data-kp-equation-motion-state="0"]')).toBeVisible();
+  await expect(demo.locator('[data-kp-equation-motion-state="1"]')).toBeHidden();
+
   await animationSelect.selectOption("linear-equation-solve-x");
   await expect(demo).toHaveAttribute(
     "data-kp-equation-animation-id",
