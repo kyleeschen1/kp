@@ -11,6 +11,7 @@ import {
 import {
   fractionTransformFixtures,
   largeOperatorTransformFixtures,
+  matrixTransformFixtures,
   radicalTransformFixtures,
   summarizeKatexTransformFixtureDiagnostics,
   scriptTransformFixtures,
@@ -371,6 +372,127 @@ test("large-operator transform fixtures declare operators and limit geometry", (
         [],
         ["h \\to 0"],
         [["limit-approach", "limit-approach", "x \\to 0", "h \\to 0"]]
+      ]
+    ]
+  );
+});
+
+test("matrix/vector transform fixtures declare bracket artifacts and entry selectors", () => {
+  assert.deepEqual(
+    matrixTransformFixtures.map((fixture) => [
+      fixture.id,
+      fixture.intent,
+      fixture.source.tokens
+        .filter(
+          (token) =>
+            token.layoutRole === "matrix-left-bracket" ||
+            token.layoutRole === "matrix-right-bracket"
+        )
+        .map((token) => [token.text, token.layoutRole]),
+      fixture.target.tokens
+        .filter(
+          (token) =>
+            token.layoutRole === "matrix-left-bracket" ||
+            token.layoutRole === "matrix-right-bracket"
+        )
+        .map((token) => [token.text, token.layoutRole]),
+      fixture.target.tokens
+        .filter(
+          (token) =>
+            token.role === "matrix-entry" || token.role === "vector-entry"
+        )
+        .map((token) => [
+          token.text,
+          token.selectorId,
+          token.matrixPosition
+        ]),
+      fixture.expectedRoleChanges.map((roleChange) => [
+        roleChange.sourceRole,
+        roleChange.targetRole,
+        roleChange.sourceText,
+        roleChange.targetText
+      ])
+    ]),
+    [
+      [
+        "matrix.bracket.change-delimiter",
+        "changeMatrixDelimiter",
+        [
+          ["[", "matrix-left-bracket"],
+          ["]", "matrix-right-bracket"]
+        ],
+        [
+          ["(", "matrix-left-bracket"],
+          [")", "matrix-right-bracket"]
+        ],
+        [
+          ["1", "entry.r0.c0", { row: 0, column: 0 }],
+          ["0", "entry.r0.c1", { row: 0, column: 1 }],
+          ["0", "entry.r1.c0", { row: 1, column: 0 }],
+          ["1", "entry.r1.c1", { row: 1, column: 1 }]
+        ],
+        []
+      ],
+      [
+        "matrix.entry.update",
+        "updateMatrixEntry",
+        [
+          ["[", "matrix-left-bracket"],
+          ["]", "matrix-right-bracket"]
+        ],
+        [
+          ["[", "matrix-left-bracket"],
+          ["]", "matrix-right-bracket"]
+        ],
+        [
+          ["1", "entry.r0.c0", { row: 0, column: 0 }],
+          ["2", "entry.r0.c1", { row: 0, column: 1 }],
+          ["6", "entry.r1.c0", { row: 1, column: 0 }],
+          ["4", "entry.r1.c1", { row: 1, column: 1 }]
+        ],
+        [["matrix-entry", "matrix-entry", "3", "6"]]
+      ],
+      [
+        "matrix.row.swap",
+        "swapMatrixRows",
+        [
+          ["[", "matrix-left-bracket"],
+          ["]", "matrix-right-bracket"]
+        ],
+        [
+          ["[", "matrix-left-bracket"],
+          ["]", "matrix-right-bracket"]
+        ],
+        [
+          ["c", "entry.c", { row: 0, column: 0 }],
+          ["d", "entry.d", { row: 0, column: 1 }],
+          ["a", "entry.a", { row: 1, column: 0 }],
+          ["b", "entry.b", { row: 1, column: 1 }]
+        ],
+        [
+          ["matrix-row", "matrix-row", "row-0", "row-1"],
+          ["matrix-row", "matrix-row", "row-1", "row-0"]
+        ]
+      ],
+      [
+        "vector.transpose.column-to-row",
+        "transposeVector",
+        [
+          ["[", "matrix-left-bracket"],
+          ["]", "matrix-right-bracket"]
+        ],
+        [
+          ["[", "matrix-left-bracket"],
+          ["]", "matrix-right-bracket"]
+        ],
+        [
+          ["x", "vector.x", { row: 0, column: 0 }],
+          ["y", "vector.y", { row: 0, column: 1 }]
+        ],
+        [
+          ["vector-entry", "vector-entry", "x", "x"],
+          ["vector-entry", "vector-entry", "y", "y"]
+        ]
       ]
     ]
   );

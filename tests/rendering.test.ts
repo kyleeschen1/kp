@@ -19,6 +19,7 @@ import {
   defaultLatexRenderer,
   matrixToLatex
 } from "../src/rendering/matrix-latex.ts";
+import { matrixTransformFixtures } from "../src/rendering/katex-transform-fixtures.ts";
 import { createGraphSceneFromLatexEquation } from "../src/semantic/equation-graph.ts";
 import type { KpSemanticObject } from "../src/semantic/document.ts";
 import {
@@ -82,6 +83,21 @@ test("matrixToLatex renders a matrix with a default bmatrix representation", () 
     String.raw`I_3 = \begin{bmatrix}1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1\end{bmatrix}`
   );
   assert.equal(defaultLatexRenderer.render(matrix), matrixToLatex(matrix));
+});
+
+test("matrix/vector transform fixtures render as KaTeX matrix expressions", () => {
+  for (const fixture of matrixTransformFixtures) {
+    assert.match(
+      renderLatexToHtml(fixture.source.latex),
+      /class="katex"/,
+      `${fixture.id} source should render`
+    );
+    assert.match(
+      renderLatexToHtml(fixture.target.latex),
+      /class="katex"/,
+      `${fixture.id} target should render`
+    );
+  }
 });
 
 test("renderLatexToHtml renders KaTeX HTML for a LaTeX string", () => {

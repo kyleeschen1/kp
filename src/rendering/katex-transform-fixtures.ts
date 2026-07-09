@@ -1,6 +1,7 @@
 export type KatexTransformFixtureFamily =
   | "fraction"
   | "large-operator"
+  | "matrix"
   | "radical"
   | "script"
   | "wrapper";
@@ -31,9 +32,16 @@ export type KatexLargeOperatorTransformIntent =
   | "addIntegralBounds"
   | "changeLimitApproach";
 
+export type KatexMatrixTransformIntent =
+  | "changeMatrixDelimiter"
+  | "updateMatrixEntry"
+  | "swapMatrixRows"
+  | "transposeVector";
+
 export type KatexTransformFixtureIntent =
   | KatexFractionTransformIntent
   | KatexLargeOperatorTransformIntent
+  | KatexMatrixTransformIntent
   | KatexRadicalTransformIntent
   | KatexScriptTransformIntent
   | KatexWrapperTransformIntent;
@@ -48,24 +56,40 @@ export type KatexTransformFixtureTokenRole =
   | "large-operator"
   | "limit-approach"
   | "lower-limit"
+  | "matrix-column"
+  | "matrix-entry"
+  | "matrix-row"
   | "operator"
   | "radicand"
   | "root-index"
   | "semantic"
   | "subscript"
   | "superscript"
-  | "upper-limit";
+  | "upper-limit"
+  | "vector-entry";
 
 export type KatexTransformFixtureLayoutRole =
   | "baseline"
   | "lower-limit"
+  | "matrix-column"
+  | "matrix-entry"
+  | "matrix-left-bracket"
+  | "matrix-right-bracket"
+  | "matrix-row"
   | "upper-limit";
+
+export interface KatexTransformFixtureMatrixPosition {
+  readonly row: number;
+  readonly column: number;
+}
 
 export interface KatexTransformFixtureToken {
   readonly text: string;
   readonly signature: string;
   readonly role: KatexTransformFixtureTokenRole;
   readonly layoutRole?: KatexTransformFixtureLayoutRole;
+  readonly selectorId?: string;
+  readonly matrixPosition?: KatexTransformFixtureMatrixPosition;
   readonly row: number;
   readonly column: number;
 }
@@ -653,9 +677,182 @@ export const largeOperatorTransformFixtures: readonly KatexTransformFixture[] = 
   }
 ];
 
+export const matrixTransformFixtures: readonly KatexTransformFixture[] = [
+  {
+    id: "matrix.bracket.change-delimiter",
+    family: "matrix",
+    intent: "changeMatrixDelimiter",
+    source: {
+      latex: "\\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}",
+      tokens: [
+        matrixBracketToken("[", "matrix-left-bracket", 0, -1),
+        matrixEntryToken("1", "entry.r0.c0", 0, 0),
+        matrixEntryToken("0", "entry.r0.c1", 0, 1),
+        matrixEntryToken("0", "entry.r1.c0", 1, 0),
+        matrixEntryToken("1", "entry.r1.c1", 1, 1),
+        matrixBracketToken("]", "matrix-right-bracket", 0, 2)
+      ]
+    },
+    target: {
+      latex: "\\begin{pmatrix}1 & 0 \\\\ 0 & 1\\end{pmatrix}",
+      tokens: [
+        matrixBracketToken("(", "matrix-left-bracket", 0, -1),
+        matrixEntryToken("1", "entry.r0.c0", 0, 0),
+        matrixEntryToken("0", "entry.r0.c1", 0, 1),
+        matrixEntryToken("0", "entry.r1.c0", 1, 0),
+        matrixEntryToken("1", "entry.r1.c1", 1, 1),
+        matrixBracketToken(")", "matrix-right-bracket", 0, 2)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [],
+    summary:
+      "A matrix changes delimiter style; bracket artifacts swap while stable entry selectors keep their grid positions."
+  },
+  {
+    id: "matrix.entry.update",
+    family: "matrix",
+    intent: "updateMatrixEntry",
+    source: {
+      latex: "\\begin{bmatrix}1 & 2 \\\\ 3 & 4\\end{bmatrix}",
+      tokens: [
+        matrixBracketToken("[", "matrix-left-bracket", 0, -1),
+        matrixEntryToken("1", "entry.r0.c0", 0, 0),
+        matrixEntryToken("2", "entry.r0.c1", 0, 1),
+        matrixEntryToken("3", "entry.r1.c0", 1, 0),
+        matrixEntryToken("4", "entry.r1.c1", 1, 1),
+        matrixBracketToken("]", "matrix-right-bracket", 0, 2)
+      ]
+    },
+    target: {
+      latex: "\\begin{bmatrix}1 & 2 \\\\ 6 & 4\\end{bmatrix}",
+      tokens: [
+        matrixBracketToken("[", "matrix-left-bracket", 0, -1),
+        matrixEntryToken("1", "entry.r0.c0", 0, 0),
+        matrixEntryToken("2", "entry.r0.c1", 0, 1),
+        matrixEntryToken("6", "entry.r1.c0", 1, 0),
+        matrixEntryToken("4", "entry.r1.c1", 1, 1),
+        matrixBracketToken("]", "matrix-right-bracket", 0, 2)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [
+      {
+        sourceRole: "matrix-entry",
+        targetRole: "matrix-entry",
+        sourceText: "3",
+        targetText: "6"
+      }
+    ],
+    summary:
+      "A single matrix entry changes in place; the fixture keeps the cell selector and grid position explicit."
+  },
+  {
+    id: "matrix.row.swap",
+    family: "matrix",
+    intent: "swapMatrixRows",
+    source: {
+      latex: "\\begin{bmatrix}a & b \\\\ c & d\\end{bmatrix}",
+      tokens: [
+        matrixBracketToken("[", "matrix-left-bracket", 0, -1),
+        matrixRowToken("row-0", "row.0", 0),
+        matrixEntryToken("a", "entry.a", 0, 0),
+        matrixEntryToken("b", "entry.b", 0, 1),
+        matrixRowToken("row-1", "row.1", 1),
+        matrixEntryToken("c", "entry.c", 1, 0),
+        matrixEntryToken("d", "entry.d", 1, 1),
+        matrixBracketToken("]", "matrix-right-bracket", 0, 2)
+      ]
+    },
+    target: {
+      latex: "\\begin{bmatrix}c & d \\\\ a & b\\end{bmatrix}",
+      tokens: [
+        matrixBracketToken("[", "matrix-left-bracket", 0, -1),
+        matrixRowToken("row-1", "row.1", 0),
+        matrixEntryToken("c", "entry.c", 0, 0),
+        matrixEntryToken("d", "entry.d", 0, 1),
+        matrixRowToken("row-0", "row.0", 1),
+        matrixEntryToken("a", "entry.a", 1, 0),
+        matrixEntryToken("b", "entry.b", 1, 1),
+        matrixBracketToken("]", "matrix-right-bracket", 0, 2)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [
+      {
+        sourceRole: "matrix-row",
+        targetRole: "matrix-row",
+        sourceText: "row-0",
+        targetText: "row-1"
+      },
+      {
+        sourceRole: "matrix-row",
+        targetRole: "matrix-row",
+        sourceText: "row-1",
+        targetText: "row-0"
+      }
+    ],
+    summary:
+      "Two matrix rows swap; entry identities persist while their grid-relative positions change with the row."
+  },
+  {
+    id: "vector.transpose.column-to-row",
+    family: "matrix",
+    intent: "transposeVector",
+    source: {
+      latex: "\\begin{bmatrix}x \\\\ y\\end{bmatrix}",
+      tokens: [
+        matrixBracketToken("[", "matrix-left-bracket", 0, -1),
+        vectorEntryToken("x", "vector.x", 0, 0),
+        vectorEntryToken("y", "vector.y", 1, 0),
+        matrixBracketToken("]", "matrix-right-bracket", 0, 1)
+      ]
+    },
+    target: {
+      latex: "\\begin{bmatrix}x & y\\end{bmatrix}",
+      tokens: [
+        matrixBracketToken("[", "matrix-left-bracket", 0, -1),
+        vectorEntryToken("x", "vector.x", 0, 0),
+        vectorEntryToken("y", "vector.y", 0, 1),
+        matrixBracketToken("]", "matrix-right-bracket", 0, 2)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [
+      {
+        sourceRole: "vector-entry",
+        targetRole: "vector-entry",
+        sourceText: "x",
+        targetText: "x"
+      },
+      {
+        sourceRole: "vector-entry",
+        targetRole: "vector-entry",
+        sourceText: "y",
+        targetText: "y"
+      }
+    ],
+    summary:
+      "A column vector transposes into a row vector; vector entry selectors persist while row and column coordinates change."
+  }
+];
+
 export const katexTransformFixtures: readonly KatexTransformFixture[] = [
   ...fractionTransformFixtures,
   ...largeOperatorTransformFixtures,
+  ...matrixTransformFixtures,
   ...radicalTransformFixtures,
   ...scriptTransformFixtures,
   ...wrapperTransformFixtures
@@ -828,6 +1025,74 @@ function limitApproachToken(
     layoutRole: "lower-limit",
     row,
     column
+  };
+}
+
+function matrixBracketToken(
+  text: string,
+  layoutRole: "matrix-left-bracket" | "matrix-right-bracket",
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "delimsizing",
+    role: "artifact",
+    layoutRole,
+    row,
+    column
+  };
+}
+
+function matrixEntryToken(
+  text: string,
+  selectorId: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "matrix-entry",
+    layoutRole: "matrix-entry",
+    selectorId,
+    matrixPosition: { row, column },
+    row,
+    column
+  };
+}
+
+function vectorEntryToken(
+  text: string,
+  selectorId: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "vector-entry",
+    layoutRole: "matrix-entry",
+    selectorId,
+    matrixPosition: { row, column },
+    row,
+    column
+  };
+}
+
+function matrixRowToken(
+  text: string,
+  selectorId: string,
+  row: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "matrix-row",
+    role: "matrix-row",
+    layoutRole: "matrix-row",
+    selectorId,
+    row,
+    column: -1
   };
 }
 

@@ -527,3 +527,16 @@ semantically `limit-approach`, but it occupies `lower-limit` layout geometry.
 Summation, product, and integral bounds use `upper-limit` and `lower-limit`
 roles directly, while persisted bodies, integrands, differentials, and large
 operator glyphs remain addressable as separate fixture tokens.
+
+Slice 16 extended the registry with matrix/vector fixtures:
+
+- `matrix.bracket.change-delimiter`
+- `matrix.entry.update`
+- `matrix.row.swap`
+- `vector.transpose.column-to-row`
+
+These fixtures add selector ids and `matrixPosition` metadata to entry tokens.
+Bracket glyphs remain visual artifacts with `matrix-left-bracket` and
+`matrix-right-bracket` layout roles. Row swaps and vector transposes can now
+represent identity persistence separately from grid-relative row/column
+placement, without requiring a dedicated matrix-view adapter yet.
