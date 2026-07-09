@@ -5,10 +5,13 @@ import {
   createInitialEditorDocument,
   renderEditorDocument
 } from "./editor/editor.ts";
+import { selectApiCatalogItem } from "./editor/api-catalog.ts";
 import { compileDocumentAsset } from "./editor/compile-client.ts";
 import {
   hydrateEquationMotionDemos,
   setEquationMotionBeat,
+  setEquationMotionCollapseScale,
+  setEquationMotionDuration,
   setEquationMotionProgress,
   stepEquationMotionDemo
 } from "./editor/equation-motion-demo-controller.ts";
@@ -60,6 +63,7 @@ if (app === null) {
 const appRoot = app;
 let editorDocument = createInitialEditorDocument();
 let projectDashboardQuery = "";
+let katexOperatorScalePercent = 85;
 type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
 let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
@@ -75,6 +79,7 @@ declare global {
 
 window.__kpEquationMotionSetProgress = setEquationMotionProgress;
 
+applyKatexOperatorScale(katexOperatorScalePercent);
 renderEditor();
 
 appRoot.addEventListener("click", (event) => {
@@ -97,6 +102,9 @@ appRoot.addEventListener("click", (event) => {
       return;
     case "compile-document":
       void compileDocument();
+      return;
+    case "select-api-outline-item":
+      selectApiCatalogItem(button);
       return;
     case "add-equation-graph":
       addEquationGraphFromInput();
@@ -162,6 +170,15 @@ appRoot.addEventListener("input", (event) => {
     case "set-equation-motion-beat":
       setEquationMotionBeat(event.target);
       return;
+    case "set-equation-motion-duration":
+      setEquationMotionDuration(event.target);
+      return;
+    case "set-equation-motion-collapse-scale":
+      setEquationMotionCollapseScale(event.target);
+      return;
+    case "set-katex-operator-scale":
+      updateKatexOperatorScaleFromInput(event.target);
+      return;
     case "filter-project-dashboard":
       filterProjectDashboardFromInput(event.target);
       return;
@@ -210,7 +227,9 @@ function addEquationGraphFromInput(): void {
 
 function renderEditor(): void {
   disposeGraph3DWebGL(appRoot);
-  appRoot.innerHTML = renderEditorDocument(editorDocument);
+  appRoot.innerHTML = renderEditorDocument(editorDocument, {
+    katexOperatorScalePercent
+  });
   hydrateEquationMotionDemos(appRoot);
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);
 }
@@ -234,6 +253,43 @@ function filterProjectDashboardFromInput(input: HTMLInputElement): void {
     nextInput.focus();
     nextInput.setSelectionRange(query.length, query.length);
   }
+}
+
+function updateKatexOperatorScaleFromInput(input: HTMLInputElement): void {
+  katexOperatorScalePercent = clampPercent(Number(input.value), 50, 150, 85);
+  input.value = String(katexOperatorScalePercent);
+  applyKatexOperatorScale(katexOperatorScalePercent);
+
+  const panel = input.closest<HTMLElement>("[data-kp-visual-tuning]");
+  const output = panel?.querySelector<HTMLOutputElement>(
+    '[data-role="katex-operator-scale-output"]'
+  );
+
+  if (output !== undefined && output !== null) {
+    output.textContent = `${katexOperatorScalePercent}%`;
+  }
+}
+
+function applyKatexOperatorScale(percent: number): void {
+  const scale = (percent / 100).toFixed(2);
+
+  document.documentElement.style.setProperty(
+    "--kp-katex-operator-scale",
+    `${scale}em`
+  );
+}
+
+function clampPercent(
+  value: number,
+  min: number,
+  max: number,
+  fallback: number
+): number {
+  if (!Number.isFinite(value)) {
+    return fallback;
+  }
+
+  return Math.min(max, Math.max(min, Math.round(value)));
 }
 
 function hydrateGraph3DWebGL(
@@ -301,7 +357,7 @@ function updateGraphAzimuthFromInput(input: HTMLInputElement): void {
     graphId,
     azimuthDegrees
   );
-  renderSemanticJson();
+  syncEditorDocumentDebug();
   renderGraph3DPreview(graphId);
   input
     .closest(".graph-control")
@@ -324,7 +380,7 @@ function updateGraphOccludedAxisLightnessFromInput(input: HTMLInputElement): voi
     graphId,
     lightness
   );
-  renderSemanticJson();
+  syncEditorDocumentDebug();
   renderGraph3DPreview(graphId);
 
   const graph = findGraph3D(graphId);
@@ -356,7 +412,7 @@ function updateGraphLightPresetFromSelect(select: HTMLSelectElement): void {
   }
 
   editorDocument = applyGraph3DLightPreset(editorDocument, graphId, presetId);
-  renderSemanticJson();
+  syncEditorDocumentDebug();
   renderGraph3DPreview(graphId);
   syncGraphLightControls(graphId);
 }
@@ -379,7 +435,7 @@ function updateGraphSurfaceModeFromSelect(select: HTMLSelectElement): void {
     graphId,
     surfaceMode
   );
-  renderSemanticJson();
+  syncEditorDocumentDebug();
   renderGraph3DPreview(graphId, previousObjects);
   select.dataset["kpGraphSurfaceMode"] = surfaceMode;
   setGraphControlOutput(select, surfaceMode);
@@ -401,7 +457,7 @@ function updateGraphSurfaceQualityFromSelect(select: HTMLSelectElement): void {
     graphId,
     surfaceQuality
   );
-  renderSemanticJson();
+  syncEditorDocumentDebug();
   renderGraph3DPreview(graphId);
   select.dataset["kpGraphSurfaceQuality"] = surfaceQuality;
   setGraphControlOutput(select, surfaceQuality);
@@ -421,7 +477,7 @@ function updateGraphViewModeFromSelect(select: HTMLSelectElement): void {
   const previousObjects = editorDocument.objects;
 
   editorDocument = updateGraph3DViewMode(editorDocument, graphId, viewMode);
-  renderSemanticJson();
+  syncEditorDocumentDebug();
   renderGraph3DPreview(graphId, previousObjects);
   select.dataset["kpGraphViewMode"] = viewMode;
   setGraphControlOutput(select, viewMode);
@@ -446,7 +502,7 @@ function updateGraphLightSettingFromInput(input: HTMLInputElement): void {
     setting,
     value
   );
-  renderSemanticJson();
+  syncEditorDocumentDebug();
   renderGraph3DPreview(graphId);
   syncGraphLightControls(graphId);
 }
@@ -463,7 +519,7 @@ function updateGraphShadowEnabledFromInput(input: HTMLInputElement): void {
     graphId,
     input.checked
   );
-  renderSemanticJson();
+  syncEditorDocumentDebug();
   renderGraph3DPreview(graphId);
   setGraphControlOutput(input, input.checked ? "on" : "off");
 }
@@ -481,7 +537,7 @@ function updateGraphShadowOpacityFromInput(input: HTMLInputElement): void {
     graphId,
     opacity
   );
-  renderSemanticJson();
+  syncEditorDocumentDebug();
   renderGraph3DPreview(graphId);
 
   const graph = findGraph3D(graphId);
@@ -514,7 +570,7 @@ function updateSaddleDenominatorFromInput(input: HTMLInputElement): void {
     surfaceId,
     denominator
   );
-  renderSemanticJson();
+  syncEditorDocumentDebug();
   renderGraph3DPreview(graphId);
 
   const surface = findSaddleSurface(surfaceId);
@@ -531,14 +587,9 @@ function updateSaddleDenominatorFromInput(input: HTMLInputElement): void {
     ?.replaceChildren(document.createTextNode(formatNumber(nextDenominator)));
 }
 
-function renderSemanticJson(): void {
-  const semanticJson = appRoot.querySelector<HTMLElement>(
-    '[data-role="semantic-json"]'
-  );
-
-  if (semanticJson !== null) {
-    semanticJson.textContent = JSON.stringify(editorDocument, null, 2);
-  }
+function syncEditorDocumentDebug(): void {
+  // The editor no longer renders a raw JSON column; keep this hook as the
+  // place where future inspector/debug surfaces can mirror document changes.
 }
 
 function renderGraph3DPreview(

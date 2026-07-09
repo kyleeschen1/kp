@@ -36,6 +36,11 @@ const EQUATION_MOTION_DEMO_OPERATIONS: readonly EquationOperation[] = [
   }
 ];
 const EQUATION_MOTION_ANIMATION_DURATION_MS = 420;
+const EQUATION_MOTION_MIN_DURATION_MS = 200;
+const EQUATION_MOTION_MAX_DURATION_MS = 3000;
+const EQUATION_MOTION_COLLAPSE_SCALE_PERCENT = 35;
+const EQUATION_MOTION_MIN_COLLAPSE_SCALE_PERCENT = 5;
+const EQUATION_MOTION_MAX_COLLAPSE_SCALE_PERCENT = 50;
 // A semantic command can contain beats; shifts finish before new tokens enter so rewind naturally reverses that order.
 const EQUATION_MOTION_BEAT_COUNT = 20;
 const EQUATION_MOTION_SHIFT_END_BEAT = 8;
@@ -44,8 +49,8 @@ const EQUATION_MOTION_CANCEL_MEET_BEAT = 8;
 const EQUATION_MOTION_CANCEL_COLLAPSE_END_BEAT = 10;
 const EQUATION_MOTION_CANCEL_SHIFT_START_BEAT = 14;
 const EQUATION_MOTION_FINAL_SIMPLIFY_MEET_BEAT = 8;
-const EQUATION_MOTION_FINAL_SIMPLIFY_FADE_END_BEAT = 14;
-const EQUATION_MOTION_FINAL_SIMPLIFY_MIN_SCALE = 0.9;
+const EQUATION_MOTION_FINAL_SIMPLIFY_COLLAPSE_END_BEAT = 10;
+const EQUATION_MOTION_FINAL_SIMPLIFY_REVEAL_END_BEAT = 14;
 const activeAnimationFrames = new WeakMap<HTMLElement, number>();
 const activeRenderContexts = new WeakMap<HTMLElement, EquationMotionRenderContext>();
 const cancellationParticleRenderers = new WeakMap<
@@ -80,9 +85,15 @@ interface MotionPoint {
   readonly y: number;
 }
 
+interface CollapseMotionGeometry {
+  readonly midpoint: MotionPoint;
+  readonly maxDistance: number;
+}
+
 interface CancellationMotionGroup {
   readonly tokenIds: ReadonlySet<string>;
   readonly midpoint: MotionPoint;
+  readonly maxDistance: number;
   readonly particleCount: number;
 }
 
@@ -90,6 +101,7 @@ interface FinalSimplifyMotionGroup {
   readonly sourceTokenIds: ReadonlySet<string>;
   readonly targetTokenId: string;
   readonly midpoint: MotionPoint;
+  readonly maxDistance: number;
 }
 
 export function hydrateEquationMotionDemos(root: ParentNode): void {
@@ -97,6 +109,14 @@ export function hydrateEquationMotionDemos(root: ParentNode): void {
     .querySelectorAll<HTMLElement>("[data-kp-equation-motion-demo]")
     .forEach((demo) => {
       syncEquationMotionActiveState(demo, readEquationMotionStep(demo));
+      syncEquationMotionDurationControl(
+        demo,
+        readEquationMotionDurationMs(demo)
+      );
+      syncEquationMotionCollapseScaleControl(
+        demo,
+        readEquationMotionCollapseScalePercent(demo)
+      );
     });
 }
 
@@ -174,6 +194,32 @@ export function setEquationMotionBeat(input: HTMLInputElement): void {
   syncEquationMotionScrubber(demo, beat, beatCount);
 }
 
+export function setEquationMotionDuration(input: HTMLInputElement): void {
+  const demo = input.closest<HTMLElement>("[data-kp-equation-motion-demo]");
+
+  if (demo === null) {
+    return;
+  }
+
+  syncEquationMotionDurationControl(
+    demo,
+    clampEquationMotionDuration(Number(input.value))
+  );
+}
+
+export function setEquationMotionCollapseScale(input: HTMLInputElement): void {
+  const demo = input.closest<HTMLElement>("[data-kp-equation-motion-demo]");
+
+  if (demo === null) {
+    return;
+  }
+
+  syncEquationMotionCollapseScaleControl(
+    demo,
+    clampEquationMotionCollapseScalePercent(Number(input.value))
+  );
+}
+
 function playEquationMotionDemoTransition(
   demo: HTMLElement,
   sourceStep: number,
@@ -201,13 +247,15 @@ function playEquationMotionDemoTransition(
   const targetProgress = sourceStep < targetStep ? 1 : 0;
   const delta = targetProgress - startProgress;
   const startTime = window.performance.now();
+  const durationMs = readEquationMotionDurationMs(demo);
 
+  syncEquationMotionDurationControl(demo, durationMs);
   player.setProgress(startProgress);
 
   const tick = (now: number): void => {
     const elapsed = now - startTime;
     const timeProgress = clampNumber(
-      elapsed / EQUATION_MOTION_ANIMATION_DURATION_MS,
+      elapsed / durationMs,
       0,
       1
     );
@@ -287,6 +335,7 @@ function renderEquationMotionFrame(
     sourceStep < targetStep ? frame.progress : 1 - frame.progress;
   const cancellationGroup = createCancellationMotionGroup(plan, context);
   const finalSimplifyGroup = createFinalSimplifyMotionGroup(plan, context);
+  const collapseScale = readEquationMotionCollapseScale(demo);
   const layoutProgress =
     cancellationGroup === undefined
       ? layoutShiftProgress(frame.progress)
@@ -368,13 +417,19 @@ function renderEquationMotionFrame(
         sourceToken.element,
         token.lifecycle === "cancel" &&
           cancellationGroup?.tokenIds.has(token.id) === true
-          ? cancellationTokenPose(sourceToken, cancellationGroup, frame.progress)
+          ? cancellationTokenPose(
+              sourceToken,
+              cancellationGroup,
+              frame.progress,
+              collapseScale
+            )
           : token.lifecycle === "simplify-into" &&
               finalSimplifyGroup?.sourceTokenIds.has(token.id) === true
             ? finalSimplifySourceTokenPose(
                 sourceToken,
                 finalSimplifyGroup,
-                frame.progress
+                frame.progress,
+                collapseScale
               )
           : frameToken.pose,
         "visible"
@@ -385,7 +440,13 @@ function renderEquationMotionFrame(
       applyEquationMotionTokenStyle(
         targetToken.element,
         token.id === finalSimplifyGroup?.targetTokenId
-          ? finalSimplifyTargetTokenPose(frameToken.pose, frame.progress)
+          ? finalSimplifyTargetTokenPose(
+              targetToken,
+              finalSimplifyGroup,
+              frameToken.pose,
+              frame.progress,
+              collapseScale
+            )
           : addedObjectPose(frameToken.pose, frame.progress),
         "visible"
       );
@@ -627,6 +688,54 @@ function syncEquationMotionScrubber(
   }
 }
 
+function syncEquationMotionDurationControl(
+  demo: HTMLElement,
+  durationMs: number
+): void {
+  const duration = clampEquationMotionDuration(durationMs);
+  const input = demo.querySelector<HTMLInputElement>(
+    '[data-action="set-equation-motion-duration"]'
+  );
+  const output = demo.querySelector<HTMLOutputElement>(
+    '[data-role="equation-motion-duration-output"]'
+  );
+
+  demo.dataset["kpEquationMotionDurationMs"] = String(duration);
+
+  if (input !== null) {
+    input.value = String(duration);
+  }
+
+  if (output !== null) {
+    output.value = String(duration);
+    output.textContent = `${duration} ms`;
+  }
+}
+
+function syncEquationMotionCollapseScaleControl(
+  demo: HTMLElement,
+  scalePercent: number
+): void {
+  const percent = clampEquationMotionCollapseScalePercent(scalePercent);
+  const input = demo.querySelector<HTMLInputElement>(
+    '[data-action="set-equation-motion-collapse-scale"]'
+  );
+  const output = demo.querySelector<HTMLOutputElement>(
+    '[data-role="equation-motion-collapse-scale-output"]'
+  );
+
+  demo.dataset["kpEquationMotionCollapseScalePercent"] = String(percent);
+
+  if (input !== null) {
+    input.value = String(percent);
+  }
+
+  if (output !== null) {
+    output.value = String(percent);
+    output.textContent = `${percent}%`;
+  }
+}
+
 function readEquationMotionBeatCount(demo: HTMLElement): number {
   const scrubber = demo.querySelector<HTMLInputElement>(
     '[data-action="set-equation-motion-beat"]'
@@ -640,6 +749,68 @@ function readEquationMotionBeatCount(demo: HTMLElement): number {
   }
 
   return configuredBeatCount;
+}
+
+function readEquationMotionDurationMs(demo: HTMLElement): number {
+  const input = demo.querySelector<HTMLInputElement>(
+    '[data-action="set-equation-motion-duration"]'
+  );
+  const configuredDuration =
+    readIntegerDataset(demo.dataset["kpEquationMotionDurationMs"]) ??
+    readIntegerDataset(input?.value);
+
+  if (configuredDuration === undefined) {
+    return EQUATION_MOTION_ANIMATION_DURATION_MS;
+  }
+
+  return clampEquationMotionDuration(configuredDuration);
+}
+
+function clampEquationMotionDuration(durationMs: number): number {
+  if (!Number.isFinite(durationMs)) {
+    return EQUATION_MOTION_ANIMATION_DURATION_MS;
+  }
+
+  return Math.round(
+    clampNumber(
+      durationMs,
+      EQUATION_MOTION_MIN_DURATION_MS,
+      EQUATION_MOTION_MAX_DURATION_MS
+    )
+  );
+}
+
+function readEquationMotionCollapseScale(demo: HTMLElement): number {
+  return readEquationMotionCollapseScalePercent(demo) / 100;
+}
+
+function readEquationMotionCollapseScalePercent(demo: HTMLElement): number {
+  const input = demo.querySelector<HTMLInputElement>(
+    '[data-action="set-equation-motion-collapse-scale"]'
+  );
+  const configuredScale =
+    readIntegerDataset(demo.dataset["kpEquationMotionCollapseScalePercent"]) ??
+    readIntegerDataset(input?.value);
+
+  if (configuredScale === undefined) {
+    return EQUATION_MOTION_COLLAPSE_SCALE_PERCENT;
+  }
+
+  return clampEquationMotionCollapseScalePercent(configuredScale);
+}
+
+function clampEquationMotionCollapseScalePercent(scalePercent: number): number {
+  if (!Number.isFinite(scalePercent)) {
+    return EQUATION_MOTION_COLLAPSE_SCALE_PERCENT;
+  }
+
+  return Math.round(
+    clampNumber(
+      scalePercent,
+      EQUATION_MOTION_MIN_COLLAPSE_SCALE_PERCENT,
+      EQUATION_MOTION_MAX_COLLAPSE_SCALE_PERCENT
+    )
+  );
 }
 
 function readLatestEquationMotionTransition(
@@ -754,31 +925,14 @@ function createCancellationMotionGroup(
     return undefined;
   }
 
-  const bounds = cancelEntries.reduce(
-    (nextBounds, entry) => {
-      const center = stableTokenCenter(entry.sourceToken);
-
-      return {
-        minX: Math.min(nextBounds.minX, center.x),
-        maxX: Math.max(nextBounds.maxX, center.x),
-        minY: Math.min(nextBounds.minY, center.y),
-        maxY: Math.max(nextBounds.maxY, center.y)
-      };
-    },
-    {
-      minX: Number.POSITIVE_INFINITY,
-      maxX: Number.NEGATIVE_INFINITY,
-      minY: Number.POSITIVE_INFINITY,
-      maxY: Number.NEGATIVE_INFINITY
-    }
+  const geometry = collapseMotionGeometryForTokens(
+    cancelEntries.map((entry) => entry.sourceToken)
   );
 
   return {
     tokenIds: new Set(cancelEntries.map((entry) => entry.tokenId)),
-    midpoint: {
-      x: (bounds.minX + bounds.maxX) / 2,
-      y: (bounds.minY + bounds.maxY) / 2
-    },
+    midpoint: geometry.midpoint,
+    maxDistance: geometry.maxDistance,
     particleCount: cancelEntries.length * 6
   };
 }
@@ -786,29 +940,14 @@ function createCancellationMotionGroup(
 function cancellationTokenPose(
   token: StableMotionToken,
   group: CancellationMotionGroup,
-  progress: number
+  progress: number,
+  collapseScale: number
 ): MotionPose {
-  const center = stableTokenCenter(token);
-  const targetX = group.midpoint.x - center.x;
-  const targetY = group.midpoint.y - center.y;
-  const moveProgress = easeInOut(
-    progressBetweenBeats(progress, 0, EQUATION_MOTION_CANCEL_MEET_BEAT)
-  );
-  const collapseProgress = easeIn(
-    progressBetweenBeats(
-      progress,
-      EQUATION_MOTION_CANCEL_MEET_BEAT,
-      EQUATION_MOTION_CANCEL_COLLAPSE_END_BEAT
-    )
-  );
-  const scale = clampNumber(1 - collapseProgress, 0, 1);
-
-  return {
-    opacity: scale,
-    x: targetX * moveProgress,
-    y: targetY * moveProgress,
-    scale
-  };
+  return collapseTokenToMidpointPose(token, group, progress, {
+    meetBeat: EQUATION_MOTION_CANCEL_MEET_BEAT,
+    collapseEndBeat: EQUATION_MOTION_CANCEL_COLLAPSE_END_BEAT,
+    collapseScale
+  });
 }
 
 function renderCancellationParticles(
@@ -963,17 +1102,76 @@ function createFinalSimplifyMotionGroup(
     return undefined;
   }
 
-  const bounds = sourceEntries.reduce(
-    (nextBounds, entry) => {
-      const center = stableTokenCenter(entry.sourceToken);
+  const geometry = collapseMotionGeometryForTokens(
+    sourceEntries.map((entry) => entry.sourceToken)
+  );
 
-      return {
-        minX: Math.min(nextBounds.minX, center.x),
-        maxX: Math.max(nextBounds.maxX, center.x),
-        minY: Math.min(nextBounds.minY, center.y),
-        maxY: Math.max(nextBounds.maxY, center.y)
-      };
-    },
+  return {
+    sourceTokenIds: new Set(sourceEntries.map((entry) => entry.tokenId)),
+    targetTokenId: targetEntry.id,
+    midpoint: geometry.midpoint,
+    maxDistance: geometry.maxDistance
+  };
+}
+
+function finalSimplifySourceTokenPose(
+  token: StableMotionToken,
+  group: FinalSimplifyMotionGroup,
+  progress: number,
+  collapseScale: number
+): MotionPose {
+  return collapseTokenToMidpointPose(token, group, progress, {
+    meetBeat: EQUATION_MOTION_FINAL_SIMPLIFY_MEET_BEAT,
+    collapseEndBeat: EQUATION_MOTION_FINAL_SIMPLIFY_COLLAPSE_END_BEAT,
+    collapseScale
+  });
+}
+
+function finalSimplifyTargetTokenPose(
+  token: StableMotionToken,
+  group: FinalSimplifyMotionGroup,
+  pose: MotionPose,
+  progress: number,
+  collapseScale: number
+): MotionPose {
+  const revealProgress = easeInOut(
+    progressBetweenBeats(
+      progress,
+      EQUATION_MOTION_FINAL_SIMPLIFY_COLLAPSE_END_BEAT,
+      EQUATION_MOTION_FINAL_SIMPLIFY_REVEAL_END_BEAT
+    )
+  );
+  const center = stableTokenCenter(token);
+  const midpointOffset = {
+    x: group.midpoint.x - center.x,
+    y: group.midpoint.y - center.y
+  };
+
+  return {
+    ...pose,
+    opacity: revealProgress,
+    x: midpointOffset.x * (1 - revealProgress),
+    y: midpointOffset.y * (1 - revealProgress),
+    scale: interpolateNumber(collapseScale, pose.scale, revealProgress)
+  };
+}
+
+function collapseMotionGeometryForTokens(
+  tokens: readonly StableMotionToken[]
+): CollapseMotionGeometry {
+  const centers = tokens.map(stableTokenCenter);
+
+  if (centers.length === 0) {
+    return { midpoint: { x: 0, y: 0 }, maxDistance: 0 };
+  }
+
+  const bounds = centers.reduce(
+    (nextBounds, center) => ({
+      minX: Math.min(nextBounds.minX, center.x),
+      maxX: Math.max(nextBounds.maxX, center.x),
+      minY: Math.min(nextBounds.minY, center.y),
+      maxY: Math.max(nextBounds.maxY, center.y)
+    }),
     {
       minX: Number.POSITIVE_INFINITY,
       maxX: Number.NEGATIVE_INFINITY,
@@ -981,67 +1179,98 @@ function createFinalSimplifyMotionGroup(
       maxY: Number.NEGATIVE_INFINITY
     }
   );
+  const midpoint = {
+    x: (bounds.minX + bounds.maxX) / 2,
+    y: (bounds.minY + bounds.maxY) / 2
+  };
 
   return {
-    sourceTokenIds: new Set(sourceEntries.map((entry) => entry.tokenId)),
-    targetTokenId: targetEntry.id,
-    midpoint: {
-      x: (bounds.minX + bounds.maxX) / 2,
-      y: (bounds.minY + bounds.maxY) / 2
-    }
+    midpoint,
+    maxDistance: centers.reduce(
+      (maxDistance, center) =>
+        Math.max(maxDistance, pointDistance(center, midpoint)),
+      0
+    )
   };
 }
 
-function finalSimplifySourceTokenPose(
+function collapseTokenToMidpointPose(
   token: StableMotionToken,
-  group: FinalSimplifyMotionGroup,
-  progress: number
+  geometry: CollapseMotionGeometry,
+  progress: number,
+  beats: {
+    readonly meetBeat: number;
+    readonly collapseEndBeat: number;
+    readonly collapseScale: number;
+  }
 ): MotionPose {
   const center = stableTokenCenter(token);
-  const moveProgress = easeInOut(
-    progressBetweenBeats(progress, 0, EQUATION_MOTION_FINAL_SIMPLIFY_MEET_BEAT)
+  const startDistance = pointDistance(center, geometry.midpoint);
+  const baseMoveProgress = easeInOut(
+    progressBetweenBeats(progress, 0, beats.meetBeat)
   );
-  const fadeProgress = easeInOut(
-    progressBetweenBeats(
-      progress,
-      EQUATION_MOTION_FINAL_SIMPLIFY_MEET_BEAT,
-      EQUATION_MOTION_FINAL_SIMPLIFY_FADE_END_BEAT
-    )
+  const moveProgress = distanceAwareConvergenceProgress(
+    baseMoveProgress,
+    center,
+    geometry.midpoint,
+    startDistance,
+    geometry.maxDistance
   );
+  const shrinkProgress = easeInOut(
+    progressBetweenBeats(progress, 0, beats.meetBeat)
+  );
+  const fadeProgress = easeOut(
+    progressBetweenBeats(progress, beats.meetBeat, beats.collapseEndBeat)
+  );
+  const scale = interpolateNumber(1, beats.collapseScale, shrinkProgress);
 
   return {
     opacity: 1 - fadeProgress,
-    x: (group.midpoint.x - center.x) * moveProgress,
-    y: (group.midpoint.y - center.y) * moveProgress,
-    scale: interpolateNumber(
-      1,
-      EQUATION_MOTION_FINAL_SIMPLIFY_MIN_SCALE,
-      fadeProgress
-    )
+    x: (geometry.midpoint.x - center.x) * moveProgress,
+    y: (geometry.midpoint.y - center.y) * moveProgress,
+    scale
   };
 }
 
-function finalSimplifyTargetTokenPose(
-  pose: MotionPose,
-  progress: number
-): MotionPose {
-  const revealProgress = easeInOut(
-    progressBetweenBeats(
-      progress,
-      EQUATION_MOTION_FINAL_SIMPLIFY_MEET_BEAT,
-      EQUATION_MOTION_FINAL_SIMPLIFY_FADE_END_BEAT
-    )
+function distanceAwareConvergenceProgress(
+  progress: number,
+  center: MotionPoint,
+  midpoint: MotionPoint,
+  startDistance: number,
+  maxDistance: number
+): number {
+  if (startDistance <= 0 || maxDistance <= 0) {
+    return progress;
+  }
+
+  const distanceRatio = clampNumber(startDistance / maxDistance, 0, 1);
+  // This breaks the visual "scaled box" read while keeping every token at the midpoint on the same beat.
+  const sideBias = convergenceSideBias(center, midpoint);
+  const exponent = clampNumber(
+    interpolateNumber(1.35, 0.72, distanceRatio) + sideBias,
+    0.54,
+    1.5
   );
 
-  return {
-    ...pose,
-    opacity: revealProgress,
-    scale: interpolateNumber(
-      EQUATION_MOTION_FINAL_SIMPLIFY_MIN_SCALE,
-      pose.scale,
-      revealProgress
-    )
-  };
+  return clampNumber(Math.pow(progress, exponent), 0, 1);
+}
+
+function convergenceSideBias(
+  center: MotionPoint,
+  midpoint: MotionPoint
+): number {
+  const horizontalDelta = center.x - midpoint.x;
+  const verticalDelta = center.y - midpoint.y;
+  const dominantDelta =
+    Math.abs(horizontalDelta) >= Math.abs(verticalDelta)
+      ? horizontalDelta
+      : verticalDelta;
+
+  if (Math.abs(dominantDelta) <= 0.001) {
+    return 0;
+  }
+
+  return dominantDelta < 0 ? 0.18 : -0.18;
 }
 
 function clearLiquidMerge(demo: HTMLElement): void {
@@ -1057,6 +1286,10 @@ function stableTokenCenter(token: StableMotionToken): MotionPoint {
     x: token.localRect.left + token.localRect.width / 2,
     y: token.localRect.top + token.localRect.height / 2
   };
+}
+
+function pointDistance(from: MotionPoint, to: MotionPoint): number {
+  return Math.hypot(from.x - to.x, from.y - to.y);
 }
 
 function layoutShiftProgress(progress: number): number {
@@ -1107,10 +1340,6 @@ function progressBetweenBeats(
 
 function easeInOut(progress: number): number {
   return (1 - Math.cos(Math.PI * progress)) / 2;
-}
-
-function easeIn(progress: number): number {
-  return progress * progress;
 }
 
 function easeOut(progress: number): number {

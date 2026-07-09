@@ -79,9 +79,37 @@ test("initial editor document contains a 3x3 identity matrix", () => {
   );
 });
 
-test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () => {
+test("renderEditorDocument renders the identity matrix with KaTeX and API outline", () => {
   const html = renderEditorDocument(createInitialEditorDocument());
 
+  assert.match(html, /data-kp-api-outline/);
+  assert.match(html, /id="api-outline-title"[^>]*>API Outline</);
+  assert.match(html, /data-kp-api-outline-group="semantic-objects"/);
+  assert.match(html, /Semantic Objects/);
+  assert.match(html, /data-kp-api-outline-item="semantic-matrix"/);
+  assert.match(html, />Matrix</);
+  assert.match(html, /data-kp-api-outline-item="semantic-equation"/);
+  assert.match(html, />Equation</);
+  assert.match(html, /data-kp-api-outline-group="semantic-transformations"/);
+  assert.match(html, /Semantic Transformations/);
+  assert.match(html, /data-kp-api-outline-item="transform-cancel-additive-inverse"/);
+  assert.match(html, />cancelAdditiveInverse</);
+  assert.match(html, /data-kp-api-outline-group="motion-primitives"/);
+  assert.match(html, /data-kp-api-outline-item="motion-vanish"/);
+  assert.match(html, />vanish</);
+  assert.match(html, /data-kp-api-outline-group="layout-objects"/);
+  assert.match(html, /data-kp-api-outline-item="layout-tabs"/);
+  assert.match(html, />tabs</);
+  assert.match(html, /data-kp-api-outline-group="curriculum-assessment"/);
+  assert.match(html, /data-kp-api-outline-item="curriculum-spaced-repetition-card"/);
+  assert.match(html, />SpacedRepetitionCard</);
+  assert.match(html, /data-kp-api-sample-card/);
+  assert.match(html, /Select an API item to preview its future sample card/);
+  assert.match(html, />Semantic API</);
+  assert.doesNotMatch(html, />JSON to HTML</);
+  assert.doesNotMatch(html, /data-role="semantic-json"/);
+  assert.doesNotMatch(html, /class="json-source"/);
+  assert.doesNotMatch(html, />Semantic JSON</);
   assert.match(html, /data-kp-equation-motion-demo/);
   assert.match(html, /data-kp-equation-motion-step="0"/);
   assert.match(html, /data-kp-equation-motion-max-step="3"/);
@@ -91,7 +119,37 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
     /type="range"[^>]*data-action="set-equation-motion-beat"[^>]*min="0"[^>]*max="20"[^>]*step="1"[^>]*value="0"[^>]*data-kp-equation-motion-beats="20"/
   );
   assert.match(html, /data-role="equation-motion-beat-output"[^>]*>0\/20</);
+  assert.match(
+    html,
+    /type="range"[^>]*data-action="set-equation-motion-duration"[^>]*min="200"[^>]*max="3000"[^>]*step="20"[^>]*value="420"/
+  );
+  assert.match(
+    html,
+    /data-role="equation-motion-duration-output"[^>]*>420 ms</
+  );
+  assert.match(
+    html,
+    /type="range"[^>]*data-action="set-equation-motion-collapse-scale"[^>]*min="5"[^>]*max="50"[^>]*step="1"[^>]*value="35"/
+  );
+  assert.match(
+    html,
+    /data-role="equation-motion-collapse-scale-output"[^>]*>35%</
+  );
   assert.match(html, /data-action="equation-motion-next"/);
+  assert.match(html, /data-kp-motion-operator="binary"/);
+  assert.match(html, /data-kp-editor-visual-tuning/);
+  assert.match(html, /Visual Tuning/);
+  assert.match(html, /Operator size/);
+  assert.match(
+    html,
+    /type="range"[^>]*data-action="set-katex-operator-scale"[^>]*min="50"[^>]*max="150"[^>]*step="1"[^>]*value="85"/
+  );
+  assert.match(html, /data-role="katex-operator-scale-output"[^>]*>85%</);
+  assert.ok(
+    html.indexOf("data-kp-equation-motion-demo") <
+      html.indexOf("data-kp-editor-visual-tuning"),
+    "KaTeX visual tuning controls should render below the equation example"
+  );
   assert.equal(
     html.match(/data-kp-equation-motion-state="/g)?.length,
     4
@@ -155,10 +213,6 @@ test("renderEditorDocument renders the identity matrix with KaTeX and JSON", () 
   assert.match(html, /data-kp-webgl-backend="three"/);
   assert.match(html, /class="graph-webgl__canvas"/);
   assert.match(html, /data-kp-renderer-fallback="svg"/);
-  assert.match(html, /&quot;type&quot;: &quot;matrix&quot;/);
-  assert.doesNotMatch(html, /&quot;type&quot;: &quot;graph-2d&quot;/);
-  assert.match(html, /&quot;type&quot;: &quot;graph-3d&quot;/);
-  assert.match(html, /data-role="semantic-json"/);
   assert.match(html, /data-role="equation-input"/);
   assert.match(html, /data-action="add-equation-graph"/);
   assert.match(html, /data-role="equation-error"/);

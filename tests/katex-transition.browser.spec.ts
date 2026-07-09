@@ -9,6 +9,12 @@ test("editor equation motion demo uses semantic playback plans", async ({
   const next = demo.locator('[data-action="equation-motion-next"]');
   const rewind = demo.locator('[data-action="equation-motion-rewind"]');
   const beatScrubber = demo.locator('[data-action="set-equation-motion-beat"]');
+  const durationSlider = demo.locator(
+    '[data-action="set-equation-motion-duration"]'
+  );
+  const collapseScaleSlider = demo.locator(
+    '[data-action="set-equation-motion-collapse-scale"]'
+  );
 
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "0");
   await expect(demo.locator('[data-kp-equation-motion-state="0"]')).toBeVisible();
@@ -17,6 +23,51 @@ test("editor equation motion demo uses semantic playback plans", async ({
   await expect(next).toBeEnabled();
   await expect(beatScrubber).toHaveAttribute("max", "20");
   await expect(beatScrubber).toHaveValue("0");
+  await expect(durationSlider).toHaveAttribute("min", "200");
+  await expect(durationSlider).toHaveAttribute("max", "3000");
+  await expect(durationSlider).toHaveValue("420");
+  await expect(
+    demo.locator('[data-role="equation-motion-duration-output"]')
+  ).toHaveText("420 ms");
+  await expect(collapseScaleSlider).toHaveAttribute("min", "5");
+  await expect(collapseScaleSlider).toHaveAttribute("max", "50");
+  await expect(collapseScaleSlider).toHaveValue("35");
+  await expect(
+    demo.locator('[data-role="equation-motion-collapse-scale-output"]')
+  ).toHaveText("35%");
+
+  await durationSlider.evaluate((element) => {
+    const input = element as HTMLInputElement;
+
+    input.value = "1200";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-duration-ms",
+    "1200"
+  );
+  await expect(
+    demo.locator('[data-role="equation-motion-duration-output"]')
+  ).toHaveText("1200 ms");
+  await collapseScaleSlider.evaluate((element) => {
+    const input = element as HTMLInputElement;
+
+    input.value = "25";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-collapse-scale-percent",
+    "25"
+  );
+  await expect(
+    demo.locator('[data-role="equation-motion-collapse-scale-output"]')
+  ).toHaveText("25%");
+  await collapseScaleSlider.evaluate((element) => {
+    const input = element as HTMLInputElement;
+
+    input.value = "35";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
 
   const visibleTokenBox = await demo
     .locator('[data-kp-equation-motion-state="0"] [data-kp-motion-id="lhs.x"]')
@@ -391,6 +442,32 @@ test("editor equation motion demo uses semantic playback plans", async ({
       a: { readonly x: number; readonly y: number },
       b: { readonly x: number; readonly y: number }
     ): number => Math.hypot(a.x - b.x, a.y - b.y);
+    const minimumScale = 0.35;
+    const isMinimumScale = (scale: number): boolean =>
+      Math.abs(scale - minimumScale) < 0.001;
+    const convergenceProgressSpread = (
+      tokens: readonly {
+        readonly motionId: string;
+        readonly center: { readonly x: number; readonly y: number };
+      }[],
+      distances: ReadonlyMap<string, number>
+    ): number => {
+      const progressValues = tokens.flatMap((token) => {
+        const startDistance = distances.get(token.motionId) ?? 0;
+
+        if (startDistance <= 1) {
+          return [];
+        }
+
+        return [1 - distance(token.center, midpoint) / startDistance];
+      });
+
+      if (progressValues.length < 2) {
+        return 0;
+      }
+
+      return Math.max(...progressValues) - Math.min(...progressValues);
+    };
 
     const start = sampleBeat(0);
     const cancelBounds = start.cancelTokens.reduce(
@@ -417,7 +494,6 @@ test("editor equation motion demo uses semantic playback plans", async ({
         distance(token.center, midpoint)
       ])
     );
-    const moveProgress = (1 - Math.cos(Math.PI * (6 / 8))) / 2;
     const overlap = sampleBeat(6);
     const fullyOverlapped = sampleBeat(8);
     const dissolve = sampleBeat(9);
@@ -438,24 +514,21 @@ test("editor equation motion demo uses semantic playback plans", async ({
           distance(token.center, midpoint) <
           (startDistances.get(token.motionId) ?? 0) - 0.5
       ),
-      overlapTokensMovedStraight: overlap.cancelTokens.every((token) => {
-        const startToken = start.cancelTokens.find(
-          (candidate) => candidate.motionId === token.motionId
-        );
-
-        if (startToken === undefined) {
-          return false;
-        }
-
-        const expected = {
-          x: startToken.center.x + (midpoint.x - startToken.center.x) * moveProgress,
-          y: startToken.center.y + (midpoint.y - startToken.center.y) * moveProgress
-        };
-
-        return distance(token.center, expected) < 1.5;
-      }),
+      overlapConvergenceProgressSpread: convergenceProgressSpread(
+        overlap.cancelTokens,
+        startDistances
+      ),
+      overlapTokensShrinking: overlap.cancelTokens.every(
+        (token) => token.transform.scale > 0 && token.transform.scale < 1
+      ),
       fullyOverlappedAtMidpoint: fullyOverlapped.cancelTokens.every(
         (token) => distance(token.center, midpoint) < 1.5
+      ),
+      fullyOverlappedAtMinimumScale: fullyOverlapped.cancelTokens.every(
+        (token) =>
+          isMinimumScale(token.transform.scale) &&
+          token.opacity === 1 &&
+          token.visibility === "visible"
       ),
       webglParticlesVisible:
         dissolve.webglParticles.exists &&
@@ -463,12 +536,18 @@ test("editor equation motion demo uses semantic playback plans", async ({
         dissolve.webglParticles.particleCount > 0 &&
         dissolve.webglParticles.nonTransparentPixelCount > 0 &&
         dissolve.webglParticles.maxAlpha > 0,
+      dissolveFadingFromMinimumScale: dissolve.cancelTokens.every(
+        (token) =>
+          isMinimumScale(token.transform.scale) &&
+          token.opacity > 0 &&
+          token.opacity < 1
+      ),
       collapsedAtMidpoint: collapsed.cancelTokens.every(
         (token) => distance(token.center, midpoint) < 1.5
       ),
-      collapsedToNothing: collapsed.cancelTokens.every(
+      collapsedToMinimumFade: collapsed.cancelTokens.every(
         (token) =>
-          token.transform.scale === 0 &&
+          isMinimumScale(token.transform.scale) &&
           token.opacity === 0 &&
           token.visibility === "hidden"
       ),
@@ -484,15 +563,20 @@ test("editor equation motion demo uses semantic playback plans", async ({
   expect(cancellationMotionState.overlap.cancelMode).toBe("particle-dissolve");
   expect(cancellationMotionState.overlap.progress).toBe("0.3");
   expect(cancellationMotionState.overlapTokensMovedCloser).toBe(true);
-  expect(cancellationMotionState.overlapTokensMovedStraight).toBe(true);
+  expect(
+    cancellationMotionState.overlapConvergenceProgressSpread
+  ).toBeGreaterThan(0.03);
+  expect(cancellationMotionState.overlapTokensShrinking).toBe(true);
   expect(cancellationMotionState.fullyOverlapped.progress).toBe("0.4");
   expect(cancellationMotionState.fullyOverlappedAtMidpoint).toBe(true);
+  expect(cancellationMotionState.fullyOverlappedAtMinimumScale).toBe(true);
   expect(cancellationMotionState.dissolve.progress).toBe("0.45");
   expect(cancellationMotionState.dissolve.domParticleCount).toBe(0);
   expect(cancellationMotionState.webglParticlesVisible).toBe(true);
+  expect(cancellationMotionState.dissolveFadingFromMinimumScale).toBe(true);
   expect(cancellationMotionState.collapsed.progress).toBe("0.5");
   expect(cancellationMotionState.collapsedAtMidpoint).toBe(true);
-  expect(cancellationMotionState.collapsedToNothing).toBe(true);
+  expect(cancellationMotionState.collapsedToMinimumFade).toBe(true);
   expect(cancellationMotionState.pause.progress).toBe("0.6");
   expect(cancellationMotionState.survivorHeldDuringPause).toBe(true);
   expect(cancellationMotionState.shifted.progress).toBe("0.8");
@@ -513,7 +597,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
 
   await next.click();
 
-  const finalCrossfadeState = await page.evaluate(() => {
+  const finalSimplifyState = await page.evaluate(() => {
     const demoElement = document.querySelector<HTMLElement>(
       "[data-kp-equation-motion-demo]"
     );
@@ -614,6 +698,32 @@ test("editor equation motion demo uses semantic playback plans", async ({
       a: { readonly x: number; readonly y: number },
       b: { readonly x: number; readonly y: number }
     ): number => Math.hypot(a.x - b.x, a.y - b.y);
+    const minimumScale = 0.35;
+    const isMinimumScale = (scale: number): boolean =>
+      Math.abs(scale - minimumScale) < 0.001;
+    const convergenceProgressSpread = (
+      tokens: readonly {
+        readonly motionId: string;
+        readonly center: { readonly x: number; readonly y: number };
+      }[],
+      distances: ReadonlyMap<string, number>
+    ): number => {
+      const progressValues = tokens.flatMap((token) => {
+        const startDistance = distances.get(token.motionId) ?? 0;
+
+        if (startDistance <= 1) {
+          return [];
+        }
+
+        return [1 - distance(token.center, midpoint) / startDistance];
+      });
+
+      if (progressValues.length < 2) {
+        return 0;
+      }
+
+      return Math.max(...progressValues) - Math.min(...progressValues);
+    };
 
     const start = sampleBeat(0);
     const sourceBounds = start.sourceTokens.reduce(
@@ -641,12 +751,14 @@ test("editor equation motion demo uses semantic playback plans", async ({
       ])
     );
     const converging = sampleBeat(6);
-    const crossfade = sampleBeat(10);
+    const collapsed = sampleBeat(10);
+    const emerging = sampleBeat(12);
 
     return {
       midpoint,
       converging,
-      crossfade,
+      collapsed,
+      emerging,
       sourceTokensMovedCloser: converging.sourceTokens.every(
         (token) => {
           const startDistance = startDistances.get(token.motionId) ?? 0;
@@ -657,33 +769,56 @@ test("editor equation motion demo uses semantic playback plans", async ({
             : convergingDistance < startDistance - 0.5;
         }
       ),
-      sourceTokensCrossfading:
-        crossfade.sourceTokens.every(
+      sourceTokensShrinking:
+        converging.sourceTokens.every(
+          (token) => token.transform.scale > 0 && token.transform.scale < 1
+        ),
+      sourceConvergenceProgressSpread: convergenceProgressSpread(
+        converging.sourceTokens,
+        startDistances
+      ),
+      sourceTokensCollapsed:
+        collapsed.sourceTokens.every(
           (token) =>
             distance(token.center, midpoint) < 1.5 &&
-            token.opacity > 0 &&
-            token.opacity < 1 &&
-            token.transform.scale > 0.85 &&
-            token.transform.scale < 1
+            token.opacity === 0 &&
+            isMinimumScale(token.transform.scale)
         ),
-      targetCrossfading:
-        distance(crossfade.targetToken.center, midpoint) < 1.5 &&
-        crossfade.targetToken.opacity > 0 &&
-        crossfade.targetToken.opacity < 1 &&
-        crossfade.targetToken.transform.scale > 0.85 &&
-        crossfade.targetToken.transform.scale < 1 &&
-        crossfade.targetToken.visibility === "visible",
+      targetCollapsedAtMidpoint:
+        distance(collapsed.targetToken.center, midpoint) < 1.5 &&
+        collapsed.targetToken.opacity === 0 &&
+        isMinimumScale(collapsed.targetToken.transform.scale) &&
+        collapsed.targetToken.visibility === "hidden",
+      sourceTokensStayCollapsed:
+        emerging.sourceTokens.every(
+          (token) =>
+            token.opacity === 0 && isMinimumScale(token.transform.scale)
+        ),
+      targetEmerging:
+        distance(emerging.targetToken.center, midpoint) < 1.5 &&
+        emerging.targetToken.opacity > 0 &&
+        emerging.targetToken.opacity < 1 &&
+        emerging.targetToken.transform.scale > minimumScale &&
+        emerging.targetToken.transform.scale < 1 &&
+        emerging.targetToken.visibility === "visible",
       noLiquidRenderer:
-        crossfade.liquidMode === undefined && !crossfade.liquidCanvasExists
+        emerging.liquidMode === undefined && !emerging.liquidCanvasExists
     };
   });
 
-  expect(finalCrossfadeState.converging.progress).toBe("0.3");
-  expect(finalCrossfadeState.sourceTokensMovedCloser).toBe(true);
-  expect(finalCrossfadeState.crossfade.progress).toBe("0.5");
-  expect(finalCrossfadeState.sourceTokensCrossfading).toBe(true);
-  expect(finalCrossfadeState.targetCrossfading).toBe(true);
-  expect(finalCrossfadeState.noLiquidRenderer).toBe(true);
+  expect(finalSimplifyState.converging.progress).toBe("0.3");
+  expect(finalSimplifyState.sourceTokensMovedCloser).toBe(true);
+  expect(finalSimplifyState.sourceTokensShrinking).toBe(true);
+  expect(finalSimplifyState.sourceConvergenceProgressSpread).toBeGreaterThan(
+    0.03
+  );
+  expect(finalSimplifyState.collapsed.progress).toBe("0.5");
+  expect(finalSimplifyState.sourceTokensCollapsed).toBe(true);
+  expect(finalSimplifyState.targetCollapsedAtMidpoint).toBe(true);
+  expect(finalSimplifyState.emerging.progress).toBe("0.6");
+  expect(finalSimplifyState.sourceTokensStayCollapsed).toBe(true);
+  expect(finalSimplifyState.targetEmerging).toBe(true);
+  expect(finalSimplifyState.noLiquidRenderer).toBe(true);
 
   await next.click();
 

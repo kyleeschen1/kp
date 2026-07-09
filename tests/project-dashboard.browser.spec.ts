@@ -15,14 +15,91 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   await expect(page.locator("[data-kp-project-dashboard-contract]")).toContainText(
     "src/project-dashboard/data.ts"
   );
+  await expect(page.locator("[data-kp-visual-tuning]")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Back to Editor" })).toBeVisible();
 
   await page.getByRole("button", { name: "Back to Editor" }).click();
 
   await expect(page.getByRole("heading", { name: "Identity Matrix" })).toBeVisible();
   await expect(page.locator("[data-kp-project-dashboard]")).toHaveCount(0);
+  await expect(page.locator("[data-kp-api-outline]")).toBeVisible();
+  await expect(page.locator('[data-role="semantic-json"]')).toHaveCount(0);
 
   const demo = page.locator("[data-kp-equation-motion-demo]");
+  const editorTuning = page.locator("[data-kp-editor-visual-tuning]");
+  const operatorScale = editorTuning.locator(
+    '[data-action="set-katex-operator-scale"]'
+  );
+  const operatorScaleOutput = editorTuning.locator(
+    '[data-role="katex-operator-scale-output"]'
+  );
+
+  await expect(editorTuning).toBeVisible();
+  await expect(operatorScale).toHaveValue("85");
+  await expect
+    .poll(async () => {
+      const demoBox = await demo.boundingBox();
+      const tuningBox = await editorTuning.boundingBox();
+
+      if (demoBox === null || tuningBox === null) {
+        return false;
+      }
+
+      return demoBox.y + demoBox.height <= tuningBox.y;
+    })
+    .toBe(true);
+  await operatorScale.evaluate((input) => {
+    const range = input as HTMLInputElement;
+
+    range.value = "92";
+    range.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(operatorScaleOutput).toHaveText("92%");
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        document.documentElement.style.getPropertyValue(
+          "--kp-katex-operator-scale"
+        )
+      )
+    )
+    .toBe("0.92em");
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        const operator = document.querySelector<HTMLElement>(
+          '[data-kp-motion-operator="binary"] .katex'
+        );
+
+        if (operator === null || operator.parentElement === null) {
+          return 0;
+        }
+
+        const parent = operator.parentElement;
+        const operatorSize = Number.parseFloat(
+          getComputedStyle(operator).fontSize
+        );
+        const parentSize = Number.parseFloat(getComputedStyle(parent).fontSize);
+
+        return Number((operatorSize / parentSize).toFixed(2));
+      })
+    )
+    .toBe(0.92);
+
+  const matrixApiItem = page.locator(
+    '[data-kp-api-outline-item="semantic-matrix"]'
+  );
+
+  await expect(matrixApiItem).toBeVisible();
+  await matrixApiItem.click();
+  await expect(matrixApiItem).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("[data-kp-api-sample-card]")).toContainText(
+    "Matrix"
+  );
+  await expect(page.locator("[data-kp-api-sample-card]")).toContainText(
+    "Sample card preview"
+  );
+
   const beatScrubber = demo.locator('[data-action="set-equation-motion-beat"]');
   const beatOutput = demo.locator('[data-role="equation-motion-beat-output"]');
 
@@ -49,6 +126,5 @@ test("project dashboard round trip keeps editor motion and graph controls usable
     surfaceMode.locator("xpath=ancestor::label[1]").locator(".graph-control__value")
   ).toHaveText("donut");
 
-  const semanticJson = page.locator('[data-role="semantic-json"]');
-  await expect(semanticJson).toContainText('"surfaceMode": "donut"');
+  await expect(page.locator("[data-kp-api-outline]")).toContainText("Graph3D");
 });

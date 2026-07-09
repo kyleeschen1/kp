@@ -25,6 +25,7 @@ import {
   type KpDocument,
   type KpSemanticObject
 } from "../semantic/document.ts";
+import { renderApiCatalogOutline } from "./api-catalog.ts";
 import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
   createDefaultGraph3DScene,
@@ -49,8 +50,18 @@ export function createInitialEditorDocument(): KpDocument {
   });
 }
 
-export function renderEditorDocument(document: KpDocument): string {
+export interface EditorRenderOptions {
+  readonly katexOperatorScalePercent?: number;
+}
+
+export function renderEditorDocument(
+  document: KpDocument,
+  options: EditorRenderOptions = {}
+): string {
   const validationIssues = validateKpDocument(document);
+  const katexOperatorScalePercent = normalizeOperatorScalePercent(
+    options.katexOperatorScalePercent ?? 85
+  );
   const validationHtml =
     validationIssues.length === 0
       ? `<p class="validation-status validation-status--ok">No validation issues</p>`
@@ -60,7 +71,7 @@ export function renderEditorDocument(document: KpDocument): string {
               `<li><strong>${escapeHtml(issue.path)}</strong>: ${escapeHtml(issue.message)}</li>`
           )
           .join("")}</ul>`;
-  const renderedObjects = renderPreviewStage(document);
+  const renderedObjects = renderPreviewStage(document, katexOperatorScalePercent);
 
   return `
     <section class="editor-shell" aria-label="Kinetic Press editor">
@@ -71,7 +82,7 @@ export function renderEditorDocument(document: KpDocument): string {
         </div>
         <div class="editor-header__actions">
           <button class="editor-header__button" type="button" data-action="show-project-dashboard">Project Dashboard</button>
-          <span class="status-pill">JSON to HTML</span>
+          <span class="status-pill">Semantic API</span>
         </div>
       </header>
       <div class="equation-entry" data-role="equation-entry">
@@ -81,13 +92,13 @@ export function renderEditorDocument(document: KpDocument): string {
         <output class="equation-entry__error" id="equation-error" data-role="equation-error" aria-live="polite"></output>
       </div>
       <div class="editor-grid">
-        <section class="editor-panel" aria-labelledby="source-title">
+        <section class="editor-panel" aria-labelledby="api-outline-title">
           <div class="panel-header">
-            <h2 id="source-title">Semantic JSON</h2>
+            <h2 id="api-outline-title">API Outline</h2>
             <button class="compile-button" type="button" data-action="compile-document">Compile</button>
           </div>
           ${validationHtml}
-          <pre class="json-source"><code data-role="semantic-json">${escapeHtml(JSON.stringify(document, null, 2))}</code></pre>
+          ${renderApiCatalogOutline()}
         </section>
         <section class="editor-panel" aria-labelledby="preview-title">
           <div class="panel-header">
@@ -101,7 +112,10 @@ export function renderEditorDocument(document: KpDocument): string {
   `;
 }
 
-function renderPreviewStage(document: KpDocument): string {
+function renderPreviewStage(
+  document: KpDocument,
+  katexOperatorScalePercent: number
+): string {
   let renderedEquationMotionDemo = false;
   const renderedObjects = document.objects.map((object) => {
     const preview = renderObjectPreview(object, document);
@@ -109,17 +123,42 @@ function renderPreviewStage(document: KpDocument): string {
     if (!renderedEquationMotionDemo && object.type === "matrix") {
       renderedEquationMotionDemo = true;
 
-      return preview + renderEquationMotionDemo();
+      return (
+        preview +
+        renderEquationMotionDemo() +
+        renderKatexVisualTuning(katexOperatorScalePercent)
+      );
     }
 
     return preview;
   });
 
   if (!renderedEquationMotionDemo) {
-    renderedObjects.unshift(renderEquationMotionDemo());
+    renderedObjects.unshift(
+      renderEquationMotionDemo() +
+        renderKatexVisualTuning(katexOperatorScalePercent)
+    );
   }
 
   return renderedObjects.join("");
+}
+
+function renderKatexVisualTuning(katexOperatorScalePercent: number): string {
+  return `
+    <section class="katex-visual-tuning" data-kp-visual-tuning data-kp-editor-visual-tuning aria-labelledby="editor-katex-visual-tuning-title">
+      <div class="katex-visual-tuning__header">
+        <h3 id="editor-katex-visual-tuning-title">Visual Tuning</h3>
+        <span>Runtime</span>
+      </div>
+      <div class="katex-visual-tuning__body">
+        <label class="katex-visual-tuning__range" for="editor-katex-operator-scale">
+          <span>Operator size</span>
+          <input id="editor-katex-operator-scale" type="range" data-action="set-katex-operator-scale" min="50" max="150" step="1" value="${katexOperatorScalePercent}" aria-label="Set KaTeX operator size" />
+          <output data-role="katex-operator-scale-output">${katexOperatorScalePercent}%</output>
+        </label>
+      </div>
+    </section>
+  `;
 }
 
 function renderObjectPreview(object: KpSemanticObject, document: KpDocument): string {
@@ -215,13 +254,23 @@ function renderEquationMotionDemo(): string {
   const maxStep = states.length - 1;
 
   return `
-    <section class="equation-motion" data-kp-equation-motion-demo data-kp-equation-motion-step="0" data-kp-equation-motion-max-step="${maxStep}">
+    <section class="equation-motion" data-kp-equation-motion-demo data-kp-equation-motion-step="0" data-kp-equation-motion-max-step="${maxStep}" data-kp-equation-motion-duration-ms="420" data-kp-equation-motion-collapse-scale-percent="35">
       <div class="equation-motion__controls">
         <button type="button" data-action="equation-motion-rewind">Rewind</button>
         <label class="equation-motion__scrubber">
           <span>Beat</span>
           <input type="range" data-action="set-equation-motion-beat" min="0" max="20" step="1" value="0" data-kp-equation-motion-beats="20" aria-label="Scrub equation motion beat" />
           <output class="equation-motion__beat-output" data-role="equation-motion-beat-output">0/20</output>
+        </label>
+        <label class="equation-motion__scrubber equation-motion__duration">
+          <span>Duration</span>
+          <input type="range" data-action="set-equation-motion-duration" min="200" max="3000" step="20" value="420" aria-label="Set equation animation duration" />
+          <output class="equation-motion__duration-output" data-role="equation-motion-duration-output">420 ms</output>
+        </label>
+        <label class="equation-motion__scrubber equation-motion__collapse-scale">
+          <span>Min size</span>
+          <input type="range" data-action="set-equation-motion-collapse-scale" min="5" max="50" step="1" value="35" aria-label="Set equation collapse minimum size" />
+          <output class="equation-motion__collapse-scale-output" data-role="equation-motion-collapse-scale-output">35%</output>
         </label>
         <button type="button" data-action="equation-motion-next">Next</button>
       </div>
@@ -249,7 +298,15 @@ function renderEquationMotionState(
 }
 
 function renderEquationMotionAnchor(annotation: EquationMotionAnnotation): string {
-  return `<span class="equation-motion__motion-anchor" data-kp-motion-id="${escapeHtml(annotation.motionId)}">${renderLatexToHtml(annotation.text, { displayMode: false })}</span>`;
+  const operatorAttribute = isBinaryOperatorToken(annotation.text)
+    ? ' data-kp-motion-operator="binary"'
+    : "";
+
+  return `<span class="equation-motion__motion-anchor" data-kp-motion-id="${escapeHtml(annotation.motionId)}"${operatorAttribute}>${renderLatexToHtml(annotation.text, { displayMode: false })}</span>`;
+}
+
+function isBinaryOperatorToken(text: string): boolean {
+  return ["+", "-", "*", "\\cdot", "\\times"].includes(text);
 }
 
 function renderGraph3DControls(
@@ -494,6 +551,14 @@ function renderPreviewArticle(
       ${body}
     </article>
   `;
+}
+
+function normalizeOperatorScalePercent(value: number): number {
+  if (!Number.isFinite(value)) {
+    return 85;
+  }
+
+  return Math.min(150, Math.max(50, Math.round(value)));
 }
 
 function escapeHtml(value: string): string {

@@ -253,6 +253,14 @@ test("renderProjectDashboard renders the data contract for dashboard writes", ()
   );
 });
 
+test("renderProjectDashboard keeps KaTeX operator visual tuning off the dashboard", () => {
+  const html = renderProjectDashboard(projectDashboardData);
+
+  assert.doesNotMatch(html, /data-kp-visual-tuning/);
+  assert.doesNotMatch(html, /data-action="set-katex-operator-scale"/);
+  assert.doesNotMatch(html, /data-role="katex-operator-scale-output"/);
+});
+
 test("project dashboard v1 card records completed Codex phase updates", () => {
   const dashboardCard = projectDashboardData.cards.find(
     (card) => card.id === "work-project-dashboard-v1"
