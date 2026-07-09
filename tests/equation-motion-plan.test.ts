@@ -281,6 +281,55 @@ test("createEquationMotionPlan maps lifecycles to selector correspondence relati
   );
 });
 
+test("createEquationMotionPlan compiles generalized subtractBothSides transitions", () => {
+  const transition = createEquationOperationTransition({
+    sourceLatex: "y = 10",
+    operation: {
+      kind: "subtractBothSides",
+      valueLatex: "2"
+    }
+  });
+
+  const plan = createEquationMotionPlan(transition);
+
+  assert.equal(plan.targetLatex, "y - 2 = 10 - 2");
+  assert.deepEqual(summarizeTokenLifecycles(plan), [
+    ["lhs.y", "persist"],
+    ["lhs.inverse.minus", "inverse-enter"],
+    ["lhs.inverse.2", "inverse-enter"],
+    ["equals", "persist"],
+    ["rhs.10", "persist"],
+    ["rhs.inverse.minus", "inverse-enter"],
+    ["rhs.inverse.2", "inverse-enter"]
+  ]);
+  assert.deepEqual(summarizeSemanticVisualLifecycles(plan), [
+    ["lhs.y", "identity-preserved", "persist"],
+    ["lhs.inverse.minus", "introduced", "enter"],
+    ["lhs.inverse.2", "introduced", "enter"],
+    ["equals", "identity-preserved", "persist"],
+    ["rhs.10", "identity-preserved", "persist"],
+    ["rhs.inverse.minus", "introduced", "enter"],
+    ["rhs.inverse.2", "introduced", "enter"]
+  ]);
+  assert.deepEqual(
+    plan.correspondenceMap.records.map((record) => [
+      record.id,
+      record.relation,
+      record.sourceSelectorIds,
+      record.targetSelectorIds
+    ]),
+    [
+      ["identity.lhs.y", "identity", ["lhs.y"], ["lhs.y"]],
+      ["identity.equals", "identity", ["equals"], ["equals"]],
+      ["identity.rhs.10", "identity", ["rhs.10"], ["rhs.10"]],
+      ["introduction.lhs.inverse.minus", "introduction", [], ["lhs.inverse.minus"]],
+      ["introduction.lhs.inverse.2", "introduction", [], ["lhs.inverse.2"]],
+      ["introduction.rhs.inverse.minus", "introduction", [], ["rhs.inverse.minus"]],
+      ["introduction.rhs.inverse.2", "introduction", [], ["rhs.inverse.2"]]
+    ]
+  );
+});
+
 test("createEquationMotionPlan cancels left additive inverse only during simplification", () => {
   const transition = createEquationOperationTransition({
     sourceLatex: "x + 3 - 3 = 7 - 3",

@@ -178,6 +178,54 @@ test("createEquationOperationTransition creates subtractBothSides(3) motion toke
   assertAnnotationsCoverReferencedMotionIds(transition);
 });
 
+test("createEquationOperationTransition generalizes subtractBothSides for simple equations", () => {
+  const transition = createEquationOperationTransition({
+    sourceLatex: "y = 10",
+    operation: {
+      kind: "subtractBothSides",
+      valueLatex: "2"
+    }
+  });
+
+  assert.equal(transition.sourceLatex, "y = 10");
+  assert.equal(transition.targetLatex, "y - 2 = 10 - 2");
+  assert.deepEqual(summarizeTokens(transition), [
+    ["lhs.y", "persist", "lhs.y", "lhs.y"],
+    ["lhs.inverse.minus", "inverse-enter", undefined, "lhs.inverse.minus"],
+    ["lhs.inverse.2", "inverse-enter", undefined, "lhs.inverse.2"],
+    ["equals", "persist", "equals", "equals"],
+    ["rhs.10", "persist", "rhs.10", "rhs.10"],
+    ["rhs.inverse.minus", "inverse-enter", undefined, "rhs.inverse.minus"],
+    ["rhs.inverse.2", "inverse-enter", undefined, "rhs.inverse.2"]
+  ]);
+  assert.deepEqual(requireSelectorPaths(transition), {
+    source: {
+      "lhs.y": "equation.left",
+      equals: "equation.relation",
+      "rhs.10": "equation.right"
+    },
+    target: {
+      "lhs.y": "equation.left.left",
+      "lhs.inverse.minus": "equation.left.operator",
+      "lhs.inverse.2": "equation.left.right",
+      equals: "equation.relation",
+      "rhs.10": "equation.right.left",
+      "rhs.inverse.minus": "equation.right.operator",
+      "rhs.inverse.2": "equation.right.right"
+    }
+  });
+  assert.deepEqual(summarizeCorrespondence(transition), [
+    ["identity.lhs.y", "identity", ["lhs.y"], ["lhs.y"]],
+    ["identity.equals", "identity", ["equals"], ["equals"]],
+    ["identity.rhs.10", "identity", ["rhs.10"], ["rhs.10"]],
+    ["introduction.lhs.inverse.minus", "introduction", [], ["lhs.inverse.minus"]],
+    ["introduction.lhs.inverse.2", "introduction", [], ["lhs.inverse.2"]],
+    ["introduction.rhs.inverse.minus", "introduction", [], ["rhs.inverse.minus"]],
+    ["introduction.rhs.inverse.2", "introduction", [], ["rhs.inverse.2"]]
+  ]);
+  assertAnnotationsCoverReferencedMotionIds(transition);
+});
+
 test("createEquationOperationTransition creates left simplification motion tokens", () => {
   const transition = createEquationOperationTransition({
     sourceLatex: "x + 3 - 3 = 7 - 3",
@@ -331,7 +379,7 @@ test("createEquationOperationTransition rejects unsupported source and operation
   assert.throws(
     () =>
       createEquationOperationTransition({
-        sourceLatex: "x = 7",
+        sourceLatex: "x + y = 7",
         operation: {
           kind: "subtractBothSides",
           valueLatex: "3"

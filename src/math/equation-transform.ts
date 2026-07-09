@@ -3,6 +3,11 @@ import {
   type CorrespondenceMap,
   type SelectorCorrespondenceRelationId
 } from "../semantic/correspondence.ts";
+import { parseLatexEquation } from "./equation-classifier.ts";
+import {
+  parseLatexExpression,
+  type ParsedLatexExpression
+} from "./latex-parser.ts";
 
 export type SemanticId = string;
 
@@ -241,6 +246,17 @@ export const createEquationOperationTransition = (
     });
   }
 
+  if (operation.kind === "subtractBothSides") {
+    const generatedTransition = createSimpleSubtractBothSidesTransition(
+      input.sourceLatex,
+      operation
+    );
+
+    if (generatedTransition !== undefined) {
+      return generatedTransition;
+    }
+  }
+
   if (
     input.sourceLatex === "x + 3 - 3 = 7 - 3" &&
     operation.kind === "simplifySide" &&
@@ -304,6 +320,128 @@ function token(
   };
 }
 
+function dynamicToken(
+  id: SemanticId,
+  lifecycle: EquationTokenLifecycle,
+  label: string,
+  sourceMotionId: SemanticId | undefined,
+  targetMotionId: SemanticId | undefined
+): EquationTransitionToken {
+  return {
+    id,
+    lifecycle,
+    label,
+    ...(sourceMotionId === undefined ? {} : { sourceMotionId }),
+    ...(targetMotionId === undefined ? {} : { targetMotionId }),
+    ...(sourceMotionId === undefined ? {} : { sourceLatex: label }),
+    ...(targetMotionId === undefined ? {} : { targetLatex: label })
+  };
+}
+
+function createSimpleSubtractBothSidesTransition(
+  sourceLatex: string,
+  operation: Extract<EquationOperation, { kind: "subtractBothSides" }>
+): EquationTransition | undefined {
+  const equation = parseLatexEquation(sourceLatex);
+  const valueExpression = parseLatexExpression(operation.valueLatex);
+
+  if (
+    equation.left.kind !== "identifier" ||
+    equation.right.kind !== "number" ||
+    valueExpression.kind !== "number"
+  ) {
+    return undefined;
+  }
+
+  const lhsLabel = equation.left.name;
+  const rhsLabel = formatParsedNumber(equation.right);
+  const valueLabel = formatParsedNumber(valueExpression);
+  const lhsId = `lhs.${motionIdSegment(lhsLabel)}`;
+  const rhsId = `rhs.${motionIdSegment(rhsLabel)}`;
+  const lhsValueId = `lhs.inverse.${motionIdSegment(valueLabel)}`;
+  const rhsValueId = `rhs.inverse.${motionIdSegment(valueLabel)}`;
+  const tokens: EquationTransitionToken[] = [
+    dynamicToken(lhsId, "persist", lhsLabel, lhsId, lhsId),
+    dynamicToken(
+      "lhs.inverse.minus",
+      "inverse-enter",
+      "-",
+      undefined,
+      "lhs.inverse.minus"
+    ),
+    dynamicToken(lhsValueId, "inverse-enter", valueLabel, undefined, lhsValueId),
+    dynamicToken("equals", "persist", "=", "equals", "equals"),
+    dynamicToken(rhsId, "persist", rhsLabel, rhsId, rhsId),
+    dynamicToken(
+      "rhs.inverse.minus",
+      "inverse-enter",
+      "-",
+      undefined,
+      "rhs.inverse.minus"
+    ),
+    dynamicToken(rhsValueId, "inverse-enter", valueLabel, undefined, rhsValueId)
+  ];
+
+  return transition({
+    sourceLatex,
+    targetLatex: `${lhsLabel} - ${valueLabel} = ${rhsLabel} - ${valueLabel}`,
+    operation,
+    tokens,
+    correspondenceMap: {
+      id: `equation.subtract-both-sides.${motionIdSegment(sourceLatex)}.minus-${motionIdSegment(valueLabel)}`,
+      records: [
+        identityRecord(lhsId),
+        identityRecord("equals"),
+        identityRecord(rhsId),
+        correspondenceRecord(
+          "introduction.lhs.inverse.minus",
+          "introduction",
+          [],
+          ["lhs.inverse.minus"],
+          "lhs.inverse.minus is introduced by subtractBothSides"
+        ),
+        correspondenceRecord(
+          `introduction.${lhsValueId}`,
+          "introduction",
+          [],
+          [lhsValueId],
+          `${lhsValueId} is introduced by subtractBothSides`
+        ),
+        correspondenceRecord(
+          "introduction.rhs.inverse.minus",
+          "introduction",
+          [],
+          ["rhs.inverse.minus"],
+          "rhs.inverse.minus is introduced by subtractBothSides"
+        ),
+        correspondenceRecord(
+          `introduction.${rhsValueId}`,
+          "introduction",
+          [],
+          [rhsValueId],
+          `${rhsValueId} is introduced by subtractBothSides`
+        )
+      ]
+    },
+    selectorPaths: {
+      source: {
+        [lhsId]: "equation.left",
+        equals: "equation.relation",
+        [rhsId]: "equation.right"
+      },
+      target: {
+        [lhsId]: "equation.left.left",
+        "lhs.inverse.minus": "equation.left.operator",
+        [lhsValueId]: "equation.left.right",
+        equals: "equation.relation",
+        [rhsId]: "equation.right.left",
+        "rhs.inverse.minus": "equation.right.operator",
+        [rhsValueId]: "equation.right.right"
+      }
+    }
+  });
+}
+
 function transition(input: {
   sourceLatex: string;
   targetLatex: string;
@@ -333,7 +471,7 @@ function cloneSelectorPaths(
   };
 }
 
-function identityRecord(selectorId: KnownMotionId): CorrespondenceMap["records"][number] {
+function identityRecord(selectorId: SemanticId): CorrespondenceMap["records"][number] {
   return correspondenceRecord(
     `identity.${selectorId}`,
     "identity",
@@ -364,18 +502,35 @@ function annotationsFor(
   tokens: readonly EquationTransitionToken[]
 ): EquationMotionAnnotation[] {
   const motionIds = new Set<SemanticId>();
+  const textByMotionId = new Map<SemanticId, string>();
 
   for (const transitionToken of tokens) {
     const motionId = transitionToken[side];
     if (motionId !== undefined) {
       motionIds.add(motionId);
+      textByMotionId.set(
+        motionId,
+        (side === "sourceMotionId"
+          ? transitionToken.sourceLatex
+          : transitionToken.targetLatex) ?? transitionToken.label
+      );
     }
   }
 
   return [...motionIds].map((motionId) => ({
     motionId,
-    text: textForMotionId(motionId)
+    text: textByMotionId.get(motionId) ?? textForMotionId(motionId)
   }));
+}
+
+function formatParsedNumber(
+  expression: Extract<ParsedLatexExpression, { kind: "number" }>
+): string {
+  return String(expression.value);
+}
+
+function motionIdSegment(value: string): string {
+  return value.trim().replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
 function textForMotionId(motionId: SemanticId): string {
