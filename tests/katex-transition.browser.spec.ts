@@ -33,12 +33,12 @@ test("editor equation motion demo uses semantic playback plans", async ({
   await expect(
     demo.locator('[data-role="equation-motion-duration-output"]')
   ).toHaveText("1200 ms");
-  await expect(collapseScaleSlider).toHaveAttribute("min", "5");
+  await expect(collapseScaleSlider).toHaveAttribute("min", "0");
   await expect(collapseScaleSlider).toHaveAttribute("max", "50");
-  await expect(collapseScaleSlider).toHaveValue("35");
+  await expect(collapseScaleSlider).toHaveValue("0");
   await expect(
     demo.locator('[data-role="equation-motion-collapse-scale-output"]')
-  ).toHaveText("35%");
+  ).toHaveText("0%");
 
   const fixtureAnimations = [
     {
@@ -170,6 +170,72 @@ test("editor equation motion demo uses semantic playback plans", async ({
     "radical.rewrite-power-as-root.target.expression"
   );
 
+  const radicalInterpolationState = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    const sourceToken = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="0"] [data-kp-motion-id="radical.rewrite-power-as-root.source.x"]'
+    );
+    const targetToken = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="1"] [data-kp-motion-id="radical.rewrite-power-as-root.target.x"]'
+    );
+
+    if (sourceToken === null || targetToken === null) {
+      throw new Error("Expected radical source and target x tokens.");
+    }
+
+    const center = (element: HTMLElement) => {
+      const rect = element.getBoundingClientRect();
+
+      return {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2
+      };
+    };
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0);
+    const start = center(sourceToken);
+    const target = center(targetToken);
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.25);
+    const inFlight = center(sourceToken);
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 1);
+    const end = center(sourceToken);
+
+    return {
+      start,
+      inFlight,
+      end,
+      target,
+      sourceDisplay: getComputedStyle(sourceToken).display,
+      targetDisplay: getComputedStyle(targetToken).display
+    };
+  });
+
+  expect(radicalInterpolationState.sourceDisplay).not.toBe("inline");
+  expect(radicalInterpolationState.targetDisplay).not.toBe("inline");
+  expect(radicalInterpolationState.inFlight.x).toBeGreaterThan(
+    radicalInterpolationState.start.x + 5
+  );
+  expect(radicalInterpolationState.inFlight.x).toBeLessThan(
+    radicalInterpolationState.target.x - 5
+  );
+  expect(radicalInterpolationState.end.x).toBeCloseTo(
+    radicalInterpolationState.target.x,
+    1
+  );
+  expect(radicalInterpolationState.end.y).toBeCloseTo(
+    radicalInterpolationState.target.y,
+    1
+  );
+
   await animationSelect.selectOption("fixture-fraction-make-inline-to-stacked");
   await next.click();
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");
@@ -216,7 +282,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
   await collapseScaleSlider.evaluate((element) => {
     const input = element as HTMLInputElement;
 
-    input.value = "35";
+    input.value = "0";
     input.dispatchEvent(new Event("input", { bubbles: true }));
   });
 
@@ -593,7 +659,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
       a: { readonly x: number; readonly y: number },
       b: { readonly x: number; readonly y: number }
     ): number => Math.hypot(a.x - b.x, a.y - b.y);
-    const minimumScale = 0.35;
+    const minimumScale = 0;
     const isMinimumScale = (scale: number): boolean =>
       Math.abs(scale - minimumScale) < 0.001;
     const convergenceProgressSpread = (
@@ -849,7 +915,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
       a: { readonly x: number; readonly y: number },
       b: { readonly x: number; readonly y: number }
     ): number => Math.hypot(a.x - b.x, a.y - b.y);
-    const minimumScale = 0.35;
+    const minimumScale = 0;
     const isMinimumScale = (scale: number): boolean =>
       Math.abs(scale - minimumScale) < 0.001;
     const convergenceProgressSpread = (

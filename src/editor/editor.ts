@@ -244,7 +244,7 @@ function renderEquationMotionDemo(equationAnimationId: string | undefined): stri
             </label>
             <label class="equation-motion__scrubber equation-motion__collapse-scale">
               <span>Min size</span>
-              <input type="range" data-action="set-equation-motion-collapse-scale" min="5" max="50" step="1" value="${animation.defaultCollapseScalePercent}" aria-label="Set equation collapse minimum size" />
+              <input type="range" data-action="set-equation-motion-collapse-scale" min="0" max="50" step="1" value="${animation.defaultCollapseScalePercent}" aria-label="Set equation collapse minimum size" />
               <output class="equation-motion__collapse-scale-output" data-role="equation-motion-collapse-scale-output">${animation.defaultCollapseScalePercent}%</output>
             </label>
           </div>

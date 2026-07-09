@@ -1209,6 +1209,10 @@ h2 {
   margin: 0;
 }
 
+.equation-motion__formula [data-kp-motion-id] {
+  display: inline-block;
+}
+
 .equation-motion__particle-canvas {
   position: absolute;
   inset: 0;

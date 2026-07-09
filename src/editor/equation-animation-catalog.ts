@@ -152,7 +152,7 @@ function createLinearEquationAnimationEntry(): EquationAnimationCatalogEntry {
     ],
     beatCount: EQUATION_ANIMATION_BEAT_LABEL_COUNT,
     defaultDurationMs: EQUATION_ANIMATION_DEFAULT_DURATION_MS,
-    defaultCollapseScalePercent: 35
+    defaultCollapseScalePercent: 0
   };
 }
 
@@ -176,7 +176,7 @@ function createFixtureAnimationEntry(input: {
     ],
     beatCount: EQUATION_ANIMATION_BEAT_LABEL_COUNT,
     defaultDurationMs: EQUATION_ANIMATION_DEFAULT_DURATION_MS,
-    defaultCollapseScalePercent: 35
+    defaultCollapseScalePercent: 0
   };
 }
 

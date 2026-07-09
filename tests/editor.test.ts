@@ -184,11 +184,11 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
   );
   assert.match(
     html,
-    /type="range"[^>]*data-action="set-equation-motion-collapse-scale"[^>]*min="5"[^>]*max="50"[^>]*step="1"[^>]*value="35"/
+    /type="range"[^>]*data-action="set-equation-motion-collapse-scale"[^>]*min="0"[^>]*max="50"[^>]*step="1"[^>]*value="0"/
   );
   assert.match(
     html,
-    /data-role="equation-motion-collapse-scale-output"[^>]*>35%</
+    /data-role="equation-motion-collapse-scale-output"[^>]*>0%</
   );
   assert.match(html, /data-action="equation-motion-next"[^>]*>Forward</);
   assert.match(html, /data-kp-motion-operator="binary"/);
