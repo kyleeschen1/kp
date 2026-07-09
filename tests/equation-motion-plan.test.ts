@@ -6,6 +6,9 @@ import {
   type EquationTransition
 } from "../src/math/equation-transform.ts";
 import {
+  findKatexTransformFixture
+} from "../src/rendering/katex-transform-fixtures.ts";
+import {
   createEquationMotionPlan,
   type EquationMotionPlan
 } from "../src/rendering/equation-motion-plan.ts";
@@ -425,6 +428,63 @@ test("createEquationMotionPlan animates right constant difference simplification
     end: 0.75,
     easing: "ease-out",
     from: { opacity: 0, x: 0, y: 0, scale: 1 },
+    to: { opacity: 1, x: 0, y: 0, scale: 1 }
+  });
+});
+
+test("createEquationMotionPlan maps wrapper fixtures to wrap and enter tracks", () => {
+  const fixture = findKatexTransformFixture("wrapper.parentheses.wrap");
+  const transition: EquationTransition = {
+    sourceLatex: fixture.source.latex,
+    targetLatex: fixture.target.latex,
+    operation: {
+      kind: "subtractBothSides",
+      valueLatex: "0"
+    },
+    tokens: [
+      {
+        id: "wrapped-expression",
+        lifecycle: "group-wrap",
+        label: "x+1",
+        sourceMotionId: "source.expression",
+        targetMotionId: "target.expression"
+      },
+      {
+        id: "open-paren",
+        lifecycle: "enter",
+        label: "(",
+        targetMotionId: "target.open-paren"
+      },
+      {
+        id: "close-paren",
+        lifecycle: "enter",
+        label: ")",
+        targetMotionId: "target.close-paren"
+      }
+    ],
+    sourceAnnotations: [{ motionId: "source.expression", text: "x+1" }],
+    targetAnnotations: [
+      { motionId: "target.open-paren", text: "(" },
+      { motionId: "target.expression", text: "x+1" },
+      { motionId: "target.close-paren", text: ")" }
+    ]
+  };
+
+  const plan = createEquationMotionPlan(transition);
+
+  assert.deepEqual(summarizeSemanticVisualLifecycles(plan), [
+    ["wrapped-expression", "role-changed", "wrap"],
+    ["open-paren", "introduced", "enter"],
+    ["close-paren", "introduced", "enter"]
+  ]);
+  assert.deepEqual(trackFor(plan, "wrapped-expression"), {
+    tokenId: "wrapped-expression",
+    lifecycle: "group-wrap",
+    visualLifecycle: "wrap",
+    start: 0,
+    end: 1,
+    easing: "ease-in-out",
+    from: { opacity: 1, x: 0, y: 0, scale: 1 },
     to: { opacity: 1, x: 0, y: 0, scale: 1 }
   });
 });

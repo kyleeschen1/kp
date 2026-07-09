@@ -501,3 +501,15 @@ These fixtures encode expected radical SVG and rule artifacts
 and target structural-token counts. Browser verification confirms the existing
 KaTeX snapshot path can capture the radical SVG artifacts without a
 renderer-specific fallback.
+
+Slice 14 extended the registry with wrapper/delimiter fixtures:
+
+- `wrapper.parentheses.wrap`
+- `wrapper.absolute-value.unwrap`
+- `wrapper.norm.wrap`
+- `wrapper.function.wrap`
+
+These fixtures encode delimiter and function-name artifacts as visual tokens.
+They also connect to the equation motion lifecycle vocabulary:
+`group-wrap` maps to `role-change` correspondence and a `wrap` visual lifecycle,
+while delimiter artifacts enter or exit separately.

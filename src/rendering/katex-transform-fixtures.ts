@@ -1,4 +1,8 @@
-export type KatexTransformFixtureFamily = "fraction" | "radical" | "script";
+export type KatexTransformFixtureFamily =
+  | "fraction"
+  | "radical"
+  | "script"
+  | "wrapper";
 
 export type KatexFractionTransformIntent =
   | "makeFraction"
@@ -15,10 +19,16 @@ export type KatexRadicalTransformIntent =
   | "rewriteRootAsPower"
   | "unwrapIndexedRoot";
 
+export type KatexWrapperTransformIntent =
+  | "wrapWithDelimiter"
+  | "unwrapDelimiter"
+  | "wrapWithFunction";
+
 export type KatexTransformFixtureIntent =
   | KatexFractionTransformIntent
   | KatexRadicalTransformIntent
-  | KatexScriptTransformIntent;
+  | KatexScriptTransformIntent
+  | KatexWrapperTransformIntent;
 
 export type KatexTransformFixtureTokenRole =
   | "artifact"
@@ -377,10 +387,117 @@ export const scriptTransformFixtures: readonly KatexTransformFixture[] = [
   }
 ];
 
+export const wrapperTransformFixtures: readonly KatexTransformFixture[] = [
+  {
+    id: "wrapper.parentheses.wrap",
+    family: "wrapper",
+    intent: "wrapWithDelimiter",
+    source: {
+      latex: "x+1",
+      tokens: [
+        semanticToken("x", 0, 0),
+        operatorToken("+", 0, 1),
+        semanticToken("1", 0, 2)
+      ]
+    },
+    target: {
+      latex: "(x+1)",
+      tokens: [
+        artifactToken("(", "mopen", 0, 0),
+        semanticToken("x", 0, 1),
+        operatorToken("+", 0, 2),
+        semanticToken("1", 0, 3),
+        artifactToken(")", "mclose", 0, 4)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [],
+    summary:
+      "An expression is wrapped in parentheses; delimiter artifacts enter around persisted child tokens."
+  },
+  {
+    id: "wrapper.absolute-value.unwrap",
+    family: "wrapper",
+    intent: "unwrapDelimiter",
+    source: {
+      latex: "|x|",
+      tokens: [
+        artifactToken("|", "mopen", 0, 0),
+        semanticToken("x", 0, 1),
+        artifactToken("|", "mclose", 0, 2)
+      ]
+    },
+    target: {
+      latex: "x",
+      tokens: [semanticToken("x", 0, 0)]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [],
+    summary:
+      "Absolute-value delimiters unwrap; delimiter artifacts exit while the child token persists."
+  },
+  {
+    id: "wrapper.norm.wrap",
+    family: "wrapper",
+    intent: "wrapWithDelimiter",
+    source: {
+      latex: "v",
+      tokens: [semanticToken("v", 0, 0)]
+    },
+    target: {
+      latex: "\\lVert v \\rVert",
+      tokens: [
+        artifactToken("\\lVert", "mopen", 0, 0),
+        semanticToken("v", 0, 1),
+        artifactToken("\\rVert", "mclose", 0, 2)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [],
+    summary:
+      "A vector symbol is wrapped in norm delimiters; large delimiter artifacts are explicit fixture tokens."
+  },
+  {
+    id: "wrapper.function.wrap",
+    family: "wrapper",
+    intent: "wrapWithFunction",
+    source: {
+      latex: "x",
+      tokens: [semanticToken("x", 0, 0)]
+    },
+    target: {
+      latex: "f(x)",
+      tokens: [
+        artifactToken("f", "mop", 0, 0),
+        artifactToken("(", "mopen", 0, 1),
+        semanticToken("x", 0, 2),
+        artifactToken(")", "mclose", 0, 3)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [],
+    summary:
+      "An expression is wrapped as a function argument; function name and delimiters are notation artifacts."
+  }
+];
+
 export const katexTransformFixtures: readonly KatexTransformFixture[] = [
   ...fractionTransformFixtures,
   ...radicalTransformFixtures,
-  ...scriptTransformFixtures
+  ...scriptTransformFixtures,
+  ...wrapperTransformFixtures
 ];
 
 export function findKatexTransformFixture(id: string): KatexTransformFixture {

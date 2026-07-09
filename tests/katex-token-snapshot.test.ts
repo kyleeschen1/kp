@@ -12,7 +12,8 @@ import {
   fractionTransformFixtures,
   radicalTransformFixtures,
   summarizeKatexTransformFixtureDiagnostics,
-  scriptTransformFixtures
+  scriptTransformFixtures,
+  wrapperTransformFixtures
 } from "../src/rendering/katex-transform-fixtures.ts";
 import type {
   KatexMotionToken,
@@ -288,6 +289,27 @@ test("radical fixture diagnostics count structural artifact expectations", () =>
         targetStructuralTokenCount: 0,
         roleChangeCount: 1
       }
+    ]
+  );
+});
+
+test("wrapper transform fixtures declare delimiter and function artifacts", () => {
+  assert.deepEqual(
+    wrapperTransformFixtures.map((fixture) => [
+      fixture.id,
+      fixture.intent,
+      fixture.source.tokens
+        .filter((token) => token.role === "artifact")
+        .map((token) => token.text),
+      fixture.target.tokens
+        .filter((token) => token.role === "artifact")
+        .map((token) => token.text)
+    ]),
+    [
+      ["wrapper.parentheses.wrap", "wrapWithDelimiter", [], ["(", ")"]],
+      ["wrapper.absolute-value.unwrap", "unwrapDelimiter", ["|", "|"], []],
+      ["wrapper.norm.wrap", "wrapWithDelimiter", [], ["\\lVert", "\\rVert"]],
+      ["wrapper.function.wrap", "wrapWithFunction", [], ["f", "(", ")"]]
     ]
   );
 });
