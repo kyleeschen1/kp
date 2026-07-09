@@ -28,7 +28,7 @@ import {
   type SemanticBeatId
 } from "../rendering/semantic-beat-compiler.ts";
 
-const EQUATION_MOTION_ANIMATION_DURATION_MS = 420;
+const EQUATION_MOTION_ANIMATION_DURATION_MS = 900;
 const EQUATION_MOTION_MIN_DURATION_MS = 200;
 const EQUATION_MOTION_MAX_DURATION_MS = 3000;
 const EQUATION_MOTION_COLLAPSE_SCALE_PERCENT = 35;
@@ -245,9 +245,7 @@ function playEquationMotionDemoTransition(
       0,
       1
     );
-    const easedProgress = easeInOut(timeProgress);
-
-    player.setProgress(startProgress + delta * easedProgress);
+    player.setProgress(startProgress + delta * timeProgress);
 
     if (timeProgress < 1) {
       activeAnimationFrames.set(demo, window.requestAnimationFrame(tick));
@@ -1377,10 +1375,6 @@ function addedObjectPose(pose: MotionPose, progress: number): MotionPose {
       entryProgress
     )
   };
-}
-
-function easeInOut(progress: number): number {
-  return (1 - Math.cos(Math.PI * progress)) / 2;
 }
 
 function interpolateNumber(from: number, to: number, progress: number): number {

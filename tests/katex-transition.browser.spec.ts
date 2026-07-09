@@ -29,10 +29,10 @@ test("editor equation motion demo uses semantic playback plans", async ({
   await expect(beatScrubber).toHaveValue("0");
   await expect(durationSlider).toHaveAttribute("min", "200");
   await expect(durationSlider).toHaveAttribute("max", "3000");
-  await expect(durationSlider).toHaveValue("420");
+  await expect(durationSlider).toHaveValue("900");
   await expect(
     demo.locator('[data-role="equation-motion-duration-output"]')
-  ).toHaveText("420 ms");
+  ).toHaveText("900 ms");
   await expect(collapseScaleSlider).toHaveAttribute("min", "5");
   await expect(collapseScaleSlider).toHaveAttribute("max", "50");
   await expect(collapseScaleSlider).toHaveValue("35");
@@ -236,7 +236,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
       throw new Error("Expected equation motion demo.");
     }
 
-    window.__kpEquationMotionSetProgress?.(demoElement, 0.5);
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.6);
 
     const sourceState = demoElement.querySelector<HTMLElement>(
       '[data-kp-equation-motion-state="0"]'
@@ -268,7 +268,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
     };
   });
 
-  expect(scrubbedVisualState.progress).toBe("0.5");
+  expect(scrubbedVisualState.progress).toBe("0.6");
   expect(scrubbedVisualState.targetStateVisibility).toBe("visible");
   expect(scrubbedVisualState.enteringOpacity).toBeGreaterThan(0);
   expect(scrubbedVisualState.enteringOpacity).toBeLessThan(1);

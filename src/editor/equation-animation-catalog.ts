@@ -45,6 +45,7 @@ export interface EquationAnimationCatalogEntry {
 export const DEFAULT_EQUATION_ANIMATION_ID: EquationAnimationId =
   "linear-equation-solve-x";
 const EQUATION_ANIMATION_BEAT_LABEL_COUNT = 50;
+const EQUATION_ANIMATION_DEFAULT_DURATION_MS = 900;
 
 export const equationAnimationCatalogEntries: readonly EquationAnimationCatalogEntry[] = [
   createLinearEquationAnimationEntry(),
@@ -150,7 +151,7 @@ function createLinearEquationAnimationEntry(): EquationAnimationCatalogEntry {
       }
     ],
     beatCount: EQUATION_ANIMATION_BEAT_LABEL_COUNT,
-    defaultDurationMs: 420,
+    defaultDurationMs: EQUATION_ANIMATION_DEFAULT_DURATION_MS,
     defaultCollapseScalePercent: 35
   };
 }
@@ -174,7 +175,7 @@ function createFixtureAnimationEntry(input: {
       createFixtureAnimationState(fixture, transition, "target")
     ],
     beatCount: EQUATION_ANIMATION_BEAT_LABEL_COUNT,
-    defaultDurationMs: 420,
+    defaultDurationMs: EQUATION_ANIMATION_DEFAULT_DURATION_MS,
     defaultCollapseScalePercent: 35
   };
 }

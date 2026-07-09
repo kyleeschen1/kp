@@ -176,11 +176,11 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
   assert.match(html, /data-role="equation-motion-beat-output"[^>]*>0\/50</);
   assert.match(
     html,
-    /type="range"[^>]*data-action="set-equation-motion-duration"[^>]*min="200"[^>]*max="3000"[^>]*step="20"[^>]*value="420"/
+    /type="range"[^>]*data-action="set-equation-motion-duration"[^>]*min="200"[^>]*max="3000"[^>]*step="20"[^>]*value="900"/
   );
   assert.match(
     html,
-    /data-role="equation-motion-duration-output"[^>]*>420 ms</
+    /data-role="equation-motion-duration-output"[^>]*>900 ms</
   );
   assert.match(
     html,

@@ -109,7 +109,7 @@ test("role-aware motion primitive descriptors compile to sampler tracks", () => 
 });
 
 test("semantic beat compiler exposes the current equation demo timeline", () => {
-  assert.equal(linearEquationDemoBeatTimeline.beatCount, 20);
+  assert.equal(linearEquationDemoBeatTimeline.beatCount, 50);
   assert.deepEqual(
     linearEquationDemoBeatTimeline.beats.map((beat) => [
       beat.id,
@@ -118,14 +118,14 @@ test("semantic beat compiler exposes the current equation demo timeline", () => 
       beat.easing
     ]),
     [
-      ["layout-shift", 0, 8, "ease-in-out"],
-      ["introduced-token-enter", 8, 20, "ease-out"],
-      ["cancel-meet", 0, 8, "ease-in-out"],
-      ["cancel-collapse", 8, 10, "ease-out"],
-      ["post-cancel-layout-shift", 14, 20, "ease-in-out"],
-      ["final-simplify-meet", 0, 8, "ease-in-out"],
-      ["final-simplify-collapse", 8, 10, "ease-out"],
-      ["final-simplify-reveal", 10, 14, "ease-in-out"]
+      ["layout-shift", 0, 25, "ease-in-out"],
+      ["introduced-token-enter", 25, 50, "ease-out"],
+      ["cancel-meet", 0, 20, "ease-in-out"],
+      ["cancel-collapse", 20, 25, "ease-out"],
+      ["post-cancel-layout-shift", 35, 50, "ease-in-out"],
+      ["final-simplify-meet", 0, 20, "ease-in-out"],
+      ["final-simplify-collapse", 20, 25, "ease-out"],
+      ["final-simplify-reveal", 25, 35, "ease-in-out"]
     ]
   );
   assert.equal(
@@ -134,7 +134,7 @@ test("semantic beat compiler exposes the current equation demo timeline", () => 
       0.3,
       "layout-shift"
     ),
-    0.75
+    0.6
   );
   assertNearlyEqual(
     easedProgressBetweenSemanticBeat(
@@ -142,7 +142,7 @@ test("semantic beat compiler exposes the current equation demo timeline", () => 
       0.3,
       "layout-shift"
     ),
-    (1 - Math.cos(Math.PI * 0.75)) / 2
+    (1 - Math.cos(Math.PI * 0.6)) / 2
   );
 });
 
@@ -161,14 +161,14 @@ test("semantic beat compiler creates sampler-compatible beat tracks", () => {
     tokenId: "introduced",
     lifecycle: "enter",
     visualLifecycle: "enter",
-    start: 0.4,
+    start: 0.5,
     end: 1,
     easing: "ease-out",
     from: { opacity: 0, x: 0, y: 0, scale: 0.82 },
     to: { opacity: 1, x: 0, y: 0, scale: 1 }
   });
   assert.equal(
-    findFrameToken(sampleEquationMotion(planWithTrack(track), 0.4), "introduced")
+    findFrameToken(sampleEquationMotion(planWithTrack(track), 0.5), "introduced")
       .pose.opacity,
     0
   );

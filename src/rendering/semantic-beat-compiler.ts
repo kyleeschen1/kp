@@ -46,61 +46,61 @@ export interface SemanticBeatMotionTrackInput {
 
 export const linearEquationDemoBeatTimeline = compileSemanticBeatTimeline({
   id: "linear-equation-demo",
-  beatCount: 20,
+  beatCount: 50,
   beats: [
     {
       id: "layout-shift",
       startBeat: 0,
-      endBeat: 8,
+      endBeat: 25,
       easing: "ease-in-out",
       summary: "Persisted tokens shift before introduced tokens appear."
     },
     {
       id: "introduced-token-enter",
-      startBeat: 8,
-      endBeat: 20,
+      startBeat: 25,
+      endBeat: 50,
       easing: "ease-out",
       summary: "New tokens fade and scale in after layout room exists."
     },
     {
       id: "cancel-meet",
       startBeat: 0,
-      endBeat: 8,
+      endBeat: 20,
       easing: "ease-in-out",
       summary: "Cancelled tokens move toward the shared midpoint."
     },
     {
       id: "cancel-collapse",
-      startBeat: 8,
-      endBeat: 10,
+      startBeat: 20,
+      endBeat: 25,
       easing: "ease-out",
       summary: "Cancelled tokens dissolve after meeting."
     },
     {
       id: "post-cancel-layout-shift",
-      startBeat: 14,
-      endBeat: 20,
+      startBeat: 35,
+      endBeat: 50,
       easing: "ease-in-out",
       summary: "Remaining tokens settle after cancellation."
     },
     {
       id: "final-simplify-meet",
       startBeat: 0,
-      endBeat: 8,
+      endBeat: 20,
       easing: "ease-in-out",
       summary: "Source tokens for a simplification move toward the midpoint."
     },
     {
       id: "final-simplify-collapse",
-      startBeat: 8,
-      endBeat: 10,
+      startBeat: 20,
+      endBeat: 25,
       easing: "ease-out",
       summary: "Source tokens shrink and fade at the midpoint."
     },
     {
       id: "final-simplify-reveal",
-      startBeat: 10,
-      endBeat: 14,
+      startBeat: 25,
+      endBeat: 35,
       easing: "ease-in-out",
       summary: "The simplified target token grows from the shared midpoint."
     }
