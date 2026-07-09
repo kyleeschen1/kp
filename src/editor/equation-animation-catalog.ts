@@ -26,7 +26,7 @@ export interface EquationAnimationState {
 }
 
 export interface EquationAnimationStructuralMotionAnnotation {
-  readonly selector: "frac-line";
+  readonly selector: "frac-line" | "hide-tail";
   readonly motionId: string;
 }
 
@@ -243,6 +243,24 @@ function fixtureAnimationRenderMetadata(
     };
   }
 
+  if (fixtureId === "radical.rewrite-power-as-root") {
+    if (side === "source") {
+      return {
+        renderLatex: `${motionDataLatex(`${fixtureId}.source.x`, "x")}^{${motionDataLatex(`${fixtureId}.source.exponent`, "1/2")}}`
+      };
+    }
+
+    return {
+      renderLatex: `\\sqrt{${motionDataLatex(`${fixtureId}.target.x`, "x")}}`,
+      structuralMotionAnnotations: [
+        {
+          selector: "hide-tail",
+          motionId: `${fixtureId}.target.radical`
+        }
+      ]
+    };
+  }
+
   if (fixtureId === "wrapper.function.wrap") {
     if (side === "source") {
       return {
@@ -348,6 +366,10 @@ function createFixtureEquationTransition(
 
   if (fixture.id === "script.combine-factor-as-power") {
     return createRepeatedFactorFixtureTransition(fixture);
+  }
+
+  if (fixture.id === "radical.rewrite-power-as-root") {
+    return createRadicalPowerAsRootFixtureTransition(fixture);
   }
 
   if (fixture.id === "wrapper.function.wrap") {
@@ -548,14 +570,17 @@ function createRepeatedFactorFixtureTransition(
         "simplify-into",
         "x",
         sourceFactor,
-        undefined
-      ),
-      fixtureTransitionToken(
-        `${fixture.id}.exponent`,
-        "enter",
-        "2",
-        undefined,
-        targetExponent
+        targetExponent,
+        {
+          targetLatex: "2",
+          motion: motionTiming(
+            0,
+            0.75,
+            "ease-in-out",
+            identityPose(),
+            { opacity: 0, x: 0, y: 0, scale: 0.35 }
+          )
+        }
       )
     ],
     sourceAnnotations: [
@@ -602,6 +627,88 @@ function createRepeatedFactorFixtureTransition(
       target: {
         [targetBase]: `${fixture.id}.target.tokens.0`,
         [targetExponent]: `${fixture.id}.target.tokens.1`
+      }
+    }
+  };
+}
+
+function createRadicalPowerAsRootFixtureTransition(
+  fixture: KatexTransformFixture
+): EquationTransition {
+  const sourceX = `${fixture.id}.source.x`;
+  const sourceExponent = `${fixture.id}.source.exponent`;
+  const targetX = `${fixture.id}.target.x`;
+  const targetRadical = `${fixture.id}.target.radical`;
+
+  return {
+    sourceLatex: fixture.source.latex,
+    targetLatex: fixture.target.latex,
+    operation: fixtureOperation(fixture),
+    tokens: [
+      fixtureTransitionToken(
+        `${fixture.id}.x`,
+        "group-wrap",
+        "x",
+        sourceX,
+        targetX
+      ),
+      fixtureTransitionToken(
+        `${fixture.id}.exponent`,
+        "exit",
+        "1/2",
+        sourceExponent,
+        undefined
+      ),
+      fixtureTransitionToken(
+        `${fixture.id}.radical`,
+        "enter",
+        "\\sqrt",
+        undefined,
+        targetRadical
+      )
+    ],
+    sourceAnnotations: [
+      { motionId: sourceX, text: "x" },
+      { motionId: sourceExponent, text: "1/2" }
+    ],
+    targetAnnotations: [
+      { motionId: targetX, text: "x" },
+      { motionId: targetRadical, text: "structural:radical" }
+    ],
+    correspondenceMap: {
+      id: `${fixture.id}.fixture-animation`,
+      records: [
+        {
+          id: `${fixture.id}.role-change.base-to-radicand`,
+          relation: "role-change",
+          sourceSelectorIds: [sourceX],
+          targetSelectorIds: [targetX],
+          summary: "base x persists as the radicand"
+        },
+        {
+          id: `${fixture.id}.removal.exponent`,
+          relation: "removal",
+          sourceSelectorIds: [sourceExponent],
+          targetSelectorIds: [],
+          summary: "the exponent notation fades as radical notation enters"
+        },
+        {
+          id: `${fixture.id}.artifact.radical`,
+          relation: "artifact",
+          sourceSelectorIds: [],
+          targetSelectorIds: [targetRadical],
+          summary: "the radical glyph and rule enter as a visual artifact"
+        }
+      ]
+    },
+    selectorPaths: {
+      source: {
+        [sourceX]: `${fixture.id}.source.tokens.0`,
+        [sourceExponent]: `${fixture.id}.source.tokens.2`
+      },
+      target: {
+        [targetRadical]: `${fixture.id}.target.tokens.0`,
+        [targetX]: `${fixture.id}.target.tokens.3`
       }
     }
   };
@@ -864,7 +971,10 @@ function fixtureTransitionToken(
   latex: string,
   sourceMotionId: string | undefined,
   targetMotionId: string | undefined,
-  options: Pick<EquationTransitionToken, "entryEffect" | "motion"> = {}
+  options: Pick<EquationTransitionToken, "entryEffect" | "motion"> & {
+    readonly sourceLatex?: string | undefined;
+    readonly targetLatex?: string | undefined;
+  } = {}
 ): EquationTransitionToken {
   return {
     id,
@@ -872,8 +982,12 @@ function fixtureTransitionToken(
     label: latex,
     ...(options.entryEffect === undefined ? {} : { entryEffect: options.entryEffect }),
     ...(options.motion === undefined ? {} : { motion: options.motion }),
-    ...(sourceMotionId === undefined ? {} : { sourceMotionId, sourceLatex: latex }),
-    ...(targetMotionId === undefined ? {} : { targetMotionId, targetLatex: latex })
+    ...(sourceMotionId === undefined
+      ? {}
+      : { sourceMotionId, sourceLatex: options.sourceLatex ?? latex }),
+    ...(targetMotionId === undefined
+      ? {}
+      : { targetMotionId, targetLatex: options.targetLatex ?? latex })
   };
 }
 

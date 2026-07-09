@@ -260,12 +260,18 @@ function validateLifecycleEndpoints(
         );
       }
       return;
-    case "exit":
     case "cancel":
-    case "simplify-into":
+    case "exit":
       if (!hasSource || hasTarget) {
         throw new Error(
           `Motion token ${token.id} lifecycle ${token.lifecycle} requires only sourceMotionId`
+        );
+      }
+      return;
+    case "simplify-into":
+      if (!hasSource) {
+        throw new Error(
+          `Motion token ${token.id} lifecycle ${token.lifecycle} requires sourceMotionId`
         );
       }
       return;

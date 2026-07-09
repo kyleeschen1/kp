@@ -337,6 +337,11 @@ function applyStructuralMotionAnnotations(
             'class="frac-line"',
             `class="frac-line" data-kp-motion-id="${escapeHtml(annotation.motionId)}"`
           )
+        : annotation.selector === "hide-tail"
+          ? nextHtml.replace(
+              'class="hide-tail"',
+              `class="hide-tail" data-kp-motion-id="${escapeHtml(annotation.motionId)}"`
+            )
         : nextHtml,
     html
   );

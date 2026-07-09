@@ -403,6 +403,40 @@ test("renderEditorDocument renders selected fixture animation", () => {
   assert.doesNotMatch(html, /structural:frac-line/);
 });
 
+test("renderEditorDocument renders radical rewrite with persistent x anchors", () => {
+  const html = renderEditorDocument(createInitialEditorDocument(), {
+    equationAnimationId: "fixture-radical-rewrite-power-as-root"
+  });
+
+  assert.match(
+    html,
+    /data-kp-equation-animation-id="fixture-radical-rewrite-power-as-root"/
+  );
+  assert.match(html, /data-kp-equation-motion-max-step="1"/);
+  assert.match(
+    html,
+    /option value="fixture-radical-rewrite-power-as-root" selected>Power to radical/
+  );
+  assert.match(
+    extractEquationMotionStateBlock(html, 0),
+    /data-kp-motion-id="radical\.rewrite-power-as-root\.source\.x"/
+  );
+  assert.match(
+    extractEquationMotionStateBlock(html, 0),
+    /data-kp-motion-id="radical\.rewrite-power-as-root\.source\.exponent"/
+  );
+  assert.match(
+    extractEquationMotionStateBlock(html, 1),
+    /data-kp-motion-id="radical\.rewrite-power-as-root\.target\.x"/
+  );
+  assert.match(
+    extractEquationMotionStateBlock(html, 1),
+    /class="hide-tail" data-kp-motion-id="radical\.rewrite-power-as-root\.target\.radical"/
+  );
+  assert.doesNotMatch(html, /radical\.rewrite-power-as-root\.source\.expression/);
+  assert.doesNotMatch(html, /radical\.rewrite-power-as-root\.target\.expression/);
+});
+
 test("renderEditorDocument renders matrix bracket swap with persistent entry anchors", () => {
   const html = renderEditorDocument(createInitialEditorDocument(), {
     equationAnimationId: "fixture-matrix-bracket-change-delimiter"

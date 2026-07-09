@@ -574,6 +574,75 @@ test("fixture fraction animation fades slash and fraction line artifacts", () =>
   );
 });
 
+test("fixture radical animation preserves x as radicand and enters radical artifact", () => {
+  const entry = findEquationAnimationCatalogEntry(
+    "fixture-radical-rewrite-power-as-root"
+  );
+  const transition = entry.transitions[0];
+
+  assert.ok(transition, "expected radical transition");
+  assert.deepEqual(
+    transition.tokens.map((token) => [
+      token.id,
+      token.lifecycle,
+      token.sourceMotionId,
+      token.targetMotionId
+    ]),
+    [
+      [
+        "radical.rewrite-power-as-root.x",
+        "group-wrap",
+        "radical.rewrite-power-as-root.source.x",
+        "radical.rewrite-power-as-root.target.x"
+      ],
+      [
+        "radical.rewrite-power-as-root.exponent",
+        "exit",
+        "radical.rewrite-power-as-root.source.exponent",
+        undefined
+      ],
+      [
+        "radical.rewrite-power-as-root.radical",
+        "enter",
+        undefined,
+        "radical.rewrite-power-as-root.target.radical"
+      ]
+    ]
+  );
+
+  const plan = createEquationMotionPlan(transition);
+
+  assert.deepEqual(summarizeSemanticVisualLifecycles(plan), [
+    ["radical.rewrite-power-as-root.x", "role-changed", "wrap"],
+    ["radical.rewrite-power-as-root.exponent", "removed", "exit"],
+    ["radical.rewrite-power-as-root.radical", "visual-only", "enter"]
+  ]);
+  assert.deepEqual(
+    plan.correspondenceMap.records.map((record) => [
+      record.relation,
+      record.sourceSelectorIds,
+      record.targetSelectorIds
+    ]),
+    [
+      [
+        "role-change",
+        ["radical.rewrite-power-as-root.source.x"],
+        ["radical.rewrite-power-as-root.target.x"]
+      ],
+      [
+        "removal",
+        ["radical.rewrite-power-as-root.source.exponent"],
+        []
+      ],
+      [
+        "artifact",
+        [],
+        ["radical.rewrite-power-as-root.target.radical"]
+      ]
+    ]
+  );
+});
+
 test("fixture script animation fades the nonpersistent dot operator", () => {
   const entry = findEquationAnimationCatalogEntry(
     "fixture-script-combine-factor-as-power"
@@ -583,9 +652,78 @@ test("fixture script animation fades the nonpersistent dot operator", () => {
   assert.deepEqual(summarizeTokenLifecycles(plan), [
     ["script.combine-factor-as-power.base", "persist"],
     ["script.combine-factor-as-power.dot", "exit"],
-    ["script.combine-factor-as-power.factor", "simplify-into"],
-    ["script.combine-factor-as-power.exponent", "enter"]
+    ["script.combine-factor-as-power.factor", "simplify-into"]
   ]);
+  assert.deepEqual(
+    plan.tokens.map((token) => [
+      token.id,
+      token.semanticLifecycle,
+      token.sourceMotionId,
+      token.targetMotionId,
+      token.sourceLatex,
+      token.targetLatex
+    ]),
+    [
+      [
+        "script.combine-factor-as-power.base",
+        "identity-preserved",
+        "script.combine-factor-as-power.source.base",
+        "script.combine-factor-as-power.target.base",
+        "x",
+        "x"
+      ],
+      [
+        "script.combine-factor-as-power.dot",
+        "removed",
+        "script.combine-factor-as-power.source.dot",
+        undefined,
+        "\\cdot",
+        undefined
+      ],
+      [
+        "script.combine-factor-as-power.factor",
+        "derived",
+        "script.combine-factor-as-power.source.factor",
+        "script.combine-factor-as-power.target.exponent",
+        "x",
+        "2"
+      ]
+    ]
+  );
+  assert.deepEqual(trackFor(plan, "script.combine-factor-as-power.factor"), {
+    tokenId: "script.combine-factor-as-power.factor",
+    lifecycle: "simplify-into",
+    visualLifecycle: "vanish",
+    start: 0,
+    end: 0.75,
+    easing: "ease-in-out",
+    from: { opacity: 1, x: 0, y: 0, scale: 1 },
+    to: { opacity: 0, x: 0, y: 0, scale: 0.35 }
+  });
+  assert.deepEqual(
+    plan.correspondenceMap.records.map((record) => [
+      record.relation,
+      record.sourceSelectorIds,
+      record.targetSelectorIds
+    ]),
+    [
+      [
+        "identity",
+        ["script.combine-factor-as-power.source.base"],
+        ["script.combine-factor-as-power.target.base"]
+      ],
+      [
+        "removal",
+        ["script.combine-factor-as-power.source.dot"],
+        []
+      ],
+      [
+        "fan-in",
+        ["script.combine-factor-as-power.source.factor"],
+        ["script.combine-factor-as-power.target.exponent"]
+      ]
+    ]
+  );
   assert.deepEqual(trackFor(plan, "script.combine-factor-as-power.dot"), {
     tokenId: "script.combine-factor-as-power.dot",
     lifecycle: "exit",

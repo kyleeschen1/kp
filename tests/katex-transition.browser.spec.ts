@@ -127,6 +127,49 @@ test("editor equation motion demo uses semantic playback plans", async ({
     "matrix.bracket.change-delimiter.target.expression"
   );
 
+  await animationSelect.selectOption("fixture-radical-rewrite-power-as-root");
+  const radicalMotionIds = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    return {
+      source: Array.from(
+        demoElement.querySelectorAll(
+          '[data-kp-equation-motion-state="0"] [data-kp-motion-id]'
+        )
+      ).map((element) => element.getAttribute("data-kp-motion-id")),
+      target: Array.from(
+        demoElement.querySelectorAll(
+          '[data-kp-equation-motion-state="1"] [data-kp-motion-id]'
+        )
+      ).map((element) => element.getAttribute("data-kp-motion-id"))
+    };
+  });
+
+  expect(radicalMotionIds.source).toContain(
+    "radical.rewrite-power-as-root.source.x"
+  );
+  expect(radicalMotionIds.source).toContain(
+    "radical.rewrite-power-as-root.source.exponent"
+  );
+  expect(radicalMotionIds.target).toContain(
+    "radical.rewrite-power-as-root.target.x"
+  );
+  expect(radicalMotionIds.target).toContain(
+    "radical.rewrite-power-as-root.target.radical"
+  );
+  expect(radicalMotionIds.source).not.toContain(
+    "radical.rewrite-power-as-root.source.expression"
+  );
+  expect(radicalMotionIds.target).not.toContain(
+    "radical.rewrite-power-as-root.target.expression"
+  );
+
   await animationSelect.selectOption("fixture-fraction-make-inline-to-stacked");
   await next.click();
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");
