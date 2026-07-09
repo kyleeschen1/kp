@@ -563,3 +563,16 @@ applies them before heuristic text/signature matching. Overrides are intentional
 narrow for now: both token ids must exist and the token text must match, so the
 current WebGL renderer can still move one source texture into the target pose
 without pretending different glyphs are the same texture.
+
+Slice 19 added role-aware motion primitive descriptors for:
+
+- `inline-to-fraction`
+- `inline-to-script`
+- `wrap`
+- `unwrap`
+
+Each descriptor compiles into a normal `EquationMotionTrack`, so the existing
+sampler/player clock can sample and rewind them without a separate animation
+runtime. The first descriptor set encodes default role-specific scale and
+baseline shifts; later measured layout can replace those numeric poses while
+keeping the same primitive ids.

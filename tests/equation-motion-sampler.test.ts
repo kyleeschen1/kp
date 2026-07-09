@@ -11,6 +11,10 @@ import {
   type EquationMotionFrame,
   type EquationMotionFrameToken
 } from "../src/rendering/equation-motion-sampler.ts";
+import {
+  createRoleAwareMotionTrack,
+  roleAwareMotionPrimitiveDescriptors
+} from "../src/rendering/role-aware-motion-primitives.ts";
 
 const findFrameToken = (
   frame: EquationMotionFrame,
@@ -64,6 +68,38 @@ test("sampleEquationMotion returns lifecycle frames for subtractBothSides", () =
   assert.equal(findOpacity(middle, "lhs.plus"), 1);
   assert.ok(findOpacity(middle, "rhs.inverse.3") > 0);
   assert.ok(findOpacity(middle, "rhs.inverse.3") < 1);
+});
+
+test("role-aware motion primitive descriptors compile to sampler tracks", () => {
+  assert.deepEqual(
+    roleAwareMotionPrimitiveDescriptors.map((descriptor) => [
+      descriptor.id,
+      descriptor.sourceRole,
+      descriptor.targetRole,
+      descriptor.tokenLifecycle,
+      descriptor.visualLifecycle,
+      descriptor.to.scale,
+      descriptor.to.y
+    ]),
+    [
+      ["inline-to-fraction", "inline", "fraction-slot", "move", "shift", 0.86, -10],
+      ["inline-to-script", "inline", "superscript", "move", "shift", 0.72, -14],
+      ["wrap", "expression", "wrapped-expression", "group-wrap", "wrap", 1, 0],
+      ["unwrap", "wrapped-expression", "expression", "group-unwrap", "unwrap", 1, 0]
+    ]
+  );
+
+  const track = createRoleAwareMotionTrack("x", "inline-to-script");
+  const frame = sampleEquationMotion(
+    planWithTrack(track),
+    0.5
+  );
+  const pose = findFrameToken(frame, "x").pose;
+
+  assert.ok(pose.scale < 1);
+  assert.ok(pose.scale > 0.72);
+  assert.ok(pose.y < 0);
+  assert.ok(pose.y > -14);
 });
 
 test("sampleEquationMotion samples cancellation during left simplification", () => {
@@ -138,6 +174,40 @@ test("sampleEquationMotion clamps progress and supports backward sampling", () =
     findFrameToken(freshEarlier, "rhs.4").pose
   );
 });
+
+function planWithTrack(
+  track: EquationMotionPlan["tracks"][number]
+): EquationMotionPlan {
+  return {
+    sourceLatex: "x",
+    targetLatex: "x",
+    correspondenceMap: {
+      id: "test.role-aware-motion",
+      records: [
+        {
+          id: "identity.x",
+          relation: "identity",
+          sourceSelectorIds: ["x"],
+          targetSelectorIds: ["x"],
+          summary: "x role changes"
+        }
+      ]
+    },
+    tokens: [
+      {
+        id: "x",
+        lifecycle: track.lifecycle,
+        correspondenceRelation: "identity",
+        semanticLifecycle: "identity-preserved",
+        visualLifecycle: track.visualLifecycle,
+        label: "x",
+        sourceMotionId: "x.source",
+        targetMotionId: "x.target"
+      }
+    ],
+    tracks: [track]
+  };
+}
 
 test("sampleEquationMotion linearly interpolates all pose fields", () => {
   const plan: EquationMotionPlan = {
