@@ -10,17 +10,63 @@ interface MatchCandidate {
   targetIndex: number;
 }
 
+export interface KatexTokenCorrespondenceOverride {
+  readonly sourceTokenId: string;
+  readonly targetTokenId: string;
+}
+
+export interface KatexTransitionPlanOptions {
+  readonly correspondenceMatches?:
+    | readonly KatexTokenCorrespondenceOverride[]
+    | undefined;
+}
+
 export function createKatexTransitionPlan(
   sourceTokens: readonly KatexMotionToken[],
-  targetTokens: readonly KatexMotionToken[]
+  targetTokens: readonly KatexMotionToken[],
+  options: KatexTransitionPlanOptions = {}
 ): KatexTransitionPlan {
   const matchableSourceTokens = sourceTokens.filter((source) => source.text.length > 0);
   const matchableTargetTokens = targetTokens.filter((target) => target.text.length > 0);
   const matched: Array<{ source: KatexMotionToken; target: KatexMotionToken }> = [];
+  const sourceById = new Map(
+    matchableSourceTokens.map((source) => [source.id, source])
+  );
+  const targetById = new Map(
+    matchableTargetTokens.map((target) => [target.id, target])
+  );
+  const usedSources = new Set<string>();
   const usedTargets = new Set<string>();
+  let overrideMatchCount = 0;
+  let invalidOverrideCount = 0;
   let ambiguousGroupCount = 0;
 
+  for (const override of options.correspondenceMatches ?? []) {
+    const source = sourceById.get(override.sourceTokenId);
+    const target = targetById.get(override.targetTokenId);
+
+    if (
+      source === undefined ||
+      target === undefined ||
+      usedSources.has(source.id) ||
+      usedTargets.has(target.id) ||
+      source.text !== target.text
+    ) {
+      invalidOverrideCount += 1;
+      continue;
+    }
+
+    matched.push({ source, target });
+    usedSources.add(source.id);
+    usedTargets.add(target.id);
+    overrideMatchCount += 1;
+  }
+
   for (const source of matchableSourceTokens) {
+    if (usedSources.has(source.id)) {
+      continue;
+    }
+
     const candidates = matchableTargetTokens
       .map((target, targetIndex): MatchCandidate => ({
         source,
@@ -48,11 +94,11 @@ export function createKatexTransitionPlan(
 
     if (best !== undefined) {
       matched.push({ source: best.source, target: best.target });
+      usedSources.add(best.source.id);
       usedTargets.add(best.target.id);
     }
   }
 
-  const usedSources = new Set(matched.map((match) => match.source.id));
   const sourceOnly = matchableSourceTokens
     .filter((source) => !usedSources.has(source.id))
     .map((source) => ({ source }));
@@ -70,7 +116,9 @@ export function createKatexTransitionPlan(
       matchedCount: matched.length,
       sourceOnlyCount: sourceOnly.length,
       targetOnlyCount: targetOnly.length,
-      ambiguousGroupCount
+      ambiguousGroupCount,
+      overrideMatchCount,
+      invalidOverrideCount
     }
   };
 }

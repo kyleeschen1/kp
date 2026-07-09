@@ -552,3 +552,14 @@ These records convert to `artifact` correspondence records and use stable ids
 derived from semantic fixture paths, not KaTeX DOM token indexes. They are the
 bridge between visual-only render artifacts and the same correspondence
 vocabulary used by semantic tokens.
+
+Slice 18 added an optional correspondence-aware matcher override:
+
+- `createKatexTransitionPlan(source, target, { correspondenceMatches })`
+- `transitionKatexEquations(..., { correspondenceMatches })`
+
+The override accepts explicit source-token-id to target-token-id pairs and
+applies them before heuristic text/signature matching. Overrides are intentionally
+narrow for now: both token ids must exist and the token text must match, so the
+current WebGL renderer can still move one source texture into the target pose
+without pretending different glyphs are the same texture.

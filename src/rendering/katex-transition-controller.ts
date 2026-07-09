@@ -1,4 +1,7 @@
-import { createKatexTransitionPlan } from "./katex-token-matcher.ts";
+import {
+  createKatexTransitionPlan,
+  type KatexTokenCorrespondenceOverride
+} from "./katex-token-matcher.ts";
 import { snapshotKatexTokens } from "./katex-token-snapshot.ts";
 import { createKatexTextureAtlas } from "./katex-texture-atlas.ts";
 import type {
@@ -15,6 +18,9 @@ export interface KatexTransitionOptions {
   easing?: ((progress: number) => number) | undefined;
   forceFallback?: boolean | undefined;
   beforeCleanup?: (() => void | Promise<void>) | undefined;
+  correspondenceMatches?:
+    | readonly KatexTokenCorrespondenceOverride[]
+    | undefined;
 }
 
 type MatchMediaLike = typeof window.matchMedia;
@@ -76,9 +82,14 @@ async function transitionKatexEquationsWithDependencies(
   const targetSnapshot = dependencies.snapshotKatexTokens(targetEl, {
     overlayRect: bounds
   });
+  const planOptions =
+    options.correspondenceMatches === undefined
+      ? undefined
+      : { correspondenceMatches: options.correspondenceMatches };
   const plan = dependencies.createKatexTransitionPlan(
     sourceSnapshot.tokens,
-    targetSnapshot.tokens
+    targetSnapshot.tokens,
+    planOptions
   );
 
   if (

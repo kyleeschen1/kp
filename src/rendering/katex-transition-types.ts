@@ -35,6 +35,8 @@ export interface KatexTransitionPlanDiagnostics {
   sourceOnlyCount: number;
   targetOnlyCount: number;
   ambiguousGroupCount: number;
+  overrideMatchCount?: number | undefined;
+  invalidOverrideCount?: number | undefined;
 }
 
 export interface KatexTransitionPlan {

@@ -15,6 +15,9 @@ import type {
   KatexTextureAtlas,
   KatexTransitionPlan
 } from "../src/rendering/katex-transition-types.ts";
+import type {
+  KatexTransitionPlanOptions
+} from "../src/rendering/katex-token-matcher.ts";
 
 test("prefersReducedKatexMotion reads matchMedia defensively", () => {
   assert.equal(prefersReducedKatexMotion(undefined), false);
@@ -181,6 +184,47 @@ test("transitionKatexEquations namespaces duplicate source and target atlas ids"
   ]);
 });
 
+test("transitionKatexEquations passes correspondence overrides to the matcher", async () => {
+  const source = fakeElement("source");
+  const target = fakeElement("target");
+  const deps = fakeDependencies({
+    sourceTokens: [
+      token("source.left-x", "x", source),
+      token("source.right-x", "x", source)
+    ],
+    targetTokens: [
+      token("target.left-x", "x", target),
+      token("target.right-x", "x", target)
+    ]
+  });
+
+  const result =
+    await __katexTransitionControllerInternals.transitionKatexEquationsWithDependencies(
+      source,
+      target,
+      {
+        durationMs: 0,
+        correspondenceMatches: [
+          {
+            sourceTokenId: "source.left-x",
+            targetTokenId: "target.right-x"
+          }
+        ]
+      },
+      deps
+    );
+
+  assert.equal(result.renderer, "webgl");
+  assert.deepEqual(deps.createPlanOptions, {
+    correspondenceMatches: [
+      {
+        sourceTokenId: "source.left-x",
+        targetTokenId: "target.right-x"
+      }
+    ]
+  });
+});
+
 test("transitionKatexEquations runs beforeCleanup before removing the WebGL overlay", async () => {
   const source = fakeElement("source");
   const target = fakeElement("target");
@@ -342,12 +386,14 @@ function fakeDependencies(options: {
   atlasTokenIds: string[];
   readonly rendererDisposed: boolean;
   readonly rendererPlan: KatexTransitionPlan | undefined;
+  readonly createPlanOptions: KatexTransitionPlanOptions | undefined;
 } {
   let now = 0;
   const timeoutDelays: number[] = [];
   const atlasTokenIds: string[] = [];
   let rendererDisposed = false;
   let rendererPlan: KatexTransitionPlan | undefined;
+  let createPlanOptions: KatexTransitionPlanOptions | undefined;
 
   const deps = {
     timeoutDelays,
@@ -358,6 +404,9 @@ function fakeDependencies(options: {
     get rendererPlan() {
       return rendererPlan;
     },
+    get createPlanOptions() {
+      return createPlanOptions;
+    },
     snapshotKatexTokens(root: Element) {
       return {
         tokens: root === options.sourceTokens[0]?.element
@@ -366,9 +415,16 @@ function fakeDependencies(options: {
         bounds: { left: 0, top: 0, width: 100, height: 20 }
       };
     },
-    createKatexTransitionPlan:
-      __katexTransitionControllerInternals.defaultDependencies
-        .createKatexTransitionPlan,
+    createKatexTransitionPlan(
+      sourceTokens: readonly KatexMotionToken[],
+      targetTokens: readonly KatexMotionToken[],
+      options: KatexTransitionPlanOptions | undefined
+    ) {
+      createPlanOptions = options;
+
+      return __katexTransitionControllerInternals.defaultDependencies
+        .createKatexTransitionPlan(sourceTokens, targetTokens, options);
+    },
     async createKatexTextureAtlas(
       tokens: readonly KatexMotionToken[]
     ): Promise<KatexTextureAtlas> {

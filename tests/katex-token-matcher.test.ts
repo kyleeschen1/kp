@@ -118,6 +118,42 @@ test("createKatexTransitionPlan preserves stable order for equivalent repeated t
   );
 });
 
+test("createKatexTransitionPlan honors explicit correspondence overrides", () => {
+  const source = [
+    token("source.left-x", "x", "mord", 0, 20),
+    token("source.right-x", "x", "mord", 90, 20)
+  ];
+  const target = [
+    token("target.left-x", "x", "mord", 0, 20),
+    token("target.right-x", "x", "mord", 90, 20)
+  ];
+
+  const plan = createKatexTransitionPlan(source, target, {
+    correspondenceMatches: [
+      {
+        sourceTokenId: "source.left-x",
+        targetTokenId: "target.right-x"
+      },
+      {
+        sourceTokenId: "source.right-x",
+        targetTokenId: "target.left-x"
+      }
+    ]
+  });
+
+  assert.deepEqual(
+    plan.matched.map((match) => [match.source.id, match.target.id]),
+    [
+      ["source.left-x", "target.right-x"],
+      ["source.right-x", "target.left-x"]
+    ]
+  );
+  assert.equal(plan.sourceOnly.length, 0);
+  assert.equal(plan.targetOnly.length, 0);
+  assert.equal(plan.diagnostics.overrideMatchCount, 2);
+  assert.equal(plan.diagnostics.invalidOverrideCount, 0);
+});
+
 test("createKatexTransitionPlan ignores empty-text tokens entirely", () => {
   const source = [
     token("s-empty", "", "mord", 0, 20),
