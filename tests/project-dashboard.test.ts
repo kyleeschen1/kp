@@ -138,7 +138,14 @@ test("groupProjectGalleryItemsByKind groups gallery items by kind", () => {
 
   assert.deepEqual(
     groups.map((group) => group.kind),
-    ["animation", "semantic-transform", "visual", "semantic-object", "protocol-api"]
+    [
+      "animation",
+      "semantic-transform",
+      "notation-transform",
+      "visual",
+      "semantic-object",
+      "protocol-api"
+    ]
   );
   assert.deepEqual(
     groups
@@ -170,6 +177,16 @@ test("groupProjectGalleryItemsByKind groups gallery items by kind", () => {
       "transform-matrix-multiply",
       "transform-rename-variable",
       "transform-subtract-both-sides"
+    ]
+  );
+  assert.deepEqual(
+    groups
+      .find((group) => group.kind === "notation-transform")
+      ?.items.map((item) => item.id),
+    [
+      "notation-implicit-to-explicit-multiply",
+      "notation-inline-to-stacked-fraction",
+      "notation-radical-to-exponent"
     ]
   );
 });
@@ -215,6 +232,19 @@ test("filterProjectDashboardData finds cards and gallery items by text facets", 
       "transform-rename-variable"
     ]
   );
+
+  const notationResult = filterProjectDashboardData(
+    projectDashboardData,
+    "NotationTransform"
+  );
+  assert.deepEqual(
+    notationResult.gallery.map((item) => item.id),
+    [
+      "notation-inline-to-stacked-fraction",
+      "notation-radical-to-exponent",
+      "notation-implicit-to-explicit-multiply"
+    ]
+  );
 });
 
 test("renderProjectDashboard renders searchable grouped galleries", () => {
@@ -226,10 +256,12 @@ test("renderProjectDashboard renders searchable grouped galleries", () => {
   assert.match(html, /value="timeline"/);
   assert.match(html, /data-kp-gallery-kind="animation"/);
   assert.match(html, /data-kp-gallery-kind="semantic-transform"/);
+  assert.match(html, /data-kp-gallery-kind="notation-transform"/);
   assert.match(html, /data-kp-gallery-kind="visual"/);
   assert.match(html, /data-kp-gallery-kind="semantic-object"/);
   assert.match(html, /data-kp-gallery-kind="protocol-api"/);
   assert.match(html, /Semantic Transformations/);
+  assert.match(html, /Notation Transformations/);
   assert.match(html, /Visuals/);
   assert.match(html, /Timeline/);
   assert.match(html, /scroll clock/);

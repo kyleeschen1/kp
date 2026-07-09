@@ -106,6 +106,14 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
   assert.match(html, />computeHessian</);
   assert.match(html, /data-kp-api-outline-item="transform-rename-variable"/);
   assert.match(html, />renameVariable</);
+  assert.match(html, /data-kp-api-outline-group="notation-transformations"/);
+  assert.match(html, /Notation Transformations/);
+  assert.match(html, /data-kp-api-outline-item="notation-inline-to-stacked-fraction"/);
+  assert.match(html, />inlineFractionToStackedFraction</);
+  assert.match(html, /data-kp-api-outline-item="notation-radical-to-exponent"/);
+  assert.match(html, />radicalToExponent</);
+  assert.match(html, /data-kp-api-outline-item="notation-implicit-to-explicit-multiply"/);
+  assert.match(html, />implicitToExplicitMultiplication</);
   assert.match(html, /data-kp-api-outline-group="motion-primitives"/);
   assert.match(html, /data-kp-api-outline-item="motion-vanish"/);
   assert.match(html, />vanish</);

@@ -446,6 +446,8 @@ function formatGalleryKindLabel(kind: ProjectGalleryKind): string {
       return "Animation Types";
     case "semantic-transform":
       return "Semantic Transformations";
+    case "notation-transform":
+      return "Notation Transformations";
     case "visual":
       return "Visuals";
     case "semantic-object":

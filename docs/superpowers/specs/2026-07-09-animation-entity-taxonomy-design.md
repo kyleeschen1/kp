@@ -496,12 +496,14 @@ flat row of tokens.
 
 ## Dashboard Materialization
 
-When this catalog moves into the project dashboard, use four card families:
+When this catalog moves into the project dashboard, use five card families:
 
 - `semantic-object`: object definitions, selector inventory, capabilities,
   default views, and fixture examples.
 - `semantic-transformation`: operation definitions, source/target contracts,
   correspondence relations, and validity checks.
+- `notation-transform`: semantic-preserving representation changes, notation
+  source/target pairs, and render artifact roles.
 - `animation`: visual motifs and motion primitives with scrubber test cases.
 - `visual`: render surfaces such as KaTeX, graph, matrix grid, diagram, table,
   source code, stack/heap, and timeline.

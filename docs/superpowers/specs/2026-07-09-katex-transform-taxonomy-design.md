@@ -9,7 +9,7 @@ Status: proposal
 
 This document lists the unusual KaTeX transitions KP must learn to animate
 reliably as equation animation moves from visual diffs to authored
-`SemanticTransformation` records.
+`SemanticTransformation` and `NotationTransform` records.
 
 The durable rule is:
 
@@ -21,6 +21,11 @@ KaTeX remains the typography and layout engine. KP should not infer algebraic
 truth from rendered spans. Instead, semantic objects and transformations provide
 identity, provenance, and intended relations, while the renderer measures the
 resulting KaTeX and samples visual tracks.
+
+Use `SemanticTransformation` when the operation creates a derived semantic
+object or proof step. Use `NotationTransform` when the same semantic object is
+rendered in a different notation, such as inline slash to stacked fraction,
+radical to exponent, or implicit to explicit multiplication.
 
 ## Scope
 

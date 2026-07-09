@@ -49,6 +49,16 @@ const apiCatalogGroups: readonly ApiCatalogGroup[] = [
     ]
   },
   {
+    id: "notation-transformations",
+    title: "Notation Transformations",
+    summary: "Semantic-preserving notation changes that keep the same object identity.",
+    items: [
+      item("notation-inline-to-stacked-fraction", "inlineFractionToStackedFraction", "fraction", "planned", "Changes inline slash notation into stacked fraction notation while preserving expression identity.", ["katex", "fraction"]),
+      item("notation-radical-to-exponent", "radicalToExponent", "radical", "proposed", "Switches between radical notation and exponent notation without creating a new semantic value.", ["katex", "radical", "script"]),
+      item("notation-implicit-to-explicit-multiply", "implicitToExplicitMultiplication", "multiplication", "planned", "Adds or removes an explicit multiplication operator while preserving product identity.", ["katex", "operator"])
+    ]
+  },
+  {
     id: "capabilities-representations",
     title: "Capabilities & Representations",
     summary: "Optional object powers that should load lazily by domain and view.",

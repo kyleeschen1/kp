@@ -279,6 +279,42 @@ export const projectDashboardData: ProjectDashboardData = {
       relatedIds: ["work-semantic-object-registry", "visual-code"]
     },
     {
+      id: "notation-inline-to-stacked-fraction",
+      title: "inlineFractionToStackedFraction",
+      kind: "notation-transform",
+      status: "planned",
+      summary:
+        "NotationTransform that keeps an expression's semantic identity while changing inline slash notation into stacked fraction layout.",
+      tags: ["fraction", "katex", "artifact"],
+      domains: ["math", "katex"],
+      interfaces: ["NotationTransform", "renderArtifactRoles", "fraction-bar"],
+      relatedIds: ["semantic-equation", "visual-webgl-graph"]
+    },
+    {
+      id: "notation-radical-to-exponent",
+      title: "radicalToExponent",
+      kind: "notation-transform",
+      status: "planned",
+      summary:
+        "NotationTransform that switches between radical notation and exponent notation while preserving the represented value.",
+      tags: ["radical", "script", "katex"],
+      domains: ["math", "katex"],
+      interfaces: ["NotationTransform", "renderArtifactRoles", "radical-line"],
+      relatedIds: ["semantic-equation"]
+    },
+    {
+      id: "notation-implicit-to-explicit-multiply",
+      title: "implicitToExplicitMultiplication",
+      kind: "notation-transform",
+      status: "planned",
+      summary:
+        "NotationTransform that adds or removes an explicit multiplication operator while preserving product identity.",
+      tags: ["multiplication", "operator", "katex"],
+      domains: ["math", "katex"],
+      interfaces: ["NotationTransform", "renderArtifactRoles", "explicit-operator"],
+      relatedIds: ["semantic-equation"]
+    },
+    {
       id: "visual-webgl-graph",
       title: "WebGL graph",
       kind: "visual",
