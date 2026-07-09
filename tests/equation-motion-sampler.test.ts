@@ -122,6 +122,18 @@ test("sampleEquationMotion linearly interpolates all pose fields", () => {
   const plan: EquationMotionPlan = {
     sourceLatex: "x",
     targetLatex: "x",
+    correspondenceMap: {
+      id: "test.identity",
+      records: [
+        {
+          id: "identity.x",
+          relation: "identity",
+          sourceSelectorIds: ["x"],
+          targetSelectorIds: ["x"],
+          summary: "x persists"
+        }
+      ]
+    },
     tokens: [
       {
         id: "x",
@@ -190,6 +202,18 @@ test("sampleEquationMotion defensively samples invalid track ranges", () => {
   const plan: EquationMotionPlan = {
     sourceLatex: "x",
     targetLatex: "x",
+    correspondenceMap: {
+      id: "test.identity",
+      records: [
+        {
+          id: "identity.x",
+          relation: "identity",
+          sourceSelectorIds: ["x"],
+          targetSelectorIds: ["x"],
+          summary: "x persists"
+        }
+      ]
+    },
     tokens: [
       {
         id: "x",

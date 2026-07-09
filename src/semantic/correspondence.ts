@@ -34,6 +34,19 @@ export interface SelectorCorrespondenceRelationDefinition {
   readonly summary: string;
 }
 
+export interface SelectorCorrespondenceRecord {
+  readonly id: string;
+  readonly relation: SelectorCorrespondenceRelationId;
+  readonly sourceSelectorIds: readonly string[];
+  readonly targetSelectorIds: readonly string[];
+  readonly summary: string;
+}
+
+export interface CorrespondenceMap {
+  readonly id: string;
+  readonly records: readonly SelectorCorrespondenceRecord[];
+}
+
 export const selectorCorrespondenceRelations: readonly SelectorCorrespondenceRelationDefinition[] = [
   {
     id: "identity",
@@ -110,4 +123,17 @@ export function findSelectorCorrespondenceRelation(
   }
 
   return relation;
+}
+
+export function cloneCorrespondenceMap(map: CorrespondenceMap): CorrespondenceMap {
+  return {
+    id: map.id,
+    records: map.records.map((record) => ({
+      id: record.id,
+      relation: record.relation,
+      sourceSelectorIds: [...record.sourceSelectorIds],
+      targetSelectorIds: [...record.targetSelectorIds],
+      summary: record.summary
+    }))
+  };
 }

@@ -12,6 +12,12 @@ type TokenSummary = [
   sourceMotionId: string | undefined,
   targetMotionId: string | undefined
 ];
+type CorrespondenceSummary = [
+  id: string,
+  relation: string,
+  sourceSelectorIds: readonly string[],
+  targetSelectorIds: readonly string[]
+];
 
 const summarizeTokens = (transition: EquationTransition): TokenSummary[] =>
   transition.tokens.map((token) => [
@@ -19,6 +25,21 @@ const summarizeTokens = (transition: EquationTransition): TokenSummary[] =>
     token.lifecycle,
     token.sourceMotionId,
     token.targetMotionId
+  ]);
+
+const requireCorrespondenceMap = (transition: EquationTransition) => {
+  assert.ok(transition.correspondenceMap, "transition should include a map");
+  return transition.correspondenceMap;
+};
+
+const summarizeCorrespondence = (
+  transition: EquationTransition
+): CorrespondenceSummary[] =>
+  requireCorrespondenceMap(transition).records.map((record) => [
+    record.id,
+    record.relation,
+    record.sourceSelectorIds,
+    record.targetSelectorIds
   ]);
 
 const assertAnnotationsCoverReferencedMotionIds = (
@@ -60,6 +81,10 @@ test("createEquationOperationTransition creates subtractBothSides(3) motion toke
 
   assert.equal(transition.sourceLatex, "x + 3 = 7");
   assert.equal(transition.targetLatex, "x + 3 - 3 = 7 - 3");
+  assert.equal(
+    requireCorrespondenceMap(transition).id,
+    "linear-equation.subtract-both-sides.3"
+  );
   assert.deepEqual(summarizeTokens(transition), [
     ["lhs.x", "persist", "lhs.x", "lhs.x"],
     ["lhs.plus", "persist", "lhs.plus", "lhs.plus"],
@@ -70,6 +95,17 @@ test("createEquationOperationTransition creates subtractBothSides(3) motion toke
     ["rhs.7", "persist", "rhs.7", "rhs.7"],
     ["rhs.inverse.minus", "inverse-enter", undefined, "rhs.inverse.minus"],
     ["rhs.inverse.3", "inverse-enter", undefined, "rhs.inverse.3"]
+  ]);
+  assert.deepEqual(summarizeCorrespondence(transition), [
+    ["identity.lhs.x", "identity", ["lhs.x"], ["lhs.x"]],
+    ["identity.lhs.plus", "identity", ["lhs.plus"], ["lhs.plus"]],
+    ["identity.lhs.3", "identity", ["lhs.3"], ["lhs.3"]],
+    ["identity.equals", "identity", ["equals"], ["equals"]],
+    ["identity.rhs.7", "identity", ["rhs.7"], ["rhs.7"]],
+    ["introduction.lhs.inverse.minus", "introduction", [], ["lhs.inverse.minus"]],
+    ["introduction.lhs.inverse.3", "introduction", [], ["lhs.inverse.3"]],
+    ["introduction.rhs.inverse.minus", "introduction", [], ["rhs.inverse.minus"]],
+    ["introduction.rhs.inverse.3", "introduction", [], ["rhs.inverse.3"]]
   ]);
   assert.deepEqual(transition.sourceAnnotations, [
     { motionId: "lhs.x", text: "x" },
@@ -129,6 +165,10 @@ test("createEquationOperationTransition creates left simplification motion token
 
   assert.equal(transition.sourceLatex, "x + 3 - 3 = 7 - 3");
   assert.equal(transition.targetLatex, "x = 7 - 3");
+  assert.equal(
+    requireCorrespondenceMap(transition).id,
+    "linear-equation.cancel-left-additive-inverse"
+  );
   assert.deepEqual(summarizeTokens(transition), [
     ["lhs.x", "persist", "lhs.x", "lhs.x"],
     ["lhs.plus", "cancel", "lhs.plus", undefined],
@@ -139,6 +179,24 @@ test("createEquationOperationTransition creates left simplification motion token
     ["rhs.7", "persist", "rhs.7", "rhs.7"],
     ["rhs.inverse.minus", "persist", "rhs.inverse.minus", "rhs.inverse.minus"],
     ["rhs.inverse.3", "persist", "rhs.inverse.3", "rhs.inverse.3"]
+  ]);
+  assert.deepEqual(summarizeCorrespondence(transition), [
+    ["identity.lhs.x", "identity", ["lhs.x"], ["lhs.x"]],
+    [
+      "cancelation.lhs.additive-inverse",
+      "cancelation",
+      ["lhs.plus", "lhs.3", "lhs.inverse.minus", "lhs.inverse.3"],
+      []
+    ],
+    ["identity.equals", "identity", ["equals"], ["equals"]],
+    ["identity.rhs.7", "identity", ["rhs.7"], ["rhs.7"]],
+    [
+      "identity.rhs.inverse.minus",
+      "identity",
+      ["rhs.inverse.minus"],
+      ["rhs.inverse.minus"]
+    ],
+    ["identity.rhs.inverse.3", "identity", ["rhs.inverse.3"], ["rhs.inverse.3"]]
   ]);
   assert.deepEqual(transition.sourceAnnotations, [
     { motionId: "lhs.x", text: "x" },
@@ -173,6 +231,10 @@ test("createEquationOperationTransition creates right simplification motion toke
 
   assert.equal(transition.sourceLatex, "x = 7 - 3");
   assert.equal(transition.targetLatex, "x = 4");
+  assert.equal(
+    requireCorrespondenceMap(transition).id,
+    "linear-equation.evaluate-right-constant-difference"
+  );
   assert.deepEqual(summarizeTokens(transition), [
     ["lhs.x", "persist", "lhs.x", "lhs.x"],
     ["equals", "persist", "equals", "equals"],
@@ -180,6 +242,16 @@ test("createEquationOperationTransition creates right simplification motion toke
     ["rhs.inverse.minus", "simplify-into", "rhs.inverse.minus", undefined],
     ["rhs.inverse.3", "simplify-into", "rhs.inverse.3", undefined],
     ["rhs.4", "enter", undefined, "rhs.4"]
+  ]);
+  assert.deepEqual(summarizeCorrespondence(transition), [
+    ["identity.lhs.x", "identity", ["lhs.x"], ["lhs.x"]],
+    ["identity.equals", "identity", ["equals"], ["equals"]],
+    [
+      "fan-in.rhs.constant-difference",
+      "fan-in",
+      ["rhs.7", "rhs.inverse.minus", "rhs.inverse.3"],
+      ["rhs.4"]
+    ]
   ]);
   assert.deepEqual(transition.sourceAnnotations, [
     { motionId: "lhs.x", text: "x" },

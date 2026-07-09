@@ -2,13 +2,18 @@ import {
   type EquationTokenLifecycle,
   type EquationTransition
 } from "../math/equation-transform.ts";
-import type { SelectorCorrespondenceRelationId } from "../semantic/correspondence.ts";
+import {
+  cloneCorrespondenceMap,
+  type CorrespondenceMap,
+  type SelectorCorrespondenceRelationId
+} from "../semantic/correspondence.ts";
 
 export type EasingName = "linear" | "ease-in" | "ease-out" | "ease-in-out";
 
 export interface EquationMotionPlan {
   readonly sourceLatex: string;
   readonly targetLatex: string;
+  readonly correspondenceMap: CorrespondenceMap;
   readonly tokens: readonly EquationMotionToken[];
   readonly tracks: readonly EquationMotionTrack[];
 }
@@ -90,6 +95,10 @@ export function createEquationMotionPlan(
   return {
     sourceLatex: transition.sourceLatex,
     targetLatex: transition.targetLatex,
+    correspondenceMap:
+      transition.correspondenceMap === undefined
+        ? fallbackCorrespondenceMap(tokens)
+        : cloneCorrespondenceMap(transition.correspondenceMap),
     tokens,
     tracks: tokens.map((token) => trackForToken(token))
   };
@@ -257,6 +266,23 @@ export function correspondenceRelationForLifecycle(
     default:
       return assertNever(lifecycle);
   }
+}
+
+function fallbackCorrespondenceMap(
+  tokens: readonly EquationMotionToken[]
+): CorrespondenceMap {
+  return {
+    id: "fallback.token-lifecycle-correspondence",
+    records: tokens.map((token) => ({
+      id: `${token.correspondenceRelation}.${token.id}`,
+      relation: token.correspondenceRelation,
+      sourceSelectorIds:
+        token.sourceMotionId === undefined ? [] : [token.sourceMotionId],
+      targetSelectorIds:
+        token.targetMotionId === undefined ? [] : [token.targetMotionId],
+      summary: `${token.id} uses ${token.correspondenceRelation}`
+    }))
+  };
 }
 
 function timingForLifecycle(lifecycle: EquationTokenLifecycle): LifecycleTiming {

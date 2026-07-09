@@ -43,6 +43,29 @@ test("createEquationMotionPlan preserves corrected semantic lifecycle tracks", (
 
   assert.equal(plan.sourceLatex, "x + 3 = 7");
   assert.equal(plan.targetLatex, "x + 3 - 3 = 7 - 3");
+  assert.equal(
+    plan.correspondenceMap.id,
+    "linear-equation.subtract-both-sides.3"
+  );
+  assert.deepEqual(
+    plan.correspondenceMap.records.map((record) => [
+      record.id,
+      record.relation,
+      record.sourceSelectorIds,
+      record.targetSelectorIds
+    ]),
+    [
+      ["identity.lhs.x", "identity", ["lhs.x"], ["lhs.x"]],
+      ["identity.lhs.plus", "identity", ["lhs.plus"], ["lhs.plus"]],
+      ["identity.lhs.3", "identity", ["lhs.3"], ["lhs.3"]],
+      ["identity.equals", "identity", ["equals"], ["equals"]],
+      ["identity.rhs.7", "identity", ["rhs.7"], ["rhs.7"]],
+      ["introduction.lhs.inverse.minus", "introduction", [], ["lhs.inverse.minus"]],
+      ["introduction.lhs.inverse.3", "introduction", [], ["lhs.inverse.3"]],
+      ["introduction.rhs.inverse.minus", "introduction", [], ["rhs.inverse.minus"]],
+      ["introduction.rhs.inverse.3", "introduction", [], ["rhs.inverse.3"]]
+    ]
+  );
   assert.deepEqual(summarizeTokenLifecycles(plan), [
     ["lhs.x", "persist"],
     ["lhs.plus", "persist"],
@@ -257,6 +280,29 @@ test("createEquationMotionPlan animates right constant difference simplification
 
   const plan = createEquationMotionPlan(transition);
 
+  assert.deepEqual(plan.correspondenceMap.records, [
+    {
+      id: "identity.lhs.x",
+      relation: "identity",
+      sourceSelectorIds: ["lhs.x"],
+      targetSelectorIds: ["lhs.x"],
+      summary: "lhs.x persists"
+    },
+    {
+      id: "identity.equals",
+      relation: "identity",
+      sourceSelectorIds: ["equals"],
+      targetSelectorIds: ["equals"],
+      summary: "equals persists"
+    },
+    {
+      id: "fan-in.rhs.constant-difference",
+      relation: "fan-in",
+      sourceSelectorIds: ["rhs.7", "rhs.inverse.minus", "rhs.inverse.3"],
+      targetSelectorIds: ["rhs.4"],
+      summary: "7 - 3 simplifies to 4"
+    }
+  ]);
   assert.deepEqual(trackFor(plan, "rhs.7"), {
     tokenId: "rhs.7",
     lifecycle: "simplify-into",

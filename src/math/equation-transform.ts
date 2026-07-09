@@ -1,3 +1,9 @@
+import {
+  cloneCorrespondenceMap,
+  type CorrespondenceMap,
+  type SelectorCorrespondenceRelationId
+} from "../semantic/correspondence.ts";
+
 export type SemanticId = string;
 
 export type EquationTokenLifecycle =
@@ -49,6 +55,7 @@ export type EquationTransition = {
   readonly tokens: readonly EquationTransitionToken[];
   readonly sourceAnnotations: readonly EquationMotionAnnotation[];
   readonly targetAnnotations: readonly EquationMotionAnnotation[];
+  readonly correspondenceMap?: CorrespondenceMap;
 };
 
 const latexByMotionId = {
@@ -78,6 +85,45 @@ const subtractBothSidesTokens: EquationTransitionToken[] = [
   token("rhs.inverse.3", "inverse-enter", undefined, "rhs.inverse.3")
 ];
 
+const subtractBothSidesCorrespondenceMap: CorrespondenceMap = {
+  id: "linear-equation.subtract-both-sides.3",
+  records: [
+    identityRecord("lhs.x"),
+    identityRecord("lhs.plus"),
+    identityRecord("lhs.3"),
+    identityRecord("equals"),
+    identityRecord("rhs.7"),
+    correspondenceRecord(
+      "introduction.lhs.inverse.minus",
+      "introduction",
+      [],
+      ["lhs.inverse.minus"],
+      "lhs.inverse.minus is introduced by subtractBothSides"
+    ),
+    correspondenceRecord(
+      "introduction.lhs.inverse.3",
+      "introduction",
+      [],
+      ["lhs.inverse.3"],
+      "lhs.inverse.3 is introduced by subtractBothSides"
+    ),
+    correspondenceRecord(
+      "introduction.rhs.inverse.minus",
+      "introduction",
+      [],
+      ["rhs.inverse.minus"],
+      "rhs.inverse.minus is introduced by subtractBothSides"
+    ),
+    correspondenceRecord(
+      "introduction.rhs.inverse.3",
+      "introduction",
+      [],
+      ["rhs.inverse.3"],
+      "rhs.inverse.3 is introduced by subtractBothSides"
+    )
+  ]
+};
+
 const simplifyLeftTokens: EquationTransitionToken[] = [
   token("lhs.x", "persist", "lhs.x", "lhs.x"),
   token("lhs.plus", "cancel", "lhs.plus", undefined),
@@ -90,6 +136,24 @@ const simplifyLeftTokens: EquationTransitionToken[] = [
   token("rhs.inverse.3", "persist", "rhs.inverse.3", "rhs.inverse.3")
 ];
 
+const simplifyLeftCorrespondenceMap: CorrespondenceMap = {
+  id: "linear-equation.cancel-left-additive-inverse",
+  records: [
+    identityRecord("lhs.x"),
+    correspondenceRecord(
+      "cancelation.lhs.additive-inverse",
+      "cancelation",
+      ["lhs.plus", "lhs.3", "lhs.inverse.minus", "lhs.inverse.3"],
+      [],
+      "left additive inverse cancels"
+    ),
+    identityRecord("equals"),
+    identityRecord("rhs.7"),
+    identityRecord("rhs.inverse.minus"),
+    identityRecord("rhs.inverse.3")
+  ]
+};
+
 const simplifyRightTokens: EquationTransitionToken[] = [
   token("lhs.x", "persist", "lhs.x", "lhs.x"),
   token("equals", "persist", "equals", "equals"),
@@ -98,6 +162,21 @@ const simplifyRightTokens: EquationTransitionToken[] = [
   token("rhs.inverse.3", "simplify-into", "rhs.inverse.3", undefined),
   token("rhs.4", "enter", undefined, "rhs.4")
 ];
+
+const simplifyRightCorrespondenceMap: CorrespondenceMap = {
+  id: "linear-equation.evaluate-right-constant-difference",
+  records: [
+    identityRecord("lhs.x"),
+    identityRecord("equals"),
+    correspondenceRecord(
+      "fan-in.rhs.constant-difference",
+      "fan-in",
+      ["rhs.7", "rhs.inverse.minus", "rhs.inverse.3"],
+      ["rhs.4"],
+      "7 - 3 simplifies to 4"
+    )
+  ]
+};
 
 export const createEquationOperationTransition = (
   input: EquationOperationInput
@@ -113,7 +192,8 @@ export const createEquationOperationTransition = (
       sourceLatex: input.sourceLatex,
       targetLatex: "x + 3 - 3 = 7 - 3",
       operation,
-      tokens: subtractBothSidesTokens
+      tokens: subtractBothSidesTokens,
+      correspondenceMap: subtractBothSidesCorrespondenceMap
     });
   }
 
@@ -127,7 +207,8 @@ export const createEquationOperationTransition = (
       sourceLatex: input.sourceLatex,
       targetLatex: "x = 7 - 3",
       operation,
-      tokens: simplifyLeftTokens
+      tokens: simplifyLeftTokens,
+      correspondenceMap: simplifyLeftCorrespondenceMap
     });
   }
 
@@ -141,7 +222,8 @@ export const createEquationOperationTransition = (
       sourceLatex: input.sourceLatex,
       targetLatex: "x = 4",
       operation,
-      tokens: simplifyRightTokens
+      tokens: simplifyRightTokens,
+      correspondenceMap: simplifyRightCorrespondenceMap
     });
   }
 
@@ -175,6 +257,7 @@ function transition(input: {
   targetLatex: string;
   operation: EquationOperation;
   tokens: readonly EquationTransitionToken[];
+  correspondenceMap: CorrespondenceMap;
 }): EquationTransition {
   return {
     sourceLatex: input.sourceLatex,
@@ -182,7 +265,34 @@ function transition(input: {
     operation: cloneOperation(input.operation),
     tokens: input.tokens.map((transitionToken) => ({ ...transitionToken })),
     sourceAnnotations: annotationsFor("sourceMotionId", input.tokens),
-    targetAnnotations: annotationsFor("targetMotionId", input.tokens)
+    targetAnnotations: annotationsFor("targetMotionId", input.tokens),
+    correspondenceMap: cloneCorrespondenceMap(input.correspondenceMap)
+  };
+}
+
+function identityRecord(selectorId: KnownMotionId): CorrespondenceMap["records"][number] {
+  return correspondenceRecord(
+    `identity.${selectorId}`,
+    "identity",
+    [selectorId],
+    [selectorId],
+    `${selectorId} persists`
+  );
+}
+
+function correspondenceRecord(
+  id: string,
+  relation: SelectorCorrespondenceRelationId,
+  sourceSelectorIds: readonly SemanticId[],
+  targetSelectorIds: readonly SemanticId[],
+  summary: string
+): CorrespondenceMap["records"][number] {
+  return {
+    id,
+    relation,
+    sourceSelectorIds,
+    targetSelectorIds,
+    summary
   };
 }
 
