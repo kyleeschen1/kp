@@ -48,6 +48,11 @@ export type EquationMotionAnnotation = {
   readonly text: string;
 };
 
+export interface EquationTransitionSelectorPaths {
+  readonly source: Readonly<Record<SemanticId, string>>;
+  readonly target: Readonly<Record<SemanticId, string>>;
+}
+
 export type EquationTransition = {
   readonly sourceLatex: string;
   readonly targetLatex: string;
@@ -56,6 +61,7 @@ export type EquationTransition = {
   readonly sourceAnnotations: readonly EquationMotionAnnotation[];
   readonly targetAnnotations: readonly EquationMotionAnnotation[];
   readonly correspondenceMap?: CorrespondenceMap;
+  readonly selectorPaths?: EquationTransitionSelectorPaths;
 };
 
 const latexByMotionId = {
@@ -84,6 +90,40 @@ const subtractBothSidesTokens: EquationTransitionToken[] = [
   token("rhs.inverse.minus", "inverse-enter", undefined, "rhs.inverse.minus"),
   token("rhs.inverse.3", "inverse-enter", undefined, "rhs.inverse.3")
 ];
+
+const initialEquationSelectorPaths = {
+  "lhs.x": "equation.left.left",
+  "lhs.plus": "equation.left.operator",
+  "lhs.3": "equation.left.right",
+  equals: "equation.relation",
+  "rhs.7": "equation.right"
+} as const;
+
+const expandedEquationSelectorPaths = {
+  "lhs.x": "equation.left.left.left",
+  "lhs.plus": "equation.left.left.operator",
+  "lhs.3": "equation.left.left.right",
+  "lhs.inverse.minus": "equation.left.operator",
+  "lhs.inverse.3": "equation.left.right",
+  equals: "equation.relation",
+  "rhs.7": "equation.right.left",
+  "rhs.inverse.minus": "equation.right.operator",
+  "rhs.inverse.3": "equation.right.right"
+} as const;
+
+const leftSimplifiedEquationSelectorPaths = {
+  "lhs.x": "equation.left",
+  equals: "equation.relation",
+  "rhs.7": "equation.right.left",
+  "rhs.inverse.minus": "equation.right.operator",
+  "rhs.inverse.3": "equation.right.right"
+} as const;
+
+const fullySimplifiedEquationSelectorPaths = {
+  "lhs.x": "equation.left",
+  equals: "equation.relation",
+  "rhs.4": "equation.right"
+} as const;
 
 const subtractBothSidesCorrespondenceMap: CorrespondenceMap = {
   id: "linear-equation.subtract-both-sides.3",
@@ -193,7 +233,11 @@ export const createEquationOperationTransition = (
       targetLatex: "x + 3 - 3 = 7 - 3",
       operation,
       tokens: subtractBothSidesTokens,
-      correspondenceMap: subtractBothSidesCorrespondenceMap
+      correspondenceMap: subtractBothSidesCorrespondenceMap,
+      selectorPaths: {
+        source: initialEquationSelectorPaths,
+        target: expandedEquationSelectorPaths
+      }
     });
   }
 
@@ -208,7 +252,11 @@ export const createEquationOperationTransition = (
       targetLatex: "x = 7 - 3",
       operation,
       tokens: simplifyLeftTokens,
-      correspondenceMap: simplifyLeftCorrespondenceMap
+      correspondenceMap: simplifyLeftCorrespondenceMap,
+      selectorPaths: {
+        source: expandedEquationSelectorPaths,
+        target: leftSimplifiedEquationSelectorPaths
+      }
     });
   }
 
@@ -223,7 +271,11 @@ export const createEquationOperationTransition = (
       targetLatex: "x = 4",
       operation,
       tokens: simplifyRightTokens,
-      correspondenceMap: simplifyRightCorrespondenceMap
+      correspondenceMap: simplifyRightCorrespondenceMap,
+      selectorPaths: {
+        source: leftSimplifiedEquationSelectorPaths,
+        target: fullySimplifiedEquationSelectorPaths
+      }
     });
   }
 
@@ -258,6 +310,7 @@ function transition(input: {
   operation: EquationOperation;
   tokens: readonly EquationTransitionToken[];
   correspondenceMap: CorrespondenceMap;
+  selectorPaths: EquationTransitionSelectorPaths;
 }): EquationTransition {
   return {
     sourceLatex: input.sourceLatex,
@@ -266,7 +319,17 @@ function transition(input: {
     tokens: input.tokens.map((transitionToken) => ({ ...transitionToken })),
     sourceAnnotations: annotationsFor("sourceMotionId", input.tokens),
     targetAnnotations: annotationsFor("targetMotionId", input.tokens),
-    correspondenceMap: cloneCorrespondenceMap(input.correspondenceMap)
+    correspondenceMap: cloneCorrespondenceMap(input.correspondenceMap),
+    selectorPaths: cloneSelectorPaths(input.selectorPaths)
+  };
+}
+
+function cloneSelectorPaths(
+  selectorPaths: EquationTransitionSelectorPaths
+): EquationTransitionSelectorPaths {
+  return {
+    source: { ...selectorPaths.source },
+    target: { ...selectorPaths.target }
   };
 }
 

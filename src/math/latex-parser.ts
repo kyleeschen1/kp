@@ -40,6 +40,20 @@ export interface ParsedLatexUnaryExpression {
   value: ParsedLatexExpression;
 }
 
+export type LatexExpressionSelectorKind =
+  | "binary"
+  | "call"
+  | "identifier"
+  | "number"
+  | "operator"
+  | "unary";
+
+export interface LatexExpressionSelectorPath {
+  readonly path: string;
+  readonly kind: LatexExpressionSelectorKind;
+  readonly label: string;
+}
+
 export class LatexParseError extends Error {
   readonly offset: number;
   readonly expected: string;
@@ -59,6 +73,17 @@ export function parseLatexExpression(input: string): ParsedLatexExpression {
   parser.expectEnd();
 
   return expression;
+}
+
+export function collectLatexExpressionSelectorPaths(
+  input: string,
+  rootPath = "expression"
+): readonly LatexExpressionSelectorPath[] {
+  const paths: LatexExpressionSelectorPath[] = [];
+
+  collectExpressionSelectorPaths(parseLatexExpression(input), rootPath, paths);
+
+  return paths;
 }
 
 class LatexParser {
@@ -313,4 +338,46 @@ function isBinaryOperator(
     operator === "/" ||
     operator === "^"
   );
+}
+
+function collectExpressionSelectorPaths(
+  expression: ParsedLatexExpression,
+  path: string,
+  paths: LatexExpressionSelectorPath[]
+): void {
+  switch (expression.kind) {
+    case "binary":
+      paths.push({ path, kind: "binary", label: expression.operator });
+      collectExpressionSelectorPaths(expression.left, `${path}.left`, paths);
+      paths.push({
+        path: `${path}.operator`,
+        kind: "operator",
+        label: expression.operator
+      });
+      collectExpressionSelectorPaths(expression.right, `${path}.right`, paths);
+      return;
+    case "call":
+      paths.push({ path, kind: "call", label: expression.name });
+      collectExpressionSelectorPaths(
+        expression.argument,
+        `${path}.argument`,
+        paths
+      );
+      return;
+    case "identifier":
+      paths.push({ path, kind: "identifier", label: expression.name });
+      return;
+    case "number":
+      paths.push({ path, kind: "number", label: String(expression.value) });
+      return;
+    case "unary":
+      paths.push({ path, kind: "unary", label: expression.operator });
+      paths.push({
+        path: `${path}.operator`,
+        kind: "operator",
+        label: expression.operator
+      });
+      collectExpressionSelectorPaths(expression.value, `${path}.value`, paths);
+      return;
+  }
 }

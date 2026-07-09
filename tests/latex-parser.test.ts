@@ -2,6 +2,7 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import {
+  collectLatexExpressionSelectorPaths,
   LatexParseError,
   parseLatexExpression
 } from "../src/math/latex-parser.ts";
@@ -83,5 +84,26 @@ test("parseLatexExpression reports structured parse errors", () => {
       error.message === "Expected expression." &&
       error.offset === 8 &&
       error.expected === "expression"
+  );
+});
+
+test("collectLatexExpressionSelectorPaths emits stable expression paths", () => {
+  assert.deepEqual(
+    collectLatexExpressionSelectorPaths("x + 3", "equation.left"),
+    [
+      { path: "equation.left", kind: "binary", label: "+" },
+      { path: "equation.left.left", kind: "identifier", label: "x" },
+      { path: "equation.left.operator", kind: "operator", label: "+" },
+      { path: "equation.left.right", kind: "number", label: "3" }
+    ]
+  );
+  assert.deepEqual(
+    collectLatexExpressionSelectorPaths("7 - 3", "equation.right"),
+    [
+      { path: "equation.right", kind: "binary", label: "-" },
+      { path: "equation.right.left", kind: "number", label: "7" },
+      { path: "equation.right.operator", kind: "operator", label: "-" },
+      { path: "equation.right.right", kind: "number", label: "3" }
+    ]
   );
 });

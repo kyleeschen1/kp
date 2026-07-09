@@ -32,6 +32,11 @@ const requireCorrespondenceMap = (transition: EquationTransition) => {
   return transition.correspondenceMap;
 };
 
+const requireSelectorPaths = (transition: EquationTransition) => {
+  assert.ok(transition.selectorPaths, "transition should include selector paths");
+  return transition.selectorPaths;
+};
+
 const summarizeCorrespondence = (
   transition: EquationTransition
 ): CorrespondenceSummary[] =>
@@ -96,6 +101,26 @@ test("createEquationOperationTransition creates subtractBothSides(3) motion toke
     ["rhs.inverse.minus", "inverse-enter", undefined, "rhs.inverse.minus"],
     ["rhs.inverse.3", "inverse-enter", undefined, "rhs.inverse.3"]
   ]);
+  assert.deepEqual(requireSelectorPaths(transition), {
+    source: {
+      "lhs.x": "equation.left.left",
+      "lhs.plus": "equation.left.operator",
+      "lhs.3": "equation.left.right",
+      equals: "equation.relation",
+      "rhs.7": "equation.right"
+    },
+    target: {
+      "lhs.x": "equation.left.left.left",
+      "lhs.plus": "equation.left.left.operator",
+      "lhs.3": "equation.left.left.right",
+      "lhs.inverse.minus": "equation.left.operator",
+      "lhs.inverse.3": "equation.left.right",
+      equals: "equation.relation",
+      "rhs.7": "equation.right.left",
+      "rhs.inverse.minus": "equation.right.operator",
+      "rhs.inverse.3": "equation.right.right"
+    }
+  });
   assert.deepEqual(summarizeCorrespondence(transition), [
     ["identity.lhs.x", "identity", ["lhs.x"], ["lhs.x"]],
     ["identity.lhs.plus", "identity", ["lhs.plus"], ["lhs.plus"]],
@@ -180,6 +205,26 @@ test("createEquationOperationTransition creates left simplification motion token
     ["rhs.inverse.minus", "persist", "rhs.inverse.minus", "rhs.inverse.minus"],
     ["rhs.inverse.3", "persist", "rhs.inverse.3", "rhs.inverse.3"]
   ]);
+  assert.deepEqual(requireSelectorPaths(transition), {
+    source: {
+      "lhs.x": "equation.left.left.left",
+      "lhs.plus": "equation.left.left.operator",
+      "lhs.3": "equation.left.left.right",
+      "lhs.inverse.minus": "equation.left.operator",
+      "lhs.inverse.3": "equation.left.right",
+      equals: "equation.relation",
+      "rhs.7": "equation.right.left",
+      "rhs.inverse.minus": "equation.right.operator",
+      "rhs.inverse.3": "equation.right.right"
+    },
+    target: {
+      "lhs.x": "equation.left",
+      equals: "equation.relation",
+      "rhs.7": "equation.right.left",
+      "rhs.inverse.minus": "equation.right.operator",
+      "rhs.inverse.3": "equation.right.right"
+    }
+  });
   assert.deepEqual(summarizeCorrespondence(transition), [
     ["identity.lhs.x", "identity", ["lhs.x"], ["lhs.x"]],
     [
@@ -243,6 +288,20 @@ test("createEquationOperationTransition creates right simplification motion toke
     ["rhs.inverse.3", "simplify-into", "rhs.inverse.3", undefined],
     ["rhs.4", "enter", undefined, "rhs.4"]
   ]);
+  assert.deepEqual(requireSelectorPaths(transition), {
+    source: {
+      "lhs.x": "equation.left",
+      equals: "equation.relation",
+      "rhs.7": "equation.right.left",
+      "rhs.inverse.minus": "equation.right.operator",
+      "rhs.inverse.3": "equation.right.right"
+    },
+    target: {
+      "lhs.x": "equation.left",
+      equals: "equation.relation",
+      "rhs.4": "equation.right"
+    }
+  });
   assert.deepEqual(summarizeCorrespondence(transition), [
     ["identity.lhs.x", "identity", ["lhs.x"], ["lhs.x"]],
     ["identity.equals", "identity", ["equals"], ["equals"]],
