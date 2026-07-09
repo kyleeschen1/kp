@@ -1,14 +1,27 @@
-export type KatexTransformFixtureFamily = "fraction";
+export type KatexTransformFixtureFamily = "fraction" | "script";
 
 export type KatexFractionTransformIntent =
   | "makeFraction"
   | "splitFraction"
   | "combineFractions";
 
+export type KatexScriptTransformIntent =
+  | "combineRepeatedFactorAsPower"
+  | "expandPower"
+  | "changeIndex";
+
+export type KatexTransformFixtureIntent =
+  | KatexFractionTransformIntent
+  | KatexScriptTransformIntent;
+
 export type KatexTransformFixtureTokenRole =
   | "artifact"
+  | "base"
+  | "factor"
   | "operator"
-  | "semantic";
+  | "semantic"
+  | "subscript"
+  | "superscript";
 
 export interface KatexTransformFixtureToken {
   readonly text: string;
@@ -23,16 +36,24 @@ export interface KatexTransformFixtureSide {
   readonly tokens: readonly KatexTransformFixtureToken[];
 }
 
+export interface KatexTransformRoleChangeExpectation {
+  readonly sourceRole: KatexTransformFixtureTokenRole;
+  readonly targetRole: KatexTransformFixtureTokenRole;
+  readonly sourceText: string;
+  readonly targetText: string;
+}
+
 export interface KatexTransformFixture {
   readonly id: string;
   readonly family: KatexTransformFixtureFamily;
-  readonly intent: KatexFractionTransformIntent;
+  readonly intent: KatexTransformFixtureIntent;
   readonly source: KatexTransformFixtureSide;
   readonly target: KatexTransformFixtureSide;
   readonly expectedStructuralTokens: {
     readonly source: readonly string[];
     readonly target: readonly string[];
   };
+  readonly expectedRoleChanges: readonly KatexTransformRoleChangeExpectation[];
   readonly summary: string;
 }
 
@@ -61,6 +82,7 @@ export const fractionTransformFixtures: readonly KatexTransformFixture[] = [
       source: [],
       target: ["structural:frac-line"]
     },
+    expectedRoleChanges: [],
     summary:
       "Inline slash notation becomes a stacked fraction; the fraction bar is a target-only render artifact."
   },
@@ -88,6 +110,7 @@ export const fractionTransformFixtures: readonly KatexTransformFixture[] = [
       source: ["structural:frac-line"],
       target: []
     },
+    expectedRoleChanges: [],
     summary:
       "Stacked fraction notation becomes inline slash notation; the fraction bar is a source-only render artifact."
   },
@@ -124,13 +147,118 @@ export const fractionTransformFixtures: readonly KatexTransformFixture[] = [
       source: ["structural:frac-line", "structural:frac-line"],
       target: ["structural:frac-line"]
     },
+    expectedRoleChanges: [],
     summary:
       "Two stacked fractions combine into one stacked fraction; bars need explicit artifact handling instead of semantic identity."
   }
 ];
 
+export const scriptTransformFixtures: readonly KatexTransformFixture[] = [
+  {
+    id: "script.combine-factor-as-power",
+    family: "script",
+    intent: "combineRepeatedFactorAsPower",
+    source: {
+      latex: "x \\cdot x",
+      tokens: [
+        baseToken("x", 0, 0),
+        operatorToken("\\cdot", 0, 1),
+        factorToken("x", 0, 2)
+      ]
+    },
+    target: {
+      latex: "x^2",
+      tokens: [baseToken("x", 0, 0), superscriptToken("2", -1, 1)]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [
+      {
+        sourceRole: "factor",
+        targetRole: "superscript",
+        sourceText: "x",
+        targetText: "2"
+      }
+    ],
+    summary:
+      "A repeated factor becomes exponent notation; one factor moves into superscript geometry as a derived script token."
+  },
+  {
+    id: "script.expand-power-to-factor",
+    family: "script",
+    intent: "expandPower",
+    source: {
+      latex: "x^2",
+      tokens: [baseToken("x", 0, 0), superscriptToken("2", -1, 1)]
+    },
+    target: {
+      latex: "x \\cdot x",
+      tokens: [
+        baseToken("x", 0, 0),
+        operatorToken("\\cdot", 0, 1),
+        factorToken("x", 0, 2)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [
+      {
+        sourceRole: "superscript",
+        targetRole: "factor",
+        sourceText: "2",
+        targetText: "x"
+      }
+    ],
+    summary:
+      "Exponent notation expands into repeated-factor notation; the script token leaves superscript geometry."
+  },
+  {
+    id: "script.change-subscript-index",
+    family: "script",
+    intent: "changeIndex",
+    source: {
+      latex: "a_i",
+      tokens: [baseToken("a", 0, 0), subscriptToken("i", 1, 1)]
+    },
+    target: {
+      latex: "a_{i+1}",
+      tokens: [
+        baseToken("a", 0, 0),
+        subscriptToken("i", 1, 1),
+        operatorToken("+", 1, 2),
+        subscriptToken("1", 1, 3)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [
+      {
+        sourceRole: "subscript",
+        targetRole: "subscript",
+        sourceText: "i",
+        targetText: "i"
+      }
+    ],
+    summary:
+      "A subscript index changes in place; the subscript baseline and scale must remain explicit in fixtures."
+  }
+];
+
+export const katexTransformFixtures: readonly KatexTransformFixture[] = [
+  ...fractionTransformFixtures,
+  ...scriptTransformFixtures
+];
+
 export function findKatexTransformFixture(id: string): KatexTransformFixture {
-  const fixture = fractionTransformFixtures.find((candidate) => candidate.id === id);
+  const fixture = katexTransformFixtures.find(
+    (candidate) => candidate.id === id
+  );
 
   if (fixture === undefined) {
     throw new Error(`Unknown KaTeX transform fixture: ${id}`);
@@ -153,6 +281,34 @@ function semanticToken(
   };
 }
 
+function baseToken(
+  text: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "base",
+    row,
+    column
+  };
+}
+
+function factorToken(
+  text: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "factor",
+    row,
+    column
+  };
+}
+
 function operatorToken(
   text: string,
   row: number,
@@ -162,6 +318,34 @@ function operatorToken(
     text,
     signature: "mbin",
     role: "operator",
+    row,
+    column
+  };
+}
+
+function subscriptToken(
+  text: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "subscript",
+    row,
+    column
+  };
+}
+
+function superscriptToken(
+  text: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "superscript",
     row,
     column
   };

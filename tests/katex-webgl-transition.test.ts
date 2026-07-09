@@ -6,6 +6,10 @@ import {
   createKatexQuadFrame,
   createKatexWebGLRenderer
 } from "../src/rendering/katex-webgl-transition.ts";
+import {
+  findKatexTransformFixture,
+  type KatexTransformFixtureToken
+} from "../src/rendering/katex-transform-fixtures.ts";
 import type {
   KatexAtlasRegion,
   KatexMatchedToken,
@@ -89,6 +93,85 @@ test("createKatexQuadFrame fades source-only and target-only tokens", () => {
     [
       ["s-minus", 0.75],
       ["t-one", 0.25]
+    ]
+  );
+});
+
+test("createKatexQuadFrame samples script role-change fixture geometry", () => {
+  const fixture = findKatexTransformFixture("script.combine-factor-as-power");
+  const source = fixtureMotionTokens("source", fixture.source.tokens);
+  const target = fixtureMotionTokens("target", fixture.target.tokens);
+  const sourceBase = requireFixtureToken(
+    source,
+    fixture.source.tokens,
+    "base",
+    "x"
+  );
+  const targetBase = requireFixtureToken(
+    target,
+    fixture.target.tokens,
+    "base",
+    "x"
+  );
+  const sourceFactor = requireFixtureToken(
+    source,
+    fixture.source.tokens,
+    "factor",
+    "x"
+  );
+  const targetSuperscript = requireFixtureToken(
+    target,
+    fixture.target.tokens,
+    "superscript",
+    "2"
+  );
+  const regions = new Map<string, KatexAtlasRegion>([
+    [sourceBase.id, regionFor(sourceBase.id)],
+    [sourceFactor.id, regionFor(sourceFactor.id)]
+  ]);
+
+  const frame = createKatexQuadFrame(
+    {
+      matched: [
+        { source: sourceBase, target: targetBase },
+        { source: sourceFactor, target: targetSuperscript }
+      ],
+      sourceOnly: [],
+      targetOnly: [],
+      diagnostics: {
+        sourceTokenCount: 2,
+        targetTokenCount: 2,
+        matchedCount: 2,
+        sourceOnlyCount: 0,
+        targetOnlyCount: 0,
+        ambiguousGroupCount: 0
+      }
+    },
+    regions,
+    0.5
+  );
+
+  assert.deepEqual(
+    frame.quads.map((quad) => [quad.tokenId, quad.rect]),
+    [
+      [
+        sourceBase.id,
+        {
+          left: 0,
+          top: 0,
+          width: 10,
+          height: 12
+        }
+      ],
+      [
+        sourceFactor.id,
+        {
+          left: 21,
+          top: -9,
+          width: 8,
+          height: 10
+        }
+      ]
     ]
   );
 });
@@ -261,6 +344,55 @@ function token(
     localRect: { left, top, width, height },
     row: 0
   };
+}
+
+function fixtureMotionTokens(
+  prefix: string,
+  entries: readonly KatexTransformFixtureToken[]
+): KatexMotionToken[] {
+  return entries.map((entry, index) => {
+    const width =
+      entry.role === "superscript" || entry.role === "subscript" ? 6 : 10;
+    const height =
+      entry.role === "superscript" || entry.role === "subscript" ? 8 : 12;
+
+    return {
+      id: `${prefix}-${index}`,
+      text: entry.text,
+      signature: entry.signature,
+      rect: {
+        left: entry.column * 14,
+        top: entry.row * 18,
+        width,
+        height
+      },
+      localRect: {
+        left: entry.column * 14,
+        top: entry.row * 18,
+        width,
+        height
+      },
+      row: entry.row
+    };
+  });
+}
+
+function requireFixtureToken(
+  tokens: readonly KatexMotionToken[],
+  entries: readonly KatexTransformFixtureToken[],
+  role: KatexTransformFixtureToken["role"],
+  text: string
+): KatexMotionToken {
+  const token = tokens.find(
+    (candidate, index) =>
+      candidate.text === text && entries[index]?.role === role
+  );
+
+  if (token === undefined) {
+    throw new Error(`Missing fixture token ${role}:${text}`);
+  }
+
+  return token;
 }
 
 function regionFor(

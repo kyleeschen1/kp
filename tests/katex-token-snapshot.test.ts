@@ -9,7 +9,8 @@ import {
   snapshotKatexTokens
 } from "../src/rendering/katex-token-snapshot.ts";
 import {
-  fractionTransformFixtures
+  fractionTransformFixtures,
+  scriptTransformFixtures
 } from "../src/rendering/katex-transform-fixtures.ts";
 import type {
   KatexMotionToken,
@@ -180,6 +181,44 @@ test("fraction transform fixtures declare expected structural tokens", () => {
         "combineFractions",
         ["structural:frac-line", "structural:frac-line"],
         ["structural:frac-line"]
+      ]
+    ]
+  );
+});
+
+test("script transform fixtures declare role-change geometry expectations", () => {
+  assert.deepEqual(
+    scriptTransformFixtures.map((fixture) => [
+      fixture.id,
+      fixture.intent,
+      fixture.expectedStructuralTokens.source,
+      fixture.expectedStructuralTokens.target,
+      fixture.expectedRoleChanges.map((roleChange) => [
+        roleChange.sourceRole,
+        roleChange.targetRole
+      ])
+    ]),
+    [
+      [
+        "script.combine-factor-as-power",
+        "combineRepeatedFactorAsPower",
+        [],
+        [],
+        [["factor", "superscript"]]
+      ],
+      [
+        "script.expand-power-to-factor",
+        "expandPower",
+        [],
+        [],
+        [["superscript", "factor"]]
+      ],
+      [
+        "script.change-subscript-index",
+        "changeIndex",
+        [],
+        [],
+        [["subscript", "subscript"]]
       ]
     ]
   );

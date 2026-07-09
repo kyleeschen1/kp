@@ -479,3 +479,13 @@ These fixtures encode expected structural tokens for fraction bars and provide
 synthetic row/column token layouts for matcher tests. They are not yet semantic
 transform implementations; they are geometry fixtures that make future
 `makeFraction`, `splitFraction`, and `combineFractions` transitions testable.
+
+Slice 12 extended the same registry with script role-change fixtures:
+
+- `script.combine-factor-as-power`
+- `script.expand-power-to-factor`
+- `script.change-subscript-index`
+
+These fixtures encode superscript/subscript rows and expected role-change pairs
+so WebGL quad interpolation can be tested against baseline and scale changes
+before algebraic script transforms exist.
