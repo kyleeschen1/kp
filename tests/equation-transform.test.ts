@@ -312,6 +312,70 @@ test("createEquationOperationTransition creates left simplification motion token
   assertAnnotationsCoverReferencedMotionIds(transition);
 });
 
+test("createEquationOperationTransition generalizes left additive inverse cancelation", () => {
+  const transition = createEquationOperationTransition({
+    sourceLatex: "y + 2 - 2 = 10 - 2",
+    operation: {
+      kind: "simplifySide",
+      side: "left",
+      rule: "cancel-additive-inverse"
+    }
+  });
+
+  assert.equal(transition.sourceLatex, "y + 2 - 2 = 10 - 2");
+  assert.equal(transition.targetLatex, "y = 10 - 2");
+  assert.deepEqual(summarizeTokens(transition), [
+    ["lhs.y", "persist", "lhs.y", "lhs.y"],
+    ["lhs.plus", "cancel", "lhs.plus", undefined],
+    ["lhs.2", "cancel", "lhs.2", undefined],
+    ["lhs.inverse.minus", "cancel", "lhs.inverse.minus", undefined],
+    ["lhs.inverse.2", "cancel", "lhs.inverse.2", undefined],
+    ["equals", "persist", "equals", "equals"],
+    ["rhs.10", "persist", "rhs.10", "rhs.10"],
+    ["rhs.inverse.minus", "persist", "rhs.inverse.minus", "rhs.inverse.minus"],
+    ["rhs.inverse.2", "persist", "rhs.inverse.2", "rhs.inverse.2"]
+  ]);
+  assert.deepEqual(requireSelectorPaths(transition), {
+    source: {
+      "lhs.y": "equation.left.left.left",
+      "lhs.plus": "equation.left.left.operator",
+      "lhs.2": "equation.left.left.right",
+      "lhs.inverse.minus": "equation.left.operator",
+      "lhs.inverse.2": "equation.left.right",
+      equals: "equation.relation",
+      "rhs.10": "equation.right.left",
+      "rhs.inverse.minus": "equation.right.operator",
+      "rhs.inverse.2": "equation.right.right"
+    },
+    target: {
+      "lhs.y": "equation.left",
+      equals: "equation.relation",
+      "rhs.10": "equation.right.left",
+      "rhs.inverse.minus": "equation.right.operator",
+      "rhs.inverse.2": "equation.right.right"
+    }
+  });
+  assert.deepEqual(summarizeCorrespondence(transition), [
+    ["identity.lhs.y", "identity", ["lhs.y"], ["lhs.y"]],
+    [
+      "cancelation.lhs.additive-inverse",
+      "cancelation",
+      ["lhs.plus", "lhs.2", "lhs.inverse.minus", "lhs.inverse.2"],
+      []
+    ],
+    ["identity.equals", "identity", ["equals"], ["equals"]],
+    ["identity.rhs.10", "identity", ["rhs.10"], ["rhs.10"]],
+    [
+      "identity.rhs.inverse.minus",
+      "identity",
+      ["rhs.inverse.minus"],
+      ["rhs.inverse.minus"]
+    ],
+    ["identity.rhs.inverse.2", "identity", ["rhs.inverse.2"], ["rhs.inverse.2"]]
+  ]);
+  assertAnnotationsCoverReferencedMotionIds(transition);
+});
+
 test("createEquationOperationTransition creates right simplification motion tokens", () => {
   const transition = createEquationOperationTransition({
     sourceLatex: "x = 7 - 3",

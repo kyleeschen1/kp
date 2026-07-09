@@ -277,6 +277,21 @@ export const createEquationOperationTransition = (
   }
 
   if (
+    operation.kind === "simplifySide" &&
+    operation.side === "left" &&
+    operation.rule === "cancel-additive-inverse"
+  ) {
+    const generatedTransition = createSimpleCancelAdditiveInverseTransition(
+      input.sourceLatex,
+      operation
+    );
+
+    if (generatedTransition !== undefined) {
+      return generatedTransition;
+    }
+  }
+
+  if (
     input.sourceLatex === "x = 7 - 3" &&
     operation.kind === "simplifySide" &&
     operation.side === "right" &&
@@ -433,6 +448,119 @@ function createSimpleSubtractBothSidesTransition(
         [lhsId]: "equation.left.left",
         "lhs.inverse.minus": "equation.left.operator",
         [lhsValueId]: "equation.left.right",
+        equals: "equation.relation",
+        [rhsId]: "equation.right.left",
+        "rhs.inverse.minus": "equation.right.operator",
+        [rhsValueId]: "equation.right.right"
+      }
+    }
+  });
+}
+
+function createSimpleCancelAdditiveInverseTransition(
+  sourceLatex: string,
+  operation: Extract<EquationOperation, { kind: "simplifySide" }>
+): EquationTransition | undefined {
+  const equation = parseLatexEquation(sourceLatex);
+
+  if (
+    equation.left.kind !== "binary" ||
+    equation.left.operator !== "-" ||
+    equation.left.left.kind !== "binary" ||
+    equation.left.left.operator !== "+" ||
+    equation.left.left.left.kind !== "identifier" ||
+    equation.left.left.right.kind !== "number" ||
+    equation.left.right.kind !== "number" ||
+    equation.left.left.right.value !== equation.left.right.value ||
+    equation.right.kind !== "binary" ||
+    equation.right.operator !== "-" ||
+    equation.right.left.kind !== "number" ||
+    equation.right.right.kind !== "number"
+  ) {
+    return undefined;
+  }
+
+  const lhsLabel = equation.left.left.left.name;
+  const cancelValueLabel = formatParsedNumber(equation.left.right);
+  const rhsLabel = formatParsedNumber(equation.right.left);
+  const rhsValueLabel = formatParsedNumber(equation.right.right);
+  const lhsId = `lhs.${motionIdSegment(lhsLabel)}`;
+  const lhsValueId = `lhs.${motionIdSegment(cancelValueLabel)}`;
+  const lhsInverseValueId = `lhs.inverse.${motionIdSegment(cancelValueLabel)}`;
+  const rhsId = `rhs.${motionIdSegment(rhsLabel)}`;
+  const rhsValueId = `rhs.inverse.${motionIdSegment(rhsValueLabel)}`;
+  const tokens: EquationTransitionToken[] = [
+    dynamicToken(lhsId, "persist", lhsLabel, lhsId, lhsId),
+    dynamicToken("lhs.plus", "cancel", "+", "lhs.plus", undefined),
+    dynamicToken(lhsValueId, "cancel", cancelValueLabel, lhsValueId, undefined),
+    dynamicToken(
+      "lhs.inverse.minus",
+      "cancel",
+      "-",
+      "lhs.inverse.minus",
+      undefined
+    ),
+    dynamicToken(
+      lhsInverseValueId,
+      "cancel",
+      cancelValueLabel,
+      lhsInverseValueId,
+      undefined
+    ),
+    dynamicToken("equals", "persist", "=", "equals", "equals"),
+    dynamicToken(rhsId, "persist", rhsLabel, rhsId, rhsId),
+    dynamicToken(
+      "rhs.inverse.minus",
+      "persist",
+      "-",
+      "rhs.inverse.minus",
+      "rhs.inverse.minus"
+    ),
+    dynamicToken(
+      rhsValueId,
+      "persist",
+      rhsValueLabel,
+      rhsValueId,
+      rhsValueId
+    )
+  ];
+
+  return transition({
+    sourceLatex,
+    targetLatex: `${lhsLabel} = ${rhsLabel} - ${rhsValueLabel}`,
+    operation,
+    tokens,
+    correspondenceMap: {
+      id: `equation.cancel-additive-inverse.${motionIdSegment(sourceLatex)}`,
+      records: [
+        identityRecord(lhsId),
+        correspondenceRecord(
+          "cancelation.lhs.additive-inverse",
+          "cancelation",
+          ["lhs.plus", lhsValueId, "lhs.inverse.minus", lhsInverseValueId],
+          [],
+          "left additive inverse cancels"
+        ),
+        identityRecord("equals"),
+        identityRecord(rhsId),
+        identityRecord("rhs.inverse.minus"),
+        identityRecord(rhsValueId)
+      ]
+    },
+    selectorPaths: {
+      source: {
+        [lhsId]: "equation.left.left.left",
+        "lhs.plus": "equation.left.left.operator",
+        [lhsValueId]: "equation.left.left.right",
+        "lhs.inverse.minus": "equation.left.operator",
+        [lhsInverseValueId]: "equation.left.right",
+        equals: "equation.relation",
+        [rhsId]: "equation.right.left",
+        "rhs.inverse.minus": "equation.right.operator",
+        [rhsValueId]: "equation.right.right"
+      },
+      target: {
+        [lhsId]: "equation.left",
         equals: "equation.relation",
         [rhsId]: "equation.right.left",
         "rhs.inverse.minus": "equation.right.operator",

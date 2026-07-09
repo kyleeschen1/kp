@@ -87,6 +87,27 @@ test("sampleEquationMotion samples cancellation during left simplification", () 
   assert.ok(findOpacity(middle, "lhs.plus") < 1);
 });
 
+test("sampleEquationMotion samples generalized additive inverse cancelation", () => {
+  const transition = createEquationOperationTransition({
+    sourceLatex: "y + 2 - 2 = 10 - 2",
+    operation: {
+      kind: "simplifySide",
+      side: "left",
+      rule: "cancel-additive-inverse"
+    }
+  });
+  const plan = createEquationMotionPlan(transition);
+
+  const start = sampleEquationMotion(plan, 0);
+  const middle = sampleEquationMotion(plan, 0.2);
+  const end = sampleEquationMotion(plan, 1);
+
+  assert.equal(findOpacity(start, "lhs.2"), 1);
+  assert.ok(findOpacity(middle, "lhs.2") < 1);
+  assert.equal(findOpacity(end, "lhs.2"), 0);
+  assert.equal(findOpacity(end, "rhs.inverse.2"), 1);
+});
+
 test("sampleEquationMotion clamps progress and supports backward sampling", () => {
   const transition = createEquationOperationTransition({
     sourceLatex: "x = 7 - 3",
