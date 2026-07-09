@@ -316,6 +316,36 @@ test("project dashboard report themes include reviewed and unreviewed assessment
   assert.ok(programmingTheme?.risks.some((risk) => risk.includes("code-domain")));
 });
 
+test("project dashboard includes semantic animation readiness checklist theme", () => {
+  const readinessTheme = projectDashboardData.reportThemes.find(
+    (theme) => theme.id === "report-semantic-animation-readiness"
+  );
+
+  assert.equal(readinessTheme?.title, "Semantic animation readiness");
+  assert.equal(readinessTheme?.status, "active");
+  assert.equal(readinessTheme?.grade, "C");
+  assert.ok(
+    readinessTheme?.questions.some((question) =>
+      question.includes("semantic source and target objects")
+    )
+  );
+  assert.ok(
+    readinessTheme?.questions.some((question) =>
+      question.includes("sampled at arbitrary progress and rewound")
+    )
+  );
+  assert.ok(
+    readinessTheme?.evidence.some((entry) =>
+      entry.href.includes("katex-transform-taxonomy-design")
+    )
+  );
+  assert.ok(
+    readinessTheme?.recommendedNextActions.some((action) =>
+      action.includes("Run this checklist")
+    )
+  );
+});
+
 test("renderProjectDashboard renders report card evidence, risks, review metadata, and next actions", () => {
   const html = renderProjectDashboard(projectDashboardData);
 

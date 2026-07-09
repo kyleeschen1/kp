@@ -459,6 +459,50 @@ export const projectDashboardData: ProjectDashboardData = {
       relatedIds: ["work-rendering-time-protocol", "animation-cancelation"]
     },
     {
+      id: "report-semantic-animation-readiness",
+      title: "Semantic animation readiness",
+      status: "active",
+      grade: "C",
+      lastReviewedOn: "2026-07-09",
+      scope:
+        "Checklist for promoting semantic transforms and visual motifs from prototypes into reusable animation objects.",
+      questions: [
+        "Does the transform declare semantic source and target objects, operation intent, and selector provenance?",
+        "Does every persisted, entered, exited, artifact, and many-to-one token have explicit correspondence identity?",
+        "Can the timeline be sampled at arbitrary progress and rewound through the same beats?",
+        "Are layout shifts, visual motifs, focus phases, annotations, and render artifacts separated from semantic truth?"
+      ],
+      evidence: [
+        {
+          label: "KaTeX transform taxonomy design",
+          href: "docs/superpowers/specs/2026-07-09-katex-transform-taxonomy-design.md"
+        },
+        {
+          label: "Rendering/time protocol design",
+          href: "docs/superpowers/specs/2026-07-08-rendering-time-protocol-design.md"
+        },
+        {
+          label: "Semantic beat compiler checkpoint",
+          href: "docs/theseus/events/2026-07-09-semantic-beat-compiler-slice-20.md"
+        }
+      ],
+      risks: [
+        "Some current fixtures are still geometry records rather than executable SemanticTransformation definitions.",
+        "Graph and programming animations still need equivalent readiness gates before cross-domain claims."
+      ],
+      recommendedNextActions: [
+        "Run this checklist before promoting a fixture or motif to active gallery status.",
+        "Add one readiness assertion when each new SemanticTransformation or NotationTransform fixture is introduced.",
+        "Use the checklist to separate semantic identity gaps from visual motif polish gaps."
+      ],
+      tags: ["animation", "semantic-transform", "readiness", "checklist"],
+      relatedIds: [
+        "work-rendering-time-protocol",
+        "animation-cancelation",
+        "gallery-rendering-time-api"
+      ]
+    },
+    {
       id: "report-semantic-object-api",
       title: "Semantic object API",
       status: "planned",

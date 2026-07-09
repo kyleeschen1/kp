@@ -602,3 +602,10 @@ structural-token expectations, and role-change records. This intentionally stops
 short of object-history/provenance integration; it is only the import/export
 shape needed before authored transforms can be loaded into galleries or sample
 cards.
+
+Slice 23 added a dashboard report-card checklist for semantic animation
+readiness. The checklist asks whether a transform declares source/target semantic
+objects, operation intent, selector provenance, explicit correspondence for every
+persist/enter/exit/artifact/many-to-one case, sampleable and rewindable timing,
+and separation between semantic truth and visual motifs. It is currently a
+dashboard seed-data report theme rather than a generated Theseus CLI report.
