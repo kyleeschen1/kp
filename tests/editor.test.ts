@@ -134,9 +134,21 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
   assert.doesNotMatch(html, /class="json-source"/);
   assert.doesNotMatch(html, />Semantic JSON</);
   assert.match(html, /data-kp-equation-motion-demo/);
+  assert.match(html, /data-kp-equation-animation-selector/);
+  assert.match(
+    html,
+    /select[^>]*data-action="set-equation-motion-animation"[^>]*aria-label="Select equation animation"/
+  );
+  assert.match(
+    html,
+    /option value="linear-equation-solve-x" selected>x \+ 3 = 7/
+  );
   assert.match(html, /data-kp-equation-motion-step="0"/);
   assert.match(html, /data-kp-equation-motion-max-step="3"/);
-  assert.match(html, /data-action="equation-motion-rewind"/);
+  assert.match(html, /data-kp-equation-motion-settings/);
+  assert.match(html, /<summary>Timing controls<\/summary>/);
+  assert.match(html, /data-kp-equation-motion-step-controls/);
+  assert.match(html, /data-action="equation-motion-rewind"[^>]*>Back</);
   assert.match(
     html,
     /type="range"[^>]*data-action="set-equation-motion-beat"[^>]*min="0"[^>]*max="20"[^>]*step="1"[^>]*value="0"[^>]*data-kp-equation-motion-beats="20"/
@@ -158,7 +170,7 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
     html,
     /data-role="equation-motion-collapse-scale-output"[^>]*>35%</
   );
-  assert.match(html, /data-action="equation-motion-next"/);
+  assert.match(html, /data-action="equation-motion-next"[^>]*>Forward</);
   assert.match(html, /data-kp-motion-operator="binary"/);
   assert.match(html, /data-kp-editor-visual-tuning/);
   assert.match(html, /Visual Tuning/);

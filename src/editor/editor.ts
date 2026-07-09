@@ -16,10 +16,13 @@ import {
 } from "./state.ts";
 import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
 import { defaultLatexRenderer } from "../rendering/matrix-latex.ts";
+import type { EquationMotionAnnotation } from "../math/equation-transform.ts";
 import {
-  createEquationOperationTransition,
-  type EquationMotionAnnotation
-} from "../math/equation-transform.ts";
+  DEFAULT_EQUATION_ANIMATION_ID,
+  equationAnimationCatalogEntries,
+  findEquationAnimationCatalogEntry,
+  type EquationAnimationCatalogEntry
+} from "./equation-animation-catalog.ts";
 import {
   createKpDocument,
   type KpDocument,
@@ -196,52 +199,10 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
 }
 
 function renderEquationMotionDemo(): string {
-  const subtractBothSides = createEquationOperationTransition({
-    sourceLatex: "x + 3 = 7",
-    operation: {
-      kind: "subtractBothSides",
-      valueLatex: "3"
-    }
-  });
-  const simplifyLeft = createEquationOperationTransition({
-    sourceLatex: subtractBothSides.targetLatex,
-    operation: {
-      kind: "simplifySide",
-      side: "left",
-      rule: "cancel-additive-inverse"
-    }
-  });
-  const simplifyRight = createEquationOperationTransition({
-    sourceLatex: simplifyLeft.targetLatex,
-    operation: {
-      kind: "simplifySide",
-      side: "right",
-      rule: "evaluate-constant-difference"
-    }
-  });
-  const states = [
-    {
-      step: 0,
-      latex: subtractBothSides.sourceLatex,
-      annotations: subtractBothSides.sourceAnnotations
-    },
-    {
-      step: 1,
-      latex: subtractBothSides.targetLatex,
-      annotations: subtractBothSides.targetAnnotations
-    },
-    {
-      step: 2,
-      latex: simplifyLeft.targetLatex,
-      annotations: simplifyLeft.targetAnnotations
-    },
-    {
-      step: 3,
-      latex: simplifyRight.targetLatex,
-      annotations: simplifyRight.targetAnnotations
-    }
-  ];
-  const stateHtml = states
+  const animation = findEquationAnimationCatalogEntry(
+    DEFAULT_EQUATION_ANIMATION_ID
+  );
+  const stateHtml = animation.states
     .map((state) =>
       renderEquationMotionState(
         state.step,
@@ -251,33 +212,59 @@ function renderEquationMotionDemo(): string {
       )
     )
     .join("");
-  const maxStep = states.length - 1;
+  const maxStep = animation.states.length - 1;
 
   return `
-    <section class="equation-motion" data-kp-equation-motion-demo data-kp-equation-motion-step="0" data-kp-equation-motion-max-step="${maxStep}" data-kp-equation-motion-duration-ms="420" data-kp-equation-motion-collapse-scale-percent="35">
-      <div class="equation-motion__controls">
-        <button type="button" data-action="equation-motion-rewind">Rewind</button>
-        <label class="equation-motion__scrubber">
-          <span>Beat</span>
-          <input type="range" data-action="set-equation-motion-beat" min="0" max="20" step="1" value="0" data-kp-equation-motion-beats="20" aria-label="Scrub equation motion beat" />
-          <output class="equation-motion__beat-output" data-role="equation-motion-beat-output">0/20</output>
-        </label>
-        <label class="equation-motion__scrubber equation-motion__duration">
-          <span>Duration</span>
-          <input type="range" data-action="set-equation-motion-duration" min="200" max="3000" step="20" value="420" aria-label="Set equation animation duration" />
-          <output class="equation-motion__duration-output" data-role="equation-motion-duration-output">420 ms</output>
-        </label>
-        <label class="equation-motion__scrubber equation-motion__collapse-scale">
-          <span>Min size</span>
-          <input type="range" data-action="set-equation-motion-collapse-scale" min="5" max="50" step="1" value="35" aria-label="Set equation collapse minimum size" />
-          <output class="equation-motion__collapse-scale-output" data-role="equation-motion-collapse-scale-output">35%</output>
-        </label>
-        <button type="button" data-action="equation-motion-next">Next</button>
-      </div>
+    <section class="equation-motion" data-kp-equation-motion-demo data-kp-equation-animation-id="${escapeHtml(animation.id)}" data-kp-equation-motion-step="0" data-kp-equation-motion-max-step="${maxStep}" data-kp-equation-motion-duration-ms="${animation.defaultDurationMs}" data-kp-equation-motion-collapse-scale-percent="${animation.defaultCollapseScalePercent}">
+      ${renderEquationAnimationSelector(animation)}
       <div class="equation-motion__stage">
         ${stateHtml}
       </div>
+      <div class="equation-motion__controls">
+        <div class="equation-motion__step-controls" data-kp-equation-motion-step-controls>
+          <button type="button" data-action="equation-motion-rewind">Back</button>
+          <button type="button" data-action="equation-motion-next">Forward</button>
+        </div>
+        <details class="equation-motion__settings" data-kp-equation-motion-settings>
+          <summary>Timing controls</summary>
+          <div class="equation-motion__settings-body">
+            <label class="equation-motion__scrubber">
+              <span>Beat</span>
+              <input type="range" data-action="set-equation-motion-beat" min="0" max="${animation.beatCount}" step="1" value="0" data-kp-equation-motion-beats="${animation.beatCount}" aria-label="Scrub equation motion beat" />
+              <output class="equation-motion__beat-output" data-role="equation-motion-beat-output">0/${animation.beatCount}</output>
+            </label>
+            <label class="equation-motion__scrubber equation-motion__duration">
+              <span>Duration</span>
+              <input type="range" data-action="set-equation-motion-duration" min="200" max="3000" step="20" value="${animation.defaultDurationMs}" aria-label="Set equation animation duration" />
+              <output class="equation-motion__duration-output" data-role="equation-motion-duration-output">${animation.defaultDurationMs} ms</output>
+            </label>
+            <label class="equation-motion__scrubber equation-motion__collapse-scale">
+              <span>Min size</span>
+              <input type="range" data-action="set-equation-motion-collapse-scale" min="5" max="50" step="1" value="${animation.defaultCollapseScalePercent}" aria-label="Set equation collapse minimum size" />
+              <output class="equation-motion__collapse-scale-output" data-role="equation-motion-collapse-scale-output">${animation.defaultCollapseScalePercent}%</output>
+            </label>
+          </div>
+        </details>
+      </div>
     </section>
+  `;
+}
+
+function renderEquationAnimationSelector(
+  selectedAnimation: EquationAnimationCatalogEntry
+): string {
+  return `
+    <label class="equation-motion__selector" data-kp-equation-animation-selector>
+      <span>Animation</span>
+      <select data-action="set-equation-motion-animation" aria-label="Select equation animation">
+        ${equationAnimationCatalogEntries
+          .map(
+            (entry) =>
+              `<option value="${escapeHtml(entry.id)}"${entry.id === selectedAnimation.id ? " selected" : ""}>${escapeHtml(entry.label)}</option>`
+          )
+          .join("")}
+      </select>
+    </label>
   `;
 }
 

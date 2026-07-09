@@ -1,7 +1,8 @@
+import { createEquationOperationTransition } from "../math/equation-transform.ts";
 import {
-  createEquationOperationTransition,
-  type EquationOperation
-} from "../math/equation-transform.ts";
+  DEFAULT_EQUATION_ANIMATION_ID,
+  findEquationAnimationCatalogEntry
+} from "./equation-animation-catalog.ts";
 import { measureAnnotatedEquationMotionTokens } from "../rendering/equation-motion-dom.ts";
 import {
   createEquationMotionPlan,
@@ -24,23 +25,6 @@ import {
   type SemanticBeatId
 } from "../rendering/semantic-beat-compiler.ts";
 
-// Semantic operations are the playback contract; DOM LaTeX is validated against them.
-const EQUATION_MOTION_DEMO_OPERATIONS: readonly EquationOperation[] = [
-  {
-    kind: "subtractBothSides",
-    valueLatex: "3"
-  },
-  {
-    kind: "simplifySide",
-    side: "left",
-    rule: "cancel-additive-inverse"
-  },
-  {
-    kind: "simplifySide",
-    side: "right",
-    rule: "evaluate-constant-difference"
-  }
-];
 const EQUATION_MOTION_ANIMATION_DURATION_MS = 420;
 const EQUATION_MOTION_MIN_DURATION_MS = 200;
 const EQUATION_MOTION_MAX_DURATION_MS = 3000;
@@ -285,7 +269,10 @@ function createDemoEquationMotionTransition(
   }
 
   const lowerStep = Math.min(sourceStep, targetStep);
-  const operation = EQUATION_MOTION_DEMO_OPERATIONS[lowerStep];
+  const animation = findEquationAnimationCatalogEntry(
+    readEquationAnimationId(demo)
+  );
+  const operation = animation.operations[lowerStep];
   const sourceState = findEquationMotionState(demo, lowerStep);
   const targetState = findEquationMotionState(demo, lowerStep + 1);
 
@@ -314,6 +301,12 @@ function createDemoEquationMotionTransition(
   }
 
   return createEquationMotionPlan(semanticTransition);
+}
+
+function readEquationAnimationId(demo: HTMLElement): string {
+  return (
+    demo.dataset["kpEquationAnimationId"] ?? DEFAULT_EQUATION_ANIMATION_ID
+  );
 }
 
 function renderEquationMotionFrame(
