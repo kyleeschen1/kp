@@ -268,6 +268,31 @@ test("renderProjectDashboard renders searchable grouped galleries", () => {
   assert.doesNotMatch(html, /Equation cancelation/);
 });
 
+test("renderProjectDashboard renders KaTeX transform fixture selection UI", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedKatexFixtureId: "radical.rewrite-power-as-root"
+  });
+
+  assert.match(html, /data-kp-katex-fixture-gallery/);
+  assert.match(html, /KaTeX Transform Fixtures/);
+  assert.match(html, /data-action="select-katex-transform-fixture"/);
+  assert.match(
+    html,
+    /data-kp-katex-transform-fixture="fraction\.make\.inline-to-stacked"/
+  );
+  assert.match(
+    html,
+    /data-kp-katex-transform-fixture="radical\.rewrite-power-as-root"[^>]*aria-pressed="true"/
+  );
+  assert.match(html, /data-kp-katex-fixture-sample/);
+  assert.match(
+    html,
+    /data-kp-selected-katex-transform-fixture="radical\.rewrite-power-as-root"/
+  );
+  assert.match(html, /rewritePowerAsRoot/);
+  assert.match(html, /Power notation becomes radical notation/);
+});
+
 test("project dashboard report themes include reviewed and unreviewed assessment fields", () => {
   const animationTheme = projectDashboardData.reportThemes.find(
     (theme) => theme.id === "report-animation-protocol"

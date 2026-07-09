@@ -584,3 +584,11 @@ and final reveal. The equation demo now reads named beat ranges from the
 compiled timeline instead of hard-coded local beat constants, preserving the
 current scrubber behavior while making the timeline data reusable by future
 semantic transformations.
+
+Slice 21 added the first dashboard-facing KaTeX transform fixture gallery. The
+project dashboard now renders the full fixture registry as selectable controls
+and keeps the selected fixture in browser memory only, preserving the current V1
+data contract that source-backed dashboard records are edited in TypeScript. The
+sample panel exposes fixture family, intent, source/target LaTeX, token counts,
+artifact counts, and role-change expectations, giving future animation cards a
+stable place to attach scrubbers without introducing persistence yet.

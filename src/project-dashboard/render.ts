@@ -13,9 +13,15 @@ import {
   groupProjectGalleryItemsByKind,
   validateProjectDashboardData
 } from "./model.ts";
+import {
+  katexTransformFixtures,
+  summarizeKatexTransformFixtureDiagnostics,
+  type KatexTransformFixture
+} from "../rendering/katex-transform-fixtures.ts";
 
 export interface ProjectDashboardRenderOptions {
   readonly query?: string;
+  readonly selectedKatexFixtureId?: string | undefined;
 }
 
 export function renderProjectDashboard(
@@ -27,6 +33,9 @@ export function renderProjectDashboard(
   const renderedData = filterProjectDashboardData(data, query);
   const titles = createTitleLookup(data);
   const visibleIds = new Set(collectProjectDashboardIds(renderedData));
+  const selectedKatexFixture = selectKatexFixture(
+    options.selectedKatexFixtureId
+  );
 
   return `
     <section class="project-dashboard" data-kp-project-dashboard aria-label="Project dashboard prototype">
@@ -58,6 +67,7 @@ export function renderProjectDashboard(
             <h2 id="project-dashboard-gallery-title">Object Gallery</h2>
             <span>${renderedData.gallery.length} items</span>
           </div>
+          ${renderKatexTransformFixtureGallery(selectedKatexFixture)}
           ${renderGalleryGroups(renderedData.gallery, titles, visibleIds)}
         </section>
         <section class="project-dashboard__section" aria-labelledby="project-dashboard-reports-title">
@@ -142,6 +152,114 @@ function renderGalleryGroups(
           `
         )
         .join("")}
+    </div>
+  `;
+}
+
+function renderKatexTransformFixtureGallery(
+  selectedFixture: KatexTransformFixture
+): string {
+  const diagnostics =
+    summarizeKatexTransformFixtureDiagnostics(selectedFixture);
+
+  return `
+    <section class="project-fixture-gallery" data-kp-katex-fixture-gallery aria-labelledby="project-katex-fixture-gallery-title">
+      <div class="project-fixture-gallery__header">
+        <div>
+          <h3 id="project-katex-fixture-gallery-title">KaTeX Transform Fixtures</h3>
+          <p>Semantic transform cases for awkward equation geometry.</p>
+        </div>
+        <span>${katexTransformFixtures.length} fixtures</span>
+      </div>
+      <div class="project-fixture-gallery__body">
+        <div class="project-fixture-gallery__list" aria-label="KaTeX transform fixture list">
+          ${katexTransformFixtures
+            .map((fixture) => renderKatexFixtureButton(fixture, selectedFixture))
+            .join("")}
+        </div>
+        <article
+          class="project-fixture-gallery__sample"
+          data-kp-katex-fixture-sample
+          data-kp-selected-katex-transform-fixture="${escapeHtml(selectedFixture.id)}"
+        >
+          ${renderMeta(selectedFixture.family, selectedFixture.intent)}
+          <h3>${escapeHtml(selectedFixture.id)}</h3>
+          <p>${escapeHtml(selectedFixture.summary)}</p>
+          <dl class="project-fixture-gallery__stats">
+            <div>
+              <dt>Source tokens</dt>
+              <dd>${diagnostics.sourceTokenCount}</dd>
+            </div>
+            <div>
+              <dt>Target tokens</dt>
+              <dd>${diagnostics.targetTokenCount}</dd>
+            </div>
+            <div>
+              <dt>Artifacts</dt>
+              <dd>${diagnostics.sourceStructuralTokenCount} -> ${diagnostics.targetStructuralTokenCount}</dd>
+            </div>
+            <div>
+              <dt>Role changes</dt>
+              <dd>${diagnostics.roleChangeCount}</dd>
+            </div>
+          </dl>
+          <div class="project-fixture-gallery__latex">
+            <div>
+              <strong>Source</strong>
+              <code>${escapeHtml(selectedFixture.source.latex)}</code>
+            </div>
+            <div>
+              <strong>Target</strong>
+              <code>${escapeHtml(selectedFixture.target.latex)}</code>
+            </div>
+          </div>
+          ${renderKatexFixtureRoleChanges(selectedFixture)}
+        </article>
+      </div>
+    </section>
+  `;
+}
+
+function renderKatexFixtureButton(
+  fixture: KatexTransformFixture,
+  selectedFixture: KatexTransformFixture
+): string {
+  return `
+    <button
+      class="project-fixture-gallery__button"
+      type="button"
+      data-action="select-katex-transform-fixture"
+      data-kp-katex-transform-fixture="${escapeHtml(fixture.id)}"
+      aria-pressed="${fixture.id === selectedFixture.id ? "true" : "false"}"
+    >
+      <span>${escapeHtml(formatFixtureFamilyLabel(fixture.family))}</span>
+      <strong>${escapeHtml(fixture.intent)}</strong>
+    </button>
+  `;
+}
+
+function renderKatexFixtureRoleChanges(
+  fixture: KatexTransformFixture
+): string {
+  if (fixture.expectedRoleChanges.length === 0) {
+    return `<p class="project-fixture-gallery__empty">No semantic role changes recorded for this fixture.</p>`;
+  }
+
+  return `
+    <div class="project-fixture-gallery__roles">
+      <strong>Role changes</strong>
+      <ul>
+        ${fixture.expectedRoleChanges
+          .map(
+            (change) => `
+              <li>
+                ${escapeHtml(change.sourceText)}:
+                ${escapeHtml(change.sourceRole)} -> ${escapeHtml(change.targetRole)}
+              </li>
+            `
+          )
+          .join("")}
+      </ul>
     </div>
   `;
 }
@@ -455,6 +573,26 @@ function formatGalleryKindLabel(kind: ProjectGalleryKind): string {
     case "protocol-api":
       return "Protocol/API";
   }
+}
+
+function formatFixtureFamilyLabel(family: string): string {
+  return family
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+function selectKatexFixture(selectedFixtureId: string | undefined): KatexTransformFixture {
+  const fallback = katexTransformFixtures[0];
+
+  if (fallback === undefined) {
+    throw new Error("Expected at least one KaTeX transform fixture.");
+  }
+
+  return (
+    katexTransformFixtures.find((fixture) => fixture.id === selectedFixtureId) ??
+    fallback
+  );
 }
 
 function escapeHtml(value: string): string {

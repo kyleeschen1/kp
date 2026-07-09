@@ -63,6 +63,7 @@ if (app === null) {
 const appRoot = app;
 let editorDocument = createInitialEditorDocument();
 let projectDashboardQuery = "";
+let projectDashboardSelectedKatexFixtureId: string | undefined;
 let katexOperatorScalePercent = 85;
 type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
@@ -105,6 +106,9 @@ appRoot.addEventListener("click", (event) => {
       return;
     case "select-api-outline-item":
       selectApiCatalogItem(button);
+      return;
+    case "select-katex-transform-fixture":
+      selectKatexTransformFixture(button);
       return;
     case "add-equation-graph":
       addEquationGraphFromInput();
@@ -237,7 +241,16 @@ function renderEditor(): void {
 function renderProjectDashboardView(query = projectDashboardQuery): void {
   projectDashboardQuery = query;
   disposeGraph3DWebGL(appRoot);
-  appRoot.innerHTML = renderProjectDashboard(projectDashboardData, { query });
+  appRoot.innerHTML = renderProjectDashboard(projectDashboardData, {
+    query,
+    selectedKatexFixtureId: projectDashboardSelectedKatexFixtureId
+  });
+}
+
+function selectKatexTransformFixture(button: HTMLButtonElement): void {
+  projectDashboardSelectedKatexFixtureId =
+    button.dataset["kpKatexTransformFixture"];
+  renderProjectDashboardView(projectDashboardQuery);
 }
 
 function filterProjectDashboardFromInput(input: HTMLInputElement): void {

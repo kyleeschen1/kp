@@ -15,6 +15,28 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   await expect(page.locator("[data-kp-project-dashboard-contract]")).toContainText(
     "src/project-dashboard/data.ts"
   );
+  const fixtureGallery = page.locator("[data-kp-katex-fixture-gallery]");
+  await expect(fixtureGallery).toBeVisible();
+  await expect(
+    fixtureGallery.locator(
+      '[data-kp-katex-transform-fixture="fraction.make.inline-to-stacked"]'
+    )
+  ).toHaveAttribute("aria-pressed", "true");
+  await fixtureGallery
+    .locator('[data-kp-katex-transform-fixture="radical.rewrite-power-as-root"]')
+    .click();
+  await expect(
+    fixtureGallery.locator(
+      '[data-kp-katex-transform-fixture="radical.rewrite-power-as-root"]'
+    )
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("[data-kp-katex-fixture-sample]")).toHaveAttribute(
+    "data-kp-selected-katex-transform-fixture",
+    "radical.rewrite-power-as-root"
+  );
+  await expect(page.locator("[data-kp-katex-fixture-sample]")).toContainText(
+    "rewritePowerAsRoot"
+  );
   await expect(page.locator("[data-kp-visual-tuning]")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Back to Editor" })).toBeVisible();
 

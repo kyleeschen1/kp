@@ -225,6 +225,186 @@ h2 {
   padding: 0.85rem;
 }
 
+.project-fixture-gallery {
+  display: grid;
+  gap: 0.75rem;
+  border-bottom: 1px solid #d9e0e8;
+  padding: 0.85rem;
+}
+
+.project-fixture-gallery__header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.project-fixture-gallery__header h3 {
+  margin: 0;
+  color: #172033;
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.project-fixture-gallery__header p {
+  margin: 0.25rem 0 0;
+  color: #526173;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.project-fixture-gallery__header > span {
+  flex: none;
+  border: 1px solid #d4dee8;
+  border-radius: 999px;
+  padding: 0.18rem 0.44rem;
+  color: #405365;
+  background: #f8fafc;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.project-fixture-gallery__body {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.project-fixture-gallery__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  gap: 0.45rem;
+}
+
+.project-fixture-gallery__button {
+  min-width: 0;
+  border: 1px solid #c8d7e5;
+  border-radius: 6px;
+  padding: 0.55rem 0.6rem;
+  color: #293241;
+  background: #ffffff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.project-fixture-gallery__button:hover,
+.project-fixture-gallery__button[aria-pressed="true"] {
+  border-color: #1f6371;
+  background: #eef8fa;
+}
+
+.project-fixture-gallery__button span,
+.project-fixture-gallery__button strong {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.project-fixture-gallery__button span {
+  color: #65758a;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.project-fixture-gallery__button strong {
+  margin-top: 0.16rem;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.project-fixture-gallery__sample {
+  min-width: 0;
+  border: 1px solid #cad6e3;
+  border-radius: 8px;
+  padding: 0.75rem;
+  background: #fbfdff;
+}
+
+.project-fixture-gallery__sample h3 {
+  margin: 0.45rem 0 0.35rem;
+  color: #172033;
+  font-size: 0.9rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.project-fixture-gallery__sample p,
+.project-fixture-gallery__empty {
+  margin: 0;
+  color: #475569;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.project-fixture-gallery__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0.75rem 0;
+}
+
+.project-fixture-gallery__stats div {
+  border: 1px solid #d4dee8;
+  border-radius: 6px;
+  padding: 0.5rem;
+  background: #ffffff;
+}
+
+.project-fixture-gallery__stats dt {
+  color: #65758a;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.project-fixture-gallery__stats dd {
+  margin: 0.15rem 0 0;
+  color: #172033;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.project-fixture-gallery__latex {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+}
+
+.project-fixture-gallery__latex div,
+.project-fixture-gallery__roles {
+  border: 1px solid #d4dee8;
+  border-radius: 6px;
+  padding: 0.55rem;
+  background: #ffffff;
+}
+
+.project-fixture-gallery__latex strong,
+.project-fixture-gallery__roles strong {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: #526173;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+}
+
+.project-fixture-gallery__latex code {
+  display: block;
+  overflow-wrap: anywhere;
+  color: #172033;
+  font-size: 0.82rem;
+}
+
+.project-fixture-gallery__roles {
+  margin-top: 0.75rem;
+  color: #475569;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.project-fixture-gallery__roles ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
 .project-work-lane,
 .project-gallery-group {
   overflow: hidden;
