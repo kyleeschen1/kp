@@ -18,6 +18,7 @@ import {
   summarizeKatexTransformFixtureDiagnostics,
   type KatexTransformFixture
 } from "../rendering/katex-transform-fixtures.ts";
+import { findEquationAnimationForFixtureId } from "../editor/equation-animation-catalog.ts";
 
 export interface ProjectDashboardRenderOptions {
   readonly query?: string;
@@ -161,6 +162,7 @@ function renderKatexTransformFixtureGallery(
 ): string {
   const diagnostics =
     summarizeKatexTransformFixtureDiagnostics(selectedFixture);
+  const linkedAnimation = findEquationAnimationForFixtureId(selectedFixture.id);
 
   return `
     <section class="project-fixture-gallery" data-kp-katex-fixture-gallery aria-labelledby="project-katex-fixture-gallery-title">
@@ -181,10 +183,12 @@ function renderKatexTransformFixtureGallery(
           class="project-fixture-gallery__sample"
           data-kp-katex-fixture-sample
           data-kp-selected-katex-transform-fixture="${escapeHtml(selectedFixture.id)}"
+          ${linkedAnimation === undefined ? "" : `data-kp-linked-equation-animation="${escapeHtml(linkedAnimation.id)}"`}
         >
           ${renderMeta(selectedFixture.family, selectedFixture.intent)}
           <h3>${escapeHtml(selectedFixture.id)}</h3>
           <p>${escapeHtml(selectedFixture.summary)}</p>
+          ${renderLinkedEquationAnimation(linkedAnimation)}
           <dl class="project-fixture-gallery__stats">
             <div>
               <dt>Source tokens</dt>
@@ -217,6 +221,23 @@ function renderKatexTransformFixtureGallery(
         </article>
       </div>
     </section>
+  `;
+}
+
+function renderLinkedEquationAnimation(
+  linkedAnimation:
+    | ReturnType<typeof findEquationAnimationForFixtureId>
+    | undefined
+): string {
+  if (linkedAnimation === undefined) {
+    return `<p class="project-fixture-gallery__empty">No editor animation linked yet.</p>`;
+  }
+
+  return `
+    <div class="project-fixture-gallery__animation-link" data-kp-linked-equation-animation-summary>
+      <strong>Editor animation available</strong>
+      <span>${escapeHtml(linkedAnimation.label)}</span>
+    </div>
   `;
 }
 

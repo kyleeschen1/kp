@@ -289,6 +289,11 @@ test("renderProjectDashboard renders KaTeX transform fixture selection UI", () =
     html,
     /data-kp-selected-katex-transform-fixture="radical\.rewrite-power-as-root"/
   );
+  assert.match(
+    html,
+    /data-kp-linked-equation-animation="fixture-radical-rewrite-power-as-root"/
+  );
+  assert.match(html, /Editor animation available/);
   assert.match(html, /rewritePowerAsRoot/);
   assert.match(html, /Power notation becomes radical notation/);
 });

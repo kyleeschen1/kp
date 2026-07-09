@@ -24,6 +24,7 @@ export interface EquationAnimationState {
 export interface EquationAnimationCatalogEntry {
   readonly id: EquationAnimationId;
   readonly label: string;
+  readonly fixtureId?: string | undefined;
   readonly summary: string;
   readonly transitions: readonly EquationTransition[];
   readonly states: readonly EquationAnimationState[];
@@ -76,6 +77,14 @@ export function findEquationAnimationCatalogEntry(
   }
 
   return entry;
+}
+
+export function findEquationAnimationForFixtureId(
+  fixtureId: string
+): EquationAnimationCatalogEntry | undefined {
+  return equationAnimationCatalogEntries.find(
+    (candidate) => candidate.fixtureId === fixtureId
+  );
 }
 
 function createLinearEquationAnimationEntry(): EquationAnimationCatalogEntry {
@@ -147,6 +156,7 @@ function createFixtureAnimationEntry(input: {
   return {
     id: input.id,
     label: input.label,
+    fixtureId: input.fixtureId,
     summary: fixture.summary,
     transitions: [transition],
     states: [
