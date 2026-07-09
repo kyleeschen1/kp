@@ -12,6 +12,11 @@ import {
 
 type TokenLifecyclePair = [id: string, lifecycle: string];
 type TokenRelationPair = [id: string, relation: string | undefined];
+type TokenSemanticVisualPair = [
+  id: string,
+  semanticLifecycle: string | undefined,
+  visualLifecycle: string | undefined
+];
 
 const summarizeTokenLifecycles = (
   plan: EquationMotionPlan
@@ -22,6 +27,15 @@ const summarizeTokenRelations = (plan: EquationMotionPlan): TokenRelationPair[] 
   plan.tokens.map((token) => [
     token.id,
     token.correspondenceRelation
+  ]);
+
+const summarizeSemanticVisualLifecycles = (
+  plan: EquationMotionPlan
+): TokenSemanticVisualPair[] =>
+  plan.tokens.map((token) => [
+    token.id,
+    token.semanticLifecycle,
+    token.visualLifecycle
   ]);
 
 const trackFor = (plan: EquationMotionPlan, tokenId: string) => {
@@ -88,9 +102,21 @@ test("createEquationMotionPlan preserves corrected semantic lifecycle tracks", (
     ["rhs.inverse.minus", "introduction"],
     ["rhs.inverse.3", "introduction"]
   ]);
+  assert.deepEqual(summarizeSemanticVisualLifecycles(plan), [
+    ["lhs.x", "identity-preserved", "persist"],
+    ["lhs.plus", "identity-preserved", "persist"],
+    ["lhs.3", "identity-preserved", "persist"],
+    ["lhs.inverse.minus", "introduced", "enter"],
+    ["lhs.inverse.3", "introduced", "enter"],
+    ["equals", "identity-preserved", "persist"],
+    ["rhs.7", "identity-preserved", "persist"],
+    ["rhs.inverse.minus", "introduced", "enter"],
+    ["rhs.inverse.3", "introduced", "enter"]
+  ]);
   assert.deepEqual(trackFor(plan, "lhs.x"), {
     tokenId: "lhs.x",
     lifecycle: "persist",
+    visualLifecycle: "persist",
     start: 0,
     end: 1,
     easing: "linear",
@@ -100,6 +126,7 @@ test("createEquationMotionPlan preserves corrected semantic lifecycle tracks", (
   assert.deepEqual(trackFor(plan, "lhs.plus"), {
     tokenId: "lhs.plus",
     lifecycle: "persist",
+    visualLifecycle: "persist",
     start: 0,
     end: 1,
     easing: "linear",
@@ -109,6 +136,7 @@ test("createEquationMotionPlan preserves corrected semantic lifecycle tracks", (
   assert.deepEqual(trackFor(plan, "lhs.inverse.minus"), {
     tokenId: "lhs.inverse.minus",
     lifecycle: "inverse-enter",
+    visualLifecycle: "enter",
     start: 0.2,
     end: 0.55,
     easing: "ease-out",
@@ -118,6 +146,7 @@ test("createEquationMotionPlan preserves corrected semantic lifecycle tracks", (
   assert.deepEqual(trackFor(plan, "rhs.inverse.3"), {
     tokenId: "rhs.inverse.3",
     lifecycle: "inverse-enter",
+    visualLifecycle: "enter",
     start: 0.2,
     end: 0.55,
     easing: "ease-out",
@@ -128,6 +157,8 @@ test("createEquationMotionPlan preserves corrected semantic lifecycle tracks", (
     id: "lhs.plus",
     lifecycle: "persist",
     correspondenceRelation: "identity",
+    semanticLifecycle: "identity-preserved",
+    visualLifecycle: "persist",
     label: "+",
     sourceMotionId: "lhs.plus",
     targetMotionId: "lhs.plus",
@@ -234,6 +265,20 @@ test("createEquationMotionPlan maps lifecycles to selector correspondence relati
     ["cancelled", "cancelation"],
     ["simplified", "fan-in"]
   ]);
+  assert.deepEqual(
+    summarizeSemanticVisualLifecycles(createEquationMotionPlan(transition)),
+    [
+      ["persisted", "identity-preserved", "persist"],
+      ["moved", "identity-preserved", "shift"],
+      ["wrapped", "role-changed", "wrap"],
+      ["unwrapped", "role-changed", "unwrap"],
+      ["entered", "introduced", "enter"],
+      ["inverse", "introduced", "enter"],
+      ["exited", "removed", "exit"],
+      ["cancelled", "cancelled", "vanish"],
+      ["simplified", "derived", "vanish"]
+    ]
+  );
 });
 
 test("createEquationMotionPlan cancels left additive inverse only during simplification", () => {
@@ -251,6 +296,7 @@ test("createEquationMotionPlan cancels left additive inverse only during simplif
   assert.deepEqual(trackFor(plan, "lhs.plus"), {
     tokenId: "lhs.plus",
     lifecycle: "cancel",
+    visualLifecycle: "vanish",
     start: 0.05,
     end: 0.35,
     easing: "ease-in",
@@ -260,6 +306,7 @@ test("createEquationMotionPlan cancels left additive inverse only during simplif
   assert.deepEqual(trackFor(plan, "lhs.inverse.3"), {
     tokenId: "lhs.inverse.3",
     lifecycle: "cancel",
+    visualLifecycle: "vanish",
     start: 0.05,
     end: 0.35,
     easing: "ease-in",
@@ -280,6 +327,14 @@ test("createEquationMotionPlan animates right constant difference simplification
 
   const plan = createEquationMotionPlan(transition);
 
+  assert.deepEqual(summarizeSemanticVisualLifecycles(plan), [
+    ["lhs.x", "identity-preserved", "persist"],
+    ["equals", "identity-preserved", "persist"],
+    ["rhs.7", "derived", "vanish"],
+    ["rhs.inverse.minus", "derived", "vanish"],
+    ["rhs.inverse.3", "derived", "vanish"],
+    ["rhs.4", "introduced", "enter"]
+  ]);
   assert.deepEqual(plan.correspondenceMap.records, [
     {
       id: "identity.lhs.x",
@@ -306,6 +361,7 @@ test("createEquationMotionPlan animates right constant difference simplification
   assert.deepEqual(trackFor(plan, "rhs.7"), {
     tokenId: "rhs.7",
     lifecycle: "simplify-into",
+    visualLifecycle: "vanish",
     start: 0.05,
     end: 0.45,
     easing: "ease-in-out",
@@ -315,6 +371,7 @@ test("createEquationMotionPlan animates right constant difference simplification
   assert.deepEqual(trackFor(plan, "rhs.4"), {
     tokenId: "rhs.4",
     lifecycle: "enter",
+    visualLifecycle: "enter",
     start: 0.35,
     end: 0.75,
     easing: "ease-out",

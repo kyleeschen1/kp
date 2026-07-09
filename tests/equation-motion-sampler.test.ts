@@ -139,6 +139,8 @@ test("sampleEquationMotion linearly interpolates all pose fields", () => {
         id: "x",
         lifecycle: "persist",
         correspondenceRelation: "identity",
+        semanticLifecycle: "identity-preserved",
+        visualLifecycle: "persist",
         label: "x",
         sourceMotionId: "x",
         targetMotionId: "x"
@@ -148,6 +150,7 @@ test("sampleEquationMotion linearly interpolates all pose fields", () => {
       {
         tokenId: "x",
         lifecycle: "persist",
+        visualLifecycle: "persist",
         start: 0,
         end: 1,
         easing: "linear",
@@ -219,6 +222,8 @@ test("sampleEquationMotion defensively samples invalid track ranges", () => {
         id: "x",
         lifecycle: "persist",
         correspondenceRelation: "identity",
+        semanticLifecycle: "identity-preserved",
+        visualLifecycle: "persist",
         label: "x",
         sourceMotionId: "x",
         targetMotionId: "x"
@@ -228,6 +233,7 @@ test("sampleEquationMotion defensively samples invalid track ranges", () => {
       {
         tokenId: "x",
         lifecycle: "persist",
+        visualLifecycle: "persist",
         start: 0.5,
         end: 0.5,
         easing: "linear",
@@ -256,6 +262,7 @@ test("sampleEquationMotion defensively samples invalid track ranges", () => {
       {
         tokenId: "x",
         lifecycle: "persist",
+        visualLifecycle: "persist",
         start: 0.7,
         end: 0.3,
         easing: "linear",

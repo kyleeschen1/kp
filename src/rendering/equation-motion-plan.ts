@@ -7,6 +7,10 @@ import {
   type CorrespondenceMap,
   type SelectorCorrespondenceRelationId
 } from "../semantic/correspondence.ts";
+import type {
+  SemanticSelectorLifecycle,
+  VisualTokenLifecycle
+} from "../semantic/lifecycle.ts";
 
 export type EasingName = "linear" | "ease-in" | "ease-out" | "ease-in-out";
 
@@ -22,6 +26,8 @@ export interface EquationMotionToken {
   readonly id: string;
   readonly lifecycle: EquationTokenLifecycle;
   readonly correspondenceRelation: SelectorCorrespondenceRelationId;
+  readonly semanticLifecycle: SemanticSelectorLifecycle;
+  readonly visualLifecycle: VisualTokenLifecycle;
   readonly label: string;
   readonly sourceMotionId?: string | undefined;
   readonly targetMotionId?: string | undefined;
@@ -32,6 +38,7 @@ export interface EquationMotionToken {
 export interface EquationMotionTrack {
   readonly tokenId: string;
   readonly lifecycle: EquationTokenLifecycle;
+  readonly visualLifecycle: VisualTokenLifecycle;
   readonly start: number;
   readonly end: number;
   readonly easing: EasingName;
@@ -68,11 +75,18 @@ export function createEquationMotionPlan(
       );
     }
     validateLifecycleEndpoints(transitionToken);
+    const correspondenceRelation = correspondenceRelationForLifecycle(
+      transitionToken.lifecycle
+    );
 
     return {
       id: transitionToken.id,
       lifecycle: transitionToken.lifecycle,
-      correspondenceRelation: correspondenceRelationForLifecycle(
+      correspondenceRelation,
+      semanticLifecycle: semanticLifecycleForCorrespondenceRelation(
+        correspondenceRelation
+      ),
+      visualLifecycle: visualLifecycleForEquationLifecycle(
         transitionToken.lifecycle
       ),
       label: transitionToken.label,
@@ -236,6 +250,7 @@ function trackForToken(token: EquationMotionToken): EquationMotionTrack {
   return {
     tokenId: token.id,
     lifecycle: token.lifecycle,
+    visualLifecycle: token.visualLifecycle,
     start: timing.start,
     end: timing.end,
     easing: timing.easing,
@@ -263,6 +278,56 @@ export function correspondenceRelationForLifecycle(
       return "cancelation";
     case "simplify-into":
       return "fan-in";
+    default:
+      return assertNever(lifecycle);
+  }
+}
+
+export function semanticLifecycleForCorrespondenceRelation(
+  relation: SelectorCorrespondenceRelationId
+): SemanticSelectorLifecycle {
+  switch (relation) {
+    case "identity":
+      return "identity-preserved";
+    case "role-change":
+      return "role-changed";
+    case "introduction":
+      return "introduced";
+    case "removal":
+      return "removed";
+    case "cancelation":
+      return "cancelled";
+    case "fan-in":
+    case "fan-out":
+      return "derived";
+    case "artifact":
+    case "focus":
+      return "visual-only";
+    default:
+      return assertNever(relation);
+  }
+}
+
+export function visualLifecycleForEquationLifecycle(
+  lifecycle: EquationTokenLifecycle
+): VisualTokenLifecycle {
+  switch (lifecycle) {
+    case "persist":
+      return "persist";
+    case "move":
+      return "shift";
+    case "enter":
+    case "inverse-enter":
+      return "enter";
+    case "exit":
+      return "exit";
+    case "cancel":
+    case "simplify-into":
+      return "vanish";
+    case "group-wrap":
+      return "wrap";
+    case "group-unwrap":
+      return "unwrap";
     default:
       return assertNever(lifecycle);
   }
