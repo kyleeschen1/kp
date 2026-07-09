@@ -1,4 +1,3 @@
-import { createEquationOperationTransition } from "../math/equation-transform.ts";
 import {
   DEFAULT_EQUATION_ANIMATION_ID,
   findEquationAnimationCatalogEntry
@@ -272,12 +271,12 @@ function createDemoEquationMotionTransition(
   const animation = findEquationAnimationCatalogEntry(
     readEquationAnimationId(demo)
   );
-  const operation = animation.operations[lowerStep];
+  const transition = animation.transitions[lowerStep];
   const sourceState = findEquationMotionState(demo, lowerStep);
   const targetState = findEquationMotionState(demo, lowerStep + 1);
 
   if (
-    operation === undefined ||
+    transition === undefined ||
     sourceState === undefined ||
     targetState === undefined
   ) {
@@ -291,16 +290,14 @@ function createDemoEquationMotionTransition(
     throw new Error("Equation motion states must include LaTeX metadata.");
   }
 
-  const semanticTransition = createEquationOperationTransition({
-    sourceLatex,
-    operation
-  });
-
-  if (semanticTransition.targetLatex !== expectedTargetLatex) {
+  if (
+    transition.sourceLatex !== sourceLatex ||
+    transition.targetLatex !== expectedTargetLatex
+  ) {
     throw new Error("Equation motion state does not match semantic operation.");
   }
 
-  return createEquationMotionPlan(semanticTransition);
+  return createEquationMotionPlan(transition);
 }
 
 function readEquationAnimationId(demo: HTMLElement): string {

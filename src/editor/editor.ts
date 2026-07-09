@@ -55,6 +55,7 @@ export function createInitialEditorDocument(): KpDocument {
 
 export interface EditorRenderOptions {
   readonly katexOperatorScalePercent?: number;
+  readonly equationAnimationId?: string | undefined;
 }
 
 export function renderEditorDocument(
@@ -74,7 +75,11 @@ export function renderEditorDocument(
               `<li><strong>${escapeHtml(issue.path)}</strong>: ${escapeHtml(issue.message)}</li>`
           )
           .join("")}</ul>`;
-  const renderedObjects = renderPreviewStage(document, katexOperatorScalePercent);
+  const renderedObjects = renderPreviewStage(
+    document,
+    katexOperatorScalePercent,
+    options.equationAnimationId
+  );
 
   return `
     <section class="editor-shell" aria-label="Kinetic Press editor">
@@ -117,7 +122,8 @@ export function renderEditorDocument(
 
 function renderPreviewStage(
   document: KpDocument,
-  katexOperatorScalePercent: number
+  katexOperatorScalePercent: number,
+  equationAnimationId: string | undefined
 ): string {
   let renderedEquationMotionDemo = false;
   const renderedObjects = document.objects.map((object) => {
@@ -128,7 +134,7 @@ function renderPreviewStage(
 
       return (
         preview +
-        renderEquationMotionDemo() +
+        renderEquationMotionDemo(equationAnimationId) +
         renderKatexVisualTuning(katexOperatorScalePercent)
       );
     }
@@ -138,7 +144,7 @@ function renderPreviewStage(
 
   if (!renderedEquationMotionDemo) {
     renderedObjects.unshift(
-      renderEquationMotionDemo() +
+      renderEquationMotionDemo(equationAnimationId) +
         renderKatexVisualTuning(katexOperatorScalePercent)
     );
   }
@@ -198,10 +204,8 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
   }
 }
 
-function renderEquationMotionDemo(): string {
-  const animation = findEquationAnimationCatalogEntry(
-    DEFAULT_EQUATION_ANIMATION_ID
-  );
+function renderEquationMotionDemo(equationAnimationId: string | undefined): string {
+  const animation = selectEquationAnimation(equationAnimationId);
   const stateHtml = animation.states
     .map((state) =>
       renderEquationMotionState(
@@ -248,6 +252,20 @@ function renderEquationMotionDemo(): string {
       </div>
     </section>
   `;
+}
+
+function selectEquationAnimation(
+  equationAnimationId: string | undefined
+): EquationAnimationCatalogEntry {
+  if (equationAnimationId === undefined) {
+    return findEquationAnimationCatalogEntry(DEFAULT_EQUATION_ANIMATION_ID);
+  }
+
+  try {
+    return findEquationAnimationCatalogEntry(equationAnimationId);
+  } catch {
+    return findEquationAnimationCatalogEntry(DEFAULT_EQUATION_ANIMATION_ID);
+  }
 }
 
 function renderEquationAnimationSelector(

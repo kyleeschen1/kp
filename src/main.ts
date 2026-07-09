@@ -64,6 +64,7 @@ const appRoot = app;
 let editorDocument = createInitialEditorDocument();
 let projectDashboardQuery = "";
 let projectDashboardSelectedKatexFixtureId: string | undefined;
+let selectedEquationAnimationId: string | undefined;
 let katexOperatorScalePercent = 85;
 type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
@@ -144,6 +145,11 @@ appRoot.addEventListener("change", (event) => {
 
   if (event.target.dataset["action"] === "set-graph-view-mode") {
     updateGraphViewModeFromSelect(event.target);
+    return;
+  }
+
+  if (event.target.dataset["action"] === "set-equation-motion-animation") {
+    selectEquationAnimation(event.target);
   }
 });
 
@@ -232,10 +238,16 @@ function addEquationGraphFromInput(): void {
 function renderEditor(): void {
   disposeGraph3DWebGL(appRoot);
   appRoot.innerHTML = renderEditorDocument(editorDocument, {
-    katexOperatorScalePercent
+    katexOperatorScalePercent,
+    equationAnimationId: selectedEquationAnimationId
   });
   hydrateEquationMotionDemos(appRoot);
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);
+}
+
+function selectEquationAnimation(select: HTMLSelectElement): void {
+  selectedEquationAnimationId = select.value;
+  renderEditor();
 }
 
 function renderProjectDashboardView(query = projectDashboardQuery): void {

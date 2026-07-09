@@ -35,6 +35,14 @@ export type EquationOperation =
       readonly rule: "cancel-additive-inverse" | "evaluate-constant-difference";
     };
 
+export type EquationTransitionOperation =
+  | EquationOperation
+  | {
+      readonly kind: "fixtureTransform";
+      readonly fixtureId: string;
+      readonly intent: string;
+    };
+
 export type EquationOperationInput = {
   readonly sourceLatex: string;
   readonly operation: EquationOperation;
@@ -63,7 +71,7 @@ export interface EquationTransitionSelectorPaths {
 export type EquationTransition = {
   readonly sourceLatex: string;
   readonly targetLatex: string;
-  readonly operation: EquationOperation;
+  readonly operation: EquationTransitionOperation;
   readonly tokens: readonly EquationTransitionToken[];
   readonly sourceAnnotations: readonly EquationMotionAnnotation[];
   readonly targetAnnotations: readonly EquationMotionAnnotation[];
@@ -784,6 +792,8 @@ function textForMotionId(motionId: SemanticId): string {
   throw new Error(`Unknown equation motion id: ${motionId}`);
 }
 
-function cloneOperation(operation: EquationOperation): EquationOperation {
+function cloneOperation(
+  operation: EquationTransitionOperation
+): EquationTransitionOperation {
   return { ...operation };
 }

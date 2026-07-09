@@ -143,6 +143,26 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
     html,
     /option value="linear-equation-solve-x" selected>x \+ 3 = 7/
   );
+  assert.match(
+    html,
+    /option value="fixture-fraction-make-inline-to-stacked">Inline fraction to stacked/
+  );
+  assert.match(
+    html,
+    /option value="fixture-radical-rewrite-power-as-root">Power to radical/
+  );
+  assert.match(
+    html,
+    /option value="fixture-wrapper-function-wrap">Wrap with function/
+  );
+  assert.match(
+    html,
+    /option value="fixture-script-combine-factor-as-power">Repeated factor to exponent/
+  );
+  assert.match(
+    html,
+    /option value="fixture-matrix-bracket-change-delimiter">Matrix bracket swap/
+  );
   assert.match(html, /data-kp-equation-motion-step="0"/);
   assert.match(html, /data-kp-equation-motion-max-step="3"/);
   assert.match(html, /data-kp-equation-motion-settings/);
@@ -353,6 +373,32 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
   assert.ok(
     html.indexOf('data-kp-equation-motion-state="2"') <
       html.indexOf('data-kp-equation-motion-state="3"')
+  );
+});
+
+test("renderEditorDocument renders selected fixture animation", () => {
+  const html = renderEditorDocument(createInitialEditorDocument(), {
+    equationAnimationId: "fixture-fraction-make-inline-to-stacked"
+  });
+
+  assert.match(
+    html,
+    /data-kp-equation-animation-id="fixture-fraction-make-inline-to-stacked"/
+  );
+  assert.match(html, /data-kp-equation-motion-max-step="1"/);
+  assert.match(
+    html,
+    /option value="fixture-fraction-make-inline-to-stacked" selected>Inline fraction to stacked/
+  );
+  assert.match(html, /data-kp-equation-motion-latex="x \/ 3"/);
+  assert.match(html, /data-kp-equation-motion-latex="\\frac\{x\}\{3\}"/);
+  assert.match(
+    html,
+    /data-kp-motion-id="fraction\.make\.inline-to-stacked\.source\.expression"/
+  );
+  assert.match(
+    html,
+    /data-kp-motion-id="fraction\.make\.inline-to-stacked\.target\.expression"/
   );
 });
 
