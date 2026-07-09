@@ -449,6 +449,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
       renderer: overlay.dataset["kpEquationMotionArtifactRenderer"],
       sourceTokenId: overlay.dataset["kpEquationMotionArtifactSource"],
       targetTokenId: overlay.dataset["kpEquationMotionArtifactTarget"],
+      sourceMotion: overlay.dataset["kpEquationMotionArtifactSourceMotion"],
       particleCount: Number(
         overlay.dataset["kpEquationMotionArtifactParticleCount"] ?? 0
       ),
@@ -464,6 +465,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
     renderer: "webgl-pixel-flow",
     sourceTokenId: "radical.rewrite-power-as-root.source.exponent",
     targetTokenId: "radical.rewrite-power-as-root.target.radical",
+    sourceMotion: "bounce-collapse-emitter",
     particleCount: 1024,
     nonTransparentPixelCount: expect.any(Number),
     maxAlpha: expect.any(Number)

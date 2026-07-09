@@ -80,24 +80,61 @@ test("createKatexArtifactPixelFlowFrame interpolates particles with no semantic 
   assert.ok((frame.particles[0]?.pointSize ?? 0) > 0);
 });
 
+test("createKatexArtifactPixelFlowFrame can bounce source pixels then collapse them to an emitter", () => {
+  const particles = pairKatexArtifactPixelFlowPoints(
+    [{ x: 16, y: 10, alpha: 1 }],
+    [{ x: 40, y: 10, alpha: 1 }],
+    1
+  );
+  const plan = pixelFlowPlan({
+    start: 0,
+    end: 1,
+    sourceMotion: {
+      kind: "bounce-collapse-emitter",
+      bounceStrength: 0.5,
+      bounceEnd: 0.25,
+      collapseEnd: 0.45
+    }
+  });
+  const bounced = createKatexArtifactPixelFlowFrame(plan, particles, 0.25);
+  const collapsed = createKatexArtifactPixelFlowFrame(plan, particles, 0.45);
+  const streaming = createKatexArtifactPixelFlowFrame(plan, particles, 0.725);
+
+  assert.equal(bounced.particles[0]?.x, 19);
+  assert.equal(bounced.particles[0]?.y, 10);
+  assert.equal(collapsed.particles[0]?.x, 10);
+  assert.equal(collapsed.particles[0]?.y, 10);
+  assert.ok(Math.abs((streaming.particles[0]?.x ?? 0) - 25) < 1e-9);
+  assert.ok(Math.abs((streaming.particles[0]?.y ?? 0) - 10) < 1e-9);
+});
+
 function pixelFlowPlan(overrides: {
   readonly start?: number | undefined;
   readonly end?: number | undefined;
+  readonly sourceMotion?:
+    | {
+        readonly kind: "bounce-collapse-emitter";
+        readonly bounceStrength: number;
+        readonly bounceEnd: number;
+        readonly collapseEnd: number;
+      }
+    | undefined;
 }) {
   return {
     id: "radical-artifact-pixel-flow",
     kind: "artifact-pixel-flow" as const,
     source: {
       tokenId: "source-artifact",
-      rect: { left: 10, top: 20, width: 30, height: 12 }
+      rect: { left: 0, top: 0, width: 20, height: 20 }
     },
     target: {
       tokenId: "target-artifact",
-      rect: { left: 14, top: 18, width: 36, height: 16 }
+      rect: { left: 30, top: 0, width: 20, height: 20 }
     },
     particleCount: 512,
     start: overrides.start ?? 0,
     end: overrides.end ?? 1,
-    easing: "linear" as const
+    easing: "linear" as const,
+    sourceMotion: overrides.sourceMotion
   };
 }

@@ -9,12 +9,20 @@ export interface KatexArtifactPixelFlowEndpoint {
   readonly rect: KatexTokenRect;
 }
 
+export interface KatexArtifactPixelFlowSourceMotion {
+  readonly kind: "bounce-collapse-emitter";
+  readonly bounceStrength: number;
+  readonly bounceEnd: number;
+  readonly collapseEnd: number;
+}
+
 export interface KatexArtifactPixelFlowPlan {
   readonly id: string;
   readonly kind: "artifact-pixel-flow";
   readonly source: KatexArtifactPixelFlowEndpoint;
   readonly target: KatexArtifactPixelFlowEndpoint;
   readonly particleCount: number;
+  readonly sourceMotion?: KatexArtifactPixelFlowSourceMotion | undefined;
   readonly start: number;
   readonly end: number;
   readonly easing: EasingName;
@@ -61,6 +69,11 @@ interface KatexArtifactPixelFlowProgramInfo {
   readonly seedLocation: number;
   readonly resolutionLocation: WebGLUniformLocation;
   readonly progressLocation: WebGLUniformLocation;
+  readonly sourceMotionEnabledLocation: WebGLUniformLocation;
+  readonly sourceMidpointLocation: WebGLUniformLocation;
+  readonly bounceStrengthLocation: WebGLUniformLocation;
+  readonly bounceEndLocation: WebGLUniformLocation;
+  readonly collapseEndLocation: WebGLUniformLocation;
   readonly pixelRatioLocation: WebGLUniformLocation;
   readonly colorLocation: WebGLUniformLocation;
 }
@@ -133,11 +146,81 @@ export function createKatexArtifactPixelFlowFrame(
   return {
     progress: localProgress,
     particles: particles.map((particle) => ({
-      x: lerp(particle.sourceX, particle.targetX, localProgress),
-      y: lerp(particle.sourceY, particle.targetY, localProgress),
+      ...sampleParticleFramePoint(plan, particle, localProgress),
       opacity: clamp01(particle.alpha),
       pointSize
     }))
+  };
+}
+
+function sampleParticleFramePoint(
+  plan: KatexArtifactPixelFlowPlan,
+  particle: KatexArtifactPixelFlowParticle,
+  progress: number
+): { readonly x: number; readonly y: number } {
+  // Source motion lets notation collapse into an emitter before the target
+  // artifact is drawn, while preserving the same scrub/rewind clock.
+  const sourceMotion = plan.sourceMotion;
+
+  if (sourceMotion === undefined) {
+    return {
+      x: lerp(particle.sourceX, particle.targetX, progress),
+      y: lerp(particle.sourceY, particle.targetY, progress)
+    };
+  }
+
+  const midpoint = {
+    x: endpointMidpointX(plan.source),
+    y: endpointMidpointY(plan.source)
+  };
+  const bounced = {
+    x:
+      particle.sourceX +
+      (particle.sourceX - midpoint.x) * sourceMotion.bounceStrength,
+    y:
+      particle.sourceY +
+      (particle.sourceY - midpoint.y) * sourceMotion.bounceStrength
+  };
+
+  if (progress <= sourceMotion.bounceEnd) {
+    const bounceProgress =
+      sourceMotion.bounceEnd <= 0
+        ? 1
+        : clamp01(progress / sourceMotion.bounceEnd);
+    const easedBounceProgress = easedProgress("ease-in-out", bounceProgress);
+
+    return {
+      x: lerp(particle.sourceX, bounced.x, easedBounceProgress),
+      y: lerp(particle.sourceY, bounced.y, easedBounceProgress)
+    };
+  }
+
+  if (progress <= sourceMotion.collapseEnd) {
+    const collapseProgress =
+      sourceMotion.collapseEnd <= sourceMotion.bounceEnd
+        ? 1
+        : clamp01(
+            (progress - sourceMotion.bounceEnd) /
+              (sourceMotion.collapseEnd - sourceMotion.bounceEnd)
+          );
+
+    return {
+      x: lerp(bounced.x, midpoint.x, collapseProgress),
+      y: lerp(bounced.y, midpoint.y, collapseProgress)
+    };
+  }
+
+  const streamProgress =
+    sourceMotion.collapseEnd >= 1
+      ? 1
+      : clamp01(
+          (progress - sourceMotion.collapseEnd) / (1 - sourceMotion.collapseEnd)
+        );
+  const easedStreamProgress = easedProgress("ease-in-out", streamProgress);
+
+  return {
+    x: lerp(midpoint.x, particle.targetX, easedStreamProgress),
+    y: lerp(midpoint.y, particle.targetY, easedStreamProgress)
   };
 }
 
@@ -295,6 +378,27 @@ export function createKatexArtifactPixelFlowRenderer(
         programInfo.progressLocation,
         sampleKatexArtifactPixelFlowProgress(plan, progress)
       );
+      gl.uniform1f(
+        programInfo.sourceMotionEnabledLocation,
+        plan.sourceMotion === undefined ? 0 : 1
+      );
+      gl.uniform2f(
+        programInfo.sourceMidpointLocation,
+        endpointMidpointX(plan.source, atlas.pixelRatio),
+        endpointMidpointY(plan.source, atlas.pixelRatio)
+      );
+      gl.uniform1f(
+        programInfo.bounceStrengthLocation,
+        plan.sourceMotion?.bounceStrength ?? 0
+      );
+      gl.uniform1f(
+        programInfo.bounceEndLocation,
+        plan.sourceMotion?.bounceEnd ?? 0
+      );
+      gl.uniform1f(
+        programInfo.collapseEndLocation,
+        plan.sourceMotion?.collapseEnd ?? 0
+      );
       gl.uniform1f(programInfo.pixelRatioLocation, atlas.pixelRatio);
       gl.uniform3f(programInfo.colorLocation, 31 / 255, 99 / 255, 113 / 255);
       gl.drawArrays(gl.POINTS, 0, particleCount);
@@ -387,23 +491,62 @@ function createProgram(
         attribute float a_seed;
         uniform vec2 u_resolution;
         uniform float u_progress;
+        uniform float u_sourceMotionEnabled;
+        uniform vec2 u_sourceMidpoint;
+        uniform float u_bounceStrength;
+        uniform float u_bounceEnd;
+        uniform float u_collapseEnd;
         uniform float u_pixelRatio;
         varying float v_alpha;
 
+        float clampUnit(float value) {
+          return clamp(value, 0.0, 1.0);
+        }
+
+        float easeInOut(float value) {
+          return (1.0 - cos(value * 3.14159265359)) / 2.0;
+        }
+
+        vec2 samplePosition() {
+          if (u_sourceMotionEnabled < 0.5) {
+            return mix(a_source, a_target, u_progress);
+          }
+
+          vec2 bounced = a_source +
+            (a_source - u_sourceMidpoint) * u_bounceStrength;
+
+          if (u_progress <= u_bounceEnd) {
+            float bounceProgress = u_bounceEnd <= 0.0001
+              ? 1.0
+              : clampUnit(u_progress / u_bounceEnd);
+
+            return mix(a_source, bounced, easeInOut(bounceProgress));
+          }
+
+          if (u_progress <= u_collapseEnd) {
+            float collapseProgress = u_collapseEnd <= u_bounceEnd
+              ? 1.0
+              : clampUnit(
+                (u_progress - u_bounceEnd) / (u_collapseEnd - u_bounceEnd)
+              );
+
+            return mix(bounced, u_sourceMidpoint, collapseProgress);
+          }
+
+          float streamProgress = u_collapseEnd >= 1.0
+            ? 1.0
+            : clampUnit((u_progress - u_collapseEnd) / (1.0 - u_collapseEnd));
+
+          return mix(u_sourceMidpoint, a_target, easeInOut(streamProgress));
+        }
+
         void main() {
-          vec2 delta = a_target - a_source;
-          float distance = length(delta);
-          vec2 normal = distance <= 0.0001
-            ? vec2(0.0, 0.0)
-            : normalize(vec2(-delta.y, delta.x));
-          float spread = sin(u_progress * 3.14159265359) *
-            (a_seed - 0.5) * 10.0 * u_pixelRatio;
-          vec2 position = mix(a_source, a_target, u_progress) + normal * spread;
+          vec2 position = samplePosition();
           vec2 zeroToOne = position / u_resolution;
           vec2 clipSpace = zeroToOne * 2.0 - 1.0;
 
           gl_Position = vec4(clipSpace * vec2(1.0, -1.0), 0.0, 1.0);
-          gl_PointSize = (2.2 + sin(u_progress * 3.14159265359) * 0.8) *
+          gl_PointSize = (2.2 + sin(u_progress * 3.14159265359) * 0.8 + a_seed * 0.12) *
             u_pixelRatio;
           v_alpha = a_alpha;
         }
@@ -473,6 +616,15 @@ function createProgram(
       seedLocation: getAttribLocation(gl, program, "a_seed"),
       resolutionLocation: getUniformLocation(gl, program, "u_resolution"),
       progressLocation: getUniformLocation(gl, program, "u_progress"),
+      sourceMotionEnabledLocation: getUniformLocation(
+        gl,
+        program,
+        "u_sourceMotionEnabled"
+      ),
+      sourceMidpointLocation: getUniformLocation(gl, program, "u_sourceMidpoint"),
+      bounceStrengthLocation: getUniformLocation(gl, program, "u_bounceStrength"),
+      bounceEndLocation: getUniformLocation(gl, program, "u_bounceEnd"),
+      collapseEndLocation: getUniformLocation(gl, program, "u_collapseEnd"),
       pixelRatioLocation: getUniformLocation(gl, program, "u_pixelRatio"),
       colorLocation: getUniformLocation(gl, program, "u_color")
     };
@@ -586,6 +738,20 @@ function seededUnit(index: number): number {
 
 function lerp(source: number, target: number, progress: number): number {
   return source + (target - source) * progress;
+}
+
+function endpointMidpointX(
+  endpoint: KatexArtifactPixelFlowEndpoint,
+  scale = 1
+): number {
+  return (endpoint.rect.left + endpoint.rect.width / 2) * scale;
+}
+
+function endpointMidpointY(
+  endpoint: KatexArtifactPixelFlowEndpoint,
+  scale = 1
+): number {
+  return (endpoint.rect.top + endpoint.rect.height / 2) * scale;
 }
 
 function clamp01(value: number): number {

@@ -1056,6 +1056,12 @@ function createRadicalArtifactPixelFlowPlan(
         rect: targetLocalRect
       },
       particleCount: 1024,
+      sourceMotion: {
+        kind: "bounce-collapse-emitter",
+        bounceStrength: 0.55,
+        bounceEnd: 0.25,
+        collapseEnd: 0.45
+      },
       start: 0,
       end: 1,
       easing: "ease-in-out"
@@ -1113,6 +1119,8 @@ function findOrCreateArtifactPixelFlowContext(
   canvas.dataset["kpEquationMotionArtifactParticleCount"] = String(
     plan.pixelFlowPlan.particleCount
   );
+  canvas.dataset["kpEquationMotionArtifactSourceMotion"] =
+    plan.pixelFlowPlan.sourceMotion?.kind ?? "direct";
   syncArtifactPixelFlowCanvas(canvas, stageRect, pixelRatio);
   stage.append(canvas);
 
