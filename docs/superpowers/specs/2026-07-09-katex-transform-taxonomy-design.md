@@ -513,3 +513,17 @@ These fixtures encode delimiter and function-name artifacts as visual tokens.
 They also connect to the equation motion lifecycle vocabulary:
 `group-wrap` maps to `role-change` correspondence and a `wrap` visual lifecycle,
 while delimiter artifacts enter or exit separately.
+
+Slice 15 extended the registry with large-operator fixtures:
+
+- `large-operator.sum.add-bounds`
+- `large-operator.product.change-bounds`
+- `large-operator.integral.add-bounds`
+- `large-operator.limit.change-approach`
+
+These fixtures introduce a separate token `layoutRole` for under/over placement.
+That keeps semantic roles distinct from visual geometry: a limit approach is
+semantically `limit-approach`, but it occupies `lower-limit` layout geometry.
+Summation, product, and integral bounds use `upper-limit` and `lower-limit`
+roles directly, while persisted bodies, integrands, differentials, and large
+operator glyphs remain addressable as separate fixture tokens.

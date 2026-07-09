@@ -10,6 +10,7 @@ import {
 } from "../src/rendering/katex-token-snapshot.ts";
 import {
   fractionTransformFixtures,
+  largeOperatorTransformFixtures,
   radicalTransformFixtures,
   summarizeKatexTransformFixtureDiagnostics,
   scriptTransformFixtures,
@@ -310,6 +311,67 @@ test("wrapper transform fixtures declare delimiter and function artifacts", () =
       ["wrapper.absolute-value.unwrap", "unwrapDelimiter", ["|", "|"], []],
       ["wrapper.norm.wrap", "wrapWithDelimiter", [], ["\\lVert", "\\rVert"]],
       ["wrapper.function.wrap", "wrapWithFunction", [], ["f", "(", ")"]]
+    ]
+  );
+});
+
+test("large-operator transform fixtures declare operators and limit geometry", () => {
+  assert.deepEqual(
+    largeOperatorTransformFixtures.map((fixture) => [
+      fixture.id,
+      fixture.intent,
+      fixture.source.tokens
+        .filter((token) => token.role === "large-operator")
+        .map((token) => token.text),
+      fixture.target.tokens
+        .filter((token) => token.layoutRole === "upper-limit")
+        .map((token) => token.text),
+      fixture.target.tokens
+        .filter((token) => token.layoutRole === "lower-limit")
+        .map((token) => token.text),
+      fixture.expectedRoleChanges.map((roleChange) => [
+        roleChange.sourceRole,
+        roleChange.targetRole,
+        roleChange.sourceText,
+        roleChange.targetText
+      ])
+    ]),
+    [
+      [
+        "large-operator.sum.add-bounds",
+        "addSummationBounds",
+        ["\\sum"],
+        ["n"],
+        ["i=1"],
+        []
+      ],
+      [
+        "large-operator.product.change-bounds",
+        "changeProductBounds",
+        ["\\prod"],
+        ["n-1"],
+        ["i=0"],
+        [
+          ["upper-limit", "upper-limit", "n", "n-1"],
+          ["lower-limit", "lower-limit", "i=1", "i=0"]
+        ]
+      ],
+      [
+        "large-operator.integral.add-bounds",
+        "addIntegralBounds",
+        ["\\int"],
+        ["b"],
+        ["a"],
+        []
+      ],
+      [
+        "large-operator.limit.change-approach",
+        "changeLimitApproach",
+        ["\\lim"],
+        [],
+        ["h \\to 0"],
+        [["limit-approach", "limit-approach", "x \\to 0", "h \\to 0"]]
+      ]
     ]
   );
 });

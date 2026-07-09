@@ -1,5 +1,6 @@
 export type KatexTransformFixtureFamily =
   | "fraction"
+  | "large-operator"
   | "radical"
   | "script"
   | "wrapper";
@@ -24,8 +25,15 @@ export type KatexWrapperTransformIntent =
   | "unwrapDelimiter"
   | "wrapWithFunction";
 
+export type KatexLargeOperatorTransformIntent =
+  | "addSummationBounds"
+  | "changeProductBounds"
+  | "addIntegralBounds"
+  | "changeLimitApproach";
+
 export type KatexTransformFixtureIntent =
   | KatexFractionTransformIntent
+  | KatexLargeOperatorTransformIntent
   | KatexRadicalTransformIntent
   | KatexScriptTransformIntent
   | KatexWrapperTransformIntent;
@@ -33,18 +41,31 @@ export type KatexTransformFixtureIntent =
 export type KatexTransformFixtureTokenRole =
   | "artifact"
   | "base"
+  | "body"
+  | "differential"
   | "factor"
+  | "integrand"
+  | "large-operator"
+  | "limit-approach"
+  | "lower-limit"
   | "operator"
   | "radicand"
   | "root-index"
   | "semantic"
   | "subscript"
-  | "superscript";
+  | "superscript"
+  | "upper-limit";
+
+export type KatexTransformFixtureLayoutRole =
+  | "baseline"
+  | "lower-limit"
+  | "upper-limit";
 
 export interface KatexTransformFixtureToken {
   readonly text: string;
   readonly signature: string;
   readonly role: KatexTransformFixtureTokenRole;
+  readonly layoutRole?: KatexTransformFixtureLayoutRole;
   readonly row: number;
   readonly column: number;
 }
@@ -493,8 +514,148 @@ export const wrapperTransformFixtures: readonly KatexTransformFixture[] = [
   }
 ];
 
+export const largeOperatorTransformFixtures: readonly KatexTransformFixture[] = [
+  {
+    id: "large-operator.sum.add-bounds",
+    family: "large-operator",
+    intent: "addSummationBounds",
+    source: {
+      latex: "\\sum a_i",
+      tokens: [
+        largeOperatorToken("\\sum", 0, 0),
+        bodyToken("a_i", 0, 1)
+      ]
+    },
+    target: {
+      latex: "\\sum_{i=1}^{n} a_i",
+      tokens: [
+        upperLimitToken("n", -1, 0),
+        largeOperatorToken("\\sum", 0, 0),
+        lowerLimitToken("i=1", 1, 0),
+        bodyToken("a_i", 0, 1)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [],
+    summary:
+      "An unbounded summation gains lower and upper bounds; the operator and summand persist while limit tokens enter in under/over geometry."
+  },
+  {
+    id: "large-operator.product.change-bounds",
+    family: "large-operator",
+    intent: "changeProductBounds",
+    source: {
+      latex: "\\prod_{i=1}^{n} a_i",
+      tokens: [
+        upperLimitToken("n", -1, 0),
+        largeOperatorToken("\\prod", 0, 0),
+        lowerLimitToken("i=1", 1, 0),
+        bodyToken("a_i", 0, 1)
+      ]
+    },
+    target: {
+      latex: "\\prod_{i=0}^{n-1} a_i",
+      tokens: [
+        upperLimitToken("n-1", -1, 0),
+        largeOperatorToken("\\prod", 0, 0),
+        lowerLimitToken("i=0", 1, 0),
+        bodyToken("a_i", 0, 1)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [
+      {
+        sourceRole: "upper-limit",
+        targetRole: "upper-limit",
+        sourceText: "n",
+        targetText: "n-1"
+      },
+      {
+        sourceRole: "lower-limit",
+        targetRole: "lower-limit",
+        sourceText: "i=1",
+        targetText: "i=0"
+      }
+    ],
+    summary:
+      "A product changes its bounds; the operator and product body persist while upper and lower limit slots morph."
+  },
+  {
+    id: "large-operator.integral.add-bounds",
+    family: "large-operator",
+    intent: "addIntegralBounds",
+    source: {
+      latex: "\\int f(x)\\,dx",
+      tokens: [
+        largeOperatorToken("\\int", 0, 0),
+        integrandToken("f(x)", 0, 1),
+        differentialToken("dx", 0, 2)
+      ]
+    },
+    target: {
+      latex: "\\int_{a}^{b} f(x)\\,dx",
+      tokens: [
+        upperLimitToken("b", -1, 0),
+        largeOperatorToken("\\int", 0, 0),
+        lowerLimitToken("a", 1, 0),
+        integrandToken("f(x)", 0, 1),
+        differentialToken("dx", 0, 2)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [],
+    summary:
+      "An indefinite integral gains bounds; bound tokens enter around a persisted integral operator, integrand, and differential."
+  },
+  {
+    id: "large-operator.limit.change-approach",
+    family: "large-operator",
+    intent: "changeLimitApproach",
+    source: {
+      latex: "\\lim_{x \\to 0} f(x)",
+      tokens: [
+        largeOperatorToken("\\lim", 0, 0),
+        limitApproachToken("x \\to 0", 1, 0),
+        bodyToken("f(x)", 0, 1)
+      ]
+    },
+    target: {
+      latex: "\\lim_{h \\to 0} f(h)",
+      tokens: [
+        largeOperatorToken("\\lim", 0, 0),
+        limitApproachToken("h \\to 0", 1, 0),
+        bodyToken("f(h)", 0, 1)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [
+      {
+        sourceRole: "limit-approach",
+        targetRole: "limit-approach",
+        sourceText: "x \\to 0",
+        targetText: "h \\to 0"
+      }
+    ],
+    summary:
+      "A limit changes its approach expression; the approach is semantically distinct from generic bounds but still occupies lower-limit layout geometry."
+  }
+];
+
 export const katexTransformFixtures: readonly KatexTransformFixture[] = [
   ...fractionTransformFixtures,
+  ...largeOperatorTransformFixtures,
   ...radicalTransformFixtures,
   ...scriptTransformFixtures,
   ...wrapperTransformFixtures
@@ -540,6 +701,20 @@ function semanticToken(
   };
 }
 
+function bodyToken(
+  text: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "body",
+    row,
+    column
+  };
+}
+
 function baseToken(
   text: string,
   row: number,
@@ -563,6 +738,94 @@ function factorToken(
     text,
     signature: "mord",
     role: "factor",
+    row,
+    column
+  };
+}
+
+function integrandToken(
+  text: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "integrand",
+    row,
+    column
+  };
+}
+
+function differentialToken(
+  text: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "differential",
+    row,
+    column
+  };
+}
+
+function largeOperatorToken(
+  text: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mop op-symbol large-op",
+    role: "large-operator",
+    layoutRole: "baseline",
+    row,
+    column
+  };
+}
+
+function upperLimitToken(
+  text: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "upper-limit",
+    layoutRole: "upper-limit",
+    row,
+    column
+  };
+}
+
+function lowerLimitToken(
+  text: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "lower-limit",
+    layoutRole: "lower-limit",
+    row,
+    column
+  };
+}
+
+function limitApproachToken(
+  text: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "limit-approach",
+    layoutRole: "lower-limit",
     row,
     column
   };
