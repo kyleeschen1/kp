@@ -576,3 +576,11 @@ sampler/player clock can sample and rewind them without a separate animation
 runtime. The first descriptor set encodes default role-specific scale and
 baseline shifts; later measured layout can replace those numeric poses while
 keeping the same primitive ids.
+
+Slice 20 added a semantic beat compiler for the current equation demo timeline.
+The compiler owns the 20-beat schedule for layout shift, token entry,
+cancel-meet, cancel-collapse, post-cancel shift, final-simplify meet/collapse,
+and final reveal. The equation demo now reads named beat ranges from the
+compiled timeline instead of hard-coded local beat constants, preserving the
+current scrubber behavior while making the timeline data reusable by future
+semantic transformations.

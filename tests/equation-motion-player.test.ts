@@ -10,6 +10,10 @@ import { createEquationMotionPlayer } from "../src/rendering/equation-motion-pla
 import {
   createRoleAwareMotionTrack
 } from "../src/rendering/role-aware-motion-primitives.ts";
+import {
+  createSemanticBeatMotionTrack,
+  linearEquationDemoBeatTimeline
+} from "../src/rendering/semantic-beat-compiler.ts";
 
 const createSubtractBothSidesPlan = () =>
   createEquationMotionPlan(
@@ -90,6 +94,31 @@ test("createEquationMotionPlayer rewinds role-aware primitive tracks", () => {
   assert.equal(sampled.at(-1)?.scale, 1);
 });
 
+test("createEquationMotionPlayer plays semantic beat tracks on the same clock", () => {
+  const sampledProgress: number[] = [];
+  const player = createEquationMotionPlayer(
+    planWithTrack(
+      createSemanticBeatMotionTrack({
+        tokenId: "introduced",
+        timeline: linearEquationDemoBeatTimeline,
+        beatId: "introduced-token-enter",
+        lifecycle: "enter",
+        visualLifecycle: "enter",
+        from: { opacity: 0, x: 0, y: 0, scale: 0.82 },
+        to: { opacity: 1, x: 0, y: 0, scale: 1 }
+      })
+    ),
+    {
+      render: (frame) => sampledProgress.push(frame.progress)
+    }
+  );
+
+  player.playTo(1, { steps: 2 });
+  player.rewindTo(0.4, { steps: 2 });
+
+  assert.deepEqual(sampledProgress, [0.5, 1, 0.7, 0.4]);
+});
+
 test("createEquationMotionPlayer plays forward in steps", () => {
   const sampledProgress: number[] = [];
   const player = createEquationMotionPlayer(createSubtractBothSidesPlan(), {
@@ -151,24 +180,24 @@ function planWithTrack(
       id: "test.role-aware-motion",
       records: [
         {
-          id: "identity.x",
+          id: `identity.${track.tokenId}`,
           relation: "identity",
-          sourceSelectorIds: ["x"],
-          targetSelectorIds: ["x"],
-          summary: "x role changes"
+          sourceSelectorIds: [track.tokenId],
+          targetSelectorIds: [track.tokenId],
+          summary: `${track.tokenId} role changes`
         }
       ]
     },
     tokens: [
       {
-        id: "x",
+        id: track.tokenId,
         lifecycle: track.lifecycle,
         correspondenceRelation: "identity",
         semanticLifecycle: "identity-preserved",
         visualLifecycle: track.visualLifecycle,
-        label: "x",
-        sourceMotionId: "x.source",
-        targetMotionId: "x.target"
+        label: track.tokenId,
+        sourceMotionId: `${track.tokenId}.source`,
+        targetMotionId: `${track.tokenId}.target`
       }
     ],
     tracks: [track]

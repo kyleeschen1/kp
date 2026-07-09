@@ -17,6 +17,12 @@ import type {
   EquationMotionFrame,
   EquationMotionFrameToken
 } from "../rendering/equation-motion-sampler.ts";
+import {
+  easedProgressBetweenSemanticBeat,
+  linearEquationDemoBeatTimeline,
+  progressBetweenSemanticBeat,
+  type SemanticBeatId
+} from "../rendering/semantic-beat-compiler.ts";
 
 // Semantic operations are the playback contract; DOM LaTeX is validated against them.
 const EQUATION_MOTION_DEMO_OPERATIONS: readonly EquationOperation[] = [
@@ -41,16 +47,9 @@ const EQUATION_MOTION_MAX_DURATION_MS = 3000;
 const EQUATION_MOTION_COLLAPSE_SCALE_PERCENT = 35;
 const EQUATION_MOTION_MIN_COLLAPSE_SCALE_PERCENT = 5;
 const EQUATION_MOTION_MAX_COLLAPSE_SCALE_PERCENT = 50;
-// A semantic command can contain beats; shifts finish before new tokens enter so rewind naturally reverses that order.
-const EQUATION_MOTION_BEAT_COUNT = 20;
-const EQUATION_MOTION_SHIFT_END_BEAT = 8;
+const EQUATION_MOTION_BEAT_TIMELINE = linearEquationDemoBeatTimeline;
+const EQUATION_MOTION_BEAT_COUNT = EQUATION_MOTION_BEAT_TIMELINE.beatCount;
 const EQUATION_MOTION_ENTER_INITIAL_SCALE = 0.82;
-const EQUATION_MOTION_CANCEL_MEET_BEAT = 8;
-const EQUATION_MOTION_CANCEL_COLLAPSE_END_BEAT = 10;
-const EQUATION_MOTION_CANCEL_SHIFT_START_BEAT = 14;
-const EQUATION_MOTION_FINAL_SIMPLIFY_MEET_BEAT = 8;
-const EQUATION_MOTION_FINAL_SIMPLIFY_COLLAPSE_END_BEAT = 10;
-const EQUATION_MOTION_FINAL_SIMPLIFY_REVEAL_END_BEAT = 14;
 const activeAnimationFrames = new WeakMap<HTMLElement, number>();
 const activeRenderContexts = new WeakMap<HTMLElement, EquationMotionRenderContext>();
 const cancellationParticleRenderers = new WeakMap<
@@ -944,8 +943,8 @@ function cancellationTokenPose(
   collapseScale: number
 ): MotionPose {
   return collapseTokenToMidpointPose(token, group, progress, {
-    meetBeat: EQUATION_MOTION_CANCEL_MEET_BEAT,
-    collapseEndBeat: EQUATION_MOTION_CANCEL_COLLAPSE_END_BEAT,
+    meetBeatId: "cancel-meet",
+    collapseBeatId: "cancel-collapse",
     collapseScale
   });
 }
@@ -955,12 +954,16 @@ function renderCancellationParticles(
   group: CancellationMotionGroup,
   progress: number
 ): void {
-  const rawParticleProgress = progressBetweenBeats(
+  const rawParticleProgress = progressBetweenSemanticBeat(
+    EQUATION_MOTION_BEAT_TIMELINE,
     progress,
-    EQUATION_MOTION_CANCEL_MEET_BEAT,
-    EQUATION_MOTION_CANCEL_COLLAPSE_END_BEAT
+    "cancel-collapse"
   );
-  const particleProgress = easeOut(rawParticleProgress);
+  const particleProgress = easedProgressBetweenSemanticBeat(
+    EQUATION_MOTION_BEAT_TIMELINE,
+    progress,
+    "cancel-collapse"
+  );
   const particleOpacity =
     rawParticleProgress <= 0 || rawParticleProgress >= 1
       ? 0
@@ -1121,8 +1124,8 @@ function finalSimplifySourceTokenPose(
   collapseScale: number
 ): MotionPose {
   return collapseTokenToMidpointPose(token, group, progress, {
-    meetBeat: EQUATION_MOTION_FINAL_SIMPLIFY_MEET_BEAT,
-    collapseEndBeat: EQUATION_MOTION_FINAL_SIMPLIFY_COLLAPSE_END_BEAT,
+    meetBeatId: "final-simplify-meet",
+    collapseBeatId: "final-simplify-collapse",
     collapseScale
   });
 }
@@ -1134,12 +1137,10 @@ function finalSimplifyTargetTokenPose(
   progress: number,
   collapseScale: number
 ): MotionPose {
-  const revealProgress = easeInOut(
-    progressBetweenBeats(
-      progress,
-      EQUATION_MOTION_FINAL_SIMPLIFY_COLLAPSE_END_BEAT,
-      EQUATION_MOTION_FINAL_SIMPLIFY_REVEAL_END_BEAT
-    )
+  const revealProgress = easedProgressBetweenSemanticBeat(
+    EQUATION_MOTION_BEAT_TIMELINE,
+    progress,
+    "final-simplify-reveal"
   );
   const center = stableTokenCenter(token);
   const midpointOffset = {
@@ -1199,15 +1200,17 @@ function collapseTokenToMidpointPose(
   geometry: CollapseMotionGeometry,
   progress: number,
   beats: {
-    readonly meetBeat: number;
-    readonly collapseEndBeat: number;
+    readonly meetBeatId: SemanticBeatId;
+    readonly collapseBeatId: SemanticBeatId;
     readonly collapseScale: number;
   }
 ): MotionPose {
   const center = stableTokenCenter(token);
   const startDistance = pointDistance(center, geometry.midpoint);
-  const baseMoveProgress = easeInOut(
-    progressBetweenBeats(progress, 0, beats.meetBeat)
+  const baseMoveProgress = easedProgressBetweenSemanticBeat(
+    EQUATION_MOTION_BEAT_TIMELINE,
+    progress,
+    beats.meetBeatId
   );
   const moveProgress = distanceAwareConvergenceProgress(
     baseMoveProgress,
@@ -1216,11 +1219,15 @@ function collapseTokenToMidpointPose(
     startDistance,
     geometry.maxDistance
   );
-  const shrinkProgress = easeInOut(
-    progressBetweenBeats(progress, 0, beats.meetBeat)
+  const shrinkProgress = easedProgressBetweenSemanticBeat(
+    EQUATION_MOTION_BEAT_TIMELINE,
+    progress,
+    beats.meetBeatId
   );
-  const fadeProgress = easeOut(
-    progressBetweenBeats(progress, beats.meetBeat, beats.collapseEndBeat)
+  const fadeProgress = easedProgressBetweenSemanticBeat(
+    EQUATION_MOTION_BEAT_TIMELINE,
+    progress,
+    beats.collapseBeatId
   );
   const scale = interpolateNumber(1, beats.collapseScale, shrinkProgress);
 
@@ -1293,28 +1300,26 @@ function pointDistance(from: MotionPoint, to: MotionPoint): number {
 }
 
 function layoutShiftProgress(progress: number): number {
-  return easeInOut(
-    progressBetweenBeats(progress, 0, EQUATION_MOTION_SHIFT_END_BEAT)
+  return easedProgressBetweenSemanticBeat(
+    EQUATION_MOTION_BEAT_TIMELINE,
+    progress,
+    "layout-shift"
   );
 }
 
 function postCancellationLayoutShiftProgress(progress: number): number {
-  return easeInOut(
-    progressBetweenBeats(
-      progress,
-      EQUATION_MOTION_CANCEL_SHIFT_START_BEAT,
-      EQUATION_MOTION_BEAT_COUNT
-    )
+  return easedProgressBetweenSemanticBeat(
+    EQUATION_MOTION_BEAT_TIMELINE,
+    progress,
+    "post-cancel-layout-shift"
   );
 }
 
 function addedObjectPose(pose: MotionPose, progress: number): MotionPose {
-  const entryProgress = easeOut(
-    progressBetweenBeats(
-      progress,
-      EQUATION_MOTION_SHIFT_END_BEAT,
-      EQUATION_MOTION_BEAT_COUNT
-    )
+  const entryProgress = easedProgressBetweenSemanticBeat(
+    EQUATION_MOTION_BEAT_TIMELINE,
+    progress,
+    "introduced-token-enter"
   );
 
   return {
@@ -1328,22 +1333,8 @@ function addedObjectPose(pose: MotionPose, progress: number): MotionPose {
   };
 }
 
-function progressBetweenBeats(
-  progress: number,
-  startBeat: number,
-  endBeat: number
-): number {
-  const beat = normalizeProgress(progress) * EQUATION_MOTION_BEAT_COUNT;
-
-  return clampNumber((beat - startBeat) / (endBeat - startBeat), 0, 1);
-}
-
 function easeInOut(progress: number): number {
   return (1 - Math.cos(Math.PI * progress)) / 2;
-}
-
-function easeOut(progress: number): number {
-  return 1 - (1 - progress) * (1 - progress);
 }
 
 function interpolateNumber(from: number, to: number, progress: number): number {

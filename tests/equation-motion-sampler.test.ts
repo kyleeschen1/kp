@@ -15,6 +15,12 @@ import {
   createRoleAwareMotionTrack,
   roleAwareMotionPrimitiveDescriptors
 } from "../src/rendering/role-aware-motion-primitives.ts";
+import {
+  createSemanticBeatMotionTrack,
+  easedProgressBetweenSemanticBeat,
+  linearEquationDemoBeatTimeline,
+  progressBetweenSemanticBeat
+} from "../src/rendering/semantic-beat-compiler.ts";
 
 const findFrameToken = (
   frame: EquationMotionFrame,
@@ -102,6 +108,77 @@ test("role-aware motion primitive descriptors compile to sampler tracks", () => 
   assert.ok(pose.y > -14);
 });
 
+test("semantic beat compiler exposes the current equation demo timeline", () => {
+  assert.equal(linearEquationDemoBeatTimeline.beatCount, 20);
+  assert.deepEqual(
+    linearEquationDemoBeatTimeline.beats.map((beat) => [
+      beat.id,
+      beat.startBeat,
+      beat.endBeat,
+      beat.easing
+    ]),
+    [
+      ["layout-shift", 0, 8, "ease-in-out"],
+      ["introduced-token-enter", 8, 20, "ease-out"],
+      ["cancel-meet", 0, 8, "ease-in-out"],
+      ["cancel-collapse", 8, 10, "ease-out"],
+      ["post-cancel-layout-shift", 14, 20, "ease-in-out"],
+      ["final-simplify-meet", 0, 8, "ease-in-out"],
+      ["final-simplify-collapse", 8, 10, "ease-out"],
+      ["final-simplify-reveal", 10, 14, "ease-in-out"]
+    ]
+  );
+  assert.equal(
+    progressBetweenSemanticBeat(
+      linearEquationDemoBeatTimeline,
+      0.3,
+      "layout-shift"
+    ),
+    0.75
+  );
+  assertNearlyEqual(
+    easedProgressBetweenSemanticBeat(
+      linearEquationDemoBeatTimeline,
+      0.3,
+      "layout-shift"
+    ),
+    (1 - Math.cos(Math.PI * 0.75)) / 2
+  );
+});
+
+test("semantic beat compiler creates sampler-compatible beat tracks", () => {
+  const track = createSemanticBeatMotionTrack({
+    tokenId: "introduced",
+    timeline: linearEquationDemoBeatTimeline,
+    beatId: "introduced-token-enter",
+    lifecycle: "enter",
+    visualLifecycle: "enter",
+    from: { opacity: 0, x: 0, y: 0, scale: 0.82 },
+    to: { opacity: 1, x: 0, y: 0, scale: 1 }
+  });
+
+  assert.deepEqual(track, {
+    tokenId: "introduced",
+    lifecycle: "enter",
+    visualLifecycle: "enter",
+    start: 0.4,
+    end: 1,
+    easing: "ease-out",
+    from: { opacity: 0, x: 0, y: 0, scale: 0.82 },
+    to: { opacity: 1, x: 0, y: 0, scale: 1 }
+  });
+  assert.equal(
+    findFrameToken(sampleEquationMotion(planWithTrack(track), 0.4), "introduced")
+      .pose.opacity,
+    0
+  );
+  assert.equal(
+    findFrameToken(sampleEquationMotion(planWithTrack(track), 1), "introduced")
+      .pose.opacity,
+    1
+  );
+});
+
 test("sampleEquationMotion samples cancellation during left simplification", () => {
   const transition = createEquationOperationTransition({
     sourceLatex: "x + 3 - 3 = 7 - 3",
@@ -185,24 +262,24 @@ function planWithTrack(
       id: "test.role-aware-motion",
       records: [
         {
-          id: "identity.x",
+          id: `identity.${track.tokenId}`,
           relation: "identity",
-          sourceSelectorIds: ["x"],
-          targetSelectorIds: ["x"],
-          summary: "x role changes"
+          sourceSelectorIds: [track.tokenId],
+          targetSelectorIds: [track.tokenId],
+          summary: `${track.tokenId} role changes`
         }
       ]
     },
     tokens: [
       {
-        id: "x",
+        id: track.tokenId,
         lifecycle: track.lifecycle,
         correspondenceRelation: "identity",
         semanticLifecycle: "identity-preserved",
         visualLifecycle: track.visualLifecycle,
-        label: "x",
-        sourceMotionId: "x.source",
-        targetMotionId: "x.target"
+        label: track.tokenId,
+        sourceMotionId: `${track.tokenId}.source`,
+        targetMotionId: `${track.tokenId}.target`
       }
     ],
     tracks: [track]
