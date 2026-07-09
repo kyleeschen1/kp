@@ -11,11 +11,18 @@ import {
 } from "../src/rendering/equation-motion-plan.ts";
 
 type TokenLifecyclePair = [id: string, lifecycle: string];
+type TokenRelationPair = [id: string, relation: string | undefined];
 
 const summarizeTokenLifecycles = (
   plan: EquationMotionPlan
 ): TokenLifecyclePair[] =>
   plan.tokens.map((token) => [token.id, token.lifecycle]);
+
+const summarizeTokenRelations = (plan: EquationMotionPlan): TokenRelationPair[] =>
+  plan.tokens.map((token) => [
+    token.id,
+    token.correspondenceRelation
+  ]);
 
 const trackFor = (plan: EquationMotionPlan, tokenId: string) => {
   const track = plan.tracks.find((candidate) => candidate.tokenId === tokenId);
@@ -46,6 +53,17 @@ test("createEquationMotionPlan preserves corrected semantic lifecycle tracks", (
     ["rhs.7", "persist"],
     ["rhs.inverse.minus", "inverse-enter"],
     ["rhs.inverse.3", "inverse-enter"]
+  ]);
+  assert.deepEqual(summarizeTokenRelations(plan), [
+    ["lhs.x", "identity"],
+    ["lhs.plus", "identity"],
+    ["lhs.3", "identity"],
+    ["lhs.inverse.minus", "introduction"],
+    ["lhs.inverse.3", "introduction"],
+    ["equals", "identity"],
+    ["rhs.7", "identity"],
+    ["rhs.inverse.minus", "introduction"],
+    ["rhs.inverse.3", "introduction"]
   ]);
   assert.deepEqual(trackFor(plan, "lhs.x"), {
     tokenId: "lhs.x",
@@ -86,12 +104,113 @@ test("createEquationMotionPlan preserves corrected semantic lifecycle tracks", (
   assert.deepEqual(plan.tokens[1], {
     id: "lhs.plus",
     lifecycle: "persist",
+    correspondenceRelation: "identity",
     label: "+",
     sourceMotionId: "lhs.plus",
     targetMotionId: "lhs.plus",
     sourceLatex: "+",
     targetLatex: "+"
   });
+});
+
+test("createEquationMotionPlan maps lifecycles to selector correspondence relations", () => {
+  const transition: EquationTransition = {
+    sourceLatex: "a + b = c",
+    targetLatex: "a + b = c",
+    operation: {
+      kind: "subtractBothSides",
+      valueLatex: "0"
+    },
+    tokens: [
+      {
+        id: "persisted",
+        lifecycle: "persist",
+        label: "p",
+        sourceMotionId: "source.persisted",
+        targetMotionId: "target.persisted"
+      },
+      {
+        id: "moved",
+        lifecycle: "move",
+        label: "m",
+        sourceMotionId: "source.moved",
+        targetMotionId: "target.moved"
+      },
+      {
+        id: "wrapped",
+        lifecycle: "group-wrap",
+        label: "w",
+        sourceMotionId: "source.wrapped",
+        targetMotionId: "target.wrapped"
+      },
+      {
+        id: "unwrapped",
+        lifecycle: "group-unwrap",
+        label: "u",
+        sourceMotionId: "source.unwrapped",
+        targetMotionId: "target.unwrapped"
+      },
+      {
+        id: "entered",
+        lifecycle: "enter",
+        label: "e",
+        targetMotionId: "target.entered"
+      },
+      {
+        id: "inverse",
+        lifecycle: "inverse-enter",
+        label: "i",
+        targetMotionId: "target.inverse"
+      },
+      {
+        id: "exited",
+        lifecycle: "exit",
+        label: "x",
+        sourceMotionId: "source.exited"
+      },
+      {
+        id: "cancelled",
+        lifecycle: "cancel",
+        label: "c",
+        sourceMotionId: "source.cancelled"
+      },
+      {
+        id: "simplified",
+        lifecycle: "simplify-into",
+        label: "s",
+        sourceMotionId: "source.simplified"
+      }
+    ],
+    sourceAnnotations: [
+      { motionId: "source.persisted", text: "p" },
+      { motionId: "source.moved", text: "m" },
+      { motionId: "source.wrapped", text: "w" },
+      { motionId: "source.unwrapped", text: "u" },
+      { motionId: "source.exited", text: "x" },
+      { motionId: "source.cancelled", text: "c" },
+      { motionId: "source.simplified", text: "s" }
+    ],
+    targetAnnotations: [
+      { motionId: "target.persisted", text: "p" },
+      { motionId: "target.moved", text: "m" },
+      { motionId: "target.wrapped", text: "w" },
+      { motionId: "target.unwrapped", text: "u" },
+      { motionId: "target.entered", text: "e" },
+      { motionId: "target.inverse", text: "i" }
+    ]
+  };
+
+  assert.deepEqual(summarizeTokenRelations(createEquationMotionPlan(transition)), [
+    ["persisted", "identity"],
+    ["moved", "identity"],
+    ["wrapped", "role-change"],
+    ["unwrapped", "role-change"],
+    ["entered", "introduction"],
+    ["inverse", "introduction"],
+    ["exited", "removal"],
+    ["cancelled", "cancelation"],
+    ["simplified", "fan-in"]
+  ]);
 });
 
 test("createEquationMotionPlan cancels left additive inverse only during simplification", () => {

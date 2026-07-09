@@ -126,6 +126,7 @@ test("sampleEquationMotion linearly interpolates all pose fields", () => {
       {
         id: "x",
         lifecycle: "persist",
+        correspondenceRelation: "identity",
         label: "x",
         sourceMotionId: "x",
         targetMotionId: "x"
@@ -193,6 +194,7 @@ test("sampleEquationMotion defensively samples invalid track ranges", () => {
       {
         id: "x",
         lifecycle: "persist",
+        correspondenceRelation: "identity",
         label: "x",
         sourceMotionId: "x",
         targetMotionId: "x"

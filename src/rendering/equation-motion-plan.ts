@@ -2,6 +2,7 @@ import {
   type EquationTokenLifecycle,
   type EquationTransition
 } from "../math/equation-transform.ts";
+import type { SelectorCorrespondenceRelationId } from "../semantic/correspondence.ts";
 
 export type EasingName = "linear" | "ease-in" | "ease-out" | "ease-in-out";
 
@@ -15,6 +16,7 @@ export interface EquationMotionPlan {
 export interface EquationMotionToken {
   readonly id: string;
   readonly lifecycle: EquationTokenLifecycle;
+  readonly correspondenceRelation: SelectorCorrespondenceRelationId;
   readonly label: string;
   readonly sourceMotionId?: string | undefined;
   readonly targetMotionId?: string | undefined;
@@ -65,6 +67,9 @@ export function createEquationMotionPlan(
     return {
       id: transitionToken.id,
       lifecycle: transitionToken.lifecycle,
+      correspondenceRelation: correspondenceRelationForLifecycle(
+        transitionToken.lifecycle
+      ),
       label: transitionToken.label,
       ...(transitionToken.sourceMotionId === undefined
         ? {}
@@ -228,6 +233,30 @@ function trackForToken(token: EquationMotionToken): EquationMotionTrack {
     from: clonePose(timing.from),
     to: clonePose(timing.to)
   };
+}
+
+export function correspondenceRelationForLifecycle(
+  lifecycle: EquationTokenLifecycle
+): SelectorCorrespondenceRelationId {
+  switch (lifecycle) {
+    case "persist":
+    case "move":
+      return "identity";
+    case "group-wrap":
+    case "group-unwrap":
+      return "role-change";
+    case "enter":
+    case "inverse-enter":
+      return "introduction";
+    case "exit":
+      return "removal";
+    case "cancel":
+      return "cancelation";
+    case "simplify-into":
+      return "fan-in";
+    default:
+      return assertNever(lifecycle);
+  }
 }
 
 function timingForLifecycle(lifecycle: EquationTokenLifecycle): LifecycleTiming {
