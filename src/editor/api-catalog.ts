@@ -128,6 +128,7 @@ const apiCatalogGroups: readonly ApiCatalogGroup[] = [
     title: "Embeds & Export",
     summary: "Portable tutorial cards and export profiles for semantic mini tutorials.",
     items: [
+      item("authoring-transform-fixture-contract", "TransformFixtureDocument", "authoring", "active", "JSON-compatible KaTeX transform fixture contract for LLM-authored source/target examples and validation.", ["fixtures", "katex", "llm"]),
       item("embed-kp-card", "KpCard", "embed", "proposed", "Semantic capsule with object graph, layout, timeline, dependency manifest, and fallback render.", ["embed", "manifest"]),
       item("embed-mini-tutorial", "MiniTutorial", "tutorial", "proposed", "Executable semantic tutorial that can render as card, GIF, video, or step sequence.", ["tutorial", "export"]),
       item("embed-tutorial-clip", "TutorialClip", "tutorial", "proposed", "Composable tutorial segment with inputs, outputs, prerequisites, and taught concepts.", ["composition", "timeline"]),

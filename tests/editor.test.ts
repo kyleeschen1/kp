@@ -123,6 +123,9 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
   assert.match(html, /data-kp-api-outline-group="curriculum-assessment"/);
   assert.match(html, /data-kp-api-outline-item="curriculum-spaced-repetition-card"/);
   assert.match(html, />SpacedRepetitionCard</);
+  assert.match(html, /data-kp-api-outline-group="embeds-export"/);
+  assert.match(html, /data-kp-api-outline-item="authoring-transform-fixture-contract"/);
+  assert.match(html, />TransformFixtureDocument</);
   assert.match(html, /data-kp-api-sample-card/);
   assert.match(html, /Select an API item to preview its future sample card/);
   assert.match(html, />Semantic API</);

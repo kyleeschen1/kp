@@ -592,3 +592,13 @@ data contract that source-backed dashboard records are edited in TypeScript. The
 sample panel exposes fixture family, intent, source/target LaTeX, token counts,
 artifact counts, and role-change expectations, giving future animation cards a
 stable place to attach scrubbers without introducing persistence yet.
+
+Slice 22 added `TransformFixtureDocument`, a JSON-compatible authoring contract
+for LLM-authored KaTeX transform fixtures. The contract wraps one fixture with a
+schema version and kind, exports existing registry fixtures through a JSON clone,
+imports validated documents back into fixture records, and reports path-specific
+validation issues for unknown families, intents, roles, malformed sides,
+structural-token expectations, and role-change records. This intentionally stops
+short of object-history/provenance integration; it is only the import/export
+shape needed before authored transforms can be loaded into galleries or sample
+cards.
