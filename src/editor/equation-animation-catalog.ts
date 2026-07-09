@@ -44,6 +44,7 @@ export interface EquationAnimationCatalogEntry {
 
 export const DEFAULT_EQUATION_ANIMATION_ID: EquationAnimationId =
   "linear-equation-solve-x";
+const EQUATION_ANIMATION_BEAT_LABEL_COUNT = 50;
 
 export const equationAnimationCatalogEntries: readonly EquationAnimationCatalogEntry[] = [
   createLinearEquationAnimationEntry(),
@@ -148,7 +149,7 @@ function createLinearEquationAnimationEntry(): EquationAnimationCatalogEntry {
         annotations: simplifyRight.targetAnnotations
       }
     ],
-    beatCount: 20,
+    beatCount: EQUATION_ANIMATION_BEAT_LABEL_COUNT,
     defaultDurationMs: 420,
     defaultCollapseScalePercent: 35
   };
@@ -172,7 +173,7 @@ function createFixtureAnimationEntry(input: {
       createFixtureAnimationState(fixture, transition, "source"),
       createFixtureAnimationState(fixture, transition, "target")
     ],
-    beatCount: 20,
+    beatCount: EQUATION_ANIMATION_BEAT_LABEL_COUNT,
     defaultDurationMs: 420,
     defaultCollapseScalePercent: 35
   };

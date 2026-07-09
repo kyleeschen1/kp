@@ -49,6 +49,15 @@ export interface EquationMotionTrack {
   readonly to: MotionPose;
 }
 
+export interface EquationMotionMeasuredDelta {
+  readonly tokenId: string;
+  readonly x: number;
+  readonly y: number;
+  readonly start?: number | undefined;
+  readonly end?: number | undefined;
+  readonly easing?: EasingName | undefined;
+}
+
 export interface MotionPose {
   readonly opacity: number;
   readonly x: number;
@@ -124,6 +133,44 @@ export function createEquationMotionPlan(
         : cloneCorrespondenceMap(transition.correspondenceMap),
     tokens,
     tracks: tokens.map((token) => trackForToken(token))
+  };
+}
+
+export function applyMeasuredMotionDeltas(
+  plan: EquationMotionPlan,
+  deltas: readonly EquationMotionMeasuredDelta[]
+): EquationMotionPlan {
+  if (deltas.length === 0) {
+    return plan;
+  }
+
+  const deltasByTokenId = new Map(
+    deltas.map((delta) => [delta.tokenId, delta])
+  );
+
+  return {
+    ...plan,
+    tokens: plan.tokens.map((token) => ({ ...token })),
+    tracks: plan.tracks.map((track) => {
+      const delta = deltasByTokenId.get(track.tokenId);
+
+      if (delta === undefined) {
+        return cloneTrack(track);
+      }
+
+      return {
+        ...track,
+        start: delta.start ?? track.start,
+        end: delta.end ?? track.end,
+        easing: delta.easing ?? track.easing,
+        from: clonePose(track.from),
+        to: {
+          ...track.to,
+          x: track.to.x + delta.x,
+          y: track.to.y + delta.y
+        }
+      };
+    })
   };
 }
 
@@ -455,5 +502,18 @@ function cloneTiming(timing: LifecycleTiming): LifecycleTiming {
     easing: timing.easing,
     from: clonePose(timing.from),
     to: clonePose(timing.to)
+  };
+}
+
+function cloneTrack(track: EquationMotionTrack): EquationMotionTrack {
+  return {
+    tokenId: track.tokenId,
+    lifecycle: track.lifecycle,
+    visualLifecycle: track.visualLifecycle,
+    start: track.start,
+    end: track.end,
+    easing: track.easing,
+    from: clonePose(track.from),
+    to: clonePose(track.to)
   };
 }

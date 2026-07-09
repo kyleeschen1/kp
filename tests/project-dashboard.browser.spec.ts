@@ -126,15 +126,15 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   const beatOutput = demo.locator('[data-role="equation-motion-beat-output"]');
 
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "0");
-  await expect(beatScrubber).toHaveAttribute("max", "20");
+  await expect(beatScrubber).toHaveAttribute("max", "50");
   await beatScrubber.evaluate((input) => {
     const range = input as HTMLInputElement;
 
-    range.value = "8";
+    range.value = "20";
     range.dispatchEvent(new Event("input", { bubbles: true }));
   });
   await expect(demo).toHaveAttribute("data-kp-equation-motion-progress", "0.4");
-  await expect(beatOutput).toHaveText("8/20");
+  await expect(beatOutput).toHaveText("20/50");
 
   const graphShell = page.locator(".graph-webgl[data-kp-object=\"saddle-orbit-graph\"]");
   await expect(graphShell).toHaveAttribute("data-kp-webgl-status", /^(ready|fallback)$/);

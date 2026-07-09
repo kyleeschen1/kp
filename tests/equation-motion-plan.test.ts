@@ -10,6 +10,7 @@ import {
   findKatexTransformFixture
 } from "../src/rendering/katex-transform-fixtures.ts";
 import {
+  applyMeasuredMotionDeltas,
   createEquationMotionPlan,
   semanticLifecycleForCorrespondenceRelation,
   type EquationMotionPlan
@@ -645,6 +646,48 @@ test("fixture function wrap stages moved x, parentheses, and delayed f entry", (
     end: 0.78,
     easing: "ease-out",
     from: { opacity: 0, x: -10, y: 0, scale: 0.35 },
+    to: { opacity: 1, x: 0, y: 0, scale: 1 }
+  });
+});
+
+test("applyMeasuredMotionDeltas encodes measured layout into sampled tracks", () => {
+  const transition = createEquationOperationTransition({
+    sourceLatex: "x + 3 = 7",
+    operation: {
+      kind: "subtractBothSides",
+      valueLatex: "3"
+    }
+  });
+  const plan = createEquationMotionPlan(transition);
+  const measuredPlan = applyMeasuredMotionDeltas(plan, [
+    {
+      tokenId: "lhs.x",
+      x: 24,
+      y: -3,
+      start: 0,
+      end: 0.4,
+      easing: "ease-in-out"
+    }
+  ]);
+
+  assert.deepEqual(trackFor(measuredPlan, "lhs.x"), {
+    tokenId: "lhs.x",
+    lifecycle: "persist",
+    visualLifecycle: "persist",
+    start: 0,
+    end: 0.4,
+    easing: "ease-in-out",
+    from: { opacity: 1, x: 0, y: 0, scale: 1 },
+    to: { opacity: 1, x: 24, y: -3, scale: 1 }
+  });
+  assert.deepEqual(trackFor(plan, "lhs.x"), {
+    tokenId: "lhs.x",
+    lifecycle: "persist",
+    visualLifecycle: "persist",
+    start: 0,
+    end: 1,
+    easing: "linear",
+    from: { opacity: 1, x: 0, y: 0, scale: 1 },
     to: { opacity: 1, x: 0, y: 0, scale: 1 }
   });
 });

@@ -171,9 +171,9 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
   assert.match(html, /data-action="equation-motion-rewind"[^>]*>Back</);
   assert.match(
     html,
-    /type="range"[^>]*data-action="set-equation-motion-beat"[^>]*min="0"[^>]*max="20"[^>]*step="1"[^>]*value="0"[^>]*data-kp-equation-motion-beats="20"/
+    /type="range"[^>]*data-action="set-equation-motion-beat"[^>]*min="0"[^>]*max="50"[^>]*step="1"[^>]*value="0"[^>]*data-kp-equation-motion-beats="50"/
   );
-  assert.match(html, /data-role="equation-motion-beat-output"[^>]*>0\/20</);
+  assert.match(html, /data-role="equation-motion-beat-output"[^>]*>0\/50</);
   assert.match(
     html,
     /type="range"[^>]*data-action="set-equation-motion-duration"[^>]*min="200"[^>]*max="3000"[^>]*step="20"[^>]*value="420"/

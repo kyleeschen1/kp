@@ -25,7 +25,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
   await expect(demo.locator('[data-kp-equation-motion-state="1"]')).toBeHidden();
   await expect(rewind).toBeDisabled();
   await expect(next).toBeEnabled();
-  await expect(beatScrubber).toHaveAttribute("max", "20");
+  await expect(beatScrubber).toHaveAttribute("max", "50");
   await expect(beatScrubber).toHaveValue("0");
   await expect(durationSlider).toHaveAttribute("min", "200");
   await expect(durationSlider).toHaveAttribute("max", "3000");
@@ -180,7 +180,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
       throw new Error("Expected equation motion beat scrubber.");
     }
 
-    scrubber.value = "6";
+    scrubber.value = "15";
     scrubber.dispatchEvent(new Event("input", { bubbles: true }));
 
     const movingToken = demoElement.querySelector<HTMLElement>(
@@ -219,7 +219,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
 
   expect(earlyBeatState).toEqual({
     progress: "0.3",
-    beatOutput: "6/20",
+    beatOutput: "15/50",
     movingTransform: expect.any(String),
     enteringOpacity: 0,
     enteringVisibility: "hidden"
@@ -559,12 +559,12 @@ test("editor equation motion demo uses semantic playback plans", async ({
         distance(token.center, midpoint)
       ])
     );
-    const overlap = sampleBeat(6);
-    const fullyOverlapped = sampleBeat(8);
-    const dissolve = sampleBeat(9);
-    const collapsed = sampleBeat(10);
-    const pause = sampleBeat(12);
-    const shifted = sampleBeat(16);
+    const overlap = sampleBeat(15);
+    const fullyOverlapped = sampleBeat(20);
+    const dissolve = sampleBeat(23);
+    const collapsed = sampleBeat(25);
+    const pause = sampleBeat(30);
+    const shifted = sampleBeat(40);
 
     return {
       midpoint,
@@ -635,7 +635,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
   expect(cancellationMotionState.fullyOverlapped.progress).toBe("0.4");
   expect(cancellationMotionState.fullyOverlappedAtMidpoint).toBe(true);
   expect(cancellationMotionState.fullyOverlappedAtMinimumScale).toBe(true);
-  expect(cancellationMotionState.dissolve.progress).toBe("0.45");
+  expect(cancellationMotionState.dissolve.progress).toBe("0.46");
   expect(cancellationMotionState.dissolve.domParticleCount).toBe(0);
   expect(cancellationMotionState.webglParticlesVisible).toBe(true);
   expect(cancellationMotionState.dissolveFadingFromMinimumScale).toBe(true);
@@ -815,9 +815,9 @@ test("editor equation motion demo uses semantic playback plans", async ({
         distance(token.center, midpoint)
       ])
     );
-    const converging = sampleBeat(6);
-    const collapsed = sampleBeat(10);
-    const emerging = sampleBeat(12);
+    const converging = sampleBeat(15);
+    const collapsed = sampleBeat(25);
+    const emerging = sampleBeat(30);
 
     return {
       midpoint,
