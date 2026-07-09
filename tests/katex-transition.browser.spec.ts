@@ -1,5 +1,117 @@
 import { expect, test } from "@playwright/test";
 
+test("equation motion card supports focused keyboard controls", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  const demo = page.locator("[data-kp-equation-motion-demo]");
+  const durationSlider = demo.locator(
+    '[data-action="set-equation-motion-duration"]'
+  );
+  const picker = demo.locator("[data-kp-equation-animation-picker]");
+
+  await durationSlider.evaluate((element) => {
+    const input = element as HTMLInputElement;
+
+    input.value = "200";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await demo.focus();
+  await expect
+    .poll(() =>
+      demo.evaluate((element) => ({
+        active: document.activeElement === element,
+        borderColor: getComputedStyle(element).borderColor
+      }))
+    )
+    .toEqual({
+      active: true,
+      borderColor: "rgb(82, 97, 115)"
+    });
+
+  await page.keyboard.press("j");
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");
+
+  await page.keyboard.press("k");
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "0");
+
+  await durationSlider.evaluate((element) => {
+    const input = element as HTMLInputElement;
+
+    input.value = "3000";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await page.keyboard.press("Space");
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-animating",
+    "true"
+  );
+  await expect
+    .poll(() =>
+      demo.evaluate((element) =>
+        Number(element.dataset["kpEquationMotionProgress"] ?? "0")
+      )
+    )
+    .toBeGreaterThan(0);
+  await page.keyboard.press("Space");
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-paused", "true");
+  const pausedProgress = await demo.evaluate((element) =>
+    Number(element.dataset["kpEquationMotionProgress"] ?? "0")
+  );
+  await page.waitForTimeout(160);
+  await expect
+    .poll(() =>
+      demo.evaluate(
+        (element, expectedProgress) =>
+          Math.abs(
+            Number(element.dataset["kpEquationMotionProgress"] ?? "0") -
+              expectedProgress
+          ),
+        pausedProgress
+      )
+    )
+    .toBeLessThan(0.001);
+  await page.keyboard.press("Space");
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-animating",
+    "true"
+  );
+  await expect(demo).not.toHaveAttribute(
+    "data-kp-equation-motion-paused",
+    "true"
+  );
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1", {
+    timeout: 3500
+  });
+
+  await page.keyboard.press("Shift+J");
+  await expect(picker).toBeVisible();
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-animation-picker-open",
+    "true"
+  );
+  await expect(picker.locator('[aria-selected="true"]')).toHaveText(
+    "Inline fraction to stacked"
+  );
+
+  await page.keyboard.press("Shift+J");
+  await expect(picker.locator('[aria-selected="true"]')).toHaveText(
+    "Power to radical"
+  );
+
+  await page.keyboard.press("Shift+K");
+  await expect(picker.locator('[aria-selected="true"]')).toHaveText(
+    "Inline fraction to stacked"
+  );
+
+  await page.keyboard.press("Enter");
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-animation-id",
+    "fixture-fraction-make-inline-to-stacked"
+  );
+});
+
 test("editor equation motion demo uses semantic playback plans", async ({
   page
 }) => {

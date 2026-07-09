@@ -1001,6 +1001,13 @@ h2 {
   box-shadow: 0 18px 45px rgb(30 41 59 / 0.12);
 }
 
+.equation-motion:focus,
+.equation-motion:focus-within {
+  border-color: #526173;
+  outline: 2px solid rgb(82 97 115 / 0.18);
+  outline-offset: 2px;
+}
+
 .katex-visual-tuning {
   width: min(100%, 34rem);
   overflow: hidden;
@@ -1094,6 +1101,30 @@ h2 {
   color: #172033;
   background: #ffffff;
   font-size: 0.85rem;
+}
+
+.equation-motion__keyboard-picker {
+  display: grid;
+  gap: 0.15rem;
+  border-bottom: 1px solid #e3e8ef;
+  padding: 0.45rem 0.9rem 0.6rem;
+  background: #ffffff;
+}
+
+.equation-motion__keyboard-picker[hidden] {
+  display: none;
+}
+
+.equation-motion__keyboard-picker-option {
+  border-radius: 5px;
+  padding: 0.36rem 0.52rem;
+  color: #405365;
+  font-size: 0.8rem;
+}
+
+.equation-motion__keyboard-picker-option[aria-selected="true"] {
+  color: #ffffff;
+  background: #1f6371;
 }
 
 .equation-motion__step-controls {

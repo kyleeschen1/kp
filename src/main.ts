@@ -8,6 +8,7 @@ import {
 import { selectApiCatalogItem } from "./editor/api-catalog.ts";
 import { compileDocumentAsset } from "./editor/compile-client.ts";
 import {
+  handleEquationMotionDemoKeydown,
   hydrateEquationMotionDemos,
   setEquationMotionBeat,
   setEquationMotionCollapseScale,
@@ -121,6 +122,10 @@ appRoot.addEventListener("click", (event) => {
       stepEquationMotionDemo(button, -1);
       return;
   }
+});
+
+appRoot.addEventListener("keydown", (event) => {
+  handleEquationMotionDemoKeydown(event);
 });
 
 appRoot.addEventListener("change", (event) => {

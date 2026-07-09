@@ -37,7 +37,8 @@ const EQUATION_MOTION_MAX_COLLAPSE_SCALE_PERCENT = 50;
 const EQUATION_MOTION_BEAT_TIMELINE = linearEquationDemoBeatTimeline;
 const EQUATION_MOTION_ENTER_INITIAL_SCALE = 0.82;
 const EQUATION_MOTION_DEMO_BEAT_LABEL_COUNT = 50;
-const activeAnimationFrames = new WeakMap<HTMLElement, number>();
+const activeAnimations = new WeakMap<HTMLElement, ActiveEquationMotionAnimation>();
+const pausedAnimations = new WeakMap<HTMLElement, PausedEquationMotionAnimation>();
 const activeRenderContexts = new WeakMap<HTMLElement, EquationMotionRenderContext>();
 const cancellationParticleRenderers = new WeakMap<
   HTMLCanvasElement,
@@ -90,6 +91,23 @@ interface FinalSimplifyMotionGroup {
   readonly maxDistance: number;
 }
 
+interface ActiveEquationMotionAnimation {
+  animationFrameId: number;
+  readonly sourceStep: number;
+  readonly targetStep: number;
+  readonly targetProgress: number;
+  readonly durationMs: number;
+  currentProgress: number;
+}
+
+interface PausedEquationMotionAnimation {
+  readonly sourceStep: number;
+  readonly targetStep: number;
+  readonly currentProgress: number;
+  readonly targetProgress: number;
+  readonly durationMs: number;
+}
+
 export function hydrateEquationMotionDemos(root: ParentNode): void {
   root
     .querySelectorAll<HTMLElement>("[data-kp-equation-motion-demo]")
@@ -116,6 +134,13 @@ export function stepEquationMotionDemo(
     return;
   }
 
+  stepEquationMotionDemoCard(demo, direction);
+}
+
+export function stepEquationMotionDemoCard(
+  demo: HTMLElement,
+  direction: -1 | 1
+): void {
   const sourceStep = readEquationMotionStep(demo);
   const targetStep = clampNumber(
     sourceStep + direction,
@@ -128,6 +153,96 @@ export function stepEquationMotionDemo(
   }
 
   playEquationMotionDemoTransition(demo, sourceStep, targetStep);
+}
+
+export function handleEquationMotionDemoKeydown(event: KeyboardEvent): boolean {
+  if (!(event.target instanceof Element)) {
+    return false;
+  }
+
+  const demo = event.target.closest<HTMLElement>(
+    "[data-kp-equation-motion-demo]"
+  );
+
+  if (demo === null) {
+    return false;
+  }
+
+  const pickerOpen = isEquationAnimationPickerOpen(demo);
+
+  if (!pickerOpen && isEquationMotionEditableTarget(event.target)) {
+    return false;
+  }
+
+  switch (event.key) {
+    case " ":
+      event.preventDefault();
+      toggleEquationMotionPlayback(demo);
+      return true;
+    case "j":
+      event.preventDefault();
+      closeEquationAnimationPicker(demo);
+      stepEquationMotionDemoCard(demo, 1);
+      return true;
+    case "k":
+      event.preventDefault();
+      closeEquationAnimationPicker(demo);
+      stepEquationMotionDemoCard(demo, -1);
+      return true;
+    case "J":
+      event.preventDefault();
+      moveEquationAnimationPicker(demo, 1);
+      return true;
+    case "K":
+      event.preventDefault();
+      moveEquationAnimationPicker(demo, -1);
+      return true;
+    case "Enter":
+      if (pickerOpen) {
+        event.preventDefault();
+        commitEquationAnimationPicker(demo);
+        return true;
+      }
+      return false;
+    case "Escape":
+      if (pickerOpen) {
+        event.preventDefault();
+        closeEquationAnimationPicker(demo);
+        return true;
+      }
+      return false;
+    default:
+      return false;
+  }
+}
+
+export function toggleEquationMotionPlayback(demo: HTMLElement): void {
+  const activeAnimation = activeAnimations.get(demo);
+
+  if (activeAnimation !== undefined) {
+    pauseEquationMotionAnimation(demo, activeAnimation);
+    return;
+  }
+
+  const pausedAnimation = pausedAnimations.get(demo);
+
+  if (pausedAnimation !== undefined) {
+    pausedAnimations.delete(demo);
+    resumeEquationMotionAnimation(demo, pausedAnimation);
+    return;
+  }
+
+  const transition = readKeyboardPlaybackTransition(demo);
+
+  if (transition === undefined) {
+    return;
+  }
+
+  playEquationMotionDemoTransition(
+    demo,
+    transition.sourceStep,
+    transition.targetStep
+  );
 }
 
 export function setEquationMotionProgress(
@@ -212,6 +327,45 @@ function playEquationMotionDemoTransition(
   targetStep: number
 ): void {
   cancelEquationMotionAnimation(demo);
+  const startProgress = sourceStep < targetStep ? 0 : 1;
+  const targetProgress = sourceStep < targetStep ? 1 : 0;
+  const durationMs = readEquationMotionDurationMs(demo);
+
+  startEquationMotionAnimation(
+    demo,
+    sourceStep,
+    targetStep,
+    startProgress,
+    targetProgress,
+    durationMs
+  );
+}
+
+function resumeEquationMotionAnimation(
+  demo: HTMLElement,
+  pausedAnimation: PausedEquationMotionAnimation
+): void {
+  startEquationMotionAnimation(
+    demo,
+    pausedAnimation.sourceStep,
+    pausedAnimation.targetStep,
+    pausedAnimation.currentProgress,
+    pausedAnimation.targetProgress,
+    pausedAnimation.durationMs * Math.abs(
+      pausedAnimation.targetProgress - pausedAnimation.currentProgress
+    )
+  );
+}
+
+function startEquationMotionAnimation(
+  demo: HTMLElement,
+  sourceStep: number,
+  targetStep: number,
+  startProgress: number,
+  targetProgress: number,
+  durationMs: number
+): void {
+  cancelEquationMotionAnimation(demo);
   const plan = createDemoEquationMotionTransition(demo, sourceStep, targetStep);
   const player = createEquationMotionPlayer(plan, {
     render: (frame) => {
@@ -228,36 +382,47 @@ function playEquationMotionDemoTransition(
   demo.dataset["kpEquationMotionLatestSource"] = String(sourceStep);
   demo.dataset["kpEquationMotionLatestTarget"] = String(targetStep);
   demo.dataset["kpEquationMotionAnimating"] = "true";
+  delete demo.dataset["kpEquationMotionPaused"];
 
-  const startProgress = sourceStep < targetStep ? 0 : 1;
-  const targetProgress = sourceStep < targetStep ? 1 : 0;
   const delta = targetProgress - startProgress;
   const startTime = window.performance.now();
-  const durationMs = readEquationMotionDurationMs(demo);
+  const clampedDurationMs = Math.max(1, durationMs);
+  const activeAnimation: ActiveEquationMotionAnimation = {
+    animationFrameId: 0,
+    sourceStep,
+    targetStep,
+    targetProgress,
+    durationMs: clampedDurationMs,
+    currentProgress: startProgress
+  };
 
-  syncEquationMotionDurationControl(demo, durationMs);
+  syncEquationMotionDurationControl(demo, readEquationMotionDurationMs(demo));
   player.setProgress(startProgress);
 
   const tick = (now: number): void => {
     const elapsed = now - startTime;
     const timeProgress = clampNumber(
-      elapsed / durationMs,
+      elapsed / clampedDurationMs,
       0,
       1
     );
-    player.setProgress(startProgress + delta * timeProgress);
+    const nextProgress = startProgress + delta * timeProgress;
+
+    activeAnimation.currentProgress = nextProgress;
+    player.setProgress(nextProgress);
 
     if (timeProgress < 1) {
-      activeAnimationFrames.set(demo, window.requestAnimationFrame(tick));
+      activeAnimation.animationFrameId = window.requestAnimationFrame(tick);
       return;
     }
 
-    activeAnimationFrames.delete(demo);
+    activeAnimations.delete(demo);
     delete demo.dataset["kpEquationMotionAnimating"];
     syncEquationMotionActiveState(demo, targetStep);
   };
 
-  activeAnimationFrames.set(demo, window.requestAnimationFrame(tick));
+  activeAnimation.animationFrameId = window.requestAnimationFrame(tick);
+  activeAnimations.set(demo, activeAnimation);
 }
 
 function createDemoEquationMotionTransition(
@@ -316,6 +481,138 @@ function readEquationAnimationId(demo: HTMLElement): string {
   return (
     demo.dataset["kpEquationAnimationId"] ?? DEFAULT_EQUATION_ANIMATION_ID
   );
+}
+
+function isEquationMotionEditableTarget(target: Element): boolean {
+  return target.closest("input, select, textarea, button, summary") !== null;
+}
+
+function isEquationAnimationPickerOpen(demo: HTMLElement): boolean {
+  const picker = findEquationAnimationPicker(demo);
+
+  return picker !== undefined && !picker.hidden;
+}
+
+function moveEquationAnimationPicker(
+  demo: HTMLElement,
+  direction: -1 | 1
+): void {
+  const picker = findEquationAnimationPicker(demo);
+  const options = findEquationAnimationPickerOptions(demo);
+
+  if (picker === undefined || options.length === 0) {
+    return;
+  }
+
+  const currentIndex = isEquationAnimationPickerOpen(demo)
+    ? readIntegerDataset(picker.dataset["kpEquationAnimationPickerIndex"]) ??
+      selectedEquationAnimationPickerIndex(demo, options)
+    : selectedEquationAnimationPickerIndex(demo, options);
+  const nextIndex = wrapIndex(currentIndex + direction, options.length);
+
+  picker.hidden = false;
+  demo.dataset["kpEquationAnimationPickerOpen"] = "true";
+  picker.dataset["kpEquationAnimationPickerIndex"] = String(nextIndex);
+  syncEquationAnimationPickerHighlight(picker, options, nextIndex);
+}
+
+function closeEquationAnimationPicker(demo: HTMLElement): void {
+  const picker = findEquationAnimationPicker(demo);
+
+  if (picker === undefined) {
+    return;
+  }
+
+  picker.hidden = true;
+  delete demo.dataset["kpEquationAnimationPickerOpen"];
+  delete picker.dataset["kpEquationAnimationPickerIndex"];
+}
+
+function commitEquationAnimationPicker(demo: HTMLElement): void {
+  const picker = findEquationAnimationPicker(demo);
+  const options = findEquationAnimationPickerOptions(demo);
+  const select = findEquationAnimationSelect(demo);
+
+  if (picker === undefined || options.length === 0 || select === undefined) {
+    return;
+  }
+
+  const index =
+    readIntegerDataset(picker.dataset["kpEquationAnimationPickerIndex"]) ??
+    selectedEquationAnimationPickerIndex(demo, options);
+  const option = options[wrapIndex(index, options.length)];
+  const animationId = option?.dataset["kpEquationAnimationId"];
+
+  if (animationId === undefined) {
+    return;
+  }
+
+  select.value = animationId;
+  select.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
+function findEquationAnimationPicker(
+  demo: HTMLElement
+): HTMLElement | undefined {
+  return (
+    demo.querySelector<HTMLElement>("[data-kp-equation-animation-picker]") ??
+    undefined
+  );
+}
+
+function findEquationAnimationSelect(
+  demo: HTMLElement
+): HTMLSelectElement | undefined {
+  return (
+    demo.querySelector<HTMLSelectElement>(
+      '[data-action="set-equation-motion-animation"]'
+    ) ?? undefined
+  );
+}
+
+function findEquationAnimationPickerOptions(
+  demo: HTMLElement
+): readonly HTMLElement[] {
+  return Array.from(
+    demo.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-animation-picker-option]"
+    )
+  );
+}
+
+function selectedEquationAnimationPickerIndex(
+  demo: HTMLElement,
+  options: readonly HTMLElement[]
+): number {
+  const select = findEquationAnimationSelect(demo);
+  const selectedId = select?.value ?? readEquationAnimationId(demo);
+  const index = options.findIndex(
+    (option) => option.dataset["kpEquationAnimationId"] === selectedId
+  );
+
+  return index < 0 ? 0 : index;
+}
+
+function syncEquationAnimationPickerHighlight(
+  picker: HTMLElement,
+  options: readonly HTMLElement[],
+  selectedIndex: number
+): void {
+  options.forEach((option, index) => {
+    option.setAttribute("aria-selected", index === selectedIndex ? "true" : "false");
+  });
+
+  const selectedOption = options[selectedIndex];
+
+  if (selectedOption?.id !== undefined && selectedOption.id !== "") {
+    picker.setAttribute("aria-activedescendant", selectedOption.id);
+  } else {
+    picker.removeAttribute("aria-activedescendant");
+  }
+}
+
+function wrapIndex(index: number, length: number): number {
+  return ((index % length) + length) % length;
 }
 
 function renderEquationMotionFrame(
@@ -518,14 +815,33 @@ function getEquationMotionRenderContext(
 }
 
 function cancelEquationMotionAnimation(demo: HTMLElement): void {
-  const activeFrame = activeAnimationFrames.get(demo);
+  const activeAnimation = activeAnimations.get(demo);
 
-  if (activeFrame !== undefined) {
-    window.cancelAnimationFrame(activeFrame);
-    activeAnimationFrames.delete(demo);
+  if (activeAnimation !== undefined) {
+    window.cancelAnimationFrame(activeAnimation.animationFrameId);
+    activeAnimations.delete(demo);
   }
 
+  pausedAnimations.delete(demo);
   delete demo.dataset["kpEquationMotionAnimating"];
+  delete demo.dataset["kpEquationMotionPaused"];
+}
+
+function pauseEquationMotionAnimation(
+  demo: HTMLElement,
+  activeAnimation: ActiveEquationMotionAnimation
+): void {
+  window.cancelAnimationFrame(activeAnimation.animationFrameId);
+  activeAnimations.delete(demo);
+  pausedAnimations.set(demo, {
+    sourceStep: activeAnimation.sourceStep,
+    targetStep: activeAnimation.targetStep,
+    currentProgress: activeAnimation.currentProgress,
+    targetProgress: activeAnimation.targetProgress,
+    durationMs: activeAnimation.durationMs
+  });
+  delete demo.dataset["kpEquationMotionAnimating"];
+  demo.dataset["kpEquationMotionPaused"] = "true";
 }
 
 function prepareEquationMotionTransitionLayers(
@@ -899,6 +1215,20 @@ function readLatestEquationMotionTransition(
 
   const sourceStep = currentStep;
   const targetStep = currentStep < maxStep ? currentStep + 1 : currentStep - 1;
+
+  if (targetStep < 0 || targetStep > maxStep || targetStep === sourceStep) {
+    return undefined;
+  }
+
+  return { sourceStep, targetStep };
+}
+
+function readKeyboardPlaybackTransition(
+  demo: HTMLElement
+): { readonly sourceStep: number; readonly targetStep: number } | undefined {
+  const maxStep = readEquationMotionMaxStep(demo);
+  const sourceStep = readEquationMotionStep(demo);
+  const targetStep = sourceStep < maxStep ? sourceStep + 1 : sourceStep - 1;
 
   if (targetStep < 0 || targetStep > maxStep || targetStep === sourceStep) {
     return undefined;

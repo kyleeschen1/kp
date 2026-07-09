@@ -219,8 +219,9 @@ function renderEquationMotionDemo(equationAnimationId: string | undefined): stri
   const maxStep = animation.states.length - 1;
 
   return `
-    <section class="equation-motion" data-kp-equation-motion-demo data-kp-equation-animation-id="${escapeHtml(animation.id)}" data-kp-equation-motion-step="0" data-kp-equation-motion-max-step="${maxStep}" data-kp-equation-motion-duration-ms="${animation.defaultDurationMs}" data-kp-equation-motion-collapse-scale-percent="${animation.defaultCollapseScalePercent}">
+    <section class="equation-motion" data-kp-equation-motion-demo data-kp-equation-animation-id="${escapeHtml(animation.id)}" data-kp-equation-motion-step="0" data-kp-equation-motion-max-step="${maxStep}" data-kp-equation-motion-duration-ms="${animation.defaultDurationMs}" data-kp-equation-motion-collapse-scale-percent="${animation.defaultCollapseScalePercent}" tabindex="0" aria-label="Equation animation card">
       ${renderEquationAnimationSelector(animation)}
+      ${renderEquationAnimationKeyboardPicker(animation)}
       <div class="equation-motion__stage">
         ${stateHtml}
       </div>
@@ -283,6 +284,21 @@ function renderEquationAnimationSelector(
           .join("")}
       </select>
     </label>
+  `;
+}
+
+function renderEquationAnimationKeyboardPicker(
+  selectedAnimation: EquationAnimationCatalogEntry
+): string {
+  return `
+    <div class="equation-motion__keyboard-picker" data-kp-equation-animation-picker role="listbox" aria-label="Animation picker" hidden>
+      ${equationAnimationCatalogEntries
+        .map(
+          (entry, index) =>
+            `<div class="equation-motion__keyboard-picker-option" id="equation-motion-picker-${escapeHtml(entry.id)}" data-kp-equation-animation-picker-option data-kp-equation-animation-id="${escapeHtml(entry.id)}" data-kp-equation-animation-index="${index}" role="option" aria-selected="${entry.id === selectedAnimation.id ? "true" : "false"}">${escapeHtml(entry.label)}</div>`
+        )
+        .join("")}
+    </div>
   `;
 }
 
