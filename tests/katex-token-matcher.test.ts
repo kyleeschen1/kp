@@ -1,6 +1,10 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
+import {
+  findKatexTransformFixture,
+  type KatexTransformFixtureToken
+} from "../src/rendering/katex-transform-fixtures.ts";
 import { createKatexTransitionPlan } from "../src/rendering/katex-token-matcher.ts";
 import type { KatexMotionToken } from "../src/rendering/katex-transition-types.ts";
 
@@ -138,3 +142,81 @@ test("createKatexTransitionPlan ignores empty-text tokens entirely", () => {
   assert.equal(plan.diagnostics.sourceOnlyCount, 0);
   assert.equal(plan.diagnostics.targetOnlyCount, 0);
 });
+
+test("fraction transform fixtures expose artifact token matcher behavior", () => {
+  const makeFixture = findKatexTransformFixture(
+    "fraction.make.inline-to-stacked"
+  );
+  const makeFraction = createKatexTransitionPlan(
+    fixtureTokens(makeFixture, "source"),
+    fixtureTokens(makeFixture, "target")
+  );
+  assert.deepEqual(
+    makeFraction.matched.map((match) => [match.source.text, match.target.text]),
+    [
+      ["x", "x"],
+      ["3", "3"]
+    ]
+  );
+  assert.deepEqual(
+    makeFraction.sourceOnly.map((entry) => entry.source.text),
+    ["/"]
+  );
+  assert.deepEqual(
+    makeFraction.targetOnly.map((entry) => entry.target.text),
+    ["structural:frac-line"]
+  );
+
+  const splitFixture = findKatexTransformFixture(
+    "fraction.split.stacked-to-inline"
+  );
+  const splitFraction = createKatexTransitionPlan(
+    fixtureTokens(splitFixture, "source"),
+    fixtureTokens(splitFixture, "target")
+  );
+  assert.deepEqual(
+    splitFraction.sourceOnly.map((entry) => entry.source.text),
+    ["structural:frac-line"]
+  );
+  assert.deepEqual(
+    splitFraction.targetOnly.map((entry) => entry.target.text),
+    ["/"]
+  );
+
+  const combineFixture = findKatexTransformFixture(
+    "fraction.combine.common-denominator"
+  );
+  const combineFractions = createKatexTransitionPlan(
+    fixtureTokens(combineFixture, "source"),
+    fixtureTokens(combineFixture, "target")
+  );
+  assert.deepEqual(
+    combineFractions.sourceOnly.map((entry) => entry.source.text),
+    ["structural:frac-line"]
+  );
+  assert.deepEqual(
+    combineFractions.matched
+      .filter((match) => match.source.text === "structural:frac-line")
+      .map((match) => [match.source.text, match.target.text]),
+    [["structural:frac-line", "structural:frac-line"]]
+  );
+});
+
+function fixtureTokens(
+  fixture: ReturnType<typeof findKatexTransformFixture>,
+  side: "source" | "target"
+): KatexMotionToken[] {
+  return fixture[side].tokens.map((entry, index) =>
+    fixtureToken(`${side}-${index}`, entry)
+  );
+}
+
+function fixtureToken(
+  id: string,
+  entry: KatexTransformFixtureToken
+): KatexMotionToken {
+  const left = entry.column * 14;
+  const top = entry.row * 18;
+
+  return token(id, entry.text, entry.signature, left, top, entry.row);
+}

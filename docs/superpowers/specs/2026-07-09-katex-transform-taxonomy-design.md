@@ -465,3 +465,17 @@ KP wrappers around KaTeX fragments whenever possible.
 4. Keep visual motifs reusable and semantic-free so equation, graph, matrix,
    diagram, and programming animations can share them.
 5. Treat arbitrary unannotated KaTeX diffing as a fallback, not the primary API.
+
+## Fixture Registry Checkpoint
+
+Slice 11 added `src/rendering/katex-transform-fixtures.ts` with the first
+fraction fixture records:
+
+- `fraction.make.inline-to-stacked`
+- `fraction.split.stacked-to-inline`
+- `fraction.combine.common-denominator`
+
+These fixtures encode expected structural tokens for fraction bars and provide
+synthetic row/column token layouts for matcher tests. They are not yet semantic
+transform implementations; they are geometry fixtures that make future
+`makeFraction`, `splitFraction`, and `combineFractions` transitions testable.

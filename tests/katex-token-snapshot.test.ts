@@ -8,6 +8,9 @@ import {
   assignKatexTokenRows,
   snapshotKatexTokens
 } from "../src/rendering/katex-token-snapshot.ts";
+import {
+  fractionTransformFixtures
+} from "../src/rendering/katex-transform-fixtures.ts";
 import type {
   KatexMotionToken,
   KatexTokenRect
@@ -147,6 +150,37 @@ test("snapshotKatexTokens emits structural KaTeX tokens", () => {
       ["structural:hdashline", "hdashline"],
       ["structural:rule", "mord rule"],
       ["structural:hide-tail", "hide-tail"]
+    ]
+  );
+});
+
+test("fraction transform fixtures declare expected structural tokens", () => {
+  assert.deepEqual(
+    fractionTransformFixtures.map((fixture) => [
+      fixture.id,
+      fixture.intent,
+      fixture.expectedStructuralTokens.source,
+      fixture.expectedStructuralTokens.target
+    ]),
+    [
+      [
+        "fraction.make.inline-to-stacked",
+        "makeFraction",
+        [],
+        ["structural:frac-line"]
+      ],
+      [
+        "fraction.split.stacked-to-inline",
+        "splitFraction",
+        ["structural:frac-line"],
+        []
+      ],
+      [
+        "fraction.combine.common-denominator",
+        "combineFractions",
+        ["structural:frac-line", "structural:frac-line"],
+        ["structural:frac-line"]
+      ]
     ]
   );
 });
