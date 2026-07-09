@@ -17,6 +17,10 @@ import {
   scriptTransformFixtures,
   wrapperTransformFixtures
 } from "../src/rendering/katex-transform-fixtures.ts";
+import {
+  katexVisualArtifactLifecycleRecords,
+  summarizeVisualArtifactLifecycleRecord
+} from "../src/rendering/visual-artifact-lifecycle.ts";
 import type {
   KatexMotionToken,
   KatexTokenRect
@@ -494,6 +498,64 @@ test("matrix/vector transform fixtures declare bracket artifacts and entry selec
           ["vector-entry", "vector-entry", "y", "y"]
         ]
       ]
+    ]
+  );
+});
+
+test("KaTeX visual artifact lifecycle records cover stable artifact categories", () => {
+  assert.deepEqual(
+    katexVisualArtifactLifecycleRecords.map(
+      summarizeVisualArtifactLifecycleRecord
+    ),
+    [
+      {
+        id: "artifact.fraction-bar.enter",
+        kind: "fraction-bar",
+        phase: "enter",
+        sourceArtifactIds: [],
+        targetArtifactIds: [
+          "fraction.make.inline-to-stacked.target.frac-line"
+        ],
+        sourceVisualLifecycle: undefined,
+        targetVisualLifecycle: "enter"
+      },
+      {
+        id: "artifact.matrix-bracket.replace-delimiter",
+        kind: "matrix-bracket",
+        phase: "replace",
+        sourceArtifactIds: [
+          "matrix.bracket.change-delimiter.source.left-bracket",
+          "matrix.bracket.change-delimiter.source.right-bracket"
+        ],
+        targetArtifactIds: [
+          "matrix.bracket.change-delimiter.target.left-bracket",
+          "matrix.bracket.change-delimiter.target.right-bracket"
+        ],
+        sourceVisualLifecycle: "exit",
+        targetVisualLifecycle: "enter"
+      },
+      {
+        id: "artifact.radical-glyph.enter",
+        kind: "radical-glyph",
+        phase: "enter",
+        sourceArtifactIds: [],
+        targetArtifactIds: [
+          "radical.rewrite-power-as-root.target.hide-tail",
+          "radical.rewrite-power-as-root.target.sqrt-line",
+          "radical.rewrite-power-as-root.target.sqrt-glyph"
+        ],
+        sourceVisualLifecycle: undefined,
+        targetVisualLifecycle: "enter"
+      },
+      {
+        id: "artifact.accent.exit-overline",
+        kind: "accent",
+        phase: "exit",
+        sourceArtifactIds: ["accent.strip-overline.source.overline"],
+        targetArtifactIds: [],
+        sourceVisualLifecycle: "exit",
+        targetVisualLifecycle: undefined
+      }
     ]
   );
 });

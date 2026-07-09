@@ -540,3 +540,15 @@ Bracket glyphs remain visual artifacts with `matrix-left-bracket` and
 `matrix-right-bracket` layout roles. Row swaps and vector transposes can now
 represent identity persistence separately from grid-relative row/column
 placement, without requiring a dedicated matrix-view adapter yet.
+
+Slice 17 added visual artifact lifecycle records for:
+
+- fraction bars entering;
+- matrix brackets being replaced;
+- radical glyph groups entering;
+- overline accents exiting.
+
+These records convert to `artifact` correspondence records and use stable ids
+derived from semantic fixture paths, not KaTeX DOM token indexes. They are the
+bridge between visual-only render artifacts and the same correspondence
+vocabulary used by semantic tokens.

@@ -10,8 +10,13 @@ import {
 } from "../src/rendering/katex-transform-fixtures.ts";
 import {
   createEquationMotionPlan,
+  semanticLifecycleForCorrespondenceRelation,
   type EquationMotionPlan
 } from "../src/rendering/equation-motion-plan.ts";
+import {
+  katexVisualArtifactLifecycleRecords,
+  visualArtifactRecordToCorrespondenceRecord
+} from "../src/rendering/visual-artifact-lifecycle.ts";
 
 type TokenLifecyclePair = [id: string, lifecycle: string];
 type TokenRelationPair = [id: string, relation: string | undefined];
@@ -487,6 +492,56 @@ test("createEquationMotionPlan maps wrapper fixtures to wrap and enter tracks", 
     from: { opacity: 1, x: 0, y: 0, scale: 1 },
     to: { opacity: 1, x: 0, y: 0, scale: 1 }
   });
+});
+
+test("visual artifact lifecycle records map to visual-only artifact correspondence", () => {
+  assert.equal(semanticLifecycleForCorrespondenceRelation("artifact"), "visual-only");
+  assert.deepEqual(
+    katexVisualArtifactLifecycleRecords
+      .map(visualArtifactRecordToCorrespondenceRecord)
+      .map((record) => [
+        record.id,
+        record.relation,
+        record.sourceSelectorIds,
+        record.targetSelectorIds
+      ]),
+    [
+      [
+        "artifact.fraction-bar.enter",
+        "artifact",
+        [],
+        ["fraction.make.inline-to-stacked.target.frac-line"]
+      ],
+      [
+        "artifact.matrix-bracket.replace-delimiter",
+        "artifact",
+        [
+          "matrix.bracket.change-delimiter.source.left-bracket",
+          "matrix.bracket.change-delimiter.source.right-bracket"
+        ],
+        [
+          "matrix.bracket.change-delimiter.target.left-bracket",
+          "matrix.bracket.change-delimiter.target.right-bracket"
+        ]
+      ],
+      [
+        "artifact.radical-glyph.enter",
+        "artifact",
+        [],
+        [
+          "radical.rewrite-power-as-root.target.hide-tail",
+          "radical.rewrite-power-as-root.target.sqrt-line",
+          "radical.rewrite-power-as-root.target.sqrt-glyph"
+        ]
+      ],
+      [
+        "artifact.accent.exit-overline",
+        "artifact",
+        ["accent.strip-overline.source.overline"],
+        []
+      ]
+    ]
+  );
 });
 
 test("createEquationMotionPlan rejects tokens without source or target motion ids", () => {
