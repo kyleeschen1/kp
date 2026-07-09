@@ -489,3 +489,15 @@ Slice 12 extended the same registry with script role-change fixtures:
 These fixtures encode superscript/subscript rows and expected role-change pairs
 so WebGL quad interpolation can be tested against baseline and scale changes
 before algebraic script transforms exist.
+
+Slice 13 extended the registry with radical/root fixtures:
+
+- `radical.rewrite-power-as-root`
+- `radical.rewrite-root-as-power`
+- `radical.unwrap-indexed-root`
+
+These fixtures encode expected radical SVG and rule artifacts
+(`structural:hide-tail` and `structural:sqrt-line`) plus diagnostics for source
+and target structural-token counts. Browser verification confirms the existing
+KaTeX snapshot path can capture the radical SVG artifacts without a
+renderer-specific fallback.

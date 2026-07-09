@@ -1,4 +1,4 @@
-export type KatexTransformFixtureFamily = "fraction" | "script";
+export type KatexTransformFixtureFamily = "fraction" | "radical" | "script";
 
 export type KatexFractionTransformIntent =
   | "makeFraction"
@@ -10,8 +10,14 @@ export type KatexScriptTransformIntent =
   | "expandPower"
   | "changeIndex";
 
+export type KatexRadicalTransformIntent =
+  | "rewritePowerAsRoot"
+  | "rewriteRootAsPower"
+  | "unwrapIndexedRoot";
+
 export type KatexTransformFixtureIntent =
   | KatexFractionTransformIntent
+  | KatexRadicalTransformIntent
   | KatexScriptTransformIntent;
 
 export type KatexTransformFixtureTokenRole =
@@ -19,6 +25,8 @@ export type KatexTransformFixtureTokenRole =
   | "base"
   | "factor"
   | "operator"
+  | "radicand"
+  | "root-index"
   | "semantic"
   | "subscript"
   | "superscript";
@@ -55,6 +63,16 @@ export interface KatexTransformFixture {
   };
   readonly expectedRoleChanges: readonly KatexTransformRoleChangeExpectation[];
   readonly summary: string;
+}
+
+export interface KatexTransformFixtureDiagnostics {
+  readonly id: string;
+  readonly family: KatexTransformFixtureFamily;
+  readonly sourceTokenCount: number;
+  readonly targetTokenCount: number;
+  readonly sourceStructuralTokenCount: number;
+  readonly targetStructuralTokenCount: number;
+  readonly roleChangeCount: number;
 }
 
 export const fractionTransformFixtures: readonly KatexTransformFixture[] = [
@@ -150,6 +168,115 @@ export const fractionTransformFixtures: readonly KatexTransformFixture[] = [
     expectedRoleChanges: [],
     summary:
       "Two stacked fractions combine into one stacked fraction; bars need explicit artifact handling instead of semantic identity."
+  }
+];
+
+export const radicalTransformFixtures: readonly KatexTransformFixture[] = [
+  {
+    id: "radical.rewrite-power-as-root",
+    family: "radical",
+    intent: "rewritePowerAsRoot",
+    source: {
+      latex: "x^{1/2}",
+      tokens: [
+        baseToken("x", 0, 0),
+        operatorToken("^", -1, 1),
+        superscriptToken("1/2", -1, 2)
+      ]
+    },
+    target: {
+      latex: "\\sqrt{x}",
+      tokens: [
+        artifactToken("structural:hide-tail", "hide-tail", 0, 0),
+        artifactToken("structural:sqrt-line", "sqrt-line", -1, 1),
+        artifactToken("\\sqrt", "sqrt", 0, 1),
+        radicandToken("x", 0, 2)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: ["structural:hide-tail", "structural:sqrt-line"]
+    },
+    expectedRoleChanges: [
+      {
+        sourceRole: "base",
+        targetRole: "radicand",
+        sourceText: "x",
+        targetText: "x"
+      }
+    ],
+    summary:
+      "Power notation becomes radical notation; radical SVG and overbar artifacts enter around the persisted radicand."
+  },
+  {
+    id: "radical.rewrite-root-as-power",
+    family: "radical",
+    intent: "rewriteRootAsPower",
+    source: {
+      latex: "\\sqrt{x}",
+      tokens: [
+        artifactToken("structural:hide-tail", "hide-tail", 0, 0),
+        artifactToken("structural:sqrt-line", "sqrt-line", -1, 1),
+        artifactToken("\\sqrt", "sqrt", 0, 1),
+        radicandToken("x", 0, 2)
+      ]
+    },
+    target: {
+      latex: "x^{1/2}",
+      tokens: [
+        baseToken("x", 0, 0),
+        operatorToken("^", -1, 1),
+        superscriptToken("1/2", -1, 2)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: ["structural:hide-tail", "structural:sqrt-line"],
+      target: []
+    },
+    expectedRoleChanges: [
+      {
+        sourceRole: "radicand",
+        targetRole: "base",
+        sourceText: "x",
+        targetText: "x"
+      }
+    ],
+    summary:
+      "Radical notation becomes power notation; radical artifacts exit while the radicand becomes the base."
+  },
+  {
+    id: "radical.unwrap-indexed-root",
+    family: "radical",
+    intent: "unwrapIndexedRoot",
+    source: {
+      latex: "\\sqrt[3]{x^3}",
+      tokens: [
+        rootIndexToken("3", -1, 0),
+        artifactToken("structural:hide-tail", "hide-tail", 0, 0),
+        artifactToken("structural:sqrt-line", "sqrt-line", -1, 1),
+        artifactToken("\\sqrt", "sqrt", 0, 1),
+        radicandToken("x", 0, 2),
+        superscriptToken("3", -1, 3)
+      ]
+    },
+    target: {
+      latex: "x",
+      tokens: [baseToken("x", 0, 0)]
+    },
+    expectedStructuralTokens: {
+      source: ["structural:hide-tail", "structural:sqrt-line"],
+      target: []
+    },
+    expectedRoleChanges: [
+      {
+        sourceRole: "radicand",
+        targetRole: "base",
+        sourceText: "x",
+        targetText: "x"
+      }
+    ],
+    summary:
+      "An indexed root unwraps to its base value; the root index, radical artifacts, and exponent need explicit fixture roles."
   }
 ];
 
@@ -252,6 +379,7 @@ export const scriptTransformFixtures: readonly KatexTransformFixture[] = [
 
 export const katexTransformFixtures: readonly KatexTransformFixture[] = [
   ...fractionTransformFixtures,
+  ...radicalTransformFixtures,
   ...scriptTransformFixtures
 ];
 
@@ -265,6 +393,20 @@ export function findKatexTransformFixture(id: string): KatexTransformFixture {
   }
 
   return fixture;
+}
+
+export function summarizeKatexTransformFixtureDiagnostics(
+  fixture: KatexTransformFixture
+): KatexTransformFixtureDiagnostics {
+  return {
+    id: fixture.id,
+    family: fixture.family,
+    sourceTokenCount: fixture.source.tokens.length,
+    targetTokenCount: fixture.target.tokens.length,
+    sourceStructuralTokenCount: fixture.expectedStructuralTokens.source.length,
+    targetStructuralTokenCount: fixture.expectedStructuralTokens.target.length,
+    roleChangeCount: fixture.expectedRoleChanges.length
+  };
 }
 
 function semanticToken(
@@ -304,6 +446,34 @@ function factorToken(
     text,
     signature: "mord",
     role: "factor",
+    row,
+    column
+  };
+}
+
+function radicandToken(
+  text: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "radicand",
+    row,
+    column
+  };
+}
+
+function rootIndexToken(
+  text: string,
+  row: number,
+  column: number
+): KatexTransformFixtureToken {
+  return {
+    text,
+    signature: "mord",
+    role: "root-index",
     row,
     column
   };

@@ -10,6 +10,8 @@ import {
 } from "../src/rendering/katex-token-snapshot.ts";
 import {
   fractionTransformFixtures,
+  radicalTransformFixtures,
+  summarizeKatexTransformFixtureDiagnostics,
   scriptTransformFixtures
 } from "../src/rendering/katex-transform-fixtures.ts";
 import type {
@@ -220,6 +222,72 @@ test("script transform fixtures declare role-change geometry expectations", () =
         [],
         [["subscript", "subscript"]]
       ]
+    ]
+  );
+});
+
+test("radical transform fixtures declare SVG and rule artifact expectations", () => {
+  assert.deepEqual(
+    radicalTransformFixtures.map((fixture) => [
+      fixture.id,
+      fixture.intent,
+      fixture.expectedStructuralTokens.source,
+      fixture.expectedStructuralTokens.target
+    ]),
+    [
+      [
+        "radical.rewrite-power-as-root",
+        "rewritePowerAsRoot",
+        [],
+        ["structural:hide-tail", "structural:sqrt-line"]
+      ],
+      [
+        "radical.rewrite-root-as-power",
+        "rewriteRootAsPower",
+        ["structural:hide-tail", "structural:sqrt-line"],
+        []
+      ],
+      [
+        "radical.unwrap-indexed-root",
+        "unwrapIndexedRoot",
+        ["structural:hide-tail", "structural:sqrt-line"],
+        []
+      ]
+    ]
+  );
+});
+
+test("radical fixture diagnostics count structural artifact expectations", () => {
+  assert.deepEqual(
+    radicalTransformFixtures.map(summarizeKatexTransformFixtureDiagnostics),
+    [
+      {
+        id: "radical.rewrite-power-as-root",
+        family: "radical",
+        sourceTokenCount: 3,
+        targetTokenCount: 4,
+        sourceStructuralTokenCount: 0,
+        targetStructuralTokenCount: 2,
+        roleChangeCount: 1
+      },
+      {
+        id: "radical.rewrite-root-as-power",
+        family: "radical",
+        sourceTokenCount: 4,
+        targetTokenCount: 3,
+        sourceStructuralTokenCount: 2,
+        targetStructuralTokenCount: 0,
+        roleChangeCount: 1
+      },
+      {
+        id: "radical.unwrap-indexed-root",
+        family: "radical",
+        sourceTokenCount: 6,
+        targetTokenCount: 1,
+        sourceStructuralTokenCount: 2,
+        targetStructuralTokenCount: 0,
+        roleChangeCount: 1
+      }
     ]
   );
 });
