@@ -1,6 +1,7 @@
 import type {
   KatexAtlasRegion,
   KatexMotionToken,
+  KatexTokenRect,
   KatexTextureAtlas
 } from "./katex-transition-types.ts";
 
@@ -133,38 +134,52 @@ export async function createKatexTextureAtlas(
   };
 }
 
+export function measureKatexTextureCaptureRect(element: Element): KatexTokenRect {
+  const rects = [element, ...Array.from(element.querySelectorAll("*"))]
+    .filter(isVisibleCaptureElement)
+    .map((entry) => entry.getBoundingClientRect())
+    .filter((rect) => rect.width > 0 && rect.height > 0);
+
+  return unionCaptureRects(
+    rects.length === 0 ? [element.getBoundingClientRect()] : rects
+  );
+}
+
 async function captureElementImage(
   element: Element,
-  rect: DOMRect | { width: number; height: number },
+  rect: KatexTokenRect,
   pixelRatio: number
 ): Promise<HTMLImageElement> {
   const width = Math.max(1, Math.ceil(rect.width * pixelRatio));
   const height = Math.max(1, Math.ceil(rect.height * pixelRatio));
+  const elementRect = element.getBoundingClientRect();
   const clone = element.cloneNode(true);
 
   if (!(clone instanceof HTMLElement)) {
     throw new Error("Expected a KaTeX token clone to be an HTMLElement.");
   }
 
-  const existingStyle = clone.getAttribute("style");
+  inlineComputedCaptureStyles(element, clone);
+
   const captureStyle = [
     copyComputedTextStyle(element),
-    copyComputedBoxStyle(element, rect),
+    copyComputedBoxStyle(element, elementRect),
+    `position:absolute`,
+    `left:${elementRect.left - rect.left}px`,
+    `top:${elementRect.top - rect.top}px`,
     `display:inline-block`,
-    `margin:0`,
-    `transform:scale(${pixelRatio})`,
-    `transform-origin:top left`
+    `margin:0`
   ].join(";");
 
-  clone.setAttribute(
-    "style",
-    existingStyle === null ? captureStyle : `${existingStyle};${captureStyle}`
-  );
+  appendInlineStyle(clone, captureStyle);
 
+  // KaTeX vlist descendants can paint outside their parent rect, so the
+  // wrapper owns the capture bounds while the cloned element keeps its DOM
+  // offset inside that larger visual frame.
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
       <foreignObject width="100%" height="100%">
-        <div xmlns="http://www.w3.org/1999/xhtml" style="display:inline-block;margin:0">${clone.outerHTML}</div>
+        <div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;display:block;width:${rect.width}px;height:${rect.height}px;overflow:visible;margin:0;transform:scale(${pixelRatio});transform-origin:top left">${clone.outerHTML}</div>
       </foreignObject>
     </svg>
   `;
@@ -178,6 +193,122 @@ async function captureElementImage(
   });
 
   return image;
+}
+
+function isVisibleCaptureElement(element: Element): boolean {
+  const style = window.getComputedStyle(element);
+
+  return (
+    style.display !== "none" &&
+    style.visibility !== "hidden" &&
+    style.opacity !== "0"
+  );
+}
+
+function unionCaptureRects(rects: readonly DOMRect[]): KatexTokenRect {
+  const left = Math.min(...rects.map((rect) => rect.left));
+  const top = Math.min(...rects.map((rect) => rect.top));
+  const right = Math.max(...rects.map((rect) => rect.right));
+  const bottom = Math.max(...rects.map((rect) => rect.bottom));
+
+  return {
+    left,
+    top,
+    width: right - left,
+    height: bottom - top
+  };
+}
+
+const COMPUTED_CAPTURE_STYLE_PROPERTIES = [
+  "background-color",
+  "border-bottom-color",
+  "border-bottom-style",
+  "border-bottom-width",
+  "border-left-color",
+  "border-left-style",
+  "border-left-width",
+  "border-right-color",
+  "border-right-style",
+  "border-right-width",
+  "border-top-color",
+  "border-top-style",
+  "border-top-width",
+  "bottom",
+  "box-sizing",
+  "color",
+  "display",
+  "font-family",
+  "font-size",
+  "font-style",
+  "font-variant",
+  "font-weight",
+  "height",
+  "left",
+  "letter-spacing",
+  "line-height",
+  "margin-bottom",
+  "margin-left",
+  "margin-right",
+  "margin-top",
+  "max-height",
+  "max-width",
+  "min-height",
+  "min-width",
+  "opacity",
+  "overflow",
+  "padding-bottom",
+  "padding-left",
+  "padding-right",
+  "padding-top",
+  "position",
+  "right",
+  "text-align",
+  "text-decoration-color",
+  "text-decoration-line",
+  "text-decoration-style",
+  "text-decoration-thickness",
+  "top",
+  "transform",
+  "transform-origin",
+  "vertical-align",
+  "white-space",
+  "width"
+] as const;
+
+function inlineComputedCaptureStyles(source: Element, clone: Element): void {
+  if (clone instanceof HTMLElement || clone instanceof SVGElement) {
+    appendInlineStyle(clone, serializeComputedCaptureStyle(source));
+  }
+
+  const sourceChildren = Array.from(source.children);
+  const cloneChildren = Array.from(clone.children);
+
+  sourceChildren.forEach((sourceChild, index) => {
+    const cloneChild = cloneChildren[index];
+
+    if (cloneChild !== undefined) {
+      inlineComputedCaptureStyles(sourceChild, cloneChild);
+    }
+  });
+}
+
+function serializeComputedCaptureStyle(element: Element): string {
+  const style = window.getComputedStyle(element);
+
+  return COMPUTED_CAPTURE_STYLE_PROPERTIES.map(
+    (property) => `${property}:${style.getPropertyValue(property)}`
+  ).join(";");
+}
+
+function appendInlineStyle(element: Element, style: string): void {
+  const existingStyle = element.getAttribute("style");
+
+  element.setAttribute(
+    "style",
+    existingStyle === null || existingStyle.length === 0
+      ? style
+      : `${existingStyle};${style}`
+  );
 }
 
 function copyComputedTextStyle(element: Element): string {

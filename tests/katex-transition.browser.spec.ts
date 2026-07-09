@@ -1593,6 +1593,125 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
   await expect(page.locator('[data-testid="target"] .katex')).toBeVisible();
 });
 
+test("KaTeX texture atlas preserves nested fraction geometry for grouped captures", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.evaluate(async () => {
+    const katexAdapterPath = "/src/rendering/katex-adapter.ts";
+    const katexTextureAtlasPath = "/src/rendering/katex-texture-atlas.ts";
+    const [
+      { renderLatexToHtml },
+      { createKatexTextureAtlas, measureKatexTextureCaptureRect }
+    ] =
+      await Promise.all([
+        import(katexAdapterPath) as Promise<
+          typeof import("../src/rendering/katex-adapter.ts")
+        >,
+        import(katexTextureAtlasPath) as Promise<
+          typeof import("../src/rendering/katex-texture-atlas.ts")
+        >
+      ]);
+    const fixture = document.createElement("div");
+
+    fixture.style.position = "absolute";
+    fixture.style.left = "80px";
+    fixture.style.top = "80px";
+    fixture.innerHTML = renderLatexToHtml(String.raw`\frac{x^2 - 1}{x - 1}`);
+    document.body.append(fixture);
+
+    const fraction = fixture.querySelector<HTMLElement>(".katex-html .mfrac");
+
+    if (fraction === null) {
+      throw new Error("Expected KaTeX to render a fraction group.");
+    }
+
+    const rect = measureKatexTextureCaptureRect(fraction);
+    const atlas = await createKatexTextureAtlas(
+      [
+        {
+          id: "grouped-fraction",
+          text: "artifact:grouped-fraction",
+          signature: "mfrac",
+          rect,
+          localRect: {
+            left: 0,
+            top: 0,
+            width: rect.width,
+            height: rect.height
+          },
+          row: 0,
+          element: fraction
+        }
+      ],
+      {
+        maxTextureSize: 256,
+        pixelRatio: 1
+      }
+    );
+    const region = atlas.regions.get("grouped-fraction");
+    const page = region === undefined ? undefined : atlas.pages[region.page];
+    const context = page?.getContext("2d");
+
+    if (region === undefined || context == null) {
+      throw new Error("Expected a texture atlas region for the fraction group.");
+    }
+
+    const pixels = context.getImageData(
+      region.x,
+      region.y,
+      region.width,
+      region.height
+    ).data;
+    const rowOpaqueCounts = Array.from({ length: region.height }, (_, y) => {
+      let opaqueCount = 0;
+
+      for (let x = 0; x < region.width; x += 1) {
+        const alpha = pixels[(y * region.width + x) * 4 + 3] ?? 0;
+
+        if (alpha > 16) {
+          opaqueCount += 1;
+        }
+      }
+
+      return opaqueCount;
+    });
+    const significantRowThreshold = Math.max(1, Math.floor(region.width * 0.08));
+    const significantRows = rowOpaqueCounts
+      .map((opaqueCount, y) => ({ opaqueCount, y }))
+      .filter(({ opaqueCount }) => opaqueCount >= significantRowThreshold)
+      .map(({ y }) => y);
+
+    if (significantRows.length === 0) {
+      throw new Error("Expected the grouped fraction texture to contain pixels.");
+    }
+
+    const clusters: number[][] = [];
+
+    for (const y of significantRows) {
+      const current = clusters[clusters.length - 1];
+
+      if (current === undefined || y - (current[current.length - 1] ?? y) > 2) {
+        clusters.push([y]);
+      } else {
+        current.push(y);
+      }
+    }
+
+    const firstSignificantRow = significantRows[0] ?? 0;
+    const lastSignificantRow = significantRows[significantRows.length - 1] ?? 0;
+    const occupiedSpan = lastSignificantRow - firstSignificantRow + 1;
+
+    if (clusters.length < 2 || occupiedSpan < region.height * 0.55) {
+      throw new Error(
+        `Expected grouped fraction capture to preserve stacked geometry; got ${clusters.length} row clusters across ${occupiedSpan}/${region.height}px.`
+      );
+    }
+
+    fixture.remove();
+  });
+});
+
 declare global {
   interface Window {
     __kpEquationMotionSetProgress?: (
