@@ -120,13 +120,14 @@
     {
       "id": "task.theseus.dashboard-extension-protocol-v0",
       "title": "Define-extension-protocol",
-      "status": "complete",
-      "summary": "Dashboard extension protocol types and merge behavior landed."
+      "summary": "Dashboard extension protocol types and merge behavior landed.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-extension-runner-v0",
       "title": "Add-extension-runner",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Sequential dashboard extension runner landed."
     },
     {
       "id": "task.theseus.dashboard-extension-rows-v0",

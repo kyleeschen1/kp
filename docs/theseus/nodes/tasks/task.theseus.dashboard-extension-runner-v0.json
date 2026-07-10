@@ -1,0 +1,50 @@
+{
+  "id": "task.theseus.dashboard-extension-runner-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard extension runner",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "summary": "Added an async dashboard extension runner that applies host contributions sequentially with the latest normalized model.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-extension.ts",
+      "summary": "Adds runTheseusDashboardExtensions and keeps contribution merging in the protocol module."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-extension.test.ts",
+      "summary": "Covers sequential extension execution and latest-model context."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/dashboard-extension.test.ts",
+      "status": "passed",
+      "scope": "Focused dashboard extension runner test.",
+      "checkedAt": "2026-07-10T07:34:50.290Z"
+    },
+    {
+      "command": "npm run test -- src/dashboard-extension.test.ts src/dashboard-data.test.ts src/dashboard-data-builder.test.ts src/dashboard-html.test.ts src/dashboard-client.test.ts",
+      "status": "passed",
+      "scope": "Adjacent dashboard tests.",
+      "checkedAt": "2026-07-10T07:34:50.303Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Theseus package TypeScript check.",
+      "checkedAt": "2026-07-10T07:34:50.315Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T07:34:50.328Z",
+      "scope": "KP Theseus graph validation."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added an async dashboard extension runner that applies host contributions sequentially with the latest normalized model."
+  }
+}
