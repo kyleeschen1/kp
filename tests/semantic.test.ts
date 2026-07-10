@@ -44,6 +44,10 @@ import {
 import { createMatrixObject, identityMatrix } from "../src/semantic/matrix.ts";
 import { createExpressionObject } from "../src/semantic/expression-object.ts";
 import {
+  createSourceFileObject,
+  sourceFileLines
+} from "../src/semantic/source-file.ts";
+import {
   listSemanticComputationProtocols,
   semanticEvaluate,
   semanticMatrixForm,
@@ -180,6 +184,57 @@ test("createExpressionObject creates a semantic expression object", () => {
       })
     ),
     []
+  );
+});
+
+test("createSourceFileObject creates a programming semantic object shell", () => {
+  const source = createSourceFileObject({
+    id: "source-file.add",
+    label: "add.ts",
+    language: "typescript",
+    path: "src/add.ts",
+    revisionId: "rev-1",
+    sourceText: "export function add(a: number, b: number) {\n  return a + b;\n}\n"
+  });
+
+  assert.deepEqual(source, {
+    id: "source-file.add",
+    type: "source-file",
+    label: "add.ts",
+    language: "typescript",
+    path: "src/add.ts",
+    revisionId: "rev-1",
+    sourceText: "export function add(a: number, b: number) {\n  return a + b;\n}\n",
+    lineCount: 4
+  });
+  assert.deepEqual(sourceFileLines(source), [
+    "export function add(a: number, b: number) {",
+    "  return a + b;",
+    "}",
+    ""
+  ]);
+  assert.deepEqual(
+    validateKpDocument(
+      createKpDocument({
+        id: "source-file-doc",
+        title: "Source file",
+        objects: [source]
+      })
+    ),
+    []
+  );
+});
+
+test("createSourceFileObject rejects empty source text", () => {
+  assert.throws(
+    () =>
+      createSourceFileObject({
+        id: "source-file.empty",
+        label: "empty.ts",
+        language: "typescript",
+        sourceText: ""
+      }),
+    /source text must not be empty/
   );
 });
 

@@ -193,6 +193,7 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
     case "axis-3d":
     case "curve-2d":
     case "curve-3d":
+    case "source-file":
     case "surface-3d":
       return "";
     case "expression":

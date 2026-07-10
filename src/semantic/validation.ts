@@ -3,6 +3,7 @@ import {
   GRAPH_3D_SURFACE_QUALITY_IDS,
   GRAPH_3D_VIEW_MODE_IDS
 } from "./graph.ts";
+import { sourceFileLines } from "./source-file.ts";
 
 export interface ValidationIssue {
   path: string;
@@ -47,6 +48,8 @@ function validateObject(
       return validateLinearMapObject(object, path, objectsById);
     case "matrix":
       return validateMatrixObject(object, path);
+    case "source-file":
+      return validateSourceFileObject(object, path);
     case "surface-3d":
       return validateSurface3DObject(object, path, objectsById);
   }
@@ -467,6 +470,60 @@ function validateMatrixObject(
   }
 
   return [];
+}
+
+function validateSourceFileObject(
+  object: Extract<KpSemanticObject, { type: "source-file" }>,
+  path: string
+): readonly ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+
+  if (object.label.trim().length === 0) {
+    issues.push({
+      path: `${path}.label`,
+      message: `SourceFile ${object.id} label must not be empty.`
+    });
+  }
+
+  if (object.language.trim().length === 0) {
+    issues.push({
+      path: `${path}.language`,
+      message: `SourceFile ${object.id} language must not be empty.`
+    });
+  }
+
+  if (object.sourceText.trim().length === 0) {
+    issues.push({
+      path: `${path}.sourceText`,
+      message: `SourceFile ${object.id} source text must not be empty.`
+    });
+  }
+
+  if (object.lineCount !== sourceFileLines(object).length) {
+    issues.push({
+      path: `${path}.lineCount`,
+      message: `SourceFile ${object.id} lineCount must match source text.`
+    });
+  }
+
+  if (object.path !== undefined && object.path.trim().length === 0) {
+    issues.push({
+      path: `${path}.path`,
+      message: `SourceFile ${object.id} path must not be empty.`
+    });
+  }
+
+  if (
+    object.revisionId !== undefined &&
+    object.revisionId.trim().length === 0
+  ) {
+    issues.push({
+      path: `${path}.revisionId`,
+      message: `SourceFile ${object.id} revisionId must not be empty.`
+    });
+  }
+
+  return issues;
 }
 
 function validateSampleCount(

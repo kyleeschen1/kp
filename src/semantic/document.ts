@@ -15,6 +15,7 @@ import type {
 import type { ExpressionObject } from "./expression-object.ts";
 import type { LinearMapObject } from "./linear-map.ts";
 import type { MatrixObject } from "./matrix.ts";
+import type { SourceFileObject } from "./source-file.ts";
 
 export interface KpDocument {
   id: string;
@@ -35,6 +36,7 @@ export type KpSemanticObject =
   | LatexComparisonObject
   | LatexFormObject
   | LinearMapObject
+  | SourceFileObject
   | Surface3DObject
   | MatrixObject;
 

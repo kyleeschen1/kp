@@ -1,0 +1,74 @@
+{
+  "id": "next.kp.source-file-semantic-object-v0",
+  "kind": "next-action",
+  "title": "Add programming SourceFile semantic object shell",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/source-file.ts",
+      "summary": "Defines SourceFile semantic object creation, source text preservation, line counting, and line splitting."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/document.ts",
+      "summary": "Adds SourceFileObject to the KpSemanticObject union."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/validation.ts",
+      "summary": "Validates SourceFile label, language, source text, line count, path, and revision metadata."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/computation-protocols.ts",
+      "summary": "Marks SourceFile as non-computational for v0 to preserve exhaustive protocol switches."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/editor.ts",
+      "summary": "Treats SourceFile as a non-rendered semantic object in the current editor preview shell."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic.test.ts",
+      "summary": "Covers SourceFile creation, line counting, document validation, and empty-source rejection."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.source-file-semantic-object-v0.json",
+      "summary": "Materializes the approved SourceFile semantic object next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the SourceFile semantic object slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic.test.ts",
+      "status": "passed",
+      "scope": "focused semantic object tests",
+      "checkedAt": "2026-07-10T23:06:00.661Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T23:06:00.689Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T23:06:00.711Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a programming SourceFile semantic object shell with document validation and exhaustiveness wiring."
+  },
+  "summary": "Added a programming SourceFile semantic object shell with document validation and exhaustiveness wiring."
+}

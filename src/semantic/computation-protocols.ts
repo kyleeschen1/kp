@@ -218,6 +218,7 @@ export function listSemanticComputationProtocols(
     case "axis-2d":
     case "axis-3d":
     case "latex-comparison":
+    case "source-file":
       return [];
   }
 }
@@ -250,6 +251,7 @@ export function semanticToLatex(
     case "graph-2d":
     case "graph-3d":
     case "latex-comparison":
+    case "source-file":
       return undefined;
   }
 }
