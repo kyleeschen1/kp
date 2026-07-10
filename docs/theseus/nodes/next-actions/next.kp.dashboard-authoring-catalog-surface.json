@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.dashboard-authoring-catalog-surface",
+  "kind": "next-action",
+  "title": "Promote dashboard to KP authoring catalog",
+  "status": "ready",
+  "domain": "kp.dashboard",
+  "summary": "Make the project dashboard a KP-first surface for semantic objects, transformations, visual motifs, renderers/views, samples/cards, coverage, blockers, maturity, and searchable authoring state."
+}

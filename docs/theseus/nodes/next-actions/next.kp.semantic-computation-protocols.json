@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.semantic-computation-protocols",
+  "kind": "next-action",
+  "title": "Add semantic computation protocols",
+  "status": "ready",
+  "domain": "kp.semantic-api",
+  "summary": "Define protocols such as toLatex, evaluate, differentiate, matrixForm, graphForm, numericSample, solveStep, and explainTransform for semantic objects that qualify."
+}

@@ -15,12 +15,19 @@
   "decisions": [
     "decision.kp.use-sibling-theseus-wrapper",
     "decision.kp.radical-artifact-dom-owned-motion",
-    "decision.kp.headless-boundary-catalog"
+    "decision.kp.headless-boundary-catalog",
+    "decision.kp.semantic-animation-runtime-roadmap"
   ],
   "nextActions": [
     "next.kp.semantic-object-transform-catalog",
     "next.kp.semantic-transition-runtime",
-    "next.kp.radical-artifact-frame-phase-routing"
+    "next.kp.radical-artifact-frame-phase-routing",
+    "next.kp.visual-motif-module-api",
+    "next.kp.animation-kernel-protocol",
+    "next.kp.katex-transform-library-foundation",
+    "next.kp.graph-animation-clock-protocol",
+    "next.kp.semantic-computation-protocols",
+    "next.kp.dashboard-authoring-catalog-surface"
   ],
   "progress": {
     "state": "partial",

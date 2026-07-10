@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.graph-animation-clock-protocol",
+  "kind": "next-action",
+  "title": "Align graph animations to shared clock",
+  "status": "ready",
+  "domain": "kp.graph",
+  "summary": "Bring graph, surface, vector, curve, matrix-transform, and projection animations onto the same sampled frame lifecycle used by equation motifs, with SVG/WebGL renderers consuming renderer-neutral frames."
+}

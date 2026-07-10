@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.katex-transform-library-foundation",
+  "kind": "next-action",
+  "title": "Grow KaTeX transform library foundation",
+  "status": "ready",
+  "domain": "kp.katex",
+  "summary": "Expand the current fixture taxonomy into reusable transform definitions for fractions, radicals, exponents, functions, logs/trig, distribution/factoring, matrices, sums, products, integrals, limits, accents, bars, norms, and absolute values."
+}

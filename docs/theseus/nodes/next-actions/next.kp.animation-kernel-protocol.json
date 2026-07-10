@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.animation-kernel-protocol",
+  "kind": "next-action",
+  "title": "Define shared animation kernel protocol",
+  "status": "ready",
+  "domain": "kp.animation-runtime",
+  "summary": "Make the SemanticObject -> SemanticTransformation -> MotionPlan -> sampled frame -> renderer protocol explicit, typed, and renderer-neutral before adding more one-off animation behavior."
+}

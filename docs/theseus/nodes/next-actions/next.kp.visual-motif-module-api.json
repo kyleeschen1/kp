@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.visual-motif-module-api",
+  "kind": "next-action",
+  "title": "Extract visual motif module API",
+  "status": "ready",
+  "domain": "kp.animation-runtime",
+  "summary": "Create a reusable visual motif module/API for vanish, collapse/reveal, artifact replace, wrap/unwrap, layout shift, focus, compare, trace, and highlight-flow so the equation demo controller stops owning semantic-free timing logic."
+}

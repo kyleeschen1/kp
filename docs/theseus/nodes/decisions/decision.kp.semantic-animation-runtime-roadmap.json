@@ -1,0 +1,48 @@
+{
+  "id": "decision.kp.semantic-animation-runtime-roadmap",
+  "kind": "decision",
+  "title": "Prioritize KP semantic animation runtime roadmap",
+  "status": "resolved",
+  "domain": "kp.roadmap",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-plan.ts",
+      "summary": "Current semantic transformation to visual motif and motion plan boundary."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-sampler.ts",
+      "summary": "Current shared clock sampler for token poses and visual motif phases."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-transform-fixtures.ts",
+      "summary": "Current KaTeX transform fixture taxonomy to grow into a broader transform library."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/graph-transitions.ts",
+      "summary": "Current graph surface transition model to align with the shared animation clock protocol."
+    },
+    {
+      "kind": "file",
+      "path": "src/math/expression.ts",
+      "summary": "Executable expression layer for semantic objects that can compute, differentiate, and render."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Current dashboard seed data for work, gallery, report cards, and animation readiness."
+    }
+  ],
+  "summary": "Upcoming KP direction: make the semantic animation runtime the center of the project. Stabilize the SemanticObject -> SemanticTransformation -> MotionPlan -> sampled frame -> renderer protocol; promote visual motifs to first-class reusable objects; grow the KaTeX transform library; bring graph animations onto the same clock and lifecycle model; add computation protocols for semantic objects that qualify; and make the dashboard the KP-first authoring/catalog surface.",
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T17:19:49.922Z",
+      "scope": "KP roadmap direction encoded in workflow queue and graph validates."
+    }
+  ]
+}
