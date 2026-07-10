@@ -23,7 +23,7 @@ export function renderKpTutorialCardHtmlShell(
     `      <div class="kp-tutorial-card__slot" data-kp-tutorial-graph-slot data-kp-tutorial-graph-frame>${renderGraphFrameSummary(frame)}</div>`,
     `    </section>`,
     `  </div>`,
-    `  <div class="kp-tutorial-card__controls" data-kp-tutorial-controls data-kp-tutorial-control-count="${frame.cardFrame.layoutFrame.controls.length}"></div>`,
+    `  <div class="kp-tutorial-card__controls" data-kp-tutorial-controls data-kp-tutorial-control-count="${frame.cardFrame.layoutFrame.controls.length}">${renderControls(frame)}</div>`,
     `</section>`
   ].join("\n");
 }
@@ -51,6 +51,32 @@ function graphVertexCount(frame: LinearSolveTutorialCardSampleFrame): number {
     (total, channel) => total + channel.vertices.length,
     0
   );
+}
+
+function renderControls(frame: LinearSolveTutorialCardSampleFrame): string {
+  return frame.cardFrame.layoutFrame.controls
+    .map((control) => renderControl(frame, control.controlId, control.kind))
+    .join("");
+}
+
+function renderControl(
+  frame: LinearSolveTutorialCardSampleFrame,
+  controlId: string,
+  kind: string
+): string {
+  const attrs = [
+    `data-kp-tutorial-control`,
+    `data-kp-tutorial-control-id="${escapeAttr(controlId)}"`,
+    `data-kp-tutorial-control-kind="${escapeAttr(kind)}"`,
+    `data-kp-tutorial-control-progress="${escapeAttr(String(frame.progress))}"`,
+    `data-kp-tutorial-control-beat="${escapeAttr(String(frame.cardFrame.parentTimelineFrame.beat))}"`
+  ].join(" ");
+
+  if (kind === "scrubber") {
+    return `<input class="kp-tutorial-card__control" type="range" min="0" max="1" step="0.001" value="${escapeAttr(String(frame.progress))}" ${attrs} />`;
+  }
+
+  return `<button class="kp-tutorial-card__control" type="button" ${attrs}>${escapeHtml(kind)}</button>`;
 }
 
 function escapeHtml(value: string): string {

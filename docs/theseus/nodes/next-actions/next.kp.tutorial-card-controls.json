@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.tutorial-card-controls",
+  "kind": "next-action",
+  "title": "Add shared scrubber controls for card shell",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/card-html-shell.ts",
+      "summary": "Renders tutorial-card controls from synchronized layout frame controls with progress and beat metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-html-shell.test.ts",
+      "summary": "Covers rendered scrubber control id, kind, progress, and beat attributes."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-controls.json",
+      "summary": "Materializes the approved tutorial-card controls next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the controls slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-html-shell.test.ts tests/linear-solve-tutorial-card-sample.test.ts",
+      "status": "passed",
+      "scope": "focused tutorial card controls shell tests",
+      "checkedAt": "2026-07-10T22:45:37.770Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:45:37.840Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:45:37.875Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added shared card controls to the tutorial card HTML shell, with scrubber/buttons bound to the parent timeline progress and beat."
+  },
+  "summary": "Added shared card controls to the tutorial card HTML shell, with scrubber/buttons bound to the parent timeline progress and beat."
+}

@@ -27,6 +27,10 @@ test("tutorial card HTML shell renders synchronized panel slots", () => {
   assert.match(html, /data-kp-tutorial-graph-vertex-count="441"/);
   assert.match(html, /data-kp-tutorial-graph-frame/);
   assert.match(html, /data-kp-tutorial-controls/);
+  assert.match(html, /data-kp-tutorial-control-id="control\.linear-solve\.scrubber"/);
+  assert.match(html, /data-kp-tutorial-control-kind="scrubber"/);
+  assert.match(html, /data-kp-tutorial-control-progress="0\.5"/);
+  assert.match(html, /data-kp-tutorial-control-beat="25"/);
 });
 
 test("tutorial card HTML shell escapes labels and includes diagnostics state", () => {

@@ -34,7 +34,7 @@
     "Do not expand into full programming execution traces before SourceFile selectors exist."
   ],
   "goal": "Run the approved tutorial-card runtime loop from KpTutorialCardManifest to a live synchronized equation and graph card.",
-  "target": "next.kp.tutorial-card-graph-panel",
+  "target": "next.kp.tutorial-card-controls",
   "runMode": "run",
   "maxSlices": 25,
   "commitCadence": "Commit after each verified slice.",
@@ -113,7 +113,7 @@
     {
       "id": "next.kp.tutorial-card-controls",
       "title": "Add shared scrubber controls for card shell",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.tutorial-card-rewind-verification",
