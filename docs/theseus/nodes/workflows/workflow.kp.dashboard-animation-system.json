@@ -16,8 +16,25 @@
     "decision.kp.use-sibling-theseus-wrapper"
   ],
   "nextActions": [
-    "next.kp.live-dashboard-sample-previews",
     "next.kp.semantic-object-transform-catalog",
     "next.kp.semantic-transition-runtime"
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Reusable dashboard v1 loop closed with dashboard core, host adapter hooks, preview links, actions, and cross-project smoke in place; active queue now continues with semantic object catalog and reversible transformation runtime work."
+  },
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- long-loop-report --limit 30",
+      "status": "passed",
+      "scope": "Closeout report shows no active run contracts and next slice next.kp.semantic-object-transform-catalog.",
+      "checkedAt": "2026-07-10T08:49:09.047Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T08:49:09.069Z",
+      "scope": "KP graph valid after closeout queue compaction and run-contract closure."
+    }
   ]
 }

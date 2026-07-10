@@ -2,7 +2,7 @@
   "id": "run-contract.kp.theseus-dashboard-v1-loop-2026-07-10",
   "kind": "run-contract",
   "title": "Theseus reusable dashboard v1 loop",
-  "status": "ready",
+  "status": "resolved",
   "sourceRefs": [
     {
       "kind": "file",
@@ -185,7 +185,9 @@
     {
       "id": "workflow.kp.dashboard-animation-system",
       "title": "Closeout-records-docs-and-next-queue",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Closed reusable dashboard v1 loop records, compacted the active workflow queue, and left semantic catalog/runtime actions as the next work."
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }
