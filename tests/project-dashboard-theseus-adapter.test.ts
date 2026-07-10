@@ -1,0 +1,60 @@
+import { strict as assert } from "node:assert";
+import { execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import test from "node:test";
+
+import {
+  createKpTheseusDashboardExtensionPayload
+} from "../src/project-dashboard/theseus-adapter.ts";
+
+const repoRoot = fileURLToPath(new URL("../", import.meta.url));
+
+test("KP Theseus dashboard extension payload exposes gallery and API rows", () => {
+  const payload = createKpTheseusDashboardExtensionPayload();
+  const sections = new Map(
+    payload.contribution.sections?.map((section) => [section.id, section])
+  );
+  const galleryRows = sections.get("kp.gallery")?.rows ?? [];
+  const apiRows = sections.get("kp.api")?.rows ?? [];
+
+  assert.equal(payload.extension.id, "kp");
+  assert.equal(payload.extension.title, "Kinetic Press");
+  assert.equal(payload.contribution.health?.[0]?.status, "ok");
+  assert.ok(
+    galleryRows.some(
+      (row) =>
+        row.id === "kp.gallery.animation-cancelation" &&
+        row.kind === "object" &&
+        row.tags?.includes("animation")
+    )
+  );
+  assert.ok(
+    apiRows.some(
+      (row) => row.id === "kp.api.semantic-matrix" && row.kind === "api"
+    )
+  );
+});
+
+test("KP Theseus dashboard extension command writes JSON payload", () => {
+  const output = execFileSync(
+    process.execPath,
+    [
+      "--disable-warning=ExperimentalWarning",
+      "scripts/project-dashboard-extension.ts"
+    ],
+    {
+      cwd: repoRoot,
+      encoding: "utf8"
+    }
+  );
+  const payload = JSON.parse(output) as ReturnType<
+    typeof createKpTheseusDashboardExtensionPayload
+  >;
+
+  assert.equal(payload.extension.id, "kp");
+  assert.ok(
+    payload.contribution.sections?.some(
+      (section) => section.id === "kp.gallery" && section.rows.length > 0
+    )
+  );
+});

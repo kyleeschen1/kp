@@ -10,6 +10,7 @@
     "dev": "node --disable-warning=ExperimentalWarning scripts/dev.ts",
     "dev:client": "vite",
     "dev:server": "node --disable-warning=ExperimentalWarning --watch server/main.ts",
+    "dashboard:extension": "node --disable-warning=ExperimentalWarning scripts/project-dashboard-extension.ts",
     "theseus": "node ../theseus/bin/theseus.mjs",
     "build": "npm run typecheck && vite build",
     "typecheck": "tsc --project tsconfig.app.json --noEmit && tsc --project tsconfig.node.json --noEmit && tsc --project tsconfig.test.json --noEmit",

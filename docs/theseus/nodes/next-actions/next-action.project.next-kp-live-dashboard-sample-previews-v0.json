@@ -1,0 +1,103 @@
+{
+  "id": "next-action.project.next-kp-live-dashboard-sample-previews-v0",
+  "kind": "next-action",
+  "title": "Add-KP-dashboard-extension-command",
+  "status": "resolved",
+  "summary": "Added a KP dashboard extension JSON command that exports gallery and API rows for the reusable Theseus dashboard protocol.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.theseus-dashboard-v1-loop-2026-07-10.json",
+      "summary": "Run contract whose stored slice next.kp.live-dashboard-sample-previews was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP workflow that owns the dashboard-backed semantic animation system queue."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/kp/src/project-dashboard/theseus-adapter.ts",
+      "summary": "Builds KP extension metadata, contribution sections, health, gallery rows, and API rows as JSON-compatible dashboard data."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/kp/scripts/project-dashboard-extension.ts",
+      "summary": "CLI entry point that writes the KP dashboard extension payload as JSON."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/kp/tests/project-dashboard-theseus-adapter.test.ts",
+      "summary": "Covers the adapter payload and command JSON output."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/kp/package.json",
+      "summary": "Registers npm run dashboard:extension."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.theseus-dashboard-v1-loop-2026-07-10",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Add-KP-dashboard-extension-command can be completed inside Theseus reusable dashboard v1 loop."
+  ],
+  "allowedWork": [
+    "Implement the approved reusable Theseus dashboard v1 slices and KP adapter slices.",
+    "Commit after each verified slice."
+  ],
+  "disallowedWork": [
+    "Do not broaden into unrelated A+ gate cleanup unless it directly blocks the dashboard loop.",
+    "Do not import KP, KaTeX, Three.js, or host rendering code into the Theseus package."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "Focused KP dashboard extension adapter tests.",
+      "checkedAt": "2026-07-10T07:48:28.728Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full KP Node test suite.",
+      "checkedAt": "2026-07-10T07:48:28.747Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "KP TypeScript checks.",
+      "checkedAt": "2026-07-10T07:48:28.759Z"
+    },
+    {
+      "command": "npm run dashboard:extension",
+      "status": "passed",
+      "scope": "Runtime JSON payload command.",
+      "checkedAt": "2026-07-10T07:48:28.768Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T07:48:28.774Z",
+      "scope": "KP Theseus graph validation."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a KP dashboard extension JSON command that exports gallery and API rows for the reusable Theseus dashboard protocol."
+  }
+}

@@ -132,13 +132,20 @@
     {
       "id": "task.theseus.dashboard-extension-rows-v0",
       "title": "Add-extension-rows",
-      "status": "complete",
-      "summary": "Loaded extension rows landed."
+      "summary": "Loaded extension rows landed.",
+      "status": "complete"
     },
     {
       "id": "next.kp.live-dashboard-sample-previews",
       "title": "Add-KP-dashboard-extension-command",
-      "status": "planned"
+      "summary": "Materialized as next-action.project.next-kp-live-dashboard-sample-previews-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.project.next-kp-live-dashboard-sample-previews-v0",
+      "title": "Add-KP-dashboard-extension-command",
+      "summary": "Materialized from stored run-contract slice next.kp.live-dashboard-sample-previews in Theseus reusable dashboard v1 loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.live-dashboard-sample-previews",
