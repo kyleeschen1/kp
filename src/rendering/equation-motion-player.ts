@@ -1,6 +1,6 @@
 import type { EquationMotionPlan } from "./equation-motion-plan.ts";
 import {
-  sampleEquationMotion,
+  createEquationMotionSampler,
   type EquationMotionFrame
 } from "./equation-motion-sampler.ts";
 
@@ -23,10 +23,11 @@ export function createEquationMotionPlayer(
   plan: EquationMotionPlan,
   renderer: EquationMotionPlayerRenderer
 ): EquationMotionPlayer {
+  const sampler = createEquationMotionSampler(plan);
   let progress = 0;
 
   const setProgress = (nextProgress: number): void => {
-    const frame = sampleEquationMotion(plan, nextProgress);
+    const frame = sampler.sample(nextProgress);
     renderer.render(frame);
     progress = frame.progress;
   };
@@ -37,7 +38,7 @@ export function createEquationMotionPlayer(
   ): void => {
     assertPositiveIntegerSteps(options.steps);
 
-    const targetFrame = sampleEquationMotion(plan, targetProgress);
+    const targetFrame = sampler.sample(targetProgress);
     const startProgress = progress;
     const delta = targetFrame.progress - startProgress;
 

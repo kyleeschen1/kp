@@ -29,28 +29,46 @@ export interface EquationMotionSamplerOptions {
   readonly timeline?: SemanticBeatTimeline | undefined;
 }
 
-export function sampleEquationMotion(
+export interface EquationMotionSampler {
+  readonly plan: EquationMotionPlan;
+  sample(progress: number): EquationMotionFrame;
+}
+
+export function createEquationMotionSampler(
   plan: EquationMotionPlan,
-  progress: number,
   options: EquationMotionSamplerOptions = {}
-): EquationMotionFrame {
-  const frameProgress = clamp01(progress);
+): EquationMotionSampler {
   const visualMotifTimeline = createEquationVisualMotifTimeline(
     plan,
     options.timeline ?? linearEquationDemoBeatTimeline
   );
 
   return {
-    progress: frameProgress,
-    tokens: plan.tracks.map((track) => ({
-      tokenId: track.tokenId,
-      pose: sampleTrackPose(track, frameProgress)
-    })),
-    visualMotifs: sampleEquationVisualMotifTimeline(
-      visualMotifTimeline,
-      frameProgress
-    ).motifs
+    plan,
+    sample(progress) {
+      const frameProgress = clamp01(progress);
+
+      return {
+        progress: frameProgress,
+        tokens: plan.tracks.map((track) => ({
+          tokenId: track.tokenId,
+          pose: sampleTrackPose(track, frameProgress)
+        })),
+        visualMotifs: sampleEquationVisualMotifTimeline(
+          visualMotifTimeline,
+          frameProgress
+        ).motifs
+      };
+    }
   };
+}
+
+export function sampleEquationMotion(
+  plan: EquationMotionPlan,
+  progress: number,
+  options: EquationMotionSamplerOptions = {}
+): EquationMotionFrame {
+  return createEquationMotionSampler(plan, options).sample(progress);
 }
 
 function sampleTrackPose(

@@ -8,6 +8,7 @@ import {
   type EquationMotionPlan
 } from "../src/rendering/equation-motion-plan.ts";
 import {
+  createEquationMotionSampler,
   sampleEquationMotion,
   type EquationMotionFrame,
   type EquationMotionFrameToken
@@ -17,6 +18,7 @@ import {
   roleAwareMotionPrimitiveDescriptors
 } from "../src/rendering/role-aware-motion-primitives.ts";
 import {
+  compileSemanticBeatTimeline,
   createSemanticBeatMotionTrack,
   easedProgressBetweenSemanticBeat,
   linearEquationDemoBeatTimeline,
@@ -242,6 +244,58 @@ test("sampleEquationMotion returns visual motif phases on the same clock", () =>
   assert.equal(phaseById.get("cancel-meet")?.progress, 1);
   assert.equal(phaseById.get("cancel-collapse")?.progress, 0.5);
   assertNearlyEqual(phaseById.get("cancel-collapse")?.easedProgress ?? 0, 0.75);
+});
+
+test("createEquationMotionSampler validates motif beat coverage at construction", () => {
+  const transition = createEquationOperationTransition({
+    sourceLatex: "x + 3 - 3 = 7 - 3",
+    operation: {
+      kind: "simplifySide",
+      side: "left",
+      rule: "cancel-additive-inverse"
+    }
+  });
+  const plan = createEquationMotionPlan(transition);
+  const brokenTimeline = compileSemanticBeatTimeline({
+    id: "missing-cancel-collapse",
+    beatCount: linearEquationDemoBeatTimeline.beatCount,
+    beats: linearEquationDemoBeatTimeline.beats.filter(
+      (beat) => beat.id !== "cancel-collapse"
+    )
+  });
+
+  assert.throws(
+    () => createEquationMotionSampler(plan, { timeline: brokenTimeline }),
+    /Unknown semantic beat cancel-collapse/
+  );
+});
+
+test("createEquationMotionSampler returns independent motif frame objects", () => {
+  const transition = createEquationOperationTransition({
+    sourceLatex: "x + 3 - 3 = 7 - 3",
+    operation: {
+      kind: "simplifySide",
+      side: "left",
+      rule: "cancel-additive-inverse"
+    }
+  });
+  const sampler = createEquationMotionSampler(
+    createEquationMotionPlan(transition)
+  );
+  const first = sampler.sample(0.45);
+  const second = sampler.sample(0.45);
+  const firstMotif = first.visualMotifs.find(
+    (candidate) => candidate.kind === "cancelation"
+  );
+  const secondMotif = second.visualMotifs.find(
+    (candidate) => candidate.kind === "cancelation"
+  );
+  assert.ok(firstMotif);
+  assert.ok(secondMotif);
+
+  (firstMotif.phases[1] as { progress: number }).progress = 0;
+
+  assert.equal(secondMotif.phases[1]?.progress, 0.5);
 });
 
 test("sampleEquationMotion samples generalized additive inverse cancelation", () => {

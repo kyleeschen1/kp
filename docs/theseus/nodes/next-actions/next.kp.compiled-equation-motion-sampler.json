@@ -1,0 +1,78 @@
+{
+  "id": "next.kp.compiled-equation-motion-sampler",
+  "kind": "next-action",
+  "title": "Precompile equation motion sampling",
+  "status": "resolved",
+  "domain": "kp.animation-runtime",
+  "summary": "Equation motion sampling now has a compiled sampler that pre-indexes motif timelines and is used by the player and public animation session.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-sampler.ts",
+      "summary": "Adds createEquationMotionSampler and keeps sampleEquationMotion as a one-shot wrapper."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-player.ts",
+      "summary": "Routes equation playback through a compiled sampler instead of rebuilding sampling context per frame."
+    },
+    {
+      "kind": "file",
+      "path": "src/public/kp-animation-sdk.ts",
+      "summary": "Uses a compiled sampler for public session getFrame and returned setProgress frames."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-sampler.test.ts",
+      "summary": "Covers construction-time beat validation and independent motif frame samples from the compiled sampler."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-sampler.test.ts",
+      "status": "passed",
+      "scope": "Focused equation motion sampler tests.",
+      "checkedAt": "2026-07-10T09:50:49.545Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-player.test.ts",
+      "status": "passed",
+      "scope": "Focused equation motion player tests.",
+      "checkedAt": "2026-07-10T09:50:49.564Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-sdk.test.ts",
+      "status": "passed",
+      "scope": "Focused public animation SDK tests.",
+      "checkedAt": "2026-07-10T09:50:49.582Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "App, node, and test TypeScript projects.",
+      "checkedAt": "2026-07-10T09:50:49.605Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full Node test suite.",
+      "checkedAt": "2026-07-10T09:50:49.626Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation.",
+      "checkedAt": "2026-07-10T09:50:49.642Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-10T09:50:49.655Z",
+      "scope": "Production build and typecheck; Vite large chunk warning remains."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Equation motion sampling now has a compiled sampler that pre-indexes motif timelines and is used by the player and public animation session."
+  }
+}

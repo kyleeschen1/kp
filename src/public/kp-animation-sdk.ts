@@ -11,7 +11,7 @@ import {
   type EquationMotionPlayer
 } from "../rendering/equation-motion-player.ts";
 import {
-  sampleEquationMotion,
+  createEquationMotionSampler,
   type EquationMotionFrame
 } from "../rendering/equation-motion-sampler.ts";
 import {
@@ -94,6 +94,7 @@ export function createKpEquationAnimationSessionFromEntry(
   }
 
   const plan = createEquationMotionPlan(transition);
+  const sampler = createEquationMotionSampler(plan);
   const player = createEquationMotionPlayer(plan, {
     render: options.render ?? (() => undefined)
   });
@@ -104,7 +105,7 @@ export function createKpEquationAnimationSessionFromEntry(
     transitionIndex,
     player,
     setProgress(progress) {
-      const frame = sampleEquationMotion(plan, progress);
+      const frame = sampler.sample(progress);
 
       player.setProgress(frame.progress);
 
@@ -114,7 +115,7 @@ export function createKpEquationAnimationSessionFromEntry(
       return player.getProgress();
     },
     getFrame(progress = player.getProgress()) {
-      return sampleEquationMotion(plan, progress);
+      return sampler.sample(progress);
     },
     getTokenMetadata(tokenOrMotionId) {
       return findKpEquationMotionTokenMetadata(plan, tokenOrMotionId);
@@ -196,4 +197,3 @@ function motionIdFromEvent(event: Event): string | undefined {
     "kpMotionId"
   ];
 }
-
