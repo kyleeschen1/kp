@@ -1,0 +1,54 @@
+{
+  "id": "decision.kp.headless-boundary-catalog",
+  "kind": "decision",
+  "title": "Expose KP headless boundary catalogue",
+  "status": "resolved",
+  "domain": "kp.architecture",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/architecture/headless-kernel-boundaries.ts",
+      "line": 1,
+      "summary": "Exports KP's host boundary conformance catalogue for Theseus A+ boundary reports."
+    },
+    {
+      "kind": "file",
+      "path": "tests/headless-kernel-boundaries.test.ts",
+      "line": 1,
+      "summary": "Verifies catalogue coverage, rationale, neutral/adaptor split, and listed file existence."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/headless-kernel-boundaries.test.ts",
+      "status": "passed",
+      "scope": "focused KP boundary catalogue test",
+      "checkedAt": "2026-07-10T12:31:43.378Z"
+    },
+    {
+      "command": "npm run theseus -- a-plus-report --skip-filesystem",
+      "status": "passed",
+      "scope": "A+ report loads KP boundary catalogue and reports boundary gate pass",
+      "checkedAt": "2026-07-10T12:31:49.625Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full Node test suite with boundary catalogue coverage",
+      "checkedAt": "2026-07-10T12:31:55.860Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "KP app, node, and test TypeScript projects",
+      "checkedAt": "2026-07-10T12:32:01.653Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T12:32:07.077Z",
+      "scope": "Theseus graph validation before decision commit"
+    }
+  ],
+  "summary": "Resolved: KP now exports src/architecture/headless-kernel-boundaries.ts so Theseus A+ boundary reports load a project-owned catalogue. The boundary gate passes; broader A+ report status remains failed because review-card, safety, and legacy Spindle-specific gates are still separate unresolved work."
+}

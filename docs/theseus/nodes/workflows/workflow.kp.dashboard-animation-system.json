@@ -14,7 +14,8 @@
   ],
   "decisions": [
     "decision.kp.use-sibling-theseus-wrapper",
-    "decision.kp.radical-artifact-dom-owned-motion"
+    "decision.kp.radical-artifact-dom-owned-motion",
+    "decision.kp.headless-boundary-catalog"
   ],
   "nextActions": [
     "next.kp.semantic-object-transform-catalog",
