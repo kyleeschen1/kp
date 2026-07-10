@@ -115,11 +115,14 @@ export function createKatexArtifactSeedRevealFrame(
         plan.sourceMotion.collapseEnd + delay,
         localProgress
       );
-      const sourceOpacity = 1 - phaseProgress(
-        plan.sourceMotion.fadeStart + delay * 0.35,
-        plan.sourceMotion.fadeEnd + delay * 0.35,
-        localProgress
+      const sourceFadeStart = Math.max(
+        plan.sourceMotion.fadeStart,
+        plan.sourceMotion.collapseEnd + delay
       );
+      const sourceOpacity =
+        collapseProgress < 1
+          ? 1
+          : 1 - phaseProgress(sourceFadeStart, 1, localProgress);
 
       if (sourceOpacity <= 0.001) {
         continue;
@@ -163,8 +166,9 @@ export function createKatexArtifactSeedRevealFrame(
         plan.targetMotion.revealEnd,
         localProgress
       );
+      const opacity = shouldDissolve ? localProgress : revealProgress;
 
-      if (revealProgress <= 0.001) {
+      if (opacity <= 0.001) {
         continue;
       }
 
@@ -182,7 +186,7 @@ export function createKatexArtifactSeedRevealFrame(
               tile.seed,
               1 - revealProgress
             ),
-        opacity: revealProgress,
+        opacity,
         region: targetRegion,
         crop: tile.crop,
         motion: shouldDissolve ? "dissolve" : "fold"

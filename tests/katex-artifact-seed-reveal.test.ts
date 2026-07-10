@@ -31,6 +31,7 @@ test("createKatexArtifactSeedRevealFrame folds texture pieces into a visible bun
     ["target-artifact", regionFor("target-artifact")]
   ]);
   const start = createKatexArtifactSeedRevealFrame(plan, regions, 0);
+  const earlyDissolve = createKatexArtifactSeedRevealFrame(plan, regions, 0.2);
   const gathering = createKatexArtifactSeedRevealFrame(plan, regions, 0.4);
   const bundled = createKatexArtifactSeedRevealFrame(plan, regions, 0.56);
   const resolving = createKatexArtifactSeedRevealFrame(plan, regions, 0.72);
@@ -42,11 +43,34 @@ test("createKatexArtifactSeedRevealFrame folds texture pieces into a visible bun
     start.pieces.some((piece) => piece.rect.left !== start.pieces[0]?.rect.left)
   );
   assert.ok(
+    earlyDissolve.pieces.some(
+      (piece) =>
+        piece.tokenId === "target-artifact" &&
+        piece.motion === "dissolve" &&
+        piece.opacity > 0 &&
+        piece.opacity < 1
+    )
+  );
+  assert.ok(
     gathering.pieces.some((piece) => piece.tokenId === "source-artifact")
   );
   assert.ok(
-    gathering.pieces.some(
-      (piece) => piece.tokenId === "source-artifact" && piece.opacity < 1
+    gathering.pieces
+      .filter(
+        (piece) =>
+          piece.tokenId === "source-artifact" &&
+          !rectIsInside(piece.rect, plan.bundleRect)
+      )
+      .every((piece) => piece.opacity === 1)
+  );
+  assert.ok(
+    resolving.pieces.some(
+      (piece) =>
+        piece.tokenId === "source-artifact" &&
+        piece.motion === "collapse" &&
+        rectIsInside(piece.rect, plan.bundleRect) &&
+        piece.opacity > 0 &&
+        piece.opacity < 1
     )
   );
   assert.ok(
@@ -88,6 +112,25 @@ test("createKatexArtifactSeedRevealFrame folds texture pieces into a visible bun
     new Set(finished.pieces.map((piece) => piece.rect.left)).size > 4
   );
 });
+
+function rectIsInside(rect: {
+  readonly left: number;
+  readonly top: number;
+  readonly width: number;
+  readonly height: number;
+}, bounds: {
+  readonly left: number;
+  readonly top: number;
+  readonly width: number;
+  readonly height: number;
+}): boolean {
+  return (
+    rect.left >= bounds.left &&
+    rect.left + rect.width <= bounds.left + bounds.width &&
+    rect.top >= bounds.top &&
+    rect.top + rect.height <= bounds.top + bounds.height
+  );
+}
 
 function seedRevealPlan(overrides: {
   readonly start?: number | undefined;
