@@ -40,7 +40,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure."
   ],
   "goal": "Run the approved export/embed loop from tutorial-card runtime metadata to concrete iframe and static-step artifacts, then prepare programming panels and follow-up runtime checks.",
-  "target": "next.kp.iframe-export-artifact-resolver",
+  "target": "next.kp.iframe-export-html-document",
   "runMode": "run",
   "maxSlices": 20,
   "commitCadence": "Commit after each verified slice.",
@@ -69,7 +69,7 @@
     {
       "id": "next.kp.iframe-export-html-document",
       "title": "Render minimal iframe document shell",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.iframe-export-dependencies-fallbacks",

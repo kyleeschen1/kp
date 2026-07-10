@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.iframe-export-html-document",
+  "kind": "next-action",
+  "title": "Render minimal iframe document shell",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added a minimal iframe-ready HTML document renderer around tutorial-card shell HTML.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/iframe-export-document.ts",
+      "summary": "Renders a full iframe document with export artifact data attributes, escaped title metadata, viewport tags, and a card-shell body slot."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-iframe-document.test.ts",
+      "summary": "Covers iframe document shell metadata, title escaping, payload kind, and embedded tutorial-card shell output."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.iframe-export-html-document.json",
+      "summary": "Materializes the approved iframe export HTML document next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the iframe document slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-iframe-document.test.ts tests/tutorial-card-html-shell.test.ts tests/tutorial-card-export-artifact.test.ts tests/tutorial-card-export-profile.test.ts tests/tutorial-card-frame-sampler.test.ts",
+      "status": "passed",
+      "scope": "iframe document, tutorial shell, and export artifact tests",
+      "checkedAt": "2026-07-10T23:51:34.038Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T23:51:34.071Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T23:51:34.102Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a minimal iframe-ready HTML document renderer around tutorial-card shell HTML."
+  }
+}
