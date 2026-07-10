@@ -8,6 +8,10 @@ import type {
 } from "./model.ts";
 import { projectDashboardDataContract } from "./data.ts";
 import {
+  createKpTheseusDashboardExtensionContribution,
+  type KpTheseusDashboardRow
+} from "./theseus-adapter.ts";
+import {
   PROJECT_DASHBOARD_PRIORITY_ORDER,
   PROJECT_DASHBOARD_STATUS_ORDER,
   PROJECT_GALLERY_KIND_ORDER,
@@ -132,6 +136,11 @@ interface ProjectAgendaModel {
   readonly sections: readonly ProjectAgendaSection[];
   readonly visibleRowCount: number;
   readonly totalRowCount: number;
+}
+
+interface ProjectAgendaAdapterRows {
+  readonly gallery: ReadonlyMap<string, KpTheseusDashboardRow>;
+  readonly api: ReadonlyMap<string, KpTheseusDashboardRow>;
 }
 
 function renderProjectAgenda(
@@ -307,6 +316,8 @@ function createProjectAgendaSections(
   data: ProjectDashboardData,
   query: string
 ): readonly ProjectAgendaSection[] {
+  const adapterRows = createProjectAgendaAdapterRows(data);
+
   return [
     {
       id: "work",
@@ -321,7 +332,7 @@ function createProjectAgendaSections(
     {
       id: "object-gallery",
       title: "Object Gallery",
-      rows: createGalleryAgendaRows(data.gallery)
+      rows: createGalleryAgendaRows(data.gallery, adapterRows.gallery)
     },
     {
       id: "animation-layout",
@@ -336,7 +347,7 @@ function createProjectAgendaSections(
     {
       id: "api",
       title: "API",
-      rows: createApiAgendaRows(query)
+      rows: createApiAgendaRows(query, adapterRows.api)
     },
     {
       id: "other",
@@ -344,6 +355,35 @@ function createProjectAgendaSections(
       rows: createOtherAgendaRows(query)
     }
   ];
+}
+
+function createProjectAgendaAdapterRows(
+  data: ProjectDashboardData
+): ProjectAgendaAdapterRows {
+  const sections =
+    createKpTheseusDashboardExtensionContribution(data).sections ?? [];
+
+  return {
+    gallery: adapterRowsBySourceId(sections, "kp.gallery", "kp.gallery."),
+    api: adapterRowsBySourceId(sections, "kp.api", "kp.api.")
+  };
+}
+
+function adapterRowsBySourceId(
+  sections: readonly { readonly id: string; readonly rows: readonly KpTheseusDashboardRow[] }[],
+  sectionId: string,
+  rowIdPrefix: string
+): ReadonlyMap<string, KpTheseusDashboardRow> {
+  const section = sections.find((candidate) => candidate.id === sectionId);
+  const rows = section?.rows ?? [];
+
+  return new Map(
+    rows.flatMap((row) =>
+      row.id.startsWith(rowIdPrefix)
+        ? [[row.id.slice(rowIdPrefix.length), row] as const]
+        : []
+    )
+  );
 }
 
 function countAgendaRows(sections: readonly ProjectAgendaSection[]): number {
@@ -401,25 +441,38 @@ function createReportAgendaRows(
 }
 
 function createGalleryAgendaRows(
-  items: readonly ProjectGalleryItem[]
+  items: readonly ProjectGalleryItem[],
+  adapterRows: ReadonlyMap<string, KpTheseusDashboardRow>
 ): readonly ProjectAgendaRow[] {
-  return [...items].sort(compareGalleryItemsForAgenda).map((item) => ({
-    id: item.id,
-    title: item.title,
-    summary: item.summary,
-    status: item.status,
-    detail: formatGalleryKindLabel(item.kind),
-    kind: item.kind,
-    depth: 0,
-    tags: [...item.domains, ...item.tags, ...(item.interfaces ?? [])],
-    dataAttributes: [["data-kp-project-gallery-item", item.id]],
-    relatedIds: item.relatedIds,
-    previewFields: [
-      { label: "Gallery kind", value: formatGalleryKindLabel(item.kind) },
-      { label: "Domains", value: item.domains.join(", ") || "None" },
-      { label: "Interfaces", value: (item.interfaces ?? []).join(", ") || "None" }
-    ]
-  }));
+  return [...items].sort(compareGalleryItemsForAgenda).map((item) => {
+    const adapterRow = adapterRows.get(item.id);
+
+    return {
+      id: item.id,
+      title: item.title,
+      summary: item.summary,
+      status: item.status,
+      detail: formatGalleryKindLabel(item.kind),
+      kind: item.kind,
+      depth: 0,
+      tags: [...item.domains, ...item.tags, ...(item.interfaces ?? [])],
+      dataAttributes: [
+        ["data-kp-project-gallery-item", item.id],
+        ...adapterDataAttributes(adapterRow)
+      ],
+      relatedIds: item.relatedIds,
+      previewFields: [
+        { label: "Gallery kind", value: formatGalleryKindLabel(item.kind) },
+        { label: "Domains", value: item.domains.join(", ") || "None" },
+        {
+          label: "Interfaces",
+          value: (item.interfaces ?? []).join(", ") || "None"
+        },
+        ...adapterPreviewFields(adapterRow)
+      ],
+      searchFields: adapterSearchFields(adapterRow)
+    };
+  });
 }
 
 function createAnimationLayoutAgendaRows(
@@ -496,15 +549,19 @@ function createKatexTransformAgendaRows(
   );
 }
 
-function createApiAgendaRows(query: string): readonly ProjectAgendaRow[] {
+function createApiAgendaRows(
+  query: string,
+  adapterRows: ReadonlyMap<string, KpTheseusDashboardRow>
+): readonly ProjectAgendaRow[] {
   return apiCatalogGroups.flatMap((group) =>
-    createApiGroupAgendaRows(group, query)
+    createApiGroupAgendaRows(group, query, adapterRows)
   );
 }
 
 function createApiGroupAgendaRows(
   group: ApiCatalogGroup,
-  query: string
+  query: string,
+  adapterRows: ReadonlyMap<string, KpTheseusDashboardRow>
 ): readonly ProjectAgendaRow[] {
   const groupRow: ProjectAgendaRow = {
     id: `api-${group.id}`,
@@ -521,23 +578,36 @@ function createApiGroupAgendaRows(
       { label: "Items", value: String(group.items.length) }
     ]
   };
-  const itemRows: readonly ProjectAgendaRow[] = group.items.map((item) => ({
-    id: `api-${item.id}`,
-    title: item.title,
-    summary: item.summary,
-    status: item.status,
-    detail: item.kind,
-    kind: "api",
-    depth: 1,
-    tags: ["api", ...item.tags],
-    dataAttributes: [["data-kp-agenda-api-item", item.id]],
-    previewFields: [
-      { label: "API group", value: group.title },
-      { label: "API id", value: item.id },
-      { label: "API status", value: item.status }
-    ],
-    searchFields: [item.id, group.title, group.summary]
-  }));
+  const itemRows: readonly ProjectAgendaRow[] = group.items.map((item) => {
+    const adapterRow = adapterRows.get(item.id);
+
+    return {
+      id: `api-${item.id}`,
+      title: item.title,
+      summary: item.summary,
+      status: item.status,
+      detail: item.kind,
+      kind: "api",
+      depth: 1,
+      tags: ["api", ...item.tags],
+      dataAttributes: [
+        ["data-kp-agenda-api-item", item.id],
+        ...adapterDataAttributes(adapterRow)
+      ],
+      previewFields: [
+        { label: "API group", value: group.title },
+        { label: "API id", value: item.id },
+        { label: "API status", value: item.status },
+        ...adapterPreviewFields(adapterRow)
+      ],
+      searchFields: [
+        item.id,
+        group.title,
+        group.summary,
+        ...adapterSearchFields(adapterRow)
+      ]
+    };
+  });
 
   if (query.trim().length === 0) {
     return [groupRow, ...itemRows];
@@ -550,6 +620,24 @@ function createApiGroupAgendaRows(
   return agendaRowMatchesQuery(groupRow, query)
     ? [groupRow, ...matchingRows]
     : matchingRows;
+}
+
+function adapterDataAttributes(
+  row: KpTheseusDashboardRow | undefined
+): readonly [string, string][] {
+  return row === undefined ? [] : [["data-kp-agenda-adapter-row", row.id]];
+}
+
+function adapterPreviewFields(
+  row: KpTheseusDashboardRow | undefined
+): readonly ProjectAgendaPreviewField[] {
+  return row === undefined ? [] : [{ label: "Adapter row", value: row.id }];
+}
+
+function adapterSearchFields(
+  row: KpTheseusDashboardRow | undefined
+): readonly string[] {
+  return row === undefined ? [] : [row.id, row.searchText ?? ""];
 }
 
 function filterAgendaRows(

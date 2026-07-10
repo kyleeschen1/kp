@@ -169,6 +169,22 @@ test("renderProjectDashboard renders animation, KaTeX transform, and API agenda 
   assert.match(html, /data-kp-agenda-api-item="semantic-matrix"/);
 });
 
+test("renderProjectDashboard backs gallery and API rows with KP adapter ids", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "api-semantic-matrix"
+  });
+
+  assert.match(
+    html,
+    /data-kp-agenda-row="animation-cancelation"[^>]*data-kp-agenda-adapter-row="kp\.gallery\.animation-cancelation"/
+  );
+  assert.match(
+    html,
+    /data-kp-agenda-row="api-semantic-matrix"[^>]*data-kp-agenda-adapter-row="kp\.api\.semantic-matrix"/
+  );
+  assert.match(html, /data-kp-preview-field="Adapter row"/);
+});
+
 test("renderProjectDashboard renders a shared selected row preview", () => {
   const html = renderProjectDashboard(projectDashboardData);
 

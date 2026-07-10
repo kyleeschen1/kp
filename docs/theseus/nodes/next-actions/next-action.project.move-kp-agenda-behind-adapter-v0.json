@@ -1,0 +1,66 @@
+{
+  "id": "next-action.project.move-kp-agenda-behind-adapter-v0",
+  "kind": "next-action",
+  "title": "Move KP agenda behind adapter",
+  "status": "resolved",
+  "domain": "project.dashboard",
+  "summary": "Moved KP project-dashboard gallery and API agenda rows behind the KP dashboard adapter while preserving existing row ids and browser behavior.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/kp/src/project-dashboard/render.ts",
+      "summary": "Consumes KP adapter rows when building gallery and API agenda rows, adding adapter ids and preview metadata."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/kp/src/project-dashboard/theseus-adapter.ts",
+      "summary": "Provides the adapter contribution consumed by the project dashboard agenda."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/kp/tests/project-dashboard.test.ts",
+      "summary": "Covers stable row ids backed by adapter row ids."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/kp/docs/theseus/nodes/run-contracts/run-contract.kp.theseus-dashboard-v1-loop-2026-07-10.json",
+      "summary": "Normalizes remaining KP adapter run-contract placeholder slices to unique ids."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "Focused project dashboard renderer tests.",
+      "checkedAt": "2026-07-10T07:54:13.959Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full KP Node test suite.",
+      "checkedAt": "2026-07-10T07:54:13.972Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "KP TypeScript checks.",
+      "checkedAt": "2026-07-10T07:54:13.983Z"
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "Dashboard browser round-trip spec.",
+      "checkedAt": "2026-07-10T07:54:13.988Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T07:54:13.997Z",
+      "scope": "KP Theseus graph validation."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Moved KP project-dashboard gallery and API agenda rows behind the KP dashboard adapter while preserving existing row ids and browser behavior."
+  }
+}
