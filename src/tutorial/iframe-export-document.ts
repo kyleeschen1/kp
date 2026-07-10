@@ -34,6 +34,9 @@ export function renderKpTutorialCardIframeDocument(
     `  <meta charset="utf-8" />`,
     `  <meta name="viewport" content="width=device-width, initial-scale=1" />`,
     `  <title>${escapeHtml(title)}</title>`,
+    `  <script type="application/json" data-kp-export-artifact-json>${escapeScriptJson(
+      JSON.stringify(artifact)
+    )}</script>`,
     "</head>",
     `<body data-kp-export-payload="${escapeAttr(artifact.payloadKind)}">`,
     bodyHtml,
@@ -51,4 +54,11 @@ function escapeHtml(value: string): string {
 
 function escapeAttr(value: string): string {
   return escapeHtml(value).replaceAll("\"", "&quot;");
+}
+
+function escapeScriptJson(value: string): string {
+  return value
+    .replaceAll("<", "\\u003c")
+    .replaceAll("\u2028", "\\u2028")
+    .replaceAll("\u2029", "\\u2029");
 }

@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.iframe-export-dependencies-fallbacks",
+  "kind": "next-action",
+  "title": "Serialize dependency and fallback metadata for iframe",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Serialized iframe export artifact dependency, fallback, timeline, and profile metadata into the iframe document.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/iframe-export-document.ts",
+      "summary": "Embeds script-safe artifact JSON inside the iframe document alongside existing document data attributes."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-iframe-document.test.ts",
+      "summary": "Covers parsing serialized dependency, fallback, timeline, status, and profile metadata from the iframe document."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.iframe-export-dependencies-fallbacks.json",
+      "summary": "Materializes the approved iframe dependency and fallback metadata next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the dependency and fallback metadata slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-iframe-document.test.ts tests/tutorial-card-html-shell.test.ts tests/tutorial-card-export-artifact.test.ts tests/tutorial-card-export-profile.test.ts tests/tutorial-card-frame-sampler.test.ts",
+      "status": "passed",
+      "scope": "iframe document metadata, tutorial shell, and export artifact tests",
+      "checkedAt": "2026-07-10T23:53:24.895Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T23:53:24.927Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T23:53:24.956Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Serialized iframe export artifact dependency, fallback, timeline, and profile metadata into the iframe document."
+  }
+}

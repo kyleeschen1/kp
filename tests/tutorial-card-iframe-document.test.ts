@@ -42,3 +42,54 @@ test("iframe export document wraps the tutorial card shell with artifact metadat
   );
   assert.match(html, /data-kp-tutorial-progress="0\.25"/);
 });
+
+test("iframe export document serializes dependency and fallback metadata", () => {
+  const sample = createLinearSolveTutorialCardSample();
+  const artifact = resolveKpTutorialCardIframeExportArtifact(
+    createLinearSolveTutorialCardManifest()
+  );
+  const html = renderKpTutorialCardIframeDocument({
+    artifact,
+    title: "Solve x + 3 = 7",
+    bodyHtml: renderKpTutorialCardHtmlShell(sample, sample.sample(0))
+  });
+
+  const match = html.match(
+    /<script type="application\/json" data-kp-export-artifact-json>([\s\S]*?)<\/script>/
+  );
+
+  assert.ok(match);
+  assert.deepEqual(JSON.parse(match[1] ?? ""), {
+    id: "artifact.linear-solve.iframe",
+    manifestId: "tutorial.linear-solve.card",
+    profileId: "export.linear-solve.iframe",
+    exportKind: "iframe",
+    target: "browser",
+    artifactKind: "iframe-document",
+    payloadKind: "html-document",
+    status: "metadata",
+    timelineIds: ["timeline.linear-solve.shared"],
+    dependencies: {
+      phases: ["critical", "interactive"],
+      capabilityKeys: [
+        "kp.semantic:document.read:*:*",
+        "kp.layout:sample.synchronized-panel:*:*",
+        "kp.equation:render.katex:equation:*",
+        "kp.graph:render.webgl:graph-3d:surface.mesh"
+      ],
+      assetIds: []
+    },
+    fallback: {
+      strategy: "static-snapshot",
+      preservesLayout: true,
+      message:
+        "Show static equation and graph snapshots when the interactive runtime is unavailable."
+    },
+    metadata: {
+      responsive: true,
+      requiresControls: true,
+      fallbackStrategy: "static-snapshot",
+      resolver: "iframe-export-profile"
+    }
+  });
+});
