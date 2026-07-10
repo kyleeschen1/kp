@@ -109,7 +109,7 @@ export function createKatexArtifactSeedRevealFrame(
     );
 
     for (const tile of sourceTiles) {
-      const delay = tileDelay(tile, "source") * plan.sourceMotion.stagger;
+      const delay = sourceCollapseOrder(tile) * plan.sourceMotion.stagger;
       const collapseProgress = phaseProgress(
         delay,
         plan.sourceMotion.collapseEnd + delay,
@@ -160,7 +160,7 @@ export function createKatexArtifactSeedRevealFrame(
       const shouldDissolve =
         deterministicUnit(tile.index + 97) < plan.targetMotion.dissolveFraction;
       const delay =
-        targetFoldOrder(tile) * plan.targetMotion.stagger;
+        targetFoldOrder(tile, plan.bundleRect) * plan.targetMotion.stagger;
       const revealProgress = phaseProgress(
         plan.targetMotion.revealStart + delay,
         plan.targetMotion.revealEnd,
@@ -316,18 +316,61 @@ function bundlePieceRect(
   };
 }
 
-function tileDelay(tile: TextureTile, direction: "source" | "target"): number {
+function sourceCollapseOrder(tile: TextureTile): number {
   const xOrder = tile.columns <= 1 ? 0 : tile.column / (tile.columns - 1);
-  const yOrder = tile.rows <= 1 ? 0 : tile.row / (tile.rows - 1);
-  const order = direction === "source" ? 0.55 * yOrder + 0.45 * tile.seed : xOrder;
 
-  return clamp01(order);
+  // The exponent's right side carries the "2" in 1/2, so it leads the
+  // collapse toward the shared reconciliation point instead of drifting as dust.
+  return clamp01(1 - xOrder);
 }
 
-function targetFoldOrder(tile: TextureTile): number {
-  const xOrder = tile.columns <= 1 ? 0 : tile.column / (tile.columns - 1);
+function targetFoldOrder(
+  tile: TextureTile,
+  creaseRect: KatexTokenRect
+): number {
+  const tileCenter = rectCenter(tile.rect);
+  const creaseCenter = rectCenter(creaseRect);
+  const groupRect = textureTileGroupRect(tile);
+  const maxDistance = Math.max(
+    ...[
+      { left: groupRect.left, top: groupRect.top },
+      { left: groupRect.left + groupRect.width, top: groupRect.top },
+      { left: groupRect.left, top: groupRect.top + groupRect.height },
+      {
+        left: groupRect.left + groupRect.width,
+        top: groupRect.top + groupRect.height
+      }
+    ].map((corner) =>
+      Math.hypot(corner.left - creaseCenter.x, corner.top - creaseCenter.y)
+    )
+  );
 
-  return clamp01(xOrder * 0.75 + tile.seed * 0.25);
+  if (maxDistance <= 0) {
+    return 0;
+  }
+
+  return clamp01(
+    Math.hypot(tileCenter.x - creaseCenter.x, tileCenter.y - creaseCenter.y) /
+      maxDistance
+  );
+}
+
+function textureTileGroupRect(tile: TextureTile): KatexTokenRect {
+  return {
+    left: tile.rect.left - tile.column * tile.rect.width,
+    top: tile.rect.top - tile.row * tile.rect.height,
+    width: tile.rect.width * tile.columns,
+    height: tile.rect.height * tile.rows
+  };
+}
+
+function rectCenter(
+  rect: KatexTokenRect
+): { readonly x: number; readonly y: number } {
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2
+  };
 }
 
 function driftRect(

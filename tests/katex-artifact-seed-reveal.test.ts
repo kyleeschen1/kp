@@ -102,6 +102,45 @@ test("createKatexArtifactSeedRevealFrame folds all texture pieces through a visi
   );
 });
 
+test("createKatexArtifactSeedRevealFrame starts exponent collapse from the far side", () => {
+  const plan = {
+    ...seedRevealPlan({}),
+    source: {
+      tokenId: "source-artifact",
+      rect: { left: 50, top: 20, width: 30, height: 12 }
+    },
+    bundleRect: { left: 20, top: 22, width: 10, height: 8 },
+    sourceMotion: {
+      ...seedRevealPlan({}).sourceMotion,
+      stagger: 0.2,
+      drift: 0
+    }
+  };
+  const regions = new Map<string, KatexAtlasRegion>([
+    ["source-artifact", regionFor("source-artifact")]
+  ]);
+  const frame = createKatexArtifactSeedRevealFrame(plan, regions, 0.12);
+  const sourcePieces = frame.pieces.filter(
+    (piece) => piece.tokenId === "source-artifact"
+  );
+  const movementByColumn = averageSourceMovementByColumn(
+    sourcePieces,
+    plan.source.rect,
+    plan.sourceGrid
+  );
+  const rightColumnMovement = movementByColumn.get(3);
+
+  assert.ok(
+    rightColumnMovement !== undefined &&
+      [0, 1, 2].every((column) => {
+        const movement = movementByColumn.get(column);
+
+        return movement !== undefined && rightColumnMovement > movement;
+      }),
+    "the exponent's right side should start moving toward the reconciliation point first"
+  );
+});
+
 function rectIsInside(rect: {
   readonly left: number;
   readonly top: number;
@@ -118,6 +157,54 @@ function rectIsInside(rect: {
     rect.left + rect.width <= bounds.left + bounds.width &&
     rect.top >= bounds.top &&
     rect.top + rect.height <= bounds.top + bounds.height
+  );
+}
+
+function averageSourceMovementByColumn(
+  pieces: readonly {
+    readonly rect: {
+      readonly left: number;
+      readonly top: number;
+      readonly width: number;
+      readonly height: number;
+    };
+    readonly crop: { readonly x: number; readonly width: number };
+  }[],
+  sourceRect: {
+    readonly left: number;
+    readonly top: number;
+    readonly width: number;
+    readonly height: number;
+  },
+  grid: { readonly columns: number; readonly rows: number }
+): ReadonlyMap<number, number> {
+  const movements = new Map<number, number[]>();
+
+  for (const piece of pieces) {
+    const column = Math.round(piece.crop.x / piece.crop.width);
+    const original = {
+      left: sourceRect.left + (sourceRect.width * column) / grid.columns,
+      top: sourceRect.top,
+      width: sourceRect.width / grid.columns,
+      height: sourceRect.height / grid.rows
+    };
+    const movement = Math.hypot(
+      piece.rect.left +
+        piece.rect.width / 2 -
+        (original.left + original.width / 2),
+      piece.rect.top +
+        piece.rect.height / 2 -
+        (original.top + original.height / 2)
+    );
+
+    movements.set(column, [...(movements.get(column) ?? []), movement]);
+  }
+
+  return new Map(
+    Array.from(movements).map(([column, entries]) => [
+      column,
+      entries.reduce((sum, entry) => sum + entry, 0) / entries.length
+    ])
   );
 }
 

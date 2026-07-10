@@ -53,6 +53,7 @@ export interface EquationMotionMeasuredDelta {
   readonly tokenId: string;
   readonly x: number;
   readonly y: number;
+  readonly scale?: number | undefined;
   readonly start?: number | undefined;
   readonly end?: number | undefined;
   readonly easing?: EasingName | undefined;
@@ -169,7 +170,8 @@ export function applyMeasuredMotionDeltas(
         to: {
           ...track.to,
           x: track.to.x + delta.x,
-          y: track.to.y + delta.y
+          y: track.to.y + delta.y,
+          scale: delta.scale ?? track.to.scale
         }
       };
     })

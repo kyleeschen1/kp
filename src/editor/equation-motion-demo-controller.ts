@@ -1057,8 +1057,8 @@ function createRadicalArtifactSeedRevealPlan(
         rect: targetLocalRect
       },
       bundleRect,
-      sourceGrid: { columns: 6, rows: 3 },
-      targetGrid: { columns: 16, rows: 3 },
+      sourceGrid: { columns: 6, rows: 2 },
+      targetGrid: { columns: 10, rows: 2 },
       sourceMotion: {
         kind: "collapse-to-bundle",
         collapseEnd: 0.48,
@@ -1459,12 +1459,39 @@ function createMeasuredLayoutDeltas(
     return [
       {
         tokenId: token.id,
-        x: targetToken.localRect.left - sourceToken.localRect.left,
-        y: targetToken.localRect.top - sourceToken.localRect.top,
+        x: rectCenterX(targetToken.localRect) - rectCenterX(sourceToken.localRect),
+        y: rectCenterY(targetToken.localRect) - rectCenterY(sourceToken.localRect),
+        scale: measuredUniformScale(sourceToken.localRect, targetToken.localRect),
         ...timing
       }
     ];
   });
+}
+
+function rectCenterX(rect: StableMotionToken["localRect"]): number {
+  return rect.left + rect.width / 2;
+}
+
+function rectCenterY(rect: StableMotionToken["localRect"]): number {
+  return rect.top + rect.height / 2;
+}
+
+function measuredUniformScale(
+  source: StableMotionToken["localRect"],
+  target: StableMotionToken["localRect"]
+): number | undefined {
+  if (source.width <= 0 || source.height <= 0) {
+    return undefined;
+  }
+
+  const widthScale = target.width / source.width;
+  const heightScale = target.height / source.height;
+
+  if (!Number.isFinite(widthScale) || !Number.isFinite(heightScale)) {
+    return undefined;
+  }
+
+  return Math.sqrt(widthScale * heightScale);
 }
 
 function findEquationMotionTrack(

@@ -959,6 +959,7 @@ test("applyMeasuredMotionDeltas encodes measured layout into sampled tracks", ()
       tokenId: "lhs.x",
       x: 24,
       y: -3,
+      scale: 0.72,
       start: 0,
       end: 0.4,
       easing: "ease-in-out"
@@ -973,7 +974,7 @@ test("applyMeasuredMotionDeltas encodes measured layout into sampled tracks", ()
     end: 0.4,
     easing: "ease-in-out",
     from: { opacity: 1, x: 0, y: 0, scale: 1 },
-    to: { opacity: 1, x: 24, y: -3, scale: 1 }
+    to: { opacity: 1, x: 24, y: -3, scale: 0.72 }
   });
   assert.deepEqual(trackFor(plan, "lhs.x"), {
     tokenId: "lhs.x",

@@ -483,6 +483,49 @@ test("editor equation motion demo uses semantic playback plans", async ({
   expect(radicalArtifactState.maxAlpha).toBeGreaterThan(0);
 
   await animationSelect.selectOption("fixture-fraction-make-inline-to-stacked");
+  const fractionScaleState = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    const sourceX = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="0"] [data-kp-motion-id="fraction.make.inline-to-stacked.source.x"]'
+    );
+    const targetX = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="1"] [data-kp-motion-id="fraction.make.inline-to-stacked.target.x"]'
+    );
+
+    if (sourceX === null || targetX === null) {
+      throw new Error("Expected inline-fraction source and target x tokens.");
+    }
+
+    const sourceWidth = sourceX.getBoundingClientRect().width;
+    const targetWidth = targetX.getBoundingClientRect().width;
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.25);
+
+    const scaleMatch = /scale\(([-\d.]+)\)/.exec(sourceX.style.transform);
+    const scale = scaleMatch === null ? Number.NaN : Number(scaleMatch[1]);
+
+    return {
+      sourceWidth,
+      targetWidth,
+      scale,
+      transform: sourceX.style.transform
+    };
+  });
+
+  expect(fractionScaleState.sourceWidth).toBeGreaterThan(
+    fractionScaleState.targetWidth
+  );
+  expect(fractionScaleState.scale).toBeLessThan(1);
+  expect(fractionScaleState.scale).toBeGreaterThan(0.5);
+  expect(fractionScaleState.transform).not.toContain("scale(1)");
+
   await next.click();
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");
   await expect(demo.locator('[data-kp-equation-motion-state="1"]')).toBeVisible();
