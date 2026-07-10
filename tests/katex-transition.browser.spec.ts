@@ -112,7 +112,7 @@ test("equation motion card supports focused keyboard controls", async ({
   );
 });
 
-test("radical artifact handoff keeps source DOM visible until texture renderer is ready", async ({
+test("radical artifact DOM path is independent of texture readiness", async ({
   page
 }) => {
   await page.goto("/");
@@ -124,7 +124,7 @@ test("radical artifact handoff keeps source DOM visible until texture renderer i
 
   await animationSelect.selectOption("fixture-radical-rewrite-power-as-root");
 
-  const handoffState = await page.evaluate(async () => {
+  const domState = await page.evaluate(async () => {
     const demoElement = document.querySelector<HTMLElement>(
       "[data-kp-equation-motion-demo]"
     );
@@ -146,7 +146,9 @@ test("radical artifact handoff keeps source DOM visible until texture renderer i
 
     try {
       window.__kpEquationMotionSetProgress?.(demoElement, 0.12);
-      await Promise.resolve();
+      await new Promise<void>((resolve) =>
+        window.requestAnimationFrame(() => resolve())
+      );
 
       const overlay = demoElement.querySelector<HTMLCanvasElement>(
         "[data-kp-equation-motion-artifact-overlay]"
@@ -175,7 +177,7 @@ test("radical artifact handoff keeps source DOM visible until texture renderer i
 
       return {
         overlayExists: overlay !== null,
-        overlayReady: overlay?.dataset["kpEquationMotionArtifactReady"],
+        artifactMode: demoElement.dataset["kpEquationMotionArtifactMode"],
         sourceRepresentationCount: sourceExponentRepresentations.length,
         visibleSourceExponentCount
       };
@@ -188,17 +190,17 @@ test("radical artifact handoff keeps source DOM visible until texture renderer i
     }
   });
 
-  expect(handoffState).toEqual({
-    overlayExists: true,
-    overlayReady: undefined,
+  expect(domState).toEqual({
+    overlayExists: false,
+    artifactMode: "dom-fold-bundle-swap",
     sourceRepresentationCount: expect.any(Number),
     visibleSourceExponentCount: expect.any(Number)
   });
-  expect(handoffState.sourceRepresentationCount).toBeGreaterThan(0);
-  expect(handoffState.visibleSourceExponentCount).toBeGreaterThan(0);
+  expect(domState.sourceRepresentationCount).toBeGreaterThan(0);
+  expect(domState.visibleSourceExponentCount).toBeGreaterThan(0);
 });
 
-test("radical artifact handoff keeps async-ready pending canvas hidden", async ({
+test("radical artifact keeps the source exponent DOM-owned after motion starts", async ({
   page
 }) => {
   await page.goto("/");
@@ -210,7 +212,7 @@ test("radical artifact handoff keeps async-ready pending canvas hidden", async (
 
   await animationSelect.selectOption("fixture-radical-rewrite-power-as-root");
 
-  const pendingReadyState = await page.evaluate(async () => {
+  const states = await page.evaluate(async () => {
     const demoElement = document.querySelector<HTMLElement>(
       "[data-kp-equation-motion-demo]"
     );
@@ -219,161 +221,125 @@ test("radical artifact handoff keeps async-ready pending canvas hidden", async (
       throw new Error("Expected equation motion demo.");
     }
 
-    window.__kpEquationMotionSetProgress?.(demoElement, 1);
-    window.__kpEquationMotionSetProgress?.(demoElement, 0.959);
+    const sample = async (progress: number) => {
+      window.__kpEquationMotionSetProgress?.(demoElement, progress);
+      await new Promise<void>((resolve) => window.setTimeout(resolve, 100));
+      window.__kpEquationMotionSetProgress?.(demoElement, progress);
+      await new Promise<void>((resolve) =>
+        window.requestAnimationFrame(() => resolve())
+      );
 
-    const overlay = await new Promise<HTMLCanvasElement>((resolve, reject) => {
-      const readOverlay = () =>
-        demoElement.querySelector<HTMLCanvasElement>(
-          '[data-kp-equation-motion-artifact-overlay][data-kp-equation-motion-artifact-ready="true"]'
-        );
-      const existingOverlay = readOverlay();
+      const overlay = demoElement.querySelector<HTMLCanvasElement>(
+        "[data-kp-equation-motion-artifact-overlay]"
+      );
+      const sourceExponentClone = demoElement.querySelector<HTMLElement>(
+        '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.source.exponent"]'
+      );
 
-      if (existingOverlay !== null) {
-        resolve(existingOverlay);
-        return;
+      if (sourceExponentClone === null) {
+        throw new Error("Expected source exponent clone.");
       }
 
-      const observer = new MutationObserver(() => {
-        const nextOverlay = readOverlay();
+      const sourceStyle = window.getComputedStyle(sourceExponentClone);
 
-        if (nextOverlay !== null) {
-          window.clearTimeout(timeout);
-          observer.disconnect();
-          resolve(nextOverlay);
-        }
-      });
-      const timeout = window.setTimeout(() => {
-        observer.disconnect();
-        reject(new Error("Expected pending radical artifact overlay to become ready."));
-      }, 5_000);
+      return {
+        progress,
+        overlayExists: overlay !== null,
+        sourceExponentVisibility: sourceStyle.visibility,
+        sourceExponentOpacity: Number(sourceStyle.opacity)
+      };
+    };
 
-      observer.observe(demoElement, {
-        attributeFilter: ["data-kp-equation-motion-artifact-ready"],
-        attributes: true,
-        childList: true,
-        subtree: true
-      });
-    });
+    return [await sample(0.08), await sample(0.1)];
+  });
 
+  expect(states).toEqual([
+    {
+      progress: 0.08,
+      overlayExists: false,
+      sourceExponentVisibility: "visible",
+      sourceExponentOpacity: expect.any(Number)
+    },
+    {
+      progress: 0.1,
+      overlayExists: false,
+      sourceExponentVisibility: "visible",
+      sourceExponentOpacity: expect.any(Number)
+    }
+  ]);
+  expect(states[0]?.sourceExponentOpacity).toBeGreaterThan(0.9);
+  expect(states[1]?.sourceExponentOpacity).toBeGreaterThan(0.9);
+});
+
+test("radical artifact moves DOM artifacts through the bundle without an overlay", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  const demo = page.locator("[data-kp-equation-motion-demo]");
+  const animationSelect = demo.locator(
+    '[data-action="set-equation-motion-animation"]'
+  );
+
+  await animationSelect.selectOption("fixture-radical-rewrite-power-as-root");
+
+  const bundleState = await page.evaluate(async () => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.5);
+    await new Promise<void>((resolve) =>
+      window.requestAnimationFrame(() => resolve())
+    );
+
+    const overlay = demoElement.querySelector<HTMLCanvasElement>(
+      "[data-kp-equation-motion-artifact-overlay]"
+    );
+    const sourceExponentClone = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.source.exponent"]'
+    );
     const targetRadicalClone = demoElement.querySelector<HTMLElement>(
       '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.target.radical"]'
     );
 
-    if (targetRadicalClone === null) {
-      throw new Error("Expected target radical clone.");
+    if (sourceExponentClone === null || targetRadicalClone === null) {
+      throw new Error("Expected radical source and target artifact clones.");
     }
 
+    const sourceStyle = window.getComputedStyle(sourceExponentClone);
+    const targetStyle = window.getComputedStyle(targetRadicalClone);
+
     return {
-      handoff: overlay.dataset["kpEquationMotionArtifactHandoff"],
-      overlayOpacity: window.getComputedStyle(overlay).opacity,
-      targetCloneVisibility: window.getComputedStyle(targetRadicalClone).visibility,
-      targetCloneOpacity: Number(window.getComputedStyle(targetRadicalClone).opacity)
+      artifactMode: demoElement.dataset["kpEquationMotionArtifactMode"],
+      overlayExists: overlay !== null,
+      sourceVisibility: sourceStyle.visibility,
+      targetVisibility: targetStyle.visibility,
+      sourceOpacity: Number(sourceStyle.opacity),
+      targetOpacity: Number(targetStyle.opacity),
+      sourceTransform: sourceExponentClone.style.transform,
+      targetTransform: targetRadicalClone.style.transform
     };
   });
 
-  expect(pendingReadyState).toEqual({
-    handoff: "pending",
-    overlayOpacity: "0",
-    targetCloneVisibility: "visible",
-    targetCloneOpacity: expect.any(Number)
+  expect(bundleState).toEqual({
+    artifactMode: "dom-fold-bundle-swap",
+    overlayExists: false,
+    sourceVisibility: "visible",
+    targetVisibility: "visible",
+    sourceOpacity: expect.any(Number),
+    targetOpacity: expect.any(Number),
+    sourceTransform: expect.stringContaining("translate("),
+    targetTransform: expect.stringContaining("translate(")
   });
-  expect(pendingReadyState.targetCloneOpacity).toBeGreaterThan(0.9);
-});
-
-test("radical artifact keeps readable exponent DOM-owned during early source phase", async ({
-  page
-}) => {
-  await page.goto("/");
-
-  const demo = page.locator("[data-kp-equation-motion-demo]");
-  const animationSelect = demo.locator(
-    '[data-action="set-equation-motion-animation"]'
-  );
-
-  await animationSelect.selectOption("fixture-radical-rewrite-power-as-root");
-
-  const earlySourceState = await page.evaluate(async () => {
-    const demoElement = document.querySelector<HTMLElement>(
-      "[data-kp-equation-motion-demo]"
-    );
-
-    if (demoElement === null) {
-      throw new Error("Expected equation motion demo.");
-    }
-
-    window.__kpEquationMotionSetProgress?.(demoElement, 0.05);
-
-    await new Promise<HTMLCanvasElement>((resolve, reject) => {
-      const readOverlay = () =>
-        demoElement.querySelector<HTMLCanvasElement>(
-          '[data-kp-equation-motion-artifact-overlay][data-kp-equation-motion-artifact-ready="true"]'
-        );
-      const existingOverlay = readOverlay();
-
-      if (existingOverlay !== null) {
-        resolve(existingOverlay);
-        return;
-      }
-
-      const observer = new MutationObserver(() => {
-        const nextOverlay = readOverlay();
-
-        if (nextOverlay !== null) {
-          window.clearTimeout(timeout);
-          observer.disconnect();
-          resolve(nextOverlay);
-        }
-      });
-      const timeout = window.setTimeout(() => {
-        observer.disconnect();
-        reject(new Error("Expected early radical artifact overlay to become ready."));
-      }, 5_000);
-
-      observer.observe(demoElement, {
-        attributeFilter: ["data-kp-equation-motion-artifact-ready"],
-        attributes: true,
-        childList: true,
-        subtree: true
-      });
-    });
-
-    window.__kpEquationMotionSetProgress?.(demoElement, 0.05);
-    await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
-
-    const overlay = demoElement.querySelector<HTMLCanvasElement>(
-      '[data-kp-equation-motion-artifact-overlay][data-kp-equation-motion-artifact-ready="true"]'
-    );
-
-    if (overlay === null) {
-      throw new Error("Expected early radical artifact overlay to stay ready.");
-    }
-
-    const sourceExponentClone = demoElement.querySelector<HTMLElement>(
-      '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.source.exponent"]'
-    );
-
-    if (sourceExponentClone === null) {
-      throw new Error("Expected source exponent clone.");
-    }
-
-    return {
-      handoff: overlay.dataset["kpEquationMotionArtifactHandoff"],
-      overlayOpacity: window.getComputedStyle(overlay).opacity,
-      sourceExponentVisibility:
-        window.getComputedStyle(sourceExponentClone).visibility,
-      sourceExponentOpacity:
-        Number(window.getComputedStyle(sourceExponentClone).opacity)
-    };
-  });
-
-  expect(earlySourceState).toEqual({
-    handoff: "source-dom",
-    overlayOpacity: "0",
-    sourceExponentVisibility: "visible",
-    sourceExponentOpacity: expect.any(Number)
-  });
-  expect(earlySourceState.sourceExponentOpacity).toBeGreaterThan(0.9);
+  expect(bundleState.sourceOpacity).toBeGreaterThan(0.01);
+  expect(bundleState.sourceOpacity).toBeLessThan(1);
+  expect(bundleState.targetOpacity).toBeGreaterThan(0.01);
+  expect(bundleState.targetOpacity).toBeLessThan(1);
 });
 
 test("editor equation motion demo uses semantic playback plans", async ({
@@ -703,130 +669,63 @@ test("editor equation motion demo uses semantic playback plans", async ({
     }
 
     window.__kpEquationMotionSetProgress?.(demoElement, 0.5);
-
-    const overlay = await new Promise<HTMLCanvasElement>((resolve, reject) => {
-      const existingOverlay = demoElement.querySelector<HTMLCanvasElement>(
-        '[data-kp-equation-motion-artifact-overlay][data-kp-equation-motion-artifact-ready="true"]'
-      );
-
-      if (existingOverlay !== null) {
-        resolve(existingOverlay);
-        return;
-      }
-
-      const observer = new MutationObserver(() => {
-        const nextOverlay = demoElement.querySelector<HTMLCanvasElement>(
-          '[data-kp-equation-motion-artifact-overlay][data-kp-equation-motion-artifact-ready="true"]'
-        );
-
-        if (nextOverlay !== null) {
-          window.clearTimeout(timeout);
-          observer.disconnect();
-          resolve(nextOverlay);
-        }
-      });
-      const timeout = window.setTimeout(() => {
-        observer.disconnect();
-        reject(new Error("Expected radical artifact texture overlay."));
-      }, 5_000);
-
-      observer.observe(demoElement, {
-        attributeFilter: ["data-kp-equation-motion-artifact-ready"],
-        attributes: true,
-        childList: true,
-        subtree: true
-      });
-      void Promise.resolve().then(() => {
-        const nextOverlay = demoElement.querySelector<HTMLCanvasElement>(
-          '[data-kp-equation-motion-artifact-overlay][data-kp-equation-motion-artifact-ready="true"]'
-        );
-
-        if (nextOverlay !== null) {
-          window.clearTimeout(timeout);
-          observer.disconnect();
-          resolve(nextOverlay);
-        }
-      });
-    });
-
     await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
 
-    const context = overlay.getContext("2d", { willReadFrequently: true });
-
-    if (context === null) {
-      throw new Error("Expected radical artifact overlay to use a 2D canvas.");
-    }
-
-    const pixels = context.getImageData(0, 0, overlay.width, overlay.height).data;
-    let maxAlpha = 0;
-    let nonTransparentPixelCount = 0;
-
-    for (let index = 3; index < pixels.length; index += 4) {
-      const alpha = pixels[index] ?? 0;
-
-      maxAlpha = Math.max(maxAlpha, alpha);
-
-      if (alpha > 0) {
-        nonTransparentPixelCount += 1;
-      }
-
-      if (nonTransparentPixelCount >= 32) {
-        break;
-      }
-    }
-
+    const overlay = demoElement.querySelector<HTMLCanvasElement>(
+      "[data-kp-equation-motion-artifact-overlay]"
+    );
     const persistentX = demoElement.querySelector<HTMLElement>(
       '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.source.x"]'
     );
+    const sourceExponent = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.source.exponent"]'
+    );
+    const targetRadical = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.target.radical"]'
+    );
 
-    if (persistentX === null) {
-      throw new Error("Expected persistent radical source x motion clone.");
+    if (
+      persistentX === null ||
+      sourceExponent === null ||
+      targetRadical === null
+    ) {
+      throw new Error("Expected radical motion clones.");
     }
+
+    const sourceExponentStyle = window.getComputedStyle(sourceExponent);
+    const targetRadicalStyle = window.getComputedStyle(targetRadical);
 
     return {
       mode: demoElement.dataset["kpEquationMotionArtifactMode"],
       fallbackReason: demoElement.dataset["kpEquationMotionArtifactFallbackReason"],
-      overlayConnected: overlay.isConnected,
-      overlayZIndex: window.getComputedStyle(overlay).zIndex,
+      overlayExists: overlay !== null,
       persistentXCloneLayerZIndex:
         window.getComputedStyle(persistentX.parentElement ?? persistentX).zIndex,
-      renderer: overlay.dataset["kpEquationMotionArtifactRenderer"],
-      sourceTokenId: overlay.dataset["kpEquationMotionArtifactSource"],
-      targetTokenId: overlay.dataset["kpEquationMotionArtifactTarget"],
-      sourceMotion: overlay.dataset["kpEquationMotionArtifactSourceMotion"],
-      pathMotion: overlay.dataset["kpEquationMotionArtifactPathMotion"],
-      targetMotion: overlay.dataset["kpEquationMotionArtifactTargetMotion"],
-      bundleRect: overlay.dataset["kpEquationMotionArtifactBundleRect"],
-      collapseEnd: overlay.dataset["kpEquationMotionArtifactCollapseEnd"],
-      revealStart: overlay.dataset["kpEquationMotionArtifactRevealStart"],
-      dissolveFraction:
-        overlay.dataset["kpEquationMotionArtifactDissolveFraction"],
-      nonTransparentPixelCount,
-      maxAlpha
+      sourceExponentVisibility: sourceExponentStyle.visibility,
+      sourceExponentOpacity: Number(sourceExponentStyle.opacity),
+      sourceExponentTransform: sourceExponent.style.transform,
+      targetRadicalVisibility: targetRadicalStyle.visibility,
+      targetRadicalOpacity: Number(targetRadicalStyle.opacity),
+      targetRadicalTransform: targetRadical.style.transform
     };
   });
 
   expect(radicalArtifactState).toEqual({
-    mode: "fold-bundle-swap",
+    mode: "dom-fold-bundle-swap",
     fallbackReason: undefined,
-    overlayConnected: true,
-    overlayZIndex: "1",
+    overlayExists: false,
     persistentXCloneLayerZIndex: "3",
-    renderer: "canvas-fold-bundle-swap",
-    sourceTokenId: "radical.rewrite-power-as-root.source.exponent",
-    targetTokenId: "radical.rewrite-power-as-root.target.radical",
-    sourceMotion: "collapse-to-bundle",
-    pathMotion: "fold-bundle-swap",
-    targetMotion: "unfold-from-bundle",
-    bundleRect: expect.any(String),
-    collapseEnd: "0.48",
-    revealStart: "0.42",
-    dissolveFraction: "0",
-    nonTransparentPixelCount: expect.any(Number),
-    maxAlpha: expect.any(Number)
+    sourceExponentVisibility: "visible",
+    sourceExponentOpacity: expect.any(Number),
+    sourceExponentTransform: expect.stringContaining("translate("),
+    targetRadicalVisibility: "visible",
+    targetRadicalOpacity: expect.any(Number),
+    targetRadicalTransform: expect.stringContaining("translate(")
   });
-  expect(radicalArtifactState.nonTransparentPixelCount).toBeGreaterThan(0);
-  expect(radicalArtifactState.maxAlpha).toBeGreaterThan(0);
+  expect(radicalArtifactState.sourceExponentOpacity).toBeGreaterThan(0.01);
+  expect(radicalArtifactState.sourceExponentOpacity).toBeLessThan(1);
+  expect(radicalArtifactState.targetRadicalOpacity).toBeGreaterThan(0.01);
+  expect(radicalArtifactState.targetRadicalOpacity).toBeLessThan(1);
 
   const radicalEndpointWindowState = await page.evaluate(() => {
     const demoElement = document.querySelector<HTMLElement>(
