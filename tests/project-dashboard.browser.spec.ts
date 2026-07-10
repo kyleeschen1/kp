@@ -205,6 +205,27 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   ).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("[data-kp-visual-tuning]")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Back to Editor" })).toBeVisible();
+  await page.locator('[data-kp-select-agenda-row="semantic-matrix"]').click();
+  await expect(agendaPreview).toHaveAttribute(
+    "data-kp-selected-agenda-row",
+    "semantic-matrix"
+  );
+  await page
+    .locator(
+      '[data-kp-preview-link="api-catalog-item"][data-kp-preview-api-item="semantic-matrix"]'
+    )
+    .click();
+  await expect(page.locator("[data-kp-project-dashboard]")).toHaveCount(0);
+  await expect(
+    page.locator('[data-kp-api-outline-item="semantic-matrix"]')
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("[data-kp-api-sample-card]")).toContainText(
+    "Matrix"
+  );
+  await page.getByRole("button", { name: "Project Dashboard" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Project Dashboard", exact: true })
+  ).toBeVisible();
   await page.locator('[data-kp-select-agenda-row="visual-donut-surface"]').click();
   await expect(agendaPreview).toHaveAttribute(
     "data-kp-selected-agenda-row",

@@ -284,6 +284,20 @@ test("renderProjectDashboard exposes gallery sample targets as preview links", (
   assert.match(html, /data-kp-preview-graph-surface-mode="donut"/);
 });
 
+test("renderProjectDashboard exposes semantic object API sample targets", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "semantic-matrix"
+  });
+
+  assert.match(html, /data-kp-selected-agenda-row="semantic-matrix"/);
+  assert.match(
+    html,
+    /data-kp-preview-field="Sample targets"[^>]*>Open Matrix API sample/
+  );
+  assert.match(html, /data-kp-preview-link="api-catalog-item"/);
+  assert.match(html, /data-kp-preview-api-item="semantic-matrix"/);
+});
+
 test("renderProjectDashboard selects KaTeX transform rows into the shared preview", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "katex-transform-fraction.make.inline-to-stacked"
@@ -773,6 +787,9 @@ test("project dashboard v1 card records completed Codex phase updates", () => {
   const sampleTargetPhase = dashboardCard?.children?.find(
     (card) => card.id === "work-project-dashboard-v1-phase-9"
   );
+  const apiSampleTargetPhase = dashboardCard?.children?.find(
+    (card) => card.id === "work-project-dashboard-v1-phase-10"
+  );
 
   assert.equal(dashboardCard?.status, "done");
   assert.equal(reportCardPhase?.status, "done");
@@ -801,6 +818,13 @@ test("project dashboard v1 card records completed Codex phase updates", () => {
   assert.ok(
     sampleTargetPhase?.sourceRefs?.some((sourceRef) =>
       sourceRef.href.includes("src/project-dashboard/model.ts")
+    )
+  );
+  assert.equal(apiSampleTargetPhase?.status, "done");
+  assert.ok(apiSampleTargetPhase?.tags.includes("api-samples"));
+  assert.ok(
+    apiSampleTargetPhase?.sourceRefs?.some((sourceRef) =>
+      sourceRef.href.includes("tests/project-dashboard.browser.spec.ts")
     )
   );
 });

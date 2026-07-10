@@ -248,6 +248,30 @@ export const projectDashboardData: ProjectDashboardData = {
             "npm run test:browser:dashboard"
           ],
           relatedIds: ["report-dashboard-operations", "visual-webgl-graph"]
+        },
+        {
+          id: "work-project-dashboard-v1-phase-10",
+          title: "Phase 10 API sample targets",
+          category: "todo",
+          status: "done",
+          priority: "high",
+          summary:
+            "Wire semantic object dashboard rows to editor API outline sample cards through typed sample targets.",
+          tags: ["dashboard", "phase-10", "api-samples", "codex-update"],
+          sourceRefs: [
+            { label: "Dashboard controller", href: "src/main.ts" },
+            { label: "Dashboard data", href: "src/project-dashboard/data.ts" },
+            { label: "Dashboard renderer", href: "src/project-dashboard/render.ts" },
+            {
+              label: "Dashboard browser spec",
+              href: "tests/project-dashboard.browser.spec.ts"
+            }
+          ],
+          verification: [
+            "npm test -- tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+            "npm run test:browser:dashboard"
+          ],
+          relatedIds: ["report-dashboard-operations", "semantic-matrix"]
         }
       ],
       relatedIds: ["report-dashboard-operations"]
@@ -611,6 +635,13 @@ export const projectDashboardData: ProjectDashboardData = {
         }
       ],
       verification: ["tests/semantic.test.ts", "tests/rendering.test.ts"],
+      sampleTargets: [
+        {
+          kind: "api-catalog-item",
+          label: "Open Matrix API sample",
+          itemId: "semantic-matrix"
+        }
+      ],
       relatedIds: ["work-semantic-object-registry"]
     },
     {

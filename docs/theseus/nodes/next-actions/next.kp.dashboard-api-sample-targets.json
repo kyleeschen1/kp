@@ -1,0 +1,60 @@
+{
+  "id": "next.kp.dashboard-api-sample-targets",
+  "kind": "next-action",
+  "title": "Wire dashboard API sample targets",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "summary": "Wired semantic-object dashboard rows to editor API outline sample cards through typed sample targets.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Matrix gallery row now advertises an API catalog sample target and dashboard phase 10 records the update."
+    },
+    {
+      "kind": "file",
+      "path": "src/main.ts",
+      "summary": "Dashboard API sample links now open the editor, expand the API group, select the API item, and scroll to it."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Node dashboard coverage asserts Matrix exposes an API sample target and phase 10 is recorded."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.browser.spec.ts",
+      "summary": "Browser dashboard coverage opens the Matrix API sample from the semantic object row."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "dashboard Node and adapter regression suite",
+      "checkedAt": "2026-07-10T18:29:10.255Z"
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "dashboard browser API sample target action",
+      "checkedAt": "2026-07-10T18:29:10.276Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T18:29:10.296Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T18:29:10.319Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Wired semantic-object dashboard rows to editor API outline sample cards through typed sample targets."
+  }
+}

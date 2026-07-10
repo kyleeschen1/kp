@@ -110,6 +110,15 @@ appRoot.addEventListener("click", (event) => {
     return;
   }
 
+  const apiCatalogLink = event.target.closest<HTMLAnchorElement>(
+    'a[data-kp-preview-link="api-catalog-item"]'
+  );
+
+  if (apiCatalogLink !== null) {
+    openProjectDashboardApiCatalogPreview(apiCatalogLink, event);
+    return;
+  }
+
   const button = event.target.closest<HTMLButtonElement>("button[data-action]");
 
   if (button === null) {
@@ -341,6 +350,33 @@ function openProjectDashboardGraphSurfacePreview(
   );
   renderEditor();
   findGraphPreview(graphId)?.scrollIntoView({ block: "start" });
+}
+
+function openProjectDashboardApiCatalogPreview(
+  link: HTMLAnchorElement,
+  event: Event
+): void {
+  event.preventDefault();
+
+  const itemId = link.dataset["kpPreviewApiItem"];
+
+  if (itemId === undefined) {
+    return;
+  }
+
+  renderEditor();
+
+  const item = Array.from(
+    appRoot.querySelectorAll<HTMLButtonElement>("[data-kp-api-outline-item]")
+  ).find((candidate) => candidate.dataset["kpApiOutlineItem"] === itemId);
+
+  if (item === undefined) {
+    return;
+  }
+
+  item.closest("details")?.setAttribute("open", "");
+  selectApiCatalogItem(item);
+  item.scrollIntoView({ block: "center" });
 }
 
 function previewApiCatalogItemFromEvent(event: Event): void {
