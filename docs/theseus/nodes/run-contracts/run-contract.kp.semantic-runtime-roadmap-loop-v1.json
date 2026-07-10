@@ -38,7 +38,7 @@
     "Do not add visual effects that do not clarify semantic identity or runtime capability."
   ],
   "goal": "Run the approved roadmap-backed semantic runtime loop from project docs through concrete verified KP slices.",
-  "target": "next.kp.graph-latex-provenance",
+  "target": "next.kp.expression-derive-graph2d",
   "runMode": "run",
   "maxSlices": 24,
   "commitCadence": "Commit after each verified slice.",
@@ -76,8 +76,8 @@
     },
     {
       "id": "next.kp.graph-latex-provenance",
-      "title": "Enforce graph LaTeX provenance honesty",
-      "status": "planned"
+      "title": "Add exact graph LaTeX provenance",
+      "status": "complete"
     },
     {
       "id": "next.kp.expression-derive-graph2d",

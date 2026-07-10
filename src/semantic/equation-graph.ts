@@ -68,6 +68,12 @@ function create2DCurveScene(
     graphId: graph.id,
     label: latex,
     equation: latex,
+    latexProvenance: {
+      kind: "exact",
+      latex,
+      sourceKind: "equation",
+      sourceLatex: latex
+    },
     expression,
     xDomain: graph.xDomain,
     sampleCount: 121
@@ -131,6 +137,12 @@ function create3DSurfaceScene(
     graphId: graph.id,
     label: latex,
     equation: latex,
+    latexProvenance: {
+      kind: "exact",
+      latex,
+      sourceKind: "equation",
+      sourceLatex: latex
+    },
     expression,
     xDomain: graph.xDomain,
     yDomain: graph.yDomain,

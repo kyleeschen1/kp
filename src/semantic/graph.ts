@@ -42,6 +42,14 @@ export interface GraphPoint3D extends GraphPoint2D {
   z: number;
 }
 
+export interface GraphLatexProvenance {
+  kind: "exact";
+  latex: string;
+  sourceKind: "authored" | "equation" | "expression";
+  sourceLatex?: string;
+  sourceObjectId?: string;
+}
+
 export interface Graph2DObject {
   id: string;
   type: "graph-2d";
@@ -70,6 +78,7 @@ export interface Curve2DObject {
   graphId: string;
   label: string;
   equation: string;
+  latexProvenance?: GraphLatexProvenance;
   expression: MathExpression;
   xDomain: NumericDomain;
   sampleCount: number;
@@ -187,6 +196,7 @@ export interface Surface3DObject {
   graphId: string;
   label: string;
   equation: string;
+  latexProvenance?: GraphLatexProvenance;
   parameterization?: SaddleSurfaceParameterization;
   expression: MathExpression;
   xDomain: NumericDomain;

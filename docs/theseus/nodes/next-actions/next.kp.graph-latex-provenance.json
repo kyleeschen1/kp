@@ -2,7 +2,59 @@
   "id": "next.kp.graph-latex-provenance",
   "kind": "next-action",
   "title": "Enforce graph LaTeX provenance honesty",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic-api",
-  "summary": "Distinguish exact symbolic graph provenance from sampled graph data and prevent sampled graphs from claiming exact LaTeX sources."
+  "summary": "Added explicit graph LaTeX provenance and exact-versus-sampled derivation checks.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/graph.ts",
+      "summary": "Graph curve and surface records can now carry explicit exact LaTeX provenance."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/equation-graph.ts",
+      "summary": "LaTeX-derived graph scenes annotate generated curves and surfaces with exact equation provenance."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/graph-latex.ts",
+      "summary": "Derives exact graph LaTeX only from exact provenance and otherwise returns sampled graph LaTeX diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-graph.test.ts",
+      "summary": "Covers exact equation-derived graph LaTeX and sampled fallback for unproven curve equations."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-graph.test.ts",
+      "status": "passed",
+      "scope": "focused graph LaTeX provenance tests",
+      "checkedAt": "2026-07-10T20:15:07.117Z"
+    },
+    {
+      "command": "npm test -- tests/equation-graph.test.ts tests/semantic.test.ts tests/rendering.test.ts tests/semantic-derive-protocols.test.ts",
+      "status": "passed",
+      "scope": "repo test script including graph, semantic, renderer, and derive coverage",
+      "checkedAt": "2026-07-10T20:15:07.137Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:15:07.156Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:15:07.180Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added explicit graph LaTeX provenance and exact-versus-sampled derivation checks."
+  }
 }
