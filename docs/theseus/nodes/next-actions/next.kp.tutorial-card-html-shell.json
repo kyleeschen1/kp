@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.tutorial-card-html-shell",
+  "kind": "next-action",
+  "title": "Add basic HTML shell for tutorial card surfaces",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/card-html-shell.ts",
+      "summary": "Adds renderKpTutorialCardHtmlShell with deterministic tutorial-card data attributes and panel slots."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-html-shell.test.ts",
+      "summary": "Covers shell root metadata, synchronized panel slot attributes, diagnostics state, and escaping behavior."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-html-shell.json",
+      "summary": "Materializes the approved tutorial-card HTML shell next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the HTML shell slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-html-shell.test.ts tests/linear-solve-tutorial-card-sample.test.ts tests/tutorial-card-graph-frame-adapter.test.ts tests/tutorial-card-equation-frame-adapter.test.ts tests/tutorial-card-frame-sampler.test.ts",
+      "status": "passed",
+      "scope": "focused tutorial card HTML shell/runtime tests",
+      "checkedAt": "2026-07-10T22:38:12.948Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:38:13.000Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:38:13.067Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a basic tutorial card HTML shell renderer with stable root, equation panel, graph panel, and controls slots for later mounting."
+  },
+  "summary": "Added a basic tutorial card HTML shell renderer with stable root, equation panel, graph panel, and controls slots for later mounting."
+}
