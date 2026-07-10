@@ -1,0 +1,54 @@
+{
+  "id": "task.theseus.dashboard-health-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard health widgets",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "summary": "Added typed dashboard health items plus header health widgets with a default valid-state item and status styling.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data.ts",
+      "summary": "Defines typed dashboard health items."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-html.ts",
+      "summary": "Renders header health widgets and the default valid-state item."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-css.ts",
+      "summary": "Styles health widget status states."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-html.test.ts",
+      "summary": "Covers default health widget markup in rendered HTML."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/dashboard-html.test.ts",
+      "status": "passed",
+      "scope": "Focused health widget renderer test.",
+      "checkedAt": "2026-07-10T06:51:36.712Z"
+    },
+    {
+      "command": "npm run test -- src/dashboard-html.test.ts src/dashboard-data.test.ts src/dashboard-client.test.ts src/dashboard-data-builder.test.ts",
+      "status": "passed",
+      "scope": "Adjacent dashboard package tests.",
+      "checkedAt": "2026-07-10T06:51:36.727Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T06:51:36.748Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added typed dashboard health items plus header health widgets with a default valid-state item and status styling."
+  }
+}

@@ -90,13 +90,14 @@
     {
       "id": "task.theseus.dashboard-selected-preview-v0",
       "title": "Add-selected-row-preview",
-      "status": "complete",
-      "summary": "Selected-row preview markup, client behavior, and styling landed for dashboard HTML."
+      "summary": "Selected-row preview markup, client behavior, and styling landed for dashboard HTML.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-health-v0",
       "title": "Add-health-widgets",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Typed health items and header health widgets landed for dashboard HTML."
     },
     {
       "id": "task.theseus.dashboard-queue-v0",
