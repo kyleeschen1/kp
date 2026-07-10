@@ -1,6 +1,7 @@
 import type {
   ProjectCard,
   ProjectDashboardData,
+  ProjectDashboardSourceRef,
   ProjectDashboardStatus,
   ProjectGalleryKind,
   ProjectGalleryItem,
@@ -34,7 +35,8 @@ import {
   apiCatalogItemDetailFields,
   apiCatalogItemSearchFields,
   apiCatalogItemTags,
-  type ApiCatalogGroup
+  type ApiCatalogGroup,
+  type ApiCatalogItem
 } from "../editor/api-catalog.ts";
 
 export interface ProjectDashboardRenderOptions {
@@ -154,6 +156,14 @@ interface ProjectAgendaModel {
 interface ProjectAgendaAdapterRows {
   readonly gallery: ReadonlyMap<string, KpTheseusDashboardRow>;
   readonly api: ReadonlyMap<string, KpTheseusDashboardRow>;
+}
+
+interface ProjectAuthoringMetadata {
+  readonly maturity?: string | undefined;
+  readonly coverage?: readonly string[] | undefined;
+  readonly sourceRefs?: readonly ProjectDashboardSourceRef[] | undefined;
+  readonly verification?: readonly string[] | undefined;
+  readonly blockers?: readonly string[] | undefined;
 }
 
 function renderProjectAgenda(
@@ -448,8 +458,16 @@ function createWorkAgendaRows(
       previewFields: [
         { label: "Priority", value: card.priority },
         { label: "Category", value: card.category },
-        { label: "Blockers", value: (card.blockers ?? []).join(" ") || "None" }
-      ]
+        { label: "Blockers", value: (card.blockers ?? []).join(" ") || "None" },
+        ...authoringPreviewFields({
+          sourceRefs: card.sourceRefs,
+          verification: card.verification
+        })
+      ],
+      searchFields: authoringSearchFields({
+        sourceRefs: card.sourceRefs,
+        verification: card.verification
+      })
     },
     ...createWorkAgendaRows(card.children ?? [], depth + 1)
   ]);
@@ -499,6 +517,7 @@ function createGalleryAgendaRows(
         ...adapterDataAttributes(adapterRow)
       ],
       relatedIds: item.relatedIds,
+      extraHtml: renderAgendaBlockers(item.blockers ?? []),
       previewFields: [
         { label: "Gallery kind", value: formatGalleryKindLabel(item.kind) },
         { label: "Domains", value: item.domains.join(", ") || "None" },
@@ -506,9 +525,25 @@ function createGalleryAgendaRows(
           label: "Interfaces",
           value: (item.interfaces ?? []).join(", ") || "None"
         },
+        ...authoringPreviewFields({
+          maturity: item.maturity,
+          coverage: item.coverage,
+          sourceRefs: item.sourceRefs,
+          verification: item.verification,
+          blockers: item.blockers
+        }),
         ...adapterPreviewFields(adapterRow)
       ],
-      searchFields: adapterSearchFields(adapterRow)
+      searchFields: [
+        ...authoringSearchFields({
+          maturity: item.maturity,
+          coverage: item.coverage,
+          sourceRefs: item.sourceRefs,
+          verification: item.verification,
+          blockers: item.blockers
+        }),
+        ...adapterSearchFields(adapterRow)
+      ]
     };
   });
 }
@@ -539,14 +574,44 @@ function createAnimationLayoutAgendaRows(
         { label: "Animation id", value: entry.id },
         { label: "Beat count", value: String(entry.beatCount) },
         { label: "Duration", value: `${entry.defaultDurationMs}ms` },
-        { label: "States", value: String(entry.states.length) }
+        { label: "States", value: String(entry.states.length) },
+        ...authoringPreviewFields({
+          maturity: "sample-ready animation",
+          coverage: [
+            `${entry.beatCount} timeline beats`,
+            `${entry.states.length} rendered states`,
+            entry.fixtureId === undefined ? "operation-authored" : "fixture-backed"
+          ],
+          sourceRefs: [
+            {
+              label: "Equation animation catalog",
+              href: "src/editor/equation-animation-catalog.ts"
+            },
+            {
+              label: "Equation motion plan",
+              href: "src/rendering/equation-motion-plan.ts"
+            },
+            {
+              label: "Equation motion sampler",
+              href: "src/rendering/equation-motion-sampler.ts"
+            }
+          ],
+          verification: [
+            "tests/equation-motion-plan.test.ts",
+            "tests/equation-motion-sampler.test.ts",
+            "tests/katex-transition.browser.spec.ts"
+          ]
+        })
       ],
       previewLinks: [liveAnimationPreviewLink(entry.id, entry.label)],
       searchFields: [
         entry.id,
         entry.fixtureId ?? "",
         `${entry.states.length} states`,
-        `${entry.defaultDurationMs}ms`
+        `${entry.defaultDurationMs}ms`,
+        "src/editor/equation-animation-catalog.ts",
+        "src/rendering/equation-motion-plan.ts",
+        "tests/katex-transition.browser.spec.ts"
       ]
     })),
     query
@@ -574,7 +639,36 @@ function createKatexTransformAgendaRows(
           { label: "Fixture id", value: fixture.id },
           { label: "Source LaTeX", value: fixture.source.latex },
           { label: "Target LaTeX", value: fixture.target.latex },
-          { label: "Linked animation", value: linkedAnimation?.label ?? "None" }
+          { label: "Linked animation", value: linkedAnimation?.label ?? "None" },
+          ...authoringPreviewFields({
+            maturity:
+              linkedAnimation === undefined
+                ? "fixture-only"
+                : "animation-linked fixture",
+            coverage: katexFixtureCoverage(fixture),
+            sourceRefs: [
+              {
+                label: "KaTeX transform fixtures",
+                href: "src/rendering/katex-transform-fixtures.ts"
+              },
+              ...(linkedAnimation === undefined
+                ? []
+                : [
+                    {
+                      label: "Equation animation catalog",
+                      href: "src/editor/equation-animation-catalog.ts"
+                    }
+                  ])
+            ],
+            verification: [
+              "tests/katex-token-snapshot.test.ts",
+              "tests/equation-motion-plan.test.ts"
+            ],
+            blockers:
+              linkedAnimation === undefined
+                ? ["No linked dashboard animation sample yet."]
+                : []
+          })
         ],
         previewLinks:
           linkedAnimation === undefined
@@ -588,7 +682,10 @@ function createKatexTransformAgendaRows(
           fixture.id,
           fixture.source.latex,
           fixture.target.latex,
-          linkedAnimation?.label ?? ""
+          linkedAnimation?.label ?? "",
+          ...katexFixtureCoverage(fixture),
+          "src/rendering/katex-transform-fixtures.ts",
+          "tests/katex-token-snapshot.test.ts"
         ]
       };
     }),
@@ -639,8 +736,10 @@ function createApiGroupAgendaRows(
     previewFields: [
       { label: "API group", value: group.title },
       { label: "API category", value: group.category },
-      { label: "Items", value: String(group.items.length) }
-    ]
+      { label: "Items", value: String(group.items.length) },
+      ...authoringPreviewFields(apiGroupAuthoringMetadata(group))
+    ],
+    searchFields: authoringSearchFields(apiGroupAuthoringMetadata(group))
   };
   const itemRows: readonly ProjectAgendaRow[] = group.items.map((item) => {
     const adapterRow = adapterRows.get(item.id);
@@ -660,10 +759,12 @@ function createApiGroupAgendaRows(
       ],
       previewFields: [
         ...apiCatalogItemDetailFields(group, item),
+        ...authoringPreviewFields(apiItemAuthoringMetadata(item)),
         ...adapterPreviewFields(adapterRow)
       ],
       searchFields: [
         ...apiCatalogItemSearchFields(group, item),
+        ...authoringSearchFields(apiItemAuthoringMetadata(item)),
         ...adapterSearchFields(adapterRow)
       ]
     };
@@ -698,6 +799,118 @@ function adapterSearchFields(
   row: KpTheseusDashboardRow | undefined
 ): readonly string[] {
   return row === undefined ? [] : [row.id, row.searchText ?? ""];
+}
+
+function apiGroupAuthoringMetadata(
+  group: ApiCatalogGroup
+): ProjectAuthoringMetadata {
+  return {
+    maturity: "catalog group",
+    coverage: [`${group.items.length} API rows`],
+    sourceRefs: [
+      {
+        label: "API catalog",
+        href: "src/editor/api-catalog.ts"
+      }
+    ],
+    verification: [
+      "tests/api-catalog.test.ts",
+      "tests/project-dashboard.test.ts"
+    ]
+  };
+}
+
+function apiItemAuthoringMetadata(
+  item: ApiCatalogItem
+): ProjectAuthoringMetadata {
+  return {
+    maturity: item.status,
+    coverage: apiCatalogItemCoverage(item),
+    sourceRefs: [
+      {
+        label: "API catalog",
+        href: "src/editor/api-catalog.ts"
+      }
+    ],
+    verification: [
+      "tests/api-catalog.test.ts",
+      "tests/project-dashboard.test.ts"
+    ]
+  };
+}
+
+function apiCatalogItemCoverage(item: ApiCatalogItem): readonly string[] {
+  const details = item.details;
+
+  return [
+    `${details?.protocols?.length ?? 0} protocols`,
+    `${details?.views?.length ?? 0} views`,
+    `${details?.computes?.length ?? 0} computations`
+  ];
+}
+
+function katexFixtureCoverage(
+  fixture: KatexTransformFixture
+): readonly string[] {
+  return [
+    `${fixture.source.tokens.length} source tokens`,
+    `${fixture.target.tokens.length} target tokens`,
+    `${fixture.expectedStructuralTokens.source.length + fixture.expectedStructuralTokens.target.length} structural artifacts`,
+    `${fixture.expectedRoleChanges.length} role changes`
+  ];
+}
+
+function authoringPreviewFields(
+  metadata: ProjectAuthoringMetadata
+): readonly ProjectAgendaPreviewField[] {
+  return [
+    ...(metadata.maturity === undefined
+      ? []
+      : [{ label: "Maturity", value: metadata.maturity }]),
+    ...previewListField("Coverage", metadata.coverage),
+    ...previewSourceRefFields(metadata.sourceRefs),
+    ...previewListField("Verification", metadata.verification),
+    ...previewListField("Authoring blockers", metadata.blockers)
+  ];
+}
+
+function previewListField(
+  label: string,
+  values: readonly string[] | undefined
+): readonly ProjectAgendaPreviewField[] {
+  return values === undefined || values.length === 0
+    ? []
+    : [{ label, value: values.join(", ") }];
+}
+
+function previewSourceRefFields(
+  sourceRefs: readonly ProjectDashboardSourceRef[] | undefined
+): readonly ProjectAgendaPreviewField[] {
+  return sourceRefs === undefined || sourceRefs.length === 0
+    ? []
+    : [
+        {
+          label: "Source refs",
+          value: sourceRefs
+            .map((sourceRef) => `${sourceRef.label}: ${sourceRef.href}`)
+            .join(", ")
+        }
+      ];
+}
+
+function authoringSearchFields(
+  metadata: ProjectAuthoringMetadata
+): readonly string[] {
+  return [
+    metadata.maturity ?? "",
+    ...(metadata.coverage ?? []),
+    ...(metadata.sourceRefs ?? []).flatMap((sourceRef) => [
+      sourceRef.label,
+      sourceRef.href
+    ]),
+    ...(metadata.verification ?? []),
+    ...(metadata.blockers ?? [])
+  ];
 }
 
 function filterAgendaRows(

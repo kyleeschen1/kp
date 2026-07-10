@@ -2,9 +2,9 @@
   "id": "next.kp.dashboard-authoring-catalog-surface",
   "kind": "next-action",
   "title": "Promote dashboard to KP authoring catalog",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.dashboard",
-  "summary": "Make the project dashboard a KP-first surface for semantic objects, transformations, visual motifs, renderers/views, samples/cards, coverage, blockers, maturity, and searchable authoring state.",
+  "summary": "Promoted the project dashboard into a KP authoring catalogue surface with searchable source refs, verification hooks, coverage, maturity, and richer generated rows.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,36 @@
       "kind": "file",
       "path": "tests/project-dashboard.browser.spec.ts",
       "summary": "Browser checks for dashboard search and interactive behavior."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/model.ts",
+      "summary": "Dashboard model now supports source refs, verification, maturity, coverage, and blocker metadata for agenda search."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Agenda rows now surface authoring metadata for work, gallery, animation, KaTeX transform, and API catalogue rows."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Seed data now records dashboard authoring metadata, updated graph/semantic object status, and the phase 7 authoring-catalog update."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/theseus-adapter.ts",
+      "summary": "Theseus dashboard export includes authoring metadata for API and gallery rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Node dashboard coverage for authoring metadata, source-ref search, and generated row previews."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.browser.spec.ts",
+      "summary": "Browser dashboard coverage for source-ref preview and expanded fuzzy search behavior."
     }
   ],
   "dependsOn": {
@@ -80,5 +110,35 @@
       "id": "theseus-state-writable",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/project-dashboard.test.ts tests/api-catalog.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "dashboard authoring catalogue Node suite",
+      "checkedAt": "2026-07-10T18:10:36.152Z"
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "dashboard browser round trip",
+      "checkedAt": "2026-07-10T18:10:36.161Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-10T18:10:36.178Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T18:10:36.188Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted the project dashboard into a KP authoring catalogue surface with searchable source refs, verification hooks, coverage, maturity, and richer generated rows."
+  }
 }

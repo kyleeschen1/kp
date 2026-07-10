@@ -9,7 +9,8 @@ export const projectDashboardDataContract = {
   notes: [
     "Browser edits are not persisted in V1.",
     "Priority, status, blocker, report-card, and gallery changes are made in the typed source file.",
-    "Persistent browser editing is deferred until the dashboard records move to structured docs or JSON with validation."
+    "Persistent browser editing is deferred until the dashboard records move to structured docs or JSON with validation.",
+    "Authoring metadata should point rows back to source refs and verification commands so Codex can update project state from the same agenda surface."
   ]
 } as const;
 
@@ -24,6 +25,21 @@ export const projectDashboardData: ProjectDashboardData = {
       summary:
         "Define the shared clock, playhead, sampler, selector, and render-index contract across equations, graphs, simulations, and code.",
       tags: ["protocol", "timeline", "rendering", "identity"],
+      sourceRefs: [
+        { label: "Animation kernel", href: "src/animation/kernel.ts" },
+        {
+          label: "Equation sampler",
+          href: "src/rendering/equation-motion-sampler.ts"
+        },
+        {
+          label: "Graph transitions",
+          href: "src/rendering/graph-transitions.ts"
+        }
+      ],
+      verification: [
+        "npm run typecheck",
+        "npm test -- tests/equation-motion-sampler.test.ts tests/graph-transitions.test.ts"
+      ],
       relatedIds: [
         "gallery-rendering-time-api",
         "animation-cancelation",
@@ -56,13 +72,21 @@ export const projectDashboardData: ProjectDashboardData = {
       id: "work-graph-surface-morphs",
       title: "Graph surface morphs",
       category: "visual",
-      status: "blocked",
+      status: "active",
       priority: "high",
       summary:
         "Expose graph surface-mode morphs through the same playhead and sampler vocabulary as equation transitions.",
       tags: ["graph", "webgl", "surface", "timeline"],
-      blockers: [
-        "Needs shared playhead protocol before graph morph playback can be unified"
+      sourceRefs: [
+        {
+          label: "Graph transition clock",
+          href: "src/rendering/graph-transitions.ts"
+        },
+        { label: "WebGL shell", href: "src/rendering/graph-webgl.ts" }
+      ],
+      verification: [
+        "npm test -- tests/graph-transitions.test.ts tests/graph-webgl.test.ts",
+        "npm run typecheck"
       ],
       relatedIds: ["visual-webgl-graph", "gallery-rendering-time-api"]
     },
@@ -70,11 +94,22 @@ export const projectDashboardData: ProjectDashboardData = {
       id: "work-semantic-object-registry",
       title: "Semantic object registry",
       category: "semantic-object",
-      status: "planned",
+      status: "active",
       priority: "critical",
       summary:
         "Move toward namespaced object records with render, select, transform, execute, compare, diagnose, and link capabilities.",
       tags: ["objects", "selectors", "capabilities", "registry"],
+      sourceRefs: [
+        {
+          label: "Semantic computation protocols",
+          href: "src/semantic/computation-protocols.ts"
+        },
+        { label: "Expression object", href: "src/semantic/expression-object.ts" }
+      ],
+      verification: [
+        "npm test -- tests/math-expression.test.ts tests/semantic.test.ts",
+        "npm run typecheck"
+      ],
       relatedIds: ["semantic-matrix", "semantic-equation", "semantic-vector"]
     },
     {
@@ -152,6 +187,26 @@ export const projectDashboardData: ProjectDashboardData = {
             "Add browser coverage for the dashboard round trip, editor rehydration, equation scrubbing, and graph control updates.",
           tags: ["dashboard", "phase-6", "browser-verification", "codex-update"],
           relatedIds: ["report-dashboard-operations"]
+        },
+        {
+          id: "work-project-dashboard-v1-phase-7",
+          title: "Phase 7 authoring catalog",
+          category: "todo",
+          status: "done",
+          priority: "high",
+          summary:
+            "Promote agenda rows into an authoring catalog with source refs, verification hooks, coverage, maturity, blockers, and searchable generated catalogue rows.",
+          tags: ["dashboard", "phase-7", "authoring-catalog"],
+          sourceRefs: [
+            { label: "Dashboard model", href: "src/project-dashboard/model.ts" },
+            { label: "Dashboard renderer", href: "src/project-dashboard/render.ts" },
+            { label: "Dashboard data", href: "src/project-dashboard/data.ts" }
+          ],
+          verification: [
+            "npm test -- tests/project-dashboard.test.ts tests/api-catalog.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+            "npm run test:browser:dashboard"
+          ],
+          relatedIds: ["report-dashboard-operations", "gallery-rendering-time-api"]
         }
       ],
       relatedIds: ["report-dashboard-operations"]
@@ -168,6 +223,23 @@ export const projectDashboardData: ProjectDashboardData = {
       tags: ["equation", "cancelation", "particles"],
       domains: ["math", "katex"],
       interfaces: ["sample(progress)", "semantic token lifecycle"],
+      maturity: "active reusable motif",
+      coverage: [
+        "semantic lifecycle",
+        "visual motif phases",
+        "rewindable sampler"
+      ],
+      sourceRefs: [
+        {
+          label: "Equation motion plan",
+          href: "src/rendering/equation-motion-plan.ts"
+        },
+        { label: "Visual motif module", href: "src/rendering/visual-motif.ts" }
+      ],
+      verification: [
+        "tests/equation-motion-plan.test.ts",
+        "tests/equation-motion-sampler.test.ts"
+      ],
       relatedIds: ["work-equation-cancelation"]
     },
     {
@@ -324,6 +396,26 @@ export const projectDashboardData: ProjectDashboardData = {
       tags: ["graph", "webgl", "surface"],
       domains: ["graphs", "calculus"],
       interfaces: ["camera controls", "surface mode", "render shell"],
+      maturity: "active renderer",
+      coverage: [
+        "mesh surface mode",
+        "donut surface mode",
+        "hyperplane surface mode",
+        "shared clock sampler"
+      ],
+      sourceRefs: [
+        { label: "WebGL graph shell", href: "src/rendering/graph-webgl.ts" },
+        {
+          label: "Graph transition sampler",
+          href: "src/rendering/graph-transitions.ts"
+        },
+        { label: "Graph semantic objects", href: "src/semantic/graph.ts" }
+      ],
+      verification: [
+        "tests/graph-webgl.test.ts",
+        "tests/graph-transitions.test.ts",
+        "tests/project-dashboard.browser.spec.ts"
+      ],
       relatedIds: ["work-graph-surface-morphs"]
     },
     {
@@ -420,6 +512,20 @@ export const projectDashboardData: ProjectDashboardData = {
       tags: ["matrix", "linear-algebra", "selectors"],
       domains: ["math", "linear algebra"],
       interfaces: ["latex render", "entry selectors"],
+      maturity: "active semantic object",
+      coverage: [
+        "toLatex protocol",
+        "matrixForm protocol",
+        "determinant evaluation"
+      ],
+      sourceRefs: [
+        { label: "Matrix object", href: "src/semantic/matrix.ts" },
+        {
+          label: "Computation protocols",
+          href: "src/semantic/computation-protocols.ts"
+        }
+      ],
+      verification: ["tests/semantic.test.ts", "tests/rendering.test.ts"],
       relatedIds: ["work-semantic-object-registry"]
     },
     {
@@ -456,6 +562,17 @@ export const projectDashboardData: ProjectDashboardData = {
       tags: ["clock", "playhead", "sampler", "render-index", "timeline"],
       domains: ["runtime", "authoring"],
       interfaces: ["KpClock", "KpPlayhead", "KpSampler", "KpRendererAdapter"],
+      maturity: "active TS API",
+      coverage: [
+        "renderer-neutral motion plan",
+        "sampled animation frame",
+        "progress player"
+      ],
+      sourceRefs: [
+        { label: "Animation kernel", href: "src/animation/kernel.ts" },
+        { label: "Public SDK", href: "src/public/kp-animation-sdk.ts" }
+      ],
+      verification: ["tests/kp-animation-sdk.test.ts"],
       relatedIds: ["work-rendering-time-protocol"]
     }
   ],

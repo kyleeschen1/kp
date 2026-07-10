@@ -21,7 +21,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure or arbitrary visual effects without asking."
   ],
   "goal": "Run the approved semantic transition runtime loop.",
-  "target": "next.kp.semantic-computation-protocols",
+  "target": "next.kp.dashboard-authoring-catalog-surface",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -115,6 +115,11 @@
     {
       "id": "next.kp.semantic-computation-protocols",
       "title": "Add semantic computation protocols",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.dashboard-authoring-catalog-surface",
+      "title": "Promote dashboard to KP authoring catalog",
       "status": "complete"
     }
   ]

@@ -41,6 +41,31 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
         field.value === "toLatex, evaluate, matrixForm"
     )
   );
+  assert.ok(
+    matrixRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Source refs" &&
+        field.value.includes("src/editor/api-catalog.ts")
+    )
+  );
+  assert.ok(
+    matrixRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Verification" &&
+        field.value.includes("tests/api-catalog.test.ts")
+    )
+  );
+
+  const graphRow = galleryRows.find(
+    (row) => row.id === "kp.gallery.visual-webgl-graph"
+  );
+
+  assert.ok(graphRow?.searchText?.includes("src/rendering/graph-transitions.ts"));
+  assert.ok(
+    graphRow?.preview?.fields.some(
+      (field) => field.label === "Maturity" && field.value === "active renderer"
+    )
+  );
 });
 
 test("KP Theseus dashboard extension command writes JSON payload", () => {

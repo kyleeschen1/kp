@@ -62,6 +62,9 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   await expect(agendaPreview).toContainText(
     "Structured row, column, and entry object"
   );
+  await expect(agendaPreview).toContainText("Source refs");
+  await expect(agendaPreview).toContainText("src/editor/api-catalog.ts");
+  await expect(agendaPreview).toContainText("tests/api-catalog.test.ts");
   await expect(
     page.locator('[data-kp-agenda-row="work-project-dashboard-v1-phase-1"]')
   ).toHaveAttribute("data-kp-agenda-depth", "1");
@@ -129,7 +132,7 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   await dashboardSearch.fill("dnt");
   await expect(animationLayout).toHaveCount(0);
   await expect(page.locator("[data-kp-project-dashboard-search-count]")).toHaveText(
-    /Showing 1 of \d+ rows/
+    /Showing 2 of \d+ rows/
   );
   await expect(page.locator('[data-kp-agenda-section="work"]')).toHaveCount(0);
   await expect(
@@ -137,6 +140,9 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   ).toBeVisible();
   await expect(
     page.locator('[data-kp-project-gallery-item="visual-donut-surface"]')
+  ).toBeVisible();
+  await expect(
+    page.locator('[data-kp-project-gallery-item="visual-webgl-graph"]')
   ).toBeVisible();
   await expect(
     page.locator('[data-kp-project-gallery-item="visual-mesh-graph"]')

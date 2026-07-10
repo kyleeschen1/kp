@@ -5,7 +5,11 @@ import {
   apiCatalogItemTags
 } from "../editor/api-catalog.ts";
 import { projectDashboardData } from "./data.ts";
-import type { ProjectDashboardData, ProjectGalleryItem } from "./model.ts";
+import type {
+  ProjectDashboardData,
+  ProjectDashboardSourceRef,
+  ProjectGalleryItem
+} from "./model.ts";
 
 // Keep this structural until Theseus publishes browser-safe package types.
 export interface KpTheseusDashboardPreviewField {
@@ -110,9 +114,32 @@ function createKpApiSection(): KpTheseusDashboardSection {
         summary: item.summary,
         tags: uniqueStrings(["kp", "api", group.id, ...apiCatalogItemTags(group, item)]),
         preview: {
-          fields: apiCatalogItemDetailFields(group, item)
+          fields: [
+            ...apiCatalogItemDetailFields(group, item),
+            { label: "Maturity", value: item.status },
+            {
+              label: "Coverage",
+              value: apiCatalogCoverage(item).join(", ")
+            },
+            {
+              label: "Source refs",
+              value: sourceRefsText([
+                { label: "API catalog", href: "src/editor/api-catalog.ts" }
+              ])
+            },
+            {
+              label: "Verification",
+              value: "tests/api-catalog.test.ts, tests/project-dashboard.test.ts"
+            }
+          ]
         },
-        searchText: apiCatalogItemSearchFields(group, item).join(" ")
+        searchText: [
+          ...apiCatalogItemSearchFields(group, item),
+          ...apiCatalogCoverage(item),
+          "src/editor/api-catalog.ts",
+          "tests/api-catalog.test.ts",
+          "tests/project-dashboard.test.ts"
+        ].join(" ")
       }))
     )
   };
@@ -139,7 +166,22 @@ function galleryItemRow(item: ProjectGalleryItem): KpTheseusDashboardRow {
         {
           label: "Interfaces",
           value: (item.interfaces ?? []).join(", ") || "None"
-        }
+        },
+        ...(item.maturity === undefined
+          ? []
+          : [{ label: "Maturity", value: item.maturity }]),
+        ...(item.coverage === undefined
+          ? []
+          : [{ label: "Coverage", value: item.coverage.join(", ") }]),
+        ...(item.sourceRefs === undefined
+          ? []
+          : [{ label: "Source refs", value: sourceRefsText(item.sourceRefs) }]),
+        ...(item.verification === undefined
+          ? []
+          : [{ label: "Verification", value: item.verification.join(", ") }]),
+        ...(item.blockers === undefined || item.blockers.length === 0
+          ? []
+          : [{ label: "Authoring blockers", value: item.blockers.join(", ") }])
       ]
     },
     searchText: [
@@ -147,7 +189,15 @@ function galleryItemRow(item: ProjectGalleryItem): KpTheseusDashboardRow {
       item.kind,
       ...item.domains,
       ...item.tags,
-      ...(item.interfaces ?? [])
+      ...(item.interfaces ?? []),
+      item.maturity ?? "",
+      ...(item.coverage ?? []),
+      ...(item.sourceRefs ?? []).flatMap((sourceRef) => [
+        sourceRef.label,
+        sourceRef.href
+      ]),
+      ...(item.verification ?? []),
+      ...(item.blockers ?? [])
     ].join(" ")
   };
 }
@@ -170,4 +220,24 @@ function createKpDashboardExtensionHealth(
 
 function uniqueStrings(values: readonly string[]): readonly string[] {
   return [...new Set(values.filter((value) => value.length > 0))];
+}
+
+function apiCatalogCoverage(
+  item: (typeof apiCatalogGroups)[number]["items"][number]
+): readonly string[] {
+  const details = item.details;
+
+  return [
+    `${details?.protocols?.length ?? 0} protocols`,
+    `${details?.views?.length ?? 0} views`,
+    `${details?.computes?.length ?? 0} computations`
+  ];
+}
+
+function sourceRefsText(
+  sourceRefs: readonly ProjectDashboardSourceRef[]
+): string {
+  return sourceRefs
+    .map((sourceRef) => `${sourceRef.label}: ${sourceRef.href}`)
+    .join(", ");
 }

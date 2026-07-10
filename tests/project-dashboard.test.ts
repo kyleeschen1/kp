@@ -35,6 +35,22 @@ test("project dashboard seed data exposes work, gallery, and report records", ()
       (theme) => theme.id === "report-animation-protocol"
     )
   );
+  assert.ok(
+    projectDashboardData.cards.some((card) =>
+      card.sourceRefs?.some((sourceRef) =>
+        sourceRef.href.includes("src/animation/kernel.ts")
+      )
+    )
+  );
+  assert.ok(
+    projectDashboardData.gallery.some(
+      (item) =>
+        item.id === "visual-webgl-graph" &&
+        item.sourceRefs?.some((sourceRef) =>
+          sourceRef.href.includes("src/rendering/graph-transitions.ts")
+        )
+    )
+  );
 });
 
 test("project dashboard ids are unique and related ids resolve", () => {
@@ -213,9 +229,43 @@ test("renderProjectDashboard selects API rows into the shared preview", () => {
   assert.match(html, /data-kp-preview-field="Protocols"[^>]*>toLatex, evaluate, matrixForm</);
   assert.match(html, /data-kp-preview-field="Views"[^>]*>latex, matrix-grid, linear-map</);
   assert.match(html, /data-kp-preview-field="Computes"[^>]*>shape, determinant</);
+  assert.match(html, /data-kp-preview-field="Maturity"[^>]*>active</);
+  assert.match(
+    html,
+    /data-kp-preview-field="Coverage"[^>]*>3 protocols, 3 views, 2 computations</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Source refs"[^>]*>API catalog: src\/editor\/api-catalog\.ts</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Verification"[^>]*>tests\/api-catalog\.test\.ts, tests\/project-dashboard\.test\.ts</
+  );
   assert.match(
     html,
     /data-action="select-project-agenda-row"[^>]*data-kp-select-agenda-row="api-semantic-matrix"[^>]*aria-pressed="true"/
+  );
+});
+
+test("renderProjectDashboard selects gallery authoring rows into the shared preview", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "visual-webgl-graph"
+  });
+
+  assert.match(html, /data-kp-selected-agenda-row="visual-webgl-graph"/);
+  assert.match(html, /data-kp-preview-field="Maturity"[^>]*>active renderer</);
+  assert.match(
+    html,
+    /data-kp-preview-field="Coverage"[^>]*>mesh surface mode, donut surface mode, hyperplane surface mode, shared clock sampler</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Source refs"[^>]*>WebGL graph shell: src\/rendering\/graph-webgl\.ts, Graph transition sampler: src\/rendering\/graph-transitions\.ts, Graph semantic objects: src\/semantic\/graph\.ts</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Verification"[^>]*>tests\/graph-webgl\.test\.ts, tests\/graph-transitions\.test\.ts, tests\/project-dashboard\.browser\.spec\.ts</
   );
 });
 
@@ -233,6 +283,12 @@ test("renderProjectDashboard selects KaTeX transform rows into the shared previe
   assert.match(html, /Target LaTeX/);
   assert.match(html, /x \/ 3/);
   assert.match(html, /\\frac\{x\}\{3\}/);
+  assert.match(html, /data-kp-preview-field="Maturity"[^>]*>animation-linked fixture</);
+  assert.match(
+    html,
+    /data-kp-preview-field="Coverage"[^>]*>\d+ source tokens, \d+ target tokens, \d+ structural artifacts, \d+ role changes</
+  );
+  assert.match(html, /src\/rendering\/katex-transform-fixtures\.ts/);
 });
 
 test("renderProjectDashboard links selected animation rows to live samples", () => {
@@ -336,16 +392,16 @@ test("groupProjectCardsByStatus groups top-level cards and sorts by priority", (
   );
 });
 
-test("renderProjectDashboard renders work lanes, blockers, children, and related links", () => {
+test("renderProjectDashboard renders work lanes, source refs, children, and related links", () => {
   const html = renderProjectDashboard(projectDashboardData);
 
   assert.match(html, /data-kp-agenda-status="active"/);
   assert.match(html, /data-kp-agenda-status="planned"/);
-  assert.match(html, /data-kp-agenda-status="blocked"/);
   assert.match(html, /data-kp-agenda-status="done"/);
   assert.match(html, /data-kp-agenda-detail="critical"/);
-  assert.match(html, /data-kp-blockers/);
-  assert.match(html, /Needs shared playhead protocol before graph morph playback can be unified/);
+  assert.match(html, /Source refs/);
+  assert.match(html, /src\/rendering\/graph-transitions\.ts/);
+  assert.match(html, /Verification/);
   assert.match(
     html,
     /data-kp-agenda-row="work-project-dashboard-v1-phase-1"[^>]*data-kp-agenda-depth="1"/
@@ -425,7 +481,7 @@ test("filterProjectDashboardData fuzzy-matches rendered forms", () => {
 
   assert.deepEqual(
     donutResult.gallery.map((item) => item.id),
-    ["visual-donut-surface"]
+    ["visual-webgl-graph", "visual-donut-surface"]
   );
 
   const meshGraphResult = filterProjectDashboardData(
@@ -435,7 +491,7 @@ test("filterProjectDashboardData fuzzy-matches rendered forms", () => {
 
   assert.deepEqual(
     meshGraphResult.gallery.map((item) => item.id),
-    ["visual-mesh-graph"]
+    ["visual-webgl-graph", "visual-mesh-graph"]
   );
 });
 
@@ -449,10 +505,13 @@ test("filterProjectDashboardData finds cards and gallery items by text facets", 
     ["gallery-rendering-time-api"]
   );
 
-  const statusResult = filterProjectDashboardData(projectDashboardData, "blocked");
+  const statusResult = filterProjectDashboardData(
+    projectDashboardData,
+    "graph-transitions.ts"
+  );
   assert.deepEqual(
     statusResult.cards.map((card) => card.id),
-    ["work-graph-surface-morphs"]
+    ["work-rendering-time-protocol", "work-graph-surface-morphs"]
   );
 
   const domainResult = filterProjectDashboardData(
@@ -502,8 +561,9 @@ test("renderProjectDashboard searches all dashboard data", () => {
 
   assert.match(html, /data-action="filter-project-dashboard"/);
   assert.match(html, /value="dnt"/);
-  assert.match(html, /Showing 1 of \d+ rows/);
+  assert.match(html, /Showing 2 of \d+ rows/);
   assert.match(html, /data-kp-agenda-row="visual-donut-surface"/);
+  assert.match(html, /data-kp-agenda-row="visual-webgl-graph"/);
   assert.doesNotMatch(html, /data-kp-agenda-row="visual-mesh-graph"/);
   assert.doesNotMatch(html, /data-kp-agenda-row="work-project-dashboard-v1"/);
   assert.doesNotMatch(html, /data-kp-agenda-row="report-dashboard-operations"/);
@@ -648,6 +708,7 @@ test("renderProjectDashboard renders the data contract for dashboard writes", ()
   assert.match(html, /Data contract/);
   assert.match(html, /src\/project-dashboard\/data\.ts/);
   assert.match(html, /Browser edits are not persisted in V1/);
+  assert.match(html, /Authoring metadata should point rows back to source refs/);
   assert.match(html, /Codex completion rule/);
   assert.match(
     html,
@@ -673,6 +734,9 @@ test("project dashboard v1 card records completed Codex phase updates", () => {
   const browserVerificationPhase = dashboardCard?.children?.find(
     (card) => card.id === "work-project-dashboard-v1-phase-6"
   );
+  const authoringCatalogPhase = dashboardCard?.children?.find(
+    (card) => card.id === "work-project-dashboard-v1-phase-7"
+  );
 
   assert.equal(dashboardCard?.status, "done");
   assert.equal(reportCardPhase?.status, "done");
@@ -682,4 +746,11 @@ test("project dashboard v1 card records completed Codex phase updates", () => {
   assert.equal(browserVerificationPhase?.status, "done");
   assert.ok(browserVerificationPhase?.tags.includes("browser-verification"));
   assert.match(browserVerificationPhase?.summary ?? "", /dashboard round trip/);
+  assert.equal(authoringCatalogPhase?.status, "done");
+  assert.ok(authoringCatalogPhase?.tags.includes("authoring-catalog"));
+  assert.ok(
+    authoringCatalogPhase?.sourceRefs?.some((sourceRef) =>
+      sourceRef.href.includes("src/project-dashboard/render.ts")
+    )
+  );
 });

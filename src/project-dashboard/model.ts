@@ -35,6 +35,8 @@ export interface ProjectCard {
   readonly blockers?: readonly string[];
   readonly children?: readonly ProjectCard[];
   readonly relatedIds?: readonly string[];
+  readonly sourceRefs?: readonly ProjectDashboardSourceRef[];
+  readonly verification?: readonly string[];
 }
 
 export interface ProjectGalleryItem {
@@ -47,6 +49,16 @@ export interface ProjectGalleryItem {
   readonly domains: readonly string[];
   readonly interfaces?: readonly string[];
   readonly relatedIds?: readonly string[];
+  readonly maturity?: string;
+  readonly coverage?: readonly string[];
+  readonly sourceRefs?: readonly ProjectDashboardSourceRef[];
+  readonly verification?: readonly string[];
+  readonly blockers?: readonly string[];
+}
+
+export interface ProjectDashboardSourceRef {
+  readonly label: string;
+  readonly href: string;
 }
 
 export interface ProjectReportTheme {
@@ -276,7 +288,9 @@ function cardMatches(card: ProjectCard, normalizedQuery: string): boolean {
       card.priority,
       card.summary,
       ...card.tags,
-      ...(card.blockers ?? [])
+      ...(card.blockers ?? []),
+      ...sourceRefSearchFields(card.sourceRefs),
+      ...(card.verification ?? [])
     ],
     normalizedQuery
   );
@@ -295,10 +309,24 @@ function galleryItemMatches(
       item.summary,
       ...item.tags,
       ...item.domains,
-      ...(item.interfaces ?? [])
+      ...(item.interfaces ?? []),
+      item.maturity ?? "",
+      ...(item.coverage ?? []),
+      ...sourceRefSearchFields(item.sourceRefs),
+      ...(item.verification ?? []),
+      ...(item.blockers ?? [])
     ],
     normalizedQuery
   );
+}
+
+function sourceRefSearchFields(
+  sourceRefs: readonly ProjectDashboardSourceRef[] | undefined
+): readonly string[] {
+  return (sourceRefs ?? []).flatMap((sourceRef) => [
+    sourceRef.label,
+    sourceRef.href
+  ]);
 }
 
 function reportThemeMatches(
