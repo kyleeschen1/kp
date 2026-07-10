@@ -1107,6 +1107,7 @@ function renderArtifactSeedReveal(
     renderContext.renderer.render(progress);
     renderContext.canvas.dataset["kpEquationMotionArtifactReady"] = "true";
     renderContext.canvas.dataset["kpEquationMotionArtifactHandoff"] = "true";
+    renderContext.canvas.style.opacity = "1";
 
     return new Set([seedRevealPlan.sourceMotionId, seedRevealPlan.targetMotionId]);
   }
@@ -1114,6 +1115,7 @@ function renderArtifactSeedReveal(
   // The texture atlas is created asynchronously after font readiness. Until the
   // renderer has painted a frame, the DOM remains the only nonblank endpoint.
   renderContext.canvas.dataset["kpEquationMotionArtifactHandoff"] = "pending";
+  renderContext.canvas.style.opacity = "0";
 
   return new Set();
 }
@@ -1249,6 +1251,7 @@ function findOrCreateArtifactSeedRevealContext(
   };
 
   canvas.className = "equation-motion__artifact-canvas";
+  canvas.style.opacity = "0";
   canvas.dataset["kpEquationMotionArtifactOverlay"] = "true";
   canvas.dataset["kpEquationMotionArtifactRenderer"] = "canvas-fold-bundle-swap";
   canvas.dataset["kpEquationMotionArtifactSource"] = plan.sourceMotionId;
@@ -1290,6 +1293,8 @@ function findOrCreateArtifactSeedRevealContext(
       renderContext.renderer = renderer;
       renderer.render(renderContext.lastProgress);
       canvas.dataset["kpEquationMotionArtifactReady"] = "true";
+      canvas.dataset["kpEquationMotionArtifactHandoff"] = "pending";
+      canvas.style.opacity = "0";
 
       return renderer;
     })

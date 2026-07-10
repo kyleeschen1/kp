@@ -198,6 +198,89 @@ test("radical artifact handoff keeps source DOM visible until texture renderer i
   expect(handoffState.visibleSourceExponentCount).toBeGreaterThan(0);
 });
 
+test("radical artifact handoff keeps async-ready pending canvas hidden", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  const demo = page.locator("[data-kp-equation-motion-demo]");
+  const animationSelect = demo.locator(
+    '[data-action="set-equation-motion-animation"]'
+  );
+
+  await animationSelect.selectOption("fixture-radical-rewrite-power-as-root");
+
+  const pendingReadyState = await page.evaluate(async () => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 1);
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.959);
+
+    const overlay = await new Promise<HTMLCanvasElement>((resolve, reject) => {
+      const readOverlay = () =>
+        demoElement.querySelector<HTMLCanvasElement>(
+          '[data-kp-equation-motion-artifact-overlay][data-kp-equation-motion-artifact-ready="true"]'
+        );
+      const existingOverlay = readOverlay();
+
+      if (existingOverlay !== null) {
+        resolve(existingOverlay);
+        return;
+      }
+
+      const observer = new MutationObserver(() => {
+        const nextOverlay = readOverlay();
+
+        if (nextOverlay !== null) {
+          window.clearTimeout(timeout);
+          observer.disconnect();
+          resolve(nextOverlay);
+        }
+      });
+      const timeout = window.setTimeout(() => {
+        observer.disconnect();
+        reject(new Error("Expected pending radical artifact overlay to become ready."));
+      }, 5_000);
+
+      observer.observe(demoElement, {
+        attributeFilter: ["data-kp-equation-motion-artifact-ready"],
+        attributes: true,
+        childList: true,
+        subtree: true
+      });
+    });
+
+    const targetRadicalClone = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.target.radical"]'
+    );
+
+    if (targetRadicalClone === null) {
+      throw new Error("Expected target radical clone.");
+    }
+
+    return {
+      handoff: overlay.dataset["kpEquationMotionArtifactHandoff"],
+      overlayOpacity: window.getComputedStyle(overlay).opacity,
+      targetCloneVisibility: window.getComputedStyle(targetRadicalClone).visibility,
+      targetCloneOpacity: Number(window.getComputedStyle(targetRadicalClone).opacity)
+    };
+  });
+
+  expect(pendingReadyState).toEqual({
+    handoff: "pending",
+    overlayOpacity: "0",
+    targetCloneVisibility: "visible",
+    targetCloneOpacity: expect.any(Number)
+  });
+  expect(pendingReadyState.targetCloneOpacity).toBeGreaterThan(0.9);
+});
+
 test("editor equation motion demo uses semantic playback plans", async ({
   page
 }) => {
