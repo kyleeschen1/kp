@@ -1,0 +1,44 @@
+{
+  "id": "task.theseus.dashboard-static-html-v0",
+  "kind": "task",
+  "title": "Generate static Theseus dashboard HTML",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "summary": "Added a static dashboard HTML renderer with escaped agenda rows, search data attributes, toolbar markup, and a safe embedded model JSON payload.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-html.ts",
+      "summary": "Renders reusable dashboard data to static agenda HTML."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-html.test.ts",
+      "summary": "Covers escaped row markup, row search attributes, section counts, and safe model JSON."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/dashboard-html.test.ts",
+      "status": "passed",
+      "scope": "Focused static dashboard HTML renderer test.",
+      "checkedAt": "2026-07-10T06:12:57.097Z"
+    },
+    {
+      "command": "npm run test -- src/dashboard-html.test.ts src/dashboard-data.test.ts src/dashboard-data-builder.test.ts",
+      "status": "passed",
+      "scope": "Adjacent dashboard model and renderer tests.",
+      "checkedAt": "2026-07-10T06:12:57.115Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T06:12:57.161Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a static dashboard HTML renderer with escaped agenda rows, search data attributes, toolbar markup, and a safe embedded model JSON payload."
+  }
+}

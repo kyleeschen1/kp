@@ -66,13 +66,14 @@
     {
       "id": "task.theseus.dashboard-search-index-v0",
       "title": "Add-fuzzy-search-metadata",
-      "status": "complete",
-      "summary": "Per-row fuzzy-search metadata landed in the reusable dashboard model."
+      "summary": "Per-row fuzzy-search metadata landed in the reusable dashboard model.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-static-html-v0",
       "title": "Generate-static-dashboard-html",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Static agenda HTML renderer landed for dashboard models."
     },
     {
       "id": "task.theseus.dashboard-agenda-css-v0",
