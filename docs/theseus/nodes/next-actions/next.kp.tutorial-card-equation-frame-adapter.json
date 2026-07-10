@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.tutorial-card-equation-frame-adapter",
+  "kind": "next-action",
+  "title": "Resolve equation animation frames from card manifests",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/equation-frame-adapter.ts",
+      "summary": "Adds createKpTutorialEquationFrameAdapter for resolving equation panel frames from tutorial card frame sampler output."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-equation-frame-adapter.test.ts",
+      "summary": "Covers active transition selection, local transition progress, deterministic rewind sampling, and clamp behavior."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-equation-frame-adapter.json",
+      "summary": "Materializes the approved equation frame adapter next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the equation frame adapter slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-equation-frame-adapter.test.ts tests/tutorial-card-frame-sampler.test.ts tests/tutorial-card-layout-timeline-binding.test.ts tests/parent-timeline.test.ts tests/tutorial-card-runtime.test.ts tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "focused tutorial card equation adapter/runtime tests",
+      "checkedAt": "2026-07-10T22:22:01.658Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:22:01.712Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:22:01.763Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a tutorial equation frame adapter that routes card progress through the active transformation track and samples the matching equation animation transition."
+  },
+  "summary": "Added a tutorial equation frame adapter that routes card progress through the active transformation track and samples the matching equation animation transition."
+}
