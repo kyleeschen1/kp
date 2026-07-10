@@ -1,22 +1,41 @@
 import type {
+  KatexTransformDefinition,
   KatexTransformFixture,
   KatexTransformFixtureFamily,
   KatexTransformFixtureIntent,
   KatexTransformFixtureLayoutRole,
+  KatexTransformFixtureToken,
   KatexTransformFixtureTokenRole
 } from "../rendering/katex-transform-fixtures.ts";
+import {
+  definitionForKatexTransformFixture,
+  findKatexTransformFixture
+} from "../rendering/katex-transform-fixtures.ts";
+import {
+  equationVisualMotifDescriptors
+} from "../rendering/visual-motif.ts";
 import type {
   EquationMotionPrimitiveId,
   EquationVisualMotifKind,
   EquationVisualMotifPhaseId
 } from "../rendering/visual-motif.ts";
+import {
+  createTransformTreeVisualMotifTimeline
+} from "../rendering/visual-motif-composition.ts";
 import type {
   TransformTreeVisualMotifTimeline
 } from "../rendering/visual-motif-composition.ts";
+import {
+  createSemanticTransformationRef
+} from "../semantic/animation.ts";
 import type {
   SemanticTransformationPreservation,
   SemanticTransformationRef
 } from "../semantic/animation.ts";
+import {
+  createEditableSemanticTransformationTree,
+  createSemanticTransformationLeaf
+} from "../semantic/transformation-composition.ts";
 import {
   selectorCorrespondenceRelationIds,
   type CorrespondenceMap
@@ -89,6 +108,11 @@ export interface GeneratedKatexFixtureDocument {
   readonly schemaVersion: typeof GENERATED_KATEX_FIXTURE_CONTRACT_VERSION;
   readonly kind: "generated-katex-transform-fixture";
   readonly generated: GeneratedKatexTransformFixture;
+}
+
+export interface CreateGeneratedKatexTransformFixtureFromSemanticTransformationInput {
+  readonly fixtureId: string;
+  readonly semanticTransformation: SemanticTransformationRef;
 }
 
 export interface TransformFixtureValidationIssue {
@@ -240,6 +264,51 @@ export function exportKatexTransformFixture(
   };
 }
 
+export function createGeneratedKatexTransformFixtureFromSemanticTransformation(
+  input: CreateGeneratedKatexTransformFixtureFromSemanticTransformationInput
+): GeneratedKatexTransformFixture {
+  const fixture = findKatexTransformFixture(input.fixtureId);
+  const definition = definitionForKatexTransformFixture(fixture);
+  const semanticTransformation = createSemanticTransformationRef(
+    input.semanticTransformation
+  );
+
+  if (semanticTransformation.kind !== definition.semanticTransform) {
+    throw new Error(
+      `Semantic transformation ${semanticTransformation.kind} does not match fixture ${fixture.id} semantic transform ${definition.semanticTransform}.`
+    );
+  }
+
+  const correspondenceMap = createGeneratedCorrespondenceMap(
+    fixture,
+    semanticTransformation.id
+  );
+  const visualMotifTimeline = createGeneratedVisualMotifTimeline(
+    definition,
+    semanticTransformation
+  );
+  const artifactExpectations = createGeneratedArtifactExpectations(fixture);
+  const primaryRoleChangeTargetId =
+    correspondenceMap.records.find((record) => record.relation === "role-change")
+      ?.targetSelectorIds[0];
+
+  return {
+    id: `generated.${fixture.id}`,
+    fixture: cloneJson(fixture),
+    semanticTransformation,
+    correspondenceMap,
+    visualMotifTimeline,
+    artifactExpectations,
+    geometryDiagnostics: createGeneratedGeometryDiagnostics({
+      artifactExpectations,
+      definition,
+      fallbackTargetId: fixture.id,
+      primaryRoleChangeTargetId
+    }),
+    summary: semanticTransformation.summary ?? definition.summary
+  };
+}
+
 export function exportGeneratedKatexTransformFixture(
   generated: GeneratedKatexTransformFixture
 ): GeneratedKatexFixtureDocument {
@@ -248,6 +317,247 @@ export function exportGeneratedKatexTransformFixture(
     kind: "generated-katex-transform-fixture",
     generated: cloneJson(generated)
   };
+}
+
+function createGeneratedCorrespondenceMap(
+  fixture: KatexTransformFixture,
+  transformationId: string
+): CorrespondenceMap {
+  return {
+    id: `correspondence.${transformationId}`,
+    records: [
+      ...fixture.expectedRoleChanges.map((change, index) => {
+        const sourceToken = findFixtureToken(
+          fixture.source.tokens,
+          change.sourceRole,
+          change.sourceText
+        );
+        const targetToken = findFixtureToken(
+          fixture.target.tokens,
+          change.targetRole,
+          change.targetText
+        );
+
+        return {
+          id: `${transformationId}.role-change.${index}`,
+          relation: "role-change" as const,
+          sourceSelectorIds: [
+            selectorForFixtureToken(fixture.id, "source", sourceToken)
+          ],
+          targetSelectorIds: [
+            selectorForFixtureToken(fixture.id, "target", targetToken)
+          ],
+          summary: `${change.sourceRole} ${change.sourceText} persists as ${change.targetRole} ${change.targetText}.`
+        };
+      }),
+      ...createGeneratedArtifactExpectations(fixture).map(
+        (artifact, index) => ({
+          id: `${transformationId}.artifact.${index}`,
+          relation: "artifact" as const,
+          sourceSelectorIds:
+            artifact.side === "source" ? [artifact.selectorId] : [],
+          targetSelectorIds:
+            artifact.side === "target" ? [artifact.selectorId] : [],
+          summary: `${artifact.structuralTokenId} is a ${artifact.side}-side ${artifact.artifactKind} artifact.`
+        })
+      )
+    ]
+  };
+}
+
+function createGeneratedVisualMotifTimeline(
+  definition: KatexTransformDefinition,
+  semanticTransformation: SemanticTransformationRef
+): GeneratedKatexTransformFixture["visualMotifTimeline"] {
+  const [primaryMotifKind] = definition.defaultVisualMotifs;
+
+  if (primaryMotifKind === undefined) {
+    throw new Error(
+      `KaTeX transform definition ${definition.id} has no default visual motifs.`
+    );
+  }
+
+  const descriptor = equationVisualMotifDescriptors.find(
+    (candidate) => candidate.kind === primaryMotifKind
+  );
+
+  if (descriptor === undefined) {
+    throw new Error(
+      `KaTeX transform definition ${definition.id} references unknown motif ${primaryMotifKind}.`
+    );
+  }
+
+  return createTransformTreeVisualMotifTimeline({
+    id: `visual.${semanticTransformation.id}`,
+    tree: createEditableSemanticTransformationTree({
+      root: createSemanticTransformationLeaf(semanticTransformation)
+    }),
+    rules: [
+      {
+        transformationKind: semanticTransformation.kind,
+        descriptor,
+        summary: definition.summary
+      }
+    ]
+  });
+}
+
+function createGeneratedArtifactExpectations(
+  fixture: KatexTransformFixture
+): readonly GeneratedKatexArtifactExpectation[] {
+  const sides: readonly GeneratedKatexArtifactSide[] = ["source", "target"];
+
+  return sides.flatMap((side) =>
+    fixture.expectedStructuralTokens[side].map((structuralTokenId, index) => {
+      const token = findStructuralFixtureToken(
+        fixture[side].tokens,
+        structuralTokenId
+      );
+
+      return {
+        id: `artifact.${fixture.id}.${side}.${index}`,
+        side,
+        selectorId: selectorForFixtureToken(fixture.id, side, token),
+        structuralTokenId,
+        artifactKind: inferGeneratedArtifactKind(fixture, structuralTokenId)
+      };
+    })
+  );
+}
+
+function createGeneratedGeometryDiagnostics(input: {
+  readonly artifactExpectations: readonly GeneratedKatexArtifactExpectation[];
+  readonly definition: KatexTransformDefinition;
+  readonly fallbackTargetId: string;
+  readonly primaryRoleChangeTargetId: string | undefined;
+}): readonly GeneratedKatexGeometryDiagnostic[] {
+  return input.definition.geometryChallenges.map((challenge, index) => {
+    const metric = inferGeometryMetric(challenge);
+    const targetId =
+      metric === "role-change"
+        ? input.primaryRoleChangeTargetId ?? input.fallbackTargetId
+        : input.artifactExpectations[index]?.selectorId ??
+          input.artifactExpectations[0]?.selectorId ??
+          input.primaryRoleChangeTargetId ??
+          input.fallbackTargetId;
+
+    return {
+      id: `geometry.${input.definition.id}.${slugId(challenge)}`,
+      targetId,
+      metric,
+      severity: metric === "role-change" ? "required" : "advisory",
+      summary: `Generated ${metric} check for ${challenge}.`
+    };
+  });
+}
+
+function findFixtureToken(
+  tokens: readonly KatexTransformFixtureToken[],
+  role: KatexTransformFixtureTokenRole,
+  text: string
+): KatexTransformFixtureToken {
+  const token = tokens.find(
+    (candidate) => candidate.role === role && candidate.text === text
+  );
+
+  if (token === undefined) {
+    throw new Error(`Expected fixture token ${role}:${text}.`);
+  }
+
+  return token;
+}
+
+function findStructuralFixtureToken(
+  tokens: readonly KatexTransformFixtureToken[],
+  structuralTokenId: string
+): KatexTransformFixtureToken {
+  const token = tokens.find((candidate) => candidate.text === structuralTokenId);
+
+  if (token === undefined) {
+    throw new Error(`Expected structural fixture token ${structuralTokenId}.`);
+  }
+
+  return token;
+}
+
+function selectorForFixtureToken(
+  fixtureId: string,
+  side: GeneratedKatexArtifactSide,
+  token: KatexTransformFixtureToken
+): string {
+  return (
+    token.selectorId ??
+    `${fixtureId}.${side}.${token.role}.${slugId(token.text)}`
+  );
+}
+
+function inferGeneratedArtifactKind(
+  fixture: KatexTransformFixture,
+  structuralTokenId: string
+): GeneratedKatexArtifactKind {
+  if (fixture.family === "radical" || structuralTokenId.includes("sqrt")) {
+    return "radical";
+  }
+
+  if (fixture.family === "fraction" || structuralTokenId.includes("frac")) {
+    return "fraction-bar";
+  }
+
+  if (fixture.family === "matrix") {
+    return "matrix-bracket";
+  }
+
+  if (fixture.family === "large-operator") {
+    return "large-operator";
+  }
+
+  if (fixture.family === "script") {
+    return "script";
+  }
+
+  if (fixture.family === "wrapper") {
+    return "delimiter";
+  }
+
+  return "rule";
+}
+
+function inferGeometryMetric(challenge: string): GeneratedKatexGeometryMetric {
+  if (challenge.includes("baseline")) {
+    return "baseline";
+  }
+
+  if (challenge.includes("column")) {
+    return "column";
+  }
+
+  if (challenge.includes("row")) {
+    return "row";
+  }
+
+  if (challenge.includes("-to-") || challenge.includes("role")) {
+    return "role-change";
+  }
+
+  if (
+    challenge.includes("artifact") ||
+    challenge.includes("bar") ||
+    challenge.includes("bracket") ||
+    challenge.includes("delimiter") ||
+    challenge.includes("glyph") ||
+    challenge.includes("line")
+  ) {
+    return "artifact-presence";
+  }
+
+  return "bounding-box";
+}
+
+function slugId(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 export function importKatexTransformFixtureDocument(

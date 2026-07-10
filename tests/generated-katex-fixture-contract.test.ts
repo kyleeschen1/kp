@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   GENERATED_KATEX_FIXTURE_CONTRACT_VERSION,
+  createGeneratedKatexTransformFixtureFromSemanticTransformation,
   exportGeneratedKatexTransformFixture,
   importGeneratedKatexFixtureDocument,
   validateGeneratedKatexFixtureDocument,
@@ -107,6 +108,137 @@ function createGeneratedFixture(): GeneratedKatexTransformFixture {
       "Generated fixture contract for rewriting a fractional power as a radical."
   };
 }
+
+test("generated KaTeX fixture generator derives radical fixture metadata from a semantic transformation", () => {
+  const semanticTransformation = createSemanticTransformationRef({
+    id: "transform.rewrite-power-as-root",
+    kind: "rewritePowerAsRadical",
+    sourceObjectIds: ["expr.power"],
+    targetObjectIds: ["expr.radical"],
+    preserves: ["identity", "role"],
+    summary: "Rewrite a one-half power as a square root."
+  });
+  const generated =
+    createGeneratedKatexTransformFixtureFromSemanticTransformation({
+      fixtureId: "radical.rewrite-power-as-root",
+      semanticTransformation
+    });
+
+  assert.equal(generated.id, "generated.radical.rewrite-power-as-root");
+  assert.equal(generated.fixture.id, "radical.rewrite-power-as-root");
+  assert.deepEqual(generated.semanticTransformation, semanticTransformation);
+  assert.deepEqual(
+    generated.correspondenceMap.records.map((record) => [
+      record.relation,
+      record.sourceSelectorIds,
+      record.targetSelectorIds
+    ]),
+    [
+      [
+        "role-change",
+        ["radical.rewrite-power-as-root.source.base.x"],
+        ["radical.rewrite-power-as-root.target.radicand.x"]
+      ],
+      [
+        "artifact",
+        [],
+        ["radical.rewrite-power-as-root.target.artifact.structural-hide-tail"]
+      ],
+      [
+        "artifact",
+        [],
+        ["radical.rewrite-power-as-root.target.artifact.structural-sqrt-line"]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    generated.visualMotifTimeline.segments.map((segment) => [
+      segment.id,
+      segment.transformationKind,
+      segment.motifKind,
+      segment.motionPrimitiveIds,
+      segment.phaseIds
+    ]),
+    [
+      [
+        "transform.rewrite-power-as-root.visual.wrap",
+        "rewritePowerAsRadical",
+        "wrap",
+        ["wrap"],
+        ["wrapped-token-shift", "wrap-artifact-enter"]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    generated.artifactExpectations.map((artifact) => [
+      artifact.side,
+      artifact.selectorId,
+      artifact.structuralTokenId,
+      artifact.artifactKind
+    ]),
+    [
+      [
+        "target",
+        "radical.rewrite-power-as-root.target.artifact.structural-hide-tail",
+        "structural:hide-tail",
+        "radical"
+      ],
+      [
+        "target",
+        "radical.rewrite-power-as-root.target.artifact.structural-sqrt-line",
+        "structural:sqrt-line",
+        "radical"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    generated.geometryDiagnostics.map((diagnostic) => [
+      diagnostic.metric,
+      diagnostic.severity,
+      diagnostic.targetId
+    ]),
+    [
+      [
+        "artifact-presence",
+        "advisory",
+        "radical.rewrite-power-as-root.target.artifact.structural-hide-tail"
+      ],
+      [
+        "artifact-presence",
+        "advisory",
+        "radical.rewrite-power-as-root.target.artifact.structural-sqrt-line"
+      ],
+      [
+        "role-change",
+        "required",
+        "radical.rewrite-power-as-root.target.radicand.x"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    validateGeneratedKatexFixtureDocument(
+      exportGeneratedKatexTransformFixture(generated)
+    ),
+    []
+  );
+});
+
+test("generated KaTeX fixture generator rejects mismatched semantic transformations", () => {
+  assert.throws(
+    () =>
+      createGeneratedKatexTransformFixtureFromSemanticTransformation({
+        fixtureId: "radical.rewrite-power-as-root",
+        semanticTransformation: createSemanticTransformationRef({
+          id: "transform.bad",
+          kind: "wrapExpressionWithFunctionCall",
+          sourceObjectIds: ["expr.x"],
+          targetObjectIds: ["expr.f-of-x"],
+          preserves: ["identity"]
+        })
+      }),
+    /does not match fixture radical\.rewrite-power-as-root/
+  );
+});
 
 test("generated KaTeX fixture contract round-trips semantic generation metadata", () => {
   const generatedFixture = createGeneratedFixture();
