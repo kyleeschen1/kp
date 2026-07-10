@@ -774,6 +774,10 @@ function sampleTargetPreviewLink(
         ["data-kp-preview-shared-clock-id", target.sharedClockId]
       ];
 
+      if (target.layoutId !== undefined) {
+        dataAttributes.push(["data-kp-preview-layout-id", target.layoutId]);
+      }
+
       if (target.fixtureId !== undefined) {
         dataAttributes.push([
           "data-kp-preview-katex-transform-fixture",
@@ -1032,6 +1036,7 @@ function sampleTargetSearchFields(
           target.label,
           target.animationId,
           target.graphId,
+          target.layoutId ?? "",
           target.sharedClockId,
           target.fixtureId ?? "",
           target.surfaceMode ?? "",

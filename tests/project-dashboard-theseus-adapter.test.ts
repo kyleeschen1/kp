@@ -95,6 +95,11 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
   );
 
   assert.ok(syncedRow?.searchText?.includes("linear-equation-solve-x"));
+  assert.ok(
+    syncedRow?.searchText?.includes(
+      "layout.sample.linear-solve-synchronized-panel"
+    )
+  );
   assert.ok(syncedRow?.searchText?.includes("solve-x-shared-clock"));
   assert.ok(
     syncedRow?.preview?.fields.some(

@@ -342,6 +342,10 @@ test("renderProjectDashboard exposes synchronized equation graph sample targets"
     html,
     /data-kp-preview-live-animation="linear-equation-solve-x"/
   );
+  assert.match(
+    html,
+    /data-kp-preview-layout-id="layout\.sample\.linear-solve-synchronized-panel"/
+  );
   assert.match(html, /data-kp-preview-graph-id="saddle-orbit-graph"/);
   assert.match(html, /data-kp-preview-shared-clock-id="solve-x-shared-clock"/);
 });

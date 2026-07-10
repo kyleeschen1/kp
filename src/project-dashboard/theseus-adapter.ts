@@ -284,6 +284,7 @@ function sampleTargetSearchFields(
           target.label,
           target.animationId,
           target.graphId,
+          target.layoutId ?? "",
           target.sharedClockId,
           target.fixtureId ?? "",
           target.surfaceMode ?? "",

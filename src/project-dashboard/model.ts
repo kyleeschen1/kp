@@ -42,6 +42,7 @@ export type ProjectDashboardSampleTarget =
       readonly label: string;
       readonly animationId: string;
       readonly graphId: string;
+      readonly layoutId?: string;
       readonly sharedClockId: string;
       readonly fixtureId?: string;
       readonly surfaceMode?: string;
@@ -379,6 +380,7 @@ function sampleTargetSearchFields(
           target.label,
           target.animationId,
           target.graphId,
+          target.layoutId ?? "",
           target.sharedClockId,
           target.fixtureId ?? "",
           target.surfaceMode ?? "",

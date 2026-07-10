@@ -360,6 +360,7 @@ export const projectDashboardData: ProjectDashboardData = {
       coverage: [
         "equation animation id",
         "graph id",
+        "synchronized panel layout id",
         "shared semantic clock id"
       ],
       sourceRefs: [
@@ -371,6 +372,10 @@ export const projectDashboardData: ProjectDashboardData = {
         {
           label: "Graph transition sampler",
           href: "src/rendering/graph-transitions.ts"
+        },
+        {
+          label: "Synchronized panel layout sample",
+          href: "src/layout/synchronized-panel.ts"
         },
         {
           label: "Dashboard sample target",
@@ -387,6 +392,7 @@ export const projectDashboardData: ProjectDashboardData = {
           label: "Open synchronized solve sample",
           animationId: "linear-equation-solve-x",
           graphId: "saddle-orbit-graph",
+          layoutId: "layout.sample.linear-solve-synchronized-panel",
           sharedClockId: "solve-x-shared-clock",
           surfaceMode: "mesh"
         }

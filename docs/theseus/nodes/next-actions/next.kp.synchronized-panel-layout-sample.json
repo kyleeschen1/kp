@@ -2,7 +2,79 @@
   "id": "next.kp.synchronized-panel-layout-sample",
   "kind": "next-action",
   "title": "Build synchronized panel layout sample",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.layout",
-  "summary": "Build the first synchronized panel layout sample that composes equation, graph, and controls through layout object metadata."
+  "summary": "Built the first renderer-neutral synchronized panel layout sample for equation, graph, and controls.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/layout/synchronized-panel.ts",
+      "summary": "Defines layout object metadata for the linear solve synchronized panel and a deterministic sampler that maps shared progress to equation, graph, and control frames."
+    },
+    {
+      "kind": "file",
+      "path": "tests/synchronized-panel-layout.test.ts",
+      "summary": "Covers layout object composition, shared clock binding, control metadata, progress clamping, and rewind-stable frame sampling."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Links the synchronized equation graph sample target to the new layout sample id and source file."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/model.ts",
+      "summary": "Extends synchronized dashboard sample targets with optional layout ids for search and launch metadata."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Renders synchronized sample preview links with layout id data attributes."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/theseus-adapter.ts",
+      "summary": "Includes synchronized layout ids in exported Theseus dashboard search metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Asserts selected synchronized sample previews expose the layout id."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-theseus-adapter.test.ts",
+      "summary": "Asserts exported Theseus dashboard rows include the layout id in search metadata."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/synchronized-panel-layout.test.ts",
+      "status": "passed",
+      "scope": "focused synchronized panel layout sample tests",
+      "checkedAt": "2026-07-10T21:16:18.878Z"
+    },
+    {
+      "command": "npm test -- tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "dashboard preview and Theseus adapter export tests",
+      "checkedAt": "2026-07-10T21:16:18.897Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T21:16:18.917Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T21:16:18.938Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Built the first renderer-neutral synchronized panel layout sample for equation, graph, and controls."
+  }
 }
