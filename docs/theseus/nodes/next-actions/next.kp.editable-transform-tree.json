@@ -2,7 +2,49 @@
   "id": "next.kp.editable-transform-tree",
   "kind": "next-action",
   "title": "Add editable transform tree metadata",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation-runtime",
-  "summary": "Represent presentation-only pauses, focus, unfocus, and emphasis as editable transform-tree annotations without mutating semantic structure."
+  "summary": "Added editable transform tree metadata for presentation-only pause, focus, unfocus, and emphasis annotations.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/transformation-composition.ts",
+      "summary": "Semantic transformation trees can now be wrapped with validated editable annotations without changing source, target, preservation, forward, or rewind phase semantics."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-transform-tree-metadata.test.ts",
+      "summary": "Covers annotation validation, immutable append behavior, node filtering, and preservation of semantic phase structure."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-transform-tree-metadata.test.ts",
+      "status": "passed",
+      "scope": "focused editable transform tree metadata tests",
+      "checkedAt": "2026-07-10T20:35:55.362Z"
+    },
+    {
+      "command": "npm test -- tests/semantic-transform-tree-metadata.test.ts tests/semantic-transformation-composition.test.ts tests/correspondence-composition.test.ts tests/equation-motion-player.test.ts",
+      "status": "passed",
+      "scope": "repo test script including transform composition and motion consumers",
+      "checkedAt": "2026-07-10T20:35:55.395Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:35:55.426Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:35:55.470Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added editable transform tree metadata for presentation-only pause, focus, unfocus, and emphasis annotations."
+  }
 }
