@@ -11,6 +11,22 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   await expect(
     page.getByRole("heading", { name: "Project Dashboard", exact: true })
   ).toBeVisible();
+  const animationLayout = page.locator(
+    "[data-kp-project-dashboard-animation-layout]"
+  );
+  await expect(animationLayout).toBeVisible();
+  const dashboardSearch = animationLayout.locator(
+    '[data-action="filter-project-dashboard"]'
+  );
+  await expect(dashboardSearch).toHaveAttribute(
+    "placeholder",
+    "Search rendered forms, animations, objects"
+  );
+  await dashboardSearch.fill("dnt");
+  await expect(
+    page.locator('[data-kp-project-gallery-item="visual-donut-surface"]')
+  ).toBeVisible();
+  await dashboardSearch.fill("");
   await expect(page.locator("[data-kp-project-card=\"work-project-dashboard-v1\"]")).toBeVisible();
   await expect(page.locator("[data-kp-project-dashboard-contract]")).toContainText(
     "src/project-dashboard/data.ts"
@@ -111,7 +127,12 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   const matrixApiItem = page.locator(
     '[data-kp-api-outline-item="semantic-matrix"]'
   );
+  const semanticObjectsGroup = page.locator(
+    '[data-kp-api-outline-group="semantic-objects"]'
+  );
 
+  await expect(semanticObjectsGroup).not.toHaveAttribute("open", "");
+  await semanticObjectsGroup.locator("summary").click();
   await expect(matrixApiItem).toBeVisible();
   await matrixApiItem.click();
   await expect(matrixApiItem).toHaveAttribute("aria-pressed", "true");

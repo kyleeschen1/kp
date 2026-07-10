@@ -63,6 +63,13 @@ test("initial editor document contains a 3x3 identity matrix", () => {
   assert.deepEqual(
     document.objects.slice(1).map((object) => object.type),
     [
+      "latex-form",
+      "latex-form",
+      "latex-form",
+      "latex-form",
+      "latex-form",
+      "latex-form",
+      "latex-comparison",
       "graph-3d",
       "axis-3d",
       "axis-3d",
@@ -70,8 +77,20 @@ test("initial editor document contains a 3x3 identity matrix", () => {
       "surface-3d"
     ]
   );
-  assert.equal(document.objects[1]?.id, "saddle-orbit-graph");
-  assert.equal(document.objects[5]?.id, "saddle-surface");
+  assert.deepEqual(
+    document.objects.slice(1, 8).map((object) => object.id),
+    [
+      "formula-ftc-derivative",
+      "formula-ftc-net-change",
+      "formula-fourier-transform",
+      "formula-inverse-fourier-transform",
+      "formula-jacobian",
+      "formula-hessian",
+      "comparison-jacobian-hessian"
+    ]
+  );
+  assert.equal(document.objects[8]?.id, "saddle-orbit-graph");
+  assert.equal(document.objects[12]?.id, "saddle-surface");
   assert.equal(document.objects.some((object) => object.id === "parabola-graph"), false);
   assert.equal(
     document.objects.some((object) => object.id === "curve-y-equals-x-squared"),
@@ -84,6 +103,7 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
 
   assert.match(html, /data-kp-api-outline/);
   assert.match(html, /id="api-outline-title"[^>]*>API Outline</);
+  assert.doesNotMatch(html, /<details class="api-outline__group"[^>]* open>/);
   assert.match(html, /data-kp-api-outline-group="semantic-objects"/);
   assert.match(html, /Semantic Objects/);
   assert.match(html, /data-kp-api-outline-item="semantic-matrix"/);
@@ -134,6 +154,7 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
   assert.doesNotMatch(html, /class="json-source"/);
   assert.doesNotMatch(html, />Semantic JSON</);
   assert.match(html, /data-kp-equation-motion-demo/);
+  assert.doesNotMatch(html, /SPC|j\/k|J\/K|toggle pause/i);
   assert.match(html, /data-kp-equation-animation-selector/);
   assert.match(
     html,
@@ -251,6 +272,18 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
   );
   assert.match(html, /data-kp-object="identity-3x3"/);
   assert.match(html, /data-kp-render-node="rn-identity-3x3-default-latex"/);
+  assert.match(html, /data-kp-object="formula-ftc-derivative"/);
+  assert.match(html, /data-kp-render-node="rn-formula-ftc-derivative-default-latex"/);
+  assert.match(html, /data-kp-object="formula-fourier-transform"/);
+  assert.match(html, /data-kp-render-node="rn-formula-fourier-transform-default-latex"/);
+  assert.match(html, /data-kp-object="comparison-jacobian-hessian"/);
+  assert.match(
+    html,
+    /data-kp-render-node="rn-comparison-jacobian-hessian-comparison-card"/
+  );
+  assert.match(html, /Jacobian \/ Hessian/);
+  assert.match(html, /data-kp-comparison-item="formula-jacobian"/);
+  assert.match(html, /data-kp-comparison-item="formula-hessian"/);
   assert.doesNotMatch(html, /data-kp-object="parabola-graph"/);
   assert.doesNotMatch(html, /data-kp-object="parabola-x-axis"/);
   assert.doesNotMatch(html, /data-kp-object="parabola-y-axis"/);

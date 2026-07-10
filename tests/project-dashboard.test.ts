@@ -57,6 +57,22 @@ test("renderProjectDashboard renders the prototype shell and seeded summaries", 
   assert.match(html, /Animation protocol maturity/);
 });
 
+test("renderProjectDashboard places the animation layout first", () => {
+  const html = renderProjectDashboard(projectDashboardData);
+  const animationLayoutIndex = html.indexOf(
+    "data-kp-project-dashboard-animation-layout"
+  );
+  const dataContractIndex = html.indexOf("data-kp-project-dashboard-contract");
+  const workSectionIndex = html.indexOf("project-dashboard-work-title");
+
+  assert.notEqual(animationLayoutIndex, -1);
+  assert.notEqual(dataContractIndex, -1);
+  assert.notEqual(workSectionIndex, -1);
+  assert.ok(animationLayoutIndex < dataContractIndex);
+  assert.ok(animationLayoutIndex < workSectionIndex);
+  assert.match(html, /placeholder="Search rendered forms, animations, objects"/);
+});
+
 test("groupProjectCardsByStatus groups top-level cards and sorts by priority", () => {
   const groups = groupProjectCardsByStatus([
     {
@@ -159,6 +175,9 @@ test("groupProjectGalleryItemsByKind groups gallery items by kind", () => {
       ?.items.map((item) => item.id),
     [
       "visual-code",
+      "visual-donut-surface",
+      "visual-hyperplane-slices",
+      "visual-mesh-graph",
       "visual-network",
       "visual-table",
       "visual-timeline",
@@ -188,6 +207,25 @@ test("groupProjectGalleryItemsByKind groups gallery items by kind", () => {
       "notation-inline-to-stacked-fraction",
       "notation-radical-to-exponent"
     ]
+  );
+});
+
+test("filterProjectDashboardData fuzzy-matches rendered forms", () => {
+  const donutResult = filterProjectDashboardData(projectDashboardData, "dnt");
+
+  assert.deepEqual(
+    donutResult.gallery.map((item) => item.id),
+    ["visual-donut-surface"]
+  );
+
+  const meshGraphResult = filterProjectDashboardData(
+    projectDashboardData,
+    "msh gr"
+  );
+
+  assert.deepEqual(
+    meshGraphResult.gallery.map((item) => item.id),
+    ["visual-mesh-graph"]
   );
 });
 

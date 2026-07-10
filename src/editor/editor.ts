@@ -37,6 +37,12 @@ import {
   type Graph3DSurfaceMode
 } from "../semantic/graph.ts";
 import type { Graph3DObject, Surface3DObject } from "../semantic/graph.ts";
+import {
+  createLatexComparisonObject,
+  createLatexFormObject,
+  type LatexComparisonObject,
+  type LatexFormObject
+} from "../semantic/latex-form.ts";
 import { identityMatrix } from "../semantic/matrix.ts";
 import { validateKpDocument } from "../semantic/validation.ts";
 
@@ -49,6 +55,64 @@ export function createInitialEditorDocument(): KpDocument {
         id: "identity-3x3",
         label: "I_3",
         size: 3
+      }),
+      createLatexFormObject({
+        id: "formula-ftc-derivative",
+        label: "FTC: derivative form",
+        latex: String.raw`\frac{d}{dx}\int_{a}^{x} f(t)\,dt = f(x)`,
+        summary:
+          "The derivative of an accumulation function recovers the integrand.",
+        tags: ["calculus", "fundamental theorem"]
+      }),
+      createLatexFormObject({
+        id: "formula-ftc-net-change",
+        label: "FTC: net change form",
+        latex: String.raw`\int_{a}^{b} f'(x)\,dx = f(b)-f(a)`,
+        summary:
+          "A definite integral of a derivative measures total change.",
+        tags: ["calculus", "fundamental theorem"]
+      }),
+      createLatexFormObject({
+        id: "formula-fourier-transform",
+        label: "Fourier transform",
+        latex:
+          String.raw`\widehat{f}(\xi)=\mathcal{F}\{f\}(\xi)=\int_{-\infty}^{\infty} f(x)e^{-2\pi i x\xi}\,dx`,
+        summary:
+          "Represents a function by its frequency-domain components.",
+        tags: ["analysis", "fourier"]
+      }),
+      createLatexFormObject({
+        id: "formula-inverse-fourier-transform",
+        label: "Inverse Fourier transform",
+        latex:
+          String.raw`f(x)=\int_{-\infty}^{\infty}\widehat{f}(\xi)e^{2\pi i x\xi}\,d\xi`,
+        summary:
+          "Reconstructs the original function from its frequency representation.",
+        tags: ["analysis", "fourier"]
+      }),
+      createLatexFormObject({
+        id: "formula-jacobian",
+        label: "Jacobian",
+        latex:
+          String.raw`J_f(x)=\begin{bmatrix}\frac{\partial f_1}{\partial x_1} & \cdots & \frac{\partial f_1}{\partial x_n}\\ \vdots & \ddots & \vdots\\ \frac{\partial f_m}{\partial x_1} & \cdots & \frac{\partial f_m}{\partial x_n}\end{bmatrix}`,
+        summary:
+          "A first-derivative matrix for vector-valued functions.",
+        tags: ["calculus", "linear algebra", "jacobian"]
+      }),
+      createLatexFormObject({
+        id: "formula-hessian",
+        label: "Hessian",
+        latex:
+          String.raw`H_f(x)=\begin{bmatrix}\frac{\partial^2 f}{\partial x_1^2} & \cdots & \frac{\partial^2 f}{\partial x_1\partial x_n}\\ \vdots & \ddots & \vdots\\ \frac{\partial^2 f}{\partial x_n\partial x_1} & \cdots & \frac{\partial^2 f}{\partial x_n^2}\end{bmatrix}`,
+        summary:
+          "A second-derivative matrix for scalar-valued functions.",
+        tags: ["calculus", "linear algebra", "hessian"]
+      }),
+      createLatexComparisonObject({
+        id: "comparison-jacobian-hessian",
+        label: "Jacobian / Hessian",
+        formIds: ["formula-jacobian", "formula-hessian"],
+        summary: "Compare first- and second-derivative matrix forms."
       }),
       ...createDefaultGraph3DScene()
     ]
@@ -181,6 +245,14 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
     case "curve-3d":
     case "surface-3d":
       return "";
+    case "latex-comparison":
+      return renderLatexComparisonPreview(object, document.objects);
+    case "latex-form":
+      if (isLatexFormReferencedByComparison(object.id, document.objects)) {
+        return "";
+      }
+
+      return renderLatexFormPreview(object);
     case "graph-2d":
       return renderPreviewArticle(
         object,
@@ -204,6 +276,73 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
       );
     }
   }
+}
+
+function renderLatexFormPreview(object: LatexFormObject): string {
+  const latex = defaultLatexRenderer.render(object);
+  const html = renderLatexToHtml(latex);
+
+  return renderPreviewArticle(
+    object,
+    "rn-" + object.id + "-default-latex",
+    `<div class="object-preview__math">${html}</div>`
+  );
+}
+
+function renderLatexComparisonPreview(
+  comparison: LatexComparisonObject,
+  objects: readonly KpSemanticObject[]
+): string {
+  const forms = comparison.formIds
+    .map((formId) => findLatexForm(objects, formId))
+    .filter((form): form is LatexFormObject => form !== undefined);
+
+  return renderPreviewArticle(
+    comparison,
+    "rn-" + comparison.id + "-comparison-card",
+    `
+      <div class="object-preview__summary">
+        <h3>${escapeHtml(comparison.label)}</h3>
+        <p>${escapeHtml(comparison.summary)}</p>
+      </div>
+      <div class="object-preview__comparison">
+        ${forms
+          .map((form) => {
+            const html = renderLatexToHtml(defaultLatexRenderer.render(form));
+
+            return `
+              <div class="object-preview__comparison-item" data-kp-comparison-item="${escapeHtml(form.id)}">
+                <h3>${escapeHtml(form.label)}</h3>
+                <div class="object-preview__math">${html}</div>
+                <p>${escapeHtml(form.summary)}</p>
+              </div>
+            `;
+          })
+          .join("")}
+      </div>
+    `,
+    { wide: true }
+  );
+}
+
+function isLatexFormReferencedByComparison(
+  formId: string,
+  objects: readonly KpSemanticObject[]
+): boolean {
+  return objects.some(
+    (object) =>
+      object.type === "latex-comparison" && object.formIds.includes(formId)
+  );
+}
+
+function findLatexForm(
+  objects: readonly KpSemanticObject[],
+  formId: string
+): LatexFormObject | undefined {
+  return objects.find(
+    (object): object is LatexFormObject =>
+      object.type === "latex-form" && object.id === formId
+  );
 }
 
 function renderEquationMotionDemo(equationAnimationId: string | undefined): string {
@@ -598,10 +737,11 @@ function findSaddleSurfaceForGraph(
 function renderPreviewArticle(
   object: KpSemanticObject,
   renderNodeId: string,
-  body: string
+  body: string,
+  options: { readonly wide?: boolean } = {}
 ): string {
   return `
-    <article class="object-preview" data-kp-object="${escapeHtml(object.id)}" data-kp-render-node="${escapeHtml(renderNodeId)}" data-kp-type="${escapeHtml(object.type)}">
+    <article class="object-preview${options.wide === true ? " object-preview--wide" : ""}" data-kp-object="${escapeHtml(object.id)}" data-kp-render-node="${escapeHtml(renderNodeId)}" data-kp-type="${escapeHtml(object.type)}">
       <div class="object-preview__meta">
         <span>${escapeHtml(object.type)}</span>
         <strong>${escapeHtml(object.id)}</strong>

@@ -17,10 +17,12 @@ import {
 import { renderLatexToHtml } from "../src/rendering/katex-adapter.ts";
 import {
   defaultLatexRenderer,
+  latexFormToLatex,
   matrixToLatex
 } from "../src/rendering/matrix-latex.ts";
 import { matrixTransformFixtures } from "../src/rendering/katex-transform-fixtures.ts";
 import { createGraphSceneFromLatexEquation } from "../src/semantic/equation-graph.ts";
+import { createLatexFormObject } from "../src/semantic/latex-form.ts";
 import type { KpSemanticObject } from "../src/semantic/document.ts";
 import {
   createDefaultGraphScene,
@@ -83,6 +85,20 @@ test("matrixToLatex renders a matrix with a default bmatrix representation", () 
     String.raw`I_3 = \begin{bmatrix}1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1\end{bmatrix}`
   );
   assert.equal(defaultLatexRenderer.render(matrix), matrixToLatex(matrix));
+});
+
+test("latexFormToLatex renders authored semantic formulas", () => {
+  const formula = createLatexFormObject({
+    id: "formula-fourier-transform",
+    label: "Fourier transform",
+    latex:
+      String.raw`\mathcal{F}\{f\}(\xi) = \int_{-\infty}^{\infty} f(x)e^{-2\pi i x\xi}\,dx`,
+    summary: "Frequency-domain representation of a function."
+  });
+
+  assert.equal(latexFormToLatex(formula), formula.latex);
+  assert.equal(defaultLatexRenderer.render(formula), formula.latex);
+  assert.match(renderLatexToHtml(defaultLatexRenderer.render(formula)), /class="katex"/);
 });
 
 test("matrix/vector transform fixtures render as KaTeX matrix expressions", () => {

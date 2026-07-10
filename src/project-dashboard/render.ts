@@ -47,13 +47,8 @@ export function renderProjectDashboard(
         </div>
         <button class="project-dashboard__back" type="button" data-action="show-editor">Back to Editor</button>
       </header>
-      <div class="project-dashboard__toolbar">
-        <label class="project-dashboard__search" for="project-dashboard-search">
-          <span>Search</span>
-          <input id="project-dashboard-search" type="search" value="${escapeHtml(query)}" data-action="filter-project-dashboard" aria-label="Search project dashboard" />
-        </label>
-      </div>
       ${renderDataStatus(issues)}
+      ${renderAnimationLayoutSection(selectedKatexFixture, query)}
       ${renderDataContract()}
       <div class="project-dashboard__grid">
         <section class="project-dashboard__section" aria-labelledby="project-dashboard-work-title">
@@ -68,7 +63,6 @@ export function renderProjectDashboard(
             <h2 id="project-dashboard-gallery-title">Object Gallery</h2>
             <span>${renderedData.gallery.length} items</span>
           </div>
-          ${renderKatexTransformFixtureGallery(selectedKatexFixture)}
           ${renderGalleryGroups(renderedData.gallery, titles, visibleIds)}
         </section>
         <section class="project-dashboard__section" aria-labelledby="project-dashboard-reports-title">
@@ -154,6 +148,27 @@ function renderGalleryGroups(
         )
         .join("")}
     </div>
+  `;
+}
+
+function renderAnimationLayoutSection(
+  selectedKatexFixture: KatexTransformFixture,
+  query: string
+): string {
+  return `
+    <section class="project-dashboard__section project-dashboard__animation-layout" data-kp-project-dashboard-animation-layout aria-labelledby="project-dashboard-animation-layout-title">
+      <div class="project-dashboard__section-header">
+        <h2 id="project-dashboard-animation-layout-title">Animation Layout</h2>
+        <span>fixtures and rendered forms</span>
+      </div>
+      <div class="project-dashboard__animation-toolbar">
+        <label class="project-dashboard__search" for="project-dashboard-search">
+          <span>Search</span>
+          <input id="project-dashboard-search" type="search" value="${escapeHtml(query)}" data-action="filter-project-dashboard" aria-label="Search project dashboard" placeholder="Search rendered forms, animations, objects" />
+        </label>
+      </div>
+      ${renderKatexTransformFixtureGallery(selectedKatexFixture)}
+    </section>
   `;
 }
 

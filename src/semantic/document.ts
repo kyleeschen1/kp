@@ -8,6 +8,10 @@ import type {
   Graph3DObject,
   Surface3DObject
 } from "./graph.ts";
+import type {
+  LatexComparisonObject,
+  LatexFormObject
+} from "./latex-form.ts";
 import type { MatrixObject } from "./matrix.ts";
 
 export interface KpDocument {
@@ -25,6 +29,8 @@ export type KpSemanticObject =
   | Curve3DObject
   | Graph2DObject
   | Graph3DObject
+  | LatexComparisonObject
+  | LatexFormObject
   | Surface3DObject
   | MatrixObject;
 

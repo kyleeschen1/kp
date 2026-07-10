@@ -210,7 +210,7 @@ export function selectApiCatalogItem(button: HTMLButtonElement): void {
 
 function renderApiCatalogGroup(group: ApiCatalogGroup): string {
   return `
-        <details class="api-outline__group" data-kp-api-outline-group="${escapeHtml(group.id)}" open>
+        <details class="api-outline__group" data-kp-api-outline-group="${escapeHtml(group.id)}">
           <summary class="api-outline__group-summary">
             <span>${escapeHtml(group.title)}</span>
             <small>${group.items.length} items</small>

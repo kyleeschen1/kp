@@ -37,6 +37,10 @@ function validateObject(
       return validateGraphObject(object, path, objectsById);
     case "graph-3d":
       return validateGraph3DObject(object, path, objectsById);
+    case "latex-comparison":
+      return validateLatexComparisonObject(object, path, objectsById);
+    case "latex-form":
+      return validateLatexFormObject(object, path);
     case "matrix":
       return validateMatrixObject(object, path);
     case "surface-3d":
@@ -317,6 +321,48 @@ function validateSurface3DObject(
   );
 
   return issues;
+}
+
+function validateLatexComparisonObject(
+  object: Extract<KpSemanticObject, { type: "latex-comparison" }>,
+  path: string,
+  objectsById: ReadonlyMap<string, KpSemanticObject>
+): readonly ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+
+  if (object.formIds.length < 2) {
+    issues.push({
+      path: `${path}.formIds`,
+      message: `LaTeX comparison ${object.id} must reference at least two formulas.`
+    });
+  }
+
+  object.formIds.forEach((formId, index) => {
+    if (objectsById.get(formId)?.type !== "latex-form") {
+      issues.push({
+        path: `${path}.formIds[${index}]`,
+        message: `LaTeX comparison ${object.id} references missing formula ${formId}.`
+      });
+    }
+  });
+
+  return issues;
+}
+
+function validateLatexFormObject(
+  object: Extract<KpSemanticObject, { type: "latex-form" }>,
+  path: string
+): readonly ValidationIssue[] {
+  if (object.latex.trim().length === 0) {
+    return [
+      {
+        path: `${path}.latex`,
+        message: `LaTeX form ${object.id} must not be empty.`
+      }
+    ];
+  }
+
+  return [];
 }
 
 function validateMatrixObject(

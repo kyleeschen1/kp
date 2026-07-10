@@ -185,10 +185,15 @@ h2 {
   background: #ffffff;
 }
 
-.project-dashboard__contract,
+.project-dashboard__animation-layout,
 .project-dashboard__contract {
   max-width: 1180px;
   margin: 0 auto 1rem;
+}
+
+.project-dashboard__animation-toolbar {
+  border-bottom: 1px solid #e3e8ef;
+  padding: 0.85rem;
 }
 
 .project-dashboard__section-header {
@@ -960,6 +965,10 @@ h2 {
   box-shadow: 0 18px 45px rgb(30 41 59 / 0.12);
 }
 
+.object-preview--wide {
+  width: min(100%, 48rem);
+}
+
 .object-preview__meta {
   display: flex;
   justify-content: space-between;
@@ -980,6 +989,71 @@ h2 {
 
 .object-preview__math .katex-display {
   margin: 0;
+}
+
+.object-preview__summary {
+  display: grid;
+  gap: 0.25rem;
+  border-bottom: 1px solid #e3e8ef;
+  padding: 0.9rem 1rem 0.75rem;
+}
+
+.object-preview__summary h3,
+.object-preview__summary p {
+  margin: 0;
+}
+
+.object-preview__summary h3 {
+  color: #172033;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.object-preview__summary p {
+  color: #526173;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.object-preview__comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.object-preview__comparison-item {
+  display: grid;
+  align-content: start;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.object-preview__comparison-item + .object-preview__comparison-item {
+  border-left: 1px solid #e3e8ef;
+  padding-left: 1rem;
+}
+
+.object-preview__comparison-item h3,
+.object-preview__comparison-item p {
+  margin: 0;
+}
+
+.object-preview__comparison-item h3 {
+  color: #172033;
+  font-size: 0.95rem;
+  line-height: 1.25;
+}
+
+.object-preview__comparison-item p {
+  color: #526173;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.object-preview__comparison .object-preview__math {
+  min-height: 9rem;
+  padding: 0.75rem;
 }
 
 .katex .mbin {
@@ -1604,6 +1678,17 @@ h2 {
 
   .project-dashboard__grid {
     grid-template-columns: 1fr;
+  }
+
+  .object-preview__comparison {
+    grid-template-columns: 1fr;
+  }
+
+  .object-preview__comparison-item + .object-preview__comparison-item {
+    border-top: 1px solid #e3e8ef;
+    border-left: 0;
+    padding-top: 1rem;
+    padding-left: 0;
   }
 
   .api-outline,

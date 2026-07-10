@@ -28,6 +28,10 @@ import {
   graph3DSurfaceResolution,
   type Graph3DObject
 } from "../src/semantic/graph.ts";
+import {
+  createLatexComparisonObject,
+  createLatexFormObject
+} from "../src/semantic/latex-form.ts";
 import { createMatrixObject, identityMatrix } from "../src/semantic/matrix.ts";
 import { validateKpDocument } from "../src/semantic/validation.ts";
 
@@ -177,6 +181,55 @@ test("identityMatrix rejects non-positive sizes", () => {
         size: 0
       }),
     /Identity matrix bad-identity size must be a positive integer/
+  );
+});
+
+test("latex form objects and comparison cards preserve formula references", () => {
+  const jacobian = createLatexFormObject({
+    id: "formula-jacobian",
+    label: "Jacobian",
+    latex: String.raw`J_f(x) = \left[\frac{\partial f_i}{\partial x_j}\right]`,
+    summary: "First-order local linear map for a vector-valued function."
+  });
+  const hessian = createLatexFormObject({
+    id: "formula-hessian",
+    label: "Hessian",
+    latex: String.raw`H_f(x) = \left[\frac{\partial^2 f}{\partial x_i\partial x_j}\right]`,
+    summary: "Second-order curvature matrix for a scalar-valued function."
+  });
+  const comparison = createLatexComparisonObject({
+    id: "comparison-jacobian-hessian",
+    label: "Jacobian / Hessian",
+    formIds: [jacobian.id, hessian.id],
+    summary: "Compare first- and second-derivative matrix forms."
+  });
+
+  assert.deepEqual(comparison.formIds, ["formula-jacobian", "formula-hessian"]);
+  assert.deepEqual(
+    validateKpDocument(
+      createKpDocument({
+        id: "comparison-doc",
+        title: "Comparison",
+        objects: [jacobian, hessian, comparison]
+      })
+    ),
+    []
+  );
+  assert.deepEqual(
+    validateKpDocument(
+      createKpDocument({
+        id: "bad-comparison-doc",
+        title: "Bad comparison",
+        objects: [jacobian, comparison]
+      })
+    ),
+    [
+      {
+        path: "objects[1].formIds[1]",
+        message:
+          "LaTeX comparison comparison-jacobian-hessian references missing formula formula-hessian."
+      }
+    ]
   );
 });
 

@@ -327,6 +327,42 @@ export const projectDashboardData: ProjectDashboardData = {
       relatedIds: ["work-graph-surface-morphs"]
     },
     {
+      id: "visual-mesh-graph",
+      title: "Mesh graph",
+      kind: "visual",
+      status: "active",
+      summary:
+        "A rendered Graph3D surface form that exposes the sampled saddle as a visible mesh.",
+      tags: ["mesh", "graph", "surface-mode", "rendered-form"],
+      domains: ["graphs", "calculus"],
+      interfaces: ["Graph3D.surfaceMode=mesh", "WebGL surface mesh"],
+      relatedIds: ["work-graph-surface-morphs", "visual-webgl-graph"]
+    },
+    {
+      id: "visual-donut-surface",
+      title: "Donut surface",
+      kind: "visual",
+      status: "active",
+      summary:
+        "A rendered Graph3D form for the torus-like surface mode used by graph morph previews.",
+      tags: ["donut", "torus", "surface-mode", "rendered-form"],
+      domains: ["graphs", "calculus"],
+      interfaces: ["Graph3D.surfaceMode=donut", "WebGL surface morph target"],
+      relatedIds: ["work-graph-surface-morphs", "visual-webgl-graph"]
+    },
+    {
+      id: "visual-hyperplane-slices",
+      title: "Hyperplane slices",
+      kind: "visual",
+      status: "active",
+      summary:
+        "A rendered Graph3D form that shows the surface as coordinated hyperplane slices.",
+      tags: ["hyperplanes", "slices", "surface-mode", "rendered-form"],
+      domains: ["graphs", "calculus"],
+      interfaces: ["Graph3D.surfaceMode=hyperplanes", "WebGL surface channels"],
+      relatedIds: ["work-graph-surface-morphs", "visual-webgl-graph"]
+    },
+    {
       id: "visual-table",
       title: "Table",
       kind: "visual",
