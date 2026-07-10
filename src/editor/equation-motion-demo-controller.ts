@@ -1380,6 +1380,7 @@ function cloneElementWithComputedStyles(element: HTMLElement): HTMLElement {
 
   inlineComputedMotionCloneStyles(element, clone);
   removeMotionIdentityAttributes(clone);
+  forceVisibleMotionCloneTree(clone);
   clone.style.position = "static";
   clone.style.left = "auto";
   clone.style.top = "auto";
@@ -1392,6 +1393,14 @@ function cloneElementWithComputedStyles(element: HTMLElement): HTMLElement {
   clone.style.willChange = "";
 
   return clone;
+}
+
+function forceVisibleMotionCloneTree(element: Element): void {
+  if (element instanceof HTMLElement || element instanceof SVGElement) {
+    element.style.visibility = "visible";
+  }
+
+  Array.from(element.children).forEach(forceVisibleMotionCloneTree);
 }
 
 function inlineComputedMotionCloneStyles(source: Element, clone: Element): void {

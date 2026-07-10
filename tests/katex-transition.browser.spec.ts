@@ -264,6 +264,12 @@ test("editor equation motion demo uses semantic playback plans", async ({
       '[data-kp-equation-motion-clone-for="matrix.bracket.change-delimiter.source.entry.r0.c0"]'
     );
     const cloneStyle = clone === null ? undefined : getComputedStyle(clone);
+    const visibleCloneDescendantCount =
+      clone === null
+        ? 0
+        : [clone, ...Array.from(clone.querySelectorAll("*"))].filter(
+            (element) => getComputedStyle(element).visibility === "visible"
+          ).length;
 
     return {
       insideKatex: matrixEntry.closest(".katex") !== null,
@@ -275,6 +281,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
       inlineWillChangeAfterMotion: matrixEntry.style.willChange,
       cloneExists: clone !== null,
       clonePosition: cloneStyle?.position,
+      visibleCloneDescendantCount,
       cloneTransform: clone?.style.transform ?? ""
     };
   });
@@ -287,6 +294,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
     inlineWillChangeAfterMotion: "",
     cloneExists: true,
     clonePosition: "absolute",
+    visibleCloneDescendantCount: 3,
     cloneTransform: expect.stringContaining("translate(")
   });
 
@@ -582,10 +590,18 @@ test("editor equation motion demo uses semantic playback plans", async ({
     }
 
     const targetRadicalStyle = getComputedStyle(targetRadical);
+    const visibleTargetRadicalCloneDescendantCount =
+      targetRadicalClone === null
+        ? 0
+        : [targetRadicalClone, ...Array.from(targetRadicalClone.querySelectorAll("*"))]
+            .filter(
+              (element) => getComputedStyle(element).visibility === "visible"
+            ).length;
 
     return {
       overlayExists: overlay !== null,
       targetRadicalCloneExists: targetRadicalClone !== null,
+      visibleTargetRadicalCloneDescendantCount,
       targetRadicalInlineTransform: targetRadical.style.transform,
       targetRadicalInlineWillChange: targetRadical.style.willChange,
       targetRadicalVisibility: targetRadicalStyle.visibility,
@@ -596,6 +612,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
   expect(radicalEndpointWindowState).toEqual({
     overlayExists: false,
     targetRadicalCloneExists: true,
+    visibleTargetRadicalCloneDescendantCount: 4,
     targetRadicalInlineTransform: "",
     targetRadicalInlineWillChange: "",
     targetRadicalVisibility: "hidden",
