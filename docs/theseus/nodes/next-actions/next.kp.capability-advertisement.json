@@ -2,7 +2,54 @@
   "id": "next.kp.capability-advertisement",
   "kind": "next-action",
   "title": "Advertise semantic object capabilities",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic-api",
-  "summary": "Let semantic objects advertise render, derive, execute, transform, compare, diagnose, animate, and link capabilities through shared metadata."
+  "summary": "Added detailed semantic object capability advertisements for registry metadata.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/object-registry.ts",
+      "summary": "Registry definitions now expose metadata-only capability advertisement details, derive descriptor ids, target types, and computation protocol ids."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-object-registry.test.ts",
+      "summary": "Covers detailed expression and matrix capability advertisements plus unknown-type fallback."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/derive-protocols.ts",
+      "summary": "Derive descriptor ids are referenced by capability advertisements."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-object-registry.test.ts",
+      "status": "passed",
+      "scope": "focused semantic object registry advertisement tests",
+      "checkedAt": "2026-07-10T20:06:56.778Z"
+    },
+    {
+      "command": "npm test -- tests/semantic-object-registry.test.ts tests/semantic-derive-protocols.test.ts",
+      "status": "passed",
+      "scope": "repo test script including registry and derive protocol coverage",
+      "checkedAt": "2026-07-10T20:06:56.803Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:06:56.826Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:06:56.847Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added detailed semantic object capability advertisements for registry metadata."
+  }
 }

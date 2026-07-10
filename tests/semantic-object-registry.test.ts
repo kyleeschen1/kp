@@ -42,6 +42,41 @@ test("semantic object registry lists object types by capability", () => {
   ]);
 });
 
+test("semantic object registry advertises detailed object capabilities", () => {
+  const registry = createDefaultSemanticObjectRegistry();
+
+  const expressionCapabilities =
+    registry.listCapabilityAdvertisementsForType("expression");
+  const expressionDerive = expressionCapabilities.find(
+    (capability) => capability.capability === "derive"
+  );
+  const expressionExecute = expressionCapabilities.find(
+    (capability) => capability.capability === "execute"
+  );
+  const matrixDerive = registry
+    .listCapabilityAdvertisementsForType("matrix")
+    .find((capability) => capability.capability === "derive");
+
+  assert.deepEqual(expressionDerive?.descriptorIds, [
+    "expression.latex",
+    "expression.graph2d",
+    "expression.graph3d"
+  ]);
+  assert.deepEqual(expressionDerive?.targetTypes, [
+    "latex-form",
+    "graph-2d",
+    "graph-3d"
+  ]);
+  assert.match(expressionDerive?.summary ?? "", /exact semantic forms/);
+  assert.deepEqual(expressionExecute?.protocolIds, [
+    "evaluate",
+    "differentiate",
+    "numericSample"
+  ]);
+  assert.deepEqual(matrixDerive?.descriptorIds, ["matrix.linear-map"]);
+  assert.deepEqual(registry.listCapabilityAdvertisementsForType("unknown"), []);
+});
+
 test("semantic object registry rejects duplicate type definitions", () => {
   assert.throws(
     () =>
