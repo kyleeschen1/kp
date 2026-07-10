@@ -1,0 +1,49 @@
+{
+  "id": "task.theseus.dashboard-agenda-css-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard agenda CSS",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "summary": "Added default agenda-mode CSS for the reusable dashboard renderer, including table rows, toolbar layout, status colors, hover/focus states, and responsive behavior.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-css.ts",
+      "summary": "Defines the reusable agenda CSS stylesheet."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-html.ts",
+      "summary": "Embeds the agenda CSS in rendered HTML by default with an opt-out option."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-html.test.ts",
+      "summary": "Covers CSS embedding and key agenda style hooks."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/dashboard-html.test.ts",
+      "status": "passed",
+      "scope": "Focused renderer CSS embedding test.",
+      "checkedAt": "2026-07-10T06:16:48.958Z"
+    },
+    {
+      "command": "npm run test -- src/dashboard-html.test.ts src/dashboard-data.test.ts src/dashboard-data-builder.test.ts",
+      "status": "passed",
+      "scope": "Adjacent dashboard package tests.",
+      "checkedAt": "2026-07-10T06:16:48.968Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T06:16:48.982Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added default agenda-mode CSS for the reusable dashboard renderer, including table rows, toolbar layout, status colors, hover/focus states, and responsive behavior."
+  }
+}

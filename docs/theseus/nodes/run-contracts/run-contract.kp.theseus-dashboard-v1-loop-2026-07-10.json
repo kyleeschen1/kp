@@ -72,13 +72,14 @@
     {
       "id": "task.theseus.dashboard-static-html-v0",
       "title": "Generate-static-dashboard-html",
-      "status": "complete",
-      "summary": "Static agenda HTML renderer landed for dashboard models."
+      "summary": "Static agenda HTML renderer landed for dashboard models.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-agenda-css-v0",
       "title": "Add-agenda-css",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Agenda-mode CSS landed for the reusable dashboard renderer."
     },
     {
       "id": "task.theseus.dashboard-client-search-v0",
