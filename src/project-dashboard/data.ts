@@ -343,6 +343,61 @@ export const projectDashboardData: ProjectDashboardData = {
       relatedIds: ["work-equation-final-simplify"]
     },
     {
+      id: "sample-synced-equation-graph-linear-solve",
+      title: "Synchronized equation graph sample",
+      kind: "animation",
+      status: "planned",
+      summary:
+        "A dashboard launch target for scrubbing an equation animation and graph view from the same semantic clock.",
+      tags: ["sync", "equation", "graph", "shared-clock"],
+      domains: ["math", "graphs", "runtime"],
+      interfaces: [
+        "shared playhead",
+        "equation animation sample",
+        "graph state sample"
+      ],
+      maturity: "sample target metadata",
+      coverage: [
+        "equation animation id",
+        "graph id",
+        "shared semantic clock id"
+      ],
+      sourceRefs: [
+        { label: "Animation kernel", href: "src/animation/kernel.ts" },
+        {
+          label: "Equation animation catalog",
+          href: "src/editor/equation-animation-catalog.ts"
+        },
+        {
+          label: "Graph transition sampler",
+          href: "src/rendering/graph-transitions.ts"
+        },
+        {
+          label: "Dashboard sample target",
+          href: "src/project-dashboard/data.ts"
+        }
+      ],
+      verification: [
+        "tests/project-dashboard.test.ts",
+        "tests/project-dashboard-theseus-adapter.test.ts"
+      ],
+      sampleTargets: [
+        {
+          kind: "synchronized-equation-graph",
+          label: "Open synchronized solve sample",
+          animationId: "linear-equation-solve-x",
+          graphId: "saddle-orbit-graph",
+          sharedClockId: "solve-x-shared-clock",
+          surfaceMode: "mesh"
+        }
+      ],
+      relatedIds: [
+        "work-rendering-time-protocol",
+        "visual-webgl-graph",
+        "semantic-equation"
+      ]
+    },
+    {
       id: "transform-subtract-both-sides",
       title: "subtractBothSides",
       kind: "semantic-transform",

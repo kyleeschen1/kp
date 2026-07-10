@@ -38,6 +38,15 @@ export type ProjectDashboardSampleTarget =
       readonly surfaceMode: string;
     }
   | {
+      readonly kind: "synchronized-equation-graph";
+      readonly label: string;
+      readonly animationId: string;
+      readonly graphId: string;
+      readonly sharedClockId: string;
+      readonly fixtureId?: string;
+      readonly surfaceMode?: string;
+    }
+  | {
       readonly kind: "api-catalog-item";
       readonly label: string;
       readonly itemId: string;
@@ -364,6 +373,17 @@ function sampleTargetSearchFields(
         ];
       case "graph-surface-mode":
         return [target.kind, target.label, target.graphId, target.surfaceMode];
+      case "synchronized-equation-graph":
+        return [
+          target.kind,
+          target.label,
+          target.animationId,
+          target.graphId,
+          target.sharedClockId,
+          target.fixtureId ?? "",
+          target.surfaceMode ?? "",
+          "sync equation graph shared clock"
+        ];
       case "api-catalog-item":
         return [target.kind, target.label, target.itemId];
     }

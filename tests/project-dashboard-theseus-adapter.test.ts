@@ -89,6 +89,20 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
         field.value.includes("Open donut graph sample")
     )
   );
+
+  const syncedRow = galleryRows.find(
+    (row) => row.id === "kp.gallery.sample-synced-equation-graph-linear-solve"
+  );
+
+  assert.ok(syncedRow?.searchText?.includes("linear-equation-solve-x"));
+  assert.ok(syncedRow?.searchText?.includes("solve-x-shared-clock"));
+  assert.ok(
+    syncedRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Sample targets" &&
+        field.value.includes("Open synchronized solve sample")
+    )
+  );
 });
 
 test("KP Theseus dashboard extension command writes JSON payload", () => {

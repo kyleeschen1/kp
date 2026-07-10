@@ -2,7 +2,63 @@
   "id": "next.kp.synced-equation-graph-samples",
   "kind": "next-action",
   "title": "Add synced equation graph samples",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.dashboard",
-  "summary": "Add a dashboard sample target for synchronized equation and graph views driven by the same semantic clock."
+  "summary": "Added dashboard metadata for a synchronized equation and graph sample driven by one semantic clock.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/model.ts",
+      "summary": "Extended dashboard sample target types and fuzzy-search fields with synchronized equation graph targets."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Renders synchronized sample preview links with equation animation, graph, surface mode, and shared clock data attributes."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Adds a searchable planned gallery row for the synchronized linear solve equation graph sample."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/theseus-adapter.ts",
+      "summary": "Exports synchronized sample target metadata through the KP Theseus dashboard adapter search payload."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers dashboard selection, preview metadata, preview link data attributes, and fuzzy search for the synchronized sample row."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-theseus-adapter.test.ts",
+      "summary": "Covers Theseus dashboard export search and preview metadata for the synchronized sample row."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "dashboard render/search and Theseus adapter export tests",
+      "checkedAt": "2026-07-10T21:07:27.477Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T21:07:27.500Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T21:07:27.524Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added dashboard metadata for a synchronized equation and graph sample driven by one semantic clock."
+  }
 }

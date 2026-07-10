@@ -766,6 +766,34 @@ function sampleTargetPreviewLink(
           ["data-kp-preview-graph-surface-mode", target.surfaceMode]
         ]
       };
+    case "synchronized-equation-graph": {
+      const dataAttributes: [string, string][] = [
+        ["data-kp-preview-link", "synchronized-equation-graph"],
+        ["data-kp-preview-live-animation", target.animationId],
+        ["data-kp-preview-graph-id", target.graphId],
+        ["data-kp-preview-shared-clock-id", target.sharedClockId]
+      ];
+
+      if (target.fixtureId !== undefined) {
+        dataAttributes.push([
+          "data-kp-preview-katex-transform-fixture",
+          target.fixtureId
+        ]);
+      }
+
+      if (target.surfaceMode !== undefined) {
+        dataAttributes.push([
+          "data-kp-preview-graph-surface-mode",
+          target.surfaceMode
+        ]);
+      }
+
+      return {
+        label: target.label,
+        href: "#project-dashboard-animation-layout-title",
+        dataAttributes
+      };
+    }
     case "api-catalog-item":
       return {
         label: target.label,
@@ -998,6 +1026,17 @@ function sampleTargetSearchFields(
         ];
       case "graph-surface-mode":
         return [target.kind, target.label, target.graphId, target.surfaceMode];
+      case "synchronized-equation-graph":
+        return [
+          target.kind,
+          target.label,
+          target.animationId,
+          target.graphId,
+          target.sharedClockId,
+          target.fixtureId ?? "",
+          target.surfaceMode ?? "",
+          "sync equation graph shared clock"
+        ];
       case "api-catalog-item":
         return [target.kind, target.label, target.itemId];
     }

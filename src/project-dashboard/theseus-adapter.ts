@@ -278,6 +278,17 @@ function sampleTargetSearchFields(
         ];
       case "graph-surface-mode":
         return [target.kind, target.label, target.graphId, target.surfaceMode];
+      case "synchronized-equation-graph":
+        return [
+          target.kind,
+          target.label,
+          target.animationId,
+          target.graphId,
+          target.sharedClockId,
+          target.fixtureId ?? "",
+          target.surfaceMode ?? "",
+          "sync equation graph shared clock"
+        ];
       case "api-catalog-item":
         return [target.kind, target.label, target.itemId];
     }

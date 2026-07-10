@@ -300,6 +300,31 @@ test("renderProjectDashboard exposes gallery sample targets as preview links", (
   assert.match(html, /data-kp-preview-graph-surface-mode="donut"/);
 });
 
+test("renderProjectDashboard exposes synchronized equation graph sample targets", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "sample-synced-equation-graph-linear-solve"
+  });
+
+  assert.match(
+    html,
+    /data-kp-selected-agenda-row="sample-synced-equation-graph-linear-solve"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Sample targets"[^>]*>Open synchronized solve sample/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-link="synchronized-equation-graph"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-live-animation="linear-equation-solve-x"/
+  );
+  assert.match(html, /data-kp-preview-graph-id="saddle-orbit-graph"/);
+  assert.match(html, /data-kp-preview-shared-clock-id="solve-x-shared-clock"/);
+});
+
 test("renderProjectDashboard exposes semantic object API sample targets", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "semantic-matrix"
@@ -503,7 +528,11 @@ test("groupProjectGalleryItemsByKind groups gallery items by kind", () => {
     groups
       .find((group) => group.kind === "animation")
       ?.items.map((item) => item.id),
-    ["animation-cancelation", "animation-final-crossfade"]
+    [
+      "animation-cancelation",
+      "animation-final-crossfade",
+      "sample-synced-equation-graph-linear-solve"
+    ]
   );
   assert.deepEqual(
     groups
@@ -556,12 +585,22 @@ test("filterProjectDashboardData fuzzy-matches rendered forms", () => {
 
   const meshGraphResult = filterProjectDashboardData(
     projectDashboardData,
-    "msh gr"
+    "msh surf"
   );
 
   assert.deepEqual(
     meshGraphResult.gallery.map((item) => item.id),
     ["visual-webgl-graph", "visual-mesh-graph"]
+  );
+
+  const syncedResult = filterProjectDashboardData(
+    projectDashboardData,
+    "syn eq gr"
+  );
+
+  assert.deepEqual(
+    syncedResult.gallery.map((item) => item.id),
+    ["sample-synced-equation-graph-linear-solve"]
   );
 });
 
