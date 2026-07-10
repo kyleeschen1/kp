@@ -1086,6 +1086,8 @@ test("editor equation motion demo uses semantic playback plans", async ({
       return {
         progress: demoElement.dataset["kpEquationMotionProgress"],
         cancelMode: demoElement.dataset["kpEquationMotionCancelMode"],
+        activeMotifs: demoElement.dataset["kpEquationMotionActiveMotifs"],
+        activePhases: demoElement.dataset["kpEquationMotionActivePhases"],
         xToken: snapshotToken("lhs.x"),
         cancelTokens: cancelMotionIds.map(snapshotToken),
         domParticleCount: demoElement.querySelectorAll(
@@ -1278,6 +1280,8 @@ test("editor equation motion demo uses semantic playback plans", async ({
 
   expect(cancellationMotionState.overlap.cancelMode).toBe("particle-dissolve");
   expect(cancellationMotionState.overlap.progress).toBe("0.3");
+  expect(cancellationMotionState.overlap.activeMotifs).toContain("cancelation");
+  expect(cancellationMotionState.overlap.activePhases).toContain("cancel-meet");
   expect(cancellationMotionState.overlapTokensMovedCloser).toBe(true);
   expect(
     cancellationMotionState.overlapConvergenceProgressSpread
@@ -1287,6 +1291,9 @@ test("editor equation motion demo uses semantic playback plans", async ({
   expect(cancellationMotionState.fullyOverlappedAtMidpoint).toBe(true);
   expect(cancellationMotionState.fullyOverlappedAtMinimumScale).toBe(true);
   expect(cancellationMotionState.dissolve.progress).toBe("0.46");
+  expect(cancellationMotionState.dissolve.activePhases).toContain(
+    "cancel-collapse"
+  );
   expect(cancellationMotionState.dissolve.domParticleCount).toBe(0);
   expect(cancellationMotionState.webglParticlesVisible).toBe(true);
   expect(cancellationMotionState.dissolveFadingFromMinimumScale).toBe(true);
@@ -1296,6 +1303,9 @@ test("editor equation motion demo uses semantic playback plans", async ({
   expect(cancellationMotionState.pause.progress).toBe("0.6");
   expect(cancellationMotionState.survivorHeldDuringPause).toBe(true);
   expect(cancellationMotionState.shifted.progress).toBe("0.8");
+  expect(cancellationMotionState.shifted.activePhases).toContain(
+    "post-cancel-layout-shift"
+  );
   expect(cancellationMotionState.survivorShiftedAfterPause).toBe(true);
 
   await next.click();

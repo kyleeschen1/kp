@@ -683,6 +683,7 @@ function renderEquationMotionFrame(
     String(countContextTokensForStep(context, sourceStep));
   demo.dataset["kpEquationMotionTargetAnchorCount"] =
     String(countContextTokensForStep(context, targetStep));
+  syncEquationMotionMotifDiagnostics(demo, frame);
   syncEquationMotionScrubber(
     demo,
     directionalProgress * readEquationMotionBeatCount(demo)
@@ -807,6 +808,27 @@ function renderEquationMotionFrame(
       );
     }
   }
+}
+
+function syncEquationMotionMotifDiagnostics(
+  demo: HTMLElement,
+  frame: EquationMotionFrame
+): void {
+  const activeMotifs = uniqueStrings(
+    frame.visualMotifs
+      .filter((motif) => motif.phases.some((phase) => phase.active))
+      .map((motif) => motif.kind)
+  );
+  const activePhases = uniqueStrings(
+    frame.visualMotifs.flatMap((motif) =>
+      motif.phases
+        .filter((phase) => phase.active)
+        .map((phase) => phase.phaseId)
+    )
+  );
+
+  writeDatasetList(demo, "kpEquationMotionActiveMotifs", activeMotifs);
+  writeDatasetList(demo, "kpEquationMotionActivePhases", activePhases);
 }
 
 function syncEquationMotionActiveState(
@@ -1855,6 +1877,23 @@ function normalizeProgress(progress: number): number {
   }
 
   return clampNumber(progress, 0, 1);
+}
+
+function uniqueStrings(values: readonly string[]): readonly string[] {
+  return [...new Set(values)];
+}
+
+function writeDatasetList(
+  element: HTMLElement,
+  key: string,
+  values: readonly string[]
+): void {
+  if (values.length === 0) {
+    delete element.dataset[key];
+    return;
+  }
+
+  element.dataset[key] = values.join(" ");
 }
 
 function hiddenTokenPose(): MotionPose {

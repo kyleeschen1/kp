@@ -1,0 +1,56 @@
+{
+  "id": "next.kp.demo-motif-phase-diagnostics",
+  "kind": "next-action",
+  "title": "Expose active motif phase diagnostics",
+  "status": "resolved",
+  "domain": "kp.animation-runtime",
+  "summary": "The equation demo now publishes active visual motif kinds and phase ids from sampled motion frames onto DOM diagnostics.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Writes active motif and phase data attributes from EquationMotionFrame.visualMotifs during frame render."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Asserts the demo exposes cancelation, cancel-meet, cancel-collapse, and post-cancel-layout-shift diagnostics while scrubbing."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/katex-transition.browser.spec.ts -g editor-equation-motion-demo-uses-semantic-playback-plans",
+      "status": "passed",
+      "scope": "Focused browser test for semantic playback diagnostics.",
+      "checkedAt": "2026-07-10T09:55:12.088Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "App, node, and test TypeScript projects.",
+      "checkedAt": "2026-07-10T09:55:12.106Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full Node test suite.",
+      "checkedAt": "2026-07-10T09:55:12.122Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation.",
+      "checkedAt": "2026-07-10T09:55:12.138Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-10T09:55:12.153Z",
+      "scope": "Production build and typecheck; Vite large chunk warning remains."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "The equation demo now publishes active visual motif kinds and phase ids from sampled motion frames onto DOM diagnostics."
+  }
+}

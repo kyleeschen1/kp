@@ -21,7 +21,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure or arbitrary visual effects without asking."
   ],
   "goal": "Run the approved semantic transition runtime loop.",
-  "target": "next.kp.compiled-equation-motion-sampler",
+  "target": "next.kp.demo-motif-phase-diagnostics",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -66,6 +66,12 @@
       "id": "next.kp.compiled-equation-motion-sampler",
       "title": "Precompile equation motion sampling",
       "summary": "Working the compiled equation motion sampler slice under the approved semantic transition runtime contract.",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.demo-motif-phase-diagnostics",
+      "title": "Expose active motif phase diagnostics",
+      "summary": "Working the demo motif phase diagnostics slice under the approved semantic transition runtime contract.",
       "status": "complete"
     }
   ]
