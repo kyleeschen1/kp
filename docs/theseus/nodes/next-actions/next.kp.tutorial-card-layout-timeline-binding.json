@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.tutorial-card-layout-timeline-binding",
+  "kind": "next-action",
+  "title": "Map tutorial card timeline to synchronized panel layout",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/layout-timeline-binding.ts",
+      "summary": "Adds layout/timeline binding creation and sampling from parent timeline frames for panels and controls."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-layout-timeline-binding.test.ts",
+      "summary": "Covers panel track selection for equation and graph targets plus deterministic binding-frame sampling for controls."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-layout-timeline-binding.json",
+      "summary": "Materializes the approved layout/timeline binding next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the layout/timeline binding slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-layout-timeline-binding.test.ts tests/parent-timeline.test.ts tests/tutorial-card-runtime.test.ts tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "focused tutorial card layout timeline binding/runtime tests",
+      "checkedAt": "2026-07-10T22:16:04.643Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:16:04.664Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:16:04.689Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Mapped tutorial card parent timeline frames onto synchronized equation, graph, and control panel bindings without renderer coupling."
+  },
+  "summary": "Mapped tutorial card parent timeline frames onto synchronized equation, graph, and control panel bindings without renderer coupling."
+}
