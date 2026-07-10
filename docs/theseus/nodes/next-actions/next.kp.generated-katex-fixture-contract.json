@@ -2,7 +2,49 @@
   "id": "next.kp.generated-katex-fixture-contract",
   "kind": "next-action",
   "title": "Define generated KaTeX fixture contract",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.katex",
-  "summary": "Define how semantic transformations generate KaTeX fixtures, identity maps, artifacts, and expected geometry diagnostics."
+  "summary": "Added a generated KaTeX fixture contract for semantic transformation metadata, correspondence maps, artifact expectations, motif timelines, and geometry diagnostics.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/authoring/transform-fixture-contract.ts",
+      "summary": "Authoring contract now exports/imports and validates generated KaTeX fixture documents beside hand-authored fixture documents."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-katex-fixture-contract.test.ts",
+      "summary": "Covers JSON round-trip of generated fixture metadata and path-specific validation for bad semantic, correspondence, motif, artifact, and geometry fields."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-katex-fixture-contract.test.ts",
+      "status": "passed",
+      "scope": "focused generated KaTeX fixture contract tests",
+      "checkedAt": "2026-07-10T20:45:51.267Z"
+    },
+    {
+      "command": "npm test -- tests/generated-katex-fixture-contract.test.ts tests/semantic.test.ts tests/katex-token-snapshot.test.ts tests/visual-motif-composition.test.ts",
+      "status": "passed",
+      "scope": "repo test script including authoring, KaTeX fixture, and motif composition coverage",
+      "checkedAt": "2026-07-10T20:45:51.297Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:45:51.317Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:45:51.342Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a generated KaTeX fixture contract for semantic transformation metadata, correspondence maps, artifact expectations, motif timelines, and geometry diagnostics."
+  }
 }

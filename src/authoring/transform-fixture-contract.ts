@@ -5,13 +5,90 @@ import type {
   KatexTransformFixtureLayoutRole,
   KatexTransformFixtureTokenRole
 } from "../rendering/katex-transform-fixtures.ts";
+import type {
+  EquationMotionPrimitiveId,
+  EquationVisualMotifKind,
+  EquationVisualMotifPhaseId
+} from "../rendering/visual-motif.ts";
+import type {
+  TransformTreeVisualMotifTimeline
+} from "../rendering/visual-motif-composition.ts";
+import type {
+  SemanticTransformationPreservation,
+  SemanticTransformationRef
+} from "../semantic/animation.ts";
+import {
+  selectorCorrespondenceRelationIds,
+  type CorrespondenceMap
+} from "../semantic/correspondence.ts";
 
 export const TRANSFORM_FIXTURE_CONTRACT_VERSION = 1;
+export const GENERATED_KATEX_FIXTURE_CONTRACT_VERSION = 1;
 
 export interface TransformFixtureDocument {
   readonly schemaVersion: typeof TRANSFORM_FIXTURE_CONTRACT_VERSION;
   readonly kind: "katex-transform-fixture";
   readonly fixture: KatexTransformFixture;
+}
+
+export type GeneratedKatexArtifactSide = "source" | "target";
+
+export type GeneratedKatexArtifactKind =
+  | "delimiter"
+  | "fraction-bar"
+  | "large-operator"
+  | "matrix-bracket"
+  | "operator"
+  | "radical"
+  | "rule"
+  | "script"
+  | "wrapper";
+
+export type GeneratedKatexGeometryMetric =
+  | "artifact-presence"
+  | "baseline"
+  | "bounding-box"
+  | "column"
+  | "row"
+  | "role-change";
+
+export type GeneratedKatexGeometrySeverity = "required" | "advisory";
+
+export interface GeneratedKatexArtifactExpectation {
+  readonly id: string;
+  readonly side: GeneratedKatexArtifactSide;
+  readonly selectorId: string;
+  readonly structuralTokenId: string;
+  readonly artifactKind: GeneratedKatexArtifactKind;
+}
+
+export interface GeneratedKatexGeometryDiagnostic {
+  readonly id: string;
+  readonly targetId: string;
+  readonly metric: GeneratedKatexGeometryMetric;
+  readonly severity: GeneratedKatexGeometrySeverity;
+  readonly summary: string;
+}
+
+export interface GeneratedKatexTransformFixture {
+  readonly id: string;
+  readonly fixture: KatexTransformFixture;
+  readonly semanticTransformation: SemanticTransformationRef;
+  readonly correspondenceMap: CorrespondenceMap;
+  readonly visualMotifTimeline: TransformTreeVisualMotifTimeline<
+    EquationVisualMotifKind,
+    EquationMotionPrimitiveId,
+    EquationVisualMotifPhaseId
+  >;
+  readonly artifactExpectations: readonly GeneratedKatexArtifactExpectation[];
+  readonly geometryDiagnostics: readonly GeneratedKatexGeometryDiagnostic[];
+  readonly summary: string;
+}
+
+export interface GeneratedKatexFixtureDocument {
+  readonly schemaVersion: typeof GENERATED_KATEX_FIXTURE_CONTRACT_VERSION;
+  readonly kind: "generated-katex-transform-fixture";
+  readonly generated: GeneratedKatexTransformFixture;
 }
 
 export interface TransformFixtureValidationIssue {
@@ -24,6 +101,17 @@ export type TransformFixtureImportResult =
       readonly ok: true;
       readonly fixture: KatexTransformFixture;
       readonly document: TransformFixtureDocument;
+    }
+  | {
+      readonly ok: false;
+      readonly issues: readonly TransformFixtureValidationIssue[];
+    };
+
+export type GeneratedKatexFixtureImportResult =
+  | {
+      readonly ok: true;
+      readonly generated: GeneratedKatexTransformFixture;
+      readonly document: GeneratedKatexFixtureDocument;
     }
   | {
       readonly ok: false;
@@ -96,6 +184,52 @@ const KATEX_TRANSFORM_LAYOUT_ROLES = new Set<string>([
   "upper-limit"
 ]);
 
+const SEMANTIC_TRANSFORMATION_PRESERVATIONS = new Set<string>([
+  "identity",
+  "presentation",
+  "role",
+  "structure",
+  "value"
+]);
+
+const SELECTOR_CORRESPONDENCE_RELATIONS = new Set<string>(
+  selectorCorrespondenceRelationIds
+);
+
+const GENERATED_KATEX_ARTIFACT_SIDES = new Set<string>(["source", "target"]);
+
+const GENERATED_KATEX_ARTIFACT_KINDS = new Set<string>([
+  "delimiter",
+  "fraction-bar",
+  "large-operator",
+  "matrix-bracket",
+  "operator",
+  "radical",
+  "rule",
+  "script",
+  "wrapper"
+]);
+
+const GENERATED_KATEX_GEOMETRY_METRICS = new Set<string>([
+  "artifact-presence",
+  "baseline",
+  "bounding-box",
+  "column",
+  "row",
+  "role-change"
+]);
+
+const GENERATED_KATEX_GEOMETRY_SEVERITIES = new Set<string>([
+  "advisory",
+  "required"
+]);
+
+const TRANSFORM_TREE_ANNOTATION_PLACEMENTS = new Set<string>([
+  "after",
+  "before",
+  "during"
+]);
+
 export function exportKatexTransformFixture(
   fixture: KatexTransformFixture
 ): TransformFixtureDocument {
@@ -103,6 +237,16 @@ export function exportKatexTransformFixture(
     schemaVersion: TRANSFORM_FIXTURE_CONTRACT_VERSION,
     kind: "katex-transform-fixture",
     fixture: cloneJson(fixture)
+  };
+}
+
+export function exportGeneratedKatexTransformFixture(
+  generated: GeneratedKatexTransformFixture
+): GeneratedKatexFixtureDocument {
+  return {
+    schemaVersion: GENERATED_KATEX_FIXTURE_CONTRACT_VERSION,
+    kind: "generated-katex-transform-fixture",
+    generated: cloneJson(generated)
   };
 }
 
@@ -121,6 +265,24 @@ export function importKatexTransformFixtureDocument(
     ok: true,
     document,
     fixture: document.fixture
+  };
+}
+
+export function importGeneratedKatexFixtureDocument(
+  value: unknown
+): GeneratedKatexFixtureImportResult {
+  const issues = validateGeneratedKatexFixtureDocument(value);
+
+  if (issues.length > 0) {
+    return { ok: false, issues };
+  }
+
+  const document = cloneJson(value as GeneratedKatexFixtureDocument);
+
+  return {
+    ok: true,
+    document,
+    generated: document.generated
   };
 }
 
@@ -154,6 +316,540 @@ export function validateTransformFixtureDocument(
   validateFixture(value["fixture"], "fixture", issues);
 
   return issues;
+}
+
+export function validateGeneratedKatexFixtureDocument(
+  value: unknown
+): readonly TransformFixtureValidationIssue[] {
+  const issues: TransformFixtureValidationIssue[] = [];
+
+  if (!isRecord(value)) {
+    issues.push({
+      path: "$",
+      message: "Expected a generated KaTeX fixture document object."
+    });
+    return issues;
+  }
+
+  if (value["schemaVersion"] !== GENERATED_KATEX_FIXTURE_CONTRACT_VERSION) {
+    issues.push({
+      path: "schemaVersion",
+      message: `Expected schema version ${GENERATED_KATEX_FIXTURE_CONTRACT_VERSION}.`
+    });
+  }
+
+  if (value["kind"] !== "generated-katex-transform-fixture") {
+    issues.push({
+      path: "kind",
+      message: "Expected kind generated-katex-transform-fixture."
+    });
+  }
+
+  validateGeneratedFixture(value["generated"], "generated", issues);
+
+  return issues;
+}
+
+function validateGeneratedFixture(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!isRecord(value)) {
+    issues.push({
+      path,
+      message: "Expected a generated fixture object."
+    });
+    return;
+  }
+
+  validateNonEmptyString(value["id"], `${path}.id`, issues);
+  validateFixture(value["fixture"], `${path}.fixture`, issues);
+  validateSemanticTransformationRef(
+    value["semanticTransformation"],
+    `${path}.semanticTransformation`,
+    issues
+  );
+  validateCorrespondenceMap(
+    value["correspondenceMap"],
+    `${path}.correspondenceMap`,
+    issues
+  );
+  validateVisualMotifTimeline(
+    value["visualMotifTimeline"],
+    `${path}.visualMotifTimeline`,
+    issues
+  );
+  validateArtifactExpectations(
+    value["artifactExpectations"],
+    `${path}.artifactExpectations`,
+    issues
+  );
+  validateGeometryDiagnostics(
+    value["geometryDiagnostics"],
+    `${path}.geometryDiagnostics`,
+    issues
+  );
+  validateNonEmptyString(value["summary"], `${path}.summary`, issues);
+}
+
+function validateSemanticTransformationRef(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!isRecord(value)) {
+    issues.push({
+      path,
+      message: "Expected a semantic transformation reference object."
+    });
+    return;
+  }
+
+  validateNonEmptyString(value["id"], `${path}.id`, issues);
+  validateNonEmptyString(value["kind"], `${path}.kind`, issues);
+  validateStringArray(value["sourceObjectIds"], `${path}.sourceObjectIds`, issues);
+  validateStringArray(value["targetObjectIds"], `${path}.targetObjectIds`, issues);
+  validatePreservationArray(value["preserves"], `${path}.preserves`, issues);
+  validateOptionalString(value["summary"], `${path}.summary`, issues);
+}
+
+function validatePreservationArray(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!Array.isArray(value)) {
+    issues.push({
+      path,
+      message: "Expected a semantic preservation array."
+    });
+    return;
+  }
+
+  value.forEach((entry, index) =>
+    validateKnownString<SemanticTransformationPreservation>(
+      entry,
+      `${path}[${index}]`,
+      SEMANTIC_TRANSFORMATION_PRESERVATIONS,
+      issues
+    )
+  );
+}
+
+function validateCorrespondenceMap(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!isRecord(value)) {
+    issues.push({
+      path,
+      message: "Expected a correspondence map object."
+    });
+    return;
+  }
+
+  validateNonEmptyString(value["id"], `${path}.id`, issues);
+  validateCorrespondenceRecords(value["records"], `${path}.records`, issues);
+}
+
+function validateCorrespondenceRecords(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!Array.isArray(value)) {
+    issues.push({
+      path,
+      message: "Expected a correspondence record array."
+    });
+    return;
+  }
+
+  if (value.length === 0) {
+    issues.push({
+      path,
+      message: "Expected at least one correspondence record."
+    });
+    return;
+  }
+
+  value.forEach((record, index) =>
+    validateCorrespondenceRecord(record, `${path}[${index}]`, issues)
+  );
+}
+
+function validateCorrespondenceRecord(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!isRecord(value)) {
+    issues.push({
+      path,
+      message: "Expected a correspondence record object."
+    });
+    return;
+  }
+
+  validateNonEmptyString(value["id"], `${path}.id`, issues);
+  validateKnownString(
+    value["relation"],
+    `${path}.relation`,
+    SELECTOR_CORRESPONDENCE_RELATIONS,
+    issues
+  );
+  validateStringArray(value["sourceSelectorIds"], `${path}.sourceSelectorIds`, issues);
+  validateStringArray(value["targetSelectorIds"], `${path}.targetSelectorIds`, issues);
+  validateNonEmptyString(value["summary"], `${path}.summary`, issues);
+
+  if (
+    Array.isArray(value["sourceSelectorIds"]) &&
+    Array.isArray(value["targetSelectorIds"]) &&
+    value["sourceSelectorIds"].length === 0 &&
+    value["targetSelectorIds"].length === 0
+  ) {
+    issues.push({
+      path,
+      message:
+        "Expected at least one source or target selector for a correspondence record."
+    });
+  }
+}
+
+function validateVisualMotifTimeline(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!isRecord(value)) {
+    issues.push({
+      path,
+      message: "Expected a visual motif timeline object."
+    });
+    return;
+  }
+
+  validateNonEmptyString(value["id"], `${path}.id`, issues);
+  validateVisualMotifSegments(value["segments"], `${path}.segments`, issues);
+  validateVisualMotifPhases(
+    value["forwardPhases"],
+    `${path}.forwardPhases`,
+    "forward",
+    issues
+  );
+  validateVisualMotifPhases(
+    value["rewindPhases"],
+    `${path}.rewindPhases`,
+    "rewind",
+    issues
+  );
+  validateTransformTreeAnnotations(value["annotations"], `${path}.annotations`, issues);
+}
+
+function validateVisualMotifSegments(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!Array.isArray(value)) {
+    issues.push({
+      path,
+      message: "Expected a visual motif segment array."
+    });
+    return;
+  }
+
+  if (value.length === 0) {
+    issues.push({
+      path,
+      message: "Expected at least one visual motif segment."
+    });
+    return;
+  }
+
+  value.forEach((segment, index) =>
+    validateVisualMotifSegment(segment, `${path}[${index}]`, issues)
+  );
+}
+
+function validateVisualMotifSegment(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!isRecord(value)) {
+    issues.push({
+      path,
+      message: "Expected a visual motif segment object."
+    });
+    return;
+  }
+
+  validateNonEmptyString(value["id"], `${path}.id`, issues);
+  validateNonEmptyString(
+    value["transformationNodeId"],
+    `${path}.transformationNodeId`,
+    issues
+  );
+  validateNonEmptyString(
+    value["transformationKind"],
+    `${path}.transformationKind`,
+    issues
+  );
+  validateNonEmptyString(value["motifKind"], `${path}.motifKind`, issues);
+  validateStringArray(value["sourceObjectIds"], `${path}.sourceObjectIds`, issues);
+  validateStringArray(value["targetObjectIds"], `${path}.targetObjectIds`, issues);
+  validateStringArray(
+    value["motionPrimitiveIds"],
+    `${path}.motionPrimitiveIds`,
+    issues
+  );
+  validateStringArray(value["phaseIds"], `${path}.phaseIds`, issues);
+  validateNonEmptyString(value["summary"], `${path}.summary`, issues);
+}
+
+function validateVisualMotifPhases(
+  value: unknown,
+  path: string,
+  expectedDirection: "forward" | "rewind",
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!Array.isArray(value)) {
+    issues.push({
+      path,
+      message: "Expected a visual motif phase array."
+    });
+    return;
+  }
+
+  if (value.length === 0) {
+    issues.push({
+      path,
+      message: "Expected at least one visual motif phase."
+    });
+    return;
+  }
+
+  value.forEach((phase, index) =>
+    validateVisualMotifPhase(
+      phase,
+      `${path}[${index}]`,
+      expectedDirection,
+      issues
+    )
+  );
+}
+
+function validateVisualMotifPhase(
+  value: unknown,
+  path: string,
+  expectedDirection: "forward" | "rewind",
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!isRecord(value)) {
+    issues.push({
+      path,
+      message: "Expected a visual motif phase object."
+    });
+    return;
+  }
+
+  validateNonEmptyString(value["id"], `${path}.id`, issues);
+
+  if (value["direction"] !== expectedDirection) {
+    issues.push({
+      path: `${path}.direction`,
+      message: `Expected ${expectedDirection} visual motif phase direction.`
+    });
+  }
+
+  validateStringArray(value["segmentIds"], `${path}.segmentIds`, issues);
+  validateAnnotationIdsByPlacement(
+    value["annotationIdsByPlacement"],
+    `${path}.annotationIdsByPlacement`,
+    issues
+  );
+}
+
+function validateAnnotationIdsByPlacement(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!isRecord(value)) {
+    issues.push({
+      path,
+      message: "Expected annotation placement id groups."
+    });
+    return;
+  }
+
+  validateStringArray(value["before"], `${path}.before`, issues);
+  validateStringArray(value["during"], `${path}.during`, issues);
+  validateStringArray(value["after"], `${path}.after`, issues);
+}
+
+function validateTransformTreeAnnotations(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!Array.isArray(value)) {
+    issues.push({
+      path,
+      message: "Expected transform tree annotation array."
+    });
+    return;
+  }
+
+  value.forEach((annotation, index) =>
+    validateTransformTreeAnnotation(annotation, `${path}[${index}]`, issues)
+  );
+}
+
+function validateTransformTreeAnnotation(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!isRecord(value)) {
+    issues.push({
+      path,
+      message: "Expected transform tree annotation object."
+    });
+    return;
+  }
+
+  validateNonEmptyString(value["id"], `${path}.id`, issues);
+  validateNonEmptyString(value["kind"], `${path}.kind`, issues);
+  validateNonEmptyString(value["targetNodeId"], `${path}.targetNodeId`, issues);
+  validateKnownString(
+    value["placement"],
+    `${path}.placement`,
+    TRANSFORM_TREE_ANNOTATION_PLACEMENTS,
+    issues
+  );
+
+  if (value["selectorIds"] !== undefined) {
+    validateStringArray(value["selectorIds"], `${path}.selectorIds`, issues);
+  }
+
+  validateOptionalNonNegativeNumber(
+    value["durationBeats"],
+    `${path}.durationBeats`,
+    issues
+  );
+  validateOptionalString(value["summary"], `${path}.summary`, issues);
+}
+
+function validateArtifactExpectations(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!Array.isArray(value)) {
+    issues.push({
+      path,
+      message: "Expected an artifact expectation array."
+    });
+    return;
+  }
+
+  value.forEach((expectation, index) =>
+    validateArtifactExpectation(expectation, `${path}[${index}]`, issues)
+  );
+}
+
+function validateArtifactExpectation(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!isRecord(value)) {
+    issues.push({
+      path,
+      message: "Expected an artifact expectation object."
+    });
+    return;
+  }
+
+  validateNonEmptyString(value["id"], `${path}.id`, issues);
+  validateKnownString<GeneratedKatexArtifactSide>(
+    value["side"],
+    `${path}.side`,
+    GENERATED_KATEX_ARTIFACT_SIDES,
+    issues
+  );
+  validateNonEmptyString(value["selectorId"], `${path}.selectorId`, issues);
+  validateNonEmptyString(
+    value["structuralTokenId"],
+    `${path}.structuralTokenId`,
+    issues
+  );
+  validateKnownString<GeneratedKatexArtifactKind>(
+    value["artifactKind"],
+    `${path}.artifactKind`,
+    GENERATED_KATEX_ARTIFACT_KINDS,
+    issues
+  );
+}
+
+function validateGeometryDiagnostics(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!Array.isArray(value)) {
+    issues.push({
+      path,
+      message: "Expected a geometry diagnostic array."
+    });
+    return;
+  }
+
+  if (value.length === 0) {
+    issues.push({
+      path,
+      message: "Expected at least one geometry diagnostic."
+    });
+    return;
+  }
+
+  value.forEach((diagnostic, index) =>
+    validateGeometryDiagnostic(diagnostic, `${path}[${index}]`, issues)
+  );
+}
+
+function validateGeometryDiagnostic(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (!isRecord(value)) {
+    issues.push({
+      path,
+      message: "Expected a geometry diagnostic object."
+    });
+    return;
+  }
+
+  validateNonEmptyString(value["id"], `${path}.id`, issues);
+  validateNonEmptyString(value["targetId"], `${path}.targetId`, issues);
+  validateKnownString<GeneratedKatexGeometryMetric>(
+    value["metric"],
+    `${path}.metric`,
+    GENERATED_KATEX_GEOMETRY_METRICS,
+    issues
+  );
+  validateKnownString<GeneratedKatexGeometrySeverity>(
+    value["severity"],
+    `${path}.severity`,
+    GENERATED_KATEX_GEOMETRY_SEVERITIES,
+    issues
+  );
+  validateNonEmptyString(value["summary"], `${path}.summary`, issues);
 }
 
 function validateFixture(
@@ -458,6 +1154,23 @@ function validateNonNegativeInteger(
   }
 
   return true;
+}
+
+function validateOptionalNonNegativeNumber(
+  value: unknown,
+  path: string,
+  issues: TransformFixtureValidationIssue[]
+): void {
+  if (value === undefined) {
+    return;
+  }
+
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+    issues.push({
+      path,
+      message: "Expected a non-negative number."
+    });
+  }
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
