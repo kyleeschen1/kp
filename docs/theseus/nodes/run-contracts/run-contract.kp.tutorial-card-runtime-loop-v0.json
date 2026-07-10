@@ -3,6 +3,7 @@
   "kind": "run-contract",
   "title": "KP tutorial card runtime loop",
   "status": "ready",
+  "domain": "kp.tutorial",
   "sourceRefs": [
     {
       "kind": "file",
@@ -33,7 +34,16 @@
     "Do not expand into full programming execution traces before SourceFile selectors exist."
   ],
   "goal": "Run the approved tutorial-card runtime loop from KpTutorialCardManifest to a live synchronized equation and graph card.",
-  "target": "next.kp.tutorial-card-runtime-loop-contract",
+  "target": "next.kp.tutorial-card-runtime-resolver",
+  "runMode": "run",
+  "maxSlices": 25,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when verification fails and needs user judgment.",
+    "Stop when the approved slice list is exhausted.",
+    "Stop if a slice would broaden beyond the approved KP tutorial-card runtime loop."
+  ],
   "slices": [
     {
       "id": "next.kp.tutorial-card-runtime-loop-contract",
@@ -43,7 +53,7 @@
     {
       "id": "next.kp.tutorial-card-runtime-resolver",
       "title": "Add tutorial card runtime context resolver",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.parent-timeline-model",

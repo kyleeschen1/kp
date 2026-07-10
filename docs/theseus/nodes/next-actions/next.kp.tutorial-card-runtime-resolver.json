@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.tutorial-card-runtime-resolver",
+  "kind": "next-action",
+  "title": "Add tutorial card runtime context resolver",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/card-runtime.ts",
+      "summary": "Adds createKpTutorialCardRuntimeContext and resolveKpTutorialCardRuntimeRef for renderer-neutral manifest resolution."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-runtime.test.ts",
+      "summary": "Covers runtime indexing, typed ref resolution, missing refs, capability lookup, fallback lookup, and validation diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-runtime-resolver.json",
+      "summary": "Materializes the approved resolver next-action for the run contract."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Repairs contract hygiene metadata and advances the target to the resolver slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-runtime.test.ts tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "focused tutorial card manifest and runtime tests",
+      "checkedAt": "2026-07-10T22:08:11.089Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:08:11.122Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:08:11.139Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a renderer-neutral tutorial card runtime context resolver with indexed refs, typed lookup, capability flattening, fallback lookup, and manifest diagnostics."
+  },
+  "summary": "Added a renderer-neutral tutorial card runtime context resolver with indexed refs, typed lookup, capability flattening, fallback lookup, and manifest diagnostics."
+}
