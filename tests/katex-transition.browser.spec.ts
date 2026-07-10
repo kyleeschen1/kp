@@ -630,6 +630,17 @@ test("editor equation motion demo uses semantic playback plans", async ({
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");
   await rewind.click();
   await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "0");
+  await expect
+    .poll(() =>
+      demo.evaluate((element) => ({
+        active: document.activeElement === element,
+        borderColor: getComputedStyle(element).borderColor
+      }))
+    )
+    .toEqual({
+      active: true,
+      borderColor: "rgb(82, 97, 115)"
+    });
 
   const radicalReverseHandoffState = await page.evaluate(() => {
     const demoElement = document.querySelector<HTMLElement>(

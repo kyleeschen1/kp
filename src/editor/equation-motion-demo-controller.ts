@@ -1481,13 +1481,23 @@ function syncEquationMotionControls(
   const next = demo.querySelector<HTMLButtonElement>(
     '[data-action="equation-motion-next"]'
   );
+  const disableRewind = activeStep <= 0;
+  const disableNext = activeStep >= maxStep;
+  const activeElement = document.activeElement;
+  const shouldRestoreCardFocus =
+    (rewind !== null && activeElement === rewind && disableRewind) ||
+    (next !== null && activeElement === next && disableNext);
 
   if (rewind !== null) {
-    rewind.disabled = activeStep <= 0;
+    rewind.disabled = disableRewind;
   }
 
   if (next !== null) {
-    next.disabled = activeStep >= maxStep;
+    next.disabled = disableNext;
+  }
+
+  if (shouldRestoreCardFocus) {
+    demo.focus({ preventScroll: true });
   }
 
   const progress = normalizeProgress(
