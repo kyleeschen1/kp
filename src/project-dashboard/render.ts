@@ -736,14 +736,34 @@ function liveAnimationPreviewLink(
 function sampleTargetPreviewFields(
   targets: readonly ProjectDashboardSampleTarget[] | undefined
 ): readonly ProjectAgendaPreviewField[] {
-  return targets === undefined || targets.length === 0
+  const sampleTargets = targets ?? [];
+
+  return sampleTargets.length === 0
     ? []
     : [
         {
           label: "Sample targets",
-          value: targets.map((target) => target.label).join(", ")
-        }
+          value: sampleTargets.map((target) => target.label).join(", ")
+        },
+        ...sampleTargets.flatMap(sampleTargetDetailPreviewFields)
       ];
+}
+
+function sampleTargetDetailPreviewFields(
+  target: ProjectDashboardSampleTarget
+): readonly ProjectAgendaPreviewField[] {
+  switch (target.kind) {
+    case "tutorial-card":
+      return [
+        { label: "Tutorial card sample", value: target.sampleId },
+        { label: "Tutorial card manifest", value: target.manifestId },
+        ...(target.sharedClockId === undefined
+          ? []
+          : [{ label: "Tutorial card clock", value: target.sharedClockId }])
+      ];
+    default:
+      return [];
+  }
 }
 
 function sampleTargetPreviewLinks(

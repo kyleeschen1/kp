@@ -396,6 +396,18 @@ test("renderProjectDashboard exposes live tutorial card sample targets", () => {
     html,
     /data-kp-preview-manifest-id="tutorial\.linear-solve\.card"/
   );
+  assert.match(
+    html,
+    /data-kp-preview-field="Tutorial card sample"[^>]*>tutorial\.linear-solve\.card\.live-sample</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Tutorial card manifest"[^>]*>tutorial\.linear-solve\.card</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Tutorial card clock"[^>]*>solve-x-shared-clock</
+  );
   assert.match(html, /src\/tutorial\/linear-solve-card-sample\.ts/);
   assert.match(html, /tests\/linear-solve-tutorial-card-sample\.test\.ts/);
 });

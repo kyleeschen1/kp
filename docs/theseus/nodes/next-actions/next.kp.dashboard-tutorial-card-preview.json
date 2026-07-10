@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.dashboard-tutorial-card-preview",
+  "kind": "next-action",
+  "title": "Render selected tutorial card preview metadata",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Adds tutorial-card sample detail preview fields alongside the existing sample target links."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers selected-row tutorial-card sample, manifest, and clock preview metadata."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.dashboard-tutorial-card-preview.json",
+      "summary": "Materializes the approved dashboard tutorial-card preview next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the dashboard tutorial-card preview slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "focused project dashboard tutorial-card preview tests",
+      "checkedAt": "2026-07-10T22:35:27.949Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:35:27.987Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:35:28.019Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Rendered selected tutorial-card sample metadata as explicit project dashboard preview fields for sample id, manifest id, and shared clock."
+  },
+  "summary": "Rendered selected tutorial-card sample metadata as explicit project dashboard preview fields for sample id, manifest id, and shared clock."
+}
