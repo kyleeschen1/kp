@@ -80,51 +80,56 @@ test("createKatexArtifactPixelFlowFrame interpolates particles with no semantic 
   assert.ok((frame.particles[0]?.pointSize ?? 0) > 0);
 });
 
-test("createKatexArtifactPixelFlowFrame can lift source pixels in depth, retract to an emitter, and embrace the target", () => {
+test("createKatexArtifactPixelFlowFrame can anticipate, collapse, stream as a filament, and form the target", () => {
   const particles = pairKatexArtifactPixelFlowPoints(
     [{ x: 16, y: 10, alpha: 1 }],
-    [{ x: 46, y: 10, alpha: 1 }],
+    [{ x: 50, y: 20, alpha: 1 }],
     1
   );
   const plan = pixelFlowPlan({
     start: 0,
     end: 1,
     sourceMotion: {
-      kind: "depth-retreat-emitter",
-      liftScale: 1.18,
-      liftEnd: 0.22,
-      collapseEnd: 0.42,
-      streamPointScale: 0.45
+      kind: "anticipate-collapse-emitter",
+      anticipationOffset: { x: 12, y: -8 },
+      anticipationEnd: 0.2,
+      pauseEnd: 0.32,
+      collapseEnd: 0.52,
+      minScale: 0.06
+    },
+    pathMotion: {
+      kind: "filament-stream",
+      formStart: 0.84,
+      filamentWidth: 1.2
     },
     targetMotion: {
-      kind: "behind-token-embrace",
-      embraceStart: 0.82,
-      embraceScale: 1.08
+      kind: "late-radical-form",
+      formStart: 0.84
     }
   });
-  const lifted = createKatexArtifactPixelFlowFrame(plan, particles, 0.22);
-  const collapsed = createKatexArtifactPixelFlowFrame(plan, particles, 0.42);
-  const streaming = createKatexArtifactPixelFlowFrame(plan, particles, 0.62);
-  const embracing = createKatexArtifactPixelFlowFrame(plan, particles, 0.91);
+  const anticipated = createKatexArtifactPixelFlowFrame(plan, particles, 0.2);
+  const paused = createKatexArtifactPixelFlowFrame(plan, particles, 0.28);
+  const collapsed = createKatexArtifactPixelFlowFrame(plan, particles, 0.52);
+  const filament = createKatexArtifactPixelFlowFrame(plan, particles, 0.68);
+  const forming = createKatexArtifactPixelFlowFrame(plan, particles, 0.92);
 
-  assert.equal(lifted.particles[0]?.x, 16);
-  assert.equal(lifted.particles[0]?.y, 10);
-  assert.ok((lifted.particles[0]?.depthScale ?? 0) > 1);
-  assert.ok(
-    (lifted.particles[0]?.pointSize ?? 0) >
-      (collapsed.particles[0]?.pointSize ?? 0)
-  );
+  assert.equal(anticipated.particles[0]?.x, 28);
+  assert.equal(anticipated.particles[0]?.y, 2);
+  assert.equal(paused.particles[0]?.x, 28);
+  assert.equal(paused.particles[0]?.y, 2);
   assert.equal(collapsed.particles[0]?.x, 10);
   assert.equal(collapsed.particles[0]?.y, 10);
-  assert.equal(collapsed.particles[0]?.depthScale, 1);
-  assert.ok(Math.abs((streaming.particles[0]?.x ?? 0) - 28) < 1e-9);
-  assert.ok(Math.abs((streaming.particles[0]?.y ?? 0) - 10) < 1e-9);
+  assert.ok((collapsed.particles[0]?.pointSize ?? 0) < 0.2);
+  assert.ok((collapsed.particles[0]?.opacity ?? 0) < 0.1);
+  assert.ok(Math.abs((filament.particles[0]?.x ?? 0) - 25) < 1e-9);
+  assert.ok(Math.abs((filament.particles[0]?.y ?? 0) - 10) <= 1.2);
   assert.ok(
-    (streaming.particles[0]?.pointSize ?? 0) <
+    (filament.particles[0]?.pointSize ?? 0) <
       (collapsed.particles[0]?.pointSize ?? 0)
   );
-  assert.ok((embracing.particles[0]?.x ?? 0) > 46);
-  assert.ok((embracing.particles[0]?.depthScale ?? 0) > 1);
+  assert.ok((forming.particles[0]?.x ?? 0) > 25);
+  assert.ok((forming.particles[0]?.y ?? 0) > 10);
+  assert.ok((forming.particles[0]?.pointSize ?? 0) > 0.2);
 });
 
 function pixelFlowPlan(overrides: {
@@ -132,18 +137,25 @@ function pixelFlowPlan(overrides: {
   readonly end?: number | undefined;
   readonly sourceMotion?:
     | {
-        readonly kind: "depth-retreat-emitter";
-        readonly liftScale: number;
-        readonly liftEnd: number;
+        readonly kind: "anticipate-collapse-emitter";
+        readonly anticipationOffset: { readonly x: number; readonly y: number };
+        readonly anticipationEnd: number;
+        readonly pauseEnd: number;
         readonly collapseEnd: number;
-        readonly streamPointScale: number;
+        readonly minScale: number;
+      }
+    | undefined;
+  readonly pathMotion?:
+    | {
+        readonly kind: "filament-stream";
+        readonly formStart: number;
+        readonly filamentWidth: number;
       }
     | undefined;
   readonly targetMotion?:
     | {
-        readonly kind: "behind-token-embrace";
-        readonly embraceStart: number;
-        readonly embraceScale: number;
+        readonly kind: "late-radical-form";
+        readonly formStart: number;
       }
     | undefined;
 }) {
@@ -163,6 +175,7 @@ function pixelFlowPlan(overrides: {
     end: overrides.end ?? 1,
     easing: "linear" as const,
     sourceMotion: overrides.sourceMotion,
+    pathMotion: overrides.pathMotion,
     targetMotion: overrides.targetMotion
   };
 }
