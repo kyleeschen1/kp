@@ -482,6 +482,44 @@ test("editor equation motion demo uses semantic playback plans", async ({
   expect(radicalArtifactState.nonTransparentPixelCount).toBeGreaterThan(0);
   expect(radicalArtifactState.maxAlpha).toBeGreaterThan(0);
 
+  const radicalEndpointWindowState = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.98);
+
+    const overlay = demoElement.querySelector<HTMLCanvasElement>(
+      "[data-kp-equation-motion-artifact-overlay]"
+    );
+    const targetRadical = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="1"] [data-kp-motion-id="radical.rewrite-power-as-root.target.radical"]'
+    );
+
+    if (targetRadical === null) {
+      throw new Error("Expected radical target artifact token.");
+    }
+
+    const targetRadicalStyle = getComputedStyle(targetRadical);
+
+    return {
+      overlayExists: overlay !== null,
+      targetRadicalVisibility: targetRadicalStyle.visibility,
+      targetRadicalOpacity: Number(targetRadicalStyle.opacity)
+    };
+  });
+
+  expect(radicalEndpointWindowState).toEqual({
+    overlayExists: false,
+    targetRadicalVisibility: "visible",
+    targetRadicalOpacity: expect.any(Number)
+  });
+  expect(radicalEndpointWindowState.targetRadicalOpacity).toBeGreaterThan(0.9);
+
   await durationSlider.evaluate((element) => {
     const input = element as HTMLInputElement;
 
@@ -509,39 +547,26 @@ test("editor equation motion demo uses semantic playback plans", async ({
       '[data-kp-equation-motion-state="0"] [data-kp-motion-id="radical.rewrite-power-as-root.source.exponent"]'
     );
 
-    if (overlay === null || exponent === null) {
+    if (exponent === null) {
       return {
         overlayExists: overlay !== null,
         exponentExists: exponent !== null
       };
     }
 
-    const overlayStyle = getComputedStyle(overlay);
     const exponentStyle = getComputedStyle(exponent);
 
     return {
-      overlayExists: true,
+      overlayExists: overlay !== null,
       exponentExists: true,
-      overlayConnected: overlay.isConnected,
-      overlayHandoff: overlay.dataset["kpEquationMotionArtifactHandoff"],
-      overlayHandoffRenderer:
-        overlay.dataset["kpEquationMotionArtifactHandoffRenderer"],
-      overlayHandoffToken:
-        overlay.dataset["kpEquationMotionArtifactHandoffToken"],
-      overlayPointerEvents: overlayStyle.pointerEvents,
       exponentVisibility: exponentStyle.visibility,
       exponentOpacity: Number(exponentStyle.opacity)
     };
   });
 
   expect(radicalReverseHandoffState).toEqual({
-    overlayExists: true,
+    overlayExists: false,
     exponentExists: true,
-    overlayConnected: true,
-    overlayHandoff: "true",
-    overlayHandoffRenderer: "endpoint-texture",
-    overlayHandoffToken: "radical.rewrite-power-as-root.source.exponent",
-    overlayPointerEvents: "none",
     exponentVisibility: "visible",
     exponentOpacity: 1
   });

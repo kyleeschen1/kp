@@ -50,7 +50,6 @@ export interface KatexArtifactSeedRevealPlan {
 
 export interface KatexArtifactSeedRevealRenderer {
   render(progress: number): void;
-  renderEndpoint(endpoint: KatexArtifactSeedRevealEndpoint): boolean;
   dispose(): void;
 }
 
@@ -235,23 +234,6 @@ export function createKatexArtifactSeedRevealRenderer(
         drawPiece(context, page, piece, atlas.pixelRatio);
       }
     },
-    renderEndpoint(endpoint) {
-      if (disposed) {
-        return false;
-      }
-
-      const region = atlas.regions.get(endpoint.tokenId);
-      const page = region === undefined ? undefined : atlas.pages[region.page];
-
-      if (region === undefined || page === undefined) {
-        return false;
-      }
-
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      drawEndpointTexture(context, page, region, endpoint.rect, atlas.pixelRatio);
-
-      return true;
-    },
     dispose() {
       disposed = true;
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -406,26 +388,6 @@ function driftRect(
     width: rect.width,
     height: rect.height
   };
-}
-
-function drawEndpointTexture(
-  context: CanvasRenderingContext2D,
-  page: HTMLCanvasElement,
-  region: KatexAtlasRegion,
-  rect: KatexTokenRect,
-  pixelRatio: number
-): void {
-  context.drawImage(
-    page,
-    region.x,
-    region.y,
-    region.width,
-    region.height,
-    rect.left * pixelRatio,
-    rect.top * pixelRatio,
-    rect.width * pixelRatio,
-    rect.height * pixelRatio
-  );
 }
 
 function drawPiece(
