@@ -38,7 +38,7 @@
     "Do not add visual effects that do not clarify semantic identity or runtime capability."
   ],
   "goal": "Run the approved roadmap-backed semantic runtime loop from project docs through concrete verified KP slices.",
-  "target": "next.kp.dashboard-capability-preview",
+  "target": "next.kp.graph-latex-provenance",
   "runMode": "run",
   "maxSlices": 24,
   "commitCadence": "Commit after each verified slice.",
@@ -71,8 +71,8 @@
     },
     {
       "id": "next.kp.dashboard-capability-preview",
-      "title": "Show capabilities in dashboard previews",
-      "status": "planned"
+      "title": "Surface capability previews on the dashboard",
+      "status": "complete"
     },
     {
       "id": "next.kp.graph-latex-provenance",

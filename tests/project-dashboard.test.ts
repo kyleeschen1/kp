@@ -229,6 +229,22 @@ test("renderProjectDashboard selects API rows into the shared preview", () => {
   assert.match(html, /data-kp-preview-field="Protocols"[^>]*>toLatex, evaluate, matrixForm</);
   assert.match(html, /data-kp-preview-field="Views"[^>]*>latex, matrix-grid, linear-map</);
   assert.match(html, /data-kp-preview-field="Computes"[^>]*>shape, determinant</);
+  assert.match(
+    html,
+    /data-kp-preview-field="Capabilities"[^>]*>render \(active\), select \(active\), derive \(planned\), execute \(active\)</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Derive descriptors"[^>]*>matrix\.linear-map</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Derive targets"[^>]*>linear-map</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Computation protocols"[^>]*>evaluate, matrixForm</
+  );
   assert.match(html, /data-kp-preview-field="Maturity"[^>]*>active</);
   assert.match(
     html,
@@ -637,6 +653,20 @@ test("renderProjectDashboard searches synthetic agenda rows", () => {
   assert.doesNotMatch(html, /data-kp-agenda-section="report-cards"/);
   assert.doesNotMatch(html, /data-kp-agenda-section="object-gallery"/);
   assert.doesNotMatch(html, /data-kp-project-dashboard-animation-layout/);
+});
+
+test("renderProjectDashboard searches semantic capability advertisements", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    query: "matrix.linear-map"
+  });
+
+  assert.match(html, /Showing 1 of \d+ rows/);
+  assert.match(html, /data-kp-agenda-row="api-semantic-matrix"/);
+  assert.match(
+    html,
+    /data-kp-preview-field="Derive descriptors"[^>]*>matrix\.linear-map</
+  );
+  assert.doesNotMatch(html, /data-kp-agenda-row="api-semantic-equation"/);
 });
 
 test("renderProjectDashboard renders agenda rows with colored statuses and tags", () => {

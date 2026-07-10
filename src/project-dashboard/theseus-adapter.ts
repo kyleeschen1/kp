@@ -4,6 +4,10 @@ import {
   apiCatalogItemSearchFields,
   apiCatalogItemTags
 } from "../editor/api-catalog.ts";
+import {
+  semanticCapabilityPreviewFields,
+  semanticCapabilitySearchFields
+} from "./capability-preview.ts";
 import { projectDashboardData } from "./data.ts";
 import type {
   ProjectDashboardData,
@@ -117,6 +121,7 @@ function createKpApiSection(): KpTheseusDashboardSection {
         preview: {
           fields: [
             ...apiCatalogItemDetailFields(group, item),
+            ...semanticCapabilityPreviewFields(group, item),
             { label: "Maturity", value: item.status },
             {
               label: "Coverage",
@@ -136,6 +141,7 @@ function createKpApiSection(): KpTheseusDashboardSection {
         },
         searchText: [
           ...apiCatalogItemSearchFields(group, item),
+          ...semanticCapabilitySearchFields(group, item),
           ...apiCatalogCoverage(item),
           "src/editor/api-catalog.ts",
           "tests/api-catalog.test.ts",

@@ -2,7 +2,69 @@
   "id": "next.kp.dashboard-capability-preview",
   "kind": "next-action",
   "title": "Show capabilities in dashboard previews",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.dashboard",
-  "summary": "Surface object capability metadata in dashboard and API selected-row previews so authoring can inspect object affordances."
+  "summary": "Surfaced semantic object capability advertisements in dashboard API previews and search.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/capability-preview.ts",
+      "summary": "Formats registry-backed semantic object capability advertisements into dashboard preview and search fields."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Adds registry capability fields to selected API agenda previews and global synthetic-row search."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/theseus-adapter.ts",
+      "summary": "Exports the same capability preview/search metadata for Theseus dashboard consumers."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers selected API preview capability fields and descriptor-based dashboard search."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-theseus-adapter.test.ts",
+      "summary": "Covers exported capability fields and search text in the KP Theseus dashboard extension."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/object-registry.ts",
+      "summary": "Provides the registry capability advertisements consumed by dashboard previews."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "focused dashboard capability preview tests",
+      "checkedAt": "2026-07-10T20:11:02.755Z"
+    },
+    {
+      "command": "npm test -- tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts tests/semantic-object-registry.test.ts",
+      "status": "passed",
+      "scope": "repo test script including dashboard, adapter, and registry coverage",
+      "checkedAt": "2026-07-10T20:11:02.779Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:11:02.814Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:11:02.900Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Surfaced semantic object capability advertisements in dashboard API previews and search."
+  }
 }

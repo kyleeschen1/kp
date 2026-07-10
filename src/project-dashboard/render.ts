@@ -39,6 +39,10 @@ import {
   type ApiCatalogGroup,
   type ApiCatalogItem
 } from "../editor/api-catalog.ts";
+import {
+  semanticCapabilityPreviewFields,
+  semanticCapabilitySearchFields
+} from "./capability-preview.ts";
 
 export interface ProjectDashboardRenderOptions {
   readonly query?: string;
@@ -824,11 +828,13 @@ function createApiGroupAgendaRows(
       ],
       previewFields: [
         ...apiCatalogItemDetailFields(group, item),
+        ...semanticCapabilityPreviewFields(group, item),
         ...authoringPreviewFields(apiItemAuthoringMetadata(item)),
         ...adapterPreviewFields(adapterRow)
       ],
       searchFields: [
         ...apiCatalogItemSearchFields(group, item),
+        ...semanticCapabilitySearchFields(group, item),
         ...authoringSearchFields(apiItemAuthoringMetadata(item)),
         ...adapterSearchFields(adapterRow)
       ]

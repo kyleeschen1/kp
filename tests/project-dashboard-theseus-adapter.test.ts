@@ -44,6 +44,21 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
   assert.ok(
     matrixRow?.preview?.fields.some(
       (field) =>
+        field.label === "Capabilities" &&
+        field.value === "render (active), select (active), derive (planned), execute (active)"
+    )
+  );
+  assert.ok(
+    matrixRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Derive descriptors" &&
+        field.value === "matrix.linear-map"
+    )
+  );
+  assert.ok(matrixRow?.searchText?.includes("matrix.linear-map"));
+  assert.ok(
+    matrixRow?.preview?.fields.some(
+      (field) =>
         field.label === "Source refs" &&
         field.value.includes("src/editor/api-catalog.ts")
     )
