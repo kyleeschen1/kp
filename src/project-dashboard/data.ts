@@ -1031,15 +1031,16 @@ export const projectDashboardData: ProjectDashboardData = {
       id: "report-semantic-runtime-readiness",
       title: "Semantic runtime readiness",
       status: "active",
-      grade: "B",
+      grade: "B+",
       lastReviewedOn: "2026-07-10",
       scope:
-        "Assess whether KP has enough shared object, transformation, layout, and time runtime to compose equation, graph, and future programming tutorials from typed metadata.",
+        "Assess whether KP has enough shared object, transformation, layout, and time runtime to compose live tutorial cards with synchronized equation and graph panels, export metadata, and future programming views.",
       questions: [
         "Can runtime objects preserve stable semantic selectors across rendered forms?",
         "Can equation, graph, and layout views sample arbitrary progress from one shared clock?",
-        "Can synchronized layout composition expose launch metadata, evidence, and verification targets in the dashboard?",
-        "Can these runtime pieces become executable tutorial cards without one-off page code?"
+        "Can synchronized layout composition mount a live card shell with equation, graph, and controls panels?",
+        "Can export profiles describe iframe and static-step outputs without changing the semantic manifest?",
+        "Can programming SourceFile selectors join the same tutorial-card runtime?"
       ],
       evidence: [
         { label: "Animation kernel", href: "src/animation/kernel.ts" },
@@ -1056,8 +1057,20 @@ export const projectDashboardData: ProjectDashboardData = {
           href: "src/layout/synchronized-panel.ts"
         },
         {
-          label: "Dashboard synchronized sample row",
-          href: "src/project-dashboard/data.ts"
+          label: "Tutorial card HTML shell",
+          href: "src/tutorial/card-html-shell.ts"
+        },
+        {
+          label: "Tutorial card frame sampler",
+          href: "src/tutorial/card-frame-sampler.ts"
+        },
+        {
+          label: "Tutorial card export profile resolver",
+          href: "src/tutorial/export-profile-resolver.ts"
+        },
+        {
+          label: "SourceFile semantic object",
+          href: "src/semantic/source-file.ts"
         },
         {
           label: "Semantic runtime loop closeout",
@@ -1065,17 +1078,26 @@ export const projectDashboardData: ProjectDashboardData = {
         }
       ],
       risks: [
-        "The synchronized panel is still metadata-first; it does not yet render an integrated live surface.",
-        "Graph and equation frames share progress but not a typed parent timeline with child time transforms.",
-        "Programming-domain objects still need source selectors before runtime readiness can be called cross-domain.",
-        "Export profiles exist in the tutorial manifest but do not yet produce iframe, GIF, video, or static-step artifacts."
+        "The tutorial card shell is still a server-rendered/static HTML surface rather than a fully packaged iframe artifact.",
+        "GIF and video encoders are still profile metadata rather than rendered media artifacts.",
+        "Static-step export metadata is resolved, but the exporter still needs to emit a concrete checkpoint sequence.",
+        "Programming-domain SourceFile selectors exist, but no programming tutorial panel consumes them yet."
       ],
       recommendedNextActions: [
-        "Promote the synchronized equation/graph sample into a live rendered tutorial card.",
-        "Add a parent timeline model that can compose child timelines, pauses, focus, and annotations.",
-        "Start the programming SourceFile object with stable source-range selectors."
+        "Package the iframe export profile into an embeddable card shell.",
+        "Generate a static step sequence from sampled parent timeline frames.",
+        "Add GIF or video export sampling after iframe and static steps have concrete artifacts.",
+        "Use SourceFile selectors in the first programming tutorial card panel."
       ],
-      tags: ["runtime", "semantic-objects", "layout", "timeline", "readiness"],
+      tags: [
+        "runtime",
+        "semantic-objects",
+        "layout",
+        "timeline",
+        "readiness",
+        "tutorial-card",
+        "export"
+      ],
       projectRefs: [
         {
           kind: "roadmap",
@@ -1092,13 +1114,20 @@ export const projectDashboardData: ProjectDashboardData = {
           label: "Semantic runtime roadmap loop",
           href: "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-runtime-roadmap-loop-v1.json",
           id: "run-contract.kp.semantic-runtime-roadmap-loop-v1"
+        },
+        {
+          kind: "theseus",
+          label: "Tutorial card runtime loop",
+          href: "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+          id: "run-contract.kp.tutorial-card-runtime-loop-v0"
         }
       ],
       relatedIds: [
         "work-rendering-time-protocol",
         "gallery-rendering-time-api",
         "sample-synced-equation-graph-linear-solve",
-        "tutorial-card-manifest-v0"
+        "tutorial-card-manifest-v0",
+        "semantic-source-file"
       ]
     },
     {

@@ -949,11 +949,11 @@ test("project dashboard includes semantic runtime readiness report card", () => 
 
   assert.equal(runtimeTheme?.title, "Semantic runtime readiness");
   assert.equal(runtimeTheme?.status, "active");
-  assert.equal(runtimeTheme?.grade, "B");
+  assert.equal(runtimeTheme?.grade, "B+");
   assert.equal(runtimeTheme?.lastReviewedOn, "2026-07-10");
   assert.ok(
     runtimeTheme?.scope.includes(
-      "shared object, transformation, layout, and time runtime"
+      "live tutorial cards with synchronized equation and graph panels"
     )
   );
   assert.ok(
@@ -968,12 +968,12 @@ test("project dashboard includes semantic runtime readiness report card", () => 
   );
   assert.ok(
     runtimeTheme?.evidence.some((entry) =>
-      entry.href.includes("src/layout/synchronized-panel.ts")
+      entry.href.includes("src/tutorial/card-html-shell.ts")
     )
   );
   assert.ok(
     runtimeTheme?.evidence.some((entry) =>
-      entry.href.includes("src/rendering/graph-transitions.ts")
+      entry.href.includes("src/tutorial/export-profile-resolver.ts")
     )
   );
   assert.ok(
@@ -985,19 +985,20 @@ test("project dashboard includes semantic runtime readiness report card", () => 
   );
   assert.ok(
     runtimeTheme?.risks.some((risk) =>
-      risk.includes("still metadata-first")
+      risk.includes("GIF and video encoders are still profile metadata")
     )
   );
   assert.ok(
     runtimeTheme?.recommendedNextActions.some((action) =>
-      action.includes("parent timeline")
+      action.includes("Package the iframe export profile")
     )
   );
   assert.deepEqual(runtimeTheme?.relatedIds, [
     "work-rendering-time-protocol",
     "gallery-rendering-time-api",
     "sample-synced-equation-graph-linear-solve",
-    "tutorial-card-manifest-v0"
+    "tutorial-card-manifest-v0",
+    "semantic-source-file"
   ]);
 });
 
@@ -1029,12 +1030,12 @@ test("renderProjectDashboard selects semantic runtime readiness report card", ()
     /data-kp-selected-agenda-row="report-semantic-runtime-readiness"/
   );
   assert.match(html, /Semantic runtime readiness/);
-  assert.match(html, /data-kp-preview-field="Grade"[^>]*>B</);
+  assert.match(html, /data-kp-preview-field="Grade"[^>]*>B\+</);
   assert.match(
     html,
-    /data-kp-preview-field="Risks"[^>]*>[\s\S]*metadata-first/
+    /data-kp-preview-field="Risks"[^>]*>[\s\S]*GIF and video encoders/
   );
-  assert.match(html, /src\/layout\/synchronized-panel\.ts/);
+  assert.match(html, /src\/tutorial\/export-profile-resolver\.ts/);
 });
 
 test("renderProjectDashboard renders the data contract for dashboard writes", () => {

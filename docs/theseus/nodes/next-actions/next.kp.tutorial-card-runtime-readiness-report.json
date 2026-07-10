@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.tutorial-card-runtime-readiness-report",
+  "kind": "next-action",
+  "title": "Refresh runtime readiness report card",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "summary": "Refreshed semantic runtime readiness around the tutorial-card runtime, export metadata, and SourceFile selectors.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Updates the semantic runtime readiness report card with live tutorial-card shell, export resolver, frame sampler, SourceFile evidence, revised risks, and next actions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers refreshed runtime readiness grade, scope, evidence, risks, next actions, related IDs, and selected preview rendering."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-runtime-readiness-report.json",
+      "summary": "Materializes the approved runtime readiness report-card refresh next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the readiness report slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/tutorial-card-export-profile.test.ts tests/tutorial-card-html-shell.test.ts tests/tutorial-card-frame-sampler.test.ts",
+      "status": "passed",
+      "scope": "dashboard runtime readiness and related tutorial-card tests",
+      "checkedAt": "2026-07-10T23:27:35.779Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T23:27:35.815Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T23:27:35.864Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Refreshed semantic runtime readiness around the tutorial-card runtime, export metadata, and SourceFile selectors."
+  }
+}
