@@ -1241,10 +1241,25 @@ h2 {
   margin: 0;
 }
 
-.equation-motion__formula [data-kp-motion-id] {
+.equation-motion__motion-anchor {
   display: inline-block;
   position: relative;
   z-index: 2;
+}
+
+.equation-motion__motion-clone-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.equation-motion__motion-clone {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  transform-origin: center;
+  will-change: opacity, transform;
 }
 
 .equation-motion__particle-canvas {
@@ -1259,10 +1274,6 @@ h2 {
   inset: 0;
   pointer-events: none;
   z-index: 1;
-}
-
-.equation-motion__motion-anchor {
-  display: inline-block;
 }
 
 .katex-transition-overlay {

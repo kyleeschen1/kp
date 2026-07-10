@@ -77,6 +77,8 @@ interface StableMotionToken {
   readonly motionId: string;
   readonly text: string;
   readonly element: HTMLElement;
+  readonly motionElement: HTMLElement;
+  readonly usesExternalMotionClone: boolean;
   readonly localRect: {
     readonly left: number;
     readonly top: number;
@@ -719,7 +721,7 @@ function renderEquationMotionFrame(
 
     if (sourceToken !== undefined && targetToken !== undefined) {
       applyEquationMotionTokenStyle(
-        sourceToken.element,
+        sourceToken.motionElement,
         token.sourceMotionId !== undefined &&
           artifactMotionIds.has(token.sourceMotionId)
           ? hiddenTokenPose()
@@ -730,7 +732,7 @@ function renderEquationMotionFrame(
           : "visible"
       );
       applyEquationMotionTokenStyle(
-        targetToken.element,
+        targetToken.motionElement,
         hiddenTokenPose(),
         "hidden"
       );
@@ -743,7 +745,7 @@ function renderEquationMotionFrame(
       artifactMotionIds.has(token.sourceMotionId)
     ) {
       applyEquationMotionTokenStyle(
-        sourceToken.element,
+        sourceToken.motionElement,
         hiddenTokenPose(),
         "hidden"
       );
@@ -756,7 +758,7 @@ function renderEquationMotionFrame(
       artifactMotionIds.has(token.targetMotionId)
     ) {
       applyEquationMotionTokenStyle(
-        targetToken.element,
+        targetToken.motionElement,
         hiddenTokenPose(),
         "hidden"
       );
@@ -765,7 +767,7 @@ function renderEquationMotionFrame(
 
     if (sourceToken !== undefined) {
       applyEquationMotionTokenStyle(
-        sourceToken.element,
+        sourceToken.motionElement,
         token.lifecycle === "cancel" &&
           cancellationGroup?.tokenIds.has(token.id) === true
           ? cancellationTokenPose(
@@ -789,7 +791,7 @@ function renderEquationMotionFrame(
 
     if (targetToken !== undefined) {
       applyEquationMotionTokenStyle(
-        targetToken.element,
+        targetToken.motionElement,
         token.id === finalSimplifyGroup?.targetTokenId
           ? finalSimplifyTargetTokenPose(
               targetToken,
@@ -861,18 +863,16 @@ function getEquationMotionRenderContext(
     return undefined;
   }
 
+  const planSourceTokens = measureAnnotatedEquationMotionTokens(planSourceState);
+  const planTargetTokens = measureAnnotatedEquationMotionTokens(planTargetState);
   const context: EquationMotionRenderContext = {
     key,
     planSourceStep,
     planTargetStep,
     planSourceState,
     planTargetState,
-    planSourceTokens: indexStableMotionTokens(
-      measureAnnotatedEquationMotionTokens(planSourceState)
-    ),
-    planTargetTokens: indexStableMotionTokens(
-      measureAnnotatedEquationMotionTokens(planTargetState)
-    )
+    planSourceTokens: indexStableMotionTokens(planSourceTokens, planSourceState),
+    planTargetTokens: indexStableMotionTokens(planTargetTokens, planTargetState)
   };
 
   prepareEquationMotionTransitionLayers(demo, planSourceState, planTargetState);
@@ -928,7 +928,11 @@ function prepareEquationMotionTransitionLayers(
         .querySelectorAll<HTMLElement>("[data-kp-motion-id]")
         .forEach((element) => {
           if (isTransitionLayer) {
-            applyEquationMotionTokenStyle(element, hiddenTokenPose(), "hidden");
+            if (isInternalKatexMotionElement(element)) {
+              hideInternalKatexMotionElement(element);
+            } else {
+              applyEquationMotionTokenStyle(element, hiddenTokenPose(), "hidden");
+            }
           } else {
             resetEquationMotionTokenStyle(element);
           }
@@ -938,6 +942,7 @@ function prepareEquationMotionTransitionLayers(
 
 function resetEquationMotionVisualState(demo: HTMLElement): void {
   clearArtifactSeedReveal(demo);
+  clearEquationMotionCloneLayers(demo);
 
   demo
     .querySelectorAll<HTMLElement>("[data-kp-equation-motion-state]")
@@ -971,6 +976,14 @@ function resetEquationMotionTokenStyle(element: HTMLElement): void {
   element.style.transform = "";
   element.style.transformOrigin = "";
   element.style.visibility = "";
+  element.style.willChange = "";
+}
+
+function hideInternalKatexMotionElement(element: HTMLElement): void {
+  element.style.opacity = "0";
+  element.style.transform = "";
+  element.style.transformOrigin = "";
+  element.style.visibility = "hidden";
   element.style.willChange = "";
 }
 
@@ -1282,18 +1295,148 @@ function findEquationMotionStage(state: HTMLElement): HTMLElement | undefined {
 }
 
 function indexStableMotionTokens(
-  tokens: ReturnType<typeof measureAnnotatedEquationMotionTokens>
+  tokens: ReturnType<typeof measureAnnotatedEquationMotionTokens>,
+  state: HTMLElement
 ): Map<string, StableMotionToken> {
   return new Map(
     tokens.map((token) => [
       token.motionId,
-      {
-        motionId: token.motionId,
-        text: token.text,
-        element: token.element,
-        localRect: { ...token.localRect }
-      }
+      createStableMotionToken(token, state)
     ])
+  );
+}
+
+function createStableMotionToken(
+  token: ReturnType<typeof measureAnnotatedEquationMotionTokens>[number],
+  state: HTMLElement
+): StableMotionToken {
+  // KaTeX internals are layout nodes; motion uses external clones so matrices,
+  // radicals, and fractions keep their native geometry intact.
+  const usesExternalMotionClone = isInternalKatexMotionElement(token.element);
+  const motionElement = usesExternalMotionClone
+    ? createEquationMotionClone(token, state)
+    : token.element;
+
+  return {
+    motionId: token.motionId,
+    text: token.text,
+    element: token.element,
+    motionElement,
+    usesExternalMotionClone,
+    localRect: { ...token.localRect }
+  };
+}
+
+function createEquationMotionClone(
+  token: ReturnType<typeof measureAnnotatedEquationMotionTokens>[number],
+  state: HTMLElement
+): HTMLElement {
+  const layer = findOrCreateEquationMotionCloneLayer(state);
+  const clone = cloneElementWithComputedStyles(token.element);
+  const wrapper = document.createElement("span");
+
+  wrapper.className = "equation-motion__motion-clone";
+  wrapper.dataset["kpEquationMotionCloneFor"] = token.motionId;
+  wrapper.style.left = formatPixel(token.localRect.left);
+  wrapper.style.top = formatPixel(token.localRect.top);
+  wrapper.style.width = formatPixel(token.localRect.width);
+  wrapper.style.height = formatPixel(token.localRect.height);
+  wrapper.append(clone);
+  layer.append(wrapper);
+
+  return wrapper;
+}
+
+function findOrCreateEquationMotionCloneLayer(state: HTMLElement): HTMLElement {
+  const existingLayer = state.querySelector<HTMLElement>(
+    ":scope > [data-kp-equation-motion-clone-layer]"
+  );
+
+  if (existingLayer !== null) {
+    return existingLayer;
+  }
+
+  const layer = document.createElement("div");
+
+  layer.className = "equation-motion__motion-clone-layer";
+  layer.dataset["kpEquationMotionCloneLayer"] = "true";
+  state.append(layer);
+
+  return layer;
+}
+
+function clearEquationMotionCloneLayers(root: HTMLElement): void {
+  root
+    .querySelectorAll<HTMLElement>("[data-kp-equation-motion-clone-layer]")
+    .forEach((layer) => layer.remove());
+}
+
+function cloneElementWithComputedStyles(element: HTMLElement): HTMLElement {
+  const clone = element.cloneNode(true);
+
+  if (!(clone instanceof HTMLElement)) {
+    throw new Error("Expected equation motion clone to be an HTMLElement.");
+  }
+
+  inlineComputedMotionCloneStyles(element, clone);
+  removeMotionIdentityAttributes(clone);
+  clone.style.position = "static";
+  clone.style.left = "auto";
+  clone.style.top = "auto";
+  clone.style.right = "auto";
+  clone.style.bottom = "auto";
+  clone.style.margin = "0";
+  clone.style.opacity = "1";
+  clone.style.transform = "none";
+  clone.style.visibility = "visible";
+  clone.style.willChange = "";
+
+  return clone;
+}
+
+function inlineComputedMotionCloneStyles(source: Element, clone: Element): void {
+  if (clone instanceof HTMLElement || clone instanceof SVGElement) {
+    clone.setAttribute("style", serializeComputedStyle(source));
+  }
+
+  const sourceChildren = Array.from(source.children);
+  const cloneChildren = Array.from(clone.children);
+
+  sourceChildren.forEach((sourceChild, index) => {
+    const cloneChild = cloneChildren[index];
+
+    if (cloneChild !== undefined) {
+      inlineComputedMotionCloneStyles(sourceChild, cloneChild);
+    }
+  });
+}
+
+function serializeComputedStyle(element: Element): string {
+  const style = window.getComputedStyle(element);
+  const declarations: string[] = [];
+
+  for (let index = 0; index < style.length; index += 1) {
+    const property = style.item(index);
+
+    declarations.push(`${property}:${style.getPropertyValue(property)}`);
+  }
+
+  return declarations.join(";");
+}
+
+function removeMotionIdentityAttributes(element: Element): void {
+  element.removeAttribute("data-kp-motion-id");
+  element.removeAttribute("id");
+  element.querySelectorAll("[data-kp-motion-id], [id]").forEach((child) => {
+    child.removeAttribute("data-kp-motion-id");
+    child.removeAttribute("id");
+  });
+}
+
+function isInternalKatexMotionElement(element: HTMLElement): boolean {
+  return (
+    !element.classList.contains("equation-motion__motion-anchor") &&
+    element.closest(".katex") !== null
   );
 }
 

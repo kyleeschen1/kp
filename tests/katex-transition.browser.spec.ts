@@ -239,6 +239,57 @@ test("editor equation motion demo uses semantic playback plans", async ({
     "matrix.bracket.change-delimiter.target.expression"
   );
 
+  const matrixInternalMotionState = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    const matrixEntry = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="0"] [data-kp-motion-id="matrix.bracket.change-delimiter.source.entry.r0.c0"]'
+    );
+
+    if (matrixEntry === null) {
+      throw new Error("Expected matrix entry motion token.");
+    }
+
+    const initialStyle = getComputedStyle(matrixEntry);
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.5);
+
+    const clone = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-clone-for="matrix.bracket.change-delimiter.source.entry.r0.c0"]'
+    );
+    const cloneStyle = clone === null ? undefined : getComputedStyle(clone);
+
+    return {
+      insideKatex: matrixEntry.closest(".katex") !== null,
+      explicitMotionAnchor: matrixEntry.classList.contains(
+        "equation-motion__motion-anchor"
+      ),
+      initialPosition: initialStyle.position,
+      inlineTransformAfterMotion: matrixEntry.style.transform,
+      inlineWillChangeAfterMotion: matrixEntry.style.willChange,
+      cloneExists: clone !== null,
+      clonePosition: cloneStyle?.position,
+      cloneTransform: clone?.style.transform ?? ""
+    };
+  });
+
+  expect(matrixInternalMotionState).toEqual({
+    insideKatex: true,
+    explicitMotionAnchor: false,
+    initialPosition: "static",
+    inlineTransformAfterMotion: "",
+    inlineWillChangeAfterMotion: "",
+    cloneExists: true,
+    clonePosition: "absolute",
+    cloneTransform: expect.stringContaining("translate(")
+  });
+
   await animationSelect.selectOption("fixture-radical-rewrite-power-as-root");
   const radicalMotionIds = await page.evaluate(() => {
     const demoElement = document.querySelector<HTMLElement>(
@@ -316,23 +367,45 @@ test("editor equation motion demo uses semantic playback plans", async ({
     const target = center(targetToken);
 
     window.__kpEquationMotionSetProgress?.(demoElement, 0.25);
-    const inFlight = center(sourceToken);
+    const inFlightClone = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.source.x"]'
+    );
+
+    if (inFlightClone === null) {
+      throw new Error("Expected radical source x motion clone.");
+    }
+
+    const inFlight = center(inFlightClone);
 
     window.__kpEquationMotionSetProgress?.(demoElement, 1);
-    const end = center(sourceToken);
+    const endClone = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.source.x"]'
+    );
+
+    if (endClone === null) {
+      throw new Error("Expected radical source x endpoint clone.");
+    }
+
+    const end = center(endClone);
 
     return {
       start,
       inFlight,
       end,
       target,
+      inFlightClonePosition: getComputedStyle(inFlightClone).position,
+      sourceInlineTransform: sourceToken.style.transform,
+      targetInlineTransform: targetToken.style.transform,
       sourceDisplay: getComputedStyle(sourceToken).display,
       targetDisplay: getComputedStyle(targetToken).display
     };
   });
 
-  expect(radicalInterpolationState.sourceDisplay).not.toBe("inline");
-  expect(radicalInterpolationState.targetDisplay).not.toBe("inline");
+  expect(radicalInterpolationState.inFlightClonePosition).toBe("absolute");
+  expect(radicalInterpolationState.sourceInlineTransform).toBe("");
+  expect(radicalInterpolationState.targetInlineTransform).toBe("");
+  expect(radicalInterpolationState.sourceDisplay).toBe("inline");
+  expect(radicalInterpolationState.targetDisplay).toBe("inline");
   expect(radicalInterpolationState.inFlight.x).toBeGreaterThan(
     radicalInterpolationState.start.x + 5
   );
@@ -431,11 +504,11 @@ test("editor equation motion demo uses semantic playback plans", async ({
     }
 
     const persistentX = demoElement.querySelector<HTMLElement>(
-      '[data-kp-equation-motion-state="0"] [data-kp-motion-id="radical.rewrite-power-as-root.source.x"]'
+      '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.source.x"]'
     );
 
     if (persistentX === null) {
-      throw new Error("Expected persistent radical source x token.");
+      throw new Error("Expected persistent radical source x motion clone.");
     }
 
     return {
@@ -443,7 +516,8 @@ test("editor equation motion demo uses semantic playback plans", async ({
       fallbackReason: demoElement.dataset["kpEquationMotionArtifactFallbackReason"],
       overlayConnected: overlay.isConnected,
       overlayZIndex: window.getComputedStyle(overlay).zIndex,
-      persistentXTokenZIndex: window.getComputedStyle(persistentX).zIndex,
+      persistentXCloneLayerZIndex:
+        window.getComputedStyle(persistentX.parentElement ?? persistentX).zIndex,
       renderer: overlay.dataset["kpEquationMotionArtifactRenderer"],
       sourceTokenId: overlay.dataset["kpEquationMotionArtifactSource"],
       targetTokenId: overlay.dataset["kpEquationMotionArtifactTarget"],
@@ -465,7 +539,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
     fallbackReason: undefined,
     overlayConnected: true,
     overlayZIndex: "1",
-    persistentXTokenZIndex: "2",
+    persistentXCloneLayerZIndex: "3",
     renderer: "canvas-fold-bundle-swap",
     sourceTokenId: "radical.rewrite-power-as-root.source.exponent",
     targetTokenId: "radical.rewrite-power-as-root.target.radical",
@@ -496,6 +570,9 @@ test("editor equation motion demo uses semantic playback plans", async ({
     const overlay = demoElement.querySelector<HTMLCanvasElement>(
       "[data-kp-equation-motion-artifact-overlay]"
     );
+    const targetRadicalClone = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.target.radical"]'
+    );
     const targetRadical = demoElement.querySelector<HTMLElement>(
       '[data-kp-equation-motion-state="1"] [data-kp-motion-id="radical.rewrite-power-as-root.target.radical"]'
     );
@@ -508,6 +585,9 @@ test("editor equation motion demo uses semantic playback plans", async ({
 
     return {
       overlayExists: overlay !== null,
+      targetRadicalCloneExists: targetRadicalClone !== null,
+      targetRadicalInlineTransform: targetRadical.style.transform,
+      targetRadicalInlineWillChange: targetRadical.style.willChange,
       targetRadicalVisibility: targetRadicalStyle.visibility,
       targetRadicalOpacity: Number(targetRadicalStyle.opacity)
     };
@@ -515,10 +595,13 @@ test("editor equation motion demo uses semantic playback plans", async ({
 
   expect(radicalEndpointWindowState).toEqual({
     overlayExists: false,
-    targetRadicalVisibility: "visible",
+    targetRadicalCloneExists: true,
+    targetRadicalInlineTransform: "",
+    targetRadicalInlineWillChange: "",
+    targetRadicalVisibility: "hidden",
     targetRadicalOpacity: expect.any(Number)
   });
-  expect(radicalEndpointWindowState.targetRadicalOpacity).toBeGreaterThan(0.9);
+  expect(radicalEndpointWindowState.targetRadicalOpacity).toBeLessThan(0.01);
 
   await durationSlider.evaluate((element) => {
     const input = element as HTMLInputElement;
@@ -597,14 +680,23 @@ test("editor equation motion demo uses semantic playback plans", async ({
 
     window.__kpEquationMotionSetProgress?.(demoElement, 0.25);
 
-    const scaleMatch = /scale\(([-\d.]+)\)/.exec(sourceX.style.transform);
+    const sourceXClone = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-clone-for="fraction.make.inline-to-stacked.source.x"]'
+    );
+
+    if (sourceXClone === null) {
+      throw new Error("Expected inline-fraction source x motion clone.");
+    }
+
+    const scaleMatch = /scale\(([-\d.]+)\)/.exec(sourceXClone.style.transform);
     const scale = scaleMatch === null ? Number.NaN : Number(scaleMatch[1]);
 
     return {
       sourceWidth,
       targetWidth,
       scale,
-      transform: sourceX.style.transform
+      originalTransform: sourceX.style.transform,
+      transform: sourceXClone.style.transform
     };
   });
 
@@ -613,6 +705,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
   );
   expect(fractionScaleState.scale).toBeLessThan(1);
   expect(fractionScaleState.scale).toBeGreaterThan(0.5);
+  expect(fractionScaleState.originalTransform).toBe("");
   expect(fractionScaleState.transform).not.toContain("scale(1)");
 
   await next.click();
