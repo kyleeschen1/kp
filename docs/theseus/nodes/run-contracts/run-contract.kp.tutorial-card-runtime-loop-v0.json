@@ -34,7 +34,7 @@
     "Do not expand into full programming execution traces before SourceFile selectors exist."
   ],
   "goal": "Run the approved tutorial-card runtime loop from KpTutorialCardManifest to a live synchronized equation and graph card.",
-  "target": "next.kp.source-file-dashboard-api-row",
+  "target": "next.kp.tutorial-card-dependency-planner",
   "runMode": "run",
   "maxSlices": 25,
   "commitCadence": "Commit after each verified slice.",
@@ -148,7 +148,7 @@
     {
       "id": "next.kp.tutorial-card-dependency-planner",
       "title": "Add tutorial card dependency planning helper",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.tutorial-card-iframe-export-profile",

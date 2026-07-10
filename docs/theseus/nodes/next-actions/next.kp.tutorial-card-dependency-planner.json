@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.tutorial-card-dependency-planner",
+  "kind": "next-action",
+  "title": "Add tutorial card dependency planning helper",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/dependency-planner.ts",
+      "summary": "Adds dependency planning types and helpers over tutorial manifest dependency sets."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-dependency-planner.test.ts",
+      "summary": "Covers linear-solve dependency phase summaries, unique totals, and capability key normalization."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-dependency-planner.json",
+      "summary": "Materializes the approved dependency planner next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the dependency planner slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-dependency-planner.test.ts tests/tutorial-card-manifest.test.ts tests/tutorial-card-runtime.test.ts",
+      "status": "passed",
+      "scope": "tutorial card dependency planner and manifest/runtime tests",
+      "checkedAt": "2026-07-10T23:17:33.825Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T23:17:33.865Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T23:17:33.903Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a tutorial card dependency planning helper that summarizes dependency phases, load stages, capability keys, and unique totals."
+  },
+  "summary": "Added a tutorial card dependency planning helper that summarizes dependency phases, load stages, capability keys, and unique totals."
+}
