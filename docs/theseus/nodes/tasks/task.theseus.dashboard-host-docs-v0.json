@@ -1,0 +1,39 @@
+{
+  "id": "task.theseus.dashboard-host-docs-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard host project docs",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/docs/dashboard-host.md",
+      "summary": "Explains host responsibilities, data model, extension protocol, preview-link safety, dashboard commands, and verification checklist."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "LC_ALL=C rg \"[^\\x00-\\x7F]\" docs/dashboard-host.md",
+      "status": "passed",
+      "scope": "ASCII documentation check; no matches.",
+      "checkedAt": "2026-07-10T08:19:40.158Z"
+    },
+    {
+      "command": "npm test -- src/dashboard-extension.test.ts src/dashboard-data.test.ts src/dashboard-html.test.ts src/dashboard-client.test.ts",
+      "status": "passed",
+      "scope": "Adjacent reusable dashboard protocol tests.",
+      "checkedAt": "2026-07-10T08:19:40.179Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T08:19:40.197Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Documented how host projects should contribute reusable Theseus dashboard sections, health, preview fields, and preview links without leaking host rendering code into Theseus."
+  },
+  "summary": "Documented how host projects should contribute reusable Theseus dashboard sections, health, preview fields, and preview links without leaking host rendering code into Theseus."
+}
