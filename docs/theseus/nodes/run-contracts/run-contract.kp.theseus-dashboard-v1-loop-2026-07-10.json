@@ -60,13 +60,14 @@
     {
       "id": "task.theseus.dashboard-row-order-v0",
       "title": "Add-row-ordering-semantics",
-      "status": "complete",
-      "summary": "Activity-first row ordering landed for dashboard data rows."
+      "summary": "Activity-first row ordering landed for dashboard data rows.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-search-index-v0",
       "title": "Add-fuzzy-search-metadata",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Per-row fuzzy-search metadata landed in the reusable dashboard model."
     },
     {
       "id": "task.theseus.dashboard-static-html-v0",

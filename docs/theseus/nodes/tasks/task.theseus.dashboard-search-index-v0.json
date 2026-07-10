@@ -1,0 +1,50 @@
+{
+  "id": "task.theseus.dashboard-search-index-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard fuzzy-search metadata",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "summary": "Added per-row dashboard search metadata with normalized text, unique terms, initials, and kind/status/tag facets while keeping legacy searchText.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data.ts",
+      "summary": "Defines dashboard search metadata and normalizes it onto each row."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data.test.ts",
+      "summary": "Covers fuzzy-search metadata shape and normalized terms."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/dashboard-data.test.ts",
+      "status": "passed",
+      "scope": "Focused dashboard search metadata contract tests.",
+      "checkedAt": "2026-07-10T06:06:47.937Z"
+    },
+    {
+      "command": "npm run test -- src/dashboard-data-builder.test.ts src/cli-report-commands.test.ts src/dashboard-data.test.ts",
+      "status": "passed",
+      "scope": "Adjacent builder and CLI report tests for dashboard model shape.",
+      "checkedAt": "2026-07-10T06:06:47.948Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Theseus package TypeScript check.",
+      "checkedAt": "2026-07-10T06:06:47.958Z"
+    },
+    {
+      "command": "node bin/theseus.mjs dashboard-data --project-root /Users/kyleeschen/Code/kp",
+      "status": "passed",
+      "checkedAt": "2026-07-10T06:06:47.969Z",
+      "scope": "Runtime dashboard-data command check against the KP graph."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added per-row dashboard search metadata with normalized text, unique terms, initials, and kind/status/tag facets while keeping legacy searchText."
+  }
+}
