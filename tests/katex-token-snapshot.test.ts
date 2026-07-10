@@ -502,6 +502,29 @@ test("large-operator transform fixtures declare operators and limit geometry", (
   );
 });
 
+test("large-operator integral fixture declares differential spacing artifacts", () => {
+  const fixture = findKatexTransformFixture("large-operator.integral.add-bounds");
+
+  assert.deepEqual(
+    fixture.source.tokens
+      .filter((token) => token.role === "artifact")
+      .map((token) => [token.text, token.signature, token.row, token.column]),
+    [["\\,", "mspace", 0, 2]]
+  );
+  assert.deepEqual(
+    fixture.target.tokens
+      .filter((token) => token.role === "artifact")
+      .map((token) => [token.text, token.signature, token.row, token.column]),
+    [["\\,", "mspace", 0, 2]]
+  );
+  assert.deepEqual(
+    fixture.target.tokens
+      .filter((token) => token.role === "differential")
+      .map((token) => [token.text, token.row, token.column]),
+    [["dx", 0, 3]]
+  );
+});
+
 test("matrix/vector transform fixtures declare bracket artifacts and entry selectors", () => {
   assert.deepEqual(
     matrixTransformFixtures.map((fixture) => [
@@ -549,6 +572,25 @@ test("matrix/vector transform fixtures declare bracket artifacts and entry selec
         [
           ["(", "matrix-left-bracket"],
           [")", "matrix-right-bracket"]
+        ],
+        [
+          ["1", "entry.r0.c0", { row: 0, column: 0 }],
+          ["0", "entry.r0.c1", { row: 0, column: 1 }],
+          ["0", "entry.r1.c0", { row: 1, column: 0 }],
+          ["1", "entry.r1.c1", { row: 1, column: 1 }]
+        ],
+        []
+      ],
+      [
+        "matrix.brace.change-delimiter",
+        "changeMatrixDelimiter",
+        [
+          ["[", "matrix-left-bracket"],
+          ["]", "matrix-right-bracket"]
+        ],
+        [
+          ["\\{", "matrix-left-bracket"],
+          ["\\}", "matrix-right-bracket"]
         ],
         [
           ["1", "entry.r0.c0", { row: 0, column: 0 }],

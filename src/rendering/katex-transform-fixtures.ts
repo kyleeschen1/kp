@@ -421,7 +421,10 @@ export const katexFixtureBackedTransformDefinitions: readonly KatexTransformDefi
     artifactPolicy: "replace",
     defaultVisualMotifs: ["artifact-replace"],
     geometryChallenges: ["large-delimiters", "entry-grid-persistence"],
-    representativeFixtureIds: ["matrix.bracket.change-delimiter"],
+    representativeFixtureIds: [
+      "matrix.bracket.change-delimiter",
+      "matrix.brace.change-delimiter"
+    ],
     maturity: "fixture-backed",
     summary:
       "Matrix delimiter artifacts replace each other while entry selector identity persists."
@@ -1100,7 +1103,8 @@ export const largeOperatorTransformFixtures: readonly KatexTransformFixture[] = 
       tokens: [
         largeOperatorToken("\\int", 0, 0),
         integrandToken("f(x)", 0, 1),
-        differentialToken("dx", 0, 2)
+        artifactToken("\\,", "mspace", 0, 2),
+        differentialToken("dx", 0, 3)
       ]
     },
     target: {
@@ -1110,7 +1114,8 @@ export const largeOperatorTransformFixtures: readonly KatexTransformFixture[] = 
         largeOperatorToken("\\int", 0, 0),
         lowerLimitToken("a", 1, 0),
         integrandToken("f(x)", 0, 1),
-        differentialToken("dx", 0, 2)
+        artifactToken("\\,", "mspace", 0, 2),
+        differentialToken("dx", 0, 3)
       ]
     },
     expectedStructuralTokens: {
@@ -1192,6 +1197,40 @@ export const matrixTransformFixtures: readonly KatexTransformFixture[] = [
     expectedRoleChanges: [],
     summary:
       "A matrix changes delimiter style; bracket artifacts swap while stable entry selectors keep their grid positions."
+  },
+  {
+    id: "matrix.brace.change-delimiter",
+    family: "matrix",
+    intent: "changeMatrixDelimiter",
+    source: {
+      latex: "\\begin{bmatrix}1 & 0 \\\\ 0 & 1\\end{bmatrix}",
+      tokens: [
+        matrixBracketToken("[", "matrix-left-bracket", 0, -1),
+        matrixEntryToken("1", "entry.r0.c0", 0, 0),
+        matrixEntryToken("0", "entry.r0.c1", 0, 1),
+        matrixEntryToken("0", "entry.r1.c0", 1, 0),
+        matrixEntryToken("1", "entry.r1.c1", 1, 1),
+        matrixBracketToken("]", "matrix-right-bracket", 0, 2)
+      ]
+    },
+    target: {
+      latex: "\\begin{Bmatrix}1 & 0 \\\\ 0 & 1\\end{Bmatrix}",
+      tokens: [
+        matrixBracketToken("\\{", "matrix-left-bracket", 0, -1),
+        matrixEntryToken("1", "entry.r0.c0", 0, 0),
+        matrixEntryToken("0", "entry.r0.c1", 0, 1),
+        matrixEntryToken("0", "entry.r1.c0", 1, 0),
+        matrixEntryToken("1", "entry.r1.c1", 1, 1),
+        matrixBracketToken("\\}", "matrix-right-bracket", 0, 2)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: [],
+      target: []
+    },
+    expectedRoleChanges: [],
+    summary:
+      "A matrix changes from bracket delimiters to brace delimiters; delimiter artifacts swap while entry selectors and grid positions persist."
   },
   {
     id: "matrix.entry.update",

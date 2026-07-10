@@ -2,7 +2,49 @@
   "id": "next.kp.katex-matrix-large-operator-artifacts",
   "kind": "next-action",
   "title": "Cover matrix and large operator artifacts",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.katex",
-  "summary": "Add matrix bracket, entry-preservation, large operator, limit, sum, product, and integral artifact coverage."
+  "summary": "Added matrix brace delimiter artifact coverage and explicit integral differential spacing artifacts.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-transform-fixtures.ts",
+      "summary": "KaTeX fixtures now include a brace delimiter matrix transform and integral spacing artifacts around the differential."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-token-snapshot.test.ts",
+      "summary": "Covers matrix brace delimiter replacement, integral spacing artifacts, and differential token geometry."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/katex-token-snapshot.test.ts",
+      "status": "passed",
+      "scope": "focused KaTeX fixture snapshot tests",
+      "checkedAt": "2026-07-10T20:55:02.882Z"
+    },
+    {
+      "command": "npm test -- tests/katex-token-snapshot.test.ts tests/rendering.test.ts tests/equation-motion-plan.test.ts tests/katex-token-matcher.test.ts",
+      "status": "passed",
+      "scope": "repo test script including KaTeX fixture, rendering, matcher, and equation motion coverage",
+      "checkedAt": "2026-07-10T20:55:02.907Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:55:02.930Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:55:02.956Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added matrix brace delimiter artifact coverage and explicit integral differential spacing artifacts."
+  }
 }

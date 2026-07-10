@@ -38,7 +38,7 @@
     "Do not add visual effects that do not clarify semantic identity or runtime capability."
   ],
   "goal": "Run the approved roadmap-backed semantic runtime loop from project docs through concrete verified KP slices.",
-  "target": "next.kp.katex-matrix-large-operator-artifacts",
+  "target": "next.kp.graph-vector-motion-diagnostics",
   "runMode": "run",
   "maxSlices": 24,
   "commitCadence": "Commit after each verified slice.",
@@ -127,7 +127,7 @@
     {
       "id": "next.kp.katex-matrix-large-operator-artifacts",
       "title": "Cover matrix and large operator artifacts",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.graph-vector-motion-diagnostics",
