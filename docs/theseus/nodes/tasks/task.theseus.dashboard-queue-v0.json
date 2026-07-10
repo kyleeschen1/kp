@@ -1,0 +1,55 @@
+{
+  "id": "task.theseus.dashboard-queue-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard workflow queue section",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "summary": "Added a Workflow Queue dashboard section derived from workflow nextActions, preserving workflow order and deduping repeated action ids.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data-builder.ts",
+      "summary": "Builds the workflow queue section from workflow nextActions."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data-builder.test.ts",
+      "summary": "Covers queue section presence, ordering, and deduping."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/cli-report-commands.test.ts",
+      "summary": "Updates dashboard-data CLI report expectations for queue sections."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/dashboard-data-builder.test.ts",
+      "status": "passed",
+      "scope": "Focused workflow queue builder tests.",
+      "checkedAt": "2026-07-10T06:55:58.755Z"
+    },
+    {
+      "command": "npm run test -- src/dashboard-data-builder.test.ts src/cli-report-commands.test.ts -t dashboard-data|workflow queue|generic dashboard",
+      "status": "passed",
+      "scope": "Focused queue builder and dashboard-data CLI tests.",
+      "checkedAt": "2026-07-10T06:55:58.768Z"
+    },
+    {
+      "command": "npm run test -- src/dashboard-data-builder.test.ts src/dashboard-data.test.ts src/dashboard-html.test.ts src/dashboard-client.test.ts src/cli-report-commands.test.ts",
+      "status": "passed",
+      "scope": "Adjacent dashboard and CLI report tests.",
+      "checkedAt": "2026-07-10T06:55:58.783Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T06:55:58.796Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a Workflow Queue dashboard section derived from workflow nextActions, preserving workflow order and deduping repeated action ids."
+  }
+}

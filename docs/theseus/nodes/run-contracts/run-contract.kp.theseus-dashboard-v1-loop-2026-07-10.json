@@ -96,13 +96,14 @@
     {
       "id": "task.theseus.dashboard-health-v0",
       "title": "Add-health-widgets",
-      "status": "complete",
-      "summary": "Typed health items and header health widgets landed for dashboard HTML."
+      "summary": "Typed health items and header health widgets landed for dashboard HTML.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-queue-v0",
       "title": "Add-workflow-queue-section",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Workflow Queue section landed for dashboard data models."
     },
     {
       "id": "task.theseus.dashboard-out-command-v0",
