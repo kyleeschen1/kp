@@ -404,7 +404,39 @@ test("wrapper transform fixtures declare delimiter and function artifacts", () =
       ["wrapper.parentheses.wrap", "wrapWithDelimiter", [], ["(", ")"]],
       ["wrapper.absolute-value.unwrap", "unwrapDelimiter", ["|", "|"], []],
       ["wrapper.norm.wrap", "wrapWithDelimiter", [], ["\\lVert", "\\rVert"]],
+      [
+        "wrapper.fraction.parentheses.wrap",
+        "wrapWithDelimiter",
+        ["structural:frac-line"],
+        ["(", "structural:frac-line", ")"]
+      ],
       ["wrapper.function.wrap", "wrapWithFunction", [], ["f", "(", ")"]]
+    ]
+  );
+});
+
+test("wrapper fraction fixture keeps stacked fraction geometry inside delimiters", () => {
+  const fixture = findKatexTransformFixture("wrapper.fraction.parentheses.wrap");
+
+  assert.deepEqual(fixture.expectedStructuralTokens, {
+    source: ["structural:frac-line"],
+    target: ["structural:frac-line"]
+  });
+  assert.deepEqual(
+    fixture.target.tokens.map((token) => [
+      token.text,
+      token.role,
+      token.row,
+      token.column
+    ]),
+    [
+      ["(", "artifact", 1, 0],
+      ["x", "semantic", 0, 1],
+      ["+", "operator", 0, 2],
+      ["1", "semantic", 0, 3],
+      ["structural:frac-line", "artifact", 1, 2],
+      ["y", "semantic", 2, 2],
+      [")", "artifact", 1, 4]
     ]
   );
 });

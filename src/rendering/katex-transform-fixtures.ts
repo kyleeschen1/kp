@@ -319,7 +319,11 @@ export const katexFixtureBackedTransformDefinitions: readonly KatexTransformDefi
     artifactPolicy: "target-only",
     defaultVisualMotifs: ["wrap", "artifact-enter"],
     geometryChallenges: ["delimiter-sizing", "child-settle"],
-    representativeFixtureIds: ["wrapper.parentheses.wrap", "wrapper.norm.wrap"],
+    representativeFixtureIds: [
+      "wrapper.parentheses.wrap",
+      "wrapper.norm.wrap",
+      "wrapper.fraction.parentheses.wrap"
+    ],
     maturity: "fixture-backed",
     summary:
       "Delimiter notation wraps a persistent child expression with target-only visual artifacts."
@@ -953,6 +957,40 @@ export const wrapperTransformFixtures: readonly KatexTransformFixture[] = [
     expectedRoleChanges: [],
     summary:
       "A vector symbol is wrapped in norm delimiters; large delimiter artifacts are explicit fixture tokens."
+  },
+  {
+    id: "wrapper.fraction.parentheses.wrap",
+    family: "wrapper",
+    intent: "wrapWithDelimiter",
+    source: {
+      latex: "\\frac{x+1}{y}",
+      tokens: [
+        semanticToken("x", 0, 0),
+        operatorToken("+", 0, 1),
+        semanticToken("1", 0, 2),
+        artifactToken("structural:frac-line", "frac-line", 1, 1),
+        semanticToken("y", 2, 1)
+      ]
+    },
+    target: {
+      latex: "\\left(\\frac{x+1}{y}\\right)",
+      tokens: [
+        artifactToken("(", "mopen", 1, 0),
+        semanticToken("x", 0, 1),
+        operatorToken("+", 0, 2),
+        semanticToken("1", 0, 3),
+        artifactToken("structural:frac-line", "frac-line", 1, 2),
+        semanticToken("y", 2, 2),
+        artifactToken(")", "mclose", 1, 4)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: ["structural:frac-line"],
+      target: ["structural:frac-line"]
+    },
+    expectedRoleChanges: [],
+    summary:
+      "A stacked fraction is wrapped in parentheses; delimiter artifacts settle around the fraction while numerator, denominator, and fraction-bar geometry remain explicit."
   },
   {
     id: "wrapper.function.wrap",

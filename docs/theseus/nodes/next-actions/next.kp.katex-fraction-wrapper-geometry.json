@@ -2,7 +2,49 @@
   "id": "next.kp.katex-fraction-wrapper-geometry",
   "kind": "next-action",
   "title": "Expand fraction wrapper geometry fixtures",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.katex",
-  "summary": "Expand fraction and function-wrapper transform fixtures around stacked geometry, delimiter settling, and artifact fade policies."
+  "summary": "Added a wrapped stacked-fraction fixture with explicit fraction-bar and delimiter geometry.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-transform-fixtures.ts",
+      "summary": "Wrapper fixture registry now covers a stacked fraction wrapped by parentheses and the delimiter definition references the fixture."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-token-snapshot.test.ts",
+      "summary": "Covers wrapper artifact lists and target token row/column geometry for a parenthesized fraction."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/katex-token-snapshot.test.ts",
+      "status": "passed",
+      "scope": "focused KaTeX fixture snapshot tests",
+      "checkedAt": "2026-07-10T20:51:43.855Z"
+    },
+    {
+      "command": "npm test -- tests/katex-token-snapshot.test.ts tests/rendering.test.ts tests/equation-motion-plan.test.ts tests/katex-token-matcher.test.ts",
+      "status": "passed",
+      "scope": "repo test script including KaTeX fixture, rendering, matcher, and equation motion coverage",
+      "checkedAt": "2026-07-10T20:51:43.885Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:51:43.910Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:51:43.942Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a wrapped stacked-fraction fixture with explicit fraction-bar and delimiter geometry."
+  }
 }
