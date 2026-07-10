@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.live-linear-solve-tutorial-card-sample",
+  "kind": "next-action",
+  "title": "Add combined equation graph tutorial card sample",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/linear-solve-card-sample.ts",
+      "summary": "Adds createLinearSolveTutorialCardSample as the live composed sample over frame, equation, and graph samplers."
+    },
+    {
+      "kind": "file",
+      "path": "tests/linear-solve-tutorial-card-sample.test.ts",
+      "summary": "Covers synchronized card/equation/graph frames, deterministic rewind sampling, diagnostics, and clamp behavior."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.live-linear-solve-tutorial-card-sample.json",
+      "summary": "Materializes the approved live linear-solve tutorial card sample next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the live sample slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-solve-tutorial-card-sample.test.ts tests/tutorial-card-graph-frame-adapter.test.ts tests/tutorial-card-equation-frame-adapter.test.ts tests/tutorial-card-frame-sampler.test.ts tests/tutorial-card-layout-timeline-binding.test.ts tests/parent-timeline.test.ts tests/tutorial-card-runtime.test.ts tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "focused tutorial card live sample/runtime tests",
+      "checkedAt": "2026-07-10T22:28:34.105Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:28:34.142Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:28:34.166Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a combined linear-solve tutorial card sample that returns synchronized card, equation, and graph frames from one progress input."
+  },
+  "summary": "Added a combined linear-solve tutorial card sample that returns synchronized card, equation, and graph frames from one progress input."
+}
