@@ -2,7 +2,54 @@
   "id": "next.kp.semantic-registry-metadata",
   "kind": "next-action",
   "title": "Add semantic registry metadata",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic-api",
-  "summary": "Introduce a metadata-first semantic object registry shape that can advertise object families and capabilities without loading every renderer or executor."
+  "summary": "Added a metadata-first semantic object registry shell with default object definitions and capability lookup.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/object-registry.ts",
+      "summary": "Defines semantic object capability ids, metadata-only object definitions, default registry metadata, duplicate validation, and capability lookup."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-object-registry.test.ts",
+      "summary": "Covers metadata-only default definitions, capability-based type listing, and duplicate type rejection."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Semantic object foundation roadmap phase motivates metadata-first registry loading."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-object-registry.test.ts",
+      "status": "passed",
+      "scope": "focused semantic object registry tests",
+      "checkedAt": "2026-07-10T20:01:35.529Z"
+    },
+    {
+      "command": "npm test -- tests/semantic-object-registry.test.ts tests/semantic-derive-protocols.test.ts",
+      "status": "passed",
+      "scope": "repo test script including registry and derive protocol coverage",
+      "checkedAt": "2026-07-10T20:01:35.553Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:01:35.576Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:01:35.602Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a metadata-first semantic object registry shell with default object definitions and capability lookup."
+  }
 }

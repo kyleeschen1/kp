@@ -38,7 +38,7 @@
     "Do not add visual effects that do not clarify semantic identity or runtime capability."
   ],
   "goal": "Run the approved roadmap-backed semantic runtime loop from project docs through concrete verified KP slices.",
-  "target": "next.kp.semantic-registry-metadata",
+  "target": "next.kp.capability-advertisement",
   "runMode": "run",
   "maxSlices": 24,
   "commitCadence": "Commit after each verified slice.",
@@ -62,7 +62,7 @@
     {
       "id": "next.kp.semantic-registry-metadata",
       "title": "Add semantic registry metadata",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.capability-advertisement",
