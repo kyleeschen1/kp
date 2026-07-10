@@ -1,0 +1,56 @@
+{
+  "id": "next.kp.motion-frame-motif-phases",
+  "kind": "next-action",
+  "title": "Expose motif phases on equation motion frames",
+  "status": "resolved",
+  "domain": "kp.animation-runtime",
+  "summary": "Equation motion frames now include visual motif phase frames sampled on the same normalized clock as token poses.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-sampler.ts",
+      "summary": "Adds visualMotifs to EquationMotionFrame by sampling compiled motif timelines with the frame progress."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-sampler.test.ts",
+      "summary": "Asserts cancelation motif phase progress is exposed from sampleEquationMotion alongside token poses."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-sampler.test.ts",
+      "status": "passed",
+      "scope": "Focused equation motion sampler tests.",
+      "checkedAt": "2026-07-10T09:47:33.209Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "App, node, and test TypeScript projects.",
+      "checkedAt": "2026-07-10T09:47:33.230Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full Node test suite.",
+      "checkedAt": "2026-07-10T09:47:33.245Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation.",
+      "checkedAt": "2026-07-10T09:47:33.266Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-10T09:47:33.291Z",
+      "scope": "Production build and typecheck; Vite large chunk warning remains."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Equation motion frames now include visual motif phase frames sampled on the same normalized clock as token poses."
+  }
+}

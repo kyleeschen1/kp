@@ -21,7 +21,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure or arbitrary visual effects without asking."
   ],
   "goal": "Run the approved semantic transition runtime loop.",
-  "target": "next.kp.visual-motif-timeline-index",
+  "target": "next.kp.motion-frame-motif-phases",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -54,6 +54,12 @@
       "id": "next.kp.visual-motif-timeline-index",
       "title": "Index visual motifs onto semantic timelines",
       "summary": "Working the motif timeline index slice under the approved semantic transition runtime contract.",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.motion-frame-motif-phases",
+      "title": "Expose motif phases on equation motion frames",
+      "summary": "Working the motion frame motif phase slice under the approved semantic transition runtime contract.",
       "status": "complete"
     }
   ]

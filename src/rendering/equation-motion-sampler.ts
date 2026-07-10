@@ -4,10 +4,20 @@ import type {
   EquationMotionTrack,
   MotionPose
 } from "./equation-motion-plan.ts";
+import {
+  createEquationVisualMotifTimeline,
+  sampleEquationVisualMotifTimeline,
+  type EquationVisualMotifFrameMotif
+} from "./equation-visual-motif-timeline.ts";
+import {
+  linearEquationDemoBeatTimeline,
+  type SemanticBeatTimeline
+} from "./semantic-beat-compiler.ts";
 
 export interface EquationMotionFrame {
   readonly progress: number;
   readonly tokens: readonly EquationMotionFrameToken[];
+  readonly visualMotifs: readonly EquationVisualMotifFrameMotif[];
 }
 
 export interface EquationMotionFrameToken {
@@ -15,18 +25,31 @@ export interface EquationMotionFrameToken {
   readonly pose: MotionPose;
 }
 
+export interface EquationMotionSamplerOptions {
+  readonly timeline?: SemanticBeatTimeline | undefined;
+}
+
 export function sampleEquationMotion(
   plan: EquationMotionPlan,
-  progress: number
+  progress: number,
+  options: EquationMotionSamplerOptions = {}
 ): EquationMotionFrame {
   const frameProgress = clamp01(progress);
+  const visualMotifTimeline = createEquationVisualMotifTimeline(
+    plan,
+    options.timeline ?? linearEquationDemoBeatTimeline
+  );
 
   return {
     progress: frameProgress,
     tokens: plan.tracks.map((track) => ({
       tokenId: track.tokenId,
       pose: sampleTrackPose(track, frameProgress)
-    }))
+    })),
+    visualMotifs: sampleEquationVisualMotifTimeline(
+      visualMotifTimeline,
+      frameProgress
+    ).motifs
   };
 }
 

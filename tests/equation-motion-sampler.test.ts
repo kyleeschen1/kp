@@ -218,6 +218,32 @@ test("sampleEquationMotion samples cancellation during left simplification", () 
   assert.ok(findOpacity(middle, "lhs.plus") < 1);
 });
 
+test("sampleEquationMotion returns visual motif phases on the same clock", () => {
+  const transition = createEquationOperationTransition({
+    sourceLatex: "x + 3 - 3 = 7 - 3",
+    operation: {
+      kind: "simplifySide",
+      side: "left",
+      rule: "cancel-additive-inverse"
+    }
+  });
+  const plan = createEquationMotionPlan(transition);
+  const frame = sampleEquationMotion(plan, 0.45);
+  const motif = frame.visualMotifs.find(
+    (candidate) => candidate.kind === "cancelation"
+  );
+  assert.ok(motif);
+  const phaseById = new Map(
+    motif.phases.map((phase) => [phase.phaseId, phase])
+  );
+
+  assert.equal(frame.progress, 0.45);
+  assert.equal(findFrameToken(frame, "lhs.plus").tokenId, "lhs.plus");
+  assert.equal(phaseById.get("cancel-meet")?.progress, 1);
+  assert.equal(phaseById.get("cancel-collapse")?.progress, 0.5);
+  assertNearlyEqual(phaseById.get("cancel-collapse")?.easedProgress ?? 0, 0.75);
+});
+
 test("sampleEquationMotion samples generalized additive inverse cancelation", () => {
   const transition = createEquationOperationTransition({
     sourceLatex: "y + 2 - 2 = 10 - 2",
