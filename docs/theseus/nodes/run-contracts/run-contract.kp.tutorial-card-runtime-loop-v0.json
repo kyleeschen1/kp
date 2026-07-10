@@ -34,7 +34,7 @@
     "Do not expand into full programming execution traces before SourceFile selectors exist."
   ],
   "goal": "Run the approved tutorial-card runtime loop from KpTutorialCardManifest to a live synchronized equation and graph card.",
-  "target": "next.kp.tutorial-card-dependency-planner",
+  "target": "next.kp.tutorial-card-iframe-export-profile",
   "runMode": "run",
   "maxSlices": 25,
   "commitCadence": "Commit after each verified slice.",
@@ -153,7 +153,7 @@
     {
       "id": "next.kp.tutorial-card-iframe-export-profile",
       "title": "Add iframe export profile metadata resolver",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.tutorial-card-step-export-profile",
