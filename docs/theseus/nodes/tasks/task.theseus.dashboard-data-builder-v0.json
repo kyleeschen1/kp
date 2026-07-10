@@ -1,0 +1,43 @@
+{
+  "id": "task.theseus.dashboard-data-builder-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard data builder",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data-builder.ts",
+      "summary": "Builds TheseusDashboardModel rows and sections from graph nodes."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data-builder.test.ts",
+      "summary": "Focused builder test covering node classification, tags, preview fields, and search text."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data.ts",
+      "summary": "Broadened row kind contract to accept all Theseus node kinds."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/dashboard-data-builder.test.ts src/dashboard-data.test.ts",
+      "status": "passed",
+      "scope": "Focused dashboard data builder and contract tests.",
+      "checkedAt": "2026-07-10T05:48:54.580Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T05:48:54.591Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a generic graph-to-dashboard builder that maps Theseus nodes into reusable Work, Decisions, Findings, Reports, and Other sections with tags, source refs, preview fields, counts, and search text."
+  },
+  "summary": "Added a generic graph-to-dashboard builder that maps Theseus nodes into reusable Work, Decisions, Findings, Reports, and Other sections with tags, source refs, preview fields, counts, and search text."
+}

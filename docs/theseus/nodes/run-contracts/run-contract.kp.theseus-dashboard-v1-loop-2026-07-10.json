@@ -42,13 +42,14 @@
     {
       "id": "task.theseus.dashboard-data-contract-v0",
       "title": "Define-dashboard-data-contract",
-      "status": "complete",
-      "summary": "Dashboard data contract and focused tests landed in the sibling Theseus package."
+      "summary": "Dashboard data contract and focused tests landed in the sibling Theseus package.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-data-builder-v0",
       "title": "Add-dashboard-data-builder",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Generic graph-to-dashboard data builder landed in the sibling Theseus package."
     },
     {
       "id": "task.theseus.dashboard-data-command-v0",
