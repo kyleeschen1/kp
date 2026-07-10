@@ -345,6 +345,16 @@ function sampleTargetSearchFields(
           target.surfaceMode ?? "",
           "sync equation graph shared clock"
         ];
+      case "tutorial-card":
+        return [
+          target.kind,
+          target.label,
+          target.sampleId,
+          target.manifestId,
+          target.layoutId ?? "",
+          target.sharedClockId ?? "",
+          "tutorial card live sample"
+        ];
       case "api-catalog-item":
         return [target.kind, target.label, target.itemId];
     }

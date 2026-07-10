@@ -34,7 +34,7 @@
     "Do not expand into full programming execution traces before SourceFile selectors exist."
   ],
   "goal": "Run the approved tutorial-card runtime loop from KpTutorialCardManifest to a live synchronized equation and graph card.",
-  "target": "next.kp.live-linear-solve-tutorial-card-sample",
+  "target": "next.kp.dashboard-tutorial-card-sample-target",
   "runMode": "run",
   "maxSlices": 25,
   "commitCadence": "Commit after each verified slice.",
@@ -88,7 +88,7 @@
     {
       "id": "next.kp.dashboard-tutorial-card-sample-target",
       "title": "Add dashboard sample target for tutorial cards",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.dashboard-tutorial-card-preview",

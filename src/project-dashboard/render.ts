@@ -806,6 +806,30 @@ function sampleTargetPreviewLink(
         dataAttributes
       };
     }
+    case "tutorial-card": {
+      const dataAttributes: [string, string][] = [
+        ["data-kp-preview-link", "tutorial-card"],
+        ["data-kp-preview-tutorial-card", target.sampleId],
+        ["data-kp-preview-manifest-id", target.manifestId]
+      ];
+
+      if (target.layoutId !== undefined) {
+        dataAttributes.push(["data-kp-preview-layout-id", target.layoutId]);
+      }
+
+      if (target.sharedClockId !== undefined) {
+        dataAttributes.push([
+          "data-kp-preview-shared-clock-id",
+          target.sharedClockId
+        ]);
+      }
+
+      return {
+        label: target.label,
+        href: "#project-dashboard-animation-layout-title",
+        dataAttributes
+      };
+    }
     case "api-catalog-item":
       return {
         label: target.label,
@@ -1101,6 +1125,16 @@ function sampleTargetSearchFields(
           target.fixtureId ?? "",
           target.surfaceMode ?? "",
           "sync equation graph shared clock"
+        ];
+      case "tutorial-card":
+        return [
+          target.kind,
+          target.label,
+          target.sampleId,
+          target.manifestId,
+          target.layoutId ?? "",
+          target.sharedClockId ?? "",
+          "tutorial card live sample"
         ];
       case "api-catalog-item":
         return [target.kind, target.label, target.itemId];

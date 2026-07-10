@@ -377,6 +377,29 @@ test("renderProjectDashboard exposes synchronized equation graph sample targets"
   assert.match(html, /data-kp-preview-shared-clock-id="solve-x-shared-clock"/);
 });
 
+test("renderProjectDashboard exposes live tutorial card sample targets", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "sample-synced-equation-graph-linear-solve"
+  });
+
+  assert.match(html, /data-kp-preview-field="Maturity"[^>]*>active live sample/);
+  assert.match(
+    html,
+    /data-kp-preview-field="Sample targets"[^>]*>[\s\S]*Open live tutorial card sample/
+  );
+  assert.match(html, /data-kp-preview-link="tutorial-card"/);
+  assert.match(
+    html,
+    /data-kp-preview-tutorial-card="tutorial\.linear-solve\.card\.live-sample"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-manifest-id="tutorial\.linear-solve\.card"/
+  );
+  assert.match(html, /src\/tutorial\/linear-solve-card-sample\.ts/);
+  assert.match(html, /tests\/linear-solve-tutorial-card-sample\.test\.ts/);
+});
+
 test("renderProjectDashboard exposes semantic object API sample targets", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "semantic-matrix"

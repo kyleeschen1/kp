@@ -375,22 +375,26 @@ export const projectDashboardData: ProjectDashboardData = {
       id: "sample-synced-equation-graph-linear-solve",
       title: "Synchronized equation graph sample",
       kind: "animation",
-      status: "planned",
+      status: "active",
       summary:
-        "A dashboard launch target for scrubbing an equation animation and graph view from the same semantic clock.",
-      tags: ["sync", "equation", "graph", "shared-clock"],
+        "A live tutorial card sample that scrubs equation and graph frames from the same semantic clock.",
+      tags: ["sync", "equation", "graph", "shared-clock", "tutorial-card"],
       domains: ["math", "graphs", "runtime"],
       interfaces: [
         "shared playhead",
         "equation animation sample",
-        "graph state sample"
+        "graph state sample",
+        "tutorial card sample(progress)"
       ],
-      maturity: "sample target metadata",
+      maturity: "active live sample",
       coverage: [
         "equation animation id",
         "graph id",
         "synchronized panel layout id",
-        "shared semantic clock id"
+        "shared semantic clock id",
+        "tutorial card frame sampler",
+        "equation frame adapter",
+        "graph frame adapter"
       ],
       sourceRefs: [
         { label: "Animation kernel", href: "src/animation/kernel.ts" },
@@ -407,11 +411,21 @@ export const projectDashboardData: ProjectDashboardData = {
           href: "src/layout/synchronized-panel.ts"
         },
         {
+          label: "Tutorial card frame sampler",
+          href: "src/tutorial/card-frame-sampler.ts"
+        },
+        {
+          label: "Linear solve live sample",
+          href: "src/tutorial/linear-solve-card-sample.ts"
+        },
+        {
           label: "Dashboard sample target",
           href: "src/project-dashboard/data.ts"
         }
       ],
       verification: [
+        "tests/linear-solve-tutorial-card-sample.test.ts",
+        "tests/tutorial-card-frame-sampler.test.ts",
         "tests/project-dashboard.test.ts",
         "tests/project-dashboard-theseus-adapter.test.ts"
       ],
@@ -424,12 +438,21 @@ export const projectDashboardData: ProjectDashboardData = {
           layoutId: "layout.sample.linear-solve-synchronized-panel",
           sharedClockId: "solve-x-shared-clock",
           surfaceMode: "mesh"
+        },
+        {
+          kind: "tutorial-card",
+          label: "Open live tutorial card sample",
+          sampleId: "tutorial.linear-solve.card.live-sample",
+          manifestId: "tutorial.linear-solve.card",
+          layoutId: "layout.sample.linear-solve-synchronized-panel",
+          sharedClockId: "solve-x-shared-clock"
         }
       ],
       relatedIds: [
         "work-rendering-time-protocol",
         "visual-webgl-graph",
-        "semantic-equation"
+        "semantic-equation",
+        "tutorial-card-manifest-v0"
       ]
     },
     {

@@ -1,0 +1,69 @@
+{
+  "id": "next.kp.dashboard-tutorial-card-sample-target",
+  "kind": "next-action",
+  "title": "Add dashboard sample target for tutorial cards",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/model.ts",
+      "summary": "Extends ProjectDashboardSampleTarget with tutorial-card sample target metadata and search fields."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Renders tutorial-card preview links and search facets for dashboard sample targets."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/theseus-adapter.ts",
+      "summary": "Includes tutorial-card sample targets in Theseus dashboard adapter search text."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Promotes the synchronized linear-solve sample row to active live sample metadata with tutorial-card target, source refs, and verification."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers live tutorial-card preview target fields, source refs, and verification in the selected dashboard row."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.dashboard-tutorial-card-sample-target.json",
+      "summary": "Materializes the approved dashboard tutorial-card sample target next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the dashboard sample-target slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "focused project dashboard tutorial-card sample target tests",
+      "checkedAt": "2026-07-10T22:32:58.193Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:32:58.213Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:32:58.243Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a live tutorial-card sample target to the project dashboard so the synchronized equation/graph row advertises the new linear-solve tutorial runtime sample."
+  },
+  "summary": "Added a live tutorial-card sample target to the project dashboard so the synchronized equation/graph row advertises the new linear-solve tutorial runtime sample."
+}

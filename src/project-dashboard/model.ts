@@ -55,6 +55,14 @@ export type ProjectDashboardSampleTarget =
       readonly surfaceMode?: string;
     }
   | {
+      readonly kind: "tutorial-card";
+      readonly label: string;
+      readonly sampleId: string;
+      readonly manifestId: string;
+      readonly layoutId?: string;
+      readonly sharedClockId?: string;
+    }
+  | {
       readonly kind: "api-catalog-item";
       readonly label: string;
       readonly itemId: string;
@@ -405,6 +413,16 @@ function sampleTargetSearchFields(
           target.fixtureId ?? "",
           target.surfaceMode ?? "",
           "sync equation graph shared clock"
+        ];
+      case "tutorial-card":
+        return [
+          target.kind,
+          target.label,
+          target.sampleId,
+          target.manifestId,
+          target.layoutId ?? "",
+          target.sharedClockId ?? "",
+          "tutorial card live sample"
         ];
       case "api-catalog-item":
         return [target.kind, target.label, target.itemId];
