@@ -1,0 +1,164 @@
+{
+  "id": "run-contract.kp.tutorial-card-runtime-loop-v0",
+  "kind": "run-contract",
+  "title": "KP tutorial card runtime loop",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-runtime-loop-contract.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-10-semantic-runtime-roadmap-loop-closeout.md",
+      "summary": "Closeout review recommends promoting the synchronized equation/graph sample into a live tutorial card driven by KpTutorialCardManifest."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Post-loop roadmap prioritizes manifest to live card, parent timeline, programming selectors, generated fixtures, and export planning."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "allowedWork": [
+    "Only work on approved KP tutorial-card runtime slices.",
+    "Keep each slice independently verified, recorded in Theseus, and committed."
+  ],
+  "disallowedWork": [
+    "Do not broaden into unrelated Theseus planner infrastructure.",
+    "Do not implement full GIF/video export encoders before the card runtime can render deterministic frames.",
+    "Do not expand into full programming execution traces before SourceFile selectors exist."
+  ],
+  "goal": "Run the approved tutorial-card runtime loop from KpTutorialCardManifest to a live synchronized equation and graph card.",
+  "target": "next.kp.tutorial-card-runtime-loop-contract",
+  "slices": [
+    {
+      "id": "next.kp.tutorial-card-runtime-loop-contract",
+      "title": "Materialize tutorial-card runtime run contract",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.tutorial-card-runtime-resolver",
+      "title": "Add tutorial card runtime context resolver",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.parent-timeline-model",
+      "title": "Add parent timeline model",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-layout-timeline-binding",
+      "title": "Map tutorial card timeline to synchronized panel layout",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-frame-sampler",
+      "title": "Build renderer-neutral tutorial card frame sampler",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-equation-frame-adapter",
+      "title": "Resolve equation animation frames from card manifests",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-graph-frame-adapter",
+      "title": "Resolve graph frames from card manifests",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.live-linear-solve-tutorial-card-sample",
+      "title": "Add combined equation graph tutorial card sample",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.dashboard-tutorial-card-sample-target",
+      "title": "Add dashboard sample target for tutorial cards",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.dashboard-tutorial-card-preview",
+      "title": "Render selected tutorial card preview metadata",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-html-shell",
+      "title": "Add basic HTML shell for tutorial card surfaces",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-equation-panel",
+      "title": "Mount synchronized equation panel in card shell",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-graph-panel",
+      "title": "Mount graph panel in card shell",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-controls",
+      "title": "Add shared scrubber controls for card shell",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-rewind-verification",
+      "title": "Verify rewind through parent timeline",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.parent-timeline-markers",
+      "title": "Add focus and annotation marker placeholders to parent timeline",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.generated-katex-fixture-from-transform",
+      "title": "Add first generated KaTeX fixture from SemanticTransformation",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.source-file-semantic-object-v0",
+      "title": "Add programming SourceFile semantic object shell",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.source-range-selectors-v0",
+      "title": "Add static source-range selectors",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.source-file-dashboard-api-row",
+      "title": "Add dashboard and API rows for SourceFile",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-dependency-planner",
+      "title": "Add tutorial card dependency planning helper",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-iframe-export-profile",
+      "title": "Add iframe export profile metadata resolver",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-step-export-profile",
+      "title": "Add static-step export profile metadata resolver",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-runtime-readiness-report",
+      "title": "Refresh runtime readiness report card",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-runtime-loop-closeout",
+      "title": "Close tutorial card runtime loop",
+      "status": "planned"
+    }
+  ]
+}

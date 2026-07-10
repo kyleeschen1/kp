@@ -1,0 +1,37 @@
+{
+  "id": "next.kp.tutorial-card-runtime-loop-contract",
+  "kind": "next-action",
+  "title": "Materialize tutorial-card runtime run contract",
+  "status": "resolved",
+  "domain": "kp.project-control",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Adds the approved 25-slice tutorial-card runtime execution contract with scope boundaries, source refs, and verification expectations."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-runtime-loop-contract.json",
+      "summary": "Records the first bootstrap slice for materializing the tutorial-card runtime loop."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/events/2026-07-10.jsonl",
+      "summary": "Records creation events for the approved tutorial-card runtime loop contract and bootstrap action."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:04:00.430Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Materialized the approved KP tutorial-card runtime loop as a Theseus run contract."
+  },
+  "summary": "Materialized the approved KP tutorial-card runtime loop as a Theseus run contract."
+}
