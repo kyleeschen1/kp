@@ -38,7 +38,7 @@
     "Do not add visual effects that do not clarify semantic identity or runtime capability."
   ],
   "goal": "Run the approved roadmap-backed semantic runtime loop from project docs through concrete verified KP slices.",
-  "target": "next.kp.transformation-composition-model",
+  "target": "next.kp.correspondence-composition",
   "runMode": "run",
   "maxSlices": 24,
   "commitCadence": "Commit after each verified slice.",
@@ -91,8 +91,8 @@
     },
     {
       "id": "next.kp.transformation-composition-model",
-      "title": "Add transformation composition model",
-      "status": "planned"
+      "title": "Model composable semantic transformations",
+      "status": "complete"
     },
     {
       "id": "next.kp.correspondence-composition",

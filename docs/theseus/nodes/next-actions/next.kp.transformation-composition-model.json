@@ -2,7 +2,54 @@
   "id": "next.kp.transformation-composition-model",
   "kind": "next-action",
   "title": "Add transformation composition model",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation-runtime",
-  "summary": "Add first-class sequence and parallel SemanticTransformation composition records with provenance and runtime-facing metadata."
+  "summary": "Added semantic transformation tree composition with sequence, parallel, forward phases, and rewind phases.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/transformation-composition.ts",
+      "summary": "Defines leaf, sequence, and parallel transformation nodes with composed sources, targets, preservation semantics, and deterministic phase helpers."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-transformation-composition.test.ts",
+      "summary": "Covers sequence endpoint composition, preservation intersection, deterministic forward/rewind phases, parallel grouping, and empty-group validation."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/animation.ts",
+      "summary": "Provides the existing SemanticTransformationRef type used as composition leaves."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-transformation-composition.test.ts",
+      "status": "passed",
+      "scope": "focused semantic transformation composition tests",
+      "checkedAt": "2026-07-10T20:26:34.675Z"
+    },
+    {
+      "command": "npm test -- tests/semantic-transformation-composition.test.ts tests/semantic.test.ts tests/equation-motion-player.test.ts tests/graph-transitions.test.ts",
+      "status": "passed",
+      "scope": "repo test script including semantic, equation motion, and graph transformation coverage",
+      "checkedAt": "2026-07-10T20:26:34.729Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:26:34.773Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:26:34.806Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added semantic transformation tree composition with sequence, parallel, forward phases, and rewind phases."
+  }
 }
