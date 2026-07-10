@@ -1,3 +1,5 @@
+import type { EquationVisualMotifKind } from "./visual-motif.ts";
+
 export type KatexTransformFixtureFamily =
   | "fraction"
   | "large-operator"
@@ -45,6 +47,46 @@ export type KatexTransformFixtureIntent =
   | KatexRadicalTransformIntent
   | KatexScriptTransformIntent
   | KatexWrapperTransformIntent;
+
+export type KatexTransformDefinitionFamily =
+  | KatexTransformFixtureFamily
+  | "accent"
+  | "distribution"
+  | "factoring"
+  | "function"
+  | "log-trig";
+
+export type KatexIdentityPreservationPolicy =
+  | "semantic-identity"
+  | "semantic-derived"
+  | "role-preserved"
+  | "structure-preserved"
+  | "visual-artifact-only";
+
+export type KatexArtifactPolicy =
+  | "none"
+  | "source-only"
+  | "target-only"
+  | "replace"
+  | "mixed";
+
+export type KatexTransformDefinitionMaturity =
+  | "fixture-backed"
+  | "planned-template";
+
+export interface KatexTransformDefinition {
+  readonly id: string;
+  readonly family: KatexTransformDefinitionFamily;
+  readonly intent: string;
+  readonly semanticTransform: string;
+  readonly identityPreservation: readonly KatexIdentityPreservationPolicy[];
+  readonly artifactPolicy: KatexArtifactPolicy;
+  readonly defaultVisualMotifs: readonly EquationVisualMotifKind[];
+  readonly geometryChallenges: readonly string[];
+  readonly representativeFixtureIds: readonly string[];
+  readonly maturity: KatexTransformDefinitionMaturity;
+  readonly summary: string;
+}
 
 export type KatexTransformFixtureTokenRole =
   | "artifact"
@@ -129,6 +171,361 @@ export interface KatexTransformFixtureDiagnostics {
   readonly targetStructuralTokenCount: number;
   readonly roleChangeCount: number;
 }
+
+export const katexFixtureBackedTransformDefinitions: readonly KatexTransformDefinition[] = [
+  {
+    id: "definition.fraction.make-fraction",
+    family: "fraction",
+    intent: "makeFraction",
+    semanticTransform: "rewriteInlineDivisionAsFraction",
+    identityPreservation: [
+      "semantic-identity",
+      "role-preserved",
+      "visual-artifact-only"
+    ],
+    artifactPolicy: "target-only",
+    defaultVisualMotifs: ["artifact-enter", "wrap"],
+    geometryChallenges: ["fraction-bar", "numerator-baseline", "denominator-baseline"],
+    representativeFixtureIds: ["fraction.make.inline-to-stacked"],
+    maturity: "fixture-backed",
+    summary:
+      "Inline division becomes stacked fraction notation while numerator and denominator identity persists."
+  },
+  {
+    id: "definition.fraction.split-fraction",
+    family: "fraction",
+    intent: "splitFraction",
+    semanticTransform: "rewriteFractionAsInlineDivision",
+    identityPreservation: [
+      "semantic-identity",
+      "role-preserved",
+      "visual-artifact-only"
+    ],
+    artifactPolicy: "source-only",
+    defaultVisualMotifs: ["artifact-exit", "unwrap"],
+    geometryChallenges: ["fraction-bar", "baseline-rejoin"],
+    representativeFixtureIds: ["fraction.split.stacked-to-inline"],
+    maturity: "fixture-backed",
+    summary:
+      "Stacked fraction notation becomes inline division while source-only fraction artifacts exit."
+  },
+  {
+    id: "definition.fraction.combine-fractions",
+    family: "fraction",
+    intent: "combineFractions",
+    semanticTransform: "combineFractionsWithCommonDenominator",
+    identityPreservation: ["semantic-derived", "structure-preserved"],
+    artifactPolicy: "mixed",
+    defaultVisualMotifs: ["simplify-into", "artifact-replace"],
+    geometryChallenges: ["multiple-fraction-bars", "derived-numerator", "derived-denominator"],
+    representativeFixtureIds: ["fraction.combine.common-denominator"],
+    maturity: "fixture-backed",
+    summary:
+      "Multiple fractions combine into one derived fraction with explicit source and target artifact handling."
+  },
+  {
+    id: "definition.radical.rewrite-power-as-root",
+    family: "radical",
+    intent: "rewritePowerAsRoot",
+    semanticTransform: "rewritePowerAsRadical",
+    identityPreservation: ["semantic-identity", "role-preserved"],
+    artifactPolicy: "target-only",
+    defaultVisualMotifs: ["wrap", "artifact-enter"],
+    geometryChallenges: ["radical-glyph", "overbar", "script-to-radicand"],
+    representativeFixtureIds: ["radical.rewrite-power-as-root"],
+    maturity: "fixture-backed",
+    summary:
+      "Power notation becomes radical notation while the base persists as the radicand."
+  },
+  {
+    id: "definition.radical.rewrite-root-as-power",
+    family: "radical",
+    intent: "rewriteRootAsPower",
+    semanticTransform: "rewriteRadicalAsPower",
+    identityPreservation: ["semantic-identity", "role-preserved"],
+    artifactPolicy: "source-only",
+    defaultVisualMotifs: ["unwrap", "artifact-exit"],
+    geometryChallenges: ["radical-glyph", "overbar", "radicand-to-base"],
+    representativeFixtureIds: ["radical.rewrite-root-as-power"],
+    maturity: "fixture-backed",
+    summary:
+      "Radical notation becomes power notation while radical artifacts exit."
+  },
+  {
+    id: "definition.radical.unwrap-indexed-root",
+    family: "radical",
+    intent: "unwrapIndexedRoot",
+    semanticTransform: "cancelRootWithMatchingPower",
+    identityPreservation: ["semantic-derived", "role-preserved"],
+    artifactPolicy: "source-only",
+    defaultVisualMotifs: ["simplify-into", "artifact-exit"],
+    geometryChallenges: ["root-index", "radical-glyph", "script-cancelation"],
+    representativeFixtureIds: ["radical.unwrap-indexed-root"],
+    maturity: "fixture-backed",
+    summary:
+      "An indexed root simplifies to its base after root index, exponent, and radical artifacts resolve."
+  },
+  {
+    id: "definition.script.combine-repeated-factor-as-power",
+    family: "script",
+    intent: "combineRepeatedFactorAsPower",
+    semanticTransform: "rewriteRepeatedFactorAsPower",
+    identityPreservation: ["semantic-derived", "role-preserved"],
+    artifactPolicy: "none",
+    defaultVisualMotifs: ["simplify-into"],
+    geometryChallenges: ["superscript-baseline", "operator-fade"],
+    representativeFixtureIds: ["script.combine-factor-as-power"],
+    maturity: "fixture-backed",
+    summary:
+      "Repeated multiplication becomes exponent notation with a derived superscript."
+  },
+  {
+    id: "definition.script.expand-power",
+    family: "script",
+    intent: "expandPower",
+    semanticTransform: "rewritePowerAsRepeatedFactors",
+    identityPreservation: ["semantic-derived", "role-preserved"],
+    artifactPolicy: "none",
+    defaultVisualMotifs: ["simplify-into"],
+    geometryChallenges: ["superscript-baseline", "operator-enter"],
+    representativeFixtureIds: ["script.expand-power-to-factor"],
+    maturity: "fixture-backed",
+    summary:
+      "Exponent notation expands into repeated factors with explicit script-to-inline geometry."
+  },
+  {
+    id: "definition.script.change-index",
+    family: "script",
+    intent: "changeIndex",
+    semanticTransform: "updateScriptIndex",
+    identityPreservation: ["semantic-identity", "role-preserved"],
+    artifactPolicy: "none",
+    defaultVisualMotifs: ["append-after-shift"],
+    geometryChallenges: ["subscript-baseline", "script-scale"],
+    representativeFixtureIds: ["script.change-subscript-index"],
+    maturity: "fixture-backed",
+    summary:
+      "A script index changes while remaining in script geometry."
+  },
+  {
+    id: "definition.wrapper.wrap-with-delimiter",
+    family: "wrapper",
+    intent: "wrapWithDelimiter",
+    semanticTransform: "wrapExpressionWithDelimiter",
+    identityPreservation: ["semantic-identity", "visual-artifact-only"],
+    artifactPolicy: "target-only",
+    defaultVisualMotifs: ["wrap", "artifact-enter"],
+    geometryChallenges: ["delimiter-sizing", "child-settle"],
+    representativeFixtureIds: ["wrapper.parentheses.wrap", "wrapper.norm.wrap"],
+    maturity: "fixture-backed",
+    summary:
+      "Delimiter notation wraps a persistent child expression with target-only visual artifacts."
+  },
+  {
+    id: "definition.wrapper.unwrap-delimiter",
+    family: "wrapper",
+    intent: "unwrapDelimiter",
+    semanticTransform: "unwrapExpressionDelimiter",
+    identityPreservation: ["semantic-identity", "visual-artifact-only"],
+    artifactPolicy: "source-only",
+    defaultVisualMotifs: ["unwrap", "artifact-exit"],
+    geometryChallenges: ["delimiter-sizing", "child-settle"],
+    representativeFixtureIds: ["wrapper.absolute-value.unwrap"],
+    maturity: "fixture-backed",
+    summary:
+      "Delimiter notation unwraps while child expression identity persists."
+  },
+  {
+    id: "definition.wrapper.wrap-with-function",
+    family: "wrapper",
+    intent: "wrapWithFunction",
+    semanticTransform: "wrapExpressionWithFunctionCall",
+    identityPreservation: ["semantic-identity", "visual-artifact-only"],
+    artifactPolicy: "target-only",
+    defaultVisualMotifs: ["wrap", "artifact-enter"],
+    geometryChallenges: ["function-name-enter", "parenthesis-settle"],
+    representativeFixtureIds: ["wrapper.function.wrap"],
+    maturity: "fixture-backed",
+    summary:
+      "Function-call notation wraps a persistent argument with function and delimiter artifacts."
+  },
+  {
+    id: "definition.large-operator.add-summation-bounds",
+    family: "large-operator",
+    intent: "addSummationBounds",
+    semanticTransform: "addLargeOperatorBounds",
+    identityPreservation: ["semantic-identity", "structure-preserved"],
+    artifactPolicy: "none",
+    defaultVisualMotifs: ["append-after-shift"],
+    geometryChallenges: ["under-over-limits", "large-operator-baseline"],
+    representativeFixtureIds: ["large-operator.sum.add-bounds"],
+    maturity: "fixture-backed",
+    summary:
+      "A large operator gains bounds while the operator and body persist."
+  },
+  {
+    id: "definition.large-operator.change-product-bounds",
+    family: "large-operator",
+    intent: "changeProductBounds",
+    semanticTransform: "changeLargeOperatorBounds",
+    identityPreservation: ["semantic-derived", "structure-preserved"],
+    artifactPolicy: "none",
+    defaultVisualMotifs: ["simplify-into"],
+    geometryChallenges: ["under-over-limits", "paired-bound-updates"],
+    representativeFixtureIds: ["large-operator.product.change-bounds"],
+    maturity: "fixture-backed",
+    summary:
+      "Large-operator bounds change while the product operator and body persist."
+  },
+  {
+    id: "definition.large-operator.add-integral-bounds",
+    family: "large-operator",
+    intent: "addIntegralBounds",
+    semanticTransform: "addIntegralBounds",
+    identityPreservation: ["semantic-identity", "structure-preserved"],
+    artifactPolicy: "none",
+    defaultVisualMotifs: ["append-after-shift"],
+    geometryChallenges: ["integral-limits", "differential-spacing"],
+    representativeFixtureIds: ["large-operator.integral.add-bounds"],
+    maturity: "fixture-backed",
+    summary:
+      "An indefinite integral gains bounds while integrand and differential persist."
+  },
+  {
+    id: "definition.large-operator.change-limit-approach",
+    family: "large-operator",
+    intent: "changeLimitApproach",
+    semanticTransform: "changeLimitApproach",
+    identityPreservation: ["semantic-derived", "structure-preserved"],
+    artifactPolicy: "none",
+    defaultVisualMotifs: ["simplify-into"],
+    geometryChallenges: ["lower-limit-layout", "function-argument-rename"],
+    representativeFixtureIds: ["large-operator.limit.change-approach"],
+    maturity: "fixture-backed",
+    summary:
+      "A limit approach expression changes inside lower-limit geometry."
+  },
+  {
+    id: "definition.matrix.change-delimiter",
+    family: "matrix",
+    intent: "changeMatrixDelimiter",
+    semanticTransform: "changeMatrixDelimiterStyle",
+    identityPreservation: ["semantic-identity", "visual-artifact-only"],
+    artifactPolicy: "replace",
+    defaultVisualMotifs: ["artifact-replace"],
+    geometryChallenges: ["large-delimiters", "entry-grid-persistence"],
+    representativeFixtureIds: ["matrix.bracket.change-delimiter"],
+    maturity: "fixture-backed",
+    summary:
+      "Matrix delimiter artifacts replace each other while entry selector identity persists."
+  },
+  {
+    id: "definition.matrix.update-entry",
+    family: "matrix",
+    intent: "updateMatrixEntry",
+    semanticTransform: "updateMatrixEntry",
+    identityPreservation: ["semantic-derived", "structure-preserved"],
+    artifactPolicy: "none",
+    defaultVisualMotifs: ["simplify-into"],
+    geometryChallenges: ["entry-grid-persistence", "cell-local-morph"],
+    representativeFixtureIds: ["matrix.entry.update"],
+    maturity: "fixture-backed",
+    summary:
+      "A matrix entry changes while the matrix grid and unaffected entries persist."
+  },
+  {
+    id: "definition.matrix.swap-rows",
+    family: "matrix",
+    intent: "swapMatrixRows",
+    semanticTransform: "swapMatrixRows",
+    identityPreservation: ["semantic-identity", "structure-preserved"],
+    artifactPolicy: "none",
+    defaultVisualMotifs: ["append-after-shift"],
+    geometryChallenges: ["row-layout-shift", "entry-grid-persistence"],
+    representativeFixtureIds: ["matrix.row.swap"],
+    maturity: "fixture-backed",
+    summary:
+      "Matrix rows swap positions while row and entry identities persist."
+  },
+  {
+    id: "definition.matrix.transpose-vector",
+    family: "matrix",
+    intent: "transposeVector",
+    semanticTransform: "transposeVectorView",
+    identityPreservation: ["semantic-identity", "structure-preserved"],
+    artifactPolicy: "none",
+    defaultVisualMotifs: ["append-after-shift"],
+    geometryChallenges: ["row-column-role-change", "delimiter-sizing"],
+    representativeFixtureIds: ["vector.transpose.column-to-row"],
+    maturity: "fixture-backed",
+    summary:
+      "A vector changes orientation while vector entry identities persist."
+  }
+];
+
+export const katexPlannedTransformDefinitions: readonly KatexTransformDefinition[] = [
+  {
+    id: "definition.distribution.distribute-product",
+    family: "distribution",
+    intent: "distributeProductOverSum",
+    semanticTransform: "distributeProductOverSum",
+    identityPreservation: ["semantic-derived", "structure-preserved"],
+    artifactPolicy: "none",
+    defaultVisualMotifs: ["append-after-shift", "simplify-into"],
+    geometryChallenges: ["duplicated-factor-provenance", "operator-entry"],
+    representativeFixtureIds: [],
+    maturity: "planned-template",
+    summary:
+      "Distribution duplicates a factor over summed terms and needs explicit provenance for copied tokens."
+  },
+  {
+    id: "definition.factoring.factor-common-term",
+    family: "factoring",
+    intent: "factorCommonTerm",
+    semanticTransform: "factorCommonTerm",
+    identityPreservation: ["semantic-derived", "structure-preserved"],
+    artifactPolicy: "target-only",
+    defaultVisualMotifs: ["simplify-into", "wrap"],
+    geometryChallenges: ["term-grouping", "parenthesis-enter", "copied-factor-collapse"],
+    representativeFixtureIds: [],
+    maturity: "planned-template",
+    summary:
+      "Factoring gathers repeated structure into a wrapped product with explicit shared provenance."
+  },
+  {
+    id: "definition.function.apply-log-or-trig",
+    family: "log-trig",
+    intent: "applyFunction",
+    semanticTransform: "wrapExpressionWithNamedFunction",
+    identityPreservation: ["semantic-identity", "visual-artifact-only"],
+    artifactPolicy: "target-only",
+    defaultVisualMotifs: ["wrap", "artifact-enter"],
+    geometryChallenges: ["function-name-enter", "argument-parens", "operator-precedence"],
+    representativeFixtureIds: [],
+    maturity: "planned-template",
+    summary:
+      "Log and trig function applications wrap an argument while function names and delimiters enter as notation artifacts."
+  },
+  {
+    id: "definition.accent.add-or-strip-accent",
+    family: "accent",
+    intent: "toggleAccent",
+    semanticTransform: "toggleAccentNotation",
+    identityPreservation: ["semantic-identity", "visual-artifact-only"],
+    artifactPolicy: "mixed",
+    defaultVisualMotifs: ["artifact-enter", "artifact-exit"],
+    geometryChallenges: ["overline-height", "bar-length", "accent-owner"],
+    representativeFixtureIds: [],
+    maturity: "planned-template",
+    summary:
+      "Accents, bars, and overlines are visual artifacts owned by an annotated expression."
+  }
+];
+
+export const katexTransformDefinitions: readonly KatexTransformDefinition[] = [
+  ...katexFixtureBackedTransformDefinitions,
+  ...katexPlannedTransformDefinitions
+];
 
 export const fractionTransformFixtures: readonly KatexTransformFixture[] = [
   {
@@ -870,6 +1267,30 @@ export function findKatexTransformFixture(id: string): KatexTransformFixture {
   return fixture;
 }
 
+export function findKatexTransformDefinition(
+  family: KatexTransformDefinitionFamily,
+  intent: string
+): KatexTransformDefinition {
+  const definition = katexTransformDefinitions.find(
+    (candidate) =>
+      candidate.family === family && candidate.intent === intent
+  );
+
+  if (definition === undefined) {
+    throw new Error(
+      `Unknown KaTeX transform definition: ${family}.${intent}`
+    );
+  }
+
+  return definition;
+}
+
+export function definitionForKatexTransformFixture(
+  fixture: KatexTransformFixture
+): KatexTransformDefinition {
+  return findKatexTransformDefinition(fixture.family, fixture.intent);
+}
+
 export function summarizeKatexTransformFixtureDiagnostics(
   fixture: KatexTransformFixture
 ): KatexTransformFixtureDiagnostics {
@@ -881,6 +1302,31 @@ export function summarizeKatexTransformFixtureDiagnostics(
     sourceStructuralTokenCount: fixture.expectedStructuralTokens.source.length,
     targetStructuralTokenCount: fixture.expectedStructuralTokens.target.length,
     roleChangeCount: fixture.expectedRoleChanges.length
+  };
+}
+
+export function summarizeKatexTransformDefinition(
+  definition: KatexTransformDefinition
+): Pick<
+  KatexTransformDefinition,
+  | "id"
+  | "family"
+  | "intent"
+  | "semanticTransform"
+  | "identityPreservation"
+  | "artifactPolicy"
+  | "defaultVisualMotifs"
+  | "maturity"
+> {
+  return {
+    id: definition.id,
+    family: definition.family,
+    intent: definition.intent,
+    semanticTransform: definition.semanticTransform,
+    identityPreservation: [...definition.identityPreservation],
+    artifactPolicy: definition.artifactPolicy,
+    defaultVisualMotifs: [...definition.defaultVisualMotifs],
+    maturity: definition.maturity
   };
 }
 

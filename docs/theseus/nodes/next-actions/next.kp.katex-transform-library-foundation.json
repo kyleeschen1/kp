@@ -2,9 +2,9 @@
   "id": "next.kp.katex-transform-library-foundation",
   "kind": "next-action",
   "title": "Grow KaTeX transform library foundation",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.katex",
-  "summary": "Expand the current fixture taxonomy into reusable transform definitions for fractions, radicals, exponents, functions, logs/trig, distribution/factoring, matrices, sums, products, integrals, limits, accents, bars, norms, and absolute values.",
+  "summary": "Added a reusable KaTeX transform definition catalogue with semantic transform names, identity preservation policy, artifact policy, default visual motifs, geometry challenges, fixture coverage, and planned transform templates.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,16 @@
       "kind": "file",
       "path": "tests/katex-transition.browser.spec.ts",
       "summary": "Browser regression suite for visible KaTeX animation samples."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-transform-fixtures.ts",
+      "summary": "Adds fixture-backed and planned transform definitions plus lookup and summary helpers for fixture-to-definition mapping."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-token-snapshot.test.ts",
+      "summary": "Covers semantic identity policy, visual policy, planned template visibility, and fixture-backed definition coverage."
     }
   ],
   "dependsOn": {
@@ -79,5 +89,35 @@
       "id": "unusual-katex-samples-searchable",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/equation-motion-plan.test.ts tests/katex-token-snapshot.test.ts tests/katex-token-matcher.test.ts",
+      "status": "passed",
+      "scope": "Focused equation motion and KaTeX transform taxonomy tests; package script also ran the full Node suite.",
+      "checkedAt": "2026-07-10T17:44:33.636Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "KaTeX browser transition suite.",
+      "checkedAt": "2026-07-10T17:44:33.657Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "App, node, and test TypeScript projects.",
+      "checkedAt": "2026-07-10T17:44:33.680Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T17:44:33.703Z",
+      "scope": "Theseus graph validation."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a reusable KaTeX transform definition catalogue with semantic transform names, identity preservation policy, artifact policy, default visual motifs, geometry challenges, fixture coverage, and planned transform templates."
+  }
 }

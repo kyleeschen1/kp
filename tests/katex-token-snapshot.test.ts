@@ -9,12 +9,16 @@ import {
   snapshotKatexTokens
 } from "../src/rendering/katex-token-snapshot.ts";
 import {
+  definitionForKatexTransformFixture,
+  findKatexTransformDefinition,
   fractionTransformFixtures,
   largeOperatorTransformFixtures,
   matrixTransformFixtures,
   radicalTransformFixtures,
+  summarizeKatexTransformDefinition,
   summarizeKatexTransformFixtureDiagnostics,
   scriptTransformFixtures,
+  katexPlannedTransformDefinitions,
   wrapperTransformFixtures
 } from "../src/rendering/katex-transform-fixtures.ts";
 import {
@@ -193,6 +197,58 @@ test("fraction transform fixtures declare expected structural tokens", () => {
       ]
     ]
   );
+});
+
+test("KaTeX transform definitions expose semantic identity and visual policies", () => {
+  const makeFraction = definitionForKatexTransformFixture(
+    fractionTransformFixtures[0]!
+  );
+  const radical = definitionForKatexTransformFixture(radicalTransformFixtures[0]!);
+  const matrixDelimiter = definitionForKatexTransformFixture(
+    matrixTransformFixtures[0]!
+  );
+  const plannedDistribution = findKatexTransformDefinition(
+    "distribution",
+    "distributeProductOverSum"
+  );
+
+  assert.deepEqual(summarizeKatexTransformDefinition(makeFraction), {
+    id: "definition.fraction.make-fraction",
+    family: "fraction",
+    intent: "makeFraction",
+    semanticTransform: "rewriteInlineDivisionAsFraction",
+    identityPreservation: [
+      "semantic-identity",
+      "role-preserved",
+      "visual-artifact-only"
+    ],
+    artifactPolicy: "target-only",
+    defaultVisualMotifs: ["artifact-enter", "wrap"],
+    maturity: "fixture-backed"
+  });
+  assert.deepEqual(radical.defaultVisualMotifs, ["wrap", "artifact-enter"]);
+  assert.deepEqual(matrixDelimiter.artifactPolicy, "replace");
+  assert.equal(plannedDistribution.maturity, "planned-template");
+  assert.deepEqual(
+    katexPlannedTransformDefinitions.map((definition) => definition.family),
+    ["distribution", "factoring", "log-trig", "accent"]
+  );
+  for (const fixture of [
+    ...fractionTransformFixtures,
+    ...largeOperatorTransformFixtures,
+    ...matrixTransformFixtures,
+    ...radicalTransformFixtures,
+    ...scriptTransformFixtures,
+    ...wrapperTransformFixtures
+  ]) {
+    const definition = definitionForKatexTransformFixture(fixture);
+
+    assert.equal(definition.maturity, "fixture-backed");
+    assert.ok(
+      definition.representativeFixtureIds.includes(fixture.id),
+      `${definition.id} should reference ${fixture.id}`
+    );
+  }
 });
 
 test("script transform fixtures declare role-change geometry expectations", () => {

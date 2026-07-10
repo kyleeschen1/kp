@@ -21,7 +21,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure or arbitrary visual effects without asking."
   ],
   "goal": "Run the approved semantic transition runtime loop.",
-  "target": "next.kp.animation-kernel-protocol",
+  "target": "next.kp.katex-transform-library-foundation",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -100,6 +100,11 @@
     {
       "id": "next.kp.animation-kernel-protocol",
       "title": "Define shared animation kernel protocol",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.katex-transform-library-foundation",
+      "title": "Grow KaTeX transform library foundation",
       "status": "complete"
     }
   ]
