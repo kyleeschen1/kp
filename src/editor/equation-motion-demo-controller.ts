@@ -37,7 +37,6 @@ import {
   easedProgressBetweenSemanticBeat,
   findSemanticBeat,
   linearEquationDemoBeatTimeline,
-  progressBetweenSemanticBeat,
   type SemanticBeatId
 } from "../rendering/semantic-beat-compiler.ts";
 
@@ -62,6 +61,9 @@ const cancellationParticleRenderers = new WeakMap<
   HTMLCanvasElement,
   EquationCancelParticleRenderer
 >();
+
+type EquationMotionFrameMotif = EquationMotionFrame["visualMotifs"][number];
+type EquationMotionFramePhase = EquationMotionFrameMotif["phases"][number];
 
 interface EquationMotionRenderContext {
   readonly key: string;
@@ -663,6 +665,11 @@ function renderEquationMotionFrame(
   const directionalProgress =
     sourceStep < targetStep ? frame.progress : 1 - frame.progress;
   const cancellationGroup = createCancellationMotionGroup(plan, context);
+  const cancelCollapsePhase = findEquationMotionFramePhase(
+    frame,
+    "cancelation",
+    "cancel-collapse"
+  );
   const finalSimplifyGroup = createFinalSimplifyMotionGroup(plan, context);
   const artifactMotionIds = renderArtifactSeedReveal(
     demo,
@@ -689,7 +696,7 @@ function renderEquationMotionFrame(
     directionalProgress * readEquationMotionBeatCount(demo)
   );
 
-  if (cancellationGroup === undefined) {
+  if (cancellationGroup === undefined || cancelCollapsePhase === undefined) {
     delete demo.dataset["kpEquationMotionCancelMode"];
     clearCancellationParticles(demo);
   } else {
@@ -697,7 +704,7 @@ function renderEquationMotionFrame(
     renderCancellationParticles(
       context.planSourceState,
       cancellationGroup,
-      frame.progress
+      cancelCollapsePhase
     );
   }
 
@@ -829,6 +836,18 @@ function syncEquationMotionMotifDiagnostics(
 
   writeDatasetList(demo, "kpEquationMotionActiveMotifs", activeMotifs);
   writeDatasetList(demo, "kpEquationMotionActivePhases", activePhases);
+}
+
+function findEquationMotionFramePhase(
+  frame: EquationMotionFrame,
+  motifKind: EquationMotionFrameMotif["kind"],
+  phaseId: EquationMotionFramePhase["phaseId"]
+): EquationMotionFramePhase | undefined {
+  const motif = frame.visualMotifs.find(
+    (candidate) => candidate.kind === motifKind
+  );
+
+  return motif?.phases.find((phase) => phase.phaseId === phaseId);
 }
 
 function syncEquationMotionActiveState(
@@ -1946,18 +1965,10 @@ function cancellationTokenPose(
 function renderCancellationParticles(
   state: HTMLElement,
   group: CancellationMotionGroup,
-  progress: number
+  phase: EquationMotionFramePhase
 ): void {
-  const rawParticleProgress = progressBetweenSemanticBeat(
-    EQUATION_MOTION_BEAT_TIMELINE,
-    progress,
-    "cancel-collapse"
-  );
-  const particleProgress = easedProgressBetweenSemanticBeat(
-    EQUATION_MOTION_BEAT_TIMELINE,
-    progress,
-    "cancel-collapse"
-  );
+  const rawParticleProgress = phase.progress;
+  const particleProgress = phase.easedProgress;
   const particleOpacity =
     rawParticleProgress <= 0 || rawParticleProgress >= 1
       ? 0
@@ -1969,6 +1980,11 @@ function renderCancellationParticles(
 
   syncCancellationParticleCanvas(canvas, bounds, pixelRatio);
   canvas.dataset["kpEquationMotionParticleRenderer"] = "webgl";
+  canvas.dataset["kpEquationMotionParticlePhase"] = phase.phaseId;
+  canvas.dataset["kpEquationMotionParticlePhaseProgress"] =
+    formatEquationMotionProgress(rawParticleProgress);
+  canvas.dataset["kpEquationMotionParticleEasedPhaseProgress"] =
+    formatEquationMotionProgress(particleProgress);
   canvas.dataset["kpEquationMotionParticleCount"] = String(group.particleCount);
 
   renderer.render({

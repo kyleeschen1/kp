@@ -21,7 +21,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure or arbitrary visual effects without asking."
   ],
   "goal": "Run the approved semantic transition runtime loop.",
-  "target": "next.kp.demo-motif-phase-diagnostics",
+  "target": "next.kp.cancel-particles-frame-phase-routing",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -72,6 +72,12 @@
       "id": "next.kp.demo-motif-phase-diagnostics",
       "title": "Expose active motif phase diagnostics",
       "summary": "Working the demo motif phase diagnostics slice under the approved semantic transition runtime contract.",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.cancel-particles-frame-phase-routing",
+      "title": "Route cancel particles through frame phases",
+      "summary": "Working the cancel particle frame-phase routing slice under the approved semantic transition runtime contract.",
       "status": "complete"
     }
   ]

@@ -1,0 +1,56 @@
+{
+  "id": "next.kp.cancel-particles-frame-phase-routing",
+  "kind": "next-action",
+  "title": "Route cancel particles through frame phases",
+  "status": "resolved",
+  "domain": "kp.animation-runtime",
+  "summary": "Cancelation WebGL particles now use the sampled cancel-collapse visual motif phase from EquationMotionFrame instead of recomputing phase progress in the controller.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Routes cancel particle progress through frame visual motif phase data and writes rendered phase metadata onto the particle canvas."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Asserts cancelation particles expose cancel-collapse raw and eased phase progress while scrubbing."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/katex-transition.browser.spec.ts -g editor-equation-motion-demo-uses-semantic-playback-plans",
+      "status": "passed",
+      "scope": "Focused browser test for semantic playback and cancel particle phase routing.",
+      "checkedAt": "2026-07-10T10:00:36.437Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full Node test suite.",
+      "checkedAt": "2026-07-10T10:00:36.457Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "App, node, and test TypeScript projects.",
+      "checkedAt": "2026-07-10T10:00:36.476Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation.",
+      "checkedAt": "2026-07-10T10:00:36.492Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-10T10:00:36.509Z",
+      "scope": "Production build and typecheck; Vite large chunk warning remains."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Cancelation WebGL particles now use the sampled cancel-collapse visual motif phase from EquationMotionFrame instead of recomputing phase progress in the controller."
+  }
+}

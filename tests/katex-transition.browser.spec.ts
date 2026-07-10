@@ -1147,6 +1147,11 @@ test("editor equation motion demo uses semantic playback plans", async ({
           return {
             exists: true,
             renderer: canvas.dataset["kpEquationMotionParticleRenderer"],
+            phase: canvas.dataset["kpEquationMotionParticlePhase"],
+            phaseProgress:
+              canvas.dataset["kpEquationMotionParticlePhaseProgress"],
+            easedPhaseProgress:
+              canvas.dataset["kpEquationMotionParticleEasedPhaseProgress"],
             particleCount: Number(
               canvas.dataset["kpEquationMotionParticleCount"] ?? 0
             ),
@@ -1294,6 +1299,15 @@ test("editor equation motion demo uses semantic playback plans", async ({
   expect(cancellationMotionState.dissolve.activePhases).toContain(
     "cancel-collapse"
   );
+  expect(cancellationMotionState.dissolve.webglParticles.phase).toBe(
+    "cancel-collapse"
+  );
+  expect(cancellationMotionState.dissolve.webglParticles.phaseProgress).toBe(
+    "0.6"
+  );
+  expect(
+    cancellationMotionState.dissolve.webglParticles.easedPhaseProgress
+  ).toBe("0.84");
   expect(cancellationMotionState.dissolve.domParticleCount).toBe(0);
   expect(cancellationMotionState.webglParticlesVisible).toBe(true);
   expect(cancellationMotionState.dissolveFadingFromMinimumScale).toBe(true);
