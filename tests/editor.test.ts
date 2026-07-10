@@ -98,7 +98,7 @@ test("initial editor document contains a 3x3 identity matrix", () => {
   );
 });
 
-test("renderEditorDocument renders the identity matrix with KaTeX and API outline", () => {
+test("renderEditorDocument renders the equation demo and compact API outline", () => {
   const html = renderEditorDocument(createInitialEditorDocument());
 
   assert.match(html, /data-kp-api-outline/);
@@ -146,6 +146,7 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
   assert.match(html, /data-kp-api-outline-group="embeds-export"/);
   assert.match(html, /data-kp-api-outline-item="authoring-transform-fixture-contract"/);
   assert.match(html, />TransformFixtureDocument</);
+  assert.match(html, /api-outline__item--row/);
   assert.match(html, /data-kp-api-sample-card/);
   assert.match(html, /Select an API item to preview its future sample card/);
   assert.match(html, />Semantic API</);
@@ -213,19 +214,10 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
   );
   assert.match(html, /data-action="equation-motion-next"[^>]*>Forward</);
   assert.match(html, /data-kp-motion-operator="binary"/);
-  assert.match(html, /data-kp-editor-visual-tuning/);
-  assert.match(html, /Visual Tuning/);
-  assert.match(html, /Operator size/);
-  assert.match(
-    html,
-    /type="range"[^>]*data-action="set-katex-operator-scale"[^>]*min="50"[^>]*max="150"[^>]*step="1"[^>]*value="85"/
-  );
-  assert.match(html, /data-role="katex-operator-scale-output"[^>]*>85%</);
-  assert.ok(
-    html.indexOf("data-kp-equation-motion-demo") <
-      html.indexOf("data-kp-editor-visual-tuning"),
-    "KaTeX visual tuning controls should render below the equation example"
-  );
+  assert.doesNotMatch(html, /data-kp-editor-visual-tuning/);
+  assert.doesNotMatch(html, /Visual Tuning/);
+  assert.doesNotMatch(html, /Operator size/);
+  assert.doesNotMatch(html, /data-action="set-katex-operator-scale"/);
   assert.equal(
     html.match(/data-kp-equation-motion-state="/g)?.length,
     4
@@ -270,8 +262,8 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
     extractEquationMotionStateBlock(html, 2),
     /data-kp-motion-id="lhs\.plus"/
   );
-  assert.match(html, /data-kp-object="identity-3x3"/);
-  assert.match(html, /data-kp-render-node="rn-identity-3x3-default-latex"/);
+  assert.doesNotMatch(html, /data-kp-object="identity-3x3"/);
+  assert.doesNotMatch(html, /data-kp-render-node="rn-identity-3x3-default-latex"/);
   assert.match(html, /data-kp-object="formula-ftc-derivative"/);
   assert.match(html, /data-kp-render-node="rn-formula-ftc-derivative-default-latex"/);
   assert.match(html, /data-kp-object="formula-fourier-transform"/);
@@ -372,12 +364,8 @@ test("renderEditorDocument renders the identity matrix with KaTeX and API outlin
   assert.match(html, /id="compiled-source"/);
   assert.match(html, /No validation issues/);
   assert.ok(
-    html.indexOf('data-kp-object="identity-3x3"') <
-      html.indexOf('data-kp-equation-motion-demo')
-  );
-  assert.ok(
     html.indexOf('data-kp-equation-motion-demo') <
-      html.indexOf('data-kp-object="saddle-orbit-graph"')
+      html.indexOf('data-kp-object="formula-ftc-derivative"')
   );
   assert.ok(
     html.indexOf('data-action="set-graph-azimuth"') <

@@ -15,28 +15,40 @@ test("project dashboard round trip keeps editor motion and graph controls usable
     "[data-kp-project-dashboard-animation-layout]"
   );
   await expect(animationLayout).toBeVisible();
-  const renderedSampleSearch = animationLayout.locator(
-    "[data-kp-animation-sample-search]"
+  const dashboardSearch = page.locator(
+    "[data-kp-project-dashboard-search]"
   );
-  await expect(animationLayout).toContainText("Rendered samples");
-  await expect(renderedSampleSearch).toHaveAttribute(
+  await expect(dashboardSearch).toBeVisible();
+  await expect(dashboardSearch).toHaveAttribute(
     "placeholder",
-    "Search rendered samples"
+    "Search work, animations, visuals, objects, reports"
   );
-  await renderedSampleSearch.fill("dnt");
+  await expect
+    .poll(async () => {
+      const searchBox = await dashboardSearch.boundingBox();
+      const animationBox = await animationLayout.boundingBox();
+
+      if (searchBox === null || animationBox === null) {
+        return false;
+      }
+
+      return searchBox.y + searchBox.height <= animationBox.y;
+    })
+    .toBe(true);
+  await dashboardSearch.fill("dnt");
   await expect(
-    animationLayout.locator('[data-kp-animation-sample="visual-donut-surface"]')
-  ).toBeVisible();
-  await expect(
-    animationLayout.locator('[data-kp-animation-sample="visual-mesh-graph"]')
-  ).toHaveCount(0);
-  await expect(
-    page.locator('[data-kp-project-card="work-project-dashboard-v1"]')
+    page.locator('[data-kp-project-gallery-item="visual-donut-surface"]')
   ).toBeVisible();
   await expect(
     page.locator('[data-kp-project-gallery-item="visual-mesh-graph"]')
+  ).toHaveCount(0);
+  await expect(
+    page.locator('[data-kp-project-card="work-project-dashboard-v1"]')
+  ).toHaveCount(0);
+  await dashboardSearch.fill("");
+  await expect(
+    page.locator('[data-kp-project-card="work-project-dashboard-v1"]')
   ).toBeVisible();
-  await renderedSampleSearch.fill("");
   await expect(page.locator("[data-kp-project-dashboard-contract]")).toContainText(
     "src/project-dashboard/data.ts"
   );
@@ -73,65 +85,9 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   await expect(page.locator('[data-role="semantic-json"]')).toHaveCount(0);
 
   const demo = page.locator("[data-kp-equation-motion-demo]");
-  const editorTuning = page.locator("[data-kp-editor-visual-tuning]");
-  const operatorScale = editorTuning.locator(
-    '[data-action="set-katex-operator-scale"]'
-  );
-  const operatorScaleOutput = editorTuning.locator(
-    '[data-role="katex-operator-scale-output"]'
-  );
-
-  await expect(editorTuning).toBeVisible();
-  await expect(operatorScale).toHaveValue("85");
-  await expect
-    .poll(async () => {
-      const demoBox = await demo.boundingBox();
-      const tuningBox = await editorTuning.boundingBox();
-
-      if (demoBox === null || tuningBox === null) {
-        return false;
-      }
-
-      return demoBox.y + demoBox.height <= tuningBox.y;
-    })
-    .toBe(true);
-  await operatorScale.evaluate((input) => {
-    const range = input as HTMLInputElement;
-
-    range.value = "92";
-    range.dispatchEvent(new Event("input", { bubbles: true }));
-  });
-  await expect(operatorScaleOutput).toHaveText("92%");
-  await expect
-    .poll(() =>
-      page.evaluate(() =>
-        document.documentElement.style.getPropertyValue(
-          "--kp-katex-operator-scale"
-        )
-      )
-    )
-    .toBe("0.92em");
-  await expect
-    .poll(() =>
-      page.evaluate(() => {
-        const operator = document.querySelector<HTMLElement>(
-          '[data-kp-motion-operator="binary"] .katex'
-        );
-
-        if (operator === null || operator.parentElement === null) {
-          return 0;
-        }
-
-        const parent = operator.parentElement;
-        const operatorSize = Number.parseFloat(
-          getComputedStyle(operator).fontSize
-        );
-        const parentSize = Number.parseFloat(getComputedStyle(parent).fontSize);
-
-        return Number((operatorSize / parentSize).toFixed(2));
-      })
-    )
-    .toBe(0.92);
+  await expect(page.locator("[data-kp-editor-visual-tuning]")).toHaveCount(0);
+  await expect(page.locator('[data-action="set-katex-operator-scale"]')).toHaveCount(0);
+  await expect(page.locator('[data-kp-object="identity-3x3"]')).toHaveCount(0);
 
   const matrixApiItem = page.locator(
     '[data-kp-api-outline-item="semantic-matrix"]'
@@ -143,8 +99,8 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   await expect(semanticObjectsGroup).not.toHaveAttribute("open", "");
   await semanticObjectsGroup.locator("summary").click();
   await expect(matrixApiItem).toBeVisible();
-  await matrixApiItem.click();
-  await expect(matrixApiItem).toHaveAttribute("aria-pressed", "true");
+  await matrixApiItem.hover();
+  await expect(matrixApiItem).toHaveAttribute("aria-pressed", "false");
   await expect(page.locator("[data-kp-api-sample-card]")).toContainText(
     "Matrix"
   );

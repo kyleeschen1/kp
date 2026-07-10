@@ -120,7 +120,6 @@ export function createInitialEditorDocument(): KpDocument {
 }
 
 export interface EditorRenderOptions {
-  readonly katexOperatorScalePercent?: number;
   readonly equationAnimationId?: string | undefined;
 }
 
@@ -129,9 +128,6 @@ export function renderEditorDocument(
   options: EditorRenderOptions = {}
 ): string {
   const validationIssues = validateKpDocument(document);
-  const katexOperatorScalePercent = normalizeOperatorScalePercent(
-    options.katexOperatorScalePercent ?? 85
-  );
   const validationHtml =
     validationIssues.length === 0
       ? `<p class="validation-status validation-status--ok">No validation issues</p>`
@@ -143,7 +139,6 @@ export function renderEditorDocument(
           .join("")}</ul>`;
   const renderedObjects = renderPreviewStage(
     document,
-    katexOperatorScalePercent,
     options.equationAnimationId
   );
 
@@ -188,52 +183,12 @@ export function renderEditorDocument(
 
 function renderPreviewStage(
   document: KpDocument,
-  katexOperatorScalePercent: number,
   equationAnimationId: string | undefined
 ): string {
-  let renderedEquationMotionDemo = false;
-  const renderedObjects = document.objects.map((object) => {
-    const preview = renderObjectPreview(object, document);
-
-    if (!renderedEquationMotionDemo && object.type === "matrix") {
-      renderedEquationMotionDemo = true;
-
-      return (
-        preview +
-        renderEquationMotionDemo(equationAnimationId) +
-        renderKatexVisualTuning(katexOperatorScalePercent)
-      );
-    }
-
-    return preview;
-  });
-
-  if (!renderedEquationMotionDemo) {
-    renderedObjects.unshift(
-      renderEquationMotionDemo(equationAnimationId) +
-        renderKatexVisualTuning(katexOperatorScalePercent)
-    );
-  }
-
-  return renderedObjects.join("");
-}
-
-function renderKatexVisualTuning(katexOperatorScalePercent: number): string {
-  return `
-    <section class="katex-visual-tuning" data-kp-visual-tuning data-kp-editor-visual-tuning aria-labelledby="editor-katex-visual-tuning-title">
-      <div class="katex-visual-tuning__header">
-        <h3 id="editor-katex-visual-tuning-title">Visual Tuning</h3>
-        <span>Runtime</span>
-      </div>
-      <div class="katex-visual-tuning__body">
-        <label class="katex-visual-tuning__range" for="editor-katex-operator-scale">
-          <span>Operator size</span>
-          <input id="editor-katex-operator-scale" type="range" data-action="set-katex-operator-scale" min="50" max="150" step="1" value="${katexOperatorScalePercent}" aria-label="Set KaTeX operator size" />
-          <output data-role="katex-operator-scale-output">${katexOperatorScalePercent}%</output>
-        </label>
-      </div>
-    </section>
-  `;
+  return [
+    renderEquationMotionDemo(equationAnimationId),
+    ...document.objects.map((object) => renderObjectPreview(object, document))
+  ].join("");
 }
 
 function renderObjectPreview(object: KpSemanticObject, document: KpDocument): string {
@@ -265,16 +220,8 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
         "rn-" + object.id + "-webgl-preview",
         `${renderGraph3DControls(object, document.objects)}<div class="object-preview__graph">${renderGraph3DWebGLShell(document.objects, object)}</div>`
       );
-    case "matrix": {
-      const latex = defaultLatexRenderer.render(object);
-      const html = renderLatexToHtml(latex);
-
-      return renderPreviewArticle(
-        object,
-        "rn-" + object.id + "-default-latex",
-        `<div class="object-preview__math">${html}</div>`
-      );
-    }
+    case "matrix":
+      return "";
   }
 }
 
@@ -749,14 +696,6 @@ function renderPreviewArticle(
       ${body}
     </article>
   `;
-}
-
-function normalizeOperatorScalePercent(value: number): number {
-  if (!Number.isFinite(value)) {
-    return 85;
-  }
-
-  return Math.min(150, Math.max(50, Math.round(value)));
 }
 
 function escapeHtml(value: string): string {

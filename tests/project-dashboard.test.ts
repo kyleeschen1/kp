@@ -55,25 +55,40 @@ test("renderProjectDashboard renders the prototype shell and seeded summaries", 
   assert.match(html, /Rendering\/time protocol/);
   assert.match(html, /Equation cancelation/);
   assert.match(html, /Animation protocol maturity/);
+  assert.match(
+    html,
+    /<details class="project-card project-card--row project-card--contract"[^>]*data-kp-project-dashboard-contract-card/
+  );
+  assert.match(
+    html,
+    /<details class="project-card project-card--row"[^>]*data-kp-project-gallery-item="animation-cancelation"/
+  );
+  assert.match(
+    html,
+    /<details class="project-card project-card--row project-card--report"[^>]*data-kp-project-report-theme="report-animation-protocol"/
+  );
 });
 
-test("renderProjectDashboard places the animation layout first", () => {
+test("renderProjectDashboard places global search above the animation layout", () => {
   const html = renderProjectDashboard(projectDashboardData);
+  const searchIndex = html.indexOf("data-kp-project-dashboard-search");
   const animationLayoutIndex = html.indexOf(
     "data-kp-project-dashboard-animation-layout"
   );
   const dataContractIndex = html.indexOf("data-kp-project-dashboard-contract");
   const workSectionIndex = html.indexOf("project-dashboard-work-title");
 
+  assert.notEqual(searchIndex, -1);
   assert.notEqual(animationLayoutIndex, -1);
   assert.notEqual(dataContractIndex, -1);
   assert.notEqual(workSectionIndex, -1);
+  assert.ok(searchIndex < animationLayoutIndex);
   assert.ok(animationLayoutIndex < dataContractIndex);
   assert.ok(animationLayoutIndex < workSectionIndex);
-  assert.match(html, /data-kp-animation-sample-search/);
-  assert.match(html, />Rendered samples</);
-  assert.match(html, /placeholder="Search rendered samples"/);
-  assert.doesNotMatch(html, /data-kp-project-dashboard-fuzzy-finder/);
+  assert.match(html, /data-action="filter-project-dashboard"/);
+  assert.match(html, />Search everything</);
+  assert.match(html, /placeholder="Search work, animations, visuals, objects, reports"/);
+  assert.doesNotMatch(html, /data-kp-animation-sample-search/);
 });
 
 test("groupProjectCardsByStatus groups top-level cards and sorts by priority", () => {
@@ -150,6 +165,15 @@ test("renderProjectDashboard renders work lanes, blockers, children, and related
 
   assert.equal(html.includes(phaseChildId), true);
   assert.equal(html.includes(topLevelChildId), false);
+  assert.match(
+    html,
+    /<details class="project-card project-card--row"[^>]*data-kp-project-card="work-project-dashboard-v1"/
+  );
+  assert.match(html, /class="project-card__row-summary"/);
+  assert.doesNotMatch(
+    html,
+    /<details class="project-card project-card--row"[^>]*data-kp-project-card="work-project-dashboard-v1"[^>]*open/
+  );
 });
 
 test("groupProjectGalleryItemsByKind groups gallery items by kind", () => {
@@ -288,23 +312,22 @@ test("filterProjectDashboardData finds cards and gallery items by text facets", 
   );
 });
 
-test("renderProjectDashboard searches rendered samples without filtering dashboard sections", () => {
+test("renderProjectDashboard searches all dashboard data", () => {
   const html = renderProjectDashboard(projectDashboardData, {
-    sampleQuery: "dnt"
+    query: "dnt"
   });
 
-  assert.match(html, /data-action="filter-project-rendered-samples"/);
+  assert.match(html, /data-action="filter-project-dashboard"/);
   assert.match(html, /value="dnt"/);
-  assert.match(html, /data-kp-animation-sample="visual-donut-surface"/);
-  assert.doesNotMatch(html, /data-kp-animation-sample="visual-mesh-graph"/);
-  assert.match(html, /data-kp-project-card="work-project-dashboard-v1"/);
-  assert.match(html, /data-kp-project-report-theme="report-dashboard-operations"/);
-  assert.match(html, /data-kp-project-gallery-item="visual-mesh-graph"/);
+  assert.match(html, /data-kp-project-gallery-item="visual-donut-surface"/);
+  assert.doesNotMatch(html, /data-kp-project-gallery-item="visual-mesh-graph"/);
+  assert.doesNotMatch(html, /data-kp-project-card="work-project-dashboard-v1"/);
+  assert.doesNotMatch(html, /data-kp-project-report-theme="report-dashboard-operations"/);
 });
 
-test("renderProjectDashboard renders grouped galleries independently of sample search", () => {
+test("renderProjectDashboard renders grouped galleries through global search", () => {
   const html = renderProjectDashboard(projectDashboardData, {
-    sampleQuery: "timeline"
+    query: "timeline"
   });
 
   assert.match(html, /data-kp-gallery-kind="animation"/);
@@ -318,7 +341,7 @@ test("renderProjectDashboard renders grouped galleries independently of sample s
   assert.match(html, /Visuals/);
   assert.match(html, /Timeline/);
   assert.match(html, /scroll clock/);
-  assert.match(html, /Equation cancelation/);
+  assert.doesNotMatch(html, /Equation cancelation/);
 });
 
 test("renderProjectDashboard renders KaTeX transform fixture selection UI", () => {

@@ -10,7 +10,7 @@ import { createInitialEditorDocument } from "../src/editor/editor.ts";
 test("compileHtmlFragment compiles semantic JSON into rendered HTML", () => {
   const fragment = compileHtmlFragment(createInitialEditorDocument());
 
-  assert.match(fragment, /data-kp-object="identity-3x3"/);
+  assert.doesNotMatch(fragment, /data-kp-object="identity-3x3"/);
   assert.doesNotMatch(fragment, /data-kp-object="parabola-graph"/);
   assert.doesNotMatch(fragment, /data-kp-object="curve-y-equals-x-squared"/);
   assert.match(fragment, /data-kp-equation-motion-demo/);

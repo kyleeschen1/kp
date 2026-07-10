@@ -5,7 +5,10 @@ import {
   createInitialEditorDocument,
   renderEditorDocument
 } from "./editor/editor.ts";
-import { selectApiCatalogItem } from "./editor/api-catalog.ts";
+import {
+  previewApiCatalogItem,
+  selectApiCatalogItem
+} from "./editor/api-catalog.ts";
 import { compileDocumentAsset } from "./editor/compile-client.ts";
 import {
   handleEquationMotionDemoKeydown,
@@ -63,10 +66,9 @@ if (app === null) {
 
 const appRoot = app;
 let editorDocument = createInitialEditorDocument();
-let projectDashboardSampleQuery = "";
+let projectDashboardQuery = "";
 let projectDashboardSelectedKatexFixtureId: string | undefined;
 let selectedEquationAnimationId: string | undefined;
-let katexOperatorScalePercent = 85;
 type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
 let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
@@ -82,7 +84,6 @@ declare global {
 
 window.__kpEquationMotionSetProgress = setEquationMotionProgress;
 
-applyKatexOperatorScale(katexOperatorScalePercent);
 renderEditor();
 
 appRoot.addEventListener("click", (event) => {
@@ -126,6 +127,14 @@ appRoot.addEventListener("click", (event) => {
 
 appRoot.addEventListener("keydown", (event) => {
   handleEquationMotionDemoKeydown(event);
+});
+
+appRoot.addEventListener("mouseover", (event) => {
+  previewApiCatalogItemFromEvent(event);
+});
+
+appRoot.addEventListener("focusin", (event) => {
+  previewApiCatalogItemFromEvent(event);
 });
 
 appRoot.addEventListener("change", (event) => {
@@ -191,11 +200,8 @@ appRoot.addEventListener("input", (event) => {
     case "set-equation-motion-collapse-scale":
       setEquationMotionCollapseScale(event.target);
       return;
-    case "set-katex-operator-scale":
-      updateKatexOperatorScaleFromInput(event.target);
-      return;
-    case "filter-project-rendered-samples":
-      filterProjectRenderedSamplesFromInput(event.target);
+    case "filter-project-dashboard":
+      filterProjectDashboardFromInput(event.target);
       return;
   }
 });
@@ -243,7 +249,6 @@ function addEquationGraphFromInput(): void {
 function renderEditor(): void {
   disposeGraph3DWebGL(appRoot);
   appRoot.innerHTML = renderEditorDocument(editorDocument, {
-    katexOperatorScalePercent,
     equationAnimationId: selectedEquationAnimationId
   });
   hydrateEquationMotionDemos(appRoot);
@@ -256,12 +261,12 @@ function selectEquationAnimation(select: HTMLSelectElement): void {
 }
 
 function renderProjectDashboardView(
-  sampleQuery = projectDashboardSampleQuery
+  query = projectDashboardQuery
 ): void {
-  projectDashboardSampleQuery = sampleQuery;
+  projectDashboardQuery = query;
   disposeGraph3DWebGL(appRoot);
   appRoot.innerHTML = renderProjectDashboard(projectDashboardData, {
-    sampleQuery,
+    query,
     selectedKatexFixtureId: projectDashboardSelectedKatexFixtureId
   });
 }
@@ -269,16 +274,16 @@ function renderProjectDashboardView(
 function selectKatexTransformFixture(button: HTMLButtonElement): void {
   projectDashboardSelectedKatexFixtureId =
     button.dataset["kpKatexTransformFixture"];
-  renderProjectDashboardView(projectDashboardSampleQuery);
+  renderProjectDashboardView(projectDashboardQuery);
 }
 
-function filterProjectRenderedSamplesFromInput(input: HTMLInputElement): void {
+function filterProjectDashboardFromInput(input: HTMLInputElement): void {
   const query = getProjectDashboardSearchQuery(input);
 
   renderProjectDashboardView(query);
 
   const nextInput = appRoot.querySelector<HTMLInputElement>(
-    "[data-kp-animation-sample-search]"
+    "[data-kp-project-dashboard-search]"
   );
 
   if (nextInput !== null) {
@@ -287,41 +292,16 @@ function filterProjectRenderedSamplesFromInput(input: HTMLInputElement): void {
   }
 }
 
-function updateKatexOperatorScaleFromInput(input: HTMLInputElement): void {
-  katexOperatorScalePercent = clampPercent(Number(input.value), 50, 150, 85);
-  input.value = String(katexOperatorScalePercent);
-  applyKatexOperatorScale(katexOperatorScalePercent);
-
-  const panel = input.closest<HTMLElement>("[data-kp-visual-tuning]");
-  const output = panel?.querySelector<HTMLOutputElement>(
-    '[data-role="katex-operator-scale-output"]'
-  );
-
-  if (output !== undefined && output !== null) {
-    output.textContent = `${katexOperatorScalePercent}%`;
-  }
-}
-
-function applyKatexOperatorScale(percent: number): void {
-  const scale = (percent / 100).toFixed(2);
-
-  document.documentElement.style.setProperty(
-    "--kp-katex-operator-scale",
-    `${scale}em`
-  );
-}
-
-function clampPercent(
-  value: number,
-  min: number,
-  max: number,
-  fallback: number
-): number {
-  if (!Number.isFinite(value)) {
-    return fallback;
+function previewApiCatalogItemFromEvent(event: Event): void {
+  if (!(event.target instanceof Element)) {
+    return;
   }
 
-  return Math.min(max, Math.max(min, Math.round(value)));
+  const item = event.target.closest<HTMLElement>("[data-kp-api-outline-item]");
+
+  if (item !== null) {
+    previewApiCatalogItem(item);
+  }
 }
 
 function hydrateGraph3DWebGL(

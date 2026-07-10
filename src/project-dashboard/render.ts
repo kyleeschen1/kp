@@ -21,7 +21,7 @@ import {
 import { findEquationAnimationForFixtureId } from "../editor/equation-animation-catalog.ts";
 
 export interface ProjectDashboardRenderOptions {
-  readonly sampleQuery?: string;
+  readonly query?: string;
   readonly selectedKatexFixtureId?: string | undefined;
 }
 
@@ -30,8 +30,8 @@ export function renderProjectDashboard(
   options: ProjectDashboardRenderOptions = {}
 ): string {
   const issues = validateProjectDashboardData(data);
-  const sampleQuery = options.sampleQuery ?? "";
-  const renderedData = data;
+  const query = options.query ?? "";
+  const renderedData = filterProjectDashboardData(data, query);
   const titles = createTitleLookup(data);
   const visibleIds = new Set(collectProjectDashboardIds(renderedData));
   const selectedKatexFixture = selectKatexFixture(
@@ -48,13 +48,8 @@ export function renderProjectDashboard(
         <button class="project-dashboard__back" type="button" data-action="show-editor">Back to Editor</button>
       </header>
       ${renderDataStatus(issues)}
-      ${renderAnimationLayoutSection(
-        renderedData.gallery,
-        titles,
-        visibleIds,
-        selectedKatexFixture,
-        sampleQuery
-      )}
+      ${renderProjectDashboardSearch(query)}
+      ${renderAnimationLayoutSection(selectedKatexFixture)}
       ${renderDataContract()}
       <div class="project-dashboard__grid">
         <section class="project-dashboard__section" aria-labelledby="project-dashboard-work-title">
@@ -89,6 +84,17 @@ export function renderProjectDashboard(
 
 export function getProjectDashboardSearchQuery(input: HTMLInputElement): string {
   return input.value;
+}
+
+function renderProjectDashboardSearch(query: string): string {
+  return `
+    <div class="project-dashboard__toolbar">
+      <label class="project-dashboard__search" for="project-dashboard-search">
+        <span>Search everything</span>
+        <input id="project-dashboard-search" type="search" value="${escapeHtml(query)}" data-action="filter-project-dashboard" data-kp-project-dashboard-search aria-label="Search project dashboard" placeholder="Search work, animations, visuals, objects, reports" />
+      </label>
+    </div>
+  `;
 }
 
 function renderWorkLanes(
@@ -158,83 +164,17 @@ function renderGalleryGroups(
 }
 
 function renderAnimationLayoutSection(
-  galleryItems: readonly ProjectGalleryItem[],
-  titles: ReadonlyMap<string, string>,
-  visibleIds: ReadonlySet<string>,
-  selectedKatexFixture: KatexTransformFixture,
-  sampleQuery: string
+  selectedKatexFixture: KatexTransformFixture
 ): string {
   return `
     <section class="project-dashboard__section project-dashboard__animation-layout" data-kp-project-dashboard-animation-layout aria-labelledby="project-dashboard-animation-layout-title">
       <div class="project-dashboard__section-header">
         <h2 id="project-dashboard-animation-layout-title">Animation Layout</h2>
-        <span>rendered sample finder</span>
+        <span>KaTeX fixtures</span>
       </div>
-      <div class="project-dashboard__animation-toolbar">
-        <label class="project-dashboard__search" for="project-dashboard-search">
-          <span>Rendered samples</span>
-          <input id="project-dashboard-search" type="search" value="${escapeHtml(sampleQuery)}" data-action="filter-project-rendered-samples" data-kp-animation-sample-search aria-label="Search rendered samples" placeholder="Search rendered samples" />
-        </label>
-      </div>
-      ${renderRenderedSampleGallery(galleryItems, titles, visibleIds, sampleQuery)}
       ${renderKatexTransformFixtureGallery(selectedKatexFixture)}
     </section>
   `;
-}
-
-function renderRenderedSampleGallery(
-  galleryItems: readonly ProjectGalleryItem[],
-  titles: ReadonlyMap<string, string>,
-  visibleIds: ReadonlySet<string>,
-  sampleQuery: string
-): string {
-  const sampleItems = getRenderedSampleItems(galleryItems);
-  const filteredSamples = filterProjectDashboardData(
-    { cards: [], gallery: sampleItems, reportThemes: [] },
-    sampleQuery
-  ).gallery;
-
-  return `
-    <section class="project-rendered-samples" data-kp-animation-samples aria-labelledby="project-rendered-samples-title">
-      <div class="project-rendered-samples__header">
-        <div>
-          <h3 id="project-rendered-samples-title">Rendered Samples</h3>
-          <p>Search examples of animations, visuals, and semantic objects already represented in the dashboard.</p>
-        </div>
-        <span>${filteredSamples.length}/${sampleItems.length} samples</span>
-      </div>
-      <div class="project-dashboard__cards project-rendered-samples__cards">
-        ${
-          filteredSamples.length === 0
-            ? `<p class="project-work-lane__empty">No rendered samples match this search.</p>`
-            : filteredSamples
-                .map((item) => renderRenderedSampleItem(item, titles, visibleIds))
-                .join("")
-        }
-      </div>
-    </section>
-  `;
-}
-
-function getRenderedSampleItems(
-  galleryItems: readonly ProjectGalleryItem[]
-): readonly ProjectGalleryItem[] {
-  return galleryItems.filter(
-    (item) =>
-      item.kind === "animation" ||
-      item.kind === "visual" ||
-      item.kind === "semantic-object"
-  );
-}
-
-function renderRenderedSampleItem(
-  item: ProjectGalleryItem,
-  titles: ReadonlyMap<string, string>,
-  visibleIds: ReadonlySet<string>
-): string {
-  return renderGalleryCard(item, titles, visibleIds, {
-    dataAttribute: `data-kp-animation-sample="${escapeHtml(item.id)}"`
-  });
 }
 
 function renderKatexTransformFixtureGallery(
@@ -384,28 +324,38 @@ function renderDataContract(): string {
         <h2 id="project-dashboard-contract-title">Data contract</h2>
         <span>V1 source</span>
       </div>
-      <article class="project-card project-card--contract">
-        <div class="project-card__interfaces">
-          <strong>Canonical source</strong>
-          <a href="${escapeHtml(projectDashboardDataContract.sourceFile)}">${escapeHtml(projectDashboardDataContract.sourceFile)}</a>
-        </div>
-        <div class="project-card__interfaces">
-          <strong>Codex completion rule</strong>
-          <span>${escapeHtml(projectDashboardDataContract.completionRule)}</span>
-        </div>
-        <div class="project-card__blockers" data-kp-dashboard-contract-notes>
-          <strong>V1 notes</strong>
-          <ul>
-            ${projectDashboardDataContract.notes
-              .map((note) => `<li>${escapeHtml(note)}</li>`)
-              .join("")}
-          </ul>
-        </div>
-        <div class="project-card__related">
-          <strong>Design</strong>
-          <a href="${escapeHtml(projectDashboardDataContract.designDocHref)}">Project dashboard V1 write protocol</a>
-        </div>
-      </article>
+      <div class="project-dashboard__cards">
+        <details class="project-card project-card--row project-card--contract" data-kp-project-dashboard-contract-card>
+          ${renderCardRowSummary(
+            "Data contract",
+            "active",
+            "V1 source",
+            "Canonical dashboard write source and Codex update rule."
+          )}
+          <div class="project-card__details">
+            <div class="project-card__interfaces">
+              <strong>Canonical source</strong>
+              <a href="${escapeHtml(projectDashboardDataContract.sourceFile)}">${escapeHtml(projectDashboardDataContract.sourceFile)}</a>
+            </div>
+            <div class="project-card__interfaces">
+              <strong>Codex completion rule</strong>
+              <span>${escapeHtml(projectDashboardDataContract.completionRule)}</span>
+            </div>
+            <div class="project-card__blockers" data-kp-dashboard-contract-notes>
+              <strong>V1 notes</strong>
+              <ul>
+                ${projectDashboardDataContract.notes
+                  .map((note) => `<li>${escapeHtml(note)}</li>`)
+                  .join("")}
+              </ul>
+            </div>
+            <div class="project-card__related">
+              <strong>Design</strong>
+              <a href="${escapeHtml(projectDashboardDataContract.designDocHref)}">Project dashboard V1 write protocol</a>
+            </div>
+          </div>
+        </details>
+      </div>
     </section>
   `;
 }
@@ -421,15 +371,16 @@ function renderProjectCard(
     : `data-kp-project-card="${escapeHtml(card.id)}"`;
 
   return `
-    <article class="project-card${options.child ? " project-card--child" : ""}" id="${escapeHtml(card.id)}" ${dataAttribute} data-kp-priority="${escapeHtml(card.priority)}">
-      ${renderMeta(card.status, card.priority)}
-      <h3>${escapeHtml(card.title)}</h3>
-      <p>${escapeHtml(card.summary)}</p>
-      ${renderBlockers(card.blockers ?? [])}
-      ${renderTags(card.tags)}
-      ${renderRelatedLinks(card.relatedIds ?? [], titles, visibleIds)}
-      ${renderChildCards(card.children ?? [], titles, visibleIds)}
-    </article>
+    <details class="project-card project-card--row${options.child ? " project-card--child" : ""}" id="${escapeHtml(card.id)}" ${dataAttribute} data-kp-priority="${escapeHtml(card.priority)}">
+      ${renderCardRowSummary(card.title, card.status, card.priority, card.summary)}
+      <div class="project-card__details">
+        <p>${escapeHtml(card.summary)}</p>
+        ${renderBlockers(card.blockers ?? [])}
+        ${renderTags(card.tags)}
+        ${renderRelatedLinks(card.relatedIds ?? [], titles, visibleIds)}
+        ${renderChildCards(card.children ?? [], titles, visibleIds)}
+      </div>
+    </details>
   `;
 }
 
@@ -457,14 +408,15 @@ function renderGalleryCard(
     options.id === undefined ? "" : `id="${escapeHtml(options.id)}" `;
 
   return `
-    <article class="project-card" ${idAttribute}${options.dataAttribute}>
-      ${renderMeta(item.status, item.kind)}
-      <h3>${escapeHtml(item.title)}</h3>
-      <p>${escapeHtml(item.summary)}</p>
-      ${renderTags([...item.domains, ...item.tags])}
-      ${renderInterfaces(item.interfaces ?? [])}
-      ${renderRelatedLinks(item.relatedIds ?? [], titles, visibleIds)}
-    </article>
+    <details class="project-card project-card--row" ${idAttribute}${options.dataAttribute}>
+      ${renderCardRowSummary(item.title, item.status, item.kind, item.summary)}
+      <div class="project-card__details">
+        <p>${escapeHtml(item.summary)}</p>
+        ${renderTags([...item.domains, ...item.tags])}
+        ${renderInterfaces(item.interfaces ?? [])}
+        ${renderRelatedLinks(item.relatedIds ?? [], titles, visibleIds)}
+      </div>
+    </details>
   `;
 }
 
@@ -474,18 +426,39 @@ function renderReportTheme(
   visibleIds: ReadonlySet<string>
 ): string {
   return `
-    <article class="project-card project-card--report" id="${escapeHtml(theme.id)}" data-kp-project-report-theme="${escapeHtml(theme.id)}">
-      ${renderMeta(theme.status, theme.grade ?? "Not reviewed")}
-      <h3>${escapeHtml(theme.title)}</h3>
-      <p>${escapeHtml(theme.scope)}</p>
-      ${renderReportReviewSummary(theme)}
-      ${renderReportQuestions(theme.questions)}
-      ${renderReportEvidence(theme.evidence)}
-      ${renderReportList("Risks", theme.risks)}
-      ${renderReportList("Next Actions", theme.recommendedNextActions)}
-      ${renderTags(theme.tags)}
-      ${renderRelatedLinks(theme.relatedIds ?? [], titles, visibleIds)}
-    </article>
+    <details class="project-card project-card--row project-card--report" id="${escapeHtml(theme.id)}" data-kp-project-report-theme="${escapeHtml(theme.id)}">
+      ${renderCardRowSummary(theme.title, theme.status, theme.grade ?? "Not reviewed", theme.scope)}
+      <div class="project-card__details">
+        <p>${escapeHtml(theme.scope)}</p>
+        ${renderReportReviewSummary(theme)}
+        ${renderReportQuestions(theme.questions)}
+        ${renderReportEvidence(theme.evidence)}
+        ${renderReportList("Risks", theme.risks)}
+        ${renderReportList("Next Actions", theme.recommendedNextActions)}
+        ${renderTags(theme.tags)}
+        ${renderRelatedLinks(theme.relatedIds ?? [], titles, visibleIds)}
+      </div>
+    </details>
+  `;
+}
+
+function renderCardRowSummary(
+  title: string,
+  status: string,
+  detail: string,
+  summary: string
+): string {
+  return `
+    <summary class="project-card__row-summary">
+      <span class="project-card__row-main">
+        <span class="project-card__row-title">${escapeHtml(title)}</span>
+        <span class="project-card__row-subtitle">${escapeHtml(summary)}</span>
+      </span>
+      <span class="project-card__row-meta">
+        <span class="project-card__status">${escapeHtml(status)}</span>
+        <span>${escapeHtml(detail)}</span>
+      </span>
+    </summary>
   `;
 }
 

@@ -162,13 +162,13 @@ export function selectApiCatalogItem(button: HTMLButtonElement): void {
   }
 
   const selectedId = button.dataset["kpApiOutlineItem"];
-  const card = outline.querySelector<HTMLElement>("[data-kp-api-sample-card]");
 
-  if (selectedId === undefined || card === null) {
+  if (selectedId === undefined) {
     return;
   }
 
   outline.dataset["kpApiCatalogSelected"] = selectedId;
+  previewApiCatalogItem(button);
 
   outline
     .querySelectorAll<HTMLButtonElement>("[data-kp-api-outline-item]")
@@ -178,13 +178,27 @@ export function selectApiCatalogItem(button: HTMLButtonElement): void {
       candidate.setAttribute("aria-pressed", selected ? "true" : "false");
       candidate.classList.toggle("api-outline__item--selected", selected);
     });
+}
+
+export function previewApiCatalogItem(item: HTMLElement): void {
+  const outline = item.closest<HTMLElement>("[data-kp-api-outline]");
+
+  if (outline === null) {
+    return;
+  }
+
+  const card = outline.querySelector<HTMLElement>("[data-kp-api-sample-card]");
+
+  if (card === null) {
+    return;
+  }
 
   setText(card, "api-outline-sample-eyebrow", "Sample card preview");
-  setText(card, "api-outline-sample-title", button.dataset["kpApiItemTitle"]);
+  setText(card, "api-outline-sample-title", item.dataset["kpApiItemTitle"]);
   setText(
     card,
     "api-outline-sample-summary",
-    button.dataset["kpApiItemSummary"]
+    item.dataset["kpApiItemSummary"]
   );
 
   const tags = card.querySelector<HTMLElement>(
@@ -192,7 +206,7 @@ export function selectApiCatalogItem(button: HTMLButtonElement): void {
   );
 
   if (tags !== null) {
-    const tagValues = (button.dataset["kpApiItemTags"] ?? "")
+    const tagValues = (item.dataset["kpApiItemTags"] ?? "")
       .split(",")
       .map((tag) => tag.trim())
       .filter((tag) => tag.length > 0);
@@ -225,7 +239,7 @@ function renderApiCatalogGroup(group: ApiCatalogGroup): string {
 
 function renderApiCatalogItem(item: ApiCatalogItem): string {
   return `
-            <button class="api-outline__item" type="button" data-action="select-api-outline-item" data-kp-api-outline-item="${escapeHtml(item.id)}" data-kp-api-item-title="${escapeHtml(item.title)}" data-kp-api-item-kind="${escapeHtml(item.kind)}" data-kp-api-item-summary="${escapeHtml(item.summary)}" data-kp-api-item-tags="${escapeHtml(item.tags.join(","))}" aria-pressed="false">
+            <button class="api-outline__item api-outline__item--row" type="button" data-action="select-api-outline-item" data-kp-api-outline-item="${escapeHtml(item.id)}" data-kp-api-item-title="${escapeHtml(item.title)}" data-kp-api-item-kind="${escapeHtml(item.kind)}" data-kp-api-item-summary="${escapeHtml(item.summary)}" data-kp-api-item-tags="${escapeHtml(item.tags.join(","))}" aria-pressed="false">
               <span class="api-outline__item-main">${escapeHtml(item.title)}</span>
               <span class="api-outline__item-meta">${escapeHtml(item.kind)} / ${escapeHtml(item.status)}</span>
             </button>
