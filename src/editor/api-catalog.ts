@@ -166,8 +166,26 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
       item("layout-column", "column", "layout", "proposed", "Stacks child views vertically for narrow or stepwise explanations.", ["composition", "responsive"]),
       item("layout-stack", "stack", "layout", "proposed", "Layers views, annotations, overlays, and focus states in one stage.", ["overlay", "annotation"]),
       item("layout-grid", "grid", "layout", "proposed", "Arranges repeated cards, matrix-like views, or gallery fixtures.", ["composition", "cards"]),
+      item("layout-split", "split", "layout", "proposed", "Divides a region into resizable or ratio-bound panes with stable child selectors.", ["panes", "responsive"], {
+        protocols: ["render", "measure"],
+        views: ["split-pane"],
+        lenses: ["primary pane", "secondary pane", "resizer"],
+        preserves: ["pane identity", "child selector identity"]
+      }),
       item("layout-tabs", "tabs", "layout", "proposed", "Switches between LaTeX, grid, graph, code, and inspector views of the same object.", ["views", "navigation"]),
+      item("layout-overlay", "overlay", "layout", "proposed", "Attaches annotations, focus states, and renderer layers above a base view without changing the base object.", ["annotation", "layer"], {
+        protocols: ["render", "measure"],
+        views: ["layered-stage"],
+        lenses: ["base", "overlay layers", "targets"],
+        preserves: ["base view identity", "overlay selector targets"]
+      }),
       item("layout-scroll-sequence", "scroll-sequence", "layout", "proposed", "Maps scroll position onto timeline progress and layout states.", ["timeline", "scroll"]),
+      item("layout-pinned-stage", "pinned-stage", "layout", "proposed", "Resolves a pinned object-time reference and keeps child layout stable while time, focus, or annotations change.", ["pinned", "stage", "timeline"], {
+        protocols: ["render", "animate", "pin"],
+        views: ["stage", "timeline-stage"],
+        lenses: ["pinned ref", "children", "time window"],
+        preserves: ["pinned object-time reference", "child selector identity"]
+      }),
       item("layout-synchronized-panel", "synchronized-panel", "layout", "proposed", "Keeps equation, graph, code, and explanation panels on one shared playhead.", ["sync", "playhead"], {
         protocols: ["render", "animate"],
         views: ["equation-panel", "graph-panel", "code-panel"],

@@ -264,6 +264,27 @@ test("renderProjectDashboard selects API rows into the shared preview", () => {
   );
 });
 
+test("renderProjectDashboard renders layout object API rows", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "api-layout-pinned-stage"
+  });
+
+  assert.match(html, /data-kp-agenda-row="api-layout-split"/);
+  assert.match(html, /data-kp-agenda-row="api-layout-overlay"/);
+  assert.match(html, /data-kp-agenda-row="api-layout-pinned-stage"/);
+  assert.match(html, /data-kp-selected-agenda-row="api-layout-pinned-stage"/);
+  assert.match(html, /pinned-stage/);
+  assert.match(html, /data-kp-preview-field="API category"[^>]*>layout</);
+  assert.match(
+    html,
+    /data-kp-preview-field="Protocols"[^>]*>render, animate, pin</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Preserves"[^>]*>pinned object-time reference, child selector identity</
+  );
+});
+
 test("renderProjectDashboard selects gallery authoring rows into the shared preview", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "visual-webgl-graph"

@@ -2,6 +2,7 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import {
+  apiCatalogGroups,
   apiCatalogItemDetailFields,
   apiCatalogItemSearchFields,
   findApiCatalogItem
@@ -86,6 +87,45 @@ test("API catalog covers notation and layout entities with the same metadata pro
   assert.deepEqual(synchronizedPanel?.item.details?.preserves, [
     "shared playhead",
     "selected semantic object"
+  ]);
+});
+
+test("API catalog exposes the complete layout object vocabulary", () => {
+  const layoutGroup = apiCatalogGroups.find(
+    (group) => group.id === "layout-objects"
+  );
+  const split = findApiCatalogItem("layout-split");
+  const overlay = findApiCatalogItem("layout-overlay");
+  const pinnedStage = findApiCatalogItem("layout-pinned-stage");
+
+  assert.deepEqual(
+    layoutGroup?.items.map((item) => item.id),
+    [
+      "layout-row",
+      "layout-column",
+      "layout-stack",
+      "layout-grid",
+      "layout-split",
+      "layout-tabs",
+      "layout-overlay",
+      "layout-scroll-sequence",
+      "layout-pinned-stage",
+      "layout-synchronized-panel"
+    ]
+  );
+  assert.deepEqual(split?.item.details?.lenses, [
+    "primary pane",
+    "secondary pane",
+    "resizer"
+  ]);
+  assert.deepEqual(overlay?.item.details?.preserves, [
+    "base view identity",
+    "overlay selector targets"
+  ]);
+  assert.deepEqual(pinnedStage?.item.details?.protocols, [
+    "render",
+    "animate",
+    "pin"
   ]);
 });
 

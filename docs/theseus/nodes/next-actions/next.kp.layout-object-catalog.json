@@ -2,7 +2,48 @@
   "id": "next.kp.layout-object-catalog",
   "kind": "next-action",
   "title": "Add layout object catalog rows",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.layout",
-  "summary": "Add layout object catalog rows for row, column, stack, grid, split, tabs, overlay, scroll sequence, and pinned stage."
+  "summary": "Completed the layout object API vocabulary with split, overlay, and pinned-stage rows.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "Adds split, overlay, and pinned-stage layout catalog items with render/measure/animate protocols, lenses, views, and identity preservation metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/api-catalog.test.ts",
+      "summary": "Pins the complete layout object vocabulary and verifies metadata for split, overlay, and pinned-stage rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers dashboard rendering and selected-row preview metadata for the new layout API rows."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/api-catalog.test.ts tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "API catalog and dashboard row rendering tests",
+      "checkedAt": "2026-07-10T21:11:12.194Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T21:11:12.216Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T21:11:12.244Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Completed the layout object API vocabulary with split, overlay, and pinned-stage rows."
+  }
 }
