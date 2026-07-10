@@ -4,5 +4,80 @@
   "title": "Extract visual motif module API",
   "status": "ready",
   "domain": "kp.animation-runtime",
-  "summary": "Create a reusable visual motif module/API for vanish, collapse/reveal, artifact replace, wrap/unwrap, layout shift, focus, compare, trace, and highlight-flow so the equation demo controller stops owning semantic-free timing logic."
+  "summary": "Create a reusable visual motif module/API for vanish, collapse/reveal, artifact replace, wrap/unwrap, layout shift, focus, compare, trace, and highlight-flow so the equation demo controller stops owning semantic-free timing logic.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-plan.ts",
+      "summary": "Current equation motion plan types and visual motif phase vocabulary."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-sampler.ts",
+      "summary": "Samples visual motif phases into renderer-consumable equation frames."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-motif-timeline.ts",
+      "summary": "Existing motif timeline helpers that should inform the extracted shared API."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Controller-local motif routing that should become thinner after extraction."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-plan.test.ts",
+      "summary": "Plan-level regression tests for motif phases and semantic beats."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-sampler.test.ts",
+      "summary": "Frame-sampling regression tests for motif timing."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.semantic-animation-runtime-roadmap",
+      "next.kp.radical-artifact-frame-phase-routing"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm test -- tests/equation-motion-plan.test.ts tests/equation-motion-sampler.test.ts tests/katex-transition-controller.test.ts",
+    "npm run test:browser:katex",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Where the boundary belongs between semantic transformations, reusable visual motifs, sampled frames, and controller-only DOM concerns.",
+    "Which current equation animation behaviors can be expressed as shared motif parameters without losing visual fidelity."
+  ],
+  "allowedWork": [
+    "Extract shared visual motif types, phase helpers, timing descriptors, and adapters from the equation motion plan/sampler/controller path.",
+    "Retain existing animation behavior while making the motif vocabulary reusable by KaTeX, graph, and future programming views.",
+    "Add focused tests that prove current cancel, simplify, wrap, radical, and layout-shift motifs still sample correctly."
+  ],
+  "disallowedWork": [
+    "Do not add new visual effects beyond the extracted API surface.",
+    "Do not redesign the dashboard or animation card while extracting the motif module.",
+    "Do not rewrite graph renderers or the semantic object model in this slice."
+  ],
+  "criteria": [
+    {
+      "id": "motif-api-reusable",
+      "weight": "high"
+    },
+    {
+      "id": "controller-routing-thinner",
+      "weight": "medium"
+    },
+    {
+      "id": "existing-motion-tests-pass",
+      "weight": "high"
+    }
+  ]
 }

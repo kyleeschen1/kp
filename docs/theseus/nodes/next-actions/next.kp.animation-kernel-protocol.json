@@ -4,5 +4,80 @@
   "title": "Define shared animation kernel protocol",
   "status": "ready",
   "domain": "kp.animation-runtime",
-  "summary": "Make the SemanticObject -> SemanticTransformation -> MotionPlan -> sampled frame -> renderer protocol explicit, typed, and renderer-neutral before adding more one-off animation behavior."
+  "summary": "Make the SemanticObject -> SemanticTransformation -> MotionPlan -> sampled frame -> renderer protocol explicit, typed, and renderer-neutral before adding more one-off animation behavior.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/document.ts",
+      "summary": "Semantic document/object identity model that should feed the animation protocol."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/animation.ts",
+      "summary": "Existing semantic animation primitives and lifecycle concepts."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-plan.ts",
+      "summary": "Current concrete MotionPlan vocabulary for equation transforms."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-player.ts",
+      "summary": "Current time/progress playback boundary for equation motion."
+    },
+    {
+      "kind": "file",
+      "path": "src/public/kp-animation-sdk.ts",
+      "summary": "Public animation SDK surface that should remain compatible or receive intentional wrappers."
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/headless-kernel-boundaries.ts",
+      "summary": "Headless/kernel boundary catalogue that should constrain renderer-neutral protocol placement."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.semantic-animation-runtime-roadmap",
+      "next.kp.visual-motif-module-api"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system",
+    "task.kp.public-animation-sdk"
+  ],
+  "verification": [
+    "npm test -- tests/equation-motion-player.test.ts tests/kp-animation-sdk.test.ts tests/headless-kernel-boundaries.test.ts tests/semantic.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "A minimal typed protocol for mapping semantic state plus time into deterministic renderer-neutral sampled frames.",
+    "Which parts of the current public SDK are protocol-shaped versus equation-demo-specific."
+  ],
+  "allowedWork": [
+    "Introduce renderer-neutral protocol types for semantic object refs, semantic transformation refs, motion plans, sampled frames, clocks, and renderer adapters.",
+    "Adapt current equation motion code to expose or consume the protocol without changing visible behavior.",
+    "Document protocol contracts close to the code and in Theseus source refs."
+  ],
+  "disallowedWork": [
+    "Do not break existing public SDK imports without a compatibility adapter.",
+    "Do not port graph animations before the protocol has tests against the equation path.",
+    "Do not encode mathematical semantics inside visual tween/motif helpers."
+  ],
+  "criteria": [
+    {
+      "id": "protocol-renderer-neutral",
+      "weight": "high"
+    },
+    {
+      "id": "sdk-compatibility-kept",
+      "weight": "high"
+    },
+    {
+      "id": "time-sampling-deterministic",
+      "weight": "high"
+    }
+  ]
 }

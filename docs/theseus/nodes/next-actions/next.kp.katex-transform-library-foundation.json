@@ -4,5 +4,80 @@
   "title": "Grow KaTeX transform library foundation",
   "status": "ready",
   "domain": "kp.katex",
-  "summary": "Expand the current fixture taxonomy into reusable transform definitions for fractions, radicals, exponents, functions, logs/trig, distribution/factoring, matrices, sums, products, integrals, limits, accents, bars, norms, and absolute values."
+  "summary": "Expand the current fixture taxonomy into reusable transform definitions for fractions, radicals, exponents, functions, logs/trig, distribution/factoring, matrices, sums, products, integrals, limits, accents, bars, norms, and absolute values.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-transform-fixtures.ts",
+      "summary": "Current authored KaTeX transform fixtures and sample taxonomy."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-animation-catalog.ts",
+      "summary": "Animation sample catalogue surfaced in the editor/dashboard."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/visual-artifact-lifecycle.ts",
+      "summary": "Existing artifact lifecycle helpers for non-token visual pieces such as radicals and brackets."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-token-snapshot.ts",
+      "summary": "KaTeX token identity and DOM snapshot machinery that constrains transform definitions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-token-snapshot.test.ts",
+      "summary": "Token snapshot tests covering KaTeX DOM identity extraction."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Browser regression suite for visible KaTeX animation samples."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.semantic-animation-runtime-roadmap",
+      "next.kp.visual-motif-module-api"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm test -- tests/equation-motion-plan.test.ts tests/katex-token-snapshot.test.ts tests/katex-token-matcher.test.ts",
+    "npm run test:browser:katex",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Which unusual KaTeX geometries need distinct semantic transform definitions versus reusable visual motif parameters.",
+    "How to preserve identity for tokens, wrappers, operators, radicals, brackets, fractions, scripts, and matrix entries across authored transitions."
+  ],
+  "allowedWork": [
+    "Extend the fixture/schema vocabulary to declare semantic transform intent, identity provenance, artifact policies, and default visual motifs.",
+    "Add representative transform definitions for fractions, radicals, exponents, functions, matrices, integrals, limits, sums/products, and wrappers.",
+    "Keep samples searchable and testable through the existing animation catalogue."
+  ],
+  "disallowedWork": [
+    "Do not attempt full arbitrary LaTeX parsing as part of this slice.",
+    "Do not add new WebGL particle effects unless they are already represented by the shared motif API.",
+    "Do not change the dashboard layout beyond catalogue data needed to expose the new transforms."
+  ],
+  "criteria": [
+    {
+      "id": "transform-intent-explicit",
+      "weight": "high"
+    },
+    {
+      "id": "identity-semantics-covered",
+      "weight": "high"
+    },
+    {
+      "id": "unusual-katex-samples-searchable",
+      "weight": "medium"
+    }
+  ]
 }

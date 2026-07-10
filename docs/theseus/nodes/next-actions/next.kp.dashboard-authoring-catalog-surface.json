@@ -4,5 +4,81 @@
   "title": "Promote dashboard to KP authoring catalog",
   "status": "ready",
   "domain": "kp.dashboard",
-  "summary": "Make the project dashboard a KP-first surface for semantic objects, transformations, visual motifs, renderers/views, samples/cards, coverage, blockers, maturity, and searchable authoring state."
+  "summary": "Make the project dashboard a KP-first surface for semantic objects, transformations, visual motifs, renderers/views, samples/cards, coverage, blockers, maturity, and searchable authoring state.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Current dashboard data builder and search catalogue source."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Current dashboard rendering surface and agenda-style rows."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/model.ts",
+      "summary": "Dashboard row/card model used by work, report cards, and object gallery entries."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "API/object catalogue source that should feed the authoring dashboard."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Node tests for dashboard data and render behavior."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.browser.spec.ts",
+      "summary": "Browser checks for dashboard search and interactive behavior."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.semantic-animation-runtime-roadmap",
+      "next.kp.visual-motif-module-api",
+      "next.kp.katex-transform-library-foundation"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm test -- tests/project-dashboard.test.ts tests/api-catalog.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+    "npm run test:browser:dashboard",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "What dashboard shape best supports fast navigation across work items, report cards, semantic objects, transformations, visual motifs, and rendered samples.",
+    "How much of the catalogue should be generated from typed runtime definitions versus curated dashboard metadata."
+  ],
+  "allowedWork": [
+    "Expose semantic objects, transformations, visual motifs, renderers/views, samples, maturity, status, blockers, and verification through searchable dashboard rows.",
+    "Keep the agenda-style dashboard layout: one row per entity, folded sections, search collapse, and preview-on-selection behavior.",
+    "Connect dashboard rows to source refs and Theseus nodes so future Codex runs can update project state."
+  ],
+  "disallowedWork": [
+    "Do not return to card-heavy dashboard layouts.",
+    "Do not make the dashboard depend on live browser-only runtime state for static catalogue rendering.",
+    "Do not implement every object/sample before the underlying catalogue schemas are stable."
+  ],
+  "criteria": [
+    {
+      "id": "agenda-navigation-kept",
+      "weight": "high"
+    },
+    {
+      "id": "catalogue-search-comprehensive",
+      "weight": "high"
+    },
+    {
+      "id": "theseus-state-writable",
+      "weight": "medium"
+    }
+  ]
 }

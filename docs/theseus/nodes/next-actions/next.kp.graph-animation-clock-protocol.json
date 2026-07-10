@@ -4,5 +4,79 @@
   "title": "Align graph animations to shared clock",
   "status": "ready",
   "domain": "kp.graph",
-  "summary": "Bring graph, surface, vector, curve, matrix-transform, and projection animations onto the same sampled frame lifecycle used by equation motifs, with SVG/WebGL renderers consuming renderer-neutral frames."
+  "summary": "Bring graph, surface, vector, curve, matrix-transform, and projection animations onto the same sampled frame lifecycle used by equation motifs, with SVG/WebGL renderers consuming renderer-neutral frames.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/graph-transitions.ts",
+      "summary": "Current graph transition interpolation code and likely first shared-clock adapter target."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/graph-webgl.ts",
+      "summary": "Current WebGL graph renderer boundary."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/graph-svg.ts",
+      "summary": "Current SVG graph renderer boundary."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/graph-2d-scene.ts",
+      "summary": "2D scene and layout model used by graph renderers."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/graph.ts",
+      "summary": "Semantic graph object model that should generate renderer-neutral graph frames."
+    },
+    {
+      "kind": "file",
+      "path": "tests/graph-transitions.test.ts",
+      "summary": "Graph transition tests for interpolation semantics."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.semantic-animation-runtime-roadmap",
+      "next.kp.animation-kernel-protocol"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm test -- tests/graph-transitions.test.ts tests/graph-webgl.test.ts tests/graph-2d-scene.test.ts tests/rendering.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "How much of the equation sampled-frame clock can be reused directly by graph, vector, surface, and projection animations.",
+    "Where SVG and WebGL graph renderers need separate view adapters while sharing semantic time and layout state."
+  ],
+  "allowedWork": [
+    "Create a graph animation adapter that samples semantic graph transitions through the shared clock/progress protocol.",
+    "Keep SVG and WebGL renderers consuming explicit frames rather than owning semantic timing.",
+    "Add tests that prove graph frames are deterministic and rewindable."
+  ],
+  "disallowedWork": [
+    "Do not replace Three.js/WebGL renderer internals unless the shared clock boundary requires a small adapter.",
+    "Do not build new graph authoring UI before the protocol is visible in tests.",
+    "Do not implement a full graph layout engine in this slice."
+  ],
+  "criteria": [
+    {
+      "id": "graph-clock-shared",
+      "weight": "high"
+    },
+    {
+      "id": "graph-rewind-deterministic",
+      "weight": "high"
+    },
+    {
+      "id": "renderer-adapters-small",
+      "weight": "medium"
+    }
+  ]
 }

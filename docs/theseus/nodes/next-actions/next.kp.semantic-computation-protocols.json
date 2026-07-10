@@ -4,5 +4,79 @@
   "title": "Add semantic computation protocols",
   "status": "ready",
   "domain": "kp.semantic-api",
-  "summary": "Define protocols such as toLatex, evaluate, differentiate, matrixForm, graphForm, numericSample, solveStep, and explainTransform for semantic objects that qualify."
+  "summary": "Define protocols such as toLatex, evaluate, differentiate, matrixForm, graphForm, numericSample, solveStep, and explainTransform for semantic objects that qualify.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/math/expression.ts",
+      "summary": "Current expression AST and computation-friendly symbolic model."
+    },
+    {
+      "kind": "file",
+      "path": "src/math/latex-to-expression.ts",
+      "summary": "Current limited LaTeX-to-expression conversion path."
+    },
+    {
+      "kind": "file",
+      "path": "src/math/surface-examples.ts",
+      "summary": "Current surface examples that connect math objects to rendered graph/surface forms."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/matrix.ts",
+      "summary": "Semantic matrix object model and likely matrix-form protocol target."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/latex-form.ts",
+      "summary": "Semantic LaTeX representation helpers."
+    },
+    {
+      "kind": "file",
+      "path": "tests/math-expression.test.ts",
+      "summary": "Expression-level regression tests for computation semantics."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.semantic-animation-runtime-roadmap",
+      "next.kp.animation-kernel-protocol"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm test -- tests/math-expression.test.ts tests/latex-to-expression.test.ts tests/semantic.test.ts tests/equation-graph.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Which semantic object families can safely expose computation protocols now and which need narrower templates or examples.",
+    "How to show the same object through LaTeX, graph, matrix, numeric sample, and explanation views without conflating type with presentation."
+  ],
+  "allowedWork": [
+    "Define capability-style protocols for qualifying semantic objects rather than making every object implement every operation.",
+    "Attach initial computation protocols to expression, matrix, graph, and LaTeX-backed objects where current tests can validate behavior.",
+    "Add catalogue metadata so the dashboard can show what protocols an object supports."
+  ],
+  "disallowedWork": [
+    "Do not build a complete CAS or theorem prover.",
+    "Do not make convenience templates such as identity matrix into separate semantic types unless they carry distinct structural semantics.",
+    "Do not add animation behavior in this slice except metadata needed to connect computation protocols to existing views."
+  ],
+  "criteria": [
+    {
+      "id": "protocols-capability-based",
+      "weight": "high"
+    },
+    {
+      "id": "latex-graph-matrix-linked",
+      "weight": "high"
+    },
+    {
+      "id": "no-type-explosion",
+      "weight": "medium"
+    }
+  ]
 }
