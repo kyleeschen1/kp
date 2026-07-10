@@ -36,8 +36,7 @@ import type {
 import {
   easedProgressBetweenSemanticBeat,
   findSemanticBeat,
-  linearEquationDemoBeatTimeline,
-  type SemanticBeatId
+  linearEquationDemoBeatTimeline
 } from "../rendering/semantic-beat-compiler.ts";
 
 const EQUATION_MOTION_ANIMATION_DURATION_MS = 1200;
@@ -671,6 +670,21 @@ function renderEquationMotionFrame(
     "cancel-collapse"
   );
   const finalSimplifyGroup = createFinalSimplifyMotionGroup(plan, context);
+  const finalSimplifyMeetPhase = findEquationMotionFramePhase(
+    frame,
+    "simplify-into",
+    "final-simplify-meet"
+  );
+  const finalSimplifyCollapsePhase = findEquationMotionFramePhase(
+    frame,
+    "simplify-into",
+    "final-simplify-collapse"
+  );
+  const finalSimplifyRevealPhase = findEquationMotionFramePhase(
+    frame,
+    "simplify-into",
+    "final-simplify-reveal"
+  );
   const artifactMotionIds = renderArtifactSeedReveal(
     demo,
     plan,
@@ -691,6 +705,12 @@ function renderEquationMotionFrame(
   demo.dataset["kpEquationMotionTargetAnchorCount"] =
     String(countContextTokensForStep(context, targetStep));
   syncEquationMotionMotifDiagnostics(demo, frame);
+  syncFinalSimplifyPhaseDiagnostics(
+    demo,
+    finalSimplifyMeetPhase,
+    finalSimplifyCollapsePhase,
+    finalSimplifyRevealPhase
+  );
   syncEquationMotionScrubber(
     demo,
     directionalProgress * readEquationMotionBeatCount(demo)
@@ -785,11 +805,14 @@ function renderEquationMotionFrame(
               collapseScale
             )
           : token.lifecycle === "simplify-into" &&
-              finalSimplifyGroup?.sourceTokenIds.has(token.id) === true
+              finalSimplifyGroup?.sourceTokenIds.has(token.id) === true &&
+              finalSimplifyMeetPhase !== undefined &&
+              finalSimplifyCollapsePhase !== undefined
             ? finalSimplifySourceTokenPose(
                 sourceToken,
                 finalSimplifyGroup,
-                frame.progress,
+                finalSimplifyMeetPhase,
+                finalSimplifyCollapsePhase,
                 collapseScale
               )
           : frameToken.pose,
@@ -800,12 +823,13 @@ function renderEquationMotionFrame(
     if (targetToken !== undefined) {
       applyEquationMotionTokenStyle(
         targetToken.motionElement,
-        token.id === finalSimplifyGroup?.targetTokenId
+        token.id === finalSimplifyGroup?.targetTokenId &&
+          finalSimplifyRevealPhase !== undefined
           ? finalSimplifyTargetTokenPose(
               targetToken,
               finalSimplifyGroup,
               frameToken.pose,
-              frame.progress,
+              finalSimplifyRevealPhase,
               collapseScale
             )
           : token.entryEffect === "direct"
@@ -848,6 +872,29 @@ function findEquationMotionFramePhase(
   );
 
   return motif?.phases.find((phase) => phase.phaseId === phaseId);
+}
+
+function syncFinalSimplifyPhaseDiagnostics(
+  demo: HTMLElement,
+  meetPhase: EquationMotionFramePhase | undefined,
+  collapsePhase: EquationMotionFramePhase | undefined,
+  revealPhase: EquationMotionFramePhase | undefined
+): void {
+  writeOptionalProgressDataset(
+    demo,
+    "kpEquationMotionFinalSimplifyMeetProgress",
+    meetPhase?.progress
+  );
+  writeOptionalProgressDataset(
+    demo,
+    "kpEquationMotionFinalSimplifyCollapseProgress",
+    collapsePhase?.progress
+  );
+  writeOptionalProgressDataset(
+    demo,
+    "kpEquationMotionFinalSimplifyRevealProgress",
+    revealPhase?.progress
+  );
 }
 
 function syncEquationMotionActiveState(
@@ -1915,6 +1962,19 @@ function writeDatasetList(
   element.dataset[key] = values.join(" ");
 }
 
+function writeOptionalProgressDataset(
+  element: HTMLElement,
+  key: string,
+  value: number | undefined
+): void {
+  if (value === undefined) {
+    delete element.dataset[key];
+    return;
+  }
+
+  element.dataset[key] = formatEquationMotionProgress(value);
+}
+
 function hiddenTokenPose(): MotionPose {
   return { opacity: 0, x: 0, y: 0, scale: 1 };
 }
@@ -1955,9 +2015,21 @@ function cancellationTokenPose(
   progress: number,
   collapseScale: number
 ): MotionPose {
-  return collapseTokenToMidpointPose(token, group, progress, {
-    meetBeatId: "cancel-meet",
-    collapseBeatId: "cancel-collapse",
+  const meetProgress = easedProgressBetweenSemanticBeat(
+    EQUATION_MOTION_BEAT_TIMELINE,
+    progress,
+    "cancel-meet"
+  );
+  const collapseProgress = easedProgressBetweenSemanticBeat(
+    EQUATION_MOTION_BEAT_TIMELINE,
+    progress,
+    "cancel-collapse"
+  );
+
+  return collapseTokenToMidpointPose(token, group, {
+    moveProgress: meetProgress,
+    shrinkProgress: meetProgress,
+    fadeProgress: collapseProgress,
     collapseScale
   });
 }
@@ -2130,12 +2202,14 @@ function createFinalSimplifyMotionGroup(
 function finalSimplifySourceTokenPose(
   token: StableMotionToken,
   group: FinalSimplifyMotionGroup,
-  progress: number,
+  meetPhase: EquationMotionFramePhase,
+  collapsePhase: EquationMotionFramePhase,
   collapseScale: number
 ): MotionPose {
-  return collapseTokenToMidpointPose(token, group, progress, {
-    meetBeatId: "final-simplify-meet",
-    collapseBeatId: "final-simplify-collapse",
+  return collapseTokenToMidpointPose(token, group, {
+    moveProgress: meetPhase.easedProgress,
+    shrinkProgress: meetPhase.easedProgress,
+    fadeProgress: collapsePhase.easedProgress,
     collapseScale
   });
 }
@@ -2144,14 +2218,10 @@ function finalSimplifyTargetTokenPose(
   token: StableMotionToken,
   group: FinalSimplifyMotionGroup,
   pose: MotionPose,
-  progress: number,
+  revealPhase: EquationMotionFramePhase,
   collapseScale: number
 ): MotionPose {
-  const revealProgress = easedProgressBetweenSemanticBeat(
-    EQUATION_MOTION_BEAT_TIMELINE,
-    progress,
-    "final-simplify-reveal"
-  );
+  const revealProgress = revealPhase.easedProgress;
   const center = stableTokenCenter(token);
   const midpointOffset = {
     x: group.midpoint.x - center.x,
@@ -2208,41 +2278,30 @@ function collapseMotionGeometryForTokens(
 function collapseTokenToMidpointPose(
   token: StableMotionToken,
   geometry: CollapseMotionGeometry,
-  progress: number,
-  beats: {
-    readonly meetBeatId: SemanticBeatId;
-    readonly collapseBeatId: SemanticBeatId;
+  phases: {
+    readonly moveProgress: number;
+    readonly shrinkProgress: number;
+    readonly fadeProgress: number;
     readonly collapseScale: number;
   }
 ): MotionPose {
   const center = stableTokenCenter(token);
   const startDistance = pointDistance(center, geometry.midpoint);
-  const baseMoveProgress = easedProgressBetweenSemanticBeat(
-    EQUATION_MOTION_BEAT_TIMELINE,
-    progress,
-    beats.meetBeatId
-  );
   const moveProgress = distanceAwareConvergenceProgress(
-    baseMoveProgress,
+    phases.moveProgress,
     center,
     geometry.midpoint,
     startDistance,
     geometry.maxDistance
   );
-  const shrinkProgress = easedProgressBetweenSemanticBeat(
-    EQUATION_MOTION_BEAT_TIMELINE,
-    progress,
-    beats.meetBeatId
+  const scale = interpolateNumber(
+    1,
+    phases.collapseScale,
+    phases.shrinkProgress
   );
-  const fadeProgress = easedProgressBetweenSemanticBeat(
-    EQUATION_MOTION_BEAT_TIMELINE,
-    progress,
-    beats.collapseBeatId
-  );
-  const scale = interpolateNumber(1, beats.collapseScale, shrinkProgress);
 
   return {
-    opacity: 1 - fadeProgress,
+    opacity: 1 - phases.fadeProgress,
     x: (geometry.midpoint.x - center.x) * moveProgress,
     y: (geometry.midpoint.y - center.y) * moveProgress,
     scale

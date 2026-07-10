@@ -1,0 +1,56 @@
+{
+  "id": "next.kp.final-simplify-frame-phase-routing",
+  "kind": "next-action",
+  "title": "Route final simplify through frame phases",
+  "status": "resolved",
+  "domain": "kp.animation-runtime",
+  "summary": "Final simplification source collapse and target reveal now use sampled visual motif phase frames, with raw phase progress exposed as diagnostics.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Routes final-simplify meet/collapse/reveal poses through EquationMotionFrame visual motif phases and writes phase progress diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Asserts final simplify active phases and phase progress diagnostics while scrubbing."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/katex-transition.browser.spec.ts -g editor-equation-motion-demo-uses-semantic-playback-plans",
+      "status": "passed",
+      "scope": "Focused browser test for semantic playback and final simplify phase routing.",
+      "checkedAt": "2026-07-10T10:05:58.663Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "App, node, and test TypeScript projects.",
+      "checkedAt": "2026-07-10T10:05:58.687Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full Node test suite.",
+      "checkedAt": "2026-07-10T10:05:58.705Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation.",
+      "checkedAt": "2026-07-10T10:05:58.724Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-10T10:05:58.741Z",
+      "scope": "Production build and typecheck; Vite large chunk warning remains."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Final simplification source collapse and target reveal now use sampled visual motif phase frames, with raw phase progress exposed as diagnostics."
+  }
+}

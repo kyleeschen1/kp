@@ -1429,6 +1429,14 @@ test("editor equation motion demo uses semantic playback plans", async ({
       return {
         progress: demoElement.dataset["kpEquationMotionProgress"],
         liquidMode: demoElement.dataset["kpEquationMotionLiquidMode"],
+        activeMotifs: demoElement.dataset["kpEquationMotionActiveMotifs"],
+        activePhases: demoElement.dataset["kpEquationMotionActivePhases"],
+        meetProgress:
+          demoElement.dataset["kpEquationMotionFinalSimplifyMeetProgress"],
+        collapseProgress:
+          demoElement.dataset["kpEquationMotionFinalSimplifyCollapseProgress"],
+        revealProgress:
+          demoElement.dataset["kpEquationMotionFinalSimplifyRevealProgress"],
         sourceTokens: sourceIds.map(snapshotSourceToken),
         targetToken: snapshotTargetToken(),
         liquidCanvasExists: canvas !== null
@@ -1547,15 +1555,28 @@ test("editor equation motion demo uses semantic playback plans", async ({
   });
 
   expect(finalSimplifyState.converging.progress).toBe("0.3");
+  expect(finalSimplifyState.converging.activeMotifs).toContain("simplify-into");
+  expect(finalSimplifyState.converging.activePhases).toContain(
+    "final-simplify-meet"
+  );
+  expect(finalSimplifyState.converging.meetProgress).toBe("0.75");
   expect(finalSimplifyState.sourceTokensMovedCloser).toBe(true);
   expect(finalSimplifyState.sourceTokensShrinking).toBe(true);
   expect(finalSimplifyState.sourceConvergenceProgressSpread).toBeGreaterThan(
     0.03
   );
   expect(finalSimplifyState.collapsed.progress).toBe("0.5");
+  expect(finalSimplifyState.collapsed.activePhases).toContain(
+    "final-simplify-collapse"
+  );
+  expect(finalSimplifyState.collapsed.collapseProgress).toBe("1");
   expect(finalSimplifyState.sourceTokensCollapsed).toBe(true);
   expect(finalSimplifyState.targetCollapsedAtMidpoint).toBe(true);
   expect(finalSimplifyState.emerging.progress).toBe("0.6");
+  expect(finalSimplifyState.emerging.activePhases).toContain(
+    "final-simplify-reveal"
+  );
+  expect(finalSimplifyState.emerging.revealProgress).toBe("0.5");
   expect(finalSimplifyState.sourceTokensStayCollapsed).toBe(true);
   expect(finalSimplifyState.targetEmerging).toBe(true);
   expect(finalSimplifyState.noLiquidRenderer).toBe(true);
