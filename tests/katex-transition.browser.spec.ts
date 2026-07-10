@@ -482,6 +482,64 @@ test("editor equation motion demo uses semantic playback plans", async ({
   expect(radicalArtifactState.nonTransparentPixelCount).toBeGreaterThan(0);
   expect(radicalArtifactState.maxAlpha).toBeGreaterThan(0);
 
+  await durationSlider.evaluate((element) => {
+    const input = element as HTMLInputElement;
+
+    input.value = "200";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await next.click();
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");
+  await rewind.click();
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "0");
+
+  const radicalReverseHandoffState = await page.evaluate(() => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    const overlay = demoElement.querySelector<HTMLCanvasElement>(
+      '[data-kp-equation-motion-artifact-overlay][data-kp-equation-motion-artifact-handoff="true"]'
+    );
+    const exponent = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="0"] [data-kp-motion-id="radical.rewrite-power-as-root.source.exponent"]'
+    );
+
+    if (overlay === null || exponent === null) {
+      return {
+        overlayExists: overlay !== null,
+        exponentExists: exponent !== null
+      };
+    }
+
+    const overlayStyle = getComputedStyle(overlay);
+    const exponentStyle = getComputedStyle(exponent);
+
+    return {
+      overlayExists: true,
+      exponentExists: true,
+      overlayConnected: overlay.isConnected,
+      overlayHandoff: overlay.dataset["kpEquationMotionArtifactHandoff"],
+      overlayPointerEvents: overlayStyle.pointerEvents,
+      exponentVisibility: exponentStyle.visibility,
+      exponentOpacity: Number(exponentStyle.opacity)
+    };
+  });
+
+  expect(radicalReverseHandoffState).toEqual({
+    overlayExists: true,
+    exponentExists: true,
+    overlayConnected: true,
+    overlayHandoff: "true",
+    overlayPointerEvents: "none",
+    exponentVisibility: "visible",
+    exponentOpacity: 1
+  });
+
   await animationSelect.selectOption("fixture-fraction-make-inline-to-stacked");
   const fractionScaleState = await page.evaluate(() => {
     const demoElement = document.querySelector<HTMLElement>(

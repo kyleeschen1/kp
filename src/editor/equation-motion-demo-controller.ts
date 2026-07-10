@@ -50,6 +50,7 @@ const EQUATION_MOTION_MAX_COLLAPSE_SCALE_PERCENT = 50;
 const EQUATION_MOTION_BEAT_TIMELINE = linearEquationDemoBeatTimeline;
 const EQUATION_MOTION_ENTER_INITIAL_SCALE = 0.82;
 const EQUATION_MOTION_DEMO_BEAT_LABEL_COUNT = 50;
+const EQUATION_MOTION_ARTIFACT_HANDOFF_MS = 220;
 const activeAnimations = new WeakMap<HTMLElement, ActiveEquationMotionAnimation>();
 const pausedAnimations = new WeakMap<HTMLElement, PausedEquationMotionAnimation>();
 const activeRenderContexts = new WeakMap<HTMLElement, EquationMotionRenderContext>();
@@ -435,9 +436,22 @@ function startEquationMotionAnimation(
       1
     );
     const nextProgress = startProgress + delta * timeProgress;
+    const shouldHandoffArtifact =
+      timeProgress >= 1 &&
+      shouldPreserveArtifactHandoffAtProgress(demo, targetProgress);
 
     activeAnimation.currentProgress = nextProgress;
-    player.setProgress(nextProgress);
+
+    if (shouldHandoffArtifact) {
+      syncEquationMotionProgressDataset(
+        demo,
+        sourceStep,
+        targetStep,
+        targetProgress
+      );
+    } else {
+      player.setProgress(nextProgress);
+    }
 
     if (timeProgress < 1) {
       activeAnimation.animationFrameId = window.requestAnimationFrame(tick);
@@ -446,11 +460,42 @@ function startEquationMotionAnimation(
 
     activeAnimations.delete(demo);
     delete demo.dataset["kpEquationMotionAnimating"];
-    syncEquationMotionActiveState(demo, targetStep);
+    syncEquationMotionActiveState(demo, targetStep, {
+      preserveArtifactHandoff: true
+    });
   };
 
   activeAnimation.animationFrameId = window.requestAnimationFrame(tick);
   activeAnimations.set(demo, activeAnimation);
+}
+
+function shouldPreserveArtifactHandoffAtProgress(
+  demo: HTMLElement,
+  progress: number
+): boolean {
+  return (
+    artifactSeedRevealContexts.has(demo) &&
+    (progress <= 0 || progress >= 1)
+  );
+}
+
+function syncEquationMotionProgressDataset(
+  demo: HTMLElement,
+  sourceStep: number,
+  targetStep: number,
+  canonicalProgress: number
+): void {
+  const directionalProgress =
+    sourceStep < targetStep ? canonicalProgress : 1 - canonicalProgress;
+
+  demo.dataset["kpEquationMotionPlanProgress"] =
+    formatEquationMotionProgress(canonicalProgress);
+  demo.dataset["kpEquationMotionProgress"] =
+    formatEquationMotionProgress(directionalProgress);
+  syncEquationMotionScrubber(
+    demo,
+    directionalProgress * readEquationMotionBeatCount(demo)
+  );
 }
 
 function createDemoEquationMotionTransition(
@@ -808,10 +853,18 @@ function renderEquationMotionFrame(
 
 function syncEquationMotionActiveState(
   demo: HTMLElement,
-  activeStep: number
+  activeStep: number,
+  options: { readonly preserveArtifactHandoff?: boolean } = {}
 ): void {
+  const handoffCanvas =
+    options.preserveArtifactHandoff === true
+      ? releaseArtifactSeedRevealForHandoff(demo)
+      : undefined;
+
   activeRenderContexts.delete(demo);
-  resetEquationMotionVisualState(demo);
+  resetEquationMotionVisualState(demo, {
+    preserveArtifactOverlays: handoffCanvas !== undefined
+  });
   delete demo.dataset["kpEquationMotionCancelMode"];
   clearCancellationParticles(demo);
   delete demo.dataset["kpEquationMotionLiquidMode"];
@@ -835,6 +888,7 @@ function syncEquationMotionActiveState(
       state.setAttribute("aria-hidden", active ? "false" : "true");
     });
   syncEquationMotionControls(demo, nextActiveStep);
+  fadeArtifactSeedRevealHandoff(handoffCanvas);
 }
 
 function getEquationMotionRenderContext(
@@ -935,8 +989,14 @@ function prepareEquationMotionTransitionLayers(
     });
 }
 
-function resetEquationMotionVisualState(demo: HTMLElement): void {
-  clearArtifactSeedReveal(demo);
+function resetEquationMotionVisualState(
+  demo: HTMLElement,
+  options: { readonly preserveArtifactOverlays?: boolean } = {}
+): void {
+  if (options.preserveArtifactOverlays !== true) {
+    clearArtifactSeedReveal(demo);
+  }
+
   demo
     .querySelectorAll<HTMLElement>("[data-kp-equation-motion-state]")
     .forEach((state) => {
@@ -1210,6 +1270,41 @@ function clearArtifactSeedReveal(demo: HTMLElement): void {
       "[data-kp-equation-motion-artifact-overlay]"
     )
     .forEach((canvas) => canvas.remove());
+}
+
+function releaseArtifactSeedRevealForHandoff(
+  demo: HTMLElement
+): HTMLCanvasElement | undefined {
+  const context = artifactSeedRevealContexts.get(demo);
+
+  if (context === undefined || !context.canvas.isConnected) {
+    return undefined;
+  }
+
+  context.disposed = true;
+  artifactSeedRevealContexts.delete(demo);
+  delete demo.dataset["kpEquationMotionArtifactMode"];
+  context.canvas.dataset["kpEquationMotionArtifactHandoff"] = "true";
+  context.canvas.style.opacity = "1";
+  context.canvas.style.transition = `opacity ${EQUATION_MOTION_ARTIFACT_HANDOFF_MS}ms ease`;
+  context.canvas.style.willChange = "opacity";
+
+  return context.canvas;
+}
+
+function fadeArtifactSeedRevealHandoff(
+  canvas: HTMLCanvasElement | undefined
+): void {
+  if (canvas === undefined) {
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    canvas.style.opacity = "0";
+    window.setTimeout(() => {
+      canvas.remove();
+    }, EQUATION_MOTION_ARTIFACT_HANDOFF_MS);
+  });
 }
 
 function syncArtifactCanvas(
