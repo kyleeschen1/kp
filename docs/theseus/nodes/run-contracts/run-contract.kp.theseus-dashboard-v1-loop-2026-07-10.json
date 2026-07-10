@@ -175,7 +175,7 @@
     {
       "id": "task.theseus.dashboard-add-verification-action-v0",
       "title": "Add-verification-write-action",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-cross-project-smoke-v0",

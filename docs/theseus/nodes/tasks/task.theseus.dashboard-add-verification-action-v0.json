@@ -1,0 +1,71 @@
+{
+  "id": "task.theseus.dashboard-add-verification-action-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard verification write action",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data.ts",
+      "summary": "Extends dashboard action effects to include explicit write actions."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data-builder.ts",
+      "summary": "Emits Add verification write actions for task and next-action rows."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data-builder.test.ts",
+      "summary": "Covers write action generation and action search metadata."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-html.test.ts",
+      "summary": "Covers explicit write effect metadata in rendered action links."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/docs/dashboard-host.md",
+      "summary": "Documents host-mediated verification write actions and their safety boundary."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- src/dashboard-data-builder.test.ts src/dashboard-html.test.ts src/dashboard-data.test.ts src/dashboard-client.test.ts",
+      "status": "passed",
+      "scope": "Focused verification write action and adjacent dashboard tests.",
+      "checkedAt": "2026-07-10T08:38:03.360Z"
+    },
+    {
+      "command": "LC_ALL=C rg \"[^\\x00-\\x7F]\" src/dashboard-data.ts src/dashboard-data-builder.ts src/dashboard-data-builder.test.ts src/dashboard-html.test.ts docs/dashboard-host.md",
+      "status": "passed",
+      "scope": "ASCII check; no matches.",
+      "checkedAt": "2026-07-10T08:38:03.375Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full Theseus package test suite.",
+      "checkedAt": "2026-07-10T08:38:03.389Z"
+    },
+    {
+      "command": "npm run source:gates",
+      "status": "passed",
+      "scope": "Theseus package source-size, function-size, and import-boundary gates.",
+      "checkedAt": "2026-07-10T08:38:03.403Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T08:38:03.418Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a host-mediated Add verification write action for task-like dashboard rows, with explicit write effect metadata, safe rendering coverage, and host documentation."
+  },
+  "summary": "Added a host-mediated Add verification write action for task-like dashboard rows, with explicit write effect metadata, safe rendering coverage, and host documentation."
+}
