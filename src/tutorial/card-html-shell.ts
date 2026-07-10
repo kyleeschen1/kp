@@ -16,8 +16,8 @@ export function renderKpTutorialCardHtmlShell(
     `    <h2>${escapeHtml("Solve x + 3 = 7")}</h2>`,
     `  </header>`,
     `  <div class="kp-tutorial-card__layout" data-kp-tutorial-layout="${escapeAttr(frame.cardFrame.layoutFrame.sampleId)}">`,
-    `    <section class="kp-tutorial-card__panel" data-kp-tutorial-panel="equation" data-kp-tutorial-panel-id="${escapeAttr(equationPanelId)}" data-kp-tutorial-equation-animation="${escapeAttr(frame.equationFrame.animationId)}">`,
-    `      <div class="kp-tutorial-card__slot" data-kp-tutorial-equation-slot></div>`,
+    `    <section class="kp-tutorial-card__panel" data-kp-tutorial-panel="equation" data-kp-tutorial-panel-id="${escapeAttr(equationPanelId)}" data-kp-tutorial-equation-animation="${escapeAttr(frame.equationFrame.animationId)}" data-kp-tutorial-equation-transition-index="${frame.equationFrame.transitionIndex}" data-kp-tutorial-equation-progress="${escapeAttr(String(frame.equationFrame.transitionProgress))}" data-kp-tutorial-equation-token-count="${frame.equationFrame.equationFrame.tokens.length}">`,
+    `      <div class="kp-tutorial-card__slot" data-kp-tutorial-equation-slot data-kp-tutorial-equation-frame>${renderEquationFrameSummary(frame)}</div>`,
     `    </section>`,
     `    <section class="kp-tutorial-card__panel" data-kp-tutorial-panel="graph" data-kp-tutorial-panel-id="${escapeAttr(graphPanelId)}" data-kp-tutorial-graph-id="${escapeAttr(frame.graphFrame.graphId)}" data-kp-tutorial-graph-surface-mode="${escapeAttr(frame.graphFrame.surfaceMode)}">`,
     `      <div class="kp-tutorial-card__slot" data-kp-tutorial-graph-slot></div>`,
@@ -26,6 +26,15 @@ export function renderKpTutorialCardHtmlShell(
     `  <div class="kp-tutorial-card__controls" data-kp-tutorial-controls data-kp-tutorial-control-count="${frame.cardFrame.layoutFrame.controls.length}"></div>`,
     `</section>`
   ].join("\n");
+}
+
+function renderEquationFrameSummary(
+  frame: LinearSolveTutorialCardSampleFrame
+): string {
+  return [
+    `<span data-kp-tutorial-equation-transition>${frame.equationFrame.transitionIndex + 1}</span>`,
+    `<span data-kp-tutorial-equation-local-progress>${escapeHtml(String(frame.equationFrame.transitionProgress))}</span>`
+  ].join("");
 }
 
 function escapeHtml(value: string): string {

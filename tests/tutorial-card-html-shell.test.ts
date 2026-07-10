@@ -15,6 +15,10 @@ test("tutorial card HTML shell renders synchronized panel slots", () => {
   assert.match(html, /data-kp-tutorial-panel="equation"/);
   assert.match(html, /data-kp-tutorial-panel-id="panel\.linear-solve\.equation"/);
   assert.match(html, /data-kp-tutorial-equation-animation="linear-equation-solve-x"/);
+  assert.match(html, /data-kp-tutorial-equation-transition-index="1"/);
+  assert.match(html, /data-kp-tutorial-equation-progress="0\.5"/);
+  assert.match(html, /data-kp-tutorial-equation-token-count="\d+"/);
+  assert.match(html, /data-kp-tutorial-equation-frame/);
   assert.match(html, /data-kp-tutorial-panel="graph"/);
   assert.match(html, /data-kp-tutorial-panel-id="panel\.linear-solve\.graph"/);
   assert.match(html, /data-kp-tutorial-graph-id="saddle-orbit-graph"/);

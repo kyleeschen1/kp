@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.tutorial-card-equation-panel",
+  "kind": "next-action",
+  "title": "Mount synchronized equation panel in card shell",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/card-html-shell.ts",
+      "summary": "Adds equation panel frame attributes and a basic mounted equation frame summary to the tutorial-card shell."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-html-shell.test.ts",
+      "summary": "Covers mounted equation panel transition index, progress, token count, and frame slot metadata."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-equation-panel.json",
+      "summary": "Materializes the approved tutorial-card equation panel next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the equation panel slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-html-shell.test.ts tests/linear-solve-tutorial-card-sample.test.ts tests/tutorial-card-equation-frame-adapter.test.ts",
+      "status": "passed",
+      "scope": "focused tutorial card equation panel shell tests",
+      "checkedAt": "2026-07-10T22:40:49.242Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:40:49.290Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:40:49.314Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Mounted synchronized equation frame metadata into the tutorial card HTML shell, including transition index, local progress, and token count."
+  },
+  "summary": "Mounted synchronized equation frame metadata into the tutorial card HTML shell, including transition index, local progress, and token count."
+}
