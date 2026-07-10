@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.tutorial-card-step-export-profile",
+  "kind": "next-action",
+  "title": "Add static-step export profile metadata resolver",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added a static step-sequence export profile metadata resolver for tutorial cards.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/export-profile-resolver.ts",
+      "summary": "Resolves step-sequence export metadata, checkpoint inclusion, sampleable and reversible timelines, fallback strategy, and dependency phases."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-export-profile.test.ts",
+      "summary": "Covers step-sequence export metadata normalization and missing step profile errors."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-step-export-profile.json",
+      "summary": "Materializes the approved step-sequence export profile next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the step export profile slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-export-profile.test.ts tests/tutorial-card-dependency-planner.test.ts tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "tutorial card step export profile tests",
+      "checkedAt": "2026-07-10T23:24:33.777Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T23:24:33.810Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T23:24:33.836Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a static step-sequence export profile metadata resolver for tutorial cards."
+  }
+}

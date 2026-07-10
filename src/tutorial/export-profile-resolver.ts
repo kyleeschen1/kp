@@ -22,6 +22,19 @@ export interface KpTutorialCardIframeExportProfileMetadata {
   readonly settings: Readonly<Record<string, KpTutorialExportSettingValue>>;
 }
 
+export interface KpTutorialCardStepExportProfileMetadata {
+  readonly manifestId: string;
+  readonly profileId: string;
+  readonly kind: "step-sequence";
+  readonly target: "static";
+  readonly includeCheckpoints: boolean;
+  readonly fallbackStrategy: KpTutorialFallbackSpec["strategy"];
+  readonly sampleableTimelineIds: readonly string[];
+  readonly reversibleTimelineIds: readonly string[];
+  readonly dependencyPhases: readonly KpTutorialDependencyPhase[];
+  readonly settings: Readonly<Record<string, KpTutorialExportSettingValue>>;
+}
+
 export function resolveKpTutorialCardIframeExportProfile(
   input: KpTutorialCardManifest
 ): KpTutorialCardIframeExportProfileMetadata {
@@ -50,6 +63,36 @@ export function resolveKpTutorialCardIframeExportProfile(
   };
 }
 
+export function resolveKpTutorialCardStepExportProfile(
+  input: KpTutorialCardManifest
+): KpTutorialCardStepExportProfileMetadata {
+  const manifest = createKpTutorialCardManifest(input);
+  const stepProfile = findExportProfile(manifest, "step-sequence");
+  const dependencyPlan = createKpTutorialCardDependencyPlan(manifest);
+
+  return {
+    manifestId: manifest.id,
+    profileId: stepProfile.id,
+    kind: "step-sequence",
+    target: "static",
+    includeCheckpoints: settingBoolean(
+      stepProfile.settings?.["includeCheckpoints"],
+      false
+    ),
+    fallbackStrategy: manifest.fallback.strategy,
+    sampleableTimelineIds: manifest.timelineRefs
+      .filter((timeline) => timeline.sampleable === true)
+      .map((timeline) => timeline.id),
+    reversibleTimelineIds: manifest.timelineRefs
+      .filter((timeline) => timeline.reversible === true)
+      .map((timeline) => timeline.id),
+    dependencyPhases: dependencyPlan.phases
+      .filter((phase) => phase.phase === "critical" || phase.phase === "optional")
+      .map((phase) => phase.phase),
+    settings: cloneSettings(stepProfile.settings)
+  };
+}
+
 function findExportProfile(
   manifest: KpTutorialCardManifest,
   kind: KpTutorialExportProfile["kind"]
@@ -60,11 +103,17 @@ function findExportProfile(
 
   if (profile === undefined) {
     throw new Error(
-      `Tutorial card ${manifest.id} does not define an ${kind} export profile.`
+      `Tutorial card ${manifest.id} does not define ${exportProfileArticle(
+        kind
+      )} ${kind} export profile.`
     );
   }
 
   return profile;
+}
+
+function exportProfileArticle(kind: KpTutorialExportProfile["kind"]): "a" | "an" {
+  return kind === "iframe" || kind === "interactive-card" ? "an" : "a";
 }
 
 function settingBoolean(
