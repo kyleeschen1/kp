@@ -13,6 +13,31 @@ import type {
   SemanticSelectorLifecycle,
   VisualTokenLifecycle
 } from "../semantic/lifecycle.ts";
+import {
+  cloneVisualMotifPlan,
+  createVisualMotifPlan,
+  phaseIdsForEquationVisualMotifKind,
+  type EquationMotionPrimitiveId,
+  type EquationVisualMotifKind,
+  type EquationVisualMotifPlan
+} from "./visual-motif.ts";
+
+export {
+  equationVisualMotifDescriptors,
+  equationVisualMotifPhaseIds,
+  phaseIdsForEquationVisualMotifKind,
+  primitiveIdsForEquationVisualMotifKind
+} from "./visual-motif.ts";
+export type {
+  EquationMotionPrimitiveId,
+  EquationVisualMotifDescriptor,
+  EquationVisualMotifKind,
+  EquationVisualMotifPhaseId,
+  EquationVisualMotifPlan,
+  VisualMotifDescriptor,
+  VisualMotifPlan,
+  VisualMotionPrimitiveId
+} from "./visual-motif.ts";
 
 export type EasingName = "linear" | "ease-in" | "ease-out" | "ease-in-out";
 
@@ -66,55 +91,6 @@ export interface MotionPose {
   readonly x: number;
   readonly y: number;
   readonly scale: number;
-}
-
-export type EquationMotionPrimitiveId =
-  | "enter"
-  | "exit"
-  | "reveal"
-  | "shift"
-  | "vanish"
-  | "wrap"
-  | "unwrap";
-
-export type EquationVisualMotifKind =
-  | "append-after-shift"
-  | "artifact-enter"
-  | "artifact-exit"
-  | "artifact-replace"
-  | "cancelation"
-  | "simplify-into"
-  | "wrap"
-  | "unwrap";
-
-export const equationVisualMotifPhaseIds = [
-  "artifact-enter",
-  "artifact-exit",
-  "layout-shift",
-  "introduced-token-enter",
-  "cancel-meet",
-  "cancel-collapse",
-  "post-cancel-layout-shift",
-  "final-simplify-meet",
-  "final-simplify-collapse",
-  "final-simplify-reveal",
-  "unwrap-artifact-exit",
-  "wrap-artifact-enter",
-  "wrapped-token-shift"
-] as const;
-
-export type EquationVisualMotifPhaseId =
-  (typeof equationVisualMotifPhaseIds)[number];
-
-export interface EquationVisualMotifPlan {
-  readonly id: string;
-  readonly kind: EquationVisualMotifKind;
-  readonly correspondenceRecordId: string;
-  readonly sourceTokenIds: readonly string[];
-  readonly targetTokenIds: readonly string[];
-  readonly motionPrimitiveIds: readonly EquationMotionPrimitiveId[];
-  readonly phaseIds: readonly EquationVisualMotifPhaseId[];
-  readonly summary: string;
 }
 
 type LifecycleTiming = {
@@ -207,7 +183,9 @@ export function applyMeasuredMotionDeltas(
   return {
     ...plan,
     tokens: plan.tokens.map((token) => ({ ...token })),
-    visualMotifs: plan.visualMotifs.map((motif) => cloneVisualMotif(motif)),
+    visualMotifs: plan.visualMotifs.map((motif) =>
+      cloneVisualMotifPlan(motif)
+    ),
     tracks: plan.tracks.map((track) => {
       const delta = deltasByTokenId.get(track.tokenId);
 
@@ -352,7 +330,7 @@ function appendAfterShiftVisualMotif(
     return undefined;
   }
 
-  return {
+  return createVisualMotifPlan({
     id: `${correspondenceMap.id}.append-after-shift`,
     kind: "append-after-shift",
     correspondenceRecordId: correspondenceMap.id,
@@ -361,7 +339,7 @@ function appendAfterShiftVisualMotif(
     motionPrimitiveIds: ["shift", "enter"],
     phaseIds: ["layout-shift", "introduced-token-enter"],
     summary: "Persisted tokens shift before introduced tokens enter."
-  };
+  });
 }
 
 function artifactVisualMotifFromRecord(input: {
@@ -469,45 +447,16 @@ function visualMotifFromRecord(input: {
   readonly targetTokenIds: readonly string[];
   readonly motionPrimitiveIds: readonly EquationMotionPrimitiveId[];
 }): EquationVisualMotifPlan {
-  return {
+  return createVisualMotifPlan({
     id: `${input.record.id}.${input.kind}`,
     kind: input.kind,
     correspondenceRecordId: input.record.id,
     sourceTokenIds: [...input.sourceTokenIds],
     targetTokenIds: [...input.targetTokenIds],
     motionPrimitiveIds: [...input.motionPrimitiveIds],
-    phaseIds: phaseIdsForVisualMotifKind(input.kind),
+    phaseIds: phaseIdsForEquationVisualMotifKind(input.kind),
     summary: input.record.summary
-  };
-}
-
-function phaseIdsForVisualMotifKind(
-  kind: EquationVisualMotifKind
-): readonly EquationVisualMotifPhaseId[] {
-  switch (kind) {
-    case "append-after-shift":
-      return ["layout-shift", "introduced-token-enter"];
-    case "artifact-enter":
-      return ["artifact-enter"];
-    case "artifact-exit":
-      return ["artifact-exit"];
-    case "artifact-replace":
-      return ["artifact-exit", "artifact-enter"];
-    case "cancelation":
-      return ["cancel-meet", "cancel-collapse", "post-cancel-layout-shift"];
-    case "simplify-into":
-      return [
-        "final-simplify-meet",
-        "final-simplify-collapse",
-        "final-simplify-reveal"
-      ];
-    case "wrap":
-      return ["wrapped-token-shift", "wrap-artifact-enter"];
-    case "unwrap":
-      return ["unwrap-artifact-exit", "wrapped-token-shift"];
-    default:
-      return assertNever(kind);
-  }
+  });
 }
 
 function indexTokenIdsByMotionId(
@@ -916,20 +865,5 @@ function cloneTrack(track: EquationMotionTrack): EquationMotionTrack {
     easing: track.easing,
     from: clonePose(track.from),
     to: clonePose(track.to)
-  };
-}
-
-function cloneVisualMotif(
-  motif: EquationVisualMotifPlan
-): EquationVisualMotifPlan {
-  return {
-    id: motif.id,
-    kind: motif.kind,
-    correspondenceRecordId: motif.correspondenceRecordId,
-    sourceTokenIds: [...motif.sourceTokenIds],
-    targetTokenIds: [...motif.targetTokenIds],
-    motionPrimitiveIds: [...motif.motionPrimitiveIds],
-    phaseIds: [...motif.phaseIds],
-    summary: motif.summary
   };
 }

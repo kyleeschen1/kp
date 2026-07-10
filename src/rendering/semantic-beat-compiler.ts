@@ -1,9 +1,9 @@
 import type {
   EasingName,
-  EquationVisualMotifPhaseId,
   EquationMotionTrack,
   MotionPose
 } from "./equation-motion-plan.ts";
+import type { EquationVisualMotifPhaseId } from "./visual-motif.ts";
 
 export type SemanticBeatId = EquationVisualMotifPhaseId;
 

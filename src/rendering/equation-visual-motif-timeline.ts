@@ -1,9 +1,11 @@
 import type {
   EasingName,
-  EquationMotionPlan,
+  EquationMotionPlan
+} from "./equation-motion-plan.ts";
+import type {
   EquationVisualMotifKind,
   EquationVisualMotifPhaseId
-} from "./equation-motion-plan.ts";
+} from "./visual-motif.ts";
 import {
   applyBeatEasing,
   findSemanticBeat,

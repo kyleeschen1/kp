@@ -21,7 +21,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure or arbitrary visual effects without asking."
   ],
   "goal": "Run the approved semantic transition runtime loop.",
-  "target": "next.kp.radical-artifact-frame-phase-routing",
+  "target": "next.kp.visual-motif-module-api",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -90,6 +90,11 @@
       "id": "next.kp.radical-artifact-frame-phase-routing",
       "title": "Route radical artifacts through frame phases",
       "summary": "Working the radical artifact frame-phase routing slice under the approved semantic transition runtime contract.",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.visual-motif-module-api",
+      "title": "Extract visual motif module API",
       "status": "complete"
     }
   ]

@@ -19,6 +19,13 @@ import {
   katexVisualArtifactLifecycleRecords,
   visualArtifactRecordToCorrespondenceRecord
 } from "../src/rendering/visual-artifact-lifecycle.ts";
+import {
+  cloneVisualMotifPlan,
+  createVisualMotifPlan,
+  equationVisualMotifDescriptors,
+  phaseIdsForEquationVisualMotifKind,
+  primitiveIdsForEquationVisualMotifKind
+} from "../src/rendering/visual-motif.ts";
 
 type TokenLifecyclePair = [id: string, lifecycle: string];
 type TokenRelationPair = [id: string, relation: string | undefined];
@@ -63,6 +70,66 @@ const trackFor = (plan: EquationMotionPlan, tokenId: string) => {
   assert.ok(track, `missing track for ${tokenId}`);
   return track;
 };
+
+test("visual motif module exposes reusable equation motif descriptors", () => {
+  assert.deepEqual(
+    equationVisualMotifDescriptors.map((descriptor) => [
+      descriptor.kind,
+      descriptor.motionPrimitiveIds,
+      descriptor.phaseIds
+    ]),
+    [
+      [
+        "append-after-shift",
+        ["shift", "enter"],
+        ["layout-shift", "introduced-token-enter"]
+      ],
+      ["artifact-enter", ["enter"], ["artifact-enter"]],
+      ["artifact-exit", ["exit"], ["artifact-exit"]],
+      ["artifact-replace", ["exit", "enter"], ["artifact-exit", "artifact-enter"]],
+      [
+        "cancelation",
+        ["vanish"],
+        ["cancel-meet", "cancel-collapse", "post-cancel-layout-shift"]
+      ],
+      [
+        "simplify-into",
+        ["vanish", "reveal"],
+        [
+          "final-simplify-meet",
+          "final-simplify-collapse",
+          "final-simplify-reveal"
+        ]
+      ],
+      ["wrap", ["wrap"], ["wrapped-token-shift", "wrap-artifact-enter"]],
+      ["unwrap", ["unwrap"], ["unwrap-artifact-exit", "wrapped-token-shift"]]
+    ]
+  );
+  assert.deepEqual(
+    primitiveIdsForEquationVisualMotifKind("artifact-replace"),
+    ["exit", "enter"]
+  );
+  assert.deepEqual(phaseIdsForEquationVisualMotifKind("wrap"), [
+    "wrapped-token-shift",
+    "wrap-artifact-enter"
+  ]);
+
+  const motif = createVisualMotifPlan({
+    id: "test.cancelation",
+    kind: "cancelation",
+    correspondenceRecordId: "cancelation.test",
+    sourceTokenIds: ["source"],
+    targetTokenIds: [],
+    motionPrimitiveIds: ["vanish"],
+    phaseIds: phaseIdsForEquationVisualMotifKind("cancelation"),
+    summary: "test cancelation"
+  });
+  const clone = cloneVisualMotifPlan(motif);
+
+  assert.deepEqual(clone, motif);
+  assert.notEqual(clone.sourceTokenIds, motif.sourceTokenIds);
+  assert.notEqual(clone.phaseIds, motif.phaseIds);
+});
 
 test("createEquationMotionPlan preserves corrected semantic lifecycle tracks", () => {
   const transition = createEquationOperationTransition({
