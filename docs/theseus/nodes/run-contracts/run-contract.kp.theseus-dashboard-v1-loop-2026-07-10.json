@@ -84,13 +84,14 @@
     {
       "id": "task.theseus.dashboard-client-search-v0",
       "title": "Add-client-search-and-TOC",
-      "status": "complete",
-      "summary": "Embedded fuzzy search, live counts, section hiding, and TOC folding landed for dashboard HTML."
+      "summary": "Embedded fuzzy search, live counts, section hiding, and TOC folding landed for dashboard HTML.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-selected-preview-v0",
       "title": "Add-selected-row-preview",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Selected-row preview markup, client behavior, and styling landed for dashboard HTML."
     },
     {
       "id": "task.theseus.dashboard-health-v0",

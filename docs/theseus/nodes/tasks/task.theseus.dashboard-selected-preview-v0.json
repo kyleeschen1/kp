@@ -1,0 +1,54 @@
+{
+  "id": "task.theseus.dashboard-selected-preview-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard selected-row preview",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "summary": "Added selected-row preview support with static preview markup, row-click client updates, selected-row styling, and a pure preview data helper.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-client.ts",
+      "summary": "Adds preview data helper and browser row-selection behavior."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-client.test.ts",
+      "summary": "Covers preview data extraction and client/renderer hooks."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-html.ts",
+      "summary": "Renders the selected-row preview panel in static dashboard HTML."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-css.ts",
+      "summary": "Styles selected rows and the preview panel."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/dashboard-client.test.ts",
+      "status": "passed",
+      "scope": "Focused selected-row preview client tests.",
+      "checkedAt": "2026-07-10T06:46:02.472Z"
+    },
+    {
+      "command": "npm run test -- src/dashboard-client.test.ts src/dashboard-html.test.ts src/dashboard-data.test.ts src/dashboard-data-builder.test.ts",
+      "status": "passed",
+      "scope": "Adjacent dashboard package tests.",
+      "checkedAt": "2026-07-10T06:46:02.484Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T06:46:02.497Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added selected-row preview support with static preview markup, row-click client updates, selected-row styling, and a pure preview data helper."
+  }
+}
