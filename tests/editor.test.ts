@@ -109,9 +109,9 @@ test("renderEditorDocument renders the equation demo and compact API outline", (
   assert.match(html, /data-kp-api-outline-item="semantic-matrix"/);
   assert.match(html, />Matrix</);
   assert.match(html, /data-kp-api-item-category="semantic-object"/);
-  assert.match(html, /data-kp-api-item-protocols="render,select,execute,derive"/);
+  assert.match(html, /data-kp-api-item-protocols="toLatex,evaluate,matrixForm"/);
   assert.match(html, /data-kp-api-item-views="latex,matrix-grid,linear-map"/);
-  assert.match(html, /data-kp-api-item-computations="determinant,inverse,rank,multiply"/);
+  assert.match(html, /data-kp-api-item-computations="shape,determinant"/);
   assert.match(html, /data-kp-api-outline-item="semantic-equation"/);
   assert.match(html, />Equation</);
   assert.match(html, /data-kp-api-outline-group="semantic-transformations"/);

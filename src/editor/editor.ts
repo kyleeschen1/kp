@@ -30,6 +30,7 @@ import {
   type KpDocument,
   type KpSemanticObject
 } from "../semantic/document.ts";
+import type { ExpressionObject } from "../semantic/expression-object.ts";
 import { renderApiCatalogOutline } from "./api-catalog.ts";
 import {
   DEFAULT_OCCLUDED_AXIS_LIGHTNESS,
@@ -194,6 +195,8 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
     case "curve-3d":
     case "surface-3d":
       return "";
+    case "expression":
+      return renderExpressionPreview(object);
     case "latex-comparison":
       return renderLatexComparisonPreview(object, document.objects);
     case "latex-form":
@@ -217,6 +220,17 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
     case "matrix":
       return "";
   }
+}
+
+function renderExpressionPreview(object: ExpressionObject): string {
+  const latex = defaultLatexRenderer.render(object);
+  const html = renderLatexToHtml(latex);
+
+  return renderPreviewArticle(
+    object,
+    "rn-" + object.id + "-default-latex",
+    `<div class="object-preview__math">${html}</div>`
+  );
 }
 
 function renderLatexFormPreview(object: LatexFormObject): string {

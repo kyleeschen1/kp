@@ -46,6 +46,12 @@ export function identityMatrix(input: IdentityMatrixInput): MatrixObject {
   });
 }
 
+export function matrixObjectToLatex(matrix: MatrixObject): string {
+  const body = matrix.rows.map((row) => row.join(" & ")).join(String.raw` \\ `);
+
+  return String.raw`${matrix.label} = \begin{bmatrix}${body}\end{bmatrix}`;
+}
+
 function validateMatrixRows(
   id: string,
   rows: readonly (readonly number[])[]

@@ -21,7 +21,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure or arbitrary visual effects without asking."
   ],
   "goal": "Run the approved semantic transition runtime loop.",
-  "target": "next.kp.graph-animation-clock-protocol",
+  "target": "next.kp.semantic-computation-protocols",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -110,6 +110,11 @@
     {
       "id": "next.kp.graph-animation-clock-protocol",
       "title": "Align graph animations to shared clock",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.semantic-computation-protocols",
+      "title": "Add semantic computation protocols",
       "status": "complete"
     }
   ]

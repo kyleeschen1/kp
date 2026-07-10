@@ -17,6 +17,7 @@ import {
 import { renderLatexToHtml } from "../src/rendering/katex-adapter.ts";
 import {
   defaultLatexRenderer,
+  expressionLatexRenderer,
   latexFormToLatex,
   matrixToLatex
 } from "../src/rendering/matrix-latex.ts";
@@ -37,6 +38,7 @@ import {
   type Graph2DObject,
   type Surface3DObject
 } from "../src/semantic/graph.ts";
+import { createExpressionObject } from "../src/semantic/expression-object.ts";
 import { createMatrixObject, identityMatrix } from "../src/semantic/matrix.ts";
 
 interface SvgPoint {
@@ -85,6 +87,17 @@ test("matrixToLatex renders a matrix with a default bmatrix representation", () 
     String.raw`I_3 = \begin{bmatrix}1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1\end{bmatrix}`
   );
   assert.equal(defaultLatexRenderer.render(matrix), matrixToLatex(matrix));
+});
+
+test("default LaTeX renderer renders expression objects", () => {
+  const expression = createExpressionObject({
+    id: "expr-x-squared",
+    label: "x squared",
+    expression: power(variable("x"), 2)
+  });
+
+  assert.equal(expressionLatexRenderer.render(expression), "x^{2}");
+  assert.equal(defaultLatexRenderer.render(expression), "x^{2}");
 });
 
 test("latexFormToLatex renders authored semantic formulas", () => {

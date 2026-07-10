@@ -12,6 +12,7 @@ import type {
   LatexComparisonObject,
   LatexFormObject
 } from "./latex-form.ts";
+import type { ExpressionObject } from "./expression-object.ts";
 import type { MatrixObject } from "./matrix.ts";
 
 export interface KpDocument {
@@ -27,6 +28,7 @@ export type KpSemanticObject =
   | Axis3DObject
   | Curve2DObject
   | Curve3DObject
+  | ExpressionObject
   | Graph2DObject
   | Graph3DObject
   | LatexComparisonObject

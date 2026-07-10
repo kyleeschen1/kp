@@ -55,14 +55,19 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
     category: "semantic-object",
     summary: "Stable values with selectors, capabilities, provenance, and views.",
     items: [
-      item("semantic-expression", "Expression", "math-core", "active", "Symbolic expression trees with terms, factors, functions, and grouped structure.", ["math", "selectors"]),
+      item("semantic-expression", "Expression", "math-core", "active", "Symbolic expression trees with terms, factors, functions, and grouped structure.", ["math", "selectors"], {
+        protocols: ["toLatex", "evaluate", "differentiate", "graphForm", "numericSample"],
+        views: ["latex", "graph-2d", "graph-3d", "inspector"],
+        lenses: ["terms", "factors", "operands", "variables"],
+        computes: ["numeric value", "derivative", "curve samples", "surface samples"]
+      }),
       item("semantic-equation", "Equation", "math-core", "active", "Left/right symbolic relation that can transform into rendered math, graphs, and solution sets.", ["math", "katex"]),
       item("semantic-function", "Function", "math-core", "planned", "Named or anonymous mapping with domain, codomain, parameters, evaluation, graph, and LaTeX views.", ["math", "derive"]),
       item("semantic-matrix", "Matrix", "linear-algebra", "active", "Structured row, column, and entry object with matrix-grid, LaTeX, execution, and linear-map views.", ["linear algebra", "execute"], {
-        protocols: ["render", "select", "execute", "derive"],
+        protocols: ["toLatex", "evaluate", "matrixForm"],
         views: ["latex", "matrix-grid", "linear-map"],
         lenses: ["rows", "columns", "entries"],
-        computes: ["determinant", "inverse", "rank", "multiply"]
+        computes: ["shape", "determinant"]
       }),
       item("semantic-vector", "Vector", "linear-algebra", "planned", "Coordinate or geometric vector with component selectors and graphical depictions.", ["linear algebra", "graph"]),
       item("semantic-linear-map", "LinearMap", "linear-algebra", "proposed", "Structure-preserving map that can derive a matrix in a selected basis and a geometric deformation view.", ["derive", "matrix"]),

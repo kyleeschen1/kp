@@ -70,6 +70,10 @@ export function createLatexComparisonObject(
   };
 }
 
+export function latexFormObjectToLatex(formula: LatexFormObject): string {
+  return formula.latex;
+}
+
 function assertNonEmpty(value: string, label: string): void {
   if (value.trim().length === 0) {
     throw new Error(`${label} must not be empty.`);

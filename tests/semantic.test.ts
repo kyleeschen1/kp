@@ -12,7 +12,11 @@ import {
   importKatexTransformFixtureDocument,
   validateTransformFixtureDocument
 } from "../src/authoring/transform-fixture-contract.ts";
-import { expressionToLatex } from "../src/math/expression.ts";
+import {
+  expressionToLatex,
+  power,
+  variable
+} from "../src/math/expression.ts";
 import { findKatexTransformFixture } from "../src/rendering/katex-transform-fixtures.ts";
 import { createKpDocument } from "../src/semantic/document.ts";
 import type { KpDocument } from "../src/semantic/document.ts";
@@ -35,6 +39,13 @@ import {
   createLatexFormObject
 } from "../src/semantic/latex-form.ts";
 import { createMatrixObject, identityMatrix } from "../src/semantic/matrix.ts";
+import { createExpressionObject } from "../src/semantic/expression-object.ts";
+import {
+  listSemanticComputationProtocols,
+  semanticEvaluate,
+  semanticMatrixForm,
+  semanticToLatex
+} from "../src/semantic/computation-protocols.ts";
 import { validateKpDocument } from "../src/semantic/validation.ts";
 
 test("createKpDocument creates a JSON-compatible semantic document", () => {
@@ -141,6 +152,73 @@ test("createMatrixObject creates a semantic matrix object", () => {
       [3, 4]
     ]
   });
+});
+
+test("createExpressionObject creates a semantic expression object", () => {
+  const expression = createExpressionObject({
+    id: "expr-x-squared",
+    label: "x squared",
+    expression: power(variable("x"), 2)
+  });
+
+  assert.deepEqual(expression, {
+    id: "expr-x-squared",
+    type: "expression",
+    label: "x squared",
+    expression: power(variable("x"), 2),
+    variables: ["x"]
+  });
+  assert.deepEqual(
+    validateKpDocument(
+      createKpDocument({
+        id: "expression-doc",
+        title: "Expression",
+        objects: [expression]
+      })
+    ),
+    []
+  );
+});
+
+test("semantic computation protocols expose matrix capabilities", () => {
+  const matrix = createMatrixObject({
+    id: "A",
+    label: "A",
+    rows: [
+      [1, 2],
+      [3, 4]
+    ]
+  });
+
+  assert.deepEqual(listSemanticComputationProtocols(matrix), [
+    "toLatex",
+    "evaluate",
+    "matrixForm"
+  ]);
+  assert.equal(
+    semanticToLatex(matrix),
+    String.raw`A = \begin{bmatrix}1 & 2 \\ 3 & 4\end{bmatrix}`
+  );
+  assert.equal(semanticMatrixForm(matrix), matrix);
+  assert.deepEqual(semanticEvaluate(matrix), {
+    kind: "matrix",
+    rowCount: 2,
+    columnCount: 2,
+    isSquare: true,
+    determinant: -2
+  });
+});
+
+test("semantic computation protocols expose authored LaTeX forms", () => {
+  const formula = createLatexFormObject({
+    id: "formula-fourier",
+    label: "Fourier",
+    latex: String.raw`\widehat{f}(\xi)=\int f(x)e^{-2\pi i x\xi}\,dx`,
+    summary: "Fourier transform."
+  });
+
+  assert.deepEqual(listSemanticComputationProtocols(formula), ["toLatex"]);
+  assert.equal(semanticToLatex(formula), formula.latex);
 });
 
 test("identityMatrix creates a square identity matrix object", () => {

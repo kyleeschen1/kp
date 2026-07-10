@@ -8,15 +8,25 @@ import {
 } from "../src/editor/api-catalog.ts";
 
 test("API catalog exposes typed metadata for semantic objects", () => {
+  const expression = findApiCatalogItem("semantic-expression");
   const matrix = findApiCatalogItem("semantic-matrix");
+
+  assert.equal(expression?.group.id, "semantic-objects");
+  assert.deepEqual(expression?.item.details?.protocols, [
+    "toLatex",
+    "evaluate",
+    "differentiate",
+    "graphForm",
+    "numericSample"
+  ]);
+  assert.ok(expression?.item.details?.computes?.includes("derivative"));
 
   assert.equal(matrix?.group.id, "semantic-objects");
   assert.equal(matrix?.group.category, "semantic-object");
   assert.deepEqual(matrix?.item.details?.protocols, [
-    "render",
-    "select",
-    "execute",
-    "derive"
+    "toLatex",
+    "evaluate",
+    "matrixForm"
   ]);
   assert.deepEqual(matrix?.item.details?.views, [
     "latex",
@@ -28,7 +38,7 @@ test("API catalog exposes typed metadata for semantic objects", () => {
     "columns",
     "entries"
   ]);
-  assert.ok(matrix?.item.details?.computes?.includes("determinant"));
+  assert.deepEqual(matrix?.item.details?.computes, ["shape", "determinant"]);
 });
 
 test("API catalog exposes typed metadata for semantic transformations", () => {

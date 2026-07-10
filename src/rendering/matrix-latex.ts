@@ -2,8 +2,24 @@ import {
   createDefaultLatexRenderer,
   type DefaultLatexObjectRenderer
 } from "./default-latex.ts";
-import type { LatexFormObject } from "../semantic/latex-form.ts";
-import type { MatrixObject } from "../semantic/matrix.ts";
+import {
+  expressionObjectToLatex,
+  type ExpressionObject
+} from "../semantic/expression-object.ts";
+import {
+  latexFormObjectToLatex,
+  type LatexFormObject
+} from "../semantic/latex-form.ts";
+import {
+  matrixObjectToLatex,
+  type MatrixObject
+} from "../semantic/matrix.ts";
+
+export const expressionLatexRenderer:
+  DefaultLatexObjectRenderer<ExpressionObject> = {
+    type: "expression",
+    render: expressionObjectToLatex
+  };
 
 export const matrixLatexRenderer: DefaultLatexObjectRenderer<MatrixObject> = {
   type: "matrix",
@@ -16,16 +32,15 @@ export const latexFormRenderer: DefaultLatexObjectRenderer<LatexFormObject> = {
 };
 
 export const defaultLatexRenderer = createDefaultLatexRenderer([
+  expressionLatexRenderer,
   latexFormRenderer,
   matrixLatexRenderer
 ]);
 
 export function latexFormToLatex(formula: LatexFormObject): string {
-  return formula.latex;
+  return latexFormObjectToLatex(formula);
 }
 
 export function matrixToLatex(matrix: MatrixObject): string {
-  const body = matrix.rows.map((row) => row.join(" & ")).join(String.raw` \\ `);
-
-  return String.raw`${matrix.label} = \begin{bmatrix}${body}\end{bmatrix}`;
+  return matrixObjectToLatex(matrix);
 }

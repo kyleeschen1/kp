@@ -38,7 +38,7 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
     matrixRow?.preview?.fields.some(
       (field) =>
         field.label === "Protocols" &&
-        field.value === "render, select, execute, derive"
+        field.value === "toLatex, evaluate, matrixForm"
     )
   );
 });

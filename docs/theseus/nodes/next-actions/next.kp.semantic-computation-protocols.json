@@ -2,9 +2,9 @@
   "id": "next.kp.semantic-computation-protocols",
   "kind": "next-action",
   "title": "Add semantic computation protocols",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic-api",
-  "summary": "Define protocols such as toLatex, evaluate, differentiate, matrixForm, graphForm, numericSample, solveStep, and explainTransform for semantic objects that qualify.",
+  "summary": "Added capability-style semantic computation protocols for expressions, matrices, LaTeX forms, and expression-backed graph samples.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,36 @@
       "kind": "file",
       "path": "tests/math-expression.test.ts",
       "summary": "Expression-level regression tests for computation semantics."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/computation-protocols.ts",
+      "summary": "Shared semantic computation protocol vocabulary and adapters for LaTeX, evaluation, differentiation, matrix forms, graph forms, and numeric samples."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/expression-object.ts",
+      "summary": "First-class expression semantic object wrapper with stable id, label, variables, and LaTeX representation."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/document.ts",
+      "summary": "Semantic object union now includes expression objects."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "API catalogue now exposes protocol support for Expression and Matrix objects."
+    },
+    {
+      "kind": "file",
+      "path": "tests/math-expression.test.ts",
+      "summary": "Expression protocol coverage for LaTeX, evaluation, differentiation, graph forms, and numeric samples."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic.test.ts",
+      "summary": "Semantic object and matrix/LaTeX protocol coverage."
     }
   ],
   "dependsOn": {
@@ -78,5 +108,29 @@
       "id": "no-type-explosion",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/math-expression.test.ts tests/latex-to-expression.test.ts tests/semantic.test.ts tests/equation-graph.test.ts",
+      "status": "passed",
+      "scope": "semantic computation protocol regression suite",
+      "checkedAt": "2026-07-10T18:01:04.869Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-10T18:01:04.889Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T18:01:04.908Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added capability-style semantic computation protocols for expressions, matrices, LaTeX forms, and expression-backed graph samples."
+  }
 }

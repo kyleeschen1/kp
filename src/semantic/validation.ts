@@ -33,6 +33,8 @@ function validateObject(
       return validateCurveObject(object, path, objectsById);
     case "curve-3d":
       return validateCurve3DObject(object, path, objectsById);
+    case "expression":
+      return validateExpressionObject(object, path);
     case "graph-2d":
       return validateGraphObject(object, path, objectsById);
     case "graph-3d":
@@ -71,6 +73,29 @@ function validateGraphObject(
     issues.push({
       path: `${path}.yAxisId`,
       message: `Graph ${object.id} references missing y-axis ${object.yAxisId}.`
+    });
+  }
+
+  return issues;
+}
+
+function validateExpressionObject(
+  object: Extract<KpSemanticObject, { type: "expression" }>,
+  path: string
+): readonly ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+
+  if (object.label.trim().length === 0) {
+    issues.push({
+      path: `${path}.label`,
+      message: `Expression ${object.id} label must not be empty.`
+    });
+  }
+
+  if (object.variables.some((variableName) => variableName.trim().length === 0)) {
+    issues.push({
+      path: `${path}.variables`,
+      message: `Expression ${object.id} variables must not be empty.`
     });
   }
 
