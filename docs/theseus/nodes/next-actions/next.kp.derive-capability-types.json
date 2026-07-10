@@ -2,7 +2,54 @@
   "id": "next.kp.derive-capability-types",
   "kind": "next-action",
   "title": "Add derive capability types",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic-api",
-  "summary": "Add typed derive capability records and tests for expression, equation, graph, matrix, and representation provenance metadata."
+  "summary": "Added typed semantic derive capability descriptors, exact/sampled derivation relation vocabulary, and provenance-bearing derivation records.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/derive-protocols.ts",
+      "summary": "Defines derive capability ids, descriptors, relation/status types, derivation result shapes, and provenance record helpers."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-derive-protocols.test.ts",
+      "summary": "Covers exact versus sampled descriptor metadata, source-type listing, and provenance preservation in derivation records."
+    },
+    {
+      "kind": "file",
+      "path": "docs/superpowers/specs/2026-07-10-derive-representation-capability-design.md",
+      "summary": "Accepted design contract for derive capability vocabulary and migration path."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-derive-protocols.test.ts",
+      "status": "passed",
+      "scope": "focused derive protocol tests",
+      "checkedAt": "2026-07-10T19:58:47.233Z"
+    },
+    {
+      "command": "npm test -- tests/semantic-derive-protocols.test.ts",
+      "status": "passed",
+      "scope": "repo test script including derive protocol coverage",
+      "checkedAt": "2026-07-10T19:58:47.255Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T19:58:47.272Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T19:58:47.302Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added typed semantic derive capability descriptors, exact/sampled derivation relation vocabulary, and provenance-bearing derivation records."
+  }
 }
