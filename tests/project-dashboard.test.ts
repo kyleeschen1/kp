@@ -427,13 +427,33 @@ test("renderProjectDashboard exposes semantic object API sample targets", () => 
 });
 
 test("semantic object gallery rows expose matching API sample targets", () => {
-  for (const itemId of ["semantic-matrix", "semantic-equation", "semantic-vector"]) {
+  for (const itemId of [
+    "semantic-matrix",
+    "semantic-equation",
+    "semantic-vector",
+    "semantic-source-file"
+  ]) {
     const html = renderProjectDashboard(projectDashboardData, {
       selectedAgendaRowId: itemId
     });
 
     assert.match(html, new RegExp(`data-kp-preview-api-item="${itemId}"`));
   }
+});
+
+test("renderProjectDashboard exposes SourceFile implementation metadata", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "semantic-source-file"
+  });
+
+  assert.match(html, /data-kp-selected-agenda-row="semantic-source-file"/);
+  assert.match(
+    html,
+    /data-kp-preview-field="Sample targets"[^>]*>Open SourceFile API sample/
+  );
+  assert.match(html, /data-kp-preview-api-item="semantic-source-file"/);
+  assert.match(html, /src\/semantic\/source-file\.ts/);
+  assert.match(html, /source range selectors/);
 });
 
 test("renderProjectDashboard selects KaTeX transform rows into the shared preview", () => {

@@ -11,6 +11,7 @@ import {
 test("API catalog exposes typed metadata for semantic objects", () => {
   const expression = findApiCatalogItem("semantic-expression");
   const matrix = findApiCatalogItem("semantic-matrix");
+  const sourceFile = findApiCatalogItem("semantic-source-file");
 
   assert.equal(expression?.group.id, "semantic-objects");
   assert.deepEqual(expression?.item.details?.protocols, [
@@ -40,6 +41,21 @@ test("API catalog exposes typed metadata for semantic objects", () => {
     "entries"
   ]);
   assert.deepEqual(matrix?.item.details?.computes, ["shape", "determinant"]);
+
+  assert.equal(sourceFile?.group.id, "semantic-objects");
+  assert.equal(sourceFile?.item.status, "active");
+  assert.deepEqual(sourceFile?.item.details?.protocols, ["select", "validate"]);
+  assert.deepEqual(sourceFile?.item.details?.views, [
+    "code",
+    "source-range overlay",
+    "inspector"
+  ]);
+  assert.deepEqual(sourceFile?.item.details?.lenses, [
+    "lines",
+    "source ranges",
+    "language",
+    "revision"
+  ]);
 });
 
 test("API catalog exposes typed metadata for semantic transformations", () => {

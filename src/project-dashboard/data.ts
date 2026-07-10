@@ -819,6 +819,41 @@ export const projectDashboardData: ProjectDashboardData = {
       relatedIds: ["work-semantic-object-registry"]
     },
     {
+      id: "semantic-source-file",
+      title: "SourceFile",
+      kind: "semantic-object",
+      status: "active",
+      summary:
+        "A programming semantic object with stable source text, language metadata, revision identity, and one-based source range selectors.",
+      tags: ["code", "programming", "selectors"],
+      domains: ["programming", "typescript", "runtime"],
+      interfaces: ["sourceFileLines", "source range selectors", "line/column positions"],
+      maturity: "active semantic object",
+      coverage: [
+        "SourceFile object shell",
+        "one-based source range selectors",
+        "document validation"
+      ],
+      sourceRefs: [
+        { label: "SourceFile object", href: "src/semantic/source-file.ts" },
+        { label: "Semantic document union", href: "src/semantic/document.ts" },
+        { label: "Semantic validation", href: "src/semantic/validation.ts" }
+      ],
+      verification: ["tests/semantic.test.ts", "npm run typecheck"],
+      sampleTargets: [
+        {
+          kind: "api-catalog-item",
+          label: "Open SourceFile API sample",
+          itemId: "semantic-source-file"
+        }
+      ],
+      relatedIds: [
+        "work-semantic-object-registry",
+        "visual-code",
+        "report-programming-readiness"
+      ]
+    },
+    {
       id: "gallery-rendering-time-api",
       title: "Rendering/time API",
       kind: "protocol-api",

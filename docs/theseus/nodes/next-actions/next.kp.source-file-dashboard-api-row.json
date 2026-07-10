@@ -1,0 +1,64 @@
+{
+  "id": "next.kp.source-file-dashboard-api-row",
+  "kind": "next-action",
+  "title": "Add dashboard and API rows for SourceFile",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "Marks SourceFile active and adds API metadata for selection, validation, code views, and source-range lenses."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Adds the SourceFile semantic-object gallery row with source refs, coverage, verification, and API sample target."
+    },
+    {
+      "kind": "file",
+      "path": "tests/api-catalog.test.ts",
+      "summary": "Covers SourceFile API catalog status and details."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers SourceFile dashboard sample target and implementation metadata preview."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.source-file-dashboard-api-row.json",
+      "summary": "Materializes the approved SourceFile dashboard/API row next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the SourceFile dashboard/API row slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/api-catalog.test.ts tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "focused SourceFile API catalog and dashboard tests",
+      "checkedAt": "2026-07-10T23:13:37.525Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T23:13:37.610Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T23:13:37.713Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted SourceFile into active API catalog and dashboard semantic-object rows with sample target metadata."
+  },
+  "summary": "Promoted SourceFile into active API catalog and dashboard semantic-object rows with sample target metadata."
+}

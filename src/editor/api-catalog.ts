@@ -74,7 +74,11 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
       item("semantic-affine-map", "AffineMap", "linear-algebra", "proposed", "Translation-aware transformation represented with homogeneous matrices when needed.", ["matrix", "graph"]),
       item("semantic-graph-2d", "Graph2D", "graphs", "active", "Axes, curves, points, regions, labels, and symbolic source provenance when available.", ["graph", "latex"]),
       item("semantic-graph-3d", "Graph3D", "graphs", "active", "3D axes, surfaces, curves, camera, lighting, surface modes, and WebGL/SVG render paths.", ["webgl", "surface"]),
-      item("semantic-source-file", "SourceFile", "programming", "proposed", "Source text with language, parse anchors, diagnostics, source range selectors, and future execution traces.", ["code", "selectors"]),
+      item("semantic-source-file", "SourceFile", "programming", "active", "Source text with language, revision metadata, stable source range selectors, and future execution traces.", ["code", "selectors"], {
+        protocols: ["select", "validate"],
+        views: ["code", "source-range overlay", "inspector"],
+        lenses: ["lines", "source ranges", "language", "revision"]
+      }),
       item("semantic-problem", "Problem", "curriculum", "proposed", "Generated or authored exercise with givens, target skills, expected answer type, and rubric.", ["assessment", "generation"]),
       item("semantic-solution", "Solution", "curriculum", "proposed", "Verified derivation made of semantic steps, checks, alternate methods, and common wrong paths.", ["assessment", "provenance"])
     ]
