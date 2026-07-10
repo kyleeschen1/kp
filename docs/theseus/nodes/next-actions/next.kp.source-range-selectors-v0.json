@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.source-range-selectors-v0",
+  "kind": "next-action",
+  "title": "Add static source-range selectors",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/source-file.ts",
+      "summary": "Adds SourceRangeSelector creation and resolution against SourceFile source text with offset calculation and validation."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic.test.ts",
+      "summary": "Covers range selector construction, multi-line text resolution, mismatched source files, and invalid positions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.source-range-selectors-v0.json",
+      "summary": "Materializes the approved static source-range selector next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the source-range selector slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic.test.ts",
+      "status": "passed",
+      "scope": "focused semantic SourceFile selector tests",
+      "checkedAt": "2026-07-10T23:09:38.521Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T23:09:38.565Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T23:09:38.599Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added static source-range selectors for SourceFile objects with one-based exclusive range resolution."
+  },
+  "summary": "Added static source-range selectors for SourceFile objects with one-based exclusive range resolution."
+}

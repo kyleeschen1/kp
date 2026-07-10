@@ -45,6 +45,8 @@ import { createMatrixObject, identityMatrix } from "../src/semantic/matrix.ts";
 import { createExpressionObject } from "../src/semantic/expression-object.ts";
 import {
   createSourceFileObject,
+  createSourceRangeSelector,
+  resolveSourceRangeSelector,
   sourceFileLines
 } from "../src/semantic/source-file.ts";
 import {
@@ -235,6 +237,73 @@ test("createSourceFileObject rejects empty source text", () => {
         sourceText: ""
       }),
     /source text must not be empty/
+  );
+});
+
+test("source range selectors resolve one-based exclusive ranges", () => {
+  const source = createSourceFileObject({
+    id: "source-file.words",
+    label: "words.txt",
+    language: "text",
+    sourceText: "alpha\nbeta\ngamma"
+  });
+  const selector = createSourceRangeSelector({
+    id: "selector.words.alpha-to-beta",
+    sourceFileId: source.id,
+    start: { line: 1, column: 3 },
+    end: { line: 2, column: 3 },
+    summary: "Select the end of alpha and beginning of beta."
+  });
+
+  assert.deepEqual(selector, {
+    id: "selector.words.alpha-to-beta",
+    kind: "source-range",
+    sourceFileId: "source-file.words",
+    start: { line: 1, column: 3 },
+    end: { line: 2, column: 3 },
+    summary: "Select the end of alpha and beginning of beta."
+  });
+  assert.deepEqual(resolveSourceRangeSelector(source, selector), {
+    selector,
+    text: "pha\nbe",
+    startOffset: 2,
+    endOffset: 8
+  });
+});
+
+test("source range selectors reject mismatched files and invalid positions", () => {
+  const source = createSourceFileObject({
+    id: "source-file.words",
+    label: "words.txt",
+    language: "text",
+    sourceText: "alpha\nbeta"
+  });
+
+  assert.throws(
+    () =>
+      resolveSourceRangeSelector(
+        source,
+        createSourceRangeSelector({
+          id: "selector.other",
+          sourceFileId: "source-file.other",
+          start: { line: 1, column: 1 },
+          end: { line: 1, column: 2 }
+        })
+      ),
+    /targets source-file.other/
+  );
+  assert.throws(
+    () =>
+      resolveSourceRangeSelector(
+        source,
+        createSourceRangeSelector({
+          id: "selector.out-of-range",
+          sourceFileId: source.id,
+          start: { line: 2, column: 1 },
+          end: { line: 2, column: 99 }
+        })
+      ),
+    /line 2 column 99/
   );
 });
 

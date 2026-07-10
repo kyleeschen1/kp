@@ -34,7 +34,7 @@
     "Do not expand into full programming execution traces before SourceFile selectors exist."
   ],
   "goal": "Run the approved tutorial-card runtime loop from KpTutorialCardManifest to a live synchronized equation and graph card.",
-  "target": "next.kp.source-file-semantic-object-v0",
+  "target": "next.kp.source-range-selectors-v0",
   "runMode": "run",
   "maxSlices": 25,
   "commitCadence": "Commit after each verified slice.",
@@ -138,7 +138,7 @@
     {
       "id": "next.kp.source-range-selectors-v0",
       "title": "Add static source-range selectors",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.source-file-dashboard-api-row",
