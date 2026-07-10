@@ -63,7 +63,7 @@ if (app === null) {
 
 const appRoot = app;
 let editorDocument = createInitialEditorDocument();
-let projectDashboardQuery = "";
+let projectDashboardSampleQuery = "";
 let projectDashboardSelectedKatexFixtureId: string | undefined;
 let selectedEquationAnimationId: string | undefined;
 let katexOperatorScalePercent = 85;
@@ -194,8 +194,8 @@ appRoot.addEventListener("input", (event) => {
     case "set-katex-operator-scale":
       updateKatexOperatorScaleFromInput(event.target);
       return;
-    case "filter-project-dashboard":
-      filterProjectDashboardFromInput(event.target);
+    case "filter-project-rendered-samples":
+      filterProjectRenderedSamplesFromInput(event.target);
       return;
   }
 });
@@ -255,11 +255,13 @@ function selectEquationAnimation(select: HTMLSelectElement): void {
   renderEditor();
 }
 
-function renderProjectDashboardView(query = projectDashboardQuery): void {
-  projectDashboardQuery = query;
+function renderProjectDashboardView(
+  sampleQuery = projectDashboardSampleQuery
+): void {
+  projectDashboardSampleQuery = sampleQuery;
   disposeGraph3DWebGL(appRoot);
   appRoot.innerHTML = renderProjectDashboard(projectDashboardData, {
-    query,
+    sampleQuery,
     selectedKatexFixtureId: projectDashboardSelectedKatexFixtureId
   });
 }
@@ -267,16 +269,16 @@ function renderProjectDashboardView(query = projectDashboardQuery): void {
 function selectKatexTransformFixture(button: HTMLButtonElement): void {
   projectDashboardSelectedKatexFixtureId =
     button.dataset["kpKatexTransformFixture"];
-  renderProjectDashboardView(projectDashboardQuery);
+  renderProjectDashboardView(projectDashboardSampleQuery);
 }
 
-function filterProjectDashboardFromInput(input: HTMLInputElement): void {
+function filterProjectRenderedSamplesFromInput(input: HTMLInputElement): void {
   const query = getProjectDashboardSearchQuery(input);
 
   renderProjectDashboardView(query);
 
   const nextInput = appRoot.querySelector<HTMLInputElement>(
-    '[data-action="filter-project-dashboard"]'
+    "[data-kp-animation-sample-search]"
   );
 
   if (nextInput !== null) {

@@ -21,7 +21,7 @@ import {
 import { findEquationAnimationForFixtureId } from "../editor/equation-animation-catalog.ts";
 
 export interface ProjectDashboardRenderOptions {
-  readonly query?: string;
+  readonly sampleQuery?: string;
   readonly selectedKatexFixtureId?: string | undefined;
 }
 
@@ -30,8 +30,8 @@ export function renderProjectDashboard(
   options: ProjectDashboardRenderOptions = {}
 ): string {
   const issues = validateProjectDashboardData(data);
-  const query = options.query ?? "";
-  const renderedData = filterProjectDashboardData(data, query);
+  const sampleQuery = options.sampleQuery ?? "";
+  const renderedData = data;
   const titles = createTitleLookup(data);
   const visibleIds = new Set(collectProjectDashboardIds(renderedData));
   const selectedKatexFixture = selectKatexFixture(
@@ -48,7 +48,13 @@ export function renderProjectDashboard(
         <button class="project-dashboard__back" type="button" data-action="show-editor">Back to Editor</button>
       </header>
       ${renderDataStatus(issues)}
-      ${renderAnimationLayoutSection(selectedKatexFixture, query)}
+      ${renderAnimationLayoutSection(
+        renderedData.gallery,
+        titles,
+        visibleIds,
+        selectedKatexFixture,
+        sampleQuery
+      )}
       ${renderDataContract()}
       <div class="project-dashboard__grid">
         <section class="project-dashboard__section" aria-labelledby="project-dashboard-work-title">
@@ -152,24 +158,83 @@ function renderGalleryGroups(
 }
 
 function renderAnimationLayoutSection(
+  galleryItems: readonly ProjectGalleryItem[],
+  titles: ReadonlyMap<string, string>,
+  visibleIds: ReadonlySet<string>,
   selectedKatexFixture: KatexTransformFixture,
-  query: string
+  sampleQuery: string
 ): string {
   return `
     <section class="project-dashboard__section project-dashboard__animation-layout" data-kp-project-dashboard-animation-layout aria-labelledby="project-dashboard-animation-layout-title">
       <div class="project-dashboard__section-header">
         <h2 id="project-dashboard-animation-layout-title">Animation Layout</h2>
-        <span>dashboard-wide fuzzy finder</span>
+        <span>rendered sample finder</span>
       </div>
       <div class="project-dashboard__animation-toolbar">
         <label class="project-dashboard__search" for="project-dashboard-search">
-          <span>Find anything</span>
-          <input id="project-dashboard-search" type="search" value="${escapeHtml(query)}" data-action="filter-project-dashboard" data-kp-project-dashboard-fuzzy-finder aria-label="Search project dashboard" placeholder="Search work, animations, visuals, objects, reports" />
+          <span>Rendered samples</span>
+          <input id="project-dashboard-search" type="search" value="${escapeHtml(sampleQuery)}" data-action="filter-project-rendered-samples" data-kp-animation-sample-search aria-label="Search rendered samples" placeholder="Search rendered samples" />
         </label>
       </div>
+      ${renderRenderedSampleGallery(galleryItems, titles, visibleIds, sampleQuery)}
       ${renderKatexTransformFixtureGallery(selectedKatexFixture)}
     </section>
   `;
+}
+
+function renderRenderedSampleGallery(
+  galleryItems: readonly ProjectGalleryItem[],
+  titles: ReadonlyMap<string, string>,
+  visibleIds: ReadonlySet<string>,
+  sampleQuery: string
+): string {
+  const sampleItems = getRenderedSampleItems(galleryItems);
+  const filteredSamples = filterProjectDashboardData(
+    { cards: [], gallery: sampleItems, reportThemes: [] },
+    sampleQuery
+  ).gallery;
+
+  return `
+    <section class="project-rendered-samples" data-kp-animation-samples aria-labelledby="project-rendered-samples-title">
+      <div class="project-rendered-samples__header">
+        <div>
+          <h3 id="project-rendered-samples-title">Rendered Samples</h3>
+          <p>Search examples of animations, visuals, and semantic objects already represented in the dashboard.</p>
+        </div>
+        <span>${filteredSamples.length}/${sampleItems.length} samples</span>
+      </div>
+      <div class="project-dashboard__cards project-rendered-samples__cards">
+        ${
+          filteredSamples.length === 0
+            ? `<p class="project-work-lane__empty">No rendered samples match this search.</p>`
+            : filteredSamples
+                .map((item) => renderRenderedSampleItem(item, titles, visibleIds))
+                .join("")
+        }
+      </div>
+    </section>
+  `;
+}
+
+function getRenderedSampleItems(
+  galleryItems: readonly ProjectGalleryItem[]
+): readonly ProjectGalleryItem[] {
+  return galleryItems.filter(
+    (item) =>
+      item.kind === "animation" ||
+      item.kind === "visual" ||
+      item.kind === "semantic-object"
+  );
+}
+
+function renderRenderedSampleItem(
+  item: ProjectGalleryItem,
+  titles: ReadonlyMap<string, string>,
+  visibleIds: ReadonlySet<string>
+): string {
+  return renderGalleryCard(item, titles, visibleIds, {
+    dataAttribute: `data-kp-animation-sample="${escapeHtml(item.id)}"`
+  });
 }
 
 function renderKatexTransformFixtureGallery(
@@ -373,8 +438,26 @@ function renderGalleryItem(
   titles: ReadonlyMap<string, string>,
   visibleIds: ReadonlySet<string>
 ): string {
+  return renderGalleryCard(item, titles, visibleIds, {
+    dataAttribute: `data-kp-project-gallery-item="${escapeHtml(item.id)}"`,
+    id: item.id
+  });
+}
+
+function renderGalleryCard(
+  item: ProjectGalleryItem,
+  titles: ReadonlyMap<string, string>,
+  visibleIds: ReadonlySet<string>,
+  options: {
+    readonly dataAttribute: string;
+    readonly id?: string;
+  }
+): string {
+  const idAttribute =
+    options.id === undefined ? "" : `id="${escapeHtml(options.id)}" `;
+
   return `
-    <article class="project-card" id="${escapeHtml(item.id)}" data-kp-project-gallery-item="${escapeHtml(item.id)}">
+    <article class="project-card" ${idAttribute}${options.dataAttribute}>
       ${renderMeta(item.status, item.kind)}
       <h3>${escapeHtml(item.title)}</h3>
       <p>${escapeHtml(item.summary)}</p>

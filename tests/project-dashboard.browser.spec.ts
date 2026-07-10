@@ -15,20 +15,28 @@ test("project dashboard round trip keeps editor motion and graph controls usable
     "[data-kp-project-dashboard-animation-layout]"
   );
   await expect(animationLayout).toBeVisible();
-  const dashboardSearch = animationLayout.locator(
-    "[data-kp-project-dashboard-fuzzy-finder]"
+  const renderedSampleSearch = animationLayout.locator(
+    "[data-kp-animation-sample-search]"
   );
-  await expect(animationLayout).toContainText("Find anything");
-  await expect(dashboardSearch).toHaveAttribute(
+  await expect(animationLayout).toContainText("Rendered samples");
+  await expect(renderedSampleSearch).toHaveAttribute(
     "placeholder",
-    "Search work, animations, visuals, objects, reports"
+    "Search rendered samples"
   );
-  await dashboardSearch.fill("dnt");
+  await renderedSampleSearch.fill("dnt");
   await expect(
-    page.locator('[data-kp-project-gallery-item="visual-donut-surface"]')
+    animationLayout.locator('[data-kp-animation-sample="visual-donut-surface"]')
   ).toBeVisible();
-  await dashboardSearch.fill("");
-  await expect(page.locator("[data-kp-project-card=\"work-project-dashboard-v1\"]")).toBeVisible();
+  await expect(
+    animationLayout.locator('[data-kp-animation-sample="visual-mesh-graph"]')
+  ).toHaveCount(0);
+  await expect(
+    page.locator('[data-kp-project-card="work-project-dashboard-v1"]')
+  ).toBeVisible();
+  await expect(
+    page.locator('[data-kp-project-gallery-item="visual-mesh-graph"]')
+  ).toBeVisible();
+  await renderedSampleSearch.fill("");
   await expect(page.locator("[data-kp-project-dashboard-contract]")).toContainText(
     "src/project-dashboard/data.ts"
   );

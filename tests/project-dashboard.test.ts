@@ -70,12 +70,10 @@ test("renderProjectDashboard places the animation layout first", () => {
   assert.notEqual(workSectionIndex, -1);
   assert.ok(animationLayoutIndex < dataContractIndex);
   assert.ok(animationLayoutIndex < workSectionIndex);
-  assert.match(html, /data-kp-project-dashboard-fuzzy-finder/);
-  assert.match(html, />Find anything</);
-  assert.match(
-    html,
-    /placeholder="Search work, animations, visuals, objects, reports"/
-  );
+  assert.match(html, /data-kp-animation-sample-search/);
+  assert.match(html, />Rendered samples</);
+  assert.match(html, /placeholder="Search rendered samples"/);
+  assert.doesNotMatch(html, /data-kp-project-dashboard-fuzzy-finder/);
 });
 
 test("groupProjectCardsByStatus groups top-level cards and sorts by priority", () => {
@@ -290,13 +288,25 @@ test("filterProjectDashboardData finds cards and gallery items by text facets", 
   );
 });
 
-test("renderProjectDashboard renders searchable grouped galleries", () => {
+test("renderProjectDashboard searches rendered samples without filtering dashboard sections", () => {
   const html = renderProjectDashboard(projectDashboardData, {
-    query: "timeline"
+    sampleQuery: "dnt"
   });
 
-  assert.match(html, /data-action="filter-project-dashboard"/);
-  assert.match(html, /value="timeline"/);
+  assert.match(html, /data-action="filter-project-rendered-samples"/);
+  assert.match(html, /value="dnt"/);
+  assert.match(html, /data-kp-animation-sample="visual-donut-surface"/);
+  assert.doesNotMatch(html, /data-kp-animation-sample="visual-mesh-graph"/);
+  assert.match(html, /data-kp-project-card="work-project-dashboard-v1"/);
+  assert.match(html, /data-kp-project-report-theme="report-dashboard-operations"/);
+  assert.match(html, /data-kp-project-gallery-item="visual-mesh-graph"/);
+});
+
+test("renderProjectDashboard renders grouped galleries independently of sample search", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    sampleQuery: "timeline"
+  });
+
   assert.match(html, /data-kp-gallery-kind="animation"/);
   assert.match(html, /data-kp-gallery-kind="semantic-transform"/);
   assert.match(html, /data-kp-gallery-kind="notation-transform"/);
@@ -308,7 +318,7 @@ test("renderProjectDashboard renders searchable grouped galleries", () => {
   assert.match(html, /Visuals/);
   assert.match(html, /Timeline/);
   assert.match(html, /scroll clock/);
-  assert.doesNotMatch(html, /Equation cancelation/);
+  assert.match(html, /Equation cancelation/);
 });
 
 test("renderProjectDashboard renders KaTeX transform fixture selection UI", () => {
