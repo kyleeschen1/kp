@@ -2,7 +2,7 @@
   "id": "run-contract.kp.tutorial-card-runtime-loop-v0",
   "kind": "run-contract",
   "title": "KP tutorial card runtime loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
   "sourceRefs": [
     {
@@ -34,7 +34,7 @@
     "Do not expand into full programming execution traces before SourceFile selectors exist."
   ],
   "goal": "Run the approved tutorial-card runtime loop from KpTutorialCardManifest to a live synchronized equation and graph card.",
-  "target": "next.kp.tutorial-card-runtime-readiness-report",
+  "target": "next.kp.tutorial-card-runtime-loop-closeout",
   "runMode": "run",
   "maxSlices": 25,
   "commitCadence": "Commit after each verified slice.",
@@ -168,7 +168,8 @@
     {
       "id": "next.kp.tutorial-card-runtime-loop-closeout",
       "title": "Close tutorial card runtime loop",
-      "status": "planned"
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }

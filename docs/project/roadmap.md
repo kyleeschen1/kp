@@ -19,15 +19,16 @@ semantics first
 
 ## Active Focus
 
-**Semantic runtime foundation.** The first roadmap loop closed on 2026-07-10
-with derive metadata, registry capability metadata, transformation
-composition, correspondence composition, KaTeX fixture coverage,
-graph/vector diagnostics, synchronized layout samples, runtime readiness, a
-tutorial-card manifest, and dashboard roadmap refs in place.
+**Tutorial-card runtime foundation.** The tutorial-card runtime loop closed on
+2026-07-10 with manifest resolution, parent timeline sampling, synchronized
+layout binding, equation/graph frame adapters, a live linear-solve card shell,
+rewind verification, SourceFile selectors, dependency planning, iframe/static
+step export profile metadata, and refreshed dashboard readiness in place.
 
-The next major implementation loop should turn that metadata spine into a
-visible executable card: `KpTutorialCardManifest -> parent timeline ->
-synchronized layout -> sampled equation/graph frames -> renderer`.
+The next major implementation loop should package that runtime into concrete
+exports: `KpTutorialCardManifest -> parent timeline -> synchronized layout ->
+sampled frames -> iframe/static-step artifact`, with GIF/video and programming
+panels following only after the first artifacts are real.
 
 ## Roadmap Phases
 
@@ -139,7 +140,7 @@ Promote the dashboard from project tracker to authoring/catalog surface:
 
 ### Phase 7: Tutorial Composition And Layout Objects
 
-Status: parked-next
+Status: active
 
 Add first-class layout and tutorial composition:
 
@@ -151,7 +152,7 @@ Add first-class layout and tutorial composition:
 
 ### Phase 8: Computation, Curriculum, And Cards
 
-Status: parked
+Status: parked-next
 
 Build the verified learning layer:
 
@@ -165,7 +166,7 @@ Build the verified learning layer:
 
 ### Phase 9: Export And Embed
 
-Status: parked
+Status: active
 
 Package executable tutorials as semantic capsules:
 
@@ -176,22 +177,21 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Promote the synchronized equation/graph sample into a live rendered tutorial
-   card driven by `KpTutorialCardManifest`.
-2. Add a parent timeline model that can map child timelines, pauses, focus, and
-   annotations while preserving exact rewind semantics.
-3. Start the programming-domain `SourceFile` object with stable source-range
-   selectors and static render nodes.
-4. Generate one KaTeX transform fixture from a semantic transformation
-   definition instead of curated fixture geometry.
-5. Add lightweight export/embed dependency planning for tutorial cards before
-   implementing actual media encoders.
+1. Package the iframe export profile into a minimal embeddable tutorial-card
+   artifact with fallbacks and controls.
+2. Generate a static step-sequence artifact from sampled parent timeline
+   checkpoints.
+3. Add a programming tutorial-card panel that consumes `SourceFile` selectors.
+4. Add a lightweight browser/runtime smoke check for the live tutorial card
+   shell.
+5. Return to KaTeX transform fixtures and graph panels with the parent timeline
+   as the required clock boundary.
 
 ## Deferred
 
 - Full curriculum and spaced repetition are deferred until object,
   transformation, and computation protocols are reliable.
-- Full export pipeline is deferred until interactive tutorial cards are
-  representable as semantic capsules.
+- GIF/video export is deferred until iframe and static-step artifacts are
+  concrete and verifiable.
 - Broad Theseus planner infrastructure is deferred unless it directly blocks KP
   roadmap execution.
