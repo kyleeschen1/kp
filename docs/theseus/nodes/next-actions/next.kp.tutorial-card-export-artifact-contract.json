@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.tutorial-card-export-artifact-contract",
+  "kind": "next-action",
+  "title": "Define export artifact TS contract",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added a renderer-neutral tutorial-card export artifact contract with cloning and validation helpers.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/export-artifact.ts",
+      "summary": "Defines export artifact kinds, payload/status vocabulary, dependency metadata, fallback metadata, cloning, and validation."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-export-artifact.test.ts",
+      "summary": "Covers portable export artifact metadata cloning and validation diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-export-artifact-contract.json",
+      "summary": "Materializes the approved export artifact contract next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the artifact contract slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-export-artifact.test.ts tests/tutorial-card-export-profile.test.ts tests/tutorial-card-dependency-planner.test.ts tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "tutorial-card export artifact and related manifest/profile tests",
+      "checkedAt": "2026-07-10T23:46:29.026Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T23:46:29.050Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T23:46:29.076Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a renderer-neutral tutorial-card export artifact contract with cloning and validation helpers."
+  }
+}

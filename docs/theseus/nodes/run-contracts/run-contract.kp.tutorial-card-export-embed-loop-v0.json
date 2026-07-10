@@ -40,7 +40,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure."
   ],
   "goal": "Run the approved export/embed loop from tutorial-card runtime metadata to concrete iframe and static-step artifacts, then prepare programming panels and follow-up runtime checks.",
-  "target": "next.kp.tutorial-card-export-embed-loop-contract",
+  "target": "next.kp.tutorial-card-export-artifact-contract",
   "runMode": "run",
   "maxSlices": 20,
   "commitCadence": "Commit after each verified slice.",
@@ -59,7 +59,7 @@
     {
       "id": "next.kp.tutorial-card-export-artifact-contract",
       "title": "Define export artifact TS contract",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.iframe-export-artifact-resolver",
