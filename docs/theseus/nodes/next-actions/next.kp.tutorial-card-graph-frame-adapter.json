@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.tutorial-card-graph-frame-adapter",
+  "kind": "next-action",
+  "title": "Resolve graph frames from card manifests",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/graph-frame-adapter.ts",
+      "summary": "Adds createKpTutorialGraphFrameAdapter with injectable scene resolution and graph surface-mode frame sampling."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-graph-frame-adapter.test.ts",
+      "summary": "Covers graph panel resolution, deterministic shared-clock graph frames, mesh topology, and clamp behavior."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-graph-frame-adapter.json",
+      "summary": "Materializes the approved graph frame adapter next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the graph frame adapter slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-graph-frame-adapter.test.ts tests/tutorial-card-equation-frame-adapter.test.ts tests/tutorial-card-frame-sampler.test.ts tests/tutorial-card-layout-timeline-binding.test.ts tests/parent-timeline.test.ts tests/tutorial-card-runtime.test.ts tests/tutorial-card-manifest.test.ts tests/graph-transitions.test.ts",
+      "status": "passed",
+      "scope": "focused tutorial card graph adapter/runtime tests",
+      "checkedAt": "2026-07-10T22:26:01.871Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:26:01.897Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:26:01.922Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a tutorial graph frame adapter that resolves the graph panel from card manifests and samples graph surface frames on the shared card clock."
+  },
+  "summary": "Added a tutorial graph frame adapter that resolves the graph panel from card manifests and samples graph surface frames on the shared card clock."
+}
