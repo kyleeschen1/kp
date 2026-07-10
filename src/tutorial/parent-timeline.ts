@@ -6,6 +6,8 @@ export type KpParentTimelineTrackKind =
   | "semantic-object"
   | "transformation";
 
+export type KpParentTimelineMarkerKind = "annotation" | "focus";
+
 export interface KpParentTimelineTrack {
   readonly id: string;
   readonly kind: KpParentTimelineTrackKind;
@@ -20,6 +22,20 @@ export interface KpParentTimelineTrack {
   readonly summary?: string | undefined;
 }
 
+export interface KpParentTimelineMarker {
+  readonly id: string;
+  readonly kind: KpParentTimelineMarkerKind;
+  readonly targetTrackId: string;
+  readonly targetId: string;
+  readonly startProgress: number;
+  readonly endProgress: number;
+  readonly startBeat: number;
+  readonly endBeat: number;
+  readonly order: number;
+  readonly placeholder: boolean;
+  readonly summary?: string | undefined;
+}
+
 export interface KpParentTimeline {
   readonly id: string;
   readonly clockId: string | undefined;
@@ -29,6 +45,7 @@ export interface KpParentTimeline {
   readonly sampleable: boolean;
   readonly reversible: boolean;
   readonly tracks: readonly KpParentTimelineTrack[];
+  readonly markers: readonly KpParentTimelineMarker[];
 }
 
 export interface KpParentTimelineFrame {
@@ -38,11 +55,24 @@ export interface KpParentTimelineFrame {
   readonly beat: number;
   readonly elapsedMs: number;
   readonly tracks: readonly KpParentTimelineTrackFrame[];
+  readonly markers: readonly KpParentTimelineMarkerFrame[];
 }
 
 export interface KpParentTimelineTrackFrame {
   readonly trackId: string;
   readonly kind: KpParentTimelineTrackKind;
+  readonly targetId: string;
+  readonly active: boolean;
+  readonly progress: number;
+  readonly localProgress: number;
+  readonly startProgress: number;
+  readonly endProgress: number;
+}
+
+export interface KpParentTimelineMarkerFrame {
+  readonly markerId: string;
+  readonly kind: KpParentTimelineMarkerKind;
+  readonly targetTrackId: string;
   readonly targetId: string;
   readonly active: boolean;
   readonly progress: number;
@@ -120,6 +150,8 @@ export function createKpParentTimelineFromRuntimeContext(
     });
   });
 
+  const markers = createTransformationMarkerPlaceholders(tracks);
+
   return {
     id: timeline.id,
     clockId: timeline.clockId,
@@ -128,7 +160,8 @@ export function createKpParentTimelineFromRuntimeContext(
     beatCount,
     sampleable,
     reversible,
-    tracks
+    tracks,
+    markers
   };
 }
 
@@ -153,6 +186,17 @@ export function sampleKpParentTimeline(
       localProgress: localTrackProgress(track, clampedProgress),
       startProgress: track.startProgress,
       endProgress: track.endProgress
+    })),
+    markers: timeline.markers.map((marker) => ({
+      markerId: marker.id,
+      kind: marker.kind,
+      targetTrackId: marker.targetTrackId,
+      targetId: marker.targetId,
+      active: isSpanActive(marker, clampedProgress),
+      progress: clampedProgress,
+      localProgress: localSpanProgress(marker, clampedProgress),
+      startProgress: marker.startProgress,
+      endProgress: marker.endProgress
     }))
   };
 }
@@ -184,25 +228,80 @@ function createFullSpanTrack(input: FullSpanTrackInput): KpParentTimelineTrack {
   };
 }
 
+function createTransformationMarkerPlaceholders(
+  tracks: readonly KpParentTimelineTrack[]
+): KpParentTimelineMarker[] {
+  const markers: KpParentTimelineMarker[] = [];
+
+  for (const track of tracks) {
+    if (track.kind !== "transformation") {
+      continue;
+    }
+
+    // These placeholders give renderers a stable binding point before authored
+    // focus and annotation timing has its own manifest section.
+    markers.push(createPlaceholderMarker(track, "focus", markers.length));
+    markers.push(createPlaceholderMarker(track, "annotation", markers.length));
+  }
+
+  return markers;
+}
+
+function createPlaceholderMarker(
+  track: KpParentTimelineTrack,
+  kind: KpParentTimelineMarkerKind,
+  order: number
+): KpParentTimelineMarker {
+  return {
+    id: `${track.id}.marker.${kind}`,
+    kind,
+    targetTrackId: track.id,
+    targetId: track.targetId,
+    startProgress: track.startProgress,
+    endProgress: track.endProgress,
+    startBeat: track.startBeat,
+    endBeat: track.endBeat,
+    order,
+    placeholder: true,
+    ...(track.summary === undefined ? {} : { summary: track.summary })
+  };
+}
+
 function isTrackActive(
   track: KpParentTimelineTrack,
   progress: number
 ): boolean {
-  return progress >= track.startProgress && progress <= track.endProgress;
+  return isSpanActive(track, progress);
 }
 
 function localTrackProgress(
   track: KpParentTimelineTrack,
   progress: number
 ): number {
-  if (track.endProgress <= track.startProgress) {
-    return progress >= track.endProgress ? 1 : 0;
+  return localSpanProgress(track, progress);
+}
+
+interface TimelineProgressSpan {
+  readonly startProgress: number;
+  readonly endProgress: number;
+}
+
+function isSpanActive(span: TimelineProgressSpan, progress: number): boolean {
+  return progress >= span.startProgress && progress <= span.endProgress;
+}
+
+function localSpanProgress(
+  span: TimelineProgressSpan,
+  progress: number
+): number {
+  if (span.endProgress <= span.startProgress) {
+    return progress >= span.endProgress ? 1 : 0;
   }
 
   return roundTimelineProgress(
     normalizeAnimationProgress(
-      (progress - track.startProgress) /
-        (track.endProgress - track.startProgress)
+      (progress - span.startProgress) /
+        (span.endProgress - span.startProgress)
     )
   );
 }

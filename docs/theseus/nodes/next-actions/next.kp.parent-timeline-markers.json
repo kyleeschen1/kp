@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.parent-timeline-markers",
+  "kind": "next-action",
+  "title": "Add focus and annotation marker placeholders to parent timeline",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/parent-timeline.ts",
+      "summary": "Adds parent timeline marker types, transformation-derived placeholders, and sampled marker frames."
+    },
+    {
+      "kind": "file",
+      "path": "tests/parent-timeline.test.ts",
+      "summary": "Covers marker placeholder creation and active marker sampling on the shared parent timeline."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.parent-timeline-markers.json",
+      "summary": "Materializes the approved parent timeline markers next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the parent timeline markers slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-html-shell.test.ts tests/linear-solve-tutorial-card-sample.test.ts tests/tutorial-card-graph-frame-adapter.test.ts tests/tutorial-card-equation-frame-adapter.test.ts tests/tutorial-card-frame-sampler.test.ts tests/tutorial-card-layout-timeline-binding.test.ts tests/parent-timeline.test.ts tests/tutorial-card-runtime.test.ts tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "affected tutorial card runtime tests",
+      "checkedAt": "2026-07-10T22:54:42.265Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:54:42.321Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:54:42.358Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added renderer-neutral focus and annotation marker placeholders to the parent timeline and sampled marker frames from the same shared clock."
+  },
+  "summary": "Added renderer-neutral focus and annotation marker placeholders to the parent timeline and sampled marker frames from the same shared clock."
+}

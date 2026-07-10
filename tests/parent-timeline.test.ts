@@ -67,6 +67,60 @@ test("parent timeline indexes layout objects and transformations on one clock", 
       ["semantic-object", "equation.linear-solve.initial", 0, 1]
     ]
   );
+  assert.equal(timeline.markers.length, 6);
+  assert.deepEqual(
+    timeline.markers.map((marker) => [
+      marker.kind,
+      marker.targetId,
+      marker.startBeat,
+      marker.endBeat,
+      marker.placeholder
+    ]),
+    [
+      [
+        "focus",
+        "transform.linear-solve.subtract-both-sides-3",
+        0,
+        50 / 3,
+        true
+      ],
+      [
+        "annotation",
+        "transform.linear-solve.subtract-both-sides-3",
+        0,
+        50 / 3,
+        true
+      ],
+      [
+        "focus",
+        "transform.linear-solve.cancel-left-additive-inverse",
+        50 / 3,
+        100 / 3,
+        true
+      ],
+      [
+        "annotation",
+        "transform.linear-solve.cancel-left-additive-inverse",
+        50 / 3,
+        100 / 3,
+        true
+      ],
+      [
+        "focus",
+        "transform.linear-solve.simplify-right-difference",
+        100 / 3,
+        50,
+        true
+      ],
+      [
+        "annotation",
+        "transform.linear-solve.simplify-right-difference",
+        100 / 3,
+        50,
+        true
+      ]
+    ]
+  );
 });
 
 test("parent timeline sampling is deterministic for direct seek and rewind", () => {
@@ -96,6 +150,19 @@ test("parent timeline sampling is deterministic for direct seek and rewind", () 
   assert.equal(firstTransform?.active, false);
   assert.equal(secondTransform?.localProgress, 0.5);
   assert.equal(secondTransform?.active, true);
+  assert.deepEqual(
+    frame.markers
+      .filter((marker) => marker.active)
+      .map((marker) => [marker.kind, marker.targetId, marker.localProgress]),
+    [
+      ["focus", "transform.linear-solve.cancel-left-additive-inverse", 0.5],
+      [
+        "annotation",
+        "transform.linear-solve.cancel-left-additive-inverse",
+        0.5
+      ]
+    ]
+  );
   assert.equal(startFrame.progress, 0);
   assert.equal(startFrame.beat, 0);
   assert.equal(endFrame.progress, 1);

@@ -34,7 +34,7 @@
     "Do not expand into full programming execution traces before SourceFile selectors exist."
   ],
   "goal": "Run the approved tutorial-card runtime loop from KpTutorialCardManifest to a live synchronized equation and graph card.",
-  "target": "next.kp.tutorial-card-rewind-verification",
+  "target": "next.kp.parent-timeline-markers",
   "runMode": "run",
   "maxSlices": 25,
   "commitCadence": "Commit after each verified slice.",
@@ -123,7 +123,7 @@
     {
       "id": "next.kp.parent-timeline-markers",
       "title": "Add focus and annotation marker placeholders to parent timeline",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.generated-katex-fixture-from-transform",
