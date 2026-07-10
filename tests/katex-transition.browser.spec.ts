@@ -1889,6 +1889,95 @@ test("KaTeX texture atlas preserves nested fraction geometry for grouped capture
   });
 });
 
+test("KaTeX texture atlas waits for document fonts before capture", async ({
+  page
+}) => {
+  await page.goto("/");
+  const state = await page.evaluate(async () => {
+    const katexTextureAtlasPath = "/src/rendering/katex-texture-atlas.ts";
+    const { createKatexTextureAtlas } = (await import(
+      katexTextureAtlasPath
+    )) as typeof import("../src/rendering/katex-texture-atlas.ts");
+    const originalFontsDescriptor = Object.getOwnPropertyDescriptor(
+      document,
+      "fonts"
+    );
+    let releaseFontsReady: (() => void) | undefined;
+    const fontsReady = new Promise<void>((resolve) => {
+      releaseFontsReady = resolve;
+    });
+    const tokenElement = document.createElement("span");
+
+    tokenElement.className = "frac-line";
+    tokenElement.style.position = "absolute";
+    tokenElement.style.left = "20px";
+    tokenElement.style.top = "20px";
+    tokenElement.style.display = "block";
+    tokenElement.style.width = "24px";
+    tokenElement.style.height = "2px";
+    tokenElement.style.borderBottom = "2px solid black";
+    document.body.append(tokenElement);
+    Object.defineProperty(document, "fonts", {
+      configurable: true,
+      value: { ready: fontsReady }
+    });
+
+    try {
+      const rect = tokenElement.getBoundingClientRect();
+      const atlasPromise = createKatexTextureAtlas(
+        [
+          {
+            id: "font-wait-structural-token",
+            text: "structural:frac-line",
+            signature: "frac-line",
+            rect,
+            localRect: {
+              left: 0,
+              top: 0,
+              width: rect.width,
+              height: rect.height
+            },
+            row: 0,
+            element: tokenElement
+          }
+        ],
+        {
+          maxTextureSize: 64,
+          pixelRatio: 1
+        }
+      );
+      let settledBeforeFontsReady = false;
+
+      atlasPromise.then(() => {
+        settledBeforeFontsReady = true;
+      });
+      await Promise.resolve();
+      await Promise.resolve();
+      const pendingBeforeRelease = settledBeforeFontsReady === false;
+
+      releaseFontsReady?.();
+      await atlasPromise;
+
+      return {
+        pendingBeforeRelease,
+        settledAfterRelease: true
+      };
+    } finally {
+      tokenElement.remove();
+      if (originalFontsDescriptor === undefined) {
+        delete (document as { fonts?: FontFaceSet }).fonts;
+      } else {
+        Object.defineProperty(document, "fonts", originalFontsDescriptor);
+      }
+    }
+  });
+
+  expect(state).toEqual({
+    pendingBeforeRelease: true,
+    settledAfterRelease: true
+  });
+});
+
 declare global {
   interface Window {
     __kpEquationMotionSetProgress?: (

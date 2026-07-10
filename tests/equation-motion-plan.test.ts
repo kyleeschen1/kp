@@ -563,14 +563,26 @@ test("fixture fraction animation fades slash and fraction line artifacts", () =>
     lifecycle: "exit",
     visualLifecycle: "exit",
     start: 0,
-    end: 1,
-    easing: "ease-in-out",
+    end: 0.2,
+    easing: "ease-out",
     from: { opacity: 1, x: 0, y: 0, scale: 1 },
     to: { opacity: 0, x: 0, y: 0, scale: 1 }
   });
+  assert.deepEqual(trackFor(plan, "fraction.make.inline-to-stacked.frac-line"), {
+    tokenId: "fraction.make.inline-to-stacked.frac-line",
+    lifecycle: "enter",
+    visualLifecycle: "enter",
+    start: 0.8,
+    end: 1,
+    easing: "ease-out",
+    from: { opacity: 0, x: 0, y: 0, scale: 1 },
+    to: { opacity: 1, x: 0, y: 0, scale: 1 }
+  });
   assert.equal(
-    trackFor(plan, "fraction.make.inline-to-stacked.frac-line").from.opacity,
-    0
+    plan.tokens.find(
+      (token) => token.id === "fraction.make.inline-to-stacked.frac-line"
+    )?.entryEffect,
+    "direct"
   );
 });
 

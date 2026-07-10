@@ -462,7 +462,16 @@ function createInlineFractionFixtureTransition(
         "exit",
         "/",
         sourceSlash,
-        undefined
+        undefined,
+        {
+          motion: motionTiming(
+            0,
+            0.2,
+            "ease-out",
+            identityPose(),
+            { opacity: 0, x: 0, y: 0, scale: 1 }
+          )
+        }
       ),
       fixtureTransitionToken(
         `${fixture.id}.3`,
@@ -476,7 +485,17 @@ function createInlineFractionFixtureTransition(
         "enter",
         "structural:frac-line",
         undefined,
-        targetLine
+        targetLine,
+        {
+          entryEffect: "direct",
+          motion: motionTiming(
+            0.8,
+            1,
+            "ease-out",
+            { opacity: 0, x: 0, y: 0, scale: 1 },
+            identityPose()
+          )
+        }
       )
     ],
     sourceAnnotations: [

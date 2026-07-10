@@ -81,6 +81,7 @@ export async function createKatexTextureAtlas(
   options: KatexTextureCaptureOptions = {}
 ): Promise<KatexTextureAtlas> {
   assertTokensHaveElements(tokens);
+  await waitForDocumentFontsReady();
 
   const pixelRatio = options.pixelRatio ?? window.devicePixelRatio ?? 1;
   const width = options.maxTextureSize ?? 2048;
@@ -132,6 +133,14 @@ export async function createKatexTextureAtlas(
     pages,
     regions: new Map(regions.map((region) => [region.tokenId, region]))
   };
+}
+
+async function waitForDocumentFontsReady(): Promise<void> {
+  if (document.fonts === undefined) {
+    return;
+  }
+
+  await document.fonts.ready;
 }
 
 export function measureKatexTextureCaptureRect(element: Element): KatexTokenRect {
