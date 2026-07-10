@@ -1,0 +1,59 @@
+{
+  "id": "task.theseus.dashboard-data-command-v0",
+  "kind": "task",
+  "title": "Register Theseus dashboard-data command",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/cli-report-commands.ts",
+      "summary": "Routes dashboard-data to buildTheseusDashboardData with workspace project metadata."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/cli-report-commands.test.ts",
+      "summary": "Covers dashboard-data report routing and emitted model shape."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/cli-command-registry.ts",
+      "summary": "Registers dashboard-data command metadata."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/docs/cli.md",
+      "summary": "Generated CLI docs include dashboard-data usage and examples."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data-builder.ts",
+      "summary": "Adds deterministic row ordering used by command output."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/cli-report-commands.test.ts src/cli-command-registry.test.ts src/dashboard-data-builder.test.ts src/dashboard-data.test.ts",
+      "status": "passed",
+      "scope": "Relevant dashboard-data CLI, registry, builder, and contract tests.",
+      "checkedAt": "2026-07-10T05:54:09.024Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Theseus package TypeScript check.",
+      "checkedAt": "2026-07-10T05:54:09.033Z"
+    },
+    {
+      "command": "node /Users/kyleeschen/Code/theseus/bin/theseus.mjs dashboard-data --project-root /Users/kyleeschen/Code/kp",
+      "status": "passed",
+      "checkedAt": "2026-07-10T05:54:09.042Z",
+      "scope": "Runtime dashboard-data command against the KP host graph."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Registered the reusable dashboard-data CLI command, routed it through the report handler, documented it in generated CLI docs, and verified it emits dashboard JSON for KP."
+  },
+  "summary": "Registered the reusable dashboard-data CLI command, routed it through the report handler, documented it in generated CLI docs, and verified it emits dashboard JSON for KP."
+}

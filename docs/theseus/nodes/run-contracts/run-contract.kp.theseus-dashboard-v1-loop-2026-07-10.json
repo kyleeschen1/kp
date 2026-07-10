@@ -48,13 +48,14 @@
     {
       "id": "task.theseus.dashboard-data-builder-v0",
       "title": "Add-dashboard-data-builder",
-      "status": "complete",
-      "summary": "Generic graph-to-dashboard data builder landed in the sibling Theseus package."
+      "summary": "Generic graph-to-dashboard data builder landed in the sibling Theseus package.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-data-command-v0",
       "title": "Register-dashboard-data-command",
-      "status": "planned"
+      "status": "complete",
+      "summary": "dashboard-data CLI command is registered, documented, tested, and runtime-checked against KP."
     },
     {
       "id": "task.theseus.dashboard-row-order-v0",
