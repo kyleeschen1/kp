@@ -2,7 +2,75 @@
   "id": "next.kp.matrix-linear-map-derive",
   "kind": "next-action",
   "title": "Link Matrix and LinearMap representations",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.linear-algebra",
-  "summary": "Define minimal LinearMap representation metadata and derive links between Matrix and LinearMap views where basis provenance is explicit."
+  "summary": "Added first-class LinearMap derivation from Matrix with basis provenance and matrix-form protocol support.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/linear-map.ts",
+      "summary": "Defines LinearMapObject, Matrix-to-LinearMap derivation records, basis provenance, and matrix-form conversion."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/document.ts",
+      "summary": "Adds LinearMapObject to the semantic document object union."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/validation.ts",
+      "summary": "Validates LinearMap source matrix references, row shape, and dimensions."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/computation-protocols.ts",
+      "summary": "Exposes matrixForm and LaTeX matrix rendering for LinearMap objects."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/editor.ts",
+      "summary": "Handles LinearMap explicitly in editor preview rendering exhaustiveness."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic.test.ts",
+      "summary": "Covers Matrix-to-LinearMap derivation, provenance selectors, validation, matrixForm, and LaTeX rendering."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic.test.ts",
+      "status": "passed",
+      "scope": "focused semantic LinearMap derivation tests",
+      "checkedAt": "2026-07-10T20:23:23.244Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/editor.test.ts tests/semantic.test.ts",
+      "status": "passed",
+      "scope": "focused editor exhaustiveness and semantic LinearMap tests",
+      "checkedAt": "2026-07-10T20:23:23.270Z"
+    },
+    {
+      "command": "npm test -- tests/editor.test.ts tests/semantic.test.ts tests/semantic-derive-protocols.test.ts tests/rendering.test.ts tests/semantic-object-registry.test.ts",
+      "status": "passed",
+      "scope": "repo test script including editor, semantic, derive, renderer, and registry coverage",
+      "checkedAt": "2026-07-10T20:23:23.354Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:23:23.401Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:23:23.439Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added first-class LinearMap derivation from Matrix with basis provenance and matrix-form protocol support."
+  }
 }

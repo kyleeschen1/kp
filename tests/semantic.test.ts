@@ -38,6 +38,9 @@ import {
   createLatexComparisonObject,
   createLatexFormObject
 } from "../src/semantic/latex-form.ts";
+import {
+  deriveLinearMapFromMatrix
+} from "../src/semantic/linear-map.ts";
 import { createMatrixObject, identityMatrix } from "../src/semantic/matrix.ts";
 import { createExpressionObject } from "../src/semantic/expression-object.ts";
 import {
@@ -207,6 +210,60 @@ test("semantic computation protocols expose matrix capabilities", () => {
     isSquare: true,
     determinant: -2
   });
+});
+
+test("deriveLinearMapFromMatrix preserves matrix basis provenance", () => {
+  const matrix = createMatrixObject({
+    id: "A",
+    label: "A",
+    rows: [
+      [1, 2, 3],
+      [4, 5, 6]
+    ]
+  });
+  const derivation = deriveLinearMapFromMatrix(matrix, {
+    id: "linear-map.A",
+    label: "T_A",
+    domainBasisId: "basis.R3.standard",
+    codomainBasisId: "basis.R2.standard"
+  });
+
+  assert.equal(derivation.object.type, "linear-map");
+  assert.equal(derivation.object.sourceMatrixId, "A");
+  assert.equal(derivation.object.domainDimension, 3);
+  assert.equal(derivation.object.codomainDimension, 2);
+  assert.deepEqual(derivation.object.rows, matrix.rows);
+  assert.equal(derivation.object.domainBasisId, "basis.R3.standard");
+  assert.equal(derivation.object.codomainBasisId, "basis.R2.standard");
+  assert.equal(derivation.record.provenance.capabilityId, "matrix.linear-map");
+  assert.equal(derivation.record.sourceObjectId, "A");
+  assert.equal(derivation.record.targetObjectId, "linear-map.A");
+  assert.deepEqual(listSemanticComputationProtocols(derivation.object), [
+    "matrixForm"
+  ]);
+  assert.deepEqual(semanticMatrixForm(derivation.object)?.rows, matrix.rows);
+  assert.equal(
+    semanticToLatex(derivation.object),
+    String.raw`T_A = \begin{bmatrix}1 & 2 & 3 \\ 4 & 5 & 6\end{bmatrix}`
+  );
+  assert.deepEqual(derivation.record.provenance.sourceSelectors, [
+    "entry[0,0]",
+    "entry[0,1]",
+    "entry[0,2]",
+    "entry[1,0]",
+    "entry[1,1]",
+    "entry[1,2]"
+  ]);
+  assert.deepEqual(
+    validateKpDocument(
+      createKpDocument({
+        id: "linear-map-doc",
+        title: "Linear map",
+        objects: [matrix, derivation.object]
+      })
+    ),
+    []
+  );
 });
 
 test("semantic computation protocols expose authored LaTeX forms", () => {

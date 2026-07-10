@@ -217,6 +217,7 @@ function renderObjectPreview(object: KpSemanticObject, document: KpDocument): st
         "rn-" + object.id + "-webgl-preview",
         `${renderGraph3DControls(object, document.objects)}<div class="object-preview__graph">${renderGraph3DWebGLShell(document.objects, object)}</div>`
       );
+    case "linear-map":
     case "matrix":
       return "";
   }

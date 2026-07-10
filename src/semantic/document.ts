@@ -13,6 +13,7 @@ import type {
   LatexFormObject
 } from "./latex-form.ts";
 import type { ExpressionObject } from "./expression-object.ts";
+import type { LinearMapObject } from "./linear-map.ts";
 import type { MatrixObject } from "./matrix.ts";
 
 export interface KpDocument {
@@ -33,6 +34,7 @@ export type KpSemanticObject =
   | Graph3DObject
   | LatexComparisonObject
   | LatexFormObject
+  | LinearMapObject
   | Surface3DObject
   | MatrixObject;
 

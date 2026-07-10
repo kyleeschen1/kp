@@ -43,6 +43,8 @@ function validateObject(
       return validateLatexComparisonObject(object, path, objectsById);
     case "latex-form":
       return validateLatexFormObject(object, path);
+    case "linear-map":
+      return validateLinearMapObject(object, path, objectsById);
     case "matrix":
       return validateMatrixObject(object, path);
     case "surface-3d":
@@ -96,6 +98,47 @@ function validateExpressionObject(
     issues.push({
       path: `${path}.variables`,
       message: `Expression ${object.id} variables must not be empty.`
+    });
+  }
+
+  return issues;
+}
+
+function validateLinearMapObject(
+  object: Extract<KpSemanticObject, { type: "linear-map" }>,
+  path: string,
+  objectsById: ReadonlyMap<string, KpSemanticObject>
+): readonly ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const sourceMatrix = objectsById.get(object.sourceMatrixId);
+
+  if (sourceMatrix?.type !== "matrix") {
+    issues.push({
+      path: `${path}.sourceMatrixId`,
+      message: `Linear map ${object.id} references missing matrix ${object.sourceMatrixId}.`
+    });
+  }
+
+  if (object.rows.length !== object.codomainDimension) {
+    issues.push({
+      path: `${path}.codomainDimension`,
+      message: `Linear map ${object.id} codomainDimension must match its row count.`
+    });
+  }
+
+  const domainDimension = object.rows[0]?.length ?? 0;
+
+  if (object.domainDimension !== domainDimension) {
+    issues.push({
+      path: `${path}.domainDimension`,
+      message: `Linear map ${object.id} domainDimension must match its column count.`
+    });
+  }
+
+  if (object.rows.some((row) => row.length !== domainDimension)) {
+    issues.push({
+      path: `${path}.rows`,
+      message: `Linear map ${object.id} rows must be rectangular.`
     });
   }
 

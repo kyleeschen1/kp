@@ -27,6 +27,7 @@ import {
   type Surface3DObject
 } from "./graph.ts";
 import { latexFormObjectToLatex } from "./latex-form.ts";
+import { linearMapToMatrixObject } from "./linear-map.ts";
 import { matrixObjectToLatex, type MatrixObject } from "./matrix.ts";
 
 export const SEMANTIC_COMPUTATION_PROTOCOL_IDS = [
@@ -201,6 +202,8 @@ export function listSemanticComputationProtocols(
       return ["toLatex", "evaluate", "differentiate", "graphForm", "numericSample"];
     case "matrix":
       return ["toLatex", "evaluate", "matrixForm"];
+    case "linear-map":
+      return ["matrixForm"];
     case "latex-form":
       return ["toLatex"];
     case "curve-2d":
@@ -231,6 +234,8 @@ export function semanticToLatex(
       return expressionObjectToLatex(target);
     case "matrix":
       return matrixObjectToLatex(target);
+    case "linear-map":
+      return matrixObjectToLatex(linearMapToMatrixObject(target));
     case "latex-form":
       return latexFormObjectToLatex(target);
     case "curve-2d":
@@ -291,9 +296,18 @@ export function semanticDifferentiate(
 export function semanticMatrixForm(
   target: SemanticComputationTarget
 ): MatrixObject | undefined {
-  return !isMathExpression(target) && target.type === "matrix"
-    ? target
-    : undefined;
+  if (isMathExpression(target)) {
+    return undefined;
+  }
+
+  switch (target.type) {
+    case "matrix":
+      return target;
+    case "linear-map":
+      return linearMapToMatrixObject(target);
+    default:
+      return undefined;
+  }
 }
 
 export function semanticGraphForm(

@@ -38,7 +38,7 @@
     "Do not add visual effects that do not clarify semantic identity or runtime capability."
   ],
   "goal": "Run the approved roadmap-backed semantic runtime loop from project docs through concrete verified KP slices.",
-  "target": "next.kp.matrix-linear-map-derive",
+  "target": "next.kp.transformation-composition-model",
   "runMode": "run",
   "maxSlices": 24,
   "commitCadence": "Commit after each verified slice.",
@@ -86,8 +86,8 @@
     },
     {
       "id": "next.kp.matrix-linear-map-derive",
-      "title": "Link Matrix and LinearMap representations",
-      "status": "planned"
+      "title": "Derive LinearMap metadata from matrices",
+      "status": "complete"
     },
     {
       "id": "next.kp.transformation-composition-model",
