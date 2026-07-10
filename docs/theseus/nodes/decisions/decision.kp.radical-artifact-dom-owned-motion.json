@@ -1,0 +1,48 @@
+{
+  "id": "decision.kp.radical-artifact-dom-owned-motion",
+  "kind": "decision",
+  "title": "Use DOM-owned motion for radical artifact demo",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "line": 1133,
+      "summary": "Routes the radical artifact demo through DOM-owned fold-bundle-swap poses instead of a canvas handoff."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "line": 115,
+      "summary": "Asserts the radical artifact has no overlay and remains DOM-owned during the formerly flickering progress window."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "radical DOM-owned artifact browser regression",
+      "checkedAt": "2026-07-10T12:24:56.206Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "controller and browser spec typing",
+      "checkedAt": "2026-07-10T12:25:05.819Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full Node test suite",
+      "checkedAt": "2026-07-10T12:25:13.847Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-10T12:25:20.392Z",
+      "scope": "production build with existing chunk-size warning"
+    }
+  ],
+  "summary": "Resolved: the radical artifact demo uses DOM-owned KaTeX clones for the 1/2-to-radical handoff because switching between live DOM and raster canvas produced visible flicker. The richer canvas fold remains deferred until it can avoid ownership seams."
+}
