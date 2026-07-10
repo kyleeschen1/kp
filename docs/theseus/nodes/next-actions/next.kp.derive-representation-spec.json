@@ -2,7 +2,42 @@
   "id": "next.kp.derive-representation-spec",
   "kind": "next-action",
   "title": "Spec derive representation contract",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic-api",
-  "summary": "Write the first focused contract for exact derive and representation capabilities across semantic objects, provenance, dashboard visibility, and tests."
+  "summary": "Defined the derive and representation capability contract for exact semantic derivations, provenance honesty, dashboard previews, and the next implementation slices.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/superpowers/specs/2026-07-10-derive-representation-capability-design.md",
+      "summary": "New derive/representation capability design defines relation/status vocabulary, result shape, provenance requirements, dashboard contract, animation boundary, and migration plan."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread now points to the accepted derive contract and the typed derive capability implementation as the next action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap phase 2 is the strategic source for the derive/representation capability slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for derive representation spec",
+      "checkedAt": "2026-07-10T19:54:49.581Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-10T19:54:49.600Z",
+      "scope": "Whitespace validation for docs slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined the derive and representation capability contract for exact semantic derivations, provenance honesty, dashboard previews, and the next implementation slices."
+  }
 }

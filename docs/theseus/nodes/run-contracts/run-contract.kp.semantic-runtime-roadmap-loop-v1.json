@@ -38,7 +38,7 @@
     "Do not add visual effects that do not clarify semantic identity or runtime capability."
   ],
   "goal": "Run the approved roadmap-backed semantic runtime loop from project docs through concrete verified KP slices.",
-  "target": "next.kp.derive-representation-spec",
+  "target": "next.kp.derive-capability-types",
   "runMode": "run",
   "maxSlices": 24,
   "commitCadence": "Commit after each verified slice.",
@@ -52,7 +52,7 @@
     {
       "id": "next.kp.derive-representation-spec",
       "title": "Spec derive representation contract",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.derive-capability-types",

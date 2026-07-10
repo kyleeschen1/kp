@@ -2,8 +2,8 @@
 
 Status: active
 Last Updated: 2026-07-10
-Current Next Action: Define the derive/representation capability and connect it
-to object metadata, dashboard rows, and sample targets.
+Current Next Action: Implement typed derive capability descriptors and results
+from the accepted derive/representation contract.
 
 ## Goal
 
@@ -49,6 +49,7 @@ semantic operation itself.
 
 - `docs/project/strategy.md`
 - `docs/project/roadmap.md`
+- `docs/superpowers/specs/2026-07-10-derive-representation-capability-design.md`
 - `docs/theseus/nodes/decisions/decision.kp.semantic-animation-runtime-roadmap.json`
 - `docs/theseus/events/2026-07-09-semantic-tutorial-system-design-decisions.md`
 - `docs/superpowers/specs/2026-07-08-rendering-time-protocol-design.md`
