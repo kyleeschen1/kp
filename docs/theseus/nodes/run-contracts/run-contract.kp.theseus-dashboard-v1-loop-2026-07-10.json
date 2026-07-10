@@ -180,7 +180,7 @@
     {
       "id": "task.theseus.dashboard-cross-project-smoke-v0",
       "title": "Add-cross-project-smoke-fixture",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "workflow.kp.dashboard-animation-system",

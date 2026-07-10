@@ -1,0 +1,67 @@
+{
+  "id": "task.theseus.dashboard-cross-project-smoke-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard cross-project smoke fixture",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "summary": "Added a cross-project dashboard smoke fixture that runs reusable dashboard commands against a temporary configured host workspace, and fixed dashboard reports to use configured host project ids.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-cross-project-smoke.test.ts",
+      "summary": "Creates a temporary host workspace and verifies dashboard-data, dashboard-out, validate, and action metadata across project roots."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/cli-report-commands.ts",
+      "summary": "Accepts configured project ids when rendering dashboard data, HTML, and served HTML."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/cli.ts",
+      "summary": "Passes workspace project ids into report command handling."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- src/dashboard-cross-project-smoke.test.ts",
+      "status": "passed",
+      "scope": "Focused cross-project dashboard smoke fixture.",
+      "checkedAt": "2026-07-10T08:46:19.000Z"
+    },
+    {
+      "command": "npm test -- src/dashboard-cross-project-smoke.test.ts src/cli-report-commands.test.ts src/cli-workspace.test.ts src/dashboard-data-builder.test.ts src/dashboard-html.test.ts src/dashboard-data.test.ts src/dashboard-client.test.ts",
+      "status": "passed",
+      "scope": "Adjacent dashboard, report command, and workspace tests.",
+      "checkedAt": "2026-07-10T08:46:19.018Z"
+    },
+    {
+      "command": "LC_ALL=C rg \"[^\\x00-\\x7F]\" src/dashboard-cross-project-smoke.test.ts src/cli.ts src/cli-report-commands.ts",
+      "status": "passed",
+      "scope": "ASCII scan returned no matches.",
+      "checkedAt": "2026-07-10T08:46:19.036Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full Theseus package test suite: 89 files, 350 tests.",
+      "checkedAt": "2026-07-10T08:46:19.051Z"
+    },
+    {
+      "command": "npm run source:gates",
+      "status": "passed",
+      "scope": "Theseus source-size, function-size, and import-boundary gates.",
+      "checkedAt": "2026-07-10T08:46:19.067Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T08:46:19.080Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a cross-project dashboard smoke fixture that runs reusable dashboard commands against a temporary configured host workspace, and fixed dashboard reports to use configured host project ids."
+  }
+}
