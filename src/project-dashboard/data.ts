@@ -870,6 +870,56 @@ export const projectDashboardData: ProjectDashboardData = {
       ]
     },
     {
+      id: "report-semantic-runtime-readiness",
+      title: "Semantic runtime readiness",
+      status: "active",
+      grade: "B-",
+      lastReviewedOn: "2026-07-10",
+      scope:
+        "Assess whether KP has enough shared object, transformation, layout, and time runtime to compose equation, graph, and future programming tutorials from typed metadata.",
+      questions: [
+        "Can runtime objects preserve stable semantic selectors across rendered forms?",
+        "Can equation, graph, and layout views sample arbitrary progress from one shared clock?",
+        "Can synchronized layout composition expose launch metadata, evidence, and verification targets in the dashboard?",
+        "Can these runtime pieces become executable tutorial cards without one-off page code?"
+      ],
+      evidence: [
+        { label: "Animation kernel", href: "src/animation/kernel.ts" },
+        {
+          label: "Equation motion sampler",
+          href: "src/rendering/equation-motion-sampler.ts"
+        },
+        {
+          label: "Graph transition sampler",
+          href: "src/rendering/graph-transitions.ts"
+        },
+        {
+          label: "Synchronized panel layout sample",
+          href: "src/layout/synchronized-panel.ts"
+        },
+        {
+          label: "Dashboard synchronized sample row",
+          href: "src/project-dashboard/data.ts"
+        }
+      ],
+      risks: [
+        "The synchronized panel is still metadata-first; it does not yet render an integrated live surface.",
+        "Graph and equation frames share progress but not a typed parent timeline with child time transforms.",
+        "Programming-domain objects still need source selectors before runtime readiness can be called broad."
+      ],
+      recommendedNextActions: [
+        "Define the tutorial card manifest around objects, layout, timeline, checks, and export settings.",
+        "Add a dashboard roadmap writeback pass so runtime readiness can stay current after each slice.",
+        "Promote the synchronized panel sample from launch metadata into an actual rendered preview."
+      ],
+      tags: ["runtime", "semantic-objects", "layout", "timeline", "readiness"],
+      relatedIds: [
+        "work-rendering-time-protocol",
+        "gallery-rendering-time-api",
+        "sample-synced-equation-graph-linear-solve"
+      ]
+    },
+    {
       id: "report-semantic-object-api",
       title: "Semantic object API",
       status: "planned",

@@ -831,6 +831,57 @@ test("project dashboard includes semantic animation readiness checklist theme", 
   );
 });
 
+test("project dashboard includes semantic runtime readiness report card", () => {
+  const runtimeTheme = projectDashboardData.reportThemes.find(
+    (theme) => theme.id === "report-semantic-runtime-readiness"
+  );
+
+  assert.equal(runtimeTheme?.title, "Semantic runtime readiness");
+  assert.equal(runtimeTheme?.status, "active");
+  assert.equal(runtimeTheme?.grade, "B-");
+  assert.equal(runtimeTheme?.lastReviewedOn, "2026-07-10");
+  assert.ok(
+    runtimeTheme?.scope.includes(
+      "shared object, transformation, layout, and time runtime"
+    )
+  );
+  assert.ok(
+    runtimeTheme?.questions.some((question) =>
+      question.includes("sample arbitrary progress")
+    )
+  );
+  assert.ok(
+    runtimeTheme?.questions.some((question) =>
+      question.includes("layout composition")
+    )
+  );
+  assert.ok(
+    runtimeTheme?.evidence.some((entry) =>
+      entry.href.includes("src/layout/synchronized-panel.ts")
+    )
+  );
+  assert.ok(
+    runtimeTheme?.evidence.some((entry) =>
+      entry.href.includes("src/rendering/graph-transitions.ts")
+    )
+  );
+  assert.ok(
+    runtimeTheme?.risks.some((risk) =>
+      risk.includes("still metadata-first")
+    )
+  );
+  assert.ok(
+    runtimeTheme?.recommendedNextActions.some((action) =>
+      action.includes("tutorial card manifest")
+    )
+  );
+  assert.deepEqual(runtimeTheme?.relatedIds, [
+    "work-rendering-time-protocol",
+    "gallery-rendering-time-api",
+    "sample-synced-equation-graph-linear-solve"
+  ]);
+});
+
 test("renderProjectDashboard renders report card evidence, risks, review metadata, and next actions", () => {
   const html = renderProjectDashboard(projectDashboardData);
 
@@ -847,6 +898,24 @@ test("renderProjectDashboard renders report card evidence, risks, review metadat
   assert.match(html, /Adapt graph surface morphs to the shared playhead/);
   assert.match(html, /Programming object readiness/);
   assert.match(html, /Not reviewed/);
+});
+
+test("renderProjectDashboard selects semantic runtime readiness report card", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "report-semantic-runtime-readiness"
+  });
+
+  assert.match(
+    html,
+    /data-kp-selected-agenda-row="report-semantic-runtime-readiness"/
+  );
+  assert.match(html, /Semantic runtime readiness/);
+  assert.match(html, /data-kp-preview-field="Grade"[^>]*>B-/);
+  assert.match(
+    html,
+    /data-kp-preview-field="Risks"[^>]*>[\s\S]*metadata-first/
+  );
+  assert.match(html, /src\/layout\/synchronized-panel\.ts/);
 });
 
 test("renderProjectDashboard renders the data contract for dashboard writes", () => {

@@ -2,7 +2,43 @@
   "id": "next.kp.runtime-readiness-report-card",
   "kind": "next-action",
   "title": "Add semantic runtime readiness report card",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.dashboard",
-  "summary": "Add a dashboard report card that grades semantic runtime maturity, risks, blockers, and next verification targets."
+  "summary": "Added a semantic runtime readiness report card to the project dashboard.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Adds the Semantic runtime readiness report theme with grade, evidence, risks, next verification targets, and related runtime rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers report-card data fields and selected report preview rendering for semantic runtime readiness."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "project dashboard report-card regression tests",
+      "checkedAt": "2026-07-10T21:20:00.245Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T21:20:00.277Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T21:20:00.301Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a semantic runtime readiness report card to the project dashboard."
+  }
 }
