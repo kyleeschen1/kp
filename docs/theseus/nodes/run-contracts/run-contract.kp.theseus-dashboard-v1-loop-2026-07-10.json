@@ -1,0 +1,169 @@
+{
+  "id": "run-contract.kp.theseus-dashboard-v1-loop-2026-07-10",
+  "kind": "run-contract",
+  "title": "Theseus reusable dashboard v1 loop",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP workflow that owns the dashboard-backed semantic animation system queue."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "allowedWork": [
+    "Implement the approved reusable Theseus dashboard v1 slices and KP adapter slices.",
+    "Commit after each verified slice."
+  ],
+  "disallowedWork": [
+    "Do not broaden into unrelated A+ gate cleanup unless it directly blocks the dashboard loop.",
+    "Do not import KP, KaTeX, Three.js, or host rendering code into the Theseus package."
+  ],
+  "goal": "Build a reusable Theseus dashboard core with KP as the first host adapter.",
+  "target": "workflow.kp.dashboard-animation-system",
+  "runMode": "run",
+  "maxSlices": 25,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when verification fails and needs user judgment.",
+    "Stop when the approved slice list is exhausted.",
+    "Stop before broadening beyond the approved reusable dashboard loop.",
+    "Stop before importing host-specific KP, KaTeX, Three.js, or animation rendering code into Theseus."
+  ],
+  "slices": [
+    {
+      "id": "task.theseus.dashboard-data-contract-v0",
+      "title": "Define-dashboard-data-contract",
+      "status": "complete",
+      "summary": "Dashboard data contract and focused tests landed in the sibling Theseus package."
+    },
+    {
+      "id": "task.theseus.dashboard-data-builder-v0",
+      "title": "Add-dashboard-data-builder",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-data-command-v0",
+      "title": "Register-dashboard-data-command",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-row-order-v0",
+      "title": "Add-row-ordering-semantics",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-search-index-v0",
+      "title": "Add-fuzzy-search-metadata",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-static-html-v0",
+      "title": "Generate-static-dashboard-html",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-agenda-css-v0",
+      "title": "Add-agenda-css",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-client-search-v0",
+      "title": "Add-client-search-and-TOC",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-selected-preview-v0",
+      "title": "Add-selected-row-preview",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-health-v0",
+      "title": "Add-health-widgets",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-queue-v0",
+      "title": "Add-workflow-queue-section",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-out-command-v0",
+      "title": "Add-dashboard-out-command",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-serve-command-v0",
+      "title": "Add-dashboard-serve-command",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-extension-protocol-v0",
+      "title": "Define-extension-protocol",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-extension-runner-v0",
+      "title": "Add-extension-runner",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-extension-rows-v0",
+      "title": "Add-extension-rows",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.live-dashboard-sample-previews",
+      "title": "Add-KP-dashboard-extension-command",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.live-dashboard-sample-previews",
+      "title": "Move-KP-agenda-behind-adapter",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.live-dashboard-sample-previews",
+      "title": "Add-KP-animation-preview-links",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-preview-links-v0",
+      "title": "Add-host-preview-link-protocol",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-host-docs-v0",
+      "title": "Add-host-project-docs",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-action-model-v0",
+      "title": "Add-read-only-action-model",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-add-verification-action-v0",
+      "title": "Add-verification-write-action",
+      "status": "planned"
+    },
+    {
+      "id": "task.theseus.dashboard-cross-project-smoke-v0",
+      "title": "Add-cross-project-smoke-fixture",
+      "status": "planned"
+    },
+    {
+      "id": "workflow.kp.dashboard-animation-system",
+      "title": "Closeout-records-docs-and-next-queue",
+      "status": "planned"
+    }
+  ]
+}

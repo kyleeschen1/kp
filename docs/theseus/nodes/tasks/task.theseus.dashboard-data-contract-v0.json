@@ -1,0 +1,38 @@
+{
+  "id": "task.theseus.dashboard-data-contract-v0",
+  "kind": "task",
+  "title": "Define Theseus dashboard data contract",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data.ts",
+      "summary": "Dashboard data contract types and createTheseusDashboardModel normalization helper."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data.test.ts",
+      "summary": "Focused contract test for searchable read-only dashboard model normalization."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/dashboard-data.test.ts",
+      "status": "passed",
+      "scope": "Focused Theseus dashboard data contract test.",
+      "checkedAt": "2026-07-10T05:41:33.021Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T05:41:33.032Z",
+      "scope": "Theseus package TypeScript contract check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined the reusable Theseus dashboard data contract with project metadata, agenda sections, rows, source refs, preview fields, health defaults, counts, and deterministic row search text."
+  },
+  "summary": "Defined the reusable Theseus dashboard data contract with project metadata, agenda sections, rows, source refs, preview fields, health defaults, counts, and deterministic row search text."
+}
