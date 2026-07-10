@@ -1,0 +1,44 @@
+{
+  "id": "task.theseus.dashboard-extension-protocol-v0",
+  "kind": "task",
+  "title": "Define Theseus dashboard extension protocol",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "summary": "Defined host-neutral dashboard extension context, extension, contribution types, and contribution merge behavior for sections and health items.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-extension.ts",
+      "summary": "Defines dashboard extension protocol types and merge helper."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-extension.test.ts",
+      "summary": "Covers extension section and health contribution merging plus row normalization."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/dashboard-extension.test.ts",
+      "status": "passed",
+      "scope": "Focused dashboard extension protocol test.",
+      "checkedAt": "2026-07-10T07:27:17.716Z"
+    },
+    {
+      "command": "npm run test -- src/dashboard-extension.test.ts src/dashboard-data.test.ts src/dashboard-data-builder.test.ts src/dashboard-html.test.ts src/dashboard-client.test.ts",
+      "status": "passed",
+      "scope": "Adjacent dashboard tests.",
+      "checkedAt": "2026-07-10T07:27:17.732Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T07:27:17.747Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined host-neutral dashboard extension context, extension, contribution types, and contribution merge behavior for sections and health items."
+  }
+}

@@ -114,13 +114,14 @@
     {
       "id": "task.theseus.dashboard-serve-command-v0",
       "title": "Add-dashboard-serve-command",
-      "status": "complete",
-      "summary": "dashboard-serve now serves reusable dashboard HTML with smoke-mode verification."
+      "summary": "dashboard-serve now serves reusable dashboard HTML with smoke-mode verification.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-extension-protocol-v0",
       "title": "Define-extension-protocol",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Dashboard extension protocol types and merge behavior landed."
     },
     {
       "id": "task.theseus.dashboard-extension-runner-v0",
