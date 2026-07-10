@@ -1,0 +1,155 @@
+{
+  "id": "run-contract.kp.tutorial-card-export-embed-loop-v0",
+  "kind": "run-contract",
+  "title": "KP tutorial-card export/embed loop",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-export-embed-loop-contract.json",
+      "summary": "Run-contract target that explains why this export/embed loop exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-10-tutorial-card-runtime-loop-closeout.md",
+      "summary": "Tutorial-card runtime loop closeout recommends packaging iframe and static-step artifacts next."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Active roadmap prioritizes iframe export artifacts, static-step artifacts, programming panels, and visual/runtime smoke checks."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread names iframe artifact packaging as the current next action."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "allowedWork": [
+    "Only work on approved KP tutorial-card export/embed slices.",
+    "Keep iframe and static-step artifacts concrete before starting GIF or video encoders.",
+    "Keep each slice independently verified, recorded in Theseus, and committed."
+  ],
+  "disallowedWork": [
+    "Do not broaden into full GIF/video encoder implementation before iframe and static-step artifacts exist.",
+    "Do not redesign SemanticObject or visual motif APIs unless a slice explicitly calls for a narrow contract needed by export/embed.",
+    "Do not broaden into unrelated Theseus planner infrastructure."
+  ],
+  "goal": "Run the approved export/embed loop from tutorial-card runtime metadata to concrete iframe and static-step artifacts, then prepare programming panels and follow-up runtime checks.",
+  "target": "next.kp.tutorial-card-export-embed-loop-contract",
+  "runMode": "run",
+  "maxSlices": 20,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when verification fails and needs user judgment.",
+    "Stop when the approved slice list is exhausted.",
+    "Stop if a slice would broaden beyond the approved KP tutorial-card export/embed loop."
+  ],
+  "slices": [
+    {
+      "id": "next.kp.tutorial-card-export-embed-loop-contract",
+      "title": "Materialize export/embed run contract",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.tutorial-card-export-artifact-contract",
+      "title": "Define export artifact TS contract",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.iframe-export-artifact-resolver",
+      "title": "Resolve iframe export artifact metadata",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.iframe-export-html-document",
+      "title": "Render minimal iframe document shell",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.iframe-export-dependencies-fallbacks",
+      "title": "Serialize dependency and fallback metadata for iframe",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.dashboard-iframe-export-sample",
+      "title": "Add iframe dashboard and API sample row",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.iframe-export-smoke-fixture",
+      "title": "Add iframe smoke fixture",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.static-step-artifact-contract",
+      "title": "Define static-step artifact contract",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.static-step-checkpoint-selector",
+      "title": "Select static-step checkpoints from parent timeline",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.static-step-sequence-renderer",
+      "title": "Render static-step sequence artifact",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.dashboard-static-step-export-sample",
+      "title": "Add static-step dashboard sample row",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.export-artifact-catalog-rows",
+      "title": "Add export artifact registry and catalog rows",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.programming-tutorial-panel-contract",
+      "title": "Add programming panel contract for tutorial cards",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.source-file-frame-adapter",
+      "title": "Add SourceFile frame adapter",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-programming-panel-shell",
+      "title": "Mount static programming panel in card shell",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.programming-tutorial-card-sample",
+      "title": "Add first programming tutorial-card sample",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.generated-katex-fixture-second-transform",
+      "title": "Promote another KaTeX fixture from semantic transform defs",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.graph-parent-timeline-diagnostic",
+      "title": "Add graph parent-timeline conformance diagnostic",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.export-embed-readiness-report",
+      "title": "Refresh runtime/export readiness report card",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-export-embed-loop-closeout",
+      "title": "Close export/embed loop",
+      "status": "planned"
+    }
+  ]
+}

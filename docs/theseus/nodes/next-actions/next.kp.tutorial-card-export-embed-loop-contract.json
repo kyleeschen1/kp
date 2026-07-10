@@ -1,0 +1,57 @@
+{
+  "id": "next.kp.tutorial-card-export-embed-loop-contract",
+  "kind": "next-action",
+  "title": "Materialize tutorial-card export/embed run contract",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Materialized the approved tutorial-card export/embed run contract and linked it into the active KP workflow queue.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-10-tutorial-card-runtime-loop-closeout.md",
+      "summary": "Closeout review recommends iframe artifacts, static-step artifacts, programming panels, smoke checks, and parent-timeline conformance as next slices."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Near-term priorities put iframe export artifacts and static step-sequence artifacts before GIF/video encoders."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-export-embed-loop-contract.json",
+      "summary": "Defines the approved export/embed loop contract target and source refs back to roadmap and closeout guidance."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Adds the durable 20-slice execution contract for iframe, static-step, programming panel, and readiness work."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Links the export/embed loop target into the active KP dashboard and semantic animation workflow queue."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T23:43:43.855Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T23:43:43.898Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Materialized the approved tutorial-card export/embed run contract and linked it into the active KP workflow queue."
+  }
+}
