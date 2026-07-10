@@ -126,13 +126,14 @@
     {
       "id": "task.theseus.dashboard-extension-runner-v0",
       "title": "Add-extension-runner",
-      "status": "complete",
-      "summary": "Sequential dashboard extension runner landed."
+      "summary": "Sequential dashboard extension runner landed.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-extension-rows-v0",
       "title": "Add-extension-rows",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Loaded extension rows landed."
     },
     {
       "id": "next.kp.live-dashboard-sample-previews",

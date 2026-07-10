@@ -1,0 +1,50 @@
+{
+  "id": "task.theseus.dashboard-extension-rows-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard extension rows",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "summary": "Added dashboard extension metadata fields and a helper that renders loaded extensions as normalized dashboard rows.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-extension.ts",
+      "summary": "Adds extension summary/tags metadata and createTheseusDashboardExtensionSection."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-extension.test.ts",
+      "summary": "Covers loaded extension rows, search normalization, tags, and preview fields."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/dashboard-extension.test.ts",
+      "status": "passed",
+      "scope": "Focused dashboard extension rows test.",
+      "checkedAt": "2026-07-10T07:40:22.212Z"
+    },
+    {
+      "command": "npm run test -- src/dashboard-extension.test.ts src/dashboard-data.test.ts src/dashboard-data-builder.test.ts src/dashboard-html.test.ts src/dashboard-client.test.ts",
+      "status": "passed",
+      "scope": "Adjacent dashboard tests.",
+      "checkedAt": "2026-07-10T07:40:22.229Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Theseus package TypeScript check.",
+      "checkedAt": "2026-07-10T07:40:22.246Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T07:40:22.264Z",
+      "scope": "KP Theseus graph validation."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added dashboard extension metadata fields and a helper that renders loaded extensions as normalized dashboard rows."
+  }
+}
