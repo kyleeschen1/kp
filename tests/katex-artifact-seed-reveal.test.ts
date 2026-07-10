@@ -24,14 +24,14 @@ test("sampleKatexArtifactSeedRevealProgress maps global progress into a reversib
   assert.equal(1 - forward, backward);
 });
 
-test("createKatexArtifactSeedRevealFrame folds texture pieces into a visible bundle and resolves them asynchronously", () => {
+test("createKatexArtifactSeedRevealFrame folds all texture pieces through a visible bundle without dissolving", () => {
   const plan = seedRevealPlan({});
   const regions = new Map<string, KatexAtlasRegion>([
     ["source-artifact", regionFor("source-artifact")],
     ["target-artifact", regionFor("target-artifact")]
   ]);
   const start = createKatexArtifactSeedRevealFrame(plan, regions, 0);
-  const earlyDissolve = createKatexArtifactSeedRevealFrame(plan, regions, 0.2);
+  const earlyTarget = createKatexArtifactSeedRevealFrame(plan, regions, 0.2);
   const gathering = createKatexArtifactSeedRevealFrame(plan, regions, 0.4);
   const bundled = createKatexArtifactSeedRevealFrame(plan, regions, 0.56);
   const resolving = createKatexArtifactSeedRevealFrame(plan, regions, 0.72);
@@ -43,13 +43,7 @@ test("createKatexArtifactSeedRevealFrame folds texture pieces into a visible bun
     start.pieces.some((piece) => piece.rect.left !== start.pieces[0]?.rect.left)
   );
   assert.ok(
-    earlyDissolve.pieces.some(
-      (piece) =>
-        piece.tokenId === "target-artifact" &&
-        piece.motion === "dissolve" &&
-        piece.opacity > 0 &&
-        piece.opacity < 1
-    )
+    earlyTarget.pieces.every((piece) => piece.motion !== "dissolve")
   );
   assert.ok(
     gathering.pieces.some((piece) => piece.tokenId === "source-artifact")
@@ -91,15 +85,10 @@ test("createKatexArtifactSeedRevealFrame folds texture pieces into a visible bun
   );
   assert.ok(
     resolving.pieces.some(
-      (piece) =>
-        piece.tokenId === "target-artifact" && piece.motion === "dissolve"
-    )
-  );
-  assert.ok(
-    resolving.pieces.some(
       (piece) => piece.tokenId === "target-artifact" && piece.motion === "fold"
     )
   );
+  assert.ok(resolving.pieces.every((piece) => piece.motion !== "dissolve"));
   assert.ok(
     resolving.pieces.some(
       (piece) => piece.tokenId === "target-artifact" && piece.opacity < 1
@@ -164,7 +153,7 @@ function seedRevealPlan(overrides: {
       revealEnd: 1,
       stagger: 0.18,
       drift: 1.25,
-      dissolveFraction: 0.25
+      dissolveFraction: 0
     },
     start: overrides.start ?? 0,
     end: overrides.end ?? 1,

@@ -461,21 +461,21 @@ test("editor equation motion demo uses semantic playback plans", async ({
   });
 
   expect(radicalArtifactState).toEqual({
-    mode: "fold-resolve",
+    mode: "fold-bundle-swap",
     fallbackReason: undefined,
     overlayConnected: true,
     overlayZIndex: "1",
     persistentXTokenZIndex: "2",
-    renderer: "canvas-fold-resolve",
+    renderer: "canvas-fold-bundle-swap",
     sourceTokenId: "radical.rewrite-power-as-root.source.exponent",
     targetTokenId: "radical.rewrite-power-as-root.target.radical",
     sourceMotion: "collapse-to-bundle",
-    pathMotion: "fold-to-bundle-then-resolve",
+    pathMotion: "fold-bundle-swap",
     targetMotion: "unfold-from-bundle",
     bundleRect: expect.any(String),
     collapseEnd: "0.48",
     revealStart: "0.42",
-    dissolveFraction: "0.25",
+    dissolveFraction: "0",
     nonTransparentPixelCount: expect.any(Number),
     maxAlpha: expect.any(Number)
   });

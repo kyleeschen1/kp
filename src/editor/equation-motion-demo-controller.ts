@@ -992,7 +992,7 @@ function renderArtifactSeedReveal(
   );
 
   renderContext.lastProgress = progress;
-  demo.dataset["kpEquationMotionArtifactMode"] = "fold-resolve";
+  demo.dataset["kpEquationMotionArtifactMode"] = "fold-bundle-swap";
   delete demo.dataset["kpEquationMotionArtifactFallbackReason"];
 
   if (renderContext.renderer !== undefined) {
@@ -1073,7 +1073,7 @@ function createRadicalArtifactSeedRevealPlan(
         revealEnd: 1,
         stagger: 0.18,
         drift: 1.25,
-        dissolveFraction: 0.25
+        dissolveFraction: 0
       },
       start: 0,
       end: 1,
@@ -1135,13 +1135,12 @@ function findOrCreateArtifactSeedRevealContext(
 
   canvas.className = "equation-motion__artifact-canvas";
   canvas.dataset["kpEquationMotionArtifactOverlay"] = "true";
-  canvas.dataset["kpEquationMotionArtifactRenderer"] = "canvas-fold-resolve";
+  canvas.dataset["kpEquationMotionArtifactRenderer"] = "canvas-fold-bundle-swap";
   canvas.dataset["kpEquationMotionArtifactSource"] = plan.sourceMotionId;
   canvas.dataset["kpEquationMotionArtifactTarget"] = plan.targetMotionId;
   canvas.dataset["kpEquationMotionArtifactSourceMotion"] =
     plan.seedRevealPlan.sourceMotion.kind;
-  canvas.dataset["kpEquationMotionArtifactPathMotion"] =
-    "fold-to-bundle-then-resolve";
+  canvas.dataset["kpEquationMotionArtifactPathMotion"] = "fold-bundle-swap";
   canvas.dataset["kpEquationMotionArtifactTargetMotion"] =
     plan.seedRevealPlan.targetMotion.kind;
   canvas.dataset["kpEquationMotionArtifactBundleRect"] =
