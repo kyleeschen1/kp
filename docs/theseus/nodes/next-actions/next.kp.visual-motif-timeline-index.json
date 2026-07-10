@@ -1,0 +1,56 @@
+{
+  "id": "next.kp.visual-motif-timeline-index",
+  "kind": "next-action",
+  "title": "Index visual motifs onto semantic timelines",
+  "status": "resolved",
+  "domain": "kp.animation-runtime",
+  "summary": "Equation visual motifs can now be indexed onto semantic timelines and sampled for deterministic per-phase progress.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-motif-timeline.ts",
+      "summary": "Adds a runtime adapter from compiled visual motifs to normalized beat windows and sampled phase frames."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-visual-motif-timeline.test.ts",
+      "summary": "Covers cancelation phase timing, reversible sampling, and missing beat validation."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-visual-motif-timeline.test.ts",
+      "status": "passed",
+      "scope": "Focused visual motif timeline adapter tests.",
+      "checkedAt": "2026-07-10T09:44:21.588Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "App, node, and test TypeScript projects.",
+      "checkedAt": "2026-07-10T09:44:21.607Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full Node test suite.",
+      "checkedAt": "2026-07-10T09:44:21.631Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation.",
+      "checkedAt": "2026-07-10T09:44:21.653Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-10T09:44:21.666Z",
+      "scope": "Production build and typecheck; Vite large chunk warning remains."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Equation visual motifs can now be indexed onto semantic timelines and sampled for deterministic per-phase progress."
+  }
+}
