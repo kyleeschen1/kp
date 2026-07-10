@@ -1,0 +1,41 @@
+{
+  "id": "decision.kp.project-docs-theseus-division",
+  "kind": "decision",
+  "title": "Split KP project docs from Theseus execution",
+  "status": "resolved",
+  "domain": "kp.project-control",
+  "summary": "Use docs/project for durable human-readable strategy, roadmap, threads, decisions, and reviews; use Theseus for executable next-actions, run contracts, source refs, verification, and provenance.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/strategy.md",
+      "summary": "Defines the KP product thesis, semantic/runtime/renderer/authoring layer split, and prioritization criteria."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Records the active roadmap and near-term semantic runtime priorities that should drive Theseus loops."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-10-project-docs-and-theseus-division.md",
+      "summary": "Human-readable decision record for the project-docs and Theseus responsibility split."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-10-next-step-review.md",
+      "summary": "Ranks candidate next steps and recommends derive/representation capability first."
+    }
+  ],
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T19:43:48.283Z",
+      "scope": "project docs and Theseus decision bootstrap"
+    }
+  ]
+}
