@@ -170,7 +170,7 @@
     {
       "id": "task.theseus.dashboard-action-model-v0",
       "title": "Add-read-only-action-model",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-add-verification-action-v0",

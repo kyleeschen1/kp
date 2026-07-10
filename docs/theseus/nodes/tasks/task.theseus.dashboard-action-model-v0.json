@@ -1,0 +1,86 @@
+{
+  "id": "task.theseus.dashboard-action-model-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard read-only action model",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data.ts",
+      "summary": "Defines read-only dashboard action descriptors and includes safe action metadata in search."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-html.ts",
+      "summary": "Renders row actions in the dashboard table as safe links with action metadata."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-client.ts",
+      "summary": "Exposes row actions through selected-preview helper output."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-css.ts",
+      "summary": "Styles the dashboard action column and action links."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data.test.ts",
+      "summary": "Covers row action search metadata."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-html.test.ts",
+      "summary": "Covers action column rendering and unsafe attribute filtering."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-client.test.ts",
+      "summary": "Covers selected-preview action helper output."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/docs/dashboard-host.md",
+      "summary": "Documents row actions versus selected-row preview links for host adapters."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- src/dashboard-data.test.ts src/dashboard-html.test.ts src/dashboard-client.test.ts",
+      "status": "passed",
+      "scope": "Focused read-only dashboard action model tests.",
+      "checkedAt": "2026-07-10T08:25:16.816Z"
+    },
+    {
+      "command": "LC_ALL=C rg \"[^\\x00-\\x7F]\" src/dashboard-data.ts src/dashboard-html.ts src/dashboard-client.ts src/dashboard-css.ts src/dashboard-data.test.ts src/dashboard-html.test.ts src/dashboard-client.test.ts docs/dashboard-host.md",
+      "status": "passed",
+      "scope": "ASCII check; no matches.",
+      "checkedAt": "2026-07-10T08:25:16.828Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full Theseus package test suite.",
+      "checkedAt": "2026-07-10T08:25:16.842Z"
+    },
+    {
+      "command": "npm run source:gates",
+      "status": "passed",
+      "scope": "Theseus package source-size, function-size, and import-boundary gates.",
+      "checkedAt": "2026-07-10T08:25:16.854Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T08:25:16.866Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a reusable read-only dashboard row action model with searchable action metadata, safe static rendering, helper access, styling, and host documentation."
+  },
+  "summary": "Added a reusable read-only dashboard row action model with searchable action metadata, safe static rendering, helper access, styling, and host documentation."
+}
