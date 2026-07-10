@@ -19,6 +19,7 @@ import type {
   Surface3DObject
 } from "../semantic/graph.ts";
 import { graph3DSurfaceResolution } from "../semantic/graph.ts";
+import type { LinearMapObject } from "../semantic/linear-map.ts";
 import {
   sampleHyperplaneSurfaceGrid,
   sampleSaddleSurface,
@@ -115,6 +116,39 @@ export interface Graph3DTo2DTransitionDescriptor {
   };
   readonly graphId: string;
   readonly kind: "graph-3d-to-2d";
+}
+
+export interface GraphVectorMotionFrame extends KpSampledAnimationFrame {
+  readonly kind: "graph-vector-motion";
+  readonly diagnostics: GraphVectorMotionDiagnostics;
+  readonly displacement: readonly number[];
+  readonly graphId?: string | undefined;
+  readonly linearMapId: string;
+  readonly sampledVector: readonly number[];
+  readonly sourceVector: readonly number[];
+  readonly targetVector: readonly number[];
+  readonly vectorId: string;
+}
+
+export interface GraphVectorMotionDiagnostics {
+  readonly componentCount: number;
+  readonly displacementMagnitude: number;
+  readonly sourceDimension: number;
+  readonly targetDimension: number;
+}
+
+export interface GraphVectorMotionFrameOptions {
+  readonly graphId?: string | undefined;
+  readonly planId?: string | undefined;
+  readonly timelineId?: string | undefined;
+  readonly vectorId?: string | undefined;
+}
+
+export interface GraphVectorMotionSampler
+  extends KpAnimationSampler<GraphVectorMotionFrame> {
+  readonly linearMap: LinearMapObject;
+  readonly sourceVector: readonly number[];
+  readonly targetVector: readonly number[];
 }
 
 export interface GraphSurfaceModeSampler
@@ -320,6 +354,30 @@ export function createGraphSurfaceModeSampler(
   };
 }
 
+export function createLinearMapVectorMotionSampler(
+  linearMap: LinearMapObject,
+  sourceVector: readonly number[],
+  options: GraphVectorMotionFrameOptions = {}
+): GraphVectorMotionSampler {
+  validateLinearMapVectorDimensions(linearMap, sourceVector);
+  const targetVector = applyLinearMapToVector(linearMap, sourceVector);
+
+  return {
+    linearMap,
+    sourceVector: [...sourceVector],
+    targetVector,
+    sample(progress) {
+      return sampleGraphVectorMotionFrame(
+        linearMap,
+        sourceVector,
+        targetVector,
+        progress,
+        options
+      );
+    }
+  };
+}
+
 export function createGraphSurfaceModeMotionPlan(
   graph: Graph3DObject,
   transition: GraphSurfaceModeTransition
@@ -353,6 +411,87 @@ export function createGraphSurfaceModeMotionPlan(
     summary:
       "Renderer-neutral graph surface mode motion plan sampled by SVG or WebGL adapters."
   });
+}
+
+function sampleGraphVectorMotionFrame(
+  linearMap: LinearMapObject,
+  sourceVector: readonly number[],
+  targetVector: readonly number[],
+  progress: number,
+  options: GraphVectorMotionFrameOptions
+): GraphVectorMotionFrame {
+  const clampedProgress = normalizeAnimationProgress(progress);
+  const displacement = subtractVectors(targetVector, sourceVector);
+
+  return {
+    ...(options.graphId === undefined ? {} : { graphId: options.graphId }),
+    kind: "graph-vector-motion",
+    diagnostics: {
+      componentCount: targetVector.length,
+      displacementMagnitude: vectorMagnitude(displacement),
+      sourceDimension: sourceVector.length,
+      targetDimension: targetVector.length
+    },
+    displacement,
+    linearMapId: linearMap.id,
+    ...(options.planId === undefined ? {} : { planId: options.planId }),
+    progress: clampedProgress,
+    sampledVector: interpolateVector(
+      sourceVector,
+      targetVector,
+      clampedProgress
+    ),
+    sourceVector: [...sourceVector],
+    targetVector: [...targetVector],
+    ...(options.timelineId === undefined
+      ? {}
+      : { timelineId: options.timelineId }),
+    vectorId: options.vectorId ?? `${linearMap.id}.source-vector`
+  };
+}
+
+function validateLinearMapVectorDimensions(
+  linearMap: LinearMapObject,
+  sourceVector: readonly number[]
+): void {
+  if (sourceVector.length !== linearMap.domainDimension) {
+    throw new Error(
+      `Linear map ${linearMap.id} expects a source vector of dimension ${linearMap.domainDimension}.`
+    );
+  }
+}
+
+function applyLinearMapToVector(
+  linearMap: LinearMapObject,
+  sourceVector: readonly number[]
+): readonly number[] {
+  return linearMap.rows.map((row) =>
+    row.reduce((sum, value, index) => sum + value * (sourceVector[index] ?? 0), 0)
+  );
+}
+
+function interpolateVector(
+  sourceVector: readonly number[],
+  targetVector: readonly number[],
+  progress: number
+): readonly number[] {
+  return targetVector.map((targetValue, index) => {
+    const sourceValue = sourceVector[index] ?? 0;
+    return interpolate(sourceValue, targetValue, progress);
+  });
+}
+
+function subtractVectors(
+  targetVector: readonly number[],
+  sourceVector: readonly number[]
+): readonly number[] {
+  return targetVector.map(
+    (targetValue, index) => targetValue - (sourceVector[index] ?? 0)
+  );
+}
+
+function vectorMagnitude(vector: readonly number[]): number {
+  return Math.sqrt(vector.reduce((sum, value) => sum + value * value, 0));
 }
 
 function createGraphSurfaceMorphChannel(

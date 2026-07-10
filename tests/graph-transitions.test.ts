@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createGraph3DTo2DTransitionDescriptor,
+  createLinearMapVectorMotionSampler,
   createGraphSurfaceModeMotionPlan,
   createGraphSurfaceModeSampler,
   createGraphSurfaceModeTransition,
@@ -13,6 +14,8 @@ import {
   createDefaultGraph3DScene,
   type Graph3DObject
 } from "../src/semantic/graph.ts";
+import { deriveLinearMapFromMatrix } from "../src/semantic/linear-map.ts";
+import { createMatrixObject } from "../src/semantic/matrix.ts";
 
 test("createGraphSurfaceModeTransition resamples mesh and donut onto matching topology", () => {
   const scene = createDefaultGraph3DScene();
@@ -143,6 +146,64 @@ test("graph surface mode sampler uses the shared animation clock contract", () =
   assert.equal(frame.progress, 0.5);
   assert.equal(startFrame.progress, 0);
   assert.equal(endFrame.progress, 1);
+});
+
+test("linear map vector motion sampler exposes graph-readable diagnostics", () => {
+  const matrix = createMatrixObject({
+    id: "scale",
+    label: "S",
+    rows: [
+      [2, 0],
+      [0, 3]
+    ]
+  });
+  const { object: linearMap } = deriveLinearMapFromMatrix(matrix, {
+    id: "linear-map.scale"
+  });
+  const sampler = createLinearMapVectorMotionSampler(linearMap, [1, 2], {
+    graphId: "xy-graph",
+    planId: "scale-vector.plan",
+    timelineId: "scale-vector.timeline",
+    vectorId: "v"
+  });
+  const frame = sampler.sample(0.5);
+  const rewindFrame = sampler.sample(0.5);
+  const startFrame = sampler.sample(Number.NaN);
+  const endFrame = sampler.sample(2);
+
+  assert.deepEqual(frame, rewindFrame);
+  assert.equal(frame.kind, "graph-vector-motion");
+  assert.equal(frame.graphId, "xy-graph");
+  assert.equal(frame.vectorId, "v");
+  assert.equal(frame.linearMapId, "linear-map.scale");
+  assert.equal(frame.progress, 0.5);
+  assert.deepEqual(frame.sourceVector, [1, 2]);
+  assert.deepEqual(frame.targetVector, [2, 6]);
+  assert.deepEqual(frame.sampledVector, [1.5, 4]);
+  assert.deepEqual(frame.displacement, [1, 4]);
+  assert.equal(frame.diagnostics.sourceDimension, 2);
+  assert.equal(frame.diagnostics.targetDimension, 2);
+  assert.equal(frame.diagnostics.componentCount, 2);
+  assert.equal(frame.diagnostics.displacementMagnitude, Math.sqrt(17));
+  assert.deepEqual(startFrame.sampledVector, [1, 2]);
+  assert.deepEqual(endFrame.sampledVector, [2, 6]);
+});
+
+test("linear map vector motion sampler rejects dimension mismatches", () => {
+  const matrix = createMatrixObject({
+    id: "scale",
+    label: "S",
+    rows: [
+      [2, 0],
+      [0, 3]
+    ]
+  });
+  const { object: linearMap } = deriveLinearMapFromMatrix(matrix);
+
+  assert.throws(
+    () => createLinearMapVectorMotionSampler(linearMap, [1, 2, 3]),
+    /expects a source vector of dimension 2/
+  );
 });
 
 test("createGraph3DTo2DTransitionDescriptor faces the xy plane and fades z", () => {

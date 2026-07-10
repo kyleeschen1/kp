@@ -38,7 +38,7 @@
     "Do not add visual effects that do not clarify semantic identity or runtime capability."
   ],
   "goal": "Run the approved roadmap-backed semantic runtime loop from project docs through concrete verified KP slices.",
-  "target": "next.kp.graph-vector-motion-diagnostics",
+  "target": "next.kp.synced-equation-graph-samples",
   "runMode": "run",
   "maxSlices": 24,
   "commitCadence": "Commit after each verified slice.",
@@ -132,7 +132,7 @@
     {
       "id": "next.kp.graph-vector-motion-diagnostics",
       "title": "Expose graph vector motion diagnostics",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.synced-equation-graph-samples",
