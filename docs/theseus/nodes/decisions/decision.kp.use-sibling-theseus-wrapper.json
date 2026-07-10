@@ -1,0 +1,32 @@
+{
+  "id": "decision.kp.use-sibling-theseus-wrapper",
+  "kind": "decision",
+  "title": "Use sibling Theseus CLI through KP npm wrapper",
+  "status": "resolved",
+  "domain": "kp.theseus",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "package.json",
+      "summary": "Adds the theseus npm script wrapper."
+    },
+    {
+      "kind": "file",
+      "path": "theseus.config.json",
+      "summary": "Defines KP project id, graph root, events root, and source roots."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T05:24:02.304Z",
+      "scope": "KP Theseus workspace validation through the npm wrapper."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "KP will use npm run theseus as a thin wrapper around the durable sibling Theseus package at ../theseus, keeping graph data in docs/theseus while avoiding a package-lock dependency change for now."
+  },
+  "summary": "KP will use npm run theseus as a thin wrapper around the durable sibling Theseus package at ../theseus, keeping graph data in docs/theseus while avoiding a package-lock dependency change for now."
+}

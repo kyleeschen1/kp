@@ -1,4 +1,4 @@
-interface ApiCatalogItem {
+export interface ApiCatalogItem {
   readonly id: string;
   readonly title: string;
   readonly kind: string;
@@ -7,14 +7,14 @@ interface ApiCatalogItem {
   readonly tags: readonly string[];
 }
 
-interface ApiCatalogGroup {
+export interface ApiCatalogGroup {
   readonly id: string;
   readonly title: string;
   readonly summary: string;
   readonly items: readonly ApiCatalogItem[];
 }
 
-const apiCatalogGroups: readonly ApiCatalogGroup[] = [
+export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
   {
     id: "semantic-objects",
     title: "Semantic Objects",

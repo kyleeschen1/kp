@@ -187,6 +187,19 @@ export function filterProjectDashboardData(
   };
 }
 
+export function projectDashboardTextFieldsMatch(
+  fields: readonly string[],
+  query: string
+): boolean {
+  const normalizedQuery = normalizeSearchText(query);
+
+  if (normalizedQuery.length === 0) {
+    return true;
+  }
+
+  return textFieldsMatch(fields, normalizedQuery);
+}
+
 function collectCardIds(cards: readonly ProjectCard[]): readonly string[] {
   return cards.flatMap((card) => [
     card.id,

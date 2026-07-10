@@ -1,0 +1,14 @@
+{
+  "id": "next.kp.semantic-object-transform-catalog",
+  "kind": "next-action",
+  "title": "Seed typed semantic object and transform catalog",
+  "status": "ready",
+  "domain": "kp.semantic-api",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "Current API outline groups and proposed SemanticObject/SemanticTransform catalog entries."
+    }
+  ]
+}

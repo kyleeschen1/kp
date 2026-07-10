@@ -1,0 +1,23 @@
+{
+  "id": "workflow.kp.dashboard-animation-system",
+  "kind": "workflow",
+  "title": "KP dashboard and semantic animation system",
+  "status": "active",
+  "domain": "kp.dashboard",
+  "summary": "Current KP frontier is the dashboard-backed semantic animation system.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP workflow queue for dashboard-backed semantic animation system work."
+    }
+  ],
+  "decisions": [
+    "decision.kp.use-sibling-theseus-wrapper"
+  ],
+  "nextActions": [
+    "next.kp.live-dashboard-sample-previews",
+    "next.kp.semantic-object-transform-catalog",
+    "next.kp.semantic-transition-runtime"
+  ]
+}

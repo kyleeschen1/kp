@@ -23,6 +23,97 @@ test("project dashboard round trip keeps editor motion and graph controls usable
     "placeholder",
     "Search work, animations, visuals, objects, reports"
   );
+  await expect(page.locator("[data-kp-project-dashboard-status]")).toContainText(
+    "Dashboard data is valid"
+  );
+  await expect(page.locator("[data-kp-project-dashboard-search-count]")).toHaveText(
+    /Showing \d+ of \d+ rows/
+  );
+  await expect(page.locator('[data-kp-agenda-section="work"]')).toBeVisible();
+  await expect(
+    page.locator('[data-kp-agenda-section="report-cards"]')
+  ).toBeVisible();
+  await expect(
+    page.locator('[data-kp-agenda-section="object-gallery"]')
+  ).toBeVisible();
+  await expect(
+    page.locator('[data-kp-agenda-section="animation-layout"]')
+  ).toBeVisible();
+  await expect(
+    page.locator('[data-kp-agenda-section="katex-transforms"]')
+  ).toBeVisible();
+  await expect(page.locator('[data-kp-agenda-section="api"]')).toBeVisible();
+  await expect(
+    page.locator('[data-kp-agenda-row="api-semantic-matrix"]')
+  ).toBeVisible();
+  const agendaPreview = page.locator("[data-kp-project-agenda-preview]");
+  await expect(agendaPreview).toHaveAttribute(
+    "data-kp-selected-agenda-row",
+    "work-rendering-time-protocol"
+  );
+  await page
+    .locator('[data-kp-select-agenda-row="api-semantic-matrix"]')
+    .click();
+  await expect(agendaPreview).toHaveAttribute(
+    "data-kp-selected-agenda-row",
+    "api-semantic-matrix"
+  );
+  await expect(agendaPreview).toContainText("Matrix");
+  await expect(agendaPreview).toContainText(
+    "Structured row, column, and entry object"
+  );
+  await expect(
+    page.locator('[data-kp-agenda-row="work-project-dashboard-v1-phase-1"]')
+  ).toHaveAttribute("data-kp-agenda-depth", "1");
+  await expect(page.locator(".project-card--row")).toHaveCount(0);
+  await expect
+    .poll(async () => {
+      const workBox = await page
+        .locator('[data-kp-agenda-section="work"]')
+        .boundingBox();
+      const reportBox = await page
+        .locator('[data-kp-agenda-section="report-cards"]')
+        .boundingBox();
+      const galleryBox = await page
+        .locator('[data-kp-agenda-section="object-gallery"]')
+        .boundingBox();
+      const animationSectionBox = await page
+        .locator('[data-kp-agenda-section="animation-layout"]')
+        .boundingBox();
+
+      if (
+        workBox === null ||
+        reportBox === null ||
+        galleryBox === null ||
+        animationSectionBox === null
+      ) {
+        return false;
+      }
+
+      return (
+        workBox.y < reportBox.y &&
+        reportBox.y < galleryBox.y &&
+        galleryBox.y < animationSectionBox.y
+      );
+    })
+    .toBe(true);
+  const tocToggle = page.locator('[data-action="toggle-project-dashboard-toc"]');
+  await tocToggle.check();
+  await expect(page.locator("[data-kp-project-agenda]")).toHaveAttribute(
+    "data-kp-agenda-toc",
+    "true"
+  );
+  await expect(page.locator(".project-agenda__table")).toHaveCount(0);
+  await expect(page.locator("[data-kp-project-agenda-preview]")).toHaveCount(0);
+  await expect(
+    page.locator('[data-kp-agenda-section="work"] h2')
+  ).toContainText(/\(\d+\)/);
+  await tocToggle.uncheck();
+  await expect(page.locator("[data-kp-project-agenda]")).toHaveAttribute(
+    "data-kp-agenda-toc",
+    "false"
+  );
+  await expect(page.locator(".project-agenda__table").first()).toBeVisible();
   await expect
     .poll(async () => {
       const searchBox = await dashboardSearch.boundingBox();
@@ -36,6 +127,14 @@ test("project dashboard round trip keeps editor motion and graph controls usable
     })
     .toBe(true);
   await dashboardSearch.fill("dnt");
+  await expect(animationLayout).toHaveCount(0);
+  await expect(page.locator("[data-kp-project-dashboard-search-count]")).toHaveText(
+    /Showing 1 of \d+ rows/
+  );
+  await expect(page.locator('[data-kp-agenda-section="work"]')).toHaveCount(0);
+  await expect(
+    page.locator('[data-kp-agenda-row="visual-donut-surface"]')
+  ).toBeVisible();
   await expect(
     page.locator('[data-kp-project-gallery-item="visual-donut-surface"]')
   ).toBeVisible();
@@ -46,6 +145,7 @@ test("project dashboard round trip keeps editor motion and graph controls usable
     page.locator('[data-kp-project-card="work-project-dashboard-v1"]')
   ).toHaveCount(0);
   await dashboardSearch.fill("");
+  await expect(animationLayout).toBeVisible();
   await expect(
     page.locator('[data-kp-project-card="work-project-dashboard-v1"]')
   ).toBeVisible();

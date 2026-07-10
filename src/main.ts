@@ -24,7 +24,6 @@ import {
   GRAPH_3D_SURFACE_QUALITY_IDS,
   GRAPH_3D_VIEW_MODE_IDS,
   applyGraph3DLightPreset,
-  addLatexEquationGraph,
   findGraph3DLightPresetId,
   updateGraph3DAzimuth,
   updateGraph3DLightSetting,
@@ -67,6 +66,8 @@ if (app === null) {
 const appRoot = app;
 let editorDocument = createInitialEditorDocument();
 let projectDashboardQuery = "";
+let projectDashboardSelectedAgendaRowId: string | undefined;
+let projectDashboardTocOnly = false;
 let projectDashboardSelectedKatexFixtureId: string | undefined;
 let selectedEquationAnimationId: string | undefined;
 type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
@@ -113,8 +114,8 @@ appRoot.addEventListener("click", (event) => {
     case "select-katex-transform-fixture":
       selectKatexTransformFixture(button);
       return;
-    case "add-equation-graph":
-      addEquationGraphFromInput();
+    case "select-project-agenda-row":
+      selectProjectAgendaRow(button);
       return;
     case "equation-motion-next":
       stepEquationMotionDemo(button, 1);
@@ -203,6 +204,9 @@ appRoot.addEventListener("input", (event) => {
     case "filter-project-dashboard":
       filterProjectDashboardFromInput(event.target);
       return;
+    case "toggle-project-dashboard-toc":
+      toggleProjectDashboardTocFromInput(event.target);
+      return;
   }
 });
 
@@ -219,29 +223,6 @@ async function compileDocument(): Promise<void> {
     if (compiledSource !== null) {
       compiledSource.textContent =
         error instanceof Error ? error.message : "Compile request failed.";
-    }
-  }
-}
-
-function addEquationGraphFromInput(): void {
-  const input = appRoot.querySelector<HTMLInputElement>(
-    '[data-role="equation-input"]'
-  );
-  const errorOutput = appRoot.querySelector<HTMLOutputElement>(
-    '[data-role="equation-error"]'
-  );
-
-  if (input === null) {
-    return;
-  }
-
-  try {
-    editorDocument = addLatexEquationGraph(editorDocument, input.value);
-    renderEditor();
-  } catch (error: unknown) {
-    if (errorOutput !== null) {
-      errorOutput.textContent =
-        error instanceof Error ? error.message : "Equation could not be parsed.";
     }
   }
 }
@@ -267,6 +248,8 @@ function renderProjectDashboardView(
   disposeGraph3DWebGL(appRoot);
   appRoot.innerHTML = renderProjectDashboard(projectDashboardData, {
     query,
+    selectedAgendaRowId: projectDashboardSelectedAgendaRowId,
+    tocOnly: projectDashboardTocOnly,
     selectedKatexFixtureId: projectDashboardSelectedKatexFixtureId
   });
 }
@@ -274,6 +257,11 @@ function renderProjectDashboardView(
 function selectKatexTransformFixture(button: HTMLButtonElement): void {
   projectDashboardSelectedKatexFixtureId =
     button.dataset["kpKatexTransformFixture"];
+  renderProjectDashboardView(projectDashboardQuery);
+}
+
+function selectProjectAgendaRow(button: HTMLButtonElement): void {
+  projectDashboardSelectedAgendaRowId = button.dataset["kpSelectAgendaRow"];
   renderProjectDashboardView(projectDashboardQuery);
 }
 
@@ -290,6 +278,11 @@ function filterProjectDashboardFromInput(input: HTMLInputElement): void {
     nextInput.focus();
     nextInput.setSelectionRange(query.length, query.length);
   }
+}
+
+function toggleProjectDashboardTocFromInput(input: HTMLInputElement): void {
+  projectDashboardTocOnly = input.checked;
+  renderProjectDashboardView(projectDashboardQuery);
 }
 
 function previewApiCatalogItemFromEvent(event: Event): void {

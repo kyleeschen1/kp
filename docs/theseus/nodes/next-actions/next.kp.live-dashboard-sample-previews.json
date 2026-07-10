@@ -1,0 +1,14 @@
+{
+  "id": "next.kp.live-dashboard-sample-previews",
+  "kind": "next-action",
+  "title": "Open live sample cards from selected dashboard rows",
+  "status": "ready",
+  "domain": "kp.dashboard",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Selected-row preview renderer; next step is replacing metadata previews with live sample card surfaces where appropriate."
+    }
+  ]
+}

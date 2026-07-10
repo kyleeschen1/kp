@@ -293,9 +293,10 @@ test("renderEditorDocument renders the equation demo and compact API outline", (
   assert.match(html, /data-kp-webgl-backend="three"/);
   assert.match(html, /class="graph-webgl__canvas"/);
   assert.match(html, /data-kp-renderer-fallback="svg"/);
-  assert.match(html, /data-role="equation-input"/);
-  assert.match(html, /data-action="add-equation-graph"/);
-  assert.match(html, /data-role="equation-error"/);
+  assert.doesNotMatch(html, /data-role="equation-entry"/);
+  assert.doesNotMatch(html, /data-role="equation-input"/);
+  assert.doesNotMatch(html, /data-action="add-equation-graph"/);
+  assert.doesNotMatch(html, /data-role="equation-error"/);
   assert.match(html, /data-action="show-project-dashboard"/);
   assert.match(html, />Project Dashboard</);
   assert.match(html, /data-action="compile-document"/);

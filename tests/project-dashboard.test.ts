@@ -57,38 +57,181 @@ test("renderProjectDashboard renders the prototype shell and seeded summaries", 
   assert.match(html, /Animation protocol maturity/);
   assert.match(
     html,
-    /<details class="project-card project-card--row project-card--contract"[^>]*data-kp-project-dashboard-contract-card/
+    /<tr class="project-agenda__row"[^>]*data-kp-agenda-row="project-dashboard-contract"/
   );
   assert.match(
     html,
-    /<details class="project-card project-card--row"[^>]*data-kp-project-gallery-item="animation-cancelation"/
+    /<tr class="project-agenda__row"[^>]*data-kp-agenda-row="animation-cancelation"/
   );
   assert.match(
     html,
-    /<details class="project-card project-card--row project-card--report"[^>]*data-kp-project-report-theme="report-animation-protocol"/
+    /<tr class="project-agenda__row"[^>]*data-kp-agenda-row="report-animation-protocol"/
   );
+  assert.doesNotMatch(html, /project-card--row/);
+  assert.doesNotMatch(html, /project-dashboard__grid/);
 });
 
-test("renderProjectDashboard places global search above the animation layout", () => {
+test("renderProjectDashboard places validation status beside the title", () => {
+  const html = renderProjectDashboard(projectDashboardData);
+  const headerStartIndex = html.indexOf('<header class="project-dashboard__header">');
+  const headerEndIndex = html.indexOf("</header>", headerStartIndex);
+  const statusIndex = html.indexOf("data-kp-project-dashboard-status");
+
+  assert.notEqual(headerStartIndex, -1);
+  assert.notEqual(headerEndIndex, -1);
+  assert.notEqual(statusIndex, -1);
+  assert.ok(headerStartIndex < statusIndex);
+  assert.ok(statusIndex < headerEndIndex);
+  assert.match(html, /Dashboard data is valid/);
+});
+
+test("renderProjectDashboard places global search above agenda sections", () => {
   const html = renderProjectDashboard(projectDashboardData);
   const searchIndex = html.indexOf("data-kp-project-dashboard-search");
+  const workSectionIndex = html.indexOf('data-kp-agenda-section="work"');
+  const reportsSectionIndex = html.indexOf(
+    'data-kp-agenda-section="report-cards"'
+  );
+  const gallerySectionIndex = html.indexOf(
+    'data-kp-agenda-section="object-gallery"'
+  );
+  const otherSectionIndex = html.indexOf('data-kp-agenda-section="other"');
+  const animationSectionIndex = html.indexOf(
+    'data-kp-agenda-section="animation-layout"'
+  );
+  const katexSectionIndex = html.indexOf(
+    'data-kp-agenda-section="katex-transforms"'
+  );
+  const apiSectionIndex = html.indexOf('data-kp-agenda-section="api"');
   const animationLayoutIndex = html.indexOf(
     "data-kp-project-dashboard-animation-layout"
   );
-  const dataContractIndex = html.indexOf("data-kp-project-dashboard-contract");
-  const workSectionIndex = html.indexOf("project-dashboard-work-title");
 
   assert.notEqual(searchIndex, -1);
-  assert.notEqual(animationLayoutIndex, -1);
-  assert.notEqual(dataContractIndex, -1);
   assert.notEqual(workSectionIndex, -1);
+  assert.notEqual(reportsSectionIndex, -1);
+  assert.notEqual(gallerySectionIndex, -1);
+  assert.notEqual(otherSectionIndex, -1);
+  assert.notEqual(animationSectionIndex, -1);
+  assert.notEqual(katexSectionIndex, -1);
+  assert.notEqual(apiSectionIndex, -1);
+  assert.notEqual(animationLayoutIndex, -1);
   assert.ok(searchIndex < animationLayoutIndex);
-  assert.ok(animationLayoutIndex < dataContractIndex);
-  assert.ok(animationLayoutIndex < workSectionIndex);
+  assert.ok(searchIndex < workSectionIndex);
+  assert.ok(workSectionIndex < reportsSectionIndex);
+  assert.ok(reportsSectionIndex < gallerySectionIndex);
+  assert.ok(gallerySectionIndex < animationSectionIndex);
+  assert.ok(animationSectionIndex < katexSectionIndex);
+  assert.ok(katexSectionIndex < apiSectionIndex);
+  assert.ok(apiSectionIndex < otherSectionIndex);
+  assert.ok(otherSectionIndex < animationLayoutIndex);
   assert.match(html, /data-action="filter-project-dashboard"/);
   assert.match(html, />Search everything</);
   assert.match(html, /placeholder="Search work, animations, visuals, objects, reports"/);
+  assert.match(html, /data-kp-project-dashboard-search-count/);
+  assert.match(html, /Showing \d+ of \d+ rows/);
+  assert.match(html, /data-action="toggle-project-dashboard-toc"/);
+  assert.match(html, />Fold lists into TOC</);
   assert.doesNotMatch(html, /data-kp-animation-sample-search/);
+});
+
+test("renderProjectDashboard uses h2 section counts above agenda rows", () => {
+  const html = renderProjectDashboard(projectDashboardData);
+  const workHeaderIndex = html.indexOf("project-agenda-work-title");
+  const workTableIndex = html.indexOf('<table class="project-agenda__table">');
+
+  assert.notEqual(workHeaderIndex, -1);
+  assert.notEqual(workTableIndex, -1);
+  assert.ok(workHeaderIndex < workTableIndex);
+  assert.match(
+    html,
+    /<h2 id="project-agenda-work-title">Work <span class="project-agenda__count">\(\d+\)<\/span><\/h2>/
+  );
+  assert.match(
+    html,
+    /<h2 id="project-agenda-api-title">API <span class="project-agenda__count">\(\d+\)<\/span><\/h2>/
+  );
+  assert.doesNotMatch(html, />\d+ rows<\/span>/);
+});
+
+test("renderProjectDashboard renders animation, KaTeX transform, and API agenda rows", () => {
+  const html = renderProjectDashboard(projectDashboardData);
+
+  assert.match(html, /data-kp-agenda-section="animation-layout"/);
+  assert.match(html, /data-kp-agenda-section="katex-transforms"/);
+  assert.match(html, /data-kp-agenda-section="api"/);
+  assert.match(html, /data-kp-agenda-row="animation-layout-linear-equation-solve-x"/);
+  assert.match(
+    html,
+    /data-kp-agenda-row="katex-transform-fraction\.make\.inline-to-stacked"/
+  );
+  assert.match(html, /data-kp-agenda-row="api-semantic-matrix"/);
+  assert.match(html, /data-kp-agenda-api-item="semantic-matrix"/);
+});
+
+test("renderProjectDashboard renders a shared selected row preview", () => {
+  const html = renderProjectDashboard(projectDashboardData);
+
+  assert.match(html, /data-kp-project-agenda-preview/);
+  assert.match(html, /data-kp-selected-agenda-row="work-rendering-time-protocol"/);
+  assert.match(html, /Selected Row/);
+  assert.match(html, /Rendering\/time protocol/);
+  assert.match(html, /Define the shared clock/);
+  assert.match(
+    html,
+    /data-action="select-project-agenda-row"[^>]*data-kp-select-agenda-row="work-rendering-time-protocol"[^>]*aria-pressed="true"/
+  );
+});
+
+test("renderProjectDashboard selects API rows into the shared preview", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "api-semantic-matrix"
+  });
+
+  assert.match(html, /data-kp-project-agenda-preview/);
+  assert.match(html, /data-kp-selected-agenda-row="api-semantic-matrix"/);
+  assert.match(html, /Matrix/);
+  assert.match(html, /Structured row, column, and entry object/);
+  assert.match(html, /data-kp-preview-field="API group"/);
+  assert.match(
+    html,
+    /data-action="select-project-agenda-row"[^>]*data-kp-select-agenda-row="api-semantic-matrix"[^>]*aria-pressed="true"/
+  );
+});
+
+test("renderProjectDashboard selects KaTeX transform rows into the shared preview", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "katex-transform-fraction.make.inline-to-stacked"
+  });
+
+  assert.match(
+    html,
+    /data-kp-selected-agenda-row="katex-transform-fraction\.make\.inline-to-stacked"/
+  );
+  assert.match(html, /makeFraction/);
+  assert.match(html, /Source LaTeX/);
+  assert.match(html, /Target LaTeX/);
+  assert.match(html, /x \/ 3/);
+  assert.match(html, /\\frac\{x\}\{3\}/);
+});
+
+test("renderProjectDashboard can fold agenda rows into a table of contents", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    tocOnly: true
+  });
+
+  assert.match(html, /data-kp-project-agenda[^>]*data-kp-agenda-toc="true"/);
+  assert.match(
+    html,
+    /data-action="toggle-project-dashboard-toc"[^>]*checked/
+  );
+  assert.match(
+    html,
+    /<h2 id="project-agenda-work-title">Work <span class="project-agenda__count">\(\d+\)<\/span><\/h2>/
+  );
+  assert.doesNotMatch(html, /data-kp-project-agenda-preview/);
+  assert.doesNotMatch(html, /<table class="project-agenda__table">/);
+  assert.doesNotMatch(html, /data-kp-agenda-row=/);
 });
 
 test("groupProjectCardsByStatus groups top-level cards and sorts by priority", () => {
@@ -150,30 +293,24 @@ test("groupProjectCardsByStatus groups top-level cards and sorts by priority", (
 test("renderProjectDashboard renders work lanes, blockers, children, and related links", () => {
   const html = renderProjectDashboard(projectDashboardData);
 
-  assert.match(html, /data-kp-work-status="active"/);
-  assert.match(html, /data-kp-work-status="planned"/);
-  assert.match(html, /data-kp-work-status="blocked"/);
-  assert.match(html, /data-kp-work-status="done"/);
-  assert.match(html, /data-kp-priority="critical"/);
+  assert.match(html, /data-kp-agenda-status="active"/);
+  assert.match(html, /data-kp-agenda-status="planned"/);
+  assert.match(html, /data-kp-agenda-status="blocked"/);
+  assert.match(html, /data-kp-agenda-status="done"/);
+  assert.match(html, /data-kp-agenda-detail="critical"/);
   assert.match(html, /data-kp-blockers/);
   assert.match(html, /Needs shared playhead protocol before graph morph playback can be unified/);
-  assert.match(html, /data-kp-child-card="work-project-dashboard-v1-phase-1"/);
-  assert.match(html, /href="#report-dashboard-operations"/);
-
-  const phaseChildId = 'data-kp-child-card="work-project-dashboard-v1-phase-1"';
-  const topLevelChildId = 'data-kp-project-card="work-project-dashboard-v1-phase-1"';
-
-  assert.equal(html.includes(phaseChildId), true);
-  assert.equal(html.includes(topLevelChildId), false);
   assert.match(
     html,
-    /<details class="project-card project-card--row"[^>]*data-kp-project-card="work-project-dashboard-v1"/
+    /data-kp-agenda-row="work-project-dashboard-v1-phase-1"[^>]*data-kp-agenda-depth="1"/
   );
-  assert.match(html, /class="project-card__row-summary"/);
-  assert.doesNotMatch(
+  assert.match(html, /href="#report-dashboard-operations"/);
+
+  assert.match(
     html,
-    /<details class="project-card project-card--row"[^>]*data-kp-project-card="work-project-dashboard-v1"[^>]*open/
+    /<tr class="project-agenda__row"[^>]*data-kp-agenda-row="work-project-dashboard-v1"/
   );
+  assert.match(html, /class="project-agenda__title"/);
 });
 
 test("groupProjectGalleryItemsByKind groups gallery items by kind", () => {
@@ -319,26 +456,39 @@ test("renderProjectDashboard searches all dashboard data", () => {
 
   assert.match(html, /data-action="filter-project-dashboard"/);
   assert.match(html, /value="dnt"/);
-  assert.match(html, /data-kp-project-gallery-item="visual-donut-surface"/);
-  assert.doesNotMatch(html, /data-kp-project-gallery-item="visual-mesh-graph"/);
-  assert.doesNotMatch(html, /data-kp-project-card="work-project-dashboard-v1"/);
-  assert.doesNotMatch(html, /data-kp-project-report-theme="report-dashboard-operations"/);
+  assert.match(html, /Showing 1 of \d+ rows/);
+  assert.match(html, /data-kp-agenda-row="visual-donut-surface"/);
+  assert.doesNotMatch(html, /data-kp-agenda-row="visual-mesh-graph"/);
+  assert.doesNotMatch(html, /data-kp-agenda-row="work-project-dashboard-v1"/);
+  assert.doesNotMatch(html, /data-kp-agenda-row="report-dashboard-operations"/);
+  assert.doesNotMatch(html, /data-kp-agenda-section="work"/);
+  assert.doesNotMatch(html, /data-kp-project-dashboard-animation-layout/);
 });
 
-test("renderProjectDashboard renders grouped galleries through global search", () => {
+test("renderProjectDashboard searches synthetic agenda rows", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    query: "codex completion rule"
+  });
+
+  assert.match(html, /data-kp-agenda-section="other"/);
+  assert.match(html, /data-kp-agenda-row="project-dashboard-contract"/);
+  assert.match(html, /Codex completion rule/);
+  assert.doesNotMatch(html, /data-kp-agenda-section="work"/);
+  assert.doesNotMatch(html, /data-kp-agenda-section="report-cards"/);
+  assert.doesNotMatch(html, /data-kp-agenda-section="object-gallery"/);
+  assert.doesNotMatch(html, /data-kp-project-dashboard-animation-layout/);
+});
+
+test("renderProjectDashboard renders agenda rows with colored statuses and tags", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     query: "timeline"
   });
 
-  assert.match(html, /data-kp-gallery-kind="animation"/);
-  assert.match(html, /data-kp-gallery-kind="semantic-transform"/);
-  assert.match(html, /data-kp-gallery-kind="notation-transform"/);
-  assert.match(html, /data-kp-gallery-kind="visual"/);
-  assert.match(html, /data-kp-gallery-kind="semantic-object"/);
-  assert.match(html, /data-kp-gallery-kind="protocol-api"/);
-  assert.match(html, /Semantic Transformations/);
-  assert.match(html, /Notation Transformations/);
-  assert.match(html, /Visuals/);
+  assert.match(html, /data-kp-agenda-section="object-gallery"/);
+  assert.match(html, /data-kp-agenda-row="visual-timeline"/);
+  assert.match(html, /data-kp-agenda-kind="visual"/);
+  assert.match(html, /project-agenda__status project-agenda__status--planned/);
+  assert.match(html, /data-kp-agenda-tag-tone="project"/);
   assert.match(html, /Timeline/);
   assert.match(html, /scroll clock/);
   assert.doesNotMatch(html, /Equation cancelation/);

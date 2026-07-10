@@ -154,12 +154,6 @@ export function renderEditorDocument(
           <span class="status-pill">Semantic API</span>
         </div>
       </header>
-      <div class="equation-entry" data-role="equation-entry">
-        <label class="equation-entry__label" for="equation-input">Equation</label>
-        <input class="equation-entry__input" id="equation-input" type="text" value="z = \\frac{x^2-y^2}{4}" data-role="equation-input" aria-describedby="equation-error" />
-        <button class="equation-entry__button" type="button" data-action="add-equation-graph">Graph</button>
-        <output class="equation-entry__error" id="equation-error" data-role="equation-error" aria-live="polite"></output>
-      </div>
       <div class="editor-grid">
         <section class="editor-panel" aria-labelledby="api-outline-title">
           <div class="panel-header">

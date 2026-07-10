@@ -1,16 +1,19 @@
 import type {
   ProjectCard,
   ProjectDashboardData,
+  ProjectDashboardStatus,
   ProjectGalleryKind,
   ProjectGalleryItem,
   ProjectReportTheme
 } from "./model.ts";
 import { projectDashboardDataContract } from "./data.ts";
 import {
+  PROJECT_DASHBOARD_PRIORITY_ORDER,
+  PROJECT_DASHBOARD_STATUS_ORDER,
+  PROJECT_GALLERY_KIND_ORDER,
   collectProjectDashboardIds,
   filterProjectDashboardData,
-  groupProjectCardsByStatus,
-  groupProjectGalleryItemsByKind,
+  projectDashboardTextFieldsMatch,
   validateProjectDashboardData
 } from "./model.ts";
 import {
@@ -18,11 +21,17 @@ import {
   summarizeKatexTransformFixtureDiagnostics,
   type KatexTransformFixture
 } from "../rendering/katex-transform-fixtures.ts";
-import { findEquationAnimationForFixtureId } from "../editor/equation-animation-catalog.ts";
+import {
+  equationAnimationCatalogEntries,
+  findEquationAnimationForFixtureId
+} from "../editor/equation-animation-catalog.ts";
+import { apiCatalogGroups, type ApiCatalogGroup } from "../editor/api-catalog.ts";
 
 export interface ProjectDashboardRenderOptions {
   readonly query?: string;
+  readonly selectedAgendaRowId?: string | undefined;
   readonly selectedKatexFixtureId?: string | undefined;
+  readonly tocOnly?: boolean;
 }
 
 export function renderProjectDashboard(
@@ -31,9 +40,16 @@ export function renderProjectDashboard(
 ): string {
   const issues = validateProjectDashboardData(data);
   const query = options.query ?? "";
+  const tocOnly = options.tocOnly ?? false;
   const renderedData = filterProjectDashboardData(data, query);
   const titles = createTitleLookup(data);
   const visibleIds = new Set(collectProjectDashboardIds(renderedData));
+  const hasQuery = query.trim().length > 0;
+  const agendaModel = createProjectAgendaModel(data, renderedData, query);
+  const selectedAgendaRow = findSelectedAgendaRow(
+    agendaModel.sections,
+    options.selectedAgendaRowId
+  );
   const selectedKatexFixture = selectKatexFixture(
     options.selectedKatexFixtureId
   );
@@ -45,39 +61,16 @@ export function renderProjectDashboard(
           <p class="eyebrow">Prototype</p>
           <h1>Project Dashboard</h1>
         </div>
+        ${renderDataStatus(issues)}
         <button class="project-dashboard__back" type="button" data-action="show-editor">Back to Editor</button>
       </header>
-      ${renderDataStatus(issues)}
-      ${renderProjectDashboardSearch(query)}
-      ${renderAnimationLayoutSection(selectedKatexFixture)}
-      ${renderDataContract()}
-      <div class="project-dashboard__grid">
-        <section class="project-dashboard__section" aria-labelledby="project-dashboard-work-title">
-          <div class="project-dashboard__section-header">
-            <h2 id="project-dashboard-work-title">Work</h2>
-            <span>${renderedData.cards.length} cards</span>
-          </div>
-          ${renderWorkLanes(renderedData.cards, titles, visibleIds)}
-        </section>
-        <section class="project-dashboard__section" aria-labelledby="project-dashboard-gallery-title">
-          <div class="project-dashboard__section-header">
-            <h2 id="project-dashboard-gallery-title">Object Gallery</h2>
-            <span>${renderedData.gallery.length} items</span>
-          </div>
-          ${renderGalleryGroups(renderedData.gallery, titles, visibleIds)}
-        </section>
-        <section class="project-dashboard__section" aria-labelledby="project-dashboard-reports-title">
-          <div class="project-dashboard__section-header">
-            <h2 id="project-dashboard-reports-title">Report Cards</h2>
-            <span>${renderedData.reportThemes.length} themes</span>
-          </div>
-          <div class="project-dashboard__cards">
-            ${renderedData.reportThemes
-              .map((theme) => renderReportTheme(theme, titles, visibleIds))
-              .join("")}
-          </div>
-        </section>
-      </div>
+      ${renderProjectDashboardSearch(query, agendaModel, tocOnly)}
+      ${tocOnly ? "" : renderProjectAgendaPreview(selectedAgendaRow)}
+      ${renderProjectAgenda(agendaModel.sections, titles, visibleIds, {
+        selectedAgendaRowId: selectedAgendaRow?.id,
+        tocOnly
+      })}
+      ${hasQuery || tocOnly ? "" : renderAnimationLayoutSection(selectedKatexFixture)}
     </section>
   `;
 }
@@ -86,81 +79,708 @@ export function getProjectDashboardSearchQuery(input: HTMLInputElement): string 
   return input.value;
 }
 
-function renderProjectDashboardSearch(query: string): string {
+function renderProjectDashboardSearch(
+  query: string,
+  agendaModel: ProjectAgendaModel,
+  tocOnly: boolean
+): string {
   return `
     <div class="project-dashboard__toolbar">
       <label class="project-dashboard__search" for="project-dashboard-search">
         <span>Search everything</span>
         <input id="project-dashboard-search" type="search" value="${escapeHtml(query)}" data-action="filter-project-dashboard" data-kp-project-dashboard-search aria-label="Search project dashboard" placeholder="Search work, animations, visuals, objects, reports" />
       </label>
+      <div class="project-dashboard__search-footer">
+        <p class="project-dashboard__search-count" data-kp-project-dashboard-search-count>Showing ${agendaModel.visibleRowCount} of ${agendaModel.totalRowCount} rows</p>
+        <label class="project-dashboard__toc-toggle">
+          <input type="checkbox" data-action="toggle-project-dashboard-toc" ${tocOnly ? "checked" : ""} />
+          <span>Fold lists into TOC</span>
+        </label>
+      </div>
     </div>
   `;
 }
 
-function renderWorkLanes(
+interface ProjectAgendaRow {
+  readonly id: string;
+  readonly title: string;
+  readonly summary: string;
+  readonly status: ProjectDashboardStatus | string;
+  readonly detail: string;
+  readonly kind: string;
+  readonly depth: number;
+  readonly tags: readonly string[];
+  readonly dataAttributes: readonly [string, string][];
+  readonly relatedIds?: readonly string[] | undefined;
+  readonly extraHtml?: string;
+  readonly previewFields?: readonly ProjectAgendaPreviewField[] | undefined;
+  readonly searchFields?: readonly string[] | undefined;
+}
+
+interface ProjectAgendaPreviewField {
+  readonly label: string;
+  readonly value: string;
+}
+
+interface ProjectAgendaSection {
+  readonly id: string;
+  readonly title: string;
+  readonly rows: readonly ProjectAgendaRow[];
+}
+
+interface ProjectAgendaModel {
+  readonly sections: readonly ProjectAgendaSection[];
+  readonly visibleRowCount: number;
+  readonly totalRowCount: number;
+}
+
+function renderProjectAgenda(
+  sections: readonly ProjectAgendaSection[],
+  titles: ReadonlyMap<string, string>,
+  visibleIds: ReadonlySet<string>,
+  options: {
+    readonly selectedAgendaRowId: string | undefined;
+    readonly tocOnly: boolean;
+  }
+): string {
+  return `
+    <div class="project-agenda" data-kp-project-agenda data-kp-agenda-toc="${options.tocOnly ? "true" : "false"}">
+      ${sections
+        .map((section) =>
+          renderAgendaSection(section, titles, visibleIds, options)
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function renderAgendaSection(
+  section: ProjectAgendaSection,
+  titles: ReadonlyMap<string, string>,
+  visibleIds: ReadonlySet<string>,
+  options: {
+    readonly selectedAgendaRowId: string | undefined;
+    readonly tocOnly: boolean;
+  }
+): string {
+  if (section.rows.length === 0) {
+    return "";
+  }
+
+  return `
+    <section class="project-agenda__section" data-kp-agenda-section="${escapeHtml(section.id)}" aria-labelledby="project-agenda-${escapeHtml(section.id)}-title">
+      <div class="project-agenda__section-header">
+        <h2 id="project-agenda-${escapeHtml(section.id)}-title">${escapeHtml(section.title)} <span class="project-agenda__count">(${section.rows.length})</span></h2>
+      </div>
+      ${options.tocOnly ? "" : `
+      <table class="project-agenda__table">
+        <thead>
+          <tr>
+            <th scope="col">Status</th>
+            <th scope="col">Item</th>
+            <th scope="col">Summary</th>
+            <th scope="col">Tags</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${section.rows
+            .map((row) =>
+              renderAgendaRow(row, titles, visibleIds, {
+                selected: row.id === options.selectedAgendaRowId
+              })
+            )
+            .join("")}
+        </tbody>
+      </table>
+      `}
+    </section>
+  `;
+}
+
+function renderAgendaRow(
+  row: ProjectAgendaRow,
+  titles: ReadonlyMap<string, string>,
+  visibleIds: ReadonlySet<string>,
+  options: { readonly selected: boolean }
+): string {
+  return `
+    <tr class="project-agenda__row${options.selected ? " project-agenda__row--selected" : ""}" data-kp-agenda-row="${escapeHtml(row.id)}" data-kp-agenda-kind="${escapeHtml(row.kind)}" data-kp-agenda-status="${escapeHtml(row.status)}" data-kp-agenda-detail="${escapeHtml(row.detail)}" data-kp-agenda-depth="${row.depth}" data-kp-agenda-selected="${options.selected ? "true" : "false"}" ${renderDataAttributes(row.dataAttributes)}>
+      <td class="project-agenda__status-cell">
+        <span class="project-agenda__status project-agenda__status--${escapeHtml(statusTone(row.status))}">${escapeHtml(row.status)}</span>
+      </td>
+      <td class="project-agenda__item-cell" style="--kp-agenda-depth: ${row.depth}">
+        <button class="project-agenda__select" type="button" data-action="select-project-agenda-row" data-kp-select-agenda-row="${escapeHtml(row.id)}" aria-pressed="${options.selected ? "true" : "false"}">
+          <span class="project-agenda__title">${escapeHtml(row.title)}</span>
+        </button>
+        <span class="project-agenda__detail">${escapeHtml(row.detail)}</span>
+      </td>
+      <td class="project-agenda__summary-cell">
+        <span>${escapeHtml(row.summary)}</span>
+        ${row.extraHtml ?? ""}
+        ${renderAgendaRelatedLinks(row.relatedIds ?? [], titles, visibleIds)}
+      </td>
+      <td class="project-agenda__tags-cell">
+        ${renderAgendaTags(row.tags)}
+      </td>
+    </tr>
+  `;
+}
+
+function renderProjectAgendaPreview(
+  row: ProjectAgendaRow | undefined
+): string {
+  if (row === undefined) {
+    return "";
+  }
+
+  return `
+    <section class="project-agenda-preview" data-kp-project-agenda-preview data-kp-selected-agenda-row="${escapeHtml(row.id)}" aria-labelledby="project-agenda-preview-title">
+      <div class="project-agenda-preview__header">
+        <div>
+          <p class="project-agenda-preview__eyebrow">Selected Row</p>
+          <h2 id="project-agenda-preview-title">${escapeHtml(row.title)}</h2>
+        </div>
+        <span class="project-agenda__status project-agenda__status--${escapeHtml(statusTone(row.status))}">${escapeHtml(row.status)}</span>
+      </div>
+      <p>${escapeHtml(row.summary)}</p>
+      <dl class="project-agenda-preview__fields">
+        <div>
+          <dt>Kind</dt>
+          <dd data-kp-preview-field="Kind">${escapeHtml(row.kind)}</dd>
+        </div>
+        <div>
+          <dt>Detail</dt>
+          <dd data-kp-preview-field="Detail">${escapeHtml(row.detail)}</dd>
+        </div>
+        ${renderPreviewFields(row.previewFields ?? [])}
+      </dl>
+      <div class="project-agenda-preview__tags">
+        ${renderAgendaTags(row.tags)}
+      </div>
+    </section>
+  `;
+}
+
+function renderPreviewFields(
+  fields: readonly ProjectAgendaPreviewField[]
+): string {
+  return fields
+    .map(
+      (field) => `
+        <div>
+          <dt>${escapeHtml(field.label)}</dt>
+          <dd data-kp-preview-field="${escapeHtml(field.label)}">${escapeHtml(field.value)}</dd>
+        </div>
+      `
+    )
+    .join("");
+}
+
+function createProjectAgendaModel(
+  fullData: ProjectDashboardData,
+  visibleData: ProjectDashboardData,
+  query: string
+): ProjectAgendaModel {
+  const sections = createProjectAgendaSections(visibleData, query);
+  const totalRowCount = countAgendaRows(createProjectAgendaSections(fullData, ""));
+
+  return {
+    sections,
+    visibleRowCount: countAgendaRows(sections),
+    totalRowCount
+  };
+}
+
+function findSelectedAgendaRow(
+  sections: readonly ProjectAgendaSection[],
+  selectedAgendaRowId: string | undefined
+): ProjectAgendaRow | undefined {
+  const rows = sections.flatMap((section) => section.rows);
+
+  return (
+    rows.find((row) => row.id === selectedAgendaRowId) ??
+    rows[0]
+  );
+}
+
+function createProjectAgendaSections(
+  data: ProjectDashboardData,
+  query: string
+): readonly ProjectAgendaSection[] {
+  return [
+    {
+      id: "work",
+      title: "Work",
+      rows: createWorkAgendaRows(data.cards)
+    },
+    {
+      id: "report-cards",
+      title: "Report Cards",
+      rows: createReportAgendaRows(data.reportThemes)
+    },
+    {
+      id: "object-gallery",
+      title: "Object Gallery",
+      rows: createGalleryAgendaRows(data.gallery)
+    },
+    {
+      id: "animation-layout",
+      title: "Animation Layout",
+      rows: createAnimationLayoutAgendaRows(query)
+    },
+    {
+      id: "katex-transforms",
+      title: "KaTeX Transforms",
+      rows: createKatexTransformAgendaRows(query)
+    },
+    {
+      id: "api",
+      title: "API",
+      rows: createApiAgendaRows(query)
+    },
+    {
+      id: "other",
+      title: "Other",
+      rows: createOtherAgendaRows(query)
+    }
+  ];
+}
+
+function countAgendaRows(sections: readonly ProjectAgendaSection[]): number {
+  return sections.reduce((sum, section) => sum + section.rows.length, 0);
+}
+
+function createWorkAgendaRows(
   cards: readonly ProjectCard[],
-  titles: ReadonlyMap<string, string>,
-  visibleIds: ReadonlySet<string>
-): string {
+  depth = 0
+): readonly ProjectAgendaRow[] {
+  return [...cards].sort(compareProjectCardsForAgenda).flatMap((card) => [
+    {
+      id: card.id,
+      title: card.title,
+      summary: card.summary,
+      status: card.status,
+      detail: card.priority,
+      kind: "work",
+      depth,
+      tags: card.tags,
+      dataAttributes: [["data-kp-project-card", card.id]],
+      relatedIds: card.relatedIds,
+      extraHtml: renderAgendaBlockers(card.blockers ?? []),
+      previewFields: [
+        { label: "Priority", value: card.priority },
+        { label: "Category", value: card.category },
+        { label: "Blockers", value: (card.blockers ?? []).join(" ") || "None" }
+      ]
+    },
+    ...createWorkAgendaRows(card.children ?? [], depth + 1)
+  ]);
+}
+
+function createReportAgendaRows(
+  themes: readonly ProjectReportTheme[]
+): readonly ProjectAgendaRow[] {
+  return [...themes].sort(compareReportThemesForAgenda).map((theme) => ({
+    id: theme.id,
+    title: theme.title,
+    summary: theme.scope,
+    status: theme.status,
+    detail: theme.grade ?? "Not reviewed",
+    kind: "report",
+    depth: 0,
+    tags: theme.tags,
+    dataAttributes: [["data-kp-project-report-theme", theme.id]],
+    relatedIds: theme.relatedIds,
+    extraHtml: renderReportAgendaNotes(theme),
+    previewFields: [
+      { label: "Grade", value: theme.grade ?? "Not reviewed" },
+      { label: "Last reviewed", value: theme.lastReviewedOn ?? "Not reviewed" },
+      { label: "Risks", value: theme.risks.join(" ") || "None recorded" }
+    ]
+  }));
+}
+
+function createGalleryAgendaRows(
+  items: readonly ProjectGalleryItem[]
+): readonly ProjectAgendaRow[] {
+  return [...items].sort(compareGalleryItemsForAgenda).map((item) => ({
+    id: item.id,
+    title: item.title,
+    summary: item.summary,
+    status: item.status,
+    detail: formatGalleryKindLabel(item.kind),
+    kind: item.kind,
+    depth: 0,
+    tags: [...item.domains, ...item.tags, ...(item.interfaces ?? [])],
+    dataAttributes: [["data-kp-project-gallery-item", item.id]],
+    relatedIds: item.relatedIds,
+    previewFields: [
+      { label: "Gallery kind", value: formatGalleryKindLabel(item.kind) },
+      { label: "Domains", value: item.domains.join(", ") || "None" },
+      { label: "Interfaces", value: (item.interfaces ?? []).join(", ") || "None" }
+    ]
+  }));
+}
+
+function createAnimationLayoutAgendaRows(
+  query: string
+): readonly ProjectAgendaRow[] {
+  return filterAgendaRows(
+    equationAnimationCatalogEntries.map((entry) => ({
+      id: `animation-layout-${entry.id}`,
+      title: entry.label,
+      summary: entry.summary,
+      status: "active",
+      detail: `${entry.beatCount} beats`,
+      kind: "animation-layout",
+      depth: 0,
+      tags: [
+        "animation",
+        "timeline",
+        "equation",
+        ...(entry.fixtureId === undefined ? [] : ["katex"])
+      ],
+      dataAttributes: [
+        ["data-kp-agenda-animation-layout", entry.id],
+        ["data-kp-equation-animation", entry.id]
+      ],
+      previewFields: [
+        { label: "Animation id", value: entry.id },
+        { label: "Beat count", value: String(entry.beatCount) },
+        { label: "Duration", value: `${entry.defaultDurationMs}ms` },
+        { label: "States", value: String(entry.states.length) }
+      ],
+      searchFields: [
+        entry.id,
+        entry.fixtureId ?? "",
+        `${entry.states.length} states`,
+        `${entry.defaultDurationMs}ms`
+      ]
+    })),
+    query
+  );
+}
+
+function createKatexTransformAgendaRows(
+  query: string
+): readonly ProjectAgendaRow[] {
+  return filterAgendaRows(
+    katexTransformFixtures.map((fixture) => {
+      const linkedAnimation = findEquationAnimationForFixtureId(fixture.id);
+
+      return {
+        id: `katex-transform-${fixture.id}`,
+        title: fixture.intent,
+        summary: fixture.summary,
+        status: linkedAnimation === undefined ? "planned" : "active",
+        detail: fixture.family,
+        kind: "katex-transform",
+        depth: 0,
+        tags: ["katex", fixture.family, fixture.intent],
+        dataAttributes: [["data-kp-agenda-katex-transform", fixture.id]],
+        previewFields: [
+          { label: "Fixture id", value: fixture.id },
+          { label: "Source LaTeX", value: fixture.source.latex },
+          { label: "Target LaTeX", value: fixture.target.latex },
+          { label: "Linked animation", value: linkedAnimation?.label ?? "None" }
+        ],
+        searchFields: [
+          fixture.id,
+          fixture.source.latex,
+          fixture.target.latex,
+          linkedAnimation?.label ?? ""
+        ]
+      };
+    }),
+    query
+  );
+}
+
+function createApiAgendaRows(query: string): readonly ProjectAgendaRow[] {
+  return apiCatalogGroups.flatMap((group) =>
+    createApiGroupAgendaRows(group, query)
+  );
+}
+
+function createApiGroupAgendaRows(
+  group: ApiCatalogGroup,
+  query: string
+): readonly ProjectAgendaRow[] {
+  const groupRow: ProjectAgendaRow = {
+    id: `api-${group.id}`,
+    title: group.title,
+    summary: group.summary,
+    status: "active",
+    detail: "API group",
+    kind: "api",
+    depth: 0,
+    tags: ["api", group.id],
+    dataAttributes: [["data-kp-agenda-api-group", group.id]],
+    previewFields: [
+      { label: "API group", value: group.title },
+      { label: "Items", value: String(group.items.length) }
+    ]
+  };
+  const itemRows: readonly ProjectAgendaRow[] = group.items.map((item) => ({
+    id: `api-${item.id}`,
+    title: item.title,
+    summary: item.summary,
+    status: item.status,
+    detail: item.kind,
+    kind: "api",
+    depth: 1,
+    tags: ["api", ...item.tags],
+    dataAttributes: [["data-kp-agenda-api-item", item.id]],
+    previewFields: [
+      { label: "API group", value: group.title },
+      { label: "API id", value: item.id },
+      { label: "API status", value: item.status }
+    ],
+    searchFields: [item.id, group.title, group.summary]
+  }));
+
+  if (query.trim().length === 0) {
+    return [groupRow, ...itemRows];
+  }
+
+  const matchingRows = itemRows.filter((row) =>
+    agendaRowMatchesQuery(row, query)
+  );
+
+  return agendaRowMatchesQuery(groupRow, query)
+    ? [groupRow, ...matchingRows]
+    : matchingRows;
+}
+
+function filterAgendaRows(
+  rows: readonly ProjectAgendaRow[],
+  query: string
+): readonly ProjectAgendaRow[] {
+  return rows.filter((row) => agendaRowMatchesQuery(row, query));
+}
+
+function createDataContractAgendaRow(): ProjectAgendaRow {
+  return {
+    id: "project-dashboard-contract",
+    title: "Data contract",
+    summary: "Canonical dashboard write source and Codex update rule.",
+    status: "active",
+    detail: "V1 source",
+    kind: "other",
+    depth: 0,
+    tags: ["dashboard", "codex", "source"],
+    dataAttributes: [
+      ["data-kp-project-dashboard-contract", "true"],
+      ["data-kp-project-dashboard-contract-card", "true"]
+    ],
+    searchFields: [
+      "Codex completion rule",
+      projectDashboardDataContract.sourceFile,
+      projectDashboardDataContract.completionRule,
+      projectDashboardDataContract.designDocHref,
+      ...projectDashboardDataContract.notes
+    ],
+    previewFields: [
+      { label: "Source", value: projectDashboardDataContract.sourceFile },
+      { label: "Design", value: projectDashboardDataContract.designDocHref },
+      { label: "Write rule", value: projectDashboardDataContract.completionRule }
+    ],
+    extraHtml: `
+      <span class="project-agenda__note">Source: <a href="${escapeHtml(projectDashboardDataContract.sourceFile)}">${escapeHtml(projectDashboardDataContract.sourceFile)}</a></span>
+      <span class="project-agenda__note">Codex completion rule: ${escapeHtml(projectDashboardDataContract.completionRule)}</span>
+      <span class="project-agenda__note"><a href="${escapeHtml(projectDashboardDataContract.designDocHref)}">Project dashboard V1 write protocol</a></span>
+      <span class="project-agenda__note" data-kp-dashboard-contract-notes>${projectDashboardDataContract.notes.map(escapeHtml).join(" ")}</span>
+    `
+  };
+}
+
+function createOtherAgendaRows(query: string): readonly ProjectAgendaRow[] {
+  const contractRow = createDataContractAgendaRow();
+
+  return agendaRowMatchesQuery(contractRow, query) ? [contractRow] : [];
+}
+
+function agendaRowMatchesQuery(row: ProjectAgendaRow, query: string): boolean {
+  return projectDashboardTextFieldsMatch(
+    [
+      row.id,
+      row.title,
+      row.summary,
+      row.status,
+      row.detail,
+      row.kind,
+      ...row.tags,
+      ...(row.searchFields ?? [])
+    ],
+    query
+  );
+}
+
+function renderAgendaBlockers(blockers: readonly string[]): string {
+  if (blockers.length === 0) {
+    return "";
+  }
+
+  return `<span class="project-agenda__note project-agenda__note--blocked" data-kp-blockers>${blockers.map(escapeHtml).join(" ")}</span>`;
+}
+
+function renderReportAgendaNotes(theme: ProjectReportTheme): string {
   return `
-    <div class="project-dashboard__work-lanes">
-      ${groupProjectCardsByStatus(cards)
-        .map(
-          (group) => `
-            <section class="project-work-lane" data-kp-work-status="${escapeHtml(group.status)}" aria-label="${escapeHtml(group.status)} work">
-              <div class="project-work-lane__header">
-                <h3>${escapeHtml(formatStatusLabel(group.status))}</h3>
-                <span>${group.cards.length}</span>
-              </div>
-              <div class="project-dashboard__cards">
-                ${
-                  group.cards.length === 0
-                    ? `<p class="project-work-lane__empty">No cards</p>`
-                    : group.cards
-                        .map((card) =>
-                          renderProjectCard(card, titles, visibleIds, { child: false })
-                        )
-                        .join("")
-                }
-              </div>
-            </section>
-          `
-        )
-        .join("")}
-    </div>
+    <span class="project-agenda__note">Grade: ${escapeHtml(theme.grade ?? "Not reviewed")}</span>
+    <span class="project-agenda__note">Last reviewed: ${escapeHtml(theme.lastReviewedOn ?? "Not reviewed")}</span>
+    <span class="project-agenda__note">Evidence: ${theme.evidence
+      .map(
+        (entry) =>
+          `<a href="${escapeHtml(entry.href)}">${escapeHtml(entry.label)}</a>`
+      )
+      .join(", ") || "None recorded"}</span>
+    <span class="project-agenda__note">Risks: ${theme.risks.map(escapeHtml).join(" ") || "None recorded"}</span>
+    <span class="project-agenda__note">Next Actions: ${theme.recommendedNextActions.map(escapeHtml).join(" ") || "None recorded"}</span>
   `;
 }
 
-function renderGalleryGroups(
-  items: readonly ProjectGalleryItem[],
+function renderAgendaRelatedLinks(
+  relatedIds: readonly string[],
   titles: ReadonlyMap<string, string>,
   visibleIds: ReadonlySet<string>
 ): string {
+  const visibleRelatedIds = relatedIds.filter((relatedId) =>
+    visibleIds.has(relatedId)
+  );
+
+  if (visibleRelatedIds.length === 0) {
+    return "";
+  }
+
   return `
-    <div class="project-dashboard__gallery-groups">
-      ${groupProjectGalleryItemsByKind(items)
-        .map(
-          (group) => `
-            <section class="project-gallery-group" data-kp-gallery-kind="${escapeHtml(group.kind)}" aria-label="${escapeHtml(formatGalleryKindLabel(group.kind))}">
-              <div class="project-gallery-group__header">
-                <h3>${escapeHtml(formatGalleryKindLabel(group.kind))}</h3>
-                <span>${group.items.length}</span>
-              </div>
-              <div class="project-dashboard__cards">
-                ${
-                  group.items.length === 0
-                    ? `<p class="project-work-lane__empty">No items</p>`
-                    : group.items
-                        .map((item) => renderGalleryItem(item, titles, visibleIds))
-                        .join("")
-                }
-              </div>
-            </section>
-          `
-        )
+    <span class="project-agenda__related">
+      ${visibleRelatedIds
+        .map((relatedId) => {
+          const label = titles.get(relatedId) ?? relatedId;
+
+          return `<a href="#${escapeHtml(relatedId)}">${escapeHtml(label)}</a>`;
+        })
         .join("")}
-    </div>
+    </span>
   `;
+}
+
+function renderAgendaTags(tags: readonly string[]): string {
+  if (tags.length === 0) {
+    return `<span class="project-agenda__tag project-agenda__tag--muted" data-kp-agenda-tag-tone="muted">none</span>`;
+  }
+
+  return tags
+    .map((tag) => {
+      const tone = tagTone(tag);
+
+      return `<span class="project-agenda__tag project-agenda__tag--${escapeHtml(tone)}" data-kp-agenda-tag-tone="${escapeHtml(tone)}">${escapeHtml(tag)}</span>`;
+    })
+    .join("");
+}
+
+function renderDataAttributes(
+  attributes: readonly [string, string][]
+): string {
+  return attributes
+    .map(([name, value]) => `${name}="${escapeHtml(value)}"`)
+    .join(" ");
+}
+
+function compareProjectCardsForAgenda(
+  left: ProjectCard,
+  right: ProjectCard
+): number {
+  const statusDelta =
+    PROJECT_DASHBOARD_STATUS_ORDER.indexOf(left.status) -
+    PROJECT_DASHBOARD_STATUS_ORDER.indexOf(right.status);
+
+  if (statusDelta !== 0) {
+    return statusDelta;
+  }
+
+  const priorityDelta =
+    PROJECT_DASHBOARD_PRIORITY_ORDER.indexOf(left.priority) -
+    PROJECT_DASHBOARD_PRIORITY_ORDER.indexOf(right.priority);
+
+  if (priorityDelta !== 0) {
+    return priorityDelta;
+  }
+
+  return left.title.localeCompare(right.title);
+}
+
+function compareReportThemesForAgenda(
+  left: ProjectReportTheme,
+  right: ProjectReportTheme
+): number {
+  const statusDelta =
+    PROJECT_DASHBOARD_STATUS_ORDER.indexOf(left.status) -
+    PROJECT_DASHBOARD_STATUS_ORDER.indexOf(right.status);
+
+  if (statusDelta !== 0) {
+    return statusDelta;
+  }
+
+  return left.title.localeCompare(right.title);
+}
+
+function compareGalleryItemsForAgenda(
+  left: ProjectGalleryItem,
+  right: ProjectGalleryItem
+): number {
+  const kindDelta =
+    PROJECT_GALLERY_KIND_ORDER.indexOf(left.kind) -
+    PROJECT_GALLERY_KIND_ORDER.indexOf(right.kind);
+
+  if (kindDelta !== 0) {
+    return kindDelta;
+  }
+
+  return left.title.localeCompare(right.title);
+}
+
+function statusTone(status: string): string {
+  switch (status) {
+    case "active":
+      return "active";
+    case "blocked":
+      return "blocked";
+    case "done":
+      return "done";
+    case "planned":
+      return "planned";
+    case "proposed":
+      return "planned";
+    default:
+      return "muted";
+  }
+}
+
+function tagTone(tag: string): string {
+  const normalized = tag.toLowerCase();
+
+  if (/(math|equation|katex|calculus|linear algebra|matrix|vector)/.test(normalized)) {
+    return "math";
+  }
+
+  if (/(graph|webgl|surface|mesh|donut|timeline|visual)/.test(normalized)) {
+    return "visual";
+  }
+
+  if (/(programming|code|rust|typescript|api)/.test(normalized)) {
+    return "programming";
+  }
+
+  if (/(project|dashboard|report|codex|protocol)/.test(normalized)) {
+    return "project";
+  }
+
+  if (/(blocked|risk|critical|cancelation)/.test(normalized)) {
+    return "attention";
+  }
+
+  return "muted";
 }
 
 function renderAnimationLayoutSection(
@@ -307,158 +927,13 @@ function renderKatexFixtureRoleChanges(
 
 function renderDataStatus(issues: readonly string[]): string {
   if (issues.length === 0) {
-    return `<p class="project-dashboard__status project-dashboard__status--ok">Dashboard data is valid</p>`;
+    return `<p class="project-dashboard__status project-dashboard__status--ok" data-kp-project-dashboard-status>Dashboard data is valid</p>`;
   }
 
   return `
-    <ul class="project-dashboard__status project-dashboard__status--error">
+    <ul class="project-dashboard__status project-dashboard__status--error" data-kp-project-dashboard-status>
       ${issues.map((issue) => `<li>${escapeHtml(issue)}</li>`).join("")}
     </ul>
-  `;
-}
-
-function renderDataContract(): string {
-  return `
-    <section class="project-dashboard__section project-dashboard__contract" data-kp-project-dashboard-contract aria-labelledby="project-dashboard-contract-title">
-      <div class="project-dashboard__section-header">
-        <h2 id="project-dashboard-contract-title">Data contract</h2>
-        <span>V1 source</span>
-      </div>
-      <div class="project-dashboard__cards">
-        <details class="project-card project-card--row project-card--contract" data-kp-project-dashboard-contract-card>
-          ${renderCardRowSummary(
-            "Data contract",
-            "active",
-            "V1 source",
-            "Canonical dashboard write source and Codex update rule."
-          )}
-          <div class="project-card__details">
-            <div class="project-card__interfaces">
-              <strong>Canonical source</strong>
-              <a href="${escapeHtml(projectDashboardDataContract.sourceFile)}">${escapeHtml(projectDashboardDataContract.sourceFile)}</a>
-            </div>
-            <div class="project-card__interfaces">
-              <strong>Codex completion rule</strong>
-              <span>${escapeHtml(projectDashboardDataContract.completionRule)}</span>
-            </div>
-            <div class="project-card__blockers" data-kp-dashboard-contract-notes>
-              <strong>V1 notes</strong>
-              <ul>
-                ${projectDashboardDataContract.notes
-                  .map((note) => `<li>${escapeHtml(note)}</li>`)
-                  .join("")}
-              </ul>
-            </div>
-            <div class="project-card__related">
-              <strong>Design</strong>
-              <a href="${escapeHtml(projectDashboardDataContract.designDocHref)}">Project dashboard V1 write protocol</a>
-            </div>
-          </div>
-        </details>
-      </div>
-    </section>
-  `;
-}
-
-function renderProjectCard(
-  card: ProjectCard,
-  titles: ReadonlyMap<string, string>,
-  visibleIds: ReadonlySet<string>,
-  options: { readonly child: boolean }
-): string {
-  const dataAttribute = options.child
-    ? `data-kp-child-card="${escapeHtml(card.id)}"`
-    : `data-kp-project-card="${escapeHtml(card.id)}"`;
-
-  return `
-    <details class="project-card project-card--row${options.child ? " project-card--child" : ""}" id="${escapeHtml(card.id)}" ${dataAttribute} data-kp-priority="${escapeHtml(card.priority)}">
-      ${renderCardRowSummary(card.title, card.status, card.priority, card.summary)}
-      <div class="project-card__details">
-        <p>${escapeHtml(card.summary)}</p>
-        ${renderBlockers(card.blockers ?? [])}
-        ${renderTags(card.tags)}
-        ${renderRelatedLinks(card.relatedIds ?? [], titles, visibleIds)}
-        ${renderChildCards(card.children ?? [], titles, visibleIds)}
-      </div>
-    </details>
-  `;
-}
-
-function renderGalleryItem(
-  item: ProjectGalleryItem,
-  titles: ReadonlyMap<string, string>,
-  visibleIds: ReadonlySet<string>
-): string {
-  return renderGalleryCard(item, titles, visibleIds, {
-    dataAttribute: `data-kp-project-gallery-item="${escapeHtml(item.id)}"`,
-    id: item.id
-  });
-}
-
-function renderGalleryCard(
-  item: ProjectGalleryItem,
-  titles: ReadonlyMap<string, string>,
-  visibleIds: ReadonlySet<string>,
-  options: {
-    readonly dataAttribute: string;
-    readonly id?: string;
-  }
-): string {
-  const idAttribute =
-    options.id === undefined ? "" : `id="${escapeHtml(options.id)}" `;
-
-  return `
-    <details class="project-card project-card--row" ${idAttribute}${options.dataAttribute}>
-      ${renderCardRowSummary(item.title, item.status, item.kind, item.summary)}
-      <div class="project-card__details">
-        <p>${escapeHtml(item.summary)}</p>
-        ${renderTags([...item.domains, ...item.tags])}
-        ${renderInterfaces(item.interfaces ?? [])}
-        ${renderRelatedLinks(item.relatedIds ?? [], titles, visibleIds)}
-      </div>
-    </details>
-  `;
-}
-
-function renderReportTheme(
-  theme: ProjectReportTheme,
-  titles: ReadonlyMap<string, string>,
-  visibleIds: ReadonlySet<string>
-): string {
-  return `
-    <details class="project-card project-card--row project-card--report" id="${escapeHtml(theme.id)}" data-kp-project-report-theme="${escapeHtml(theme.id)}">
-      ${renderCardRowSummary(theme.title, theme.status, theme.grade ?? "Not reviewed", theme.scope)}
-      <div class="project-card__details">
-        <p>${escapeHtml(theme.scope)}</p>
-        ${renderReportReviewSummary(theme)}
-        ${renderReportQuestions(theme.questions)}
-        ${renderReportEvidence(theme.evidence)}
-        ${renderReportList("Risks", theme.risks)}
-        ${renderReportList("Next Actions", theme.recommendedNextActions)}
-        ${renderTags(theme.tags)}
-        ${renderRelatedLinks(theme.relatedIds ?? [], titles, visibleIds)}
-      </div>
-    </details>
-  `;
-}
-
-function renderCardRowSummary(
-  title: string,
-  status: string,
-  detail: string,
-  summary: string
-): string {
-  return `
-    <summary class="project-card__row-summary">
-      <span class="project-card__row-main">
-        <span class="project-card__row-title">${escapeHtml(title)}</span>
-        <span class="project-card__row-subtitle">${escapeHtml(summary)}</span>
-      </span>
-      <span class="project-card__row-meta">
-        <span class="project-card__status">${escapeHtml(status)}</span>
-        <span>${escapeHtml(detail)}</span>
-      </span>
-    </summary>
   `;
 }
 
@@ -467,159 +942,6 @@ function renderMeta(status: string, detail: string): string {
     <div class="project-card__meta">
       <span class="project-card__status">${escapeHtml(status)}</span>
       <span>${escapeHtml(detail)}</span>
-    </div>
-  `;
-}
-
-function renderTags(tags: readonly string[]): string {
-  if (tags.length === 0) {
-    return "";
-  }
-
-  return `
-    <div class="project-card__tags">
-      ${tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}
-    </div>
-  `;
-}
-
-function renderInterfaces(interfaces: readonly string[]): string {
-  if (interfaces.length === 0) {
-    return "";
-  }
-
-  return `
-    <div class="project-card__interfaces">
-      <strong>Interfaces</strong>
-      ${interfaces.map((entry) => `<span>${escapeHtml(entry)}</span>`).join("")}
-    </div>
-  `;
-}
-
-function renderReportReviewSummary(theme: ProjectReportTheme): string {
-  return `
-    <dl class="project-report__summary">
-      <div>
-        <dt>Grade</dt>
-        <dd>${escapeHtml(theme.grade ?? "Not reviewed")}</dd>
-      </div>
-      <div>
-        <dt>Last reviewed</dt>
-        <dd>${escapeHtml(theme.lastReviewedOn ?? "Not reviewed")}</dd>
-      </div>
-    </dl>
-  `;
-}
-
-function renderReportQuestions(questions: readonly string[]): string {
-  return renderReportList("Questions", questions);
-}
-
-function renderReportEvidence(
-  evidence: readonly ProjectReportTheme["evidence"][number][]
-): string {
-  if (evidence.length === 0) {
-    return `
-      <div class="project-report__section">
-        <strong>Evidence</strong>
-        <p>No evidence recorded</p>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="project-report__section">
-      <strong>Evidence</strong>
-      <ul>
-        ${evidence
-          .map(
-            (entry) =>
-              `<li><a href="${escapeHtml(entry.href)}">${escapeHtml(entry.label)}</a></li>`
-          )
-          .join("")}
-      </ul>
-    </div>
-  `;
-}
-
-function renderReportList(label: string, items: readonly string[]): string {
-  if (items.length === 0) {
-    return `
-      <div class="project-report__section">
-        <strong>${escapeHtml(label)}</strong>
-        <p>None recorded</p>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="project-report__section">
-      <strong>${escapeHtml(label)}</strong>
-      <ul>
-        ${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
-      </ul>
-    </div>
-  `;
-}
-
-function renderBlockers(blockers: readonly string[]): string {
-  if (blockers.length === 0) {
-    return "";
-  }
-
-  return `
-    <div class="project-card__blockers" data-kp-blockers>
-      <strong>Blockers</strong>
-      <ul>
-        ${blockers.map((blocker) => `<li>${escapeHtml(blocker)}</li>`).join("")}
-      </ul>
-    </div>
-  `;
-}
-
-function renderRelatedLinks(
-  relatedIds: readonly string[],
-  titles: ReadonlyMap<string, string>,
-  visibleIds: ReadonlySet<string>
-): string {
-  const visibleRelatedIds = relatedIds.filter((relatedId) =>
-    visibleIds.has(relatedId)
-  );
-
-  if (visibleRelatedIds.length === 0) {
-    return "";
-  }
-
-  return `
-    <div class="project-card__related">
-      <strong>Related</strong>
-      ${visibleRelatedIds
-        .map((relatedId) => {
-          const label = titles.get(relatedId) ?? relatedId;
-
-          return `<a href="#${escapeHtml(relatedId)}">${escapeHtml(label)}</a>`;
-        })
-        .join("")}
-    </div>
-  `;
-}
-
-function renderChildCards(
-  children: readonly ProjectCard[],
-  titles: ReadonlyMap<string, string>,
-  visibleIds: ReadonlySet<string>
-): string {
-  if (children.length === 0) {
-    return "";
-  }
-
-  return `
-    <div class="project-card__children">
-      ${children
-        .map((child) =>
-          renderProjectCard(child, titles, visibleIds, { child: true })
-        )
-        .join("")}
     </div>
   `;
 }
@@ -644,10 +966,6 @@ function createTitleLookup(data: ProjectDashboardData): ReadonlyMap<string, stri
 
 function flattenCards(cards: readonly ProjectCard[]): readonly ProjectCard[] {
   return cards.flatMap((card) => [card, ...flattenCards(card.children ?? [])]);
-}
-
-function formatStatusLabel(status: string): string {
-  return status.charAt(0).toUpperCase() + status.slice(1);
 }
 
 function formatGalleryKindLabel(kind: ProjectGalleryKind): string {

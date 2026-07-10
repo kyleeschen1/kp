@@ -1,0 +1,70 @@
+{
+  "id": "task.kp.dashboard-agenda-navigation",
+  "kind": "task",
+  "title": "Dashboard agenda navigation and selected row preview",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Agenda model, section rendering, selected row preview, TOC mode, animation/KaTeX/API synthetic rows."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/model.ts",
+      "summary": "Shared dashboard text matching helper used by synthetic agenda rows."
+    },
+    {
+      "kind": "file",
+      "path": "src/main.ts",
+      "summary": "Dashboard selected-row and TOC state wiring."
+    },
+    {
+      "kind": "file",
+      "path": "src/styles.css",
+      "summary": "Agenda table, selected row, preview panel, search count, and TOC styling."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Unit coverage for agenda layout, counts, TOC, selected preview, and search behavior."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.browser.spec.ts",
+      "summary": "Browser coverage for row selection, TOC folding, ordering, and search."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "Project dashboard unit tests.",
+      "checkedAt": "2026-07-10T05:23:11.345Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects.",
+      "checkedAt": "2026-07-10T05:23:11.349Z"
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "Chromium dashboard browser smoke.",
+      "checkedAt": "2026-07-10T05:23:11.353Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-10T05:23:11.358Z",
+      "scope": "Whitespace check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Reworked the project dashboard into an agenda-style row table with global search, TOC folding, selected row preview, animation layout rows, KaTeX transform rows, API rows, and browser/unit coverage."
+  },
+  "summary": "Reworked the project dashboard into an agenda-style row table with global search, TOC folding, selected row preview, animation layout rows, KaTeX transform rows, API rows, and browser/unit coverage."
+}

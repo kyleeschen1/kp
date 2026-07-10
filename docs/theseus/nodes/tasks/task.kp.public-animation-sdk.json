@@ -1,0 +1,42 @@
+{
+  "id": "task.kp.public-animation-sdk",
+  "kind": "task",
+  "title": "Public equation animation SDK and picker manifest",
+  "status": "resolved",
+  "domain": "kp.animation-api",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/public/equation-animation-manifest.ts",
+      "summary": "Lightweight picker manifest for equation animation samples."
+    },
+    {
+      "kind": "file",
+      "path": "src/public/kp-animation-sdk.ts",
+      "summary": "Public session API for lazy loading, progress sampling, and token metadata lookup."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-sdk.test.ts",
+      "summary": "Node tests for manifest/catalog parity, session sampling, and token metadata lookup."
+    },
+    {
+      "kind": "file",
+      "path": "docs/superpowers/specs/2026-07-09-kp-animation-sdk-api.md",
+      "summary": "SDK handoff notes for host imports, picker metadata, time control, and rendering responsibilities."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test tests/kp-animation-sdk.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-10T05:23:45.982Z",
+      "scope": "Public animation SDK and current full node test suite."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a public equation animation SDK surface with lightweight picker metadata, lazy animation session loading, progress sampling, and token metadata lookup for host integrations."
+  },
+  "summary": "Added a public equation animation SDK surface with lightweight picker metadata, lazy animation session loading, progress sampling, and token metadata lookup for host integrations."
+}
