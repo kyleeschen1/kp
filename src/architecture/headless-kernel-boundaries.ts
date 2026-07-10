@@ -58,6 +58,7 @@ export function headlessKernelBoundaryConformanceEntries(): readonly HeadlessKer
       role: "protocol",
       rendererNeutral: true,
       sourceFiles: [
+        "src/animation/kernel.ts",
         "src/animation/tween.ts",
         "src/rendering/equation-motion-player.ts",
         "src/rendering/equation-motion-sampler.ts",

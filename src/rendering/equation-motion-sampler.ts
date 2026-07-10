@@ -1,4 +1,8 @@
 import type {
+  KpAnimationSampler,
+  KpSampledAnimationFrame
+} from "../animation/kernel.ts";
+import type {
   EasingName,
   EquationMotionPlan,
   EquationMotionTrack,
@@ -14,7 +18,7 @@ import {
   type SemanticBeatTimeline
 } from "./semantic-beat-compiler.ts";
 
-export interface EquationMotionFrame {
+export interface EquationMotionFrame extends KpSampledAnimationFrame {
   readonly progress: number;
   readonly tokens: readonly EquationMotionFrameToken[];
   readonly visualMotifs: readonly EquationVisualMotifFrameMotif[];
@@ -29,7 +33,8 @@ export interface EquationMotionSamplerOptions {
   readonly timeline?: SemanticBeatTimeline | undefined;
 }
 
-export interface EquationMotionSampler {
+export interface EquationMotionSampler
+  extends KpAnimationSampler<EquationMotionFrame> {
   readonly plan: EquationMotionPlan;
   sample(progress: number): EquationMotionFrame;
 }

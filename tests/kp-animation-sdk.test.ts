@@ -7,7 +7,11 @@ import {
   createKpEquationAnimationSessionFromEntry,
   findKpEquationAnimationSelection,
   findKpEquationMotionTokenMetadata,
-  listKpEquationAnimationSelections
+  listKpEquationAnimationSelections,
+  type KpAnimationRenderer,
+  type KpSampledAnimationFrame,
+  type SemanticObjectRef,
+  type SemanticTransformationRef
 } from "../src/public/kp-animation-sdk.ts";
 
 test("public animation selections expose lightweight picker metadata", () => {
@@ -30,6 +34,29 @@ test("public animation manifest ids match the full animation catalog", () => {
   const catalogIds = equationAnimationCatalogEntries.map((entry) => entry.id);
 
   assert.deepEqual([...selectionIds].sort(), [...catalogIds].sort());
+});
+
+test("public animation SDK exports renderer-neutral kernel protocol types", () => {
+  const renderedProgress: number[] = [];
+  const renderer: KpAnimationRenderer<KpSampledAnimationFrame> = {
+    render: (frame) => renderedProgress.push(frame.progress)
+  };
+  const objectRef: SemanticObjectRef = {
+    objectId: "equation.source",
+    objectType: "equation"
+  };
+  const transformationRef: SemanticTransformationRef = {
+    id: "subtract-both-sides.3",
+    kind: "subtractBothSides",
+    sourceObjectIds: [objectRef.objectId],
+    targetObjectIds: ["equation.target"],
+    preserves: ["identity"]
+  };
+
+  renderer.render({ progress: 0.25, planId: "plan" });
+
+  assert.deepEqual(renderedProgress, [0.25]);
+  assert.equal(transformationRef.preserves[0], "identity");
 });
 
 test("createKpEquationAnimationSession lazy-loads an animation and samples time", async () => {

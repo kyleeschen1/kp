@@ -2,9 +2,9 @@
   "id": "next.kp.animation-kernel-protocol",
   "kind": "next-action",
   "title": "Define shared animation kernel protocol",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation-runtime",
-  "summary": "Make the SemanticObject -> SemanticTransformation -> MotionPlan -> sampled frame -> renderer protocol explicit, typed, and renderer-neutral before adding more one-off animation behavior.",
+  "summary": "Added renderer-neutral animation kernel protocol types, semantic object/transformation refs, and wired equation sampling/playback plus SDK exports onto the shared progress contract.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,51 @@
       "kind": "file",
       "path": "src/architecture/headless-kernel-boundaries.ts",
       "summary": "Headless/kernel boundary catalogue that should constrain renderer-neutral protocol placement."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/kernel.ts",
+      "summary": "Defines renderer-neutral motion plan, sampled frame, sampler, renderer, player, and deterministic progress-step helpers."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/animation.ts",
+      "summary": "Adds semantic object and transformation refs for provenance and preservation metadata."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-player.ts",
+      "summary": "Types equation playback against the shared kernel player/renderer contracts and uses the shared step helper."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-sampler.ts",
+      "summary": "Types equation frames and samplers against the shared sampled-frame and sampler contracts."
+    },
+    {
+      "kind": "file",
+      "path": "src/public/kp-animation-sdk.ts",
+      "summary": "Re-exports kernel and semantic ref protocol types without changing existing session APIs."
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/headless-kernel-boundaries.ts",
+      "summary": "Adds the new animation kernel module to the renderer-neutral boundary catalogue."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-player.test.ts",
+      "summary": "Covers renderer-neutral motion plans, reversible steps, and exact final target progress."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-sdk.test.ts",
+      "summary": "Covers public SDK type export compatibility for the kernel protocol."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic.test.ts",
+      "summary": "Covers semantic object and transformation ref provenance cloning."
     }
   ],
   "dependsOn": {
@@ -79,5 +124,29 @@
       "id": "time-sampling-deterministic",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/equation-motion-player.test.ts tests/kp-animation-sdk.test.ts tests/headless-kernel-boundaries.test.ts tests/semantic.test.ts",
+      "status": "passed",
+      "scope": "Focused kernel, SDK, boundary, and semantic tests; package script also ran the full Node suite.",
+      "checkedAt": "2026-07-10T17:40:07.863Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "App, node, and test TypeScript projects.",
+      "checkedAt": "2026-07-10T17:40:07.880Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T17:40:07.916Z",
+      "scope": "Theseus graph validation."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added renderer-neutral animation kernel protocol types, semantic object/transformation refs, and wired equation sampling/playback plus SDK exports onto the shared progress contract."
+  }
 }

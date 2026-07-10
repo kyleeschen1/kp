@@ -1,23 +1,21 @@
+import type {
+  KpAnimationProgressPlayer,
+  KpAnimationRenderer,
+  KpAnimationStepOptions
+} from "../animation/kernel.ts";
+import { animationStepProgresses } from "../animation/kernel.ts";
 import type { EquationMotionPlan } from "./equation-motion-plan.ts";
 import {
   createEquationMotionSampler,
   type EquationMotionFrame
 } from "./equation-motion-sampler.ts";
 
-export interface EquationMotionPlayerRenderer {
-  render(frame: EquationMotionFrame): void;
-}
+export type EquationMotionPlayerRenderer =
+  KpAnimationRenderer<EquationMotionFrame>;
 
-export interface EquationMotionStepOptions {
-  readonly steps: number;
-}
+export type EquationMotionStepOptions = KpAnimationStepOptions;
 
-export interface EquationMotionPlayer {
-  setProgress(nextProgress: number): void;
-  playTo(targetProgress: number, options: EquationMotionStepOptions): void;
-  rewindTo(targetProgress: number, options: EquationMotionStepOptions): void;
-  getProgress(): number;
-}
+export type EquationMotionPlayer = KpAnimationProgressPlayer;
 
 export function createEquationMotionPlayer(
   plan: EquationMotionPlan,
@@ -36,16 +34,15 @@ export function createEquationMotionPlayer(
     targetProgress: number,
     options: EquationMotionStepOptions
   ): void => {
-    assertPositiveIntegerSteps(options.steps);
-
     const targetFrame = sampler.sample(targetProgress);
-    const startProgress = progress;
-    const delta = targetFrame.progress - startProgress;
-
-    for (let step = 1; step < options.steps; step += 1) {
-      setProgress(startProgress + (delta * step) / options.steps);
+    for (const nextProgress of animationStepProgresses({
+      startProgress: progress,
+      targetProgress: targetFrame.progress,
+      steps: options.steps,
+      label: "Equation motion"
+    })) {
+      setProgress(nextProgress);
     }
-    setProgress(targetFrame.progress);
   };
 
   return {
@@ -54,10 +51,4 @@ export function createEquationMotionPlayer(
     rewindTo: stepTo,
     getProgress: () => progress
   };
-}
-
-function assertPositiveIntegerSteps(steps: number): void {
-  if (!Number.isInteger(steps) || steps <= 0) {
-    throw new Error("Equation motion steps must be a positive integer.");
-  }
 }

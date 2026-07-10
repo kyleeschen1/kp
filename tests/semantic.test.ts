@@ -2,7 +2,9 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import {
-  createSaddleDenominatorAnimationIntent
+  createSaddleDenominatorAnimationIntent,
+  createSemanticObjectRef,
+  createSemanticTransformationRef
 } from "../src/semantic/animation.ts";
 import {
   TRANSFORM_FIXTURE_CONTRACT_VERSION,
@@ -750,6 +752,44 @@ test("createSaddleDenominatorAnimationIntent creates a semantic animation intent
     to: 8,
     durationMs: 900,
     easing: "ease-in-out"
+  });
+});
+
+test("semantic animation refs preserve object and transformation provenance", () => {
+  const objectRef = createSemanticObjectRef({
+    objectId: "matrix.A",
+    objectType: "matrix",
+    selectorId: "entry.0.0",
+    revisionId: "rev-1"
+  });
+  const sourceObjectIds = ["matrix.A"];
+  const targetObjectIds = ["matrix.B"];
+  const preserves = ["identity", "structure"] as const;
+  const transformationRef = createSemanticTransformationRef({
+    id: "matrix.scale.row",
+    kind: "scaleRow",
+    sourceObjectIds,
+    targetObjectIds,
+    preserves,
+    summary: "Scale a row while preserving matrix structure."
+  });
+
+  sourceObjectIds.push("mutated");
+  targetObjectIds.push("mutated");
+
+  assert.deepEqual(objectRef, {
+    objectId: "matrix.A",
+    objectType: "matrix",
+    selectorId: "entry.0.0",
+    revisionId: "rev-1"
+  });
+  assert.deepEqual(transformationRef, {
+    id: "matrix.scale.row",
+    kind: "scaleRow",
+    sourceObjectIds: ["matrix.A"],
+    targetObjectIds: ["matrix.B"],
+    preserves: ["identity", "structure"],
+    summary: "Scale a row while preserving matrix structure."
   });
 });
 

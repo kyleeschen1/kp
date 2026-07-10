@@ -21,7 +21,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure or arbitrary visual effects without asking."
   ],
   "goal": "Run the approved semantic transition runtime loop.",
-  "target": "next.kp.visual-motif-module-api",
+  "target": "next.kp.animation-kernel-protocol",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -95,6 +95,11 @@
     {
       "id": "next.kp.visual-motif-module-api",
       "title": "Extract visual motif module API",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.animation-kernel-protocol",
+      "title": "Define shared animation kernel protocol",
       "status": "complete"
     }
   ]

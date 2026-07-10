@@ -1,5 +1,28 @@
 export type AnimationEasing = "ease-in-out" | "linear";
 
+export interface SemanticObjectRef {
+  readonly objectId: string;
+  readonly objectType?: string | undefined;
+  readonly selectorId?: string | undefined;
+  readonly revisionId?: string | undefined;
+}
+
+export type SemanticTransformationPreservation =
+  | "identity"
+  | "structure"
+  | "value"
+  | "role"
+  | "presentation";
+
+export interface SemanticTransformationRef {
+  readonly id: string;
+  readonly kind: string;
+  readonly sourceObjectIds: readonly string[];
+  readonly targetObjectIds: readonly string[];
+  readonly preserves: readonly SemanticTransformationPreservation[];
+  readonly summary?: string | undefined;
+}
+
 export interface SaddleDenominatorAnimationIntent {
   id: string;
   type: "animation-intent";
@@ -37,5 +60,29 @@ export function createSaddleDenominatorAnimationIntent(
     to: input.toDenominator,
     durationMs: input.durationMs,
     easing: input.easing ?? "ease-in-out"
+  };
+}
+
+export function createSemanticObjectRef(
+  input: SemanticObjectRef
+): SemanticObjectRef {
+  return {
+    objectId: input.objectId,
+    ...(input.objectType === undefined ? {} : { objectType: input.objectType }),
+    ...(input.selectorId === undefined ? {} : { selectorId: input.selectorId }),
+    ...(input.revisionId === undefined ? {} : { revisionId: input.revisionId })
+  };
+}
+
+export function createSemanticTransformationRef(
+  input: SemanticTransformationRef
+): SemanticTransformationRef {
+  return {
+    id: input.id,
+    kind: input.kind,
+    sourceObjectIds: [...input.sourceObjectIds],
+    targetObjectIds: [...input.targetObjectIds],
+    preserves: [...input.preserves],
+    ...(input.summary === undefined ? {} : { summary: input.summary })
   };
 }

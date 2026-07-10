@@ -1,7 +1,15 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
+import {
+  animationStepProgresses,
+  createKpAnimationMotionPlan
+} from "../src/animation/kernel.ts";
 import { createEquationOperationTransition } from "../src/math/equation-transform.ts";
+import {
+  createSemanticObjectRef,
+  createSemanticTransformationRef
+} from "../src/semantic/animation.ts";
 import {
   createEquationMotionPlan,
   type EquationMotionPlan
@@ -37,6 +45,66 @@ const createRightSimplificationPlan = () =>
       }
     })
   );
+
+test("animation kernel defines renderer-neutral motion plans and reversible steps", () => {
+  const source = createSemanticObjectRef({
+    objectId: "equation.source",
+    objectType: "equation"
+  });
+  const target = createSemanticObjectRef({
+    objectId: "equation.target",
+    objectType: "equation"
+  });
+  const transformation = createSemanticTransformationRef({
+    id: "subtract-both-sides.3",
+    kind: "subtractBothSides",
+    sourceObjectIds: [source.objectId],
+    targetObjectIds: [target.objectId],
+    preserves: ["identity", "structure"]
+  });
+  const plan = createKpAnimationMotionPlan({
+    id: "plan.subtract-both-sides.3",
+    kind: "equation-motion",
+    sourceObjectRefs: [source],
+    targetObjectRefs: [target],
+    transformationRefs: [transformation],
+    summary: "Equation motion plan wrapper."
+  });
+
+  assert.equal(plan.rendererNeutral, true);
+  assert.deepEqual(plan.transformationRefs[0]?.preserves, [
+    "identity",
+    "structure"
+  ]);
+  assert.deepEqual(
+    animationStepProgresses({
+      startProgress: 1,
+      targetProgress: 0,
+      steps: 4,
+      label: "Equation motion"
+    }),
+    [0.75, 0.5, 0.25, 0]
+  );
+  assert.equal(
+    animationStepProgresses({
+      startProgress: 0,
+      targetProgress: 0.7,
+      steps: 3,
+      label: "Equation motion"
+    }).at(-1),
+    0.7
+  );
+  assert.throws(
+    () =>
+      animationStepProgresses({
+        startProgress: 0,
+        targetProgress: 1,
+        steps: 0,
+        label: "Equation motion"
+      }),
+    /Equation motion steps must be a positive integer/
+  );
+});
 
 test("createEquationMotionPlayer samples explicit progress", () => {
   const sampledProgress: number[] = [];

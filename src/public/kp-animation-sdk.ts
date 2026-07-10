@@ -29,6 +29,18 @@ export {
 };
 
 export type { EquationMotionFrame, EquationMotionPlan };
+export type {
+  KpAnimationMotionPlan,
+  KpAnimationProgressPlayer,
+  KpAnimationRenderer,
+  KpAnimationSampler,
+  KpAnimationStepOptions,
+  KpSampledAnimationFrame
+} from "../animation/kernel.ts";
+export type {
+  SemanticObjectRef,
+  SemanticTransformationRef
+} from "../semantic/animation.ts";
 
 export interface KpEquationAnimationSession {
   readonly animation: EquationAnimationCatalogEntry;
