@@ -40,7 +40,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure."
   ],
   "goal": "Run the approved export/embed loop from tutorial-card runtime metadata to concrete iframe and static-step artifacts, then prepare programming panels and follow-up runtime checks.",
-  "target": "next.kp.iframe-export-dependencies-fallbacks",
+  "target": "next.kp.dashboard-iframe-export-sample",
   "runMode": "run",
   "maxSlices": 20,
   "commitCadence": "Commit after each verified slice.",
@@ -79,7 +79,7 @@
     {
       "id": "next.kp.dashboard-iframe-export-sample",
       "title": "Add iframe dashboard and API sample row",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.iframe-export-smoke-fixture",

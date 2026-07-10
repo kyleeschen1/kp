@@ -412,6 +412,37 @@ test("renderProjectDashboard exposes live tutorial card sample targets", () => {
   assert.match(html, /tests\/linear-solve-tutorial-card-sample\.test\.ts/);
 });
 
+test("renderProjectDashboard exposes iframe export artifact sample targets", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "iframe-export-artifact"
+  });
+
+  assert.match(html, /data-kp-selected-agenda-row="iframe-export-artifact"/);
+  assert.match(
+    html,
+    /data-kp-preview-field="Sample targets"[^>]*>Open iframe export artifact/
+  );
+  assert.match(html, /data-kp-preview-link="export-artifact"/);
+  assert.match(
+    html,
+    /data-kp-preview-export-artifact="artifact\.linear-solve\.iframe"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-manifest-id="tutorial\.linear-solve\.card"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-export-profile="export\.linear-solve\.iframe"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Export artifact"[^>]*>artifact\.linear-solve\.iframe</
+  );
+  assert.match(html, /src\/tutorial\/iframe-export-document\.ts/);
+  assert.match(html, /tests\/tutorial-card-iframe-document\.test\.ts/);
+});
+
 test("renderProjectDashboard exposes semantic object API sample targets", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "semantic-matrix"

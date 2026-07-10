@@ -1,0 +1,74 @@
+{
+  "id": "next.kp.dashboard-iframe-export-sample",
+  "kind": "next-action",
+  "title": "Add iframe dashboard and API sample row",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "summary": "Added dashboard and API catalog visibility for the iframe export artifact.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Adds the iframe export artifact gallery row with source refs, verification, export-artifact sample target, and API sample target."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/model.ts",
+      "summary": "Adds export-artifact sample target fields and search facets."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Renders export-artifact preview links and selected-row metadata fields."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/theseus-adapter.ts",
+      "summary": "Adds export-artifact sample target search fields for dashboard adapter payloads."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "Adds active IframeExportArtifact API catalog entry under embeds."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers selected dashboard preview, sample target link attributes, source refs, and verification for iframe export artifacts."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.dashboard-iframe-export-sample.json",
+      "summary": "Materializes the approved iframe dashboard/API sample row next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the dashboard iframe export sample slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/api-catalog.test.ts tests/project-dashboard-theseus-adapter.test.ts tests/tutorial-card-iframe-document.test.ts tests/tutorial-card-export-artifact.test.ts",
+      "status": "passed",
+      "scope": "dashboard/API iframe export artifact and related export tests",
+      "checkedAt": "2026-07-10T23:56:49.432Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T23:56:49.456Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T23:56:49.480Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added dashboard and API catalog visibility for the iframe export artifact."
+  }
+}

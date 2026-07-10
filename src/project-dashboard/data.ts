@@ -946,6 +946,68 @@ export const projectDashboardData: ProjectDashboardData = {
         "sample-synced-equation-graph-linear-solve",
         "report-semantic-runtime-readiness"
       ]
+    },
+    {
+      id: "iframe-export-artifact",
+      title: "Iframe export artifact",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Resolved iframe export artifact for the linear-solve tutorial card, carrying artifact identity, profile metadata, dependency phases, fallback data, and an iframe-ready HTML document shell.",
+      tags: ["iframe", "export", "embed", "tutorial-card"],
+      domains: ["runtime", "authoring", "export"],
+      interfaces: [
+        "KpTutorialCardExportArtifact",
+        "resolveKpTutorialCardIframeExportArtifact",
+        "renderKpTutorialCardIframeDocument"
+      ],
+      maturity: "active metadata artifact",
+      coverage: [
+        "artifact identity",
+        "iframe profile mapping",
+        "dependency metadata",
+        "fallback metadata",
+        "iframe document shell"
+      ],
+      sourceRefs: [
+        {
+          label: "Export artifact contract",
+          href: "src/tutorial/export-artifact.ts"
+        },
+        {
+          label: "Iframe artifact resolver",
+          href: "src/tutorial/export-artifact-resolver.ts"
+        },
+        {
+          label: "Iframe document renderer",
+          href: "src/tutorial/iframe-export-document.ts"
+        }
+      ],
+      verification: [
+        "tests/tutorial-card-export-artifact.test.ts",
+        "tests/tutorial-card-iframe-document.test.ts",
+        "tests/project-dashboard.test.ts"
+      ],
+      sampleTargets: [
+        {
+          kind: "export-artifact",
+          label: "Open iframe export artifact",
+          artifactId: "artifact.linear-solve.iframe",
+          manifestId: "tutorial.linear-solve.card",
+          profileId: "export.linear-solve.iframe",
+          payloadKind: "html-document"
+        },
+        {
+          kind: "api-catalog-item",
+          label: "Open IframeExportArtifact API sample",
+          itemId: "embed-iframe-export-artifact"
+        }
+      ],
+      relatedIds: [
+        "tutorial-card-manifest-v0",
+        "sample-synced-equation-graph-linear-solve",
+        "report-semantic-runtime-readiness"
+      ]
     }
   ],
   reportThemes: [

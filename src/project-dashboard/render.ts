@@ -761,6 +761,13 @@ function sampleTargetDetailPreviewFields(
           ? []
           : [{ label: "Tutorial card clock", value: target.sharedClockId }])
       ];
+    case "export-artifact":
+      return [
+        { label: "Export artifact", value: target.artifactId },
+        { label: "Export profile", value: target.profileId },
+        { label: "Export manifest", value: target.manifestId },
+        { label: "Export payload", value: target.payloadKind }
+      ];
     default:
       return [];
   }
@@ -850,6 +857,18 @@ function sampleTargetPreviewLink(
         dataAttributes
       };
     }
+    case "export-artifact":
+      return {
+        label: target.label,
+        href: "#project-dashboard-animation-layout-title",
+        dataAttributes: [
+          ["data-kp-preview-link", "export-artifact"],
+          ["data-kp-preview-export-artifact", target.artifactId],
+          ["data-kp-preview-manifest-id", target.manifestId],
+          ["data-kp-preview-export-profile", target.profileId],
+          ["data-kp-preview-export-payload", target.payloadKind]
+        ]
+      };
     case "api-catalog-item":
       return {
         label: target.label,
@@ -1155,6 +1174,16 @@ function sampleTargetSearchFields(
           target.layoutId ?? "",
           target.sharedClockId ?? "",
           "tutorial card live sample"
+        ];
+      case "export-artifact":
+        return [
+          target.kind,
+          target.label,
+          target.artifactId,
+          target.manifestId,
+          target.profileId,
+          target.payloadKind,
+          "iframe export artifact embed"
         ];
       case "api-catalog-item":
         return [target.kind, target.label, target.itemId];

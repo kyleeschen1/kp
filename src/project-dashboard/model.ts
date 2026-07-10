@@ -63,6 +63,14 @@ export type ProjectDashboardSampleTarget =
       readonly sharedClockId?: string;
     }
   | {
+      readonly kind: "export-artifact";
+      readonly label: string;
+      readonly artifactId: string;
+      readonly manifestId: string;
+      readonly profileId: string;
+      readonly payloadKind: string;
+    }
+  | {
       readonly kind: "api-catalog-item";
       readonly label: string;
       readonly itemId: string;
@@ -423,6 +431,16 @@ function sampleTargetSearchFields(
           target.layoutId ?? "",
           target.sharedClockId ?? "",
           "tutorial card live sample"
+        ];
+      case "export-artifact":
+        return [
+          target.kind,
+          target.label,
+          target.artifactId,
+          target.manifestId,
+          target.profileId,
+          target.payloadKind,
+          "iframe export artifact embed"
         ];
       case "api-catalog-item":
         return [target.kind, target.label, target.itemId];

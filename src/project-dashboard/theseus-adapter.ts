@@ -355,6 +355,16 @@ function sampleTargetSearchFields(
           target.sharedClockId ?? "",
           "tutorial card live sample"
         ];
+      case "export-artifact":
+        return [
+          target.kind,
+          target.label,
+          target.artifactId,
+          target.manifestId,
+          target.profileId,
+          target.payloadKind,
+          "iframe export artifact embed"
+        ];
       case "api-catalog-item":
         return [target.kind, target.label, target.itemId];
     }

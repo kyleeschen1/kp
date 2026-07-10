@@ -230,6 +230,12 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
       item("embed-mini-tutorial", "MiniTutorial", "tutorial", "proposed", "Executable semantic tutorial that can render as card, GIF, video, or step sequence.", ["tutorial", "export"]),
       item("embed-tutorial-clip", "TutorialClip", "tutorial", "proposed", "Composable tutorial segment with inputs, outputs, prerequisites, and taught concepts.", ["composition", "timeline"]),
       item("embed-export-profile", "ExportProfile", "export", "proposed", "Output target such as gif-small, video, card, embed, or lesson sequence.", ["gif", "video"]),
+      item("embed-iframe-export-artifact", "IframeExportArtifact", "export", "active", "Resolved iframe artifact metadata with manifest/profile identity, dependency closure, fallback data, and iframe document shell output.", ["iframe", "export", "embed"], {
+        protocols: ["resolveKpTutorialCardIframeExportArtifact", "renderKpTutorialCardIframeDocument"],
+        inputs: ["KpTutorialCardManifest", "KpTutorialCardExportArtifact"],
+        outputs: ["html-document", "artifact metadata"],
+        preserves: ["manifest identity", "profile identity", "timeline identity"]
+      }),
       item("embed-dependency-manifest", "DependencyManifest", "runtime", "planned", "Critical, interactive, optional, and fallback dependency closure for each card or route.", ["lazy loading", "runtime"])
     ]
   }
