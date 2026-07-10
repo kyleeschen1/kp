@@ -102,13 +102,14 @@
     {
       "id": "task.theseus.dashboard-queue-v0",
       "title": "Add-workflow-queue-section",
-      "status": "complete",
-      "summary": "Workflow Queue section landed for dashboard data models."
+      "summary": "Workflow Queue section landed for dashboard data models.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-out-command-v0",
       "title": "Add-dashboard-out-command",
-      "status": "planned"
+      "status": "complete",
+      "summary": "dashboard-out now prints or writes reusable dashboard HTML."
     },
     {
       "id": "task.theseus.dashboard-serve-command-v0",

@@ -1,0 +1,66 @@
+{
+  "id": "task.theseus.dashboard-out-command-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard-out command",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "summary": "Added dashboard-out CLI support for printing dashboard HTML or writing it to --out, registered command metadata, and synchronized generated CLI docs.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/cli-report-commands.ts",
+      "summary": "Routes dashboard-out to the dashboard model builder and HTML renderer."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/cli-report-commands.test.ts",
+      "summary": "Covers dashboard-out stdout and --out file behavior."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/cli-command-registry.ts",
+      "summary": "Registers dashboard-out command metadata."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/docs/cli.md",
+      "summary": "Documents dashboard-out usage, examples, and --out option."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/cli-report-commands.test.ts -t dashboard-out|dashboard-data",
+      "status": "passed",
+      "scope": "Focused dashboard CLI report tests.",
+      "checkedAt": "2026-07-10T07:09:44.401Z"
+    },
+    {
+      "command": "npm run test -- src/cli-command-registry.test.ts -t registry|docs|dispatch|dashboard-out",
+      "status": "passed",
+      "scope": "CLI registry/docs tests.",
+      "checkedAt": "2026-07-10T07:09:44.412Z"
+    },
+    {
+      "command": "npm run test -- src/cli-report-commands.test.ts src/cli-command-registry.test.ts src/dashboard-data-builder.test.ts src/dashboard-html.test.ts src/dashboard-client.test.ts",
+      "status": "passed",
+      "scope": "Adjacent CLI and dashboard tests.",
+      "checkedAt": "2026-07-10T07:09:44.422Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Theseus package TypeScript check.",
+      "checkedAt": "2026-07-10T07:09:44.432Z"
+    },
+    {
+      "command": "node bin/theseus.mjs dashboard-out --project-root /Users/kyleeschen/Code/kp --out /private/tmp/kp-theseus-dashboard.html",
+      "status": "passed",
+      "checkedAt": "2026-07-10T07:09:44.441Z",
+      "scope": "Runtime dashboard-out write check against the KP graph."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added dashboard-out CLI support for printing dashboard HTML or writing it to --out, registered command metadata, and synchronized generated CLI docs."
+  }
+}
