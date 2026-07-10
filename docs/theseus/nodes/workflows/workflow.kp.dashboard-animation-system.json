@@ -19,7 +19,8 @@
   ],
   "nextActions": [
     "next.kp.semantic-object-transform-catalog",
-    "next.kp.semantic-transition-runtime"
+    "next.kp.semantic-transition-runtime",
+    "next.kp.radical-artifact-frame-phase-routing"
   ],
   "progress": {
     "state": "partial",
