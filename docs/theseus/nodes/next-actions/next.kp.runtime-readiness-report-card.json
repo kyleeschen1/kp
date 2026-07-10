@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.runtime-readiness-report-card",
+  "kind": "next-action",
+  "title": "Add semantic runtime readiness report card",
+  "status": "ready",
+  "domain": "kp.dashboard",
+  "summary": "Add a dashboard report card that grades semantic runtime maturity, risks, blockers, and next verification targets."
+}

@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.synced-equation-graph-samples",
+  "kind": "next-action",
+  "title": "Add synced equation graph samples",
+  "status": "ready",
+  "domain": "kp.dashboard",
+  "summary": "Add a dashboard sample target for synchronized equation and graph views driven by the same semantic clock."
+}

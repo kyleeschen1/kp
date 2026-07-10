@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.tutorial-card-manifest-v0",
+  "kind": "next-action",
+  "title": "Define tutorial card manifest v0",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Define a semantic tutorial capsule manifest for objects, transformations, layouts, timelines, checks, and export settings."
+}

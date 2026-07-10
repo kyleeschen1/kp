@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.matrix-linear-map-derive",
+  "kind": "next-action",
+  "title": "Link Matrix and LinearMap representations",
+  "status": "ready",
+  "domain": "kp.linear-algebra",
+  "summary": "Define minimal LinearMap representation metadata and derive links between Matrix and LinearMap views where basis provenance is explicit."
+}

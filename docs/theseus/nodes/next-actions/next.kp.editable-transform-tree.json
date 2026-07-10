@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.editable-transform-tree",
+  "kind": "next-action",
+  "title": "Add editable transform tree metadata",
+  "status": "ready",
+  "domain": "kp.animation-runtime",
+  "summary": "Represent presentation-only pauses, focus, unfocus, and emphasis as editable transform-tree annotations without mutating semantic structure."
+}

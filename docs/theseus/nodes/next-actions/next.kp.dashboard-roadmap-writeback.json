@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.dashboard-roadmap-writeback",
+  "kind": "next-action",
+  "title": "Surface roadmap refs in dashboard",
+  "status": "ready",
+  "domain": "kp.dashboard",
+  "summary": "Make dashboard rows surface project-doc roadmap, thread, review, and decision refs alongside Theseus operational refs."
+}

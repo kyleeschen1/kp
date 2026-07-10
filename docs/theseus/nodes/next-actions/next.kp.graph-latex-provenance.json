@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.graph-latex-provenance",
+  "kind": "next-action",
+  "title": "Enforce graph LaTeX provenance honesty",
+  "status": "ready",
+  "domain": "kp.semantic-api",
+  "summary": "Distinguish exact symbolic graph provenance from sampled graph data and prevent sampled graphs from claiming exact LaTeX sources."
+}

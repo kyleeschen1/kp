@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.generated-katex-fixture-contract",
+  "kind": "next-action",
+  "title": "Define generated KaTeX fixture contract",
+  "status": "ready",
+  "domain": "kp.katex",
+  "summary": "Define how semantic transformations generate KaTeX fixtures, identity maps, artifacts, and expected geometry diagnostics."
+}

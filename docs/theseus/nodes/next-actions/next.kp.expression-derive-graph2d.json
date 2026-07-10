@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.expression-derive-graph2d",
+  "kind": "next-action",
+  "title": "Derive Graph2D from expressions and equations",
+  "status": "ready",
+  "domain": "kp.graph",
+  "summary": "Add initial exact Expression and classifiable Equation to Graph2D derivation paths with renderer and dashboard coverage."
+}

@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.semantic-runtime-loop-closeout",
+  "kind": "next-action",
+  "title": "Close semantic runtime roadmap loop",
+  "status": "ready",
+  "domain": "kp.project-control",
+  "summary": "Sync project docs, Theseus records, dashboard status, residual risks, and next recommended slices at loop closeout."
+}

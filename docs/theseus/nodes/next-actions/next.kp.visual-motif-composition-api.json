@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.visual-motif-composition-api",
+  "kind": "next-action",
+  "title": "Compose visual motifs from transform trees",
+  "status": "ready",
+  "domain": "kp.animation-runtime",
+  "summary": "Expose a visual motif composition API that maps transformation trees and annotations into reversible motif timelines."
+}

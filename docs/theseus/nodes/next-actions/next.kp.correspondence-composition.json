@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.correspondence-composition",
+  "kind": "next-action",
+  "title": "Compose correspondence maps",
+  "status": "ready",
+  "domain": "kp.animation-runtime",
+  "summary": "Compose selector correspondence and provenance across sequential and parallel transformations."
+}

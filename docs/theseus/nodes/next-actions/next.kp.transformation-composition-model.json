@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.transformation-composition-model",
+  "kind": "next-action",
+  "title": "Add transformation composition model",
+  "status": "ready",
+  "domain": "kp.animation-runtime",
+  "summary": "Add first-class sequence and parallel SemanticTransformation composition records with provenance and runtime-facing metadata."
+}

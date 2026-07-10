@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.capability-advertisement",
+  "kind": "next-action",
+  "title": "Advertise semantic object capabilities",
+  "status": "ready",
+  "domain": "kp.semantic-api",
+  "summary": "Let semantic objects advertise render, derive, execute, transform, compare, diagnose, animate, and link capabilities through shared metadata."
+}

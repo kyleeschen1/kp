@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.katex-exponent-radical-identity",
+  "kind": "next-action",
+  "title": "Expand exponent radical identity fixtures",
+  "status": "ready",
+  "domain": "kp.katex",
+  "summary": "Expand exponent and radical transform coverage around persistent tokens, artifacts, and semantic identity."
+}

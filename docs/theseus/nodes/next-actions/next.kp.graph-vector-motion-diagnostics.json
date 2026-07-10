@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.graph-vector-motion-diagnostics",
+  "kind": "next-action",
+  "title": "Expose graph vector motion diagnostics",
+  "status": "ready",
+  "domain": "kp.graph",
+  "summary": "Expose graph and vector sampled-frame diagnostics through the shared animation runtime and dashboard-readable metadata."
+}

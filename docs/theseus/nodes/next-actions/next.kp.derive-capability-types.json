@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.derive-capability-types",
+  "kind": "next-action",
+  "title": "Add derive capability types",
+  "status": "ready",
+  "domain": "kp.semantic-api",
+  "summary": "Add typed derive capability records and tests for expression, equation, graph, matrix, and representation provenance metadata."
+}

@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.katex-matrix-large-operator-artifacts",
+  "kind": "next-action",
+  "title": "Cover matrix and large operator artifacts",
+  "status": "ready",
+  "domain": "kp.katex",
+  "summary": "Add matrix bracket, entry-preservation, large operator, limit, sum, product, and integral artifact coverage."
+}

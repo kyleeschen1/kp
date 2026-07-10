@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.dashboard-capability-preview",
+  "kind": "next-action",
+  "title": "Show capabilities in dashboard previews",
+  "status": "ready",
+  "domain": "kp.dashboard",
+  "summary": "Surface object capability metadata in dashboard and API selected-row previews so authoring can inspect object affordances."
+}

@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.synchronized-panel-layout-sample",
+  "kind": "next-action",
+  "title": "Build synchronized panel layout sample",
+  "status": "ready",
+  "domain": "kp.layout",
+  "summary": "Build the first synchronized panel layout sample that composes equation, graph, and controls through layout object metadata."
+}

@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.katex-fraction-wrapper-geometry",
+  "kind": "next-action",
+  "title": "Expand fraction wrapper geometry fixtures",
+  "status": "ready",
+  "domain": "kp.katex",
+  "summary": "Expand fraction and function-wrapper transform fixtures around stacked geometry, delimiter settling, and artifact fade policies."
+}

@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.derive-representation-spec",
+  "kind": "next-action",
+  "title": "Spec derive representation contract",
+  "status": "ready",
+  "domain": "kp.semantic-api",
+  "summary": "Write the first focused contract for exact derive and representation capabilities across semantic objects, provenance, dashboard visibility, and tests."
+}

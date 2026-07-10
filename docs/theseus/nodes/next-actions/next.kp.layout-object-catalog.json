@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.layout-object-catalog",
+  "kind": "next-action",
+  "title": "Add layout object catalog rows",
+  "status": "ready",
+  "domain": "kp.layout",
+  "summary": "Add layout object catalog rows for row, column, stack, grid, split, tabs, overlay, scroll sequence, and pinned stage."
+}
