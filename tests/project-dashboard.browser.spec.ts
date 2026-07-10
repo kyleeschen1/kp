@@ -16,11 +16,12 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   );
   await expect(animationLayout).toBeVisible();
   const dashboardSearch = animationLayout.locator(
-    '[data-action="filter-project-dashboard"]'
+    "[data-kp-project-dashboard-fuzzy-finder]"
   );
+  await expect(animationLayout).toContainText("Find anything");
   await expect(dashboardSearch).toHaveAttribute(
     "placeholder",
-    "Search rendered forms, animations, objects"
+    "Search work, animations, visuals, objects, reports"
   );
   await dashboardSearch.fill("dnt");
   await expect(

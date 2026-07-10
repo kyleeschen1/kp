@@ -159,12 +159,12 @@ function renderAnimationLayoutSection(
     <section class="project-dashboard__section project-dashboard__animation-layout" data-kp-project-dashboard-animation-layout aria-labelledby="project-dashboard-animation-layout-title">
       <div class="project-dashboard__section-header">
         <h2 id="project-dashboard-animation-layout-title">Animation Layout</h2>
-        <span>fixtures and rendered forms</span>
+        <span>dashboard-wide fuzzy finder</span>
       </div>
       <div class="project-dashboard__animation-toolbar">
         <label class="project-dashboard__search" for="project-dashboard-search">
-          <span>Search</span>
-          <input id="project-dashboard-search" type="search" value="${escapeHtml(query)}" data-action="filter-project-dashboard" aria-label="Search project dashboard" placeholder="Search rendered forms, animations, objects" />
+          <span>Find anything</span>
+          <input id="project-dashboard-search" type="search" value="${escapeHtml(query)}" data-action="filter-project-dashboard" data-kp-project-dashboard-fuzzy-finder aria-label="Search project dashboard" placeholder="Search work, animations, visuals, objects, reports" />
         </label>
       </div>
       ${renderKatexTransformFixtureGallery(selectedKatexFixture)}

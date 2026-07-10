@@ -70,7 +70,12 @@ test("renderProjectDashboard places the animation layout first", () => {
   assert.notEqual(workSectionIndex, -1);
   assert.ok(animationLayoutIndex < dataContractIndex);
   assert.ok(animationLayoutIndex < workSectionIndex);
-  assert.match(html, /placeholder="Search rendered forms, animations, objects"/);
+  assert.match(html, /data-kp-project-dashboard-fuzzy-finder/);
+  assert.match(html, />Find anything</);
+  assert.match(
+    html,
+    /placeholder="Search work, animations, visuals, objects, reports"/
+  );
 });
 
 test("groupProjectCardsByStatus groups top-level cards and sorts by priority", () => {
