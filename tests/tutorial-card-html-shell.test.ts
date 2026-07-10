@@ -22,6 +22,10 @@ test("tutorial card HTML shell renders synchronized panel slots", () => {
   assert.match(html, /data-kp-tutorial-panel="graph"/);
   assert.match(html, /data-kp-tutorial-panel-id="panel\.linear-solve\.graph"/);
   assert.match(html, /data-kp-tutorial-graph-id="saddle-orbit-graph"/);
+  assert.match(html, /data-kp-tutorial-graph-progress="0\.5"/);
+  assert.match(html, /data-kp-tutorial-graph-channel-count="1"/);
+  assert.match(html, /data-kp-tutorial-graph-vertex-count="441"/);
+  assert.match(html, /data-kp-tutorial-graph-frame/);
   assert.match(html, /data-kp-tutorial-controls/);
 });
 
