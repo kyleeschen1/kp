@@ -973,7 +973,7 @@ export const projectDashboardData: ProjectDashboardData = {
       id: "report-semantic-runtime-readiness",
       title: "Semantic runtime readiness",
       status: "active",
-      grade: "B-",
+      grade: "B",
       lastReviewedOn: "2026-07-10",
       scope:
         "Assess whether KP has enough shared object, transformation, layout, and time runtime to compose equation, graph, and future programming tutorials from typed metadata.",
@@ -1000,17 +1000,22 @@ export const projectDashboardData: ProjectDashboardData = {
         {
           label: "Dashboard synchronized sample row",
           href: "src/project-dashboard/data.ts"
+        },
+        {
+          label: "Semantic runtime loop closeout",
+          href: "docs/project/reviews/2026-07-10-semantic-runtime-roadmap-loop-closeout.md"
         }
       ],
       risks: [
         "The synchronized panel is still metadata-first; it does not yet render an integrated live surface.",
         "Graph and equation frames share progress but not a typed parent timeline with child time transforms.",
-        "Programming-domain objects still need source selectors before runtime readiness can be called broad."
+        "Programming-domain objects still need source selectors before runtime readiness can be called cross-domain.",
+        "Export profiles exist in the tutorial manifest but do not yet produce iframe, GIF, video, or static-step artifacts."
       ],
       recommendedNextActions: [
-        "Define the tutorial card manifest around objects, layout, timeline, checks, and export settings.",
-        "Add a dashboard roadmap writeback pass so runtime readiness can stay current after each slice.",
-        "Promote the synchronized panel sample from launch metadata into an actual rendered preview."
+        "Promote the synchronized equation/graph sample into a live rendered tutorial card.",
+        "Add a parent timeline model that can compose child timelines, pauses, focus, and annotations.",
+        "Start the programming SourceFile object with stable source-range selectors."
       ],
       tags: ["runtime", "semantic-objects", "layout", "timeline", "readiness"],
       projectRefs: [
@@ -1021,8 +1026,8 @@ export const projectDashboardData: ProjectDashboardData = {
         },
         {
           kind: "review",
-          label: "July 10 next-step review",
-          href: "docs/project/reviews/2026-07-10-next-step-review.md"
+          label: "Semantic runtime loop closeout",
+          href: "docs/project/reviews/2026-07-10-semantic-runtime-roadmap-loop-closeout.md"
         },
         {
           kind: "theseus",
@@ -1034,7 +1039,8 @@ export const projectDashboardData: ProjectDashboardData = {
       relatedIds: [
         "work-rendering-time-protocol",
         "gallery-rendering-time-api",
-        "sample-synced-equation-graph-linear-solve"
+        "sample-synced-equation-graph-linear-solve",
+        "tutorial-card-manifest-v0"
       ]
     },
     {

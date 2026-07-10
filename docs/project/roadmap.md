@@ -19,14 +19,15 @@ semantics first
 
 ## Active Focus
 
-**Semantic runtime foundation.** Stabilize the shared protocol for
-`SemanticObject -> SemanticTransformation -> CorrespondenceMap -> MotionPlan ->
-sampled frame -> renderer`.
+**Semantic runtime foundation.** The first roadmap loop closed on 2026-07-10
+with derive metadata, registry capability metadata, transformation
+composition, correspondence composition, KaTeX fixture coverage,
+graph/vector diagnostics, synchronized layout samples, runtime readiness, a
+tutorial-card manifest, and dashboard roadmap refs in place.
 
-The next major implementation loop should build the missing connective tissue:
-derive/representation capabilities, object registry shape, richer typed sample
-targets, reusable transformation composition, layout objects, and dashboard
-visibility for all of it.
+The next major implementation loop should turn that metadata spine into a
+visible executable card: `KpTutorialCardManifest -> parent timeline ->
+synchronized layout -> sampled equation/graph frames -> renderer`.
 
 ## Roadmap Phases
 
@@ -175,15 +176,16 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Bootstrap project memory and tie it to Theseus.
-2. Define the derive/representation capability.
-3. Add a minimal semantic object registry and capability metadata model.
-4. Expand dashboard/API samples so objects expose their available lenses,
-   renderers, and protocols.
-5. Make transformation composition explicit and editable.
-6. Grow KaTeX transformation fixtures from semantic definitions.
-7. Bring graph/vector samples fully under the same clock and dashboard sample
-   target system.
+1. Promote the synchronized equation/graph sample into a live rendered tutorial
+   card driven by `KpTutorialCardManifest`.
+2. Add a parent timeline model that can map child timelines, pauses, focus, and
+   annotations while preserving exact rewind semantics.
+3. Start the programming-domain `SourceFile` object with stable source-range
+   selectors and static render nodes.
+4. Generate one KaTeX transform fixture from a semantic transformation
+   definition instead of curated fixture geometry.
+5. Add lightweight export/embed dependency planning for tutorial cards before
+   implementing actual media encoders.
 
 ## Deferred
 

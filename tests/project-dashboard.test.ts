@@ -894,7 +894,7 @@ test("project dashboard includes semantic runtime readiness report card", () => 
 
   assert.equal(runtimeTheme?.title, "Semantic runtime readiness");
   assert.equal(runtimeTheme?.status, "active");
-  assert.equal(runtimeTheme?.grade, "B-");
+  assert.equal(runtimeTheme?.grade, "B");
   assert.equal(runtimeTheme?.lastReviewedOn, "2026-07-10");
   assert.ok(
     runtimeTheme?.scope.includes(
@@ -922,19 +922,27 @@ test("project dashboard includes semantic runtime readiness report card", () => 
     )
   );
   assert.ok(
+    runtimeTheme?.evidence.some((entry) =>
+      entry.href.includes(
+        "docs/project/reviews/2026-07-10-semantic-runtime-roadmap-loop-closeout.md"
+      )
+    )
+  );
+  assert.ok(
     runtimeTheme?.risks.some((risk) =>
       risk.includes("still metadata-first")
     )
   );
   assert.ok(
     runtimeTheme?.recommendedNextActions.some((action) =>
-      action.includes("tutorial card manifest")
+      action.includes("parent timeline")
     )
   );
   assert.deepEqual(runtimeTheme?.relatedIds, [
     "work-rendering-time-protocol",
     "gallery-rendering-time-api",
-    "sample-synced-equation-graph-linear-solve"
+    "sample-synced-equation-graph-linear-solve",
+    "tutorial-card-manifest-v0"
   ]);
 });
 
@@ -966,7 +974,7 @@ test("renderProjectDashboard selects semantic runtime readiness report card", ()
     /data-kp-selected-agenda-row="report-semantic-runtime-readiness"/
   );
   assert.match(html, /Semantic runtime readiness/);
-  assert.match(html, /data-kp-preview-field="Grade"[^>]*>B-/);
+  assert.match(html, /data-kp-preview-field="Grade"[^>]*>B</);
   assert.match(
     html,
     /data-kp-preview-field="Risks"[^>]*>[\s\S]*metadata-first/

@@ -2,7 +2,64 @@
   "id": "next.kp.semantic-runtime-loop-closeout",
   "kind": "next-action",
   "title": "Close semantic runtime roadmap loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.project-control",
-  "summary": "Sync project docs, Theseus records, dashboard status, residual risks, and next recommended slices at loop closeout."
+  "summary": "Closed the semantic runtime roadmap loop with project-doc handoff, refreshed dashboard readiness, residual risks, and next recommended slices.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-10-semantic-runtime-roadmap-loop-closeout.md",
+      "summary": "Adds the semantic runtime roadmap loop closeout review with completed commits, outcomes, verification, residual risks, and recommended next slices."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Updates active focus and near-term priorities to the post-loop executable tutorial-card direction."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Refreshes the active semantic runtime thread with closeout state and current next action."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Refreshes the semantic runtime readiness report card with closeout evidence, grade, residual risks, and next actions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Updates dashboard report-card assertions for the post-closeout runtime readiness state."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "focused dashboard closeout tests",
+      "checkedAt": "2026-07-10T21:39:21.336Z"
+    },
+    {
+      "command": "npm test -- tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "project dashboard regression suite",
+      "checkedAt": "2026-07-10T21:39:21.411Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T21:39:21.454Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T21:39:21.491Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Closed the semantic runtime roadmap loop with project-doc handoff, refreshed dashboard readiness, residual risks, and next recommended slices."
+  }
 }
