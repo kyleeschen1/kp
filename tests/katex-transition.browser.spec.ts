@@ -406,27 +406,15 @@ test("editor equation motion demo uses semantic playback plans", async ({
 
     await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
 
-    const gl = overlay.getContext("webgl");
+    const context = overlay.getContext("2d", { willReadFrequently: true });
 
-    if (gl === null) {
-      throw new Error("Expected radical artifact overlay to use WebGL.");
+    if (context === null) {
+      throw new Error("Expected radical artifact overlay to use a 2D canvas.");
     }
 
-    gl.finish();
-
-    const pixels = new Uint8Array(overlay.width * overlay.height * 4);
+    const pixels = context.getImageData(0, 0, overlay.width, overlay.height).data;
     let maxAlpha = 0;
     let nonTransparentPixelCount = 0;
-
-    gl.readPixels(
-      0,
-      0,
-      overlay.width,
-      overlay.height,
-      gl.RGBA,
-      gl.UNSIGNED_BYTE,
-      pixels
-    );
 
     for (let index = 3; index < pixels.length; index += 4) {
       const alpha = pixels[index] ?? 0;
@@ -462,37 +450,29 @@ test("editor equation motion demo uses semantic playback plans", async ({
       sourceMotion: overlay.dataset["kpEquationMotionArtifactSourceMotion"],
       pathMotion: overlay.dataset["kpEquationMotionArtifactPathMotion"],
       targetMotion: overlay.dataset["kpEquationMotionArtifactTargetMotion"],
-      anticipationOffset:
-        overlay.dataset["kpEquationMotionArtifactAnticipationOffset"],
-      collapsedPointSize:
-        overlay.dataset["kpEquationMotionArtifactCollapsedPointSize"],
-      filamentWidth: overlay.dataset["kpEquationMotionArtifactFilamentWidth"],
-      formStart: overlay.dataset["kpEquationMotionArtifactFormStart"],
-      particleCount: Number(
-        overlay.dataset["kpEquationMotionArtifactParticleCount"] ?? 0
-      ),
+      seedRect: overlay.dataset["kpEquationMotionArtifactSeedRect"],
+      contractEnd: overlay.dataset["kpEquationMotionArtifactContractEnd"],
+      revealStart: overlay.dataset["kpEquationMotionArtifactRevealStart"],
       nonTransparentPixelCount,
       maxAlpha
     };
   });
 
   expect(radicalArtifactState).toEqual({
-    mode: "pixel-flow",
+    mode: "seed-reveal",
     fallbackReason: undefined,
     overlayConnected: true,
     overlayZIndex: "1",
     persistentXTokenZIndex: "2",
-    renderer: "webgl-pixel-flow",
+    renderer: "canvas-seed-reveal",
     sourceTokenId: "radical.rewrite-power-as-root.source.exponent",
     targetTokenId: "radical.rewrite-power-as-root.target.radical",
-    sourceMotion: "anticipate-collapse-emitter",
-    pathMotion: "filament-stream",
-    targetMotion: "late-radical-form",
-    anticipationOffset: "0,-14",
-    collapsedPointSize: "1",
-    filamentWidth: "0.7",
-    formStart: "0.88",
-    particleCount: 1024,
+    sourceMotion: "contract-to-seed",
+    pathMotion: "none",
+    targetMotion: "reveal-from-seed",
+    seedRect: expect.any(String),
+    contractEnd: "0.55",
+    revealStart: "0.58",
     nonTransparentPixelCount: expect.any(Number),
     maxAlpha: expect.any(Number)
   });

@@ -17,10 +17,10 @@ import {
   type EquationCancelParticleRenderer
 } from "../rendering/equation-cancel-particles-webgl.ts";
 import {
-  createKatexArtifactPixelFlowRenderer,
-  type KatexArtifactPixelFlowPlan,
-  type KatexArtifactPixelFlowRenderer
-} from "../rendering/katex-artifact-pixel-flow.ts";
+  createKatexArtifactSeedRevealRenderer,
+  type KatexArtifactSeedRevealPlan,
+  type KatexArtifactSeedRevealRenderer
+} from "../rendering/katex-artifact-seed-reveal.ts";
 import {
   createKatexTextureAtlas,
   measureKatexTextureCaptureRect
@@ -53,9 +53,9 @@ const EQUATION_MOTION_DEMO_BEAT_LABEL_COUNT = 50;
 const activeAnimations = new WeakMap<HTMLElement, ActiveEquationMotionAnimation>();
 const pausedAnimations = new WeakMap<HTMLElement, PausedEquationMotionAnimation>();
 const activeRenderContexts = new WeakMap<HTMLElement, EquationMotionRenderContext>();
-const artifactPixelFlowContexts = new WeakMap<
+const artifactSeedRevealContexts = new WeakMap<
   HTMLElement,
-  EquationArtifactPixelFlowContext
+  EquationArtifactSeedRevealContext
 >();
 const cancellationParticleRenderers = new WeakMap<
   HTMLCanvasElement,
@@ -108,13 +108,13 @@ interface FinalSimplifyMotionGroup {
   readonly maxDistance: number;
 }
 
-interface EquationArtifactPixelFlowContext {
+interface EquationArtifactSeedRevealContext {
   readonly key: string;
   readonly sourceMotionId: string;
   readonly targetMotionId: string;
   readonly canvas: HTMLCanvasElement;
-  rendererPromise: Promise<KatexArtifactPixelFlowRenderer | undefined>;
-  renderer: KatexArtifactPixelFlowRenderer | undefined;
+  rendererPromise: Promise<KatexArtifactSeedRevealRenderer | undefined>;
+  renderer: KatexArtifactSeedRevealRenderer | undefined;
   disposed: boolean;
   lastProgress: number;
 }
@@ -661,7 +661,7 @@ function renderEquationMotionFrame(
     sourceStep < targetStep ? frame.progress : 1 - frame.progress;
   const cancellationGroup = createCancellationMotionGroup(plan, context);
   const finalSimplifyGroup = createFinalSimplifyMotionGroup(plan, context);
-  const artifactMotionIds = renderArtifactPixelFlow(
+  const artifactMotionIds = renderArtifactSeedReveal(
     demo,
     plan,
     context,
@@ -936,7 +936,7 @@ function prepareEquationMotionTransitionLayers(
 }
 
 function resetEquationMotionVisualState(demo: HTMLElement): void {
-  clearArtifactPixelFlow(demo);
+  clearArtifactSeedReveal(demo);
   demo
     .querySelectorAll<HTMLElement>("[data-kp-equation-motion-state]")
     .forEach((state) => {
@@ -972,27 +972,27 @@ function resetEquationMotionTokenStyle(element: HTMLElement): void {
   element.style.willChange = "";
 }
 
-function renderArtifactPixelFlow(
+function renderArtifactSeedReveal(
   demo: HTMLElement,
   plan: EquationMotionPlan,
   context: EquationMotionRenderContext,
   progress: number
 ): ReadonlySet<string> {
-  const pixelFlowPlan = createRadicalArtifactPixelFlowPlan(plan, context);
+  const seedRevealPlan = createRadicalArtifactSeedRevealPlan(plan, context);
 
-  if (pixelFlowPlan === undefined || progress <= 0 || progress >= 1) {
-    clearArtifactPixelFlow(demo);
+  if (seedRevealPlan === undefined || progress <= 0 || progress >= 1) {
+    clearArtifactSeedReveal(demo);
     return new Set();
   }
 
-  const renderContext = findOrCreateArtifactPixelFlowContext(
+  const renderContext = findOrCreateArtifactSeedRevealContext(
     demo,
     context,
-    pixelFlowPlan
+    seedRevealPlan
   );
 
   renderContext.lastProgress = progress;
-  demo.dataset["kpEquationMotionArtifactMode"] = "pixel-flow";
+  demo.dataset["kpEquationMotionArtifactMode"] = "seed-reveal";
   delete demo.dataset["kpEquationMotionArtifactFallbackReason"];
 
   if (renderContext.renderer !== undefined) {
@@ -1000,10 +1000,10 @@ function renderArtifactPixelFlow(
     renderContext.canvas.dataset["kpEquationMotionArtifactReady"] = "true";
   }
 
-  return new Set([pixelFlowPlan.sourceMotionId, pixelFlowPlan.targetMotionId]);
+  return new Set([seedRevealPlan.sourceMotionId, seedRevealPlan.targetMotionId]);
 }
 
-function createRadicalArtifactPixelFlowPlan(
+function createRadicalArtifactSeedRevealPlan(
   plan: EquationMotionPlan,
   context: EquationMotionRenderContext
 ):
@@ -1011,7 +1011,7 @@ function createRadicalArtifactPixelFlowPlan(
       readonly key: string;
       readonly sourceMotionId: string;
       readonly targetMotionId: string;
-      readonly pixelFlowPlan: KatexArtifactPixelFlowPlan;
+      readonly seedRevealPlan: KatexArtifactSeedRevealPlan;
       readonly sourceAtlasToken: KatexMotionToken;
       readonly targetAtlasToken: KatexMotionToken;
     }
@@ -1039,14 +1039,15 @@ function createRadicalArtifactPixelFlowPlan(
   const targetCaptureRect = measureKatexTextureCaptureRect(targetToken.element);
   const sourceLocalRect = viewportRectToLocalRect(sourceCaptureRect, stageRect);
   const targetLocalRect = viewportRectToLocalRect(targetCaptureRect, stageRect);
+  const seedRect = radicalSeedRect(targetLocalRect);
 
   return {
-    key: `${context.key}:radical-artifact-pixel-flow`,
+    key: `${context.key}:radical-artifact-seed-reveal`,
     sourceMotionId,
     targetMotionId,
-    pixelFlowPlan: {
-      id: "radical.rewrite-power-as-root.artifact-pixel-flow",
-      kind: "artifact-pixel-flow",
+    seedRevealPlan: {
+      id: "radical.rewrite-power-as-root.artifact-seed-reveal",
+      kind: "artifact-seed-reveal",
       source: {
         tokenId: sourceMotionId,
         rect: sourceLocalRect
@@ -1055,23 +1056,17 @@ function createRadicalArtifactPixelFlowPlan(
         tokenId: targetMotionId,
         rect: targetLocalRect
       },
-      particleCount: 1024,
+      seedRect,
       sourceMotion: {
-        kind: "anticipate-collapse-emitter",
-        anticipationOffset: { x: 0, y: -14 },
-        anticipationEnd: 0.24,
-        pauseEnd: 0.34,
-        collapseEnd: 0.56,
-        collapsedPointSize: 1
-      },
-      pathMotion: {
-        kind: "filament-stream",
-        formStart: 0.88,
-        filamentWidth: 0.7
+        kind: "contract-to-seed",
+        contractEnd: 0.55,
+        fadeStart: 0.56,
+        fadeEnd: 0.6
       },
       targetMotion: {
-        kind: "late-radical-form",
-        formStart: 0.88
+        kind: "reveal-from-seed",
+        revealStart: 0.58,
+        revealEnd: 1
       },
       start: 0,
       end: 1,
@@ -1090,28 +1085,37 @@ function createRadicalArtifactPixelFlowPlan(
   };
 }
 
-function findOrCreateArtifactPixelFlowContext(
+function radicalSeedRect(targetRect: KatexTokenRect): KatexTokenRect {
+  return {
+    left: targetRect.left + targetRect.width * 0.18,
+    top: targetRect.top + targetRect.height * 0.62,
+    width: 1,
+    height: 1
+  };
+}
+
+function findOrCreateArtifactSeedRevealContext(
   demo: HTMLElement,
   context: EquationMotionRenderContext,
-  plan: NonNullable<ReturnType<typeof createRadicalArtifactPixelFlowPlan>>
-): EquationArtifactPixelFlowContext {
-  const existingContext = artifactPixelFlowContexts.get(demo);
+  plan: NonNullable<ReturnType<typeof createRadicalArtifactSeedRevealPlan>>
+): EquationArtifactSeedRevealContext {
+  const existingContext = artifactSeedRevealContexts.get(demo);
 
   if (existingContext?.key === plan.key) {
     return existingContext;
   }
 
-  clearArtifactPixelFlow(demo);
+  clearArtifactSeedReveal(demo);
   const stage = findEquationMotionStage(context.planSourceState);
 
   if (stage === undefined) {
-    throw new Error("Expected equation motion stage for artifact pixel flow.");
+    throw new Error("Expected equation motion stage for artifact seed reveal.");
   }
 
   const canvas = document.createElement("canvas");
   const stageRect = stage.getBoundingClientRect();
   const pixelRatio = window.devicePixelRatio || 1;
-  const renderContext: EquationArtifactPixelFlowContext = {
+  const renderContext: EquationArtifactSeedRevealContext = {
     key: plan.key,
     sourceMotionId: plan.sourceMotionId,
     targetMotionId: plan.targetMotionId,
@@ -1124,35 +1128,23 @@ function findOrCreateArtifactPixelFlowContext(
 
   canvas.className = "equation-motion__artifact-canvas";
   canvas.dataset["kpEquationMotionArtifactOverlay"] = "true";
-  canvas.dataset["kpEquationMotionArtifactRenderer"] = "webgl-pixel-flow";
+  canvas.dataset["kpEquationMotionArtifactRenderer"] = "canvas-seed-reveal";
   canvas.dataset["kpEquationMotionArtifactSource"] = plan.sourceMotionId;
   canvas.dataset["kpEquationMotionArtifactTarget"] = plan.targetMotionId;
-  canvas.dataset["kpEquationMotionArtifactParticleCount"] = String(
-    plan.pixelFlowPlan.particleCount
-  );
   canvas.dataset["kpEquationMotionArtifactSourceMotion"] =
-    plan.pixelFlowPlan.sourceMotion?.kind ?? "direct";
-  canvas.dataset["kpEquationMotionArtifactPathMotion"] =
-    plan.pixelFlowPlan.pathMotion?.kind ?? "direct";
+    plan.seedRevealPlan.sourceMotion.kind;
+  canvas.dataset["kpEquationMotionArtifactPathMotion"] = "none";
   canvas.dataset["kpEquationMotionArtifactTargetMotion"] =
-    plan.pixelFlowPlan.targetMotion?.kind ?? "direct";
-  if (plan.pixelFlowPlan.sourceMotion !== undefined) {
-    canvas.dataset["kpEquationMotionArtifactAnticipationOffset"] =
-      `${plan.pixelFlowPlan.sourceMotion.anticipationOffset.x},` +
-      `${plan.pixelFlowPlan.sourceMotion.anticipationOffset.y}`;
-    canvas.dataset["kpEquationMotionArtifactCollapsedPointSize"] = String(
-      plan.pixelFlowPlan.sourceMotion.collapsedPointSize
-    );
-  }
-  if (plan.pixelFlowPlan.pathMotion !== undefined) {
-    canvas.dataset["kpEquationMotionArtifactFilamentWidth"] = String(
-      plan.pixelFlowPlan.pathMotion.filamentWidth
-    );
-    canvas.dataset["kpEquationMotionArtifactFormStart"] = String(
-      plan.pixelFlowPlan.pathMotion.formStart
-    );
-  }
-  syncArtifactPixelFlowCanvas(canvas, stageRect, pixelRatio);
+    plan.seedRevealPlan.targetMotion.kind;
+  canvas.dataset["kpEquationMotionArtifactSeedRect"] =
+    formatDatasetRect(plan.seedRevealPlan.seedRect);
+  canvas.dataset["kpEquationMotionArtifactContractEnd"] = String(
+    plan.seedRevealPlan.sourceMotion.contractEnd
+  );
+  canvas.dataset["kpEquationMotionArtifactRevealStart"] = String(
+    plan.seedRevealPlan.targetMotion.revealStart
+  );
+  syncArtifactCanvas(canvas, stageRect, pixelRatio);
   stage.append(canvas);
 
   const rendererPromise = createKatexTextureAtlas(
@@ -1164,16 +1156,13 @@ function findOrCreateArtifactPixelFlowContext(
         return undefined;
       }
 
-      const renderer = createKatexArtifactPixelFlowRenderer(
+      const renderer = createKatexArtifactSeedRevealRenderer(
         canvas,
-        plan.pixelFlowPlan,
+        plan.seedRevealPlan,
         atlas
       );
 
       renderContext.renderer = renderer;
-      canvas.dataset["kpEquationMotionArtifactParticleCount"] = String(
-        renderer.particleCount
-      );
       renderer.render(renderContext.lastProgress);
       canvas.dataset["kpEquationMotionArtifactReady"] = "true";
 
@@ -1182,27 +1171,27 @@ function findOrCreateArtifactPixelFlowContext(
     .catch((error: unknown) => {
       if (!renderContext.disposed) {
         demo.dataset["kpEquationMotionArtifactFallbackReason"] =
-          error instanceof Error ? error.message : "Unknown artifact pixel flow error.";
-        clearArtifactPixelFlow(demo);
+          error instanceof Error ? error.message : "Unknown artifact seed reveal error.";
+        clearArtifactSeedReveal(demo);
       }
 
       return undefined;
     });
 
   renderContext.rendererPromise = rendererPromise;
-  artifactPixelFlowContexts.set(demo, renderContext);
+  artifactSeedRevealContexts.set(demo, renderContext);
 
   return renderContext;
 }
 
-function clearArtifactPixelFlow(demo: HTMLElement): void {
-  const context = artifactPixelFlowContexts.get(demo);
+function clearArtifactSeedReveal(demo: HTMLElement): void {
+  const context = artifactSeedRevealContexts.get(demo);
 
   if (context !== undefined) {
     context.disposed = true;
     context.renderer?.dispose();
     context.canvas.remove();
-    artifactPixelFlowContexts.delete(demo);
+    artifactSeedRevealContexts.delete(demo);
   }
 
   delete demo.dataset["kpEquationMotionArtifactMode"];
@@ -1213,7 +1202,7 @@ function clearArtifactPixelFlow(demo: HTMLElement): void {
     .forEach((canvas) => canvas.remove());
 }
 
-function syncArtifactPixelFlowCanvas(
+function syncArtifactCanvas(
   canvas: HTMLCanvasElement,
   bounds: DOMRect,
   pixelRatio: number
@@ -1227,6 +1216,17 @@ function syncArtifactPixelFlowCanvas(
   canvas.style.height = `${bounds.height}px`;
 }
 
+function formatDatasetRect(rect: KatexTokenRect): string {
+  return [
+    rect.left,
+    rect.top,
+    rect.width,
+    rect.height
+  ]
+    .map((value) => formatEquationMotionProgress(value))
+    .join(",");
+}
+
 function artifactAtlasToken(
   id: string,
   rect: KatexTokenRect,
@@ -1235,7 +1235,7 @@ function artifactAtlasToken(
   return {
     id,
     text: id,
-    signature: "artifact-pixel-flow",
+    signature: "artifact-seed-reveal",
     rect,
     localRect: {
       left: 0,
