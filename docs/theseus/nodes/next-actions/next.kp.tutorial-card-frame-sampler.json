@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.tutorial-card-frame-sampler",
+  "kind": "next-action",
+  "title": "Build renderer-neutral tutorial card frame sampler",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/card-frame-sampler.ts",
+      "summary": "Adds createKpTutorialCardFrameSampler and a linear-solve convenience sampler for deterministic frame sampling."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-frame-sampler.test.ts",
+      "summary": "Covers composed frame output, shared progress clamping, layout frames, binding frames, and direct-seek rewind determinism."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-frame-sampler.json",
+      "summary": "Materializes the approved frame sampler next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the frame sampler slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-frame-sampler.test.ts tests/tutorial-card-layout-timeline-binding.test.ts tests/parent-timeline.test.ts tests/tutorial-card-runtime.test.ts tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "focused tutorial card frame sampler/runtime tests",
+      "checkedAt": "2026-07-10T22:18:40.941Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:18:40.977Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:18:41.012Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a renderer-neutral tutorial card frame sampler that composes runtime context, parent timeline, synchronized layout frames, and layout/timeline binding frames."
+  },
+  "summary": "Added a renderer-neutral tutorial card frame sampler that composes runtime context, parent timeline, synchronized layout frames, and layout/timeline binding frames."
+}
