@@ -2,7 +2,49 @@
   "id": "next.kp.visual-motif-composition-api",
   "kind": "next-action",
   "title": "Compose visual motifs from transform trees",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation-runtime",
-  "summary": "Expose a visual motif composition API that maps transformation trees and annotations into reversible motif timelines."
+  "summary": "Added a generic transform-tree visual motif composition API with reversible forward and rewind phases.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/visual-motif-composition.ts",
+      "summary": "Maps editable semantic transformation trees to motif segments, forward phases, rewind phases, and mirrored annotation placement using descriptor rules."
+    },
+    {
+      "kind": "file",
+      "path": "tests/visual-motif-composition.test.ts",
+      "summary": "Covers sequence and parallel motif phase composition, reversible annotation placement, and missing transformation-kind rule validation."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/visual-motif-composition.test.ts",
+      "status": "passed",
+      "scope": "focused visual motif composition tests",
+      "checkedAt": "2026-07-10T20:40:03.668Z"
+    },
+    {
+      "command": "npm test -- tests/visual-motif-composition.test.ts tests/semantic-transform-tree-metadata.test.ts tests/equation-visual-motif-timeline.test.ts tests/equation-motion-plan.test.ts tests/semantic-transformation-composition.test.ts",
+      "status": "passed",
+      "scope": "repo test script including visual motif, transform tree, and equation motion coverage",
+      "checkedAt": "2026-07-10T20:40:03.712Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:40:03.831Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:40:03.937Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a generic transform-tree visual motif composition API with reversible forward and rewind phases."
+  }
 }

@@ -1,0 +1,244 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import { createSemanticTransformationRef } from "../src/semantic/animation.ts";
+import {
+  createEditableSemanticTransformationTree,
+  createSemanticTransformationLeaf,
+  createSemanticTransformationParallel,
+  createSemanticTransformationSequence
+} from "../src/semantic/transformation-composition.ts";
+import {
+  createTransformTreeVisualMotifTimeline,
+  type TransformTreeVisualMotifRule
+} from "../src/rendering/visual-motif-composition.ts";
+import type {
+  EquationMotionPrimitiveId,
+  EquationVisualMotifKind,
+  EquationVisualMotifPhaseId
+} from "../src/rendering/visual-motif.ts";
+
+type EquationMotifRule = TransformTreeVisualMotifRule<
+  EquationVisualMotifKind,
+  EquationMotionPrimitiveId,
+  EquationVisualMotifPhaseId
+>;
+
+const rules: readonly EquationMotifRule[] = [
+  {
+    transformationKind: "subtractBothSides",
+    descriptor: {
+      kind: "append-after-shift",
+      motionPrimitiveIds: ["shift", "enter"],
+      phaseIds: ["layout-shift", "introduced-token-enter"],
+      summary: "Persisted terms shift before inverse terms enter."
+    }
+  },
+  {
+    transformationKind: "cancelAdditiveInverse",
+    descriptor: {
+      kind: "cancelation",
+      motionPrimitiveIds: ["vanish"],
+      phaseIds: ["cancel-meet", "cancel-collapse", "post-cancel-layout-shift"],
+      summary: "Canceling terms vanish and remaining terms shift."
+    }
+  },
+  {
+    transformationKind: "dotProduct",
+    descriptor: {
+      kind: "simplify-into",
+      motionPrimitiveIds: ["vanish", "reveal"],
+      phaseIds: [
+        "final-simplify-meet",
+        "final-simplify-collapse",
+        "final-simplify-reveal"
+      ],
+      summary: "Products combine into an output entry."
+    }
+  }
+];
+
+test("createTransformTreeVisualMotifTimeline maps transform trees to reversible motif phases", () => {
+  const subtract = createSemanticTransformationRef({
+    id: "transform.subtract-both-sides.3",
+    kind: "subtractBothSides",
+    sourceObjectIds: ["equation.initial"],
+    targetObjectIds: ["equation.with-inverses"],
+    preserves: ["value", "structure"]
+  });
+  const cancel = createSemanticTransformationRef({
+    id: "transform.cancel-additive-inverse",
+    kind: "cancelAdditiveInverse",
+    sourceObjectIds: ["equation.with-inverses"],
+    targetObjectIds: ["equation.simplified-left"],
+    preserves: ["value"]
+  });
+  const tree = createEditableSemanticTransformationTree({
+    root: createSemanticTransformationSequence({
+      id: "solve-x.sequence",
+      label: "Solve x",
+      children: [
+        createSemanticTransformationLeaf(subtract),
+        createSemanticTransformationLeaf(cancel)
+      ]
+    }),
+    annotations: [
+      {
+        id: "pause.after-subtract",
+        kind: "pause",
+        targetNodeId: "transform.subtract-both-sides.3",
+        placement: "after",
+        durationBeats: 1
+      },
+      {
+        id: "focus.cancel",
+        kind: "focus",
+        targetNodeId: "transform.cancel-additive-inverse",
+        placement: "during",
+        selectorIds: ["lhs.plus-3", "lhs.minus-3"]
+      }
+    ]
+  });
+
+  const timeline = createTransformTreeVisualMotifTimeline({
+    id: "solve-x.visual",
+    tree,
+    rules
+  });
+
+  assert.deepEqual(
+    timeline.segments.map((segment) => [
+      segment.id,
+      segment.transformationNodeId,
+      segment.motifKind,
+      segment.phaseIds
+    ]),
+    [
+      [
+        "transform.subtract-both-sides.3.visual.append-after-shift",
+        "transform.subtract-both-sides.3",
+        "append-after-shift",
+        ["layout-shift", "introduced-token-enter"]
+      ],
+      [
+        "transform.cancel-additive-inverse.visual.cancelation",
+        "transform.cancel-additive-inverse",
+        "cancelation",
+        ["cancel-meet", "cancel-collapse", "post-cancel-layout-shift"]
+      ]
+    ]
+  );
+  assert.deepEqual(timeline.forwardPhases, [
+    {
+      id: "solve-x.visual.forward.0",
+      direction: "forward",
+      segmentIds: ["transform.subtract-both-sides.3.visual.append-after-shift"],
+      annotationIdsByPlacement: {
+        before: [],
+        during: [],
+        after: ["pause.after-subtract"]
+      }
+    },
+    {
+      id: "solve-x.visual.forward.1",
+      direction: "forward",
+      segmentIds: ["transform.cancel-additive-inverse.visual.cancelation"],
+      annotationIdsByPlacement: {
+        before: [],
+        during: ["focus.cancel"],
+        after: []
+      }
+    }
+  ]);
+  assert.deepEqual(timeline.rewindPhases, [
+    {
+      id: "solve-x.visual.rewind.0",
+      direction: "rewind",
+      segmentIds: ["transform.cancel-additive-inverse.visual.cancelation"],
+      annotationIdsByPlacement: {
+        before: [],
+        during: ["focus.cancel"],
+        after: []
+      }
+    },
+    {
+      id: "solve-x.visual.rewind.1",
+      direction: "rewind",
+      segmentIds: ["transform.subtract-both-sides.3.visual.append-after-shift"],
+      annotationIdsByPlacement: {
+        before: ["pause.after-subtract"],
+        during: [],
+        after: []
+      }
+    }
+  ]);
+});
+
+test("createTransformTreeVisualMotifTimeline keeps parallel leaves in one motif phase", () => {
+  const row1 = createSemanticTransformationRef({
+    id: "dot.row1",
+    kind: "dotProduct",
+    sourceObjectIds: ["matrix.row1", "vector"],
+    targetObjectIds: ["entry.row1"],
+    preserves: ["value", "structure"]
+  });
+  const row2 = createSemanticTransformationRef({
+    id: "dot.row2",
+    kind: "dotProduct",
+    sourceObjectIds: ["matrix.row2", "vector"],
+    targetObjectIds: ["entry.row2"],
+    preserves: ["value", "structure"]
+  });
+  const tree = createEditableSemanticTransformationTree({
+    root: createSemanticTransformationParallel({
+      id: "matrix-vector.rows",
+      label: "Matrix-vector rows",
+      children: [
+        createSemanticTransformationLeaf(row1),
+        createSemanticTransformationLeaf(row2)
+      ]
+    })
+  });
+  const timeline = createTransformTreeVisualMotifTimeline({
+    id: "matrix-vector.visual",
+    tree,
+    rules
+  });
+
+  assert.deepEqual(timeline.forwardPhases.map((phase) => phase.segmentIds), [
+    [
+      "dot.row1.visual.simplify-into",
+      "dot.row2.visual.simplify-into"
+    ]
+  ]);
+  assert.deepEqual(timeline.rewindPhases.map((phase) => phase.segmentIds), [
+    [
+      "dot.row1.visual.simplify-into",
+      "dot.row2.visual.simplify-into"
+    ]
+  ]);
+});
+
+test("createTransformTreeVisualMotifTimeline rejects unmapped transformation kinds", () => {
+  const tree = createEditableSemanticTransformationTree({
+    root: createSemanticTransformationLeaf(
+      createSemanticTransformationRef({
+        id: "transform.unknown",
+        kind: "unknownTransform",
+        sourceObjectIds: ["a"],
+        targetObjectIds: ["b"],
+        preserves: ["value"]
+      })
+    )
+  });
+
+  assert.throws(
+    () =>
+      createTransformTreeVisualMotifTimeline({
+        id: "unknown.visual",
+        tree,
+        rules
+      }),
+    /No visual motif rule for transformation kind unknownTransform/
+  );
+});
