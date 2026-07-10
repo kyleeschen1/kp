@@ -54,13 +54,14 @@
     {
       "id": "task.theseus.dashboard-data-command-v0",
       "title": "Register-dashboard-data-command",
-      "status": "complete",
-      "summary": "dashboard-data CLI command is registered, documented, tested, and runtime-checked against KP."
+      "summary": "dashboard-data CLI command is registered, documented, tested, and runtime-checked against KP.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-row-order-v0",
       "title": "Add-row-ordering-semantics",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Activity-first row ordering landed for dashboard data rows."
     },
     {
       "id": "task.theseus.dashboard-search-index-v0",

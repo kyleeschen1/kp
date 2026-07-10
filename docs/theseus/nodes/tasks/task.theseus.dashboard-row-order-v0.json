@@ -1,0 +1,38 @@
+{
+  "id": "task.theseus.dashboard-row-order-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard row ordering semantics",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data-builder.ts",
+      "summary": "Adds status and node-kind ranks for deterministic dashboard row ordering."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data-builder.test.ts",
+      "summary": "Covers activity-first row ordering before stable id sorting."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/dashboard-data-builder.test.ts",
+      "status": "passed",
+      "scope": "Focused dashboard row ordering tests.",
+      "checkedAt": "2026-07-10T05:56:57.788Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T05:56:57.804Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added explicit activity/status row ordering for dashboard work rows so active and in-progress items appear before ready, blocked, deferred, and resolved rows."
+  },
+  "summary": "Added explicit activity/status row ordering for dashboard work rows so active and in-progress items appear before ready, blocked, deferred, and resolved rows."
+}
