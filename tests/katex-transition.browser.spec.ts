@@ -316,6 +316,20 @@ test("radical artifact moves DOM artifacts through the bundle without an overlay
 
     return {
       artifactMode: demoElement.dataset["kpEquationMotionArtifactMode"],
+      artifactPhaseSource:
+        demoElement.dataset["kpEquationMotionArtifactPhaseSource"],
+      artifactSourceExitProgress: Number(
+        demoElement.dataset["kpEquationMotionArtifactSourceExitProgress"]
+      ),
+      artifactTargetEnterProgress: Number(
+        demoElement.dataset["kpEquationMotionArtifactTargetEnterProgress"]
+      ),
+      artifactWrapEnterProgress: Number(
+        demoElement.dataset["kpEquationMotionArtifactWrapEnterProgress"]
+      ),
+      artifactTargetRevealProgress: Number(
+        demoElement.dataset["kpEquationMotionArtifactTargetRevealProgress"]
+      ),
       overlayExists: overlay !== null,
       sourceVisibility: sourceStyle.visibility,
       targetVisibility: targetStyle.visibility,
@@ -328,6 +342,11 @@ test("radical artifact moves DOM artifacts through the bundle without an overlay
 
   expect(bundleState).toEqual({
     artifactMode: "dom-fold-bundle-swap",
+    artifactPhaseSource: "frame-visual-motif",
+    artifactSourceExitProgress: 1,
+    artifactTargetEnterProgress: 0,
+    artifactWrapEnterProgress: expect.any(Number),
+    artifactTargetRevealProgress: expect.any(Number),
     overlayExists: false,
     sourceVisibility: "visible",
     targetVisibility: "visible",
@@ -340,6 +359,8 @@ test("radical artifact moves DOM artifacts through the bundle without an overlay
   expect(bundleState.sourceOpacity).toBeLessThan(1);
   expect(bundleState.targetOpacity).toBeGreaterThan(0.01);
   expect(bundleState.targetOpacity).toBeLessThan(1);
+  expect(bundleState.artifactWrapEnterProgress).toBeGreaterThan(0);
+  expect(bundleState.artifactTargetRevealProgress).toBeGreaterThan(0);
 });
 
 test("editor equation motion demo uses semantic playback plans", async ({

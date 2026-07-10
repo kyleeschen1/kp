@@ -88,8 +88,9 @@
     },
     {
       "id": "next.kp.radical-artifact-frame-phase-routing",
-      "status": "ready",
-      "title": "Route radical artifacts through frame phases"
+      "title": "Route radical artifacts through frame phases",
+      "summary": "Working the radical artifact frame-phase routing slice under the approved semantic transition runtime contract.",
+      "status": "complete"
     }
   ]
 }

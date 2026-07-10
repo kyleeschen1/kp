@@ -17,7 +17,6 @@ import {
   type EquationCancelParticleRenderer
 } from "../rendering/equation-cancel-particles-webgl.ts";
 import {
-  sampleKatexArtifactSeedRevealProgress,
   type KatexArtifactSeedRevealPlan
 } from "../rendering/katex-artifact-seed-reveal.ts";
 import { measureKatexTextureCaptureRect } from "../rendering/katex-texture-atlas.ts";
@@ -98,6 +97,14 @@ interface FinalSimplifyMotionGroup {
   readonly targetTokenId: string;
   readonly midpoint: MotionPoint;
   readonly maxDistance: number;
+}
+
+interface RadicalArtifactFramePhases {
+  readonly sourceExitPhase: EquationMotionFramePhase;
+  readonly targetEnterPhase: EquationMotionFramePhase;
+  readonly wrapEnterPhase: EquationMotionFramePhase;
+  readonly sourceExitProgress: number;
+  readonly targetRevealProgress: number;
 }
 
 interface EquationArtifactRenderState {
@@ -668,11 +675,12 @@ function renderEquationMotionFrame(
     "simplify-into",
     "final-simplify-reveal"
   );
+  const radicalArtifactPhases = createRadicalArtifactFramePhases(frame);
   const artifactRenderState = renderArtifactSeedReveal(
     demo,
     plan,
     context,
-    frame.progress
+    radicalArtifactPhases
   );
   const collapseScale = readEquationMotionCollapseScale(demo);
 
@@ -694,6 +702,7 @@ function renderEquationMotionFrame(
     finalSimplifyCollapsePhase,
     finalSimplifyRevealPhase
   );
+  syncRadicalArtifactPhaseDiagnostics(demo, radicalArtifactPhases);
   syncEquationMotionScrubber(
     demo,
     directionalProgress * readEquationMotionBeatCount(demo)
@@ -873,6 +882,45 @@ function findEquationMotionFramePhase(
   return motif?.phases.find((phase) => phase.phaseId === phaseId);
 }
 
+function createRadicalArtifactFramePhases(
+  frame: EquationMotionFrame
+): RadicalArtifactFramePhases | undefined {
+  const sourceExitPhase = findEquationMotionFramePhase(
+    frame,
+    "artifact-replace",
+    "artifact-exit"
+  );
+  const targetEnterPhase = findEquationMotionFramePhase(
+    frame,
+    "artifact-replace",
+    "artifact-enter"
+  );
+  const wrapEnterPhase = findEquationMotionFramePhase(
+    frame,
+    "wrap",
+    "wrap-artifact-enter"
+  );
+
+  if (
+    sourceExitPhase === undefined ||
+    targetEnterPhase === undefined ||
+    wrapEnterPhase === undefined
+  ) {
+    return undefined;
+  }
+
+  return {
+    sourceExitPhase,
+    targetEnterPhase,
+    wrapEnterPhase,
+    sourceExitProgress: sourceExitPhase.easedProgress,
+    targetRevealProgress: Math.max(
+      targetEnterPhase.easedProgress,
+      wrapEnterPhase.easedProgress
+    )
+  };
+}
+
 function syncFinalSimplifyPhaseDiagnostics(
   demo: HTMLElement,
   meetPhase: EquationMotionFramePhase | undefined,
@@ -894,6 +942,46 @@ function syncFinalSimplifyPhaseDiagnostics(
     "kpEquationMotionFinalSimplifyRevealProgress",
     revealPhase?.progress
   );
+}
+
+function syncRadicalArtifactPhaseDiagnostics(
+  demo: HTMLElement,
+  phases: RadicalArtifactFramePhases | undefined
+): void {
+  if (phases === undefined) {
+    clearRadicalArtifactPhaseDiagnostics(demo);
+    return;
+  }
+
+  demo.dataset["kpEquationMotionArtifactPhaseSource"] = "frame-visual-motif";
+  writeOptionalProgressDataset(
+    demo,
+    "kpEquationMotionArtifactSourceExitProgress",
+    phases.sourceExitPhase.progress
+  );
+  writeOptionalProgressDataset(
+    demo,
+    "kpEquationMotionArtifactTargetEnterProgress",
+    phases.targetEnterPhase.progress
+  );
+  writeOptionalProgressDataset(
+    demo,
+    "kpEquationMotionArtifactWrapEnterProgress",
+    phases.wrapEnterPhase.progress
+  );
+  writeOptionalProgressDataset(
+    demo,
+    "kpEquationMotionArtifactTargetRevealProgress",
+    phases.targetRevealProgress
+  );
+}
+
+function clearRadicalArtifactPhaseDiagnostics(demo: HTMLElement): void {
+  delete demo.dataset["kpEquationMotionArtifactPhaseSource"];
+  delete demo.dataset["kpEquationMotionArtifactSourceExitProgress"];
+  delete demo.dataset["kpEquationMotionArtifactTargetEnterProgress"];
+  delete demo.dataset["kpEquationMotionArtifactWrapEnterProgress"];
+  delete demo.dataset["kpEquationMotionArtifactTargetRevealProgress"];
 }
 
 function syncEquationMotionActiveState(
@@ -1120,11 +1208,11 @@ function renderArtifactSeedReveal(
   demo: HTMLElement,
   plan: EquationMotionPlan,
   context: EquationMotionRenderContext,
-  progress: number
+  phases: RadicalArtifactFramePhases | undefined
 ): EquationArtifactRenderState {
   const seedRevealPlan = createRadicalArtifactSeedRevealPlan(plan, context);
 
-  if (seedRevealPlan === undefined) {
+  if (seedRevealPlan === undefined || phases === undefined) {
     clearArtifactSeedReveal(demo);
     return emptyArtifactRenderState();
   }
@@ -1137,7 +1225,7 @@ function renderArtifactSeedReveal(
     seedRevealPlan.seedRevealPlan,
     seedRevealPlan.sourceMotionId,
     seedRevealPlan.targetMotionId,
-    progress,
+    phases,
     readEquationMotionCollapseScale(demo)
   );
 }
@@ -1146,25 +1234,12 @@ function createDomArtifactSeedRevealState(
   plan: KatexArtifactSeedRevealPlan,
   sourceMotionId: string,
   targetMotionId: string,
-  progress: number,
+  phases: RadicalArtifactFramePhases,
   collapseScale: number
 ): EquationArtifactRenderState {
-  const localProgress = sampleKatexArtifactSeedRevealProgress(plan, progress);
-  const sourceCollapseProgress = artifactPhaseProgress(
-    0,
-    plan.sourceMotion.collapseEnd,
-    localProgress
-  );
-  const sourceFadeProgress = artifactPhaseProgress(
-    plan.sourceMotion.fadeStart,
-    plan.sourceMotion.fadeEnd,
-    localProgress
-  );
-  const targetRevealProgress = artifactPhaseProgress(
-    plan.targetMotion.revealStart,
-    plan.targetMotion.revealEnd,
-    localProgress
-  );
+  const sourceCollapseProgress = phases.sourceExitProgress;
+  const sourceFadeProgress = phases.targetRevealProgress;
+  const targetRevealProgress = phases.targetRevealProgress;
   const sourcePose = rectMorphPose(
     plan.source.rect,
     plan.bundleRect,
@@ -1192,20 +1267,6 @@ function createDomArtifactSeedRevealState(
       [targetMotionId, targetPose]
     ])
   };
-}
-
-function artifactPhaseProgress(
-  start: number,
-  end: number,
-  progress: number
-): number {
-  if (end <= start) {
-    return progress >= end ? 1 : 0;
-  }
-
-  const phaseProgress = clampNumber((progress - start) / (end - start), 0, 1);
-
-  return (1 - Math.cos(Math.PI * phaseProgress)) / 2;
 }
 
 function rectMorphPose(

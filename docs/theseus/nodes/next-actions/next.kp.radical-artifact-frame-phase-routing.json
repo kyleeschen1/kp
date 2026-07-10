@@ -2,7 +2,79 @@
   "id": "next.kp.radical-artifact-frame-phase-routing",
   "kind": "next-action",
   "title": "Route radical artifacts through frame phases",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation-runtime",
-  "summary": "Promote radical artifact fold-bundle-swap handoff to the sampled EquationMotionFrame visual motif phase contract so DOM-owned artifact motion uses the same reversible runtime as cancelation and final simplify."
+  "summary": "Radical artifact DOM handoff now uses sampled EquationMotionFrame visual motif phases for source collapse and target reveal, with frame-phase diagnostics exposed on the demo.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Routes radical artifact DOM poses through artifact-exit, artifact-enter, and wrap-artifact-enter frame phases."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Asserts radical artifact DOM bundle state exposes frame-derived artifact phase diagnostics while scrubbing."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "KaTeX browser suite covering radical artifact frame-phase routing",
+      "checkedAt": "2026-07-10T12:41:55.438Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full Node test suite.",
+      "checkedAt": "2026-07-10T12:42:08.416Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "App, node, and test TypeScript projects.",
+      "checkedAt": "2026-07-10T12:42:14.990Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation.",
+      "checkedAt": "2026-07-10T12:42:21.552Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production build and typecheck; Vite large chunk warning remains.",
+      "checkedAt": "2026-07-10T12:42:28.714Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "Final-source KaTeX browser suite after controller cleanup.",
+      "checkedAt": "2026-07-10T12:44:48.639Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Final-source full Node test suite.",
+      "checkedAt": "2026-07-10T12:45:01.001Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Final-source production build and typecheck; Vite large chunk warning remains.",
+      "checkedAt": "2026-07-10T12:45:07.673Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T12:45:14.474Z",
+      "scope": "Final-source Theseus graph validation."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Radical artifact DOM handoff now uses sampled EquationMotionFrame visual motif phases for source collapse and target reveal, with frame-phase diagnostics exposed on the demo."
+  }
 }
