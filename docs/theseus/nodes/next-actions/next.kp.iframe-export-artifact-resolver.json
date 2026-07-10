@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.iframe-export-artifact-resolver",
+  "kind": "next-action",
+  "title": "Resolve iframe export artifact metadata",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added an iframe export artifact resolver that maps iframe profile metadata into the generic artifact contract.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/export-artifact-resolver.ts",
+      "summary": "Resolves iframe export artifacts with profile identity, timeline ids, dependency phases, capability keys, fallback metadata, and control/responsive flags."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-export-artifact.test.ts",
+      "summary": "Covers iframe export artifact resolver output alongside artifact cloning and validation."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.iframe-export-artifact-resolver.json",
+      "summary": "Materializes the approved iframe export artifact resolver next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the iframe artifact resolver slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-export-artifact.test.ts tests/tutorial-card-export-profile.test.ts tests/tutorial-card-dependency-planner.test.ts tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "tutorial-card iframe export artifact and related manifest/profile tests",
+      "checkedAt": "2026-07-10T23:49:06.166Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T23:49:06.234Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T23:49:06.268Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added an iframe export artifact resolver that maps iframe profile metadata into the generic artifact contract."
+  }
+}

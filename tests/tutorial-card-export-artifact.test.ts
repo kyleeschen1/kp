@@ -10,6 +10,7 @@ import {
   createKpTutorialCardExportArtifact,
   validateKpTutorialCardExportArtifact
 } from "../src/tutorial/export-artifact.ts";
+import { resolveKpTutorialCardIframeExportArtifact } from "../src/tutorial/export-artifact-resolver.ts";
 
 test("tutorial card export artifact contract preserves portable output metadata", () => {
   const manifest = createLinearSolveTutorialCardManifest();
@@ -112,4 +113,44 @@ test("tutorial card export artifact validation reports missing identity", () => 
       message: "Export artifact must reference at least one timeline."
     }
   ]);
+});
+
+test("iframe export artifact resolver maps profile metadata onto artifact contract", () => {
+  const artifact = resolveKpTutorialCardIframeExportArtifact(
+    createLinearSolveTutorialCardManifest()
+  );
+
+  assert.deepEqual(artifact, {
+    id: "artifact.linear-solve.iframe",
+    manifestId: "tutorial.linear-solve.card",
+    profileId: "export.linear-solve.iframe",
+    exportKind: "iframe",
+    target: "browser",
+    artifactKind: "iframe-document",
+    payloadKind: "html-document",
+    status: "metadata",
+    timelineIds: ["timeline.linear-solve.shared"],
+    dependencies: {
+      phases: ["critical", "interactive"],
+      capabilityKeys: [
+        "kp.semantic:document.read:*:*",
+        "kp.layout:sample.synchronized-panel:*:*",
+        "kp.equation:render.katex:equation:*",
+        "kp.graph:render.webgl:graph-3d:surface.mesh"
+      ],
+      assetIds: []
+    },
+    fallback: {
+      strategy: "static-snapshot",
+      preservesLayout: true,
+      message:
+        "Show static equation and graph snapshots when the interactive runtime is unavailable."
+    },
+    metadata: {
+      responsive: true,
+      requiresControls: true,
+      fallbackStrategy: "static-snapshot",
+      resolver: "iframe-export-profile"
+    }
+  });
 });
