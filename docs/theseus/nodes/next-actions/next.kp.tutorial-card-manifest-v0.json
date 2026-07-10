@@ -2,7 +2,74 @@
   "id": "next.kp.tutorial-card-manifest-v0",
   "kind": "next-action",
   "title": "Define tutorial card manifest v0",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Define a semantic tutorial capsule manifest for objects, transformations, layouts, timelines, checks, and export settings."
+  "summary": "Defined tutorial card manifest v0 and surfaced it in KP catalog and dashboard metadata.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/card-manifest.ts",
+      "summary": "Adds the serializable KpTutorialCardManifest contract, validation helpers, dependency/fallback/export metadata, and a linear-solve tutorial card builder."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-manifest.test.ts",
+      "summary": "Covers generated manifest facets, cross-reference validation, and defensive cloning."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "Promotes KpCard to active API catalog status with manifest, validation, export, view, and preservation metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/api-catalog.test.ts",
+      "summary": "Asserts the active tutorial card manifest API appears in the embeds and export catalog group."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Adds a searchable project dashboard protocol row for the tutorial card manifest v0 API."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers dashboard preview, fuzzy search, and source/verification metadata for the tutorial card manifest row."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-theseus-adapter.test.ts",
+      "summary": "Covers Theseus dashboard export metadata for the tutorial card manifest row."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/api-catalog.test.ts tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "focused tutorial manifest catalog and dashboard tests",
+      "checkedAt": "2026-07-10T21:29:20.865Z"
+    },
+    {
+      "command": "npm test -- tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "project test regression suite with tutorial manifest tests",
+      "checkedAt": "2026-07-10T21:29:20.887Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T21:29:20.906Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T21:29:20.943Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined tutorial card manifest v0 and surfaced it in KP catalog and dashboard metadata."
+  }
 }

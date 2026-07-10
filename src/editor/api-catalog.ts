@@ -214,7 +214,15 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
     summary: "Portable tutorial cards and export profiles for semantic mini tutorials.",
     items: [
       item("authoring-transform-fixture-contract", "TransformFixtureDocument", "authoring", "active", "JSON-compatible KaTeX transform fixture contract for LLM-authored source/target examples and validation.", ["fixtures", "katex", "llm"]),
-      item("embed-kp-card", "KpCard", "embed", "proposed", "Semantic capsule with object graph, layout, timeline, dependency manifest, and fallback render.", ["embed", "manifest"]),
+      item("embed-kp-card", "KpCard", "embed", "active", "Semantic capsule with object graph, layout, timeline, dependency manifest, and fallback render.", ["embed", "manifest"], {
+        protocols: ["manifest", "validate", "export"],
+        views: ["interactive-card", "iframe", "gif", "step-sequence"],
+        preserves: [
+          "semantic object identity",
+          "shared timeline identity",
+          "layout composition"
+        ]
+      }),
       item("embed-mini-tutorial", "MiniTutorial", "tutorial", "proposed", "Executable semantic tutorial that can render as card, GIF, video, or step sequence.", ["tutorial", "export"]),
       item("embed-tutorial-clip", "TutorialClip", "tutorial", "proposed", "Composable tutorial segment with inputs, outputs, prerequisites, and taught concepts.", ["composition", "timeline"]),
       item("embed-export-profile", "ExportProfile", "export", "proposed", "Output target such as gif-small, video, card, embed, or lesson sequence.", ["gif", "video"]),

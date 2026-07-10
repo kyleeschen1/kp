@@ -108,6 +108,22 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
         field.value.includes("Open synchronized solve sample")
     )
   );
+
+  const tutorialManifestRow = galleryRows.find(
+    (row) => row.id === "kp.gallery.tutorial-card-manifest-v0"
+  );
+
+  assert.ok(tutorialManifestRow?.searchText?.includes("KpTutorialCardManifest"));
+  assert.ok(
+    tutorialManifestRow?.searchText?.includes("src/tutorial/card-manifest.ts")
+  );
+  assert.ok(
+    tutorialManifestRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Verification" &&
+        field.value.includes("tests/tutorial-card-manifest.test.ts")
+    )
+  );
 });
 
 test("KP Theseus dashboard extension command writes JSON payload", () => {

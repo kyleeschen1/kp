@@ -670,7 +670,8 @@ test("filterProjectDashboardData finds cards and gallery items by text facets", 
       "transform-matrix-multiply",
       "transform-compute-jacobian",
       "transform-compute-hessian",
-      "transform-rename-variable"
+      "transform-rename-variable",
+      "tutorial-card-manifest-v0"
     ]
   );
 
@@ -731,6 +732,22 @@ test("renderProjectDashboard searches semantic capability advertisements", () =>
     /data-kp-preview-field="Derive descriptors"[^>]*>matrix\.linear-map</
   );
   assert.doesNotMatch(html, /data-kp-agenda-row="api-semantic-equation"/);
+});
+
+test("renderProjectDashboard exposes tutorial card manifest protocol row", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "tutorial-card-manifest-v0"
+  });
+
+  assert.match(html, /data-kp-agenda-row="tutorial-card-manifest-v0"/);
+  assert.match(html, /Tutorial card manifest v0/);
+  assert.match(html, /data-kp-preview-field="Maturity"[^>]*>active TS API/);
+  assert.match(
+    html,
+    /data-kp-preview-field="Coverage"[^>]*>[\s\S]*export profiles/
+  );
+  assert.match(html, /src\/tutorial\/card-manifest\.ts/);
+  assert.match(html, /tests\/tutorial-card-manifest\.test\.ts/);
 });
 
 test("renderProjectDashboard renders agenda rows with colored statuses and tags", () => {

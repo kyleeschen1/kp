@@ -788,6 +788,53 @@ export const projectDashboardData: ProjectDashboardData = {
       ],
       verification: ["tests/kp-animation-sdk.test.ts"],
       relatedIds: ["work-rendering-time-protocol"]
+    },
+    {
+      id: "tutorial-card-manifest-v0",
+      title: "Tutorial card manifest v0",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Serializable capsule contract for portable tutorials with semantic objects, transformations, layouts, timelines, checks, dependencies, fallbacks, and export profiles.",
+      tags: ["tutorial", "manifest", "runtime", "export"],
+      domains: ["runtime", "authoring", "curriculum"],
+      interfaces: [
+        "KpTutorialCardManifest",
+        "createKpTutorialCardManifest",
+        "validateKpTutorialCardManifest",
+        "createLinearSolveTutorialCardManifest"
+      ],
+      maturity: "active TS API",
+      coverage: [
+        "semantic object refs",
+        "semantic transformation refs",
+        "layout refs",
+        "timeline refs",
+        "readiness checks",
+        "dependency manifest",
+        "fallback render",
+        "export profiles"
+      ],
+      sourceRefs: [
+        {
+          label: "Tutorial card manifest API",
+          href: "src/tutorial/card-manifest.ts"
+        },
+        {
+          label: "Embeds and export API outline",
+          href: "src/editor/api-catalog.ts"
+        }
+      ],
+      verification: [
+        "tests/tutorial-card-manifest.test.ts",
+        "tests/api-catalog.test.ts",
+        "tests/project-dashboard.test.ts"
+      ],
+      relatedIds: [
+        "gallery-rendering-time-api",
+        "sample-synced-equation-graph-linear-solve",
+        "report-semantic-runtime-readiness"
+      ]
     }
   ],
   reportThemes: [

@@ -129,6 +129,31 @@ test("API catalog exposes the complete layout object vocabulary", () => {
   ]);
 });
 
+test("API catalog exposes active tutorial card manifest API", () => {
+  const kpCard = findApiCatalogItem("embed-kp-card");
+  const dependencyManifest = findApiCatalogItem("embed-dependency-manifest");
+
+  assert.equal(kpCard?.group.category, "embed");
+  assert.equal(kpCard?.item.status, "active");
+  assert.deepEqual(kpCard?.item.details?.protocols, [
+    "manifest",
+    "validate",
+    "export"
+  ]);
+  assert.deepEqual(kpCard?.item.details?.views, [
+    "interactive-card",
+    "iframe",
+    "gif",
+    "step-sequence"
+  ]);
+  assert.deepEqual(kpCard?.item.details?.preserves, [
+    "semantic object identity",
+    "shared timeline identity",
+    "layout composition"
+  ]);
+  assert.equal(dependencyManifest?.item.status, "planned");
+});
+
 test("API catalog detail helpers normalize preview and search fields", () => {
   const matrix = findApiCatalogItem("semantic-matrix");
   assert.ok(matrix);
