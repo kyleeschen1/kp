@@ -31,6 +31,13 @@ import {
   semanticNumericSample,
   semanticToLatex
 } from "../src/semantic/computation-protocols.ts";
+import {
+  deriveGraphLatexFromScene
+} from "../src/semantic/graph-latex.ts";
+import type {
+  Curve2DObject,
+  Graph2DObject
+} from "../src/semantic/graph.ts";
 
 test("semantic expressions render to LaTeX and evaluate numerically", () => {
   const expression = divide(
@@ -132,11 +139,30 @@ test("semantic computation protocols expose expression capabilities", () => {
     xDomain: [-1, 1],
     sampleCount: 3
   });
+  const graph = graphForm?.find(
+    (object): object is Graph2DObject => object.type === "graph-2d"
+  );
+  const curve = graphForm?.find(
+    (object): object is Curve2DObject => object.type === "curve-2d"
+  );
 
   assert.deepEqual(
     graphForm?.map((object) => object.type),
     ["graph-2d", "axis-2d", "axis-2d", "curve-2d"]
   );
+  assert.equal(curve?.latexProvenance?.kind, "exact");
+  assert.equal(curve?.latexProvenance?.latex, "y = x^{2} + 1");
+  assert.equal(curve?.latexProvenance?.sourceKind, "expression");
+  assert.equal(curve?.latexProvenance?.sourceObjectId, "expr-shifted-parabola");
+
+  if (graphForm === undefined || graph === undefined) {
+    throw new Error("Expected expression-backed Graph2D scene.");
+  }
+
+  const latexDerivation = deriveGraphLatexFromScene(graphForm, graph.id);
+
+  assert.equal(latexDerivation.kind, "exact");
+  assert.equal(latexDerivation.latex, "y = x^{2} + 1");
 });
 
 test("semantic numeric sampling supports expression-backed surfaces", () => {

@@ -356,20 +356,23 @@ function createExpressionGraphScene(
 ): readonly GraphSceneObject[] {
   const variables = expressionVariables(expression);
   const idPrefix = options.idPrefix ?? semanticTargetId(target);
+  const sourceObjectId = isMathExpression(target) ? undefined : target.id;
 
   return variables.includes("x") && variables.includes("y")
-    ? createExpressionSurfaceScene(idPrefix, expression, options)
-    : createExpressionCurveScene(idPrefix, expression, options);
+    ? createExpressionSurfaceScene(idPrefix, expression, options, sourceObjectId)
+    : createExpressionCurveScene(idPrefix, expression, options, sourceObjectId);
 }
 
 function createExpressionCurveScene(
   idPrefix: string,
   expression: MathExpression,
-  options: SemanticGraphFormOptions
+  options: SemanticGraphFormOptions,
+  sourceObjectId: string | undefined
 ): readonly GraphSceneObject[] {
+  const latex = `y = ${expressionToLatex(expression)}`;
   const graph = createGraph2DObject({
     id: `${idPrefix}-graph`,
-    label: `y = ${expressionToLatex(expression)}`,
+    label: latex,
     xAxisId: `${idPrefix}-x-axis`,
     yAxisId: `${idPrefix}-y-axis`,
     xDomain: options.xDomain ?? [-3, 3],
@@ -399,6 +402,12 @@ function createExpressionCurveScene(
     graphId: graph.id,
     label: graph.label,
     equation: graph.label,
+    latexProvenance: {
+      kind: "exact",
+      latex,
+      sourceKind: "expression",
+      ...(sourceObjectId === undefined ? {} : { sourceObjectId })
+    },
     expression,
     xDomain: graph.xDomain,
     sampleCount: options.sampleCount ?? 121
@@ -410,11 +419,13 @@ function createExpressionCurveScene(
 function createExpressionSurfaceScene(
   idPrefix: string,
   expression: MathExpression,
-  options: SemanticGraphFormOptions
+  options: SemanticGraphFormOptions,
+  sourceObjectId: string | undefined
 ): readonly GraphSceneObject[] {
+  const latex = `z = ${expressionToLatex(expression)}`;
   const graph = createGraph3DObject({
     id: `${idPrefix}-graph`,
-    label: `z = ${expressionToLatex(expression)}`,
+    label: latex,
     xAxisId: `${idPrefix}-x-axis`,
     yAxisId: `${idPrefix}-y-axis`,
     zAxisId: `${idPrefix}-z-axis`,
@@ -461,6 +472,12 @@ function createExpressionSurfaceScene(
     graphId: graph.id,
     label: graph.label,
     equation: graph.label,
+    latexProvenance: {
+      kind: "exact",
+      latex,
+      sourceKind: "expression",
+      ...(sourceObjectId === undefined ? {} : { sourceObjectId })
+    },
     expression,
     xDomain: graph.xDomain,
     yDomain: graph.yDomain,

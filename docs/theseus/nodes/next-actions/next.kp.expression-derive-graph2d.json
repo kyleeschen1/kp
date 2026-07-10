@@ -2,7 +2,59 @@
   "id": "next.kp.expression-derive-graph2d",
   "kind": "next-action",
   "title": "Derive Graph2D from expressions and equations",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.graph",
-  "summary": "Add initial exact Expression and classifiable Equation to Graph2D derivation paths with renderer and dashboard coverage."
+  "summary": "Expression graph-form derivation now preserves exact Graph2D LaTeX provenance.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/computation-protocols.ts",
+      "summary": "Expression-derived 2D curves and 3D surfaces now carry exact expression provenance through semanticGraphForm."
+    },
+    {
+      "kind": "file",
+      "path": "tests/math-expression.test.ts",
+      "summary": "Covers expression Graph2D derivation provenance and exact graph-to-LaTeX round trip."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/graph-latex.ts",
+      "summary": "Provides the exact graph LaTeX derivation helper used by the expression graph-form test."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/graph.ts",
+      "summary": "Defines the graph LaTeX provenance shape carried by expression-derived graph parts."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/math-expression.test.ts",
+      "status": "passed",
+      "scope": "focused expression graph-form provenance tests",
+      "checkedAt": "2026-07-10T20:18:29.375Z"
+    },
+    {
+      "command": "npm test -- tests/math-expression.test.ts tests/equation-graph.test.ts tests/semantic.test.ts tests/rendering.test.ts",
+      "status": "passed",
+      "scope": "repo test script including expression, graph, semantic, and renderer coverage",
+      "checkedAt": "2026-07-10T20:18:29.401Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:18:29.429Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:18:29.464Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Expression graph-form derivation now preserves exact Graph2D LaTeX provenance."
+  }
 }
