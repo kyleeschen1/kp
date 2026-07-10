@@ -1,0 +1,54 @@
+{
+  "id": "task.theseus.dashboard-client-search-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard client search and TOC",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "summary": "Added embedded dashboard client behavior for fuzzy row search, live match counts, section hiding, and TOC folding.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-client.ts",
+      "summary": "Defines the fuzzy matcher and embedded browser client script."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-client.test.ts",
+      "summary": "Covers fuzzy matching and client script embedding."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-html.ts",
+      "summary": "Embeds the client script in static dashboard HTML by default with an opt-out option."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-css.ts",
+      "summary": "Adds hidden row/section and TOC folding style hooks."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/dashboard-client.test.ts",
+      "status": "passed",
+      "scope": "Focused dashboard client search/TOC tests.",
+      "checkedAt": "2026-07-10T06:37:00.892Z"
+    },
+    {
+      "command": "npm run test -- src/dashboard-client.test.ts src/dashboard-html.test.ts src/dashboard-data.test.ts src/dashboard-data-builder.test.ts",
+      "status": "passed",
+      "scope": "Adjacent dashboard package tests.",
+      "checkedAt": "2026-07-10T06:37:00.903Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T06:37:00.913Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added embedded dashboard client behavior for fuzzy row search, live match counts, section hiding, and TOC folding."
+  }
+}

@@ -78,13 +78,14 @@
     {
       "id": "task.theseus.dashboard-agenda-css-v0",
       "title": "Add-agenda-css",
-      "status": "complete",
-      "summary": "Agenda-mode CSS landed for the reusable dashboard renderer."
+      "summary": "Agenda-mode CSS landed for the reusable dashboard renderer.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-client-search-v0",
       "title": "Add-client-search-and-TOC",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Embedded fuzzy search, live counts, section hiding, and TOC folding landed for dashboard HTML."
     },
     {
       "id": "task.theseus.dashboard-selected-preview-v0",
