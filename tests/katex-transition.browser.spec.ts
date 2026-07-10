@@ -112,6 +112,92 @@ test("equation motion card supports focused keyboard controls", async ({
   );
 });
 
+test("radical artifact handoff keeps source DOM visible until texture renderer is ready", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  const demo = page.locator("[data-kp-equation-motion-demo]");
+  const animationSelect = demo.locator(
+    '[data-action="set-equation-motion-animation"]'
+  );
+
+  await animationSelect.selectOption("fixture-radical-rewrite-power-as-root");
+
+  const handoffState = await page.evaluate(async () => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    const originalFonts = document.fonts;
+    let releaseFonts: () => void = () => {};
+    const delayedFontsReady = new Promise<FontFaceSet>((resolve) => {
+      releaseFonts = () => resolve(originalFonts);
+    });
+
+    Object.defineProperty(document, "fonts", {
+      configurable: true,
+      value: { ready: delayedFontsReady }
+    });
+
+    try {
+      window.__kpEquationMotionSetProgress?.(demoElement, 0.12);
+      await Promise.resolve();
+
+      const overlay = demoElement.querySelector<HTMLCanvasElement>(
+        "[data-kp-equation-motion-artifact-overlay]"
+      );
+      const sourceExponentRepresentations = [
+        demoElement.querySelector<HTMLElement>(
+          '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.source.exponent"]'
+        ),
+        demoElement.querySelector<HTMLElement>(
+          '[data-kp-equation-motion-state="0"] [data-kp-motion-id="radical.rewrite-power-as-root.source.exponent"]'
+        )
+      ].filter((entry): entry is HTMLElement => entry !== null);
+      const visibleSourceExponentCount = sourceExponentRepresentations.filter(
+        (entry) => {
+          const style = getComputedStyle(entry);
+          const rect = entry.getBoundingClientRect();
+
+          return (
+            style.visibility === "visible" &&
+            Number(style.opacity) > 0.001 &&
+            rect.width > 0 &&
+            rect.height > 0
+          );
+        }
+      ).length;
+
+      return {
+        overlayExists: overlay !== null,
+        overlayReady: overlay?.dataset["kpEquationMotionArtifactReady"],
+        sourceRepresentationCount: sourceExponentRepresentations.length,
+        visibleSourceExponentCount
+      };
+    } finally {
+      releaseFonts();
+      Object.defineProperty(document, "fonts", {
+        configurable: true,
+        value: originalFonts
+      });
+    }
+  });
+
+  expect(handoffState).toEqual({
+    overlayExists: true,
+    overlayReady: undefined,
+    sourceRepresentationCount: expect.any(Number),
+    visibleSourceExponentCount: expect.any(Number)
+  });
+  expect(handoffState.sourceRepresentationCount).toBeGreaterThan(0);
+  expect(handoffState.visibleSourceExponentCount).toBeGreaterThan(0);
+});
+
 test("editor equation motion demo uses semantic playback plans", async ({
   page
 }) => {

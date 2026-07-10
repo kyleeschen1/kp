@@ -1106,9 +1106,16 @@ function renderArtifactSeedReveal(
   if (renderContext.renderer !== undefined) {
     renderContext.renderer.render(progress);
     renderContext.canvas.dataset["kpEquationMotionArtifactReady"] = "true";
+    renderContext.canvas.dataset["kpEquationMotionArtifactHandoff"] = "true";
+
+    return new Set([seedRevealPlan.sourceMotionId, seedRevealPlan.targetMotionId]);
   }
 
-  return new Set([seedRevealPlan.sourceMotionId, seedRevealPlan.targetMotionId]);
+  // The texture atlas is created asynchronously after font readiness. Until the
+  // renderer has painted a frame, the DOM remains the only nonblank endpoint.
+  renderContext.canvas.dataset["kpEquationMotionArtifactHandoff"] = "pending";
+
+  return new Set();
 }
 
 function createRadicalArtifactSeedRevealPlan(
