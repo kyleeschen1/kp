@@ -2,9 +2,9 @@
   "id": "next.kp.graph-animation-clock-protocol",
   "kind": "next-action",
   "title": "Align graph animations to shared clock",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.graph",
-  "summary": "Bring graph, surface, vector, curve, matrix-transform, and projection animations onto the same sampled frame lifecycle used by equation motifs, with SVG/WebGL renderers consuming renderer-neutral frames.",
+  "summary": "Aligned graph surface morph transitions to the shared animation kernel by adding graph motion-plan refs, a graph surface sampler, deterministic progress normalization, and WebGL consumption of the sampler.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,21 @@
       "kind": "file",
       "path": "tests/graph-transitions.test.ts",
       "summary": "Graph transition tests for interpolation semantics."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/graph-transitions.ts",
+      "summary": "Adds graph surface motion-plan creation, shared-clock sampler, sampled-frame metadata, and kernel progress normalization."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/graph-webgl.ts",
+      "summary": "Routes WebGL surface morph scene models through the graph sampler instead of direct interpolation."
+    },
+    {
+      "kind": "file",
+      "path": "tests/graph-transitions.test.ts",
+      "summary": "Covers renderer-neutral graph motion plans, deterministic rewind sampling, and progress clamping."
     }
   ],
   "dependsOn": {
@@ -78,5 +93,29 @@
       "id": "renderer-adapters-small",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/graph-transitions.test.ts tests/graph-webgl.test.ts tests/graph-2d-scene.test.ts tests/rendering.test.ts",
+      "status": "passed",
+      "scope": "Focused graph transition, WebGL, 2D scene, and rendering tests; package script also ran the full Node suite.",
+      "checkedAt": "2026-07-10T17:47:35.221Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "App, node, and test TypeScript projects.",
+      "checkedAt": "2026-07-10T17:47:35.238Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T17:47:35.258Z",
+      "scope": "Theseus graph validation."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Aligned graph surface morph transitions to the shared animation kernel by adding graph motion-plan refs, a graph surface sampler, deterministic progress normalization, and WebGL consumption of the sampler."
+  }
 }

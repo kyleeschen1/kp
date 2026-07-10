@@ -16,9 +16,9 @@ import {
 } from "./graph-svg.ts";
 import {
   createGraph3DTo2DTransitionDescriptor,
+  createGraphSurfaceModeSampler,
   createGraphSurfaceModeTransition,
   graphSurfaceMorphTargetFromGrid,
-  interpolateGraphSurfaceModeTransition,
   type Graph3DTo2DTransitionDescriptor,
   type GraphSurfaceModeTransition,
   type GraphSurfaceMorphRole,
@@ -260,7 +260,7 @@ function createSurfaceModelsFromMorphTransition(
   transition: GraphSurfaceModeTransition,
   progress: number
 ): readonly Graph3DWebGLSurfaceModel[] {
-  const frame = interpolateGraphSurfaceModeTransition(transition, progress);
+  const frame = createGraphSurfaceModeSampler(transition).sample(progress);
 
   return frame.channels.map((channel) =>
     createGridSurfaceModel(

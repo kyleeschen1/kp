@@ -1,3 +1,14 @@
+import {
+  createKpAnimationMotionPlan,
+  normalizeAnimationProgress,
+  type KpAnimationMotionPlan,
+  type KpAnimationSampler,
+  type KpSampledAnimationFrame
+} from "../animation/kernel.ts";
+import {
+  createSemanticObjectRef,
+  createSemanticTransformationRef
+} from "../semantic/animation.ts";
 import type { KpSemanticObject } from "../semantic/document.ts";
 import type {
   Axis3DObject,
@@ -58,11 +69,18 @@ export interface GraphSurfaceModeTransition {
   readonly vSampleCount: number;
 }
 
-export interface GraphSurfaceMorphFrame {
+export interface GraphSurfaceMorphFrame extends KpSampledAnimationFrame {
+  readonly planId?: string | undefined;
   readonly channels: readonly GraphSurfaceMorphFrameChannel[];
   readonly progress: number;
   readonly sourceMode: Graph3DSurfaceMode;
   readonly targetMode: Graph3DSurfaceMode;
+  readonly timelineId?: string | undefined;
+}
+
+export interface GraphSurfaceMorphFrameOptions {
+  readonly planId?: string | undefined;
+  readonly timelineId?: string | undefined;
 }
 
 export interface GraphSurfaceMorphFrameChannel {
@@ -97,6 +115,11 @@ export interface Graph3DTo2DTransitionDescriptor {
   };
   readonly graphId: string;
   readonly kind: "graph-3d-to-2d";
+}
+
+export interface GraphSurfaceModeSampler
+  extends KpAnimationSampler<GraphSurfaceMorphFrame> {
+  readonly transition: GraphSurfaceModeTransition;
 }
 
 export function createGraph3DTo2DTransitionDescriptor(
@@ -258,11 +281,13 @@ export function graphSurfaceMorphTargetFromGrid(
 
 export function interpolateGraphSurfaceModeTransition(
   transition: GraphSurfaceModeTransition,
-  progress: number
+  progress: number,
+  options: GraphSurfaceMorphFrameOptions = {}
 ): GraphSurfaceMorphFrame {
-  const clampedProgress = clamp(progress, 0, 1);
+  const clampedProgress = normalizeAnimationProgress(progress);
 
   return {
+    ...(options.planId === undefined ? {} : { planId: options.planId }),
     channels: transition.channels.map((channel) => ({
       channelIndex: channel.channelIndex,
       mode: transition.targetMode,
@@ -278,8 +303,56 @@ export function interpolateGraphSurfaceModeTransition(
     })),
     progress: clampedProgress,
     sourceMode: transition.sourceMode,
-    targetMode: transition.targetMode
+    targetMode: transition.targetMode,
+    ...(options.timelineId === undefined ? {} : { timelineId: options.timelineId })
   };
+}
+
+export function createGraphSurfaceModeSampler(
+  transition: GraphSurfaceModeTransition,
+  options: GraphSurfaceMorphFrameOptions = {}
+): GraphSurfaceModeSampler {
+  return {
+    transition,
+    sample(progress) {
+      return interpolateGraphSurfaceModeTransition(transition, progress, options);
+    }
+  };
+}
+
+export function createGraphSurfaceModeMotionPlan(
+  graph: Graph3DObject,
+  transition: GraphSurfaceModeTransition
+): KpAnimationMotionPlan {
+  const sourceRef = createSemanticObjectRef({
+    objectId: graph.id,
+    objectType: graph.type,
+    selectorId: `surfaceMode.${transition.sourceMode}`
+  });
+  const targetRef = createSemanticObjectRef({
+    objectId: graph.id,
+    objectType: graph.type,
+    selectorId: `surfaceMode.${transition.targetMode}`
+  });
+  const transformation = createSemanticTransformationRef({
+    id: `${graph.id}.surface-mode.${transition.sourceMode}-to-${transition.targetMode}`,
+    kind: "changeGraphSurfaceMode",
+    sourceObjectIds: [graph.id],
+    targetObjectIds: [graph.id],
+    preserves: ["identity", "structure"],
+    summary:
+      "Graph surface mode changes while the graph semantic object identity persists."
+  });
+
+  return createKpAnimationMotionPlan({
+    id: `${graph.id}.surface-mode.${transition.sourceMode}-to-${transition.targetMode}.plan`,
+    kind: "graph-surface-mode-transition",
+    sourceObjectRefs: [sourceRef],
+    targetObjectRefs: [targetRef],
+    transformationRefs: [transformation],
+    summary:
+      "Renderer-neutral graph surface mode motion plan sampled by SVG or WebGL adapters."
+  });
 }
 
 function createGraphSurfaceMorphChannel(
@@ -330,10 +403,6 @@ function interpolateSurfaceVertices(
 
 function interpolate(source: number, target: number, progress: number): number {
   return source + (target - source) * progress;
-}
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(max, Math.max(min, value));
 }
 
 function transitionResolution(

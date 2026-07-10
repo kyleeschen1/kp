@@ -3,6 +3,8 @@ import test from "node:test";
 
 import {
   createGraph3DTo2DTransitionDescriptor,
+  createGraphSurfaceModeMotionPlan,
+  createGraphSurfaceModeSampler,
   createGraphSurfaceModeTransition,
   createGraphSurfaceMorphTargets,
   interpolateGraphSurfaceModeTransition
@@ -108,6 +110,39 @@ test("interpolateGraphSurfaceModeTransition samples visible intermediate vertice
   assert.ok(Math.abs(midpoint.x - (source.x + target.x) / 2) < 1e-12);
   assert.ok(Math.abs(midpoint.y - (source.y + target.y) / 2) < 1e-12);
   assert.ok(Math.abs(midpoint.z - (source.z + target.z) / 2) < 1e-12);
+});
+
+test("graph surface mode sampler uses the shared animation clock contract", () => {
+  const scene = createDefaultGraph3DScene();
+  const graph = scene[0] as Graph3DObject;
+  const transition = createGraphSurfaceModeTransition(
+    scene,
+    graph,
+    "mesh",
+    "donut"
+  );
+  const plan = createGraphSurfaceModeMotionPlan(graph, transition);
+  const sampler = createGraphSurfaceModeSampler(transition, {
+    planId: plan.id,
+    timelineId: "graph-surface-mode"
+  });
+  const frame = sampler.sample(0.5);
+  const rewindFrame = sampler.sample(0.5);
+  const startFrame = sampler.sample(Number.NaN);
+  const endFrame = sampler.sample(2);
+
+  assert.equal(plan.rendererNeutral, true);
+  assert.equal(plan.kind, "graph-surface-mode-transition");
+  assert.deepEqual(plan.transformationRefs[0]?.preserves, [
+    "identity",
+    "structure"
+  ]);
+  assert.deepEqual(frame, rewindFrame);
+  assert.equal(frame.planId, plan.id);
+  assert.equal(frame.timelineId, "graph-surface-mode");
+  assert.equal(frame.progress, 0.5);
+  assert.equal(startFrame.progress, 0);
+  assert.equal(endFrame.progress, 1);
 });
 
 test("createGraph3DTo2DTransitionDescriptor faces the xy plane and fades z", () => {
