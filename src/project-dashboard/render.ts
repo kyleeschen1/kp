@@ -603,7 +603,15 @@ function createAnimationLayoutAgendaRows(
           ]
         })
       ],
-      previewLinks: [liveAnimationPreviewLink(entry.id, entry.label)],
+      previewLinks: [
+        liveAnimationPreviewLink(
+          entry.id,
+          entry.label,
+          entry.fixtureId === undefined
+            ? []
+            : [["data-kp-preview-katex-transform-fixture", entry.fixtureId]]
+        )
+      ],
       searchFields: [
         entry.id,
         entry.fixtureId ?? "",

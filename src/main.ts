@@ -92,6 +92,15 @@ appRoot.addEventListener("click", (event) => {
     return;
   }
 
+  const livePreviewLink = event.target.closest<HTMLAnchorElement>(
+    'a[data-kp-preview-link="live-animation"]'
+  );
+
+  if (livePreviewLink !== null) {
+    openProjectDashboardLiveAnimationPreview(livePreviewLink, event);
+    return;
+  }
+
   const button = event.target.closest<HTMLButtonElement>("button[data-action]");
 
   if (button === null) {
@@ -283,6 +292,24 @@ function filterProjectDashboardFromInput(input: HTMLInputElement): void {
 function toggleProjectDashboardTocFromInput(input: HTMLInputElement): void {
   projectDashboardTocOnly = input.checked;
   renderProjectDashboardView(projectDashboardQuery);
+}
+
+function openProjectDashboardLiveAnimationPreview(
+  link: HTMLAnchorElement,
+  event: Event
+): void {
+  event.preventDefault();
+
+  selectedEquationAnimationId = link.dataset["kpPreviewLiveAnimation"];
+  projectDashboardSelectedKatexFixtureId =
+    link.dataset["kpPreviewKatexTransformFixture"] ??
+    projectDashboardSelectedKatexFixtureId;
+  projectDashboardTocOnly = false;
+  renderProjectDashboardView("");
+
+  document
+    .getElementById("project-dashboard-animation-layout-title")
+    ?.scrollIntoView({ block: "start" });
 }
 
 function previewApiCatalogItemFromEvent(event: Event): void {

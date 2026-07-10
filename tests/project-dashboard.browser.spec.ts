@@ -180,6 +180,29 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   await expect(page.locator("[data-kp-katex-fixture-sample]")).toContainText(
     "rewritePowerAsRoot"
   );
+  await page
+    .locator(
+      '[data-kp-select-agenda-row="katex-transform-wrapper.function.wrap"]'
+    )
+    .click();
+  await expect(agendaPreview).toHaveAttribute(
+    "data-kp-selected-agenda-row",
+    "katex-transform-wrapper.function.wrap"
+  );
+  await page
+    .locator(
+      '[data-kp-preview-live-animation="fixture-wrapper-function-wrap"]'
+    )
+    .click();
+  await expect(page.locator("[data-kp-katex-fixture-sample]")).toHaveAttribute(
+    "data-kp-selected-katex-transform-fixture",
+    "wrapper.function.wrap"
+  );
+  await expect(
+    page.locator(
+      '[data-kp-katex-transform-fixture="wrapper.function.wrap"]'
+    )
+  ).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("[data-kp-visual-tuning]")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Back to Editor" })).toBeVisible();
 

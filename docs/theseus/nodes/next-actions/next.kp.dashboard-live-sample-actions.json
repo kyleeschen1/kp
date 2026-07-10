@@ -1,0 +1,65 @@
+{
+  "id": "next.kp.dashboard-live-sample-actions",
+  "kind": "next-action",
+  "title": "Wire dashboard live sample actions",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "summary": "Wired dashboard preview links into live fixture sample actions so fixture-backed animation rows can select their KaTeX sample surface from the agenda preview.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Fixture-backed animation preview links now carry the KaTeX fixture id needed to select the live sample."
+    },
+    {
+      "kind": "file",
+      "path": "src/main.ts",
+      "summary": "Dashboard live-animation preview links now select the associated fixture, clear filters, unfold the agenda, and scroll to the sample layout."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Dashboard phase metadata records the live sample action slice and its verification hooks."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Node dashboard coverage asserts fixture-backed animation links expose sample fixture ids and records phase 8 completion."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.browser.spec.ts",
+      "summary": "Browser dashboard coverage clicks a preview link and verifies the linked KaTeX fixture sample becomes selected."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "dashboard Node regression suite",
+      "checkedAt": "2026-07-10T18:17:38.490Z"
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "dashboard browser live sample action",
+      "checkedAt": "2026-07-10T18:17:38.513Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-10T18:17:38.535Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T18:17:38.553Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Wired dashboard preview links into live fixture sample actions so fixture-backed animation rows can select their KaTeX sample surface from the agenda preview."
+  }
+}

@@ -317,6 +317,21 @@ test("renderProjectDashboard links selected animation rows to live samples", () 
   );
 });
 
+test("renderProjectDashboard tags fixture-backed animation links with sample fixture ids", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "animation-layout-fixture-radical-rewrite-power-as-root"
+  });
+
+  assert.match(
+    html,
+    /data-kp-preview-live-animation="fixture-radical-rewrite-power-as-root"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-katex-transform-fixture="radical\.rewrite-power-as-root"/
+  );
+});
+
 test("renderProjectDashboard can fold agenda rows into a table of contents", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     tocOnly: true
@@ -737,6 +752,9 @@ test("project dashboard v1 card records completed Codex phase updates", () => {
   const authoringCatalogPhase = dashboardCard?.children?.find(
     (card) => card.id === "work-project-dashboard-v1-phase-7"
   );
+  const liveSamplePhase = dashboardCard?.children?.find(
+    (card) => card.id === "work-project-dashboard-v1-phase-8"
+  );
 
   assert.equal(dashboardCard?.status, "done");
   assert.equal(reportCardPhase?.status, "done");
@@ -751,6 +769,13 @@ test("project dashboard v1 card records completed Codex phase updates", () => {
   assert.ok(
     authoringCatalogPhase?.sourceRefs?.some((sourceRef) =>
       sourceRef.href.includes("src/project-dashboard/render.ts")
+    )
+  );
+  assert.equal(liveSamplePhase?.status, "done");
+  assert.ok(liveSamplePhase?.tags.includes("live-samples"));
+  assert.ok(
+    liveSamplePhase?.sourceRefs?.some((sourceRef) =>
+      sourceRef.href.includes("src/main.ts")
     )
   );
 });

@@ -207,6 +207,26 @@ export const projectDashboardData: ProjectDashboardData = {
             "npm run test:browser:dashboard"
           ],
           relatedIds: ["report-dashboard-operations", "gallery-rendering-time-api"]
+        },
+        {
+          id: "work-project-dashboard-v1-phase-8",
+          title: "Phase 8 live sample actions",
+          category: "todo",
+          status: "done",
+          priority: "high",
+          summary:
+            "Wire selected dashboard preview links to live fixture-backed samples so catalogue rows can open their current KaTeX sample surface.",
+          tags: ["dashboard", "phase-8", "live-samples", "codex-update"],
+          sourceRefs: [
+            { label: "Dashboard renderer", href: "src/project-dashboard/render.ts" },
+            { label: "Dashboard controller", href: "src/main.ts" },
+            { label: "Dashboard browser spec", href: "tests/project-dashboard.browser.spec.ts" }
+          ],
+          verification: [
+            "npm test -- tests/project-dashboard.test.ts",
+            "npm run test:browser:dashboard"
+          ],
+          relatedIds: ["report-dashboard-operations", "gallery-rendering-time-api"]
         }
       ],
       relatedIds: ["report-dashboard-operations"]
