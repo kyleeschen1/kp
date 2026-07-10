@@ -2,13 +2,70 @@
   "id": "next.kp.semantic-object-transform-catalog",
   "kind": "next-action",
   "title": "Seed typed semantic object and transform catalog",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic-api",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "src/editor/api-catalog.ts",
       "summary": "Current API outline groups and proposed SemanticObject/SemanticTransform catalog entries."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "Adds typed catalog categories, per-item detail metadata, shared lookup/search/preview helpers, and editor preview data attributes."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Surfaces typed catalog metadata in project dashboard API rows and selected-row previews."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/theseus-adapter.ts",
+      "summary": "Exports typed catalog metadata through KP's Theseus dashboard extension rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/api-catalog.test.ts",
+      "summary": "Covers semantic object, semantic transformation, notation, layout, preview, and search metadata contracts."
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/api-catalog.test.ts tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts tests/editor.test.ts",
+      "status": "passed",
+      "scope": "Focused catalog, dashboard, adapter, and editor coverage; repo script expanded to the full Node suite.",
+      "checkedAt": "2026-07-10T09:15:25.926Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full KP Node test suite: 304 tests.",
+      "checkedAt": "2026-07-10T09:15:25.943Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "KP TypeScript checks for app, node, and test projects.",
+      "checkedAt": "2026-07-10T09:15:25.964Z"
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "Playwright dashboard round-trip smoke.",
+      "checkedAt": "2026-07-10T09:15:25.980Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-10T09:15:25.994Z",
+      "scope": "Production build and bundled frontend verification."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Seeded a typed API catalog protocol for semantic objects, semantic transformations, notation transforms, layouts, and dashboard exports, with shared preview/search helpers."
+  },
+  "summary": "Seeded a typed API catalog protocol for semantic objects, semantic transformations, notation transforms, layouts, and dashboard exports, with shared preview/search helpers."
 }
