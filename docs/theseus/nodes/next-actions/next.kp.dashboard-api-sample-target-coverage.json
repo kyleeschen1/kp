@@ -1,0 +1,44 @@
+{
+  "id": "next.kp.dashboard-api-sample-target-coverage",
+  "kind": "next-action",
+  "title": "Broaden dashboard API sample target coverage",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "summary": "Broadened semantic-object dashboard API sample links to cover Equation and Vector alongside Matrix.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Equation and Vector gallery rows now advertise API catalog sample targets; dashboard phase 11 records the coverage pass."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Dashboard coverage asserts Matrix, Equation, and Vector rows all expose matching API sample links."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "dashboard API sample target coverage regression",
+      "checkedAt": "2026-07-10T18:31:49.171Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T18:31:49.194Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T18:31:49.217Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Broadened semantic-object dashboard API sample links to cover Equation and Vector alongside Matrix."
+  }
+}

@@ -298,6 +298,16 @@ test("renderProjectDashboard exposes semantic object API sample targets", () => 
   assert.match(html, /data-kp-preview-api-item="semantic-matrix"/);
 });
 
+test("semantic object gallery rows expose matching API sample targets", () => {
+  for (const itemId of ["semantic-matrix", "semantic-equation", "semantic-vector"]) {
+    const html = renderProjectDashboard(projectDashboardData, {
+      selectedAgendaRowId: itemId
+    });
+
+    assert.match(html, new RegExp(`data-kp-preview-api-item="${itemId}"`));
+  }
+});
+
 test("renderProjectDashboard selects KaTeX transform rows into the shared preview", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "katex-transform-fraction.make.inline-to-stacked"
@@ -790,6 +800,9 @@ test("project dashboard v1 card records completed Codex phase updates", () => {
   const apiSampleTargetPhase = dashboardCard?.children?.find(
     (card) => card.id === "work-project-dashboard-v1-phase-10"
   );
+  const apiSampleCoveragePhase = dashboardCard?.children?.find(
+    (card) => card.id === "work-project-dashboard-v1-phase-11"
+  );
 
   assert.equal(dashboardCard?.status, "done");
   assert.equal(reportCardPhase?.status, "done");
@@ -825,6 +838,13 @@ test("project dashboard v1 card records completed Codex phase updates", () => {
   assert.ok(
     apiSampleTargetPhase?.sourceRefs?.some((sourceRef) =>
       sourceRef.href.includes("tests/project-dashboard.browser.spec.ts")
+    )
+  );
+  assert.equal(apiSampleCoveragePhase?.status, "done");
+  assert.ok(apiSampleCoveragePhase?.tags.includes("api-samples"));
+  assert.ok(
+    apiSampleCoveragePhase?.sourceRefs?.some((sourceRef) =>
+      sourceRef.href.includes("tests/project-dashboard.test.ts")
     )
   );
 });

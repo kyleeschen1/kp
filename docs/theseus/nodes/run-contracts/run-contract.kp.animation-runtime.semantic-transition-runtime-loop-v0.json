@@ -21,7 +21,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure or arbitrary visual effects without asking."
   ],
   "goal": "Run the approved semantic transition runtime loop.",
-  "target": "next.kp.dashboard-api-sample-targets",
+  "target": "next.kp.dashboard-api-sample-target-coverage",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -135,6 +135,11 @@
     {
       "id": "next.kp.dashboard-api-sample-targets",
       "title": "Wire dashboard API sample targets",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.dashboard-api-sample-target-coverage",
+      "title": "Broaden dashboard API sample target coverage",
       "status": "complete"
     }
   ]

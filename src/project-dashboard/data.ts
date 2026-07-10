@@ -272,6 +272,29 @@ export const projectDashboardData: ProjectDashboardData = {
             "npm run test:browser:dashboard"
           ],
           relatedIds: ["report-dashboard-operations", "semantic-matrix"]
+        },
+        {
+          id: "work-project-dashboard-v1-phase-11",
+          title: "Phase 11 API sample target coverage",
+          category: "todo",
+          status: "done",
+          priority: "high",
+          summary:
+            "Broaden semantic object dashboard sample links so Equation and Vector rows open their matching API outline samples.",
+          tags: ["dashboard", "phase-11", "api-samples", "codex-update"],
+          sourceRefs: [
+            { label: "Dashboard data", href: "src/project-dashboard/data.ts" },
+            { label: "Dashboard test", href: "tests/project-dashboard.test.ts" }
+          ],
+          verification: [
+            "npm test -- tests/project-dashboard.test.ts",
+            "npm run theseus -- validate"
+          ],
+          relatedIds: [
+            "report-dashboard-operations",
+            "semantic-equation",
+            "semantic-vector"
+          ]
         }
       ],
       relatedIds: ["report-dashboard-operations"]
@@ -654,6 +677,13 @@ export const projectDashboardData: ProjectDashboardData = {
       tags: ["equation", "transform", "selectors"],
       domains: ["math", "algebra"],
       interfaces: ["subtractBothSides", "simplifySide", "token selectors"],
+      sampleTargets: [
+        {
+          kind: "api-catalog-item",
+          label: "Open Equation API sample",
+          itemId: "semantic-equation"
+        }
+      ],
       relatedIds: ["work-semantic-object-registry"]
     },
     {
@@ -666,6 +696,13 @@ export const projectDashboardData: ProjectDashboardData = {
       tags: ["vector", "linear-algebra"],
       domains: ["math", "linear algebra"],
       interfaces: ["component selectors", "geometric render"],
+      sampleTargets: [
+        {
+          kind: "api-catalog-item",
+          label: "Open Vector API sample",
+          itemId: "semantic-vector"
+        }
+      ],
       relatedIds: ["work-semantic-object-registry"]
     },
     {
