@@ -209,6 +209,10 @@ test("renderProjectDashboard selects API rows into the shared preview", () => {
   assert.match(html, /Matrix/);
   assert.match(html, /Structured row, column, and entry object/);
   assert.match(html, /data-kp-preview-field="API group"/);
+  assert.match(html, /data-kp-preview-field="API category"[^>]*>semantic-object</);
+  assert.match(html, /data-kp-preview-field="Protocols"[^>]*>render, select, execute, derive</);
+  assert.match(html, /data-kp-preview-field="Views"[^>]*>latex, matrix-grid, linear-map</);
+  assert.match(html, /data-kp-preview-field="Computes"[^>]*>determinant, inverse, rank, multiply</);
   assert.match(
     html,
     /data-action="select-project-agenda-row"[^>]*data-kp-select-agenda-row="api-semantic-matrix"[^>]*aria-pressed="true"/

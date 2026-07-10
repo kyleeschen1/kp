@@ -1,4 +1,9 @@
-import { apiCatalogGroups } from "../editor/api-catalog.ts";
+import {
+  apiCatalogGroups,
+  apiCatalogItemDetailFields,
+  apiCatalogItemSearchFields,
+  apiCatalogItemTags
+} from "../editor/api-catalog.ts";
 import { projectDashboardData } from "./data.ts";
 import type { ProjectDashboardData, ProjectGalleryItem } from "./model.ts";
 
@@ -103,16 +108,11 @@ function createKpApiSection(): KpTheseusDashboardSection {
         kind: "api",
         status: item.status,
         summary: item.summary,
-        tags: ["kp", "api", group.id, ...item.tags],
+        tags: uniqueStrings(["kp", "api", group.id, ...apiCatalogItemTags(group, item)]),
         preview: {
-          fields: [
-            { label: "API group", value: group.title },
-            { label: "API id", value: item.id },
-            { label: "API kind", value: item.kind },
-            { label: "API status", value: item.status }
-          ]
+          fields: apiCatalogItemDetailFields(group, item)
         },
-        searchText: [item.id, group.title, group.summary, item.kind].join(" ")
+        searchText: apiCatalogItemSearchFields(group, item).join(" ")
       }))
     )
   };
@@ -166,4 +166,8 @@ function createKpDashboardExtensionHealth(
     status: "ok",
     summary: `${data.gallery.length} gallery rows and ${apiRowCount} API rows exported.`
   };
+}
+
+function uniqueStrings(values: readonly string[]): readonly string[] {
+  return [...new Set(values.filter((value) => value.length > 0))];
 }

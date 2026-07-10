@@ -28,9 +28,17 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
         row.tags?.includes("animation")
     )
   );
+  const matrixRow = apiRows.find((row) => row.id === "kp.api.semantic-matrix");
+
+  assert.equal(matrixRow?.kind, "api");
+  assert.ok(matrixRow?.tags?.includes("semantic-object"));
+  assert.ok(matrixRow?.searchText?.includes("matrix-grid"));
+  assert.ok(matrixRow?.searchText?.includes("determinant"));
   assert.ok(
-    apiRows.some(
-      (row) => row.id === "kp.api.semantic-matrix" && row.kind === "api"
+    matrixRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Protocols" &&
+        field.value === "render, select, execute, derive"
     )
   );
 });

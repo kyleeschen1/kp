@@ -108,6 +108,10 @@ test("renderEditorDocument renders the equation demo and compact API outline", (
   assert.match(html, /Semantic Objects/);
   assert.match(html, /data-kp-api-outline-item="semantic-matrix"/);
   assert.match(html, />Matrix</);
+  assert.match(html, /data-kp-api-item-category="semantic-object"/);
+  assert.match(html, /data-kp-api-item-protocols="render,select,execute,derive"/);
+  assert.match(html, /data-kp-api-item-views="latex,matrix-grid,linear-map"/);
+  assert.match(html, /data-kp-api-item-computations="determinant,inverse,rank,multiply"/);
   assert.match(html, /data-kp-api-outline-item="semantic-equation"/);
   assert.match(html, />Equation</);
   assert.match(html, /data-kp-api-outline-group="semantic-transformations"/);
@@ -149,6 +153,7 @@ test("renderEditorDocument renders the equation demo and compact API outline", (
   assert.match(html, /api-outline__item--row/);
   assert.match(html, /data-kp-api-sample-card/);
   assert.match(html, /Select an API item to preview its future sample card/);
+  assert.match(html, /data-role="api-outline-sample-fields"/);
   assert.match(html, />Semantic API</);
   assert.doesNotMatch(html, />JSON to HTML</);
   assert.doesNotMatch(html, /data-role="semantic-json"/);

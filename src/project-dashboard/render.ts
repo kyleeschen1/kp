@@ -29,7 +29,13 @@ import {
   equationAnimationCatalogEntries,
   findEquationAnimationForFixtureId
 } from "../editor/equation-animation-catalog.ts";
-import { apiCatalogGroups, type ApiCatalogGroup } from "../editor/api-catalog.ts";
+import {
+  apiCatalogGroups,
+  apiCatalogItemDetailFields,
+  apiCatalogItemSearchFields,
+  apiCatalogItemTags,
+  type ApiCatalogGroup
+} from "../editor/api-catalog.ts";
 
 export interface ProjectDashboardRenderOptions {
   readonly query?: string;
@@ -632,6 +638,7 @@ function createApiGroupAgendaRows(
     dataAttributes: [["data-kp-agenda-api-group", group.id]],
     previewFields: [
       { label: "API group", value: group.title },
+      { label: "API category", value: group.category },
       { label: "Items", value: String(group.items.length) }
     ]
   };
@@ -646,21 +653,17 @@ function createApiGroupAgendaRows(
       detail: item.kind,
       kind: "api",
       depth: 1,
-      tags: ["api", ...item.tags],
+      tags: ["api", ...apiCatalogItemTags(group, item)],
       dataAttributes: [
         ["data-kp-agenda-api-item", item.id],
         ...adapterDataAttributes(adapterRow)
       ],
       previewFields: [
-        { label: "API group", value: group.title },
-        { label: "API id", value: item.id },
-        { label: "API status", value: item.status },
+        ...apiCatalogItemDetailFields(group, item),
         ...adapterPreviewFields(adapterRow)
       ],
       searchFields: [
-        item.id,
-        group.title,
-        group.summary,
+        ...apiCatalogItemSearchFields(group, item),
         ...adapterSearchFields(adapterRow)
       ]
     };

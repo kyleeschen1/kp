@@ -5,25 +5,65 @@ export interface ApiCatalogItem {
   readonly status: "active" | "planned" | "proposed";
   readonly summary: string;
   readonly tags: readonly string[];
+  readonly details?: ApiCatalogItemDetails;
+}
+
+export type ApiCatalogCategory =
+  | "semantic-object"
+  | "semantic-transformation"
+  | "notation-transformation"
+  | "capability"
+  | "motion-primitive"
+  | "visual-motif"
+  | "layout"
+  | "curriculum"
+  | "embed";
+
+export interface ApiCatalogItemDetails {
+  readonly protocols?: readonly string[];
+  readonly views?: readonly string[];
+  readonly lenses?: readonly string[];
+  readonly inputs?: readonly string[];
+  readonly outputs?: readonly string[];
+  readonly preserves?: readonly string[];
+  readonly visualMotifs?: readonly string[];
+  readonly computes?: readonly string[];
 }
 
 export interface ApiCatalogGroup {
   readonly id: string;
   readonly title: string;
+  readonly category: ApiCatalogCategory;
   readonly summary: string;
   readonly items: readonly ApiCatalogItem[];
+}
+
+export interface ApiCatalogItemMatch {
+  readonly group: ApiCatalogGroup;
+  readonly item: ApiCatalogItem;
+}
+
+export interface ApiCatalogDetailField {
+  readonly label: string;
+  readonly value: string;
 }
 
 export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
   {
     id: "semantic-objects",
     title: "Semantic Objects",
+    category: "semantic-object",
     summary: "Stable values with selectors, capabilities, provenance, and views.",
     items: [
       item("semantic-expression", "Expression", "math-core", "active", "Symbolic expression trees with terms, factors, functions, and grouped structure.", ["math", "selectors"]),
       item("semantic-equation", "Equation", "math-core", "active", "Left/right symbolic relation that can transform into rendered math, graphs, and solution sets.", ["math", "katex"]),
       item("semantic-function", "Function", "math-core", "planned", "Named or anonymous mapping with domain, codomain, parameters, evaluation, graph, and LaTeX views.", ["math", "derive"]),
-      item("semantic-matrix", "Matrix", "linear-algebra", "active", "Structured row, column, and entry object with matrix-grid, LaTeX, execution, and linear-map views.", ["linear algebra", "execute"]),
+      item("semantic-matrix", "Matrix", "linear-algebra", "active", "Structured row, column, and entry object with matrix-grid, LaTeX, execution, and linear-map views.", ["linear algebra", "execute"], {
+        protocols: ["render", "select", "execute", "derive"],
+        views: ["latex", "matrix-grid", "linear-map"],
+        lenses: ["rows", "columns", "entries"],
+        computes: ["determinant", "inverse", "rank", "multiply"]
+      }),
       item("semantic-vector", "Vector", "linear-algebra", "planned", "Coordinate or geometric vector with component selectors and graphical depictions.", ["linear algebra", "graph"]),
       item("semantic-linear-map", "LinearMap", "linear-algebra", "proposed", "Structure-preserving map that can derive a matrix in a selected basis and a geometric deformation view.", ["derive", "matrix"]),
       item("semantic-affine-map", "AffineMap", "linear-algebra", "proposed", "Translation-aware transformation represented with homogeneous matrices when needed.", ["matrix", "graph"]),
@@ -37,13 +77,19 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
   {
     id: "semantic-transformations",
     title: "Semantic Transformations",
+    category: "semantic-transformation",
     summary: "Structure-aware operations that produce target objects and correspondence maps.",
     items: [
       item("transform-subtract-both-sides", "subtractBothSides", "equation", "active", "Introduces an inverse term on both sides while preserving equation balance.", ["equation", "algebra"]),
       item("transform-cancel-additive-inverse", "cancelAdditiveInverse", "equation", "active", "Marks inverse-related selectors as cancelled-by before a visual motif removes them.", ["cancelation", "correspondence"]),
       item("transform-evaluate-constant-expression", "evaluateConstantExpression", "algebra", "active", "Evaluates a constant expression such as 7 - 3 into a simplified target object.", ["simplification", "execute"]),
       item("transform-matrix-multiply", "matrixMultiply", "linear-algebra", "proposed", "Composes row-column dot products into a matrix product with step-level provenance.", ["matrix", "dot product"]),
-      item("transform-compute-jacobian", "computeJacobian", "calculus", "proposed", "Derives the local linear map for a vector-valued function.", ["calculus", "linearization"]),
+      item("transform-compute-jacobian", "computeJacobian", "calculus", "proposed", "Derives the local linear map for a vector-valued function.", ["calculus", "linearization"], {
+        inputs: ["Function"],
+        outputs: ["Matrix", "LinearMap"],
+        preserves: ["domain point", "local derivative provenance"],
+        visualMotifs: ["jacobian-local-linearization"]
+      }),
       item("transform-compute-hessian", "computeHessian", "calculus", "proposed", "Derives the second-derivative matrix and curvature classification evidence.", ["calculus", "curvature"]),
       item("transform-rename-variable", "renameVariable", "programming", "proposed", "Preserves binding/reference identity while labels change across code views.", ["code", "refactor"])
     ]
@@ -51,16 +97,23 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
   {
     id: "notation-transformations",
     title: "Notation Transformations",
+    category: "notation-transformation",
     summary: "Semantic-preserving notation changes that keep the same object identity.",
     items: [
       item("notation-inline-to-stacked-fraction", "inlineFractionToStackedFraction", "fraction", "planned", "Changes inline slash notation into stacked fraction notation while preserving expression identity.", ["katex", "fraction"]),
-      item("notation-radical-to-exponent", "radicalToExponent", "radical", "proposed", "Switches between radical notation and exponent notation without creating a new semantic value.", ["katex", "radical", "script"]),
+      item("notation-radical-to-exponent", "radicalToExponent", "radical", "proposed", "Switches between radical notation and exponent notation without creating a new semantic value.", ["katex", "radical", "script"], {
+        inputs: ["Expression"],
+        outputs: ["Expression"],
+        preserves: ["semantic object identity"],
+        visualMotifs: ["radical-fold-bundle-swap"]
+      }),
       item("notation-implicit-to-explicit-multiply", "implicitToExplicitMultiplication", "multiplication", "planned", "Adds or removes an explicit multiplication operator while preserving product identity.", ["katex", "operator"])
     ]
   },
   {
     id: "capabilities-representations",
     title: "Capabilities & Representations",
+    category: "capability",
     summary: "Optional object powers that should load lazily by domain and view.",
     items: [
       item("capability-select", "select", "capability", "planned", "Lists and resolves semantic selectors independently from rendered DOM, SVG, or WebGL nodes.", ["selectors", "identity"]),
@@ -73,6 +126,7 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
   {
     id: "motion-primitives",
     title: "Motion Primitives",
+    category: "motion-primitive",
     summary: "Reusable visual behavior with no semantic truth by itself.",
     items: [
       item("motion-persist", "persist", "motion", "active", "Keeps selector identity visible while it moves or restyles.", ["identity", "timeline"]),
@@ -86,6 +140,7 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
   {
     id: "visual-motifs",
     title: "Visual Motifs",
+    category: "visual-motif",
     summary: "Named compositions of motion primitives used by transformations.",
     items: [
       item("motif-cancelation", "cancelation", "motif", "active", "Inverse-related tokens meet, shrink, fade, then remaining tokens settle.", ["equation", "particles"]),
@@ -99,6 +154,7 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
   {
     id: "layout-objects",
     title: "Layout Objects",
+    category: "layout",
     summary: "Addressable composition structures for synchronized views and nested cards.",
     items: [
       item("layout-row", "row", "layout", "proposed", "Places child views side by side with stable child selectors.", ["composition", "responsive"]),
@@ -107,12 +163,17 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
       item("layout-grid", "grid", "layout", "proposed", "Arranges repeated cards, matrix-like views, or gallery fixtures.", ["composition", "cards"]),
       item("layout-tabs", "tabs", "layout", "proposed", "Switches between LaTeX, grid, graph, code, and inspector views of the same object.", ["views", "navigation"]),
       item("layout-scroll-sequence", "scroll-sequence", "layout", "proposed", "Maps scroll position onto timeline progress and layout states.", ["timeline", "scroll"]),
-      item("layout-synchronized-panel", "synchronized-panel", "layout", "proposed", "Keeps equation, graph, code, and explanation panels on one shared playhead.", ["sync", "playhead"])
+      item("layout-synchronized-panel", "synchronized-panel", "layout", "proposed", "Keeps equation, graph, code, and explanation panels on one shared playhead.", ["sync", "playhead"], {
+        protocols: ["render", "animate"],
+        views: ["equation-panel", "graph-panel", "code-panel"],
+        preserves: ["shared playhead", "selected semantic object"]
+      })
     ]
   },
   {
     id: "curriculum-assessment",
     title: "Curriculum & Assessment",
+    category: "curriculum",
     summary: "The behind-the-scenes learning graph for generation and adaptation.",
     items: [
       item("curriculum-concept", "CurriculumConcept", "curriculum", "proposed", "Concept node with prerequisites, canonical objects, misconceptions, and fixture links.", ["knowledge graph", "learning"]),
@@ -126,6 +187,7 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
   {
     id: "embeds-export",
     title: "Embeds & Export",
+    category: "embed",
     summary: "Portable tutorial cards and export profiles for semantic mini tutorials.",
     items: [
       item("authoring-transform-fixture-contract", "TransformFixtureDocument", "authoring", "active", "JSON-compatible KaTeX transform fixture contract for LLM-authored source/target examples and validation.", ["fixtures", "katex", "llm"]),
@@ -148,10 +210,63 @@ export function renderApiCatalogOutline(): string {
         <p class="api-outline__sample-eyebrow" data-role="api-outline-sample-eyebrow">Sample card preview</p>
         <h3 data-role="api-outline-sample-title">Select an API item to preview its future sample card</h3>
         <p data-role="api-outline-sample-summary">These outline entries will become clickable cards for examples, controls, fixtures, and docs as the API catalog hardens.</p>
+        <dl class="api-outline__sample-fields" data-role="api-outline-sample-fields"></dl>
         <div class="api-outline__sample-tags" data-role="api-outline-sample-tags"></div>
       </article>
     </div>
   `;
+}
+
+export function findApiCatalogItem(id: string): ApiCatalogItemMatch | undefined {
+  for (const group of apiCatalogGroups) {
+    const item = group.items.find((candidate) => candidate.id === id);
+
+    if (item !== undefined) {
+      return { group, item };
+    }
+  }
+
+  return undefined;
+}
+
+export function apiCatalogItemDetailFields(
+  group: ApiCatalogGroup,
+  item: ApiCatalogItem
+): readonly ApiCatalogDetailField[] {
+  return [
+    { label: "API group", value: group.title },
+    { label: "API category", value: group.category },
+    { label: "API id", value: item.id },
+    { label: "API kind", value: item.kind },
+    { label: "API status", value: item.status },
+    ...apiCatalogDetailFields(item.details)
+  ];
+}
+
+export function apiCatalogItemSearchFields(
+  group: ApiCatalogGroup,
+  item: ApiCatalogItem
+): readonly string[] {
+  return uniqueStrings([
+    group.id,
+    group.title,
+    group.category,
+    group.summary,
+    item.id,
+    item.title,
+    item.kind,
+    item.status,
+    item.summary,
+    ...item.tags,
+    ...apiCatalogDetailValues(item.details)
+  ]);
+}
+
+export function apiCatalogItemTags(
+  group: ApiCatalogGroup,
+  item: ApiCatalogItem
+): readonly string[] {
+  return uniqueStrings([group.category, item.kind, ...item.tags]);
 }
 
 export function selectApiCatalogItem(button: HTMLButtonElement): void {
@@ -200,6 +315,7 @@ export function previewApiCatalogItem(item: HTMLElement): void {
     "api-outline-sample-summary",
     item.dataset["kpApiItemSummary"]
   );
+  renderApiCatalogSampleFields(card, item);
 
   const tags = card.querySelector<HTMLElement>(
     '[data-role="api-outline-sample-tags"]'
@@ -231,15 +347,18 @@ function renderApiCatalogGroup(group: ApiCatalogGroup): string {
           </summary>
           <p class="api-outline__group-description">${escapeHtml(group.summary)}</p>
           <div class="api-outline__items">
-            ${group.items.map(renderApiCatalogItem).join("")}
+            ${group.items.map((item) => renderApiCatalogItem(group, item)).join("")}
           </div>
         </details>
   `;
 }
 
-function renderApiCatalogItem(item: ApiCatalogItem): string {
+function renderApiCatalogItem(
+  group: ApiCatalogGroup,
+  item: ApiCatalogItem
+): string {
   return `
-            <button class="api-outline__item api-outline__item--row" type="button" data-action="select-api-outline-item" data-kp-api-outline-item="${escapeHtml(item.id)}" data-kp-api-item-title="${escapeHtml(item.title)}" data-kp-api-item-kind="${escapeHtml(item.kind)}" data-kp-api-item-summary="${escapeHtml(item.summary)}" data-kp-api-item-tags="${escapeHtml(item.tags.join(","))}" aria-pressed="false">
+            <button class="api-outline__item api-outline__item--row" type="button" data-action="select-api-outline-item" data-kp-api-outline-item="${escapeHtml(item.id)}" data-kp-api-item-title="${escapeHtml(item.title)}" data-kp-api-item-category="${escapeHtml(group.category)}" data-kp-api-item-kind="${escapeHtml(item.kind)}" data-kp-api-item-summary="${escapeHtml(item.summary)}" data-kp-api-item-tags="${escapeHtml(apiCatalogItemTags(group, item).join(","))}" ${renderApiCatalogDetailDataAttributes(item.details)} aria-pressed="false">
               <span class="api-outline__item-main">${escapeHtml(item.title)}</span>
               <span class="api-outline__item-meta">${escapeHtml(item.kind)} / ${escapeHtml(item.status)}</span>
             </button>
@@ -252,7 +371,8 @@ function item(
   kind: string,
   status: ApiCatalogItem["status"],
   summary: string,
-  tags: readonly string[]
+  tags: readonly string[],
+  details?: ApiCatalogItemDetails
 ): ApiCatalogItem {
   return {
     id,
@@ -260,8 +380,125 @@ function item(
     kind,
     status,
     summary,
-    tags
+    tags,
+    ...(details === undefined ? {} : { details })
   };
+}
+
+function apiCatalogDetailFields(
+  details: ApiCatalogItemDetails | undefined
+): readonly ApiCatalogDetailField[] {
+  if (details === undefined) {
+    return [];
+  }
+
+  return detailFieldEntries.flatMap(([key, label]) => {
+    const values = details[key];
+
+    return values === undefined || values.length === 0
+      ? []
+      : [{ label, value: values.join(", ") }];
+  });
+}
+
+function apiCatalogDetailValues(
+  details: ApiCatalogItemDetails | undefined
+): readonly string[] {
+  return details === undefined
+    ? []
+    : detailFieldEntries.flatMap(([key]) => details[key] ?? []);
+}
+
+function renderApiCatalogDetailDataAttributes(
+  details: ApiCatalogItemDetails | undefined
+): string {
+  if (details === undefined) {
+    return "";
+  }
+
+  return detailDataAttributeEntries
+    .flatMap(([key, name]) => {
+      const values = details[key];
+
+      return values === undefined || values.length === 0
+        ? []
+        : [`${name}="${escapeHtml(values.join(","))}"`];
+    })
+    .join(" ");
+}
+
+function renderApiCatalogSampleFields(
+  card: ParentNode,
+  item: HTMLElement
+): void {
+  const fields = card.querySelector<HTMLElement>(
+    '[data-role="api-outline-sample-fields"]'
+  );
+
+  if (fields === null) {
+    return;
+  }
+
+  const rawValues: readonly (readonly [string, string | undefined])[] = [
+    ["API category", item.dataset["kpApiItemCategory"]],
+    ["API kind", item.dataset["kpApiItemKind"]],
+    ["Protocols", item.dataset["kpApiItemProtocols"]],
+    ["Views", item.dataset["kpApiItemViews"]],
+    ["Lenses", item.dataset["kpApiItemLenses"]],
+    ["Inputs", item.dataset["kpApiItemInputs"]],
+    ["Outputs", item.dataset["kpApiItemOutputs"]],
+    ["Preserves", item.dataset["kpApiItemPreserves"]],
+    ["Visual motifs", item.dataset["kpApiItemVisualMotifs"]],
+    ["Computes", item.dataset["kpApiItemComputations"]]
+  ];
+  const values: readonly (readonly [string, string])[] = rawValues.flatMap(([label, value]) =>
+    value === undefined || value.length === 0 ? [] : [[label, value] as const]
+  );
+
+  fields.replaceChildren(
+    ...values.map(([label, value]) => {
+      const row = document.createElement("div");
+      const term = document.createElement("dt");
+      const description = document.createElement("dd");
+
+      term.textContent = label;
+      description.textContent = value.split(",").join(", ");
+      row.append(term, description);
+      return row;
+    })
+  );
+}
+
+const detailFieldEntries = [
+  ["protocols", "Protocols"],
+  ["views", "Views"],
+  ["lenses", "Lenses"],
+  ["inputs", "Inputs"],
+  ["outputs", "Outputs"],
+  ["preserves", "Preserves"],
+  ["visualMotifs", "Visual motifs"],
+  ["computes", "Computes"]
+] as const satisfies readonly (readonly [
+  keyof ApiCatalogItemDetails,
+  string
+])[];
+
+const detailDataAttributeEntries = [
+  ["protocols", "data-kp-api-item-protocols"],
+  ["views", "data-kp-api-item-views"],
+  ["lenses", "data-kp-api-item-lenses"],
+  ["inputs", "data-kp-api-item-inputs"],
+  ["outputs", "data-kp-api-item-outputs"],
+  ["preserves", "data-kp-api-item-preserves"],
+  ["visualMotifs", "data-kp-api-item-visual-motifs"],
+  ["computes", "data-kp-api-item-computations"]
+] as const satisfies readonly (readonly [
+  keyof ApiCatalogItemDetails,
+  string
+])[];
+
+function uniqueStrings(values: readonly string[]): readonly string[] {
+  return [...new Set(values.filter((value) => value.length > 0))];
 }
 
 function setText(root: ParentNode, role: string, value: string | undefined): void {
