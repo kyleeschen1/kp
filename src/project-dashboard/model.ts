@@ -24,6 +24,25 @@ export type ProjectGalleryKind =
   | "semantic-object"
   | "protocol-api";
 
+export type ProjectDashboardSampleTarget =
+  | {
+      readonly kind: "equation-animation";
+      readonly label: string;
+      readonly animationId: string;
+      readonly fixtureId?: string;
+    }
+  | {
+      readonly kind: "graph-surface-mode";
+      readonly label: string;
+      readonly graphId: string;
+      readonly surfaceMode: string;
+    }
+  | {
+      readonly kind: "api-catalog-item";
+      readonly label: string;
+      readonly itemId: string;
+    };
+
 export interface ProjectCard {
   readonly id: string;
   readonly title: string;
@@ -54,6 +73,7 @@ export interface ProjectGalleryItem {
   readonly sourceRefs?: readonly ProjectDashboardSourceRef[];
   readonly verification?: readonly string[];
   readonly blockers?: readonly string[];
+  readonly sampleTargets?: readonly ProjectDashboardSampleTarget[];
 }
 
 export interface ProjectDashboardSourceRef {
@@ -314,7 +334,8 @@ function galleryItemMatches(
       ...(item.coverage ?? []),
       ...sourceRefSearchFields(item.sourceRefs),
       ...(item.verification ?? []),
-      ...(item.blockers ?? [])
+      ...(item.blockers ?? []),
+      ...sampleTargetSearchFields(item.sampleTargets)
     ],
     normalizedQuery
   );
@@ -327,6 +348,26 @@ function sourceRefSearchFields(
     sourceRef.label,
     sourceRef.href
   ]);
+}
+
+function sampleTargetSearchFields(
+  targets: readonly ProjectDashboardSampleTarget[] | undefined
+): readonly string[] {
+  return (targets ?? []).flatMap((target) => {
+    switch (target.kind) {
+      case "equation-animation":
+        return [
+          target.kind,
+          target.label,
+          target.animationId,
+          target.fixtureId ?? ""
+        ];
+      case "graph-surface-mode":
+        return [target.kind, target.label, target.graphId, target.surfaceMode];
+      case "api-catalog-item":
+        return [target.kind, target.label, target.itemId];
+    }
+  });
 }
 
 function reportThemeMatches(

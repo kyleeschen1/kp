@@ -269,6 +269,21 @@ test("renderProjectDashboard selects gallery authoring rows into the shared prev
   );
 });
 
+test("renderProjectDashboard exposes gallery sample targets as preview links", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "visual-donut-surface"
+  });
+
+  assert.match(html, /data-kp-selected-agenda-row="visual-donut-surface"/);
+  assert.match(
+    html,
+    /data-kp-preview-field="Sample targets"[^>]*>Open donut graph sample/
+  );
+  assert.match(html, /data-kp-preview-link="graph-surface-mode"/);
+  assert.match(html, /data-kp-preview-graph-id="saddle-orbit-graph"/);
+  assert.match(html, /data-kp-preview-graph-surface-mode="donut"/);
+});
+
 test("renderProjectDashboard selects KaTeX transform rows into the shared preview", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "katex-transform-fraction.make.inline-to-stacked"
@@ -755,6 +770,9 @@ test("project dashboard v1 card records completed Codex phase updates", () => {
   const liveSamplePhase = dashboardCard?.children?.find(
     (card) => card.id === "work-project-dashboard-v1-phase-8"
   );
+  const sampleTargetPhase = dashboardCard?.children?.find(
+    (card) => card.id === "work-project-dashboard-v1-phase-9"
+  );
 
   assert.equal(dashboardCard?.status, "done");
   assert.equal(reportCardPhase?.status, "done");
@@ -776,6 +794,13 @@ test("project dashboard v1 card records completed Codex phase updates", () => {
   assert.ok(
     liveSamplePhase?.sourceRefs?.some((sourceRef) =>
       sourceRef.href.includes("src/main.ts")
+    )
+  );
+  assert.equal(sampleTargetPhase?.status, "done");
+  assert.ok(sampleTargetPhase?.tags.includes("sample-targets"));
+  assert.ok(
+    sampleTargetPhase?.sourceRefs?.some((sourceRef) =>
+      sourceRef.href.includes("src/project-dashboard/model.ts")
     )
   );
 });

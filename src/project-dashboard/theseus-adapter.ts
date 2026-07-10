@@ -7,6 +7,7 @@ import {
 import { projectDashboardData } from "./data.ts";
 import type {
   ProjectDashboardData,
+  ProjectDashboardSampleTarget,
   ProjectDashboardSourceRef,
   ProjectGalleryItem
 } from "./model.ts";
@@ -181,7 +182,15 @@ function galleryItemRow(item: ProjectGalleryItem): KpTheseusDashboardRow {
           : [{ label: "Verification", value: item.verification.join(", ") }]),
         ...(item.blockers === undefined || item.blockers.length === 0
           ? []
-          : [{ label: "Authoring blockers", value: item.blockers.join(", ") }])
+          : [{ label: "Authoring blockers", value: item.blockers.join(", ") }]),
+        ...(item.sampleTargets === undefined || item.sampleTargets.length === 0
+          ? []
+          : [
+              {
+                label: "Sample targets",
+                value: sampleTargetsText(item.sampleTargets)
+              }
+            ])
       ]
     },
     searchText: [
@@ -197,7 +206,8 @@ function galleryItemRow(item: ProjectGalleryItem): KpTheseusDashboardRow {
         sourceRef.href
       ]),
       ...(item.verification ?? []),
-      ...(item.blockers ?? [])
+      ...(item.blockers ?? []),
+      ...sampleTargetSearchFields(item.sampleTargets)
     ].join(" ")
   };
 }
@@ -240,4 +250,30 @@ function sourceRefsText(
   return sourceRefs
     .map((sourceRef) => `${sourceRef.label}: ${sourceRef.href}`)
     .join(", ");
+}
+
+function sampleTargetsText(
+  targets: readonly ProjectDashboardSampleTarget[]
+): string {
+  return targets.map((target) => target.label).join(", ");
+}
+
+function sampleTargetSearchFields(
+  targets: readonly ProjectDashboardSampleTarget[] | undefined
+): readonly string[] {
+  return (targets ?? []).flatMap((target) => {
+    switch (target.kind) {
+      case "equation-animation":
+        return [
+          target.kind,
+          target.label,
+          target.animationId,
+          target.fixtureId ?? ""
+        ];
+      case "graph-surface-mode":
+        return [target.kind, target.label, target.graphId, target.surfaceMode];
+      case "api-catalog-item":
+        return [target.kind, target.label, target.itemId];
+    }
+  });
 }

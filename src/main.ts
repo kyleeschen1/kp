@@ -101,6 +101,15 @@ appRoot.addEventListener("click", (event) => {
     return;
   }
 
+  const graphSurfaceLink = event.target.closest<HTMLAnchorElement>(
+    'a[data-kp-preview-link="graph-surface-mode"]'
+  );
+
+  if (graphSurfaceLink !== null) {
+    openProjectDashboardGraphSurfacePreview(graphSurfaceLink, event);
+    return;
+  }
+
   const button = event.target.closest<HTMLButtonElement>("button[data-action]");
 
   if (button === null) {
@@ -310,6 +319,28 @@ function openProjectDashboardLiveAnimationPreview(
   document
     .getElementById("project-dashboard-animation-layout-title")
     ?.scrollIntoView({ block: "start" });
+}
+
+function openProjectDashboardGraphSurfacePreview(
+  link: HTMLAnchorElement,
+  event: Event
+): void {
+  event.preventDefault();
+
+  const graphId = link.dataset["kpPreviewGraphId"];
+  const surfaceMode = link.dataset["kpPreviewGraphSurfaceMode"];
+
+  if (graphId === undefined || !isGraph3DSurfaceMode(surfaceMode)) {
+    return;
+  }
+
+  editorDocument = updateGraph3DSurfaceMode(
+    editorDocument,
+    graphId,
+    surfaceMode
+  );
+  renderEditor();
+  findGraphPreview(graphId)?.scrollIntoView({ block: "start" });
 }
 
 function previewApiCatalogItemFromEvent(event: Event): void {

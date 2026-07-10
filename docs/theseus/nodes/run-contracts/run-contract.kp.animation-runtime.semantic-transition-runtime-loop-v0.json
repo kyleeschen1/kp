@@ -21,7 +21,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure or arbitrary visual effects without asking."
   ],
   "goal": "Run the approved semantic transition runtime loop.",
-  "target": "next.kp.dashboard-live-sample-actions",
+  "target": "next.kp.dashboard-sample-targets",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -125,6 +125,11 @@
     {
       "id": "next.kp.dashboard-live-sample-actions",
       "title": "Wire dashboard live sample actions",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.dashboard-sample-targets",
+      "title": "Add dashboard sample target metadata",
       "status": "complete"
     }
   ]

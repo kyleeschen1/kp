@@ -1,0 +1,80 @@
+{
+  "id": "next.kp.dashboard-sample-targets",
+  "kind": "next-action",
+  "title": "Add dashboard sample target metadata",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "summary": "Added typed dashboard sample-target metadata for gallery rows and wired graph surface targets to live editor Graph3D samples.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/model.ts",
+      "summary": "Dashboard gallery items now support typed sample targets and searchable sample metadata."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Selected gallery previews now render sample target fields and graph/equation/API preview links."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Graph visual rows now advertise mesh, donut, and hyperplane live sample targets; dashboard phase 9 records the update."
+    },
+    {
+      "kind": "file",
+      "path": "src/main.ts",
+      "summary": "Dashboard graph sample links now update the editor Graph3D surface mode and open the live editor sample."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/theseus-adapter.ts",
+      "summary": "KP Theseus dashboard extension rows now export sample-target preview and search metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Node dashboard coverage asserts sample target preview fields, links, search row behavior, and phase metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.browser.spec.ts",
+      "summary": "Browser dashboard coverage opens a donut graph sample from a selected dashboard row and verifies editor state."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-theseus-adapter.test.ts",
+      "summary": "Adapter coverage asserts sample targets survive the KP Theseus dashboard export."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "dashboard Node and adapter regression suite",
+      "checkedAt": "2026-07-10T18:24:05.643Z"
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "dashboard browser graph sample target action",
+      "checkedAt": "2026-07-10T18:24:05.656Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-10T18:24:05.672Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T18:24:05.690Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added typed dashboard sample-target metadata for gallery rows and wired graph surface targets to live editor Graph3D samples."
+  }
+}

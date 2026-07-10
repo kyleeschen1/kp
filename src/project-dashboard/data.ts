@@ -227,6 +227,27 @@ export const projectDashboardData: ProjectDashboardData = {
             "npm run test:browser:dashboard"
           ],
           relatedIds: ["report-dashboard-operations", "gallery-rendering-time-api"]
+        },
+        {
+          id: "work-project-dashboard-v1-phase-9",
+          title: "Phase 9 sample target metadata",
+          category: "todo",
+          status: "done",
+          priority: "high",
+          summary:
+            "Add typed sample targets so gallery rows can advertise and launch their current live visual or object sample.",
+          tags: ["dashboard", "phase-9", "sample-targets", "codex-update"],
+          sourceRefs: [
+            { label: "Dashboard model", href: "src/project-dashboard/model.ts" },
+            { label: "Dashboard renderer", href: "src/project-dashboard/render.ts" },
+            { label: "Dashboard adapter", href: "src/project-dashboard/theseus-adapter.ts" },
+            { label: "Dashboard controller", href: "src/main.ts" }
+          ],
+          verification: [
+            "npm test -- tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+            "npm run test:browser:dashboard"
+          ],
+          relatedIds: ["report-dashboard-operations", "visual-webgl-graph"]
         }
       ],
       relatedIds: ["report-dashboard-operations"]
@@ -436,6 +457,26 @@ export const projectDashboardData: ProjectDashboardData = {
         "tests/graph-transitions.test.ts",
         "tests/project-dashboard.browser.spec.ts"
       ],
+      sampleTargets: [
+        {
+          kind: "graph-surface-mode",
+          label: "Open mesh graph sample",
+          graphId: "saddle-orbit-graph",
+          surfaceMode: "mesh"
+        },
+        {
+          kind: "graph-surface-mode",
+          label: "Open donut graph sample",
+          graphId: "saddle-orbit-graph",
+          surfaceMode: "donut"
+        },
+        {
+          kind: "graph-surface-mode",
+          label: "Open hyperplane graph sample",
+          graphId: "saddle-orbit-graph",
+          surfaceMode: "hyperplanes"
+        }
+      ],
       relatedIds: ["work-graph-surface-morphs"]
     },
     {
@@ -448,6 +489,14 @@ export const projectDashboardData: ProjectDashboardData = {
       tags: ["mesh", "graph", "surface-mode", "rendered-form"],
       domains: ["graphs", "calculus"],
       interfaces: ["Graph3D.surfaceMode=mesh", "WebGL surface mesh"],
+      sampleTargets: [
+        {
+          kind: "graph-surface-mode",
+          label: "Open mesh graph sample",
+          graphId: "saddle-orbit-graph",
+          surfaceMode: "mesh"
+        }
+      ],
       relatedIds: ["work-graph-surface-morphs", "visual-webgl-graph"]
     },
     {
@@ -460,6 +509,14 @@ export const projectDashboardData: ProjectDashboardData = {
       tags: ["donut", "torus", "surface-mode", "rendered-form"],
       domains: ["graphs", "calculus"],
       interfaces: ["Graph3D.surfaceMode=donut", "WebGL surface morph target"],
+      sampleTargets: [
+        {
+          kind: "graph-surface-mode",
+          label: "Open donut graph sample",
+          graphId: "saddle-orbit-graph",
+          surfaceMode: "donut"
+        }
+      ],
       relatedIds: ["work-graph-surface-morphs", "visual-webgl-graph"]
     },
     {
@@ -472,6 +529,14 @@ export const projectDashboardData: ProjectDashboardData = {
       tags: ["hyperplanes", "slices", "surface-mode", "rendered-form"],
       domains: ["graphs", "calculus"],
       interfaces: ["Graph3D.surfaceMode=hyperplanes", "WebGL surface channels"],
+      sampleTargets: [
+        {
+          kind: "graph-surface-mode",
+          label: "Open hyperplane graph sample",
+          graphId: "saddle-orbit-graph",
+          surfaceMode: "hyperplanes"
+        }
+      ],
       relatedIds: ["work-graph-surface-morphs", "visual-webgl-graph"]
     },
     {

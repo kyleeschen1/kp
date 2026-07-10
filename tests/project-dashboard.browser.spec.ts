@@ -205,8 +205,16 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   ).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("[data-kp-visual-tuning]")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Back to Editor" })).toBeVisible();
-
-  await page.getByRole("button", { name: "Back to Editor" }).click();
+  await page.locator('[data-kp-select-agenda-row="visual-donut-surface"]').click();
+  await expect(agendaPreview).toHaveAttribute(
+    "data-kp-selected-agenda-row",
+    "visual-donut-surface"
+  );
+  await page
+    .locator(
+      '[data-kp-preview-link="graph-surface-mode"][data-kp-preview-graph-surface-mode="donut"]'
+    )
+    .click();
 
   await expect(page.getByRole("heading", { name: "Identity Matrix" })).toBeVisible();
   await expect(page.locator("[data-kp-project-dashboard]")).toHaveCount(0);
@@ -256,6 +264,7 @@ test("project dashboard round trip keeps editor motion and graph controls usable
 
   const surfaceMode = page.locator('[data-action="set-graph-surface-mode"]');
   await expect(surfaceMode).toBeVisible();
+  await expect(surfaceMode).toHaveValue("donut");
   await surfaceMode.selectOption("donut");
   await expect(surfaceMode).toHaveValue("donut");
   await expect(surfaceMode).toHaveAttribute("data-kp-graph-surface-mode", "donut");

@@ -1,6 +1,7 @@
 import type {
   ProjectCard,
   ProjectDashboardData,
+  ProjectDashboardSampleTarget,
   ProjectDashboardSourceRef,
   ProjectDashboardStatus,
   ProjectGalleryKind,
@@ -532,8 +533,10 @@ function createGalleryAgendaRows(
           verification: item.verification,
           blockers: item.blockers
         }),
+        ...sampleTargetPreviewFields(item.sampleTargets),
         ...adapterPreviewFields(adapterRow)
       ],
+      previewLinks: sampleTargetPreviewLinks(item.sampleTargets),
       searchFields: [
         ...authoringSearchFields({
           maturity: item.maturity,
@@ -542,6 +545,7 @@ function createGalleryAgendaRows(
           verification: item.verification,
           blockers: item.blockers
         }),
+        ...sampleTargetSearchFields(item.sampleTargets),
         ...adapterSearchFields(adapterRow)
       ]
     };
@@ -715,6 +719,59 @@ function liveAnimationPreviewLink(
       ...extraDataAttributes
     ]
   };
+}
+
+function sampleTargetPreviewFields(
+  targets: readonly ProjectDashboardSampleTarget[] | undefined
+): readonly ProjectAgendaPreviewField[] {
+  return targets === undefined || targets.length === 0
+    ? []
+    : [
+        {
+          label: "Sample targets",
+          value: targets.map((target) => target.label).join(", ")
+        }
+      ];
+}
+
+function sampleTargetPreviewLinks(
+  targets: readonly ProjectDashboardSampleTarget[] | undefined
+): readonly ProjectAgendaPreviewLink[] {
+  return (targets ?? []).map(sampleTargetPreviewLink);
+}
+
+function sampleTargetPreviewLink(
+  target: ProjectDashboardSampleTarget
+): ProjectAgendaPreviewLink {
+  switch (target.kind) {
+    case "equation-animation":
+      return liveAnimationPreviewLink(
+        target.animationId,
+        target.label.replace(/^Open\s+/i, ""),
+        target.fixtureId === undefined
+          ? []
+          : [["data-kp-preview-katex-transform-fixture", target.fixtureId]]
+      );
+    case "graph-surface-mode":
+      return {
+        label: target.label,
+        href: "#",
+        dataAttributes: [
+          ["data-kp-preview-link", "graph-surface-mode"],
+          ["data-kp-preview-graph-id", target.graphId],
+          ["data-kp-preview-graph-surface-mode", target.surfaceMode]
+        ]
+      };
+    case "api-catalog-item":
+      return {
+        label: target.label,
+        href: "#project-agenda-api-title",
+        dataAttributes: [
+          ["data-kp-preview-link", "api-catalog-item"],
+          ["data-kp-preview-api-item", target.itemId]
+        ]
+      };
+  }
 }
 
 function createApiAgendaRows(
@@ -919,6 +976,26 @@ function authoringSearchFields(
     ...(metadata.verification ?? []),
     ...(metadata.blockers ?? [])
   ];
+}
+
+function sampleTargetSearchFields(
+  targets: readonly ProjectDashboardSampleTarget[] | undefined
+): readonly string[] {
+  return (targets ?? []).flatMap((target) => {
+    switch (target.kind) {
+      case "equation-animation":
+        return [
+          target.kind,
+          target.label,
+          target.animationId,
+          target.fixtureId ?? ""
+        ];
+      case "graph-surface-mode":
+        return [target.kind, target.label, target.graphId, target.surfaceMode];
+      case "api-catalog-item":
+        return [target.kind, target.label, target.itemId];
+    }
+  });
 }
 
 function filterAgendaRows(

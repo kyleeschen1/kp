@@ -61,9 +61,17 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
   );
 
   assert.ok(graphRow?.searchText?.includes("src/rendering/graph-transitions.ts"));
+  assert.ok(graphRow?.searchText?.includes("Open donut graph sample"));
   assert.ok(
     graphRow?.preview?.fields.some(
       (field) => field.label === "Maturity" && field.value === "active renderer"
+    )
+  );
+  assert.ok(
+    graphRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Sample targets" &&
+        field.value.includes("Open donut graph sample")
     )
   );
 });
