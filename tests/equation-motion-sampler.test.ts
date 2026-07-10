@@ -290,7 +290,8 @@ function planWithTrack(
         targetMotionId: `${track.tokenId}.target`
       }
     ],
-    tracks: [track]
+    tracks: [track],
+    visualMotifs: []
   };
 }
 
@@ -333,7 +334,8 @@ test("sampleEquationMotion linearly interpolates all pose fields", () => {
         from: { opacity: 0, x: 0, y: 0, scale: 1 },
         to: { opacity: 1, x: 10, y: 20, scale: 2 }
       }
-    ]
+    ],
+    visualMotifs: []
   };
 
   assert.deepEqual(findFrameToken(sampleEquationMotion(plan, 0.5), "x").pose, {
@@ -416,7 +418,8 @@ test("sampleEquationMotion defensively samples invalid track ranges", () => {
         from: { opacity: 0, x: 0, y: 0, scale: 1 },
         to: { opacity: 1, x: 10, y: 20, scale: 2 }
       }
-    ]
+    ],
+    visualMotifs: []
   };
 
   assert.deepEqual(findFrameToken(sampleEquationMotion(plan, 0.49), "x").pose, {

@@ -2,13 +2,64 @@
   "id": "next.kp.semantic-transition-runtime",
   "kind": "next-action",
   "title": "Unify semantic transformations with rewindable visual motifs",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation-runtime",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "src/rendering/equation-motion-plan.ts",
       "summary": "Current transition-to-motion-plan compiler where semantic transformations become reversible visual tracks."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-plan.ts",
+      "summary": "Adds visual motif plan types and compiles motifs from correspondence records alongside tracks."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-plan.test.ts",
+      "summary": "Covers motif derivation for subtract-both-sides, cancelation, constant simplification, and matrix artifact replacement."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-sampler.test.ts",
+      "summary": "Updates hand-built sampler plans to satisfy the explicit motif-list contract."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-player.test.ts",
+      "summary": "Updates hand-built player plans to satisfy the explicit motif-list contract."
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full Node test suite, 305 tests.",
+      "checkedAt": "2026-07-10T09:31:17.576Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "App, node, and test TypeScript projects.",
+      "checkedAt": "2026-07-10T09:31:17.606Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation.",
+      "checkedAt": "2026-07-10T09:31:17.631Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-10T09:32:01.952Z",
+      "scope": "Production build and typecheck; Vite reports existing large chunk warning."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Equation motion plans now expose correspondence-derived visual motif records for append-after-shift, cancelation, simplify-into, wrap/unwrap, and artifact entry/replacement."
+  },
+  "summary": "Equation motion plans now expose correspondence-derived visual motif records for append-after-shift, cancelation, simplify-into, wrap/unwrap, and artifact entry/replacement."
 }

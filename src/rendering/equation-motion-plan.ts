@@ -6,6 +6,7 @@ import {
 import {
   cloneCorrespondenceMap,
   type CorrespondenceMap,
+  type SelectorCorrespondenceRecord,
   type SelectorCorrespondenceRelationId
 } from "../semantic/correspondence.ts";
 import type {
@@ -21,6 +22,7 @@ export interface EquationMotionPlan {
   readonly correspondenceMap: CorrespondenceMap;
   readonly tokens: readonly EquationMotionToken[];
   readonly tracks: readonly EquationMotionTrack[];
+  readonly visualMotifs: readonly EquationVisualMotifPlan[];
 }
 
 export interface EquationMotionToken {
@@ -64,6 +66,35 @@ export interface MotionPose {
   readonly x: number;
   readonly y: number;
   readonly scale: number;
+}
+
+export type EquationMotionPrimitiveId =
+  | "enter"
+  | "exit"
+  | "reveal"
+  | "shift"
+  | "vanish"
+  | "wrap"
+  | "unwrap";
+
+export type EquationVisualMotifKind =
+  | "append-after-shift"
+  | "artifact-enter"
+  | "artifact-exit"
+  | "artifact-replace"
+  | "cancelation"
+  | "simplify-into"
+  | "wrap"
+  | "unwrap";
+
+export interface EquationVisualMotifPlan {
+  readonly id: string;
+  readonly kind: EquationVisualMotifKind;
+  readonly correspondenceRecordId: string;
+  readonly sourceTokenIds: readonly string[];
+  readonly targetTokenIds: readonly string[];
+  readonly motionPrimitiveIds: readonly EquationMotionPrimitiveId[];
+  readonly summary: string;
 }
 
 type LifecycleTiming = {
@@ -126,16 +157,18 @@ export function createEquationMotionPlan(
     };
   });
   validateAnnotationCoverage(transition, tokens);
+  const correspondenceMap =
+    transition.correspondenceMap === undefined
+      ? fallbackCorrespondenceMap(tokens)
+      : cloneCorrespondenceMap(transition.correspondenceMap);
 
   return {
     sourceLatex: transition.sourceLatex,
     targetLatex: transition.targetLatex,
-    correspondenceMap:
-      transition.correspondenceMap === undefined
-        ? fallbackCorrespondenceMap(tokens)
-        : cloneCorrespondenceMap(transition.correspondenceMap),
+    correspondenceMap,
     tokens,
-    tracks: tokens.map((token) => trackForToken(token))
+    tracks: tokens.map((token) => trackForToken(token)),
+    visualMotifs: createEquationVisualMotifPlans(tokens, correspondenceMap)
   };
 }
 
@@ -154,6 +187,7 @@ export function applyMeasuredMotionDeltas(
   return {
     ...plan,
     tokens: plan.tokens.map((token) => ({ ...token })),
+    visualMotifs: plan.visualMotifs.map((motif) => cloneVisualMotif(motif)),
     tracks: plan.tracks.map((track) => {
       const delta = deltasByTokenId.get(track.tokenId);
 
@@ -176,6 +210,282 @@ export function applyMeasuredMotionDeltas(
       };
     })
   };
+}
+
+function createEquationVisualMotifPlans(
+  tokens: readonly EquationMotionToken[],
+  correspondenceMap: CorrespondenceMap
+): readonly EquationVisualMotifPlan[] {
+  const sourceTokenIdsByMotionId = indexTokenIdsByMotionId(tokens, "source");
+  const targetTokenIdsByMotionId = indexTokenIdsByMotionId(tokens, "target");
+  const motifs: EquationVisualMotifPlan[] = [];
+
+  for (const record of correspondenceMap.records) {
+    if (record.relation === "cancelation") {
+      motifs.push(
+        visualMotifFromRecord({
+          kind: "cancelation",
+          record,
+          sourceTokenIds: tokenIdsForMotionIds(
+            sourceTokenIdsByMotionId,
+            record.sourceSelectorIds
+          ),
+          targetTokenIds: [],
+          motionPrimitiveIds: ["vanish"]
+        })
+      );
+      continue;
+    }
+
+    if (record.relation === "fan-in") {
+      motifs.push(
+        visualMotifFromRecord({
+          kind: "simplify-into",
+          record,
+          sourceTokenIds: tokenIdsForMotionIds(
+            sourceTokenIdsByMotionId,
+            record.sourceSelectorIds
+          ),
+          targetTokenIds: tokenIdsForMotionIds(
+            targetTokenIdsByMotionId,
+            record.targetSelectorIds
+          ),
+          motionPrimitiveIds: ["vanish", "reveal"]
+        })
+      );
+      continue;
+    }
+
+    if (record.relation === "role-change") {
+      const sourceTokenIds = tokenIdsForMotionIds(
+        sourceTokenIdsByMotionId,
+        record.sourceSelectorIds
+      );
+      const targetTokenIds = tokenIdsForMotionIds(
+        targetTokenIdsByMotionId,
+        record.targetSelectorIds
+      );
+      const roleChangeToken = tokens.find((token) =>
+        sourceTokenIds.includes(token.id) || targetTokenIds.includes(token.id)
+      );
+      const kind =
+        roleChangeToken?.visualLifecycle === "unwrap" ? "unwrap" : "wrap";
+
+      motifs.push(
+        visualMotifFromRecord({
+          kind,
+          record,
+          sourceTokenIds,
+          targetTokenIds,
+          motionPrimitiveIds: [kind]
+        })
+      );
+      continue;
+    }
+
+    if (record.relation === "artifact") {
+      motifs.push(
+        artifactVisualMotifFromRecord({
+          record,
+          sourceTokenIdsByMotionId,
+          targetTokenIdsByMotionId,
+          correspondenceMap
+        })
+      );
+    }
+  }
+
+  const appendAfterShift = appendAfterShiftVisualMotif(
+    tokens,
+    correspondenceMap
+  );
+
+  return appendAfterShift === undefined
+    ? motifs
+    : [appendAfterShift, ...motifs];
+}
+
+function appendAfterShiftVisualMotif(
+  tokens: readonly EquationMotionToken[],
+  correspondenceMap: CorrespondenceMap
+): EquationVisualMotifPlan | undefined {
+  const sourceTokenIdsByMotionId = indexTokenIdsByMotionId(tokens, "source");
+  const targetTokenIdsByMotionId = indexTokenIdsByMotionId(tokens, "target");
+  const sourceTokenIds = correspondenceMap.records
+    .filter((record) => record.relation === "identity")
+    .flatMap((record) =>
+      tokenIdsForMotionIds(
+        sourceTokenIdsByMotionId,
+        record.sourceSelectorIds
+      )
+    );
+  const targetTokenIds = correspondenceMap.records
+    .filter((record) => record.relation === "introduction")
+    .flatMap((record) =>
+      tokenIdsForMotionIds(
+        targetTokenIdsByMotionId,
+        record.targetSelectorIds
+      )
+    );
+
+  if (sourceTokenIds.length === 0 || targetTokenIds.length === 0) {
+    return undefined;
+  }
+
+  return {
+    id: `${correspondenceMap.id}.append-after-shift`,
+    kind: "append-after-shift",
+    correspondenceRecordId: correspondenceMap.id,
+    sourceTokenIds,
+    targetTokenIds,
+    motionPrimitiveIds: ["shift", "enter"],
+    summary: "Persisted tokens shift before introduced tokens enter."
+  };
+}
+
+function artifactVisualMotifFromRecord(input: {
+  readonly record: SelectorCorrespondenceRecord;
+  readonly sourceTokenIdsByMotionId: ReadonlyMap<string, readonly string[]>;
+  readonly targetTokenIdsByMotionId: ReadonlyMap<string, readonly string[]>;
+  readonly correspondenceMap: CorrespondenceMap;
+}): EquationVisualMotifPlan {
+  const sourceTokenIds = tokenIdsForMotionIds(
+    input.sourceTokenIdsByMotionId,
+    input.record.sourceSelectorIds
+  );
+  const targetTokenIds = tokenIdsForMotionIds(
+    input.targetTokenIdsByMotionId,
+    input.record.targetSelectorIds
+  );
+
+  if (sourceTokenIds.length > 0 && targetTokenIds.length > 0) {
+    return visualMotifFromRecord({
+      kind: "artifact-replace",
+      record: input.record,
+      sourceTokenIds,
+      targetTokenIds,
+      motionPrimitiveIds: ["exit", "enter"]
+    });
+  }
+
+  if (targetTokenIds.length > 0) {
+    const pairedSourceTokenIds = nearestUnpairedRemovalSourceTokenIds(
+      input.record,
+      input.correspondenceMap,
+      input.sourceTokenIdsByMotionId
+    );
+
+    if (pairedSourceTokenIds.length > 0) {
+      return visualMotifFromRecord({
+        kind: "artifact-replace",
+        record: input.record,
+        sourceTokenIds: pairedSourceTokenIds,
+        targetTokenIds,
+        motionPrimitiveIds: ["exit", "enter"]
+      });
+    }
+
+    return visualMotifFromRecord({
+      kind: "artifact-enter",
+      record: input.record,
+      sourceTokenIds: [],
+      targetTokenIds,
+      motionPrimitiveIds: ["enter"]
+    });
+  }
+
+  return visualMotifFromRecord({
+    kind: "artifact-exit",
+    record: input.record,
+    sourceTokenIds,
+    targetTokenIds: [],
+    motionPrimitiveIds: ["exit"]
+  });
+}
+
+function nearestUnpairedRemovalSourceTokenIds(
+  artifactRecord: SelectorCorrespondenceRecord,
+  correspondenceMap: CorrespondenceMap,
+  sourceTokenIdsByMotionId: ReadonlyMap<string, readonly string[]>
+): readonly string[] {
+  const artifactIndex = correspondenceMap.records.findIndex(
+    (record) => record.id === artifactRecord.id
+  );
+
+  if (artifactIndex < 0) {
+    return [];
+  }
+
+  for (let index = artifactIndex - 1; index >= 0; index -= 1) {
+    const record = correspondenceMap.records[index];
+
+    if (record === undefined) {
+      continue;
+    }
+
+    if (record.relation === "identity" || record.relation === "role-change") {
+      break;
+    }
+
+    if (
+      record.relation === "removal" &&
+      record.targetSelectorIds.length === 0
+    ) {
+      return tokenIdsForMotionIds(
+        sourceTokenIdsByMotionId,
+        record.sourceSelectorIds
+      );
+    }
+  }
+
+  return [];
+}
+
+function visualMotifFromRecord(input: {
+  readonly kind: EquationVisualMotifKind;
+  readonly record: SelectorCorrespondenceRecord;
+  readonly sourceTokenIds: readonly string[];
+  readonly targetTokenIds: readonly string[];
+  readonly motionPrimitiveIds: readonly EquationMotionPrimitiveId[];
+}): EquationVisualMotifPlan {
+  return {
+    id: `${input.record.id}.${input.kind}`,
+    kind: input.kind,
+    correspondenceRecordId: input.record.id,
+    sourceTokenIds: [...input.sourceTokenIds],
+    targetTokenIds: [...input.targetTokenIds],
+    motionPrimitiveIds: [...input.motionPrimitiveIds],
+    summary: input.record.summary
+  };
+}
+
+function indexTokenIdsByMotionId(
+  tokens: readonly EquationMotionToken[],
+  side: "source" | "target"
+): ReadonlyMap<string, readonly string[]> {
+  const index = new Map<string, string[]>();
+
+  for (const token of tokens) {
+    const motionId =
+      side === "source" ? token.sourceMotionId : token.targetMotionId;
+
+    if (motionId === undefined) {
+      continue;
+    }
+
+    const tokenIds = index.get(motionId) ?? [];
+    tokenIds.push(token.id);
+    index.set(motionId, tokenIds);
+  }
+
+  return index;
+}
+
+function tokenIdsForMotionIds(
+  index: ReadonlyMap<string, readonly string[]>,
+  motionIds: readonly string[]
+): readonly string[] {
+  return motionIds.flatMap((motionId) => index.get(motionId) ?? []);
 }
 
 function explicitVisualOnlyRelationForToken(
@@ -555,5 +865,19 @@ function cloneTrack(track: EquationMotionTrack): EquationMotionTrack {
     easing: track.easing,
     from: clonePose(track.from),
     to: clonePose(track.to)
+  };
+}
+
+function cloneVisualMotif(
+  motif: EquationVisualMotifPlan
+): EquationVisualMotifPlan {
+  return {
+    id: motif.id,
+    kind: motif.kind,
+    correspondenceRecordId: motif.correspondenceRecordId,
+    sourceTokenIds: [...motif.sourceTokenIds],
+    targetTokenIds: [...motif.targetTokenIds],
+    motionPrimitiveIds: [...motif.motionPrimitiveIds],
+    summary: motif.summary
   };
 }

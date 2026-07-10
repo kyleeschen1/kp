@@ -200,6 +200,7 @@ function planWithTrack(
         targetMotionId: `${track.tokenId}.target`
       }
     ],
-    tracks: [track]
+    tracks: [track],
+    visualMotifs: []
   };
 }

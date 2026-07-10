@@ -1,0 +1,42 @@
+{
+  "id": "run-contract.kp.animation-runtime.semantic-transition-runtime-loop-v0",
+  "kind": "run-contract",
+  "title": "Semantic transition runtime loop",
+  "status": "ready",
+  "domain": "kp.animation-runtime",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.semantic-transition-runtime.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "allowedWork": [
+    "Only work on approved KP semantic transition runtime slices."
+  ],
+  "disallowedWork": [
+    "Do not broaden into unrelated Theseus planner infrastructure or arbitrary visual effects without asking."
+  ],
+  "goal": "Run the approved semantic transition runtime loop.",
+  "target": "next.kp.semantic-transition-runtime",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when verification fails and needs user judgment.",
+    "Stop when the approved slice list is exhausted.",
+    "Stop if Theseus readiness blocks focused execution after contract creation."
+  ],
+  "slices": [
+    {
+      "id": "next.kp.semantic-transition-runtime",
+      "title": "Unify semantic transformations with rewindable visual motifs",
+      "summary": "Working the first focused KP slice under the approved semantic transition runtime contract.",
+      "status": "complete"
+    }
+  ]
+}

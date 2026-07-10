@@ -48,6 +48,15 @@ const summarizeSemanticVisualLifecycles = (
     token.visualLifecycle
   ]);
 
+const summarizeVisualMotifs = (plan: EquationMotionPlan) =>
+  plan.visualMotifs.map((motif) => [
+    motif.kind,
+    motif.correspondenceRecordId,
+    motif.sourceTokenIds,
+    motif.targetTokenIds,
+    motif.motionPrimitiveIds
+  ]);
+
 const trackFor = (plan: EquationMotionPlan, tokenId: string) => {
   const track = plan.tracks.find((candidate) => candidate.tokenId === tokenId);
   assert.ok(track, `missing track for ${tokenId}`);
@@ -175,6 +184,33 @@ test("createEquationMotionPlan preserves corrected semantic lifecycle tracks", (
     sourceLatex: "+",
     targetLatex: "+"
   });
+});
+
+test("createEquationMotionPlan derives append-after-shift motifs from introductions", () => {
+  const transition = createEquationOperationTransition({
+    sourceLatex: "x + 3 = 7",
+    operation: {
+      kind: "subtractBothSides",
+      valueLatex: "3"
+    }
+  });
+
+  const plan = createEquationMotionPlan(transition);
+
+  assert.deepEqual(summarizeVisualMotifs(plan), [
+    [
+      "append-after-shift",
+      "linear-equation.subtract-both-sides.3",
+      ["lhs.x", "lhs.plus", "lhs.3", "equals", "rhs.7"],
+      [
+        "lhs.inverse.minus",
+        "lhs.inverse.3",
+        "rhs.inverse.minus",
+        "rhs.inverse.3"
+      ],
+      ["shift", "enter"]
+    ]
+  ]);
 });
 
 test("createEquationMotionPlan maps lifecycles to selector correspondence relations", () => {
@@ -352,6 +388,15 @@ test("createEquationMotionPlan cancels left additive inverse only during simplif
 
   const plan = createEquationMotionPlan(transition);
 
+  assert.deepEqual(summarizeVisualMotifs(plan), [
+    [
+      "cancelation",
+      "cancelation.lhs.additive-inverse",
+      ["lhs.plus", "lhs.3", "lhs.inverse.minus", "lhs.inverse.3"],
+      [],
+      ["vanish"]
+    ]
+  ]);
   assert.deepEqual(trackFor(plan, "lhs.plus"), {
     tokenId: "lhs.plus",
     lifecycle: "cancel",
@@ -386,6 +431,15 @@ test("createEquationMotionPlan animates right constant difference simplification
 
   const plan = createEquationMotionPlan(transition);
 
+  assert.deepEqual(summarizeVisualMotifs(plan), [
+    [
+      "simplify-into",
+      "fan-in.rhs.constant-difference",
+      ["rhs.7", "rhs.inverse.minus", "rhs.inverse.3"],
+      ["rhs.4"],
+      ["vanish", "reveal"]
+    ]
+  ]);
   assert.deepEqual(summarizeSemanticVisualLifecycles(plan), [
     ["lhs.x", "identity-preserved", "persist"],
     ["equals", "identity-preserved", "persist"],
@@ -868,6 +922,21 @@ test("fixture matrix bracket swap preserves entry identity and swaps bracket art
 
   const plan = createEquationMotionPlan(transition);
 
+  assert.deepEqual(summarizeVisualMotifs(plan), [
+    [
+      "artifact-replace",
+      "matrix.bracket.change-delimiter.artifact.target-brackets",
+      [
+        "matrix.bracket.change-delimiter.source.left-bracket",
+        "matrix.bracket.change-delimiter.source.right-bracket"
+      ],
+      [
+        "matrix.bracket.change-delimiter.target.left-bracket",
+        "matrix.bracket.change-delimiter.target.right-bracket"
+      ],
+      ["exit", "enter"]
+    ]
+  ]);
   assert.deepEqual(summarizeSemanticVisualLifecycles(plan), [
     [
       "matrix.bracket.change-delimiter.entry.r0.c0",
