@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.parent-timeline-model",
+  "kind": "next-action",
+  "title": "Add parent timeline model",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/parent-timeline.ts",
+      "summary": "Defines KpParentTimeline, sequenced child tracks, and sampleKpParentTimeline for state-free timeline sampling."
+    },
+    {
+      "kind": "file",
+      "path": "tests/parent-timeline.test.ts",
+      "summary": "Covers shared clock metadata, layout/object/transform track allocation, deterministic sampling, clamping, and rewind-safe direct seek."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.parent-timeline-model.json",
+      "summary": "Materializes the approved parent timeline model next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the parent timeline slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/parent-timeline.test.ts tests/tutorial-card-runtime.test.ts tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "focused tutorial card parent timeline/runtime tests",
+      "checkedAt": "2026-07-10T22:11:48.920Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:11:49.053Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:11:49.112Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a renderer-neutral parent timeline model that derives a shared clock spine from tutorial card runtime context and samples deterministic child track progress for direct seek and rewind."
+  },
+  "summary": "Added a renderer-neutral parent timeline model that derives a shared clock spine from tutorial card runtime context and samples deterministic child track progress for direct seek and rewind."
+}
