@@ -1,0 +1,49 @@
+{
+  "id": "next.kp.tutorial-card-rewind-verification",
+  "kind": "next-action",
+  "title": "Verify rewind through parent timeline",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "tests/linear-solve-tutorial-card-sample.test.ts",
+      "summary": "Adds direct forward/backward frame equality coverage for the live tutorial card sample."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-rewind-verification.json",
+      "summary": "Materializes the approved rewind verification next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json",
+      "summary": "Advances the active run-contract target to the rewind verification slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-solve-tutorial-card-sample.test.ts tests/tutorial-card-html-shell.test.ts tests/parent-timeline.test.ts",
+      "status": "passed",
+      "scope": "focused tutorial card rewind verification tests",
+      "checkedAt": "2026-07-10T22:50:16.934Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T22:50:17.022Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T22:50:17.117Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added rewind verification for the live linear-solve tutorial card sample, asserting backward direct sampling matches forward frames exactly."
+  },
+  "summary": "Added rewind verification for the live linear-solve tutorial card sample, asserting backward direct sampling matches forward frames exactly."
+}

@@ -20,6 +20,38 @@ test("linear solve tutorial card sample synchronizes card, equation, and graph f
   assert.deepEqual(frame.diagnostics, []);
 });
 
+test("linear solve tutorial card sample rewinds to the same frames as forward sampling", () => {
+  const sample = createLinearSolveTutorialCardSample();
+  const progressSteps = [0, 0.25, 0.5, 0.75, 1];
+  const forwardFrames = progressSteps.map((progress) => sample.sample(progress));
+  const rewindFrames = [...progressSteps]
+    .reverse()
+    .map((progress) => sample.sample(progress));
+
+  forwardFrames.forEach((forwardFrame, index) => {
+    assert.deepEqual(
+      forwardFrame,
+      rewindFrames[rewindFrames.length - 1 - index]
+    );
+  });
+  assert.deepEqual(
+    forwardFrames.map((frame) => frame.cardFrame.parentTimelineFrame.beat),
+    [0, 12.5, 25, 37.5, 50]
+  );
+  assert.deepEqual(
+    forwardFrames.map((frame) => frame.equationFrame.transitionIndex),
+    [0, 0, 1, 2, 2]
+  );
+  assert.deepEqual(
+    forwardFrames.map((frame) => frame.equationFrame.transitionProgress),
+    [0, 0.75, 0.5, 0.25, 1]
+  );
+  assert.deepEqual(
+    forwardFrames.map((frame) => frame.graphFrame.graphProgress),
+    [0, 0.25, 0.5, 0.75, 1]
+  );
+});
+
 test("linear solve tutorial card sample clamps every child frame through the parent clock", () => {
   const sample = createLinearSolveTutorialCardSample();
   const startFrame = sample.sample(Number.NaN);
