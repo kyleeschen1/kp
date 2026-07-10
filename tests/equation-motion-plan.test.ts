@@ -54,7 +54,8 @@ const summarizeVisualMotifs = (plan: EquationMotionPlan) =>
     motif.correspondenceRecordId,
     motif.sourceTokenIds,
     motif.targetTokenIds,
-    motif.motionPrimitiveIds
+    motif.motionPrimitiveIds,
+    motif.phaseIds
   ]);
 
 const trackFor = (plan: EquationMotionPlan, tokenId: string) => {
@@ -208,7 +209,8 @@ test("createEquationMotionPlan derives append-after-shift motifs from introducti
         "rhs.inverse.minus",
         "rhs.inverse.3"
       ],
-      ["shift", "enter"]
+      ["shift", "enter"],
+      ["layout-shift", "introduced-token-enter"]
     ]
   ]);
 });
@@ -394,7 +396,8 @@ test("createEquationMotionPlan cancels left additive inverse only during simplif
       "cancelation.lhs.additive-inverse",
       ["lhs.plus", "lhs.3", "lhs.inverse.minus", "lhs.inverse.3"],
       [],
-      ["vanish"]
+      ["vanish"],
+      ["cancel-meet", "cancel-collapse", "post-cancel-layout-shift"]
     ]
   ]);
   assert.deepEqual(trackFor(plan, "lhs.plus"), {
@@ -437,7 +440,8 @@ test("createEquationMotionPlan animates right constant difference simplification
       "fan-in.rhs.constant-difference",
       ["rhs.7", "rhs.inverse.minus", "rhs.inverse.3"],
       ["rhs.4"],
-      ["vanish", "reveal"]
+      ["vanish", "reveal"],
+      ["final-simplify-meet", "final-simplify-collapse", "final-simplify-reveal"]
     ]
   ]);
   assert.deepEqual(summarizeSemanticVisualLifecycles(plan), [
@@ -934,7 +938,8 @@ test("fixture matrix bracket swap preserves entry identity and swaps bracket art
         "matrix.bracket.change-delimiter.target.left-bracket",
         "matrix.bracket.change-delimiter.target.right-bracket"
       ],
-      ["exit", "enter"]
+      ["exit", "enter"],
+      ["artifact-exit", "artifact-enter"]
     ]
   ]);
   assert.deepEqual(summarizeSemanticVisualLifecycles(plan), [

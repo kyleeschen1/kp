@@ -87,6 +87,21 @@ export type EquationVisualMotifKind =
   | "wrap"
   | "unwrap";
 
+export type EquationVisualMotifPhaseId =
+  | "artifact-enter"
+  | "artifact-exit"
+  | "cancel-collapse"
+  | "cancel-meet"
+  | "final-simplify-collapse"
+  | "final-simplify-meet"
+  | "final-simplify-reveal"
+  | "introduced-token-enter"
+  | "layout-shift"
+  | "post-cancel-layout-shift"
+  | "unwrap-artifact-exit"
+  | "wrap-artifact-enter"
+  | "wrapped-token-shift";
+
 export interface EquationVisualMotifPlan {
   readonly id: string;
   readonly kind: EquationVisualMotifKind;
@@ -94,6 +109,7 @@ export interface EquationVisualMotifPlan {
   readonly sourceTokenIds: readonly string[];
   readonly targetTokenIds: readonly string[];
   readonly motionPrimitiveIds: readonly EquationMotionPrimitiveId[];
+  readonly phaseIds: readonly EquationVisualMotifPhaseId[];
   readonly summary: string;
 }
 
@@ -339,6 +355,7 @@ function appendAfterShiftVisualMotif(
     sourceTokenIds,
     targetTokenIds,
     motionPrimitiveIds: ["shift", "enter"],
+    phaseIds: ["layout-shift", "introduced-token-enter"],
     summary: "Persisted tokens shift before introduced tokens enter."
   };
 }
@@ -455,8 +472,38 @@ function visualMotifFromRecord(input: {
     sourceTokenIds: [...input.sourceTokenIds],
     targetTokenIds: [...input.targetTokenIds],
     motionPrimitiveIds: [...input.motionPrimitiveIds],
+    phaseIds: phaseIdsForVisualMotifKind(input.kind),
     summary: input.record.summary
   };
+}
+
+function phaseIdsForVisualMotifKind(
+  kind: EquationVisualMotifKind
+): readonly EquationVisualMotifPhaseId[] {
+  switch (kind) {
+    case "append-after-shift":
+      return ["layout-shift", "introduced-token-enter"];
+    case "artifact-enter":
+      return ["artifact-enter"];
+    case "artifact-exit":
+      return ["artifact-exit"];
+    case "artifact-replace":
+      return ["artifact-exit", "artifact-enter"];
+    case "cancelation":
+      return ["cancel-meet", "cancel-collapse", "post-cancel-layout-shift"];
+    case "simplify-into":
+      return [
+        "final-simplify-meet",
+        "final-simplify-collapse",
+        "final-simplify-reveal"
+      ];
+    case "wrap":
+      return ["wrapped-token-shift", "wrap-artifact-enter"];
+    case "unwrap":
+      return ["unwrap-artifact-exit", "wrapped-token-shift"];
+    default:
+      return assertNever(kind);
+  }
 }
 
 function indexTokenIdsByMotionId(
@@ -878,6 +925,7 @@ function cloneVisualMotif(
     sourceTokenIds: [...motif.sourceTokenIds],
     targetTokenIds: [...motif.targetTokenIds],
     motionPrimitiveIds: [...motif.motionPrimitiveIds],
+    phaseIds: [...motif.phaseIds],
     summary: motif.summary
   };
 }
