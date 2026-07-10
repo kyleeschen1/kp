@@ -231,6 +231,32 @@ test("renderProjectDashboard selects KaTeX transform rows into the shared previe
   assert.match(html, /\\frac\{x\}\{3\}/);
 });
 
+test("renderProjectDashboard links selected animation rows to live samples", () => {
+  const animationHtml = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "animation-layout-linear-equation-solve-x"
+  });
+  const fixtureHtml = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "katex-transform-fraction.make.inline-to-stacked"
+  });
+
+  assert.match(
+    animationHtml,
+    /data-kp-preview-live-animation="linear-equation-solve-x"/
+  );
+  assert.match(
+    animationHtml,
+    /href="#project-dashboard-animation-layout-title"/
+  );
+  assert.match(
+    fixtureHtml,
+    /data-kp-preview-live-animation="fixture-fraction-make-inline-to-stacked"/
+  );
+  assert.match(
+    fixtureHtml,
+    /data-kp-preview-katex-transform-fixture="fraction\.make\.inline-to-stacked"/
+  );
+});
+
 test("renderProjectDashboard can fold agenda rows into a table of contents", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     tocOnly: true

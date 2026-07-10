@@ -1,0 +1,61 @@
+{
+  "id": "next-action.project.add-kp-animation-preview-links-v0",
+  "kind": "next-action",
+  "title": "Add KP animation preview links",
+  "status": "resolved",
+  "domain": "project.dashboard",
+  "summary": "Added selected-row preview links from KP dashboard animation and linked KaTeX transform rows to the live animation sample area.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/kp/src/project-dashboard/render.ts",
+      "summary": "Adds selected-row preview links for animation-layout and linked KaTeX transform rows."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/kp/src/styles.css",
+      "summary": "Styles compact selected-row preview links."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/kp/tests/project-dashboard.test.ts",
+      "summary": "Covers live animation preview links for animation and KaTeX transform rows."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "Focused project dashboard renderer tests.",
+      "checkedAt": "2026-07-10T08:00:08.781Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full KP Node test suite.",
+      "checkedAt": "2026-07-10T08:00:08.794Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "KP TypeScript checks.",
+      "checkedAt": "2026-07-10T08:00:08.807Z"
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "Dashboard browser round-trip spec.",
+      "checkedAt": "2026-07-10T08:00:08.825Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T08:00:08.838Z",
+      "scope": "KP Theseus graph validation."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added selected-row preview links from KP dashboard animation and linked KaTeX transform rows to the live animation sample area."
+  }
+}

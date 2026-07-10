@@ -118,12 +118,19 @@ interface ProjectAgendaRow {
   readonly relatedIds?: readonly string[] | undefined;
   readonly extraHtml?: string;
   readonly previewFields?: readonly ProjectAgendaPreviewField[] | undefined;
+  readonly previewLinks?: readonly ProjectAgendaPreviewLink[] | undefined;
   readonly searchFields?: readonly string[] | undefined;
 }
 
 interface ProjectAgendaPreviewField {
   readonly label: string;
   readonly value: string;
+}
+
+interface ProjectAgendaPreviewLink {
+  readonly label: string;
+  readonly href: string;
+  readonly dataAttributes: readonly [string, string][];
 }
 
 interface ProjectAgendaSection {
@@ -263,6 +270,7 @@ function renderProjectAgendaPreview(
         </div>
         ${renderPreviewFields(row.previewFields ?? [])}
       </dl>
+      ${renderPreviewLinks(row.previewLinks ?? [])}
       <div class="project-agenda-preview__tags">
         ${renderAgendaTags(row.tags)}
       </div>
@@ -283,6 +291,30 @@ function renderPreviewFields(
       `
     )
     .join("");
+}
+
+function renderPreviewLinks(
+  links: readonly ProjectAgendaPreviewLink[]
+): string {
+  if (links.length === 0) {
+    return "";
+  }
+
+  return `
+    <div class="project-agenda-preview__links">
+      ${links
+        .map(
+          (link) => `
+            <a
+              class="project-agenda-preview__link"
+              href="${escapeHtml(link.href)}"
+              ${renderDataAttributes(link.dataAttributes)}
+            >${escapeHtml(link.label)}</a>
+          `
+        )
+        .join("")}
+    </div>
+  `;
 }
 
 function createProjectAgendaModel(
@@ -503,6 +535,7 @@ function createAnimationLayoutAgendaRows(
         { label: "Duration", value: `${entry.defaultDurationMs}ms` },
         { label: "States", value: String(entry.states.length) }
       ],
+      previewLinks: [liveAnimationPreviewLink(entry.id, entry.label)],
       searchFields: [
         entry.id,
         entry.fixtureId ?? "",
@@ -537,6 +570,14 @@ function createKatexTransformAgendaRows(
           { label: "Target LaTeX", value: fixture.target.latex },
           { label: "Linked animation", value: linkedAnimation?.label ?? "None" }
         ],
+        previewLinks:
+          linkedAnimation === undefined
+            ? []
+            : [
+                liveAnimationPreviewLink(linkedAnimation.id, linkedAnimation.label, [
+                  ["data-kp-preview-katex-transform-fixture", fixture.id]
+                ])
+              ],
         searchFields: [
           fixture.id,
           fixture.source.latex,
@@ -547,6 +588,22 @@ function createKatexTransformAgendaRows(
     }),
     query
   );
+}
+
+function liveAnimationPreviewLink(
+  animationId: string,
+  label: string,
+  extraDataAttributes: readonly [string, string][] = []
+): ProjectAgendaPreviewLink {
+  return {
+    label: `Open ${label} sample`,
+    href: "#project-dashboard-animation-layout-title",
+    dataAttributes: [
+      ["data-kp-preview-link", "live-animation"],
+      ["data-kp-preview-live-animation", animationId],
+      ...extraDataAttributes
+    ]
+  };
 }
 
 function createApiAgendaRows(

@@ -273,6 +273,24 @@ h2 {
   font-weight: 700;
 }
 
+.project-agenda-preview__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.project-agenda-preview__link {
+  color: #145f74;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 0.18rem;
+}
+
+.project-agenda-preview__link:hover {
+  color: #0f4057;
+}
+
 .project-agenda-preview__tags {
   min-width: 0;
 }
