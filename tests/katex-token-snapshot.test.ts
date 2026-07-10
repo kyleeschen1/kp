@@ -10,6 +10,7 @@ import {
 } from "../src/rendering/katex-token-snapshot.ts";
 import {
   definitionForKatexTransformFixture,
+  findKatexTransformFixture,
   findKatexTransformDefinition,
   fractionTransformFixtures,
   largeOperatorTransformFixtures,
@@ -311,6 +312,12 @@ test("radical transform fixtures declare SVG and rule artifact expectations", ()
         []
       ],
       [
+        "radical.rewrite-indexed-root-as-power",
+        "rewriteRootAsPower",
+        ["structural:hide-tail", "structural:sqrt-line"],
+        []
+      ],
+      [
         "radical.unwrap-indexed-root",
         "unwrapIndexedRoot",
         ["structural:hide-tail", "structural:sqrt-line"],
@@ -343,6 +350,15 @@ test("radical fixture diagnostics count structural artifact expectations", () =>
         roleChangeCount: 1
       },
       {
+        id: "radical.rewrite-indexed-root-as-power",
+        family: "radical",
+        sourceTokenCount: 5,
+        targetTokenCount: 3,
+        sourceStructuralTokenCount: 2,
+        targetStructuralTokenCount: 0,
+        roleChangeCount: 2
+      },
+      {
         id: "radical.unwrap-indexed-root",
         family: "radical",
         sourceTokenCount: 6,
@@ -351,6 +367,23 @@ test("radical fixture diagnostics count structural artifact expectations", () =>
         targetStructuralTokenCount: 0,
         roleChangeCount: 1
       }
+    ]
+  );
+});
+
+test("radical transform fixtures preserve indexed root identity as exponent roles", () => {
+  const fixture = findKatexTransformFixture("radical.rewrite-indexed-root-as-power");
+
+  assert.deepEqual(
+    fixture.expectedRoleChanges.map((roleChange) => [
+      roleChange.sourceRole,
+      roleChange.targetRole,
+      roleChange.sourceText,
+      roleChange.targetText
+    ]),
+    [
+      ["radicand", "base", "x", "x"],
+      ["root-index", "superscript", "3", "1/3"]
     ]
   );
 });

@@ -2,7 +2,49 @@
   "id": "next.kp.katex-exponent-radical-identity",
   "kind": "next-action",
   "title": "Expand exponent radical identity fixtures",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.katex",
-  "summary": "Expand exponent and radical transform coverage around persistent tokens, artifacts, and semantic identity."
+  "summary": "Added an indexed radical-to-fractional-exponent fixture that preserves radicand/base identity and root-index/exponent roles.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-transform-fixtures.ts",
+      "summary": "Radical fixture registry now includes indexed-root-to-power coverage and the root-as-power definition references the new representative fixture."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-token-snapshot.test.ts",
+      "summary": "Covers the new radical fixture ordering, diagnostics, and explicit root-index to superscript role-change expectations."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/katex-token-snapshot.test.ts",
+      "status": "passed",
+      "scope": "focused KaTeX fixture snapshot tests",
+      "checkedAt": "2026-07-10T20:48:55.573Z"
+    },
+    {
+      "command": "npm test -- tests/katex-token-snapshot.test.ts tests/rendering.test.ts tests/equation-motion-plan.test.ts tests/katex-token-matcher.test.ts",
+      "status": "passed",
+      "scope": "repo test script including KaTeX fixture, rendering, matcher, and equation motion coverage",
+      "checkedAt": "2026-07-10T20:48:55.604Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:48:55.630Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:48:55.656Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added an indexed radical-to-fractional-exponent fixture that preserves radicand/base identity and root-index/exponent roles."
+  }
 }

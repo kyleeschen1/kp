@@ -246,7 +246,10 @@ export const katexFixtureBackedTransformDefinitions: readonly KatexTransformDefi
     artifactPolicy: "source-only",
     defaultVisualMotifs: ["unwrap", "artifact-exit"],
     geometryChallenges: ["radical-glyph", "overbar", "radicand-to-base"],
-    representativeFixtureIds: ["radical.rewrite-root-as-power"],
+    representativeFixtureIds: [
+      "radical.rewrite-root-as-power",
+      "radical.rewrite-indexed-root-as-power"
+    ],
     maturity: "fixture-backed",
     summary:
       "Radical notation becomes power notation while radical artifacts exit."
@@ -695,6 +698,49 @@ export const radicalTransformFixtures: readonly KatexTransformFixture[] = [
     ],
     summary:
       "Radical notation becomes power notation; radical artifacts exit while the radicand becomes the base."
+  },
+  {
+    id: "radical.rewrite-indexed-root-as-power",
+    family: "radical",
+    intent: "rewriteRootAsPower",
+    source: {
+      latex: "\\sqrt[3]{x}",
+      tokens: [
+        rootIndexToken("3", -1, 0),
+        artifactToken("structural:hide-tail", "hide-tail", 0, 0),
+        artifactToken("structural:sqrt-line", "sqrt-line", -1, 1),
+        artifactToken("\\sqrt", "sqrt", 0, 1),
+        radicandToken("x", 0, 2)
+      ]
+    },
+    target: {
+      latex: "x^{1/3}",
+      tokens: [
+        baseToken("x", 0, 0),
+        operatorToken("^", -1, 1),
+        superscriptToken("1/3", -1, 2)
+      ]
+    },
+    expectedStructuralTokens: {
+      source: ["structural:hide-tail", "structural:sqrt-line"],
+      target: []
+    },
+    expectedRoleChanges: [
+      {
+        sourceRole: "radicand",
+        targetRole: "base",
+        sourceText: "x",
+        targetText: "x"
+      },
+      {
+        sourceRole: "root-index",
+        targetRole: "superscript",
+        sourceText: "3",
+        targetText: "1/3"
+      }
+    ],
+    summary:
+      "Indexed radical notation becomes fractional exponent notation; the radicand persists as the base and the root index becomes exponent structure."
   },
   {
     id: "radical.unwrap-indexed-root",
