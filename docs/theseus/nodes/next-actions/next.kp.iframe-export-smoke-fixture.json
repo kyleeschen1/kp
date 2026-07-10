@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.iframe-export-smoke-fixture",
+  "kind": "next-action",
+  "title": "Add iframe smoke fixture",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added a deterministic linear-solve iframe export smoke fixture.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/iframe-export-smoke-fixture.ts",
+      "summary": "Composes manifest, sample frame, iframe export artifact, card shell HTML, and iframe document output into a reusable smoke fixture."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-iframe-smoke-fixture.test.ts",
+      "summary": "Covers smoke fixture identity, progress, artifact metadata, diagnostics, and assembled iframe document markers."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.iframe-export-smoke-fixture.json",
+      "summary": "Materializes the approved iframe export smoke fixture next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the iframe smoke fixture slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-iframe-smoke-fixture.test.ts tests/tutorial-card-iframe-document.test.ts tests/tutorial-card-html-shell.test.ts tests/tutorial-card-export-artifact.test.ts tests/tutorial-card-frame-sampler.test.ts",
+      "status": "passed",
+      "scope": "iframe smoke fixture, document, shell, and export artifact tests",
+      "checkedAt": "2026-07-10T23:58:44.393Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T23:58:44.430Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T23:58:44.468Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a deterministic linear-solve iframe export smoke fixture."
+  }
+}

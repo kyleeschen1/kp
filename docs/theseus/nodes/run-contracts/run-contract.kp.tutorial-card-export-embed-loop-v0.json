@@ -40,7 +40,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure."
   ],
   "goal": "Run the approved export/embed loop from tutorial-card runtime metadata to concrete iframe and static-step artifacts, then prepare programming panels and follow-up runtime checks.",
-  "target": "next.kp.dashboard-iframe-export-sample",
+  "target": "next.kp.iframe-export-smoke-fixture",
   "runMode": "run",
   "maxSlices": 20,
   "commitCadence": "Commit after each verified slice.",
@@ -84,7 +84,7 @@
     {
       "id": "next.kp.iframe-export-smoke-fixture",
       "title": "Add iframe smoke fixture",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.static-step-artifact-contract",
