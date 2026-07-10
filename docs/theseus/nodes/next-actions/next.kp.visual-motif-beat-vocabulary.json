@@ -1,0 +1,61 @@
+{
+  "id": "next.kp.visual-motif-beat-vocabulary",
+  "kind": "next-action",
+  "title": "Unify visual motif phase and beat vocabularies",
+  "status": "resolved",
+  "domain": "kp.animation-runtime",
+  "summary": "Equation visual motif phases now have a runtime vocabulary shared with semantic beat ids, and the demo timeline defines beats for every motif phase.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-plan.ts",
+      "summary": "Exports the ordered equation visual motif phase-id list used by planners and timeline code."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/semantic-beat-compiler.ts",
+      "summary": "Derives SemanticBeatId from EquationVisualMotifPhaseId and adds artifact/wrapper phase beats."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-sampler.test.ts",
+      "summary": "Asserts the linear equation demo timeline covers every visual motif phase id."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-sampler.test.ts",
+      "status": "passed",
+      "scope": "Focused equation motion sampler tests.",
+      "checkedAt": "2026-07-10T09:40:08.720Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "App, node, and test TypeScript projects.",
+      "checkedAt": "2026-07-10T09:40:08.741Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full Node test suite.",
+      "checkedAt": "2026-07-10T09:40:08.758Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation.",
+      "checkedAt": "2026-07-10T09:40:08.776Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-10T09:40:08.797Z",
+      "scope": "Production build and typecheck; Vite large chunk warning remains."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Equation visual motif phases now have a runtime vocabulary shared with semantic beat ids, and the demo timeline defines beats for every motif phase."
+  }
+}

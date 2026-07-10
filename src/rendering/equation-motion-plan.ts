@@ -87,20 +87,24 @@ export type EquationVisualMotifKind =
   | "wrap"
   | "unwrap";
 
+export const equationVisualMotifPhaseIds = [
+  "artifact-enter",
+  "artifact-exit",
+  "layout-shift",
+  "introduced-token-enter",
+  "cancel-meet",
+  "cancel-collapse",
+  "post-cancel-layout-shift",
+  "final-simplify-meet",
+  "final-simplify-collapse",
+  "final-simplify-reveal",
+  "unwrap-artifact-exit",
+  "wrap-artifact-enter",
+  "wrapped-token-shift"
+] as const;
+
 export type EquationVisualMotifPhaseId =
-  | "artifact-enter"
-  | "artifact-exit"
-  | "cancel-collapse"
-  | "cancel-meet"
-  | "final-simplify-collapse"
-  | "final-simplify-meet"
-  | "final-simplify-reveal"
-  | "introduced-token-enter"
-  | "layout-shift"
-  | "post-cancel-layout-shift"
-  | "unwrap-artifact-exit"
-  | "wrap-artifact-enter"
-  | "wrapped-token-shift";
+  (typeof equationVisualMotifPhaseIds)[number];
 
 export interface EquationVisualMotifPlan {
   readonly id: string;

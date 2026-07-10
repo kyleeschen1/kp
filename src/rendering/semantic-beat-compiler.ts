@@ -1,18 +1,11 @@
 import type {
   EasingName,
+  EquationVisualMotifPhaseId,
   EquationMotionTrack,
   MotionPose
 } from "./equation-motion-plan.ts";
 
-export type SemanticBeatId =
-  | "layout-shift"
-  | "introduced-token-enter"
-  | "cancel-meet"
-  | "cancel-collapse"
-  | "post-cancel-layout-shift"
-  | "final-simplify-meet"
-  | "final-simplify-collapse"
-  | "final-simplify-reveal";
+export type SemanticBeatId = EquationVisualMotifPhaseId;
 
 export interface SemanticBeatDefinition {
   readonly id: SemanticBeatId;
@@ -48,6 +41,20 @@ export const linearEquationDemoBeatTimeline = compileSemanticBeatTimeline({
   id: "linear-equation-demo",
   beatCount: 50,
   beats: [
+    {
+      id: "artifact-enter",
+      startBeat: 25,
+      endBeat: 50,
+      easing: "ease-out",
+      summary: "Visual artifacts enter after their semantic hosts make room."
+    },
+    {
+      id: "artifact-exit",
+      startBeat: 0,
+      endBeat: 25,
+      easing: "ease-out",
+      summary: "Visual artifacts exit before replacement artifacts settle."
+    },
     {
       id: "layout-shift",
       startBeat: 0,
@@ -103,6 +110,27 @@ export const linearEquationDemoBeatTimeline = compileSemanticBeatTimeline({
       endBeat: 35,
       easing: "ease-in-out",
       summary: "The simplified target token grows from the shared midpoint."
+    },
+    {
+      id: "unwrap-artifact-exit",
+      startBeat: 0,
+      endBeat: 20,
+      easing: "ease-out",
+      summary: "Unwrapped delimiters exit before the unwrapped token settles."
+    },
+    {
+      id: "wrap-artifact-enter",
+      startBeat: 20,
+      endBeat: 50,
+      easing: "ease-out",
+      summary: "Wrapper artifacts enter around an already moving token."
+    },
+    {
+      id: "wrapped-token-shift",
+      startBeat: 0,
+      endBeat: 20,
+      easing: "ease-in-out",
+      summary: "Wrapped or unwrapped tokens move before delimiter artifacts finish."
     }
   ]
 });

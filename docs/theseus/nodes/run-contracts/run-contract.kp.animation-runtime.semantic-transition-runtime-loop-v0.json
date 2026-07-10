@@ -21,7 +21,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure or arbitrary visual effects without asking."
   ],
   "goal": "Run the approved semantic transition runtime loop.",
-  "target": "next.kp.visual-motif-phase-timing",
+  "target": "next.kp.visual-motif-beat-vocabulary",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -42,6 +42,12 @@
       "id": "next.kp.visual-motif-phase-timing",
       "title": "Attach timing phases to equation visual motifs",
       "summary": "Working the motif timing phase slice under the approved semantic transition runtime contract.",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.visual-motif-beat-vocabulary",
+      "title": "Unify visual motif phase and beat vocabularies",
+      "summary": "Working the motif beat vocabulary slice under the approved semantic transition runtime contract.",
       "status": "complete"
     }
   ]

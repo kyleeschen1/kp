@@ -3,6 +3,7 @@ import test from "node:test";
 
 import { createEquationOperationTransition } from "../src/math/equation-transform.ts";
 import {
+  equationVisualMotifPhaseIds,
   createEquationMotionPlan,
   type EquationMotionPlan
 } from "../src/rendering/equation-motion-plan.ts";
@@ -111,6 +112,10 @@ test("role-aware motion primitive descriptors compile to sampler tracks", () => 
 test("semantic beat compiler exposes the current equation demo timeline", () => {
   assert.equal(linearEquationDemoBeatTimeline.beatCount, 50);
   assert.deepEqual(
+    linearEquationDemoBeatTimeline.beats.map((beat) => beat.id),
+    [...equationVisualMotifPhaseIds]
+  );
+  assert.deepEqual(
     linearEquationDemoBeatTimeline.beats.map((beat) => [
       beat.id,
       beat.startBeat,
@@ -118,6 +123,8 @@ test("semantic beat compiler exposes the current equation demo timeline", () => 
       beat.easing
     ]),
     [
+      ["artifact-enter", 25, 50, "ease-out"],
+      ["artifact-exit", 0, 25, "ease-out"],
       ["layout-shift", 0, 25, "ease-in-out"],
       ["introduced-token-enter", 25, 50, "ease-out"],
       ["cancel-meet", 0, 20, "ease-in-out"],
@@ -125,7 +132,10 @@ test("semantic beat compiler exposes the current equation demo timeline", () => 
       ["post-cancel-layout-shift", 30, 50, "ease-in-out"],
       ["final-simplify-meet", 0, 20, "ease-in-out"],
       ["final-simplify-collapse", 20, 25, "ease-out"],
-      ["final-simplify-reveal", 25, 35, "ease-in-out"]
+      ["final-simplify-reveal", 25, 35, "ease-in-out"],
+      ["unwrap-artifact-exit", 0, 20, "ease-out"],
+      ["wrap-artifact-enter", 20, 50, "ease-out"],
+      ["wrapped-token-shift", 0, 20, "ease-in-out"]
     ]
   );
   assert.equal(
