@@ -524,6 +524,10 @@ test("editor equation motion demo uses semantic playback plans", async ({
       exponentExists: true,
       overlayConnected: overlay.isConnected,
       overlayHandoff: overlay.dataset["kpEquationMotionArtifactHandoff"],
+      overlayHandoffRenderer:
+        overlay.dataset["kpEquationMotionArtifactHandoffRenderer"],
+      overlayHandoffToken:
+        overlay.dataset["kpEquationMotionArtifactHandoffToken"],
       overlayPointerEvents: overlayStyle.pointerEvents,
       exponentVisibility: exponentStyle.visibility,
       exponentOpacity: Number(exponentStyle.opacity)
@@ -535,6 +539,8 @@ test("editor equation motion demo uses semantic playback plans", async ({
     exponentExists: true,
     overlayConnected: true,
     overlayHandoff: "true",
+    overlayHandoffRenderer: "endpoint-texture",
+    overlayHandoffToken: "radical.rewrite-power-as-root.source.exponent",
     overlayPointerEvents: "none",
     exponentVisibility: "visible",
     exponentOpacity: 1

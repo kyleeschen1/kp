@@ -18,6 +18,7 @@ import {
 } from "../rendering/equation-cancel-particles-webgl.ts";
 import {
   createKatexArtifactSeedRevealRenderer,
+  type KatexArtifactSeedRevealEndpoint,
   type KatexArtifactSeedRevealPlan,
   type KatexArtifactSeedRevealRenderer
 } from "../rendering/katex-artifact-seed-reveal.ts";
@@ -113,6 +114,8 @@ interface EquationArtifactSeedRevealContext {
   readonly key: string;
   readonly sourceMotionId: string;
   readonly targetMotionId: string;
+  readonly sourceEndpoint: KatexArtifactSeedRevealEndpoint;
+  readonly targetEndpoint: KatexArtifactSeedRevealEndpoint;
   readonly canvas: HTMLCanvasElement;
   rendererPromise: Promise<KatexArtifactSeedRevealRenderer | undefined>;
   renderer: KatexArtifactSeedRevealRenderer | undefined;
@@ -461,7 +464,8 @@ function startEquationMotionAnimation(
     activeAnimations.delete(demo);
     delete demo.dataset["kpEquationMotionAnimating"];
     syncEquationMotionActiveState(demo, targetStep, {
-      preserveArtifactHandoff: true
+      preserveArtifactHandoff: true,
+      artifactHandoffProgress: targetProgress
     });
   };
 
@@ -854,11 +858,17 @@ function renderEquationMotionFrame(
 function syncEquationMotionActiveState(
   demo: HTMLElement,
   activeStep: number,
-  options: { readonly preserveArtifactHandoff?: boolean } = {}
+  options: {
+    readonly preserveArtifactHandoff?: boolean;
+    readonly artifactHandoffProgress?: number;
+  } = {}
 ): void {
   const handoffCanvas =
     options.preserveArtifactHandoff === true
-      ? releaseArtifactSeedRevealForHandoff(demo)
+      ? releaseArtifactSeedRevealForHandoff(
+          demo,
+          options.artifactHandoffProgress ?? (activeStep <= 0 ? 0 : 1)
+        )
       : undefined;
 
   activeRenderContexts.delete(demo);
@@ -1186,6 +1196,8 @@ function findOrCreateArtifactSeedRevealContext(
     key: plan.key,
     sourceMotionId: plan.sourceMotionId,
     targetMotionId: plan.targetMotionId,
+    sourceEndpoint: plan.seedRevealPlan.source,
+    targetEndpoint: plan.seedRevealPlan.target,
     canvas,
     renderer: undefined,
     rendererPromise: Promise.resolve(undefined),
@@ -1273,7 +1285,8 @@ function clearArtifactSeedReveal(demo: HTMLElement): void {
 }
 
 function releaseArtifactSeedRevealForHandoff(
-  demo: HTMLElement
+  demo: HTMLElement,
+  progress: number
 ): HTMLCanvasElement | undefined {
   const context = artifactSeedRevealContexts.get(demo);
 
@@ -1281,10 +1294,21 @@ function releaseArtifactSeedRevealForHandoff(
     return undefined;
   }
 
+  const endpoint =
+    progress <= 0 ? context.sourceEndpoint : context.targetEndpoint;
+  // Repaint before marking the context disposed; disposal clears the canvas
+  // but the handoff overlay needs to fade out over the exact endpoint texture.
+  const renderedEndpoint =
+    context.renderer?.renderEndpoint(endpoint) === true;
+
   context.disposed = true;
   artifactSeedRevealContexts.delete(demo);
   delete demo.dataset["kpEquationMotionArtifactMode"];
   context.canvas.dataset["kpEquationMotionArtifactHandoff"] = "true";
+  context.canvas.dataset["kpEquationMotionArtifactHandoffRenderer"] =
+    renderedEndpoint ? "endpoint-texture" : "previous-frame";
+  context.canvas.dataset["kpEquationMotionArtifactHandoffToken"] =
+    renderedEndpoint ? endpoint.tokenId : "";
   context.canvas.style.opacity = "1";
   context.canvas.style.transition = `opacity ${EQUATION_MOTION_ARTIFACT_HANDOFF_MS}ms ease`;
   context.canvas.style.willChange = "opacity";
