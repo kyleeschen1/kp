@@ -1,0 +1,75 @@
+{
+  "id": "task.theseus.dashboard-preview-links-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard preview link protocol",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data.ts",
+      "summary": "Defines preview link data contract, search metadata inclusion, and safe data-attribute predicate."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-html.ts",
+      "summary": "Renders selected-row preview links with safe hrefs and data-* attributes only."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-client.ts",
+      "summary": "Updates browser selected-row previews and helper output with preview links."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-css.ts",
+      "summary": "Styles reusable selected-row preview links."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-data.test.ts",
+      "summary": "Covers preview links in reusable dashboard search metadata."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-html.test.ts",
+      "summary": "Covers static preview-link rendering and unsafe attribute filtering."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-client.test.ts",
+      "summary": "Covers selected preview link data and client updater hooks."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- src/dashboard-data.test.ts src/dashboard-html.test.ts src/dashboard-client.test.ts src/dashboard-extension.test.ts",
+      "status": "passed",
+      "scope": "Focused and adjacent reusable dashboard protocol tests.",
+      "checkedAt": "2026-07-10T08:16:41.915Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full Theseus package test suite.",
+      "checkedAt": "2026-07-10T08:16:41.929Z"
+    },
+    {
+      "command": "npm run source:gates",
+      "status": "passed",
+      "scope": "Theseus package source-size, function-size, and import-boundary gates.",
+      "checkedAt": "2026-07-10T08:16:41.945Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-10T08:16:41.958Z",
+      "scope": "Theseus package TypeScript check."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added host-neutral selected-row preview links to the reusable Theseus dashboard model, static renderer, client updater, and CSS."
+  },
+  "summary": "Added host-neutral selected-row preview links to the reusable Theseus dashboard model, static renderer, client updater, and CSS."
+}

@@ -160,7 +160,7 @@
     {
       "id": "task.theseus.dashboard-preview-links-v0",
       "title": "Add-host-preview-link-protocol",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-host-docs-v0",
