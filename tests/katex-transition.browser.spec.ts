@@ -462,6 +462,12 @@ test("editor equation motion demo uses semantic playback plans", async ({
       sourceMotion: overlay.dataset["kpEquationMotionArtifactSourceMotion"],
       pathMotion: overlay.dataset["kpEquationMotionArtifactPathMotion"],
       targetMotion: overlay.dataset["kpEquationMotionArtifactTargetMotion"],
+      anticipationOffset:
+        overlay.dataset["kpEquationMotionArtifactAnticipationOffset"],
+      collapsedPointSize:
+        overlay.dataset["kpEquationMotionArtifactCollapsedPointSize"],
+      filamentWidth: overlay.dataset["kpEquationMotionArtifactFilamentWidth"],
+      formStart: overlay.dataset["kpEquationMotionArtifactFormStart"],
       particleCount: Number(
         overlay.dataset["kpEquationMotionArtifactParticleCount"] ?? 0
       ),
@@ -482,6 +488,10 @@ test("editor equation motion demo uses semantic playback plans", async ({
     sourceMotion: "anticipate-collapse-emitter",
     pathMotion: "filament-stream",
     targetMotion: "late-radical-form",
+    anticipationOffset: "0,-14",
+    collapsedPointSize: "1",
+    filamentWidth: "0.7",
+    formStart: "0.88",
     particleCount: 1024,
     nonTransparentPixelCount: expect.any(Number),
     maxAlpha: expect.any(Number)

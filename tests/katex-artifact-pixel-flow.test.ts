@@ -80,7 +80,7 @@ test("createKatexArtifactPixelFlowFrame interpolates particles with no semantic 
   assert.ok((frame.particles[0]?.pointSize ?? 0) > 0);
 });
 
-test("createKatexArtifactPixelFlowFrame can anticipate, collapse, stream as a filament, and form the target", () => {
+test("createKatexArtifactPixelFlowFrame lifts, collapses to 1px dots, streams as a filament, and forms the target", () => {
   const particles = pairKatexArtifactPixelFlowPoints(
     [{ x: 16, y: 10, alpha: 1 }],
     [{ x: 50, y: 20, alpha: 1 }],
@@ -91,45 +91,43 @@ test("createKatexArtifactPixelFlowFrame can anticipate, collapse, stream as a fi
     end: 1,
     sourceMotion: {
       kind: "anticipate-collapse-emitter",
-      anticipationOffset: { x: 12, y: -8 },
-      anticipationEnd: 0.2,
-      pauseEnd: 0.32,
-      collapseEnd: 0.52,
-      minScale: 0.06
+      anticipationOffset: { x: 0, y: -12 },
+      anticipationEnd: 0.24,
+      pauseEnd: 0.34,
+      collapseEnd: 0.56,
+      collapsedPointSize: 1
     },
     pathMotion: {
       kind: "filament-stream",
-      formStart: 0.84,
-      filamentWidth: 1.2
+      formStart: 0.88,
+      filamentWidth: 0.7
     },
     targetMotion: {
       kind: "late-radical-form",
-      formStart: 0.84
+      formStart: 0.88
     }
   });
-  const anticipated = createKatexArtifactPixelFlowFrame(plan, particles, 0.2);
+  const anticipated = createKatexArtifactPixelFlowFrame(plan, particles, 0.24);
   const paused = createKatexArtifactPixelFlowFrame(plan, particles, 0.28);
-  const collapsed = createKatexArtifactPixelFlowFrame(plan, particles, 0.52);
-  const filament = createKatexArtifactPixelFlowFrame(plan, particles, 0.68);
-  const forming = createKatexArtifactPixelFlowFrame(plan, particles, 0.92);
+  const collapsed = createKatexArtifactPixelFlowFrame(plan, particles, 0.56);
+  const filament = createKatexArtifactPixelFlowFrame(plan, particles, 0.72);
+  const forming = createKatexArtifactPixelFlowFrame(plan, particles, 0.94);
 
-  assert.equal(anticipated.particles[0]?.x, 28);
-  assert.equal(anticipated.particles[0]?.y, 2);
-  assert.equal(paused.particles[0]?.x, 28);
-  assert.equal(paused.particles[0]?.y, 2);
+  assert.equal(anticipated.particles[0]?.x, 16);
+  assert.equal(anticipated.particles[0]?.y, -2);
+  assert.equal(paused.particles[0]?.x, 16);
+  assert.equal(paused.particles[0]?.y, -2);
   assert.equal(collapsed.particles[0]?.x, 10);
   assert.equal(collapsed.particles[0]?.y, 10);
-  assert.ok((collapsed.particles[0]?.pointSize ?? 0) < 0.2);
-  assert.ok((collapsed.particles[0]?.opacity ?? 0) < 0.1);
+  assert.equal(collapsed.particles[0]?.pointSize, 1);
+  assert.equal(collapsed.particles[0]?.opacity, 1);
   assert.ok(Math.abs((filament.particles[0]?.x ?? 0) - 25) < 1e-9);
-  assert.ok(Math.abs((filament.particles[0]?.y ?? 0) - 10) <= 1.2);
-  assert.ok(
-    (filament.particles[0]?.pointSize ?? 0) <
-      (collapsed.particles[0]?.pointSize ?? 0)
-  );
+  assert.ok(Math.abs((filament.particles[0]?.y ?? 0) - 10) <= 0.7);
+  assert.equal(filament.particles[0]?.pointSize, 1);
+  assert.equal(filament.particles[0]?.opacity, 1);
   assert.ok((forming.particles[0]?.x ?? 0) > 25);
   assert.ok((forming.particles[0]?.y ?? 0) > 10);
-  assert.ok((forming.particles[0]?.pointSize ?? 0) > 0.2);
+  assert.ok((forming.particles[0]?.pointSize ?? 0) > 1);
 });
 
 function pixelFlowPlan(overrides: {
@@ -142,7 +140,7 @@ function pixelFlowPlan(overrides: {
         readonly anticipationEnd: number;
         readonly pauseEnd: number;
         readonly collapseEnd: number;
-        readonly minScale: number;
+        readonly collapsedPointSize: number;
       }
     | undefined;
   readonly pathMotion?:

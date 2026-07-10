@@ -18,7 +18,7 @@ export interface KatexArtifactPixelFlowSourceMotion {
   readonly anticipationEnd: number;
   readonly pauseEnd: number;
   readonly collapseEnd: number;
-  readonly minScale: number;
+  readonly collapsedPointSize: number;
 }
 
 export interface KatexArtifactPixelFlowPathMotion {
@@ -93,7 +93,7 @@ interface KatexArtifactPixelFlowProgramInfo {
   readonly anticipationEndLocation: WebGLUniformLocation;
   readonly pauseEndLocation: WebGLUniformLocation;
   readonly collapseEndLocation: WebGLUniformLocation;
-  readonly minScaleLocation: WebGLUniformLocation;
+  readonly collapsedPointSizeLocation: WebGLUniformLocation;
   readonly pathMotionEnabledLocation: WebGLUniformLocation;
   readonly formStartLocation: WebGLUniformLocation;
   readonly filamentWidthLocation: WebGLUniformLocation;
@@ -171,13 +171,18 @@ export function createKatexArtifactPixelFlowFrame(
   return {
     progress: localProgress,
     particles: particles.map((particle) => {
-      const pose = sampleParticleFramePose(plan, particle, localProgress);
+      const pose = sampleParticleFramePose(
+        plan,
+        particle,
+        localProgress,
+        basePointSize
+      );
 
       return {
         x: pose.x,
         y: pose.y,
         opacity: clamp01(particle.alpha * pose.opacityScale),
-        pointSize: basePointSize * pose.pointSizeScale
+        pointSize: pose.pointSize
       };
     })
   };
@@ -186,11 +191,12 @@ export function createKatexArtifactPixelFlowFrame(
 function sampleParticleFramePose(
   plan: KatexArtifactPixelFlowPlan,
   particle: KatexArtifactPixelFlowParticle,
-  progress: number
+  progress: number,
+  basePointSize: number
 ): {
   readonly x: number;
   readonly y: number;
-  readonly pointSizeScale: number;
+  readonly pointSize: number;
   readonly opacityScale: number;
 } {
   // The source/path/target phases encode anticipation, compression, transfer,
@@ -207,7 +213,7 @@ function sampleParticleFramePose(
     return {
       x: lerp(particle.sourceX, particle.targetX, progress),
       y: lerp(particle.sourceY, particle.targetY, progress),
-      pointSizeScale: 1,
+      pointSize: basePointSize,
       opacityScale: 1
     };
   }
@@ -240,7 +246,7 @@ function sampleParticleFramePose(
     return {
       x: lerp(particle.sourceX, sourceAnticipated.x, easedAnticipationProgress),
       y: lerp(particle.sourceY, sourceAnticipated.y, easedAnticipationProgress),
-      pointSizeScale: 1,
+      pointSize: basePointSize,
       opacityScale: 1
     };
   }
@@ -249,7 +255,7 @@ function sampleParticleFramePose(
     return {
       x: sourceAnticipated.x,
       y: sourceAnticipated.y,
-      pointSizeScale: 1,
+      pointSize: basePointSize,
       opacityScale: 1
     };
   }
@@ -267,8 +273,12 @@ function sampleParticleFramePose(
     return {
       x: lerp(sourceAnticipated.x, sourceMidpoint.x, easedCollapseProgress),
       y: lerp(sourceAnticipated.y, sourceMidpoint.y, easedCollapseProgress),
-      pointSizeScale: lerp(1, sourceMotion.minScale, easedCollapseProgress),
-      opacityScale: lerp(1, sourceMotion.minScale, easedCollapseProgress)
+      pointSize: lerp(
+        basePointSize,
+        sourceMotion.collapsedPointSize,
+        easedCollapseProgress
+      ),
+      opacityScale: 1
     };
   }
 
@@ -283,9 +293,8 @@ function sampleParticleFramePose(
     particle.seed,
     pathMotion?.filamentWidth ?? 0
   );
-  const sourcePointScale = sourceMotion?.minScale ?? 1;
-  const filamentPointScale =
-    sourceMotion === undefined ? 1 : sourceMotion.minScale * 0.55;
+  const collapsedPointSize =
+    sourceMotion === undefined ? basePointSize : sourceMotion.collapsedPointSize;
 
   if (progress <= formStart) {
     const streamProgress =
@@ -297,8 +306,8 @@ function sampleParticleFramePose(
     return {
       x: lerp(streamSource.x, filamentPoint.x, easedStreamProgress),
       y: lerp(streamSource.y, filamentPoint.y, easedStreamProgress),
-      pointSizeScale: lerp(sourcePointScale, filamentPointScale, streamProgress),
-      opacityScale: lerp(sourcePointScale, filamentPointScale, streamProgress)
+      pointSize: collapsedPointSize,
+      opacityScale: 1
     };
   }
 
@@ -311,8 +320,8 @@ function sampleParticleFramePose(
   return {
     x: lerp(filamentPoint.x, particle.targetX, easedFormProgress),
     y: lerp(filamentPoint.y, particle.targetY, easedFormProgress),
-    pointSizeScale: lerp(filamentPointScale, 1, easedFormProgress),
-    opacityScale: lerp(filamentPointScale, 1, easedFormProgress)
+    pointSize: lerp(collapsedPointSize, basePointSize, easedFormProgress),
+    opacityScale: 1
   };
 }
 
@@ -521,8 +530,8 @@ export function createKatexArtifactPixelFlowRenderer(
         plan.sourceMotion?.collapseEnd ?? 0
       );
       gl.uniform1f(
-        programInfo.minScaleLocation,
-        plan.sourceMotion?.minScale ?? 1
+        programInfo.collapsedPointSizeLocation,
+        plan.sourceMotion?.collapsedPointSize ?? 1
       );
       gl.uniform1f(
         programInfo.pathMotionEnabledLocation,
@@ -643,7 +652,7 @@ function createProgram(
         uniform float u_anticipationEnd;
         uniform float u_pauseEnd;
         uniform float u_collapseEnd;
-        uniform float u_minScale;
+        uniform float u_collapsedPointSize;
         uniform float u_pathMotionEnabled;
         uniform float u_formStart;
         uniform float u_filamentWidth;
@@ -651,7 +660,6 @@ function createProgram(
         uniform vec2 u_targetMidpoint;
         uniform float u_pixelRatio;
         varying float v_alpha;
-        varying float v_pointSizeScale;
 
         float clampUnit(float value) {
           return clamp(value, 0.0, 1.0);
@@ -731,17 +739,23 @@ function createProgram(
           return mix(filamentTarget(), a_target, easeInOut(formProgress));
         }
 
-        float filamentScale() {
-          return u_sourceMotionEnabled < 0.5 ? 1.0 : u_minScale * 0.55;
+        float basePointSize() {
+          return 2.2 + sin(u_progress * 3.14159265359) * 0.8 + a_seed * 0.12;
         }
 
-        float samplePointSizeScale() {
+        float collapsedPointSize() {
+          return u_sourceMotionEnabled < 0.5
+            ? basePointSize()
+            : u_collapsedPointSize;
+        }
+
+        float samplePointSize() {
           if (u_sourceMotionEnabled < 0.5 && u_pathMotionEnabled < 0.5) {
-            return 1.0;
+            return basePointSize();
           }
 
           if (u_sourceMotionEnabled > 0.5 && u_progress <= u_pauseEnd) {
-            return 1.0;
+            return basePointSize();
           }
 
           if (u_sourceMotionEnabled > 0.5 && u_progress <= u_collapseEnd) {
@@ -751,38 +765,37 @@ function createProgram(
                 (u_progress - u_pauseEnd) / (u_collapseEnd - u_pauseEnd)
               );
 
-            return mix(1.0, u_minScale, easeInOut(collapseProgress));
+            return mix(
+              basePointSize(),
+              collapsedPointSize(),
+              easeInOut(collapseProgress)
+            );
           }
 
           if (u_progress <= streamEnd()) {
-            float streamProgress = streamEnd() <= streamStart()
-              ? 1.0
-              : clampUnit((u_progress - streamStart()) / (streamEnd() - streamStart()));
-
-            return mix(u_minScale, filamentScale(), streamProgress);
+            return collapsedPointSize();
           }
 
           float formProgress = streamEnd() >= 1.0
             ? 1.0
             : clampUnit((u_progress - streamEnd()) / (1.0 - streamEnd()));
 
-          return mix(filamentScale(), 1.0, easeInOut(formProgress));
+          return mix(
+            collapsedPointSize(),
+            basePointSize(),
+            easeInOut(formProgress)
+          );
         }
 
         void main() {
           vec2 position = samplePosition();
-          float pointSizeScale = samplePointSizeScale();
+          float pointSize = samplePointSize();
           vec2 zeroToOne = position / u_resolution;
           vec2 clipSpace = zeroToOne * 2.0 - 1.0;
 
           gl_Position = vec4(clipSpace * vec2(1.0, -1.0), 0.0, 1.0);
-          float pointSize =
-            (2.2 + sin(u_progress * 3.14159265359) * 0.8 + a_seed * 0.12) *
-            pointSizeScale *
-            u_pixelRatio;
-          gl_PointSize = max(pointSize, 1.2 * u_pixelRatio);
-          v_alpha = a_alpha * pointSizeScale;
-          v_pointSizeScale = pointSizeScale;
+          gl_PointSize = max(pointSize * u_pixelRatio, 1.0 * u_pixelRatio);
+          v_alpha = a_alpha;
         }
       `
     );
@@ -793,7 +806,6 @@ function createProgram(
         precision mediump float;
         uniform vec3 u_color;
         varying float v_alpha;
-        varying float v_pointSizeScale;
 
         void main() {
           vec2 centeredPoint = gl_PointCoord - vec2(0.5);
@@ -869,7 +881,11 @@ function createProgram(
       ),
       pauseEndLocation: getUniformLocation(gl, program, "u_pauseEnd"),
       collapseEndLocation: getUniformLocation(gl, program, "u_collapseEnd"),
-      minScaleLocation: getUniformLocation(gl, program, "u_minScale"),
+      collapsedPointSizeLocation: getUniformLocation(
+        gl,
+        program,
+        "u_collapsedPointSize"
+      ),
       pathMotionEnabledLocation: getUniformLocation(
         gl,
         program,

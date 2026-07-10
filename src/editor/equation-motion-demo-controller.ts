@@ -1058,20 +1058,20 @@ function createRadicalArtifactPixelFlowPlan(
       particleCount: 1024,
       sourceMotion: {
         kind: "anticipate-collapse-emitter",
-        anticipationOffset: { x: 12, y: -8 },
-        anticipationEnd: 0.2,
-        pauseEnd: 0.32,
-        collapseEnd: 0.52,
-        minScale: 0.06
+        anticipationOffset: { x: 0, y: -14 },
+        anticipationEnd: 0.24,
+        pauseEnd: 0.34,
+        collapseEnd: 0.56,
+        collapsedPointSize: 1
       },
       pathMotion: {
         kind: "filament-stream",
-        formStart: 0.84,
-        filamentWidth: 1.2
+        formStart: 0.88,
+        filamentWidth: 0.7
       },
       targetMotion: {
         kind: "late-radical-form",
-        formStart: 0.84
+        formStart: 0.88
       },
       start: 0,
       end: 1,
@@ -1136,6 +1136,22 @@ function findOrCreateArtifactPixelFlowContext(
     plan.pixelFlowPlan.pathMotion?.kind ?? "direct";
   canvas.dataset["kpEquationMotionArtifactTargetMotion"] =
     plan.pixelFlowPlan.targetMotion?.kind ?? "direct";
+  if (plan.pixelFlowPlan.sourceMotion !== undefined) {
+    canvas.dataset["kpEquationMotionArtifactAnticipationOffset"] =
+      `${plan.pixelFlowPlan.sourceMotion.anticipationOffset.x},` +
+      `${plan.pixelFlowPlan.sourceMotion.anticipationOffset.y}`;
+    canvas.dataset["kpEquationMotionArtifactCollapsedPointSize"] = String(
+      plan.pixelFlowPlan.sourceMotion.collapsedPointSize
+    );
+  }
+  if (plan.pixelFlowPlan.pathMotion !== undefined) {
+    canvas.dataset["kpEquationMotionArtifactFilamentWidth"] = String(
+      plan.pixelFlowPlan.pathMotion.filamentWidth
+    );
+    canvas.dataset["kpEquationMotionArtifactFormStart"] = String(
+      plan.pixelFlowPlan.pathMotion.formStart
+    );
+  }
   syncArtifactPixelFlowCanvas(canvas, stageRect, pixelRatio);
   stage.append(canvas);
 
