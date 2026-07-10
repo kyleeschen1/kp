@@ -137,3 +137,146 @@ export function cloneCorrespondenceMap(map: CorrespondenceMap): CorrespondenceMa
     }))
   };
 }
+
+export function composeCorrespondenceMapsSequence(
+  id: string,
+  maps: readonly CorrespondenceMap[]
+): CorrespondenceMap {
+  validateCompositionInput(id, maps);
+
+  return maps.slice(1).reduce(
+    (currentMap, nextMap) => composeTwoCorrespondenceMaps(id, currentMap, nextMap),
+    cloneCorrespondenceMap(maps[0]!)
+  );
+}
+
+export function composeCorrespondenceMapsParallel(
+  id: string,
+  maps: readonly CorrespondenceMap[]
+): CorrespondenceMap {
+  validateCompositionInput(id, maps);
+
+  return {
+    id,
+    records: maps.flatMap((map) =>
+      map.records.map((record) => cloneRecordWithId(record, `${map.id}.${record.id}`))
+    )
+  };
+}
+
+function composeTwoCorrespondenceMaps(
+  id: string,
+  firstMap: CorrespondenceMap,
+  secondMap: CorrespondenceMap
+): CorrespondenceMap {
+  const matchedSecondRecordIds = new Set<string>();
+  const records = firstMap.records.flatMap((firstRecord) => {
+    const matchingSecondRecords = secondMap.records.filter((secondRecord) =>
+      selectorsOverlap(firstRecord.targetSelectorIds, secondRecord.sourceSelectorIds)
+    );
+
+    if (matchingSecondRecords.length === 0) {
+      return [cloneRecordWithId(firstRecord, firstRecord.id)];
+    }
+
+    return matchingSecondRecords.map((secondRecord) => {
+      matchedSecondRecordIds.add(secondRecord.id);
+
+      return composeCorrespondenceRecords(firstMap, firstRecord, secondMap, secondRecord);
+    });
+  });
+  const introducedRecords = secondMap.records
+    .filter(
+      (secondRecord) =>
+        secondRecord.sourceSelectorIds.length === 0 &&
+        !matchedSecondRecordIds.has(secondRecord.id)
+    )
+    .map((record) => cloneRecordWithId(record, `${secondMap.id}.${record.id}`));
+
+  return {
+    id,
+    records: [...records, ...introducedRecords]
+  };
+}
+
+function composeCorrespondenceRecords(
+  firstMap: CorrespondenceMap,
+  firstRecord: SelectorCorrespondenceRecord,
+  secondMap: CorrespondenceMap,
+  secondRecord: SelectorCorrespondenceRecord
+): SelectorCorrespondenceRecord {
+  return {
+    id: `${firstMap.id}.${firstRecord.id}__${secondMap.id}.${secondRecord.id}`,
+    relation: composeCorrespondenceRelation(firstRecord, secondRecord),
+    sourceSelectorIds: [...firstRecord.sourceSelectorIds],
+    targetSelectorIds: [...secondRecord.targetSelectorIds],
+    summary: `${firstRecord.summary}; ${secondRecord.summary}`
+  };
+}
+
+function composeCorrespondenceRelation(
+  firstRecord: SelectorCorrespondenceRecord,
+  secondRecord: SelectorCorrespondenceRecord
+): SelectorCorrespondenceRelationId {
+  if (firstRecord.sourceSelectorIds.length === 0) {
+    return firstRecord.relation;
+  }
+
+  if (secondRecord.targetSelectorIds.length === 0) {
+    return secondRecord.relation;
+  }
+
+  if (firstRecord.relation === "identity") {
+    return secondRecord.relation;
+  }
+
+  if (secondRecord.relation === "identity") {
+    return firstRecord.relation;
+  }
+
+  if (firstRecord.relation === secondRecord.relation) {
+    return firstRecord.relation;
+  }
+
+  if (
+    firstRecord.relation === "role-change" ||
+    secondRecord.relation === "role-change"
+  ) {
+    return "role-change";
+  }
+
+  return "fan-in";
+}
+
+function cloneRecordWithId(
+  record: SelectorCorrespondenceRecord,
+  id: string
+): SelectorCorrespondenceRecord {
+  return {
+    id,
+    relation: record.relation,
+    sourceSelectorIds: [...record.sourceSelectorIds],
+    targetSelectorIds: [...record.targetSelectorIds],
+    summary: record.summary
+  };
+}
+
+function selectorsOverlap(
+  left: readonly string[],
+  right: readonly string[]
+): boolean {
+  const rightSelectors = new Set(right);
+
+  return left.some((selector) => rightSelectors.has(selector));
+}
+
+function validateCompositionInput(
+  id: string,
+  maps: readonly CorrespondenceMap[]
+): void {
+  if (maps.length === 0) {
+    throw new Error(
+      `Correspondence map composition ${id} requires at least one correspondence map.`
+    );
+  }
+}

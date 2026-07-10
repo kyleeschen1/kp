@@ -2,7 +2,49 @@
   "id": "next.kp.correspondence-composition",
   "kind": "next-action",
   "title": "Compose correspondence maps",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation-runtime",
-  "summary": "Compose selector correspondence and provenance across sequential and parallel transformations."
+  "summary": "Added sequence and parallel composition helpers for selector correspondence maps.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/correspondence.ts",
+      "summary": "Correspondence maps can now compose through intermediate selectors or merge independent parallel records with stable namespaced ids."
+    },
+    {
+      "kind": "file",
+      "path": "tests/correspondence-composition.test.ts",
+      "summary": "Covers sequence linking through intermediate selectors, target-only record preservation, parallel namespacing, and empty input validation."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/correspondence-composition.test.ts",
+      "status": "passed",
+      "scope": "focused correspondence composition tests",
+      "checkedAt": "2026-07-10T20:31:25.535Z"
+    },
+    {
+      "command": "npm test -- tests/correspondence-composition.test.ts tests/equation-motion-plan.test.ts tests/equation-transform.test.ts tests/semantic-transformation-composition.test.ts",
+      "status": "passed",
+      "scope": "repo test script including correspondence consumers and transformation composition coverage",
+      "checkedAt": "2026-07-10T20:31:25.565Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T20:31:25.611Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T20:31:25.639Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added sequence and parallel composition helpers for selector correspondence maps."
+  }
 }
