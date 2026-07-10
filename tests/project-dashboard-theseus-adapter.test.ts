@@ -124,6 +124,18 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
         field.value.includes("tests/tutorial-card-manifest.test.ts")
     )
   );
+  assert.ok(
+    tutorialManifestRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Theseus refs" &&
+        field.value.includes("next.kp.tutorial-card-manifest-v0")
+    )
+  );
+  assert.ok(
+    tutorialManifestRow?.searchText?.includes(
+      "decision.kp.semantic-animation-runtime-roadmap"
+    )
+  );
 });
 
 test("KP Theseus dashboard extension command writes JSON payload", () => {

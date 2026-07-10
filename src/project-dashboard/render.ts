@@ -1,6 +1,7 @@
 import type {
   ProjectCard,
   ProjectDashboardData,
+  ProjectDashboardProjectRef,
   ProjectDashboardSampleTarget,
   ProjectDashboardSourceRef,
   ProjectDashboardStatus,
@@ -166,6 +167,7 @@ interface ProjectAgendaAdapterRows {
 interface ProjectAuthoringMetadata {
   readonly maturity?: string | undefined;
   readonly coverage?: readonly string[] | undefined;
+  readonly projectRefs?: readonly ProjectDashboardProjectRef[] | undefined;
   readonly sourceRefs?: readonly ProjectDashboardSourceRef[] | undefined;
   readonly verification?: readonly string[] | undefined;
   readonly blockers?: readonly string[] | undefined;
@@ -465,11 +467,13 @@ function createWorkAgendaRows(
         { label: "Category", value: card.category },
         { label: "Blockers", value: (card.blockers ?? []).join(" ") || "None" },
         ...authoringPreviewFields({
+          projectRefs: card.projectRefs,
           sourceRefs: card.sourceRefs,
           verification: card.verification
         })
       ],
       searchFields: authoringSearchFields({
+        projectRefs: card.projectRefs,
         sourceRefs: card.sourceRefs,
         verification: card.verification
       })
@@ -496,8 +500,10 @@ function createReportAgendaRows(
     previewFields: [
       { label: "Grade", value: theme.grade ?? "Not reviewed" },
       { label: "Last reviewed", value: theme.lastReviewedOn ?? "Not reviewed" },
-      { label: "Risks", value: theme.risks.join(" ") || "None recorded" }
-    ]
+      { label: "Risks", value: theme.risks.join(" ") || "None recorded" },
+      ...previewProjectRefFields(theme.projectRefs)
+    ],
+    searchFields: projectRefSearchFields(theme.projectRefs)
   }));
 }
 
@@ -533,6 +539,7 @@ function createGalleryAgendaRows(
         ...authoringPreviewFields({
           maturity: item.maturity,
           coverage: item.coverage,
+          projectRefs: item.projectRefs,
           sourceRefs: item.sourceRefs,
           verification: item.verification,
           blockers: item.blockers
@@ -545,6 +552,7 @@ function createGalleryAgendaRows(
         ...authoringSearchFields({
           maturity: item.maturity,
           coverage: item.coverage,
+          projectRefs: item.projectRefs,
           sourceRefs: item.sourceRefs,
           verification: item.verification,
           blockers: item.blockers
@@ -971,6 +979,7 @@ function authoringPreviewFields(
       ? []
       : [{ label: "Maturity", value: metadata.maturity }]),
     ...previewListField("Coverage", metadata.coverage),
+    ...previewProjectRefFields(metadata.projectRefs),
     ...previewSourceRefFields(metadata.sourceRefs),
     ...previewListField("Verification", metadata.verification),
     ...previewListField("Authoring blockers", metadata.blockers)
@@ -1007,6 +1016,7 @@ function authoringSearchFields(
   return [
     metadata.maturity ?? "",
     ...(metadata.coverage ?? []),
+    ...projectRefSearchFields(metadata.projectRefs),
     ...(metadata.sourceRefs ?? []).flatMap((sourceRef) => [
       sourceRef.label,
       sourceRef.href
@@ -1014,6 +1024,56 @@ function authoringSearchFields(
     ...(metadata.verification ?? []),
     ...(metadata.blockers ?? [])
   ];
+}
+
+function previewProjectRefFields(
+  projectRefs: readonly ProjectDashboardProjectRef[] | undefined
+): readonly ProjectAgendaPreviewField[] {
+  const refs = projectRefs ?? [];
+
+  return [
+    previewProjectRefField("roadmap", "Roadmap refs", refs),
+    previewProjectRefField("thread", "Thread refs", refs),
+    previewProjectRefField("review", "Review refs", refs),
+    previewProjectRefField("decision", "Decision refs", refs),
+    previewProjectRefField("theseus", "Theseus refs", refs)
+  ].filter((field): field is ProjectAgendaPreviewField => field !== undefined);
+}
+
+function previewProjectRefField(
+  kind: ProjectDashboardProjectRef["kind"],
+  label: string,
+  refs: readonly ProjectDashboardProjectRef[]
+): ProjectAgendaPreviewField | undefined {
+  const matchingRefs = refs.filter((ref) => ref.kind === kind);
+
+  return matchingRefs.length === 0
+    ? undefined
+    : {
+        label,
+        value: matchingRefs.map(formatProjectRef).join(", ")
+      };
+}
+
+function projectRefSearchFields(
+  projectRefs: readonly ProjectDashboardProjectRef[] | undefined
+): readonly string[] {
+  return (projectRefs ?? []).flatMap((projectRef) => [
+    projectRef.kind,
+    projectRef.label,
+    projectRef.href ?? "",
+    projectRef.id ?? "",
+    projectRef.summary ?? ""
+  ]);
+}
+
+function formatProjectRef(projectRef: ProjectDashboardProjectRef): string {
+  const target = projectRef.href ?? projectRef.id;
+  const targetText = target === undefined ? "" : `: ${target}`;
+  const summaryText =
+    projectRef.summary === undefined ? "" : ` (${projectRef.summary})`;
+
+  return `${projectRef.label}${targetText}${summaryText}`;
 }
 
 function sampleTargetSearchFields(

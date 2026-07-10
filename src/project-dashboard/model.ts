@@ -16,6 +16,13 @@ export type ProjectDashboardStatus =
 
 export type ProjectDashboardPriority = "critical" | "high" | "medium" | "low";
 
+export type ProjectDashboardProjectRefKind =
+  | "decision"
+  | "review"
+  | "roadmap"
+  | "theseus"
+  | "thread";
+
 export type ProjectGalleryKind =
   | "animation"
   | "semantic-transform"
@@ -64,6 +71,7 @@ export interface ProjectCard {
   readonly blockers?: readonly string[];
   readonly children?: readonly ProjectCard[];
   readonly relatedIds?: readonly string[];
+  readonly projectRefs?: readonly ProjectDashboardProjectRef[];
   readonly sourceRefs?: readonly ProjectDashboardSourceRef[];
   readonly verification?: readonly string[];
 }
@@ -78,6 +86,7 @@ export interface ProjectGalleryItem {
   readonly domains: readonly string[];
   readonly interfaces?: readonly string[];
   readonly relatedIds?: readonly string[];
+  readonly projectRefs?: readonly ProjectDashboardProjectRef[];
   readonly maturity?: string;
   readonly coverage?: readonly string[];
   readonly sourceRefs?: readonly ProjectDashboardSourceRef[];
@@ -89,6 +98,14 @@ export interface ProjectGalleryItem {
 export interface ProjectDashboardSourceRef {
   readonly label: string;
   readonly href: string;
+}
+
+export interface ProjectDashboardProjectRef {
+  readonly kind: ProjectDashboardProjectRefKind;
+  readonly label: string;
+  readonly href?: string | undefined;
+  readonly id?: string | undefined;
+  readonly summary?: string | undefined;
 }
 
 export interface ProjectReportTheme {
@@ -104,6 +121,7 @@ export interface ProjectReportTheme {
   readonly recommendedNextActions: readonly string[];
   readonly tags: readonly string[];
   readonly relatedIds?: readonly string[];
+  readonly projectRefs?: readonly ProjectDashboardProjectRef[];
 }
 
 export interface ProjectReportEvidence {
@@ -319,6 +337,7 @@ function cardMatches(card: ProjectCard, normalizedQuery: string): boolean {
       card.summary,
       ...card.tags,
       ...(card.blockers ?? []),
+      ...projectRefSearchFields(card.projectRefs),
       ...sourceRefSearchFields(card.sourceRefs),
       ...(card.verification ?? [])
     ],
@@ -342,6 +361,7 @@ function galleryItemMatches(
       ...(item.interfaces ?? []),
       item.maturity ?? "",
       ...(item.coverage ?? []),
+      ...projectRefSearchFields(item.projectRefs),
       ...sourceRefSearchFields(item.sourceRefs),
       ...(item.verification ?? []),
       ...(item.blockers ?? []),
@@ -408,10 +428,23 @@ function reportThemeMatches(
       ...theme.evidence.flatMap((entry) => [entry.label, entry.href]),
       ...theme.risks,
       ...theme.recommendedNextActions,
-      ...theme.tags
+      ...theme.tags,
+      ...projectRefSearchFields(theme.projectRefs)
     ],
     normalizedQuery
   );
+}
+
+function projectRefSearchFields(
+  projectRefs: readonly ProjectDashboardProjectRef[] | undefined
+): readonly string[] {
+  return (projectRefs ?? []).flatMap((projectRef) => [
+    projectRef.kind,
+    projectRef.label,
+    projectRef.href ?? "",
+    projectRef.id ?? "",
+    projectRef.summary ?? ""
+  ]);
 }
 
 function textFieldsMatch(

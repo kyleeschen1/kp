@@ -25,6 +25,35 @@ export const projectDashboardData: ProjectDashboardData = {
       summary:
         "Define the shared clock, playhead, sampler, selector, and render-index contract across equations, graphs, simulations, and code.",
       tags: ["protocol", "timeline", "rendering", "identity"],
+      projectRefs: [
+        {
+          kind: "roadmap",
+          label: "KP roadmap",
+          href: "docs/project/roadmap.md"
+        },
+        {
+          kind: "thread",
+          label: "Semantic runtime thread",
+          href: "docs/project/threads/semantic-runtime.md"
+        },
+        {
+          kind: "review",
+          label: "July 10 next-step review",
+          href: "docs/project/reviews/2026-07-10-next-step-review.md"
+        },
+        {
+          kind: "decision",
+          label: "Semantic runtime roadmap decision",
+          href: "docs/theseus/nodes/decisions/decision.kp.semantic-animation-runtime-roadmap.json",
+          id: "decision.kp.semantic-animation-runtime-roadmap"
+        },
+        {
+          kind: "theseus",
+          label: "Semantic runtime roadmap loop",
+          href: "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-runtime-roadmap-loop-v1.json",
+          id: "run-contract.kp.semantic-runtime-roadmap-loop-v1"
+        }
+      ],
       sourceRefs: [
         { label: "Animation kernel", href: "src/animation/kernel.ts" },
         {
@@ -815,6 +844,30 @@ export const projectDashboardData: ProjectDashboardData = {
         "fallback render",
         "export profiles"
       ],
+      projectRefs: [
+        {
+          kind: "roadmap",
+          label: "KP roadmap",
+          href: "docs/project/roadmap.md"
+        },
+        {
+          kind: "thread",
+          label: "Semantic runtime thread",
+          href: "docs/project/threads/semantic-runtime.md"
+        },
+        {
+          kind: "decision",
+          label: "Semantic runtime roadmap decision",
+          href: "docs/theseus/nodes/decisions/decision.kp.semantic-animation-runtime-roadmap.json",
+          id: "decision.kp.semantic-animation-runtime-roadmap"
+        },
+        {
+          kind: "theseus",
+          label: "Tutorial card manifest slice",
+          href: "docs/theseus/nodes/next-actions/next.kp.tutorial-card-manifest-v0.json",
+          id: "next.kp.tutorial-card-manifest-v0"
+        }
+      ],
       sourceRefs: [
         {
           label: "Tutorial card manifest API",
@@ -960,6 +1013,24 @@ export const projectDashboardData: ProjectDashboardData = {
         "Promote the synchronized panel sample from launch metadata into an actual rendered preview."
       ],
       tags: ["runtime", "semantic-objects", "layout", "timeline", "readiness"],
+      projectRefs: [
+        {
+          kind: "roadmap",
+          label: "KP roadmap",
+          href: "docs/project/roadmap.md"
+        },
+        {
+          kind: "review",
+          label: "July 10 next-step review",
+          href: "docs/project/reviews/2026-07-10-next-step-review.md"
+        },
+        {
+          kind: "theseus",
+          label: "Semantic runtime roadmap loop",
+          href: "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-runtime-roadmap-loop-v1.json",
+          id: "run-contract.kp.semantic-runtime-roadmap-loop-v1"
+        }
+      ],
       relatedIds: [
         "work-rendering-time-protocol",
         "gallery-rendering-time-api",

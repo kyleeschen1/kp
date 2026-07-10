@@ -2,7 +2,69 @@
   "id": "next.kp.dashboard-roadmap-writeback",
   "kind": "next-action",
   "title": "Surface roadmap refs in dashboard",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.dashboard",
-  "summary": "Make dashboard rows surface project-doc roadmap, thread, review, and decision refs alongside Theseus operational refs."
+  "summary": "Surfaced project-doc and Theseus roadmap refs across dashboard rows, search, previews, and exported gallery metadata.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/model.ts",
+      "summary": "Adds typed roadmap, thread, review, decision, and Theseus refs to dashboard cards, gallery items, and report themes, including search facets."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Renders grouped project refs in selected row previews and includes them in agenda search fields."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/theseus-adapter.ts",
+      "summary": "Exports grouped project refs and search text through the KP Theseus dashboard gallery adapter."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Adds roadmap/thread/review/decision/Theseus refs to semantic runtime, runtime readiness, and tutorial manifest rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers selected preview ref fields and fuzzy search over project and Theseus refs."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-theseus-adapter.test.ts",
+      "summary": "Covers exported Theseus ref fields and ref search text for the tutorial manifest row."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "focused dashboard roadmap ref tests",
+      "checkedAt": "2026-07-10T21:35:21.777Z"
+    },
+    {
+      "command": "npm test -- tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "project dashboard regression suite",
+      "checkedAt": "2026-07-10T21:35:21.799Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-10T21:35:21.820Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-10T21:35:21.839Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Surfaced project-doc and Theseus roadmap refs across dashboard rows, search, previews, and exported gallery metadata."
+  }
 }

@@ -215,6 +215,33 @@ test("renderProjectDashboard renders a shared selected row preview", () => {
   );
 });
 
+test("renderProjectDashboard surfaces project and Theseus refs in selected preview", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "work-rendering-time-protocol"
+  });
+
+  assert.match(
+    html,
+    /data-kp-preview-field="Roadmap refs"[^>]*>[\s\S]*docs\/project\/roadmap\.md/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Thread refs"[^>]*>[\s\S]*docs\/project\/threads\/semantic-runtime\.md/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Review refs"[^>]*>[\s\S]*docs\/project\/reviews\/2026-07-10-next-step-review\.md/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Decision refs"[^>]*>[\s\S]*decision\.kp\.semantic-animation-runtime-roadmap/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Theseus refs"[^>]*>[\s\S]*run-contract\.kp\.semantic-runtime-roadmap-loop-v1/
+  );
+});
+
 test("renderProjectDashboard selects API rows into the shared preview", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "api-semantic-matrix"
@@ -673,6 +700,18 @@ test("filterProjectDashboardData finds cards and gallery items by text facets", 
       "transform-rename-variable",
       "tutorial-card-manifest-v0"
     ]
+  );
+
+  const refResult = filterProjectDashboardData(
+    projectDashboardData,
+    "decision.kp.semantic-animation-runtime-roadmap"
+  );
+  assert.deepEqual(
+    refResult.cards.map((card) => card.id),
+    ["work-rendering-time-protocol"]
+  );
+  assert.ok(
+    refResult.gallery.some((item) => item.id === "tutorial-card-manifest-v0")
   );
 
   const notationResult = filterProjectDashboardData(

@@ -11,6 +11,7 @@ import {
 import { projectDashboardData } from "./data.ts";
 import type {
   ProjectDashboardData,
+  ProjectDashboardProjectRef,
   ProjectDashboardSampleTarget,
   ProjectDashboardSourceRef,
   ProjectGalleryItem
@@ -180,6 +181,7 @@ function galleryItemRow(item: ProjectGalleryItem): KpTheseusDashboardRow {
         ...(item.coverage === undefined
           ? []
           : [{ label: "Coverage", value: item.coverage.join(", ") }]),
+        ...projectRefPreviewFields(item.projectRefs),
         ...(item.sourceRefs === undefined
           ? []
           : [{ label: "Source refs", value: sourceRefsText(item.sourceRefs) }]),
@@ -207,6 +209,7 @@ function galleryItemRow(item: ProjectGalleryItem): KpTheseusDashboardRow {
       ...(item.interfaces ?? []),
       item.maturity ?? "",
       ...(item.coverage ?? []),
+      ...projectRefSearchFields(item.projectRefs),
       ...(item.sourceRefs ?? []).flatMap((sourceRef) => [
         sourceRef.label,
         sourceRef.href
@@ -256,6 +259,58 @@ function sourceRefsText(
   return sourceRefs
     .map((sourceRef) => `${sourceRef.label}: ${sourceRef.href}`)
     .join(", ");
+}
+
+function projectRefPreviewFields(
+  projectRefs: readonly ProjectDashboardProjectRef[] | undefined
+): readonly KpTheseusDashboardPreviewField[] {
+  const refs = projectRefs ?? [];
+
+  return [
+    projectRefPreviewField("roadmap", "Roadmap refs", refs),
+    projectRefPreviewField("thread", "Thread refs", refs),
+    projectRefPreviewField("review", "Review refs", refs),
+    projectRefPreviewField("decision", "Decision refs", refs),
+    projectRefPreviewField("theseus", "Theseus refs", refs)
+  ].filter(
+    (field): field is KpTheseusDashboardPreviewField => field !== undefined
+  );
+}
+
+function projectRefPreviewField(
+  kind: ProjectDashboardProjectRef["kind"],
+  label: string,
+  refs: readonly ProjectDashboardProjectRef[]
+): KpTheseusDashboardPreviewField | undefined {
+  const matchingRefs = refs.filter((ref) => ref.kind === kind);
+
+  return matchingRefs.length === 0
+    ? undefined
+    : {
+        label,
+        value: matchingRefs.map(projectRefText).join(", ")
+      };
+}
+
+function projectRefSearchFields(
+  projectRefs: readonly ProjectDashboardProjectRef[] | undefined
+): readonly string[] {
+  return (projectRefs ?? []).flatMap((projectRef) => [
+    projectRef.kind,
+    projectRef.label,
+    projectRef.href ?? "",
+    projectRef.id ?? "",
+    projectRef.summary ?? ""
+  ]);
+}
+
+function projectRefText(projectRef: ProjectDashboardProjectRef): string {
+  const target = projectRef.href ?? projectRef.id;
+  const targetText = target === undefined ? "" : `: ${target}`;
+  const summaryText =
+    projectRef.summary === undefined ? "" : ` (${projectRef.summary})`;
+
+  return `${projectRef.label}${targetText}${summaryText}`;
 }
 
 function sampleTargetsText(
