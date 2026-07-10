@@ -281,6 +281,101 @@ test("radical artifact handoff keeps async-ready pending canvas hidden", async (
   expect(pendingReadyState.targetCloneOpacity).toBeGreaterThan(0.9);
 });
 
+test("radical artifact keeps readable exponent DOM-owned during early source phase", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  const demo = page.locator("[data-kp-equation-motion-demo]");
+  const animationSelect = demo.locator(
+    '[data-action="set-equation-motion-animation"]'
+  );
+
+  await animationSelect.selectOption("fixture-radical-rewrite-power-as-root");
+
+  const earlySourceState = await page.evaluate(async () => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.05);
+
+    await new Promise<HTMLCanvasElement>((resolve, reject) => {
+      const readOverlay = () =>
+        demoElement.querySelector<HTMLCanvasElement>(
+          '[data-kp-equation-motion-artifact-overlay][data-kp-equation-motion-artifact-ready="true"]'
+        );
+      const existingOverlay = readOverlay();
+
+      if (existingOverlay !== null) {
+        resolve(existingOverlay);
+        return;
+      }
+
+      const observer = new MutationObserver(() => {
+        const nextOverlay = readOverlay();
+
+        if (nextOverlay !== null) {
+          window.clearTimeout(timeout);
+          observer.disconnect();
+          resolve(nextOverlay);
+        }
+      });
+      const timeout = window.setTimeout(() => {
+        observer.disconnect();
+        reject(new Error("Expected early radical artifact overlay to become ready."));
+      }, 5_000);
+
+      observer.observe(demoElement, {
+        attributeFilter: ["data-kp-equation-motion-artifact-ready"],
+        attributes: true,
+        childList: true,
+        subtree: true
+      });
+    });
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.05);
+    await new Promise<void>((resolve) => window.requestAnimationFrame(() => resolve()));
+
+    const overlay = demoElement.querySelector<HTMLCanvasElement>(
+      '[data-kp-equation-motion-artifact-overlay][data-kp-equation-motion-artifact-ready="true"]'
+    );
+
+    if (overlay === null) {
+      throw new Error("Expected early radical artifact overlay to stay ready.");
+    }
+
+    const sourceExponentClone = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.source.exponent"]'
+    );
+
+    if (sourceExponentClone === null) {
+      throw new Error("Expected source exponent clone.");
+    }
+
+    return {
+      handoff: overlay.dataset["kpEquationMotionArtifactHandoff"],
+      overlayOpacity: window.getComputedStyle(overlay).opacity,
+      sourceExponentVisibility:
+        window.getComputedStyle(sourceExponentClone).visibility,
+      sourceExponentOpacity:
+        Number(window.getComputedStyle(sourceExponentClone).opacity)
+    };
+  });
+
+  expect(earlySourceState).toEqual({
+    handoff: "source-dom",
+    overlayOpacity: "0",
+    sourceExponentVisibility: "visible",
+    sourceExponentOpacity: expect.any(Number)
+  });
+  expect(earlySourceState.sourceExponentOpacity).toBeGreaterThan(0.9);
+});
+
 test("editor equation motion demo uses semantic playback plans", async ({
   page
 }) => {

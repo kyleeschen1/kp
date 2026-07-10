@@ -18,6 +18,7 @@ import {
 } from "../rendering/equation-cancel-particles-webgl.ts";
 import {
   createKatexArtifactSeedRevealRenderer,
+  sampleKatexArtifactSeedRevealProgress,
   type KatexArtifactSeedRevealPlan,
   type KatexArtifactSeedRevealRenderer
 } from "../rendering/katex-artifact-seed-reveal.ts";
@@ -49,6 +50,8 @@ const EQUATION_MOTION_BEAT_TIMELINE = linearEquationDemoBeatTimeline;
 const EQUATION_MOTION_ENTER_INITIAL_SCALE = 0.82;
 const EQUATION_MOTION_DEMO_BEAT_LABEL_COUNT = 50;
 const EQUATION_MOTION_ARTIFACT_DOM_ENDPOINT_WINDOW = 0.04;
+const EQUATION_MOTION_ARTIFACT_SOURCE_CANVAS_TAKEOVER_START = 0.22;
+const EQUATION_MOTION_ARTIFACT_SOURCE_CANVAS_TAKEOVER_END = 0.34;
 const activeAnimations = new WeakMap<HTMLElement, ActiveEquationMotionAnimation>();
 const pausedAnimations = new WeakMap<HTMLElement, PausedEquationMotionAnimation>();
 const activeRenderContexts = new WeakMap<HTMLElement, EquationMotionRenderContext>();
@@ -121,6 +124,11 @@ interface EquationArtifactSeedRevealContext {
   renderer: KatexArtifactSeedRevealRenderer | undefined;
   disposed: boolean;
   lastProgress: number;
+}
+
+interface EquationArtifactRenderState {
+  readonly hiddenMotionIds: ReadonlySet<string>;
+  readonly domOpacityByMotionId: ReadonlyMap<string, number>;
 }
 
 interface ActiveEquationMotionAnimation {
@@ -685,7 +693,7 @@ function renderEquationMotionFrame(
     "simplify-into",
     "final-simplify-reveal"
   );
-  const artifactMotionIds = renderArtifactSeedReveal(
+  const artifactRenderState = renderArtifactSeedReveal(
     demo,
     plan,
     context,
@@ -748,16 +756,20 @@ function renderEquationMotionFrame(
         : context.planTargetTokens.get(token.targetMotionId);
 
     if (sourceToken !== undefined && targetToken !== undefined) {
+      const sourceHidden = isArtifactMotionHidden(
+        artifactRenderState,
+        token.sourceMotionId
+      );
       applyEquationMotionTokenStyle(
         sourceToken.motionElement,
-        token.sourceMotionId !== undefined &&
-          artifactMotionIds.has(token.sourceMotionId)
+        sourceHidden
           ? hiddenTokenPose()
-          : frameToken.pose,
-        token.sourceMotionId !== undefined &&
-          artifactMotionIds.has(token.sourceMotionId)
-          ? "hidden"
-          : "visible"
+          : applyArtifactDomOpacity(
+              frameToken.pose,
+              artifactRenderState,
+              token.sourceMotionId
+            ),
+        sourceHidden ? "hidden" : "visible"
       );
       applyEquationMotionTokenStyle(
         targetToken.motionElement,
@@ -769,8 +781,7 @@ function renderEquationMotionFrame(
 
     if (
       sourceToken !== undefined &&
-      token.sourceMotionId !== undefined &&
-      artifactMotionIds.has(token.sourceMotionId)
+      isArtifactMotionHidden(artifactRenderState, token.sourceMotionId)
     ) {
       applyEquationMotionTokenStyle(
         sourceToken.motionElement,
@@ -782,8 +793,7 @@ function renderEquationMotionFrame(
 
     if (
       targetToken !== undefined &&
-      token.targetMotionId !== undefined &&
-      artifactMotionIds.has(token.targetMotionId)
+      isArtifactMotionHidden(artifactRenderState, token.targetMotionId)
     ) {
       applyEquationMotionTokenStyle(
         targetToken.motionElement,
@@ -794,10 +804,9 @@ function renderEquationMotionFrame(
     }
 
     if (sourceToken !== undefined) {
-      applyEquationMotionTokenStyle(
-        sourceToken.motionElement,
+      const pose =
         token.lifecycle === "cancel" &&
-          cancellationGroup?.tokenIds.has(token.id) === true
+        cancellationGroup?.tokenIds.has(token.id) === true
           ? cancellationTokenPose(
               sourceToken,
               cancellationGroup,
@@ -815,16 +824,23 @@ function renderEquationMotionFrame(
                 finalSimplifyCollapsePhase,
                 collapseScale
               )
-          : frameToken.pose,
+          : frameToken.pose;
+
+      applyEquationMotionTokenStyle(
+        sourceToken.motionElement,
+        applyArtifactDomOpacity(
+          pose,
+          artifactRenderState,
+          token.sourceMotionId
+        ),
         "visible"
       );
     }
 
     if (targetToken !== undefined) {
-      applyEquationMotionTokenStyle(
-        targetToken.motionElement,
+      const pose =
         token.id === finalSimplifyGroup?.targetTokenId &&
-          finalSimplifyRevealPhase !== undefined
+        finalSimplifyRevealPhase !== undefined
           ? finalSimplifyTargetTokenPose(
               targetToken,
               finalSimplifyGroup,
@@ -834,7 +850,15 @@ function renderEquationMotionFrame(
             )
           : token.entryEffect === "direct"
             ? frameToken.pose
-            : addedObjectPose(frameToken.pose, frame.progress),
+            : addedObjectPose(frameToken.pose, frame.progress);
+
+      applyEquationMotionTokenStyle(
+        targetToken.motionElement,
+        applyArtifactDomOpacity(
+          pose,
+          artifactRenderState,
+          token.targetMotionId
+        ),
         "visible"
       );
     }
@@ -1075,12 +1099,47 @@ function hideInternalKatexMotionElement(element: HTMLElement): void {
   element.style.willChange = "";
 }
 
+function emptyArtifactRenderState(): EquationArtifactRenderState {
+  return {
+    hiddenMotionIds: new Set(),
+    domOpacityByMotionId: new Map()
+  };
+}
+
+function isArtifactMotionHidden(
+  state: EquationArtifactRenderState,
+  motionId: string | undefined
+): boolean {
+  return motionId !== undefined && state.hiddenMotionIds.has(motionId);
+}
+
+function applyArtifactDomOpacity(
+  pose: MotionPose,
+  state: EquationArtifactRenderState,
+  motionId: string | undefined
+): MotionPose {
+  if (motionId === undefined) {
+    return pose;
+  }
+
+  const opacity = state.domOpacityByMotionId.get(motionId);
+
+  if (opacity === undefined) {
+    return pose;
+  }
+
+  return {
+    ...pose,
+    opacity: pose.opacity * opacity
+  };
+}
+
 function renderArtifactSeedReveal(
   demo: HTMLElement,
   plan: EquationMotionPlan,
   context: EquationMotionRenderContext,
   progress: number
-): ReadonlySet<string> {
+): EquationArtifactRenderState {
   const seedRevealPlan = createRadicalArtifactSeedRevealPlan(plan, context);
   // The canvas owns the abstract middle of this artifact transform; readable
   // endpoint typography stays DOM-rendered to avoid canvas-vs-KaTeX seams.
@@ -1090,7 +1149,7 @@ function renderArtifactSeedReveal(
 
   if (seedRevealPlan === undefined || useDomEndpointRenderer) {
     clearArtifactSeedReveal(demo);
-    return new Set();
+    return emptyArtifactRenderState();
   }
 
   const renderContext = findOrCreateArtifactSeedRevealContext(
@@ -1104,12 +1163,47 @@ function renderArtifactSeedReveal(
   delete demo.dataset["kpEquationMotionArtifactFallbackReason"];
 
   if (renderContext.renderer !== undefined) {
+    const sourceCanvasOpacity = sourceArtifactCanvasTakeoverProgress(
+      seedRevealPlan.seedRevealPlan,
+      progress
+    );
+
     renderContext.renderer.render(progress);
     renderContext.canvas.dataset["kpEquationMotionArtifactReady"] = "true";
-    renderContext.canvas.dataset["kpEquationMotionArtifactHandoff"] = "true";
-    renderContext.canvas.style.opacity = "1";
+    renderContext.canvas.style.opacity =
+      formatEquationMotionProgress(sourceCanvasOpacity);
 
-    return new Set([seedRevealPlan.sourceMotionId, seedRevealPlan.targetMotionId]);
+    if (sourceCanvasOpacity <= 0.001) {
+      renderContext.canvas.dataset["kpEquationMotionArtifactHandoff"] =
+        "source-dom";
+
+      return emptyArtifactRenderState();
+    }
+
+    if (sourceCanvasOpacity < 0.999) {
+      renderContext.canvas.dataset["kpEquationMotionArtifactHandoff"] =
+        "source-crossfade";
+
+      return {
+        hiddenMotionIds: new Set(),
+        domOpacityByMotionId: new Map([
+          [
+            seedRevealPlan.sourceMotionId,
+            roundEquationMotionProgress(1 - sourceCanvasOpacity)
+          ]
+        ])
+      };
+    }
+
+    renderContext.canvas.dataset["kpEquationMotionArtifactHandoff"] = "true";
+
+    return {
+      hiddenMotionIds: new Set([
+        seedRevealPlan.sourceMotionId,
+        seedRevealPlan.targetMotionId
+      ]),
+      domOpacityByMotionId: new Map()
+    };
   }
 
   // The texture atlas is created asynchronously after font readiness. Until the
@@ -1117,7 +1211,36 @@ function renderArtifactSeedReveal(
   renderContext.canvas.dataset["kpEquationMotionArtifactHandoff"] = "pending";
   renderContext.canvas.style.opacity = "0";
 
-  return new Set();
+  return emptyArtifactRenderState();
+}
+
+function sourceArtifactCanvasTakeoverProgress(
+  plan: KatexArtifactSeedRevealPlan,
+  progress: number
+): number {
+  const localProgress = sampleKatexArtifactSeedRevealProgress(plan, progress);
+
+  // Keep readable KaTeX text DOM-owned. The canvas takes over only once the
+  // exponent is entering its abstract collapse, avoiding a bitmap/text seam.
+  return smoothProgressBetween(
+    EQUATION_MOTION_ARTIFACT_SOURCE_CANVAS_TAKEOVER_START,
+    EQUATION_MOTION_ARTIFACT_SOURCE_CANVAS_TAKEOVER_END,
+    localProgress
+  );
+}
+
+function smoothProgressBetween(
+  start: number,
+  end: number,
+  value: number
+): number {
+  if (end <= start) {
+    return value >= end ? 1 : 0;
+  }
+
+  const progress = clampNumber((value - start) / (end - start), 0, 1);
+
+  return progress * progress * (3 - 2 * progress);
 }
 
 function createRadicalArtifactSeedRevealPlan(
@@ -2407,7 +2530,11 @@ function formatEquationMotionProgress(progress: number): string {
     return String(progress);
   }
 
-  return String(Number(progress.toFixed(6)));
+  return String(roundEquationMotionProgress(progress));
+}
+
+function roundEquationMotionProgress(progress: number): number {
+  return Number(progress.toFixed(6));
 }
 
 function formatPixel(value: number): string {
