@@ -108,13 +108,14 @@
     {
       "id": "task.theseus.dashboard-out-command-v0",
       "title": "Add-dashboard-out-command",
-      "status": "complete",
-      "summary": "dashboard-out now prints or writes reusable dashboard HTML."
+      "summary": "dashboard-out now prints or writes reusable dashboard HTML.",
+      "status": "complete"
     },
     {
       "id": "task.theseus.dashboard-serve-command-v0",
       "title": "Add-dashboard-serve-command",
-      "status": "planned"
+      "status": "complete",
+      "summary": "dashboard-serve now serves reusable dashboard HTML with smoke-mode verification."
     },
     {
       "id": "task.theseus.dashboard-extension-protocol-v0",

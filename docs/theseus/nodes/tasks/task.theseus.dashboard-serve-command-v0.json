@@ -1,0 +1,83 @@
+{
+  "id": "task.theseus.dashboard-serve-command-v0",
+  "kind": "task",
+  "title": "Add Theseus dashboard-serve command",
+  "status": "resolved",
+  "domain": "theseus.dashboard",
+  "summary": "Added dashboard-serve CLI support with reusable HTTP server helpers, smoke mode, command metadata, and synchronized CLI docs.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/dashboard-server.ts",
+      "summary": "Defines reusable dashboard HTTP server, listen, and smoke helpers."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/cli-report-commands.ts",
+      "summary": "Routes dashboard-serve through dashboard HTML and server helpers."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/cli-report-commands.test.ts",
+      "summary": "Covers dashboard-serve smoke behavior."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/src/cli-command-registry.ts",
+      "summary": "Registers dashboard-serve metadata."
+    },
+    {
+      "kind": "file",
+      "path": "/Users/kyleeschen/Code/theseus/docs/cli.md",
+      "summary": "Documents dashboard-serve usage, examples, and options."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test -- src/cli-report-commands.test.ts -t dashboard-serve",
+      "status": "passed",
+      "scope": "Focused dashboard-serve smoke test.",
+      "checkedAt": "2026-07-10T07:17:24.963Z"
+    },
+    {
+      "command": "npm run test -- src/cli-command-registry.test.ts -t registry|docs|dispatch|dashboard-serve",
+      "status": "passed",
+      "scope": "CLI registry/docs tests.",
+      "checkedAt": "2026-07-10T07:17:25.000Z"
+    },
+    {
+      "command": "npm run test -- src/cli-report-commands.test.ts src/cli-command-registry.test.ts src/dashboard-data-builder.test.ts src/dashboard-html.test.ts src/dashboard-client.test.ts",
+      "status": "passed",
+      "scope": "Adjacent CLI and dashboard tests.",
+      "checkedAt": "2026-07-10T07:17:25.021Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Theseus package TypeScript check.",
+      "checkedAt": "2026-07-10T07:17:25.034Z"
+    },
+    {
+      "command": "node bin/theseus.mjs dashboard-serve --project-root /Users/kyleeschen/Code/kp --smoke --port 0",
+      "status": "passed",
+      "scope": "Runtime dashboard-serve smoke check against the KP graph.",
+      "checkedAt": "2026-07-10T07:17:25.048Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Re-run after dashboard server listen error handling change.",
+      "checkedAt": "2026-07-10T07:19:49.517Z"
+    },
+    {
+      "command": "npm run test -- src/cli-report-commands.test.ts -t dashboard-serve",
+      "status": "passed",
+      "checkedAt": "2026-07-10T07:19:49.543Z",
+      "scope": "Re-run after dashboard server listen error handling change."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added dashboard-serve CLI support with reusable HTTP server helpers, smoke mode, command metadata, and synchronized CLI docs."
+  }
+}
