@@ -24,49 +24,69 @@ test("sampleKatexArtifactSeedRevealProgress maps global progress into a reversib
   assert.equal(1 - forward, backward);
 });
 
-test("createKatexArtifactSeedRevealFrame contracts source into a seed and reveals the target from that seed", () => {
+test("createKatexArtifactSeedRevealFrame folds texture pieces into a visible bundle and resolves them asynchronously", () => {
   const plan = seedRevealPlan({});
   const regions = new Map<string, KatexAtlasRegion>([
     ["source-artifact", regionFor("source-artifact")],
     ["target-artifact", regionFor("target-artifact")]
   ]);
   const start = createKatexArtifactSeedRevealFrame(plan, regions, 0);
-  const contracted = createKatexArtifactSeedRevealFrame(plan, regions, 0.55);
-  const vanished = createKatexArtifactSeedRevealFrame(plan, regions, 0.6);
-  const revealing = createKatexArtifactSeedRevealFrame(plan, regions, 0.79);
+  const gathering = createKatexArtifactSeedRevealFrame(plan, regions, 0.4);
+  const bundled = createKatexArtifactSeedRevealFrame(plan, regions, 0.56);
+  const resolving = createKatexArtifactSeedRevealFrame(plan, regions, 0.72);
   const finished = createKatexArtifactSeedRevealFrame(plan, regions, 1);
 
-  assert.deepEqual(
-    start.quads.map((quad) => [quad.tokenId, quad.rect, quad.opacity]),
-    [
-      [
-        "source-artifact",
-        { left: 10, top: 20, width: 30, height: 12 },
-        1
-      ]
-    ]
+  assert.equal(start.pieces.length, 8);
+  assert.ok(start.pieces.every((piece) => piece.tokenId === "source-artifact"));
+  assert.ok(
+    start.pieces.some((piece) => piece.rect.left !== start.pieces[0]?.rect.left)
   );
-  assert.deepEqual(contracted.quads[0]?.rect, {
-    left: 32,
-    top: 24,
-    width: 1,
-    height: 1
-  });
-  assert.ok((contracted.quads[0]?.opacity ?? 0) > 0);
-  assert.deepEqual(
-    vanished.quads.map((quad) => quad.tokenId),
-    ["target-artifact"]
+  assert.ok(
+    gathering.pieces.some((piece) => piece.tokenId === "source-artifact")
   );
-  assert.ok((revealing.quads[0]?.rect.width ?? 0) > 1);
-  assert.ok((revealing.quads[0]?.rect.width ?? 0) < 36);
-  assert.ok((revealing.quads[0]?.opacity ?? 0) > 0);
-  assert.deepEqual(finished.quads[0]?.rect, {
-    left: 50,
-    top: 18,
-    width: 36,
-    height: 16
-  });
-  assert.equal(finished.quads[0]?.opacity, 1);
+  assert.ok(
+    gathering.pieces.some(
+      (piece) => piece.tokenId === "source-artifact" && piece.opacity < 1
+    )
+  );
+  assert.ok(
+    new Set(
+      gathering.pieces
+        .filter((piece) => piece.tokenId === "source-artifact")
+        .map((piece) => Math.round(piece.rect.left * 10) / 10)
+    ).size > 2
+  );
+  assert.ok(
+    bundled.pieces.filter(
+      (piece) =>
+        piece.rect.left >= 32 &&
+        piece.rect.left + piece.rect.width <= 42 &&
+        piece.rect.top >= 22 &&
+        piece.rect.top + piece.rect.height <= 30
+    ).length > 0
+  );
+  assert.ok(
+    resolving.pieces.some(
+      (piece) =>
+        piece.tokenId === "target-artifact" && piece.motion === "dissolve"
+    )
+  );
+  assert.ok(
+    resolving.pieces.some(
+      (piece) => piece.tokenId === "target-artifact" && piece.motion === "fold"
+    )
+  );
+  assert.ok(
+    resolving.pieces.some(
+      (piece) => piece.tokenId === "target-artifact" && piece.opacity < 1
+    )
+  );
+  assert.equal(finished.pieces.length, 16);
+  assert.ok(finished.pieces.every((piece) => piece.tokenId === "target-artifact"));
+  assert.ok(finished.pieces.every((piece) => piece.opacity === 1));
+  assert.ok(
+    new Set(finished.pieces.map((piece) => piece.rect.left)).size > 4
+  );
 });
 
 function seedRevealPlan(overrides: {
@@ -84,17 +104,24 @@ function seedRevealPlan(overrides: {
       tokenId: "target-artifact",
       rect: { left: 50, top: 18, width: 36, height: 16 }
     },
-    seedRect: { left: 32, top: 24, width: 1, height: 1 },
+    bundleRect: { left: 32, top: 22, width: 10, height: 8 },
+    sourceGrid: { columns: 4, rows: 2 },
+    targetGrid: { columns: 8, rows: 2 },
     sourceMotion: {
-      kind: "contract-to-seed" as const,
-      contractEnd: 0.55,
-      fadeStart: 0.56,
-      fadeEnd: 0.6
+      kind: "collapse-to-bundle" as const,
+      collapseEnd: 0.48,
+      fadeStart: 0.34,
+      fadeEnd: 0.56,
+      stagger: 0.08,
+      drift: 1.5
     },
     targetMotion: {
-      kind: "reveal-from-seed" as const,
-      revealStart: 0.58,
-      revealEnd: 1
+      kind: "unfold-from-bundle" as const,
+      revealStart: 0.42,
+      revealEnd: 1,
+      stagger: 0.18,
+      drift: 1.25,
+      dissolveFraction: 0.25
     },
     start: overrides.start ?? 0,
     end: overrides.end ?? 1,

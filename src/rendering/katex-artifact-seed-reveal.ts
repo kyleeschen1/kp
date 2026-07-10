@@ -1,5 +1,4 @@
 import type { EasingName } from "./equation-motion-plan.ts";
-import type { KatexQuad, KatexQuadFrame } from "./katex-webgl-transition.ts";
 import type {
   KatexAtlasRegion,
   KatexTextureAtlas,
@@ -12,16 +11,26 @@ export interface KatexArtifactSeedRevealEndpoint {
 }
 
 export interface KatexArtifactSeedRevealSourceMotion {
-  readonly kind: "contract-to-seed";
-  readonly contractEnd: number;
+  readonly kind: "collapse-to-bundle";
+  readonly collapseEnd: number;
   readonly fadeStart: number;
   readonly fadeEnd: number;
+  readonly stagger: number;
+  readonly drift: number;
 }
 
 export interface KatexArtifactSeedRevealTargetMotion {
-  readonly kind: "reveal-from-seed";
+  readonly kind: "unfold-from-bundle";
   readonly revealStart: number;
   readonly revealEnd: number;
+  readonly stagger: number;
+  readonly drift: number;
+  readonly dissolveFraction: number;
+}
+
+export interface KatexArtifactSeedRevealGrid {
+  readonly columns: number;
+  readonly rows: number;
 }
 
 export interface KatexArtifactSeedRevealPlan {
@@ -29,7 +38,9 @@ export interface KatexArtifactSeedRevealPlan {
   readonly kind: "artifact-seed-reveal";
   readonly source: KatexArtifactSeedRevealEndpoint;
   readonly target: KatexArtifactSeedRevealEndpoint;
-  readonly seedRect: KatexTokenRect;
+  readonly bundleRect: KatexTokenRect;
+  readonly sourceGrid: KatexArtifactSeedRevealGrid;
+  readonly targetGrid: KatexArtifactSeedRevealGrid;
   readonly sourceMotion: KatexArtifactSeedRevealSourceMotion;
   readonly targetMotion: KatexArtifactSeedRevealTargetMotion;
   readonly start: number;
@@ -40,6 +51,26 @@ export interface KatexArtifactSeedRevealPlan {
 export interface KatexArtifactSeedRevealRenderer {
   render(progress: number): void;
   dispose(): void;
+}
+
+export interface KatexArtifactSeedRevealPiece {
+  readonly tokenId: string;
+  readonly rect: KatexTokenRect;
+  readonly opacity: number;
+  readonly region: KatexAtlasRegion;
+  readonly crop: KatexAtlasCropRect;
+  readonly motion: "collapse" | "fold" | "dissolve";
+}
+
+export interface KatexAtlasCropRect {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+}
+
+export interface KatexArtifactSeedRevealFrame {
+  readonly pieces: readonly KatexArtifactSeedRevealPiece[];
 }
 
 export function sampleKatexArtifactSeedRevealProgress(
@@ -63,56 +94,103 @@ export function createKatexArtifactSeedRevealFrame(
   plan: KatexArtifactSeedRevealPlan,
   regions: ReadonlyMap<string, KatexAtlasRegion>,
   progress: number
-): KatexQuadFrame {
+): KatexArtifactSeedRevealFrame {
   const localProgress = sampleKatexArtifactSeedRevealProgress(plan, progress);
-  const quads: KatexQuad[] = [];
+  const pieces: KatexArtifactSeedRevealPiece[] = [];
   const sourceRegion = regions.get(plan.source.tokenId);
   const targetRegion = regions.get(plan.target.tokenId);
 
   if (sourceRegion !== undefined) {
-    const contractProgress = phaseProgress(
-      0,
-      plan.sourceMotion.contractEnd,
-      localProgress
-    );
-    const sourceOpacity = 1 - phaseProgress(
-      plan.sourceMotion.fadeStart,
-      plan.sourceMotion.fadeEnd,
-      localProgress
+    const sourceTiles = createTextureTiles(
+      plan.source.tokenId,
+      plan.source.rect,
+      sourceRegion,
+      plan.sourceGrid
     );
 
-    if (sourceOpacity > 0.001) {
-      quads.push({
+    for (const tile of sourceTiles) {
+      const delay = tileDelay(tile, "source") * plan.sourceMotion.stagger;
+      const collapseProgress = phaseProgress(
+        delay,
+        plan.sourceMotion.collapseEnd + delay,
+        localProgress
+      );
+      const sourceOpacity = 1 - phaseProgress(
+        plan.sourceMotion.fadeStart + delay * 0.35,
+        plan.sourceMotion.fadeEnd + delay * 0.35,
+        localProgress
+      );
+
+      if (sourceOpacity <= 0.001) {
+        continue;
+      }
+
+      pieces.push({
         tokenId: plan.source.tokenId,
-        rect: interpolateRect(
-          plan.source.rect,
-          plan.seedRect,
-          contractProgress
+        rect: driftRect(
+          interpolateRect(
+            tile.rect,
+            bundlePieceRect(plan.bundleRect, tile.index, sourceTiles.length),
+            collapseProgress
+          ),
+          plan.sourceMotion.drift,
+          tile.seed,
+          collapseProgress
         ),
         opacity: sourceOpacity,
-        region: sourceRegion
+        region: sourceRegion,
+        crop: tile.crop,
+        motion: "collapse"
       });
     }
   }
 
   if (targetRegion !== undefined) {
-    const revealProgress = phaseProgress(
-      plan.targetMotion.revealStart,
-      plan.targetMotion.revealEnd,
-      localProgress
+    const targetTiles = createTextureTiles(
+      plan.target.tokenId,
+      plan.target.rect,
+      targetRegion,
+      plan.targetGrid
     );
 
-    if (revealProgress > 0.001) {
-      quads.push({
+    for (const tile of targetTiles) {
+      const shouldDissolve =
+        deterministicUnit(tile.index + 97) < plan.targetMotion.dissolveFraction;
+      const delay =
+        targetFoldOrder(tile) * plan.targetMotion.stagger;
+      const revealProgress = phaseProgress(
+        plan.targetMotion.revealStart + delay,
+        plan.targetMotion.revealEnd,
+        localProgress
+      );
+
+      if (revealProgress <= 0.001) {
+        continue;
+      }
+
+      pieces.push({
         tokenId: plan.target.tokenId,
-        rect: interpolateRect(plan.seedRect, plan.target.rect, revealProgress),
+        rect: shouldDissolve
+          ? tile.rect
+          : driftRect(
+              interpolateRect(
+                bundlePieceRect(plan.bundleRect, tile.index, targetTiles.length),
+                tile.rect,
+                revealProgress
+              ),
+              plan.targetMotion.drift,
+              tile.seed,
+              1 - revealProgress
+            ),
         opacity: revealProgress,
-        region: targetRegion
+        region: targetRegion,
+        crop: tile.crop,
+        motion: shouldDissolve ? "dissolve" : "fold"
       });
     }
   }
 
-  return { quads };
+  return { pieces };
 }
 
 export function createKatexArtifactSeedRevealRenderer(
@@ -138,18 +216,18 @@ export function createKatexArtifactSeedRevealRenderer(
 
       context.clearRect(0, 0, canvas.width, canvas.height);
 
-      for (const quad of createKatexArtifactSeedRevealFrame(
+      for (const piece of createKatexArtifactSeedRevealFrame(
         plan,
         atlas.regions,
         progress
-      ).quads) {
-        const page = atlas.pages[quad.region.page];
+      ).pieces) {
+        const page = atlas.pages[piece.region.page];
 
         if (page === undefined) {
           continue;
         }
 
-        drawQuad(context, page, quad, atlas.pixelRatio);
+        drawPiece(context, page, piece, atlas.pixelRatio);
       }
     },
     dispose() {
@@ -159,24 +237,130 @@ export function createKatexArtifactSeedRevealRenderer(
   };
 }
 
-function drawQuad(
+interface TextureTile {
+  readonly tokenId: string;
+  readonly rect: KatexTokenRect;
+  readonly crop: KatexAtlasCropRect;
+  readonly index: number;
+  readonly column: number;
+  readonly row: number;
+  readonly columns: number;
+  readonly rows: number;
+  readonly seed: number;
+}
+
+function createTextureTiles(
+  tokenId: string,
+  rect: KatexTokenRect,
+  region: KatexAtlasRegion,
+  grid: KatexArtifactSeedRevealGrid
+): readonly TextureTile[] {
+  const columns = Math.max(1, Math.floor(grid.columns));
+  const rows = Math.max(1, Math.floor(grid.rows));
+  const tiles: TextureTile[] = [];
+
+  for (let row = 0; row < rows; row += 1) {
+    for (let column = 0; column < columns; column += 1) {
+      const index = row * columns + column;
+
+      tiles.push({
+        tokenId,
+        rect: {
+          left: rect.left + (rect.width * column) / columns,
+          top: rect.top + (rect.height * row) / rows,
+          width: rect.width / columns,
+          height: rect.height / rows
+        },
+        crop: {
+          x: region.x + (region.width * column) / columns,
+          y: region.y + (region.height * row) / rows,
+          width: region.width / columns,
+          height: region.height / rows
+        },
+        index,
+        column,
+        row,
+        columns,
+        rows,
+        seed: deterministicUnit(index)
+      });
+    }
+  }
+
+  return tiles;
+}
+
+function bundlePieceRect(
+  bundleRect: KatexTokenRect,
+  index: number,
+  count: number
+): KatexTokenRect {
+  const columns = Math.max(1, Math.ceil(Math.sqrt(count)));
+  const rows = Math.max(1, Math.ceil(count / columns));
+  const column = index % columns;
+  const row = Math.floor(index / columns);
+  const cellWidth = bundleRect.width / columns;
+  const cellHeight = bundleRect.height / rows;
+  const width = Math.max(0.8, cellWidth * 0.74);
+  const height = Math.max(0.8, cellHeight * 0.74);
+
+  return {
+    left: bundleRect.left + column * cellWidth + (cellWidth - width) / 2,
+    top: bundleRect.top + row * cellHeight + (cellHeight - height) / 2,
+    width,
+    height
+  };
+}
+
+function tileDelay(tile: TextureTile, direction: "source" | "target"): number {
+  const xOrder = tile.columns <= 1 ? 0 : tile.column / (tile.columns - 1);
+  const yOrder = tile.rows <= 1 ? 0 : tile.row / (tile.rows - 1);
+  const order = direction === "source" ? 0.55 * yOrder + 0.45 * tile.seed : xOrder;
+
+  return clamp01(order);
+}
+
+function targetFoldOrder(tile: TextureTile): number {
+  const xOrder = tile.columns <= 1 ? 0 : tile.column / (tile.columns - 1);
+
+  return clamp01(xOrder * 0.75 + tile.seed * 0.25);
+}
+
+function driftRect(
+  rect: KatexTokenRect,
+  drift: number,
+  seed: number,
+  progress: number
+): KatexTokenRect {
+  const driftProgress = Math.sin(clamp01(progress) * Math.PI);
+  const angle = seed * Math.PI * 2;
+
+  return {
+    left: rect.left + Math.cos(angle) * drift * driftProgress,
+    top: rect.top + Math.sin(angle) * drift * driftProgress,
+    width: rect.width,
+    height: rect.height
+  };
+}
+
+function drawPiece(
   context: CanvasRenderingContext2D,
   page: HTMLCanvasElement,
-  quad: KatexQuad,
+  piece: KatexArtifactSeedRevealPiece,
   pixelRatio: number
 ): void {
   context.save();
-  context.globalAlpha = quad.opacity;
+  context.globalAlpha = piece.opacity;
   context.drawImage(
     page,
-    quad.region.x,
-    quad.region.y,
-    quad.region.width,
-    quad.region.height,
-    quad.rect.left * pixelRatio,
-    quad.rect.top * pixelRatio,
-    quad.rect.width * pixelRatio,
-    quad.rect.height * pixelRatio
+    piece.crop.x,
+    piece.crop.y,
+    piece.crop.width,
+    piece.crop.height,
+    piece.rect.left * pixelRatio,
+    piece.rect.top * pixelRatio,
+    piece.rect.width * pixelRatio,
+    piece.rect.height * pixelRatio
   );
   context.restore();
 }
@@ -204,6 +388,12 @@ function interpolateRect(
 
 function interpolate(source: number, target: number, progress: number): number {
   return source + (target - source) * progress;
+}
+
+function deterministicUnit(index: number): number {
+  const value = Math.sin((index + 1) * 12.9898) * 43758.5453;
+
+  return value - Math.floor(value);
 }
 
 function easedProgress(easing: EasingName, progress: number): number {

@@ -992,7 +992,7 @@ function renderArtifactSeedReveal(
   );
 
   renderContext.lastProgress = progress;
-  demo.dataset["kpEquationMotionArtifactMode"] = "seed-reveal";
+  demo.dataset["kpEquationMotionArtifactMode"] = "fold-resolve";
   delete demo.dataset["kpEquationMotionArtifactFallbackReason"];
 
   if (renderContext.renderer !== undefined) {
@@ -1039,7 +1039,7 @@ function createRadicalArtifactSeedRevealPlan(
   const targetCaptureRect = measureKatexTextureCaptureRect(targetToken.element);
   const sourceLocalRect = viewportRectToLocalRect(sourceCaptureRect, stageRect);
   const targetLocalRect = viewportRectToLocalRect(targetCaptureRect, stageRect);
-  const seedRect = radicalSeedRect(targetLocalRect);
+  const bundleRect = radicalBundleRect(targetLocalRect);
 
   return {
     key: `${context.key}:radical-artifact-seed-reveal`,
@@ -1056,17 +1056,24 @@ function createRadicalArtifactSeedRevealPlan(
         tokenId: targetMotionId,
         rect: targetLocalRect
       },
-      seedRect,
+      bundleRect,
+      sourceGrid: { columns: 6, rows: 3 },
+      targetGrid: { columns: 16, rows: 3 },
       sourceMotion: {
-        kind: "contract-to-seed",
-        contractEnd: 0.55,
-        fadeStart: 0.56,
-        fadeEnd: 0.6
+        kind: "collapse-to-bundle",
+        collapseEnd: 0.48,
+        fadeStart: 0.34,
+        fadeEnd: 0.56,
+        stagger: 0.08,
+        drift: 1.5
       },
       targetMotion: {
-        kind: "reveal-from-seed",
-        revealStart: 0.58,
-        revealEnd: 1
+        kind: "unfold-from-bundle",
+        revealStart: 0.42,
+        revealEnd: 1,
+        stagger: 0.18,
+        drift: 1.25,
+        dissolveFraction: 0.25
       },
       start: 0,
       end: 1,
@@ -1085,12 +1092,12 @@ function createRadicalArtifactSeedRevealPlan(
   };
 }
 
-function radicalSeedRect(targetRect: KatexTokenRect): KatexTokenRect {
+function radicalBundleRect(targetRect: KatexTokenRect): KatexTokenRect {
   return {
-    left: targetRect.left + targetRect.width * 0.18,
-    top: targetRect.top + targetRect.height * 0.62,
-    width: 1,
-    height: 1
+    left: targetRect.left + targetRect.width * 0.14,
+    top: targetRect.top + targetRect.height * 0.55,
+    width: Math.max(8, targetRect.width * 0.2),
+    height: Math.max(6, targetRect.height * 0.22)
   };
 }
 
@@ -1128,21 +1135,25 @@ function findOrCreateArtifactSeedRevealContext(
 
   canvas.className = "equation-motion__artifact-canvas";
   canvas.dataset["kpEquationMotionArtifactOverlay"] = "true";
-  canvas.dataset["kpEquationMotionArtifactRenderer"] = "canvas-seed-reveal";
+  canvas.dataset["kpEquationMotionArtifactRenderer"] = "canvas-fold-resolve";
   canvas.dataset["kpEquationMotionArtifactSource"] = plan.sourceMotionId;
   canvas.dataset["kpEquationMotionArtifactTarget"] = plan.targetMotionId;
   canvas.dataset["kpEquationMotionArtifactSourceMotion"] =
     plan.seedRevealPlan.sourceMotion.kind;
-  canvas.dataset["kpEquationMotionArtifactPathMotion"] = "none";
+  canvas.dataset["kpEquationMotionArtifactPathMotion"] =
+    "fold-to-bundle-then-resolve";
   canvas.dataset["kpEquationMotionArtifactTargetMotion"] =
     plan.seedRevealPlan.targetMotion.kind;
-  canvas.dataset["kpEquationMotionArtifactSeedRect"] =
-    formatDatasetRect(plan.seedRevealPlan.seedRect);
-  canvas.dataset["kpEquationMotionArtifactContractEnd"] = String(
-    plan.seedRevealPlan.sourceMotion.contractEnd
+  canvas.dataset["kpEquationMotionArtifactBundleRect"] =
+    formatDatasetRect(plan.seedRevealPlan.bundleRect);
+  canvas.dataset["kpEquationMotionArtifactCollapseEnd"] = String(
+    plan.seedRevealPlan.sourceMotion.collapseEnd
   );
   canvas.dataset["kpEquationMotionArtifactRevealStart"] = String(
     plan.seedRevealPlan.targetMotion.revealStart
+  );
+  canvas.dataset["kpEquationMotionArtifactDissolveFraction"] = String(
+    plan.seedRevealPlan.targetMotion.dissolveFraction
   );
   syncArtifactCanvas(canvas, stageRect, pixelRatio);
   stage.append(canvas);

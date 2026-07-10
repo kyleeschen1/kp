@@ -450,29 +450,32 @@ test("editor equation motion demo uses semantic playback plans", async ({
       sourceMotion: overlay.dataset["kpEquationMotionArtifactSourceMotion"],
       pathMotion: overlay.dataset["kpEquationMotionArtifactPathMotion"],
       targetMotion: overlay.dataset["kpEquationMotionArtifactTargetMotion"],
-      seedRect: overlay.dataset["kpEquationMotionArtifactSeedRect"],
-      contractEnd: overlay.dataset["kpEquationMotionArtifactContractEnd"],
+      bundleRect: overlay.dataset["kpEquationMotionArtifactBundleRect"],
+      collapseEnd: overlay.dataset["kpEquationMotionArtifactCollapseEnd"],
       revealStart: overlay.dataset["kpEquationMotionArtifactRevealStart"],
+      dissolveFraction:
+        overlay.dataset["kpEquationMotionArtifactDissolveFraction"],
       nonTransparentPixelCount,
       maxAlpha
     };
   });
 
   expect(radicalArtifactState).toEqual({
-    mode: "seed-reveal",
+    mode: "fold-resolve",
     fallbackReason: undefined,
     overlayConnected: true,
     overlayZIndex: "1",
     persistentXTokenZIndex: "2",
-    renderer: "canvas-seed-reveal",
+    renderer: "canvas-fold-resolve",
     sourceTokenId: "radical.rewrite-power-as-root.source.exponent",
     targetTokenId: "radical.rewrite-power-as-root.target.radical",
-    sourceMotion: "contract-to-seed",
-    pathMotion: "none",
-    targetMotion: "reveal-from-seed",
-    seedRect: expect.any(String),
-    contractEnd: "0.55",
-    revealStart: "0.58",
+    sourceMotion: "collapse-to-bundle",
+    pathMotion: "fold-to-bundle-then-resolve",
+    targetMotion: "unfold-from-bundle",
+    bundleRect: expect.any(String),
+    collapseEnd: "0.48",
+    revealStart: "0.42",
+    dissolveFraction: "0.25",
     nonTransparentPixelCount: expect.any(Number),
     maxAlpha: expect.any(Number)
   });
