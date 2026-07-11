@@ -19,6 +19,9 @@ for identity, composition, representation change, and preservation. Functional
 reactive programming supplies the time model. KP supplies the concrete artifact
 types, tests, validators, and renderer seams.
 
+The companion law document is
+`docs/project/principles/kp-composition-laws.md`.
+
 ## Core Rule
 
 Semantic truth is immutable; presentation is derived and mutable.
