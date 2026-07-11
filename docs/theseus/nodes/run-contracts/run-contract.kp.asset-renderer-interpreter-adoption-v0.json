@@ -1,0 +1,178 @@
+{
+  "id": "run-contract.kp.asset-renderer-interpreter-adoption-v0",
+  "kind": "run-contract",
+  "title": "KP asset renderer interpreter adoption",
+  "status": "ready",
+  "domain": "kp.asset-calculus",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.asset-renderer-interpreter-adoption-v0.json",
+      "summary": "Defines the approved 24-slice KP renderer/interpreter adoption loop boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/events/2026-07-11.jsonl",
+      "summary": "Records the run-contract creation event."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "allowedWork": [
+    "Only work on the approved KP renderer/interpreter adoption slices."
+  ],
+  "disallowedWork": [
+    "Do not broaden into visual motif rewrites, CAS/LSP ports, or graph/program interpreters without asking."
+  ],
+  "goal": "Run the approved renderer/interpreter adoption loop for KP semantic assets.",
+  "target": "workflow.kp.dashboard-animation-system",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when verification fails and needs user judgment.",
+    "Stop when the approved slice list is exhausted."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T22:41:16.154Z",
+      "scope": "slice 1 contract materialization"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Created approved KP renderer/interpreter adoption run contract."
+  },
+  "summary": "Reopened after slice-materialization evidence so the approved multi-slice loop can continue.",
+  "slices": [
+    {
+      "id": "slice.kp.asset-renderer.contract-materialization",
+      "title": "Materialize new Theseus run contract",
+      "status": "complete"
+    },
+    {
+      "id": "slice.kp.asset-renderer.boundary-doc",
+      "title": "Define asset-to-interpreter-to-frame-to-view boundary",
+      "status": "ready"
+    },
+    {
+      "id": "slice.kp.asset-renderer.equation-frame-contract",
+      "title": "Define KaTeX/equation frame interpreter contract",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.preservation-diagnostics",
+      "title": "Add preservation-level diagnostics shape",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.linear-solve-frame-interpreter",
+      "title": "Build linear-solve asset-to-equation-frame interpreter",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.asset-behavior-transform-ids",
+      "title": "Source active transformation IDs from asset behavior",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.selector-correspondence",
+      "title": "Resolve equation object and selector correspondence through semantic asset selectors",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.inspection-metadata",
+      "title": "Attach inspection API output to equation frame samples",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.drilldown-metadata",
+      "title": "Wire drill-down hooks into equation frame/sample metadata",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.flashcard-metadata",
+      "title": "Wire flashcard references into equation frame/sample metadata",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.tutorial-card-interpreter-path",
+      "title": "Make linear-solve tutorial card consume interpreter path",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.export-stability",
+      "title": "Keep existing card/export behavior stable after source-of-truth swap",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.selector-law",
+      "title": "Add selector correspondence law helper",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.diagram-associativity-law",
+      "title": "Add diagram associativity law helper",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.interpreter-composition-loss",
+      "title": "Add interpreter composition and loss diagnostics tests",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.flashcard-closure-law",
+      "title": "Add flashcard reference-closure law",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.dashboard-preview-interpreter",
+      "title": "Add dashboard preview interpreter for semantic asset rows",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.linear-solve-dashboard-preview",
+      "title": "Show linear-solve asset preview data from interpreter path",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.drilldown-flashcard-dashboard-rows",
+      "title": "Add preview rows for drill-downs and flashcards",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.generated-algebra-fixture",
+      "title": "Add generated algebra tutorial fixture v0",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.second-solve-example",
+      "title": "Add second simple solve example through generated fixture path",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.generated-family-dashboard",
+      "title": "Add dashboard rows for generated tutorial family readiness",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.browser-smoke-if-needed",
+      "title": "Add browser smoke if UI rendering changes materially",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.asset-renderer.closeout",
+      "status": "planned",
+      "title": "Update roadmap, semantic runtime thread, and loop closeout notes"
+    }
+  ]
+}
