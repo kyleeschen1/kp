@@ -231,7 +231,14 @@
     {
       "id": "next.kp.hosted-export-roadmap-refresh",
       "title": "Refresh roadmap and semantic-runtime thread",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.tutorial.next-kp-hosted-export-roadmap-refresh-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.tutorial.next-kp-hosted-export-roadmap-refresh-v0",
+      "title": "Refresh roadmap and semantic-runtime thread",
+      "summary": "Materialized from stored run-contract slice next.kp.hosted-export-roadmap-refresh in KP hosted package readiness and export sampling loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.hosted-export-loop-closeout",

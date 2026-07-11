@@ -43,7 +43,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Reusable dashboard v1, semantic transition runtime, tutorial-card runtime, and export/embed loops are closed; active queue now continues with tutorial-card browser/embed hardening before media export or broader capability registry work."
+    "summary": "Reusable dashboard v1, semantic transition runtime, tutorial-card runtime, export/embed, and browser-hardening loops are closed; hosted/package readiness and parent-timeline export sampling are in closeout before the next media encoder, capability loading, or graph runtime loop."
   },
   "verificationRecords": [
     {

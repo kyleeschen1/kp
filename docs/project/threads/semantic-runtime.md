@@ -2,9 +2,9 @@
 
 Status: active
 Last Updated: 2026-07-11
-Current Next Action: Choose the next implementation loop: hosted/package
-readiness checks, parent-timeline media export sampling, or SemanticObject
-registry/capability loading.
+Current Next Action: Close the hosted/package readiness and parent-timeline
+export sampling loop, then choose between media encoder integration,
+SemanticObject capability loading, or graph/visual runtime unification.
 
 ## Goal
 
@@ -42,13 +42,21 @@ catalog, a programming tutorial-card sample, generated KaTeX fixture promotion,
 graph parent-timeline diagnostics, and a refreshed export/runtime readiness
 report card.
 
-The tutorial-card browser hardening loop closed on 2026-07-11. It proved concrete launch paths
-and sampled browser surfaces across dashboard launch targets, iframe exports,
-static-step exports, programming cards, execution-trace cards, synchronized
-comparison cards, iframe asset manifests, fallback readiness, nonblank panel
-probes, static-step authored markers, and expanded graph timeline diagnostics.
-The remaining browser-hardening work is hosted/package readiness, not basic
-launch-path discovery.
+The tutorial-card browser hardening loop closed on 2026-07-11. It proved
+concrete launch paths and sampled browser surfaces across dashboard launch
+targets, iframe exports, static-step exports, programming cards,
+execution-trace cards, synchronized comparison cards, iframe asset manifests,
+fallback readiness, nonblank panel probes, static-step authored markers, and
+expanded graph timeline diagnostics.
+
+The hosted/package readiness and parent-timeline export sampling loop is in
+closeout. It has added static-host fixture roots, hosted fallback readiness,
+packaged iframe/static-step browser smokes, dashboard/report rows for hosted
+readiness, parent-timeline media frame export contracts, equation/graph/code
+frame sampling, frame-sequence artifacts and HTML previews, browser probes,
+rewind checks, dependency manifests, and metadata-only export capability
+advertisements. The remaining work in this loop is the closeout review, not
+basic hosted readiness or frame sampling discovery.
 
 ## Accepted Scope
 
@@ -70,9 +78,10 @@ launch-path discovery.
 
 ## Open Questions
 
-- Which hosted/package checks best prove iframe asset manifests, fallback
-  behavior, and dependency paths outside the dev server?
-- What is the smallest useful GIF/video sampler over parent timeline frames?
+- Which media encoder target should consume the frame-sequence artifact first:
+  GIF, MP4/WebM, or a deterministic image sequence?
+- How should export capability advertisements move from sample-specific
+  metadata into the broader SemanticObject registry/capability loading layer?
 - How should static-step export choose richer checkpoints from authored parent
   timeline markers, pauses, and annotations?
 - Which remaining KaTeX transform fixtures should be promoted from curated

@@ -19,18 +19,24 @@ semantics first
 
 ## Active Focus
 
-**Tutorial-card browser/embed hardening.** The export/embed loop closed on
-2026-07-11 with concrete iframe and static-step artifacts. The browser
-hardening loop has now added launch-target smoke coverage, iframe dependency
-closure, fallback readiness, iframe embed policy and asset manifests,
-deterministic seek/nonblank browser probes, programming execution-trace card
-samples, authored static-step markers, expanded graph timeline diagnostics,
-synchronized comparison shells, and dashboard/API catalog rows for the new
-hardening surfaces.
+**Tutorial-card hosted/package readiness and export sampling.** The
+export/embed loop and browser hardening loop both closed on 2026-07-11. KP now
+has concrete iframe and static-step artifacts, launch-target smoke coverage,
+iframe dependency closure, fallback readiness, iframe embed policy and asset
+manifests, deterministic seek/nonblank browser probes, programming
+execution-trace card samples, authored static-step markers, expanded graph
+timeline diagnostics, synchronized comparison shells, and dashboard/API catalog
+rows for those surfaces.
 
-The browser hardening loop is closed. The next implementation choice is between
-hosted/package readiness checks, parent-timeline media export sampling, and the
-SemanticObject registry/capability loading layer.
+The hosted/export sampling loop is now in closeout. It added static-host
+fixture roots, packaged iframe/static-step browser smokes, hosted readiness
+dashboard/report rows, parent-timeline frame export contracts, synchronized
+equation/graph/programming frame sampling, frame-sequence artifacts and
+previews, browser probes, rewind checks, frame-sequence dependency manifests,
+and metadata-only export capability advertisements. The next implementation
+choice should happen after the loop closeout review and should choose between
+media encoder integration, broader SemanticObject capability loading, and graph
+runtime unification.
 
 ## Roadmap Phases
 
@@ -179,20 +185,25 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Add hosted/package readiness checks for iframe artifact dependencies,
-   fallback behavior, and asset manifests outside the dev server.
-2. Start GIF or video export sampling from parent timeline frames after the
-   iframe/static-step/browser paths stay stable.
-3. Expand graph diagnostics from current mesh/conformance checks into richer
+1. Close the hosted/package readiness and parent-timeline export sampling loop
+   with a short review that records what is proven and what remains runtime
+   risk.
+2. Decide the next loop: media encoder integration, broader SemanticObject
+   capability loading, or graph/visual runtime unification.
+3. Start GIF or video encoder integration only after the frame-sequence JSON
+   artifact, HTML preview, browser probe, rewind check, dependency manifest,
+   and capability advertisements stay stable.
+4. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-4. Return to the SemanticObject registry and capability loading layer so export
+5. Return to the SemanticObject registry and capability loading layer so export
    artifacts can advertise exactly what each card needs.
 
 ## Deferred
 
 - Full curriculum and spaced repetition are deferred until object,
   transformation, and computation protocols are reliable.
-- GIF/video export is deferred until iframe and static-step artifacts are
-  concrete and verifiable.
+- GIF/video encoder integration is deferred until the frame-sequence artifact
+  format and dependency advertisements are accepted as the encoder input
+  contract.
 - Broad Theseus planner infrastructure is deferred unless it directly blocks KP
   roadmap execution.
