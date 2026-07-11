@@ -139,13 +139,14 @@
     {
       "id": "next.kp.asset-linear-solve-behavior",
       "title": "Map existing equation sampler into KpBehavior",
-      "status": "complete",
-      "summary": "Added createLinearSolveKpBehavior, a KpBehavior wrapper over the existing live linear-solve tutorial card sampler that preserves parent-timeline duration and deterministic progress sampling."
+      "summary": "Added createLinearSolveKpBehavior, a KpBehavior wrapper over the existing live linear-solve tutorial card sampler that preserves parent-timeline duration and deterministic progress sampling.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-inspect-at-api",
       "title": "Add pause-time asset inspection API",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added inspectKpBehaviorAt, a generic pause-time inspection helper that samples a KpBehavior at time and extracts active transformations, selectors, and phase metadata, including linear-solve coverage."
     },
     {
       "id": "next.kp.asset-decomposition-hook",
