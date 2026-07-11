@@ -282,7 +282,14 @@
     {
       "id": "next.kp.capability-loading-report-card",
       "title": "Capability loading report card",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-capability-loading-report-card-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-capability-loading-report-card-v0",
+      "title": "Capability loading report card",
+      "summary": "Materialized from stored run-contract slice next.kp.capability-loading-report-card in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.capability-loading-roadmap-refresh",

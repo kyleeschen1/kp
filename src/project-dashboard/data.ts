@@ -1753,6 +1753,91 @@ export const projectDashboardData: ProjectDashboardData = {
       ]
     },
     {
+      id: "report-capability-loading-readiness",
+      title: "Capability loading readiness",
+      status: "active",
+      grade: "B+",
+      lastReviewedOn: "2026-07-11",
+      scope:
+        "Assess whether KP now has registry-backed SemanticObject capability packages that can drive tutorial dependency planning, dashboard search, and export dependency closure without sample-specific capability advertisements.",
+      questions: [
+        "Do SemanticObject definitions map to stable capability package manifests with source refs and package ids?",
+        "Can tutorial dependency planners resolve capability packages from semantic capability keys?",
+        "Do iframe, static-step, and frame-sequence exports carry capability package closure alongside legacy capability keys?",
+        "Can the dashboard search and preview package metadata without hand-coded sample-specific rows?"
+      ],
+      evidence: [
+        {
+          label: "Capability package manifest catalog",
+          href: "src/semantic/capability-package-manifest.ts"
+        },
+        {
+          label: "Semantic object registry package ids",
+          href: "src/semantic/object-registry.ts"
+        },
+        {
+          label: "Tutorial dependency planner",
+          href: "src/tutorial/dependency-planner.ts"
+        },
+        {
+          label: "Capability package closure helper",
+          href: "src/tutorial/capability-package-closure.ts"
+        },
+        {
+          label: "Export dependency closure tests",
+          href: "tests/tutorial-card-export-dependency-closure.test.ts"
+        },
+        {
+          label: "Capability package dashboard facets",
+          href: "src/project-dashboard/capability-package-facets.ts"
+        },
+        {
+          label: "Capability loading report card review",
+          href: "docs/project/reviews/2026-07-11-capability-loading-readiness-report.md"
+        }
+      ],
+      risks: [
+        "The dynamic package loader is still deferred; current packages are metadata manifests and closure checks.",
+        "Package ids cover core Equation, Matrix, Graph, SourceFile, and export fixtures, not a broad generated math/programming catalog.",
+        "Export artifacts validate package closure, but the actual browser/media loading pipeline still consumes bundled local code.",
+        "Capability package maturity is strong enough for dashboard planning, but not yet a public extension/package API."
+      ],
+      recommendedNextActions: [
+        "Refresh the roadmap and semantic runtime thread around capability packages as the next stable dependency layer.",
+        "Define the first dynamic loader boundary only after the metadata catalog remains stable.",
+        "Extend package manifests to generated tutorial families before adding new render domains.",
+        "Keep package source refs mandatory for new SemanticObject capability definitions."
+      ],
+      tags: [
+        "semantic-objects",
+        "capability-packages",
+        "dependency-closure",
+        "dashboard",
+        "export"
+      ],
+      projectRefs: [
+        {
+          kind: "theseus",
+          label: "SemanticObject capability loading loop",
+          href: "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-capability-loading-v0.json",
+          id: "run-contract.kp.semantic-capability-loading-v0"
+        },
+        {
+          kind: "review",
+          label: "Capability loading readiness report",
+          href: "docs/project/reviews/2026-07-11-capability-loading-readiness-report.md"
+        }
+      ],
+      relatedIds: [
+        "work-semantic-object-registry",
+        "tutorial-card-manifest-v0",
+        "iframe-export-artifact",
+        "static-step-export-artifact",
+        "frame-sequence-export-preview",
+        "report-hosted-package-readiness"
+      ]
+    },
+    {
       id: "report-semantic-object-api",
       title: "Semantic object API",
       status: "planned",

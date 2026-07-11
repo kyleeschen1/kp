@@ -1410,6 +1410,65 @@ test("project dashboard includes hosted package readiness report card", () => {
   ]);
 });
 
+test("project dashboard includes capability loading readiness report card", () => {
+  const capabilityTheme = projectDashboardData.reportThemes.find(
+    (theme) => theme.id === "report-capability-loading-readiness"
+  );
+
+  assert.equal(capabilityTheme?.title, "Capability loading readiness");
+  assert.equal(capabilityTheme?.status, "active");
+  assert.equal(capabilityTheme?.grade, "B+");
+  assert.equal(capabilityTheme?.lastReviewedOn, "2026-07-11");
+  assert.ok(
+    capabilityTheme?.scope.includes(
+      "registry-backed SemanticObject capability packages"
+    )
+  );
+  assert.ok(
+    capabilityTheme?.questions.some((question) =>
+      question.includes("tutorial dependency planners")
+    )
+  );
+  assert.ok(
+    capabilityTheme?.questions.some((question) =>
+      question.includes("iframe, static-step, and frame-sequence exports")
+    )
+  );
+  assert.ok(
+    capabilityTheme?.evidence.some((entry) =>
+      entry.href.includes("src/semantic/capability-package-manifest.ts")
+    )
+  );
+  assert.ok(
+    capabilityTheme?.evidence.some((entry) =>
+      entry.href.includes("src/tutorial/capability-package-closure.ts")
+    )
+  );
+  assert.ok(
+    capabilityTheme?.evidence.some((entry) =>
+      entry.href.includes("tests/tutorial-card-export-dependency-closure.test.ts")
+    )
+  );
+  assert.ok(
+    capabilityTheme?.risks.some((risk) =>
+      risk.includes("dynamic package loader is still deferred")
+    )
+  );
+  assert.ok(
+    capabilityTheme?.recommendedNextActions.some((action) =>
+      action.includes("roadmap and semantic runtime thread")
+    )
+  );
+  assert.deepEqual(capabilityTheme?.relatedIds, [
+    "work-semantic-object-registry",
+    "tutorial-card-manifest-v0",
+    "iframe-export-artifact",
+    "static-step-export-artifact",
+    "frame-sequence-export-preview",
+    "report-hosted-package-readiness"
+  ]);
+});
+
 test("renderProjectDashboard renders report card evidence, risks, review metadata, and next actions", () => {
   const html = renderProjectDashboard(projectDashboardData);
 
