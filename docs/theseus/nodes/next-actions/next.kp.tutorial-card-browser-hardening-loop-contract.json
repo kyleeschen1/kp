@@ -1,0 +1,78 @@
+{
+  "id": "next.kp.tutorial-card-browser-hardening-loop-contract",
+  "kind": "next-action",
+  "title": "Materialize tutorial-card browser/embed hardening loop",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Materialized the approved tutorial-card browser/embed hardening loop, seeded the launch-target registry slice, linked the workflow queue, and retired the stale semantic-transition contract state.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Current roadmap names browser smoke coverage for iframe, static-step, and programming sample launch paths as the next priority."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active semantic runtime thread names browser smoke coverage and launch-path hardening as the current next action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-tutorial-card-export-embed-loop-closeout.md",
+      "summary": "Export/embed closeout recommends browser smoke coverage, hosted dependency checks, execution-trace panels, graph diagnostics, and registry/capability follow-up work."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-browser-hardening-loop-contract.json",
+      "summary": "Materializes the approved browser/embed hardening control-plane next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-launch-target-registry.json",
+      "summary": "Seeds the first executable hardening slice after contract materialization."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Adds the durable 24-slice browser/embed hardening run contract and points it at the launch-target registry slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Links the hardening loop and first launch-target slice into the active KP workflow queue."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-runtime.semantic-transition-runtime-loop-v0.json",
+      "summary": "Resolves the stale semantic-transition contract after its recorded slices were completed and superseded."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T00:58:48.029Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T00:58:48.080Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T00:58:48.119Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Materialized the approved tutorial-card browser/embed hardening loop, seeded the launch-target registry slice, linked the workflow queue, and retired the stale semantic-transition contract state."
+  }
+}

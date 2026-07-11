@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.tutorial-launch-target-registry",
+  "kind": "next-action",
+  "title": "Define tutorial sample launch target registry",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Create a typed registry that maps tutorial-card samples, iframe artifacts, static-step artifacts, and programming cards to browser launch targets for smoke tests and dashboard actions."
+}

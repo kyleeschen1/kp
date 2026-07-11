@@ -19,6 +19,8 @@
     "decision.kp.semantic-animation-runtime-roadmap"
   ],
   "nextActions": [
+    "next.kp.tutorial-card-browser-hardening-loop-contract",
+    "next.kp.tutorial-launch-target-registry",
     "next.kp.tutorial-card-export-embed-loop-contract",
     "next.kp.semantic-object-transform-catalog",
     "next.kp.semantic-transition-runtime",
@@ -32,7 +34,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Reusable dashboard v1 loop closed with dashboard core, host adapter hooks, preview links, actions, and cross-project smoke in place; active queue now continues with semantic object catalog and reversible transformation runtime work."
+    "summary": "Reusable dashboard v1, semantic transition runtime, tutorial-card runtime, and export/embed loops are closed; active queue now continues with tutorial-card browser/embed hardening before media export or broader capability registry work."
   },
   "verificationRecords": [
     {

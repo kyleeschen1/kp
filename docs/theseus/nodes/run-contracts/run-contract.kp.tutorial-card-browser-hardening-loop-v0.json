@@ -1,0 +1,173 @@
+{
+  "id": "run-contract.kp.tutorial-card-browser-hardening-loop-v0",
+  "kind": "run-contract",
+  "title": "KP tutorial-card browser/embed hardening loop",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Near-term priorities start with browser smoke coverage for iframe, static-step, and programming sample launch paths before GIF/video export."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active thread names browser launch-path hardening as the current next action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-tutorial-card-export-embed-loop-closeout.md",
+      "summary": "Closeout review identifies the broad verification gap this hardening loop addresses."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "allowedWork": [
+    "Only work on approved KP tutorial-card browser/embed hardening slices.",
+    "Keep iframe, static-step, programming, graph, and dashboard launch-path work tied to existing tutorial-card runtime artifacts.",
+    "Use static programming execution traces only; do not build an interpreter in this loop.",
+    "Record each slice in Theseus and commit after focused verification passes."
+  ],
+  "disallowedWork": [
+    "Do not start GIF, MP4, or WebM encoder implementation before browser smoke paths are stable.",
+    "Do not start the full SemanticObject registry/capability loading loop in this contract.",
+    "Do not broaden into unrelated Theseus planner infrastructure beyond retiring stale queue state.",
+    "Do not pursue visual polish unless it blocks launch smoke reliability."
+  ],
+  "goal": "Prove concrete tutorial-card iframe, static-step, programming, graph, and dashboard launch surfaces can render, seek, expose fallbacks/dependencies, and report readiness before moving into media export or broader capability registry work.",
+  "target": "next.kp.tutorial-launch-target-registry",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when verification fails and needs user judgment.",
+    "Stop when the approved slice list is exhausted.",
+    "Stop if a slice would broaden beyond the approved KP tutorial-card browser/embed hardening loop.",
+    "Stop before implementing GIF/video encoders or a full programming interpreter."
+  ],
+  "slices": [
+    {
+      "id": "next.kp.tutorial-card-browser-hardening-loop-contract",
+      "title": "Materialize hardening loop control plane",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.tutorial-launch-target-registry",
+      "title": "Define tutorial sample launch target registry",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-launch-smoke-harness",
+      "title": "Add Playwright tutorial launch smoke harness",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.iframe-export-browser-smoke",
+      "title": "Smoke iframe export artifact launch",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.static-step-browser-smoke",
+      "title": "Smoke static-step export launch",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.programming-card-browser-smoke",
+      "title": "Smoke programming tutorial-card launch",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.dashboard-export-sample-link-health",
+      "title": "Check dashboard sample links for export rows",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.iframe-dependency-closure-check",
+      "title": "Verify iframe dependency closure",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.export-fallback-readiness-check",
+      "title": "Verify fallback readiness metadata",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.iframe-embed-policy-metadata",
+      "title": "Add embed sandbox/policy metadata",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.iframe-asset-manifest",
+      "title": "Serialize iframe asset manifest",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-seek-browser-smoke",
+      "title": "Add shared seek smoke for tutorial cards",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-panel-nonblank-smoke",
+      "title": "Add nonblank panel probes",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-launch-readiness-report",
+      "title": "Add tutorial launch readiness report row",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.programming-execution-trace-frame-contract",
+      "title": "Define programming execution-trace frame contract",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.programming-execution-trace-fixture",
+      "title": "Add static execution-trace fixture",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.programming-execution-trace-panel",
+      "title": "Render execution-trace programming panel",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.programming-execution-trace-card-sample",
+      "title": "Add execution-trace tutorial-card sample",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.static-step-authored-markers",
+      "title": "Add authored marker support for static-step checkpoints",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.graph-parent-timeline-diagnostic-expanded",
+      "title": "Expand graph parent-timeline diagnostic",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.synchronized-comparison-card-shell",
+      "title": "Add synchronized comparison sample shell",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.hardening-api-catalog-rows",
+      "title": "Expose hardening status in API/catalog rows",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.browser-hardening-readiness-refresh",
+      "title": "Refresh project roadmap/readiness after hardening",
+      "status": "planned"
+    },
+    {
+      "id": "next.kp.tutorial-card-browser-hardening-loop-closeout",
+      "title": "Close tutorial-card browser/embed hardening loop",
+      "status": "planned"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "id": "run-contract.kp.animation-runtime.semantic-transition-runtime-loop-v0",
   "kind": "run-contract",
   "title": "Semantic transition runtime loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation-runtime",
   "sourceRefs": [
     {
@@ -142,5 +142,6 @@
       "title": "Broaden dashboard API sample target coverage",
       "status": "complete"
     }
-  ]
+  ],
+  "summary": "Resolved after all recorded semantic transition runtime slices completed; unused max-slice capacity is superseded by the tutorial-card browser/embed hardening loop."
 }
