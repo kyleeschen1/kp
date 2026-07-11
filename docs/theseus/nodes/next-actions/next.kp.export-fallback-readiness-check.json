@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.export-fallback-readiness-check",
+  "kind": "next-action",
+  "title": "Verify fallback readiness metadata",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add checks that export artifacts declare usable fallback metadata for unavailable interactive runtimes."
+}

@@ -2,7 +2,64 @@
   "id": "next.kp.iframe-dependency-closure-check",
   "kind": "next-action",
   "title": "Verify iframe dependency closure",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add checks that iframe export artifacts declare the dependency phases, capabilities, and assets required by their tutorial-card launch surfaces."
+  "summary": "Added export dependency-closure diagnostics that verify iframe artifacts include every capability and asset required by their declared dependency phases.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/export-dependency-closure.ts",
+      "summary": "Defines dependency closure diagnostics for export artifacts against tutorial-card manifest dependency plans."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-export-dependency-closure.test.ts",
+      "summary": "Covers healthy iframe dependency closure and missing phase capability diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.iframe-dependency-closure-check.json",
+      "summary": "Records the approved iframe dependency closure check next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.export-fallback-readiness-check.json",
+      "summary": "Materializes the next approved export fallback readiness check slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the export fallback readiness check slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-export-dependency-closure.test.ts tests/tutorial-card-export-artifact.test.ts tests/tutorial-card-dependency-planner.test.ts",
+      "status": "passed",
+      "scope": "export dependency closure, export artifact, and dependency planner unit coverage",
+      "checkedAt": "2026-07-11T01:18:24.514Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:18:24.530Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:18:24.548Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:18:24.569Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added export dependency-closure diagnostics that verify iframe artifacts include every capability and asset required by their declared dependency phases."
+  }
 }
