@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.static-step-artifact-contract",
+  "kind": "next-action",
+  "title": "Define static-step artifact contract",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added a static step-sequence artifact contract with checkpoint cloning and validation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-step-artifact.ts",
+      "summary": "Defines static-step checkpoint records, sequence artifact wrapper, cloning, and validation for static-step artifacts."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-static-step-artifact.test.ts",
+      "summary": "Covers checkpoint cloning and validation diagnostics for static-step artifact shape."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.static-step-artifact-contract.json",
+      "summary": "Materializes the approved static-step artifact contract next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the static-step artifact contract slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-static-step-artifact.test.ts tests/tutorial-card-export-artifact.test.ts tests/tutorial-card-export-profile.test.ts tests/tutorial-card-dependency-planner.test.ts tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "static-step artifact contract and related export tests",
+      "checkedAt": "2026-07-11T00:01:30.588Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T00:01:30.604Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T00:01:30.617Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a static step-sequence artifact contract with checkpoint cloning and validation."
+  }
+}
