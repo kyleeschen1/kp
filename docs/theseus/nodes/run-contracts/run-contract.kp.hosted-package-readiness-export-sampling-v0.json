@@ -147,7 +147,14 @@
     {
       "id": "next.kp.frame-sequence-artifact-format",
       "title": "Add frame sequence artifact format",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.tutorial.next-kp-frame-sequence-artifact-format-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.tutorial.next-kp-frame-sequence-artifact-format-v0",
+      "title": "Add frame sequence artifact format",
+      "summary": "Materialized from stored run-contract slice next.kp.frame-sequence-artifact-format in KP hosted package readiness and export sampling loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.frame-sequence-html-preview",

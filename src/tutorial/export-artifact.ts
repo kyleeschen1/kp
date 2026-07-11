@@ -6,6 +6,7 @@ import type {
 import type { KpTutorialDependencyPhase } from "./dependency-planner.ts";
 
 export type KpTutorialExportArtifactKind =
+  | "frame-sequence"
   | "iframe-document"
   | "media-encoding"
   | "static-step-sequence";

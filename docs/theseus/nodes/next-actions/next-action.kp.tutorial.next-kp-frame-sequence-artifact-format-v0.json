@@ -1,0 +1,110 @@
+{
+  "id": "next-action.kp.tutorial.next-kp-frame-sequence-artifact-format-v0",
+  "kind": "next-action",
+  "title": "Add frame sequence artifact format",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added a frame-sequence JSON artifact format bundling equation, graph, and programming frames by parent-timeline index.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract whose stored slice next.kp.frame-sequence-artifact-format was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap selects hosted/package readiness, parent-timeline media export sampling, and SemanticObject capability loading as the next choices after browser hardening."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread records hosted/package readiness and parent-timeline media export sampling as open next loops."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-tutorial-card-browser-hardening-loop-closeout.md",
+      "summary": "Browser hardening closeout recommends hosted/package readiness checks before media export encoders."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-sequence-artifact.ts",
+      "summary": "Defines the synchronized frame-sequence artifact payload, domain bundles, rewind ids, and alignment diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/export-artifact.ts",
+      "summary": "Adds frame-sequence as an export artifact kind."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-frame-sequence-artifact.test.ts",
+      "summary": "Covers frame-sequence artifact metadata, synchronized domain frame bundles, and reverse frame ids."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Records materialization and completion of the stored frame-sequence artifact format slice."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.hosted-package-readiness-export-sampling-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Add frame sequence artifact format can be completed inside KP hosted package readiness and export sampling loop."
+  ],
+  "allowedWork": [
+    "Only work on approved KP hosted/package readiness and parent-timeline export sampling slices.",
+    "Keep work tied to tutorial-card runtime, export artifacts, dashboard/API catalog, and semantic runtime capability metadata.",
+    "Use deterministic fixtures and static programming execution traces only."
+  ],
+  "disallowedWork": [
+    "Do not implement GIF, MP4, or WebM encoders in this loop.",
+    "Do not broaden into full SemanticObject registry loading beyond capability advertisements needed for export readiness.",
+    "Do not pursue broad Theseus planner follow-ups unless they block this KP loop."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-frame-sequence-artifact.test.ts tests/tutorial-card-frame-export-contract.test.ts tests/tutorial-card-equation-frame-export-sampler.test.ts tests/tutorial-card-graph-frame-export-sampler.test.ts tests/tutorial-card-programming-frame-export-sampler.test.ts tests/tutorial-card-export-artifact.test.ts",
+      "status": "passed",
+      "scope": "frame-sequence artifact and adjacent export artifact coverage",
+      "checkedAt": "2026-07-11T03:12:31.992Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript compile checks",
+      "checkedAt": "2026-07-11T03:12:32.012Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T03:12:32.034Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T03:12:32.054Z",
+      "scope": "Whitespace check"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a frame-sequence JSON artifact format bundling equation, graph, and programming frames by parent-timeline index."
+  }
+}
