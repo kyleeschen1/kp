@@ -91,13 +91,14 @@
     {
       "id": "next.kp.asset-diagram-composition",
       "title": "Define SemanticDiagram composition forms",
-      "status": "complete",
-      "summary": "Added semantic diagram composition for transformation leaves, sequences, parallels, tree substitution, source-target boundary checks, leaf transformation ids, forward phases, and exact rewind phase ordering."
+      "summary": "Added semantic diagram composition for transformation leaves, sequences, parallels, tree substitution, source-target boundary checks, leaf transformation ids, forward phases, and exact rewind phase ordering.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-behavior-protocol",
       "title": "Define KpBehavior time sampling protocol",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added the KpBehavior protocol with normalized sample context, clamped time sampling, progress sampling, invalid duration checks, and duration reparameterization that preserves semantic progress."
     },
     {
       "id": "next.kp.asset-timeline-protocol",
