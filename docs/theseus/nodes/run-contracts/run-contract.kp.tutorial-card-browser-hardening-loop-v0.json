@@ -2,7 +2,7 @@
   "id": "run-contract.kp.tutorial-card-browser-hardening-loop-v0",
   "kind": "run-contract",
   "title": "KP tutorial-card browser/embed hardening loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
   "sourceRefs": [
     {
@@ -167,7 +167,8 @@
     {
       "id": "next.kp.tutorial-card-browser-hardening-loop-closeout",
       "title": "Close tutorial-card browser/embed hardening loop",
-      "status": "planned"
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }

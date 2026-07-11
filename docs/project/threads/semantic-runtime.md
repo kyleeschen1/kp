@@ -2,8 +2,9 @@
 
 Status: active
 Last Updated: 2026-07-11
-Current Next Action: Close the tutorial-card browser hardening loop with
-residual risks and next-loop recommendations.
+Current Next Action: Choose the next implementation loop: hosted/package
+readiness checks, parent-timeline media export sampling, or SemanticObject
+registry/capability loading.
 
 ## Goal
 
@@ -41,13 +42,13 @@ catalog, a programming tutorial-card sample, generated KaTeX fixture promotion,
 graph parent-timeline diagnostics, and a refreshed export/runtime readiness
 report card.
 
-The tutorial-card browser hardening loop has now proved concrete launch paths
+The tutorial-card browser hardening loop closed on 2026-07-11. It proved concrete launch paths
 and sampled browser surfaces across dashboard launch targets, iframe exports,
 static-step exports, programming cards, execution-trace cards, synchronized
 comparison cards, iframe asset manifests, fallback readiness, nonblank panel
 probes, static-step authored markers, and expanded graph timeline diagnostics.
-The remaining browser-hardening work is closeout and hosted/package readiness,
-not basic launch-path discovery.
+The remaining browser-hardening work is hosted/package readiness, not basic
+launch-path discovery.
 
 ## Accepted Scope
 
@@ -84,6 +85,7 @@ not basic launch-path discovery.
 - `docs/project/reviews/2026-07-10-semantic-runtime-roadmap-loop-closeout.md`
 - `docs/project/reviews/2026-07-10-tutorial-card-runtime-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-tutorial-card-export-embed-loop-closeout.md`
+- `docs/project/reviews/2026-07-11-tutorial-card-browser-hardening-loop-closeout.md`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json`
 - `docs/superpowers/specs/2026-07-10-derive-representation-capability-design.md`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json`

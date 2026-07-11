@@ -2,7 +2,65 @@
   "id": "next.kp.tutorial-card-browser-hardening-loop-closeout",
   "kind": "next-action",
   "title": "Close tutorial-card browser/embed hardening loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Close the tutorial-card browser/embed hardening loop with final verification, residual risks, and next-loop handoff."
+  "summary": "Closed the tutorial-card browser/embed hardening loop with final review, residual risks, and next-loop recommendations.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-tutorial-card-browser-hardening-loop-closeout.md",
+      "summary": "Final closeout review for the browser hardening loop, including delivered coverage, residual risks, and recommended next loops."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap now treats the browser hardening loop as closed and moves hosted/package readiness ahead of media export work."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread now points to hosted/package readiness, media export sampling, or SemanticObject registry loading as next loop choices."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Run contract final slice auto-completion target for the tutorial-card browser hardening loop."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tutorial browser hardening unit aggregate",
+      "status": "passed",
+      "scope": "unit browser-hardening aggregate",
+      "checkedAt": "2026-07-11T02:14:12.189Z"
+    },
+    {
+      "command": "npx playwright test tutorial browser hardening Chromium aggregate",
+      "status": "passed",
+      "scope": "browser hardening aggregate",
+      "checkedAt": "2026-07-11T02:14:12.215Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typescript",
+      "checkedAt": "2026-07-11T02:14:12.237Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "theseus graph",
+      "checkedAt": "2026-07-11T02:14:12.263Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:14:12.287Z",
+      "scope": "whitespace"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Closed the tutorial-card browser/embed hardening loop with final review, residual risks, and next-loop recommendations."
+  }
 }

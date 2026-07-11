@@ -28,9 +28,9 @@ samples, authored static-step markers, expanded graph timeline diagnostics,
 synchronized comparison shells, and dashboard/API catalog rows for the new
 hardening surfaces.
 
-The immediate implementation focus is to close the browser hardening loop with
-a residual-risk report, then choose between media export sampling and returning
-to the SemanticObject registry/capability loading layer.
+The browser hardening loop is closed. The next implementation choice is between
+hosted/package readiness checks, parent-timeline media export sampling, and the
+SemanticObject registry/capability loading layer.
 
 ## Roadmap Phases
 
@@ -179,15 +179,13 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Close the tutorial-card browser hardening loop with a concise stop report,
-   residual risks, and next-loop recommendations.
-2. Add hosted/package readiness checks for iframe artifact dependencies,
+1. Add hosted/package readiness checks for iframe artifact dependencies,
    fallback behavior, and asset manifests outside the dev server.
-3. Start GIF or video export sampling from parent timeline frames after the
+2. Start GIF or video export sampling from parent timeline frames after the
    iframe/static-step/browser paths stay stable.
-4. Expand graph diagnostics from current mesh/conformance checks into richer
+3. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-5. Return to the SemanticObject registry and capability loading layer so export
+4. Return to the SemanticObject registry and capability loading layer so export
    artifacts can advertise exactly what each card needs.
 
 ## Deferred
