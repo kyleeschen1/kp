@@ -59,7 +59,7 @@
     {
       "id": "next.kp.hosted-artifact-readiness-contract",
       "title": "Define hosted artifact readiness contract",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.static-host-fixture-root",

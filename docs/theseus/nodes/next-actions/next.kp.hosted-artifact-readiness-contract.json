@@ -2,9 +2,9 @@
   "id": "next.kp.hosted-artifact-readiness-contract",
   "kind": "next-action",
   "title": "Define hosted artifact readiness contract",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Define the static-host readiness data contract for iframe, static-step, and tutorial-card export artifacts.",
+  "summary": "Defined the hosted artifact readiness validator for iframe and static-step export artifacts, aggregating artifact, dependency, fallback, dev-server asset URL, and iframe embed-policy checks.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -20,9 +20,59 @@
       "kind": "file",
       "path": "docs/project/roadmap.md",
       "summary": "Roadmap puts hosted/package readiness immediately after browser hardening."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/hosted-artifact-readiness.ts",
+      "summary": "New hosted-readiness contract and validator for static-host/package assumptions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-hosted-artifact-readiness.test.ts",
+      "summary": "Focused tests proving accepted iframe/static-step artifacts and diagnostics for dev-server URLs and missing iframe policy."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.static-host-fixture-root.json",
+      "summary": "Seeds the next static-host fixture-root slice so the run contract can advance."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract advances from the hosted-readiness contract to the static-host fixture-root slice."
     }
   ],
   "verification": [
     "node --disable-warning=ExperimentalWarning --test tests/tutorial-hosted-artifact-readiness.test.ts"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-hosted-artifact-readiness.test.ts tests/tutorial-card-export-fallback-readiness.test.ts tests/tutorial-card-export-dependency-closure.test.ts tests/tutorial-card-iframe-asset-manifest.test.ts tests/tutorial-card-export-artifact.test.ts",
+      "status": "passed",
+      "scope": "hosted artifact and export readiness unit coverage",
+      "checkedAt": "2026-07-11T02:28:01.811Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T02:28:01.836Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T02:28:01.859Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:28:01.879Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined the hosted artifact readiness validator for iframe and static-step export artifacts, aggregating artifact, dependency, fallback, dev-server asset URL, and iframe embed-policy checks."
+  }
 }

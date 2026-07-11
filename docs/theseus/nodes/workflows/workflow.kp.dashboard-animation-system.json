@@ -32,7 +32,8 @@
     "next.kp.semantic-computation-protocols",
     "next.kp.dashboard-authoring-catalog-surface",
     "run-contract.kp.hosted-package-readiness-export-sampling-v0",
-    "next.kp.hosted-artifact-readiness-contract"
+    "next.kp.hosted-artifact-readiness-contract",
+    "next.kp.static-host-fixture-root"
   ],
   "progress": {
     "state": "partial",

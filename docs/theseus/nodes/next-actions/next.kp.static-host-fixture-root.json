@@ -1,0 +1,33 @@
+{
+  "id": "next.kp.static-host-fixture-root",
+  "kind": "next-action",
+  "title": "Add static-host fixture root",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add a static-host fixture root for packaged iframe and static-step artifact checks outside dev-server assumptions.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/hosted-artifact-readiness.ts",
+      "summary": "Hosted-readiness contract that the static-host fixture root will feed."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap puts hosted/package readiness before media encoders."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread calls out hosted/package checks outside the dev server."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract records static-host fixture root as the next slice after hosted-readiness contract."
+    }
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/tutorial-static-host-fixture-root.test.ts"
+  ]
+}
