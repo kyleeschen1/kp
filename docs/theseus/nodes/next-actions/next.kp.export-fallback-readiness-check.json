@@ -2,7 +2,64 @@
   "id": "next.kp.export-fallback-readiness-check",
   "kind": "next-action",
   "title": "Verify fallback readiness metadata",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add checks that export artifacts declare usable fallback metadata for unavailable interactive runtimes."
+  "summary": "Added export fallback readiness diagnostics that verify fallback strategy, layout preservation, user-facing message, and metadata strategy consistency.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/export-fallback-readiness.ts",
+      "summary": "Defines fallback readiness diagnostics for export artifacts."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-export-fallback-readiness.test.ts",
+      "summary": "Covers healthy iframe/static-step fallbacks and incomplete fallback diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.export-fallback-readiness-check.json",
+      "summary": "Records the approved export fallback readiness check next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.iframe-embed-policy-metadata.json",
+      "summary": "Materializes the next approved iframe embed policy metadata slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the iframe embed policy metadata slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-export-fallback-readiness.test.ts tests/tutorial-card-export-artifact.test.ts tests/tutorial-card-iframe-document.test.ts",
+      "status": "passed",
+      "scope": "export fallback readiness, artifact, and iframe document unit coverage",
+      "checkedAt": "2026-07-11T01:21:11.317Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:21:11.333Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:21:11.351Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:21:11.378Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added export fallback readiness diagnostics that verify fallback strategy, layout preservation, user-facing message, and metadata strategy consistency."
+  }
 }

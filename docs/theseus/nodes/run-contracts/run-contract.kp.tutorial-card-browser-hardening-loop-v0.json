@@ -37,7 +37,7 @@
     "Do not pursue visual polish unless it blocks launch smoke reliability."
   ],
   "goal": "Prove concrete tutorial-card iframe, static-step, programming, graph, and dashboard launch surfaces can render, seek, expose fallbacks/dependencies, and report readiness before moving into media export or broader capability registry work.",
-  "target": "next.kp.export-fallback-readiness-check",
+  "target": "next.kp.iframe-embed-policy-metadata",
   "runMode": "run",
   "maxSlices": 24,
   "commitCadence": "Commit after each verified slice.",
@@ -92,7 +92,7 @@
     {
       "id": "next.kp.export-fallback-readiness-check",
       "title": "Verify fallback readiness metadata",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.iframe-embed-policy-metadata",

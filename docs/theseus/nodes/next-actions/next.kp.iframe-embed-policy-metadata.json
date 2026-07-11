@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.iframe-embed-policy-metadata",
+  "kind": "next-action",
+  "title": "Add embed sandbox/policy metadata",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add iframe export artifact metadata for embed sandbox policy, permission policy, and referrer behavior."
+}
