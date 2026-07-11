@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.static-step-checkpoint-selector",
+  "kind": "next-action",
+  "title": "Select static-step checkpoints from parent timeline",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added static-step checkpoint selection from parent timeline start and transformation boundaries.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-step-checkpoints.ts",
+      "summary": "Selects static-step checkpoints from the parent timeline initial state and semantic transformation end boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-static-step-artifact.test.ts",
+      "summary": "Covers static-step checkpoint selection over the linear-solve parent timeline."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.static-step-checkpoint-selector.json",
+      "summary": "Materializes the approved static-step checkpoint selector next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the static-step checkpoint selector slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-static-step-artifact.test.ts tests/parent-timeline.test.ts tests/tutorial-card-frame-sampler.test.ts",
+      "status": "passed",
+      "scope": "static-step checkpoint selector and parent timeline tests",
+      "checkedAt": "2026-07-11T00:05:28.894Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T00:05:28.910Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T00:05:28.925Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added static-step checkpoint selection from parent timeline start and transformation boundaries."
+  }
+}
