@@ -60,13 +60,20 @@
     {
       "id": "next.kp.semantic-capability-loading-run-contract",
       "title": "Materialize SemanticObject capability loading run contract",
-      "status": "complete",
-      "summary": "Created approved KP SemanticObject capability loading run contract with 22 scoped slices."
+      "summary": "Created approved KP SemanticObject capability loading run contract with 22 scoped slices.",
+      "status": "complete"
     },
     {
       "id": "next.kp.capability-package-manifest",
       "title": "Define capability package manifest",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-capability-package-manifest-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-capability-package-manifest-v0",
+      "title": "Define capability package manifest",
+      "summary": "Materialized from stored run-contract slice next.kp.capability-package-manifest in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.capability-key-normalization",
