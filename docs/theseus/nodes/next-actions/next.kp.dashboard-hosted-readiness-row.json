@@ -1,0 +1,33 @@
+{
+  "id": "next.kp.dashboard-hosted-readiness-row",
+  "kind": "next-action",
+  "title": "Add dashboard hosted-readiness row",
+  "status": "ready",
+  "domain": "kp.dashboard",
+  "summary": "Expose hosted/package readiness artifacts and static-host smoke coverage in the project dashboard and API/catalog rows.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract records dashboard hosted readiness row as the next slice after packaged browser smokes."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Dashboard seed data will expose hosted readiness rows and sample targets."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-host-fixture-root.ts",
+      "summary": "Static-host fixture root is the core artifact to surface in dashboard/API rows."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "API catalog will expose hosted-readiness contracts and static-host artifacts."
+    }
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/api-catalog.test.ts"
+  ]
+}

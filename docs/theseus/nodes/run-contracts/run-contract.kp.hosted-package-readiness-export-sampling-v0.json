@@ -84,7 +84,7 @@
     {
       "id": "next.kp.packaged-static-step-browser-smoke",
       "title": "Add packaged static-step browser smoke fixture",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.dashboard-hosted-readiness-row",

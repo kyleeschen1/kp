@@ -2,9 +2,9 @@
   "id": "next.kp.packaged-static-step-browser-smoke",
   "kind": "next-action",
   "title": "Add packaged static-step browser smoke fixture",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add browser smoke coverage that loads the static-step artifact from the static-host fixture root rather than the direct smoke fixture.",
+  "summary": "Added packaged static-step browser smoke coverage that loads the static-step artifact through the static-host fixture root and shared static-host browser loader.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,9 +25,65 @@
       "kind": "file",
       "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
       "summary": "Run contract records packaged static-step browser smoke as the next slice after packaged iframe smoke."
+    },
+    {
+      "kind": "file",
+      "path": "tests/packaged-static-step-smoke.browser.spec.ts",
+      "summary": "New Chromium smoke spec for loading the static-step artifact from static-host root path."
+    },
+    {
+      "kind": "file",
+      "path": "tests/support/tutorial-launch-smoke.ts",
+      "summary": "Shared static-host fixture entry loader reused by packaged iframe and static-step smokes."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-host-fixture-root.ts",
+      "summary": "Static-host fixture root provides the packaged static-step HTML entry used by the smoke test."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.dashboard-hosted-readiness-row.json",
+      "summary": "Seeds the dashboard/API hosted-readiness row slice so the run contract can advance."
     }
   ],
   "verification": [
     "npx playwright test tests/packaged-static-step-smoke.browser.spec.ts --project=chromium"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/packaged-static-step-smoke.browser.spec.ts tests/static-step-export-smoke.browser.spec.ts tests/packaged-iframe-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "packaged static-step, direct static-step, and packaged iframe browser smoke",
+      "checkedAt": "2026-07-11T02:43:30.048Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-static-host-fixture-root.test.ts tests/tutorial-static-host-fallback-readiness.test.ts tests/tutorial-card-static-step-artifact.test.ts",
+      "status": "passed",
+      "scope": "static-host and static-step unit coverage",
+      "checkedAt": "2026-07-11T02:43:30.072Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T02:43:30.097Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T02:43:30.123Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:43:30.170Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added packaged static-step browser smoke coverage that loads the static-step artifact through the static-host fixture root and shared static-host browser loader."
+  }
 }
