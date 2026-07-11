@@ -2,9 +2,9 @@
   "id": "next.kp.static-host-fixture-root",
   "kind": "next-action",
   "title": "Add static-host fixture root",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add a static-host fixture root for packaged iframe and static-step artifact checks outside dev-server assumptions.",
+  "summary": "Added a static-host fixture root for linear-solve iframe and static-step export artifacts with relative paths, artifact metadata, content payloads, and hosted-readiness diagnostics.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,9 +25,59 @@
       "kind": "file",
       "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
       "summary": "Run contract records static-host fixture root as the next slice after hosted-readiness contract."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-host-fixture-root.ts",
+      "summary": "New static-host fixture root over existing iframe and static-step smoke fixtures."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-static-host-fixture-root.test.ts",
+      "summary": "Focused tests for relative fixture paths, artifact metadata, readiness diagnostics, and path lookup."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/hosted-artifact-readiness.ts",
+      "summary": "Hosted-readiness validator used by the fixture root to report packaging blockers."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.iframe-static-asset-path-closure.json",
+      "summary": "Seeds the next iframe static asset path closure slice so the run contract can advance."
     }
   ],
   "verification": [
     "node --disable-warning=ExperimentalWarning --test tests/tutorial-static-host-fixture-root.test.ts"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-static-host-fixture-root.test.ts tests/tutorial-hosted-artifact-readiness.test.ts tests/tutorial-card-iframe-smoke-fixture.test.ts tests/tutorial-card-static-step-artifact.test.ts",
+      "status": "passed",
+      "scope": "static-host fixture and adjacent export artifact unit coverage",
+      "checkedAt": "2026-07-11T02:31:11.843Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T02:31:11.875Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T02:31:11.902Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:31:11.926Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a static-host fixture root for linear-solve iframe and static-step export artifacts with relative paths, artifact metadata, content payloads, and hosted-readiness diagnostics."
+  }
 }

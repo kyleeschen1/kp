@@ -1,0 +1,33 @@
+{
+  "id": "next.kp.iframe-static-asset-path-closure",
+  "kind": "next-action",
+  "title": "Check iframe asset manifest path closure under static hosting",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Verify iframe asset manifests can describe relative hosted paths and reject unresolved dev-server or absolute-path dependencies.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-iframe-asset-manifest.test.ts",
+      "summary": "Existing iframe asset manifest coverage to extend for hosted path closure."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/iframe-asset-manifest.ts",
+      "summary": "Existing iframe asset manifest serializer to extend with static-host path closure metadata."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-host-fixture-root.ts",
+      "summary": "Static-host fixture root that will carry iframe entries for asset path closure checks."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract records iframe static asset path closure as the next slice after static-host fixture root."
+    }
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/tutorial-iframe-static-asset-path-closure.test.ts"
+  ]
+}

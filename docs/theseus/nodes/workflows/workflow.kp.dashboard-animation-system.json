@@ -33,7 +33,8 @@
     "next.kp.dashboard-authoring-catalog-surface",
     "run-contract.kp.hosted-package-readiness-export-sampling-v0",
     "next.kp.hosted-artifact-readiness-contract",
-    "next.kp.static-host-fixture-root"
+    "next.kp.static-host-fixture-root",
+    "next.kp.iframe-static-asset-path-closure"
   ],
   "progress": {
     "state": "partial",
