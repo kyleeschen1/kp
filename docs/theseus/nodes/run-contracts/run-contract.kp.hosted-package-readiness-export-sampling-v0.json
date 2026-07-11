@@ -74,7 +74,7 @@
     {
       "id": "next.kp.static-host-fallback-readiness",
       "title": "Check fallback readiness without dev server",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.packaged-iframe-browser-smoke",

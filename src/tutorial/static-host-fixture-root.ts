@@ -2,6 +2,7 @@ import {
   createLinearSolveTutorialCardManifest
 } from "./card-manifest.ts";
 import type {
+  KpTutorialCardExportArtifact,
   KpTutorialExportArtifactKind,
   KpTutorialExportArtifactPayloadKind
 } from "./export-artifact.ts";
@@ -15,6 +16,9 @@ import {
   validateKpTutorialHostedArtifactReadiness,
   type KpTutorialHostedArtifactReadinessDiagnostic
 } from "./hosted-artifact-readiness.ts";
+import {
+  validateKpTutorialExportFallbackReadiness
+} from "./export-fallback-readiness.ts";
 
 export interface KpStaticHostFixtureRootOptions {
   readonly iframeProgress?: number | undefined;
@@ -32,7 +36,16 @@ export interface KpStaticHostFixtureEntry {
 export interface KpStaticHostFixtureRoot {
   readonly id: string;
   readonly entries: readonly KpStaticHostFixtureEntry[];
+  readonly fallbackReadiness: readonly KpStaticHostFallbackReadiness[];
   readonly readinessDiagnostics: readonly KpTutorialHostedArtifactReadinessDiagnostic[];
+}
+
+export interface KpStaticHostFallbackReadiness {
+  readonly artifactId: string;
+  readonly strategy: KpTutorialCardExportArtifact["fallback"]["strategy"];
+  readonly preservesLayout: boolean;
+  readonly message: string;
+  readonly diagnostics: readonly KpTutorialHostedArtifactReadinessDiagnostic[];
 }
 
 export function createLinearSolveStaticHostFixtureRoot(
@@ -64,6 +77,10 @@ export function createLinearSolveStaticHostFixtureRoot(
         content: staticStepFixture.html
       }
     ],
+    fallbackReadiness: [
+      staticHostFallbackReadiness(iframeFixture.artifact),
+      staticHostFallbackReadiness(staticStepFixture.sequence.artifact)
+    ],
     readinessDiagnostics: [
       ...validateKpTutorialHostedArtifactReadiness({
         artifact: iframeFixture.artifact,
@@ -74,6 +91,18 @@ export function createLinearSolveStaticHostFixtureRoot(
         manifest
       })
     ]
+  };
+}
+
+function staticHostFallbackReadiness(
+  artifact: KpTutorialCardExportArtifact
+): KpStaticHostFallbackReadiness {
+  return {
+    artifactId: artifact.id,
+    strategy: artifact.fallback.strategy,
+    preservesLayout: artifact.fallback.preservesLayout,
+    message: artifact.fallback.message ?? "",
+    diagnostics: validateKpTutorialExportFallbackReadiness(artifact)
   };
 }
 

@@ -2,9 +2,9 @@
   "id": "next.kp.static-host-fallback-readiness",
   "kind": "next-action",
   "title": "Check fallback readiness without dev server",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Verify static-host fixtures expose fallback readiness without depending on dev-server runtime behavior.",
+  "summary": "Exposed static-host fallback readiness per artifact from the fixture root, including strategy, layout-preservation, fallback message, and diagnostics.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,9 +25,59 @@
       "kind": "file",
       "path": "src/tutorial/static-host-fixture-root.ts",
       "summary": "Static-host root will expose fallback readiness for packaged artifact entries."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-host-fixture-root.ts",
+      "summary": "Static-host fixture root now surfaces per-artifact fallback readiness metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-static-host-fallback-readiness.test.ts",
+      "summary": "Focused test for iframe and static-step fallback readiness records."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/hosted-artifact-readiness.ts",
+      "summary": "Hosted-readiness validator remains the aggregate readiness gate while fallback metadata becomes directly inspectable."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.packaged-iframe-browser-smoke.json",
+      "summary": "Seeds the packaged iframe browser smoke slice so the run contract can advance."
     }
   ],
   "verification": [
     "node --disable-warning=ExperimentalWarning --test tests/tutorial-static-host-fallback-readiness.test.ts"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-static-host-fallback-readiness.test.ts tests/tutorial-static-host-fixture-root.test.ts tests/tutorial-hosted-artifact-readiness.test.ts tests/tutorial-card-export-fallback-readiness.test.ts tests/tutorial-iframe-static-asset-path-closure.test.ts",
+      "status": "passed",
+      "scope": "static-host fallback readiness and adjacent unit coverage",
+      "checkedAt": "2026-07-11T02:37:36.859Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T02:37:36.887Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T02:37:36.909Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:37:36.937Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Exposed static-host fallback readiness per artifact from the fixture root, including strategy, layout-preservation, fallback message, and diagnostics."
+  }
 }

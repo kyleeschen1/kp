@@ -35,7 +35,8 @@
     "next.kp.hosted-artifact-readiness-contract",
     "next.kp.static-host-fixture-root",
     "next.kp.iframe-static-asset-path-closure",
-    "next.kp.static-host-fallback-readiness"
+    "next.kp.static-host-fallback-readiness",
+    "next.kp.packaged-iframe-browser-smoke"
   ],
   "progress": {
     "state": "partial",

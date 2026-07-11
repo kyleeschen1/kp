@@ -1,0 +1,33 @@
+{
+  "id": "next.kp.packaged-iframe-browser-smoke",
+  "kind": "next-action",
+  "title": "Add packaged iframe browser smoke fixture",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add browser smoke coverage that loads the iframe artifact from the static-host fixture root rather than a dev-server document path.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "tests/support/tutorial-launch-smoke.ts",
+      "summary": "Browser smoke helpers for loading tutorial artifact documents."
+    },
+    {
+      "kind": "file",
+      "path": "tests/iframe-export-smoke.browser.spec.ts",
+      "summary": "Existing iframe export smoke spec pattern to adapt for packaged static-host loading."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-host-fixture-root.ts",
+      "summary": "Static-host fixture root will provide the packaged iframe HTML entry."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract records packaged iframe browser smoke as the next slice after static-host fallback readiness."
+    }
+  ],
+  "verification": [
+    "npx playwright test tests/packaged-iframe-smoke.browser.spec.ts --project=chromium"
+  ]
+}
