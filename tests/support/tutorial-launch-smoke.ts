@@ -15,6 +15,8 @@ export interface KpTutorialCardSeekSampleExpectation {
   readonly beat: number;
 }
 
+export type KpTutorialPanelKind = "equation" | "graph" | "code";
+
 export async function openKpTutorialLaunchTargetPreview(
   page: Page,
   target: KpTutorialLaunchTarget
@@ -65,6 +67,31 @@ export async function expectKpTutorialCardSeekSample(
     progress
   );
   await expect(scrubber).toHaveAttribute("data-kp-tutorial-control-beat", beat);
+}
+
+export async function expectKpTutorialPanelNonblank(
+  page: Page,
+  panelKind: KpTutorialPanelKind
+): Promise<void> {
+  const panel = page.locator(
+    `[data-kp-tutorial-panel="${panelKind}"]`
+  );
+
+  await expect(panel).toBeVisible();
+
+  const metrics = await panel.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+
+    return {
+      textLength: (element.textContent ?? "").trim().length,
+      width: rect.width,
+      height: rect.height
+    };
+  });
+
+  expect(metrics.textLength).toBeGreaterThan(0);
+  expect(metrics.width).toBeGreaterThan(0);
+  expect(metrics.height).toBeGreaterThan(0);
 }
 
 export async function loadKpStaticStepExportSmokeFixtureDocument(

@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.tutorial-launch-readiness-report",
+  "kind": "next-action",
+  "title": "Add tutorial launch readiness report row",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add a dashboard/report row that summarizes browser launch readiness across tutorial-card iframe, static-step, programming, dependency, fallback, seek, and nonblank checks."
+}

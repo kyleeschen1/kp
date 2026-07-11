@@ -2,7 +2,64 @@
   "id": "next.kp.tutorial-panel-nonblank-smoke",
   "kind": "next-action",
   "title": "Add nonblank panel probes",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add browser smoke probes that prove tutorial-card equation, graph, and programming panels render nonblank sample content across launch surfaces."
+  "summary": "Added reusable browser nonblank panel probes covering iframe equation and graph panels plus the programming code panel.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "tests/tutorial-panel-nonblank-smoke.browser.spec.ts",
+      "summary": "Covers visible nonempty equation, graph, and code tutorial panels in browser smoke fixtures."
+    },
+    {
+      "kind": "file",
+      "path": "tests/support/tutorial-launch-smoke.ts",
+      "summary": "Adds the reusable tutorial panel nonblank assertion helper for browser smoke specs."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-panel-nonblank-smoke.json",
+      "summary": "Records the approved nonblank panel probe next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-launch-readiness-report.json",
+      "summary": "Materializes the next approved tutorial launch readiness report slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the launch readiness report slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/tutorial-panel-nonblank-smoke.browser.spec.ts tests/iframe-export-smoke.browser.spec.ts tests/programming-card-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "nonblank panel, iframe, and programming browser smoke coverage",
+      "checkedAt": "2026-07-11T01:38:19.295Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:38:19.318Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:38:19.368Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:38:19.394Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added reusable browser nonblank panel probes covering iframe equation and graph panels plus the programming code panel."
+  }
 }
