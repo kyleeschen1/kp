@@ -2,9 +2,9 @@
   "id": "next.kp.hosted-readiness-report-card",
   "kind": "next-action",
   "title": "Add hosted readiness report card",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.dashboard",
-  "summary": "Add a report card theme that grades hosted/package readiness and points to the static-host fixture and packaged browser smoke evidence.",
+  "summary": "Added hosted package readiness report card with packaged iframe/static-step evidence and linked hosted artifact rows.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,9 +25,54 @@
       "kind": "file",
       "path": "tests/packaged-static-step-smoke.browser.spec.ts",
       "summary": "Packaged static-step smoke evidence for hosted readiness report card."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Adds the hosted package readiness report theme and source/evidence links."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers the hosted report card fields, evidence, risks, next actions, and related ids."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract advances through the hosted readiness report card slice."
     }
   ],
   "verification": [
     "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "project dashboard report card coverage",
+      "checkedAt": "2026-07-11T02:52:19.985Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript compile checks",
+      "checkedAt": "2026-07-11T02:52:20.013Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T02:52:20.035Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:52:20.058Z",
+      "scope": "Whitespace check"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added hosted package readiness report card with packaged iframe/static-step evidence and linked hosted artifact rows."
+  }
 }

@@ -1601,6 +1601,75 @@ export const projectDashboardData: ProjectDashboardData = {
       ]
     },
     {
+      id: "report-hosted-package-readiness",
+      title: "Hosted package readiness",
+      status: "active",
+      grade: "B+",
+      lastReviewedOn: "2026-07-11",
+      scope:
+        "Assess whether static-hosted iframe and static-step tutorial artifacts can launch outside the dev server with closed dependency paths, fallback metadata, and browser smoke coverage.",
+      questions: [
+        "Do packaged tutorial entries resolve all iframe and static-step dependencies through relative asset paths?",
+        "Do hosted artifacts preserve embed policy, fallback metadata, and static-entry labels for dashboard consumers?",
+        "Do browser smoke tests prove the packaged iframe and static-step entries render nonblank tutorial content?"
+      ],
+      evidence: [
+        {
+          label: "Hosted artifact readiness contract",
+          href: "src/tutorial/hosted-artifact-readiness.ts"
+        },
+        {
+          label: "Static host fixture root",
+          href: "src/tutorial/static-host-fixture-root.ts"
+        },
+        {
+          label: "Iframe static asset path closure",
+          href: "src/tutorial/iframe-asset-manifest.ts"
+        },
+        {
+          label: "Packaged iframe browser smoke",
+          href: "tests/packaged-iframe-smoke.browser.spec.ts"
+        },
+        {
+          label: "Packaged static-step browser smoke",
+          href: "tests/packaged-static-step-smoke.browser.spec.ts"
+        }
+      ],
+      risks: [
+        "production deployment smoke still needs to prove the same package from an actual hosted URL.",
+        "Frame export is not yet sampled from the parent timeline, so hosted readiness currently stops at iframe and static-step artifacts.",
+        "The static fixture root is intentionally small; more tutorial cards will need the same dependency-closure gate."
+      ],
+      recommendedNextActions: [
+        "Start parent-timeline frame sampling from the hosted-ready tutorial entries.",
+        "Add a production deployment smoke once a hosted URL is available.",
+        "Expand the static host fixture root after the first frame-sequence artifact is stable."
+      ],
+      tags: [
+        "tutorial-card",
+        "hosted",
+        "package",
+        "iframe",
+        "static-step",
+        "readiness"
+      ],
+      projectRefs: [
+        {
+          kind: "theseus",
+          label: "Hosted package readiness and export sampling loop",
+          href: "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+          id: "run-contract.kp.hosted-package-readiness-export-sampling-v0"
+        }
+      ],
+      relatedIds: [
+        "hosted-artifact-readiness",
+        "static-host-fixture-root",
+        "iframe-export-artifact",
+        "static-step-export-artifact",
+        "report-tutorial-launch-readiness"
+      ]
+    },
+    {
       id: "report-semantic-object-api",
       title: "Semantic object API",
       status: "planned",

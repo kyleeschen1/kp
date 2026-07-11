@@ -1210,6 +1210,64 @@ test("project dashboard includes tutorial launch readiness report card", () => {
   ]);
 });
 
+test("project dashboard includes hosted package readiness report card", () => {
+  const hostedTheme = projectDashboardData.reportThemes.find(
+    (theme) => theme.id === "report-hosted-package-readiness"
+  );
+
+  assert.equal(hostedTheme?.title, "Hosted package readiness");
+  assert.equal(hostedTheme?.status, "active");
+  assert.equal(hostedTheme?.grade, "B+");
+  assert.equal(hostedTheme?.lastReviewedOn, "2026-07-11");
+  assert.ok(
+    hostedTheme?.scope.includes(
+      "static-hosted iframe and static-step tutorial artifacts"
+    )
+  );
+  assert.ok(
+    hostedTheme?.questions.some((question) =>
+      question.includes("relative asset paths")
+    )
+  );
+  assert.ok(
+    hostedTheme?.questions.some((question) =>
+      question.includes("fallback metadata")
+    )
+  );
+  assert.ok(
+    hostedTheme?.evidence.some((entry) =>
+      entry.href.includes("src/tutorial/static-host-fixture-root.ts")
+    )
+  );
+  assert.ok(
+    hostedTheme?.evidence.some((entry) =>
+      entry.href.includes("tests/packaged-iframe-smoke.browser.spec.ts")
+    )
+  );
+  assert.ok(
+    hostedTheme?.evidence.some((entry) =>
+      entry.href.includes("tests/packaged-static-step-smoke.browser.spec.ts")
+    )
+  );
+  assert.ok(
+    hostedTheme?.risks.some((risk) =>
+      risk.includes("production deployment smoke")
+    )
+  );
+  assert.ok(
+    hostedTheme?.recommendedNextActions.some((action) =>
+      action.includes("parent-timeline frame sampling")
+    )
+  );
+  assert.deepEqual(hostedTheme?.relatedIds, [
+    "hosted-artifact-readiness",
+    "static-host-fixture-root",
+    "iframe-export-artifact",
+    "static-step-export-artifact",
+    "report-tutorial-launch-readiness"
+  ]);
+});
+
 test("renderProjectDashboard renders report card evidence, risks, review metadata, and next actions", () => {
   const html = renderProjectDashboard(projectDashboardData);
 
