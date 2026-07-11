@@ -175,13 +175,14 @@
     {
       "id": "next.kp.asset-program-trace-skeleton",
       "title": "Add program-trace asset skeleton",
-      "status": "complete",
-      "summary": "Added a semantic asset wrapper for the existing addition execution-trace fixture, including source-file and execution-step objects, sequential advanceExecutionTrace transformations, a diagram, and deterministic behavior sampling."
+      "summary": "Added a semantic asset wrapper for the existing addition execution-trace fixture, including source-file and execution-step objects, sequential advanceExecutionTrace transformations, a diagram, and deterministic behavior sampling.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-dashboard-samples",
       "title": "Expose asset bundles, examples, flashcards, and ports in the dashboard",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added dashboard rows for the linear-solve asset bundle, generated flashcards, algebra-trace port fixture, and program-trace asset skeleton, with source refs, verification metadata, search coverage, and Theseus payload coverage."
     },
     {
       "id": "next.kp.asset-readiness-report-card",

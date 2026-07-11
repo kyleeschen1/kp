@@ -1098,6 +1098,160 @@ export const projectDashboardData: ProjectDashboardData = {
       ]
     },
     {
+      id: "asset-linear-solve-bundle",
+      title: "Linear solve AssetBundle",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Canonical KP Asset Calculus example for x + 3 = 7, including equation objects, selector correspondence, semantic transformations, a sequence diagram, behavior, drill-down hook, and flashcards.",
+      tags: ["asset-bundle", "linear-solve", "equation", "behavior", "example"],
+      domains: ["runtime", "authoring", "math"],
+      interfaces: [
+        "createLinearSolveKpAssetBundle",
+        "createLinearSolveKpBehavior",
+        "KpSemanticTransformation",
+        "KpSemanticDiagramSequence"
+      ],
+      maturity: "active canonical example",
+      coverage: [
+        "semantic objects",
+        "selector correspondence",
+        "diagram rewind law",
+        "behavior determinism"
+      ],
+      sourceRefs: [
+        {
+          label: "Linear solve asset",
+          href: "src/semantic/linear-solve-asset.ts"
+        }
+      ],
+      verification: [
+        "node --disable-warning=ExperimentalWarning --test tests/kp-linear-solve-asset.test.ts"
+      ],
+      relatedIds: [
+        "gallery-kp-asset-calculus",
+        "asset-linear-solve-flashcards",
+        "port-algebra-trace-fixture"
+      ]
+    },
+    {
+      id: "asset-linear-solve-flashcards",
+      title: "Linear solve flashcards",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Reusable flashcard specs generated from the linear-solve bundle for cloze, predict-next, explain-transform, and selector-persistence prompts.",
+      tags: ["flashcard", "linear-solve", "study", "selector", "example"],
+      domains: ["authoring", "curriculum", "math"],
+      interfaces: ["KpFlashcardSpec", "validateKpFlashcardSpec"],
+      maturity: "active canonical example",
+      coverage: [
+        "cloze selector references",
+        "predict-next transformation references",
+        "explain-transform prompts",
+        "selector persistence focus"
+      ],
+      sourceRefs: [
+        {
+          label: "Linear solve flashcards",
+          href: "src/semantic/linear-solve-asset.ts"
+        },
+        {
+          label: "Flashcard contract",
+          href: "src/semantic/asset-flashcard.ts"
+        }
+      ],
+      verification: [
+        "node --disable-warning=ExperimentalWarning --test tests/kp-linear-solve-asset.test.ts tests/kp-asset-flashcard.test.ts"
+      ],
+      relatedIds: [
+        "asset-linear-solve-bundle",
+        "gallery-kp-asset-calculus",
+        "gallery-kp-asset-authoring-guide"
+      ]
+    },
+    {
+      id: "port-algebra-trace-fixture",
+      title: "Algebra trace port fixture",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Deterministic external algebra-trace port fixture that imports generated solve steps into the canonical linear-solve bundle shape with explicit provenance and loss diagnostics.",
+      tags: ["port", "algebra-trace", "diagnostics", "linear-solve", "example"],
+      domains: ["runtime", "authoring", "math", "verification"],
+      interfaces: [
+        "createLinearSolveAlgebraTracePort",
+        "linearSolveAlgebraTraceFixture",
+        "checkKpPortDeterminism",
+        "checkKpPortLossDiagnostics"
+      ],
+      maturity: "active fixture",
+      coverage: [
+        "strict deterministic import",
+        "port provenance",
+        "shape parity with canonical bundle",
+        "partial-loss diagnostics"
+      ],
+      sourceRefs: [
+        {
+          label: "Algebra trace port fixture",
+          href: "src/semantic/algebra-trace-port-fixture.ts"
+        },
+        {
+          label: "Port law helpers",
+          href: "src/semantic/asset-laws.ts"
+        }
+      ],
+      verification: [
+        "node --disable-warning=ExperimentalWarning --test tests/kp-algebra-trace-port-fixture.test.ts tests/kp-asset-port.test.ts"
+      ],
+      relatedIds: [
+        "asset-linear-solve-bundle",
+        "gallery-kp-composition-laws",
+        "gallery-kp-asset-authoring-guide"
+      ]
+    },
+    {
+      id: "asset-program-trace-skeleton",
+      title: "Program trace asset skeleton",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Semantic wrapper for the addition execution trace fixture, exposing source-file and execution-step objects, advanceExecutionTrace transformations, a diagram, and deterministic behavior sampling.",
+      tags: ["programming", "execution-trace", "source-file", "behavior", "example"],
+      domains: ["runtime", "authoring", "programming"],
+      interfaces: [
+        "createAdditionProgramTraceKpAsset",
+        "advanceExecutionTrace",
+        "KpBehavior"
+      ],
+      maturity: "active skeleton",
+      coverage: [
+        "source range selectors",
+        "execution-step objects",
+        "trace transformation sequence",
+        "behavior determinism"
+      ],
+      sourceRefs: [
+        {
+          label: "Program trace asset",
+          href: "src/semantic/program-trace-asset.ts"
+        },
+        {
+          label: "Execution trace fixture",
+          href: "src/tutorial/programming-execution-trace-fixture.ts"
+        }
+      ],
+      verification: [
+        "node --disable-warning=ExperimentalWarning --test tests/kp-program-trace-asset.test.ts tests/programming-execution-trace-fixture.test.ts"
+      ],
+      relatedIds: [
+        "gallery-kp-asset-calculus",
+        "visual-code",
+        "report-programming-readiness"
+      ]
+    },
+    {
       id: "tutorial-card-manifest-v0",
       title: "Tutorial card manifest v0",
       kind: "protocol-api",

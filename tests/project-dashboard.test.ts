@@ -63,6 +63,62 @@ test("project dashboard seed data exposes work, gallery, and report records", ()
   );
 });
 
+test("project dashboard exposes KP Asset Calculus sample artifacts", () => {
+  const galleryIds = new Set(projectDashboardData.gallery.map((item) => item.id));
+  const requiredIds = [
+    "asset-linear-solve-bundle",
+    "asset-linear-solve-flashcards",
+    "port-algebra-trace-fixture",
+    "asset-program-trace-skeleton"
+  ];
+
+  requiredIds.forEach((id) => assert.ok(galleryIds.has(id), id));
+
+  const flashcards = projectDashboardData.gallery.find(
+    (item) => item.id === "asset-linear-solve-flashcards"
+  );
+  const algebraPort = projectDashboardData.gallery.find(
+    (item) => item.id === "port-algebra-trace-fixture"
+  );
+  const programTrace = projectDashboardData.gallery.find(
+    (item) => item.id === "asset-program-trace-skeleton"
+  );
+
+  assert.ok(flashcards?.tags.includes("flashcard"));
+  assert.ok(
+    flashcards?.sourceRefs?.some((sourceRef) =>
+      sourceRef.href.includes("src/semantic/linear-solve-asset.ts")
+    )
+  );
+  assert.ok(algebraPort?.tags.includes("port"));
+  assert.ok(
+    algebraPort?.sourceRefs?.some((sourceRef) =>
+      sourceRef.href.includes("src/semantic/algebra-trace-port-fixture.ts")
+    )
+  );
+  assert.ok(programTrace?.tags.includes("programming"));
+  assert.ok(
+    programTrace?.sourceRefs?.some((sourceRef) =>
+      sourceRef.href.includes("src/semantic/program-trace-asset.ts")
+    )
+  );
+
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "port-algebra-trace-fixture"
+  });
+
+  assert.match(
+    html,
+    /data-kp-agenda-row="asset-linear-solve-flashcards"/
+  );
+  assert.match(html, /data-kp-agenda-row="port-algebra-trace-fixture"/);
+  assert.match(
+    html,
+    /data-kp-selected-agenda-row="port-algebra-trace-fixture"/
+  );
+  assert.match(html, /Algebra trace port fixture/);
+});
+
 test("project dashboard ids are unique and related ids resolve", () => {
   const ids = collectProjectDashboardIds(projectDashboardData);
   const uniqueIds = new Set(ids);
@@ -976,7 +1032,11 @@ test("filterProjectDashboardData finds cards and gallery items by text facets", 
   );
   assert.deepEqual(
     assetProtocolResult.gallery.map((item) => item.id),
-    ["gallery-kp-asset-calculus"]
+    [
+      "gallery-kp-asset-calculus",
+      "asset-linear-solve-bundle",
+      "asset-program-trace-skeleton"
+    ]
   );
 
   const statusResult = filterProjectDashboardData(
@@ -994,7 +1054,12 @@ test("filterProjectDashboardData finds cards and gallery items by text facets", 
   );
   assert.deepEqual(
     domainResult.gallery.map((item) => item.id),
-    ["transform-matrix-multiply", "semantic-matrix", "semantic-vector"]
+    [
+      "transform-matrix-multiply",
+      "semantic-matrix",
+      "semantic-vector",
+      "port-algebra-trace-fixture"
+    ]
   );
 
   const transformResult = filterProjectDashboardData(
@@ -1012,6 +1077,7 @@ test("filterProjectDashboardData finds cards and gallery items by text facets", 
       "transform-compute-hessian",
       "transform-rename-variable",
       "gallery-kp-asset-calculus",
+      "asset-linear-solve-bundle",
       "tutorial-card-manifest-v0"
     ]
   );
