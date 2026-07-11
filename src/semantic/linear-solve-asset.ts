@@ -4,6 +4,10 @@ import {
   type KpAssetBundle
 } from "./asset.ts";
 import {
+  createKpBehavior,
+  type KpBehavior
+} from "./asset-behavior.ts";
+import {
   createKpSemanticDiagramSequence,
   createKpTransformationDiagramLeaf,
   type KpSemanticDiagramSequence
@@ -12,6 +16,10 @@ import {
   createKpSemanticTransformation,
   type KpSemanticTransformation
 } from "./asset-transformation.ts";
+import {
+  createLinearSolveTutorialCardSample,
+  type LinearSolveTutorialCardSampleFrame
+} from "../tutorial/linear-solve-card-sample.ts";
 
 export interface LinearSolveKpAsset {
   readonly sourceAnimationId: "linear-equation-solve-x";
@@ -19,6 +27,9 @@ export interface LinearSolveKpAsset {
   readonly transformations: readonly KpSemanticTransformation[];
   readonly diagram: KpSemanticDiagramSequence;
 }
+
+export type LinearSolveKpBehavior =
+  KpBehavior<LinearSolveTutorialCardSampleFrame>;
 
 const ids = {
   initial: "equation.linear-solve.initial",
@@ -119,6 +130,16 @@ export function createLinearSolveKpAssetBundle(): LinearSolveKpAsset {
     transformations,
     diagram
   };
+}
+
+export function createLinearSolveKpBehavior(): LinearSolveKpBehavior {
+  const sample = createLinearSolveTutorialCardSample();
+
+  return createKpBehavior({
+    id: "behavior.linear-solve.card",
+    durationMs: sample.cardSampler.parentTimeline.durationMs,
+    sample: ({ progress }) => sample.sample(progress)
+  });
 }
 
 function createLinearSolveTransformations(): readonly KpSemanticTransformation[] {

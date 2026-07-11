@@ -133,13 +133,14 @@
     {
       "id": "next.kp.asset-linear-solve-bundle",
       "title": "Wrap linear solve as an AssetBundle",
-      "status": "complete",
-      "summary": "Added a canonical linear-solve KP asset wrapper with manifest-aligned equation object ids, selector metadata, transformation contracts, correspondence maps, and a sequence diagram without changing the existing renderer."
+      "summary": "Added a canonical linear-solve KP asset wrapper with manifest-aligned equation object ids, selector metadata, transformation contracts, correspondence maps, and a sequence diagram without changing the existing renderer.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-linear-solve-behavior",
       "title": "Map existing equation sampler into KpBehavior",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added createLinearSolveKpBehavior, a KpBehavior wrapper over the existing live linear-solve tutorial card sampler that preserves parent-timeline duration and deterministic progress sampling."
     },
     {
       "id": "next.kp.asset-inspect-at-api",
