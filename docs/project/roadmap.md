@@ -19,23 +19,23 @@ semantics first
 
 ## Active Focus
 
-**Tutorial-card hosted/package readiness and export sampling.** The
-export/embed loop and browser hardening loop both closed on 2026-07-11. KP now
-has concrete iframe and static-step artifacts, launch-target smoke coverage,
-iframe dependency closure, fallback readiness, iframe embed policy and asset
-manifests, deterministic seek/nonblank browser probes, programming
-execution-trace card samples, authored static-step markers, expanded graph
-timeline diagnostics, synchronized comparison shells, and dashboard/API catalog
-rows for those surfaces.
+**SemanticObject capability loading.** The export/embed, browser hardening, and
+hosted/export sampling loops all closed on 2026-07-11. KP now has concrete
+iframe and static-step artifacts, launch-target smoke coverage, hosted fixture
+roots, parent-timeline frame-sequence artifacts, and dependency manifests for
+those outputs.
 
-The hosted/export sampling loop is closed. It added static-host fixture roots,
-packaged iframe/static-step browser smokes, hosted readiness dashboard/report
-rows, parent-timeline frame export contracts, synchronized
-equation/graph/programming frame sampling, frame-sequence artifacts and
-previews, browser probes, rewind checks, frame-sequence dependency manifests,
-and metadata-only export capability advertisements. The next implementation
-choice should choose between media encoder integration, broader SemanticObject
-capability loading, and graph runtime unification.
+The current capability-loading loop moved the next dependency layer from
+sample-specific capability advertisements into registry-backed capability
+package manifests. Equation, Matrix, Graph, SourceFile, and export capabilities
+now have package ids, stable capability keys, source refs, dashboard rows,
+facet search, tutorial dependency planning, and export closure validation across
+iframe, static-step, and frame-sequence artifacts.
+
+Dynamic package loading is deliberately not the next step yet. The useful
+contract is the metadata spine: generated tutorials, export artifacts, and the
+dashboard can agree on what capabilities and packages a tutorial needs before
+KP starts shipping those packages independently.
 
 ## Roadmap Phases
 
@@ -49,7 +49,7 @@ strategy, roadmap, active threads, decision record, and next-step review exist.
 
 ### Phase 1: Semantic Object Foundation
 
-Status: next
+Status: active
 
 Formalize the shared object protocol:
 
@@ -58,7 +58,9 @@ Formalize the shared object protocol:
 - traits and predicates instead of type explosion;
 - capabilities for render, select, derive, execute, transform, compare,
   diagnose, animate, and link;
-- a registry that can advertise metadata without loading every capability.
+- a registry that can advertise metadata without loading every capability;
+- capability package manifests that expose package ids, stable capability keys,
+  source refs, target surfaces, load phases, protocols, and views.
 
 ### Phase 2: Derive And Representation Capability
 
@@ -184,22 +186,27 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Decide the next loop: media encoder integration, broader SemanticObject
-   capability loading, or graph/visual runtime unification.
-2. Start GIF or video encoder integration only after the frame-sequence JSON
+1. Close the SemanticObject capability loading loop with a concise closeout
+   report and residual-risk list.
+2. Choose the next loop: a generated tutorial family that consumes capability
+   packages, media encoder integration, or graph/visual runtime unification.
+3. Start GIF or video encoder integration only after the frame-sequence JSON
    artifact, HTML preview, browser probe, rewind check, dependency manifest,
-   and capability advertisements stay stable.
-3. Expand graph diagnostics from current mesh/conformance checks into richer
+   and capability package manifests stay stable.
+4. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-4. Return to the SemanticObject registry and capability loading layer so export
-   artifacts can advertise exactly what each card needs.
+5. Defer dynamic package loading until at least one generated tutorial family
+   proves the metadata contract across math, graph, programming, and export
+   examples.
 
 ## Deferred
 
 - Full curriculum and spaced repetition are deferred until object,
   transformation, and computation protocols are reliable.
 - GIF/video encoder integration is deferred until the frame-sequence artifact
-  format and dependency advertisements are accepted as the encoder input
+  format and capability package manifests are accepted as the encoder input
   contract.
+- Dynamic package loading is deferred until package manifests stay stable across
+  generated tutorial families and broader render domains.
 - Broad Theseus planner infrastructure is deferred unless it directly blocks KP
   roadmap execution.

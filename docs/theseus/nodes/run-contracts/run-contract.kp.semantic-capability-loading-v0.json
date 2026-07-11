@@ -294,7 +294,14 @@
     {
       "id": "next.kp.capability-loading-roadmap-refresh",
       "title": "Roadmap/thread refresh",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-capability-loading-roadmap-refresh-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-capability-loading-roadmap-refresh-v0",
+      "title": "Roadmap/thread refresh",
+      "summary": "Materialized from stored run-contract slice next.kp.capability-loading-roadmap-refresh in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.capability-loading-loop-closeout",

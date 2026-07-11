@@ -2,8 +2,9 @@
 
 Status: active
 Last Updated: 2026-07-11
-Current Next Action: Choose between media encoder integration, SemanticObject
-capability loading, or graph/visual runtime unification.
+Current Next Action: Close the SemanticObject capability loading loop, then
+choose between generated tutorial families, media encoder integration, or
+graph/visual runtime unification.
 
 ## Goal
 
@@ -56,12 +57,22 @@ frame sampling, frame-sequence artifacts and HTML previews, browser probes,
 rewind checks, dependency manifests, metadata-only export capability
 advertisements, and a closeout review.
 
+The SemanticObject capability loading loop is now in closeout. It converted
+the sample-specific capability advertisement path into registry-backed
+capability package manifests for Equation, Matrix, Graph, SourceFile, and
+export capabilities. Those packages expose stable ids, capability keys, source
+refs, target surfaces, load phases, protocols, dashboard rows, facet search,
+tutorial dependency planning, and export closure validation across iframe,
+static-step, and frame-sequence artifacts.
+
 ## Accepted Scope
 
 - semantic objects with stable selectors and immutable structural history;
 - semantic transformations with correspondence and provenance;
 - capability-style protocols for render, derive, execute, transform, animate,
   compare, diagnose, and link;
+- capability package manifests as the metadata dependency layer before any
+  dynamic package loader;
 - sampled timelines that can seek and rewind deterministically;
 - renderer adapters that consume explicit frames;
 - dashboard visibility for the catalog and current samples.
@@ -76,10 +87,13 @@ advertisements, and a closeout review.
 
 ## Open Questions
 
+- Which next loop should consume capability packages first: a generated
+  tutorial family, media encoder integration, or graph/visual runtime
+  unification?
 - Which media encoder target should consume the frame-sequence artifact first:
   GIF, MP4/WebM, or a deterministic image sequence?
-- How should export capability advertisements move from sample-specific
-  metadata into the broader SemanticObject registry/capability loading layer?
+- What is the minimum dynamic package loader boundary once manifests are stable
+  across generated math, graph, programming, and export examples?
 - How should static-step export choose richer checkpoints from authored parent
   timeline markers, pauses, and annotations?
 - Which remaining KaTeX transform fixtures should be promoted from curated
@@ -94,6 +108,8 @@ advertisements, and a closeout review.
 - `docs/project/reviews/2026-07-11-tutorial-card-export-embed-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-tutorial-card-browser-hardening-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-hosted-package-readiness-export-sampling-loop-closeout.md`
+- `docs/project/reviews/2026-07-11-capability-loading-readiness-report.md`
+- `docs/theseus/nodes/run-contracts/run-contract.kp.semantic-capability-loading-v0.json`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json`
 - `docs/superpowers/specs/2026-07-10-derive-representation-capability-design.md`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json`
