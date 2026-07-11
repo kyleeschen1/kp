@@ -242,6 +242,30 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
         outputs: ["json-document", "checkpoint frames"],
         preserves: ["manifest identity", "profile identity", "timeline identity", "checkpoint provenance"]
       }),
+      item("embed-frame-sequence-export-preview", "FrameSequenceExportPreview", "export", "active", "Parent-timeline media frame sampling contract with synchronized equation, graph, and programming frame bundles plus a static HTML preview.", ["frame-sequence", "media", "preview", "timeline"], {
+        protocols: [
+          "createKpTutorialParentTimelineFrameExportContract",
+          "sampleKpTutorialEquationFramesForExport",
+          "sampleKpTutorialGraphFramesForExport",
+          "sampleKpTutorialProgrammingFramesForExport",
+          "createKpTutorialFrameSequenceArtifact",
+          "renderKpTutorialFrameSequencePreviewHtml"
+        ],
+        inputs: [
+          "KpTutorialParentTimelineFrameExportContract",
+          "domain frame export sequences"
+        ],
+        outputs: [
+          "frame-sequence artifact",
+          "json-document preview",
+          "rewind frame ids"
+        ],
+        preserves: [
+          "parent timeline identity",
+          "frame index identity",
+          "domain frame provenance"
+        ]
+      }),
       item("embed-iframe-asset-manifest", "IframeAssetManifest", "export", "active", "Serializable iframe asset manifest for dependencies, capability keys, assets, and embed policy metadata.", ["iframe", "assets", "policy"], {
         protocols: ["createKpIframeExportAssetManifest"],
         inputs: ["KpTutorialCardExportArtifact"],

@@ -1072,6 +1072,89 @@ export const projectDashboardData: ProjectDashboardData = {
       ]
     },
     {
+      id: "frame-sequence-export-preview",
+      title: "Frame-sequence export preview",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Parent-timeline media export sampler that bundles synchronized equation, graph, and programming frames into a renderable JSON frame-sequence artifact with a static HTML preview.",
+      tags: ["frame-sequence", "export", "media", "timeline", "preview"],
+      domains: ["runtime", "authoring", "export", "programming"],
+      interfaces: [
+        "createKpTutorialParentTimelineFrameExportContract",
+        "sampleKpTutorialEquationFramesForExport",
+        "sampleKpTutorialGraphFramesForExport",
+        "sampleKpTutorialProgrammingFramesForExport",
+        "createKpTutorialFrameSequenceArtifact",
+        "renderKpTutorialFrameSequencePreviewHtml"
+      ],
+      maturity: "active frame-sequence preview",
+      coverage: [
+        "parent timeline frame sampling",
+        "equation frame sequence",
+        "graph frame sequence",
+        "programming trace frame sequence",
+        "rewind frame ids",
+        "HTML preview"
+      ],
+      sourceRefs: [
+        {
+          label: "Frame export contract",
+          href: "src/tutorial/frame-export-contract.ts"
+        },
+        {
+          label: "Equation frame export sampler",
+          href: "src/tutorial/equation-frame-export-sampler.ts"
+        },
+        {
+          label: "Graph frame export sampler",
+          href: "src/tutorial/graph-frame-export-sampler.ts"
+        },
+        {
+          label: "Programming frame export sampler",
+          href: "src/tutorial/programming-frame-export-sampler.ts"
+        },
+        {
+          label: "Frame-sequence artifact",
+          href: "src/tutorial/frame-sequence-artifact.ts"
+        },
+        {
+          label: "Frame-sequence preview",
+          href: "src/tutorial/frame-sequence-preview.ts"
+        }
+      ],
+      verification: [
+        "tests/tutorial-card-frame-export-contract.test.ts",
+        "tests/tutorial-card-equation-frame-export-sampler.test.ts",
+        "tests/tutorial-card-graph-frame-export-sampler.test.ts",
+        "tests/tutorial-card-programming-frame-export-sampler.test.ts",
+        "tests/tutorial-card-frame-sequence-artifact.test.ts",
+        "tests/tutorial-card-frame-sequence-preview.test.ts"
+      ],
+      sampleTargets: [
+        {
+          kind: "export-artifact",
+          label: "Open frame-sequence export preview",
+          artifactId: "artifact.linear-solve.gif.frames",
+          manifestId: "tutorial.linear-solve.card",
+          profileId: "export.linear-solve.gif",
+          payloadKind: "json-document"
+        },
+        {
+          kind: "api-catalog-item",
+          label: "Open FrameSequenceExportPreview API sample",
+          itemId: "embed-frame-sequence-export-preview"
+        }
+      ],
+      relatedIds: [
+        "static-step-export-artifact",
+        "iframe-export-artifact",
+        "programming-execution-trace-card",
+        "report-hosted-package-readiness",
+        "report-semantic-runtime-readiness"
+      ]
+    },
+    {
       id: "iframe-asset-manifest",
       title: "Iframe asset manifest",
       kind: "protocol-api",

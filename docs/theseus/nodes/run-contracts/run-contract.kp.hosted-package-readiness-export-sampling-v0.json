@@ -171,7 +171,14 @@
     {
       "id": "next.kp.dashboard-export-sampling-controls",
       "title": "Add export sampling controls to dashboard preview",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.tutorial.next-kp-dashboard-export-sampling-controls-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.tutorial.next-kp-dashboard-export-sampling-controls-v0",
+      "title": "Add export sampling controls to dashboard preview",
+      "summary": "Materialized from stored run-contract slice next.kp.dashboard-export-sampling-controls in KP hosted package readiness and export sampling loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.sampled-frame-nonblank-browser-probe",

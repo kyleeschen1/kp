@@ -476,6 +476,37 @@ test("renderProjectDashboard exposes static-step export artifact sample targets"
   assert.match(html, /data-kp-preview-api-item="embed-static-step-export-artifact"/);
 });
 
+test("renderProjectDashboard exposes frame-sequence export sampling controls", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "frame-sequence-export-preview"
+  });
+
+  assert.match(
+    html,
+    /data-kp-selected-agenda-row="frame-sequence-export-preview"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Sample targets"[^>]*>Open frame-sequence export preview/
+  );
+  assert.match(html, /data-kp-preview-link="export-artifact"/);
+  assert.match(
+    html,
+    /data-kp-preview-export-artifact="artifact\.linear-solve\.gif\.frames"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-export-profile="export\.linear-solve\.gif"/
+  );
+  assert.match(html, /data-kp-preview-export-payload="json-document"/);
+  assert.match(
+    html,
+    /data-kp-preview-api-item="embed-frame-sequence-export-preview"/
+  );
+  assert.match(html, /src\/tutorial\/frame-sequence-preview\.ts/);
+  assert.match(html, /tests\/tutorial-card-frame-sequence-preview\.test\.ts/);
+});
+
 test("renderProjectDashboard exposes tutorial browser hardening catalog rows", () => {
   const iframeManifestHtml = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "iframe-asset-manifest"

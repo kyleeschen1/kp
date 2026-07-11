@@ -239,6 +239,28 @@ test("API catalog exposes browser hardening artifacts and samples", () => {
   ]);
 });
 
+test("API catalog exposes frame sequence export preview API", () => {
+  const frameSequencePreview = findApiCatalogItem(
+    "embed-frame-sequence-export-preview"
+  );
+
+  assert.equal(frameSequencePreview?.group.category, "embed");
+  assert.equal(frameSequencePreview?.item.status, "active");
+  assert.deepEqual(frameSequencePreview?.item.details?.protocols, [
+    "createKpTutorialParentTimelineFrameExportContract",
+    "sampleKpTutorialEquationFramesForExport",
+    "sampleKpTutorialGraphFramesForExport",
+    "sampleKpTutorialProgrammingFramesForExport",
+    "createKpTutorialFrameSequenceArtifact",
+    "renderKpTutorialFrameSequencePreviewHtml"
+  ]);
+  assert.deepEqual(frameSequencePreview?.item.details?.outputs, [
+    "frame-sequence artifact",
+    "json-document preview",
+    "rewind frame ids"
+  ]);
+});
+
 test("API catalog detail helpers normalize preview and search fields", () => {
   const matrix = findApiCatalogItem("semantic-matrix");
   assert.ok(matrix);
