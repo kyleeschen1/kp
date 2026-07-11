@@ -90,7 +90,14 @@
     {
       "id": "next.kp.registry-package-manifest-mapping",
       "title": "Map SemanticObject registry capabilities to package manifests",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-registry-package-manifest-mapping-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-registry-package-manifest-mapping-v0",
+      "title": "Map SemanticObject registry capabilities to package manifests",
+      "summary": "Materialized from stored run-contract slice next.kp.registry-package-manifest-mapping in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.capability-loader-planning-api",

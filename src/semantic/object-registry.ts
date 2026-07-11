@@ -29,6 +29,7 @@ export interface SemanticObjectDefinitionMetadata {
   readonly summary: string;
   readonly tags: readonly string[];
   readonly capabilities: readonly SemanticObjectCapabilityId[];
+  readonly capabilityPackageIds?: readonly string[] | undefined;
   readonly capabilityAdvertisements?:
     readonly SemanticObjectCapabilityAdvertisement[];
 }
@@ -51,6 +52,7 @@ export interface SemanticObjectRegistry {
   listCapabilityAdvertisementsForType(
     type: string
   ): readonly SemanticObjectCapabilityAdvertisement[];
+  listCapabilityPackageIdsForType(type: string): readonly string[];
 }
 
 export function createSemanticObjectRegistry(
@@ -86,6 +88,13 @@ export function createSemanticObjectRegistry(
         ...(definition.capabilityAdvertisements ??
           createDefaultCapabilityAdvertisements(definition))
       ];
+    },
+    listCapabilityPackageIdsForType: (type) => {
+      const definition = definitionsByType.get(type);
+
+      return definition === undefined
+        ? []
+        : [...(definition.capabilityPackageIds ?? [])];
     }
   };
 }
@@ -148,6 +157,7 @@ export const defaultSemanticObjectDefinitions:
         "Left/right symbolic relation that can transform, render as KaTeX, and derive graph views when classifiable.",
       tags: ["math", "relation", "transform"],
       capabilities: ["render", "select", "derive", "transform", "animate"],
+      capabilityPackageIds: ["package.kp.equation.render.katex"],
       capabilityAdvertisements: [
         capabilityAdvertisement(
           "render",
@@ -220,6 +230,10 @@ export const defaultSemanticObjectDefinitions:
         "Rectangular linear-algebra object with row, column, entry selectors, LaTeX rendering, execution, and linear-map derivation metadata.",
       tags: ["linear-algebra", "selectors", "grid"],
       capabilities: ["render", "select", "derive", "execute"],
+      capabilityPackageIds: [
+        "package.kp.matrix.render.katex",
+        "package.kp.matrix.execute.facts"
+      ],
       capabilityAdvertisements: [
         capabilityAdvertisement(
           "render",
@@ -259,6 +273,9 @@ export const defaultSemanticObjectDefinitions:
         "3D graph scene with axes, surfaces, curves, camera, lighting, and WebGL/SVG render adapters.",
       tags: ["graph", "webgl", "surface"],
       capabilities: ["render", "select", "animate"],
+      capabilityPackageIds: [
+        "package.kp.graph3d.render.webgl.surface-mesh"
+      ],
       capabilityAdvertisements: [
         capabilityAdvertisement(
           "render",
