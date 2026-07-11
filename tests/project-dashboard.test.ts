@@ -165,7 +165,7 @@ test("renderProjectDashboard renders capability package agenda rows", () => {
   assert.match(html, /data-kp-agenda-section="capability-packages"/);
   assert.match(
     html,
-    /<h2 id="project-agenda-capability-packages-title">Capability Packages <span class="project-agenda__count">\(8\)<\/span><\/h2>/
+    /<h2 id="project-agenda-capability-packages-title">Capability Packages <span class="project-agenda__count">\(11\)<\/span><\/h2>/
   );
   assert.match(
     html,

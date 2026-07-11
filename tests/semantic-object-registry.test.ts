@@ -90,8 +90,13 @@ test("semantic object registry maps object types to capability package ids", () 
     "package.kp.matrix.execute.facts",
     "package.kp.matrix.derive.linear-map"
   ]);
+  assert.deepEqual(registry.listCapabilityPackageIdsForType("graph-2d"), [
+    "package.kp.graph2d.render.svg",
+    "package.kp.graph2d.derive.latex"
+  ]);
   assert.deepEqual(registry.listCapabilityPackageIdsForType("graph-3d"), [
-    "package.kp.graph3d.render.webgl.surface-mesh"
+    "package.kp.graph3d.render.webgl.surface-mesh",
+    "package.kp.graph3d.animate.surface-mode"
   ]);
   assert.deepEqual(registry.listCapabilityPackageIdsForType("unknown"), []);
 });

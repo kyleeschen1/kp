@@ -217,6 +217,87 @@ export const defaultKpCapabilityPackageManifests:
       ]
     },
     {
+      id: "package.kp.graph2d.render.svg",
+      title: "SVG Graph2D Renderer",
+      library: "kp.graph",
+      capability: "render.svg",
+      objectType: "graph-2d",
+      mode: "*",
+      status: "planned",
+      target: "browser",
+      loadPhase: "initial-render",
+      summary:
+        "Render Graph2D scenes through the SVG graph renderer and scene model.",
+      semanticCapabilities: ["render", "select"],
+      protocols: ["renderGraph2dSvg"],
+      views: ["svg-graph"],
+      tags: ["graph", "svg", "2d"],
+      sourceRefs: [
+        {
+          label: "Graph2D scene",
+          href: "src/rendering/graph-2d-scene.ts"
+        },
+        {
+          label: "Graph SVG renderer",
+          href: "src/rendering/graph-svg.ts"
+        }
+      ]
+    },
+    {
+      id: "package.kp.graph2d.derive.latex",
+      title: "Graph2D Exact LaTeX Deriver",
+      library: "kp.graph",
+      capability: "derive.latex",
+      objectType: "graph-2d",
+      mode: "*",
+      status: "planned",
+      target: "runtime",
+      loadPhase: "interaction",
+      summary:
+        "Derive exact LaTeX forms from Graph2D symbolic provenance when available.",
+      semanticCapabilities: ["derive"],
+      protocols: ["deriveGraph2dExactLatex"],
+      views: ["latex-form"],
+      tags: ["graph", "latex", "provenance"],
+      sourceRefs: [
+        {
+          label: "Equation graph derivation",
+          href: "src/semantic/equation-graph.ts"
+        },
+        {
+          label: "Semantic object registry",
+          href: "src/semantic/object-registry.ts"
+        }
+      ]
+    },
+    {
+      id: "package.kp.graph3d.animate.surface-mode",
+      title: "Graph3D Surface Mode Animator",
+      library: "kp.graph",
+      capability: "animate.surface-mode",
+      objectType: "graph-3d",
+      mode: "surface.mode",
+      status: "active",
+      target: "browser",
+      loadPhase: "interaction",
+      summary:
+        "Animate Graph3D surface-mode changes through the shared motion-plan clock.",
+      semanticCapabilities: ["animate", "select"],
+      protocols: ["createGraphSurfaceModeMotionPlan"],
+      views: ["surface-mode-motion"],
+      tags: ["graph", "webgl", "surface", "timeline"],
+      sourceRefs: [
+        {
+          label: "Graph transitions",
+          href: "src/rendering/graph-transitions.ts"
+        },
+        {
+          label: "Animation kernel",
+          href: "src/animation/kernel.ts"
+        }
+      ]
+    },
+    {
       id: "package.kp.matrix.render.katex",
       title: "KaTeX Matrix Renderer",
       library: "kp.matrix",

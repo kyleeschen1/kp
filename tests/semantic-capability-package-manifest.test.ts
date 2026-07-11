@@ -68,6 +68,20 @@ test("capability package catalog indexes default package manifests", () => {
     ["package.kp.graph3d.render.webgl.surface-mesh"]
   );
   assert.deepEqual(
+    catalog.listManifestsForObjectType("graph-2d").map((manifest) => manifest.id),
+    [
+      "package.kp.graph2d.render.svg",
+      "package.kp.graph2d.derive.latex"
+    ]
+  );
+  assert.deepEqual(
+    catalog.listManifestsForObjectType("graph-3d").map((manifest) => manifest.id),
+    [
+      "package.kp.graph3d.render.webgl.surface-mesh",
+      "package.kp.graph3d.animate.surface-mode"
+    ]
+  );
+  assert.deepEqual(
     catalog.listManifestsForObjectType("matrix").map((manifest) => manifest.id),
     [
       "package.kp.matrix.render.katex",

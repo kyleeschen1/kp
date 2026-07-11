@@ -198,7 +198,14 @@
     {
       "id": "next.kp.graph-capability-package-fixtures",
       "title": "Add Graph2D/Graph3D capability package fixtures",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-graph-capability-package-fixtures-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-graph-capability-package-fixtures-v0",
+      "title": "Add Graph2D/Graph3D capability package fixtures",
+      "summary": "Materialized from stored run-contract slice next.kp.graph-capability-package-fixtures in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.programming-capability-package-fixtures",

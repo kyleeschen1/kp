@@ -45,7 +45,7 @@ test("tutorial card dependency planner summarizes manifest dependency phases", (
           layoutCount: 1,
           timelineCount: 1,
           capabilityCount: 1,
-          capabilityPackageCount: 1,
+          capabilityPackageCount: 2,
           assetCount: 0
         }
       ],
@@ -71,7 +71,7 @@ test("tutorial card dependency planner summarizes manifest dependency phases", (
     layoutCount: 1,
     timelineCount: 1,
     capabilityCount: 6,
-    capabilityPackageCount: 4,
+    capabilityPackageCount: 5,
     assetCount: 0
   });
   assert.deepEqual(plan.phases[0]?.capabilityPackageIds, [
@@ -85,7 +85,8 @@ test("tutorial card dependency planner summarizes manifest dependency phases", (
     "kp.equation:animate.motion-plan:equation:*"
   ]);
   assert.deepEqual(plan.phases[1]?.capabilityPackageIds, [
-    "package.kp.graph3d.render.webgl.surface-mesh"
+    "package.kp.graph3d.render.webgl.surface-mesh",
+    "package.kp.graph3d.animate.surface-mode"
   ]);
   assert.deepEqual(plan.phases[1]?.capabilityKeys, [
     "kp.graph:render.webgl:graph-3d:surface.mesh"

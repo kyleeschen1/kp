@@ -203,6 +203,10 @@ export const defaultSemanticObjectDefinitions:
         "2D graph scene with axes, curves, render metadata, and optional symbolic provenance for exact LaTeX derivation.",
       tags: ["graph", "latex", "provenance"],
       capabilities: ["render", "select", "derive"],
+      capabilityPackageIds: [
+        "package.kp.graph2d.render.svg",
+        "package.kp.graph2d.derive.latex"
+      ],
       capabilityAdvertisements: [
         capabilityAdvertisement(
           "render",
@@ -279,7 +283,8 @@ export const defaultSemanticObjectDefinitions:
       tags: ["graph", "webgl", "surface"],
       capabilities: ["render", "select", "animate"],
       capabilityPackageIds: [
-        "package.kp.graph3d.render.webgl.surface-mesh"
+        "package.kp.graph3d.render.webgl.surface-mesh",
+        "package.kp.graph3d.animate.surface-mode"
       ],
       capabilityAdvertisements: [
         capabilityAdvertisement(
