@@ -248,6 +248,27 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
         outputs: ["dependency phases", "capability keys", "asset ids", "embed policy"],
         preserves: ["artifact identity", "manifest identity", "profile identity"]
       }),
+      item("embed-hosted-artifact-readiness", "HostedArtifactReadiness", "export", "active", "Static-host/package readiness validator for export artifacts, fallback data, dependency closure, dev-server asset URLs, and iframe embed policy.", ["hosted", "readiness", "export"], {
+        protocols: ["validateKpTutorialHostedArtifactReadiness"],
+        inputs: ["KpTutorialCardExportArtifact", "KpTutorialCardManifest"],
+        outputs: ["readiness diagnostics"],
+        preserves: ["artifact identity", "manifest identity"]
+      }),
+      item("embed-static-host-fixture-root", "StaticHostFixtureRoot", "export", "active", "Serializable static-host fixture root for packaged iframe and static-step artifact entries with relative paths and fallback readiness metadata.", ["hosted", "fixture", "iframe", "static-step"], {
+        protocols: [
+          "createLinearSolveStaticHostFixtureRoot",
+          "findKpStaticHostFixtureEntry"
+        ],
+        inputs: ["iframe progress"],
+        outputs: ["relative hosted entries", "fallback readiness"],
+        preserves: ["artifact identity", "relative path identity"]
+      }),
+      item("embed-iframe-static-asset-path-closure", "IframeStaticAssetPathClosure", "export", "active", "Path closure report that verifies iframe documents and declared assets map to relative static-host paths.", ["iframe", "assets", "hosted", "path-closure"], {
+        protocols: ["createKpIframeStaticAssetPathClosure"],
+        inputs: ["KpTutorialCardExportArtifact", "KpStaticHostFixtureRoot"],
+        outputs: ["document path", "asset paths", "path diagnostics"],
+        preserves: ["artifact identity", "asset identity"]
+      }),
       item("embed-programming-execution-trace-card", "ProgrammingExecutionTraceCard", "tutorial", "active", "Programming tutorial card sample that synchronizes SourceFile and execution-trace panels from one progress value.", ["programming", "trace", "tutorial-card"], {
         protocols: ["createAdditionProgrammingExecutionTraceTutorialCardSample", "renderKpProgrammingExecutionTraceTutorialCardHtmlShell"],
         views: ["source-file panel", "execution-trace panel"],

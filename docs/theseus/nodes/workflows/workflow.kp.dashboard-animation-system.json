@@ -38,7 +38,8 @@
     "next.kp.static-host-fallback-readiness",
     "next.kp.packaged-iframe-browser-smoke",
     "next.kp.packaged-static-step-browser-smoke",
-    "next.kp.dashboard-hosted-readiness-row"
+    "next.kp.dashboard-hosted-readiness-row",
+    "next.kp.hosted-readiness-report-card"
   ],
   "progress": {
     "state": "partial",

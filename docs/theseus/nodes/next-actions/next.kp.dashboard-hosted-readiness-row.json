@@ -2,9 +2,9 @@
   "id": "next.kp.dashboard-hosted-readiness-row",
   "kind": "next-action",
   "title": "Add dashboard hosted-readiness row",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.dashboard",
-  "summary": "Expose hosted/package readiness artifacts and static-host smoke coverage in the project dashboard and API/catalog rows.",
+  "summary": "Exposed hosted/package readiness in the API catalog and project dashboard through active rows for HostedArtifactReadiness, StaticHostFixtureRoot, and iframe static asset path closure.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,9 +25,64 @@
       "kind": "file",
       "path": "src/editor/api-catalog.ts",
       "summary": "API catalog will expose hosted-readiness contracts and static-host artifacts."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "API catalog now advertises hosted-readiness, static-host fixture root, and iframe static asset path closure contracts."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Dashboard gallery rows now expose hosted artifact readiness and static-host fixture root with source refs, verification, and API sample targets."
+    },
+    {
+      "kind": "file",
+      "path": "tests/api-catalog.test.ts",
+      "summary": "API catalog tests assert the hosted-readiness API entries."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Dashboard tests assert hosted-readiness selected-row previews and source refs."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.hosted-readiness-report-card.json",
+      "summary": "Seeds the hosted readiness report-card slice so the run contract can advance."
     }
   ],
   "verification": [
     "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/api-catalog.test.ts"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/api-catalog.test.ts tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "dashboard and API catalog coverage",
+      "checkedAt": "2026-07-11T02:47:53.344Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T02:47:53.406Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T02:47:53.441Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:47:53.475Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Exposed hosted/package readiness in the API catalog and project dashboard through active rows for HostedArtifactReadiness, StaticHostFixtureRoot, and iframe static asset path closure."
+  }
 }

@@ -480,6 +480,12 @@ test("renderProjectDashboard exposes tutorial browser hardening catalog rows", (
   const iframeManifestHtml = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "iframe-asset-manifest"
   });
+  const hostedReadinessHtml = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "hosted-artifact-readiness"
+  });
+  const staticHostRootHtml = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "static-host-fixture-root"
+  });
   const traceCardHtml = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "programming-execution-trace-card"
   });
@@ -494,6 +500,26 @@ test("renderProjectDashboard exposes tutorial browser hardening catalog rows", (
   assert.match(
     iframeManifestHtml,
     /src\/tutorial\/iframe-asset-manifest\.ts/
+  );
+  assert.match(
+    hostedReadinessHtml,
+    /data-kp-preview-api-item="embed-hosted-artifact-readiness"/
+  );
+  assert.match(
+    hostedReadinessHtml,
+    /src\/tutorial\/hosted-artifact-readiness\.ts/
+  );
+  assert.match(
+    staticHostRootHtml,
+    /data-kp-preview-api-item="embed-static-host-fixture-root"/
+  );
+  assert.match(
+    staticHostRootHtml,
+    /tests\/packaged-iframe-smoke\.browser\.spec\.ts/
+  );
+  assert.match(
+    staticHostRootHtml,
+    /tests\/packaged-static-step-smoke\.browser\.spec\.ts/
   );
   assert.match(
     traceCardHtml,

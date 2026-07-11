@@ -184,6 +184,11 @@ test("API catalog exposes active tutorial card manifest API", () => {
 
 test("API catalog exposes browser hardening artifacts and samples", () => {
   const iframeAssetManifest = findApiCatalogItem("embed-iframe-asset-manifest");
+  const hostedReadiness = findApiCatalogItem("embed-hosted-artifact-readiness");
+  const staticHostRoot = findApiCatalogItem("embed-static-host-fixture-root");
+  const iframePathClosure = findApiCatalogItem(
+    "embed-iframe-static-asset-path-closure"
+  );
   const executionTraceCard = findApiCatalogItem(
     "embed-programming-execution-trace-card"
   );
@@ -201,6 +206,19 @@ test("API catalog exposes browser hardening artifacts and samples", () => {
     "capability keys",
     "asset ids",
     "embed policy"
+  ]);
+  assert.equal(hostedReadiness?.item.status, "active");
+  assert.deepEqual(hostedReadiness?.item.details?.protocols, [
+    "validateKpTutorialHostedArtifactReadiness"
+  ]);
+  assert.equal(staticHostRoot?.item.status, "active");
+  assert.deepEqual(staticHostRoot?.item.details?.protocols, [
+    "createLinearSolveStaticHostFixtureRoot",
+    "findKpStaticHostFixtureEntry"
+  ]);
+  assert.equal(iframePathClosure?.item.status, "active");
+  assert.deepEqual(iframePathClosure?.item.details?.protocols, [
+    "createKpIframeStaticAssetPathClosure"
   ]);
 
   assert.equal(executionTraceCard?.item.status, "active");

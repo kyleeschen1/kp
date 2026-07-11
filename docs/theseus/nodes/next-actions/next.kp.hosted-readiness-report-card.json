@@ -1,0 +1,33 @@
+{
+  "id": "next.kp.hosted-readiness-report-card",
+  "kind": "next-action",
+  "title": "Add hosted readiness report card",
+  "status": "ready",
+  "domain": "kp.dashboard",
+  "summary": "Add a report card theme that grades hosted/package readiness and points to the static-host fixture and packaged browser smoke evidence.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Project dashboard report themes will include hosted/package readiness."
+    },
+    {
+      "kind": "file",
+      "path": "tests/packaged-iframe-smoke.browser.spec.ts",
+      "summary": "Packaged iframe smoke evidence for hosted readiness report card."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract records hosted readiness report card as the next slice after dashboard rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/packaged-static-step-smoke.browser.spec.ts",
+      "summary": "Packaged static-step smoke evidence for hosted readiness report card."
+    }
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts"
+  ]
+}

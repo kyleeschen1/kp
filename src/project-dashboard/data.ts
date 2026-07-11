@@ -1112,6 +1112,102 @@ export const projectDashboardData: ProjectDashboardData = {
       ]
     },
     {
+      id: "hosted-artifact-readiness",
+      title: "Hosted artifact readiness",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Static-host/package readiness validator for iframe and static-step export artifacts, aggregating artifact validity, dependency closure, fallback readiness, dev-server asset URL checks, and iframe embed policy.",
+      tags: ["hosted", "readiness", "export", "fallback", "hardening"],
+      domains: ["runtime", "export", "embed"],
+      interfaces: ["validateKpTutorialHostedArtifactReadiness"],
+      maturity: "active hosted-readiness gate",
+      coverage: [
+        "artifact validity",
+        "dependency closure",
+        "fallback readiness",
+        "dev-server asset URL diagnostics",
+        "iframe embed policy diagnostics"
+      ],
+      sourceRefs: [
+        {
+          label: "Hosted artifact readiness",
+          href: "src/tutorial/hosted-artifact-readiness.ts"
+        }
+      ],
+      verification: [
+        "tests/tutorial-hosted-artifact-readiness.test.ts",
+        "tests/tutorial-static-host-fallback-readiness.test.ts"
+      ],
+      sampleTargets: [
+        {
+          kind: "api-catalog-item",
+          label: "Open HostedArtifactReadiness API sample",
+          itemId: "embed-hosted-artifact-readiness"
+        }
+      ],
+      relatedIds: [
+        "iframe-export-artifact",
+        "static-step-export-artifact",
+        "iframe-asset-manifest",
+        "report-tutorial-launch-readiness"
+      ]
+    },
+    {
+      id: "static-host-fixture-root",
+      title: "Static-host fixture root",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Serializable static-host root for packaged iframe and static-step artifact entries with relative paths, HTML payloads, readiness diagnostics, and fallback metadata.",
+      tags: ["hosted", "fixture", "iframe", "static-step", "hardening"],
+      domains: ["runtime", "export", "embed"],
+      interfaces: [
+        "createLinearSolveStaticHostFixtureRoot",
+        "findKpStaticHostFixtureEntry"
+      ],
+      maturity: "active packaged smoke fixture",
+      coverage: [
+        "relative hosted paths",
+        "iframe document entry",
+        "static-step document entry",
+        "fallback readiness metadata",
+        "packaged browser smoke"
+      ],
+      sourceRefs: [
+        {
+          label: "Static-host fixture root",
+          href: "src/tutorial/static-host-fixture-root.ts"
+        },
+        {
+          label: "Packaged iframe smoke",
+          href: "tests/packaged-iframe-smoke.browser.spec.ts"
+        },
+        {
+          label: "Packaged static-step smoke",
+          href: "tests/packaged-static-step-smoke.browser.spec.ts"
+        }
+      ],
+      verification: [
+        "tests/tutorial-static-host-fixture-root.test.ts",
+        "tests/packaged-iframe-smoke.browser.spec.ts",
+        "tests/packaged-static-step-smoke.browser.spec.ts"
+      ],
+      sampleTargets: [
+        {
+          kind: "api-catalog-item",
+          label: "Open StaticHostFixtureRoot API sample",
+          itemId: "embed-static-host-fixture-root"
+        }
+      ],
+      relatedIds: [
+        "hosted-artifact-readiness",
+        "iframe-export-artifact",
+        "static-step-export-artifact",
+        "report-tutorial-launch-readiness"
+      ]
+    },
+    {
       id: "programming-execution-trace-card",
       title: "Programming execution-trace card",
       kind: "protocol-api",
