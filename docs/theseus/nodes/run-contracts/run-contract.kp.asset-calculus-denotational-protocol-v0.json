@@ -103,13 +103,14 @@
     {
       "id": "next.kp.asset-timeline-protocol",
       "title": "Define timeline and event protocol",
-      "status": "complete",
-      "summary": "Added timeline specs with beats, events, checkpoints, pauses, active beat sampling, elapsed event sampling, duration clamping, and validation for beat/event ids and bounds."
+      "summary": "Added timeline specs with beats, events, checkpoints, pauses, active beat sampling, elapsed event sampling, duration clamping, and validation for beat/event ids and bounds.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-interpreter-contract",
       "title": "Define interpreter contract for render/export backends",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added a generic KP interpreter contract with target kinds, input kind, preservation level, normalized interpretation output, and explicit diagnostics for lax or lossy mappings."
     },
     {
       "id": "next.kp.asset-port-contract",
