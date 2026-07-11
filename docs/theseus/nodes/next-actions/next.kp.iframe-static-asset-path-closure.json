@@ -2,9 +2,9 @@
   "id": "next.kp.iframe-static-asset-path-closure",
   "kind": "next-action",
   "title": "Check iframe asset manifest path closure under static hosting",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Verify iframe asset manifests can describe relative hosted paths and reject unresolved dev-server or absolute-path dependencies.",
+  "summary": "Added iframe static asset path-closure reporting over the iframe asset manifest and static-host fixture root, including relative document path and per-asset path diagnostics.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,9 +25,59 @@
       "kind": "file",
       "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
       "summary": "Run contract records iframe static asset path closure as the next slice after static-host fixture root."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/iframe-asset-manifest.ts",
+      "summary": "Extended iframe asset manifest module with static-host path closure types and reporter."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-iframe-static-asset-path-closure.test.ts",
+      "summary": "Focused tests for relative fixture path acceptance and missing/nonportable asset path diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-host-fixture-root.ts",
+      "summary": "Static-host fixture root supplies the iframe hosted document entry used by path closure."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.static-host-fallback-readiness.json",
+      "summary": "Seeds the next static-host fallback readiness slice so the run contract can advance."
     }
   ],
   "verification": [
     "node --disable-warning=ExperimentalWarning --test tests/tutorial-iframe-static-asset-path-closure.test.ts"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-iframe-static-asset-path-closure.test.ts tests/tutorial-card-iframe-asset-manifest.test.ts tests/tutorial-static-host-fixture-root.test.ts tests/tutorial-hosted-artifact-readiness.test.ts tests/tutorial-card-export-dependency-closure.test.ts",
+      "status": "passed",
+      "scope": "iframe path closure and adjacent export readiness unit coverage",
+      "checkedAt": "2026-07-11T02:34:40.037Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T02:34:40.069Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T02:34:40.093Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:34:40.116Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added iframe static asset path-closure reporting over the iframe asset manifest and static-host fixture root, including relative document path and per-asset path diagnostics."
+  }
 }

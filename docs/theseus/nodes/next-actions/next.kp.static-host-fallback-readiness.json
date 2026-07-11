@@ -1,0 +1,33 @@
+{
+  "id": "next.kp.static-host-fallback-readiness",
+  "kind": "next-action",
+  "title": "Check fallback readiness without dev server",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Verify static-host fixtures expose fallback readiness without depending on dev-server runtime behavior.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract records static-host fallback readiness as the next slice after iframe path closure."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-hosted-artifact-readiness.test.ts",
+      "summary": "Existing hosted-readiness tests cover fallback aggregation and dev-server assumptions."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/hosted-artifact-readiness.ts",
+      "summary": "Hosted-readiness validator already aggregates fallback readiness diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-host-fixture-root.ts",
+      "summary": "Static-host root will expose fallback readiness for packaged artifact entries."
+    }
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/tutorial-static-host-fallback-readiness.test.ts"
+  ]
+}

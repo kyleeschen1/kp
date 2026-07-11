@@ -34,7 +34,8 @@
     "run-contract.kp.hosted-package-readiness-export-sampling-v0",
     "next.kp.hosted-artifact-readiness-contract",
     "next.kp.static-host-fixture-root",
-    "next.kp.iframe-static-asset-path-closure"
+    "next.kp.iframe-static-asset-path-closure",
+    "next.kp.static-host-fallback-readiness"
   ],
   "progress": {
     "state": "partial",

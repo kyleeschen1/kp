@@ -69,7 +69,7 @@
     {
       "id": "next.kp.iframe-static-asset-path-closure",
       "title": "Check iframe asset manifest path closure under static hosting",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.static-host-fallback-readiness",
