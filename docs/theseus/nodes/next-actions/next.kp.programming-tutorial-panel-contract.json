@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.programming-tutorial-panel-contract",
+  "kind": "next-action",
+  "title": "Add programming panel contract for tutorial cards",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added a programming tutorial-panel contract that binds SourceFile selectors to a code panel and shared clock.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/programming-panel.ts",
+      "summary": "Defines the SourceFile-backed code panel contract, selector identity preservation, shared-clock binding, and mismatched-selector validation."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-programming-panel.test.ts",
+      "summary": "Covers programming panel contract creation, cloning of selector ids, preservation metadata, and selector/source mismatch rejection."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.programming-tutorial-panel-contract.json",
+      "summary": "Materializes the approved programming tutorial panel contract next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the programming tutorial panel contract slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-programming-panel.test.ts tests/semantic.test.ts tests/api-catalog.test.ts",
+      "status": "passed",
+      "scope": "programming panel contract, SourceFile semantic object, and API catalog tests",
+      "checkedAt": "2026-07-11T00:18:24.140Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T00:18:24.154Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T00:18:24.167Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a programming tutorial-panel contract that binds SourceFile selectors to a code panel and shared clock."
+  }
+}
