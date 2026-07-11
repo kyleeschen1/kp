@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.programming-tutorial-card-sample",
+  "kind": "next-action",
+  "title": "Add first programming tutorial-card sample",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added the first SourceFile-backed programming tutorial-card sample and shell renderer.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/programming-card-sample.ts",
+      "summary": "Defines the addition programming tutorial-card sample, SourceFile selectors, code panel adapter composition, frame sampling, and full card shell rendering."
+    },
+    {
+      "kind": "file",
+      "path": "tests/programming-tutorial-card-sample.test.ts",
+      "summary": "Covers deterministic SourceFile frame sampling, progress clamping, selector text, and full programming card shell output."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.programming-tutorial-card-sample.json",
+      "summary": "Materializes the approved programming tutorial-card sample next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the programming tutorial-card sample slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/programming-tutorial-card-sample.test.ts tests/tutorial-card-programming-panel.test.ts tests/tutorial-card-html-shell.test.ts tests/semantic.test.ts",
+      "status": "passed",
+      "scope": "programming tutorial-card sample, SourceFile adapter, shell, and semantic SourceFile tests",
+      "checkedAt": "2026-07-11T00:27:13.634Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T00:27:13.656Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T00:27:13.672Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added the first SourceFile-backed programming tutorial-card sample and shell renderer."
+  }
+}
