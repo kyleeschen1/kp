@@ -236,7 +236,8 @@ export const defaultSemanticObjectDefinitions:
       capabilities: ["render", "select", "derive", "execute"],
       capabilityPackageIds: [
         "package.kp.matrix.render.katex",
-        "package.kp.matrix.execute.facts"
+        "package.kp.matrix.execute.facts",
+        "package.kp.matrix.derive.linear-map"
       ],
       capabilityAdvertisements: [
         capabilityAdvertisement(

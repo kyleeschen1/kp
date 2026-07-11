@@ -186,7 +186,14 @@
     {
       "id": "next.kp.matrix-capability-package-fixtures",
       "title": "Add Matrix capability package fixtures",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-matrix-capability-package-fixtures-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-matrix-capability-package-fixtures-v0",
+      "title": "Add Matrix capability package fixtures",
+      "summary": "Materialized from stored run-contract slice next.kp.matrix-capability-package-fixtures in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.graph-capability-package-fixtures",

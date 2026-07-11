@@ -71,7 +71,8 @@ test("capability package catalog indexes default package manifests", () => {
     catalog.listManifestsForObjectType("matrix").map((manifest) => manifest.id),
     [
       "package.kp.matrix.render.katex",
-      "package.kp.matrix.execute.facts"
+      "package.kp.matrix.execute.facts",
+      "package.kp.matrix.derive.linear-map"
     ]
   );
 });

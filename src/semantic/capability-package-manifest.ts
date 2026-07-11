@@ -261,6 +261,33 @@ export const defaultKpCapabilityPackageManifests:
       ]
     },
     {
+      id: "package.kp.matrix.derive.linear-map",
+      title: "Matrix Linear Map Deriver",
+      library: "kp.matrix",
+      capability: "derive.linear-map",
+      objectType: "matrix",
+      mode: "*",
+      status: "planned",
+      target: "runtime",
+      loadPhase: "interaction",
+      summary:
+        "Derive linear-map metadata from matrix objects with explicit basis provenance.",
+      semanticCapabilities: ["derive"],
+      protocols: ["deriveMatrixLinearMap"],
+      views: ["linear-map"],
+      tags: ["matrix", "derive", "linear-algebra"],
+      sourceRefs: [
+        {
+          label: "Semantic object registry",
+          href: "src/semantic/object-registry.ts"
+        },
+        {
+          label: "Semantic computation protocols",
+          href: "src/semantic/computation-protocols.ts"
+        }
+      ]
+    },
+    {
       id: "package.kp.export.encode.gif",
       title: "GIF Encoder Export Package",
       library: "kp.export",

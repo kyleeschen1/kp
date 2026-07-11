@@ -87,7 +87,8 @@ test("semantic object registry maps object types to capability package ids", () 
   ]);
   assert.deepEqual(registry.listCapabilityPackageIdsForType("matrix"), [
     "package.kp.matrix.render.katex",
-    "package.kp.matrix.execute.facts"
+    "package.kp.matrix.execute.facts",
+    "package.kp.matrix.derive.linear-map"
   ]);
   assert.deepEqual(registry.listCapabilityPackageIdsForType("graph-3d"), [
     "package.kp.graph3d.render.webgl.surface-mesh"
