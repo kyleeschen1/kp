@@ -1,0 +1,49 @@
+{
+  "id": "next.kp.generated-katex-fixture-second-transform",
+  "kind": "next-action",
+  "title": "Promote another KaTeX fixture from semantic transform defs",
+  "status": "resolved",
+  "domain": "kp.katex",
+  "summary": "Promoted the fraction inline-division-to-stacked-fraction fixture through the generated semantic transformation fixture path.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "tests/generated-katex-fixture-contract.test.ts",
+      "summary": "Adds generated fixture coverage for fraction.make.inline-to-stacked, including artifact correspondence, motif timing, geometry diagnostics, and validation round-trip."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.generated-katex-fixture-second-transform.json",
+      "summary": "Materializes the approved generated KaTeX fixture second-transform next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the generated KaTeX fixture second-transform slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-katex-fixture-contract.test.ts tests/katex-token-snapshot.test.ts tests/visual-motif-composition.test.ts tests/semantic-transform-tree-metadata.test.ts",
+      "status": "passed",
+      "scope": "generated KaTeX fixture, token fixture, and visual motif tests",
+      "checkedAt": "2026-07-11T00:29:46.296Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T00:29:46.316Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T00:29:46.334Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted the fraction inline-division-to-stacked-fraction fixture through the generated semantic transformation fixture path."
+  }
+}

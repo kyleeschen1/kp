@@ -223,6 +223,104 @@ test("generated KaTeX fixture generator derives radical fixture metadata from a 
   );
 });
 
+test("generated KaTeX fixture generator derives fraction fixture metadata from a semantic transformation", () => {
+  const semanticTransformation = createSemanticTransformationRef({
+    id: "transform.rewrite-inline-division-as-fraction",
+    kind: "rewriteInlineDivisionAsFraction",
+    sourceObjectIds: ["expr.inline-division"],
+    targetObjectIds: ["expr.fraction"],
+    preserves: ["identity", "role", "presentation"],
+    summary: "Rewrite x / 3 as a stacked fraction."
+  });
+  const generated =
+    createGeneratedKatexTransformFixtureFromSemanticTransformation({
+      fixtureId: "fraction.make.inline-to-stacked",
+      semanticTransformation
+    });
+
+  assert.equal(generated.id, "generated.fraction.make.inline-to-stacked");
+  assert.equal(generated.fixture.id, "fraction.make.inline-to-stacked");
+  assert.deepEqual(generated.semanticTransformation, semanticTransformation);
+  assert.deepEqual(
+    generated.correspondenceMap.records.map((record) => [
+      record.relation,
+      record.sourceSelectorIds,
+      record.targetSelectorIds
+    ]),
+    [
+      [
+        "artifact",
+        [],
+        ["fraction.make.inline-to-stacked.target.artifact.structural-frac-line"]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    generated.visualMotifTimeline.segments.map((segment) => [
+      segment.id,
+      segment.transformationKind,
+      segment.motifKind,
+      segment.motionPrimitiveIds,
+      segment.phaseIds
+    ]),
+    [
+      [
+        "transform.rewrite-inline-division-as-fraction.visual.artifact-enter",
+        "rewriteInlineDivisionAsFraction",
+        "artifact-enter",
+        ["enter"],
+        ["artifact-enter"]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    generated.artifactExpectations.map((artifact) => [
+      artifact.side,
+      artifact.selectorId,
+      artifact.structuralTokenId,
+      artifact.artifactKind
+    ]),
+    [
+      [
+        "target",
+        "fraction.make.inline-to-stacked.target.artifact.structural-frac-line",
+        "structural:frac-line",
+        "fraction-bar"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    generated.geometryDiagnostics.map((diagnostic) => [
+      diagnostic.metric,
+      diagnostic.severity,
+      diagnostic.targetId
+    ]),
+    [
+      [
+        "artifact-presence",
+        "advisory",
+        "fraction.make.inline-to-stacked.target.artifact.structural-frac-line"
+      ],
+      [
+        "baseline",
+        "advisory",
+        "fraction.make.inline-to-stacked.target.artifact.structural-frac-line"
+      ],
+      [
+        "baseline",
+        "advisory",
+        "fraction.make.inline-to-stacked.target.artifact.structural-frac-line"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    validateGeneratedKatexFixtureDocument(
+      exportGeneratedKatexTransformFixture(generated)
+    ),
+    []
+  );
+});
+
 test("generated KaTeX fixture generator rejects mismatched semantic transformations", () => {
   assert.throws(
     () =>
