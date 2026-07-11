@@ -6,6 +6,7 @@ import {
   type KpTutorialDependencySet
 } from "./card-manifest.ts";
 import { formatKpCapabilityKey } from "../semantic/capability-key.ts";
+import { createKpCapabilityLoadPlan } from "../semantic/capability-loader-plan.ts";
 
 export type KpTutorialDependencyPhase = keyof KpTutorialDependencyManifest;
 
@@ -22,6 +23,7 @@ export interface KpTutorialDependencyCounts {
   readonly layoutCount: number;
   readonly timelineCount: number;
   readonly capabilityCount: number;
+  readonly capabilityPackageCount: number;
   readonly assetCount: number;
 }
 
@@ -34,6 +36,8 @@ export interface KpTutorialDependencyPlanPhase {
   readonly layoutIds: readonly string[];
   readonly timelineIds: readonly string[];
   readonly capabilityKeys: readonly string[];
+  readonly capabilityPackageIds: readonly string[];
+  readonly capabilityPackageKeys: readonly string[];
   readonly assetIds: readonly string[];
   readonly counts: KpTutorialDependencyCounts;
 }
@@ -56,12 +60,17 @@ export function createKpTutorialCardDependencyPlan(
   input: KpTutorialCardManifest
 ): KpTutorialCardDependencyPlan {
   const manifest = createKpTutorialCardManifest(input);
+  const objectTypesById = new Map(
+    manifest.semanticObjectRefs.flatMap((ref) =>
+      ref.objectType === undefined ? [] : [[ref.objectId, ref.objectType]]
+    )
+  );
   const phases = dependencyPhases.flatMap((phase) => {
     const dependencySet = manifest.dependencies[phase];
 
     return dependencySet === undefined || dependencySetIsEmpty(dependencySet)
       ? []
-      : [createDependencyPlanPhase(phase, dependencySet)];
+      : [createDependencyPlanPhase(phase, dependencySet, objectTypesById)];
   });
 
   return {
@@ -79,10 +88,20 @@ export function dependencyCapabilityKey(
 
 function createDependencyPlanPhase(
   phase: KpTutorialDependencyPhase,
-  dependencySet: KpTutorialDependencySet
+  dependencySet: KpTutorialDependencySet,
+  objectTypesById: ReadonlyMap<string, string>
 ): KpTutorialDependencyPlanPhase {
   const assetIds = dependencySet.assets?.map((asset) => asset.id) ?? [];
   const capabilityKeys = dependencySet.capabilities.map(dependencyCapabilityKey);
+  const capabilityPackagePlan = createKpCapabilityLoadPlan({
+    objectTypes: unique(
+      dependencySet.semanticObjectIds.flatMap((objectId) => {
+        const objectType = objectTypesById.get(objectId);
+
+        return objectType === undefined ? [] : [objectType];
+      })
+    )
+  });
 
   return {
     phase,
@@ -93,6 +112,8 @@ function createDependencyPlanPhase(
     layoutIds: [...dependencySet.layoutIds],
     timelineIds: [...dependencySet.timelineIds],
     capabilityKeys,
+    capabilityPackageIds: [...capabilityPackagePlan.packageIds],
+    capabilityPackageKeys: [...capabilityPackagePlan.capabilityKeys],
     assetIds,
     counts: dependencyCounts({
       semanticObjectIds: dependencySet.semanticObjectIds,
@@ -100,6 +121,7 @@ function createDependencyPlanPhase(
       layoutIds: dependencySet.layoutIds,
       timelineIds: dependencySet.timelineIds,
       capabilityKeys,
+      capabilityPackageIds: capabilityPackagePlan.packageIds,
       assetIds
     })
   };
@@ -114,6 +136,9 @@ function dependencyTotals(
     layoutIds: unique(phases.flatMap((phase) => phase.layoutIds)),
     timelineIds: unique(phases.flatMap((phase) => phase.timelineIds)),
     capabilityKeys: unique(phases.flatMap((phase) => phase.capabilityKeys)),
+    capabilityPackageIds: unique(
+      phases.flatMap((phase) => phase.capabilityPackageIds)
+    ),
     assetIds: unique(phases.flatMap((phase) => phase.assetIds))
   });
 }
@@ -124,6 +149,7 @@ function dependencyCounts(input: {
   readonly layoutIds: readonly string[];
   readonly timelineIds: readonly string[];
   readonly capabilityKeys: readonly string[];
+  readonly capabilityPackageIds: readonly string[];
   readonly assetIds: readonly string[];
 }): KpTutorialDependencyCounts {
   return {
@@ -132,6 +158,7 @@ function dependencyCounts(input: {
     layoutCount: input.layoutIds.length,
     timelineCount: input.timelineIds.length,
     capabilityCount: input.capabilityKeys.length,
+    capabilityPackageCount: input.capabilityPackageIds.length,
     assetCount: input.assetIds.length
   };
 }
