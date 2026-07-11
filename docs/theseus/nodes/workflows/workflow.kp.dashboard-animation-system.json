@@ -30,7 +30,9 @@
     "next.kp.katex-transform-library-foundation",
     "next.kp.graph-animation-clock-protocol",
     "next.kp.semantic-computation-protocols",
-    "next.kp.dashboard-authoring-catalog-surface"
+    "next.kp.dashboard-authoring-catalog-surface",
+    "run-contract.kp.hosted-package-readiness-export-sampling-v0",
+    "next.kp.hosted-artifact-readiness-contract"
   ],
   "progress": {
     "state": "partial",

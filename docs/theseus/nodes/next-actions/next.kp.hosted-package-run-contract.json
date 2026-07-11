@@ -1,0 +1,67 @@
+{
+  "id": "next.kp.hosted-package-run-contract",
+  "kind": "next-action",
+  "title": "Materialize KP hosted/package readiness run contract",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Materialized the approved hosted/package readiness and export sampling run contract, seeded the first executable hosted-artifact slice, and linked the active KP workflow to the new loop.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Durable 22-slice run contract for hosted/package readiness and parent-timeline export sampling."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.hosted-package-run-contract.json",
+      "summary": "Control-plane next-action for materializing and closing the loop setup slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.hosted-artifact-readiness-contract.json",
+      "summary": "First executable hosted-readiness slice seeded for the next step."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP workflow now links to the new run contract and first executable hosted-readiness action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap places hosted/package readiness first after browser hardening."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread records hosted/package readiness as the remaining browser-hardening work."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T02:23:33.005Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-unresolved-slices run-contract.kp.hosted-package-readiness-export-sampling-v0",
+      "status": "passed",
+      "scope": "run-contract slice queue",
+      "checkedAt": "2026-07-11T02:23:33.023Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:23:33.041Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Materialized the approved hosted/package readiness and export sampling run contract, seeded the first executable hosted-artifact slice, and linked the active KP workflow to the new loop."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "next.kp.hosted-artifact-readiness-contract",
+  "kind": "next-action",
+  "title": "Define hosted artifact readiness contract",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Define the static-host readiness data contract for iframe, static-step, and tutorial-card export artifacts.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract records this as the first executable hosted-readiness slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread names hosted/package readiness as remaining browser-hardening work."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap puts hosted/package readiness immediately after browser hardening."
+    }
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/tutorial-hosted-artifact-readiness.test.ts"
+  ]
+}
