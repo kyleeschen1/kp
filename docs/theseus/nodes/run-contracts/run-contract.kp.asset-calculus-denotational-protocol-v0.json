@@ -1,0 +1,33 @@
+{
+  "id": "run-contract.kp.asset-calculus-denotational-protocol-v0",
+  "kind": "run-contract",
+  "title": "KP Asset Calculus denotational protocol",
+  "status": "ready",
+  "domain": "kp.asset-calculus",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "allowedWork": [
+    "Only work on approved KP Asset Calculus loop slices."
+  ],
+  "disallowedWork": [
+    "Do not broaden into GIF export, live CAS/LSP integrations, large graph runtime work, curriculum generation, or unrelated Theseus A-plus gates."
+  ],
+  "goal": "Run the approved KP Asset Calculus loop for semantic assets, transformations, timelines, ports, interpreters, flashcards, and law checks.",
+  "target": "workflow.kp.dashboard-animation-system",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when verification fails and needs user judgment.",
+    "Stop when the approved slice list is exhausted."
+  ]
+}
