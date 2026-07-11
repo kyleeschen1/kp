@@ -121,13 +121,14 @@
     {
       "id": "next.kp.asset-flashcard-contract",
       "title": "Define flashcard spec contract",
-      "status": "complete",
-      "summary": "Added flashcard specs that reference asset ids, object ids, selector ids, transformation ids, time slices, and answers, plus validation so cards cannot silently drift from source assets."
+      "summary": "Added flashcard specs that reference asset ids, object ids, selector ids, transformation ids, time slices, and answers, plus validation so cards cannot silently drift from source assets.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-law-test-helpers",
       "title": "Add law-test helper utilities",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added reusable law helpers for behavior determinism, behavior duration reparameterization, and diagram rewind phase equivalence, with structured pass/failure results for future canonical examples."
     },
     {
       "id": "next.kp.asset-linear-solve-bundle",
