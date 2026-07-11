@@ -57,6 +57,31 @@ export interface KpCapabilityPackageCatalog {
   ): readonly KpCapabilityPackageManifest[];
 }
 
+const equationCapabilityPackageTheseusSourceRef = {
+  label: "Theseus Equation capability package fixtures",
+  href: "docs/theseus/nodes/next-actions/next-action.kp.semantic.next-kp-equation-capability-package-fixtures-v0.json"
+} satisfies KpCapabilityPackageSourceRef;
+
+const graphCapabilityPackageTheseusSourceRef = {
+  label: "Theseus Graph capability package fixtures",
+  href: "docs/theseus/nodes/next-actions/next-action.kp.semantic.next-kp-graph-capability-package-fixtures-v0.json"
+} satisfies KpCapabilityPackageSourceRef;
+
+const sourceFileCapabilityPackageTheseusSourceRef = {
+  label: "Theseus SourceFile capability package fixtures",
+  href: "docs/theseus/nodes/next-actions/next-action.kp.semantic.next-kp-programming-capability-package-fixtures-v0.json"
+} satisfies KpCapabilityPackageSourceRef;
+
+const matrixCapabilityPackageTheseusSourceRef = {
+  label: "Theseus Matrix capability package fixture",
+  href: "docs/theseus/nodes/next-actions/next-action.kp.semantic.next-kp-matrix-capability-package-fixtures-v0.json"
+} satisfies KpCapabilityPackageSourceRef;
+
+const capabilityPackageManifestTheseusSourceRef = {
+  label: "Theseus capability package manifest",
+  href: "docs/theseus/nodes/next-actions/next-action.kp.semantic.next-kp-capability-package-manifest-v0.json"
+} satisfies KpCapabilityPackageSourceRef;
+
 export function createKpCapabilityPackageManifest(
   input: KpCapabilityPackageManifestInput
 ): KpCapabilityPackageManifest {
@@ -133,7 +158,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "Equation motion sampler",
           href: "src/rendering/equation-motion-sampler.ts"
-        }
+        },
+        equationCapabilityPackageTheseusSourceRef
       ]
     },
     {
@@ -160,7 +186,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "Equation motion plan",
           href: "src/rendering/equation-motion-plan.ts"
-        }
+        },
+        equationCapabilityPackageTheseusSourceRef
       ]
     },
     {
@@ -191,7 +218,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "Equation animation catalog",
           href: "src/editor/equation-animation-catalog.ts"
-        }
+        },
+        equationCapabilityPackageTheseusSourceRef
       ]
     },
     {
@@ -213,7 +241,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "Graph frame adapter",
           href: "src/tutorial/graph-frame-adapter.ts"
-        }
+        },
+        graphCapabilityPackageTheseusSourceRef
       ]
     },
     {
@@ -240,7 +269,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "Graph SVG renderer",
           href: "src/rendering/graph-svg.ts"
-        }
+        },
+        graphCapabilityPackageTheseusSourceRef
       ]
     },
     {
@@ -267,7 +297,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "Semantic object registry",
           href: "src/semantic/object-registry.ts"
-        }
+        },
+        graphCapabilityPackageTheseusSourceRef
       ]
     },
     {
@@ -294,7 +325,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "Animation kernel",
           href: "src/animation/kernel.ts"
-        }
+        },
+        graphCapabilityPackageTheseusSourceRef
       ]
     },
     {
@@ -324,7 +356,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "Tutorial card HTML shell",
           href: "src/tutorial/card-html-shell.ts"
-        }
+        },
+        sourceFileCapabilityPackageTheseusSourceRef
       ]
     },
     {
@@ -347,7 +380,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "SourceFile semantic object",
           href: "src/semantic/source-file.ts"
-        }
+        },
+        sourceFileCapabilityPackageTheseusSourceRef
       ]
     },
     {
@@ -382,7 +416,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "Programming execution trace panel",
           href: "src/tutorial/programming-execution-trace-panel.ts"
-        }
+        },
+        sourceFileCapabilityPackageTheseusSourceRef
       ]
     },
     {
@@ -404,7 +439,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "Semantic object registry",
           href: "src/semantic/object-registry.ts"
-        }
+        },
+        matrixCapabilityPackageTheseusSourceRef
       ]
     },
     {
@@ -426,7 +462,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "Semantic computation protocols",
           href: "src/semantic/computation-protocols.ts"
-        }
+        },
+        matrixCapabilityPackageTheseusSourceRef
       ]
     },
     {
@@ -453,7 +490,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "Semantic computation protocols",
           href: "src/semantic/computation-protocols.ts"
-        }
+        },
+        matrixCapabilityPackageTheseusSourceRef
       ]
     },
     {
@@ -475,7 +513,8 @@ export const defaultKpCapabilityPackageManifests:
         {
           label: "Frame sequence artifact",
           href: "src/tutorial/frame-sequence-artifact.ts"
-        }
+        },
+        capabilityPackageManifestTheseusSourceRef
       ]
     }
   ];

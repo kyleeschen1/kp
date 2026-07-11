@@ -95,6 +95,33 @@ test("capability package catalog indexes default package manifests", () => {
     ).map((manifest) => manifest.id),
     ["package.kp.source-file.animate.execution-trace"]
   );
+  assert.ok(
+    catalog
+      .getManifest("package.kp.source-file.animate.execution-trace")
+      ?.sourceRefs.some((sourceRef) =>
+        sourceRef.href.includes(
+          "next-action.kp.semantic.next-kp-programming-capability-package-fixtures-v0.json"
+        )
+      )
+  );
+  assert.ok(
+    catalog
+      .getManifest("package.kp.graph3d.animate.surface-mode")
+      ?.sourceRefs.some((sourceRef) =>
+        sourceRef.href.includes(
+          "next-action.kp.semantic.next-kp-graph-capability-package-fixtures-v0.json"
+        )
+      )
+  );
+  assert.ok(
+    catalog
+      .getManifest("package.kp.export.encode.gif")
+      ?.sourceRefs.some((sourceRef) =>
+        sourceRef.href.includes(
+          "next-action.kp.semantic.next-kp-capability-package-manifest-v0.json"
+        )
+      )
+  );
   assert.deepEqual(
     catalog.listManifestsForObjectType("matrix").map((manifest) => manifest.id),
     [

@@ -150,6 +150,15 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
           "kp.source-file / animate.execution-trace / source-file / trace"
     )
   );
+  assert.ok(
+    sourceTracePackageRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Source refs" &&
+        field.value.includes(
+          "next-action.kp.semantic.next-kp-programming-capability-package-fixtures-v0.json"
+        )
+    )
+  );
 
   const graphRow = galleryRows.find(
     (row) => row.id === "kp.gallery.visual-webgl-graph"

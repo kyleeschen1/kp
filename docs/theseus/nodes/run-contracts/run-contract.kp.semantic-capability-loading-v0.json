@@ -270,7 +270,14 @@
     {
       "id": "next.kp.capability-package-theseus-source-refs",
       "title": "Theseus source refs for capability packages",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-capability-package-theseus-source-refs-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-capability-package-theseus-source-refs-v0",
+      "title": "Theseus source refs for capability packages",
+      "summary": "Materialized from stored run-contract slice next.kp.capability-package-theseus-source-refs in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.capability-loading-report-card",

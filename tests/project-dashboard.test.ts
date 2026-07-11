@@ -1083,6 +1083,10 @@ test("renderProjectDashboard searches capability package facets", () => {
     html,
     /data-kp-preview-field="Capability key"[^>]*>kp\.source-file:animate\.execution-trace:source-file:trace</
   );
+  assert.match(
+    html,
+    /data-kp-preview-field="Source refs"[^>]*>[\s\S]*next-action\.kp\.semantic\.next-kp-programming-capability-package-fixtures-v0\.json/
+  );
   assert.doesNotMatch(
     html,
     /data-kp-agenda-row="capability-package-package\.kp\.source-file\.render\.code-panel"/
