@@ -2,6 +2,7 @@ import { expect, type Page } from "@playwright/test";
 
 import type { KpTutorialLaunchTarget } from "../../src/tutorial/launch-targets.ts";
 import type { LinearSolveIframeExportSmokeFixture } from "../../src/tutorial/iframe-export-smoke-fixture.ts";
+import type { LinearSolveStaticStepExportSmokeFixture } from "../../src/tutorial/static-step-export-smoke-fixture.ts";
 
 export async function openKpTutorialLaunchTargetPreview(
   page: Page,
@@ -30,5 +31,16 @@ export async function loadKpIframeExportSmokeFixtureDocument(
   await expect(page.locator("html")).toHaveAttribute(
     "data-kp-export-artifact",
     fixture.artifact.id
+  );
+}
+
+export async function loadKpStaticStepExportSmokeFixtureDocument(
+  page: Page,
+  fixture: LinearSolveStaticStepExportSmokeFixture
+): Promise<void> {
+  await page.setContent(fixture.html, { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-kp-export-artifact",
+    fixture.sequence.artifact.id
   );
 }

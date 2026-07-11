@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.programming-card-browser-smoke",
+  "kind": "next-action",
+  "title": "Smoke programming tutorial-card launch",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Use the tutorial launch smoke harness to verify the programming tutorial-card launch path and SourceFile panel browser probes."
+}

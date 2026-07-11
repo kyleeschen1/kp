@@ -2,7 +2,75 @@
   "id": "next.kp.static-step-browser-smoke",
   "kind": "next-action",
   "title": "Smoke static-step export launch",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Use the tutorial launch smoke harness to verify the static-step export artifact launch path and JSON step-sequence browser probes."
+  "summary": "Added static-step export browser smoke coverage with a rendered JSON step-sequence smoke fixture and browser DOM probes.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-step-export-smoke-fixture.ts",
+      "summary": "Builds a browser-loadable static-step smoke fixture document from the rendered linear-solve step sequence artifact."
+    },
+    {
+      "kind": "file",
+      "path": "tests/static-step-export-smoke.browser.spec.ts",
+      "summary": "Verifies the static-step artifact document in Playwright with artifact, payload, step, progress, and JSON sequence probes."
+    },
+    {
+      "kind": "file",
+      "path": "tests/support/tutorial-launch-smoke.ts",
+      "summary": "Adds a reusable helper for loading static-step export smoke fixture documents into a browser page."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.static-step-browser-smoke.json",
+      "summary": "Records the approved static-step browser smoke next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.programming-card-browser-smoke.json",
+      "summary": "Materializes the next approved programming card browser smoke slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the programming card browser smoke slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/static-step-export-smoke.browser.spec.ts tests/tutorial-launch-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "static-step export and launch target browser smoke",
+      "checkedAt": "2026-07-11T01:11:36.603Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-static-step-artifact.test.ts tests/tutorial-launch-targets.test.ts",
+      "status": "passed",
+      "scope": "static-step artifact and launch-target unit coverage",
+      "checkedAt": "2026-07-11T01:11:36.627Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:11:36.653Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:11:36.679Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:11:36.702Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added static-step export browser smoke coverage with a rendered JSON step-sequence smoke fixture and browser DOM probes."
+  }
 }
