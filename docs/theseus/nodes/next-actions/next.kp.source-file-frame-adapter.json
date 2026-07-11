@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.source-file-frame-adapter",
+  "kind": "next-action",
+  "title": "Add SourceFile frame adapter",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added a SourceFile frame adapter that samples code lines and resolved source-range selectors on a shared clock.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/source-file-frame-adapter.ts",
+      "summary": "Defines a SourceFile-backed tutorial frame sampler with normalized progress, source lines, resolved selector text, and selector offset metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-programming-panel.test.ts",
+      "summary": "Covers SourceFile frame sampling, deterministic rewind, progress clamping, selector range resolution, and missing selector validation."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.source-file-frame-adapter.json",
+      "summary": "Materializes the approved SourceFile frame adapter next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the SourceFile frame adapter slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-programming-panel.test.ts tests/semantic.test.ts tests/tutorial-card-frame-sampler.test.ts",
+      "status": "passed",
+      "scope": "SourceFile frame adapter, semantic SourceFile, and tutorial frame sampler tests",
+      "checkedAt": "2026-07-11T00:21:13.518Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T00:21:13.536Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T00:21:13.553Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a SourceFile frame adapter that samples code lines and resolved source-range selectors on a shared clock."
+  }
+}

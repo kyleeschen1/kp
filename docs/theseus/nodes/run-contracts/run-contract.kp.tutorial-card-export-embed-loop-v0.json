@@ -40,7 +40,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure."
   ],
   "goal": "Run the approved export/embed loop from tutorial-card runtime metadata to concrete iframe and static-step artifacts, then prepare programming panels and follow-up runtime checks.",
-  "target": "next.kp.programming-tutorial-panel-contract",
+  "target": "next.kp.source-file-frame-adapter",
   "runMode": "run",
   "maxSlices": 20,
   "commitCadence": "Commit after each verified slice.",
@@ -119,7 +119,7 @@
     {
       "id": "next.kp.source-file-frame-adapter",
       "title": "Add SourceFile frame adapter",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.tutorial-card-programming-panel-shell",
