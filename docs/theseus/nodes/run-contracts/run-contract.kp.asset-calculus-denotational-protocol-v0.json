@@ -55,7 +55,8 @@
     {
       "id": "next.kp.asset-calculus-doctrine-spec",
       "title": "Write KP Asset Calculus doctrine spec",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added the active doctrine for semantic assets, transformations, diagrams, behaviors, interpreters, ports, flashcards, composition forms, time denotation, boundaries, and the linear-solve vertical proof target."
     },
     {
       "id": "next.kp.asset-calculus-composition-laws",

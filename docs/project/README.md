@@ -31,6 +31,8 @@ conversation or design record
 - `next-actions.md`: short list of concrete work candidates.
 - `threads/`: living summaries for major workstreams.
 - `decisions/`: accepted decisions and pivots.
+- `principles/`: active architecture doctrine and design laws that future
+  sessions should follow.
 - `reviews/`: periodic next-step or project health reviews.
 - `inbox/`: raw imported plans; keep immutable after import.
 - `archive/`: superseded historical material.
