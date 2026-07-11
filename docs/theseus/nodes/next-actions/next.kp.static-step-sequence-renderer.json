@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.static-step-sequence-renderer",
+  "kind": "next-action",
+  "title": "Render static-step sequence artifact",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added a static-step sequence renderer that samples tutorial-card frames at parent-timeline checkpoints.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-step-sequence-renderer.ts",
+      "summary": "Renders a generic static-step sequence from an export artifact, selected checkpoints, and any KP animation sampler."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-static-step-artifact.test.ts",
+      "summary": "Covers static-step sequence rendering over the linear-solve tutorial-card sample."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.static-step-sequence-renderer.json",
+      "summary": "Materializes the approved static-step sequence renderer next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the static-step sequence renderer slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-static-step-artifact.test.ts tests/parent-timeline.test.ts tests/tutorial-card-frame-sampler.test.ts tests/tutorial-card-export-profile.test.ts tests/tutorial-card-export-artifact.test.ts",
+      "status": "passed",
+      "scope": "static-step renderer and related timeline export tests",
+      "checkedAt": "2026-07-11T00:09:03.847Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T00:09:03.863Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T00:09:03.878Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a static-step sequence renderer that samples tutorial-card frames at parent-timeline checkpoints."
+  }
+}
