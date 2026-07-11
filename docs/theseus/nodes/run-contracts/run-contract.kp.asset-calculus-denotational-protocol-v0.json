@@ -73,13 +73,14 @@
     {
       "id": "next.kp.asset-calculus-dashboard-rows",
       "title": "Expose Asset Calculus framework rows in the dashboard",
-      "status": "complete",
-      "summary": "Added dashboard work and protocol-gallery rows for KP Asset Calculus doctrine, composition laws, and the asset authoring guide, with search, preview, and Theseus adapter coverage."
+      "summary": "Added dashboard work and protocol-gallery rows for KP Asset Calculus doctrine, composition laws, and the asset authoring guide, with search, preview, and Theseus adapter coverage.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-core-interfaces",
       "title": "Define core SemanticObject asset interfaces",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added the first KP asset core module with semantic asset objects, selectors, bundles, provenance, diagnostics, selector lookup, and structural validation for duplicate ids and selector closure."
     },
     {
       "id": "next.kp.asset-transformation-interfaces",
