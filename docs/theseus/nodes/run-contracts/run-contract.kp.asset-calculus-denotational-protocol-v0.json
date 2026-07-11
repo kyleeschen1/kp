@@ -193,13 +193,14 @@
     {
       "id": "next.kp.asset-roadmap-refresh",
       "title": "Refresh roadmap and semantic runtime thread",
-      "status": "complete",
-      "summary": "Updated the KP roadmap and semantic runtime thread to treat Asset Calculus as implemented source infrastructure, with next priorities centered on renderer/interpreter adoption, law expansion, generated tutorial pressure tests, and fixture-first external ports."
+      "summary": "Updated the KP roadmap and semantic runtime thread to treat Asset Calculus as implemented source infrastructure, with next priorities centered on renderer/interpreter adoption, law expansion, generated tutorial pressure tests, and fixture-first external ports.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-loop-closeout",
       "title": "Close KP Asset Calculus loop",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added the KP Asset Calculus loop closeout report with structural improvements, unlocked behavior, verification evidence, residual risks, and recommended next slices for renderer/interpreter adoption."
     }
   ]
 }
