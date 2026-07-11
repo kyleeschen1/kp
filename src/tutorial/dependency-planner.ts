@@ -5,6 +5,7 @@ import {
   type KpTutorialDependencyManifest,
   type KpTutorialDependencySet
 } from "./card-manifest.ts";
+import { formatKpCapabilityKey } from "../semantic/capability-key.ts";
 
 export type KpTutorialDependencyPhase = keyof KpTutorialDependencyManifest;
 
@@ -73,12 +74,7 @@ export function createKpTutorialCardDependencyPlan(
 export function dependencyCapabilityKey(
   capability: KpTutorialCapabilityDependency
 ): string {
-  return [
-    capability.library,
-    capability.capability,
-    capability.objectType ?? "*",
-    capability.mode ?? "*"
-  ].join(":");
+  return formatKpCapabilityKey(capability);
 }
 
 function createDependencyPlanPhase(

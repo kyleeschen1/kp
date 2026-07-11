@@ -10,6 +10,7 @@ import {
   validateKpTutorialHostedArtifactReadiness,
   type KpTutorialHostedArtifactReadinessDiagnostic
 } from "./hosted-artifact-readiness.ts";
+import { parseKpCapabilityKey } from "../semantic/capability-key.ts";
 
 export type KpTutorialExportCapabilityHostedReadiness =
   | "diagnostic"
@@ -47,7 +48,7 @@ export function createKpTutorialExportCapabilityAdvertisements(
   });
 
   return input.artifact.dependencies.capabilityKeys.map((capabilityKey) => {
-    const parsed = parseCapabilityKey(capabilityKey);
+    const parsed = parseKpCapabilityKey(capabilityKey);
     const phases = phasesByCapabilityKey.get(capabilityKey) ?? [];
 
     return {
@@ -87,23 +88,6 @@ function groupArtifactPhasesByCapabilityKey(input: {
   }
 
   return grouped;
-}
-
-function parseCapabilityKey(capabilityKey: string): {
-  readonly library: string;
-  readonly capability: string;
-  readonly objectType: string;
-  readonly mode: string;
-} {
-  const [library = "", capability = "", objectType = "*", mode = "*"] =
-    capabilityKey.split(":");
-
-  return {
-    library,
-    capability,
-    objectType,
-    mode
-  };
 }
 
 function phaseNames(phases: readonly KpTutorialDependencyPlanPhase[]): string {

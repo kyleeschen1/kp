@@ -78,7 +78,14 @@
     {
       "id": "next.kp.capability-key-normalization",
       "title": "Normalize capability keys",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-capability-key-normalization-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-capability-key-normalization-v0",
+      "title": "Normalize capability keys",
+      "summary": "Materialized from stored run-contract slice next.kp.capability-key-normalization in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.registry-package-manifest-mapping",

@@ -2,6 +2,7 @@ import type {
   SemanticObjectCapabilityId,
   SemanticObjectDefinitionStatus
 } from "./object-registry.ts";
+import { formatKpCapabilityKey } from "./capability-key.ts";
 
 export type KpCapabilityPackageTarget =
   | "authoring"
@@ -66,7 +67,7 @@ export function createKpCapabilityPackageManifest(
     capability: input.capability,
     objectType: input.objectType,
     mode: input.mode,
-    capabilityKey: capabilityPackageKey(input),
+    capabilityKey: formatKpCapabilityKey(input),
     status: input.status,
     target: input.target,
     loadPhase: input.loadPhase,
@@ -224,20 +225,6 @@ export const defaultKpCapabilityPackageManifests:
       ]
     }
   ];
-
-function capabilityPackageKey(input: {
-  readonly library: string;
-  readonly capability: string;
-  readonly objectType: string;
-  readonly mode: string;
-}): string {
-  return [
-    input.library,
-    input.capability,
-    input.objectType,
-    input.mode
-  ].join(":");
-}
 
 function cloneManifest(
   manifest: KpCapabilityPackageManifest | undefined
