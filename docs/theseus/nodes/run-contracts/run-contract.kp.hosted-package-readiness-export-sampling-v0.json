@@ -195,7 +195,14 @@
     {
       "id": "next.kp.export-sampled-rewind-check",
       "title": "Add deterministic rewind sample check for exported frames",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.tutorial.next-kp-export-sampled-rewind-check-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.tutorial.next-kp-export-sampled-rewind-check-v0",
+      "title": "Add deterministic rewind sample check for exported frames",
+      "summary": "Materialized from stored run-contract slice next.kp.export-sampled-rewind-check in KP hosted package readiness and export sampling loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.frame-sequence-dependency-manifest",
