@@ -8,6 +8,10 @@ import {
   runKpExternalPort
 } from "../src/semantic/asset-port.ts";
 import {
+  checkKpPortDeterminism,
+  checkKpPortLossDiagnostics
+} from "../src/semantic/asset-laws.ts";
+import {
   createLinearSolveAlgebraTracePort,
   linearSolveAlgebraTraceFixture
 } from "../src/semantic/algebra-trace-port-fixture.ts";
@@ -69,6 +73,46 @@ test("linear solve algebra trace fixture imports to canonical bundle shape", () 
       }
     ]
   );
+});
+
+test("linear solve algebra trace fixture passes port determinism law", () => {
+  const port = createLinearSolveAlgebraTracePort();
+
+  assert.deepEqual(checkKpPortDeterminism(port, linearSolveAlgebraTraceFixture), {
+    lawId: "port.determinism",
+    passed: true,
+    failures: []
+  });
+});
+
+test("linear solve algebra trace fixture reports lossy mismatches", () => {
+  const port = createLinearSolveAlgebraTracePort();
+  const mismatchedTrace = {
+    ...linearSolveAlgebraTraceFixture,
+    steps: linearSolveAlgebraTraceFixture.steps.map((step) =>
+      step.id === "trace.linear-solve.step.left-simplified"
+        ? { ...step, latex: "x = 0" }
+        : step
+    )
+  };
+  const imported = runKpExternalPort(port, mismatchedTrace);
+
+  assert.equal(imported.preservation, "lax");
+  assert.deepEqual(imported.diagnostics, [
+    {
+      severity: "warning",
+      code: "trace-latex-mismatch",
+      lossKind: "partial",
+      message:
+        "Trace step trace.linear-solve.step.left-simplified latex does not match canonical object equation.linear-solve.left-simplified.",
+      path: "steps[2].latex"
+    }
+  ]);
+  assert.deepEqual(checkKpPortLossDiagnostics(imported), {
+    lawId: "port.loss-reporting",
+    passed: true,
+    failures: []
+  });
 });
 
 function bundleShape(bundle: ReturnType<typeof createLinearSolveKpAssetBundle>["bundle"]) {

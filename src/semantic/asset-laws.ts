@@ -9,6 +9,11 @@ import {
   kpSemanticDiagramRewindPhases,
   type KpSemanticDiagram
 } from "./asset-diagram.ts";
+import {
+  runKpExternalPort,
+  type KpExternalPort,
+  type KpExternalPortRunResult
+} from "./asset-port.ts";
 
 export interface KpLawFailure {
   readonly path: string;
@@ -87,6 +92,61 @@ export function checkKpDiagramRewindLaw(
   }
 
   return lawResult("diagram.rewind", failures);
+}
+
+export function checkKpPortDeterminism<TInput>(
+  port: KpExternalPort<TInput>,
+  input: TInput
+): KpLawCheckResult {
+  const first = runKpExternalPort(port, input);
+  const second = runKpExternalPort(port, input);
+  const failures: KpLawFailure[] = [];
+
+  if (!framesEqual(first, second)) {
+    failures.push({
+      path: "runs",
+      message: `Port ${port.id} produced different imports for the same input.`
+    });
+  }
+
+  return lawResult("port.determinism", failures);
+}
+
+export function checkKpPortLossDiagnostics(
+  result: KpExternalPortRunResult
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+
+  if (result.preservation !== "strict" && result.diagnostics.length === 0) {
+    failures.push({
+      path: "diagnostics",
+      message: `Port ${result.portId} must report diagnostics when preservation is ${result.preservation}.`
+    });
+  }
+
+  result.diagnostics.forEach((diagnostic, index) => {
+    if (
+      (diagnostic.severity === "warning" || diagnostic.severity === "error") &&
+      diagnostic.lossKind === undefined
+    ) {
+      failures.push({
+        path: `diagnostics[${index}].lossKind`,
+        message: `Port ${result.portId} diagnostic ${diagnostic.code} must name the loss kind.`
+      });
+    }
+  });
+
+  if (
+    result.preservation === "strict" &&
+    result.diagnostics.some((diagnostic) => diagnostic.lossKind !== undefined)
+  ) {
+    failures.push({
+      path: "preservation",
+      message: `Port ${result.portId} cannot claim strict preservation while reporting loss diagnostics.`
+    });
+  }
+
+  return lawResult("port.loss-reporting", failures);
 }
 
 function lawResult(

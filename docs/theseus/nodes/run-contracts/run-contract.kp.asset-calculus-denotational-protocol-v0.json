@@ -163,13 +163,14 @@
     {
       "id": "next.kp.asset-algebra-trace-port-fixture",
       "title": "Add deterministic algebra-trace port fixture",
-      "status": "complete",
-      "summary": "Added a deterministic linear-solve algebra-trace fixture port that imports trace steps into the canonical KP bundle shape with explicit port provenance and strict preservation when the trace matches."
+      "summary": "Added a deterministic linear-solve algebra-trace fixture port that imports trace steps into the canonical KP bundle shape with explicit port provenance and strict preservation when the trace matches.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-algebra-port-laws",
       "title": "Test algebra port composition and loss diagnostics",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added generic port determinism and loss-reporting law helpers, then verified the algebra-trace fixture imports deterministically and downgrades mismatched traces with explicit partial-loss diagnostics."
     },
     {
       "id": "next.kp.asset-program-trace-skeleton",
