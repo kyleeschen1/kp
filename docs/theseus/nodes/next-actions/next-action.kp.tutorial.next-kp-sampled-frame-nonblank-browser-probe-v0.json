@@ -1,0 +1,116 @@
+{
+  "id": "next-action.kp.tutorial.next-kp-sampled-frame-nonblank-browser-probe-v0",
+  "kind": "next-action",
+  "title": "Add nonblank sampled-frame browser probe",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added a Playwright browser probe that loads the frame-sequence preview and checks sampled frame rows and JSON payload are nonblank.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract whose stored slice next.kp.sampled-frame-nonblank-browser-probe was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap selects hosted/package readiness, parent-timeline media export sampling, and SemanticObject capability loading as the next choices after browser hardening."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread records hosted/package readiness and parent-timeline media export sampling as open next loops."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-tutorial-card-browser-hardening-loop-closeout.md",
+      "summary": "Browser hardening closeout recommends hosted/package readiness checks before media export encoders."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-sequence-preview-smoke-fixture.ts",
+      "summary": "Builds the linear-solve frame-sequence preview fixture from the parent-timeline contract and domain frame samplers."
+    },
+    {
+      "kind": "file",
+      "path": "tests/frame-sequence-preview-smoke.browser.spec.ts",
+      "summary": "Loads the preview HTML in Chromium and checks sampled frame row geometry, text, attrs, and JSON payload."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-sequence-preview.ts",
+      "summary": "Provides the HTML preview shell exercised by the browser probe."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Records materialization and completion of the stored sampled-frame nonblank browser probe slice."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.hosted-package-readiness-export-sampling-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Add nonblank sampled-frame browser probe can be completed inside KP hosted package readiness and export sampling loop."
+  ],
+  "allowedWork": [
+    "Only work on approved KP hosted/package readiness and parent-timeline export sampling slices.",
+    "Keep work tied to tutorial-card runtime, export artifacts, dashboard/API catalog, and semantic runtime capability metadata.",
+    "Use deterministic fixtures and static programming execution traces only."
+  ],
+  "disallowedWork": [
+    "Do not implement GIF, MP4, or WebM encoders in this loop.",
+    "Do not broaden into full SemanticObject registry loading beyond capability advertisements needed for export readiness.",
+    "Do not pursue broad Theseus planner follow-ups unless they block this KP loop."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/frame-sequence-preview-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "Chromium frame-sequence preview nonblank smoke",
+      "checkedAt": "2026-07-11T03:24:14.004Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-frame-sequence-preview.test.ts tests/tutorial-card-frame-sequence-artifact.test.ts",
+      "status": "passed",
+      "scope": "frame-sequence preview unit coverage",
+      "checkedAt": "2026-07-11T03:24:14.024Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript compile checks",
+      "checkedAt": "2026-07-11T03:24:14.045Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T03:24:14.067Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T03:24:14.091Z",
+      "scope": "Whitespace check"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a Playwright browser probe that loads the frame-sequence preview and checks sampled frame rows and JSON payload are nonblank."
+  }
+}

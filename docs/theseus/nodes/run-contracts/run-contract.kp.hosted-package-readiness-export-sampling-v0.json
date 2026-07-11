@@ -183,7 +183,14 @@
     {
       "id": "next.kp.sampled-frame-nonblank-browser-probe",
       "title": "Add nonblank sampled-frame browser probe",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.tutorial.next-kp-sampled-frame-nonblank-browser-probe-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.tutorial.next-kp-sampled-frame-nonblank-browser-probe-v0",
+      "title": "Add nonblank sampled-frame browser probe",
+      "summary": "Materialized from stored run-contract slice next.kp.sampled-frame-nonblank-browser-probe in KP hosted package readiness and export sampling loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.export-sampled-rewind-check",
