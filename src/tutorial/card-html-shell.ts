@@ -2,6 +2,7 @@ import type {
   LinearSolveTutorialCardSample,
   LinearSolveTutorialCardSampleFrame
 } from "./linear-solve-card-sample.ts";
+import type { KpTutorialSourceFileFrame } from "./source-file-frame-adapter.ts";
 
 export function renderKpTutorialCardHtmlShell(
   sample: LinearSolveTutorialCardSample,
@@ -24,6 +25,17 @@ export function renderKpTutorialCardHtmlShell(
     `    </section>`,
     `  </div>`,
     `  <div class="kp-tutorial-card__controls" data-kp-tutorial-controls data-kp-tutorial-control-count="${frame.cardFrame.layoutFrame.controls.length}">${renderControls(frame)}</div>`,
+    `</section>`
+  ].join("\n");
+}
+
+export function renderKpTutorialSourceFilePanelHtml(
+  frame: KpTutorialSourceFileFrame
+): string {
+  return [
+    `<section class="kp-tutorial-card__panel" data-kp-tutorial-panel="code" data-kp-tutorial-panel-id="${escapeAttr(frame.panelId)}" data-kp-tutorial-source-file="${escapeAttr(frame.sourceFileId)}" data-kp-tutorial-source-language="${escapeAttr(frame.language)}" data-kp-tutorial-source-progress="${escapeAttr(String(frame.progress))}" data-kp-tutorial-source-line-count="${frame.lineCount}" data-kp-tutorial-source-selector-count="${frame.selectors.length}">`,
+    `  <pre class="kp-tutorial-card__code" data-kp-tutorial-source-file-frame><code>${renderSourceLines(frame)}</code></pre>`,
+    `  <div class="kp-tutorial-card__source-selectors" data-kp-tutorial-source-selectors>${renderSourceSelectors(frame)}</div>`,
     `</section>`
   ].join("\n");
 }
@@ -56,6 +68,24 @@ function graphVertexCount(frame: LinearSolveTutorialCardSampleFrame): number {
 function renderControls(frame: LinearSolveTutorialCardSampleFrame): string {
   return frame.cardFrame.layoutFrame.controls
     .map((control) => renderControl(frame, control.controlId, control.kind))
+    .join("");
+}
+
+function renderSourceLines(frame: KpTutorialSourceFileFrame): string {
+  return frame.lines
+    .map(
+      (line, index) =>
+        `<span data-kp-tutorial-source-line="${index + 1}">${escapeHtml(line)}</span>`
+    )
+    .join("\n");
+}
+
+function renderSourceSelectors(frame: KpTutorialSourceFileFrame): string {
+  return frame.selectors
+    .map(
+      (selector) =>
+        `<span data-kp-tutorial-source-selector="${escapeAttr(selector.selectorId)}" data-kp-tutorial-source-start-offset="${selector.startOffset}" data-kp-tutorial-source-end-offset="${selector.endOffset}" data-kp-tutorial-source-start-line="${selector.start.line}" data-kp-tutorial-source-start-column="${selector.start.column}" data-kp-tutorial-source-end-line="${selector.end.line}" data-kp-tutorial-source-end-column="${selector.end.column}">${escapeHtml(selector.summary ?? selector.text)}</span>`
+    )
     .join("");
 }
 

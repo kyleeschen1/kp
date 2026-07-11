@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.tutorial-card-programming-panel-shell",
+  "kind": "next-action",
+  "title": "Mount static programming panel in card shell",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added a static SourceFile programming panel renderer to the tutorial-card HTML shell.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/card-html-shell.ts",
+      "summary": "Exports renderKpTutorialSourceFilePanelHtml for SourceFile frames with code lines, source metadata, progress, and selector attributes."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-html-shell.test.ts",
+      "summary": "Covers static SourceFile panel shell rendering, panel metadata, source line output, and selector attributes."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-programming-panel-shell.json",
+      "summary": "Materializes the approved tutorial-card programming panel shell next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the programming panel shell slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-html-shell.test.ts tests/tutorial-card-programming-panel.test.ts tests/tutorial-card-iframe-document.test.ts tests/tutorial-card-iframe-smoke-fixture.test.ts",
+      "status": "passed",
+      "scope": "programming panel shell, SourceFile frame adapter, iframe document, and smoke fixture tests",
+      "checkedAt": "2026-07-11T00:23:40.432Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T00:23:40.453Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T00:23:40.491Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a static SourceFile programming panel renderer to the tutorial-card HTML shell."
+  }
+}

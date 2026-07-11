@@ -1,8 +1,17 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
+import {
+  createSourceFileObject,
+  createSourceRangeSelector
+} from "../src/semantic/source-file.ts";
 import { createLinearSolveTutorialCardSample } from "../src/tutorial/linear-solve-card-sample.ts";
-import { renderKpTutorialCardHtmlShell } from "../src/tutorial/card-html-shell.ts";
+import {
+  renderKpTutorialCardHtmlShell,
+  renderKpTutorialSourceFilePanelHtml
+} from "../src/tutorial/card-html-shell.ts";
+import { createKpTutorialProgrammingPanelContract } from "../src/tutorial/programming-panel.ts";
+import { createKpTutorialSourceFileFrameAdapter } from "../src/tutorial/source-file-frame-adapter.ts";
 
 test("tutorial card HTML shell renders synchronized panel slots", () => {
   const sample = createLinearSolveTutorialCardSample();
@@ -39,4 +48,52 @@ test("tutorial card HTML shell escapes labels and includes diagnostics state", (
 
   assert.match(html, /data-kp-tutorial-diagnostics="0"/);
   assert.doesNotMatch(html, /undefined/);
+});
+
+test("tutorial card HTML shell renders a static SourceFile programming panel", () => {
+  const sourceFile = createSourceFileObject({
+    id: "source-file.add",
+    label: "add.ts",
+    language: "typescript",
+    sourceText: "export function add(a: number, b: number) {\n  return a + b;\n}"
+  });
+  const selectors = [
+    createSourceRangeSelector({
+      id: "selector.add.signature",
+      sourceFileId: sourceFile.id,
+      start: { line: 1, column: 1 },
+      end: { line: 1, column: 44 },
+      summary: "Function signature."
+    })
+  ];
+  const panel = createKpTutorialProgrammingPanelContract({
+    panelId: "panel.add.code",
+    sharedClockId: "clock.add-demo",
+    sourceFile,
+    selectors
+  });
+  const adapter = createKpTutorialSourceFileFrameAdapter({
+    panel,
+    sourceFile,
+    selectors
+  });
+  const html = renderKpTutorialSourceFilePanelHtml(adapter.sample(0.25));
+
+  assert.match(html, /data-kp-tutorial-panel="code"/);
+  assert.match(html, /data-kp-tutorial-panel-id="panel\.add\.code"/);
+  assert.match(html, /data-kp-tutorial-source-file="source-file\.add"/);
+  assert.match(html, /data-kp-tutorial-source-language="typescript"/);
+  assert.match(html, /data-kp-tutorial-source-progress="0\.25"/);
+  assert.match(html, /data-kp-tutorial-source-line-count="3"/);
+  assert.match(html, /data-kp-tutorial-source-selector-count="1"/);
+  assert.match(html, /data-kp-tutorial-source-file-frame/);
+  assert.match(html, /data-kp-tutorial-source-line="1"/);
+  assert.match(html, /export function add/);
+  assert.match(
+    html,
+    /data-kp-tutorial-source-selector="selector\.add\.signature"/
+  );
+  assert.match(html, /data-kp-tutorial-source-start-offset="0"/);
+  assert.match(html, /data-kp-tutorial-source-end-offset="43"/);
+  assert.match(html, /Function signature\./);
 });
