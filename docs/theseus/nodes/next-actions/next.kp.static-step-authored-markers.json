@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.static-step-authored-markers",
+  "kind": "next-action",
+  "title": "Add authored marker support for static-step checkpoints",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add authored label/annotation marker support to static-step checkpoints so exported step sequences can preserve explanatory author intent."
+}

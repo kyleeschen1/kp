@@ -15,7 +15,11 @@ export interface KpTutorialCardSeekSampleExpectation {
   readonly beat: number;
 }
 
-export type KpTutorialPanelKind = "equation" | "graph" | "code";
+export type KpTutorialPanelKind =
+  | "equation"
+  | "graph"
+  | "code"
+  | "execution-trace";
 
 export async function openKpTutorialLaunchTargetPreview(
   page: Page,

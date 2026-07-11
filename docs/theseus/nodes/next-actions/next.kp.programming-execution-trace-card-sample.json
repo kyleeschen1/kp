@@ -2,7 +2,80 @@
   "id": "next.kp.programming-execution-trace-card-sample",
   "kind": "next-action",
   "title": "Add execution-trace tutorial-card sample",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add a browser-smokeable programming tutorial-card sample that composes the SourceFile panel with the execution-trace panel on the shared clock."
+  "summary": "Added a browser-smokeable programming execution-trace tutorial-card sample that composes SourceFile and execution-trace panels on the same sampled clock.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/programming-execution-trace-card-sample.ts",
+      "summary": "Defines the composed execution-trace tutorial-card sample and HTML shell renderer."
+    },
+    {
+      "kind": "file",
+      "path": "tests/programming-execution-trace-card-sample.test.ts",
+      "summary": "Covers shared-clock source and trace sampling, clamping, deterministic rewind sampling, and rendered shell content."
+    },
+    {
+      "kind": "file",
+      "path": "tests/programming-execution-trace-card-smoke.browser.spec.ts",
+      "summary": "Browser-smokes the composed execution-trace card with source and trace nonblank panel probes."
+    },
+    {
+      "kind": "file",
+      "path": "tests/support/tutorial-launch-smoke.ts",
+      "summary": "Extends the reusable nonblank panel probe to execution-trace panels."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.programming-execution-trace-card-sample.json",
+      "summary": "Records the approved execution-trace tutorial-card sample next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.static-step-authored-markers.json",
+      "summary": "Materializes the next approved static-step authored marker slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the static-step authored marker slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/programming-execution-trace-card-sample.test.ts tests/programming-execution-trace-panel.test.ts tests/programming-execution-trace-fixture.test.ts tests/programming-execution-trace-frame.test.ts",
+      "status": "passed",
+      "scope": "execution trace card sample, panel, fixture, and contract unit coverage",
+      "checkedAt": "2026-07-11T01:52:31.291Z"
+    },
+    {
+      "command": "npx playwright test tests/programming-execution-trace-card-smoke.browser.spec.ts tests/programming-card-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "execution trace and source-only programming browser smoke coverage",
+      "checkedAt": "2026-07-11T01:52:31.313Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:52:31.334Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:52:31.353Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:52:31.376Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a browser-smokeable programming execution-trace tutorial-card sample that composes SourceFile and execution-trace panels on the same sampled clock."
+  }
 }
