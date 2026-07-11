@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.programming-execution-trace-card-sample",
+  "kind": "next-action",
+  "title": "Add execution-trace tutorial-card sample",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add a browser-smokeable programming tutorial-card sample that composes the SourceFile panel with the execution-trace panel on the shared clock."
+}
