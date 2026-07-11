@@ -135,7 +135,14 @@
     {
       "id": "next.kp.export-sample-programming-frames",
       "title": "Sample programming frames from parent timeline",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.tutorial.next-kp-export-sample-programming-frames-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.tutorial.next-kp-export-sample-programming-frames-v0",
+      "title": "Sample programming frames from parent timeline",
+      "summary": "Materialized from stored run-contract slice next.kp.export-sample-programming-frames in KP hosted package readiness and export sampling loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.frame-sequence-artifact-format",
