@@ -2,7 +2,74 @@
   "id": "next.kp.graph-parent-timeline-diagnostic-expanded",
   "kind": "next-action",
   "title": "Expand graph parent-timeline diagnostic",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Expand graph parent-timeline diagnostics so graph panel frames can report shared timeline, active track, local progress, and sampled graph progress consistency."
+  "summary": "Expanded graph parent-timeline diagnostics with active track span/local progress and explicit shared-timeline/progress consistency booleans.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/graph-frame-adapter.ts",
+      "summary": "Carries graph track active state, span, and local progress on sampled graph frames."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/layout-timeline-binding.ts",
+      "summary": "Preserves parent track start and end progress on panel timeline binding frames."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/graph-parent-timeline-diagnostic.ts",
+      "summary": "Reports expanded graph timeline sample fields and consistency booleans."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-graph-frame-adapter.test.ts",
+      "summary": "Covers graph frame track fields, expanded diagnostic samples, and timeline mismatch reporting."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.graph-parent-timeline-diagnostic-expanded.json",
+      "summary": "Records the approved expanded graph parent-timeline diagnostic next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.synchronized-comparison-card-shell.json",
+      "summary": "Materializes the next approved synchronized comparison sample shell slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the synchronized comparison sample shell slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-graph-frame-adapter.test.ts tests/tutorial-card-frame-sampler.test.ts tests/graph-transitions.test.ts",
+      "status": "passed",
+      "scope": "graph parent-timeline diagnostics, frame sampler, and graph transition unit coverage",
+      "checkedAt": "2026-07-11T01:58:37.451Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:58:37.468Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:58:37.488Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:58:37.509Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Expanded graph parent-timeline diagnostics with active track span/local progress and explicit shared-timeline/progress consistency booleans."
+  }
 }

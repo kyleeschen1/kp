@@ -71,6 +71,8 @@ export interface KpTutorialCardPanelTrackFrame {
   readonly targetId: string;
   readonly active: boolean;
   readonly localProgress: number;
+  readonly startProgress: number;
+  readonly endProgress: number;
 }
 
 export interface KpTutorialCardControlTimelineBindingFrame {
@@ -216,7 +218,9 @@ function samplePanelBinding(
       kind: trackFrame.kind,
       targetId: trackFrame.targetId,
       active: trackFrame.active,
-      localProgress: trackFrame.localProgress
+      localProgress: trackFrame.localProgress,
+      startProgress: trackFrame.startProgress,
+      endProgress: trackFrame.endProgress
     }));
 
   return {

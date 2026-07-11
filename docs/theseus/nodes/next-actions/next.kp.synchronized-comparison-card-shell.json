@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.synchronized-comparison-card-shell",
+  "kind": "next-action",
+  "title": "Add synchronized comparison sample shell",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add a sample shell for comparing two synchronized tutorial-card views from one shared progress value."
+}

@@ -39,6 +39,10 @@ export interface KpTutorialGraphFrame {
   readonly cardProgress: number;
   readonly graphProgress: number;
   readonly graphTrackId: string;
+  readonly graphTrackActive: boolean;
+  readonly graphTrackStartProgress: number;
+  readonly graphTrackEndProgress: number;
+  readonly graphTrackLocalProgress: number;
   readonly graphFrame: GraphSurfaceMorphFrame;
 }
 
@@ -113,6 +117,10 @@ function sampleKpTutorialGraphFrame(
     cardProgress: input.cardFrame.progress,
     graphProgress: graphTrack.localProgress,
     graphTrackId: graphTrack.trackId,
+    graphTrackActive: graphTrack.active,
+    graphTrackStartProgress: graphTrack.startProgress,
+    graphTrackEndProgress: graphTrack.endProgress,
+    graphTrackLocalProgress: graphTrack.localProgress,
     graphFrame
   };
 }

@@ -18,6 +18,10 @@ test("tutorial graph frame adapter resolves graph surface frames from card progr
   assert.equal(adapter.surfaceMode, "mesh");
   assert.equal(frame.cardProgress, 0.5);
   assert.equal(frame.graphProgress, 0.5);
+  assert.equal(frame.graphTrackActive, true);
+  assert.equal(frame.graphTrackStartProgress, 0);
+  assert.equal(frame.graphTrackEndProgress, 1);
+  assert.equal(frame.graphTrackLocalProgress, 0.5);
   assert.equal(frame.graphFrame.progress, 0.5);
   assert.equal(frame.graphFrame.timelineId, "timeline.linear-solve.shared");
   assert.equal(frame.graphFrame.sourceMode, "mesh");
@@ -58,27 +62,51 @@ test("tutorial graph parent timeline diagnostic checks shared timeline conforman
     samples: [
       {
         requestedProgress: 0,
+        parentTimelineId: "timeline.linear-solve.shared",
         cardProgress: 0,
         graphProgress: 0,
+        graphTrackActive: true,
+        graphTrackStartProgress: 0,
+        graphTrackEndProgress: 1,
+        graphTrackLocalProgress: 0,
         frameProgress: 0,
         graphFrameTimelineId: "timeline.linear-solve.shared",
-        graphTrackId: "timeline.linear-solve.shared.semantic-object.saddle-orbit-graph"
+        graphTrackId: "timeline.linear-solve.shared.semantic-object.saddle-orbit-graph",
+        graphFrameTimelineMatchesParent: true,
+        graphProgressMatchesCard: true,
+        frameProgressMatchesGraph: true
       },
       {
         requestedProgress: 0.5,
+        parentTimelineId: "timeline.linear-solve.shared",
         cardProgress: 0.5,
         graphProgress: 0.5,
+        graphTrackActive: true,
+        graphTrackStartProgress: 0,
+        graphTrackEndProgress: 1,
+        graphTrackLocalProgress: 0.5,
         frameProgress: 0.5,
         graphFrameTimelineId: "timeline.linear-solve.shared",
-        graphTrackId: "timeline.linear-solve.shared.semantic-object.saddle-orbit-graph"
+        graphTrackId: "timeline.linear-solve.shared.semantic-object.saddle-orbit-graph",
+        graphFrameTimelineMatchesParent: true,
+        graphProgressMatchesCard: true,
+        frameProgressMatchesGraph: true
       },
       {
         requestedProgress: 1,
+        parentTimelineId: "timeline.linear-solve.shared",
         cardProgress: 1,
         graphProgress: 1,
+        graphTrackActive: true,
+        graphTrackStartProgress: 0,
+        graphTrackEndProgress: 1,
+        graphTrackLocalProgress: 1,
         frameProgress: 1,
         graphFrameTimelineId: "timeline.linear-solve.shared",
-        graphTrackId: "timeline.linear-solve.shared.semantic-object.saddle-orbit-graph"
+        graphTrackId: "timeline.linear-solve.shared.semantic-object.saddle-orbit-graph",
+        graphFrameTimelineMatchesParent: true,
+        graphProgressMatchesCard: true,
+        frameProgressMatchesGraph: true
       }
     ],
     diagnostics: []
@@ -102,4 +130,8 @@ test("tutorial graph parent timeline diagnostic reports timeline mismatches", ()
         "Graph frame timeline timeline.linear-solve.shared does not match parent timeline timeline.other."
     }
   ]);
+  assert.equal(
+    diagnostic.samples[0]?.graphFrameTimelineMatchesParent,
+    false
+  );
 });
