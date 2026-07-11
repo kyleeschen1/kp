@@ -207,7 +207,14 @@
     {
       "id": "next.kp.frame-sequence-dependency-manifest",
       "title": "Add dependency manifest for frame-sequence export",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.tutorial.next-kp-frame-sequence-dependency-manifest-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.tutorial.next-kp-frame-sequence-dependency-manifest-v0",
+      "title": "Add dependency manifest for frame-sequence export",
+      "summary": "Materialized from stored run-contract slice next.kp.frame-sequence-dependency-manifest in KP hosted package readiness and export sampling loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.export-capability-advertisements",
