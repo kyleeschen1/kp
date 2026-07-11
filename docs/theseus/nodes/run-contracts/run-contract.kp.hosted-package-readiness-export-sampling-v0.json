@@ -99,7 +99,14 @@
     {
       "id": "next.kp.parent-timeline-frame-export-contract",
       "title": "Define parent-timeline frame export sample contract",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.tutorial.next-kp-parent-timeline-frame-export-contract-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.tutorial.next-kp-parent-timeline-frame-export-contract-v0",
+      "title": "Define parent-timeline frame export sample contract",
+      "summary": "Materialized from stored run-contract slice next.kp.parent-timeline-frame-export-contract in KP hosted package readiness and export sampling loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.export-sample-equation-frames",

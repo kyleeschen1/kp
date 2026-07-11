@@ -1,0 +1,105 @@
+{
+  "id": "next-action.kp.tutorial.next-kp-parent-timeline-frame-export-contract-v0",
+  "kind": "next-action",
+  "title": "Define parent-timeline frame export sample contract",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Defined a parent-timeline media frame export contract with deterministic forward sample points and reverse sample order for rewind checks.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract whose stored slice next.kp.parent-timeline-frame-export-contract was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap selects hosted/package readiness, parent-timeline media export sampling, and SemanticObject capability loading as the next choices after browser hardening."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread records hosted/package readiness and parent-timeline media export sampling as open next loops."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-tutorial-card-browser-hardening-loop-closeout.md",
+      "summary": "Browser hardening closeout recommends hosted/package readiness checks before media export encoders."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-export-contract.ts",
+      "summary": "Adds the media frame export contract, artifact metadata resolver, parent-timeline sample points, diagnostics, and rewind order."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-frame-export-contract.test.ts",
+      "summary": "Covers GIF media artifact metadata, five parent-timeline sample points, active track evidence, reverse sample order, and frame-count validation."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Records materialization of the stored parent-timeline frame export slice into a concrete next-action."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.hosted-package-readiness-export-sampling-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Define parent-timeline frame export sample contract can be completed inside KP hosted package readiness and export sampling loop."
+  ],
+  "allowedWork": [
+    "Only work on approved KP hosted/package readiness and parent-timeline export sampling slices.",
+    "Keep work tied to tutorial-card runtime, export artifacts, dashboard/API catalog, and semantic runtime capability metadata.",
+    "Use deterministic fixtures and static programming execution traces only."
+  ],
+  "disallowedWork": [
+    "Do not implement GIF, MP4, or WebM encoders in this loop.",
+    "Do not broaden into full SemanticObject registry loading beyond capability advertisements needed for export readiness.",
+    "Do not pursue broad Theseus planner follow-ups unless they block this KP loop."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-frame-export-contract.test.ts tests/tutorial-card-frame-sampler.test.ts tests/tutorial-card-static-step-artifact.test.ts tests/tutorial-card-export-artifact.test.ts",
+      "status": "passed",
+      "scope": "frame export contract and adjacent tutorial export coverage",
+      "checkedAt": "2026-07-11T02:58:30.205Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript compile checks",
+      "checkedAt": "2026-07-11T02:58:30.230Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T02:58:30.258Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:58:30.277Z",
+      "scope": "Whitespace check"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined a parent-timeline media frame export contract with deterministic forward sample points and reverse sample order for rewind checks."
+  }
+}
