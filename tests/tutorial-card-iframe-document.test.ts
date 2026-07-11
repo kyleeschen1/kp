@@ -89,6 +89,14 @@ test("iframe export document serializes dependency and fallback metadata", () =>
       responsive: true,
       requiresControls: true,
       fallbackStrategy: "static-snapshot",
+      sandboxTokens: ["allow-scripts"],
+      permissionPolicy: [
+        "camera=()",
+        "geolocation=()",
+        "microphone=()",
+        "payment=()"
+      ],
+      referrerPolicy: "no-referrer",
       resolver: "iframe-export-profile"
     }
   });

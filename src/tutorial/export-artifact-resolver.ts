@@ -52,6 +52,14 @@ export function resolveKpTutorialCardIframeExportArtifact(
       responsive: iframeProfile.responsive,
       requiresControls: iframeProfile.requiresControls,
       fallbackStrategy: iframeProfile.fallbackStrategy,
+      sandboxTokens: ["allow-scripts"],
+      permissionPolicy: [
+        "camera=()",
+        "geolocation=()",
+        "microphone=()",
+        "payment=()"
+      ],
+      referrerPolicy: "no-referrer",
       resolver: "iframe-export-profile"
     }
   });

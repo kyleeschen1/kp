@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.iframe-asset-manifest",
+  "kind": "next-action",
+  "title": "Serialize iframe asset manifest",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Serialize iframe export artifact asset/dependency metadata into an explicit asset manifest for hosted embed readiness."
+}

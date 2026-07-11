@@ -153,9 +153,32 @@ test("iframe export artifact resolver maps profile metadata onto artifact contra
       responsive: true,
       requiresControls: true,
       fallbackStrategy: "static-snapshot",
+      sandboxTokens: ["allow-scripts"],
+      permissionPolicy: [
+        "camera=()",
+        "geolocation=()",
+        "microphone=()",
+        "payment=()"
+      ],
+      referrerPolicy: "no-referrer",
       resolver: "iframe-export-profile"
     }
   });
+});
+
+test("iframe export artifact includes embed policy metadata", () => {
+  const artifact = resolveKpTutorialCardIframeExportArtifact(
+    createLinearSolveTutorialCardManifest()
+  );
+
+  assert.deepEqual(artifact.metadata?.["sandboxTokens"], ["allow-scripts"]);
+  assert.deepEqual(artifact.metadata?.["permissionPolicy"], [
+    "camera=()",
+    "geolocation=()",
+    "microphone=()",
+    "payment=()"
+  ]);
+  assert.equal(artifact.metadata?.["referrerPolicy"], "no-referrer");
 });
 
 test("step export artifact resolver maps profile metadata onto artifact contract", () => {

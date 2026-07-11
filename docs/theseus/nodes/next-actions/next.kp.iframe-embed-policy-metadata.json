@@ -2,7 +2,69 @@
   "id": "next.kp.iframe-embed-policy-metadata",
   "kind": "next-action",
   "title": "Add embed sandbox/policy metadata",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add iframe export artifact metadata for embed sandbox policy, permission policy, and referrer behavior."
+  "summary": "Added iframe embed policy metadata for sandbox tokens, denied permission policy entries, and no-referrer behavior on iframe export artifacts.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/export-artifact-resolver.ts",
+      "summary": "Adds sandboxTokens, permissionPolicy, and referrerPolicy metadata to iframe export artifacts."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-export-artifact.test.ts",
+      "summary": "Covers iframe embed policy metadata on resolved export artifacts."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-iframe-document.test.ts",
+      "summary": "Updates iframe document artifact JSON assertions for serialized embed policy metadata."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.iframe-embed-policy-metadata.json",
+      "summary": "Records the approved iframe embed policy metadata next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.iframe-asset-manifest.json",
+      "summary": "Materializes the next approved iframe asset manifest slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the iframe asset manifest slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-export-artifact.test.ts tests/tutorial-card-iframe-document.test.ts tests/tutorial-card-export-fallback-readiness.test.ts",
+      "status": "passed",
+      "scope": "iframe embed policy, artifact, document, and fallback unit coverage",
+      "checkedAt": "2026-07-11T01:23:26.817Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:23:26.836Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:23:26.850Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:23:26.869Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added iframe embed policy metadata for sandbox tokens, denied permission policy entries, and no-referrer behavior on iframe export artifacts."
+  }
 }
