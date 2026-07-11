@@ -1412,7 +1412,7 @@ export const projectDashboardData: ProjectDashboardData = {
       id: "report-tutorial-launch-readiness",
       title: "Tutorial launch readiness",
       status: "active",
-      grade: "B+",
+      grade: "A-",
       lastReviewedOn: "2026-07-11",
       scope:
         "Assess whether current tutorial-card launch surfaces are browser-reachable, sampleable, linked from the dashboard, and backed by export dependency and fallback checks.",
@@ -1469,14 +1469,14 @@ export const projectDashboardData: ProjectDashboardData = {
         }
       ],
       risks: [
-        "Coverage is still smoke-level: it proves launch, seek metadata, and nonblank panels, not full visual parity or production hosting.",
-        "Programming launch coverage still uses a static SourceFile card rather than execution traces, stack frames, or runtime state.",
-        "Graph coverage proves current mesh sample launch and panel content; richer graph transformation quality still needs timeline diagnostics."
+        "Hosted packaging and production deployment checks still need to prove dependency paths outside the dev server.",
+        "GIF, video, and generated media export are still future work after iframe/static-step browser paths.",
+        "Visual quality is still smoke-level: tests prove launch, seek metadata, and nonblank panels, not full pixel parity."
       ],
       recommendedNextActions: [
-        "Add the execution-trace programming frame contract and static fixture.",
-        "Render an execution-trace programming panel from static frames.",
-        "Expand graph parent-timeline diagnostics after the launch surfaces stay stable."
+        "Close the browser hardening loop with a concise residual-risk report.",
+        "Start GIF or video export sampling from parent timeline frames.",
+        "Return to the SemanticObject registry and capability loading layer."
       ],
       tags: [
         "tutorial-card",
@@ -1498,7 +1498,10 @@ export const projectDashboardData: ProjectDashboardData = {
         "sample-synced-equation-graph-linear-solve",
         "iframe-export-artifact",
         "static-step-export-artifact",
-        "semantic-source-file"
+        "semantic-source-file",
+        "iframe-asset-manifest",
+        "programming-execution-trace-card",
+        "synchronized-comparison-card"
       ]
     },
     {

@@ -19,16 +19,18 @@ semantics first
 
 ## Active Focus
 
-**Tutorial-card export/embed foundation.** The export/embed loop closed on
-2026-07-11 with concrete iframe artifacts, static-step sequence artifacts, an
-export artifact catalog, a programming tutorial-card panel sample, generated
-KaTeX fixture promotion, graph parent-timeline diagnostics, and refreshed
-dashboard readiness in place.
+**Tutorial-card browser/embed hardening.** The export/embed loop closed on
+2026-07-11 with concrete iframe and static-step artifacts. The browser
+hardening loop has now added launch-target smoke coverage, iframe dependency
+closure, fallback readiness, iframe embed policy and asset manifests,
+deterministic seek/nonblank browser probes, programming execution-trace card
+samples, authored static-step markers, expanded graph timeline diagnostics,
+synchronized comparison shells, and dashboard/API catalog rows for the new
+hardening surfaces.
 
-The next major implementation loop should harden these artifacts in browser and
-hosted contexts before moving into media encoders:
-`KpTutorialCardManifest -> parent timeline -> synchronized sampled frames ->
-iframe/static-step artifact -> smoke-tested embed surface`.
+The immediate implementation focus is to close the browser hardening loop with
+a residual-risk report, then choose between media export sampling and returning
+to the SemanticObject registry/capability loading layer.
 
 ## Roadmap Phases
 
@@ -177,17 +179,15 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Add browser smoke coverage for iframe, static-step, and programming sample
-   launch paths.
-2. Add hosted/package readiness checks for iframe artifact dependencies and
-   fallbacks.
-3. Extend programming tutorial cards from static SourceFile panels into
-   execution-trace frames.
-4. Start GIF or video export sampling from parent timeline frames after the
-   iframe/static-step paths stay stable.
-5. Expand graph diagnostics from the current mesh sample into richer graph
-   transforms and synchronized comparison cards.
-6. Return to the SemanticObject registry and capability loading layer so export
+1. Close the tutorial-card browser hardening loop with a concise stop report,
+   residual risks, and next-loop recommendations.
+2. Add hosted/package readiness checks for iframe artifact dependencies,
+   fallback behavior, and asset manifests outside the dev server.
+3. Start GIF or video export sampling from parent timeline frames after the
+   iframe/static-step/browser paths stay stable.
+4. Expand graph diagnostics from current mesh/conformance checks into richer
+   graph transforms and synchronized comparison cards.
+5. Return to the SemanticObject registry and capability loading layer so export
    artifacts can advertise exactly what each card needs.
 
 ## Deferred

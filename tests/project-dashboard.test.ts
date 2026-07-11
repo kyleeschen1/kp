@@ -1132,7 +1132,7 @@ test("project dashboard includes tutorial launch readiness report card", () => {
 
   assert.equal(launchTheme?.title, "Tutorial launch readiness");
   assert.equal(launchTheme?.status, "active");
-  assert.equal(launchTheme?.grade, "B+");
+  assert.equal(launchTheme?.grade, "A-");
   assert.equal(launchTheme?.lastReviewedOn, "2026-07-11");
   assert.ok(
     launchTheme?.questions.some((question) =>
@@ -1169,7 +1169,7 @@ test("project dashboard includes tutorial launch readiness report card", () => {
   );
   assert.ok(
     launchTheme?.recommendedNextActions.some((action) =>
-      action.includes("execution-trace programming")
+      action.includes("Close the browser hardening loop")
     )
   );
   assert.deepEqual(launchTheme?.relatedIds, [
@@ -1177,7 +1177,10 @@ test("project dashboard includes tutorial launch readiness report card", () => {
     "sample-synced-equation-graph-linear-solve",
     "iframe-export-artifact",
     "static-step-export-artifact",
-    "semantic-source-file"
+    "semantic-source-file",
+    "iframe-asset-manifest",
+    "programming-execution-trace-card",
+    "synchronized-comparison-card"
   ]);
 });
 
@@ -1227,7 +1230,7 @@ test("renderProjectDashboard selects tutorial launch readiness report card", () 
     /data-kp-selected-agenda-row="report-tutorial-launch-readiness"/
   );
   assert.match(html, /Tutorial launch readiness/);
-  assert.match(html, /data-kp-preview-field="Grade"[^>]*>B\+/);
+  assert.match(html, /data-kp-preview-field="Grade"[^>]*>A-/);
   assert.match(html, /tests\/tutorial-card-seek-smoke\.browser\.spec\.ts/);
 });
 

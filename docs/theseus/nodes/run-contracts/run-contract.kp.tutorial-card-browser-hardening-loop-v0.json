@@ -37,7 +37,7 @@
     "Do not pursue visual polish unless it blocks launch smoke reliability."
   ],
   "goal": "Prove concrete tutorial-card iframe, static-step, programming, graph, and dashboard launch surfaces can render, seek, expose fallbacks/dependencies, and report readiness before moving into media export or broader capability registry work.",
-  "target": "next.kp.browser-hardening-readiness-refresh",
+  "target": "next.kp.tutorial-card-browser-hardening-loop-closeout",
   "runMode": "run",
   "maxSlices": 24,
   "commitCadence": "Commit after each verified slice.",
@@ -162,7 +162,7 @@
     {
       "id": "next.kp.browser-hardening-readiness-refresh",
       "title": "Refresh project roadmap/readiness after hardening",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.tutorial-card-browser-hardening-loop-closeout",

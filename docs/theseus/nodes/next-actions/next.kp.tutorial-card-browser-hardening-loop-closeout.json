@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.tutorial-card-browser-hardening-loop-closeout",
+  "kind": "next-action",
+  "title": "Close tutorial-card browser/embed hardening loop",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Close the tutorial-card browser/embed hardening loop with final verification, residual risks, and next-loop handoff."
+}

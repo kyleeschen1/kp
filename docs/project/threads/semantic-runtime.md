@@ -2,8 +2,8 @@
 
 Status: active
 Last Updated: 2026-07-11
-Current Next Action: Add browser smoke coverage for iframe, static-step, and
-programming sample launch paths.
+Current Next Action: Close the tutorial-card browser hardening loop with
+residual risks and next-loop recommendations.
 
 ## Goal
 
@@ -41,6 +41,14 @@ catalog, a programming tutorial-card sample, generated KaTeX fixture promotion,
 graph parent-timeline diagnostics, and a refreshed export/runtime readiness
 report card.
 
+The tutorial-card browser hardening loop has now proved concrete launch paths
+and sampled browser surfaces across dashboard launch targets, iframe exports,
+static-step exports, programming cards, execution-trace cards, synchronized
+comparison cards, iframe asset manifests, fallback readiness, nonblank panel
+probes, static-step authored markers, and expanded graph timeline diagnostics.
+The remaining browser-hardening work is closeout and hosted/package readiness,
+not basic launch-path discovery.
+
 ## Accepted Scope
 
 - semantic objects with stable selectors and immutable structural history;
@@ -61,14 +69,11 @@ report card.
 
 ## Open Questions
 
-- What is the smallest iframe artifact that preserves manifest identity,
-  fallback behavior, controls, and dependency metadata?
-- Which browser smoke checks best prove iframe, static-step, and programming
-  samples launch without drifting from the parent timeline?
-- How should static-step export choose richer checkpoints from parent timeline
-  markers, pauses, and annotations?
-- What is the minimal execution-trace frame for the next programming
-  tutorial-card panel?
+- Which hosted/package checks best prove iframe asset manifests, fallback
+  behavior, and dependency paths outside the dev server?
+- What is the smallest useful GIF/video sampler over parent timeline frames?
+- How should static-step export choose richer checkpoints from authored parent
+  timeline markers, pauses, and annotations?
 - Which remaining KaTeX transform fixtures should be promoted from curated
   geometry to semantic transformation definitions?
 
@@ -79,6 +84,7 @@ report card.
 - `docs/project/reviews/2026-07-10-semantic-runtime-roadmap-loop-closeout.md`
 - `docs/project/reviews/2026-07-10-tutorial-card-runtime-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-tutorial-card-export-embed-loop-closeout.md`
+- `docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json`
 - `docs/superpowers/specs/2026-07-10-derive-representation-capability-design.md`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json`

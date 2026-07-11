@@ -2,7 +2,79 @@
   "id": "next.kp.browser-hardening-readiness-refresh",
   "kind": "next-action",
   "title": "Refresh project roadmap/readiness after hardening",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Refresh project roadmap, readiness report language, and next priorities after the tutorial-card browser hardening loop artifacts are represented in the dashboard/API catalog."
+  "summary": "Refreshed project roadmap, semantic runtime thread, readiness report card, and review notes after tutorial-card browser hardening artifacts landed.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Updates active focus and near-term priorities after browser hardening work."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Updates current next action, current state, open questions, and links for browser hardening."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-tutorial-card-browser-hardening-readiness-refresh.md",
+      "summary": "Adds a short readiness refresh review with delivered evidence, risks, and next moves."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Refreshes tutorial launch readiness grade, risks, next actions, and related hardening rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers the refreshed tutorial launch readiness report card."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.browser-hardening-readiness-refresh.json",
+      "summary": "Records the approved browser hardening readiness refresh next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-browser-hardening-loop-closeout.json",
+      "summary": "Materializes the final approved tutorial-card browser hardening loop closeout slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the loop closeout slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/api-catalog.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "dashboard readiness, API catalog, and Theseus dashboard adapter unit coverage",
+      "checkedAt": "2026-07-11T02:10:00.923Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T02:10:00.939Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T02:10:00.957Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:10:00.974Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Refreshed project roadmap, semantic runtime thread, readiness report card, and review notes after tutorial-card browser hardening artifacts landed."
+  }
 }
