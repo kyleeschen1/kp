@@ -2,7 +2,7 @@
   "id": "run-contract.kp.semantic-capability-loading-v0",
   "kind": "run-contract",
   "title": "KP SemanticObject capability loading loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic",
   "sourceRefs": [
     {
@@ -306,7 +306,15 @@
     {
       "id": "next.kp.capability-loading-loop-closeout",
       "title": "Loop closeout review",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-capability-loading-loop-closeout-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-capability-loading-loop-closeout-v0",
+      "title": "Loop closeout review",
+      "summary": "Materialized from stored run-contract slice next.kp.capability-loading-loop-closeout in KP SemanticObject capability loading loop.",
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }

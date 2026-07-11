@@ -25,7 +25,8 @@ iframe and static-step artifacts, launch-target smoke coverage, hosted fixture
 roots, parent-timeline frame-sequence artifacts, and dependency manifests for
 those outputs.
 
-The current capability-loading loop moved the next dependency layer from
+The SemanticObject capability loading loop closed on 2026-07-11. It moved the
+next dependency layer from
 sample-specific capability advertisements into registry-backed capability
 package manifests. Equation, Matrix, Graph, SourceFile, and export capabilities
 now have package ids, stable capability keys, source refs, dashboard rows,
@@ -186,16 +187,14 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Close the SemanticObject capability loading loop with a concise closeout
-   report and residual-risk list.
-2. Choose the next loop: a generated tutorial family that consumes capability
+1. Choose the next loop: a generated tutorial family that consumes capability
    packages, media encoder integration, or graph/visual runtime unification.
-3. Start GIF or video encoder integration only after the frame-sequence JSON
+2. Start GIF or video encoder integration only after the frame-sequence JSON
    artifact, HTML preview, browser probe, rewind check, dependency manifest,
    and capability package manifests stay stable.
-4. Expand graph diagnostics from current mesh/conformance checks into richer
+3. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-5. Defer dynamic package loading until at least one generated tutorial family
+4. Defer dynamic package loading until at least one generated tutorial family
    proves the metadata contract across math, graph, programming, and export
    examples.
 

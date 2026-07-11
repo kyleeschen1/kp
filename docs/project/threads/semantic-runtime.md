@@ -2,9 +2,8 @@
 
 Status: active
 Last Updated: 2026-07-11
-Current Next Action: Close the SemanticObject capability loading loop, then
-choose between generated tutorial families, media encoder integration, or
-graph/visual runtime unification.
+Current Next Action: Choose between generated tutorial families, media encoder
+integration, or graph/visual runtime unification.
 
 ## Goal
 
@@ -57,7 +56,7 @@ frame sampling, frame-sequence artifacts and HTML previews, browser probes,
 rewind checks, dependency manifests, metadata-only export capability
 advertisements, and a closeout review.
 
-The SemanticObject capability loading loop is now in closeout. It converted
+The SemanticObject capability loading loop closed on 2026-07-11. It converted
 the sample-specific capability advertisement path into registry-backed
 capability package manifests for Equation, Matrix, Graph, SourceFile, and
 export capabilities. Those packages expose stable ids, capability keys, source
@@ -109,6 +108,7 @@ static-step, and frame-sequence artifacts.
 - `docs/project/reviews/2026-07-11-tutorial-card-browser-hardening-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-hosted-package-readiness-export-sampling-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-capability-loading-readiness-report.md`
+- `docs/project/reviews/2026-07-11-semantic-capability-loading-loop-closeout.md`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.semantic-capability-loading-v0.json`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json`
 - `docs/superpowers/specs/2026-07-10-derive-representation-capability-design.md`
