@@ -123,7 +123,14 @@
     {
       "id": "next.kp.export-sample-graph-frames",
       "title": "Sample graph frames from parent timeline",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.tutorial.next-kp-export-sample-graph-frames-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.tutorial.next-kp-export-sample-graph-frames-v0",
+      "title": "Sample graph frames from parent timeline",
+      "summary": "Materialized from stored run-contract slice next.kp.export-sample-graph-frames in KP hosted package readiness and export sampling loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.export-sample-programming-frames",
