@@ -2,7 +2,64 @@
   "id": "next.kp.programming-execution-trace-frame-contract",
   "kind": "next-action",
   "title": "Define programming execution-trace frame contract",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Define the typed frame contract for static programming execution traces, including current step, call stack, locals, output, selectors, and timeline progress."
+  "summary": "Defined the programming execution-trace frame contract with immutable trace steps, sampled frames, active selectors, stack frames, locals, output, validation, and normalized progress.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/programming-execution-trace.ts",
+      "summary": "Defines execution trace step, trace, and frame types plus constructors for validated static trace state."
+    },
+    {
+      "kind": "file",
+      "path": "tests/programming-execution-trace-frame.test.ts",
+      "summary": "Covers current-step frame shape, progress normalization, empty trace validation, and out-of-range step validation."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.programming-execution-trace-frame-contract.json",
+      "summary": "Records the approved programming execution-trace frame contract next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.programming-execution-trace-fixture.json",
+      "summary": "Materializes the next approved static execution-trace fixture slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the static execution-trace fixture slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/programming-execution-trace-frame.test.ts tests/programming-tutorial-card-sample.test.ts tests/tutorial-card-programming-panel.test.ts",
+      "status": "passed",
+      "scope": "execution trace frame contract and adjacent programming tutorial unit coverage",
+      "checkedAt": "2026-07-11T01:44:31.443Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:44:31.463Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:44:31.474Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:44:31.495Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined the programming execution-trace frame contract with immutable trace steps, sampled frames, active selectors, stack frames, locals, output, validation, and normalized progress."
+  }
 }

@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.programming-execution-trace-fixture",
+  "kind": "next-action",
+  "title": "Add static execution-trace fixture",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add a static add(a, b) programming execution-trace fixture that uses the trace frame contract for deterministic sampled execution states."
+}
