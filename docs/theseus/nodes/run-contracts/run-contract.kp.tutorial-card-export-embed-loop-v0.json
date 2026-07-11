@@ -40,7 +40,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure."
   ],
   "goal": "Run the approved export/embed loop from tutorial-card runtime metadata to concrete iframe and static-step artifacts, then prepare programming panels and follow-up runtime checks.",
-  "target": "next.kp.graph-parent-timeline-diagnostic",
+  "target": "next.kp.export-embed-readiness-report",
   "runMode": "run",
   "maxSlices": 20,
   "commitCadence": "Commit after each verified slice.",
@@ -144,7 +144,7 @@
     {
       "id": "next.kp.export-embed-readiness-report",
       "title": "Refresh runtime/export readiness report card",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.tutorial-card-export-embed-loop-closeout",

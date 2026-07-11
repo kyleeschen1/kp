@@ -1013,8 +1013,8 @@ test("project dashboard includes semantic runtime readiness report card", () => 
 
   assert.equal(runtimeTheme?.title, "Semantic runtime readiness");
   assert.equal(runtimeTheme?.status, "active");
-  assert.equal(runtimeTheme?.grade, "B+");
-  assert.equal(runtimeTheme?.lastReviewedOn, "2026-07-10");
+  assert.equal(runtimeTheme?.grade, "A-");
+  assert.equal(runtimeTheme?.lastReviewedOn, "2026-07-11");
   assert.ok(
     runtimeTheme?.scope.includes(
       "live tutorial cards with synchronized equation and graph panels"
@@ -1042,6 +1042,26 @@ test("project dashboard includes semantic runtime readiness report card", () => 
   );
   assert.ok(
     runtimeTheme?.evidence.some((entry) =>
+      entry.href.includes("src/tutorial/export-artifact-catalog.ts")
+    )
+  );
+  assert.ok(
+    runtimeTheme?.evidence.some((entry) =>
+      entry.href.includes("src/tutorial/static-step-sequence-renderer.ts")
+    )
+  );
+  assert.ok(
+    runtimeTheme?.evidence.some((entry) =>
+      entry.href.includes("src/tutorial/programming-card-sample.ts")
+    )
+  );
+  assert.ok(
+    runtimeTheme?.evidence.some((entry) =>
+      entry.href.includes("src/tutorial/graph-parent-timeline-diagnostic.ts")
+    )
+  );
+  assert.ok(
+    runtimeTheme?.evidence.some((entry) =>
       entry.href.includes(
         "docs/project/reviews/2026-07-10-semantic-runtime-roadmap-loop-closeout.md"
       )
@@ -1054,7 +1074,7 @@ test("project dashboard includes semantic runtime readiness report card", () => 
   );
   assert.ok(
     runtimeTheme?.recommendedNextActions.some((action) =>
-      action.includes("Package the iframe export profile")
+      action.includes("Close the export/embed loop")
     )
   );
   assert.deepEqual(runtimeTheme?.relatedIds, [
@@ -1062,6 +1082,8 @@ test("project dashboard includes semantic runtime readiness report card", () => 
     "gallery-rendering-time-api",
     "sample-synced-equation-graph-linear-solve",
     "tutorial-card-manifest-v0",
+    "iframe-export-artifact",
+    "static-step-export-artifact",
     "semantic-source-file"
   ]);
 });
@@ -1094,7 +1116,7 @@ test("renderProjectDashboard selects semantic runtime readiness report card", ()
     /data-kp-selected-agenda-row="report-semantic-runtime-readiness"/
   );
   assert.match(html, /Semantic runtime readiness/);
-  assert.match(html, /data-kp-preview-field="Grade"[^>]*>B\+</);
+  assert.match(html, /data-kp-preview-field="Grade"[^>]*>A-/);
   assert.match(
     html,
     /data-kp-preview-field="Risks"[^>]*>[\s\S]*GIF and video encoders/

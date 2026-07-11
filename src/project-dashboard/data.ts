@@ -1155,10 +1155,10 @@ export const projectDashboardData: ProjectDashboardData = {
       id: "report-semantic-runtime-readiness",
       title: "Semantic runtime readiness",
       status: "active",
-      grade: "B+",
-      lastReviewedOn: "2026-07-10",
+      grade: "A-",
+      lastReviewedOn: "2026-07-11",
       scope:
-        "Assess whether KP has enough shared object, transformation, layout, and time runtime to compose live tutorial cards with synchronized equation and graph panels, export metadata, and future programming views.",
+        "Assess whether KP has enough shared object, transformation, layout, and time runtime to compose live tutorial cards with synchronized equation and graph panels, concrete export artifacts, and future programming views.",
       questions: [
         "Can runtime objects preserve stable semantic selectors across rendered forms?",
         "Can equation, graph, and layout views sample arbitrary progress from one shared clock?",
@@ -1193,6 +1193,22 @@ export const projectDashboardData: ProjectDashboardData = {
           href: "src/tutorial/export-profile-resolver.ts"
         },
         {
+          label: "Tutorial export artifact catalog",
+          href: "src/tutorial/export-artifact-catalog.ts"
+        },
+        {
+          label: "Static-step sequence renderer",
+          href: "src/tutorial/static-step-sequence-renderer.ts"
+        },
+        {
+          label: "Programming tutorial card sample",
+          href: "src/tutorial/programming-card-sample.ts"
+        },
+        {
+          label: "Graph parent-timeline diagnostic",
+          href: "src/tutorial/graph-parent-timeline-diagnostic.ts"
+        },
+        {
           label: "SourceFile semantic object",
           href: "src/semantic/source-file.ts"
         },
@@ -1202,16 +1218,16 @@ export const projectDashboardData: ProjectDashboardData = {
         }
       ],
       risks: [
-        "The tutorial card shell is still a server-rendered/static HTML surface rather than a fully packaged iframe artifact.",
         "GIF and video encoders are still profile metadata rather than rendered media artifacts.",
-        "Static-step export metadata is resolved, but the exporter still needs to emit a concrete checkpoint sequence.",
-        "Programming-domain SourceFile selectors exist, but no programming tutorial panel consumes them yet."
+        "Iframe and static-step artifacts are concrete, but they still need broader browser smoke coverage across hosted packaging and dashboard launch paths.",
+        "Programming tutorial cards currently cover a static SourceFile panel, not execution traces, stack frames, locals, or runtime state.",
+        "Graph diagnostics cover timeline conformance for the current mesh sample; richer graph transformations still need cross-panel readiness checks."
       ],
       recommendedNextActions: [
-        "Package the iframe export profile into an embeddable card shell.",
-        "Generate a static step sequence from sampled parent timeline frames.",
-        "Add GIF or video export sampling after iframe and static steps have concrete artifacts.",
-        "Use SourceFile selectors in the first programming tutorial card panel."
+        "Close the export/embed loop with a stop report and next-loop priorities.",
+        "Add browser smoke coverage for iframe, static-step, and programming sample launch paths.",
+        "Start GIF or video export sampling after iframe and static-step artifacts stay stable.",
+        "Extend programming tutorial cards from static SourceFile panels into execution-trace frames."
       ],
       tags: [
         "runtime",
@@ -1251,6 +1267,8 @@ export const projectDashboardData: ProjectDashboardData = {
         "gallery-rendering-time-api",
         "sample-synced-equation-graph-linear-solve",
         "tutorial-card-manifest-v0",
+        "iframe-export-artifact",
+        "static-step-export-artifact",
         "semantic-source-file"
       ]
     },

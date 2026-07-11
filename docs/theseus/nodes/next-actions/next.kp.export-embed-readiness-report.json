@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.export-embed-readiness-report",
+  "kind": "next-action",
+  "title": "Refresh runtime/export readiness report card",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "summary": "Refreshed the semantic runtime readiness report with concrete export/embed, programming, generated fixture, and graph diagnostic evidence.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Updates the semantic runtime readiness report grade, evidence, risks, next actions, and related rows after the export/embed loop slices."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers refreshed semantic runtime readiness report grade, evidence, risks, next actions, and related ids."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.export-embed-readiness-report.json",
+      "summary": "Materializes the approved export/embed readiness report next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the readiness report slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts tests/tutorial-card-export-artifact-catalog.test.ts tests/tutorial-card-static-step-artifact.test.ts tests/programming-tutorial-card-sample.test.ts tests/tutorial-card-graph-frame-adapter.test.ts",
+      "status": "passed",
+      "scope": "dashboard readiness report and related export/embed tutorial tests",
+      "checkedAt": "2026-07-11T00:36:31.846Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T00:36:31.863Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T00:36:31.879Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Refreshed the semantic runtime readiness report with concrete export/embed, programming, generated fixture, and graph diagnostic evidence."
+  }
+}
