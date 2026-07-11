@@ -43,3 +43,33 @@ test("iframe export dependency closure reports missing phase capabilities", () =
     ]
   );
 });
+
+test("iframe export dependency closure reports missing capability packages", () => {
+  const manifest = createLinearSolveTutorialCardManifest();
+  const artifact = resolveKpTutorialCardIframeExportArtifact(manifest);
+
+  assert.deepEqual(
+    validateKpTutorialExportDependencyClosure({
+      artifact: {
+        ...artifact,
+        dependencies: {
+          ...artifact.dependencies,
+          capabilityPackageIds:
+            artifact.dependencies.capabilityPackageIds?.filter(
+              (packageId) =>
+                packageId !==
+                "package.kp.graph3d.render.webgl.surface-mesh"
+            ) ?? []
+        }
+      },
+      manifest
+    }),
+    [
+      {
+        path: "dependencies.capabilityPackageIds",
+        message:
+          "Export artifact artifact.linear-solve.iframe is missing capability package package.kp.graph3d.render.webgl.surface-mesh from dependency phase interactive."
+      }
+    ]
+  );
+});

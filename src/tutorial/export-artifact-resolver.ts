@@ -45,6 +45,12 @@ export function resolveKpTutorialCardIframeExportArtifact(
       capabilityKeys: unique(
         dependencyPlanPhases.flatMap((phase) => phase.capabilityKeys)
       ),
+      capabilityPackageIds: unique(
+        dependencyPlanPhases.flatMap((phase) => phase.capabilityPackageIds)
+      ),
+      capabilityPackageKeys: unique(
+        dependencyPlanPhases.flatMap((phase) => phase.capabilityPackageKeys)
+      ),
       assetIds: unique(dependencyPlanPhases.flatMap((phase) => phase.assetIds))
     },
     fallback: manifest.fallback,

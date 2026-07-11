@@ -222,7 +222,14 @@
     {
       "id": "next.kp.iframe-capability-closure",
       "title": "Capability closure for iframe exports",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-iframe-capability-closure-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-iframe-capability-closure-v0",
+      "title": "Capability closure for iframe exports",
+      "summary": "Materialized from stored run-contract slice next.kp.iframe-capability-closure in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.static-step-capability-closure",

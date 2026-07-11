@@ -44,6 +44,34 @@ export function validateKpTutorialExportDependencyClosure(
       }
     }
 
+    if (input.artifact.artifactKind === "iframe-document") {
+      for (const packageId of planPhase.capabilityPackageIds) {
+        if (
+          !(input.artifact.dependencies.capabilityPackageIds ?? []).includes(
+            packageId
+          )
+        ) {
+          diagnostics.push({
+            path: "dependencies.capabilityPackageIds",
+            message: `Export artifact ${input.artifact.id} is missing capability package ${packageId} from dependency phase ${phase}.`
+          });
+        }
+      }
+
+      for (const packageKey of planPhase.capabilityPackageKeys) {
+        if (
+          !(input.artifact.dependencies.capabilityPackageKeys ?? []).includes(
+            packageKey
+          )
+        ) {
+          diagnostics.push({
+            path: "dependencies.capabilityPackageKeys",
+            message: `Export artifact ${input.artifact.id} is missing capability package key ${packageKey} from dependency phase ${phase}.`
+          });
+        }
+      }
+    }
+
     for (const assetId of planPhase.assetIds) {
       if (!input.artifact.dependencies.assetIds.includes(assetId)) {
         diagnostics.push({

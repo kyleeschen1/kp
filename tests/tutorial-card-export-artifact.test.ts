@@ -23,9 +23,18 @@ test("tutorial card export artifact contract preserves portable output metadata"
     "interactive"
   ];
   const timelineIds = ["timeline.linear-solve.shared"];
-  const capabilityKeys = dependencyPlan.phases
-    .filter((phase) => dependencyPhases.includes(phase.phase))
-    .flatMap((phase) => phase.capabilityKeys);
+  const dependencyPlanPhases = dependencyPlan.phases.filter((phase) =>
+    dependencyPhases.includes(phase.phase)
+  );
+  const capabilityKeys = dependencyPlanPhases.flatMap(
+    (phase) => phase.capabilityKeys
+  );
+  const capabilityPackageIds = dependencyPlanPhases.flatMap(
+    (phase) => phase.capabilityPackageIds
+  );
+  const capabilityPackageKeys = dependencyPlanPhases.flatMap(
+    (phase) => phase.capabilityPackageKeys
+  );
   const tags = ["embed", "linear-solve"];
 
   const artifact = createKpTutorialCardExportArtifact({
@@ -41,6 +50,8 @@ test("tutorial card export artifact contract preserves portable output metadata"
     dependencies: {
       phases: dependencyPhases,
       capabilityKeys,
+      capabilityPackageIds,
+      capabilityPackageKeys,
       assetIds: []
     },
     fallback: manifest.fallback,
@@ -71,6 +82,20 @@ test("tutorial card export artifact contract preserves portable output metadata"
         "kp.layout:sample.synchronized-panel:*:*",
         "kp.equation:render.katex:equation:*",
         "kp.graph:render.webgl:graph-3d:surface.mesh"
+      ],
+      capabilityPackageIds: [
+        "package.kp.equation.render.katex",
+        "package.kp.equation.transform.semantic",
+        "package.kp.equation.animate.motion-plan",
+        "package.kp.graph3d.render.webgl.surface-mesh",
+        "package.kp.graph3d.animate.surface-mode"
+      ],
+      capabilityPackageKeys: [
+        "kp.equation:render.katex:equation:*",
+        "kp.equation:transform.semantic:equation:*",
+        "kp.equation:animate.motion-plan:equation:*",
+        "kp.graph:render.webgl:graph-3d:surface.mesh",
+        "kp.graph:animate.surface-mode:graph-3d:surface.mode"
       ],
       assetIds: []
     },
@@ -140,6 +165,20 @@ test("iframe export artifact resolver maps profile metadata onto artifact contra
         "kp.layout:sample.synchronized-panel:*:*",
         "kp.equation:render.katex:equation:*",
         "kp.graph:render.webgl:graph-3d:surface.mesh"
+      ],
+      capabilityPackageIds: [
+        "package.kp.equation.render.katex",
+        "package.kp.equation.transform.semantic",
+        "package.kp.equation.animate.motion-plan",
+        "package.kp.graph3d.render.webgl.surface-mesh",
+        "package.kp.graph3d.animate.surface-mode"
+      ],
+      capabilityPackageKeys: [
+        "kp.equation:render.katex:equation:*",
+        "kp.equation:transform.semantic:equation:*",
+        "kp.equation:animate.motion-plan:equation:*",
+        "kp.graph:render.webgl:graph-3d:surface.mesh",
+        "kp.graph:animate.surface-mode:graph-3d:surface.mode"
       ],
       assetIds: []
     },

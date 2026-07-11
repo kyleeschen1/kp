@@ -18,6 +18,8 @@ export interface KpIframeExportAssetManifest {
   readonly payloadKind: KpTutorialExportArtifactPayloadKind;
   readonly dependencyPhases: readonly KpTutorialDependencyPhase[];
   readonly capabilityKeys: readonly string[];
+  readonly capabilityPackageIds: readonly string[];
+  readonly capabilityPackageKeys: readonly string[];
   readonly assetIds: readonly string[];
   readonly embedPolicy: KpIframeExportEmbedPolicyManifest;
 }
@@ -61,6 +63,12 @@ export function createKpIframeExportAssetManifest(
     payloadKind: artifact.payloadKind,
     dependencyPhases: [...artifact.dependencies.phases],
     capabilityKeys: [...artifact.dependencies.capabilityKeys],
+    capabilityPackageIds: [
+      ...(artifact.dependencies.capabilityPackageIds ?? [])
+    ],
+    capabilityPackageKeys: [
+      ...(artifact.dependencies.capabilityPackageKeys ?? [])
+    ],
     assetIds: [...artifact.dependencies.assetIds],
     embedPolicy: {
       sandboxTokens: metadataStringList(artifact, "sandboxTokens"),

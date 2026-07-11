@@ -32,6 +32,8 @@ export type KpTutorialExportArtifactMetadataValue =
 export interface KpTutorialExportArtifactDependencies {
   readonly phases: readonly KpTutorialDependencyPhase[];
   readonly capabilityKeys: readonly string[];
+  readonly capabilityPackageIds?: readonly string[] | undefined;
+  readonly capabilityPackageKeys?: readonly string[] | undefined;
   readonly assetIds: readonly string[];
 }
 
@@ -73,6 +75,20 @@ export function createKpTutorialCardExportArtifact(
     dependencies: {
       phases: [...input.dependencies.phases],
       capabilityKeys: [...input.dependencies.capabilityKeys],
+      ...(input.dependencies.capabilityPackageIds === undefined
+        ? {}
+        : {
+            capabilityPackageIds: [
+              ...input.dependencies.capabilityPackageIds
+            ]
+          }),
+      ...(input.dependencies.capabilityPackageKeys === undefined
+        ? {}
+        : {
+            capabilityPackageKeys: [
+              ...input.dependencies.capabilityPackageKeys
+            ]
+          }),
       assetIds: [...input.dependencies.assetIds]
     },
     fallback: { ...input.fallback },
