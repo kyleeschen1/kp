@@ -115,13 +115,14 @@
     {
       "id": "next.kp.asset-port-contract",
       "title": "Define external deterministic port contract",
-      "status": "complete",
-      "summary": "Added an external port contract for deterministic imports into KP asset bundles, including source system/version metadata, preservation level, run wrapper, and explicit approximate/lossy/opaque/partial/unsupported diagnostics."
+      "summary": "Added an external port contract for deterministic imports into KP asset bundles, including source system/version metadata, preservation level, run wrapper, and explicit approximate/lossy/opaque/partial/unsupported diagnostics.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-flashcard-contract",
       "title": "Define flashcard spec contract",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added flashcard specs that reference asset ids, object ids, selector ids, transformation ids, time slices, and answers, plus validation so cards cannot silently drift from source assets."
     },
     {
       "id": "next.kp.asset-law-test-helpers",
