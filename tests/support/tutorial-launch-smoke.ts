@@ -8,6 +8,10 @@ import {
   type ProgrammingTutorialCardSampleFrame
 } from "../../src/tutorial/programming-card-sample.ts";
 import type { LinearSolveStaticStepExportSmokeFixture } from "../../src/tutorial/static-step-export-smoke-fixture.ts";
+import {
+  findKpStaticHostFixtureEntry,
+  type KpStaticHostFixtureRoot
+} from "../../src/tutorial/static-host-fixture-root.ts";
 
 export interface KpTutorialCardSeekSampleExpectation {
   readonly progress: number;
@@ -48,6 +52,24 @@ export async function loadKpIframeExportSmokeFixtureDocument(
   await expect(page.locator("html")).toHaveAttribute(
     "data-kp-export-artifact",
     fixture.artifact.id
+  );
+}
+
+export async function loadKpStaticHostFixtureEntryDocument(
+  page: Page,
+  root: KpStaticHostFixtureRoot,
+  path: string
+): Promise<void> {
+  const entry = findKpStaticHostFixtureEntry(root, path);
+
+  if (entry === undefined) {
+    throw new Error(`Static host fixture ${root.id} has no entry ${path}.`);
+  }
+
+  await page.setContent(entry.content, { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-kp-export-artifact",
+    entry.artifactId
   );
 }
 

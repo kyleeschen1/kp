@@ -79,7 +79,7 @@
     {
       "id": "next.kp.packaged-iframe-browser-smoke",
       "title": "Add packaged iframe browser smoke fixture",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.packaged-static-step-browser-smoke",

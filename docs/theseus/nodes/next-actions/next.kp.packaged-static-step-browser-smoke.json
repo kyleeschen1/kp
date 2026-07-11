@@ -1,0 +1,33 @@
+{
+  "id": "next.kp.packaged-static-step-browser-smoke",
+  "kind": "next-action",
+  "title": "Add packaged static-step browser smoke fixture",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add browser smoke coverage that loads the static-step artifact from the static-host fixture root rather than the direct smoke fixture.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "tests/support/tutorial-launch-smoke.ts",
+      "summary": "Static-host browser loader added for packaged iframe and reusable for static-step entries."
+    },
+    {
+      "kind": "file",
+      "path": "tests/static-step-export-smoke.browser.spec.ts",
+      "summary": "Existing static-step browser smoke pattern to adapt for static-host root loading."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-host-fixture-root.ts",
+      "summary": "Static-host fixture root already contains the packaged static-step HTML entry."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract records packaged static-step browser smoke as the next slice after packaged iframe smoke."
+    }
+  ],
+  "verification": [
+    "npx playwright test tests/packaged-static-step-smoke.browser.spec.ts --project=chromium"
+  ]
+}

@@ -36,7 +36,8 @@
     "next.kp.static-host-fixture-root",
     "next.kp.iframe-static-asset-path-closure",
     "next.kp.static-host-fallback-readiness",
-    "next.kp.packaged-iframe-browser-smoke"
+    "next.kp.packaged-iframe-browser-smoke",
+    "next.kp.packaged-static-step-browser-smoke"
   ],
   "progress": {
     "state": "partial",

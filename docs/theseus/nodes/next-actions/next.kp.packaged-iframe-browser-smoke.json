@@ -2,9 +2,9 @@
   "id": "next.kp.packaged-iframe-browser-smoke",
   "kind": "next-action",
   "title": "Add packaged iframe browser smoke fixture",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add browser smoke coverage that loads the iframe artifact from the static-host fixture root rather than a dev-server document path.",
+  "summary": "Added packaged iframe browser smoke coverage that loads the iframe artifact through a static-host fixture root entry and reusable browser support helper.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,9 +25,65 @@
       "kind": "file",
       "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
       "summary": "Run contract records packaged iframe browser smoke as the next slice after static-host fallback readiness."
+    },
+    {
+      "kind": "file",
+      "path": "tests/packaged-iframe-smoke.browser.spec.ts",
+      "summary": "New Chromium smoke spec for loading the iframe artifact from static-host root path."
+    },
+    {
+      "kind": "file",
+      "path": "tests/support/tutorial-launch-smoke.ts",
+      "summary": "Adds a reusable static-host fixture entry loader for browser smoke tests."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-host-fixture-root.ts",
+      "summary": "Static-host fixture root provides the packaged iframe HTML entry used by the smoke test."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.packaged-static-step-browser-smoke.json",
+      "summary": "Seeds the packaged static-step browser smoke slice so the run contract can advance."
     }
   ],
   "verification": [
     "npx playwright test tests/packaged-iframe-smoke.browser.spec.ts --project=chromium"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/packaged-iframe-smoke.browser.spec.ts tests/iframe-export-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "packaged and direct iframe browser smoke",
+      "checkedAt": "2026-07-11T02:40:53.954Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-static-host-fixture-root.test.ts tests/tutorial-static-host-fallback-readiness.test.ts tests/tutorial-iframe-static-asset-path-closure.test.ts tests/tutorial-card-iframe-smoke-fixture.test.ts",
+      "status": "passed",
+      "scope": "static-host and iframe fixture unit coverage",
+      "checkedAt": "2026-07-11T02:40:53.976Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T02:40:53.989Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T02:40:54.014Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:40:54.036Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added packaged iframe browser smoke coverage that loads the iframe artifact through a static-host fixture root entry and reusable browser support helper."
+  }
 }
