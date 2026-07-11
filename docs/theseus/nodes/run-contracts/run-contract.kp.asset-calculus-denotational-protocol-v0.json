@@ -9,6 +9,21 @@
       "kind": "file",
       "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
       "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap selects KP Asset Calculus and denotational animation protocol as the active focus."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread explains how assets, transformations, timelines, ports, interpreters, law checks, and flashcards fit the current priority."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-11-kp-asset-calculus-priority.md",
+      "summary": "Accepted decision that KP Asset Calculus should precede generated tutorial families, media encoder integration, and graph runtime unification."
     }
   ],
   "verification": [
@@ -29,5 +44,138 @@
   "stopConditions": [
     "Stop when verification fails and needs user judgment.",
     "Stop when the approved slice list is exhausted."
+  ],
+  "slices": [
+    {
+      "id": "next.kp.asset-calculus-run-contract",
+      "title": "Materialize KP Asset Calculus run contract",
+      "summary": "Created the approved KP Asset Calculus run contract and recorded the approved long-loop queue.",
+      "status": "complete"
+    },
+    {
+      "id": "next.kp.asset-calculus-doctrine-spec",
+      "title": "Write KP Asset Calculus doctrine spec",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-calculus-composition-laws",
+      "title": "Write KP Asset Calculus composition law spec",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-calculus-llm-authoring-guide",
+      "title": "Write LLM authoring guide for KP assets",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-calculus-dashboard-rows",
+      "title": "Expose Asset Calculus framework rows in the dashboard",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-core-interfaces",
+      "title": "Define core SemanticObject asset interfaces",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-transformation-interfaces",
+      "title": "Define SemanticTransformation source and target contracts",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-diagram-composition",
+      "title": "Define SemanticDiagram composition forms",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-behavior-protocol",
+      "title": "Define KpBehavior time sampling protocol",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-timeline-protocol",
+      "title": "Define timeline and event protocol",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-interpreter-contract",
+      "title": "Define interpreter contract for render/export backends",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-port-contract",
+      "title": "Define external deterministic port contract",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-flashcard-contract",
+      "title": "Define flashcard spec contract",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-law-test-helpers",
+      "title": "Add law-test helper utilities",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-linear-solve-bundle",
+      "title": "Wrap linear solve as an AssetBundle",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-linear-solve-behavior",
+      "title": "Map existing equation sampler into KpBehavior",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-inspect-at-api",
+      "title": "Add pause-time asset inspection API",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-decomposition-hook",
+      "title": "Add transformation drill-down asset hook",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-linear-solve-flashcards",
+      "title": "Generate flashcard specs from the linear solve bundle",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-algebra-trace-port-fixture",
+      "title": "Add deterministic algebra-trace port fixture",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-algebra-port-laws",
+      "title": "Test algebra port composition and loss diagnostics",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-program-trace-skeleton",
+      "title": "Add program-trace asset skeleton",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-dashboard-samples",
+      "title": "Expose asset bundles, examples, flashcards, and ports in the dashboard",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-readiness-report-card",
+      "title": "Write KP Asset Calculus readiness report card",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-roadmap-refresh",
+      "title": "Refresh roadmap and semantic runtime thread",
+      "status": "ready"
+    },
+    {
+      "id": "next.kp.asset-loop-closeout",
+      "title": "Close KP Asset Calculus loop",
+      "status": "ready"
+    }
   ]
 }
