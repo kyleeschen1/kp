@@ -1582,6 +1582,30 @@ test("project dashboard includes capability loading readiness report card", () =
   ]);
 });
 
+test("project dashboard includes KP Asset Calculus readiness report card", () => {
+  const theme = projectDashboardData.reportThemes.find(
+    (candidate) => candidate.id === "report-kp-asset-calculus-readiness"
+  );
+
+  assert.equal(theme?.status, "active");
+  assert.equal(theme?.grade, "B");
+  assert.ok(theme?.tags.includes("asset-calculus"));
+  assert.ok(
+    theme?.evidence.some((evidence) =>
+      evidence.href.includes(
+        "docs/project/reviews/2026-07-11-kp-asset-calculus-readiness-report.md"
+      )
+    )
+  );
+  assert.deepEqual(theme?.relatedIds, [
+    "work-kp-asset-calculus",
+    "asset-linear-solve-bundle",
+    "port-algebra-trace-fixture",
+    "asset-program-trace-skeleton",
+    "asset-linear-solve-flashcards"
+  ]);
+});
+
 test("renderProjectDashboard renders report card evidence, risks, review metadata, and next actions", () => {
   const html = renderProjectDashboard(projectDashboardData);
 

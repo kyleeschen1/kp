@@ -181,13 +181,14 @@
     {
       "id": "next.kp.asset-dashboard-samples",
       "title": "Expose asset bundles, examples, flashcards, and ports in the dashboard",
-      "status": "complete",
-      "summary": "Added dashboard rows for the linear-solve asset bundle, generated flashcards, algebra-trace port fixture, and program-trace asset skeleton, with source refs, verification metadata, search coverage, and Theseus payload coverage."
+      "summary": "Added dashboard rows for the linear-solve asset bundle, generated flashcards, algebra-trace port fixture, and program-trace asset skeleton, with source refs, verification metadata, search coverage, and Theseus payload coverage.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-readiness-report-card",
       "title": "Write KP Asset Calculus readiness report card",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added a KP Asset Calculus readiness report and dashboard report-card theme summarizing current maturity, evidence, risks, and next actions across assets, ports, flashcards, law helpers, dashboard rows, and program-trace skeletons."
     },
     {
       "id": "next.kp.asset-roadmap-refresh",

@@ -2213,6 +2213,87 @@ export const projectDashboardData: ProjectDashboardData = {
       ]
     },
     {
+      id: "report-kp-asset-calculus-readiness",
+      title: "KP Asset Calculus readiness",
+      status: "active",
+      grade: "B",
+      lastReviewedOn: "2026-07-11",
+      scope:
+        "Assess whether the new KP Asset Calculus contracts are ready to guide semantic authoring across math, external traces, programming traces, flashcards, dashboard search, and future renderer integrations.",
+      questions: [
+        "Can authored assets expose objects, transformations, diagrams, behavior, inspection, drill-downs, and flashcards from one source of truth?",
+        "Can deterministic external traces import into KP assets with explicit provenance and loss diagnostics?",
+        "Can programming execution traces use the same asset, transformation, diagram, and behavior vocabulary as math examples?",
+        "Can future Codex sessions discover canonical examples and verification commands through the dashboard?"
+      ],
+      evidence: [
+        {
+          label: "KP Asset Calculus readiness report",
+          href: "docs/project/reviews/2026-07-11-kp-asset-calculus-readiness-report.md"
+        },
+        {
+          label: "Linear solve asset",
+          href: "src/semantic/linear-solve-asset.ts"
+        },
+        {
+          label: "Algebra trace port fixture",
+          href: "src/semantic/algebra-trace-port-fixture.ts"
+        },
+        {
+          label: "Program trace asset skeleton",
+          href: "src/semantic/program-trace-asset.ts"
+        },
+        {
+          label: "Asset law helpers",
+          href: "src/semantic/asset-laws.ts"
+        },
+        {
+          label: "Dashboard artifact rows",
+          href: "tests/project-dashboard.test.ts"
+        }
+      ],
+      risks: [
+        "Renderer integrations still mostly consume legacy tutorial/card samplers rather than the new asset protocol directly.",
+        "The law suite covers determinism, rewind, and port loss diagnostics, but not full associativity, correspondence closure, interpreter composition, or flashcard generation laws.",
+        "The external-port story is currently fixture-backed; live CAS, LSP, or runtime adapters may expose ambiguity not yet modeled.",
+        "The interfaces are local internal contracts rather than a stable public package API."
+      ],
+      recommendedNextActions: [
+        "Promote the linear-solve renderer path so it consumes the asset bundle, inspection API, drill-down hooks, and flashcards from one source of truth.",
+        "Add interpreter contracts for KaTeX frame sampling and dashboard previews before widening the math catalog.",
+        "Add law tests for selector correspondence, diagram associativity, flashcard reference closure, and interpreter loss diagnostics.",
+        "Keep external ports fixture-first until diagnostics can handle opaque, ambiguous, and lossy live systems."
+      ],
+      tags: [
+        "asset-calculus",
+        "semantics",
+        "composition",
+        "ports",
+        "flashcards",
+        "programming"
+      ],
+      projectRefs: [
+        {
+          kind: "theseus",
+          label: "KP Asset Calculus run contract",
+          href: "docs/theseus/nodes/run-contracts/run-contract.kp.asset-calculus-denotational-protocol-v0.json",
+          id: "run-contract.kp.asset-calculus-denotational-protocol-v0"
+        },
+        {
+          kind: "review",
+          label: "KP Asset Calculus readiness report",
+          href: "docs/project/reviews/2026-07-11-kp-asset-calculus-readiness-report.md"
+        }
+      ],
+      relatedIds: [
+        "work-kp-asset-calculus",
+        "asset-linear-solve-bundle",
+        "port-algebra-trace-fixture",
+        "asset-program-trace-skeleton",
+        "asset-linear-solve-flashcards"
+      ]
+    },
+    {
       id: "report-semantic-object-api",
       title: "Semantic object API",
       status: "planned",
