@@ -19,17 +19,19 @@ semantics first
 
 ## Active Focus
 
-**KP Asset Calculus and denotational animation protocol.** The new priority is
-to formalize the small shared asset calculus that lets humans, LLMs, generated
-problem systems, external CAS/program-trace ports, renderers, exports, and
-flashcards compose through one predictable semantic/time protocol.
+**KP Asset Calculus and denotational animation protocol.** KP now has the first
+encoded asset-calculus layer for humans, LLMs, generated problem systems,
+external CAS/program-trace ports, renderers, exports, and flashcards to compose
+through one predictable semantic/time protocol.
 
-The framework should be encoded before the next large product loop. It should
-capture the doctrine, typed contracts, executable law checks, authoring guide,
-and canonical examples for immutable semantic assets with denotational
-time-varying interpretations. The goal is not a category theory framework; it
-is a practical KP intermediate representation with composition laws inspired
-by category theory and FRP.
+The doctrine, composition laws, authoring guide, core interfaces, executable
+law checks, pause-time inspection, drill-down hooks, flashcard specs, external
+port fixture, and programming trace skeleton are in place. The current pressure
+is no longer to define the vocabulary; it is to make renderer/interpreter paths
+consume it directly, starting with the linear-solve KaTeX card and dashboard
+previews. The goal remains practical: a KP intermediate representation with
+composition laws inspired by category theory and FRP, not a broad abstract
+category theory framework.
 
 **Completed dependency layer.** The export/embed, browser hardening, and
 hosted/export sampling loops all closed on 2026-07-11. KP now has concrete
@@ -199,20 +201,20 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Encode the KP Asset Calculus priority: doctrine, composition laws,
-   denotational animation/time protocol, LLM authoring guide, dashboard/Theseus
-   refs, and one canonical linear-solve example target.
-2. Implement the smallest core IR and law-checking layer only after the
-   doctrine is approved: immutable assets, semantic transformations, diagrams,
-   behaviors, ports, interpreters, and flashcard specs.
-3. Use a generated tutorial family as the first pressure test for the asset
+1. Promote the linear-solve renderer path so it consumes the asset bundle,
+   inspection API, drill-down hooks, and flashcards from one source of truth.
+2. Add interpreter contracts for KaTeX frame sampling and dashboard previews
+   before widening the math catalog.
+3. Add law tests for selector correspondence, diagram associativity, flashcard
+   reference closure, and interpreter loss diagnostics.
+4. Use a generated tutorial family as the first pressure test for the asset
    calculus and capability packages.
-4. Start GIF or video encoder integration only after the frame-sequence JSON
+5. Start GIF or video encoder integration only after the frame-sequence JSON
    artifact, HTML preview, browser probe, rewind check, dependency manifest,
    and capability package manifests stay stable.
-5. Expand graph diagnostics from current mesh/conformance checks into richer
+6. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-6. Defer dynamic package loading until at least one generated tutorial family
+7. Defer dynamic package loading until at least one generated tutorial family
    proves the metadata contract across math, graph, programming, and export
    examples.
 

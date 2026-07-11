@@ -187,13 +187,14 @@
     {
       "id": "next.kp.asset-readiness-report-card",
       "title": "Write KP Asset Calculus readiness report card",
-      "status": "complete",
-      "summary": "Added a KP Asset Calculus readiness report and dashboard report-card theme summarizing current maturity, evidence, risks, and next actions across assets, ports, flashcards, law helpers, dashboard rows, and program-trace skeletons."
+      "summary": "Added a KP Asset Calculus readiness report and dashboard report-card theme summarizing current maturity, evidence, risks, and next actions across assets, ports, flashcards, law helpers, dashboard rows, and program-trace skeletons.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-roadmap-refresh",
       "title": "Refresh roadmap and semantic runtime thread",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Updated the KP roadmap and semantic runtime thread to treat Asset Calculus as implemented source infrastructure, with next priorities centered on renderer/interpreter adoption, law expansion, generated tutorial pressure tests, and fixture-first external ports."
     },
     {
       "id": "next.kp.asset-loop-closeout",

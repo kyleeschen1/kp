@@ -2,8 +2,9 @@
 
 Status: active
 Last Updated: 2026-07-11
-Current Next Action: Encode the KP Asset Calculus and denotational animation
-protocol as the new priority before the next large product loop.
+Current Next Action: Promote the linear-solve renderer path onto the KP Asset
+Calculus source of truth, then add interpreter contracts for KaTeX frames and
+dashboard previews.
 
 ## Goal
 
@@ -71,11 +72,19 @@ refs, target surfaces, load phases, protocols, dashboard rows, facet search,
 tutorial dependency planning, and export closure validation across iframe,
 static-step, and frame-sequence artifacts.
 
-The next priority is to encode the asset-calculus doctrine and laws so future
-LLM sessions can compose, decompose, inspect, and extend KP assets without
-inventing new animation paths. Generated tutorial families, media encoders,
-and graph/visual runtime unification should use that framework rather than
-running ahead of it.
+The KP Asset Calculus loop has now encoded the doctrine and laws into source.
+It added core semantic asset interfaces, transformation contracts, diagram
+composition, behavior sampling, timeline specs, interpreter and port contracts,
+flashcard specs, law helpers, pause-time inspection, transformation drill-down
+hooks, a linear-solve asset bundle, generated linear-solve flashcards, a
+deterministic algebra-trace port fixture, port law checks, a programming trace
+asset skeleton, dashboard rows for those artifacts, and an Asset Calculus
+readiness report.
+
+The next priority is to make existing renderers and dashboard previews consume
+those artifacts directly. Generated tutorial families, media encoders, and
+graph/visual runtime unification should use the asset-calculus framework rather
+than running ahead of it.
 
 ## Accepted Scope
 
@@ -106,12 +115,15 @@ running ahead of it.
 
 ## Open Questions
 
-- What is the smallest KP Asset Calculus spec that future LLM sessions can
-  reliably follow?
-- Which laws should be enforced by TypeScript shape checks, runtime validators,
-  sampled equivalence tests, browser/pixel tests, or human review?
-- What canonical example should prove the full path first: linear solve,
-  generated algebra trace, or program execution trace?
+- How should the linear-solve KaTeX renderer consume asset bundles,
+  inspection, drill-down hooks, and flashcards without duplicating semantic
+  state?
+- Which interpreter contracts should be strict, sampled, lax, or qualitative
+  for KaTeX, WebGL graphs, source-code panels, dashboard previews, and exports?
+- Which law checks should come next: selector correspondence, diagram
+  associativity, flashcard reference closure, or interpreter loss diagnostics?
+- Which generated tutorial family should pressure-test the asset calculus
+  after the linear-solve and programming trace examples?
 - Which media encoder target should consume the frame-sequence artifact first:
   GIF, MP4/WebM, or a deterministic image sequence?
 - What is the minimum dynamic package loader boundary once manifests are stable
@@ -131,8 +143,10 @@ running ahead of it.
 - `docs/project/reviews/2026-07-11-tutorial-card-browser-hardening-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-hosted-package-readiness-export-sampling-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-capability-loading-readiness-report.md`
+- `docs/project/reviews/2026-07-11-kp-asset-calculus-readiness-report.md`
 - `docs/project/reviews/2026-07-11-semantic-capability-loading-loop-closeout.md`
 - `docs/project/decisions/2026-07-11-kp-asset-calculus-priority.md`
+- `docs/theseus/nodes/run-contracts/run-contract.kp.asset-calculus-denotational-protocol-v0.json`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.semantic-capability-loading-v0.json`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json`
 - `docs/superpowers/specs/2026-07-10-derive-representation-capability-design.md`
