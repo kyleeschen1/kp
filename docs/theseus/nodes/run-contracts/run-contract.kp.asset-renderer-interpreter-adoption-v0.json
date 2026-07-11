@@ -30,6 +30,16 @@
       "kind": "file",
       "path": "docs/project/threads/semantic-runtime.md",
       "summary": "Records renderer adoption as the active semantic runtime direction for the linear-solve KaTeX card."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/equation-frame-interpreter.ts",
+      "summary": "Adds the KaTeX equation-frame interpreter contract and renderer-neutral frame refs."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-equation-frame-interpreter.test.ts",
+      "summary": "Covers the equation-frame interpreter contract and empty-id validation."
     }
   ],
   "verification": [
@@ -45,8 +55,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-11T22:46:05.842Z",
-      "scope": "slice 2 renderer adoption boundary docs"
+      "scope": "slice 2 renderer adoption boundary docs",
+      "checkedAt": "2026-07-11T22:46:05.842Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-equation-frame-interpreter.test.ts tests/kp-asset-interpreter.test.ts",
+      "status": "passed",
+      "scope": "slice 3 equation-frame interpreter contract focused tests",
+      "checkedAt": "2026-07-11T22:52:37.122Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 3 equation-frame interpreter contract typecheck",
+      "checkedAt": "2026-07-11T22:52:38.966Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T22:52:40.760Z",
+      "scope": "slice 3 equation-frame interpreter contract Theseus validation"
     }
   ],
   "progress": {
@@ -84,12 +112,13 @@
     {
       "id": "slice.kp.asset-renderer.equation-frame-contract",
       "title": "Define KaTeX/equation frame interpreter contract",
-      "status": "ready"
+      "summary": "Added a semantic KaTeX equation-frame interpreter contract with object, transformation, selector, flashcard, drill-down, and diagnostic frame refs.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.preservation-diagnostics",
       "title": "Add preservation-level diagnostics shape",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.linear-solve-frame-interpreter",
