@@ -19,7 +19,19 @@ semantics first
 
 ## Active Focus
 
-**SemanticObject capability loading.** The export/embed, browser hardening, and
+**KP Asset Calculus and denotational animation protocol.** The new priority is
+to formalize the small shared asset calculus that lets humans, LLMs, generated
+problem systems, external CAS/program-trace ports, renderers, exports, and
+flashcards compose through one predictable semantic/time protocol.
+
+The framework should be encoded before the next large product loop. It should
+capture the doctrine, typed contracts, executable law checks, authoring guide,
+and canonical examples for immutable semantic assets with denotational
+time-varying interpretations. The goal is not a category theory framework; it
+is a practical KP intermediate representation with composition laws inspired
+by category theory and FRP.
+
+**Completed dependency layer.** The export/embed, browser hardening, and
 hosted/export sampling loops all closed on 2026-07-11. KP now has concrete
 iframe and static-step artifacts, launch-target smoke coverage, hosted fixture
 roots, parent-timeline frame-sequence artifacts, and dependency manifests for
@@ -187,14 +199,20 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Choose the next loop: a generated tutorial family that consumes capability
-   packages, media encoder integration, or graph/visual runtime unification.
-2. Start GIF or video encoder integration only after the frame-sequence JSON
+1. Encode the KP Asset Calculus priority: doctrine, composition laws,
+   denotational animation/time protocol, LLM authoring guide, dashboard/Theseus
+   refs, and one canonical linear-solve example target.
+2. Implement the smallest core IR and law-checking layer only after the
+   doctrine is approved: immutable assets, semantic transformations, diagrams,
+   behaviors, ports, interpreters, and flashcard specs.
+3. Use a generated tutorial family as the first pressure test for the asset
+   calculus and capability packages.
+4. Start GIF or video encoder integration only after the frame-sequence JSON
    artifact, HTML preview, browser probe, rewind check, dependency manifest,
    and capability package manifests stay stable.
-3. Expand graph diagnostics from current mesh/conformance checks into richer
+5. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-4. Defer dynamic package loading until at least one generated tutorial family
+6. Defer dynamic package loading until at least one generated tutorial family
    proves the metadata contract across math, graph, programming, and export
    examples.
 
@@ -207,5 +225,8 @@ Package executable tutorials as semantic capsules:
   contract.
 - Dynamic package loading is deferred until package manifests stay stable across
   generated tutorial families and broader render domains.
+- Large media, graph, and curriculum loops are deferred until the KP Asset
+  Calculus doctrine/laws are captured well enough for future LLM sessions to
+  follow them without rediscovery.
 - Broad Theseus planner infrastructure is deferred unless it directly blocks KP
   roadmap execution.
