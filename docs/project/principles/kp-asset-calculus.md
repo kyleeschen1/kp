@@ -21,6 +21,8 @@ types, tests, validators, and renderer seams.
 
 The companion law document is
 `docs/project/principles/kp-composition-laws.md`.
+The practical authoring guide is
+`docs/project/authoring/kp-asset-authoring-guide.md`.
 
 ## Core Rule
 

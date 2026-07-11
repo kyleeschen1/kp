@@ -61,13 +61,14 @@
     {
       "id": "next.kp.asset-calculus-composition-laws",
       "title": "Write KP Asset Calculus composition law spec",
-      "status": "complete",
-      "summary": "Added composition laws for object identity, selector closure, provenance, transformations, diagrams, behaviors, interpreters, ports, flashcards, law levels, and failure policy."
+      "summary": "Added composition laws for object identity, selector closure, provenance, transformations, diagrams, behaviors, interpreters, ports, flashcards, law levels, and failure policy.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-calculus-llm-authoring-guide",
       "title": "Write LLM authoring guide for KP assets",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added a practical guide for LLM and human authors covering object, selector, transformation, diagram, behavior, interpreter, port, decomposition, flashcard, review, and anti-pattern rules."
     },
     {
       "id": "next.kp.asset-calculus-dashboard-rows",

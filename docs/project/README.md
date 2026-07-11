@@ -33,6 +33,8 @@ conversation or design record
 - `decisions/`: accepted decisions and pivots.
 - `principles/`: active architecture doctrine and design laws that future
   sessions should follow.
+- `authoring/`: practical guides for humans, LLM sessions, and generated
+  systems that create KP assets.
 - `reviews/`: periodic next-step or project health reviews.
 - `inbox/`: raw imported plans; keep immutable after import.
 - `archive/`: superseded historical material.
