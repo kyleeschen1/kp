@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.iframe-dependency-closure-check",
+  "kind": "next-action",
+  "title": "Verify iframe dependency closure",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add checks that iframe export artifacts declare the dependency phases, capabilities, and assets required by their tutorial-card launch surfaces."
+}

@@ -2,7 +2,64 @@
   "id": "next.kp.dashboard-export-sample-link-health",
   "kind": "next-action",
   "title": "Check dashboard sample links for export rows",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.dashboard",
-  "summary": "Verify dashboard export artifact rows expose launchable sample links that correspond to tutorial launch targets and API catalog rows."
+  "summary": "Added dashboard export launch-target link health diagnostics that cross-check iframe and static-step launch registry entries against dashboard sample target metadata.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/launch-target-dashboard-health.ts",
+      "summary": "Defines export launch-target diagnostics for dashboard row and sample target drift."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-launch-target-dashboard-health.test.ts",
+      "summary": "Covers healthy dashboard export launch links and missing sample target diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.dashboard-export-sample-link-health.json",
+      "summary": "Records the approved dashboard export sample link-health next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.iframe-dependency-closure-check.json",
+      "summary": "Materializes the next approved iframe dependency closure check slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the iframe dependency closure check slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-launch-target-dashboard-health.test.ts tests/tutorial-launch-targets.test.ts tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "dashboard export launch target link health and dashboard regression coverage",
+      "checkedAt": "2026-07-11T01:16:13.280Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:16:13.297Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:16:13.314Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:16:13.330Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added dashboard export launch-target link health diagnostics that cross-check iframe and static-step launch registry entries against dashboard sample target metadata."
+  }
 }
