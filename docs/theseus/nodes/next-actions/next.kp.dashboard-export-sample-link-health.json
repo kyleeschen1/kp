@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.dashboard-export-sample-link-health",
+  "kind": "next-action",
+  "title": "Check dashboard sample links for export rows",
+  "status": "ready",
+  "domain": "kp.dashboard",
+  "summary": "Verify dashboard export artifact rows expose launchable sample links that correspond to tutorial launch targets and API catalog rows."
+}

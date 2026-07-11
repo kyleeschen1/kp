@@ -2,7 +2,70 @@
   "id": "next.kp.programming-card-browser-smoke",
   "kind": "next-action",
   "title": "Smoke programming tutorial-card launch",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Use the tutorial launch smoke harness to verify the programming tutorial-card launch path and SourceFile panel browser probes."
+  "summary": "Added programming tutorial-card browser smoke coverage that renders the SourceFile panel shell in Playwright and verifies card, manifest, source-file, selector, and code probes.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "tests/programming-card-smoke.browser.spec.ts",
+      "summary": "Verifies the programming tutorial-card SourceFile panel in Playwright."
+    },
+    {
+      "kind": "file",
+      "path": "tests/support/tutorial-launch-smoke.ts",
+      "summary": "Adds a reusable helper for loading programming tutorial-card smoke documents into a browser page."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.programming-card-browser-smoke.json",
+      "summary": "Records the approved programming card browser smoke next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.dashboard-export-sample-link-health.json",
+      "summary": "Materializes the next approved dashboard export sample link-health slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the dashboard export sample link-health slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/programming-card-smoke.browser.spec.ts tests/tutorial-launch-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "programming card and launch target browser smoke",
+      "checkedAt": "2026-07-11T01:13:46.503Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/programming-tutorial-card-sample.test.ts tests/tutorial-launch-targets.test.ts tests/tutorial-card-programming-panel.test.ts",
+      "status": "passed",
+      "scope": "programming tutorial card, launch target, and panel unit coverage",
+      "checkedAt": "2026-07-11T01:13:46.536Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:13:46.577Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:13:46.611Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:13:46.655Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added programming tutorial-card browser smoke coverage that renders the SourceFile panel shell in Playwright and verifies card, manifest, source-file, selector, and code probes."
+  }
 }
