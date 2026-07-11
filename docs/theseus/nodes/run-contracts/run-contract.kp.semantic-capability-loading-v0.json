@@ -126,7 +126,14 @@
     {
       "id": "next.kp.export-capability-registry-backed",
       "title": "Replace frame-sequence export capability ad hoc hook",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-export-capability-registry-backed-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-export-capability-registry-backed-v0",
+      "title": "Replace frame-sequence export capability ad hoc hook",
+      "summary": "Materialized from stored run-contract slice next.kp.export-capability-registry-backed in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.capability-diagnostics",

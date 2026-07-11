@@ -33,6 +33,12 @@ test("export capability advertisements connect dependency keys to hosted readine
   assert.equal(graphAdvertisement?.capability, "render.webgl");
   assert.equal(graphAdvertisement?.objectType, "graph-3d");
   assert.equal(graphAdvertisement?.mode, "surface.mesh");
+  assert.deepEqual(graphAdvertisement?.capabilityPackageIds, [
+    "package.kp.graph3d.render.webgl.surface-mesh"
+  ]);
+  assert.deepEqual(graphAdvertisement?.capabilityPackageLoadPhases, [
+    "interaction"
+  ]);
   assert.deepEqual(graphAdvertisement?.dependencyPhases, ["interactive"]);
   assert.deepEqual(graphAdvertisement?.loadStages, ["interaction"]);
   assert.equal(graphAdvertisement?.requiredForInitialRender, false);
@@ -45,5 +51,9 @@ test("export capability advertisements connect dependency keys to hosted readine
 
   assert.deepEqual(gifAdvertisement?.dependencyPhases, ["optional"]);
   assert.deepEqual(gifAdvertisement?.loadStages, ["export"]);
+  assert.deepEqual(gifAdvertisement?.capabilityPackageIds, [
+    "package.kp.export.encode.gif"
+  ]);
+  assert.deepEqual(gifAdvertisement?.capabilityPackageLoadPhases, ["export"]);
   assert.equal(gifAdvertisement?.hostedReadiness, "ready");
 });

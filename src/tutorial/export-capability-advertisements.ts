@@ -11,6 +11,12 @@ import {
   type KpTutorialHostedArtifactReadinessDiagnostic
 } from "./hosted-artifact-readiness.ts";
 import { parseKpCapabilityKey } from "../semantic/capability-key.ts";
+import {
+  createKpCapabilityPackageCatalog,
+  defaultKpCapabilityPackageManifests,
+  type KpCapabilityPackageLoadPhase,
+  type KpCapabilityPackageTarget
+} from "../semantic/capability-package-manifest.ts";
 
 export type KpTutorialExportCapabilityHostedReadiness =
   | "diagnostic"
@@ -22,6 +28,9 @@ export interface KpTutorialExportCapabilityAdvertisement {
   readonly capability: string;
   readonly objectType: string;
   readonly mode: string;
+  readonly capabilityPackageIds: readonly string[];
+  readonly capabilityPackageTargets: readonly KpCapabilityPackageTarget[];
+  readonly capabilityPackageLoadPhases: readonly KpCapabilityPackageLoadPhase[];
   readonly dependencyPhases: readonly KpTutorialDependencyPhase[];
   readonly loadStages: readonly KpTutorialDependencyLoadStage[];
   readonly requiredForInitialRender: boolean;
@@ -46,14 +55,26 @@ export function createKpTutorialExportCapabilityAdvertisements(
     artifact: input.artifact,
     phases: plan.phases
   });
+  const packageCatalog = createKpCapabilityPackageCatalog(
+    defaultKpCapabilityPackageManifests
+  );
 
   return input.artifact.dependencies.capabilityKeys.map((capabilityKey) => {
     const parsed = parseKpCapabilityKey(capabilityKey);
     const phases = phasesByCapabilityKey.get(capabilityKey) ?? [];
+    const capabilityPackages =
+      packageCatalog.listManifestsByCapabilityKey(capabilityKey);
 
     return {
       capabilityKey,
       ...parsed,
+      capabilityPackageIds: capabilityPackages.map((manifest) => manifest.id),
+      capabilityPackageTargets: unique(
+        capabilityPackages.map((manifest) => manifest.target)
+      ),
+      capabilityPackageLoadPhases: unique(
+        capabilityPackages.map((manifest) => manifest.loadPhase)
+      ),
       dependencyPhases: phases.map((phase) => phase.phase),
       loadStages: phases.map((phase) => phase.loadStage),
       requiredForInitialRender: phases.some(
@@ -94,4 +115,8 @@ function phaseNames(phases: readonly KpTutorialDependencyPlanPhase[]): string {
   return phases.length === 0
     ? "declared artifact dependencies"
     : phases.map((phase) => phase.phase).join(", ");
+}
+
+function unique<T>(values: readonly T[]): readonly T[] {
+  return [...new Set(values)];
 }
