@@ -2,6 +2,7 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import { createLinearSolveTutorialCardManifest } from "../src/tutorial/card-manifest.ts";
+import { createLinearSolveTutorialCardFrameSampler } from "../src/tutorial/card-frame-sampler.ts";
 import {
   validateKpTutorialExportDependencyClosure
 } from "../src/tutorial/export-dependency-closure.ts";
@@ -9,6 +10,7 @@ import {
   resolveKpTutorialCardIframeExportArtifact,
   resolveKpTutorialCardStepExportArtifact
 } from "../src/tutorial/export-artifact-resolver.ts";
+import { createKpTutorialParentTimelineFrameExportContract } from "../src/tutorial/frame-export-contract.ts";
 
 test("iframe export dependency closure accepts declared dependency phases", () => {
   const manifest = createLinearSolveTutorialCardManifest();
@@ -101,6 +103,40 @@ test("static-step export dependency closure reports missing capability packages"
         path: "dependencies.capabilityPackageIds",
         message:
           "Export artifact artifact.linear-solve.steps is missing capability package package.kp.export.encode.gif from dependency phase optional."
+      }
+    ]
+  );
+});
+
+test("media frame export dependency closure reports missing capability packages", () => {
+  const manifest = createLinearSolveTutorialCardManifest();
+  const contract = createKpTutorialParentTimelineFrameExportContract({
+    manifest,
+    parentTimeline: createLinearSolveTutorialCardFrameSampler().parentTimeline,
+    exportKind: "gif",
+    frameCount: 5
+  });
+
+  assert.deepEqual(
+    validateKpTutorialExportDependencyClosure({
+      artifact: {
+        ...contract.artifact,
+        dependencies: {
+          ...contract.artifact.dependencies,
+          capabilityPackageIds:
+            contract.artifact.dependencies.capabilityPackageIds?.filter(
+              (packageId) =>
+                packageId !== "package.kp.export.encode.gif"
+            ) ?? []
+        }
+      },
+      manifest
+    }),
+    [
+      {
+        path: "dependencies.capabilityPackageIds",
+        message:
+          "Export artifact artifact.linear-solve.gif is missing capability package package.kp.export.encode.gif from dependency phase optional."
       }
     ]
   );

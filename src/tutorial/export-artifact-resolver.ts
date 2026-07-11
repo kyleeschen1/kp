@@ -4,9 +4,9 @@ import {
 } from "./card-manifest.ts";
 import {
   createKpTutorialCardDependencyPlan,
-  type KpTutorialDependencyPhase,
-  type KpTutorialDependencyPlanPhase
+  type KpTutorialDependencyPhase
 } from "./dependency-planner.ts";
+import { collectKpTutorialCapabilityPackageClosure } from "./capability-package-closure.ts";
 import {
   createKpTutorialCardExportArtifact,
   type KpTutorialCardExportArtifact
@@ -15,11 +15,6 @@ import {
   resolveKpTutorialCardIframeExportProfile,
   resolveKpTutorialCardStepExportProfile
 } from "./export-profile-resolver.ts";
-import {
-  createKpCapabilityPackageCatalog,
-  defaultKpCapabilityPackageManifests
-} from "../semantic/capability-package-manifest.ts";
-
 export function resolveKpTutorialCardIframeExportArtifact(
   input: KpTutorialCardManifest
 ): KpTutorialCardExportArtifact {
@@ -33,7 +28,7 @@ export function resolveKpTutorialCardIframeExportArtifact(
     dependencyPhases.includes(phase.phase)
   );
   const capabilityPackageClosure =
-    collectCapabilityPackageClosure(dependencyPlanPhases);
+    collectKpTutorialCapabilityPackageClosure(dependencyPlanPhases);
 
   return createKpTutorialCardExportArtifact({
     id: artifactIdForProfile(iframeProfile.profileId),
@@ -87,7 +82,7 @@ export function resolveKpTutorialCardStepExportArtifact(
     dependencyPhases.includes(phase.phase)
   );
   const capabilityPackageClosure =
-    collectCapabilityPackageClosure(dependencyPlanPhases);
+    collectKpTutorialCapabilityPackageClosure(dependencyPlanPhases);
 
   return createKpTutorialCardExportArtifact({
     id: artifactIdForProfile(stepProfile.profileId),
@@ -131,31 +126,4 @@ function collectDependencyPhases(
 
 function unique(values: readonly string[]): readonly string[] {
   return [...new Set(values)];
-}
-
-function collectCapabilityPackageClosure(
-  phases: readonly KpTutorialDependencyPlanPhase[]
-): {
-  readonly packageIds: readonly string[];
-  readonly packageKeys: readonly string[];
-} {
-  const packageCatalog = createKpCapabilityPackageCatalog(
-    defaultKpCapabilityPackageManifests
-  );
-  const capabilityPackages = phases.flatMap((phase) =>
-    phase.capabilityKeys.flatMap((capabilityKey) =>
-      packageCatalog.listManifestsByCapabilityKey(capabilityKey)
-    )
-  );
-
-  return {
-    packageIds: unique([
-      ...phases.flatMap((phase) => phase.capabilityPackageIds),
-      ...capabilityPackages.map((manifest) => manifest.id)
-    ]),
-    packageKeys: unique([
-      ...phases.flatMap((phase) => phase.capabilityPackageKeys),
-      ...capabilityPackages.map((manifest) => manifest.capabilityKey)
-    ])
-  };
 }

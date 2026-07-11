@@ -32,6 +32,8 @@ export interface KpTutorialFrameSequenceDependencyManifest {
   readonly domains: readonly KpTutorialFrameSequenceDomain[];
   readonly dependencyPhases: readonly KpTutorialDependencyPhase[];
   readonly capabilityKeys: readonly string[];
+  readonly capabilityPackageIds: readonly string[];
+  readonly capabilityPackageKeys: readonly string[];
   readonly assetIds: readonly string[];
   readonly previewRenderer: "renderKpTutorialFrameSequencePreviewHtml";
   readonly diagnostics: readonly KpTutorialExportDependencyClosureDiagnostic[];
@@ -54,6 +56,12 @@ export function createKpTutorialFrameSequenceDependencyManifest(
     domains: [...sequence.domains],
     dependencyPhases: [...artifact.dependencies.phases],
     capabilityKeys: [...artifact.dependencies.capabilityKeys],
+    capabilityPackageIds: [
+      ...(artifact.dependencies.capabilityPackageIds ?? [])
+    ],
+    capabilityPackageKeys: [
+      ...(artifact.dependencies.capabilityPackageKeys ?? [])
+    ],
     assetIds: [...artifact.dependencies.assetIds],
     previewRenderer: "renderKpTutorialFrameSequencePreviewHtml",
     diagnostics:

@@ -41,6 +41,22 @@ test("parent-timeline frame export contract declares media artifact and sample p
         "kp.export:encode.gif:*:*",
         "kp.export:render.step-sequence:*:*"
       ],
+      capabilityPackageIds: [
+        "package.kp.equation.render.katex",
+        "package.kp.equation.transform.semantic",
+        "package.kp.equation.animate.motion-plan",
+        "package.kp.graph3d.render.webgl.surface-mesh",
+        "package.kp.graph3d.animate.surface-mode",
+        "package.kp.export.encode.gif"
+      ],
+      capabilityPackageKeys: [
+        "kp.equation:render.katex:equation:*",
+        "kp.equation:transform.semantic:equation:*",
+        "kp.equation:animate.motion-plan:equation:*",
+        "kp.graph:render.webgl:graph-3d:surface.mesh",
+        "kp.graph:animate.surface-mode:graph-3d:surface.mode",
+        "kp.export:encode.gif:*:*"
+      ],
       assetIds: []
     },
     fallback: {

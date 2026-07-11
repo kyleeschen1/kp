@@ -246,7 +246,14 @@
     {
       "id": "next.kp.frame-sequence-capability-closure",
       "title": "Capability closure for frame-sequence exports",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-frame-sequence-capability-closure-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-frame-sequence-capability-closure-v0",
+      "title": "Capability closure for frame-sequence exports",
+      "summary": "Materialized from stored run-contract slice next.kp.frame-sequence-capability-closure in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.dashboard-capability-facet-search",

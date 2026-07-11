@@ -1,0 +1,142 @@
+{
+  "id": "next-action.kp.semantic.next-kp-frame-sequence-capability-closure-v0",
+  "kind": "next-action",
+  "title": "Capability closure for frame-sequence exports",
+  "status": "resolved",
+  "domain": "kp.semantic",
+  "summary": "Added frame-sequence capability package closure by sharing package closure collection across export artifact resolvers, media frame contracts, frame-sequence dependency manifests, and closure diagnostics.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-capability-loading-v0.json",
+      "summary": "Run contract whose stored slice next.kp.frame-sequence-capability-closure was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP workflow frontier for dashboard-backed semantic animation system work."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap selects SemanticObject capability loading as one of the next loop choices after hosted/export closeout."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread names capability loading as an active next choice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-hosted-package-readiness-export-sampling-loop-closeout.md",
+      "summary": "Hosted/export closeout recommends registry-backed capability loading before hardcoded encoder dependencies."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/capability-package-closure.ts",
+      "summary": "Adds shared package closure collection from dependency-plan packages plus direct capability package manifests."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-export-contract.ts",
+      "summary": "Adds capability package IDs and keys to media frame export artifacts."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-sequence-dependency-manifest.ts",
+      "summary": "Serializes package closure in frame-sequence dependency manifests."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/export-dependency-closure.ts",
+      "summary": "Extends package closure validation to media-encoding and frame-sequence artifacts."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/export-artifact-resolver.ts",
+      "summary": "Reuses the shared package closure helper for iframe and static-step artifacts."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-frame-export-contract.test.ts",
+      "summary": "Covers media frame export package closure metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-frame-sequence-dependency-manifest.test.ts",
+      "summary": "Covers frame-sequence dependency manifest package closure serialization."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-export-dependency-closure.test.ts",
+      "summary": "Covers missing media frame capability package diagnostics."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-capability-loading-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Capability closure for frame-sequence exports can be completed inside KP SemanticObject capability loading loop."
+  ],
+  "allowedWork": [
+    "Only work on approved KP SemanticObject capability loading slices.",
+    "Keep work tied to semantic capability package metadata, tutorial dependency planning, export capability closure, dashboard/API catalog rows, and project docs.",
+    "Use metadata-first package manifests and deterministic fixtures before any dynamic loader."
+  ],
+  "disallowedWork": [
+    "Do not implement GIF, MP4, or WebM encoders in this loop.",
+    "Do not implement full CAS behavior or broad symbolic algebra.",
+    "Do not pursue broad Theseus planner infrastructure unless it directly blocks this KP run contract.",
+    "Do not broaden into graph runtime unification beyond package metadata needed by graph capabilities."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-frame-export-contract.test.ts tests/tutorial-card-frame-sequence-dependency-manifest.test.ts tests/tutorial-card-export-dependency-closure.test.ts",
+      "status": "passed",
+      "scope": "focused frame-sequence package closure coverage",
+      "checkedAt": "2026-07-11T05:28:20.218Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-frame-sequence-artifact.test.ts tests/tutorial-card-frame-sequence-preview.test.ts tests/tutorial-card-frame-sequence-rewind-check.test.ts tests/tutorial-export-capability-advertisements.test.ts tests/tutorial-card-export-artifact.test.ts tests/tutorial-hosted-artifact-readiness.test.ts",
+      "status": "passed",
+      "scope": "adjacent frame-sequence, export artifact, export advertisement, and hosted readiness coverage",
+      "checkedAt": "2026-07-11T05:28:20.242Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript project references",
+      "checkedAt": "2026-07-11T05:28:20.267Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T05:28:20.288Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T05:28:20.313Z",
+      "scope": "whitespace and conflict-marker check"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added frame-sequence capability package closure by sharing package closure collection across export artifact resolvers, media frame contracts, frame-sequence dependency manifests, and closure diagnostics."
+  }
+}

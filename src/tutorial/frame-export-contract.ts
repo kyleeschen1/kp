@@ -9,6 +9,7 @@ import {
   type KpTutorialDependencyPhase,
   type KpTutorialDependencyPlanPhase
 } from "./dependency-planner.ts";
+import { collectKpTutorialCapabilityPackageClosure } from "./capability-package-closure.ts";
 import {
   createKpTutorialCardExportArtifact,
   type KpTutorialCardExportArtifact,
@@ -119,6 +120,10 @@ interface CreateFrameExportArtifactInput {
 function createFrameExportArtifact(
   input: CreateFrameExportArtifactInput
 ): KpTutorialCardExportArtifact {
+  const capabilityPackageClosure = collectKpTutorialCapabilityPackageClosure(
+    input.dependencyPhases
+  );
+
   return createKpTutorialCardExportArtifact({
     id: artifactIdForProfile(input.profile.id),
     manifestId: input.manifest.id,
@@ -134,6 +139,8 @@ function createFrameExportArtifact(
       capabilityKeys: unique(
         input.dependencyPhases.flatMap((phase) => phase.capabilityKeys)
       ),
+      capabilityPackageIds: capabilityPackageClosure.packageIds,
+      capabilityPackageKeys: capabilityPackageClosure.packageKeys,
       assetIds: unique(input.dependencyPhases.flatMap((phase) => phase.assetIds))
     },
     fallback: input.manifest.fallback,
