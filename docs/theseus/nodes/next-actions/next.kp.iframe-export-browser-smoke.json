@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.iframe-export-browser-smoke",
+  "kind": "next-action",
+  "title": "Smoke iframe export artifact launch",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Use the tutorial launch smoke harness to verify the iframe export artifact launch path and iframe-specific browser probes."
+}

@@ -2,7 +2,70 @@
   "id": "next.kp.tutorial-launch-smoke-harness",
   "kind": "next-action",
   "title": "Add Playwright tutorial launch smoke harness",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add a reusable browser smoke harness that consumes tutorial launch targets and verifies dashboard/sample launch paths in Playwright."
+  "summary": "Added a reusable Playwright tutorial launch smoke harness that opens dashboard launch targets and verifies registry preview selectors in the browser.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "tests/tutorial-launch-smoke.browser.spec.ts",
+      "summary": "Adds browser smoke coverage over all current tutorial launch targets from the registry."
+    },
+    {
+      "kind": "file",
+      "path": "tests/support/tutorial-launch-smoke.ts",
+      "summary": "Provides the reusable Playwright helper for opening a launch target preview from the dashboard."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-launch-smoke-harness.json",
+      "summary": "Records the approved tutorial launch smoke harness next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.iframe-export-browser-smoke.json",
+      "summary": "Materializes the next approved iframe export browser smoke slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the iframe export browser smoke slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/tutorial-launch-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "tutorial launch target browser smoke harness",
+      "checkedAt": "2026-07-11T01:05:41.579Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-launch-targets.test.ts",
+      "status": "passed",
+      "scope": "tutorial launch target registry unit coverage",
+      "checkedAt": "2026-07-11T01:05:41.634Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:05:41.718Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:05:41.793Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:05:41.862Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a reusable Playwright tutorial launch smoke harness that opens dashboard launch targets and verifies registry preview selectors in the browser."
+  }
 }
