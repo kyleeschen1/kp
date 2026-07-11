@@ -132,6 +132,16 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
       "kp.source-file:animate.execution-trace:source-file:trace"
     )
   );
+  assert.ok(sourceTracePackageRow?.searchText?.includes("target:browser"));
+  assert.ok(
+    sourceTracePackageRow?.searchText?.includes("load-phase:interaction")
+  );
+  assert.ok(sourceTracePackageRow?.searchText?.includes("object:source-file"));
+  assert.ok(
+    sourceTracePackageRow?.searchText?.includes(
+      "protocol:createKpProgrammingExecutionTraceFrame"
+    )
+  );
   assert.ok(
     sourceTracePackageRow?.preview?.fields.some(
       (field) =>

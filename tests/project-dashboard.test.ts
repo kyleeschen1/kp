@@ -1066,6 +1066,33 @@ test("renderProjectDashboard searches export capability advertisements", () => {
   assert.doesNotMatch(html, /data-kp-agenda-row="api-semantic-matrix"/);
 });
 
+test("renderProjectDashboard searches capability package facets", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    query: "target:browser load-phase:interaction object:source-file",
+    selectedAgendaRowId:
+      "capability-package-package.kp.source-file.animate.execution-trace"
+  });
+
+  assert.match(html, /Showing 1 of \d+ rows/);
+  assert.match(html, /data-kp-agenda-section="capability-packages"/);
+  assert.match(
+    html,
+    /data-kp-agenda-row="capability-package-package\.kp\.source-file\.animate\.execution-trace"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Capability key"[^>]*>kp\.source-file:animate\.execution-trace:source-file:trace</
+  );
+  assert.doesNotMatch(
+    html,
+    /data-kp-agenda-row="capability-package-package\.kp\.source-file\.render\.code-panel"/
+  );
+  assert.doesNotMatch(
+    html,
+    /data-kp-agenda-row="capability-package-package\.kp\.graph3d\.animate\.surface-mode"/
+  );
+});
+
 test("renderProjectDashboard exposes tutorial card manifest protocol row", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "tutorial-card-manifest-v0"

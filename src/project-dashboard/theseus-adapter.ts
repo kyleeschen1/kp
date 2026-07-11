@@ -9,6 +9,7 @@ import {
   defaultKpCapabilityPackageManifests,
   type KpCapabilityPackageManifest
 } from "../semantic/capability-package-manifest.ts";
+import { capabilityPackageFacetSearchFields } from "./capability-package-facets.ts";
 import {
   semanticCapabilityPreviewFields,
   semanticCapabilitySearchFields
@@ -205,25 +206,7 @@ function capabilityPackageRow(
         { label: "Source refs", value: sourceRefsText(manifest.sourceRefs) }
       ]
     },
-    searchText: [
-      manifest.id,
-      manifest.title,
-      manifest.capabilityKey,
-      manifest.library,
-      manifest.capability,
-      manifest.objectType,
-      manifest.mode,
-      manifest.target,
-      manifest.loadPhase,
-      ...manifest.semanticCapabilities,
-      ...manifest.protocols,
-      ...manifest.views,
-      ...manifest.tags,
-      ...manifest.sourceRefs.flatMap((sourceRef) => [
-        sourceRef.label,
-        sourceRef.href
-      ])
-    ].join(" ")
+    searchText: capabilityPackageFacetSearchFields(manifest).join(" ")
   };
 }
 
