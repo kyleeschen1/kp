@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.tutorial-card-seek-browser-smoke",
+  "kind": "next-action",
+  "title": "Add shared seek smoke for tutorial cards",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add browser smoke coverage proving tutorial-card launch surfaces respond to deterministic seek/progress changes."
+}

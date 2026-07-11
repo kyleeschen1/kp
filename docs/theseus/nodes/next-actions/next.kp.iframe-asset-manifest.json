@@ -2,7 +2,64 @@
   "id": "next.kp.iframe-asset-manifest",
   "kind": "next-action",
   "title": "Serialize iframe asset manifest",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Serialize iframe export artifact asset/dependency metadata into an explicit asset manifest for hosted embed readiness."
+  "summary": "Added an iframe export asset manifest that serializes dependency phases, capability keys, asset ids, and embed policy metadata from iframe artifacts.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/iframe-asset-manifest.ts",
+      "summary": "Defines the iframe asset manifest shape and serializer from iframe export artifacts."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-iframe-asset-manifest.test.ts",
+      "summary": "Covers serialized dependency and embed policy metadata for the linear-solve iframe artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.iframe-asset-manifest.json",
+      "summary": "Records the approved iframe asset manifest next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-seek-browser-smoke.json",
+      "summary": "Materializes the next approved tutorial-card seek browser smoke slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the tutorial-card seek browser smoke slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-iframe-asset-manifest.test.ts tests/tutorial-card-export-artifact.test.ts tests/tutorial-card-iframe-document.test.ts",
+      "status": "passed",
+      "scope": "iframe asset manifest, export artifact, and iframe document unit coverage",
+      "checkedAt": "2026-07-11T01:25:28.733Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:25:28.751Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:25:28.770Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:25:28.806Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added an iframe export asset manifest that serializes dependency phases, capability keys, asset ids, and embed policy metadata from iframe artifacts."
+  }
 }
