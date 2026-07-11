@@ -85,13 +85,14 @@
     {
       "id": "next.kp.asset-transformation-interfaces",
       "title": "Define SemanticTransformation source and target contracts",
-      "status": "complete",
-      "summary": "Added KP semantic transformation contracts with source and target object ids, preservation tags, selector correspondence, law refs, endpoint validation, and adjacent sequencing compatibility checks."
+      "summary": "Added KP semantic transformation contracts with source and target object ids, preservation tags, selector correspondence, law refs, endpoint validation, and adjacent sequencing compatibility checks.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-diagram-composition",
       "title": "Define SemanticDiagram composition forms",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added semantic diagram composition for transformation leaves, sequences, parallels, tree substitution, source-target boundary checks, leaf transformation ids, forward phases, and exact rewind phase ordering."
     },
     {
       "id": "next.kp.asset-behavior-protocol",
