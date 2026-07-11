@@ -133,7 +133,7 @@ contract.
 - How should the linear-solve KaTeX renderer consume asset bundles,
   inspection, drill-down hooks, and flashcards without duplicating semantic
   state?
-- Which interpreter contracts should be strict, sampled, lax, or qualitative
+- Which interpreter contracts should be strict, sampled, lax, or lossy
   for KaTeX, WebGL graphs, source-code panels, dashboard previews, and exports?
 - Which law checks should come next: selector correspondence, diagram
   associativity, flashcard reference closure, or interpreter loss diagnostics?

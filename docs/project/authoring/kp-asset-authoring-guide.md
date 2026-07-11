@@ -126,7 +126,7 @@ For each transformation, record:
 - assumptions;
 - selector correspondence;
 - provenance output;
-- whether the mapping is strict, sampled, lax, or qualitative.
+- whether the mapping is strict, sampled, lax, or lossy.
 
 ### 4. Define Diagram
 

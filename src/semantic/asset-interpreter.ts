@@ -14,10 +14,21 @@ export type KpInterpreterDiagnosticSeverity =
   | "warning"
   | "error";
 
+export type KpInterpreterLossKind =
+  | "composition"
+  | "geometry"
+  | "identity"
+  | "provenance"
+  | "renderer-binding"
+  | "selector-correspondence"
+  | "timing"
+  | "unsupported";
+
 export interface KpInterpreterDiagnostic {
   readonly severity: KpInterpreterDiagnosticSeverity;
   readonly code: string;
   readonly message: string;
+  readonly lossKind?: KpInterpreterLossKind | undefined;
   readonly path?: string | undefined;
 }
 
@@ -84,6 +95,9 @@ export function runKpInterpreter<TInput, TOutput>(
       severity: diagnostic.severity,
       code: diagnostic.code,
       message: diagnostic.message,
+      ...(diagnostic.lossKind === undefined
+        ? {}
+        : { lossKind: diagnostic.lossKind }),
       ...(diagnostic.path === undefined ? {} : { path: diagnostic.path })
     }))
   };

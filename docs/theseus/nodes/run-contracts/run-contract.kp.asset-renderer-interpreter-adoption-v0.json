@@ -40,6 +40,26 @@
       "kind": "file",
       "path": "tests/kp-equation-frame-interpreter.test.ts",
       "summary": "Covers the equation-frame interpreter contract and empty-id validation."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-interpreter.ts",
+      "summary": "Adds interpreter loss-kind diagnostics and preserves them through runKpInterpreter."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "Adds lossy as an explicit law/preservation level for interpreters."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-asset-interpreter.test.ts",
+      "summary": "Covers lossy interpreter diagnostics and loss-kind propagation."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/kp-composition-laws.md",
+      "summary": "Aligns interpreter preservation vocabulary with lossy diagnostics."
     }
   ],
   "verification": [
@@ -73,8 +93,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-11T22:52:40.760Z",
-      "scope": "slice 3 equation-frame interpreter contract Theseus validation"
+      "scope": "slice 3 equation-frame interpreter contract Theseus validation",
+      "checkedAt": "2026-07-11T22:52:40.760Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-asset-interpreter.test.ts tests/kp-equation-frame-interpreter.test.ts",
+      "status": "passed",
+      "scope": "slice 4 preservation diagnostics focused tests",
+      "checkedAt": "2026-07-11T22:56:39.341Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 4 preservation diagnostics typecheck",
+      "checkedAt": "2026-07-11T22:56:41.146Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T22:56:43.155Z",
+      "scope": "slice 4 preservation diagnostics Theseus validation"
     }
   ],
   "progress": {
@@ -118,12 +156,13 @@
     {
       "id": "slice.kp.asset-renderer.preservation-diagnostics",
       "title": "Add preservation-level diagnostics shape",
-      "status": "ready"
+      "summary": "Added lossy preservation and interpreter loss-kind diagnostics, with docs aligned to keep qualitative review separate.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.linear-solve-frame-interpreter",
       "title": "Build linear-solve asset-to-equation-frame interpreter",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.asset-behavior-transform-ids",

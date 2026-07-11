@@ -101,6 +101,49 @@ test("runKpInterpreter reports lax or lossy interpretation diagnostics", () => {
   });
 });
 
+test("runKpInterpreter preserves lossy diagnostic kind", () => {
+  const interpreter = createKpInterpreter({
+    id: "interpreter.katex.frame.lossy",
+    target: "katex-dom",
+    inputKind: "asset-bundle",
+    preservation: "lossy",
+    interpret: () => ({
+      preservation: "lossy",
+      output: {
+        frameId: "frame.lossy"
+      },
+      diagnostics: [
+        {
+          severity: "error",
+          code: "selector-correspondence-dropped",
+          message: "A rendered token could not be linked back to a selector.",
+          lossKind: "selector-correspondence",
+          path: "selectorRefs[0]"
+        }
+      ]
+    })
+  });
+
+  assert.deepEqual(runKpInterpreter(interpreter, bundle), {
+    interpreterId: "interpreter.katex.frame.lossy",
+    target: "katex-dom",
+    inputKind: "asset-bundle",
+    preservation: "lossy",
+    output: {
+      frameId: "frame.lossy"
+    },
+    diagnostics: [
+      {
+        severity: "error",
+        code: "selector-correspondence-dropped",
+        message: "A rendered token could not be linked back to a selector.",
+        lossKind: "selector-correspondence",
+        path: "selectorRefs[0]"
+      }
+    ]
+  });
+});
+
 test("createKpInterpreter rejects empty identifiers", () => {
   assert.throws(
     () =>

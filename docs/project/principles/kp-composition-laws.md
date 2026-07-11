@@ -218,9 +218,10 @@ Examples:
 
 Checks:
 
-- Interpreters state whether they are strict, sampled, lax, or qualitative for
-  a given transformation.
-- Lax representation shifts emit diagnostics and preserve source refs.
+- Interpreters state whether they are strict, sampled, lax, or lossy for a
+  given transformation.
+- Lax and lossy representation shifts emit diagnostics and preserve source
+  refs where possible.
 
 ## Behavior Laws
 

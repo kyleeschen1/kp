@@ -14,6 +14,7 @@ export type KpLawCheckLevel =
   | "strict"
   | "sampled"
   | "lax"
+  | "lossy"
   | "qualitative";
 
 export interface KpTransformationLawRef {
