@@ -1,0 +1,110 @@
+{
+  "id": "next-action.kp.tutorial.next-kp-export-sample-equation-frames-v0",
+  "kind": "next-action",
+  "title": "Sample equation frames from parent timeline",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Sampled equation frames from parent-timeline media export points and preserved exact reverse order for rewind.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract whose stored slice next.kp.export-sample-equation-frames was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap selects hosted/package readiness, parent-timeline media export sampling, and SemanticObject capability loading as the next choices after browser hardening."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread records hosted/package readiness and parent-timeline media export sampling as open next loops."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-tutorial-card-browser-hardening-loop-closeout.md",
+      "summary": "Browser hardening closeout recommends hosted/package readiness checks before media export encoders."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/equation-frame-export-sampler.ts",
+      "summary": "Adds the equation frame export sequence over parent-timeline frame sample points."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-equation-frame-export-sampler.test.ts",
+      "summary": "Covers equation frame sampling at media export points and exact reversed rewind sequence."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-export-contract.ts",
+      "summary": "Provides the parent-timeline media frame export contract consumed by the equation sampler."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Records materialization and completion of the stored equation-frame sampling slice."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.hosted-package-readiness-export-sampling-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Sample equation frames from parent timeline can be completed inside KP hosted package readiness and export sampling loop."
+  ],
+  "allowedWork": [
+    "Only work on approved KP hosted/package readiness and parent-timeline export sampling slices.",
+    "Keep work tied to tutorial-card runtime, export artifacts, dashboard/API catalog, and semantic runtime capability metadata.",
+    "Use deterministic fixtures and static programming execution traces only."
+  ],
+  "disallowedWork": [
+    "Do not implement GIF, MP4, or WebM encoders in this loop.",
+    "Do not broaden into full SemanticObject registry loading beyond capability advertisements needed for export readiness.",
+    "Do not pursue broad Theseus planner follow-ups unless they block this KP loop."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-equation-frame-export-sampler.test.ts tests/tutorial-card-frame-export-contract.test.ts tests/tutorial-card-equation-frame-adapter.test.ts tests/tutorial-card-frame-sampler.test.ts",
+      "status": "passed",
+      "scope": "equation export frame sampling and adjacent frame contract coverage",
+      "checkedAt": "2026-07-11T03:01:44.277Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript compile checks",
+      "checkedAt": "2026-07-11T03:01:44.290Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T03:01:44.312Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T03:01:44.334Z",
+      "scope": "Whitespace check"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Sampled equation frames from parent-timeline media export points and preserved exact reverse order for rewind."
+  }
+}
