@@ -137,6 +137,64 @@ export const defaultKpCapabilityPackageManifests:
       ]
     },
     {
+      id: "package.kp.equation.transform.semantic",
+      title: "Semantic Equation Transformer",
+      library: "kp.equation",
+      capability: "transform.semantic",
+      objectType: "equation",
+      mode: "*",
+      status: "active",
+      target: "runtime",
+      loadPhase: "interaction",
+      summary:
+        "Apply semantic equation transformations with stable correspondence metadata.",
+      semanticCapabilities: ["transform", "select"],
+      protocols: ["applyEquationTransformation", "createEquationMotionPlan"],
+      views: ["transformation-plan"],
+      tags: ["equation", "transform", "semantic-motion"],
+      sourceRefs: [
+        {
+          label: "Equation transform semantics",
+          href: "src/math/equation-transform.ts"
+        },
+        {
+          label: "Equation motion plan",
+          href: "src/rendering/equation-motion-plan.ts"
+        }
+      ]
+    },
+    {
+      id: "package.kp.equation.animate.motion-plan",
+      title: "Equation Motion Plan Animator",
+      library: "kp.equation",
+      capability: "animate.motion-plan",
+      objectType: "equation",
+      mode: "*",
+      status: "active",
+      target: "browser",
+      loadPhase: "interaction",
+      summary:
+        "Sample equation motion plans into reversible, scrub-ready animation frames.",
+      semanticCapabilities: ["animate", "select"],
+      protocols: ["createEquationMotionPlan", "sampleEquationMotionPlan"],
+      views: ["motion-plan", "sampled-frame"],
+      tags: ["equation", "animation", "timeline"],
+      sourceRefs: [
+        {
+          label: "Equation motion plan",
+          href: "src/rendering/equation-motion-plan.ts"
+        },
+        {
+          label: "Equation motion sampler",
+          href: "src/rendering/equation-motion-sampler.ts"
+        },
+        {
+          label: "Equation animation catalog",
+          href: "src/editor/equation-animation-catalog.ts"
+        }
+      ]
+    },
+    {
       id: "package.kp.graph3d.render.webgl.surface-mesh",
       title: "WebGL Graph3D Surface Mesh Renderer",
       library: "kp.graph",

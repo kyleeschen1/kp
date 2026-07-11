@@ -81,7 +81,9 @@ test("semantic object registry maps object types to capability package ids", () 
   const registry = createDefaultSemanticObjectRegistry();
 
   assert.deepEqual(registry.listCapabilityPackageIdsForType("equation"), [
-    "package.kp.equation.render.katex"
+    "package.kp.equation.render.katex",
+    "package.kp.equation.transform.semantic",
+    "package.kp.equation.animate.motion-plan"
   ]);
   assert.deepEqual(registry.listCapabilityPackageIdsForType("matrix"), [
     "package.kp.matrix.render.katex",

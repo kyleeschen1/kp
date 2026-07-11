@@ -42,10 +42,24 @@ test("capability package catalog indexes default package manifests", () => {
     defaultKpCapabilityPackageManifests
   );
 
-  assert.equal(catalog.listManifests().length >= 4, true);
+  assert.equal(catalog.listManifests().length >= 6, true);
   assert.equal(
     catalog.getManifest("package.kp.equation.render.katex")?.capabilityKey,
     "kp.equation:render.katex:equation:*"
+  );
+  assert.deepEqual(
+    catalog.listManifestsForObjectType("equation").map((manifest) => manifest.id),
+    [
+      "package.kp.equation.render.katex",
+      "package.kp.equation.transform.semantic",
+      "package.kp.equation.animate.motion-plan"
+    ]
+  );
+  assert.deepEqual(
+    catalog.listManifestsByCapabilityKey(
+      "kp.equation:transform.semantic:equation:*"
+    ).map((manifest) => manifest.id),
+    ["package.kp.equation.transform.semantic"]
   );
   assert.deepEqual(
     catalog.listManifestsByCapabilityKey(

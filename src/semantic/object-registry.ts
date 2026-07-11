@@ -157,7 +157,11 @@ export const defaultSemanticObjectDefinitions:
         "Left/right symbolic relation that can transform, render as KaTeX, and derive graph views when classifiable.",
       tags: ["math", "relation", "transform"],
       capabilities: ["render", "select", "derive", "transform", "animate"],
-      capabilityPackageIds: ["package.kp.equation.render.katex"],
+      capabilityPackageIds: [
+        "package.kp.equation.render.katex",
+        "package.kp.equation.transform.semantic",
+        "package.kp.equation.animate.motion-plan"
+      ],
       capabilityAdvertisements: [
         capabilityAdvertisement(
           "render",

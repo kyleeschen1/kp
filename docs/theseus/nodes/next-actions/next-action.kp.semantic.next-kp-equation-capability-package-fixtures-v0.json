@@ -1,0 +1,126 @@
+{
+  "id": "next-action.kp.semantic.next-kp-equation-capability-package-fixtures-v0",
+  "kind": "next-action",
+  "title": "Add Equation capability package fixtures",
+  "status": "resolved",
+  "domain": "kp.semantic",
+  "summary": "Added Equation transform and animation capability package fixtures.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-capability-loading-v0.json",
+      "summary": "Run contract whose stored slice next.kp.equation-capability-package-fixtures was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP workflow frontier for dashboard-backed semantic animation system work."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap selects SemanticObject capability loading as one of the next loop choices after hosted/export closeout."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread names capability loading as an active next choice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-hosted-package-readiness-export-sampling-loop-closeout.md",
+      "summary": "Hosted/export closeout recommends registry-backed capability loading before hardcoded encoder dependencies."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/capability-package-manifest.ts",
+      "summary": "Adds semantic transform and motion-plan animation package manifests for equation objects."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/object-registry.ts",
+      "summary": "Registers the new Equation package IDs on the Equation SemanticObject definition."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-capability-package-manifest.test.ts",
+      "summary": "Covers Equation package catalog ordering and capability key lookup."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-object-registry.test.ts",
+      "summary": "Covers Equation registry package ID mapping."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-dependency-planner.test.ts",
+      "summary": "Updates tutorial dependency package counts and keys for Equation packages."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Updates dashboard capability package row count for the new fixtures."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-capability-loading-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Add Equation capability package fixtures can be completed inside KP SemanticObject capability loading loop."
+  ],
+  "allowedWork": [
+    "Only work on approved KP SemanticObject capability loading slices.",
+    "Keep work tied to semantic capability package metadata, tutorial dependency planning, export capability closure, dashboard/API catalog rows, and project docs.",
+    "Use metadata-first package manifests and deterministic fixtures before any dynamic loader."
+  ],
+  "disallowedWork": [
+    "Do not implement GIF, MP4, or WebM encoders in this loop.",
+    "Do not implement full CAS behavior or broad symbolic algebra.",
+    "Do not pursue broad Theseus planner infrastructure unless it directly blocks this KP run contract.",
+    "Do not broaden into graph runtime unification beyond package metadata needed by graph capabilities."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-capability-package-manifest.test.ts tests/semantic-object-registry.test.ts tests/tutorial-card-dependency-planner.test.ts tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "focused Equation package fixture, registry, dependency, and dashboard tests",
+      "checkedAt": "2026-07-11T04:53:00.517Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript projects",
+      "checkedAt": "2026-07-11T04:53:00.541Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T04:53:00.579Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T04:53:00.608Z",
+      "scope": "whitespace check"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added Equation transform and animation capability package fixtures."
+  }
+}
