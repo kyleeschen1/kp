@@ -145,13 +145,14 @@
     {
       "id": "next.kp.asset-inspect-at-api",
       "title": "Add pause-time asset inspection API",
-      "status": "complete",
-      "summary": "Added inspectKpBehaviorAt, a generic pause-time inspection helper that samples a KpBehavior at time and extracts active transformations, selectors, and phase metadata, including linear-solve coverage."
+      "summary": "Added inspectKpBehaviorAt, a generic pause-time inspection helper that samples a KpBehavior at time and extracts active transformations, selectors, and phase metadata, including linear-solve coverage.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-decomposition-hook",
       "title": "Add transformation drill-down asset hook",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added a pure transformation drill-down hook API that resolves active pause-time inspections to explainer assets, validates hook uniqueness and parent transformation references, and exposes a canonical linear-solve cancellation explainer hook."
     },
     {
       "id": "next.kp.asset-linear-solve-flashcards",

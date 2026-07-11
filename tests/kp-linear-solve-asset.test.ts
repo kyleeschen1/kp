@@ -5,6 +5,13 @@ import {
   sampleKpBehavior
 } from "../src/semantic/asset-behavior.ts";
 import {
+  resolveKpTransformationDrillDowns,
+  validateKpTransformationDrillDownHooks
+} from "../src/semantic/asset-decomposition.ts";
+import {
+  inspectKpBehaviorAt
+} from "../src/semantic/asset-inspection.ts";
+import {
   checkKpBehaviorDeterminism,
   checkKpDiagramRewindLaw
 } from "../src/semantic/asset-laws.ts";
@@ -64,6 +71,38 @@ test("createLinearSolveKpAssetBundle exposes transformations and diagram phases"
     passed: true,
     failures: []
   });
+});
+
+test("createLinearSolveKpAssetBundle exposes a cancellation drill-down hook", () => {
+  const asset = createLinearSolveKpAssetBundle();
+  const behavior = createLinearSolveKpBehavior();
+  const inspection = inspectKpBehaviorAt({
+    behavior,
+    timeMs: 1200,
+    activeTransformationIds: (frame) =>
+      frame.cardFrame.parentTimelineFrame.tracks
+        .filter((track) => track.kind === "transformation" && track.active)
+        .map((track) => track.targetId)
+  });
+
+  assert.deepEqual(
+    validateKpTransformationDrillDownHooks(asset.drillDownHooks, {
+      transformations: asset.transformations
+    }),
+    []
+  );
+  assert.deepEqual(
+    resolveKpTransformationDrillDowns({
+      inspection,
+      hooks: asset.drillDownHooks
+    }).map((hook) => [hook.id, hook.asset.id]),
+    [
+      [
+        "drilldown.linear-solve.cancel-additive-inverse",
+        "asset.linear-solve.cancel-additive-inverse-explainer"
+      ]
+    ]
+  );
 });
 
 test("createLinearSolveKpBehavior samples the existing tutorial card timeline", () => {

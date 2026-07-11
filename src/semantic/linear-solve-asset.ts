@@ -8,6 +8,10 @@ import {
   type KpBehavior
 } from "./asset-behavior.ts";
 import {
+  createKpTransformationDrillDownHook,
+  type KpTransformationDrillDownHook
+} from "./asset-decomposition.ts";
+import {
   createKpSemanticDiagramSequence,
   createKpTransformationDiagramLeaf,
   type KpSemanticDiagramSequence
@@ -26,6 +30,7 @@ export interface LinearSolveKpAsset {
   readonly bundle: KpAssetBundle;
   readonly transformations: readonly KpSemanticTransformation[];
   readonly diagram: KpSemanticDiagramSequence;
+  readonly drillDownHooks: readonly KpTransformationDrillDownHook[];
 }
 
 export type LinearSolveKpBehavior =
@@ -123,12 +128,14 @@ export function createLinearSolveKpAssetBundle(): LinearSolveKpAsset {
     title: "Linear solve sequence",
     children: transformations.map(createKpTransformationDiagramLeaf)
   });
+  const drillDownHooks = createLinearSolveDrillDownHooks();
 
   return {
     sourceAnimationId: "linear-equation-solve-x",
     bundle,
     transformations,
-    diagram
+    diagram,
+    drillDownHooks
   };
 }
 
@@ -209,6 +216,88 @@ function createLinearSolveTransformations(): readonly KpSemanticTransformation[]
         correspondence(ids.leftSimplified, "lhs.x", ids.solved, "lhs.x"),
         correspondence(ids.leftSimplified, "equals", ids.solved, "equals")
       ]
+    })
+  ];
+}
+
+function createLinearSolveDrillDownHooks(): readonly KpTransformationDrillDownHook[] {
+  return [
+    createKpTransformationDrillDownHook({
+      id: "drilldown.linear-solve.cancel-additive-inverse",
+      transformationId: ids.cancel,
+      title: "Explain additive inverse cancellation",
+      summary: "Shows why +3 and -3 collapse to zero in the linear solve.",
+      asset: createKpAssetBundle({
+        id: "asset.linear-solve.cancel-additive-inverse-explainer",
+        title: "Why +3 and -3 cancel",
+        objects: [
+          createKpSemanticAssetObject({
+            id: "equation.linear-solve.cancel-law.generic",
+            objectType: "equation",
+            title: "Additive inverse identity",
+            value: { latex: "a + (-a) = 0" },
+            selectors: [
+              selector(
+                "equation.linear-solve.cancel-law.generic",
+                "lhs.a",
+                "term",
+                "a"
+              ),
+              selector(
+                "equation.linear-solve.cancel-law.generic",
+                "lhs.inverse",
+                "term",
+                "-a"
+              ),
+              selector(
+                "equation.linear-solve.cancel-law.generic",
+                "rhs.zero",
+                "term",
+                "0"
+              )
+            ],
+            provenance: {
+              kind: "authored",
+              sourceIds: [ids.cancel],
+              summary:
+                "Authored drill-down identity for additive inverse cancellation."
+            }
+          }),
+          createKpSemanticAssetObject({
+            id: "equation.linear-solve.cancel-law.instantiated",
+            objectType: "equation",
+            title: "Cancel +3 and -3",
+            value: { latex: "3 + (-3) = 0" },
+            selectors: [
+              selector(
+                "equation.linear-solve.cancel-law.instantiated",
+                "lhs.plus3",
+                "term",
+                "+3"
+              ),
+              selector(
+                "equation.linear-solve.cancel-law.instantiated",
+                "lhs.minus3",
+                "term",
+                "-3"
+              ),
+              selector(
+                "equation.linear-solve.cancel-law.instantiated",
+                "rhs.zero",
+                "term",
+                "0"
+              )
+            ],
+            provenance: {
+              kind: "transformed",
+              sourceIds: ["equation.linear-solve.cancel-law.generic"],
+              transformationId: ids.cancel,
+              summary:
+                "Instantiates the additive inverse identity for the +3 and -3 terms."
+            }
+          })
+        ]
+      })
     })
   ];
 }
