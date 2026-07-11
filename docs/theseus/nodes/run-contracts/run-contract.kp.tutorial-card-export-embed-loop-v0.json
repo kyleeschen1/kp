@@ -2,7 +2,7 @@
   "id": "run-contract.kp.tutorial-card-export-embed-loop-v0",
   "kind": "run-contract",
   "title": "KP tutorial-card export/embed loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
   "sourceRefs": [
     {
@@ -40,7 +40,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure."
   ],
   "goal": "Run the approved export/embed loop from tutorial-card runtime metadata to concrete iframe and static-step artifacts, then prepare programming panels and follow-up runtime checks.",
-  "target": "next.kp.export-embed-readiness-report",
+  "target": "next.kp.tutorial-card-export-embed-loop-closeout",
   "runMode": "run",
   "maxSlices": 20,
   "commitCadence": "Commit after each verified slice.",
@@ -149,7 +149,8 @@
     {
       "id": "next.kp.tutorial-card-export-embed-loop-closeout",
       "title": "Close export/embed loop",
-      "status": "planned"
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }

@@ -1,9 +1,9 @@
 # Semantic Runtime Thread
 
 Status: active
-Last Updated: 2026-07-10
-Current Next Action: Package the iframe export profile into a minimal
-embeddable tutorial-card artifact.
+Last Updated: 2026-07-11
+Current Next Action: Add browser smoke coverage for iframe, static-step, and
+programming sample launch paths.
 
 ## Goal
 
@@ -35,6 +35,12 @@ controls, rewind verification, SourceFile selectors, generated KaTeX fixture
 metadata, dependency planning, iframe/static-step export profile metadata, and
 a refreshed runtime readiness report card.
 
+The tutorial-card export/embed loop closed on 2026-07-11. It delivered concrete
+iframe export artifacts, static-step sequence artifacts, an export artifact
+catalog, a programming tutorial-card sample, generated KaTeX fixture promotion,
+graph parent-timeline diagnostics, and a refreshed export/runtime readiness
+report card.
+
 ## Accepted Scope
 
 - semantic objects with stable selectors and immutable structural history;
@@ -57,10 +63,12 @@ a refreshed runtime readiness report card.
 
 - What is the smallest iframe artifact that preserves manifest identity,
   fallback behavior, controls, and dependency metadata?
-- How should static-step export choose checkpoints from parent timeline
+- Which browser smoke checks best prove iframe, static-step, and programming
+  samples launch without drifting from the parent timeline?
+- How should static-step export choose richer checkpoints from parent timeline
   markers, pauses, and annotations?
-- What should the first programming tutorial-card panel do with `SourceFile`
-  selectors?
+- What is the minimal execution-trace frame for the next programming
+  tutorial-card panel?
 - Which remaining KaTeX transform fixtures should be promoted from curated
   geometry to semantic transformation definitions?
 
@@ -70,8 +78,10 @@ a refreshed runtime readiness report card.
 - `docs/project/roadmap.md`
 - `docs/project/reviews/2026-07-10-semantic-runtime-roadmap-loop-closeout.md`
 - `docs/project/reviews/2026-07-10-tutorial-card-runtime-loop-closeout.md`
+- `docs/project/reviews/2026-07-11-tutorial-card-export-embed-loop-closeout.md`
 - `docs/superpowers/specs/2026-07-10-derive-representation-capability-design.md`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json`
+- `docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json`
 - `docs/theseus/nodes/decisions/decision.kp.semantic-animation-runtime-roadmap.json`
 - `docs/theseus/events/2026-07-09-semantic-tutorial-system-design-decisions.md`
 - `docs/superpowers/specs/2026-07-08-rendering-time-protocol-design.md`

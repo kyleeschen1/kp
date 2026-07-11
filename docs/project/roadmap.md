@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-10
+Last Updated: 2026-07-11
 Status: active
 Active Thread: `threads/semantic-runtime.md`
 
@@ -19,16 +19,16 @@ semantics first
 
 ## Active Focus
 
-**Tutorial-card runtime foundation.** The tutorial-card runtime loop closed on
-2026-07-10 with manifest resolution, parent timeline sampling, synchronized
-layout binding, equation/graph frame adapters, a live linear-solve card shell,
-rewind verification, SourceFile selectors, dependency planning, iframe/static
-step export profile metadata, and refreshed dashboard readiness in place.
+**Tutorial-card export/embed foundation.** The export/embed loop closed on
+2026-07-11 with concrete iframe artifacts, static-step sequence artifacts, an
+export artifact catalog, a programming tutorial-card panel sample, generated
+KaTeX fixture promotion, graph parent-timeline diagnostics, and refreshed
+dashboard readiness in place.
 
-The next major implementation loop should package that runtime into concrete
-exports: `KpTutorialCardManifest -> parent timeline -> synchronized layout ->
-sampled frames -> iframe/static-step artifact`, with GIF/video and programming
-panels following only after the first artifacts are real.
+The next major implementation loop should harden these artifacts in browser and
+hosted contexts before moving into media encoders:
+`KpTutorialCardManifest -> parent timeline -> synchronized sampled frames ->
+iframe/static-step artifact -> smoke-tested embed surface`.
 
 ## Roadmap Phases
 
@@ -177,15 +177,18 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Package the iframe export profile into a minimal embeddable tutorial-card
-   artifact with fallbacks and controls.
-2. Generate a static step-sequence artifact from sampled parent timeline
-   checkpoints.
-3. Add a programming tutorial-card panel that consumes `SourceFile` selectors.
-4. Add a lightweight browser/runtime smoke check for the live tutorial card
-   shell.
-5. Return to KaTeX transform fixtures and graph panels with the parent timeline
-   as the required clock boundary.
+1. Add browser smoke coverage for iframe, static-step, and programming sample
+   launch paths.
+2. Add hosted/package readiness checks for iframe artifact dependencies and
+   fallbacks.
+3. Extend programming tutorial cards from static SourceFile panels into
+   execution-trace frames.
+4. Start GIF or video export sampling from parent timeline frames after the
+   iframe/static-step paths stay stable.
+5. Expand graph diagnostics from the current mesh sample into richer graph
+   transforms and synchronized comparison cards.
+6. Return to the SemanticObject registry and capability loading layer so export
+   artifacts can advertise exactly what each card needs.
 
 ## Deferred
 
