@@ -1070,6 +1070,142 @@ export const projectDashboardData: ProjectDashboardData = {
         "sample-synced-equation-graph-linear-solve",
         "report-semantic-runtime-readiness"
       ]
+    },
+    {
+      id: "iframe-asset-manifest",
+      title: "Iframe asset manifest",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Serializable iframe export manifest for dependency phases, capability keys, asset ids, and sandbox/permission/referrer embed policy metadata.",
+      tags: ["iframe", "manifest", "assets", "policy", "hardening"],
+      domains: ["runtime", "export", "embed"],
+      interfaces: ["createKpIframeExportAssetManifest"],
+      maturity: "active export hardening artifact",
+      coverage: [
+        "dependency phases",
+        "capability keys",
+        "asset ids",
+        "embed policy metadata"
+      ],
+      sourceRefs: [
+        {
+          label: "Iframe asset manifest",
+          href: "src/tutorial/iframe-asset-manifest.ts"
+        }
+      ],
+      verification: [
+        "tests/tutorial-card-iframe-asset-manifest.test.ts",
+        "tests/tutorial-card-iframe-document.test.ts"
+      ],
+      sampleTargets: [
+        {
+          kind: "api-catalog-item",
+          label: "Open IframeAssetManifest API sample",
+          itemId: "embed-iframe-asset-manifest"
+        }
+      ],
+      relatedIds: [
+        "iframe-export-artifact",
+        "tutorial-card-manifest-v0",
+        "report-tutorial-launch-readiness"
+      ]
+    },
+    {
+      id: "programming-execution-trace-card",
+      title: "Programming execution-trace card",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Browser-smokeable programming tutorial card that composes SourceFile and execution-trace panels from one sampled clock.",
+      tags: ["programming", "trace", "tutorial-card", "hardening"],
+      domains: ["programming", "runtime", "tutorial"],
+      interfaces: [
+        "createAdditionProgrammingExecutionTraceTutorialCardSample",
+        "renderKpProgrammingExecutionTraceTutorialCardHtmlShell"
+      ],
+      maturity: "active tutorial-card sample",
+      coverage: [
+        "SourceFile panel",
+        "execution-trace panel",
+        "shared progress sampling",
+        "browser nonblank smoke"
+      ],
+      sourceRefs: [
+        {
+          label: "Execution trace card sample",
+          href: "src/tutorial/programming-execution-trace-card-sample.ts"
+        },
+        {
+          label: "Execution trace panel",
+          href: "src/tutorial/programming-execution-trace-panel.ts"
+        }
+      ],
+      verification: [
+        "tests/programming-execution-trace-card-sample.test.ts",
+        "tests/programming-execution-trace-card-smoke.browser.spec.ts"
+      ],
+      sampleTargets: [
+        {
+          kind: "tutorial-card",
+          label: "Open programming execution-trace card",
+          sampleId: "tutorial.programming.add.execution-trace.card.live-sample",
+          manifestId: "tutorial.programming.add.execution-trace.card",
+          sharedClockId: "clock.programming.add-demo"
+        },
+        {
+          kind: "api-catalog-item",
+          label: "Open ProgrammingExecutionTraceCard API sample",
+          itemId: "embed-programming-execution-trace-card"
+        }
+      ],
+      relatedIds: [
+        "semantic-source-file",
+        "report-tutorial-launch-readiness",
+        "report-programming-readiness"
+      ]
+    },
+    {
+      id: "synchronized-comparison-card",
+      title: "Synchronized comparison card",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Comparison shell that renders two tutorial-card samples from one shared progress value for synchronized explanation layouts.",
+      tags: ["comparison", "sync", "tutorial-card", "layout", "hardening"],
+      domains: ["runtime", "layout", "tutorial"],
+      interfaces: [
+        "createLinearSolveProgrammingComparisonSample",
+        "renderKpSynchronizedComparisonHtmlShell"
+      ],
+      maturity: "active comparison sample shell",
+      coverage: [
+        "shared progress sampling",
+        "two tutorial-card child shells",
+        "browser smoke"
+      ],
+      sourceRefs: [
+        {
+          label: "Synchronized comparison shell",
+          href: "src/tutorial/synchronized-comparison-card.ts"
+        }
+      ],
+      verification: [
+        "tests/synchronized-comparison-card.test.ts",
+        "tests/synchronized-comparison-card.browser.spec.ts"
+      ],
+      sampleTargets: [
+        {
+          kind: "api-catalog-item",
+          label: "Open SynchronizedComparisonCard API sample",
+          itemId: "embed-synchronized-comparison-card"
+        }
+      ],
+      relatedIds: [
+        "sample-synced-equation-graph-linear-solve",
+        "programming-execution-trace-card",
+        "report-tutorial-launch-readiness"
+      ]
     }
   ],
   reportThemes: [

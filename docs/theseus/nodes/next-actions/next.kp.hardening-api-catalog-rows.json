@@ -2,7 +2,74 @@
   "id": "next.kp.hardening-api-catalog-rows",
   "kind": "next-action",
   "title": "Expose hardening status in API/catalog rows",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Expose browser hardening artifacts, diagnostics, and comparison samples through dashboard/API catalogue rows."
+  "summary": "Exposed tutorial-card browser hardening artifacts in API catalog and dashboard rows for iframe asset manifests, programming execution-trace cards, and synchronized comparison shells.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "Adds API catalog entries for iframe asset manifests, programming execution-trace cards, and synchronized comparison cards."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Adds dashboard gallery rows with source refs, verification, related IDs, and sample/API targets for the hardening artifacts."
+    },
+    {
+      "kind": "file",
+      "path": "tests/api-catalog.test.ts",
+      "summary": "Covers the new browser hardening API catalog entries and metadata fields."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers selecting the new browser hardening rows from the project dashboard preview."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.hardening-api-catalog-rows.json",
+      "summary": "Records the approved hardening API/catalog rows next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.browser-hardening-readiness-refresh.json",
+      "summary": "Materializes the next approved browser hardening readiness refresh slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the readiness refresh slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/api-catalog.test.ts tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "API catalog, project dashboard, and Theseus dashboard adapter unit coverage",
+      "checkedAt": "2026-07-11T02:05:53.511Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T02:05:53.531Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T02:05:53.555Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:05:53.588Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Exposed tutorial-card browser hardening artifacts in API catalog and dashboard rows for iframe asset manifests, programming execution-trace cards, and synchronized comparison shells."
+  }
 }

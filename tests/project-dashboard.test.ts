@@ -476,6 +476,43 @@ test("renderProjectDashboard exposes static-step export artifact sample targets"
   assert.match(html, /data-kp-preview-api-item="embed-static-step-export-artifact"/);
 });
 
+test("renderProjectDashboard exposes tutorial browser hardening catalog rows", () => {
+  const iframeManifestHtml = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "iframe-asset-manifest"
+  });
+  const traceCardHtml = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "programming-execution-trace-card"
+  });
+  const comparisonHtml = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "synchronized-comparison-card"
+  });
+
+  assert.match(
+    iframeManifestHtml,
+    /data-kp-preview-api-item="embed-iframe-asset-manifest"/
+  );
+  assert.match(
+    iframeManifestHtml,
+    /src\/tutorial\/iframe-asset-manifest\.ts/
+  );
+  assert.match(
+    traceCardHtml,
+    /data-kp-preview-tutorial-card="tutorial\.programming\.add\.execution-trace\.card\.live-sample"/
+  );
+  assert.match(
+    traceCardHtml,
+    /tests\/programming-execution-trace-card-smoke\.browser\.spec\.ts/
+  );
+  assert.match(
+    comparisonHtml,
+    /data-kp-preview-api-item="embed-synchronized-comparison-card"/
+  );
+  assert.match(
+    comparisonHtml,
+    /tests\/synchronized-comparison-card\.browser\.spec\.ts/
+  );
+});
+
 test("renderProjectDashboard exposes semantic object API sample targets", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "semantic-matrix"

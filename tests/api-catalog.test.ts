@@ -182,6 +182,45 @@ test("API catalog exposes active tutorial card manifest API", () => {
   assert.equal(dependencyManifest?.item.status, "planned");
 });
 
+test("API catalog exposes browser hardening artifacts and samples", () => {
+  const iframeAssetManifest = findApiCatalogItem("embed-iframe-asset-manifest");
+  const executionTraceCard = findApiCatalogItem(
+    "embed-programming-execution-trace-card"
+  );
+  const comparisonShell = findApiCatalogItem(
+    "embed-synchronized-comparison-card"
+  );
+
+  assert.equal(iframeAssetManifest?.group.category, "embed");
+  assert.equal(iframeAssetManifest?.item.status, "active");
+  assert.deepEqual(iframeAssetManifest?.item.details?.protocols, [
+    "createKpIframeExportAssetManifest"
+  ]);
+  assert.deepEqual(iframeAssetManifest?.item.details?.outputs, [
+    "dependency phases",
+    "capability keys",
+    "asset ids",
+    "embed policy"
+  ]);
+
+  assert.equal(executionTraceCard?.item.status, "active");
+  assert.deepEqual(executionTraceCard?.item.details?.views, [
+    "source-file panel",
+    "execution-trace panel"
+  ]);
+  assert.ok(
+    executionTraceCard?.item.details?.protocols?.includes(
+      "createAdditionProgrammingExecutionTraceTutorialCardSample"
+    )
+  );
+
+  assert.equal(comparisonShell?.item.status, "active");
+  assert.deepEqual(comparisonShell?.item.details?.preserves, [
+    "shared progress value",
+    "child card identity"
+  ]);
+});
+
 test("API catalog detail helpers normalize preview and search fields", () => {
   const matrix = findApiCatalogItem("semantic-matrix");
   assert.ok(matrix);

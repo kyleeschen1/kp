@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.browser-hardening-readiness-refresh",
+  "kind": "next-action",
+  "title": "Refresh project roadmap/readiness after hardening",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Refresh project roadmap, readiness report language, and next priorities after the tutorial-card browser hardening loop artifacts are represented in the dashboard/API catalog."
+}

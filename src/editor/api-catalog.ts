@@ -242,6 +242,26 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
         outputs: ["json-document", "checkpoint frames"],
         preserves: ["manifest identity", "profile identity", "timeline identity", "checkpoint provenance"]
       }),
+      item("embed-iframe-asset-manifest", "IframeAssetManifest", "export", "active", "Serializable iframe asset manifest for dependencies, capability keys, assets, and embed policy metadata.", ["iframe", "assets", "policy"], {
+        protocols: ["createKpIframeExportAssetManifest"],
+        inputs: ["KpTutorialCardExportArtifact"],
+        outputs: ["dependency phases", "capability keys", "asset ids", "embed policy"],
+        preserves: ["artifact identity", "manifest identity", "profile identity"]
+      }),
+      item("embed-programming-execution-trace-card", "ProgrammingExecutionTraceCard", "tutorial", "active", "Programming tutorial card sample that synchronizes SourceFile and execution-trace panels from one progress value.", ["programming", "trace", "tutorial-card"], {
+        protocols: ["createAdditionProgrammingExecutionTraceTutorialCardSample", "renderKpProgrammingExecutionTraceTutorialCardHtmlShell"],
+        views: ["source-file panel", "execution-trace panel"],
+        inputs: ["SourceFile", "KpProgrammingExecutionTrace"],
+        outputs: ["sampled tutorial-card frame"],
+        preserves: ["source selector identity", "shared clock identity"]
+      }),
+      item("embed-synchronized-comparison-card", "SynchronizedComparisonCard", "tutorial", "active", "Comparison shell that renders two tutorial-card samples from a shared progress value.", ["comparison", "sync", "tutorial-card"], {
+        protocols: ["createLinearSolveProgrammingComparisonSample", "renderKpSynchronizedComparisonHtmlShell"],
+        views: ["left tutorial card", "right tutorial card"],
+        inputs: ["KpAnimationSampler", "progress"],
+        outputs: ["comparison shell"],
+        preserves: ["shared progress value", "child card identity"]
+      }),
       item("embed-dependency-manifest", "DependencyManifest", "runtime", "planned", "Critical, interactive, optional, and fallback dependency closure for each card or route.", ["lazy loading", "runtime"])
     ]
   }
