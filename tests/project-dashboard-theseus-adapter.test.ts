@@ -112,6 +112,13 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
         field.value === "kp.graph:render.webgl:graph-3d:surface.mesh"
     )
   );
+  assert.ok(
+    graphPackageRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Package coordinates" &&
+        field.value === "kp.graph / render.webgl / graph-3d / surface.mesh"
+    )
+  );
 
   const graphRow = galleryRows.find(
     (row) => row.id === "kp.gallery.visual-webgl-graph"

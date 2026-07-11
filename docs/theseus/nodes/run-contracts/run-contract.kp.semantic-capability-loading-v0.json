@@ -162,7 +162,14 @@
     {
       "id": "next.kp.dashboard-capability-package-preview",
       "title": "Add selected-row preview for capability packages",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-dashboard-capability-package-preview-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-dashboard-capability-package-preview-v0",
+      "title": "Add selected-row preview for capability packages",
+      "summary": "Materialized from stored run-contract slice next.kp.dashboard-capability-package-preview in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.equation-capability-package-fixtures",

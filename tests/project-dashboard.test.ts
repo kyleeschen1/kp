@@ -191,6 +191,14 @@ test("renderProjectDashboard renders capability package agenda rows", () => {
     html,
     /data-kp-preview-field="Package target"[^>]*>browser</
   );
+  assert.match(
+    html,
+    /data-kp-preview-field="Package coordinates"[^>]*>kp\.graph \/ render\.webgl \/ graph-3d \/ surface\.mesh</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Package scope"[^>]*>3 semantic capabilities, 1 protocols, 1 views</
+  );
 });
 
 test("renderProjectDashboard uses h2 section counts above agenda rows", () => {

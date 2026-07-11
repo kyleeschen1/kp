@@ -192,6 +192,8 @@ function capabilityPackageRow(
       fields: [
         { label: "Package id", value: manifest.id },
         { label: "Capability key", value: manifest.capabilityKey },
+        { label: "Package coordinates", value: capabilityPackageCoordinates(manifest) },
+        { label: "Package scope", value: capabilityPackageScope(manifest) },
         { label: "Package target", value: manifest.target },
         { label: "Load phase", value: manifest.loadPhase },
         {
@@ -223,6 +225,27 @@ function capabilityPackageRow(
       ])
     ].join(" ")
   };
+}
+
+function capabilityPackageCoordinates(
+  manifest: KpCapabilityPackageManifest
+): string {
+  return [
+    manifest.library,
+    manifest.capability,
+    manifest.objectType,
+    manifest.mode
+  ].join(" / ");
+}
+
+function capabilityPackageScope(
+  manifest: KpCapabilityPackageManifest
+): string {
+  return [
+    `${manifest.semanticCapabilities.length} semantic capabilities`,
+    `${manifest.protocols.length} protocols`,
+    `${manifest.views.length} views`
+  ].join(", ");
 }
 
 function galleryItemRow(item: ProjectGalleryItem): KpTheseusDashboardRow {

@@ -1,0 +1,116 @@
+{
+  "id": "next-action.kp.semantic.next-kp-dashboard-capability-package-preview-v0",
+  "kind": "next-action",
+  "title": "Add selected-row preview for capability packages",
+  "status": "resolved",
+  "domain": "kp.semantic",
+  "summary": "Added richer selected-row preview fields for capability package rows.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-capability-loading-v0.json",
+      "summary": "Run contract whose stored slice next.kp.dashboard-capability-package-preview was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP workflow frontier for dashboard-backed semantic animation system work."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap selects SemanticObject capability loading as one of the next loop choices after hosted/export closeout."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread names capability loading as an active next choice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-hosted-package-readiness-export-sampling-loop-closeout.md",
+      "summary": "Hosted/export closeout recommends registry-backed capability loading before hardcoded encoder dependencies."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Adds package coordinate and scope preview fields for local dashboard capability package rows."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/theseus-adapter.ts",
+      "summary": "Exports the same package coordinate and scope preview fields through the Theseus dashboard adapter."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers selected package row preview coordinates and package scope."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-theseus-adapter.test.ts",
+      "summary": "Covers adapter-exported package coordinate preview fields."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-capability-loading-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Add selected-row preview for capability packages can be completed inside KP SemanticObject capability loading loop."
+  ],
+  "allowedWork": [
+    "Only work on approved KP SemanticObject capability loading slices.",
+    "Keep work tied to semantic capability package metadata, tutorial dependency planning, export capability closure, dashboard/API catalog rows, and project docs.",
+    "Use metadata-first package manifests and deterministic fixtures before any dynamic loader."
+  ],
+  "disallowedWork": [
+    "Do not implement GIF, MP4, or WebM encoders in this loop.",
+    "Do not implement full CAS behavior or broad symbolic algebra.",
+    "Do not pursue broad Theseus planner infrastructure unless it directly blocks this KP run contract.",
+    "Do not broaden into graph runtime unification beyond package metadata needed by graph capabilities."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "focused dashboard package preview tests",
+      "checkedAt": "2026-07-11T04:48:52.338Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript projects",
+      "checkedAt": "2026-07-11T04:48:52.372Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T04:48:52.396Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T04:48:52.422Z",
+      "scope": "whitespace check"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added richer selected-row preview fields for capability package rows."
+  }
+}
