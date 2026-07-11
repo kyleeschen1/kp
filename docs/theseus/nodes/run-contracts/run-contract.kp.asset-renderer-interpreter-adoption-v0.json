@@ -70,6 +70,21 @@
       "kind": "file",
       "path": "tests/kp-linear-solve-equation-frame-interpreter.test.ts",
       "summary": "Covers active transform sampling, object refs, selector correspondence, and progress clamping."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/equation-frame-interpreter.ts",
+      "summary": "Adds activeTransformationIds as a standard equation-frame field."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/linear-solve-equation-frame-interpreter.ts",
+      "summary": "Adds a semantic equation-frame behavior that samples active transformation ids from the asset-backed interpreter."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-linear-solve-equation-frame-interpreter.test.ts",
+      "summary": "Covers active transformation ids on interpreter and behavior frames."
     }
   ],
   "verification": [
@@ -139,8 +154,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-11T23:00:32.140Z",
-      "scope": "slice 5 linear-solve equation-frame interpreter Theseus validation"
+      "scope": "slice 5 linear-solve equation-frame interpreter Theseus validation",
+      "checkedAt": "2026-07-11T23:00:32.140Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-linear-solve-equation-frame-interpreter.test.ts tests/kp-equation-frame-interpreter.test.ts tests/kp-linear-solve-asset.test.ts tests/kp-asset-interpreter.test.ts tests/kp-asset-behavior.test.ts",
+      "status": "passed",
+      "scope": "slice 6 active transformation id behavior tests",
+      "checkedAt": "2026-07-11T23:04:46.013Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 6 active transformation id behavior typecheck",
+      "checkedAt": "2026-07-11T23:04:47.764Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T23:04:49.568Z",
+      "scope": "slice 6 active transformation id behavior Theseus validation"
     }
   ],
   "progress": {
@@ -196,12 +229,13 @@
     {
       "id": "slice.kp.asset-renderer.asset-behavior-transform-ids",
       "title": "Source active transformation IDs from asset behavior",
-      "status": "ready"
+      "summary": "Added activeTransformationIds to equation frames and a linear-solve equation-frame behavior that samples those ids from the asset-backed interpreter.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.selector-correspondence",
       "title": "Resolve equation object and selector correspondence through semantic asset selectors",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.inspection-metadata",

@@ -1,3 +1,7 @@
+import {
+  createKpBehavior,
+  type KpBehavior
+} from "./asset-behavior.ts";
 import { findKpAssetSelector } from "./asset.ts";
 import {
   createKpEquationFrameInterpreter,
@@ -17,6 +21,8 @@ export interface LinearSolveEquationFrameInterpreterInput {
   readonly progress: number;
 }
 
+export type LinearSolveEquationFrameBehavior = KpBehavior<KpEquationFrame>;
+
 interface ActiveLinearSolveTransformation {
   readonly transformation: KpSemanticTransformation;
   readonly index: number;
@@ -31,6 +37,22 @@ export function createLinearSolveEquationFrameInterpreter():
     inputKind: "linear-solve-asset",
     preservation: "sampled",
     interpret: interpretLinearSolveEquationFrame
+  });
+}
+
+export function createLinearSolveEquationFrameBehavior(
+  asset: LinearSolveKpAsset
+): LinearSolveEquationFrameBehavior {
+  const interpreter = createLinearSolveEquationFrameInterpreter();
+
+  return createKpBehavior({
+    id: "behavior.linear-solve.katex-equation-frame",
+    durationMs: Math.max(1, asset.transformations.length) * 1000,
+    sample: ({ progress }) =>
+      interpreter.interpret({
+        asset,
+        progress
+      }).output
   });
 }
 
@@ -54,6 +76,7 @@ function interpretLinearSolveEquationFrame(
       assetId: input.asset.bundle.id,
       progress: active.globalProgress,
       surface: "katex-dom",
+      activeTransformationIds: [active.transformation.id],
       objectRefs: [
         ...active.transformation.sourceObjectIds.map((objectId) => ({
           objectId,

@@ -47,6 +47,7 @@ export interface KpEquationFrame {
   readonly assetId: string;
   readonly progress: number;
   readonly surface: KpEquationFrameSurface;
+  readonly activeTransformationIds: readonly string[];
   readonly objectRefs: readonly KpEquationFrameObjectRef[];
   readonly transformationRefs: readonly KpEquationFrameTransformationRef[];
   readonly selectorRefs: readonly KpEquationFrameSelectorRef[];

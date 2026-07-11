@@ -18,6 +18,9 @@ test("equation frame interpreter contract carries semantic ids to KaTeX frames",
         assetId: "asset.linear-solve",
         progress,
         surface: "katex-dom",
+        activeTransformationIds: [
+          "transform.linear-solve.cancel-left-additive-inverse"
+        ],
         objectRefs: [
           {
             objectId: "equation.linear-solve.after-subtract",
@@ -85,6 +88,7 @@ test("equation frame interpreter rejects empty contract identifiers", () => {
             assetId: "asset.linear-solve",
             progress: 0,
             surface: "katex-dom",
+            activeTransformationIds: [],
             objectRefs: [],
             transformationRefs: [],
             selectorRefs: [],

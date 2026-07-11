@@ -2,8 +2,12 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { runKpInterpreter } from "../src/semantic/asset-interpreter.ts";
+import { sampleKpBehaviorAtProgress } from "../src/semantic/asset-behavior.ts";
 import { createLinearSolveKpAssetBundle } from "../src/semantic/linear-solve-asset.ts";
-import { createLinearSolveEquationFrameInterpreter } from "../src/semantic/linear-solve-equation-frame-interpreter.ts";
+import {
+  createLinearSolveEquationFrameBehavior,
+  createLinearSolveEquationFrameInterpreter
+} from "../src/semantic/linear-solve-equation-frame-interpreter.ts";
 
 test("linear-solve equation frame interpreter samples the active cancel transformation", () => {
   const asset = createLinearSolveKpAssetBundle();
@@ -25,6 +29,9 @@ test("linear-solve equation frame interpreter samples the active cancel transfor
     ]),
     [["transform.linear-solve.cancel-left-additive-inverse", 0.5]]
   );
+  assert.deepEqual(interpretation.output.activeTransformationIds, [
+    "transform.linear-solve.cancel-left-additive-inverse"
+  ]);
   assert.deepEqual(
     interpretation.output.objectRefs.map((ref) => [ref.objectId, ref.role]),
     [
@@ -68,4 +75,18 @@ test("linear-solve equation frame interpreter clamps progress at the solved step
     ]),
     [["transform.linear-solve.simplify-right-difference", 1]]
   );
+});
+
+test("linear-solve equation frame behavior exposes active semantic transformation ids", () => {
+  const behavior = createLinearSolveEquationFrameBehavior(
+    createLinearSolveKpAssetBundle()
+  );
+  const frame = sampleKpBehaviorAtProgress(behavior, 0.5);
+  const rewindFrame = sampleKpBehaviorAtProgress(behavior, 0.5);
+
+  assert.deepEqual(frame, rewindFrame);
+  assert.equal(behavior.id, "behavior.linear-solve.katex-equation-frame");
+  assert.deepEqual(frame.activeTransformationIds, [
+    "transform.linear-solve.cancel-left-additive-inverse"
+  ]);
 });
