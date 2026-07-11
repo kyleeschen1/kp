@@ -127,13 +127,14 @@
     {
       "id": "next.kp.asset-law-test-helpers",
       "title": "Add law-test helper utilities",
-      "status": "complete",
-      "summary": "Added reusable law helpers for behavior determinism, behavior duration reparameterization, and diagram rewind phase equivalence, with structured pass/failure results for future canonical examples."
+      "summary": "Added reusable law helpers for behavior determinism, behavior duration reparameterization, and diagram rewind phase equivalence, with structured pass/failure results for future canonical examples.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-linear-solve-bundle",
       "title": "Wrap linear solve as an AssetBundle",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added a canonical linear-solve KP asset wrapper with manifest-aligned equation object ids, selector metadata, transformation contracts, correspondence maps, and a sequence diagram without changing the existing renderer."
     },
     {
       "id": "next.kp.asset-linear-solve-behavior",
