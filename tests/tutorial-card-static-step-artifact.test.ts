@@ -210,6 +210,55 @@ test("static-step sequence renderer samples frames at selected checkpoints", () 
   assert.deepEqual(sequence.diagnostics, []);
 });
 
+test("static-step artifact and sequence renderer preserve authored markers", () => {
+  const sample = createLinearSolveTutorialCardSample();
+  const checkpoints: KpTutorialStaticStepCheckpoint[] = [
+    {
+      id: "step.linear-solve.authored-cancel",
+      label: "Cancel the inverse pair",
+      progress: 2 / 3,
+      beat: 100 / 3,
+      timelineId: "timeline.linear-solve.shared",
+      summary: "Pause on the cancelation step.",
+      markers: [
+        {
+          id: "marker.linear-solve.authored-cancel-note",
+          kind: "annotation",
+          label: "The +3 and -3 share one cancelation marker.",
+          targetId: "transform.linear-solve.cancel-left-additive-inverse",
+          summary: "Authored note for the static export."
+        }
+      ]
+    }
+  ];
+
+  const sequence = renderKpTutorialCardStaticStepSequence({
+    artifact: staticArtifact,
+    checkpoints,
+    sampler: sample
+  });
+
+  checkpoints[0] = {
+    id: "mutated",
+    label: "Mutated",
+    progress: 0,
+    beat: 0,
+    timelineId: "timeline.linear-solve.shared",
+    markers: []
+  };
+
+  assert.deepEqual(sequence.checkpoints[0]?.markers, [
+    {
+      id: "marker.linear-solve.authored-cancel-note",
+      kind: "annotation",
+      label: "The +3 and -3 share one cancelation marker.",
+      targetId: "transform.linear-solve.cancel-left-additive-inverse",
+      summary: "Authored note for the static export."
+    }
+  ]);
+  assert.deepEqual(sequence.steps[0]?.markers, sequence.checkpoints[0]?.markers);
+});
+
 function assertNear(actual: number, expected: number): void {
   assert.ok(
     Math.abs(actual - expected) < 1e-9,

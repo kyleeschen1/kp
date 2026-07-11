@@ -5,6 +5,7 @@ import type {
 import {
   createKpTutorialCardStaticStepArtifact,
   validateKpTutorialCardStaticStepArtifact,
+  type KpTutorialStaticStepAuthoredMarker,
   type KpTutorialCardStaticStepArtifact,
   type KpTutorialStaticStepArtifactDiagnostic,
   type KpTutorialStaticStepCheckpoint
@@ -19,6 +20,7 @@ export interface KpTutorialStaticStepSequenceFrame<
   readonly beat: number;
   readonly timelineId: string;
   readonly frame: TFrame;
+  readonly markers?: readonly KpTutorialStaticStepAuthoredMarker[] | undefined;
 }
 
 export interface KpTutorialCardStaticStepSequence<
@@ -68,6 +70,21 @@ function renderStepFrame<TFrame extends KpSampledAnimationFrame>(
     progress: checkpoint.progress,
     beat: checkpoint.beat,
     timelineId: checkpoint.timelineId,
-    frame: sampler.sample(checkpoint.progress)
+    frame: sampler.sample(checkpoint.progress),
+    ...(checkpoint.markers === undefined
+      ? {}
+      : { markers: checkpoint.markers.map(cloneAuthoredMarker) })
+  };
+}
+
+function cloneAuthoredMarker(
+  marker: KpTutorialStaticStepAuthoredMarker
+): KpTutorialStaticStepAuthoredMarker {
+  return {
+    id: marker.id,
+    kind: marker.kind,
+    label: marker.label,
+    ...(marker.targetId === undefined ? {} : { targetId: marker.targetId }),
+    ...(marker.summary === undefined ? {} : { summary: marker.summary })
   };
 }

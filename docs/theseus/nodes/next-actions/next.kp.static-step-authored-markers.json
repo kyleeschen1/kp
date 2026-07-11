@@ -2,7 +2,75 @@
   "id": "next.kp.static-step-authored-markers",
   "kind": "next-action",
   "title": "Add authored marker support for static-step checkpoints",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add authored label/annotation marker support to static-step checkpoints so exported step sequences can preserve explanatory author intent."
+  "summary": "Added authored marker support to static-step checkpoints and rendered step frames so static exports can preserve annotation and focus intent.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-step-artifact.ts",
+      "summary": "Adds authored marker types to static-step checkpoints and clones them through artifact creation."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/static-step-sequence-renderer.ts",
+      "summary": "Preserves checkpoint authored markers on rendered static-step frames."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-static-step-artifact.test.ts",
+      "summary": "Covers authored marker round-tripping through static-step artifacts and rendered step frames."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.static-step-authored-markers.json",
+      "summary": "Records the approved static-step authored marker next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.graph-parent-timeline-diagnostic-expanded.json",
+      "summary": "Materializes the next approved expanded graph parent-timeline diagnostic slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the expanded graph parent-timeline diagnostic slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-static-step-artifact.test.ts tests/tutorial-card-iframe-smoke-fixture.test.ts",
+      "status": "passed",
+      "scope": "static-step authored markers and adjacent fixture unit coverage",
+      "checkedAt": "2026-07-11T01:55:17.716Z"
+    },
+    {
+      "command": "npx playwright test tests/static-step-export-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "static-step export browser smoke coverage",
+      "checkedAt": "2026-07-11T01:55:17.735Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:55:17.756Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:55:17.782Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:55:17.804Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added authored marker support to static-step checkpoints and rendered step frames so static exports can preserve annotation and focus intent."
+  }
 }

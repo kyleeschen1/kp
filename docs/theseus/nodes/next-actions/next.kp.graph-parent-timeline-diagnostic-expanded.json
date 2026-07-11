@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.graph-parent-timeline-diagnostic-expanded",
+  "kind": "next-action",
+  "title": "Expand graph parent-timeline diagnostic",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Expand graph parent-timeline diagnostics so graph panel frames can report shared timeline, active track, local progress, and sampled graph progress consistency."
+}

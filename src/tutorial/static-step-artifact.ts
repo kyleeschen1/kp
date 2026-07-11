@@ -10,6 +10,17 @@ export interface KpTutorialStaticStepCheckpoint {
   readonly beat: number;
   readonly timelineId: string;
   readonly summary?: string | undefined;
+  readonly markers?: readonly KpTutorialStaticStepAuthoredMarker[] | undefined;
+}
+
+export type KpTutorialStaticStepAuthoredMarkerKind = "annotation" | "focus";
+
+export interface KpTutorialStaticStepAuthoredMarker {
+  readonly id: string;
+  readonly kind: KpTutorialStaticStepAuthoredMarkerKind;
+  readonly label: string;
+  readonly targetId?: string | undefined;
+  readonly summary?: string | undefined;
 }
 
 export interface KpTutorialCardStaticStepArtifact {
@@ -72,6 +83,21 @@ function cloneCheckpoint(
     timelineId: checkpoint.timelineId,
     ...(checkpoint.summary === undefined
       ? {}
-      : { summary: checkpoint.summary })
+      : { summary: checkpoint.summary }),
+    ...(checkpoint.markers === undefined
+      ? {}
+      : { markers: checkpoint.markers.map(cloneAuthoredMarker) })
+  };
+}
+
+function cloneAuthoredMarker(
+  marker: KpTutorialStaticStepAuthoredMarker
+): KpTutorialStaticStepAuthoredMarker {
+  return {
+    id: marker.id,
+    kind: marker.kind,
+    label: marker.label,
+    ...(marker.targetId === undefined ? {} : { targetId: marker.targetId }),
+    ...(marker.summary === undefined ? {} : { summary: marker.summary })
   };
 }
