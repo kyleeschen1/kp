@@ -6,7 +6,11 @@ import {
   type KpTutorialDependencySet
 } from "./card-manifest.ts";
 import { formatKpCapabilityKey } from "../semantic/capability-key.ts";
-import { createKpCapabilityLoadPlan } from "../semantic/capability-loader-plan.ts";
+import {
+  createKpCapabilityLoadPlan,
+  type KpCapabilityLoadPlanDiagnostic
+} from "../semantic/capability-loader-plan.ts";
+import type { SemanticObjectRef } from "../semantic/animation.ts";
 
 export type KpTutorialDependencyPhase = keyof KpTutorialDependencyManifest;
 
@@ -27,6 +31,11 @@ export interface KpTutorialDependencyCounts {
   readonly assetCount: number;
 }
 
+export interface KpTutorialDependencyPlanDiagnostic {
+  readonly path: string;
+  readonly message: string;
+}
+
 export interface KpTutorialDependencyPlanPhase {
   readonly phase: KpTutorialDependencyPhase;
   readonly loadStage: KpTutorialDependencyLoadStage;
@@ -39,6 +48,7 @@ export interface KpTutorialDependencyPlanPhase {
   readonly capabilityPackageIds: readonly string[];
   readonly capabilityPackageKeys: readonly string[];
   readonly assetIds: readonly string[];
+  readonly diagnostics: readonly KpTutorialDependencyPlanDiagnostic[];
   readonly counts: KpTutorialDependencyCounts;
 }
 
@@ -46,6 +56,7 @@ export interface KpTutorialCardDependencyPlan {
   readonly manifestId: string;
   readonly phases: readonly KpTutorialDependencyPlanPhase[];
   readonly totals: KpTutorialDependencyCounts;
+  readonly diagnostics: readonly KpTutorialDependencyPlanDiagnostic[];
 }
 
 const dependencyPhases: readonly KpTutorialDependencyPhase[] = [
@@ -60,23 +71,22 @@ export function createKpTutorialCardDependencyPlan(
   input: KpTutorialCardManifest
 ): KpTutorialCardDependencyPlan {
   const manifest = createKpTutorialCardManifest(input);
-  const objectTypesById = new Map(
-    manifest.semanticObjectRefs.flatMap((ref) =>
-      ref.objectType === undefined ? [] : [[ref.objectId, ref.objectType]]
-    )
+  const objectRefsById = new Map(
+    manifest.semanticObjectRefs.map((ref) => [ref.objectId, ref])
   );
   const phases = dependencyPhases.flatMap((phase) => {
     const dependencySet = manifest.dependencies[phase];
 
     return dependencySet === undefined || dependencySetIsEmpty(dependencySet)
       ? []
-      : [createDependencyPlanPhase(phase, dependencySet, objectTypesById)];
+      : [createDependencyPlanPhase(phase, dependencySet, objectRefsById)];
   });
 
   return {
     manifestId: manifest.id,
     phases,
-    totals: dependencyTotals(phases)
+    totals: dependencyTotals(phases),
+    diagnostics: phases.flatMap((phase) => phase.diagnostics)
   };
 }
 
@@ -89,19 +99,26 @@ export function dependencyCapabilityKey(
 function createDependencyPlanPhase(
   phase: KpTutorialDependencyPhase,
   dependencySet: KpTutorialDependencySet,
-  objectTypesById: ReadonlyMap<string, string>
+  objectRefsById: ReadonlyMap<string, SemanticObjectRef>
 ): KpTutorialDependencyPlanPhase {
   const assetIds = dependencySet.assets?.map((asset) => asset.id) ?? [];
   const capabilityKeys = dependencySet.capabilities.map(dependencyCapabilityKey);
+  const capabilityPackageRequest = createCapabilityPackageRequest(
+    phase,
+    dependencySet,
+    objectRefsById
+  );
   const capabilityPackagePlan = createKpCapabilityLoadPlan({
-    objectTypes: unique(
-      dependencySet.semanticObjectIds.flatMap((objectId) => {
-        const objectType = objectTypesById.get(objectId);
-
-        return objectType === undefined ? [] : [objectType];
-      })
-    )
+    objectTypes: capabilityPackageRequest.objectTypes
   });
+  const diagnostics = [
+    ...capabilityPackageRequest.diagnostics,
+    ...remapCapabilityLoadPlanDiagnostics(
+      phase,
+      capabilityPackageRequest.sources,
+      capabilityPackagePlan.diagnostics
+    )
+  ];
 
   return {
     phase,
@@ -115,6 +132,7 @@ function createDependencyPlanPhase(
     capabilityPackageIds: [...capabilityPackagePlan.packageIds],
     capabilityPackageKeys: [...capabilityPackagePlan.capabilityKeys],
     assetIds,
+    diagnostics,
     counts: dependencyCounts({
       semanticObjectIds: dependencySet.semanticObjectIds,
       transformationIds: dependencySet.transformationIds,
@@ -125,6 +143,69 @@ function createDependencyPlanPhase(
       assetIds
     })
   };
+}
+
+function createCapabilityPackageRequest(
+  phase: KpTutorialDependencyPhase,
+  dependencySet: KpTutorialDependencySet,
+  objectRefsById: ReadonlyMap<string, SemanticObjectRef>
+): {
+  readonly objectTypes: readonly string[];
+  readonly sources: readonly CapabilityPackageObjectTypeSource[];
+  readonly diagnostics: readonly KpTutorialDependencyPlanDiagnostic[];
+} {
+  const objectTypes: string[] = [];
+  const sources: CapabilityPackageObjectTypeSource[] = [];
+  const diagnostics: KpTutorialDependencyPlanDiagnostic[] = [];
+
+  dependencySet.semanticObjectIds.forEach((objectId, dependencyIndex) => {
+    const objectType = objectRefsById.get(objectId)?.objectType;
+
+    if (objectType === undefined) {
+      diagnostics.push({
+        path: `dependencies.${phase}.semanticObjectIds[${dependencyIndex}]`,
+        message:
+          `Semantic object ${objectId} has no objectType; capability package planning skipped it.`
+      });
+      return;
+    }
+
+    objectTypes.push(objectType);
+    sources.push({ dependencyIndex, objectType });
+  });
+
+  return { objectTypes, sources, diagnostics };
+}
+
+interface CapabilityPackageObjectTypeSource {
+  readonly dependencyIndex: number;
+  readonly objectType: string;
+}
+
+function remapCapabilityLoadPlanDiagnostics(
+  phase: KpTutorialDependencyPhase,
+  sources: readonly CapabilityPackageObjectTypeSource[],
+  diagnostics: readonly KpCapabilityLoadPlanDiagnostic[]
+): readonly KpTutorialDependencyPlanDiagnostic[] {
+  return diagnostics.map((diagnostic) => {
+    const objectTypeIndex = objectTypeDiagnosticIndex(diagnostic.path);
+    const source =
+      objectTypeIndex === undefined ? undefined : sources[objectTypeIndex];
+
+    return {
+      path:
+        source === undefined
+          ? `dependencies.${phase}.capabilityPackages.${diagnostic.path}`
+          : `dependencies.${phase}.semanticObjectIds[${source.dependencyIndex}].objectType`,
+      message: diagnostic.message
+    };
+  });
+}
+
+function objectTypeDiagnosticIndex(path: string): number | undefined {
+  const match = /^objectTypes\[(\d+)\]$/.exec(path);
+
+  return match === null ? undefined : Number(match[1]);
 }
 
 function dependencyTotals(

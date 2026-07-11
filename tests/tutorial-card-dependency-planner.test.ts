@@ -94,3 +94,55 @@ test("tutorial card dependency planner summarizes manifest dependency phases", (
     "kp.export:encode.gif:*:*"
   );
 });
+
+test("tutorial card dependency planner reports capability package diagnostics", () => {
+  const plan = createKpTutorialCardDependencyPlan({
+    id: "tutorial.diagnostics",
+    title: "Diagnostics",
+    version: 1,
+    rootLayoutId: "layout.root",
+    semanticObjectRefs: [
+      { objectId: "equation.missing-type" },
+      { objectId: "object.unknown-type", objectType: "unknown-object" }
+    ],
+    transformationRefs: [],
+    layoutRefs: [
+      {
+        id: "layout.root",
+        kind: "row",
+        rootLayoutId: "layout.root",
+        childIds: []
+      }
+    ],
+    timelineRefs: [],
+    checks: [],
+    exportProfiles: [],
+    dependencies: {
+      critical: {
+        semanticObjectIds: ["equation.missing-type", "object.unknown-type"],
+        transformationIds: [],
+        layoutIds: ["layout.root"],
+        timelineIds: [],
+        capabilities: []
+      }
+    },
+    fallback: {
+      strategy: "text-only",
+      preservesLayout: false
+    }
+  });
+
+  assert.deepEqual(plan.phases[0]?.capabilityPackageIds, []);
+  assert.deepEqual(plan.phases[0]?.diagnostics, [
+    {
+      path: "dependencies.critical.semanticObjectIds[0]",
+      message:
+        "Semantic object equation.missing-type has no objectType; capability package planning skipped it."
+    },
+    {
+      path: "dependencies.critical.semanticObjectIds[1].objectType",
+      message: "Unknown semantic object type unknown-object."
+    }
+  ]);
+  assert.deepEqual(plan.diagnostics, plan.phases[0]?.diagnostics);
+});

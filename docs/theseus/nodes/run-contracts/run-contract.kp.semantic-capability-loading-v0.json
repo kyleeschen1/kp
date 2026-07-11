@@ -138,7 +138,14 @@
     {
       "id": "next.kp.capability-diagnostics",
       "title": "Add capability diagnostics",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-capability-diagnostics-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-capability-diagnostics-v0",
+      "title": "Add capability diagnostics",
+      "summary": "Materialized from stored run-contract slice next.kp.capability-diagnostics in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.dashboard-capability-package-rows",
