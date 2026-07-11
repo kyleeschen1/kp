@@ -1,0 +1,64 @@
+{
+  "id": "next.kp.export-artifact-catalog-rows",
+  "kind": "next-action",
+  "title": "Add export artifact registry and catalog rows",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added a typed tutorial export-artifact catalog linking iframe and static-step artifacts to dashboard and API rows.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/export-artifact-resolver.ts",
+      "summary": "Adds a step-sequence export artifact resolver that maps the static export profile into the generic artifact contract."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/export-artifact-catalog.ts",
+      "summary": "Lists iframe and static-step export artifacts with dashboard row ids, API item ids, source refs, verification, and checkpoint metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-export-artifact.test.ts",
+      "summary": "Covers the step export artifact resolver alongside iframe artifact resolver coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-export-artifact-catalog.test.ts",
+      "summary": "Covers catalog entries, lookup, dashboard row links, API item links, and source-backed metadata."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.export-artifact-catalog-rows.json",
+      "summary": "Materializes the approved export artifact catalog rows next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the export artifact catalog rows slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-export-artifact.test.ts tests/tutorial-card-export-artifact-catalog.test.ts tests/tutorial-card-static-step-artifact.test.ts tests/project-dashboard.test.ts tests/api-catalog.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "export artifact catalog, dashboard/API row links, and static-step export tests",
+      "checkedAt": "2026-07-11T00:16:03.044Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T00:16:03.058Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T00:16:03.073Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a typed tutorial export-artifact catalog linking iframe and static-step artifacts to dashboard and API rows."
+  }
+}

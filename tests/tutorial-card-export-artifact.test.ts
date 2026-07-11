@@ -10,7 +10,10 @@ import {
   createKpTutorialCardExportArtifact,
   validateKpTutorialCardExportArtifact
 } from "../src/tutorial/export-artifact.ts";
-import { resolveKpTutorialCardIframeExportArtifact } from "../src/tutorial/export-artifact-resolver.ts";
+import {
+  resolveKpTutorialCardIframeExportArtifact,
+  resolveKpTutorialCardStepExportArtifact
+} from "../src/tutorial/export-artifact-resolver.ts";
 
 test("tutorial card export artifact contract preserves portable output metadata", () => {
   const manifest = createLinearSolveTutorialCardManifest();
@@ -151,6 +154,46 @@ test("iframe export artifact resolver maps profile metadata onto artifact contra
       requiresControls: true,
       fallbackStrategy: "static-snapshot",
       resolver: "iframe-export-profile"
+    }
+  });
+});
+
+test("step export artifact resolver maps profile metadata onto artifact contract", () => {
+  const artifact = resolveKpTutorialCardStepExportArtifact(
+    createLinearSolveTutorialCardManifest()
+  );
+
+  assert.deepEqual(artifact, {
+    id: "artifact.linear-solve.steps",
+    manifestId: "tutorial.linear-solve.card",
+    profileId: "export.linear-solve.steps",
+    exportKind: "step-sequence",
+    target: "static",
+    artifactKind: "static-step-sequence",
+    payloadKind: "json-document",
+    status: "metadata",
+    timelineIds: ["timeline.linear-solve.shared"],
+    dependencies: {
+      phases: ["critical", "optional"],
+      capabilityKeys: [
+        "kp.semantic:document.read:*:*",
+        "kp.layout:sample.synchronized-panel:*:*",
+        "kp.equation:render.katex:equation:*",
+        "kp.export:encode.gif:*:*",
+        "kp.export:render.step-sequence:*:*"
+      ],
+      assetIds: []
+    },
+    fallback: {
+      strategy: "static-snapshot",
+      preservesLayout: true,
+      message:
+        "Show static equation and graph snapshots when the interactive runtime is unavailable."
+    },
+    metadata: {
+      includeCheckpoints: true,
+      fallbackStrategy: "static-snapshot",
+      resolver: "step-export-profile"
     }
   });
 });
