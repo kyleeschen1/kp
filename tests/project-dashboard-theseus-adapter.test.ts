@@ -71,6 +71,26 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
     )
   );
 
+  const frameSequenceRow = apiRows.find(
+    (row) => row.id === "kp.api.embed-frame-sequence-export-preview"
+  );
+
+  assert.ok(
+    frameSequenceRow?.searchText?.includes("kp.export:encode.gif:*:*")
+  );
+  assert.ok(
+    frameSequenceRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Export capabilities" &&
+        field.value.includes("kp.export:encode.gif:*:* (optional, ready)")
+    )
+  );
+  assert.ok(
+    frameSequenceRow?.preview?.fields.some(
+      (field) => field.label === "Hosted readiness" && field.value === "ready"
+    )
+  );
+
   const graphRow = galleryRows.find(
     (row) => row.id === "kp.gallery.visual-webgl-graph"
   );

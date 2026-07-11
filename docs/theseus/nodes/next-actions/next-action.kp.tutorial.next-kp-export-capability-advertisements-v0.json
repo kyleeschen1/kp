@@ -1,0 +1,115 @@
+{
+  "id": "next-action.kp.tutorial.next-kp-export-capability-advertisements-v0",
+  "kind": "next-action",
+  "title": "Connect hosted readiness to capability advertisements",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Added metadata-only export capability advertisements and dashboard search/preview fields for frame-sequence hosted readiness.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.hosted-package-readiness-export-sampling-v0.json",
+      "summary": "Run contract whose stored slice next.kp.export-capability-advertisements was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap selects hosted/package readiness, parent-timeline media export sampling, and SemanticObject capability loading as the next choices after browser hardening."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread records hosted/package readiness and parent-timeline media export sampling as open next loops."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-tutorial-card-browser-hardening-loop-closeout.md",
+      "summary": "Browser hardening closeout recommends hosted/package readiness checks before media export encoders."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/export-capability-advertisements.ts",
+      "summary": "Defines export capability advertisements from artifact dependency keys, dependency phases, load stages, and hosted readiness diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/capability-preview.ts",
+      "summary": "Adds frame-sequence export capability preview and search fields to dashboard and Theseus API rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-export-capability-advertisements.test.ts",
+      "summary": "Covers capability key parsing, phase/load-stage mapping, and hosted readiness status."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers dashboard search and preview for exact export capability keys."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-theseus-adapter.test.ts",
+      "summary": "Covers Theseus dashboard API row search/preview fields for export capability advertisements."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.hosted-package-readiness-export-sampling-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Connect hosted readiness to capability advertisements can be completed inside KP hosted package readiness and export sampling loop."
+  ],
+  "allowedWork": [
+    "Only work on approved KP hosted/package readiness and parent-timeline export sampling slices.",
+    "Keep work tied to tutorial-card runtime, export artifacts, dashboard/API catalog, and semantic runtime capability metadata.",
+    "Use deterministic fixtures and static programming execution traces only."
+  ],
+  "disallowedWork": [
+    "Do not implement GIF, MP4, or WebM encoders in this loop.",
+    "Do not broaden into full SemanticObject registry loading beyond capability advertisements needed for export readiness.",
+    "Do not pursue broad Theseus planner follow-ups unless they block this KP loop."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-export-capability-advertisements.test.ts tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "focused export capability advertisement and dashboard tests",
+      "checkedAt": "2026-07-11T03:39:24.826Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript projects",
+      "checkedAt": "2026-07-11T03:39:24.853Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T03:39:24.876Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T03:39:24.902Z",
+      "scope": "whitespace check"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added metadata-only export capability advertisements and dashboard search/preview fields for frame-sequence hosted readiness."
+  }
+}

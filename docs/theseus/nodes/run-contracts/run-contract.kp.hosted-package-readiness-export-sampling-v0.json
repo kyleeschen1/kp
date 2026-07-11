@@ -219,7 +219,14 @@
     {
       "id": "next.kp.export-capability-advertisements",
       "title": "Connect hosted readiness to capability advertisements",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.tutorial.next-kp-export-capability-advertisements-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.tutorial.next-kp-export-capability-advertisements-v0",
+      "title": "Connect hosted readiness to capability advertisements",
+      "summary": "Materialized from stored run-contract slice next.kp.export-capability-advertisements in KP hosted package readiness and export sampling loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.hosted-export-roadmap-refresh",

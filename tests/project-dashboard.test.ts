@@ -986,6 +986,28 @@ test("renderProjectDashboard searches semantic capability advertisements", () =>
   assert.doesNotMatch(html, /data-kp-agenda-row="api-semantic-equation"/);
 });
 
+test("renderProjectDashboard searches export capability advertisements", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    query: "kp.export:encode.gif:*:*",
+    selectedAgendaRowId: "api-embed-frame-sequence-export-preview"
+  });
+
+  assert.match(html, /Showing 1 of \d+ rows/);
+  assert.match(
+    html,
+    /data-kp-agenda-row="api-embed-frame-sequence-export-preview"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Export capabilities"[^>]*>[\s\S]*kp\.export:encode\.gif:\*:\* \(optional, ready\)/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Hosted readiness"[^>]*>ready/
+  );
+  assert.doesNotMatch(html, /data-kp-agenda-row="api-semantic-matrix"/);
+});
+
 test("renderProjectDashboard exposes tutorial card manifest protocol row", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "tutorial-card-manifest-v0"
