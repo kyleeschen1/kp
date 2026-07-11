@@ -3,9 +3,14 @@ import {
   type KpTutorialCardManifest
 } from "./card-manifest.ts";
 import {
-  createKpTutorialCardDependencyPlan
+  createKpTutorialCardDependencyPlan,
+  type KpTutorialDependencyPlanPhase
 } from "./dependency-planner.ts";
 import type { KpTutorialCardExportArtifact } from "./export-artifact.ts";
+import {
+  createKpCapabilityPackageCatalog,
+  defaultKpCapabilityPackageManifests
+} from "../semantic/capability-package-manifest.ts";
 
 export interface KpTutorialExportDependencyClosureInput {
   readonly artifact: KpTutorialCardExportArtifact;
@@ -44,8 +49,10 @@ export function validateKpTutorialExportDependencyClosure(
       }
     }
 
-    if (input.artifact.artifactKind === "iframe-document") {
-      for (const packageId of planPhase.capabilityPackageIds) {
+    if (artifactRequiresCapabilityPackageClosure(input.artifact)) {
+      const packageClosure = collectPhaseCapabilityPackageClosure(planPhase);
+
+      for (const packageId of packageClosure.packageIds) {
         if (
           !(input.artifact.dependencies.capabilityPackageIds ?? []).includes(
             packageId
@@ -58,7 +65,7 @@ export function validateKpTutorialExportDependencyClosure(
         }
       }
 
-      for (const packageKey of planPhase.capabilityPackageKeys) {
+      for (const packageKey of packageClosure.packageKeys) {
         if (
           !(input.artifact.dependencies.capabilityPackageKeys ?? []).includes(
             packageKey
@@ -94,10 +101,48 @@ export function validateKpTutorialExportDependencyClosure(
   return diagnostics;
 }
 
+function artifactRequiresCapabilityPackageClosure(
+  artifact: KpTutorialCardExportArtifact
+): boolean {
+  return (
+    artifact.artifactKind === "iframe-document" ||
+    artifact.artifactKind === "static-step-sequence"
+  );
+}
+
 function sampleableTimelineIds(
   manifest: KpTutorialCardManifest
 ): readonly string[] {
   return manifest.timelineRefs
     .filter((timeline) => timeline.sampleable === true)
     .map((timeline) => timeline.id);
+}
+
+function collectPhaseCapabilityPackageClosure(
+  phase: KpTutorialDependencyPlanPhase
+): {
+  readonly packageIds: readonly string[];
+  readonly packageKeys: readonly string[];
+} {
+  const packageCatalog = createKpCapabilityPackageCatalog(
+    defaultKpCapabilityPackageManifests
+  );
+  const capabilityPackages = phase.capabilityKeys.flatMap((capabilityKey) =>
+    packageCatalog.listManifestsByCapabilityKey(capabilityKey)
+  );
+
+  return {
+    packageIds: unique([
+      ...phase.capabilityPackageIds,
+      ...capabilityPackages.map((manifest) => manifest.id)
+    ]),
+    packageKeys: unique([
+      ...phase.capabilityPackageKeys,
+      ...capabilityPackages.map((manifest) => manifest.capabilityKey)
+    ])
+  };
+}
+
+function unique(values: readonly string[]): readonly string[] {
+  return [...new Set(values)];
 }

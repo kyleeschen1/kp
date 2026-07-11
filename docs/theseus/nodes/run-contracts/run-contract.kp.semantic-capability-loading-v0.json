@@ -234,7 +234,14 @@
     {
       "id": "next.kp.static-step-capability-closure",
       "title": "Capability closure for static-step exports",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-static-step-capability-closure-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-static-step-capability-closure-v0",
+      "title": "Capability closure for static-step exports",
+      "summary": "Materialized from stored run-contract slice next.kp.static-step-capability-closure in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.frame-sequence-capability-closure",

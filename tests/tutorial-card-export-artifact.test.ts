@@ -244,6 +244,18 @@ test("step export artifact resolver maps profile metadata onto artifact contract
         "kp.export:encode.gif:*:*",
         "kp.export:render.step-sequence:*:*"
       ],
+      capabilityPackageIds: [
+        "package.kp.equation.render.katex",
+        "package.kp.equation.transform.semantic",
+        "package.kp.equation.animate.motion-plan",
+        "package.kp.export.encode.gif"
+      ],
+      capabilityPackageKeys: [
+        "kp.equation:render.katex:equation:*",
+        "kp.equation:transform.semantic:equation:*",
+        "kp.equation:animate.motion-plan:equation:*",
+        "kp.export:encode.gif:*:*"
+      ],
       assetIds: []
     },
     fallback: {

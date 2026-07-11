@@ -5,7 +5,10 @@ import { createLinearSolveTutorialCardManifest } from "../src/tutorial/card-mani
 import {
   validateKpTutorialExportDependencyClosure
 } from "../src/tutorial/export-dependency-closure.ts";
-import { resolveKpTutorialCardIframeExportArtifact } from "../src/tutorial/export-artifact-resolver.ts";
+import {
+  resolveKpTutorialCardIframeExportArtifact,
+  resolveKpTutorialCardStepExportArtifact
+} from "../src/tutorial/export-artifact-resolver.ts";
 
 test("iframe export dependency closure accepts declared dependency phases", () => {
   const manifest = createLinearSolveTutorialCardManifest();
@@ -69,6 +72,35 @@ test("iframe export dependency closure reports missing capability packages", () 
         path: "dependencies.capabilityPackageIds",
         message:
           "Export artifact artifact.linear-solve.iframe is missing capability package package.kp.graph3d.render.webgl.surface-mesh from dependency phase interactive."
+      }
+    ]
+  );
+});
+
+test("static-step export dependency closure reports missing capability packages", () => {
+  const manifest = createLinearSolveTutorialCardManifest();
+  const artifact = resolveKpTutorialCardStepExportArtifact(manifest);
+
+  assert.deepEqual(
+    validateKpTutorialExportDependencyClosure({
+      artifact: {
+        ...artifact,
+        dependencies: {
+          ...artifact.dependencies,
+          capabilityPackageIds:
+            artifact.dependencies.capabilityPackageIds?.filter(
+              (packageId) =>
+                packageId !== "package.kp.export.encode.gif"
+            ) ?? []
+        }
+      },
+      manifest
+    }),
+    [
+      {
+        path: "dependencies.capabilityPackageIds",
+        message:
+          "Export artifact artifact.linear-solve.steps is missing capability package package.kp.export.encode.gif from dependency phase optional."
       }
     ]
   );
