@@ -86,6 +86,21 @@ those artifacts directly. Generated tutorial families, media encoders, and
 graph/visual runtime unification should use the asset-calculus framework rather
 than running ahead of it.
 
+The renderer adoption path is:
+
+```text
+semantic asset -> interpreter -> renderer-neutral frame -> view binding
+```
+
+Semantic assets own identity and laws. Interpreters sample those assets for a
+target surface and report whether preservation is strict, sampled, lax, or
+lossy. Frames carry active object, transformation, selector, drill-down,
+flashcard, layout, timing, focus, and diagnostic data without owning DOM or
+WebGL resources. View bindings render the frame and keep any concrete DOM,
+KaTeX, WebGL, canvas, or export handles as mutable implementation details.
+The linear-solve KaTeX card should be the first path converted to this
+contract.
+
 ## Accepted Scope
 
 - semantic objects with stable selectors and immutable structural history;

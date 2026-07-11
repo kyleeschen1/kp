@@ -4,6 +4,7 @@
   "title": "KP asset renderer interpreter adoption",
   "status": "ready",
   "domain": "kp.asset-calculus",
+  "summary": "Reopened after slice-materialization evidence so the approved multi-slice loop can continue.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -19,11 +20,39 @@
       "kind": "file",
       "path": "docs/theseus/events/2026-07-11.jsonl",
       "summary": "Records the run-contract creation event."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/kp-asset-calculus.md",
+      "summary": "Defines the semantic asset to interpreter to renderer-neutral frame to view binding adoption boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Records renderer adoption as the active semantic runtime direction for the linear-solve KaTeX card."
     }
   ],
   "verification": [
     "npm run theseus -- validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "slice 1 contract materialization",
+      "checkedAt": "2026-07-11T22:41:16.154Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T22:46:05.842Z",
+      "scope": "slice 2 renderer adoption boundary docs"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Created approved KP renderer/interpreter adoption run contract."
+  },
   "allowedWork": [
     "Only work on the approved KP renderer/interpreter adoption slices."
   ],
@@ -40,19 +69,6 @@
     "Stop when verification fails and needs user judgment.",
     "Stop when the approved slice list is exhausted."
   ],
-  "verificationRecords": [
-    {
-      "command": "npm run theseus -- validate",
-      "status": "passed",
-      "checkedAt": "2026-07-11T22:41:16.154Z",
-      "scope": "slice 1 contract materialization"
-    }
-  ],
-  "progress": {
-    "state": "complete",
-    "summary": "Created approved KP renderer/interpreter adoption run contract."
-  },
-  "summary": "Reopened after slice-materialization evidence so the approved multi-slice loop can continue.",
   "slices": [
     {
       "id": "slice.kp.asset-renderer.contract-materialization",
@@ -62,12 +78,13 @@
     {
       "id": "slice.kp.asset-renderer.boundary-doc",
       "title": "Define asset-to-interpreter-to-frame-to-view boundary",
-      "status": "ready"
+      "summary": "Defined the asset/interpreter/frame/view binding boundary and preservation levels in project doctrine and runtime thread.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.equation-frame-contract",
       "title": "Define KaTeX/equation frame interpreter contract",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.preservation-diagnostics",
@@ -171,8 +188,8 @@
     },
     {
       "id": "slice.kp.asset-renderer.closeout",
-      "status": "planned",
-      "title": "Update roadmap, semantic runtime thread, and loop closeout notes"
+      "title": "Update roadmap, semantic runtime thread, and loop closeout notes",
+      "status": "planned"
     }
   ]
 }

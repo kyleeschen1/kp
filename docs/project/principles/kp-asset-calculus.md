@@ -197,6 +197,59 @@ camera state, code highlights, and export markers.
 The frame is not canonical semantic state. It is a deterministic projection of
 semantic state at one time.
 
+## Renderer Adoption Boundary
+
+Renderer adoption should follow one narrow path:
+
+```text
+semantic asset -> interpreter -> renderer-neutral frame -> view binding
+```
+
+The asset layer owns immutable identity. It records object ids,
+transformation ids, selector ids, provenance, diagrams, timelines, laws,
+drill-down hooks, flashcards, and external-port diagnostics.
+
+The interpreter layer samples that semantic truth for one target surface. It
+may depend on a layout context and prepared measurements, but its result must
+say how much structure survived the interpretation:
+
+- strict: semantic objects, transformations, selectors, and composition are
+  preserved directly;
+- sampled: identity is preserved, but geometry or timing depends on a measured
+  sample;
+- lax: useful correspondence exists, but composition or selector coverage is
+  partial;
+- lossy: the output is still usable as a representation, but important
+  identity, correspondence, or provenance was dropped and must be diagnosed.
+
+The frame layer is renderer-neutral. A frame can name active transformations,
+visible objects, selector poses, focus states, annotations, layout regions,
+export markers, drill-down refs, flashcard refs, and diagnostics. It must not
+own DOM nodes, WebGL buffers, KaTeX spans, browser listeners, or mutable
+renderer caches.
+
+The view binding layer turns frames into concrete DOM, WebGL, canvas, static
+HTML, or export output. It may cache aggressively and mutate for speed, but it
+must treat semantic ids as foreign keys back to the asset. If a DOM node,
+WebGL object, or rendered token cannot be linked back to the frame's semantic
+ids, the binding should emit a diagnostic rather than silently inventing
+identity.
+
+The linear-solve KaTeX card is the first adoption target. Its equation panel
+should stop duplicating semantic transition ownership in tutorial-specific
+tables and instead consume:
+
+```text
+linear-solve asset bundle
+-> KaTeX/equation frame interpreter
+-> tutorial card frame sampler
+-> DOM/KaTeX view binding
+```
+
+Dashboard previews, export frame sequences, drill-down cards, and flashcards
+should read the same asset/interpreter output rather than each maintaining a
+separate copy of the current step.
+
 ## Boundary Discipline
 
 Pure layer:
