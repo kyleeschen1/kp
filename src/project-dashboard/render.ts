@@ -41,6 +41,11 @@ import {
   type ApiCatalogItem
 } from "../editor/api-catalog.ts";
 import {
+  createKpCapabilityPackageCatalog,
+  defaultKpCapabilityPackageManifests,
+  type KpCapabilityPackageManifest
+} from "../semantic/capability-package-manifest.ts";
+import {
   semanticCapabilityPreviewFields,
   semanticCapabilitySearchFields
 } from "./capability-preview.ts";
@@ -403,6 +408,11 @@ function createProjectAgendaSections(
       id: "api",
       title: "API",
       rows: createApiAgendaRows(query, adapterRows.api)
+    },
+    {
+      id: "capability-packages",
+      title: "Capability Packages",
+      rows: createCapabilityPackageAgendaRows(query)
     },
     {
       id: "other",
@@ -955,6 +965,75 @@ function createApiGroupAgendaRows(
   return agendaRowMatchesQuery(groupRow, query)
     ? [groupRow, ...matchingRows]
     : matchingRows;
+}
+
+function createCapabilityPackageAgendaRows(
+  query: string
+): readonly ProjectAgendaRow[] {
+  const catalog = createKpCapabilityPackageCatalog(
+    defaultKpCapabilityPackageManifests
+  );
+
+  return filterAgendaRows(
+    catalog.listManifests().map(capabilityPackageAgendaRow),
+    query
+  );
+}
+
+function capabilityPackageAgendaRow(
+  manifest: KpCapabilityPackageManifest
+): ProjectAgendaRow {
+  return {
+    id: `capability-package-${manifest.id}`,
+    title: manifest.title,
+    summary: manifest.summary,
+    status: manifest.status,
+    detail: manifest.target,
+    kind: "capability-package",
+    depth: 0,
+    tags: [
+      "capability-package",
+      manifest.target,
+      manifest.loadPhase,
+      ...manifest.semanticCapabilities,
+      ...manifest.tags
+    ],
+    dataAttributes: [["data-kp-agenda-capability-package", manifest.id]],
+    previewFields: [
+      { label: "Package id", value: manifest.id },
+      { label: "Capability key", value: manifest.capabilityKey },
+      { label: "Package target", value: manifest.target },
+      { label: "Load phase", value: manifest.loadPhase },
+      {
+        label: "Semantic capabilities",
+        value: manifest.semanticCapabilities.join(", ")
+      },
+      { label: "Protocols", value: manifest.protocols.join(", ") },
+      { label: "Views", value: manifest.views.join(", ") },
+      {
+        label: "Source refs",
+        value: manifest.sourceRefs
+          .map((sourceRef) => `${sourceRef.label}: ${sourceRef.href}`)
+          .join(", ")
+      }
+    ],
+    searchFields: [
+      manifest.id,
+      manifest.capabilityKey,
+      manifest.library,
+      manifest.capability,
+      manifest.objectType,
+      manifest.mode,
+      manifest.loadPhase,
+      ...manifest.semanticCapabilities,
+      ...manifest.protocols,
+      ...manifest.views,
+      ...manifest.sourceRefs.flatMap((sourceRef) => [
+        sourceRef.label,
+        sourceRef.href
+      ])
+    ]
+  };
 }
 
 function adapterDataAttributes(

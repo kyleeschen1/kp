@@ -5,6 +5,11 @@ import {
   apiCatalogItemTags
 } from "../editor/api-catalog.ts";
 import {
+  createKpCapabilityPackageCatalog,
+  defaultKpCapabilityPackageManifests,
+  type KpCapabilityPackageManifest
+} from "../semantic/capability-package-manifest.ts";
+import {
   semanticCapabilityPreviewFields,
   semanticCapabilitySearchFields
 } from "./capability-preview.ts";
@@ -91,7 +96,8 @@ export function createKpTheseusDashboardExtensionContribution(
   return {
     sections: [
       createKpGallerySection(data),
-      createKpApiSection()
+      createKpApiSection(),
+      createKpCapabilityPackageSection()
     ],
     health: [createKpDashboardExtensionHealth(data)]
   };
@@ -150,6 +156,72 @@ function createKpApiSection(): KpTheseusDashboardSection {
         ].join(" ")
       }))
     )
+  };
+}
+
+function createKpCapabilityPackageSection(): KpTheseusDashboardSection {
+  const catalog = createKpCapabilityPackageCatalog(
+    defaultKpCapabilityPackageManifests
+  );
+
+  return {
+    id: "kp.capability-packages",
+    title: "KP Capability Packages",
+    rows: catalog.listManifests().map(capabilityPackageRow)
+  };
+}
+
+function capabilityPackageRow(
+  manifest: KpCapabilityPackageManifest
+): KpTheseusDashboardRow {
+  return {
+    id: `kp.capability-package.${manifest.id}`,
+    title: manifest.title,
+    kind: "capability-package",
+    status: manifest.status,
+    summary: manifest.summary,
+    tags: uniqueStrings([
+      "kp",
+      "capability-package",
+      manifest.target,
+      manifest.loadPhase,
+      ...manifest.semanticCapabilities,
+      ...manifest.tags
+    ]),
+    preview: {
+      fields: [
+        { label: "Package id", value: manifest.id },
+        { label: "Capability key", value: manifest.capabilityKey },
+        { label: "Package target", value: manifest.target },
+        { label: "Load phase", value: manifest.loadPhase },
+        {
+          label: "Semantic capabilities",
+          value: manifest.semanticCapabilities.join(", ")
+        },
+        { label: "Protocols", value: manifest.protocols.join(", ") },
+        { label: "Views", value: manifest.views.join(", ") },
+        { label: "Source refs", value: sourceRefsText(manifest.sourceRefs) }
+      ]
+    },
+    searchText: [
+      manifest.id,
+      manifest.title,
+      manifest.capabilityKey,
+      manifest.library,
+      manifest.capability,
+      manifest.objectType,
+      manifest.mode,
+      manifest.target,
+      manifest.loadPhase,
+      ...manifest.semanticCapabilities,
+      ...manifest.protocols,
+      ...manifest.views,
+      ...manifest.tags,
+      ...manifest.sourceRefs.flatMap((sourceRef) => [
+        sourceRef.label,
+        sourceRef.href
+      ])
+    ].join(" ")
   };
 }
 

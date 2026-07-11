@@ -150,7 +150,14 @@
     {
       "id": "next.kp.dashboard-capability-package-rows",
       "title": "Expose package manifest rows on dashboard",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-dashboard-capability-package-rows-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-dashboard-capability-package-rows-v0",
+      "title": "Expose package manifest rows on dashboard",
+      "summary": "Materialized from stored run-contract slice next.kp.dashboard-capability-package-rows in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.dashboard-capability-package-preview",

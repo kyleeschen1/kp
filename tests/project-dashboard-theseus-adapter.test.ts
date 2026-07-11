@@ -16,6 +16,8 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
   );
   const galleryRows = sections.get("kp.gallery")?.rows ?? [];
   const apiRows = sections.get("kp.api")?.rows ?? [];
+  const capabilityPackageRows =
+    sections.get("kp.capability-packages")?.rows ?? [];
 
   assert.equal(payload.extension.id, "kp");
   assert.equal(payload.extension.title, "Kinetic Press");
@@ -88,6 +90,26 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
   assert.ok(
     frameSequenceRow?.preview?.fields.some(
       (field) => field.label === "Hosted readiness" && field.value === "ready"
+    )
+  );
+
+  const graphPackageRow = capabilityPackageRows.find(
+    (row) =>
+      row.id === "kp.capability-package.package.kp.graph3d.render.webgl.surface-mesh"
+  );
+
+  assert.equal(graphPackageRow?.kind, "capability-package");
+  assert.ok(graphPackageRow?.tags?.includes("webgl"));
+  assert.ok(
+    graphPackageRow?.searchText?.includes(
+      "kp.graph:render.webgl:graph-3d:surface.mesh"
+    )
+  );
+  assert.ok(
+    graphPackageRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Capability key" &&
+        field.value === "kp.graph:render.webgl:graph-3d:surface.mesh"
     )
   );
 

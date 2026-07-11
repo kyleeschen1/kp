@@ -119,6 +119,9 @@ test("renderProjectDashboard places global search above agenda sections", () => 
     'data-kp-agenda-section="katex-transforms"'
   );
   const apiSectionIndex = html.indexOf('data-kp-agenda-section="api"');
+  const capabilityPackagesSectionIndex = html.indexOf(
+    'data-kp-agenda-section="capability-packages"'
+  );
   const animationLayoutIndex = html.indexOf(
     "data-kp-project-dashboard-animation-layout"
   );
@@ -131,6 +134,7 @@ test("renderProjectDashboard places global search above agenda sections", () => 
   assert.notEqual(animationSectionIndex, -1);
   assert.notEqual(katexSectionIndex, -1);
   assert.notEqual(apiSectionIndex, -1);
+  assert.notEqual(capabilityPackagesSectionIndex, -1);
   assert.notEqual(animationLayoutIndex, -1);
   assert.ok(searchIndex < animationLayoutIndex);
   assert.ok(searchIndex < workSectionIndex);
@@ -139,7 +143,8 @@ test("renderProjectDashboard places global search above agenda sections", () => 
   assert.ok(gallerySectionIndex < animationSectionIndex);
   assert.ok(animationSectionIndex < katexSectionIndex);
   assert.ok(katexSectionIndex < apiSectionIndex);
-  assert.ok(apiSectionIndex < otherSectionIndex);
+  assert.ok(apiSectionIndex < capabilityPackagesSectionIndex);
+  assert.ok(capabilityPackagesSectionIndex < otherSectionIndex);
   assert.ok(otherSectionIndex < animationLayoutIndex);
   assert.match(html, /data-action="filter-project-dashboard"/);
   assert.match(html, />Search everything</);
@@ -149,6 +154,43 @@ test("renderProjectDashboard places global search above agenda sections", () => 
   assert.match(html, /data-action="toggle-project-dashboard-toc"/);
   assert.match(html, />Fold lists into TOC</);
   assert.doesNotMatch(html, /data-kp-animation-sample-search/);
+});
+
+test("renderProjectDashboard renders capability package agenda rows", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId:
+      "capability-package-package.kp.graph3d.render.webgl.surface-mesh"
+  });
+
+  assert.match(html, /data-kp-agenda-section="capability-packages"/);
+  assert.match(
+    html,
+    /<h2 id="project-agenda-capability-packages-title">Capability Packages <span class="project-agenda__count">\(5\)<\/span><\/h2>/
+  );
+  assert.match(
+    html,
+    /data-kp-agenda-row="capability-package-package\.kp\.equation\.render\.katex"/
+  );
+  assert.match(
+    html,
+    /data-kp-agenda-row="capability-package-package\.kp\.graph3d\.render\.webgl\.surface-mesh"/
+  );
+  assert.match(
+    html,
+    /data-kp-agenda-capability-package="package\.kp\.graph3d\.render\.webgl\.surface-mesh"/
+  );
+  assert.match(
+    html,
+    /data-kp-selected-agenda-row="capability-package-package\.kp\.graph3d\.render\.webgl\.surface-mesh"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Capability key"[^>]*>kp\.graph:render\.webgl:graph-3d:surface\.mesh</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Package target"[^>]*>browser</
+  );
 });
 
 test("renderProjectDashboard uses h2 section counts above agenda rows", () => {
@@ -992,10 +1034,14 @@ test("renderProjectDashboard searches export capability advertisements", () => {
     selectedAgendaRowId: "api-embed-frame-sequence-export-preview"
   });
 
-  assert.match(html, /Showing 1 of \d+ rows/);
+  assert.match(html, /Showing 2 of \d+ rows/);
   assert.match(
     html,
     /data-kp-agenda-row="api-embed-frame-sequence-export-preview"/
+  );
+  assert.match(
+    html,
+    /data-kp-agenda-row="capability-package-package\.kp\.export\.encode\.gif"/
   );
   assert.match(
     html,

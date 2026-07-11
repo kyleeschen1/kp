@@ -1,0 +1,116 @@
+{
+  "id": "next-action.kp.semantic.next-kp-dashboard-capability-package-rows-v0",
+  "kind": "next-action",
+  "title": "Expose package manifest rows on dashboard",
+  "status": "resolved",
+  "domain": "kp.semantic",
+  "summary": "Exposed capability package manifest rows on the project dashboard and Theseus dashboard adapter.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-capability-loading-v0.json",
+      "summary": "Run contract whose stored slice next.kp.dashboard-capability-package-rows was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP workflow frontier for dashboard-backed semantic animation system work."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap selects SemanticObject capability loading as one of the next loop choices after hosted/export closeout."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread names capability loading as an active next choice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-hosted-package-readiness-export-sampling-loop-closeout.md",
+      "summary": "Hosted/export closeout recommends registry-backed capability loading before hardcoded encoder dependencies."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Adds a Capability Packages agenda section backed by package manifests with searchable row metadata."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/theseus-adapter.ts",
+      "summary": "Exports capability package rows through the KP Theseus dashboard extension contribution."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers local dashboard package rows, section ordering, preview fields, and search behavior."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-theseus-adapter.test.ts",
+      "summary": "Covers adapter-exported package rows and package capability key metadata."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-capability-loading-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Expose package manifest rows on dashboard can be completed inside KP SemanticObject capability loading loop."
+  ],
+  "allowedWork": [
+    "Only work on approved KP SemanticObject capability loading slices.",
+    "Keep work tied to semantic capability package metadata, tutorial dependency planning, export capability closure, dashboard/API catalog rows, and project docs.",
+    "Use metadata-first package manifests and deterministic fixtures before any dynamic loader."
+  ],
+  "disallowedWork": [
+    "Do not implement GIF, MP4, or WebM encoders in this loop.",
+    "Do not implement full CAS behavior or broad symbolic algebra.",
+    "Do not pursue broad Theseus planner infrastructure unless it directly blocks this KP run contract.",
+    "Do not broaden into graph runtime unification beyond package metadata needed by graph capabilities."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+      "status": "passed",
+      "scope": "focused dashboard package row tests",
+      "checkedAt": "2026-07-11T04:46:04.336Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript projects",
+      "checkedAt": "2026-07-11T04:46:04.361Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T04:46:04.380Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T04:46:04.404Z",
+      "scope": "whitespace check"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Exposed capability package manifest rows on the project dashboard and Theseus dashboard adapter."
+  }
+}
