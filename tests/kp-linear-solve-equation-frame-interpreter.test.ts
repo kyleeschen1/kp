@@ -54,6 +54,28 @@ test("linear-solve equation frame interpreter samples the active cancel transfor
       "equation.linear-solve.left-simplified.rhs.minus3"
     ]
   );
+  assert.deepEqual(interpretation.output.selectorCorrespondenceRefs, [
+    {
+      sourceSelectorId: "equation.linear-solve.after-subtract.lhs.x",
+      targetSelectorId: "equation.linear-solve.left-simplified.lhs.x",
+      preserves: ["identity", "role"]
+    },
+    {
+      sourceSelectorId: "equation.linear-solve.after-subtract.equals",
+      targetSelectorId: "equation.linear-solve.left-simplified.equals",
+      preserves: ["identity", "role"]
+    },
+    {
+      sourceSelectorId: "equation.linear-solve.after-subtract.rhs.7",
+      targetSelectorId: "equation.linear-solve.left-simplified.rhs.7",
+      preserves: ["identity", "role"]
+    },
+    {
+      sourceSelectorId: "equation.linear-solve.after-subtract.rhs.minus3",
+      targetSelectorId: "equation.linear-solve.left-simplified.rhs.minus3",
+      preserves: ["identity", "role"]
+    }
+  ]);
   assert.deepEqual(interpretation.diagnostics, []);
   assert.deepEqual(interpretation.output.diagnostics, []);
 });

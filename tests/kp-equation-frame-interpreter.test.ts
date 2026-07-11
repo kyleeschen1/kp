@@ -51,6 +51,13 @@ test("equation frame interpreter contract carries semantic ids to KaTeX frames",
             role: "persistent"
           }
         ],
+        selectorCorrespondenceRefs: [
+          {
+            sourceSelectorId: "equation.linear-solve.after-subtract.lhs.x",
+            targetSelectorId: "equation.linear-solve.left-simplified.lhs.x",
+            preserves: ["identity", "role"]
+          }
+        ],
         diagnostics: []
       } satisfies KpEquationFrame
     })
@@ -92,6 +99,7 @@ test("equation frame interpreter rejects empty contract identifiers", () => {
             objectRefs: [],
             transformationRefs: [],
             selectorRefs: [],
+            selectorCorrespondenceRefs: [],
             diagnostics: []
           }
         })

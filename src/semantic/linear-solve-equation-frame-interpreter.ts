@@ -96,6 +96,13 @@ function interpretLinearSolveEquationFrame(
         }
       ],
       selectorRefs,
+      selectorCorrespondenceRefs: active.transformation.correspondence.map(
+        (correspondence) => ({
+          sourceSelectorId: correspondence.sourceSelectorId,
+          targetSelectorId: correspondence.targetSelectorId,
+          preserves: correspondence.preserves
+        })
+      ),
       diagnostics
     },
     diagnostics

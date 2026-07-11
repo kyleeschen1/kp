@@ -4,7 +4,10 @@ import {
   type KpInterpreterDiagnostic,
   type KpInterpreterResultInput
 } from "./asset-interpreter.ts";
-import type { KpLawCheckLevel } from "./asset-transformation.ts";
+import type {
+  KpLawCheckLevel,
+  KpTransformationPreservation
+} from "./asset-transformation.ts";
 
 export type KpEquationFrameSurface =
   | "katex-dom"
@@ -42,6 +45,12 @@ export interface KpEquationFrameSelectorRef {
   readonly role?: KpEquationFrameSelectorRole | undefined;
 }
 
+export interface KpEquationFrameSelectorCorrespondenceRef {
+  readonly sourceSelectorId: string;
+  readonly targetSelectorId: string;
+  readonly preserves: readonly KpTransformationPreservation[];
+}
+
 export interface KpEquationFrame {
   readonly id: string;
   readonly assetId: string;
@@ -51,6 +60,7 @@ export interface KpEquationFrame {
   readonly objectRefs: readonly KpEquationFrameObjectRef[];
   readonly transformationRefs: readonly KpEquationFrameTransformationRef[];
   readonly selectorRefs: readonly KpEquationFrameSelectorRef[];
+  readonly selectorCorrespondenceRefs: readonly KpEquationFrameSelectorCorrespondenceRef[];
   readonly drillDownIds?: readonly string[] | undefined;
   readonly flashcardIds?: readonly string[] | undefined;
   readonly diagnostics: readonly KpInterpreterDiagnostic[];

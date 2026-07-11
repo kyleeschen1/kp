@@ -85,6 +85,21 @@
       "kind": "file",
       "path": "tests/kp-linear-solve-equation-frame-interpreter.test.ts",
       "summary": "Covers active transformation ids on interpreter and behavior frames."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/equation-frame-interpreter.ts",
+      "summary": "Adds selectorCorrespondenceRefs to renderer-neutral equation frames."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/linear-solve-equation-frame-interpreter.ts",
+      "summary": "Populates selector correspondence refs from semantic transformation correspondence."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-linear-solve-equation-frame-interpreter.test.ts",
+      "summary": "Covers source-to-target selector correspondence pairs on sampled linear-solve frames."
     }
   ],
   "verification": [
@@ -172,8 +187,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-11T23:04:49.568Z",
-      "scope": "slice 6 active transformation id behavior Theseus validation"
+      "scope": "slice 6 active transformation id behavior Theseus validation",
+      "checkedAt": "2026-07-11T23:04:49.568Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-linear-solve-equation-frame-interpreter.test.ts tests/kp-equation-frame-interpreter.test.ts tests/kp-linear-solve-asset.test.ts tests/kp-asset-interpreter.test.ts tests/kp-asset-behavior.test.ts tests/kp-asset-transformation.test.ts",
+      "status": "passed",
+      "scope": "slice 7 selector correspondence semantic frame tests",
+      "checkedAt": "2026-07-11T23:09:44.665Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 7 selector correspondence typecheck",
+      "checkedAt": "2026-07-11T23:09:46.418Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T23:09:48.163Z",
+      "scope": "slice 7 selector correspondence Theseus validation"
     }
   ],
   "progress": {
@@ -235,12 +268,13 @@
     {
       "id": "slice.kp.asset-renderer.selector-correspondence",
       "title": "Resolve equation object and selector correspondence through semantic asset selectors",
-      "status": "ready"
+      "summary": "Added selectorCorrespondenceRefs to equation frames and populated them from semantic transformation correspondence.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.inspection-metadata",
       "title": "Attach inspection API output to equation frame samples",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.drilldown-metadata",
