@@ -21,8 +21,18 @@ test("project dashboard seed data exposes work, gallery, and report records", ()
     )
   );
   assert.ok(
+    projectDashboardData.cards.some(
+      (card) => card.id === "work-kp-asset-calculus"
+    )
+  );
+  assert.ok(
     projectDashboardData.gallery.some(
       (item) => item.id === "animation-cancelation"
+    )
+  );
+  assert.ok(
+    projectDashboardData.gallery.some(
+      (item) => item.id === "gallery-kp-asset-calculus"
     )
   );
   assert.ok(
@@ -259,13 +269,13 @@ test("renderProjectDashboard renders a shared selected row preview", () => {
   const html = renderProjectDashboard(projectDashboardData);
 
   assert.match(html, /data-kp-project-agenda-preview/);
-  assert.match(html, /data-kp-selected-agenda-row="work-rendering-time-protocol"/);
+  assert.match(html, /data-kp-selected-agenda-row="work-kp-asset-calculus"/);
   assert.match(html, /Selected Row/);
-  assert.match(html, /Rendering\/time protocol/);
-  assert.match(html, /Define the shared clock/);
+  assert.match(html, /KP Asset Calculus/);
+  assert.match(html, /Formalize the shared asset/);
   assert.match(
     html,
-    /data-action="select-project-agenda-row"[^>]*data-kp-select-agenda-row="work-rendering-time-protocol"[^>]*aria-pressed="true"/
+    /data-action="select-project-agenda-row"[^>]*data-kp-select-agenda-row="work-kp-asset-calculus"[^>]*aria-pressed="true"/
   );
 });
 
@@ -293,6 +303,33 @@ test("renderProjectDashboard surfaces project and Theseus refs in selected previ
   assert.match(
     html,
     /data-kp-preview-field="Theseus refs"[^>]*>[\s\S]*run-contract\.kp\.semantic-runtime-roadmap-loop-v1/
+  );
+});
+
+test("renderProjectDashboard exposes the KP Asset Calculus work row", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "work-kp-asset-calculus"
+  });
+
+  assert.match(html, /data-kp-agenda-row="work-kp-asset-calculus"/);
+  assert.match(html, /data-kp-selected-agenda-row="work-kp-asset-calculus"/);
+  assert.match(html, /KP Asset Calculus/);
+  assert.match(html, /Formalize the shared asset/);
+  assert.match(
+    html,
+    /data-kp-preview-field="Source refs"[^>]*>[\s\S]*docs\/project\/principles\/kp-asset-calculus\.md/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Source refs"[^>]*>[\s\S]*docs\/project\/principles\/kp-composition-laws\.md/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Source refs"[^>]*>[\s\S]*docs\/project\/authoring\/kp-asset-authoring-guide\.md/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Theseus refs"[^>]*>[\s\S]*run-contract\.kp\.asset-calculus-denotational-protocol-v0/
   );
 });
 
@@ -933,6 +970,15 @@ test("filterProjectDashboardData finds cards and gallery items by text facets", 
     ["gallery-rendering-time-api"]
   );
 
+  const assetProtocolResult = filterProjectDashboardData(
+    projectDashboardData,
+    "KpBehavior"
+  );
+  assert.deepEqual(
+    assetProtocolResult.gallery.map((item) => item.id),
+    ["gallery-kp-asset-calculus"]
+  );
+
   const statusResult = filterProjectDashboardData(
     projectDashboardData,
     "graph-transitions.ts"
@@ -965,6 +1011,7 @@ test("filterProjectDashboardData finds cards and gallery items by text facets", 
       "transform-compute-jacobian",
       "transform-compute-hessian",
       "transform-rename-variable",
+      "gallery-kp-asset-calculus",
       "tutorial-card-manifest-v0"
     ]
   );

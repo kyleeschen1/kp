@@ -198,6 +198,30 @@ test("KP Theseus dashboard extension payload exposes gallery and API rows", () =
     )
   );
 
+  const assetCalculusRow = galleryRows.find(
+    (row) => row.id === "kp.gallery.gallery-kp-asset-calculus"
+  );
+
+  assert.equal(assetCalculusRow?.kind, "api");
+  assert.ok(assetCalculusRow?.tags?.includes("asset-calculus"));
+  assert.ok(assetCalculusRow?.searchText?.includes("KpBehavior"));
+  assert.ok(
+    assetCalculusRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Source refs" &&
+        field.value.includes("docs/project/principles/kp-asset-calculus.md")
+    )
+  );
+  assert.ok(
+    assetCalculusRow?.preview?.fields.some(
+      (field) =>
+        field.label === "Theseus refs" &&
+        field.value.includes(
+          "run-contract.kp.asset-calculus-denotational-protocol-v0"
+        )
+    )
+  );
+
   const tutorialManifestRow = galleryRows.find(
     (row) => row.id === "kp.gallery.tutorial-card-manifest-v0"
   );

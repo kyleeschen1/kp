@@ -67,13 +67,14 @@
     {
       "id": "next.kp.asset-calculus-llm-authoring-guide",
       "title": "Write LLM authoring guide for KP assets",
-      "status": "complete",
-      "summary": "Added a practical guide for LLM and human authors covering object, selector, transformation, diagram, behavior, interpreter, port, decomposition, flashcard, review, and anti-pattern rules."
+      "summary": "Added a practical guide for LLM and human authors covering object, selector, transformation, diagram, behavior, interpreter, port, decomposition, flashcard, review, and anti-pattern rules.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-calculus-dashboard-rows",
       "title": "Expose Asset Calculus framework rows in the dashboard",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added dashboard work and protocol-gallery rows for KP Asset Calculus doctrine, composition laws, and the asset authoring guide, with search, preview, and Theseus adapter coverage."
     },
     {
       "id": "next.kp.asset-core-interfaces",

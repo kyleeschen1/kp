@@ -76,6 +76,70 @@ export const projectDashboardData: ProjectDashboardData = {
       ]
     },
     {
+      id: "work-kp-asset-calculus",
+      title: "KP Asset Calculus",
+      category: "ts-api",
+      status: "active",
+      priority: "critical",
+      summary:
+        "Formalize the shared asset, transformation, diagram, behavior, interpreter, port, flashcard, and law protocol that future KP authoring composes through.",
+      tags: [
+        "asset-calculus",
+        "semantics",
+        "composition",
+        "denotational-time",
+        "llm-authoring"
+      ],
+      projectRefs: [
+        {
+          kind: "roadmap",
+          label: "KP roadmap",
+          href: "docs/project/roadmap.md"
+        },
+        {
+          kind: "thread",
+          label: "Semantic runtime thread",
+          href: "docs/project/threads/semantic-runtime.md"
+        },
+        {
+          kind: "decision",
+          label: "KP Asset Calculus priority decision",
+          href: "docs/project/decisions/2026-07-11-kp-asset-calculus-priority.md"
+        },
+        {
+          kind: "theseus",
+          label: "KP Asset Calculus run contract",
+          href: "docs/theseus/nodes/run-contracts/run-contract.kp.asset-calculus-denotational-protocol-v0.json",
+          id: "run-contract.kp.asset-calculus-denotational-protocol-v0"
+        }
+      ],
+      sourceRefs: [
+        {
+          label: "Asset Calculus doctrine",
+          href: "docs/project/principles/kp-asset-calculus.md"
+        },
+        {
+          label: "Composition laws",
+          href: "docs/project/principles/kp-composition-laws.md"
+        },
+        {
+          label: "Asset authoring guide",
+          href: "docs/project/authoring/kp-asset-authoring-guide.md"
+        }
+      ],
+      verification: [
+        "npm run theseus -- validate",
+        "npm test -- tests/project-dashboard.test.ts tests/project-dashboard-theseus-adapter.test.ts"
+      ],
+      relatedIds: [
+        "work-rendering-time-protocol",
+        "work-semantic-object-registry",
+        "gallery-kp-asset-calculus",
+        "gallery-kp-composition-laws",
+        "gallery-kp-asset-authoring-guide"
+      ]
+    },
+    {
       id: "work-equation-cancelation",
       title: "Equation cancelation animation",
       category: "animation",
@@ -875,6 +939,163 @@ export const projectDashboardData: ProjectDashboardData = {
       ],
       verification: ["tests/kp-animation-sdk.test.ts"],
       relatedIds: ["work-rendering-time-protocol"]
+    },
+    {
+      id: "gallery-kp-asset-calculus",
+      title: "KP Asset Calculus",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Project doctrine for immutable semantic assets, structure-preserving transformations, diagrams, denotational behaviors, interpreters, ports, flashcards, and renderer boundaries.",
+      tags: [
+        "asset-calculus",
+        "semantic-object",
+        "semantic-transformation",
+        "diagram",
+        "behavior",
+        "interpreter",
+        "port",
+        "flashcard"
+      ],
+      domains: ["runtime", "authoring", "math", "programming"],
+      interfaces: [
+        "SemanticObject",
+        "SemanticTransformation",
+        "SemanticDiagram",
+        "KpBehavior",
+        "Interpreter",
+        "Port",
+        "FlashcardSpec",
+        "AssetBundle"
+      ],
+      maturity: "active doctrine",
+      coverage: [
+        "semantic truth vs presentation boundary",
+        "composition forms",
+        "denotational time",
+        "linear-solve vertical proof target"
+      ],
+      projectRefs: [
+        {
+          kind: "decision",
+          label: "KP Asset Calculus priority decision",
+          href: "docs/project/decisions/2026-07-11-kp-asset-calculus-priority.md"
+        },
+        {
+          kind: "theseus",
+          label: "KP Asset Calculus run contract",
+          href: "docs/theseus/nodes/run-contracts/run-contract.kp.asset-calculus-denotational-protocol-v0.json",
+          id: "run-contract.kp.asset-calculus-denotational-protocol-v0"
+        }
+      ],
+      sourceRefs: [
+        {
+          label: "Asset Calculus doctrine",
+          href: "docs/project/principles/kp-asset-calculus.md"
+        }
+      ],
+      verification: ["npm run theseus -- validate"],
+      relatedIds: [
+        "work-kp-asset-calculus",
+        "gallery-rendering-time-api",
+        "semantic-equation"
+      ]
+    },
+    {
+      id: "gallery-kp-composition-laws",
+      title: "KP composition laws",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Law vocabulary and enforcement levels for identity, associativity, selector closure, correspondence, deterministic sampling, rewind, interpreters, ports, and flashcards.",
+      tags: [
+        "composition",
+        "laws",
+        "identity",
+        "associativity",
+        "rewind",
+        "diagnostics"
+      ],
+      domains: ["runtime", "verification", "authoring"],
+      interfaces: [
+        "identity law",
+        "associativity law",
+        "selector closure",
+        "correspondence preservation",
+        "rewind equivalence",
+        "loss diagnostics"
+      ],
+      maturity: "active doctrine",
+      coverage: [
+        "strict laws",
+        "sampled laws",
+        "lax laws",
+        "qualitative review",
+        "failure policy"
+      ],
+      projectRefs: [
+        {
+          kind: "decision",
+          label: "KP Asset Calculus priority decision",
+          href: "docs/project/decisions/2026-07-11-kp-asset-calculus-priority.md"
+        }
+      ],
+      sourceRefs: [
+        {
+          label: "Composition laws",
+          href: "docs/project/principles/kp-composition-laws.md"
+        }
+      ],
+      verification: ["npm run theseus -- validate"],
+      relatedIds: [
+        "work-kp-asset-calculus",
+        "gallery-kp-asset-calculus",
+        "gallery-rendering-time-api"
+      ]
+    },
+    {
+      id: "gallery-kp-asset-authoring-guide",
+      title: "KP asset authoring guide",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Operational guide for humans, LLM sessions, and deterministic generators to create assets from semantic intent through objects, selectors, transformations, diagrams, behaviors, ports, and flashcards.",
+      tags: ["llm-authoring", "codex", "asset-authoring", "generator", "guide"],
+      domains: ["authoring", "runtime", "curriculum"],
+      interfaces: [
+        "authoring checklist",
+        "external port recipe",
+        "decomposition recipe",
+        "flashcard references",
+        "review checklist"
+      ],
+      maturity: "active guide",
+      coverage: [
+        "semantic-first naming",
+        "selector rules",
+        "behavior frames",
+        "port diagnostics",
+        "anti-patterns"
+      ],
+      projectRefs: [
+        {
+          kind: "decision",
+          label: "KP Asset Calculus priority decision",
+          href: "docs/project/decisions/2026-07-11-kp-asset-calculus-priority.md"
+        }
+      ],
+      sourceRefs: [
+        {
+          label: "Asset authoring guide",
+          href: "docs/project/authoring/kp-asset-authoring-guide.md"
+        }
+      ],
+      verification: ["npm run theseus -- validate"],
+      relatedIds: [
+        "work-kp-asset-calculus",
+        "gallery-kp-asset-calculus",
+        "gallery-kp-composition-laws"
+      ]
     },
     {
       id: "tutorial-card-manifest-v0",
