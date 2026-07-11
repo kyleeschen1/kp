@@ -151,13 +151,14 @@
     {
       "id": "next.kp.asset-decomposition-hook",
       "title": "Add transformation drill-down asset hook",
-      "status": "complete",
-      "summary": "Added a pure transformation drill-down hook API that resolves active pause-time inspections to explainer assets, validates hook uniqueness and parent transformation references, and exposes a canonical linear-solve cancellation explainer hook."
+      "summary": "Added a pure transformation drill-down hook API that resolves active pause-time inspections to explainer assets, validates hook uniqueness and parent transformation references, and exposes a canonical linear-solve cancellation explainer hook.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-linear-solve-flashcards",
       "title": "Generate flashcard specs from the linear solve bundle",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added reusable linear-solve flashcards for cloze, predict-next, explain-transform, and selector-persistence focus prompts, all validated against the canonical asset bundle and transformation IDs."
     },
     {
       "id": "next.kp.asset-algebra-trace-port-fixture",

@@ -17,6 +17,10 @@ import {
   type KpSemanticDiagramSequence
 } from "./asset-diagram.ts";
 import {
+  createKpFlashcardSpec,
+  type KpFlashcardSpec
+} from "./asset-flashcard.ts";
+import {
   createKpSemanticTransformation,
   type KpSemanticTransformation
 } from "./asset-transformation.ts";
@@ -31,6 +35,7 @@ export interface LinearSolveKpAsset {
   readonly transformations: readonly KpSemanticTransformation[];
   readonly diagram: KpSemanticDiagramSequence;
   readonly drillDownHooks: readonly KpTransformationDrillDownHook[];
+  readonly flashcards: readonly KpFlashcardSpec[];
 }
 
 export type LinearSolveKpBehavior =
@@ -129,13 +134,15 @@ export function createLinearSolveKpAssetBundle(): LinearSolveKpAsset {
     children: transformations.map(createKpTransformationDiagramLeaf)
   });
   const drillDownHooks = createLinearSolveDrillDownHooks();
+  const flashcards = createLinearSolveFlashcards();
 
   return {
     sourceAnimationId: "linear-equation-solve-x",
     bundle,
     transformations,
     diagram,
-    drillDownHooks
+    drillDownHooks,
+    flashcards
   };
 }
 
@@ -216,6 +223,63 @@ function createLinearSolveTransformations(): readonly KpSemanticTransformation[]
         correspondence(ids.leftSimplified, "lhs.x", ids.solved, "lhs.x"),
         correspondence(ids.leftSimplified, "equals", ids.solved, "equals")
       ]
+    })
+  ];
+}
+
+function createLinearSolveFlashcards(): readonly KpFlashcardSpec[] {
+  return [
+    createKpFlashcardSpec({
+      id: "card.linear-solve.cloze-plus3",
+      kind: "cloze",
+      title: "Hide the constant term",
+      assetId: "asset.linear-solve",
+      prompt: "What term must be removed to isolate x?",
+      selectorIds: [`${ids.initial}.lhs.plus3`],
+      answer: {
+        kind: "text",
+        value: "+3"
+      }
+    }),
+    createKpFlashcardSpec({
+      id: "card.linear-solve.predict-subtract",
+      kind: "predict-next",
+      title: "Predict the first transformation",
+      assetId: "asset.linear-solve",
+      prompt: "Which transformation preserves equality while moving toward x?",
+      transformationIds: [ids.subtract],
+      timeMs: 0,
+      answer: {
+        kind: "transformation",
+        value: ids.subtract
+      }
+    }),
+    createKpFlashcardSpec({
+      id: "card.linear-solve.explain-cancel",
+      kind: "explain-transform",
+      title: "Explain cancellation",
+      assetId: "asset.linear-solve",
+      prompt: "Why can the +3 and -3 on the left disappear?",
+      objectIds: [ids.afterSubtract, ids.leftSimplified],
+      transformationIds: [ids.cancel],
+      timeMs: 1200,
+      answer: {
+        kind: "text",
+        value: "A term plus its additive inverse simplifies to zero."
+      }
+    }),
+    createKpFlashcardSpec({
+      id: "card.linear-solve.focus-x-persistence",
+      kind: "focus-relationship",
+      title: "Follow x through the solve",
+      assetId: "asset.linear-solve",
+      prompt: "Which selector represents the same unknown after solving?",
+      selectorIds: [`${ids.initial}.lhs.x`, `${ids.solved}.lhs.x`],
+      transformationIds: [ids.subtract, ids.cancel, ids.simplify],
+      answer: {
+        kind: "selector",
+        value: `${ids.solved}.lhs.x`
+      }
     })
   ];
 }

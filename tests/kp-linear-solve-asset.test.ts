@@ -16,6 +16,9 @@ import {
   checkKpDiagramRewindLaw
 } from "../src/semantic/asset-laws.ts";
 import { validateKpAssetBundle } from "../src/semantic/asset.ts";
+import {
+  validateKpFlashcardSpec
+} from "../src/semantic/asset-flashcard.ts";
 import { validateKpSemanticTransformation } from "../src/semantic/asset-transformation.ts";
 import {
   createLinearSolveKpAssetBundle,
@@ -103,6 +106,41 @@ test("createLinearSolveKpAssetBundle exposes a cancellation drill-down hook", ()
       ]
     ]
   );
+});
+
+test("createLinearSolveKpAssetBundle exposes reusable flashcard specs", () => {
+  const asset = createLinearSolveKpAssetBundle();
+
+  assert.deepEqual(
+    asset.flashcards.map((card) => [card.id, card.kind]),
+    [
+      ["card.linear-solve.cloze-plus3", "cloze"],
+      ["card.linear-solve.predict-subtract", "predict-next"],
+      ["card.linear-solve.explain-cancel", "explain-transform"],
+      ["card.linear-solve.focus-x-persistence", "focus-relationship"]
+    ]
+  );
+  assert.deepEqual(
+    asset.flashcards.flatMap((card) =>
+      validateKpFlashcardSpec(card, {
+        bundle: asset.bundle,
+        transformations: asset.transformations
+      })
+    ),
+    []
+  );
+  assert.deepEqual(asset.flashcards[0], {
+    id: "card.linear-solve.cloze-plus3",
+    kind: "cloze",
+    title: "Hide the constant term",
+    assetId: "asset.linear-solve",
+    prompt: "What term must be removed to isolate x?",
+    selectorIds: ["equation.linear-solve.initial.lhs.plus3"],
+    answer: {
+      kind: "text",
+      value: "+3"
+    }
+  });
 });
 
 test("createLinearSolveKpBehavior samples the existing tutorial card timeline", () => {
