@@ -236,6 +236,12 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
         outputs: ["html-document", "artifact metadata"],
         preserves: ["manifest identity", "profile identity", "timeline identity"]
       }),
+      item("embed-static-step-export-artifact", "StaticStepExportArtifact", "export", "active", "Renderable JSON step-sequence artifact with selected parent-timeline checkpoints and sampled tutorial-card frames.", ["static-step", "step-sequence", "export"], {
+        protocols: ["selectKpTutorialStaticStepCheckpoints", "renderKpTutorialCardStaticStepSequence"],
+        inputs: ["KpTutorialCardExportArtifact", "KpTutorialStaticStepCheckpoint[]", "KpAnimationSampler"],
+        outputs: ["json-document", "checkpoint frames"],
+        preserves: ["manifest identity", "profile identity", "timeline identity", "checkpoint provenance"]
+      }),
       item("embed-dependency-manifest", "DependencyManifest", "runtime", "planned", "Critical, interactive, optional, and fallback dependency closure for each card or route.", ["lazy loading", "runtime"])
     ]
   }

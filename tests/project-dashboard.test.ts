@@ -443,6 +443,39 @@ test("renderProjectDashboard exposes iframe export artifact sample targets", () 
   assert.match(html, /tests\/tutorial-card-iframe-document\.test\.ts/);
 });
 
+test("renderProjectDashboard exposes static-step export artifact sample targets", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "static-step-export-artifact"
+  });
+
+  assert.match(html, /data-kp-selected-agenda-row="static-step-export-artifact"/);
+  assert.match(
+    html,
+    /data-kp-preview-field="Sample targets"[^>]*>Open static-step export artifact/
+  );
+  assert.match(html, /data-kp-preview-link="export-artifact"/);
+  assert.match(
+    html,
+    /data-kp-preview-export-artifact="artifact\.linear-solve\.steps"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-manifest-id="tutorial\.linear-solve\.card"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-export-profile="export\.linear-solve\.steps"/
+  );
+  assert.match(html, /data-kp-preview-export-payload="json-document"/);
+  assert.match(
+    html,
+    /data-kp-preview-field="Export artifact"[^>]*>artifact\.linear-solve\.steps</
+  );
+  assert.match(html, /src\/tutorial\/static-step-sequence-renderer\.ts/);
+  assert.match(html, /tests\/tutorial-card-static-step-artifact\.test\.ts/);
+  assert.match(html, /data-kp-preview-api-item="embed-static-step-export-artifact"/);
+});
+
 test("renderProjectDashboard exposes semantic object API sample targets", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "semantic-matrix"

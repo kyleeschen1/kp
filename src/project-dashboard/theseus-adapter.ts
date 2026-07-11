@@ -363,7 +363,7 @@ function sampleTargetSearchFields(
           target.manifestId,
           target.profileId,
           target.payloadKind,
-          "iframe export artifact embed"
+          "export artifact embed iframe static step sequence"
         ];
       case "api-catalog-item":
         return [target.kind, target.label, target.itemId];

@@ -1008,6 +1008,68 @@ export const projectDashboardData: ProjectDashboardData = {
         "sample-synced-equation-graph-linear-solve",
         "report-semantic-runtime-readiness"
       ]
+    },
+    {
+      id: "static-step-export-artifact",
+      title: "Static-step export artifact",
+      kind: "protocol-api",
+      status: "active",
+      summary:
+        "Renderable static-step export artifact for the linear-solve tutorial card, selecting parent-timeline checkpoints and sampling frames into a JSON step sequence.",
+      tags: ["static-step", "step-sequence", "export", "tutorial-card", "json"],
+      domains: ["runtime", "authoring", "export"],
+      interfaces: [
+        "KpTutorialCardStaticStepArtifact",
+        "selectKpTutorialStaticStepCheckpoints",
+        "renderKpTutorialCardStaticStepSequence"
+      ],
+      maturity: "active renderable artifact",
+      coverage: [
+        "checkpoint selection",
+        "parent timeline boundaries",
+        "frame sampling",
+        "JSON sequence output"
+      ],
+      sourceRefs: [
+        {
+          label: "Static-step artifact contract",
+          href: "src/tutorial/static-step-artifact.ts"
+        },
+        {
+          label: "Static-step checkpoint selector",
+          href: "src/tutorial/static-step-checkpoints.ts"
+        },
+        {
+          label: "Static-step sequence renderer",
+          href: "src/tutorial/static-step-sequence-renderer.ts"
+        }
+      ],
+      verification: [
+        "tests/tutorial-card-static-step-artifact.test.ts",
+        "tests/project-dashboard.test.ts",
+        "tests/api-catalog.test.ts"
+      ],
+      sampleTargets: [
+        {
+          kind: "export-artifact",
+          label: "Open static-step export artifact",
+          artifactId: "artifact.linear-solve.steps",
+          manifestId: "tutorial.linear-solve.card",
+          profileId: "export.linear-solve.steps",
+          payloadKind: "json-document"
+        },
+        {
+          kind: "api-catalog-item",
+          label: "Open StaticStepExportArtifact API sample",
+          itemId: "embed-static-step-export-artifact"
+        }
+      ],
+      relatedIds: [
+        "tutorial-card-manifest-v0",
+        "iframe-export-artifact",
+        "sample-synced-equation-graph-linear-solve",
+        "report-semantic-runtime-readiness"
+      ]
     }
   ],
   reportThemes: [

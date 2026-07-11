@@ -1,0 +1,79 @@
+{
+  "id": "next.kp.dashboard-static-step-export-sample",
+  "kind": "next-action",
+  "title": "Add static-step dashboard sample row",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "summary": "Added dashboard and API catalog sample rows for the static-step export artifact.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Adds the Static-step export artifact gallery row with export-artifact and API sample targets."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "Adds the StaticStepExportArtifact API catalog item for checkpoint selection and sequence rendering."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/model.ts",
+      "summary": "Generalizes export-artifact sample target search metadata beyond iframe-only wording."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Generalizes rendered export-artifact search metadata beyond iframe-only wording."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/theseus-adapter.ts",
+      "summary": "Generalizes Theseus dashboard export-artifact search metadata beyond iframe-only wording."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers static-step export artifact preview fields, links, and source refs."
+    },
+    {
+      "kind": "file",
+      "path": "tests/api-catalog.test.ts",
+      "summary": "Covers the StaticStepExportArtifact API catalog item."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.dashboard-static-step-export-sample.json",
+      "summary": "Materializes the approved dashboard static-step export sample next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the dashboard static-step export sample slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/api-catalog.test.ts tests/project-dashboard-theseus-adapter.test.ts tests/tutorial-card-static-step-artifact.test.ts",
+      "status": "passed",
+      "scope": "dashboard static-step export sample, API catalog, adapter, and static-step tests",
+      "checkedAt": "2026-07-11T00:11:56.941Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T00:11:56.961Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T00:11:56.975Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added dashboard and API catalog sample rows for the static-step export artifact."
+  }
+}

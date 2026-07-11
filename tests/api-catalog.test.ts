@@ -147,6 +147,9 @@ test("API catalog exposes the complete layout object vocabulary", () => {
 
 test("API catalog exposes active tutorial card manifest API", () => {
   const kpCard = findApiCatalogItem("embed-kp-card");
+  const staticStepArtifact = findApiCatalogItem(
+    "embed-static-step-export-artifact"
+  );
   const dependencyManifest = findApiCatalogItem("embed-dependency-manifest");
 
   assert.equal(kpCard?.group.category, "embed");
@@ -166,6 +169,15 @@ test("API catalog exposes active tutorial card manifest API", () => {
     "semantic object identity",
     "shared timeline identity",
     "layout composition"
+  ]);
+  assert.equal(staticStepArtifact?.item.status, "active");
+  assert.deepEqual(staticStepArtifact?.item.details?.protocols, [
+    "selectKpTutorialStaticStepCheckpoints",
+    "renderKpTutorialCardStaticStepSequence"
+  ]);
+  assert.deepEqual(staticStepArtifact?.item.details?.outputs, [
+    "json-document",
+    "checkpoint frames"
   ]);
   assert.equal(dependencyManifest?.item.status, "planned");
 });
