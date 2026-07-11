@@ -2,7 +2,64 @@
   "id": "next.kp.tutorial-card-seek-browser-smoke",
   "kind": "next-action",
   "title": "Add shared seek smoke for tutorial cards",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add browser smoke coverage proving tutorial-card launch surfaces respond to deterministic seek/progress changes."
+  "summary": "Added a shared browser seek smoke that verifies iframe tutorial-card samples can be re-rendered at deterministic progress, clock, scrubber, and beat states.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-seek-smoke.browser.spec.ts",
+      "summary": "Covers sampled iframe tutorial-card progress at 0, 0.5, and 1 against the shared seek contract."
+    },
+    {
+      "kind": "file",
+      "path": "tests/support/tutorial-launch-smoke.ts",
+      "summary": "Adds the reusable tutorial-card seek assertion helper for browser smoke specs."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-card-seek-browser-smoke.json",
+      "summary": "Records the approved tutorial-card seek browser smoke next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-panel-nonblank-smoke.json",
+      "summary": "Materializes the next approved nonblank panel probe slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the nonblank panel probe slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/tutorial-card-seek-smoke.browser.spec.ts tests/iframe-export-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "tutorial-card seek and iframe browser smoke coverage",
+      "checkedAt": "2026-07-11T01:29:56.186Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:29:56.207Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:29:56.232Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:29:56.257Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a shared browser seek smoke that verifies iframe tutorial-card samples can be re-rendered at deterministic progress, clock, scrubber, and beat states."
+  }
 }

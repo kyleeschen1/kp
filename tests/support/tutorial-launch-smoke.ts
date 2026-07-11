@@ -9,6 +9,12 @@ import {
 } from "../../src/tutorial/programming-card-sample.ts";
 import type { LinearSolveStaticStepExportSmokeFixture } from "../../src/tutorial/static-step-export-smoke-fixture.ts";
 
+export interface KpTutorialCardSeekSampleExpectation {
+  readonly progress: number;
+  readonly clockId: string;
+  readonly beat: number;
+}
+
 export async function openKpTutorialLaunchTargetPreview(
   page: Page,
   target: KpTutorialLaunchTarget
@@ -37,6 +43,28 @@ export async function loadKpIframeExportSmokeFixtureDocument(
     "data-kp-export-artifact",
     fixture.artifact.id
   );
+}
+
+export async function expectKpTutorialCardSeekSample(
+  page: Page,
+  expectation: KpTutorialCardSeekSampleExpectation
+): Promise<void> {
+  const progress = String(expectation.progress);
+  const beat = String(expectation.beat);
+  const card = page.locator("[data-kp-tutorial-card]");
+  const scrubber = page.locator('[data-kp-tutorial-control-kind="scrubber"]');
+
+  await expect(card).toHaveAttribute("data-kp-tutorial-progress", progress);
+  await expect(card).toHaveAttribute(
+    "data-kp-tutorial-clock",
+    expectation.clockId
+  );
+  await expect(scrubber).toHaveValue(progress);
+  await expect(scrubber).toHaveAttribute(
+    "data-kp-tutorial-control-progress",
+    progress
+  );
+  await expect(scrubber).toHaveAttribute("data-kp-tutorial-control-beat", beat);
 }
 
 export async function loadKpStaticStepExportSmokeFixtureDocument(

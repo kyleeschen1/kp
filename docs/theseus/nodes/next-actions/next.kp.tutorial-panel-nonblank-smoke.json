@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.tutorial-panel-nonblank-smoke",
+  "kind": "next-action",
+  "title": "Add nonblank panel probes",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add browser smoke probes that prove tutorial-card equation, graph, and programming panels render nonblank sample content across launch surfaces."
+}
