@@ -28,15 +28,14 @@ execution-trace card samples, authored static-step markers, expanded graph
 timeline diagnostics, synchronized comparison shells, and dashboard/API catalog
 rows for those surfaces.
 
-The hosted/export sampling loop is now in closeout. It added static-host
-fixture roots, packaged iframe/static-step browser smokes, hosted readiness
-dashboard/report rows, parent-timeline frame export contracts, synchronized
+The hosted/export sampling loop is closed. It added static-host fixture roots,
+packaged iframe/static-step browser smokes, hosted readiness dashboard/report
+rows, parent-timeline frame export contracts, synchronized
 equation/graph/programming frame sampling, frame-sequence artifacts and
 previews, browser probes, rewind checks, frame-sequence dependency manifests,
 and metadata-only export capability advertisements. The next implementation
-choice should happen after the loop closeout review and should choose between
-media encoder integration, broader SemanticObject capability loading, and graph
-runtime unification.
+choice should choose between media encoder integration, broader SemanticObject
+capability loading, and graph runtime unification.
 
 ## Roadmap Phases
 
@@ -185,17 +184,14 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Close the hosted/package readiness and parent-timeline export sampling loop
-   with a short review that records what is proven and what remains runtime
-   risk.
-2. Decide the next loop: media encoder integration, broader SemanticObject
+1. Decide the next loop: media encoder integration, broader SemanticObject
    capability loading, or graph/visual runtime unification.
-3. Start GIF or video encoder integration only after the frame-sequence JSON
+2. Start GIF or video encoder integration only after the frame-sequence JSON
    artifact, HTML preview, browser probe, rewind check, dependency manifest,
    and capability advertisements stay stable.
-4. Expand graph diagnostics from current mesh/conformance checks into richer
+3. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-5. Return to the SemanticObject registry and capability loading layer so export
+4. Return to the SemanticObject registry and capability loading layer so export
    artifacts can advertise exactly what each card needs.
 
 ## Deferred

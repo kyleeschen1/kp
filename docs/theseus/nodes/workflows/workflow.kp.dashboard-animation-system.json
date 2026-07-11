@@ -43,7 +43,7 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "Reusable dashboard v1, semantic transition runtime, tutorial-card runtime, export/embed, and browser-hardening loops are closed; hosted/package readiness and parent-timeline export sampling are in closeout before the next media encoder, capability loading, or graph runtime loop."
+    "summary": "Reusable dashboard v1, semantic transition runtime, tutorial-card runtime, export/embed, browser-hardening, hosted/package readiness, and parent-timeline export sampling loops are closed; the next KP loop should choose between media encoders, capability loading, or graph runtime unification."
   },
   "verificationRecords": [
     {

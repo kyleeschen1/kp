@@ -2,7 +2,7 @@
   "id": "run-contract.kp.hosted-package-readiness-export-sampling-v0",
   "kind": "run-contract",
   "title": "KP hosted package readiness and export sampling loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
   "sourceRefs": [
     {
@@ -243,7 +243,15 @@
     {
       "id": "next.kp.hosted-export-loop-closeout",
       "title": "Add loop closeout review",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.tutorial.next-kp-hosted-export-loop-closeout-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.tutorial.next-kp-hosted-export-loop-closeout-v0",
+      "title": "Add loop closeout review",
+      "summary": "Materialized from stored run-contract slice next.kp.hosted-export-loop-closeout in KP hosted package readiness and export sampling loop.",
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }

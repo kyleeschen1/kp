@@ -2,9 +2,8 @@
 
 Status: active
 Last Updated: 2026-07-11
-Current Next Action: Close the hosted/package readiness and parent-timeline
-export sampling loop, then choose between media encoder integration,
-SemanticObject capability loading, or graph/visual runtime unification.
+Current Next Action: Choose between media encoder integration, SemanticObject
+capability loading, or graph/visual runtime unification.
 
 ## Goal
 
@@ -49,14 +48,13 @@ execution-trace cards, synchronized comparison cards, iframe asset manifests,
 fallback readiness, nonblank panel probes, static-step authored markers, and
 expanded graph timeline diagnostics.
 
-The hosted/package readiness and parent-timeline export sampling loop is in
-closeout. It has added static-host fixture roots, hosted fallback readiness,
+The hosted/package readiness and parent-timeline export sampling loop closed on
+2026-07-11. It added static-host fixture roots, hosted fallback readiness,
 packaged iframe/static-step browser smokes, dashboard/report rows for hosted
 readiness, parent-timeline media frame export contracts, equation/graph/code
 frame sampling, frame-sequence artifacts and HTML previews, browser probes,
-rewind checks, dependency manifests, and metadata-only export capability
-advertisements. The remaining work in this loop is the closeout review, not
-basic hosted readiness or frame sampling discovery.
+rewind checks, dependency manifests, metadata-only export capability
+advertisements, and a closeout review.
 
 ## Accepted Scope
 
@@ -95,6 +93,7 @@ basic hosted readiness or frame sampling discovery.
 - `docs/project/reviews/2026-07-10-tutorial-card-runtime-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-tutorial-card-export-embed-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-tutorial-card-browser-hardening-loop-closeout.md`
+- `docs/project/reviews/2026-07-11-hosted-package-readiness-export-sampling-loop-closeout.md`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json`
 - `docs/superpowers/specs/2026-07-10-derive-representation-capability-design.md`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-runtime-loop-v0.json`
