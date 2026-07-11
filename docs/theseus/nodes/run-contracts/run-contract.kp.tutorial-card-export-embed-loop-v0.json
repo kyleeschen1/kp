@@ -40,7 +40,7 @@
     "Do not broaden into unrelated Theseus planner infrastructure."
   ],
   "goal": "Run the approved export/embed loop from tutorial-card runtime metadata to concrete iframe and static-step artifacts, then prepare programming panels and follow-up runtime checks.",
-  "target": "next.kp.generated-katex-fixture-second-transform",
+  "target": "next.kp.graph-parent-timeline-diagnostic",
   "runMode": "run",
   "maxSlices": 20,
   "commitCadence": "Commit after each verified slice.",
@@ -139,7 +139,7 @@
     {
       "id": "next.kp.graph-parent-timeline-diagnostic",
       "title": "Add graph parent-timeline conformance diagnostic",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.export-embed-readiness-report",

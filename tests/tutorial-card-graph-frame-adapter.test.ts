@@ -3,6 +3,7 @@ import test from "node:test";
 
 import { createLinearSolveTutorialCardFrameSampler } from "../src/tutorial/card-frame-sampler.ts";
 import { createKpTutorialGraphFrameAdapter } from "../src/tutorial/graph-frame-adapter.ts";
+import { createKpTutorialGraphParentTimelineDiagnostic } from "../src/tutorial/graph-parent-timeline-diagnostic.ts";
 
 test("tutorial graph frame adapter resolves graph surface frames from card progress", () => {
   const adapter = createKpTutorialGraphFrameAdapter(
@@ -38,4 +39,67 @@ test("tutorial graph frame adapter clamps through parent timeline", () => {
   assert.equal(endFrame.cardProgress, 1);
   assert.equal(endFrame.graphProgress, 1);
   assert.equal(endFrame.graphFrame.progress, 1);
+});
+
+test("tutorial graph parent timeline diagnostic checks shared timeline conformance", () => {
+  const cardSampler = createLinearSolveTutorialCardFrameSampler();
+  const adapter = createKpTutorialGraphFrameAdapter(cardSampler);
+  const diagnostic = createKpTutorialGraphParentTimelineDiagnostic({
+    adapter,
+    timelineId: cardSampler.parentTimeline.id,
+    sampleProgresses: [0, 0.5, 1]
+  });
+
+  assert.deepEqual(diagnostic, {
+    id: "diagnostic.panel.linear-solve.graph.parent-timeline",
+    panelId: "panel.linear-solve.graph",
+    graphId: "saddle-orbit-graph",
+    timelineId: "timeline.linear-solve.shared",
+    samples: [
+      {
+        requestedProgress: 0,
+        cardProgress: 0,
+        graphProgress: 0,
+        frameProgress: 0,
+        graphFrameTimelineId: "timeline.linear-solve.shared",
+        graphTrackId: "timeline.linear-solve.shared.semantic-object.saddle-orbit-graph"
+      },
+      {
+        requestedProgress: 0.5,
+        cardProgress: 0.5,
+        graphProgress: 0.5,
+        frameProgress: 0.5,
+        graphFrameTimelineId: "timeline.linear-solve.shared",
+        graphTrackId: "timeline.linear-solve.shared.semantic-object.saddle-orbit-graph"
+      },
+      {
+        requestedProgress: 1,
+        cardProgress: 1,
+        graphProgress: 1,
+        frameProgress: 1,
+        graphFrameTimelineId: "timeline.linear-solve.shared",
+        graphTrackId: "timeline.linear-solve.shared.semantic-object.saddle-orbit-graph"
+      }
+    ],
+    diagnostics: []
+  });
+});
+
+test("tutorial graph parent timeline diagnostic reports timeline mismatches", () => {
+  const adapter = createKpTutorialGraphFrameAdapter(
+    createLinearSolveTutorialCardFrameSampler()
+  );
+  const diagnostic = createKpTutorialGraphParentTimelineDiagnostic({
+    adapter,
+    timelineId: "timeline.other",
+    sampleProgresses: [0.5]
+  });
+
+  assert.deepEqual(diagnostic.diagnostics, [
+    {
+      path: "samples[0].graphFrame.timelineId",
+      message:
+        "Graph frame timeline timeline.linear-solve.shared does not match parent timeline timeline.other."
+    }
+  ]);
 });

@@ -1,0 +1,54 @@
+{
+  "id": "next.kp.graph-parent-timeline-diagnostic",
+  "kind": "next-action",
+  "title": "Add graph parent-timeline conformance diagnostic",
+  "status": "resolved",
+  "domain": "kp.graph",
+  "summary": "Added a graph parent-timeline diagnostic that samples tutorial graph frames and reports timeline/progress drift.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/graph-parent-timeline-diagnostic.ts",
+      "summary": "Defines a graph parent-timeline conformance report over graph frame adapters with sample records and diagnostics for timeline/progress mismatches."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-graph-frame-adapter.test.ts",
+      "summary": "Covers graph parent-timeline conformance samples and timeline mismatch diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.graph-parent-timeline-diagnostic.json",
+      "summary": "Materializes the approved graph parent-timeline diagnostic next-action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-export-embed-loop-v0.json",
+      "summary": "Advances the active export/embed run-contract target to the graph parent-timeline diagnostic slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-graph-frame-adapter.test.ts tests/tutorial-card-frame-sampler.test.ts tests/parent-timeline.test.ts tests/graph-transitions.test.ts",
+      "status": "passed",
+      "scope": "graph parent-timeline diagnostic, graph adapter, parent timeline, and graph transition tests",
+      "checkedAt": "2026-07-11T00:32:06.718Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T00:32:06.742Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-11T00:32:06.775Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a graph parent-timeline diagnostic that samples tutorial graph frames and reports timeline/progress drift."
+  }
+}
