@@ -157,13 +157,14 @@
     {
       "id": "next.kp.asset-linear-solve-flashcards",
       "title": "Generate flashcard specs from the linear solve bundle",
-      "status": "complete",
-      "summary": "Added reusable linear-solve flashcards for cloze, predict-next, explain-transform, and selector-persistence focus prompts, all validated against the canonical asset bundle and transformation IDs."
+      "summary": "Added reusable linear-solve flashcards for cloze, predict-next, explain-transform, and selector-persistence focus prompts, all validated against the canonical asset bundle and transformation IDs.",
+      "status": "complete"
     },
     {
       "id": "next.kp.asset-algebra-trace-port-fixture",
       "title": "Add deterministic algebra-trace port fixture",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Added a deterministic linear-solve algebra-trace fixture port that imports trace steps into the canonical KP bundle shape with explicit port provenance and strict preservation when the trace matches."
     },
     {
       "id": "next.kp.asset-algebra-port-laws",
