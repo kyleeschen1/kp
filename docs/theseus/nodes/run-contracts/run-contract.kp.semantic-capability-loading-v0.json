@@ -210,7 +210,14 @@
     {
       "id": "next.kp.programming-capability-package-fixtures",
       "title": "Add SourceFile/programming capability packages",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-programming-capability-package-fixtures-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-programming-capability-package-fixtures-v0",
+      "title": "Add SourceFile/programming capability packages",
+      "summary": "Materialized from stored run-contract slice next.kp.programming-capability-package-fixtures in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.iframe-capability-closure",

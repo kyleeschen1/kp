@@ -165,7 +165,7 @@ test("renderProjectDashboard renders capability package agenda rows", () => {
   assert.match(html, /data-kp-agenda-section="capability-packages"/);
   assert.match(
     html,
-    /<h2 id="project-agenda-capability-packages-title">Capability Packages <span class="project-agenda__count">\(11\)<\/span><\/h2>/
+    /<h2 id="project-agenda-capability-packages-title">Capability Packages <span class="project-agenda__count">\(14\)<\/span><\/h2>/
   );
   assert.match(
     html,
@@ -174,6 +174,10 @@ test("renderProjectDashboard renders capability package agenda rows", () => {
   assert.match(
     html,
     /data-kp-agenda-row="capability-package-package\.kp\.graph3d\.render\.webgl\.surface-mesh"/
+  );
+  assert.match(
+    html,
+    /data-kp-agenda-row="capability-package-package\.kp\.source-file\.animate\.execution-trace"/
   );
   assert.match(
     html,

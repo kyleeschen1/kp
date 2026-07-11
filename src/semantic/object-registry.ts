@@ -305,6 +305,43 @@ export const defaultSemanticObjectDefinitions:
       ]
     },
     {
+      type: "source-file",
+      title: "SourceFile",
+      domain: "programming",
+      status: "active",
+      summary:
+        "Programming source text with language metadata, stable range selectors, code-panel rendering, and execution-trace animation hooks.",
+      tags: ["programming", "code", "selectors"],
+      capabilities: ["render", "select", "animate", "execute"],
+      capabilityPackageIds: [
+        "package.kp.source-file.render.code-panel",
+        "package.kp.source-file.select.range",
+        "package.kp.source-file.animate.execution-trace"
+      ],
+      capabilityAdvertisements: [
+        capabilityAdvertisement(
+          "render",
+          "active",
+          "Render source text as synchronized programming tutorial code panels."
+        ),
+        capabilityAdvertisement(
+          "select",
+          "active",
+          "Expose stable source-range selectors over immutable source revisions."
+        ),
+        capabilityAdvertisement(
+          "animate",
+          "active",
+          "Sample source frames and execution-trace steps on the shared tutorial clock."
+        ),
+        capabilityAdvertisement(
+          "execute",
+          "active",
+          "Represent deterministic execution traces, stack frames, locals, and output for programming tutorials."
+        )
+      ]
+    },
+    {
       type: "latex-form",
       title: "LaTeX form",
       domain: "math-core",

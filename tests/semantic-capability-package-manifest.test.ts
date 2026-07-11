@@ -82,6 +82,20 @@ test("capability package catalog indexes default package manifests", () => {
     ]
   );
   assert.deepEqual(
+    catalog.listManifestsForObjectType("source-file").map((manifest) => manifest.id),
+    [
+      "package.kp.source-file.render.code-panel",
+      "package.kp.source-file.select.range",
+      "package.kp.source-file.animate.execution-trace"
+    ]
+  );
+  assert.deepEqual(
+    catalog.listManifestsByCapabilityKey(
+      "kp.source-file:animate.execution-trace:source-file:trace"
+    ).map((manifest) => manifest.id),
+    ["package.kp.source-file.animate.execution-trace"]
+  );
+  assert.deepEqual(
     catalog.listManifestsForObjectType("matrix").map((manifest) => manifest.id),
     [
       "package.kp.matrix.render.katex",

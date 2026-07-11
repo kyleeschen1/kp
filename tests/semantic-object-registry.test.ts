@@ -12,6 +12,7 @@ test("default semantic object registry exposes metadata without behavior", () =>
   const expression = registry.getDefinition("expression");
   const matrix = registry.getDefinition("matrix");
   const graph2D = registry.getDefinition("graph-2d");
+  const sourceFile = registry.getDefinition("source-file");
 
   assert.equal(expression?.title, "Expression");
   assert.deepEqual(expression?.capabilities, [
@@ -22,6 +23,13 @@ test("default semantic object registry exposes metadata without behavior", () =>
   ]);
   assert.equal(matrix?.domain, "linear-algebra");
   assert.equal(graph2D?.summary.includes("symbolic provenance"), true);
+  assert.equal(sourceFile?.domain, "programming");
+  assert.deepEqual(sourceFile?.capabilities, [
+    "render",
+    "select",
+    "animate",
+    "execute"
+  ]);
   assert.equal("render" in (expression ?? {}), false);
   assert.equal("execute" in (matrix ?? {}), false);
 });
@@ -38,7 +46,13 @@ test("semantic object registry lists object types by capability", () => {
   assert.deepEqual(registry.listTypesByCapability("animate"), [
     "equation",
     "graph-3d",
+    "source-file",
     "animation-intent"
+  ]);
+  assert.deepEqual(registry.listTypesByCapability("execute"), [
+    "expression",
+    "matrix",
+    "source-file"
   ]);
 });
 
@@ -97,6 +111,11 @@ test("semantic object registry maps object types to capability package ids", () 
   assert.deepEqual(registry.listCapabilityPackageIdsForType("graph-3d"), [
     "package.kp.graph3d.render.webgl.surface-mesh",
     "package.kp.graph3d.animate.surface-mode"
+  ]);
+  assert.deepEqual(registry.listCapabilityPackageIdsForType("source-file"), [
+    "package.kp.source-file.render.code-panel",
+    "package.kp.source-file.select.range",
+    "package.kp.source-file.animate.execution-trace"
   ]);
   assert.deepEqual(registry.listCapabilityPackageIdsForType("unknown"), []);
 });

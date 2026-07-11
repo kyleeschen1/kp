@@ -298,6 +298,94 @@ export const defaultKpCapabilityPackageManifests:
       ]
     },
     {
+      id: "package.kp.source-file.render.code-panel",
+      title: "SourceFile Code Panel Renderer",
+      library: "kp.source-file",
+      capability: "render.code-panel",
+      objectType: "source-file",
+      mode: "*",
+      status: "active",
+      target: "browser",
+      loadPhase: "initial-render",
+      summary:
+        "Render SourceFile objects as synchronized programming tutorial code panels.",
+      semanticCapabilities: ["render", "select"],
+      protocols: [
+        "createKpTutorialProgrammingPanelContract",
+        "renderKpTutorialSourceFilePanelHtml"
+      ],
+      views: ["code-panel", "source-lines"],
+      tags: ["source-file", "programming", "code-panel"],
+      sourceRefs: [
+        {
+          label: "Programming panel contract",
+          href: "src/tutorial/programming-panel.ts"
+        },
+        {
+          label: "Tutorial card HTML shell",
+          href: "src/tutorial/card-html-shell.ts"
+        }
+      ]
+    },
+    {
+      id: "package.kp.source-file.select.range",
+      title: "SourceFile Range Selector",
+      library: "kp.source-file",
+      capability: "select.range",
+      objectType: "source-file",
+      mode: "*",
+      status: "active",
+      target: "runtime",
+      loadPhase: "interaction",
+      summary:
+        "Create and resolve stable one-based source-range selectors for SourceFile objects.",
+      semanticCapabilities: ["select"],
+      protocols: ["createSourceRangeSelector", "resolveSourceRangeSelector"],
+      views: ["source-range"],
+      tags: ["source-file", "programming", "selector"],
+      sourceRefs: [
+        {
+          label: "SourceFile semantic object",
+          href: "src/semantic/source-file.ts"
+        }
+      ]
+    },
+    {
+      id: "package.kp.source-file.animate.execution-trace",
+      title: "SourceFile Execution Trace Animator",
+      library: "kp.source-file",
+      capability: "animate.execution-trace",
+      objectType: "source-file",
+      mode: "trace",
+      status: "active",
+      target: "browser",
+      loadPhase: "interaction",
+      summary:
+        "Synchronize SourceFile frames with execution-trace steps on the shared tutorial clock.",
+      semanticCapabilities: ["animate", "select", "execute"],
+      protocols: [
+        "createKpTutorialSourceFileFrameAdapter",
+        "createKpProgrammingExecutionTrace",
+        "createKpProgrammingExecutionTraceFrame"
+      ],
+      views: ["source-frame", "execution-trace"],
+      tags: ["source-file", "programming", "trace", "timeline"],
+      sourceRefs: [
+        {
+          label: "SourceFile frame adapter",
+          href: "src/tutorial/source-file-frame-adapter.ts"
+        },
+        {
+          label: "Programming execution trace",
+          href: "src/tutorial/programming-execution-trace.ts"
+        },
+        {
+          label: "Programming execution trace panel",
+          href: "src/tutorial/programming-execution-trace-panel.ts"
+        }
+      ]
+    },
+    {
       id: "package.kp.matrix.render.katex",
       title: "KaTeX Matrix Renderer",
       library: "kp.matrix",

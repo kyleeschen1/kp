@@ -151,3 +151,55 @@ test("tutorial card dependency planner reports capability package diagnostics", 
   ]);
   assert.deepEqual(plan.diagnostics, plan.phases[0]?.diagnostics);
 });
+
+test("tutorial card dependency planner includes SourceFile capability packages", () => {
+  const plan = createKpTutorialCardDependencyPlan({
+    id: "tutorial.programming.source-file",
+    title: "SourceFile programming sample",
+    version: 1,
+    rootLayoutId: "layout.programming.source-file",
+    semanticObjectRefs: [
+      {
+        objectId: "source-file.programming.add",
+        objectType: "source-file"
+      }
+    ],
+    transformationRefs: [],
+    layoutRefs: [
+      {
+        id: "layout.programming.source-file",
+        kind: "row",
+        rootLayoutId: "layout.programming.source-file",
+        childIds: []
+      }
+    ],
+    timelineRefs: [],
+    checks: [],
+    exportProfiles: [],
+    dependencies: {
+      critical: {
+        semanticObjectIds: ["source-file.programming.add"],
+        transformationIds: [],
+        layoutIds: ["layout.programming.source-file"],
+        timelineIds: [],
+        capabilities: []
+      }
+    },
+    fallback: {
+      strategy: "text-only",
+      preservesLayout: false
+    }
+  });
+
+  assert.deepEqual(plan.phases[0]?.capabilityPackageIds, [
+    "package.kp.source-file.render.code-panel",
+    "package.kp.source-file.select.range",
+    "package.kp.source-file.animate.execution-trace"
+  ]);
+  assert.deepEqual(plan.phases[0]?.capabilityPackageKeys, [
+    "kp.source-file:render.code-panel:source-file:*",
+    "kp.source-file:select.range:source-file:*",
+    "kp.source-file:animate.execution-trace:source-file:trace"
+  ]);
+  assert.equal(plan.totals.capabilityPackageCount, 3);
+});
