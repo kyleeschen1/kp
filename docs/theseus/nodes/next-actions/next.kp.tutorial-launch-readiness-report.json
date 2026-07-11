@@ -2,7 +2,64 @@
   "id": "next.kp.tutorial-launch-readiness-report",
   "kind": "next-action",
   "title": "Add tutorial launch readiness report row",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add a dashboard/report row that summarizes browser launch readiness across tutorial-card iframe, static-step, programming, dependency, fallback, seek, and nonblank checks."
+  "summary": "Added a tutorial launch readiness report-card row that summarizes dashboard launch reachability, sampled seeking, nonblank panels, dependency closure, fallback readiness, and embed metadata.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/data.ts",
+      "summary": "Adds the Tutorial launch readiness report-card theme with evidence, risks, next actions, related rows, and Theseus loop provenance."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers the new report-card data fields and selected dashboard preview rendering."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.tutorial-launch-readiness-report.json",
+      "summary": "Records the approved tutorial launch readiness report next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.programming-execution-trace-frame-contract.json",
+      "summary": "Materializes the next approved programming execution-trace frame contract slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the programming execution-trace frame contract slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/tutorial-launch-target-dashboard-health.test.ts tests/tutorial-launch-targets.test.ts",
+      "status": "passed",
+      "scope": "dashboard launch readiness report and launch registry unit coverage",
+      "checkedAt": "2026-07-11T01:41:17.103Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:41:17.129Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:41:17.151Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:41:17.174Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a tutorial launch readiness report-card row that summarizes dashboard launch reachability, sampled seeking, nonblank panels, dependency closure, fallback readiness, and embed metadata."
+  }
 }

@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.programming-execution-trace-frame-contract",
+  "kind": "next-action",
+  "title": "Define programming execution-trace frame contract",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Define the typed frame contract for static programming execution traces, including current step, call stack, locals, output, selectors, and timeline progress."
+}

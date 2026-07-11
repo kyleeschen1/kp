@@ -1088,6 +1088,62 @@ test("project dashboard includes semantic runtime readiness report card", () => 
   ]);
 });
 
+test("project dashboard includes tutorial launch readiness report card", () => {
+  const launchTheme = projectDashboardData.reportThemes.find(
+    (theme) => theme.id === "report-tutorial-launch-readiness"
+  );
+
+  assert.equal(launchTheme?.title, "Tutorial launch readiness");
+  assert.equal(launchTheme?.status, "active");
+  assert.equal(launchTheme?.grade, "B+");
+  assert.equal(launchTheme?.lastReviewedOn, "2026-07-11");
+  assert.ok(
+    launchTheme?.questions.some((question) =>
+      question.includes("browser-reachable")
+    )
+  );
+  assert.ok(
+    launchTheme?.questions.some((question) =>
+      question.includes("deterministic progress")
+    )
+  );
+  assert.ok(
+    launchTheme?.questions.some((question) =>
+      question.includes("nonblank panel content")
+    )
+  );
+  assert.ok(
+    launchTheme?.evidence.some((entry) =>
+      entry.href.includes("tests/tutorial-launch-smoke.browser.spec.ts")
+    )
+  );
+  assert.ok(
+    launchTheme?.evidence.some((entry) =>
+      entry.href.includes("tests/tutorial-card-seek-smoke.browser.spec.ts")
+    )
+  );
+  assert.ok(
+    launchTheme?.evidence.some((entry) =>
+      entry.href.includes("tests/tutorial-panel-nonblank-smoke.browser.spec.ts")
+    )
+  );
+  assert.ok(
+    launchTheme?.risks.some((risk) => risk.includes("smoke-level"))
+  );
+  assert.ok(
+    launchTheme?.recommendedNextActions.some((action) =>
+      action.includes("execution-trace programming")
+    )
+  );
+  assert.deepEqual(launchTheme?.relatedIds, [
+    "report-semantic-runtime-readiness",
+    "sample-synced-equation-graph-linear-solve",
+    "iframe-export-artifact",
+    "static-step-export-artifact",
+    "semantic-source-file"
+  ]);
+});
+
 test("renderProjectDashboard renders report card evidence, risks, review metadata, and next actions", () => {
   const html = renderProjectDashboard(projectDashboardData);
 
@@ -1122,6 +1178,20 @@ test("renderProjectDashboard selects semantic runtime readiness report card", ()
     /data-kp-preview-field="Risks"[^>]*>[\s\S]*GIF and video encoders/
   );
   assert.match(html, /src\/tutorial\/export-profile-resolver\.ts/);
+});
+
+test("renderProjectDashboard selects tutorial launch readiness report card", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "report-tutorial-launch-readiness"
+  });
+
+  assert.match(
+    html,
+    /data-kp-selected-agenda-row="report-tutorial-launch-readiness"/
+  );
+  assert.match(html, /Tutorial launch readiness/);
+  assert.match(html, /data-kp-preview-field="Grade"[^>]*>B\+/);
+  assert.match(html, /tests\/tutorial-card-seek-smoke\.browser\.spec\.ts/);
 });
 
 test("renderProjectDashboard renders the data contract for dashboard writes", () => {

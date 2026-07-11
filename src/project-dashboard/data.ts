@@ -1273,6 +1273,99 @@ export const projectDashboardData: ProjectDashboardData = {
       ]
     },
     {
+      id: "report-tutorial-launch-readiness",
+      title: "Tutorial launch readiness",
+      status: "active",
+      grade: "B+",
+      lastReviewedOn: "2026-07-11",
+      scope:
+        "Assess whether current tutorial-card launch surfaces are browser-reachable, sampleable, linked from the dashboard, and backed by export dependency and fallback checks.",
+      questions: [
+        "Are live, iframe, static-step, and programming tutorial launch targets browser-reachable from the dashboard?",
+        "Can tutorial cards be sampled at deterministic progress states with matching clock, scrubber, and beat metadata?",
+        "Do equation, graph, and programming panels render nonblank panel content in browser smoke fixtures?",
+        "Do iframe and static-step export artifacts expose dependency closure, fallback readiness, and embed policy metadata?"
+      ],
+      evidence: [
+        {
+          label: "Tutorial launch target registry",
+          href: "src/tutorial/launch-targets.ts"
+        },
+        {
+          label: "Dashboard launch target health",
+          href: "src/tutorial/launch-target-dashboard-health.ts"
+        },
+        {
+          label: "Tutorial launch browser smoke",
+          href: "tests/tutorial-launch-smoke.browser.spec.ts"
+        },
+        {
+          label: "Iframe export browser smoke",
+          href: "tests/iframe-export-smoke.browser.spec.ts"
+        },
+        {
+          label: "Static-step export browser smoke",
+          href: "tests/static-step-export-smoke.browser.spec.ts"
+        },
+        {
+          label: "Programming card browser smoke",
+          href: "tests/programming-card-smoke.browser.spec.ts"
+        },
+        {
+          label: "Tutorial card seek browser smoke",
+          href: "tests/tutorial-card-seek-smoke.browser.spec.ts"
+        },
+        {
+          label: "Tutorial panel nonblank browser smoke",
+          href: "tests/tutorial-panel-nonblank-smoke.browser.spec.ts"
+        },
+        {
+          label: "Export dependency closure",
+          href: "src/tutorial/export-dependency-closure.ts"
+        },
+        {
+          label: "Export fallback readiness",
+          href: "src/tutorial/export-fallback-readiness.ts"
+        },
+        {
+          label: "Iframe asset manifest",
+          href: "src/tutorial/iframe-asset-manifest.ts"
+        }
+      ],
+      risks: [
+        "Coverage is still smoke-level: it proves launch, seek metadata, and nonblank panels, not full visual parity or production hosting.",
+        "Programming launch coverage still uses a static SourceFile card rather than execution traces, stack frames, or runtime state.",
+        "Graph coverage proves current mesh sample launch and panel content; richer graph transformation quality still needs timeline diagnostics."
+      ],
+      recommendedNextActions: [
+        "Add the execution-trace programming frame contract and static fixture.",
+        "Render an execution-trace programming panel from static frames.",
+        "Expand graph parent-timeline diagnostics after the launch surfaces stay stable."
+      ],
+      tags: [
+        "tutorial-card",
+        "browser-smoke",
+        "launch",
+        "export",
+        "readiness"
+      ],
+      projectRefs: [
+        {
+          kind: "theseus",
+          label: "Tutorial-card browser hardening loop",
+          href: "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+          id: "run-contract.kp.tutorial-card-browser-hardening-loop-v0"
+        }
+      ],
+      relatedIds: [
+        "report-semantic-runtime-readiness",
+        "sample-synced-equation-graph-linear-solve",
+        "iframe-export-artifact",
+        "static-step-export-artifact",
+        "semantic-source-file"
+      ]
+    },
+    {
       id: "report-semantic-object-api",
       title: "Semantic object API",
       status: "planned",
