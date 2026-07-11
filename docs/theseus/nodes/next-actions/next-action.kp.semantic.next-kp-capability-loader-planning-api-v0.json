@@ -1,0 +1,106 @@
+{
+  "id": "next-action.kp.semantic.next-kp-capability-loader-planning-api-v0",
+  "kind": "next-action",
+  "title": "Add capability loader planning API",
+  "status": "resolved",
+  "domain": "kp.semantic",
+  "summary": "Added metadata-only capability load planning from SemanticObject types to package manifests.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-capability-loading-v0.json",
+      "summary": "Run contract whose stored slice next.kp.capability-loader-planning-api was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP workflow frontier for dashboard-backed semantic animation system work."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap selects SemanticObject capability loading as one of the next loop choices after hosted/export closeout."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread names capability loading as an active next choice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-11-hosted-package-readiness-export-sampling-loop-closeout.md",
+      "summary": "Hosted/export closeout recommends registry-backed capability loading before hardcoded encoder dependencies."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/capability-loader-plan.ts",
+      "summary": "Defines capability load plan inputs, diagnostics, package selection, filter handling, and default registry/catalog wiring."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-capability-loader-plan.test.ts",
+      "summary": "Covers object-type package selection, capability/target filtering, ordering, and missing object/package diagnostics."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-capability-loading-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Add capability loader planning API can be completed inside KP SemanticObject capability loading loop."
+  ],
+  "allowedWork": [
+    "Only work on approved KP SemanticObject capability loading slices.",
+    "Keep work tied to semantic capability package metadata, tutorial dependency planning, export capability closure, dashboard/API catalog rows, and project docs.",
+    "Use metadata-first package manifests and deterministic fixtures before any dynamic loader."
+  ],
+  "disallowedWork": [
+    "Do not implement GIF, MP4, or WebM encoders in this loop.",
+    "Do not implement full CAS behavior or broad symbolic algebra.",
+    "Do not pursue broad Theseus planner infrastructure unless it directly blocks this KP run contract.",
+    "Do not broaden into graph runtime unification beyond package metadata needed by graph capabilities."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-capability-loader-plan.test.ts tests/semantic-object-registry.test.ts tests/semantic-capability-package-manifest.test.ts",
+      "status": "passed",
+      "scope": "focused capability loader planning tests",
+      "checkedAt": "2026-07-11T04:29:47.650Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript projects",
+      "checkedAt": "2026-07-11T04:29:47.678Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T04:29:47.700Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T04:29:47.729Z",
+      "scope": "whitespace check"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added metadata-only capability load planning from SemanticObject types to package manifests."
+  }
+}

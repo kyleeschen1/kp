@@ -102,7 +102,14 @@
     {
       "id": "next.kp.capability-loader-planning-api",
       "title": "Add capability loader planning API",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.semantic.next-kp-capability-loader-planning-api-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.semantic.next-kp-capability-loader-planning-api-v0",
+      "title": "Add capability loader planning API",
+      "summary": "Materialized from stored run-contract slice next.kp.capability-loader-planning-api in KP SemanticObject capability loading loop.",
+      "status": "complete"
     },
     {
       "id": "next.kp.tutorial-dependency-package-planner",
