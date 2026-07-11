@@ -2,7 +2,64 @@
   "id": "next.kp.programming-execution-trace-fixture",
   "kind": "next-action",
   "title": "Add static execution-trace fixture",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add a static add(a, b) programming execution-trace fixture that uses the trace frame contract for deterministic sampled execution states."
+  "summary": "Added a static add(a, b) execution-trace fixture that samples deterministic call, evaluate, return, and output frames from the execution trace contract.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/programming-execution-trace-fixture.ts",
+      "summary": "Defines the static add execution-trace fixture and sampler using the current SourceFile programming sample selectors."
+    },
+    {
+      "kind": "file",
+      "path": "tests/programming-execution-trace-fixture.test.ts",
+      "summary": "Covers deterministic step sampling, active selectors, stack/local/output state, rewind determinism, and progress clamping."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.programming-execution-trace-fixture.json",
+      "summary": "Records the approved static execution-trace fixture next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.programming-execution-trace-panel.json",
+      "summary": "Materializes the next approved execution-trace programming panel slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the execution-trace programming panel slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/programming-execution-trace-fixture.test.ts tests/programming-execution-trace-frame.test.ts tests/programming-tutorial-card-sample.test.ts tests/tutorial-card-programming-panel.test.ts",
+      "status": "passed",
+      "scope": "execution trace fixture, contract, and adjacent programming tutorial unit coverage",
+      "checkedAt": "2026-07-11T01:47:09.096Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T01:47:09.107Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T01:47:09.126Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T01:47:09.144Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a static add(a, b) execution-trace fixture that samples deterministic call, evaluate, return, and output frames from the execution trace contract."
+  }
 }

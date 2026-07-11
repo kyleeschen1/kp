@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.programming-execution-trace-panel",
+  "kind": "next-action",
+  "title": "Render execution-trace programming panel",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Render execution-trace frames into a programming tutorial panel that exposes current step, active selectors, stack, locals, and output."
+}
