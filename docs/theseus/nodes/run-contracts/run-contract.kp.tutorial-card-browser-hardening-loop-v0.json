@@ -37,7 +37,7 @@
     "Do not pursue visual polish unless it blocks launch smoke reliability."
   ],
   "goal": "Prove concrete tutorial-card iframe, static-step, programming, graph, and dashboard launch surfaces can render, seek, expose fallbacks/dependencies, and report readiness before moving into media export or broader capability registry work.",
-  "target": "next.kp.synchronized-comparison-card-shell",
+  "target": "next.kp.hardening-api-catalog-rows",
   "runMode": "run",
   "maxSlices": 24,
   "commitCadence": "Commit after each verified slice.",
@@ -152,7 +152,7 @@
     {
       "id": "next.kp.synchronized-comparison-card-shell",
       "title": "Add synchronized comparison sample shell",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next.kp.hardening-api-catalog-rows",

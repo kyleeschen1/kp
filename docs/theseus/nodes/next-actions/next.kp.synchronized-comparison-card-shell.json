@@ -2,7 +2,75 @@
   "id": "next.kp.synchronized-comparison-card-shell",
   "kind": "next-action",
   "title": "Add synchronized comparison sample shell",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Add a sample shell for comparing two synchronized tutorial-card views from one shared progress value."
+  "summary": "Added a synchronized comparison sample shell that renders linear-solve and programming execution-trace tutorial cards from one shared progress value.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/synchronized-comparison-card.ts",
+      "summary": "Defines the comparison sampler and HTML shell that compose two tutorial-card samples from one normalized progress."
+    },
+    {
+      "kind": "file",
+      "path": "tests/synchronized-comparison-card.test.ts",
+      "summary": "Covers synchronized sampling, clamping, deterministic frame sampling, and rendered comparison shell metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/synchronized-comparison-card.browser.spec.ts",
+      "summary": "Browser-smokes the comparison shell and verifies both tutorial-card panels render."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.synchronized-comparison-card-shell.json",
+      "summary": "Records the approved synchronized comparison sample shell next-action and completion evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next.kp.hardening-api-catalog-rows.json",
+      "summary": "Materializes the next approved hardening API/catalog rows slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial-card-browser-hardening-loop-v0.json",
+      "summary": "Advances the browser/embed hardening run-contract target to the hardening API/catalog rows slice."
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/synchronized-comparison-card.test.ts tests/programming-execution-trace-card-sample.test.ts tests/linear-solve-tutorial-card-sample.test.ts",
+      "status": "passed",
+      "scope": "comparison, programming trace card, and linear-solve tutorial card unit coverage",
+      "checkedAt": "2026-07-11T02:01:42.630Z"
+    },
+    {
+      "command": "npx playwright test tests/synchronized-comparison-card.browser.spec.ts tests/programming-execution-trace-card-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "comparison and programming execution-trace browser smoke coverage",
+      "checkedAt": "2026-07-11T02:01:42.653Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-11T02:01:42.676Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-11T02:01:42.707Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-11T02:01:42.732Z",
+      "scope": "whitespace validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a synchronized comparison sample shell that renders linear-solve and programming execution-trace tutorial cards from one shared progress value."
+  }
 }

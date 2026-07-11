@@ -1,0 +1,8 @@
+{
+  "id": "next.kp.hardening-api-catalog-rows",
+  "kind": "next-action",
+  "title": "Expose hardening status in API/catalog rows",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Expose browser hardening artifacts, diagnostics, and comparison samples through dashboard/API catalogue rows."
+}
