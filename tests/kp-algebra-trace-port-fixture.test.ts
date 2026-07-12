@@ -12,9 +12,13 @@ import {
   checkKpPortLossDiagnostics
 } from "../src/semantic/asset-laws.ts";
 import {
+  createAlgebraTraceFixturePort,
   createLinearSolveAlgebraTracePort,
   linearSolveAlgebraTraceFixture
 } from "../src/semantic/algebra-trace-port-fixture.ts";
+import {
+  createGeneratedLinearSolveTutorialFixture
+} from "../src/semantic/generated-algebra-tutorial-fixture.ts";
 import {
   createLinearSolveKpAssetBundle
 } from "../src/semantic/linear-solve-asset.ts";
@@ -106,6 +110,65 @@ test("linear solve algebra trace fixture reports lossy mismatches", () => {
       message:
         "Trace step trace.linear-solve.step.left-simplified latex does not match canonical object equation.linear-solve.left-simplified.",
       path: "steps[2].latex"
+    }
+  ]);
+  assert.deepEqual(checkKpPortLossDiagnostics(imported), {
+    lawId: "port.loss-reporting",
+    passed: true,
+    failures: []
+  });
+});
+
+test("generated algebra trace fixture port reports transformation and rule mismatches", () => {
+  const fixture = createGeneratedLinearSolveTutorialFixture({
+    id: "generated.linear-solve.two-x-plus-3",
+    title: "Generated solve 2x plus 3",
+    variable: "x",
+    coefficient: 2,
+    addend: 3,
+    solution: 4
+  });
+  const port = createAlgebraTraceFixturePort({
+    id: `port.fixture.algebra-trace.${fixture.id}`,
+    title: `${fixture.title} algebra trace port`,
+    targetBundle: fixture.bundle,
+    expectedTrace: fixture.trace,
+    transformationIds: fixture.transformations.map(
+      (transformation) => transformation.id
+    )
+  });
+  const mismatchedTrace = {
+    ...fixture.trace,
+    steps: fixture.trace.steps.map((step) =>
+      step.id.endsWith(".after-divide")
+        ? {
+            ...step,
+            transformationId:
+              "transform.generated.linear-solve.two-x-plus-3.cancel-additive-inverse",
+            rule: "cancelAdditiveInverses"
+          }
+        : step
+    )
+  };
+  const imported = runKpExternalPort(port, mismatchedTrace);
+
+  assert.equal(imported.preservation, "lax");
+  assert.deepEqual(imported.diagnostics, [
+    {
+      severity: "warning",
+      code: "trace-transformation-mismatch",
+      lossKind: "lossy",
+      message:
+        "Trace step trace.generated.linear-solve.two-x-plus-3.after-divide transformation transform.generated.linear-solve.two-x-plus-3.cancel-additive-inverse does not match expected transform.generated.linear-solve.two-x-plus-3.divide-coefficient.",
+      path: "steps[4].transformationId"
+    },
+    {
+      severity: "warning",
+      code: "trace-rule-mismatch",
+      lossKind: "partial",
+      message:
+        "Trace step trace.generated.linear-solve.two-x-plus-3.after-divide rule cancelAdditiveInverses does not match expected divideBothSides.",
+      path: "steps[4].rule"
     }
   ]);
   assert.deepEqual(checkKpPortLossDiagnostics(imported), {

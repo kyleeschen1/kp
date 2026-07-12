@@ -31,6 +31,14 @@ export interface AlgebraTraceFixture {
   readonly steps: readonly AlgebraTraceStepFixture[];
 }
 
+export interface CreateAlgebraTraceFixturePortInput {
+  readonly id: string;
+  readonly title: string;
+  readonly targetBundle: KpAssetBundle;
+  readonly expectedTrace: AlgebraTraceFixture;
+  readonly transformationIds?: readonly string[] | undefined;
+}
+
 export const linearSolveAlgebraTraceFixture: AlgebraTraceFixture = {
   id: "trace.linear-solve",
   title: "Linear solve generated algebra trace",
@@ -61,41 +69,59 @@ export const linearSolveAlgebraTraceFixture: AlgebraTraceFixture = {
 };
 
 export function createLinearSolveAlgebraTracePort(): KpExternalPort<AlgebraTraceFixture> {
-  return createKpExternalPort({
+  const canonical = createLinearSolveKpAssetBundle();
+
+  return createAlgebraTraceFixturePort({
     id: portId,
     title: "Linear solve algebra trace fixture port",
-    sourceSystem: "fixture.algebra-trace",
-    version: "0.1.0",
-    preservation: "strict",
-    importAsset: importLinearSolveAlgebraTrace
+    targetBundle: canonical.bundle,
+    expectedTrace: linearSolveAlgebraTraceFixture,
+    transformationIds: canonical.transformations.map(
+      (transformation) => transformation.id
+    )
   });
 }
 
-function importLinearSolveAlgebraTrace(
+export function createAlgebraTraceFixturePort(
+  input: CreateAlgebraTraceFixturePortInput
+): KpExternalPort<AlgebraTraceFixture> {
+  return createKpExternalPort({
+    id: input.id,
+    title: input.title,
+    sourceSystem: "fixture.algebra-trace",
+    version: "0.1.0",
+    preservation: "strict",
+    importAsset: (trace) => importAlgebraTraceFixture(input, trace)
+  });
+}
+
+function importAlgebraTraceFixture(
+  input: CreateAlgebraTraceFixturePortInput,
   trace: AlgebraTraceFixture
 ): KpExternalPortImportResult {
-  const canonical = createLinearSolveKpAssetBundle().bundle;
-  const diagnostics = validateTraceShape(trace, canonical);
+  const diagnostics = validateTraceShape(trace, input);
 
   return {
-    bundle: createImportedLinearSolveBundle(canonical, trace),
+    bundle: createImportedTraceBundle(input.targetBundle, trace, input.id),
     preservation: diagnostics.length === 0 ? "strict" : "lax",
     ...(diagnostics.length === 0 ? {} : { diagnostics })
   };
 }
 
-function createImportedLinearSolveBundle(
-  canonical: KpAssetBundle,
-  trace: AlgebraTraceFixture
+function createImportedTraceBundle(
+  targetBundle: KpAssetBundle,
+  trace: AlgebraTraceFixture,
+  sourcePortId: string
 ): KpAssetBundle {
   return createKpAssetBundle({
-    id: canonical.id,
-    title: canonical.title,
-    objects: canonical.objects.map((object, index) =>
+    id: targetBundle.id,
+    title: targetBundle.title,
+    objects: targetBundle.objects.map((object, index) =>
       createImportedObject(
         object,
         trace.steps[index] ?? fallbackStep(trace, index),
-        index
+        index,
+        sourcePortId
       )
     )
   });
@@ -104,7 +130,8 @@ function createImportedLinearSolveBundle(
 function createImportedObject(
   object: KpSemanticAssetObject,
   step: AlgebraTraceStepFixture,
-  index: number
+  index: number,
+  sourcePortId: string
 ): KpSemanticAssetObject {
   return createKpSemanticAssetObject({
     id: object.id,
@@ -118,7 +145,7 @@ function createImportedObject(
       ...(step.transformationId === undefined
         ? {}
         : { transformationId: step.transformationId }),
-      portId
+      portId: sourcePortId
     },
     ...(object.metadata === undefined ? {} : { metadata: object.metadata })
   });
@@ -126,22 +153,27 @@ function createImportedObject(
 
 function validateTraceShape(
   trace: AlgebraTraceFixture,
-  canonical: KpAssetBundle
+  input: CreateAlgebraTraceFixturePortInput
 ): readonly KpPortDiagnostic[] {
   const diagnostics: KpPortDiagnostic[] = [];
+  const transformationIds =
+    input.transformationIds === undefined
+      ? undefined
+      : new Set(input.transformationIds);
 
-  if (trace.steps.length !== canonical.objects.length) {
+  if (trace.steps.length !== input.targetBundle.objects.length) {
     diagnostics.push({
       severity: "warning",
       code: "trace-step-count-mismatch",
       lossKind: "partial",
-      message: `Expected ${canonical.objects.length} trace steps but received ${trace.steps.length}.`,
+      message: `Expected ${input.targetBundle.objects.length} trace steps but received ${trace.steps.length}.`,
       path: "steps"
     });
   }
 
-  canonical.objects.forEach((object, index) => {
+  input.targetBundle.objects.forEach((object, index) => {
     const step = trace.steps[index];
+    const expectedStep = input.expectedTrace.steps[index];
     const expectedLatex = expectedLatexForObject(object);
 
     if (
@@ -155,6 +187,51 @@ function validateTraceShape(
         lossKind: "partial",
         message: `Trace step ${step.id} latex does not match canonical object ${object.id}.`,
         path: `steps[${index}].latex`
+      });
+    }
+
+    if (
+      step !== undefined &&
+      expectedStep !== undefined &&
+      step.transformationId !== expectedStep.transformationId
+    ) {
+      diagnostics.push({
+        severity: "warning",
+        code: "trace-transformation-mismatch",
+        lossKind: "lossy",
+        message:
+          `Trace step ${step.id} transformation ${formatTraceOptional(step.transformationId)} does not match expected ${formatTraceOptional(expectedStep.transformationId)}.`,
+        path: `steps[${index}].transformationId`
+      });
+    }
+
+    if (
+      step !== undefined &&
+      expectedStep !== undefined &&
+      step.rule !== expectedStep.rule
+    ) {
+      diagnostics.push({
+        severity: "warning",
+        code: "trace-rule-mismatch",
+        lossKind: "partial",
+        message:
+          `Trace step ${step.id} rule ${formatTraceOptional(step.rule)} does not match expected ${formatTraceOptional(expectedStep.rule)}.`,
+        path: `steps[${index}].rule`
+      });
+    }
+
+    if (
+      step?.transformationId !== undefined &&
+      transformationIds !== undefined &&
+      !transformationIds.has(step.transformationId)
+    ) {
+      diagnostics.push({
+        severity: "warning",
+        code: "trace-transformation-unknown",
+        lossKind: "lossy",
+        message:
+          `Trace step ${step.id} references unknown transformation ${step.transformationId}.`,
+        path: `steps[${index}].transformationId`
       });
     }
   });
@@ -173,6 +250,10 @@ function expectedLatexForObject(object: KpSemanticAssetObject): string | undefin
   }
 
   return undefined;
+}
+
+function formatTraceOptional(value: string | undefined): string {
+  return value ?? "<none>";
 }
 
 function fallbackStep(

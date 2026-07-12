@@ -343,6 +343,16 @@
       "kind": "file",
       "path": "tests/generated-linear-solve-tutorial-card-sample.test.ts",
       "summary": "Applies the renderer preservation law to generated card sample frames."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/algebra-trace-port-fixture.ts",
+      "summary": "Adds generic algebra trace fixture port construction and generated mismatch diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-algebra-trace-port-fixture.test.ts",
+      "summary": "Covers generated fixture transformation and rule mismatch diagnostics."
     }
   ],
   "verification": [
@@ -647,13 +657,31 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T17:48:42.235Z",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-12T17:48:42.235Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-algebra-trace-port-fixture.test.ts tests/kp-asset-laws.test.ts tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard-semantic-asset-catalog.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts tests/generated-linear-solve-export-sample.test.ts tests/kp-asset-decomposition.test.ts",
+      "status": "passed",
+      "scope": "algebra trace port and generated semantic fixture suite",
+      "checkedAt": "2026-07-12T17:52:33.999Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T17:52:34.036Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T17:52:34.073Z",
       "scope": "Theseus graph validation"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added renderer-frame semantic preservation law for generated tutorial card samples, preserving parent-clock and semantic metadata without assuming one-to-one visual track ids."
+    "summary": "Generalized algebra trace fixture ports so generated fixtures report transformation-id and rule mismatches with explicit diagnostics."
   },
   "allowedWork": [
     "Only work on the approved generated-fixture catalog adoption slices.",
@@ -772,13 +800,14 @@
     {
       "id": "slice.kp.generated-fixture.frame-preservation-law",
       "title": "Add renderer-frame preservation law",
-      "status": "complete",
-      "summary": "Added renderer-frame semantic preservation law and generated card sample coverage."
+      "summary": "Added renderer-frame semantic preservation law and generated card sample coverage.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.port-diagnostics",
       "title": "Add port diagnostics for generated fixture mismatch",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Generalized algebra trace ports and added generated mismatch diagnostics."
     },
     {
       "id": "slice.kp.generated-fixture.dependency-manifest",
