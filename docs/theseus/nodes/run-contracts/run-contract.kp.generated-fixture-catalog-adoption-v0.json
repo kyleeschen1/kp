@@ -173,6 +173,16 @@
       "kind": "file",
       "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
       "summary": "Generated dashboard rows assert concrete generated tutorial-card sample ids."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-linear-solve-export-sample.ts",
+      "summary": "Generated fixture samples route through iframe and static-step export renderers."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-linear-solve-export-sample.test.ts",
+      "summary": "Generated export samples assert iframe HTML and static-step semantic preservation."
     }
   ],
   "verification": [
@@ -315,8 +325,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T05:48:44.517Z",
-      "scope": "slice 9 generated tutorial-card sample Theseus validation"
+      "scope": "slice 9 generated tutorial-card sample Theseus validation",
+      "checkedAt": "2026-07-12T05:48:44.517Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-linear-solve-export-sample.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts tests/tutorial-card-export-artifact.test.ts tests/tutorial-card-static-step-artifact.test.ts tests/tutorial-card-iframe-document.test.ts tests/tutorial-card-export-artifact-catalog.test.ts",
+      "status": "passed",
+      "scope": "generated fixture export sample path",
+      "checkedAt": "2026-07-12T05:55:26.082Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 10 generated export sample typecheck",
+      "checkedAt": "2026-07-12T05:55:32.787Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T05:55:41.875Z",
+      "scope": "slice 10 generated export sample Theseus validation"
     }
   ],
   "allowedWork": [
@@ -394,7 +422,7 @@
     {
       "id": "slice.kp.generated-fixture.export-sample-path",
       "title": "Wire generated fixtures into export sample path",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.subtractive-solves",
