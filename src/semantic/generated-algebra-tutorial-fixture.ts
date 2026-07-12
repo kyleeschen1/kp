@@ -18,14 +18,21 @@ import {
   type KpSemanticTransformation
 } from "./asset-transformation.ts";
 import type { AlgebraTraceFixture } from "./algebra-trace-port-fixture.ts";
+import {
+  generatedLinearSolveTutorialFixtureSpecs,
+  type GeneratedLinearSolveTutorialFixtureSpec
+} from "./generated-algebra-fixture-registry.ts";
 
-export interface CreateGeneratedLinearSolveTutorialFixtureInput {
-  readonly id: string;
-  readonly title: string;
-  readonly variable: string;
-  readonly addend: number;
-  readonly solution: number;
-}
+export type {
+  GeneratedLinearSolveTutorialFixtureSpec,
+  GeneratedLinearSolveTutorialFixtureSpec as CreateGeneratedLinearSolveTutorialFixtureInput
+} from "./generated-algebra-fixture-registry.ts";
+
+export {
+  generatedLinearSolveTutorialFixtureSpecs,
+  getGeneratedLinearSolveTutorialFixtureSpec,
+  listGeneratedLinearSolveTutorialFixtureSpecs
+} from "./generated-algebra-fixture-registry.ts";
 
 export interface GeneratedLinearSolveTutorialFixture {
   readonly id: string;
@@ -37,24 +44,6 @@ export interface GeneratedLinearSolveTutorialFixture {
   readonly flashcards: readonly KpFlashcardSpec[];
 }
 
-export const generatedLinearSolveTutorialFixtureSpecs:
-  readonly CreateGeneratedLinearSolveTutorialFixtureInput[] = [
-    {
-      id: "generated.linear-solve.x-plus-3",
-      title: "Generated solve x plus 3",
-      variable: "x",
-      addend: 3,
-      solution: 4
-    },
-    {
-      id: "generated.linear-solve.y-plus-5",
-      title: "Generated solve y plus 5",
-      variable: "y",
-      addend: 5,
-      solution: 7
-    }
-  ];
-
 export function createGeneratedLinearSolveTutorialFixtures():
   readonly GeneratedLinearSolveTutorialFixture[] {
   return generatedLinearSolveTutorialFixtureSpecs.map(
@@ -63,7 +52,7 @@ export function createGeneratedLinearSolveTutorialFixtures():
 }
 
 export function createGeneratedLinearSolveTutorialFixture(
-  input: CreateGeneratedLinearSolveTutorialFixtureInput
+  input: GeneratedLinearSolveTutorialFixtureSpec
 ): GeneratedLinearSolveTutorialFixture {
   assertNonEmpty(input.id, "Generated algebra fixture id");
   assertNonEmpty(input.title, `Generated algebra fixture ${input.id} title`);
@@ -185,7 +174,7 @@ function createGeneratedLinearSolveTransformations(
 }
 
 function createGeneratedLinearSolveTrace(
-  input: CreateGeneratedLinearSolveTutorialFixtureInput,
+  input: GeneratedLinearSolveTutorialFixtureSpec,
   ids: GeneratedLinearSolveIds,
   latex: GeneratedLinearSolveLatex
 ): AlgebraTraceFixture {
@@ -220,7 +209,7 @@ function createGeneratedLinearSolveTrace(
 }
 
 function createGeneratedLinearSolveFlashcards(
-  input: CreateGeneratedLinearSolveTutorialFixtureInput,
+  input: GeneratedLinearSolveTutorialFixtureSpec,
   ids: GeneratedLinearSolveIds
 ): readonly KpFlashcardSpec[] {
   return [
@@ -289,7 +278,7 @@ interface GeneratedLinearSolveLatex {
 }
 
 function generatedLinearSolveLatex(
-  input: CreateGeneratedLinearSolveTutorialFixtureInput
+  input: GeneratedLinearSolveTutorialFixtureSpec
 ): GeneratedLinearSolveLatex {
   const rhs = input.solution + input.addend;
 

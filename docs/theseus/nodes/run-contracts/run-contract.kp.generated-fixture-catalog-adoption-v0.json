@@ -23,11 +23,58 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-07-12-kp-renderer-interpreter-adoption-loop-closeout.md",
       "summary": "Renderer/interpreter closeout recommends the generated fixture catalog adoption loop."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Extracts generated linear-solve fixture specs and lookup into a reusable semantic registry module."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Covers registry listing and id lookup without constructing generated tutorial fixtures."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Consumes and re-exports the generated fixture registry while preserving the existing tutorial fixture API."
     }
   ],
   "verification": [
     "npm run theseus -- validate",
     "npm run typecheck"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "slice 2 durable contract promotion",
+      "checkedAt": "2026-07-12T04:22:04.003Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 2 durable contract promotion",
+      "checkedAt": "2026-07-12T04:22:06.043Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "scope": "slice 3 generated fixture registry focused tests",
+      "checkedAt": "2026-07-12T04:30:04.498Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 3 generated fixture registry typecheck",
+      "checkedAt": "2026-07-12T04:31:19.410Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T04:32:16.912Z",
+      "scope": "slice 3 generated fixture registry Theseus validation"
+    }
   ],
   "allowedWork": [
     "Only work on the approved generated-fixture catalog adoption slices.",
@@ -58,13 +105,14 @@
     {
       "id": "slice.kp.generated-fixture.promote-contract",
       "title": "Promote durable execution contract",
-      "status": "complete",
-      "summary": "Created the durable generated fixture catalog adoption contract and linked it to the KP workflow."
+      "summary": "Created the durable generated fixture catalog adoption contract and linked it to the KP workflow.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.registry",
       "title": "Extract generated fixture registry",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Extracted generated linear-solve fixture specs and lookup into a reusable semantic registry module while preserving the existing fixture API."
     },
     {
       "id": "slice.kp.generated-fixture.dashboard-row-catalog",
@@ -170,20 +218,6 @@
       "id": "slice.kp.generated-fixture.closeout",
       "title": "Close generated fixture catalog loop",
       "status": "planned"
-    }
-  ],
-  "verificationRecords": [
-    {
-      "command": "npm run theseus -- validate",
-      "status": "passed",
-      "scope": "slice 2 durable contract promotion",
-      "checkedAt": "2026-07-12T04:22:04.003Z"
-    },
-    {
-      "command": "npm run typecheck",
-      "status": "passed",
-      "checkedAt": "2026-07-12T04:22:06.043Z",
-      "scope": "slice 2 durable contract promotion"
     }
   ]
 }
