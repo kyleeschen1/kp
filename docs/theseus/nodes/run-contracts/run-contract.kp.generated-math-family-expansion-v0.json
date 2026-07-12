@@ -244,6 +244,16 @@
       "kind": "file",
       "path": "tests/generated-algebra-export-sample.test.ts",
       "summary": "Updates generated export discovery expectations for function-wrap inclusion."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "summary": "Defines default transform-kind to visual-motif rules for wrap and unwrap transforms."
+    },
+    {
+      "kind": "file",
+      "path": "tests/visual-motif-composition.test.ts",
+      "summary": "Covers default wrap/unwrap motif rules in reversible transform-tree timelines."
     }
   ],
   "verification": [
@@ -551,11 +561,31 @@
       "command": "npm run theseus -- validate",
       "status": "passed",
       "checkedAt": "2026-07-12T19:45:04.560Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/visual-motif-composition.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:48:50.817Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/visual-motif-composition.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:48:50.859Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:48:50.901Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:48:50.936Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added generated function-wrap fixture family for x to f(x), including registry support, semantic object selectors, argument identity correspondence, trace, and discovery expectations."
+    "summary": "Added default equation visual motif rules mapping wrapFunction and unwrapFunction semantic transforms to reusable wrap/unwrap motif descriptors."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -661,8 +691,8 @@
     {
       "id": "slice.kp.generated-math.wrap-motifs",
       "title": "Encode wrap and unwrap visual motif defaults",
-      "summary": "Add reusable wrap/unwrap motif defaults for generated fixtures.",
-      "status": "planned"
+      "summary": "Default equation visual motif rules now map wrapFunction/unwrapFunction to wrap/unwrap motif descriptors.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.distribution-fixtures",

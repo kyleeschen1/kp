@@ -12,6 +12,9 @@ import {
   createTransformTreeVisualMotifTimeline,
   type TransformTreeVisualMotifRule
 } from "../src/rendering/visual-motif-composition.ts";
+import {
+  defaultEquationTransformVisualMotifRules
+} from "../src/rendering/equation-visual-motif-defaults.ts";
 import type {
   EquationMotionPrimitiveId,
   EquationVisualMotifKind,
@@ -216,6 +219,66 @@ test("createTransformTreeVisualMotifTimeline keeps parallel leaves in one motif 
       "dot.row1.visual.simplify-into",
       "dot.row2.visual.simplify-into"
     ]
+  ]);
+});
+
+test("default equation visual motif rules map wrap and unwrap transforms", () => {
+  const wrap = createSemanticTransformationRef({
+    id: "transform.wrap-function",
+    kind: "wrapFunction",
+    sourceObjectIds: ["expression.x"],
+    targetObjectIds: ["expression.f-of-x"],
+    preserves: ["identity", "role"]
+  });
+  const unwrap = createSemanticTransformationRef({
+    id: "transform.unwrap-function",
+    kind: "unwrapFunction",
+    sourceObjectIds: ["expression.f-of-x"],
+    targetObjectIds: ["expression.x"],
+    preserves: ["identity", "role"]
+  });
+  const tree = createEditableSemanticTransformationTree({
+    root: createSemanticTransformationSequence({
+      id: "wrap-unwrap.sequence",
+      label: "Wrap then unwrap",
+      children: [
+        createSemanticTransformationLeaf(wrap),
+        createSemanticTransformationLeaf(unwrap)
+      ]
+    })
+  });
+
+  const timeline = createTransformTreeVisualMotifTimeline({
+    id: "wrap-unwrap.visual",
+    tree,
+    rules: defaultEquationTransformVisualMotifRules
+  });
+
+  assert.deepEqual(
+    timeline.segments.map((segment) => [
+      segment.transformationKind,
+      segment.motifKind,
+      segment.motionPrimitiveIds,
+      segment.phaseIds
+    ]),
+    [
+      [
+        "wrapFunction",
+        "wrap",
+        ["wrap"],
+        ["wrapped-token-shift", "wrap-artifact-enter"]
+      ],
+      [
+        "unwrapFunction",
+        "unwrap",
+        ["unwrap"],
+        ["unwrap-artifact-exit", "wrapped-token-shift"]
+      ]
+    ]
+  );
+  assert.deepEqual(timeline.rewindPhases.map((phase) => phase.segmentIds), [
+    ["transform.unwrap-function.visual.unwrap"],
+    ["transform.wrap-function.visual.wrap"]
   ]);
 });
 
