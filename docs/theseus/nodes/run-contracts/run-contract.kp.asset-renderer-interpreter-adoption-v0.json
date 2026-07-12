@@ -195,6 +195,16 @@
       "kind": "file",
       "path": "tests/kp-asset-laws.test.ts",
       "summary": "Covers passing and failing flashcard reference-closure law results."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/dashboard-preview-interpreter.ts",
+      "summary": "Adds a dashboard asset-preview interpreter that converts semantic asset bundles into preview fields, search fields, and diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-dashboard-preview-interpreter.test.ts",
+      "summary": "Covers strict asset previews and lossy previews with validation diagnostics."
     }
   ],
   "verification": [
@@ -462,8 +472,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T02:55:36.702Z",
-      "scope": "slice 16 flashcard closure law Theseus validation"
+      "scope": "slice 16 flashcard closure law Theseus validation",
+      "checkedAt": "2026-07-12T02:55:36.702Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-dashboard-preview-interpreter.test.ts tests/kp-asset-interpreter.test.ts",
+      "status": "passed",
+      "scope": "slice 17 dashboard preview interpreter focused tests",
+      "checkedAt": "2026-07-12T02:59:48.399Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 17 dashboard preview interpreter typecheck",
+      "checkedAt": "2026-07-12T02:59:56.279Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T03:00:04.718Z",
+      "scope": "slice 17 dashboard preview interpreter Theseus validation"
     }
   ],
   "progress": {
@@ -585,12 +613,13 @@
     {
       "id": "slice.kp.asset-renderer.dashboard-preview-interpreter",
       "title": "Add dashboard preview interpreter for semantic asset rows",
-      "status": "ready"
+      "summary": "Added a dashboard asset-preview interpreter producing preview fields, search fields, and validation diagnostics from semantic asset bundles.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.linear-solve-dashboard-preview",
       "title": "Show linear-solve asset preview data from interpreter path",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.drilldown-flashcard-dashboard-rows",
