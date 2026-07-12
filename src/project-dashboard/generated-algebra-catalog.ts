@@ -1,18 +1,18 @@
-import { runKpInterpreter, type KpInterpretation } from "../semantic/asset-interpreter.ts";
-import {
-  createKpDashboardAssetPreviewInterpreter,
-  type KpDashboardAssetPreview
-} from "../semantic/dashboard-preview-interpreter.ts";
+import { runKpInterpreter } from "../semantic/asset-interpreter.ts";
+import { createKpDashboardAssetPreviewInterpreter } from "../semantic/dashboard-preview-interpreter.ts";
 import {
   createGeneratedLinearSolveTutorialFixtures,
   type GeneratedLinearSolveTutorialFixture
 } from "../semantic/generated-algebra-tutorial-fixture.ts";
+import {
+  dashboardAssetPreviewDataAttributes,
+  dashboardAssetPreviewFields,
+  dashboardAssetPreviewSearchFields,
+  type DashboardAssetPreviewField
+} from "./asset-preview-fields.ts";
 import { projectDashboardTextFieldsMatch } from "./model.ts";
 
-export interface GeneratedAlgebraAgendaPreviewField {
-  readonly label: string;
-  readonly value: string;
-}
+export type GeneratedAlgebraAgendaPreviewField = DashboardAssetPreviewField;
 
 export interface GeneratedAlgebraFixtureAgendaRow {
   readonly id: string;
@@ -51,7 +51,7 @@ export function createGeneratedAlgebraFixtureAgendaRows(
       tags: ["generated", "algebra", "linear-solve", "fixture"],
       dataAttributes: [
         ["data-kp-generated-algebra-fixture", fixture.id] as [string, string],
-        ...semanticAssetPreviewDataAttributes(interpretation)
+        ...dashboardAssetPreviewDataAttributes(interpretation)
       ],
       relatedIds: ["asset-linear-solve-bundle", "port-algebra-trace-fixture"],
       previewFields: [
@@ -59,7 +59,7 @@ export function createGeneratedAlgebraFixtureAgendaRows(
         { label: "Initial LaTeX", value: initialLatex },
         { label: "Solved LaTeX", value: solvedLatex },
         { label: "Trace steps", value: String(fixture.trace.steps.length) },
-        ...semanticAssetPreviewFields(interpretation)
+        ...dashboardAssetPreviewFields(interpretation)
       ],
       searchFields: [
         "semantic asset catalog",
@@ -88,7 +88,7 @@ export function createGeneratedAlgebraFixtureAgendaRows(
           ...(card.selectorIds ?? []),
           ...(card.transformationIds ?? [])
         ]),
-        ...semanticAssetPreviewSearchFields(interpretation)
+        ...dashboardAssetPreviewSearchFields(interpretation)
       ]
     };
   });
@@ -114,46 +114,6 @@ function latexValueAt(
   )
     ? value.latex
     : "";
-}
-
-function semanticAssetPreviewFields(
-  interpretation: KpInterpretation<KpDashboardAssetPreview>
-): readonly GeneratedAlgebraAgendaPreviewField[] {
-  return [
-    { label: "Dashboard interpreter", value: interpretation.interpreterId },
-    { label: "Asset summary", value: interpretation.output.summary },
-    ...interpretation.output.fields,
-    ...previewListField(
-      "Asset diagnostics",
-      interpretation.diagnostics.map((diagnostic) => diagnostic.message)
-    )
-  ];
-}
-
-function semanticAssetPreviewSearchFields(
-  interpretation: KpInterpretation<KpDashboardAssetPreview>
-): readonly string[] {
-  return [
-    interpretation.interpreterId,
-    interpretation.output.summary,
-    ...interpretation.output.searchFields,
-    ...interpretation.diagnostics.map((diagnostic) => diagnostic.message)
-  ];
-}
-
-function semanticAssetPreviewDataAttributes(
-  interpretation: KpInterpretation<KpDashboardAssetPreview>
-): readonly [string, string][] {
-  return [["data-kp-dashboard-preview-interpreter", interpretation.interpreterId]];
-}
-
-function previewListField(
-  label: string,
-  values: readonly string[] | undefined
-): readonly GeneratedAlgebraAgendaPreviewField[] {
-  return values === undefined || values.length === 0
-    ? []
-    : [{ label, value: values.join(", ") }];
 }
 
 function generatedAlgebraRowMatchesQuery(

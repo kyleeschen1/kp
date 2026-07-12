@@ -88,6 +88,26 @@
       "kind": "file",
       "path": "tests/project-dashboard-semantic-asset-catalog.test.ts",
       "summary": "Covers semantic catalog role search metadata for flashcard rows."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/asset-preview-fields.ts",
+      "summary": "Adds a shared dashboard asset-preview adapter for interpreter fields, search fields, and data attributes."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-asset-preview-fields.test.ts",
+      "summary": "Covers adapting dashboard asset-preview interpreter output into agenda row fields."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Consumes shared dashboard asset-preview adapter for generated fixture rows."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Consumes shared dashboard asset-preview adapter for hand-authored semantic asset gallery rows."
     }
   ],
   "verification": [
@@ -176,8 +196,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T05:10:39.864Z",
-      "scope": "slice 6 catalog search metadata Theseus validation"
+      "scope": "slice 6 catalog search metadata Theseus validation",
+      "checkedAt": "2026-07-12T05:10:39.864Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard-asset-preview-fields.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard-semantic-asset-catalog.test.ts tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "slice 7 shared dashboard asset-preview adapter focused tests",
+      "checkedAt": "2026-07-12T05:22:56.720Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 7 shared dashboard asset-preview adapter typecheck",
+      "checkedAt": "2026-07-12T05:23:23.844Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T05:24:03.274Z",
+      "scope": "slice 7 shared dashboard asset-preview adapter Theseus validation"
     }
   ],
   "allowedWork": [
@@ -233,13 +271,14 @@
     {
       "id": "slice.kp.generated-fixture.search-metadata",
       "title": "Add catalog search metadata",
-      "status": "complete",
-      "summary": "Added richer catalog search metadata for generated fixture transformations, diagrams, flashcards, and semantic catalog roles."
+      "summary": "Added richer catalog search metadata for generated fixture transformations, diagrams, flashcards, and semantic catalog roles.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.preview-interpreter",
       "title": "Use preview interpreter across generated rows",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Extracted a shared dashboard asset-preview adapter and made generated and hand-authored semantic asset rows consume it."
     },
     {
       "id": "slice.kp.generated-fixture.tutorial-sample-registry",

@@ -53,6 +53,11 @@ import { runKpInterpreter, type KpInterpretation } from "../semantic/asset-inter
 import { createLinearSolveKpAssetBundle } from "../semantic/linear-solve-asset.ts";
 import { capabilityPackageFacetSearchFields } from "./capability-package-facets.ts";
 import {
+  dashboardAssetPreviewDataAttributes,
+  dashboardAssetPreviewFields,
+  dashboardAssetPreviewSearchFields
+} from "./asset-preview-fields.ts";
+import {
   semanticCapabilityPreviewFields,
   semanticCapabilitySearchFields
 } from "./capability-preview.ts";
@@ -549,7 +554,7 @@ function createGalleryAgendaRows(
       tags: [...item.domains, ...item.tags, ...(item.interfaces ?? [])],
       dataAttributes: [
         ["data-kp-project-gallery-item", item.id],
-        ...semanticAssetPreviewDataAttributes(semanticAssetPreview),
+        ...dashboardAssetPreviewDataAttributes(semanticAssetPreview),
         ...adapterDataAttributes(adapterRow)
       ],
       relatedIds: item.relatedIds,
@@ -561,7 +566,7 @@ function createGalleryAgendaRows(
           label: "Interfaces",
           value: (item.interfaces ?? []).join(", ") || "None"
         },
-        ...semanticAssetPreviewFields(semanticAssetPreview),
+        ...dashboardAssetPreviewFields(semanticAssetPreview),
         ...authoringPreviewFields({
           maturity: item.maturity,
           coverage: item.coverage,
@@ -584,7 +589,7 @@ function createGalleryAgendaRows(
           blockers: item.blockers
         }),
         ...sampleTargetSearchFields(item.sampleTargets),
-        ...semanticAssetPreviewSearchFields(semanticAssetPreview),
+        ...dashboardAssetPreviewSearchFields(semanticAssetPreview),
         ...adapterSearchFields(adapterRow)
       ]
     };
@@ -601,43 +606,6 @@ function semanticAssetDashboardPreview(
     createKpDashboardAssetPreviewInterpreter(),
     createLinearSolveKpAssetBundle().bundle
   );
-}
-
-function semanticAssetPreviewFields(
-  interpretation: KpInterpretation<KpDashboardAssetPreview> | undefined
-): readonly ProjectAgendaPreviewField[] {
-  if (interpretation === undefined) return [];
-
-  return [
-    { label: "Dashboard interpreter", value: interpretation.interpreterId },
-    { label: "Asset summary", value: interpretation.output.summary },
-    ...interpretation.output.fields,
-    ...previewListField(
-      "Asset diagnostics",
-      interpretation.diagnostics.map((diagnostic) => diagnostic.message)
-    )
-  ];
-}
-
-function semanticAssetPreviewSearchFields(
-  interpretation: KpInterpretation<KpDashboardAssetPreview> | undefined
-): readonly string[] {
-  if (interpretation === undefined) return [];
-
-  return [
-    interpretation.interpreterId,
-    interpretation.output.summary,
-    ...interpretation.output.searchFields,
-    ...interpretation.diagnostics.map((diagnostic) => diagnostic.message)
-  ];
-}
-
-function semanticAssetPreviewDataAttributes(
-  interpretation: KpInterpretation<KpDashboardAssetPreview> | undefined
-): readonly [string, string][] {
-  return interpretation === undefined
-    ? []
-    : [["data-kp-dashboard-preview-interpreter", interpretation.interpreterId]];
 }
 
 function createAnimationLayoutAgendaRows(
