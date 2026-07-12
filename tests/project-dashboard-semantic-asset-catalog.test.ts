@@ -6,13 +6,19 @@ import {
 } from "../src/project-dashboard/semantic-asset-catalog.ts";
 
 test("semantic asset dashboard catalog combines derived and generated rows", () => {
-  const rowIds = createSemanticAssetCatalogAgendaRows("").map((row) => row.id);
+  const rows = createSemanticAssetCatalogAgendaRows("");
+  const rowIds = rows.map((row) => row.id);
 
   assert.ok(
     rowIds.includes("drilldown-linear-solve-cancel-additive-inverse")
   );
   assert.ok(rowIds.includes("flashcard-linear-solve-cloze-plus3"));
   assert.ok(rowIds.includes("generated-linear-solve-x-plus-3"));
+  assert.ok(
+    rows
+      .find((row) => row.id === "flashcard-linear-solve-cloze-plus3")
+      ?.searchFields.includes("linear solve flashcard catalog")
+  );
 });
 
 test("semantic asset dashboard catalog filters across derived and generated rows", () => {

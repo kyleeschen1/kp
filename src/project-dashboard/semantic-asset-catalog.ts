@@ -60,6 +60,9 @@ function createLinearSolveDerivedAgendaRows(
         { label: "Explainer objects", value: String(hook.asset.objects.length) }
       ],
       searchFields: [
+        "semantic asset catalog",
+        "linear solve drill-down catalog",
+        "transformation explanation catalog",
         hook.id,
         hook.transformationId,
         hook.asset.id,
@@ -86,6 +89,9 @@ function createLinearSolveDerivedAgendaRows(
         { label: "Answer", value: formatFlashcardAnswer(card.answer) }
       ],
       searchFields: [
+        "semantic asset catalog",
+        "linear solve flashcard catalog",
+        "spaced repetition catalog",
         card.id,
         card.kind,
         card.prompt,

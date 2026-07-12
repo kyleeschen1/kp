@@ -27,3 +27,13 @@ test("generated algebra dashboard catalog filters rows by search text", () => {
     "generated-linear-solve-x-plus-3"
   ]);
 });
+
+test("generated algebra dashboard catalog searches transformation metadata", () => {
+  const rows = createGeneratedAlgebraFixtureAgendaRows(
+    "transform.generated.linear-solve.y-plus-5.cancel-additive-inverse"
+  );
+
+  assert.deepEqual(rows.map((row) => row.id), [
+    "generated-linear-solve-y-plus-5"
+  ]);
+});

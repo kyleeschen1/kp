@@ -62,11 +62,32 @@ export function createGeneratedAlgebraFixtureAgendaRows(
         ...semanticAssetPreviewFields(interpretation)
       ],
       searchFields: [
+        "semantic asset catalog",
+        "generated algebra fixture catalog",
+        "generated tutorial fixture",
+        "linear solve fixture family",
         fixture.id,
         fixture.title,
+        fixture.bundle.id,
+        fixture.diagram.id,
         initialLatex,
         solvedLatex,
+        ...fixture.transformations.flatMap((transformation) => [
+          transformation.id,
+          transformation.title,
+          transformation.transformType,
+          ...transformation.sourceObjectIds,
+          ...transformation.targetObjectIds
+        ]),
         ...fixture.trace.steps.flatMap((step) => [step.id, step.latex]),
+        ...fixture.flashcards.flatMap((card) => [
+          card.id,
+          card.kind,
+          card.title,
+          card.prompt,
+          ...(card.selectorIds ?? []),
+          ...(card.transformationIds ?? [])
+        ]),
         ...semanticAssetPreviewSearchFields(interpretation)
       ]
     };
