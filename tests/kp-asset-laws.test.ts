@@ -18,12 +18,16 @@ import {
 import {
   checkKpBehaviorDeterminism,
   checkKpBehaviorReparameterization,
+  checkKpAssetFixtureReferenceClosure,
   checkKpDiagramRewindLaw,
   checkKpDiagramSequenceAssociativityLaw,
   checkKpEquationFrameSelectorCorrespondenceClosure,
   checkKpFlashcardReferenceClosure,
   checkKpInterpreterLossDiagnostics
 } from "../src/semantic/asset-laws.ts";
+import {
+  createKpTransformationDrillDownHook
+} from "../src/semantic/asset-decomposition.ts";
 import { createKpFlashcardSpec } from "../src/semantic/asset-flashcard.ts";
 import type { KpInterpretation } from "../src/semantic/asset-interpreter.ts";
 import type { KpEquationFrame } from "../src/semantic/equation-frame-interpreter.ts";
@@ -223,6 +227,108 @@ test("checkKpDiagramSequenceAssociativityLaw validates equivalent regrouping", (
       lawId: "diagram.sequence-associativity",
       passed: true,
       failures: []
+    }
+  );
+});
+
+test("checkKpAssetFixtureReferenceClosure reports unresolved fixture references", () => {
+  const bundle = createKpAssetBundle({
+    id: "asset.fixture-law",
+    title: "Fixture law",
+    objects: [
+      createKpSemanticAssetObject({
+        id: "equation.initial",
+        objectType: "equation",
+        title: "Initial",
+        value: { latex: "x + 3 = 7" },
+        selectors: [{ id: "equation.initial.x", kind: "term", label: "x" }]
+      }),
+      createKpSemanticAssetObject({
+        id: "equation.next",
+        objectType: "equation",
+        title: "Next",
+        value: { latex: "x = 4" },
+        selectors: [{ id: "equation.next.x", kind: "term", label: "x" }]
+      })
+    ]
+  });
+  const transformation = createKpSemanticTransformation({
+    id: "transform.subtract",
+    transformType: "subtractBothSides",
+    title: "Subtract",
+    sourceObjectIds: ["equation.initial"],
+    targetObjectIds: ["equation.next"],
+    preserves: ["value"]
+  });
+  const diagramOnlyTransformation = createKpSemanticTransformation({
+    id: "transform.diagram-missing",
+    transformType: "diagramOnly",
+    title: "Diagram only",
+    sourceObjectIds: ["equation.initial"],
+    targetObjectIds: ["equation.next"],
+    preserves: ["value"]
+  });
+  const hook = createKpTransformationDrillDownHook({
+    id: "drilldown.bad",
+    transformationId: "transform.hook-missing",
+    title: "Bad hook",
+    asset: createKpAssetBundle({
+      id: "asset.hook",
+      title: "Hook",
+      objects: []
+    })
+  });
+  const card = createKpFlashcardSpec({
+    id: "card.bad",
+    kind: "predict-next",
+    title: "Bad card",
+    assetId: "asset.fixture-law",
+    prompt: "What transform is missing?",
+    transformationIds: ["transform.card-missing"]
+  });
+
+  assert.deepEqual(
+    checkKpAssetFixtureReferenceClosure({
+      bundle,
+      transformations: [transformation],
+      diagram: createKpTransformationDiagramLeaf(diagramOnlyTransformation),
+      drillDownHooks: [hook],
+      flashcards: [card],
+      trace: {
+        id: "trace.bad",
+        steps: [
+          {
+            id: "trace.bad.step",
+            transformationId: "transform.trace-missing"
+          }
+        ]
+      }
+    }),
+    {
+      lawId: "asset-fixture.reference-closure",
+      passed: false,
+      failures: [
+        {
+          path: "diagram.forwardPhases[0][0]",
+          message:
+            "Diagram transform.diagram-missing references missing transformation transform.diagram-missing."
+        },
+        {
+          path: "drillDownHooks.hooks[0].transformationId",
+          message:
+            "Drill-down hook drilldown.bad references missing transformation transform.hook-missing."
+        },
+        {
+          path: "flashcards[0].transformationIds[0]",
+          message:
+            "Flashcard card.bad references missing transformation transform.card-missing."
+        },
+        {
+          path: "trace.steps[0].transformationId",
+          message:
+            "Trace trace.bad step trace.bad.step references missing transformation transform.trace-missing."
+        }
+      ]
     }
   );
 });

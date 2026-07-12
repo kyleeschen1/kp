@@ -313,6 +313,21 @@
       "kind": "file",
       "path": "tests/generated-linear-solve-tutorial-card-sample.test.ts",
       "summary": "Covers generated card semantic drill-down ids during active cancellation."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-laws.ts",
+      "summary": "Adds the bundled fixture reference closure law across bundles, transformations, diagrams, drill-down hooks, flashcards, and trace steps."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-asset-laws.test.ts",
+      "summary": "Covers unresolved fixture reference failures for the new closure law."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Applies the closure law to the generated fixture family."
     }
   ],
   "verification": [
@@ -581,10 +596,32 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T17:36:49.948Z",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-12T17:36:49.948Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-asset-laws.test.ts tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard-semantic-asset-catalog.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts tests/generated-linear-solve-export-sample.test.ts tests/kp-asset-decomposition.test.ts",
+      "status": "passed",
+      "scope": "asset law and generated semantic fixture suite",
+      "checkedAt": "2026-07-12T17:42:31.385Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T17:42:31.423Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T17:42:31.459Z",
       "scope": "Theseus graph validation"
     }
   ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added an asset-fixture reference closure law and applied it to every generated linear-solve fixture."
+  },
   "allowedWork": [
     "Only work on the approved generated-fixture catalog adoption slices.",
     "Use existing KP Asset Calculus, interpreter, dashboard, tutorial-card, and export patterns."
@@ -690,13 +727,14 @@
     {
       "id": "slice.kp.generated-fixture.drilldown-family",
       "title": "Add generated drill-down hooks",
-      "status": "complete",
-      "summary": "Generated fixtures expose cancellation drill-down hooks and generated tutorial cards surface hook ids during active cancellation."
+      "summary": "Generated fixtures expose cancellation drill-down hooks and generated tutorial cards surface hook ids during active cancellation.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.fixture-closure-law",
       "title": "Add generated fixture closure law",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Added asset-fixture reference closure law and generated fixture coverage."
     },
     {
       "id": "slice.kp.generated-fixture.frame-preservation-law",
@@ -733,9 +771,5 @@
       "title": "Close generated fixture catalog loop",
       "status": "planned"
     }
-  ],
-  "progress": {
-    "state": "complete",
-    "summary": "Generated linear-solve fixtures now expose validated cancellation drill-down hooks and generated card samples surface matching semantic drill-down ids."
-  }
+  ]
 }

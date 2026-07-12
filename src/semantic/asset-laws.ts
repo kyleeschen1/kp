@@ -5,10 +5,22 @@ import {
   type KpBehavior
 } from "./asset-behavior.ts";
 import {
+  validateKpAssetBundle,
+  type KpAssetBundle
+} from "./asset.ts";
+import {
+  validateKpTransformationDrillDownHooks,
+  type KpTransformationDrillDownHook
+} from "./asset-decomposition.ts";
+import {
   kpSemanticDiagramForwardPhases,
   kpSemanticDiagramRewindPhases,
   type KpSemanticDiagram
 } from "./asset-diagram.ts";
+import {
+  validateKpSemanticTransformation,
+  type KpSemanticTransformation
+} from "./asset-transformation.ts";
 import {
   runKpExternalPort,
   type KpExternalPort,
@@ -31,6 +43,25 @@ export interface KpLawCheckResult {
   readonly lawId: string;
   readonly passed: boolean;
   readonly failures: readonly KpLawFailure[];
+}
+
+export interface KpAssetFixtureReferenceClosureInput {
+  readonly bundle: KpAssetBundle;
+  readonly transformations: readonly KpSemanticTransformation[];
+  readonly diagram: KpSemanticDiagram;
+  readonly drillDownHooks: readonly KpTransformationDrillDownHook[];
+  readonly flashcards: readonly KpFlashcardSpec[];
+  readonly trace?: KpFixtureTraceReferenceClosureInput | undefined;
+}
+
+export interface KpFixtureTraceReferenceClosureInput {
+  readonly id: string;
+  readonly steps: readonly KpFixtureTraceStepReferenceClosureInput[];
+}
+
+export interface KpFixtureTraceStepReferenceClosureInput {
+  readonly id: string;
+  readonly transformationId?: string | undefined;
 }
 
 export function checkKpBehaviorDeterminism<TFrame>(
@@ -134,6 +165,83 @@ export function checkKpDiagramSequenceAssociativityLaw(
   }
 
   return lawResult("diagram.sequence-associativity", failures);
+}
+
+export function checkKpAssetFixtureReferenceClosure(
+  input: KpAssetFixtureReferenceClosureInput
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+  const transformationIds = new Set(
+    input.transformations.map((transformation) => transformation.id)
+  );
+
+  validateKpAssetBundle(input.bundle).forEach((issue) => {
+    failures.push({
+      path: `bundle.${issue.path}`,
+      message: issue.message
+    });
+  });
+
+  input.transformations.forEach((transformation, index) => {
+    validateKpSemanticTransformation(transformation, input.bundle).forEach(
+      (issue) => {
+        failures.push({
+          path: `transformations[${index}].${issue.path}`,
+          message: issue.message
+        });
+      }
+    );
+  });
+
+  kpSemanticDiagramForwardPhases(input.diagram).forEach((phase, phaseIndex) => {
+    phase.forEach((transformationId, transformationIndex) => {
+      if (!transformationIds.has(transformationId)) {
+        failures.push({
+          path: `diagram.forwardPhases[${phaseIndex}][${transformationIndex}]`,
+          message:
+            `Diagram ${input.diagram.id} references missing transformation ${transformationId}.`
+        });
+      }
+    });
+  });
+
+  validateKpTransformationDrillDownHooks(input.drillDownHooks, {
+    transformations: input.transformations
+  }).forEach((issue) => {
+    failures.push({
+      path: `drillDownHooks.${issue.path}`,
+      message: issue.message
+    });
+  });
+
+  input.flashcards.forEach((card, index) => {
+    validateKpFlashcardSpec(card, {
+      bundle: input.bundle,
+      transformations: input.transformations
+    }).forEach((issue) => {
+      failures.push({
+        path: `flashcards[${index}].${issue.path}`,
+        message: issue.message
+      });
+    });
+  });
+
+  const trace = input.trace;
+
+  trace?.steps.forEach((step, index) => {
+    if (
+      step.transformationId !== undefined &&
+      !transformationIds.has(step.transformationId)
+    ) {
+      failures.push({
+        path: `trace.steps[${index}].transformationId`,
+        message:
+          `Trace ${trace.id} step ${step.id} references missing transformation ${step.transformationId}.`
+      });
+    }
+  });
+
+  return lawResult("asset-fixture.reference-closure", failures);
 }
 
 export function checkKpPortDeterminism<TInput>(

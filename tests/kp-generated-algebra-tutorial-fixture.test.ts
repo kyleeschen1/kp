@@ -8,6 +8,7 @@ import {
   validateKpTransformationDrillDownHooks
 } from "../src/semantic/asset-decomposition.ts";
 import {
+  checkKpAssetFixtureReferenceClosure,
   checkKpDiagramRewindLaw,
   checkKpFlashcardReferenceClosure
 } from "../src/semantic/asset-laws.ts";
@@ -403,4 +404,26 @@ test("generated linear solve fixtures expose cancellation drill-down hooks", () 
       ]
     ]
   );
+});
+
+test("generated linear solve fixtures satisfy bundled reference closure", () => {
+  const fixtures = createGeneratedLinearSolveTutorialFixtures();
+
+  for (const fixture of fixtures) {
+    assert.deepEqual(
+      checkKpAssetFixtureReferenceClosure({
+        bundle: fixture.bundle,
+        transformations: fixture.transformations,
+        diagram: fixture.diagram,
+        drillDownHooks: fixture.drillDownHooks,
+        flashcards: fixture.flashcards,
+        trace: fixture.trace
+      }),
+      {
+        lawId: "asset-fixture.reference-closure",
+        passed: true,
+        failures: []
+      }
+    );
+  }
 });
