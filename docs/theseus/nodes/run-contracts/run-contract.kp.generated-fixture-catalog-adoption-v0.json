@@ -368,6 +368,26 @@
       "kind": "file",
       "path": "tests/generated-linear-solve-export-sample.test.ts",
       "summary": "Covers generated export dependency manifest metadata and dependency phases."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Adds generated family maturity agenda row with fixture, law, hook, flashcard, diagnostics, and dependency-manifest coverage."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/semantic-asset-catalog.ts",
+      "summary": "Includes generated maturity rows in semantic asset dashboard aggregation."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "summary": "Covers maturity row counts and search metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-semantic-asset-catalog.test.ts",
+      "summary": "Covers maturity row aggregation and search through semantic asset catalog."
     }
   ],
   "verification": [
@@ -708,13 +728,31 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T17:57:26.915Z",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-12T17:57:26.915Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard-semantic-asset-catalog.test.ts tests/kp-algebra-trace-port-fixture.test.ts tests/kp-asset-laws.test.ts tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts tests/generated-linear-solve-export-sample.test.ts tests/kp-asset-decomposition.test.ts",
+      "status": "passed",
+      "scope": "generated dashboard and semantic fixture suite",
+      "checkedAt": "2026-07-12T18:05:57.781Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T18:05:57.819Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T18:05:57.869Z",
       "scope": "Theseus graph validation"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Generated linear-solve export samples now emit dependency manifests that combine artifact dependencies with generated semantic fixture closure metadata."
+    "summary": "Added generated linear-solve family maturity rows to the dashboard semantic asset catalog."
   },
   "allowedWork": [
     "Only work on the approved generated-fixture catalog adoption slices.",
@@ -845,13 +883,14 @@
     {
       "id": "slice.kp.generated-fixture.dependency-manifest",
       "title": "Add dependency manifest emission",
-      "status": "complete",
-      "summary": "Generated export samples emit dependency manifests for artifact and semantic fixture dependencies."
+      "summary": "Generated export samples emit dependency manifests for artifact and semantic fixture dependencies.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.dashboard-maturity-rows",
       "title": "Add generated family dashboard maturity rows",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Added generated linear-solve maturity dashboard row and semantic catalog search coverage."
     },
     {
       "id": "slice.kp.generated-fixture.browser-smoke",

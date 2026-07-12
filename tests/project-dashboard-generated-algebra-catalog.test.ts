@@ -2,7 +2,8 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import {
-  createGeneratedAlgebraFixtureAgendaRows
+  createGeneratedAlgebraFixtureAgendaRows,
+  createGeneratedAlgebraMaturityAgendaRows
 } from "../src/project-dashboard/generated-algebra-catalog.ts";
 import { projectDashboardData } from "../src/project-dashboard/data.ts";
 import { renderProjectDashboard } from "../src/project-dashboard/render.ts";
@@ -24,6 +25,32 @@ test("generated algebra dashboard catalog exposes fixture agenda rows", () => {
     { label: "Solved LaTeX", value: "y = 7" },
     { label: "Trace steps", value: "4" }
   ]);
+});
+
+test("generated algebra dashboard catalog exposes family maturity rows", () => {
+  const rows = createGeneratedAlgebraMaturityAgendaRows("");
+
+  assert.deepEqual(rows.map((row) => row.id), [
+    "generated-linear-solve-family-maturity"
+  ]);
+  assert.deepEqual(rows[0]?.previewFields.slice(0, 7), [
+    { label: "Fixture family", value: "generated.linear-solve" },
+    { label: "Fixtures", value: "6" },
+    { label: "Semantic objects", value: "27" },
+    { label: "Transformations", value: "21" },
+    { label: "Drill-down hooks", value: "7" },
+    { label: "Flashcards", value: "25" },
+    { label: "Dependency manifests", value: "iframe, static-step" }
+  ]);
+});
+
+test("generated algebra maturity rows are searchable by protocol coverage", () => {
+  assert.deepEqual(
+    createGeneratedAlgebraMaturityAgendaRows(
+      "renderer-frame semantic-preservation dependency manifests"
+    ).map((row) => row.id),
+    ["generated-linear-solve-family-maturity"]
+  );
 });
 
 test("generated algebra dashboard catalog filters rows by search text", () => {

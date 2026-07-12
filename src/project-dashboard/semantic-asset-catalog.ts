@@ -2,6 +2,7 @@ import { createLinearSolveKpAssetBundle } from "../semantic/linear-solve-asset.t
 import { projectDashboardTextFieldsMatch } from "./model.ts";
 import {
   createGeneratedAlgebraFixtureAgendaRows,
+  createGeneratedAlgebraMaturityAgendaRows,
   type GeneratedAlgebraAgendaPreviewField,
   type GeneratedAlgebraFixtureAgendaRow
 } from "./generated-algebra-catalog.ts";
@@ -33,6 +34,7 @@ export function createSemanticAssetCatalogAgendaRows(
 ): readonly (SemanticAssetCatalogAgendaRow | GeneratedAlgebraFixtureAgendaRow)[] {
   return [
     ...createLinearSolveDerivedAgendaRows(query),
+    ...createGeneratedAlgebraMaturityAgendaRows(query),
     ...createGeneratedAlgebraFixtureAgendaRows(query)
   ];
 }

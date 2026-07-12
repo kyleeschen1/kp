@@ -13,6 +13,7 @@ test("semantic asset dashboard catalog combines derived and generated rows", () 
     rowIds.includes("drilldown-linear-solve-cancel-additive-inverse")
   );
   assert.ok(rowIds.includes("flashcard-linear-solve-cloze-plus3"));
+  assert.ok(rowIds.includes("generated-linear-solve-family-maturity"));
   assert.ok(rowIds.includes("generated-linear-solve-x-plus-3"));
   assert.ok(
     rows
@@ -25,6 +26,12 @@ test("semantic asset dashboard catalog filters across derived and generated rows
   assert.deepEqual(
     createSemanticAssetCatalogAgendaRows("12 - 5").map((row) => row.id),
     ["generated-linear-solve-y-plus-5"]
+  );
+  assert.deepEqual(
+    createSemanticAssetCatalogAgendaRows(
+      "generated fixture dependency manifests"
+    ).map((row) => row.id),
+    ["generated-linear-solve-family-maturity"]
   );
   assert.deepEqual(
     createSemanticAssetCatalogAgendaRows(
