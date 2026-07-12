@@ -79,6 +79,10 @@ test("linear-solve equation frame interpreter samples the active cancel transfor
   assert.deepEqual(interpretation.output.drillDownIds, [
     "drilldown.linear-solve.cancel-additive-inverse"
   ]);
+  assert.deepEqual(interpretation.output.flashcardIds, [
+    "card.linear-solve.explain-cancel",
+    "card.linear-solve.focus-x-persistence"
+  ]);
   assert.deepEqual(interpretation.diagnostics, []);
   assert.deepEqual(interpretation.output.diagnostics, []);
 });

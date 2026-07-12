@@ -120,6 +120,11 @@ function interpretLinearSolveEquationFrame(
       drillDownIds: input.asset.drillDownHooks
         .filter((hook) => hook.transformationId === active.transformation.id)
         .map((hook) => hook.id),
+      flashcardIds: input.asset.flashcards
+        .filter((card) =>
+          card.transformationIds?.includes(active.transformation.id) ?? false
+        )
+        .map((card) => card.id),
       diagnostics
     },
     diagnostics

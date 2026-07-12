@@ -125,6 +125,16 @@
       "kind": "file",
       "path": "tests/kp-linear-solve-equation-frame-interpreter.test.ts",
       "summary": "Covers drill-down ids on the active cancellation equation frame."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/linear-solve-equation-frame-interpreter.ts",
+      "summary": "Adds active transformation-linked flashcard ids to linear-solve equation frames."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-linear-solve-equation-frame-interpreter.test.ts",
+      "summary": "Covers flashcard ids on the active cancellation equation frame."
     }
   ],
   "verification": [
@@ -266,8 +276,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T02:24:16.314Z",
-      "scope": "slice 9 equation-frame drill-down metadata Theseus validation"
+      "scope": "slice 9 equation-frame drill-down metadata Theseus validation",
+      "checkedAt": "2026-07-12T02:24:16.314Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-linear-solve-equation-frame-interpreter.test.ts tests/kp-asset-flashcard.test.ts tests/kp-linear-solve-asset.test.ts",
+      "status": "passed",
+      "scope": "slice 10 equation-frame flashcard metadata tests",
+      "checkedAt": "2026-07-12T02:27:25.912Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 10 equation-frame flashcard metadata typecheck",
+      "checkedAt": "2026-07-12T02:27:27.650Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T02:27:29.395Z",
+      "scope": "slice 10 equation-frame flashcard metadata Theseus validation"
     }
   ],
   "progress": {
@@ -347,12 +375,13 @@
     {
       "id": "slice.kp.asset-renderer.flashcard-metadata",
       "title": "Wire flashcard references into equation frame/sample metadata",
-      "status": "ready"
+      "summary": "Added flashcardIds to active linear-solve equation frames by matching frame transformations to flashcard transformation refs.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.tutorial-card-interpreter-path",
       "title": "Make linear-solve tutorial card consume interpreter path",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.export-stability",
