@@ -15,6 +15,9 @@ import {
 import {
   createLinearSolveKpAssetBundle
 } from "./linear-solve-asset.ts";
+import type {
+  GeneratedAlgebraTutorialFixture
+} from "./generated-algebra-tutorial-fixture.ts";
 
 const portId = "port.fixture.algebra-trace.linear-solve";
 
@@ -77,6 +80,20 @@ export function createLinearSolveAlgebraTracePort(): KpExternalPort<AlgebraTrace
     targetBundle: canonical.bundle,
     expectedTrace: linearSolveAlgebraTraceFixture,
     transformationIds: canonical.transformations.map(
+      (transformation) => transformation.id
+    )
+  });
+}
+
+export function createGeneratedAlgebraTraceFixturePort(
+  fixture: GeneratedAlgebraTutorialFixture
+): KpExternalPort<AlgebraTraceFixture> {
+  return createAlgebraTraceFixturePort({
+    id: `port.fixture.algebra-trace.${fixture.id}`,
+    title: `${fixture.title} algebra trace port`,
+    targetBundle: fixture.bundle,
+    expectedTrace: fixture.trace,
+    transformationIds: fixture.transformations.map(
       (transformation) => transformation.id
     )
   });

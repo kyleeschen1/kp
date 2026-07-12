@@ -13,11 +13,13 @@ import {
 } from "../src/semantic/asset-laws.ts";
 import {
   createAlgebraTraceFixturePort,
+  createGeneratedAlgebraTraceFixturePort,
   createLinearSolveAlgebraTracePort,
   linearSolveAlgebraTraceFixture
 } from "../src/semantic/algebra-trace-port-fixture.ts";
 import {
-  createGeneratedLinearSolveTutorialFixture
+  createGeneratedLinearSolveTutorialFixture,
+  createGeneratedRadicalTutorialFixture
 } from "../src/semantic/generated-algebra-tutorial-fixture.ts";
 import {
   createLinearSolveKpAssetBundle
@@ -169,6 +171,95 @@ test("generated algebra trace fixture port reports transformation and rule misma
       message:
         "Trace step trace.generated.linear-solve.two-x-plus-3.after-divide rule cancelAdditiveInverses does not match expected divideBothSides.",
       path: "steps[4].rule"
+    }
+  ]);
+  assert.deepEqual(checkKpPortLossDiagnostics(imported), {
+    lawId: "port.loss-reporting",
+    passed: true,
+    failures: []
+  });
+});
+
+test("generated non-linear algebra trace fixture port imports radical traces", () => {
+  const fixture = createGeneratedRadicalTutorialFixture({
+    familyId: "generated.radical",
+    id: "generated.radical.square-root-as-power",
+    title: "Generated rewrite square root as power",
+    base: "x",
+    index: 2,
+    exponentNumerator: 1
+  });
+  const port = createGeneratedAlgebraTraceFixturePort(fixture);
+  const imported = runKpExternalPort(port, fixture.trace);
+
+  assert.equal(
+    imported.portId,
+    "port.fixture.algebra-trace.generated.radical.square-root-as-power"
+  );
+  assert.equal(imported.preservation, "strict");
+  assert.deepEqual(imported.diagnostics, []);
+  assert.deepEqual(bundleShape(imported.bundle), bundleShape(fixture.bundle));
+});
+
+test("generated non-linear algebra trace fixture port reports radical diagnostics", () => {
+  const fixture = createGeneratedRadicalTutorialFixture({
+    familyId: "generated.radical",
+    id: "generated.radical.square-root-as-power",
+    title: "Generated rewrite square root as power",
+    base: "x",
+    index: 2,
+    exponentNumerator: 1
+  });
+  const port = createGeneratedAlgebraTraceFixturePort(fixture);
+  const mismatchedTrace = {
+    ...fixture.trace,
+    steps: fixture.trace.steps.map((step) =>
+      step.id.endsWith(".radical")
+        ? {
+            ...step,
+            latex: "\\sqrt{y}",
+            transformationId:
+              "transform.generated.radical.square-root-as-power.unknown",
+            rule: "rewritePowerAsExponent"
+          }
+        : step
+    )
+  };
+  const imported = runKpExternalPort(port, mismatchedTrace);
+
+  assert.equal(imported.preservation, "lax");
+  assert.deepEqual(imported.diagnostics, [
+    {
+      severity: "warning",
+      code: "trace-latex-mismatch",
+      lossKind: "partial",
+      message:
+        "Trace step trace.generated.radical.square-root-as-power.radical latex does not match canonical object expression.generated.radical.square-root-as-power.radical.",
+      path: "steps[1].latex"
+    },
+    {
+      severity: "warning",
+      code: "trace-transformation-mismatch",
+      lossKind: "lossy",
+      message:
+        "Trace step trace.generated.radical.square-root-as-power.radical transformation transform.generated.radical.square-root-as-power.unknown does not match expected transform.generated.radical.square-root-as-power.rewrite-power-as-root.",
+      path: "steps[1].transformationId"
+    },
+    {
+      severity: "warning",
+      code: "trace-rule-mismatch",
+      lossKind: "partial",
+      message:
+        "Trace step trace.generated.radical.square-root-as-power.radical rule rewritePowerAsExponent does not match expected rewritePowerAsRoot.",
+      path: "steps[1].rule"
+    },
+    {
+      severity: "warning",
+      code: "trace-transformation-unknown",
+      lossKind: "lossy",
+      message:
+        "Trace step trace.generated.radical.square-root-as-power.radical references unknown transformation transform.generated.radical.square-root-as-power.unknown.",
+      path: "steps[1].transformationId"
     }
   ]);
   assert.deepEqual(checkKpPortLossDiagnostics(imported), {
