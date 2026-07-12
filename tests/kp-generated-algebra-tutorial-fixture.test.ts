@@ -319,3 +319,23 @@ test("createGeneratedLinearSolveTutorialFixtures exposes multiple generated exam
     []
   );
 });
+
+test("generated linear solve fixtures expose a standard flashcard family", () => {
+  const fixtures = createGeneratedLinearSolveTutorialFixtures();
+
+  for (const fixture of fixtures) {
+    assert.deepEqual(
+      [...new Set(fixture.flashcards.map((card) => card.kind))].sort(),
+      ["cloze", "explain-transform", "focus-relationship", "predict-next"]
+    );
+    assert.deepEqual(
+      fixture.flashcards.flatMap((card) =>
+        checkKpFlashcardReferenceClosure(card, {
+          bundle: fixture.bundle,
+          transformations: fixture.transformations
+        }).failures
+      ),
+      []
+    );
+  }
+});

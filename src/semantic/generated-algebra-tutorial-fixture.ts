@@ -667,6 +667,33 @@ function createGeneratedLinearSolveFlashcards(
         kind: "transformation",
         value: ids.subtract
       }
+    }),
+    createKpFlashcardSpec({
+      id: `card.${input.id}.explain-cancel`,
+      kind: "explain-transform",
+      title: "Explain cancellation",
+      assetId: ids.asset,
+      prompt: "Why can the inverse terms disappear?",
+      objectIds: [ids.afterSubtract, ids.leftSimplified],
+      transformationIds: [ids.cancel],
+      timeMs: 1200,
+      answer: {
+        kind: "text",
+        value: "A term combined with its additive inverse simplifies to zero."
+      }
+    }),
+    createKpFlashcardSpec({
+      id: `card.${input.id}.focus-variable-persistence`,
+      kind: "focus-relationship",
+      title: "Follow the variable",
+      assetId: ids.asset,
+      prompt: "Which selector represents the same variable in the solved equation?",
+      selectorIds: [`${ids.initial}.lhs.variable`, `${ids.solved}.lhs.variable`],
+      transformationIds: [ids.subtract, ids.cancel, ids.simplify],
+      answer: {
+        kind: "selector",
+        value: `${ids.solved}.lhs.variable`
+      }
     })
   ];
 }
@@ -699,6 +726,33 @@ function createGeneratedCoefficientSolveFlashcards(
       answer: {
         kind: "transformation",
         value: ids.subtract
+      }
+    }),
+    createKpFlashcardSpec({
+      id: `card.${input.id}.explain-coefficient-cancel`,
+      kind: "explain-transform",
+      title: "Explain coefficient cancellation",
+      assetId: ids.asset,
+      prompt: "Why does dividing by the coefficient isolate the variable?",
+      objectIds: [ids.afterSubtract, ids.leftSimplified],
+      transformationIds: [ids.cancel],
+      timeMs: 1200,
+      answer: {
+        kind: "text",
+        value: "A non-zero factor divided by itself simplifies to one."
+      }
+    }),
+    createKpFlashcardSpec({
+      id: `card.${input.id}.focus-variable-persistence`,
+      kind: "focus-relationship",
+      title: "Follow the variable",
+      assetId: ids.asset,
+      prompt: "Which selector represents the same variable in the solved equation?",
+      selectorIds: [`${ids.initial}.lhs.variable`, `${ids.solved}.lhs.variable`],
+      transformationIds: [ids.subtract, ids.cancel, ids.simplify],
+      answer: {
+        kind: "selector",
+        value: `${ids.solved}.lhs.variable`
       }
     })
   ];
@@ -734,6 +788,53 @@ function createGeneratedTwoStepSolveFlashcards(
       answer: {
         kind: "text",
         value: String(input.coefficient)
+      }
+    }),
+    createKpFlashcardSpec({
+      id: `card.${input.id}.predict-subtract`,
+      kind: "predict-next",
+      title: "Predict the first transformation",
+      assetId: ids.asset,
+      prompt: "Which transformation preserves equality first?",
+      transformationIds: [ids.subtract],
+      timeMs: 0,
+      answer: {
+        kind: "transformation",
+        value: ids.subtract
+      }
+    }),
+    createKpFlashcardSpec({
+      id: `card.${input.id}.explain-additive-cancel`,
+      kind: "explain-transform",
+      title: "Explain additive cancellation",
+      assetId: ids.asset,
+      prompt: "Why can the addend and its inverse disappear?",
+      objectIds: [ids.afterSubtract, ids.addendCanceled],
+      transformationIds: [ids.cancelAddend],
+      timeMs: 1200,
+      answer: {
+        kind: "text",
+        value: "A term combined with its additive inverse simplifies to zero."
+      }
+    }),
+    createKpFlashcardSpec({
+      id: `card.${input.id}.focus-variable-persistence`,
+      kind: "focus-relationship",
+      title: "Follow the variable",
+      assetId: ids.asset,
+      prompt: "Which selector represents the same variable in the solved equation?",
+      selectorIds: [`${ids.initial}.lhs.variable`, `${ids.solved}.lhs.variable`],
+      transformationIds: [
+        ids.subtract,
+        ids.cancelAddend,
+        ids.simplifyDifference,
+        ids.divide,
+        ids.cancelCoefficient,
+        ids.simplifyQuotient
+      ],
+      answer: {
+        kind: "selector",
+        value: `${ids.solved}.lhs.variable`
       }
     })
   ];

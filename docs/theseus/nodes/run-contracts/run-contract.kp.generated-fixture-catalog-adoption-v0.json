@@ -283,6 +283,16 @@
       "kind": "file",
       "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
       "summary": "Dashboard generated-catalog tests include the fraction-bearing fixture row."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Generated fixtures emit a standard cloze, predict, explain, and focus flashcard family."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Generated fixture tests assert standard flashcard family coverage and closure."
     }
   ],
   "verification": [
@@ -515,8 +525,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T17:22:00.801Z",
-      "scope": "slice 14 fraction fixture Theseus validation"
+      "scope": "slice 14 fraction fixture Theseus validation",
+      "checkedAt": "2026-07-12T17:22:00.801Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard-semantic-asset-catalog.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts tests/generated-linear-solve-export-sample.test.ts",
+      "status": "passed",
+      "scope": "generated flashcard family",
+      "checkedAt": "2026-07-12T17:27:02.403Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 15 flashcard family typecheck",
+      "checkedAt": "2026-07-12T17:27:10.130Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T17:27:20.628Z",
+      "scope": "slice 15 flashcard family Theseus validation"
     }
   ],
   "allowedWork": [
@@ -619,7 +647,7 @@
     {
       "id": "slice.kp.generated-fixture.flashcard-family",
       "title": "Add generated flashcard family",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.drilldown-family",
