@@ -79,6 +79,21 @@
       "kind": "file",
       "path": "tests/generated-algebra-tutorial-card-sample.test.ts",
       "summary": "Specifies fraction fixture card sample semantics, renderer preservation, and rendered fixture identity."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-algebra-export-sample.ts",
+      "summary": "Creates generic generated algebra iframe and static-step export samples with fixture family metadata."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-algebra-dependency-manifest.ts",
+      "summary": "Creates family-aware generated algebra dependency manifests from shared fixture structures."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-export-sample.test.ts",
+      "summary": "Specifies fraction fixture iframe/static-step export artifacts, manifests, HTML identity, and trace preservation."
     }
   ],
   "verification": [
@@ -166,13 +181,37 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T19:03:42.608Z",
-      "scope": "Theseus graph validation after fraction card sample slice"
+      "scope": "Theseus graph validation after fraction card sample slice",
+      "checkedAt": "2026-07-12T19:03:42.608Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-export-sample.test.ts",
+      "status": "passed",
+      "scope": "Focused generated algebra export red/green test",
+      "checkedAt": "2026-07-12T19:07:32.239Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-export-sample.test.ts tests/generated-linear-solve-export-sample.test.ts tests/generated-algebra-tutorial-card-sample.test.ts",
+      "status": "passed",
+      "scope": "Generated algebra export/card and existing linear export tests",
+      "checkedAt": "2026-07-12T19:07:32.279Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T19:07:32.322Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:07:32.374Z",
+      "scope": "Theseus graph validation after fraction export slice"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added a generated-algebra tutorial-card sample path and proved fraction fixtures sample semantic frames through it."
+    "summary": "Added generated algebra iframe/static-step export samples and family-aware dependency manifests for fraction fixtures."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -224,8 +263,8 @@
     {
       "id": "slice.kp.generated-math.fraction-exports",
       "title": "Export fraction samples with manifests",
-      "summary": "Emit generated fraction export samples and dependency manifests.",
-      "status": "planned"
+      "summary": "Added generated algebra export samples and dependency manifests for fraction fixtures.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.fraction-browser-smoke",
