@@ -3,9 +3,11 @@ import test from "node:test";
 
 import {
   getGeneratedAlgebraTutorialFixtureSpec,
+  getGeneratedExponentTutorialFixtureSpec,
   getGeneratedFractionExpressionTutorialFixtureSpec,
   getGeneratedLinearSolveTutorialFixtureSpec,
   listGeneratedAlgebraTutorialFixtureSpecs,
+  listGeneratedExponentTutorialFixtureSpecs,
   listGeneratedFractionExpressionTutorialFixtureSpecs,
   listGeneratedLinearSolveTutorialFixtureSpecs
 } from "../src/semantic/generated-algebra-fixture-registry.ts";
@@ -97,6 +99,10 @@ test("generated algebra fixture registry exposes family-aware specs", () => {
       [
         "generated.fraction-expression.two-fourths",
         "generated.fraction-expression"
+      ],
+      [
+        "generated.exponent.square-as-product",
+        "generated.exponent"
       ]
     ]
   );
@@ -113,6 +119,34 @@ test("generated algebra fixture registry exposes family-aware specs", () => {
       simplifiedNumerator: 1,
       simplifiedDenominator: 2
     }
+  );
+});
+
+test("generated algebra fixture registry resolves exponent specs", () => {
+  assert.deepEqual(listGeneratedExponentTutorialFixtureSpecs(), [
+    {
+      familyId: "generated.exponent",
+      id: "generated.exponent.square-as-product",
+      title: "Generated expand square as product",
+      base: "x",
+      exponent: 2
+    }
+  ]);
+  assert.deepEqual(
+    getGeneratedAlgebraTutorialFixtureSpec(
+      "generated.exponent.square-as-product"
+    ),
+    {
+      familyId: "generated.exponent",
+      id: "generated.exponent.square-as-product",
+      title: "Generated expand square as product",
+      base: "x",
+      exponent: 2
+    }
+  );
+  assert.equal(
+    getGeneratedExponentTutorialFixtureSpec("generated.exponent.missing"),
+    undefined
   );
 });
 

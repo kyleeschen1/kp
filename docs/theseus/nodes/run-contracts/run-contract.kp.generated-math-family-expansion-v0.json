@@ -104,6 +104,26 @@
       "kind": "file",
       "path": "tests/generated-algebra-smoke.browser.spec.ts",
       "summary": "Verifies generated fraction iframe export artifact, tutorial card identity, nonblank equation panel, and fixture family metadata in Chromium."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Adds generated exponent fixture specs to the family-aware registry."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Adds generated exponent fixture factory, transformation, trace, and flashcard."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Specifies generated exponent registry lookup behavior."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Specifies generated exponent fixture bundle, transformation, trace, and closure behavior."
     }
   ],
   "verification": [
@@ -245,13 +265,37 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T19:10:45.620Z",
-      "scope": "Theseus graph validation after browser smoke slice"
+      "scope": "Theseus graph validation after browser smoke slice",
+      "checkedAt": "2026-07-12T19:10:45.620Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "scope": "Focused generated algebra registry and fixture tests; red before implementation, green after",
+      "checkedAt": "2026-07-12T19:15:16.897Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-tutorial-card-sample.test.ts tests/generated-algebra-export-sample.test.ts",
+      "status": "passed",
+      "scope": "Generated algebra card/export regression tests",
+      "checkedAt": "2026-07-12T19:15:16.937Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T19:15:16.973Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:15:17.009Z",
+      "scope": "Theseus graph validation after exponent fixture slice"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added Chromium smoke coverage for generated fraction-expression iframe exports."
+    "summary": "Added generated exponent fixture family with an x^2 to repeated-product semantic asset."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -315,8 +359,8 @@
     {
       "id": "slice.kp.generated-math.exponent-fixtures",
       "title": "Add exponent fixture family",
-      "summary": "Add generated exponent fixtures.",
-      "status": "planned"
+      "summary": "Added the first generated exponent fixture family.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.exponent-transforms",

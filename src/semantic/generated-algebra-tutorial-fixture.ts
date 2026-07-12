@@ -24,10 +24,12 @@ import {
 import type { AlgebraTraceFixture } from "./algebra-trace-port-fixture.ts";
 import {
   getGeneratedAlgebraTutorialFixtureSpec,
+  generatedExponentTutorialFixtureSpecs,
   generatedFractionExpressionTutorialFixtureSpecs,
   generatedLinearSolveTutorialFixtureSpecs,
   type GeneratedAlgebraFixtureFamilyId,
   type GeneratedAlgebraTutorialFixtureSpec,
+  type GeneratedExponentTutorialFixtureSpec,
   type GeneratedFractionExpressionTutorialFixtureSpec,
   type GeneratedLinearSolveTutorialFixtureSpec
 } from "./generated-algebra-fixture-registry.ts";
@@ -36,18 +38,22 @@ export type {
   GeneratedAlgebraFixtureFamilyId,
   GeneratedAlgebraLinearSolveTutorialFixtureSpec,
   GeneratedAlgebraTutorialFixtureSpec,
+  GeneratedExponentTutorialFixtureSpec,
   GeneratedFractionExpressionTutorialFixtureSpec,
   GeneratedLinearSolveTutorialFixtureSpec,
   GeneratedLinearSolveTutorialFixtureSpec as CreateGeneratedLinearSolveTutorialFixtureInput
 } from "./generated-algebra-fixture-registry.ts";
 
 export {
+  generatedExponentTutorialFixtureSpecs,
   generatedFractionExpressionTutorialFixtureSpecs,
   generatedLinearSolveTutorialFixtureSpecs,
   getGeneratedAlgebraTutorialFixtureSpec,
+  getGeneratedExponentTutorialFixtureSpec,
   getGeneratedFractionExpressionTutorialFixtureSpec,
   getGeneratedLinearSolveTutorialFixtureSpec,
   listGeneratedAlgebraTutorialFixtureSpecs,
+  listGeneratedExponentTutorialFixtureSpecs,
   listGeneratedFractionExpressionTutorialFixtureSpecs,
   listGeneratedLinearSolveTutorialFixtureSpecs
 } from "./generated-algebra-fixture-registry.ts";
@@ -74,11 +80,17 @@ export interface GeneratedFractionExpressionTutorialFixture
   readonly familyId: "generated.fraction-expression";
 }
 
+export interface GeneratedExponentTutorialFixture
+  extends GeneratedAlgebraTutorialFixture {
+  readonly familyId: "generated.exponent";
+}
+
 export function createGeneratedAlgebraTutorialFixtures():
   readonly GeneratedAlgebraTutorialFixture[] {
   return [
     ...createGeneratedLinearSolveTutorialFixtures(),
-    ...createGeneratedFractionExpressionTutorialFixtures()
+    ...createGeneratedFractionExpressionTutorialFixtures(),
+    ...createGeneratedExponentTutorialFixtures()
   ];
 }
 
@@ -98,6 +110,10 @@ export function createGeneratedAlgebraTutorialFixture(
     return createGeneratedFractionExpressionTutorialFixture(spec);
   }
 
+  if (spec.familyId === "generated.exponent") {
+    return createGeneratedExponentTutorialFixture(spec);
+  }
+
   return createGeneratedLinearSolveTutorialFixture(spec);
 }
 
@@ -112,6 +128,13 @@ export function createGeneratedFractionExpressionTutorialFixtures():
   readonly GeneratedFractionExpressionTutorialFixture[] {
   return generatedFractionExpressionTutorialFixtureSpecs.map(
     createGeneratedFractionExpressionTutorialFixture
+  );
+}
+
+export function createGeneratedExponentTutorialFixtures():
+  readonly GeneratedExponentTutorialFixture[] {
+  return generatedExponentTutorialFixtureSpecs.map(
+    createGeneratedExponentTutorialFixture
   );
 }
 
@@ -668,6 +691,146 @@ function createGeneratedFractionExpressionFlashcards(
         kind: "text",
         value:
           "Dividing numerator and denominator by the same non-zero factor gives an equivalent fraction."
+      }
+    })
+  ];
+}
+
+export function createGeneratedExponentTutorialFixture(
+  input: GeneratedExponentTutorialFixtureSpec
+): GeneratedExponentTutorialFixture {
+  assertNonEmpty(input.id, "Generated exponent fixture id");
+  assertNonEmpty(input.title, `Generated exponent fixture ${input.id} title`);
+  assertNonEmpty(input.base, `Generated exponent fixture ${input.id} base`);
+
+  if (!Number.isInteger(input.exponent) || input.exponent < 2) {
+    throw new Error(
+      `Generated exponent fixture ${input.id} exponent must be an integer greater than one.`
+    );
+  }
+
+  const ids = generatedExponentIds(input);
+  const latex = {
+    initial: `${input.base}^{${input.exponent}}`,
+    expanded: Array.from({ length: input.exponent }, () => input.base).join(
+      " \\cdot "
+    )
+  };
+  const bundle = createKpAssetBundle({
+    id: ids.asset,
+    title: input.title,
+    objects: [
+      expressionObject(ids.initial, "Initial exponent", latex.initial, [
+        selector(ids.initial, "base", "term", input.base),
+        selector(ids.initial, "exponent", "exponent", String(input.exponent))
+      ]),
+      expressionObject(ids.expanded, "Expanded product", latex.expanded, [
+        ...Array.from({ length: input.exponent }, (_, index) =>
+          selector(
+            ids.expanded,
+            `factor-${index + 1}`,
+            "factor",
+            input.base
+          )
+        ).flatMap((factorSelector, index) =>
+          index === input.exponent - 1
+            ? [factorSelector]
+            : [
+                factorSelector,
+                selector(
+                  ids.expanded,
+                  `times-${index + 1}`,
+                  "operator",
+                  "\\cdot"
+                )
+              ]
+        )
+      ])
+    ]
+  });
+  const transformations = createGeneratedExponentTransformations(ids);
+  const diagram = createKpSemanticDiagramSequence({
+    id: ids.diagram,
+    title: `${input.title} sequence`,
+    children: transformations.map(createKpTransformationDiagramLeaf)
+  });
+
+  return {
+    id: input.id,
+    familyId: "generated.exponent",
+    title: input.title,
+    bundle,
+    transformations,
+    diagram,
+    trace: createGeneratedExponentTrace(ids, latex),
+    drillDownHooks: [],
+    flashcards: createGeneratedExponentFlashcards(input, ids)
+  };
+}
+
+function createGeneratedExponentTransformations(
+  ids: GeneratedExponentIds
+): readonly KpSemanticTransformation[] {
+  return [
+    createKpSemanticTransformation({
+      id: ids.expand,
+      transformType: "expandExponent",
+      title: "Expand the exponent into a repeated product",
+      sourceObjectIds: [ids.initial],
+      targetObjectIds: [ids.expanded],
+      preserves: ["value"],
+      assumptions: [
+        "A positive integer exponent denotes repeated multiplication of the base."
+      ],
+      lawRefs: [
+        { id: "law.arithmetic.exponent-as-repeated-product", level: "strict" }
+      ],
+      correspondence: [
+        correspondence(ids.initial, "base", ids.expanded, "factor-1")
+      ]
+    })
+  ];
+}
+
+function createGeneratedExponentTrace(
+  ids: GeneratedExponentIds,
+  latex: GeneratedExponentLatex
+): AlgebraTraceFixture {
+  return {
+    id: ids.trace,
+    title: `${ids.baseId} generated exponent trace`,
+    steps: [
+      {
+        id: `${ids.trace}.initial`,
+        latex: latex.initial
+      },
+      {
+        id: `${ids.trace}.expanded`,
+        latex: latex.expanded,
+        transformationId: ids.expand,
+        rule: "expandExponent"
+      }
+    ]
+  };
+}
+
+function createGeneratedExponentFlashcards(
+  input: GeneratedExponentTutorialFixtureSpec,
+  ids: GeneratedExponentIds
+): readonly KpFlashcardSpec[] {
+  return [
+    createKpFlashcardSpec({
+      id: `card.${input.id}.explain-exponent-product`,
+      kind: "explain-transform",
+      title: "Explain exponent expansion",
+      assetId: ids.asset,
+      prompt: "What does this positive integer exponent mean?",
+      objectIds: [ids.initial, ids.expanded],
+      transformationIds: [ids.expand],
+      timeMs: 600,
+      answer: {
+        kind: "text",
+        value: "A positive integer exponent means repeated multiplication."
       }
     })
   ];
@@ -1481,6 +1644,32 @@ function generatedFractionExpressionIds(
   };
 }
 
+interface GeneratedExponentIds {
+  readonly baseId: string;
+  readonly asset: string;
+  readonly diagram: string;
+  readonly trace: string;
+  readonly initial: string;
+  readonly expanded: string;
+  readonly expand: string;
+}
+
+function generatedExponentIds(
+  input: GeneratedExponentTutorialFixtureSpec
+): GeneratedExponentIds {
+  const id = input.id;
+
+  return {
+    baseId: id,
+    asset: `asset.${id}`,
+    diagram: `diagram.${id}.sequence`,
+    trace: `trace.${id}`,
+    initial: `expression.${id}.initial`,
+    expanded: `expression.${id}.expanded`,
+    expand: `transform.${id}.expand-exponent`
+  };
+}
+
 interface GeneratedLinearSolveLatex {
   readonly rhs: number;
   readonly initial: string;
@@ -1521,6 +1710,11 @@ interface GeneratedFractionExpressionLatex {
   readonly factored: string;
   readonly commonFactor: string;
   readonly simplified: string;
+}
+
+interface GeneratedExponentLatex {
+  readonly initial: string;
+  readonly expanded: string;
 }
 
 function equationObject(

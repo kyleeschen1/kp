@@ -1,6 +1,7 @@
 export type GeneratedAlgebraFixtureFamilyId =
   | "generated.linear-solve"
-  | "generated.fraction-expression";
+  | "generated.fraction-expression"
+  | "generated.exponent";
 
 export interface GeneratedLinearSolveTutorialFixtureSpec {
   readonly id: string;
@@ -26,9 +27,18 @@ export interface GeneratedFractionExpressionTutorialFixtureSpec {
   readonly simplifiedDenominator: number;
 }
 
+export interface GeneratedExponentTutorialFixtureSpec {
+  readonly familyId: "generated.exponent";
+  readonly id: string;
+  readonly title: string;
+  readonly base: string;
+  readonly exponent: number;
+}
+
 export type GeneratedAlgebraTutorialFixtureSpec =
   | GeneratedAlgebraLinearSolveTutorialFixtureSpec
-  | GeneratedFractionExpressionTutorialFixtureSpec;
+  | GeneratedFractionExpressionTutorialFixtureSpec
+  | GeneratedExponentTutorialFixtureSpec;
 
 export const generatedLinearSolveTutorialFixtureSpecs:
   readonly GeneratedLinearSolveTutorialFixtureSpec[] = [
@@ -90,6 +100,17 @@ export const generatedFractionExpressionTutorialFixtureSpecs:
     }
   ];
 
+export const generatedExponentTutorialFixtureSpecs:
+  readonly GeneratedExponentTutorialFixtureSpec[] = [
+    {
+      familyId: "generated.exponent",
+      id: "generated.exponent.square-as-product",
+      title: "Generated expand square as product",
+      base: "x",
+      exponent: 2
+    }
+  ];
+
 export function listGeneratedLinearSolveTutorialFixtureSpecs():
   readonly GeneratedLinearSolveTutorialFixtureSpec[] {
   return generatedLinearSolveTutorialFixtureSpecs;
@@ -100,13 +121,19 @@ export function listGeneratedFractionExpressionTutorialFixtureSpecs():
   return generatedFractionExpressionTutorialFixtureSpecs;
 }
 
+export function listGeneratedExponentTutorialFixtureSpecs():
+  readonly GeneratedExponentTutorialFixtureSpec[] {
+  return generatedExponentTutorialFixtureSpecs;
+}
+
 export function listGeneratedAlgebraTutorialFixtureSpecs():
   readonly GeneratedAlgebraTutorialFixtureSpec[] {
   return [
     ...generatedLinearSolveTutorialFixtureSpecs.map(
       generatedLinearSolveSpecAsAlgebraSpec
     ),
-    ...generatedFractionExpressionTutorialFixtureSpecs
+    ...generatedFractionExpressionTutorialFixtureSpecs,
+    ...generatedExponentTutorialFixtureSpecs
   ];
 }
 
@@ -122,6 +149,12 @@ export function getGeneratedFractionExpressionTutorialFixtureSpec(
   return generatedFractionExpressionTutorialFixtureSpecs.find(
     (spec) => spec.id === id
   );
+}
+
+export function getGeneratedExponentTutorialFixtureSpec(
+  id: string
+): GeneratedExponentTutorialFixtureSpec | undefined {
+  return generatedExponentTutorialFixtureSpecs.find((spec) => spec.id === id);
 }
 
 export function getGeneratedAlgebraTutorialFixtureSpec(

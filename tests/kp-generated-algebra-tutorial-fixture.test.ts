@@ -21,6 +21,7 @@ import {
 import {
   createGeneratedAlgebraTutorialFixture,
   createGeneratedAlgebraTutorialFixtures,
+  createGeneratedExponentTutorialFixture,
   createGeneratedFractionExpressionTutorialFixture,
   createGeneratedLinearSolveTutorialFixture,
   createGeneratedLinearSolveTutorialFixtures
@@ -640,6 +641,10 @@ test("generated algebra fixture helpers include linear-solve and fraction famili
       [
         "generated.fraction-expression.two-fourths",
         "generated.fraction-expression"
+      ],
+      [
+        "generated.exponent.square-as-product",
+        "generated.exponent"
       ]
     ]
   );
@@ -648,5 +653,94 @@ test("generated algebra fixture helpers include linear-solve and fraction famili
       "generated.fraction-expression.two-fourths"
     ).bundle.objects.at(-1)?.value,
     { latex: "\\frac{1}{2}" }
+  );
+});
+
+test("createGeneratedExponentTutorialFixture builds a semantic exponent asset", () => {
+  const fixture = createGeneratedExponentTutorialFixture({
+    familyId: "generated.exponent",
+    id: "generated.exponent.square-as-product",
+    title: "Generated expand square as product",
+    base: "x",
+    exponent: 2
+  });
+
+  assert.equal(fixture.familyId, "generated.exponent");
+  assert.equal(fixture.bundle.id, "asset.generated.exponent.square-as-product");
+  assert.deepEqual(
+    fixture.bundle.objects.map((object) => ({
+      id: object.id,
+      objectType: object.objectType,
+      value: object.value,
+      selectorIds: object.selectors.map((selector) => selector.id)
+    })),
+    [
+      {
+        id: "expression.generated.exponent.square-as-product.initial",
+        objectType: "expression",
+        value: { latex: "x^{2}" },
+        selectorIds: [
+          "expression.generated.exponent.square-as-product.initial.base",
+          "expression.generated.exponent.square-as-product.initial.exponent"
+        ]
+      },
+      {
+        id: "expression.generated.exponent.square-as-product.expanded",
+        objectType: "expression",
+        value: { latex: "x \\cdot x" },
+        selectorIds: [
+          "expression.generated.exponent.square-as-product.expanded.factor-1",
+          "expression.generated.exponent.square-as-product.expanded.times-1",
+          "expression.generated.exponent.square-as-product.expanded.factor-2"
+        ]
+      }
+    ]
+  );
+  assert.deepEqual(
+    fixture.transformations.map((transformation) => [
+      transformation.id,
+      transformation.transformType,
+      transformation.sourceObjectIds,
+      transformation.targetObjectIds,
+      transformation.lawRefs
+    ]),
+    [
+      [
+        "transform.generated.exponent.square-as-product.expand-exponent",
+        "expandExponent",
+        ["expression.generated.exponent.square-as-product.initial"],
+        ["expression.generated.exponent.square-as-product.expanded"],
+        [{ id: "law.arithmetic.exponent-as-repeated-product", level: "strict" }]
+      ]
+    ]
+  );
+  assert.deepEqual(kpSemanticDiagramForwardPhases(fixture.diagram), [
+    ["transform.generated.exponent.square-as-product.expand-exponent"]
+  ]);
+  assert.deepEqual(
+    fixture.trace.steps.map((step) => [step.id, step.latex, step.rule]),
+    [
+      ["trace.generated.exponent.square-as-product.initial", "x^{2}", undefined],
+      [
+        "trace.generated.exponent.square-as-product.expanded",
+        "x \\cdot x",
+        "expandExponent"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    checkKpAssetFixtureReferenceClosure({
+      bundle: fixture.bundle,
+      transformations: fixture.transformations,
+      diagram: fixture.diagram,
+      drillDownHooks: fixture.drillDownHooks,
+      flashcards: fixture.flashcards,
+      trace: fixture.trace
+    }),
+    {
+      lawId: "asset-fixture.reference-closure",
+      passed: true,
+      failures: []
+    }
   );
 });
