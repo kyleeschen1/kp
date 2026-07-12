@@ -173,7 +173,8 @@ test("createGeneratedLinearSolveTutorialFixtures exposes multiple generated exam
 
   assert.deepEqual(fixtures.map((fixture) => fixture.id), [
     "generated.linear-solve.x-plus-3",
-    "generated.linear-solve.y-plus-5"
+    "generated.linear-solve.y-plus-5",
+    "generated.linear-solve.z-minus-4"
   ]);
   assert.deepEqual(
     fixtures[1]?.bundle.objects.map((object) => object.value),
@@ -182,6 +183,39 @@ test("createGeneratedLinearSolveTutorialFixtures exposes multiple generated exam
       { latex: "y + 5 - 5 = 12 - 5" },
       { latex: "y = 12 - 5" },
       { latex: "y = 7" }
+    ]
+  );
+  assert.deepEqual(
+    fixtures[2]?.bundle.objects.map((object) => object.value),
+    [
+      { latex: "z - 4 = 6" },
+      { latex: "z - 4 + 4 = 6 + 4" },
+      { latex: "z = 6 + 4" },
+      { latex: "z = 10" }
+    ]
+  );
+  assert.deepEqual(
+    fixtures[2]?.transformations.map((transformation) => [
+      transformation.id,
+      transformation.transformType,
+      transformation.lawRefs
+    ]),
+    [
+      [
+        "transform.generated.linear-solve.z-minus-4.add-inverse",
+        "addBothSides",
+        [{ id: "law.equation.add-both-sides", level: "strict" }]
+      ],
+      [
+        "transform.generated.linear-solve.z-minus-4.cancel-additive-inverse",
+        "cancelAdditiveInverses",
+        [{ id: "law.algebra.additive-inverse", level: "strict" }]
+      ],
+      [
+        "transform.generated.linear-solve.z-minus-4.simplify-sum",
+        "simplifyConstantSum",
+        [{ id: "law.arithmetic.constant-sum", level: "strict" }]
+      ]
     ]
   );
   assert.deepEqual(

@@ -12,7 +12,8 @@ test("generated algebra dashboard catalog exposes fixture agenda rows", () => {
 
   assert.deepEqual(rows.map((row) => row.id), [
     "generated-linear-solve-x-plus-3",
-    "generated-linear-solve-y-plus-5"
+    "generated-linear-solve-y-plus-5",
+    "generated-linear-solve-z-minus-4"
   ]);
   assert.deepEqual(rows[1]?.previewFields?.slice(0, 4), [
     { label: "Generated fixture", value: "generated.linear-solve.y-plus-5" },

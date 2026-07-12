@@ -21,6 +21,13 @@ export const generatedLinearSolveTutorialFixtureSpecs:
       variable: "y",
       addend: 5,
       solution: 7
+    },
+    {
+      id: "generated.linear-solve.z-minus-4",
+      title: "Generated solve z minus 4",
+      variable: "z",
+      addend: -4,
+      solution: 10
     }
   ];
 

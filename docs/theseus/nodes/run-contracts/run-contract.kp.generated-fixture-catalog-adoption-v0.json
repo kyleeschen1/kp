@@ -183,6 +183,31 @@
       "kind": "file",
       "path": "tests/generated-linear-solve-export-sample.test.ts",
       "summary": "Generated export samples assert iframe HTML and static-step semantic preservation."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Generated fixture registry includes a subtractive one-step solve."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Generated linear-solve fixture builder handles signed addends and inverse operations."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Registry tests assert subtractive generated fixture specs."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Generated fixture tests assert subtractive solve states and semantic laws."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "summary": "Dashboard generated-catalog tests include the subtractive fixture row."
     }
   ],
   "verification": [
@@ -343,8 +368,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T05:55:41.875Z",
-      "scope": "slice 10 generated export sample Theseus validation"
+      "scope": "slice 10 generated export sample Theseus validation",
+      "checkedAt": "2026-07-12T05:55:41.875Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard-semantic-asset-catalog.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts tests/generated-linear-solve-export-sample.test.ts",
+      "status": "passed",
+      "scope": "subtractive generated linear-solve fixture",
+      "checkedAt": "2026-07-12T06:03:25.582Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 11 subtractive fixture typecheck",
+      "checkedAt": "2026-07-12T06:03:32.879Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T06:03:39.692Z",
+      "scope": "slice 11 subtractive fixture Theseus validation"
     }
   ],
   "allowedWork": [
@@ -427,7 +470,7 @@
     {
       "id": "slice.kp.generated-fixture.subtractive-solves",
       "title": "Add subtractive one-step solve fixtures",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.coefficient-solves",

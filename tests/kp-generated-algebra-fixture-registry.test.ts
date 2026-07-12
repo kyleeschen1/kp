@@ -11,7 +11,8 @@ test("generated algebra fixture registry lists linear-solve specs without buildi
 
   assert.deepEqual(specs.map((spec) => spec.id), [
     "generated.linear-solve.x-plus-3",
-    "generated.linear-solve.y-plus-5"
+    "generated.linear-solve.y-plus-5",
+    "generated.linear-solve.z-minus-4"
   ]);
   assert.deepEqual(specs[0], {
     id: "generated.linear-solve.x-plus-3",
@@ -26,6 +27,16 @@ test("generated algebra fixture registry resolves specs by id", () => {
   assert.equal(
     getGeneratedLinearSolveTutorialFixtureSpec("generated.linear-solve.y-plus-5")?.solution,
     7
+  );
+  assert.deepEqual(
+    getGeneratedLinearSolveTutorialFixtureSpec("generated.linear-solve.z-minus-4"),
+    {
+      id: "generated.linear-solve.z-minus-4",
+      title: "Generated solve z minus 4",
+      variable: "z",
+      addend: -4,
+      solution: 10
+    }
   );
   assert.equal(
     getGeneratedLinearSolveTutorialFixtureSpec("generated.linear-solve.missing"),

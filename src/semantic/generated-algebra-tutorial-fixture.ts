@@ -57,9 +57,9 @@ export function createGeneratedLinearSolveTutorialFixture(
   assertNonEmpty(input.id, "Generated algebra fixture id");
   assertNonEmpty(input.title, `Generated algebra fixture ${input.id} title`);
   assertNonEmpty(input.variable, `Generated algebra fixture ${input.id} variable`);
-  assertPositiveInteger(input.addend, `Generated algebra fixture ${input.id} addend`);
+  assertNonZeroInteger(input.addend, `Generated algebra fixture ${input.id} addend`);
 
-  const ids = generatedLinearSolveIds(input.id);
+  const ids = generatedLinearSolveIds(input);
   const latex = generatedLinearSolveLatex(input);
   const bundle = createKpAssetBundle({
     id: ids.asset,
@@ -67,7 +67,7 @@ export function createGeneratedLinearSolveTutorialFixture(
     objects: [
       equationObject(ids.initial, "Initial equation", latex.initial, [
         selector(ids.initial, "lhs.variable", "term", input.variable),
-        selector(ids.initial, "lhs.addend", "term", formatPositiveTerm(input.addend)),
+        selector(ids.initial, "lhs.addend", "term", formatSignedTerm(input.addend)),
         selector(ids.initial, "equals", "relation", "="),
         selector(ids.initial, "rhs.value", "term", String(latex.rhs))
       ]),
@@ -77,11 +77,11 @@ export function createGeneratedLinearSolveTutorialFixture(
         latex.afterSubtract,
         [
           selector(ids.afterSubtract, "lhs.variable", "term", input.variable),
-          selector(ids.afterSubtract, "lhs.addend", "term", formatPositiveTerm(input.addend)),
-          selector(ids.afterSubtract, "lhs.subtract", "term", `-${input.addend}`),
+          selector(ids.afterSubtract, "lhs.addend", "term", formatSignedTerm(input.addend)),
+          selector(ids.afterSubtract, "lhs.subtract", "term", formatSignedTerm(-input.addend)),
           selector(ids.afterSubtract, "equals", "relation", "="),
           selector(ids.afterSubtract, "rhs.value", "term", String(latex.rhs)),
-          selector(ids.afterSubtract, "rhs.subtract", "term", `-${input.addend}`)
+          selector(ids.afterSubtract, "rhs.subtract", "term", formatSignedTerm(-input.addend))
         ]
       ),
       equationObject(
@@ -126,13 +126,13 @@ function createGeneratedLinearSolveTransformations(
   return [
     createKpSemanticTransformation({
       id: ids.subtract,
-      transformType: "subtractBothSides",
-      title: "Subtract the addend from both sides",
+      transformType: ids.firstTransformType,
+      title: ids.firstTransformTitle,
       sourceObjectIds: [ids.initial],
       targetObjectIds: [ids.afterSubtract],
       preserves: ["value", "structure"],
-      assumptions: ["Subtracting equal quantities preserves equality."],
-      lawRefs: [{ id: "law.equation.subtract-both-sides", level: "strict" }],
+      assumptions: [ids.firstTransformAssumption],
+      lawRefs: [{ id: ids.firstTransformLawId, level: "strict" }],
       correspondence: [
         correspondence(ids.initial, "lhs.variable", ids.afterSubtract, "lhs.variable"),
         correspondence(ids.initial, "lhs.addend", ids.afterSubtract, "lhs.addend"),
@@ -158,13 +158,13 @@ function createGeneratedLinearSolveTransformations(
     }),
     createKpSemanticTransformation({
       id: ids.simplify,
-      transformType: "simplifyConstantDifference",
-      title: "Simplify the constant difference",
+      transformType: ids.simplifyTransformType,
+      title: ids.simplifyTransformTitle,
       sourceObjectIds: [ids.leftSimplified],
       targetObjectIds: [ids.solved],
       preserves: ["value"],
-      assumptions: ["The right-hand constant difference evaluates to the solution."],
-      lawRefs: [{ id: "law.arithmetic.constant-difference", level: "strict" }],
+      assumptions: [ids.simplifyTransformAssumption],
+      lawRefs: [{ id: ids.simplifyTransformLawId, level: "strict" }],
       correspondence: [
         correspondence(ids.leftSimplified, "lhs.variable", ids.solved, "lhs.variable"),
         correspondence(ids.leftSimplified, "equals", ids.solved, "equals")
@@ -190,7 +190,7 @@ function createGeneratedLinearSolveTrace(
         id: `${ids.trace}.after-subtract`,
         latex: latex.afterSubtract,
         transformationId: ids.subtract,
-        rule: "subtractBothSides"
+        rule: ids.firstTransformType
       },
       {
         id: `${ids.trace}.left-simplified`,
@@ -202,7 +202,7 @@ function createGeneratedLinearSolveTrace(
         id: `${ids.trace}.solved`,
         latex: latex.solved,
         transformationId: ids.simplify,
-        rule: "simplifyConstantDifference"
+        rule: ids.simplifyTransformType
       }
     ]
   };
@@ -222,7 +222,7 @@ function createGeneratedLinearSolveFlashcards(
       selectorIds: [`${ids.initial}.lhs.addend`],
       answer: {
         kind: "text",
-        value: formatPositiveTerm(input.addend)
+        value: formatSignedTerm(input.addend)
       }
     }),
     createKpFlashcardSpec({
@@ -252,9 +252,22 @@ interface GeneratedLinearSolveIds {
   readonly subtract: string;
   readonly cancel: string;
   readonly simplify: string;
+  readonly firstTransformType: string;
+  readonly firstTransformTitle: string;
+  readonly firstTransformAssumption: string;
+  readonly firstTransformLawId: string;
+  readonly simplifyTransformType: string;
+  readonly simplifyTransformTitle: string;
+  readonly simplifyTransformAssumption: string;
+  readonly simplifyTransformLawId: string;
 }
 
-function generatedLinearSolveIds(id: string): GeneratedLinearSolveIds {
+function generatedLinearSolveIds(
+  input: GeneratedLinearSolveTutorialFixtureSpec
+): GeneratedLinearSolveIds {
+  const id = input.id;
+  const positiveAddend = input.addend > 0;
+
   return {
     asset: `asset.${id}`,
     diagram: `diagram.${id}.sequence`,
@@ -263,9 +276,31 @@ function generatedLinearSolveIds(id: string): GeneratedLinearSolveIds {
     afterSubtract: `equation.${id}.after-subtract`,
     leftSimplified: `equation.${id}.left-simplified`,
     solved: `equation.${id}.solved`,
-    subtract: `transform.${id}.subtract-addend`,
+    subtract: `transform.${id}.${positiveAddend ? "subtract-addend" : "add-inverse"}`,
     cancel: `transform.${id}.cancel-additive-inverse`,
-    simplify: `transform.${id}.simplify-difference`
+    simplify: `transform.${id}.${positiveAddend ? "simplify-difference" : "simplify-sum"}`,
+    firstTransformType: positiveAddend ? "subtractBothSides" : "addBothSides",
+    firstTransformTitle: positiveAddend
+      ? "Subtract the addend from both sides"
+      : "Add the inverse to both sides",
+    firstTransformAssumption: positiveAddend
+      ? "Subtracting equal quantities preserves equality."
+      : "Adding equal quantities preserves equality.",
+    firstTransformLawId: positiveAddend
+      ? "law.equation.subtract-both-sides"
+      : "law.equation.add-both-sides",
+    simplifyTransformType: positiveAddend
+      ? "simplifyConstantDifference"
+      : "simplifyConstantSum",
+    simplifyTransformTitle: positiveAddend
+      ? "Simplify the constant difference"
+      : "Simplify the constant sum",
+    simplifyTransformAssumption: positiveAddend
+      ? "The right-hand constant difference evaluates to the solution."
+      : "The right-hand constant sum evaluates to the solution.",
+    simplifyTransformLawId: positiveAddend
+      ? "law.arithmetic.constant-difference"
+      : "law.arithmetic.constant-sum"
   };
 }
 
@@ -281,12 +316,14 @@ function generatedLinearSolveLatex(
   input: GeneratedLinearSolveTutorialFixtureSpec
 ): GeneratedLinearSolveLatex {
   const rhs = input.solution + input.addend;
+  const addendTerm = formatLatexSignedTerm(input.addend);
+  const inverseTerm = formatLatexSignedTerm(-input.addend);
 
   return {
     rhs,
-    initial: `${input.variable} + ${input.addend} = ${rhs}`,
-    afterSubtract: `${input.variable} + ${input.addend} - ${input.addend} = ${rhs} - ${input.addend}`,
-    leftSimplified: `${input.variable} = ${rhs} - ${input.addend}`,
+    initial: `${input.variable} ${addendTerm} = ${rhs}`,
+    afterSubtract: `${input.variable} ${addendTerm} ${inverseTerm} = ${rhs} ${inverseTerm}`,
+    leftSimplified: `${input.variable} = ${rhs} ${inverseTerm}`,
     solved: `${input.variable} = ${input.solution}`
   };
 }
@@ -332,8 +369,12 @@ function correspondence(
   };
 }
 
-function formatPositiveTerm(value: number): string {
-  return `+${value}`;
+function formatSignedTerm(value: number): string {
+  return `${value > 0 ? "+" : "-"}${Math.abs(value)}`;
+}
+
+function formatLatexSignedTerm(value: number): string {
+  return `${value > 0 ? "+" : "-"} ${Math.abs(value)}`;
 }
 
 function assertNonEmpty(value: string, label: string): void {
@@ -342,8 +383,8 @@ function assertNonEmpty(value: string, label: string): void {
   }
 }
 
-function assertPositiveInteger(value: number, label: string): void {
-  if (!Number.isInteger(value) || value <= 0) {
-    throw new Error(`${label} must be a positive integer.`);
+function assertNonZeroInteger(value: number, label: string): void {
+  if (!Number.isInteger(value) || value === 0) {
+    throw new Error(`${label} must be a non-zero integer.`);
   }
 }
