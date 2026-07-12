@@ -215,6 +215,16 @@
       "kind": "file",
       "path": "tests/project-dashboard.test.ts",
       "summary": "Covers interpreter-produced preview fields on the selected linear-solve asset dashboard row."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Generates object-gallery rows for linear-solve drill-down hooks and flashcards from semantic asset definitions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers selected-row previews for generated linear-solve drill-down and flashcard rows."
     }
   ],
   "verification": [
@@ -518,8 +528,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T03:08:53.688Z",
-      "scope": "slice 18 linear-solve dashboard preview Theseus validation"
+      "scope": "slice 18 linear-solve dashboard preview Theseus validation",
+      "checkedAt": "2026-07-12T03:08:53.688Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "slice 19 drill-down and flashcard dashboard rows focused tests",
+      "checkedAt": "2026-07-12T03:16:53.111Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 19 drill-down and flashcard dashboard rows typecheck",
+      "checkedAt": "2026-07-12T03:17:02.337Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T03:17:15.644Z",
+      "scope": "slice 19 drill-down and flashcard dashboard rows Theseus validation"
     }
   ],
   "progress": {
@@ -653,12 +681,13 @@
     {
       "id": "slice.kp.asset-renderer.drilldown-flashcard-dashboard-rows",
       "title": "Add preview rows for drill-downs and flashcards",
-      "status": "ready"
+      "summary": "Generated dashboard object-gallery rows for the linear-solve drill-down hook and flashcards from semantic asset definitions.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.generated-algebra-fixture",
       "title": "Add generated algebra tutorial fixture v0",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.second-solve-example",

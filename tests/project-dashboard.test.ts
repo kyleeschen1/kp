@@ -144,6 +144,40 @@ test("renderProjectDashboard uses semantic preview interpreter for the linear-so
   );
 });
 
+test("renderProjectDashboard exposes linear-solve drill-down and flashcard rows", () => {
+  const drillDownHtml = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "drilldown-linear-solve-cancel-additive-inverse"
+  });
+  const flashcardHtml = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "flashcard-linear-solve-cloze-plus3"
+  });
+
+  assert.match(
+    drillDownHtml,
+    /data-kp-agenda-row="drilldown-linear-solve-cancel-additive-inverse"/
+  );
+  assert.match(
+    drillDownHtml,
+    /data-kp-preview-field="Drill-down hook"[^>]*>drilldown\.linear-solve\.cancel-additive-inverse</
+  );
+  assert.match(
+    drillDownHtml,
+    /data-kp-preview-field="Explainer asset"[^>]*>asset\.linear-solve\.cancel-additive-inverse-explainer</
+  );
+  assert.match(
+    flashcardHtml,
+    /data-kp-agenda-row="flashcard-linear-solve-cloze-plus3"/
+  );
+  assert.match(
+    flashcardHtml,
+    /data-kp-preview-field="Flashcard kind"[^>]*>cloze</
+  );
+  assert.match(
+    flashcardHtml,
+    /data-kp-preview-field="Answer"[^>]*>text: \+3</
+  );
+});
+
 test("project dashboard ids are unique and related ids resolve", () => {
   const ids = collectProjectDashboardIds(projectDashboardData);
   const uniqueIds = new Set(ids);
