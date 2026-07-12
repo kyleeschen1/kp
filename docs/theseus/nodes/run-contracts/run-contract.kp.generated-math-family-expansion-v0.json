@@ -339,6 +339,16 @@
       "kind": "file",
       "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
       "summary": "Covers generated family maturity tutorial-card action links."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Adds family/transform/motif/maturity search fields to generated family maturity rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "summary": "Covers facet search for generated function-wrap family and wrap motif."
     }
   ],
   "verification": [
@@ -771,11 +781,26 @@
       "command": "npm run theseus -- validate",
       "status": "passed",
       "checkedAt": "2026-07-12T20:14:38.221Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T20:18:34.671Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T20:18:34.716Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T20:18:34.783Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added generic generated algebra tutorial-card sample targets and exposed them as actions on generated family maturity rows."
+    "summary": "Added explicit generated algebra dashboard search facets for family, transform, motif, and maturity fields."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -923,8 +948,8 @@
     {
       "id": "slice.kp.generated-math.search-facets",
       "title": "Add generated fixture family search facets",
-      "summary": "Expose family, transform, motif, and maturity facets to dashboard search.",
-      "status": "planned"
+      "summary": "Generated family maturity rows now expose family, transform, motif, and maturity search facets.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.roadmap-refresh",

@@ -6,6 +6,9 @@ import {
   type GeneratedAlgebraTutorialFixture
 } from "../semantic/generated-algebra-tutorial-fixture.ts";
 import {
+  defaultEquationTransformVisualMotifRules
+} from "../rendering/equation-visual-motif-defaults.ts";
+import {
   dashboardAssetPreviewDataAttributes,
   dashboardAssetPreviewFields,
   dashboardAssetPreviewSearchFields,
@@ -124,6 +127,18 @@ export function createGeneratedAlgebraMaturityAgendaRows(
     const sampleTargets = fixtures.map((fixture) =>
       createGeneratedAlgebraTutorialCardSampleTarget(fixture)
     );
+    const transformTypes = uniqueStrings(
+      fixtures.flatMap((fixture) =>
+        fixture.transformations.map((transformation) => transformation.transformType)
+      )
+    );
+    const motifKinds = uniqueStrings(
+      transformTypes.flatMap((transformType) =>
+        defaultEquationTransformVisualMotifRules
+          .filter((rule) => rule.transformationKind === transformType)
+          .map((rule) => rule.descriptor.kind)
+      )
+    );
 
     return {
       id: `generated-${familyLabel.replaceAll(".", "-")}-family-maturity`,
@@ -188,6 +203,8 @@ export function createGeneratedAlgebraMaturityAgendaRows(
         "generated fixture maturity",
         "generated fixture dependency manifests",
         `${familyLabel} fixture family`,
+        `family:${familyId}`,
+        "maturity:active",
         familyId,
         "asset-fixture.reference-closure",
         "renderer-frame semantic-preservation",
@@ -196,6 +213,8 @@ export function createGeneratedAlgebraMaturityAgendaRows(
         "trace-rule-mismatch",
         "dependency-manifest",
         "iframe static-step",
+        ...transformTypes.map((transformType) => `transform:${transformType}`),
+        ...motifKinds.map((motifKind) => `motif:${motifKind}`),
         ...fixtures.map((fixture) => fixture.id),
         ...fixtures.flatMap((fixture) =>
           fixture.transformations.map((transformation) => transformation.id)
@@ -220,6 +239,10 @@ function agendaIdFromGeneratedFixtureId(id: string): string {
 
 function sum<T>(values: readonly T[], select: (value: T) => number): number {
   return values.reduce((total, value) => total + select(value), 0);
+}
+
+function uniqueStrings(values: readonly string[]): readonly string[] {
+  return Array.from(new Set(values));
 }
 
 function latexValueAt(

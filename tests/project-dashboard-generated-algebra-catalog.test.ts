@@ -119,6 +119,15 @@ test("generated algebra maturity rows expose tutorial-card sample actions", () =
   });
 });
 
+test("generated algebra maturity rows expose family transform motif and maturity search facets", () => {
+  assert.deepEqual(
+    createGeneratedAlgebraMaturityAgendaRows(
+      "family:generated.function-wrap transform:wrapFunction motif:wrap maturity:active"
+    ).map((row) => row.id),
+    ["generated-function-wrap-family-maturity"]
+  );
+});
+
 test("generated algebra dashboard catalog filters rows by search text", () => {
   const rows = createGeneratedAlgebraFixtureAgendaRows("x + 3 = 7");
 
