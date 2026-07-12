@@ -1,3 +1,7 @@
+export type GeneratedAlgebraFixtureFamilyId =
+  | "generated.linear-solve"
+  | "generated.fraction-expression";
+
 export interface GeneratedLinearSolveTutorialFixtureSpec {
   readonly id: string;
   readonly title: string;
@@ -6,6 +10,25 @@ export interface GeneratedLinearSolveTutorialFixtureSpec {
   readonly coefficient?: number | undefined;
   readonly solution: number;
 }
+
+export interface GeneratedAlgebraLinearSolveTutorialFixtureSpec
+  extends GeneratedLinearSolveTutorialFixtureSpec {
+  readonly familyId: "generated.linear-solve";
+}
+
+export interface GeneratedFractionExpressionTutorialFixtureSpec {
+  readonly familyId: "generated.fraction-expression";
+  readonly id: string;
+  readonly title: string;
+  readonly numerator: number;
+  readonly denominator: number;
+  readonly simplifiedNumerator: number;
+  readonly simplifiedDenominator: number;
+}
+
+export type GeneratedAlgebraTutorialFixtureSpec =
+  | GeneratedAlgebraLinearSolveTutorialFixtureSpec
+  | GeneratedFractionExpressionTutorialFixtureSpec;
 
 export const generatedLinearSolveTutorialFixtureSpecs:
   readonly GeneratedLinearSolveTutorialFixtureSpec[] = [
@@ -54,13 +77,66 @@ export const generatedLinearSolveTutorialFixtureSpecs:
     }
   ];
 
+export const generatedFractionExpressionTutorialFixtureSpecs:
+  readonly GeneratedFractionExpressionTutorialFixtureSpec[] = [
+    {
+      familyId: "generated.fraction-expression",
+      id: "generated.fraction-expression.two-fourths",
+      title: "Generated simplify two fourths",
+      numerator: 2,
+      denominator: 4,
+      simplifiedNumerator: 1,
+      simplifiedDenominator: 2
+    }
+  ];
+
 export function listGeneratedLinearSolveTutorialFixtureSpecs():
   readonly GeneratedLinearSolveTutorialFixtureSpec[] {
   return generatedLinearSolveTutorialFixtureSpecs;
+}
+
+export function listGeneratedFractionExpressionTutorialFixtureSpecs():
+  readonly GeneratedFractionExpressionTutorialFixtureSpec[] {
+  return generatedFractionExpressionTutorialFixtureSpecs;
+}
+
+export function listGeneratedAlgebraTutorialFixtureSpecs():
+  readonly GeneratedAlgebraTutorialFixtureSpec[] {
+  return [
+    ...generatedLinearSolveTutorialFixtureSpecs.map(
+      generatedLinearSolveSpecAsAlgebraSpec
+    ),
+    ...generatedFractionExpressionTutorialFixtureSpecs
+  ];
 }
 
 export function getGeneratedLinearSolveTutorialFixtureSpec(
   id: string
 ): GeneratedLinearSolveTutorialFixtureSpec | undefined {
   return generatedLinearSolveTutorialFixtureSpecs.find((spec) => spec.id === id);
+}
+
+export function getGeneratedFractionExpressionTutorialFixtureSpec(
+  id: string
+): GeneratedFractionExpressionTutorialFixtureSpec | undefined {
+  return generatedFractionExpressionTutorialFixtureSpecs.find(
+    (spec) => spec.id === id
+  );
+}
+
+export function getGeneratedAlgebraTutorialFixtureSpec(
+  id: string
+): GeneratedAlgebraTutorialFixtureSpec | undefined {
+  return listGeneratedAlgebraTutorialFixtureSpecs().find(
+    (spec) => spec.id === id
+  );
+}
+
+function generatedLinearSolveSpecAsAlgebraSpec(
+  spec: GeneratedLinearSolveTutorialFixtureSpec
+): GeneratedAlgebraLinearSolveTutorialFixtureSpec {
+  return {
+    familyId: "generated.linear-solve",
+    ...spec
+  };
 }

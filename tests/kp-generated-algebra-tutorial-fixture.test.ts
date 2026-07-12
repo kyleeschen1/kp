@@ -19,6 +19,9 @@ import {
   validateKpSemanticTransformation
 } from "../src/semantic/asset-transformation.ts";
 import {
+  createGeneratedAlgebraTutorialFixture,
+  createGeneratedAlgebraTutorialFixtures,
+  createGeneratedFractionExpressionTutorialFixture,
   createGeneratedLinearSolveTutorialFixture,
   createGeneratedLinearSolveTutorialFixtures
 } from "../src/semantic/generated-algebra-tutorial-fixture.ts";
@@ -426,4 +429,126 @@ test("generated linear solve fixtures satisfy bundled reference closure", () => 
       }
     );
   }
+});
+
+test("createGeneratedFractionExpressionTutorialFixture builds a semantic fraction asset", () => {
+  const fixture = createGeneratedFractionExpressionTutorialFixture({
+    familyId: "generated.fraction-expression",
+    id: "generated.fraction-expression.two-fourths",
+    title: "Generated simplify two fourths",
+    numerator: 2,
+    denominator: 4,
+    simplifiedNumerator: 1,
+    simplifiedDenominator: 2
+  });
+
+  assert.equal(fixture.familyId, "generated.fraction-expression");
+  assert.equal(fixture.bundle.id, "asset.generated.fraction-expression.two-fourths");
+  assert.deepEqual(
+    fixture.bundle.objects.map((object) => ({
+      id: object.id,
+      objectType: object.objectType,
+      value: object.value,
+      selectorIds: object.selectors.map((selector) => selector.id)
+    })),
+    [
+      {
+        id: "expression.generated.fraction-expression.two-fourths.initial",
+        objectType: "expression",
+        value: { latex: "\\frac{2}{4}" },
+        selectorIds: [
+          "expression.generated.fraction-expression.two-fourths.initial.numerator",
+          "expression.generated.fraction-expression.two-fourths.initial.fraction-line",
+          "expression.generated.fraction-expression.two-fourths.initial.denominator"
+        ]
+      },
+      {
+        id: "expression.generated.fraction-expression.two-fourths.simplified",
+        objectType: "expression",
+        value: { latex: "\\frac{1}{2}" },
+        selectorIds: [
+          "expression.generated.fraction-expression.two-fourths.simplified.numerator",
+          "expression.generated.fraction-expression.two-fourths.simplified.fraction-line",
+          "expression.generated.fraction-expression.two-fourths.simplified.denominator"
+        ]
+      }
+    ]
+  );
+  assert.deepEqual(
+    fixture.transformations.map((transformation) => [
+      transformation.id,
+      transformation.transformType,
+      transformation.sourceObjectIds,
+      transformation.targetObjectIds,
+      transformation.lawRefs
+    ]),
+    [
+      [
+        "transform.generated.fraction-expression.two-fourths.simplify-fraction",
+        "simplifyFraction",
+        ["expression.generated.fraction-expression.two-fourths.initial"],
+        ["expression.generated.fraction-expression.two-fourths.simplified"],
+        [{ id: "law.arithmetic.equivalent-fractions", level: "strict" }]
+      ]
+    ]
+  );
+  assert.deepEqual(kpSemanticDiagramForwardPhases(fixture.diagram), [
+    ["transform.generated.fraction-expression.two-fourths.simplify-fraction"]
+  ]);
+  assert.deepEqual(
+    fixture.trace.steps.map((step) => [step.id, step.latex, step.rule]),
+    [
+      [
+        "trace.generated.fraction-expression.two-fourths.initial",
+        "\\frac{2}{4}",
+        undefined
+      ],
+      [
+        "trace.generated.fraction-expression.two-fourths.simplified",
+        "\\frac{1}{2}",
+        "simplifyFraction"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    checkKpAssetFixtureReferenceClosure({
+      bundle: fixture.bundle,
+      transformations: fixture.transformations,
+      diagram: fixture.diagram,
+      drillDownHooks: fixture.drillDownHooks,
+      flashcards: fixture.flashcards,
+      trace: fixture.trace
+    }),
+    {
+      lawId: "asset-fixture.reference-closure",
+      passed: true,
+      failures: []
+    }
+  );
+});
+
+test("generated algebra fixture helpers include linear-solve and fraction families", () => {
+  const fixtures = createGeneratedAlgebraTutorialFixtures();
+
+  assert.deepEqual(
+    fixtures.map((fixture) => [fixture.id, fixture.familyId]),
+    [
+      ["generated.linear-solve.x-plus-3", "generated.linear-solve"],
+      ["generated.linear-solve.y-plus-5", "generated.linear-solve"],
+      ["generated.linear-solve.z-minus-4", "generated.linear-solve"],
+      ["generated.linear-solve.three-x", "generated.linear-solve"],
+      ["generated.linear-solve.two-x-plus-3", "generated.linear-solve"],
+      ["generated.linear-solve.x-plus-one-half", "generated.linear-solve"],
+      [
+        "generated.fraction-expression.two-fourths",
+        "generated.fraction-expression"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    createGeneratedAlgebraTutorialFixture(
+      "generated.fraction-expression.two-fourths"
+    ).bundle.objects.at(-1)?.value,
+    { latex: "\\frac{1}{2}" }
+  );
 });

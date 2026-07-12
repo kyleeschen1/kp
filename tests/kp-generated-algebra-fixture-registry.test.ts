@@ -2,7 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  getGeneratedAlgebraTutorialFixtureSpec,
+  getGeneratedFractionExpressionTutorialFixtureSpec,
   getGeneratedLinearSolveTutorialFixtureSpec,
+  listGeneratedAlgebraTutorialFixtureSpecs,
+  listGeneratedFractionExpressionTutorialFixtureSpecs,
   listGeneratedLinearSolveTutorialFixtureSpecs
 } from "../src/semantic/generated-algebra-fixture-registry.ts";
 
@@ -74,6 +78,60 @@ test("generated algebra fixture registry resolves specs by id", () => {
   );
   assert.equal(
     getGeneratedLinearSolveTutorialFixtureSpec("generated.linear-solve.missing"),
+    undefined
+  );
+});
+
+test("generated algebra fixture registry exposes family-aware specs", () => {
+  const specs = listGeneratedAlgebraTutorialFixtureSpecs();
+
+  assert.deepEqual(
+    specs.map((spec) => [spec.id, spec.familyId]),
+    [
+      ["generated.linear-solve.x-plus-3", "generated.linear-solve"],
+      ["generated.linear-solve.y-plus-5", "generated.linear-solve"],
+      ["generated.linear-solve.z-minus-4", "generated.linear-solve"],
+      ["generated.linear-solve.three-x", "generated.linear-solve"],
+      ["generated.linear-solve.two-x-plus-3", "generated.linear-solve"],
+      ["generated.linear-solve.x-plus-one-half", "generated.linear-solve"],
+      [
+        "generated.fraction-expression.two-fourths",
+        "generated.fraction-expression"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    getGeneratedAlgebraTutorialFixtureSpec(
+      "generated.fraction-expression.two-fourths"
+    ),
+    {
+      familyId: "generated.fraction-expression",
+      id: "generated.fraction-expression.two-fourths",
+      title: "Generated simplify two fourths",
+      numerator: 2,
+      denominator: 4,
+      simplifiedNumerator: 1,
+      simplifiedDenominator: 2
+    }
+  );
+});
+
+test("generated algebra fixture registry resolves fraction-expression specs", () => {
+  assert.deepEqual(listGeneratedFractionExpressionTutorialFixtureSpecs(), [
+    {
+      familyId: "generated.fraction-expression",
+      id: "generated.fraction-expression.two-fourths",
+      title: "Generated simplify two fourths",
+      numerator: 2,
+      denominator: 4,
+      simplifiedNumerator: 1,
+      simplifiedDenominator: 2
+    }
+  ]);
+  assert.equal(
+    getGeneratedFractionExpressionTutorialFixtureSpec(
+      "generated.fraction-expression.missing"
+    ),
     undefined
   );
 });

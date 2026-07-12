@@ -23,23 +23,38 @@ import {
 } from "./asset-transformation.ts";
 import type { AlgebraTraceFixture } from "./algebra-trace-port-fixture.ts";
 import {
+  getGeneratedAlgebraTutorialFixtureSpec,
+  generatedFractionExpressionTutorialFixtureSpecs,
   generatedLinearSolveTutorialFixtureSpecs,
+  type GeneratedAlgebraFixtureFamilyId,
+  type GeneratedAlgebraTutorialFixtureSpec,
+  type GeneratedFractionExpressionTutorialFixtureSpec,
   type GeneratedLinearSolveTutorialFixtureSpec
 } from "./generated-algebra-fixture-registry.ts";
 
 export type {
+  GeneratedAlgebraFixtureFamilyId,
+  GeneratedAlgebraLinearSolveTutorialFixtureSpec,
+  GeneratedAlgebraTutorialFixtureSpec,
+  GeneratedFractionExpressionTutorialFixtureSpec,
   GeneratedLinearSolveTutorialFixtureSpec,
   GeneratedLinearSolveTutorialFixtureSpec as CreateGeneratedLinearSolveTutorialFixtureInput
 } from "./generated-algebra-fixture-registry.ts";
 
 export {
+  generatedFractionExpressionTutorialFixtureSpecs,
   generatedLinearSolveTutorialFixtureSpecs,
+  getGeneratedAlgebraTutorialFixtureSpec,
+  getGeneratedFractionExpressionTutorialFixtureSpec,
   getGeneratedLinearSolveTutorialFixtureSpec,
+  listGeneratedAlgebraTutorialFixtureSpecs,
+  listGeneratedFractionExpressionTutorialFixtureSpecs,
   listGeneratedLinearSolveTutorialFixtureSpecs
 } from "./generated-algebra-fixture-registry.ts";
 
-export interface GeneratedLinearSolveTutorialFixture {
+export interface GeneratedAlgebraTutorialFixture {
   readonly id: string;
+  readonly familyId: GeneratedAlgebraFixtureFamilyId;
   readonly title: string;
   readonly bundle: KpAssetBundle;
   readonly transformations: readonly KpSemanticTransformation[];
@@ -49,10 +64,54 @@ export interface GeneratedLinearSolveTutorialFixture {
   readonly flashcards: readonly KpFlashcardSpec[];
 }
 
+export interface GeneratedLinearSolveTutorialFixture
+  extends GeneratedAlgebraTutorialFixture {
+  readonly familyId: "generated.linear-solve";
+}
+
+export interface GeneratedFractionExpressionTutorialFixture
+  extends GeneratedAlgebraTutorialFixture {
+  readonly familyId: "generated.fraction-expression";
+}
+
+export function createGeneratedAlgebraTutorialFixtures():
+  readonly GeneratedAlgebraTutorialFixture[] {
+  return [
+    ...createGeneratedLinearSolveTutorialFixtures(),
+    ...createGeneratedFractionExpressionTutorialFixtures()
+  ];
+}
+
+export function createGeneratedAlgebraTutorialFixture(
+  fixtureOrId: GeneratedAlgebraTutorialFixtureSpec | string
+): GeneratedAlgebraTutorialFixture {
+  const spec =
+    typeof fixtureOrId === "string"
+      ? getGeneratedAlgebraTutorialFixtureSpec(fixtureOrId)
+      : fixtureOrId;
+
+  if (spec === undefined) {
+    throw new Error(`Unknown generated algebra fixture: ${fixtureOrId}`);
+  }
+
+  if (spec.familyId === "generated.fraction-expression") {
+    return createGeneratedFractionExpressionTutorialFixture(spec);
+  }
+
+  return createGeneratedLinearSolveTutorialFixture(spec);
+}
+
 export function createGeneratedLinearSolveTutorialFixtures():
   readonly GeneratedLinearSolveTutorialFixture[] {
   return generatedLinearSolveTutorialFixtureSpecs.map(
     createGeneratedLinearSolveTutorialFixture
+  );
+}
+
+export function createGeneratedFractionExpressionTutorialFixtures():
+  readonly GeneratedFractionExpressionTutorialFixture[] {
+  return generatedFractionExpressionTutorialFixtureSpecs.map(
+    createGeneratedFractionExpressionTutorialFixture
   );
 }
 
@@ -139,6 +198,7 @@ export function createGeneratedLinearSolveTutorialFixture(
 
   return {
     id: input.id,
+    familyId: "generated.linear-solve",
     title: input.title,
     bundle,
     transformations,
@@ -208,6 +268,7 @@ function createGeneratedCoefficientLinearSolveTutorialFixture(
 
   return {
     id: input.id,
+    familyId: "generated.linear-solve",
     title: input.title,
     bundle,
     transformations,
@@ -309,6 +370,7 @@ function createGeneratedTwoStepLinearSolveTutorialFixture(
 
   return {
     id: input.id,
+    familyId: "generated.linear-solve",
     title: input.title,
     bundle,
     transformations,
@@ -326,6 +388,143 @@ function createGeneratedTwoStepLinearSolveTutorialFixture(
     ],
     flashcards: createGeneratedTwoStepSolveFlashcards(input, ids)
   };
+}
+
+export function createGeneratedFractionExpressionTutorialFixture(
+  input: GeneratedFractionExpressionTutorialFixtureSpec
+): GeneratedFractionExpressionTutorialFixture {
+  assertNonEmpty(input.id, "Generated fraction fixture id");
+  assertNonEmpty(input.title, `Generated fraction fixture ${input.id} title`);
+  assertNonZeroInteger(input.numerator, `Generated fraction fixture ${input.id} numerator`);
+  assertNonZeroInteger(input.denominator, `Generated fraction fixture ${input.id} denominator`);
+  assertNonZeroInteger(
+    input.simplifiedNumerator,
+    `Generated fraction fixture ${input.id} simplified numerator`
+  );
+  assertNonZeroInteger(
+    input.simplifiedDenominator,
+    `Generated fraction fixture ${input.id} simplified denominator`
+  );
+
+  const ids = generatedFractionExpressionIds(input);
+  const latex = {
+    initial: fractionLatex(input.numerator, input.denominator),
+    simplified: fractionLatex(
+      input.simplifiedNumerator,
+      input.simplifiedDenominator
+    )
+  };
+  const bundle = createKpAssetBundle({
+    id: ids.asset,
+    title: input.title,
+    objects: [
+      expressionObject(ids.initial, "Initial fraction", latex.initial, [
+        selector(ids.initial, "numerator", "term", String(input.numerator)),
+        selector(ids.initial, "fraction-line", "artifact", "/"),
+        selector(ids.initial, "denominator", "term", String(input.denominator))
+      ]),
+      expressionObject(ids.simplified, "Simplified fraction", latex.simplified, [
+        selector(
+          ids.simplified,
+          "numerator",
+          "term",
+          String(input.simplifiedNumerator)
+        ),
+        selector(ids.simplified, "fraction-line", "artifact", "/"),
+        selector(
+          ids.simplified,
+          "denominator",
+          "term",
+          String(input.simplifiedDenominator)
+        )
+      ])
+    ]
+  });
+  const transformations = createGeneratedFractionExpressionTransformations(ids);
+  const diagram = createKpSemanticDiagramSequence({
+    id: ids.diagram,
+    title: `${input.title} sequence`,
+    children: transformations.map(createKpTransformationDiagramLeaf)
+  });
+
+  return {
+    id: input.id,
+    familyId: "generated.fraction-expression",
+    title: input.title,
+    bundle,
+    transformations,
+    diagram,
+    trace: createGeneratedFractionExpressionTrace(ids, latex),
+    drillDownHooks: [],
+    flashcards: createGeneratedFractionExpressionFlashcards(input, ids)
+  };
+}
+
+function createGeneratedFractionExpressionTransformations(
+  ids: GeneratedFractionExpressionIds
+): readonly KpSemanticTransformation[] {
+  return [
+    createKpSemanticTransformation({
+      id: ids.simplify,
+      transformType: "simplifyFraction",
+      title: "Simplify the fraction",
+      sourceObjectIds: [ids.initial],
+      targetObjectIds: [ids.simplified],
+      preserves: ["value", "structure"],
+      assumptions: [
+        "Dividing numerator and denominator by the same non-zero factor preserves the represented value."
+      ],
+      lawRefs: [{ id: "law.arithmetic.equivalent-fractions", level: "strict" }],
+      correspondence: [
+        correspondence(ids.initial, "fraction-line", ids.simplified, "fraction-line")
+      ]
+    })
+  ];
+}
+
+function createGeneratedFractionExpressionTrace(
+  ids: GeneratedFractionExpressionIds,
+  latex: GeneratedFractionExpressionLatex
+): AlgebraTraceFixture {
+  return {
+    id: ids.trace,
+    title: `${ids.baseId} generated fraction trace`,
+    steps: [
+      {
+        id: `${ids.trace}.initial`,
+        latex: latex.initial
+      },
+      {
+        id: `${ids.trace}.simplified`,
+        latex: latex.simplified,
+        transformationId: ids.simplify,
+        rule: "simplifyFraction"
+      }
+    ]
+  };
+}
+
+function createGeneratedFractionExpressionFlashcards(
+  input: GeneratedFractionExpressionTutorialFixtureSpec,
+  ids: GeneratedFractionExpressionIds
+): readonly KpFlashcardSpec[] {
+  return [
+    createKpFlashcardSpec({
+      id: `card.${input.id}.explain-equivalent-fraction`,
+      kind: "explain-transform",
+      title: "Explain fraction simplification",
+      assetId: ids.asset,
+      prompt: "Why does simplifying this fraction preserve its value?",
+      objectIds: [ids.initial, ids.simplified],
+      transformationIds: [ids.simplify],
+      timeMs: 600,
+      answer: {
+        kind: "text",
+        value:
+          "Dividing numerator and denominator by the same non-zero factor gives an equivalent fraction."
+      }
+    })
+  ];
 }
 
 function createGeneratedLinearSolveTransformations(
@@ -1102,6 +1301,32 @@ function generatedTwoStepSolveIds(
   };
 }
 
+interface GeneratedFractionExpressionIds {
+  readonly baseId: string;
+  readonly asset: string;
+  readonly diagram: string;
+  readonly trace: string;
+  readonly initial: string;
+  readonly simplified: string;
+  readonly simplify: string;
+}
+
+function generatedFractionExpressionIds(
+  input: GeneratedFractionExpressionTutorialFixtureSpec
+): GeneratedFractionExpressionIds {
+  const id = input.id;
+
+  return {
+    baseId: id,
+    asset: `asset.${id}`,
+    diagram: `diagram.${id}.sequence`,
+    trace: `trace.${id}`,
+    initial: `expression.${id}.initial`,
+    simplified: `expression.${id}.simplified`,
+    simplify: `transform.${id}.simplify-fraction`
+  };
+}
+
 interface GeneratedLinearSolveLatex {
   readonly rhs: number;
   readonly initial: string;
@@ -1137,6 +1362,11 @@ interface GeneratedTwoStepSolveLatex {
   readonly solved: string;
 }
 
+interface GeneratedFractionExpressionLatex {
+  readonly initial: string;
+  readonly simplified: string;
+}
+
 function equationObject(
   id: string,
   title: string,
@@ -1146,6 +1376,21 @@ function equationObject(
   return createKpSemanticAssetObject({
     id,
     objectType: "equation",
+    title,
+    value: { latex },
+    selectors
+  });
+}
+
+function expressionObject(
+  id: string,
+  title: string,
+  latex: string,
+  selectors: readonly CreateKpAssetSelectorInput[]
+) {
+  return createKpSemanticAssetObject({
+    id,
+    objectType: "expression",
     title,
     value: { latex },
     selectors
@@ -1212,6 +1457,10 @@ function formatPlainNumber(value: number): string {
   }
 
   return String(value);
+}
+
+function fractionLatex(numerator: number, denominator: number): string {
+  return `\\frac{${formatLatexNumber(numerator)}}{${formatLatexNumber(denominator)}}`;
 }
 
 function assertNonEmpty(value: string, label: string): void {

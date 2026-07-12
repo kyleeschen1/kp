@@ -39,6 +39,26 @@
       "kind": "file",
       "path": "src/project-dashboard/generated-algebra-catalog.ts",
       "summary": "Dashboard generated algebra row seam that should group rows by fixture family."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Adds family-aware generated algebra spec helpers and the first fraction-expression spec."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Adds the shared generated algebra fixture shape, algebra factory routing, and fraction-expression fixture builder."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Specifies family-aware registry behavior and fraction-expression lookup."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Specifies generated fraction fixture bundle, transformation, trace, and closure behavior."
     }
   ],
   "verification": [
@@ -60,13 +80,31 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T18:46:41.627Z",
-      "scope": "Theseus graph validation after seam audit"
+      "scope": "Theseus graph validation after seam audit",
+      "checkedAt": "2026-07-12T18:46:41.627Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "scope": "Focused generated algebra registry and fixture tests; red before implementation, green after",
+      "checkedAt": "2026-07-12T18:52:52.924Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T18:52:52.974Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T18:52:53.013Z",
+      "scope": "Theseus graph validation after fraction fixture slice"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Audited generated algebra registry seams and identified the shared fixture layer needed before adding new math families."
+    "summary": "Added family-aware generated algebra fixture helpers and a generated fraction-expression simplification fixture."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -100,8 +138,8 @@
     {
       "id": "slice.kp.generated-math.fraction-fixtures",
       "title": "Add generated fraction-expression fixture family",
-      "summary": "Add generated fraction-expression fixtures beyond linear solves.",
-      "status": "planned"
+      "summary": "Added shared generated algebra fixture helpers and the first fraction-expression semantic fixture.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.fraction-transforms",
