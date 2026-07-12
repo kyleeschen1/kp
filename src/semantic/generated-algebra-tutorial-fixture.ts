@@ -712,6 +712,7 @@ export function createGeneratedExponentTutorialFixture(
   const ids = generatedExponentIds(input);
   const latex = {
     initial: `${input.base}^{${input.exponent}}`,
+    lowered: `${input.base} \\cdot ${input.base}^{${input.exponent - 1}}`,
     expanded: Array.from({ length: input.exponent }, () => input.base).join(
       " \\cdot "
     )
@@ -723,6 +724,17 @@ export function createGeneratedExponentTutorialFixture(
       expressionObject(ids.initial, "Initial exponent", latex.initial, [
         selector(ids.initial, "base", "term", input.base),
         selector(ids.initial, "exponent", "exponent", String(input.exponent))
+      ]),
+      expressionObject(ids.lowered, "Lowered exponent", latex.lowered, [
+        selector(ids.lowered, "factor-1", "factor", input.base),
+        selector(ids.lowered, "times-1", "operator", "\\cdot"),
+        selector(ids.lowered, "residual-base", "term", input.base),
+        selector(
+          ids.lowered,
+          "residual-exponent",
+          "exponent",
+          String(input.exponent - 1)
+        )
       ]),
       expressionObject(ids.expanded, "Expanded product", latex.expanded, [
         ...Array.from({ length: input.exponent }, (_, index) =>
@@ -773,20 +785,35 @@ function createGeneratedExponentTransformations(
 ): readonly KpSemanticTransformation[] {
   return [
     createKpSemanticTransformation({
-      id: ids.expand,
-      transformType: "expandExponent",
-      title: "Expand the exponent into a repeated product",
+      id: ids.lower,
+      transformType: "lowerExponent",
+      title: "Lower the exponent by one factor",
       sourceObjectIds: [ids.initial],
-      targetObjectIds: [ids.expanded],
-      preserves: ["value"],
+      targetObjectIds: [ids.lowered],
+      preserves: ["identity", "value"],
       assumptions: [
-        "A positive integer exponent denotes repeated multiplication of the base."
+        "A positive integer exponent can be lowered by exposing one copied base factor."
       ],
-      lawRefs: [
-        { id: "law.arithmetic.exponent-as-repeated-product", level: "strict" }
-      ],
+      lawRefs: [{ id: "law.arithmetic.exponent-lowering", level: "strict" }],
       correspondence: [
-        correspondence(ids.initial, "base", ids.expanded, "factor-1")
+        correspondence(ids.initial, "base", ids.lowered, "factor-1"),
+        correspondence(ids.initial, "base", ids.lowered, "residual-base")
+      ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.unwrap,
+      transformType: "unwrapUnitExponent",
+      title: "Unwrap the unit exponent",
+      sourceObjectIds: [ids.lowered],
+      targetObjectIds: [ids.expanded],
+      preserves: ["identity", "value"],
+      assumptions: [
+        "A base raised to the first power is the base itself."
+      ],
+      lawRefs: [{ id: "law.arithmetic.unit-exponent", level: "strict" }],
+      correspondence: [
+        correspondence(ids.lowered, "factor-1", ids.expanded, "factor-1"),
+        correspondence(ids.lowered, "residual-base", ids.expanded, "factor-2")
       ]
     })
   ];
@@ -805,10 +832,16 @@ function createGeneratedExponentTrace(
         latex: latex.initial
       },
       {
+        id: `${ids.trace}.lowered`,
+        latex: latex.lowered,
+        transformationId: ids.lower,
+        rule: "lowerExponent"
+      },
+      {
         id: `${ids.trace}.expanded`,
         latex: latex.expanded,
-        transformationId: ids.expand,
-        rule: "expandExponent"
+        transformationId: ids.unwrap,
+        rule: "unwrapUnitExponent"
       }
     ]
   };
@@ -826,7 +859,7 @@ function createGeneratedExponentFlashcards(
       assetId: ids.asset,
       prompt: "What does this positive integer exponent mean?",
       objectIds: [ids.initial, ids.expanded],
-      transformationIds: [ids.expand],
+      transformationIds: [ids.lower, ids.unwrap],
       timeMs: 600,
       answer: {
         kind: "text",
@@ -1650,8 +1683,10 @@ interface GeneratedExponentIds {
   readonly diagram: string;
   readonly trace: string;
   readonly initial: string;
+  readonly lowered: string;
   readonly expanded: string;
-  readonly expand: string;
+  readonly lower: string;
+  readonly unwrap: string;
 }
 
 function generatedExponentIds(
@@ -1665,8 +1700,10 @@ function generatedExponentIds(
     diagram: `diagram.${id}.sequence`,
     trace: `trace.${id}`,
     initial: `expression.${id}.initial`,
+    lowered: `expression.${id}.lowered`,
     expanded: `expression.${id}.expanded`,
-    expand: `transform.${id}.expand-exponent`
+    lower: `transform.${id}.lower-exponent`,
+    unwrap: `transform.${id}.unwrap-unit-exponent`
   };
 }
 
@@ -1714,6 +1751,7 @@ interface GeneratedFractionExpressionLatex {
 
 interface GeneratedExponentLatex {
   readonly initial: string;
+  readonly lowered: string;
   readonly expanded: string;
 }
 

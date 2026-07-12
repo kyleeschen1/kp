@@ -124,6 +124,16 @@
       "kind": "file",
       "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
       "summary": "Specifies generated exponent fixture bundle, transformation, trace, and closure behavior."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Defines generated exponent lowered object, lower/unwrap transformations, identity correspondences, trace, and flashcard ids."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Covers the lowered exponent object, transform sequence, correspondence matrix, and trace rules."
     }
   ],
   "verification": [
@@ -289,13 +299,33 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T19:15:17.009Z",
-      "scope": "Theseus graph validation after exponent fixture slice"
+      "scope": "Theseus graph validation after exponent fixture slice",
+      "checkedAt": "2026-07-12T19:15:17.009Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:22:02.089Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:22:02.128Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:22:02.166Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:22:02.199Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added generated exponent fixture family with an x^2 to repeated-product semantic asset."
+    "summary": "Added two-stage generated exponent semantics with lower-exponent and unwrap-unit-exponent transforms, identity correspondences, trace steps, and flashcard references."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -365,8 +395,8 @@
     {
       "id": "slice.kp.generated-math.exponent-transforms",
       "title": "Add exponent transform metadata",
-      "summary": "Add raise, lower, unwrap, and identity metadata for exponent transforms.",
-      "status": "planned"
+      "summary": "Generated exponent fixtures now split exponent expansion into lowerExponent and unwrapUnitExponent transforms with preserved base identity correspondences and trace coverage.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.exponent-cards-exports",

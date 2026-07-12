@@ -685,6 +685,17 @@ test("createGeneratedExponentTutorialFixture builds a semantic exponent asset", 
         ]
       },
       {
+        id: "expression.generated.exponent.square-as-product.lowered",
+        objectType: "expression",
+        value: { latex: "x \\cdot x^{1}" },
+        selectorIds: [
+          "expression.generated.exponent.square-as-product.lowered.factor-1",
+          "expression.generated.exponent.square-as-product.lowered.times-1",
+          "expression.generated.exponent.square-as-product.lowered.residual-base",
+          "expression.generated.exponent.square-as-product.lowered.residual-exponent"
+        ]
+      },
+      {
         id: "expression.generated.exponent.square-as-product.expanded",
         objectType: "expression",
         value: { latex: "x \\cdot x" },
@@ -706,25 +717,73 @@ test("createGeneratedExponentTutorialFixture builds a semantic exponent asset", 
     ]),
     [
       [
-        "transform.generated.exponent.square-as-product.expand-exponent",
-        "expandExponent",
+        "transform.generated.exponent.square-as-product.lower-exponent",
+        "lowerExponent",
         ["expression.generated.exponent.square-as-product.initial"],
+        ["expression.generated.exponent.square-as-product.lowered"],
+        [{ id: "law.arithmetic.exponent-lowering", level: "strict" }]
+      ],
+      [
+        "transform.generated.exponent.square-as-product.unwrap-unit-exponent",
+        "unwrapUnitExponent",
+        ["expression.generated.exponent.square-as-product.lowered"],
         ["expression.generated.exponent.square-as-product.expanded"],
-        [{ id: "law.arithmetic.exponent-as-repeated-product", level: "strict" }]
+        [{ id: "law.arithmetic.unit-exponent", level: "strict" }]
       ]
     ]
   );
   assert.deepEqual(kpSemanticDiagramForwardPhases(fixture.diagram), [
-    ["transform.generated.exponent.square-as-product.expand-exponent"]
+    ["transform.generated.exponent.square-as-product.lower-exponent"],
+    ["transform.generated.exponent.square-as-product.unwrap-unit-exponent"]
   ]);
+  assert.deepEqual(
+    fixture.transformations.map((transformation) =>
+      transformation.correspondence.map((entry) => [
+        entry.sourceSelectorId,
+        entry.targetSelectorId,
+        entry.preserves
+      ])
+    ),
+    [
+      [
+        [
+          "expression.generated.exponent.square-as-product.initial.base",
+          "expression.generated.exponent.square-as-product.lowered.factor-1",
+          ["identity"]
+        ],
+        [
+          "expression.generated.exponent.square-as-product.initial.base",
+          "expression.generated.exponent.square-as-product.lowered.residual-base",
+          ["identity"]
+        ]
+      ],
+      [
+        [
+          "expression.generated.exponent.square-as-product.lowered.factor-1",
+          "expression.generated.exponent.square-as-product.expanded.factor-1",
+          ["identity"]
+        ],
+        [
+          "expression.generated.exponent.square-as-product.lowered.residual-base",
+          "expression.generated.exponent.square-as-product.expanded.factor-2",
+          ["identity"]
+        ]
+      ]
+    ]
+  );
   assert.deepEqual(
     fixture.trace.steps.map((step) => [step.id, step.latex, step.rule]),
     [
       ["trace.generated.exponent.square-as-product.initial", "x^{2}", undefined],
       [
+        "trace.generated.exponent.square-as-product.lowered",
+        "x \\cdot x^{1}",
+        "lowerExponent"
+      ],
+      [
         "trace.generated.exponent.square-as-product.expanded",
         "x \\cdot x",
-        "expandExponent"
+        "unwrapUnitExponent"
       ]
     ]
   );
