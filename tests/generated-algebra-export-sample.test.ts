@@ -256,6 +256,16 @@ test("generated algebra export sample discovery includes exponent fixtures", () 
         "generated.function-wrap.apply-f",
         "generated.function-wrap",
         "artifact.generated.function-wrap.apply-f.iframe"
+      ],
+      [
+        "generated.distribution.expand-a-sum",
+        "generated.distribution",
+        "artifact.generated.distribution.expand-a-sum.iframe"
+      ],
+      [
+        "generated.distribution.factor-common-a",
+        "generated.distribution",
+        "artifact.generated.distribution.factor-common-a.iframe"
       ]
     ]
   );
@@ -287,6 +297,16 @@ test("generated algebra export sample discovery includes exponent fixtures", () 
         "generated.function-wrap.apply-f",
         "generated.function-wrap",
         "artifact.generated.function-wrap.apply-f.steps"
+      ],
+      [
+        "generated.distribution.expand-a-sum",
+        "generated.distribution",
+        "artifact.generated.distribution.expand-a-sum.steps"
+      ],
+      [
+        "generated.distribution.factor-common-a",
+        "generated.distribution",
+        "artifact.generated.distribution.factor-common-a.steps"
       ]
     ]
   );

@@ -24,6 +24,7 @@ import {
 import type { AlgebraTraceFixture } from "./algebra-trace-port-fixture.ts";
 import {
   getGeneratedAlgebraTutorialFixtureSpec,
+  generatedDistributionTutorialFixtureSpecs,
   generatedExponentTutorialFixtureSpecs,
   generatedFractionExpressionTutorialFixtureSpecs,
   generatedFunctionWrapTutorialFixtureSpecs,
@@ -31,6 +32,7 @@ import {
   generatedRadicalTutorialFixtureSpecs,
   type GeneratedAlgebraFixtureFamilyId,
   type GeneratedAlgebraTutorialFixtureSpec,
+  type GeneratedDistributionTutorialFixtureSpec,
   type GeneratedExponentTutorialFixtureSpec,
   type GeneratedFractionExpressionTutorialFixtureSpec,
   type GeneratedFunctionWrapTutorialFixtureSpec,
@@ -42,6 +44,7 @@ export type {
   GeneratedAlgebraFixtureFamilyId,
   GeneratedAlgebraLinearSolveTutorialFixtureSpec,
   GeneratedAlgebraTutorialFixtureSpec,
+  GeneratedDistributionTutorialFixtureSpec,
   GeneratedExponentTutorialFixtureSpec,
   GeneratedFractionExpressionTutorialFixtureSpec,
   GeneratedFunctionWrapTutorialFixtureSpec,
@@ -55,12 +58,14 @@ export {
   generatedFractionExpressionTutorialFixtureSpecs,
   generatedLinearSolveTutorialFixtureSpecs,
   getGeneratedAlgebraTutorialFixtureSpec,
+  getGeneratedDistributionTutorialFixtureSpec,
   getGeneratedExponentTutorialFixtureSpec,
   getGeneratedFractionExpressionTutorialFixtureSpec,
   getGeneratedFunctionWrapTutorialFixtureSpec,
   getGeneratedLinearSolveTutorialFixtureSpec,
   getGeneratedRadicalTutorialFixtureSpec,
   listGeneratedAlgebraTutorialFixtureSpecs,
+  listGeneratedDistributionTutorialFixtureSpecs,
   listGeneratedExponentTutorialFixtureSpecs,
   listGeneratedFractionExpressionTutorialFixtureSpecs,
   listGeneratedFunctionWrapTutorialFixtureSpecs,
@@ -105,6 +110,11 @@ export interface GeneratedFunctionWrapTutorialFixture
   readonly familyId: "generated.function-wrap";
 }
 
+export interface GeneratedDistributionTutorialFixture
+  extends GeneratedAlgebraTutorialFixture {
+  readonly familyId: "generated.distribution";
+}
+
 export function createGeneratedAlgebraTutorialFixtures():
   readonly GeneratedAlgebraTutorialFixture[] {
   return [
@@ -112,7 +122,8 @@ export function createGeneratedAlgebraTutorialFixtures():
     ...createGeneratedFractionExpressionTutorialFixtures(),
     ...createGeneratedExponentTutorialFixtures(),
     ...createGeneratedRadicalTutorialFixtures(),
-    ...createGeneratedFunctionWrapTutorialFixtures()
+    ...createGeneratedFunctionWrapTutorialFixtures(),
+    ...createGeneratedDistributionTutorialFixtures()
   ];
 }
 
@@ -142,6 +153,10 @@ export function createGeneratedAlgebraTutorialFixture(
 
   if (spec.familyId === "generated.function-wrap") {
     return createGeneratedFunctionWrapTutorialFixture(spec);
+  }
+
+  if (spec.familyId === "generated.distribution") {
+    return createGeneratedDistributionTutorialFixture(spec);
   }
 
   return createGeneratedLinearSolveTutorialFixture(spec);
@@ -179,6 +194,13 @@ export function createGeneratedFunctionWrapTutorialFixtures():
   readonly GeneratedFunctionWrapTutorialFixture[] {
   return generatedFunctionWrapTutorialFixtureSpecs.map(
     createGeneratedFunctionWrapTutorialFixture
+  );
+}
+
+export function createGeneratedDistributionTutorialFixtures():
+  readonly GeneratedDistributionTutorialFixture[] {
+  return generatedDistributionTutorialFixtureSpecs.map(
+    createGeneratedDistributionTutorialFixture
   );
 }
 
@@ -1144,6 +1166,144 @@ function createGeneratedFunctionWrapTrace(
   };
 }
 
+export function createGeneratedDistributionTutorialFixture(
+  input: GeneratedDistributionTutorialFixtureSpec
+): GeneratedDistributionTutorialFixture {
+  assertNonEmpty(input.id, "Generated distribution fixture id");
+  assertNonEmpty(
+    input.title,
+    `Generated distribution fixture ${input.id} title`
+  );
+  assertNonEmpty(input.factor, `Generated distribution fixture ${input.id} factor`);
+  assertNonEmpty(
+    input.leftTerm,
+    `Generated distribution fixture ${input.id} left term`
+  );
+  assertNonEmpty(
+    input.rightTerm,
+    `Generated distribution fixture ${input.id} right term`
+  );
+
+  const ids = generatedDistributionIds(input);
+  const latex = generatedDistributionLatex(input);
+  const bundle = createKpAssetBundle({
+    id: ids.asset,
+    title: input.title,
+    objects: [
+      expressionObject(ids.factored, "Factored expression", latex.factored, [
+        selector(ids.factored, "factor", "factor", input.factor),
+        selector(ids.factored, "left-paren", "delimiter", "("),
+        selector(ids.factored, "left-term", "term", input.leftTerm),
+        selector(ids.factored, "plus", "operator", "+"),
+        selector(ids.factored, "right-term", "term", input.rightTerm),
+        selector(ids.factored, "right-paren", "delimiter", ")")
+      ]),
+      expressionObject(ids.expanded, "Expanded expression", latex.expanded, [
+        selector(ids.expanded, "left-factor", "factor", input.factor),
+        selector(ids.expanded, "left-term", "term", input.leftTerm),
+        selector(ids.expanded, "plus", "operator", "+"),
+        selector(ids.expanded, "right-factor", "factor", input.factor),
+        selector(ids.expanded, "right-term", "term", input.rightTerm)
+      ])
+    ]
+  });
+  const transformations = createGeneratedDistributionTransformations(input, ids);
+  const diagram = createKpSemanticDiagramSequence({
+    id: ids.diagram,
+    title: `${input.title} sequence`,
+    children: transformations.map(createKpTransformationDiagramLeaf)
+  });
+
+  return {
+    id: input.id,
+    familyId: "generated.distribution",
+    title: input.title,
+    bundle,
+    transformations,
+    diagram,
+    trace: createGeneratedDistributionTrace(input, ids, latex),
+    drillDownHooks: [],
+    flashcards: []
+  };
+}
+
+function createGeneratedDistributionTransformations(
+  input: GeneratedDistributionTutorialFixtureSpec,
+  ids: GeneratedDistributionIds
+): readonly KpSemanticTransformation[] {
+  const distributing = input.direction === "distribute";
+
+  return [
+    createKpSemanticTransformation({
+      id: ids.transform,
+      transformType: distributing
+        ? "distributeMultiplication"
+        : "factorCommonTerm",
+      title: distributing
+        ? "Distribute multiplication over addition"
+        : "Factor the common term",
+      sourceObjectIds: [distributing ? ids.factored : ids.expanded],
+      targetObjectIds: [distributing ? ids.expanded : ids.factored],
+      preserves: ["identity", "value", "structure"],
+      assumptions: [
+        "Multiplication distributes over addition and can be read in either direction."
+      ],
+      lawRefs: [{ id: "law.algebra.distributive-property", level: "strict" }],
+      correspondence: distributing
+        ? [
+            correspondence(ids.factored, "factor", ids.expanded, "left-factor"),
+            correspondence(ids.factored, "factor", ids.expanded, "right-factor"),
+            correspondence(ids.factored, "left-term", ids.expanded, "left-term"),
+            correspondence(ids.factored, "right-term", ids.expanded, "right-term")
+          ]
+        : [
+            correspondence(ids.expanded, "left-factor", ids.factored, "factor"),
+            correspondence(ids.expanded, "right-factor", ids.factored, "factor"),
+            correspondence(ids.expanded, "left-term", ids.factored, "left-term"),
+            correspondence(ids.expanded, "right-term", ids.factored, "right-term")
+          ]
+    })
+  ];
+}
+
+function createGeneratedDistributionTrace(
+  input: GeneratedDistributionTutorialFixtureSpec,
+  ids: GeneratedDistributionIds,
+  latex: GeneratedDistributionLatex
+): AlgebraTraceFixture {
+  const distributing = input.direction === "distribute";
+
+  return {
+    id: ids.trace,
+    title: `${ids.baseId} generated distribution trace`,
+    steps: distributing
+      ? [
+          {
+            id: `${ids.trace}.factored`,
+            latex: latex.factored
+          },
+          {
+            id: `${ids.trace}.expanded`,
+            latex: latex.expanded,
+            transformationId: ids.transform,
+            rule: "distributeMultiplication"
+          }
+        ]
+      : [
+          {
+            id: `${ids.trace}.expanded`,
+            latex: latex.expanded
+          },
+          {
+            id: `${ids.trace}.factored`,
+            latex: latex.factored,
+            transformationId: ids.transform,
+            rule: "factorCommonTerm"
+          }
+        ]
+  };
+}
+
 function createGeneratedLinearSolveTransformations(
   ids: GeneratedLinearSolveIds
 ): readonly KpSemanticTransformation[] {
@@ -2034,6 +2194,32 @@ function generatedFunctionWrapIds(
   };
 }
 
+interface GeneratedDistributionIds {
+  readonly baseId: string;
+  readonly asset: string;
+  readonly diagram: string;
+  readonly trace: string;
+  readonly factored: string;
+  readonly expanded: string;
+  readonly transform: string;
+}
+
+function generatedDistributionIds(
+  input: GeneratedDistributionTutorialFixtureSpec
+): GeneratedDistributionIds {
+  const id = input.id;
+
+  return {
+    baseId: id,
+    asset: `asset.${id}`,
+    diagram: `diagram.${id}.sequence`,
+    trace: `trace.${id}`,
+    factored: `expression.${id}.factored`,
+    expanded: `expression.${id}.expanded`,
+    transform: `transform.${id}.${input.direction === "distribute" ? "distribute" : "factor"}`
+  };
+}
+
 interface GeneratedLinearSolveLatex {
   readonly rhs: number;
   readonly initial: string;
@@ -2125,6 +2311,20 @@ function generatedFunctionWrapLatex(
   return {
     input: input.input,
     wrapped: `${input.functionName}(${input.input})`
+  };
+}
+
+interface GeneratedDistributionLatex {
+  readonly factored: string;
+  readonly expanded: string;
+}
+
+function generatedDistributionLatex(
+  input: GeneratedDistributionTutorialFixtureSpec
+): GeneratedDistributionLatex {
+  return {
+    factored: `${input.factor}(${input.leftTerm} + ${input.rightTerm})`,
+    expanded: `${input.factor}${input.leftTerm} + ${input.factor}${input.rightTerm}`
   };
 }
 

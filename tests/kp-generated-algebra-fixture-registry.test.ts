@@ -3,12 +3,14 @@ import test from "node:test";
 
 import {
   getGeneratedAlgebraTutorialFixtureSpec,
+  getGeneratedDistributionTutorialFixtureSpec,
   getGeneratedExponentTutorialFixtureSpec,
   getGeneratedFractionExpressionTutorialFixtureSpec,
   getGeneratedFunctionWrapTutorialFixtureSpec,
   getGeneratedLinearSolveTutorialFixtureSpec,
   getGeneratedRadicalTutorialFixtureSpec,
   listGeneratedAlgebraTutorialFixtureSpecs,
+  listGeneratedDistributionTutorialFixtureSpecs,
   listGeneratedExponentTutorialFixtureSpecs,
   listGeneratedFractionExpressionTutorialFixtureSpecs,
   listGeneratedFunctionWrapTutorialFixtureSpecs,
@@ -115,6 +117,14 @@ test("generated algebra fixture registry exposes family-aware specs", () => {
       [
         "generated.function-wrap.apply-f",
         "generated.function-wrap"
+      ],
+      [
+        "generated.distribution.expand-a-sum",
+        "generated.distribution"
+      ],
+      [
+        "generated.distribution.factor-common-a",
+        "generated.distribution"
       ]
     ]
   );
@@ -215,6 +225,49 @@ test("generated algebra fixture registry resolves function-wrap specs", () => {
   assert.equal(
     getGeneratedFunctionWrapTutorialFixtureSpec(
       "generated.function-wrap.missing"
+    ),
+    undefined
+  );
+});
+
+test("generated algebra fixture registry resolves distribution specs", () => {
+  assert.deepEqual(listGeneratedDistributionTutorialFixtureSpecs(), [
+    {
+      familyId: "generated.distribution",
+      id: "generated.distribution.expand-a-sum",
+      title: "Generated distribute a over sum",
+      direction: "distribute",
+      factor: "a",
+      leftTerm: "b",
+      rightTerm: "c"
+    },
+    {
+      familyId: "generated.distribution",
+      id: "generated.distribution.factor-common-a",
+      title: "Generated factor common a",
+      direction: "factor",
+      factor: "a",
+      leftTerm: "b",
+      rightTerm: "c"
+    }
+  ]);
+  assert.deepEqual(
+    getGeneratedAlgebraTutorialFixtureSpec(
+      "generated.distribution.expand-a-sum"
+    ),
+    {
+      familyId: "generated.distribution",
+      id: "generated.distribution.expand-a-sum",
+      title: "Generated distribute a over sum",
+      direction: "distribute",
+      factor: "a",
+      leftTerm: "b",
+      rightTerm: "c"
+    }
+  );
+  assert.equal(
+    getGeneratedDistributionTutorialFixtureSpec(
+      "generated.distribution.missing"
     ),
     undefined
   );

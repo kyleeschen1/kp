@@ -21,6 +21,7 @@ import {
 import {
   createGeneratedAlgebraTutorialFixture,
   createGeneratedAlgebraTutorialFixtures,
+  createGeneratedDistributionTutorialFixture,
   createGeneratedExponentTutorialFixture,
   createGeneratedFractionExpressionTutorialFixture,
   createGeneratedFunctionWrapTutorialFixture,
@@ -655,6 +656,14 @@ test("generated algebra fixture helpers include linear-solve and fraction famili
       [
         "generated.function-wrap.apply-f",
         "generated.function-wrap"
+      ],
+      [
+        "generated.distribution.expand-a-sum",
+        "generated.distribution"
+      ],
+      [
+        "generated.distribution.factor-common-a",
+        "generated.distribution"
       ]
     ]
   );
@@ -868,6 +877,138 @@ test("createGeneratedFunctionWrapTutorialFixture builds a semantic function-wrap
         "trace.generated.function-wrap.apply-f.wrapped",
         "f(x)",
         "wrapFunction"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    checkKpAssetFixtureReferenceClosure({
+      bundle: fixture.bundle,
+      transformations: fixture.transformations,
+      diagram: fixture.diagram,
+      drillDownHooks: fixture.drillDownHooks,
+      flashcards: fixture.flashcards,
+      trace: fixture.trace
+    }),
+    {
+      lawId: "asset-fixture.reference-closure",
+      passed: true,
+      failures: []
+    }
+  );
+});
+
+test("createGeneratedDistributionTutorialFixture builds a semantic distribution asset", () => {
+  const fixture = createGeneratedDistributionTutorialFixture({
+    familyId: "generated.distribution",
+    id: "generated.distribution.expand-a-sum",
+    title: "Generated distribute a over sum",
+    direction: "distribute",
+    factor: "a",
+    leftTerm: "b",
+    rightTerm: "c"
+  });
+
+  assert.equal(fixture.familyId, "generated.distribution");
+  assert.equal(fixture.bundle.id, "asset.generated.distribution.expand-a-sum");
+  assert.deepEqual(
+    fixture.bundle.objects.map((object) => ({
+      id: object.id,
+      objectType: object.objectType,
+      value: object.value,
+      selectorIds: object.selectors.map((selector) => selector.id)
+    })),
+    [
+      {
+        id: "expression.generated.distribution.expand-a-sum.factored",
+        objectType: "expression",
+        value: { latex: "a(b + c)" },
+        selectorIds: [
+          "expression.generated.distribution.expand-a-sum.factored.factor",
+          "expression.generated.distribution.expand-a-sum.factored.left-paren",
+          "expression.generated.distribution.expand-a-sum.factored.left-term",
+          "expression.generated.distribution.expand-a-sum.factored.plus",
+          "expression.generated.distribution.expand-a-sum.factored.right-term",
+          "expression.generated.distribution.expand-a-sum.factored.right-paren"
+        ]
+      },
+      {
+        id: "expression.generated.distribution.expand-a-sum.expanded",
+        objectType: "expression",
+        value: { latex: "ab + ac" },
+        selectorIds: [
+          "expression.generated.distribution.expand-a-sum.expanded.left-factor",
+          "expression.generated.distribution.expand-a-sum.expanded.left-term",
+          "expression.generated.distribution.expand-a-sum.expanded.plus",
+          "expression.generated.distribution.expand-a-sum.expanded.right-factor",
+          "expression.generated.distribution.expand-a-sum.expanded.right-term"
+        ]
+      }
+    ]
+  );
+  assert.deepEqual(
+    fixture.transformations.map((transformation) => [
+      transformation.id,
+      transformation.transformType,
+      transformation.sourceObjectIds,
+      transformation.targetObjectIds,
+      transformation.preserves,
+      transformation.lawRefs
+    ]),
+    [
+      [
+        "transform.generated.distribution.expand-a-sum.distribute",
+        "distributeMultiplication",
+        ["expression.generated.distribution.expand-a-sum.factored"],
+        ["expression.generated.distribution.expand-a-sum.expanded"],
+        ["identity", "value", "structure"],
+        [{ id: "law.algebra.distributive-property", level: "strict" }]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    fixture.transformations[0]?.correspondence.map((entry) => [
+      entry.sourceSelectorId,
+      entry.targetSelectorId,
+      entry.preserves
+    ]),
+    [
+      [
+        "expression.generated.distribution.expand-a-sum.factored.factor",
+        "expression.generated.distribution.expand-a-sum.expanded.left-factor",
+        ["identity"]
+      ],
+      [
+        "expression.generated.distribution.expand-a-sum.factored.factor",
+        "expression.generated.distribution.expand-a-sum.expanded.right-factor",
+        ["identity"]
+      ],
+      [
+        "expression.generated.distribution.expand-a-sum.factored.left-term",
+        "expression.generated.distribution.expand-a-sum.expanded.left-term",
+        ["identity"]
+      ],
+      [
+        "expression.generated.distribution.expand-a-sum.factored.right-term",
+        "expression.generated.distribution.expand-a-sum.expanded.right-term",
+        ["identity"]
+      ]
+    ]
+  );
+  assert.deepEqual(kpSemanticDiagramForwardPhases(fixture.diagram), [
+    ["transform.generated.distribution.expand-a-sum.distribute"]
+  ]);
+  assert.deepEqual(
+    fixture.trace.steps.map((step) => [step.id, step.latex, step.rule]),
+    [
+      [
+        "trace.generated.distribution.expand-a-sum.factored",
+        "a(b + c)",
+        undefined
+      ],
+      [
+        "trace.generated.distribution.expand-a-sum.expanded",
+        "ab + ac",
+        "distributeMultiplication"
       ]
     ]
   );

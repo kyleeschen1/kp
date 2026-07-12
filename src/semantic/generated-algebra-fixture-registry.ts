@@ -3,7 +3,8 @@ export type GeneratedAlgebraFixtureFamilyId =
   | "generated.fraction-expression"
   | "generated.exponent"
   | "generated.radical"
-  | "generated.function-wrap";
+  | "generated.function-wrap"
+  | "generated.distribution";
 
 export interface GeneratedLinearSolveTutorialFixtureSpec {
   readonly id: string;
@@ -54,12 +55,23 @@ export interface GeneratedFunctionWrapTutorialFixtureSpec {
   readonly functionName: string;
 }
 
+export interface GeneratedDistributionTutorialFixtureSpec {
+  readonly familyId: "generated.distribution";
+  readonly id: string;
+  readonly title: string;
+  readonly direction: "distribute" | "factor";
+  readonly factor: string;
+  readonly leftTerm: string;
+  readonly rightTerm: string;
+}
+
 export type GeneratedAlgebraTutorialFixtureSpec =
   | GeneratedAlgebraLinearSolveTutorialFixtureSpec
   | GeneratedFractionExpressionTutorialFixtureSpec
   | GeneratedExponentTutorialFixtureSpec
   | GeneratedRadicalTutorialFixtureSpec
-  | GeneratedFunctionWrapTutorialFixtureSpec;
+  | GeneratedFunctionWrapTutorialFixtureSpec
+  | GeneratedDistributionTutorialFixtureSpec;
 
 export const generatedLinearSolveTutorialFixtureSpecs:
   readonly GeneratedLinearSolveTutorialFixtureSpec[] = [
@@ -155,6 +167,28 @@ export const generatedFunctionWrapTutorialFixtureSpecs:
     }
   ];
 
+export const generatedDistributionTutorialFixtureSpecs:
+  readonly GeneratedDistributionTutorialFixtureSpec[] = [
+    {
+      familyId: "generated.distribution",
+      id: "generated.distribution.expand-a-sum",
+      title: "Generated distribute a over sum",
+      direction: "distribute",
+      factor: "a",
+      leftTerm: "b",
+      rightTerm: "c"
+    },
+    {
+      familyId: "generated.distribution",
+      id: "generated.distribution.factor-common-a",
+      title: "Generated factor common a",
+      direction: "factor",
+      factor: "a",
+      leftTerm: "b",
+      rightTerm: "c"
+    }
+  ];
+
 export function listGeneratedLinearSolveTutorialFixtureSpecs():
   readonly GeneratedLinearSolveTutorialFixtureSpec[] {
   return generatedLinearSolveTutorialFixtureSpecs;
@@ -180,6 +214,11 @@ export function listGeneratedFunctionWrapTutorialFixtureSpecs():
   return generatedFunctionWrapTutorialFixtureSpecs;
 }
 
+export function listGeneratedDistributionTutorialFixtureSpecs():
+  readonly GeneratedDistributionTutorialFixtureSpec[] {
+  return generatedDistributionTutorialFixtureSpecs;
+}
+
 export function listGeneratedAlgebraTutorialFixtureSpecs():
   readonly GeneratedAlgebraTutorialFixtureSpec[] {
   return [
@@ -189,7 +228,8 @@ export function listGeneratedAlgebraTutorialFixtureSpecs():
     ...generatedFractionExpressionTutorialFixtureSpecs,
     ...generatedExponentTutorialFixtureSpecs,
     ...generatedRadicalTutorialFixtureSpecs,
-    ...generatedFunctionWrapTutorialFixtureSpecs
+    ...generatedFunctionWrapTutorialFixtureSpecs,
+    ...generatedDistributionTutorialFixtureSpecs
   ];
 }
 
@@ -223,6 +263,14 @@ export function getGeneratedFunctionWrapTutorialFixtureSpec(
   id: string
 ): GeneratedFunctionWrapTutorialFixtureSpec | undefined {
   return generatedFunctionWrapTutorialFixtureSpecs.find(
+    (spec) => spec.id === id
+  );
+}
+
+export function getGeneratedDistributionTutorialFixtureSpec(
+  id: string
+): GeneratedDistributionTutorialFixtureSpec | undefined {
+  return generatedDistributionTutorialFixtureSpecs.find(
     (spec) => spec.id === id
   );
 }

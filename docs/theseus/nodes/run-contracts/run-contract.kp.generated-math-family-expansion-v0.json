@@ -254,6 +254,36 @@
       "kind": "file",
       "path": "tests/visual-motif-composition.test.ts",
       "summary": "Covers default wrap/unwrap motif rules in reversible transform-tree timelines."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Adds generated.distribution specs and list/get registry functions."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Adds distribution/factoring tutorial fixture builder, transforms, traces, IDs, and LaTeX helpers."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Covers distribution spec listing and lookup."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Covers representative distribution object bundle, transform metadata, correspondence, trace, and closure."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-tutorial-card-sample.test.ts",
+      "summary": "Updates generated card sample discovery expectations for distribution inclusion."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-export-sample.test.ts",
+      "summary": "Updates generated export discovery expectations for distribution inclusion."
     }
   ],
   "verification": [
@@ -581,11 +611,36 @@
       "command": "npm run theseus -- validate",
       "status": "passed",
       "checkedAt": "2026-07-12T19:48:50.936Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:54:39.691Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:54:39.727Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/generated-algebra-tutorial-card-sample.test.ts tests/generated-algebra-export-sample.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:54:39.762Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:54:39.796Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:54:39.829Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added default equation visual motif rules mapping wrapFunction and unwrapFunction semantic transforms to reusable wrap/unwrap motif descriptors."
+    "summary": "Added generated distribution/factoring fixture family with distribute and factor variants, semantic object selectors, identity correspondences, traces, and discovery expectations."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -697,8 +752,8 @@
     {
       "id": "slice.kp.generated-math.distribution-fixtures",
       "title": "Add distribution and factoring fixture family",
-      "summary": "Add generated distribution and factoring fixtures.",
-      "status": "planned"
+      "summary": "Generated distribution fixtures now cover distributing and factoring a common factor with semantic correspondences and discovery.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.cancellation-consistency-law",

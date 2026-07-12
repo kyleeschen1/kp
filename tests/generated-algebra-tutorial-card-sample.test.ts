@@ -184,6 +184,16 @@ test("generated algebra tutorial card sample discovery includes exponent fixture
         "generated.function-wrap.apply-f",
         "generated.function-wrap",
         "tutorial.generated.function-wrap.apply-f.card.live-sample"
+      ],
+      [
+        "generated.distribution.expand-a-sum",
+        "generated.distribution",
+        "tutorial.generated.distribution.expand-a-sum.card.live-sample"
+      ],
+      [
+        "generated.distribution.factor-common-a",
+        "generated.distribution",
+        "tutorial.generated.distribution.factor-common-a.card.live-sample"
       ]
     ]
   );
