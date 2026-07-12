@@ -5,11 +5,13 @@ import {
   getGeneratedAlgebraTutorialFixtureSpec,
   getGeneratedExponentTutorialFixtureSpec,
   getGeneratedFractionExpressionTutorialFixtureSpec,
+  getGeneratedFunctionWrapTutorialFixtureSpec,
   getGeneratedLinearSolveTutorialFixtureSpec,
   getGeneratedRadicalTutorialFixtureSpec,
   listGeneratedAlgebraTutorialFixtureSpecs,
   listGeneratedExponentTutorialFixtureSpecs,
   listGeneratedFractionExpressionTutorialFixtureSpecs,
+  listGeneratedFunctionWrapTutorialFixtureSpecs,
   listGeneratedLinearSolveTutorialFixtureSpecs,
   listGeneratedRadicalTutorialFixtureSpecs
 } from "../src/semantic/generated-algebra-fixture-registry.ts";
@@ -109,6 +111,10 @@ test("generated algebra fixture registry exposes family-aware specs", () => {
       [
         "generated.radical.square-root-as-power",
         "generated.radical"
+      ],
+      [
+        "generated.function-wrap.apply-f",
+        "generated.function-wrap"
       ]
     ]
   );
@@ -182,6 +188,34 @@ test("generated algebra fixture registry resolves radical specs", () => {
   );
   assert.equal(
     getGeneratedRadicalTutorialFixtureSpec("generated.radical.missing"),
+    undefined
+  );
+});
+
+test("generated algebra fixture registry resolves function-wrap specs", () => {
+  assert.deepEqual(listGeneratedFunctionWrapTutorialFixtureSpecs(), [
+    {
+      familyId: "generated.function-wrap",
+      id: "generated.function-wrap.apply-f",
+      title: "Generated wrap x with f",
+      input: "x",
+      functionName: "f"
+    }
+  ]);
+  assert.deepEqual(
+    getGeneratedAlgebraTutorialFixtureSpec("generated.function-wrap.apply-f"),
+    {
+      familyId: "generated.function-wrap",
+      id: "generated.function-wrap.apply-f",
+      title: "Generated wrap x with f",
+      input: "x",
+      functionName: "f"
+    }
+  );
+  assert.equal(
+    getGeneratedFunctionWrapTutorialFixtureSpec(
+      "generated.function-wrap.missing"
+    ),
     undefined
   );
 });

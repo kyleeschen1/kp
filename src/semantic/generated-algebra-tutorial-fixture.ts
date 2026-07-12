@@ -26,12 +26,14 @@ import {
   getGeneratedAlgebraTutorialFixtureSpec,
   generatedExponentTutorialFixtureSpecs,
   generatedFractionExpressionTutorialFixtureSpecs,
+  generatedFunctionWrapTutorialFixtureSpecs,
   generatedLinearSolveTutorialFixtureSpecs,
   generatedRadicalTutorialFixtureSpecs,
   type GeneratedAlgebraFixtureFamilyId,
   type GeneratedAlgebraTutorialFixtureSpec,
   type GeneratedExponentTutorialFixtureSpec,
   type GeneratedFractionExpressionTutorialFixtureSpec,
+  type GeneratedFunctionWrapTutorialFixtureSpec,
   type GeneratedLinearSolveTutorialFixtureSpec,
   type GeneratedRadicalTutorialFixtureSpec
 } from "./generated-algebra-fixture-registry.ts";
@@ -42,6 +44,7 @@ export type {
   GeneratedAlgebraTutorialFixtureSpec,
   GeneratedExponentTutorialFixtureSpec,
   GeneratedFractionExpressionTutorialFixtureSpec,
+  GeneratedFunctionWrapTutorialFixtureSpec,
   GeneratedLinearSolveTutorialFixtureSpec,
   GeneratedRadicalTutorialFixtureSpec,
   GeneratedLinearSolveTutorialFixtureSpec as CreateGeneratedLinearSolveTutorialFixtureInput
@@ -54,11 +57,13 @@ export {
   getGeneratedAlgebraTutorialFixtureSpec,
   getGeneratedExponentTutorialFixtureSpec,
   getGeneratedFractionExpressionTutorialFixtureSpec,
+  getGeneratedFunctionWrapTutorialFixtureSpec,
   getGeneratedLinearSolveTutorialFixtureSpec,
   getGeneratedRadicalTutorialFixtureSpec,
   listGeneratedAlgebraTutorialFixtureSpecs,
   listGeneratedExponentTutorialFixtureSpecs,
   listGeneratedFractionExpressionTutorialFixtureSpecs,
+  listGeneratedFunctionWrapTutorialFixtureSpecs,
   listGeneratedLinearSolveTutorialFixtureSpecs,
   listGeneratedRadicalTutorialFixtureSpecs
 } from "./generated-algebra-fixture-registry.ts";
@@ -95,13 +100,19 @@ export interface GeneratedRadicalTutorialFixture
   readonly familyId: "generated.radical";
 }
 
+export interface GeneratedFunctionWrapTutorialFixture
+  extends GeneratedAlgebraTutorialFixture {
+  readonly familyId: "generated.function-wrap";
+}
+
 export function createGeneratedAlgebraTutorialFixtures():
   readonly GeneratedAlgebraTutorialFixture[] {
   return [
     ...createGeneratedLinearSolveTutorialFixtures(),
     ...createGeneratedFractionExpressionTutorialFixtures(),
     ...createGeneratedExponentTutorialFixtures(),
-    ...createGeneratedRadicalTutorialFixtures()
+    ...createGeneratedRadicalTutorialFixtures(),
+    ...createGeneratedFunctionWrapTutorialFixtures()
   ];
 }
 
@@ -127,6 +138,10 @@ export function createGeneratedAlgebraTutorialFixture(
 
   if (spec.familyId === "generated.radical") {
     return createGeneratedRadicalTutorialFixture(spec);
+  }
+
+  if (spec.familyId === "generated.function-wrap") {
+    return createGeneratedFunctionWrapTutorialFixture(spec);
   }
 
   return createGeneratedLinearSolveTutorialFixture(spec);
@@ -157,6 +172,13 @@ export function createGeneratedRadicalTutorialFixtures():
   readonly GeneratedRadicalTutorialFixture[] {
   return generatedRadicalTutorialFixtureSpecs.map(
     createGeneratedRadicalTutorialFixture
+  );
+}
+
+export function createGeneratedFunctionWrapTutorialFixtures():
+  readonly GeneratedFunctionWrapTutorialFixture[] {
+  return generatedFunctionWrapTutorialFixtureSpecs.map(
+    createGeneratedFunctionWrapTutorialFixture
   );
 }
 
@@ -1027,6 +1049,101 @@ function createGeneratedRadicalFlashcards(
   ];
 }
 
+export function createGeneratedFunctionWrapTutorialFixture(
+  input: GeneratedFunctionWrapTutorialFixtureSpec
+): GeneratedFunctionWrapTutorialFixture {
+  assertNonEmpty(input.id, "Generated function-wrap fixture id");
+  assertNonEmpty(
+    input.title,
+    `Generated function-wrap fixture ${input.id} title`
+  );
+  assertNonEmpty(input.input, `Generated function-wrap fixture ${input.id} input`);
+  assertNonEmpty(
+    input.functionName,
+    `Generated function-wrap fixture ${input.id} function name`
+  );
+
+  const ids = generatedFunctionWrapIds(input);
+  const latex = generatedFunctionWrapLatex(input);
+  const bundle = createKpAssetBundle({
+    id: ids.asset,
+    title: input.title,
+    objects: [
+      expressionObject(ids.input, "Input expression", latex.input, [
+        selector(ids.input, "value", "term", input.input)
+      ]),
+      expressionObject(ids.wrapped, "Function application", latex.wrapped, [
+        selector(ids.wrapped, "function", "function", input.functionName),
+        selector(ids.wrapped, "left-paren", "delimiter", "("),
+        selector(ids.wrapped, "argument", "term", input.input),
+        selector(ids.wrapped, "right-paren", "delimiter", ")")
+      ])
+    ]
+  });
+  const transformations = createGeneratedFunctionWrapTransformations(ids);
+  const diagram = createKpSemanticDiagramSequence({
+    id: ids.diagram,
+    title: `${input.title} sequence`,
+    children: transformations.map(createKpTransformationDiagramLeaf)
+  });
+
+  return {
+    id: input.id,
+    familyId: "generated.function-wrap",
+    title: input.title,
+    bundle,
+    transformations,
+    diagram,
+    trace: createGeneratedFunctionWrapTrace(ids, latex),
+    drillDownHooks: [],
+    flashcards: []
+  };
+}
+
+function createGeneratedFunctionWrapTransformations(
+  ids: GeneratedFunctionWrapIds
+): readonly KpSemanticTransformation[] {
+  return [
+    createKpSemanticTransformation({
+      id: ids.wrap,
+      transformType: "wrapFunction",
+      title: "Wrap the expression in a function application",
+      sourceObjectIds: [ids.input],
+      targetObjectIds: [ids.wrapped],
+      preserves: ["identity", "role"],
+      assumptions: [
+        "The input expression persists as the argument of the function application."
+      ],
+      lawRefs: [{ id: "law.notation.function-application", level: "strict" }],
+      correspondence: [
+        correspondence(ids.input, "value", ids.wrapped, "argument")
+      ]
+    })
+  ];
+}
+
+function createGeneratedFunctionWrapTrace(
+  ids: GeneratedFunctionWrapIds,
+  latex: GeneratedFunctionWrapLatex
+): AlgebraTraceFixture {
+  return {
+    id: ids.trace,
+    title: `${ids.baseId} generated function-wrap trace`,
+    steps: [
+      {
+        id: `${ids.trace}.input`,
+        latex: latex.input
+      },
+      {
+        id: `${ids.trace}.wrapped`,
+        latex: latex.wrapped,
+        transformationId: ids.wrap,
+        rule: "wrapFunction"
+      }
+    ]
+  };
+}
+
 function createGeneratedLinearSolveTransformations(
   ids: GeneratedLinearSolveIds
 ): readonly KpSemanticTransformation[] {
@@ -1891,6 +2008,32 @@ function generatedRadicalIds(
   };
 }
 
+interface GeneratedFunctionWrapIds {
+  readonly baseId: string;
+  readonly asset: string;
+  readonly diagram: string;
+  readonly trace: string;
+  readonly input: string;
+  readonly wrapped: string;
+  readonly wrap: string;
+}
+
+function generatedFunctionWrapIds(
+  input: GeneratedFunctionWrapTutorialFixtureSpec
+): GeneratedFunctionWrapIds {
+  const id = input.id;
+
+  return {
+    baseId: id,
+    asset: `asset.${id}`,
+    diagram: `diagram.${id}.sequence`,
+    trace: `trace.${id}`,
+    input: `expression.${id}.input`,
+    wrapped: `expression.${id}.wrapped`,
+    wrap: `transform.${id}.wrap-function`
+  };
+}
+
 interface GeneratedLinearSolveLatex {
   readonly rhs: number;
   readonly initial: string;
@@ -1968,6 +2111,20 @@ function generatedRadicalLatex(
   return {
     power,
     radical: `\\sqrt[${denominator}]{${input.base}^{${numerator}}}`
+  };
+}
+
+interface GeneratedFunctionWrapLatex {
+  readonly input: string;
+  readonly wrapped: string;
+}
+
+function generatedFunctionWrapLatex(
+  input: GeneratedFunctionWrapTutorialFixtureSpec
+): GeneratedFunctionWrapLatex {
+  return {
+    input: input.input,
+    wrapped: `${input.functionName}(${input.input})`
   };
 }
 

@@ -179,6 +179,11 @@ test("generated algebra tutorial card sample discovery includes exponent fixture
         "generated.radical.square-root-as-power",
         "generated.radical",
         "tutorial.generated.radical.square-root-as-power.card.live-sample"
+      ],
+      [
+        "generated.function-wrap.apply-f",
+        "generated.function-wrap",
+        "tutorial.generated.function-wrap.apply-f.card.live-sample"
       ]
     ]
   );

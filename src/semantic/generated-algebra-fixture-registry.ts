@@ -2,7 +2,8 @@ export type GeneratedAlgebraFixtureFamilyId =
   | "generated.linear-solve"
   | "generated.fraction-expression"
   | "generated.exponent"
-  | "generated.radical";
+  | "generated.radical"
+  | "generated.function-wrap";
 
 export interface GeneratedLinearSolveTutorialFixtureSpec {
   readonly id: string;
@@ -45,11 +46,20 @@ export interface GeneratedRadicalTutorialFixtureSpec {
   readonly exponentNumerator: number;
 }
 
+export interface GeneratedFunctionWrapTutorialFixtureSpec {
+  readonly familyId: "generated.function-wrap";
+  readonly id: string;
+  readonly title: string;
+  readonly input: string;
+  readonly functionName: string;
+}
+
 export type GeneratedAlgebraTutorialFixtureSpec =
   | GeneratedAlgebraLinearSolveTutorialFixtureSpec
   | GeneratedFractionExpressionTutorialFixtureSpec
   | GeneratedExponentTutorialFixtureSpec
-  | GeneratedRadicalTutorialFixtureSpec;
+  | GeneratedRadicalTutorialFixtureSpec
+  | GeneratedFunctionWrapTutorialFixtureSpec;
 
 export const generatedLinearSolveTutorialFixtureSpecs:
   readonly GeneratedLinearSolveTutorialFixtureSpec[] = [
@@ -134,6 +144,17 @@ export const generatedRadicalTutorialFixtureSpecs:
     }
   ];
 
+export const generatedFunctionWrapTutorialFixtureSpecs:
+  readonly GeneratedFunctionWrapTutorialFixtureSpec[] = [
+    {
+      familyId: "generated.function-wrap",
+      id: "generated.function-wrap.apply-f",
+      title: "Generated wrap x with f",
+      input: "x",
+      functionName: "f"
+    }
+  ];
+
 export function listGeneratedLinearSolveTutorialFixtureSpecs():
   readonly GeneratedLinearSolveTutorialFixtureSpec[] {
   return generatedLinearSolveTutorialFixtureSpecs;
@@ -154,6 +175,11 @@ export function listGeneratedRadicalTutorialFixtureSpecs():
   return generatedRadicalTutorialFixtureSpecs;
 }
 
+export function listGeneratedFunctionWrapTutorialFixtureSpecs():
+  readonly GeneratedFunctionWrapTutorialFixtureSpec[] {
+  return generatedFunctionWrapTutorialFixtureSpecs;
+}
+
 export function listGeneratedAlgebraTutorialFixtureSpecs():
   readonly GeneratedAlgebraTutorialFixtureSpec[] {
   return [
@@ -162,7 +188,8 @@ export function listGeneratedAlgebraTutorialFixtureSpecs():
     ),
     ...generatedFractionExpressionTutorialFixtureSpecs,
     ...generatedExponentTutorialFixtureSpecs,
-    ...generatedRadicalTutorialFixtureSpecs
+    ...generatedRadicalTutorialFixtureSpecs,
+    ...generatedFunctionWrapTutorialFixtureSpecs
   ];
 }
 
@@ -190,6 +217,14 @@ export function getGeneratedRadicalTutorialFixtureSpec(
   id: string
 ): GeneratedRadicalTutorialFixtureSpec | undefined {
   return generatedRadicalTutorialFixtureSpecs.find((spec) => spec.id === id);
+}
+
+export function getGeneratedFunctionWrapTutorialFixtureSpec(
+  id: string
+): GeneratedFunctionWrapTutorialFixtureSpec | undefined {
+  return generatedFunctionWrapTutorialFixtureSpecs.find(
+    (spec) => spec.id === id
+  );
 }
 
 export function getGeneratedAlgebraTutorialFixtureSpec(

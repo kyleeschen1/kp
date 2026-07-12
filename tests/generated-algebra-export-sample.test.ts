@@ -251,6 +251,11 @@ test("generated algebra export sample discovery includes exponent fixtures", () 
         "generated.radical.square-root-as-power",
         "generated.radical",
         "artifact.generated.radical.square-root-as-power.iframe"
+      ],
+      [
+        "generated.function-wrap.apply-f",
+        "generated.function-wrap",
+        "artifact.generated.function-wrap.apply-f.iframe"
       ]
     ]
   );
@@ -277,6 +282,11 @@ test("generated algebra export sample discovery includes exponent fixtures", () 
         "generated.radical.square-root-as-power",
         "generated.radical",
         "artifact.generated.radical.square-root-as-power.steps"
+      ],
+      [
+        "generated.function-wrap.apply-f",
+        "generated.function-wrap",
+        "artifact.generated.function-wrap.apply-f.steps"
       ]
     ]
   );

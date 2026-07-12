@@ -214,6 +214,36 @@
       "kind": "file",
       "path": "tests/generated-algebra-smoke.browser.spec.ts",
       "summary": "Adds browser smoke coverage for generated radical iframe exports."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Adds generated.function-wrap specs and list/get registry functions."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Adds function-wrap tutorial fixture builder, transform, trace, IDs, and LaTeX helpers."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Covers function-wrap spec listing and lookup."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Covers function-wrap object bundle, transform metadata, correspondence, trace, and closure."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-tutorial-card-sample.test.ts",
+      "summary": "Updates generated card sample discovery expectations for function-wrap inclusion."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-export-sample.test.ts",
+      "summary": "Updates generated export discovery expectations for function-wrap inclusion."
     }
   ],
   "verification": [
@@ -496,11 +526,36 @@
       "command": "npm run theseus -- validate",
       "status": "passed",
       "checkedAt": "2026-07-12T19:39:20.258Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:45:04.039Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:45:04.272Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/generated-algebra-tutorial-card-sample.test.ts tests/generated-algebra-export-sample.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:45:04.365Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:45:04.440Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:45:04.560Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Wired generated radical fixtures through card sampling, iframe/static exports, and browser smoke coverage with a radical explanation flashcard."
+    "summary": "Added generated function-wrap fixture family for x to f(x), including registry support, semantic object selectors, argument identity correspondence, trace, and discovery expectations."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -600,8 +655,8 @@
     {
       "id": "slice.kp.generated-math.function-wrap-fixtures",
       "title": "Add function wrapping fixture family",
-      "summary": "Add generated x to f(x) style function wrapping fixtures.",
-      "status": "planned"
+      "summary": "Generated function-wrap fixtures now model x to f(x) with argument identity correspondence and registry-backed discovery.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.wrap-motifs",

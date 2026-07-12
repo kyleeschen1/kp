@@ -23,6 +23,7 @@ import {
   createGeneratedAlgebraTutorialFixtures,
   createGeneratedExponentTutorialFixture,
   createGeneratedFractionExpressionTutorialFixture,
+  createGeneratedFunctionWrapTutorialFixture,
   createGeneratedLinearSolveTutorialFixture,
   createGeneratedLinearSolveTutorialFixtures,
   createGeneratedRadicalTutorialFixture
@@ -650,6 +651,10 @@ test("generated algebra fixture helpers include linear-solve and fraction famili
       [
         "generated.radical.square-root-as-power",
         "generated.radical"
+      ],
+      [
+        "generated.function-wrap.apply-f",
+        "generated.function-wrap"
       ]
     ]
   );
@@ -760,6 +765,109 @@ test("createGeneratedRadicalTutorialFixture builds a semantic radical asset", ()
         "trace.generated.radical.square-root-as-power.radical",
         "\\sqrt{x}",
         "rewritePowerAsRoot"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    checkKpAssetFixtureReferenceClosure({
+      bundle: fixture.bundle,
+      transformations: fixture.transformations,
+      diagram: fixture.diagram,
+      drillDownHooks: fixture.drillDownHooks,
+      flashcards: fixture.flashcards,
+      trace: fixture.trace
+    }),
+    {
+      lawId: "asset-fixture.reference-closure",
+      passed: true,
+      failures: []
+    }
+  );
+});
+
+test("createGeneratedFunctionWrapTutorialFixture builds a semantic function-wrap asset", () => {
+  const fixture = createGeneratedFunctionWrapTutorialFixture({
+    familyId: "generated.function-wrap",
+    id: "generated.function-wrap.apply-f",
+    title: "Generated wrap x with f",
+    input: "x",
+    functionName: "f"
+  });
+
+  assert.equal(fixture.familyId, "generated.function-wrap");
+  assert.equal(fixture.bundle.id, "asset.generated.function-wrap.apply-f");
+  assert.deepEqual(
+    fixture.bundle.objects.map((object) => ({
+      id: object.id,
+      objectType: object.objectType,
+      value: object.value,
+      selectorIds: object.selectors.map((selector) => selector.id)
+    })),
+    [
+      {
+        id: "expression.generated.function-wrap.apply-f.input",
+        objectType: "expression",
+        value: { latex: "x" },
+        selectorIds: ["expression.generated.function-wrap.apply-f.input.value"]
+      },
+      {
+        id: "expression.generated.function-wrap.apply-f.wrapped",
+        objectType: "expression",
+        value: { latex: "f(x)" },
+        selectorIds: [
+          "expression.generated.function-wrap.apply-f.wrapped.function",
+          "expression.generated.function-wrap.apply-f.wrapped.left-paren",
+          "expression.generated.function-wrap.apply-f.wrapped.argument",
+          "expression.generated.function-wrap.apply-f.wrapped.right-paren"
+        ]
+      }
+    ]
+  );
+  assert.deepEqual(
+    fixture.transformations.map((transformation) => [
+      transformation.id,
+      transformation.transformType,
+      transformation.sourceObjectIds,
+      transformation.targetObjectIds,
+      transformation.preserves,
+      transformation.lawRefs
+    ]),
+    [
+      [
+        "transform.generated.function-wrap.apply-f.wrap-function",
+        "wrapFunction",
+        ["expression.generated.function-wrap.apply-f.input"],
+        ["expression.generated.function-wrap.apply-f.wrapped"],
+        ["identity", "role"],
+        [{ id: "law.notation.function-application", level: "strict" }]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    fixture.transformations[0]?.correspondence.map((entry) => [
+      entry.sourceSelectorId,
+      entry.targetSelectorId,
+      entry.preserves
+    ]),
+    [
+      [
+        "expression.generated.function-wrap.apply-f.input.value",
+        "expression.generated.function-wrap.apply-f.wrapped.argument",
+        ["identity"]
+      ]
+    ]
+  );
+  assert.deepEqual(kpSemanticDiagramForwardPhases(fixture.diagram), [
+    ["transform.generated.function-wrap.apply-f.wrap-function"]
+  ]);
+  assert.deepEqual(
+    fixture.trace.steps.map((step) => [step.id, step.latex, step.rule]),
+    [
+      ["trace.generated.function-wrap.apply-f.input", "x", undefined],
+      [
+        "trace.generated.function-wrap.apply-f.wrapped",
+        "f(x)",
+        "wrapFunction"
       ]
     ]
   );
