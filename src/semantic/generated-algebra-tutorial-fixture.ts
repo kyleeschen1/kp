@@ -10,6 +10,10 @@ import {
   type KpSemanticDiagramSequence
 } from "./asset-diagram.ts";
 import {
+  createKpTransformationDrillDownHook,
+  type KpTransformationDrillDownHook
+} from "./asset-decomposition.ts";
+import {
   createKpFlashcardSpec,
   type KpFlashcardSpec
 } from "./asset-flashcard.ts";
@@ -41,6 +45,7 @@ export interface GeneratedLinearSolveTutorialFixture {
   readonly transformations: readonly KpSemanticTransformation[];
   readonly diagram: KpSemanticDiagramSequence;
   readonly trace: AlgebraTraceFixture;
+  readonly drillDownHooks: readonly KpTransformationDrillDownHook[];
   readonly flashcards: readonly KpFlashcardSpec[];
 }
 
@@ -139,6 +144,9 @@ export function createGeneratedLinearSolveTutorialFixture(
     transformations,
     diagram,
     trace: createGeneratedLinearSolveTrace(additiveInput, ids, latex),
+    drillDownHooks: [
+      createGeneratedAdditiveCancellationDrillDownHook(additiveInput, ids.cancel)
+    ],
     flashcards: createGeneratedLinearSolveFlashcards(additiveInput, ids)
   };
 }
@@ -205,6 +213,9 @@ function createGeneratedCoefficientLinearSolveTutorialFixture(
     transformations,
     diagram,
     trace: createGeneratedCoefficientSolveTrace(input, ids, latex),
+    drillDownHooks: [
+      createGeneratedMultiplicativeCancellationDrillDownHook(input, ids.cancel)
+    ],
     flashcards: createGeneratedCoefficientSolveFlashcards(input, ids)
   };
 }
@@ -303,6 +314,16 @@ function createGeneratedTwoStepLinearSolveTutorialFixture(
     transformations,
     diagram,
     trace: createGeneratedTwoStepSolveTrace(input, ids, latex),
+    drillDownHooks: [
+      createGeneratedAdditiveCancellationDrillDownHook(
+        input,
+        ids.cancelAddend
+      ),
+      createGeneratedMultiplicativeCancellationDrillDownHook(
+        input,
+        ids.cancelCoefficient
+      )
+    ],
     flashcards: createGeneratedTwoStepSolveFlashcards(input, ids)
   };
 }
@@ -838,6 +859,108 @@ function createGeneratedTwoStepSolveFlashcards(
       }
     })
   ];
+}
+
+function createGeneratedAdditiveCancellationDrillDownHook(
+  input: GeneratedLinearSolveTutorialFixtureSpec & { readonly addend: number },
+  transformationId: string
+): KpTransformationDrillDownHook {
+  const lawObjectId = `equation.${input.id}.cancel-additive-inverse-law`;
+  const instantiatedObjectId =
+    `equation.${input.id}.cancel-additive-inverse-instantiated`;
+  const addend = formatLatexNumber(input.addend);
+  const inverse = formatLatexNumber(-input.addend);
+
+  return createKpTransformationDrillDownHook({
+    id: `drilldown.${input.id}.cancel-additive-inverse`,
+    transformationId,
+    title: "Explain additive inverse cancellation",
+    summary:
+      "Shows why a term and its additive inverse can collapse to zero.",
+    asset: createKpAssetBundle({
+      id: `asset.${input.id}.cancel-additive-inverse-explainer`,
+      title: "Why additive inverses cancel",
+      objects: [
+        equationObject(lawObjectId, "Additive inverse identity", "a + (-a) = 0", [
+          selector(lawObjectId, "lhs.term", "term", "a"),
+          selector(lawObjectId, "lhs.inverse", "term", "-a"),
+          selector(lawObjectId, "rhs.zero", "term", "0")
+        ]),
+        equationObject(
+          instantiatedObjectId,
+          "Generated additive inverse cancellation",
+          `${addend} + (${inverse}) = 0`,
+          [
+            selector(instantiatedObjectId, "lhs.term", "term", addend),
+            selector(instantiatedObjectId, "lhs.inverse", "term", inverse),
+            selector(instantiatedObjectId, "rhs.zero", "term", "0")
+          ]
+        )
+      ]
+    })
+  });
+}
+
+function createGeneratedMultiplicativeCancellationDrillDownHook(
+  input: GeneratedLinearSolveTutorialFixtureSpec & {
+    readonly coefficient: number;
+  },
+  transformationId: string
+): KpTransformationDrillDownHook {
+  const lawObjectId = `equation.${input.id}.cancel-multiplicative-inverse-law`;
+  const instantiatedObjectId =
+    `equation.${input.id}.cancel-multiplicative-inverse-instantiated`;
+  const coefficient = formatLatexNumber(input.coefficient);
+
+  return createKpTransformationDrillDownHook({
+    id: `drilldown.${input.id}.cancel-multiplicative-inverse`,
+    transformationId,
+    title: "Explain multiplicative inverse cancellation",
+    summary:
+      "Shows why a non-zero factor divided by itself leaves the variable isolated.",
+    asset: createKpAssetBundle({
+      id: `asset.${input.id}.cancel-multiplicative-inverse-explainer`,
+      title: "Why multiplicative inverses cancel",
+      objects: [
+        equationObject(lawObjectId, "Multiplicative inverse identity", "a / a = 1", [
+          selector(lawObjectId, "lhs.factor", "factor", "a"),
+          selector(lawObjectId, "lhs.inverse", "factor", "/a"),
+          selector(lawObjectId, "rhs.one", "term", "1")
+        ]),
+        equationObject(
+          instantiatedObjectId,
+          "Generated coefficient cancellation",
+          `${coefficient}${input.variable} / ${coefficient} = ${input.variable}`,
+          [
+            selector(
+              instantiatedObjectId,
+              "lhs.coefficient",
+              "factor",
+              coefficient
+            ),
+            selector(
+              instantiatedObjectId,
+              "lhs.variable",
+              "term",
+              input.variable
+            ),
+            selector(
+              instantiatedObjectId,
+              "lhs.inverse",
+              "factor",
+              `/${coefficient}`
+            ),
+            selector(
+              instantiatedObjectId,
+              "rhs.variable",
+              "term",
+              input.variable
+            )
+          ]
+        )
+      ]
+    })
+  });
 }
 
 interface GeneratedLinearSolveIds {

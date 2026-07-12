@@ -97,7 +97,7 @@ function generatedFixtureAsLinearSolveAsset(
     bundle: fixture.bundle,
     transformations: fixture.transformations,
     diagram: fixture.diagram,
-    drillDownHooks: [],
+    drillDownHooks: fixture.drillDownHooks,
     flashcards: fixture.flashcards
   };
 }

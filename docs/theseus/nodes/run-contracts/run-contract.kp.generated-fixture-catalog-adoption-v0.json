@@ -293,6 +293,26 @@
       "kind": "file",
       "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
       "summary": "Generated fixture tests assert standard flashcard family coverage and closure."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Adds generated additive and multiplicative cancellation drill-down hook bundles."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-linear-solve-card-sample.ts",
+      "summary": "Propagates generated fixture drill-down hooks into the card semantic frame adapter."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Covers generated drill-down hook validation and expected cancellation hook ids."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-linear-solve-tutorial-card-sample.test.ts",
+      "summary": "Covers generated card semantic drill-down ids during active cancellation."
     }
   ],
   "verification": [
@@ -543,8 +563,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T17:27:20.628Z",
-      "scope": "slice 15 flashcard family Theseus validation"
+      "scope": "slice 15 flashcard family Theseus validation",
+      "checkedAt": "2026-07-12T17:27:20.628Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard-semantic-asset-catalog.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts tests/generated-linear-solve-export-sample.test.ts tests/kp-asset-decomposition.test.ts",
+      "status": "passed",
+      "scope": "generated fixture and drill-down suite",
+      "checkedAt": "2026-07-12T17:36:49.859Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T17:36:49.902Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T17:36:49.948Z",
+      "scope": "Theseus graph validation"
     }
   ],
   "allowedWork": [
@@ -652,7 +690,8 @@
     {
       "id": "slice.kp.generated-fixture.drilldown-family",
       "title": "Add generated drill-down hooks",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Generated fixtures expose cancellation drill-down hooks and generated tutorial cards surface hook ids during active cancellation."
     },
     {
       "id": "slice.kp.generated-fixture.fixture-closure-law",
@@ -694,5 +733,9 @@
       "title": "Close generated fixture catalog loop",
       "status": "planned"
     }
-  ]
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Generated linear-solve fixtures now expose validated cancellation drill-down hooks and generated card samples surface matching semantic drill-down ids."
+  }
 }

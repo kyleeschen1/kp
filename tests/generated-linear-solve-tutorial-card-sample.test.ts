@@ -28,6 +28,9 @@ test("generated linear-solve tutorial card samples use generated fixture semanti
   assert.deepEqual(frame.equationFrame.semanticFrame?.activeTransformationIds, [
     "transform.generated.linear-solve.x-plus-3.cancel-additive-inverse"
   ]);
+  assert.deepEqual(frame.equationFrame.semanticFrame?.drillDownIds, [
+    "drilldown.generated.linear-solve.x-plus-3.cancel-additive-inverse"
+  ]);
   assert.deepEqual(frame.diagnostics, []);
 });
 

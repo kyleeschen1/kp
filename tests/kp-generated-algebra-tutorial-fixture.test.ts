@@ -5,6 +5,9 @@ import {
   validateKpAssetBundle
 } from "../src/semantic/asset.ts";
 import {
+  validateKpTransformationDrillDownHooks
+} from "../src/semantic/asset-decomposition.ts";
+import {
   checkKpDiagramRewindLaw,
   checkKpFlashcardReferenceClosure
 } from "../src/semantic/asset-laws.ts";
@@ -338,4 +341,66 @@ test("generated linear solve fixtures expose a standard flashcard family", () =>
       []
     );
   }
+});
+
+test("generated linear solve fixtures expose cancellation drill-down hooks", () => {
+  const fixtures = createGeneratedLinearSolveTutorialFixtures();
+
+  for (const fixture of fixtures) {
+    assert.ok(Array.isArray(fixture.drillDownHooks));
+    assert.deepEqual(
+      validateKpTransformationDrillDownHooks(fixture.drillDownHooks, {
+        transformations: fixture.transformations
+      }),
+      []
+    );
+  }
+
+  assert.deepEqual(
+    fixtures[0]?.drillDownHooks.map((hook) => [
+      hook.id,
+      hook.transformationId,
+      hook.asset.id
+    ]),
+    [
+      [
+        "drilldown.generated.linear-solve.x-plus-3.cancel-additive-inverse",
+        "transform.generated.linear-solve.x-plus-3.cancel-additive-inverse",
+        "asset.generated.linear-solve.x-plus-3.cancel-additive-inverse-explainer"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    fixtures[3]?.drillDownHooks.map((hook) => [
+      hook.id,
+      hook.transformationId,
+      hook.asset.id
+    ]),
+    [
+      [
+        "drilldown.generated.linear-solve.three-x.cancel-multiplicative-inverse",
+        "transform.generated.linear-solve.three-x.cancel-multiplicative-inverse",
+        "asset.generated.linear-solve.three-x.cancel-multiplicative-inverse-explainer"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    fixtures[4]?.drillDownHooks.map((hook) => [
+      hook.id,
+      hook.transformationId,
+      hook.asset.id
+    ]),
+    [
+      [
+        "drilldown.generated.linear-solve.two-x-plus-3.cancel-additive-inverse",
+        "transform.generated.linear-solve.two-x-plus-3.cancel-additive-inverse",
+        "asset.generated.linear-solve.two-x-plus-3.cancel-additive-inverse-explainer"
+      ],
+      [
+        "drilldown.generated.linear-solve.two-x-plus-3.cancel-multiplicative-inverse",
+        "transform.generated.linear-solve.two-x-plus-3.cancel-multiplicative-inverse",
+        "asset.generated.linear-solve.two-x-plus-3.cancel-multiplicative-inverse-explainer"
+      ]
+    ]
+  );
 });
