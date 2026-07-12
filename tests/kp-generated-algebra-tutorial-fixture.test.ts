@@ -463,6 +463,34 @@ test("createGeneratedFractionExpressionTutorialFixture builds a semantic fractio
         ]
       },
       {
+        id: "expression.generated.fraction-expression.two-fourths.factored",
+        objectType: "expression",
+        value: { latex: "\\frac{1 \\cdot 2}{2 \\cdot 2}" },
+        selectorIds: [
+          "expression.generated.fraction-expression.two-fourths.factored.base-numerator",
+          "expression.generated.fraction-expression.two-fourths.factored.numerator-times",
+          "expression.generated.fraction-expression.two-fourths.factored.common-numerator-factor",
+          "expression.generated.fraction-expression.two-fourths.factored.fraction-line",
+          "expression.generated.fraction-expression.two-fourths.factored.base-denominator",
+          "expression.generated.fraction-expression.two-fourths.factored.denominator-times",
+          "expression.generated.fraction-expression.two-fourths.factored.common-denominator-factor"
+        ]
+      },
+      {
+        id: "expression.generated.fraction-expression.two-fourths.common-factor",
+        objectType: "expression",
+        value: { latex: "\\frac{1}{2} \\cdot \\frac{2}{2}" },
+        selectorIds: [
+          "expression.generated.fraction-expression.two-fourths.common-factor.base-numerator",
+          "expression.generated.fraction-expression.two-fourths.common-factor.base-fraction-line",
+          "expression.generated.fraction-expression.two-fourths.common-factor.base-denominator",
+          "expression.generated.fraction-expression.two-fourths.common-factor.times",
+          "expression.generated.fraction-expression.two-fourths.common-factor.unit-numerator",
+          "expression.generated.fraction-expression.two-fourths.common-factor.unit-fraction-line",
+          "expression.generated.fraction-expression.two-fourths.common-factor.unit-denominator"
+        ]
+      },
+      {
         id: "expression.generated.fraction-expression.two-fourths.simplified",
         objectType: "expression",
         value: { latex: "\\frac{1}{2}" },
@@ -484,17 +512,77 @@ test("createGeneratedFractionExpressionTutorialFixture builds a semantic fractio
     ]),
     [
       [
-        "transform.generated.fraction-expression.two-fourths.simplify-fraction",
-        "simplifyFraction",
+        "transform.generated.fraction-expression.two-fourths.split-factors",
+        "splitFractionFactors",
         ["expression.generated.fraction-expression.two-fourths.initial"],
+        ["expression.generated.fraction-expression.two-fourths.factored"],
+        [{ id: "law.arithmetic.factor-fraction", level: "strict" }]
+      ],
+      [
+        "transform.generated.fraction-expression.two-fourths.merge-common-factor",
+        "mergeFractionCommonFactor",
+        ["expression.generated.fraction-expression.two-fourths.factored"],
+        ["expression.generated.fraction-expression.two-fourths.common-factor"],
+        [{ id: "law.arithmetic.fraction-factorization", level: "strict" }]
+      ],
+      [
+        "transform.generated.fraction-expression.two-fourths.simplify-unit-factor",
+        "simplifyUnitFractionFactor",
+        ["expression.generated.fraction-expression.two-fourths.common-factor"],
         ["expression.generated.fraction-expression.two-fourths.simplified"],
-        [{ id: "law.arithmetic.equivalent-fractions", level: "strict" }]
+        [{ id: "law.arithmetic.unit-fraction-factor", level: "strict" }]
       ]
     ]
   );
   assert.deepEqual(kpSemanticDiagramForwardPhases(fixture.diagram), [
-    ["transform.generated.fraction-expression.two-fourths.simplify-fraction"]
+    ["transform.generated.fraction-expression.two-fourths.split-factors"],
+    ["transform.generated.fraction-expression.two-fourths.merge-common-factor"],
+    ["transform.generated.fraction-expression.two-fourths.simplify-unit-factor"]
   ]);
+  const correspondenceMatrix = fixture.transformations.map((transformation) =>
+    transformation.correspondence.map((entry) => [
+      entry.sourceSelectorId,
+      entry.targetSelectorId,
+      entry.preserves
+    ])
+  );
+
+  assert.deepEqual(
+    correspondenceMatrix,
+    [
+      [
+        [
+          "expression.generated.fraction-expression.two-fourths.initial.fraction-line",
+          "expression.generated.fraction-expression.two-fourths.factored.fraction-line",
+          ["structure"]
+        ]
+      ],
+      [
+        [
+          "expression.generated.fraction-expression.two-fourths.factored.base-numerator",
+          "expression.generated.fraction-expression.two-fourths.common-factor.base-numerator",
+          ["identity"]
+        ],
+        [
+          "expression.generated.fraction-expression.two-fourths.factored.base-denominator",
+          "expression.generated.fraction-expression.two-fourths.common-factor.base-denominator",
+          ["identity"]
+        ]
+      ],
+      [
+        [
+          "expression.generated.fraction-expression.two-fourths.common-factor.base-numerator",
+          "expression.generated.fraction-expression.two-fourths.simplified.numerator",
+          ["identity"]
+        ],
+        [
+          "expression.generated.fraction-expression.two-fourths.common-factor.base-denominator",
+          "expression.generated.fraction-expression.two-fourths.simplified.denominator",
+          ["identity"]
+        ]
+      ]
+    ]
+  );
   assert.deepEqual(
     fixture.trace.steps.map((step) => [step.id, step.latex, step.rule]),
     [
@@ -504,9 +592,19 @@ test("createGeneratedFractionExpressionTutorialFixture builds a semantic fractio
         undefined
       ],
       [
+        "trace.generated.fraction-expression.two-fourths.factored",
+        "\\frac{1 \\cdot 2}{2 \\cdot 2}",
+        "splitFractionFactors"
+      ],
+      [
+        "trace.generated.fraction-expression.two-fourths.common-factor",
+        "\\frac{1}{2} \\cdot \\frac{2}{2}",
+        "mergeFractionCommonFactor"
+      ],
+      [
         "trace.generated.fraction-expression.two-fourths.simplified",
         "\\frac{1}{2}",
-        "simplifyFraction"
+        "simplifyUnitFractionFactor"
       ]
     ]
   );

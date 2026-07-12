@@ -59,6 +59,16 @@
       "kind": "file",
       "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
       "summary": "Specifies generated fraction fixture bundle, transformation, trace, and closure behavior."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Adds split/merge/simplify fraction objects, transformations, trace steps, and identity correspondences."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Specifies fraction transform sequence, laws, diagram order, trace rules, and identity metadata."
     }
   ],
   "verification": [
@@ -98,13 +108,37 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T18:52:53.013Z",
-      "scope": "Theseus graph validation after fraction fixture slice"
+      "scope": "Theseus graph validation after fraction fixture slice",
+      "checkedAt": "2026-07-12T18:52:53.013Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "scope": "Focused fraction transform red/green fixture test",
+      "checkedAt": "2026-07-12T18:59:34.572Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "scope": "Generated algebra registry and fixture tests",
+      "checkedAt": "2026-07-12T18:59:34.638Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T18:59:34.679Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T18:59:34.723Z",
+      "scope": "Theseus graph validation after fraction transform slice"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added family-aware generated algebra fixture helpers and a generated fraction-expression simplification fixture."
+    "summary": "Expanded generated fraction-expression fixtures into split, merge, and simplify semantic transformations with identity correspondences."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -144,8 +178,8 @@
     {
       "id": "slice.kp.generated-math.fraction-transforms",
       "title": "Add fraction transform metadata",
-      "summary": "Add split, merge, simplify, and identity metadata for generated fraction transforms.",
-      "status": "planned"
+      "summary": "Added split, merge, simplify, and identity metadata to generated fraction-expression fixtures.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.fraction-cards",

@@ -407,8 +407,19 @@ export function createGeneratedFractionExpressionTutorialFixture(
   );
 
   const ids = generatedFractionExpressionIds(input);
+  const commonFactor = generatedFractionCommonFactor(input);
   const latex = {
     initial: fractionLatex(input.numerator, input.denominator),
+    factored: fractionProductLatex(
+      input.simplifiedNumerator,
+      commonFactor,
+      input.simplifiedDenominator,
+      commonFactor
+    ),
+    commonFactor: `${fractionLatex(
+      input.simplifiedNumerator,
+      input.simplifiedDenominator
+    )} \\cdot ${fractionLatex(commonFactor, commonFactor)}`,
     simplified: fractionLatex(
       input.simplifiedNumerator,
       input.simplifiedDenominator
@@ -423,6 +434,69 @@ export function createGeneratedFractionExpressionTutorialFixture(
         selector(ids.initial, "fraction-line", "artifact", "/"),
         selector(ids.initial, "denominator", "term", String(input.denominator))
       ]),
+      expressionObject(ids.factored, "Factored fraction", latex.factored, [
+        selector(
+          ids.factored,
+          "base-numerator",
+          "term",
+          String(input.simplifiedNumerator)
+        ),
+        selector(ids.factored, "numerator-times", "operator", "\\cdot"),
+        selector(
+          ids.factored,
+          "common-numerator-factor",
+          "factor",
+          String(commonFactor)
+        ),
+        selector(ids.factored, "fraction-line", "artifact", "/"),
+        selector(
+          ids.factored,
+          "base-denominator",
+          "term",
+          String(input.simplifiedDenominator)
+        ),
+        selector(ids.factored, "denominator-times", "operator", "\\cdot"),
+        selector(
+          ids.factored,
+          "common-denominator-factor",
+          "factor",
+          String(commonFactor)
+        )
+      ]),
+      expressionObject(
+        ids.commonFactor,
+        "Common factor separated",
+        latex.commonFactor,
+        [
+          selector(
+            ids.commonFactor,
+            "base-numerator",
+            "term",
+            String(input.simplifiedNumerator)
+          ),
+          selector(ids.commonFactor, "base-fraction-line", "artifact", "/"),
+          selector(
+            ids.commonFactor,
+            "base-denominator",
+            "term",
+            String(input.simplifiedDenominator)
+          ),
+          selector(ids.commonFactor, "times", "operator", "\\cdot"),
+          selector(
+            ids.commonFactor,
+            "unit-numerator",
+            "term",
+            String(commonFactor)
+          ),
+          selector(ids.commonFactor, "unit-fraction-line", "artifact", "/"),
+          selector(
+            ids.commonFactor,
+            "unit-denominator",
+            "term",
+            String(commonFactor)
+          )
+        ]
+      ),
       expressionObject(ids.simplified, "Simplified fraction", latex.simplified, [
         selector(
           ids.simplified,
@@ -465,18 +539,78 @@ function createGeneratedFractionExpressionTransformations(
 ): readonly KpSemanticTransformation[] {
   return [
     createKpSemanticTransformation({
-      id: ids.simplify,
-      transformType: "simplifyFraction",
-      title: "Simplify the fraction",
+      id: ids.split,
+      transformType: "splitFractionFactors",
+      title: "Split numerator and denominator into common factors",
       sourceObjectIds: [ids.initial],
-      targetObjectIds: [ids.simplified],
+      targetObjectIds: [ids.factored],
       preserves: ["value", "structure"],
       assumptions: [
-        "Dividing numerator and denominator by the same non-zero factor preserves the represented value."
+        "A numerator and denominator can be rewritten as products with a shared factor."
       ],
-      lawRefs: [{ id: "law.arithmetic.equivalent-fractions", level: "strict" }],
+      lawRefs: [{ id: "law.arithmetic.factor-fraction", level: "strict" }],
       correspondence: [
-        correspondence(ids.initial, "fraction-line", ids.simplified, "fraction-line")
+        {
+          sourceSelectorId: `${ids.initial}.fraction-line`,
+          targetSelectorId: `${ids.factored}.fraction-line`,
+          preserves: ["structure"]
+        }
+      ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.merge,
+      transformType: "mergeFractionCommonFactor",
+      title: "Separate the common fraction factor",
+      sourceObjectIds: [ids.factored],
+      targetObjectIds: [ids.commonFactor],
+      preserves: ["identity", "value", "structure"],
+      assumptions: [
+        "A fraction of products can be grouped into the simplified base fraction times a unit fraction."
+      ],
+      lawRefs: [
+        { id: "law.arithmetic.fraction-factorization", level: "strict" }
+      ],
+      correspondence: [
+        correspondence(
+          ids.factored,
+          "base-numerator",
+          ids.commonFactor,
+          "base-numerator"
+        ),
+        correspondence(
+          ids.factored,
+          "base-denominator",
+          ids.commonFactor,
+          "base-denominator"
+        )
+      ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.simplify,
+      transformType: "simplifyUnitFractionFactor",
+      title: "Simplify the unit fraction factor",
+      sourceObjectIds: [ids.commonFactor],
+      targetObjectIds: [ids.simplified],
+      preserves: ["identity", "value"],
+      assumptions: [
+        "A non-zero value divided by itself is one, so multiplying by it does not change the base fraction."
+      ],
+      lawRefs: [
+        { id: "law.arithmetic.unit-fraction-factor", level: "strict" }
+      ],
+      correspondence: [
+        correspondence(
+          ids.commonFactor,
+          "base-numerator",
+          ids.simplified,
+          "numerator"
+        ),
+        correspondence(
+          ids.commonFactor,
+          "base-denominator",
+          ids.simplified,
+          "denominator"
+        )
       ]
     })
   ];
@@ -495,10 +629,22 @@ function createGeneratedFractionExpressionTrace(
         latex: latex.initial
       },
       {
+        id: `${ids.trace}.factored`,
+        latex: latex.factored,
+        transformationId: ids.split,
+        rule: "splitFractionFactors"
+      },
+      {
+        id: `${ids.trace}.common-factor`,
+        latex: latex.commonFactor,
+        transformationId: ids.merge,
+        rule: "mergeFractionCommonFactor"
+      },
+      {
         id: `${ids.trace}.simplified`,
         latex: latex.simplified,
         transformationId: ids.simplify,
-        rule: "simplifyFraction"
+        rule: "simplifyUnitFractionFactor"
       }
     ]
   };
@@ -516,7 +662,7 @@ function createGeneratedFractionExpressionFlashcards(
       assetId: ids.asset,
       prompt: "Why does simplifying this fraction preserve its value?",
       objectIds: [ids.initial, ids.simplified],
-      transformationIds: [ids.simplify],
+      transformationIds: [ids.split, ids.merge, ids.simplify],
       timeMs: 600,
       answer: {
         kind: "text",
@@ -1307,7 +1453,11 @@ interface GeneratedFractionExpressionIds {
   readonly diagram: string;
   readonly trace: string;
   readonly initial: string;
+  readonly factored: string;
+  readonly commonFactor: string;
   readonly simplified: string;
+  readonly split: string;
+  readonly merge: string;
   readonly simplify: string;
 }
 
@@ -1322,8 +1472,12 @@ function generatedFractionExpressionIds(
     diagram: `diagram.${id}.sequence`,
     trace: `trace.${id}`,
     initial: `expression.${id}.initial`,
+    factored: `expression.${id}.factored`,
+    commonFactor: `expression.${id}.common-factor`,
     simplified: `expression.${id}.simplified`,
-    simplify: `transform.${id}.simplify-fraction`
+    split: `transform.${id}.split-factors`,
+    merge: `transform.${id}.merge-common-factor`,
+    simplify: `transform.${id}.simplify-unit-factor`
   };
 }
 
@@ -1364,6 +1518,8 @@ interface GeneratedTwoStepSolveLatex {
 
 interface GeneratedFractionExpressionLatex {
   readonly initial: string;
+  readonly factored: string;
+  readonly commonFactor: string;
   readonly simplified: string;
 }
 
@@ -1461,6 +1617,35 @@ function formatPlainNumber(value: number): string {
 
 function fractionLatex(numerator: number, denominator: number): string {
   return `\\frac{${formatLatexNumber(numerator)}}{${formatLatexNumber(denominator)}}`;
+}
+
+function fractionProductLatex(
+  numeratorBase: number,
+  numeratorFactor: number,
+  denominatorBase: number,
+  denominatorFactor: number
+): string {
+  return `\\frac{${formatLatexNumber(numeratorBase)} \\cdot ${formatLatexNumber(numeratorFactor)}}{${formatLatexNumber(denominatorBase)} \\cdot ${formatLatexNumber(denominatorFactor)}}`;
+}
+
+function generatedFractionCommonFactor(
+  input: GeneratedFractionExpressionTutorialFixtureSpec
+): number {
+  const numeratorFactor = input.numerator / input.simplifiedNumerator;
+  const denominatorFactor = input.denominator / input.simplifiedDenominator;
+
+  if (
+    !Number.isInteger(numeratorFactor) ||
+    !Number.isInteger(denominatorFactor) ||
+    numeratorFactor !== denominatorFactor ||
+    numeratorFactor === 0
+  ) {
+    throw new Error(
+      `Generated fraction fixture ${input.id} must simplify by one non-zero integer common factor.`
+    );
+  }
+
+  return numeratorFactor;
 }
 
 function assertNonEmpty(value: string, label: string): void {
