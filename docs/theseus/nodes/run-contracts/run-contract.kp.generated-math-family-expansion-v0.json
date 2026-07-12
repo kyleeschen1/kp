@@ -19,11 +19,55 @@
       "kind": "file",
       "path": "docs/theseus/nodes/run-contracts/run-contract.kp.generated-math-family-expansion-v0.json",
       "summary": "Stores the approved 24-slice generated math family expansion loop."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-12-generated-math-registry-seam-audit.md",
+      "summary": "Maps generated registry, fixture, card, export, dashboard, law, and trace seams for family expansion."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Current linear-solve-specific generated fixture registry seam."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Current generated fixture builder whose output shape should become family-neutral."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Dashboard generated algebra row seam that should group rows by fixture family."
     }
   ],
   "verification": [
     "npm run theseus -- validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation after run-contract creation",
+      "checkedAt": "2026-07-12T18:43:02.432Z"
+    },
+    {
+      "command": "npm test -- tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts tests/generated-linear-solve-export-sample.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/kp-asset-laws.test.ts tests/kp-algebra-trace-port-fixture.test.ts",
+      "status": "passed",
+      "scope": "Generated algebra registry/card/export/dashboard/law baseline; repo npm test script executed 588 tests",
+      "checkedAt": "2026-07-12T18:46:41.576Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T18:46:41.627Z",
+      "scope": "Theseus graph validation after seam audit"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Audited generated algebra registry seams and identified the shared fixture layer needed before adding new math families."
+  },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
   ],
@@ -50,8 +94,8 @@
     {
       "id": "slice.kp.generated-math.registry-audit",
       "title": "Audit generated algebra fixture registry seams",
-      "summary": "Inspect registry/catalog seams and record where new fixture families should attach.",
-      "status": "planned"
+      "summary": "Recorded generated algebra registry seam audit and focused baseline verification.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.fraction-fixtures",
@@ -185,17 +229,5 @@
       "summary": "Write closeout, resolve run contract, and record final verification.",
       "status": "planned"
     }
-  ],
-  "verificationRecords": [
-    {
-      "command": "npm run theseus -- validate",
-      "status": "passed",
-      "checkedAt": "2026-07-12T18:43:02.432Z",
-      "scope": "Theseus graph validation after run-contract creation"
-    }
-  ],
-  "progress": {
-    "state": "complete",
-    "summary": "Created approved generated math family expansion run contract with 24 recorded slices."
-  }
+  ]
 }
