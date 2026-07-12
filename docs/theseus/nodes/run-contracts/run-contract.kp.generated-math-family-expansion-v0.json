@@ -324,6 +324,21 @@
       "kind": "file",
       "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
       "summary": "Covers generated family maturity rows, counts, and search behavior."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-fixture-sample-targets.ts",
+      "summary": "Adds generic generated algebra tutorial-card sample target helper while preserving linear-solve wrapper."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Adds sample target fields, search terms, and preview links to family maturity rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "summary": "Covers generated family maturity tutorial-card action links."
     }
   ],
   "verification": [
@@ -741,11 +756,26 @@
       "command": "npm run theseus -- validate",
       "status": "passed",
       "checkedAt": "2026-07-12T20:09:45.567Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T20:14:38.149Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T20:14:38.187Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T20:14:38.221Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Generalized generated algebra dashboard maturity rows across all generated fixture families with per-family counts and search coverage."
+    "summary": "Added generic generated algebra tutorial-card sample targets and exposed them as actions on generated family maturity rows."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -887,8 +917,8 @@
     {
       "id": "slice.kp.generated-math.dashboard-actions",
       "title": "Add dashboard sample actions for generated family rows",
-      "summary": "Add authoring-oriented actions for generated family rows.",
-      "status": "planned"
+      "summary": "Generated family maturity rows now expose tutorial-card sample actions through generic generated algebra sample targets.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.search-facets",

@@ -11,7 +11,10 @@ import {
   dashboardAssetPreviewSearchFields,
   type DashboardAssetPreviewField
 } from "./asset-preview-fields.ts";
-import { createGeneratedLinearSolveTutorialCardSampleTarget } from "./generated-fixture-sample-targets.ts";
+import {
+  createGeneratedAlgebraTutorialCardSampleTarget,
+  createGeneratedLinearSolveTutorialCardSampleTarget
+} from "./generated-fixture-sample-targets.ts";
 import { projectDashboardTextFieldsMatch } from "./model.ts";
 import {
   dashboardSampleTargetPreviewFields,
@@ -118,6 +121,9 @@ export function createGeneratedAlgebraMaturityAgendaRows(
     createGeneratedAlgebraTutorialFixtures()
   ).map(({ familyId, fixtures }): GeneratedAlgebraFixtureAgendaRow => {
     const familyLabel = familyId.replace(/^generated\./, "");
+    const sampleTargets = fixtures.map((fixture) =>
+      createGeneratedAlgebraTutorialCardSampleTarget(fixture)
+    );
 
     return {
       id: `generated-${familyLabel.replaceAll(".", "-")}-family-maturity`,
@@ -163,6 +169,7 @@ export function createGeneratedAlgebraMaturityAgendaRows(
           value: String(sum(fixtures, (fixture) => fixture.flashcards.length))
         },
         { label: "Dependency manifests", value: "iframe, static-step" },
+        ...dashboardSampleTargetPreviewFields(sampleTargets),
         { label: "Closure law", value: "asset-fixture.reference-closure" },
         {
           label: "Renderer law",
@@ -174,7 +181,7 @@ export function createGeneratedAlgebraMaturityAgendaRows(
             "trace-latex-mismatch, trace-transformation-mismatch, trace-rule-mismatch"
         }
       ],
-      previewLinks: [],
+      previewLinks: dashboardSampleTargetPreviewLinks(sampleTargets),
       searchFields: [
         "semantic asset catalog",
         "generated algebra fixture catalog",
@@ -198,7 +205,8 @@ export function createGeneratedAlgebraMaturityAgendaRows(
         ),
         ...fixtures.flatMap((fixture) =>
           fixture.flashcards.map((flashcard) => flashcard.id)
-        )
+        ),
+        ...dashboardSampleTargetSearchFields(sampleTargets)
       ]
     };
   });

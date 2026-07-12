@@ -83,6 +83,42 @@ test("generated algebra maturity rows are searchable by protocol coverage", () =
   );
 });
 
+test("generated algebra maturity rows expose tutorial-card sample actions", () => {
+  const row = createGeneratedAlgebraMaturityAgendaRows("generated.radical")[0];
+
+  assert.equal(row?.id, "generated-radical-family-maturity");
+  assert.ok(
+    row.previewFields.some(
+      (field) =>
+        field.label === "Sample targets" &&
+        field.value.includes(
+          "Open generated rewrite square root as power tutorial card"
+        )
+    )
+  );
+  assert.deepEqual(row.previewLinks[0], {
+    label: "Open generated rewrite square root as power tutorial card",
+    href: "#project-dashboard-animation-layout-title",
+    dataAttributes: [
+      ["data-kp-preview-link", "tutorial-card"],
+      [
+        "data-kp-preview-tutorial-card",
+        "tutorial.generated.radical.square-root-as-power.card.live-sample"
+      ],
+      ["data-kp-preview-manifest-id", "tutorial.linear-solve.card"],
+      [
+        "data-kp-preview-layout-id",
+        "layout.sample.linear-solve-synchronized-panel"
+      ],
+      ["data-kp-preview-shared-clock-id", "solve-x-shared-clock"],
+      [
+        "data-kp-preview-katex-transform-fixture",
+        "generated.radical.square-root-as-power"
+      ]
+    ]
+  });
+});
+
 test("generated algebra dashboard catalog filters rows by search text", () => {
   const rows = createGeneratedAlgebraFixtureAgendaRows("x + 3 = 7");
 
