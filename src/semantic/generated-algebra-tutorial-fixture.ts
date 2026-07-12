@@ -37,6 +37,31 @@ export interface GeneratedLinearSolveTutorialFixture {
   readonly flashcards: readonly KpFlashcardSpec[];
 }
 
+export const generatedLinearSolveTutorialFixtureSpecs:
+  readonly CreateGeneratedLinearSolveTutorialFixtureInput[] = [
+    {
+      id: "generated.linear-solve.x-plus-3",
+      title: "Generated solve x plus 3",
+      variable: "x",
+      addend: 3,
+      solution: 4
+    },
+    {
+      id: "generated.linear-solve.y-plus-5",
+      title: "Generated solve y plus 5",
+      variable: "y",
+      addend: 5,
+      solution: 7
+    }
+  ];
+
+export function createGeneratedLinearSolveTutorialFixtures():
+  readonly GeneratedLinearSolveTutorialFixture[] {
+  return generatedLinearSolveTutorialFixtureSpecs.map(
+    createGeneratedLinearSolveTutorialFixture
+  );
+}
+
 export function createGeneratedLinearSolveTutorialFixture(
   input: CreateGeneratedLinearSolveTutorialFixtureInput
 ): GeneratedLinearSolveTutorialFixture {

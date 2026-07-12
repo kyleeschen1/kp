@@ -235,6 +235,16 @@
       "kind": "file",
       "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
       "summary": "Covers generated fixture structure and asset-law closure."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Adds a generated linear-solve fixture registry with a second solve example through the generator path."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Covers the second generated solve example and registry-level transformation closure."
     }
   ],
   "verification": [
@@ -574,8 +584,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T03:22:29.578Z",
-      "scope": "slice 20 generated algebra tutorial fixture Theseus validation"
+      "scope": "slice 20 generated algebra tutorial fixture Theseus validation",
+      "checkedAt": "2026-07-12T03:22:29.578Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-tutorial-fixture.test.ts tests/kp-algebra-trace-port-fixture.test.ts",
+      "status": "passed",
+      "scope": "slice 21 second generated solve focused tests",
+      "checkedAt": "2026-07-12T03:27:00.322Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 21 second generated solve typecheck",
+      "checkedAt": "2026-07-12T03:27:28.536Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T03:27:40.101Z",
+      "scope": "slice 21 second generated solve Theseus validation"
     }
   ],
   "progress": {
@@ -721,12 +749,13 @@
     {
       "id": "slice.kp.asset-renderer.second-solve-example",
       "title": "Add second simple solve example through generated fixture path",
-      "status": "ready"
+      "summary": "Added a generated linear-solve fixture registry with a second y + 5 = 12 solve example through the generator path.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.generated-family-dashboard",
       "title": "Add dashboard rows for generated tutorial family readiness",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.browser-smoke-if-needed",

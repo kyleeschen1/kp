@@ -15,7 +15,8 @@ import {
   validateKpSemanticTransformation
 } from "../src/semantic/asset-transformation.ts";
 import {
-  createGeneratedLinearSolveTutorialFixture
+  createGeneratedLinearSolveTutorialFixture,
+  createGeneratedLinearSolveTutorialFixtures
 } from "../src/semantic/generated-algebra-tutorial-fixture.ts";
 
 test("createGeneratedLinearSolveTutorialFixture builds a semantic tutorial asset", () => {
@@ -162,6 +163,32 @@ test("generated linear solve tutorial fixture satisfies asset laws", () => {
         bundle: fixture.bundle,
         transformations: fixture.transformations
       }).failures
+    ),
+    []
+  );
+});
+
+test("createGeneratedLinearSolveTutorialFixtures exposes multiple generated examples", () => {
+  const fixtures = createGeneratedLinearSolveTutorialFixtures();
+
+  assert.deepEqual(fixtures.map((fixture) => fixture.id), [
+    "generated.linear-solve.x-plus-3",
+    "generated.linear-solve.y-plus-5"
+  ]);
+  assert.deepEqual(
+    fixtures[1]?.bundle.objects.map((object) => object.value),
+    [
+      { latex: "y + 5 = 12" },
+      { latex: "y + 5 - 5 = 12 - 5" },
+      { latex: "y = 12 - 5" },
+      { latex: "y = 7" }
+    ]
+  );
+  assert.deepEqual(
+    fixtures.flatMap((fixture) =>
+      fixture.transformations.flatMap((transformation) =>
+        validateKpSemanticTransformation(transformation, fixture.bundle)
+      )
     ),
     []
   );
