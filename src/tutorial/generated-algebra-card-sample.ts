@@ -1,6 +1,7 @@
 import { sampleKpBehaviorAtProgress } from "../semantic/asset-behavior.ts";
 import {
   createGeneratedAlgebraTutorialFixture,
+  listGeneratedAlgebraTutorialFixtureSpecs,
   type GeneratedAlgebraTutorialFixture,
   type GeneratedAlgebraTutorialFixtureSpec
 } from "../semantic/generated-algebra-tutorial-fixture.ts";
@@ -72,6 +73,13 @@ export function createGeneratedAlgebraTutorialCardSample(
       };
     }
   };
+}
+
+export function createGeneratedAlgebraTutorialCardSamples():
+  readonly GeneratedAlgebraTutorialCardSample[] {
+  return listGeneratedAlgebraTutorialFixtureSpecs().map((spec) =>
+    createGeneratedAlgebraTutorialCardSample(spec)
+  );
 }
 
 function generatedAlgebraFixtureAsLinearSolveAsset(

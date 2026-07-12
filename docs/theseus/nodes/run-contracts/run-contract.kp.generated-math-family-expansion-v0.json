@@ -134,6 +134,26 @@
       "kind": "file",
       "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
       "summary": "Covers the lowered exponent object, transform sequence, correspondence matrix, and trace rules."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-algebra-card-sample.ts",
+      "summary": "Adds generated algebra card sample discovery from the fixture registry."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-algebra-export-sample.ts",
+      "summary": "Adds generated algebra iframe and static-step export discovery from the fixture registry."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-tutorial-card-sample.test.ts",
+      "summary": "Covers exponent card sampling and card sample discovery."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-export-sample.test.ts",
+      "summary": "Covers exponent iframe/static-step exports and export sample discovery."
     }
   ],
   "verification": [
@@ -321,11 +341,36 @@
       "command": "npm run theseus -- validate",
       "status": "passed",
       "checkedAt": "2026-07-12T19:22:02.199Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-tutorial-card-sample.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:26:30.545Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-export-sample.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:26:30.584Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-tutorial-card-sample.test.ts tests/generated-algebra-export-sample.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts tests/generated-linear-solve-export-sample.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:26:30.623Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:26:30.656Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:26:30.693Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added two-stage generated exponent semantics with lower-exponent and unwrap-unit-exponent transforms, identity correspondences, trace steps, and flashcard references."
+    "summary": "Exposed generated exponent fixtures through generic generated algebra card, iframe export, and static-step export discovery helpers with semantic coverage."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -401,8 +446,8 @@
     {
       "id": "slice.kp.generated-math.exponent-cards-exports",
       "title": "Wire exponent samples through cards and exports",
-      "summary": "Expose exponent fixtures through card and export paths.",
-      "status": "planned"
+      "summary": "Generated exponent fixtures are now covered by card sampling plus iframe and static-step export discovery paths.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.radical-fixtures",

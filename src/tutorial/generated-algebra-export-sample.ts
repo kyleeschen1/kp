@@ -1,5 +1,6 @@
 import {
   createGeneratedAlgebraTutorialFixture,
+  listGeneratedAlgebraTutorialFixtureSpecs,
   type GeneratedAlgebraTutorialFixture
 } from "../semantic/generated-algebra-tutorial-fixture.ts";
 import { createLinearSolveTutorialCardManifest } from "./card-manifest.ts";
@@ -85,6 +86,14 @@ export function createGeneratedAlgebraIframeExportSample(
   };
 }
 
+export function createGeneratedAlgebraIframeExportSamples(
+  progress = 0.5
+): readonly GeneratedAlgebraIframeExportSample[] {
+  return listGeneratedAlgebraTutorialFixtureSpecs().map((spec) =>
+    createGeneratedAlgebraIframeExportSample(spec.id, progress)
+  );
+}
+
 export function createGeneratedAlgebraStaticStepExportSample(
   fixtureId: string
 ): GeneratedAlgebraStaticStepExportSample {
@@ -116,6 +125,13 @@ export function createGeneratedAlgebraStaticStepExportSample(
     }),
     diagnostics: sequence.diagnostics
   };
+}
+
+export function createGeneratedAlgebraStaticStepExportSamples():
+  readonly GeneratedAlgebraStaticStepExportSample[] {
+  return listGeneratedAlgebraTutorialFixtureSpecs().map((spec) =>
+    createGeneratedAlgebraStaticStepExportSample(spec.id)
+  );
 }
 
 function generatedAlgebraExportArtifact(input: {

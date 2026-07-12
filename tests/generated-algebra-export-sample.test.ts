@@ -3,6 +3,8 @@ import test from "node:test";
 
 import {
   createGeneratedAlgebraIframeExportSample,
+  createGeneratedAlgebraIframeExportSamples,
+  createGeneratedAlgebraStaticStepExportSamples,
   createGeneratedAlgebraStaticStepExportSample
 } from "../src/tutorial/generated-algebra-export-sample.ts";
 
@@ -97,4 +99,118 @@ test("generated algebra static-step export sample preserves fraction semantics",
   ]);
   assert.deepEqual(fixture.dependencyManifest.diagnostics, []);
   assert.deepEqual(fixture.diagnostics, []);
+});
+
+test("generated algebra iframe export sample renders exponent fixture card HTML", () => {
+  const fixture = createGeneratedAlgebraIframeExportSample(
+    "generated.exponent.square-as-product",
+    0.75
+  );
+
+  assert.equal(
+    fixture.artifact.id,
+    "artifact.generated.exponent.square-as-product.iframe"
+  );
+  assert.equal(fixture.fixtureFamilyId, "generated.exponent");
+  assert.equal(
+    fixture.artifact.metadata?.["generatedFixtureFamilyId"],
+    "generated.exponent"
+  );
+  assert.deepEqual(
+    fixture.dependencyManifest.transformationIds,
+    [
+      "transform.generated.exponent.square-as-product.lower-exponent",
+      "transform.generated.exponent.square-as-product.unwrap-unit-exponent"
+    ]
+  );
+  assert.deepEqual(fixture.dependencyManifest.flashcardIds, [
+    "card.generated.exponent.square-as-product.explain-exponent-product"
+  ]);
+  assert.match(
+    fixture.html,
+    /data-kp-tutorial-card="tutorial\.generated\.exponent\.square-as-product\.card\.live-sample"/
+  );
+  assert.match(
+    fixture.html,
+    /data-kp-tutorial-fixture="generated\.exponent\.square-as-product"/
+  );
+  assert.deepEqual(fixture.diagnostics, []);
+});
+
+test("generated algebra static-step export sample preserves exponent trace semantics", () => {
+  const fixture = createGeneratedAlgebraStaticStepExportSample(
+    "generated.exponent.square-as-product"
+  );
+
+  assert.equal(
+    fixture.sequence.artifact.id,
+    "artifact.generated.exponent.square-as-product.steps"
+  );
+  assert.equal(fixture.fixtureFamilyId, "generated.exponent");
+  assert.deepEqual(
+    fixture.sequence.steps.map((step) => step.progress),
+    [0, 1 / 3, 2 / 3, 1]
+  );
+  assert.equal(
+    fixture.sequence.steps[2]?.frame.equationFrame.semanticFrame?.assetId,
+    "asset.generated.exponent.square-as-product"
+  );
+  assert.deepEqual(fixture.dependencyManifest.traceStepIds, [
+    "trace.generated.exponent.square-as-product.initial",
+    "trace.generated.exponent.square-as-product.lowered",
+    "trace.generated.exponent.square-as-product.expanded"
+  ]);
+  assert.deepEqual(fixture.dependencyManifest.flashcardIds, [
+    "card.generated.exponent.square-as-product.explain-exponent-product"
+  ]);
+  assert.deepEqual(fixture.dependencyManifest.diagnostics, []);
+  assert.deepEqual(fixture.diagnostics, []);
+});
+
+test("generated algebra export sample discovery includes exponent fixtures", () => {
+  const iframeSamples = createGeneratedAlgebraIframeExportSamples(0.25);
+  const staticStepSamples = createGeneratedAlgebraStaticStepExportSamples();
+
+  assert.deepEqual(
+    iframeSamples
+      .filter((sample) => sample.fixtureFamilyId !== "generated.linear-solve")
+      .map((sample) => [
+        sample.fixtureId,
+        sample.fixtureFamilyId,
+        sample.artifact.id
+      ]),
+    [
+      [
+        "generated.fraction-expression.two-fourths",
+        "generated.fraction-expression",
+        "artifact.generated.fraction-expression.two-fourths.iframe"
+      ],
+      [
+        "generated.exponent.square-as-product",
+        "generated.exponent",
+        "artifact.generated.exponent.square-as-product.iframe"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    staticStepSamples
+      .filter((sample) => sample.fixtureFamilyId !== "generated.linear-solve")
+      .map((sample) => [
+        sample.fixtureId,
+        sample.fixtureFamilyId,
+        sample.sequence.artifact.id
+      ]),
+    [
+      [
+        "generated.fraction-expression.two-fourths",
+        "generated.fraction-expression",
+        "artifact.generated.fraction-expression.two-fourths.steps"
+      ],
+      [
+        "generated.exponent.square-as-product",
+        "generated.exponent",
+        "artifact.generated.exponent.square-as-product.steps"
+      ]
+    ]
+  );
 });
