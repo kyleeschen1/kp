@@ -14,6 +14,7 @@ import {
   type KpExternalPort,
   type KpExternalPortRunResult
 } from "./asset-port.ts";
+import type { KpEquationFrame } from "./equation-frame-interpreter.ts";
 
 export interface KpLawFailure {
   readonly path: string;
@@ -147,6 +148,33 @@ export function checkKpPortLossDiagnostics(
   }
 
   return lawResult("port.loss-reporting", failures);
+}
+
+export function checkKpEquationFrameSelectorCorrespondenceClosure(
+  frame: KpEquationFrame
+): KpLawCheckResult {
+  const selectorIds = new Set(
+    frame.selectorRefs.map((selectorRef) => selectorRef.selectorId)
+  );
+  const failures: KpLawFailure[] = [];
+
+  frame.selectorCorrespondenceRefs.forEach((correspondence, index) => {
+    if (!selectorIds.has(correspondence.sourceSelectorId)) {
+      failures.push({
+        path: `selectorCorrespondenceRefs[${index}].sourceSelectorId`,
+        message: `Equation frame ${frame.id} correspondence references missing source selector ${correspondence.sourceSelectorId}.`
+      });
+    }
+
+    if (!selectorIds.has(correspondence.targetSelectorId)) {
+      failures.push({
+        path: `selectorCorrespondenceRefs[${index}].targetSelectorId`,
+        message: `Equation frame ${frame.id} correspondence references missing target selector ${correspondence.targetSelectorId}.`
+      });
+    }
+  });
+
+  return lawResult("equation-frame.selector-correspondence-closure", failures);
 }
 
 function lawResult(

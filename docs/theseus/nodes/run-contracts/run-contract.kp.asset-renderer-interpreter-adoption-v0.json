@@ -155,6 +155,16 @@
       "kind": "file",
       "path": "tests/tutorial-card-equation-frame-export-sampler.test.ts",
       "summary": "Covers export sampling with the semantic-enriched live equation adapter while preserving old visual frame ordering and rewind identity."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-laws.ts",
+      "summary": "Adds an equation-frame selector correspondence closure law helper."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-asset-laws.test.ts",
+      "summary": "Covers selector correspondence closure passing and missing-selector failures."
     }
   ],
   "verification": [
@@ -350,8 +360,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T02:36:27.135Z",
-      "scope": "slice 12 export stability Theseus validation"
+      "scope": "slice 12 export stability Theseus validation",
+      "checkedAt": "2026-07-12T02:36:27.135Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-asset-laws.test.ts tests/kp-linear-solve-equation-frame-interpreter.test.ts",
+      "status": "passed",
+      "scope": "slice 13 selector correspondence law tests",
+      "checkedAt": "2026-07-12T02:39:31.858Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 13 selector correspondence law typecheck",
+      "checkedAt": "2026-07-12T02:39:33.626Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T02:39:35.429Z",
+      "scope": "slice 13 selector correspondence law Theseus validation"
     }
   ],
   "progress": {
@@ -449,12 +477,13 @@
     {
       "id": "slice.kp.asset-renderer.selector-law",
       "title": "Add selector correspondence law helper",
-      "status": "ready"
+      "summary": "Added an equation-frame selector correspondence closure law helper that fails when correspondence refs point outside frame selector refs.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.diagram-associativity-law",
       "title": "Add diagram associativity law helper",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.interpreter-composition-loss",

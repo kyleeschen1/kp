@@ -14,8 +14,10 @@ import {
 import {
   checkKpBehaviorDeterminism,
   checkKpBehaviorReparameterization,
-  checkKpDiagramRewindLaw
+  checkKpDiagramRewindLaw,
+  checkKpEquationFrameSelectorCorrespondenceClosure
 } from "../src/semantic/asset-laws.ts";
+import type { KpEquationFrame } from "../src/semantic/equation-frame-interpreter.ts";
 
 test("checkKpBehaviorDeterminism passes repeated equivalent samples", () => {
   const behavior = createKpBehavior({
@@ -105,3 +107,69 @@ test("checkKpBehaviorReparameterization validates normalized samples", () => {
     failures: []
   });
 });
+
+test("checkKpEquationFrameSelectorCorrespondenceClosure validates frame-local selector pairs", () => {
+  const frame = equationFrame({
+    selectorIds: ["equation.initial.x", "equation.next.x"],
+    correspondence: [
+      {
+        sourceSelectorId: "equation.initial.x",
+        targetSelectorId: "equation.next.x",
+        preserves: ["identity"]
+      }
+    ]
+  });
+
+  assert.deepEqual(checkKpEquationFrameSelectorCorrespondenceClosure(frame), {
+    lawId: "equation-frame.selector-correspondence-closure",
+    passed: true,
+    failures: []
+  });
+});
+
+test("checkKpEquationFrameSelectorCorrespondenceClosure reports missing frame selectors", () => {
+  const frame = equationFrame({
+    selectorIds: ["equation.initial.x"],
+    correspondence: [
+      {
+        sourceSelectorId: "equation.initial.x",
+        targetSelectorId: "equation.next.x",
+        preserves: ["identity"]
+      }
+    ]
+  });
+
+  assert.deepEqual(checkKpEquationFrameSelectorCorrespondenceClosure(frame), {
+    lawId: "equation-frame.selector-correspondence-closure",
+    passed: false,
+    failures: [
+      {
+        path: "selectorCorrespondenceRefs[0].targetSelectorId",
+        message:
+          "Equation frame frame.sample correspondence references missing target selector equation.next.x."
+      }
+    ]
+  });
+});
+
+function equationFrame(input: {
+  readonly selectorIds: readonly string[];
+  readonly correspondence: KpEquationFrame["selectorCorrespondenceRefs"];
+}): KpEquationFrame {
+  return {
+    id: "frame.sample",
+    assetId: "asset.sample",
+    progress: 0.5,
+    surface: "katex-dom",
+    activeTransformationIds: ["transform.sample"],
+    objectRefs: [],
+    transformationRefs: [],
+    selectorRefs: input.selectorIds.map((selectorId) => ({
+      selectorId,
+      objectId: selectorId.split(".").slice(0, 2).join("."),
+      role: "persistent"
+    })),
+    selectorCorrespondenceRefs: input.correspondence,
+    diagnostics: []
+  };
+}
