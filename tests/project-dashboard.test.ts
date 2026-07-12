@@ -119,6 +119,31 @@ test("project dashboard exposes KP Asset Calculus sample artifacts", () => {
   assert.match(html, /Algebra trace port fixture/);
 });
 
+test("renderProjectDashboard uses semantic preview interpreter for the linear-solve asset row", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "asset-linear-solve-bundle"
+  });
+
+  assert.match(
+    html,
+    /data-kp-preview-field="Dashboard interpreter"[^>]*>interpreter\.dashboard\.asset-preview</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Asset summary"[^>]*>4 objects, 17 selectors</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Asset id"[^>]*>asset\.linear-solve</
+  );
+  assert.match(html, /data-kp-preview-field="Objects"[^>]*>4</);
+  assert.match(html, /data-kp-preview-field="Selectors"[^>]*>17</);
+  assert.match(
+    html,
+    /data-kp-preview-field="Object types"[^>]*>equation</
+  );
+});
+
 test("project dashboard ids are unique and related ids resolve", () => {
   const ids = collectProjectDashboardIds(projectDashboardData);
   const uniqueIds = new Set(ids);

@@ -45,6 +45,12 @@ import {
   defaultKpCapabilityPackageManifests,
   type KpCapabilityPackageManifest
 } from "../semantic/capability-package-manifest.ts";
+import {
+  createKpDashboardAssetPreviewInterpreter,
+  type KpDashboardAssetPreview
+} from "../semantic/dashboard-preview-interpreter.ts";
+import { runKpInterpreter, type KpInterpretation } from "../semantic/asset-interpreter.ts";
+import { createLinearSolveKpAssetBundle } from "../semantic/linear-solve-asset.ts";
 import { capabilityPackageFacetSearchFields } from "./capability-package-facets.ts";
 import {
   semanticCapabilityPreviewFields,
@@ -524,6 +530,7 @@ function createGalleryAgendaRows(
 ): readonly ProjectAgendaRow[] {
   return [...items].sort(compareGalleryItemsForAgenda).map((item) => {
     const adapterRow = adapterRows.get(item.id);
+    const semanticAssetPreview = semanticAssetDashboardPreview(item.id);
 
     return {
       id: item.id,
@@ -536,6 +543,7 @@ function createGalleryAgendaRows(
       tags: [...item.domains, ...item.tags, ...(item.interfaces ?? [])],
       dataAttributes: [
         ["data-kp-project-gallery-item", item.id],
+        ...semanticAssetPreviewDataAttributes(semanticAssetPreview),
         ...adapterDataAttributes(adapterRow)
       ],
       relatedIds: item.relatedIds,
@@ -547,6 +555,7 @@ function createGalleryAgendaRows(
           label: "Interfaces",
           value: (item.interfaces ?? []).join(", ") || "None"
         },
+        ...semanticAssetPreviewFields(semanticAssetPreview),
         ...authoringPreviewFields({
           maturity: item.maturity,
           coverage: item.coverage,
@@ -569,10 +578,60 @@ function createGalleryAgendaRows(
           blockers: item.blockers
         }),
         ...sampleTargetSearchFields(item.sampleTargets),
+        ...semanticAssetPreviewSearchFields(semanticAssetPreview),
         ...adapterSearchFields(adapterRow)
       ]
     };
   });
+}
+
+function semanticAssetDashboardPreview(
+  itemId: string
+): KpInterpretation<KpDashboardAssetPreview> | undefined {
+  // Keep this registry narrow until semantic asset rows move out of hand-authored dashboard data.
+  if (itemId !== "asset-linear-solve-bundle") return undefined;
+
+  return runKpInterpreter(
+    createKpDashboardAssetPreviewInterpreter(),
+    createLinearSolveKpAssetBundle().bundle
+  );
+}
+
+function semanticAssetPreviewFields(
+  interpretation: KpInterpretation<KpDashboardAssetPreview> | undefined
+): readonly ProjectAgendaPreviewField[] {
+  if (interpretation === undefined) return [];
+
+  return [
+    { label: "Dashboard interpreter", value: interpretation.interpreterId },
+    { label: "Asset summary", value: interpretation.output.summary },
+    ...interpretation.output.fields,
+    ...previewListField(
+      "Asset diagnostics",
+      interpretation.diagnostics.map((diagnostic) => diagnostic.message)
+    )
+  ];
+}
+
+function semanticAssetPreviewSearchFields(
+  interpretation: KpInterpretation<KpDashboardAssetPreview> | undefined
+): readonly string[] {
+  if (interpretation === undefined) return [];
+
+  return [
+    interpretation.interpreterId,
+    interpretation.output.summary,
+    ...interpretation.output.searchFields,
+    ...interpretation.diagnostics.map((diagnostic) => diagnostic.message)
+  ];
+}
+
+function semanticAssetPreviewDataAttributes(
+  interpretation: KpInterpretation<KpDashboardAssetPreview> | undefined
+): readonly [string, string][] {
+  return interpretation === undefined
+    ? []
+    : [["data-kp-dashboard-preview-interpreter", interpretation.interpreterId]];
 }
 
 function createAnimationLayoutAgendaRows(
