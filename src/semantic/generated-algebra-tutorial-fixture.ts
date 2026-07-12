@@ -968,12 +968,15 @@ function createGeneratedRadicalTransformations(
       title: "Rewrite the rational exponent as a radical",
       sourceObjectIds: [ids.power],
       targetObjectIds: [ids.radical],
-      preserves: ["value"],
+      preserves: ["identity", "value"],
       assumptions: [
         "A rational exponent with numerator one can be represented as a root."
       ],
       lawRefs: [
         { id: "law.arithmetic.rational-exponent-as-root", level: "strict" }
+      ],
+      correspondence: [
+        correspondence(ids.power, "base", ids.radical, "radicand")
       ]
     })
   ];

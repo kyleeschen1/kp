@@ -725,6 +725,30 @@ test("createGeneratedRadicalTutorialFixture builds a semantic radical asset", ()
     ["transform.generated.radical.square-root-as-power.rewrite-power-as-root"]
   ]);
   assert.deepEqual(
+    fixture.transformations.map((transformation) => [
+      transformation.id,
+      transformation.preserves,
+      transformation.correspondence.map((entry) => [
+        entry.sourceSelectorId,
+        entry.targetSelectorId,
+        entry.preserves
+      ])
+    ]),
+    [
+      [
+        "transform.generated.radical.square-root-as-power.rewrite-power-as-root",
+        ["identity", "value"],
+        [
+          [
+            "expression.generated.radical.square-root-as-power.power.base",
+            "expression.generated.radical.square-root-as-power.radical.radicand",
+            ["identity"]
+          ]
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
     fixture.trace.steps.map((step) => [step.id, step.latex, step.rule]),
     [
       [

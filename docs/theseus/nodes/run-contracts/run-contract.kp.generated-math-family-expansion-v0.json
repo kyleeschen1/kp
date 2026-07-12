@@ -184,6 +184,16 @@
       "kind": "file",
       "path": "tests/generated-algebra-export-sample.test.ts",
       "summary": "Updates generated export discovery expectations for registry-driven radical inclusion."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Adds identity preservation and base/radicand correspondence to the radical rewrite transform."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Covers radical transform preservation metadata and correspondence."
     }
   ],
   "verification": [
@@ -421,11 +431,31 @@
       "command": "npm run theseus -- validate",
       "status": "passed",
       "checkedAt": "2026-07-12T19:32:53.479Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:35:35.344Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/generated-algebra-tutorial-card-sample.test.ts tests/generated-algebra-export-sample.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:35:35.382Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:35:35.422Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:35:35.457Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added generated radical fixture family with square-root/power objects, registry support, trace, basic rewrite transform, and registry-driven discovery expectations."
+    "summary": "Enriched generated radical rewrite semantics with identity/value preservation and base-to-radicand selector correspondence."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -513,8 +543,8 @@
     {
       "id": "slice.kp.generated-math.radical-transforms",
       "title": "Add radicalize and square-root transform semantics",
-      "summary": "Add radical transform semantics and preservation metadata.",
-      "status": "planned"
+      "summary": "Generated radical rewrite now preserves base identity through a base-to-radicand selector correspondence.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.radical-cards-exports",
