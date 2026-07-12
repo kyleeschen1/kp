@@ -128,6 +128,11 @@ test("generated algebra tutorial card sample discovery includes exponent fixture
         "generated.exponent.square-as-product",
         "generated.exponent",
         "tutorial.generated.exponent.square-as-product.card.live-sample"
+      ],
+      [
+        "generated.radical.square-root-as-power",
+        "generated.radical",
+        "tutorial.generated.radical.square-root-as-power.card.live-sample"
       ]
     ]
   );

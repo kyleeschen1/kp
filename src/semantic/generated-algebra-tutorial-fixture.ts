@@ -27,11 +27,13 @@ import {
   generatedExponentTutorialFixtureSpecs,
   generatedFractionExpressionTutorialFixtureSpecs,
   generatedLinearSolveTutorialFixtureSpecs,
+  generatedRadicalTutorialFixtureSpecs,
   type GeneratedAlgebraFixtureFamilyId,
   type GeneratedAlgebraTutorialFixtureSpec,
   type GeneratedExponentTutorialFixtureSpec,
   type GeneratedFractionExpressionTutorialFixtureSpec,
-  type GeneratedLinearSolveTutorialFixtureSpec
+  type GeneratedLinearSolveTutorialFixtureSpec,
+  type GeneratedRadicalTutorialFixtureSpec
 } from "./generated-algebra-fixture-registry.ts";
 
 export type {
@@ -41,6 +43,7 @@ export type {
   GeneratedExponentTutorialFixtureSpec,
   GeneratedFractionExpressionTutorialFixtureSpec,
   GeneratedLinearSolveTutorialFixtureSpec,
+  GeneratedRadicalTutorialFixtureSpec,
   GeneratedLinearSolveTutorialFixtureSpec as CreateGeneratedLinearSolveTutorialFixtureInput
 } from "./generated-algebra-fixture-registry.ts";
 
@@ -52,10 +55,12 @@ export {
   getGeneratedExponentTutorialFixtureSpec,
   getGeneratedFractionExpressionTutorialFixtureSpec,
   getGeneratedLinearSolveTutorialFixtureSpec,
+  getGeneratedRadicalTutorialFixtureSpec,
   listGeneratedAlgebraTutorialFixtureSpecs,
   listGeneratedExponentTutorialFixtureSpecs,
   listGeneratedFractionExpressionTutorialFixtureSpecs,
-  listGeneratedLinearSolveTutorialFixtureSpecs
+  listGeneratedLinearSolveTutorialFixtureSpecs,
+  listGeneratedRadicalTutorialFixtureSpecs
 } from "./generated-algebra-fixture-registry.ts";
 
 export interface GeneratedAlgebraTutorialFixture {
@@ -85,12 +90,18 @@ export interface GeneratedExponentTutorialFixture
   readonly familyId: "generated.exponent";
 }
 
+export interface GeneratedRadicalTutorialFixture
+  extends GeneratedAlgebraTutorialFixture {
+  readonly familyId: "generated.radical";
+}
+
 export function createGeneratedAlgebraTutorialFixtures():
   readonly GeneratedAlgebraTutorialFixture[] {
   return [
     ...createGeneratedLinearSolveTutorialFixtures(),
     ...createGeneratedFractionExpressionTutorialFixtures(),
-    ...createGeneratedExponentTutorialFixtures()
+    ...createGeneratedExponentTutorialFixtures(),
+    ...createGeneratedRadicalTutorialFixtures()
   ];
 }
 
@@ -114,6 +125,10 @@ export function createGeneratedAlgebraTutorialFixture(
     return createGeneratedExponentTutorialFixture(spec);
   }
 
+  if (spec.familyId === "generated.radical") {
+    return createGeneratedRadicalTutorialFixture(spec);
+  }
+
   return createGeneratedLinearSolveTutorialFixture(spec);
 }
 
@@ -135,6 +150,13 @@ export function createGeneratedExponentTutorialFixtures():
   readonly GeneratedExponentTutorialFixture[] {
   return generatedExponentTutorialFixtureSpecs.map(
     createGeneratedExponentTutorialFixture
+  );
+}
+
+export function createGeneratedRadicalTutorialFixtures():
+  readonly GeneratedRadicalTutorialFixture[] {
+  return generatedRadicalTutorialFixtureSpecs.map(
+    createGeneratedRadicalTutorialFixture
   );
 }
 
@@ -867,6 +889,116 @@ function createGeneratedExponentFlashcards(
       }
     })
   ];
+}
+
+export function createGeneratedRadicalTutorialFixture(
+  input: GeneratedRadicalTutorialFixtureSpec
+): GeneratedRadicalTutorialFixture {
+  assertNonEmpty(input.id, "Generated radical fixture id");
+  assertNonEmpty(input.title, `Generated radical fixture ${input.id} title`);
+  assertNonEmpty(input.base, `Generated radical fixture ${input.id} base`);
+
+  if (!Number.isInteger(input.index) || input.index < 2) {
+    throw new Error(
+      `Generated radical fixture ${input.id} index must be an integer greater than one.`
+    );
+  }
+
+  if (!Number.isInteger(input.exponentNumerator) || input.exponentNumerator < 1) {
+    throw new Error(
+      `Generated radical fixture ${input.id} exponent numerator must be a positive integer.`
+    );
+  }
+
+  const ids = generatedRadicalIds(input);
+  const latex = generatedRadicalLatex(input);
+  const bundle = createKpAssetBundle({
+    id: ids.asset,
+    title: input.title,
+    objects: [
+      expressionObject(ids.power, "Power form", latex.power, [
+        selector(ids.power, "base", "term", input.base),
+        selector(
+          ids.power,
+          "exponent-numerator",
+          "term",
+          formatLatexNumber(input.exponentNumerator)
+        ),
+        selector(ids.power, "exponent-fraction-line", "operator", "\\frac"),
+        selector(
+          ids.power,
+          "exponent-denominator",
+          "term",
+          formatLatexNumber(input.index)
+        )
+      ]),
+      expressionObject(ids.radical, "Radical form", latex.radical, [
+        selector(ids.radical, "radical-symbol", "operator", "\\sqrt"),
+        selector(ids.radical, "radicand", "term", input.base)
+      ])
+    ]
+  });
+  const transformations = createGeneratedRadicalTransformations(ids);
+  const diagram = createKpSemanticDiagramSequence({
+    id: ids.diagram,
+    title: `${input.title} sequence`,
+    children: transformations.map(createKpTransformationDiagramLeaf)
+  });
+
+  return {
+    id: input.id,
+    familyId: "generated.radical",
+    title: input.title,
+    bundle,
+    transformations,
+    diagram,
+    trace: createGeneratedRadicalTrace(ids, latex),
+    drillDownHooks: [],
+    flashcards: []
+  };
+}
+
+function createGeneratedRadicalTransformations(
+  ids: GeneratedRadicalIds
+): readonly KpSemanticTransformation[] {
+  return [
+    createKpSemanticTransformation({
+      id: ids.rewrite,
+      transformType: "rewritePowerAsRoot",
+      title: "Rewrite the rational exponent as a radical",
+      sourceObjectIds: [ids.power],
+      targetObjectIds: [ids.radical],
+      preserves: ["value"],
+      assumptions: [
+        "A rational exponent with numerator one can be represented as a root."
+      ],
+      lawRefs: [
+        { id: "law.arithmetic.rational-exponent-as-root", level: "strict" }
+      ]
+    })
+  ];
+}
+
+function createGeneratedRadicalTrace(
+  ids: GeneratedRadicalIds,
+  latex: GeneratedRadicalLatex
+): AlgebraTraceFixture {
+  return {
+    id: ids.trace,
+    title: `${ids.baseId} generated radical trace`,
+    steps: [
+      {
+        id: `${ids.trace}.power`,
+        latex: latex.power
+      },
+      {
+        id: `${ids.trace}.radical`,
+        latex: latex.radical,
+        transformationId: ids.rewrite,
+        rule: "rewritePowerAsRoot"
+      }
+    ]
+  };
 }
 
 function createGeneratedLinearSolveTransformations(
@@ -1707,6 +1839,32 @@ function generatedExponentIds(
   };
 }
 
+interface GeneratedRadicalIds {
+  readonly baseId: string;
+  readonly asset: string;
+  readonly diagram: string;
+  readonly trace: string;
+  readonly power: string;
+  readonly radical: string;
+  readonly rewrite: string;
+}
+
+function generatedRadicalIds(
+  input: GeneratedRadicalTutorialFixtureSpec
+): GeneratedRadicalIds {
+  const id = input.id;
+
+  return {
+    baseId: id,
+    asset: `asset.${id}`,
+    diagram: `diagram.${id}.sequence`,
+    trace: `trace.${id}`,
+    power: `expression.${id}.power`,
+    radical: `expression.${id}.radical`,
+    rewrite: `transform.${id}.rewrite-power-as-root`
+  };
+}
+
 interface GeneratedLinearSolveLatex {
   readonly rhs: number;
   readonly initial: string;
@@ -1753,6 +1911,38 @@ interface GeneratedExponentLatex {
   readonly initial: string;
   readonly lowered: string;
   readonly expanded: string;
+}
+
+interface GeneratedRadicalLatex {
+  readonly power: string;
+  readonly radical: string;
+}
+
+function generatedRadicalLatex(
+  input: GeneratedRadicalTutorialFixtureSpec
+): GeneratedRadicalLatex {
+  const numerator = formatLatexNumber(input.exponentNumerator);
+  const denominator = formatLatexNumber(input.index);
+  const power = `${input.base}^{\\frac{${numerator}}{${denominator}}}`;
+
+  if (input.index === 2 && input.exponentNumerator === 1) {
+    return {
+      power,
+      radical: `\\sqrt{${input.base}}`
+    };
+  }
+
+  if (input.exponentNumerator === 1) {
+    return {
+      power,
+      radical: `\\sqrt[${denominator}]{${input.base}}`
+    };
+  }
+
+  return {
+    power,
+    radical: `\\sqrt[${denominator}]{${input.base}^{${numerator}}}`
+  };
 }
 
 function equationObject(

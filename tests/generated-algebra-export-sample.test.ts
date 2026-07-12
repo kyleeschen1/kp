@@ -189,6 +189,11 @@ test("generated algebra export sample discovery includes exponent fixtures", () 
         "generated.exponent.square-as-product",
         "generated.exponent",
         "artifact.generated.exponent.square-as-product.iframe"
+      ],
+      [
+        "generated.radical.square-root-as-power",
+        "generated.radical",
+        "artifact.generated.radical.square-root-as-power.iframe"
       ]
     ]
   );
@@ -210,6 +215,11 @@ test("generated algebra export sample discovery includes exponent fixtures", () 
         "generated.exponent.square-as-product",
         "generated.exponent",
         "artifact.generated.exponent.square-as-product.steps"
+      ],
+      [
+        "generated.radical.square-root-as-power",
+        "generated.radical",
+        "artifact.generated.radical.square-root-as-power.steps"
       ]
     ]
   );

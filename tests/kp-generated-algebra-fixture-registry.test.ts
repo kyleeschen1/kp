@@ -6,10 +6,12 @@ import {
   getGeneratedExponentTutorialFixtureSpec,
   getGeneratedFractionExpressionTutorialFixtureSpec,
   getGeneratedLinearSolveTutorialFixtureSpec,
+  getGeneratedRadicalTutorialFixtureSpec,
   listGeneratedAlgebraTutorialFixtureSpecs,
   listGeneratedExponentTutorialFixtureSpecs,
   listGeneratedFractionExpressionTutorialFixtureSpecs,
-  listGeneratedLinearSolveTutorialFixtureSpecs
+  listGeneratedLinearSolveTutorialFixtureSpecs,
+  listGeneratedRadicalTutorialFixtureSpecs
 } from "../src/semantic/generated-algebra-fixture-registry.ts";
 
 test("generated algebra fixture registry lists linear-solve specs without building fixtures", () => {
@@ -103,6 +105,10 @@ test("generated algebra fixture registry exposes family-aware specs", () => {
       [
         "generated.exponent.square-as-product",
         "generated.exponent"
+      ],
+      [
+        "generated.radical.square-root-as-power",
+        "generated.radical"
       ]
     ]
   );
@@ -146,6 +152,36 @@ test("generated algebra fixture registry resolves exponent specs", () => {
   );
   assert.equal(
     getGeneratedExponentTutorialFixtureSpec("generated.exponent.missing"),
+    undefined
+  );
+});
+
+test("generated algebra fixture registry resolves radical specs", () => {
+  assert.deepEqual(listGeneratedRadicalTutorialFixtureSpecs(), [
+    {
+      familyId: "generated.radical",
+      id: "generated.radical.square-root-as-power",
+      title: "Generated rewrite square root as power",
+      base: "x",
+      index: 2,
+      exponentNumerator: 1
+    }
+  ]);
+  assert.deepEqual(
+    getGeneratedAlgebraTutorialFixtureSpec(
+      "generated.radical.square-root-as-power"
+    ),
+    {
+      familyId: "generated.radical",
+      id: "generated.radical.square-root-as-power",
+      title: "Generated rewrite square root as power",
+      base: "x",
+      index: 2,
+      exponentNumerator: 1
+    }
+  );
+  assert.equal(
+    getGeneratedRadicalTutorialFixtureSpec("generated.radical.missing"),
     undefined
   );
 });

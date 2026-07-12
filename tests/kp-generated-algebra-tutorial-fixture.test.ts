@@ -24,7 +24,8 @@ import {
   createGeneratedExponentTutorialFixture,
   createGeneratedFractionExpressionTutorialFixture,
   createGeneratedLinearSolveTutorialFixture,
-  createGeneratedLinearSolveTutorialFixtures
+  createGeneratedLinearSolveTutorialFixtures,
+  createGeneratedRadicalTutorialFixture
 } from "../src/semantic/generated-algebra-tutorial-fixture.ts";
 
 test("createGeneratedLinearSolveTutorialFixture builds a semantic tutorial asset", () => {
@@ -645,6 +646,10 @@ test("generated algebra fixture helpers include linear-solve and fraction famili
       [
         "generated.exponent.square-as-product",
         "generated.exponent"
+      ],
+      [
+        "generated.radical.square-root-as-power",
+        "generated.radical"
       ]
     ]
   );
@@ -653,6 +658,101 @@ test("generated algebra fixture helpers include linear-solve and fraction famili
       "generated.fraction-expression.two-fourths"
     ).bundle.objects.at(-1)?.value,
     { latex: "\\frac{1}{2}" }
+  );
+});
+
+test("createGeneratedRadicalTutorialFixture builds a semantic radical asset", () => {
+  const fixture = createGeneratedRadicalTutorialFixture({
+    familyId: "generated.radical",
+    id: "generated.radical.square-root-as-power",
+    title: "Generated rewrite square root as power",
+    base: "x",
+    index: 2,
+    exponentNumerator: 1
+  });
+
+  assert.equal(fixture.familyId, "generated.radical");
+  assert.equal(fixture.bundle.id, "asset.generated.radical.square-root-as-power");
+  assert.deepEqual(
+    fixture.bundle.objects.map((object) => ({
+      id: object.id,
+      objectType: object.objectType,
+      value: object.value,
+      selectorIds: object.selectors.map((selector) => selector.id)
+    })),
+    [
+      {
+        id: "expression.generated.radical.square-root-as-power.power",
+        objectType: "expression",
+        value: { latex: "x^{\\frac{1}{2}}" },
+        selectorIds: [
+          "expression.generated.radical.square-root-as-power.power.base",
+          "expression.generated.radical.square-root-as-power.power.exponent-numerator",
+          "expression.generated.radical.square-root-as-power.power.exponent-fraction-line",
+          "expression.generated.radical.square-root-as-power.power.exponent-denominator"
+        ]
+      },
+      {
+        id: "expression.generated.radical.square-root-as-power.radical",
+        objectType: "expression",
+        value: { latex: "\\sqrt{x}" },
+        selectorIds: [
+          "expression.generated.radical.square-root-as-power.radical.radical-symbol",
+          "expression.generated.radical.square-root-as-power.radical.radicand"
+        ]
+      }
+    ]
+  );
+  assert.deepEqual(
+    fixture.transformations.map((transformation) => [
+      transformation.id,
+      transformation.transformType,
+      transformation.sourceObjectIds,
+      transformation.targetObjectIds,
+      transformation.lawRefs
+    ]),
+    [
+      [
+        "transform.generated.radical.square-root-as-power.rewrite-power-as-root",
+        "rewritePowerAsRoot",
+        ["expression.generated.radical.square-root-as-power.power"],
+        ["expression.generated.radical.square-root-as-power.radical"],
+        [{ id: "law.arithmetic.rational-exponent-as-root", level: "strict" }]
+      ]
+    ]
+  );
+  assert.deepEqual(kpSemanticDiagramForwardPhases(fixture.diagram), [
+    ["transform.generated.radical.square-root-as-power.rewrite-power-as-root"]
+  ]);
+  assert.deepEqual(
+    fixture.trace.steps.map((step) => [step.id, step.latex, step.rule]),
+    [
+      [
+        "trace.generated.radical.square-root-as-power.power",
+        "x^{\\frac{1}{2}}",
+        undefined
+      ],
+      [
+        "trace.generated.radical.square-root-as-power.radical",
+        "\\sqrt{x}",
+        "rewritePowerAsRoot"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    checkKpAssetFixtureReferenceClosure({
+      bundle: fixture.bundle,
+      transformations: fixture.transformations,
+      diagram: fixture.diagram,
+      drillDownHooks: fixture.drillDownHooks,
+      flashcards: fixture.flashcards,
+      trace: fixture.trace
+    }),
+    {
+      lawId: "asset-fixture.reference-closure",
+      passed: true,
+      failures: []
+    }
   );
 });
 

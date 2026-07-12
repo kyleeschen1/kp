@@ -154,6 +154,36 @@
       "kind": "file",
       "path": "tests/generated-algebra-export-sample.test.ts",
       "summary": "Covers exponent iframe/static-step exports and export sample discovery."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Adds generated.radical family specs and list/get registry functions."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Adds radical tutorial fixture builder, IDs, LaTeX helpers, transform, and trace wiring."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Covers radical spec listing and lookup."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Covers radical object bundle, transform edge, trace, and closure."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-tutorial-card-sample.test.ts",
+      "summary": "Updates generated card sample discovery expectations for registry-driven radical inclusion."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-export-sample.test.ts",
+      "summary": "Updates generated export discovery expectations for registry-driven radical inclusion."
     }
   ],
   "verification": [
@@ -366,11 +396,36 @@
       "command": "npm run theseus -- validate",
       "status": "passed",
       "checkedAt": "2026-07-12T19:26:30.693Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:32:53.325Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:32:53.363Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/generated-algebra-tutorial-card-sample.test.ts tests/generated-algebra-export-sample.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:32:53.401Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:32:53.445Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:32:53.479Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Exposed generated exponent fixtures through generic generated algebra card, iframe export, and static-step export discovery helpers with semantic coverage."
+    "summary": "Added generated radical fixture family with square-root/power objects, registry support, trace, basic rewrite transform, and registry-driven discovery expectations."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -452,8 +507,8 @@
     {
       "id": "slice.kp.generated-math.radical-fixtures",
       "title": "Add radical fixture family",
-      "summary": "Add generated radical fixtures.",
-      "status": "planned"
+      "summary": "Generated radical fixtures now exist as registry-backed square-root/power semantic assets with trace and basic rewrite edge.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.radical-transforms",
