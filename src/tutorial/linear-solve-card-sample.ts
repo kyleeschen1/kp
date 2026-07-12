@@ -1,4 +1,7 @@
 import type { KpAnimationSampler } from "../animation/kernel.ts";
+import { sampleKpBehaviorAtProgress } from "../semantic/asset-behavior.ts";
+import { createLinearSolveKpAssetBundle } from "../semantic/linear-solve-asset.ts";
+import { createLinearSolveEquationFrameBehavior } from "../semantic/linear-solve-equation-frame-interpreter.ts";
 import {
   createLinearSolveTutorialCardFrameSampler,
   type KpTutorialCardFrame,
@@ -36,7 +39,15 @@ export interface LinearSolveTutorialCardSampleFrame {
 
 export function createLinearSolveTutorialCardSample(): LinearSolveTutorialCardSample {
   const cardSampler = createLinearSolveTutorialCardFrameSampler();
-  const equationAdapter = createKpTutorialEquationFrameAdapter(cardSampler);
+  const semanticEquationFrameBehavior = createLinearSolveEquationFrameBehavior(
+    createLinearSolveKpAssetBundle()
+  );
+  const equationAdapter = createKpTutorialEquationFrameAdapter(cardSampler, {
+    semanticFrameSampler: {
+      sample: (progress) =>
+        sampleKpBehaviorAtProgress(semanticEquationFrameBehavior, progress)
+    }
+  });
   const graphAdapter = createKpTutorialGraphFrameAdapter(cardSampler);
 
   return {

@@ -10,6 +10,7 @@ import {
   type EquationMotionFrame,
   type EquationMotionSampler
 } from "../rendering/equation-motion-sampler.ts";
+import type { KpEquationFrame } from "../semantic/equation-frame-interpreter.ts";
 import type {
   KpTutorialCardFrame,
   KpTutorialCardFrameSampler
@@ -34,10 +35,18 @@ export interface KpTutorialEquationFrame {
   readonly transitionTrackId: string;
   readonly transitionProgress: number;
   readonly equationFrame: EquationMotionFrame;
+  readonly semanticFrame?: KpEquationFrame | undefined;
+}
+
+export interface CreateKpTutorialEquationFrameAdapterOptions {
+  readonly semanticFrameSampler?:
+    | KpAnimationSampler<KpEquationFrame>
+    | undefined;
 }
 
 export function createKpTutorialEquationFrameAdapter(
-  cardSampler: KpTutorialCardFrameSampler
+  cardSampler: KpTutorialCardFrameSampler,
+  options: CreateKpTutorialEquationFrameAdapterOptions = {}
 ): KpTutorialEquationFrameAdapter {
   const panelBinding = cardSampler.binding.panels.find(
     (panel) => panel.role === "equation" && panel.target.kind === "equation-animation"
@@ -67,6 +76,7 @@ export function createKpTutorialEquationFrameAdapter(
         animation,
         cardFrame: cardSampler.sample(progress),
         panelId: panelBinding.panelId,
+        semanticFrameSampler: options.semanticFrameSampler,
         transitionSamplers,
         transitionTrackIds
       });
@@ -78,6 +88,7 @@ interface SampleKpTutorialEquationFrameInput {
   readonly animation: EquationAnimationCatalogEntry;
   readonly cardFrame: KpTutorialCardFrame;
   readonly panelId: string;
+  readonly semanticFrameSampler?: KpAnimationSampler<KpEquationFrame> | undefined;
   readonly transitionSamplers: readonly EquationMotionSampler[];
   readonly transitionTrackIds: readonly string[];
 }
@@ -109,7 +120,10 @@ function sampleKpTutorialEquationFrame(
     transitionIndex,
     transitionTrackId: selectedTrack.trackId,
     transitionProgress: selectedTrack.localProgress,
-    equationFrame: transitionSampler.sample(selectedTrack.localProgress)
+    equationFrame: transitionSampler.sample(selectedTrack.localProgress),
+    ...(input.semanticFrameSampler === undefined
+      ? {}
+      : { semanticFrame: input.semanticFrameSampler.sample(input.cardFrame.progress) })
   };
 }
 

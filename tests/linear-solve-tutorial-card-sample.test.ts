@@ -15,6 +15,16 @@ test("linear solve tutorial card sample synchronizes card, equation, and graph f
   assert.equal(frame.cardFrame.parentTimelineFrame.beat, 25);
   assert.equal(frame.equationFrame.transitionIndex, 1);
   assert.equal(frame.equationFrame.transitionProgress, 0.5);
+  assert.deepEqual(frame.equationFrame.semanticFrame?.activeTransformationIds, [
+    "transform.linear-solve.cancel-left-additive-inverse"
+  ]);
+  assert.deepEqual(frame.equationFrame.semanticFrame?.drillDownIds, [
+    "drilldown.linear-solve.cancel-additive-inverse"
+  ]);
+  assert.deepEqual(frame.equationFrame.semanticFrame?.flashcardIds, [
+    "card.linear-solve.explain-cancel",
+    "card.linear-solve.focus-x-persistence"
+  ]);
   assert.equal(frame.graphFrame.graphFrame.progress, 0.5);
   assert.equal(frame.graphFrame.graphFrame.timelineId, "timeline.linear-solve.shared");
   assert.deepEqual(frame.diagnostics, []);
