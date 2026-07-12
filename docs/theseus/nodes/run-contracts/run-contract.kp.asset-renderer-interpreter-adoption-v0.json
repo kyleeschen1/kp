@@ -150,6 +150,11 @@
       "kind": "file",
       "path": "tests/linear-solve-tutorial-card-sample.test.ts",
       "summary": "Covers semantic frame transformation, drill-down, and flashcard ids on the live linear-solve tutorial card."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-equation-frame-export-sampler.test.ts",
+      "summary": "Covers export sampling with the semantic-enriched live equation adapter while preserving old visual frame ordering and rewind identity."
     }
   ],
   "verification": [
@@ -327,8 +332,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T02:32:46.744Z",
-      "scope": "slice 11 tutorial card interpreter path Theseus validation"
+      "scope": "slice 11 tutorial card interpreter path Theseus validation",
+      "checkedAt": "2026-07-12T02:32:46.744Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-equation-frame-export-sampler.test.ts tests/tutorial-card-frame-sequence-artifact.test.ts tests/tutorial-card-frame-sequence-rewind-check.test.ts tests/tutorial-card-frame-sequence-preview.test.ts tests/linear-solve-tutorial-card-sample.test.ts tests/tutorial-card-export-artifact.test.ts",
+      "status": "passed",
+      "scope": "slice 12 export stability tests",
+      "checkedAt": "2026-07-12T02:36:23.375Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 12 export stability typecheck",
+      "checkedAt": "2026-07-12T02:36:25.248Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T02:36:27.135Z",
+      "scope": "slice 12 export stability Theseus validation"
     }
   ],
   "progress": {
@@ -420,12 +443,13 @@
     {
       "id": "slice.kp.asset-renderer.export-stability",
       "title": "Keep existing card/export behavior stable after source-of-truth swap",
-      "status": "ready"
+      "summary": "Added export regression coverage proving semantic-enriched equation frames preserve existing export ordering, visual transition fields, and rewind identity.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.selector-law",
       "title": "Add selector correspondence law helper",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.diagram-associativity-law",
