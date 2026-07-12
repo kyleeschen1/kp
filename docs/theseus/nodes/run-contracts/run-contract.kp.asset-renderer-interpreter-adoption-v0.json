@@ -100,6 +100,21 @@
       "kind": "file",
       "path": "tests/kp-linear-solve-equation-frame-interpreter.test.ts",
       "summary": "Covers source-to-target selector correspondence pairs on sampled linear-solve frames."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/equation-frame-interpreter.ts",
+      "summary": "Adds compact inspection metadata to renderer-neutral equation frames."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/linear-solve-equation-frame-interpreter.ts",
+      "summary": "Annotates linear-solve equation-frame behavior samples with behavior/time/active id inspection metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-linear-solve-equation-frame-interpreter.test.ts",
+      "summary": "Covers inspection metadata on sampled linear-solve equation frames."
     }
   ],
   "verification": [
@@ -205,8 +220,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-11T23:09:48.163Z",
-      "scope": "slice 7 selector correspondence Theseus validation"
+      "scope": "slice 7 selector correspondence Theseus validation",
+      "checkedAt": "2026-07-11T23:09:48.163Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-linear-solve-equation-frame-interpreter.test.ts tests/kp-equation-frame-interpreter.test.ts tests/kp-asset-inspection.test.ts tests/kp-asset-decomposition.test.ts tests/kp-linear-solve-asset.test.ts tests/kp-asset-behavior.test.ts",
+      "status": "passed",
+      "scope": "slice 8 equation-frame inspection metadata tests",
+      "checkedAt": "2026-07-12T02:19:51.632Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 8 equation-frame inspection metadata typecheck",
+      "checkedAt": "2026-07-12T02:19:55.422Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T02:20:00.160Z",
+      "scope": "slice 8 equation-frame inspection metadata Theseus validation"
     }
   ],
   "progress": {
@@ -274,12 +307,13 @@
     {
       "id": "slice.kp.asset-renderer.inspection-metadata",
       "title": "Attach inspection API output to equation frame samples",
-      "status": "ready"
+      "summary": "Attached compact inspection metadata to behavior-sampled equation frames, including behavior id, time, progress, phase id, active transformations, and active selectors.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.drilldown-metadata",
       "title": "Wire drill-down hooks into equation frame/sample metadata",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.flashcard-metadata",

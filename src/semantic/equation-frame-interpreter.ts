@@ -51,6 +51,15 @@ export interface KpEquationFrameSelectorCorrespondenceRef {
   readonly preserves: readonly KpTransformationPreservation[];
 }
 
+export interface KpEquationFrameInspection {
+  readonly behaviorId: string;
+  readonly timeMs: number;
+  readonly progress: number;
+  readonly phaseId?: string | undefined;
+  readonly activeTransformationIds: readonly string[];
+  readonly activeSelectorIds: readonly string[];
+}
+
 export interface KpEquationFrame {
   readonly id: string;
   readonly assetId: string;
@@ -61,6 +70,7 @@ export interface KpEquationFrame {
   readonly transformationRefs: readonly KpEquationFrameTransformationRef[];
   readonly selectorRefs: readonly KpEquationFrameSelectorRef[];
   readonly selectorCorrespondenceRefs: readonly KpEquationFrameSelectorCorrespondenceRef[];
+  readonly inspection?: KpEquationFrameInspection | undefined;
   readonly drillDownIds?: readonly string[] | undefined;
   readonly flashcardIds?: readonly string[] | undefined;
   readonly diagnostics: readonly KpInterpreterDiagnostic[];

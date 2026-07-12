@@ -111,4 +111,23 @@ test("linear-solve equation frame behavior exposes active semantic transformatio
   assert.deepEqual(frame.activeTransformationIds, [
     "transform.linear-solve.cancel-left-additive-inverse"
   ]);
+  assert.deepEqual(frame.inspection, {
+    behaviorId: "behavior.linear-solve.katex-equation-frame",
+    timeMs: 1500,
+    progress: 0.5,
+    phaseId: "transform.linear-solve.cancel-left-additive-inverse",
+    activeTransformationIds: [
+      "transform.linear-solve.cancel-left-additive-inverse"
+    ],
+    activeSelectorIds: [
+      "equation.linear-solve.after-subtract.lhs.x",
+      "equation.linear-solve.left-simplified.lhs.x",
+      "equation.linear-solve.after-subtract.equals",
+      "equation.linear-solve.left-simplified.equals",
+      "equation.linear-solve.after-subtract.rhs.7",
+      "equation.linear-solve.left-simplified.rhs.7",
+      "equation.linear-solve.after-subtract.rhs.minus3",
+      "equation.linear-solve.left-simplified.rhs.minus3"
+    ]
+  });
 });

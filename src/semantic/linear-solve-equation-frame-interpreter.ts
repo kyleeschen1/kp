@@ -44,15 +44,29 @@ export function createLinearSolveEquationFrameBehavior(
   asset: LinearSolveKpAsset
 ): LinearSolveEquationFrameBehavior {
   const interpreter = createLinearSolveEquationFrameInterpreter();
+  const behaviorId = "behavior.linear-solve.katex-equation-frame";
 
   return createKpBehavior({
-    id: "behavior.linear-solve.katex-equation-frame",
+    id: behaviorId,
     durationMs: Math.max(1, asset.transformations.length) * 1000,
-    sample: ({ progress }) =>
-      interpreter.interpret({
+    sample: ({ timeMs, progress }) => {
+      const frame = interpreter.interpret({
         asset,
         progress
-      }).output
+      }).output;
+
+      return {
+        ...frame,
+        inspection: {
+          behaviorId,
+          timeMs,
+          progress: frame.progress,
+          phaseId: frame.activeTransformationIds[0],
+          activeTransformationIds: frame.activeTransformationIds,
+          activeSelectorIds: frame.selectorRefs.map((ref) => ref.selectorId)
+        }
+      };
+    }
   });
 }
 
