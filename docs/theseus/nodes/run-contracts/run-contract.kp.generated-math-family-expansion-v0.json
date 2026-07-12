@@ -194,6 +194,26 @@
       "kind": "file",
       "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
       "summary": "Covers radical transform preservation metadata and correspondence."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Adds radical explain-transform flashcard tied to the rewrite transform."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-tutorial-card-sample.test.ts",
+      "summary": "Covers direct radical card sampling and semantic frame flashcard references."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-export-sample.test.ts",
+      "summary": "Covers direct radical iframe and static-step export manifests."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-smoke.browser.spec.ts",
+      "summary": "Adds browser smoke coverage for generated radical iframe exports."
     }
   ],
   "verification": [
@@ -451,11 +471,36 @@
       "command": "npm run theseus -- validate",
       "status": "passed",
       "checkedAt": "2026-07-12T19:35:35.457Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-tutorial-card-sample.test.ts tests/generated-algebra-export-sample.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:39:20.107Z"
+    },
+    {
+      "command": "npx playwright test tests/generated-algebra-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:39:20.141Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/generated-algebra-tutorial-card-sample.test.ts tests/generated-algebra-export-sample.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:39:20.186Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:39:20.220Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:39:20.258Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Enriched generated radical rewrite semantics with identity/value preservation and base-to-radicand selector correspondence."
+    "summary": "Wired generated radical fixtures through card sampling, iframe/static exports, and browser smoke coverage with a radical explanation flashcard."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -549,8 +594,8 @@
     {
       "id": "slice.kp.generated-math.radical-cards-exports",
       "title": "Wire radical samples through cards and exports",
-      "summary": "Expose radical fixtures through card, export, and browser paths.",
-      "status": "planned"
+      "summary": "Generated radical samples now have card/export/browser coverage and a transform-linked explanation flashcard.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.function-wrap-fixtures",

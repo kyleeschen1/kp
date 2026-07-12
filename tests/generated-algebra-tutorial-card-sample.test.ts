@@ -107,6 +107,52 @@ test("generated algebra tutorial card samples expose exponent fixture semantics"
   );
 });
 
+test("generated algebra tutorial card samples expose radical fixture semantics", () => {
+  const sample = createGeneratedAlgebraTutorialCardSample(
+    "generated.radical.square-root-as-power"
+  );
+  const frame = sample.sample(0.5);
+
+  assert.equal(
+    sample.id,
+    generatedAlgebraTutorialCardSampleId(
+      "generated.radical.square-root-as-power"
+    )
+  );
+  assert.equal(sample.fixtureId, "generated.radical.square-root-as-power");
+  assert.equal(sample.fixtureFamilyId, "generated.radical");
+  assert.equal(sample.title, "Generated rewrite square root as power");
+  assert.equal(
+    frame.equationFrame.semanticFrame?.assetId,
+    "asset.generated.radical.square-root-as-power"
+  );
+  assert.deepEqual(frame.equationFrame.semanticFrame?.activeTransformationIds, [
+    "transform.generated.radical.square-root-as-power.rewrite-power-as-root"
+  ]);
+  assert.deepEqual(
+    frame.equationFrame.semanticFrame?.objectRefs.map((ref) => [
+      ref.objectId,
+      ref.role
+    ]),
+    [
+      ["expression.generated.radical.square-root-as-power.power", "source"],
+      ["expression.generated.radical.square-root-as-power.radical", "target"]
+    ]
+  );
+  assert.deepEqual(frame.equationFrame.semanticFrame?.flashcardIds, [
+    "card.generated.radical.square-root-as-power.explain-radical-power"
+  ]);
+  assert.deepEqual(frame.diagnostics, []);
+  assert.deepEqual(
+    checkKpRendererFrameSemanticPreservation(frame.equationFrame),
+    {
+      lawId: "renderer-frame.semantic-preservation",
+      passed: true,
+      failures: []
+    }
+  );
+});
+
 test("generated algebra tutorial card sample discovery includes exponent fixtures", () => {
   const samples = createGeneratedAlgebraTutorialCardSamples();
 

@@ -167,6 +167,63 @@ test("generated algebra static-step export sample preserves exponent trace seman
   assert.deepEqual(fixture.diagnostics, []);
 });
 
+test("generated algebra iframe export sample renders radical fixture card HTML", () => {
+  const fixture = createGeneratedAlgebraIframeExportSample(
+    "generated.radical.square-root-as-power",
+    0.5
+  );
+
+  assert.equal(
+    fixture.artifact.id,
+    "artifact.generated.radical.square-root-as-power.iframe"
+  );
+  assert.equal(fixture.fixtureFamilyId, "generated.radical");
+  assert.equal(
+    fixture.artifact.metadata?.["generatedFixtureFamilyId"],
+    "generated.radical"
+  );
+  assert.deepEqual(fixture.dependencyManifest.transformationIds, [
+    "transform.generated.radical.square-root-as-power.rewrite-power-as-root"
+  ]);
+  assert.deepEqual(fixture.dependencyManifest.flashcardIds, [
+    "card.generated.radical.square-root-as-power.explain-radical-power"
+  ]);
+  assert.match(
+    fixture.html,
+    /data-kp-tutorial-card="tutorial\.generated\.radical\.square-root-as-power\.card\.live-sample"/
+  );
+  assert.match(
+    fixture.html,
+    /data-kp-tutorial-fixture="generated\.radical\.square-root-as-power"/
+  );
+  assert.deepEqual(fixture.diagnostics, []);
+});
+
+test("generated algebra static-step export sample preserves radical trace semantics", () => {
+  const fixture = createGeneratedAlgebraStaticStepExportSample(
+    "generated.radical.square-root-as-power"
+  );
+
+  assert.equal(
+    fixture.sequence.artifact.id,
+    "artifact.generated.radical.square-root-as-power.steps"
+  );
+  assert.equal(fixture.fixtureFamilyId, "generated.radical");
+  assert.equal(
+    fixture.sequence.steps[2]?.frame.equationFrame.semanticFrame?.assetId,
+    "asset.generated.radical.square-root-as-power"
+  );
+  assert.deepEqual(fixture.dependencyManifest.traceStepIds, [
+    "trace.generated.radical.square-root-as-power.power",
+    "trace.generated.radical.square-root-as-power.radical"
+  ]);
+  assert.deepEqual(fixture.dependencyManifest.flashcardIds, [
+    "card.generated.radical.square-root-as-power.explain-radical-power"
+  ]);
+  assert.deepEqual(fixture.dependencyManifest.diagnostics, []);
+  assert.deepEqual(fixture.diagnostics, []);
+});
+
 test("generated algebra export sample discovery includes exponent fixtures", () => {
   const iframeSamples = createGeneratedAlgebraIframeExportSamples(0.25);
   const staticStepSamples = createGeneratedAlgebraStaticStepExportSamples();

@@ -954,7 +954,7 @@ export function createGeneratedRadicalTutorialFixture(
     diagram,
     trace: createGeneratedRadicalTrace(ids, latex),
     drillDownHooks: [],
-    flashcards: []
+    flashcards: createGeneratedRadicalFlashcards(input, ids)
   };
 }
 
@@ -1002,6 +1002,29 @@ function createGeneratedRadicalTrace(
       }
     ]
   };
+}
+
+function createGeneratedRadicalFlashcards(
+  input: GeneratedRadicalTutorialFixtureSpec,
+  ids: GeneratedRadicalIds
+): readonly KpFlashcardSpec[] {
+  return [
+    createKpFlashcardSpec({
+      id: `card.${input.id}.explain-radical-power`,
+      kind: "explain-transform",
+      title: "Explain radical power notation",
+      assetId: ids.asset,
+      prompt: "How does this rational exponent become a radical?",
+      objectIds: [ids.power, ids.radical],
+      transformationIds: [ids.rewrite],
+      timeMs: 600,
+      answer: {
+        kind: "text",
+        value:
+          "A denominator in a rational exponent gives the root index, so a one-half exponent is a square root."
+      }
+    })
+  ];
 }
 
 function createGeneratedLinearSolveTransformations(
