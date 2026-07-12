@@ -165,6 +165,16 @@
       "kind": "file",
       "path": "tests/kp-asset-laws.test.ts",
       "summary": "Covers selector correspondence closure passing and missing-selector failures."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-laws.ts",
+      "summary": "Adds a diagram sequence associativity law helper over boundaries and forward phases."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-asset-laws.test.ts",
+      "summary": "Covers equivalent regrouping of nested semantic diagram sequences."
     }
   ],
   "verification": [
@@ -378,8 +388,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T02:39:35.429Z",
-      "scope": "slice 13 selector correspondence law Theseus validation"
+      "scope": "slice 13 selector correspondence law Theseus validation",
+      "checkedAt": "2026-07-12T02:39:35.429Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-asset-laws.test.ts tests/kp-asset-diagram.test.ts",
+      "status": "passed",
+      "scope": "slice 14 diagram associativity law focused tests",
+      "checkedAt": "2026-07-12T02:46:55.262Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 14 diagram associativity law typecheck",
+      "checkedAt": "2026-07-12T02:47:01.687Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T02:47:07.481Z",
+      "scope": "slice 14 diagram associativity law Theseus validation"
     }
   ],
   "progress": {
@@ -483,12 +511,13 @@
     {
       "id": "slice.kp.asset-renderer.diagram-associativity-law",
       "title": "Add diagram associativity law helper",
-      "status": "ready"
+      "summary": "Added diagram sequence associativity law helper comparing source/target boundaries and forward phase order under regrouping.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.interpreter-composition-loss",
       "title": "Add interpreter composition and loss diagnostics tests",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.flashcard-closure-law",

@@ -15,6 +15,7 @@ import {
   checkKpBehaviorDeterminism,
   checkKpBehaviorReparameterization,
   checkKpDiagramRewindLaw,
+  checkKpDiagramSequenceAssociativityLaw,
   checkKpEquationFrameSelectorCorrespondenceClosure
 } from "../src/semantic/asset-laws.ts";
 import type { KpEquationFrame } from "../src/semantic/equation-frame-interpreter.ts";
@@ -150,6 +151,72 @@ test("checkKpEquationFrameSelectorCorrespondenceClosure reports missing frame se
       }
     ]
   });
+});
+
+test("checkKpDiagramSequenceAssociativityLaw validates equivalent regrouping", () => {
+  const first = createKpSemanticTransformation({
+    id: "transform.first",
+    transformType: "first",
+    title: "First",
+    sourceObjectIds: ["equation.a"],
+    targetObjectIds: ["equation.b"],
+    preserves: ["value"]
+  });
+  const second = createKpSemanticTransformation({
+    id: "transform.second",
+    transformType: "second",
+    title: "Second",
+    sourceObjectIds: ["equation.b"],
+    targetObjectIds: ["equation.c"],
+    preserves: ["value"]
+  });
+  const third = createKpSemanticTransformation({
+    id: "transform.third",
+    transformType: "third",
+    title: "Third",
+    sourceObjectIds: ["equation.c"],
+    targetObjectIds: ["equation.d"],
+    preserves: ["value"]
+  });
+  const leftAssociated = createKpSemanticDiagramSequence({
+    id: "diagram.left-associated",
+    title: "Left associated",
+    children: [
+      createKpSemanticDiagramSequence({
+        id: "diagram.first-second",
+        title: "First then second",
+        children: [
+          createKpTransformationDiagramLeaf(first),
+          createKpTransformationDiagramLeaf(second)
+        ]
+      }),
+      createKpTransformationDiagramLeaf(third)
+    ]
+  });
+  const rightAssociated = createKpSemanticDiagramSequence({
+    id: "diagram.right-associated",
+    title: "Right associated",
+    children: [
+      createKpTransformationDiagramLeaf(first),
+      createKpSemanticDiagramSequence({
+        id: "diagram.second-third",
+        title: "Second then third",
+        children: [
+          createKpTransformationDiagramLeaf(second),
+          createKpTransformationDiagramLeaf(third)
+        ]
+      })
+    ]
+  });
+
+  assert.deepEqual(
+    checkKpDiagramSequenceAssociativityLaw(leftAssociated, rightAssociated),
+    {
+      lawId: "diagram.sequence-associativity",
+      passed: true,
+      failures: []
+    }
+  );
 });
 
 function equationFrame(input: {

@@ -95,6 +95,41 @@ export function checkKpDiagramRewindLaw(
   return lawResult("diagram.rewind", failures);
 }
 
+export function checkKpDiagramSequenceAssociativityLaw(
+  left: KpSemanticDiagram,
+  right: KpSemanticDiagram
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+
+  if (!framesEqual(left.sourceObjectIds, right.sourceObjectIds)) {
+    failures.push({
+      path: "sourceObjectIds",
+      message: `Diagram ${left.id} and ${right.id} must have the same source boundary.`
+    });
+  }
+
+  if (!framesEqual(left.targetObjectIds, right.targetObjectIds)) {
+    failures.push({
+      path: "targetObjectIds",
+      message: `Diagram ${left.id} and ${right.id} must have the same target boundary.`
+    });
+  }
+
+  if (
+    !framesEqual(
+      kpSemanticDiagramForwardPhases(left),
+      kpSemanticDiagramForwardPhases(right)
+    )
+  ) {
+    failures.push({
+      path: "forwardPhases",
+      message: `Diagram ${left.id} and ${right.id} must preserve forward phase order under regrouping.`
+    });
+  }
+
+  return lawResult("diagram.sequence-associativity", failures);
+}
+
 export function checkKpPortDeterminism<TInput>(
   port: KpExternalPort<TInput>,
   input: TInput
