@@ -21,7 +21,9 @@ import {
 
 export interface LinearSolveTutorialCardSample
   extends KpAnimationSampler<LinearSolveTutorialCardSampleFrame> {
-  readonly id: "tutorial.linear-solve.card.live-sample";
+  readonly id: string;
+  readonly title: string;
+  readonly fixtureId?: string | undefined;
   readonly manifestId: string;
   readonly cardSampler: KpTutorialCardFrameSampler;
   readonly equationAdapter: KpTutorialEquationFrameAdapter;
@@ -52,6 +54,7 @@ export function createLinearSolveTutorialCardSample(): LinearSolveTutorialCardSa
 
   return {
     id: "tutorial.linear-solve.card.live-sample",
+    title: "Solve x + 3 = 7",
     manifestId: cardSampler.manifestId,
     cardSampler,
     equationAdapter,

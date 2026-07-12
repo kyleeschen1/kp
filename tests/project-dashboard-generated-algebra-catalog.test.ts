@@ -60,7 +60,7 @@ test("generated algebra dashboard catalog exposes tutorial-card sample targets",
       ["data-kp-preview-link", "tutorial-card"],
       [
         "data-kp-preview-tutorial-card",
-        "tutorial.linear-solve.card.live-sample"
+        "tutorial.generated.linear-solve.x-plus-3.card.live-sample"
       ],
       ["data-kp-preview-manifest-id", "tutorial.linear-solve.card"],
       [
@@ -84,7 +84,7 @@ test("renderProjectDashboard links generated fixture rows to tutorial-card previ
   assert.match(html, /data-kp-preview-link="tutorial-card"/);
   assert.match(
     html,
-    /data-kp-preview-tutorial-card="tutorial\.linear-solve\.card\.live-sample"/
+    /data-kp-preview-tutorial-card="tutorial\.generated\.linear-solve\.y-plus-5\.card\.live-sample"/
   );
   assert.match(
     html,

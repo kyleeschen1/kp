@@ -10,11 +10,15 @@ export function renderKpTutorialCardHtmlShell(
 ): string {
   const equationPanelId = frame.equationFrame.panelId;
   const graphPanelId = frame.graphFrame.panelId;
+  const fixtureAttr =
+    sample.fixtureId === undefined
+      ? ""
+      : ` data-kp-tutorial-fixture="${escapeAttr(sample.fixtureId)}"`;
 
   return [
-    `<section class="kp-tutorial-card" data-kp-tutorial-card="${escapeAttr(sample.id)}" data-kp-tutorial-manifest="${escapeAttr(sample.manifestId)}" data-kp-tutorial-progress="${escapeAttr(String(frame.progress))}" data-kp-tutorial-clock="${escapeAttr(frame.cardFrame.parentTimelineFrame.timelineId)}" data-kp-tutorial-diagnostics="${frame.diagnostics.length}">`,
+    `<section class="kp-tutorial-card" data-kp-tutorial-card="${escapeAttr(sample.id)}" data-kp-tutorial-manifest="${escapeAttr(sample.manifestId)}" data-kp-tutorial-progress="${escapeAttr(String(frame.progress))}" data-kp-tutorial-clock="${escapeAttr(frame.cardFrame.parentTimelineFrame.timelineId)}" data-kp-tutorial-diagnostics="${frame.diagnostics.length}"${fixtureAttr}>`,
     `  <header class="kp-tutorial-card__header">`,
-    `    <h2>${escapeHtml("Solve x + 3 = 7")}</h2>`,
+    `    <h2>${escapeHtml(sample.title)}</h2>`,
     `  </header>`,
     `  <div class="kp-tutorial-card__layout" data-kp-tutorial-layout="${escapeAttr(frame.cardFrame.layoutFrame.sampleId)}">`,
     `    <section class="kp-tutorial-card__panel" data-kp-tutorial-panel="equation" data-kp-tutorial-panel-id="${escapeAttr(equationPanelId)}" data-kp-tutorial-equation-animation="${escapeAttr(frame.equationFrame.animationId)}" data-kp-tutorial-equation-transition-index="${frame.equationFrame.transitionIndex}" data-kp-tutorial-equation-progress="${escapeAttr(String(frame.equationFrame.transitionProgress))}" data-kp-tutorial-equation-token-count="${frame.equationFrame.equationFrame.tokens.length}">`,

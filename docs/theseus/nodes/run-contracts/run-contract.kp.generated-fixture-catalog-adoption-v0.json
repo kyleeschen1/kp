@@ -143,6 +143,36 @@
       "kind": "file",
       "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
       "summary": "Generated fixture rows assert tutorial-card preview target links."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-linear-solve-card-sample.ts",
+      "summary": "Generated linear-solve tutorial-card sample swaps in generated fixture semantics."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/card-html-shell.ts",
+      "summary": "Tutorial-card shell renders sample titles and fixture identity."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/linear-solve-card-sample.ts",
+      "summary": "Base tutorial-card sample exposes general title and optional fixture metadata."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-fixture-sample-targets.ts",
+      "summary": "Generated fixture sample targets now point at concrete generated tutorial-card sample ids."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-linear-solve-tutorial-card-sample.test.ts",
+      "summary": "Generated tutorial-card sample verifies semantic frame and rendered fixture identity."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "summary": "Generated dashboard rows assert concrete generated tutorial-card sample ids."
     }
   ],
   "verification": [
@@ -267,8 +297,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T05:39:25.821Z",
-      "scope": "Theseus graph validation"
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-12T05:39:25.821Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-linear-solve-tutorial-card-sample.test.ts tests/linear-solve-tutorial-card-sample.test.ts tests/tutorial-card-html-shell.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard.test.ts tests/tutorial-launch-targets.test.ts",
+      "status": "passed",
+      "scope": "generated fixture tutorial-card sample rendering",
+      "checkedAt": "2026-07-12T05:48:27.892Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 9 generated tutorial-card sample typecheck",
+      "checkedAt": "2026-07-12T05:48:34.802Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T05:48:44.517Z",
+      "scope": "slice 9 generated tutorial-card sample Theseus validation"
     }
   ],
   "allowedWork": [
@@ -341,7 +389,7 @@
     {
       "id": "slice.kp.generated-fixture.render-sample-card",
       "title": "Render one generated tutorial card sample",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.export-sample-path",

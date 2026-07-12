@@ -1,7 +1,7 @@
 import type { GeneratedLinearSolveTutorialFixture } from "../semantic/generated-algebra-tutorial-fixture.ts";
+import { generatedLinearSolveTutorialCardSampleId } from "../tutorial/generated-linear-solve-card-sample.ts";
 import type { ProjectDashboardSampleTarget } from "./model.ts";
 
-const linearSolveTutorialCardSampleId = "tutorial.linear-solve.card.live-sample";
 const linearSolveTutorialCardManifestId = "tutorial.linear-solve.card";
 const linearSolveTutorialCardLayoutId = "layout.sample.linear-solve-synchronized-panel";
 const linearSolveTutorialCardClockId = "solve-x-shared-clock";
@@ -12,7 +12,7 @@ export function createGeneratedLinearSolveTutorialCardSampleTarget(
   return {
     kind: "tutorial-card",
     label: `Open ${lowerFirst(fixture.title)} tutorial card`,
-    sampleId: linearSolveTutorialCardSampleId,
+    sampleId: generatedLinearSolveTutorialCardSampleId(fixture.id),
     manifestId: linearSolveTutorialCardManifestId,
     layoutId: linearSolveTutorialCardLayoutId,
     sharedClockId: linearSolveTutorialCardClockId,
