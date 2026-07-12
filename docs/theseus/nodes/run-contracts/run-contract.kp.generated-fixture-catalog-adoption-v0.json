@@ -38,6 +38,21 @@
       "kind": "file",
       "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
       "summary": "Consumes and re-exports the generated fixture registry while preserving the existing tutorial fixture API."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Extracts generated algebra fixture agenda rows into a reusable dashboard catalog module."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Consumes generated algebra agenda rows from the extracted catalog module."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "summary": "Covers generated algebra dashboard catalog row creation and query filtering."
     }
   ],
   "verification": [
@@ -72,8 +87,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T04:32:16.912Z",
-      "scope": "slice 3 generated fixture registry Theseus validation"
+      "scope": "slice 3 generated fixture registry Theseus validation",
+      "checkedAt": "2026-07-12T04:32:16.912Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "slice 4 generated algebra dashboard catalog focused tests",
+      "checkedAt": "2026-07-12T04:43:33.896Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 4 generated algebra dashboard catalog typecheck",
+      "checkedAt": "2026-07-12T04:45:05.139Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T04:46:55.151Z",
+      "scope": "slice 4 generated algebra dashboard catalog Theseus validation"
     }
   ],
   "allowedWork": [
@@ -111,13 +144,14 @@
     {
       "id": "slice.kp.generated-fixture.registry",
       "title": "Extract generated fixture registry",
-      "status": "complete",
-      "summary": "Extracted generated linear-solve fixture specs and lookup into a reusable semantic registry module while preserving the existing fixture API."
+      "summary": "Extracted generated linear-solve fixture specs and lookup into a reusable semantic registry module while preserving the existing fixture API.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.dashboard-row-catalog",
       "title": "Extract semantic dashboard row catalog",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Extracted generated algebra fixture agenda row construction into a reusable dashboard catalog module and kept renderer output stable."
     },
     {
       "id": "slice.kp.generated-fixture.dashboard-consumption",
