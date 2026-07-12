@@ -431,6 +431,7 @@ function sampleTargetSearchFields(
           target.manifestId,
           target.layoutId ?? "",
           target.sharedClockId ?? "",
+          target.fixtureId ?? "",
           "tutorial card live sample"
         ];
       case "export-artifact":

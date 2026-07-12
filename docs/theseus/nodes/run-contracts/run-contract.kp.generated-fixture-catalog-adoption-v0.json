@@ -108,6 +108,41 @@
       "kind": "file",
       "path": "src/project-dashboard/render.ts",
       "summary": "Consumes shared dashboard asset-preview adapter for hand-authored semantic asset gallery rows."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Generated algebra rows now emit tutorial-card sample links for fixture variants."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/sample-target-preview.ts",
+      "summary": "Shared dashboard adapter for sample-target preview fields, links, and search text."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-fixture-sample-targets.ts",
+      "summary": "Generated fixture tutorial-card sample-target registry."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Dashboard renderer consumes shared sample-target preview helpers."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/model.ts",
+      "summary": "Tutorial-card sample targets can carry fixture identity."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/theseus-adapter.ts",
+      "summary": "Theseus dashboard export search includes tutorial-card fixture identity."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "summary": "Generated fixture rows assert tutorial-card preview target links."
     }
   ],
   "verification": [
@@ -214,8 +249,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T05:24:03.274Z",
-      "scope": "slice 7 shared dashboard asset-preview adapter Theseus validation"
+      "scope": "slice 7 shared dashboard asset-preview adapter Theseus validation",
+      "checkedAt": "2026-07-12T05:24:03.274Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard.test.ts tests/project-dashboard-semantic-asset-catalog.test.ts tests/tutorial-launch-targets.test.ts",
+      "status": "passed",
+      "scope": "generated fixture tutorial-card sample target registry",
+      "checkedAt": "2026-07-12T05:38:02.260Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript project checks",
+      "checkedAt": "2026-07-12T05:39:14.827Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T05:39:25.821Z",
+      "scope": "Theseus graph validation"
     }
   ],
   "allowedWork": [
@@ -277,13 +330,13 @@
     {
       "id": "slice.kp.generated-fixture.preview-interpreter",
       "title": "Use preview interpreter across generated rows",
-      "status": "complete",
-      "summary": "Extracted a shared dashboard asset-preview adapter and made generated and hand-authored semantic asset rows consume it."
+      "summary": "Extracted a shared dashboard asset-preview adapter and made generated and hand-authored semantic asset rows consume it.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.tutorial-sample-registry",
       "title": "Wire generated fixtures into tutorial-card sample registry",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.render-sample-card",

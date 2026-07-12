@@ -61,6 +61,7 @@ export type ProjectDashboardSampleTarget =
       readonly manifestId: string;
       readonly layoutId?: string;
       readonly sharedClockId?: string;
+      readonly fixtureId?: string;
     }
   | {
       readonly kind: "export-artifact";
@@ -430,6 +431,7 @@ function sampleTargetSearchFields(
           target.manifestId,
           target.layoutId ?? "",
           target.sharedClockId ?? "",
+          target.fixtureId ?? "",
           "tutorial card live sample"
         ];
       case "export-artifact":

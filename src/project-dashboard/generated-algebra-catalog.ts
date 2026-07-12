@@ -10,7 +10,14 @@ import {
   dashboardAssetPreviewSearchFields,
   type DashboardAssetPreviewField
 } from "./asset-preview-fields.ts";
+import { createGeneratedLinearSolveTutorialCardSampleTarget } from "./generated-fixture-sample-targets.ts";
 import { projectDashboardTextFieldsMatch } from "./model.ts";
+import {
+  dashboardSampleTargetPreviewFields,
+  dashboardSampleTargetPreviewLinks,
+  dashboardSampleTargetSearchFields,
+  type DashboardSampleTargetPreviewLink
+} from "./sample-target-preview.ts";
 
 export type GeneratedAlgebraAgendaPreviewField = DashboardAssetPreviewField;
 
@@ -26,6 +33,7 @@ export interface GeneratedAlgebraFixtureAgendaRow {
   readonly dataAttributes: readonly [string, string][];
   readonly relatedIds: readonly string[];
   readonly previewFields: readonly GeneratedAlgebraAgendaPreviewField[];
+  readonly previewLinks: readonly DashboardSampleTargetPreviewLink[];
   readonly searchFields: readonly string[];
 }
 
@@ -39,6 +47,9 @@ export function createGeneratedAlgebraFixtureAgendaRows(
     );
     const initialLatex = latexValueAt(fixture, 0);
     const solvedLatex = latexValueAt(fixture, fixture.bundle.objects.length - 1);
+    const sampleTargets = [
+      createGeneratedLinearSolveTutorialCardSampleTarget(fixture)
+    ];
 
     return {
       id: agendaIdFromGeneratedFixtureId(fixture.id),
@@ -59,8 +70,10 @@ export function createGeneratedAlgebraFixtureAgendaRows(
         { label: "Initial LaTeX", value: initialLatex },
         { label: "Solved LaTeX", value: solvedLatex },
         { label: "Trace steps", value: String(fixture.trace.steps.length) },
+        ...dashboardSampleTargetPreviewFields(sampleTargets),
         ...dashboardAssetPreviewFields(interpretation)
       ],
+      previewLinks: dashboardSampleTargetPreviewLinks(sampleTargets),
       searchFields: [
         "semantic asset catalog",
         "generated algebra fixture catalog",
@@ -88,6 +101,7 @@ export function createGeneratedAlgebraFixtureAgendaRows(
           ...(card.selectorIds ?? []),
           ...(card.transformationIds ?? [])
         ]),
+        ...dashboardSampleTargetSearchFields(sampleTargets),
         ...dashboardAssetPreviewSearchFields(interpretation)
       ]
     };
