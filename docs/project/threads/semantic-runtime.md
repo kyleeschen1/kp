@@ -2,9 +2,10 @@
 
 Status: active
 Last Updated: 2026-07-12
-Current Next Action: Move generated algebra and dashboard asset-row registries
-out of ad hoc dashboard helpers, then wire generated fixtures into tutorial-card
-and export/sample paths.
+Current Next Action: Expand generated tutorial families and promote more
+renderers to consume semantic frames, now that generated linear-solve fixtures
+flow through cards, exports, laws, diagnostics, dashboard rows, and browser
+smoke coverage.
 
 ## Goal
 
@@ -91,10 +92,19 @@ asset-preview interpreter, surfaced the linear-solve asset and generated
 linear-solve fixtures through interpreter-backed dashboard rows, and verified
 dashboard browser rendering after those changes.
 
-The next priority is to make those paths less sample-specific. Generated
-tutorial families, media encoders, graph/visual runtime unification, and
-program-trace visualizations should all use the asset-calculus framework rather
-than running ahead of it.
+The generated fixture catalog adoption loop established the first generated
+tutorial family as a reusable semantic/export/dashboard path. Generated
+linear-solve fixtures now cover additive, subtractive, coefficient, two-step,
+and fractional cases; produce standard flashcard families and cancellation
+drill-down hooks; satisfy fixture reference-closure and renderer-frame
+preservation laws; expose algebra-trace port diagnostics for transformation and
+rule mismatches; emit generated export dependency manifests; surface dashboard
+maturity rows; and have a Chromium smoke fixture for generated iframe rendering.
+
+The next priority is to make those paths less narrow. Generated tutorial
+families, media encoders, graph/visual runtime unification, and program-trace
+visualizations should all use the asset-calculus framework rather than running
+ahead of it.
 
 The renderer adoption path is:
 
@@ -145,8 +155,9 @@ same fixtures into tutorial-card and export/sample paths.
 - How should generated algebra fixture families move from narrow examples into
   a reusable semantic catalog without making the dashboard renderer own the
   registry?
-- Which renderer-neutral frame fields should become required across KaTeX,
-  WebGL graphs, source-code panels, dashboard previews, and exports?
+- Which renderer-neutral frame fields should become required across WebGL
+  graphs, source-code panels, dashboard previews, and exports now that the
+  KaTeX generated fixture path has a preservation law?
 - How far should the first generated tutorial family expand before the media
   encoder path consumes it: more linear solves, fractions/radicals/exponents,
   or mixed algebra/calculus examples?

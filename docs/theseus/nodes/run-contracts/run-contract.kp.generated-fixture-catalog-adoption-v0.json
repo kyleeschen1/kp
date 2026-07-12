@@ -398,6 +398,16 @@
       "kind": "file",
       "path": "tests/generated-linear-solve-smoke.browser.spec.ts",
       "summary": "Covers generated two-step solve iframe rendering in Chromium."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Updates active focus and near-term priorities after generated fixture adoption."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Updates semantic runtime current state and next action for generated fixture expansion."
     }
   ],
   "verification": [
@@ -780,13 +790,25 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T18:10:04.506Z",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-12T18:10:04.506Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T18:14:09.011Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T18:14:09.047Z",
       "scope": "Theseus graph validation"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added a generated linear-solve iframe browser smoke fixture and Chromium Playwright smoke coverage."
+    "summary": "Refreshed KP roadmap and semantic runtime thread to reflect generated fixture catalog adoption and new priorities."
   },
   "allowedWork": [
     "Only work on the approved generated-fixture catalog adoption slices.",
@@ -929,13 +951,14 @@
     {
       "id": "slice.kp.generated-fixture.browser-smoke",
       "title": "Add generated fixture browser smoke",
-      "status": "complete",
-      "summary": "Added generated linear-solve Chromium browser smoke fixture and spec."
+      "summary": "Added generated linear-solve Chromium browser smoke fixture and spec.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.roadmap-refresh",
       "title": "Refresh roadmap and runtime docs",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Updated roadmap and semantic runtime thread after generated fixture adoption."
     },
     {
       "id": "slice.kp.generated-fixture.closeout",

@@ -28,11 +28,15 @@ The doctrine, composition laws, authoring guide, core interfaces, executable
 law checks, pause-time inspection, drill-down hooks, flashcard specs, external
 port fixture, programming trace skeleton, equation-frame interpreter path,
 dashboard preview interpreter, and generated algebra tutorial fixture path are
-in place. The current pressure is no longer to define the vocabulary; it is to
-make more renderer, dashboard, export, and generated-tutorial paths consume it
-directly. The goal remains practical: a KP intermediate representation with
-composition laws inspired by category theory and FRP, not a broad abstract
-category theory framework.
+in place. Generated linear-solve fixtures now flow through the tutorial-card
+sample path, export samples, dependency manifests, drill-down hooks,
+flashcards, algebra-trace port diagnostics, renderer-frame preservation laws,
+fixture-closure laws, dashboard maturity rows, and browser smoke coverage. The
+current pressure is no longer to define the vocabulary; it is to make more
+renderer, dashboard, export, graph, programming, and generated-tutorial paths
+consume it directly. The goal remains practical: a KP intermediate
+representation with composition laws inspired by category theory and FRP, not a
+broad abstract category theory framework.
 
 **Completed dependency layer.** The export/embed, browser hardening, and
 hosted/export sampling loops all closed on 2026-07-11. KP now has concrete
@@ -202,25 +206,24 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Move generated algebra and dashboard asset-row registries out of ad hoc
-   dashboard renderer helpers and into reusable semantic catalog modules.
-2. Wire generated algebra fixtures into tutorial-card samples and export/sample
-   paths so the same semantic bundle can drive cards, previews, and artifacts.
-3. Expand generated tutorial fixtures beyond positive-addend linear solves:
+1. Expand generated tutorial fixtures beyond the first linear-solve family:
    subtraction, multiplication, division, multi-step algebra, fractions,
    radicals, exponents, and function wrapping.
-4. Promote additional renderer surfaces to consume interpreter frames:
+2. Promote additional renderer surfaces to consume interpreter frames:
    comparison cards, graph/vector panels, source-code traces, and export
    previews.
-5. Keep adding law checks where composition matters: renderer frame
-   preservation, generated fixture closure, port diagnostics, and flashcard
-   prompt/reference consistency.
-6. Start GIF or video encoder integration only after the frame-sequence JSON
+3. Keep adding law checks where composition matters: flashcard prompt/reference
+   consistency, semantic transformation decomposition, generated media-frame
+   preservation, and graph/programming frame preservation.
+4. Move generated fixture family maturity from status rows into actionable
+   authoring controls: create fixture, inspect closure, open sample, run smoke,
+   and compare variants.
+5. Start GIF or video encoder integration only after the frame-sequence JSON
    artifact, HTML preview, browser probe, rewind check, dependency manifest,
    and capability package manifests stay stable.
-7. Expand graph diagnostics from current mesh/conformance checks into richer
+6. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-8. Defer dynamic package loading until at least one generated tutorial family
+7. Defer dynamic package loading until at least one generated tutorial family
    proves the metadata contract across math, graph, programming, and export
    examples.
 
