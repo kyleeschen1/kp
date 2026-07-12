@@ -57,17 +57,38 @@ export function createGeneratedLinearSolveTutorialFixture(
   assertNonEmpty(input.id, "Generated algebra fixture id");
   assertNonEmpty(input.title, `Generated algebra fixture ${input.id} title`);
   assertNonEmpty(input.variable, `Generated algebra fixture ${input.id} variable`);
-  assertNonZeroInteger(input.addend, `Generated algebra fixture ${input.id} addend`);
 
-  const ids = generatedLinearSolveIds(input);
-  const latex = generatedLinearSolveLatex(input);
+  if (input.coefficient !== undefined) {
+    if (input.addend !== undefined) {
+      throw new Error(
+        `Generated algebra fixture ${input.id} cannot define both addend and coefficient.`
+      );
+    }
+
+    return createGeneratedCoefficientLinearSolveTutorialFixture({
+      ...input,
+      coefficient: input.coefficient
+    });
+  }
+
+  if (input.addend === undefined) {
+    throw new Error(
+      `Generated algebra fixture ${input.id} must define addend or coefficient.`
+    );
+  }
+
+  assertNonZeroInteger(input.addend, `Generated algebra fixture ${input.id} addend`);
+  const additiveInput = { ...input, addend: input.addend };
+
+  const ids = generatedLinearSolveIds(additiveInput);
+  const latex = generatedLinearSolveLatex(additiveInput);
   const bundle = createKpAssetBundle({
     id: ids.asset,
     title: input.title,
     objects: [
       equationObject(ids.initial, "Initial equation", latex.initial, [
         selector(ids.initial, "lhs.variable", "term", input.variable),
-        selector(ids.initial, "lhs.addend", "term", formatSignedTerm(input.addend)),
+        selector(ids.initial, "lhs.addend", "term", formatSignedTerm(additiveInput.addend)),
         selector(ids.initial, "equals", "relation", "="),
         selector(ids.initial, "rhs.value", "term", String(latex.rhs))
       ]),
@@ -77,11 +98,11 @@ export function createGeneratedLinearSolveTutorialFixture(
         latex.afterSubtract,
         [
           selector(ids.afterSubtract, "lhs.variable", "term", input.variable),
-          selector(ids.afterSubtract, "lhs.addend", "term", formatSignedTerm(input.addend)),
-          selector(ids.afterSubtract, "lhs.subtract", "term", formatSignedTerm(-input.addend)),
+          selector(ids.afterSubtract, "lhs.addend", "term", formatSignedTerm(additiveInput.addend)),
+          selector(ids.afterSubtract, "lhs.subtract", "term", formatSignedTerm(-additiveInput.addend)),
           selector(ids.afterSubtract, "equals", "relation", "="),
           selector(ids.afterSubtract, "rhs.value", "term", String(latex.rhs)),
-          selector(ids.afterSubtract, "rhs.subtract", "term", formatSignedTerm(-input.addend))
+          selector(ids.afterSubtract, "rhs.subtract", "term", formatSignedTerm(-additiveInput.addend))
         ]
       ),
       equationObject(
@@ -92,7 +113,7 @@ export function createGeneratedLinearSolveTutorialFixture(
           selector(ids.leftSimplified, "lhs.variable", "term", input.variable),
           selector(ids.leftSimplified, "equals", "relation", "="),
           selector(ids.leftSimplified, "rhs.value", "term", String(latex.rhs)),
-          selector(ids.leftSimplified, "rhs.subtract", "term", `-${input.addend}`)
+          selector(ids.leftSimplified, "rhs.subtract", "term", formatSignedTerm(-additiveInput.addend))
         ]
       ),
       equationObject(ids.solved, "Solved equation", latex.solved, [
@@ -115,8 +136,74 @@ export function createGeneratedLinearSolveTutorialFixture(
     bundle,
     transformations,
     diagram,
-    trace: createGeneratedLinearSolveTrace(input, ids, latex),
-    flashcards: createGeneratedLinearSolveFlashcards(input, ids)
+    trace: createGeneratedLinearSolveTrace(additiveInput, ids, latex),
+    flashcards: createGeneratedLinearSolveFlashcards(additiveInput, ids)
+  };
+}
+
+function createGeneratedCoefficientLinearSolveTutorialFixture(
+  input: GeneratedLinearSolveTutorialFixtureSpec & { readonly coefficient: number }
+): GeneratedLinearSolveTutorialFixture {
+  assertNonZeroInteger(
+    input.coefficient,
+    `Generated algebra fixture ${input.id} coefficient`
+  );
+
+  const ids = generatedCoefficientSolveIds(input);
+  const rhs = input.coefficient * input.solution;
+  const latex = {
+    rhs,
+    initial: `${input.coefficient}${input.variable} = ${rhs}`,
+    afterSubtract: `${input.coefficient}${input.variable} / ${input.coefficient} = ${rhs} / ${input.coefficient}`,
+    leftSimplified: `${input.variable} = ${rhs} / ${input.coefficient}`,
+    solved: `${input.variable} = ${input.solution}`
+  };
+  const bundle = createKpAssetBundle({
+    id: ids.asset,
+    title: input.title,
+    objects: [
+      equationObject(ids.initial, "Initial equation", latex.initial, [
+        selector(ids.initial, "lhs.coefficient", "factor", String(input.coefficient)),
+        selector(ids.initial, "lhs.variable", "term", input.variable),
+        selector(ids.initial, "equals", "relation", "="),
+        selector(ids.initial, "rhs.value", "term", String(rhs))
+      ]),
+      equationObject(ids.afterSubtract, "After dividing by the coefficient", latex.afterSubtract, [
+        selector(ids.afterSubtract, "lhs.coefficient", "factor", String(input.coefficient)),
+        selector(ids.afterSubtract, "lhs.variable", "term", input.variable),
+        selector(ids.afterSubtract, "lhs.divide", "term", `/${input.coefficient}`),
+        selector(ids.afterSubtract, "equals", "relation", "="),
+        selector(ids.afterSubtract, "rhs.value", "term", String(rhs)),
+        selector(ids.afterSubtract, "rhs.divide", "term", `/${input.coefficient}`)
+      ]),
+      equationObject(ids.leftSimplified, "After cancellation", latex.leftSimplified, [
+        selector(ids.leftSimplified, "lhs.variable", "term", input.variable),
+        selector(ids.leftSimplified, "equals", "relation", "="),
+        selector(ids.leftSimplified, "rhs.value", "term", String(rhs)),
+        selector(ids.leftSimplified, "rhs.divide", "term", `/${input.coefficient}`)
+      ]),
+      equationObject(ids.solved, "Solved equation", latex.solved, [
+        selector(ids.solved, "lhs.variable", "term", input.variable),
+        selector(ids.solved, "equals", "relation", "="),
+        selector(ids.solved, "rhs.solution", "term", String(input.solution))
+      ])
+    ]
+  });
+  const transformations = createGeneratedCoefficientSolveTransformations(ids);
+  const diagram = createKpSemanticDiagramSequence({
+    id: ids.diagram,
+    title: `${input.title} sequence`,
+    children: transformations.map(createKpTransformationDiagramLeaf)
+  });
+
+  return {
+    id: input.id,
+    title: input.title,
+    bundle,
+    transformations,
+    diagram,
+    trace: createGeneratedCoefficientSolveTrace(input, ids, latex),
+    flashcards: createGeneratedCoefficientSolveFlashcards(input, ids)
   };
 }
 
@@ -173,8 +260,61 @@ function createGeneratedLinearSolveTransformations(
   ];
 }
 
+function createGeneratedCoefficientSolveTransformations(
+  ids: GeneratedLinearSolveIds
+): readonly KpSemanticTransformation[] {
+  return [
+    createKpSemanticTransformation({
+      id: ids.subtract,
+      transformType: "divideBothSides",
+      title: "Divide both sides by the coefficient",
+      sourceObjectIds: [ids.initial],
+      targetObjectIds: [ids.afterSubtract],
+      preserves: ["value", "structure"],
+      assumptions: ["Dividing equal quantities by the same non-zero value preserves equality."],
+      lawRefs: [{ id: "law.equation.divide-both-sides", level: "strict" }],
+      correspondence: [
+        correspondence(ids.initial, "lhs.coefficient", ids.afterSubtract, "lhs.coefficient"),
+        correspondence(ids.initial, "lhs.variable", ids.afterSubtract, "lhs.variable"),
+        correspondence(ids.initial, "equals", ids.afterSubtract, "equals"),
+        correspondence(ids.initial, "rhs.value", ids.afterSubtract, "rhs.value")
+      ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.cancel,
+      transformType: "cancelMultiplicativeInverses",
+      title: "Cancel multiplicative inverses",
+      sourceObjectIds: [ids.afterSubtract],
+      targetObjectIds: [ids.leftSimplified],
+      preserves: ["value"],
+      assumptions: ["A non-zero factor divided by itself simplifies to one."],
+      lawRefs: [{ id: "law.algebra.multiplicative-inverse", level: "strict" }],
+      correspondence: [
+        correspondence(ids.afterSubtract, "lhs.variable", ids.leftSimplified, "lhs.variable"),
+        correspondence(ids.afterSubtract, "equals", ids.leftSimplified, "equals"),
+        correspondence(ids.afterSubtract, "rhs.value", ids.leftSimplified, "rhs.value"),
+        correspondence(ids.afterSubtract, "rhs.divide", ids.leftSimplified, "rhs.divide")
+      ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.simplify,
+      transformType: "simplifyConstantQuotient",
+      title: "Simplify the constant quotient",
+      sourceObjectIds: [ids.leftSimplified],
+      targetObjectIds: [ids.solved],
+      preserves: ["value"],
+      assumptions: ["The right-hand constant quotient evaluates to the solution."],
+      lawRefs: [{ id: "law.arithmetic.constant-quotient", level: "strict" }],
+      correspondence: [
+        correspondence(ids.leftSimplified, "lhs.variable", ids.solved, "lhs.variable"),
+        correspondence(ids.leftSimplified, "equals", ids.solved, "equals")
+      ]
+    })
+  ];
+}
+
 function createGeneratedLinearSolveTrace(
-  input: GeneratedLinearSolveTutorialFixtureSpec,
+  input: GeneratedLinearSolveTutorialFixtureSpec & { readonly addend: number },
   ids: GeneratedLinearSolveIds,
   latex: GeneratedLinearSolveLatex
 ): AlgebraTraceFixture {
@@ -208,8 +348,43 @@ function createGeneratedLinearSolveTrace(
   };
 }
 
+function createGeneratedCoefficientSolveTrace(
+  input: GeneratedLinearSolveTutorialFixtureSpec & { readonly coefficient: number },
+  ids: GeneratedLinearSolveIds,
+  latex: GeneratedLinearSolveLatex
+): AlgebraTraceFixture {
+  return {
+    id: ids.trace,
+    title: `${input.title} generated coefficient trace`,
+    steps: [
+      {
+        id: `${ids.trace}.initial`,
+        latex: latex.initial
+      },
+      {
+        id: `${ids.trace}.after-divide`,
+        latex: latex.afterSubtract,
+        transformationId: ids.subtract,
+        rule: "divideBothSides"
+      },
+      {
+        id: `${ids.trace}.left-simplified`,
+        latex: latex.leftSimplified,
+        transformationId: ids.cancel,
+        rule: "cancelMultiplicativeInverses"
+      },
+      {
+        id: `${ids.trace}.solved`,
+        latex: latex.solved,
+        transformationId: ids.simplify,
+        rule: "simplifyConstantQuotient"
+      }
+    ]
+  };
+}
+
 function createGeneratedLinearSolveFlashcards(
-  input: GeneratedLinearSolveTutorialFixtureSpec,
+  input: GeneratedLinearSolveTutorialFixtureSpec & { readonly addend: number },
   ids: GeneratedLinearSolveIds
 ): readonly KpFlashcardSpec[] {
   return [
@@ -227,6 +402,39 @@ function createGeneratedLinearSolveFlashcards(
     }),
     createKpFlashcardSpec({
       id: `card.${input.id}.predict-subtract`,
+      kind: "predict-next",
+      title: "Predict the first transformation",
+      assetId: ids.asset,
+      prompt: "Which transformation preserves equality first?",
+      transformationIds: [ids.subtract],
+      timeMs: 0,
+      answer: {
+        kind: "transformation",
+        value: ids.subtract
+      }
+    })
+  ];
+}
+
+function createGeneratedCoefficientSolveFlashcards(
+  input: GeneratedLinearSolveTutorialFixtureSpec & { readonly coefficient: number },
+  ids: GeneratedLinearSolveIds
+): readonly KpFlashcardSpec[] {
+  return [
+    createKpFlashcardSpec({
+      id: `card.${input.id}.cloze-coefficient`,
+      kind: "cloze",
+      title: "Hide the coefficient",
+      assetId: ids.asset,
+      prompt: "What coefficient must be divided away to isolate the variable?",
+      selectorIds: [`${ids.initial}.lhs.coefficient`],
+      answer: {
+        kind: "text",
+        value: String(input.coefficient)
+      }
+    }),
+    createKpFlashcardSpec({
+      id: `card.${input.id}.predict-divide`,
       kind: "predict-next",
       title: "Predict the first transformation",
       assetId: ids.asset,
@@ -263,7 +471,7 @@ interface GeneratedLinearSolveIds {
 }
 
 function generatedLinearSolveIds(
-  input: GeneratedLinearSolveTutorialFixtureSpec
+  input: GeneratedLinearSolveTutorialFixtureSpec & { readonly addend: number }
 ): GeneratedLinearSolveIds {
   const id = input.id;
   const positiveAddend = input.addend > 0;
@@ -304,6 +512,35 @@ function generatedLinearSolveIds(
   };
 }
 
+function generatedCoefficientSolveIds(
+  input: GeneratedLinearSolveTutorialFixtureSpec & { readonly coefficient: number }
+): GeneratedLinearSolveIds {
+  const id = input.id;
+
+  return {
+    asset: `asset.${id}`,
+    diagram: `diagram.${id}.sequence`,
+    trace: `trace.${id}`,
+    initial: `equation.${id}.initial`,
+    afterSubtract: `equation.${id}.after-divide`,
+    leftSimplified: `equation.${id}.left-simplified`,
+    solved: `equation.${id}.solved`,
+    subtract: `transform.${id}.divide-coefficient`,
+    cancel: `transform.${id}.cancel-multiplicative-inverse`,
+    simplify: `transform.${id}.simplify-quotient`,
+    firstTransformType: "divideBothSides",
+    firstTransformTitle: "Divide both sides by the coefficient",
+    firstTransformAssumption:
+      "Dividing equal quantities by the same non-zero value preserves equality.",
+    firstTransformLawId: "law.equation.divide-both-sides",
+    simplifyTransformType: "simplifyConstantQuotient",
+    simplifyTransformTitle: "Simplify the constant quotient",
+    simplifyTransformAssumption:
+      "The right-hand constant quotient evaluates to the solution.",
+    simplifyTransformLawId: "law.arithmetic.constant-quotient"
+  };
+}
+
 interface GeneratedLinearSolveLatex {
   readonly rhs: number;
   readonly initial: string;
@@ -313,7 +550,7 @@ interface GeneratedLinearSolveLatex {
 }
 
 function generatedLinearSolveLatex(
-  input: GeneratedLinearSolveTutorialFixtureSpec
+  input: GeneratedLinearSolveTutorialFixtureSpec & { readonly addend: number }
 ): GeneratedLinearSolveLatex {
   const rhs = input.solution + input.addend;
   const addendTerm = formatLatexSignedTerm(input.addend);

@@ -208,6 +208,31 @@
       "kind": "file",
       "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
       "summary": "Dashboard generated-catalog tests include the subtractive fixture row."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Generated fixture registry includes a coefficient-only solve."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Generated fixture builder supports coefficient-only divide/cancel/quotient solves."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Registry tests assert coefficient-only generated fixture specs."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Generated fixture tests assert coefficient divide/cancel/quotient semantics."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "summary": "Dashboard generated-catalog tests include the coefficient fixture row."
     }
   ],
   "verification": [
@@ -386,8 +411,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T06:03:39.692Z",
-      "scope": "slice 11 subtractive fixture Theseus validation"
+      "scope": "slice 11 subtractive fixture Theseus validation",
+      "checkedAt": "2026-07-12T06:03:39.692Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard-semantic-asset-catalog.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts tests/generated-linear-solve-export-sample.test.ts",
+      "status": "passed",
+      "scope": "coefficient generated linear-solve fixture",
+      "checkedAt": "2026-07-12T06:13:48.572Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 12 coefficient fixture typecheck",
+      "checkedAt": "2026-07-12T06:14:15.073Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T06:14:24.524Z",
+      "scope": "slice 12 coefficient fixture Theseus validation"
     }
   ],
   "allowedWork": [
@@ -475,7 +518,7 @@
     {
       "id": "slice.kp.generated-fixture.coefficient-solves",
       "title": "Add coefficient solve fixtures",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.two-step-solves",

@@ -2,7 +2,8 @@ export interface GeneratedLinearSolveTutorialFixtureSpec {
   readonly id: string;
   readonly title: string;
   readonly variable: string;
-  readonly addend: number;
+  readonly addend?: number | undefined;
+  readonly coefficient?: number | undefined;
   readonly solution: number;
 }
 
@@ -28,6 +29,13 @@ export const generatedLinearSolveTutorialFixtureSpecs:
       variable: "z",
       addend: -4,
       solution: 10
+    },
+    {
+      id: "generated.linear-solve.three-x",
+      title: "Generated solve 3x equals 12",
+      variable: "x",
+      coefficient: 3,
+      solution: 4
     }
   ];
 

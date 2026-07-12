@@ -174,7 +174,8 @@ test("createGeneratedLinearSolveTutorialFixtures exposes multiple generated exam
   assert.deepEqual(fixtures.map((fixture) => fixture.id), [
     "generated.linear-solve.x-plus-3",
     "generated.linear-solve.y-plus-5",
-    "generated.linear-solve.z-minus-4"
+    "generated.linear-solve.z-minus-4",
+    "generated.linear-solve.three-x"
   ]);
   assert.deepEqual(
     fixtures[1]?.bundle.objects.map((object) => object.value),
@@ -215,6 +216,39 @@ test("createGeneratedLinearSolveTutorialFixtures exposes multiple generated exam
         "transform.generated.linear-solve.z-minus-4.simplify-sum",
         "simplifyConstantSum",
         [{ id: "law.arithmetic.constant-sum", level: "strict" }]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    fixtures[3]?.bundle.objects.map((object) => object.value),
+    [
+      { latex: "3x = 12" },
+      { latex: "3x / 3 = 12 / 3" },
+      { latex: "x = 12 / 3" },
+      { latex: "x = 4" }
+    ]
+  );
+  assert.deepEqual(
+    fixtures[3]?.transformations.map((transformation) => [
+      transformation.id,
+      transformation.transformType,
+      transformation.lawRefs
+    ]),
+    [
+      [
+        "transform.generated.linear-solve.three-x.divide-coefficient",
+        "divideBothSides",
+        [{ id: "law.equation.divide-both-sides", level: "strict" }]
+      ],
+      [
+        "transform.generated.linear-solve.three-x.cancel-multiplicative-inverse",
+        "cancelMultiplicativeInverses",
+        [{ id: "law.algebra.multiplicative-inverse", level: "strict" }]
+      ],
+      [
+        "transform.generated.linear-solve.three-x.simplify-quotient",
+        "simplifyConstantQuotient",
+        [{ id: "law.arithmetic.constant-quotient", level: "strict" }]
       ]
     ]
   );
