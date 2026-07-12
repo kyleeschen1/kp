@@ -69,6 +69,16 @@
       "kind": "file",
       "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
       "summary": "Specifies fraction transform sequence, laws, diagram order, trace rules, and identity metadata."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-algebra-card-sample.ts",
+      "summary": "Creates family-aware generated algebra tutorial-card samples using the shared card sampler and semantic frame behavior."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-tutorial-card-sample.test.ts",
+      "summary": "Specifies fraction fixture card sample semantics, renderer preservation, and rendered fixture identity."
     }
   ],
   "verification": [
@@ -132,13 +142,37 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T18:59:34.723Z",
-      "scope": "Theseus graph validation after fraction transform slice"
+      "scope": "Theseus graph validation after fraction transform slice",
+      "checkedAt": "2026-07-12T18:59:34.723Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-tutorial-card-sample.test.ts",
+      "status": "passed",
+      "scope": "Focused generated algebra card sample red/green test",
+      "checkedAt": "2026-07-12T19:03:42.491Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-tutorial-card-sample.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts",
+      "status": "passed",
+      "scope": "Generated algebra and existing linear-solve card sample tests",
+      "checkedAt": "2026-07-12T19:03:42.534Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T19:03:42.568Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:03:42.608Z",
+      "scope": "Theseus graph validation after fraction card sample slice"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Expanded generated fraction-expression fixtures into split, merge, and simplify semantic transformations with identity correspondences."
+    "summary": "Added a generated-algebra tutorial-card sample path and proved fraction fixtures sample semantic frames through it."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -184,8 +218,8 @@
     {
       "id": "slice.kp.generated-math.fraction-cards",
       "title": "Wire fraction samples into tutorial cards",
-      "summary": "Expose fraction fixtures through tutorial-card sample paths.",
-      "status": "planned"
+      "summary": "Wired generated fraction-expression fixtures into the tutorial-card sample path.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.fraction-exports",
