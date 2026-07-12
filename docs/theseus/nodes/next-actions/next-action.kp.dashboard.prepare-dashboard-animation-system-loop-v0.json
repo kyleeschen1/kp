@@ -2,14 +2,19 @@
   "id": "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v0",
   "kind": "next-action",
   "title": "Prepare KP dashboard and semantic animation system Loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.dashboard",
-  "summary": "Read the selected frontier, choose the next concrete implementation slice, and record the result in Theseus. Why now: Loop-plan selected this frontier because Workflow is active.",
+  "summary": "Prepared the KP dashboard/semantic animation frontier and superseded it with the durable generated fixture catalog adoption contract.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
       "summary": "Frontier selected by loop-plan rank 1. Loop-plan selected this frontier because Workflow is active."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.generated-fixture-catalog-adoption-v0.json",
+      "summary": "Durable execution contract produced from the preparation scaffold."
     }
   ],
   "dependsOn": {
@@ -55,5 +60,17 @@
       "id": "journey-report-updated-after-preparation",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T04:17:52.998Z",
+      "scope": "slice 2 durable contract promotion graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Prepared the KP dashboard/semantic animation frontier and superseded it with the durable generated fixture catalog adoption contract."
+  }
 }

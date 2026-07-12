@@ -1,0 +1,81 @@
+{
+  "id": "next-action.kp.generated-fixture-catalog-adoption-v0",
+  "kind": "next-action",
+  "title": "Adopt generated fixture catalog path",
+  "status": "ready",
+  "domain": "kp.asset-calculus",
+  "summary": "Execute the approved generated fixture catalog adoption loop: extract reusable fixture and dashboard catalog modules, wire generated fixtures into tutorial-card and export paths, expand algebra fixtures, add closure laws, and close with roadmap evidence.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap sets generated fixture catalog adoption as the next KP priority."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread defines the generated fixture catalog and tutorial/export wiring path."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-12-kp-renderer-interpreter-adoption-loop-closeout.md",
+      "summary": "Closeout review identifies generated fixture catalog adoption as the recommended next loop."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.generated-fixture-catalog-adoption-v0.json",
+      "summary": "Durable run contract that owns the approved slice sequence."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "workflow.kp.dashboard-animation-system",
+      "run-contract.kp.asset-renderer-interpreter-adoption-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system",
+    "run-contract.kp.generated-fixture-catalog-adoption-v0"
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run typecheck",
+    "npm run test:browser:dashboard"
+  ],
+  "expectedLearning": [
+    "Whether generated algebra fixtures can be maintained outside dashboard renderer helpers.",
+    "Whether the same generated fixture bundle can drive dashboard rows, tutorial-card samples, and export/sample paths.",
+    "Which law checks are needed before widening fixture generation beyond simple linear solves."
+  ],
+  "allowedWork": [
+    "Work only inside the approved generated-fixture catalog adoption slices.",
+    "Use existing KP Asset Calculus, interpreter, dashboard, tutorial-card, and export patterns.",
+    "Add focused tests before behavior changes."
+  ],
+  "disallowedWork": [
+    "Do not broaden into graph runtime conversion, GIF/video encoder integration, dynamic package loading, or curriculum systems.",
+    "Do not redesign unrelated dashboard layout or live animation effects."
+  ],
+  "criteria": [
+    {
+      "id": "generated-fixture-registry-extracted",
+      "weight": "high"
+    },
+    {
+      "id": "dashboard-catalog-consumes-semantic-fixtures",
+      "weight": "high"
+    },
+    {
+      "id": "tutorial-and-export-paths-consume-generated-fixtures",
+      "weight": "high"
+    },
+    {
+      "id": "fixture-family-expanded-with-laws",
+      "weight": "high"
+    },
+    {
+      "id": "roadmap-and-theseus-closeout-updated",
+      "weight": "medium"
+    }
+  ]
+}

@@ -40,7 +40,8 @@
     "next.kp.packaged-static-step-browser-smoke",
     "next.kp.dashboard-hosted-readiness-row",
     "next.kp.hosted-readiness-report-card",
-    "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v0"
+    "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v0",
+    "next-action.kp.generated-fixture-catalog-adoption-v0"
   ],
   "progress": {
     "state": "partial",

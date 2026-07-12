@@ -1,0 +1,189 @@
+{
+  "id": "run-contract.kp.generated-fixture-catalog-adoption-v0",
+  "kind": "run-contract",
+  "title": "KP generated fixture catalog adoption",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.generated-fixture-catalog-adoption-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap names generated algebra catalog extraction and tutorial/export wiring as the next priority."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread defines the next conversion path for generated fixtures and dashboard catalog surfaces."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-12-kp-renderer-interpreter-adoption-loop-closeout.md",
+      "summary": "Renderer/interpreter closeout recommends the generated fixture catalog adoption loop."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Only work on the approved generated-fixture catalog adoption slices.",
+    "Use existing KP Asset Calculus, interpreter, dashboard, tutorial-card, and export patterns."
+  ],
+  "disallowedWork": [
+    "Do not broaden into graph runtime conversion, GIF/video encoder integration, dynamic package loading, or curriculum systems.",
+    "Do not rewrite unrelated dashboard layout or live animation effects unless a slice explicitly requires it."
+  ],
+  "goal": "Run the approved 24-slice loop to move generated fixtures and dashboard rows into reusable semantic catalog paths, wire them to cards and exports, expand fixture coverage, and close with roadmap evidence.",
+  "target": "next-action.kp.generated-fixture-catalog-adoption-v0",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when verification fails and needs user judgment.",
+    "Stop if a slice would broaden beyond generated fixture catalog adoption.",
+    "Stop when the approved slice list is exhausted."
+  ],
+  "slices": [
+    {
+      "id": "slice.kp.generated-fixture.materialize-prep",
+      "title": "Materialize preparation scaffold",
+      "summary": "Materialized the KP dashboard/semantic animation preparation scaffold.",
+      "status": "complete"
+    },
+    {
+      "id": "slice.kp.generated-fixture.promote-contract",
+      "title": "Promote durable execution contract",
+      "status": "complete",
+      "summary": "Created the durable generated fixture catalog adoption contract and linked it to the KP workflow."
+    },
+    {
+      "id": "slice.kp.generated-fixture.registry",
+      "title": "Extract generated fixture registry",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.dashboard-row-catalog",
+      "title": "Extract semantic dashboard row catalog",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.dashboard-consumption",
+      "title": "Make dashboard consume semantic catalog rows",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.search-metadata",
+      "title": "Add catalog search metadata",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.preview-interpreter",
+      "title": "Use preview interpreter across generated rows",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.tutorial-sample-registry",
+      "title": "Wire generated fixtures into tutorial-card sample registry",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.render-sample-card",
+      "title": "Render one generated tutorial card sample",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.export-sample-path",
+      "title": "Wire generated fixtures into export sample path",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.subtractive-solves",
+      "title": "Add subtractive one-step solve fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.coefficient-solves",
+      "title": "Add coefficient solve fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.two-step-solves",
+      "title": "Add two-step linear solve fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.fraction-solve",
+      "title": "Add fraction-bearing solve fixture",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.flashcard-family",
+      "title": "Add generated flashcard family",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.drilldown-family",
+      "title": "Add generated drill-down hooks",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.fixture-closure-law",
+      "title": "Add generated fixture closure law",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.frame-preservation-law",
+      "title": "Add renderer-frame preservation law",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.port-diagnostics",
+      "title": "Add port diagnostics for generated fixture mismatch",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.dependency-manifest",
+      "title": "Add dependency manifest emission",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.dashboard-maturity-rows",
+      "title": "Add generated family dashboard maturity rows",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.browser-smoke",
+      "title": "Add generated fixture browser smoke",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.roadmap-refresh",
+      "title": "Refresh roadmap and runtime docs",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-fixture.closeout",
+      "title": "Close generated fixture catalog loop",
+      "status": "planned"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "slice 2 durable contract promotion",
+      "checkedAt": "2026-07-12T04:22:04.003Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T04:22:06.043Z",
+      "scope": "slice 2 durable contract promotion"
+    }
+  ]
+}

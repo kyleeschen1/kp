@@ -2,9 +2,9 @@
   "id": "run-contract.kp.dashboard.prepare-dashboard-animation-system-loop-v0",
   "kind": "run-contract",
   "title": "KP dashboard and semantic animation system Preparation Loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.dashboard",
-  "summary": "Run contract for preparing KP dashboard and semantic animation system from loop-plan frontier state. Why now: Loop-plan selected this frontier because Workflow is active.",
+  "summary": "Superseded by durable generated fixture catalog adoption contract run-contract.kp.generated-fixture-catalog-adoption-v0.",
   "sourceRefs": [
     {
       "kind": "file",

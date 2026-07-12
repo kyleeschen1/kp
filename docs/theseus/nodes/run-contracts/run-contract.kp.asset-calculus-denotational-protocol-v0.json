@@ -2,7 +2,7 @@
   "id": "run-contract.kp.asset-calculus-denotational-protocol-v0",
   "kind": "run-contract",
   "title": "KP Asset Calculus denotational protocol",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.asset-calculus",
   "sourceRefs": [
     {
@@ -202,5 +202,6 @@
       "status": "complete",
       "summary": "Added the KP Asset Calculus loop closeout report with structural improvements, unlocked behavior, verification evidence, residual risks, and recommended next slices for renderer/interpreter adoption."
     }
-  ]
+  ],
+  "summary": "Resolved after the KP Asset Calculus loop closeout; follow-up work is now represented by run-contract.kp.generated-fixture-catalog-adoption-v0."
 }
