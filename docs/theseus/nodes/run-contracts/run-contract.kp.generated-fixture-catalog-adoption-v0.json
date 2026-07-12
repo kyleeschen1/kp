@@ -53,6 +53,21 @@
       "kind": "file",
       "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
       "summary": "Covers generated algebra dashboard catalog row creation and query filtering."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/semantic-asset-catalog.ts",
+      "summary": "Adds a semantic dashboard catalog aggregator for linear-solve drill-down, flashcard, and generated fixture rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-semantic-asset-catalog.test.ts",
+      "summary": "Covers semantic dashboard catalog aggregation and filtering across derived and generated rows."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Consumes semantic dashboard catalog rows through a single catalog surface."
     }
   ],
   "verification": [
@@ -105,8 +120,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T04:46:55.151Z",
-      "scope": "slice 4 generated algebra dashboard catalog Theseus validation"
+      "scope": "slice 4 generated algebra dashboard catalog Theseus validation",
+      "checkedAt": "2026-07-12T04:46:55.151Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard-semantic-asset-catalog.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "slice 5 semantic dashboard catalog focused tests",
+      "checkedAt": "2026-07-12T05:02:32.272Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 5 semantic dashboard catalog typecheck",
+      "checkedAt": "2026-07-12T05:02:58.828Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T05:03:59.915Z",
+      "scope": "slice 5 semantic dashboard catalog Theseus validation"
     }
   ],
   "allowedWork": [
@@ -150,13 +183,14 @@
     {
       "id": "slice.kp.generated-fixture.dashboard-row-catalog",
       "title": "Extract semantic dashboard row catalog",
-      "status": "complete",
-      "summary": "Extracted generated algebra fixture agenda row construction into a reusable dashboard catalog module and kept renderer output stable."
+      "summary": "Extracted generated algebra fixture agenda row construction into a reusable dashboard catalog module and kept renderer output stable.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.dashboard-consumption",
       "title": "Make dashboard consume semantic catalog rows",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Made the dashboard consume semantic asset catalog rows through a single aggregator for derived linear-solve and generated fixture rows."
     },
     {
       "id": "slice.kp.generated-fixture.search-metadata",

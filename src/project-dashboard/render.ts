@@ -57,8 +57,8 @@ import {
   semanticCapabilitySearchFields
 } from "./capability-preview.ts";
 import {
-  createGeneratedAlgebraFixtureAgendaRows
-} from "./generated-algebra-catalog.ts";
+  createSemanticAssetCatalogAgendaRows
+} from "./semantic-asset-catalog.ts";
 
 export interface ProjectDashboardRenderOptions {
   readonly query?: string;
@@ -404,8 +404,7 @@ function createProjectAgendaSections(
       title: "Object Gallery",
       rows: [
         ...createGalleryAgendaRows(data.gallery, adapterRows.gallery),
-        ...createLinearSolveDerivedAgendaRows(query),
-        ...createGeneratedAlgebraFixtureAgendaRows(query)
+        ...createSemanticAssetCatalogAgendaRows(query)
       ]
     },
     {
@@ -590,78 +589,6 @@ function createGalleryAgendaRows(
       ]
     };
   });
-}
-
-function createLinearSolveDerivedAgendaRows(
-  query: string
-): readonly ProjectAgendaRow[] {
-  const asset = createLinearSolveKpAssetBundle();
-  const rows: ProjectAgendaRow[] = [
-    ...asset.drillDownHooks.map((hook) => ({
-      id: agendaIdFromSemanticId("drilldown", hook.id),
-      title: hook.title,
-      summary: hook.summary ?? `Drill-down for ${hook.transformationId}.`,
-      status: "active",
-      detail: "drill-down hook",
-      kind: "protocol-api",
-      depth: 0,
-      tags: ["drilldown", "linear-solve", "semantic", "explanation"],
-      dataAttributes: [["data-kp-linear-solve-drilldown", hook.id] as [string, string]],
-      relatedIds: ["asset-linear-solve-bundle"],
-      previewFields: [
-        { label: "Drill-down hook", value: hook.id },
-        { label: "Transformation", value: hook.transformationId },
-        { label: "Explainer asset", value: hook.asset.id },
-        { label: "Explainer objects", value: String(hook.asset.objects.length) }
-      ],
-      searchFields: [
-        hook.id,
-        hook.transformationId,
-        hook.asset.id,
-        hook.asset.title,
-        ...hook.asset.objects.map((object) => object.id)
-      ]
-    })),
-    ...asset.flashcards.map((card) => ({
-      id: agendaIdFromSemanticId("flashcard", card.id),
-      title: card.title,
-      summary: card.prompt,
-      status: "active",
-      detail: card.kind,
-      kind: "protocol-api",
-      depth: 0,
-      tags: ["flashcard", "linear-solve", card.kind, "study"],
-      dataAttributes: [["data-kp-linear-solve-flashcard", card.id] as [string, string]],
-      relatedIds: ["asset-linear-solve-bundle", "asset-linear-solve-flashcards"],
-      previewFields: [
-        { label: "Flashcard id", value: card.id },
-        { label: "Flashcard kind", value: card.kind },
-        ...previewListField("Selectors", card.selectorIds),
-        ...previewListField("Transformations", card.transformationIds),
-        { label: "Answer", value: formatFlashcardAnswer(card.answer) }
-      ],
-      searchFields: [
-        card.id,
-        card.kind,
-        card.prompt,
-        ...(card.selectorIds ?? []),
-        ...(card.transformationIds ?? []),
-        card.answer?.value ?? ""
-      ]
-    }))
-  ];
-
-  return filterAgendaRows(rows, query);
-}
-
-function agendaIdFromSemanticId(prefix: string, id: string): string {
-  return `${prefix}-${id.replace(/^(card|drilldown|generated)\./, "").replaceAll(".", "-")}`;
-}
-
-function formatFlashcardAnswer(
-  answer: { readonly kind: string; readonly value: string } | undefined
-): string {
-  return answer === undefined ? "None" : `${answer.kind}: ${answer.value}`;
 }
 
 function semanticAssetDashboardPreview(
