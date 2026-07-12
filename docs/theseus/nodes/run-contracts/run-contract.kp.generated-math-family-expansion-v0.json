@@ -1,0 +1,201 @@
+{
+  "id": "run-contract.kp.generated-math-family-expansion-v0",
+  "kind": "run-contract",
+  "title": "KP generated math family expansion",
+  "status": "ready",
+  "domain": "kp.asset-calculus",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-12-next-ten-loop-review.md",
+      "summary": "Records the strategic next-ten-loop order that this run contract executes."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.generated-math-family-expansion-v0.json",
+      "summary": "Stores the approved 24-slice generated math family expansion loop."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "allowedWork": [
+    "Only work on approved generated math family expansion slices."
+  ],
+  "disallowedWork": [
+    "Do not broaden into graph, media encoder, dynamic package loading, or curriculum work without asking."
+  ],
+  "goal": "Run the approved generated math family expansion loop.",
+  "target": "workflow.kp.dashboard-animation-system",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when verification fails and needs user judgment.",
+    "Stop when the approved slice list is exhausted."
+  ],
+  "slices": [
+    {
+      "id": "slice.kp.generated-math.contract",
+      "title": "Record run contract and next-ten-loop review",
+      "summary": "Created approved run contract, recorded source refs, and validated Theseus graph.",
+      "status": "complete"
+    },
+    {
+      "id": "slice.kp.generated-math.registry-audit",
+      "title": "Audit generated algebra fixture registry seams",
+      "summary": "Inspect registry/catalog seams and record where new fixture families should attach.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.fraction-fixtures",
+      "title": "Add generated fraction-expression fixture family",
+      "summary": "Add generated fraction-expression fixtures beyond linear solves.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.fraction-transforms",
+      "title": "Add fraction transform metadata",
+      "summary": "Add split, merge, simplify, and identity metadata for generated fraction transforms.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.fraction-cards",
+      "title": "Wire fraction samples into tutorial cards",
+      "summary": "Expose fraction fixtures through tutorial-card sample paths.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.fraction-exports",
+      "title": "Export fraction samples with manifests",
+      "summary": "Emit generated fraction export samples and dependency manifests.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.fraction-browser-smoke",
+      "title": "Add generated fraction browser smoke",
+      "summary": "Prove generated fraction card rendering in Chromium.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.exponent-fixtures",
+      "title": "Add exponent fixture family",
+      "summary": "Add generated exponent fixtures.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.exponent-transforms",
+      "title": "Add exponent transform metadata",
+      "summary": "Add raise, lower, unwrap, and identity metadata for exponent transforms.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.exponent-cards-exports",
+      "title": "Wire exponent samples through cards and exports",
+      "summary": "Expose exponent fixtures through card and export paths.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.radical-fixtures",
+      "title": "Add radical fixture family",
+      "summary": "Add generated radical fixtures.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.radical-transforms",
+      "title": "Add radicalize and square-root transform semantics",
+      "summary": "Add radical transform semantics and preservation metadata.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.radical-cards-exports",
+      "title": "Wire radical samples through cards and exports",
+      "summary": "Expose radical fixtures through card, export, and browser paths.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.function-wrap-fixtures",
+      "title": "Add function wrapping fixture family",
+      "summary": "Add generated x to f(x) style function wrapping fixtures.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.wrap-motifs",
+      "title": "Encode wrap and unwrap visual motif defaults",
+      "summary": "Add reusable wrap/unwrap motif defaults for generated fixtures.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.distribution-fixtures",
+      "title": "Add distribution and factoring fixture family",
+      "summary": "Add generated distribution and factoring fixtures.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.cancellation-consistency-law",
+      "title": "Add cancellation and simplification consistency law",
+      "summary": "Check cancellation/simplification consistency across generated families.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.flashcard-consistency-law",
+      "title": "Add flashcard prompt/reference consistency law",
+      "summary": "Check generated flashcard prompts and references across fixture families.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.trace-diagnostics",
+      "title": "Expand algebra-trace port diagnostics",
+      "summary": "Add trace-port diagnostics for generated non-linear-solve families.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.dashboard-family-rows",
+      "title": "Add dashboard maturity rows per generated family",
+      "summary": "Surface generated family maturity in dashboard rows.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.dashboard-actions",
+      "title": "Add dashboard sample actions for generated family rows",
+      "summary": "Add authoring-oriented actions for generated family rows.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.search-facets",
+      "title": "Add generated fixture family search facets",
+      "summary": "Expose family, transform, motif, and maturity facets to dashboard search.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.roadmap-refresh",
+      "title": "Refresh roadmap and semantic-runtime docs",
+      "summary": "Update project docs with generated math family progress.",
+      "status": "planned"
+    },
+    {
+      "id": "slice.kp.generated-math.closeout",
+      "title": "Close generated math family expansion loop",
+      "summary": "Write closeout, resolve run contract, and record final verification.",
+      "status": "planned"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T18:43:02.432Z",
+      "scope": "Theseus graph validation after run-contract creation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Created approved generated math family expansion run contract with 24 recorded slices."
+  }
+}
