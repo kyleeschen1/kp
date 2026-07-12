@@ -2,7 +2,7 @@
   "id": "run-contract.kp.generated-fixture-catalog-adoption-v0",
   "kind": "run-contract",
   "title": "KP generated fixture catalog adoption",
-  "status": "ready",
+  "status": "resolved",
   "sourceRefs": [
     {
       "kind": "file",
@@ -408,6 +408,16 @@
       "kind": "file",
       "path": "docs/project/threads/semantic-runtime.md",
       "summary": "Updates semantic runtime current state and next action for generated fixture expansion."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-12-generated-fixture-catalog-loop-closeout.md",
+      "summary": "Documents loop outcome, commits, verification, residual risks, and recommended next slices."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Links the generated fixture catalog closeout review from the active semantic runtime thread."
     }
   ],
   "verification": [
@@ -802,13 +812,31 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T18:14:09.047Z",
-      "scope": "Theseus graph validation"
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-12T18:14:09.047Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T18:18:09.169Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-12T18:18:09.210Z"
+    },
+    {
+      "command": "npx playwright test tests/generated-linear-solve-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "checkedAt": "2026-07-12T18:18:09.244Z",
+      "scope": "Generated fixture Chromium browser smoke"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Refreshed KP roadmap and semantic runtime thread to reflect generated fixture catalog adoption and new priorities."
+    "summary": "Added generated fixture catalog loop closeout review and linked it from the semantic runtime thread."
   },
   "allowedWork": [
     "Only work on the approved generated-fixture catalog adoption slices.",
@@ -957,13 +985,15 @@
     {
       "id": "slice.kp.generated-fixture.roadmap-refresh",
       "title": "Refresh roadmap and runtime docs",
-      "status": "complete",
-      "summary": "Updated roadmap and semantic runtime thread after generated fixture adoption."
+      "summary": "Updated roadmap and semantic runtime thread after generated fixture adoption.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.closeout",
       "title": "Close generated fixture catalog loop",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Added generated fixture catalog loop closeout review."
     }
-  ]
+  ],
+  "summary": "Generated fixture catalog adoption loop complete."
 }

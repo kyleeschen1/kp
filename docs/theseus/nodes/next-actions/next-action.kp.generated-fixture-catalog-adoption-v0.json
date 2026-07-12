@@ -2,9 +2,9 @@
   "id": "next-action.kp.generated-fixture-catalog-adoption-v0",
   "kind": "next-action",
   "title": "Adopt generated fixture catalog path",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.asset-calculus",
-  "summary": "Execute the approved generated fixture catalog adoption loop: extract reusable fixture and dashboard catalog modules, wire generated fixtures into tutorial-card and export paths, expand algebra fixtures, add closure laws, and close with roadmap evidence.",
+  "summary": "Generated fixture catalog adoption loop completed via run-contract.kp.generated-fixture-catalog-adoption-v0.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,6 +25,16 @@
       "kind": "file",
       "path": "docs/theseus/nodes/run-contracts/run-contract.kp.generated-fixture-catalog-adoption-v0.json",
       "summary": "Durable run contract that owns the approved slice sequence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-12-generated-fixture-catalog-loop-closeout.md",
+      "summary": "Closeout review for completed generated fixture catalog adoption loop."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.generated-fixture-catalog-adoption-v0.json",
+      "summary": "Resolved run contract with all recorded slices complete."
     }
   ],
   "dependsOn": {
@@ -77,5 +87,17 @@
       "id": "roadmap-and-theseus-closeout-updated",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T18:20:13.371Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Generated fixture catalog adoption loop completed via run-contract.kp.generated-fixture-catalog-adoption-v0."
+  }
 }
