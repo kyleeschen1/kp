@@ -233,6 +233,31 @@
       "kind": "file",
       "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
       "summary": "Dashboard generated-catalog tests include the coefficient fixture row."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Generated fixture registry includes a two-step linear solve."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Generated fixture builder supports two-step addend-plus-coefficient solves."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Registry tests assert two-step generated fixture specs."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Generated fixture tests assert two-step semantic transformation sequence."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "summary": "Dashboard generated-catalog tests include the two-step fixture row."
     }
   ],
   "verification": [
@@ -429,8 +454,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T06:14:24.524Z",
-      "scope": "slice 12 coefficient fixture Theseus validation"
+      "scope": "slice 12 coefficient fixture Theseus validation",
+      "checkedAt": "2026-07-12T06:14:24.524Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard-semantic-asset-catalog.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts tests/generated-linear-solve-export-sample.test.ts",
+      "status": "passed",
+      "scope": "two-step generated linear-solve fixture",
+      "checkedAt": "2026-07-12T13:23:05.086Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 13 two-step fixture typecheck",
+      "checkedAt": "2026-07-12T13:23:17.729Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T13:23:28.111Z",
+      "scope": "slice 13 two-step fixture Theseus validation"
     }
   ],
   "allowedWork": [
@@ -523,7 +566,7 @@
     {
       "id": "slice.kp.generated-fixture.two-step-solves",
       "title": "Add two-step linear solve fixtures",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.fraction-solve",

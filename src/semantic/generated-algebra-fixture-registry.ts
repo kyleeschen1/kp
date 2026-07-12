@@ -36,6 +36,14 @@ export const generatedLinearSolveTutorialFixtureSpecs:
       variable: "x",
       coefficient: 3,
       solution: 4
+    },
+    {
+      id: "generated.linear-solve.two-x-plus-3",
+      title: "Generated solve 2x plus 3",
+      variable: "x",
+      coefficient: 2,
+      addend: 3,
+      solution: 4
     }
   ];
 

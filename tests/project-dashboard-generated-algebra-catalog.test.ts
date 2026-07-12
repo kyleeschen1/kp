@@ -14,7 +14,8 @@ test("generated algebra dashboard catalog exposes fixture agenda rows", () => {
     "generated-linear-solve-x-plus-3",
     "generated-linear-solve-y-plus-5",
     "generated-linear-solve-z-minus-4",
-    "generated-linear-solve-three-x"
+    "generated-linear-solve-three-x",
+    "generated-linear-solve-two-x-plus-3"
   ]);
   assert.deepEqual(rows[1]?.previewFields?.slice(0, 4), [
     { label: "Generated fixture", value: "generated.linear-solve.y-plus-5" },
@@ -25,10 +26,11 @@ test("generated algebra dashboard catalog exposes fixture agenda rows", () => {
 });
 
 test("generated algebra dashboard catalog filters rows by search text", () => {
-  const rows = createGeneratedAlgebraFixtureAgendaRows("x + 3");
+  const rows = createGeneratedAlgebraFixtureAgendaRows("x + 3 = 7");
 
   assert.deepEqual(rows.map((row) => row.id), [
-    "generated-linear-solve-x-plus-3"
+    "generated-linear-solve-x-plus-3",
+    "generated-linear-solve-two-x-plus-3"
   ]);
 });
 

@@ -175,7 +175,8 @@ test("createGeneratedLinearSolveTutorialFixtures exposes multiple generated exam
     "generated.linear-solve.x-plus-3",
     "generated.linear-solve.y-plus-5",
     "generated.linear-solve.z-minus-4",
-    "generated.linear-solve.three-x"
+    "generated.linear-solve.three-x",
+    "generated.linear-solve.two-x-plus-3"
   ]);
   assert.deepEqual(
     fixtures[1]?.bundle.objects.map((object) => object.value),
@@ -249,6 +250,50 @@ test("createGeneratedLinearSolveTutorialFixtures exposes multiple generated exam
         "transform.generated.linear-solve.three-x.simplify-quotient",
         "simplifyConstantQuotient",
         [{ id: "law.arithmetic.constant-quotient", level: "strict" }]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    fixtures[4]?.bundle.objects.map((object) => object.value),
+    [
+      { latex: "2x + 3 = 11" },
+      { latex: "2x + 3 - 3 = 11 - 3" },
+      { latex: "2x = 11 - 3" },
+      { latex: "2x = 8" },
+      { latex: "2x / 2 = 8 / 2" },
+      { latex: "x = 8 / 2" },
+      { latex: "x = 4" }
+    ]
+  );
+  assert.deepEqual(
+    fixtures[4]?.transformations.map((transformation) => [
+      transformation.id,
+      transformation.transformType
+    ]),
+    [
+      [
+        "transform.generated.linear-solve.two-x-plus-3.subtract-addend",
+        "subtractBothSides"
+      ],
+      [
+        "transform.generated.linear-solve.two-x-plus-3.cancel-additive-inverse",
+        "cancelAdditiveInverses"
+      ],
+      [
+        "transform.generated.linear-solve.two-x-plus-3.simplify-difference",
+        "simplifyConstantDifference"
+      ],
+      [
+        "transform.generated.linear-solve.two-x-plus-3.divide-coefficient",
+        "divideBothSides"
+      ],
+      [
+        "transform.generated.linear-solve.two-x-plus-3.cancel-multiplicative-inverse",
+        "cancelMultiplicativeInverses"
+      ],
+      [
+        "transform.generated.linear-solve.two-x-plus-3.simplify-quotient",
+        "simplifyConstantQuotient"
       ]
     ]
   );

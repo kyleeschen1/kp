@@ -60,9 +60,11 @@ export function createGeneratedLinearSolveTutorialFixture(
 
   if (input.coefficient !== undefined) {
     if (input.addend !== undefined) {
-      throw new Error(
-        `Generated algebra fixture ${input.id} cannot define both addend and coefficient.`
-      );
+      return createGeneratedTwoStepLinearSolveTutorialFixture({
+        ...input,
+        coefficient: input.coefficient,
+        addend: input.addend
+      });
     }
 
     return createGeneratedCoefficientLinearSolveTutorialFixture({
@@ -207,6 +209,104 @@ function createGeneratedCoefficientLinearSolveTutorialFixture(
   };
 }
 
+function createGeneratedTwoStepLinearSolveTutorialFixture(
+  input: GeneratedLinearSolveTutorialFixtureSpec & {
+    readonly addend: number;
+    readonly coefficient: number;
+  }
+): GeneratedLinearSolveTutorialFixture {
+  assertNonZeroInteger(input.addend, `Generated algebra fixture ${input.id} addend`);
+  assertNonZeroInteger(
+    input.coefficient,
+    `Generated algebra fixture ${input.id} coefficient`
+  );
+
+  const ids = generatedTwoStepSolveIds(input);
+  const reducedRhs = input.coefficient * input.solution;
+  const rhs = reducedRhs + input.addend;
+  const addendTerm = formatLatexSignedTerm(input.addend);
+  const inverseTerm = formatLatexSignedTerm(-input.addend);
+  const latex = {
+    initial: `${input.coefficient}${input.variable} ${addendTerm} = ${rhs}`,
+    afterSubtract: `${input.coefficient}${input.variable} ${addendTerm} ${inverseTerm} = ${rhs} ${inverseTerm}`,
+    addendCanceled: `${input.coefficient}${input.variable} = ${rhs} ${inverseTerm}`,
+    constantSimplified: `${input.coefficient}${input.variable} = ${reducedRhs}`,
+    afterDivide: `${input.coefficient}${input.variable} / ${input.coefficient} = ${reducedRhs} / ${input.coefficient}`,
+    coefficientCanceled: `${input.variable} = ${reducedRhs} / ${input.coefficient}`,
+    solved: `${input.variable} = ${input.solution}`
+  };
+  const bundle = createKpAssetBundle({
+    id: ids.asset,
+    title: input.title,
+    objects: [
+      equationObject(ids.initial, "Initial equation", latex.initial, [
+        selector(ids.initial, "lhs.coefficient", "factor", String(input.coefficient)),
+        selector(ids.initial, "lhs.variable", "term", input.variable),
+        selector(ids.initial, "lhs.addend", "term", formatSignedTerm(input.addend)),
+        selector(ids.initial, "equals", "relation", "="),
+        selector(ids.initial, "rhs.value", "term", String(rhs))
+      ]),
+      equationObject(ids.afterSubtract, "After applying additive inverse", latex.afterSubtract, [
+        selector(ids.afterSubtract, "lhs.coefficient", "factor", String(input.coefficient)),
+        selector(ids.afterSubtract, "lhs.variable", "term", input.variable),
+        selector(ids.afterSubtract, "lhs.addend", "term", formatSignedTerm(input.addend)),
+        selector(ids.afterSubtract, "lhs.subtract", "term", formatSignedTerm(-input.addend)),
+        selector(ids.afterSubtract, "equals", "relation", "="),
+        selector(ids.afterSubtract, "rhs.value", "term", String(rhs)),
+        selector(ids.afterSubtract, "rhs.subtract", "term", formatSignedTerm(-input.addend))
+      ]),
+      equationObject(ids.addendCanceled, "After additive cancellation", latex.addendCanceled, [
+        selector(ids.addendCanceled, "lhs.coefficient", "factor", String(input.coefficient)),
+        selector(ids.addendCanceled, "lhs.variable", "term", input.variable),
+        selector(ids.addendCanceled, "equals", "relation", "="),
+        selector(ids.addendCanceled, "rhs.value", "term", String(rhs)),
+        selector(ids.addendCanceled, "rhs.subtract", "term", formatSignedTerm(-input.addend))
+      ]),
+      equationObject(ids.constantSimplified, "After simplifying the constant", latex.constantSimplified, [
+        selector(ids.constantSimplified, "lhs.coefficient", "factor", String(input.coefficient)),
+        selector(ids.constantSimplified, "lhs.variable", "term", input.variable),
+        selector(ids.constantSimplified, "equals", "relation", "="),
+        selector(ids.constantSimplified, "rhs.reduced", "term", String(reducedRhs))
+      ]),
+      equationObject(ids.afterDivide, "After dividing by the coefficient", latex.afterDivide, [
+        selector(ids.afterDivide, "lhs.coefficient", "factor", String(input.coefficient)),
+        selector(ids.afterDivide, "lhs.variable", "term", input.variable),
+        selector(ids.afterDivide, "lhs.divide", "term", `/${input.coefficient}`),
+        selector(ids.afterDivide, "equals", "relation", "="),
+        selector(ids.afterDivide, "rhs.reduced", "term", String(reducedRhs)),
+        selector(ids.afterDivide, "rhs.divide", "term", `/${input.coefficient}`)
+      ]),
+      equationObject(ids.coefficientCanceled, "After coefficient cancellation", latex.coefficientCanceled, [
+        selector(ids.coefficientCanceled, "lhs.variable", "term", input.variable),
+        selector(ids.coefficientCanceled, "equals", "relation", "="),
+        selector(ids.coefficientCanceled, "rhs.reduced", "term", String(reducedRhs)),
+        selector(ids.coefficientCanceled, "rhs.divide", "term", `/${input.coefficient}`)
+      ]),
+      equationObject(ids.solved, "Solved equation", latex.solved, [
+        selector(ids.solved, "lhs.variable", "term", input.variable),
+        selector(ids.solved, "equals", "relation", "="),
+        selector(ids.solved, "rhs.solution", "term", String(input.solution))
+      ])
+    ]
+  });
+  const transformations = createGeneratedTwoStepSolveTransformations(ids);
+  const diagram = createKpSemanticDiagramSequence({
+    id: ids.diagram,
+    title: `${input.title} sequence`,
+    children: transformations.map(createKpTransformationDiagramLeaf)
+  });
+
+  return {
+    id: input.id,
+    title: input.title,
+    bundle,
+    transformations,
+    diagram,
+    trace: createGeneratedTwoStepSolveTrace(input, ids, latex),
+    flashcards: createGeneratedTwoStepSolveFlashcards(input, ids)
+  };
+}
+
 function createGeneratedLinearSolveTransformations(
   ids: GeneratedLinearSolveIds
 ): readonly KpSemanticTransformation[] {
@@ -313,6 +413,108 @@ function createGeneratedCoefficientSolveTransformations(
   ];
 }
 
+function createGeneratedTwoStepSolveTransformations(
+  ids: GeneratedTwoStepSolveIds
+): readonly KpSemanticTransformation[] {
+  return [
+    createKpSemanticTransformation({
+      id: ids.subtract,
+      transformType: "subtractBothSides",
+      title: "Subtract the addend from both sides",
+      sourceObjectIds: [ids.initial],
+      targetObjectIds: [ids.afterSubtract],
+      preserves: ["value", "structure"],
+      assumptions: ["Subtracting equal quantities preserves equality."],
+      lawRefs: [{ id: "law.equation.subtract-both-sides", level: "strict" }],
+      correspondence: [
+        correspondence(ids.initial, "lhs.coefficient", ids.afterSubtract, "lhs.coefficient"),
+        correspondence(ids.initial, "lhs.variable", ids.afterSubtract, "lhs.variable"),
+        correspondence(ids.initial, "lhs.addend", ids.afterSubtract, "lhs.addend"),
+        correspondence(ids.initial, "equals", ids.afterSubtract, "equals"),
+        correspondence(ids.initial, "rhs.value", ids.afterSubtract, "rhs.value")
+      ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.cancelAddend,
+      transformType: "cancelAdditiveInverses",
+      title: "Cancel additive inverses",
+      sourceObjectIds: [ids.afterSubtract],
+      targetObjectIds: [ids.addendCanceled],
+      preserves: ["value"],
+      assumptions: ["A term plus its additive inverse simplifies to zero."],
+      lawRefs: [{ id: "law.algebra.additive-inverse", level: "strict" }],
+      correspondence: [
+        correspondence(ids.afterSubtract, "lhs.coefficient", ids.addendCanceled, "lhs.coefficient"),
+        correspondence(ids.afterSubtract, "lhs.variable", ids.addendCanceled, "lhs.variable"),
+        correspondence(ids.afterSubtract, "equals", ids.addendCanceled, "equals"),
+        correspondence(ids.afterSubtract, "rhs.value", ids.addendCanceled, "rhs.value"),
+        correspondence(ids.afterSubtract, "rhs.subtract", ids.addendCanceled, "rhs.subtract")
+      ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.simplifyDifference,
+      transformType: "simplifyConstantDifference",
+      title: "Simplify the constant difference",
+      sourceObjectIds: [ids.addendCanceled],
+      targetObjectIds: [ids.constantSimplified],
+      preserves: ["value"],
+      assumptions: ["The right-hand constant difference evaluates to the remaining product."],
+      lawRefs: [{ id: "law.arithmetic.constant-difference", level: "strict" }],
+      correspondence: [
+        correspondence(ids.addendCanceled, "lhs.coefficient", ids.constantSimplified, "lhs.coefficient"),
+        correspondence(ids.addendCanceled, "lhs.variable", ids.constantSimplified, "lhs.variable"),
+        correspondence(ids.addendCanceled, "equals", ids.constantSimplified, "equals")
+      ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.divide,
+      transformType: "divideBothSides",
+      title: "Divide both sides by the coefficient",
+      sourceObjectIds: [ids.constantSimplified],
+      targetObjectIds: [ids.afterDivide],
+      preserves: ["value", "structure"],
+      assumptions: ["Dividing equal quantities by the same non-zero value preserves equality."],
+      lawRefs: [{ id: "law.equation.divide-both-sides", level: "strict" }],
+      correspondence: [
+        correspondence(ids.constantSimplified, "lhs.coefficient", ids.afterDivide, "lhs.coefficient"),
+        correspondence(ids.constantSimplified, "lhs.variable", ids.afterDivide, "lhs.variable"),
+        correspondence(ids.constantSimplified, "equals", ids.afterDivide, "equals"),
+        correspondence(ids.constantSimplified, "rhs.reduced", ids.afterDivide, "rhs.reduced")
+      ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.cancelCoefficient,
+      transformType: "cancelMultiplicativeInverses",
+      title: "Cancel multiplicative inverses",
+      sourceObjectIds: [ids.afterDivide],
+      targetObjectIds: [ids.coefficientCanceled],
+      preserves: ["value"],
+      assumptions: ["A non-zero factor divided by itself simplifies to one."],
+      lawRefs: [{ id: "law.algebra.multiplicative-inverse", level: "strict" }],
+      correspondence: [
+        correspondence(ids.afterDivide, "lhs.variable", ids.coefficientCanceled, "lhs.variable"),
+        correspondence(ids.afterDivide, "equals", ids.coefficientCanceled, "equals"),
+        correspondence(ids.afterDivide, "rhs.reduced", ids.coefficientCanceled, "rhs.reduced"),
+        correspondence(ids.afterDivide, "rhs.divide", ids.coefficientCanceled, "rhs.divide")
+      ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.simplifyQuotient,
+      transformType: "simplifyConstantQuotient",
+      title: "Simplify the constant quotient",
+      sourceObjectIds: [ids.coefficientCanceled],
+      targetObjectIds: [ids.solved],
+      preserves: ["value"],
+      assumptions: ["The right-hand constant quotient evaluates to the solution."],
+      lawRefs: [{ id: "law.arithmetic.constant-quotient", level: "strict" }],
+      correspondence: [
+        correspondence(ids.coefficientCanceled, "lhs.variable", ids.solved, "lhs.variable"),
+        correspondence(ids.coefficientCanceled, "equals", ids.solved, "equals")
+      ]
+    })
+  ];
+}
+
 function createGeneratedLinearSolveTrace(
   input: GeneratedLinearSolveTutorialFixtureSpec & { readonly addend: number },
   ids: GeneratedLinearSolveIds,
@@ -383,6 +585,59 @@ function createGeneratedCoefficientSolveTrace(
   };
 }
 
+function createGeneratedTwoStepSolveTrace(
+  input: GeneratedLinearSolveTutorialFixtureSpec & {
+    readonly addend: number;
+    readonly coefficient: number;
+  },
+  ids: GeneratedTwoStepSolveIds,
+  latex: GeneratedTwoStepSolveLatex
+): AlgebraTraceFixture {
+  return {
+    id: ids.trace,
+    title: `${input.title} generated two-step trace`,
+    steps: [
+      { id: `${ids.trace}.initial`, latex: latex.initial },
+      {
+        id: `${ids.trace}.after-subtract`,
+        latex: latex.afterSubtract,
+        transformationId: ids.subtract,
+        rule: "subtractBothSides"
+      },
+      {
+        id: `${ids.trace}.addend-canceled`,
+        latex: latex.addendCanceled,
+        transformationId: ids.cancelAddend,
+        rule: "cancelAdditiveInverses"
+      },
+      {
+        id: `${ids.trace}.constant-simplified`,
+        latex: latex.constantSimplified,
+        transformationId: ids.simplifyDifference,
+        rule: "simplifyConstantDifference"
+      },
+      {
+        id: `${ids.trace}.after-divide`,
+        latex: latex.afterDivide,
+        transformationId: ids.divide,
+        rule: "divideBothSides"
+      },
+      {
+        id: `${ids.trace}.coefficient-canceled`,
+        latex: latex.coefficientCanceled,
+        transformationId: ids.cancelCoefficient,
+        rule: "cancelMultiplicativeInverses"
+      },
+      {
+        id: `${ids.trace}.solved`,
+        latex: latex.solved,
+        transformationId: ids.simplifyQuotient,
+        rule: "simplifyConstantQuotient"
+      }
+    ]
+  };
+}
+
 function createGeneratedLinearSolveFlashcards(
   input: GeneratedLinearSolveTutorialFixtureSpec & { readonly addend: number },
   ids: GeneratedLinearSolveIds
@@ -444,6 +699,41 @@ function createGeneratedCoefficientSolveFlashcards(
       answer: {
         kind: "transformation",
         value: ids.subtract
+      }
+    })
+  ];
+}
+
+function createGeneratedTwoStepSolveFlashcards(
+  input: GeneratedLinearSolveTutorialFixtureSpec & {
+    readonly addend: number;
+    readonly coefficient: number;
+  },
+  ids: GeneratedTwoStepSolveIds
+): readonly KpFlashcardSpec[] {
+  return [
+    createKpFlashcardSpec({
+      id: `card.${input.id}.cloze-addend`,
+      kind: "cloze",
+      title: "Hide the addend",
+      assetId: ids.asset,
+      prompt: "What term must be removed before dividing?",
+      selectorIds: [`${ids.initial}.lhs.addend`],
+      answer: {
+        kind: "text",
+        value: formatSignedTerm(input.addend)
+      }
+    }),
+    createKpFlashcardSpec({
+      id: `card.${input.id}.cloze-coefficient`,
+      kind: "cloze",
+      title: "Hide the coefficient",
+      assetId: ids.asset,
+      prompt: "What coefficient must be divided away?",
+      selectorIds: [`${ids.constantSimplified}.lhs.coefficient`],
+      answer: {
+        kind: "text",
+        value: String(input.coefficient)
       }
     })
   ];
@@ -541,6 +831,53 @@ function generatedCoefficientSolveIds(
   };
 }
 
+interface GeneratedTwoStepSolveIds {
+  readonly asset: string;
+  readonly diagram: string;
+  readonly trace: string;
+  readonly initial: string;
+  readonly afterSubtract: string;
+  readonly addendCanceled: string;
+  readonly constantSimplified: string;
+  readonly afterDivide: string;
+  readonly coefficientCanceled: string;
+  readonly solved: string;
+  readonly subtract: string;
+  readonly cancelAddend: string;
+  readonly simplifyDifference: string;
+  readonly divide: string;
+  readonly cancelCoefficient: string;
+  readonly simplifyQuotient: string;
+}
+
+function generatedTwoStepSolveIds(
+  input: GeneratedLinearSolveTutorialFixtureSpec & {
+    readonly addend: number;
+    readonly coefficient: number;
+  }
+): GeneratedTwoStepSolveIds {
+  const id = input.id;
+
+  return {
+    asset: `asset.${id}`,
+    diagram: `diagram.${id}.sequence`,
+    trace: `trace.${id}`,
+    initial: `equation.${id}.initial`,
+    afterSubtract: `equation.${id}.after-subtract`,
+    addendCanceled: `equation.${id}.addend-canceled`,
+    constantSimplified: `equation.${id}.constant-simplified`,
+    afterDivide: `equation.${id}.after-divide`,
+    coefficientCanceled: `equation.${id}.coefficient-canceled`,
+    solved: `equation.${id}.solved`,
+    subtract: `transform.${id}.subtract-addend`,
+    cancelAddend: `transform.${id}.cancel-additive-inverse`,
+    simplifyDifference: `transform.${id}.simplify-difference`,
+    divide: `transform.${id}.divide-coefficient`,
+    cancelCoefficient: `transform.${id}.cancel-multiplicative-inverse`,
+    simplifyQuotient: `transform.${id}.simplify-quotient`
+  };
+}
+
 interface GeneratedLinearSolveLatex {
   readonly rhs: number;
   readonly initial: string;
@@ -563,6 +900,16 @@ function generatedLinearSolveLatex(
     leftSimplified: `${input.variable} = ${rhs} ${inverseTerm}`,
     solved: `${input.variable} = ${input.solution}`
   };
+}
+
+interface GeneratedTwoStepSolveLatex {
+  readonly initial: string;
+  readonly afterSubtract: string;
+  readonly addendCanceled: string;
+  readonly constantSimplified: string;
+  readonly afterDivide: string;
+  readonly coefficientCanceled: string;
+  readonly solved: string;
 }
 
 function equationObject(
