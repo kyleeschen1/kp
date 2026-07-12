@@ -176,7 +176,8 @@ test("createGeneratedLinearSolveTutorialFixtures exposes multiple generated exam
     "generated.linear-solve.y-plus-5",
     "generated.linear-solve.z-minus-4",
     "generated.linear-solve.three-x",
-    "generated.linear-solve.two-x-plus-3"
+    "generated.linear-solve.two-x-plus-3",
+    "generated.linear-solve.x-plus-one-half"
   ]);
   assert.deepEqual(
     fixtures[1]?.bundle.objects.map((object) => object.value),
@@ -295,6 +296,18 @@ test("createGeneratedLinearSolveTutorialFixtures exposes multiple generated exam
         "transform.generated.linear-solve.two-x-plus-3.simplify-quotient",
         "simplifyConstantQuotient"
       ]
+    ]
+  );
+  assert.deepEqual(
+    fixtures[5]?.bundle.objects.map((object) => object.value),
+    [
+      { latex: "x + \\frac{1}{2} = \\frac{5}{2}" },
+      {
+        latex:
+          "x + \\frac{1}{2} - \\frac{1}{2} = \\frac{5}{2} - \\frac{1}{2}"
+      },
+      { latex: "x = \\frac{5}{2} - \\frac{1}{2}" },
+      { latex: "x = 2" }
     ]
   );
   assert.deepEqual(

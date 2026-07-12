@@ -44,6 +44,13 @@ export const generatedLinearSolveTutorialFixtureSpecs:
       coefficient: 2,
       addend: 3,
       solution: 4
+    },
+    {
+      id: "generated.linear-solve.x-plus-one-half",
+      title: "Generated solve x plus one half",
+      variable: "x",
+      addend: 1 / 2,
+      solution: 2
     }
   ];
 

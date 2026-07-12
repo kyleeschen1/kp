@@ -79,7 +79,7 @@ export function createGeneratedLinearSolveTutorialFixture(
     );
   }
 
-  assertNonZeroInteger(input.addend, `Generated algebra fixture ${input.id} addend`);
+  assertNonZeroNumber(input.addend, `Generated algebra fixture ${input.id} addend`);
   const additiveInput = { ...input, addend: input.addend };
 
   const ids = generatedLinearSolveIds(additiveInput);
@@ -215,7 +215,7 @@ function createGeneratedTwoStepLinearSolveTutorialFixture(
     readonly coefficient: number;
   }
 ): GeneratedLinearSolveTutorialFixture {
-  assertNonZeroInteger(input.addend, `Generated algebra fixture ${input.id} addend`);
+  assertNonZeroNumber(input.addend, `Generated algebra fixture ${input.id} addend`);
   assertNonZeroInteger(
     input.coefficient,
     `Generated algebra fixture ${input.id} coefficient`
@@ -233,7 +233,7 @@ function createGeneratedTwoStepLinearSolveTutorialFixture(
     constantSimplified: `${input.coefficient}${input.variable} = ${reducedRhs}`,
     afterDivide: `${input.coefficient}${input.variable} / ${input.coefficient} = ${reducedRhs} / ${input.coefficient}`,
     coefficientCanceled: `${input.variable} = ${reducedRhs} / ${input.coefficient}`,
-    solved: `${input.variable} = ${input.solution}`
+    solved: `${input.variable} = ${formatLatexNumber(input.solution)}`
   };
   const bundle = createKpAssetBundle({
     id: ids.asset,
@@ -890,15 +890,16 @@ function generatedLinearSolveLatex(
   input: GeneratedLinearSolveTutorialFixtureSpec & { readonly addend: number }
 ): GeneratedLinearSolveLatex {
   const rhs = input.solution + input.addend;
+  const rhsLatex = formatLatexNumber(rhs);
   const addendTerm = formatLatexSignedTerm(input.addend);
   const inverseTerm = formatLatexSignedTerm(-input.addend);
 
   return {
     rhs,
-    initial: `${input.variable} ${addendTerm} = ${rhs}`,
-    afterSubtract: `${input.variable} ${addendTerm} ${inverseTerm} = ${rhs} ${inverseTerm}`,
-    leftSimplified: `${input.variable} = ${rhs} ${inverseTerm}`,
-    solved: `${input.variable} = ${input.solution}`
+    initial: `${input.variable} ${addendTerm} = ${rhsLatex}`,
+    afterSubtract: `${input.variable} ${addendTerm} ${inverseTerm} = ${rhsLatex} ${inverseTerm}`,
+    leftSimplified: `${input.variable} = ${rhsLatex} ${inverseTerm}`,
+    solved: `${input.variable} = ${formatLatexNumber(input.solution)}`
   };
 }
 
@@ -954,11 +955,39 @@ function correspondence(
 }
 
 function formatSignedTerm(value: number): string {
-  return `${value > 0 ? "+" : "-"}${Math.abs(value)}`;
+  return `${value > 0 ? "+" : "-"}${formatPlainNumber(Math.abs(value))}`;
 }
 
 function formatLatexSignedTerm(value: number): string {
-  return `${value > 0 ? "+" : "-"} ${Math.abs(value)}`;
+  return `${value > 0 ? "+" : "-"} ${formatLatexNumber(Math.abs(value))}`;
+}
+
+function formatLatexNumber(value: number): string {
+  if (Number.isInteger(value)) {
+    return String(value);
+  }
+
+  const doubled = value * 2;
+
+  if (Number.isInteger(doubled)) {
+    return `\\frac{${doubled}}{2}`;
+  }
+
+  return String(value);
+}
+
+function formatPlainNumber(value: number): string {
+  if (Number.isInteger(value)) {
+    return String(value);
+  }
+
+  const doubled = value * 2;
+
+  if (Number.isInteger(doubled)) {
+    return `${doubled}/2`;
+  }
+
+  return String(value);
 }
 
 function assertNonEmpty(value: string, label: string): void {
@@ -970,5 +999,11 @@ function assertNonEmpty(value: string, label: string): void {
 function assertNonZeroInteger(value: number, label: string): void {
   if (!Number.isInteger(value) || value === 0) {
     throw new Error(`${label} must be a non-zero integer.`);
+  }
+}
+
+function assertNonZeroNumber(value: number, label: string): void {
+  if (!Number.isFinite(value) || value === 0) {
+    throw new Error(`${label} must be a non-zero number.`);
   }
 }
