@@ -284,6 +284,16 @@
       "kind": "file",
       "path": "tests/generated-algebra-export-sample.test.ts",
       "summary": "Updates generated export discovery expectations for distribution inclusion."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-laws.ts",
+      "summary": "Defines generated algebra cancellation/simplification consistency law."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-laws.test.ts",
+      "summary": "Covers passing generated fixtures and a failing simplification transform regression."
     }
   ],
   "verification": [
@@ -636,11 +646,31 @@
       "command": "npm run theseus -- validate",
       "status": "passed",
       "checkedAt": "2026-07-12T19:54:39.829Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-laws.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:58:02.352Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-laws.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:58:02.398Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:58:02.470Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:58:02.514Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added generated distribution/factoring fixture family with distribute and factor variants, semantic object selectors, identity correspondences, traces, and discovery expectations."
+    "summary": "Added generated algebra cancellation/simplification consistency law with positive and negative coverage for value preservation, law references, and cancellation correspondence."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -758,8 +788,8 @@
     {
       "id": "slice.kp.generated-math.cancellation-consistency-law",
       "title": "Add cancellation and simplification consistency law",
-      "summary": "Check cancellation/simplification consistency across generated families.",
-      "status": "planned"
+      "summary": "Generated algebra cancellation/simplification consistency law now checks value preservation, law refs, and cancellation correspondence.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.flashcard-consistency-law",
