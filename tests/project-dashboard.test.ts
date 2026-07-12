@@ -178,6 +178,37 @@ test("renderProjectDashboard exposes linear-solve drill-down and flashcard rows"
   );
 });
 
+test("renderProjectDashboard exposes generated algebra tutorial family rows", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "generated-linear-solve-y-plus-5"
+  });
+
+  assert.match(
+    html,
+    /data-kp-agenda-row="generated-linear-solve-x-plus-3"/
+  );
+  assert.match(
+    html,
+    /data-kp-agenda-row="generated-linear-solve-y-plus-5"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Generated fixture"[^>]*>generated\.linear-solve\.y-plus-5</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Initial LaTeX"[^>]*>y \+ 5 = 12</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Solved LaTeX"[^>]*>y = 7</
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Dashboard interpreter"[^>]*>interpreter\.dashboard\.asset-preview</
+  );
+});
+
 test("project dashboard ids are unique and related ids resolve", () => {
   const ids = collectProjectDashboardIds(projectDashboardData);
   const uniqueIds = new Set(ids);

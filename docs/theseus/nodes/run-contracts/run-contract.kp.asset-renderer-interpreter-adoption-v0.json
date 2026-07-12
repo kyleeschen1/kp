@@ -245,6 +245,16 @@
       "kind": "file",
       "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
       "summary": "Covers the second generated solve example and registry-level transformation closure."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Adds dashboard rows for the generated algebra tutorial fixture family using semantic preview interpreter data."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers generated algebra tutorial family dashboard rows and selected-row previews."
     }
   ],
   "verification": [
@@ -602,8 +612,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T03:27:40.101Z",
-      "scope": "slice 21 second generated solve Theseus validation"
+      "scope": "slice 21 second generated solve Theseus validation",
+      "checkedAt": "2026-07-12T03:27:40.101Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "status": "passed",
+      "scope": "slice 22 generated family dashboard focused tests",
+      "checkedAt": "2026-07-12T03:33:16.606Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 22 generated family dashboard typecheck",
+      "checkedAt": "2026-07-12T03:33:25.791Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T03:33:35.088Z",
+      "scope": "slice 22 generated family dashboard Theseus validation"
     }
   ],
   "progress": {
@@ -755,12 +783,13 @@
     {
       "id": "slice.kp.asset-renderer.generated-family-dashboard",
       "title": "Add dashboard rows for generated tutorial family readiness",
-      "status": "ready"
+      "summary": "Added dashboard object-gallery rows for generated algebra tutorial fixtures with interpreter-backed preview fields.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.browser-smoke-if-needed",
       "title": "Add browser smoke if UI rendering changes materially",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.closeout",

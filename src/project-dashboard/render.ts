@@ -50,6 +50,7 @@ import {
   type KpDashboardAssetPreview
 } from "../semantic/dashboard-preview-interpreter.ts";
 import { runKpInterpreter, type KpInterpretation } from "../semantic/asset-interpreter.ts";
+import { createGeneratedLinearSolveTutorialFixtures } from "../semantic/generated-algebra-tutorial-fixture.ts";
 import { createLinearSolveKpAssetBundle } from "../semantic/linear-solve-asset.ts";
 import { capabilityPackageFacetSearchFields } from "./capability-package-facets.ts";
 import {
@@ -401,7 +402,8 @@ function createProjectAgendaSections(
       title: "Object Gallery",
       rows: [
         ...createGalleryAgendaRows(data.gallery, adapterRows.gallery),
-        ...createLinearSolveDerivedAgendaRows(query)
+        ...createLinearSolveDerivedAgendaRows(query),
+        ...createGeneratedAlgebraFixtureAgendaRows(query)
       ]
     },
     {
@@ -650,14 +652,76 @@ function createLinearSolveDerivedAgendaRows(
   return filterAgendaRows(rows, query);
 }
 
+function createGeneratedAlgebraFixtureAgendaRows(
+  query: string
+): readonly ProjectAgendaRow[] {
+  const rows = createGeneratedLinearSolveTutorialFixtures().map((fixture) => {
+    const interpretation = runKpInterpreter(
+      createKpDashboardAssetPreviewInterpreter(),
+      fixture.bundle
+    );
+    const initialLatex = latexValueAt(fixture, 0);
+    const solvedLatex = latexValueAt(fixture, fixture.bundle.objects.length - 1);
+
+    return {
+      id: agendaIdFromSemanticId("generated", fixture.id),
+      title: fixture.title,
+      summary: `Generated algebra tutorial fixture from ${initialLatex} to ${solvedLatex}.`,
+      status: "active",
+      detail: "generated algebra",
+      kind: "protocol-api",
+      depth: 0,
+      tags: ["generated", "algebra", "linear-solve", "fixture"],
+      dataAttributes: [
+        ["data-kp-generated-algebra-fixture", fixture.id] as [string, string],
+        ...semanticAssetPreviewDataAttributes(interpretation)
+      ],
+      relatedIds: ["asset-linear-solve-bundle", "port-algebra-trace-fixture"],
+      previewFields: [
+        { label: "Generated fixture", value: fixture.id },
+        { label: "Initial LaTeX", value: initialLatex },
+        { label: "Solved LaTeX", value: solvedLatex },
+        { label: "Trace steps", value: String(fixture.trace.steps.length) },
+        ...semanticAssetPreviewFields(interpretation)
+      ],
+      searchFields: [
+        fixture.id,
+        fixture.title,
+        initialLatex,
+        solvedLatex,
+        ...fixture.trace.steps.flatMap((step) => [step.id, step.latex]),
+        ...semanticAssetPreviewSearchFields(interpretation)
+      ]
+    };
+  });
+
+  return filterAgendaRows(rows, query);
+}
+
 function agendaIdFromSemanticId(prefix: string, id: string): string {
-  return `${prefix}-${id.replace(/^(card|drilldown)\./, "").replaceAll(".", "-")}`;
+  return `${prefix}-${id.replace(/^(card|drilldown|generated)\./, "").replaceAll(".", "-")}`;
 }
 
 function formatFlashcardAnswer(
   answer: { readonly kind: string; readonly value: string } | undefined
 ): string {
   return answer === undefined ? "None" : `${answer.kind}: ${answer.value}`;
+}
+
+function latexValueAt(
+  fixture: ReturnType<typeof createGeneratedLinearSolveTutorialFixtures>[number],
+  index: number
+): string {
+  const value = fixture.bundle.objects[index]?.value;
+
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "latex" in value &&
+    typeof value.latex === "string"
+  )
+    ? value.latex
+    : "";
 }
 
 function semanticAssetDashboardPreview(
