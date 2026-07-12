@@ -328,6 +328,21 @@
       "kind": "file",
       "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
       "summary": "Applies the closure law to the generated fixture family."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-laws.ts",
+      "summary": "Adds renderer-frame semantic preservation law over structural tutorial equation frame inputs."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-asset-laws.test.ts",
+      "summary": "Covers renderer clock drift, semantic transform/ref drift, selector closure, and inspection phase drift."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-linear-solve-tutorial-card-sample.test.ts",
+      "summary": "Applies the renderer preservation law to generated card sample frames."
     }
   ],
   "verification": [
@@ -614,13 +629,31 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T17:42:31.459Z",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-12T17:42:31.459Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-asset-laws.test.ts tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard-semantic-asset-catalog.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts tests/generated-linear-solve-export-sample.test.ts tests/kp-asset-decomposition.test.ts",
+      "status": "passed",
+      "scope": "asset law and generated semantic fixture suite",
+      "checkedAt": "2026-07-12T17:48:42.063Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T17:48:42.170Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T17:48:42.235Z",
       "scope": "Theseus graph validation"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added an asset-fixture reference closure law and applied it to every generated linear-solve fixture."
+    "summary": "Added renderer-frame semantic preservation law for generated tutorial card samples, preserving parent-clock and semantic metadata without assuming one-to-one visual track ids."
   },
   "allowedWork": [
     "Only work on the approved generated-fixture catalog adoption slices.",
@@ -733,13 +766,14 @@
     {
       "id": "slice.kp.generated-fixture.fixture-closure-law",
       "title": "Add generated fixture closure law",
-      "status": "complete",
-      "summary": "Added asset-fixture reference closure law and generated fixture coverage."
+      "summary": "Added asset-fixture reference closure law and generated fixture coverage.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.frame-preservation-law",
       "title": "Add renderer-frame preservation law",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Added renderer-frame semantic preservation law and generated card sample coverage."
     },
     {
       "id": "slice.kp.generated-fixture.port-diagnostics",

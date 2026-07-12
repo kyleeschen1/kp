@@ -64,6 +64,18 @@ export interface KpFixtureTraceStepReferenceClosureInput {
   readonly transformationId?: string | undefined;
 }
 
+export interface KpRendererFrameSemanticPreservationInput {
+  readonly progress: number;
+  readonly cardProgress?: number | undefined;
+  readonly transitionProgress?: number | undefined;
+  readonly equationFrame?: KpRendererEquationMotionFrameReference | undefined;
+  readonly semanticFrame?: KpEquationFrame | undefined;
+}
+
+export interface KpRendererEquationMotionFrameReference {
+  readonly progress: number;
+}
+
 export function checkKpBehaviorDeterminism<TFrame>(
   behavior: KpBehavior<TFrame>,
   timesMs: readonly number[]
@@ -244,6 +256,126 @@ export function checkKpAssetFixtureReferenceClosure(
   return lawResult("asset-fixture.reference-closure", failures);
 }
 
+export function checkKpRendererFrameSemanticPreservation(
+  input: KpRendererFrameSemanticPreservationInput
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+  const semanticFrame = input.semanticFrame;
+
+  if (semanticFrame === undefined) {
+    return lawResult("renderer-frame.semantic-preservation", [
+      {
+        path: "semanticFrame",
+        message: "Renderer frame must include a semantic frame."
+      }
+    ]);
+  }
+
+  if (!numbersEqual(input.progress, semanticFrame.progress)) {
+    failures.push({
+      path: "progress",
+      message:
+        `Renderer frame progress ${input.progress} does not match semantic frame progress ${semanticFrame.progress}.`
+    });
+  }
+
+  if (
+    input.cardProgress !== undefined &&
+    !numbersEqual(input.cardProgress, semanticFrame.progress)
+  ) {
+    failures.push({
+      path: "cardProgress",
+      message:
+        `Renderer card progress ${input.cardProgress} does not match semantic frame progress ${semanticFrame.progress}.`
+    });
+  }
+
+  if (
+    input.transitionProgress !== undefined &&
+    input.equationFrame !== undefined &&
+    !numbersEqual(input.equationFrame.progress, input.transitionProgress)
+  ) {
+    failures.push({
+      path: "equationFrame.progress",
+      message:
+        `Renderer equation motion progress ${input.equationFrame.progress} does not match transition progress ${input.transitionProgress}.`
+    });
+  }
+
+  const transformationRefIds = semanticFrame.transformationRefs.map(
+    (ref) => ref.transformationId
+  );
+
+  if (!framesEqual(semanticFrame.activeTransformationIds, transformationRefIds)) {
+    failures.push({
+      path: "semanticFrame.transformationRefs",
+      message:
+        `Semantic frame ${semanticFrame.id} active transformations must match transformation refs.`
+    });
+  }
+
+  // Generated semantic timelines can have more transformations than the reused
+  // visual motif; this law preserves the shared parent clock and metadata, not
+  // a one-to-one visual-track mapping.
+  checkKpEquationFrameSelectorCorrespondenceClosure(semanticFrame).failures.forEach(
+    (failure) => {
+      failures.push({
+        path: `semanticFrame.${failure.path}`,
+        message: failure.message
+      });
+    }
+  );
+
+  const inspection = semanticFrame.inspection;
+
+  if (inspection !== undefined) {
+    if (!numbersEqual(inspection.progress, semanticFrame.progress)) {
+      failures.push({
+        path: "semanticFrame.inspection.progress",
+        message:
+          `Semantic frame ${semanticFrame.id} inspection progress ${inspection.progress} must match frame progress ${semanticFrame.progress}.`
+      });
+    }
+
+    if (
+      inspection.phaseId !== undefined &&
+      semanticFrame.activeTransformationIds[0] !== undefined &&
+      inspection.phaseId !== semanticFrame.activeTransformationIds[0]
+    ) {
+      failures.push({
+        path: "semanticFrame.inspection.phaseId",
+        message:
+          `Semantic frame ${semanticFrame.id} inspection phase ${inspection.phaseId} must match active transformation ${semanticFrame.activeTransformationIds[0]}.`
+      });
+    }
+
+    if (
+      !framesEqual(
+        inspection.activeTransformationIds,
+        semanticFrame.activeTransformationIds
+      )
+    ) {
+      failures.push({
+        path: "semanticFrame.inspection.activeTransformationIds",
+        message:
+          `Semantic frame ${semanticFrame.id} inspection active transformations must match frame active transformations.`
+      });
+    }
+
+    const selectorIds = semanticFrame.selectorRefs.map((ref) => ref.selectorId);
+
+    if (!framesEqual(inspection.activeSelectorIds, selectorIds)) {
+      failures.push({
+        path: "semanticFrame.inspection.activeSelectorIds",
+        message:
+          `Semantic frame ${semanticFrame.id} inspection active selectors must match frame selector refs.`
+      });
+    }
+  }
+
+  return lawResult("renderer-frame.semantic-preservation", failures);
+}
+
 export function checkKpPortDeterminism<TInput>(
   port: KpExternalPort<TInput>,
   input: TInput
@@ -394,4 +526,8 @@ function lawResult(
 
 function framesEqual(left: unknown, right: unknown): boolean {
   return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function numbersEqual(left: number, right: number): boolean {
+  return Math.abs(left - right) < 1e-9;
 }

@@ -23,7 +23,8 @@ import {
   checkKpDiagramSequenceAssociativityLaw,
   checkKpEquationFrameSelectorCorrespondenceClosure,
   checkKpFlashcardReferenceClosure,
-  checkKpInterpreterLossDiagnostics
+  checkKpInterpreterLossDiagnostics,
+  checkKpRendererFrameSemanticPreservation
 } from "../src/semantic/asset-laws.ts";
 import {
   createKpTransformationDrillDownHook
@@ -327,6 +328,75 @@ test("checkKpAssetFixtureReferenceClosure reports unresolved fixture references"
           path: "trace.steps[0].transformationId",
           message:
             "Trace trace.bad step trace.bad.step references missing transformation transform.trace-missing."
+        }
+      ]
+    }
+  );
+});
+
+test("checkKpRendererFrameSemanticPreservation reports clock and semantic drift", () => {
+  const semanticFrame = equationFrame({
+    selectorIds: ["equation.initial.x"],
+    correspondence: [
+      {
+        sourceSelectorId: "equation.initial.x",
+        targetSelectorId: "equation.next.x",
+        preserves: ["identity"]
+      }
+    ]
+  });
+  const driftedFrame = {
+    ...semanticFrame,
+    activeTransformationIds: ["transform.active"],
+    transformationRefs: [
+      {
+        transformationId: "transform.other",
+        sourceObjectIds: ["equation.initial"],
+        targetObjectIds: ["equation.next"],
+        progress: 0.75
+      }
+    ],
+    inspection: {
+      behaviorId: "behavior.sample",
+      timeMs: 500,
+      progress: 0.5,
+      phaseId: "transform.inspected",
+      activeTransformationIds: ["transform.active"],
+      activeSelectorIds: ["equation.initial.x"]
+    }
+  };
+
+  assert.deepEqual(
+    checkKpRendererFrameSemanticPreservation({
+      progress: 0.5,
+      cardProgress: 0.5,
+      transitionProgress: 0.25,
+      equationFrame: { progress: 0.5 },
+      semanticFrame: driftedFrame
+    }),
+    {
+      lawId: "renderer-frame.semantic-preservation",
+      passed: false,
+      failures: [
+        {
+          path: "equationFrame.progress",
+          message:
+            "Renderer equation motion progress 0.5 does not match transition progress 0.25."
+        },
+        {
+          path: "semanticFrame.transformationRefs",
+          message:
+            "Semantic frame frame.sample active transformations must match transformation refs."
+        },
+        {
+          path: "semanticFrame.selectorCorrespondenceRefs[0].targetSelectorId",
+          message:
+            "Equation frame frame.sample correspondence references missing target selector equation.next.x."
+        },
+        {
+          path: "semanticFrame.inspection.phaseId",
+          message:
+            "Semantic frame frame.sample inspection phase transform.inspected must match active transformation transform.active."
         }
       ]
     }

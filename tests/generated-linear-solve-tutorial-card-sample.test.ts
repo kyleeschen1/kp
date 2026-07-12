@@ -6,6 +6,9 @@ import {
   generatedLinearSolveTutorialCardSampleId
 } from "../src/tutorial/generated-linear-solve-card-sample.ts";
 import { renderKpTutorialCardHtmlShell } from "../src/tutorial/card-html-shell.ts";
+import {
+  checkKpRendererFrameSemanticPreservation
+} from "../src/semantic/asset-laws.ts";
 
 test("generated linear-solve tutorial card samples use generated fixture semantics", () => {
   const sample = createGeneratedLinearSolveTutorialCardSample(
@@ -49,4 +52,23 @@ test("generated linear-solve tutorial card samples render fixture identity", () 
     /data-kp-tutorial-fixture="generated\.linear-solve\.x-plus-3"/
   );
   assert.match(html, /<h2>Generated solve x plus 3<\/h2>/);
+});
+
+test("generated linear-solve tutorial card samples preserve semantic renderer frames", () => {
+  const sample = createGeneratedLinearSolveTutorialCardSample(
+    "generated.linear-solve.two-x-plus-3"
+  );
+
+  for (const progress of [0, 0.25, 0.5, 0.75, 1]) {
+    assert.deepEqual(
+      checkKpRendererFrameSemanticPreservation(
+        sample.sample(progress).equationFrame
+      ),
+      {
+        lawId: "renderer-frame.semantic-preservation",
+        passed: true,
+        failures: []
+      }
+    );
+  }
 });
