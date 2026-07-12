@@ -2,7 +2,7 @@
   "id": "run-contract.kp.generated-math-family-expansion-v0",
   "kind": "run-contract",
   "title": "KP generated math family expansion",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.asset-calculus",
   "sourceRefs": [
     {
@@ -960,8 +960,9 @@
     {
       "id": "slice.kp.generated-math.closeout",
       "title": "Close generated math family expansion loop",
-      "summary": "Write closeout, resolve run contract, and record final verification.",
-      "status": "planned"
+      "summary": "Wrote generated math family expansion closeout, recorded final verification, and linked the closeout from the semantic runtime thread.",
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Completed generated math family expansion loop with generated algebra families, dashboard/search/export/law coverage, roadmap refresh, and closeout verification."
 }

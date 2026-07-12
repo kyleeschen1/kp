@@ -198,6 +198,7 @@ same fixtures into tutorial-card and export/sample paths.
 - `docs/project/reviews/2026-07-11-kp-asset-calculus-readiness-report.md`
 - `docs/project/reviews/2026-07-12-kp-renderer-interpreter-adoption-loop-closeout.md`
 - `docs/project/reviews/2026-07-12-generated-fixture-catalog-loop-closeout.md`
+- `docs/project/reviews/2026-07-12-generated-math-family-expansion-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-semantic-capability-loading-loop-closeout.md`
 - `docs/project/decisions/2026-07-11-kp-asset-calculus-priority.md`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.asset-calculus-denotational-protocol-v0.json`
