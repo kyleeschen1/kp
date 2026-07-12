@@ -14,6 +14,11 @@ import {
   type KpExternalPort,
   type KpExternalPortRunResult
 } from "./asset-port.ts";
+import {
+  validateKpFlashcardSpec,
+  type KpFlashcardSpec,
+  type KpFlashcardValidationContext
+} from "./asset-flashcard.ts";
 import type { KpInterpretation } from "./asset-interpreter.ts";
 import type { KpEquationFrame } from "./equation-frame-interpreter.ts";
 
@@ -226,6 +231,19 @@ export function checkKpInterpreterLossDiagnostics(
   }
 
   return lawResult("interpreter.loss-reporting", failures);
+}
+
+export function checkKpFlashcardReferenceClosure(
+  card: KpFlashcardSpec,
+  context: KpFlashcardValidationContext
+): KpLawCheckResult {
+  return lawResult(
+    "flashcard.reference-closure",
+    validateKpFlashcardSpec(card, context).map((issue) => ({
+      path: issue.path,
+      message: issue.message
+    }))
+  );
 }
 
 export function checkKpEquationFrameSelectorCorrespondenceClosure(

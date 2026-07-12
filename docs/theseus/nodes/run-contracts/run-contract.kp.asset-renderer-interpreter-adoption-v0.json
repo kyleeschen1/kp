@@ -185,6 +185,16 @@
       "kind": "file",
       "path": "tests/kp-asset-laws.test.ts",
       "summary": "Covers explicit interpreter composition loss diagnostics and failures for silent or unnamed loss."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-laws.ts",
+      "summary": "Adds a flashcard reference-closure law helper that reuses the flashcard validator."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-asset-laws.test.ts",
+      "summary": "Covers passing and failing flashcard reference-closure law results."
     }
   ],
   "verification": [
@@ -434,8 +444,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T02:51:03.669Z",
-      "scope": "slice 15 interpreter composition loss Theseus validation"
+      "scope": "slice 15 interpreter composition loss Theseus validation",
+      "checkedAt": "2026-07-12T02:51:03.669Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-asset-laws.test.ts tests/kp-asset-flashcard.test.ts tests/kp-linear-solve-asset.test.ts",
+      "status": "passed",
+      "scope": "slice 16 flashcard closure law focused tests",
+      "checkedAt": "2026-07-12T02:54:53.782Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 16 flashcard closure law typecheck",
+      "checkedAt": "2026-07-12T02:55:28.256Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T02:55:36.702Z",
+      "scope": "slice 16 flashcard closure law Theseus validation"
     }
   ],
   "progress": {
@@ -551,12 +579,13 @@
     {
       "id": "slice.kp.asset-renderer.flashcard-closure-law",
       "title": "Add flashcard reference-closure law",
-      "status": "ready"
+      "summary": "Added a flashcard reference-closure law helper and tests over asset, selector, and transformation references.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.dashboard-preview-interpreter",
       "title": "Add dashboard preview interpreter for semantic asset rows",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.linear-solve-dashboard-preview",

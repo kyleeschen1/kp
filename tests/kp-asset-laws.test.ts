@@ -2,6 +2,10 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  createKpAssetBundle,
+  createKpSemanticAssetObject
+} from "../src/semantic/asset.ts";
+import {
   createKpBehavior
 } from "../src/semantic/asset-behavior.ts";
 import {
@@ -17,8 +21,10 @@ import {
   checkKpDiagramRewindLaw,
   checkKpDiagramSequenceAssociativityLaw,
   checkKpEquationFrameSelectorCorrespondenceClosure,
+  checkKpFlashcardReferenceClosure,
   checkKpInterpreterLossDiagnostics
 } from "../src/semantic/asset-laws.ts";
+import { createKpFlashcardSpec } from "../src/semantic/asset-flashcard.ts";
 import type { KpInterpretation } from "../src/semantic/asset-interpreter.ts";
 import type { KpEquationFrame } from "../src/semantic/equation-frame-interpreter.ts";
 
@@ -320,6 +326,66 @@ test("checkKpInterpreterLossDiagnostics reports silent and unnamed losses", () =
   });
 });
 
+test("checkKpFlashcardReferenceClosure validates referenced asset entities", () => {
+  const context = flashcardContext();
+  const card = createKpFlashcardSpec({
+    id: "card.sample",
+    kind: "cloze",
+    title: "Hide the constant term",
+    assetId: "asset.flashcard-law",
+    prompt: "What term is hidden?",
+    objectIds: ["equation.initial"],
+    selectorIds: ["equation.initial.plus3"],
+    transformationIds: ["transform.subtract"],
+    answer: {
+      kind: "selector",
+      value: "equation.initial.plus3"
+    }
+  });
+
+  assert.deepEqual(checkKpFlashcardReferenceClosure(card, context), {
+    lawId: "flashcard.reference-closure",
+    passed: true,
+    failures: []
+  });
+});
+
+test("checkKpFlashcardReferenceClosure reports unresolved references", () => {
+  const card = createKpFlashcardSpec({
+    id: "card.bad",
+    kind: "predict-next",
+    title: "Bad flashcard refs",
+    assetId: "asset.other",
+    prompt: "What happens next?",
+    selectorIds: ["selector.missing"],
+    transformationIds: ["transform.missing"]
+  });
+
+  assert.deepEqual(
+    checkKpFlashcardReferenceClosure(card, flashcardContext()),
+    {
+      lawId: "flashcard.reference-closure",
+      passed: false,
+      failures: [
+        {
+          path: "assetId",
+          message:
+            "Flashcard card.bad references asset asset.other but validation context is asset.flashcard-law."
+        },
+        {
+          path: "selectorIds[0]",
+          message: "Flashcard card.bad references missing selector selector.missing."
+        },
+        {
+          path: "transformationIds[0]",
+          message:
+            "Flashcard card.bad references missing transformation transform.missing."
+        }
+      ]
+    }
+  );
+});
+
 function equationFrame(input: {
   readonly selectorIds: readonly string[];
   readonly correspondence: KpEquationFrame["selectorCorrespondenceRefs"];
@@ -339,5 +405,37 @@ function equationFrame(input: {
     })),
     selectorCorrespondenceRefs: input.correspondence,
     diagnostics: []
+  };
+}
+
+function flashcardContext() {
+  const bundle = createKpAssetBundle({
+    id: "asset.flashcard-law",
+    title: "Flashcard law fixture",
+    objects: [
+      createKpSemanticAssetObject({
+        id: "equation.initial",
+        objectType: "equation",
+        title: "Initial equation",
+        value: { latex: "x + 3 = 7" },
+        selectors: [
+          { id: "equation.initial.x", kind: "term", label: "x" },
+          { id: "equation.initial.plus3", kind: "term", label: "+3" }
+        ]
+      })
+    ]
+  });
+  const transformation = createKpSemanticTransformation({
+    id: "transform.subtract",
+    transformType: "subtractBothSides",
+    title: "Subtract 3",
+    sourceObjectIds: ["equation.initial"],
+    targetObjectIds: ["equation.next"],
+    preserves: ["value"]
+  });
+
+  return {
+    bundle,
+    transformations: [transformation]
   };
 }
