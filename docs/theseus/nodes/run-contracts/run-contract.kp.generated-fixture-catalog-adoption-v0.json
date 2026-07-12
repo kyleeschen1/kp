@@ -388,6 +388,16 @@
       "kind": "file",
       "path": "tests/project-dashboard-semantic-asset-catalog.test.ts",
       "summary": "Covers maturity row aggregation and search through semantic asset catalog."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-linear-solve-smoke-fixture.ts",
+      "summary": "Adds generated iframe smoke fixture wrapper with artifact and dependency manifest metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-linear-solve-smoke.browser.spec.ts",
+      "summary": "Covers generated two-step solve iframe rendering in Chromium."
     }
   ],
   "verification": [
@@ -746,13 +756,37 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T18:05:57.869Z",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-12T18:05:57.869Z"
+    },
+    {
+      "command": "npx playwright test tests/generated-linear-solve-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "Generated fixture Chromium browser smoke",
+      "checkedAt": "2026-07-12T18:10:04.400Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-linear-solve-export-sample.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts",
+      "status": "passed",
+      "scope": "generated export and card sample tests",
+      "checkedAt": "2026-07-12T18:10:04.440Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T18:10:04.469Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T18:10:04.506Z",
       "scope": "Theseus graph validation"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added generated linear-solve family maturity rows to the dashboard semantic asset catalog."
+    "summary": "Added a generated linear-solve iframe browser smoke fixture and Chromium Playwright smoke coverage."
   },
   "allowedWork": [
     "Only work on the approved generated-fixture catalog adoption slices.",
@@ -889,13 +923,14 @@
     {
       "id": "slice.kp.generated-fixture.dashboard-maturity-rows",
       "title": "Add generated family dashboard maturity rows",
-      "status": "complete",
-      "summary": "Added generated linear-solve maturity dashboard row and semantic catalog search coverage."
+      "summary": "Added generated linear-solve maturity dashboard row and semantic catalog search coverage.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.browser-smoke",
       "title": "Add generated fixture browser smoke",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Added generated linear-solve Chromium browser smoke fixture and spec."
     },
     {
       "id": "slice.kp.generated-fixture.roadmap-refresh",
