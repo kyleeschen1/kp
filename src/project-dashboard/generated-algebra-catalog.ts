@@ -1,8 +1,9 @@
 import { runKpInterpreter } from "../semantic/asset-interpreter.ts";
 import { createKpDashboardAssetPreviewInterpreter } from "../semantic/dashboard-preview-interpreter.ts";
 import {
+  createGeneratedAlgebraTutorialFixtures,
   createGeneratedLinearSolveTutorialFixtures,
-  type GeneratedLinearSolveTutorialFixture
+  type GeneratedAlgebraTutorialFixture
 } from "../semantic/generated-algebra-tutorial-fixture.ts";
 import {
   dashboardAssetPreviewDataAttributes,
@@ -113,11 +114,14 @@ export function createGeneratedAlgebraFixtureAgendaRows(
 export function createGeneratedAlgebraMaturityAgendaRows(
   query: string
 ): readonly GeneratedAlgebraFixtureAgendaRow[] {
-  const fixtures = createGeneratedLinearSolveTutorialFixtures();
-  const rows: GeneratedAlgebraFixtureAgendaRow[] = [
-    {
-      id: "generated-linear-solve-family-maturity",
-      title: "Generated linear-solve family maturity",
+  const rows = generatedFixturesGroupedByFamily(
+    createGeneratedAlgebraTutorialFixtures()
+  ).map(({ familyId, fixtures }): GeneratedAlgebraFixtureAgendaRow => {
+    const familyLabel = familyId.replace(/^generated\./, "");
+
+    return {
+      id: `generated-${familyLabel.replaceAll(".", "-")}-family-maturity`,
+      title: `Generated ${familyLabel} family maturity`,
       summary:
         "Tracks generated fixture coverage across semantic closure, renderer preservation, port diagnostics, drill-downs, flashcards, and export manifests.",
       status: "active",
@@ -127,21 +131,20 @@ export function createGeneratedAlgebraMaturityAgendaRows(
       tags: [
         "generated",
         "algebra",
-        "linear-solve",
+        familyLabel,
         "maturity",
         "dependency-manifest"
       ],
       dataAttributes: [
-        ["data-kp-generated-algebra-family", "generated.linear-solve"],
-        ["data-kp-generated-algebra-maturity", "active"]
+        ["data-kp-generated-algebra-family", familyId] as [string, string],
+        ["data-kp-generated-algebra-maturity", "active"] as [string, string]
       ],
       relatedIds: [
-        "asset-linear-solve-bundle",
         "port-algebra-trace-fixture",
-        "generated-linear-solve-x-plus-3"
+        ...fixtures.map((fixture) => agendaIdFromGeneratedFixtureId(fixture.id))
       ],
       previewFields: [
-        { label: "Fixture family", value: "generated.linear-solve" },
+        { label: "Fixture family", value: familyId },
         { label: "Fixtures", value: String(fixtures.length) },
         {
           label: "Semantic objects",
@@ -167,7 +170,8 @@ export function createGeneratedAlgebraMaturityAgendaRows(
         },
         {
           label: "Port diagnostics",
-          value: "trace-transformation-mismatch, trace-rule-mismatch"
+          value:
+            "trace-latex-mismatch, trace-transformation-mismatch, trace-rule-mismatch"
         }
       ],
       previewLinks: [],
@@ -176,9 +180,11 @@ export function createGeneratedAlgebraMaturityAgendaRows(
         "generated algebra fixture catalog",
         "generated fixture maturity",
         "generated fixture dependency manifests",
-        "linear solve fixture family",
+        `${familyLabel} fixture family`,
+        familyId,
         "asset-fixture.reference-closure",
         "renderer-frame semantic-preservation",
+        "trace-latex-mismatch",
         "trace-transformation-mismatch",
         "trace-rule-mismatch",
         "dependency-manifest",
@@ -194,8 +200,8 @@ export function createGeneratedAlgebraMaturityAgendaRows(
           fixture.flashcards.map((flashcard) => flashcard.id)
         )
       ]
-    }
-  ];
+    };
+  });
 
   return rows.filter((row) => generatedAlgebraRowMatchesQuery(row, query));
 }
@@ -209,7 +215,7 @@ function sum<T>(values: readonly T[], select: (value: T) => number): number {
 }
 
 function latexValueAt(
-  fixture: GeneratedLinearSolveTutorialFixture,
+  fixture: GeneratedAlgebraTutorialFixture,
   index: number
 ): string {
   const value = fixture.bundle.objects[index]?.value;
@@ -222,6 +228,30 @@ function latexValueAt(
   )
     ? value.latex
     : "";
+}
+
+function generatedFixturesGroupedByFamily(
+  fixtures: readonly GeneratedAlgebraTutorialFixture[]
+): readonly {
+  readonly familyId: GeneratedAlgebraTutorialFixture["familyId"];
+  readonly fixtures: readonly GeneratedAlgebraTutorialFixture[];
+}[] {
+  const groups = new Map<
+    GeneratedAlgebraTutorialFixture["familyId"],
+    GeneratedAlgebraTutorialFixture[]
+  >();
+
+  fixtures.forEach((fixture) => {
+    const group = groups.get(fixture.familyId) ?? [];
+
+    group.push(fixture);
+    groups.set(fixture.familyId, group);
+  });
+
+  return Array.from(groups, ([familyId, familyFixtures]) => ({
+    familyId,
+    fixtures: familyFixtures
+  }));
 }
 
 function generatedAlgebraRowMatchesQuery(

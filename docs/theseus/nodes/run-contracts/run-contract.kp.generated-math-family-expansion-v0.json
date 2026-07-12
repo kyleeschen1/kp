@@ -314,6 +314,16 @@
       "kind": "file",
       "path": "tests/kp-algebra-trace-port-fixture.test.ts",
       "summary": "Covers generated radical trace imports and latex/transformation/rule/unknown diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Groups generated algebra fixtures by family for maturity agenda rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "summary": "Covers generated family maturity rows, counts, and search behavior."
     }
   ],
   "verification": [
@@ -716,11 +726,26 @@
       "command": "npm run theseus -- validate",
       "status": "passed",
       "checkedAt": "2026-07-12T20:05:26.434Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T20:09:45.474Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T20:09:45.519Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T20:09:45.567Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added generated algebra trace port helper and radical trace diagnostics coverage for non-linear generated fixtures."
+    "summary": "Generalized generated algebra dashboard maturity rows across all generated fixture families with per-family counts and search coverage."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -856,8 +881,8 @@
     {
       "id": "slice.kp.generated-math.dashboard-family-rows",
       "title": "Add dashboard maturity rows per generated family",
-      "summary": "Surface generated family maturity in dashboard rows.",
-      "status": "planned"
+      "summary": "Generated algebra dashboard maturity rows now cover every generated fixture family with per-family counts and search coverage.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.dashboard-actions",

@@ -31,7 +31,12 @@ test("generated algebra dashboard catalog exposes family maturity rows", () => {
   const rows = createGeneratedAlgebraMaturityAgendaRows("");
 
   assert.deepEqual(rows.map((row) => row.id), [
-    "generated-linear-solve-family-maturity"
+    "generated-linear-solve-family-maturity",
+    "generated-fraction-expression-family-maturity",
+    "generated-exponent-family-maturity",
+    "generated-radical-family-maturity",
+    "generated-function-wrap-family-maturity",
+    "generated-distribution-family-maturity"
   ]);
   assert.deepEqual(rows[0]?.previewFields.slice(0, 7), [
     { label: "Fixture family", value: "generated.linear-solve" },
@@ -42,6 +47,24 @@ test("generated algebra dashboard catalog exposes family maturity rows", () => {
     { label: "Flashcards", value: "25" },
     { label: "Dependency manifests", value: "iframe, static-step" }
   ]);
+  assert.deepEqual(rows[3]?.previewFields.slice(0, 7), [
+    { label: "Fixture family", value: "generated.radical" },
+    { label: "Fixtures", value: "1" },
+    { label: "Semantic objects", value: "2" },
+    { label: "Transformations", value: "1" },
+    { label: "Drill-down hooks", value: "0" },
+    { label: "Flashcards", value: "1" },
+    { label: "Dependency manifests", value: "iframe, static-step" }
+  ]);
+  assert.deepEqual(rows[5]?.previewFields.slice(0, 7), [
+    { label: "Fixture family", value: "generated.distribution" },
+    { label: "Fixtures", value: "2" },
+    { label: "Semantic objects", value: "4" },
+    { label: "Transformations", value: "2" },
+    { label: "Drill-down hooks", value: "0" },
+    { label: "Flashcards", value: "0" },
+    { label: "Dependency manifests", value: "iframe, static-step" }
+  ]);
 });
 
 test("generated algebra maturity rows are searchable by protocol coverage", () => {
@@ -49,7 +72,14 @@ test("generated algebra maturity rows are searchable by protocol coverage", () =
     createGeneratedAlgebraMaturityAgendaRows(
       "renderer-frame semantic-preservation dependency manifests"
     ).map((row) => row.id),
-    ["generated-linear-solve-family-maturity"]
+    [
+      "generated-linear-solve-family-maturity",
+      "generated-fraction-expression-family-maturity",
+      "generated-exponent-family-maturity",
+      "generated-radical-family-maturity",
+      "generated-function-wrap-family-maturity",
+      "generated-distribution-family-maturity"
+    ]
   );
 });
 
