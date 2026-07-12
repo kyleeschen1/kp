@@ -954,8 +954,8 @@
     {
       "id": "slice.kp.generated-math.roadmap-refresh",
       "title": "Refresh roadmap and semantic-runtime docs",
-      "summary": "Update project docs with generated math family progress.",
-      "status": "planned"
+      "summary": "Refreshed KP roadmap and semantic-runtime docs with generated algebra family expansion progress, updated near-term priorities, and refreshed open questions after verification.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.closeout",

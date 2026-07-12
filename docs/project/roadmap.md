@@ -28,15 +28,17 @@ The doctrine, composition laws, authoring guide, core interfaces, executable
 law checks, pause-time inspection, drill-down hooks, flashcard specs, external
 port fixture, programming trace skeleton, equation-frame interpreter path,
 dashboard preview interpreter, and generated algebra tutorial fixture path are
-in place. Generated linear-solve fixtures now flow through the tutorial-card
-sample path, export samples, dependency manifests, drill-down hooks,
-flashcards, algebra-trace port diagnostics, renderer-frame preservation laws,
-fixture-closure laws, dashboard maturity rows, and browser smoke coverage. The
-current pressure is no longer to define the vocabulary; it is to make more
-renderer, dashboard, export, graph, programming, and generated-tutorial paths
-consume it directly. The goal remains practical: a KP intermediate
-representation with composition laws inspired by category theory and FRP, not a
-broad abstract category theory framework.
+in place. Generated algebra now covers linear solves, fraction expressions,
+exponents, radicals, function wrapping, and distribution/factoring through the
+same registry, tutorial-card sample path, export samples, dependency manifests,
+drill-down hooks, flashcards, algebra-trace port diagnostics, renderer-frame
+preservation laws, fixture-closure laws, dashboard maturity rows, sample
+actions, search facets, and browser smoke coverage. The current pressure is no
+longer to define the vocabulary; it is to make more renderer, dashboard,
+export, graph, programming, and generated-tutorial paths consume it directly.
+The goal remains practical: a KP intermediate representation with composition
+laws inspired by category theory and FRP, not a broad abstract category theory
+framework.
 
 **Completed dependency layer.** The export/embed, browser hardening, and
 hosted/export sampling loops all closed on 2026-07-11. KP now has concrete
@@ -120,8 +122,10 @@ tutorial can edit emphasis without changing semantic truth.
 
 Status: next
 
-Use equations as the proof lab. Grow transform fixtures and semantic coverage
-for:
+Use equations as the proof lab. Generated algebra now has the first reusable
+family path for several KaTeX shapes, so the next pressure is to promote the
+best family-level definitions into a stronger transform library. Grow transform
+fixtures and semantic coverage for:
 
 - fractions;
 - radicals;
@@ -206,9 +210,9 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Expand generated tutorial fixtures beyond the first linear-solve family:
-   subtraction, multiplication, division, multi-step algebra, fractions,
-   radicals, exponents, and function wrapping.
+1. Promote the generated algebra family path from "many sample families" into
+   richer semantic transform definitions for fractions, radicals, exponents,
+   function wrapping, distribution, factoring, simplification, and cancellation.
 2. Promote additional renderer surfaces to consume interpreter frames:
    comparison cards, graph/vector panels, source-code traces, and export
    previews.

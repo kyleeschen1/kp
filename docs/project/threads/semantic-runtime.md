@@ -2,10 +2,11 @@
 
 Status: active
 Last Updated: 2026-07-12
-Current Next Action: Expand generated tutorial families and promote more
-renderers to consume semantic frames, now that generated linear-solve fixtures
-flow through cards, exports, laws, diagnostics, dashboard rows, and browser
-smoke coverage.
+Current Next Action: Promote generated algebra families into stronger semantic
+transform definitions and move more renderer surfaces to consume semantic
+frames, now that linear-solve, fraction, exponent, radical, function-wrap, and
+distribution/factoring families flow through cards, exports, laws, diagnostics,
+dashboard rows, sample actions, search facets, and browser smoke coverage.
 
 ## Goal
 
@@ -101,10 +102,21 @@ preservation laws; expose algebra-trace port diagnostics for transformation and
 rule mismatches; emit generated export dependency manifests; surface dashboard
 maturity rows; and have a Chromium smoke fixture for generated iframe rendering.
 
-The next priority is to make those paths less narrow. Generated tutorial
-families, media encoders, graph/visual runtime unification, and program-trace
-visualizations should all use the asset-calculus framework rather than running
-ahead of it.
+The generated math family expansion loop then widened that path into a
+family-neutral generated algebra catalog. Fraction-expression, exponent,
+radical, function-wrap, and distribution/factoring fixtures now share the same
+registry, asset bundle, semantic transformation, diagram, trace, flashcard,
+tutorial-card sample, export sample, dependency manifest, dashboard row,
+sample-action, search-facet, law, diagnostic, and browser-smoke seams. That
+means the next work is less about proving that generated math can enter KP and
+more about improving the semantic transform library, visual motif defaults,
+composition laws, and renderer-neutral frame adoption that those generated
+families exercise.
+
+The next priority is to make those paths more semantically expressive.
+Generated tutorial families, media encoders, graph/visual runtime unification,
+and program-trace visualizations should all use the asset-calculus framework
+rather than running ahead of it.
 
 The renderer adoption path is:
 
@@ -152,15 +164,16 @@ same fixtures into tutorial-card and export/sample paths.
 
 ## Open Questions
 
-- How should generated algebra fixture families move from narrow examples into
-  a reusable semantic catalog without making the dashboard renderer own the
-  registry?
+- Which generated algebra transform families should be promoted first from
+  fixture-specific metadata into reusable SemanticTransformation definitions:
+  fraction split/merge, exponent lowering, radical rewrite, function wrapping,
+  distribution/factoring, simplification, or cancellation?
 - Which renderer-neutral frame fields should become required across WebGL
   graphs, source-code panels, dashboard previews, and exports now that the
   KaTeX generated fixture path has a preservation law?
-- How far should the first generated tutorial family expand before the media
-  encoder path consumes it: more linear solves, fractions/radicals/exponents,
-  or mixed algebra/calculus examples?
+- How much generated family coverage is enough before the media encoder path
+  consumes it: the current algebra families, a mixed algebra/calculus example,
+  or a graph-linked equation example?
 - Which law checks should come next: renderer frame preservation, generated
   fixture closure, port diagnostics, or flashcard prompt/reference consistency?
 - Which media encoder target should consume the frame-sequence artifact first:
