@@ -294,6 +294,16 @@
       "kind": "file",
       "path": "tests/generated-algebra-laws.test.ts",
       "summary": "Covers passing generated fixtures and a failing simplification transform regression."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-laws.ts",
+      "summary": "Adds generated algebra flashcard consistency law on top of shared flashcard reference closure."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-laws.test.ts",
+      "summary": "Covers passing generated flashcards and a broken generated flashcard regression."
     }
   ],
   "verification": [
@@ -666,11 +676,26 @@
       "command": "npm run theseus -- validate",
       "status": "passed",
       "checkedAt": "2026-07-12T19:58:02.514Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-laws.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-12T20:02:03.502Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-12T20:02:03.548Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T20:02:03.591Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added generated algebra cancellation/simplification consistency law with positive and negative coverage for value preservation, law references, and cancellation correspondence."
+    "summary": "Added generated algebra flashcard consistency law for generated card ids, asset references, non-empty prompts, explain-transform references, and closure diagnostics."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -794,8 +819,8 @@
     {
       "id": "slice.kp.generated-math.flashcard-consistency-law",
       "title": "Add flashcard prompt/reference consistency law",
-      "summary": "Check generated flashcard prompts and references across fixture families.",
-      "status": "planned"
+      "summary": "Generated algebra flashcard consistency law now checks ids, asset refs, prompts, explain-transform refs, and closure.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.trace-diagnostics",

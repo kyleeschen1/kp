@@ -2,6 +2,9 @@ import type {
   KpLawCheckResult,
   KpLawFailure
 } from "./asset-laws.ts";
+import {
+  checkKpFlashcardReferenceClosure
+} from "./asset-laws.ts";
 import type {
   GeneratedAlgebraTutorialFixture
 } from "./generated-algebra-tutorial-fixture.ts";
@@ -57,6 +60,70 @@ export function checkGeneratedAlgebraCancellationSimplificationConsistency(
 
   return {
     lawId: "generated-algebra.cancellation-simplification-consistency",
+    passed: failures.length === 0,
+    failures
+  };
+}
+
+export function checkGeneratedAlgebraFlashcardConsistency(
+  fixtures: readonly GeneratedAlgebraTutorialFixture[]
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+
+  fixtures.forEach((fixture, fixtureIndex) => {
+    fixture.flashcards.forEach((card, cardIndex) => {
+      const path = `fixtures[${fixtureIndex}].flashcards[${cardIndex}]`;
+      const expectedIdPrefix = `card.${fixture.id}.`;
+
+      if (!card.id.startsWith(expectedIdPrefix)) {
+        failures.push({
+          path: `${path}.id`,
+          message:
+            `Generated algebra flashcard ${card.id} id must start with ${expectedIdPrefix.slice(0, -1)}.`
+        });
+      }
+
+      if (card.assetId !== fixture.bundle.id) {
+        failures.push({
+          path: `${path}.assetId`,
+          message:
+            `Generated algebra flashcard ${card.id} must reference asset ${fixture.bundle.id}.`
+        });
+      }
+
+      if (card.prompt.trim().length === 0) {
+        failures.push({
+          path: `${path}.prompt`,
+          message:
+            `Generated algebra flashcard ${card.id} must have a non-empty prompt.`
+        });
+      }
+
+      if (
+        card.kind === "explain-transform" &&
+        (card.transformationIds ?? []).length === 0
+      ) {
+        failures.push({
+          path: `${path}.transformationIds`,
+          message:
+            `Generated algebra explain-transform flashcard ${card.id} must reference at least one transformation.`
+        });
+      }
+
+      checkKpFlashcardReferenceClosure(card, {
+        bundle: fixture.bundle,
+        transformations: fixture.transformations
+      }).failures.forEach((failure) => {
+        failures.push({
+          path: `${path}.${failure.path}`,
+          message: failure.message
+        });
+      });
+    });
+  });
+
+  return {
+    lawId: "generated-algebra.flashcard-consistency",
     passed: failures.length === 0,
     failures
   };

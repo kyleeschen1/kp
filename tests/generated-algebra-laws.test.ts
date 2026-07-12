@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  checkGeneratedAlgebraFlashcardConsistency,
   checkGeneratedAlgebraCancellationSimplificationConsistency
 } from "../src/semantic/generated-algebra-laws.ts";
 import {
@@ -58,4 +59,74 @@ test("generated algebra cancellation and simplification law reports missing valu
       ]
     }
   );
+});
+
+test("generated algebra flashcards satisfy prompt and reference consistency law", () => {
+  assert.deepEqual(
+    checkGeneratedAlgebraFlashcardConsistency(
+      createGeneratedAlgebraTutorialFixtures()
+    ),
+    {
+      lawId: "generated-algebra.flashcard-consistency",
+      passed: true,
+      failures: []
+    }
+  );
+});
+
+test("generated algebra flashcard consistency law reports broken generated flashcards", () => {
+  const fixture = createGeneratedAlgebraTutorialFixtures().find(
+    (candidate) => candidate.id === "generated.radical.square-root-as-power"
+  );
+
+  assert.ok(fixture);
+
+  const [card] = fixture.flashcards;
+
+  assert.ok(card);
+
+  const broken = {
+    ...fixture,
+    flashcards: [
+      {
+        ...card,
+        id: "card.generated.radical.bad",
+        assetId: "asset.generated.radical.missing",
+        prompt: "",
+        transformationIds: []
+      }
+    ]
+  };
+
+  assert.deepEqual(checkGeneratedAlgebraFlashcardConsistency([broken]), {
+    lawId: "generated-algebra.flashcard-consistency",
+    passed: false,
+    failures: [
+      {
+        path: "fixtures[0].flashcards[0].id",
+        message:
+          "Generated algebra flashcard card.generated.radical.bad id must start with card.generated.radical.square-root-as-power."
+      },
+      {
+        path: "fixtures[0].flashcards[0].assetId",
+        message:
+          "Generated algebra flashcard card.generated.radical.bad must reference asset asset.generated.radical.square-root-as-power."
+      },
+      {
+        path: "fixtures[0].flashcards[0].prompt",
+        message:
+          "Generated algebra flashcard card.generated.radical.bad must have a non-empty prompt."
+      },
+      {
+        path: "fixtures[0].flashcards[0].transformationIds",
+        message:
+          "Generated algebra explain-transform flashcard card.generated.radical.bad must reference at least one transformation."
+      },
+      {
+        path: "fixtures[0].flashcards[0].assetId",
+        message:
+          "Flashcard card.generated.radical.bad references asset asset.generated.radical.missing but validation context is asset.generated.radical.square-root-as-power."
+      }
+    ]
+  });
 });
