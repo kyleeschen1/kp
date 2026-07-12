@@ -117,6 +117,9 @@ function interpretLinearSolveEquationFrame(
           preserves: correspondence.preserves
         })
       ),
+      drillDownIds: input.asset.drillDownHooks
+        .filter((hook) => hook.transformationId === active.transformation.id)
+        .map((hook) => hook.id),
       diagnostics
     },
     diagnostics

@@ -115,6 +115,16 @@
       "kind": "file",
       "path": "tests/kp-linear-solve-equation-frame-interpreter.test.ts",
       "summary": "Covers inspection metadata on sampled linear-solve equation frames."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/linear-solve-equation-frame-interpreter.ts",
+      "summary": "Adds active drill-down hook ids to linear-solve equation frames."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-linear-solve-equation-frame-interpreter.test.ts",
+      "summary": "Covers drill-down ids on the active cancellation equation frame."
     }
   ],
   "verification": [
@@ -238,8 +248,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T02:20:00.160Z",
-      "scope": "slice 8 equation-frame inspection metadata Theseus validation"
+      "scope": "slice 8 equation-frame inspection metadata Theseus validation",
+      "checkedAt": "2026-07-12T02:20:00.160Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-linear-solve-equation-frame-interpreter.test.ts tests/kp-asset-decomposition.test.ts tests/kp-linear-solve-asset.test.ts",
+      "status": "passed",
+      "scope": "slice 9 equation-frame drill-down metadata tests",
+      "checkedAt": "2026-07-12T02:24:12.346Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 9 equation-frame drill-down metadata typecheck",
+      "checkedAt": "2026-07-12T02:24:14.291Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T02:24:16.314Z",
+      "scope": "slice 9 equation-frame drill-down metadata Theseus validation"
     }
   ],
   "progress": {
@@ -313,12 +341,13 @@
     {
       "id": "slice.kp.asset-renderer.drilldown-metadata",
       "title": "Wire drill-down hooks into equation frame/sample metadata",
-      "status": "ready"
+      "summary": "Added drillDownIds to active linear-solve equation frames by matching asset drill-down hooks to the active semantic transformation.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.flashcard-metadata",
       "title": "Wire flashcard references into equation frame/sample metadata",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.tutorial-card-interpreter-path",

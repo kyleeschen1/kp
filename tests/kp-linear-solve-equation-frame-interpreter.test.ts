@@ -76,6 +76,9 @@ test("linear-solve equation frame interpreter samples the active cancel transfor
       preserves: ["identity", "role"]
     }
   ]);
+  assert.deepEqual(interpretation.output.drillDownIds, [
+    "drilldown.linear-solve.cancel-additive-inverse"
+  ]);
   assert.deepEqual(interpretation.diagnostics, []);
   assert.deepEqual(interpretation.output.diagnostics, []);
 });
