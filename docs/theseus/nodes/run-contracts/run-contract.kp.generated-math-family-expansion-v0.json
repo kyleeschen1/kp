@@ -94,6 +94,16 @@
       "kind": "file",
       "path": "tests/generated-algebra-export-sample.test.ts",
       "summary": "Specifies fraction fixture iframe/static-step export artifacts, manifests, HTML identity, and trace preservation."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-algebra-smoke-fixture.ts",
+      "summary": "Creates generated algebra iframe smoke fixtures from the generic export sample path."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-smoke.browser.spec.ts",
+      "summary": "Verifies generated fraction iframe export artifact, tutorial card identity, nonblank equation panel, and fixture family metadata in Chromium."
     }
   ],
   "verification": [
@@ -205,13 +215,43 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T19:07:32.374Z",
-      "scope": "Theseus graph validation after fraction export slice"
+      "scope": "Theseus graph validation after fraction export slice",
+      "checkedAt": "2026-07-12T19:07:32.374Z"
+    },
+    {
+      "command": "npx playwright test tests/generated-algebra-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "Focused generated fraction browser smoke red/green test",
+      "checkedAt": "2026-07-12T19:10:45.424Z"
+    },
+    {
+      "command": "npx playwright test tests/generated-algebra-smoke.browser.spec.ts tests/generated-linear-solve-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "Generated algebra and existing linear-solve Chromium smoke tests",
+      "checkedAt": "2026-07-12T19:10:45.492Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-export-sample.test.ts",
+      "status": "passed",
+      "scope": "Generated algebra export sample regression",
+      "checkedAt": "2026-07-12T19:10:45.538Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T19:10:45.580Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T19:10:45.620Z",
+      "scope": "Theseus graph validation after browser smoke slice"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Added generated algebra iframe/static-step export samples and family-aware dependency manifests for fraction fixtures."
+    "summary": "Added Chromium smoke coverage for generated fraction-expression iframe exports."
   },
   "allowedWork": [
     "Only work on approved generated math family expansion slices."
@@ -269,8 +309,8 @@
     {
       "id": "slice.kp.generated-math.fraction-browser-smoke",
       "title": "Add generated fraction browser smoke",
-      "summary": "Prove generated fraction card rendering in Chromium.",
-      "status": "planned"
+      "summary": "Added generated fraction-expression Chromium iframe smoke coverage.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-math.exponent-fixtures",
