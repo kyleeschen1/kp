@@ -1,10 +1,10 @@
 # Semantic Runtime Thread
 
 Status: active
-Last Updated: 2026-07-11
-Current Next Action: Promote the linear-solve renderer path onto the KP Asset
-Calculus source of truth, then add interpreter contracts for KaTeX frames and
-dashboard previews.
+Last Updated: 2026-07-12
+Current Next Action: Move generated algebra and dashboard asset-row registries
+out of ad hoc dashboard helpers, then wire generated fixtures into tutorial-card
+and export/sample paths.
 
 ## Goal
 
@@ -81,9 +81,19 @@ deterministic algebra-trace port fixture, port law checks, a programming trace
 asset skeleton, dashboard rows for those artifacts, and an Asset Calculus
 readiness report.
 
-The next priority is to make existing renderers and dashboard previews consume
-those artifacts directly. Generated tutorial families, media encoders, and
-graph/visual runtime unification should use the asset-calculus framework rather
+The renderer/interpreter adoption loop closed on 2026-07-12. It documented the
+asset-to-interpreter-to-frame-to-view boundary, added equation-frame contracts
+and preservation diagnostics, made the linear-solve tutorial card consume
+semantic equation frames, attached active transformation, selector, inspection,
+drill-down, and flashcard refs to those frames, protected export stability,
+added selector/diagram/interpreter/flashcard law helpers, added a dashboard
+asset-preview interpreter, surfaced the linear-solve asset and generated
+linear-solve fixtures through interpreter-backed dashboard rows, and verified
+dashboard browser rendering after those changes.
+
+The next priority is to make those paths less sample-specific. Generated
+tutorial families, media encoders, graph/visual runtime unification, and
+program-trace visualizations should all use the asset-calculus framework rather
 than running ahead of it.
 
 The renderer adoption path is:
@@ -98,8 +108,10 @@ lossy. Frames carry active object, transformation, selector, drill-down,
 flashcard, layout, timing, focus, and diagnostic data without owning DOM or
 WebGL resources. View bindings render the frame and keep any concrete DOM,
 KaTeX, WebGL, canvas, or export handles as mutable implementation details.
-The linear-solve KaTeX card should be the first path converted to this
-contract.
+The linear-solve KaTeX card and dashboard preview path are the first converted
+examples. The next conversion should turn the generated algebra fixture registry
+and dashboard row construction into reusable catalog surfaces, then feed those
+same fixtures into tutorial-card and export/sample paths.
 
 ## Accepted Scope
 
@@ -130,15 +142,16 @@ contract.
 
 ## Open Questions
 
-- How should the linear-solve KaTeX renderer consume asset bundles,
-  inspection, drill-down hooks, and flashcards without duplicating semantic
-  state?
-- Which interpreter contracts should be strict, sampled, lax, or lossy
-  for KaTeX, WebGL graphs, source-code panels, dashboard previews, and exports?
-- Which law checks should come next: selector correspondence, diagram
-  associativity, flashcard reference closure, or interpreter loss diagnostics?
-- Which generated tutorial family should pressure-test the asset calculus
-  after the linear-solve and programming trace examples?
+- How should generated algebra fixture families move from narrow examples into
+  a reusable semantic catalog without making the dashboard renderer own the
+  registry?
+- Which renderer-neutral frame fields should become required across KaTeX,
+  WebGL graphs, source-code panels, dashboard previews, and exports?
+- How far should the first generated tutorial family expand before the media
+  encoder path consumes it: more linear solves, fractions/radicals/exponents,
+  or mixed algebra/calculus examples?
+- Which law checks should come next: renderer frame preservation, generated
+  fixture closure, port diagnostics, or flashcard prompt/reference consistency?
 - Which media encoder target should consume the frame-sequence artifact first:
   GIF, MP4/WebM, or a deterministic image sequence?
 - What is the minimum dynamic package loader boundary once manifests are stable
@@ -159,6 +172,7 @@ contract.
 - `docs/project/reviews/2026-07-11-hosted-package-readiness-export-sampling-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-capability-loading-readiness-report.md`
 - `docs/project/reviews/2026-07-11-kp-asset-calculus-readiness-report.md`
+- `docs/project/reviews/2026-07-12-kp-renderer-interpreter-adoption-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-semantic-capability-loading-loop-closeout.md`
 - `docs/project/decisions/2026-07-11-kp-asset-calculus-priority.md`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.asset-calculus-denotational-protocol-v0.json`

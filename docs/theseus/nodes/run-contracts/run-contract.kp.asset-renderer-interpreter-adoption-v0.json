@@ -2,9 +2,9 @@
   "id": "run-contract.kp.asset-renderer-interpreter-adoption-v0",
   "kind": "run-contract",
   "title": "KP asset renderer interpreter adoption",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.asset-calculus",
-  "summary": "Reopened after slice-materialization evidence so the approved multi-slice loop can continue.",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -260,6 +260,21 @@
       "kind": "file",
       "path": "tests/project-dashboard.browser.spec.ts",
       "summary": "Updates the dashboard browser smoke to the current default selected row and verifies a generated algebra fixture row renders."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Refreshes the roadmap after the renderer/interpreter adoption loop and sets the next generated-fixture/catalog priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Records the renderer/interpreter adoption loop closeout and the next semantic runtime conversion path."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-12-kp-renderer-interpreter-adoption-loop-closeout.md",
+      "summary": "Closeout report for the KP renderer/interpreter adoption loop, including verification, residual risks, and next slices."
     }
   ],
   "verification": [
@@ -653,8 +668,14 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T03:42:58.830Z",
-      "scope": "slice 23 dashboard browser smoke Theseus validation"
+      "scope": "slice 23 dashboard browser smoke Theseus validation",
+      "checkedAt": "2026-07-12T03:42:58.830Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T03:54:50.507Z",
+      "scope": "slice 24 closeout docs and run-contract provenance"
     }
   ],
   "progress": {
@@ -818,7 +839,8 @@
     {
       "id": "slice.kp.asset-renderer.closeout",
       "title": "Update roadmap, semantic runtime thread, and loop closeout notes",
-      "status": "ready"
+      "status": "complete",
+      "summary": "Updated roadmap, semantic runtime thread, and closeout review for the KP renderer/interpreter adoption loop."
     }
   ]
 }

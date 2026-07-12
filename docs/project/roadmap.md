@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-11
+Last Updated: 2026-07-12
 Status: active
 Active Thread: `threads/semantic-runtime.md`
 
@@ -19,17 +19,18 @@ semantics first
 
 ## Active Focus
 
-**KP Asset Calculus and denotational animation protocol.** KP now has the first
+**KP Asset Calculus and renderer/interpreter adoption.** KP now has the first
 encoded asset-calculus layer for humans, LLMs, generated problem systems,
 external CAS/program-trace ports, renderers, exports, and flashcards to compose
 through one predictable semantic/time protocol.
 
 The doctrine, composition laws, authoring guide, core interfaces, executable
 law checks, pause-time inspection, drill-down hooks, flashcard specs, external
-port fixture, and programming trace skeleton are in place. The current pressure
-is no longer to define the vocabulary; it is to make renderer/interpreter paths
-consume it directly, starting with the linear-solve KaTeX card and dashboard
-previews. The goal remains practical: a KP intermediate representation with
+port fixture, programming trace skeleton, equation-frame interpreter path,
+dashboard preview interpreter, and generated algebra tutorial fixture path are
+in place. The current pressure is no longer to define the vocabulary; it is to
+make more renderer, dashboard, export, and generated-tutorial paths consume it
+directly. The goal remains practical: a KP intermediate representation with
 composition laws inspired by category theory and FRP, not a broad abstract
 category theory framework.
 
@@ -201,20 +202,25 @@ Package executable tutorials as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Promote the linear-solve renderer path so it consumes the asset bundle,
-   inspection API, drill-down hooks, and flashcards from one source of truth.
-2. Add interpreter contracts for KaTeX frame sampling and dashboard previews
-   before widening the math catalog.
-3. Add law tests for selector correspondence, diagram associativity, flashcard
-   reference closure, and interpreter loss diagnostics.
-4. Use a generated tutorial family as the first pressure test for the asset
-   calculus and capability packages.
-5. Start GIF or video encoder integration only after the frame-sequence JSON
+1. Move generated algebra and dashboard asset-row registries out of ad hoc
+   dashboard renderer helpers and into reusable semantic catalog modules.
+2. Wire generated algebra fixtures into tutorial-card samples and export/sample
+   paths so the same semantic bundle can drive cards, previews, and artifacts.
+3. Expand generated tutorial fixtures beyond positive-addend linear solves:
+   subtraction, multiplication, division, multi-step algebra, fractions,
+   radicals, exponents, and function wrapping.
+4. Promote additional renderer surfaces to consume interpreter frames:
+   comparison cards, graph/vector panels, source-code traces, and export
+   previews.
+5. Keep adding law checks where composition matters: renderer frame
+   preservation, generated fixture closure, port diagnostics, and flashcard
+   prompt/reference consistency.
+6. Start GIF or video encoder integration only after the frame-sequence JSON
    artifact, HTML preview, browser probe, rewind check, dependency manifest,
    and capability package manifests stay stable.
-6. Expand graph diagnostics from current mesh/conformance checks into richer
+7. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-7. Defer dynamic package loading until at least one generated tutorial family
+8. Defer dynamic package loading until at least one generated tutorial family
    proves the metadata contract across math, graph, programming, and export
    examples.
 
