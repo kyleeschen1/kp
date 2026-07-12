@@ -16,8 +16,10 @@ import {
   checkKpBehaviorReparameterization,
   checkKpDiagramRewindLaw,
   checkKpDiagramSequenceAssociativityLaw,
-  checkKpEquationFrameSelectorCorrespondenceClosure
+  checkKpEquationFrameSelectorCorrespondenceClosure,
+  checkKpInterpreterLossDiagnostics
 } from "../src/semantic/asset-laws.ts";
+import type { KpInterpretation } from "../src/semantic/asset-interpreter.ts";
 import type { KpEquationFrame } from "../src/semantic/equation-frame-interpreter.ts";
 
 test("checkKpBehaviorDeterminism passes repeated equivalent samples", () => {
@@ -217,6 +219,105 @@ test("checkKpDiagramSequenceAssociativityLaw validates equivalent regrouping", (
       failures: []
     }
   );
+});
+
+test("checkKpInterpreterLossDiagnostics validates explicit composition loss diagnostics", () => {
+  const interpretation: KpInterpretation<unknown> = {
+    interpreterId: "interpreter.frame-sequence",
+    target: "frame-sequence",
+    inputKind: "semantic-diagram",
+    preservation: "lossy",
+    output: { frames: [] },
+    diagnostics: [
+      {
+        severity: "warning",
+        code: "composition-flattened",
+        message: "Nested semantic diagram groups were flattened for export.",
+        lossKind: "composition",
+        path: "diagram.children"
+      }
+    ]
+  };
+
+  assert.deepEqual(checkKpInterpreterLossDiagnostics(interpretation), {
+    lawId: "interpreter.loss-reporting",
+    passed: true,
+    failures: []
+  });
+});
+
+test("checkKpInterpreterLossDiagnostics reports silent and unnamed losses", () => {
+  const silent: KpInterpretation<unknown> = {
+    interpreterId: "interpreter.silent",
+    target: "custom",
+    inputKind: "asset-bundle",
+    preservation: "lax",
+    output: {},
+    diagnostics: []
+  };
+  const unnamed: KpInterpretation<unknown> = {
+    interpreterId: "interpreter.unnamed-loss",
+    target: "katex-dom",
+    inputKind: "asset-bundle",
+    preservation: "lossy",
+    output: {},
+    diagnostics: [
+      {
+        severity: "error",
+        code: "selector-dropped",
+        message: "A selector was dropped during interpretation."
+      }
+    ]
+  };
+  const strictWithLoss: KpInterpretation<unknown> = {
+    interpreterId: "interpreter.strict-loss",
+    target: "dashboard",
+    inputKind: "asset-bundle",
+    preservation: "strict",
+    output: {},
+    diagnostics: [
+      {
+        severity: "info",
+        code: "identity-dropped",
+        message: "Identity was dropped despite strict preservation.",
+        lossKind: "identity"
+      }
+    ]
+  };
+
+  assert.deepEqual(checkKpInterpreterLossDiagnostics(silent), {
+    lawId: "interpreter.loss-reporting",
+    passed: false,
+    failures: [
+      {
+        path: "diagnostics",
+        message:
+          "Interpreter interpreter.silent must report diagnostics when preservation is lax."
+      }
+    ]
+  });
+  assert.deepEqual(checkKpInterpreterLossDiagnostics(unnamed), {
+    lawId: "interpreter.loss-reporting",
+    passed: false,
+    failures: [
+      {
+        path: "diagnostics[0].lossKind",
+        message:
+          "Interpreter interpreter.unnamed-loss diagnostic selector-dropped must name the loss kind."
+      }
+    ]
+  });
+  assert.deepEqual(checkKpInterpreterLossDiagnostics(strictWithLoss), {
+    lawId: "interpreter.loss-reporting",
+    passed: false,
+    failures: [
+      {
+        path: "preservation",
+        message:
+          "Interpreter interpreter.strict-loss cannot claim strict preservation while reporting loss diagnostics."
+      }
+    ]
+  });
 });
 
 function equationFrame(input: {

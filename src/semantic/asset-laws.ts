@@ -14,6 +14,7 @@ import {
   type KpExternalPort,
   type KpExternalPortRunResult
 } from "./asset-port.ts";
+import type { KpInterpretation } from "./asset-interpreter.ts";
 import type { KpEquationFrame } from "./equation-frame-interpreter.ts";
 
 export interface KpLawFailure {
@@ -183,6 +184,48 @@ export function checkKpPortLossDiagnostics(
   }
 
   return lawResult("port.loss-reporting", failures);
+}
+
+export function checkKpInterpreterLossDiagnostics(
+  interpretation: KpInterpretation<unknown>
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+
+  if (
+    interpretation.preservation !== "strict" &&
+    interpretation.diagnostics.length === 0
+  ) {
+    failures.push({
+      path: "diagnostics",
+      message: `Interpreter ${interpretation.interpreterId} must report diagnostics when preservation is ${interpretation.preservation}.`
+    });
+  }
+
+  interpretation.diagnostics.forEach((diagnostic, index) => {
+    if (
+      (diagnostic.severity === "warning" || diagnostic.severity === "error") &&
+      diagnostic.lossKind === undefined
+    ) {
+      failures.push({
+        path: `diagnostics[${index}].lossKind`,
+        message: `Interpreter ${interpretation.interpreterId} diagnostic ${diagnostic.code} must name the loss kind.`
+      });
+    }
+  });
+
+  if (
+    interpretation.preservation === "strict" &&
+    interpretation.diagnostics.some(
+      (diagnostic) => diagnostic.lossKind !== undefined
+    )
+  ) {
+    failures.push({
+      path: "preservation",
+      message: `Interpreter ${interpretation.interpreterId} cannot claim strict preservation while reporting loss diagnostics.`
+    });
+  }
+
+  return lawResult("interpreter.loss-reporting", failures);
 }
 
 export function checkKpEquationFrameSelectorCorrespondenceClosure(

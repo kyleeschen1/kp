@@ -175,6 +175,16 @@
       "kind": "file",
       "path": "tests/kp-asset-laws.test.ts",
       "summary": "Covers equivalent regrouping of nested semantic diagram sequences."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-laws.ts",
+      "summary": "Adds interpreter loss-reporting law checks aligned with port diagnostics and composition-loss reporting."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-asset-laws.test.ts",
+      "summary": "Covers explicit interpreter composition loss diagnostics and failures for silent or unnamed loss."
     }
   ],
   "verification": [
@@ -406,8 +416,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T02:47:07.481Z",
-      "scope": "slice 14 diagram associativity law Theseus validation"
+      "scope": "slice 14 diagram associativity law Theseus validation",
+      "checkedAt": "2026-07-12T02:47:07.481Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-asset-laws.test.ts tests/kp-asset-interpreter.test.ts",
+      "status": "passed",
+      "scope": "slice 15 interpreter composition loss focused tests",
+      "checkedAt": "2026-07-12T02:50:49.886Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 15 interpreter composition loss typecheck",
+      "checkedAt": "2026-07-12T02:50:56.046Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T02:51:03.669Z",
+      "scope": "slice 15 interpreter composition loss Theseus validation"
     }
   ],
   "progress": {
@@ -517,12 +545,13 @@
     {
       "id": "slice.kp.asset-renderer.interpreter-composition-loss",
       "title": "Add interpreter composition and loss diagnostics tests",
-      "status": "ready"
+      "summary": "Added interpreter loss-reporting law checks for explicit composition loss, silent non-strict interpretations, unnamed warning/error losses, and strict outputs that still report loss diagnostics.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.flashcard-closure-law",
       "title": "Add flashcard reference-closure law",
-      "status": "planned"
+      "status": "ready"
     },
     {
       "id": "slice.kp.asset-renderer.dashboard-preview-interpreter",
