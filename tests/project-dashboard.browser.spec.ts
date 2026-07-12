@@ -46,10 +46,13 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   await expect(
     page.locator('[data-kp-agenda-row="api-semantic-matrix"]')
   ).toBeVisible();
+  await expect(
+    page.locator('[data-kp-agenda-row="generated-linear-solve-y-plus-5"]')
+  ).toBeVisible();
   const agendaPreview = page.locator("[data-kp-project-agenda-preview]");
   await expect(agendaPreview).toHaveAttribute(
     "data-kp-selected-agenda-row",
-    "work-rendering-time-protocol"
+    "work-kp-asset-calculus"
   );
   await page
     .locator('[data-kp-select-agenda-row="api-semantic-matrix"]')

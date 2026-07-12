@@ -255,6 +255,11 @@
       "kind": "file",
       "path": "tests/project-dashboard.test.ts",
       "summary": "Covers generated algebra tutorial family dashboard rows and selected-row previews."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.browser.spec.ts",
+      "summary": "Updates the dashboard browser smoke to the current default selected row and verifies a generated algebra fixture row renders."
     }
   ],
   "verification": [
@@ -630,8 +635,26 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T03:33:35.088Z",
-      "scope": "slice 22 generated family dashboard Theseus validation"
+      "scope": "slice 22 generated family dashboard Theseus validation",
+      "checkedAt": "2026-07-12T03:33:35.088Z"
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "slice 23 dashboard browser smoke",
+      "checkedAt": "2026-07-12T03:42:21.378Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 23 dashboard browser smoke typecheck",
+      "checkedAt": "2026-07-12T03:42:48.051Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T03:42:58.830Z",
+      "scope": "slice 23 dashboard browser smoke Theseus validation"
     }
   ],
   "progress": {
@@ -789,12 +812,13 @@
     {
       "id": "slice.kp.asset-renderer.browser-smoke-if-needed",
       "title": "Add browser smoke if UI rendering changes materially",
-      "status": "ready"
+      "summary": "Ran dashboard browser smoke after generated dashboard row changes and updated the smoke expectation to the current default selected row.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.asset-renderer.closeout",
       "title": "Update roadmap, semantic runtime thread, and loop closeout notes",
-      "status": "planned"
+      "status": "ready"
     }
   ]
 }
