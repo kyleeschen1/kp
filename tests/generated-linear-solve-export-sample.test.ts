@@ -21,6 +21,31 @@ test("generated linear-solve iframe export sample renders fixture card HTML", ()
     "export.generated.linear-solve.x-plus-3.iframe"
   );
   assert.equal(fixture.artifact.metadata?.["generatedFixtureId"], fixture.fixtureId);
+  assert.ok(fixture.dependencyManifest);
+  assert.deepEqual(
+    {
+      id: fixture.dependencyManifest.id,
+      artifactId: fixture.dependencyManifest.artifactId,
+      fixtureId: fixture.dependencyManifest.fixtureId,
+      assetId: fixture.dependencyManifest.assetId,
+      transformationIds: fixture.dependencyManifest.transformationIds,
+      drillDownIds: fixture.dependencyManifest.drillDownIds
+    },
+    {
+      id: "dependency-manifest.artifact.generated.linear-solve.x-plus-3.iframe",
+      artifactId: "artifact.generated.linear-solve.x-plus-3.iframe",
+      fixtureId: "generated.linear-solve.x-plus-3",
+      assetId: "asset.generated.linear-solve.x-plus-3",
+      transformationIds: [
+        "transform.generated.linear-solve.x-plus-3.subtract-addend",
+        "transform.generated.linear-solve.x-plus-3.cancel-additive-inverse",
+        "transform.generated.linear-solve.x-plus-3.simplify-difference"
+      ],
+      drillDownIds: [
+        "drilldown.generated.linear-solve.x-plus-3.cancel-additive-inverse"
+      ]
+    }
+  );
   assert.equal(fixture.progress, 0.5);
   assert.match(
     fixture.html,
@@ -58,5 +83,17 @@ test("generated linear-solve static-step export sample preserves generated seman
     fixture.sequence.artifact.metadata?.["sampleId"],
     "tutorial.generated.linear-solve.x-plus-3.card.live-sample"
   );
+  assert.ok(fixture.dependencyManifest);
+  assert.deepEqual(fixture.dependencyManifest.traceStepIds, [
+    "trace.generated.linear-solve.x-plus-3.initial",
+    "trace.generated.linear-solve.x-plus-3.after-subtract",
+    "trace.generated.linear-solve.x-plus-3.left-simplified",
+    "trace.generated.linear-solve.x-plus-3.solved"
+  ]);
+  assert.deepEqual(fixture.dependencyManifest.dependencyPhases, [
+    "critical",
+    "optional"
+  ]);
+  assert.deepEqual(fixture.dependencyManifest.diagnostics, []);
   assert.deepEqual(fixture.diagnostics, []);
 });

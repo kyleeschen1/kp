@@ -353,6 +353,21 @@
       "kind": "file",
       "path": "tests/kp-algebra-trace-port-fixture.test.ts",
       "summary": "Covers generated fixture transformation and rule mismatch diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-linear-solve-dependency-manifest.ts",
+      "summary": "Adds generated linear-solve dependency manifest construction."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-linear-solve-export-sample.ts",
+      "summary": "Emits dependency manifests from generated iframe and static-step export samples."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-linear-solve-export-sample.test.ts",
+      "summary": "Covers generated export dependency manifest metadata and dependency phases."
     }
   ],
   "verification": [
@@ -675,13 +690,31 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-12T17:52:34.073Z",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-12T17:52:34.073Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-algebra-trace-port-fixture.test.ts tests/kp-asset-laws.test.ts tests/kp-generated-algebra-fixture-registry.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard-semantic-asset-catalog.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts tests/generated-linear-solve-export-sample.test.ts tests/kp-asset-decomposition.test.ts",
+      "status": "passed",
+      "scope": "generated export and semantic fixture suite",
+      "checkedAt": "2026-07-12T17:57:26.833Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-12T17:57:26.874Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-12T17:57:26.915Z",
       "scope": "Theseus graph validation"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Generalized algebra trace fixture ports so generated fixtures report transformation-id and rule mismatches with explicit diagnostics."
+    "summary": "Generated linear-solve export samples now emit dependency manifests that combine artifact dependencies with generated semantic fixture closure metadata."
   },
   "allowedWork": [
     "Only work on the approved generated-fixture catalog adoption slices.",
@@ -806,13 +839,14 @@
     {
       "id": "slice.kp.generated-fixture.port-diagnostics",
       "title": "Add port diagnostics for generated fixture mismatch",
-      "status": "complete",
-      "summary": "Generalized algebra trace ports and added generated mismatch diagnostics."
+      "summary": "Generalized algebra trace ports and added generated mismatch diagnostics.",
+      "status": "complete"
     },
     {
       "id": "slice.kp.generated-fixture.dependency-manifest",
       "title": "Add dependency manifest emission",
-      "status": "planned"
+      "status": "complete",
+      "summary": "Generated export samples emit dependency manifests for artifact and semantic fixture dependencies."
     },
     {
       "id": "slice.kp.generated-fixture.dashboard-maturity-rows",
