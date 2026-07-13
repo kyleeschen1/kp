@@ -1,0 +1,71 @@
+{
+  "id": "next-action.kp.curriculum.problem-card-capsule-v0",
+  "kind": "next-action",
+  "title": "Gate curriculum, generated problems, and card capsules",
+  "status": "deferred",
+  "domain": "kp.curriculum",
+  "summary": "Defer curriculum/problem generation and spaced-repetition card capsules until semantic transformations, computation protocols, frame preservation, and flashcard specs are stable enough to generate verified solution assets.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-flashcard.ts",
+      "summary": "Current flashcard spec contract."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/computation-protocols.ts",
+      "summary": "Computation protocol metadata for objects that qualify."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Generated algebra fixtures that could later back verified problem sets."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-asset-flashcard.test.ts",
+      "summary": "Flashcard contract coverage."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.long-term-semantic-product-plan",
+      "next-action.kp.semantic.promote-generated-transform-library-v0",
+      "next-action.kp.export.media-frame-preservation-law-v0"
+    ]
+  },
+  "affects": [
+    "milestone.kp.long-term-semantic-product-plan-v0"
+  ],
+  "verification": [
+    "npm test -- tests/kp-asset-flashcard.test.ts tests/generated-algebra-laws.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Which generated solution assets are mathematically verified enough to become tutorial capsules or spaced-repetition prompts.",
+    "How concept prerequisites, misconceptions, and learner memory should reference stable semantic object ids.",
+    "Which flashcard prompt types can be generated from existing transformation and frame data."
+  ],
+  "allowedWork": [
+    "Keep this as a gated design and breakdown until prerequisite protocols are stable.",
+    "Use existing flashcard specs and generated algebra fixtures as examples."
+  ],
+  "disallowedWork": [
+    "Do not build learner memory, concept graph, or bulk problem generation yet.",
+    "Do not generate unverified math or solution steps."
+  ],
+  "revisitWhen": [
+    "After reusable semantic transformations, computation protocols, and media/frame laws prove solution provenance."
+  ],
+  "criteria": [
+    {
+      "id": "curriculum-gates-explicit",
+      "weight": "high"
+    },
+    {
+      "id": "verified-solution-asset-contract-known",
+      "weight": "high"
+    }
+  ]
+}

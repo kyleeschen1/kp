@@ -1,0 +1,78 @@
+{
+  "id": "next-action.kp.dashboard.authoring-actions-v0",
+  "kind": "next-action",
+  "title": "Plan dashboard authoring actions from catalog rows",
+  "status": "needs-breakdown",
+  "domain": "kp.dashboard",
+  "summary": "Break down dashboard actions for create fixture, inspect closure, compare variants, open samples, run smokes, and navigate source/test refs from agenda rows.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/model.ts",
+      "summary": "Dashboard row and action model."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Agenda-style dashboard rendering and preview behavior."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-fixture-sample-targets.ts",
+      "summary": "Generated fixture sample target hooks."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Dashboard data and rendering coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.browser.spec.ts",
+      "summary": "Dashboard browser interaction coverage."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.long-term-semantic-product-plan",
+      "next-action.kp.semantic.promote-generated-transform-library-v0"
+    ]
+  },
+  "affects": [
+    "milestone.kp.long-term-semantic-product-plan-v0"
+  ],
+  "verification": [
+    "npm test -- tests/project-dashboard.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard-theseus-adapter.test.ts",
+    "npm run test:browser:dashboard",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Which authoring actions are safe as static links versus which require an authenticated or local action runner.",
+    "How rows should report maturity, blockers, source refs, and verification after actions run.",
+    "How future Codex sessions should write back completion state without hand-editing dashboard data."
+  ],
+  "allowedWork": [
+    "Define the dashboard action contract and split implementation into small slices.",
+    "Prefer actions that open existing samples, tests, and source refs before mutation actions.",
+    "Keep one-row agenda navigation as the dominant layout."
+  ],
+  "disallowedWork": [
+    "Do not return to card-heavy dashboard sections.",
+    "Do not add writeback mutation actions before source refs and verification reporting are stable.",
+    "Do not make the dashboard depend on live browser-only state for static catalog rendering."
+  ],
+  "revisitWhen": [
+    "After the promoted transform library gives dashboard rows concrete semantic definitions to operate on."
+  ],
+  "criteria": [
+    {
+      "id": "dashboard-action-contract-drafted",
+      "weight": "high"
+    },
+    {
+      "id": "safe-static-actions-identified",
+      "weight": "medium"
+    }
+  ]
+}

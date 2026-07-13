@@ -1,7 +1,7 @@
 # Semantic Runtime Thread
 
 Status: active
-Last Updated: 2026-07-12
+Last Updated: 2026-07-13
 Current Next Action: Promote generated algebra families into stronger semantic
 transform definitions and move more renderer surfaces to consume semantic
 frames, now that linear-solve, fraction, exponent, radical, function-wrap, and
@@ -113,6 +113,14 @@ more about improving the semantic transform library, visual motif defaults,
 composition laws, and renderer-neutral frame adoption that those generated
 families exercise.
 
+The accepted long-term semantic product plan now gives this thread an ordered
+tranche sequence: promote generated families into reusable
+`SemanticTransformation` modules, attach visual motif defaults and reversible
+timeline laws, move graphs/source/dashboard/export views to renderer-neutral
+frames, turn dashboard rows into authoring actions, harden compile/export
+boundaries, and only then broaden into media encoders, curriculum/problem
+generation, spaced repetition, and dynamic package loading.
+
 The next priority is to make those paths more semantically expressive.
 Generated tutorial families, media encoders, graph/visual runtime unification,
 and program-trace visualizations should all use the asset-calculus framework
@@ -184,6 +192,8 @@ same fixtures into tutorial-card and export/sample paths.
   timeline markers, pauses, and annotations?
 - Which remaining KaTeX transform fixtures should be promoted from curated
   geometry to semantic transformation definitions?
+- What is the smallest `/api/compile` and export hardening slice that protects
+  future external ports without slowing the semantic transform library work?
 
 ## Links
 
@@ -199,6 +209,7 @@ same fixtures into tutorial-card and export/sample paths.
 - `docs/project/reviews/2026-07-12-kp-renderer-interpreter-adoption-loop-closeout.md`
 - `docs/project/reviews/2026-07-12-generated-fixture-catalog-loop-closeout.md`
 - `docs/project/reviews/2026-07-12-generated-math-family-expansion-loop-closeout.md`
+- `docs/project/decisions/2026-07-13-kp-long-term-semantic-product-plan.md`
 - `docs/project/reviews/2026-07-11-semantic-capability-loading-loop-closeout.md`
 - `docs/project/decisions/2026-07-11-kp-asset-calculus-priority.md`
 - `docs/theseus/nodes/run-contracts/run-contract.kp.asset-calculus-denotational-protocol-v0.json`

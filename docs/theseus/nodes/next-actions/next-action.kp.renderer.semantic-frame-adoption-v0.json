@@ -1,0 +1,71 @@
+{
+  "id": "next-action.kp.renderer.semantic-frame-adoption-v0",
+  "kind": "next-action",
+  "title": "Plan renderer-neutral frame adoption across KP surfaces",
+  "status": "needs-breakdown",
+  "domain": "kp.renderer",
+  "summary": "Break down graph/vector panels, source-code traces, dashboard previews, and export previews so each consumes semantic frames from interpreters instead of owning semantic time.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/graph-frame-adapter.ts",
+      "summary": "Graph frame adapter path to broaden beyond current samples."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/source-file-frame-adapter.ts",
+      "summary": "Source/programming frame adapter path for code trace rendering."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/asset-preview-fields.ts",
+      "summary": "Dashboard asset preview field surface that should consume semantic frames."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-sequence-artifact.ts",
+      "summary": "Export frame-sequence artifact that should stay renderer-neutral."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.long-term-semantic-product-plan",
+      "next-action.kp.runtime.visual-motif-default-laws-v0"
+    ]
+  },
+  "affects": [
+    "milestone.kp.long-term-semantic-product-plan-v0"
+  ],
+  "verification": [
+    "npm test -- tests/tutorial-card-graph-frame-adapter.test.ts tests/tutorial-card-programming-frame-export-sampler.test.ts tests/project-dashboard-asset-preview-fields.test.ts tests/tutorial-card-frame-sequence-artifact.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Which frame fields must become required across graph, source, dashboard, and export surfaces.",
+    "Which renderer-specific states can stay mutable view bindings.",
+    "Whether one adoption loop or several domain loops is the right execution shape."
+  ],
+  "allowedWork": [
+    "Create a concrete breakdown for frame adoption by surface.",
+    "Name shared frame fields and law checks before implementation.",
+    "Keep graph and source renderers as consumers of sampled semantic frames."
+  ],
+  "disallowedWork": [
+    "Do not replace WebGL, SVG, or code rendering internals before the frame boundary is explicit.",
+    "Do not create a separate timing system for graphs or source traces."
+  ],
+  "revisitWhen": [
+    "After promoted transform definitions and motif laws are stable enough to serve as frame inputs."
+  ],
+  "criteria": [
+    {
+      "id": "surface-breakdown-explicit",
+      "weight": "high"
+    },
+    {
+      "id": "shared-frame-fields-named",
+      "weight": "high"
+    }
+  ]
+}

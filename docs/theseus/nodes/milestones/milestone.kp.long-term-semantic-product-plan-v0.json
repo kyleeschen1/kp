@@ -1,0 +1,67 @@
+{
+  "id": "milestone.kp.long-term-semantic-product-plan-v0",
+  "kind": "milestone",
+  "title": "KP long-term semantic product plan",
+  "status": "active",
+  "domain": "kp.roadmap",
+  "summary": "Long-term KP plan encoded as an ordered tranche: reusable semantic transformations, visual motif laws, renderer-neutral frame adoption, dashboard authoring actions, compile/export hardening, media-frame preservation, curriculum/problem/card capsules, and dynamic package loading only after manifests stabilize.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-long-term-semantic-product-plan.md",
+      "summary": "Human-readable accepted plan."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Current source of truth with near-term priority order."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active workstream narrative and open questions."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.long-term-semantic-product-plan",
+      "decision.kp.semantic-animation-runtime-roadmap"
+    ]
+  },
+  "nextActions": [
+    "next-action.kp.semantic.promote-generated-transform-library-v0",
+    "next-action.kp.runtime.visual-motif-default-laws-v0",
+    "next-action.kp.renderer.semantic-frame-adoption-v0",
+    "next-action.kp.dashboard.authoring-actions-v0",
+    "next-action.kp.security.compile-export-boundary-hardening-v0",
+    "next-action.kp.export.media-frame-preservation-law-v0",
+    "next-action.kp.curriculum.problem-card-capsule-v0",
+    "next-action.kp.runtime.dynamic-package-loading-boundary-v0"
+  ],
+  "criteria": [
+    {
+      "id": "semantic-transform-library-promoted",
+      "weight": "high"
+    },
+    {
+      "id": "visual-motif-laws-reusable",
+      "weight": "high"
+    },
+    {
+      "id": "renderer-neutral-frames-adopted",
+      "weight": "high"
+    },
+    {
+      "id": "dashboard-authoring-actions-usable",
+      "weight": "medium"
+    },
+    {
+      "id": "external-boundaries-hardened",
+      "weight": "medium"
+    },
+    {
+      "id": "deferred-systems-remain-gated",
+      "weight": "medium"
+    }
+  ]
+}

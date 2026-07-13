@@ -1,0 +1,71 @@
+{
+  "id": "next-action.kp.runtime.dynamic-package-loading-boundary-v0",
+  "kind": "next-action",
+  "title": "Gate dynamic package loading behind stable manifests",
+  "status": "deferred",
+  "domain": "kp.runtime",
+  "summary": "Defer dynamic capability package loading until package manifests are stable across generated math, graph, programming, and export examples.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/capability-package-manifest.ts",
+      "summary": "Current package manifest metadata spine."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-sequence-dependency-manifest.ts",
+      "summary": "Export dependency manifest path that should remain compatible with package loading."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-dependency-planner.test.ts",
+      "summary": "Tutorial dependency planning tests."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-frame-sequence-dependency-manifest.test.ts",
+      "summary": "Frame-sequence dependency manifest tests."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.long-term-semantic-product-plan",
+      "next-action.kp.renderer.semantic-frame-adoption-v0",
+      "next-action.kp.security.compile-export-boundary-hardening-v0"
+    ]
+  },
+  "affects": [
+    "milestone.kp.long-term-semantic-product-plan-v0"
+  ],
+  "verification": [
+    "npm test -- tests/tutorial-card-dependency-planner.test.ts tests/tutorial-card-frame-sequence-dependency-manifest.test.ts tests/tutorial-card-export-dependency-closure.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Which manifest fields are stable enough to become loader input.",
+    "How exported capsules should declare critical, interactive, optional, and fallback package phases.",
+    "What security and dependency closure checks must pass before runtime loading."
+  ],
+  "allowedWork": [
+    "Keep this gated until manifests have cross-domain evidence.",
+    "Use package manifests as metadata contracts before loading code dynamically."
+  ],
+  "disallowedWork": [
+    "Do not implement a dynamic loader yet.",
+    "Do not ship package splitting until generated math, graph, programming, and export examples agree on manifests."
+  ],
+  "revisitWhen": [
+    "After package manifests are stable across generated math, graph, programming, and export examples."
+  ],
+  "criteria": [
+    {
+      "id": "manifest-stability-gates-explicit",
+      "weight": "high"
+    },
+    {
+      "id": "loader-security-preconditions-known",
+      "weight": "high"
+    }
+  ]
+}

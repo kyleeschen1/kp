@@ -1,0 +1,90 @@
+{
+  "id": "next-action.kp.semantic.promote-generated-transform-library-v0",
+  "kind": "next-action",
+  "title": "Promote generated algebra transforms into reusable definitions",
+  "status": "ready",
+  "domain": "kp.semantic",
+  "summary": "Turn generated algebra family metadata into reusable SemanticTransformation definitions for fraction split/merge, exponent lowering, radical rewrite, function wrapping, distribution/factoring, simplification, and cancellation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Generated algebra family registry that currently names the source fixture families."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Generated fixtures that currently create family-specific semantic transformations and diagrams."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "SemanticTransformation contract and correspondence validation target."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-transform-fixtures.ts",
+      "summary": "Existing KaTeX transform fixture taxonomy to retire as the sole definition source."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Generated fixture registry coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-laws.test.ts",
+      "summary": "Generated algebra law checks to extend for promoted definitions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-asset-transformation.test.ts",
+      "summary": "SemanticTransformation validation and composition coverage."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.long-term-semantic-product-plan",
+      "next.kp.katex-transform-library-foundation",
+      "next-action.kp.generated-fixture-catalog-adoption-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system",
+    "milestone.kp.long-term-semantic-product-plan-v0"
+  ],
+  "verification": [
+    "npm test -- tests/kp-generated-algebra-fixture-registry.test.ts tests/generated-algebra-laws.test.ts tests/kp-asset-transformation.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Which generated algebra families are ready to become reusable SemanticTransformation modules instead of fixture-local metadata.",
+    "What correspondence fields and law refs are needed for each family to preserve identity, structure, value, role, and presentation honestly.",
+    "Where fixtures should keep template convenience separate from semantic type explosion."
+  ],
+  "allowedWork": [
+    "Extract or add reusable transform definition data for generated algebra families.",
+    "Keep generated fixture specs as templates and object inputs, not as the only source of semantic transformation meaning.",
+    "Add law checks that prove fixture-generated transformations reference existing objects and selectors."
+  ],
+  "disallowedWork": [
+    "Do not redesign the whole semantic object registry in this slice.",
+    "Do not add a new animation effect unless it is represented through existing motif or frame contracts.",
+    "Do not broaden into graph, curriculum, media, or package loading implementation."
+  ],
+  "criteria": [
+    {
+      "id": "family-transform-definitions-reusable",
+      "weight": "high"
+    },
+    {
+      "id": "correspondence-and-preservation-explicit",
+      "weight": "high"
+    },
+    {
+      "id": "generated-fixtures-consume-definitions",
+      "weight": "high"
+    }
+  ]
+}

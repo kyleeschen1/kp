@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-12
+Last Updated: 2026-07-13
 Status: active
 Active Thread: `threads/semantic-runtime.md`
 
@@ -16,6 +16,13 @@ semantics first
 -> renderers third
 -> authoring and generation fourth
 ```
+
+The accepted long-term plan is recorded in
+`decisions/2026-07-13-kp-long-term-semantic-product-plan.md`. KP should keep
+turning generated examples and visible demos into reusable semantic objects,
+semantic transformations, visual motifs, renderer-neutral frames, dashboard
+authoring actions, and verified export inputs before expanding into media,
+curriculum, or dynamic package loading.
 
 ## Active Focus
 
@@ -213,21 +220,27 @@ Package executable tutorials as semantic capsules:
 1. Promote the generated algebra family path from "many sample families" into
    richer semantic transform definitions for fractions, radicals, exponents,
    function wrapping, distribution, factoring, simplification, and cancellation.
-2. Promote additional renderer surfaces to consume interpreter frames:
+2. Attach visual motif defaults and reversible timeline laws to those promoted
+   transformations so generated and hand-authored tutorials share the same
+   motion vocabulary.
+3. Promote additional renderer surfaces to consume interpreter frames:
    comparison cards, graph/vector panels, source-code traces, and export
    previews.
-3. Keep adding law checks where composition matters: flashcard prompt/reference
+4. Keep adding law checks where composition matters: flashcard prompt/reference
    consistency, semantic transformation decomposition, generated media-frame
    preservation, and graph/programming frame preservation.
-4. Move generated fixture family maturity from status rows into actionable
+5. Move generated fixture family maturity from status rows into actionable
    authoring controls: create fixture, inspect closure, open sample, run smoke,
    and compare variants.
-5. Start GIF or video encoder integration only after the frame-sequence JSON
+6. Harden `/api/compile`, export/embed boundaries, and future hosted capsules
+   with explicit size, schema, error, auth, CSP, and dependency policies before
+   inviting broad external input.
+7. Start GIF or video encoder integration only after the frame-sequence JSON
    artifact, HTML preview, browser probe, rewind check, dependency manifest,
    and capability package manifests stay stable.
-6. Expand graph diagnostics from current mesh/conformance checks into richer
+8. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-7. Defer dynamic package loading until at least one generated tutorial family
+9. Defer dynamic package loading until at least one generated tutorial family
    proves the metadata contract across math, graph, programming, and export
    examples.
 

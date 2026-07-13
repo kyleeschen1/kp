@@ -16,7 +16,8 @@
     "decision.kp.use-sibling-theseus-wrapper",
     "decision.kp.radical-artifact-dom-owned-motion",
     "decision.kp.headless-boundary-catalog",
-    "decision.kp.semantic-animation-runtime-roadmap"
+    "decision.kp.semantic-animation-runtime-roadmap",
+    "decision.kp.long-term-semantic-product-plan"
   ],
   "nextActions": [
     "next.kp.tutorial-card-browser-hardening-loop-contract",
@@ -42,11 +43,16 @@
     "next.kp.hosted-readiness-report-card",
     "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v0",
     "next-action.kp.generated-fixture-catalog-adoption-v0",
-    "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v1"
+    "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v1",
+    "next-action.kp.semantic.promote-generated-transform-library-v0",
+    "next-action.kp.runtime.visual-motif-default-laws-v0"
+  ],
+  "milestones": [
+    "milestone.kp.long-term-semantic-product-plan-v0"
   ],
   "progress": {
     "state": "partial",
-    "summary": "Reusable dashboard v1, semantic transition runtime, tutorial-card runtime, export/embed, browser-hardening, hosted/package readiness, and parent-timeline export sampling loops are closed; the next KP loop should choose between media encoders, capability loading, or graph runtime unification."
+    "summary": "Reusable dashboard v1, semantic transition runtime, tutorial-card runtime, export/embed, browser hardening, hosted/package readiness, capability loading, asset calculus, renderer adoption, generated fixture catalog adoption, and generated math family expansion loops are closed. The accepted long-term direction is to promote generated algebra families into reusable SemanticTransformation modules and visual motif laws first, then widen renderer-neutral frame adoption, dashboard authoring actions, compile/export hardening, media-frame laws, curriculum/card capsules, and dynamic package loading in that order."
   },
   "verificationRecords": [
     {

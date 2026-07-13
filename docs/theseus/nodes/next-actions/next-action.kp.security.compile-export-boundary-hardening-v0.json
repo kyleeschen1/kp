@@ -1,0 +1,75 @@
+{
+  "id": "next-action.kp.security.compile-export-boundary-hardening-v0",
+  "kind": "next-action",
+  "title": "Harden compile and export external boundaries",
+  "status": "needs-breakdown",
+  "domain": "kp.security",
+  "summary": "Plan the first hardening slice for /api/compile and export/embed boundaries: request size limit, schema validation, safer errors, and future auth/CSP/export policy hooks.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "server/app.ts",
+      "summary": "Prototype /api/compile endpoint that currently accepts unbounded JSON and returns compile errors as invalid request."
+    },
+    {
+      "kind": "file",
+      "path": "server/app.test.ts",
+      "summary": "Server API coverage for health, missing routes, and compile response."
+    },
+    {
+      "kind": "file",
+      "path": "src/compiler/html-asset.ts",
+      "summary": "HTML asset compiler invoked by the endpoint."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/hosted-artifact-readiness.ts",
+      "summary": "Hosted/export readiness diagnostics that should inform export boundary policy."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.long-term-semantic-product-plan"
+    ]
+  },
+  "affects": [
+    "milestone.kp.long-term-semantic-product-plan-v0"
+  ],
+  "verification": [
+    "npm test -- server/app.test.ts tests/compiler.test.ts tests/tutorial-hosted-artifact-readiness.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "What minimum schema validation protects deterministic external ports without blocking local authoring.",
+    "Which security constraints belong to compile input, export artifacts, iframe policy, or deployment policy.",
+    "Whether the first implementation should be endpoint hardening or an explicit policy metadata layer."
+  ],
+  "allowedWork": [
+    "Break hardening into small server, compiler, and export-policy slices.",
+    "Add focused tests for rejected oversized, malformed, and invalid document inputs.",
+    "Keep errors structured and safe for browser clients."
+  ],
+  "disallowedWork": [
+    "Do not add authentication or deployment infrastructure in the first hardening slice.",
+    "Do not broaden into hosted production deployment unless a boundary test requires metadata.",
+    "Do not block local dashboard/editor workflows with policy that has no bypass path."
+  ],
+  "revisitWhen": [
+    "Before external CAS/program/LSP ports or public embedded capsules rely on /api/compile."
+  ],
+  "criteria": [
+    {
+      "id": "compile-input-limits-defined",
+      "weight": "high"
+    },
+    {
+      "id": "schema-validation-scope-defined",
+      "weight": "high"
+    },
+    {
+      "id": "export-policy-hooks-identified",
+      "weight": "medium"
+    }
+  ]
+}

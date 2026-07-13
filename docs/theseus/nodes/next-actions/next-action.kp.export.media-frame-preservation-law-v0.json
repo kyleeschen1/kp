@@ -1,0 +1,70 @@
+{
+  "id": "next-action.kp.export.media-frame-preservation-law-v0",
+  "kind": "next-action",
+  "title": "Gate media encoders behind frame preservation laws",
+  "status": "deferred",
+  "domain": "kp.export",
+  "summary": "Define the media-frame preservation law that GIF, MP4/WebM, deterministic image sequence, and static-step exports must satisfy before encoder integration begins.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-sequence-artifact.ts",
+      "summary": "Frame-sequence JSON artifact that media encoders should consume."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-sequence-rewind-check.ts",
+      "summary": "Existing rewind check that should inform preservation law coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-frame-sequence-artifact.test.ts",
+      "summary": "Frame sequence artifact tests."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-frame-sequence-rewind-check.test.ts",
+      "summary": "Rewind check coverage."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.long-term-semantic-product-plan",
+      "next-action.kp.renderer.semantic-frame-adoption-v0"
+    ]
+  },
+  "affects": [
+    "milestone.kp.long-term-semantic-product-plan-v0"
+  ],
+  "verification": [
+    "npm test -- tests/tutorial-card-frame-sequence-artifact.test.ts tests/tutorial-card-frame-sequence-rewind-check.test.ts tests/tutorial-card-frame-export-contract.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Which frame metadata media encoders must preserve exactly and which can be sampled lossy.",
+    "How to prove media export rewind and beat alignment without implementing an encoder first.",
+    "Whether deterministic image sequence should precede GIF or MP4/WebM."
+  ],
+  "allowedWork": [
+    "Define law checks and artifact metadata expectations before encoder implementation.",
+    "Keep encoders as consumers of frame-sequence artifacts."
+  ],
+  "disallowedWork": [
+    "Do not implement GIF, MP4, WebM, or image-sequence encoders in this slice.",
+    "Do not let encoder APIs own semantic timing."
+  ],
+  "revisitWhen": [
+    "After renderer-neutral frame adoption is stable across equation, graph, source, dashboard, and export surfaces."
+  ],
+  "criteria": [
+    {
+      "id": "media-preservation-law-defined",
+      "weight": "high"
+    },
+    {
+      "id": "encoder-input-contract-accepted",
+      "weight": "high"
+    }
+  ]
+}

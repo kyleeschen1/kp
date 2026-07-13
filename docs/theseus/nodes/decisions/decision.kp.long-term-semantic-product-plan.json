@@ -1,0 +1,45 @@
+{
+  "id": "decision.kp.long-term-semantic-product-plan",
+  "kind": "decision",
+  "title": "Adopt KP long-term semantic product plan",
+  "status": "resolved",
+  "domain": "kp.roadmap",
+  "summary": "Accepted the long-term KP plan: semantic transformations and objects first, deterministic runtime and renderer-neutral frames second, renderers third, authoring/generation fourth. Generated algebra families should be promoted into reusable transformation modules and motif laws before graph/source/dashboard/export adoption, media encoders, curriculum generation, or dynamic package loading broaden the system.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-long-term-semantic-product-plan.md",
+      "summary": "Accepted long-term product plan and tranche order."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap updated with the accepted long-term plan and near-term priority order."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active semantic-runtime thread updated with the ordered tranche sequence."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "Current SemanticTransformation contract that generated transform definitions should target."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/visual-motif-composition.ts",
+      "summary": "Existing semantic transformation tree to visual motif timeline boundary."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/render.ts",
+      "summary": "Dashboard surface that should become a stronger authoring and catalog control plane."
+    },
+    {
+      "kind": "file",
+      "path": "server/app.ts",
+      "summary": "Prototype compile endpoint that needs request hardening before broad external input."
+    }
+  ]
+}

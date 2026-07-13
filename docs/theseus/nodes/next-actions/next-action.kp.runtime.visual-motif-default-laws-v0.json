@@ -1,0 +1,79 @@
+{
+  "id": "next-action.kp.runtime.visual-motif-default-laws-v0",
+  "kind": "next-action",
+  "title": "Attach reusable visual motif defaults and reversible laws",
+  "status": "ready",
+  "domain": "kp.runtime",
+  "summary": "Bind promoted SemanticTransformation definitions to default visual motifs and law checks so generated and authored examples share reversible timelines for cancellation, vanish/appear, wrapping, morphing, focus, and simplification.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/visual-motif-composition.ts",
+      "summary": "Maps semantic transformation trees to motif segments and forward/rewind phases."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "summary": "Default equation visual motif definitions."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-motif-timeline.ts",
+      "summary": "Timeline data that renderer/export paths can sample."
+    },
+    {
+      "kind": "file",
+      "path": "tests/visual-motif-composition.test.ts",
+      "summary": "Transform tree to motif composition tests."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-visual-motif-timeline.test.ts",
+      "summary": "Equation visual motif timeline coverage."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.long-term-semantic-product-plan",
+      "next-action.kp.semantic.promote-generated-transform-library-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system",
+    "milestone.kp.long-term-semantic-product-plan-v0"
+  ],
+  "verification": [
+    "npm test -- tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts tests/generated-algebra-laws.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Which semantic transformation kinds can share a visual motif without losing semantic specificity.",
+    "How to test rewind and composition at the motif timeline layer before renderer binding.",
+    "Which motifs remain presentation-only transformations such as focus/unfocus."
+  ],
+  "allowedWork": [
+    "Map semantic transformation kinds to default visual motifs through data or small adapters.",
+    "Add law checks for reversible forward/rewind phase order and motif reference closure.",
+    "Keep semantic operations distinct from presentation motifs."
+  ],
+  "disallowedWork": [
+    "Do not hard-code generated fixture ids into motif behavior.",
+    "Do not add renderer-specific DOM/WebGL state to semantic transformations.",
+    "Do not rework animation card UI in this slice."
+  ],
+  "criteria": [
+    {
+      "id": "motif-defaults-data-driven",
+      "weight": "high"
+    },
+    {
+      "id": "rewind-law-covered",
+      "weight": "high"
+    },
+    {
+      "id": "semantic-and-presentation-layers-separated",
+      "weight": "high"
+    }
+  ]
+}
