@@ -5,6 +5,7 @@ import {
   compileKpAnimationAssetSemanticRefs,
   createKpAnimationAsset,
   createKpAnimationAssetBuilder,
+  describeKpAnimationAssetTransformationTree,
   validateKpAnimationAsset
 } from "../src/animation/asset.ts";
 import {
@@ -494,5 +495,159 @@ test("compileKpAnimationAssetSemanticRefs emits stable downstream refs", () => {
       }
     ],
     diagnostics: []
+  });
+});
+
+test("describeKpAnimationAssetTransformationTree exposes reversible phase metadata", () => {
+  const initial = createKpSemanticAssetObject({
+    id: "equation.initial",
+    objectType: "equation",
+    title: "Initial equation",
+    value: { latex: "x + 3 = 7" }
+  });
+  const expanded = createKpSemanticAssetObject({
+    id: "equation.expanded",
+    objectType: "equation",
+    title: "Subtract 3",
+    value: { latex: "x + 3 - 3 = 7 - 3" }
+  });
+  const solved = createKpSemanticAssetObject({
+    id: "equation.solved",
+    objectType: "equation",
+    title: "Solved equation",
+    value: { latex: "x = 4" }
+  });
+  const subtract = createKpSemanticTransformation({
+    id: "transform.subtract",
+    transformType: "subtractBothSides",
+    title: "Subtract 3 from both sides",
+    sourceObjectIds: [initial.id],
+    targetObjectIds: [expanded.id],
+    preserves: ["value", "structure"]
+  });
+  const cancel = createKpSemanticTransformation({
+    id: "transform.cancel",
+    transformType: "cancel",
+    title: "Cancel additive inverses",
+    sourceObjectIds: [expanded.id],
+    targetObjectIds: [solved.id],
+    preserves: ["value"]
+  });
+  const animation = createKpAnimationAssetBuilder({
+    id: "animation.solve-x",
+    title: "Solve x + 3 = 7"
+  })
+    .addObject(initial)
+    .addObject(expanded)
+    .addObject(solved)
+    .addTransformation(subtract)
+    .addTransformation(cancel)
+    .addAnnotation({
+      id: "pause.after-subtract",
+      kind: "pause",
+      targetNodeId: subtract.id,
+      placement: "after",
+      durationBeats: 1
+    })
+    .addAnnotation({
+      id: "focus.cancel",
+      kind: "focus",
+      targetNodeId: cancel.id,
+      placement: "during",
+      selectorIds: ["lhs.plus-3", "lhs.minus-3"]
+    })
+    .build();
+
+  assert.deepEqual(describeKpAnimationAssetTransformationTree(animation), {
+    animationId: "animation.solve-x",
+    rootNodeId: "animation.solve-x.transformations",
+    rootKind: "sequence",
+    nodes: [
+      {
+        id: "animation.solve-x.transformations",
+        kind: "sequence",
+        label: "Solve x + 3 = 7 transformations",
+        childIds: ["transform.subtract", "transform.cancel"],
+        sourceObjectIds: ["equation.initial"],
+        targetObjectIds: ["equation.solved"],
+        preserves: ["value"]
+      },
+      {
+        id: "transform.subtract",
+        kind: "leaf",
+        transformationKind: "subtractBothSides",
+        sourceObjectIds: ["equation.initial"],
+        targetObjectIds: ["equation.expanded"],
+        preserves: ["value", "structure"]
+      },
+      {
+        id: "transform.cancel",
+        kind: "leaf",
+        transformationKind: "cancel",
+        sourceObjectIds: ["equation.expanded"],
+        targetObjectIds: ["equation.solved"],
+        preserves: ["value"]
+      }
+    ],
+    forwardPhases: [
+      {
+        id: "animation.solve-x.forward.0",
+        direction: "forward",
+        nodeIds: ["transform.subtract"],
+        annotationIdsByPlacement: {
+          before: [],
+          during: [],
+          after: ["pause.after-subtract"]
+        }
+      },
+      {
+        id: "animation.solve-x.forward.1",
+        direction: "forward",
+        nodeIds: ["transform.cancel"],
+        annotationIdsByPlacement: {
+          before: [],
+          during: ["focus.cancel"],
+          after: []
+        }
+      }
+    ],
+    rewindPhases: [
+      {
+        id: "animation.solve-x.rewind.0",
+        direction: "rewind",
+        nodeIds: ["transform.cancel"],
+        annotationIdsByPlacement: {
+          before: [],
+          during: ["focus.cancel"],
+          after: []
+        }
+      },
+      {
+        id: "animation.solve-x.rewind.1",
+        direction: "rewind",
+        nodeIds: ["transform.subtract"],
+        annotationIdsByPlacement: {
+          before: ["pause.after-subtract"],
+          during: [],
+          after: []
+        }
+      }
+    ],
+    annotations: [
+      {
+        id: "pause.after-subtract",
+        kind: "pause",
+        targetNodeId: "transform.subtract",
+        placement: "after",
+        durationBeats: 1
+      },
+      {
+        id: "focus.cancel",
+        kind: "focus",
+        targetNodeId: "transform.cancel",
+        placement: "during",
+        selectorIds: ["lhs.plus-3", "lhs.minus-3"]
+      }
+    ]
   });
 });

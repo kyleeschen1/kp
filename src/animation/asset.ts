@@ -15,14 +15,18 @@ import {
   createSemanticObjectRef,
   createSemanticTransformationRef,
   type SemanticObjectRef,
+  type SemanticTransformationPreservation,
   type SemanticTransformationRef
 } from "../semantic/animation.ts";
 import {
   createEditableSemanticTransformationTree,
   createSemanticTransformationLeaf,
   createSemanticTransformationSequence,
+  semanticTransformationForwardPhases,
   semanticTransformationLeafRefs,
+  semanticTransformationRewindPhases,
   type EditableSemanticTransformationTree,
+  type SemanticTransformationTreeAnnotationPlacement,
   type SemanticTransformationTreeAnnotation,
   type SemanticTransformationNode
 } from "../semantic/transformation-composition.ts";
@@ -160,6 +164,45 @@ export interface KpAnimationAssetCompiledRenderTargetRef {
   readonly summary?: string | undefined;
 }
 
+export type KpAnimationAssetTransformationTreeDirection =
+  | "forward"
+  | "rewind";
+
+export interface KpAnimationAssetTransformationTreeDescription {
+  readonly animationId: string;
+  readonly rootNodeId: string;
+  readonly rootKind: SemanticTransformationNode["kind"];
+  readonly nodes: readonly KpAnimationAssetTransformationTreeNodeRef[];
+  readonly forwardPhases: readonly KpAnimationAssetTransformationTreePhase[];
+  readonly rewindPhases: readonly KpAnimationAssetTransformationTreePhase[];
+  readonly annotations: readonly SemanticTransformationTreeAnnotation[];
+}
+
+export interface KpAnimationAssetTransformationTreeNodeRef {
+  readonly id: string;
+  readonly kind: SemanticTransformationNode["kind"];
+  readonly label?: string | undefined;
+  readonly childIds?: readonly string[] | undefined;
+  readonly transformationKind?: string | undefined;
+  readonly sourceObjectIds: readonly string[];
+  readonly targetObjectIds: readonly string[];
+  readonly preserves: readonly SemanticTransformationPreservation[];
+  readonly summary?: string | undefined;
+}
+
+export interface KpAnimationAssetTransformationTreePhase {
+  readonly id: string;
+  readonly direction: KpAnimationAssetTransformationTreeDirection;
+  readonly nodeIds: readonly string[];
+  readonly annotationIdsByPlacement: KpAnimationAssetTreePhaseAnnotationIds;
+}
+
+export interface KpAnimationAssetTreePhaseAnnotationIds {
+  readonly before: readonly string[];
+  readonly during: readonly string[];
+  readonly after: readonly string[];
+}
+
 export interface CreateKpAnimationAssetBuilderInput {
   readonly id: string;
   readonly title: string;
@@ -272,6 +315,33 @@ export function compileKpAnimationAssetSemanticRefs(
     diagnostics: validateKpAnimationAsset(animation).map((diagnostic) => ({
       ...diagnostic
     }))
+  };
+}
+
+export function describeKpAnimationAssetTransformationTree(
+  animation: KpAnimationAsset
+): KpAnimationAssetTransformationTreeDescription {
+  const tree = animation.transformationTree;
+  const annotations = tree.annotations.map(cloneTransformationTreeAnnotation);
+
+  return {
+    animationId: animation.id,
+    rootNodeId: tree.root.id,
+    rootKind: tree.root.kind,
+    nodes: describeTransformationTreeNodes(tree.root),
+    forwardPhases: describeTransformationTreeDirectionPhases(
+      animation.id,
+      "forward",
+      semanticTransformationForwardPhases(tree.root),
+      annotations
+    ),
+    rewindPhases: describeTransformationTreeDirectionPhases(
+      animation.id,
+      "rewind",
+      semanticTransformationRewindPhases(tree.root),
+      annotations
+    ),
+    annotations
   };
 }
 
@@ -595,6 +665,119 @@ function compileAnimationAssetRenderTargetRef(
     transformationIds: [...(target.transformationIds ?? [])],
     ...(target.timelineId === undefined ? {} : { timelineId: target.timelineId }),
     ...(target.summary === undefined ? {} : { summary: target.summary })
+  };
+}
+
+function describeTransformationTreeNodes(
+  node: SemanticTransformationNode
+): readonly KpAnimationAssetTransformationTreeNodeRef[] {
+  switch (node.kind) {
+    case "leaf":
+      return [
+        {
+          id: node.id,
+          kind: "leaf",
+          transformationKind: node.transformation.kind,
+          sourceObjectIds: [...node.sourceObjectIds],
+          targetObjectIds: [...node.targetObjectIds],
+          preserves: [...node.preserves]
+        }
+      ];
+    case "sequence":
+    case "parallel":
+      return [
+        {
+          id: node.id,
+          kind: node.kind,
+          label: node.label,
+          childIds: node.children.map((child) => child.id),
+          sourceObjectIds: [...node.sourceObjectIds],
+          targetObjectIds: [...node.targetObjectIds],
+          preserves: [...node.preserves],
+          ...(node.summary === undefined ? {} : { summary: node.summary })
+        },
+        ...node.children.flatMap(describeTransformationTreeNodes)
+      ];
+  }
+}
+
+function describeTransformationTreeDirectionPhases(
+  animationId: string,
+  direction: KpAnimationAssetTransformationTreeDirection,
+  nodePhases: readonly (readonly string[])[],
+  annotations: readonly SemanticTransformationTreeAnnotation[]
+): readonly KpAnimationAssetTransformationTreePhase[] {
+  return nodePhases.map((nodeIds, index) => ({
+    id: `${animationId}.${direction}.${index}`,
+    direction,
+    nodeIds: [...nodeIds],
+    annotationIdsByPlacement: transformationTreeAnnotationIdsForPhase(
+      nodeIds,
+      direction,
+      annotations
+    )
+  }));
+}
+
+function transformationTreeAnnotationIdsForPhase(
+  nodeIds: readonly string[],
+  direction: KpAnimationAssetTransformationTreeDirection,
+  annotations: readonly SemanticTransformationTreeAnnotation[]
+): KpAnimationAssetTreePhaseAnnotationIds {
+  const nodeIdSet = new Set(nodeIds);
+  const idsByPlacement: {
+    before: string[];
+    during: string[];
+    after: string[];
+  } = {
+    before: [],
+    during: [],
+    after: []
+  };
+
+  annotations.forEach((annotation) => {
+    if (!nodeIdSet.has(annotation.targetNodeId)) {
+      return;
+    }
+
+    const placement =
+      direction === "forward"
+        ? annotation.placement
+        : mirrorTransformationTreeAnnotationPlacement(annotation.placement);
+    idsByPlacement[placement].push(annotation.id);
+  });
+
+  return idsByPlacement;
+}
+
+function mirrorTransformationTreeAnnotationPlacement(
+  placement: SemanticTransformationTreeAnnotationPlacement
+): SemanticTransformationTreeAnnotationPlacement {
+  switch (placement) {
+    case "before":
+      return "after";
+    case "during":
+      return "during";
+    case "after":
+      return "before";
+  }
+}
+
+function cloneTransformationTreeAnnotation(
+  annotation: SemanticTransformationTreeAnnotation
+): SemanticTransformationTreeAnnotation {
+  return {
+    id: annotation.id,
+    kind: annotation.kind,
+    targetNodeId: annotation.targetNodeId,
+    placement: annotation.placement,
+    ...(annotation.selectorIds === undefined
+      ? {}
+      : { selectorIds: [...annotation.selectorIds] }),
+    ...(annotation.durationBeats === undefined
+      ? {}
+      : { durationBeats: annotation.durationBeats }),
+    ...(annotation.summary === undefined ? {} : { summary: annotation.summary })
   };
 }
 
