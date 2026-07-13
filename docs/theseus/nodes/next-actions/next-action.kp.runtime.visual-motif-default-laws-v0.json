@@ -2,9 +2,9 @@
   "id": "next-action.kp.runtime.visual-motif-default-laws-v0",
   "kind": "next-action",
   "title": "Attach reusable visual motif defaults and reversible laws",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.runtime",
-  "summary": "Bind promoted SemanticTransformation definitions to default visual motifs and law checks so generated and authored examples share reversible timelines for cancellation, vanish/appear, wrapping, morphing, focus, and simplification.",
+  "summary": "Attached generated-definition-backed equation visual motif defaults and rewind laws for reusable motif timelines.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -30,6 +30,31 @@
       "kind": "file",
       "path": "tests/equation-visual-motif-timeline.test.ts",
       "summary": "Equation visual motif timeline coverage."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "summary": "Added promoted generated algebra definition-backed default motif rules and a default coverage law."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/visual-motif-composition.ts",
+      "summary": "Carried optional semantic definition ids through motif rules and added a visual motif rewind mirror law."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-motif-timeline.ts",
+      "summary": "Added explicit rewind direction sampling with normalized mirrored progress."
+    },
+    {
+      "kind": "file",
+      "path": "tests/visual-motif-composition.test.ts",
+      "summary": "Covered default transform definition motif coverage and rewind mirror law diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-visual-motif-timeline.test.ts",
+      "summary": "Covered explicit rewind sampling against forward frames."
     }
   ],
   "dependsOn": {
@@ -75,5 +100,29 @@
       "id": "semantic-and-presentation-layers-separated",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts tests/generated-algebra-laws.test.ts",
+      "status": "passed",
+      "scope": "slice 9 expected test command",
+      "checkedAt": "2026-07-13T22:01:32.342Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 9 typecheck",
+      "checkedAt": "2026-07-13T22:01:32.363Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T22:01:32.384Z",
+      "scope": "slice 9 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Attached generated-definition-backed equation visual motif defaults and rewind laws for reusable motif timelines."
+  }
 }

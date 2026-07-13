@@ -75,7 +75,9 @@ test("createEquationVisualMotifTimeline indexes motif phases to semantic beats",
 test("sampleEquationVisualMotifTimeline reports reversible phase progress", () => {
   const timeline = cancelationTimeline();
   const frame = sampleEquationVisualMotifTimeline(timeline, 0.45);
-  const rewindFrame = sampleEquationVisualMotifTimeline(timeline, 0.45);
+  const rewindFrame = sampleEquationVisualMotifTimeline(timeline, 0.55, {
+    direction: "rewind"
+  });
   const motif = findFrameMotif(frame, "cancelation");
   const phaseById = new Map(
     motif.phases.map((phase) => [phase.phaseId, phase])

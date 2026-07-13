@@ -7,6 +7,10 @@ import {
   type SemanticTransformationTreeAnnotation,
   type SemanticTransformationTreeAnnotationPlacement
 } from "../semantic/transformation-composition.ts";
+import type {
+  KpLawCheckResult,
+  KpLawFailure
+} from "../semantic/asset-laws.ts";
 import type { VisualMotifDescriptor } from "./visual-motif.ts";
 
 export type TransformTreeVisualMotifDirection = "forward" | "rewind";
@@ -18,6 +22,7 @@ export interface TransformTreeVisualMotifRule<
 > {
   readonly transformationKind: string;
   readonly descriptor: VisualMotifDescriptor<TKind, TPrimitiveId, TPhaseId>;
+  readonly definitionIds?: readonly string[] | undefined;
   readonly summary?: string | undefined;
 }
 
@@ -62,6 +67,7 @@ export interface TransformTreeVisualMotifSegment<
   readonly motifKind: TKind;
   readonly sourceObjectIds: readonly string[];
   readonly targetObjectIds: readonly string[];
+  readonly definitionIds?: readonly string[] | undefined;
   readonly motionPrimitiveIds: readonly TPrimitiveId[];
   readonly phaseIds: readonly TPhaseId[];
   readonly summary: string;
@@ -123,6 +129,32 @@ export function createTransformTreeVisualMotifTimeline<
       annotations
     ),
     annotations
+  };
+}
+
+export function checkTransformTreeVisualMotifRewindLaw(
+  timeline: TransformTreeVisualMotifTimeline
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+  const expectedRewindSegmentIds = [...timeline.forwardPhases]
+    .reverse()
+    .map((phase) => phase.segmentIds);
+  const actualRewindSegmentIds = timeline.rewindPhases.map(
+    (phase) => phase.segmentIds
+  );
+
+  if (!segmentPhaseListsEqual(actualRewindSegmentIds, expectedRewindSegmentIds)) {
+    failures.push({
+      path: `${timeline.id}.rewindPhases`,
+      message:
+        `Visual motif timeline ${timeline.id} rewind phases must mirror forward phase segment order.`
+    });
+  }
+
+  return {
+    lawId: "transform-tree-visual-motif.rewind-phase-mirror",
+    passed: failures.length === 0,
+    failures
   };
 }
 
@@ -190,6 +222,7 @@ function createSegmentForLeaf<
     motifKind: rule.descriptor.kind,
     sourceObjectIds: [...leaf.sourceObjectIds],
     targetObjectIds: [...leaf.targetObjectIds],
+    definitionIds: [...(rule.definitionIds ?? [])],
     motionPrimitiveIds: [...rule.descriptor.motionPrimitiveIds],
     phaseIds: [...rule.descriptor.phaseIds],
     summary: rule.summary ?? rule.descriptor.summary
@@ -285,4 +318,28 @@ function cloneTreeAnnotation(
       : { durationBeats: annotation.durationBeats }),
     ...(annotation.summary === undefined ? {} : { summary: annotation.summary })
   };
+}
+
+function segmentPhaseListsEqual(
+  actual: readonly (readonly string[])[],
+  expected: readonly (readonly string[])[]
+): boolean {
+  if (actual.length !== expected.length) {
+    return false;
+  }
+
+  return actual.every((segmentIds, index) =>
+    stringListsEqual(segmentIds, expected[index] ?? [])
+  );
+}
+
+function stringListsEqual(
+  actual: readonly string[],
+  expected: readonly string[]
+): boolean {
+  if (actual.length !== expected.length) {
+    return false;
+  }
+
+  return actual.every((value, index) => value === expected[index]);
 }

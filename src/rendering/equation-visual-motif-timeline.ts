@@ -53,6 +53,12 @@ export interface EquationVisualMotifPhaseFrame {
   readonly active: boolean;
 }
 
+export type EquationVisualMotifTimelineDirection = "forward" | "rewind";
+
+export interface SampleEquationVisualMotifTimelineOptions {
+  readonly direction?: EquationVisualMotifTimelineDirection | undefined;
+}
+
 // Boundary adapter: semantic plans name motif phases; renderers sample these
 // normalized phase windows without duplicating semantic beat lookup rules.
 export function createEquationVisualMotifTimeline(
@@ -77,9 +83,13 @@ export function createEquationVisualMotifTimeline(
 
 export function sampleEquationVisualMotifTimeline(
   timeline: EquationVisualMotifTimeline,
-  progress: number
+  progress: number,
+  options: SampleEquationVisualMotifTimelineOptions = {}
 ): EquationVisualMotifTimelineFrame {
-  const frameProgress = clamp01(progress);
+  const frameProgress = timelineProgressForDirection(
+    progress,
+    options.direction ?? "forward"
+  );
 
   return {
     progress: frameProgress,
@@ -91,6 +101,17 @@ export function sampleEquationVisualMotifTimeline(
       )
     }))
   };
+}
+
+function timelineProgressForDirection(
+  progress: number,
+  direction: EquationVisualMotifTimelineDirection
+): number {
+  const clampedProgress = clamp01(progress);
+
+  return direction === "forward"
+    ? clampedProgress
+    : normalizedProgress(1 - clampedProgress);
 }
 
 function createPhaseTiming(
@@ -147,4 +168,8 @@ function clamp01(value: number): number {
   }
 
   return Math.min(1, Math.max(0, value));
+}
+
+function normalizedProgress(value: number): number {
+  return Number(value.toFixed(12));
 }

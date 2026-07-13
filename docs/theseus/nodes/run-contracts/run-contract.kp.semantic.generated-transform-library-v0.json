@@ -2,9 +2,9 @@
   "id": "run-contract.kp.semantic.generated-transform-library-v0",
   "kind": "run-contract",
   "title": "KP generated transform library loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic",
-  "summary": "Focused KP-only loop for promoting generated algebra families into reusable SemanticTransformation definitions, wiring generated fixtures through those definitions, surfacing them in dashboard/export metadata, and then attaching visual motif defaults and reversible laws.",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -102,7 +102,7 @@
     {
       "id": "next-action.kp.runtime.visual-motif-default-laws-v0",
       "title": "Attach reusable visual motif defaults and reversible laws",
-      "status": "planned"
+      "status": "complete"
     }
   ]
 }

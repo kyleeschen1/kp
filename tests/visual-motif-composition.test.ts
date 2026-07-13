@@ -9,12 +9,17 @@ import {
   createSemanticTransformationSequence
 } from "../src/semantic/transformation-composition.ts";
 import {
+  checkTransformTreeVisualMotifRewindLaw,
   createTransformTreeVisualMotifTimeline,
   type TransformTreeVisualMotifRule
 } from "../src/rendering/visual-motif-composition.ts";
 import {
+  checkGeneratedAlgebraEquationVisualMotifDefaultCoverage,
   defaultEquationTransformVisualMotifRules
 } from "../src/rendering/equation-visual-motif-defaults.ts";
+import {
+  listGeneratedAlgebraTransformDefinitions
+} from "../src/semantic/generated-algebra-transform-definition-registry.ts";
 import type {
   EquationMotionPrimitiveId,
   EquationVisualMotifKind,
@@ -175,6 +180,11 @@ test("createTransformTreeVisualMotifTimeline maps transform trees to reversible 
       }
     }
   ]);
+  assert.deepEqual(checkTransformTreeVisualMotifRewindLaw(timeline), {
+    lawId: "transform-tree-visual-motif.rewind-phase-mirror",
+    passed: true,
+    failures: []
+  });
 });
 
 test("createTransformTreeVisualMotifTimeline keeps parallel leaves in one motif phase", () => {
@@ -280,6 +290,186 @@ test("default equation visual motif rules map wrap and unwrap transforms", () =>
     ["transform.unwrap-function.visual.unwrap"],
     ["transform.wrap-function.visual.wrap"]
   ]);
+});
+
+test("default equation visual motif rules cover promoted generated transform definitions", () => {
+  assert.deepEqual(checkGeneratedAlgebraEquationVisualMotifDefaultCoverage(), {
+    lawId: "equation-visual-motif.generated-transform-default-coverage",
+    passed: true,
+    failures: []
+  });
+  assert.deepEqual(
+    defaultEquationTransformVisualMotifRules
+      .filter((rule) => (rule.definitionIds ?? []).length > 0)
+      .map((rule) => [
+        rule.transformationKind,
+        rule.descriptor.kind,
+        rule.definitionIds
+      ]),
+    [
+      [
+        "subtractBothSides",
+        "append-after-shift",
+        ["definition.generated.linear-solve.subtract-both-sides"]
+      ],
+      [
+        "addBothSides",
+        "append-after-shift",
+        ["definition.generated.linear-solve.add-both-sides"]
+      ],
+      [
+        "cancelAdditiveInverses",
+        "cancelation",
+        ["definition.generated.linear-solve.cancel-additive-inverses"]
+      ],
+      [
+        "simplifyConstantDifference",
+        "simplify-into",
+        ["definition.generated.linear-solve.simplify-constant-difference"]
+      ],
+      [
+        "simplifyConstantSum",
+        "simplify-into",
+        ["definition.generated.linear-solve.simplify-constant-sum"]
+      ],
+      [
+        "divideBothSides",
+        "append-after-shift",
+        ["definition.generated.linear-solve.divide-both-sides"]
+      ],
+      [
+        "cancelMultiplicativeInverses",
+        "cancelation",
+        ["definition.generated.linear-solve.cancel-multiplicative-inverses"]
+      ],
+      [
+        "simplifyConstantQuotient",
+        "simplify-into",
+        ["definition.generated.linear-solve.simplify-constant-quotient"]
+      ],
+      [
+        "splitFractionFactors",
+        "artifact-replace",
+        ["definition.generated.fraction-expression.split-fraction-factors"]
+      ],
+      [
+        "mergeFractionCommonFactor",
+        "artifact-replace",
+        ["definition.generated.fraction-expression.merge-common-factor"]
+      ],
+      [
+        "simplifyUnitFractionFactor",
+        "simplify-into",
+        ["definition.generated.fraction-expression.simplify-unit-factor"]
+      ],
+      [
+        "lowerExponent",
+        "append-after-shift",
+        ["definition.generated.exponent.lower-exponent"]
+      ],
+      [
+        "unwrapUnitExponent",
+        "unwrap",
+        ["definition.generated.exponent.unwrap-unit-exponent"]
+      ],
+      [
+        "rewritePowerAsRoot",
+        "artifact-replace",
+        ["definition.generated.radical.rewrite-power-as-root"]
+      ],
+      [
+        "wrapFunction",
+        "wrap",
+        ["definition.generated.function-wrap.wrap-function"]
+      ],
+      [
+        "distributeMultiplication",
+        "artifact-replace",
+        ["definition.generated.distribution.distribute-multiplication"]
+      ],
+      [
+        "factorCommonTerm",
+        "simplify-into",
+        ["definition.generated.distribution.factor-common-term"]
+      ]
+    ]
+  );
+});
+
+test("default equation visual motif coverage law reports missing promoted definitions", () => {
+  assert.deepEqual(
+    checkGeneratedAlgebraEquationVisualMotifDefaultCoverage({
+      definitions: listGeneratedAlgebraTransformDefinitions(),
+      rules: defaultEquationTransformVisualMotifRules.filter(
+        (rule) => rule.transformationKind !== "cancelAdditiveInverses"
+      )
+    }),
+    {
+      lawId: "equation-visual-motif.generated-transform-default-coverage",
+      passed: false,
+      failures: [
+        {
+          path:
+            "definitions[definition.generated.linear-solve.cancel-additive-inverses]",
+          message:
+            "Promoted generated transform definition definition.generated.linear-solve.cancel-additive-inverses must have a default equation visual motif rule."
+        }
+      ]
+    }
+  );
+});
+
+test("visual motif rewind law reports non-mirrored phase order", () => {
+  const subtract = createSemanticTransformationRef({
+    id: "transform.subtract-both-sides.3",
+    kind: "subtractBothSides",
+    sourceObjectIds: ["equation.initial"],
+    targetObjectIds: ["equation.with-inverses"],
+    preserves: ["value", "structure"]
+  });
+  const cancel = createSemanticTransformationRef({
+    id: "transform.cancel-additive-inverse",
+    kind: "cancelAdditiveInverse",
+    sourceObjectIds: ["equation.with-inverses"],
+    targetObjectIds: ["equation.simplified-left"],
+    preserves: ["value"]
+  });
+  const timeline = createTransformTreeVisualMotifTimeline({
+    id: "solve-x.visual",
+    tree: createEditableSemanticTransformationTree({
+      root: createSemanticTransformationSequence({
+        id: "solve-x.sequence",
+        label: "Solve x",
+        children: [
+          createSemanticTransformationLeaf(subtract),
+          createSemanticTransformationLeaf(cancel)
+        ]
+      })
+    }),
+    rules
+  });
+
+  assert.deepEqual(
+    checkTransformTreeVisualMotifRewindLaw({
+      ...timeline,
+      rewindPhases: timeline.forwardPhases.map((phase) => ({
+        ...phase,
+        direction: "rewind" as const,
+        id: phase.id.replace(".forward.", ".rewind.")
+      }))
+    }),
+    {
+      lawId: "transform-tree-visual-motif.rewind-phase-mirror",
+      passed: false,
+      failures: [
+        {
+          path: "solve-x.visual.rewindPhases",
+          message:
+            "Visual motif timeline solve-x.visual rewind phases must mirror forward phase segment order."
+        }
+      ]
+    }
+  );
 });
 
 test("createTransformTreeVisualMotifTimeline rejects unmapped transformation kinds", () => {
