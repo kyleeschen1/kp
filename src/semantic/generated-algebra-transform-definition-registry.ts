@@ -559,6 +559,102 @@ export const generatedAlgebraTransformDefinitions:
           summary: "The input value persists as the function argument."
         }
       ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.distribution.distribute-multiplication",
+      familyId: "generated.distribution",
+      templateId: "distribution.distribute-multiplication",
+      status: "promoted",
+      transformType: "distributeMultiplication",
+      title: "Distribute multiplication over addition",
+      sourceObjectRoles: ["factored-expression"],
+      targetObjectRoles: ["expanded-expression"],
+      preserves: ["identity", "value", "structure"],
+      artifactPolicy: "mixed",
+      assumptions: [
+        "Multiplication distributes over addition and duplicates the common factor into each term."
+      ],
+      lawRefs: [{ id: "law.algebra.distributive-property", level: "strict" }],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "factored-expression",
+          sourceSelectorRole: "factor",
+          targetObjectRole: "expanded-expression",
+          targetSelectorRole: "left-factor",
+          preserves: ["identity", "role"],
+          summary: "The common factor is copied into the left product."
+        },
+        {
+          sourceObjectRole: "factored-expression",
+          sourceSelectorRole: "factor",
+          targetObjectRole: "expanded-expression",
+          targetSelectorRole: "right-factor",
+          preserves: ["identity", "role"],
+          summary: "The common factor is copied into the right product."
+        },
+        {
+          sourceObjectRole: "factored-expression",
+          sourceSelectorRole: "left-term",
+          targetObjectRole: "expanded-expression",
+          targetSelectorRole: "left-term",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "factored-expression",
+          sourceSelectorRole: "right-term",
+          targetObjectRole: "expanded-expression",
+          targetSelectorRole: "right-term",
+          preserves: ["identity", "role"]
+        }
+      ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.distribution.factor-common-term",
+      familyId: "generated.distribution",
+      templateId: "distribution.factor-common-term",
+      status: "promoted",
+      transformType: "factorCommonTerm",
+      title: "Factor the common term",
+      sourceObjectRoles: ["expanded-expression"],
+      targetObjectRoles: ["factored-expression"],
+      preserves: ["identity", "value", "structure"],
+      artifactPolicy: "mixed",
+      assumptions: [
+        "The distributive property can be read backward to factor a common term."
+      ],
+      lawRefs: [{ id: "law.algebra.distributive-property", level: "strict" }],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "expanded-expression",
+          sourceSelectorRole: "left-factor",
+          targetObjectRole: "factored-expression",
+          targetSelectorRole: "factor",
+          preserves: ["identity", "role"],
+          summary: "The left factor contributes to the shared factored term."
+        },
+        {
+          sourceObjectRole: "expanded-expression",
+          sourceSelectorRole: "right-factor",
+          targetObjectRole: "factored-expression",
+          targetSelectorRole: "factor",
+          preserves: ["identity", "role"],
+          summary: "The right factor contributes to the shared factored term."
+        },
+        {
+          sourceObjectRole: "expanded-expression",
+          sourceSelectorRole: "left-term",
+          targetObjectRole: "factored-expression",
+          targetSelectorRole: "left-term",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "expanded-expression",
+          sourceSelectorRole: "right-term",
+          targetObjectRole: "factored-expression",
+          targetSelectorRole: "right-term",
+          preserves: ["identity", "role"]
+        }
+      ]
     })
   ];
 

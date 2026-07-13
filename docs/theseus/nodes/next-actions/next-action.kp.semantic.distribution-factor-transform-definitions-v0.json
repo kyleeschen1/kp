@@ -2,9 +2,9 @@
   "id": "next-action.kp.semantic.distribution-factor-transform-definitions-v0",
   "kind": "next-action",
   "title": "Promote distribution and factoring definitions",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic",
-  "summary": "Promote distribution and factoring semantics into reusable transform definitions that record value preservation, duplicated factor provenance, and correspondence between expanded and factored forms.",
+  "summary": "Promoted bidirectional distribution and factoring transform definitions with duplicated-factor correspondence metadata.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -20,6 +20,21 @@
       "kind": "file",
       "path": "tests/generated-algebra-laws.test.ts",
       "summary": "Generated algebra law checks."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-transform-definition-registry.ts",
+      "summary": "Added distributeMultiplication and factorCommonTerm generated transform definitions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Covered distribution transform definition lookup and artifact policies."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-laws.test.ts",
+      "summary": "Coverage law passes with distribution/factoring family included through promoted definitions."
     }
   ],
   "dependsOn": {
@@ -56,5 +71,29 @@
       "id": "distribute-factor-correspondence-covered",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test generated algebra laws and fixture tests",
+      "status": "passed",
+      "scope": "slice 6 focused plus broad node tests",
+      "checkedAt": "2026-07-13T21:38:16.276Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 6 typecheck",
+      "checkedAt": "2026-07-13T21:38:16.299Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T21:38:16.332Z",
+      "scope": "slice 6 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted bidirectional distribution and factoring transform definitions with duplicated-factor correspondence metadata."
+  }
 }
