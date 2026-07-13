@@ -36,7 +36,7 @@
     "Do not create renderer-owned animation formats separate from semantic asset calculus."
   ],
   "goal": "Run the approved KP loop that makes composable semantic animations the primary typed artifact, with tutorials, exports, flashcards, graphs, and programming views as consumers.",
-  "target": "next-action.kp.animation.function-wrap-adapter-v0",
+  "target": "next-action.kp.animation.distribution-adapter-v0",
   "slices": [
     {
       "id": "next-action.kp.animation.composable-animation-asset-contract-v0",
@@ -112,7 +112,8 @@
     {
       "id": "next-action.kp.animation.distribution-adapter-v0",
       "title": "Migrate distribution and factoring sample into animation asset path",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.distribution-adapter-v0 in KP composable animation asset v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.dashboard-rows-v0",
