@@ -7,7 +7,9 @@ import {
 } from "../src/semantic/asset.ts";
 import {
   canSequenceKpSemanticTransformations,
+  createKpSemanticTransformationDefinition,
   createKpSemanticTransformation,
+  validateKpSemanticTransformationDefinition,
   validateKpSemanticTransformation
 } from "../src/semantic/asset-transformation.ts";
 
@@ -182,4 +184,100 @@ test("canSequenceKpSemanticTransformations checks adjacent object boundaries", (
 
   assert.equal(canSequenceKpSemanticTransformations(first, second), true);
   assert.equal(canSequenceKpSemanticTransformations(first, incompatible), false);
+});
+
+test("createKpSemanticTransformationDefinition records reusable role templates", () => {
+  const definition = createKpSemanticTransformationDefinition({
+    id: "definition.linear-solve.subtract-both-sides",
+    transformType: "subtractBothSides",
+    title: "Subtract the same value from both sides",
+    sourceObjectRoles: ["initial-equation"],
+    targetObjectRoles: ["with-inverse-terms"],
+    preserves: ["value", "structure"],
+    assumptions: ["Subtracting equal quantities preserves equality."],
+    lawRefs: [
+      {
+        id: "law.equation.subtract-both-sides",
+        level: "strict"
+      }
+    ],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "initial-equation",
+        sourceSelectorRole: "lhs.variable",
+        targetObjectRole: "with-inverse-terms",
+        targetSelectorRole: "lhs.variable",
+        preserves: ["identity", "role"],
+        summary: "The unknown persists across the balanced operation."
+      }
+    ]
+  });
+
+  assert.deepEqual(definition, {
+    id: "definition.linear-solve.subtract-both-sides",
+    kind: "semantic-transformation-definition",
+    transformType: "subtractBothSides",
+    title: "Subtract the same value from both sides",
+    sourceObjectRoles: ["initial-equation"],
+    targetObjectRoles: ["with-inverse-terms"],
+    preserves: ["value", "structure"],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "initial-equation",
+        sourceSelectorRole: "lhs.variable",
+        targetObjectRole: "with-inverse-terms",
+        targetSelectorRole: "lhs.variable",
+        preserves: ["identity", "role"],
+        summary: "The unknown persists across the balanced operation."
+      }
+    ],
+    assumptions: ["Subtracting equal quantities preserves equality."],
+    lawRefs: [
+      {
+        id: "law.equation.subtract-both-sides",
+        level: "strict"
+      }
+    ]
+  });
+  assert.deepEqual(validateKpSemanticTransformationDefinition(definition), []);
+});
+
+test("validateKpSemanticTransformationDefinition reports broken role templates", () => {
+  const definition = createKpSemanticTransformationDefinition({
+    id: "definition.bad",
+    transformType: "bad",
+    title: "Bad definition",
+    sourceObjectRoles: ["source"],
+    targetObjectRoles: ["target"],
+    preserves: ["value"],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "missing-source",
+        sourceSelectorRole: "value",
+        targetObjectRole: "target",
+        targetSelectorRole: "value",
+        preserves: ["identity"]
+      },
+      {
+        sourceObjectRole: "source",
+        sourceSelectorRole: "value",
+        targetObjectRole: "missing-target",
+        targetSelectorRole: "value",
+        preserves: ["identity"]
+      }
+    ]
+  });
+
+  assert.deepEqual(validateKpSemanticTransformationDefinition(definition), [
+    {
+      path: "correspondenceTemplates[0].sourceObjectRole",
+      message:
+        "Transformation definition definition.bad references missing source object role missing-source."
+    },
+    {
+      path: "correspondenceTemplates[1].targetObjectRole",
+      message:
+        "Transformation definition definition.bad references missing target object role missing-target."
+    }
+  ]);
 });

@@ -17,6 +17,13 @@ import {
   listGeneratedLinearSolveTutorialFixtureSpecs,
   listGeneratedRadicalTutorialFixtureSpecs
 } from "../src/semantic/generated-algebra-fixture-registry.ts";
+import {
+  findGeneratedAlgebraTransformDefinition,
+  getGeneratedAlgebraTransformDefinition,
+  listGeneratedAlgebraTransformDefinitions,
+  listGeneratedAlgebraTransformDefinitionsByFamily,
+  validateGeneratedAlgebraTransformDefinitionRegistry
+} from "../src/semantic/generated-algebra-transform-definition-registry.ts";
 
 test("generated algebra fixture registry lists linear-solve specs without building fixtures", () => {
   const specs = listGeneratedLinearSolveTutorialFixtureSpecs();
@@ -36,6 +43,120 @@ test("generated algebra fixture registry lists linear-solve specs without buildi
     addend: 3,
     solution: 4
   });
+});
+
+test("generated algebra transform definition registry exposes reusable semantic templates", () => {
+  const definitions = listGeneratedAlgebraTransformDefinitions();
+
+  assert.deepEqual(definitions.map((definition) => definition.id), [
+    "definition.generated.linear-solve.subtract-both-sides"
+  ]);
+  assert.deepEqual(
+    listGeneratedAlgebraTransformDefinitionsByFamily("generated.linear-solve").map(
+      (definition) => [definition.templateId, definition.transformType]
+    ),
+    [["linear-solve.subtract-both-sides", "subtractBothSides"]]
+  );
+  assert.deepEqual(
+    getGeneratedAlgebraTransformDefinition(
+      "definition.generated.linear-solve.subtract-both-sides"
+    ),
+    {
+      id: "definition.generated.linear-solve.subtract-both-sides",
+      kind: "semantic-transformation-definition",
+      familyId: "generated.linear-solve",
+      templateId: "linear-solve.subtract-both-sides",
+      status: "seed",
+      artifactPolicy: "target-only",
+      transformType: "subtractBothSides",
+      title: "Subtract the same value from both sides",
+      sourceObjectRoles: ["initial-equation"],
+      targetObjectRoles: ["with-inverse-terms"],
+      preserves: ["value", "structure"],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "initial-equation",
+          sourceSelectorRole: "lhs.variable",
+          targetObjectRole: "with-inverse-terms",
+          targetSelectorRole: "lhs.variable",
+          preserves: ["identity", "role"],
+          summary: "The unknown persists while inverse terms are introduced."
+        },
+        {
+          sourceObjectRole: "initial-equation",
+          sourceSelectorRole: "lhs.addend",
+          targetObjectRole: "with-inverse-terms",
+          targetSelectorRole: "lhs.addend",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "initial-equation",
+          sourceSelectorRole: "equals",
+          targetObjectRole: "with-inverse-terms",
+          targetSelectorRole: "equals",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "initial-equation",
+          sourceSelectorRole: "rhs.value",
+          targetObjectRole: "with-inverse-terms",
+          targetSelectorRole: "rhs.value",
+          preserves: ["identity", "role"]
+        }
+      ],
+      assumptions: ["Subtracting equal quantities preserves equality."],
+      lawRefs: [{ id: "law.equation.subtract-both-sides", level: "strict" }]
+    }
+  );
+});
+
+test("generated algebra transform definition registry validates lookup and completeness", () => {
+  const [definition] = listGeneratedAlgebraTransformDefinitions();
+
+  assert.ok(definition);
+  assert.deepEqual(validateGeneratedAlgebraTransformDefinitionRegistry(), []);
+  assert.equal(
+    findGeneratedAlgebraTransformDefinition("definition.generated.missing"),
+    undefined
+  );
+  assert.throws(
+    () => getGeneratedAlgebraTransformDefinition("definition.generated.missing"),
+    /Unknown generated algebra transform definition: definition.generated.missing/
+  );
+  assert.deepEqual(
+    validateGeneratedAlgebraTransformDefinitionRegistry([
+      definition,
+      {
+        ...definition,
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "missing-source",
+            sourceSelectorRole: "value",
+            targetObjectRole: "with-inverse-terms",
+            targetSelectorRole: "value",
+            preserves: ["identity"]
+          }
+        ]
+      }
+    ]),
+    [
+      {
+        path: "definitions[1].id",
+        message:
+          "Duplicate generated algebra transform definition id: definition.generated.linear-solve.subtract-both-sides."
+      },
+      {
+        path: "definitions[1].templateId",
+        message:
+          "Duplicate generated algebra transform template id: linear-solve.subtract-both-sides."
+      },
+      {
+        path: "definitions[1].correspondenceTemplates[0].sourceObjectRole",
+        message:
+          "Transformation definition definition.generated.linear-solve.subtract-both-sides references missing source object role missing-source."
+      }
+    ]
+  );
 });
 
 test("generated algebra fixture registry resolves specs by id", () => {

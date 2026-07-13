@@ -33,7 +33,7 @@
     "milestone.kp.long-term-semantic-product-plan-v0"
   ],
   "goal": "Run the KP generated transform-library promotion slices without broadening into stale Theseus planner follow-ups.",
-  "target": "next-action.kp.semantic.transform-definition-registry-v0",
+  "target": "next-action.kp.semantic.linear-solve-cancellation-transform-definitions-v0",
   "runMode": "run",
   "maxSlices": 9,
   "commitCadence": "Commit after each verified slice.",
@@ -62,7 +62,7 @@
     {
       "id": "next-action.kp.semantic.transform-definition-registry-v0",
       "title": "Add generated transform definition registry",
-      "status": "ready"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic.linear-solve-cancellation-transform-definitions-v0",

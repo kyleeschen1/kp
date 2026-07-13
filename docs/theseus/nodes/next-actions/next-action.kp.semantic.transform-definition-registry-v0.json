@@ -2,9 +2,9 @@
   "id": "next-action.kp.semantic.transform-definition-registry-v0",
   "kind": "next-action",
   "title": "Add generated transform definition registry",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic",
-  "summary": "Create a reusable generated-algebra transform definition registry that records transform type, source/target object roles, preservation policy, correspondence expectations, and law refs before individual families consume it.",
+  "summary": "Added a reusable generated algebra transform definition registry with typed role templates, lookup helpers, and validation coverage.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -20,6 +20,26 @@
       "kind": "file",
       "path": "tests/kp-asset-transformation.test.ts",
       "summary": "Existing SemanticTransformation validation coverage to extend."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "Added reusable SemanticTransformationDefinition role templates and validation."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-transform-definition-registry.ts",
+      "summary": "Added generated algebra transform-definition registry, lookup helpers, and registry validation."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-asset-transformation.test.ts",
+      "summary": "Covered reusable transformation definition creation and role validation."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Covered generated transform-definition lookup and registry validation."
     }
   ],
   "dependsOn": {
@@ -58,5 +78,29 @@
       "id": "definition-lookup-tested",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test named transform registry tests",
+      "status": "passed",
+      "scope": "slice 1 focused plus broad node tests",
+      "checkedAt": "2026-07-13T21:20:48.734Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 1 typecheck",
+      "checkedAt": "2026-07-13T21:20:48.771Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T21:20:48.798Z",
+      "scope": "slice 1 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a reusable generated algebra transform definition registry with typed role templates, lookup helpers, and validation coverage."
+  }
 }

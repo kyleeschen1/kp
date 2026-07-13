@@ -30,6 +30,15 @@ export interface KpSelectorCorrespondence {
   readonly summary?: string | undefined;
 }
 
+export interface KpSelectorCorrespondenceTemplate {
+  readonly sourceObjectRole: string;
+  readonly sourceSelectorRole: string;
+  readonly targetObjectRole: string;
+  readonly targetSelectorRole: string;
+  readonly preserves: readonly KpTransformationPreservation[];
+  readonly summary?: string | undefined;
+}
+
 export interface KpSemanticTransformation {
   readonly id: string;
   readonly kind: "semantic-transformation";
@@ -43,6 +52,19 @@ export interface KpSemanticTransformation {
   readonly lawRefs?: readonly KpTransformationLawRef[] | undefined;
 }
 
+export interface KpSemanticTransformationDefinition {
+  readonly id: string;
+  readonly kind: "semantic-transformation-definition";
+  readonly transformType: string;
+  readonly title: string;
+  readonly sourceObjectRoles: readonly string[];
+  readonly targetObjectRoles: readonly string[];
+  readonly preserves: readonly KpTransformationPreservation[];
+  readonly correspondenceTemplates: readonly KpSelectorCorrespondenceTemplate[];
+  readonly assumptions?: readonly string[] | undefined;
+  readonly lawRefs?: readonly KpTransformationLawRef[] | undefined;
+}
+
 export interface CreateKpSemanticTransformationInput {
   readonly id: string;
   readonly transformType: string;
@@ -51,6 +73,18 @@ export interface CreateKpSemanticTransformationInput {
   readonly targetObjectIds: readonly string[];
   readonly preserves: readonly KpTransformationPreservation[];
   readonly correspondence?: readonly KpSelectorCorrespondence[] | undefined;
+  readonly assumptions?: readonly string[] | undefined;
+  readonly lawRefs?: readonly KpTransformationLawRef[] | undefined;
+}
+
+export interface CreateKpSemanticTransformationDefinitionInput {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly sourceObjectRoles: readonly string[];
+  readonly targetObjectRoles: readonly string[];
+  readonly preserves: readonly KpTransformationPreservation[];
+  readonly correspondenceTemplates?: readonly KpSelectorCorrespondenceTemplate[] | undefined;
   readonly assumptions?: readonly string[] | undefined;
   readonly lawRefs?: readonly KpTransformationLawRef[] | undefined;
 }
@@ -106,6 +140,59 @@ export function createKpSemanticTransformation(
   };
 }
 
+export function createKpSemanticTransformationDefinition(
+  input: CreateKpSemanticTransformationDefinitionInput
+): KpSemanticTransformationDefinition {
+  assertNonEmpty(input.id, "Semantic transformation definition id");
+  assertNonEmpty(
+    input.transformType,
+    `Semantic transformation definition ${input.id} type`
+  );
+  assertNonEmpty(input.title, `Semantic transformation definition ${input.id} title`);
+
+  if (input.sourceObjectRoles.length === 0) {
+    throw new Error(`Semantic transformation definition ${input.id} must have a source role.`);
+  }
+
+  if (input.targetObjectRoles.length === 0) {
+    throw new Error(`Semantic transformation definition ${input.id} must have a target role.`);
+  }
+
+  return {
+    id: input.id,
+    kind: "semantic-transformation-definition",
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: [...input.sourceObjectRoles],
+    targetObjectRoles: [...input.targetObjectRoles],
+    preserves: [...input.preserves],
+    correspondenceTemplates: (input.correspondenceTemplates ?? []).map(
+      (correspondence) => ({
+        sourceObjectRole: correspondence.sourceObjectRole,
+        sourceSelectorRole: correspondence.sourceSelectorRole,
+        targetObjectRole: correspondence.targetObjectRole,
+        targetSelectorRole: correspondence.targetSelectorRole,
+        preserves: [...correspondence.preserves],
+        ...(correspondence.summary === undefined
+          ? {}
+          : { summary: correspondence.summary })
+      })
+    ),
+    ...(input.assumptions === undefined
+      ? {}
+      : { assumptions: [...input.assumptions] }),
+    ...(input.lawRefs === undefined
+      ? {}
+      : {
+          lawRefs: input.lawRefs.map((lawRef) => ({
+            id: lawRef.id,
+            level: lawRef.level,
+            ...(lawRef.summary === undefined ? {} : { summary: lawRef.summary })
+          }))
+        })
+  };
+}
+
 export function validateKpSemanticTransformation(
   transformation: KpSemanticTransformation,
   bundle: KpAssetBundle
@@ -143,6 +230,50 @@ export function validateKpSemanticTransformation(
       issues.push({
         path: `correspondence[${index}].targetSelectorId`,
         message: `Transformation ${transformation.id} references missing target selector ${correspondence.targetSelectorId}.`
+      });
+    }
+  });
+
+  return issues;
+}
+
+export function validateKpSemanticTransformationDefinition(
+  definition: KpSemanticTransformationDefinition
+): readonly KpTransformationValidationIssue[] {
+  const issues: KpTransformationValidationIssue[] = [];
+  const sourceObjectRoles = new Set(definition.sourceObjectRoles);
+  const targetObjectRoles = new Set(definition.targetObjectRoles);
+
+  definition.sourceObjectRoles.forEach((role, index) => {
+    if (role.trim().length === 0) {
+      issues.push({
+        path: `sourceObjectRoles[${index}]`,
+        message: `Transformation definition ${definition.id} has an empty source object role.`
+      });
+    }
+  });
+
+  definition.targetObjectRoles.forEach((role, index) => {
+    if (role.trim().length === 0) {
+      issues.push({
+        path: `targetObjectRoles[${index}]`,
+        message: `Transformation definition ${definition.id} has an empty target object role.`
+      });
+    }
+  });
+
+  definition.correspondenceTemplates.forEach((correspondence, index) => {
+    if (!sourceObjectRoles.has(correspondence.sourceObjectRole)) {
+      issues.push({
+        path: `correspondenceTemplates[${index}].sourceObjectRole`,
+        message: `Transformation definition ${definition.id} references missing source object role ${correspondence.sourceObjectRole}.`
+      });
+    }
+
+    if (!targetObjectRoles.has(correspondence.targetObjectRole)) {
+      issues.push({
+        path: `correspondenceTemplates[${index}].targetObjectRole`,
+        message: `Transformation definition ${definition.id} references missing target object role ${correspondence.targetObjectRole}.`
       });
     }
   });
