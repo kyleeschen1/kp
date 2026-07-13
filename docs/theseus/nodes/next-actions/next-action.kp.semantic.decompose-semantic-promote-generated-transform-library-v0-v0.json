@@ -1,0 +1,76 @@
+{
+  "id": "next-action.kp.semantic.decompose-semantic-promote-generated-transform-library-v0-v0",
+  "kind": "next-action",
+  "title": "Decompose Promote generated algebra transforms into reusable definitions",
+  "status": "resolved",
+  "domain": "kp.semantic",
+  "summary": "Decomposed the generated transform-library parent into narrow ready child actions and cleared task-decomposition pressure.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic.promote-generated-transform-library-v0.json",
+      "summary": "Broad task evidence trail that triggered pressure materialization."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic.promote-generated-transform-library-v0.json",
+      "summary": "Parent container now lists the child implementation actions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Workflow queue now runs the child actions directly."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "next-action.kp.semantic.promote-generated-transform-library-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic.promote-generated-transform-library-v0"
+  ],
+  "verification": [
+    "npm run theseus -- decomposition-report",
+    "npm run theseus -- validate"
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Decomposed the generated transform-library parent into narrow ready child actions and cleared task-decomposition pressure."
+  },
+  "expectedLearning": [
+    "Which smaller follow-up actions should replace the broad evidence trail."
+  ],
+  "allowedWork": [
+    "Inspect the broad task's source refs, verification records, and affected nodes.",
+    "Create or link narrower follow-up actions with their own contracts."
+  ],
+  "disallowedWork": [
+    "Do not add more implementation evidence to the broad task while decomposing it.",
+    "Do not mark the broad task resolved unless the replacement queue is explicit."
+  ],
+  "criteria": [
+    {
+      "id": "broad-task-has-narrow-follow-ups",
+      "weight": "high"
+    },
+    {
+      "id": "follow-ups-have-contracts",
+      "weight": "high"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- decomposition-report",
+      "status": "passed",
+      "scope": "No decomposition candidates remain.",
+      "checkedAt": "2026-07-13T20:01:18.945Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T20:01:18.964Z",
+      "scope": "Theseus graph validates after decomposition."
+    }
+  ]
+}

@@ -2,14 +2,24 @@
   "id": "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v1",
   "kind": "next-action",
   "title": "Prepare KP dashboard and semantic animation system Loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.dashboard",
-  "summary": "Read the selected frontier, choose the next concrete implementation slice, and record the result in Theseus. Why now: Loop-plan selected this frontier because Workflow is active.",
+  "summary": "Prepared the KP dashboard and semantic animation queue by replacing the broad generated-transform-library slice with narrower ready transform-definition actions.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
       "summary": "Frontier selected by loop-plan rank 1. Loop-plan selected this frontier because Workflow is active."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Workflow queue now points at narrow generated transform-library implementation slices."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic.promote-generated-transform-library-v0.json",
+      "summary": "Broad parent converted into a needs-breakdown container with explicit child actions."
     }
   ],
   "dependsOn": {
@@ -55,5 +65,23 @@
       "id": "journey-report-updated-after-preparation",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validates after queue decomposition.",
+      "checkedAt": "2026-07-13T20:01:04.048Z"
+    },
+    {
+      "command": "npm run theseus -- pressure-report",
+      "status": "passed",
+      "checkedAt": "2026-07-13T20:01:04.064Z",
+      "scope": "Project pressure is clear after decomposition."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Prepared the KP dashboard and semantic animation queue by replacing the broad generated-transform-library slice with narrower ready transform-definition actions."
+  }
 }

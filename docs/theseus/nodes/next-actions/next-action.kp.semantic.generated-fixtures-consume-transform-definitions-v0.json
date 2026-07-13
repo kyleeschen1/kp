@@ -1,0 +1,64 @@
+{
+  "id": "next-action.kp.semantic.generated-fixtures-consume-transform-definitions-v0",
+  "kind": "next-action",
+  "title": "Make generated fixtures consume transform definitions",
+  "status": "ready",
+  "domain": "kp.semantic",
+  "summary": "Update generated algebra fixture construction so transformations are created from reusable definitions rather than duplicating fixture-local semantic metadata.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Generated fixture construction to route through definitions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Fixture construction coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-laws.test.ts",
+      "summary": "Reference closure and law coverage for generated fixtures."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "next-action.kp.semantic.linear-solve-cancellation-transform-definitions-v0",
+      "next-action.kp.semantic.fraction-transform-definitions-v0",
+      "next-action.kp.semantic.exponent-radical-transform-definitions-v0",
+      "next-action.kp.semantic.function-wrap-transform-definitions-v0",
+      "next-action.kp.semantic.distribution-factor-transform-definitions-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic.promote-generated-transform-library-v0"
+  ],
+  "verification": [
+    "npm test -- tests/kp-generated-algebra-tutorial-fixture.test.ts tests/generated-algebra-laws.test.ts tests/generated-algebra-tutorial-card-sample.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether family-specific fixture builders can share one definition application path.",
+    "Which fixture-local metadata remains template configuration rather than semantic transformation definition."
+  ],
+  "allowedWork": [
+    "Refactor generated fixture construction to consume definitions.",
+    "Preserve tutorial-card and export sample behavior unless law tests require explicit changes."
+  ],
+  "disallowedWork": [
+    "Do not add new generated families in this slice.",
+    "Do not change dashboard layout."
+  ],
+  "criteria": [
+    {
+      "id": "fixture-builders-use-definitions",
+      "weight": "high"
+    },
+    {
+      "id": "generated-law-suite-passes",
+      "weight": "high"
+    }
+  ]
+}

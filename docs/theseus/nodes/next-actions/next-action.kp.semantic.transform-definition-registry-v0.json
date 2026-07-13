@@ -1,0 +1,62 @@
+{
+  "id": "next-action.kp.semantic.transform-definition-registry-v0",
+  "kind": "next-action",
+  "title": "Add generated transform definition registry",
+  "status": "ready",
+  "domain": "kp.semantic",
+  "summary": "Create a reusable generated-algebra transform definition registry that records transform type, source/target object roles, preservation policy, correspondence expectations, and law refs before individual families consume it.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "SemanticTransformation contract and preservation vocabulary."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Generated family ids and templates that should map to transform definitions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-asset-transformation.test.ts",
+      "summary": "Existing SemanticTransformation validation coverage to extend."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "next-action.kp.semantic.promote-generated-transform-library-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic.promote-generated-transform-library-v0",
+    "milestone.kp.long-term-semantic-product-plan-v0"
+  ],
+  "verification": [
+    "npm test -- tests/kp-asset-transformation.test.ts tests/kp-generated-algebra-fixture-registry.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "What minimal data shape lets generated fixture families share SemanticTransformation definitions.",
+    "Which preservation and correspondence fields are common across generated algebra families."
+  ],
+  "allowedWork": [
+    "Add a small typed registry or definition module.",
+    "Keep fixture templates separate from semantic transform definitions.",
+    "Add focused tests for registry completeness and lookup behavior."
+  ],
+  "disallowedWork": [
+    "Do not migrate every generated fixture in this slice.",
+    "Do not add visual motif behavior here."
+  ],
+  "criteria": [
+    {
+      "id": "registry-shape-typed",
+      "weight": "high"
+    },
+    {
+      "id": "definition-lookup-tested",
+      "weight": "high"
+    }
+  ]
+}

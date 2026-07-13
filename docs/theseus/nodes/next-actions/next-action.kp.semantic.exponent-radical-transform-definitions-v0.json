@@ -1,0 +1,60 @@
+{
+  "id": "next-action.kp.semantic.exponent-radical-transform-definitions-v0",
+  "kind": "next-action",
+  "title": "Promote exponent and radical rewrite definitions",
+  "status": "ready",
+  "domain": "kp.semantic",
+  "summary": "Promote exponent expansion/lowering and radical-to-power rewrite semantics into reusable transform definitions that distinguish persistent bases from non-persistent notation artifacts.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Exponent and radical generated fixture specs."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-transform-fixtures.ts",
+      "summary": "Current exponent/radical transform fixture taxonomy."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-tutorial-card-sample.test.ts",
+      "summary": "Generated algebra card sample coverage."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "next-action.kp.semantic.transform-definition-registry-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic.promote-generated-transform-library-v0"
+  ],
+  "verification": [
+    "npm test -- tests/generated-algebra-tutorial-card-sample.test.ts tests/generated-algebra-laws.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "How exponent tokens, radical glyphs, indices, and bases should declare persistence.",
+    "Which rewrite law refs prove the radical/power relationship without relying on visual diffing."
+  ],
+  "allowedWork": [
+    "Add or wire exponent and radical transform definitions.",
+    "Keep visual geometry and particle effects out of semantic definitions."
+  ],
+  "disallowedWork": [
+    "Do not change radical animation rendering.",
+    "Do not broaden into function wrapping or distribution."
+  ],
+  "criteria": [
+    {
+      "id": "base-persistence-explicit",
+      "weight": "high"
+    },
+    {
+      "id": "radical-power-law-ref-explicit",
+      "weight": "high"
+    }
+  ]
+}

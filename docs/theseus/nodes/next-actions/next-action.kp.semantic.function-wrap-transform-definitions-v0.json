@@ -1,0 +1,61 @@
+{
+  "id": "next-action.kp.semantic.function-wrap-transform-definitions-v0",
+  "kind": "next-action",
+  "title": "Promote function-wrap transform definitions",
+  "status": "ready",
+  "domain": "kp.semantic",
+  "summary": "Promote function wrapping semantics into reusable transform definitions for wrapping an input with a function application while distinguishing persistent input tokens from introduced function/paren artifacts.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Function-wrap generated fixture specs."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "summary": "Current wrapping visual motif defaults that should later consume semantic definitions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-laws.test.ts",
+      "summary": "Generated algebra law checks."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "next-action.kp.semantic.transform-definition-registry-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic.promote-generated-transform-library-v0",
+    "next-action.kp.runtime.visual-motif-default-laws-v0"
+  ],
+  "verification": [
+    "npm test -- tests/generated-algebra-laws.test.ts tests/equation-visual-motif-timeline.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "How wrapping preserves the input while adding function and paren artifacts.",
+    "Which semantic data the wrapping visual motif needs without owning the semantic operation."
+  ],
+  "allowedWork": [
+    "Add or wire function-wrap transform definitions.",
+    "Record artifact policy for function names and parentheses."
+  ],
+  "disallowedWork": [
+    "Do not tune function-wrap animation timing here.",
+    "Do not broaden into distribution/factoring."
+  ],
+  "criteria": [
+    {
+      "id": "wrap-persistence-policy-explicit",
+      "weight": "high"
+    },
+    {
+      "id": "function-wrap-laws-covered",
+      "weight": "high"
+    }
+  ]
+}

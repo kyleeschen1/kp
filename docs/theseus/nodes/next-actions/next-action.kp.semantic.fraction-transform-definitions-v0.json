@@ -1,0 +1,60 @@
+{
+  "id": "next-action.kp.semantic.fraction-transform-definitions-v0",
+  "kind": "next-action",
+  "title": "Promote fraction transform definitions",
+  "status": "ready",
+  "domain": "kp.semantic",
+  "summary": "Promote generated fraction split, merge, slash-to-stacked, and simplification semantics into reusable transform definitions with clear operator/artifact policy.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Fraction-expression generated fixture specs."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-transform-fixtures.ts",
+      "summary": "Current fraction fixture and notation taxonomy."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
+      "summary": "Generated algebra fixture construction coverage."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "next-action.kp.semantic.transform-definition-registry-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic.promote-generated-transform-library-v0"
+  ],
+  "verification": [
+    "npm test -- tests/kp-generated-algebra-tutorial-fixture.test.ts tests/generated-algebra-laws.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "How fraction bars and slash operators should be represented as artifacts without persistence claims.",
+    "Which fraction selectors should preserve value, structure, or presentation."
+  ],
+  "allowedWork": [
+    "Add or wire fraction transform definitions.",
+    "Preserve current generated fraction fixture behavior."
+  ],
+  "disallowedWork": [
+    "Do not implement pixel morphing or KaTeX measurement fixes here.",
+    "Do not broaden into non-fraction families."
+  ],
+  "criteria": [
+    {
+      "id": "fraction-artifact-policy-explicit",
+      "weight": "high"
+    },
+    {
+      "id": "fraction-laws-covered",
+      "weight": "high"
+    }
+  ]
+}

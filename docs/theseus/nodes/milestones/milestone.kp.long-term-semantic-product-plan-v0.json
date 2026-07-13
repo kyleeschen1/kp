@@ -29,7 +29,14 @@
     ]
   },
   "nextActions": [
-    "next-action.kp.semantic.promote-generated-transform-library-v0",
+    "next-action.kp.semantic.transform-definition-registry-v0",
+    "next-action.kp.semantic.linear-solve-cancellation-transform-definitions-v0",
+    "next-action.kp.semantic.fraction-transform-definitions-v0",
+    "next-action.kp.semantic.exponent-radical-transform-definitions-v0",
+    "next-action.kp.semantic.function-wrap-transform-definitions-v0",
+    "next-action.kp.semantic.distribution-factor-transform-definitions-v0",
+    "next-action.kp.semantic.generated-fixtures-consume-transform-definitions-v0",
+    "next-action.kp.semantic.transform-definition-dashboard-export-coverage-v0",
     "next-action.kp.runtime.visual-motif-default-laws-v0",
     "next-action.kp.renderer.semantic-frame-adoption-v0",
     "next-action.kp.dashboard.authoring-actions-v0",

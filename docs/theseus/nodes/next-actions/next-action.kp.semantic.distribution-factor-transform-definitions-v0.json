@@ -1,0 +1,60 @@
+{
+  "id": "next-action.kp.semantic.distribution-factor-transform-definitions-v0",
+  "kind": "next-action",
+  "title": "Promote distribution and factoring definitions",
+  "status": "ready",
+  "domain": "kp.semantic",
+  "summary": "Promote distribution and factoring semantics into reusable transform definitions that record value preservation, duplicated factor provenance, and correspondence between expanded and factored forms.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-fixture-registry.ts",
+      "summary": "Distribution/factoring generated fixture specs."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Distribution/factoring fixture transformation construction."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-laws.test.ts",
+      "summary": "Generated algebra law checks."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "next-action.kp.semantic.transform-definition-registry-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic.promote-generated-transform-library-v0"
+  ],
+  "verification": [
+    "npm test -- tests/generated-algebra-laws.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "How a factored term should record provenance when it appears in multiple expanded positions.",
+    "Which correspondence structure supports both distribute and factor directions."
+  ],
+  "allowedWork": [
+    "Add or wire distribution and factoring transform definitions.",
+    "Keep bidirectional semantics explicit where fixtures support both directions."
+  ],
+  "disallowedWork": [
+    "Do not implement symbolic algebra simplification beyond fixture metadata.",
+    "Do not change graph rendering in this slice."
+  ],
+  "criteria": [
+    {
+      "id": "duplicated-factor-provenance-explicit",
+      "weight": "high"
+    },
+    {
+      "id": "distribute-factor-correspondence-covered",
+      "weight": "high"
+    }
+  ]
+}

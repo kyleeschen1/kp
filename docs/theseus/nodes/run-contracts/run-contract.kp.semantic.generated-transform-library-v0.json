@@ -1,0 +1,108 @@
+{
+  "id": "run-contract.kp.semantic.generated-transform-library-v0",
+  "kind": "run-contract",
+  "title": "KP generated transform library loop",
+  "status": "ready",
+  "domain": "kp.semantic",
+  "summary": "Focused KP-only loop for promoting generated algebra families into reusable SemanticTransformation definitions, wiring generated fixtures through those definitions, surfacing them in dashboard/export metadata, and then attaching visual motif defaults and reversible laws.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic.promote-generated-transform-library-v0.json",
+      "summary": "Umbrella parent decomposed into this focused run contract."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP workflow queue now lists the run contract slices in order."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-long-term-semantic-product-plan.md",
+      "summary": "Accepted long-term plan that prioritizes reusable semantic transformations before broader renderer, media, and curriculum work."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.long-term-semantic-product-plan",
+      "milestone.kp.long-term-semantic-product-plan-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system",
+    "milestone.kp.long-term-semantic-product-plan-v0"
+  ],
+  "goal": "Run the KP generated transform-library promotion slices without broadening into stale Theseus planner follow-ups.",
+  "target": "next-action.kp.semantic.transform-definition-registry-v0",
+  "runMode": "run",
+  "maxSlices": 9,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run typecheck"
+  ],
+  "stopConditions": [
+    "Stop if a slice requires changing semantic object architecture outside the generated transform-library boundary.",
+    "Stop if focused tests fail in a way that needs product or math-semantics judgment.",
+    "Stop before implementing renderer animation effects that are not represented by semantic transformations or visual motif defaults.",
+    "Stop after the ninth slice and rerun long-loop-report before considering renderer frame adoption, dashboard authoring actions, media, curriculum, or dynamic package loading."
+  ],
+  "allowedWork": [
+    "Work only on generated transform-library definitions, fixture consumption, dashboard/export surfacing, and visual motif default law wiring.",
+    "Use the source refs and verification commands recorded on each slice.",
+    "Keep template convenience separate from SemanticObject or SemanticTransformation type expansion."
+  ],
+  "disallowedWork": [
+    "Do not work on stale Theseus planner follow-ups in this KP loop.",
+    "Do not implement GIF/video encoders, curriculum generation, package loading, or graph/runtime unification in this loop.",
+    "Do not add visual-only effects without semantic or motif contract coverage."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.semantic.transform-definition-registry-v0",
+      "title": "Add generated transform definition registry",
+      "status": "ready"
+    },
+    {
+      "id": "next-action.kp.semantic.linear-solve-cancellation-transform-definitions-v0",
+      "title": "Promote linear-solve cancellation definitions",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic.fraction-transform-definitions-v0",
+      "title": "Promote fraction transform definitions",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic.exponent-radical-transform-definitions-v0",
+      "title": "Promote exponent and radical rewrite definitions",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic.function-wrap-transform-definitions-v0",
+      "title": "Promote function-wrap transform definitions",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic.distribution-factor-transform-definitions-v0",
+      "title": "Promote distribution and factoring definitions",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic.generated-fixtures-consume-transform-definitions-v0",
+      "title": "Make generated fixtures consume transform definitions",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic.transform-definition-dashboard-export-coverage-v0",
+      "title": "Surface transform definitions in dashboard and exports",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.runtime.visual-motif-default-laws-v0",
+      "title": "Attach reusable visual motif defaults and reversible laws",
+      "status": "planned"
+    }
+  ]
+}

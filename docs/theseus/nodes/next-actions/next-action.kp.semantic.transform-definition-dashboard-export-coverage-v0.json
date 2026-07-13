@@ -1,0 +1,66 @@
+{
+  "id": "next-action.kp.semantic.transform-definition-dashboard-export-coverage-v0",
+  "kind": "next-action",
+  "title": "Surface transform definitions in dashboard and exports",
+  "status": "ready",
+  "domain": "kp.semantic",
+  "summary": "Expose promoted generated transform definitions through dashboard rows, generated export dependency metadata, and smoke/law coverage so authors and future Codex sessions can inspect them.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Generated algebra dashboard catalog rows."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-algebra-dependency-manifest.ts",
+      "summary": "Generated algebra export dependency manifest."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "summary": "Dashboard generated algebra catalog tests."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-export-sample.test.ts",
+      "summary": "Generated algebra export sample tests."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "next-action.kp.semantic.generated-fixtures-consume-transform-definitions-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic.promote-generated-transform-library-v0",
+    "next-action.kp.dashboard.authoring-actions-v0"
+  ],
+  "verification": [
+    "npm test -- tests/project-dashboard-generated-algebra-catalog.test.ts tests/generated-algebra-export-sample.test.ts tests/generated-algebra-smoke.browser.spec.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "What dashboard metadata authors need to inspect transform definitions.",
+    "Which export dependency manifests should include transform-definition references."
+  ],
+  "allowedWork": [
+    "Add catalog/export metadata for promoted definitions.",
+    "Keep authoring actions as links or metadata unless already supported."
+  ],
+  "disallowedWork": [
+    "Do not redesign dashboard rows.",
+    "Do not implement new export media formats."
+  ],
+  "criteria": [
+    {
+      "id": "dashboard-shows-transform-definitions",
+      "weight": "medium"
+    },
+    {
+      "id": "exports-reference-promoted-definitions",
+      "weight": "medium"
+    }
+  ]
+}

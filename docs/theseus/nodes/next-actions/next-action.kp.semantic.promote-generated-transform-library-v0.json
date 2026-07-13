@@ -2,9 +2,9 @@
   "id": "next-action.kp.semantic.promote-generated-transform-library-v0",
   "kind": "next-action",
   "title": "Promote generated algebra transforms into reusable definitions",
-  "status": "ready",
+  "status": "needs-breakdown",
   "domain": "kp.semantic",
-  "summary": "Turn generated algebra family metadata into reusable SemanticTransformation definitions for fraction split/merge, exponent lowering, radical rewrite, function wrapping, distribution/factoring, simplification, and cancellation.",
+  "summary": "Umbrella container for promoting generated algebra family metadata into reusable SemanticTransformation definitions. Execution is decomposed into narrower ready child actions for the registry, linear-solve cancellation, fractions, exponent/radical rewrites, function wrapping, distribution/factoring, fixture consumption, and dashboard/export coverage.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -58,6 +58,16 @@
     "npm run typecheck",
     "npm run theseus -- validate"
   ],
+  "nextActions": [
+    "next-action.kp.semantic.transform-definition-registry-v0",
+    "next-action.kp.semantic.linear-solve-cancellation-transform-definitions-v0",
+    "next-action.kp.semantic.fraction-transform-definitions-v0",
+    "next-action.kp.semantic.exponent-radical-transform-definitions-v0",
+    "next-action.kp.semantic.function-wrap-transform-definitions-v0",
+    "next-action.kp.semantic.distribution-factor-transform-definitions-v0",
+    "next-action.kp.semantic.generated-fixtures-consume-transform-definitions-v0",
+    "next-action.kp.semantic.transform-definition-dashboard-export-coverage-v0"
+  ],
   "expectedLearning": [
     "Which generated algebra families are ready to become reusable SemanticTransformation modules instead of fixture-local metadata.",
     "What correspondence fields and law refs are needed for each family to preserve identity, structure, value, role, and presentation honestly.",
@@ -86,5 +96,9 @@
       "id": "generated-fixtures-consume-definitions",
       "weight": "high"
     }
-  ]
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Decomposed into narrower ready implementation actions so the broad transform-library goal is no longer an executable long-loop slice."
+  }
 }

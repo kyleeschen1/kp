@@ -1,0 +1,60 @@
+{
+  "id": "next-action.kp.semantic.linear-solve-cancellation-transform-definitions-v0",
+  "kind": "next-action",
+  "title": "Promote linear-solve cancellation definitions",
+  "status": "ready",
+  "domain": "kp.semantic",
+  "summary": "Promote additive/subtractive linear-solve cancellation and simplification steps into reusable generated transform definitions with explicit identity, value, and artifact policy.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Linear-solve fixture transformation construction."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-laws.test.ts",
+      "summary": "Generated algebra law checks for transformation closure."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-linear-solve-tutorial-card-sample.test.ts",
+      "summary": "Generated linear-solve sample coverage."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "next-action.kp.semantic.transform-definition-registry-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic.promote-generated-transform-library-v0"
+  ],
+  "verification": [
+    "npm test -- tests/generated-algebra-laws.test.ts tests/generated-linear-solve-tutorial-card-sample.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "How cancellation and simplification should preserve identity for surviving selectors while artifacts vanish.",
+    "Which linear-solve transforms become reusable templates for later families."
+  ],
+  "allowedWork": [
+    "Move linear-solve cancellation metadata into generated transform definitions.",
+    "Keep existing fixture outputs stable unless tests define a better contract."
+  ],
+  "disallowedWork": [
+    "Do not alter visible animation timing in this slice.",
+    "Do not broaden into fraction/exponent/radical families."
+  ],
+  "criteria": [
+    {
+      "id": "cancellation-definition-reusable",
+      "weight": "high"
+    },
+    {
+      "id": "linear-solve-fixtures-still-pass-laws",
+      "weight": "high"
+    }
+  ]
+}
