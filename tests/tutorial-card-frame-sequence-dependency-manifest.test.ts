@@ -19,6 +19,7 @@ test("frame sequence dependency manifest exposes export dependencies and closure
     profileId: "export.linear-solve.gif",
     payloadKind: "json-document",
     timelineIds: ["timeline.linear-solve.shared"],
+    animationIds: ["animation.linear-solve.solve-x"],
     frameCount: 5,
     domains: ["equation", "graph", "programming"],
     dependencyPhases: ["critical", "interactive", "optional"],

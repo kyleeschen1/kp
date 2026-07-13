@@ -23,3 +23,17 @@ export function createGeneratedAlgebraAnimationAssets():
     createDistributionFactoringAnimationAsset()
   ];
 }
+
+export function animationIdsForTimelineIds(
+  timelineIds: readonly string[]
+): readonly string[] {
+  const timelineIdSet = new Set(timelineIds);
+
+  return createGeneratedAlgebraAnimationAssets()
+    .filter((animation) =>
+      animation.timeline === undefined
+        ? false
+        : timelineIdSet.has(animation.timeline.id)
+    )
+    .map((animation) => animation.id);
+}

@@ -50,6 +50,7 @@ test("frame sequence artifact bundles equation graph and programming frames by p
     status: "renderable",
     metadata: {
       ...contract.artifact.metadata,
+      animationIds: ["animation.linear-solve.solve-x"],
       domains: ["equation", "graph", "programming"],
       frameSequenceVersion: 1,
       sourceArtifactId: "artifact.linear-solve.gif"

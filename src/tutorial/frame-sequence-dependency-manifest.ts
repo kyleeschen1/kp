@@ -28,6 +28,7 @@ export interface KpTutorialFrameSequenceDependencyManifest {
   readonly profileId: string;
   readonly payloadKind: KpTutorialExportArtifactPayloadKind;
   readonly timelineIds: readonly string[];
+  readonly animationIds: readonly string[];
   readonly frameCount: number;
   readonly domains: readonly KpTutorialFrameSequenceDomain[];
   readonly dependencyPhases: readonly KpTutorialDependencyPhase[];
@@ -52,6 +53,7 @@ export function createKpTutorialFrameSequenceDependencyManifest(
     profileId: artifact.profileId,
     payloadKind: artifact.payloadKind,
     timelineIds: [...artifact.timelineIds],
+    animationIds: animationIds(sequence),
     frameCount: sequence.frameCount,
     domains: [...sequence.domains],
     dependencyPhases: [...artifact.dependencies.phases],
@@ -78,4 +80,14 @@ function sourceArtifactId(sequence: KpTutorialFrameSequenceArtifact): string {
   const sourceArtifactId = sequence.artifact.metadata?.["sourceArtifactId"];
 
   return typeof sourceArtifactId === "string" ? sourceArtifactId : "";
+}
+
+function animationIds(
+  sequence: KpTutorialFrameSequenceArtifact
+): readonly string[] {
+  const animationIds = sequence.artifact.metadata?.["animationIds"];
+
+  return Array.isArray(animationIds)
+    ? animationIds.filter((animationId) => typeof animationId === "string")
+    : [];
 }

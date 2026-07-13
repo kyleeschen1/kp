@@ -9,6 +9,7 @@ import {
   type KpTutorialDependencyPhase,
   type KpTutorialDependencyPlanPhase
 } from "./dependency-planner.ts";
+import { animationIdsForTimelineIds } from "../animation/catalog.ts";
 import { collectKpTutorialCapabilityPackageClosure } from "./capability-package-closure.ts";
 import {
   createKpTutorialCardExportArtifact,
@@ -146,6 +147,7 @@ function createFrameExportArtifact(
     fallback: input.manifest.fallback,
     metadata: {
       ...cloneMetadataSettings(input.profile.settings),
+      animationIds: animationIdsForTimelineIds([input.parentTimeline.id]),
       frameCount: input.frameCount,
       frameSampleSource: "parent-timeline",
       resolver: "parent-timeline-frame-export"

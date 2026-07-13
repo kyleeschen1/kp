@@ -1,0 +1,105 @@
+{
+  "id": "next-action.kp.animation.frame-sequence-metadata-v0",
+  "kind": "next-action",
+  "title": "Make frame-sequence artifacts consume animation metadata",
+  "status": "resolved",
+  "summary": "Threaded AnimationAsset IDs into frame export metadata and frame-sequence dependency manifests.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-animation-asset-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.frame-sequence-metadata-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming composable semantic animations as KP's primary artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Ready action anchoring the approved animation asset contract loop."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Adds timeline-to-animation lookup used by frame export metadata."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-export-contract.ts",
+      "summary": "Writes timeline-derived animationIds into parent frame export artifact metadata."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-sequence-dependency-manifest.ts",
+      "summary": "Exposes animationIds from frame-sequence artifact metadata in dependency manifests."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-frame-sequence-artifact.test.ts",
+      "summary": "Covers frame-sequence artifact metadata carrying animationIds."
+    },
+    {
+      "kind": "file",
+      "path": "tests/tutorial-card-frame-sequence-dependency-manifest.test.ts",
+      "summary": "Covers frame-sequence dependency manifests exposing animationIds."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.composable-animation-asset-v0",
+      "next-action.kp.animation.export-manifest-animation-ids-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.export-manifest-animation-ids-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Make frame-sequence artifacts consume animation metadata can be completed inside KP composable animation asset v0 loop."
+  ],
+  "allowedWork": [
+    "Work only on the approved composable semantic animation asset v0 loop.",
+    "Keep tutorials, cards, exports, flashcards, graphs, and programming views as consumers of animation assets rather than the core artifact.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broadly rename tutorial-card modules in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add curriculum generation, spaced repetition generation, or dynamic package loading in this loop.",
+    "Do not create renderer-owned animation formats separate from semantic asset calculus."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/tutorial-card-frame-sequence-artifact.test.ts tests/tutorial-card-frame-sequence-dependency-manifest.test.ts tests/tutorial-card-frame-sequence-preview.test.ts tests/tutorial-card-frame-sequence-rewind-check.test.ts tests/generated-algebra-export-sample.test.ts tests/project-dashboard-animation-asset-catalog.test.ts tests/kp-linear-solve-animation-asset.test.ts tests/kp-animation-asset.test.ts tests/kp-animation-frame-descriptor.test.ts tests/kp-animation-visual-motif.test.ts",
+      "status": "passed",
+      "scope": "frame-sequence metadata, dependency manifests, and animation catalog lookup",
+      "checkedAt": "2026-07-13T23:45:46.133Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-13T23:45:46.179Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T23:45:46.220Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Threaded AnimationAsset IDs into frame export metadata and frame-sequence dependency manifests."
+  }
+}
