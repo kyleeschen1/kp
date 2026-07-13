@@ -1,0 +1,92 @@
+{
+  "id": "next-action.kp.animation.composable-animation-asset-contract-v0",
+  "kind": "next-action",
+  "title": "Define composable animation asset contract",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Define a typed, annotated AnimationAsset contract that composes semantic objects, SemanticTransformations, transformation trees, layouts, timelines, visual motifs, renderer-neutral frames, laws, exports, sample targets, and dashboard metadata without binding the reusable artifact to the tutorial use case.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming composable semantic animations as KP's primary authored artifact."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset.ts",
+      "summary": "Core semantic asset and selector primitives the animation contract should reference."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "SemanticTransformation and definition contracts the animation contract should compose."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/transformation-composition.ts",
+      "summary": "Sequence, parallel, annotations, and rewind phase model that should become the animation transformation tree boundary."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/visual-motif-composition.ts",
+      "summary": "Renderer-neutral visual motif timeline composition that animation assets should target."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-sequence-artifact.ts",
+      "summary": "Existing frame-sequence export format that should become a consumer of sampled animation frames."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "decision.kp.animation-asset-primary-unit",
+      "decision.kp.long-term-semantic-product-plan",
+      "next-action.kp.runtime.visual-motif-default-laws-v0"
+    ]
+  },
+  "affects": [
+    "milestone.kp.long-term-semantic-product-plan-v0"
+  ],
+  "verification": [
+    "npm test -- tests/semantic.test.ts tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts",
+    "npm test -- tests/generated-algebra-export-sample.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "What minimal AnimationAsset v0 fields can compile to existing semantic assets, transform trees, visual motifs, dashboard rows, and exports.",
+    "Which tutorial-card-specific names should stay as compatibility consumers rather than become the core abstraction.",
+    "How LLMs should author and decompose animation assets without directly editing renderer state.",
+    "Which laws prove animation composition, seek, and rewind before graph/programming/media consumers adopt it."
+  ],
+  "allowedWork": [
+    "Define AnimationAsset as a typed contract above existing semantic asset, transformation, motif, timeline, layout, frame, dashboard, and export seams.",
+    "Migrate a small number of existing generated algebra examples into the contract as adapters or fixtures.",
+    "Keep existing tutorial-card modules as consumers until a later compatibility rename is justified.",
+    "Add law checks and dashboard/export metadata that prove the contract composes and rewinds."
+  ],
+  "disallowedWork": [
+    "Do not build GIF/video encoders in this loop.",
+    "Do not rename all tutorial-card source modules as a broad mechanical churn.",
+    "Do not create a renderer-owned animation format separate from semantic asset calculus.",
+    "Do not broaden into curriculum generation or spaced repetition before the animation contract is stable."
+  ],
+  "criteria": [
+    {
+      "id": "animation-asset-contract-named",
+      "weight": "high"
+    },
+    {
+      "id": "existing-examples-compile-through-contract",
+      "weight": "high"
+    },
+    {
+      "id": "composition-and-rewind-laws-covered",
+      "weight": "high"
+    },
+    {
+      "id": "dashboard-and-export-consume-animation-metadata",
+      "weight": "medium"
+    }
+  ]
+}

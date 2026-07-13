@@ -1,0 +1,50 @@
+{
+  "id": "decision.kp.animation-asset-primary-unit",
+  "kind": "decision",
+  "title": "Use composable animations as KP primary artifact",
+  "status": "resolved",
+  "domain": "kp.roadmap",
+  "summary": "Accepted that KP's durable authored unit is a composable semantic animation, not a tutorial. Tutorials, cards, generated solutions, flashcards, embeds, static steps, GIFs, videos, graph scenes, and program traces are consumers of the same typed animation asset.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Accepted decision defining semantic animations as the primary KP artifact and tutorials as one consumer."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/strategy.md",
+      "summary": "Strategy updated from semantic tutorial system to semantic animation system."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap updated to name composable semantic animations as the artifact that cards, exports, generated solutions, and flashcards consume."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active semantic-runtime thread updated with the composable animation asset next action and terminology."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset.ts",
+      "summary": "Semantic asset primitives that the animation asset contract should compose instead of replacing."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "SemanticTransformation contracts that animation assets should orchestrate."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/visual-motif-composition.ts",
+      "summary": "Reusable visual motif timeline boundary that animation assets should compile to."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/frame-sequence-artifact.ts",
+      "summary": "Existing export consumer that should consume animation frames rather than define a separate artifact truth."
+    }
+  ]
+}

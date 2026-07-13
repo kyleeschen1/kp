@@ -2,16 +2,15 @@
 
 Status: active
 Last Updated: 2026-07-13
-Current Next Action: Promote generated algebra families into stronger semantic
-transform definitions and move more renderer surfaces to consume semantic
-frames, now that linear-solve, fraction, exponent, radical, function-wrap, and
-distribution/factoring families flow through cards, exports, laws, diagnostics,
-dashboard rows, sample actions, search facets, and browser smoke coverage.
+Current Next Action: Define the composable semantic animation asset contract so
+objects, transformations, layouts, timelines, motifs, renderer-neutral frames,
+laws, exports, cards, and dashboard rows compose around one typed artifact
+instead of one-off tutorial-specific fixtures.
 
 ## Goal
 
 Make KP's semantic runtime the stable spine for equations, graphs, diagrams,
-code, layouts, and tutorial cards.
+code, layouts, and composable animation cards.
 
 ## Current Decision
 
@@ -27,6 +26,13 @@ Category theory supplies the composition-law vocabulary; FRP supplies the
 `Time -> Frame` denotation for animation. The practical framework should stay
 small: assets, semantic transformations, diagrams, timelines/behaviors, ports,
 interpreters, law checks, and flashcard specs.
+
+The primary authored artifact should now be named an **animation**, not a
+tutorial. Tutorials remain an important use case and existing module name, but
+the reusable unit is broader: a typed semantic animation can back a lesson, a
+comparison card, an embeddable capsule, a generated solution step, a
+spaced-repetition prompt, a graph/program trace, or a media export without
+changing its semantic core.
 
 ## Current State
 
@@ -113,18 +119,28 @@ more about improving the semantic transform library, visual motif defaults,
 composition laws, and renderer-neutral frame adoption that those generated
 families exercise.
 
+The generated transform-library loop closed on 2026-07-13. It promoted the
+generated algebra families into reusable transform definitions, made generated
+fixtures consume those definitions, surfaced definition provenance in dashboard
+and export manifests, and attached definition-backed visual motif defaults plus
+reversible motif timeline laws. This unlocks the next layer: defining a typed
+composable animation artifact that can assemble those semantic pieces without
+being tied to the tutorial-card use case.
+
 The accepted long-term semantic product plan now gives this thread an ordered
 tranche sequence: promote generated families into reusable
 `SemanticTransformation` modules, attach visual motif defaults and reversible
-timeline laws, move graphs/source/dashboard/export views to renderer-neutral
-frames, turn dashboard rows into authoring actions, harden compile/export
-boundaries, and only then broaden into media encoders, curriculum/problem
-generation, spaced repetition, and dynamic package loading.
+timeline laws, define composable animation assets, move
+graphs/source/dashboard/export views to renderer-neutral frames, turn dashboard
+rows into authoring actions, harden compile/export boundaries, and only then
+broaden into media encoders, curriculum/problem generation, spaced repetition,
+and dynamic package loading.
 
-The next priority is to make those paths more semantically expressive.
-Generated tutorial families, media encoders, graph/visual runtime unification,
-and program-trace visualizations should all use the asset-calculus framework
-rather than running ahead of it.
+The next priority is to make those paths more semantically expressive by
+introducing the composable animation asset contract. Generated animation
+families, media encoders, graph/visual runtime unification, tutorial cards,
+flashcards, and program-trace visualizations should all use the asset-calculus
+framework rather than running ahead of it.
 
 The renderer adoption path is:
 
@@ -147,6 +163,9 @@ same fixtures into tutorial-card and export/sample paths.
 
 - semantic objects with stable selectors and immutable structural history;
 - semantic transformations with correspondence and provenance;
+- composable semantic animation assets with objects, transformations, layouts,
+  timelines, visual motifs, checks, render targets, sample/export metadata, and
+  dashboard catalog metadata;
 - asset-calculus composition forms for sequence, parallel, tree/operad-style
   substitution, focus, and representation reinterpretation;
 - denotational animation behavior where playback, rewind, scroll, and export
@@ -176,6 +195,12 @@ same fixtures into tutorial-card and export/sample paths.
   fixture-specific metadata into reusable SemanticTransformation definitions:
   fraction split/merge, exponent lowering, radical rewrite, function wrapping,
   distribution/factoring, simplification, or cancellation?
+- What is the smallest `AnimationAsset` v0 that can compile into existing
+  generated algebra fixtures, tutorial-card samples, frame-sequence exports,
+  dashboard rows, and laws without forcing broad rewrites?
+- Which existing examples should become canonical animation assets first:
+  `x + 3 = 7`, fraction simplification, exponent/radical rewrite,
+  function wrapping, matrix bracket switch, graph morph, or SourceFile trace?
 - Which renderer-neutral frame fields should become required across WebGL
   graphs, source-code panels, dashboard previews, and exports now that the
   KaTeX generated fixture path has a preservation law?

@@ -17,7 +17,11 @@
     "decision.kp.radical-artifact-dom-owned-motion",
     "decision.kp.headless-boundary-catalog",
     "decision.kp.semantic-animation-runtime-roadmap",
-    "decision.kp.long-term-semantic-product-plan"
+    "decision.kp.long-term-semantic-product-plan",
+    "decision.kp.animation-asset-primary-unit"
+  ],
+  "milestones": [
+    "milestone.kp.long-term-semantic-product-plan-v0"
   ],
   "nextActions": [
     "next.kp.tutorial-card-browser-hardening-loop-contract",
@@ -53,15 +57,9 @@
     "next-action.kp.semantic.distribution-factor-transform-definitions-v0",
     "next-action.kp.semantic.generated-fixtures-consume-transform-definitions-v0",
     "next-action.kp.semantic.transform-definition-dashboard-export-coverage-v0",
-    "next-action.kp.runtime.visual-motif-default-laws-v0"
+    "next-action.kp.runtime.visual-motif-default-laws-v0",
+    "next-action.kp.animation.composable-animation-asset-contract-v0"
   ],
-  "milestones": [
-    "milestone.kp.long-term-semantic-product-plan-v0"
-  ],
-  "progress": {
-    "state": "partial",
-    "summary": "Reusable dashboard v1, semantic transition runtime, tutorial-card runtime, export/embed, browser hardening, hosted/package readiness, capability loading, asset calculus, renderer adoption, generated fixture catalog adoption, and generated math family expansion loops are closed. The accepted long-term direction is to promote generated algebra families into reusable SemanticTransformation modules and visual motif laws first, then widen renderer-neutral frame adoption, dashboard authoring actions, compile/export hardening, media-frame laws, curriculum/card capsules, and dynamic package loading in that order."
-  },
   "verificationRecords": [
     {
       "command": "npm run theseus -- long-loop-report --limit 30",
@@ -72,8 +70,12 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-10T08:49:09.069Z",
-      "scope": "KP graph valid after closeout queue compaction and run-contract closure."
+      "scope": "KP graph valid after closeout queue compaction and run-contract closure.",
+      "checkedAt": "2026-07-10T08:49:09.069Z"
     }
-  ]
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Current KP frontier is now composable semantic animation assets: define a typed artifact that can feed tutorials, cards, exports, flashcards, generated solutions, graph/code panels, and media consumers without making tutorial cards the core abstraction."
+  }
 }

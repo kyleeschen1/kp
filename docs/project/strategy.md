@@ -4,17 +4,19 @@ Last Updated: 2026-07-10
 
 ## North Star
 
-Kinetic Press should become a semantic tutorial system, not a collection of
-one-off animations. LLMs should be able to propose and revise structured
-explanations; KP should validate the semantics, execute computations, derive
+Kinetic Press should become a semantic animation system, not a collection of
+one-off visual effects. LLMs should be able to propose and revise structured
+animations; KP should validate the semantics, execute computations, derive
 representations, preserve identity, render synchronized views, and export the
-result as interactive cards, static steps, GIFs, or videos.
+result as interactive cards, lessons, static steps, GIFs, or videos.
 
 ## Product Thesis
 
-The durable artifact is an executable semantic tutorial. A tutorial contains
+The durable artifact is an executable semantic animation. An animation contains
 semantic objects, semantic transformations, layouts, timelines, visual motifs,
-concept refs, checks, and export settings. The same source should support:
+concept refs, checks, and export settings. Tutorials, cards, comparisons,
+problem solutions, and embeds are consumers of that animation artifact, not the
+artifact itself. The same source should support:
 
 - interactive scrubbable cards;
 - synchronized equation, graph, diagram, and code views;
@@ -33,8 +35,9 @@ The project should keep four layers distinct:
    sequencing, parallel composition, and layout state.
 3. **Renderer layer:** KaTeX, SVG, WebGL, DOM, code, diagram, and table
    renderers that consume explicit frames.
-4. **Authoring layer:** dashboard/catalog, tutorial specs, LLM-editable
-   scripts, comparison cards, report cards, and project navigation.
+4. **Authoring layer:** dashboard/catalog, animation specs, LLM-editable
+   scripts, tutorial cards, comparison cards, report cards, and project
+   navigation.
 
 ## Project Docs And Theseus
 
@@ -69,9 +72,9 @@ When choosing the next slice, prefer work that improves:
   renderer-neutral sampling;
 - **authoring workflow:** dashboard search, samples, report cards, and project
   navigation;
-- **reusable primitives:** capabilities and motifs that many tutorials can
+- **reusable primitives:** capabilities and motifs that many animations can
   reuse;
-- **demo value:** visible equation/graph/tutorial behavior that proves the
+- **demo value:** visible equation/graph/animation behavior that proves the
   architecture;
 - **cross-session continuity:** clear docs and Theseus records that let future
   Codex runs continue without rediscovery.

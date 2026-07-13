@@ -8,7 +8,9 @@ Active Thread: `threads/semantic-runtime.md`
 
 The active direction is to make KP's semantic animation runtime the center of
 the project, with the project dashboard as the operational catalog and authoring
-surface. The ordering principle is:
+surface. The primary artifact is a composable semantic animation; tutorials,
+cards, exports, generated solutions, and flashcards are use cases of that
+artifact. The ordering principle is:
 
 ```text
 semantics first
@@ -34,7 +36,7 @@ through one predictable semantic/time protocol.
 The doctrine, composition laws, authoring guide, core interfaces, executable
 law checks, pause-time inspection, drill-down hooks, flashcard specs, external
 port fixture, programming trace skeleton, equation-frame interpreter path,
-dashboard preview interpreter, and generated algebra tutorial fixture path are
+dashboard preview interpreter, and generated algebra animation fixture path are
 in place. Generated algebra now covers linear solves, fraction expressions,
 exponents, radicals, function wrapping, and distribution/factoring through the
 same registry, tutorial-card sample path, export samples, dependency manifests,
@@ -42,7 +44,7 @@ drill-down hooks, flashcards, algebra-trace port diagnostics, renderer-frame
 preservation laws, fixture-closure laws, dashboard maturity rows, sample
 actions, search facets, and browser smoke coverage. The current pressure is no
 longer to define the vocabulary; it is to make more renderer, dashboard,
-export, graph, programming, and generated-tutorial paths consume it directly.
+export, graph, programming, and generated-animation paths consume it directly.
 The goal remains practical: a KP intermediate representation with composition
 laws inspired by category theory and FRP, not a broad abstract category theory
 framework.
@@ -62,8 +64,8 @@ facet search, tutorial dependency planning, and export closure validation across
 iframe, static-step, and frame-sequence artifacts.
 
 Dynamic package loading is deliberately not the next step yet. The useful
-contract is the metadata spine: generated tutorials, export artifacts, and the
-dashboard can agree on what capabilities and packages a tutorial needs before
+contract is the metadata spine: generated animations, export artifacts, and the
+dashboard can agree on what capabilities and packages an animation needs before
 KP starts shipping those packages independently.
 
 ## Roadmap Phases
@@ -122,8 +124,8 @@ Make transformations compose as first-class objects:
 - reversible visual motif timelines;
 - editable transformation trees for pauses, focus, and emphasis.
 
-This is where matrix multiplication can be composed from dot products, and a
-tutorial can edit emphasis without changing semantic truth.
+This is where matrix multiplication can be composed from dot products, and an
+animation can edit emphasis without changing semantic truth.
 
 ### Phase 4: KaTeX Transform Library
 
@@ -178,17 +180,17 @@ Promote the dashboard from project tracker to authoring/catalog surface:
 - visible blockers, maturity, source refs, and verification records;
 - future writeback from structured docs/JSON and Theseus nodes.
 
-### Phase 7: Tutorial Composition And Layout Objects
+### Phase 7: Animation Composition And Layout Objects
 
 Status: active
 
-Add first-class layout and tutorial composition:
+Add first-class layout and animation composition:
 
 - row, column, stack, grid, split, tabs, overlay, scroll sequence, pinned stage;
 - synchronized panels;
 - timeline markers and annotations;
 - focus/unfocus as presentation transformations;
-- nested tutorial cards and comparison cards.
+- nested animation cards, tutorial cards, and comparison cards.
 
 ### Phase 8: Computation, Curriculum, And Cards
 
@@ -208,7 +210,7 @@ Build the verified learning layer:
 
 Status: active
 
-Package executable tutorials as semantic capsules:
+Package executable animations as semantic capsules:
 
 - web component or iframe embeds;
 - lazy capability manifests;
@@ -221,7 +223,7 @@ Package executable tutorials as semantic capsules:
    richer semantic transform definitions for fractions, radicals, exponents,
    function wrapping, distribution, factoring, simplification, and cancellation.
 2. Attach visual motif defaults and reversible timeline laws to those promoted
-   transformations so generated and hand-authored tutorials share the same
+   transformations so generated and hand-authored animations share the same
    motion vocabulary.
 3. Promote additional renderer surfaces to consume interpreter frames:
    comparison cards, graph/vector panels, source-code traces, and export
@@ -240,7 +242,7 @@ Package executable tutorials as semantic capsules:
    and capability package manifests stay stable.
 8. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-9. Defer dynamic package loading until at least one generated tutorial family
+9. Defer dynamic package loading until at least one generated animation family
    proves the metadata contract across math, graph, programming, and export
    examples.
 
@@ -252,7 +254,7 @@ Package executable tutorials as semantic capsules:
   format and capability package manifests are accepted as the encoder input
   contract.
 - Dynamic package loading is deferred until package manifests stay stable across
-  generated tutorial families and broader render domains.
+  generated animation families and broader render domains.
 - Large media, graph, and curriculum loops are deferred until the KP Asset
   Calculus doctrine/laws are captured well enough for future LLM sessions to
   follow them without rediscovery.
