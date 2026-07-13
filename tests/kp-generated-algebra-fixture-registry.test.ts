@@ -56,7 +56,10 @@ test("generated algebra transform definition registry exposes reusable semantic 
     "definition.generated.linear-solve.simplify-constant-sum",
     "definition.generated.linear-solve.divide-both-sides",
     "definition.generated.linear-solve.cancel-multiplicative-inverses",
-    "definition.generated.linear-solve.simplify-constant-quotient"
+    "definition.generated.linear-solve.simplify-constant-quotient",
+    "definition.generated.fraction-expression.split-fraction-factors",
+    "definition.generated.fraction-expression.merge-common-factor",
+    "definition.generated.fraction-expression.simplify-unit-factor"
   ]);
   assert.deepEqual(
     listGeneratedAlgebraTransformDefinitionsByFamily("generated.linear-solve").map(
@@ -74,6 +77,32 @@ test("generated algebra transform definition registry exposes reusable semantic 
         "cancelMultiplicativeInverses"
       ],
       ["linear-solve.simplify-constant-quotient", "simplifyConstantQuotient"]
+    ]
+  );
+  assert.deepEqual(
+    listGeneratedAlgebraTransformDefinitionsByFamily(
+      "generated.fraction-expression"
+    ).map((definition) => [
+      definition.templateId,
+      definition.transformType,
+      definition.artifactPolicy
+    ]),
+    [
+      [
+        "fraction-expression.split-fraction-factors",
+        "splitFractionFactors",
+        "mixed"
+      ],
+      [
+        "fraction-expression.merge-common-factor",
+        "mergeFractionCommonFactor",
+        "mixed"
+      ],
+      [
+        "fraction-expression.simplify-unit-factor",
+        "simplifyUnitFractionFactor",
+        "source-only"
+      ]
     ]
   );
   const subtractDefinition = getGeneratedAlgebraTransformDefinition(

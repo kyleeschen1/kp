@@ -2,9 +2,9 @@
   "id": "next-action.kp.semantic.fraction-transform-definitions-v0",
   "kind": "next-action",
   "title": "Promote fraction transform definitions",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic",
-  "summary": "Promote generated fraction split, merge, slash-to-stacked, and simplification semantics into reusable transform definitions with clear operator/artifact policy.",
+  "summary": "Promoted generated fraction-expression transform definitions for factor splitting, common-factor separation, and unit-factor simplification.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -20,6 +20,26 @@
       "kind": "file",
       "path": "tests/kp-generated-algebra-tutorial-fixture.test.ts",
       "summary": "Generated algebra fixture construction coverage."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-transform-definition-registry.ts",
+      "summary": "Added promoted fraction transform definitions with artifact policies, law refs, and correspondence templates."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Covered fraction family lookup and artifact policy expectations in the generated transform registry."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-laws.ts",
+      "summary": "Existing coverage law now includes the promoted fraction family automatically."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-laws.test.ts",
+      "summary": "Coverage law passes with linear-solve and fraction families promoted."
     }
   ],
   "dependsOn": {
@@ -56,5 +76,29 @@
       "id": "fraction-laws-covered",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test generated algebra fixture and law tests",
+      "status": "passed",
+      "scope": "slice 3 focused plus broad node tests",
+      "checkedAt": "2026-07-13T21:29:27.769Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 3 typecheck",
+      "checkedAt": "2026-07-13T21:29:27.787Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T21:29:27.807Z",
+      "scope": "slice 3 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted generated fraction-expression transform definitions for factor splitting, common-factor separation, and unit-factor simplification."
+  }
 }

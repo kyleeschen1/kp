@@ -347,6 +347,100 @@ export const generatedAlgebraTransformDefinitions:
           preserves: ["identity", "role"]
         }
       ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.fraction-expression.split-fraction-factors",
+      familyId: "generated.fraction-expression",
+      templateId: "fraction-expression.split-fraction-factors",
+      status: "promoted",
+      transformType: "splitFractionFactors",
+      title: "Split numerator and denominator into common factors",
+      sourceObjectRoles: ["fraction-expression"],
+      targetObjectRoles: ["factored-fraction-expression"],
+      preserves: ["value", "structure"],
+      artifactPolicy: "mixed",
+      assumptions: [
+        "A numerator and denominator can be rewritten as products with a shared factor."
+      ],
+      lawRefs: [{ id: "law.arithmetic.factor-fraction", level: "strict" }],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "fraction-expression",
+          sourceSelectorRole: "fraction-line",
+          targetObjectRole: "factored-fraction-expression",
+          targetSelectorRole: "fraction-line",
+          preserves: ["structure"],
+          summary: "The fraction relationship persists as factors are exposed."
+        }
+      ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.fraction-expression.merge-common-factor",
+      familyId: "generated.fraction-expression",
+      templateId: "fraction-expression.merge-common-factor",
+      status: "promoted",
+      transformType: "mergeFractionCommonFactor",
+      title: "Separate the common fraction factor",
+      sourceObjectRoles: ["factored-fraction-expression"],
+      targetObjectRoles: ["separated-common-factor-expression"],
+      preserves: ["identity", "value", "structure"],
+      artifactPolicy: "mixed",
+      assumptions: [
+        "A fraction of products can be grouped into a base fraction times a unit fraction."
+      ],
+      lawRefs: [
+        { id: "law.arithmetic.fraction-factorization", level: "strict" }
+      ],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "factored-fraction-expression",
+          sourceSelectorRole: "base-numerator",
+          targetObjectRole: "separated-common-factor-expression",
+          targetSelectorRole: "base-numerator",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "factored-fraction-expression",
+          sourceSelectorRole: "base-denominator",
+          targetObjectRole: "separated-common-factor-expression",
+          targetSelectorRole: "base-denominator",
+          preserves: ["identity", "role"]
+        }
+      ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.fraction-expression.simplify-unit-factor",
+      familyId: "generated.fraction-expression",
+      templateId: "fraction-expression.simplify-unit-factor",
+      status: "promoted",
+      transformType: "simplifyUnitFractionFactor",
+      title: "Simplify the unit fraction factor",
+      sourceObjectRoles: ["separated-common-factor-expression"],
+      targetObjectRoles: ["simplified-fraction-expression"],
+      preserves: ["identity", "value"],
+      artifactPolicy: "source-only",
+      assumptions: [
+        "A non-zero value divided by itself is one, so multiplying by it does not change the base fraction."
+      ],
+      lawRefs: [
+        { id: "law.arithmetic.unit-fraction-factor", level: "strict" }
+      ],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "separated-common-factor-expression",
+          sourceSelectorRole: "base-numerator",
+          targetObjectRole: "simplified-fraction-expression",
+          targetSelectorRole: "numerator",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "separated-common-factor-expression",
+          sourceSelectorRole: "base-denominator",
+          targetObjectRole: "simplified-fraction-expression",
+          targetSelectorRole: "denominator",
+          preserves: ["identity", "role"]
+        }
+      ]
     })
   ];
 
