@@ -1,3 +1,6 @@
+import {
+  createGeneratedAlgebraAnimationAssets
+} from "../animation/catalog.ts";
 import type {
   GeneratedAlgebraTutorialFixture
 } from "../semantic/generated-algebra-tutorial-fixture.ts";
@@ -16,6 +19,7 @@ export interface GeneratedAlgebraDependencyManifest {
   readonly fixtureId: string;
   readonly fixtureFamilyId: GeneratedAlgebraTutorialFixture["familyId"];
   readonly sampleId: string;
+  readonly animationIds: readonly string[];
   readonly assetId: string;
   readonly semanticObjectIds: readonly string[];
   readonly transformationIds: readonly string[];
@@ -56,6 +60,7 @@ export function createGeneratedAlgebraDependencyManifest(
     fixtureId: fixture.id,
     fixtureFamilyId: fixture.familyId,
     sampleId: input.sampleId,
+    animationIds: animationIdsForFixture(fixture.id),
     assetId: fixture.bundle.id,
     semanticObjectIds: fixture.bundle.objects.map((object) => object.id),
     transformationIds: fixture.transformations.map(
@@ -87,4 +92,15 @@ export function createGeneratedAlgebraDependencyManifest(
 
 function uniqueStrings(values: readonly string[]): readonly string[] {
   return Array.from(new Set(values));
+}
+
+function animationIdsForFixture(fixtureId: string): readonly string[] {
+  return createGeneratedAlgebraAnimationAssets()
+    .filter((animation) => {
+      const sourceRefIds = animation.dashboard?.sourceRefIds ?? [];
+      const sourceFixtureId = animation.metadata?.["sourceFixtureId"];
+
+      return sourceRefIds.includes(fixtureId) || sourceFixtureId === fixtureId;
+    })
+    .map((animation) => animation.id);
 }

@@ -33,6 +33,7 @@ test("generated algebra iframe export sample renders fraction fixture card HTML"
       artifactId: fixture.dependencyManifest.artifactId,
       fixtureId: fixture.dependencyManifest.fixtureId,
       fixtureFamilyId: fixture.dependencyManifest.fixtureFamilyId,
+      animationIds: fixture.dependencyManifest.animationIds,
       assetId: fixture.dependencyManifest.assetId,
       transformationIds: fixture.dependencyManifest.transformationIds,
       transformDefinitionIds: fixture.dependencyManifest.transformDefinitionIds
@@ -43,6 +44,7 @@ test("generated algebra iframe export sample renders fraction fixture card HTML"
       artifactId: "artifact.generated.fraction-expression.two-fourths.iframe",
       fixtureId: "generated.fraction-expression.two-fourths",
       fixtureFamilyId: "generated.fraction-expression",
+      animationIds: ["animation.generated.fraction-expression.two-fourths"],
       assetId: "asset.generated.fraction-expression.two-fourths",
       transformationIds: [
         "transform.generated.fraction-expression.two-fourths.split-factors",
