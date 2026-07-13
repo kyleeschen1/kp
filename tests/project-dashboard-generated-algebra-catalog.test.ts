@@ -25,6 +25,11 @@ test("generated algebra dashboard catalog exposes fixture agenda rows", () => {
     { label: "Solved LaTeX", value: "y = 7" },
     { label: "Trace steps", value: "4" }
   ]);
+  assert.deepEqual(rows[1]?.previewFields?.[4], {
+    label: "Transform definitions",
+    value:
+      "definition.generated.linear-solve.subtract-both-sides, definition.generated.linear-solve.cancel-additive-inverses, definition.generated.linear-solve.simplify-constant-difference"
+  });
 });
 
 test("generated algebra dashboard catalog exposes family maturity rows", () => {
@@ -65,6 +70,10 @@ test("generated algebra dashboard catalog exposes family maturity rows", () => {
     { label: "Flashcards", value: "0" },
     { label: "Dependency manifests", value: "iframe, static-step" }
   ]);
+  assert.deepEqual(rows[5]?.previewFields[7], {
+    label: "Transform definitions",
+    value: "2"
+  });
 });
 
 test("generated algebra maturity rows are searchable by protocol coverage", () => {
@@ -125,6 +134,27 @@ test("generated algebra maturity rows expose family transform motif and maturity
       "family:generated.function-wrap transform:wrapFunction motif:wrap maturity:active"
     ).map((row) => row.id),
     ["generated-function-wrap-family-maturity"]
+  );
+});
+
+test("generated algebra dashboard catalog searches promoted transform definitions", () => {
+  assert.deepEqual(
+    createGeneratedAlgebraFixtureAgendaRows(
+      "definition.generated.linear-solve.cancel-additive-inverses"
+    ).map((row) => row.id),
+    [
+      "generated-linear-solve-x-plus-3",
+      "generated-linear-solve-y-plus-5",
+      "generated-linear-solve-z-minus-4",
+      "generated-linear-solve-two-x-plus-3",
+      "generated-linear-solve-x-plus-one-half"
+    ]
+  );
+  assert.deepEqual(
+    createGeneratedAlgebraMaturityAgendaRows(
+      "definition:definition.generated.distribution.factor-common-term"
+    ).map((row) => row.id),
+    ["generated-distribution-family-maturity"]
   );
 });
 

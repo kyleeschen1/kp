@@ -18,6 +18,7 @@ export interface GeneratedLinearSolveDependencyManifest {
   readonly assetId: string;
   readonly semanticObjectIds: readonly string[];
   readonly transformationIds: readonly string[];
+  readonly transformDefinitionIds: readonly string[];
   readonly drillDownIds: readonly string[];
   readonly flashcardIds: readonly string[];
   readonly traceStepIds: readonly string[];
@@ -58,6 +59,13 @@ export function createGeneratedLinearSolveDependencyManifest(
     transformationIds: fixture.transformations.map(
       (transformation) => transformation.id
     ),
+    transformDefinitionIds: uniqueStrings(
+      fixture.transformations.flatMap((transformation) =>
+        transformation.definitionId === undefined
+          ? []
+          : [transformation.definitionId]
+      )
+    ),
     drillDownIds: fixture.drillDownHooks.map((hook) => hook.id),
     flashcardIds: fixture.flashcards.map((flashcard) => flashcard.id),
     traceStepIds: fixture.trace.steps.map((step) => step.id),
@@ -73,4 +81,8 @@ export function createGeneratedLinearSolveDependencyManifest(
     assetIds: [...artifact.dependencies.assetIds],
     diagnostics: []
   };
+}
+
+function uniqueStrings(values: readonly string[]): readonly string[] {
+  return Array.from(new Set(values));
 }

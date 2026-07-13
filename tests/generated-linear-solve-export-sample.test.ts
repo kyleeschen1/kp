@@ -29,6 +29,7 @@ test("generated linear-solve iframe export sample renders fixture card HTML", ()
       fixtureId: fixture.dependencyManifest.fixtureId,
       assetId: fixture.dependencyManifest.assetId,
       transformationIds: fixture.dependencyManifest.transformationIds,
+      transformDefinitionIds: fixture.dependencyManifest.transformDefinitionIds,
       drillDownIds: fixture.dependencyManifest.drillDownIds
     },
     {
@@ -40,6 +41,11 @@ test("generated linear-solve iframe export sample renders fixture card HTML", ()
         "transform.generated.linear-solve.x-plus-3.subtract-addend",
         "transform.generated.linear-solve.x-plus-3.cancel-additive-inverse",
         "transform.generated.linear-solve.x-plus-3.simplify-difference"
+      ],
+      transformDefinitionIds: [
+        "definition.generated.linear-solve.subtract-both-sides",
+        "definition.generated.linear-solve.cancel-additive-inverses",
+        "definition.generated.linear-solve.simplify-constant-difference"
       ],
       drillDownIds: [
         "drilldown.generated.linear-solve.x-plus-3.cancel-additive-inverse"
@@ -93,6 +99,11 @@ test("generated linear-solve static-step export sample preserves generated seman
   assert.deepEqual(fixture.dependencyManifest.dependencyPhases, [
     "critical",
     "optional"
+  ]);
+  assert.deepEqual(fixture.dependencyManifest.transformDefinitionIds, [
+    "definition.generated.linear-solve.subtract-both-sides",
+    "definition.generated.linear-solve.cancel-additive-inverses",
+    "definition.generated.linear-solve.simplify-constant-difference"
   ]);
   assert.deepEqual(fixture.dependencyManifest.diagnostics, []);
   assert.deepEqual(fixture.diagnostics, []);

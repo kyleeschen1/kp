@@ -57,6 +57,7 @@ export function createGeneratedAlgebraFixtureAgendaRows(
     const sampleTargets = [
       createGeneratedLinearSolveTutorialCardSampleTarget(fixture)
     ];
+    const transformDefinitionIds = definitionIdsForFixture(fixture);
 
     return {
       id: agendaIdFromGeneratedFixtureId(fixture.id),
@@ -69,14 +70,26 @@ export function createGeneratedAlgebraFixtureAgendaRows(
       tags: ["generated", "algebra", "linear-solve", "fixture"],
       dataAttributes: [
         ["data-kp-generated-algebra-fixture", fixture.id] as [string, string],
+        [
+          "data-kp-generated-algebra-transform-definitions",
+          transformDefinitionIds.join(" ")
+        ] as [string, string],
         ...dashboardAssetPreviewDataAttributes(interpretation)
       ],
-      relatedIds: ["asset-linear-solve-bundle", "port-algebra-trace-fixture"],
+      relatedIds: [
+        "asset-linear-solve-bundle",
+        "port-algebra-trace-fixture",
+        ...transformDefinitionIds
+      ],
       previewFields: [
         { label: "Generated fixture", value: fixture.id },
         { label: "Initial LaTeX", value: initialLatex },
         { label: "Solved LaTeX", value: solvedLatex },
         { label: "Trace steps", value: String(fixture.trace.steps.length) },
+        {
+          label: "Transform definitions",
+          value: transformDefinitionIds.join(", ")
+        },
         ...dashboardSampleTargetPreviewFields(sampleTargets),
         ...dashboardAssetPreviewFields(interpretation)
       ],
@@ -96,6 +109,7 @@ export function createGeneratedAlgebraFixtureAgendaRows(
           transformation.id,
           transformation.title,
           transformation.transformType,
+          transformation.definitionId ?? "",
           ...transformation.sourceObjectIds,
           ...transformation.targetObjectIds
         ]),
@@ -132,6 +146,9 @@ export function createGeneratedAlgebraMaturityAgendaRows(
         fixture.transformations.map((transformation) => transformation.transformType)
       )
     );
+    const transformDefinitionIds = uniqueStrings(
+      fixtures.flatMap(definitionIdsForFixture)
+    );
     const motifKinds = uniqueStrings(
       transformTypes.flatMap((transformType) =>
         defaultEquationTransformVisualMotifRules
@@ -158,10 +175,15 @@ export function createGeneratedAlgebraMaturityAgendaRows(
       ],
       dataAttributes: [
         ["data-kp-generated-algebra-family", familyId] as [string, string],
-        ["data-kp-generated-algebra-maturity", "active"] as [string, string]
+        ["data-kp-generated-algebra-maturity", "active"] as [string, string],
+        [
+          "data-kp-generated-algebra-transform-definitions",
+          transformDefinitionIds.join(" ")
+        ] as [string, string]
       ],
       relatedIds: [
         "port-algebra-trace-fixture",
+        ...transformDefinitionIds,
         ...fixtures.map((fixture) => agendaIdFromGeneratedFixtureId(fixture.id))
       ],
       previewFields: [
@@ -184,6 +206,10 @@ export function createGeneratedAlgebraMaturityAgendaRows(
           value: String(sum(fixtures, (fixture) => fixture.flashcards.length))
         },
         { label: "Dependency manifests", value: "iframe, static-step" },
+        {
+          label: "Transform definitions",
+          value: String(transformDefinitionIds.length)
+        },
         ...dashboardSampleTargetPreviewFields(sampleTargets),
         { label: "Closure law", value: "asset-fixture.reference-closure" },
         {
@@ -214,6 +240,8 @@ export function createGeneratedAlgebraMaturityAgendaRows(
         "dependency-manifest",
         "iframe static-step",
         ...transformTypes.map((transformType) => `transform:${transformType}`),
+        ...transformDefinitionIds,
+        ...transformDefinitionIds.map((definitionId) => `definition:${definitionId}`),
         ...motifKinds.map((motifKind) => `motif:${motifKind}`),
         ...fixtures.map((fixture) => fixture.id),
         ...fixtures.flatMap((fixture) =>
@@ -224,8 +252,7 @@ export function createGeneratedAlgebraMaturityAgendaRows(
         ),
         ...fixtures.flatMap((fixture) =>
           fixture.flashcards.map((flashcard) => flashcard.id)
-        ),
-        ...dashboardSampleTargetSearchFields(sampleTargets)
+        )
       ]
     };
   });
@@ -243,6 +270,18 @@ function sum<T>(values: readonly T[], select: (value: T) => number): number {
 
 function uniqueStrings(values: readonly string[]): readonly string[] {
   return Array.from(new Set(values));
+}
+
+function definitionIdsForFixture(
+  fixture: GeneratedAlgebraTutorialFixture
+): readonly string[] {
+  return uniqueStrings(
+    fixture.transformations.flatMap((transformation) =>
+      transformation.definitionId === undefined
+        ? []
+        : [transformation.definitionId]
+    )
+  );
 }
 
 function latexValueAt(
@@ -299,8 +338,27 @@ function generatedAlgebraRowMatchesQuery(
       row.kind,
       ...row.tags,
       ...row.searchFields,
-      ...row.previewFields.flatMap((field) => [field.label, field.value])
+      ...searchablePreviewFields(row).flatMap((field) => [
+        field.label,
+        field.value
+      ])
     ],
     query
+  );
+}
+
+function searchablePreviewFields(
+  row: GeneratedAlgebraFixtureAgendaRow
+): readonly GeneratedAlgebraAgendaPreviewField[] {
+  if (row.detail !== "generated family maturity") {
+    return row.previewFields;
+  }
+
+  // Family maturity rows summarize many samples; keep sample target labels display-only
+  // so formula-specific searches resolve to concrete fixture rows.
+  return row.previewFields.filter(
+    (field) =>
+      field.label !== "Sample targets" &&
+      !field.label.startsWith("Tutorial card ")
   );
 }

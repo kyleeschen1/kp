@@ -2,9 +2,9 @@
   "id": "next-action.kp.semantic.transform-definition-dashboard-export-coverage-v0",
   "kind": "next-action",
   "title": "Surface transform definitions in dashboard and exports",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic",
-  "summary": "Expose promoted generated transform definitions through dashboard rows, generated export dependency metadata, and smoke/law coverage so authors and future Codex sessions can inspect them.",
+  "summary": "Surfaced generated transform definition ids in dashboard catalog rows and export dependency manifests.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,6 +25,36 @@
       "kind": "file",
       "path": "tests/generated-algebra-export-sample.test.ts",
       "summary": "Generated algebra export sample tests."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Added transform definition ids to generated fixture and maturity row data attributes, related ids, preview fields, and search fields."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-algebra-dependency-manifest.ts",
+      "summary": "Added transformDefinitionIds to generated algebra dependency manifests."
+    },
+    {
+      "kind": "file",
+      "path": "src/tutorial/generated-linear-solve-dependency-manifest.ts",
+      "summary": "Added transformDefinitionIds to linear-solve dependency manifests."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "summary": "Covered dashboard preview/search for promoted transform definitions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-export-sample.test.ts",
+      "summary": "Covered generated algebra export dependency manifest transform definition ids."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-linear-solve-export-sample.test.ts",
+      "summary": "Covered linear-solve export manifest transform definition ids."
     }
   ],
   "dependsOn": {
@@ -62,5 +92,35 @@
       "id": "exports-reference-promoted-definitions",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node focused generated dashboard and export tests",
+      "status": "passed",
+      "scope": "slice 8 focused tests",
+      "checkedAt": "2026-07-13T21:51:18.602Z"
+    },
+    {
+      "command": "npx playwright test tests/generated-algebra-smoke.browser.spec.ts",
+      "status": "passed",
+      "scope": "slice 8 browser smoke",
+      "checkedAt": "2026-07-13T21:51:18.627Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 8 typecheck",
+      "checkedAt": "2026-07-13T21:51:18.657Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T21:51:18.679Z",
+      "scope": "slice 8 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Surfaced generated transform definition ids in dashboard catalog rows and export dependency manifests."
+  }
 }

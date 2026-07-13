@@ -34,7 +34,8 @@ test("generated algebra iframe export sample renders fraction fixture card HTML"
       fixtureId: fixture.dependencyManifest.fixtureId,
       fixtureFamilyId: fixture.dependencyManifest.fixtureFamilyId,
       assetId: fixture.dependencyManifest.assetId,
-      transformationIds: fixture.dependencyManifest.transformationIds
+      transformationIds: fixture.dependencyManifest.transformationIds,
+      transformDefinitionIds: fixture.dependencyManifest.transformDefinitionIds
     },
     {
       id:
@@ -47,6 +48,11 @@ test("generated algebra iframe export sample renders fraction fixture card HTML"
         "transform.generated.fraction-expression.two-fourths.split-factors",
         "transform.generated.fraction-expression.two-fourths.merge-common-factor",
         "transform.generated.fraction-expression.two-fourths.simplify-unit-factor"
+      ],
+      transformDefinitionIds: [
+        "definition.generated.fraction-expression.split-fraction-factors",
+        "definition.generated.fraction-expression.merge-common-factor",
+        "definition.generated.fraction-expression.simplify-unit-factor"
       ]
     }
   );
@@ -97,6 +103,11 @@ test("generated algebra static-step export sample preserves fraction semantics",
   assert.deepEqual(fixture.dependencyManifest.flashcardIds, [
     "card.generated.fraction-expression.two-fourths.explain-equivalent-fraction"
   ]);
+  assert.deepEqual(fixture.dependencyManifest.transformDefinitionIds, [
+    "definition.generated.fraction-expression.split-fraction-factors",
+    "definition.generated.fraction-expression.merge-common-factor",
+    "definition.generated.fraction-expression.simplify-unit-factor"
+  ]);
   assert.deepEqual(fixture.dependencyManifest.diagnostics, []);
   assert.deepEqual(fixture.diagnostics, []);
 });
@@ -123,6 +134,10 @@ test("generated algebra iframe export sample renders exponent fixture card HTML"
       "transform.generated.exponent.square-as-product.unwrap-unit-exponent"
     ]
   );
+  assert.deepEqual(fixture.dependencyManifest.transformDefinitionIds, [
+    "definition.generated.exponent.lower-exponent",
+    "definition.generated.exponent.unwrap-unit-exponent"
+  ]);
   assert.deepEqual(fixture.dependencyManifest.flashcardIds, [
     "card.generated.exponent.square-as-product.explain-exponent-product"
   ]);
