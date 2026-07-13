@@ -1,0 +1,106 @@
+{
+  "id": "next-action.kp.animation.linear-solve-adapter-v0",
+  "kind": "next-action",
+  "title": "Migrate x plus 3 equals 7 into animation asset adapter",
+  "status": "resolved",
+  "summary": "Added a linear-solve AnimationAsset adapter over the canonical x plus 3 equals 7 semantic asset, preserving existing object and transform IDs, attaching generated definition IDs, exposing timeline/render-target metadata, and proving closure, seek-rewind, visual motif, and frame descriptor paths.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-animation-asset-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.linear-solve-adapter-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming composable semantic animations as KP's primary artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Ready action anchoring the approved animation asset contract loop."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/linear-solve-adapter.ts",
+      "summary": "Adds createLinearSolveAnimationAsset over the existing semantic linear-solve asset."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/asset.ts",
+      "summary": "Allows animation-level checks to target the animation asset id for reference closure."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-linear-solve-animation-asset.test.ts",
+      "summary": "Covers canonical IDs, definition-backed motifs, frame sampling, closure, and seek-rewind for x plus 3 equals 7."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.linear-solve-adapter-v0.json",
+      "summary": "Tracks the materialized linear-solve adapter run-contract slice."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.composable-animation-asset-v0",
+      "next-action.kp.animation.frame-descriptor-contract-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.frame-descriptor-contract-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Migrate x plus 3 equals 7 into animation asset adapter can be completed inside KP composable animation asset v0 loop."
+  ],
+  "allowedWork": [
+    "Work only on the approved composable semantic animation asset v0 loop.",
+    "Keep tutorials, cards, exports, flashcards, graphs, and programming views as consumers of animation assets rather than the core artifact.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broadly rename tutorial-card modules in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add curriculum generation, spaced repetition generation, or dynamic package loading in this loop.",
+    "Do not create renderer-owned animation formats separate from semantic asset calculus."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-linear-solve-animation-asset.test.ts tests/kp-animation-asset.test.ts tests/kp-animation-frame-descriptor.test.ts tests/kp-animation-visual-motif.test.ts tests/kp-linear-solve-asset.test.ts tests/kp-linear-solve-equation-frame-interpreter.test.ts tests/visual-motif-composition.test.ts",
+      "status": "passed",
+      "scope": "slice 9 linear-solve animation adapter and adjacent tests",
+      "checkedAt": "2026-07-13T23:07:56.783Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-linear-solve-tutorial-card-sample.test.ts tests/generated-linear-solve-export-sample.test.ts tests/generated-algebra-export-sample.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "status": "passed",
+      "scope": "slice 9 generated linear-solve and algebra consumers",
+      "checkedAt": "2026-07-13T23:07:56.812Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 9 typecheck",
+      "checkedAt": "2026-07-13T23:07:56.839Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T23:07:56.864Z",
+      "scope": "slice 9 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a linear-solve AnimationAsset adapter over the canonical x plus 3 equals 7 semantic asset, preserving existing object and transform IDs, attaching generated definition IDs, exposing timeline/render-target metadata, and proving closure, seek-rewind, visual motif, and frame descriptor paths."
+  }
+}

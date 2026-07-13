@@ -850,6 +850,7 @@ function createAnimationCheckTargetIds(input: {
   readonly exportTargetIds: ReadonlySet<string>;
 }): ReadonlySet<string> {
   return new Set([
+    input.animation.id,
     ...input.objectIds,
     ...input.selectorIds,
     ...input.transformationIds,
