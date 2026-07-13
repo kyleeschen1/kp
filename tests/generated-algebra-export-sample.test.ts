@@ -88,6 +88,30 @@ test("generated algebra static-step export sample preserves fraction semantics",
     fixture.sequence.steps.map((step) => step.progress),
     [0, 1 / 3, 2 / 3, 1]
   );
+  assert.deepEqual(
+    fixture.sequence.checkpoints.map((checkpoint) => [
+      checkpoint.id,
+      checkpoint.markers?.map((marker) => marker.id) ?? []
+    ]),
+    [
+      ["step.animation.generated.fraction-expression.two-fourths.start", []],
+      [
+        "step.transform.generated.fraction-expression.two-fourths.split-factors",
+        []
+      ],
+      [
+        "step.transform.generated.fraction-expression.two-fourths.merge-common-factor",
+        [
+          "focus.generated.fraction-expression.two-fourths.common-factor",
+          "pause.generated.fraction-expression.two-fourths.merge-common-factor"
+        ]
+      ],
+      [
+        "step.transform.generated.fraction-expression.two-fourths.simplify-unit-factor",
+        []
+      ]
+    ]
+  );
   assert.equal(
     fixture.sequence.steps[2]?.frame.equationFrame.semanticFrame?.assetId,
     "asset.generated.fraction-expression.two-fourths"
@@ -166,10 +190,18 @@ test("generated algebra static-step export sample preserves exponent trace seman
   assert.equal(fixture.fixtureFamilyId, "generated.exponent");
   assert.deepEqual(
     fixture.sequence.steps.map((step) => step.progress),
-    [0, 1 / 3, 2 / 3, 1]
+    [0, 0.5, 1]
+  );
+  assert.deepEqual(
+    fixture.sequence.checkpoints.map((checkpoint) => checkpoint.id),
+    [
+      "step.animation.generated.exponent.square-as-product.start",
+      "step.transform.generated.exponent.square-as-product.lower-exponent",
+      "step.transform.generated.exponent.square-as-product.unwrap-unit-exponent"
+    ]
   );
   assert.equal(
-    fixture.sequence.steps[2]?.frame.equationFrame.semanticFrame?.assetId,
+    fixture.sequence.steps.at(-1)?.frame.equationFrame.semanticFrame?.assetId,
     "asset.generated.exponent.square-as-product"
   );
   assert.deepEqual(fixture.dependencyManifest.traceStepIds, [
@@ -226,8 +258,19 @@ test("generated algebra static-step export sample preserves radical trace semant
     "artifact.generated.radical.square-root-as-power.steps"
   );
   assert.equal(fixture.fixtureFamilyId, "generated.radical");
+  assert.deepEqual(
+    fixture.sequence.steps.map((step) => step.progress),
+    [0, 1]
+  );
+  assert.deepEqual(
+    fixture.sequence.checkpoints.map((checkpoint) => checkpoint.id),
+    [
+      "step.animation.generated.radical.square-root-as-power.start",
+      "step.transform.generated.radical.square-root-as-power.rewrite-power-as-root"
+    ]
+  );
   assert.equal(
-    fixture.sequence.steps[2]?.frame.equationFrame.semanticFrame?.assetId,
+    fixture.sequence.steps.at(-1)?.frame.equationFrame.semanticFrame?.assetId,
     "asset.generated.radical.square-root-as-power"
   );
   assert.deepEqual(fixture.dependencyManifest.traceStepIds, [

@@ -3,6 +3,9 @@ import {
   listGeneratedAlgebraTutorialFixtureSpecs,
   type GeneratedAlgebraTutorialFixture
 } from "../semantic/generated-algebra-tutorial-fixture.ts";
+import {
+  animationAssetForSourceFixtureId
+} from "../animation/catalog.ts";
 import { createLinearSolveTutorialCardManifest } from "./card-manifest.ts";
 import { renderKpTutorialCardHtmlShell } from "./card-html-shell.ts";
 import {
@@ -24,7 +27,10 @@ import { renderKpTutorialCardIframeDocument } from "./iframe-export-document.ts"
 import type {
   LinearSolveTutorialCardSampleFrame
 } from "./linear-solve-card-sample.ts";
-import { selectKpTutorialStaticStepCheckpoints } from "./static-step-checkpoints.ts";
+import {
+  selectKpAnimationStaticStepCheckpoints,
+  selectKpTutorialStaticStepCheckpoints
+} from "./static-step-checkpoints.ts";
 import {
   renderKpTutorialCardStaticStepSequence,
   type KpTutorialCardStaticStepSequence
@@ -107,9 +113,7 @@ export function createGeneratedAlgebraStaticStepExportSample(
       sampleId: sample.id,
       suffix: "steps"
     }),
-    checkpoints: selectKpTutorialStaticStepCheckpoints(
-      sample.cardSampler.parentTimeline
-    ),
+    checkpoints: selectGeneratedAlgebraStaticStepCheckpoints(fixture, sample),
     sampler: sample
   });
 
@@ -132,6 +136,17 @@ export function createGeneratedAlgebraStaticStepExportSamples():
   return listGeneratedAlgebraTutorialFixtureSpecs().map((spec) =>
     createGeneratedAlgebraStaticStepExportSample(spec.id)
   );
+}
+
+function selectGeneratedAlgebraStaticStepCheckpoints(
+  fixture: GeneratedAlgebraTutorialFixture,
+  sample: ReturnType<typeof createGeneratedAlgebraTutorialCardSample>
+) {
+  const animation = animationAssetForSourceFixtureId(fixture.id);
+
+  return animation === undefined
+    ? selectKpTutorialStaticStepCheckpoints(sample.cardSampler.parentTimeline)
+    : selectKpAnimationStaticStepCheckpoints(animation);
 }
 
 function generatedAlgebraExportArtifact(input: {

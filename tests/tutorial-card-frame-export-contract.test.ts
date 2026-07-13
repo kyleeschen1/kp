@@ -66,6 +66,7 @@ test("parent-timeline frame export contract declares media artifact and sample p
         "Show static equation and graph snapshots when the interactive runtime is unavailable."
     },
     metadata: {
+      animationIds: ["animation.linear-solve.solve-x"],
       frameCount: 5,
       frameSampleSource: "parent-timeline",
       fps: 30,

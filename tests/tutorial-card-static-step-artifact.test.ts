@@ -5,6 +5,7 @@ import {
   createKpTutorialCardExportArtifact,
   type KpTutorialCardExportArtifact
 } from "../src/tutorial/export-artifact.ts";
+import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
 import { createKpParentTimelineFromRuntimeContext } from "../src/tutorial/parent-timeline.ts";
 import { createKpTutorialCardRuntimeContext } from "../src/tutorial/card-runtime.ts";
 import { createLinearSolveTutorialCardManifest } from "../src/tutorial/card-manifest.ts";
@@ -14,7 +15,10 @@ import {
   type KpTutorialStaticStepCheckpoint,
   validateKpTutorialCardStaticStepArtifact
 } from "../src/tutorial/static-step-artifact.ts";
-import { selectKpTutorialStaticStepCheckpoints } from "../src/tutorial/static-step-checkpoints.ts";
+import {
+  selectKpAnimationStaticStepCheckpoints,
+  selectKpTutorialStaticStepCheckpoints
+} from "../src/tutorial/static-step-checkpoints.ts";
 import { renderKpTutorialCardStaticStepSequence } from "../src/tutorial/static-step-sequence-renderer.ts";
 
 const staticArtifact: KpTutorialCardExportArtifact =
@@ -147,6 +151,63 @@ test("static-step checkpoint selector uses parent timeline transformation bounda
       summary: "Simplify 7 - 3 into 4."
     }
   ]);
+});
+
+test("static-step checkpoint selector can derive checkpoints from animation annotations", () => {
+  const checkpoints = selectKpAnimationStaticStepCheckpoints(
+    createLinearSolveAnimationAsset()
+  );
+
+  assert.deepEqual(
+    checkpoints.map((checkpoint) => [
+      checkpoint.id,
+      checkpoint.progress,
+      checkpoint.beat,
+      checkpoint.markers?.map((marker) => [
+        marker.id,
+        marker.kind,
+        marker.targetId
+      ]) ?? []
+    ]),
+    [
+      ["step.animation.linear-solve.solve-x.start", 0, 0, []],
+      [
+        "step.transform.linear-solve.subtract-both-sides-3",
+        1 / 3,
+        50 / 3,
+        [
+          [
+            "pause.linear-solve.subtract",
+            "annotation",
+            "transform.linear-solve.subtract-both-sides-3"
+          ]
+        ]
+      ],
+      [
+        "step.transform.linear-solve.cancel-left-additive-inverse",
+        2 / 3,
+        100 / 3,
+        [
+          [
+            "focus.linear-solve.cancel",
+            "focus",
+            "transform.linear-solve.cancel-left-additive-inverse"
+          ],
+          [
+            "pause.linear-solve.cancel",
+            "annotation",
+            "transform.linear-solve.cancel-left-additive-inverse"
+          ]
+        ]
+      ],
+      [
+        "step.transform.linear-solve.simplify-right-difference",
+        1,
+        50,
+        []
+      ]
+    ]
+  );
 });
 
 test("static-step sequence renderer samples frames at selected checkpoints", () => {

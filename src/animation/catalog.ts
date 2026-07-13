@@ -37,3 +37,14 @@ export function animationIdsForTimelineIds(
     )
     .map((animation) => animation.id);
 }
+
+export function animationAssetForSourceFixtureId(
+  fixtureId: string
+): KpAnimationAsset | undefined {
+  return createGeneratedAlgebraAnimationAssets().find((animation) => {
+    const sourceRefIds = animation.dashboard?.sourceRefIds ?? [];
+    const sourceFixtureId = animation.metadata?.["sourceFixtureId"];
+
+    return sourceRefIds.includes(fixtureId) || sourceFixtureId === fixtureId;
+  });
+}
