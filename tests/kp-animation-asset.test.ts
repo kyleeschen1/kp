@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  checkKpAnimationAssetReferenceClosure,
   compileKpAnimationAssetSemanticRefs,
   createKpAnimationAsset,
   createKpAnimationAssetBuilder,
@@ -647,6 +648,94 @@ test("describeKpAnimationAssetTransformationTree exposes reversible phase metada
         targetNodeId: "transform.cancel",
         placement: "during",
         selectorIds: ["lhs.plus-3", "lhs.minus-3"]
+      }
+    ]
+  });
+});
+
+test("checkKpAnimationAssetReferenceClosure reports missing animation refs", () => {
+  const initial = createKpSemanticAssetObject({
+    id: "equation.initial",
+    objectType: "equation",
+    title: "Initial equation",
+    value: { latex: "x + 3 = 7" }
+  });
+  const solved = createKpSemanticAssetObject({
+    id: "equation.solved",
+    objectType: "equation",
+    title: "Solved equation",
+    value: { latex: "x = 4" }
+  });
+  const solve = createKpSemanticTransformation({
+    id: "transform.solve",
+    transformType: "equation.solve-linear",
+    title: "Solve the linear equation",
+    sourceObjectIds: [initial.id],
+    targetObjectIds: [solved.id],
+    preserves: ["value"]
+  });
+  const validAnimation = createKpAnimationAssetBuilder({
+    id: "animation.solve-x",
+    title: "Solve x + 3 = 7"
+  })
+    .addObject(initial)
+    .addObject(solved)
+    .addTransformation(solve)
+    .withTimeline({ id: "timeline.solve-x", beatCount: 20 })
+    .addRenderTarget({
+      id: "render.equation",
+      kind: "equation",
+      objectIds: [initial.id, solved.id],
+      transformationIds: [solve.id],
+      timelineId: "timeline.solve-x"
+    })
+    .addCheck({
+      id: "check.tree",
+      lawId: "animation.rewind",
+      level: "strict",
+      targetId: solve.id
+    })
+    .build();
+  const invalidAnimation = createKpAnimationAssetBuilder({
+    id: "animation.bad",
+    title: "Broken refs"
+  })
+    .addObject(initial)
+    .addObject(solved)
+    .addTransformation(solve)
+    .addRenderTarget({
+      id: "render.bad",
+      kind: "equation",
+      objectIds: [initial.id],
+      transformationIds: [solve.id],
+      timelineId: "timeline.missing"
+    })
+    .addCheck({
+      id: "check.bad",
+      lawId: "animation.rewind",
+      level: "strict",
+      targetId: "target.missing"
+    })
+    .build();
+
+  assert.deepEqual(checkKpAnimationAssetReferenceClosure(validAnimation), {
+    lawId: "animation.reference-closure",
+    passed: true,
+    failures: []
+  });
+  assert.deepEqual(checkKpAnimationAssetReferenceClosure(invalidAnimation), {
+    lawId: "animation.reference-closure",
+    passed: false,
+    failures: [
+      {
+        path: "renderTargets[0].timelineId",
+        message:
+          "Animation animation.bad render target render.bad references missing timeline timeline.missing."
+      },
+      {
+        path: "checks[0].targetId",
+        message:
+          "Animation animation.bad check check.bad references missing target target.missing."
       }
     ]
   });

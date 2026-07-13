@@ -1,0 +1,101 @@
+{
+  "id": "next-action.kp.animation.reference-closure-law-v0",
+  "kind": "next-action",
+  "title": "Add animation-level reference closure law",
+  "status": "resolved",
+  "summary": "Added animation.reference-closure as a named law over AnimationAsset validation, including closure checks for render-target timeline refs and check target refs across semantic objects, selectors, transformations, tree nodes, render targets, layouts, timelines, and export targets.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-animation-asset-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.reference-closure-law-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming composable semantic animations as KP's primary artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Ready action anchoring the approved animation asset contract loop."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/asset.ts",
+      "summary": "Adds the reference-closure law and expands AnimationAsset validation for timeline and check target refs."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-asset.test.ts",
+      "summary": "Covers passing and failing animation reference-closure law results."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.reference-closure-law-v0.json",
+      "summary": "Tracks the materialized reference-closure law run-contract slice."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.composable-animation-asset-v0",
+      "next-action.kp.animation.transformation-tree-integration-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.transformation-tree-integration-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Add animation-level reference closure law can be completed inside KP composable animation asset v0 loop."
+  ],
+  "allowedWork": [
+    "Work only on the approved composable semantic animation asset v0 loop.",
+    "Keep tutorials, cards, exports, flashcards, graphs, and programming views as consumers of animation assets rather than the core artifact.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broadly rename tutorial-card modules in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add curriculum generation, spaced repetition generation, or dynamic package loading in this loop.",
+    "Do not create renderer-owned animation formats separate from semantic asset calculus."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-asset.test.ts tests/kp-asset-laws.test.ts tests/semantic-transform-tree-metadata.test.ts tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts tests/semantic.test.ts",
+      "status": "passed",
+      "scope": "slice 5 animation and semantic law tests",
+      "checkedAt": "2026-07-13T22:52:01.127Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-export-sample.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "status": "passed",
+      "scope": "slice 5 generated algebra consumers",
+      "checkedAt": "2026-07-13T22:52:01.154Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 5 typecheck",
+      "checkedAt": "2026-07-13T22:52:01.179Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T22:52:01.201Z",
+      "scope": "slice 5 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added animation.reference-closure as a named law over AnimationAsset validation, including closure checks for render-target timeline refs and check target refs across semantic objects, selectors, transformations, tree nodes, render targets, layouts, timelines, and export targets."
+  }
+}

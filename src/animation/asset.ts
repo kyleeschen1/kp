@@ -11,6 +11,10 @@ import {
   type KpLawCheckLevel,
   type KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
+import type {
+  KpLawCheckResult,
+  KpLawFailure
+} from "../semantic/asset-laws.ts";
 import {
   createSemanticObjectRef,
   createSemanticTransformationRef,
@@ -25,6 +29,7 @@ import {
   semanticTransformationForwardPhases,
   semanticTransformationLeafRefs,
   semanticTransformationRewindPhases,
+  semanticTransformationTreeNodeIds,
   type EditableSemanticTransformationTree,
   type SemanticTransformationTreeAnnotationPlacement,
   type SemanticTransformationTreeAnnotation,
@@ -280,6 +285,23 @@ export function createKpAnimationAssetBuilder(
   return new DefaultKpAnimationAssetBuilder(input);
 }
 
+export function checkKpAnimationAssetReferenceClosure(
+  animation: KpAnimationAsset
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = validateKpAnimationAsset(animation).map(
+    (issue) => ({
+      path: issue.path,
+      message: issue.message
+    })
+  );
+
+  return {
+    lawId: "animation.reference-closure",
+    passed: failures.length === 0,
+    failures
+  };
+}
+
 export function compileKpAnimationAssetSemanticRefs(
   animation: KpAnimationAsset
 ): KpAnimationAssetSemanticRefCompilation {
@@ -359,6 +381,15 @@ export function validateKpAnimationAsset(
   const renderTargetIds = new Set(
     animation.renderTargets.map((target) => target.id)
   );
+  const timelineIds = new Set(
+    animation.timeline === undefined ? [] : [animation.timeline.id]
+  );
+  const layoutIds = new Set(
+    animation.layout === undefined ? [] : [animation.layout.id]
+  );
+  const exportTargetIds = new Set(
+    animation.exportTargets.map((target) => target.id)
+  );
 
   validateKpAssetBundle(animation.bundle).forEach((issue) => {
     issues.push({
@@ -398,6 +429,21 @@ export function validateKpAnimationAsset(
     objectIds,
     selectorIds,
     transformationIds,
+    timelineIds,
+    issues
+  );
+  validateCheckClosure(
+    animation,
+    createAnimationCheckTargetIds({
+      animation,
+      objectIds,
+      selectorIds,
+      transformationIds,
+      renderTargetIds,
+      layoutIds,
+      timelineIds,
+      exportTargetIds
+    }),
     issues
   );
 
@@ -610,6 +656,7 @@ function validateRenderTargetClosure(
   objectIds: ReadonlySet<string>,
   selectorIds: ReadonlySet<string>,
   transformationIds: ReadonlySet<string>,
+  timelineIds: ReadonlySet<string>,
   issues: KpAnimationAssetValidationIssue[]
 ): void {
   animation.renderTargets.forEach((target, targetIndex) => {
@@ -651,7 +698,58 @@ function validateRenderTargetClosure(
         });
       }
     );
+
+    if (
+      target.timelineId !== undefined &&
+      !timelineIds.has(target.timelineId)
+    ) {
+      issues.push({
+        path: `renderTargets[${targetIndex}].timelineId`,
+        message:
+          `Animation ${animation.id} render target ${target.id} references missing timeline ${target.timelineId}.`
+      });
+    }
   });
+}
+
+function validateCheckClosure(
+  animation: KpAnimationAsset,
+  targetIds: ReadonlySet<string>,
+  issues: KpAnimationAssetValidationIssue[]
+): void {
+  animation.checks.forEach((check, checkIndex) => {
+    if (check.targetId === undefined || targetIds.has(check.targetId)) {
+      return;
+    }
+
+    issues.push({
+      path: `checks[${checkIndex}].targetId`,
+      message:
+        `Animation ${animation.id} check ${check.id} references missing target ${check.targetId}.`
+    });
+  });
+}
+
+function createAnimationCheckTargetIds(input: {
+  readonly animation: KpAnimationAsset;
+  readonly objectIds: ReadonlySet<string>;
+  readonly selectorIds: ReadonlySet<string>;
+  readonly transformationIds: ReadonlySet<string>;
+  readonly renderTargetIds: ReadonlySet<string>;
+  readonly layoutIds: ReadonlySet<string>;
+  readonly timelineIds: ReadonlySet<string>;
+  readonly exportTargetIds: ReadonlySet<string>;
+}): ReadonlySet<string> {
+  return new Set([
+    ...input.objectIds,
+    ...input.selectorIds,
+    ...input.transformationIds,
+    ...semanticTransformationTreeNodeIds(input.animation.transformationTree.root),
+    ...input.renderTargetIds,
+    ...input.layoutIds,
+    ...input.timelineIds,
+    ...input.exportTargetIds
+  ]);
 }
 
 function compileAnimationAssetRenderTargetRef(
