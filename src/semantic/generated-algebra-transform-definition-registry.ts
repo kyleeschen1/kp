@@ -533,6 +533,32 @@ export const generatedAlgebraTransformDefinitions:
           summary: "The base persists as the radicand while notation artifacts change."
         }
       ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.function-wrap.wrap-function",
+      familyId: "generated.function-wrap",
+      templateId: "function-wrap.wrap-function",
+      status: "promoted",
+      transformType: "wrapFunction",
+      title: "Wrap the expression in a function application",
+      sourceObjectRoles: ["input-expression"],
+      targetObjectRoles: ["function-application"],
+      preserves: ["identity", "role"],
+      artifactPolicy: "target-only",
+      assumptions: [
+        "The input expression persists as the argument of the function application."
+      ],
+      lawRefs: [{ id: "law.notation.function-application", level: "strict" }],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "input-expression",
+          sourceSelectorRole: "value",
+          targetObjectRole: "function-application",
+          targetSelectorRole: "argument",
+          preserves: ["identity", "role"],
+          summary: "The input value persists as the function argument."
+        }
+      ]
     })
   ];
 

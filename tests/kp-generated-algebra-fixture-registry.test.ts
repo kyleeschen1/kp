@@ -62,7 +62,8 @@ test("generated algebra transform definition registry exposes reusable semantic 
     "definition.generated.fraction-expression.simplify-unit-factor",
     "definition.generated.exponent.lower-exponent",
     "definition.generated.exponent.unwrap-unit-exponent",
-    "definition.generated.radical.rewrite-power-as-root"
+    "definition.generated.radical.rewrite-power-as-root",
+    "definition.generated.function-wrap.wrap-function"
   ]);
   assert.deepEqual(
     listGeneratedAlgebraTransformDefinitionsByFamily("generated.linear-solve").map(
@@ -148,6 +149,16 @@ test("generated algebra transform definition registry exposes reusable semantic 
       ]
     ),
     [["radical.rewrite-power-as-root", "rewritePowerAsRoot", "mixed"]]
+  );
+  assert.deepEqual(
+    listGeneratedAlgebraTransformDefinitionsByFamily(
+      "generated.function-wrap"
+    ).map((definition) => [
+      definition.templateId,
+      definition.transformType,
+      definition.artifactPolicy
+    ]),
+    [["function-wrap.wrap-function", "wrapFunction", "target-only"]]
   );
 });
 

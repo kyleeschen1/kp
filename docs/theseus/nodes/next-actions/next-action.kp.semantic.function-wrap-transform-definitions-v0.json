@@ -2,9 +2,9 @@
   "id": "next-action.kp.semantic.function-wrap-transform-definitions-v0",
   "kind": "next-action",
   "title": "Promote function-wrap transform definitions",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic",
-  "summary": "Promote function wrapping semantics into reusable transform definitions for wrapping an input with a function application while distinguishing persistent input tokens from introduced function/paren artifacts.",
+  "summary": "Promoted function-wrap semantic transform definition while preserving existing wrap visual motif defaults.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -20,6 +20,21 @@
       "kind": "file",
       "path": "tests/generated-algebra-laws.test.ts",
       "summary": "Generated algebra law checks."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-transform-definition-registry.ts",
+      "summary": "Added promoted function-wrap transform definition with argument identity correspondence and target-only wrapper artifact policy."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Covered function-wrap definition lookup and artifact policy."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "summary": "Verified existing wrapFunction visual motif default remains compatible."
     }
   ],
   "dependsOn": {
@@ -57,5 +72,29 @@
       "id": "function-wrap-laws-covered",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test generated algebra laws and equation visual motif timeline",
+      "status": "passed",
+      "scope": "slice 5 focused plus broad node tests",
+      "checkedAt": "2026-07-13T21:35:35.797Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 5 typecheck",
+      "checkedAt": "2026-07-13T21:35:35.824Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T21:35:35.844Z",
+      "scope": "slice 5 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted function-wrap semantic transform definition while preserving existing wrap visual motif defaults."
+  }
 }
