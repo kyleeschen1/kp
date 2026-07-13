@@ -1,0 +1,101 @@
+{
+  "id": "next-action.kp.animation.semantic-ref-compiler-v0",
+  "kind": "next-action",
+  "title": "Compile animation assets to semantic refs",
+  "status": "resolved",
+  "summary": "Added a pure AnimationAsset semantic-ref compiler that projects animation objects and transformations into existing SemanticObjectRef and SemanticTransformationRef shapes, with lightweight timeline, layout, render-target refs, and validation diagnostics for downstream consumers.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-animation-asset-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.semantic-ref-compiler-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming composable semantic animations as KP's primary artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Ready action anchoring the approved animation asset contract loop."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/asset.ts",
+      "summary": "Adds the semantic-ref compiler and compiled render-target ref projection."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-asset.test.ts",
+      "summary": "Covers stable compiler output for semantic refs, timeline refs, layout refs, render-target refs, and diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.semantic-ref-compiler-v0.json",
+      "summary": "Tracks the materialized semantic-ref compiler run-contract slice."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.composable-animation-asset-v0",
+      "next-action.kp.animation.animation-asset-builder-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.animation-asset-builder-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Compile animation assets to semantic refs can be completed inside KP composable animation asset v0 loop."
+  ],
+  "allowedWork": [
+    "Work only on the approved composable semantic animation asset v0 loop.",
+    "Keep tutorials, cards, exports, flashcards, graphs, and programming views as consumers of animation assets rather than the core artifact.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broadly rename tutorial-card modules in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add curriculum generation, spaced repetition generation, or dynamic package loading in this loop.",
+    "Do not create renderer-owned animation formats separate from semantic asset calculus."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-asset.test.ts tests/semantic.test.ts tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts tests/tutorial-card-manifest.test.ts",
+      "status": "passed",
+      "scope": "slice 3 semantic ref and manifest-adjacent tests",
+      "checkedAt": "2026-07-13T22:42:49.381Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-export-sample.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "status": "passed",
+      "scope": "slice 3 generated algebra consumers",
+      "checkedAt": "2026-07-13T22:42:49.405Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 3 typecheck",
+      "checkedAt": "2026-07-13T22:42:49.430Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T22:42:49.463Z",
+      "scope": "slice 3 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a pure AnimationAsset semantic-ref compiler that projects animation objects and transformations into existing SemanticObjectRef and SemanticTransformationRef shapes, with lightweight timeline, layout, render-target refs, and validation diagnostics for downstream consumers."
+  }
+}

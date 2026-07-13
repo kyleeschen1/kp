@@ -11,7 +11,12 @@ import {
   type KpLawCheckLevel,
   type KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
-import { createSemanticTransformationRef } from "../semantic/animation.ts";
+import {
+  createSemanticObjectRef,
+  createSemanticTransformationRef,
+  type SemanticObjectRef,
+  type SemanticTransformationRef
+} from "../semantic/animation.ts";
 import {
   createEditableSemanticTransformationTree,
   createSemanticTransformationLeaf,
@@ -135,6 +140,26 @@ export interface KpAnimationAssetValidationIssue {
   readonly message: string;
 }
 
+export interface KpAnimationAssetSemanticRefCompilation {
+  readonly animationId: string;
+  readonly semanticObjectRefs: readonly SemanticObjectRef[];
+  readonly transformationRefs: readonly SemanticTransformationRef[];
+  readonly timelineRefs: readonly KpAnimationAssetTimeline[];
+  readonly layoutRefs: readonly KpAnimationAssetLayoutNode[];
+  readonly renderTargetRefs: readonly KpAnimationAssetCompiledRenderTargetRef[];
+  readonly diagnostics: readonly KpAnimationAssetValidationIssue[];
+}
+
+export interface KpAnimationAssetCompiledRenderTargetRef {
+  readonly id: string;
+  readonly kind: KpAnimationAssetRenderTargetKind;
+  readonly objectIds: readonly string[];
+  readonly selectorIds: readonly string[];
+  readonly transformationIds: readonly string[];
+  readonly timelineId?: string | undefined;
+  readonly summary?: string | undefined;
+}
+
 export interface CreateKpAnimationAssetBuilderInput {
   readonly id: string;
   readonly title: string;
@@ -210,6 +235,44 @@ export function createKpAnimationAssetBuilder(
   input: CreateKpAnimationAssetBuilderInput
 ): KpAnimationAssetBuilder {
   return new DefaultKpAnimationAssetBuilder(input);
+}
+
+export function compileKpAnimationAssetSemanticRefs(
+  animation: KpAnimationAsset
+): KpAnimationAssetSemanticRefCompilation {
+  return {
+    animationId: animation.id,
+    semanticObjectRefs: animation.bundle.objects.map((object) =>
+      createSemanticObjectRef({
+        objectId: object.id,
+        objectType: object.objectType
+      })
+    ),
+    transformationRefs: animation.transformations.map((transformation) =>
+      createSemanticTransformationRef({
+        id: transformation.id,
+        kind: transformation.transformType,
+        sourceObjectIds: transformation.sourceObjectIds,
+        targetObjectIds: transformation.targetObjectIds,
+        preserves: transformation.preserves,
+        summary: transformation.title
+      })
+    ),
+    timelineRefs:
+      animation.timeline === undefined
+        ? []
+        : [cloneAnimationAssetTimeline(animation.timeline)],
+    layoutRefs:
+      animation.layout === undefined
+        ? []
+        : [cloneAnimationAssetLayoutNode(animation.layout)],
+    renderTargetRefs: animation.renderTargets.map(
+      compileAnimationAssetRenderTargetRef
+    ),
+    diagnostics: validateKpAnimationAsset(animation).map((diagnostic) => ({
+      ...diagnostic
+    }))
+  };
 }
 
 export function validateKpAnimationAsset(
@@ -519,6 +582,20 @@ function validateRenderTargetClosure(
       }
     );
   });
+}
+
+function compileAnimationAssetRenderTargetRef(
+  target: KpAnimationAssetRenderTarget
+): KpAnimationAssetCompiledRenderTargetRef {
+  return {
+    id: target.id,
+    kind: target.kind,
+    objectIds: [...(target.objectIds ?? [])],
+    selectorIds: [...(target.selectorIds ?? [])],
+    transformationIds: [...(target.transformationIds ?? [])],
+    ...(target.timelineId === undefined ? {} : { timelineId: target.timelineId }),
+    ...(target.summary === undefined ? {} : { summary: target.summary })
+  };
 }
 
 function cloneKpSemanticTransformation(

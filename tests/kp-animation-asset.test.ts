@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  compileKpAnimationAssetSemanticRefs,
   createKpAnimationAsset,
   createKpAnimationAssetBuilder,
   validateKpAnimationAsset
@@ -400,4 +401,98 @@ test("createKpAnimationAssetBuilder assembles an inferred sequential animation a
     }
   ]);
   assert.deepEqual(JSON.parse(JSON.stringify(animation)), animation);
+});
+
+test("compileKpAnimationAssetSemanticRefs emits stable downstream refs", () => {
+  const initial = createKpSemanticAssetObject({
+    id: "equation.initial",
+    objectType: "equation",
+    title: "Initial equation",
+    value: { latex: "x + 3 = 7" }
+  });
+  const solved = createKpSemanticAssetObject({
+    id: "equation.solved",
+    objectType: "equation",
+    title: "Solved equation",
+    value: { latex: "x = 4" }
+  });
+  const solve = createKpSemanticTransformation({
+    id: "transform.solve",
+    transformType: "equation.solve-linear",
+    title: "Solve the linear equation",
+    sourceObjectIds: [initial.id],
+    targetObjectIds: [solved.id],
+    preserves: ["value"],
+    lawRefs: [{ id: "law.equation.balance", level: "strict" }]
+  });
+  const animation = createKpAnimationAssetBuilder({
+    id: "animation.solve-x",
+    title: "Solve x + 3 = 7"
+  })
+    .addObject(initial)
+    .addObject(solved)
+    .addTransformation(solve)
+    .withTimeline({
+      id: "timeline.solve-x",
+      durationMs: 1200,
+      beatCount: 20,
+      markerIds: ["beat.subtract", "beat.cancel"]
+    })
+    .addRenderTarget({
+      id: "render.equation",
+      kind: "equation",
+      objectIds: [initial.id, solved.id],
+      transformationIds: [solve.id],
+      timelineId: "timeline.solve-x"
+    })
+    .withLayout({
+      id: "layout.solve-x",
+      kind: "single",
+      targetId: "render.equation"
+    })
+    .build();
+
+  assert.deepEqual(compileKpAnimationAssetSemanticRefs(animation), {
+    animationId: "animation.solve-x",
+    semanticObjectRefs: [
+      { objectId: "equation.initial", objectType: "equation" },
+      { objectId: "equation.solved", objectType: "equation" }
+    ],
+    transformationRefs: [
+      {
+        id: "transform.solve",
+        kind: "equation.solve-linear",
+        sourceObjectIds: ["equation.initial"],
+        targetObjectIds: ["equation.solved"],
+        preserves: ["value"],
+        summary: "Solve the linear equation"
+      }
+    ],
+    timelineRefs: [
+      {
+        id: "timeline.solve-x",
+        durationMs: 1200,
+        beatCount: 20,
+        markerIds: ["beat.subtract", "beat.cancel"]
+      }
+    ],
+    layoutRefs: [
+      {
+        id: "layout.solve-x",
+        kind: "single",
+        targetId: "render.equation"
+      }
+    ],
+    renderTargetRefs: [
+      {
+        id: "render.equation",
+        kind: "equation",
+        objectIds: ["equation.initial", "equation.solved"],
+        selectorIds: [],
+        transformationIds: ["transform.solve"],
+        timelineId: "timeline.solve-x"
+      }
+    ],
+    diagnostics: []
+  });
 });
