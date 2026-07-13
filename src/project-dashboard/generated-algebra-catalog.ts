@@ -1,4 +1,8 @@
 import { runKpInterpreter } from "../semantic/asset-interpreter.ts";
+import {
+  createGeneratedAlgebraAnimationAssets
+} from "../animation/catalog.ts";
+import type { KpAnimationAsset } from "../animation/asset.ts";
 import { createKpDashboardAssetPreviewInterpreter } from "../semantic/dashboard-preview-interpreter.ts";
 import {
   createGeneratedAlgebraTutorialFixtures,
@@ -127,6 +131,125 @@ export function createGeneratedAlgebraFixtureAgendaRows(
       ]
     };
   });
+
+  return rows.filter((row) => generatedAlgebraRowMatchesQuery(row, query));
+}
+
+export function createGeneratedAlgebraAnimationAssetAgendaRows(
+  query: string
+): readonly GeneratedAlgebraFixtureAgendaRow[] {
+  const rows = createGeneratedAlgebraAnimationAssets().map(
+    (animation): GeneratedAlgebraFixtureAgendaRow => {
+      const transformDefinitionIds = animationDefinitionIds(animation);
+      const renderTargetIds = animation.renderTargets.map((target) => target.id);
+      const exportTargetIds = animation.exportTargets.map((target) => target.id);
+      const sourceRefIds = animation.dashboard?.sourceRefIds ?? [];
+
+      return {
+        id: animation.dashboard?.rowId ?? `animation-${animation.id}`,
+        title: animation.title,
+        summary:
+          `Composable animation asset with ${animation.bundle.objects.length} semantic objects and ${animation.transformations.length} transformations.`,
+        status: "active",
+        detail: "animation asset",
+        kind: "protocol-api",
+        depth: 0,
+        tags: animation.dashboard?.tags ?? ["animation"],
+        dataAttributes: [
+          ["data-kp-animation-asset", animation.id] as [string, string],
+          ["data-kp-animation-timeline", animation.timeline?.id ?? ""] as [
+            string,
+            string
+          ],
+          [
+            "data-kp-animation-transformations",
+            animation.transformations
+              .map((transformation) => transformation.id)
+              .join(" ")
+          ] as [string, string],
+          [
+            "data-kp-animation-render-targets",
+            renderTargetIds.join(" ")
+          ] as [string, string]
+        ],
+        relatedIds: [
+          animation.id,
+          animation.bundle.id,
+          animation.transformationTree.root.id,
+          ...transformDefinitionIds,
+          ...renderTargetIds,
+          ...exportTargetIds
+        ],
+        previewFields: [
+          { label: "Animation asset", value: animation.id },
+          { label: "Bundle", value: animation.bundle.id },
+          { label: "Timeline", value: animation.timeline?.id ?? "None" },
+          { label: "Beats", value: String(animation.timeline?.beatCount ?? 0) },
+          {
+            label: "Duration",
+            value:
+              animation.timeline?.durationMs === undefined
+                ? "None"
+                : `${animation.timeline.durationMs}ms`
+          },
+          { label: "Layout", value: animation.layout?.kind ?? "None" },
+          {
+            label: "Semantic objects",
+            value: String(animation.bundle.objects.length)
+          },
+          {
+            label: "Transformations",
+            value: String(animation.transformations.length)
+          },
+          {
+            label: "Transform definitions",
+            value: transformDefinitionIds.join(", ")
+          },
+          {
+            label: "Render targets",
+            value: renderTargetIds.join(", ")
+          },
+          {
+            label: "Export targets",
+            value: exportTargetIds.join(", ")
+          }
+        ],
+        previewLinks: [],
+        searchFields: [
+          "semantic asset catalog",
+          "animation asset catalog",
+          "composable animation asset",
+          "generated algebra animation asset",
+          "motif source",
+          animation.id,
+          animation.title,
+          animation.bundle.id,
+          animation.transformationTree.root.id,
+          animation.timeline?.id ?? "",
+          animation.layout?.id ?? "",
+          animation.layout?.kind ?? "",
+          ...(animation.dashboard?.tags ?? []),
+          ...sourceRefIds,
+          ...sourceRefIds.map((sourceRefId) => `source:${sourceRefId}`),
+          ...animation.bundle.objects.map((object) => object.id),
+          ...animation.transformations.flatMap((transformation) => [
+            transformation.id,
+            transformation.title,
+            transformation.transformType,
+            `transform:${transformation.transformType}`,
+            transformation.definitionId ?? "",
+            ...(transformation.definitionId === undefined
+              ? []
+              : [`definition:${transformation.definitionId}`]),
+            ...transformation.sourceObjectIds,
+            ...transformation.targetObjectIds
+          ]),
+          ...renderTargetIds,
+          ...exportTargetIds
+        ]
+      };
+    }
+  );
 
   return rows.filter((row) => generatedAlgebraRowMatchesQuery(row, query));
 }
@@ -277,6 +400,18 @@ function definitionIdsForFixture(
 ): readonly string[] {
   return uniqueStrings(
     fixture.transformations.flatMap((transformation) =>
+      transformation.definitionId === undefined
+        ? []
+        : [transformation.definitionId]
+    )
+  );
+}
+
+function animationDefinitionIds(
+  animation: KpAnimationAsset
+): readonly string[] {
+  return uniqueStrings(
+    animation.transformations.flatMap((transformation) =>
       transformation.definitionId === undefined
         ? []
         : [transformation.definitionId]
