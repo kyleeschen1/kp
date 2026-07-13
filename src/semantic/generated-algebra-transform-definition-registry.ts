@@ -1,7 +1,10 @@
 import {
+  createKpSemanticTransformation,
   createKpSemanticTransformationDefinition,
   validateKpSemanticTransformationDefinition,
   type CreateKpSemanticTransformationDefinitionInput,
+  type KpSelectorCorrespondence,
+  type KpSemanticTransformation,
   type KpSemanticTransformationDefinition,
   type KpTransformationValidationIssue
 } from "./asset-transformation.ts";
@@ -29,6 +32,16 @@ export interface CreateGeneratedAlgebraTransformDefinitionInput
   readonly templateId: string;
   readonly status?: GeneratedAlgebraTransformDefinitionStatus | undefined;
   readonly artifactPolicy?: GeneratedAlgebraTransformArtifactPolicy | undefined;
+}
+
+export interface CreateGeneratedAlgebraSemanticTransformationInput {
+  readonly familyId: GeneratedAlgebraFixtureFamilyId;
+  readonly transformType: string;
+  readonly id: string;
+  readonly title?: string | undefined;
+  readonly sourceObjectIds: readonly string[];
+  readonly targetObjectIds: readonly string[];
+  readonly correspondence?: readonly KpSelectorCorrespondence[] | undefined;
 }
 
 export const generatedAlgebraTransformDefinitions:
@@ -698,6 +711,20 @@ export function findGeneratedAlgebraTransformDefinition(
     : cloneGeneratedAlgebraTransformDefinition(definition);
 }
 
+export function findGeneratedAlgebraTransformDefinitionByFamilyAndType(
+  familyId: GeneratedAlgebraFixtureFamilyId,
+  transformType: string
+): GeneratedAlgebraTransformDefinition | undefined {
+  const definition = generatedAlgebraTransformDefinitions.find(
+    (candidate) =>
+      candidate.familyId === familyId && candidate.transformType === transformType
+  );
+
+  return definition === undefined
+    ? undefined
+    : cloneGeneratedAlgebraTransformDefinition(definition);
+}
+
 export function getGeneratedAlgebraTransformDefinition(
   id: string
 ): GeneratedAlgebraTransformDefinition {
@@ -708,6 +735,34 @@ export function getGeneratedAlgebraTransformDefinition(
   }
 
   return definition;
+}
+
+export function createGeneratedAlgebraSemanticTransformation(
+  input: CreateGeneratedAlgebraSemanticTransformationInput
+): KpSemanticTransformation {
+  const definition = findGeneratedAlgebraTransformDefinitionByFamilyAndType(
+    input.familyId,
+    input.transformType
+  );
+
+  if (definition === undefined) {
+    throw new Error(
+      `Unknown generated algebra transform definition for ${input.familyId}.${input.transformType}`
+    );
+  }
+
+  return createKpSemanticTransformation({
+    id: input.id,
+    definitionId: definition.id,
+    transformType: definition.transformType,
+    title: input.title ?? definition.title,
+    sourceObjectIds: input.sourceObjectIds,
+    targetObjectIds: input.targetObjectIds,
+    preserves: definition.preserves,
+    assumptions: definition.assumptions,
+    lawRefs: definition.lawRefs,
+    correspondence: input.correspondence
+  });
 }
 
 export function validateGeneratedAlgebraTransformDefinitionRegistry(

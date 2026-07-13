@@ -17,11 +17,11 @@ import {
   createKpFlashcardSpec,
   type KpFlashcardSpec
 } from "./asset-flashcard.ts";
-import {
-  createKpSemanticTransformation,
-  type KpSemanticTransformation
-} from "./asset-transformation.ts";
+import type { KpSemanticTransformation } from "./asset-transformation.ts";
 import type { AlgebraTraceFixture } from "./algebra-trace-port-fixture.ts";
+import {
+  createGeneratedAlgebraSemanticTransformation
+} from "./generated-algebra-transform-definition-registry.ts";
 import {
   getGeneratedAlgebraTutorialFixtureSpec,
   generatedDistributionTutorialFixtureSpecs,
@@ -627,17 +627,13 @@ function createGeneratedFractionExpressionTransformations(
   ids: GeneratedFractionExpressionIds
 ): readonly KpSemanticTransformation[] {
   return [
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.fraction-expression",
       id: ids.split,
       transformType: "splitFractionFactors",
       title: "Split numerator and denominator into common factors",
       sourceObjectIds: [ids.initial],
       targetObjectIds: [ids.factored],
-      preserves: ["value", "structure"],
-      assumptions: [
-        "A numerator and denominator can be rewritten as products with a shared factor."
-      ],
-      lawRefs: [{ id: "law.arithmetic.factor-fraction", level: "strict" }],
       correspondence: [
         {
           sourceSelectorId: `${ids.initial}.fraction-line`,
@@ -646,19 +642,13 @@ function createGeneratedFractionExpressionTransformations(
         }
       ]
     }),
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.fraction-expression",
       id: ids.merge,
       transformType: "mergeFractionCommonFactor",
       title: "Separate the common fraction factor",
       sourceObjectIds: [ids.factored],
       targetObjectIds: [ids.commonFactor],
-      preserves: ["identity", "value", "structure"],
-      assumptions: [
-        "A fraction of products can be grouped into the simplified base fraction times a unit fraction."
-      ],
-      lawRefs: [
-        { id: "law.arithmetic.fraction-factorization", level: "strict" }
-      ],
       correspondence: [
         correspondence(
           ids.factored,
@@ -674,19 +664,13 @@ function createGeneratedFractionExpressionTransformations(
         )
       ]
     }),
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.fraction-expression",
       id: ids.simplify,
       transformType: "simplifyUnitFractionFactor",
       title: "Simplify the unit fraction factor",
       sourceObjectIds: [ids.commonFactor],
       targetObjectIds: [ids.simplified],
-      preserves: ["identity", "value"],
-      assumptions: [
-        "A non-zero value divided by itself is one, so multiplying by it does not change the base fraction."
-      ],
-      lawRefs: [
-        { id: "law.arithmetic.unit-fraction-factor", level: "strict" }
-      ],
       correspondence: [
         correspondence(
           ids.commonFactor,
@@ -850,33 +834,25 @@ function createGeneratedExponentTransformations(
   ids: GeneratedExponentIds
 ): readonly KpSemanticTransformation[] {
   return [
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.exponent",
       id: ids.lower,
       transformType: "lowerExponent",
       title: "Lower the exponent by one factor",
       sourceObjectIds: [ids.initial],
       targetObjectIds: [ids.lowered],
-      preserves: ["identity", "value"],
-      assumptions: [
-        "A positive integer exponent can be lowered by exposing one copied base factor."
-      ],
-      lawRefs: [{ id: "law.arithmetic.exponent-lowering", level: "strict" }],
       correspondence: [
         correspondence(ids.initial, "base", ids.lowered, "factor-1"),
         correspondence(ids.initial, "base", ids.lowered, "residual-base")
       ]
     }),
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.exponent",
       id: ids.unwrap,
       transformType: "unwrapUnitExponent",
       title: "Unwrap the unit exponent",
       sourceObjectIds: [ids.lowered],
       targetObjectIds: [ids.expanded],
-      preserves: ["identity", "value"],
-      assumptions: [
-        "A base raised to the first power is the base itself."
-      ],
-      lawRefs: [{ id: "law.arithmetic.unit-exponent", level: "strict" }],
       correspondence: [
         correspondence(ids.lowered, "factor-1", ids.expanded, "factor-1"),
         correspondence(ids.lowered, "residual-base", ids.expanded, "factor-2")
@@ -1006,19 +982,13 @@ function createGeneratedRadicalTransformations(
   ids: GeneratedRadicalIds
 ): readonly KpSemanticTransformation[] {
   return [
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.radical",
       id: ids.rewrite,
       transformType: "rewritePowerAsRoot",
       title: "Rewrite the rational exponent as a radical",
       sourceObjectIds: [ids.power],
       targetObjectIds: [ids.radical],
-      preserves: ["identity", "value"],
-      assumptions: [
-        "A rational exponent with numerator one can be represented as a root."
-      ],
-      lawRefs: [
-        { id: "law.arithmetic.rational-exponent-as-root", level: "strict" }
-      ],
       correspondence: [
         correspondence(ids.power, "base", ids.radical, "radicand")
       ]
@@ -1126,17 +1096,13 @@ function createGeneratedFunctionWrapTransformations(
   ids: GeneratedFunctionWrapIds
 ): readonly KpSemanticTransformation[] {
   return [
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.function-wrap",
       id: ids.wrap,
       transformType: "wrapFunction",
       title: "Wrap the expression in a function application",
       sourceObjectIds: [ids.input],
       targetObjectIds: [ids.wrapped],
-      preserves: ["identity", "role"],
-      assumptions: [
-        "The input expression persists as the argument of the function application."
-      ],
-      lawRefs: [{ id: "law.notation.function-application", level: "strict" }],
       correspondence: [
         correspondence(ids.input, "value", ids.wrapped, "argument")
       ]
@@ -1234,7 +1200,8 @@ function createGeneratedDistributionTransformations(
   const distributing = input.direction === "distribute";
 
   return [
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.distribution",
       id: ids.transform,
       transformType: distributing
         ? "distributeMultiplication"
@@ -1244,11 +1211,6 @@ function createGeneratedDistributionTransformations(
         : "Factor the common term",
       sourceObjectIds: [distributing ? ids.factored : ids.expanded],
       targetObjectIds: [distributing ? ids.expanded : ids.factored],
-      preserves: ["identity", "value", "structure"],
-      assumptions: [
-        "Multiplication distributes over addition and can be read in either direction."
-      ],
-      lawRefs: [{ id: "law.algebra.distributive-property", level: "strict" }],
       correspondence: distributing
         ? [
             correspondence(ids.factored, "factor", ids.expanded, "left-factor"),
@@ -1308,15 +1270,13 @@ function createGeneratedLinearSolveTransformations(
   ids: GeneratedLinearSolveIds
 ): readonly KpSemanticTransformation[] {
   return [
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.linear-solve",
       id: ids.subtract,
       transformType: ids.firstTransformType,
       title: ids.firstTransformTitle,
       sourceObjectIds: [ids.initial],
       targetObjectIds: [ids.afterSubtract],
-      preserves: ["value", "structure"],
-      assumptions: [ids.firstTransformAssumption],
-      lawRefs: [{ id: ids.firstTransformLawId, level: "strict" }],
       correspondence: [
         correspondence(ids.initial, "lhs.variable", ids.afterSubtract, "lhs.variable"),
         correspondence(ids.initial, "lhs.addend", ids.afterSubtract, "lhs.addend"),
@@ -1324,15 +1284,13 @@ function createGeneratedLinearSolveTransformations(
         correspondence(ids.initial, "rhs.value", ids.afterSubtract, "rhs.value")
       ]
     }),
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.linear-solve",
       id: ids.cancel,
       transformType: "cancelAdditiveInverses",
       title: "Cancel additive inverses",
       sourceObjectIds: [ids.afterSubtract],
       targetObjectIds: [ids.leftSimplified],
-      preserves: ["value"],
-      assumptions: ["A term plus its additive inverse simplifies to zero."],
-      lawRefs: [{ id: "law.algebra.additive-inverse", level: "strict" }],
       correspondence: [
         correspondence(ids.afterSubtract, "lhs.variable", ids.leftSimplified, "lhs.variable"),
         correspondence(ids.afterSubtract, "equals", ids.leftSimplified, "equals"),
@@ -1340,15 +1298,13 @@ function createGeneratedLinearSolveTransformations(
         correspondence(ids.afterSubtract, "rhs.subtract", ids.leftSimplified, "rhs.subtract")
       ]
     }),
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.linear-solve",
       id: ids.simplify,
       transformType: ids.simplifyTransformType,
       title: ids.simplifyTransformTitle,
       sourceObjectIds: [ids.leftSimplified],
       targetObjectIds: [ids.solved],
-      preserves: ["value"],
-      assumptions: [ids.simplifyTransformAssumption],
-      lawRefs: [{ id: ids.simplifyTransformLawId, level: "strict" }],
       correspondence: [
         correspondence(ids.leftSimplified, "lhs.variable", ids.solved, "lhs.variable"),
         correspondence(ids.leftSimplified, "equals", ids.solved, "equals")
@@ -1361,15 +1317,13 @@ function createGeneratedCoefficientSolveTransformations(
   ids: GeneratedLinearSolveIds
 ): readonly KpSemanticTransformation[] {
   return [
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.linear-solve",
       id: ids.subtract,
       transformType: "divideBothSides",
       title: "Divide both sides by the coefficient",
       sourceObjectIds: [ids.initial],
       targetObjectIds: [ids.afterSubtract],
-      preserves: ["value", "structure"],
-      assumptions: ["Dividing equal quantities by the same non-zero value preserves equality."],
-      lawRefs: [{ id: "law.equation.divide-both-sides", level: "strict" }],
       correspondence: [
         correspondence(ids.initial, "lhs.coefficient", ids.afterSubtract, "lhs.coefficient"),
         correspondence(ids.initial, "lhs.variable", ids.afterSubtract, "lhs.variable"),
@@ -1377,15 +1331,13 @@ function createGeneratedCoefficientSolveTransformations(
         correspondence(ids.initial, "rhs.value", ids.afterSubtract, "rhs.value")
       ]
     }),
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.linear-solve",
       id: ids.cancel,
       transformType: "cancelMultiplicativeInverses",
       title: "Cancel multiplicative inverses",
       sourceObjectIds: [ids.afterSubtract],
       targetObjectIds: [ids.leftSimplified],
-      preserves: ["value"],
-      assumptions: ["A non-zero factor divided by itself simplifies to one."],
-      lawRefs: [{ id: "law.algebra.multiplicative-inverse", level: "strict" }],
       correspondence: [
         correspondence(ids.afterSubtract, "lhs.variable", ids.leftSimplified, "lhs.variable"),
         correspondence(ids.afterSubtract, "equals", ids.leftSimplified, "equals"),
@@ -1393,15 +1345,13 @@ function createGeneratedCoefficientSolveTransformations(
         correspondence(ids.afterSubtract, "rhs.divide", ids.leftSimplified, "rhs.divide")
       ]
     }),
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.linear-solve",
       id: ids.simplify,
       transformType: "simplifyConstantQuotient",
       title: "Simplify the constant quotient",
       sourceObjectIds: [ids.leftSimplified],
       targetObjectIds: [ids.solved],
-      preserves: ["value"],
-      assumptions: ["The right-hand constant quotient evaluates to the solution."],
-      lawRefs: [{ id: "law.arithmetic.constant-quotient", level: "strict" }],
       correspondence: [
         correspondence(ids.leftSimplified, "lhs.variable", ids.solved, "lhs.variable"),
         correspondence(ids.leftSimplified, "equals", ids.solved, "equals")
@@ -1414,15 +1364,13 @@ function createGeneratedTwoStepSolveTransformations(
   ids: GeneratedTwoStepSolveIds
 ): readonly KpSemanticTransformation[] {
   return [
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.linear-solve",
       id: ids.subtract,
       transformType: "subtractBothSides",
       title: "Subtract the addend from both sides",
       sourceObjectIds: [ids.initial],
       targetObjectIds: [ids.afterSubtract],
-      preserves: ["value", "structure"],
-      assumptions: ["Subtracting equal quantities preserves equality."],
-      lawRefs: [{ id: "law.equation.subtract-both-sides", level: "strict" }],
       correspondence: [
         correspondence(ids.initial, "lhs.coefficient", ids.afterSubtract, "lhs.coefficient"),
         correspondence(ids.initial, "lhs.variable", ids.afterSubtract, "lhs.variable"),
@@ -1431,15 +1379,13 @@ function createGeneratedTwoStepSolveTransformations(
         correspondence(ids.initial, "rhs.value", ids.afterSubtract, "rhs.value")
       ]
     }),
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.linear-solve",
       id: ids.cancelAddend,
       transformType: "cancelAdditiveInverses",
       title: "Cancel additive inverses",
       sourceObjectIds: [ids.afterSubtract],
       targetObjectIds: [ids.addendCanceled],
-      preserves: ["value"],
-      assumptions: ["A term plus its additive inverse simplifies to zero."],
-      lawRefs: [{ id: "law.algebra.additive-inverse", level: "strict" }],
       correspondence: [
         correspondence(ids.afterSubtract, "lhs.coefficient", ids.addendCanceled, "lhs.coefficient"),
         correspondence(ids.afterSubtract, "lhs.variable", ids.addendCanceled, "lhs.variable"),
@@ -1448,30 +1394,26 @@ function createGeneratedTwoStepSolveTransformations(
         correspondence(ids.afterSubtract, "rhs.subtract", ids.addendCanceled, "rhs.subtract")
       ]
     }),
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.linear-solve",
       id: ids.simplifyDifference,
       transformType: "simplifyConstantDifference",
       title: "Simplify the constant difference",
       sourceObjectIds: [ids.addendCanceled],
       targetObjectIds: [ids.constantSimplified],
-      preserves: ["value"],
-      assumptions: ["The right-hand constant difference evaluates to the remaining product."],
-      lawRefs: [{ id: "law.arithmetic.constant-difference", level: "strict" }],
       correspondence: [
         correspondence(ids.addendCanceled, "lhs.coefficient", ids.constantSimplified, "lhs.coefficient"),
         correspondence(ids.addendCanceled, "lhs.variable", ids.constantSimplified, "lhs.variable"),
         correspondence(ids.addendCanceled, "equals", ids.constantSimplified, "equals")
       ]
     }),
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.linear-solve",
       id: ids.divide,
       transformType: "divideBothSides",
       title: "Divide both sides by the coefficient",
       sourceObjectIds: [ids.constantSimplified],
       targetObjectIds: [ids.afterDivide],
-      preserves: ["value", "structure"],
-      assumptions: ["Dividing equal quantities by the same non-zero value preserves equality."],
-      lawRefs: [{ id: "law.equation.divide-both-sides", level: "strict" }],
       correspondence: [
         correspondence(ids.constantSimplified, "lhs.coefficient", ids.afterDivide, "lhs.coefficient"),
         correspondence(ids.constantSimplified, "lhs.variable", ids.afterDivide, "lhs.variable"),
@@ -1479,15 +1421,13 @@ function createGeneratedTwoStepSolveTransformations(
         correspondence(ids.constantSimplified, "rhs.reduced", ids.afterDivide, "rhs.reduced")
       ]
     }),
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.linear-solve",
       id: ids.cancelCoefficient,
       transformType: "cancelMultiplicativeInverses",
       title: "Cancel multiplicative inverses",
       sourceObjectIds: [ids.afterDivide],
       targetObjectIds: [ids.coefficientCanceled],
-      preserves: ["value"],
-      assumptions: ["A non-zero factor divided by itself simplifies to one."],
-      lawRefs: [{ id: "law.algebra.multiplicative-inverse", level: "strict" }],
       correspondence: [
         correspondence(ids.afterDivide, "lhs.variable", ids.coefficientCanceled, "lhs.variable"),
         correspondence(ids.afterDivide, "equals", ids.coefficientCanceled, "equals"),
@@ -1495,15 +1435,13 @@ function createGeneratedTwoStepSolveTransformations(
         correspondence(ids.afterDivide, "rhs.divide", ids.coefficientCanceled, "rhs.divide")
       ]
     }),
-    createKpSemanticTransformation({
+    createGeneratedAlgebraSemanticTransformation({
+      familyId: "generated.linear-solve",
       id: ids.simplifyQuotient,
       transformType: "simplifyConstantQuotient",
       title: "Simplify the constant quotient",
       sourceObjectIds: [ids.coefficientCanceled],
       targetObjectIds: [ids.solved],
-      preserves: ["value"],
-      assumptions: ["The right-hand constant quotient evaluates to the solution."],
-      lawRefs: [{ id: "law.arithmetic.constant-quotient", level: "strict" }],
       correspondence: [
         correspondence(ids.coefficientCanceled, "lhs.variable", ids.solved, "lhs.variable"),
         correspondence(ids.coefficientCanceled, "equals", ids.solved, "equals")

@@ -2,9 +2,9 @@
   "id": "next-action.kp.semantic.generated-fixtures-consume-transform-definitions-v0",
   "kind": "next-action",
   "title": "Make generated fixtures consume transform definitions",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic",
-  "summary": "Update generated algebra fixture construction so transformations are created from reusable definitions rather than duplicating fixture-local semantic metadata.",
+  "summary": "Generated algebra fixtures now instantiate concrete transformations from promoted transform definitions and carry definitionId provenance.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -20,6 +20,31 @@
       "kind": "file",
       "path": "tests/generated-algebra-laws.test.ts",
       "summary": "Reference closure and law coverage for generated fixtures."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "Added optional definitionId provenance to concrete SemanticTransformation records."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-transform-definition-registry.ts",
+      "summary": "Added lookup by family/type and helper for instantiating concrete transformations from generated definitions."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-laws.ts",
+      "summary": "Coverage law now requires fixture transforms to reference their promoted definition ids."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Migrated generated algebra fixture transformation constructors to consume promoted definitions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-laws.test.ts",
+      "summary": "Definition coverage law verifies fixture transformations consume promoted definitions."
     }
   ],
   "dependsOn": {
@@ -60,5 +85,29 @@
       "id": "generated-law-suite-passes",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test generated algebra fixture law and sample tests",
+      "status": "passed",
+      "scope": "slice 7 focused plus broad node tests",
+      "checkedAt": "2026-07-13T21:43:27.939Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 7 typecheck",
+      "checkedAt": "2026-07-13T21:43:27.966Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T21:43:27.987Z",
+      "scope": "slice 7 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Generated algebra fixtures now instantiate concrete transformations from promoted transform definitions and carry definitionId provenance."
+  }
 }

@@ -42,6 +42,7 @@ export interface KpSelectorCorrespondenceTemplate {
 export interface KpSemanticTransformation {
   readonly id: string;
   readonly kind: "semantic-transformation";
+  readonly definitionId?: string | undefined;
   readonly transformType: string;
   readonly title: string;
   readonly sourceObjectIds: readonly string[];
@@ -67,6 +68,7 @@ export interface KpSemanticTransformationDefinition {
 
 export interface CreateKpSemanticTransformationInput {
   readonly id: string;
+  readonly definitionId?: string | undefined;
   readonly transformType: string;
   readonly title: string;
   readonly sourceObjectIds: readonly string[];
@@ -112,6 +114,9 @@ export function createKpSemanticTransformation(
   return {
     id: input.id,
     kind: "semantic-transformation",
+    ...(input.definitionId === undefined
+      ? {}
+      : { definitionId: input.definitionId }),
     transformType: input.transformType,
     title: input.title,
     sourceObjectIds: [...input.sourceObjectIds],

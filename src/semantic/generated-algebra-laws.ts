@@ -184,6 +184,14 @@ export function checkGeneratedAlgebraTransformDefinitionCoverage(
             `Generated algebra transform definition ${definition.id} must cite at least one law.`
         });
       }
+
+      if (transformation.definitionId !== definition.id) {
+        failures.push({
+          path: `${path}.definitionId`,
+          message:
+            `Generated algebra transform ${transformation.id} must reference promoted definition ${definition.id}.`
+        });
+      }
     });
   });
 
