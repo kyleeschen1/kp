@@ -3,11 +3,15 @@ import test from "node:test";
 
 import {
   checkGeneratedAlgebraFlashcardConsistency,
-  checkGeneratedAlgebraCancellationSimplificationConsistency
+  checkGeneratedAlgebraCancellationSimplificationConsistency,
+  checkGeneratedAlgebraTransformDefinitionCoverage
 } from "../src/semantic/generated-algebra-laws.ts";
 import {
   createGeneratedAlgebraTutorialFixtures
 } from "../src/semantic/generated-algebra-tutorial-fixture.ts";
+import {
+  listGeneratedAlgebraTransformDefinitions
+} from "../src/semantic/generated-algebra-transform-definition-registry.ts";
 
 test("generated algebra cancellation and simplification transforms satisfy consistency law", () => {
   assert.deepEqual(
@@ -129,4 +133,61 @@ test("generated algebra flashcard consistency law reports broken generated flash
       }
     ]
   });
+});
+
+test("generated algebra transform definition coverage law accepts promoted linear-solve definitions", () => {
+  assert.deepEqual(
+    checkGeneratedAlgebraTransformDefinitionCoverage(
+      createGeneratedAlgebraTutorialFixtures()
+    ),
+    {
+      lawId: "generated-algebra.transform-definition-coverage",
+      passed: true,
+      failures: []
+    }
+  );
+});
+
+test("generated algebra transform definition coverage law reports missing definitions", () => {
+  const definitions = listGeneratedAlgebraTransformDefinitions().filter(
+    (definition) => definition.transformType !== "cancelAdditiveInverses"
+  );
+
+  assert.deepEqual(
+    checkGeneratedAlgebraTransformDefinitionCoverage(
+      createGeneratedAlgebraTutorialFixtures(),
+      definitions
+    ),
+    {
+      lawId: "generated-algebra.transform-definition-coverage",
+      passed: false,
+      failures: [
+        {
+          path: "fixtures[0].transformations[1].transformType",
+          message:
+            "Generated algebra transform transform.generated.linear-solve.x-plus-3.cancel-additive-inverse has no promoted definition for generated.linear-solve.cancelAdditiveInverses."
+        },
+        {
+          path: "fixtures[1].transformations[1].transformType",
+          message:
+            "Generated algebra transform transform.generated.linear-solve.y-plus-5.cancel-additive-inverse has no promoted definition for generated.linear-solve.cancelAdditiveInverses."
+        },
+        {
+          path: "fixtures[2].transformations[1].transformType",
+          message:
+            "Generated algebra transform transform.generated.linear-solve.z-minus-4.cancel-additive-inverse has no promoted definition for generated.linear-solve.cancelAdditiveInverses."
+        },
+        {
+          path: "fixtures[4].transformations[1].transformType",
+          message:
+            "Generated algebra transform transform.generated.linear-solve.two-x-plus-3.cancel-additive-inverse has no promoted definition for generated.linear-solve.cancelAdditiveInverses."
+        },
+        {
+          path: "fixtures[5].transformations[1].transformType",
+          message:
+            "Generated algebra transform transform.generated.linear-solve.x-plus-one-half.cancel-additive-inverse has no promoted definition for generated.linear-solve.cancelAdditiveInverses."
+        }
+      ]
+    }
+  );
 });

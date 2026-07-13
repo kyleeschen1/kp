@@ -2,9 +2,9 @@
   "id": "next-action.kp.semantic.linear-solve-cancellation-transform-definitions-v0",
   "kind": "next-action",
   "title": "Promote linear-solve cancellation definitions",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic",
-  "summary": "Promote additive/subtractive linear-solve cancellation and simplification steps into reusable generated transform definitions with explicit identity, value, and artifact policy.",
+  "summary": "Promoted linear-solve generated transform types into reusable definitions and added coverage laws proving fixture transforms are represented by the registry.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -20,6 +20,26 @@
       "kind": "file",
       "path": "tests/generated-linear-solve-tutorial-card-sample.test.ts",
       "summary": "Generated linear-solve sample coverage."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-transform-definition-registry.ts",
+      "summary": "Added promoted linear-solve transform definitions with preservation, artifact policy, assumptions, correspondence templates, and law refs."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-laws.ts",
+      "summary": "Added generated transform-definition coverage law keyed by fixture family and transform type."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-laws.test.ts",
+      "summary": "Covered transform-definition coverage success and missing-definition failure paths."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Updated registry expectations for the promoted linear-solve definition set."
     }
   ],
   "dependsOn": {
@@ -56,5 +76,29 @@
       "id": "linear-solve-fixtures-still-pass-laws",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test generated algebra laws and linear solve samples",
+      "status": "passed",
+      "scope": "slice 2 focused plus broad node tests",
+      "checkedAt": "2026-07-13T21:25:53.468Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 2 typecheck",
+      "checkedAt": "2026-07-13T21:25:53.491Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T21:25:53.512Z",
+      "scope": "slice 2 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted linear-solve generated transform types into reusable definitions and added coverage laws proving fixture transforms are represented by the registry."
+  }
 }

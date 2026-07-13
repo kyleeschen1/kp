@@ -37,6 +37,7 @@ export const generatedAlgebraTransformDefinitions:
       id: "definition.generated.linear-solve.subtract-both-sides",
       familyId: "generated.linear-solve",
       templateId: "linear-solve.subtract-both-sides",
+      status: "promoted",
       transformType: "subtractBothSides",
       title: "Subtract the same value from both sides",
       sourceObjectRoles: ["initial-equation"],
@@ -73,6 +74,276 @@ export const generatedAlgebraTransformDefinitions:
           sourceSelectorRole: "rhs.value",
           targetObjectRole: "with-inverse-terms",
           targetSelectorRole: "rhs.value",
+          preserves: ["identity", "role"]
+        }
+      ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.linear-solve.add-both-sides",
+      familyId: "generated.linear-solve",
+      templateId: "linear-solve.add-both-sides",
+      status: "promoted",
+      transformType: "addBothSides",
+      title: "Add the same value to both sides",
+      sourceObjectRoles: ["initial-equation"],
+      targetObjectRoles: ["with-inverse-terms"],
+      preserves: ["value", "structure"],
+      artifactPolicy: "target-only",
+      assumptions: ["Adding equal quantities preserves equality."],
+      lawRefs: [{ id: "law.equation.add-both-sides", level: "strict" }],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "initial-equation",
+          sourceSelectorRole: "lhs.variable",
+          targetObjectRole: "with-inverse-terms",
+          targetSelectorRole: "lhs.variable",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "initial-equation",
+          sourceSelectorRole: "lhs.addend",
+          targetObjectRole: "with-inverse-terms",
+          targetSelectorRole: "lhs.addend",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "initial-equation",
+          sourceSelectorRole: "equals",
+          targetObjectRole: "with-inverse-terms",
+          targetSelectorRole: "equals",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "initial-equation",
+          sourceSelectorRole: "rhs.value",
+          targetObjectRole: "with-inverse-terms",
+          targetSelectorRole: "rhs.value",
+          preserves: ["identity", "role"]
+        }
+      ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.linear-solve.cancel-additive-inverses",
+      familyId: "generated.linear-solve",
+      templateId: "linear-solve.cancel-additive-inverses",
+      status: "promoted",
+      transformType: "cancelAdditiveInverses",
+      title: "Cancel additive inverses",
+      sourceObjectRoles: ["with-inverse-terms"],
+      targetObjectRoles: ["left-simplified-equation"],
+      preserves: ["value"],
+      artifactPolicy: "source-only",
+      assumptions: ["A term plus its additive inverse simplifies to zero."],
+      lawRefs: [{ id: "law.algebra.additive-inverse", level: "strict" }],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "with-inverse-terms",
+          sourceSelectorRole: "lhs.variable",
+          targetObjectRole: "left-simplified-equation",
+          targetSelectorRole: "lhs.variable",
+          preserves: ["identity", "role"],
+          summary: "The unknown persists after inverse terms cancel."
+        },
+        {
+          sourceObjectRole: "with-inverse-terms",
+          sourceSelectorRole: "equals",
+          targetObjectRole: "left-simplified-equation",
+          targetSelectorRole: "equals",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "with-inverse-terms",
+          sourceSelectorRole: "rhs.constant",
+          targetObjectRole: "left-simplified-equation",
+          targetSelectorRole: "rhs.constant",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "with-inverse-terms",
+          sourceSelectorRole: "rhs.inverse-term",
+          targetObjectRole: "left-simplified-equation",
+          targetSelectorRole: "rhs.inverse-term",
+          preserves: ["identity", "role"]
+        }
+      ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.linear-solve.simplify-constant-difference",
+      familyId: "generated.linear-solve",
+      templateId: "linear-solve.simplify-constant-difference",
+      status: "promoted",
+      transformType: "simplifyConstantDifference",
+      title: "Simplify the constant difference",
+      sourceObjectRoles: ["constant-expression-equation"],
+      targetObjectRoles: ["solved-equation"],
+      preserves: ["value"],
+      artifactPolicy: "mixed",
+      assumptions: ["The right-hand constant difference evaluates to the solution."],
+      lawRefs: [{ id: "law.arithmetic.constant-difference", level: "strict" }],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "constant-expression-equation",
+          sourceSelectorRole: "lhs.variable",
+          targetObjectRole: "solved-equation",
+          targetSelectorRole: "lhs.variable",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "constant-expression-equation",
+          sourceSelectorRole: "equals",
+          targetObjectRole: "solved-equation",
+          targetSelectorRole: "equals",
+          preserves: ["identity", "role"]
+        }
+      ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.linear-solve.simplify-constant-sum",
+      familyId: "generated.linear-solve",
+      templateId: "linear-solve.simplify-constant-sum",
+      status: "promoted",
+      transformType: "simplifyConstantSum",
+      title: "Simplify the constant sum",
+      sourceObjectRoles: ["constant-expression-equation"],
+      targetObjectRoles: ["solved-equation"],
+      preserves: ["value"],
+      artifactPolicy: "mixed",
+      assumptions: ["The right-hand constant sum evaluates to the solution."],
+      lawRefs: [{ id: "law.arithmetic.constant-sum", level: "strict" }],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "constant-expression-equation",
+          sourceSelectorRole: "lhs.variable",
+          targetObjectRole: "solved-equation",
+          targetSelectorRole: "lhs.variable",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "constant-expression-equation",
+          sourceSelectorRole: "equals",
+          targetObjectRole: "solved-equation",
+          targetSelectorRole: "equals",
+          preserves: ["identity", "role"]
+        }
+      ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.linear-solve.divide-both-sides",
+      familyId: "generated.linear-solve",
+      templateId: "linear-solve.divide-both-sides",
+      status: "promoted",
+      transformType: "divideBothSides",
+      title: "Divide both sides by the coefficient",
+      sourceObjectRoles: ["coefficient-equation"],
+      targetObjectRoles: ["with-division-terms"],
+      preserves: ["value", "structure"],
+      artifactPolicy: "target-only",
+      assumptions: [
+        "Dividing equal quantities by the same non-zero value preserves equality."
+      ],
+      lawRefs: [{ id: "law.equation.divide-both-sides", level: "strict" }],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "coefficient-equation",
+          sourceSelectorRole: "lhs.coefficient",
+          targetObjectRole: "with-division-terms",
+          targetSelectorRole: "lhs.coefficient",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "coefficient-equation",
+          sourceSelectorRole: "lhs.variable",
+          targetObjectRole: "with-division-terms",
+          targetSelectorRole: "lhs.variable",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "coefficient-equation",
+          sourceSelectorRole: "equals",
+          targetObjectRole: "with-division-terms",
+          targetSelectorRole: "equals",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "coefficient-equation",
+          sourceSelectorRole: "rhs.constant",
+          targetObjectRole: "with-division-terms",
+          targetSelectorRole: "rhs.constant",
+          preserves: ["identity", "role"]
+        }
+      ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.linear-solve.cancel-multiplicative-inverses",
+      familyId: "generated.linear-solve",
+      templateId: "linear-solve.cancel-multiplicative-inverses",
+      status: "promoted",
+      transformType: "cancelMultiplicativeInverses",
+      title: "Cancel multiplicative inverses",
+      sourceObjectRoles: ["with-division-terms"],
+      targetObjectRoles: ["coefficient-canceled-equation"],
+      preserves: ["value"],
+      artifactPolicy: "source-only",
+      assumptions: ["A non-zero factor divided by itself simplifies to one."],
+      lawRefs: [{ id: "law.algebra.multiplicative-inverse", level: "strict" }],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "with-division-terms",
+          sourceSelectorRole: "lhs.variable",
+          targetObjectRole: "coefficient-canceled-equation",
+          targetSelectorRole: "lhs.variable",
+          preserves: ["identity", "role"],
+          summary: "The variable persists after its coefficient cancels."
+        },
+        {
+          sourceObjectRole: "with-division-terms",
+          sourceSelectorRole: "equals",
+          targetObjectRole: "coefficient-canceled-equation",
+          targetSelectorRole: "equals",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "with-division-terms",
+          sourceSelectorRole: "rhs.constant",
+          targetObjectRole: "coefficient-canceled-equation",
+          targetSelectorRole: "rhs.constant",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "with-division-terms",
+          sourceSelectorRole: "rhs.divisor",
+          targetObjectRole: "coefficient-canceled-equation",
+          targetSelectorRole: "rhs.divisor",
+          preserves: ["identity", "role"]
+        }
+      ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.linear-solve.simplify-constant-quotient",
+      familyId: "generated.linear-solve",
+      templateId: "linear-solve.simplify-constant-quotient",
+      status: "promoted",
+      transformType: "simplifyConstantQuotient",
+      title: "Simplify the constant quotient",
+      sourceObjectRoles: ["quotient-expression-equation"],
+      targetObjectRoles: ["solved-equation"],
+      preserves: ["value"],
+      artifactPolicy: "mixed",
+      assumptions: ["The right-hand constant quotient evaluates to the solution."],
+      lawRefs: [{ id: "law.arithmetic.constant-quotient", level: "strict" }],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "quotient-expression-equation",
+          sourceSelectorRole: "lhs.variable",
+          targetObjectRole: "solved-equation",
+          targetSelectorRole: "lhs.variable",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "quotient-expression-equation",
+          sourceSelectorRole: "equals",
+          targetObjectRole: "solved-equation",
+          targetSelectorRole: "equals",
           preserves: ["identity", "role"]
         }
       ]

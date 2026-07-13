@@ -49,65 +49,51 @@ test("generated algebra transform definition registry exposes reusable semantic 
   const definitions = listGeneratedAlgebraTransformDefinitions();
 
   assert.deepEqual(definitions.map((definition) => definition.id), [
-    "definition.generated.linear-solve.subtract-both-sides"
+    "definition.generated.linear-solve.subtract-both-sides",
+    "definition.generated.linear-solve.add-both-sides",
+    "definition.generated.linear-solve.cancel-additive-inverses",
+    "definition.generated.linear-solve.simplify-constant-difference",
+    "definition.generated.linear-solve.simplify-constant-sum",
+    "definition.generated.linear-solve.divide-both-sides",
+    "definition.generated.linear-solve.cancel-multiplicative-inverses",
+    "definition.generated.linear-solve.simplify-constant-quotient"
   ]);
   assert.deepEqual(
     listGeneratedAlgebraTransformDefinitionsByFamily("generated.linear-solve").map(
       (definition) => [definition.templateId, definition.transformType]
     ),
-    [["linear-solve.subtract-both-sides", "subtractBothSides"]]
-  );
-  assert.deepEqual(
-    getGeneratedAlgebraTransformDefinition(
-      "definition.generated.linear-solve.subtract-both-sides"
-    ),
-    {
-      id: "definition.generated.linear-solve.subtract-both-sides",
-      kind: "semantic-transformation-definition",
-      familyId: "generated.linear-solve",
-      templateId: "linear-solve.subtract-both-sides",
-      status: "seed",
-      artifactPolicy: "target-only",
-      transformType: "subtractBothSides",
-      title: "Subtract the same value from both sides",
-      sourceObjectRoles: ["initial-equation"],
-      targetObjectRoles: ["with-inverse-terms"],
-      preserves: ["value", "structure"],
-      correspondenceTemplates: [
-        {
-          sourceObjectRole: "initial-equation",
-          sourceSelectorRole: "lhs.variable",
-          targetObjectRole: "with-inverse-terms",
-          targetSelectorRole: "lhs.variable",
-          preserves: ["identity", "role"],
-          summary: "The unknown persists while inverse terms are introduced."
-        },
-        {
-          sourceObjectRole: "initial-equation",
-          sourceSelectorRole: "lhs.addend",
-          targetObjectRole: "with-inverse-terms",
-          targetSelectorRole: "lhs.addend",
-          preserves: ["identity", "role"]
-        },
-        {
-          sourceObjectRole: "initial-equation",
-          sourceSelectorRole: "equals",
-          targetObjectRole: "with-inverse-terms",
-          targetSelectorRole: "equals",
-          preserves: ["identity", "role"]
-        },
-        {
-          sourceObjectRole: "initial-equation",
-          sourceSelectorRole: "rhs.value",
-          targetObjectRole: "with-inverse-terms",
-          targetSelectorRole: "rhs.value",
-          preserves: ["identity", "role"]
-        }
+    [
+      ["linear-solve.subtract-both-sides", "subtractBothSides"],
+      ["linear-solve.add-both-sides", "addBothSides"],
+      ["linear-solve.cancel-additive-inverses", "cancelAdditiveInverses"],
+      ["linear-solve.simplify-constant-difference", "simplifyConstantDifference"],
+      ["linear-solve.simplify-constant-sum", "simplifyConstantSum"],
+      ["linear-solve.divide-both-sides", "divideBothSides"],
+      [
+        "linear-solve.cancel-multiplicative-inverses",
+        "cancelMultiplicativeInverses"
       ],
-      assumptions: ["Subtracting equal quantities preserves equality."],
-      lawRefs: [{ id: "law.equation.subtract-both-sides", level: "strict" }]
-    }
+      ["linear-solve.simplify-constant-quotient", "simplifyConstantQuotient"]
+    ]
   );
+  const subtractDefinition = getGeneratedAlgebraTransformDefinition(
+    "definition.generated.linear-solve.subtract-both-sides"
+  );
+  const cancelDefinition = getGeneratedAlgebraTransformDefinition(
+    "definition.generated.linear-solve.cancel-additive-inverses"
+  );
+
+  assert.equal(subtractDefinition.status, "promoted");
+  assert.equal(subtractDefinition.artifactPolicy, "target-only");
+  assert.deepEqual(subtractDefinition.preserves, ["value", "structure"]);
+  assert.deepEqual(cancelDefinition.sourceObjectRoles, ["with-inverse-terms"]);
+  assert.deepEqual(cancelDefinition.targetObjectRoles, [
+    "left-simplified-equation"
+  ]);
+  assert.equal(cancelDefinition.artifactPolicy, "source-only");
+  assert.deepEqual(cancelDefinition.lawRefs, [
+    { id: "law.algebra.additive-inverse", level: "strict" }
+  ]);
 });
 
 test("generated algebra transform definition registry validates lookup and completeness", () => {

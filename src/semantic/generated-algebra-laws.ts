@@ -11,6 +11,13 @@ import type {
 import type {
   KpSemanticTransformation
 } from "./asset-transformation.ts";
+import type {
+  GeneratedAlgebraFixtureFamilyId
+} from "./generated-algebra-fixture-registry.ts";
+import {
+  listGeneratedAlgebraTransformDefinitions,
+  type GeneratedAlgebraTransformDefinition
+} from "./generated-algebra-transform-definition-registry.ts";
 
 type GeneratedAlgebraConsistencyTransformKind =
   | "cancellation"
@@ -129,6 +136,64 @@ export function checkGeneratedAlgebraFlashcardConsistency(
   };
 }
 
+export function checkGeneratedAlgebraTransformDefinitionCoverage(
+  fixtures: readonly GeneratedAlgebraTutorialFixture[],
+  definitions: readonly GeneratedAlgebraTransformDefinition[] =
+    listGeneratedAlgebraTransformDefinitions()
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+  const promotedFamilies = new Set(
+    definitions.map((definition) => definition.familyId)
+  );
+  const definitionsByFamilyAndType = new Map<
+    string,
+    GeneratedAlgebraTransformDefinition
+  >();
+
+  definitions.forEach((definition) => {
+    definitionsByFamilyAndType.set(
+      generatedTransformDefinitionKey(definition.familyId, definition.transformType),
+      definition
+    );
+  });
+
+  fixtures.forEach((fixture, fixtureIndex) => {
+    if (!promotedFamilies.has(fixture.familyId)) {
+      return;
+    }
+
+    fixture.transformations.forEach((transformation, transformationIndex) => {
+      const definition = definitionsByFamilyAndType.get(
+        generatedTransformDefinitionKey(fixture.familyId, transformation.transformType)
+      );
+      const path = `fixtures[${fixtureIndex}].transformations[${transformationIndex}]`;
+
+      if (definition === undefined) {
+        failures.push({
+          path: `${path}.transformType`,
+          message:
+            `Generated algebra transform ${transformation.id} has no promoted definition for ${fixture.familyId}.${transformation.transformType}.`
+        });
+        return;
+      }
+
+      if ((definition.lawRefs ?? []).length === 0) {
+        failures.push({
+          path: `${path}.transformType`,
+          message:
+            `Generated algebra transform definition ${definition.id} must cite at least one law.`
+        });
+      }
+    });
+  });
+
+  return {
+    lawId: "generated-algebra.transform-definition-coverage",
+    passed: failures.length === 0,
+    failures
+  };
+}
+
 function classifyConsistencyTransform(
   transformation: KpSemanticTransformation
 ): GeneratedAlgebraConsistencyTransformKind | undefined {
@@ -144,4 +209,11 @@ function classifyConsistencyTransform(
   }
 
   return undefined;
+}
+
+function generatedTransformDefinitionKey(
+  familyId: GeneratedAlgebraFixtureFamilyId,
+  transformType: string
+): string {
+  return `${familyId}:${transformType}`;
 }
