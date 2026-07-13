@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createKpAnimationAsset,
+  createKpAnimationAssetBuilder,
   validateKpAnimationAsset
 } from "../src/animation/asset.ts";
 import {
@@ -266,4 +267,137 @@ test("validateKpAnimationAsset reports unresolved animation references", () => {
         "Animation animation.bad render target render.bad references missing transformation transform.missing.render."
     }
   ]);
+});
+
+test("createKpAnimationAssetBuilder assembles an inferred sequential animation asset", () => {
+  const initial = createKpSemanticAssetObject({
+    id: "equation.initial",
+    objectType: "equation",
+    title: "Initial equation",
+    value: { latex: "x + 3 = 7" },
+    selectors: [{ id: "equation.initial.x", kind: "term", label: "x" }]
+  });
+  const expanded = createKpSemanticAssetObject({
+    id: "equation.expanded",
+    objectType: "equation",
+    title: "Subtract 3",
+    value: { latex: "x + 3 - 3 = 7 - 3" },
+    selectors: [{ id: "equation.expanded.x", kind: "term", label: "x" }]
+  });
+  const solved = createKpSemanticAssetObject({
+    id: "equation.solved",
+    objectType: "equation",
+    title: "Solved equation",
+    value: { latex: "x = 4" },
+    selectors: [{ id: "equation.solved.x", kind: "term", label: "x" }]
+  });
+  const subtract = createKpSemanticTransformation({
+    id: "transform.subtract",
+    transformType: "subtractBothSides",
+    title: "Subtract 3 from both sides",
+    sourceObjectIds: [initial.id],
+    targetObjectIds: [expanded.id],
+    preserves: ["value", "structure"],
+    correspondence: [
+      {
+        sourceSelectorId: "equation.initial.x",
+        targetSelectorId: "equation.expanded.x",
+        preserves: ["identity", "role"]
+      }
+    ]
+  });
+  const cancel = createKpSemanticTransformation({
+    id: "transform.cancel",
+    transformType: "cancel",
+    title: "Cancel additive inverses",
+    sourceObjectIds: [expanded.id],
+    targetObjectIds: [solved.id],
+    preserves: ["value", "structure"],
+    correspondence: [
+      {
+        sourceSelectorId: "equation.expanded.x",
+        targetSelectorId: "equation.solved.x",
+        preserves: ["identity", "role"]
+      }
+    ]
+  });
+
+  const animation = createKpAnimationAssetBuilder({
+    id: "animation.solve-x",
+    title: "Solve x + 3 = 7",
+    bundleId: "asset.solve-x",
+    bundleTitle: "Solve x assets",
+    metadata: { domain: "algebra" }
+  })
+    .addObject(initial)
+    .addObject(expanded)
+    .addObject(solved)
+    .addTransformation(subtract)
+    .addTransformation(cancel)
+    .addAnnotation({
+      id: "pause.after-cancel",
+      kind: "pause",
+      targetNodeId: cancel.id,
+      placement: "after",
+      durationBeats: 1
+    })
+    .withTimeline({
+      id: "timeline.solve-x",
+      beatCount: 20
+    })
+    .addRenderTarget({
+      id: "render.equation",
+      kind: "equation",
+      objectIds: [initial.id, expanded.id, solved.id],
+      transformationIds: [subtract.id, cancel.id]
+    })
+    .withLayout({
+      id: "layout.solve-x",
+      kind: "single",
+      targetId: "render.equation"
+    })
+    .addCheck({
+      id: "check.rewind",
+      lawId: "animation.rewind",
+      level: "strict",
+      targetId: "animation.solve-x.transformations"
+    })
+    .addExportTarget({
+      id: "export.frames",
+      kind: "frame-sequence",
+      artifactId: "artifact.solve-x.frames"
+    })
+    .withDashboard({
+      rowId: "row.animation.solve-x",
+      tags: ["animation", "algebra"]
+    })
+    .build();
+
+  assert.deepEqual(validateKpAnimationAsset(animation), []);
+  assert.equal(animation.bundle.id, "asset.solve-x");
+  assert.equal(animation.bundle.title, "Solve x assets");
+  assert.deepEqual(
+    animation.bundle.objects.map((object) => object.id),
+    [initial.id, expanded.id, solved.id]
+  );
+  assert.deepEqual(
+    animation.transformations.map((transformation) => transformation.id),
+    [subtract.id, cancel.id]
+  );
+  assert.equal(animation.transformationTree.root.kind, "sequence");
+  assert.equal(animation.transformationTree.root.id, "animation.solve-x.transformations");
+  assert.deepEqual(
+    animation.transformationTree.root.children.map((child) => child.id),
+    [subtract.id, cancel.id]
+  );
+  assert.deepEqual(animation.transformationTree.annotations, [
+    {
+      id: "pause.after-cancel",
+      kind: "pause",
+      targetNodeId: cancel.id,
+      placement: "after",
+      durationBeats: 1
+    }
+  ]);
+  assert.deepEqual(JSON.parse(JSON.stringify(animation)), animation);
 });

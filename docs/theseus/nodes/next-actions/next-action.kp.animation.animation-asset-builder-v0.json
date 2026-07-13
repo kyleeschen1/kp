@@ -1,0 +1,101 @@
+{
+  "id": "next-action.kp.animation.animation-asset-builder-v0",
+  "kind": "next-action",
+  "title": "Add animation asset builder API",
+  "status": "resolved",
+  "summary": "Added a fluent AnimationAsset builder that collects semantic objects, semantic transformations, annotations, render targets, layout, checks, exports, dashboard metadata, and infers a sequential transformation tree into the canonical AnimationAsset contract.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-animation-asset-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.animation-asset-builder-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming composable semantic animations as KP's primary artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Ready action anchoring the approved animation asset contract loop."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/asset.ts",
+      "summary": "Adds the builder API while keeping AnimationAsset as the single canonical contract."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-asset.test.ts",
+      "summary": "Covers inferred sequential builder assembly and JSON-compatible output."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.animation-asset-builder-v0.json",
+      "summary": "Tracks the materialized builder API run-contract slice."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.composable-animation-asset-v0",
+      "next-action.kp.animation.composable-animation-asset-contract-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.composable-animation-asset-contract-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Add animation asset builder API can be completed inside KP composable animation asset v0 loop."
+  ],
+  "allowedWork": [
+    "Work only on the approved composable semantic animation asset v0 loop.",
+    "Keep tutorials, cards, exports, flashcards, graphs, and programming views as consumers of animation assets rather than the core artifact.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broadly rename tutorial-card modules in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add curriculum generation, spaced repetition generation, or dynamic package loading in this loop.",
+    "Do not create renderer-owned animation formats separate from semantic asset calculus."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-asset.test.ts tests/semantic.test.ts tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts",
+      "status": "passed",
+      "scope": "slice 2 semantic and motif contract tests",
+      "checkedAt": "2026-07-13T22:39:12.893Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-export-sample.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "status": "passed",
+      "scope": "slice 2 generated algebra consumers",
+      "checkedAt": "2026-07-13T22:39:12.924Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 2 typecheck",
+      "checkedAt": "2026-07-13T22:39:12.949Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T22:39:12.971Z",
+      "scope": "slice 2 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a fluent AnimationAsset builder that collects semantic objects, semantic transformations, annotations, render targets, layout, checks, exports, dashboard metadata, and infers a sequential transformation tree into the canonical AnimationAsset contract."
+  }
+}

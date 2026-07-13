@@ -2,7 +2,8 @@ import {
   createKpAssetBundle,
   validateKpAssetBundle,
   type KpAssetBundle,
-  type KpAssetMetadataValue
+  type KpAssetMetadataValue,
+  type KpSemanticAssetObject
 } from "../semantic/asset.ts";
 import {
   createKpSemanticTransformation,
@@ -10,10 +11,14 @@ import {
   type KpLawCheckLevel,
   type KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
+import { createSemanticTransformationRef } from "../semantic/animation.ts";
 import {
   createEditableSemanticTransformationTree,
+  createSemanticTransformationLeaf,
+  createSemanticTransformationSequence,
   semanticTransformationLeafRefs,
   type EditableSemanticTransformationTree,
+  type SemanticTransformationTreeAnnotation,
   type SemanticTransformationNode
 } from "../semantic/transformation-composition.ts";
 
@@ -130,6 +135,39 @@ export interface KpAnimationAssetValidationIssue {
   readonly message: string;
 }
 
+export interface CreateKpAnimationAssetBuilderInput {
+  readonly id: string;
+  readonly title: string;
+  readonly bundleId?: string | undefined;
+  readonly bundleTitle?: string | undefined;
+  readonly metadata?: Readonly<Record<string, KpAssetMetadataValue>> | undefined;
+}
+
+export interface KpAnimationAssetBuilder {
+  addObject(object: KpSemanticAssetObject): KpAnimationAssetBuilder;
+  addTransformation(
+    transformation: KpSemanticTransformation
+  ): KpAnimationAssetBuilder;
+  addAnnotation(
+    annotation: SemanticTransformationTreeAnnotation
+  ): KpAnimationAssetBuilder;
+  withTransformationTree(
+    tree: EditableSemanticTransformationTree
+  ): KpAnimationAssetBuilder;
+  withTimeline(timeline: KpAnimationAssetTimeline): KpAnimationAssetBuilder;
+  withLayout(layout: KpAnimationAssetLayoutNode): KpAnimationAssetBuilder;
+  addRenderTarget(target: KpAnimationAssetRenderTarget): KpAnimationAssetBuilder;
+  addCheck(check: KpAnimationAssetCheckRef): KpAnimationAssetBuilder;
+  addExportTarget(target: KpAnimationAssetExportTarget): KpAnimationAssetBuilder;
+  withDashboard(
+    dashboard: KpAnimationAssetDashboardMetadata
+  ): KpAnimationAssetBuilder;
+  withMetadata(
+    metadata: Readonly<Record<string, KpAssetMetadataValue>>
+  ): KpAnimationAssetBuilder;
+  build(): KpAnimationAsset;
+}
+
 // AnimationAsset is deliberately a thin composition contract: semantic truth
 // stays in asset bundles, transformations, and trees while renderers consume it.
 export function createKpAnimationAsset(
@@ -166,6 +204,12 @@ export function createKpAnimationAsset(
       : { dashboard: cloneAnimationAssetDashboardMetadata(input.dashboard) }),
     ...(input.metadata === undefined ? {} : { metadata: { ...input.metadata } })
   };
+}
+
+export function createKpAnimationAssetBuilder(
+  input: CreateKpAnimationAssetBuilderInput
+): KpAnimationAssetBuilder {
+  return new DefaultKpAnimationAssetBuilder(input);
 }
 
 export function validateKpAnimationAsset(
@@ -225,6 +269,171 @@ export function validateKpAnimationAsset(
   );
 
   return issues;
+}
+
+class DefaultKpAnimationAssetBuilder implements KpAnimationAssetBuilder {
+  private readonly id: string;
+  private readonly title: string;
+  private readonly bundleId: string;
+  private readonly bundleTitle: string;
+  private objects: KpSemanticAssetObject[] = [];
+  private transformations: KpSemanticTransformation[] = [];
+  private annotations: SemanticTransformationTreeAnnotation[] = [];
+  private transformationTree: EditableSemanticTransformationTree | undefined;
+  private timeline: KpAnimationAssetTimeline | undefined;
+  private layout: KpAnimationAssetLayoutNode | undefined;
+  private renderTargets: KpAnimationAssetRenderTarget[] = [];
+  private checks: KpAnimationAssetCheckRef[] = [];
+  private exportTargets: KpAnimationAssetExportTarget[] = [];
+  private dashboard: KpAnimationAssetDashboardMetadata | undefined;
+  private metadata: Readonly<Record<string, KpAssetMetadataValue>> | undefined;
+
+  constructor(input: CreateKpAnimationAssetBuilderInput) {
+    assertNonEmpty(input.id, "Animation asset id");
+    assertNonEmpty(input.title, `Animation asset ${input.id} title`);
+
+    this.id = input.id;
+    this.title = input.title;
+    this.bundleId = input.bundleId ?? `${input.id}.assets`;
+    this.bundleTitle = input.bundleTitle ?? `${input.title} assets`;
+    this.metadata = input.metadata === undefined ? undefined : { ...input.metadata };
+  }
+
+  addObject(object: KpSemanticAssetObject): KpAnimationAssetBuilder {
+    this.objects = [...this.objects, object];
+    return this;
+  }
+
+  addTransformation(
+    transformation: KpSemanticTransformation
+  ): KpAnimationAssetBuilder {
+    this.transformations = [...this.transformations, transformation];
+    return this;
+  }
+
+  addAnnotation(
+    annotation: SemanticTransformationTreeAnnotation
+  ): KpAnimationAssetBuilder {
+    this.annotations = [...this.annotations, annotation];
+    return this;
+  }
+
+  withTransformationTree(
+    tree: EditableSemanticTransformationTree
+  ): KpAnimationAssetBuilder {
+    this.transformationTree = createEditableSemanticTransformationTree(tree);
+    return this;
+  }
+
+  withTimeline(timeline: KpAnimationAssetTimeline): KpAnimationAssetBuilder {
+    this.timeline = cloneAnimationAssetTimeline(timeline);
+    return this;
+  }
+
+  withLayout(layout: KpAnimationAssetLayoutNode): KpAnimationAssetBuilder {
+    this.layout = cloneAnimationAssetLayoutNode(layout);
+    return this;
+  }
+
+  addRenderTarget(target: KpAnimationAssetRenderTarget): KpAnimationAssetBuilder {
+    this.renderTargets = [
+      ...this.renderTargets,
+      cloneAnimationAssetRenderTarget(target)
+    ];
+    return this;
+  }
+
+  addCheck(check: KpAnimationAssetCheckRef): KpAnimationAssetBuilder {
+    this.checks = [...this.checks, cloneAnimationAssetCheckRef(check)];
+    return this;
+  }
+
+  addExportTarget(target: KpAnimationAssetExportTarget): KpAnimationAssetBuilder {
+    this.exportTargets = [
+      ...this.exportTargets,
+      cloneAnimationAssetExportTarget(target)
+    ];
+    return this;
+  }
+
+  withDashboard(
+    dashboard: KpAnimationAssetDashboardMetadata
+  ): KpAnimationAssetBuilder {
+    this.dashboard = cloneAnimationAssetDashboardMetadata(dashboard);
+    return this;
+  }
+
+  withMetadata(
+    metadata: Readonly<Record<string, KpAssetMetadataValue>>
+  ): KpAnimationAssetBuilder {
+    this.metadata = { ...metadata };
+    return this;
+  }
+
+  build(): KpAnimationAsset {
+    return createKpAnimationAsset({
+      id: this.id,
+      title: this.title,
+      bundle: createKpAssetBundle({
+        id: this.bundleId,
+        title: this.bundleTitle,
+        objects: this.objects
+      }),
+      transformations: this.transformations,
+      transformationTree: this.buildTransformationTree(),
+      ...(this.timeline === undefined ? {} : { timeline: this.timeline }),
+      ...(this.layout === undefined ? {} : { layout: this.layout }),
+      renderTargets: this.renderTargets,
+      checks: this.checks,
+      exportTargets: this.exportTargets,
+      ...(this.dashboard === undefined ? {} : { dashboard: this.dashboard }),
+      ...(this.metadata === undefined ? {} : { metadata: this.metadata })
+    });
+  }
+
+  private buildTransformationTree(): EditableSemanticTransformationTree {
+    if (this.transformationTree !== undefined) {
+      return createEditableSemanticTransformationTree({
+        root: this.transformationTree.root,
+        annotations: [
+          ...this.transformationTree.annotations,
+          ...this.annotations
+        ]
+      });
+    }
+
+    if (this.transformations.length === 0) {
+      throw new Error(
+        `Animation asset ${this.id} builder requires at least one transformation or an explicit transformation tree.`
+      );
+    }
+
+    const leaves = this.transformations.map((transformation) =>
+      createSemanticTransformationLeaf(
+        createSemanticTransformationRef({
+          id: transformation.id,
+          kind: transformation.transformType,
+          sourceObjectIds: transformation.sourceObjectIds,
+          targetObjectIds: transformation.targetObjectIds,
+          preserves: transformation.preserves,
+          summary: transformation.title
+        })
+      )
+    );
+    const root =
+      leaves.length === 1
+        ? leaves[0]!
+        : createSemanticTransformationSequence({
+            id: `${this.id}.transformations`,
+            label: `${this.title} transformations`,
+            children: leaves
+          });
+
+    return createEditableSemanticTransformationTree({
+      root,
+      annotations: this.annotations
+    });
+  }
 }
 
 function validateTransformationTreeClosure(
