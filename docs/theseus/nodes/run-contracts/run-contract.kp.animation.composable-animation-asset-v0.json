@@ -1,0 +1,162 @@
+{
+  "id": "run-contract.kp.animation.composable-animation-asset-v0",
+  "kind": "run-contract",
+  "title": "KP composable animation asset v0 loop",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming composable semantic animations as KP's primary artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Ready action anchoring the approved animation asset contract loop."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "allowedWork": [
+    "Work only on the approved composable semantic animation asset v0 loop.",
+    "Keep tutorials, cards, exports, flashcards, graphs, and programming views as consumers of animation assets rather than the core artifact.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broadly rename tutorial-card modules in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add curriculum generation, spaced repetition generation, or dynamic package loading in this loop.",
+    "Do not create renderer-owned animation formats separate from semantic asset calculus."
+  ],
+  "goal": "Run the approved KP loop that makes composable semantic animations the primary typed artifact, with tutorials, exports, flashcards, graphs, and programming views as consumers.",
+  "target": "next-action.kp.animation.composable-animation-asset-contract-v0",
+  "slices": [
+    {
+      "id": "next-action.kp.animation.composable-animation-asset-contract-v0",
+      "title": "Define AnimationAsset core contract",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.animation.animation-asset-builder-v0",
+      "title": "Add animation asset builder API",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.semantic-ref-compiler-v0",
+      "title": "Compile animation assets to semantic refs",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.transformation-tree-integration-v0",
+      "title": "Add transformation tree integration",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.reference-closure-law-v0",
+      "title": "Add animation-level reference closure law",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.seek-rewind-law-v0",
+      "title": "Add seek and rewind law for animation assets",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.definition-backed-motifs-v0",
+      "title": "Attach visual motif defaults through definitions",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.frame-descriptor-contract-v0",
+      "title": "Add animation frame descriptor contract",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.linear-solve-adapter-v0",
+      "title": "Migrate x plus 3 equals 7 into animation asset adapter",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.fraction-adapter-v0",
+      "title": "Migrate fraction simplification into animation asset path",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.exponent-radical-adapter-v0",
+      "title": "Migrate exponent and radical rewrite into animation asset path",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.function-wrap-adapter-v0",
+      "title": "Migrate function-wrap sample into animation asset path",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.distribution-adapter-v0",
+      "title": "Migrate distribution and factoring sample into animation asset path",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.dashboard-rows-v0",
+      "title": "Add dashboard animation asset rows",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.dashboard-preview-v0",
+      "title": "Add dashboard selected preview for animation assets",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.export-manifest-animation-ids-v0",
+      "title": "Add export dependency manifest animation ids",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.frame-sequence-metadata-v0",
+      "title": "Make frame-sequence artifacts consume animation metadata",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.static-step-checkpoints-v0",
+      "title": "Add static-step checkpoints from animation timeline annotations",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.graph-placeholder-contract-v0",
+      "title": "Add graph and vector animation asset placeholder contract",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.source-placeholder-contract-v0",
+      "title": "Add SourceFile program-trace animation asset placeholder contract",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.comparison-layout-sample-v0",
+      "title": "Add comparison-card animation layout sample",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.dashboard-search-facets-v0",
+      "title": "Add dashboard search facets for animation asset components",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.llm-authoring-spec-v0",
+      "title": "Add documentation spec for LLM-authored animation assets",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.loop-readiness-report-v0",
+      "title": "Close loop with readiness report and next tranche",
+      "status": "planned"
+    }
+  ]
+}

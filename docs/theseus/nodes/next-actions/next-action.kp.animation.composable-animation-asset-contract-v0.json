@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation.composable-animation-asset-contract-v0",
   "kind": "next-action",
   "title": "Define composable animation asset contract",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Define a typed, annotated AnimationAsset contract that composes semantic objects, SemanticTransformations, transformation trees, layouts, timelines, visual motifs, renderer-neutral frames, laws, exports, sample targets, and dashboard metadata without binding the reusable artifact to the tutorial use case.",
+  "summary": "Defined the core AnimationAsset contract as a thin typed composition layer over semantic bundles, transformations, editable transform trees, render targets, layouts, timelines, export targets, dashboard metadata, and validation refs.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,21 @@
       "kind": "file",
       "path": "src/tutorial/frame-sequence-artifact.ts",
       "summary": "Existing frame-sequence export format that should become a consumer of sampled animation frames."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/asset.ts",
+      "summary": "Adds the typed AnimationAsset contract, constructor, cloning, and reference validation."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-asset.test.ts",
+      "summary": "Covers JSON-compatible construction and unresolved reference diagnostics for AnimationAsset."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-animation-asset-v0.json",
+      "summary": "Stores the approved composable animation asset run contract."
     }
   ],
   "dependsOn": {
@@ -88,5 +103,35 @@
       "id": "dashboard-and-export-consume-animation-metadata",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-asset.test.ts tests/semantic.test.ts tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts",
+      "status": "passed",
+      "scope": "slice 1 semantic and motif contract tests",
+      "checkedAt": "2026-07-13T22:32:55.321Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-export-sample.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "status": "passed",
+      "scope": "slice 1 generated algebra consumers",
+      "checkedAt": "2026-07-13T22:32:55.344Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 1 typecheck",
+      "checkedAt": "2026-07-13T22:32:55.376Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T22:32:55.404Z",
+      "scope": "slice 1 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined the core AnimationAsset contract as a thin typed composition layer over semantic bundles, transformations, editable transform trees, render targets, layouts, timelines, export targets, dashboard metadata, and validation refs."
+  }
 }
