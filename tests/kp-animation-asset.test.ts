@@ -3,10 +3,12 @@ import test from "node:test";
 
 import {
   checkKpAnimationAssetReferenceClosure,
+  checkKpAnimationAssetSeekRewindLaw,
   compileKpAnimationAssetSemanticRefs,
   createKpAnimationAsset,
   createKpAnimationAssetBuilder,
   describeKpAnimationAssetTransformationTree,
+  sampleKpAnimationAssetPhase,
   validateKpAnimationAsset
 } from "../src/animation/asset.ts";
 import {
@@ -738,5 +740,91 @@ test("checkKpAnimationAssetReferenceClosure reports missing animation refs", () 
           "Animation animation.bad check check.bad references missing target target.missing."
       }
     ]
+  });
+});
+
+test("checkKpAnimationAssetSeekRewindLaw validates phase seek symmetry", () => {
+  const initial = createKpSemanticAssetObject({
+    id: "equation.initial",
+    objectType: "equation",
+    title: "Initial equation",
+    value: { latex: "x + 3 = 7" }
+  });
+  const expanded = createKpSemanticAssetObject({
+    id: "equation.expanded",
+    objectType: "equation",
+    title: "Subtract 3",
+    value: { latex: "x + 3 - 3 = 7 - 3" }
+  });
+  const solved = createKpSemanticAssetObject({
+    id: "equation.solved",
+    objectType: "equation",
+    title: "Solved equation",
+    value: { latex: "x = 4" }
+  });
+  const subtract = createKpSemanticTransformation({
+    id: "transform.subtract",
+    transformType: "subtractBothSides",
+    title: "Subtract 3 from both sides",
+    sourceObjectIds: [initial.id],
+    targetObjectIds: [expanded.id],
+    preserves: ["value", "structure"]
+  });
+  const cancel = createKpSemanticTransformation({
+    id: "transform.cancel",
+    transformType: "cancel",
+    title: "Cancel additive inverses",
+    sourceObjectIds: [expanded.id],
+    targetObjectIds: [solved.id],
+    preserves: ["value"]
+  });
+  const animation = createKpAnimationAssetBuilder({
+    id: "animation.solve-x",
+    title: "Solve x + 3 = 7"
+  })
+    .addObject(initial)
+    .addObject(expanded)
+    .addObject(solved)
+    .addTransformation(subtract)
+    .addTransformation(cancel)
+    .addAnnotation({
+      id: "pause.after-subtract",
+      kind: "pause",
+      targetNodeId: subtract.id,
+      placement: "after",
+      durationBeats: 1
+    })
+    .build();
+
+  assert.deepEqual(
+    sampleKpAnimationAssetPhase(animation, {
+      direction: "forward",
+      progress: 0.25
+    }),
+    {
+      animationId: "animation.solve-x",
+      direction: "forward",
+      progress: 0.25,
+      phaseIndex: 0,
+      phaseId: "animation.solve-x.forward.0",
+      nodeIds: ["transform.subtract"],
+      annotationIdsByPlacement: {
+        before: [],
+        during: [],
+        after: ["pause.after-subtract"]
+      }
+    }
+  );
+  assert.deepEqual(
+    sampleKpAnimationAssetPhase(animation, {
+      direction: "rewind",
+      progress: 0.25
+    }).nodeIds,
+    ["transform.cancel"]
+  );
+  assert.deepEqual(checkKpAnimationAssetSeekRewindLaw(animation), {
+    lawId: "animation.seek-rewind",
+    passed: true,
+    failures: []
   });
 });

@@ -208,6 +208,21 @@ export interface KpAnimationAssetTreePhaseAnnotationIds {
   readonly after: readonly string[];
 }
 
+export interface KpAnimationAssetPhaseSampleInput {
+  readonly direction: KpAnimationAssetTransformationTreeDirection;
+  readonly progress: number;
+}
+
+export interface KpAnimationAssetPhaseSample {
+  readonly animationId: string;
+  readonly direction: KpAnimationAssetTransformationTreeDirection;
+  readonly progress: number;
+  readonly phaseIndex: number;
+  readonly phaseId: string;
+  readonly nodeIds: readonly string[];
+  readonly annotationIdsByPlacement: KpAnimationAssetTreePhaseAnnotationIds;
+}
+
 export interface CreateKpAnimationAssetBuilderInput {
   readonly id: string;
   readonly title: string;
@@ -297,6 +312,100 @@ export function checkKpAnimationAssetReferenceClosure(
 
   return {
     lawId: "animation.reference-closure",
+    passed: failures.length === 0,
+    failures
+  };
+}
+
+export function sampleKpAnimationAssetPhase(
+  animation: KpAnimationAsset,
+  input: KpAnimationAssetPhaseSampleInput
+): KpAnimationAssetPhaseSample {
+  if (
+    !Number.isFinite(input.progress) ||
+    input.progress < 0 ||
+    input.progress > 1
+  ) {
+    throw new Error(
+      `Animation ${animation.id} phase progress must be between 0 and 1.`
+    );
+  }
+
+  const description = describeKpAnimationAssetTransformationTree(animation);
+  const phases =
+    input.direction === "forward"
+      ? description.forwardPhases
+      : description.rewindPhases;
+
+  if (phases.length === 0) {
+    throw new Error(`Animation ${animation.id} has no ${input.direction} phases.`);
+  }
+
+  const phaseIndex = Math.min(
+    Math.floor(input.progress * phases.length),
+    phases.length - 1
+  );
+  const phase = phases[phaseIndex]!;
+
+  return {
+    animationId: animation.id,
+    direction: input.direction,
+    progress: input.progress,
+    phaseIndex,
+    phaseId: phase.id,
+    nodeIds: [...phase.nodeIds],
+    annotationIdsByPlacement: cloneAnimationAssetAnnotationIdsByPlacement(
+      phase.annotationIdsByPlacement
+    )
+  };
+}
+
+export function checkKpAnimationAssetSeekRewindLaw(
+  animation: KpAnimationAsset
+): KpLawCheckResult {
+  const description = describeKpAnimationAssetTransformationTree(animation);
+  const failures: KpLawFailure[] = [];
+  const forwardNodePhases = description.forwardPhases.map((phase) => phase.nodeIds);
+  const rewindNodePhases = description.rewindPhases.map((phase) => phase.nodeIds);
+  const expectedRewindNodePhases = [...forwardNodePhases].reverse();
+
+  if (!phaseNodeListsEqual(rewindNodePhases, expectedRewindNodePhases)) {
+    failures.push({
+      path: "rewindPhases",
+      message:
+        `Animation ${animation.id} rewind phases must mirror forward phase node order.`
+    });
+  }
+
+  if (description.forwardPhases.length === 0) {
+    failures.push({
+      path: "forwardPhases",
+      message: `Animation ${animation.id} must include at least one seekable phase.`
+    });
+  }
+
+  description.forwardPhases.forEach((_, index) => {
+    const progress = (index + 0.5) / description.forwardPhases.length;
+    const forwardSample = sampleKpAnimationAssetPhase(animation, {
+      direction: "forward",
+      progress
+    });
+    const rewindSample = sampleKpAnimationAssetPhase(animation, {
+      direction: "rewind",
+      progress: 1 - progress
+    });
+
+    if (!stringListsEqual(forwardSample.nodeIds, rewindSample.nodeIds)) {
+      failures.push({
+        path: `seekSamples[${index}]`,
+        message:
+          `Animation ${animation.id} forward seek sample ${index} does not match mirrored rewind sample.`
+      });
+    }
+  });
+
+  return {
+    lawId: "animation.seek-rewind",
     passed: failures.length === 0,
     failures
   };
@@ -879,6 +988,16 @@ function cloneTransformationTreeAnnotation(
   };
 }
 
+function cloneAnimationAssetAnnotationIdsByPlacement(
+  ids: KpAnimationAssetTreePhaseAnnotationIds
+): KpAnimationAssetTreePhaseAnnotationIds {
+  return {
+    before: [...ids.before],
+    during: [...ids.during],
+    after: [...ids.after]
+  };
+}
+
 function cloneKpSemanticTransformation(
   transformation: KpSemanticTransformation
 ): KpSemanticTransformation {
@@ -1008,6 +1127,30 @@ function transformationTreePathForRef(
         refId,
         `${path}.children[${childIndex}]`
       );
+}
+
+function phaseNodeListsEqual(
+  actual: readonly (readonly string[])[],
+  expected: readonly (readonly string[])[]
+): boolean {
+  if (actual.length !== expected.length) {
+    return false;
+  }
+
+  return actual.every((nodeIds, index) =>
+    stringListsEqual(nodeIds, expected[index] ?? [])
+  );
+}
+
+function stringListsEqual(
+  actual: readonly string[],
+  expected: readonly string[]
+): boolean {
+  if (actual.length !== expected.length) {
+    return false;
+  }
+
+  return actual.every((value, index) => value === expected[index]);
 }
 
 function assertNonEmpty(value: string, label: string): void {

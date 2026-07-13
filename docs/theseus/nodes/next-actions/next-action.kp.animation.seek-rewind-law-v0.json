@@ -1,0 +1,101 @@
+{
+  "id": "next-action.kp.animation.seek-rewind-law-v0",
+  "kind": "next-action",
+  "title": "Add seek and rewind law for animation assets",
+  "status": "resolved",
+  "summary": "Added AnimationAsset phase sampling by normalized progress plus animation.seek-rewind law checks for mirrored rewind phase order and midpoint seek symmetry.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-animation-asset-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.seek-rewind-law-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming composable semantic animations as KP's primary artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Ready action anchoring the approved animation asset contract loop."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/asset.ts",
+      "summary": "Adds phase sample types, sampler, seek-rewind law, and array comparison helpers."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-asset.test.ts",
+      "summary": "Covers phase sampling and passing seek-rewind law behavior for a sequential animation asset."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.seek-rewind-law-v0.json",
+      "summary": "Tracks the materialized seek-rewind law run-contract slice."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.composable-animation-asset-v0",
+      "next-action.kp.animation.reference-closure-law-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.reference-closure-law-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Add seek and rewind law for animation assets can be completed inside KP composable animation asset v0 loop."
+  ],
+  "allowedWork": [
+    "Work only on the approved composable semantic animation asset v0 loop.",
+    "Keep tutorials, cards, exports, flashcards, graphs, and programming views as consumers of animation assets rather than the core artifact.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broadly rename tutorial-card modules in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add curriculum generation, spaced repetition generation, or dynamic package loading in this loop.",
+    "Do not create renderer-owned animation formats separate from semantic asset calculus."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-asset.test.ts tests/kp-asset-laws.test.ts tests/semantic-transform-tree-metadata.test.ts tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts tests/semantic.test.ts",
+      "status": "passed",
+      "scope": "slice 6 animation seek-rewind and semantic law tests",
+      "checkedAt": "2026-07-13T22:55:54.560Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/generated-algebra-export-sample.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "status": "passed",
+      "scope": "slice 6 generated algebra consumers",
+      "checkedAt": "2026-07-13T22:55:54.585Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 6 typecheck",
+      "checkedAt": "2026-07-13T22:55:54.608Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T22:55:54.630Z",
+      "scope": "slice 6 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added AnimationAsset phase sampling by normalized progress plus animation.seek-rewind law checks for mirrored rewind phase order and midpoint seek symmetry."
+  }
+}
