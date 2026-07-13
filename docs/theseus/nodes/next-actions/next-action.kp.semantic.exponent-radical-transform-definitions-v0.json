@@ -2,9 +2,9 @@
   "id": "next-action.kp.semantic.exponent-radical-transform-definitions-v0",
   "kind": "next-action",
   "title": "Promote exponent and radical rewrite definitions",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.semantic",
-  "summary": "Promote exponent expansion/lowering and radical-to-power rewrite semantics into reusable transform definitions that distinguish persistent bases from non-persistent notation artifacts.",
+  "summary": "Promoted exponent lowering, unit exponent unwrap, and radical rewrite definitions with explicit identity and artifact policies.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -20,6 +20,21 @@
       "kind": "file",
       "path": "tests/generated-algebra-tutorial-card-sample.test.ts",
       "summary": "Generated algebra card sample coverage."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-transform-definition-registry.ts",
+      "summary": "Added promoted exponent and radical transform definitions with correspondence templates and law refs."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-algebra-fixture-registry.test.ts",
+      "summary": "Covered generated exponent and radical transform definition lookup and artifact policies."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-algebra-laws.test.ts",
+      "summary": "Coverage law passes with exponent and radical families included through promoted definitions."
     }
   ],
   "dependsOn": {
@@ -56,5 +71,29 @@
       "id": "radical-power-law-ref-explicit",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test generated algebra card sample and laws",
+      "status": "passed",
+      "scope": "slice 4 focused plus broad node tests",
+      "checkedAt": "2026-07-13T21:32:30.179Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice 4 typecheck",
+      "checkedAt": "2026-07-13T21:32:30.202Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T21:32:30.224Z",
+      "scope": "slice 4 graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted exponent lowering, unit exponent unwrap, and radical rewrite definitions with explicit identity and artifact policies."
+  }
 }

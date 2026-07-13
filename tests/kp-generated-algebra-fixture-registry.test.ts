@@ -59,7 +59,10 @@ test("generated algebra transform definition registry exposes reusable semantic 
     "definition.generated.linear-solve.simplify-constant-quotient",
     "definition.generated.fraction-expression.split-fraction-factors",
     "definition.generated.fraction-expression.merge-common-factor",
-    "definition.generated.fraction-expression.simplify-unit-factor"
+    "definition.generated.fraction-expression.simplify-unit-factor",
+    "definition.generated.exponent.lower-exponent",
+    "definition.generated.exponent.unwrap-unit-exponent",
+    "definition.generated.radical.rewrite-power-as-root"
   ]);
   assert.deepEqual(
     listGeneratedAlgebraTransformDefinitionsByFamily("generated.linear-solve").map(
@@ -123,6 +126,29 @@ test("generated algebra transform definition registry exposes reusable semantic 
   assert.deepEqual(cancelDefinition.lawRefs, [
     { id: "law.algebra.additive-inverse", level: "strict" }
   ]);
+  assert.deepEqual(
+    listGeneratedAlgebraTransformDefinitionsByFamily("generated.exponent").map(
+      (definition) => [
+        definition.templateId,
+        definition.transformType,
+        definition.artifactPolicy
+      ]
+    ),
+    [
+      ["exponent.lower-exponent", "lowerExponent", "mixed"],
+      ["exponent.unwrap-unit-exponent", "unwrapUnitExponent", "source-only"]
+    ]
+  );
+  assert.deepEqual(
+    listGeneratedAlgebraTransformDefinitionsByFamily("generated.radical").map(
+      (definition) => [
+        definition.templateId,
+        definition.transformType,
+        definition.artifactPolicy
+      ]
+    ),
+    [["radical.rewrite-power-as-root", "rewritePowerAsRoot", "mixed"]]
+  );
 });
 
 test("generated algebra transform definition registry validates lookup and completeness", () => {

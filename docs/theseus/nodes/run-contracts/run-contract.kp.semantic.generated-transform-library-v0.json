@@ -33,7 +33,7 @@
     "milestone.kp.long-term-semantic-product-plan-v0"
   ],
   "goal": "Run the KP generated transform-library promotion slices without broadening into stale Theseus planner follow-ups.",
-  "target": "next-action.kp.semantic.exponent-radical-transform-definitions-v0",
+  "target": "next-action.kp.semantic.function-wrap-transform-definitions-v0",
   "runMode": "run",
   "maxSlices": 9,
   "commitCadence": "Commit after each verified slice.",
@@ -77,7 +77,7 @@
     {
       "id": "next-action.kp.semantic.exponent-radical-transform-definitions-v0",
       "title": "Promote exponent and radical rewrite definitions",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic.function-wrap-transform-definitions-v0",

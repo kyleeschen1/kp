@@ -441,6 +441,98 @@ export const generatedAlgebraTransformDefinitions:
           preserves: ["identity", "role"]
         }
       ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.exponent.lower-exponent",
+      familyId: "generated.exponent",
+      templateId: "exponent.lower-exponent",
+      status: "promoted",
+      transformType: "lowerExponent",
+      title: "Lower the exponent by one factor",
+      sourceObjectRoles: ["power-expression"],
+      targetObjectRoles: ["lowered-product-expression"],
+      preserves: ["identity", "value"],
+      artifactPolicy: "mixed",
+      assumptions: [
+        "A positive integer exponent can be lowered by exposing one copied base factor."
+      ],
+      lawRefs: [{ id: "law.arithmetic.exponent-lowering", level: "strict" }],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "power-expression",
+          sourceSelectorRole: "base",
+          targetObjectRole: "lowered-product-expression",
+          targetSelectorRole: "factor-1",
+          preserves: ["identity", "role"],
+          summary: "The base contributes one explicit factor."
+        },
+        {
+          sourceObjectRole: "power-expression",
+          sourceSelectorRole: "base",
+          targetObjectRole: "lowered-product-expression",
+          targetSelectorRole: "residual-base",
+          preserves: ["identity", "role"],
+          summary: "The same base persists inside the remaining power."
+        }
+      ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.exponent.unwrap-unit-exponent",
+      familyId: "generated.exponent",
+      templateId: "exponent.unwrap-unit-exponent",
+      status: "promoted",
+      transformType: "unwrapUnitExponent",
+      title: "Unwrap the unit exponent",
+      sourceObjectRoles: ["lowered-product-expression"],
+      targetObjectRoles: ["expanded-product-expression"],
+      preserves: ["identity", "value"],
+      artifactPolicy: "source-only",
+      assumptions: ["A base raised to the first power is the base itself."],
+      lawRefs: [{ id: "law.arithmetic.unit-exponent", level: "strict" }],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "lowered-product-expression",
+          sourceSelectorRole: "factor-1",
+          targetObjectRole: "expanded-product-expression",
+          targetSelectorRole: "factor-1",
+          preserves: ["identity", "role"]
+        },
+        {
+          sourceObjectRole: "lowered-product-expression",
+          sourceSelectorRole: "residual-base",
+          targetObjectRole: "expanded-product-expression",
+          targetSelectorRole: "factor-2",
+          preserves: ["identity", "role"]
+        }
+      ]
+    }),
+    createGeneratedAlgebraTransformDefinition({
+      id: "definition.generated.radical.rewrite-power-as-root",
+      familyId: "generated.radical",
+      templateId: "radical.rewrite-power-as-root",
+      status: "promoted",
+      transformType: "rewritePowerAsRoot",
+      title: "Rewrite the rational exponent as a radical",
+      sourceObjectRoles: ["rational-power-expression"],
+      targetObjectRoles: ["radical-expression"],
+      preserves: ["identity", "value"],
+      artifactPolicy: "mixed",
+      assumptions: [
+        "A rational exponent with numerator one can be represented as a root."
+      ],
+      lawRefs: [
+        { id: "law.arithmetic.rational-exponent-as-root", level: "strict" }
+      ],
+      correspondenceTemplates: [
+        {
+          sourceObjectRole: "rational-power-expression",
+          sourceSelectorRole: "base",
+          targetObjectRole: "radical-expression",
+          targetSelectorRole: "radicand",
+          preserves: ["identity", "role"],
+          summary: "The base persists as the radicand while notation artifacts change."
+        }
+      ]
     })
   ];
 
