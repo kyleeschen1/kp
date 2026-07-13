@@ -1,0 +1,90 @@
+{
+  "id": "next-action.kp.animation.exponent-radical-adapter-v0",
+  "kind": "next-action",
+  "title": "Migrate exponent and radical rewrite into animation asset path",
+  "status": "resolved",
+  "summary": "Adapted generated exponent expansion and radical rewrite fixtures into composable AnimationAssets with laws, motif coverage, and frame sampling.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-animation-asset-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.exponent-radical-adapter-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming composable semantic animations as KP's primary artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Ready action anchoring the approved animation asset contract loop."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/exponent-radical-adapter.ts",
+      "summary": "Creates exponent and radical animation assets from generated fixture registries while preserving semantic object and transformation IDs."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-exponent-radical-animation-asset.test.ts",
+      "summary": "Covers exponent and radical animation IDs, tree order, reference closure, seek/rewind, visual motifs, and frame sampling."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.composable-animation-asset-v0",
+      "next-action.kp.animation.fraction-adapter-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.fraction-adapter-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Migrate exponent and radical rewrite into animation asset path can be completed inside KP composable animation asset v0 loop."
+  ],
+  "allowedWork": [
+    "Work only on the approved composable semantic animation asset v0 loop.",
+    "Keep tutorials, cards, exports, flashcards, graphs, and programming views as consumers of animation assets rather than the core artifact.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broadly rename tutorial-card modules in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add curriculum generation, spaced repetition generation, or dynamic package loading in this loop.",
+    "Do not create renderer-owned animation formats separate from semantic asset calculus."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-exponent-radical-animation-asset.test.ts tests/kp-fraction-animation-asset.test.ts tests/kp-animation-asset.test.ts tests/kp-animation-frame-descriptor.test.ts tests/kp-animation-visual-motif.test.ts tests/kp-generated-algebra-tutorial-fixture.test.ts tests/visual-motif-composition.test.ts tests/generated-algebra-export-sample.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts",
+      "status": "passed",
+      "scope": "focused exponent radical animation adapter and generated algebra consumers",
+      "checkedAt": "2026-07-13T23:19:51.581Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-13T23:19:51.613Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-13T23:19:51.650Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Adapted generated exponent expansion and radical rewrite fixtures into composable AnimationAssets with laws, motif coverage, and frame sampling."
+  }
+}
