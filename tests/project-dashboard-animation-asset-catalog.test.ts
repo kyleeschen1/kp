@@ -7,6 +7,8 @@ import {
 import {
   createSemanticAssetCatalogAgendaRows
 } from "../src/project-dashboard/semantic-asset-catalog.ts";
+import { projectDashboardData } from "../src/project-dashboard/data.ts";
+import { renderProjectDashboard } from "../src/project-dashboard/render.ts";
 
 test("generated algebra dashboard catalog exposes animation asset rows", () => {
   const rows = createGeneratedAlgebraAnimationAssetAgendaRows("");
@@ -60,5 +62,32 @@ test("semantic asset dashboard catalog includes animation asset rows", () => {
       "composable animation asset generated.radical.square-root-as-power"
     ).map((row) => row.id),
     ["animation-generated-radical-square-root-as-power"]
+  );
+});
+
+test("project dashboard selected preview exposes animation time protocol fields", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "animation-generated-radical-square-root-as-power"
+  });
+
+  assert.match(
+    html,
+    /data-kp-selected-agenda-row="animation-generated-radical-square-root-as-power"/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Animation asset"[^>]*>[\s\S]*animation\.generated\.radical\.square-root-as-power/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Midpoint phase"[^>]*>[\s\S]*transform\.generated\.radical\.square-root-as-power\.rewrite-power-as-root/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Seek\/Rewind law"[^>]*>[\s\S]*passed/
+  );
+  assert.match(
+    html,
+    /data-kp-preview-field="Reference closure"[^>]*>[\s\S]*passed/
   );
 });

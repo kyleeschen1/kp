@@ -2,7 +2,14 @@ import { runKpInterpreter } from "../semantic/asset-interpreter.ts";
 import {
   createGeneratedAlgebraAnimationAssets
 } from "../animation/catalog.ts";
-import type { KpAnimationAsset } from "../animation/asset.ts";
+import {
+  checkKpAnimationAssetReferenceClosure,
+  checkKpAnimationAssetSeekRewindLaw,
+  type KpAnimationAsset
+} from "../animation/asset.ts";
+import {
+  sampleKpAnimationFrameDescriptor
+} from "../animation/frame-descriptor.ts";
 import { createKpDashboardAssetPreviewInterpreter } from "../semantic/dashboard-preview-interpreter.ts";
 import {
   createGeneratedAlgebraTutorialFixtures,
@@ -144,6 +151,14 @@ export function createGeneratedAlgebraAnimationAssetAgendaRows(
       const renderTargetIds = animation.renderTargets.map((target) => target.id);
       const exportTargetIds = animation.exportTargets.map((target) => target.id);
       const sourceRefIds = animation.dashboard?.sourceRefIds ?? [];
+      const midpointFrame = sampleKpAnimationFrameDescriptor({
+        id: `frame.${animation.id}.preview-midpoint`,
+        animation,
+        direction: "forward",
+        progress: 0.5
+      });
+      const referenceClosure = checkKpAnimationAssetReferenceClosure(animation);
+      const seekRewind = checkKpAnimationAssetSeekRewindLaw(animation);
 
       return {
         id: animation.dashboard?.rowId ?? `animation-${animation.id}`,
@@ -212,6 +227,23 @@ export function createGeneratedAlgebraAnimationAssetAgendaRows(
           {
             label: "Export targets",
             value: exportTargetIds.join(", ")
+          },
+          {
+            label: "Reference closure",
+            value: formatLawStatus(referenceClosure.passed)
+          },
+          {
+            label: "Seek/Rewind law",
+            value: formatLawStatus(seekRewind.passed)
+          },
+          {
+            label: "Midpoint phase",
+            value:
+              `${midpointFrame.phaseId}: ${midpointFrame.nodeIds.join(", ")}`
+          },
+          {
+            label: "Midpoint beat",
+            value: String(midpointFrame.beat ?? "None")
           }
         ],
         previewLinks: [],
@@ -228,6 +260,10 @@ export function createGeneratedAlgebraAnimationAssetAgendaRows(
           animation.timeline?.id ?? "",
           animation.layout?.id ?? "",
           animation.layout?.kind ?? "",
+          `reference-closure:${formatLawStatus(referenceClosure.passed)}`,
+          `seek-rewind:${formatLawStatus(seekRewind.passed)}`,
+          midpointFrame.phaseId,
+          ...midpointFrame.nodeIds,
           ...(animation.dashboard?.tags ?? []),
           ...sourceRefIds,
           ...sourceRefIds.map((sourceRefId) => `source:${sourceRefId}`),
@@ -417,6 +453,10 @@ function animationDefinitionIds(
         : [transformation.definitionId]
     )
   );
+}
+
+function formatLawStatus(passed: boolean): string {
+  return passed ? "passed" : "failed";
 }
 
 function latexValueAt(
