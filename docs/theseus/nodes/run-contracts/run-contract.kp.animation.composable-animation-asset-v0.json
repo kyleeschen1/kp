@@ -36,7 +36,7 @@
     "Do not create renderer-owned animation formats separate from semantic asset calculus."
   ],
   "goal": "Run the approved KP loop that makes composable semantic animations the primary typed artifact, with tutorials, exports, flashcards, graphs, and programming views as consumers.",
-  "target": "next-action.kp.animation.definition-backed-motifs-v0",
+  "target": "next-action.kp.animation.frame-descriptor-contract-v0",
   "slices": [
     {
       "id": "next-action.kp.animation.composable-animation-asset-contract-v0",
@@ -82,7 +82,8 @@
     {
       "id": "next-action.kp.animation.frame-descriptor-contract-v0",
       "title": "Add animation frame descriptor contract",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.frame-descriptor-contract-v0 in KP composable animation asset v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.linear-solve-adapter-v0",
