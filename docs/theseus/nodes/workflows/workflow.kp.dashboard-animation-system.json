@@ -73,6 +73,7 @@
     "next-action.kp.animation-library.function-wrapping-transforms-v0",
     "next-action.kp.animation-library.matrix-delimiter-transforms-v0",
     "next-action.kp.animation-library.large-operator-transforms-v0",
+    "next-action.kp.animation-library.jacobian-hessian-comparison-v0",
     "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3"
   ],
   "verificationRecords": [

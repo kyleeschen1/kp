@@ -1,0 +1,130 @@
+{
+  "id": "next-action.kp.animation-library.jacobian-hessian-comparison-v0",
+  "kind": "next-action",
+  "title": "Add Jacobian and Hessian comparison asset",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added a Jacobian/Hessian comparison AnimationAsset that packages authored LaTeX forms as semantic asset objects, renders them side by side through a shared-clock row layout, and records the derivative-order comparison as a typed semantic transformation tree.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation-library.jacobian-hessian-comparison-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation-library.current-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-animation-renderer-integration-readiness-report.md",
+      "summary": "Renderer integration closeout recommending live card runtime visual-frame adoption, KaTeX fixture expansion, generated problem registry, flashcard samples, graph consumer, and paused-frame drill-down."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Project roadmap with semantic-first, runtime-second, renderer-third ordering and KaTeX/graph/dashboard/export priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active semantic runtime thread describing AnimationAsset, renderer-neutral frame, generated math, visual motif, and graph/programming adoption direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/comparison-layout-adapter.ts",
+      "summary": "Adds createJacobianHessianComparisonAnimationAsset with LaTeX form objects, comparison selectors, semantic transformations, shared timeline, row layout, render targets, checks, and dashboard metadata."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-comparison-layout-animation-asset.test.ts",
+      "summary": "Covers the Jacobian/Hessian comparison asset layout, selector refs, phases, validation, reference closure, seek/rewind law, and catalog inclusion."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-animation-asset-catalog.test.ts",
+      "summary": "Existing dashboard catalog coverage verifies the expanded animation catalog still samples runtime frames and rows correctly."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-runtime-sampler.test.ts",
+      "summary": "Existing runtime sampler coverage verifies composed animation assets still sample frame clocks and child/render targets correctly."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-runtime-laws.test.ts",
+      "summary": "Existing runtime law coverage verifies rewind and composition laws remain green with the expanded catalog."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation-library-expansion-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add Jacobian and Hessian comparison asset can be completed inside KP animation library expansion v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved animation-library expansion loop slices.",
+    "Grow KaTeX SemanticTransformation definitions, visual motifs, generated problem fixtures, graph runtime consumers, flashcard projections, and drill-down authoring through the AnimationAsset/runtime visual-frame protocol.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, live LSP, network integrations, or dynamic package loading; use deterministic fixtures.",
+    "Do not broaden into a dashboard redesign beyond search, progress rows, and sample previews needed for this loop.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-comparison-layout-animation-asset.test.ts",
+      "status": "passed",
+      "scope": "focused Jacobian/Hessian comparison asset coverage",
+      "checkedAt": "2026-07-14T20:31:34.317Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard-animation-asset-catalog.test.ts tests/kp-animation-runtime-sampler.test.ts tests/kp-animation-runtime-laws.test.ts",
+      "status": "passed",
+      "scope": "dashboard catalog and runtime law coverage for the expanded animation catalog",
+      "checkedAt": "2026-07-14T20:31:34.351Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for Jacobian/Hessian comparison slice",
+      "checkedAt": "2026-07-14T20:31:34.382Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for live KaTeX behavior and regressions",
+      "checkedAt": "2026-07-14T20:31:34.412Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for Jacobian/Hessian comparison slice",
+      "checkedAt": "2026-07-14T20:31:34.446Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T20:31:34.483Z",
+      "scope": "Run-contract hygiene for Jacobian/Hessian comparison slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a Jacobian/Hessian comparison AnimationAsset that packages authored LaTeX forms as semantic asset objects, renders them side by side through a shared-clock row layout, and records the derivative-order comparison as a typed semantic transformation tree."
+  }
+}
