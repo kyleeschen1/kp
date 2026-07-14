@@ -1,0 +1,67 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import {
+  checkKpAnimationAssetReferenceClosure,
+  checkKpAnimationAssetSeekRewindLaw
+} from "../src/animation/asset.ts";
+import {
+  createKpAnimationFlashcardProjections
+} from "../src/animation/flashcard-projection.ts";
+import {
+  createGeneratedProblemAnimationAsset
+} from "../src/animation/generated-problem-import.ts";
+import {
+  sampleKpAnimationRuntimeFrame
+} from "../src/animation/runtime-sampler.ts";
+import {
+  createGeneratedAlgebraTutorialFixture
+} from "../src/semantic/generated-algebra-tutorial-fixture.ts";
+
+test("createGeneratedProblemAnimationAsset imports generated solution steps into an AnimationAsset", () => {
+  const fixture = createGeneratedAlgebraTutorialFixture(
+    "generated.linear-solve.y-plus-5"
+  );
+  const animation = createGeneratedProblemAnimationAsset(fixture);
+
+  assert.equal(animation.id, "animation.generated.linear-solve.y-plus-5");
+  assert.equal(animation.bundle.id, "asset.generated.linear-solve.y-plus-5");
+  assert.deepEqual(
+    animation.transformations.map((transformation) => transformation.id),
+    fixture.transformations.map((transformation) => transformation.id)
+  );
+  assert.deepEqual(animation.timeline, {
+    id: "timeline.generated.linear-solve.y-plus-5.shared",
+    durationMs: 2400,
+    beatCount: 50
+  });
+  assert.deepEqual(animation.metadata, {
+    generatedProblemImport: true,
+    sourceFixtureId: "generated.linear-solve.y-plus-5",
+    sourceFixtureFamilyId: "generated.linear-solve",
+    sourceTraceId: "trace.generated.linear-solve.y-plus-5"
+  });
+  assert.equal(checkKpAnimationAssetReferenceClosure(animation).passed, true);
+  assert.equal(checkKpAnimationAssetSeekRewindLaw(animation).passed, true);
+
+  const frame = sampleKpAnimationRuntimeFrame({
+    animation,
+    progress: 0.5
+  });
+
+  assert.deepEqual(frame.activeTransformationIds, [
+    "transform.generated.linear-solve.y-plus-5.cancel-additive-inverse"
+  ]);
+
+  const projections = createKpAnimationFlashcardProjections({
+    animation,
+    cards: fixture.flashcards
+  });
+
+  assert.equal(projections.length, fixture.flashcards.length);
+  assert.deepEqual(
+    projections.flatMap((projection) => projection.diagnostics),
+    []
+  );
+});
+

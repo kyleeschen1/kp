@@ -95,6 +95,9 @@ test("API catalog covers notation and layout entities with the same metadata pro
   const flashcardProjection = findApiCatalogItem(
     "capability-animation-flashcard-projection"
   );
+  const generatedProblemImport = findApiCatalogItem(
+    "capability-generated-problem-animation-import"
+  );
 
   assert.equal(radical?.group.category, "notation-transformation");
   assert.deepEqual(radical?.item.details?.preserves, [
@@ -168,6 +171,17 @@ test("API catalog covers notation and layout entities with the same metadata pro
     "reference diagnostics",
     "cloze hidden selectors",
     "predict-next candidates"
+  ]);
+
+  assert.equal(generatedProblemImport?.group.id, "capabilities-representations");
+  assert.equal(generatedProblemImport?.item.status, "active");
+  assert.deepEqual(generatedProblemImport?.item.details?.protocols, [
+    "createGeneratedProblemAnimationAsset"
+  ]);
+  assert.deepEqual(generatedProblemImport?.item.details?.outputs, [
+    "AnimationAsset",
+    "runtime frames",
+    "flashcard projections"
   ]);
 });
 

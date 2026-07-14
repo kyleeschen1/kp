@@ -187,6 +187,12 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
           "predict-next candidates"
         ],
         preserves: ["animation clock", "flashcard reference identity"]
+      }),
+      item("capability-generated-problem-animation-import", "GeneratedProblemAnimationImport", "runtime", "active", "Imports generated algebra fixtures with solution traces into sampleable AnimationAssets.", ["animation", "generated-problem", "solution"], {
+        protocols: ["createGeneratedProblemAnimationAsset"],
+        inputs: ["GeneratedAlgebraTutorialFixture"],
+        outputs: ["AnimationAsset", "runtime frames", "flashcard projections"],
+        preserves: ["fixture identity", "solution step order", "transformation references"]
       })
     ]
   },
