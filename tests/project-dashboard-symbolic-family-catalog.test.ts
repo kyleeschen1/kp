@@ -1205,6 +1205,221 @@ test("algebra generated problem rows surface practice-ready maturity", () => {
   );
 });
 
+test("calculus derivative rules family models rule-specific persistence", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.calculus.derivative-rules"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "derivative.before",
+        "derivative-expression",
+        [
+          "derivative.operator",
+          "outer.function",
+          "inner.function",
+          "variable",
+          "exponent",
+          "factor.left",
+          "factor.right"
+        ]
+      ],
+      [
+        "derivative.after",
+        "derivative-expression",
+        [
+          "derivative.operator",
+          "outer.derivative",
+          "inner.derivative",
+          "variable",
+          "exponent.decremented",
+          "coefficient",
+          "product.operator",
+          "quotient.bar"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.calculus.derivative-sum-rule",
+        "derivativeSumRule",
+        ["value", "structure"],
+        "law.calculus.derivative-sum"
+      ],
+      [
+        "definition.symbolic.calculus.derivative-constant-multiple",
+        "derivativeConstantMultipleRule",
+        ["value", "structure"],
+        "law.calculus.derivative-constant-multiple"
+      ],
+      [
+        "definition.symbolic.calculus.derivative-power-rule",
+        "derivativePowerRule",
+        ["value", "structure"],
+        "law.calculus.derivative-power"
+      ],
+      [
+        "definition.symbolic.calculus.derivative-product-rule",
+        "derivativeProductRule",
+        ["value", "structure"],
+        "law.calculus.derivative-product"
+      ],
+      [
+        "definition.symbolic.calculus.derivative-quotient-rule",
+        "derivativeQuotientRule",
+        ["value", "structure"],
+        "law.calculus.derivative-quotient"
+      ],
+      [
+        "definition.symbolic.calculus.derivative-chain-rule",
+        "derivativeChainRule",
+        ["value", "structure"],
+        "law.calculus.derivative-chain"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[2]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["variable", "variable", ["identity", "role"]],
+      ["exponent", "coefficient", ["value", "role"]],
+      ["exponent", "exponent.decremented", ["value", "role"]]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[5]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["outer.function", "outer.derivative", ["identity", "role"]],
+      ["inner.function", "inner.derivative", ["identity", "role"]],
+      ["variable", "variable", ["identity", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.calculus.derivative.distribute-operator",
+      motifKind: "derivative-distribute",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.derivative-sum-rule",
+        "definition.symbolic.calculus.derivative-constant-multiple"
+      ],
+      summary:
+        "The derivative operator duplicates across additive terms while constants persist as coefficients."
+    },
+    {
+      id: "motif.calculus.derivative.exponent-drop",
+      motifKind: "exponent-drop",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.derivative-power-rule"
+      ],
+      summary:
+        "The exponent drops into coefficient position while a decremented exponent remains in the superscript region."
+    },
+    {
+      id: "motif.calculus.derivative.rule-branch",
+      motifKind: "rule-branch",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.derivative-product-rule",
+        "definition.symbolic.calculus.derivative-quotient-rule",
+        "definition.symbolic.calculus.derivative-chain-rule"
+      ],
+      summary:
+        "Composite rules branch into coordinated sub-derivatives that can be animated in parallel or sequence."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.derivative-rules.basic",
+      animationId: "animation.derivative-rules.basic",
+      renderTargetKinds: ["equation"],
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.derivative-power-rule",
+        "definition.symbolic.calculus.derivative-chain-rule"
+      ],
+      summary:
+        "Basic derivative sample exercises power-rule exponent drop and chain-rule nested persistence."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.calculus.derivative.tangent-line",
+      title: "Derivative corresponds to tangent slope",
+      representationKind: "tangent-line",
+      exactness: "sampled",
+      preserves: ["value"],
+      lawRefs: [
+        {
+          id: "law.graph.derivative-tangent-slope",
+          level: "sampled"
+        }
+      ],
+      sampleAssetIds: ["animation.derivative-rules.basic"],
+      summary:
+        "Derivative-rule rewrites preserve the symbolic derivative whose value drives tangent slope samples."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.calculus-derivative-rules",
+      fixtureFamilyId: "generated.calculus-derivative-rules",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.derivative-sum-rule",
+        "definition.symbolic.calculus.derivative-constant-multiple",
+        "definition.symbolic.calculus.derivative-power-rule",
+        "definition.symbolic.calculus.derivative-product-rule",
+        "definition.symbolic.calculus.derivative-quotient-rule",
+        "definition.symbolic.calculus.derivative-chain-rule"
+      ],
+      summary:
+        "Generated derivative traces can map each rule application to reusable derivative animations."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.calculus.derivative-rule.pick",
+      kind: "predict-next",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.derivative-sum-rule",
+        "definition.symbolic.calculus.derivative-constant-multiple",
+        "definition.symbolic.calculus.derivative-power-rule",
+        "definition.symbolic.calculus.derivative-product-rule",
+        "definition.symbolic.calculus.derivative-quotient-rule",
+        "definition.symbolic.calculus.derivative-chain-rule"
+      ],
+      summary:
+        "Predict-next cards can ask which derivative rule applies and what sub-derivative appears next."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
   assert.deepEqual(
     createSymbolicManipulationFamilyAgendaRows(

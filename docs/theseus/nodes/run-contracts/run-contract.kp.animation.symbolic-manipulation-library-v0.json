@@ -126,7 +126,7 @@
       "id": "next-action.kp.animation.calculus-derivative-rules-family-v0",
       "title": "Add calculus derivative rules family",
       "summary": "Model sum, constant multiple, power, product, quotient, and chain rule transforms as semantic animation families with reusable visual samples.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.calculus-tangent-graph-equivalent-v0",

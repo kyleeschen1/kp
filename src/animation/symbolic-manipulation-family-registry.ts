@@ -230,6 +230,7 @@ export function createSymbolicManipulationFamilyRegistry():
     createAlgebraFractionSimplificationFamily(),
     createAlgebraExponentLogFamily(),
     createAlgebraInequalityFamily(),
+    createCalculusDerivativeRulesFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
@@ -238,7 +239,8 @@ export function createSymbolicManipulationFamilyRegistry():
           spec.id !== "family.algebra.distribution-factoring" &&
           spec.id !== "family.algebra.fraction-simplification" &&
           spec.id !== "family.algebra.exponent-log-laws" &&
-          spec.id !== "family.algebra.inequality"
+          spec.id !== "family.algebra.inequality" &&
+          spec.id !== "family.calculus.derivative-rules"
       )
       .map(createSeedFamily)
   ];
@@ -1773,6 +1775,307 @@ function createInequalityDefinition(input: {
         targetObjectRole: "inequality.after",
         targetSelectorRole: "operation.artifact",
         preserves: ["value", "role"]
+      }
+    ]
+  });
+}
+
+function createCalculusDerivativeRulesFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.calculus.derivative-sum-rule",
+    "definition.symbolic.calculus.derivative-constant-multiple",
+    "definition.symbolic.calculus.derivative-power-rule",
+    "definition.symbolic.calculus.derivative-product-rule",
+    "definition.symbolic.calculus.derivative-quotient-rule",
+    "definition.symbolic.calculus.derivative-chain-rule"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.calculus.derivative-rules",
+    title: "Derivative rules",
+    domain: "calculus",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "derivative.before",
+        objectType: "derivative-expression",
+        title: "Derivative expression before rule application",
+        selectorRoles: [
+          { id: "derivative.operator", kind: "operator" },
+          { id: "outer.function", kind: "function" },
+          { id: "inner.function", kind: "function" },
+          { id: "variable", kind: "variable" },
+          { id: "exponent", kind: "exponent" },
+          { id: "factor.left", kind: "factor" },
+          { id: "factor.right", kind: "factor" }
+        ]
+      },
+      {
+        id: "derivative.after",
+        objectType: "derivative-expression",
+        title: "Derivative expression after rule application",
+        selectorRoles: [
+          { id: "derivative.operator", kind: "operator" },
+          { id: "outer.derivative", kind: "function" },
+          { id: "inner.derivative", kind: "function" },
+          { id: "variable", kind: "variable" },
+          { id: "exponent.decremented", kind: "exponent" },
+          { id: "coefficient", kind: "coefficient" },
+          { id: "product.operator", kind: "operator" },
+          { id: "quotient.bar", kind: "fraction-bar" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createDerivativeDefinition({
+        id: "definition.symbolic.calculus.derivative-sum-rule",
+        transformType: "derivativeSumRule",
+        title: "Apply the derivative sum rule",
+        lawId: "law.calculus.derivative-sum",
+        assumption: "The derivative is linear over finite sums."
+      }),
+      createDerivativeDefinition({
+        id: "definition.symbolic.calculus.derivative-constant-multiple",
+        transformType: "derivativeConstantMultipleRule",
+        title: "Apply the derivative constant multiple rule",
+        lawId: "law.calculus.derivative-constant-multiple",
+        assumption: "The constant factor is independent of the differentiation variable."
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.calculus.derivative-power-rule",
+        transformType: "derivativePowerRule",
+        title: "Apply the derivative power rule",
+        sourceObjectRoles: ["derivative.before"],
+        targetObjectRoles: ["derivative.after"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "The power rule applies for the represented exponent and differentiation domain."
+        ],
+        lawRefs: [
+          {
+            id: "law.calculus.derivative-power",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "derivative.before",
+            sourceSelectorRole: "variable",
+            targetObjectRole: "derivative.after",
+            targetSelectorRole: "variable",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "derivative.before",
+            sourceSelectorRole: "exponent",
+            targetObjectRole: "derivative.after",
+            targetSelectorRole: "coefficient",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "derivative.before",
+            sourceSelectorRole: "exponent",
+            targetObjectRole: "derivative.after",
+            targetSelectorRole: "exponent.decremented",
+            preserves: ["value", "role"]
+          }
+        ]
+      }),
+      createDerivativeDefinition({
+        id: "definition.symbolic.calculus.derivative-product-rule",
+        transformType: "derivativeProductRule",
+        title: "Apply the derivative product rule",
+        lawId: "law.calculus.derivative-product",
+        assumption:
+          "Both factors are differentiable and the product rule expands into two coordinated branches."
+      }),
+      createDerivativeDefinition({
+        id: "definition.symbolic.calculus.derivative-quotient-rule",
+        transformType: "derivativeQuotientRule",
+        title: "Apply the derivative quotient rule",
+        lawId: "law.calculus.derivative-quotient",
+        assumption:
+          "The denominator is non-zero and both numerator and denominator are differentiable."
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.calculus.derivative-chain-rule",
+        transformType: "derivativeChainRule",
+        title: "Apply the derivative chain rule",
+        sourceObjectRoles: ["derivative.before"],
+        targetObjectRoles: ["derivative.after"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "The outer and inner functions are differentiable on the represented domain."
+        ],
+        lawRefs: [
+          {
+            id: "law.calculus.derivative-chain",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "derivative.before",
+            sourceSelectorRole: "outer.function",
+            targetObjectRole: "derivative.after",
+            targetSelectorRole: "outer.derivative",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "derivative.before",
+            sourceSelectorRole: "inner.function",
+            targetObjectRole: "derivative.after",
+            targetSelectorRole: "inner.derivative",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "derivative.before",
+            sourceSelectorRole: "variable",
+            targetObjectRole: "derivative.after",
+            targetSelectorRole: "variable",
+            preserves: ["identity", "role"]
+          }
+        ]
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.calculus.derivative.distribute-operator",
+        motifKind: "derivative-distribute",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.derivative-sum-rule",
+          "definition.symbolic.calculus.derivative-constant-multiple"
+        ],
+        summary:
+          "The derivative operator duplicates across additive terms while constants persist as coefficients."
+      },
+      {
+        id: "motif.calculus.derivative.exponent-drop",
+        motifKind: "exponent-drop",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.derivative-power-rule"
+        ],
+        summary:
+          "The exponent drops into coefficient position while a decremented exponent remains in the superscript region."
+      },
+      {
+        id: "motif.calculus.derivative.rule-branch",
+        motifKind: "rule-branch",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.derivative-product-rule",
+          "definition.symbolic.calculus.derivative-quotient-rule",
+          "definition.symbolic.calculus.derivative-chain-rule"
+        ],
+        summary:
+          "Composite rules branch into coordinated sub-derivatives that can be animated in parallel or sequence."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.derivative-rules.basic",
+        animationId: "animation.derivative-rules.basic",
+        renderTargetKinds: ["equation"],
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.derivative-power-rule",
+          "definition.symbolic.calculus.derivative-chain-rule"
+        ],
+        summary:
+          "Basic derivative sample exercises power-rule exponent drop and chain-rule nested persistence."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.calculus.derivative.tangent-line",
+        title: "Derivative corresponds to tangent slope",
+        representationKind: "tangent-line",
+        exactness: "sampled",
+        preserves: ["value"],
+        lawRefs: [
+          {
+            id: "law.graph.derivative-tangent-slope",
+            level: "sampled"
+          }
+        ],
+        sampleAssetIds: ["animation.derivative-rules.basic"],
+        summary:
+          "Derivative-rule rewrites preserve the symbolic derivative whose value drives tangent slope samples."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.calculus-derivative-rules",
+        fixtureFamilyId: "generated.calculus-derivative-rules",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated derivative traces can map each rule application to reusable derivative animations."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.calculus.derivative-rule.pick",
+        kind: "predict-next",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Predict-next cards can ask which derivative rule applies and what sub-derivative appears next."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId("family.calculus.derivative-rules"),
+      tags: [
+        "derivative",
+        "chain-rule",
+        "tangent",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for sum, constant multiple, power, product, quotient, and chain derivative rules.",
+      searchSummary:
+        "derivative sum power product quotient chain rule tangent slope exponent drop composite branch",
+      graphEquivalentKinds: "tangent-line"
+    }
+  });
+}
+
+function createDerivativeDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["derivative.before"],
+    targetObjectRoles: ["derivative.after"],
+    preserves: ["value", "structure"],
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "derivative.before",
+        sourceSelectorRole: "derivative.operator",
+        targetObjectRole: "derivative.after",
+        targetSelectorRole: "derivative.operator",
+        preserves: ["presentation", "role"]
+      },
+      {
+        sourceObjectRole: "derivative.before",
+        sourceSelectorRole: "factor.left",
+        targetObjectRole: "derivative.after",
+        targetSelectorRole: "outer.derivative",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "derivative.before",
+        sourceSelectorRole: "factor.right",
+        targetObjectRole: "derivative.after",
+        targetSelectorRole: "inner.derivative",
+        preserves: ["identity", "role"]
       }
     ]
   });
