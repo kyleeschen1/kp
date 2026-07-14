@@ -1855,6 +1855,11 @@ test("editor equation motion demo exposes the runtime frame clock while scrubbin
       renderTargetCount: Number(
         demoElement.dataset["kpAnimationRuntimeRenderTargetCount"] ?? "0"
       ),
+      runtimeDiagnosticCount: Number(
+        demoElement.dataset["kpAnimationRuntimeDiagnosticCount"] ?? "0"
+      ),
+      runtimeDiagnosticCodes:
+        demoElement.dataset["kpAnimationRuntimeDiagnosticCodes"],
       visualFrameId: demoElement.dataset["kpAnimationVisualFrameId"],
       visualRuntimeFrameId:
         demoElement.dataset["kpAnimationVisualRuntimeFrameId"],
@@ -1874,6 +1879,10 @@ test("editor equation motion demo exposes the runtime frame clock while scrubbin
       visualDiagnosticCount: Number(
         demoElement.dataset["kpAnimationVisualDiagnosticCount"] ?? "0"
       ),
+      visualDiagnosticCodes:
+        demoElement.dataset["kpAnimationVisualDiagnosticCodes"],
+      visualUnboundSelectors:
+        demoElement.dataset["kpAnimationVisualUnboundSelectors"],
       visualRenderTargetCount: Number(
         demoElement.dataset["kpAnimationVisualRenderTargetCount"] ?? "0"
       ),
@@ -1893,6 +1902,9 @@ test("editor equation motion demo exposes the runtime frame clock while scrubbin
       "transform.linear-solve.cancel-left-additive-inverse",
     selectorCount: expect.any(Number),
     renderTargetCount: 1,
+    runtimeDiagnosticCount: 4,
+    runtimeDiagnosticCodes:
+      "runtime.phase.active-transformations runtime.phase.annotations runtime.selector.context runtime.selector.focus",
     visualFrameId: "visual.live-equation-card.frame",
     visualRuntimeFrameId: "runtime.live-equation-card.frame",
     visualPhaseId: "animation.linear-solve.solve-x.forward.1",
@@ -1901,6 +1913,8 @@ test("editor equation motion demo exposes the runtime frame clock while scrubbin
     visualBoundSelectorCount: 10,
     visualUnboundSelectorCount: 0,
     visualDiagnosticCount: 0,
+    visualDiagnosticCodes: "none",
+    visualUnboundSelectors: "none",
     visualRenderTargetCount: 1,
     equationProgress: "0.5"
   });

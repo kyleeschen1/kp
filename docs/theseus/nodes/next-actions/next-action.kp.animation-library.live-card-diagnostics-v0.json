@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation-library.live-card-diagnostics-v0",
   "kind": "next-action",
   "title": "Add card visual-frame diagnostics",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-diagnostics-v0 in KP animation library expansion v0 loop.",
+  "summary": "Exposed runtime and visual-frame diagnostic summaries on the live equation card, including runtime diagnostic codes, visual diagnostic codes, and unbound selector ids with explicit none summaries for clean paths.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -30,6 +30,16 @@
       "kind": "file",
       "path": "src/rendering/katex-runtime-visual-bindings.ts",
       "summary": "KaTeX selector diagnostics that should be summarized by the card."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Publishes runtime diagnostic counts and codes plus visual diagnostic codes and unbound selector summaries on the live equation card."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Extends browser coverage for runtime and visual diagnostic summaries while preserving the clean linear-solve visual path."
     }
   ],
   "dependsOn": {
@@ -73,5 +83,35 @@
       "id": "zero-diagnostic-linear-solve-path-remains-covered",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for live runtime and visual diagnostic summaries",
+      "checkedAt": "2026-07-14T19:28:56.545Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for live diagnostics slice",
+      "checkedAt": "2026-07-14T19:28:56.586Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for live diagnostics slice",
+      "checkedAt": "2026-07-14T19:28:56.625Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T19:28:56.668Z",
+      "scope": "Run-contract hygiene for live diagnostics slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Exposed runtime and visual-frame diagnostic summaries on the live equation card, including runtime diagnostic codes, visual diagnostic codes, and unbound selector ids with explicit none summaries for clean paths."
+  }
 }

@@ -65,6 +65,7 @@
     "next-action.kp.animation-library.live-card-clock-v0",
     "next-action.kp.animation-library.live-card-katex-visual-frame-v0",
     "next-action.kp.animation-library.live-card-diagnostics-v0",
+    "next-action.kp.animation-library.live-card-rewind-law-v0",
     "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3"
   ],
   "verificationRecords": [

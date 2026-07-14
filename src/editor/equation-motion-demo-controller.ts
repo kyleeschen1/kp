@@ -920,6 +920,13 @@ function syncLiveEquationRuntimeFrame(
     String(runtimeFrame.selectorFrames.length);
   demo.dataset["kpAnimationRuntimeRenderTargetCount"] =
     String(runtimeFrame.activeRenderTargets.length);
+  demo.dataset["kpAnimationRuntimeDiagnosticCount"] =
+    String(runtimeDiagnosticCount(runtimeFrame));
+  writeDatasetSummary(
+    demo,
+    "kpAnimationRuntimeDiagnosticCodes",
+    runtimeDiagnosticCodes(runtimeFrame)
+  );
 
   return runtimeFrame;
 }
@@ -936,6 +943,8 @@ function clearLiveEquationRuntimeFrame(demo: HTMLElement): void {
   delete demo.dataset["kpAnimationRuntimeActiveAnnotations"];
   delete demo.dataset["kpAnimationRuntimeSelectorCount"];
   delete demo.dataset["kpAnimationRuntimeRenderTargetCount"];
+  delete demo.dataset["kpAnimationRuntimeDiagnosticCount"];
+  delete demo.dataset["kpAnimationRuntimeDiagnosticCodes"];
   clearLiveEquationVisualFrame(demo);
 }
 
@@ -965,6 +974,9 @@ function syncLiveEquationVisualFrame(
   ).length;
   const unboundSelectorCount =
     visualFrame.selectorVisuals.length - boundSelectorCount;
+  const unboundSelectorIds = visualFrame.selectorVisuals
+    .filter((selector) => selector.nodeIds.length === 0)
+    .map((selector) => selector.selectorId);
 
   demo.dataset["kpAnimationVisualFrameId"] = visualFrame.id;
   demo.dataset["kpAnimationVisualRuntimeFrameId"] =
@@ -980,6 +992,16 @@ function syncLiveEquationVisualFrame(
     String(unboundSelectorCount);
   demo.dataset["kpAnimationVisualDiagnosticCount"] =
     String(visualFrame.diagnostics.length);
+  writeDatasetSummary(
+    demo,
+    "kpAnimationVisualDiagnosticCodes",
+    uniqueStrings(visualFrame.diagnostics.map((diagnostic) => diagnostic.code))
+  );
+  writeDatasetSummary(
+    demo,
+    "kpAnimationVisualUnboundSelectors",
+    unboundSelectorIds
+  );
   demo.dataset["kpAnimationVisualRenderTargetCount"] =
     String(visualFrame.renderTargetVisuals.length);
 }
@@ -993,7 +1015,27 @@ function clearLiveEquationVisualFrame(demo: HTMLElement): void {
   delete demo.dataset["kpAnimationVisualBoundSelectorCount"];
   delete demo.dataset["kpAnimationVisualUnboundSelectorCount"];
   delete demo.dataset["kpAnimationVisualDiagnosticCount"];
+  delete demo.dataset["kpAnimationVisualDiagnosticCodes"];
+  delete demo.dataset["kpAnimationVisualUnboundSelectors"];
   delete demo.dataset["kpAnimationVisualRenderTargetCount"];
+}
+
+function runtimeDiagnosticCount(frame: KpAnimationRuntimeFrame): number {
+  return (
+    frame.phaseDiagnostics.length +
+    frame.selectorDiagnostics.length +
+    frame.childDiagnostics.length +
+    frame.diagnostics.length
+  );
+}
+
+function runtimeDiagnosticCodes(frame: KpAnimationRuntimeFrame): readonly string[] {
+  return uniqueStrings([
+    ...frame.phaseDiagnostics.map((diagnostic) => diagnostic.code),
+    ...frame.selectorDiagnostics.map((diagnostic) => diagnostic.code),
+    ...frame.childDiagnostics.map((diagnostic) => diagnostic.code),
+    ...frame.diagnostics.map((diagnostic) => diagnostic.path)
+  ]);
 }
 
 function syncEquationMotionMotifDiagnostics(
@@ -2132,6 +2174,14 @@ function writeDatasetList(
   }
 
   element.dataset[key] = values.join(" ");
+}
+
+function writeDatasetSummary(
+  element: HTMLElement,
+  key: string,
+  values: readonly string[]
+): void {
+  element.dataset[key] = values.length === 0 ? "none" : values.join(" ");
 }
 
 function writeOptionalProgressDataset(
