@@ -58,7 +58,8 @@
     {
       "id": "next-action.kp.animation.runtime-visual-frame-adapter-contract-v0",
       "title": "Define runtime visual-frame adapter contract",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.runtime-visual-frame-adapter-contract-v0 in KP animation renderer integration v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.runtime-katex-selector-token-refs-v0",
