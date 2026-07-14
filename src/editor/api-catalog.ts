@@ -224,6 +224,17 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
           "rewind phases",
           "source/target boundaries"
         ]
+      }),
+      item("capability-effectful-animation-combinator", "EffectfulAnimationCombinator", "runtime", "active", "Threads ordered effects through animation authoring combinators while preserving values and inspectable effect order.", ["animation", "combinator", "effect"], {
+        protocols: [
+          "createKpAnimationCombinatorResult",
+          "mapKpAnimationCombinatorResult",
+          "chainKpAnimationCombinatorResult",
+          "checkKpAnimationCombinatorEffectOrder"
+        ],
+        inputs: ["value", "ordered effects"],
+        outputs: ["value", "ordered effects", "effect order law"],
+        preserves: ["value", "effect order"]
       })
     ]
   },

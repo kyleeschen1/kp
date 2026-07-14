@@ -104,6 +104,9 @@ test("API catalog covers notation and layout entities with the same metadata pro
   const transformTreeComposition = findApiCatalogItem(
     "capability-transform-tree-composition"
   );
+  const effectfulCombinator = findApiCatalogItem(
+    "capability-effectful-animation-combinator"
+  );
 
   assert.equal(radical?.group.category, "notation-transformation");
   assert.deepEqual(radical?.item.details?.preserves, [
@@ -215,6 +218,19 @@ test("API catalog covers notation and layout entities with the same metadata pro
     "forward phases",
     "rewind phases",
     "source/target boundaries"
+  ]);
+
+  assert.equal(effectfulCombinator?.group.id, "capabilities-representations");
+  assert.equal(effectfulCombinator?.item.status, "active");
+  assert.deepEqual(effectfulCombinator?.item.details?.protocols, [
+    "createKpAnimationCombinatorResult",
+    "mapKpAnimationCombinatorResult",
+    "chainKpAnimationCombinatorResult",
+    "checkKpAnimationCombinatorEffectOrder"
+  ]);
+  assert.deepEqual(effectfulCombinator?.item.details?.preserves, [
+    "value",
+    "effect order"
   ]);
 });
 
