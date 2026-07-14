@@ -1625,6 +1625,17 @@ test("calculus integral and FTC family preserves integrands and bounds", () => {
       ],
       summary:
         "Basic FTC sample links bound movement, antiderivative evaluation, and area accumulation."
+    },
+    {
+      id: "sample.animation.integral-ftc.area-sweep",
+      animationId: "animation.integral-ftc.area-sweep",
+      renderTargetKinds: ["graph"],
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.definite-integral-ftc",
+        "definition.symbolic.calculus.accumulation-derivative-ftc"
+      ],
+      summary:
+        "Graph-only area sweep sample preserves bound provenance while showing sampled accumulation."
     }
   ]);
   assert.deepEqual(family.graphEquivalents, [
@@ -1643,6 +1654,22 @@ test("calculus integral and FTC family preserves integrands and bounds", () => {
       sampleAssetIds: ["animation.integral-ftc.basic"],
       summary:
         "Integral and FTC rewrites preserve the accumulated area represented between the lower and upper bounds."
+    },
+    {
+      id: "graph.calculus.integral.area-sweep-provenance",
+      title: "Area sweep preserves bound provenance",
+      representationKind: "area-sweep-provenance",
+      exactness: "sampled",
+      preserves: ["value"],
+      lawRefs: [
+        {
+          id: "law.graph.integral-area-sweep-provenance",
+          level: "sampled"
+        }
+      ],
+      sampleAssetIds: ["animation.integral-ftc.area-sweep"],
+      summary:
+        "Area sweep samples are visually sampled but preserve symbolic bound provenance from the integral family."
     }
   ]);
   assert.deepEqual(family.generatedProblemHooks, [
@@ -1671,6 +1698,57 @@ test("calculus integral and FTC family preserves integrands and bounds", () => {
         "Relationship cards can ask how bounds, antiderivatives, and area regions correspond."
     }
   ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
+test("calculus integral family projects to area sweep graph samples", () => {
+  const family = symbolicManipulationFamilyById("family.calculus.integral-ftc");
+
+  assert.ok(family);
+  assert.deepEqual(
+    family.runtimeSamples.filter((sample) =>
+      sample.renderTargetKinds.includes("graph") &&
+      sample.id === "sample.animation.integral-ftc.area-sweep"
+    ),
+    [
+      {
+        id: "sample.animation.integral-ftc.area-sweep",
+        animationId: "animation.integral-ftc.area-sweep",
+        renderTargetKinds: ["graph"],
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.definite-integral-ftc",
+          "definition.symbolic.calculus.accumulation-derivative-ftc"
+        ],
+        summary:
+          "Graph-only area sweep sample preserves bound provenance while showing sampled accumulation."
+      }
+    ]
+  );
+  assert.deepEqual(
+    family.graphEquivalents.map((equivalent) => [
+      equivalent.id,
+      equivalent.representationKind,
+      equivalent.exactness,
+      equivalent.sampleAssetIds,
+      equivalent.summary
+    ]),
+    [
+      [
+        "graph.calculus.integral.area-accumulation",
+        "area-accumulation",
+        "sampled",
+        ["animation.integral-ftc.basic"],
+        "Integral and FTC rewrites preserve the accumulated area represented between the lower and upper bounds."
+      ],
+      [
+        "graph.calculus.integral.area-sweep-provenance",
+        "area-sweep-provenance",
+        "sampled",
+        ["animation.integral-ftc.area-sweep"],
+        "Area sweep samples are visually sampled but preserve symbolic bound provenance from the integral family."
+      ]
+    ]
+  );
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 

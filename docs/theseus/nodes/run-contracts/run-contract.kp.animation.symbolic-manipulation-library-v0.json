@@ -144,7 +144,7 @@
       "id": "next-action.kp.animation.calculus-area-graph-equivalent-v0",
       "title": "Add integral area graph equivalent",
       "summary": "Project integral families into area accumulation graph samples with provenance and honest sampled-vs-symbolic metadata.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.calculus-taylor-local-linearization-family-v0",

@@ -2271,6 +2271,17 @@ function createCalculusIntegralFtcFamily(): KpSymbolicManipulationFamily {
         ],
         summary:
           "Basic FTC sample links bound movement, antiderivative evaluation, and area accumulation."
+      },
+      {
+        id: "sample.animation.integral-ftc.area-sweep",
+        animationId: "animation.integral-ftc.area-sweep",
+        renderTargetKinds: ["graph"],
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.definite-integral-ftc",
+          "definition.symbolic.calculus.accumulation-derivative-ftc"
+        ],
+        summary:
+          "Graph-only area sweep sample preserves bound provenance while showing sampled accumulation."
       }
     ],
     graphEquivalents: [
@@ -2289,6 +2300,22 @@ function createCalculusIntegralFtcFamily(): KpSymbolicManipulationFamily {
         sampleAssetIds: ["animation.integral-ftc.basic"],
         summary:
           "Integral and FTC rewrites preserve the accumulated area represented between the lower and upper bounds."
+      },
+      {
+        id: "graph.calculus.integral.area-sweep-provenance",
+        title: "Area sweep preserves bound provenance",
+        representationKind: "area-sweep-provenance",
+        exactness: "sampled",
+        preserves: ["value"],
+        lawRefs: [
+          {
+            id: "law.graph.integral-area-sweep-provenance",
+            level: "sampled"
+          }
+        ],
+        sampleAssetIds: ["animation.integral-ftc.area-sweep"],
+        summary:
+          "Area sweep samples are visually sampled but preserve symbolic bound provenance from the integral family."
       }
     ],
     generatedProblemHooks: [
