@@ -116,6 +116,7 @@ test("API catalog covers notation and layout entities with the same metadata pro
     "phase",
     "selector frames",
     "active render targets",
+    "child frames",
     "diagnostics",
     "frame descriptor"
   ]);

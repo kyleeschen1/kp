@@ -130,10 +130,10 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
       item("capability-derive", "derive", "capability", "proposed", "Produces alternate semantic representations, such as Function to Graph2D or Rotation to Matrix.", ["representation", "provenance"]),
       item("capability-execute", "execute", "capability", "proposed", "Computes structured semantic results such as determinant, inverse, derivative, sampled grid, or test result.", ["computation", "verification"]),
       item("capability-animate", "animate", "capability", "active", "Compiles transformations, correspondence maps, and layouts into sampleable timelines.", ["timeline", "motion"]),
-      item("capability-animation-runtime-frame", "AnimationRuntimeFrame", "runtime", "active", "Renderer-neutral AnimationAsset sample with one normalized clock, phase metadata, selector frames, active render targets, semantic refs, and diagnostics.", ["animation", "runtime", "timeline"], {
+      item("capability-animation-runtime-frame", "AnimationRuntimeFrame", "runtime", "active", "Renderer-neutral AnimationAsset sample with one normalized clock, phase metadata, selector frames, active render targets, child frames, semantic refs, and diagnostics.", ["animation", "runtime", "timeline"], {
         protocols: ["sampleKpAnimationRuntimeFrame"],
         inputs: ["AnimationAsset", "progress | elapsedMs | beat"],
-        outputs: ["clock", "phase", "selector frames", "active render targets", "diagnostics", "frame descriptor"],
+        outputs: ["clock", "phase", "selector frames", "active render targets", "child frames", "diagnostics", "frame descriptor"],
         preserves: ["animation identity", "timeline identity", "semantic ref identity"]
       })
     ]

@@ -4,6 +4,10 @@ import test from "node:test";
 import {
   sampleKpAnimationRuntimeFrame
 } from "../src/animation/runtime-sampler.ts";
+import { createKpAnimationAssets } from "../src/animation/catalog.ts";
+import {
+  createLinearSolveProgrammingComparisonAnimationAsset
+} from "../src/animation/comparison-layout-adapter.ts";
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
 
 test("sampleKpAnimationRuntimeFrame samples a renderer-neutral frame from elapsed time", () => {
@@ -231,6 +235,52 @@ test("sampleKpAnimationRuntimeFrame exposes phase and selector diagnostics", () 
       code: "runtime.selector.focus",
       path: "focusSelectorIds",
       message: "2 selector(s) are focus-active."
+    }
+  ]);
+});
+
+test("sampleKpAnimationRuntimeFrame samples referenced child animations for composed layouts", () => {
+  const animation = createLinearSolveProgrammingComparisonAnimationAsset();
+  const frame = sampleKpAnimationRuntimeFrame({
+    id: "runtime.comparison.middle",
+    animation,
+    progress: 0.5,
+    childAnimations: createKpAnimationAssets()
+  });
+
+  assert.deepEqual(
+    frame.childFrames.map((child) => ({
+      renderTargetId: child.renderTargetId,
+      animationId: child.animationId,
+      progress: child.frame.clock.progress,
+      phaseId: child.frame.phase.phaseId,
+      activeTransformationIds: child.frame.activeTransformationIds
+    })),
+    [
+      {
+        renderTargetId: "render.comparison.linear-solve.equation",
+        animationId: "animation.linear-solve.solve-x",
+        progress: 0.5,
+        phaseId: "animation.linear-solve.solve-x.forward.1",
+        activeTransformationIds: [
+          "transform.linear-solve.cancel-left-additive-inverse"
+        ]
+      },
+      {
+        renderTargetId: "render.comparison.programming.trace",
+        animationId: "animation.programming.add.execution-trace",
+        progress: 0.5,
+        phaseId: "animation.programming.add.execution-trace.forward.2",
+        activeTransformationIds: ["transform.programming.add.return"]
+      }
+    ]
+  );
+  assert.deepEqual(frame.childDiagnostics, [
+    {
+      severity: "info",
+      code: "runtime.child.frames",
+      path: "childFrames",
+      message: "2 child animation frame(s) sampled from render target metadata."
     }
   ]);
 });

@@ -64,7 +64,8 @@
     {
       "id": "next-action.kp.animation.runtime-child-sampling-v0",
       "title": "Sample child animation assets for composed layouts",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.runtime-child-sampling-v0 in KP composable animation runtime v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.dashboard-sample-card-runtime-v0",

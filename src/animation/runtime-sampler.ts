@@ -20,6 +20,7 @@ import type {
 export interface SampleKpAnimationRuntimeFrameInput {
   readonly id?: string | undefined;
   readonly animation: KpAnimationAsset;
+  readonly childAnimations?: readonly KpAnimationAsset[] | undefined;
   readonly direction?: KpAnimationAssetTransformationTreeDirection | undefined;
   readonly progress?: number | undefined;
   readonly elapsedMs?: number | undefined;
@@ -41,9 +42,11 @@ export interface KpAnimationRuntimeFrame {
   readonly semanticObjectRefs: readonly SemanticObjectRef[];
   readonly transformationRefs: readonly SemanticTransformationRef[];
   readonly activeRenderTargets: readonly KpAnimationRuntimeRenderTargetFrame[];
+  readonly childFrames: readonly KpAnimationRuntimeChildFrame[];
   readonly frameDescriptor: KpAnimationFrameDescriptor;
   readonly phaseDiagnostics: readonly KpAnimationRuntimeDiagnostic[];
   readonly selectorDiagnostics: readonly KpAnimationRuntimeDiagnostic[];
+  readonly childDiagnostics: readonly KpAnimationRuntimeDiagnostic[];
   readonly diagnostics: readonly KpLawFailure[];
 }
 
@@ -67,6 +70,12 @@ export interface KpAnimationRuntimePhase {
 export interface KpAnimationRuntimeRenderTargetFrame
   extends KpAnimationAssetCompiledRenderTargetRef {
   readonly activeTransformationIds: readonly string[];
+}
+
+export interface KpAnimationRuntimeChildFrame {
+  readonly renderTargetId: string;
+  readonly animationId: string;
+  readonly frame: KpAnimationRuntimeFrame;
 }
 
 export interface KpAnimationRuntimeDiagnostic {
@@ -125,6 +134,9 @@ export function sampleKpAnimationRuntimeFrame(
       runtimeRenderTargetFrame(target, activeTransformationIds)
     )
     .filter((target) => target.activeTransformationIds.length > 0);
+  const frameId =
+    input.id ??
+    `runtime.${input.animation.id}.${direction}.${progress.toFixed(4)}`;
   const focusSelectorIds = uniqueStrings(
     activeAnnotations
       .filter((annotation) =>
@@ -139,11 +151,17 @@ export function sampleKpAnimationRuntimeFrame(
     focusSelectorIds,
     activeRenderTargets
   });
+  const childFrames = runtimeChildFrames({
+    animation: input.animation,
+    childAnimations: input.childAnimations ?? [],
+    activeRenderTargets,
+    direction,
+    progress,
+    parentFrameId: frameId
+  });
 
   return {
-    id:
-      input.id ??
-      `runtime.${input.animation.id}.${direction}.${progress.toFixed(4)}`,
+    id: frameId,
     kind: "animation-runtime-frame",
     rendererNeutral: true,
     animationId: input.animation.id,
@@ -166,6 +184,7 @@ export function sampleKpAnimationRuntimeFrame(
     semanticObjectRefs: refs.semanticObjectRefs.map((ref) => ({ ...ref })),
     transformationRefs: refs.transformationRefs.map(cloneTransformationRef),
     activeRenderTargets,
+    childFrames,
     frameDescriptor: descriptor,
     phaseDiagnostics: createPhaseDiagnostics({
       phaseId: phase.phaseId,
@@ -176,6 +195,7 @@ export function sampleKpAnimationRuntimeFrame(
       selectorCount: selectorFrames.length,
       focusSelectorCount: focusSelectorIds.length
     }),
+    childDiagnostics: createChildDiagnostics(childFrames.length),
     diagnostics: descriptor.diagnostics.map((diagnostic) => ({ ...diagnostic }))
   };
 }
@@ -330,6 +350,45 @@ function runtimeSelectorFrames(input: {
   });
 }
 
+function runtimeChildFrames(input: {
+  readonly animation: KpAnimationAsset;
+  readonly childAnimations: readonly KpAnimationAsset[];
+  readonly activeRenderTargets: readonly KpAnimationRuntimeRenderTargetFrame[];
+  readonly direction: KpAnimationAssetTransformationTreeDirection;
+  readonly progress: number;
+  readonly parentFrameId: string;
+}): readonly KpAnimationRuntimeChildFrame[] {
+  if (input.childAnimations.length === 0) return [];
+
+  const activeRenderTargetIds = new Set(
+    input.activeRenderTargets.map((target) => target.id)
+  );
+  const childAnimationsById = new Map(
+    input.childAnimations.map((animation) => [animation.id, animation])
+  );
+
+  return input.animation.renderTargets.flatMap((target) => {
+    if (!activeRenderTargetIds.has(target.id)) return [];
+
+    const childAnimationId = target.metadata?.["childAnimationId"];
+    if (typeof childAnimationId !== "string") return [];
+
+    const childAnimation = childAnimationsById.get(childAnimationId);
+    if (childAnimation === undefined) return [];
+
+    return [{
+      renderTargetId: target.id,
+      animationId: childAnimation.id,
+      frame: sampleKpAnimationRuntimeFrame({
+        id: `${input.parentFrameId}.child.${target.id}`,
+        animation: childAnimation,
+        direction: input.direction,
+        progress: input.progress
+      })
+    }];
+  });
+}
+
 function selectorRoles(input: {
   readonly selectorId: string;
   readonly objectId: string;
@@ -352,6 +411,22 @@ function selectorRoles(input: {
   if (input.focusSelectorIds.has(input.selectorId)) roles.push("focus");
 
   return roles;
+}
+
+function createChildDiagnostics(
+  childFrameCount: number
+): readonly KpAnimationRuntimeDiagnostic[] {
+  return childFrameCount === 0
+    ? []
+    : [
+        {
+          severity: "info",
+          code: "runtime.child.frames",
+          path: "childFrames",
+          message:
+            `${childFrameCount} child animation frame(s) sampled from render target metadata.`
+        }
+      ];
 }
 
 function createPhaseDiagnostics(input: {
