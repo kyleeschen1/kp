@@ -44,6 +44,19 @@ export interface KpAnimationFlashcardProjection {
   readonly diagnostics: readonly KpFlashcardValidationIssue[];
 }
 
+export interface KpAnimationClozeProjection
+  extends KpAnimationFlashcardProjection {
+  readonly interactionKind: "cloze";
+  readonly hiddenSelectorIds: readonly string[];
+}
+
+export interface KpAnimationPredictNextProjection
+  extends KpAnimationFlashcardProjection {
+  readonly interactionKind: "predict-next";
+  readonly expectedTransformationId?: string | undefined;
+  readonly candidateTransformationIds: readonly string[];
+}
+
 export function createKpAnimationFlashcardProjection(
   input: CreateKpAnimationFlashcardProjectionInput
 ): KpAnimationFlashcardProjection {
@@ -79,6 +92,37 @@ export function createKpAnimationFlashcardProjection(
   };
 }
 
+export function createKpAnimationClozeProjection(
+  input: CreateKpAnimationFlashcardProjectionInput
+): KpAnimationClozeProjection {
+  const projection = createKpAnimationFlashcardProjection(input);
+
+  return {
+    ...projection,
+    interactionKind: "cloze",
+    hiddenSelectorIds: [...projection.selectorIds]
+  };
+}
+
+export function createKpAnimationPredictNextProjection(
+  input: CreateKpAnimationFlashcardProjectionInput
+): KpAnimationPredictNextProjection {
+  const projection = createKpAnimationFlashcardProjection(input);
+
+  return {
+    ...projection,
+    interactionKind: "predict-next",
+    ...(input.card.answer?.kind === "transformation"
+      ? { expectedTransformationId: input.card.answer.value }
+      : projection.transformationIds[0] === undefined
+        ? {}
+        : { expectedTransformationId: projection.transformationIds[0] }),
+    candidateTransformationIds: input.animation.transformations.map(
+      (transformation) => transformation.id
+    )
+  };
+}
+
 export function createKpAnimationFlashcardProjections(
   input: CreateKpAnimationFlashcardProjectionsInput
 ): readonly KpAnimationFlashcardProjection[] {
@@ -90,4 +134,3 @@ export function createKpAnimationFlashcardProjections(
     })
   );
 }
-

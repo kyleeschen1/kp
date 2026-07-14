@@ -2,8 +2,10 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  createKpAnimationClozeProjection,
   createKpAnimationFlashcardProjection,
-  createKpAnimationFlashcardProjections
+  createKpAnimationFlashcardProjections,
+  createKpAnimationPredictNextProjection
 } from "../src/animation/flashcard-projection.ts";
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
 import { createKpFlashcardSpec } from "../src/semantic/asset-flashcard.ts";
@@ -89,3 +91,59 @@ test("flashcard projection reports missing animation references", () => {
   ]);
 });
 
+test("createKpAnimationClozeProjection exposes hidden selectors and answer", () => {
+  const animation = createLinearSolveAnimationAsset();
+  const semantic = createLinearSolveKpAssetBundle();
+  const card = semantic.flashcards.find(
+    (candidate) => candidate.id === "card.linear-solve.cloze-plus3"
+  );
+
+  assert.ok(card);
+
+  const projection = createKpAnimationClozeProjection({
+    animation,
+    card
+  });
+
+  assert.equal(projection.interactionKind, "cloze");
+  assert.deepEqual(projection.hiddenSelectorIds, [
+    "equation.linear-solve.initial.lhs.plus3"
+  ]);
+  assert.deepEqual(projection.answer, {
+    kind: "text",
+    value: "+3"
+  });
+  assert.equal(projection.clock.progress, 0.5);
+  assert.deepEqual(projection.diagnostics, []);
+});
+
+test("createKpAnimationPredictNextProjection exposes expected transformation candidates", () => {
+  const animation = createLinearSolveAnimationAsset();
+  const semantic = createLinearSolveKpAssetBundle();
+  const card = semantic.flashcards.find(
+    (candidate) => candidate.id === "card.linear-solve.predict-subtract"
+  );
+
+  assert.ok(card);
+
+  const projection = createKpAnimationPredictNextProjection({
+    animation,
+    card
+  });
+
+  assert.equal(projection.interactionKind, "predict-next");
+  assert.equal(
+    projection.expectedTransformationId,
+    "transform.linear-solve.subtract-both-sides-3"
+  );
+  assert.deepEqual(projection.candidateTransformationIds, [
+    "transform.linear-solve.subtract-both-sides-3",
+    "transform.linear-solve.cancel-left-additive-inverse",
+    "transform.linear-solve.simplify-right-difference"
+  ]);
+  assert.equal(projection.clock.progress, 0);
+  assert.deepEqual(projection.activeTransformationIds, [
+    "transform.linear-solve.subtract-both-sides-3"
+  ]);
+  assert.deepEqual(projection.diagnostics, []);
+});

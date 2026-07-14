@@ -118,7 +118,8 @@
     {
       "id": "next-action.kp.animation.flashcard-cloze-predict-v0",
       "title": "Add cloze and predict-next flashcard projections",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.flashcard-cloze-predict-v0 in KP composable animation runtime v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.dashboard-flashcard-facets-v0",

@@ -158,12 +158,16 @@ test("API catalog covers notation and layout entities with the same metadata pro
   assert.equal(flashcardProjection?.item.status, "active");
   assert.deepEqual(flashcardProjection?.item.details?.protocols, [
     "createKpAnimationFlashcardProjection",
-    "createKpAnimationFlashcardProjections"
+    "createKpAnimationFlashcardProjections",
+    "createKpAnimationClozeProjection",
+    "createKpAnimationPredictNextProjection"
   ]);
   assert.deepEqual(flashcardProjection?.item.details?.outputs, [
     "runtime frame",
     "flashcard references",
-    "reference diagnostics"
+    "reference diagnostics",
+    "cloze hidden selectors",
+    "predict-next candidates"
   ]);
 });
 

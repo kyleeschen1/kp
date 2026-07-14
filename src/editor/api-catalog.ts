@@ -174,10 +174,18 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
       item("capability-animation-flashcard-projection", "FlashcardProjection", "runtime", "active", "Binds KpFlashcardSpec prompts to sampled AnimationAsset runtime frames with reference diagnostics.", ["animation", "flashcard", "study"], {
         protocols: [
           "createKpAnimationFlashcardProjection",
-          "createKpAnimationFlashcardProjections"
+          "createKpAnimationFlashcardProjections",
+          "createKpAnimationClozeProjection",
+          "createKpAnimationPredictNextProjection"
         ],
         inputs: ["AnimationAsset", "KpFlashcardSpec", "progress | timeMs"],
-        outputs: ["runtime frame", "flashcard references", "reference diagnostics"],
+        outputs: [
+          "runtime frame",
+          "flashcard references",
+          "reference diagnostics",
+          "cloze hidden selectors",
+          "predict-next candidates"
+        ],
         preserves: ["animation clock", "flashcard reference identity"]
       })
     ]
