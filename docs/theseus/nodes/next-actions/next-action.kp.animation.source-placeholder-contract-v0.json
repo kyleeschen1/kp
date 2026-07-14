@@ -1,0 +1,95 @@
+{
+  "id": "next-action.kp.animation.source-placeholder-contract-v0",
+  "kind": "next-action",
+  "title": "Add SourceFile program-trace animation asset placeholder contract",
+  "status": "resolved",
+  "summary": "Added a SourceFile execution-trace AnimationAsset placeholder and catalog exposure.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-animation-asset-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.source-placeholder-contract-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming composable semantic animations as KP's primary artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Ready action anchoring the approved animation asset contract loop."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/programming-adapter.ts",
+      "summary": "Adds a programming AnimationAsset adapter around the deterministic SourceFile execution-trace semantic asset."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Includes programming animation placeholders in the general animation asset catalog."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-programming-animation-asset.test.ts",
+      "summary": "Covers the programming animation placeholder contract, reference closure, seek/rewind behavior, and catalog inclusion."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.composable-animation-asset-v0",
+      "next-action.kp.animation.graph-placeholder-contract-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.graph-placeholder-contract-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Add SourceFile program-trace animation asset placeholder contract can be completed inside KP composable animation asset v0 loop."
+  ],
+  "allowedWork": [
+    "Work only on the approved composable semantic animation asset v0 loop.",
+    "Keep tutorials, cards, exports, flashcards, graphs, and programming views as consumers of animation assets rather than the core artifact.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broadly rename tutorial-card modules in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add curriculum generation, spaced repetition generation, or dynamic package loading in this loop.",
+    "Do not create renderer-owned animation formats separate from semantic asset calculus."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-programming-animation-asset.test.ts tests/kp-program-trace-asset.test.ts tests/kp-graph-animation-asset.test.ts tests/kp-animation-asset.test.ts tests/project-dashboard-animation-asset-catalog.test.ts tests/generated-algebra-export-sample.test.ts tests/tutorial-card-frame-export-contract.test.ts",
+      "status": "passed",
+      "scope": "programming animation placeholder assets, semantic program trace assets, animation catalog, dashboard rows, and export metadata",
+      "checkedAt": "2026-07-14T00:09:27.015Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-14T00:09:27.046Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-14T00:09:27.104Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a SourceFile execution-trace AnimationAsset placeholder and catalog exposure."
+  }
+}

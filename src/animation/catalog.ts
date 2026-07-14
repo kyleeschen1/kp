@@ -11,11 +11,13 @@ import { createFractionSimplificationAnimationAsset } from "./fraction-adapter.t
 import { createFunctionWrapAnimationAsset } from "./function-wrap-adapter.ts";
 import { createGraphAnimationAssets } from "./graph-adapter.ts";
 import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
+import { createProgrammingAnimationAssets } from "./programming-adapter.ts";
 
 export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
   return [
     ...createGeneratedAlgebraAnimationAssets(),
-    ...createGraphAnimationAssets()
+    ...createGraphAnimationAssets(),
+    ...createProgrammingAnimationAssets()
   ];
 }
 
