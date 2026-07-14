@@ -1,0 +1,115 @@
+{
+  "id": "next-action.kp.animation.algebra-exponent-log-laws-family-v0",
+  "kind": "next-action",
+  "title": "Add exponent and logarithm law family",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Promoted exponent/log laws with same-base, quotient, power-of-power, power-to-root, log/exp inverse, and log-product definitions plus base/argument correspondences, radical/function motifs, runtime sample, graph equivalent, generated-problem hook, and flashcard hook.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.symbolic-manipulation-library-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.algebra-exponent-log-laws-family-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md",
+      "summary": "Accepted long-term plan for major symbolic manipulation animation families."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/decisions/decision.kp.symbolic-manipulation-animation-library.json",
+      "summary": "Theseus decision node that makes symbolic manipulation animation-library expansion the current long-term KP direction."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap active focus and near-term priorities for symbolic manipulation family expansion."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread describing how symbolic manipulation families should use existing semantic asset, runtime-frame, visual-frame, graph, dashboard, generated problem, and flashcard protocols."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/asset.ts",
+      "summary": "AnimationAsset container and timeline/render-target contracts that symbolic manipulation families should use."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "SemanticTransformation contract for symbolic manipulation definitions, correspondence, laws, and provenance."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/symbolic-manipulation-family-registry.ts",
+      "summary": "Defines the promoted exponent/log family and reusable power/function semantic definitions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-symbolic-family-catalog.test.ts",
+      "summary": "Covers base persistence, radical fold correspondence, function wrapper correspondence, hooks, and validation."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.symbolic-manipulation-library-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add exponent and logarithm law family can be completed inside KP symbolic manipulation animation library v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved symbolic manipulation animation-library slices.",
+    "Model reusable semantic animation asset families with SemanticTransformation definitions, correspondence, identity rules, visual motifs, runtime-frame samples, visual-frame samples, graph equivalents, generated problem hooks, flashcard hooks, law checks, and dashboard rows.",
+    "Use deterministic fixtures and existing KP asset/runtime/rendering contracts.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not build a full CAS or theorem prover in this loop.",
+    "Do not add GIF/video encoders, live LSP, network integrations, or dynamic package loading in this loop.",
+    "Do not make graph views a separate animation system; graph equivalents must project from the same semantic assets where honest.",
+    "Do not broaden into unrelated dashboard redesign or visual polish beyond what the active slice requires.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-symbolic-manipulation-family.test.ts tests/project-dashboard-symbolic-family-catalog.test.ts",
+      "status": "passed",
+      "scope": "focused symbolic manipulation family tests",
+      "checkedAt": "2026-07-14T22:43:12.195Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app/node/test projects",
+      "checkedAt": "2026-07-14T22:43:12.394Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-14T22:43:12.576Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T22:43:12.795Z",
+      "scope": "Theseus run-contract hygiene"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted exponent/log laws with same-base, quotient, power-of-power, power-to-root, log/exp inverse, and log-product definitions plus base/argument correspondences, radical/function motifs, runtime sample, graph equivalent, generated-problem hook, and flashcard hook."
+  }
+}

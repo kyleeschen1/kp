@@ -228,13 +228,15 @@ export function createSymbolicManipulationFamilyRegistry():
     createAlgebraCancelCombineFamily(),
     createAlgebraDistributionFactoringFamily(),
     createAlgebraFractionSimplificationFamily(),
+    createAlgebraExponentLogFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
           spec.id !== "family.algebra.both-sides" &&
           spec.id !== "family.algebra.cancel-combine" &&
           spec.id !== "family.algebra.distribution-factoring" &&
-          spec.id !== "family.algebra.fraction-simplification"
+          spec.id !== "family.algebra.fraction-simplification" &&
+          spec.id !== "family.algebra.exponent-log-laws"
       )
       .map(createSeedFamily)
   ];
@@ -1211,6 +1213,337 @@ function createFractionDefinition(input: {
         targetObjectRole,
         targetSelectorRole: "denominator",
         preserves: ["identity", "role"]
+      }
+    ]
+  });
+}
+
+function createAlgebraExponentLogFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.algebra.multiply-same-base-powers",
+    "definition.symbolic.algebra.divide-same-base-powers",
+    "definition.symbolic.algebra.power-of-power",
+    "definition.symbolic.algebra.power-to-root",
+    "definition.symbolic.algebra.log-exp-inverse",
+    "definition.symbolic.algebra.log-product"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.algebra.exponent-log-laws",
+    title: "Exponent and logarithm laws",
+    domain: "algebra",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "power.before",
+        objectType: "expression",
+        title: "Power or function expression before rewrite",
+        selectorRoles: [
+          { id: "base", kind: "term" },
+          { id: "exponent.left", kind: "exponent" },
+          { id: "operator", kind: "operator" },
+          { id: "exponent.right", kind: "exponent" },
+          { id: "function.name", kind: "function-name" },
+          { id: "function.argument", kind: "argument" },
+          { id: "function.open", kind: "wrapper" },
+          { id: "function.close", kind: "wrapper" }
+        ]
+      },
+      {
+        id: "power.after",
+        objectType: "expression",
+        title: "Power or function expression after rewrite",
+        selectorRoles: [
+          { id: "base", kind: "term" },
+          { id: "exponent", kind: "exponent" },
+          { id: "operator", kind: "operator" },
+          { id: "function.name", kind: "function-name" },
+          { id: "function.argument", kind: "argument" },
+          { id: "function.open", kind: "wrapper" },
+          { id: "function.close", kind: "wrapper" },
+          { id: "radical.index", kind: "radical-index" },
+          { id: "radical.path", kind: "radical-path" },
+          { id: "artifact.operator", kind: "operator" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createPowerDefinition({
+        id: "definition.symbolic.algebra.multiply-same-base-powers",
+        transformType: "multiplySameBasePowers",
+        title: "Multiply powers with the same base",
+        lawId: "law.algebra.exponent-product",
+        assumption:
+          "Powers have the same base, so exponents combine by addition under the domain assumptions."
+      }),
+      createPowerDefinition({
+        id: "definition.symbolic.algebra.divide-same-base-powers",
+        transformType: "divideSameBasePowers",
+        title: "Divide powers with the same base",
+        lawId: "law.algebra.exponent-quotient",
+        assumption:
+          "Powers have the same non-zero base, so exponents combine by subtraction."
+      }),
+      createPowerDefinition({
+        id: "definition.symbolic.algebra.power-of-power",
+        transformType: "powerOfPower",
+        title: "Rewrite a power of a power",
+        lawId: "law.algebra.power-of-power",
+        assumption:
+          "Nested powers share one base and compose exponents under the domain assumptions."
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.algebra.power-to-root",
+        transformType: "powerToRoot",
+        title: "Rewrite a rational power as a root",
+        sourceObjectRoles: ["power.before"],
+        targetObjectRoles: ["power.after"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "The base and root index satisfy the domain assumptions for the chosen real or complex branch."
+        ],
+        lawRefs: [
+          {
+            id: "law.algebra.power-root",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "power.before",
+            sourceSelectorRole: "base",
+            targetObjectRole: "power.after",
+            targetSelectorRole: "base",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "power.before",
+            sourceSelectorRole: "exponent.left",
+            targetObjectRole: "power.after",
+            targetSelectorRole: "radical.index",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "power.before",
+            sourceSelectorRole: "exponent.right",
+            targetObjectRole: "power.after",
+            targetSelectorRole: "radical.path",
+            preserves: ["presentation", "role"]
+          }
+        ]
+      }),
+      createFunctionWrapDefinition({
+        id: "definition.symbolic.algebra.log-exp-inverse",
+        transformType: "logExpInverse",
+        title: "Cancel logarithm and exponential wrappers",
+        lawId: "law.algebra.log-exp-inverse",
+        assumption:
+          "Logarithm and exponential wrappers are inverse functions on the represented domain."
+      }),
+      createFunctionWrapDefinition({
+        id: "definition.symbolic.algebra.log-product",
+        transformType: "logProduct",
+        title: "Rewrite logarithm of a product",
+        lawId: "law.algebra.log-product",
+        assumption:
+          "Log product rewrites require positive factors in the real-valued setting."
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.algebra.exponent-log.exponent-stack-align",
+        motifKind: "exponent-stack-align",
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.multiply-same-base-powers",
+          "definition.symbolic.algebra.divide-same-base-powers",
+          "definition.symbolic.algebra.power-of-power"
+        ],
+        summary:
+          "Persistent bases stay fixed while exponent tokens align, combine, or separate in the superscript region."
+      },
+      {
+        id: "motif.algebra.exponent-log.root-fold",
+        motifKind: "root-fold",
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.power-to-root"
+        ],
+        summary:
+          "The base persists while exponent geometry folds into radical index and path geometry."
+      },
+      {
+        id: "motif.algebra.exponent-log.function-wrap-settle",
+        motifKind: "function-wrap-settle",
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.log-exp-inverse",
+          "definition.symbolic.algebra.log-product"
+        ],
+        summary:
+          "Function names and parens wrap or unwrap around a persistent argument, then settle to final spacing."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.power-radical-fold.basic",
+        animationId: "animation.power-radical-fold.basic",
+        renderTargetKinds: ["equation"],
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.power-to-root",
+          "definition.symbolic.algebra.log-exp-inverse"
+        ],
+        summary:
+          "Basic exponent-to-root and log/exp inverse sample exercises persistent base and argument semantics."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.algebra.exponent-log.function-equivalence",
+        title: "Function equivalence is preserved on its domain",
+        representationKind: "function-graph",
+        exactness: "sampled",
+        preserves: ["value"],
+        lawRefs: [
+          {
+            id: "law.graph.exponent-log-equivalence",
+            level: "sampled"
+          }
+        ],
+        sampleAssetIds: ["animation.power-radical-fold.basic"],
+        summary:
+          "Exponent, root, and logarithm rewrites preserve function values where the domain assumptions hold."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.exponent-log-simplify",
+        fixtureFamilyId: "generated.exponent-log-simplify",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated exponent/log traces can map base persistence, exponent combination, radical folds, and function wrappers to this family."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.algebra.exponent-log.cloze",
+        kind: "cloze",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Cloze cards can hide the resulting exponent, radical index, or unwrapped argument."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId("family.algebra.exponent-log-laws"),
+      tags: [
+        "exponent",
+        "logarithm",
+        "inverse-operation",
+        "radical",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for powers, roots, exponent laws, logarithm laws, and inverse rewrites.",
+      searchSummary:
+        "exponent logarithm power root radical inverse product quotient law base argument function wrapper",
+      graphEquivalentKinds: "function-graph"
+    }
+  });
+}
+
+function createPowerDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["power.before"],
+    targetObjectRoles: ["power.after"],
+    preserves: ["value", "structure"],
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "power.before",
+        sourceSelectorRole: "base",
+        targetObjectRole: "power.after",
+        targetSelectorRole: "base",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "power.before",
+        sourceSelectorRole: "exponent.left",
+        targetObjectRole: "power.after",
+        targetSelectorRole: "exponent",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "power.before",
+        sourceSelectorRole: "exponent.right",
+        targetObjectRole: "power.after",
+        targetSelectorRole: "exponent",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "power.before",
+        sourceSelectorRole: "operator",
+        targetObjectRole: "power.after",
+        targetSelectorRole: "artifact.operator",
+        preserves: ["presentation", "role"]
+      }
+    ]
+  });
+}
+
+function createFunctionWrapDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["power.before"],
+    targetObjectRoles: ["power.after"],
+    preserves: ["value", "structure"],
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "power.before",
+        sourceSelectorRole: "function.argument",
+        targetObjectRole: "power.after",
+        targetSelectorRole: "function.argument",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "power.before",
+        sourceSelectorRole: "function.name",
+        targetObjectRole: "power.after",
+        targetSelectorRole: "function.name",
+        preserves: ["role"]
+      },
+      {
+        sourceObjectRole: "power.before",
+        sourceSelectorRole: "function.open",
+        targetObjectRole: "power.after",
+        targetSelectorRole: "function.open",
+        preserves: ["presentation", "role"]
+      },
+      {
+        sourceObjectRole: "power.before",
+        sourceSelectorRole: "function.close",
+        targetObjectRole: "power.after",
+        targetSelectorRole: "function.close",
+        preserves: ["presentation", "role"]
       }
     ]
   });

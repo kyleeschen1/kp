@@ -728,6 +728,225 @@ test("algebra fraction simplification family covers bars, copies, and reciprocal
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("algebra exponent-log family preserves bases and wrapped arguments", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.algebra.exponent-log-laws"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "power.before",
+        "expression",
+        [
+          "base",
+          "exponent.left",
+          "operator",
+          "exponent.right",
+          "function.name",
+          "function.argument",
+          "function.open",
+          "function.close"
+        ]
+      ],
+      [
+        "power.after",
+        "expression",
+        [
+          "base",
+          "exponent",
+          "operator",
+          "function.name",
+          "function.argument",
+          "function.open",
+          "function.close",
+          "radical.index",
+          "radical.path",
+          "artifact.operator"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.algebra.multiply-same-base-powers",
+        "multiplySameBasePowers",
+        ["value", "structure"],
+        "law.algebra.exponent-product"
+      ],
+      [
+        "definition.symbolic.algebra.divide-same-base-powers",
+        "divideSameBasePowers",
+        ["value", "structure"],
+        "law.algebra.exponent-quotient"
+      ],
+      [
+        "definition.symbolic.algebra.power-of-power",
+        "powerOfPower",
+        ["value", "structure"],
+        "law.algebra.power-of-power"
+      ],
+      [
+        "definition.symbolic.algebra.power-to-root",
+        "powerToRoot",
+        ["value", "structure"],
+        "law.algebra.power-root"
+      ],
+      [
+        "definition.symbolic.algebra.log-exp-inverse",
+        "logExpInverse",
+        ["value", "structure"],
+        "law.algebra.log-exp-inverse"
+      ],
+      [
+        "definition.symbolic.algebra.log-product",
+        "logProduct",
+        ["value", "structure"],
+        "law.algebra.log-product"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[3]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["base", "base", ["identity", "role"]],
+      ["exponent.left", "radical.index", ["value", "role"]],
+      ["exponent.right", "radical.path", ["presentation", "role"]]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[4]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["function.argument", "function.argument", ["identity", "role"]],
+      ["function.name", "function.name", ["role"]],
+      ["function.open", "function.open", ["presentation", "role"]],
+      ["function.close", "function.close", ["presentation", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.algebra.exponent-log.exponent-stack-align",
+      motifKind: "exponent-stack-align",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.multiply-same-base-powers",
+        "definition.symbolic.algebra.divide-same-base-powers",
+        "definition.symbolic.algebra.power-of-power"
+      ],
+      summary:
+        "Persistent bases stay fixed while exponent tokens align, combine, or separate in the superscript region."
+    },
+    {
+      id: "motif.algebra.exponent-log.root-fold",
+      motifKind: "root-fold",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.power-to-root"
+      ],
+      summary:
+        "The base persists while exponent geometry folds into radical index and path geometry."
+    },
+    {
+      id: "motif.algebra.exponent-log.function-wrap-settle",
+      motifKind: "function-wrap-settle",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.log-exp-inverse",
+        "definition.symbolic.algebra.log-product"
+      ],
+      summary:
+        "Function names and parens wrap or unwrap around a persistent argument, then settle to final spacing."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.power-radical-fold.basic",
+      animationId: "animation.power-radical-fold.basic",
+      renderTargetKinds: ["equation"],
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.power-to-root",
+        "definition.symbolic.algebra.log-exp-inverse"
+      ],
+      summary:
+        "Basic exponent-to-root and log/exp inverse sample exercises persistent base and argument semantics."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.algebra.exponent-log.function-equivalence",
+      title: "Function equivalence is preserved on its domain",
+      representationKind: "function-graph",
+      exactness: "sampled",
+      preserves: ["value"],
+      lawRefs: [
+        {
+          id: "law.graph.exponent-log-equivalence",
+          level: "sampled"
+        }
+      ],
+      sampleAssetIds: ["animation.power-radical-fold.basic"],
+      summary:
+        "Exponent, root, and logarithm rewrites preserve function values where the domain assumptions hold."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.exponent-log-simplify",
+      fixtureFamilyId: "generated.exponent-log-simplify",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.multiply-same-base-powers",
+        "definition.symbolic.algebra.divide-same-base-powers",
+        "definition.symbolic.algebra.power-of-power",
+        "definition.symbolic.algebra.power-to-root",
+        "definition.symbolic.algebra.log-exp-inverse",
+        "definition.symbolic.algebra.log-product"
+      ],
+      summary:
+        "Generated exponent/log traces can map base persistence, exponent combination, radical folds, and function wrappers to this family."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.algebra.exponent-log.cloze",
+      kind: "cloze",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.multiply-same-base-powers",
+        "definition.symbolic.algebra.divide-same-base-powers",
+        "definition.symbolic.algebra.power-of-power",
+        "definition.symbolic.algebra.power-to-root",
+        "definition.symbolic.algebra.log-exp-inverse",
+        "definition.symbolic.algebra.log-product"
+      ],
+      summary:
+        "Cloze cards can hide the resulting exponent, radical index, or unwrapped argument."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic manipulation family dashboard rows expose comparable readiness fields", () => {
   const rows = createSymbolicManipulationFamilyAgendaRows("");
 

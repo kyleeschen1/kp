@@ -108,7 +108,7 @@
       "id": "next-action.kp.animation.algebra-exponent-log-laws-family-v0",
       "title": "Add exponent and logarithm law family",
       "summary": "Model power, root, exponent/log inverse, product/quotient powers, and function-wrapped rewrites with persistent base/argument semantics.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.algebra-inequality-family-v0",
