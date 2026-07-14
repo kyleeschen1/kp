@@ -1,0 +1,81 @@
+{
+  "id": "next-action.kp.animation.representation-transform-contract-v0",
+  "kind": "next-action",
+  "title": "Add representation transformation contract",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added a RepresentationTransform contract for AnimationAssets, with apply wrappers and a preservation law checking semantic object ids, transformation ids, and forward phase order across representation changes.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-runtime-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.representation-transform-contract-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming AnimationAsset as the primary composable KP artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active workflow frontier for dashboard-backed semantic animation system work."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/representation-transform.ts",
+      "summary": "Added a RepresentationTransform contract for AnimationAssets, with apply wrappers and a preservation law checking semantic object ids, transformation ids, and forward phase order across representation changes."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-representation-transform.test.ts",
+      "summary": "Added a RepresentationTransform contract for AnimationAssets, with apply wrappers and a preservation law checking semantic object ids, transformation ids, and forward phase order across representation changes."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "Added a RepresentationTransform contract for AnimationAssets, with apply wrappers and a preservation law checking semantic object ids, transformation ids, and forward phase order across representation changes."
+    },
+    {
+      "kind": "file",
+      "path": "tests/api-catalog.test.ts",
+      "summary": "Added a RepresentationTransform contract for AnimationAssets, with apply wrappers and a preservation law checking semantic object ids, transformation ids, and forward phase order across representation changes."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.composable-runtime-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add representation transformation contract can be completed inside KP composable animation runtime v0 loop."
+  ],
+  "allowedWork": [
+    "Work on AnimationAsset runtime sampling, diagnostics, dashboard previews, external deterministic ports, programming trace imports, flashcard projections, and composition laws.",
+    "Keep semantic objects, transformations, render targets, layouts, and timelines as typed data that can be inspected and sampled.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not rewrite the full renderer or equation animation DOM pipeline in this loop.",
+    "Do not add GIF/video encoders or large live external integrations in this loop.",
+    "Do not stage unrelated worktree changes."
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a RepresentationTransform contract for AnimationAssets, with apply wrappers and a preservation law checking semantic object ids, transformation ids, and forward phase order across representation changes."
+  }
+}

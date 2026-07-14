@@ -98,6 +98,9 @@ test("API catalog covers notation and layout entities with the same metadata pro
   const generatedProblemImport = findApiCatalogItem(
     "capability-generated-problem-animation-import"
   );
+  const representationTransform = findApiCatalogItem(
+    "capability-animation-representation-transform"
+  );
 
   assert.equal(radical?.group.category, "notation-transformation");
   assert.deepEqual(radical?.item.details?.preserves, [
@@ -184,6 +187,19 @@ test("API catalog covers notation and layout entities with the same metadata pro
     "AnimationAsset",
     "runtime frames",
     "flashcard projections"
+  ]);
+
+  assert.equal(representationTransform?.group.id, "capabilities-representations");
+  assert.equal(representationTransform?.item.status, "active");
+  assert.deepEqual(representationTransform?.item.details?.protocols, [
+    "createKpAnimationRepresentationTransform",
+    "applyKpAnimationRepresentationTransform",
+    "checkKpAnimationRepresentationTransformLaw"
+  ]);
+  assert.deepEqual(representationTransform?.item.details?.preserves, [
+    "semantic object ids",
+    "transformation ids",
+    "phase order"
   ]);
 });
 

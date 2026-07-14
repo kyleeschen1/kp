@@ -203,6 +203,16 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
         inputs: ["GeneratedAlgebraTutorialFixture"],
         outputs: ["AnimationAsset", "runtime frames", "flashcard projections"],
         preserves: ["fixture identity", "solution step order", "transformation references"]
+      }),
+      item("capability-animation-representation-transform", "RepresentationTransform", "runtime", "active", "Maps an AnimationAsset into another visual representation while law-checking semantic identity preservation.", ["animation", "representation", "natural-transformation"], {
+        protocols: [
+          "createKpAnimationRepresentationTransform",
+          "applyKpAnimationRepresentationTransform",
+          "checkKpAnimationRepresentationTransformLaw"
+        ],
+        inputs: ["AnimationAsset"],
+        outputs: ["AnimationAsset", "validation diagnostics", "preservation law"],
+        preserves: ["semantic object ids", "transformation ids", "phase order"]
       })
     ]
   },

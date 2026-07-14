@@ -142,7 +142,8 @@
     {
       "id": "next-action.kp.animation.representation-transform-contract-v0",
       "title": "Add representation transformation contract",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.representation-transform-contract-v0 in KP composable animation runtime v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.transform-tree-composition-contract-v0",
