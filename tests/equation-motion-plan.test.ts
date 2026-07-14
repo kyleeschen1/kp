@@ -17,6 +17,7 @@ import {
 } from "../src/rendering/equation-motion-plan.ts";
 import {
   checkKatexVisualArtifactFadeRules,
+  checkKatexMatrixDelimiterArtifactContract,
   katexVisualArtifactLifecycleRecords,
   visualArtifactRecordToCorrespondenceRecord
 } from "../src/rendering/visual-artifact-lifecycle.ts";
@@ -701,6 +702,41 @@ test("visual artifact fade rule reports replacement persistence claims", () => {
             "records[artifact.matrix-bracket.replace-delimiter].targetVisualLifecycle",
           message:
             "Visual artifact artifact.matrix-bracket.replace-delimiter phase replace expected targetVisualLifecycle enter but received persist."
+        }
+      ]
+    }
+  );
+});
+
+test("matrix delimiter artifact contract pins bracket replacement semantics", () => {
+  assert.deepEqual(checkKatexMatrixDelimiterArtifactContract(), {
+    lawId: "katex-matrix-delimiter.artifact-contract",
+    passed: true,
+    failures: []
+  });
+});
+
+test("matrix delimiter artifact contract reports missing target bracket artifacts", () => {
+  assert.deepEqual(
+    checkKatexMatrixDelimiterArtifactContract(
+      katexVisualArtifactLifecycleRecords.map((record) =>
+        record.id === "artifact.matrix-bracket.replace-delimiter"
+          ? {
+              ...record,
+              targetArtifactIds: [record.targetArtifactIds[0] ?? "missing"]
+            }
+          : record
+      )
+    ),
+    {
+      lawId: "katex-matrix-delimiter.artifact-contract",
+      passed: false,
+      failures: [
+        {
+          path:
+            "records[artifact.matrix-bracket.replace-delimiter].targetArtifactIds",
+          message:
+            "Visual artifact artifact.matrix-bracket.replace-delimiter expected 2 targetArtifactIds but received 1."
         }
       ]
     }

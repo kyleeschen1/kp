@@ -1,4 +1,8 @@
 import type { EquationVisualMotifKind } from "./visual-motif.ts";
+import type {
+  KpLawCheckResult,
+  KpLawFailure
+} from "../semantic/asset-laws.ts";
 
 export type KatexTransformFixtureFamily =
   | "fraction"
@@ -1156,6 +1160,12 @@ export const largeOperatorTransformFixtures: readonly KatexTransformFixture[] = 
         targetRole: "limit-approach",
         sourceText: "x \\to 0",
         targetText: "h \\to 0"
+      },
+      {
+        sourceRole: "body",
+        targetRole: "body",
+        sourceText: "f(x)",
+        targetText: "f(h)"
       }
     ],
     summary:
@@ -1451,6 +1461,240 @@ export function summarizeKatexTransformDefinition(
     defaultVisualMotifs: [...definition.defaultVisualMotifs],
     maturity: definition.maturity
   };
+}
+
+export function checkKatexLargeOperatorFixtureContract(
+  fixtures: readonly KatexTransformFixture[] = largeOperatorTransformFixtures
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+
+  fixtures.forEach((fixture) => {
+    const path = `fixtures[${fixture.id}]`;
+
+    if (fixture.family !== "large-operator") {
+      failures.push({
+        path: `${path}.family`,
+        message:
+          `Large operator fixture contract received non-large-operator fixture ${fixture.id}.`
+      });
+      return;
+    }
+
+    checkSingleLargeOperator({
+      failures,
+      fixture,
+      side: "source"
+    });
+    checkSingleLargeOperator({
+      failures,
+      fixture,
+      side: "target"
+    });
+    checkLargeOperatorTextPersistence({
+      failures,
+      fixture
+    });
+    checkChangedLargeOperatorRoles({
+      failures,
+      fixture,
+      roles: [
+        "body",
+        "integrand",
+        "differential",
+        "upper-limit",
+        "lower-limit",
+        "limit-approach"
+      ]
+    });
+    checkLargeOperatorIntentShape({
+      failures,
+      fixture
+    });
+  });
+
+  return {
+    lawId: "katex-large-operator.fixture-contract",
+    passed: failures.length === 0,
+    failures
+  };
+}
+
+function checkSingleLargeOperator(input: {
+  readonly failures: KpLawFailure[];
+  readonly fixture: KatexTransformFixture;
+  readonly side: "source" | "target";
+}): void {
+  const operators = input.fixture[input.side].tokens.filter(
+    (token) => token.role === "large-operator"
+  );
+
+  if (operators.length === 1) return;
+
+  input.failures.push({
+    path: `fixtures[${input.fixture.id}].${input.side}.tokens`,
+    message:
+      `Large operator fixture ${input.fixture.id} must declare exactly one ${input.side} large-operator token, received ${operators.length}.`
+  });
+}
+
+function checkLargeOperatorTextPersistence(input: {
+  readonly failures: KpLawFailure[];
+  readonly fixture: KatexTransformFixture;
+}): void {
+  const sourceOperator = input.fixture.source.tokens.find(
+    (token) => token.role === "large-operator"
+  );
+  const targetOperator = input.fixture.target.tokens.find(
+    (token) => token.role === "large-operator"
+  );
+
+  if (
+    sourceOperator === undefined ||
+    targetOperator === undefined ||
+    sourceOperator.text === targetOperator.text
+  ) {
+    return;
+  }
+
+  input.failures.push({
+    path: `fixtures[${input.fixture.id}].target.tokens`,
+    message:
+      `Large operator fixture ${input.fixture.id} changes operator ${sourceOperator.text} to ${targetOperator.text}; use a distinct transform fixture instead of implying operator persistence.`
+  });
+}
+
+function checkChangedLargeOperatorRoles(input: {
+  readonly failures: KpLawFailure[];
+  readonly fixture: KatexTransformFixture;
+  readonly roles: readonly KatexTransformFixtureTokenRole[];
+}): void {
+  input.roles.forEach((role) => {
+    const sourceTokens = tokensWithRole(input.fixture.source.tokens, role);
+    const targetTokens = tokensWithRole(input.fixture.target.tokens, role);
+
+    if (sourceTokens.length !== targetTokens.length) return;
+
+    sourceTokens.forEach((sourceToken, index) => {
+      const targetToken = targetTokens[index];
+
+      if (targetToken === undefined || sourceToken.text === targetToken.text) {
+        return;
+      }
+
+      if (
+        hasRoleChangeExpectation(
+          input.fixture,
+          role,
+          role,
+          sourceToken.text,
+          targetToken.text
+        )
+      ) {
+        return;
+      }
+
+      input.failures.push({
+        path: `fixtures[${input.fixture.id}].expectedRoleChanges`,
+        message:
+          `Large operator fixture ${input.fixture.id} changes ${role} token ${sourceToken.text} to ${targetToken.text} without an explicit role-change expectation.`
+      });
+    });
+  });
+}
+
+function checkLargeOperatorIntentShape(input: {
+  readonly failures: KpLawFailure[];
+  readonly fixture: KatexTransformFixture;
+}): void {
+  switch (input.fixture.intent) {
+    case "addSummationBounds":
+    case "addIntegralBounds":
+      checkAddedBoundSlots(input.failures, input.fixture, [
+        "upper-limit",
+        "lower-limit"
+      ]);
+      break;
+    case "changeProductBounds":
+      checkChangedBoundSlot(input.failures, input.fixture, "upper-limit");
+      checkChangedBoundSlot(input.failures, input.fixture, "lower-limit");
+      break;
+    case "changeLimitApproach":
+      checkChangedBoundSlot(input.failures, input.fixture, "limit-approach");
+      break;
+    default:
+      break;
+  }
+}
+
+function checkAddedBoundSlots(
+  failures: KpLawFailure[],
+  fixture: KatexTransformFixture,
+  roles: readonly KatexTransformFixtureTokenRole[]
+): void {
+  roles.forEach((role) => {
+    const sourceCount = tokensWithRole(fixture.source.tokens, role).length;
+    const targetCount = tokensWithRole(fixture.target.tokens, role).length;
+
+    if (sourceCount === 0 && targetCount > 0) return;
+
+    failures.push({
+      path: `fixtures[${fixture.id}].${role}`,
+      message:
+        `Large operator fixture ${fixture.id} intent ${fixture.intent} must add target-only ${role} tokens.`
+    });
+  });
+}
+
+function checkChangedBoundSlot(
+  failures: KpLawFailure[],
+  fixture: KatexTransformFixture,
+  role: KatexTransformFixtureTokenRole
+): void {
+  const sourceToken = tokensWithRole(fixture.source.tokens, role)[0];
+  const targetToken = tokensWithRole(fixture.target.tokens, role)[0];
+
+  if (
+    sourceToken !== undefined &&
+    targetToken !== undefined &&
+    hasRoleChangeExpectation(
+      fixture,
+      role,
+      role,
+      sourceToken.text,
+      targetToken.text
+    )
+  ) {
+    return;
+  }
+
+  failures.push({
+    path: `fixtures[${fixture.id}].expectedRoleChanges`,
+    message:
+      `Large operator fixture ${fixture.id} must declare a role-change expectation for ${role}.`
+  });
+}
+
+function tokensWithRole(
+  tokens: readonly KatexTransformFixtureToken[],
+  role: KatexTransformFixtureTokenRole
+): readonly KatexTransformFixtureToken[] {
+  return tokens.filter((token) => token.role === role);
+}
+
+function hasRoleChangeExpectation(
+  fixture: KatexTransformFixture,
+  sourceRole: KatexTransformFixtureTokenRole,
+  targetRole: KatexTransformFixtureTokenRole,
+  sourceText: string,
+  targetText: string
+): boolean {
+  return fixture.expectedRoleChanges.some(
+    (roleChange) =>
+      roleChange.sourceRole === sourceRole &&
+      roleChange.targetRole === targetRole &&
+      roleChange.sourceText === sourceText &&
+      roleChange.targetText === targetText
+  );
 }
 
 function semanticToken(

@@ -1,0 +1,114 @@
+{
+  "id": "next-action.kp.animation-library.large-operator-transforms-v0",
+  "kind": "next-action",
+  "title": "Add large operator transform fixtures",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Expanded large-operator transform coverage by adding a fixture contract that pins single large-operator persistence, target-only bound entry, declared bound-slot changes, and explicit limit body rename provenance.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation-library.large-operator-transforms-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation-library.current-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-animation-renderer-integration-readiness-report.md",
+      "summary": "Renderer integration closeout recommending live card runtime visual-frame adoption, KaTeX fixture expansion, generated problem registry, flashcard samples, graph consumer, and paused-frame drill-down."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Project roadmap with semantic-first, runtime-second, renderer-third ordering and KaTeX/graph/dashboard/export priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active semantic runtime thread describing AnimationAsset, renderer-neutral frame, generated math, visual motif, and graph/programming adoption direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-transform-fixtures.ts",
+      "summary": "Adds the large-operator fixture contract and records the lim body rename from f(x) to f(h) as an explicit role-change expectation."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-token-snapshot.test.ts",
+      "summary": "Covers large-operator contract success and the undeclared body-rename failure mode alongside existing limit, sum, product, and integral fixture expectations."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-plan.test.ts",
+      "summary": "Existing planner tests stayed green with the strengthened KaTeX fixture catalogue."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation-library-expansion-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add large operator transform fixtures can be completed inside KP animation library expansion v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved animation-library expansion loop slices.",
+    "Grow KaTeX SemanticTransformation definitions, visual motifs, generated problem fixtures, graph runtime consumers, flashcard projections, and drill-down authoring through the AnimationAsset/runtime visual-frame protocol.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, live LSP, network integrations, or dynamic package loading; use deterministic fixtures.",
+    "Do not broaden into a dashboard redesign beyond search, progress rows, and sample previews needed for this loop.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/katex-token-snapshot.test.ts tests/equation-motion-plan.test.ts",
+      "status": "passed",
+      "scope": "focused large-operator fixture and equation planner coverage",
+      "checkedAt": "2026-07-14T20:24:54.047Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for live KaTeX behavior and regressions",
+      "checkedAt": "2026-07-14T20:24:54.078Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for large-operator slice",
+      "checkedAt": "2026-07-14T20:24:54.116Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for large-operator slice",
+      "checkedAt": "2026-07-14T20:24:54.148Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T20:24:54.202Z",
+      "scope": "Run-contract hygiene for large-operator slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Expanded large-operator transform coverage by adding a fixture contract that pins single large-operator persistence, target-only bound entry, declared bound-slot changes, and explicit limit body rename provenance."
+  }
+}

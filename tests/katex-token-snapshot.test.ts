@@ -9,6 +9,7 @@ import {
   snapshotKatexTokens
 } from "../src/rendering/katex-token-snapshot.ts";
 import {
+  checkKatexLargeOperatorFixtureContract,
   definitionForKatexTransformFixture,
   findKatexTransformFixture,
   findKatexTransformDefinition,
@@ -496,10 +497,47 @@ test("large-operator transform fixtures declare operators and limit geometry", (
         ["\\lim"],
         [],
         ["h \\to 0"],
-        [["limit-approach", "limit-approach", "x \\to 0", "h \\to 0"]]
+        [
+          ["limit-approach", "limit-approach", "x \\to 0", "h \\to 0"],
+          ["body", "body", "f(x)", "f(h)"]
+        ]
       ]
     ]
   );
+});
+
+test("large-operator fixture contract preserves operators and declares changed slots", () => {
+  assert.deepEqual(checkKatexLargeOperatorFixtureContract(), {
+    lawId: "katex-large-operator.fixture-contract",
+    passed: true,
+    failures: []
+  });
+});
+
+test("large-operator fixture contract reports undeclared body renames", () => {
+  const fixtures = largeOperatorTransformFixtures.map((fixture) =>
+    fixture.id === "large-operator.limit.change-approach"
+      ? {
+          ...fixture,
+          expectedRoleChanges: fixture.expectedRoleChanges.filter(
+            (roleChange) => roleChange.sourceRole !== "body"
+          )
+        }
+      : fixture
+  );
+
+  assert.deepEqual(checkKatexLargeOperatorFixtureContract(fixtures), {
+    lawId: "katex-large-operator.fixture-contract",
+    passed: false,
+    failures: [
+      {
+        path:
+          "fixtures[large-operator.limit.change-approach].expectedRoleChanges",
+        message:
+          "Large operator fixture large-operator.limit.change-approach changes body token f(x) to f(h) without an explicit role-change expectation."
+      }
+    ]
+  });
 });
 
 test("large-operator integral fixture declares differential spacing artifacts", () => {

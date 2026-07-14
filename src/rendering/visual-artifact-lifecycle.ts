@@ -251,6 +251,76 @@ export function checkKatexVisualArtifactFadeRules(
   };
 }
 
+export function checkKatexMatrixDelimiterArtifactContract(
+  records: readonly VisualArtifactLifecycleRecord[] =
+    katexVisualArtifactLifecycleRecords
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+  const record = records.find(
+    (candidate) => candidate.id === "artifact.matrix-bracket.replace-delimiter"
+  );
+
+  if (record === undefined) {
+    failures.push({
+      path: "records[artifact.matrix-bracket.replace-delimiter]",
+      message:
+        "Matrix delimiter swaps must define a matrix bracket replacement artifact record."
+    });
+    return {
+      lawId: "katex-matrix-delimiter.artifact-contract",
+      passed: false,
+      failures
+    };
+  }
+
+  if (record.kind !== "matrix-bracket") {
+    failures.push({
+      path: `records[${record.id}].kind`,
+      message:
+        `Matrix delimiter artifact ${record.id} must use kind matrix-bracket.`
+    });
+  }
+
+  if (record.phase !== "replace") {
+    failures.push({
+      path: `records[${record.id}].phase`,
+      message:
+        `Matrix delimiter artifact ${record.id} must replace delimiters rather than persist them.`
+    });
+  }
+
+  checkArtifactCount({
+    failures,
+    record,
+    field: "sourceArtifactIds",
+    expectedCount: 2
+  });
+  checkArtifactCount({
+    failures,
+    record,
+    field: "targetArtifactIds",
+    expectedCount: 2
+  });
+  checkArtifactLifecycle({
+    failures,
+    record,
+    field: "sourceVisualLifecycle",
+    expected: "exit"
+  });
+  checkArtifactLifecycle({
+    failures,
+    record,
+    field: "targetVisualLifecycle",
+    expected: "enter"
+  });
+
+  return {
+    lawId: "katex-matrix-delimiter.artifact-contract",
+    passed: failures.length === 0,
+    failures
+  };
+}
+
 function checkArtifactEndpoint(input: {
   readonly failures: KpLawFailure[];
   readonly record: VisualArtifactLifecycleRecord;
@@ -266,6 +336,23 @@ function checkArtifactEndpoint(input: {
     path: `records[${input.record.id}].${input.field}`,
     message:
       `Visual artifact ${input.record.id} phase ${input.record.phase} expected ${input.field} to be ${input.expectedEmpty ? "empty" : "present"}.`
+  });
+}
+
+function checkArtifactCount(input: {
+  readonly failures: KpLawFailure[];
+  readonly record: VisualArtifactLifecycleRecord;
+  readonly field: "sourceArtifactIds" | "targetArtifactIds";
+  readonly expectedCount: number;
+}): void {
+  const actualCount = input.record[input.field].length;
+
+  if (actualCount === input.expectedCount) return;
+
+  input.failures.push({
+    path: `records[${input.record.id}].${input.field}`,
+    message:
+      `Visual artifact ${input.record.id} expected ${input.expectedCount} ${input.field} but received ${actualCount}.`
   });
 }
 

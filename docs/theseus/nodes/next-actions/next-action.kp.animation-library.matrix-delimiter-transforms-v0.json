@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation-library.matrix-delimiter-transforms-v0",
   "kind": "next-action",
   "title": "Expand matrix delimiter and entry persistence coverage",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.matrix-delimiter-transforms-v0 in KP animation library expansion v0 loop.",
+  "summary": "Expanded matrix delimiter coverage by adding a KaTeX matrix delimiter artifact contract that pins bracket swaps as visual-only replacement artifacts while entry identity remains persistent in the planner fixture.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,26 @@
       "kind": "file",
       "path": "tests/katex-token-snapshot.test.ts",
       "summary": "KaTeX fixture coverage for matrix/vector bracket artifacts and entry selectors."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/visual-artifact-lifecycle.ts",
+      "summary": "Adds a matrix delimiter artifact contract law for matrix-bracket replacement phase, bracket counts, and exit/enter lifecycles."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-plan.test.ts",
+      "summary": "Covers the matrix delimiter artifact contract and existing planner coverage for entry persistence and bracket artifact replacement."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-token-snapshot.test.ts",
+      "summary": "Existing fixture coverage verifies matrix/vector bracket artifacts and entry selectors."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic.test.ts",
+      "summary": "Existing semantic matrix tests verify matrix object rendering and entry structure."
     }
   ],
   "dependsOn": {
@@ -84,5 +104,41 @@
       "id": "browser-coverage-keeps-matrix-card-visible",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-plan.test.ts tests/katex-token-snapshot.test.ts tests/semantic.test.ts",
+      "status": "passed",
+      "scope": "focused matrix delimiter, KaTeX fixture, and semantic matrix coverage",
+      "checkedAt": "2026-07-14T20:20:03.331Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for live KaTeX behavior and regressions",
+      "checkedAt": "2026-07-14T20:20:03.360Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for matrix delimiter slice",
+      "checkedAt": "2026-07-14T20:20:03.394Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for matrix delimiter slice",
+      "checkedAt": "2026-07-14T20:20:03.435Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T20:20:03.479Z",
+      "scope": "Run-contract hygiene for matrix delimiter slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Expanded matrix delimiter coverage by adding a KaTeX matrix delimiter artifact contract that pins bracket swaps as visual-only replacement artifacts while entry identity remains persistent in the planner fixture."
+  }
 }
