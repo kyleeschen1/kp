@@ -20,6 +20,9 @@ import {
 import {
   createGeneratedCalculusProblemFixture
 } from "../src/semantic/generated-calculus-problem-fixture.ts";
+import {
+  createGeneratedLinearAlgebraProblemFixture
+} from "../src/semantic/generated-linear-algebra-problem-fixture.ts";
 
 test("createGeneratedProblemAnimationAsset imports generated solution steps into an AnimationAsset", () => {
   const fixture = createGeneratedAlgebraTutorialFixture(
@@ -109,6 +112,61 @@ test("createGeneratedProblemAnimationAsset imports generated calculus derivative
 
   assert.deepEqual(frame.activeTransformationIds, [
     "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule"
+  ]);
+
+  const projections = createKpAnimationFlashcardProjections({
+    animation,
+    cards: fixture.flashcards
+  });
+
+  assert.equal(projections.length, fixture.flashcards.length);
+  assert.deepEqual(
+    projections.flatMap((projection) => projection.diagnostics),
+    []
+  );
+});
+
+test("createGeneratedProblemAnimationAsset imports generated linear algebra matrix-vector steps", () => {
+  const fixture = createGeneratedLinearAlgebraProblemFixture(
+    "generated.linear-algebra.matrix-vector.two-by-two"
+  );
+  const animation = createGeneratedProblemAnimationAsset(fixture);
+
+  assert.equal(
+    animation.id,
+    "animation.generated.linear-algebra.matrix-vector.two-by-two"
+  );
+  assert.equal(
+    animation.bundle.id,
+    "asset.generated.linear-algebra.matrix-vector.two-by-two"
+  );
+  assert.deepEqual(
+    animation.transformations.map((transformation) => transformation.id),
+    fixture.transformations.map((transformation) => transformation.id)
+  );
+  const dashboard = animation.dashboard;
+  assert.ok(dashboard);
+  assert.deepEqual(dashboard.tags, [
+    "animation",
+    "generated-problem",
+    "generated.linear-algebra.matrix-vector"
+  ]);
+  assert.deepEqual(animation.metadata, {
+    generatedProblemImport: true,
+    sourceFixtureId: "generated.linear-algebra.matrix-vector.two-by-two",
+    sourceFixtureFamilyId: "generated.linear-algebra.matrix-vector",
+    sourceTraceId: "trace.generated.linear-algebra.matrix-vector.two-by-two"
+  });
+  assert.equal(checkKpAnimationAssetReferenceClosure(animation).passed, true);
+  assert.equal(checkKpAnimationAssetSeekRewindLaw(animation).passed, true);
+
+  const frame = sampleKpAnimationRuntimeFrame({
+    animation,
+    progress: 0.5
+  });
+
+  assert.deepEqual(frame.activeTransformationIds, [
+    "transform.generated.linear-algebra.matrix-vector.two-by-two.multiply-matrix-vector"
   ]);
 
   const projections = createKpAnimationFlashcardProjections({
