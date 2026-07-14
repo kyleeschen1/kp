@@ -9,8 +9,10 @@ import {
   type KpAnimationAsset
 } from "../animation/asset.ts";
 import {
+  createKpAnimationRuntimeScrubberControl,
   sampleKpAnimationRuntimeFrame,
-  type KpAnimationRuntimeChildFrame
+  type KpAnimationRuntimeChildFrame,
+  type KpAnimationRuntimeScrubberControl
 } from "../animation/runtime-sampler.ts";
 import { createKpDashboardAssetPreviewInterpreter } from "../semantic/dashboard-preview-interpreter.ts";
 import {
@@ -197,6 +199,7 @@ function createAnimationAssetAgendaRowsForAssets(input: {
         progress: 0.5,
         childAnimations: input.animations
       });
+      const runtimeScrubber = createKpAnimationRuntimeScrubberControl(animation);
       const midpointFrame = runtimeFrame.frameDescriptor;
       const referenceClosure = checkKpAnimationAssetReferenceClosure(animation);
       const seekRewind = checkKpAnimationAssetSeekRewindLaw(animation);
@@ -303,6 +306,10 @@ function createAnimationAssetAgendaRowsForAssets(input: {
             value: runtimeFrame.id
           },
           {
+            label: "Runtime scrubber",
+            value: formatRuntimeScrubber(runtimeScrubber)
+          },
+          {
             label: "Runtime clock",
             value:
               `progress ${runtimeFrame.clock.progress}, beat ${runtimeFrame.clock.beat ?? "None"}`
@@ -351,6 +358,10 @@ function createAnimationAssetAgendaRowsForAssets(input: {
           `seek-rewind:${formatLawStatus(seekRewind.passed)}`,
           runtimeFrame.id,
           `runtime-frame:${runtimeFrame.id}`,
+          runtimeScrubber.id,
+          runtimeScrubber.unit,
+          `runtime-scrubber:${runtimeScrubber.unit}`,
+          `runtime-scrubber-id:${runtimeScrubber.id}`,
           runtimeFrame.phase.phaseId,
           `runtime-phase:${runtimeFrame.phase.phaseId}`,
           ...runtimeFrame.activeAnnotationIds,
@@ -637,6 +648,12 @@ function formatRuntimeChildFrames(
           `${child.renderTargetId}:${child.animationId}@${child.frame.phase.phaseId}`
         )
         .join(", ");
+}
+
+function formatRuntimeScrubber(
+  scrubber: KpAnimationRuntimeScrubberControl
+): string {
+  return `${scrubber.unit} ${scrubber.min}-${scrubber.max} step ${scrubber.step} default ${scrubber.defaultValue}`;
 }
 
 function latexValueAt(

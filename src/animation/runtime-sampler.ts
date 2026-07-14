@@ -60,6 +60,19 @@ export interface KpAnimationRuntimeClock {
   readonly beat?: number | undefined;
 }
 
+export interface KpAnimationRuntimeScrubberControl {
+  readonly id: string;
+  readonly kind: "animation-runtime-scrubber";
+  readonly animationId: string;
+  readonly timelineId?: string | undefined;
+  readonly unit: "beat" | "progress";
+  readonly min: number;
+  readonly max: number;
+  readonly step: number;
+  readonly defaultValue: number;
+  readonly defaultProgress: number;
+}
+
 export interface KpAnimationRuntimePhase {
   readonly phaseIndex: number;
   readonly phaseId: string;
@@ -76,6 +89,14 @@ export interface KpAnimationRuntimeChildFrame {
   readonly renderTargetId: string;
   readonly animationId: string;
   readonly frame: KpAnimationRuntimeFrame;
+}
+
+export interface SampleKpAnimationRuntimeFrameFromScrubberInput {
+  readonly animation: KpAnimationAsset;
+  readonly scrubber: KpAnimationRuntimeScrubberControl;
+  readonly value: number;
+  readonly childAnimations?: readonly KpAnimationAsset[] | undefined;
+  readonly direction?: KpAnimationAssetTransformationTreeDirection | undefined;
 }
 
 export interface KpAnimationRuntimeDiagnostic {
@@ -101,6 +122,58 @@ export interface KpAnimationRuntimeSelectorFrame {
   readonly activeTransformationIds: readonly string[];
   readonly annotationIds: readonly string[];
   readonly renderTargetIds: readonly string[];
+}
+
+export function createKpAnimationRuntimeScrubberControl(
+  animation: KpAnimationAsset
+): KpAnimationRuntimeScrubberControl {
+  const timeline = animation.timeline;
+  const beatCount = timeline?.beatCount;
+
+  if (
+    beatCount !== undefined &&
+    Number.isFinite(beatCount) &&
+    beatCount > 0
+  ) {
+    return {
+      id: `scrubber.${animation.id}`,
+      kind: "animation-runtime-scrubber",
+      animationId: animation.id,
+      ...(timeline?.id === undefined ? {} : { timelineId: timeline.id }),
+      unit: "beat",
+      min: 0,
+      max: beatCount,
+      step: 1,
+      defaultValue: roundClockValue(beatCount / 2),
+      defaultProgress: 0.5
+    };
+  }
+
+  return {
+    id: `scrubber.${animation.id}`,
+    kind: "animation-runtime-scrubber",
+    animationId: animation.id,
+    ...(timeline?.id === undefined ? {} : { timelineId: timeline.id }),
+    unit: "progress",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    defaultValue: 0.5,
+    defaultProgress: 0.5
+  };
+}
+
+export function sampleKpAnimationRuntimeFrameFromScrubber(
+  input: SampleKpAnimationRuntimeFrameFromScrubberInput
+): KpAnimationRuntimeFrame {
+  return sampleKpAnimationRuntimeFrame({
+    animation: input.animation,
+    childAnimations: input.childAnimations,
+    direction: input.direction,
+    ...(input.scrubber.unit === "beat"
+      ? { beat: input.value }
+      : { progress: input.value })
+  });
 }
 
 export function sampleKpAnimationRuntimeFrame(

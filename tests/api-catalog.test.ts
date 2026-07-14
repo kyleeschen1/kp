@@ -109,7 +109,9 @@ test("API catalog covers notation and layout entities with the same metadata pro
   assert.equal(runtimeFrame?.group.id, "capabilities-representations");
   assert.equal(runtimeFrame?.item.status, "active");
   assert.deepEqual(runtimeFrame?.item.details?.protocols, [
-    "sampleKpAnimationRuntimeFrame"
+    "sampleKpAnimationRuntimeFrame",
+    "createKpAnimationRuntimeScrubberControl",
+    "sampleKpAnimationRuntimeFrameFromScrubber"
   ]);
   assert.deepEqual(runtimeFrame?.item.details?.outputs, [
     "clock",

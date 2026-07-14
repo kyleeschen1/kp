@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  createKpAnimationRuntimeScrubberControl,
+  sampleKpAnimationRuntimeFrameFromScrubber,
   sampleKpAnimationRuntimeFrame
 } from "../src/animation/runtime-sampler.ts";
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
@@ -283,4 +285,30 @@ test("sampleKpAnimationRuntimeFrame samples referenced child animations for comp
       message: "2 child animation frame(s) sampled from render target metadata."
     }
   ]);
+});
+
+test("runtime scrubber control samples frames through the shared beat clock", () => {
+  const animation = createLinearSolveAnimationAsset();
+  const scrubber = createKpAnimationRuntimeScrubberControl(animation);
+  const frame = sampleKpAnimationRuntimeFrameFromScrubber({
+    animation,
+    scrubber,
+    value: 25
+  });
+
+  assert.deepEqual(scrubber, {
+    id: "scrubber.animation.linear-solve.solve-x",
+    kind: "animation-runtime-scrubber",
+    animationId: "animation.linear-solve.solve-x",
+    timelineId: "timeline.linear-solve.shared",
+    unit: "beat",
+    min: 0,
+    max: 50,
+    step: 1,
+    defaultValue: 25,
+    defaultProgress: 0.5
+  });
+  assert.equal(frame.clock.progress, 0.5);
+  assert.equal(frame.clock.beat, 25);
+  assert.equal(frame.phase.phaseId, "animation.linear-solve.solve-x.forward.1");
 });

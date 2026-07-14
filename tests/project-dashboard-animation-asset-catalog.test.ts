@@ -102,6 +102,16 @@ test("dashboard animation asset rows include cross-domain component facets", () 
         "render.comparison.linear-solve.equation:animation.linear-solve.solve-x@animation.linear-solve.solve-x.forward.1, render.comparison.programming.trace:animation.programming.add.execution-trace@animation.programming.add.execution-trace.forward.2"
     }
   );
+  assert.deepEqual(
+    comparison?.previewFields.find(
+      (field) => field.label === "Runtime scrubber"
+    ),
+    {
+      label: "Runtime scrubber",
+      value: "beat 0-50 step 1 default 25"
+    }
+  );
+  assert.ok(comparison?.searchFields.includes("runtime-scrubber:beat"));
   assert.ok(
     comparison?.searchFields.includes(
       "runtime-child:animation.programming.add.execution-trace"

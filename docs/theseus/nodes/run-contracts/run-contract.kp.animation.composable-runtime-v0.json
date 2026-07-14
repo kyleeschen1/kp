@@ -76,7 +76,8 @@
     {
       "id": "next-action.kp.animation.scrubber-runtime-controls-v0",
       "title": "Wire shared scrubber controls to runtime frames",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.scrubber-runtime-controls-v0 in KP composable animation runtime v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.external-port-contract-v0",

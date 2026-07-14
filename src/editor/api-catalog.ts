@@ -131,7 +131,11 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
       item("capability-execute", "execute", "capability", "proposed", "Computes structured semantic results such as determinant, inverse, derivative, sampled grid, or test result.", ["computation", "verification"]),
       item("capability-animate", "animate", "capability", "active", "Compiles transformations, correspondence maps, and layouts into sampleable timelines.", ["timeline", "motion"]),
       item("capability-animation-runtime-frame", "AnimationRuntimeFrame", "runtime", "active", "Renderer-neutral AnimationAsset sample with one normalized clock, phase metadata, selector frames, active render targets, child frames, semantic refs, and diagnostics.", ["animation", "runtime", "timeline"], {
-        protocols: ["sampleKpAnimationRuntimeFrame"],
+        protocols: [
+          "sampleKpAnimationRuntimeFrame",
+          "createKpAnimationRuntimeScrubberControl",
+          "sampleKpAnimationRuntimeFrameFromScrubber"
+        ],
         inputs: ["AnimationAsset", "progress | elapsedMs | beat"],
         outputs: ["clock", "phase", "selector frames", "active render targets", "child frames", "diagnostics", "frame descriptor"],
         preserves: ["animation identity", "timeline identity", "semantic ref identity"]
