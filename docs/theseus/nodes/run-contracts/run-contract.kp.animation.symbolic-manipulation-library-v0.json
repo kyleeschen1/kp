@@ -162,7 +162,7 @@
       "id": "next-action.kp.animation.calculus-hessian-optimization-family-v0",
       "title": "Add Hessian and optimization family",
       "summary": "Model Hessian, quadratic form, second-derivative test, and optimization stationarity examples with curvature-oriented graph equivalents.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.linear-algebra-vector-add-scale-family-v0",

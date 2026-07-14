@@ -234,6 +234,7 @@ export function createSymbolicManipulationFamilyRegistry():
     createCalculusIntegralFtcFamily(),
     createCalculusTaylorLocalLinearizationFamily(),
     createCalculusGradientJacobianFamily(),
+    createCalculusHessianOptimizationFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
@@ -246,7 +247,8 @@ export function createSymbolicManipulationFamilyRegistry():
           spec.id !== "family.calculus.derivative-rules" &&
           spec.id !== "family.calculus.integral-ftc" &&
           spec.id !== "family.calculus.taylor-local-linearization" &&
-          spec.id !== "family.calculus.gradient-jacobian"
+          spec.id !== "family.calculus.gradient-jacobian" &&
+          spec.id !== "family.calculus.hessian-optimization"
       )
       .map(createSeedFamily)
   ];
@@ -2926,6 +2928,268 @@ function createGradientDefinition(input: {
         targetObjectRole: "multivar.after",
         targetSelectorRole: "partial.derivative",
         preserves: ["presentation", "role"]
+      }
+    ]
+  });
+}
+
+function createCalculusHessianOptimizationFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.calculus.hessian-matrix",
+    "definition.symbolic.calculus.quadratic-form",
+    "definition.symbolic.calculus.second-derivative-test",
+    "definition.symbolic.calculus.stationarity-condition"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.calculus.hessian-optimization",
+    title: "Hessian and optimization",
+    domain: "calculus",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "hessian.before",
+        objectType: "second-order-function",
+        title: "Second-order function before optimization view",
+        selectorRoles: [
+          { id: "scalar.function", kind: "function" },
+          { id: "gradient.vector", kind: "vector" },
+          { id: "variable.row", kind: "variable" },
+          { id: "variable.column", kind: "variable" },
+          { id: "critical.point", kind: "point" }
+        ]
+      },
+      {
+        id: "hessian.after",
+        objectType: "second-order-optimization-view",
+        title: "Hessian or optimization view",
+        selectorRoles: [
+          { id: "hessian.matrix", kind: "matrix" },
+          { id: "hessian.row", kind: "matrix-row" },
+          { id: "hessian.column", kind: "matrix-column" },
+          { id: "quadratic.form", kind: "quadratic-form" },
+          { id: "eigenvalue.sign", kind: "sign" },
+          { id: "curvature.classification", kind: "classification" },
+          { id: "critical.point", kind: "point" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.calculus.hessian-matrix",
+        transformType: "hessianMatrix",
+        title: "Build a Hessian matrix",
+        sourceObjectRoles: ["hessian.before"],
+        targetObjectRoles: ["hessian.after"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "The scalar function has second partial derivatives at the represented point."
+        ],
+        lawRefs: [
+          {
+            id: "law.calculus.hessian-matrix",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "hessian.before",
+            sourceSelectorRole: "scalar.function",
+            targetObjectRole: "hessian.after",
+            targetSelectorRole: "hessian.matrix",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "hessian.before",
+            sourceSelectorRole: "variable.row",
+            targetObjectRole: "hessian.after",
+            targetSelectorRole: "hessian.row",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "hessian.before",
+            sourceSelectorRole: "variable.column",
+            targetObjectRole: "hessian.after",
+            targetSelectorRole: "hessian.column",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "hessian.before",
+            sourceSelectorRole: "critical.point",
+            targetObjectRole: "hessian.after",
+            targetSelectorRole: "critical.point",
+            preserves: ["identity", "role"]
+          }
+        ]
+      }),
+      createHessianDefinition({
+        id: "definition.symbolic.calculus.quadratic-form",
+        transformType: "quadraticForm",
+        title: "Project a Hessian into a quadratic form",
+        lawId: "law.calculus.quadratic-form",
+        assumption:
+          "The Hessian describes the second-order local quadratic form at the point."
+      }),
+      createHessianDefinition({
+        id: "definition.symbolic.calculus.second-derivative-test",
+        transformType: "secondDerivativeTest",
+        title: "Apply the second derivative test",
+        lawId: "law.calculus.second-derivative-test",
+        assumption:
+          "The critical point is stationary and the Hessian eigenvalue signs determine the local classification when nondegenerate."
+      }),
+      createHessianDefinition({
+        id: "definition.symbolic.calculus.stationarity-condition",
+        transformType: "stationarityCondition",
+        title: "Apply the stationarity condition",
+        lawId: "law.calculus.stationarity",
+        assumption:
+          "The gradient vanishes at the represented critical point."
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.calculus.hessian.matrix-fill",
+        motifKind: "hessian-matrix-fill",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.hessian-matrix"
+        ],
+        summary:
+          "Second partial derivatives fill Hessian rows and columns while variable provenance persists."
+      },
+      {
+        id: "motif.calculus.hessian.quadratic-form-surface",
+        motifKind: "quadratic-form-surface",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.quadratic-form"
+        ],
+        summary:
+          "The Hessian matrix projects into a quadratic-form surface around the critical point."
+      },
+      {
+        id: "motif.calculus.hessian.curvature-classification",
+        motifKind: "curvature-classification",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.second-derivative-test",
+          "definition.symbolic.calculus.stationarity-condition"
+        ],
+        summary:
+          "Eigenvalue signs and stationarity conditions produce a derived curvature classification."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.hessian-optimization.basic",
+        animationId: "animation.hessian-optimization.basic",
+        renderTargetKinds: ["equation", "matrix", "graph"],
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.hessian-matrix",
+          "definition.symbolic.calculus.quadratic-form",
+          "definition.symbolic.calculus.second-derivative-test"
+        ],
+        summary:
+          "Basic Hessian sample links second partial matrix entries to quadratic-form and curvature graph views."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.calculus.hessian.quadratic-form",
+        title: "Hessian determines local quadratic curvature",
+        representationKind: "quadratic-form",
+        exactness: "sampled",
+        preserves: ["value", "structure"],
+        lawRefs: [
+          {
+            id: "law.graph.hessian-quadratic-curvature",
+            level: "sampled"
+          }
+        ],
+        sampleAssetIds: ["animation.hessian-optimization.basic"],
+        summary:
+          "Hessian symbolic views project to local quadratic curvature and optimization classification graph views."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.calculus-hessian-optimization",
+        fixtureFamilyId: "generated.calculus-hessian-optimization",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated optimization traces can map Hessian construction, quadratic forms, and second-derivative tests to this family."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.calculus.hessian-optimization.compare",
+        kind: "relationship",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.hessian-matrix",
+          "definition.symbolic.calculus.quadratic-form",
+          "definition.symbolic.calculus.second-derivative-test"
+        ],
+        summary:
+          "Relationship cards can compare Hessian entries, quadratic-form geometry, and curvature classifications."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId(
+        "family.calculus.hessian-optimization"
+      ),
+      tags: [
+        "hessian",
+        "optimization",
+        "curvature",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for Hessians, quadratic forms, second-derivative tests, and optimization stationarity.",
+      searchSummary:
+        "hessian optimization curvature quadratic form second derivative stationarity critical point eigenvalue",
+      graphEquivalentKinds: "curvature,quadratic-form"
+    }
+  });
+}
+
+function createHessianDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["hessian.before"],
+    targetObjectRoles: ["hessian.after"],
+    preserves: ["value", "structure"],
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "hessian.before",
+        sourceSelectorRole: "scalar.function",
+        targetObjectRole: "hessian.after",
+        targetSelectorRole: "quadratic.form",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "hessian.before",
+        sourceSelectorRole: "critical.point",
+        targetObjectRole: "hessian.after",
+        targetSelectorRole: "critical.point",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "hessian.before",
+        sourceSelectorRole: "gradient.vector",
+        targetObjectRole: "hessian.after",
+        targetSelectorRole: "curvature.classification",
+        preserves: ["role"]
       }
     ]
   });

@@ -2111,6 +2111,187 @@ test("calculus gradient and Jacobian family maps partials into vector and matrix
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("calculus Hessian family maps second partials to curvature and optimization views", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.calculus.hessian-optimization"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "hessian.before",
+        "second-order-function",
+        [
+          "scalar.function",
+          "gradient.vector",
+          "variable.row",
+          "variable.column",
+          "critical.point"
+        ]
+      ],
+      [
+        "hessian.after",
+        "second-order-optimization-view",
+        [
+          "hessian.matrix",
+          "hessian.row",
+          "hessian.column",
+          "quadratic.form",
+          "eigenvalue.sign",
+          "curvature.classification",
+          "critical.point"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.calculus.hessian-matrix",
+        "hessianMatrix",
+        ["value", "structure"],
+        "law.calculus.hessian-matrix"
+      ],
+      [
+        "definition.symbolic.calculus.quadratic-form",
+        "quadraticForm",
+        ["value", "structure"],
+        "law.calculus.quadratic-form"
+      ],
+      [
+        "definition.symbolic.calculus.second-derivative-test",
+        "secondDerivativeTest",
+        ["value", "structure"],
+        "law.calculus.second-derivative-test"
+      ],
+      [
+        "definition.symbolic.calculus.stationarity-condition",
+        "stationarityCondition",
+        ["value", "structure"],
+        "law.calculus.stationarity"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[0]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["scalar.function", "hessian.matrix", ["value", "role"]],
+      ["variable.row", "hessian.row", ["identity", "role"]],
+      ["variable.column", "hessian.column", ["identity", "role"]],
+      ["critical.point", "critical.point", ["identity", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.calculus.hessian.matrix-fill",
+      motifKind: "hessian-matrix-fill",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.hessian-matrix"
+      ],
+      summary:
+        "Second partial derivatives fill Hessian rows and columns while variable provenance persists."
+    },
+    {
+      id: "motif.calculus.hessian.quadratic-form-surface",
+      motifKind: "quadratic-form-surface",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.quadratic-form"
+      ],
+      summary:
+        "The Hessian matrix projects into a quadratic-form surface around the critical point."
+    },
+    {
+      id: "motif.calculus.hessian.curvature-classification",
+      motifKind: "curvature-classification",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.second-derivative-test",
+        "definition.symbolic.calculus.stationarity-condition"
+      ],
+      summary:
+        "Eigenvalue signs and stationarity conditions produce a derived curvature classification."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.hessian-optimization.basic",
+      animationId: "animation.hessian-optimization.basic",
+      renderTargetKinds: ["equation", "matrix", "graph"],
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.hessian-matrix",
+        "definition.symbolic.calculus.quadratic-form",
+        "definition.symbolic.calculus.second-derivative-test"
+      ],
+      summary:
+        "Basic Hessian sample links second partial matrix entries to quadratic-form and curvature graph views."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.calculus.hessian.quadratic-form",
+      title: "Hessian determines local quadratic curvature",
+      representationKind: "quadratic-form",
+      exactness: "sampled",
+      preserves: ["value", "structure"],
+      lawRefs: [
+        {
+          id: "law.graph.hessian-quadratic-curvature",
+          level: "sampled"
+        }
+      ],
+      sampleAssetIds: ["animation.hessian-optimization.basic"],
+      summary:
+        "Hessian symbolic views project to local quadratic curvature and optimization classification graph views."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.calculus-hessian-optimization",
+      fixtureFamilyId: "generated.calculus-hessian-optimization",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.hessian-matrix",
+        "definition.symbolic.calculus.quadratic-form",
+        "definition.symbolic.calculus.second-derivative-test",
+        "definition.symbolic.calculus.stationarity-condition"
+      ],
+      summary:
+        "Generated optimization traces can map Hessian construction, quadratic forms, and second-derivative tests to this family."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.calculus.hessian-optimization.compare",
+      kind: "relationship",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.hessian-matrix",
+        "definition.symbolic.calculus.quadratic-form",
+        "definition.symbolic.calculus.second-derivative-test"
+      ],
+      summary:
+        "Relationship cards can compare Hessian entries, quadratic-form geometry, and curvature classifications."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
   assert.deepEqual(
     createSymbolicManipulationFamilyAgendaRows(
