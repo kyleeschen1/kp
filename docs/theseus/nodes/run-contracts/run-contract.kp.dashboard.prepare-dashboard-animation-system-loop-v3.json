@@ -1,0 +1,40 @@
+{
+  "id": "run-contract.kp.dashboard.prepare-dashboard-animation-system-loop-v3",
+  "kind": "run-contract",
+  "title": "KP dashboard and semantic animation system Preparation Loop",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "summary": "Superseded by durable execution contract run-contract.kp.dashboard.dashboard-animation-system-execution-loop-v1.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Frontier selected by loop-plan rank 1. Loop-plan selected this frontier because Workflow is active."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run theseus -- journey-report",
+    "npm run theseus -- loop-plan --limit 5"
+  ],
+  "allowedWork": [
+    "Read the frontier context and adjacent decisions before choosing work.",
+    "Create, link, or defer a concrete next action with source refs and verification.",
+    "Run only the selected concrete slice if the context makes it small and safe."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected frontier.",
+    "Do not start unrelated Spindle feature work."
+  ],
+  "goal": "Prepare KP dashboard and semantic animation system into concrete, verified next work without broadening beyond the selected frontier.",
+  "target": "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3",
+  "runMode": "run",
+  "maxSlices": 2,
+  "commitCadence": "Commit after the preparation slice is verified.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop if context shows the frontier should remain deferred.",
+    "Stop if the concrete next action would cross unrelated domains.",
+    "Stop after creating or completing one concrete slice."
+  ]
+}

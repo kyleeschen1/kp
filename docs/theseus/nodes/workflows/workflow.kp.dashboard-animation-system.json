@@ -59,7 +59,8 @@
     "next-action.kp.semantic.transform-definition-dashboard-export-coverage-v0",
     "next-action.kp.runtime.visual-motif-default-laws-v0",
     "next-action.kp.animation.composable-animation-asset-contract-v0",
-    "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v2"
+    "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v2",
+    "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3"
   ],
   "verificationRecords": [
     {

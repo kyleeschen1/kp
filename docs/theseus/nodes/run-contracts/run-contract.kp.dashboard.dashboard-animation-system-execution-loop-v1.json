@@ -1,0 +1,52 @@
+{
+  "id": "run-contract.kp.dashboard.dashboard-animation-system-execution-loop-v1",
+  "kind": "run-contract",
+  "title": "KP dashboard and semantic animation system Execution Loop",
+  "status": "ready",
+  "domain": "kp.dashboard",
+  "summary": "Durable execution contract promoted from KP dashboard and semantic animation system Preparation Loop so Prepare KP dashboard and semantic animation system Loop has an explicit long-loop owner.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.dashboard.prepare-dashboard-animation-system-loop-v3.json",
+      "summary": "Preparation scaffold that this durable contract supersedes."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3.json",
+      "summary": "Ready action that the durable execution contract now owns."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run theseus -- journey-report",
+    "npm run theseus -- loop-plan --limit 5"
+  ],
+  "allowedWork": [
+    "Read the frontier context and adjacent decisions before choosing work.",
+    "Create, link, or defer a concrete next action with source refs and verification.",
+    "Run only the selected concrete slice if the context makes it small and safe."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected frontier.",
+    "Do not start unrelated Spindle feature work."
+  ],
+  "goal": "Run Prepare KP dashboard and semantic animation system Loop through a durable, explicitly owned execution loop.",
+  "target": "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3",
+  "runMode": "run",
+  "maxSlices": 3,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop if the prepared action is no longer the right durable target.",
+    "Stop if implementation broadens beyond the prepared action and its immediate follow-up queue work.",
+    "Rerun long-loop-report after each resolved slice to confirm durable continuity still holds."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3",
+      "title": "Prepare KP dashboard and semantic animation system Loop",
+      "status": "ready"
+    }
+  ]
+}
