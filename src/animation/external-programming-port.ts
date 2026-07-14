@@ -18,6 +18,7 @@ import {
 } from "../tutorial/programming-execution-trace-fixture.ts";
 import type {
   KpProgrammingExecutionTrace,
+  KpProgrammingExecutionTraceStackFrame,
   KpProgrammingExecutionTraceStep
 } from "../tutorial/programming-execution-trace.ts";
 
@@ -217,6 +218,96 @@ function validateProgrammingTraceStep(
       path: `steps[${index}].selectorIds`
     });
   }
+
+  validateProgrammingTraceStack(step, expectedStep, index, diagnostics);
+}
+
+function validateProgrammingTraceStack(
+  step: KpProgrammingExecutionTraceStep,
+  expectedStep: KpProgrammingExecutionTraceStep,
+  stepIndex: number,
+  diagnostics: KpPortDiagnostic[]
+): void {
+  if (step.stack.length !== expectedStep.stack.length) {
+    diagnostics.push({
+      severity: "warning",
+      code: "programming-trace-stack-count-mismatch",
+      lossKind: "partial",
+      message:
+        `Programming trace step ${step.stepId} stack depth ${step.stack.length} does not match expected ${expectedStep.stack.length}.`,
+      path: `steps[${stepIndex}].stack`
+    });
+  }
+
+  expectedStep.stack.forEach((expectedFrame, frameIndex) => {
+    const frame = step.stack[frameIndex];
+
+    if (frame === undefined) {
+      return;
+    }
+
+    validateProgrammingTraceStackFrame(
+      frame,
+      expectedFrame,
+      step.stepId,
+      stepIndex,
+      frameIndex,
+      diagnostics
+    );
+  });
+}
+
+function validateProgrammingTraceStackFrame(
+  frame: KpProgrammingExecutionTraceStackFrame,
+  expectedFrame: KpProgrammingExecutionTraceStackFrame,
+  stepId: string,
+  stepIndex: number,
+  frameIndex: number,
+  diagnostics: KpPortDiagnostic[]
+): void {
+  if (frame.frameId !== expectedFrame.frameId) {
+    diagnostics.push({
+      severity: "warning",
+      code: "programming-trace-stack-frame-id-mismatch",
+      lossKind: "lossy",
+      message:
+        `Programming trace step ${stepId} stack frame ${frame.frameId} does not match expected ${expectedFrame.frameId}.`,
+      path: `steps[${stepIndex}].stack[${frameIndex}].frameId`
+    });
+  }
+
+  if (frame.functionName !== expectedFrame.functionName) {
+    diagnostics.push({
+      severity: "warning",
+      code: "programming-trace-stack-function-mismatch",
+      lossKind: "lossy",
+      message:
+        `Programming trace step ${stepId} stack frame ${frame.frameId} function ${frame.functionName} does not match expected ${expectedFrame.functionName}.`,
+      path: `steps[${stepIndex}].stack[${frameIndex}].functionName`
+    });
+  }
+
+  if (frame.sourceFileId !== expectedFrame.sourceFileId) {
+    diagnostics.push({
+      severity: "warning",
+      code: "programming-trace-stack-source-file-mismatch",
+      lossKind: "partial",
+      message:
+        `Programming trace step ${stepId} stack frame ${frame.frameId} source file ${frame.sourceFileId} does not match expected ${expectedFrame.sourceFileId}.`,
+      path: `steps[${stepIndex}].stack[${frameIndex}].sourceFileId`
+    });
+  }
+
+  if (frame.selectorId !== expectedFrame.selectorId) {
+    diagnostics.push({
+      severity: "warning",
+      code: "programming-trace-stack-selector-mismatch",
+      lossKind: "lossy",
+      message:
+        `Programming trace step ${stepId} stack frame ${frame.frameId} selector ${formatOptionalString(frame.selectorId)} does not match expected ${formatOptionalString(expectedFrame.selectorId)}.`,
+      path: `steps[${stepIndex}].stack[${frameIndex}].selectorId`
+    });
+  }
 }
 
 function stringListsEqual(
@@ -231,3 +322,6 @@ function formatStringList(values: readonly string[]): string {
   return values.length === 0 ? "<none>" : values.join(", ");
 }
 
+function formatOptionalString(value: string | undefined): string {
+  return value ?? "<none>";
+}

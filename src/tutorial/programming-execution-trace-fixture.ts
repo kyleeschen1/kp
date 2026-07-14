@@ -27,6 +27,14 @@ export interface AdditionProgrammingExecutionTraceFixture
   readonly trace: KpProgrammingExecutionTrace;
 }
 
+export interface AdditionProgrammingCallstackLossyTraceFixture
+  extends KpAnimationSampler<KpProgrammingExecutionTraceFrame> {
+  readonly id: "fixture.programming.add.callstack-lossy";
+  readonly sourceFile: SourceFileObject;
+  readonly selectors: readonly SourceRangeSelector[];
+  readonly trace: KpProgrammingExecutionTrace;
+}
+
 export function createAdditionProgrammingExecutionTraceFixture(): AdditionProgrammingExecutionTraceFixture {
   const sample = createAdditionProgrammingTutorialCardSample();
   const signatureSelectorId = "selector.programming.add.signature";
@@ -90,6 +98,46 @@ export function createAdditionProgrammingExecutionTraceFixture(): AdditionProgra
     id: "fixture.programming.add.execution-trace",
     sourceFile: sample.sourceFile,
     selectors: sample.selectors,
+    trace,
+    sample(progress) {
+      const normalizedProgress = normalizeAnimationProgress(progress);
+
+      return createKpProgrammingExecutionTraceFrame({
+        trace,
+        stepIndex: selectProgrammingExecutionTraceStepIndex(
+          trace,
+          normalizedProgress
+        ),
+        progress: normalizedProgress
+      });
+    }
+  };
+}
+
+export function createAdditionProgrammingCallstackLossyTraceFixture():
+  AdditionProgrammingCallstackLossyTraceFixture {
+  const base = createAdditionProgrammingExecutionTraceFixture();
+  const trace = createKpProgrammingExecutionTrace({
+    traceId: "trace.programming.add.callstack-lossy",
+    sourceFileId: base.trace.sourceFileId,
+    sharedClockId: base.trace.sharedClockId,
+    steps: base.trace.steps.map((step) =>
+      step.stepId === "step.programming.add.call"
+        ? {
+            ...step,
+            stack: step.stack.map((frame) => ({
+              ...frame,
+              selectorId: "selector.programming.add.missing"
+            }))
+          }
+        : step
+    )
+  });
+
+  return {
+    id: "fixture.programming.add.callstack-lossy",
+    sourceFile: base.sourceFile,
+    selectors: base.selectors,
     trace,
     sample(progress) {
       const normalizedProgress = normalizeAnimationProgress(progress);

@@ -12,6 +12,7 @@ import {
   sampleKpAnimationRuntimeFrame
 } from "../src/animation/runtime-sampler.ts";
 import {
+  createAdditionProgrammingCallstackLossyTraceFixture,
   createAdditionProgrammingExecutionTraceFixture
 } from "../src/tutorial/programming-execution-trace-fixture.ts";
 
@@ -98,3 +99,44 @@ test("addition program trace port reports mismatched execution steps", () => {
   });
 });
 
+test("addition program trace port reports callstack source-range mismatches", () => {
+  const fixture = createAdditionProgrammingCallstackLossyTraceFixture();
+  const port = createAdditionProgramTraceExternalAnimationPort();
+  const result = runKpExternalAnimationPort(port, fixture.trace);
+
+  assert.equal(result.preservation, "lax");
+  assert.equal(
+    result.animation.metadata?.["sourceTraceId"],
+    "trace.programming.add.callstack-lossy"
+  );
+  assert.deepEqual(result.diagnosticSummary, {
+    total: 1,
+    bySeverity: {
+      info: 0,
+      warning: 1,
+      error: 0
+    },
+    byLossKind: {
+      lossy: 1
+    },
+    codes: ["programming-trace-stack-selector-mismatch"],
+    hasErrors: false,
+    hasLoss: true,
+    preservation: "lax"
+  });
+  assert.deepEqual(result.diagnostics, [
+    {
+      severity: "warning",
+      code: "programming-trace-stack-selector-mismatch",
+      lossKind: "lossy",
+      message:
+        "Programming trace step step.programming.add.call stack frame frame.programming.add selector selector.programming.add.missing does not match expected selector.programming.add.signature.",
+      path: "steps[0].stack[0].selectorId"
+    }
+  ]);
+  assert.deepEqual(checkKpExternalAnimationPortLossDiagnostics(result), {
+    lawId: "animation-port.loss-reporting",
+    passed: true,
+    failures: []
+  });
+});
