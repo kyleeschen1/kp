@@ -1,0 +1,97 @@
+{
+  "id": "next-action.kp.animation.graph-vector-visual-frame-adapter-v0",
+  "kind": "next-action",
+  "title": "Add visual-frame adapter for graph and vector assets",
+  "status": "resolved",
+  "summary": "Added a graph runtime visual-frame adapter that binds graph render targets and vector/linear-map selectors into stable SVG visual-frame refs.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.renderer-integration-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.graph-vector-visual-frame-adapter-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-composable-animation-runtime-readiness-report.md",
+      "summary": "Runtime closeout recommends connecting the sampler to one live visual renderer, visual-frame adapters, representation transforms, generated imports, flashcards, and hardened ports."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP frontier for dashboard-backed semantic animation system work."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/graph-runtime-visual-frame-adapter.ts",
+      "summary": "Creates graph visual frames from runtime frames using render-target bindings, selector refs, optional geometry, and the shared visual-frame diagnostics contract."
+    },
+    {
+      "kind": "file",
+      "path": "tests/graph-runtime-visual-frame-adapter.test.ts",
+      "summary": "Focused test proving graph render-target and vector selector bindings for the linear-map vector animation asset."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.renderer-integration-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add visual-frame adapter for graph and vector assets can be completed inside KP animation renderer integration v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved renderer-integration loop slices.",
+    "Start by proving one honest runtime-to-visual path before broader renderer work.",
+    "Keep AnimationAsset runtime frames, semantic refs, visual-frame adapters, dashboards, generated problems, flashcards, and deterministic ports typed and inspectable."
+  ],
+  "disallowedWork": [
+    "Do not rewrite the full renderer or equation animation DOM pipeline in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, LSP, or network integrations; use deterministic fixtures.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/graph-runtime-visual-frame-adapter.test.ts tests/kp-graph-animation-asset.test.ts tests/kp-animation-runtime-sampler.test.ts tests/kp-animation-visual-frame-adapter.test.ts tests/kp-animation-visual-frame-diagnostics-panel.test.ts",
+      "status": "passed",
+      "scope": "graph visual-frame adapter and adjacent runtime/visual contracts",
+      "checkedAt": "2026-07-14T17:52:47.173Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app, node, and test projects",
+      "checkedAt": "2026-07-14T17:52:47.206Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-14T17:52:47.243Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T17:52:47.275Z",
+      "scope": "Run-contract hygiene gate"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a graph runtime visual-frame adapter that binds graph render targets and vector/linear-map selectors into stable SVG visual-frame refs."
+  }
+}
