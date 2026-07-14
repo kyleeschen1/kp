@@ -1752,6 +1752,185 @@ test("calculus integral family projects to area sweep graph samples", () => {
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("calculus Taylor family models approximation and local linearization", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.calculus.taylor-local-linearization"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "taylor.before",
+        "approximation-expression",
+        [
+          "function",
+          "center",
+          "variable",
+          "derivative.order",
+          "factorial",
+          "remainder"
+        ]
+      ],
+      [
+        "taylor.after",
+        "approximation-expression",
+        [
+          "polynomial.term",
+          "center",
+          "variable",
+          "derivative.value",
+          "order.marker",
+          "remainder.annotation"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.calculus.taylor-expansion",
+        "taylorExpansion",
+        ["value", "structure"],
+        "law.calculus.taylor-expansion"
+      ],
+      [
+        "definition.symbolic.calculus.taylor-truncation",
+        "taylorTruncation",
+        ["structure"],
+        "law.calculus.taylor-truncation"
+      ],
+      [
+        "definition.symbolic.calculus.local-linearization",
+        "localLinearization",
+        ["value", "structure"],
+        "law.calculus.local-linearization"
+      ],
+      [
+        "definition.symbolic.calculus.remainder-annotation",
+        "remainderAnnotation",
+        ["structure"],
+        "law.calculus.taylor-remainder"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[2]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["function", "polynomial.term", ["value", "role"]],
+      ["center", "center", ["identity", "role"]],
+      ["variable", "variable", ["identity", "role"]],
+      ["derivative.order", "derivative.value", ["value", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.calculus.taylor.polynomial-layer-build",
+      motifKind: "polynomial-layer-build",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.taylor-expansion"
+      ],
+      summary:
+        "Derivative-order terms layer into a polynomial approximation around a persistent center."
+    },
+    {
+      id: "motif.calculus.taylor.truncate-remainder",
+      motifKind: "truncate-remainder",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.taylor-truncation",
+        "definition.symbolic.calculus.remainder-annotation"
+      ],
+      summary:
+        "Higher-order terms collapse into an explicit remainder annotation instead of disappearing silently."
+    },
+    {
+      id: "motif.calculus.taylor.local-tangent-settle",
+      motifKind: "local-tangent-settle",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.local-linearization"
+      ],
+      summary:
+        "The approximation settles into tangent-line geometry at the preserved center point."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.taylor-local-linearization.basic",
+      animationId: "animation.taylor-local-linearization.basic",
+      renderTargetKinds: ["equation", "graph"],
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.taylor-expansion",
+        "definition.symbolic.calculus.local-linearization"
+      ],
+      summary:
+        "Basic Taylor sample links symbolic approximation terms to tangent and polynomial graph overlays."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.calculus.taylor.local-polynomial",
+      title: "Taylor polynomial approximates the function locally",
+      representationKind: "function-graph",
+      exactness: "sampled",
+      preserves: ["structure"],
+      lawRefs: [
+        {
+          id: "law.graph.taylor-local-approximation",
+          level: "sampled"
+        }
+      ],
+      sampleAssetIds: ["animation.taylor-local-linearization.basic"],
+      summary:
+        "Taylor and local-linearization rewrites project to tangent or local-polynomial overlays near the expansion center."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.calculus-taylor-linearization",
+      fixtureFamilyId: "generated.calculus-taylor-linearization",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.taylor-expansion",
+        "definition.symbolic.calculus.taylor-truncation",
+        "definition.symbolic.calculus.local-linearization",
+        "definition.symbolic.calculus.remainder-annotation"
+      ],
+      summary:
+        "Generated approximation traces can map expansion, truncation, local linearization, and remainder steps to this family."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.calculus.taylor.approximation",
+      kind: "relationship",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.taylor-expansion",
+        "definition.symbolic.calculus.local-linearization"
+      ],
+      summary:
+        "Relationship cards can ask how a symbolic Taylor term maps to graph-local approximation behavior."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
   assert.deepEqual(
     createSymbolicManipulationFamilyAgendaRows(

@@ -150,7 +150,7 @@
       "id": "next-action.kp.animation.calculus-taylor-local-linearization-family-v0",
       "title": "Add Taylor and local linearization family",
       "summary": "Model Taylor expansion, truncation, remainder annotation, and local linear approximation as symbolic families with graph equivalents.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.calculus-gradient-jacobian-family-v0",

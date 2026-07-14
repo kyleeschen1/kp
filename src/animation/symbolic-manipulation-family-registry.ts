@@ -232,6 +232,7 @@ export function createSymbolicManipulationFamilyRegistry():
     createAlgebraInequalityFamily(),
     createCalculusDerivativeRulesFamily(),
     createCalculusIntegralFtcFamily(),
+    createCalculusTaylorLocalLinearizationFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
@@ -242,7 +243,8 @@ export function createSymbolicManipulationFamilyRegistry():
           spec.id !== "family.algebra.exponent-log-laws" &&
           spec.id !== "family.algebra.inequality" &&
           spec.id !== "family.calculus.derivative-rules" &&
-          spec.id !== "family.calculus.integral-ftc"
+          spec.id !== "family.calculus.integral-ftc" &&
+          spec.id !== "family.calculus.taylor-local-linearization"
       )
       .map(createSeedFamily)
   ];
@@ -2396,6 +2398,271 @@ function createIntegralDefinition(input: {
         targetObjectRole: "integral.after",
         targetSelectorRole: "evaluation.bar",
         preserves: ["presentation", "role"]
+      }
+    ]
+  });
+}
+
+function createCalculusTaylorLocalLinearizationFamily():
+  KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.calculus.taylor-expansion",
+    "definition.symbolic.calculus.taylor-truncation",
+    "definition.symbolic.calculus.local-linearization",
+    "definition.symbolic.calculus.remainder-annotation"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.calculus.taylor-local-linearization",
+    title: "Taylor and local linearization",
+    domain: "calculus",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "taylor.before",
+        objectType: "approximation-expression",
+        title: "Function expression before approximation",
+        selectorRoles: [
+          { id: "function", kind: "function" },
+          { id: "center", kind: "point" },
+          { id: "variable", kind: "variable" },
+          { id: "derivative.order", kind: "order" },
+          { id: "factorial", kind: "factorial" },
+          { id: "remainder", kind: "annotation" }
+        ]
+      },
+      {
+        id: "taylor.after",
+        objectType: "approximation-expression",
+        title: "Approximation expression after rewrite",
+        selectorRoles: [
+          { id: "polynomial.term", kind: "term" },
+          { id: "center", kind: "point" },
+          { id: "variable", kind: "variable" },
+          { id: "derivative.value", kind: "coefficient" },
+          { id: "order.marker", kind: "order" },
+          { id: "remainder.annotation", kind: "annotation" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createTaylorDefinition({
+        id: "definition.symbolic.calculus.taylor-expansion",
+        transformType: "taylorExpansion",
+        title: "Expand a function into a Taylor polynomial",
+        lawId: "law.calculus.taylor-expansion",
+        preserves: ["value", "structure"],
+        assumption:
+          "The function is sufficiently differentiable near the represented center."
+      }),
+      createTaylorDefinition({
+        id: "definition.symbolic.calculus.taylor-truncation",
+        transformType: "taylorTruncation",
+        title: "Truncate a Taylor expansion",
+        lawId: "law.calculus.taylor-truncation",
+        preserves: ["structure"],
+        assumption:
+          "Truncation is an approximation step and requires explicit remainder or error metadata."
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.calculus.local-linearization",
+        transformType: "localLinearization",
+        title: "Build a local linear approximation",
+        sourceObjectRoles: ["taylor.before"],
+        targetObjectRoles: ["taylor.after"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "The first-order approximation is centered at the represented point."
+        ],
+        lawRefs: [
+          {
+            id: "law.calculus.local-linearization",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "taylor.before",
+            sourceSelectorRole: "function",
+            targetObjectRole: "taylor.after",
+            targetSelectorRole: "polynomial.term",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "taylor.before",
+            sourceSelectorRole: "center",
+            targetObjectRole: "taylor.after",
+            targetSelectorRole: "center",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "taylor.before",
+            sourceSelectorRole: "variable",
+            targetObjectRole: "taylor.after",
+            targetSelectorRole: "variable",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "taylor.before",
+            sourceSelectorRole: "derivative.order",
+            targetObjectRole: "taylor.after",
+            targetSelectorRole: "derivative.value",
+            preserves: ["value", "role"]
+          }
+        ]
+      }),
+      createTaylorDefinition({
+        id: "definition.symbolic.calculus.remainder-annotation",
+        transformType: "remainderAnnotation",
+        title: "Annotate a Taylor remainder",
+        lawId: "law.calculus.taylor-remainder",
+        preserves: ["structure"],
+        assumption:
+          "The omitted terms are represented by an explicit remainder or error annotation."
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.calculus.taylor.polynomial-layer-build",
+        motifKind: "polynomial-layer-build",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.taylor-expansion"
+        ],
+        summary:
+          "Derivative-order terms layer into a polynomial approximation around a persistent center."
+      },
+      {
+        id: "motif.calculus.taylor.truncate-remainder",
+        motifKind: "truncate-remainder",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.taylor-truncation",
+          "definition.symbolic.calculus.remainder-annotation"
+        ],
+        summary:
+          "Higher-order terms collapse into an explicit remainder annotation instead of disappearing silently."
+      },
+      {
+        id: "motif.calculus.taylor.local-tangent-settle",
+        motifKind: "local-tangent-settle",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.local-linearization"
+        ],
+        summary:
+          "The approximation settles into tangent-line geometry at the preserved center point."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.taylor-local-linearization.basic",
+        animationId: "animation.taylor-local-linearization.basic",
+        renderTargetKinds: ["equation", "graph"],
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.taylor-expansion",
+          "definition.symbolic.calculus.local-linearization"
+        ],
+        summary:
+          "Basic Taylor sample links symbolic approximation terms to tangent and polynomial graph overlays."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.calculus.taylor.local-polynomial",
+        title: "Taylor polynomial approximates the function locally",
+        representationKind: "function-graph",
+        exactness: "sampled",
+        preserves: ["structure"],
+        lawRefs: [
+          {
+            id: "law.graph.taylor-local-approximation",
+            level: "sampled"
+          }
+        ],
+        sampleAssetIds: ["animation.taylor-local-linearization.basic"],
+        summary:
+          "Taylor and local-linearization rewrites project to tangent or local-polynomial overlays near the expansion center."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.calculus-taylor-linearization",
+        fixtureFamilyId: "generated.calculus-taylor-linearization",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated approximation traces can map expansion, truncation, local linearization, and remainder steps to this family."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.calculus.taylor.approximation",
+        kind: "relationship",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.taylor-expansion",
+          "definition.symbolic.calculus.local-linearization"
+        ],
+        summary:
+          "Relationship cards can ask how a symbolic Taylor term maps to graph-local approximation behavior."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId(
+        "family.calculus.taylor-local-linearization"
+      ),
+      tags: [
+        "taylor",
+        "linearization",
+        "approximation",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for Taylor expansion, truncation, remainder annotation, and local linear approximation.",
+      searchSummary:
+        "taylor series local linearization approximation remainder tangent polynomial center",
+      graphEquivalentKinds: "function-graph,tangent-line"
+    }
+  });
+}
+
+function createTaylorDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly preserves: readonly ("value" | "structure")[];
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["taylor.before"],
+    targetObjectRoles: ["taylor.after"],
+    preserves: input.preserves,
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "taylor.before",
+        sourceSelectorRole: "function",
+        targetObjectRole: "taylor.after",
+        targetSelectorRole: "polynomial.term",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "taylor.before",
+        sourceSelectorRole: "center",
+        targetObjectRole: "taylor.after",
+        targetSelectorRole: "center",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "taylor.before",
+        sourceSelectorRole: "remainder",
+        targetObjectRole: "taylor.after",
+        targetSelectorRole: "remainder.annotation",
+        preserves: ["role"]
       }
     ]
   });
