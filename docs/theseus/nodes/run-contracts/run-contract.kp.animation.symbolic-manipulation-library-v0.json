@@ -210,7 +210,7 @@
       "id": "next-action.kp.animation.symbolic-graph-equivalence-laws-v0",
       "title": "Add graph equivalence law suite",
       "summary": "Add law checks that representation transforms preserve semantic references, correspondence, rewind, and honest sampled graph metadata.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.symbolic-flashcard-hooks-v0",

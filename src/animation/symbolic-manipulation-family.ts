@@ -281,6 +281,12 @@ export function validateKpSymbolicManipulationFamily(
         });
       }
     });
+    validateGraphEquivalentLawRefs({
+      family,
+      equivalent,
+      index,
+      issues
+    });
   });
 
   family.generatedProblemHooks.forEach((hook, index) => {
@@ -306,6 +312,38 @@ export function validateKpSymbolicManipulationFamily(
   });
 
   return issues;
+}
+
+function validateGraphEquivalentLawRefs(input: {
+  readonly family: KpSymbolicManipulationFamily;
+  readonly equivalent: KpSymbolicGraphEquivalentRef;
+  readonly index: number;
+  readonly issues: KpSymbolicManipulationFamilyValidationIssue[];
+}): void {
+  const lawLevels = new Set(
+    (input.equivalent.lawRefs ?? []).map((law) => law.level)
+  );
+  if (input.equivalent.exactness === "sampled" && !lawLevels.has("sampled")) {
+    input.issues.push({
+      path: `graphEquivalents[${input.index}].lawRefs`,
+      message:
+        `Family ${input.family.id} graph equivalent ${input.equivalent.id} with sampled exactness must include a sampled law reference.`
+    });
+  }
+  if (input.equivalent.exactness === "qualitative" && !lawLevels.has("qualitative")) {
+    input.issues.push({
+      path: `graphEquivalents[${input.index}].lawRefs`,
+      message:
+        `Family ${input.family.id} graph equivalent ${input.equivalent.id} with qualitative exactness must include a qualitative law reference.`
+    });
+  }
+  if (input.equivalent.exactness === "exact" && !lawLevels.has("strict")) {
+    input.issues.push({
+      path: `graphEquivalents[${input.index}].lawRefs`,
+      message:
+        `Family ${input.family.id} graph equivalent ${input.equivalent.id} with exact exactness must include a strict law reference.`
+    });
+  }
 }
 
 function validateSelectorRoleRef(input: {

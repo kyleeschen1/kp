@@ -185,6 +185,11 @@ test("validateKpSymbolicManipulationFamily reports broken family references", ()
       path: "graphEquivalents[0].sampleAssetIds[0]",
       message:
         "Family family.algebra.broken graph equivalent graph.missing-sample references missing runtime sample animation animation.absent."
+    },
+    {
+      path: "graphEquivalents[0].lawRefs",
+      message:
+        "Family family.algebra.broken graph equivalent graph.missing-sample with sampled exactness must include a sampled law reference."
     }
   ]);
 });
