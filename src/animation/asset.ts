@@ -50,6 +50,7 @@ export type KpAnimationAssetLayoutKind =
 
 export type KpAnimationAssetRenderTargetKind =
   | "equation"
+  | "matrix"
   | "graph"
   | "programming"
   | "dashboard"

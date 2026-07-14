@@ -20,6 +20,10 @@ import {
   createGraphSceneFromLatexEquation
 } from "../semantic/equation-graph.ts";
 import {
+  createMatrixObject,
+  matrixObjectToLatex
+} from "../semantic/matrix.ts";
+import {
   createSemanticTransformationRef
 } from "../semantic/animation.ts";
 import {
@@ -34,6 +38,13 @@ export interface EquationToGraphRepresentationSample {
   readonly graphSceneObjectIds: readonly string[];
 }
 
+export interface EquationToMatrixRepresentationSample {
+  readonly sourceAnimation: KpAnimationAsset;
+  readonly transform: KpAnimationRepresentationTransform;
+  readonly result: KpAnimationRepresentationTransformResult;
+  readonly matrixRows: readonly (readonly number[])[];
+}
+
 const equationToGraphLatex = "y = x^2";
 const equationToGraphScenePrefix = "representation.parabola";
 const equationToGraphAnimationId = "animation.representation.equation-parabola";
@@ -42,6 +53,18 @@ const equationToGraphSelectorId = "equation.representation.parabola.full";
 const equationToGraphTransformationId =
   "transform.representation.parabola.identity-view";
 const equationToGraphRenderTargetId = "render.representation.parabola";
+
+const equationToMatrixLatex = "T(x, y) = (2x, 3y)";
+const equationToMatrixAnimationId =
+  "animation.representation.equation-linear-map-scale";
+const equationToMatrixObjectId =
+  "equation.representation.linear-map-scale";
+const equationToMatrixSelectorId =
+  "equation.representation.linear-map-scale.full";
+const equationToMatrixTransformationId =
+  "transform.representation.linear-map-scale.identity-view";
+const equationToMatrixRenderTargetId =
+  "render.representation.linear-map-scale";
 
 export function createEquationToGraphRepresentationSample():
   EquationToGraphRepresentationSample {
@@ -59,6 +82,23 @@ export function createEquationToGraphRepresentationSample():
     graphSceneObjectIds: splitMetadataIds(
       result.targetAnimation.renderTargets[0]?.metadata?.["graphSceneObjectIds"]
     )
+  };
+}
+
+export function createEquationToMatrixRepresentationSample():
+  EquationToMatrixRepresentationSample {
+  const sourceAnimation = createEquationMatrixRepresentationSourceAnimation();
+  const transform = createEquationToMatrixRepresentationTransform();
+  const result = applyKpAnimationRepresentationTransform(
+    transform,
+    sourceAnimation
+  );
+
+  return {
+    sourceAnimation,
+    transform,
+    result,
+    matrixRows: equationToMatrixObject().rows
   };
 }
 
@@ -172,6 +212,115 @@ export function createEquationGraphRepresentationSourceAnimation():
   });
 }
 
+export function createEquationMatrixRepresentationSourceAnimation():
+  KpAnimationAsset {
+  const equation = createKpSemanticAssetObject({
+    id: equationToMatrixObjectId,
+    objectType: "equation",
+    title: "Scale linear-map equation",
+    value: { latex: equationToMatrixLatex },
+    selectors: [
+      {
+        id: equationToMatrixSelectorId,
+        kind: "equation",
+        label: equationToMatrixLatex
+      }
+    ],
+    metadata: {
+      latex: equationToMatrixLatex,
+      representation: "equation"
+    }
+  });
+  const transformation = createKpSemanticTransformation({
+    id: equationToMatrixTransformationId,
+    transformType: "holdEquationRepresentation",
+    title: "Hold linear-map equation representation",
+    sourceObjectIds: [equation.id],
+    targetObjectIds: [equation.id],
+    preserves: ["identity", "value", "presentation"],
+    correspondence: [
+      {
+        sourceSelectorId: equationToMatrixSelectorId,
+        targetSelectorId: equationToMatrixSelectorId,
+        preserves: ["identity", "value", "presentation"]
+      }
+    ],
+    lawRefs: [
+      {
+        id: "law.equation.same-linear-map-view",
+        level: "strict"
+      }
+    ]
+  });
+
+  return createKpAnimationAsset({
+    id: equationToMatrixAnimationId,
+    title: "Linear-map equation representation",
+    bundle: createKpAssetBundle({
+      id: "asset.representation.equation-linear-map-scale",
+      title: "Linear-map equation representation assets",
+      objects: [equation]
+    }),
+    transformations: [transformation],
+    transformationTree: createEditableSemanticTransformationTree({
+      root: createSemanticTransformationLeaf(
+        createSemanticTransformationRef({
+          id: transformation.id,
+          kind: transformation.transformType,
+          sourceObjectIds: transformation.sourceObjectIds,
+          targetObjectIds: transformation.targetObjectIds,
+          preserves: transformation.preserves,
+          summary: transformation.title
+        })
+      )
+    }),
+    timeline: {
+      id: "timeline.representation.equation-linear-map-scale",
+      durationMs: 1200,
+      beatCount: 12
+    },
+    layout: {
+      id: "layout.representation.equation-linear-map-scale",
+      kind: "single",
+      targetId: equationToMatrixRenderTargetId
+    },
+    renderTargets: [
+      {
+        id: equationToMatrixRenderTargetId,
+        kind: "equation",
+        objectIds: [equation.id],
+        selectorIds: [equationToMatrixSelectorId],
+        transformationIds: [transformation.id],
+        timelineId: "timeline.representation.equation-linear-map-scale",
+        summary: "Source linear-map equation representation target.",
+        metadata: {
+          representation: "equation",
+          sourceLatex: equationToMatrixLatex
+        }
+      }
+    ],
+    checks: [
+      {
+        id: "check.representation.equation-linear-map-scale.reference-closure",
+        lawId: "animation.reference-closure",
+        level: "strict",
+        targetId: equationToMatrixAnimationId
+      },
+      {
+        id: "check.representation.equation-linear-map-scale.seek-rewind",
+        lawId: "animation.seek-rewind",
+        level: "strict",
+        targetId: equationToMatrixTransformationId
+      }
+    ],
+    exportTargets: [],
+    metadata: {
+      representation: "equation",
+      sourceLatex: equationToMatrixLatex
+    }
+  });
+}
+
 export function createEquationToGraphRepresentationTransform():
   KpAnimationRepresentationTransform {
   return createKpAnimationRepresentationTransform({
@@ -231,6 +380,71 @@ export function createEquationToGraphRepresentationTransform():
       });
     }
   });
+}
+
+export function createEquationToMatrixRepresentationTransform():
+  KpAnimationRepresentationTransform {
+  return createKpAnimationRepresentationTransform({
+    id: "representation.equation-to-matrix.linear-map",
+    title: "Equation to matrix representation",
+    sourceRepresentation: "equation",
+    targetRepresentation: "matrix",
+    preservation: "strict",
+    apply: (animation) => {
+      const latex =
+        metadataString(animation.metadata?.["sourceLatex"]) ??
+        equationToMatrixLatex;
+      const matrix = equationToMatrixObject();
+
+      return createKpAnimationAsset({
+        ...animation,
+        renderTargets: animation.renderTargets.map((target) => ({
+          ...target,
+          kind: "matrix" as const,
+          summary:
+            "Derived matrix representation target with exact fixture provenance.",
+          metadata: {
+            ...(target.metadata ?? {}),
+            representation: "matrix",
+            sourceRepresentation: "equation",
+            targetRepresentation: "matrix",
+            sourceLatex: latex,
+            matrixDerivationCapability: "equation.matrix",
+            matrixDerivationStatus: "exact-fixture",
+            matrixObjectId: matrix.id,
+            matrixRows: formatMatrixRows(matrix.rows),
+            matrixLatex: matrixObjectToLatex(matrix),
+            domainDimension: matrix.rows[0]?.length ?? 0,
+            codomainDimension: matrix.rows.length
+          }
+        })),
+        metadata: {
+          ...(animation.metadata ?? {}),
+          representation: "matrix",
+          sourceRepresentation: "equation",
+          targetRepresentation: "matrix",
+          sourceLatex: latex,
+          matrixDerivationCapability: "equation.matrix",
+          matrixDerivationStatus: "exact-fixture"
+        }
+      });
+    }
+  });
+}
+
+function equationToMatrixObject() {
+  return createMatrixObject({
+    id: "matrix.representation.scale",
+    label: "S",
+    rows: [
+      [2, 0],
+      [0, 3]
+    ]
+  });
+}
+
+function formatMatrixRows(rows: readonly (readonly number[])[]): string {
+  return rows.map((row) => row.join(" ")).join("; ");
 }
 
 function metadataString(
