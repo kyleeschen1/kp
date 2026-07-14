@@ -2,9 +2,9 @@
   "id": "run-contract.kp.dashboard.dashboard-animation-system-execution-loop-v1",
   "kind": "run-contract",
   "title": "KP dashboard and semantic animation system Execution Loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.dashboard",
-  "summary": "Durable execution contract promoted from KP dashboard and semantic animation system Preparation Loop so Prepare KP dashboard and semantic animation system Loop has an explicit long-loop owner.",
+  "summary": "Superseded by approved durable animation-library expansion contract run-contract.kp.animation-library-expansion-v0.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -46,7 +46,7 @@
     {
       "id": "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3",
       "title": "Prepare KP dashboard and semantic animation system Loop",
-      "status": "ready"
+      "status": "complete"
     }
   ]
 }

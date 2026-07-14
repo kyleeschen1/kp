@@ -1,0 +1,185 @@
+{
+  "id": "run-contract.kp.animation-library-expansion-v0",
+  "kind": "run-contract",
+  "title": "KP animation library expansion v0 loop",
+  "status": "ready",
+  "domain": "kp.animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation-library.current-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-animation-renderer-integration-readiness-report.md",
+      "summary": "Renderer integration closeout recommending live card runtime visual-frame adoption, KaTeX fixture expansion, generated problem registry, flashcard samples, graph consumer, and paused-frame drill-down."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Project roadmap with semantic-first, runtime-second, renderer-third ordering and KaTeX/graph/dashboard/export priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active semantic runtime thread describing AnimationAsset, renderer-neutral frame, generated math, visual motif, and graph/programming adoption direction."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "allowedWork": [
+    "Only work on the approved animation-library expansion loop slices.",
+    "Grow KaTeX SemanticTransformation definitions, visual motifs, generated problem fixtures, graph runtime consumers, flashcard projections, and drill-down authoring through the AnimationAsset/runtime visual-frame protocol.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, live LSP, network integrations, or dynamic package loading; use deterministic fixtures.",
+    "Do not broaden into a dashboard redesign beyond search, progress rows, and sample previews needed for this loop.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "goal": "Run the approved loop that expands KP composable animations through KaTeX semantic transforms, reusable visual motifs, one live runtime visual-frame card, generated problem fixtures, graph/WebGL consumers, flashcard projections, and drill-down authoring.",
+  "target": "next-action.kp.animation-library.current-focus-v0",
+  "runMode": "run",
+  "maxSlices": 25,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop if a slice requires broad renderer replacement instead of an incremental AnimationAsset/runtime visual-frame adapter.",
+    "Stop if verification fails and the fix is not local to the active slice.",
+    "Stop if work requires GIF/video encoders, live CAS, live LSP, network access, dynamic package loading, or unrelated dashboard redesign.",
+    "Stop when the approved slice list is exhausted."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.animation-library.current-focus-v0",
+      "title": "Record animation library expansion as current focus",
+      "status": "ready",
+      "summary": "Update project docs and Theseus state so animation-library expansion is the current active KP focus."
+    },
+    {
+      "id": "next-action.kp.animation-library.live-card-audit-v0",
+      "title": "Audit live x plus 3 equals 7 card path",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.live-card-clock-v0",
+      "title": "Convert live equation card clock to runtime frames",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.live-card-katex-visual-frame-v0",
+      "title": "Bind live card to KaTeX visual frames",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.live-card-diagnostics-v0",
+      "title": "Add card visual-frame diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.live-card-rewind-law-v0",
+      "title": "Lock live card rewind behavior",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.cancellation-motif-v0",
+      "title": "Promote cancellation motif coverage",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.artifact-fade-rules-v0",
+      "title": "Promote artifact fade rules",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.fraction-transforms-v0",
+      "title": "Expand fraction transform coverage",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.exponent-radical-transforms-v0",
+      "title": "Expand exponent and radical transform coverage",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.function-wrapping-transforms-v0",
+      "title": "Expand function wrapping transform coverage",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.matrix-delimiter-transforms-v0",
+      "title": "Expand matrix delimiter and entry persistence coverage",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.large-operator-transforms-v0",
+      "title": "Add large operator transform fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.jacobian-hessian-comparison-v0",
+      "title": "Add Jacobian and Hessian comparison asset",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.complex-katex-samples-v0",
+      "title": "Add Fundamental Theorem and Fourier samples",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.dashboard-animation-search-v0",
+      "title": "Build animation search rows",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.generated-problem-registry-v0",
+      "title": "Add generated problem registry surface",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.generated-calculus-fixtures-v0",
+      "title": "Add calculus generated animation fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.generated-linear-algebra-fixtures-v0",
+      "title": "Add linear algebra generated animation fixtures",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.graph-vector-runtime-consumer-v0",
+      "title": "Make one graph vector sample consume runtime frames",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.graph-rewind-law-v0",
+      "title": "Add graph rewind law sample",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.flashcard-renderer-sample-v0",
+      "title": "Surface flashcard renderer sample",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.paused-frame-drilldown-v0",
+      "title": "Add paused-frame drill-down sample",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.dashboard-progress-rows-v0",
+      "title": "Update dashboard progress and report rows",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-library.closeout-report-v0",
+      "title": "Close with animation library expansion readiness report",
+      "status": "planned"
+    }
+  ]
+}

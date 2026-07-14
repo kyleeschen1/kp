@@ -1,0 +1,79 @@
+{
+  "id": "next-action.kp.animation-library.current-focus-v0",
+  "kind": "next-action",
+  "title": "Make animation library expansion the active KP focus",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Record animation-library expansion as the current KP focus: KaTeX SemanticTransformation coverage, reusable visual motifs, one live runtime visual-frame card, generated problem fixtures, graph/WebGL consumers, flashcard projections, and paused-frame drill-down authoring.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Current KP roadmap that should name animation-library expansion as the active focus."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active semantic runtime thread that should carry the immediate animation-library tranche."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-animation-renderer-integration-readiness-report.md",
+      "summary": "Renderer integration closeout that recommends the next tranche: live equation card, KaTeX fixtures, generated problem registry, flashcard sample, graph consumer, and drill-down generation."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Approved durable run contract for the animation-library expansion loop."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "workflow.kp.dashboard-animation-system",
+      "decision.kp.semantic-animation-runtime-roadmap",
+      "decision.kp.animation-asset-primary-unit"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system",
+    "milestone.kp.long-term-semantic-product-plan-v0"
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report",
+    "npm run theseus -- long-loop-report --limit 30"
+  ],
+  "expectedLearning": [
+    "Whether the renderer integration closeout recommendations are now captured as an executable animation-library tranche.",
+    "Whether the next concrete slice should start with docs/current-focus recording or jump directly to live card/runtime adoption.",
+    "Whether the run-contract queue is specific enough for future LLM sessions to continue without rediscovering the roadmap."
+  ],
+  "allowedWork": [
+    "Update project docs and Theseus nodes so animation-library expansion is the current explicit focus.",
+    "Keep the ordering semantic transforms and motifs first, then live card adoption, then generated problems, graph/WebGL, flashcards, and drill-down authoring.",
+    "Record verification and close this focus-recording slice once Theseus gates pass."
+  ],
+  "disallowedWork": [
+    "Do not implement renderer behavior in this slice.",
+    "Do not add new generated fixtures in this slice.",
+    "Do not change unrelated dashboard layout or dirty worktree files."
+  ],
+  "criteria": [
+    {
+      "id": "roadmap-active-focus-updated",
+      "weight": "high"
+    },
+    {
+      "id": "semantic-runtime-current-action-updated",
+      "weight": "high"
+    },
+    {
+      "id": "approved-loop-owned-by-run-contract",
+      "weight": "high"
+    },
+    {
+      "id": "theseus-long-loop-ready",
+      "weight": "medium"
+    }
+  ]
+}
