@@ -3352,6 +3352,207 @@ test("linear algebra determinant-inverse family links scale, orientation, and un
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("linear algebra basis-eigen family tracks coordinate changes and eigenline persistence", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.linear-algebra.basis-eigen"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.equal(
+    family.metadata?.["spectralScope"],
+    "starter diagonalization examples, not a full eigensolver"
+  );
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "basisEigen.before",
+        "basis-or-linear-map",
+        [
+          "matrix",
+          "basis",
+          "basis.vector",
+          "coordinate.vector",
+          "eigenvector",
+          "eigenvalue"
+        ]
+      ],
+      [
+        "basisEigen.after",
+        "basis-eigen-result",
+        [
+          "changed.basis",
+          "coordinate.vector",
+          "transformed.vector",
+          "eigenline",
+          "scaled.eigenvector",
+          "diagonal.matrix"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.linear-algebra.change-basis",
+        "changeBasis",
+        ["value", "structure"],
+        "law.linear-algebra.change-basis"
+      ],
+      [
+        "definition.symbolic.linear-algebra.coordinate-transform",
+        "coordinateTransform",
+        ["value", "presentation"],
+        "law.linear-algebra.coordinate-transform"
+      ],
+      [
+        "definition.symbolic.linear-algebra.eigenvector-relation",
+        "eigenvectorRelation",
+        ["identity", "structure"],
+        "law.linear-algebra.eigenvector"
+      ],
+      [
+        "definition.symbolic.linear-algebra.diagonalization-starter",
+        "diagonalizationStarter",
+        ["value", "structure"],
+        "law.linear-algebra.diagonalization"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[2]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["matrix", "scaled.eigenvector", ["value", "role"]],
+      ["eigenvector", "eigenline", ["identity", "role"]],
+      ["eigenvalue", "scaled.eigenvector", ["value", "role"]],
+      ["eigenvector", "transformed.vector", ["identity", "value"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.linear-algebra.basis.frame-morph",
+      motifKind: "basis-frame-morph",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.change-basis"
+      ],
+      summary:
+        "Basis vectors move as a frame while represented vectors keep their underlying identity."
+    },
+    {
+      id: "motif.linear-algebra.basis.coordinate-relabel",
+      motifKind: "coordinate-grid-relabel",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.coordinate-transform"
+      ],
+      summary:
+        "Coordinate entries relabel against the new basis without implying a physical vector moved."
+    },
+    {
+      id: "motif.linear-algebra.eigen.line-scale",
+      motifKind: "eigenline-scale",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.eigenvector-relation",
+        "definition.symbolic.linear-algebra.diagonalization-starter"
+      ],
+      summary:
+        "Eigenvectors remain on their eigenline while the eigenvalue controls scaling."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.basis-eigen.basic",
+      animationId: "animation.basis-eigen.basic",
+      renderTargetKinds: ["equation", "matrix", "graph"],
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.change-basis",
+        "definition.symbolic.linear-algebra.coordinate-transform",
+        "definition.symbolic.linear-algebra.eigenvector-relation",
+        "definition.symbolic.linear-algebra.diagonalization-starter"
+      ],
+      summary:
+        "Basic basis-eigen sample links coordinate changes to eigenline scaling and a diagonalization starter."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.linear-algebra.basis-change.linear-map",
+      title: "Basis changes relabel a linear map",
+      representationKind: "linear-map",
+      exactness: "exact",
+      preserves: ["value", "presentation"],
+      lawRefs: [
+        {
+          id: "law.graph.basis-change-linear-map",
+          level: "strict"
+        }
+      ],
+      sampleAssetIds: ["animation.basis-eigen.basic"],
+      summary:
+        "Changing basis alters coordinates and grid presentation while preserving the underlying vector and linear map."
+    },
+    {
+      id: "graph.linear-algebra.eigen.eigenline",
+      title: "Eigenvectors persist as invariant directions",
+      representationKind: "eigenvector-graph",
+      exactness: "exact",
+      preserves: ["identity", "presentation"],
+      lawRefs: [
+        {
+          id: "law.graph.eigenvector-invariant-direction",
+          level: "strict"
+        }
+      ],
+      sampleAssetIds: ["animation.basis-eigen.basic"],
+      summary:
+        "The eigen graph view keeps the eigenvector on the same line while the transform scales it."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.linear-algebra-basis-eigen",
+      fixtureFamilyId: "generated.linear-algebra-basis-eigen",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.change-basis",
+        "definition.symbolic.linear-algebra.coordinate-transform",
+        "definition.symbolic.linear-algebra.eigenvector-relation",
+        "definition.symbolic.linear-algebra.diagonalization-starter"
+      ],
+      summary:
+        "Generated basis and eigen examples can map coordinate changes, eigen relations, and starter diagonalization steps."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.linear-algebra.basis-eigen.relationship",
+      kind: "relationship",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.change-basis",
+        "definition.symbolic.linear-algebra.eigenvector-relation"
+      ],
+      summary:
+        "Relationship cards can ask which values change under coordinate relabeling and which directions remain invariant."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
   assert.deepEqual(
     createSymbolicManipulationFamilyAgendaRows(

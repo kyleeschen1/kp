@@ -241,6 +241,7 @@ export function createSymbolicManipulationFamilyRegistry():
     createLinearAlgebraMatrixMatrixCompositionFamily(),
     createLinearAlgebraRowOperationsFamily(),
     createLinearAlgebraDeterminantInverseFamily(),
+    createLinearAlgebraBasisEigenFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
@@ -260,7 +261,8 @@ export function createSymbolicManipulationFamilyRegistry():
           spec.id !== "family.linear-algebra.matrix-vector" &&
           spec.id !== "family.linear-algebra.matrix-matrix-composition" &&
           spec.id !== "family.linear-algebra.row-operations" &&
-          spec.id !== "family.linear-algebra.determinant-inverse"
+          spec.id !== "family.linear-algebra.determinant-inverse" &&
+          spec.id !== "family.linear-algebra.basis-eigen"
       )
       .map(createSeedFamily)
   ];
@@ -4812,6 +4814,296 @@ function createDeterminantInverseDefinition(input: {
         targetObjectRole: "determinantInverse.after",
         targetSelectorRole: "determinant.value",
         preserves: ["value", "role"]
+      }
+    ]
+  });
+}
+
+function createLinearAlgebraBasisEigenFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.linear-algebra.change-basis",
+    "definition.symbolic.linear-algebra.coordinate-transform",
+    "definition.symbolic.linear-algebra.eigenvector-relation",
+    "definition.symbolic.linear-algebra.diagonalization-starter"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.linear-algebra.basis-eigen",
+    title: "Basis change and eigen examples",
+    domain: "linear-algebra",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "basisEigen.before",
+        objectType: "basis-or-linear-map",
+        title: "Basis, coordinates, and linear map before transformation",
+        selectorRoles: [
+          { id: "matrix", kind: "matrix" },
+          { id: "basis", kind: "basis" },
+          { id: "basis.vector", kind: "vector" },
+          { id: "coordinate.vector", kind: "coordinate-vector" },
+          { id: "eigenvector", kind: "vector" },
+          { id: "eigenvalue", kind: "scalar" }
+        ]
+      },
+      {
+        id: "basisEigen.after",
+        objectType: "basis-eigen-result",
+        title: "Basis and eigen result",
+        selectorRoles: [
+          { id: "changed.basis", kind: "basis" },
+          { id: "coordinate.vector", kind: "coordinate-vector" },
+          { id: "transformed.vector", kind: "vector" },
+          { id: "eigenline", kind: "line" },
+          { id: "scaled.eigenvector", kind: "vector" },
+          { id: "diagonal.matrix", kind: "matrix" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createBasisEigenDefinition({
+        id: "definition.symbolic.linear-algebra.change-basis",
+        transformType: "changeBasis",
+        title: "Change basis",
+        lawId: "law.linear-algebra.change-basis",
+        preserves: ["value", "structure"],
+        assumption:
+          "The new basis is invertible, so the represented vector or map is preserved under coordinate relabeling."
+      }),
+      createBasisEigenDefinition({
+        id: "definition.symbolic.linear-algebra.coordinate-transform",
+        transformType: "coordinateTransform",
+        title: "Transform coordinates between bases",
+        lawId: "law.linear-algebra.coordinate-transform",
+        preserves: ["value", "presentation"],
+        assumption:
+          "Coordinate entries change representation while the underlying vector value persists."
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.linear-algebra.eigenvector-relation",
+        transformType: "eigenvectorRelation",
+        title: "Relate eigenvectors and eigenvalues",
+        sourceObjectRoles: ["basisEigen.before"],
+        targetObjectRoles: ["basisEigen.after"],
+        preserves: ["identity", "structure"],
+        assumptions: [
+          "An eigenvector is nonzero and remains on its span under the linear map."
+        ],
+        lawRefs: [
+          {
+            id: "law.linear-algebra.eigenvector",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "basisEigen.before",
+            sourceSelectorRole: "matrix",
+            targetObjectRole: "basisEigen.after",
+            targetSelectorRole: "scaled.eigenvector",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "basisEigen.before",
+            sourceSelectorRole: "eigenvector",
+            targetObjectRole: "basisEigen.after",
+            targetSelectorRole: "eigenline",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "basisEigen.before",
+            sourceSelectorRole: "eigenvalue",
+            targetObjectRole: "basisEigen.after",
+            targetSelectorRole: "scaled.eigenvector",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "basisEigen.before",
+            sourceSelectorRole: "eigenvector",
+            targetObjectRole: "basisEigen.after",
+            targetSelectorRole: "transformed.vector",
+            preserves: ["identity", "value"]
+          }
+        ]
+      }),
+      createBasisEigenDefinition({
+        id: "definition.symbolic.linear-algebra.diagonalization-starter",
+        transformType: "diagonalizationStarter",
+        title: "Use eigenvectors to form a diagonalization starter",
+        lawId: "law.linear-algebra.diagonalization",
+        preserves: ["value", "structure"],
+        assumption:
+          "The example has enough independent eigenvectors to expose a diagonal matrix representation."
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.linear-algebra.basis.frame-morph",
+        motifKind: "basis-frame-morph",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.change-basis"
+        ],
+        summary:
+          "Basis vectors move as a frame while represented vectors keep their underlying identity."
+      },
+      {
+        id: "motif.linear-algebra.basis.coordinate-relabel",
+        motifKind: "coordinate-grid-relabel",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.coordinate-transform"
+        ],
+        summary:
+          "Coordinate entries relabel against the new basis without implying a physical vector moved."
+      },
+      {
+        id: "motif.linear-algebra.eigen.line-scale",
+        motifKind: "eigenline-scale",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.eigenvector-relation",
+          "definition.symbolic.linear-algebra.diagonalization-starter"
+        ],
+        summary:
+          "Eigenvectors remain on their eigenline while the eigenvalue controls scaling."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.basis-eigen.basic",
+        animationId: "animation.basis-eigen.basic",
+        renderTargetKinds: ["equation", "matrix", "graph"],
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Basic basis-eigen sample links coordinate changes to eigenline scaling and a diagonalization starter."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.linear-algebra.basis-change.linear-map",
+        title: "Basis changes relabel a linear map",
+        representationKind: "linear-map",
+        exactness: "exact",
+        preserves: ["value", "presentation"],
+        lawRefs: [
+          {
+            id: "law.graph.basis-change-linear-map",
+            level: "strict"
+          }
+        ],
+        sampleAssetIds: ["animation.basis-eigen.basic"],
+        summary:
+          "Changing basis alters coordinates and grid presentation while preserving the underlying vector and linear map."
+      },
+      {
+        id: "graph.linear-algebra.eigen.eigenline",
+        title: "Eigenvectors persist as invariant directions",
+        representationKind: "eigenvector-graph",
+        exactness: "exact",
+        preserves: ["identity", "presentation"],
+        lawRefs: [
+          {
+            id: "law.graph.eigenvector-invariant-direction",
+            level: "strict"
+          }
+        ],
+        sampleAssetIds: ["animation.basis-eigen.basic"],
+        summary:
+          "The eigen graph view keeps the eigenvector on the same line while the transform scales it."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.linear-algebra-basis-eigen",
+        fixtureFamilyId: "generated.linear-algebra-basis-eigen",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated basis and eigen examples can map coordinate changes, eigen relations, and starter diagonalization steps."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.linear-algebra.basis-eigen.relationship",
+        kind: "relationship",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.change-basis",
+          "definition.symbolic.linear-algebra.eigenvector-relation"
+        ],
+        summary:
+          "Relationship cards can ask which values change under coordinate relabeling and which directions remain invariant."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId(
+        "family.linear-algebra.basis-eigen"
+      ),
+      tags: [
+        "basis",
+        "eigen",
+        "diagonalization",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for basis changes, coordinate transforms, eigenvectors, eigenvalues, and starter diagonalization examples.",
+      searchSummary:
+        "basis change coordinates eigenvectors eigenvalues diagonalization invariant direction linear map graph",
+      graphEquivalentKinds: "linear-map eigenvector-graph",
+      spectralScope: "starter diagonalization examples, not a full eigensolver"
+    }
+  });
+}
+
+function createBasisEigenDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly preserves: readonly (
+    | "identity"
+    | "value"
+    | "structure"
+    | "presentation"
+  )[];
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["basisEigen.before"],
+    targetObjectRoles: ["basisEigen.after"],
+    preserves: input.preserves,
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "basisEigen.before",
+        sourceSelectorRole: "basis",
+        targetObjectRole: "basisEigen.after",
+        targetSelectorRole: "changed.basis",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "basisEigen.before",
+        sourceSelectorRole: "basis.vector",
+        targetObjectRole: "basisEigen.after",
+        targetSelectorRole: "changed.basis",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "basisEigen.before",
+        sourceSelectorRole: "coordinate.vector",
+        targetObjectRole: "basisEigen.after",
+        targetSelectorRole: "coordinate.vector",
+        preserves: ["value", "presentation"]
+      },
+      {
+        sourceObjectRole: "basisEigen.before",
+        sourceSelectorRole: "matrix",
+        targetObjectRole: "basisEigen.after",
+        targetSelectorRole: "diagonal.matrix",
+        preserves: ["value", "structure"]
       }
     ]
   });

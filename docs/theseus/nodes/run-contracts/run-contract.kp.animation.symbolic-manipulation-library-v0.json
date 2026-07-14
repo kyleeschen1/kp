@@ -204,7 +204,7 @@
       "id": "next-action.kp.animation.linear-algebra-basis-eigen-family-v0",
       "title": "Add basis change and eigen family",
       "summary": "Model basis changes, coordinate transforms, eigenvectors, eigenvalues, and diagonalization starter examples.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.symbolic-graph-equivalence-laws-v0",
