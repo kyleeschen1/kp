@@ -14,6 +14,11 @@ import {
 import {
   defaultEquationTransformVisualMotifRules
 } from "../src/rendering/equation-visual-motif-defaults.ts";
+import {
+  checkGeneratedFunctionWrapTransformDefinitionCoverage,
+  listGeneratedAlgebraTransformDefinitions,
+  listGeneratedFunctionWrapTransformDefinitions
+} from "../src/semantic/generated-algebra-transform-definition-registry.ts";
 
 test("createFunctionWrapAnimationAsset adapts f of x into AnimationAsset", () => {
   const animation = createFunctionWrapAnimationAsset();
@@ -101,6 +106,59 @@ test("createFunctionWrapAnimationAsset adapts f of x into AnimationAsset", () =>
       phaseId: "animation.generated.function-wrap.apply-f.forward.0",
       nodeIds: ["transform.generated.function-wrap.apply-f.wrap-function"],
       diagnostics: []
+    }
+  );
+});
+
+test("generated function-wrap transform definitions expose promoted coverage", () => {
+  assert.deepEqual(
+    listGeneratedFunctionWrapTransformDefinitions().map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.artifactPolicy,
+      definition.preserves
+    ]),
+    [
+      [
+        "definition.generated.function-wrap.wrap-function",
+        "wrapFunction",
+        "target-only",
+        ["identity", "role"]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    checkGeneratedFunctionWrapTransformDefinitionCoverage(),
+    {
+      lawId: "generated-function-wrap.transform-definition-coverage",
+      passed: true,
+      failures: []
+    }
+  );
+});
+
+test("generated function-wrap coverage reports identity preservation drift", () => {
+  assert.deepEqual(
+    checkGeneratedFunctionWrapTransformDefinitionCoverage(
+      listGeneratedAlgebraTransformDefinitions().map((definition) =>
+        definition.id === "definition.generated.function-wrap.wrap-function"
+          ? {
+              ...definition,
+              preserves: ["role"]
+            }
+          : definition
+      )
+    ),
+    {
+      lawId: "generated-function-wrap.transform-definition-coverage",
+      passed: false,
+      failures: [
+        {
+          path: "definitions[definition.generated.function-wrap.wrap-function].preserves",
+          message:
+            "Generated function-wrap transform definition.generated.function-wrap.wrap-function must preserve identity, role."
+        }
+      ]
     }
   );
 });

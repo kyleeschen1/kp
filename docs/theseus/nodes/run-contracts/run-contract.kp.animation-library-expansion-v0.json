@@ -118,13 +118,14 @@
     {
       "id": "next-action.kp.animation-library.function-wrapping-transforms-v0",
       "title": "Expand function wrapping transform coverage",
-      "status": "ready",
-      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.function-wrapping-transforms-v0 in KP animation library expansion v0 loop."
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.function-wrapping-transforms-v0 in KP animation library expansion v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation-library.matrix-delimiter-transforms-v0",
       "title": "Expand matrix delimiter and entry persistence coverage",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.matrix-delimiter-transforms-v0 in KP animation library expansion v0 loop."
     },
     {
       "id": "next-action.kp.animation-library.large-operator-transforms-v0",

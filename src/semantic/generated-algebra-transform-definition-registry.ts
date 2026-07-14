@@ -110,6 +110,23 @@ export const generatedExponentRadicalTransformExpectations:
     }
   ];
 
+export interface GeneratedFunctionWrapTransformExpectation {
+  readonly transformType: string;
+  readonly definitionId: string;
+  readonly artifactPolicy: GeneratedAlgebraTransformArtifactPolicy;
+  readonly preserves: readonly string[];
+}
+
+export const generatedFunctionWrapTransformExpectations:
+  readonly GeneratedFunctionWrapTransformExpectation[] = [
+    {
+      transformType: "wrapFunction",
+      definitionId: "definition.generated.function-wrap.wrap-function",
+      artifactPolicy: "target-only",
+      preserves: ["identity", "role"]
+    }
+  ];
+
 export const generatedAlgebraTransformDefinitions:
   readonly GeneratedAlgebraTransformDefinition[] = [
     createGeneratedAlgebraTransformDefinition({
@@ -939,6 +956,90 @@ export function checkGeneratedExponentRadicalTransformDefinitionCoverage(
 
   return {
     lawId: "generated-exponent-radical.transform-definition-coverage",
+    passed: failures.length === 0,
+    failures
+  };
+}
+
+export function listGeneratedFunctionWrapTransformDefinitions(
+  definitions: readonly GeneratedAlgebraTransformDefinition[] =
+    listGeneratedAlgebraTransformDefinitions()
+): readonly GeneratedAlgebraTransformDefinition[] {
+  const expectationOrder = new Map(
+    generatedFunctionWrapTransformExpectations.map(
+      (expectation, index) => [expectation.transformType, index]
+    )
+  );
+
+  return definitions
+    .filter((definition) => definition.familyId === "generated.function-wrap")
+    .filter((definition) => expectationOrder.has(definition.transformType))
+    .sort(
+      (left, right) =>
+        (expectationOrder.get(left.transformType) ?? 0) -
+        (expectationOrder.get(right.transformType) ?? 0)
+    )
+    .map(cloneGeneratedAlgebraTransformDefinition);
+}
+
+export function checkGeneratedFunctionWrapTransformDefinitionCoverage(
+  definitions: readonly GeneratedAlgebraTransformDefinition[] =
+    listGeneratedAlgebraTransformDefinitions()
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+  const definitionsByType = new Map(
+    listGeneratedFunctionWrapTransformDefinitions(definitions).map(
+      (definition) => [definition.transformType, definition]
+    )
+  );
+
+  generatedFunctionWrapTransformExpectations.forEach((expectation) => {
+    const definition = definitionsByType.get(expectation.transformType);
+
+    if (definition === undefined) {
+      failures.push({
+        path: `definitions[${expectation.transformType}]`,
+        message:
+          `Generated function-wrap transform ${expectation.transformType} must be defined.`
+      });
+      return;
+    }
+
+    if (definition.id !== expectation.definitionId) {
+      failures.push({
+        path: `definitions[${expectation.transformType}].id`,
+        message:
+          `Generated function-wrap transform ${expectation.transformType} expected definition id ${expectation.definitionId}.`
+      });
+    }
+
+    if (definition.status !== "promoted") {
+      failures.push({
+        path: `definitions[${definition.id}].status`,
+        message:
+          `Generated function-wrap transform ${definition.id} must be promoted.`
+      });
+    }
+
+    if (definition.artifactPolicy !== expectation.artifactPolicy) {
+      failures.push({
+        path: `definitions[${definition.id}].artifactPolicy`,
+        message:
+          `Generated function-wrap transform ${definition.id} expected artifact policy ${expectation.artifactPolicy} but received ${definition.artifactPolicy}.`
+      });
+    }
+
+    if (!stringListsEqual(definition.preserves, expectation.preserves)) {
+      failures.push({
+        path: `definitions[${definition.id}].preserves`,
+        message:
+          `Generated function-wrap transform ${definition.id} must preserve ${expectation.preserves.join(", ")}.`
+      });
+    }
+  });
+
+  return {
+    lawId: "generated-function-wrap.transform-definition-coverage",
     passed: failures.length === 0,
     failures
   };

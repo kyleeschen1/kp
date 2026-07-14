@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation-library.function-wrapping-transforms-v0",
   "kind": "next-action",
   "title": "Expand function wrapping transform coverage",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.function-wrapping-transforms-v0 in KP animation library expansion v0 loop.",
+  "summary": "Expanded function wrapping transform coverage by adding a generated function-wrap definition contract for wrapFunction, including target-only wrapper artifacts and identity/role preservation for the argument.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,26 @@
       "kind": "file",
       "path": "tests/equation-motion-plan.test.ts",
       "summary": "Planner coverage for staged x motion, parentheses entry, and delayed function token entry in the live wrap fixture."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-transform-definition-registry.ts",
+      "summary": "Adds function-wrap transform expectations, ordered definition listing, and a coverage law for the promoted wrapFunction definition."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-function-wrap-animation-asset.test.ts",
+      "summary": "Covers promoted function-wrap definition order, artifact policy, preservation expectations, and drift diagnostics alongside AnimationAsset tests."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/function-wrap-adapter.ts",
+      "summary": "Existing function-wrap AnimationAsset adapter consumes the generated wrapFunction transform."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-plan.test.ts",
+      "summary": "Existing planner coverage verifies staged persistent x motion, wrapper artifact entry, and delayed function token entry."
     }
   ],
   "dependsOn": {
@@ -84,5 +104,41 @@
       "id": "browser-coverage-keeps-function-wrap-visible",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-function-wrap-animation-asset.test.ts tests/equation-motion-plan.test.ts tests/visual-motif-composition.test.ts tests/kp-generated-algebra-fixture-registry.test.ts",
+      "status": "passed",
+      "scope": "focused generated function-wrap transform, planner, motif, and fixture registry coverage",
+      "checkedAt": "2026-07-14T20:13:52.397Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for live KaTeX behavior and regressions",
+      "checkedAt": "2026-07-14T20:13:52.429Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for function-wrap slice",
+      "checkedAt": "2026-07-14T20:13:52.458Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for function-wrap slice",
+      "checkedAt": "2026-07-14T20:13:52.498Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T20:13:52.530Z",
+      "scope": "Run-contract hygiene for function-wrap slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Expanded function wrapping transform coverage by adding a generated function-wrap definition contract for wrapFunction, including target-only wrapper artifacts and identity/role preservation for the argument."
+  }
 }
