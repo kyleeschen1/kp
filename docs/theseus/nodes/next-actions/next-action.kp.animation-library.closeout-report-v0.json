@@ -1,0 +1,103 @@
+{
+  "id": "next-action.kp.animation-library.closeout-report-v0",
+  "kind": "next-action",
+  "title": "Close with animation library expansion readiness report",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added the KP animation library expansion readiness report capturing loop fit, structural improvements, ready capabilities, contract-level gaps, verification, residual risks, and the recommended next tranche.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation-library.closeout-report-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation-library.current-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-animation-renderer-integration-readiness-report.md",
+      "summary": "Renderer integration closeout recommending live card runtime visual-frame adoption, KaTeX fixture expansion, generated problem registry, flashcard samples, graph consumer, and paused-frame drill-down."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Project roadmap with semantic-first, runtime-second, renderer-third ordering and KaTeX/graph/dashboard/export priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active semantic runtime thread describing AnimationAsset, renderer-neutral frame, generated math, visual motif, and graph/programming adoption direction."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-animation-library-expansion-readiness-report.md",
+      "summary": "Closeout readiness report for the animation-library expansion loop, including delivered capabilities, residual risks, and recommended next tranche."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-library-expansion-readiness-report.test.ts",
+      "summary": "Covers required closeout report sections and delivered capability names."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation-library-expansion-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Close with animation library expansion readiness report can be completed inside KP animation library expansion v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved animation-library expansion loop slices.",
+    "Grow KaTeX SemanticTransformation definitions, visual motifs, generated problem fixtures, graph runtime consumers, flashcard projections, and drill-down authoring through the AnimationAsset/runtime visual-frame protocol.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, live LSP, network integrations, or dynamic package loading; use deterministic fixtures.",
+    "Do not broaden into a dashboard redesign beyond search, progress rows, and sample previews needed for this loop.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-library-expansion-readiness-report.test.ts",
+      "status": "passed",
+      "scope": "focused animation-library closeout report coverage",
+      "checkedAt": "2026-07-14T21:49:52.370Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for closeout report test",
+      "checkedAt": "2026-07-14T21:49:52.414Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for closeout report slice",
+      "checkedAt": "2026-07-14T21:49:52.450Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T21:49:52.498Z",
+      "scope": "Run-contract hygiene for closeout report slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added the KP animation library expansion readiness report capturing loop fit, structural improvements, ready capabilities, contract-level gaps, verification, residual risks, and the recommended next tranche."
+  }
+}

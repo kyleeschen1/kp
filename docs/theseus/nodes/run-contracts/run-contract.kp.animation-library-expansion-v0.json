@@ -2,7 +2,7 @@
   "id": "run-contract.kp.animation-library-expansion-v0",
   "kind": "run-contract",
   "title": "KP animation library expansion v0 loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
   "sourceRefs": [
     {
@@ -202,7 +202,9 @@
     {
       "id": "next-action.kp.animation-library.closeout-report-v0",
       "title": "Close with animation library expansion readiness report",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.closeout-report-v0 in KP animation library expansion v0 loop.",
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }
