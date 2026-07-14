@@ -72,7 +72,7 @@
       "id": "next-action.kp.animation.symbolic-family-schema-v0",
       "title": "Define symbolic manipulation family schema",
       "summary": "Create the shared typed shape for a manipulation family: semantic objects/selectors, transformations, correspondence, motifs, samples, graph equivalents, generated problem hooks, flashcard hooks, laws, and dashboard metadata.",
-      "status": "ready"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.symbolic-family-registry-dashboard-v0",

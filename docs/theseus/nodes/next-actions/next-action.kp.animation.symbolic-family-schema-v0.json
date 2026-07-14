@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation.symbolic-family-schema-v0",
   "kind": "next-action",
   "title": "Define symbolic manipulation family schema",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Create the shared typed shape for a manipulation family: semantic objects/selectors, transformations, correspondence, motifs, samples, graph equivalents, generated problem hooks, flashcard hooks, laws, and dashboard metadata.",
+  "summary": "Added the symbolic manipulation family schema with validation for object roles, transformation definitions, visual motifs, runtime samples, graph equivalents, generated-problem hooks, flashcard hooks, and dashboard tags.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,16 @@
       "kind": "file",
       "path": "src/semantic/asset-transformation.ts",
       "summary": "SemanticTransformation contract for symbolic manipulation definitions, correspondence, laws, and provenance."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/symbolic-manipulation-family.ts",
+      "summary": "Defines the reusable symbolic manipulation family contract and validators."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-symbolic-manipulation-family.test.ts",
+      "summary": "Covers valid family construction and missing-reference diagnostics."
     }
   ],
   "dependsOn": {
@@ -80,5 +90,35 @@
       "id": "law-and-sample-requirements-explicit",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-symbolic-manipulation-family.test.ts",
+      "status": "passed",
+      "scope": "focused symbolic manipulation family schema tests",
+      "checkedAt": "2026-07-14T22:16:57.876Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification",
+      "checkedAt": "2026-07-14T22:16:57.938Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-14T22:16:58.001Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T22:16:58.058Z",
+      "scope": "run-contract hygiene"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added the symbolic manipulation family schema with validation for object roles, transformation definitions, visual motifs, runtime samples, graph equivalents, generated-problem hooks, flashcard hooks, and dashboard tags."
+  }
 }
