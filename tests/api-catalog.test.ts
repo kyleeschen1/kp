@@ -82,6 +82,9 @@ test("API catalog covers notation and layout entities with the same metadata pro
   const radical = findApiCatalogItem("notation-radical-to-exponent");
   const synchronizedPanel = findApiCatalogItem("layout-synchronized-panel");
   const runtimeFrame = findApiCatalogItem("capability-animation-runtime-frame");
+  const externalAnimationPort = findApiCatalogItem(
+    "capability-external-animation-port"
+  );
 
   assert.equal(radical?.group.category, "notation-transformation");
   assert.deepEqual(radical?.item.details?.preserves, [
@@ -121,6 +124,18 @@ test("API catalog covers notation and layout entities with the same metadata pro
     "child frames",
     "diagnostics",
     "frame descriptor"
+  ]);
+
+  assert.equal(externalAnimationPort?.group.id, "capabilities-representations");
+  assert.equal(externalAnimationPort?.item.status, "active");
+  assert.deepEqual(externalAnimationPort?.item.details?.protocols, [
+    "createKpExternalAnimationPort",
+    "runKpExternalAnimationPort"
+  ]);
+  assert.deepEqual(externalAnimationPort?.item.details?.outputs, [
+    "AnimationAsset",
+    "port diagnostics",
+    "animation validation diagnostics"
   ]);
 });
 

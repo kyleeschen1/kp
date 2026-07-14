@@ -1,0 +1,107 @@
+{
+  "id": "next-action.kp.animation.external-port-contract-v0",
+  "kind": "next-action",
+  "title": "Add external deterministic animation port contract",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added a deterministic external animation port contract that imports external traces or fixtures as AnimationAssets, preserves port diagnostics, and appends animation validation diagnostics.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-runtime-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.external-port-contract-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming AnimationAsset as the primary composable KP artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active workflow frontier for dashboard-backed semantic animation system work."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/external-port.ts",
+      "summary": "Adds createKpExternalAnimationPort and runKpExternalAnimationPort for validated external AnimationAsset imports."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-external-port.test.ts",
+      "summary": "Covers strict imports, lossy diagnostics, animation validation diagnostics, and metadata validation."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "Exposes ExternalAnimationPort in the API catalog."
+    },
+    {
+      "kind": "file",
+      "path": "tests/api-catalog.test.ts",
+      "summary": "Covers ExternalAnimationPort API catalog metadata."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.composable-runtime-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add external deterministic animation port contract can be completed inside KP composable animation runtime v0 loop."
+  ],
+  "allowedWork": [
+    "Work on AnimationAsset runtime sampling, diagnostics, dashboard previews, external deterministic ports, programming trace imports, flashcard projections, and composition laws.",
+    "Keep semantic objects, transformations, render targets, layouts, and timelines as typed data that can be inspected and sampled.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not rewrite the full renderer or equation animation DOM pipeline in this loop.",
+    "Do not add GIF/video encoders or large live external integrations in this loop.",
+    "Do not stage unrelated worktree changes."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-external-port.test.ts tests/api-catalog.test.ts",
+      "status": "passed",
+      "scope": "external animation port and API catalog focused tests",
+      "checkedAt": "2026-07-14T01:29:07.636Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript project typecheck",
+      "checkedAt": "2026-07-14T01:29:07.662Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-14T01:29:07.686Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T01:29:07.712Z",
+      "scope": "Theseus run-contract hygiene"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a deterministic external animation port contract that imports external traces or fixtures as AnimationAssets, preserves port diagnostics, and appends animation validation diagnostics."
+  }
+}
