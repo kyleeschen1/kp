@@ -2,7 +2,7 @@
   "id": "run-contract.kp.animation.renderer-integration-v0",
   "kind": "run-contract",
   "title": "KP animation renderer integration v0 loop",
-  "status": "ready",
+  "status": "resolved",
   "sourceRefs": [
     {
       "kind": "file",
@@ -190,7 +190,9 @@
     {
       "id": "next-action.kp.animation.renderer-integration-readiness-report-v0",
       "title": "Close with renderer integration readiness report",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.renderer-integration-readiness-report-v0 in KP animation renderer integration v0 loop.",
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }
