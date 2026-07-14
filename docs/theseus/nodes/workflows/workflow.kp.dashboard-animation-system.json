@@ -58,7 +58,8 @@
     "next-action.kp.semantic.generated-fixtures-consume-transform-definitions-v0",
     "next-action.kp.semantic.transform-definition-dashboard-export-coverage-v0",
     "next-action.kp.runtime.visual-motif-default-laws-v0",
-    "next-action.kp.animation.composable-animation-asset-contract-v0"
+    "next-action.kp.animation.composable-animation-asset-contract-v0",
+    "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v2"
   ],
   "verificationRecords": [
     {

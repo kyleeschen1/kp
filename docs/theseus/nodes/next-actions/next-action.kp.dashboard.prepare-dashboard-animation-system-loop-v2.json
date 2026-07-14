@@ -1,0 +1,93 @@
+{
+  "id": "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v2",
+  "kind": "next-action",
+  "title": "Prepare KP dashboard and semantic animation system Loop",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "summary": "Prepared the KP dashboard animation system frontier by materializing a ready preparation run contract and linking it from the active workflow.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Frontier selected by loop-plan rank 1. Loop-plan selected this frontier because Workflow is active."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.dashboard.prepare-dashboard-animation-system-loop-v2.json",
+      "summary": "Adds the ready preparation run contract selected from the active KP dashboard animation frontier."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Links the generated preparation action into the active KP dashboard animation workflow queue."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run theseus -- journey-report",
+    "npm run theseus -- loop-plan --limit 5"
+  ],
+  "expectedLearning": [
+    "Whether KP dashboard and semantic animation system should become active work now or remain deferred.",
+    "Whether the why-now rationale is sufficient: Loop-plan selected this frontier because Workflow is active."
+  ],
+  "allowedWork": [
+    "Read the frontier context and adjacent decisions before choosing work.",
+    "Create, link, or defer a concrete next action with source refs and verification.",
+    "Run only the selected concrete slice if the context makes it small and safe."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected frontier.",
+    "Do not start unrelated Spindle feature work."
+  ],
+  "criteria": [
+    {
+      "id": "frontier-context-reviewed",
+      "weight": "high"
+    },
+    {
+      "id": "frontier-needs-materialization-assessed",
+      "weight": "high"
+    },
+    {
+      "id": "concrete-next-action-created-or-deferred",
+      "weight": "high"
+    },
+    {
+      "id": "journey-report-updated-after-preparation",
+      "weight": "medium"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation after preparation",
+      "checkedAt": "2026-07-14T00:54:57.109Z"
+    },
+    {
+      "command": "npm run theseus -- journey-report",
+      "status": "passed",
+      "scope": "Journey report after preparation",
+      "checkedAt": "2026-07-14T00:54:57.136Z"
+    },
+    {
+      "command": "npm run theseus -- loop-plan --limit 5",
+      "status": "passed",
+      "checkedAt": "2026-07-14T00:54:57.160Z",
+      "scope": "Focused loop-plan readiness after preparation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Prepared the KP dashboard animation system frontier by materializing a ready preparation run contract and linking it from the active workflow."
+  }
+}
