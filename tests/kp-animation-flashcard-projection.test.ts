@@ -13,6 +13,9 @@ import {
 import {
   createKpAnimationClozeVisualMaskData
 } from "../src/animation/flashcard-cloze-visual-mask.ts";
+import {
+  createKpAnimationPredictNextAnswerState
+} from "../src/animation/flashcard-predict-next-answer-state.ts";
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
 import { createKpFlashcardSpec } from "../src/semantic/asset-flashcard.ts";
 import { createLinearSolveKpAssetBundle } from "../src/semantic/linear-solve-asset.ts";
@@ -253,4 +256,70 @@ test("createKpAnimationClozeVisualMaskData maps hidden selectors to visual nodes
     ]
   );
   assert.deepEqual(mask.diagnostics, []);
+});
+
+test("createKpAnimationPredictNextAnswerState evaluates selected transformation answers", () => {
+  const animation = createLinearSolveAnimationAsset();
+  const semantic = createLinearSolveKpAssetBundle();
+  const preview = createKpAnimationFlashcardPreviewRendererData({
+    animation,
+    cards: semantic.flashcards
+  });
+  const predictItem = preview.items.find(
+    (item) => item.cardId === "card.linear-solve.predict-subtract"
+  );
+
+  assert.ok(predictItem);
+
+  const pending = createKpAnimationPredictNextAnswerState({
+    item: predictItem
+  });
+  const correct = createKpAnimationPredictNextAnswerState({
+    item: predictItem,
+    selectedTransformationId: "transform.linear-solve.subtract-both-sides-3"
+  });
+  const incorrect = createKpAnimationPredictNextAnswerState({
+    item: predictItem,
+    selectedTransformationId: "transform.linear-solve.cancel-left-additive-inverse"
+  });
+  const unavailable = createKpAnimationPredictNextAnswerState({
+    item: predictItem,
+    selectedTransformationId: "transform.linear-solve.missing"
+  });
+
+  assert.equal(pending.status, "pending");
+  assert.equal(correct.status, "correct");
+  assert.equal(incorrect.status, "incorrect");
+  assert.equal(unavailable.status, "unavailable");
+  assert.deepEqual(
+    pending.candidates.map((candidate) => [
+      candidate.transformationId,
+      candidate.state
+    ]),
+    [
+      ["transform.linear-solve.subtract-both-sides-3", "expected"],
+      ["transform.linear-solve.cancel-left-additive-inverse", "available"],
+      ["transform.linear-solve.simplify-right-difference", "available"]
+    ]
+  );
+  assert.deepEqual(
+    incorrect.candidates.map((candidate) => [
+      candidate.transformationId,
+      candidate.state
+    ]),
+    [
+      ["transform.linear-solve.subtract-both-sides-3", "expected"],
+      ["transform.linear-solve.cancel-left-additive-inverse", "incorrect"],
+      ["transform.linear-solve.simplify-right-difference", "available"]
+    ]
+  );
+  assert.deepEqual(unavailable.diagnostics, [
+    {
+      severity: "warning",
+      code: "predict-next-answer.unavailable-selection",
+      path: "selectedTransformationId",
+      message:
+        "Selected transformation transform.linear-solve.missing is not a candidate for card.linear-solve.predict-subtract."
+    }
+  ]);
 });
