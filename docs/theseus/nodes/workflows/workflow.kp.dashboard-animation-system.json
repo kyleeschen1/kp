@@ -63,6 +63,7 @@
     "next-action.kp.animation-library.current-focus-v0",
     "next-action.kp.animation-library.live-card-audit-v0",
     "next-action.kp.animation-library.live-card-clock-v0",
+    "next-action.kp.animation-library.live-card-katex-visual-frame-v0",
     "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3"
   ],
   "verificationRecords": [

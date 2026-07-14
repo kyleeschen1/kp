@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation-library.live-card-clock-v0",
   "kind": "next-action",
   "title": "Convert live equation card clock to runtime frames",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-clock-v0 in KP animation library expansion v0 loop.",
+  "summary": "Made the live equation card sample the linear-solve AnimationAsset runtime frame during scrubbing/rendering and expose runtime clock, phase, active transformation, selector count, and render-target count datasets while preserving the existing DOM motion renderer.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,16 @@
       "kind": "file",
       "path": "tests/kp-animation-visual-frame-scrubber.test.ts",
       "summary": "Existing scrubber-clock test pattern for runtime and visual-frame sampling."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Samples the linear-solve AnimationAsset runtime frame from the live card progress/direction and publishes runtime frame datasets alongside existing equation-motion DOM rendering."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Adds browser coverage proving scrubbing exposes the runtime frame clock, phase, active transformation, selector count, render target count, and preserves operation-plan rendering."
     }
   ],
   "dependsOn": {
@@ -82,5 +92,35 @@
       "id": "focused-runtime-clock-test-added",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "red/green KaTeX browser suite for live runtime-clock dataset bridge",
+      "checkedAt": "2026-07-14T19:10:13.098Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for live-card clock slice",
+      "checkedAt": "2026-07-14T19:10:13.141Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for live-card clock slice",
+      "checkedAt": "2026-07-14T19:10:13.187Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T19:10:13.235Z",
+      "scope": "Run-contract hygiene for live-card clock slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Made the live equation card sample the linear-solve AnimationAsset runtime frame during scrubbing/rendering and expose runtime clock, phase, active transformation, selector count, and render-target count datasets while preserving the existing DOM motion renderer."
+  }
 }

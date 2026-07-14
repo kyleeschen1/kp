@@ -1818,6 +1818,68 @@ test("editor equation motion demo uses semantic playback plans", async ({
   });
 });
 
+test("editor equation motion demo exposes the runtime frame clock while scrubbing", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  const demo = page.locator("[data-kp-equation-motion-demo]");
+
+  const runtimeState = await page.evaluate(async () => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+
+    if (demoElement === null) {
+      throw new Error("Expected equation motion demo.");
+    }
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.5);
+    await new Promise<void>((resolve) =>
+      window.requestAnimationFrame(() => resolve())
+    );
+
+    return {
+      animationId: demoElement.dataset["kpAnimationRuntimeAnimationId"],
+      frameId: demoElement.dataset["kpAnimationRuntimeFrameId"],
+      direction: demoElement.dataset["kpAnimationRuntimeDirection"],
+      progress: demoElement.dataset["kpAnimationRuntimeProgress"],
+      beat: demoElement.dataset["kpAnimationRuntimeBeat"],
+      beatCount: demoElement.dataset["kpAnimationRuntimeBeatCount"],
+      phaseId: demoElement.dataset["kpAnimationRuntimePhaseId"],
+      activeTransformations:
+        demoElement.dataset["kpAnimationRuntimeActiveTransformations"],
+      selectorCount: Number(
+        demoElement.dataset["kpAnimationRuntimeSelectorCount"] ?? "0"
+      ),
+      renderTargetCount: Number(
+        demoElement.dataset["kpAnimationRuntimeRenderTargetCount"] ?? "0"
+      ),
+      equationProgress: demoElement.dataset["kpEquationMotionProgress"]
+    };
+  });
+
+  expect(runtimeState).toEqual({
+    animationId: "animation.linear-solve.solve-x",
+    frameId: "runtime.live-equation-card.frame",
+    direction: "forward",
+    progress: "0.5000",
+    beat: "25",
+    beatCount: "50",
+    phaseId: "animation.linear-solve.solve-x.forward.1",
+    activeTransformations:
+      "transform.linear-solve.cancel-left-additive-inverse",
+    selectorCount: expect.any(Number),
+    renderTargetCount: 1,
+    equationProgress: "0.5"
+  });
+  expect(runtimeState.selectorCount).toBeGreaterThan(0);
+  await expect(demo).toHaveAttribute(
+    "data-kp-equation-motion-last-renderer",
+    "operation-plan"
+  );
+});
+
 test("KaTeX WebGL transition blanks DOM during overlay and reveals target", async ({
   page
 }) => {

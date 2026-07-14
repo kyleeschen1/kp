@@ -1,0 +1,86 @@
+{
+  "id": "next-action.kp.animation-library.live-card-katex-visual-frame-v0",
+  "kind": "next-action",
+  "title": "Bind live card to KaTeX visual frames",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-katex-visual-frame-v0 in KP animation library expansion v0 loop.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation-library.live-card-katex-visual-frame-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Live equation card controller that should publish KaTeX visual-frame ids, diagnostics, and binding counts."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-dom-visual-frame-adapter.ts",
+      "summary": "DOM/snapshot adapter that creates KaTeX runtime visual frames from runtime frames."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-token-snapshot.ts",
+      "summary": "KaTeX token snapshot boundary for binding runtime selectors to DOM token refs and geometry."
+    },
+    {
+      "kind": "file",
+      "path": "tests/linear-solve-runtime-visual-frame-sample.test.ts",
+      "summary": "Focused visual-frame binding sample for the linear-solve KaTeX selector refs."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Browser coverage for live equation card runtime and KaTeX visual-frame datasets."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation-library-expansion-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Bind live card to KaTeX visual frames can be completed inside KP animation library expansion v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved animation-library expansion loop slices.",
+    "Grow KaTeX SemanticTransformation definitions, visual motifs, generated problem fixtures, graph runtime consumers, flashcard projections, and drill-down authoring through the AnimationAsset/runtime visual-frame protocol.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, live LSP, network integrations, or dynamic package loading; use deterministic fixtures.",
+    "Do not broaden into a dashboard redesign beyond search, progress rows, and sample previews needed for this loop.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "criteria": [
+    {
+      "id": "live-card-visual-frame-sampled-from-runtime-frame",
+      "weight": "high"
+    },
+    {
+      "id": "selector-and-render-target-binding-counts-exposed",
+      "weight": "high"
+    },
+    {
+      "id": "visual-frame-diagnostics-visible-on-card",
+      "weight": "high"
+    },
+    {
+      "id": "browser-coverage-proves-no-unbound-linear-solve-visual-selectors",
+      "weight": "medium"
+    }
+  ]
+}

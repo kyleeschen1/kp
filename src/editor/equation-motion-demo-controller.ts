@@ -2,6 +2,8 @@ import {
   DEFAULT_EQUATION_ANIMATION_ID,
   findEquationAnimationCatalogEntry
 } from "./equation-animation-catalog.ts";
+import { createLinearSolveAnimationAsset } from "../animation/linear-solve-adapter.ts";
+import { sampleKpAnimationRuntimeFrame } from "../animation/runtime-sampler.ts";
 import { measureAnnotatedEquationMotionTokens } from "../rendering/equation-motion-dom.ts";
 import {
   applyMeasuredMotionDeltas,
@@ -40,6 +42,8 @@ const EQUATION_MOTION_MAX_COLLAPSE_SCALE_PERCENT = 50;
 const EQUATION_MOTION_BEAT_TIMELINE = linearEquationDemoBeatTimeline;
 const EQUATION_MOTION_ENTER_INITIAL_SCALE = 0.82;
 const EQUATION_MOTION_DEMO_BEAT_LABEL_COUNT = 50;
+const LIVE_EQUATION_RUNTIME_FRAME_ID = "runtime.live-equation-card.frame";
+const liveEquationRuntimeAnimation = createLinearSolveAnimationAsset();
 const activeAnimations = new WeakMap<HTMLElement, ActiveEquationMotionAnimation>();
 const pausedAnimations = new WeakMap<HTMLElement, PausedEquationMotionAnimation>();
 const activeRenderContexts = new WeakMap<HTMLElement, EquationMotionRenderContext>();
@@ -695,6 +699,11 @@ function renderEquationMotionFrame(
     String(countContextTokensForStep(context, sourceStep));
   demo.dataset["kpEquationMotionTargetAnchorCount"] =
     String(countContextTokensForStep(context, targetStep));
+  syncLiveEquationRuntimeFrame(
+    demo,
+    sourceStep < targetStep ? "forward" : "rewind",
+    directionalProgress
+  );
   syncEquationMotionMotifDiagnostics(demo, frame);
   syncFinalSimplifyPhaseDiagnostics(
     demo,
@@ -847,6 +856,72 @@ function renderEquationMotionFrame(
       );
     }
   }
+}
+
+function syncLiveEquationRuntimeFrame(
+  demo: HTMLElement,
+  direction: "forward" | "rewind",
+  progress: number
+): void {
+  if (readEquationAnimationId(demo) !== DEFAULT_EQUATION_ANIMATION_ID) {
+    clearLiveEquationRuntimeFrame(demo);
+    return;
+  }
+
+  const runtimeFrame = sampleKpAnimationRuntimeFrame({
+    id: LIVE_EQUATION_RUNTIME_FRAME_ID,
+    animation: liveEquationRuntimeAnimation,
+    direction,
+    progress
+  });
+
+  // The card still renders through equation-motion DOM; these datasets expose
+  // the AnimationAsset clock/identity while the view binding is migrated.
+  demo.dataset["kpAnimationRuntimeAnimationId"] = runtimeFrame.animationId;
+  demo.dataset["kpAnimationRuntimeFrameId"] = runtimeFrame.id;
+  demo.dataset["kpAnimationRuntimeDirection"] = runtimeFrame.clock.direction;
+  demo.dataset["kpAnimationRuntimeProgress"] = formatRuntimeClockProgress(
+    runtimeFrame.clock.progress
+  );
+  writeOptionalRuntimeNumberDataset(
+    demo,
+    "kpAnimationRuntimeBeat",
+    runtimeFrame.clock.beat
+  );
+  writeOptionalRuntimeNumberDataset(
+    demo,
+    "kpAnimationRuntimeBeatCount",
+    runtimeFrame.clock.beatCount
+  );
+  demo.dataset["kpAnimationRuntimePhaseId"] = runtimeFrame.phase.phaseId;
+  writeDatasetList(
+    demo,
+    "kpAnimationRuntimeActiveTransformations",
+    runtimeFrame.activeTransformationIds
+  );
+  writeDatasetList(
+    demo,
+    "kpAnimationRuntimeActiveAnnotations",
+    runtimeFrame.activeAnnotationIds
+  );
+  demo.dataset["kpAnimationRuntimeSelectorCount"] =
+    String(runtimeFrame.selectorFrames.length);
+  demo.dataset["kpAnimationRuntimeRenderTargetCount"] =
+    String(runtimeFrame.activeRenderTargets.length);
+}
+
+function clearLiveEquationRuntimeFrame(demo: HTMLElement): void {
+  delete demo.dataset["kpAnimationRuntimeAnimationId"];
+  delete demo.dataset["kpAnimationRuntimeFrameId"];
+  delete demo.dataset["kpAnimationRuntimeDirection"];
+  delete demo.dataset["kpAnimationRuntimeProgress"];
+  delete demo.dataset["kpAnimationRuntimeBeat"];
+  delete demo.dataset["kpAnimationRuntimeBeatCount"];
+  delete demo.dataset["kpAnimationRuntimePhaseId"];
+  delete demo.dataset["kpAnimationRuntimeActiveTransformations"];
+  delete demo.dataset["kpAnimationRuntimeActiveAnnotations"];
+  delete demo.dataset["kpAnimationRuntimeSelectorCount"];
+  delete demo.dataset["kpAnimationRuntimeRenderTargetCount"];
 }
 
 function syncEquationMotionMotifDiagnostics(
@@ -2000,6 +2075,19 @@ function writeOptionalProgressDataset(
   element.dataset[key] = formatEquationMotionProgress(value);
 }
 
+function writeOptionalRuntimeNumberDataset(
+  element: HTMLElement,
+  key: string,
+  value: number | undefined
+): void {
+  if (value === undefined) {
+    delete element.dataset[key];
+    return;
+  }
+
+  element.dataset[key] = String(value);
+}
+
 function hiddenTokenPose(): MotionPose {
   return { opacity: 0, x: 0, y: 0, scale: 1 };
 }
@@ -2421,6 +2509,10 @@ function formatEquationMotionProgress(progress: number): string {
   }
 
   return String(roundEquationMotionProgress(progress));
+}
+
+function formatRuntimeClockProgress(progress: number): string {
+  return progress.toFixed(4);
 }
 
 function roundEquationMotionProgress(progress: number): number {
