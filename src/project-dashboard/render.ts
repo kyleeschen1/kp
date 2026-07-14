@@ -68,6 +68,7 @@ import {
   dashboardSampleTargetPreviewLinks as sampleTargetPreviewLinks,
   dashboardSampleTargetSearchFields as sampleTargetSearchFields
 } from "./sample-target-preview.ts";
+import animationLibraryRunContract from "../../docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json" with { type: "json" };
 
 export interface ProjectDashboardRenderOptions {
   readonly query?: string;
@@ -401,12 +402,18 @@ function createProjectAgendaSections(
     {
       id: "work",
       title: "Work",
-      rows: createWorkAgendaRows(data.cards)
+      rows: [
+        ...createWorkAgendaRows(data.cards),
+        ...createAnimationLibraryLoopWorkRows(query)
+      ]
     },
     {
       id: "report-cards",
       title: "Report Cards",
-      rows: createReportAgendaRows(data.reportThemes)
+      rows: [
+        ...createReportAgendaRows(data.reportThemes),
+        ...createAnimationLibraryLoopReportRows(query)
+      ]
     },
     {
       id: "object-gallery",
@@ -537,6 +544,153 @@ function createReportAgendaRows(
     ],
     searchFields: projectRefSearchFields(theme.projectRefs)
   }));
+}
+
+function createAnimationLibraryLoopWorkRows(
+  query: string
+): readonly ProjectAgendaRow[] {
+  const progress = animationLibraryLoopProgress();
+  const row: ProjectAgendaRow = {
+    id: "work-kp-animation-library-expansion-loop",
+    title: "KP animation library expansion loop",
+    summary:
+      "Tracks the approved AnimationAsset/runtime-frame library expansion loop across semantic transforms, visual motifs, generated problems, graph consumers, flashcards, and dashboard drill-downs.",
+    status: animationLibraryLoopStatus(progress),
+    detail: progress.progressText,
+    kind: "work",
+    depth: 0,
+    tags: ["animation", "theseus", "progress", "runtime"],
+    dataAttributes: [
+      ["data-kp-animation-library-run-contract", animationLibraryRunContract.id],
+      ["data-kp-animation-library-progress-row", "work"]
+    ],
+    previewFields: animationLibraryLoopPreviewFields(progress),
+    searchFields: animationLibraryLoopSearchFields(progress)
+  };
+
+  return agendaRowMatchesQuery(row, query) ? [row] : [];
+}
+
+function createAnimationLibraryLoopReportRows(
+  query: string
+): readonly ProjectAgendaRow[] {
+  const progress = animationLibraryLoopProgress();
+  const row: ProjectAgendaRow = {
+    id: "report-kp-animation-library-expansion-loop",
+    title: "KP animation library expansion readiness",
+    summary:
+      "Report-card row for whether the current animation library loop is producing typed, inspectable, composable animation assets.",
+    status: animationLibraryLoopStatus(progress),
+    detail: progress.progressText,
+    kind: "report",
+    depth: 0,
+    tags: ["report-card", "animation", "theseus", "progress"],
+    dataAttributes: [
+      ["data-kp-animation-library-run-contract", animationLibraryRunContract.id],
+      ["data-kp-animation-library-progress-row", "report"]
+    ],
+    previewFields: [
+      ...animationLibraryLoopPreviewFields(progress),
+      {
+        label: "Readiness",
+        value:
+          progress.remainingCount === 0
+            ? "Loop complete; ready for closeout review."
+            : "Loop in progress; remaining slices still need verification."
+      }
+    ],
+    searchFields: [
+      ...animationLibraryLoopSearchFields(progress),
+      "report-card",
+      "readiness",
+      "animation-library-readiness"
+    ]
+  };
+
+  return agendaRowMatchesQuery(row, query) ? [row] : [];
+}
+
+type AnimationLibraryRunContractSlice =
+  typeof animationLibraryRunContract.slices[number];
+
+interface AnimationLibraryLoopProgress {
+  readonly completedCount: number;
+  readonly totalCount: number;
+  readonly remainingCount: number;
+  readonly progressText: string;
+  readonly nextSlice: AnimationLibraryRunContractSlice | undefined;
+  readonly lastCompletedSlice: AnimationLibraryRunContractSlice | undefined;
+}
+
+function animationLibraryLoopProgress(): AnimationLibraryLoopProgress {
+  const slices = animationLibraryRunContract.slices;
+  const completedSlices = slices.filter((slice) => slice.status === "complete");
+  const nextSlice = slices.find((slice) => slice.status !== "complete");
+  const lastCompletedSlice = [...completedSlices].reverse()[0];
+
+  return {
+    completedCount: completedSlices.length,
+    totalCount: slices.length,
+    remainingCount: slices.length - completedSlices.length,
+    progressText: `${completedSlices.length}/${slices.length} slices complete`,
+    nextSlice,
+    lastCompletedSlice
+  };
+}
+
+function animationLibraryLoopStatus(
+  progress: AnimationLibraryLoopProgress
+): ProjectDashboardStatus {
+  return progress.remainingCount === 0 ? "done" : "active";
+}
+
+function animationLibraryLoopPreviewFields(
+  progress: AnimationLibraryLoopProgress
+): readonly ProjectAgendaPreviewField[] {
+  return [
+    { label: "Run contract", value: animationLibraryRunContract.id },
+    { label: "Loop status", value: animationLibraryRunContract.status },
+    { label: "Loop progress", value: progress.progressText },
+    {
+      label: "Remaining slices",
+      value: String(progress.remainingCount)
+    },
+    {
+      label: "Next slice",
+      value: progress.nextSlice?.id ?? "None"
+    },
+    {
+      label: "Last completed slice",
+      value: progress.lastCompletedSlice?.id ?? "None"
+    },
+    {
+      label: "Verification",
+      value: animationLibraryRunContract.verification.join(", ")
+    }
+  ];
+}
+
+function animationLibraryLoopSearchFields(
+  progress: AnimationLibraryLoopProgress
+): readonly string[] {
+  return [
+    "animation-library-expansion-loop",
+    "kp animation library expansion",
+    "animation library loop progress",
+    animationLibraryRunContract.id,
+    animationLibraryRunContract.title,
+    animationLibraryRunContract.status,
+    progress.progressText,
+    progress.nextSlice?.id ?? "",
+    progress.lastCompletedSlice?.id ?? "",
+    ...animationLibraryRunContract.verification,
+    ...animationLibraryRunContract.slices.flatMap((slice) => [
+      slice.id,
+      slice.title,
+      slice.status,
+      `slice-status:${slice.status}`
+    ])
+  ];
 }
 
 function createGalleryAgendaRows(

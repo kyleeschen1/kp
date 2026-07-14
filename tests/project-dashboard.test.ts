@@ -1,6 +1,7 @@
 import { strict as assert } from "node:assert";
 import test from "node:test";
 
+import animationLibraryRunContract from "../docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json" with { type: "json" };
 import { projectDashboardData } from "../src/project-dashboard/data.ts";
 import {
   collectProjectDashboardIds,
@@ -241,6 +242,64 @@ test("renderProjectDashboard renders the prototype shell and seeded summaries", 
   );
   assert.doesNotMatch(html, /project-card--row/);
   assert.doesNotMatch(html, /project-dashboard__grid/);
+});
+
+test("renderProjectDashboard exposes animation library loop progress rows", () => {
+  const completedSlices = animationLibraryRunContract.slices.filter(
+    (slice) => slice.status === "complete"
+  ).length;
+  const totalSlices = animationLibraryRunContract.slices.length;
+  const nextSlice = animationLibraryRunContract.slices.find(
+    (slice) => slice.status !== "complete"
+  );
+  const workHtml = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "work-kp-animation-library-expansion-loop"
+  });
+  const reportHtml = renderProjectDashboard(projectDashboardData, {
+    selectedAgendaRowId: "report-kp-animation-library-expansion-loop"
+  });
+  const filteredHtml = renderProjectDashboard(projectDashboardData, {
+    query: "animation-library-expansion-loop progress"
+  });
+
+  assert.match(
+    workHtml,
+    /data-kp-agenda-row="work-kp-animation-library-expansion-loop"/
+  );
+  assert.match(
+    workHtml,
+    new RegExp(
+      `data-kp-preview-field="Loop progress"[^>]*>${completedSlices}/${totalSlices} slices complete`
+    )
+  );
+  assert.match(
+    workHtml,
+    new RegExp(
+      `data-kp-preview-field="Next slice"[^>]*>${escapeRegExp(nextSlice?.id ?? "None")}`
+    )
+  );
+  assert.match(
+    workHtml,
+    /data-kp-preview-field="Run contract"[^>]*>run-contract\.kp\.animation-library-expansion-v0/
+  );
+  assert.match(
+    reportHtml,
+    /data-kp-agenda-row="report-kp-animation-library-expansion-loop"/
+  );
+  assert.match(
+    reportHtml,
+    new RegExp(
+      `data-kp-preview-field="Loop progress"[^>]*>${completedSlices}/${totalSlices} slices complete`
+    )
+  );
+  assert.match(
+    filteredHtml,
+    /data-kp-agenda-row="work-kp-animation-library-expansion-loop"/
+  );
+  assert.match(
+    filteredHtml,
+    /data-kp-agenda-row="report-kp-animation-library-expansion-loop"/
+  );
 });
 
 test("renderProjectDashboard places validation status beside the title", () => {
@@ -1868,3 +1927,7 @@ test("project dashboard v1 card records completed Codex phase updates", () => {
     )
   );
 });
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
