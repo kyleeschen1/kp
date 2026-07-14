@@ -1,8 +1,13 @@
 import type {
-  KpAnimationRuntimeClock,
-  KpAnimationRuntimeFrame,
-  KpAnimationRuntimeRenderTargetFrame,
-  KpAnimationRuntimeSelectorFrame
+  KpAnimationAsset
+} from "./asset.ts";
+import {
+  sampleKpAnimationRuntimeFrameFromScrubber,
+  type KpAnimationRuntimeClock,
+  type KpAnimationRuntimeFrame,
+  type KpAnimationRuntimeRenderTargetFrame,
+  type KpAnimationRuntimeScrubberControl,
+  type KpAnimationRuntimeSelectorFrame
 } from "./runtime-sampler.ts";
 
 export type KpAnimationVisualRendererKind =
@@ -45,6 +50,17 @@ export interface CreateKpAnimationVisualFrameInput {
   readonly bindings: readonly KpAnimationVisualBinding[];
 }
 
+export interface SampleKpAnimationVisualFrameFromScrubberInput {
+  readonly animation: KpAnimationAsset;
+  readonly scrubber: KpAnimationRuntimeScrubberControl;
+  readonly value: number;
+  readonly childAnimations?: readonly KpAnimationAsset[] | undefined;
+  readonly direction?: KpAnimationRuntimeClock["direction"] | undefined;
+  readonly createVisualFrame: (
+    runtimeFrame: KpAnimationRuntimeFrame
+  ) => KpAnimationVisualFrame;
+}
+
 export interface KpAnimationVisualFrame {
   readonly id: string;
   readonly kind: "animation-visual-frame";
@@ -59,6 +75,15 @@ export interface KpAnimationVisualFrame {
   readonly renderTargetVisuals: readonly KpAnimationVisualRenderTarget[];
   readonly selectorVisuals: readonly KpAnimationVisualSelector[];
   readonly diagnostics: readonly KpAnimationVisualFrameDiagnostic[];
+}
+
+export interface KpAnimationVisualFrameScrubberSample {
+  readonly id: string;
+  readonly kind: "animation-visual-frame-scrubber-sample";
+  readonly scrubber: KpAnimationRuntimeScrubberControl;
+  readonly value: number;
+  readonly runtimeFrame: KpAnimationRuntimeFrame;
+  readonly visualFrame: KpAnimationVisualFrame;
 }
 
 export interface KpAnimationVisualNode extends KpAnimationVisualBinding {}
@@ -119,6 +144,27 @@ export function createKpAnimationVisualFrame(
       renderTargetVisuals,
       selectorVisuals
     })
+  };
+}
+
+export function sampleKpAnimationVisualFrameFromScrubber(
+  input: SampleKpAnimationVisualFrameFromScrubberInput
+): KpAnimationVisualFrameScrubberSample {
+  const runtimeFrame = sampleKpAnimationRuntimeFrameFromScrubber({
+    animation: input.animation,
+    scrubber: input.scrubber,
+    value: input.value,
+    childAnimations: input.childAnimations,
+    direction: input.direction
+  });
+
+  return {
+    id: `visual-scrubber.${input.scrubber.id}.${input.value}`,
+    kind: "animation-visual-frame-scrubber-sample",
+    scrubber: { ...input.scrubber },
+    value: input.value,
+    runtimeFrame,
+    visualFrame: input.createVisualFrame(runtimeFrame)
   };
 }
 
