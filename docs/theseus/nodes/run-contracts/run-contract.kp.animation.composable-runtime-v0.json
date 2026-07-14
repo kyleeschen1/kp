@@ -1,0 +1,153 @@
+{
+  "id": "run-contract.kp.animation.composable-runtime-v0",
+  "kind": "run-contract",
+  "title": "KP composable animation runtime v0 loop",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Durable execution contract for the approved KP direction: predictable, inspectable, composable animations as typed assets driven by one clock and reusable across math, graphs, programming, generated problems, and flashcards.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming AnimationAsset as the primary composable KP artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active workflow frontier for dashboard-backed semantic animation system work."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "allowedWork": [
+    "Work on AnimationAsset runtime sampling, diagnostics, dashboard previews, external deterministic ports, programming trace imports, flashcard projections, and composition laws.",
+    "Keep semantic objects, transformations, render targets, layouts, and timelines as typed data that can be inspected and sampled.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not rewrite the full renderer or equation animation DOM pipeline in this loop.",
+    "Do not add GIF/video encoders or large live external integrations in this loop.",
+    "Do not stage unrelated worktree changes."
+  ],
+  "goal": "Advance KP from typed AnimationAsset definitions to a renderer-neutral runtime that samples, composes, imports deterministic external data, and projects animation assets into dashboard previews, programming traces, and flashcards.",
+  "target": "workflow.kp.dashboard-animation-system",
+  "runMode": "run",
+  "maxSlices": 20,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop if a slice requires broad renderer replacement instead of an incremental typed runtime adapter.",
+    "Stop if verification fails and the fix is not local to the active slice.",
+    "Stop if external port work requires networked live integrations rather than deterministic fixtures."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.animation.runtime-frame-sampler-v0",
+      "title": "Add renderer-neutral animation runtime frame sampler",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.runtime-phase-diagnostics-v0",
+      "title": "Add runtime phase and selector diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.runtime-child-sampling-v0",
+      "title": "Sample child animation assets for composed layouts",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.dashboard-sample-card-runtime-v0",
+      "title": "Add dashboard sample cards backed by runtime frames",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.scrubber-runtime-controls-v0",
+      "title": "Wire shared scrubber controls to runtime frames",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.external-port-contract-v0",
+      "title": "Add external deterministic animation port contract",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.external-port-linear-solve-fixture-v0",
+      "title": "Map external algebra fixture to animation assets",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.external-port-diagnostics-v0",
+      "title": "Add external port diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.program-trace-port-generalization-v0",
+      "title": "Generalize programming trace import as animation port",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.source-range-provenance-v0",
+      "title": "Add SourceFile and source-range provenance",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.flashcard-projection-core-v0",
+      "title": "Add flashcard projection core",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.flashcard-cloze-predict-v0",
+      "title": "Add cloze and predict-next flashcard projections",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.dashboard-flashcard-facets-v0",
+      "title": "Add dashboard facets for flashcard projections",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.generated-problem-animation-import-v0",
+      "title": "Import generated problem solutions into animation assets",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.runtime-composition-laws-v0",
+      "title": "Add runtime composition law checks",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.representation-transform-contract-v0",
+      "title": "Add representation transformation contract",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.transform-tree-composition-contract-v0",
+      "title": "Add transform-tree composition contract",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.effectful-combinator-contract-v0",
+      "title": "Add effectful combinator contract",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.llm-decomposition-authoring-flow-v0",
+      "title": "Add LLM decomposition authoring flow",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.composable-runtime-readiness-report-v0",
+      "title": "Close loop with runtime readiness report",
+      "status": "planned"
+    }
+  ]
+}
