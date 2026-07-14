@@ -143,3 +143,94 @@ test("sampleKpAnimationRuntimeFrame normalizes beats, progress, and rewind direc
   assert.equal(clamped.clock.elapsedMs, 2400);
   assert.equal(clamped.clock.beat, 50);
 });
+
+test("sampleKpAnimationRuntimeFrame exposes phase and selector diagnostics", () => {
+  const animation = createLinearSolveAnimationAsset();
+  const frame = sampleKpAnimationRuntimeFrame({
+    animation,
+    progress: 0.5
+  });
+
+  assert.deepEqual(frame.activeAnnotationIds, [
+    "focus.linear-solve.cancel",
+    "pause.linear-solve.cancel"
+  ]);
+  assert.deepEqual(frame.focusSelectorIds, [
+    "equation.linear-solve.after-subtract.lhs.plus3",
+    "equation.linear-solve.after-subtract.lhs.minus3"
+  ]);
+  assert.deepEqual(
+    frame.selectorFrames
+      .filter((selector) => selector.roles.includes("focus"))
+      .map((selector) => ({
+        id: selector.id,
+        objectId: selector.objectId,
+        label: selector.label,
+        roles: selector.roles,
+        annotationIds: selector.annotationIds
+      })),
+    [
+      {
+        id: "equation.linear-solve.after-subtract.lhs.plus3",
+        objectId: "equation.linear-solve.after-subtract",
+        label: "+3",
+        roles: ["source", "focus"],
+        annotationIds: ["focus.linear-solve.cancel"]
+      },
+      {
+        id: "equation.linear-solve.after-subtract.lhs.minus3",
+        objectId: "equation.linear-solve.after-subtract",
+        label: "-3",
+        roles: ["source", "focus"],
+        annotationIds: ["focus.linear-solve.cancel"]
+      }
+    ]
+  );
+  assert.deepEqual(
+    frame.selectorFrames.find(
+      (selector) => selector.id === "equation.linear-solve.after-subtract.lhs.x"
+    ),
+    {
+      id: "equation.linear-solve.after-subtract.lhs.x",
+      objectId: "equation.linear-solve.after-subtract",
+      kind: "term",
+      label: "x",
+      roles: ["source", "correspondence-source"],
+      activeTransformationIds: [
+        "transform.linear-solve.cancel-left-additive-inverse"
+      ],
+      annotationIds: [],
+      renderTargetIds: ["render.linear-solve.equation"]
+    }
+  );
+  assert.deepEqual(frame.phaseDiagnostics, [
+    {
+      severity: "info",
+      code: "runtime.phase.active-transformations",
+      path: "phase.nodeIds",
+      message:
+        "Phase animation.linear-solve.solve-x.forward.1 activates 1 transformation(s)."
+    },
+    {
+      severity: "info",
+      code: "runtime.phase.annotations",
+      path: "phase.annotationIdsByPlacement",
+      message:
+        "Phase animation.linear-solve.solve-x.forward.1 exposes 2 annotation(s)."
+    }
+  ]);
+  assert.deepEqual(frame.selectorDiagnostics, [
+    {
+      severity: "info",
+      code: "runtime.selector.context",
+      path: "selectorFrames",
+      message: "10 selector(s) are in the active source/target context."
+    },
+    {
+      severity: "info",
+      code: "runtime.selector.focus",
+      path: "focusSelectorIds",
+      message: "2 selector(s) are focus-active."
+    }
+  ]);
+});

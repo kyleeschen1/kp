@@ -114,7 +114,9 @@ test("API catalog covers notation and layout entities with the same metadata pro
   assert.deepEqual(runtimeFrame?.item.details?.outputs, [
     "clock",
     "phase",
+    "selector frames",
     "active render targets",
+    "diagnostics",
     "frame descriptor"
   ]);
 });

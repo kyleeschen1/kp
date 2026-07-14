@@ -35,10 +35,15 @@ export interface KpAnimationRuntimeFrame {
   readonly clock: KpAnimationRuntimeClock;
   readonly phase: KpAnimationRuntimePhase;
   readonly activeTransformationIds: readonly string[];
+  readonly activeAnnotationIds: readonly string[];
+  readonly focusSelectorIds: readonly string[];
+  readonly selectorFrames: readonly KpAnimationRuntimeSelectorFrame[];
   readonly semanticObjectRefs: readonly SemanticObjectRef[];
   readonly transformationRefs: readonly SemanticTransformationRef[];
   readonly activeRenderTargets: readonly KpAnimationRuntimeRenderTargetFrame[];
   readonly frameDescriptor: KpAnimationFrameDescriptor;
+  readonly phaseDiagnostics: readonly KpAnimationRuntimeDiagnostic[];
+  readonly selectorDiagnostics: readonly KpAnimationRuntimeDiagnostic[];
   readonly diagnostics: readonly KpLawFailure[];
 }
 
@@ -64,6 +69,31 @@ export interface KpAnimationRuntimeRenderTargetFrame
   readonly activeTransformationIds: readonly string[];
 }
 
+export interface KpAnimationRuntimeDiagnostic {
+  readonly severity: "info" | "warning" | "error";
+  readonly code: string;
+  readonly path: string;
+  readonly message: string;
+}
+
+export type KpAnimationRuntimeSelectorRole =
+  | "source"
+  | "target"
+  | "correspondence-source"
+  | "correspondence-target"
+  | "focus";
+
+export interface KpAnimationRuntimeSelectorFrame {
+  readonly id: string;
+  readonly objectId: string;
+  readonly kind: string;
+  readonly label?: string | undefined;
+  readonly roles: readonly KpAnimationRuntimeSelectorRole[];
+  readonly activeTransformationIds: readonly string[];
+  readonly annotationIds: readonly string[];
+  readonly renderTargetIds: readonly string[];
+}
+
 export function sampleKpAnimationRuntimeFrame(
   input: SampleKpAnimationRuntimeFrameInput
 ): KpAnimationRuntimeFrame {
@@ -85,6 +115,30 @@ export function sampleKpAnimationRuntimeFrame(
   });
   const refs = compileKpAnimationAssetSemanticRefs(input.animation);
   const activeTransformationIds = [...descriptor.transformationIds];
+  const activeAnnotationIds = flattenAnnotationIds(
+    phase.annotationIdsByPlacement
+  );
+  const activeAnnotations = input.animation.transformationTree.annotations
+    .filter((annotation) => activeAnnotationIds.includes(annotation.id));
+  const activeRenderTargets = descriptor.renderTargets
+    .map((target) =>
+      runtimeRenderTargetFrame(target, activeTransformationIds)
+    )
+    .filter((target) => target.activeTransformationIds.length > 0);
+  const focusSelectorIds = uniqueStrings(
+    activeAnnotations
+      .filter((annotation) =>
+        annotation.kind === "focus" || annotation.kind === "emphasis"
+      )
+      .flatMap((annotation) => annotation.selectorIds ?? [])
+  );
+  const selectorFrames = runtimeSelectorFrames({
+    animation: input.animation,
+    activeTransformationIds,
+    activeAnnotationIds,
+    focusSelectorIds,
+    activeRenderTargets
+  });
 
   return {
     id:
@@ -106,14 +160,22 @@ export function sampleKpAnimationRuntimeFrame(
       }
     },
     activeTransformationIds,
+    activeAnnotationIds,
+    focusSelectorIds,
+    selectorFrames,
     semanticObjectRefs: refs.semanticObjectRefs.map((ref) => ({ ...ref })),
     transformationRefs: refs.transformationRefs.map(cloneTransformationRef),
-    activeRenderTargets: descriptor.renderTargets
-      .map((target) =>
-        runtimeRenderTargetFrame(target, activeTransformationIds)
-      )
-      .filter((target) => target.activeTransformationIds.length > 0),
+    activeRenderTargets,
     frameDescriptor: descriptor,
+    phaseDiagnostics: createPhaseDiagnostics({
+      phaseId: phase.phaseId,
+      activeTransformationCount: activeTransformationIds.length,
+      activeAnnotationCount: activeAnnotationIds.length
+    }),
+    selectorDiagnostics: createSelectorDiagnostics({
+      selectorCount: selectorFrames.length,
+      focusSelectorCount: focusSelectorIds.length
+    }),
     diagnostics: descriptor.diagnostics.map((diagnostic) => ({ ...diagnostic }))
   };
 }
@@ -194,6 +256,158 @@ function runtimeRenderTargetFrame(
   };
 }
 
+function runtimeSelectorFrames(input: {
+  readonly animation: KpAnimationAsset;
+  readonly activeTransformationIds: readonly string[];
+  readonly activeAnnotationIds: readonly string[];
+  readonly focusSelectorIds: readonly string[];
+  readonly activeRenderTargets: readonly KpAnimationRuntimeRenderTargetFrame[];
+}): readonly KpAnimationRuntimeSelectorFrame[] {
+  const activeTransformationSet = new Set(input.activeTransformationIds);
+  const activeTransformations = input.animation.transformations.filter(
+    (transformation) => activeTransformationSet.has(transformation.id)
+  );
+  const sourceObjectIds = new Set(
+    activeTransformations.flatMap((transformation) => transformation.sourceObjectIds)
+  );
+  const targetObjectIds = new Set(
+    activeTransformations.flatMap((transformation) => transformation.targetObjectIds)
+  );
+  const correspondenceSourceSelectorIds = new Set(
+    activeTransformations.flatMap((transformation) =>
+      transformation.correspondence.map((correspondence) =>
+        correspondence.sourceSelectorId
+      )
+    )
+  );
+  const correspondenceTargetSelectorIds = new Set(
+    activeTransformations.flatMap((transformation) =>
+      transformation.correspondence.map((correspondence) =>
+        correspondence.targetSelectorId
+      )
+    )
+  );
+  const focusSelectorIds = new Set(input.focusSelectorIds);
+  const activeAnnotations = input.animation.transformationTree.annotations
+    .filter((annotation) => input.activeAnnotationIds.includes(annotation.id));
+
+  return input.animation.bundle.objects.flatMap((object) => {
+    if (!sourceObjectIds.has(object.id) && !targetObjectIds.has(object.id)) {
+      return [];
+    }
+
+    return object.selectors.map((selector) => {
+      const roles = selectorRoles({
+        selectorId: selector.id,
+        objectId: object.id,
+        sourceObjectIds,
+        targetObjectIds,
+        correspondenceSourceSelectorIds,
+        correspondenceTargetSelectorIds,
+        focusSelectorIds
+      });
+      const annotationIds = activeAnnotations
+        .filter((annotation) => annotation.selectorIds?.includes(selector.id))
+        .map((annotation) => annotation.id);
+      const renderTargetIds = input.activeRenderTargets
+        .filter((target) =>
+          target.objectIds.includes(object.id) ||
+          target.selectorIds.includes(selector.id)
+        )
+        .map((target) => target.id);
+
+      return {
+        id: selector.id,
+        objectId: selector.objectId,
+        kind: selector.kind,
+        ...(selector.label === undefined ? {} : { label: selector.label }),
+        roles,
+        activeTransformationIds: [...input.activeTransformationIds],
+        annotationIds,
+        renderTargetIds
+      };
+    });
+  });
+}
+
+function selectorRoles(input: {
+  readonly selectorId: string;
+  readonly objectId: string;
+  readonly sourceObjectIds: ReadonlySet<string>;
+  readonly targetObjectIds: ReadonlySet<string>;
+  readonly correspondenceSourceSelectorIds: ReadonlySet<string>;
+  readonly correspondenceTargetSelectorIds: ReadonlySet<string>;
+  readonly focusSelectorIds: ReadonlySet<string>;
+}): readonly KpAnimationRuntimeSelectorRole[] {
+  const roles: KpAnimationRuntimeSelectorRole[] = [];
+
+  if (input.sourceObjectIds.has(input.objectId)) roles.push("source");
+  if (input.targetObjectIds.has(input.objectId)) roles.push("target");
+  if (input.correspondenceSourceSelectorIds.has(input.selectorId)) {
+    roles.push("correspondence-source");
+  }
+  if (input.correspondenceTargetSelectorIds.has(input.selectorId)) {
+    roles.push("correspondence-target");
+  }
+  if (input.focusSelectorIds.has(input.selectorId)) roles.push("focus");
+
+  return roles;
+}
+
+function createPhaseDiagnostics(input: {
+  readonly phaseId: string;
+  readonly activeTransformationCount: number;
+  readonly activeAnnotationCount: number;
+}): readonly KpAnimationRuntimeDiagnostic[] {
+  return [
+    {
+      severity: "info",
+      code: "runtime.phase.active-transformations",
+      path: "phase.nodeIds",
+      message:
+        `Phase ${input.phaseId} activates ${input.activeTransformationCount} transformation(s).`
+    },
+    {
+      severity: "info",
+      code: "runtime.phase.annotations",
+      path: "phase.annotationIdsByPlacement",
+      message:
+        `Phase ${input.phaseId} exposes ${input.activeAnnotationCount} annotation(s).`
+    }
+  ];
+}
+
+function createSelectorDiagnostics(input: {
+  readonly selectorCount: number;
+  readonly focusSelectorCount: number;
+}): readonly KpAnimationRuntimeDiagnostic[] {
+  return [
+    {
+      severity: "info",
+      code: "runtime.selector.context",
+      path: "selectorFrames",
+      message:
+        `${input.selectorCount} selector(s) are in the active source/target context.`
+    },
+    {
+      severity: "info",
+      code: "runtime.selector.focus",
+      path: "focusSelectorIds",
+      message: `${input.focusSelectorCount} selector(s) are focus-active.`
+    }
+  ];
+}
+
+function flattenAnnotationIds(
+  annotationIdsByPlacement: KpAnimationAssetTreePhaseAnnotationIds
+): readonly string[] {
+  return [
+    ...annotationIdsByPlacement.before,
+    ...annotationIdsByPlacement.during,
+    ...annotationIdsByPlacement.after
+  ];
+}
+
 function cloneTransformationRef(
   ref: SemanticTransformationRef
 ): SemanticTransformationRef {
@@ -209,4 +423,8 @@ function roundClockValue(value: number): number {
   const rounded = Number(value.toFixed(3));
 
   return Object.is(rounded, -0) ? 0 : rounded;
+}
+
+function uniqueStrings(values: readonly string[]): readonly string[] {
+  return [...new Set(values.filter((value) => value.length > 0))];
 }

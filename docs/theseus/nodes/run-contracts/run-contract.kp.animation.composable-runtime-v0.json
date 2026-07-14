@@ -58,7 +58,8 @@
     {
       "id": "next-action.kp.animation.runtime-phase-diagnostics-v0",
       "title": "Add runtime phase and selector diagnostics",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.runtime-phase-diagnostics-v0 in KP composable animation runtime v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.runtime-child-sampling-v0",
