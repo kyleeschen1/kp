@@ -61,6 +61,7 @@
     "next-action.kp.animation.composable-animation-asset-contract-v0",
     "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v2",
     "next-action.kp.animation-library.current-focus-v0",
+    "next-action.kp.animation-library.live-card-audit-v0",
     "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3"
   ],
   "verificationRecords": [

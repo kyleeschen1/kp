@@ -43,7 +43,7 @@
     "Do not stage unrelated dirty worktree files."
   ],
   "goal": "Run the approved loop that expands KP composable animations through KaTeX semantic transforms, reusable visual motifs, one live runtime visual-frame card, generated problem fixtures, graph/WebGL consumers, flashcard projections, and drill-down authoring.",
-  "target": "next-action.kp.animation-library.current-focus-v0",
+  "target": "workflow.kp.dashboard-animation-system",
   "runMode": "run",
   "maxSlices": 25,
   "commitCadence": "Commit after each verified slice.",
@@ -58,13 +58,14 @@
     {
       "id": "next-action.kp.animation-library.current-focus-v0",
       "title": "Record animation library expansion as current focus",
-      "status": "ready",
-      "summary": "Update project docs and Theseus state so animation-library expansion is the current active KP focus."
+      "summary": "Update project docs and Theseus state so animation-library expansion is the current active KP focus.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation-library.live-card-audit-v0",
       "title": "Audit live x plus 3 equals 7 card path",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-audit-v0 in KP animation library expansion v0 loop."
     },
     {
       "id": "next-action.kp.animation-library.live-card-clock-v0",

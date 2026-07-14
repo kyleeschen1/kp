@@ -1,11 +1,12 @@
 # Semantic Runtime Thread
 
 Status: active
-Last Updated: 2026-07-13
-Current Next Action: Define the composable semantic animation asset contract so
-objects, transformations, layouts, timelines, motifs, renderer-neutral frames,
-laws, exports, cards, and dashboard rows compose around one typed artifact
-instead of one-off tutorial-specific fixtures.
+Last Updated: 2026-07-14
+Current Next Action: Expand the composable animation library through KaTeX
+`SemanticTransformation` coverage, reusable visual motif defaults, one live
+runtime/visual-frame equation card, generated problem fixtures, graph/vector
+runtime consumers, flashcard projections, and paused-frame drill-down
+authoring.
 
 ## Goal
 
@@ -136,11 +137,24 @@ rows into authoring actions, harden compile/export boundaries, and only then
 broaden into media encoders, curriculum/problem generation, spaced repetition,
 and dynamic package loading.
 
-The next priority is to make those paths more semantically expressive by
-introducing the composable animation asset contract. Generated animation
-families, media encoders, graph/visual runtime unification, tutorial cards,
-flashcards, and program-trace visualizations should all use the asset-calculus
-framework rather than running ahead of it.
+The renderer/interpreter integration loop then moved the asset contract toward
+real renderer adoption. Runtime visual-frame adapters, KaTeX selector token
+refs, DOM geometry frames, dashboard KaTeX previews, scrubber synchronization,
+persistent-token rewind laws, representation samples, graph runtime visual
+frames, program trace frame previews, generated calculus and linear algebra
+imports, flashcard renderer data, cloze masks, predict-next answer state,
+lossy external algebra fixtures, programming callstack diagnostics, and a
+paused-frame decomposition example are now encoded.
+
+The next priority is animation-library expansion, not another abstract
+contract layer. KP should use the existing asset-calculus and renderer-frame
+protocols to grow reusable KaTeX transformations and visual motifs first,
+convert one live equation card to consume runtime plus visual frames, then
+broaden the same protocol into generated problem fixtures, graph/vector
+runtime consumers, flashcard previews, and paused-frame drill-down authoring.
+Generated animation families, media encoders, graph/visual runtime
+unification, tutorial cards, flashcards, and program-trace visualizations
+should all use the asset-calculus framework rather than running ahead of it.
 
 The renderer adoption path is:
 

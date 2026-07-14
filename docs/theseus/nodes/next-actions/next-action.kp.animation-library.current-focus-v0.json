@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation-library.current-focus-v0",
   "kind": "next-action",
   "title": "Make animation library expansion the active KP focus",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Record animation-library expansion as the current KP focus: KaTeX SemanticTransformation coverage, reusable visual motifs, one live runtime visual-frame card, generated problem fixtures, graph/WebGL consumers, flashcard projections, and paused-frame drill-down authoring.",
+  "summary": "Updated the KP roadmap and semantic runtime thread so animation-library expansion is the explicit active focus and tied it to the approved durable run contract.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -25,6 +25,21 @@
       "kind": "file",
       "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
       "summary": "Approved durable run contract for the animation-library expansion loop."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Names KP animation-library expansion as the active focus and lists the immediate KaTeX, live-card, generated problem, graph, flashcard, and drill-down tranche."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Updates the semantic runtime thread current next action and current-state narrative to prioritize animation-library expansion over another abstract contract layer."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Stores the approved animation-library expansion run contract and slice queue."
     }
   ],
   "dependsOn": {
@@ -75,5 +90,35 @@
       "id": "theseus-long-loop-ready",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for focus-recording slice",
+      "checkedAt": "2026-07-14T18:57:30.292Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for focus-recording slice",
+      "checkedAt": "2026-07-14T18:57:30.333Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "scope": "Run-contract hygiene for active animation-library contract",
+      "checkedAt": "2026-07-14T18:57:30.366Z"
+    },
+    {
+      "command": "npm run theseus -- long-loop-report --limit 30",
+      "status": "passed",
+      "checkedAt": "2026-07-14T18:57:30.396Z",
+      "scope": "Long-loop readiness before resolving the focus-recording slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Updated the KP roadmap and semantic runtime thread so animation-library expansion is the explicit active focus and tied it to the approved durable run contract."
+  }
 }

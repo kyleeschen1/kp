@@ -1,0 +1,86 @@
+{
+  "id": "next-action.kp.animation-library.live-card-audit-v0",
+  "kind": "next-action",
+  "title": "Audit live x plus 3 equals 7 card path",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-audit-v0 in KP animation library expansion v0 loop.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation-library.live-card-audit-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Live equation animation card/controller path to audit before runtime visual-frame adoption."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-plan.ts",
+      "summary": "Semantic transformation to visual motif and motion plan boundary used by equation animations."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-sampler.ts",
+      "summary": "Shared clock sampler for token poses and motif phases."
+    },
+    {
+      "kind": "file",
+      "path": "tests/linear-solve-runtime-visual-frame-sample.test.ts",
+      "summary": "Focused runtime-to-visual sample coverage for the linear-solve animation path."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Browser coverage for KaTeX transition behavior and DOM-owned motion regressions."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation-library-expansion-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Audit live x plus 3 equals 7 card path can be completed inside KP animation library expansion v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved animation-library expansion loop slices.",
+    "Grow KaTeX SemanticTransformation definitions, visual motifs, generated problem fixtures, graph runtime consumers, flashcard projections, and drill-down authoring through the AnimationAsset/runtime visual-frame protocol.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, live LSP, network integrations, or dynamic package loading; use deterministic fixtures.",
+    "Do not broaden into a dashboard redesign beyond search, progress rows, and sample previews needed for this loop.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "criteria": [
+    {
+      "id": "live-card-entrypoints-identified",
+      "weight": "high"
+    },
+    {
+      "id": "runtime-frame-and-visual-frame-seams-identified",
+      "weight": "high"
+    },
+    {
+      "id": "remaining-dom-owned-timing-and-layout-paths-listed",
+      "weight": "high"
+    },
+    {
+      "id": "focused-tests-for-next-live-card-slices-identified",
+      "weight": "medium"
+    }
+  ]
+}

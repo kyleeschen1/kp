@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-13
+Last Updated: 2026-07-14
 Status: active
 Active Thread: `threads/semantic-runtime.md`
 
@@ -28,23 +28,34 @@ curriculum, or dynamic package loading.
 
 ## Active Focus
 
-**KP Asset Calculus and renderer/interpreter adoption.** KP now has the first
-encoded asset-calculus layer for humans, LLMs, generated problem systems,
-external CAS/program-trace ports, renderers, exports, and flashcards to compose
-through one predictable semantic/time protocol.
+**KP animation-library expansion.** KP now has the first encoded
+asset-calculus layer and renderer/interpreter seams for humans, LLMs,
+generated problem systems, external CAS/program-trace ports, renderers,
+exports, and flashcards to compose through one predictable semantic/time
+protocol. The current focus is to turn those contracts into a broader library
+of composable animations.
 
 The doctrine, composition laws, authoring guide, core interfaces, executable
 law checks, pause-time inspection, drill-down hooks, flashcard specs, external
 port fixture, programming trace skeleton, equation-frame interpreter path,
-dashboard preview interpreter, and generated algebra animation fixture path are
-in place. Generated algebra now covers linear solves, fraction expressions,
-exponents, radicals, function wrapping, and distribution/factoring through the
-same registry, tutorial-card sample path, export samples, dependency manifests,
-drill-down hooks, flashcards, algebra-trace port diagnostics, renderer-frame
-preservation laws, fixture-closure laws, dashboard maturity rows, sample
-actions, search facets, and browser smoke coverage. The current pressure is no
-longer to define the vocabulary; it is to make more renderer, dashboard,
-export, graph, programming, and generated-animation paths consume it directly.
+dashboard preview interpreter, runtime visual-frame adapters, generated algebra
+animation fixtures, generated problem imports, flashcard projections, graph
+visual-frame seams, and paused-frame decomposition examples are in place.
+
+The active tranche is now:
+
+1. expand KaTeX `SemanticTransformation` coverage and visual motif defaults for
+   cancellation, artifacts, fractions, radicals, exponents, function wrapping,
+   matrices, large operators, and complex rendered forms;
+2. make one live equation card consume the runtime plus visual-frame protocol
+   directly, with deterministic scrub, rewind, token refs, geometry, and
+   diagnostics;
+3. promote generated problem fixtures for algebra, calculus, and linear algebra
+   into a shared registry and dashboard surface;
+4. add one graph/vector runtime-frame consumer and rewind law;
+5. surface flashcard renderer data and paused-frame drill-down authoring from
+   the same animation asset protocol.
+
 The goal remains practical: a KP intermediate representation with composition
 laws inspired by category theory and FRP, not a broad abstract category theory
 framework.
