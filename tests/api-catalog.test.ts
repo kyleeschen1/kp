@@ -44,7 +44,13 @@ test("API catalog exposes typed metadata for semantic objects", () => {
 
   assert.equal(sourceFile?.group.id, "semantic-objects");
   assert.equal(sourceFile?.item.status, "active");
-  assert.deepEqual(sourceFile?.item.details?.protocols, ["select", "validate"]);
+  assert.deepEqual(sourceFile?.item.details?.protocols, [
+    "select",
+    "validate",
+    "resolveSourceRangeSelector",
+    "createSourceRangeProvenance",
+    "sourceRangeTextHash"
+  ]);
   assert.deepEqual(sourceFile?.item.details?.views, [
     "code",
     "source-range overlay",
@@ -53,6 +59,7 @@ test("API catalog exposes typed metadata for semantic objects", () => {
   assert.deepEqual(sourceFile?.item.details?.lenses, [
     "lines",
     "source ranges",
+    "source range provenance",
     "language",
     "revision"
   ]);

@@ -30,6 +30,22 @@ export interface ResolvedSourceRangeSelector {
   readonly endOffset: number;
 }
 
+export interface SourceRangeProvenance {
+  readonly id: string;
+  readonly kind: "source-range-provenance";
+  readonly sourceFileId: string;
+  readonly selectorId: string;
+  readonly language: string;
+  readonly path?: string | undefined;
+  readonly revisionId?: string | undefined;
+  readonly start: SourcePosition;
+  readonly end: SourcePosition;
+  readonly startOffset: number;
+  readonly endOffset: number;
+  readonly text: string;
+  readonly textHash: string;
+}
+
 interface CreateSourceFileObjectInput {
   readonly id: string;
   readonly label: string;
@@ -125,6 +141,49 @@ export function resolveSourceRangeSelector(
     startOffset,
     endOffset
   };
+}
+
+export function createSourceRangeProvenance(
+  sourceFile: SourceFileObject,
+  selector: SourceRangeSelector
+): SourceRangeProvenance {
+  const resolved = resolveSourceRangeSelector(sourceFile, selector);
+
+  return {
+    id: sourceRangeProvenanceId(sourceFile.id, selector.id),
+    kind: "source-range-provenance",
+    sourceFileId: sourceFile.id,
+    selectorId: selector.id,
+    language: sourceFile.language,
+    ...(sourceFile.path === undefined ? {} : { path: sourceFile.path }),
+    ...(sourceFile.revisionId === undefined
+      ? {}
+      : { revisionId: sourceFile.revisionId }),
+    start: { ...selector.start },
+    end: { ...selector.end },
+    startOffset: resolved.startOffset,
+    endOffset: resolved.endOffset,
+    text: resolved.text,
+    textHash: sourceRangeTextHash(resolved.text)
+  };
+}
+
+export function sourceRangeProvenanceId(
+  sourceFileId: string,
+  selectorId: string
+): string {
+  return `provenance.${sourceFileId}.${selectorId}`;
+}
+
+export function sourceRangeTextHash(text: string): string {
+  let hash = 0x811c9dc5;
+
+  for (let index = 0; index < text.length; index += 1) {
+    hash ^= text.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+
+  return `fnv1a-${hash.toString(16).padStart(8, "0")}`;
 }
 
 function sourceFileLinesFromText(sourceText: string): readonly string[] {

@@ -41,6 +41,17 @@ test("createAdditionProgramTraceKpAsset wraps source and execution steps", () =>
     asset.bundle.objects[0]?.selectors.map((selector) => selector.id),
     ["selector.programming.add.signature", "selector.programming.add.return"]
   );
+  assert.deepEqual(asset.bundle.objects[0]?.selectors[1]?.metadata, {
+    startLine: 2,
+    startColumn: 3,
+    endLine: 2,
+    endColumn: 16,
+    sourceFileId: "source-file.programming.add",
+    sourceRangeProvenanceId:
+      "provenance.source-file.programming.add.selector.programming.add.return",
+    sourceRevisionId: "rev-1",
+    sourceTextHash: "fnv1a-acab0c94"
+  });
 });
 
 test("createAdditionProgramTraceKpAsset exposes execution transformations and behavior", () => {

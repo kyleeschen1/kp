@@ -45,6 +45,7 @@ import { createMatrixObject, identityMatrix } from "../src/semantic/matrix.ts";
 import { createExpressionObject } from "../src/semantic/expression-object.ts";
 import {
   createSourceFileObject,
+  createSourceRangeProvenance,
   createSourceRangeSelector,
   resolveSourceRangeSelector,
   sourceFileLines
@@ -268,6 +269,40 @@ test("source range selectors resolve one-based exclusive ranges", () => {
     text: "pha\nbe",
     startOffset: 2,
     endOffset: 8
+  });
+});
+
+test("source range provenance records stable revision and offset identity", () => {
+  const source = createSourceFileObject({
+    id: "source-file.words",
+    label: "words.txt",
+    language: "text",
+    path: "fixtures/words.txt",
+    revisionId: "rev-words-1",
+    sourceText: "alpha\nbeta\ngamma"
+  });
+  const selector = createSourceRangeSelector({
+    id: "selector.words.alpha-to-beta",
+    sourceFileId: source.id,
+    start: { line: 1, column: 3 },
+    end: { line: 2, column: 3 },
+    summary: "Select the end of alpha and beginning of beta."
+  });
+
+  assert.deepEqual(createSourceRangeProvenance(source, selector), {
+    id: "provenance.source-file.words.selector.words.alpha-to-beta",
+    kind: "source-range-provenance",
+    sourceFileId: "source-file.words",
+    selectorId: "selector.words.alpha-to-beta",
+    language: "text",
+    path: "fixtures/words.txt",
+    revisionId: "rev-words-1",
+    start: { line: 1, column: 3 },
+    end: { line: 2, column: 3 },
+    startOffset: 2,
+    endOffset: 8,
+    text: "pha\nbe",
+    textHash: "fnv1a-270edc6f"
   });
 });
 

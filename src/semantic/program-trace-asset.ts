@@ -18,7 +18,11 @@ import {
   type KpSemanticTransformation
 } from "./asset-transformation.ts";
 import type {
+  SourceFileObject,
   SourceRangeSelector
+} from "./source-file.ts";
+import {
+  createSourceRangeProvenance
 } from "./source-file.ts";
 import {
   createAdditionProgrammingExecutionTraceFixture
@@ -47,7 +51,9 @@ export function createAdditionProgramTraceKpAsset(): ProgramTraceKpAsset {
         objectType: "source-file",
         title: fixture.sourceFile.label,
         value: fixture.sourceFile,
-        selectors: fixture.selectors.map(sourceRangeSelectorInput),
+        selectors: fixture.selectors.map((selector) =>
+          sourceRangeSelectorInput(fixture.sourceFile, selector)
+        ),
         provenance: {
           kind: "authored",
           sourceIds: [fixture.id],
@@ -131,8 +137,11 @@ function executionStepValue(step: KpProgrammingExecutionTraceStep) {
 }
 
 function sourceRangeSelectorInput(
+  sourceFile: SourceFileObject,
   selector: SourceRangeSelector
 ): CreateKpAssetSelectorInput {
+  const provenance = createSourceRangeProvenance(sourceFile, selector);
+
   return {
     id: selector.id,
     kind: selector.kind,
@@ -141,7 +150,13 @@ function sourceRangeSelectorInput(
       startLine: selector.start.line,
       startColumn: selector.start.column,
       endLine: selector.end.line,
-      endColumn: selector.end.column
+      endColumn: selector.end.column,
+      sourceFileId: provenance.sourceFileId,
+      sourceRangeProvenanceId: provenance.id,
+      ...(provenance.revisionId === undefined
+        ? {}
+        : { sourceRevisionId: provenance.revisionId }),
+      sourceTextHash: provenance.textHash
     }
   };
 }
