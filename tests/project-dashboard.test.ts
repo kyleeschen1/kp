@@ -1235,10 +1235,15 @@ test("renderProjectDashboard searches synthetic agenda rows", () => {
 
 test("renderProjectDashboard searches semantic capability advertisements", () => {
   const html = renderProjectDashboard(projectDashboardData, {
-    query: "matrix.linear-map"
+    query: "matrix.linear-map",
+    selectedAgendaRowId: "api-semantic-matrix"
   });
 
-  assert.match(html, /Showing 1 of \d+ rows/);
+  assert.match(html, /Showing 2 of \d+ rows/);
+  assert.match(
+    html,
+    /data-kp-agenda-row="representation-equation-to-matrix-linear-map"/
+  );
   assert.match(html, /data-kp-agenda-row="api-semantic-matrix"/);
   assert.match(
     html,

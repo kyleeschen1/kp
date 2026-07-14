@@ -118,7 +118,8 @@
     {
       "id": "next-action.kp.animation.dashboard-representation-transform-search-v0",
       "title": "Make representation transforms searchable in dashboard",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.dashboard-representation-transform-search-v0 in KP animation renderer integration v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.graph-vector-visual-frame-adapter-v0",
