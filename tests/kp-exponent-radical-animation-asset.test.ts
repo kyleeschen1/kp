@@ -18,6 +18,11 @@ import {
 import {
   defaultEquationTransformVisualMotifRules
 } from "../src/rendering/equation-visual-motif-defaults.ts";
+import {
+  checkGeneratedExponentRadicalTransformDefinitionCoverage,
+  listGeneratedAlgebraTransformDefinitions,
+  listGeneratedExponentRadicalTransformDefinitions
+} from "../src/semantic/generated-algebra-transform-definition-registry.ts";
 
 test("createExponentExpansionAnimationAsset adapts square expansion into AnimationAsset", () => {
   const animation = createExponentExpansionAnimationAsset();
@@ -149,6 +154,76 @@ test("createExponentRadicalRewriteAnimationAsset adapts square root rewrite into
         "transform.generated.radical.square-root-as-power.rewrite-power-as-root"
       ],
       diagnostics: []
+    }
+  );
+});
+
+test("generated exponent and radical transform definitions expose promoted coverage", () => {
+  assert.deepEqual(
+    listGeneratedExponentRadicalTransformDefinitions().map((definition) => [
+      definition.id,
+      definition.familyId,
+      definition.transformType,
+      definition.artifactPolicy,
+      definition.preserves
+    ]),
+    [
+      [
+        "definition.generated.exponent.lower-exponent",
+        "generated.exponent",
+        "lowerExponent",
+        "mixed",
+        ["identity", "value"]
+      ],
+      [
+        "definition.generated.exponent.unwrap-unit-exponent",
+        "generated.exponent",
+        "unwrapUnitExponent",
+        "source-only",
+        ["identity", "value"]
+      ],
+      [
+        "definition.generated.radical.rewrite-power-as-root",
+        "generated.radical",
+        "rewritePowerAsRoot",
+        "mixed",
+        ["identity", "value"]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    checkGeneratedExponentRadicalTransformDefinitionCoverage(),
+    {
+      lawId: "generated-exponent-radical.transform-definition-coverage",
+      passed: true,
+      failures: []
+    }
+  );
+});
+
+test("generated exponent and radical transform coverage reports artifact drift", () => {
+  assert.deepEqual(
+    checkGeneratedExponentRadicalTransformDefinitionCoverage(
+      listGeneratedAlgebraTransformDefinitions().map((definition) =>
+        definition.id === "definition.generated.radical.rewrite-power-as-root"
+          ? {
+              ...definition,
+              artifactPolicy: "target-only"
+            }
+          : definition
+      )
+    ),
+    {
+      lawId: "generated-exponent-radical.transform-definition-coverage",
+      passed: false,
+      failures: [
+        {
+          path:
+            "definitions[definition.generated.radical.rewrite-power-as-root].artifactPolicy",
+          message:
+            "Generated exponent/radical transform definition.generated.radical.rewrite-power-as-root expected artifact policy mixed but received target-only."
+        }
+      ]
     }
   );
 });

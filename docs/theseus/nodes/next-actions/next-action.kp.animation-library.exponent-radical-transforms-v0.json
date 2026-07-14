@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation-library.exponent-radical-transforms-v0",
   "kind": "next-action",
   "title": "Expand exponent and radical transform coverage",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.exponent-radical-transforms-v0 in KP animation library expansion v0 loop.",
+  "summary": "Expanded exponent and radical transform coverage by adding a generated exponent/radical definition contract for lower exponent, unwrap unit exponent, and rewrite power as root, including artifact policies and preservation expectations.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,26 @@
       "kind": "file",
       "path": "tests/katex-transition.browser.spec.ts",
       "summary": "Browser coverage for radical persistent x motion, artifact handoff, and endpoint visibility."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-transform-definition-registry.ts",
+      "summary": "Adds exponent/radical transform expectations, ordered definition listing, and a coverage law for promoted exponent and radical definitions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-exponent-radical-animation-asset.test.ts",
+      "summary": "Covers promoted exponent/radical definition order, artifact policies, preservation expectations, and drift diagnostics alongside AnimationAsset tests."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/exponent-radical-adapter.ts",
+      "summary": "Existing exponent/radical AnimationAsset adapters consume the generated transform sequences."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Existing browser coverage verifies radical persistent x motion, artifact handoff, endpoint visibility, and rewind behavior."
     }
   ],
   "dependsOn": {
@@ -84,5 +104,41 @@
       "id": "browser-coverage-preserves-radical-handoff-and-rewind",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-exponent-radical-animation-asset.test.ts tests/generated-katex-fixture-contract.test.ts tests/katex-artifact-pixel-flow.test.ts tests/katex-token-snapshot.test.ts",
+      "status": "passed",
+      "scope": "focused generated exponent/radical transform, fixture, pixel-flow, and snapshot coverage",
+      "checkedAt": "2026-07-14T20:09:05.115Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for radical artifact behavior and KaTeX regressions",
+      "checkedAt": "2026-07-14T20:09:05.146Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for exponent/radical slice",
+      "checkedAt": "2026-07-14T20:09:05.174Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for exponent/radical slice",
+      "checkedAt": "2026-07-14T20:09:05.206Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T20:09:05.253Z",
+      "scope": "Run-contract hygiene for exponent/radical slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Expanded exponent and radical transform coverage by adding a generated exponent/radical definition contract for lower exponent, unwrap unit exponent, and rewrite power as root, including artifact policies and preservation expectations."
+  }
 }

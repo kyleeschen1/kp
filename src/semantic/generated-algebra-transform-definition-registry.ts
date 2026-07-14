@@ -77,6 +77,39 @@ export const generatedFractionExpressionTransformExpectations:
     }
   ];
 
+export interface GeneratedExponentRadicalTransformExpectation {
+  readonly transformType: string;
+  readonly definitionId: string;
+  readonly familyId: GeneratedAlgebraFixtureFamilyId;
+  readonly artifactPolicy: GeneratedAlgebraTransformArtifactPolicy;
+  readonly preserves: readonly string[];
+}
+
+export const generatedExponentRadicalTransformExpectations:
+  readonly GeneratedExponentRadicalTransformExpectation[] = [
+    {
+      transformType: "lowerExponent",
+      definitionId: "definition.generated.exponent.lower-exponent",
+      familyId: "generated.exponent",
+      artifactPolicy: "mixed",
+      preserves: ["identity", "value"]
+    },
+    {
+      transformType: "unwrapUnitExponent",
+      definitionId: "definition.generated.exponent.unwrap-unit-exponent",
+      familyId: "generated.exponent",
+      artifactPolicy: "source-only",
+      preserves: ["identity", "value"]
+    },
+    {
+      transformType: "rewritePowerAsRoot",
+      definitionId: "definition.generated.radical.rewrite-power-as-root",
+      familyId: "generated.radical",
+      artifactPolicy: "mixed",
+      preserves: ["identity", "value"]
+    }
+  ];
+
 export const generatedAlgebraTransformDefinitions:
   readonly GeneratedAlgebraTransformDefinition[] = [
     createGeneratedAlgebraTransformDefinition({
@@ -811,6 +844,101 @@ export function checkGeneratedFractionExpressionTransformDefinitionCoverage(
 
   return {
     lawId: "generated-fraction-expression.transform-definition-coverage",
+    passed: failures.length === 0,
+    failures
+  };
+}
+
+export function listGeneratedExponentRadicalTransformDefinitions(
+  definitions: readonly GeneratedAlgebraTransformDefinition[] =
+    listGeneratedAlgebraTransformDefinitions()
+): readonly GeneratedAlgebraTransformDefinition[] {
+  const expectationOrder = new Map(
+    generatedExponentRadicalTransformExpectations.map(
+      (expectation, index) => [expectation.transformType, index]
+    )
+  );
+
+  return definitions
+    .filter((definition) =>
+      definition.familyId === "generated.exponent" ||
+      definition.familyId === "generated.radical"
+    )
+    .filter((definition) => expectationOrder.has(definition.transformType))
+    .sort(
+      (left, right) =>
+        (expectationOrder.get(left.transformType) ?? 0) -
+        (expectationOrder.get(right.transformType) ?? 0)
+    )
+    .map(cloneGeneratedAlgebraTransformDefinition);
+}
+
+export function checkGeneratedExponentRadicalTransformDefinitionCoverage(
+  definitions: readonly GeneratedAlgebraTransformDefinition[] =
+    listGeneratedAlgebraTransformDefinitions()
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+  const definitionsByType = new Map(
+    listGeneratedExponentRadicalTransformDefinitions(definitions).map(
+      (definition) => [definition.transformType, definition]
+    )
+  );
+
+  generatedExponentRadicalTransformExpectations.forEach((expectation) => {
+    const definition = definitionsByType.get(expectation.transformType);
+
+    if (definition === undefined) {
+      failures.push({
+        path: `definitions[${expectation.transformType}]`,
+        message:
+          `Generated exponent/radical transform ${expectation.transformType} must be defined.`
+      });
+      return;
+    }
+
+    if (definition.id !== expectation.definitionId) {
+      failures.push({
+        path: `definitions[${expectation.transformType}].id`,
+        message:
+          `Generated exponent/radical transform ${expectation.transformType} expected definition id ${expectation.definitionId}.`
+      });
+    }
+
+    if (definition.familyId !== expectation.familyId) {
+      failures.push({
+        path: `definitions[${definition.id}].familyId`,
+        message:
+          `Generated exponent/radical transform ${definition.id} expected family ${expectation.familyId}.`
+      });
+    }
+
+    if (definition.status !== "promoted") {
+      failures.push({
+        path: `definitions[${definition.id}].status`,
+        message:
+          `Generated exponent/radical transform ${definition.id} must be promoted.`
+      });
+    }
+
+    if (definition.artifactPolicy !== expectation.artifactPolicy) {
+      failures.push({
+        path: `definitions[${definition.id}].artifactPolicy`,
+        message:
+          `Generated exponent/radical transform ${definition.id} expected artifact policy ${expectation.artifactPolicy} but received ${definition.artifactPolicy}.`
+      });
+    }
+
+    if (!stringListsEqual(definition.preserves, expectation.preserves)) {
+      failures.push({
+        path: `definitions[${definition.id}].preserves`,
+        message:
+          `Generated exponent/radical transform ${definition.id} must preserve ${expectation.preserves.join(", ")}.`
+      });
+    }
+  });
+
+  return {
+    lawId: "generated-exponent-radical.transform-definition-coverage",
     passed: failures.length === 0,
     failures
   };
