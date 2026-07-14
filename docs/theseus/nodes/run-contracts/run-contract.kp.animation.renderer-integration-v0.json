@@ -100,7 +100,8 @@
     {
       "id": "next-action.kp.animation.visual-frame-diagnostics-panel-data-v0",
       "title": "Build visual diagnostics panel data for frames",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.visual-frame-diagnostics-panel-data-v0 in KP animation renderer integration v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.representation-equation-to-graph-sample-v0",

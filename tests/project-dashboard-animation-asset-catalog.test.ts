@@ -176,11 +176,35 @@ test("dashboard animation asset rows include KaTeX runtime visual preview facets
         "equation.linear-solve.after-subtract.lhs.plus3:tok.plus tok.plus-three; equation.linear-solve.after-subtract.lhs.minus3:tok.left-minus tok.left-minus-three"
     }
   );
+  assert.deepEqual(
+    linearSolve?.previewFields.find(
+      (field) => field.label === "KaTeX diagnostics panel"
+    ),
+    {
+      label: "KaTeX diagnostics panel",
+      value: "passed (0 warnings, 0 errors)"
+    }
+  );
+  assert.deepEqual(
+    linearSolve?.previewFields.find(
+      (field) => field.label === "KaTeX binding coverage"
+    ),
+    {
+      label: "KaTeX binding coverage",
+      value: "targets 1/1, selectors 10/10, nodes 15"
+    }
+  );
   assert.ok(linearSolve?.searchFields.includes("katex-visual-frame"));
   assert.ok(
     linearSolve?.searchFields.includes("visual.linear-solve.visual-sample")
   );
   assert.ok(linearSolve?.searchFields.includes("katex-token:tok.plus"));
+  assert.ok(
+    linearSolve?.searchFields.includes("visual-frame-diagnostics-panel")
+  );
+  assert.ok(
+    linearSolve?.searchFields.includes("visual-bindings-selectors:10/10")
+  );
 });
 
 test("semantic asset dashboard search resolves animation component facets", () => {

@@ -17,6 +17,10 @@ import {
   type KpAnimationRuntimeChildFrame,
   type KpAnimationRuntimeScrubberControl
 } from "../animation/runtime-sampler.ts";
+import {
+  createKpAnimationVisualFrameDiagnosticsPanelData,
+  type KpAnimationVisualFrameDiagnosticsPanelData
+} from "../animation/visual-frame-diagnostics-panel.ts";
 import { createKpDashboardAssetPreviewInterpreter } from "../semantic/dashboard-preview-interpreter.ts";
 import {
   createGeneratedAlgebraTutorialFixtures,
@@ -742,6 +746,10 @@ function katexVisualPreviewFields(
     return [];
   }
 
+  const diagnosticsPanel = createKpAnimationVisualFrameDiagnosticsPanelData(
+    sample.visualFrame
+  );
+
   return [
     {
       label: "KaTeX visual frame",
@@ -763,6 +771,14 @@ function katexVisualPreviewFields(
           : sample.visualFrame.diagnostics
               .map((diagnostic) => diagnostic.code)
               .join(", ")
+    },
+    {
+      label: "KaTeX diagnostics panel",
+      value: formatVisualDiagnosticsPanel(diagnosticsPanel)
+    },
+    {
+      label: "KaTeX binding coverage",
+      value: formatVisualBindingCoverage(diagnosticsPanel)
     }
   ];
 }
@@ -773,6 +789,10 @@ function katexVisualSearchFields(
   if (sample === undefined) {
     return [];
   }
+
+  const diagnosticsPanel = createKpAnimationVisualFrameDiagnosticsPanelData(
+    sample.visualFrame
+  );
 
   return [
     "katex-visual-frame",
@@ -791,8 +811,23 @@ function katexVisualSearchFields(
       node.ref,
       `katex-token:${node.ref}`
     ]),
-    ...sample.visualFrame.diagnostics.map((diagnostic) => diagnostic.code)
+    ...sample.visualFrame.diagnostics.map((diagnostic) => diagnostic.code),
+    ...diagnosticsPanel.searchFields
   ];
+}
+
+function formatVisualDiagnosticsPanel(
+  panel: KpAnimationVisualFrameDiagnosticsPanelData
+): string {
+  return `${panel.status} (${panel.severityCounts.warning} warnings, ${panel.severityCounts.error} errors)`;
+}
+
+function formatVisualBindingCoverage(
+  panel: KpAnimationVisualFrameDiagnosticsPanelData
+): string {
+  const summary = panel.bindingSummary;
+
+  return `targets ${summary.boundRenderTargetCount}/${summary.renderTargetCount}, selectors ${summary.boundSelectorCount}/${summary.selectorCount}, nodes ${summary.nodeCount}`;
 }
 
 function formatKatexFocusTokenRefs(

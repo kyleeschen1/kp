@@ -1,0 +1,112 @@
+{
+  "id": "next-action.kp.animation.visual-frame-diagnostics-panel-data-v0",
+  "kind": "next-action",
+  "title": "Build visual diagnostics panel data for frames",
+  "status": "resolved",
+  "summary": "Added reusable visual-frame diagnostics panel data and surfaced the KaTeX visual-frame health and binding coverage on animation asset dashboard rows.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.renderer-integration-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.visual-frame-diagnostics-panel-data-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-composable-animation-runtime-readiness-report.md",
+      "summary": "Runtime closeout recommends connecting the sampler to one live visual renderer, visual-frame adapters, representation transforms, generated imports, flashcards, and hardened ports."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP frontier for dashboard-backed semantic animation system work."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/visual-frame-diagnostics-panel.ts",
+      "summary": "Defines structured diagnostics panel data, severity counts, binding coverage, diagnostic rows, and search fields for visual frames."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Projects KaTeX visual diagnostics panel summaries and search fields into animation asset dashboard rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-visual-frame-diagnostics-panel.test.ts",
+      "summary": "Focused tests for clean and warning visual-frame diagnostics panel data."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-animation-asset-catalog.test.ts",
+      "summary": "Dashboard test for KaTeX diagnostics panel and binding coverage preview/search facets."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Updates global dashboard search expectation for the existing mesh-to-donut animation row."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.renderer-integration-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Build visual diagnostics panel data for frames can be completed inside KP animation renderer integration v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved renderer-integration loop slices.",
+    "Start by proving one honest runtime-to-visual path before broader renderer work.",
+    "Keep AnimationAsset runtime frames, semantic refs, visual-frame adapters, dashboards, generated problems, flashcards, and deterministic ports typed and inspectable."
+  ],
+  "disallowedWork": [
+    "Do not rewrite the full renderer or equation animation DOM pipeline in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, LSP, or network integrations; use deterministic fixtures.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-visual-frame-diagnostics-panel.test.ts tests/project-dashboard-animation-asset-catalog.test.ts tests/project-dashboard.test.ts tests/project-dashboard-generated-algebra-catalog.test.ts tests/project-dashboard-asset-preview-fields.test.ts",
+      "status": "passed",
+      "scope": "visual-frame diagnostics panel data and dashboard search/preview integration",
+      "checkedAt": "2026-07-14T17:35:26.897Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app, node, and test projects",
+      "checkedAt": "2026-07-14T17:35:26.933Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-14T17:35:26.984Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T17:35:27.019Z",
+      "scope": "Run-contract hygiene gate"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added reusable visual-frame diagnostics panel data and surfaced the KaTeX visual-frame health and binding coverage on animation asset dashboard rows."
+  }
+}
