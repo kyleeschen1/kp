@@ -107,6 +107,9 @@ test("API catalog covers notation and layout entities with the same metadata pro
   const effectfulCombinator = findApiCatalogItem(
     "capability-effectful-animation-combinator"
   );
+  const decompositionAuthoring = findApiCatalogItem(
+    "capability-llm-decomposition-authoring"
+  );
 
   assert.equal(radical?.group.category, "notation-transformation");
   assert.deepEqual(radical?.item.details?.preserves, [
@@ -231,6 +234,18 @@ test("API catalog covers notation and layout entities with the same metadata pro
   assert.deepEqual(effectfulCombinator?.item.details?.preserves, [
     "value",
     "effect order"
+  ]);
+
+  assert.equal(decompositionAuthoring?.group.id, "capabilities-representations");
+  assert.equal(decompositionAuthoring?.item.status, "active");
+  assert.deepEqual(decompositionAuthoring?.item.details?.protocols, [
+    "createKpAnimationDecompositionAuthoringRequest"
+  ]);
+  assert.deepEqual(decompositionAuthoring?.item.details?.outputs, [
+    "selected transformation context",
+    "runtime clock",
+    "focus selectors",
+    "prompt facts"
   ]);
 });
 

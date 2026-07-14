@@ -235,6 +235,17 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
         inputs: ["value", "ordered effects"],
         outputs: ["value", "ordered effects", "effect order law"],
         preserves: ["value", "effect order"]
+      }),
+      item("capability-llm-decomposition-authoring", "LLMDecompositionAuthoring", "runtime", "active", "Packages a paused animation runtime frame and selected transformation as structured context for drill-down authoring.", ["animation", "llm", "decomposition"], {
+        protocols: ["createKpAnimationDecompositionAuthoringRequest"],
+        inputs: ["AnimationAsset", "AnimationRuntimeFrame", "selected transformation"],
+        outputs: [
+          "selected transformation context",
+          "runtime clock",
+          "focus selectors",
+          "prompt facts"
+        ],
+        preserves: ["animation id", "runtime clock", "selected transformation id"]
       })
     ]
   },
