@@ -1,0 +1,90 @@
+{
+  "id": "next-action.kp.animation.loop-readiness-report-v0",
+  "kind": "next-action",
+  "title": "Close loop with readiness report and next tranche",
+  "status": "resolved",
+  "summary": "Closed the composable animation asset loop with a readiness report and recommended next tranche.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-animation-asset-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.loop-readiness-report-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming composable semantic animations as KP's primary artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Ready action anchoring the approved animation asset contract loop."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-animation-asset-loop-readiness-report.md",
+      "summary": "Summarizes completed animation asset stack, remaining contract-level gaps, verification, autonomy gates, and recommended next tranche."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-loop-readiness-report.test.ts",
+      "summary": "Guards readiness report sections and next-priority coverage."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.composable-animation-asset-v0",
+      "next-action.kp.animation.llm-authoring-spec-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.llm-authoring-spec-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Close loop with readiness report and next tranche can be completed inside KP composable animation asset v0 loop."
+  ],
+  "allowedWork": [
+    "Work only on the approved composable semantic animation asset v0 loop.",
+    "Keep tutorials, cards, exports, flashcards, graphs, and programming views as consumers of animation assets rather than the core artifact.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broadly rename tutorial-card modules in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add curriculum generation, spaced repetition generation, or dynamic package loading in this loop.",
+    "Do not create renderer-owned animation formats separate from semantic asset calculus."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-loop-readiness-report.test.ts tests/kp-animation-llm-authoring-spec.test.ts tests/project-dashboard-animation-asset-catalog.test.ts tests/kp-comparison-layout-animation-asset.test.ts tests/kp-programming-animation-asset.test.ts tests/kp-graph-animation-asset.test.ts tests/kp-animation-asset.test.ts",
+      "status": "passed",
+      "scope": "loop readiness report, LLM authoring spec, dashboard animation facets, comparison/programming/graph animation assets, and animation core laws",
+      "checkedAt": "2026-07-14T00:27:58.638Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-14T00:27:58.663Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-14T00:27:58.686Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Closed the composable animation asset loop with a readiness report and recommended next tranche."
+  }
+}
