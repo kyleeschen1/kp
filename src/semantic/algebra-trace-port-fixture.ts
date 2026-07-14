@@ -71,6 +71,25 @@ export const linearSolveAlgebraTraceFixture: AlgebraTraceFixture = {
   ]
 };
 
+export const linearSolveLossyAlgebraTraceFixture: AlgebraTraceFixture = {
+  id: "trace.linear-solve.lossy",
+  title: "Linear solve lossy generated algebra trace",
+  steps: linearSolveAlgebraTraceFixture.steps.map((step) =>
+    step.id === "trace.linear-solve.step.left-simplified"
+      ? {
+          ...step,
+          id: "trace.linear-solve.lossy.step.left-simplified",
+          latex: "x = 0",
+          transformationId: "transform.linear-solve.unknown",
+          rule: "unknownRule"
+        }
+      : {
+          ...step,
+          id: step.id.replace("trace.linear-solve", "trace.linear-solve.lossy")
+        }
+  )
+};
+
 export function createLinearSolveAlgebraTracePort(): KpExternalPort<AlgebraTraceFixture> {
   const canonical = createLinearSolveKpAssetBundle();
 

@@ -12,6 +12,7 @@ import {
   sampleKpAnimationRuntimeFrame
 } from "../src/animation/runtime-sampler.ts";
 import {
+  linearSolveLossyAlgebraTraceFixture,
   linearSolveAlgebraTraceFixture
 } from "../src/semantic/algebra-trace-port-fixture.ts";
 
@@ -90,6 +91,46 @@ test("linear solve animation port surfaces algebra trace mismatch diagnostics", 
       path: "steps[2].latex"
     }
   ]);
+  assert.deepEqual(checkKpExternalAnimationPortLossDiagnostics(result), {
+    lawId: "animation-port.loss-reporting",
+    passed: true,
+    failures: []
+  });
+});
+
+test("linear solve animation port preserves reusable lossy fixture diagnostics", () => {
+  const port = createLinearSolveExternalAnimationPort();
+  const result = runKpExternalAnimationPort(
+    port,
+    linearSolveLossyAlgebraTraceFixture
+  );
+
+  assert.equal(result.preservation, "lax");
+  assert.equal(
+    result.animation.metadata?.["sourceTraceId"],
+    "trace.linear-solve.lossy"
+  );
+  assert.deepEqual(result.diagnosticSummary, {
+    total: 4,
+    bySeverity: {
+      info: 0,
+      warning: 4,
+      error: 0
+    },
+    byLossKind: {
+      partial: 2,
+      lossy: 2
+    },
+    codes: [
+      "trace-latex-mismatch",
+      "trace-transformation-mismatch",
+      "trace-rule-mismatch",
+      "trace-transformation-unknown"
+    ],
+    hasErrors: false,
+    hasLoss: true,
+    preservation: "lax"
+  });
   assert.deepEqual(checkKpExternalAnimationPortLossDiagnostics(result), {
     lawId: "animation-port.loss-reporting",
     passed: true,
