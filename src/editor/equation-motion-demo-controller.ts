@@ -3,7 +3,10 @@ import {
   findEquationAnimationCatalogEntry
 } from "./equation-animation-catalog.ts";
 import { createLinearSolveAnimationAsset } from "../animation/linear-solve-adapter.ts";
-import { sampleKpAnimationRuntimeFrame } from "../animation/runtime-sampler.ts";
+import {
+  sampleKpAnimationRuntimeFrame,
+  type KpAnimationRuntimeFrame
+} from "../animation/runtime-sampler.ts";
 import { measureAnnotatedEquationMotionTokens } from "../rendering/equation-motion-dom.ts";
 import {
   applyMeasuredMotionDeltas,
@@ -21,6 +24,7 @@ import {
 import {
   type KatexArtifactSeedRevealPlan
 } from "../rendering/katex-artifact-seed-reveal.ts";
+import { createKatexDomRuntimeVisualFrame } from "../rendering/katex-dom-visual-frame-adapter.ts";
 import { measureKatexTextureCaptureRect } from "../rendering/katex-texture-atlas.ts";
 import type { KatexTokenRect } from "../rendering/katex-transition-types.ts";
 import type {
@@ -43,6 +47,8 @@ const EQUATION_MOTION_BEAT_TIMELINE = linearEquationDemoBeatTimeline;
 const EQUATION_MOTION_ENTER_INITIAL_SCALE = 0.82;
 const EQUATION_MOTION_DEMO_BEAT_LABEL_COUNT = 50;
 const LIVE_EQUATION_RUNTIME_FRAME_ID = "runtime.live-equation-card.frame";
+const LIVE_EQUATION_VISUAL_FRAME_ID = "visual.live-equation-card.frame";
+const LIVE_EQUATION_RENDER_TARGET_REF = "katex.live-equation-card";
 const liveEquationRuntimeAnimation = createLinearSolveAnimationAsset();
 const activeAnimations = new WeakMap<HTMLElement, ActiveEquationMotionAnimation>();
 const pausedAnimations = new WeakMap<HTMLElement, PausedEquationMotionAnimation>();
@@ -699,10 +705,16 @@ function renderEquationMotionFrame(
     String(countContextTokensForStep(context, sourceStep));
   demo.dataset["kpEquationMotionTargetAnchorCount"] =
     String(countContextTokensForStep(context, targetStep));
-  syncLiveEquationRuntimeFrame(
+  const runtimeFrame = syncLiveEquationRuntimeFrame(
     demo,
     sourceStep < targetStep ? "forward" : "rewind",
     directionalProgress
+  );
+  syncLiveEquationVisualFrame(
+    demo,
+    runtimeFrame,
+    context,
+    sourceStep < targetStep ? "forward" : "rewind"
   );
   syncEquationMotionMotifDiagnostics(demo, frame);
   syncFinalSimplifyPhaseDiagnostics(
@@ -862,10 +874,10 @@ function syncLiveEquationRuntimeFrame(
   demo: HTMLElement,
   direction: "forward" | "rewind",
   progress: number
-): void {
+): KpAnimationRuntimeFrame | undefined {
   if (readEquationAnimationId(demo) !== DEFAULT_EQUATION_ANIMATION_ID) {
     clearLiveEquationRuntimeFrame(demo);
-    return;
+    return undefined;
   }
 
   const runtimeFrame = sampleKpAnimationRuntimeFrame({
@@ -908,6 +920,8 @@ function syncLiveEquationRuntimeFrame(
     String(runtimeFrame.selectorFrames.length);
   demo.dataset["kpAnimationRuntimeRenderTargetCount"] =
     String(runtimeFrame.activeRenderTargets.length);
+
+  return runtimeFrame;
 }
 
 function clearLiveEquationRuntimeFrame(demo: HTMLElement): void {
@@ -922,6 +936,64 @@ function clearLiveEquationRuntimeFrame(demo: HTMLElement): void {
   delete demo.dataset["kpAnimationRuntimeActiveAnnotations"];
   delete demo.dataset["kpAnimationRuntimeSelectorCount"];
   delete demo.dataset["kpAnimationRuntimeRenderTargetCount"];
+  clearLiveEquationVisualFrame(demo);
+}
+
+function syncLiveEquationVisualFrame(
+  demo: HTMLElement,
+  runtimeFrame: KpAnimationRuntimeFrame | undefined,
+  context: EquationMotionRenderContext,
+  direction: "forward" | "rewind"
+): void {
+  if (runtimeFrame === undefined) {
+    clearLiveEquationVisualFrame(demo);
+    return;
+  }
+
+  const root =
+    direction === "forward"
+      ? context.planTargetState
+      : context.planSourceState;
+  const visualFrame = createKatexDomRuntimeVisualFrame({
+    id: LIVE_EQUATION_VISUAL_FRAME_ID,
+    runtimeFrame,
+    root,
+    renderTargetRef: LIVE_EQUATION_RENDER_TARGET_REF
+  });
+  const boundSelectorCount = visualFrame.selectorVisuals.filter(
+    (selector) => selector.nodeIds.length > 0
+  ).length;
+  const unboundSelectorCount =
+    visualFrame.selectorVisuals.length - boundSelectorCount;
+
+  demo.dataset["kpAnimationVisualFrameId"] = visualFrame.id;
+  demo.dataset["kpAnimationVisualRuntimeFrameId"] =
+    visualFrame.runtimeFrameId;
+  demo.dataset["kpAnimationVisualPhaseId"] = visualFrame.phaseId;
+  demo.dataset["kpAnimationVisualNodeCount"] =
+    String(visualFrame.nodes.length);
+  demo.dataset["kpAnimationVisualSelectorCount"] =
+    String(visualFrame.selectorVisuals.length);
+  demo.dataset["kpAnimationVisualBoundSelectorCount"] =
+    String(boundSelectorCount);
+  demo.dataset["kpAnimationVisualUnboundSelectorCount"] =
+    String(unboundSelectorCount);
+  demo.dataset["kpAnimationVisualDiagnosticCount"] =
+    String(visualFrame.diagnostics.length);
+  demo.dataset["kpAnimationVisualRenderTargetCount"] =
+    String(visualFrame.renderTargetVisuals.length);
+}
+
+function clearLiveEquationVisualFrame(demo: HTMLElement): void {
+  delete demo.dataset["kpAnimationVisualFrameId"];
+  delete demo.dataset["kpAnimationVisualRuntimeFrameId"];
+  delete demo.dataset["kpAnimationVisualPhaseId"];
+  delete demo.dataset["kpAnimationVisualNodeCount"];
+  delete demo.dataset["kpAnimationVisualSelectorCount"];
+  delete demo.dataset["kpAnimationVisualBoundSelectorCount"];
+  delete demo.dataset["kpAnimationVisualUnboundSelectorCount"];
+  delete demo.dataset["kpAnimationVisualDiagnosticCount"];
+  delete demo.dataset["kpAnimationVisualRenderTargetCount"];
 }
 
 function syncEquationMotionMotifDiagnostics(

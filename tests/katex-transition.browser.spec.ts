@@ -1855,6 +1855,28 @@ test("editor equation motion demo exposes the runtime frame clock while scrubbin
       renderTargetCount: Number(
         demoElement.dataset["kpAnimationRuntimeRenderTargetCount"] ?? "0"
       ),
+      visualFrameId: demoElement.dataset["kpAnimationVisualFrameId"],
+      visualRuntimeFrameId:
+        demoElement.dataset["kpAnimationVisualRuntimeFrameId"],
+      visualPhaseId: demoElement.dataset["kpAnimationVisualPhaseId"],
+      visualNodeCount: Number(
+        demoElement.dataset["kpAnimationVisualNodeCount"] ?? "0"
+      ),
+      visualSelectorCount: Number(
+        demoElement.dataset["kpAnimationVisualSelectorCount"] ?? "0"
+      ),
+      visualBoundSelectorCount: Number(
+        demoElement.dataset["kpAnimationVisualBoundSelectorCount"] ?? "0"
+      ),
+      visualUnboundSelectorCount: Number(
+        demoElement.dataset["kpAnimationVisualUnboundSelectorCount"] ?? "0"
+      ),
+      visualDiagnosticCount: Number(
+        demoElement.dataset["kpAnimationVisualDiagnosticCount"] ?? "0"
+      ),
+      visualRenderTargetCount: Number(
+        demoElement.dataset["kpAnimationVisualRenderTargetCount"] ?? "0"
+      ),
       equationProgress: demoElement.dataset["kpEquationMotionProgress"]
     };
   });
@@ -1871,9 +1893,19 @@ test("editor equation motion demo exposes the runtime frame clock while scrubbin
       "transform.linear-solve.cancel-left-additive-inverse",
     selectorCount: expect.any(Number),
     renderTargetCount: 1,
+    visualFrameId: "visual.live-equation-card.frame",
+    visualRuntimeFrameId: "runtime.live-equation-card.frame",
+    visualPhaseId: "animation.linear-solve.solve-x.forward.1",
+    visualNodeCount: expect.any(Number),
+    visualSelectorCount: 10,
+    visualBoundSelectorCount: 10,
+    visualUnboundSelectorCount: 0,
+    visualDiagnosticCount: 0,
+    visualRenderTargetCount: 1,
     equationProgress: "0.5"
   });
   expect(runtimeState.selectorCount).toBeGreaterThan(0);
+  expect(runtimeState.visualNodeCount).toBeGreaterThan(10);
   await expect(demo).toHaveAttribute(
     "data-kp-equation-motion-last-renderer",
     "operation-plan"

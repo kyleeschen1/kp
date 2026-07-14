@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation-library.live-card-katex-visual-frame-v0",
   "kind": "next-action",
   "title": "Bind live card to KaTeX visual frames",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-katex-visual-frame-v0 in KP animation library expansion v0 loop.",
+  "summary": "Bound the live equation card to KaTeX visual frames by sampling a visual frame from the live runtime frame and DOM KaTeX snapshot, exposing visual frame ids, binding counts, render-target counts, and diagnostics while normalizing KaTeX Unicode minus tokens.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,21 @@
       "kind": "file",
       "path": "tests/katex-transition.browser.spec.ts",
       "summary": "Browser coverage for live equation card runtime and KaTeX visual-frame datasets."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Creates a live KaTeX DOM visual frame from the sampled runtime frame and publishes visual-frame binding/diagnostic datasets on the card."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-token-snapshot.ts",
+      "summary": "Normalizes KaTeX Unicode minus text to ASCII minus so runtime selector labels bind to real KaTeX DOM tokens."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Extends browser coverage to prove the live card exposes visual-frame ids, selector binding counts, render target count, zero diagnostics, and existing rendering."
     }
   ],
   "dependsOn": {
@@ -82,5 +97,41 @@
       "id": "browser-coverage-proves-no-unbound-linear-solve-visual-selectors",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/katex-runtime-visual-bindings.test.ts tests/linear-solve-runtime-visual-frame-sample.test.ts",
+      "status": "passed",
+      "scope": "focused KaTeX runtime visual binding unit coverage",
+      "checkedAt": "2026-07-14T19:18:33.983Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for live KaTeX visual-frame bridge and motion regressions",
+      "checkedAt": "2026-07-14T19:18:34.021Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for live KaTeX visual-frame slice",
+      "checkedAt": "2026-07-14T19:18:34.051Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for live KaTeX visual-frame slice",
+      "checkedAt": "2026-07-14T19:18:34.100Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T19:18:34.141Z",
+      "scope": "Run-contract hygiene for live KaTeX visual-frame slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Bound the live equation card to KaTeX visual frames by sampling a visual frame from the live runtime frame and DOM KaTeX snapshot, exposing visual frame ids, binding counts, render-target counts, and diagnostics while normalizing KaTeX Unicode minus tokens."
+  }
 }

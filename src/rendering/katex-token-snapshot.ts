@@ -86,7 +86,7 @@ export function snapshotKatexTokens(
 }
 
 export function normalizeKatexTokenText(text: string): string {
-  return text.replace(/\s+/g, " ").trim();
+  return text.replace(/\u2212/g, "-").replace(/\s+/g, " ").trim();
 }
 
 export function normalizeKatexTokenSignature(className: string): string {

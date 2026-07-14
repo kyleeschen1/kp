@@ -76,13 +76,14 @@
     {
       "id": "next-action.kp.animation-library.live-card-katex-visual-frame-v0",
       "title": "Bind live card to KaTeX visual frames",
-      "status": "ready",
-      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-katex-visual-frame-v0 in KP animation library expansion v0 loop."
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-katex-visual-frame-v0 in KP animation library expansion v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation-library.live-card-diagnostics-v0",
       "title": "Add card visual-frame diagnostics",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-diagnostics-v0 in KP animation library expansion v0 loop."
     },
     {
       "id": "next-action.kp.animation-library.live-card-rewind-law-v0",
