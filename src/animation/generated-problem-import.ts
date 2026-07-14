@@ -4,8 +4,8 @@ import {
 } from "./asset.ts";
 import { createSemanticTransformationRef } from "../semantic/animation.ts";
 import type {
-  GeneratedAlgebraTutorialFixture
-} from "../semantic/generated-algebra-tutorial-fixture.ts";
+  GeneratedProblemAnimationFixture
+} from "../semantic/generated-problem-fixture.ts";
 import {
   createEditableSemanticTransformationTree,
   createSemanticTransformationLeaf,
@@ -13,7 +13,7 @@ import {
 } from "../semantic/transformation-composition.ts";
 
 export function createGeneratedProblemAnimationAsset(
-  fixture: GeneratedAlgebraTutorialFixture
+  fixture: GeneratedProblemAnimationFixture
 ): KpAnimationAsset {
   const animationId = `animation.${fixture.id}`;
   const timelineId = `timeline.${fixture.id}.shared`;
@@ -102,4 +102,3 @@ export function createGeneratedProblemAnimationAsset(
     }
   });
 }
-

@@ -1,0 +1,315 @@
+import {
+  createKpAssetBundle,
+  createKpSemanticAssetObject,
+  type CreateKpAssetSelectorInput
+} from "./asset.ts";
+import {
+  createKpSemanticDiagramSequence,
+  createKpTransformationDiagramLeaf
+} from "./asset-diagram.ts";
+import { createKpFlashcardSpec, type KpFlashcardSpec } from "./asset-flashcard.ts";
+import { createKpSemanticTransformation } from "./asset-transformation.ts";
+import type { AlgebraTraceFixture } from "./algebra-trace-port-fixture.ts";
+import type { GeneratedProblemAnimationFixture } from "./generated-problem-fixture.ts";
+
+export type GeneratedCalculusProblemFamilyId = "generated.calculus.derivative";
+
+export interface GeneratedDerivativeProblemFixtureSpec {
+  readonly familyId: "generated.calculus.derivative";
+  readonly id: string;
+  readonly title: string;
+  readonly variable: string;
+  readonly base: string;
+  readonly exponent: number;
+}
+
+export type GeneratedCalculusProblemFixtureSpec =
+  GeneratedDerivativeProblemFixtureSpec;
+
+export interface GeneratedCalculusProblemFixture
+  extends GeneratedProblemAnimationFixture {
+  readonly familyId: GeneratedCalculusProblemFamilyId;
+}
+
+export const generatedCalculusProblemFixtureSpecs:
+  readonly GeneratedCalculusProblemFixtureSpec[] = [
+    {
+      familyId: "generated.calculus.derivative",
+      id: "generated.calculus.derivative.power-rule-x-cubed",
+      title: "Generated derivative power rule for x cubed",
+      variable: "x",
+      base: "x",
+      exponent: 3
+    }
+  ];
+
+export function listGeneratedCalculusProblemFixtureSpecs():
+  readonly GeneratedCalculusProblemFixtureSpec[] {
+  return generatedCalculusProblemFixtureSpecs;
+}
+
+export function getGeneratedCalculusProblemFixtureSpec(
+  id: string
+): GeneratedCalculusProblemFixtureSpec | undefined {
+  return generatedCalculusProblemFixtureSpecs.find((spec) => spec.id === id);
+}
+
+export function createGeneratedCalculusProblemFixtures():
+  readonly GeneratedCalculusProblemFixture[] {
+  return generatedCalculusProblemFixtureSpecs.map(
+    createGeneratedCalculusProblemFixture
+  );
+}
+
+export function createGeneratedCalculusProblemFixture(
+  fixtureOrId: GeneratedCalculusProblemFixtureSpec | string
+): GeneratedCalculusProblemFixture {
+  const spec =
+    typeof fixtureOrId === "string"
+      ? getGeneratedCalculusProblemFixtureSpec(fixtureOrId)
+      : fixtureOrId;
+
+  if (spec === undefined) {
+    throw new Error(`Unknown generated calculus fixture: ${fixtureOrId}`);
+  }
+
+  return createGeneratedDerivativeProblemFixture(spec);
+}
+
+function createGeneratedDerivativeProblemFixture(
+  input: GeneratedDerivativeProblemFixtureSpec
+): GeneratedCalculusProblemFixture {
+  assertNonEmpty(input.id, "Generated calculus fixture id");
+  assertNonEmpty(input.title, `Generated calculus fixture ${input.id} title`);
+  assertNonEmpty(input.variable, `Generated calculus fixture ${input.id} variable`);
+  assertNonEmpty(input.base, `Generated calculus fixture ${input.id} base`);
+
+  if (!Number.isInteger(input.exponent) || input.exponent < 2) {
+    throw new Error(
+      `Generated calculus fixture ${input.id} exponent must be an integer greater than one.`
+    );
+  }
+
+  const ids = generatedDerivativeProblemIds(input);
+  const latex = generatedDerivativeProblemLatex(input);
+  const bundle = createKpAssetBundle({
+    id: ids.asset,
+    title: input.title,
+    objects: [
+      expressionObject(
+        ids.initial,
+        "Derivative expression",
+        latex.initial,
+        [
+          selector(ids.initial, "operator", "operator", "d/dx"),
+          selector(ids.initial, "operator-variable", "term", input.variable),
+          selector(ids.initial, "base", "term", input.base),
+          selector(ids.initial, "exponent", "term", String(input.exponent))
+        ]
+      ),
+      expressionObject(
+        ids.derived,
+        "After applying the power rule",
+        latex.derived,
+        [
+          selector(ids.derived, "coefficient", "term", String(input.exponent)),
+          selector(ids.derived, "base", "term", input.base),
+          selector(ids.derived, "exponent", "term", String(input.exponent - 1))
+        ]
+      )
+    ]
+  });
+  const transformations = [
+    createKpSemanticTransformation({
+      id: ids.transform,
+      definitionId: "definition.generated.calculus.derivative.power-rule",
+      transformType: "applyDerivativePowerRule",
+      title: "Apply the derivative power rule",
+      sourceObjectIds: [ids.initial],
+      targetObjectIds: [ids.derived],
+      preserves: ["value", "structure"],
+      correspondence: [
+        {
+          sourceSelectorId: `${ids.initial}.base`,
+          targetSelectorId: `${ids.derived}.base`,
+          preserves: ["identity", "role"],
+          summary: "The base variable persists as the differentiated variable."
+        },
+        {
+          sourceSelectorId: `${ids.initial}.exponent`,
+          targetSelectorId: `${ids.derived}.coefficient`,
+          preserves: ["value"],
+          summary: "The original exponent becomes the coefficient."
+        }
+      ],
+      assumptions: [
+        "The exponent is a positive integer.",
+        "The derivative is taken with respect to the base variable."
+      ],
+      lawRefs: [
+        {
+          id: "law.calculus.derivative.power-rule",
+          level: "strict"
+        }
+      ]
+    })
+  ];
+  const diagram = createKpSemanticDiagramSequence({
+    id: ids.diagram,
+    title: `${input.title} sequence`,
+    children: transformations.map(createKpTransformationDiagramLeaf)
+  });
+
+  return {
+    id: input.id,
+    familyId: "generated.calculus.derivative",
+    title: input.title,
+    bundle,
+    transformations,
+    diagram,
+    trace: createGeneratedDerivativeProblemTrace(ids, latex),
+    drillDownHooks: [],
+    flashcards: createGeneratedDerivativeProblemFlashcards(input, ids)
+  };
+}
+
+interface GeneratedDerivativeProblemIds {
+  readonly asset: string;
+  readonly diagram: string;
+  readonly trace: string;
+  readonly initial: string;
+  readonly derived: string;
+  readonly transform: string;
+}
+
+interface GeneratedDerivativeProblemLatex {
+  readonly initial: string;
+  readonly derived: string;
+}
+
+function generatedDerivativeProblemIds(
+  input: GeneratedDerivativeProblemFixtureSpec
+): GeneratedDerivativeProblemIds {
+  return {
+    asset: `asset.${input.id}`,
+    diagram: `diagram.${input.id}.sequence`,
+    trace: `trace.${input.id}`,
+    initial: `expression.${input.id}.initial`,
+    derived: `expression.${input.id}.derived`,
+    transform: `transform.${input.id}.apply-power-rule`
+  };
+}
+
+function generatedDerivativeProblemLatex(
+  input: GeneratedDerivativeProblemFixtureSpec
+): GeneratedDerivativeProblemLatex {
+  return {
+    initial: `\\frac{d}{d${input.variable}}${input.base}^{${input.exponent}}`,
+    derived: `${input.exponent}${input.base}^{${input.exponent - 1}}`
+  };
+}
+
+function createGeneratedDerivativeProblemTrace(
+  ids: GeneratedDerivativeProblemIds,
+  latex: GeneratedDerivativeProblemLatex
+): AlgebraTraceFixture {
+  return {
+    id: ids.trace,
+    title: `${ids.trace} generated calculus trace`,
+    steps: [
+      {
+        id: `${ids.trace}.initial`,
+        latex: latex.initial
+      },
+      {
+        id: `${ids.trace}.derived`,
+        latex: latex.derived,
+        transformationId: ids.transform,
+        rule: "applyDerivativePowerRule"
+      }
+    ]
+  };
+}
+
+function createGeneratedDerivativeProblemFlashcards(
+  input: GeneratedDerivativeProblemFixtureSpec,
+  ids: GeneratedDerivativeProblemIds
+): readonly KpFlashcardSpec[] {
+  return [
+    createKpFlashcardSpec({
+      id: `card.${input.id}.predict-power-rule`,
+      kind: "predict-next",
+      title: "Predict the power-rule step",
+      assetId: ids.asset,
+      prompt: "Which transformation differentiates this power expression?",
+      transformationIds: [ids.transform],
+      timeMs: 0,
+      answer: {
+        kind: "transformation",
+        value: ids.transform
+      }
+    }),
+    createKpFlashcardSpec({
+      id: `card.${input.id}.cloze-coefficient`,
+      kind: "cloze",
+      title: "Hide the coefficient",
+      assetId: ids.asset,
+      prompt: "What coefficient appears after applying the power rule?",
+      selectorIds: [`${ids.derived}.coefficient`],
+      timeMs: 1200,
+      answer: {
+        kind: "text",
+        value: String(input.exponent)
+      }
+    }),
+    createKpFlashcardSpec({
+      id: `card.${input.id}.explain-power-rule`,
+      kind: "explain-transform",
+      title: "Explain the derivative power rule",
+      assetId: ids.asset,
+      prompt: "Why does the exponent move into the coefficient position?",
+      objectIds: [ids.initial, ids.derived],
+      transformationIds: [ids.transform],
+      timeMs: 1200,
+      answer: {
+        kind: "text",
+        value:
+          "For a power x^n, the derivative is n times x raised to one less power."
+      }
+    })
+  ];
+}
+
+function expressionObject(
+  id: string,
+  title: string,
+  latex: string,
+  selectors: readonly CreateKpAssetSelectorInput[]
+) {
+  return createKpSemanticAssetObject({
+    id,
+    objectType: "expression",
+    title,
+    value: { latex },
+    selectors
+  });
+}
+
+function selector(
+  objectId: string,
+  suffix: string,
+  kind: string,
+  label: string
+): CreateKpAssetSelectorInput {
+  return {
+    id: `${objectId}.${suffix}`,
+    kind,
+    label
+  };
+}
+
+function assertNonEmpty(value: string, label: string): void {
+  if (value.trim().length === 0) {
+    throw new Error(`${label} must not be empty.`);
+  }
+}

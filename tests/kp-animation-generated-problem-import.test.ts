@@ -17,6 +17,9 @@ import {
 import {
   createGeneratedAlgebraTutorialFixture
 } from "../src/semantic/generated-algebra-tutorial-fixture.ts";
+import {
+  createGeneratedCalculusProblemFixture
+} from "../src/semantic/generated-calculus-problem-fixture.ts";
 
 test("createGeneratedProblemAnimationAsset imports generated solution steps into an AnimationAsset", () => {
   const fixture = createGeneratedAlgebraTutorialFixture(
@@ -65,3 +68,57 @@ test("createGeneratedProblemAnimationAsset imports generated solution steps into
   );
 });
 
+test("createGeneratedProblemAnimationAsset imports generated calculus derivative steps", () => {
+  const fixture = createGeneratedCalculusProblemFixture(
+    "generated.calculus.derivative.power-rule-x-cubed"
+  );
+  const animation = createGeneratedProblemAnimationAsset(fixture);
+
+  assert.equal(
+    animation.id,
+    "animation.generated.calculus.derivative.power-rule-x-cubed"
+  );
+  assert.equal(
+    animation.bundle.id,
+    "asset.generated.calculus.derivative.power-rule-x-cubed"
+  );
+  assert.deepEqual(
+    animation.transformations.map((transformation) => transformation.id),
+    fixture.transformations.map((transformation) => transformation.id)
+  );
+  const dashboard = animation.dashboard;
+  assert.ok(dashboard);
+  assert.deepEqual(dashboard.tags, [
+    "animation",
+    "generated-problem",
+    "generated.calculus.derivative"
+  ]);
+  assert.deepEqual(animation.metadata, {
+    generatedProblemImport: true,
+    sourceFixtureId: "generated.calculus.derivative.power-rule-x-cubed",
+    sourceFixtureFamilyId: "generated.calculus.derivative",
+    sourceTraceId: "trace.generated.calculus.derivative.power-rule-x-cubed"
+  });
+  assert.equal(checkKpAnimationAssetReferenceClosure(animation).passed, true);
+  assert.equal(checkKpAnimationAssetSeekRewindLaw(animation).passed, true);
+
+  const frame = sampleKpAnimationRuntimeFrame({
+    animation,
+    progress: 0.5
+  });
+
+  assert.deepEqual(frame.activeTransformationIds, [
+    "transform.generated.calculus.derivative.power-rule-x-cubed.apply-power-rule"
+  ]);
+
+  const projections = createKpAnimationFlashcardProjections({
+    animation,
+    cards: fixture.flashcards
+  });
+
+  assert.equal(projections.length, fixture.flashcards.length);
+  assert.deepEqual(
+    projections.flatMap((projection) => projection.diagnostics),
+    []
+  );
+});

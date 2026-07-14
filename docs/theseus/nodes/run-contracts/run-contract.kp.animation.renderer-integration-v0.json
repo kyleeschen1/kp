@@ -136,7 +136,8 @@
     {
       "id": "next-action.kp.animation.generated-calculus-problem-import-v0",
       "title": "Add generated calculus problem animation import",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.generated-calculus-problem-import-v0 in KP animation renderer integration v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.generated-linear-algebra-problem-import-v0",
