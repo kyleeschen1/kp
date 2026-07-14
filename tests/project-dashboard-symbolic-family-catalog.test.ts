@@ -2649,6 +2649,162 @@ test("linear algebra dot-projection family links scalar, projection, and angle v
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("linear algebra matrix-vector family composes rows, entries, and graph maps", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.linear-algebra.matrix-vector"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "matrixVector.before",
+        "matrix-vector-expression",
+        ["matrix", "matrix.row", "matrix.entry", "vector", "vector.entry"]
+      ],
+      [
+        "matrixVector.after",
+        "matrix-vector-result",
+        [
+          "result.vector",
+          "result.entry",
+          "row.dot.product",
+          "linear.map",
+          "transformed.vector"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.linear-algebra.matrix-vector-multiply",
+        "matrixVectorMultiply",
+        ["value", "structure"],
+        "law.linear-algebra.matrix-vector"
+      ],
+      [
+        "definition.symbolic.linear-algebra.row-dot-products",
+        "rowDotProducts",
+        ["value", "structure"],
+        "law.linear-algebra.matrix-row-dot"
+      ],
+      [
+        "definition.symbolic.linear-algebra.apply-linear-map",
+        "applyLinearMap",
+        ["value", "presentation"],
+        "law.linear-algebra.linear-map-application"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[1]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["matrix.row", "row.dot.product", ["identity", "role"]],
+      ["matrix.entry", "row.dot.product", ["value", "role"]],
+      ["vector.entry", "row.dot.product", ["value", "role"]],
+      ["vector", "result.vector", ["value", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.linear-algebra.matrix-vector.row-dot-sweep",
+      motifKind: "row-dot-sweep",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.row-dot-products",
+        "definition.symbolic.linear-algebra.matrix-vector-multiply"
+      ],
+      summary:
+        "Each matrix row sweeps across vector entries to form one persistent result entry."
+    },
+    {
+      id: "motif.linear-algebra.matrix-vector.linear-map-apply",
+      motifKind: "linear-map-apply",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.apply-linear-map"
+      ],
+      summary:
+        "The matrix expression projects into a graph transform of the input vector."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.matrix-vector.basic",
+      animationId: "animation.matrix-vector.basic",
+      renderTargetKinds: ["equation", "matrix", "graph"],
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.matrix-vector-multiply",
+        "definition.symbolic.linear-algebra.row-dot-products",
+        "definition.symbolic.linear-algebra.apply-linear-map"
+      ],
+      summary:
+        "Basic matrix-vector sample links row dot products to a linear-map graph transform."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.linear-algebra.matrix-vector.linear-map",
+      title: "Matrix-vector multiplication applies a linear map",
+      representationKind: "linear-map",
+      exactness: "exact",
+      preserves: ["value", "presentation"],
+      lawRefs: [
+        {
+          id: "law.graph.matrix-vector-linear-map",
+          level: "strict"
+        }
+      ],
+      sampleAssetIds: ["animation.matrix-vector.basic"],
+      summary:
+        "Matrix-vector multiplication preserves the linear-map relation between input and transformed output vectors."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.linear-algebra-matrix-vector",
+      fixtureFamilyId: "generated.linear-algebra-matrix-vector",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.matrix-vector-multiply",
+        "definition.symbolic.linear-algebra.row-dot-products",
+        "definition.symbolic.linear-algebra.apply-linear-map"
+      ],
+      summary:
+        "Generated matrix-vector traces can map row dot products and graph linear-map application to this family."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.linear-algebra.matrix-vector.row-dot",
+      kind: "predict-next",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.row-dot-products",
+        "definition.symbolic.linear-algebra.matrix-vector-multiply"
+      ],
+      summary:
+        "Predict-next cards can ask which row dot product creates each result entry."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
   assert.deepEqual(
     createSymbolicManipulationFamilyAgendaRows(

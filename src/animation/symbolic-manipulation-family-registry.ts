@@ -237,6 +237,7 @@ export function createSymbolicManipulationFamilyRegistry():
     createCalculusHessianOptimizationFamily(),
     createLinearAlgebraVectorAddScaleFamily(),
     createLinearAlgebraDotProjectionFamily(),
+    createLinearAlgebraMatrixVectorFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
@@ -252,7 +253,8 @@ export function createSymbolicManipulationFamilyRegistry():
           spec.id !== "family.calculus.gradient-jacobian" &&
           spec.id !== "family.calculus.hessian-optimization" &&
           spec.id !== "family.linear-algebra.vector-add-scale" &&
-          spec.id !== "family.linear-algebra.dot-projection"
+          spec.id !== "family.linear-algebra.dot-projection" &&
+          spec.id !== "family.linear-algebra.matrix-vector"
       )
       .map(createSeedFamily)
   ];
@@ -3751,6 +3753,246 @@ function createDotProjectionDefinition(input: {
         targetObjectRole: "dot.after",
         targetSelectorRole: "length.right",
         preserves: ["identity", "role"]
+      }
+    ]
+  });
+}
+
+function createLinearAlgebraMatrixVectorFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.linear-algebra.matrix-vector-multiply",
+    "definition.symbolic.linear-algebra.row-dot-products",
+    "definition.symbolic.linear-algebra.apply-linear-map"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.linear-algebra.matrix-vector",
+    title: "Matrix-vector multiplication",
+    domain: "linear-algebra",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "matrixVector.before",
+        objectType: "matrix-vector-expression",
+        title: "Matrix-vector expression before multiplication",
+        selectorRoles: [
+          { id: "matrix", kind: "matrix" },
+          { id: "matrix.row", kind: "matrix-row" },
+          { id: "matrix.entry", kind: "matrix-entry" },
+          { id: "vector", kind: "vector" },
+          { id: "vector.entry", kind: "vector-entry" }
+        ]
+      },
+      {
+        id: "matrixVector.after",
+        objectType: "matrix-vector-result",
+        title: "Matrix-vector result",
+        selectorRoles: [
+          { id: "result.vector", kind: "vector" },
+          { id: "result.entry", kind: "vector-entry" },
+          { id: "row.dot.product", kind: "dot-product" },
+          { id: "linear.map", kind: "linear-map" },
+          { id: "transformed.vector", kind: "vector" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createMatrixVectorDefinition({
+        id: "definition.symbolic.linear-algebra.matrix-vector-multiply",
+        transformType: "matrixVectorMultiply",
+        title: "Multiply a matrix by a vector",
+        lawId: "law.linear-algebra.matrix-vector",
+        preserves: ["value", "structure"],
+        assumption:
+          "Matrix columns and vector dimension are compatible for multiplication."
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.linear-algebra.row-dot-products",
+        transformType: "rowDotProducts",
+        title: "Compute matrix-vector rows as dot products",
+        sourceObjectRoles: ["matrixVector.before"],
+        targetObjectRoles: ["matrixVector.after"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "Each result component is the dot product of one matrix row and the input vector."
+        ],
+        lawRefs: [
+          {
+            id: "law.linear-algebra.matrix-row-dot",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "matrixVector.before",
+            sourceSelectorRole: "matrix.row",
+            targetObjectRole: "matrixVector.after",
+            targetSelectorRole: "row.dot.product",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "matrixVector.before",
+            sourceSelectorRole: "matrix.entry",
+            targetObjectRole: "matrixVector.after",
+            targetSelectorRole: "row.dot.product",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "matrixVector.before",
+            sourceSelectorRole: "vector.entry",
+            targetObjectRole: "matrixVector.after",
+            targetSelectorRole: "row.dot.product",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "matrixVector.before",
+            sourceSelectorRole: "vector",
+            targetObjectRole: "matrixVector.after",
+            targetSelectorRole: "result.vector",
+            preserves: ["value", "role"]
+          }
+        ]
+      }),
+      createMatrixVectorDefinition({
+        id: "definition.symbolic.linear-algebra.apply-linear-map",
+        transformType: "applyLinearMap",
+        title: "Apply the matrix as a linear map",
+        lawId: "law.linear-algebra.linear-map-application",
+        preserves: ["value", "presentation"],
+        assumption:
+          "The matrix represents a linear map from input vectors to transformed output vectors."
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.linear-algebra.matrix-vector.row-dot-sweep",
+        motifKind: "row-dot-sweep",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.row-dot-products",
+          "definition.symbolic.linear-algebra.matrix-vector-multiply"
+        ],
+        summary:
+          "Each matrix row sweeps across vector entries to form one persistent result entry."
+      },
+      {
+        id: "motif.linear-algebra.matrix-vector.linear-map-apply",
+        motifKind: "linear-map-apply",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.apply-linear-map"
+        ],
+        summary:
+          "The matrix expression projects into a graph transform of the input vector."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.matrix-vector.basic",
+        animationId: "animation.matrix-vector.basic",
+        renderTargetKinds: ["equation", "matrix", "graph"],
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Basic matrix-vector sample links row dot products to a linear-map graph transform."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.linear-algebra.matrix-vector.linear-map",
+        title: "Matrix-vector multiplication applies a linear map",
+        representationKind: "linear-map",
+        exactness: "exact",
+        preserves: ["value", "presentation"],
+        lawRefs: [
+          {
+            id: "law.graph.matrix-vector-linear-map",
+            level: "strict"
+          }
+        ],
+        sampleAssetIds: ["animation.matrix-vector.basic"],
+        summary:
+          "Matrix-vector multiplication preserves the linear-map relation between input and transformed output vectors."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.linear-algebra-matrix-vector",
+        fixtureFamilyId: "generated.linear-algebra-matrix-vector",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated matrix-vector traces can map row dot products and graph linear-map application to this family."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.linear-algebra.matrix-vector.row-dot",
+        kind: "predict-next",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.row-dot-products",
+          "definition.symbolic.linear-algebra.matrix-vector-multiply"
+        ],
+        summary:
+          "Predict-next cards can ask which row dot product creates each result entry."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId(
+        "family.linear-algebra.matrix-vector"
+      ),
+      tags: [
+        "matrix",
+        "vector",
+        "linear-map",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for matrix-vector multiplication as row dot products and linear-map equivalents.",
+      searchSummary:
+        "matrix vector multiplication row dot products linear map transform graph",
+      graphEquivalentKinds: "linear-map"
+    }
+  });
+}
+
+function createMatrixVectorDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly preserves: readonly ("value" | "structure" | "presentation")[];
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["matrixVector.before"],
+    targetObjectRoles: ["matrixVector.after"],
+    preserves: input.preserves,
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "matrixVector.before",
+        sourceSelectorRole: "matrix",
+        targetObjectRole: "matrixVector.after",
+        targetSelectorRole: "linear.map",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "matrixVector.before",
+        sourceSelectorRole: "vector",
+        targetObjectRole: "matrixVector.after",
+        targetSelectorRole: "transformed.vector",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "matrixVector.before",
+        sourceSelectorRole: "matrix.entry",
+        targetObjectRole: "matrixVector.after",
+        targetSelectorRole: "result.entry",
+        preserves: ["value", "role"]
       }
     ]
   });

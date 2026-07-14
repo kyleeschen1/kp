@@ -180,7 +180,7 @@
       "id": "next-action.kp.animation.linear-algebra-matrix-vector-family-v0",
       "title": "Add matrix-vector family",
       "summary": "Model matrix-vector multiplication as row dot products with persistent entries and graph linear-map equivalents.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.linear-algebra-matrix-matrix-composition-v0",
