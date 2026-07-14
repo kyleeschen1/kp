@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation-library.fraction-transforms-v0",
   "kind": "next-action",
   "title": "Expand fraction transform coverage",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.fraction-transforms-v0 in KP animation library expansion v0 loop.",
+  "summary": "Expanded fraction transform coverage by adding a generated fraction-expression definition contract for split factors, merge common factor, and simplify unit factor, including artifact policies and preservation expectations.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,26 @@
       "kind": "file",
       "path": "tests/generated-katex-fixture-contract.test.ts",
       "summary": "Generated KaTeX fraction fixture contract coverage for structural fraction-line artifacts and visual motifs."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-transform-definition-registry.ts",
+      "summary": "Adds fraction-expression transform expectations, ordered definition listing, and a coverage law for promoted fraction transform definitions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-fraction-animation-asset.test.ts",
+      "summary": "Covers promoted fraction definition order, artifact policies, preservation expectations, and drift diagnostics alongside the AnimationAsset tests."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/fraction-adapter.ts",
+      "summary": "Existing fraction AnimationAsset adapter remains the consumer of the generated fraction-expression transform sequence."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-katex-fixture-contract.test.ts",
+      "summary": "Existing generated KaTeX fixture coverage verifies structural fraction-line artifacts and visual motifs for inline-to-stacked fractions."
     }
   ],
   "dependsOn": {
@@ -84,5 +104,41 @@
       "id": "fraction-fixtures-remain-browser-visible-and-searchable",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-fraction-animation-asset.test.ts tests/equation-motion-plan.test.ts tests/generated-katex-fixture-contract.test.ts tests/kp-generated-algebra-fixture-registry.test.ts",
+      "status": "passed",
+      "scope": "focused generated fraction transform, fixture, and AnimationAsset coverage",
+      "checkedAt": "2026-07-14T20:03:49.936Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for fraction-visible KaTeX behavior and regressions",
+      "checkedAt": "2026-07-14T20:03:49.978Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for fraction transform slice",
+      "checkedAt": "2026-07-14T20:03:50.021Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for fraction transform slice",
+      "checkedAt": "2026-07-14T20:03:50.048Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T20:03:50.098Z",
+      "scope": "Run-contract hygiene for fraction transform slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Expanded fraction transform coverage by adding a generated fraction-expression definition contract for split factors, merge common factor, and simplify unit factor, including artifact policies and preservation expectations."
+  }
 }

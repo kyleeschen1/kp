@@ -8,6 +8,10 @@ import {
   type KpSemanticTransformationDefinition,
   type KpTransformationValidationIssue
 } from "./asset-transformation.ts";
+import type {
+  KpLawCheckResult,
+  KpLawFailure
+} from "./asset-laws.ts";
 import type { GeneratedAlgebraFixtureFamilyId } from "./generated-algebra-fixture-registry.ts";
 
 export type GeneratedAlgebraTransformDefinitionStatus = "seed" | "promoted";
@@ -43,6 +47,35 @@ export interface CreateGeneratedAlgebraSemanticTransformationInput {
   readonly targetObjectIds: readonly string[];
   readonly correspondence?: readonly KpSelectorCorrespondence[] | undefined;
 }
+
+export interface GeneratedFractionExpressionTransformExpectation {
+  readonly transformType: string;
+  readonly definitionId: string;
+  readonly artifactPolicy: GeneratedAlgebraTransformArtifactPolicy;
+  readonly preserves: readonly string[];
+}
+
+export const generatedFractionExpressionTransformExpectations:
+  readonly GeneratedFractionExpressionTransformExpectation[] = [
+    {
+      transformType: "splitFractionFactors",
+      definitionId: "definition.generated.fraction-expression.split-fraction-factors",
+      artifactPolicy: "mixed",
+      preserves: ["value", "structure"]
+    },
+    {
+      transformType: "mergeFractionCommonFactor",
+      definitionId: "definition.generated.fraction-expression.merge-common-factor",
+      artifactPolicy: "mixed",
+      preserves: ["identity", "value", "structure"]
+    },
+    {
+      transformType: "simplifyUnitFractionFactor",
+      definitionId: "definition.generated.fraction-expression.simplify-unit-factor",
+      artifactPolicy: "source-only",
+      preserves: ["identity", "value"]
+    }
+  ];
 
 export const generatedAlgebraTransformDefinitions:
   readonly GeneratedAlgebraTransformDefinition[] = [
@@ -699,6 +732,90 @@ export function listGeneratedAlgebraTransformDefinitionsByFamily(
   );
 }
 
+export function listGeneratedFractionExpressionTransformDefinitions(
+  definitions: readonly GeneratedAlgebraTransformDefinition[] =
+    listGeneratedAlgebraTransformDefinitions()
+): readonly GeneratedAlgebraTransformDefinition[] {
+  const expectationOrder = new Map(
+    generatedFractionExpressionTransformExpectations.map(
+      (expectation, index) => [expectation.transformType, index]
+    )
+  );
+
+  return definitions
+    .filter((definition) => definition.familyId === "generated.fraction-expression")
+    .filter((definition) => expectationOrder.has(definition.transformType))
+    .sort(
+      (left, right) =>
+        (expectationOrder.get(left.transformType) ?? 0) -
+        (expectationOrder.get(right.transformType) ?? 0)
+    )
+    .map(cloneGeneratedAlgebraTransformDefinition);
+}
+
+export function checkGeneratedFractionExpressionTransformDefinitionCoverage(
+  definitions: readonly GeneratedAlgebraTransformDefinition[] =
+    listGeneratedAlgebraTransformDefinitions()
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+  const definitionsByType = new Map(
+    listGeneratedFractionExpressionTransformDefinitions(definitions).map(
+      (definition) => [definition.transformType, definition]
+    )
+  );
+
+  generatedFractionExpressionTransformExpectations.forEach((expectation) => {
+    const definition = definitionsByType.get(expectation.transformType);
+
+    if (definition === undefined) {
+      failures.push({
+        path: `definitions[${expectation.transformType}]`,
+        message:
+          `Generated fraction-expression transform ${expectation.transformType} must be defined.`
+      });
+      return;
+    }
+
+    if (definition.id !== expectation.definitionId) {
+      failures.push({
+        path: `definitions[${expectation.transformType}].id`,
+        message:
+          `Generated fraction-expression transform ${expectation.transformType} expected definition id ${expectation.definitionId}.`
+      });
+    }
+
+    if (definition.status !== "promoted") {
+      failures.push({
+        path: `definitions[${definition.id}].status`,
+        message:
+          `Generated fraction-expression transform ${definition.id} must be promoted.`
+      });
+    }
+
+    if (definition.artifactPolicy !== expectation.artifactPolicy) {
+      failures.push({
+        path: `definitions[${definition.id}].artifactPolicy`,
+        message:
+          `Generated fraction-expression transform ${definition.id} expected artifact policy ${expectation.artifactPolicy} but received ${definition.artifactPolicy}.`
+      });
+    }
+
+    if (!stringListsEqual(definition.preserves, expectation.preserves)) {
+      failures.push({
+        path: `definitions[${definition.id}].preserves`,
+        message:
+          `Generated fraction-expression transform ${definition.id} must preserve ${expectation.preserves.join(", ")}.`
+      });
+    }
+  });
+
+  return {
+    lawId: "generated-fraction-expression.transform-definition-coverage",
+    passed: failures.length === 0,
+    failures
+  };
+}
+
 export function findGeneratedAlgebraTransformDefinition(
   id: string
 ): GeneratedAlgebraTransformDefinition | undefined {
@@ -813,6 +930,14 @@ function cloneGeneratedAlgebraTransformDefinition(
     status: definition.status,
     artifactPolicy: definition.artifactPolicy
   };
+}
+
+function stringListsEqual(
+  left: readonly string[],
+  right: readonly string[]
+): boolean {
+  return left.length === right.length &&
+    left.every((value, index) => value === right[index]);
 }
 
 function assertNonEmpty(value: string, label: string): void {

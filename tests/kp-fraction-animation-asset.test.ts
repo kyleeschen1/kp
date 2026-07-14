@@ -14,6 +14,11 @@ import {
 import {
   defaultEquationTransformVisualMotifRules
 } from "../src/rendering/equation-visual-motif-defaults.ts";
+import {
+  checkGeneratedFractionExpressionTransformDefinitionCoverage,
+  listGeneratedAlgebraTransformDefinitions,
+  listGeneratedFractionExpressionTransformDefinitions
+} from "../src/semantic/generated-algebra-transform-definition-registry.ts";
 
 test("createFractionSimplificationAnimationAsset adapts two fourths into AnimationAsset", () => {
   const animation = createFractionSimplificationAnimationAsset();
@@ -166,6 +171,73 @@ test("createFractionSimplificationAnimationAsset adapts two fourths into Animati
         }
       ],
       diagnostics: []
+    }
+  );
+});
+
+test("generated fraction-expression transform definitions expose the promoted sequence", () => {
+  assert.deepEqual(
+    listGeneratedFractionExpressionTransformDefinitions().map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.artifactPolicy,
+      definition.preserves
+    ]),
+    [
+      [
+        "definition.generated.fraction-expression.split-fraction-factors",
+        "splitFractionFactors",
+        "mixed",
+        ["value", "structure"]
+      ],
+      [
+        "definition.generated.fraction-expression.merge-common-factor",
+        "mergeFractionCommonFactor",
+        "mixed",
+        ["identity", "value", "structure"]
+      ],
+      [
+        "definition.generated.fraction-expression.simplify-unit-factor",
+        "simplifyUnitFractionFactor",
+        "source-only",
+        ["identity", "value"]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    checkGeneratedFractionExpressionTransformDefinitionCoverage(),
+    {
+      lawId: "generated-fraction-expression.transform-definition-coverage",
+      passed: true,
+      failures: []
+    }
+  );
+});
+
+test("generated fraction-expression transform coverage reports artifact policy drift", () => {
+  assert.deepEqual(
+    checkGeneratedFractionExpressionTransformDefinitionCoverage(
+      listGeneratedAlgebraTransformDefinitions().map((definition) =>
+        definition.id ===
+          "definition.generated.fraction-expression.simplify-unit-factor"
+          ? {
+              ...definition,
+              artifactPolicy: "mixed"
+            }
+          : definition
+      )
+    ),
+    {
+      lawId: "generated-fraction-expression.transform-definition-coverage",
+      passed: false,
+      failures: [
+        {
+          path:
+            "definitions[definition.generated.fraction-expression.simplify-unit-factor].artifactPolicy",
+          message:
+            "Generated fraction-expression transform definition.generated.fraction-expression.simplify-unit-factor expected artifact policy source-only but received mixed."
+        }
+      ]
     }
   );
 });
