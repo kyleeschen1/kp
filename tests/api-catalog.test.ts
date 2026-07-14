@@ -81,6 +81,7 @@ test("API catalog exposes typed metadata for semantic transformations", () => {
 test("API catalog covers notation and layout entities with the same metadata protocol", () => {
   const radical = findApiCatalogItem("notation-radical-to-exponent");
   const synchronizedPanel = findApiCatalogItem("layout-synchronized-panel");
+  const runtimeFrame = findApiCatalogItem("capability-animation-runtime-frame");
 
   assert.equal(radical?.group.category, "notation-transformation");
   assert.deepEqual(radical?.item.details?.preserves, [
@@ -103,6 +104,18 @@ test("API catalog covers notation and layout entities with the same metadata pro
   assert.deepEqual(synchronizedPanel?.item.details?.preserves, [
     "shared playhead",
     "selected semantic object"
+  ]);
+
+  assert.equal(runtimeFrame?.group.id, "capabilities-representations");
+  assert.equal(runtimeFrame?.item.status, "active");
+  assert.deepEqual(runtimeFrame?.item.details?.protocols, [
+    "sampleKpAnimationRuntimeFrame"
+  ]);
+  assert.deepEqual(runtimeFrame?.item.details?.outputs, [
+    "clock",
+    "phase",
+    "active render targets",
+    "frame descriptor"
   ]);
 });
 

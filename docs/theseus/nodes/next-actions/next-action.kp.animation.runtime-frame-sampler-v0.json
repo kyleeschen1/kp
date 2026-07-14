@@ -1,0 +1,107 @@
+{
+  "id": "next-action.kp.animation.runtime-frame-sampler-v0",
+  "kind": "next-action",
+  "title": "Add renderer-neutral animation runtime frame sampler",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added a renderer-neutral AnimationAsset runtime frame sampler that normalizes progress, elapsed time, and beats into one clock envelope with phase metadata, active render targets, semantic refs, and frame descriptors.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-runtime-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.runtime-frame-sampler-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming AnimationAsset as the primary composable KP artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active workflow frontier for dashboard-backed semantic animation system work."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/runtime-sampler.ts",
+      "summary": "Adds sampleKpAnimationRuntimeFrame and renderer-neutral runtime frame types over AnimationAsset frame descriptors."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-runtime-sampler.test.ts",
+      "summary": "Covers elapsed-time, beat, progress, rewind, active render target, and descriptor sampling behavior."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/api-catalog.ts",
+      "summary": "Exposes AnimationRuntimeFrame in the API catalog for dashboard discovery."
+    },
+    {
+      "kind": "file",
+      "path": "tests/api-catalog.test.ts",
+      "summary": "Covers the AnimationRuntimeFrame API catalog row."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.composable-runtime-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add renderer-neutral animation runtime frame sampler can be completed inside KP composable animation runtime v0 loop."
+  ],
+  "allowedWork": [
+    "Work on AnimationAsset runtime sampling, diagnostics, dashboard previews, external deterministic ports, programming trace imports, flashcard projections, and composition laws.",
+    "Keep semantic objects, transformations, render targets, layouts, and timelines as typed data that can be inspected and sampled.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not rewrite the full renderer or equation animation DOM pipeline in this loop.",
+    "Do not add GIF/video encoders or large live external integrations in this loop.",
+    "Do not stage unrelated worktree changes."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-runtime-sampler.test.ts tests/api-catalog.test.ts",
+      "status": "passed",
+      "scope": "runtime sampler and API catalog focused tests",
+      "checkedAt": "2026-07-14T01:05:58.549Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript project typecheck",
+      "checkedAt": "2026-07-14T01:05:58.575Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-14T01:05:58.599Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T01:05:58.622Z",
+      "scope": "Theseus run-contract hygiene"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a renderer-neutral AnimationAsset runtime frame sampler that normalizes progress, elapsed time, and beats into one clock envelope with phase metadata, active render targets, semantic refs, and frame descriptors."
+  }
+}
