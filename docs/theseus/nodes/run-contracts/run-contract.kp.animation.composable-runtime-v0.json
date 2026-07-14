@@ -88,7 +88,8 @@
     {
       "id": "next-action.kp.animation.external-port-linear-solve-fixture-v0",
       "title": "Map external algebra fixture to animation assets",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.external-port-linear-solve-fixture-v0 in KP composable animation runtime v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.external-port-diagnostics-v0",
