@@ -390,6 +390,15 @@ function createAlgebraBothSidesFamily(): KpSymbolicManipulationFamily {
           "Generated linear-solve traces can map add/subtract/multiply/divide both-sides steps to this family."
       }
     ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.algebra.both-sides.predict-next",
+        kind: "predict-next",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Predict-next cards can ask which operation isolates or preserves the equation next."
+      }
+    ],
     dashboard: {
       rowId: symbolicManipulationFamilyRowId("family.algebra.both-sides"),
       tags: ["equation", "inverse-operation", "generated-problem"]

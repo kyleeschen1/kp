@@ -45,6 +45,7 @@ function symbolicManipulationFamilyAgendaRow(
   const graphEquivalentKinds = metadataList(
     family.metadata?.["graphEquivalentKinds"]
   );
+  const practiceMaturity = symbolicManipulationFamilyPracticeMaturity(family);
 
   return {
     id: family.dashboard?.rowId ?? `symbolic-family-${family.id}`,
@@ -83,7 +84,8 @@ function symbolicManipulationFamilyAgendaRow(
         value: String(family.generatedProblemHooks.length)
       },
       { label: "Flashcard hooks", value: String(family.flashcardHooks.length) },
-      { label: "Validation", value: validation.length === 0 ? "passed" : "failed" }
+      { label: "Validation", value: validation.length === 0 ? "passed" : "failed" },
+      { label: "Practice maturity", value: practiceMaturity }
     ],
     searchFields: [
       "semantic asset catalog",
@@ -97,9 +99,32 @@ function symbolicManipulationFamilyAgendaRow(
       searchSummary,
       ...graphEquivalentKinds.map((kind) => `graph-equivalent:${kind}`),
       `flashcard-ready:${String(family.flashcardHooks.length > 0)}`,
-      `generated-problem-ready:${String(family.generatedProblemHooks.length > 0)}`
+      `generated-problem-ready:${String(family.generatedProblemHooks.length > 0)}`,
+      `maturity:${practiceMaturity}`
     ]
   };
+}
+
+function symbolicManipulationFamilyPracticeMaturity(
+  family: KpSymbolicManipulationFamily
+): string {
+  if (family.status === "seed") {
+    return "seed";
+  }
+
+  if (
+    family.generatedProblemHooks.length > 0 &&
+    family.flashcardHooks.length > 0 &&
+    family.runtimeSamples.length > 0
+  ) {
+    return "practice-ready";
+  }
+
+  if (family.generatedProblemHooks.length > 0) {
+    return "generated-ready";
+  }
+
+  return "needs-hooks";
 }
 
 function symbolicManipulationFamilyRowMatchesQuery(

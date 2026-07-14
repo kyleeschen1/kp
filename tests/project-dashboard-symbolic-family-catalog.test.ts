@@ -177,6 +177,20 @@ test("algebra both-sides family promotes operation definitions and sample hooks"
         "Generated linear-solve traces can map add/subtract/multiply/divide both-sides steps to this family."
     }
   ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.algebra.both-sides.predict-next",
+      kind: "predict-next",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.add-both-sides",
+        "definition.symbolic.algebra.subtract-both-sides",
+        "definition.symbolic.algebra.multiply-both-sides",
+        "definition.symbolic.algebra.divide-both-sides"
+      ],
+      summary:
+        "Predict-next cards can ask which operation isolates or preserves the equation next."
+    }
+  ]);
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
@@ -1147,8 +1161,9 @@ test("symbolic manipulation family dashboard rows expose comparable readiness fi
       { label: "Runtime samples", value: "1" },
       { label: "Graph equivalents", value: "1" },
       { label: "Generated problem hooks", value: "1" },
-      { label: "Flashcard hooks", value: "0" },
-      { label: "Validation", value: "passed" }
+      { label: "Flashcard hooks", value: "1" },
+      { label: "Validation", value: "passed" },
+      { label: "Practice maturity", value: "practice-ready" }
     ],
     searchFields: [
       "semantic asset catalog",
@@ -1163,10 +1178,31 @@ test("symbolic manipulation family dashboard rows expose comparable readiness fi
       "generated-problem",
       "add, subtract, multiply, and divide both sides while preserving equality",
       "graph-equivalent:equation-graph",
-      "flashcard-ready:false",
-      "generated-problem-ready:true"
+      "flashcard-ready:true",
+      "generated-problem-ready:true",
+      "maturity:practice-ready"
     ]
   });
+});
+
+test("algebra generated problem rows surface practice-ready maturity", () => {
+  assert.deepEqual(
+    createSymbolicManipulationFamilyAgendaRows(
+      "algebra maturity:practice-ready generated-problem-ready:true flashcard-ready:true"
+    ).map((row) => [
+      row.id,
+      row.previewFields.find((field) => field.label === "Practice maturity")
+        ?.value
+    ]),
+    [
+      ["symbolic-family-algebra-both-sides", "practice-ready"],
+      ["symbolic-family-algebra-cancel-combine", "practice-ready"],
+      ["symbolic-family-algebra-distribution-factoring", "practice-ready"],
+      ["symbolic-family-algebra-fraction-simplification", "practice-ready"],
+      ["symbolic-family-algebra-exponent-log-laws", "practice-ready"],
+      ["symbolic-family-algebra-inequality", "practice-ready"]
+    ]
+  );
 });
 
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
