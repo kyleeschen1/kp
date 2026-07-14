@@ -226,11 +226,13 @@ export function createSymbolicManipulationFamilyRegistry():
   return [
     createAlgebraBothSidesFamily(),
     createAlgebraCancelCombineFamily(),
+    createAlgebraDistributionFactoringFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
           spec.id !== "family.algebra.both-sides" &&
-          spec.id !== "family.algebra.cancel-combine"
+          spec.id !== "family.algebra.cancel-combine" &&
+          spec.id !== "family.algebra.distribution-factoring"
       )
       .map(createSeedFamily)
   ];
@@ -678,6 +680,269 @@ function createAlgebraCancelCombineFamily(): KpSymbolicManipulationFamily {
       searchSummary:
         "cancel additive inverses multiplicative inverses combine like terms simplify reversible midpoint vanish coalesce replacement",
       graphEquivalentKinds: "expression-evaluation"
+    }
+  });
+}
+
+function createAlgebraDistributionFactoringFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.algebra.distribute-product-over-sum",
+    "definition.symbolic.algebra.factor-common-term"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.algebra.distribution-factoring",
+    title: "Distribution and factoring",
+    domain: "algebra",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "expression.factored",
+        objectType: "expression",
+        title: "Factored expression",
+        selectorRoles: [
+          { id: "context.persistent", kind: "context" },
+          { id: "factor.shared", kind: "factor" },
+          { id: "product.operator", kind: "operator" },
+          { id: "group.open", kind: "wrapper" },
+          { id: "group.term.left", kind: "term" },
+          { id: "group.operator", kind: "operator" },
+          { id: "group.term.right", kind: "term" },
+          { id: "group.close", kind: "wrapper" }
+        ]
+      },
+      {
+        id: "expression.distributed",
+        objectType: "expression",
+        title: "Distributed expression",
+        selectorRoles: [
+          { id: "context.persistent", kind: "context" },
+          { id: "factor.left.copy", kind: "factor" },
+          { id: "product.operator.left", kind: "operator" },
+          { id: "term.left", kind: "term" },
+          { id: "distributed.operator", kind: "operator" },
+          { id: "factor.right.copy", kind: "factor" },
+          { id: "product.operator.right", kind: "operator" },
+          { id: "term.right", kind: "term" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.algebra.distribute-product-over-sum",
+        transformType: "distributeProductOverSum",
+        title: "Distribute product over sum",
+        sourceObjectRoles: ["expression.factored"],
+        targetObjectRoles: ["expression.distributed"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "The grouped terms form a sum or difference and the shared factor applies to the whole group."
+        ],
+        lawRefs: [
+          {
+            id: "law.algebra.distribution",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "expression.factored",
+            sourceSelectorRole: "context.persistent",
+            targetObjectRole: "expression.distributed",
+            targetSelectorRole: "context.persistent",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "expression.factored",
+            sourceSelectorRole: "factor.shared",
+            targetObjectRole: "expression.distributed",
+            targetSelectorRole: "factor.left.copy",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "expression.factored",
+            sourceSelectorRole: "factor.shared",
+            targetObjectRole: "expression.distributed",
+            targetSelectorRole: "factor.right.copy",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "expression.factored",
+            sourceSelectorRole: "group.term.left",
+            targetObjectRole: "expression.distributed",
+            targetSelectorRole: "term.left",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "expression.factored",
+            sourceSelectorRole: "group.operator",
+            targetObjectRole: "expression.distributed",
+            targetSelectorRole: "distributed.operator",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "expression.factored",
+            sourceSelectorRole: "group.term.right",
+            targetObjectRole: "expression.distributed",
+            targetSelectorRole: "term.right",
+            preserves: ["identity", "role"]
+          }
+        ]
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.algebra.factor-common-term",
+        transformType: "factorCommonTerm",
+        title: "Factor a common term",
+        sourceObjectRoles: ["expression.distributed"],
+        targetObjectRoles: ["expression.factored"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "Distributed terms share a common factor that can be reconciled into one factored role."
+        ],
+        lawRefs: [
+          {
+            id: "law.algebra.common-factor",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "expression.distributed",
+            sourceSelectorRole: "context.persistent",
+            targetObjectRole: "expression.factored",
+            targetSelectorRole: "context.persistent",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "expression.distributed",
+            sourceSelectorRole: "factor.left.copy",
+            targetObjectRole: "expression.factored",
+            targetSelectorRole: "factor.shared",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "expression.distributed",
+            sourceSelectorRole: "factor.right.copy",
+            targetObjectRole: "expression.factored",
+            targetSelectorRole: "factor.shared",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "expression.distributed",
+            sourceSelectorRole: "term.left",
+            targetObjectRole: "expression.factored",
+            targetSelectorRole: "group.term.left",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "expression.distributed",
+            sourceSelectorRole: "distributed.operator",
+            targetObjectRole: "expression.factored",
+            targetSelectorRole: "group.operator",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "expression.distributed",
+            sourceSelectorRole: "term.right",
+            targetObjectRole: "expression.factored",
+            targetSelectorRole: "group.term.right",
+            preserves: ["identity", "role"]
+          }
+        ]
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.algebra.distribution-factoring.copy-sweep",
+        motifKind: "copy-sweep",
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.distribute-product-over-sum"
+        ],
+        summary:
+          "The shared factor yields two value-preserving copies that sweep into each distributed product while grouping artifacts fade away.",
+        metadata: {
+          reversible: true,
+          inverseMotifKind: "group-wrap"
+        }
+      },
+      {
+        id: "motif.algebra.distribution-factoring.group-wrap",
+        motifKind: "group-wrap",
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.factor-common-term"
+        ],
+        summary:
+          "Matching factor copies reconcile into one shared factor, then grouping artifacts wrap the remaining sum.",
+        metadata: {
+          reversible: true,
+          inverseMotifKind: "copy-sweep"
+        }
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.distribution-factoring.basic",
+        animationId: "animation.distribution-factoring.basic",
+        renderTargetKinds: ["equation"],
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Basic a(b + c) and ab + ac sample exercises distribution and factoring as reversible views."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.algebra.distribution-factoring.area-model",
+        title: "Area model preserves total area",
+        representationKind: "area-model",
+        exactness: "exact",
+        preserves: ["value", "structure"],
+        lawRefs: [
+          {
+            id: "law.graph.area-distribution",
+            level: "strict"
+          }
+        ],
+        sampleAssetIds: ["animation.distribution-factoring.basic"],
+        summary:
+          "Distribution splits one rectangle into pieces while factoring regroups equal total area."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.algebra-expand-factor.distribution",
+        fixtureFamilyId: "generated.algebra-expand-factor",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated expand/factor traces can map copied factors, grouped terms, and artifact wrappers to this family."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.algebra.distribution-factoring.relationship",
+        kind: "relationship",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Relationship cards can ask which distributed factors reconcile into a shared factor."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId(
+        "family.algebra.distribution-factoring"
+      ),
+      tags: [
+        "distribution",
+        "factoring",
+        "inverse-operation",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for distributing products over sums and factoring common terms.",
+      searchSummary:
+        "distribute factor common term expand collect inverse operation copied factor grouped artifacts area model",
+      graphEquivalentKinds: "area-model"
     }
   });
 }

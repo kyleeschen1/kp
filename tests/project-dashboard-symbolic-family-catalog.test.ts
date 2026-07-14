@@ -349,6 +349,195 @@ test("algebra cancel-combine family promotes inverse and like-term semantics", (
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("algebra distribution-factoring family models copied and grouped artifacts", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.algebra.distribution-factoring"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "expression.factored",
+        "expression",
+        [
+          "context.persistent",
+          "factor.shared",
+          "product.operator",
+          "group.open",
+          "group.term.left",
+          "group.operator",
+          "group.term.right",
+          "group.close"
+        ]
+      ],
+      [
+        "expression.distributed",
+        "expression",
+        [
+          "context.persistent",
+          "factor.left.copy",
+          "product.operator.left",
+          "term.left",
+          "distributed.operator",
+          "factor.right.copy",
+          "product.operator.right",
+          "term.right"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.sourceObjectRoles,
+      definition.targetObjectRoles,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.algebra.distribute-product-over-sum",
+        "distributeProductOverSum",
+        ["expression.factored"],
+        ["expression.distributed"],
+        "law.algebra.distribution"
+      ],
+      [
+        "definition.symbolic.algebra.factor-common-term",
+        "factorCommonTerm",
+        ["expression.distributed"],
+        ["expression.factored"],
+        "law.algebra.common-factor"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[0]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["context.persistent", "context.persistent", ["identity", "role"]],
+      ["factor.shared", "factor.left.copy", ["value", "role"]],
+      ["factor.shared", "factor.right.copy", ["value", "role"]],
+      ["group.term.left", "term.left", ["identity", "role"]],
+      ["group.operator", "distributed.operator", ["identity", "role"]],
+      ["group.term.right", "term.right", ["identity", "role"]]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[1]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["context.persistent", "context.persistent", ["identity", "role"]],
+      ["factor.left.copy", "factor.shared", ["value", "role"]],
+      ["factor.right.copy", "factor.shared", ["value", "role"]],
+      ["term.left", "group.term.left", ["identity", "role"]],
+      ["distributed.operator", "group.operator", ["identity", "role"]],
+      ["term.right", "group.term.right", ["identity", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.algebra.distribution-factoring.copy-sweep",
+      motifKind: "copy-sweep",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.distribute-product-over-sum"
+      ],
+      summary:
+        "The shared factor yields two value-preserving copies that sweep into each distributed product while grouping artifacts fade away.",
+      metadata: {
+        reversible: true,
+        inverseMotifKind: "group-wrap"
+      }
+    },
+    {
+      id: "motif.algebra.distribution-factoring.group-wrap",
+      motifKind: "group-wrap",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.factor-common-term"
+      ],
+      summary:
+        "Matching factor copies reconcile into one shared factor, then grouping artifacts wrap the remaining sum.",
+      metadata: {
+        reversible: true,
+        inverseMotifKind: "copy-sweep"
+      }
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.distribution-factoring.basic",
+      animationId: "animation.distribution-factoring.basic",
+      renderTargetKinds: ["equation"],
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.distribute-product-over-sum",
+        "definition.symbolic.algebra.factor-common-term"
+      ],
+      summary:
+        "Basic a(b + c) and ab + ac sample exercises distribution and factoring as reversible views."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.algebra.distribution-factoring.area-model",
+      title: "Area model preserves total area",
+      representationKind: "area-model",
+      exactness: "exact",
+      preserves: ["value", "structure"],
+      lawRefs: [
+        {
+          id: "law.graph.area-distribution",
+          level: "strict"
+        }
+      ],
+      sampleAssetIds: ["animation.distribution-factoring.basic"],
+      summary:
+        "Distribution splits one rectangle into pieces while factoring regroups equal total area."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.algebra-expand-factor.distribution",
+      fixtureFamilyId: "generated.algebra-expand-factor",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.distribute-product-over-sum",
+        "definition.symbolic.algebra.factor-common-term"
+      ],
+      summary:
+        "Generated expand/factor traces can map copied factors, grouped terms, and artifact wrappers to this family."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.algebra.distribution-factoring.relationship",
+      kind: "relationship",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.distribute-product-over-sum",
+        "definition.symbolic.algebra.factor-common-term"
+      ],
+      summary:
+        "Relationship cards can ask which distributed factors reconcile into a shared factor."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic manipulation family dashboard rows expose comparable readiness fields", () => {
   const rows = createSymbolicManipulationFamilyAgendaRows("");
 

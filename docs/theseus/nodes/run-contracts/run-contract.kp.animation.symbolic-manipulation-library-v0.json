@@ -96,7 +96,7 @@
       "id": "next-action.kp.animation.algebra-distribution-factoring-family-v0",
       "title": "Add distribution and factoring family",
       "summary": "Model distribution and factoring as inverse-ish semantic transformations with explicit correspondence for copied, grouped, and artifact tokens.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.algebra-fraction-simplification-family-v0",
