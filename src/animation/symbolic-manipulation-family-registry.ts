@@ -240,6 +240,7 @@ export function createSymbolicManipulationFamilyRegistry():
     createLinearAlgebraMatrixVectorFamily(),
     createLinearAlgebraMatrixMatrixCompositionFamily(),
     createLinearAlgebraRowOperationsFamily(),
+    createLinearAlgebraDeterminantInverseFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
@@ -258,7 +259,8 @@ export function createSymbolicManipulationFamilyRegistry():
           spec.id !== "family.linear-algebra.dot-projection" &&
           spec.id !== "family.linear-algebra.matrix-vector" &&
           spec.id !== "family.linear-algebra.matrix-matrix-composition" &&
-          spec.id !== "family.linear-algebra.row-operations"
+          spec.id !== "family.linear-algebra.row-operations" &&
+          spec.id !== "family.linear-algebra.determinant-inverse"
       )
       .map(createSeedFamily)
   ];
@@ -4484,6 +4486,331 @@ function createRowOperationDefinition(input: {
         sourceSelectorRole: "determinant",
         targetObjectRole: "rowOperation.after",
         targetSelectorRole: "determinant.factor",
+        preserves: ["value", "role"]
+      }
+    ]
+  });
+}
+
+function createLinearAlgebraDeterminantInverseFamily():
+  KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.linear-algebra.determinant-compute",
+    "definition.symbolic.linear-algebra.determinant-area-volume",
+    "definition.symbolic.linear-algebra.matrix-inverse",
+    "definition.symbolic.linear-algebra.inverse-undo-linear-map"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.linear-algebra.determinant-inverse",
+    title: "Determinant and inverse",
+    domain: "linear-algebra",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "determinantInverse.before",
+        objectType: "linear-map-or-matrix",
+        title: "Matrix or linear map before determinant and inverse analysis",
+        selectorRoles: [
+          { id: "matrix", kind: "matrix" },
+          { id: "matrix.entry", kind: "matrix-entry" },
+          { id: "determinant", kind: "determinant" },
+          { id: "input.vector", kind: "vector" },
+          { id: "unit.area", kind: "area" },
+          { id: "unit.volume", kind: "volume" }
+        ]
+      },
+      {
+        id: "determinantInverse.after",
+        objectType: "determinant-inverse-result",
+        title: "Determinant scale and inverse result",
+        selectorRoles: [
+          { id: "determinant.value", kind: "scalar" },
+          { id: "area.volume.scale", kind: "scale-factor" },
+          { id: "inverse.matrix", kind: "matrix" },
+          { id: "output.vector", kind: "vector" },
+          { id: "identity.map", kind: "linear-map" },
+          { id: "orientation", kind: "orientation" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createDeterminantInverseDefinition({
+        id: "definition.symbolic.linear-algebra.determinant-compute",
+        transformType: "determinantCompute",
+        title: "Compute the determinant",
+        lawId: "law.linear-algebra.determinant",
+        preserves: ["value", "structure"],
+        assumption:
+          "The determinant is computed from a square matrix and produces a scalar value."
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.linear-algebra.determinant-area-volume",
+        transformType: "determinantAreaVolumeScale",
+        title: "View determinant as area or volume scale",
+        sourceObjectRoles: ["determinantInverse.before"],
+        targetObjectRoles: ["determinantInverse.after"],
+        preserves: ["value", "presentation"],
+        assumptions: [
+          "The determinant magnitude gives area or volume scale, and its sign records orientation."
+        ],
+        lawRefs: [
+          {
+            id: "law.linear-algebra.determinant-area-volume",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "determinantInverse.before",
+            sourceSelectorRole: "matrix",
+            targetObjectRole: "determinantInverse.after",
+            targetSelectorRole: "area.volume.scale",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "determinantInverse.before",
+            sourceSelectorRole: "determinant",
+            targetObjectRole: "determinantInverse.after",
+            targetSelectorRole: "determinant.value",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "determinantInverse.before",
+            sourceSelectorRole: "unit.area",
+            targetObjectRole: "determinantInverse.after",
+            targetSelectorRole: "area.volume.scale",
+            preserves: ["presentation", "role"]
+          },
+          {
+            sourceObjectRole: "determinantInverse.before",
+            sourceSelectorRole: "unit.volume",
+            targetObjectRole: "determinantInverse.after",
+            targetSelectorRole: "area.volume.scale",
+            preserves: ["presentation", "role"]
+          },
+          {
+            sourceObjectRole: "determinantInverse.before",
+            sourceSelectorRole: "determinant",
+            targetObjectRole: "determinantInverse.after",
+            targetSelectorRole: "orientation",
+            preserves: ["value", "role"]
+          }
+        ]
+      }),
+      createDeterminantInverseDefinition({
+        id: "definition.symbolic.linear-algebra.matrix-inverse",
+        transformType: "matrixInverse",
+        title: "Construct the inverse matrix",
+        lawId: "law.linear-algebra.matrix-inverse",
+        preserves: ["value", "structure"],
+        assumption:
+          "The matrix has nonzero determinant, so an inverse matrix exists."
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.linear-algebra.inverse-undo-linear-map",
+        transformType: "inverseUndoLinearMap",
+        title: "Use the inverse to undo a linear map",
+        sourceObjectRoles: ["determinantInverse.before"],
+        targetObjectRoles: ["determinantInverse.after"],
+        preserves: ["value", "presentation"],
+        assumptions: [
+          "Composing an invertible matrix with its inverse returns the identity map."
+        ],
+        lawRefs: [
+          {
+            id: "law.linear-algebra.inverse-linear-map",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "determinantInverse.before",
+            sourceSelectorRole: "matrix",
+            targetObjectRole: "determinantInverse.after",
+            targetSelectorRole: "inverse.matrix",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "determinantInverse.before",
+            sourceSelectorRole: "determinant",
+            targetObjectRole: "determinantInverse.after",
+            targetSelectorRole: "inverse.matrix",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "determinantInverse.before",
+            sourceSelectorRole: "input.vector",
+            targetObjectRole: "determinantInverse.after",
+            targetSelectorRole: "output.vector",
+            preserves: ["identity", "value"]
+          },
+          {
+            sourceObjectRole: "determinantInverse.before",
+            sourceSelectorRole: "matrix",
+            targetObjectRole: "determinantInverse.after",
+            targetSelectorRole: "identity.map",
+            preserves: ["structure", "role"]
+          }
+        ]
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.linear-algebra.determinant.area-volume-scale",
+        motifKind: "area-volume-scale",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.determinant-area-volume",
+          "definition.symbolic.linear-algebra.determinant-compute"
+        ],
+        summary:
+          "A unit area or volume deforms under the matrix while determinant magnitude is tracked as scale."
+      },
+      {
+        id: "motif.linear-algebra.determinant.orientation-flip",
+        motifKind: "orientation-flip",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.determinant-area-volume"
+        ],
+        summary:
+          "Negative determinant cases surface orientation reversal as presentation, not token identity."
+      },
+      {
+        id: "motif.linear-algebra.inverse.map-undo",
+        motifKind: "linear-map-undo",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.matrix-inverse",
+          "definition.symbolic.linear-algebra.inverse-undo-linear-map"
+        ],
+        summary:
+          "The inverse map runs the transformed vector back through the identity reference frame."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.determinant-inverse.basic",
+        animationId: "animation.determinant-inverse.basic",
+        renderTargetKinds: ["equation", "matrix", "graph"],
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Basic determinant-inverse sample links determinant scale to inverse undoing on the graph."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.linear-algebra.determinant.area-volume-scaling",
+        title: "Determinant measures area or volume scaling",
+        representationKind: "area-volume-scaling",
+        exactness: "exact",
+        preserves: ["value", "presentation"],
+        lawRefs: [
+          {
+            id: "law.graph.determinant-area-volume",
+            level: "strict"
+          }
+        ],
+        sampleAssetIds: ["animation.determinant-inverse.basic"],
+        summary:
+          "The determinant value is represented as signed area or volume scale under the linear map."
+      },
+      {
+        id: "graph.linear-algebra.inverse.linear-map-undo",
+        title: "An inverse matrix undoes a linear map",
+        representationKind: "linear-map",
+        exactness: "exact",
+        preserves: ["value", "presentation"],
+        lawRefs: [
+          {
+            id: "law.graph.inverse-linear-map-undo",
+            level: "strict"
+          }
+        ],
+        sampleAssetIds: ["animation.determinant-inverse.basic"],
+        summary:
+          "The inverse graph view composes a matrix with its inverse to return to the identity map."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.linear-algebra-determinant-inverse",
+        fixtureFamilyId: "generated.linear-algebra-determinant-inverse",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated determinant and inverse traces can expose scale, orientation, and nonzero determinant checks."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.linear-algebra.determinant-inverse.relationship",
+        kind: "relationship",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.determinant-area-volume",
+          "definition.symbolic.linear-algebra.inverse-undo-linear-map"
+        ],
+        summary:
+          "Relationship cards can ask how determinant scale predicts invertibility and inverse behavior."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId(
+        "family.linear-algebra.determinant-inverse"
+      ),
+      tags: [
+        "determinant",
+        "inverse",
+        "area-volume",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for determinants as area/volume scaling and inverses as undoing linear maps.",
+      searchSummary:
+        "determinant inverse area volume scaling orientation undo linear map graph nonzero",
+      graphEquivalentKinds: "linear-map area-volume-scaling",
+      invertibilityCondition: "matrix inverse requires nonzero determinant"
+    }
+  });
+}
+
+function createDeterminantInverseDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly preserves: readonly ("value" | "structure" | "presentation")[];
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["determinantInverse.before"],
+    targetObjectRoles: ["determinantInverse.after"],
+    preserves: input.preserves,
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "determinantInverse.before",
+        sourceSelectorRole: "matrix",
+        targetObjectRole: "determinantInverse.after",
+        targetSelectorRole: "determinant.value",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "determinantInverse.before",
+        sourceSelectorRole: "matrix.entry",
+        targetObjectRole: "determinantInverse.after",
+        targetSelectorRole: "determinant.value",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "determinantInverse.before",
+        sourceSelectorRole: "determinant",
+        targetObjectRole: "determinantInverse.after",
+        targetSelectorRole: "determinant.value",
         preserves: ["value", "role"]
       }
     ]

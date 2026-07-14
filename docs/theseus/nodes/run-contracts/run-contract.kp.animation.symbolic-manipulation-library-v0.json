@@ -198,7 +198,7 @@
       "id": "next-action.kp.animation.linear-algebra-determinant-inverse-family-v0",
       "title": "Add determinant and inverse family",
       "summary": "Model determinant as area/volume scaling and inverse as undoing a linear map with symbolic and graph samples.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.linear-algebra-basis-eigen-family-v0",

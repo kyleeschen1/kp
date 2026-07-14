@@ -3150,6 +3150,208 @@ test("linear algebra row operations family records system equivalence and determ
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("linear algebra determinant-inverse family links scale, orientation, and undo maps", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.linear-algebra.determinant-inverse"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.equal(
+    family.metadata?.["invertibilityCondition"],
+    "matrix inverse requires nonzero determinant"
+  );
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "determinantInverse.before",
+        "linear-map-or-matrix",
+        [
+          "matrix",
+          "matrix.entry",
+          "determinant",
+          "input.vector",
+          "unit.area",
+          "unit.volume"
+        ]
+      ],
+      [
+        "determinantInverse.after",
+        "determinant-inverse-result",
+        [
+          "determinant.value",
+          "area.volume.scale",
+          "inverse.matrix",
+          "output.vector",
+          "identity.map",
+          "orientation"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.linear-algebra.determinant-compute",
+        "determinantCompute",
+        ["value", "structure"],
+        "law.linear-algebra.determinant"
+      ],
+      [
+        "definition.symbolic.linear-algebra.determinant-area-volume",
+        "determinantAreaVolumeScale",
+        ["value", "presentation"],
+        "law.linear-algebra.determinant-area-volume"
+      ],
+      [
+        "definition.symbolic.linear-algebra.matrix-inverse",
+        "matrixInverse",
+        ["value", "structure"],
+        "law.linear-algebra.matrix-inverse"
+      ],
+      [
+        "definition.symbolic.linear-algebra.inverse-undo-linear-map",
+        "inverseUndoLinearMap",
+        ["value", "presentation"],
+        "law.linear-algebra.inverse-linear-map"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[3]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["matrix", "inverse.matrix", ["value", "role"]],
+      ["determinant", "inverse.matrix", ["value", "role"]],
+      ["input.vector", "output.vector", ["identity", "value"]],
+      ["matrix", "identity.map", ["structure", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.linear-algebra.determinant.area-volume-scale",
+      motifKind: "area-volume-scale",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.determinant-area-volume",
+        "definition.symbolic.linear-algebra.determinant-compute"
+      ],
+      summary:
+        "A unit area or volume deforms under the matrix while determinant magnitude is tracked as scale."
+    },
+    {
+      id: "motif.linear-algebra.determinant.orientation-flip",
+      motifKind: "orientation-flip",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.determinant-area-volume"
+      ],
+      summary:
+        "Negative determinant cases surface orientation reversal as presentation, not token identity."
+    },
+    {
+      id: "motif.linear-algebra.inverse.map-undo",
+      motifKind: "linear-map-undo",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.matrix-inverse",
+        "definition.symbolic.linear-algebra.inverse-undo-linear-map"
+      ],
+      summary:
+        "The inverse map runs the transformed vector back through the identity reference frame."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.determinant-inverse.basic",
+      animationId: "animation.determinant-inverse.basic",
+      renderTargetKinds: ["equation", "matrix", "graph"],
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.determinant-compute",
+        "definition.symbolic.linear-algebra.determinant-area-volume",
+        "definition.symbolic.linear-algebra.matrix-inverse",
+        "definition.symbolic.linear-algebra.inverse-undo-linear-map"
+      ],
+      summary:
+        "Basic determinant-inverse sample links determinant scale to inverse undoing on the graph."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.linear-algebra.determinant.area-volume-scaling",
+      title: "Determinant measures area or volume scaling",
+      representationKind: "area-volume-scaling",
+      exactness: "exact",
+      preserves: ["value", "presentation"],
+      lawRefs: [
+        {
+          id: "law.graph.determinant-area-volume",
+          level: "strict"
+        }
+      ],
+      sampleAssetIds: ["animation.determinant-inverse.basic"],
+      summary:
+        "The determinant value is represented as signed area or volume scale under the linear map."
+    },
+    {
+      id: "graph.linear-algebra.inverse.linear-map-undo",
+      title: "An inverse matrix undoes a linear map",
+      representationKind: "linear-map",
+      exactness: "exact",
+      preserves: ["value", "presentation"],
+      lawRefs: [
+        {
+          id: "law.graph.inverse-linear-map-undo",
+          level: "strict"
+        }
+      ],
+      sampleAssetIds: ["animation.determinant-inverse.basic"],
+      summary:
+        "The inverse graph view composes a matrix with its inverse to return to the identity map."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.linear-algebra-determinant-inverse",
+      fixtureFamilyId: "generated.linear-algebra-determinant-inverse",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.determinant-compute",
+        "definition.symbolic.linear-algebra.determinant-area-volume",
+        "definition.symbolic.linear-algebra.matrix-inverse",
+        "definition.symbolic.linear-algebra.inverse-undo-linear-map"
+      ],
+      summary:
+        "Generated determinant and inverse traces can expose scale, orientation, and nonzero determinant checks."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.linear-algebra.determinant-inverse.relationship",
+      kind: "relationship",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.determinant-area-volume",
+        "definition.symbolic.linear-algebra.inverse-undo-linear-map"
+      ],
+      summary:
+        "Relationship cards can ask how determinant scale predicts invertibility and inverse behavior."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
   assert.deepEqual(
     createSymbolicManipulationFamilyAgendaRows(
