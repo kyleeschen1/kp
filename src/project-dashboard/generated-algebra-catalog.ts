@@ -7,6 +7,9 @@ import {
   createKpAnimationFlashcardProjections
 } from "../animation/flashcard-projection.ts";
 import {
+  createKpAnimationFlashcardPreviewRendererData
+} from "../animation/flashcard-preview-renderer-data.ts";
+import {
   checkKpAnimationAssetReferenceClosure,
   checkKpAnimationAssetSeekRewindLaw,
   type KpAnimationAsset
@@ -226,12 +229,21 @@ function createAnimationAssetAgendaRowsForAssets(input: {
       const midpointFrame = runtimeFrame.frameDescriptor;
       const referenceClosure = checkKpAnimationAssetReferenceClosure(animation);
       const seekRewind = checkKpAnimationAssetSeekRewindLaw(animation);
+      const flashcards = flashcardsForAnimation(animation);
       const flashcardProjections = createKpAnimationFlashcardProjections({
         animation,
-        cards: flashcardsForAnimation(animation)
+        cards: flashcards
       });
+      const flashcardPreviewRendererData =
+        createKpAnimationFlashcardPreviewRendererData({
+          animation,
+          cards: flashcards
+        });
       const flashcardKinds = uniqueStrings(
         flashcardProjections.map((projection) => projection.cardKind)
+      );
+      const flashcardPreviewInteractionKinds = uniqueStrings(
+        flashcardPreviewRendererData.items.map((item) => item.interactionKind)
       );
       const katexVisualSample = linearSolveVisualSampleForAnimation(animation);
 
@@ -370,6 +382,17 @@ function createAnimationAssetAgendaRowsForAssets(input: {
             value:
               flashcardKinds.length === 0 ? "None" : flashcardKinds.join(", ")
           },
+          {
+            label: "Flashcard preview data",
+            value: flashcardPreviewRendererData.id
+          },
+          {
+            label: "Flashcard preview interactions",
+            value:
+              flashcardPreviewInteractionKinds.length === 0
+                ? "None"
+                : flashcardPreviewInteractionKinds.join(", ")
+          },
           ...katexVisualPreviewFields(katexVisualSample)
         ],
         previewLinks: [],
@@ -442,6 +465,36 @@ function createAnimationAssetAgendaRowsForAssets(input: {
             ...projection.selectorIds,
             ...projection.transformationIds,
             ...projection.diagnostics.map((diagnostic) => diagnostic.message)
+          ]),
+          ...(flashcardPreviewRendererData.items.length === 0
+            ? []
+            : ["flashcard-preview-renderer"]),
+          flashcardPreviewRendererData.id,
+          ...flashcardPreviewRendererData.items.flatMap((item) => [
+            item.id,
+            item.projectionId,
+            item.cardId,
+            item.cardKind,
+            item.interactionKind,
+            `flashcard-preview-interaction:${item.interactionKind}`,
+            ...item.objectIds,
+            ...item.selectorIds,
+            ...item.transformationIds,
+            ...item.hiddenSelectorIds,
+            ...(item.expectedTransformationId === undefined
+              ? []
+              : [
+                  item.expectedTransformationId,
+                  `flashcard-preview-expected:${item.expectedTransformationId}`
+                ]),
+            ...item.candidateTransformationIds.map(
+              (transformationId) =>
+                `flashcard-preview-candidate:${transformationId}`
+            ),
+            ...item.activeTransformationIds.map(
+              (transformationId) =>
+                `flashcard-preview-active:${transformationId}`
+            )
           ]),
           ...katexVisualSearchFields(katexVisualSample),
           midpointFrame.phaseId,

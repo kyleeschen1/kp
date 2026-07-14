@@ -151,6 +151,41 @@ test("dashboard animation asset rows include flashcard projection facets", () =>
   );
 });
 
+test("dashboard animation asset rows include flashcard preview renderer data", () => {
+  const rows = createAnimationAssetAgendaRows("");
+  const linearSolve = rows.find(
+    (row) => row.id === "animation-linear-solve-solve-x"
+  );
+
+  assert.deepEqual(
+    linearSolve?.previewFields.find(
+      (field) => field.label === "Flashcard preview data"
+    ),
+    {
+      label: "Flashcard preview data",
+      value: "flashcard-preview.animation.linear-solve.solve-x"
+    }
+  );
+  assert.deepEqual(
+    linearSolve?.previewFields.find(
+      (field) => field.label === "Flashcard preview interactions"
+    ),
+    {
+      label: "Flashcard preview interactions",
+      value: "cloze, predict-next, review"
+    }
+  );
+  assert.ok(linearSolve?.searchFields.includes("flashcard-preview-renderer"));
+  assert.ok(
+    linearSolve?.searchFields.includes("flashcard-preview-interaction:cloze")
+  );
+  assert.ok(
+    linearSolve?.searchFields.includes(
+      "flashcard-preview-expected:transform.linear-solve.subtract-both-sides-3"
+    )
+  );
+});
+
 test("dashboard animation asset rows include generated calculus and linear algebra imports", () => {
   const rows = createAnimationAssetAgendaRows("generated-problem");
   const rowIds = rows.map((row) => row.id);

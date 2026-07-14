@@ -7,6 +7,9 @@ import {
   createKpAnimationFlashcardProjections,
   createKpAnimationPredictNextProjection
 } from "../src/animation/flashcard-projection.ts";
+import {
+  createKpAnimationFlashcardPreviewRendererData
+} from "../src/animation/flashcard-preview-renderer-data.ts";
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
 import { createKpFlashcardSpec } from "../src/semantic/asset-flashcard.ts";
 import { createLinearSolveKpAssetBundle } from "../src/semantic/linear-solve-asset.ts";
@@ -146,4 +149,50 @@ test("createKpAnimationPredictNextProjection exposes expected transformation can
     "transform.linear-solve.subtract-both-sides-3"
   ]);
   assert.deepEqual(projection.diagnostics, []);
+});
+
+test("createKpAnimationFlashcardPreviewRendererData summarizes projections for renderers", () => {
+  const animation = createLinearSolveAnimationAsset();
+  const semantic = createLinearSolveKpAssetBundle();
+  const preview = createKpAnimationFlashcardPreviewRendererData({
+    animation,
+    cards: semantic.flashcards
+  });
+
+  assert.equal(
+    preview.id,
+    "flashcard-preview.animation.linear-solve.solve-x"
+  );
+  assert.equal(preview.animationId, "animation.linear-solve.solve-x");
+  assert.equal(preview.itemCount, 4);
+  assert.deepEqual(
+    preview.items.map((item) => [
+      item.cardId,
+      item.cardKind,
+      item.interactionKind
+    ]),
+    [
+      ["card.linear-solve.cloze-plus3", "cloze", "cloze"],
+      ["card.linear-solve.predict-subtract", "predict-next", "predict-next"],
+      ["card.linear-solve.explain-cancel", "explain-transform", "review"],
+      ["card.linear-solve.focus-x-persistence", "focus-relationship", "review"]
+    ]
+  );
+  assert.deepEqual(preview.items[0]?.hiddenSelectorIds, [
+    "equation.linear-solve.initial.lhs.plus3"
+  ]);
+  assert.equal(
+    preview.items[1]?.expectedTransformationId,
+    "transform.linear-solve.subtract-both-sides-3"
+  );
+  assert.deepEqual(preview.items[1]?.candidateTransformationIds, [
+    "transform.linear-solve.subtract-both-sides-3",
+    "transform.linear-solve.cancel-left-additive-inverse",
+    "transform.linear-solve.simplify-right-difference"
+  ]);
+  assert.deepEqual(preview.diagnostics, []);
+  assert.equal(preview.items[2]?.clock.progress, 0.5);
+  assert.deepEqual(preview.items[2]?.activeTransformationIds, [
+    "transform.linear-solve.cancel-left-additive-inverse"
+  ]);
 });
