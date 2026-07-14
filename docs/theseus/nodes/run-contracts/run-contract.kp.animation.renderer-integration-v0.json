@@ -64,7 +64,8 @@
     {
       "id": "next-action.kp.animation.runtime-katex-selector-token-refs-v0",
       "title": "Map runtime selector frames to KaTeX token refs",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.runtime-katex-selector-token-refs-v0 in KP animation renderer integration v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.runtime-dom-geometry-frame-adapter-v0",
