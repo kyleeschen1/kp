@@ -1,5 +1,8 @@
 import type { KpAnimationAsset } from "./asset.ts";
 import {
+  createComplexKatexSampleAnimationAssets
+} from "./complex-katex-sample-adapter.ts";
+import {
   createComparisonLayoutAnimationAssets
 } from "./comparison-layout-adapter.ts";
 import {
@@ -29,7 +32,8 @@ export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
     ...createGeneratedProblemAnimationAssets(),
     ...createGraphAnimationAssets(),
     ...createProgrammingAnimationAssets(),
-    ...createComparisonLayoutAnimationAssets()
+    ...createComparisonLayoutAnimationAssets(),
+    ...createComplexKatexSampleAnimationAssets()
   ];
 }
 

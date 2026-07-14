@@ -1,0 +1,140 @@
+{
+  "id": "next-action.kp.animation-library.complex-katex-samples-v0",
+  "kind": "next-action",
+  "title": "Add Fundamental Theorem and Fourier samples",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added Fundamental Theorem of Calculus and Fourier transform-pair AnimationAssets as deterministic complex KaTeX samples with shared-clock row layouts, semantic LaTeX form objects, comparison selectors, and dashboard-searchable animation rows.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation-library.complex-katex-samples-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation-library.current-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-animation-renderer-integration-readiness-report.md",
+      "summary": "Renderer integration closeout recommending live card runtime visual-frame adoption, KaTeX fixture expansion, generated problem registry, flashcard samples, graph consumer, and paused-frame drill-down."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Project roadmap with semantic-first, runtime-second, renderer-third ordering and KaTeX/graph/dashboard/export priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active semantic runtime thread describing AnimationAsset, renderer-neutral frame, generated math, visual motif, and graph/programming adoption direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/complex-katex-sample-adapter.ts",
+      "summary": "Adds reusable complex KaTeX sample assets for FTC forms and Fourier forward/inverse transform forms with typed semantic transformations and render targets."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Registers complex KaTeX sample assets in the main animation catalog."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-complex-katex-sample-animation-asset.test.ts",
+      "summary": "Covers FTC/Fourier sample assets, reference closure, seek/rewind law, catalog inclusion, and dashboard search."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-animation-asset-catalog.test.ts",
+      "summary": "Existing dashboard catalog coverage verifies the expanded animation catalog still renders/searches rows correctly."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-runtime-sampler.test.ts",
+      "summary": "Existing runtime sampler coverage verifies runtime frames still sample the expanded catalog."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-runtime-laws.test.ts",
+      "summary": "Existing runtime laws verify rewind and composition behavior remains green with the expanded catalog."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-comparison-layout-animation-asset.test.ts",
+      "summary": "Existing comparison layout coverage verifies synchronized comparison assets remain stable alongside the new samples."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation-library-expansion-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add Fundamental Theorem and Fourier samples can be completed inside KP animation library expansion v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved animation-library expansion loop slices.",
+    "Grow KaTeX SemanticTransformation definitions, visual motifs, generated problem fixtures, graph runtime consumers, flashcard projections, and drill-down authoring through the AnimationAsset/runtime visual-frame protocol.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, live LSP, network integrations, or dynamic package loading; use deterministic fixtures.",
+    "Do not broaden into a dashboard redesign beyond search, progress rows, and sample previews needed for this loop.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-complex-katex-sample-animation-asset.test.ts",
+      "status": "passed",
+      "scope": "focused FTC/Fourier complex KaTeX sample asset coverage",
+      "checkedAt": "2026-07-14T20:38:35.522Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard-animation-asset-catalog.test.ts tests/kp-animation-runtime-sampler.test.ts tests/kp-animation-runtime-laws.test.ts tests/kp-comparison-layout-animation-asset.test.ts",
+      "status": "passed",
+      "scope": "dashboard catalog, runtime, and comparison regression coverage",
+      "checkedAt": "2026-07-14T20:38:35.553Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for complex KaTeX sample slice",
+      "checkedAt": "2026-07-14T20:38:35.588Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for live KaTeX behavior and regressions",
+      "checkedAt": "2026-07-14T20:38:35.617Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for complex KaTeX sample slice",
+      "checkedAt": "2026-07-14T20:38:35.654Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T20:38:35.688Z",
+      "scope": "Run-contract hygiene for complex KaTeX sample slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added Fundamental Theorem of Calculus and Fourier transform-pair AnimationAssets as deterministic complex KaTeX samples with shared-clock row layouts, semantic LaTeX form objects, comparison selectors, and dashboard-searchable animation rows."
+  }
+}

@@ -142,7 +142,8 @@
     {
       "id": "next-action.kp.animation-library.complex-katex-samples-v0",
       "title": "Add Fundamental Theorem and Fourier samples",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.complex-katex-samples-v0 in KP animation library expansion v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation-library.dashboard-animation-search-v0",
