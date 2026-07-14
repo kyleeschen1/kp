@@ -1981,6 +1981,17 @@ function createCalculusDerivativeRulesFamily(): KpSymbolicManipulationFamily {
         ],
         summary:
           "Basic derivative sample exercises power-rule exponent drop and chain-rule nested persistence."
+      },
+      {
+        id: "sample.animation.derivative-rules.tangent-graph",
+        animationId: "animation.derivative-rules.tangent-graph",
+        renderTargetKinds: ["graph"],
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.derivative-power-rule",
+          "definition.symbolic.calculus.derivative-chain-rule"
+        ],
+        summary:
+          "Graph sample projects derivative-rule steps onto tangent line and local-slope motion."
       }
     ],
     graphEquivalents: [
@@ -1999,6 +2010,22 @@ function createCalculusDerivativeRulesFamily(): KpSymbolicManipulationFamily {
         sampleAssetIds: ["animation.derivative-rules.basic"],
         summary:
           "Derivative-rule rewrites preserve the symbolic derivative whose value drives tangent slope samples."
+      },
+      {
+        id: "graph.calculus.derivative.local-slope-motion",
+        title: "Derivative drives local-slope motion",
+        representationKind: "local-slope-motion",
+        exactness: "sampled",
+        preserves: ["value"],
+        lawRefs: [
+          {
+            id: "law.graph.derivative-local-slope-motion",
+            level: "sampled"
+          }
+        ],
+        sampleAssetIds: ["animation.derivative-rules.tangent-graph"],
+        summary:
+          "A shared derivative value can drive a tangent handle, secant-to-tangent limit cue, or local-slope marker without changing the symbolic step."
       }
     ],
     generatedProblemHooks: [

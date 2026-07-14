@@ -132,7 +132,7 @@
       "id": "next-action.kp.animation.calculus-tangent-graph-equivalent-v0",
       "title": "Add derivative tangent graph equivalent",
       "summary": "Project derivative family assets into graph samples where derivative semantics appear as tangent/local-slope visual equivalents.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.calculus-integral-ftc-family-v0",

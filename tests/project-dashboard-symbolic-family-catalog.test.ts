@@ -1365,6 +1365,17 @@ test("calculus derivative rules family models rule-specific persistence", () => 
       ],
       summary:
         "Basic derivative sample exercises power-rule exponent drop and chain-rule nested persistence."
+    },
+    {
+      id: "sample.animation.derivative-rules.tangent-graph",
+      animationId: "animation.derivative-rules.tangent-graph",
+      renderTargetKinds: ["graph"],
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.derivative-power-rule",
+        "definition.symbolic.calculus.derivative-chain-rule"
+      ],
+      summary:
+        "Graph sample projects derivative-rule steps onto tangent line and local-slope motion."
     }
   ]);
   assert.deepEqual(family.graphEquivalents, [
@@ -1383,6 +1394,22 @@ test("calculus derivative rules family models rule-specific persistence", () => 
       sampleAssetIds: ["animation.derivative-rules.basic"],
       summary:
         "Derivative-rule rewrites preserve the symbolic derivative whose value drives tangent slope samples."
+    },
+    {
+      id: "graph.calculus.derivative.local-slope-motion",
+      title: "Derivative drives local-slope motion",
+      representationKind: "local-slope-motion",
+      exactness: "sampled",
+      preserves: ["value"],
+      lawRefs: [
+        {
+          id: "law.graph.derivative-local-slope-motion",
+          level: "sampled"
+        }
+      ],
+      sampleAssetIds: ["animation.derivative-rules.tangent-graph"],
+      summary:
+        "A shared derivative value can drive a tangent handle, secant-to-tangent limit cue, or local-slope marker without changing the symbolic step."
     }
   ]);
   assert.deepEqual(family.generatedProblemHooks, [
@@ -1417,6 +1444,55 @@ test("calculus derivative rules family models rule-specific persistence", () => 
         "Predict-next cards can ask which derivative rule applies and what sub-derivative appears next."
     }
   ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
+test("calculus derivative rules family projects to tangent graph samples", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.calculus.derivative-rules"
+  );
+
+  assert.ok(family);
+  assert.deepEqual(
+    family.runtimeSamples.filter((sample) =>
+      sample.renderTargetKinds.includes("graph")
+    ),
+    [
+      {
+        id: "sample.animation.derivative-rules.tangent-graph",
+        animationId: "animation.derivative-rules.tangent-graph",
+        renderTargetKinds: ["graph"],
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.derivative-power-rule",
+          "definition.symbolic.calculus.derivative-chain-rule"
+        ],
+        summary:
+          "Graph sample projects derivative-rule steps onto tangent line and local-slope motion."
+      }
+    ]
+  );
+  assert.deepEqual(
+    family.graphEquivalents.map((equivalent) => [
+      equivalent.id,
+      equivalent.representationKind,
+      equivalent.sampleAssetIds,
+      equivalent.summary
+    ]),
+    [
+      [
+        "graph.calculus.derivative.tangent-line",
+        "tangent-line",
+        ["animation.derivative-rules.basic"],
+        "Derivative-rule rewrites preserve the symbolic derivative whose value drives tangent slope samples."
+      ],
+      [
+        "graph.calculus.derivative.local-slope-motion",
+        "local-slope-motion",
+        ["animation.derivative-rules.tangent-graph"],
+        "A shared derivative value can drive a tangent handle, secant-to-tangent limit cue, or local-slope marker without changing the symbolic step."
+      ]
+    ]
+  );
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
