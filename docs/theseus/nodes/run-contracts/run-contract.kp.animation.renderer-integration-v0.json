@@ -106,7 +106,8 @@
     {
       "id": "next-action.kp.animation.representation-equation-to-graph-sample-v0",
       "title": "Add representation transform sample from equation to graph",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.representation-equation-to-graph-sample-v0 in KP animation renderer integration v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.representation-equation-to-matrix-sample-v0",
