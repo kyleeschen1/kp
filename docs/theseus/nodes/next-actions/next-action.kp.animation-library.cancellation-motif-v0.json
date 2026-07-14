@@ -1,0 +1,88 @@
+{
+  "id": "next-action.kp.animation-library.cancellation-motif-v0",
+  "kind": "next-action",
+  "title": "Promote cancellation motif coverage",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.cancellation-motif-v0 in KP animation library expansion v0 loop.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation-library.cancellation-motif-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/visual-motif.ts",
+      "summary": "Reusable equation visual motif descriptors, including the cancelation motif primitives and phases."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "summary": "Default mapping from generated semantic transform definitions to reusable equation visual motifs."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-plan.ts",
+      "summary": "Equation transition planner that assigns cancelation motif semantics and token lifecycles."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-plan.test.ts",
+      "summary": "Focused tests for cancelation motif phases, lifecycle assignment, and generated additive inverse cancellation planning."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Browser coverage for cancellation motion diagnostics and live token behavior in the editor card."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation-library-expansion-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/equation-motion-plan.test.ts tests/equation-motion-sampler.test.ts tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts",
+    "npm run test:browser:katex",
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Promote cancellation motif coverage can be completed inside KP animation library expansion v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved animation-library expansion loop slices.",
+    "Grow KaTeX SemanticTransformation definitions, visual motifs, generated problem fixtures, graph runtime consumers, flashcard projections, and drill-down authoring through the AnimationAsset/runtime visual-frame protocol.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, live LSP, network integrations, or dynamic package loading; use deterministic fixtures.",
+    "Do not broaden into a dashboard redesign beyond search, progress rows, and sample previews needed for this loop.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "criteria": [
+    {
+      "id": "cancelation-motif-has-stable-primitive-and-phase-contract",
+      "weight": "high"
+    },
+    {
+      "id": "generated-cancel-transform-definitions-map-to-cancelation-motif",
+      "weight": "high"
+    },
+    {
+      "id": "sampler-exposes-cancel-meet-collapse-and-layout-shift-beats",
+      "weight": "high"
+    },
+    {
+      "id": "browser-diagnostics-prove-cancelation-motion-remains-observable",
+      "weight": "medium"
+    }
+  ]
+}

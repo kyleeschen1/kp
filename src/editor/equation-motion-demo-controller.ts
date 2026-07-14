@@ -713,8 +713,7 @@ function renderEquationMotionFrame(
   syncLiveEquationVisualFrame(
     demo,
     runtimeFrame,
-    context,
-    sourceStep < targetStep ? "forward" : "rewind"
+    context
   );
   syncEquationMotionMotifDiagnostics(demo, frame);
   syncFinalSimplifyPhaseDiagnostics(
@@ -951,18 +950,17 @@ function clearLiveEquationRuntimeFrame(demo: HTMLElement): void {
 function syncLiveEquationVisualFrame(
   demo: HTMLElement,
   runtimeFrame: KpAnimationRuntimeFrame | undefined,
-  context: EquationMotionRenderContext,
-  direction: "forward" | "rewind"
+  context: EquationMotionRenderContext
 ): void {
   if (runtimeFrame === undefined) {
     clearLiveEquationVisualFrame(demo);
     return;
   }
 
-  const root =
-    direction === "forward"
-      ? context.planTargetState
-      : context.planSourceState;
+  // The motion context is normalized to lower/upper adjacent states. Until the
+  // visual-frame bridge supports dual source/target roots, bind against the
+  // upper state so rewinds see introduced tokens instead of the lower source.
+  const root = context.planTargetState;
   const visualFrame = createKatexDomRuntimeVisualFrame({
     id: LIVE_EQUATION_VISUAL_FRAME_ID,
     runtimeFrame,

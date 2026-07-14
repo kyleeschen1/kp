@@ -2,7 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  checkKpAnimationRuntimeCompositionLaw
+  checkKpAnimationRuntimeCompositionLaw,
+  checkKpAnimationRuntimeRewindClockLaw
 } from "../src/animation/runtime-laws.ts";
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import {
@@ -50,3 +51,31 @@ test("checkKpAnimationRuntimeCompositionLaw reports missing child animations", (
   );
 });
 
+test("checkKpAnimationRuntimeRewindClockLaw accepts mirrored linear solve sampling", () => {
+  assert.deepEqual(
+    checkKpAnimationRuntimeRewindClockLaw({
+      animation: createLinearSolveAnimationAsset(),
+      progressSamples: [0.25, 0.5, 0.75]
+    }),
+    {
+      lawId: "animation-runtime.rewind-clock",
+      passed: true,
+      failures: []
+    }
+  );
+});
+
+test("checkKpAnimationRuntimeRewindClockLaw accepts composed child sampling", () => {
+  assert.deepEqual(
+    checkKpAnimationRuntimeRewindClockLaw({
+      animation: createLinearSolveProgrammingComparisonAnimationAsset(),
+      childAnimations: createKpAnimationAssets(),
+      progressSamples: [0.25, 0.5, 0.75]
+    }),
+    {
+      lawId: "animation-runtime.rewind-clock",
+      passed: true,
+      failures: []
+    }
+  );
+});

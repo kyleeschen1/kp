@@ -1926,6 +1926,93 @@ test("editor equation motion demo exposes the runtime frame clock while scrubbin
   );
 });
 
+test("editor equation motion demo mirrors runtime datasets when rewound", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  const demo = page.locator("[data-kp-equation-motion-demo]");
+  const next = demo.locator('[data-action="equation-motion-next"]');
+  const rewind = demo.locator('[data-action="equation-motion-rewind"]');
+  const captureRuntimeState = async (progress: number) =>
+    page.evaluate(async (scrubProgress) => {
+      const demoElement = document.querySelector<HTMLElement>(
+        "[data-kp-equation-motion-demo]"
+      );
+
+      if (demoElement === null) {
+        throw new Error("Expected equation motion demo.");
+      }
+
+      window.__kpEquationMotionSetProgress?.(demoElement, scrubProgress);
+      await new Promise<void>((resolve) =>
+        window.requestAnimationFrame(() => resolve())
+      );
+
+      return {
+        direction: demoElement.dataset["kpAnimationRuntimeDirection"],
+        progress: demoElement.dataset["kpAnimationRuntimeProgress"],
+        beat: Number(demoElement.dataset["kpAnimationRuntimeBeat"] ?? "0"),
+        beatCount: Number(
+          demoElement.dataset["kpAnimationRuntimeBeatCount"] ?? "0"
+        ),
+        phaseId: demoElement.dataset["kpAnimationRuntimePhaseId"],
+        activeTransformations:
+          demoElement.dataset["kpAnimationRuntimeActiveTransformations"],
+        visualPhaseId: demoElement.dataset["kpAnimationVisualPhaseId"],
+        visualBoundSelectorCount: Number(
+          demoElement.dataset["kpAnimationVisualBoundSelectorCount"] ?? "0"
+        ),
+        visualUnboundSelectorCount: Number(
+          demoElement.dataset["kpAnimationVisualUnboundSelectorCount"] ?? "0"
+        ),
+        visualDiagnosticCodes:
+          demoElement.dataset["kpAnimationVisualDiagnosticCodes"],
+        visualUnboundSelectors:
+          demoElement.dataset["kpAnimationVisualUnboundSelectors"]
+      };
+    }, progress);
+
+  const forwardState = await captureRuntimeState(0.25);
+
+  await next.click();
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");
+
+  await rewind.click();
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "0");
+
+  const rewindState = await captureRuntimeState(0.75);
+
+  expect(forwardState).toMatchObject({
+    direction: "forward",
+    progress: "0.2500",
+    beat: 12.5,
+    beatCount: 50,
+    phaseId: "animation.linear-solve.solve-x.forward.0",
+    activeTransformations: "transform.linear-solve.subtract-both-sides-3",
+    visualPhaseId: "animation.linear-solve.solve-x.forward.0",
+    visualUnboundSelectorCount: 0,
+    visualDiagnosticCodes: "none",
+    visualUnboundSelectors: "none"
+  });
+  expect(rewindState).toMatchObject({
+    direction: "rewind",
+    progress: "0.7500",
+    beat: 37.5,
+    beatCount: 50,
+    phaseId: "animation.linear-solve.solve-x.rewind.2",
+    activeTransformations: forwardState.activeTransformations,
+    visualPhaseId: "animation.linear-solve.solve-x.rewind.2",
+    visualUnboundSelectorCount: 0,
+    visualDiagnosticCodes: "none",
+    visualUnboundSelectors: "none"
+  });
+  expect(forwardState.beat + rewindState.beat).toBe(forwardState.beatCount);
+  expect(rewindState.visualBoundSelectorCount).toBe(
+    forwardState.visualBoundSelectorCount
+  );
+});
+
 test("KaTeX WebGL transition blanks DOM during overlay and reveals target", async ({
   page
 }) => {

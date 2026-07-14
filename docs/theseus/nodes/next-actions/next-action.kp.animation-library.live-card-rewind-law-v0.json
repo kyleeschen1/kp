@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation-library.live-card-rewind-law-v0",
   "kind": "next-action",
   "title": "Lock live card rewind behavior",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-rewind-law-v0 in KP animation library expansion v0 loop.",
+  "summary": "Locked live equation card rewind behavior by adding a runtime mirror-clock law, covering visual persistent-token rewind bindings, and fixing the live KaTeX visual-frame bridge to bind rewinds against the transition's token-rich upper state.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,26 @@
       "kind": "file",
       "path": "tests/katex-transition.browser.spec.ts",
       "summary": "Browser coverage for the live equation card scrubber and observable runtime/visual-frame datasets."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/runtime-laws.ts",
+      "summary": "Adds a runtime rewind-clock law that compares forward progress p with rewind progress 1 - p across clock, phase, transformation, selector, and render-target data."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-runtime-laws.test.ts",
+      "summary": "Covers mirrored runtime sampling for the linear-solve asset and composed child-animation sampling."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Keeps live visual-frame rewind bindings stable by sampling the normalized transition's upper KaTeX state for the single-root DOM bridge."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Adds browser coverage proving forward and mirrored rewind scrub datasets share active transformations and stable visual binding counts."
     }
   ],
   "dependsOn": {
@@ -47,7 +67,7 @@
     "workflow.kp.dashboard-animation-system"
   ],
   "verification": [
-    "npm test -- tests/kp-animation-runtime-laws.test.ts tests/kp-animation-visual-frame-laws.test.ts",
+    "node --disable-warning=ExperimentalWarning --test tests/kp-animation-runtime-laws.test.ts tests/kp-animation-visual-frame-laws.test.ts",
     "npm run test:browser:katex",
     "npm run typecheck",
     "npm run theseus -- validate",
@@ -84,5 +104,41 @@
       "id": "existing-motion-rendering-preserved",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-runtime-laws.test.ts tests/kp-animation-visual-frame-laws.test.ts",
+      "status": "passed",
+      "scope": "focused runtime rewind and visual persistent-token law coverage",
+      "checkedAt": "2026-07-14T19:47:42.478Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for live equation card rewind datasets and KaTeX regressions",
+      "checkedAt": "2026-07-14T19:47:42.510Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for live rewind-law slice",
+      "checkedAt": "2026-07-14T19:47:42.540Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for live rewind-law slice",
+      "checkedAt": "2026-07-14T19:47:42.569Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T19:47:42.604Z",
+      "scope": "Run-contract hygiene for live rewind-law slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Locked live equation card rewind behavior by adding a runtime mirror-clock law, covering visual persistent-token rewind bindings, and fixing the live KaTeX visual-frame bridge to bind rewinds against the transition's token-rich upper state."
+  }
 }
