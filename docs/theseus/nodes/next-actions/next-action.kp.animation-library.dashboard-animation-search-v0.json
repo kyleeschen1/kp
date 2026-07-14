@@ -1,0 +1,125 @@
+{
+  "id": "next-action.kp.animation-library.dashboard-animation-search-v0",
+  "kind": "next-action",
+  "title": "Build animation search rows",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Built stronger dashboard animation search rows by adding bundle selector labels, selector metadata, and compact human aliases for complex animation assets so searches like ftc duality, fundamental theorem animation, fourier kernel, and derivative matrix comparison resolve to concrete animation rows.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation-library.dashboard-animation-search-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation-library.current-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-animation-renderer-integration-readiness-report.md",
+      "summary": "Renderer integration closeout recommending live card runtime visual-frame adoption, KaTeX fixture expansion, generated problem registry, flashcard samples, graph consumer, and paused-frame drill-down."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Project roadmap with semantic-first, runtime-second, renderer-third ordering and KaTeX/graph/dashboard/export priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active semantic runtime thread describing AnimationAsset, renderer-neutral frame, generated math, visual motif, and graph/programming adoption direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Adds semantic bundle selector facets and human search aliases to generated animation asset agenda rows."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-animation-asset-catalog.test.ts",
+      "summary": "Covers complex KaTeX search aliases at the animation row factory level."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.test.ts",
+      "summary": "Covers global dashboard render search for the FTC duality animation alias."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard.browser.spec.ts",
+      "summary": "Updates the dashboard browser smoke to the current dnt search count including the donut animation asset row."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation-library-expansion-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Build animation search rows can be completed inside KP animation library expansion v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved animation-library expansion loop slices.",
+    "Grow KaTeX SemanticTransformation definitions, visual motifs, generated problem fixtures, graph runtime consumers, flashcard projections, and drill-down authoring through the AnimationAsset/runtime visual-frame protocol.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, live LSP, network integrations, or dynamic package loading; use deterministic fixtures.",
+    "Do not broaden into a dashboard redesign beyond search, progress rows, and sample previews needed for this loop.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/project-dashboard-animation-asset-catalog.test.ts tests/project-dashboard.test.ts",
+      "status": "passed",
+      "scope": "focused dashboard animation search row and render coverage",
+      "checkedAt": "2026-07-14T20:46:02.362Z"
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "browser dashboard search smoke coverage",
+      "checkedAt": "2026-07-14T20:46:02.394Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser KaTeX regression coverage run during this slice",
+      "checkedAt": "2026-07-14T20:46:02.449Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for dashboard search-row slice",
+      "checkedAt": "2026-07-14T20:46:02.492Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for dashboard search-row slice",
+      "checkedAt": "2026-07-14T20:46:02.539Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T20:46:02.582Z",
+      "scope": "Run-contract hygiene for dashboard search-row slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Built stronger dashboard animation search rows by adding bundle selector labels, selector metadata, and compact human aliases for complex animation assets so searches like ftc duality, fundamental theorem animation, fourier kernel, and derivative matrix comparison resolve to concrete animation rows."
+  }
+}

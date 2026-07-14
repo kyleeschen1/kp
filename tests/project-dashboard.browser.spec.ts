@@ -135,7 +135,7 @@ test("project dashboard round trip keeps editor motion and graph controls usable
   await dashboardSearch.fill("dnt");
   await expect(animationLayout).toHaveCount(0);
   await expect(page.locator("[data-kp-project-dashboard-search-count]")).toHaveText(
-    /Showing 2 of \d+ rows/
+    /Showing 3 of \d+ rows/
   );
   await expect(page.locator('[data-kp-agenda-section="work"]')).toHaveCount(0);
   await expect(

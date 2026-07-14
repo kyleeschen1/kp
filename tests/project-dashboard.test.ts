@@ -1219,6 +1219,26 @@ test("renderProjectDashboard searches all dashboard data", () => {
   assert.doesNotMatch(html, /data-kp-project-dashboard-animation-layout/);
 });
 
+test("renderProjectDashboard searches complex animation asset aliases", () => {
+  const html = renderProjectDashboard(projectDashboardData, {
+    query: "ftc duality"
+  });
+
+  assert.match(html, /data-action="filter-project-dashboard"/);
+  assert.match(html, /value="ftc duality"/);
+  assert.match(html, /data-kp-agenda-section="object-gallery"/);
+  assert.match(
+    html,
+    /data-kp-agenda-row="animation-sample-fundamental-theorem-calculus"/
+  );
+  assert.match(html, /Fundamental Theorem of Calculus forms/);
+  assert.doesNotMatch(
+    html,
+    /data-kp-agenda-row="animation-sample-fourier-transform-pair"/
+  );
+  assert.doesNotMatch(html, /data-kp-project-dashboard-animation-layout/);
+});
+
 test("renderProjectDashboard searches synthetic agenda rows", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     query: "codex completion rule"

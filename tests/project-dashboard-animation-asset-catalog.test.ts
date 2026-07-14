@@ -333,6 +333,29 @@ test("semantic asset dashboard search resolves generated problem animation impor
   );
 });
 
+test("dashboard animation asset rows expose complex KaTeX search aliases", () => {
+  assert.deepEqual(
+    createAnimationAssetAgendaRows("ftc duality").map((row) => row.id),
+    ["animation-sample-fundamental-theorem-calculus"]
+  );
+  assert.deepEqual(
+    createAnimationAssetAgendaRows("fundamental theorem animation").map(
+      (row) => row.id
+    ),
+    ["animation-sample-fundamental-theorem-calculus"]
+  );
+  assert.deepEqual(
+    createAnimationAssetAgendaRows("fourier kernel").map((row) => row.id),
+    ["animation-sample-fourier-transform-pair"]
+  );
+  assert.deepEqual(
+    createAnimationAssetAgendaRows("derivative matrix comparison").map(
+      (row) => row.id
+    ),
+    ["animation-comparison-jacobian-hessian"]
+  );
+});
+
 test("project dashboard selected preview exposes animation time protocol fields", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     selectedAgendaRowId: "animation-generated-radical-square-root-as-power"

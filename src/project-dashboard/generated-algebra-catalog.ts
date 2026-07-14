@@ -219,6 +219,8 @@ function createAnimationAssetAgendaRowsForAssets(input: {
       const renderTargetMetadataSearchFields = animation.renderTargets.flatMap(
         (target) => animationMetadataSearchFields(target.metadata)
       );
+      const bundleSearchFields = animationBundleSearchFields(animation);
+      const humanSearchAliases = animationHumanSearchAliases(animation);
       const runtimeFrame = sampleKpAnimationRuntimeFrame({
         id: `runtime.${animation.id}.preview-midpoint`,
         animation,
@@ -506,6 +508,8 @@ function createAnimationAssetAgendaRowsForAssets(input: {
           ...childAnimationIds.map((childId) => `component:${childId}`),
           ...metadataSearchFields,
           ...renderTargetMetadataSearchFields,
+          ...bundleSearchFields,
+          ...humanSearchAliases,
           ...animation.bundle.objects.flatMap((object) => [
             object.id,
             object.objectType,
@@ -775,6 +779,70 @@ function animationMetadataSearchFields(
       `metadata:${key}:${stringValue}`
     ];
   });
+}
+
+function animationBundleSearchFields(
+  animation: KpAnimationAsset
+): readonly string[] {
+  return animation.bundle.objects.flatMap((object) => [
+    object.id,
+    object.objectType,
+    object.title,
+    ...animationMetadataSearchFields(object.metadata),
+    ...object.selectors.flatMap((selector) => [
+      selector.id,
+      selector.kind,
+      selector.label ?? "",
+      selector.summary ?? "",
+      `${selector.kind}:${selector.label ?? selector.id}`,
+      ...animationMetadataSearchFields(selector.metadata)
+    ])
+  ]);
+}
+
+function animationHumanSearchAliases(
+  animation: KpAnimationAsset
+): readonly string[] {
+  const fields = [
+    animation.id,
+    animation.title,
+    animation.bundle.id,
+    animation.bundle.title,
+    ...(animation.dashboard?.tags ?? []),
+    ...animationMetadataSearchFields(animation.metadata),
+    ...animationBundleSearchFields(animation)
+  ].join(" ").toLowerCase();
+  const aliases: string[] = [];
+
+  if (fields.includes("fundamental") || fields.includes("ftc")) {
+    aliases.push(
+      "ftc",
+      "ftc duality",
+      "fundamental theorem animation",
+      "fundamental theorem calculus animation",
+      "integral derivative duality"
+    );
+  }
+
+  if (fields.includes("fourier")) {
+    aliases.push(
+      "fourier animation",
+      "fourier kernel",
+      "fourier transform animation",
+      "inverse fourier animation",
+      "frequency transform pair"
+    );
+  }
+
+  if (fields.includes("jacobian") && fields.includes("hessian")) {
+    aliases.push(
+      "jacobian hessian",
+      "jacobian hessian comparison",
+      "derivative matrix comparison"
+    );
+  }
+
+  return aliases;
 }
 
 function formatLawStatus(passed: boolean): string {
