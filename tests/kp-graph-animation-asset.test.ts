@@ -13,7 +13,11 @@ import {
   createGraphSurfaceModeAnimationAsset,
   createLinearMapVectorAnimationAsset
 } from "../src/animation/graph-adapter.ts";
+import {
+  sampleLinearMapVectorGraphRuntimeFrame
+} from "../src/animation/graph-runtime-frame.ts";
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
+import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.ts";
 
 test("createGraphSurfaceModeAnimationAsset wraps graph surface motion in an AnimationAsset", () => {
   const animation = createGraphSurfaceModeAnimationAsset();
@@ -106,4 +110,42 @@ test("graph animation placeholders are available through the animation catalog",
       .map((animation) => animation.id)
       .includes("animation.graph.vector.linear-map-scale")
   );
+});
+
+test("linear map vector graph sample consumes animation runtime frames", () => {
+  const animation = createLinearMapVectorAnimationAsset();
+  const runtimeFrame = sampleKpAnimationRuntimeFrame({
+    id: "runtime.graph.vector.midpoint",
+    animation,
+    beat: 10
+  });
+  const graphFrame = sampleLinearMapVectorGraphRuntimeFrame({
+    animation,
+    runtimeFrame
+  });
+
+  assert.deepEqual(graphFrame, {
+    id: "graph-frame.runtime.graph.vector.midpoint.render.graph.vector.linear-map-scale",
+    kind: "graph-vector-runtime-frame",
+    animationId: "animation.graph.vector.linear-map-scale",
+    renderTargetId: "render.graph.vector.linear-map-scale",
+    graphId: "graph.vector-plane",
+    linearMapId: "linear-map.scale",
+    sourceVectorId: "vector.scale.source",
+    targetVectorId: "vector.scale.target",
+    runtimeFrameId: "runtime.graph.vector.midpoint",
+    phaseId: "animation.graph.vector.linear-map-scale.forward.0",
+    progress: 0.5,
+    beat: 10,
+    activeTransformationIds: [
+      "transform.graph.vector.apply-linear-map-scale"
+    ],
+    sourceCoordinates: [1, 2],
+    targetCoordinates: [2, 6],
+    currentCoordinates: [1.5, 4],
+    pathCoordinates: [
+      [1, 2],
+      [2, 6]
+    ]
+  });
 });

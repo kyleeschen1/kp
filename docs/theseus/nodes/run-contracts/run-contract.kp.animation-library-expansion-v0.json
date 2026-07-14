@@ -172,7 +172,8 @@
     {
       "id": "next-action.kp.animation-library.graph-vector-runtime-consumer-v0",
       "title": "Make one graph vector sample consume runtime frames",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.graph-vector-runtime-consumer-v0 in KP animation library expansion v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation-library.graph-rewind-law-v0",
