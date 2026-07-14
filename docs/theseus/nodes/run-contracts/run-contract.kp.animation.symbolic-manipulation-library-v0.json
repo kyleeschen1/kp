@@ -78,7 +78,7 @@
       "id": "next-action.kp.animation.symbolic-family-registry-dashboard-v0",
       "title": "Add symbolic family registry and dashboard rows",
       "summary": "Create a registry and dashboard projection so every family is searchable, comparable, and visible before individual coverage expands.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.algebra-both-sides-family-v0",

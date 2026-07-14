@@ -15,6 +15,10 @@ import {
   type GeneratedAlgebraAgendaPreviewField,
   type GeneratedAlgebraFixtureAgendaRow
 } from "./generated-algebra-catalog.ts";
+import {
+  createSymbolicManipulationFamilyAgendaRows,
+  type SymbolicManipulationFamilyAgendaRow
+} from "./symbolic-family-catalog.ts";
 
 export interface SemanticAssetAgendaPreviewField {
   readonly label: string;
@@ -40,10 +44,15 @@ export interface SemanticAssetCatalogAgendaRow {
 
 export function createSemanticAssetCatalogAgendaRows(
   query: string
-): readonly (SemanticAssetCatalogAgendaRow | GeneratedAlgebraFixtureAgendaRow)[] {
+): readonly (
+  | SemanticAssetCatalogAgendaRow
+  | GeneratedAlgebraFixtureAgendaRow
+  | SymbolicManipulationFamilyAgendaRow
+)[] {
   return [
     ...createLinearSolveDerivedAgendaRows(query),
     ...createAnimationAssetAgendaRows(query),
+    ...createSymbolicManipulationFamilyAgendaRows(query),
     ...createGeneratedProblemRegistryAgendaRows(query),
     ...createRepresentationTransformAgendaRows(query),
     ...createGeneratedAlgebraMaturityAgendaRows(query),
