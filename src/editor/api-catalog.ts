@@ -146,10 +146,20 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
         protocols: [
           "sampleKpAnimationRuntimeFrame",
           "createKpAnimationRuntimeScrubberControl",
-          "sampleKpAnimationRuntimeFrameFromScrubber"
+          "sampleKpAnimationRuntimeFrameFromScrubber",
+          "checkKpAnimationRuntimeCompositionLaw"
         ],
         inputs: ["AnimationAsset", "progress | elapsedMs | beat"],
-        outputs: ["clock", "phase", "selector frames", "active render targets", "child frames", "diagnostics", "frame descriptor"],
+        outputs: [
+          "clock",
+          "phase",
+          "selector frames",
+          "active render targets",
+          "child frames",
+          "diagnostics",
+          "frame descriptor",
+          "composition law"
+        ],
         preserves: ["animation identity", "timeline identity", "semantic ref identity"]
       }),
       item("capability-external-animation-port", "ExternalAnimationPort", "runtime", "active", "Deterministic adapter contract for importing external symbolic, graph, or program data as validated AnimationAssets.", ["animation", "port", "external"], {

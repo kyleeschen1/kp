@@ -127,7 +127,8 @@ test("API catalog covers notation and layout entities with the same metadata pro
   assert.deepEqual(runtimeFrame?.item.details?.protocols, [
     "sampleKpAnimationRuntimeFrame",
     "createKpAnimationRuntimeScrubberControl",
-    "sampleKpAnimationRuntimeFrameFromScrubber"
+    "sampleKpAnimationRuntimeFrameFromScrubber",
+    "checkKpAnimationRuntimeCompositionLaw"
   ]);
   assert.deepEqual(runtimeFrame?.item.details?.outputs, [
     "clock",
@@ -136,7 +137,8 @@ test("API catalog covers notation and layout entities with the same metadata pro
     "active render targets",
     "child frames",
     "diagnostics",
-    "frame descriptor"
+    "frame descriptor",
+    "composition law"
   ]);
 
   assert.equal(externalAnimationPort?.group.id, "capabilities-representations");
