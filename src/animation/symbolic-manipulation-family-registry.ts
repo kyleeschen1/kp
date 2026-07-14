@@ -3,6 +3,9 @@ import {
   type KpSymbolicManipulationDomain,
   type KpSymbolicManipulationFamily
 } from "./symbolic-manipulation-family.ts";
+import {
+  createKpSemanticTransformationDefinition
+} from "../semantic/asset-transformation.ts";
 
 interface SymbolicManipulationFamilySeedSpec {
   readonly id: string;
@@ -220,7 +223,26 @@ const symbolicManipulationFamilySeedSpecs:
 
 export function createSymbolicManipulationFamilyRegistry():
   readonly KpSymbolicManipulationFamily[] {
-  return symbolicManipulationFamilySeedSpecs.map((spec) =>
+  return [
+    createAlgebraBothSidesFamily(),
+    ...symbolicManipulationFamilySeedSpecs
+      .filter((spec) => spec.id !== "family.algebra.both-sides")
+      .map(createSeedFamily)
+  ];
+}
+
+export function symbolicManipulationFamilyById(
+  id: string
+): KpSymbolicManipulationFamily | undefined {
+  return createSymbolicManipulationFamilyRegistry().find(
+    (family) => family.id === id
+  );
+}
+
+function createSeedFamily(
+  spec: SymbolicManipulationFamilySeedSpec
+): KpSymbolicManipulationFamily {
+  return (
     createKpSymbolicManipulationFamily({
       id: spec.id,
       title: spec.title,
@@ -240,12 +262,175 @@ export function createSymbolicManipulationFamilyRegistry():
   );
 }
 
-export function symbolicManipulationFamilyById(
-  id: string
-): KpSymbolicManipulationFamily | undefined {
-  return createSymbolicManipulationFamilyRegistry().find(
-    (family) => family.id === id
-  );
+function createAlgebraBothSidesFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.algebra.add-both-sides",
+    "definition.symbolic.algebra.subtract-both-sides",
+    "definition.symbolic.algebra.multiply-both-sides",
+    "definition.symbolic.algebra.divide-both-sides"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.algebra.both-sides",
+    title: "Both-sides equation operations",
+    domain: "algebra",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "equation.before",
+        objectType: "equation",
+        title: "Source equation",
+        selectorRoles: [
+          { id: "lhs.variable", kind: "term" },
+          { id: "equals", kind: "relation" },
+          { id: "rhs.value", kind: "term" }
+        ]
+      },
+      {
+        id: "equation.after",
+        objectType: "equation",
+        title: "Equation after both-sides operation",
+        selectorRoles: [
+          { id: "lhs.variable", kind: "term" },
+          { id: "equals", kind: "relation" },
+          { id: "rhs.value", kind: "term" },
+          { id: "operation.artifact", kind: "term" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createBothSidesDefinition({
+        id: "definition.symbolic.algebra.add-both-sides",
+        transformType: "addBothSides",
+        title: "Add the same value to both sides",
+        lawId: "law.equation.add-both-sides",
+        assumption: "Adding equal quantities preserves equality."
+      }),
+      createBothSidesDefinition({
+        id: "definition.symbolic.algebra.subtract-both-sides",
+        transformType: "subtractBothSides",
+        title: "Subtract the same value from both sides",
+        lawId: "law.equation.subtract-both-sides",
+        assumption: "Subtracting equal quantities preserves equality."
+      }),
+      createBothSidesDefinition({
+        id: "definition.symbolic.algebra.multiply-both-sides",
+        transformType: "multiplyBothSides",
+        title: "Multiply both sides by the same value",
+        lawId: "law.equation.multiply-both-sides",
+        assumption:
+          "Multiplying both sides preserves equality; equivalence requires a non-zero multiplier."
+      }),
+      createBothSidesDefinition({
+        id: "definition.symbolic.algebra.divide-both-sides",
+        transformType: "divideBothSides",
+        title: "Divide both sides by the same non-zero value",
+        lawId: "law.equation.divide-both-sides",
+        assumption:
+          "Dividing equal quantities by the same non-zero value preserves equality."
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.algebra.both-sides.append-after-shift",
+        motifKind: "append-after-shift",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Persistent tokens shift first, then the operation artifact appears on both sides."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.solve-x.both-sides",
+        animationId: "animation.solve-x",
+        renderTargetKinds: ["equation"],
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.subtract-both-sides"
+        ],
+        summary: "Existing x + 3 = 7 animation exercises subtract-both-sides."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.algebra.both-sides.solution-set",
+        title: "Equation solution set is preserved",
+        representationKind: "equation-graph",
+        exactness: "qualitative",
+        preserves: ["value"],
+        lawRefs: [
+          {
+            id: "law.graph.solution-set-preservation",
+            level: "qualitative"
+          }
+        ],
+        sampleAssetIds: ["animation.solve-x"],
+        summary:
+          "Both-sides operations preserve the solution set even when the rendered equation changes."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.linear-solve.both-sides",
+        fixtureFamilyId: "generated.linear-solve",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated linear-solve traces can map add/subtract/multiply/divide both-sides steps to this family."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId("family.algebra.both-sides"),
+      tags: ["equation", "inverse-operation", "generated-problem"]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for algebra: add, subtract, multiply, and divide both sides while preserving equality.",
+      searchSummary:
+        "add, subtract, multiply, and divide both sides while preserving equality",
+      graphEquivalentKinds: "equation-graph"
+    }
+  });
+}
+
+function createBothSidesDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["equation.before"],
+    targetObjectRoles: ["equation.after"],
+    preserves: ["value", "structure"],
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "equation.before",
+        sourceSelectorRole: "lhs.variable",
+        targetObjectRole: "equation.after",
+        targetSelectorRole: "lhs.variable",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "equation.before",
+        sourceSelectorRole: "equals",
+        targetObjectRole: "equation.after",
+        targetSelectorRole: "equals",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "equation.before",
+        sourceSelectorRole: "rhs.value",
+        targetObjectRole: "equation.after",
+        targetSelectorRole: "rhs.value",
+        preserves: ["identity", "role"]
+      }
+    ]
+  });
 }
 
 function symbolicManipulationFamilyRowId(familyId: string): string {

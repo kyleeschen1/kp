@@ -84,7 +84,7 @@
       "id": "next-action.kp.animation.algebra-both-sides-family-v0",
       "title": "Add algebra both-sides operation family",
       "summary": "Model add, subtract, multiply, and divide both sides with identity persistence, inverse provenance, generated fixture hooks, and a basic visual sample.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.algebra-cancel-combine-family-v0",
