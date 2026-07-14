@@ -236,6 +236,7 @@ export function createSymbolicManipulationFamilyRegistry():
     createCalculusGradientJacobianFamily(),
     createCalculusHessianOptimizationFamily(),
     createLinearAlgebraVectorAddScaleFamily(),
+    createLinearAlgebraDotProjectionFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
@@ -250,7 +251,8 @@ export function createSymbolicManipulationFamilyRegistry():
           spec.id !== "family.calculus.taylor-local-linearization" &&
           spec.id !== "family.calculus.gradient-jacobian" &&
           spec.id !== "family.calculus.hessian-optimization" &&
-          spec.id !== "family.linear-algebra.vector-add-scale"
+          spec.id !== "family.linear-algebra.vector-add-scale" &&
+          spec.id !== "family.linear-algebra.dot-projection"
       )
       .map(createSeedFamily)
   ];
@@ -3464,6 +3466,290 @@ function createVectorDefinition(input: {
         sourceSelectorRole: "tip",
         targetObjectRole: "vector.after",
         targetSelectorRole: "tip",
+        preserves: ["identity", "role"]
+      }
+    ]
+  });
+}
+
+function createLinearAlgebraDotProjectionFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.linear-algebra.dot-product",
+    "definition.symbolic.linear-algebra.vector-projection",
+    "definition.symbolic.linear-algebra.orthogonality-test",
+    "definition.symbolic.linear-algebra.angle-from-dot"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.linear-algebra.dot-projection",
+    title: "Dot product and projection",
+    domain: "linear-algebra",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "dot.before",
+        objectType: "dot-product-expression",
+        title: "Dot product expression before interpretation",
+        selectorRoles: [
+          { id: "vector.left", kind: "vector" },
+          { id: "vector.right", kind: "vector" },
+          { id: "component.left", kind: "component" },
+          { id: "component.right", kind: "component" },
+          { id: "angle", kind: "angle" },
+          { id: "length.left", kind: "length" },
+          { id: "length.right", kind: "length" }
+        ]
+      },
+      {
+        id: "dot.after",
+        objectType: "dot-product-interpretation",
+        title: "Dot product geometric interpretation",
+        selectorRoles: [
+          { id: "scalar.result", kind: "scalar" },
+          { id: "projection.vector", kind: "vector" },
+          { id: "orthogonal.component", kind: "vector" },
+          { id: "angle", kind: "angle" },
+          { id: "length.left", kind: "length" },
+          { id: "length.right", kind: "length" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.linear-algebra.dot-product",
+        transformType: "dotProduct",
+        title: "Compute a dot product",
+        sourceObjectRoles: ["dot.before"],
+        targetObjectRoles: ["dot.after"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "Vectors are in the same inner-product space."
+        ],
+        lawRefs: [
+          {
+            id: "law.linear-algebra.dot-product",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "dot.before",
+            sourceSelectorRole: "vector.left",
+            targetObjectRole: "dot.after",
+            targetSelectorRole: "scalar.result",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "dot.before",
+            sourceSelectorRole: "vector.right",
+            targetObjectRole: "dot.after",
+            targetSelectorRole: "scalar.result",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "dot.before",
+            sourceSelectorRole: "angle",
+            targetObjectRole: "dot.after",
+            targetSelectorRole: "angle",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "dot.before",
+            sourceSelectorRole: "length.left",
+            targetObjectRole: "dot.after",
+            targetSelectorRole: "length.left",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "dot.before",
+            sourceSelectorRole: "length.right",
+            targetObjectRole: "dot.after",
+            targetSelectorRole: "length.right",
+            preserves: ["identity", "role"]
+          }
+        ]
+      }),
+      createDotProjectionDefinition({
+        id: "definition.symbolic.linear-algebra.vector-projection",
+        transformType: "vectorProjection",
+        title: "Project one vector onto another",
+        lawId: "law.linear-algebra.vector-projection",
+        assumption:
+          "The projection target vector is non-zero in the represented inner-product space."
+      }),
+      createDotProjectionDefinition({
+        id: "definition.symbolic.linear-algebra.orthogonality-test",
+        transformType: "orthogonalityTest",
+        title: "Test orthogonality by dot product",
+        lawId: "law.linear-algebra.orthogonality",
+        assumption:
+          "Zero dot product indicates orthogonality under the represented inner product."
+      }),
+      createDotProjectionDefinition({
+        id: "definition.symbolic.linear-algebra.angle-from-dot",
+        transformType: "angleFromDotProduct",
+        title: "Recover angle information from a dot product",
+        lawId: "law.linear-algebra.dot-angle",
+        assumption:
+          "Both vector lengths are non-zero when recovering an angle from the dot product."
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.linear-algebra.dot.component-pair-sum",
+        motifKind: "component-pair-sum",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.dot-product"
+        ],
+        summary:
+          "Component pairs align, multiply, and accumulate into a scalar dot-product result."
+      },
+      {
+        id: "motif.linear-algebra.dot.projection-drop",
+        motifKind: "projection-drop",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.vector-projection",
+          "definition.symbolic.linear-algebra.orthogonality-test"
+        ],
+        summary:
+          "One vector drops perpendicularly onto another while the orthogonal component remains explicit."
+      },
+      {
+        id: "motif.linear-algebra.dot.angle-sweep",
+        motifKind: "angle-sweep",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.angle-from-dot"
+        ],
+        summary:
+          "Angle and length tokens sweep into the geometric dot-product interpretation."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.dot-projection.basic",
+        animationId: "animation.dot-projection.basic",
+        renderTargetKinds: ["equation", "graph"],
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.dot-product",
+          "definition.symbolic.linear-algebra.vector-projection",
+          "definition.symbolic.linear-algebra.angle-from-dot"
+        ],
+        summary:
+          "Basic dot/projection sample links scalar dot products to projection and angle graph views."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.linear-algebra.dot-projection.geometry",
+        title: "Dot product corresponds to projection geometry",
+        representationKind: "vector-graph",
+        exactness: "exact",
+        preserves: ["value", "presentation"],
+        lawRefs: [
+          {
+            id: "law.graph.dot-projection-geometry",
+            level: "strict"
+          }
+        ],
+        sampleAssetIds: ["animation.dot-projection.basic"],
+        summary:
+          "Dot product, projection, orthogonality, and angle interpretations preserve the same vector relationship."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.linear-algebra-dot-projection",
+        fixtureFamilyId: "generated.linear-algebra-dot-projection",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated vector traces can map dot products, projections, orthogonality, and angle steps to this family."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.linear-algebra.dot-projection.relationship",
+        kind: "relationship",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.dot-product",
+          "definition.symbolic.linear-algebra.vector-projection",
+          "definition.symbolic.linear-algebra.angle-from-dot"
+        ],
+        summary:
+          "Relationship cards can ask how scalar dot products, projections, and angles encode the same relationship."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId(
+        "family.linear-algebra.dot-projection"
+      ),
+      tags: [
+        "dot-product",
+        "projection",
+        "orthogonality",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for dot products, projections, orthogonality, and angle/length interpretations.",
+      searchSummary:
+        "dot product projection orthogonal angle length scalar component vector graph",
+      graphEquivalentKinds: "vector-graph"
+    }
+  });
+}
+
+function createDotProjectionDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["dot.before"],
+    targetObjectRoles: ["dot.after"],
+    preserves: ["value", "structure"],
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "dot.before",
+        sourceSelectorRole: "vector.left",
+        targetObjectRole: "dot.after",
+        targetSelectorRole: "projection.vector",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "dot.before",
+        sourceSelectorRole: "vector.right",
+        targetObjectRole: "dot.after",
+        targetSelectorRole: "projection.vector",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "dot.before",
+        sourceSelectorRole: "angle",
+        targetObjectRole: "dot.after",
+        targetSelectorRole: "angle",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "dot.before",
+        sourceSelectorRole: "length.left",
+        targetObjectRole: "dot.after",
+        targetSelectorRole: "length.left",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "dot.before",
+        sourceSelectorRole: "length.right",
+        targetObjectRole: "dot.after",
+        targetSelectorRole: "length.right",
         preserves: ["identity", "role"]
       }
     ]

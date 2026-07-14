@@ -2466,6 +2466,189 @@ test("linear algebra vector add-scale family preserves components and graph arro
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("linear algebra dot-projection family links scalar, projection, and angle views", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.linear-algebra.dot-projection"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "dot.before",
+        "dot-product-expression",
+        [
+          "vector.left",
+          "vector.right",
+          "component.left",
+          "component.right",
+          "angle",
+          "length.left",
+          "length.right"
+        ]
+      ],
+      [
+        "dot.after",
+        "dot-product-interpretation",
+        [
+          "scalar.result",
+          "projection.vector",
+          "orthogonal.component",
+          "angle",
+          "length.left",
+          "length.right"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.linear-algebra.dot-product",
+        "dotProduct",
+        ["value", "structure"],
+        "law.linear-algebra.dot-product"
+      ],
+      [
+        "definition.symbolic.linear-algebra.vector-projection",
+        "vectorProjection",
+        ["value", "structure"],
+        "law.linear-algebra.vector-projection"
+      ],
+      [
+        "definition.symbolic.linear-algebra.orthogonality-test",
+        "orthogonalityTest",
+        ["value", "structure"],
+        "law.linear-algebra.orthogonality"
+      ],
+      [
+        "definition.symbolic.linear-algebra.angle-from-dot",
+        "angleFromDotProduct",
+        ["value", "structure"],
+        "law.linear-algebra.dot-angle"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[0]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["vector.left", "scalar.result", ["value", "role"]],
+      ["vector.right", "scalar.result", ["value", "role"]],
+      ["angle", "angle", ["identity", "role"]],
+      ["length.left", "length.left", ["identity", "role"]],
+      ["length.right", "length.right", ["identity", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.linear-algebra.dot.component-pair-sum",
+      motifKind: "component-pair-sum",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.dot-product"
+      ],
+      summary:
+        "Component pairs align, multiply, and accumulate into a scalar dot-product result."
+    },
+    {
+      id: "motif.linear-algebra.dot.projection-drop",
+      motifKind: "projection-drop",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.vector-projection",
+        "definition.symbolic.linear-algebra.orthogonality-test"
+      ],
+      summary:
+        "One vector drops perpendicularly onto another while the orthogonal component remains explicit."
+    },
+    {
+      id: "motif.linear-algebra.dot.angle-sweep",
+      motifKind: "angle-sweep",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.angle-from-dot"
+      ],
+      summary:
+        "Angle and length tokens sweep into the geometric dot-product interpretation."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.dot-projection.basic",
+      animationId: "animation.dot-projection.basic",
+      renderTargetKinds: ["equation", "graph"],
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.dot-product",
+        "definition.symbolic.linear-algebra.vector-projection",
+        "definition.symbolic.linear-algebra.angle-from-dot"
+      ],
+      summary:
+        "Basic dot/projection sample links scalar dot products to projection and angle graph views."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.linear-algebra.dot-projection.geometry",
+      title: "Dot product corresponds to projection geometry",
+      representationKind: "vector-graph",
+      exactness: "exact",
+      preserves: ["value", "presentation"],
+      lawRefs: [
+        {
+          id: "law.graph.dot-projection-geometry",
+          level: "strict"
+        }
+      ],
+      sampleAssetIds: ["animation.dot-projection.basic"],
+      summary:
+        "Dot product, projection, orthogonality, and angle interpretations preserve the same vector relationship."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.linear-algebra-dot-projection",
+      fixtureFamilyId: "generated.linear-algebra-dot-projection",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.dot-product",
+        "definition.symbolic.linear-algebra.vector-projection",
+        "definition.symbolic.linear-algebra.orthogonality-test",
+        "definition.symbolic.linear-algebra.angle-from-dot"
+      ],
+      summary:
+        "Generated vector traces can map dot products, projections, orthogonality, and angle steps to this family."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.linear-algebra.dot-projection.relationship",
+      kind: "relationship",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.dot-product",
+        "definition.symbolic.linear-algebra.vector-projection",
+        "definition.symbolic.linear-algebra.angle-from-dot"
+      ],
+      summary:
+        "Relationship cards can ask how scalar dot products, projections, and angles encode the same relationship."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
   assert.deepEqual(
     createSymbolicManipulationFamilyAgendaRows(

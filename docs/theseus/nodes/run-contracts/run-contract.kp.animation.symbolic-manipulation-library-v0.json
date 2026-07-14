@@ -174,7 +174,7 @@
       "id": "next-action.kp.animation.linear-algebra-dot-projection-family-v0",
       "title": "Add dot product and projection family",
       "summary": "Model dot products, projections, orthogonality, and angle/length interpretations with symbolic and graphical views.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.linear-algebra-matrix-vector-family-v0",
