@@ -26,14 +26,21 @@ semantic transformations, visual motifs, renderer-neutral frames, dashboard
 authoring actions, and verified export inputs before expanding into media,
 curriculum, or dynamic package loading.
 
+The current long-term library plan is recorded in
+`decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`.
+The next durable expansion is to model major symbolic manipulations across
+algebra, calculus, linear algebra, and their graphical equivalents as reusable
+semantic animation asset families.
+
 ## Active Focus
 
-**KP animation-library expansion.** KP now has the first encoded
+**KP symbolic manipulation animation library.** KP now has the first encoded
 asset-calculus layer and renderer/interpreter seams for humans, LLMs,
 generated problem systems, external CAS/program-trace ports, renderers,
 exports, and flashcards to compose through one predictable semantic/time
-protocol. The current focus is to turn those contracts into a broader library
-of composable animations.
+protocol. The current focus is to turn those contracts into a broad library of
+major symbolic manipulations across algebra, calculus, linear algebra, and
+their graphical equivalents.
 
 The doctrine, composition laws, authoring guide, core interfaces, executable
 law checks, pause-time inspection, drill-down hooks, flashcard specs, external
@@ -44,17 +51,23 @@ visual-frame seams, and paused-frame decomposition examples are in place.
 
 The active tranche is now:
 
-1. expand KaTeX `SemanticTransformation` coverage and visual motif defaults for
-   cancellation, artifacts, fractions, radicals, exponents, function wrapping,
-   matrices, large operators, and complex rendered forms;
-2. make one live equation card consume the runtime plus visual-frame protocol
-   directly, with deterministic scrub, rewind, token refs, geometry, and
-   diagnostics;
-3. promote generated problem fixtures for algebra, calculus, and linear algebra
-   into a shared registry and dashboard surface;
-4. add one graph/vector runtime-frame consumer and rewind law;
-5. surface flashcard renderer data and paused-frame drill-down authoring from
-   the same animation asset protocol.
+1. define a shared symbolic manipulation family schema with semantic objects,
+   selectors, transformation definitions, correspondence, visual motifs,
+   runtime/visual samples, graph equivalents, generated problem hooks,
+   flashcard hooks, and dashboard rows;
+2. model canonical algebra manipulations: both-sides operations,
+   cancellation, combine like terms, distribution/factoring, fractions,
+   exponent/log laws, function wrapping, and inequalities;
+3. model canonical calculus manipulations: limits, derivative rules,
+   integrals, the Fundamental Theorem of Calculus, Taylor/local
+   linearization, gradient, Jacobian, Hessian, and optimization;
+4. model canonical linear algebra manipulations: vector add/scale, dot
+   product, projection, matrix-vector, matrix-matrix as composed dot products,
+   row operations, determinant, inverse, basis change, and eigen examples;
+5. attach graphical equivalents honestly: equation graphs, symbolic transform
+   mirrored as graph transform, derivative as tangent, integral as area,
+   matrix as linear map, Jacobian as local linear map, and Hessian as
+   curvature/quadratic form.
 
 The goal remains practical: a KP intermediate representation with composition
 laws inspired by category theory and FRP, not a broad abstract category theory
@@ -230,30 +243,31 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Promote the generated algebra family path from "many sample families" into
-   richer semantic transform definitions for fractions, radicals, exponents,
-   function wrapping, distribution, factoring, simplification, and cancellation.
-2. Attach visual motif defaults and reversible timeline laws to those promoted
-   transformations so generated and hand-authored animations share the same
-   motion vocabulary.
-3. Promote additional renderer surfaces to consume interpreter frames:
-   comparison cards, graph/vector panels, source-code traces, and export
-   previews.
-4. Keep adding law checks where composition matters: flashcard prompt/reference
-   consistency, semantic transformation decomposition, generated media-frame
-   preservation, and graph/programming frame preservation.
-5. Move generated fixture family maturity from status rows into actionable
+1. Create the symbolic manipulation family schema and dashboard rows that make
+   algebra, calculus, linear algebra, and graph-equivalent families comparable.
+2. Promote algebra families first because they reuse existing generated
+   fixtures and stress token persistence, artifacts, wrappers, inverses, and
+   both-sides semantics.
+3. Add calculus families next, using derivative, integral, FTC, tangent,
+   area, Taylor, Jacobian, and Hessian examples to connect symbolic rules to
+   graphical views.
+4. Add linear algebra families with dot products and matrix multiplication as
+   the first higher-order composition test.
+5. Add law checks where composition matters: correspondence composition,
+   graph representation preservation, flashcard prompt/reference consistency,
+   generated problem provenance, and rewind.
+6. Move generated fixture family maturity from status rows into actionable
    authoring controls: create fixture, inspect closure, open sample, run smoke,
    and compare variants.
-6. Harden `/api/compile`, export/embed boundaries, and future hosted capsules
+7. Harden `/api/compile`, export/embed boundaries, and future hosted capsules
    with explicit size, schema, error, auth, CSP, and dependency policies before
    inviting broad external input.
-7. Start GIF or video encoder integration only after the frame-sequence JSON
+8. Start GIF or video encoder integration only after the frame-sequence JSON
    artifact, HTML preview, browser probe, rewind check, dependency manifest,
    and capability package manifests stay stable.
-8. Expand graph diagnostics from current mesh/conformance checks into richer
+9. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-9. Defer dynamic package loading until at least one generated animation family
+10. Defer dynamic package loading until at least one generated animation family
    proves the metadata contract across math, graph, programming, and export
    examples.
 

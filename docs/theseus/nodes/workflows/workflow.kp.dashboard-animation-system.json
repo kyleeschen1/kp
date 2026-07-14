@@ -18,7 +18,8 @@
     "decision.kp.headless-boundary-catalog",
     "decision.kp.semantic-animation-runtime-roadmap",
     "decision.kp.long-term-semantic-product-plan",
-    "decision.kp.animation-asset-primary-unit"
+    "decision.kp.animation-asset-primary-unit",
+    "decision.kp.symbolic-manipulation-animation-library"
   ],
   "milestones": [
     "milestone.kp.long-term-semantic-product-plan-v0"
@@ -82,7 +83,10 @@
     "next-action.kp.animation-library.graph-vector-runtime-consumer-v0",
     "next-action.kp.animation-library.graph-rewind-law-v0",
     "next-action.kp.animation-library.flashcard-renderer-sample-v0",
-    "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3"
+    "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3",
+    "next-action.kp.animation-library.symbolic-manipulation-loop-v0",
+    "run-contract.kp.animation.symbolic-manipulation-library-v0",
+    "next-action.kp.animation.symbolic-family-schema-v0"
   ],
   "verificationRecords": [
     {

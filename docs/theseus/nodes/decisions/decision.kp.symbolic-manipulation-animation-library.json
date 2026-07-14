@@ -1,0 +1,45 @@
+{
+  "id": "decision.kp.symbolic-manipulation-animation-library",
+  "kind": "decision",
+  "title": "Adopt symbolic manipulation animation library as current KP plan",
+  "status": "resolved",
+  "domain": "kp.roadmap",
+  "summary": "Make the current long-term KP plan a reusable symbolic manipulation animation library across algebra, calculus, linear algebra, and graphical equivalents. Each manipulation family should carry semantic objects, selectors, SemanticTransformation definitions, correspondence and identity rules, visual motifs, runtime and visual-frame samples, graph equivalents where honest, generated problem hooks, flashcard hooks, law checks, and dashboard/search rows.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md",
+      "summary": "Accepted project decision for modeling major symbolic manipulation families as reusable semantic animation assets."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap updated so symbolic manipulation animation-library expansion is the active long-term plan."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active semantic runtime thread updated with the algebra, calculus, linear algebra, and graph-equivalent family direction."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-animation-library-expansion-readiness-report.md",
+      "summary": "Closeout report showing that the previous animation-library loop delivered enough runtime, visual-frame, graph, flashcard, dashboard, and generated-problem substrate for this expansion."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "SemanticTransformation contract that symbolic manipulation families should target."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/asset.ts",
+      "summary": "AnimationAsset contract that should become the durable container for symbolic manipulation families."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Current dashboard catalog surface for generated problem and animation asset rows."
+    }
+  ]
+}

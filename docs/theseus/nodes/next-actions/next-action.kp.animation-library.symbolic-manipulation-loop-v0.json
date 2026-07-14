@@ -1,0 +1,99 @@
+{
+  "id": "next-action.kp.animation-library.symbolic-manipulation-loop-v0",
+  "kind": "next-action",
+  "title": "Prepare symbolic manipulation animation library loop",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Prepared the accepted symbolic manipulation animation-library plan as a concrete 28-slice run contract covering algebra, calculus, linear algebra, graphical equivalents, law checks, dashboard rows, generated problem hooks, flashcard hooks, and readiness reporting.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md",
+      "summary": "Accepted long-term plan for major symbolic manipulation animation families."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/decisions/decision.kp.symbolic-manipulation-animation-library.json",
+      "summary": "Theseus decision node making symbolic manipulation animation-library expansion the current long-term KP direction."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap active focus and near-term priorities for symbolic manipulation family expansion."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active thread describing how symbolic manipulation families should use semantic asset, runtime-frame, visual-frame, graph, dashboard, generated problem, and flashcard protocols."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/asset.ts",
+      "summary": "AnimationAsset container and timeline/render-target contracts that symbolic manipulation families should use."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "SemanticTransformation contract for symbolic manipulation definitions, correspondence, laws, and provenance."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.symbolic-manipulation-library-v0.json",
+      "summary": "Ready run contract containing the proposed symbolic manipulation animation-library slices."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "workflow.kp.dashboard-animation-system",
+      "decision.kp.symbolic-manipulation-animation-library",
+      "decision.kp.animation-asset-primary-unit",
+      "decision.kp.long-term-semantic-product-plan"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system",
+    "milestone.kp.long-term-semantic-product-plan-v0"
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run theseus -- long-loop-report --limit 30",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether the next loop should start with a shared symbolic manipulation family schema or directly add families.",
+    "Which first 20-30 slices best cover algebra, calculus, linear algebra, graph equivalents, dashboard rows, generated problem hooks, and flashcard hooks without overbroad visual polishing.",
+    "Whether the proposed run contract has small enough commit boundaries for future autonomous execution."
+  ],
+  "allowedWork": [
+    "Create a proposed long-loop run contract for symbolic manipulation animation-library expansion.",
+    "Keep the loop focused on typed family schemas, semantic transformations, runtime/visual samples, graph equivalents, law checks, dashboard rows, generated problem hooks, flashcard hooks, and closeout reporting.",
+    "Use deterministic fixtures and existing KP asset/runtime/rendering contracts."
+  ],
+  "disallowedWork": [
+    "Do not start implementation before the long-loop proposal is approved.",
+    "Do not add GIF/video encoders, live CAS, live LSP, dynamic package loading, or broad renderer rewrites in this preparation slice.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "criteria": [
+    {
+      "id": "symbolic-family-schema-slices-proposed",
+      "weight": "high"
+    },
+    {
+      "id": "algebra-calculus-linear-algebra-graph-families-covered",
+      "weight": "high"
+    },
+    {
+      "id": "deferrals-explicit",
+      "weight": "high"
+    },
+    {
+      "id": "approval-gate-preserved",
+      "weight": "high"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Created the ready run contract run-contract.kp.animation.symbolic-manipulation-library-v0 and preserved the approval gate before implementation."
+  }
+}

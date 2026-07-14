@@ -1,0 +1,240 @@
+{
+  "id": "run-contract.kp.animation.symbolic-manipulation-library-v0",
+  "kind": "run-contract",
+  "title": "KP symbolic manipulation animation library v0 loop",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Approved candidate loop for expanding KP into a typed symbolic manipulation animation library across algebra, calculus, linear algebra, and graphical equivalents.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md",
+      "summary": "Accepted long-term plan for major symbolic manipulation animation families."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/decisions/decision.kp.symbolic-manipulation-animation-library.json",
+      "summary": "Theseus decision node that makes symbolic manipulation animation-library expansion the current long-term KP direction."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap active focus and near-term priorities for symbolic manipulation family expansion."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread describing how symbolic manipulation families should use existing semantic asset, runtime-frame, visual-frame, graph, dashboard, generated problem, and flashcard protocols."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/asset.ts",
+      "summary": "AnimationAsset container and timeline/render-target contracts that symbolic manipulation families should use."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "SemanticTransformation contract for symbolic manipulation definitions, correspondence, laws, and provenance."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "allowedWork": [
+    "Only work on the approved symbolic manipulation animation-library slices.",
+    "Model reusable semantic animation asset families with SemanticTransformation definitions, correspondence, identity rules, visual motifs, runtime-frame samples, visual-frame samples, graph equivalents, generated problem hooks, flashcard hooks, law checks, and dashboard rows.",
+    "Use deterministic fixtures and existing KP asset/runtime/rendering contracts.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not build a full CAS or theorem prover in this loop.",
+    "Do not add GIF/video encoders, live LSP, network integrations, or dynamic package loading in this loop.",
+    "Do not make graph views a separate animation system; graph equivalents must project from the same semantic assets where honest.",
+    "Do not broaden into unrelated dashboard redesign or visual polish beyond what the active slice requires.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "goal": "Build the first representative symbolic manipulation animation library so algebra, calculus, linear algebra, and graph-equivalent transformations become typed, searchable, composable KP animation assets.",
+  "target": "workflow.kp.dashboard-animation-system",
+  "runMode": "run",
+  "maxSlices": 28,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop if a slice requires a broad renderer rewrite instead of extending the existing AnimationAsset, SemanticTransformation, runtime-frame, or visual-frame path.",
+    "Stop if verification fails and the fix is not local to the active slice.",
+    "Stop if work requires a full CAS, theorem prover, GIF/video encoder, live LSP, network integration, dynamic package loading, or unrelated dashboard redesign.",
+    "Stop when the approved slice list is exhausted."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.animation.symbolic-family-schema-v0",
+      "title": "Define symbolic manipulation family schema",
+      "summary": "Create the shared typed shape for a manipulation family: semantic objects/selectors, transformations, correspondence, motifs, samples, graph equivalents, generated problem hooks, flashcard hooks, laws, and dashboard metadata.",
+      "status": "ready"
+    },
+    {
+      "id": "next-action.kp.animation.symbolic-family-registry-dashboard-v0",
+      "title": "Add symbolic family registry and dashboard rows",
+      "summary": "Create a registry and dashboard projection so every family is searchable, comparable, and visible before individual coverage expands.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.algebra-both-sides-family-v0",
+      "title": "Add algebra both-sides operation family",
+      "summary": "Model add, subtract, multiply, and divide both sides with identity persistence, inverse provenance, generated fixture hooks, and a basic visual sample.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.algebra-cancel-combine-family-v0",
+      "title": "Add cancellation and combine-like-terms families",
+      "summary": "Promote cancellation and combine-like-terms as reusable algebra families with correspondence and reversible visual motif coverage.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.algebra-distribution-factoring-family-v0",
+      "title": "Add distribution and factoring family",
+      "summary": "Model distribution and factoring as inverse-ish semantic transformations with explicit correspondence for copied, grouped, and artifact tokens.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.algebra-fraction-simplification-family-v0",
+      "title": "Add fraction simplification family",
+      "summary": "Cover split, merge, simplify, common-denominator, and reciprocal forms while preserving numerator, denominator, fraction bar, and artifact semantics.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.algebra-exponent-log-laws-family-v0",
+      "title": "Add exponent and logarithm law family",
+      "summary": "Model power, root, exponent/log inverse, product/quotient powers, and function-wrapped rewrites with persistent base/argument semantics.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.algebra-inequality-family-v0",
+      "title": "Add inequality transformation family",
+      "summary": "Model inequality-preserving operations and sign-flip cases with explicit law metadata so invalid transforms are not animated as valid.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.algebra-generated-problem-hooks-v0",
+      "title": "Attach algebra generated problem hooks",
+      "summary": "Connect the algebra families to generated problem fixtures, solution steps, flashcard hooks, and dashboard family maturity rows.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.calculus-derivative-rules-family-v0",
+      "title": "Add calculus derivative rules family",
+      "summary": "Model sum, constant multiple, power, product, quotient, and chain rule transforms as semantic animation families with reusable visual samples.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.calculus-tangent-graph-equivalent-v0",
+      "title": "Add derivative tangent graph equivalent",
+      "summary": "Project derivative family assets into graph samples where derivative semantics appear as tangent/local-slope visual equivalents.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.calculus-integral-ftc-family-v0",
+      "title": "Add integral and FTC family",
+      "summary": "Model antiderivative, definite integral, bounds, and Fundamental Theorem of Calculus rewrites with persistent integrand/bound semantics.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.calculus-area-graph-equivalent-v0",
+      "title": "Add integral area graph equivalent",
+      "summary": "Project integral families into area accumulation graph samples with provenance and honest sampled-vs-symbolic metadata.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.calculus-taylor-local-linearization-family-v0",
+      "title": "Add Taylor and local linearization family",
+      "summary": "Model Taylor expansion, truncation, remainder annotation, and local linear approximation as symbolic families with graph equivalents.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.calculus-gradient-jacobian-family-v0",
+      "title": "Add gradient and Jacobian family",
+      "summary": "Model scalar gradient and vector-valued Jacobian forms with symbolic, matrix, and local-linear-map views.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.calculus-hessian-optimization-family-v0",
+      "title": "Add Hessian and optimization family",
+      "summary": "Model Hessian, quadratic form, second-derivative test, and optimization stationarity examples with curvature-oriented graph equivalents.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.linear-algebra-vector-add-scale-family-v0",
+      "title": "Add vector add and scale family",
+      "summary": "Model vector addition, scalar multiplication, component persistence, and graphical vector composition.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.linear-algebra-dot-projection-family-v0",
+      "title": "Add dot product and projection family",
+      "summary": "Model dot products, projections, orthogonality, and angle/length interpretations with symbolic and graphical views.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.linear-algebra-matrix-vector-family-v0",
+      "title": "Add matrix-vector family",
+      "summary": "Model matrix-vector multiplication as row dot products with persistent entries and graph linear-map equivalents.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.linear-algebra-matrix-matrix-composition-v0",
+      "title": "Add matrix-matrix composition family",
+      "summary": "Model matrix multiplication as composed dot products and test higher-order animation composition.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.linear-algebra-row-operations-family-v0",
+      "title": "Add row operations family",
+      "summary": "Model row swap, scale, and row replacement with provenance, determinant impact metadata, and equation-system equivalents.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.linear-algebra-determinant-inverse-family-v0",
+      "title": "Add determinant and inverse family",
+      "summary": "Model determinant as area/volume scaling and inverse as undoing a linear map with symbolic and graph samples.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.linear-algebra-basis-eigen-family-v0",
+      "title": "Add basis change and eigen family",
+      "summary": "Model basis changes, coordinate transforms, eigenvectors, eigenvalues, and diagonalization starter examples.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.symbolic-graph-equivalence-laws-v0",
+      "title": "Add graph equivalence law suite",
+      "summary": "Add law checks that representation transforms preserve semantic references, correspondence, rewind, and honest sampled graph metadata.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.symbolic-flashcard-hooks-v0",
+      "title": "Add flashcard hooks for symbolic families",
+      "summary": "Project selected family assets into cloze, focus, predict-next, and relationship prompt hooks without duplicating lesson markup.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.symbolic-paused-frame-drilldown-v0",
+      "title": "Add paused-frame drill-down for symbolic families",
+      "summary": "Expose paused-frame transformation context so an author or LLM can decompose confusing steps into smaller animations.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.symbolic-dashboard-progress-v0",
+      "title": "Update dashboard search and progress rows",
+      "summary": "Surface symbolic family coverage, readiness, blockers, law status, graph equivalents, generated problem hooks, and flashcard hooks in the project dashboard.",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation.symbolic-library-closeout-report-v0",
+      "title": "Close symbolic manipulation library loop",
+      "summary": "Write the closeout report with completed commits, verification evidence, residual risks, and recommended next slices.",
+      "status": "planned"
+    }
+  ]
+}

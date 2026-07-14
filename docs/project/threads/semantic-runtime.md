@@ -2,11 +2,10 @@
 
 Status: active
 Last Updated: 2026-07-14
-Current Next Action: Expand the composable animation library through KaTeX
-`SemanticTransformation` coverage, reusable visual motif defaults, one live
-runtime/visual-frame equation card, generated problem fixtures, graph/vector
-runtime consumers, flashcard projections, and paused-frame drill-down
-authoring.
+Current Next Action: Expand KP into a symbolic manipulation animation library
+that models canonical algebra, calculus, linear algebra, and graphical
+equivalent transformations through the existing semantic asset, runtime frame,
+visual frame, dashboard, generated problem, flashcard, and graph protocols.
 
 ## Goal
 
@@ -146,15 +145,27 @@ imports, flashcard renderer data, cloze masks, predict-next answer state,
 lossy external algebra fixtures, programming callstack diagnostics, and a
 paused-frame decomposition example are now encoded.
 
-The next priority is animation-library expansion, not another abstract
-contract layer. KP should use the existing asset-calculus and renderer-frame
-protocols to grow reusable KaTeX transformations and visual motifs first,
-convert one live equation card to consume runtime plus visual frames, then
-broaden the same protocol into generated problem fixtures, graph/vector
-runtime consumers, flashcard previews, and paused-frame drill-down authoring.
-Generated animation families, media encoders, graph/visual runtime
-unification, tutorial cards, flashcards, and program-trace visualizations
-should all use the asset-calculus framework rather than running ahead of it.
+The first animation-library expansion loop then closed on 2026-07-14. It
+proved that KP can grow reusable animation families through the existing
+contracts rather than inventing a separate path for each demo. The loop added
+live equation card runtime/visual-frame adoption, cancellation and artifact
+motifs, fraction/exponent/radical/function/matrix/large-operator coverage,
+Jacobian/Hessian comparison, Fundamental Theorem of Calculus and Fourier
+Transform sample assets, generated problem registry rows, calculus fixtures,
+linear algebra fixtures, graph vector runtime consumers, graph rewind laws,
+flashcard renderer samples, paused-frame drill-down samples, dashboard
+progress rows, and an animation-library readiness closeout.
+
+The next priority is the symbolic manipulation animation library. KP should
+model major symbolic manipulations across algebra, calculus, linear algebra,
+and graphical equivalents as reusable semantic animation asset families. Each
+family should declare semantic objects and selectors, transformation
+definitions, identity and correspondence rules, visual motifs, runtime/visual
+samples, graphical equivalents where honest, generated problem hooks,
+flashcard hooks, law checks, and dashboard/search rows. Generated animation
+families, graph/visual runtime unification, tutorial cards, flashcards,
+program-trace visualizations, and future media should all use this library
+rather than running ahead of it.
 
 The renderer adoption path is:
 
@@ -205,6 +216,21 @@ same fixtures into tutorial-card and export/sample paths.
 
 ## Open Questions
 
+- What is the smallest symbolic manipulation family schema that covers
+  algebra, calculus, linear algebra, and graph-equivalent families without
+  becoming a taxonomy sink?
+- Which algebra families should become canonical first: both-sides operations,
+  cancellation, combine like terms, distribution/factoring, fractions,
+  exponent/log laws, wrapping, or inequalities?
+- Which calculus examples best prove the symbolic/graph equivalent seam:
+  derivative as tangent, integral as area, FTC, Taylor/local linearization,
+  Jacobian as local linear map, Hessian as curvature, or optimization?
+- How should matrix multiplication, row operations, determinant, inverse,
+  basis change, and eigen examples compose from smaller semantic
+  transformations and visual motifs?
+- Which graph equivalence law should come first: equation-to-graph
+  provenance, tangent preservation, area preservation, linear-map matrix
+  preservation, or local-linearization preservation?
 - Which generated algebra transform families should be promoted first from
   fixture-specific metadata into reusable SemanticTransformation definitions:
   fraction split/merge, exponent lowering, radical rewrite, function wrapping,
