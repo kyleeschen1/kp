@@ -156,7 +156,7 @@
       "id": "next-action.kp.animation.calculus-gradient-jacobian-family-v0",
       "title": "Add gradient and Jacobian family",
       "summary": "Model scalar gradient and vector-valued Jacobian forms with symbolic, matrix, and local-linear-map views.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.calculus-hessian-optimization-family-v0",

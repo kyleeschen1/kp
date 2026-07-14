@@ -1931,6 +1931,186 @@ test("calculus Taylor family models approximation and local linearization", () =
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("calculus gradient and Jacobian family maps partials into vector and matrix views", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.calculus.gradient-jacobian"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "multivar.before",
+        "multivariable-function",
+        [
+          "function.output",
+          "input.vector",
+          "variable.row",
+          "variable.column",
+          "partial.operator"
+        ]
+      ],
+      [
+        "multivar.after",
+        "multivariable-linearization",
+        [
+          "gradient.vector",
+          "jacobian.matrix",
+          "row.index",
+          "column.index",
+          "partial.derivative",
+          "local.linear.map"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.calculus.scalar-gradient",
+        "scalarGradient",
+        ["value", "structure"],
+        "law.calculus.scalar-gradient"
+      ],
+      [
+        "definition.symbolic.calculus.jacobian-matrix",
+        "jacobianMatrix",
+        ["value", "structure"],
+        "law.calculus.jacobian-matrix"
+      ],
+      [
+        "definition.symbolic.calculus.directional-derivative",
+        "directionalDerivative",
+        ["value", "structure"],
+        "law.calculus.directional-derivative"
+      ],
+      [
+        "definition.symbolic.calculus.local-linear-map",
+        "localLinearMap",
+        ["value", "structure"],
+        "law.calculus.local-linear-map"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[1]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["function.output", "row.index", ["role"]],
+      ["variable.column", "column.index", ["identity", "role"]],
+      ["partial.operator", "partial.derivative", ["presentation", "role"]],
+      ["input.vector", "jacobian.matrix", ["structure", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.calculus.gradient.gradient-vector-emerge",
+      motifKind: "gradient-vector-emerge",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.scalar-gradient",
+        "definition.symbolic.calculus.directional-derivative"
+      ],
+      summary:
+        "Scalar partial derivatives align into a gradient vector while input-variable identity persists."
+    },
+    {
+      id: "motif.calculus.gradient.jacobian-matrix-fill",
+      motifKind: "jacobian-matrix-fill",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.jacobian-matrix"
+      ],
+      summary:
+        "Output components and input variables fill Jacobian rows and columns with explicit provenance."
+    },
+    {
+      id: "motif.calculus.gradient.local-linear-map",
+      motifKind: "local-linear-map",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.local-linear-map"
+      ],
+      summary:
+        "The Jacobian matrix projects into a local-linear-map graph view around the chosen point."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.gradient-jacobian.basic",
+      animationId: "animation.gradient-jacobian.basic",
+      renderTargetKinds: ["equation", "matrix", "graph"],
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.scalar-gradient",
+        "definition.symbolic.calculus.jacobian-matrix",
+        "definition.symbolic.calculus.local-linear-map"
+      ],
+      summary:
+        "Basic multivariable sample links gradient vector, Jacobian matrix, and local-linear-map views."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.calculus.gradient-jacobian.local-linear-map",
+      title: "Jacobian is the local linear map",
+      representationKind: "local-linear-map",
+      exactness: "sampled",
+      preserves: ["value", "structure"],
+      lawRefs: [
+        {
+          id: "law.graph.jacobian-local-linear-map",
+          level: "sampled"
+        }
+      ],
+      sampleAssetIds: ["animation.gradient-jacobian.basic"],
+      summary:
+        "Gradient and Jacobian symbolic views project to vector-field and local-linear-map graph equivalents."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.calculus-gradient-jacobian",
+      fixtureFamilyId: "generated.calculus-gradient-jacobian",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.scalar-gradient",
+        "definition.symbolic.calculus.jacobian-matrix",
+        "definition.symbolic.calculus.directional-derivative",
+        "definition.symbolic.calculus.local-linear-map"
+      ],
+      summary:
+        "Generated multivariable traces can map partial derivatives into gradient, Jacobian, and local-linear-map forms."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.calculus.gradient-jacobian.compare",
+      kind: "relationship",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.scalar-gradient",
+        "definition.symbolic.calculus.jacobian-matrix",
+        "definition.symbolic.calculus.local-linear-map"
+      ],
+      summary:
+        "Relationship cards can compare scalar gradients, Jacobian rows/columns, and local-linear-map effects."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
   assert.deepEqual(
     createSymbolicManipulationFamilyAgendaRows(

@@ -233,6 +233,7 @@ export function createSymbolicManipulationFamilyRegistry():
     createCalculusDerivativeRulesFamily(),
     createCalculusIntegralFtcFamily(),
     createCalculusTaylorLocalLinearizationFamily(),
+    createCalculusGradientJacobianFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
@@ -244,7 +245,8 @@ export function createSymbolicManipulationFamilyRegistry():
           spec.id !== "family.algebra.inequality" &&
           spec.id !== "family.calculus.derivative-rules" &&
           spec.id !== "family.calculus.integral-ftc" &&
-          spec.id !== "family.calculus.taylor-local-linearization"
+          spec.id !== "family.calculus.taylor-local-linearization" &&
+          spec.id !== "family.calculus.gradient-jacobian"
       )
       .map(createSeedFamily)
   ];
@@ -2663,6 +2665,267 @@ function createTaylorDefinition(input: {
         targetObjectRole: "taylor.after",
         targetSelectorRole: "remainder.annotation",
         preserves: ["role"]
+      }
+    ]
+  });
+}
+
+function createCalculusGradientJacobianFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.calculus.scalar-gradient",
+    "definition.symbolic.calculus.jacobian-matrix",
+    "definition.symbolic.calculus.directional-derivative",
+    "definition.symbolic.calculus.local-linear-map"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.calculus.gradient-jacobian",
+    title: "Gradient and Jacobian",
+    domain: "calculus",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "multivar.before",
+        objectType: "multivariable-function",
+        title: "Multivariable function before differential view",
+        selectorRoles: [
+          { id: "function.output", kind: "component" },
+          { id: "input.vector", kind: "vector" },
+          { id: "variable.row", kind: "variable" },
+          { id: "variable.column", kind: "variable" },
+          { id: "partial.operator", kind: "operator" }
+        ]
+      },
+      {
+        id: "multivar.after",
+        objectType: "multivariable-linearization",
+        title: "Gradient or Jacobian differential view",
+        selectorRoles: [
+          { id: "gradient.vector", kind: "vector" },
+          { id: "jacobian.matrix", kind: "matrix" },
+          { id: "row.index", kind: "matrix-row" },
+          { id: "column.index", kind: "matrix-column" },
+          { id: "partial.derivative", kind: "partial-derivative" },
+          { id: "local.linear.map", kind: "linear-map" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createGradientDefinition({
+        id: "definition.symbolic.calculus.scalar-gradient",
+        transformType: "scalarGradient",
+        title: "Build a scalar gradient vector",
+        lawId: "law.calculus.scalar-gradient",
+        assumption:
+          "The scalar field is differentiable with respect to the represented input variables."
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.calculus.jacobian-matrix",
+        transformType: "jacobianMatrix",
+        title: "Build a Jacobian matrix",
+        sourceObjectRoles: ["multivar.before"],
+        targetObjectRoles: ["multivar.after"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "Each output component is differentiable with respect to each input variable."
+        ],
+        lawRefs: [
+          {
+            id: "law.calculus.jacobian-matrix",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "multivar.before",
+            sourceSelectorRole: "function.output",
+            targetObjectRole: "multivar.after",
+            targetSelectorRole: "row.index",
+            preserves: ["role"]
+          },
+          {
+            sourceObjectRole: "multivar.before",
+            sourceSelectorRole: "variable.column",
+            targetObjectRole: "multivar.after",
+            targetSelectorRole: "column.index",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "multivar.before",
+            sourceSelectorRole: "partial.operator",
+            targetObjectRole: "multivar.after",
+            targetSelectorRole: "partial.derivative",
+            preserves: ["presentation", "role"]
+          },
+          {
+            sourceObjectRole: "multivar.before",
+            sourceSelectorRole: "input.vector",
+            targetObjectRole: "multivar.after",
+            targetSelectorRole: "jacobian.matrix",
+            preserves: ["structure", "role"]
+          }
+        ]
+      }),
+      createGradientDefinition({
+        id: "definition.symbolic.calculus.directional-derivative",
+        transformType: "directionalDerivative",
+        title: "Build a directional derivative",
+        lawId: "law.calculus.directional-derivative",
+        assumption:
+          "The direction vector and gradient are defined at the represented point."
+      }),
+      createGradientDefinition({
+        id: "definition.symbolic.calculus.local-linear-map",
+        transformType: "localLinearMap",
+        title: "Project a Jacobian into a local linear map",
+        lawId: "law.calculus.local-linear-map",
+        assumption:
+          "The Jacobian represents the first-order linear approximation near the point."
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.calculus.gradient.gradient-vector-emerge",
+        motifKind: "gradient-vector-emerge",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.scalar-gradient",
+          "definition.symbolic.calculus.directional-derivative"
+        ],
+        summary:
+          "Scalar partial derivatives align into a gradient vector while input-variable identity persists."
+      },
+      {
+        id: "motif.calculus.gradient.jacobian-matrix-fill",
+        motifKind: "jacobian-matrix-fill",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.jacobian-matrix"
+        ],
+        summary:
+          "Output components and input variables fill Jacobian rows and columns with explicit provenance."
+      },
+      {
+        id: "motif.calculus.gradient.local-linear-map",
+        motifKind: "local-linear-map",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.local-linear-map"
+        ],
+        summary:
+          "The Jacobian matrix projects into a local-linear-map graph view around the chosen point."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.gradient-jacobian.basic",
+        animationId: "animation.gradient-jacobian.basic",
+        renderTargetKinds: ["equation", "matrix", "graph"],
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.scalar-gradient",
+          "definition.symbolic.calculus.jacobian-matrix",
+          "definition.symbolic.calculus.local-linear-map"
+        ],
+        summary:
+          "Basic multivariable sample links gradient vector, Jacobian matrix, and local-linear-map views."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.calculus.gradient-jacobian.local-linear-map",
+        title: "Jacobian is the local linear map",
+        representationKind: "local-linear-map",
+        exactness: "sampled",
+        preserves: ["value", "structure"],
+        lawRefs: [
+          {
+            id: "law.graph.jacobian-local-linear-map",
+            level: "sampled"
+          }
+        ],
+        sampleAssetIds: ["animation.gradient-jacobian.basic"],
+        summary:
+          "Gradient and Jacobian symbolic views project to vector-field and local-linear-map graph equivalents."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.calculus-gradient-jacobian",
+        fixtureFamilyId: "generated.calculus-gradient-jacobian",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated multivariable traces can map partial derivatives into gradient, Jacobian, and local-linear-map forms."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.calculus.gradient-jacobian.compare",
+        kind: "relationship",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.scalar-gradient",
+          "definition.symbolic.calculus.jacobian-matrix",
+          "definition.symbolic.calculus.local-linear-map"
+        ],
+        summary:
+          "Relationship cards can compare scalar gradients, Jacobian rows/columns, and local-linear-map effects."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId(
+        "family.calculus.gradient-jacobian"
+      ),
+      tags: [
+        "gradient",
+        "jacobian",
+        "local-linear-map",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for scalar gradients and vector-valued Jacobians with local-linear-map views.",
+      searchSummary:
+        "gradient jacobian partial derivatives matrix local linear map multivariable vector field",
+      graphEquivalentKinds: "local-linear-map,vector-field"
+    }
+  });
+}
+
+function createGradientDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["multivar.before"],
+    targetObjectRoles: ["multivar.after"],
+    preserves: ["value", "structure"],
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "multivar.before",
+        sourceSelectorRole: "input.vector",
+        targetObjectRole: "multivar.after",
+        targetSelectorRole: "gradient.vector",
+        preserves: ["structure", "role"]
+      },
+      {
+        sourceObjectRole: "multivar.before",
+        sourceSelectorRole: "variable.column",
+        targetObjectRole: "multivar.after",
+        targetSelectorRole: "column.index",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "multivar.before",
+        sourceSelectorRole: "partial.operator",
+        targetObjectRole: "multivar.after",
+        targetSelectorRole: "partial.derivative",
+        preserves: ["presentation", "role"]
       }
     ]
   });
