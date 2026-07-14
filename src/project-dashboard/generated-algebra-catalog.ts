@@ -9,8 +9,9 @@ import {
   type KpAnimationAsset
 } from "../animation/asset.ts";
 import {
-  sampleKpAnimationFrameDescriptor
-} from "../animation/frame-descriptor.ts";
+  sampleKpAnimationRuntimeFrame,
+  type KpAnimationRuntimeChildFrame
+} from "../animation/runtime-sampler.ts";
 import { createKpDashboardAssetPreviewInterpreter } from "../semantic/dashboard-preview-interpreter.ts";
 import {
   createGeneratedAlgebraTutorialFixtures,
@@ -190,12 +191,13 @@ function createAnimationAssetAgendaRowsForAssets(input: {
       const renderTargetMetadataSearchFields = animation.renderTargets.flatMap(
         (target) => animationMetadataSearchFields(target.metadata)
       );
-      const midpointFrame = sampleKpAnimationFrameDescriptor({
-        id: `frame.${animation.id}.preview-midpoint`,
+      const runtimeFrame = sampleKpAnimationRuntimeFrame({
+        id: `runtime.${animation.id}.preview-midpoint`,
         animation,
-        direction: "forward",
-        progress: 0.5
+        progress: 0.5,
+        childAnimations: input.animations
       });
+      const midpointFrame = runtimeFrame.frameDescriptor;
       const referenceClosure = checkKpAnimationAssetReferenceClosure(animation);
       const seekRewind = checkKpAnimationAssetSeekRewindLaw(animation);
 
@@ -295,6 +297,31 @@ function createAnimationAssetAgendaRowsForAssets(input: {
           {
             label: "Midpoint beat",
             value: String(midpointFrame.beat ?? "None")
+          },
+          {
+            label: "Runtime frame",
+            value: runtimeFrame.id
+          },
+          {
+            label: "Runtime clock",
+            value:
+              `progress ${runtimeFrame.clock.progress}, beat ${runtimeFrame.clock.beat ?? "None"}`
+          },
+          {
+            label: "Runtime active targets",
+            value:
+              runtimeFrame.activeRenderTargets.map((target) => target.id).join(", ")
+          },
+          {
+            label: "Runtime focus selectors",
+            value:
+              runtimeFrame.focusSelectorIds.length === 0
+                ? "None"
+                : runtimeFrame.focusSelectorIds.join(", ")
+          },
+          {
+            label: "Runtime child frames",
+            value: formatRuntimeChildFrames(runtimeFrame.childFrames)
           }
         ],
         previewLinks: [],
@@ -322,6 +349,33 @@ function createAnimationAssetAgendaRowsForAssets(input: {
               ]),
           `reference-closure:${formatLawStatus(referenceClosure.passed)}`,
           `seek-rewind:${formatLawStatus(seekRewind.passed)}`,
+          runtimeFrame.id,
+          `runtime-frame:${runtimeFrame.id}`,
+          runtimeFrame.phase.phaseId,
+          `runtime-phase:${runtimeFrame.phase.phaseId}`,
+          ...runtimeFrame.activeAnnotationIds,
+          ...runtimeFrame.activeAnnotationIds.map((id) => `runtime-annotation:${id}`),
+          ...runtimeFrame.focusSelectorIds,
+          ...runtimeFrame.focusSelectorIds.map((id) => `runtime-focus:${id}`),
+          ...runtimeFrame.activeRenderTargets.flatMap((target) => [
+            target.id,
+            `runtime-target:${target.id}`
+          ]),
+          ...runtimeFrame.selectorFrames.flatMap((selector) => [
+            selector.id,
+            `runtime-selector:${selector.id}`,
+            ...selector.roles.map((role) => `runtime-selector-role:${role}`)
+          ]),
+          ...runtimeFrame.childFrames.flatMap((child) => [
+            child.renderTargetId,
+            child.animationId,
+            child.frame.phase.phaseId,
+            `runtime-child:${child.animationId}`,
+            `runtime-child-target:${child.renderTargetId}`
+          ]),
+          ...runtimeFrame.phaseDiagnostics.map((diagnostic) => diagnostic.code),
+          ...runtimeFrame.selectorDiagnostics.map((diagnostic) => diagnostic.code),
+          ...runtimeFrame.childDiagnostics.map((diagnostic) => diagnostic.code),
           midpointFrame.phaseId,
           ...midpointFrame.nodeIds,
           ...(animation.dashboard?.tags ?? []),
@@ -571,6 +625,18 @@ function animationMetadataSearchFields(
 
 function formatLawStatus(passed: boolean): string {
   return passed ? "passed" : "failed";
+}
+
+function formatRuntimeChildFrames(
+  childFrames: readonly KpAnimationRuntimeChildFrame[]
+): string {
+  return childFrames.length === 0
+    ? "None"
+    : childFrames
+        .map((child) =>
+          `${child.renderTargetId}:${child.animationId}@${child.frame.phase.phaseId}`
+        )
+        .join(", ");
 }
 
 function latexValueAt(

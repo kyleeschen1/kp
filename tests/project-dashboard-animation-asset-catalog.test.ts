@@ -92,6 +92,21 @@ test("dashboard animation asset rows include cross-domain component facets", () 
       value: "equation, programming"
     }
   );
+  assert.deepEqual(
+    comparison?.previewFields.find(
+      (field) => field.label === "Runtime child frames"
+    ),
+    {
+      label: "Runtime child frames",
+      value:
+        "render.comparison.linear-solve.equation:animation.linear-solve.solve-x@animation.linear-solve.solve-x.forward.1, render.comparison.programming.trace:animation.programming.add.execution-trace@animation.programming.add.execution-trace.forward.2"
+    }
+  );
+  assert.ok(
+    comparison?.searchFields.includes(
+      "runtime-child:animation.programming.add.execution-trace"
+    )
+  );
 });
 
 test("semantic asset dashboard search resolves animation component facets", () => {
