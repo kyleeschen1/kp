@@ -227,12 +227,14 @@ export function createSymbolicManipulationFamilyRegistry():
     createAlgebraBothSidesFamily(),
     createAlgebraCancelCombineFamily(),
     createAlgebraDistributionFactoringFamily(),
+    createAlgebraFractionSimplificationFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
           spec.id !== "family.algebra.both-sides" &&
           spec.id !== "family.algebra.cancel-combine" &&
-          spec.id !== "family.algebra.distribution-factoring"
+          spec.id !== "family.algebra.distribution-factoring" &&
+          spec.id !== "family.algebra.fraction-simplification"
       )
       .map(createSeedFamily)
   ];
@@ -944,6 +946,273 @@ function createAlgebraDistributionFactoringFamily(): KpSymbolicManipulationFamil
         "distribute factor common term expand collect inverse operation copied factor grouped artifacts area model",
       graphEquivalentKinds: "area-model"
     }
+  });
+}
+
+function createAlgebraFractionSimplificationFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.algebra.split-fraction-sum",
+    "definition.symbolic.algebra.merge-fractions",
+    "definition.symbolic.algebra.cancel-common-factor",
+    "definition.symbolic.algebra.create-common-denominator",
+    "definition.symbolic.algebra.reciprocal-rewrite"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.algebra.fraction-simplification",
+    title: "Fraction simplification",
+    domain: "algebra",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "fraction.before",
+        objectType: "fraction",
+        title: "Fraction before rewrite",
+        selectorRoles: [
+          { id: "numerator", kind: "term" },
+          { id: "fraction.bar", kind: "fraction-bar" },
+          { id: "denominator", kind: "term" },
+          { id: "common.factor.numerator", kind: "factor" },
+          { id: "common.factor.denominator", kind: "factor" }
+        ]
+      },
+      {
+        id: "fraction.after",
+        objectType: "fraction",
+        title: "Fraction after rewrite",
+        selectorRoles: [
+          { id: "numerator", kind: "term" },
+          { id: "fraction.bar", kind: "fraction-bar" },
+          { id: "denominator", kind: "term" },
+          { id: "operation.artifact", kind: "operator" },
+          { id: "denominator.copy", kind: "term" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createFractionDefinition({
+        id: "definition.symbolic.algebra.split-fraction-sum",
+        transformType: "splitFractionSum",
+        title: "Split a fraction over a numerator sum",
+        lawId: "law.algebra.fraction-sum-split",
+        preserves: ["value", "structure"],
+        assumption:
+          "The numerator is a sum or difference whose terms can each share the same denominator."
+      }),
+      createFractionDefinition({
+        id: "definition.symbolic.algebra.merge-fractions",
+        transformType: "mergeFractions",
+        title: "Merge fractions over a common denominator",
+        lawId: "law.algebra.fraction-sum-merge",
+        sourceObjectRole: "fraction.after",
+        targetObjectRole: "fraction.before",
+        preserves: ["value", "structure"],
+        assumption:
+          "Fractions have a compatible denominator and can be merged into one numerator expression."
+      }),
+      createFractionDefinition({
+        id: "definition.symbolic.algebra.cancel-common-factor",
+        transformType: "cancelCommonFactor",
+        title: "Cancel a common numerator and denominator factor",
+        lawId: "law.algebra.fraction-common-factor",
+        preserves: ["value"],
+        assumption:
+          "Common numerator and denominator factors are equal and non-zero."
+      }),
+      createFractionDefinition({
+        id: "definition.symbolic.algebra.create-common-denominator",
+        transformType: "createCommonDenominator",
+        title: "Create a common denominator",
+        lawId: "law.algebra.common-denominator",
+        preserves: ["value", "structure"],
+        assumption:
+          "Multiplying numerator and denominator by the same non-zero expression preserves value."
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.algebra.reciprocal-rewrite",
+        transformType: "reciprocalRewrite",
+        title: "Rewrite as a reciprocal fraction",
+        sourceObjectRoles: ["fraction.before"],
+        targetObjectRoles: ["fraction.after"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "The denominator is non-zero and reciprocal notation swaps numerator and denominator roles."
+        ],
+        lawRefs: [
+          {
+            id: "law.algebra.reciprocal-rewrite",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "fraction.before",
+            sourceSelectorRole: "numerator",
+            targetObjectRole: "fraction.after",
+            targetSelectorRole: "denominator",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "fraction.before",
+            sourceSelectorRole: "denominator",
+            targetObjectRole: "fraction.after",
+            targetSelectorRole: "numerator",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "fraction.before",
+            sourceSelectorRole: "fraction.bar",
+            targetObjectRole: "fraction.after",
+            targetSelectorRole: "fraction.bar",
+            preserves: ["presentation", "role"]
+          }
+        ]
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.algebra.fraction.line-persist",
+        motifKind: "fraction-line-persist",
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.split-fraction-sum",
+          "definition.symbolic.algebra.merge-fractions",
+          "definition.symbolic.algebra.cancel-common-factor"
+        ],
+        summary:
+          "Fraction bars act as persistent anchors while non-persistent operators and canceled factors fade."
+      },
+      {
+        id: "motif.algebra.fraction.denominator-copy-align",
+        motifKind: "denominator-copy-align",
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.create-common-denominator"
+        ],
+        summary:
+          "Denominator copies appear only after existing numerator and bar geometry shifts into place."
+      },
+      {
+        id: "motif.algebra.fraction.reciprocal-swap",
+        motifKind: "reciprocal-swap",
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.reciprocal-rewrite"
+        ],
+        summary:
+          "Numerator and denominator trade vertical roles while the fraction bar remains a stable visual reference."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.fraction-simplification.basic",
+        animationId: "animation.fraction-simplification.basic",
+        renderTargetKinds: ["equation"],
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Basic rational-expression sample exercises split, merge, simplify, common-denominator, and reciprocal forms."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.algebra.fraction.rational-value",
+        title: "Rational value is preserved",
+        representationKind: "number-line",
+        exactness: "exact",
+        preserves: ["value"],
+        lawRefs: [
+          {
+            id: "law.graph.rational-value-preservation",
+            level: "strict"
+          }
+        ],
+        sampleAssetIds: ["animation.fraction-simplification.basic"],
+        summary:
+          "Fraction rewrites keep the represented rational value fixed even when numerator, denominator, and bars are rearranged."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.rational-simplify.fraction",
+        fixtureFamilyId: "generated.rational-simplify",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated rational-expression traces can map fraction bar, denominator-copy, and reciprocal steps to this family."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.algebra.fraction.predict-next",
+        kind: "predict-next",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Predict-next cards can hide the next fraction rewrite or ask which denominator copy appears."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId(
+        "family.algebra.fraction-simplification"
+      ),
+      tags: [
+        "fraction",
+        "simplification",
+        "common-denominator",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for splitting, merging, simplifying, common-denominator, and reciprocal fraction rewrites.",
+      searchSummary:
+        "fraction simplify split merge reciprocal common denominator numerator denominator fraction bar rational value",
+      graphEquivalentKinds: "number-line"
+    }
+  });
+}
+
+function createFractionDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly preserves: readonly ["value"] | readonly ["value", "structure"];
+  readonly assumption: string;
+  readonly sourceObjectRole?: string | undefined;
+  readonly targetObjectRole?: string | undefined;
+}) {
+  const sourceObjectRole = input.sourceObjectRole ?? "fraction.before";
+  const targetObjectRole = input.targetObjectRole ?? "fraction.after";
+
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: [sourceObjectRole],
+    targetObjectRoles: [targetObjectRole],
+    preserves: input.preserves,
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole,
+        sourceSelectorRole: "numerator",
+        targetObjectRole,
+        targetSelectorRole: "numerator",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole,
+        sourceSelectorRole: "fraction.bar",
+        targetObjectRole,
+        targetSelectorRole: "fraction.bar",
+        preserves: ["presentation", "role"]
+      },
+      {
+        sourceObjectRole,
+        sourceSelectorRole: "denominator",
+        targetObjectRole,
+        targetSelectorRole: "denominator",
+        preserves: ["identity", "role"]
+      }
+    ]
   });
 }
 

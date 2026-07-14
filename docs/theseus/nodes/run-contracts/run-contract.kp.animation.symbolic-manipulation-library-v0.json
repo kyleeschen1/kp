@@ -102,7 +102,7 @@
       "id": "next-action.kp.animation.algebra-fraction-simplification-family-v0",
       "title": "Add fraction simplification family",
       "summary": "Cover split, merge, simplify, common-denominator, and reciprocal forms while preserving numerator, denominator, fraction bar, and artifact semantics.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.algebra-exponent-log-laws-family-v0",

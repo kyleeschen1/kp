@@ -538,6 +538,196 @@ test("algebra distribution-factoring family models copied and grouped artifacts"
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("algebra fraction simplification family covers bars, copies, and reciprocal swaps", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.algebra.fraction-simplification"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "fraction.before",
+        "fraction",
+        [
+          "numerator",
+          "fraction.bar",
+          "denominator",
+          "common.factor.numerator",
+          "common.factor.denominator"
+        ]
+      ],
+      [
+        "fraction.after",
+        "fraction",
+        [
+          "numerator",
+          "fraction.bar",
+          "denominator",
+          "operation.artifact",
+          "denominator.copy"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.algebra.split-fraction-sum",
+        "splitFractionSum",
+        ["value", "structure"],
+        "law.algebra.fraction-sum-split"
+      ],
+      [
+        "definition.symbolic.algebra.merge-fractions",
+        "mergeFractions",
+        ["value", "structure"],
+        "law.algebra.fraction-sum-merge"
+      ],
+      [
+        "definition.symbolic.algebra.cancel-common-factor",
+        "cancelCommonFactor",
+        ["value"],
+        "law.algebra.fraction-common-factor"
+      ],
+      [
+        "definition.symbolic.algebra.create-common-denominator",
+        "createCommonDenominator",
+        ["value", "structure"],
+        "law.algebra.common-denominator"
+      ],
+      [
+        "definition.symbolic.algebra.reciprocal-rewrite",
+        "reciprocalRewrite",
+        ["value", "structure"],
+        "law.algebra.reciprocal-rewrite"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[4]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["numerator", "denominator", ["identity", "role"]],
+      ["denominator", "numerator", ["identity", "role"]],
+      ["fraction.bar", "fraction.bar", ["presentation", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.algebra.fraction.line-persist",
+      motifKind: "fraction-line-persist",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.split-fraction-sum",
+        "definition.symbolic.algebra.merge-fractions",
+        "definition.symbolic.algebra.cancel-common-factor"
+      ],
+      summary:
+        "Fraction bars act as persistent anchors while non-persistent operators and canceled factors fade."
+    },
+    {
+      id: "motif.algebra.fraction.denominator-copy-align",
+      motifKind: "denominator-copy-align",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.create-common-denominator"
+      ],
+      summary:
+        "Denominator copies appear only after existing numerator and bar geometry shifts into place."
+    },
+    {
+      id: "motif.algebra.fraction.reciprocal-swap",
+      motifKind: "reciprocal-swap",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.reciprocal-rewrite"
+      ],
+      summary:
+        "Numerator and denominator trade vertical roles while the fraction bar remains a stable visual reference."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.fraction-simplification.basic",
+      animationId: "animation.fraction-simplification.basic",
+      renderTargetKinds: ["equation"],
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.split-fraction-sum",
+        "definition.symbolic.algebra.merge-fractions",
+        "definition.symbolic.algebra.cancel-common-factor",
+        "definition.symbolic.algebra.create-common-denominator",
+        "definition.symbolic.algebra.reciprocal-rewrite"
+      ],
+      summary:
+        "Basic rational-expression sample exercises split, merge, simplify, common-denominator, and reciprocal forms."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.algebra.fraction.rational-value",
+      title: "Rational value is preserved",
+      representationKind: "number-line",
+      exactness: "exact",
+      preserves: ["value"],
+      lawRefs: [
+        {
+          id: "law.graph.rational-value-preservation",
+          level: "strict"
+        }
+      ],
+      sampleAssetIds: ["animation.fraction-simplification.basic"],
+      summary:
+        "Fraction rewrites keep the represented rational value fixed even when numerator, denominator, and bars are rearranged."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.rational-simplify.fraction",
+      fixtureFamilyId: "generated.rational-simplify",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.split-fraction-sum",
+        "definition.symbolic.algebra.merge-fractions",
+        "definition.symbolic.algebra.cancel-common-factor",
+        "definition.symbolic.algebra.create-common-denominator",
+        "definition.symbolic.algebra.reciprocal-rewrite"
+      ],
+      summary:
+        "Generated rational-expression traces can map fraction bar, denominator-copy, and reciprocal steps to this family."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.algebra.fraction.predict-next",
+      kind: "predict-next",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.split-fraction-sum",
+        "definition.symbolic.algebra.merge-fractions",
+        "definition.symbolic.algebra.cancel-common-factor",
+        "definition.symbolic.algebra.create-common-denominator",
+        "definition.symbolic.algebra.reciprocal-rewrite"
+      ],
+      summary:
+        "Predict-next cards can hide the next fraction rewrite or ask which denominator copy appears."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic manipulation family dashboard rows expose comparable readiness fields", () => {
   const rows = createSymbolicManipulationFamilyAgendaRows("");
 
