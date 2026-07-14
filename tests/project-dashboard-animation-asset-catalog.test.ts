@@ -151,6 +151,38 @@ test("dashboard animation asset rows include flashcard projection facets", () =>
   );
 });
 
+test("dashboard animation asset rows include KaTeX runtime visual preview facets", () => {
+  const rows = createAnimationAssetAgendaRows("");
+  const linearSolve = rows.find(
+    (row) => row.id === "animation-linear-solve-solve-x"
+  );
+
+  assert.deepEqual(
+    linearSolve?.previewFields.find(
+      (field) => field.label === "KaTeX visual frame"
+    ),
+    {
+      label: "KaTeX visual frame",
+      value: "visual.linear-solve.visual-sample"
+    }
+  );
+  assert.deepEqual(
+    linearSolve?.previewFields.find(
+      (field) => field.label === "KaTeX focus token refs"
+    ),
+    {
+      label: "KaTeX focus token refs",
+      value:
+        "equation.linear-solve.after-subtract.lhs.plus3:tok.plus tok.plus-three; equation.linear-solve.after-subtract.lhs.minus3:tok.left-minus tok.left-minus-three"
+    }
+  );
+  assert.ok(linearSolve?.searchFields.includes("katex-visual-frame"));
+  assert.ok(
+    linearSolve?.searchFields.includes("visual.linear-solve.visual-sample")
+  );
+  assert.ok(linearSolve?.searchFields.includes("katex-token:tok.plus"));
+});
+
 test("semantic asset dashboard search resolves animation component facets", () => {
   assert.deepEqual(
     createSemanticAssetCatalogAgendaRows(

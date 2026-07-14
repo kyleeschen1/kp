@@ -33,6 +33,10 @@ import {
   defaultEquationTransformVisualMotifRules
 } from "../rendering/equation-visual-motif-defaults.ts";
 import {
+  createLinearSolveRuntimeVisualFrameSample,
+  type LinearSolveRuntimeVisualFrameSample
+} from "../rendering/linear-solve-runtime-visual-sample.ts";
+import {
   dashboardAssetPreviewDataAttributes,
   dashboardAssetPreviewFields,
   dashboardAssetPreviewSearchFields,
@@ -219,6 +223,7 @@ function createAnimationAssetAgendaRowsForAssets(input: {
       const flashcardKinds = uniqueStrings(
         flashcardProjections.map((projection) => projection.cardKind)
       );
+      const katexVisualSample = linearSolveVisualSampleForAnimation(animation);
 
       return {
         id: animation.dashboard?.rowId ?? `animation-${animation.id}`,
@@ -354,7 +359,8 @@ function createAnimationAssetAgendaRowsForAssets(input: {
             label: "Flashcard kinds",
             value:
               flashcardKinds.length === 0 ? "None" : flashcardKinds.join(", ")
-          }
+          },
+          ...katexVisualPreviewFields(katexVisualSample)
         ],
         previewLinks: [],
         searchFields: [
@@ -427,6 +433,7 @@ function createAnimationAssetAgendaRowsForAssets(input: {
             ...projection.transformationIds,
             ...projection.diagnostics.map((diagnostic) => diagnostic.message)
           ]),
+          ...katexVisualSearchFields(katexVisualSample),
           midpointFrame.phaseId,
           ...midpointFrame.nodeIds,
           ...(animation.dashboard?.tags ?? []),
@@ -718,6 +725,93 @@ function formatRuntimeScrubber(
   scrubber: KpAnimationRuntimeScrubberControl
 ): string {
   return `${scrubber.unit} ${scrubber.min}-${scrubber.max} step ${scrubber.step} default ${scrubber.defaultValue}`;
+}
+
+function linearSolveVisualSampleForAnimation(
+  animation: KpAnimationAsset
+): LinearSolveRuntimeVisualFrameSample | undefined {
+  return animation.id === "animation.linear-solve.solve-x"
+    ? createLinearSolveRuntimeVisualFrameSample()
+    : undefined;
+}
+
+function katexVisualPreviewFields(
+  sample: LinearSolveRuntimeVisualFrameSample | undefined
+): readonly GeneratedAlgebraAgendaPreviewField[] {
+  if (sample === undefined) {
+    return [];
+  }
+
+  return [
+    {
+      label: "KaTeX visual frame",
+      value: sample.visualFrame.id
+    },
+    {
+      label: "KaTeX visual nodes",
+      value: String(sample.visualFrame.nodes.length)
+    },
+    {
+      label: "KaTeX focus token refs",
+      value: formatKatexFocusTokenRefs(sample)
+    },
+    {
+      label: "KaTeX visual diagnostics",
+      value:
+        sample.visualFrame.diagnostics.length === 0
+          ? "passed"
+          : sample.visualFrame.diagnostics
+              .map((diagnostic) => diagnostic.code)
+              .join(", ")
+    }
+  ];
+}
+
+function katexVisualSearchFields(
+  sample: LinearSolveRuntimeVisualFrameSample | undefined
+): readonly string[] {
+  if (sample === undefined) {
+    return [];
+  }
+
+  return [
+    "katex-visual-frame",
+    sample.visualFrame.id,
+    sample.runtimeFrame.id,
+    ...sample.visualFrame.renderTargetVisuals.map(
+      (target) => `katex-visual-target:${target.renderTargetId}`
+    ),
+    ...sample.visualFrame.selectorVisuals.flatMap((selector) => [
+      selector.selectorId,
+      `katex-visual-selector:${selector.selectorId}`,
+      ...selector.nodeIds
+    ]),
+    ...sample.visualFrame.nodes.flatMap((node) => [
+      node.id,
+      node.ref,
+      `katex-token:${node.ref}`
+    ]),
+    ...sample.visualFrame.diagnostics.map((diagnostic) => diagnostic.code)
+  ];
+}
+
+function formatKatexFocusTokenRefs(
+  sample: LinearSolveRuntimeVisualFrameSample
+): string {
+  const visualFrame = sample.visualFrame;
+
+  return visualFrame.selectorVisuals
+    .filter((selector) => selector.roles.includes("focus"))
+    .map((selector) => {
+      const refs = selector.nodeIds
+        .map((nodeId) =>
+          visualFrame.nodes.find((node) => node.id === nodeId)?.ref
+        )
+        .filter((ref): ref is string => ref !== undefined);
+
+      return `${selector.selectorId}:${refs.join(" ")}`;
+    })
+    .join("; ");
 }
 
 function latexValueAt(

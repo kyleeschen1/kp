@@ -82,7 +82,8 @@
     {
       "id": "next-action.kp.animation.dashboard-katex-runtime-preview-v0",
       "title": "Add dashboard runtime preview renderer for KaTeX assets",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.dashboard-katex-runtime-preview-v0 in KP animation renderer integration v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.scrubber-visual-frame-sync-v0",
