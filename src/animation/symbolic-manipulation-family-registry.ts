@@ -239,6 +239,7 @@ export function createSymbolicManipulationFamilyRegistry():
     createLinearAlgebraDotProjectionFamily(),
     createLinearAlgebraMatrixVectorFamily(),
     createLinearAlgebraMatrixMatrixCompositionFamily(),
+    createLinearAlgebraRowOperationsFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
@@ -256,7 +257,8 @@ export function createSymbolicManipulationFamilyRegistry():
           spec.id !== "family.linear-algebra.vector-add-scale" &&
           spec.id !== "family.linear-algebra.dot-projection" &&
           spec.id !== "family.linear-algebra.matrix-vector" &&
-          spec.id !== "family.linear-algebra.matrix-matrix-composition"
+          spec.id !== "family.linear-algebra.matrix-matrix-composition" &&
+          spec.id !== "family.linear-algebra.row-operations"
       )
       .map(createSeedFamily)
   ];
@@ -4260,6 +4262,228 @@ function createMatrixMatrixDefinition(input: {
         sourceSelectorRole: "right.entry",
         targetObjectRole: "matrixMatrix.after",
         targetSelectorRole: "result.entry",
+        preserves: ["value", "role"]
+      }
+    ]
+  });
+}
+
+function createLinearAlgebraRowOperationsFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.linear-algebra.row-swap",
+    "definition.symbolic.linear-algebra.row-scale",
+    "definition.symbolic.linear-algebra.row-replacement"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.linear-algebra.row-operations",
+    title: "Row operations",
+    domain: "linear-algebra",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "rowOperation.before",
+        objectType: "augmented-matrix-or-system",
+        title: "Augmented matrix or system before an elementary row operation",
+        selectorRoles: [
+          { id: "matrix", kind: "matrix" },
+          { id: "row", kind: "matrix-row" },
+          { id: "row.entry", kind: "matrix-entry" },
+          { id: "equation.system", kind: "equation-system" },
+          { id: "solution.set", kind: "solution-set" },
+          { id: "determinant", kind: "determinant" }
+        ]
+      },
+      {
+        id: "rowOperation.after",
+        objectType: "row-operation-result",
+        title: "Result after an elementary row operation",
+        selectorRoles: [
+          { id: "matrix", kind: "matrix" },
+          { id: "row", kind: "matrix-row" },
+          { id: "row.entry", kind: "matrix-entry" },
+          { id: "equivalent.system", kind: "equation-system" },
+          { id: "solution.set", kind: "solution-set" },
+          { id: "determinant.factor", kind: "determinant-factor" },
+          { id: "operation.annotation", kind: "annotation" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createRowOperationDefinition({
+        id: "definition.symbolic.linear-algebra.row-swap",
+        transformType: "rowSwap",
+        title: "Swap two rows",
+        lawId: "law.linear-algebra.row-swap",
+        assumption:
+          "Swapping two equations preserves the solution set and flips determinant sign."
+      }),
+      createRowOperationDefinition({
+        id: "definition.symbolic.linear-algebra.row-scale",
+        transformType: "rowScale",
+        title: "Scale a row by a nonzero scalar",
+        lawId: "law.linear-algebra.row-scale",
+        assumption:
+          "Scaling an equation by a nonzero scalar preserves the solution set and scales determinant value."
+      }),
+      createRowOperationDefinition({
+        id: "definition.symbolic.linear-algebra.row-replacement",
+        transformType: "rowReplacement",
+        title: "Replace a row by itself plus a multiple of another row",
+        lawId: "law.linear-algebra.row-replacement",
+        assumption:
+          "Adding a multiple of one equation to another preserves both the solution set and determinant."
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.linear-algebra.row-operation.swap-slide",
+        motifKind: "row-swap-slide",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.row-swap"
+        ],
+        summary:
+          "Selected rows exchange positions while row identities remain visible through the swap."
+      },
+      {
+        id: "motif.linear-algebra.row-operation.scale-pulse",
+        motifKind: "row-scale-pulse",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.row-scale"
+        ],
+        summary:
+          "A nonzero scalar focus propagates across each entry in the selected row."
+      },
+      {
+        id: "motif.linear-algebra.row-operation.replacement-compose",
+        motifKind: "row-replacement-compose",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.row-replacement"
+        ],
+        summary:
+          "A scaled source row is composed into a target row without changing the solution set."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.row-operations.basic",
+        animationId: "animation.row-operations.basic",
+        renderTargetKinds: ["equation", "matrix", "graph"],
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Basic row-operation sample links matrix row edits to equivalent systems and determinant annotations."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.linear-algebra.row-operations.solution-set",
+        title: "Elementary row operations preserve solution sets",
+        representationKind: "solution-set",
+        exactness: "exact",
+        preserves: ["value", "presentation"],
+        lawRefs: [
+          {
+            id: "law.graph.row-operations-solution-set",
+            level: "strict"
+          }
+        ],
+        sampleAssetIds: ["animation.row-operations.basic"],
+        summary:
+          "Row operations can be shown as equivalent-system moves while the represented solution set persists."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.linear-algebra-row-operations",
+        fixtureFamilyId: "generated.linear-algebra-row-operations",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated elimination traces can map each elementary row operation to this family."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.linear-algebra.row-operations.effect",
+        kind: "relationship",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Relationship cards can ask how each row operation affects solution sets and determinants."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId(
+        "family.linear-algebra.row-operations"
+      ),
+      tags: [
+        "row-operation",
+        "system",
+        "determinant",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for row swap, row scale, and row replacement with solution-set provenance and determinant impact metadata.",
+      searchSummary:
+        "row operations swap scale replacement gaussian elimination determinant system equations solution set",
+      graphEquivalentKinds: "solution-set",
+      determinantImpact:
+        "swap flips sign, scale multiplies determinant, replacement preserves determinant"
+    }
+  });
+}
+
+function createRowOperationDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["rowOperation.before"],
+    targetObjectRoles: ["rowOperation.after"],
+    preserves: ["value", "structure"],
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "rowOperation.before",
+        sourceSelectorRole: "row",
+        targetObjectRole: "rowOperation.after",
+        targetSelectorRole: "row",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "rowOperation.before",
+        sourceSelectorRole: "row.entry",
+        targetObjectRole: "rowOperation.after",
+        targetSelectorRole: "row.entry",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "rowOperation.before",
+        sourceSelectorRole: "equation.system",
+        targetObjectRole: "rowOperation.after",
+        targetSelectorRole: "equivalent.system",
+        preserves: ["value", "structure"]
+      },
+      {
+        sourceObjectRole: "rowOperation.before",
+        sourceSelectorRole: "solution.set",
+        targetObjectRole: "rowOperation.after",
+        targetSelectorRole: "solution.set",
+        preserves: ["identity", "value"]
+      },
+      {
+        sourceObjectRole: "rowOperation.before",
+        sourceSelectorRole: "determinant",
+        targetObjectRole: "rowOperation.after",
+        targetSelectorRole: "determinant.factor",
         preserves: ["value", "role"]
       }
     ]

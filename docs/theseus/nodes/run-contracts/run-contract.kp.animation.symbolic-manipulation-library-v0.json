@@ -192,7 +192,7 @@
       "id": "next-action.kp.animation.linear-algebra-row-operations-family-v0",
       "title": "Add row operations family",
       "summary": "Model row swap, scale, and row replacement with provenance, determinant impact metadata, and equation-system equivalents.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.linear-algebra-determinant-inverse-family-v0",

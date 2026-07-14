@@ -2971,6 +2971,185 @@ test("linear algebra matrix-matrix family composes dot-product cells and map com
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("linear algebra row operations family records system equivalence and determinant impact", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.linear-algebra.row-operations"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.equal(
+    family.metadata?.["determinantImpact"],
+    "swap flips sign, scale multiplies determinant, replacement preserves determinant"
+  );
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "rowOperation.before",
+        "augmented-matrix-or-system",
+        [
+          "matrix",
+          "row",
+          "row.entry",
+          "equation.system",
+          "solution.set",
+          "determinant"
+        ]
+      ],
+      [
+        "rowOperation.after",
+        "row-operation-result",
+        [
+          "matrix",
+          "row",
+          "row.entry",
+          "equivalent.system",
+          "solution.set",
+          "determinant.factor",
+          "operation.annotation"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.linear-algebra.row-swap",
+        "rowSwap",
+        ["value", "structure"],
+        "law.linear-algebra.row-swap"
+      ],
+      [
+        "definition.symbolic.linear-algebra.row-scale",
+        "rowScale",
+        ["value", "structure"],
+        "law.linear-algebra.row-scale"
+      ],
+      [
+        "definition.symbolic.linear-algebra.row-replacement",
+        "rowReplacement",
+        ["value", "structure"],
+        "law.linear-algebra.row-replacement"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[2]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["row", "row", ["identity", "role"]],
+      ["row.entry", "row.entry", ["value", "role"]],
+      ["equation.system", "equivalent.system", ["value", "structure"]],
+      ["solution.set", "solution.set", ["identity", "value"]],
+      ["determinant", "determinant.factor", ["value", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.linear-algebra.row-operation.swap-slide",
+      motifKind: "row-swap-slide",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.row-swap"
+      ],
+      summary:
+        "Selected rows exchange positions while row identities remain visible through the swap."
+    },
+    {
+      id: "motif.linear-algebra.row-operation.scale-pulse",
+      motifKind: "row-scale-pulse",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.row-scale"
+      ],
+      summary:
+        "A nonzero scalar focus propagates across each entry in the selected row."
+    },
+    {
+      id: "motif.linear-algebra.row-operation.replacement-compose",
+      motifKind: "row-replacement-compose",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.row-replacement"
+      ],
+      summary:
+        "A scaled source row is composed into a target row without changing the solution set."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.row-operations.basic",
+      animationId: "animation.row-operations.basic",
+      renderTargetKinds: ["equation", "matrix", "graph"],
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.row-swap",
+        "definition.symbolic.linear-algebra.row-scale",
+        "definition.symbolic.linear-algebra.row-replacement"
+      ],
+      summary:
+        "Basic row-operation sample links matrix row edits to equivalent systems and determinant annotations."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.linear-algebra.row-operations.solution-set",
+      title: "Elementary row operations preserve solution sets",
+      representationKind: "solution-set",
+      exactness: "exact",
+      preserves: ["value", "presentation"],
+      lawRefs: [
+        {
+          id: "law.graph.row-operations-solution-set",
+          level: "strict"
+        }
+      ],
+      sampleAssetIds: ["animation.row-operations.basic"],
+      summary:
+        "Row operations can be shown as equivalent-system moves while the represented solution set persists."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.linear-algebra-row-operations",
+      fixtureFamilyId: "generated.linear-algebra-row-operations",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.row-swap",
+        "definition.symbolic.linear-algebra.row-scale",
+        "definition.symbolic.linear-algebra.row-replacement"
+      ],
+      summary:
+        "Generated elimination traces can map each elementary row operation to this family."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.linear-algebra.row-operations.effect",
+      kind: "relationship",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.row-swap",
+        "definition.symbolic.linear-algebra.row-scale",
+        "definition.symbolic.linear-algebra.row-replacement"
+      ],
+      summary:
+        "Relationship cards can ask how each row operation affects solution sets and determinants."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
   assert.deepEqual(
     createSymbolicManipulationFamilyAgendaRows(
