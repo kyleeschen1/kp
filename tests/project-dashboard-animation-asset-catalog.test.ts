@@ -329,6 +329,40 @@ test("dashboard animation asset rows include KaTeX runtime visual preview facets
   );
 });
 
+test("dashboard animation asset rows include paused-frame drill-down facets", () => {
+  const rows = createAnimationAssetAgendaRows("");
+  const linearSolve = rows.find(
+    (row) => row.id === "animation-linear-solve-solve-x"
+  );
+
+  assert.deepEqual(
+    linearSolve?.previewFields.find(
+      (field) => field.label === "Paused frame drill-down"
+    ),
+    {
+      label: "Paused frame drill-down",
+      value:
+        "paused-frame-drilldown.animation.linear-solve.solve-x.forward.beat-25"
+    }
+  );
+  assert.deepEqual(
+    linearSolve?.previewFields.find(
+      (field) => field.label === "Paused focus selectors"
+    ),
+    {
+      label: "Paused focus selectors",
+      value:
+        "equation.linear-solve.after-subtract.lhs.plus3, equation.linear-solve.after-subtract.lhs.minus3"
+    }
+  );
+  assert.ok(linearSolve?.searchFields.includes("paused-frame-drilldown"));
+  assert.ok(
+    linearSolve?.searchFields.includes(
+      "paused-frame-focus:equation.linear-solve.after-subtract.lhs.plus3"
+    )
+  );
+});
+
 test("semantic asset dashboard search resolves animation component facets", () => {
   assert.deepEqual(
     createSemanticAssetCatalogAgendaRows(

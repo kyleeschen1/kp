@@ -190,7 +190,8 @@
     {
       "id": "next-action.kp.animation-library.paused-frame-drilldown-v0",
       "title": "Add paused-frame drill-down sample",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.paused-frame-drilldown-v0 in KP animation library expansion v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation-library.dashboard-progress-rows-v0",

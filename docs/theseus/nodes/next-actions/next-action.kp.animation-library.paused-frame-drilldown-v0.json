@@ -1,0 +1,125 @@
+{
+  "id": "next-action.kp.animation-library.paused-frame-drilldown-v0",
+  "kind": "next-action",
+  "title": "Add paused-frame drill-down sample",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added a linear-solve paused-frame drill-down sample that explains the midpoint cancel phase through runtime clock, active transformations, visual selector/token rows, and flashcard preview rows, and surfaced it in dashboard animation search.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation-library.paused-frame-drilldown-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation-library.current-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-animation-renderer-integration-readiness-report.md",
+      "summary": "Renderer integration closeout recommending live card runtime visual-frame adoption, KaTeX fixture expansion, generated problem registry, flashcard samples, graph consumer, and paused-frame drill-down."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Project roadmap with semantic-first, runtime-second, renderer-third ordering and KaTeX/graph/dashboard/export priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active semantic runtime thread describing AnimationAsset, renderer-neutral frame, generated math, visual motif, and graph/programming adoption direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/paused-frame-drilldown.ts",
+      "summary": "Adds the typed paused-frame drill-down sample derived from AnimationAsset runtime frames, KaTeX visual-frame rows, and flashcard preview data."
+    },
+    {
+      "kind": "file",
+      "path": "src/project-dashboard/generated-algebra-catalog.ts",
+      "summary": "Surfaces paused-frame drill-down preview fields and search facets on the linear-solve animation dashboard row."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-paused-frame-drilldown.test.ts",
+      "summary": "Covers the paused cancel frame drill-down sample contract, focus selector token refs, flashcard rows, and diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-animation-asset-catalog.test.ts",
+      "summary": "Covers dashboard preview and search exposure for paused-frame drill-down samples."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation-library-expansion-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add paused-frame drill-down sample can be completed inside KP animation library expansion v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved animation-library expansion loop slices.",
+    "Grow KaTeX SemanticTransformation definitions, visual motifs, generated problem fixtures, graph runtime consumers, flashcard projections, and drill-down authoring through the AnimationAsset/runtime visual-frame protocol.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, live LSP, network integrations, or dynamic package loading; use deterministic fixtures.",
+    "Do not broaden into a dashboard redesign beyond search, progress rows, and sample previews needed for this loop.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-paused-frame-drilldown.test.ts tests/project-dashboard-animation-asset-catalog.test.ts",
+      "status": "passed",
+      "scope": "focused paused-frame drill-down sample and dashboard catalog coverage",
+      "checkedAt": "2026-07-14T21:40:24.246Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for paused-frame drill-down sample",
+      "checkedAt": "2026-07-14T21:40:24.281Z"
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "browser dashboard smoke coverage for paused-frame drill-down surface",
+      "checkedAt": "2026-07-14T21:40:24.312Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser KaTeX regression coverage",
+      "checkedAt": "2026-07-14T21:40:24.352Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for paused-frame drill-down slice",
+      "checkedAt": "2026-07-14T21:40:24.377Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T21:40:24.430Z",
+      "scope": "Run-contract hygiene for paused-frame drill-down slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a linear-solve paused-frame drill-down sample that explains the midpoint cancel phase through runtime clock, active transformations, visual selector/token rows, and flashcard preview rows, and surfaced it in dashboard animation search."
+  }
+}

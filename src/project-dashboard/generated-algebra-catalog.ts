@@ -14,6 +14,10 @@ import {
   type LinearSolveFlashcardRendererSample
 } from "../animation/flashcard-renderer-sample.ts";
 import {
+  createLinearSolvePausedFrameDrillDownSample,
+  type KpAnimationPausedFrameDrillDownSample
+} from "../animation/paused-frame-drilldown.ts";
+import {
   checkKpAnimationAssetReferenceClosure,
   checkKpAnimationAssetSeekRewindLaw,
   type KpAnimationAsset
@@ -261,6 +265,8 @@ function createAnimationAssetAgendaRowsForAssets(input: {
         });
       const flashcardRendererSample =
         flashcardRendererSampleForAnimation(animation);
+      const pausedFrameDrillDownSample =
+        pausedFrameDrillDownSampleForAnimation(animation);
       const flashcardKinds = uniqueStrings(
         flashcardProjections.map((projection) => projection.cardKind)
       );
@@ -416,6 +422,7 @@ function createAnimationAssetAgendaRowsForAssets(input: {
                 : flashcardPreviewInteractionKinds.join(", ")
           },
           ...flashcardRendererSamplePreviewFields(flashcardRendererSample),
+          ...pausedFrameDrillDownPreviewFields(pausedFrameDrillDownSample),
           ...katexVisualPreviewFields(katexVisualSample)
         ],
         previewLinks: [],
@@ -520,6 +527,7 @@ function createAnimationAssetAgendaRowsForAssets(input: {
             )
           ]),
           ...flashcardRendererSampleSearchFields(flashcardRendererSample),
+          ...pausedFrameDrillDownSearchFields(pausedFrameDrillDownSample),
           ...katexVisualSearchFields(katexVisualSample),
           midpointFrame.phaseId,
           ...midpointFrame.nodeIds,
@@ -892,6 +900,92 @@ function flashcardRendererSampleSearchFields(
     ...sample.predictNextPending.candidates.map(
       (candidate) => `flashcard-renderer-candidate:${candidate.transformationId}`
     )
+  ];
+}
+
+function pausedFrameDrillDownSampleForAnimation(
+  animation: KpAnimationAsset
+): KpAnimationPausedFrameDrillDownSample | undefined {
+  return animation.id === "animation.linear-solve.solve-x"
+    ? createLinearSolvePausedFrameDrillDownSample({ progress: 0.5 })
+    : undefined;
+}
+
+function pausedFrameDrillDownPreviewFields(
+  sample: KpAnimationPausedFrameDrillDownSample | undefined
+): readonly DashboardAssetPreviewField[] {
+  if (sample === undefined) {
+    return [];
+  }
+
+  return [
+    { label: "Paused frame drill-down", value: sample.id },
+    {
+      label: "Paused focus selectors",
+      value:
+        sample.focusSelectorRows.length === 0
+          ? "None"
+          : sample.focusSelectorRows.map((row) => row.selectorId).join(", ")
+    },
+    {
+      label: "Paused active transforms",
+      value:
+        sample.activeTransformationRows.length === 0
+          ? "None"
+          : sample.activeTransformationRows
+              .map((row) => row.transformationId)
+              .join(", ")
+    }
+  ];
+}
+
+function pausedFrameDrillDownSearchFields(
+  sample: KpAnimationPausedFrameDrillDownSample | undefined
+): readonly string[] {
+  if (sample === undefined) {
+    return [];
+  }
+
+  return [
+    "paused-frame-drilldown",
+    sample.id,
+    sample.runtimeFrameId,
+    sample.visualFrameId,
+    sample.previewDataId,
+    sample.phase.phaseId,
+    `paused-frame-phase:${sample.phase.phaseId}`,
+    ...sample.phase.nodeIds,
+    ...sample.activeTransformationRows.flatMap((row) => [
+      row.transformationId,
+      row.transformType,
+      `paused-frame-transform:${row.transformationId}`,
+      `paused-frame-transform-type:${row.transformType}`,
+      ...row.sourceObjectIds,
+      ...row.targetObjectIds
+    ]),
+    ...sample.focusSelectorRows.flatMap((row) => [
+      row.selectorId,
+      `paused-frame-focus:${row.selectorId}`,
+      ...row.nodeRefs.map((nodeRef) => `paused-frame-token:${nodeRef}`)
+    ]),
+    ...sample.selectorRows.flatMap((row) => [
+      row.selectorId,
+      row.label ?? "",
+      ...row.roles.map((role) => `paused-frame-selector-role:${role}`),
+      ...row.nodeRefs
+    ]),
+    ...sample.flashcardRows.flatMap((row) => [
+      row.itemId,
+      row.cardId,
+      row.cardKind,
+      row.interactionKind,
+      `paused-frame-flashcard:${row.interactionKind}`,
+      row.phaseId,
+      ...row.activeTransformationIds,
+      ...row.hiddenSelectorIds,
+      row.expectedTransformationId ?? "",
+      ...row.candidateTransformationIds
+    ])
   ];
 }
 
