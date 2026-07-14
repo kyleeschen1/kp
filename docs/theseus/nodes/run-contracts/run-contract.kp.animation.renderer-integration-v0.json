@@ -94,7 +94,8 @@
     {
       "id": "next-action.kp.animation.persistent-token-rewind-law-v0",
       "title": "Add rewind visual-frame law for persistent tokens",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.persistent-token-rewind-law-v0 in KP animation renderer integration v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.visual-frame-diagnostics-panel-data-v0",
