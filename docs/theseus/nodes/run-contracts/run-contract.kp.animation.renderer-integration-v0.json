@@ -184,7 +184,8 @@
     {
       "id": "next-action.kp.animation.llm-paused-frame-decomposition-example-v0",
       "title": "Add LLM authoring decomposition example from paused frame",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.llm-paused-frame-decomposition-example-v0 in KP animation renderer integration v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.renderer-integration-readiness-report-v0",

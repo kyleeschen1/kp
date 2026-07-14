@@ -1,0 +1,93 @@
+{
+  "id": "next-action.kp.animation.llm-paused-frame-decomposition-example-v0",
+  "kind": "next-action",
+  "title": "Add LLM authoring decomposition example from paused frame",
+  "status": "resolved",
+  "summary": "Added a typed LLM paused-frame decomposition example for the linear-solve cancellation phase, including runtime frame sampling, selected transformation context, prompt facts, and a drill-down animation blueprint.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.renderer-integration-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.llm-paused-frame-decomposition-example-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-composable-animation-runtime-readiness-report.md",
+      "summary": "Runtime closeout recommends connecting the sampler to one live visual renderer, visual-frame adapters, representation transforms, generated imports, flashcards, and hardened ports."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP frontier for dashboard-backed semantic animation system work."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/llm-paused-frame-decomposition-example.ts",
+      "summary": "Added a typed LLM paused-frame decomposition example for the linear-solve cancellation phase, including runtime frame sampling, selected transformation context, prompt facts, and a drill-down animation blueprint."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-llm-decomposition-authoring.test.ts",
+      "summary": "Added a typed LLM paused-frame decomposition example for the linear-solve cancellation phase, including runtime frame sampling, selected transformation context, prompt facts, and a drill-down animation blueprint."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.renderer-integration-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add LLM authoring decomposition example from paused frame can be completed inside KP animation renderer integration v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved renderer-integration loop slices.",
+    "Start by proving one honest runtime-to-visual path before broader renderer work.",
+    "Keep AnimationAsset runtime frames, semantic refs, visual-frame adapters, dashboards, generated problems, flashcards, and deterministic ports typed and inspectable."
+  ],
+  "disallowedWork": [
+    "Do not rewrite the full renderer or equation animation DOM pipeline in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, LSP, or network integrations; use deterministic fixtures.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-animation-llm-decomposition-authoring.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-14T18:31:40.378Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-14T18:31:40.414Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-14T18:31:40.443Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T18:31:40.474Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a typed LLM paused-frame decomposition example for the linear-solve cancellation phase, including runtime frame sampling, selected transformation context, prompt facts, and a drill-down animation blueprint."
+  }
+}

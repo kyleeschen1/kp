@@ -4,6 +4,9 @@ import test from "node:test";
 import {
   createKpAnimationDecompositionAuthoringRequest
 } from "../src/animation/llm-decomposition-authoring.ts";
+import {
+  createLinearSolvePausedFrameDecompositionExample
+} from "../src/animation/llm-paused-frame-decomposition-example.ts";
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
 import {
   sampleKpAnimationRuntimeFrame
@@ -73,3 +76,46 @@ test("decomposition authoring request reports missing selected transformation", 
   ]);
 });
 
+test("linear solve paused-frame decomposition example packages an LLM drill-down blueprint", () => {
+  const example = createLinearSolvePausedFrameDecompositionExample();
+
+  assert.equal(
+    example.id,
+    "llm-decomposition-example.animation.linear-solve.solve-x.cancel-additive-inverse"
+  );
+  assert.equal(example.kind, "llm-paused-frame-decomposition-example");
+  assert.equal(example.animationId, "animation.linear-solve.solve-x");
+  assert.equal(example.pausedFrameId, "runtime.linear-solve.paused-cancel");
+  assert.equal(example.progress, 0.5);
+  assert.equal(
+    example.request.selectedTransformationId,
+    "transform.linear-solve.cancel-left-additive-inverse"
+  );
+  assert.deepEqual(example.request.focusSelectorIds, [
+    "equation.linear-solve.after-subtract.lhs.plus3",
+    "equation.linear-solve.after-subtract.lhs.minus3"
+  ]);
+  assert.deepEqual(example.drillDownBlueprint, {
+    animationId:
+      "animation.drilldown.linear-solve.cancel-left-additive-inverse",
+    title: "Drill down into additive inverse cancellation",
+    sourceTransformationId:
+      "transform.linear-solve.cancel-left-additive-inverse",
+    requiredSelectorIds: [
+      "equation.linear-solve.after-subtract.lhs.plus3",
+      "equation.linear-solve.after-subtract.lhs.minus3"
+    ],
+    suggestedTransformTypes: [
+      "focusSelectors",
+      "pairAdditiveInverses",
+      "vanishToZero",
+      "restoreParentFrame"
+    ]
+  });
+  assert.ok(example.searchFields.includes("llm-paused-frame-decomposition"));
+  assert.ok(
+    example.searchFields.includes(
+      "selected-transformation:transform.linear-solve.cancel-left-additive-inverse"
+    )
+  );
+});
