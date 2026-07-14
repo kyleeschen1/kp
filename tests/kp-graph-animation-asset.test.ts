@@ -14,6 +14,7 @@ import {
   createLinearMapVectorAnimationAsset
 } from "../src/animation/graph-adapter.ts";
 import {
+  checkLinearMapVectorGraphRewindLaw,
   sampleLinearMapVectorGraphRuntimeFrame
 } from "../src/animation/graph-runtime-frame.ts";
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
@@ -136,6 +137,7 @@ test("linear map vector graph sample consumes animation runtime frames", () => {
     runtimeFrameId: "runtime.graph.vector.midpoint",
     phaseId: "animation.graph.vector.linear-map-scale.forward.0",
     progress: 0.5,
+    graphProgress: 0.5,
     beat: 10,
     activeTransformationIds: [
       "transform.graph.vector.apply-linear-map-scale"
@@ -148,4 +150,51 @@ test("linear map vector graph sample consumes animation runtime frames", () => {
       [2, 6]
     ]
   });
+});
+
+test("linear map vector graph runtime frame has an exact rewind law", () => {
+  const animation = createLinearMapVectorAnimationAsset();
+  const forwardQuarter = sampleLinearMapVectorGraphRuntimeFrame({
+    animation,
+    runtimeFrame: sampleKpAnimationRuntimeFrame({
+      animation,
+      direction: "forward",
+      progress: 0.25
+    })
+  });
+  const rewindThreeQuarter = sampleLinearMapVectorGraphRuntimeFrame({
+    animation,
+    runtimeFrame: sampleKpAnimationRuntimeFrame({
+      animation,
+      direction: "rewind",
+      progress: 0.75
+    })
+  });
+  const rewindStart = sampleLinearMapVectorGraphRuntimeFrame({
+    animation,
+    runtimeFrame: sampleKpAnimationRuntimeFrame({
+      animation,
+      direction: "rewind",
+      progress: 0
+    })
+  });
+
+  assert.equal(forwardQuarter.graphProgress, 0.25);
+  assert.equal(rewindThreeQuarter.graphProgress, 0.25);
+  assert.deepEqual(
+    rewindThreeQuarter.currentCoordinates,
+    forwardQuarter.currentCoordinates
+  );
+  assert.deepEqual(rewindStart.currentCoordinates, [2, 6]);
+  assert.deepEqual(
+    checkLinearMapVectorGraphRewindLaw({
+      animation,
+      sampleProgresses: [0, 0.25, 0.5, 0.75, 1]
+    }),
+    {
+      lawId: "graph-runtime.linear-map-vector.rewind",
+      passed: true,
+      failures: []
+    }
+  );
 });

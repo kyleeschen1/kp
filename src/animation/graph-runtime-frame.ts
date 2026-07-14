@@ -1,12 +1,20 @@
 import type {
   KpAnimationAsset,
-  KpAnimationAssetRenderTarget
+  KpAnimationAssetRenderTarget,
+  KpAnimationAssetTransformationTreeDirection
 } from "./asset.ts";
-import type {
-  KpAnimationRuntimeFrame,
-  KpAnimationRuntimeRenderTargetFrame
+import {
+  sampleKpAnimationRuntimeFrame,
+  type KpAnimationRuntimeFrame,
+  type KpAnimationRuntimeRenderTargetFrame
 } from "./runtime-sampler.ts";
-import type { KpAssetMetadataValue } from "../semantic/asset.ts";
+import type {
+  KpLawCheckResult,
+  KpLawFailure
+} from "../semantic/asset-laws.ts";
+import type {
+  KpAssetMetadataValue
+} from "../semantic/asset.ts";
 
 export interface SampleLinearMapVectorGraphRuntimeFrameInput {
   readonly animation: KpAnimationAsset;
@@ -25,12 +33,19 @@ export interface LinearMapVectorGraphRuntimeFrame {
   readonly runtimeFrameId: string;
   readonly phaseId: string;
   readonly progress: number;
+  readonly graphProgress: number;
   readonly beat?: number | undefined;
   readonly activeTransformationIds: readonly string[];
   readonly sourceCoordinates: readonly number[];
   readonly targetCoordinates: readonly number[];
   readonly currentCoordinates: readonly number[];
   readonly pathCoordinates: readonly (readonly number[])[];
+}
+
+export interface CheckLinearMapVectorGraphRewindLawInput {
+  readonly animation: KpAnimationAsset;
+  readonly sampleProgresses?: readonly number[] | undefined;
+  readonly epsilon?: number | undefined;
 }
 
 export function sampleLinearMapVectorGraphRuntimeFrame(
@@ -62,10 +77,14 @@ export function sampleLinearMapVectorGraphRuntimeFrame(
   const sourceCoordinates = vectorCoordinates(input.animation, sourceVectorId);
   const targetCoordinates = vectorCoordinates(input.animation, targetVectorId);
   const progress = input.runtimeFrame.clock.progress;
+  const graphProgress = graphLocalProgress({
+    direction: input.runtimeFrame.clock.direction,
+    progress
+  });
   const currentCoordinates = interpolateCoordinates({
     sourceCoordinates,
     targetCoordinates,
-    progress
+    progress: graphProgress
   });
 
   return {
@@ -80,6 +99,7 @@ export function sampleLinearMapVectorGraphRuntimeFrame(
     runtimeFrameId: input.runtimeFrame.id,
     phaseId: input.runtimeFrame.phase.phaseId,
     progress,
+    graphProgress,
     ...(input.runtimeFrame.clock.beat === undefined
       ? {}
       : { beat: input.runtimeFrame.clock.beat }),
@@ -89,6 +109,62 @@ export function sampleLinearMapVectorGraphRuntimeFrame(
     currentCoordinates,
     pathCoordinates: [sourceCoordinates, targetCoordinates]
   };
+}
+
+export function checkLinearMapVectorGraphRewindLaw(
+  input: CheckLinearMapVectorGraphRewindLawInput
+): KpLawCheckResult {
+  const sampleProgresses = input.sampleProgresses ?? [0, 0.25, 0.5, 0.75, 1];
+  const epsilon = input.epsilon ?? 1e-9;
+  const failures: KpLawFailure[] = [];
+
+  sampleProgresses.forEach((progress, index) => {
+    const forward = sampleGraphRuntimeFrameAt({
+      animation: input.animation,
+      direction: "forward",
+      progress
+    });
+    const rewind = sampleGraphRuntimeFrameAt({
+      animation: input.animation,
+      direction: "rewind",
+      progress: 1 - progress
+    });
+
+    if (
+      !coordinatesNearlyEqual(
+        forward.currentCoordinates,
+        rewind.currentCoordinates,
+        epsilon
+      )
+    ) {
+      failures.push({
+        path: `sampleProgresses[${index}]`,
+        message:
+          `Graph rewind sample at ${1 - progress} did not match forward sample at ${progress}.`
+      });
+    }
+  });
+
+  return {
+    lawId: "graph-runtime.linear-map-vector.rewind",
+    passed: failures.length === 0,
+    failures
+  };
+}
+
+function sampleGraphRuntimeFrameAt(input: {
+  readonly animation: KpAnimationAsset;
+  readonly direction: KpAnimationAssetTransformationTreeDirection;
+  readonly progress: number;
+}): LinearMapVectorGraphRuntimeFrame {
+  return sampleLinearMapVectorGraphRuntimeFrame({
+    animation: input.animation,
+    runtimeFrame: sampleKpAnimationRuntimeFrame({
+      animation: input.animation,
+      direction: input.direction,
+      progress: input.progress
+    })
+  });
 }
 
 function findLinearMapVectorRenderTarget(
@@ -149,6 +225,13 @@ function vectorCoordinates(
   return [...coordinates];
 }
 
+function graphLocalProgress(input: {
+  readonly direction: KpAnimationAssetTransformationTreeDirection;
+  readonly progress: number;
+}): number {
+  return input.direction === "rewind" ? 1 - input.progress : input.progress;
+}
+
 function interpolateCoordinates(input: {
   readonly sourceCoordinates: readonly number[];
   readonly targetCoordinates: readonly number[];
@@ -165,6 +248,21 @@ function interpolateCoordinates(input: {
   });
 }
 
-function metadataString(value: KpAssetMetadataValue | undefined): string | undefined {
+function coordinatesNearlyEqual(
+  left: readonly number[],
+  right: readonly number[],
+  epsilon: number
+): boolean {
+  return (
+    left.length === right.length &&
+    left.every(
+      (value, index) => Math.abs(value - (right[index] ?? value)) <= epsilon
+    )
+  );
+}
+
+function metadataString(
+  value: KpAssetMetadataValue | undefined
+): string | undefined {
   return typeof value === "string" ? value : undefined;
 }

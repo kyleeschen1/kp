@@ -178,7 +178,8 @@
     {
       "id": "next-action.kp.animation-library.graph-rewind-law-v0",
       "title": "Add graph rewind law sample",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.graph-rewind-law-v0 in KP animation library expansion v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation-library.flashcard-renderer-sample-v0",

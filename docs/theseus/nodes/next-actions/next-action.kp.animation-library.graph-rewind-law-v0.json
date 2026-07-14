@@ -1,0 +1,115 @@
+{
+  "id": "next-action.kp.animation-library.graph-rewind-law-v0",
+  "kind": "next-action",
+  "title": "Add graph rewind law sample",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added a graph vector rewind law sample that proves rewind graph-local progress is the exact reverse of forward progress for the linear-map vector runtime projection.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation-library.graph-rewind-law-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation-library.current-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-animation-renderer-integration-readiness-report.md",
+      "summary": "Renderer integration closeout recommending live card runtime visual-frame adoption, KaTeX fixture expansion, generated problem registry, flashcard samples, graph consumer, and paused-frame drill-down."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Project roadmap with semantic-first, runtime-second, renderer-third ordering and KaTeX/graph/dashboard/export priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Active semantic runtime thread describing AnimationAsset, renderer-neutral frame, generated math, visual motif, and graph/programming adoption direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/graph-runtime-frame.ts",
+      "summary": "Adds graph-local progress, direction-aware rewind sampling, and a graph rewind law checker for linear-map vector runtime frames."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-graph-animation-asset.test.ts",
+      "summary": "Covers forward/rewind coordinate equality and graph rewind law success for the vector graph sample."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation-library-expansion-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add graph rewind law sample can be completed inside KP animation library expansion v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved animation-library expansion loop slices.",
+    "Grow KaTeX SemanticTransformation definitions, visual motifs, generated problem fixtures, graph runtime consumers, flashcard projections, and drill-down authoring through the AnimationAsset/runtime visual-frame protocol.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, live LSP, network integrations, or dynamic package loading; use deterministic fixtures.",
+    "Do not broaden into a dashboard redesign beyond search, progress rows, and sample previews needed for this loop.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-graph-animation-asset.test.ts",
+      "status": "passed",
+      "scope": "focused graph runtime rewind law coverage",
+      "checkedAt": "2026-07-14T21:23:29.187Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for graph rewind law sample",
+      "checkedAt": "2026-07-14T21:23:29.228Z"
+    },
+    {
+      "command": "npm run test:browser:dashboard",
+      "status": "passed",
+      "scope": "browser dashboard smoke coverage for graph/runtime surfaces",
+      "checkedAt": "2026-07-14T21:23:29.272Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser KaTeX regression coverage",
+      "checkedAt": "2026-07-14T21:23:29.318Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for graph rewind law slice",
+      "checkedAt": "2026-07-14T21:23:29.366Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T21:23:29.403Z",
+      "scope": "Run-contract hygiene for graph rewind law slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a graph vector rewind law sample that proves rewind graph-local progress is the exact reverse of forward progress for the linear-map vector runtime projection."
+  }
+}

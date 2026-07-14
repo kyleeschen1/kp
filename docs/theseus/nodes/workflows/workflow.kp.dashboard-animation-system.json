@@ -80,6 +80,7 @@
     "next-action.kp.animation-library.generated-calculus-fixtures-v0",
     "next-action.kp.animation-library.generated-linear-algebra-fixtures-v0",
     "next-action.kp.animation-library.graph-vector-runtime-consumer-v0",
+    "next-action.kp.animation-library.graph-rewind-law-v0",
     "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3"
   ],
   "verificationRecords": [
