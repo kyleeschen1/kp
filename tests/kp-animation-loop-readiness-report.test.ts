@@ -3,13 +3,13 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 const reportPath =
-  "docs/project/reviews/2026-07-14-kp-animation-asset-loop-readiness-report.md";
+  "docs/project/reviews/2026-07-14-kp-composable-animation-runtime-readiness-report.md";
 
-test("KP animation asset loop readiness report records outcomes and next tranche", () => {
+test("KP composable animation runtime readiness report records outcomes and next tranche", () => {
   const report = readFileSync(reportPath, "utf8");
 
   [
-    "# KP Animation Asset Loop Readiness Report",
+    "# KP Composable Animation Runtime Readiness Report",
     "## What Is Ready",
     "## What Is Still Contract-Level",
     "## Verification",
@@ -19,15 +19,21 @@ test("KP animation asset loop readiness report records outcomes and next tranche
   ].forEach((heading) => assert.match(report, new RegExp(escapeRegExp(heading))));
 });
 
-test("KP animation asset loop readiness report names the next implementation priorities", () => {
+test("KP composable animation runtime readiness report names delivered capabilities", () => {
   const report = readFileSync(reportPath, "utf8");
 
   [
     "renderer-neutral runtime sampler",
     "dashboard sample cards",
-    "external symbolic port",
+    "external deterministic ports",
     "program trace port",
-    "flashcard projection",
+    "flashcard projections",
+    "generated problem imports",
+    "runtime composition law",
+    "representation transform",
+    "transform-tree composition",
+    "effectful combinators",
+    "LLM decomposition",
     "quality gates"
   ].forEach((priority) =>
     assert.match(report, new RegExp(escapeRegExp(priority), "i"))

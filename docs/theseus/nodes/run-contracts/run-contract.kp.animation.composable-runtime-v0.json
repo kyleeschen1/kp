@@ -2,9 +2,9 @@
   "id": "run-contract.kp.animation.composable-runtime-v0",
   "kind": "run-contract",
   "title": "KP composable animation runtime v0 loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Durable execution contract for the approved KP direction: predictable, inspectable, composable animations as typed assets driven by one clock and reusable across math, graphs, programming, generated problems, and flashcards.",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -166,7 +166,8 @@
     {
       "id": "next-action.kp.animation.composable-runtime-readiness-report-v0",
       "title": "Close loop with runtime readiness report",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.composable-runtime-readiness-report-v0 in KP composable animation runtime v0 loop.",
+      "status": "complete"
     }
   ]
 }
