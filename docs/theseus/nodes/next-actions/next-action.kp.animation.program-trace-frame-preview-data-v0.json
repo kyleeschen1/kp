@@ -1,0 +1,97 @@
+{
+  "id": "next-action.kp.animation.program-trace-frame-preview-data-v0",
+  "kind": "next-action",
+  "title": "Add programming trace frame preview data",
+  "status": "resolved",
+  "summary": "Added programming trace frame preview data that projects animation runtime frames and execution-trace frames into inspectable step, stack, locals, output, and search fields.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.renderer-integration-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.program-trace-frame-preview-data-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-composable-animation-runtime-readiness-report.md",
+      "summary": "Runtime closeout recommends connecting the sampler to one live visual renderer, visual-frame adapters, representation transforms, generated imports, flashcards, and hardened ports."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Active KP frontier for dashboard-backed semantic animation system work."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/program-trace-frame-preview.ts",
+      "summary": "Defines program-trace preview data and a deterministic sample helper for the addition execution trace animation."
+    },
+    {
+      "kind": "file",
+      "path": "tests/program-trace-frame-preview.test.ts",
+      "summary": "Focused test proving runtime phase, trace step, active selectors, stack, locals, output, and search facets."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.renderer-integration-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add programming trace frame preview data can be completed inside KP animation renderer integration v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved renderer-integration loop slices.",
+    "Start by proving one honest runtime-to-visual path before broader renderer work.",
+    "Keep AnimationAsset runtime frames, semantic refs, visual-frame adapters, dashboards, generated problems, flashcards, and deterministic ports typed and inspectable."
+  ],
+  "disallowedWork": [
+    "Do not rewrite the full renderer or equation animation DOM pipeline in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, LSP, or network integrations; use deterministic fixtures.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/program-trace-frame-preview.test.ts tests/kp-programming-animation-asset.test.ts tests/kp-program-trace-asset.test.ts tests/programming-execution-trace-frame.test.ts tests/programming-execution-trace-fixture.test.ts tests/kp-animation-runtime-sampler.test.ts",
+      "status": "passed",
+      "scope": "program trace frame preview and adjacent programming/runtime contracts",
+      "checkedAt": "2026-07-14T17:56:25.142Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app, node, and test projects",
+      "checkedAt": "2026-07-14T17:56:25.177Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation",
+      "checkedAt": "2026-07-14T17:56:25.209Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T17:56:25.240Z",
+      "scope": "Run-contract hygiene gate"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added programming trace frame preview data that projects animation runtime frames and execution-trace frames into inspectable step, stack, locals, output, and search fields."
+  }
+}
