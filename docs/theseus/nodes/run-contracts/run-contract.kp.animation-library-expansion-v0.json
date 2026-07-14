@@ -100,13 +100,14 @@
     {
       "id": "next-action.kp.animation-library.artifact-fade-rules-v0",
       "title": "Promote artifact fade rules",
-      "status": "ready",
-      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.artifact-fade-rules-v0 in KP animation library expansion v0 loop."
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.artifact-fade-rules-v0 in KP animation library expansion v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation-library.fraction-transforms-v0",
       "title": "Expand fraction transform coverage",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.fraction-transforms-v0 in KP animation library expansion v0 loop."
     },
     {
       "id": "next-action.kp.animation-library.exponent-radical-transforms-v0",

@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation-library.artifact-fade-rules-v0",
   "kind": "next-action",
   "title": "Promote artifact fade rules",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.artifact-fade-rules-v0 in KP animation library expansion v0 loop.",
+  "summary": "Promoted artifact fade rules by adding a KaTeX visual artifact fade law that distinguishes target-only enter, source-only exit, source-to-target replace, and persist records without claiming identity for visual-only artifacts.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,26 @@
       "kind": "file",
       "path": "tests/katex-artifact-texture-blend.test.ts",
       "summary": "Focused texture blend coverage for artifact source fade and target reveal behavior."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/visual-artifact-lifecycle.ts",
+      "summary": "Adds the artifact fade law over visual-only lifecycle records and correspondence conversion semantics."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-plan.test.ts",
+      "summary": "Covers valid artifact lifecycle records and a broken replacement that incorrectly claims target persistence."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-artifact-texture-blend.ts",
+      "summary": "Existing texture blend sampler provides source fade and target reveal behavior for visual-only artifact quads."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-artifact-texture-blend.test.ts",
+      "summary": "Existing texture blend coverage verifies reversible progress, source/target opacity, atlas gaps, and WebGL transition plan exposure."
     }
   ],
   "dependsOn": {
@@ -84,5 +104,41 @@
       "id": "browser-coverage-preserves-live-artifact-rendering",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-plan.test.ts tests/katex-artifact-texture-blend.test.ts tests/katex-token-snapshot.test.ts",
+      "status": "passed",
+      "scope": "focused artifact lifecycle, texture blend, and KaTeX snapshot coverage",
+      "checkedAt": "2026-07-14T19:57:41.073Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for live artifact rendering and KaTeX regressions",
+      "checkedAt": "2026-07-14T19:57:41.109Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for artifact fade rules slice",
+      "checkedAt": "2026-07-14T19:57:41.143Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for artifact fade rules slice",
+      "checkedAt": "2026-07-14T19:57:41.178Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T19:57:41.216Z",
+      "scope": "Run-contract hygiene for artifact fade rules slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted artifact fade rules by adding a KaTeX visual artifact fade law that distinguishes target-only enter, source-only exit, source-to-target replace, and persist records without claiming identity for visual-only artifacts."
+  }
 }

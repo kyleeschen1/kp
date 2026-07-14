@@ -16,6 +16,7 @@ import {
   type EquationMotionPlan
 } from "../src/rendering/equation-motion-plan.ts";
 import {
+  checkKatexVisualArtifactFadeRules,
   katexVisualArtifactLifecycleRecords,
   visualArtifactRecordToCorrespondenceRecord
 } from "../src/rendering/visual-artifact-lifecycle.ts";
@@ -668,6 +669,41 @@ test("visual artifact lifecycle records map to visual-only artifact corresponden
         []
       ]
     ]
+  );
+});
+
+test("visual artifact lifecycle records satisfy artifact fade rules", () => {
+  assert.deepEqual(checkKatexVisualArtifactFadeRules(), {
+    lawId: "katex-visual-artifact.fade-rules",
+    passed: true,
+    failures: []
+  });
+});
+
+test("visual artifact fade rule reports replacement persistence claims", () => {
+  assert.deepEqual(
+    checkKatexVisualArtifactFadeRules(
+      katexVisualArtifactLifecycleRecords.map((record) =>
+        record.id === "artifact.matrix-bracket.replace-delimiter"
+          ? {
+              ...record,
+              targetVisualLifecycle: "persist"
+            }
+          : record
+      )
+    ),
+    {
+      lawId: "katex-visual-artifact.fade-rules",
+      passed: false,
+      failures: [
+        {
+          path:
+            "records[artifact.matrix-bracket.replace-delimiter].targetVisualLifecycle",
+          message:
+            "Visual artifact artifact.matrix-bracket.replace-delimiter phase replace expected targetVisualLifecycle enter but received persist."
+        }
+      ]
+    }
   );
 });
 
