@@ -143,10 +143,18 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
       item("capability-external-animation-port", "ExternalAnimationPort", "runtime", "active", "Deterministic adapter contract for importing external symbolic, graph, or program data as validated AnimationAssets.", ["animation", "port", "external"], {
         protocols: [
           "createKpExternalAnimationPort",
-          "runKpExternalAnimationPort"
+          "runKpExternalAnimationPort",
+          "summarizeKpExternalAnimationPortDiagnostics",
+          "checkKpExternalAnimationPortLossDiagnostics"
         ],
         inputs: ["external deterministic trace", "fixture", "symbolic-system output"],
-        outputs: ["AnimationAsset", "port diagnostics", "animation validation diagnostics"],
+        outputs: [
+          "AnimationAsset",
+          "port diagnostics",
+          "animation validation diagnostics",
+          "diagnostic summary",
+          "loss reporting law"
+        ],
         preserves: ["port provenance", "animation identity", "diagnostic provenance"]
       })
     ]

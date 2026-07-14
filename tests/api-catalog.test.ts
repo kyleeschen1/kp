@@ -130,12 +130,16 @@ test("API catalog covers notation and layout entities with the same metadata pro
   assert.equal(externalAnimationPort?.item.status, "active");
   assert.deepEqual(externalAnimationPort?.item.details?.protocols, [
     "createKpExternalAnimationPort",
-    "runKpExternalAnimationPort"
+    "runKpExternalAnimationPort",
+    "summarizeKpExternalAnimationPortDiagnostics",
+    "checkKpExternalAnimationPortLossDiagnostics"
   ]);
   assert.deepEqual(externalAnimationPort?.item.details?.outputs, [
     "AnimationAsset",
     "port diagnostics",
-    "animation validation diagnostics"
+    "animation validation diagnostics",
+    "diagnostic summary",
+    "loss reporting law"
   ]);
 });
 

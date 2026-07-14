@@ -5,6 +5,7 @@ import {
   createLinearSolveExternalAnimationPort
 } from "../src/animation/external-algebra-port.ts";
 import {
+  checkKpExternalAnimationPortLossDiagnostics,
   runKpExternalAnimationPort
 } from "../src/animation/external-port.ts";
 import {
@@ -49,4 +50,49 @@ test("linear solve algebra trace imports as a sampleable AnimationAsset", () => 
   assert.deepEqual(frame.activeTransformationIds, [
     "transform.linear-solve.cancel-left-additive-inverse"
   ]);
+});
+
+test("linear solve animation port surfaces algebra trace mismatch diagnostics", () => {
+  const port = createLinearSolveExternalAnimationPort();
+  const mismatchedTrace = {
+    ...linearSolveAlgebraTraceFixture,
+    steps: linearSolveAlgebraTraceFixture.steps.map((step) =>
+      step.id === "trace.linear-solve.step.left-simplified"
+        ? { ...step, latex: "x = 0" }
+        : step
+    )
+  };
+  const result = runKpExternalAnimationPort(port, mismatchedTrace);
+
+  assert.equal(result.preservation, "lax");
+  assert.deepEqual(result.diagnosticSummary, {
+    total: 1,
+    bySeverity: {
+      info: 0,
+      warning: 1,
+      error: 0
+    },
+    byLossKind: {
+      partial: 1
+    },
+    codes: ["trace-latex-mismatch"],
+    hasErrors: false,
+    hasLoss: true,
+    preservation: "lax"
+  });
+  assert.deepEqual(result.diagnostics, [
+    {
+      severity: "warning",
+      code: "trace-latex-mismatch",
+      lossKind: "partial",
+      message:
+        "Trace step trace.linear-solve.step.left-simplified latex does not match canonical object equation.linear-solve.left-simplified.",
+      path: "steps[2].latex"
+    }
+  ]);
+  assert.deepEqual(checkKpExternalAnimationPortLossDiagnostics(result), {
+    lawId: "animation-port.loss-reporting",
+    passed: true,
+    failures: []
+  });
 });

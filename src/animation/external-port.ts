@@ -6,8 +6,14 @@ import type {
   KpLawCheckLevel
 } from "../semantic/asset-transformation.ts";
 import type {
-  KpPortDiagnostic
+  KpPortDiagnostic,
+  KpPortDiagnosticSeverity,
+  KpPortLossKind
 } from "../semantic/asset-port.ts";
+import type {
+  KpLawCheckResult,
+  KpLawFailure
+} from "../semantic/asset-laws.ts";
 
 export interface KpExternalAnimationPortImportResult {
   readonly animation: KpAnimationAsset;
@@ -43,6 +49,17 @@ export interface KpExternalAnimationPortRunResult {
   readonly preservation: KpLawCheckLevel;
   readonly animation: KpAnimationAsset;
   readonly diagnostics: readonly KpPortDiagnostic[];
+  readonly diagnosticSummary: KpExternalAnimationPortDiagnosticSummary;
+}
+
+export interface KpExternalAnimationPortDiagnosticSummary {
+  readonly total: number;
+  readonly bySeverity: Readonly<Record<KpPortDiagnosticSeverity, number>>;
+  readonly byLossKind: Readonly<Partial<Record<KpPortLossKind, number>>>;
+  readonly codes: readonly string[];
+  readonly hasErrors: boolean;
+  readonly hasLoss: boolean;
+  readonly preservation: KpLawCheckLevel;
 }
 
 export function createKpExternalAnimationPort<TInput>(
@@ -80,7 +97,92 @@ export function runKpExternalAnimationPort<TInput>(
     version: port.version,
     preservation: result.preservation ?? port.preservation,
     animation: result.animation,
-    diagnostics
+    diagnostics,
+    diagnosticSummary: summarizeKpExternalAnimationPortDiagnostics({
+      preservation: result.preservation ?? port.preservation,
+      diagnostics
+    })
+  };
+}
+
+export function summarizeKpExternalAnimationPortDiagnostics(
+  result: Pick<KpExternalAnimationPortRunResult, "preservation" | "diagnostics">
+): KpExternalAnimationPortDiagnosticSummary {
+  const bySeverity: Record<KpPortDiagnosticSeverity, number> = {
+    info: 0,
+    warning: 0,
+    error: 0
+  };
+  const byLossKind: Partial<Record<KpPortLossKind, number>> = {};
+  const codes: string[] = [];
+
+  result.diagnostics.forEach((diagnostic) => {
+    bySeverity[diagnostic.severity] += 1;
+
+    if (diagnostic.lossKind !== undefined) {
+      byLossKind[diagnostic.lossKind] =
+        (byLossKind[diagnostic.lossKind] ?? 0) + 1;
+    }
+
+    if (!codes.includes(diagnostic.code)) {
+      codes.push(diagnostic.code);
+    }
+  });
+
+  return {
+    total: result.diagnostics.length,
+    bySeverity,
+    byLossKind,
+    codes,
+    hasErrors: bySeverity.error > 0,
+    hasLoss: result.diagnostics.some(
+      (diagnostic) => diagnostic.lossKind !== undefined
+    ),
+    preservation: result.preservation
+  };
+}
+
+export function checkKpExternalAnimationPortLossDiagnostics(
+  result: KpExternalAnimationPortRunResult
+): KpLawCheckResult {
+  const failures: KpLawFailure[] = [];
+
+  if (result.preservation !== "strict" && result.diagnostics.length === 0) {
+    failures.push({
+      path: "diagnostics",
+      message:
+        `Animation port ${result.portId} must report diagnostics when preservation is ${result.preservation}.`
+    });
+  }
+
+  result.diagnostics.forEach((diagnostic, index) => {
+    if (
+      (diagnostic.severity === "warning" || diagnostic.severity === "error") &&
+      diagnostic.lossKind === undefined
+    ) {
+      failures.push({
+        path: `diagnostics[${index}].lossKind`,
+        message:
+          `Animation port ${result.portId} diagnostic ${diagnostic.code} must name the loss kind.`
+      });
+    }
+  });
+
+  if (
+    result.preservation === "strict" &&
+    result.diagnostics.some((diagnostic) => diagnostic.lossKind !== undefined)
+  ) {
+    failures.push({
+      path: "diagnostics",
+      message:
+        `Animation port ${result.portId} cannot claim strict preservation while reporting loss diagnostics.`
+    });
+  }
+
+  return {
+    lawId: "animation-port.loss-reporting",
+    passed: failures.length === 0,
+    failures
   };
 }
 
@@ -90,6 +192,7 @@ function animationValidationDiagnostics(
   return validateKpAnimationAsset(animation).map((issue) => ({
     severity: "error",
     code: "animation-validation",
+    lossKind: "unsupported",
     message: formatAnimationValidationMessage(animation, issue.message),
     path: issue.path
   }));
