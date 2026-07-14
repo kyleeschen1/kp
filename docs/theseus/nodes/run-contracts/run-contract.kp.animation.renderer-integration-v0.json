@@ -70,7 +70,8 @@
     {
       "id": "next-action.kp.animation.runtime-dom-geometry-frame-adapter-v0",
       "title": "Add measured DOM geometry frame adapter",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.runtime-dom-geometry-frame-adapter-v0 in KP animation renderer integration v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.runtime-linear-solve-visual-consumer-v0",

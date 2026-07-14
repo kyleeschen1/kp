@@ -3,6 +3,7 @@ import {
   type KpAnimationVisualBinding,
   type KpAnimationVisualFrame,
   type KpAnimationVisualFrameDiagnostic,
+  type KpAnimationVisualGeometry,
   type KpAnimationVisualRendererKind
 } from "../animation/visual-frame-adapter.ts";
 import type {
@@ -21,6 +22,7 @@ export interface CreateKatexRuntimeVisualFrameInput {
   readonly runtimeFrame: KpAnimationRuntimeFrame;
   readonly tokens: readonly KatexMotionToken[];
   readonly renderTargetRef?: string | undefined;
+  readonly renderTargetGeometry?: KpAnimationVisualGeometry | undefined;
   readonly renderer?: KpAnimationVisualRendererKind | undefined;
 }
 
@@ -64,7 +66,10 @@ export function createKatexRuntimeVisualBindings(
       kind: "render-target",
       targetId: target.id,
       renderer,
-      ref: input.renderTargetRef ?? target.id
+      ref: input.renderTargetRef ?? target.id,
+      ...(input.renderTargetGeometry === undefined
+        ? {}
+        : { geometry: { ...input.renderTargetGeometry } })
     }));
   const selectorBindings = input.runtimeFrame.selectorFrames.flatMap(
     (selector) => {
