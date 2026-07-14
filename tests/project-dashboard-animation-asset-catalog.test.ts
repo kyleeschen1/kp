@@ -119,6 +119,38 @@ test("dashboard animation asset rows include cross-domain component facets", () 
   );
 });
 
+test("dashboard animation asset rows include flashcard projection facets", () => {
+  const rows = createAnimationAssetAgendaRows("");
+  const linearSolve = rows.find(
+    (row) => row.id === "animation-linear-solve-solve-x"
+  );
+
+  assert.deepEqual(
+    linearSolve?.previewFields.find(
+      (field) => field.label === "Flashcard projections"
+    ),
+    {
+      label: "Flashcard projections",
+      value: "4"
+    }
+  );
+  assert.deepEqual(
+    linearSolve?.previewFields.find(
+      (field) => field.label === "Flashcard kinds"
+    ),
+    {
+      label: "Flashcard kinds",
+      value: "cloze, predict-next, explain-transform, focus-relationship"
+    }
+  );
+  assert.ok(
+    linearSolve?.searchFields.includes("flashcard-projection:predict-next")
+  );
+  assert.ok(
+    linearSolve?.searchFields.includes("card.linear-solve.predict-subtract")
+  );
+});
+
 test("semantic asset dashboard search resolves animation component facets", () => {
   assert.deepEqual(
     createSemanticAssetCatalogAgendaRows(
@@ -131,6 +163,15 @@ test("semantic asset dashboard search resolves animation component facets", () =
       "layout-kind:row component:animation.programming.add.execution-trace"
     ).map((row) => row.id),
     ["animation-comparison-linear-solve-programming"]
+  );
+});
+
+test("semantic asset dashboard search resolves flashcard projection facets", () => {
+  assert.deepEqual(
+    createSemanticAssetCatalogAgendaRows(
+      "flashcard-projection:predict-next card.linear-solve.predict-subtract"
+    ).map((row) => row.id),
+    ["animation-linear-solve-solve-x"]
   );
 });
 

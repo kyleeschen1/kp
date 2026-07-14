@@ -124,7 +124,8 @@
     {
       "id": "next-action.kp.animation.dashboard-flashcard-facets-v0",
       "title": "Add dashboard facets for flashcard projections",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.dashboard-flashcard-facets-v0 in KP composable animation runtime v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.generated-problem-animation-import-v0",

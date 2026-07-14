@@ -4,6 +4,9 @@ import {
   createGeneratedAlgebraAnimationAssets
 } from "../animation/catalog.ts";
 import {
+  createKpAnimationFlashcardProjections
+} from "../animation/flashcard-projection.ts";
+import {
   checkKpAnimationAssetReferenceClosure,
   checkKpAnimationAssetSeekRewindLaw,
   type KpAnimationAsset
@@ -20,6 +23,12 @@ import {
   createGeneratedLinearSolveTutorialFixtures,
   type GeneratedAlgebraTutorialFixture
 } from "../semantic/generated-algebra-tutorial-fixture.ts";
+import type {
+  KpFlashcardSpec
+} from "../semantic/asset-flashcard.ts";
+import {
+  createLinearSolveKpAssetBundle
+} from "../semantic/linear-solve-asset.ts";
 import {
   defaultEquationTransformVisualMotifRules
 } from "../rendering/equation-visual-motif-defaults.ts";
@@ -203,6 +212,13 @@ function createAnimationAssetAgendaRowsForAssets(input: {
       const midpointFrame = runtimeFrame.frameDescriptor;
       const referenceClosure = checkKpAnimationAssetReferenceClosure(animation);
       const seekRewind = checkKpAnimationAssetSeekRewindLaw(animation);
+      const flashcardProjections = createKpAnimationFlashcardProjections({
+        animation,
+        cards: flashcardsForAnimation(animation)
+      });
+      const flashcardKinds = uniqueStrings(
+        flashcardProjections.map((projection) => projection.cardKind)
+      );
 
       return {
         id: animation.dashboard?.rowId ?? `animation-${animation.id}`,
@@ -329,6 +345,15 @@ function createAnimationAssetAgendaRowsForAssets(input: {
           {
             label: "Runtime child frames",
             value: formatRuntimeChildFrames(runtimeFrame.childFrames)
+          },
+          {
+            label: "Flashcard projections",
+            value: String(flashcardProjections.length)
+          },
+          {
+            label: "Flashcard kinds",
+            value:
+              flashcardKinds.length === 0 ? "None" : flashcardKinds.join(", ")
           }
         ],
         previewLinks: [],
@@ -387,6 +412,21 @@ function createAnimationAssetAgendaRowsForAssets(input: {
           ...runtimeFrame.phaseDiagnostics.map((diagnostic) => diagnostic.code),
           ...runtimeFrame.selectorDiagnostics.map((diagnostic) => diagnostic.code),
           ...runtimeFrame.childDiagnostics.map((diagnostic) => diagnostic.code),
+          ...(flashcardProjections.length === 0
+            ? []
+            : ["flashcard-projection"]),
+          ...flashcardProjections.flatMap((projection) => [
+            projection.id,
+            projection.cardId,
+            projection.cardKind,
+            projection.title,
+            projection.prompt,
+            `flashcard-projection:${projection.cardKind}`,
+            ...projection.objectIds,
+            ...projection.selectorIds,
+            ...projection.transformationIds,
+            ...projection.diagnostics.map((diagnostic) => diagnostic.message)
+          ]),
           midpointFrame.phaseId,
           ...midpointFrame.nodeIds,
           ...(animation.dashboard?.tags ?? []),
@@ -611,12 +651,36 @@ function childAnimationIdsForAnimation(
   return uniqueStrings([...metadataChildIds, ...renderTargetChildIds]);
 }
 
+function flashcardsForAnimation(
+  animation: KpAnimationAsset
+): readonly KpFlashcardSpec[] {
+  const linearSolve = createLinearSolveKpAssetBundle();
+
+  if (animation.bundle.id === linearSolve.bundle.id) {
+    return linearSolve.flashcards;
+  }
+
+  const sourceFixtureId = metadataString(animation.metadata?.["sourceFixtureId"]);
+  const fixture = createGeneratedAlgebraTutorialFixtures().find((candidate) =>
+    candidate.bundle.id === animation.bundle.id ||
+    (sourceFixtureId !== undefined && candidate.id === sourceFixtureId)
+  );
+
+  return fixture?.flashcards ?? [];
+}
+
 function splitMetadataIds(
   value: string | number | boolean | undefined
 ): readonly string[] {
   return typeof value === "string"
     ? value.split(/\s+/).filter((part) => part.length > 0)
     : [];
+}
+
+function metadataString(
+  value: string | number | boolean | undefined
+): string | undefined {
+  return typeof value === "string" ? value : undefined;
 }
 
 function animationMetadataSearchFields(
