@@ -1496,6 +1496,184 @@ test("calculus derivative rules family projects to tangent graph samples", () =>
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("calculus integral and FTC family preserves integrands and bounds", () => {
+  const family = symbolicManipulationFamilyById("family.calculus.integral-ftc");
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "integral.before",
+        "integral-expression",
+        [
+          "integral.sign",
+          "lower.bound",
+          "upper.bound",
+          "integrand",
+          "differential",
+          "variable"
+        ]
+      ],
+      [
+        "integral.after",
+        "integral-expression",
+        [
+          "antiderivative",
+          "lower.bound",
+          "upper.bound",
+          "evaluation.bar",
+          "variable",
+          "area.region"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.calculus.integral-sum-rule",
+        "integralSumRule",
+        ["value", "structure"],
+        "law.calculus.integral-sum"
+      ],
+      [
+        "definition.symbolic.calculus.antiderivative-rule",
+        "antiderivativeRule",
+        ["value", "structure"],
+        "law.calculus.antiderivative"
+      ],
+      [
+        "definition.symbolic.calculus.definite-integral-ftc",
+        "definiteIntegralFtc",
+        ["value", "structure"],
+        "law.calculus.ftc-evaluation"
+      ],
+      [
+        "definition.symbolic.calculus.accumulation-derivative-ftc",
+        "accumulationDerivativeFtc",
+        ["value", "structure"],
+        "law.calculus.ftc-accumulation-derivative"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[2]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["integrand", "antiderivative", ["value", "role"]],
+      ["lower.bound", "lower.bound", ["identity", "role"]],
+      ["upper.bound", "upper.bound", ["identity", "role"]],
+      ["variable", "variable", ["identity", "role"]],
+      ["integral.sign", "evaluation.bar", ["presentation", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.calculus.integral.antiderivative-emerge",
+      motifKind: "antiderivative-emerge",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.integral-sum-rule",
+        "definition.symbolic.calculus.antiderivative-rule"
+      ],
+      summary:
+        "The integrand persists into an antiderivative form while integral and differential artifacts fade."
+    },
+    {
+      id: "motif.calculus.integral.bounds-evaluate",
+      motifKind: "bounds-evaluate",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.definite-integral-ftc"
+      ],
+      summary:
+        "Bounds move from integral limits to evaluation positions around the antiderivative."
+    },
+    {
+      id: "motif.calculus.integral.area-accumulation",
+      motifKind: "area-accumulation",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.accumulation-derivative-ftc"
+      ],
+      summary:
+        "Changing upper bounds sweep an area region while preserving the integrand as the accumulated rate."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.integral-ftc.basic",
+      animationId: "animation.integral-ftc.basic",
+      renderTargetKinds: ["equation", "graph"],
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.definite-integral-ftc",
+        "definition.symbolic.calculus.accumulation-derivative-ftc"
+      ],
+      summary:
+        "Basic FTC sample links bound movement, antiderivative evaluation, and area accumulation."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.calculus.integral.area-accumulation",
+      title: "Definite integral corresponds to accumulated area",
+      representationKind: "area-accumulation",
+      exactness: "sampled",
+      preserves: ["value"],
+      lawRefs: [
+        {
+          id: "law.graph.integral-area-accumulation",
+          level: "sampled"
+        }
+      ],
+      sampleAssetIds: ["animation.integral-ftc.basic"],
+      summary:
+        "Integral and FTC rewrites preserve the accumulated area represented between the lower and upper bounds."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.calculus-integral-ftc",
+      fixtureFamilyId: "generated.calculus-integral-ftc",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.integral-sum-rule",
+        "definition.symbolic.calculus.antiderivative-rule",
+        "definition.symbolic.calculus.definite-integral-ftc",
+        "definition.symbolic.calculus.accumulation-derivative-ftc"
+      ],
+      summary:
+        "Generated integral traces can map antiderivatives, definite bounds, and FTC evaluation to this family."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.calculus.integral-ftc.bounds",
+      kind: "relationship",
+      transformationDefinitionIds: [
+        "definition.symbolic.calculus.definite-integral-ftc",
+        "definition.symbolic.calculus.accumulation-derivative-ftc"
+      ],
+      summary:
+        "Relationship cards can ask how bounds, antiderivatives, and area regions correspond."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
   assert.deepEqual(
     createSymbolicManipulationFamilyAgendaRows(

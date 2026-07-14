@@ -231,6 +231,7 @@ export function createSymbolicManipulationFamilyRegistry():
     createAlgebraExponentLogFamily(),
     createAlgebraInequalityFamily(),
     createCalculusDerivativeRulesFamily(),
+    createCalculusIntegralFtcFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
@@ -240,7 +241,8 @@ export function createSymbolicManipulationFamilyRegistry():
           spec.id !== "family.algebra.fraction-simplification" &&
           spec.id !== "family.algebra.exponent-log-laws" &&
           spec.id !== "family.algebra.inequality" &&
-          spec.id !== "family.calculus.derivative-rules"
+          spec.id !== "family.calculus.derivative-rules" &&
+          spec.id !== "family.calculus.integral-ftc"
       )
       .map(createSeedFamily)
   ];
@@ -2103,6 +2105,270 @@ function createDerivativeDefinition(input: {
         targetObjectRole: "derivative.after",
         targetSelectorRole: "inner.derivative",
         preserves: ["identity", "role"]
+      }
+    ]
+  });
+}
+
+function createCalculusIntegralFtcFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.calculus.integral-sum-rule",
+    "definition.symbolic.calculus.antiderivative-rule",
+    "definition.symbolic.calculus.definite-integral-ftc",
+    "definition.symbolic.calculus.accumulation-derivative-ftc"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.calculus.integral-ftc",
+    title: "Integral and FTC transformations",
+    domain: "calculus",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "integral.before",
+        objectType: "integral-expression",
+        title: "Integral expression before rewrite",
+        selectorRoles: [
+          { id: "integral.sign", kind: "operator" },
+          { id: "lower.bound", kind: "bound" },
+          { id: "upper.bound", kind: "bound" },
+          { id: "integrand", kind: "function" },
+          { id: "differential", kind: "operator" },
+          { id: "variable", kind: "variable" }
+        ]
+      },
+      {
+        id: "integral.after",
+        objectType: "integral-expression",
+        title: "Integral expression after rewrite",
+        selectorRoles: [
+          { id: "antiderivative", kind: "function" },
+          { id: "lower.bound", kind: "bound" },
+          { id: "upper.bound", kind: "bound" },
+          { id: "evaluation.bar", kind: "operator" },
+          { id: "variable", kind: "variable" },
+          { id: "area.region", kind: "graph-region" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createIntegralDefinition({
+        id: "definition.symbolic.calculus.integral-sum-rule",
+        transformType: "integralSumRule",
+        title: "Apply the integral sum rule",
+        lawId: "law.calculus.integral-sum",
+        assumption: "The integral is linear over finite sums."
+      }),
+      createIntegralDefinition({
+        id: "definition.symbolic.calculus.antiderivative-rule",
+        transformType: "antiderivativeRule",
+        title: "Rewrite an indefinite integral as an antiderivative",
+        lawId: "law.calculus.antiderivative",
+        assumption:
+          "The chosen antiderivative differentiates back to the integrand on the represented domain."
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.calculus.definite-integral-ftc",
+        transformType: "definiteIntegralFtc",
+        title: "Evaluate a definite integral by the Fundamental Theorem of Calculus",
+        sourceObjectRoles: ["integral.before"],
+        targetObjectRoles: ["integral.after"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "The integrand is continuous on the interval and has the represented antiderivative."
+        ],
+        lawRefs: [
+          {
+            id: "law.calculus.ftc-evaluation",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "integral.before",
+            sourceSelectorRole: "integrand",
+            targetObjectRole: "integral.after",
+            targetSelectorRole: "antiderivative",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "integral.before",
+            sourceSelectorRole: "lower.bound",
+            targetObjectRole: "integral.after",
+            targetSelectorRole: "lower.bound",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "integral.before",
+            sourceSelectorRole: "upper.bound",
+            targetObjectRole: "integral.after",
+            targetSelectorRole: "upper.bound",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "integral.before",
+            sourceSelectorRole: "variable",
+            targetObjectRole: "integral.after",
+            targetSelectorRole: "variable",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "integral.before",
+            sourceSelectorRole: "integral.sign",
+            targetObjectRole: "integral.after",
+            targetSelectorRole: "evaluation.bar",
+            preserves: ["presentation", "role"]
+          }
+        ]
+      }),
+      createIntegralDefinition({
+        id: "definition.symbolic.calculus.accumulation-derivative-ftc",
+        transformType: "accumulationDerivativeFtc",
+        title: "Relate an accumulation function derivative to its integrand",
+        lawId: "law.calculus.ftc-accumulation-derivative",
+        assumption:
+          "The upper bound varies and the integrand is continuous on the accumulated interval."
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.calculus.integral.antiderivative-emerge",
+        motifKind: "antiderivative-emerge",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.integral-sum-rule",
+          "definition.symbolic.calculus.antiderivative-rule"
+        ],
+        summary:
+          "The integrand persists into an antiderivative form while integral and differential artifacts fade."
+      },
+      {
+        id: "motif.calculus.integral.bounds-evaluate",
+        motifKind: "bounds-evaluate",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.definite-integral-ftc"
+        ],
+        summary:
+          "Bounds move from integral limits to evaluation positions around the antiderivative."
+      },
+      {
+        id: "motif.calculus.integral.area-accumulation",
+        motifKind: "area-accumulation",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.accumulation-derivative-ftc"
+        ],
+        summary:
+          "Changing upper bounds sweep an area region while preserving the integrand as the accumulated rate."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.integral-ftc.basic",
+        animationId: "animation.integral-ftc.basic",
+        renderTargetKinds: ["equation", "graph"],
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.definite-integral-ftc",
+          "definition.symbolic.calculus.accumulation-derivative-ftc"
+        ],
+        summary:
+          "Basic FTC sample links bound movement, antiderivative evaluation, and area accumulation."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.calculus.integral.area-accumulation",
+        title: "Definite integral corresponds to accumulated area",
+        representationKind: "area-accumulation",
+        exactness: "sampled",
+        preserves: ["value"],
+        lawRefs: [
+          {
+            id: "law.graph.integral-area-accumulation",
+            level: "sampled"
+          }
+        ],
+        sampleAssetIds: ["animation.integral-ftc.basic"],
+        summary:
+          "Integral and FTC rewrites preserve the accumulated area represented between the lower and upper bounds."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.calculus-integral-ftc",
+        fixtureFamilyId: "generated.calculus-integral-ftc",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated integral traces can map antiderivatives, definite bounds, and FTC evaluation to this family."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.calculus.integral-ftc.bounds",
+        kind: "relationship",
+        transformationDefinitionIds: [
+          "definition.symbolic.calculus.definite-integral-ftc",
+          "definition.symbolic.calculus.accumulation-derivative-ftc"
+        ],
+        summary:
+          "Relationship cards can ask how bounds, antiderivatives, and area regions correspond."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId("family.calculus.integral-ftc"),
+      tags: [
+        "integral",
+        "ftc",
+        "area",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for antiderivatives, definite integrals, bounds, and the Fundamental Theorem of Calculus.",
+      searchSummary:
+        "integral antiderivative definite bounds fundamental theorem calculus area accumulation lower upper",
+      graphEquivalentKinds: "area-accumulation"
+    }
+  });
+}
+
+function createIntegralDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["integral.before"],
+    targetObjectRoles: ["integral.after"],
+    preserves: ["value", "structure"],
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "integral.before",
+        sourceSelectorRole: "integrand",
+        targetObjectRole: "integral.after",
+        targetSelectorRole: "antiderivative",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "integral.before",
+        sourceSelectorRole: "variable",
+        targetObjectRole: "integral.after",
+        targetSelectorRole: "variable",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "integral.before",
+        sourceSelectorRole: "integral.sign",
+        targetObjectRole: "integral.after",
+        targetSelectorRole: "evaluation.bar",
+        preserves: ["presentation", "role"]
       }
     ]
   });

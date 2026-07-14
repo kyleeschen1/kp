@@ -138,7 +138,7 @@
       "id": "next-action.kp.animation.calculus-integral-ftc-family-v0",
       "title": "Add integral and FTC family",
       "summary": "Model antiderivative, definite integral, bounds, and Fundamental Theorem of Calculus rewrites with persistent integrand/bound semantics.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.calculus-area-graph-equivalent-v0",
