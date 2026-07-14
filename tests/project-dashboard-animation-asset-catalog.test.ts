@@ -2,6 +2,7 @@ import { strict as assert } from "node:assert";
 import test from "node:test";
 
 import {
+  createAnimationAssetAgendaRows,
   createGeneratedAlgebraAnimationAssetAgendaRows
 } from "../src/project-dashboard/generated-algebra-catalog.ts";
 import {
@@ -62,6 +63,49 @@ test("semantic asset dashboard catalog includes animation asset rows", () => {
       "composable animation asset generated.radical.square-root-as-power"
     ).map((row) => row.id),
     ["animation-generated-radical-square-root-as-power"]
+  );
+});
+
+test("dashboard animation asset rows include cross-domain component facets", () => {
+  const rows = createAnimationAssetAgendaRows("");
+  const rowIds = rows.map((row) => row.id);
+  const comparison = rows.find(
+    (row) => row.id === "animation-comparison-linear-solve-programming"
+  );
+
+  assert.ok(rowIds.includes("animation-graph-vector-linear-map-scale"));
+  assert.ok(rowIds.includes("animation-programming-add-execution-trace"));
+  assert.ok(rowIds.includes("animation-comparison-linear-solve-programming"));
+  assert.ok(
+    comparison?.searchFields.includes(
+      "component:animation.programming.add.execution-trace"
+    )
+  );
+  assert.ok(comparison?.searchFields.includes("layout-kind:row"));
+  assert.ok(comparison?.searchFields.includes("render-target-kind:programming"));
+  assert.deepEqual(
+    comparison?.previewFields.find(
+      (field) => field.label === "Render target kinds"
+    ),
+    {
+      label: "Render target kinds",
+      value: "equation, programming"
+    }
+  );
+});
+
+test("semantic asset dashboard search resolves animation component facets", () => {
+  assert.deepEqual(
+    createSemanticAssetCatalogAgendaRows(
+      "render-target-kind:graph linear-map-vector-motion"
+    ).map((row) => row.id),
+    ["animation-graph-vector-linear-map-scale"]
+  );
+  assert.deepEqual(
+    createSemanticAssetCatalogAgendaRows(
+      "layout-kind:row component:animation.programming.add.execution-trace"
+    ).map((row) => row.id),
+    ["animation-comparison-linear-solve-programming"]
   );
 });
 

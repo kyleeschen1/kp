@@ -1,5 +1,6 @@
 import { runKpInterpreter } from "../semantic/asset-interpreter.ts";
 import {
+  createKpAnimationAssets,
   createGeneratedAlgebraAnimationAssets
 } from "../animation/catalog.ts";
 import {
@@ -145,12 +146,50 @@ export function createGeneratedAlgebraFixtureAgendaRows(
 export function createGeneratedAlgebraAnimationAssetAgendaRows(
   query: string
 ): readonly GeneratedAlgebraFixtureAgendaRow[] {
-  const rows = createGeneratedAlgebraAnimationAssets().map(
+  return createAnimationAssetAgendaRowsForAssets({
+    animations: createGeneratedAlgebraAnimationAssets(),
+    catalogSearchLabel: "generated algebra animation asset",
+    query
+  });
+}
+
+export function createAnimationAssetAgendaRows(
+  query: string
+): readonly GeneratedAlgebraFixtureAgendaRow[] {
+  return createAnimationAssetAgendaRowsForAssets({
+    animations: createKpAnimationAssets(),
+    catalogSearchLabel: "animation asset catalog",
+    query
+  });
+}
+
+function createAnimationAssetAgendaRowsForAssets(input: {
+  readonly animations: readonly KpAnimationAsset[];
+  readonly catalogSearchLabel: string;
+  readonly query: string;
+}): readonly GeneratedAlgebraFixtureAgendaRow[] {
+  const rows = input.animations.map(
     (animation): GeneratedAlgebraFixtureAgendaRow => {
       const transformDefinitionIds = animationDefinitionIds(animation);
       const renderTargetIds = animation.renderTargets.map((target) => target.id);
+      const renderTargetKinds = uniqueStrings(
+        animation.renderTargets.map((target) => target.kind)
+      );
       const exportTargetIds = animation.exportTargets.map((target) => target.id);
+      const objectTypes = uniqueStrings(
+        animation.bundle.objects.map((object) => object.objectType)
+      );
       const sourceRefIds = animation.dashboard?.sourceRefIds ?? [];
+      const childAnimationIds = childAnimationIdsForAnimation(animation);
+      const checkFacets = animation.checks.map(
+        (check) => `${check.lawId}:${check.level}`
+      );
+      const metadataSearchFields = animationMetadataSearchFields(
+        animation.metadata
+      );
+      const renderTargetMetadataSearchFields = animation.renderTargets.flatMap(
+        (target) => animationMetadataSearchFields(target.metadata)
+      );
       const midpointFrame = sampleKpAnimationFrameDescriptor({
         id: `frame.${animation.id}.preview-midpoint`,
         animation,
@@ -209,6 +248,18 @@ export function createGeneratedAlgebraAnimationAssetAgendaRows(
           },
           { label: "Layout", value: animation.layout?.kind ?? "None" },
           {
+            label: "Render target kinds",
+            value: renderTargetKinds.join(", ")
+          },
+          {
+            label: "Object types",
+            value: objectTypes.join(", ")
+          },
+          {
+            label: "Checks",
+            value: checkFacets.join(", ")
+          },
+          {
             label: "Semantic objects",
             value: String(animation.bundle.objects.length)
           },
@@ -251,15 +302,24 @@ export function createGeneratedAlgebraAnimationAssetAgendaRows(
           "semantic asset catalog",
           "animation asset catalog",
           "composable animation asset",
-          "generated algebra animation asset",
+          input.catalogSearchLabel,
           "motif source",
           animation.id,
           animation.title,
           animation.bundle.id,
           animation.transformationTree.root.id,
           animation.timeline?.id ?? "",
+          ...(animation.timeline === undefined
+            ? []
+            : [`timeline:${animation.timeline.id}`]),
           animation.layout?.id ?? "",
           animation.layout?.kind ?? "",
+          ...(animation.layout === undefined
+            ? []
+            : [
+                `layout:${animation.layout.id}`,
+                `layout-kind:${animation.layout.kind}`
+              ]),
           `reference-closure:${formatLawStatus(referenceClosure.passed)}`,
           `seek-rewind:${formatLawStatus(seekRewind.passed)}`,
           midpointFrame.phaseId,
@@ -267,7 +327,15 @@ export function createGeneratedAlgebraAnimationAssetAgendaRows(
           ...(animation.dashboard?.tags ?? []),
           ...sourceRefIds,
           ...sourceRefIds.map((sourceRefId) => `source:${sourceRefId}`),
-          ...animation.bundle.objects.map((object) => object.id),
+          ...childAnimationIds,
+          ...childAnimationIds.map((childId) => `component:${childId}`),
+          ...metadataSearchFields,
+          ...renderTargetMetadataSearchFields,
+          ...animation.bundle.objects.flatMap((object) => [
+            object.id,
+            object.objectType,
+            `object-type:${object.objectType}`
+          ]),
           ...animation.transformations.flatMap((transformation) => [
             transformation.id,
             transformation.title,
@@ -281,13 +349,23 @@ export function createGeneratedAlgebraAnimationAssetAgendaRows(
             ...transformation.targetObjectIds
           ]),
           ...renderTargetIds,
+          ...renderTargetIds.map((targetId) => `render-target:${targetId}`),
+          ...renderTargetKinds,
+          ...renderTargetKinds.map((kind) => `render-target-kind:${kind}`),
+          ...checkFacets,
+          ...animation.checks.flatMap((check) => [
+            check.id,
+            check.lawId,
+            `check:${check.lawId}`,
+            `check-level:${check.level}`
+          ]),
           ...exportTargetIds
         ]
       };
     }
   );
 
-  return rows.filter((row) => generatedAlgebraRowMatchesQuery(row, query));
+  return rows.filter((row) => generatedAlgebraRowMatchesQuery(row, input.query));
 }
 
 export function createGeneratedAlgebraMaturityAgendaRows(
@@ -455,6 +533,42 @@ function animationDefinitionIds(
   );
 }
 
+function childAnimationIdsForAnimation(
+  animation: KpAnimationAsset
+): readonly string[] {
+  const metadataChildIds = splitMetadataIds(
+    animation.metadata?.["childAnimationIds"]
+  );
+  const renderTargetChildIds = animation.renderTargets.flatMap((target) =>
+    splitMetadataIds(target.metadata?.["childAnimationId"])
+  );
+
+  return uniqueStrings([...metadataChildIds, ...renderTargetChildIds]);
+}
+
+function splitMetadataIds(
+  value: string | number | boolean | undefined
+): readonly string[] {
+  return typeof value === "string"
+    ? value.split(/\s+/).filter((part) => part.length > 0)
+    : [];
+}
+
+function animationMetadataSearchFields(
+  metadata: Readonly<Record<string, string | number | boolean>> | undefined
+): readonly string[] {
+  return Object.entries(metadata ?? {}).flatMap(([key, value]) => {
+    const stringValue = String(value);
+
+    return [
+      key,
+      stringValue,
+      `${key}:${stringValue}`,
+      `metadata:${key}:${stringValue}`
+    ];
+  });
+}
+
 function formatLawStatus(passed: boolean): string {
   return passed ? "passed" : "failed";
 }
@@ -525,6 +639,19 @@ function generatedAlgebraRowMatchesQuery(
 function searchablePreviewFields(
   row: GeneratedAlgebraFixtureAgendaRow
 ): readonly GeneratedAlgebraAgendaPreviewField[] {
+  if (row.detail === "animation asset") {
+    return row.previewFields.filter(
+      (field) =>
+        ![
+          "Beats",
+          "Duration",
+          "Semantic objects",
+          "Transformations",
+          "Midpoint beat"
+        ].includes(field.label)
+    );
+  }
+
   if (row.detail !== "generated family maturity") {
     return row.previewFields;
   }
