@@ -101,6 +101,9 @@ test("API catalog covers notation and layout entities with the same metadata pro
   const representationTransform = findApiCatalogItem(
     "capability-animation-representation-transform"
   );
+  const transformTreeComposition = findApiCatalogItem(
+    "capability-transform-tree-composition"
+  );
 
   assert.equal(radical?.group.category, "notation-transformation");
   assert.deepEqual(radical?.item.details?.preserves, [
@@ -200,6 +203,18 @@ test("API catalog covers notation and layout entities with the same metadata pro
     "semantic object ids",
     "transformation ids",
     "phase order"
+  ]);
+
+  assert.equal(transformTreeComposition?.group.id, "capabilities-representations");
+  assert.equal(transformTreeComposition?.item.status, "active");
+  assert.deepEqual(transformTreeComposition?.item.details?.protocols, [
+    "checkKpTransformTreeCompositionEquivalence"
+  ]);
+  assert.deepEqual(transformTreeComposition?.item.details?.preserves, [
+    "leaf order",
+    "forward phases",
+    "rewind phases",
+    "source/target boundaries"
   ]);
 });
 

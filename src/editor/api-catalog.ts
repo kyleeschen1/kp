@@ -213,6 +213,17 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
         inputs: ["AnimationAsset"],
         outputs: ["AnimationAsset", "validation diagnostics", "preservation law"],
         preserves: ["semantic object ids", "transformation ids", "phase order"]
+      }),
+      item("capability-transform-tree-composition", "TransformTreeComposition", "runtime", "active", "Checks whether regrouped transformation trees preserve leaf order, phase structure, and source/target boundaries.", ["animation", "composition", "law"], {
+        protocols: ["checkKpTransformTreeCompositionEquivalence"],
+        inputs: ["SemanticTransformationNode", "SemanticTransformationNode"],
+        outputs: ["composition law"],
+        preserves: [
+          "leaf order",
+          "forward phases",
+          "rewind phases",
+          "source/target boundaries"
+        ]
       })
     ]
   },
