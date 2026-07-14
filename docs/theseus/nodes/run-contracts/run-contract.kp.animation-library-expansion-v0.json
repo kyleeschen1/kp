@@ -160,7 +160,8 @@
     {
       "id": "next-action.kp.animation-library.generated-calculus-fixtures-v0",
       "title": "Add calculus generated animation fixtures",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.generated-calculus-fixtures-v0 in KP animation library expansion v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation-library.generated-linear-algebra-fixtures-v0",

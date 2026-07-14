@@ -13,13 +13,18 @@ test("createGeneratedProblemRegistryRecords summarizes generated algebra, calcul
   const calculus = findGeneratedProblemRegistryRecord(
     "generated.calculus.derivative.power-rule-x-cubed"
   );
+  const integral = findGeneratedProblemRegistryRecord(
+    "generated.calculus.integral.power-rule-quadratic"
+  );
   const matrixVector = findGeneratedProblemRegistryRecord(
     "generated.linear-algebra.matrix-vector.two-by-two"
   );
 
-  assert.equal(records.length, 14);
+  assert.equal(records.length, 16);
   assert.ok(ids.includes("generated.linear-solve.x-plus-3"));
   assert.ok(ids.includes("generated.fraction-expression.two-fourths"));
+  assert.ok(ids.includes("generated.calculus.derivative.sum-rule-polynomial"));
+  assert.ok(ids.includes("generated.calculus.integral.power-rule-quadratic"));
   assert.deepEqual(calculus, {
     fixtureId: "generated.calculus.derivative.power-rule-x-cubed",
     familyId: "generated.calculus.derivative",
@@ -45,6 +50,9 @@ test("createGeneratedProblemRegistryRecords summarizes generated algebra, calcul
     flashcardKinds: ["predict-next", "cloze", "explain-transform"],
     searchFields: calculus?.searchFields ?? []
   });
+  assert.ok(
+    integral?.searchFields.includes("law.calculus.integral.power-rule")
+  );
   assert.ok(
     matrixVector?.searchFields.includes(
       "law.linear-algebra.matrix-vector-product"

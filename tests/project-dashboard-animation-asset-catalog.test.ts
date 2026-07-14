@@ -326,7 +326,9 @@ test("semantic asset dashboard search resolves generated problem animation impor
     ).map((row) => row.id),
     [
       "animation-generated-calculus-derivative-power-rule-x-cubed",
-      "generated-problem-registry-generated-calculus-derivative-power-rule-x-cubed"
+      "animation-generated-calculus-derivative-sum-rule-polynomial",
+      "generated-problem-registry-generated-calculus-derivative-power-rule-x-cubed",
+      "generated-problem-registry-generated-calculus-derivative-sum-rule-polynomial"
     ]
   );
   assert.deepEqual(
@@ -336,6 +338,15 @@ test("semantic asset dashboard search resolves generated problem animation impor
     [
       "animation-generated-linear-algebra-matrix-vector-two-by-two",
       "generated-problem-registry-generated-linear-algebra-matrix-vector-two-by-two"
+    ]
+  );
+  assert.deepEqual(
+    createSemanticAssetCatalogAgendaRows(
+      "generated-problem generated.calculus.integral"
+    ).map((row) => row.id),
+    [
+      "animation-generated-calculus-integral-power-rule-quadratic",
+      "generated-problem-registry-generated-calculus-integral-power-rule-quadratic"
     ]
   );
 });
