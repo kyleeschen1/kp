@@ -114,7 +114,7 @@
       "id": "next-action.kp.animation.algebra-inequality-family-v0",
       "title": "Add inequality transformation family",
       "summary": "Model inequality-preserving operations and sign-flip cases with explicit law metadata so invalid transforms are not animated as valid.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.algebra-generated-problem-hooks-v0",

@@ -947,6 +947,166 @@ test("algebra exponent-log family preserves bases and wrapped arguments", () => 
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("algebra inequality family distinguishes preserving and sign-flip operations", () => {
+  const family = symbolicManipulationFamilyById("family.algebra.inequality");
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "inequality.before",
+        "inequality",
+        ["lhs.term", "relation", "rhs.term", "multiplier.sign"]
+      ],
+      [
+        "inequality.after",
+        "inequality",
+        [
+          "lhs.term",
+          "relation",
+          "relation.flip",
+          "rhs.term",
+          "operation.artifact"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.algebra.inequality-add-both-sides",
+        "addBothSidesInequality",
+        ["value", "structure"],
+        "law.inequality.add-both-sides"
+      ],
+      [
+        "definition.symbolic.algebra.inequality-multiply-positive",
+        "multiplyPositiveBothSidesInequality",
+        ["value", "structure"],
+        "law.inequality.multiply-positive"
+      ],
+      [
+        "definition.symbolic.algebra.inequality-multiply-negative",
+        "multiplyNegativeBothSidesInequality",
+        ["value", "structure"],
+        "law.inequality.multiply-negative-flip"
+      ],
+      [
+        "definition.symbolic.algebra.inequality-divide-negative",
+        "divideNegativeBothSidesInequality",
+        ["value", "structure"],
+        "law.inequality.divide-negative-flip"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[2]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["lhs.term", "lhs.term", ["identity", "role"]],
+      ["relation", "relation.flip", ["role"]],
+      ["rhs.term", "rhs.term", ["identity", "role"]],
+      ["multiplier.sign", "operation.artifact", ["value", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.algebra.inequality.append-preserve-relation",
+      motifKind: "append-after-shift",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.inequality-add-both-sides",
+        "definition.symbolic.algebra.inequality-multiply-positive"
+      ],
+      summary:
+        "Persistent inequality terms shift first, then same-side operation artifacts appear while the relation persists."
+    },
+    {
+      id: "motif.algebra.inequality.relation-flip-pivot",
+      motifKind: "relation-flip-pivot",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.inequality-multiply-negative",
+        "definition.symbolic.algebra.inequality-divide-negative"
+      ],
+      summary:
+        "Negative scaling keeps both sides equivalent only when the relation glyph flips as a first-class semantic event."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.inequality.sign-flip.basic",
+      animationId: "animation.inequality.sign-flip.basic",
+      renderTargetKinds: ["equation"],
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.inequality-multiply-negative"
+      ],
+      summary:
+        "Basic inequality sign-flip sample exercises relation.flip semantics for negative scaling."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.algebra.inequality.number-line-solution-set",
+      title: "Number-line solution set is preserved",
+      representationKind: "number-line",
+      exactness: "exact",
+      preserves: ["value"],
+      lawRefs: [
+        {
+          id: "law.graph.inequality-solution-set-preservation",
+          level: "strict"
+        }
+      ],
+      sampleAssetIds: ["animation.inequality.sign-flip.basic"],
+      summary:
+        "Inequality operations preserve the number-line solution set when sign-flip rules are followed."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.inequality-solve.sign-flip",
+      fixtureFamilyId: "generated.inequality-solve",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.inequality-add-both-sides",
+        "definition.symbolic.algebra.inequality-multiply-positive",
+        "definition.symbolic.algebra.inequality-multiply-negative",
+        "definition.symbolic.algebra.inequality-divide-negative"
+      ],
+      summary:
+        "Generated inequality-solving traces can require a valid sign-flip transform before animating negative scaling."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.algebra.inequality.sign-flip",
+      kind: "predict-next",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.inequality-multiply-negative",
+        "definition.symbolic.algebra.inequality-divide-negative"
+      ],
+      summary:
+        "Predict-next cards can ask whether the inequality relation should flip."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic manipulation family dashboard rows expose comparable readiness fields", () => {
   const rows = createSymbolicManipulationFamilyAgendaRows("");
 

@@ -229,6 +229,7 @@ export function createSymbolicManipulationFamilyRegistry():
     createAlgebraDistributionFactoringFamily(),
     createAlgebraFractionSimplificationFamily(),
     createAlgebraExponentLogFamily(),
+    createAlgebraInequalityFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
@@ -236,7 +237,8 @@ export function createSymbolicManipulationFamilyRegistry():
           spec.id !== "family.algebra.cancel-combine" &&
           spec.id !== "family.algebra.distribution-factoring" &&
           spec.id !== "family.algebra.fraction-simplification" &&
-          spec.id !== "family.algebra.exponent-log-laws"
+          spec.id !== "family.algebra.exponent-log-laws" &&
+          spec.id !== "family.algebra.inequality"
       )
       .map(createSeedFamily)
   ];
@@ -1544,6 +1546,224 @@ function createFunctionWrapDefinition(input: {
         targetObjectRole: "power.after",
         targetSelectorRole: "function.close",
         preserves: ["presentation", "role"]
+      }
+    ]
+  });
+}
+
+function createAlgebraInequalityFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.algebra.inequality-add-both-sides",
+    "definition.symbolic.algebra.inequality-multiply-positive",
+    "definition.symbolic.algebra.inequality-multiply-negative",
+    "definition.symbolic.algebra.inequality-divide-negative"
+  ];
+  const signFlipDefinitionIds = [
+    "definition.symbolic.algebra.inequality-multiply-negative",
+    "definition.symbolic.algebra.inequality-divide-negative"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.algebra.inequality",
+    title: "Inequality transformations",
+    domain: "algebra",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "inequality.before",
+        objectType: "inequality",
+        title: "Inequality before operation",
+        selectorRoles: [
+          { id: "lhs.term", kind: "term" },
+          { id: "relation", kind: "relation" },
+          { id: "rhs.term", kind: "term" },
+          { id: "multiplier.sign", kind: "sign" }
+        ]
+      },
+      {
+        id: "inequality.after",
+        objectType: "inequality",
+        title: "Inequality after operation",
+        selectorRoles: [
+          { id: "lhs.term", kind: "term" },
+          { id: "relation", kind: "relation" },
+          { id: "relation.flip", kind: "relation" },
+          { id: "rhs.term", kind: "term" },
+          { id: "operation.artifact", kind: "term" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createInequalityDefinition({
+        id: "definition.symbolic.algebra.inequality-add-both-sides",
+        transformType: "addBothSidesInequality",
+        title: "Add the same quantity to both sides of an inequality",
+        lawId: "law.inequality.add-both-sides",
+        assumption: "Adding the same quantity preserves inequality order.",
+        targetRelationSelector: "relation"
+      }),
+      createInequalityDefinition({
+        id: "definition.symbolic.algebra.inequality-multiply-positive",
+        transformType: "multiplyPositiveBothSidesInequality",
+        title: "Multiply both sides of an inequality by a positive quantity",
+        lawId: "law.inequality.multiply-positive",
+        assumption: "Multiplication by a positive quantity preserves order.",
+        targetRelationSelector: "relation"
+      }),
+      createInequalityDefinition({
+        id: "definition.symbolic.algebra.inequality-multiply-negative",
+        transformType: "multiplyNegativeBothSidesInequality",
+        title: "Multiply both sides of an inequality by a negative quantity",
+        lawId: "law.inequality.multiply-negative-flip",
+        assumption:
+          "Multiplication by a negative quantity preserves the solution set only when the relation flips.",
+        targetRelationSelector: "relation.flip"
+      }),
+      createInequalityDefinition({
+        id: "definition.symbolic.algebra.inequality-divide-negative",
+        transformType: "divideNegativeBothSidesInequality",
+        title: "Divide both sides of an inequality by a negative quantity",
+        lawId: "law.inequality.divide-negative-flip",
+        assumption:
+          "Division by a negative quantity preserves the solution set only when the relation flips.",
+        targetRelationSelector: "relation.flip"
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.algebra.inequality.append-preserve-relation",
+        motifKind: "append-after-shift",
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.inequality-add-both-sides",
+          "definition.symbolic.algebra.inequality-multiply-positive"
+        ],
+        summary:
+          "Persistent inequality terms shift first, then same-side operation artifacts appear while the relation persists."
+      },
+      {
+        id: "motif.algebra.inequality.relation-flip-pivot",
+        motifKind: "relation-flip-pivot",
+        transformationDefinitionIds: signFlipDefinitionIds,
+        summary:
+          "Negative scaling keeps both sides equivalent only when the relation glyph flips as a first-class semantic event."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.inequality.sign-flip.basic",
+        animationId: "animation.inequality.sign-flip.basic",
+        renderTargetKinds: ["equation"],
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.inequality-multiply-negative"
+        ],
+        summary:
+          "Basic inequality sign-flip sample exercises relation.flip semantics for negative scaling."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.algebra.inequality.number-line-solution-set",
+        title: "Number-line solution set is preserved",
+        representationKind: "number-line",
+        exactness: "exact",
+        preserves: ["value"],
+        lawRefs: [
+          {
+            id: "law.graph.inequality-solution-set-preservation",
+            level: "strict"
+          }
+        ],
+        sampleAssetIds: ["animation.inequality.sign-flip.basic"],
+        summary:
+          "Inequality operations preserve the number-line solution set when sign-flip rules are followed."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.inequality-solve.sign-flip",
+        fixtureFamilyId: "generated.inequality-solve",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated inequality-solving traces can require a valid sign-flip transform before animating negative scaling."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.algebra.inequality.sign-flip",
+        kind: "predict-next",
+        transformationDefinitionIds: signFlipDefinitionIds,
+        summary:
+          "Predict-next cards can ask whether the inequality relation should flip."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId("family.algebra.inequality"),
+      tags: [
+        "inequality",
+        "sign-flip",
+        "validity",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for inequality-preserving operations and sign-flip cases.",
+      searchSummary:
+        "inequality preserve order sign flip multiply divide negative valid transform number line solution set",
+      graphEquivalentKinds: "number-line,region-graph"
+    }
+  });
+}
+
+function createInequalityDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly assumption: string;
+  readonly targetRelationSelector: "relation" | "relation.flip";
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["inequality.before"],
+    targetObjectRoles: ["inequality.after"],
+    preserves: ["value", "structure"],
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "inequality.before",
+        sourceSelectorRole: "lhs.term",
+        targetObjectRole: "inequality.after",
+        targetSelectorRole: "lhs.term",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "inequality.before",
+        sourceSelectorRole: "relation",
+        targetObjectRole: "inequality.after",
+        targetSelectorRole: input.targetRelationSelector,
+        preserves:
+          input.targetRelationSelector === "relation"
+            ? ["presentation", "role"]
+            : ["role"]
+      },
+      {
+        sourceObjectRole: "inequality.before",
+        sourceSelectorRole: "rhs.term",
+        targetObjectRole: "inequality.after",
+        targetSelectorRole: "rhs.term",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "inequality.before",
+        sourceSelectorRole: "multiplier.sign",
+        targetObjectRole: "inequality.after",
+        targetSelectorRole: "operation.artifact",
+        preserves: ["value", "role"]
       }
     ]
   });
