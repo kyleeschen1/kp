@@ -90,7 +90,7 @@
       "id": "next-action.kp.animation.algebra-cancel-combine-family-v0",
       "title": "Add cancellation and combine-like-terms families",
       "summary": "Promote cancellation and combine-like-terms as reusable algebra families with correspondence and reversible visual motif coverage.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.algebra-distribution-factoring-family-v0",

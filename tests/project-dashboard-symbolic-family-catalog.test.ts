@@ -180,6 +180,175 @@ test("algebra both-sides family promotes operation definitions and sample hooks"
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("algebra cancel-combine family promotes inverse and like-term semantics", () => {
+  const family = symbolicManipulationFamilyById("family.algebra.cancel-combine");
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "expression.before",
+        "expression",
+        [
+          "context.persistent",
+          "inverse.left",
+          "inverse.operator",
+          "inverse.right",
+          "like.coefficient.left",
+          "like.factor.left",
+          "like.operator",
+          "like.coefficient.right",
+          "like.factor.right"
+        ]
+      ],
+      [
+        "expression.after",
+        "expression",
+        [
+          "context.persistent",
+          "like.coefficient.combined",
+          "like.factor.combined"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.algebra.cancel-additive-inverses",
+        "cancelAdditiveInverses",
+        ["value"],
+        "law.algebra.additive-inverse-cancellation"
+      ],
+      [
+        "definition.symbolic.algebra.cancel-multiplicative-inverses",
+        "cancelMultiplicativeInverses",
+        ["value"],
+        "law.algebra.multiplicative-inverse-cancellation"
+      ],
+      [
+        "definition.symbolic.algebra.combine-like-terms",
+        "combineLikeTerms",
+        ["value", "structure"],
+        "law.algebra.combine-like-terms"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[2]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["context.persistent", "context.persistent", ["identity", "role"]],
+      ["like.coefficient.left", "like.coefficient.combined", ["role"]],
+      ["like.factor.left", "like.factor.combined", ["identity", "role"]],
+      ["like.coefficient.right", "like.coefficient.combined", ["role"]],
+      ["like.factor.right", "like.factor.combined", ["identity", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.algebra.cancel-combine.midpoint-vanish",
+      motifKind: "midpoint-vanish",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.cancel-additive-inverses",
+        "definition.symbolic.algebra.cancel-multiplicative-inverses"
+      ],
+      summary:
+        "Inverse tokens move to their midpoint, shrink together, then fade once overlapped.",
+      metadata: {
+        reversible: true,
+        reverseMotifKind: "emerge-from-midpoint"
+      }
+    },
+    {
+      id: "motif.algebra.cancel-combine.coalesce-replacement",
+      motifKind: "coalesce-replacement",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.combine-like-terms"
+      ],
+      summary:
+        "Like terms converge to a shared point while the replacement term grows from that point on rewindable timing.",
+      metadata: {
+        reversible: true
+      }
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.solve-x.cancel-additive-inverses",
+      animationId: "animation.solve-x",
+      renderTargetKinds: ["equation"],
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.cancel-additive-inverses"
+      ],
+      summary:
+        "Existing x + 3 - 3 cancellation exercises additive inverse vanish."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.algebra.cancel-combine.expression-value",
+      title: "Expression value is preserved",
+      representationKind: "expression-evaluation",
+      exactness: "exact",
+      preserves: ["value"],
+      lawRefs: [
+        {
+          id: "law.graph.expression-value-preservation",
+          level: "strict"
+        }
+      ],
+      sampleAssetIds: ["animation.solve-x"],
+      summary:
+        "Cancellation and combine-like-terms keep equivalent expressions or equation sides on the same value trace."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.linear-simplify.cancel-combine",
+      fixtureFamilyId: "generated.linear-simplify",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.cancel-additive-inverses",
+        "definition.symbolic.algebra.cancel-multiplicative-inverses",
+        "definition.symbolic.algebra.combine-like-terms"
+      ],
+      summary:
+        "Generated simplification traces can map inverse-pair cancellation and like-term combination to this family."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.algebra.cancel-combine.predict-next",
+      kind: "predict-next",
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.cancel-additive-inverses",
+        "definition.symbolic.algebra.cancel-multiplicative-inverses",
+        "definition.symbolic.algebra.combine-like-terms"
+      ],
+      summary:
+        "Predict-next cards can ask which inverse pair vanishes or which like terms combine next."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic manipulation family dashboard rows expose comparable readiness fields", () => {
   const rows = createSymbolicManipulationFamilyAgendaRows("");
 

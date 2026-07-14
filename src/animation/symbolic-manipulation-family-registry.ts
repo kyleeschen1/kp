@@ -225,8 +225,13 @@ export function createSymbolicManipulationFamilyRegistry():
   readonly KpSymbolicManipulationFamily[] {
   return [
     createAlgebraBothSidesFamily(),
+    createAlgebraCancelCombineFamily(),
     ...symbolicManipulationFamilySeedSpecs
-      .filter((spec) => spec.id !== "family.algebra.both-sides")
+      .filter(
+        (spec) =>
+          spec.id !== "family.algebra.both-sides" &&
+          spec.id !== "family.algebra.cancel-combine"
+      )
       .map(createSeedFamily)
   ];
 }
@@ -430,6 +435,250 @@ function createBothSidesDefinition(input: {
         preserves: ["identity", "role"]
       }
     ]
+  });
+}
+
+function createAlgebraCancelCombineFamily(): KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.algebra.cancel-additive-inverses",
+    "definition.symbolic.algebra.cancel-multiplicative-inverses",
+    "definition.symbolic.algebra.combine-like-terms"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.algebra.cancel-combine",
+    title: "Cancellation and combine-like-terms",
+    domain: "algebra",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "expression.before",
+        objectType: "expression",
+        title: "Expression before simplification",
+        selectorRoles: [
+          { id: "context.persistent", kind: "context" },
+          { id: "inverse.left", kind: "term" },
+          { id: "inverse.operator", kind: "operator" },
+          { id: "inverse.right", kind: "term" },
+          { id: "like.coefficient.left", kind: "coefficient" },
+          { id: "like.factor.left", kind: "factor" },
+          { id: "like.operator", kind: "operator" },
+          { id: "like.coefficient.right", kind: "coefficient" },
+          { id: "like.factor.right", kind: "factor" }
+        ]
+      },
+      {
+        id: "expression.after",
+        objectType: "expression",
+        title: "Expression after simplification",
+        selectorRoles: [
+          { id: "context.persistent", kind: "context" },
+          { id: "like.coefficient.combined", kind: "coefficient" },
+          { id: "like.factor.combined", kind: "factor" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.algebra.cancel-additive-inverses",
+        transformType: "cancelAdditiveInverses",
+        title: "Cancel additive inverses",
+        sourceObjectRoles: ["expression.before"],
+        targetObjectRoles: ["expression.after"],
+        preserves: ["value"],
+        assumptions: [
+          "Additive inverse terms are on the same expression side and sum to zero."
+        ],
+        lawRefs: [
+          {
+            id: "law.algebra.additive-inverse-cancellation",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "expression.before",
+            sourceSelectorRole: "context.persistent",
+            targetObjectRole: "expression.after",
+            targetSelectorRole: "context.persistent",
+            preserves: ["identity", "role"]
+          }
+        ]
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.algebra.cancel-multiplicative-inverses",
+        transformType: "cancelMultiplicativeInverses",
+        title: "Cancel multiplicative inverses",
+        sourceObjectRoles: ["expression.before"],
+        targetObjectRoles: ["expression.after"],
+        preserves: ["value"],
+        assumptions: [
+          "Multiplicative inverse factors are non-zero and multiply to one."
+        ],
+        lawRefs: [
+          {
+            id: "law.algebra.multiplicative-inverse-cancellation",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "expression.before",
+            sourceSelectorRole: "context.persistent",
+            targetObjectRole: "expression.after",
+            targetSelectorRole: "context.persistent",
+            preserves: ["identity", "role"]
+          }
+        ]
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.algebra.combine-like-terms",
+        transformType: "combineLikeTerms",
+        title: "Combine like terms",
+        sourceObjectRoles: ["expression.before"],
+        targetObjectRoles: ["expression.after"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "Like terms share the same symbolic factor and only their coefficients combine."
+        ],
+        lawRefs: [
+          {
+            id: "law.algebra.combine-like-terms",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "expression.before",
+            sourceSelectorRole: "context.persistent",
+            targetObjectRole: "expression.after",
+            targetSelectorRole: "context.persistent",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "expression.before",
+            sourceSelectorRole: "like.coefficient.left",
+            targetObjectRole: "expression.after",
+            targetSelectorRole: "like.coefficient.combined",
+            preserves: ["role"]
+          },
+          {
+            sourceObjectRole: "expression.before",
+            sourceSelectorRole: "like.factor.left",
+            targetObjectRole: "expression.after",
+            targetSelectorRole: "like.factor.combined",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "expression.before",
+            sourceSelectorRole: "like.coefficient.right",
+            targetObjectRole: "expression.after",
+            targetSelectorRole: "like.coefficient.combined",
+            preserves: ["role"]
+          },
+          {
+            sourceObjectRole: "expression.before",
+            sourceSelectorRole: "like.factor.right",
+            targetObjectRole: "expression.after",
+            targetSelectorRole: "like.factor.combined",
+            preserves: ["identity", "role"]
+          }
+        ]
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.algebra.cancel-combine.midpoint-vanish",
+        motifKind: "midpoint-vanish",
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.cancel-additive-inverses",
+          "definition.symbolic.algebra.cancel-multiplicative-inverses"
+        ],
+        summary:
+          "Inverse tokens move to their midpoint, shrink together, then fade once overlapped.",
+        metadata: {
+          reversible: true,
+          reverseMotifKind: "emerge-from-midpoint"
+        }
+      },
+      {
+        id: "motif.algebra.cancel-combine.coalesce-replacement",
+        motifKind: "coalesce-replacement",
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.combine-like-terms"
+        ],
+        summary:
+          "Like terms converge to a shared point while the replacement term grows from that point on rewindable timing.",
+        metadata: {
+          reversible: true
+        }
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.solve-x.cancel-additive-inverses",
+        animationId: "animation.solve-x",
+        renderTargetKinds: ["equation"],
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.cancel-additive-inverses"
+        ],
+        summary:
+          "Existing x + 3 - 3 cancellation exercises additive inverse vanish."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.algebra.cancel-combine.expression-value",
+        title: "Expression value is preserved",
+        representationKind: "expression-evaluation",
+        exactness: "exact",
+        preserves: ["value"],
+        lawRefs: [
+          {
+            id: "law.graph.expression-value-preservation",
+            level: "strict"
+          }
+        ],
+        sampleAssetIds: ["animation.solve-x"],
+        summary:
+          "Cancellation and combine-like-terms keep equivalent expressions or equation sides on the same value trace."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.linear-simplify.cancel-combine",
+        fixtureFamilyId: "generated.linear-simplify",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated simplification traces can map inverse-pair cancellation and like-term combination to this family."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.algebra.cancel-combine.predict-next",
+        kind: "predict-next",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Predict-next cards can ask which inverse pair vanishes or which like terms combine next."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId("family.algebra.cancel-combine"),
+      tags: [
+        "cancelation",
+        "simplification",
+        "like-terms",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for cancellation and combining like terms with reversible vanish/coalesce motifs.",
+      searchSummary:
+        "cancel additive inverses multiplicative inverses combine like terms simplify reversible midpoint vanish coalesce replacement",
+      graphEquivalentKinds: "expression-evaluation"
+    }
   });
 }
 
