@@ -19,12 +19,20 @@ test("createGeneratedProblemRegistryRecords summarizes generated algebra, calcul
   const matrixVector = findGeneratedProblemRegistryRecord(
     "generated.linear-algebra.matrix-vector.two-by-two"
   );
+  const dotProduct = findGeneratedProblemRegistryRecord(
+    "generated.linear-algebra.dot-product.three-vector"
+  );
+  const matrixMatrix = findGeneratedProblemRegistryRecord(
+    "generated.linear-algebra.matrix-matrix.two-by-two"
+  );
 
-  assert.equal(records.length, 16);
+  assert.equal(records.length, 18);
   assert.ok(ids.includes("generated.linear-solve.x-plus-3"));
   assert.ok(ids.includes("generated.fraction-expression.two-fourths"));
   assert.ok(ids.includes("generated.calculus.derivative.sum-rule-polynomial"));
   assert.ok(ids.includes("generated.calculus.integral.power-rule-quadratic"));
+  assert.ok(ids.includes("generated.linear-algebra.dot-product.three-vector"));
+  assert.ok(ids.includes("generated.linear-algebra.matrix-matrix.two-by-two"));
   assert.deepEqual(calculus, {
     fixtureId: "generated.calculus.derivative.power-rule-x-cubed",
     familyId: "generated.calculus.derivative",
@@ -56,6 +64,12 @@ test("createGeneratedProblemRegistryRecords summarizes generated algebra, calcul
   assert.ok(
     matrixVector?.searchFields.includes(
       "law.linear-algebra.matrix-vector-product"
+    )
+  );
+  assert.ok(dotProduct?.searchFields.includes("law.linear-algebra.dot-product"));
+  assert.ok(
+    matrixMatrix?.searchFields.includes(
+      "law.linear-algebra.matrix-matrix-product"
     )
   );
   assert.deepEqual(checkGeneratedProblemRegistrySurface(), {

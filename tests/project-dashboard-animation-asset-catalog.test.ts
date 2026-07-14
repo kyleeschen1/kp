@@ -200,6 +200,16 @@ test("dashboard animation asset rows include generated calculus and linear algeb
       row.id ===
       "animation-generated-linear-algebra-matrix-vector-two-by-two"
   );
+  const dotProduct = rows.find(
+    (row) =>
+      row.id ===
+      "animation-generated-linear-algebra-dot-product-three-vector"
+  );
+  const matrixMatrix = rows.find(
+    (row) =>
+      row.id ===
+      "animation-generated-linear-algebra-matrix-matrix-two-by-two"
+  );
 
   assert.ok(
     rowIds.includes("animation-generated-calculus-derivative-power-rule-x-cubed")
@@ -207,6 +217,14 @@ test("dashboard animation asset rows include generated calculus and linear algeb
   assert.ok(
     rowIds.includes(
       "animation-generated-linear-algebra-matrix-vector-two-by-two"
+    )
+  );
+  assert.ok(
+    rowIds.includes("animation-generated-linear-algebra-dot-product-three-vector")
+  );
+  assert.ok(
+    rowIds.includes(
+      "animation-generated-linear-algebra-matrix-matrix-two-by-two"
     )
   );
   assert.deepEqual(
@@ -235,6 +253,12 @@ test("dashboard animation asset rows include generated calculus and linear algeb
   assert.ok(
     linearAlgebra?.searchFields.includes(
       "law.linear-algebra.matrix-vector-product"
+    )
+  );
+  assert.ok(dotProduct?.searchFields.includes("law.linear-algebra.dot-product"));
+  assert.ok(
+    matrixMatrix?.searchFields.includes(
+      "law.linear-algebra.matrix-matrix-product"
     )
   );
 });
@@ -338,6 +362,24 @@ test("semantic asset dashboard search resolves generated problem animation impor
     [
       "animation-generated-linear-algebra-matrix-vector-two-by-two",
       "generated-problem-registry-generated-linear-algebra-matrix-vector-two-by-two"
+    ]
+  );
+  assert.deepEqual(
+    createSemanticAssetCatalogAgendaRows(
+      "generated-problem dot-product"
+    ).map((row) => row.id),
+    [
+      "animation-generated-linear-algebra-dot-product-three-vector",
+      "generated-problem-registry-generated-linear-algebra-dot-product-three-vector"
+    ]
+  );
+  assert.deepEqual(
+    createSemanticAssetCatalogAgendaRows(
+      "generated-problem matrix-matrix-product"
+    ).map((row) => row.id),
+    [
+      "animation-generated-linear-algebra-matrix-matrix-two-by-two",
+      "generated-problem-registry-generated-linear-algebra-matrix-matrix-two-by-two"
     ]
   );
   assert.deepEqual(

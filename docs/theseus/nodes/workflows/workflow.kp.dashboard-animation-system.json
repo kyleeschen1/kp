@@ -78,6 +78,7 @@
     "next-action.kp.animation-library.dashboard-animation-search-v0",
     "next-action.kp.animation-library.generated-problem-registry-v0",
     "next-action.kp.animation-library.generated-calculus-fixtures-v0",
+    "next-action.kp.animation-library.generated-linear-algebra-fixtures-v0",
     "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3"
   ],
   "verificationRecords": [
