@@ -12,13 +12,21 @@ import {
 } from "./exponent-radical-adapter.ts";
 import { createFractionSimplificationAnimationAsset } from "./fraction-adapter.ts";
 import { createFunctionWrapAnimationAsset } from "./function-wrap-adapter.ts";
+import { createGeneratedProblemAnimationAsset } from "./generated-problem-import.ts";
 import { createGraphAnimationAssets } from "./graph-adapter.ts";
 import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
 import { createProgrammingAnimationAssets } from "./programming-adapter.ts";
+import {
+  createGeneratedCalculusProblemFixtures
+} from "../semantic/generated-calculus-problem-fixture.ts";
+import {
+  createGeneratedLinearAlgebraProblemFixtures
+} from "../semantic/generated-linear-algebra-problem-fixture.ts";
 
 export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
   return [
     ...createGeneratedAlgebraAnimationAssets(),
+    ...createGeneratedProblemAnimationAssets(),
     ...createGraphAnimationAssets(),
     ...createProgrammingAnimationAssets(),
     ...createComparisonLayoutAnimationAssets()
@@ -38,6 +46,14 @@ export function createGeneratedAlgebraAnimationAssets():
   ];
 }
 
+export function createGeneratedProblemAnimationAssets():
+  readonly KpAnimationAsset[] {
+  return [
+    ...createGeneratedCalculusProblemFixtures(),
+    ...createGeneratedLinearAlgebraProblemFixtures()
+  ].map(createGeneratedProblemAnimationAsset);
+}
+
 export function animationIdsForTimelineIds(
   timelineIds: readonly string[]
 ): readonly string[] {
@@ -55,7 +71,10 @@ export function animationIdsForTimelineIds(
 export function animationAssetForSourceFixtureId(
   fixtureId: string
 ): KpAnimationAsset | undefined {
-  return createGeneratedAlgebraAnimationAssets().find((animation) => {
+  return [
+    ...createGeneratedAlgebraAnimationAssets(),
+    ...createGeneratedProblemAnimationAssets()
+  ].find((animation) => {
     const sourceRefIds = animation.dashboard?.sourceRefIds ?? [];
     const sourceFixtureId = animation.metadata?.["sourceFixtureId"];
 

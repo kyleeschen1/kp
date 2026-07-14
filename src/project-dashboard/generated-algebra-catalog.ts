@@ -27,6 +27,12 @@ import {
   createGeneratedLinearSolveTutorialFixtures,
   type GeneratedAlgebraTutorialFixture
 } from "../semantic/generated-algebra-tutorial-fixture.ts";
+import {
+  createGeneratedCalculusProblemFixtures
+} from "../semantic/generated-calculus-problem-fixture.ts";
+import {
+  createGeneratedLinearAlgebraProblemFixtures
+} from "../semantic/generated-linear-algebra-problem-fixture.ts";
 import type {
   KpFlashcardSpec
 } from "../semantic/asset-flashcard.ts";
@@ -461,6 +467,11 @@ function createAnimationAssetAgendaRowsForAssets(input: {
             ...(transformation.definitionId === undefined
               ? []
               : [`definition:${transformation.definitionId}`]),
+            ...(transformation.lawRefs ?? []).flatMap((lawRef) => [
+              lawRef.id,
+              `law:${lawRef.id}`,
+              `law-level:${lawRef.level}`
+            ]),
             ...transformation.sourceObjectIds,
             ...transformation.targetObjectIds
           ]),
@@ -672,7 +683,11 @@ function flashcardsForAnimation(
   }
 
   const sourceFixtureId = metadataString(animation.metadata?.["sourceFixtureId"]);
-  const fixture = createGeneratedAlgebraTutorialFixtures().find((candidate) =>
+  const fixture = [
+    ...createGeneratedAlgebraTutorialFixtures(),
+    ...createGeneratedCalculusProblemFixtures(),
+    ...createGeneratedLinearAlgebraProblemFixtures()
+  ].find((candidate) =>
     candidate.bundle.id === animation.bundle.id ||
     (sourceFixtureId !== undefined && candidate.id === sourceFixtureId)
   );

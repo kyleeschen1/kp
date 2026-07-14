@@ -148,7 +148,8 @@
     {
       "id": "next-action.kp.animation.dashboard-generated-problem-animation-rows-v0",
       "title": "Project generated problem imports into dashboard rows",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.dashboard-generated-problem-animation-rows-v0 in KP animation renderer integration v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.flashcard-preview-projection-renderer-data-v0",

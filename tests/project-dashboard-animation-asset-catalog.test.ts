@@ -151,6 +151,58 @@ test("dashboard animation asset rows include flashcard projection facets", () =>
   );
 });
 
+test("dashboard animation asset rows include generated calculus and linear algebra imports", () => {
+  const rows = createAnimationAssetAgendaRows("generated-problem");
+  const rowIds = rows.map((row) => row.id);
+  const calculus = rows.find(
+    (row) =>
+      row.id ===
+      "animation-generated-calculus-derivative-power-rule-x-cubed"
+  );
+  const linearAlgebra = rows.find(
+    (row) =>
+      row.id ===
+      "animation-generated-linear-algebra-matrix-vector-two-by-two"
+  );
+
+  assert.ok(
+    rowIds.includes("animation-generated-calculus-derivative-power-rule-x-cubed")
+  );
+  assert.ok(
+    rowIds.includes(
+      "animation-generated-linear-algebra-matrix-vector-two-by-two"
+    )
+  );
+  assert.deepEqual(
+    calculus?.previewFields.find(
+      (field) => field.label === "Flashcard projections"
+    ),
+    {
+      label: "Flashcard projections",
+      value: "3"
+    }
+  );
+  assert.deepEqual(
+    linearAlgebra?.previewFields.find(
+      (field) => field.label === "Flashcard kinds"
+    ),
+    {
+      label: "Flashcard kinds",
+      value: "predict-next, cloze, explain-transform"
+    }
+  );
+  assert.ok(
+    calculus?.searchFields.includes(
+      "definition.generated.calculus.derivative.power-rule"
+    )
+  );
+  assert.ok(
+    linearAlgebra?.searchFields.includes(
+      "law.linear-algebra.matrix-vector-product"
+    )
+  );
+});
+
 test("dashboard animation asset rows include KaTeX runtime visual preview facets", () => {
   const rows = createAnimationAssetAgendaRows("");
   const linearSolve = rows.find(
@@ -228,6 +280,21 @@ test("semantic asset dashboard search resolves flashcard projection facets", () 
       "flashcard-projection:predict-next card.linear-solve.predict-subtract"
     ).map((row) => row.id),
     ["animation-linear-solve-solve-x"]
+  );
+});
+
+test("semantic asset dashboard search resolves generated problem animation imports", () => {
+  assert.deepEqual(
+    createSemanticAssetCatalogAgendaRows(
+      "generated-problem generated.calculus.derivative"
+    ).map((row) => row.id),
+    ["animation-generated-calculus-derivative-power-rule-x-cubed"]
+  );
+  assert.deepEqual(
+    createSemanticAssetCatalogAgendaRows(
+      "generated-problem matrix-vector-product"
+    ).map((row) => row.id),
+    ["animation-generated-linear-algebra-matrix-vector-two-by-two"]
   );
 });
 
