@@ -3,7 +3,8 @@ import test from "node:test";
 
 import {
   createAnimationAssetAgendaRows,
-  createGeneratedAlgebraAnimationAssetAgendaRows
+  createGeneratedAlgebraAnimationAssetAgendaRows,
+  createGeneratedProblemRegistryAgendaRows
 } from "../src/project-dashboard/generated-algebra-catalog.ts";
 import {
   createSemanticAssetCatalogAgendaRows
@@ -323,13 +324,39 @@ test("semantic asset dashboard search resolves generated problem animation impor
     createSemanticAssetCatalogAgendaRows(
       "generated-problem generated.calculus.derivative"
     ).map((row) => row.id),
-    ["animation-generated-calculus-derivative-power-rule-x-cubed"]
+    [
+      "animation-generated-calculus-derivative-power-rule-x-cubed",
+      "generated-problem-registry-generated-calculus-derivative-power-rule-x-cubed"
+    ]
   );
   assert.deepEqual(
     createSemanticAssetCatalogAgendaRows(
       "generated-problem matrix-vector-product"
     ).map((row) => row.id),
-    ["animation-generated-linear-algebra-matrix-vector-two-by-two"]
+    [
+      "animation-generated-linear-algebra-matrix-vector-two-by-two",
+      "generated-problem-registry-generated-linear-algebra-matrix-vector-two-by-two"
+    ]
+  );
+});
+
+test("dashboard exposes generated problem registry rows", () => {
+  assert.deepEqual(
+    createGeneratedProblemRegistryAgendaRows(
+      "definition.generated.calculus.derivative.power-rule"
+    ).map((row) => row.id),
+    [
+      "generated-problem-registry-generated-calculus-derivative-power-rule-x-cubed"
+    ]
+  );
+  assert.deepEqual(
+    createSemanticAssetCatalogAgendaRows(
+      "law.linear-algebra.matrix-vector-product"
+    ).map((row) => row.id),
+    [
+      "animation-generated-linear-algebra-matrix-vector-two-by-two",
+      "generated-problem-registry-generated-linear-algebra-matrix-vector-two-by-two"
+    ]
   );
 });
 

@@ -11,6 +11,7 @@ import {
   createAnimationAssetAgendaRows,
   createGeneratedAlgebraFixtureAgendaRows,
   createGeneratedAlgebraMaturityAgendaRows,
+  createGeneratedProblemRegistryAgendaRows,
   type GeneratedAlgebraAgendaPreviewField,
   type GeneratedAlgebraFixtureAgendaRow
 } from "./generated-algebra-catalog.ts";
@@ -43,6 +44,7 @@ export function createSemanticAssetCatalogAgendaRows(
   return [
     ...createLinearSolveDerivedAgendaRows(query),
     ...createAnimationAssetAgendaRows(query),
+    ...createGeneratedProblemRegistryAgendaRows(query),
     ...createRepresentationTransformAgendaRows(query),
     ...createGeneratedAlgebraMaturityAgendaRows(query),
     ...createGeneratedAlgebraFixtureAgendaRows(query)

@@ -36,6 +36,10 @@ import {
 import {
   createGeneratedLinearAlgebraProblemFixtures
 } from "../semantic/generated-linear-algebra-problem-fixture.ts";
+import {
+  createGeneratedProblemRegistryRecords,
+  type GeneratedProblemRegistryRecord
+} from "../semantic/generated-problem-registry.ts";
 import type {
   KpFlashcardSpec
 } from "../semantic/asset-flashcard.ts";
@@ -180,6 +184,16 @@ export function createGeneratedAlgebraAnimationAssetAgendaRows(
     catalogSearchLabel: "generated algebra animation asset",
     query
   });
+}
+
+export function createGeneratedProblemRegistryAgendaRows(
+  query: string
+): readonly GeneratedAlgebraFixtureAgendaRow[] {
+  const rows = createGeneratedProblemRegistryRecords().map(
+    generatedProblemRegistryAgendaRow
+  );
+
+  return rows.filter((row) => generatedAlgebraRowMatchesQuery(row, query));
 }
 
 export function createAnimationAssetAgendaRows(
@@ -550,6 +564,80 @@ function createAnimationAssetAgendaRowsForAssets(input: {
   );
 
   return rows.filter((row) => generatedAlgebraRowMatchesQuery(row, input.query));
+}
+
+function generatedProblemRegistryAgendaRow(
+  record: GeneratedProblemRegistryRecord
+): GeneratedAlgebraFixtureAgendaRow {
+  return {
+    id: `generated-problem-registry-${record.fixtureId.replaceAll(".", "-")}`,
+    title: record.title,
+    summary:
+      `Generated problem registry record for ${record.familyId} with ${record.transformationCount} transformations and ${record.flashcardCount} flashcards.`,
+    status: "active",
+    detail: "generated problem registry",
+    kind: "protocol-api",
+    depth: 0,
+    tags: [
+      "generated-problem",
+      "registry",
+      record.domain,
+      record.familyId
+    ],
+    dataAttributes: [
+      ["data-kp-generated-problem-registry", record.fixtureId],
+      ["data-kp-generated-problem-family", record.familyId],
+      ["data-kp-generated-problem-animation", record.animationId]
+    ],
+    relatedIds: [
+      record.fixtureId,
+      record.familyId,
+      record.bundleId,
+      record.animationId,
+      record.animationRowId,
+      record.traceId,
+      ...record.transformDefinitionIds,
+      ...record.lawIds
+    ],
+    previewFields: [
+      { label: "Fixture", value: record.fixtureId },
+      { label: "Family", value: record.familyId },
+      { label: "Domain", value: record.domain },
+      { label: "Animation asset", value: record.animationId },
+      { label: "Animation row", value: record.animationRowId },
+      { label: "Trace", value: record.traceId },
+      { label: "Objects", value: String(record.objectCount) },
+      { label: "Selectors", value: String(record.selectorCount) },
+      { label: "Transformations", value: String(record.transformationCount) },
+      { label: "Trace steps", value: String(record.traceStepCount) },
+      { label: "Flashcards", value: String(record.flashcardCount) },
+      {
+        label: "Flashcard kinds",
+        value:
+          record.flashcardKinds.length === 0
+            ? "None"
+            : record.flashcardKinds.join(", ")
+      },
+      {
+        label: "Transform definitions",
+        value:
+          record.transformDefinitionIds.length === 0
+            ? "None"
+            : record.transformDefinitionIds.join(", ")
+      },
+      {
+        label: "Laws",
+        value: record.lawIds.length === 0 ? "None" : record.lawIds.join(", ")
+      }
+    ],
+    previewLinks: [],
+    searchFields: [
+      "semantic asset catalog",
+      "generated problem registry",
+      "generated problem registry surface",
+      ...record.searchFields
+    ]
+  };
 }
 
 export function createGeneratedAlgebraMaturityAgendaRows(

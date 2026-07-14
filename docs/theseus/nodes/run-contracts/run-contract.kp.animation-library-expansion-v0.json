@@ -154,7 +154,8 @@
     {
       "id": "next-action.kp.animation-library.generated-problem-registry-v0",
       "title": "Add generated problem registry surface",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.generated-problem-registry-v0 in KP animation library expansion v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation-library.generated-calculus-fixtures-v0",
