@@ -92,6 +92,9 @@ test("API catalog covers notation and layout entities with the same metadata pro
   const externalAnimationPort = findApiCatalogItem(
     "capability-external-animation-port"
   );
+  const flashcardProjection = findApiCatalogItem(
+    "capability-animation-flashcard-projection"
+  );
 
   assert.equal(radical?.group.category, "notation-transformation");
   assert.deepEqual(radical?.item.details?.preserves, [
@@ -149,6 +152,18 @@ test("API catalog covers notation and layout entities with the same metadata pro
     "animation validation diagnostics",
     "diagnostic summary",
     "loss reporting law"
+  ]);
+
+  assert.equal(flashcardProjection?.group.id, "capabilities-representations");
+  assert.equal(flashcardProjection?.item.status, "active");
+  assert.deepEqual(flashcardProjection?.item.details?.protocols, [
+    "createKpAnimationFlashcardProjection",
+    "createKpAnimationFlashcardProjections"
+  ]);
+  assert.deepEqual(flashcardProjection?.item.details?.outputs, [
+    "runtime frame",
+    "flashcard references",
+    "reference diagnostics"
   ]);
 });
 

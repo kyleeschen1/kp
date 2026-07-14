@@ -170,6 +170,15 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
           "loss reporting law"
         ],
         preserves: ["port provenance", "animation identity", "diagnostic provenance"]
+      }),
+      item("capability-animation-flashcard-projection", "FlashcardProjection", "runtime", "active", "Binds KpFlashcardSpec prompts to sampled AnimationAsset runtime frames with reference diagnostics.", ["animation", "flashcard", "study"], {
+        protocols: [
+          "createKpAnimationFlashcardProjection",
+          "createKpAnimationFlashcardProjections"
+        ],
+        inputs: ["AnimationAsset", "KpFlashcardSpec", "progress | timeMs"],
+        outputs: ["runtime frame", "flashcard references", "reference diagnostics"],
+        preserves: ["animation clock", "flashcard reference identity"]
       })
     ]
   },

@@ -112,7 +112,8 @@
     {
       "id": "next-action.kp.animation.flashcard-projection-core-v0",
       "title": "Add flashcard projection core",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.flashcard-projection-core-v0 in KP composable animation runtime v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.flashcard-cloze-predict-v0",
