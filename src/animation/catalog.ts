@@ -9,7 +9,15 @@ import {
 } from "./exponent-radical-adapter.ts";
 import { createFractionSimplificationAnimationAsset } from "./fraction-adapter.ts";
 import { createFunctionWrapAnimationAsset } from "./function-wrap-adapter.ts";
+import { createGraphAnimationAssets } from "./graph-adapter.ts";
 import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
+
+export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
+  return [
+    ...createGeneratedAlgebraAnimationAssets(),
+    ...createGraphAnimationAssets()
+  ];
+}
 
 export function createGeneratedAlgebraAnimationAssets():
   readonly KpAnimationAsset[] {
@@ -29,7 +37,7 @@ export function animationIdsForTimelineIds(
 ): readonly string[] {
   const timelineIdSet = new Set(timelineIds);
 
-  return createGeneratedAlgebraAnimationAssets()
+  return createKpAnimationAssets()
     .filter((animation) =>
       animation.timeline === undefined
         ? false
