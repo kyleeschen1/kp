@@ -2292,6 +2292,180 @@ test("calculus Hessian family maps second partials to curvature and optimization
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("linear algebra vector add-scale family preserves components and graph arrows", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.linear-algebra.vector-add-scale"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "vector.before",
+        "vector-expression",
+        ["vector.left", "vector.right", "scalar", "component", "origin", "tip"]
+      ],
+      [
+        "vector.after",
+        "vector-expression",
+        [
+          "vector.result",
+          "scaled.vector",
+          "component",
+          "origin",
+          "tip",
+          "parallelogram.edge"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.linear-algebra.vector-addition",
+        "vectorAddition",
+        ["value", "structure"],
+        "law.linear-algebra.vector-addition"
+      ],
+      [
+        "definition.symbolic.linear-algebra.scalar-multiplication",
+        "scalarMultiplication",
+        ["value", "structure"],
+        "law.linear-algebra.scalar-multiplication"
+      ],
+      [
+        "definition.symbolic.linear-algebra.component-decomposition",
+        "componentDecomposition",
+        ["value", "structure"],
+        "law.linear-algebra.component-decomposition"
+      ],
+      [
+        "definition.symbolic.linear-algebra.graphical-vector-composition",
+        "graphicalVectorComposition",
+        ["value", "presentation"],
+        "law.graph.vector-composition"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[0]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["vector.left", "vector.result", ["value", "role"]],
+      ["vector.right", "vector.result", ["value", "role"]],
+      ["origin", "origin", ["identity", "role"]],
+      ["tip", "tip", ["identity", "role"]],
+      ["component", "component", ["identity", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.linear-algebra.vector.tip-to-tail",
+      motifKind: "tip-to-tail",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.vector-addition",
+        "definition.symbolic.linear-algebra.graphical-vector-composition"
+      ],
+      summary:
+        "Vector arrows move tip-to-tail while component identities remain tied to the symbolic result."
+    },
+    {
+      id: "motif.linear-algebra.vector.scalar-stretch",
+      motifKind: "scalar-stretch",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.scalar-multiplication"
+      ],
+      summary:
+        "Scalar multiplication stretches or reverses the vector arrow while preserving origin/component provenance."
+    },
+    {
+      id: "motif.linear-algebra.vector.component-lift",
+      motifKind: "component-lift",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.component-decomposition"
+      ],
+      summary:
+        "Component entries lift into coordinate-axis arrows and can fold back into vector notation."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.vector-add-scale.basic",
+      animationId: "animation.vector-add-scale.basic",
+      renderTargetKinds: ["equation", "graph"],
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.vector-addition",
+        "definition.symbolic.linear-algebra.scalar-multiplication",
+        "definition.symbolic.linear-algebra.graphical-vector-composition"
+      ],
+      summary:
+        "Basic vector sample links symbolic component operations to graph arrow composition."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.linear-algebra.vector-add-scale.arrow-composition",
+      title: "Vector operations correspond to arrow geometry",
+      representationKind: "vector-graph",
+      exactness: "exact",
+      preserves: ["value", "presentation"],
+      lawRefs: [
+        {
+          id: "law.graph.vector-arrow-composition",
+          level: "strict"
+        }
+      ],
+      sampleAssetIds: ["animation.vector-add-scale.basic"],
+      summary:
+        "Vector addition and scaling preserve the represented vector while changing arrow placement or length."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.linear-algebra-vector-add-scale",
+      fixtureFamilyId: "generated.linear-algebra-vector-add-scale",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.vector-addition",
+        "definition.symbolic.linear-algebra.scalar-multiplication",
+        "definition.symbolic.linear-algebra.component-decomposition",
+        "definition.symbolic.linear-algebra.graphical-vector-composition"
+      ],
+      summary:
+        "Generated vector traces can map component arithmetic, scaling, and graph arrow composition to this family."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.linear-algebra.vector-add-scale.predict",
+      kind: "predict-next",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.vector-addition",
+        "definition.symbolic.linear-algebra.scalar-multiplication"
+      ],
+      summary:
+        "Predict-next cards can ask for the resulting vector or graphical arrow placement."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
   assert.deepEqual(
     createSymbolicManipulationFamilyAgendaRows(

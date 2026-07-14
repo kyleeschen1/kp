@@ -235,6 +235,7 @@ export function createSymbolicManipulationFamilyRegistry():
     createCalculusTaylorLocalLinearizationFamily(),
     createCalculusGradientJacobianFamily(),
     createCalculusHessianOptimizationFamily(),
+    createLinearAlgebraVectorAddScaleFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
@@ -248,7 +249,8 @@ export function createSymbolicManipulationFamilyRegistry():
           spec.id !== "family.calculus.integral-ftc" &&
           spec.id !== "family.calculus.taylor-local-linearization" &&
           spec.id !== "family.calculus.gradient-jacobian" &&
-          spec.id !== "family.calculus.hessian-optimization"
+          spec.id !== "family.calculus.hessian-optimization" &&
+          spec.id !== "family.linear-algebra.vector-add-scale"
       )
       .map(createSeedFamily)
   ];
@@ -3190,6 +3192,279 @@ function createHessianDefinition(input: {
         targetObjectRole: "hessian.after",
         targetSelectorRole: "curvature.classification",
         preserves: ["role"]
+      }
+    ]
+  });
+}
+
+function createLinearAlgebraVectorAddScaleFamily():
+  KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.linear-algebra.vector-addition",
+    "definition.symbolic.linear-algebra.scalar-multiplication",
+    "definition.symbolic.linear-algebra.component-decomposition",
+    "definition.symbolic.linear-algebra.graphical-vector-composition"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.linear-algebra.vector-add-scale",
+    title: "Vector add and scale",
+    domain: "linear-algebra",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "vector.before",
+        objectType: "vector-expression",
+        title: "Vector expression before operation",
+        selectorRoles: [
+          { id: "vector.left", kind: "vector" },
+          { id: "vector.right", kind: "vector" },
+          { id: "scalar", kind: "scalar" },
+          { id: "component", kind: "component" },
+          { id: "origin", kind: "point" },
+          { id: "tip", kind: "point" }
+        ]
+      },
+      {
+        id: "vector.after",
+        objectType: "vector-expression",
+        title: "Vector expression after operation",
+        selectorRoles: [
+          { id: "vector.result", kind: "vector" },
+          { id: "scaled.vector", kind: "vector" },
+          { id: "component", kind: "component" },
+          { id: "origin", kind: "point" },
+          { id: "tip", kind: "point" },
+          { id: "parallelogram.edge", kind: "graph-edge" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.linear-algebra.vector-addition",
+        transformType: "vectorAddition",
+        title: "Add vectors",
+        sourceObjectRoles: ["vector.before"],
+        targetObjectRoles: ["vector.after"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "Vectors share a coordinate space and can be added componentwise."
+        ],
+        lawRefs: [
+          {
+            id: "law.linear-algebra.vector-addition",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "vector.before",
+            sourceSelectorRole: "vector.left",
+            targetObjectRole: "vector.after",
+            targetSelectorRole: "vector.result",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "vector.before",
+            sourceSelectorRole: "vector.right",
+            targetObjectRole: "vector.after",
+            targetSelectorRole: "vector.result",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "vector.before",
+            sourceSelectorRole: "origin",
+            targetObjectRole: "vector.after",
+            targetSelectorRole: "origin",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "vector.before",
+            sourceSelectorRole: "tip",
+            targetObjectRole: "vector.after",
+            targetSelectorRole: "tip",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "vector.before",
+            sourceSelectorRole: "component",
+            targetObjectRole: "vector.after",
+            targetSelectorRole: "component",
+            preserves: ["identity", "role"]
+          }
+        ]
+      }),
+      createVectorDefinition({
+        id: "definition.symbolic.linear-algebra.scalar-multiplication",
+        transformType: "scalarMultiplication",
+        title: "Scale a vector",
+        lawId: "law.linear-algebra.scalar-multiplication",
+        preserves: ["value", "structure"],
+        assumption:
+          "Scalar multiplication scales each component in the represented vector space."
+      }),
+      createVectorDefinition({
+        id: "definition.symbolic.linear-algebra.component-decomposition",
+        transformType: "componentDecomposition",
+        title: "Decompose a vector into components",
+        lawId: "law.linear-algebra.component-decomposition",
+        preserves: ["value", "structure"],
+        assumption:
+          "Component decomposition uses the represented coordinate basis."
+      }),
+      createVectorDefinition({
+        id: "definition.symbolic.linear-algebra.graphical-vector-composition",
+        transformType: "graphicalVectorComposition",
+        title: "Compose vectors graphically",
+        lawId: "law.graph.vector-composition",
+        preserves: ["value", "presentation"],
+        assumption:
+          "Graphical composition uses equivalent translated arrows in the same vector space."
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.linear-algebra.vector.tip-to-tail",
+        motifKind: "tip-to-tail",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.vector-addition",
+          "definition.symbolic.linear-algebra.graphical-vector-composition"
+        ],
+        summary:
+          "Vector arrows move tip-to-tail while component identities remain tied to the symbolic result."
+      },
+      {
+        id: "motif.linear-algebra.vector.scalar-stretch",
+        motifKind: "scalar-stretch",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.scalar-multiplication"
+        ],
+        summary:
+          "Scalar multiplication stretches or reverses the vector arrow while preserving origin/component provenance."
+      },
+      {
+        id: "motif.linear-algebra.vector.component-lift",
+        motifKind: "component-lift",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.component-decomposition"
+        ],
+        summary:
+          "Component entries lift into coordinate-axis arrows and can fold back into vector notation."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.vector-add-scale.basic",
+        animationId: "animation.vector-add-scale.basic",
+        renderTargetKinds: ["equation", "graph"],
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.vector-addition",
+          "definition.symbolic.linear-algebra.scalar-multiplication",
+          "definition.symbolic.linear-algebra.graphical-vector-composition"
+        ],
+        summary:
+          "Basic vector sample links symbolic component operations to graph arrow composition."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.linear-algebra.vector-add-scale.arrow-composition",
+        title: "Vector operations correspond to arrow geometry",
+        representationKind: "vector-graph",
+        exactness: "exact",
+        preserves: ["value", "presentation"],
+        lawRefs: [
+          {
+            id: "law.graph.vector-arrow-composition",
+            level: "strict"
+          }
+        ],
+        sampleAssetIds: ["animation.vector-add-scale.basic"],
+        summary:
+          "Vector addition and scaling preserve the represented vector while changing arrow placement or length."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.linear-algebra-vector-add-scale",
+        fixtureFamilyId: "generated.linear-algebra-vector-add-scale",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated vector traces can map component arithmetic, scaling, and graph arrow composition to this family."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.linear-algebra.vector-add-scale.predict",
+        kind: "predict-next",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.vector-addition",
+          "definition.symbolic.linear-algebra.scalar-multiplication"
+        ],
+        summary:
+          "Predict-next cards can ask for the resulting vector or graphical arrow placement."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId(
+        "family.linear-algebra.vector-add-scale"
+      ),
+      tags: [
+        "vector",
+        "scale",
+        "graph",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for vector addition, scalar multiplication, and component persistence.",
+      searchSummary:
+        "vector addition scalar multiplication scale components parallelogram graph arrows tip tail",
+      graphEquivalentKinds: "vector-graph"
+    }
+  });
+}
+
+function createVectorDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly preserves: readonly ("value" | "structure" | "presentation")[];
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["vector.before"],
+    targetObjectRoles: ["vector.after"],
+    preserves: input.preserves,
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "vector.before",
+        sourceSelectorRole: "component",
+        targetObjectRole: "vector.after",
+        targetSelectorRole: "component",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "vector.before",
+        sourceSelectorRole: "origin",
+        targetObjectRole: "vector.after",
+        targetSelectorRole: "origin",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceObjectRole: "vector.before",
+        sourceSelectorRole: "tip",
+        targetObjectRole: "vector.after",
+        targetSelectorRole: "tip",
+        preserves: ["identity", "role"]
       }
     ]
   });

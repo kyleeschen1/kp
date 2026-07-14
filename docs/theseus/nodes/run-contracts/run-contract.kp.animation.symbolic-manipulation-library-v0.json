@@ -168,7 +168,7 @@
       "id": "next-action.kp.animation.linear-algebra-vector-add-scale-family-v0",
       "title": "Add vector add and scale family",
       "summary": "Model vector addition, scalar multiplication, component persistence, and graphical vector composition.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.linear-algebra-dot-projection-family-v0",
