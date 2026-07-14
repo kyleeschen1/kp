@@ -40,6 +40,12 @@ export interface CheckGeneratedAlgebraEquationVisualMotifDefaultCoverageInput {
   readonly rules?: readonly EquationTransformVisualMotifRule[] | undefined;
 }
 
+export interface CheckEquationCancelationVisualMotifContractInput {
+  readonly definitions?: readonly GeneratedAlgebraTransformDefinition[] | undefined;
+  readonly rules?: readonly EquationTransformVisualMotifRule[] | undefined;
+  readonly descriptors?: readonly EquationVisualMotifDescriptor[] | undefined;
+}
+
 export function checkGeneratedAlgebraEquationVisualMotifDefaultCoverage(
   input: CheckGeneratedAlgebraEquationVisualMotifDefaultCoverageInput = {}
 ): KpLawCheckResult {
@@ -79,6 +85,73 @@ export function checkGeneratedAlgebraEquationVisualMotifDefaultCoverage(
 
   return {
     lawId: "equation-visual-motif.generated-transform-default-coverage",
+    passed: failures.length === 0,
+    failures
+  };
+}
+
+export function checkEquationCancelationVisualMotifContract(
+  input: CheckEquationCancelationVisualMotifContractInput = {}
+): KpLawCheckResult {
+  const definitions = input.definitions ?? listGeneratedAlgebraTransformDefinitions();
+  const rules = input.rules ?? defaultEquationTransformVisualMotifRules;
+  const descriptors = input.descriptors ?? equationVisualMotifDescriptors;
+  const failures: KpLawFailure[] = [];
+  const cancelationDescriptor = descriptors.find(
+    (descriptor) => descriptor.kind === "cancelation"
+  );
+
+  if (cancelationDescriptor === undefined) {
+    failures.push({
+      path: "descriptors[cancelation]",
+      message: "Equation visual motifs must define the cancelation descriptor."
+    });
+  } else {
+    checkExactMotifList({
+      failures,
+      path: "descriptors[cancelation].motionPrimitiveIds",
+      label: "motion primitives",
+      actual: cancelationDescriptor.motionPrimitiveIds,
+      expected: ["vanish"]
+    });
+    checkExactMotifList({
+      failures,
+      path: "descriptors[cancelation].phaseIds",
+      label: "phase ids",
+      actual: cancelationDescriptor.phaseIds,
+      expected: ["cancel-meet", "cancel-collapse", "post-cancel-layout-shift"]
+    });
+  }
+
+  const ruleByTransformationKind = new Map(
+    rules.map((rule) => [rule.transformationKind, rule])
+  );
+
+  definitions
+    .filter(isPromotedGeneratedCancelationDefinition)
+    .forEach((definition) => {
+      const rule = ruleByTransformationKind.get(definition.transformType);
+
+      if (rule === undefined) {
+        failures.push({
+          path: `definitions[${definition.id}]`,
+          message:
+            `Generated cancelation transform definition ${definition.id} must use the cancelation visual motif.`
+        });
+        return;
+      }
+
+      if (rule.descriptor.kind !== "cancelation") {
+        failures.push({
+          path: `rules[${definition.transformType}].descriptor.kind`,
+          message:
+            `Generated cancelation transform definition ${definition.id} mapped to ${rule.descriptor.kind}, expected cancelation.`
+        });
+      }
+    });
+
+  return {
+    lawId: "equation-visual-motif.cancelation-contract",
     passed: failures.length === 0,
     failures
   };
@@ -222,4 +295,36 @@ function descriptorForEquationMotif(
   }
 
   return descriptor;
+}
+
+function isPromotedGeneratedCancelationDefinition(
+  definition: GeneratedAlgebraTransformDefinition
+): boolean {
+  return definition.status === "promoted" &&
+    definition.transformType.startsWith("cancel") &&
+    definition.transformType.endsWith("Inverses");
+}
+
+function checkExactMotifList(input: {
+  readonly failures: KpLawFailure[];
+  readonly path: string;
+  readonly label: string;
+  readonly actual: readonly string[];
+  readonly expected: readonly string[];
+}): void {
+  if (stringListsEqual(input.actual, input.expected)) return;
+
+  input.failures.push({
+    path: input.path,
+    message:
+      `Equation cancelation motif ${input.label} must be ${input.expected.join(", ")}.`
+  });
+}
+
+function stringListsEqual(
+  left: readonly string[],
+  right: readonly string[]
+): boolean {
+  return left.length === right.length &&
+    left.every((value, index) => value === right[index]);
 }

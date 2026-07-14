@@ -14,6 +14,7 @@ import {
   type TransformTreeVisualMotifRule
 } from "../src/rendering/visual-motif-composition.ts";
 import {
+  checkEquationCancelationVisualMotifContract,
   checkGeneratedAlgebraEquationVisualMotifDefaultCoverage,
   defaultEquationTransformVisualMotifRules
 } from "../src/rendering/equation-visual-motif-defaults.ts";
@@ -413,6 +414,43 @@ test("default equation visual motif coverage law reports missing promoted defini
             "definitions[definition.generated.linear-solve.cancel-additive-inverses]",
           message:
             "Promoted generated transform definition definition.generated.linear-solve.cancel-additive-inverses must have a default equation visual motif rule."
+        }
+      ]
+    }
+  );
+});
+
+test("equation cancelation visual motif contract accepts generated cancellation defaults", () => {
+  assert.deepEqual(checkEquationCancelationVisualMotifContract(), {
+    lawId: "equation-visual-motif.cancelation-contract",
+    passed: true,
+    failures: []
+  });
+});
+
+test("equation cancelation visual motif contract reports non-cancelation defaults", () => {
+  assert.deepEqual(
+    checkEquationCancelationVisualMotifContract({
+      rules: defaultEquationTransformVisualMotifRules.map((rule) =>
+        rule.transformationKind === "cancelMultiplicativeInverses"
+          ? {
+              ...rule,
+              descriptor: {
+                ...rule.descriptor,
+                kind: "simplify-into"
+              }
+            }
+          : rule
+      )
+    }),
+    {
+      lawId: "equation-visual-motif.cancelation-contract",
+      passed: false,
+      failures: [
+        {
+          path: "rules[cancelMultiplicativeInverses].descriptor.kind",
+          message:
+            "Generated cancelation transform definition definition.generated.linear-solve.cancel-multiplicative-inverses mapped to simplify-into, expected cancelation."
         }
       ]
     }

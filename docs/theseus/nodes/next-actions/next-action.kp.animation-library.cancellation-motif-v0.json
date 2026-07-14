@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation-library.cancellation-motif-v0",
   "kind": "next-action",
   "title": "Promote cancellation motif coverage",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.cancellation-motif-v0 in KP animation library expansion v0 loop.",
+  "summary": "Promoted cancellation motif coverage by adding a reusable cancelation motif contract law that pins vanish primitives, meet/collapse/layout-shift phases, and generated cancellation transform defaults.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,26 @@
       "kind": "file",
       "path": "tests/katex-transition.browser.spec.ts",
       "summary": "Browser coverage for cancellation motion diagnostics and live token behavior in the editor card."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "summary": "Adds the equation cancelation visual motif contract law for descriptor shape and generated cancellation transform default mappings."
+    },
+    {
+      "kind": "file",
+      "path": "tests/visual-motif-composition.test.ts",
+      "summary": "Covers the cancelation motif contract for valid generated defaults and a broken non-cancelation mapping."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-plan.test.ts",
+      "summary": "Existing planner coverage verifies cancelation motif phases and vanish lifecycles for additive inverse simplification."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Existing browser coverage verifies cancellation motion diagnostics, WebGL dissolve, collapse timing, and post-cancel layout shift remain observable."
     }
   ],
   "dependsOn": {
@@ -84,5 +104,41 @@
       "id": "browser-diagnostics-prove-cancelation-motion-remains-observable",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-plan.test.ts tests/equation-motion-sampler.test.ts tests/visual-motif-composition.test.ts tests/equation-visual-motif-timeline.test.ts",
+      "status": "passed",
+      "scope": "focused motif, planner, sampler, and timeline coverage for cancellation",
+      "checkedAt": "2026-07-14T19:52:49.325Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "browser coverage for cancellation motion diagnostics and KaTeX regressions",
+      "checkedAt": "2026-07-14T19:52:49.356Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for cancellation motif slice",
+      "checkedAt": "2026-07-14T19:52:49.388Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for cancellation motif slice",
+      "checkedAt": "2026-07-14T19:52:49.426Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T19:52:49.461Z",
+      "scope": "Run-contract hygiene for cancellation motif slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted cancellation motif coverage by adding a reusable cancelation motif contract law that pins vanish primitives, meet/collapse/layout-shift phases, and generated cancellation transform defaults."
+  }
 }

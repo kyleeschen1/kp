@@ -1,0 +1,88 @@
+{
+  "id": "next-action.kp.animation-library.artifact-fade-rules-v0",
+  "kind": "next-action",
+  "title": "Promote artifact fade rules",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.artifact-fade-rules-v0 in KP animation library expansion v0 loop.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation-library.artifact-fade-rules-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/visual-artifact-lifecycle.ts",
+      "summary": "Visual-only artifact lifecycle records and correspondence conversion for nonpersistent KaTeX structures."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-plan.ts",
+      "summary": "Equation planner that assigns artifact enter, exit, and replace motif lifecycles to visual-only tokens."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-artifact-texture-blend.ts",
+      "summary": "Texture-space artifact fade/blend sampler for source-only and target-only KaTeX artifacts."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-motion-plan.test.ts",
+      "summary": "Planner coverage for fraction, radical, matrix, and wrapper artifact lifecycles."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-artifact-texture-blend.test.ts",
+      "summary": "Focused texture blend coverage for artifact source fade and target reveal behavior."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation-library-expansion-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/equation-motion-plan.test.ts tests/katex-artifact-texture-blend.test.ts tests/katex-token-snapshot.test.ts",
+    "npm run test:browser:katex",
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Promote artifact fade rules can be completed inside KP animation library expansion v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved animation-library expansion loop slices.",
+    "Grow KaTeX SemanticTransformation definitions, visual motifs, generated problem fixtures, graph runtime consumers, flashcard projections, and drill-down authoring through the AnimationAsset/runtime visual-frame protocol.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, live LSP, network integrations, or dynamic package loading; use deterministic fixtures.",
+    "Do not broaden into a dashboard redesign beyond search, progress rows, and sample previews needed for this loop.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "criteria": [
+    {
+      "id": "artifact-enter-exit-replace-motif-contracts-are-explicit",
+      "weight": "high"
+    },
+    {
+      "id": "visual-only-artifact-lifecycle-records-cover-katex-geometry-cases",
+      "weight": "high"
+    },
+    {
+      "id": "texture-blend-fades-nonpersistent-artifacts-without-identity-claims",
+      "weight": "high"
+    },
+    {
+      "id": "browser-coverage-preserves-live-artifact-rendering",
+      "weight": "medium"
+    }
+  ]
+}
