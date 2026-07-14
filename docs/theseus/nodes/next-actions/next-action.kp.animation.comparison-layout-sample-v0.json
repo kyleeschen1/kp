@@ -1,0 +1,95 @@
+{
+  "id": "next-action.kp.animation.comparison-layout-sample-v0",
+  "kind": "next-action",
+  "title": "Add comparison-card animation layout sample",
+  "status": "resolved",
+  "summary": "Added a synchronized comparison layout AnimationAsset that composes equation and programming child targets.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.composable-animation-asset-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.comparison-layout-sample-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-13-kp-animation-asset-primary-unit.md",
+      "summary": "Decision naming composable semantic animations as KP's primary artifact."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.composable-animation-asset-contract-v0.json",
+      "summary": "Ready action anchoring the approved animation asset contract loop."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/comparison-layout-adapter.ts",
+      "summary": "Adds a row-layout comparison AnimationAsset that composes linear solve and programming trace assets on a shared progress timeline."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Includes comparison layout animation assets in the general animation catalog."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-comparison-layout-animation-asset.test.ts",
+      "summary": "Covers comparison layout metadata, child render targets, shared timeline, parallel transformation tree, laws, and catalog inclusion."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.composable-animation-asset-v0",
+      "next-action.kp.animation.source-placeholder-contract-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.source-placeholder-contract-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Add comparison-card animation layout sample can be completed inside KP composable animation asset v0 loop."
+  ],
+  "allowedWork": [
+    "Work only on the approved composable semantic animation asset v0 loop.",
+    "Keep tutorials, cards, exports, flashcards, graphs, and programming views as consumers of animation assets rather than the core artifact.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broadly rename tutorial-card modules in this loop.",
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add curriculum generation, spaced repetition generation, or dynamic package loading in this loop.",
+    "Do not create renderer-owned animation formats separate from semantic asset calculus."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-comparison-layout-animation-asset.test.ts tests/synchronized-comparison-card.test.ts tests/kp-programming-animation-asset.test.ts tests/kp-program-trace-asset.test.ts tests/kp-graph-animation-asset.test.ts tests/kp-animation-asset.test.ts tests/project-dashboard-animation-asset-catalog.test.ts tests/generated-algebra-export-sample.test.ts",
+      "status": "passed",
+      "scope": "comparison layout assets, synchronized comparison sample, child animation placeholders, animation catalog, and dashboard rows",
+      "checkedAt": "2026-07-14T00:13:23.939Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript app node test projects",
+      "checkedAt": "2026-07-14T00:13:23.960Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-14T00:13:23.980Z",
+      "scope": "Theseus graph validation"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a synchronized comparison layout AnimationAsset that composes equation and programming child targets."
+  }
+}

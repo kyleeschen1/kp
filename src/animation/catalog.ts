@@ -1,5 +1,8 @@
 import type { KpAnimationAsset } from "./asset.ts";
 import {
+  createComparisonLayoutAnimationAssets
+} from "./comparison-layout-adapter.ts";
+import {
   createDistributionExpansionAnimationAsset,
   createDistributionFactoringAnimationAsset
 } from "./distribution-adapter.ts";
@@ -17,7 +20,8 @@ export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
   return [
     ...createGeneratedAlgebraAnimationAssets(),
     ...createGraphAnimationAssets(),
-    ...createProgrammingAnimationAssets()
+    ...createProgrammingAnimationAssets(),
+    ...createComparisonLayoutAnimationAssets()
   ];
 }
 
