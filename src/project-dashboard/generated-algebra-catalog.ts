@@ -10,6 +10,10 @@ import {
   createKpAnimationFlashcardPreviewRendererData
 } from "../animation/flashcard-preview-renderer-data.ts";
 import {
+  createLinearSolveFlashcardRendererSample,
+  type LinearSolveFlashcardRendererSample
+} from "../animation/flashcard-renderer-sample.ts";
+import {
   checkKpAnimationAssetReferenceClosure,
   checkKpAnimationAssetSeekRewindLaw,
   type KpAnimationAsset
@@ -255,6 +259,8 @@ function createAnimationAssetAgendaRowsForAssets(input: {
           animation,
           cards: flashcards
         });
+      const flashcardRendererSample =
+        flashcardRendererSampleForAnimation(animation);
       const flashcardKinds = uniqueStrings(
         flashcardProjections.map((projection) => projection.cardKind)
       );
@@ -409,6 +415,7 @@ function createAnimationAssetAgendaRowsForAssets(input: {
                 ? "None"
                 : flashcardPreviewInteractionKinds.join(", ")
           },
+          ...flashcardRendererSamplePreviewFields(flashcardRendererSample),
           ...katexVisualPreviewFields(katexVisualSample)
         ],
         previewLinks: [],
@@ -512,6 +519,7 @@ function createAnimationAssetAgendaRowsForAssets(input: {
                 `flashcard-preview-active:${transformationId}`
             )
           ]),
+          ...flashcardRendererSampleSearchFields(flashcardRendererSample),
           ...katexVisualSearchFields(katexVisualSample),
           midpointFrame.phaseId,
           ...midpointFrame.nodeIds,
@@ -838,6 +846,53 @@ function flashcardsForAnimation(
   );
 
   return fixture?.flashcards ?? [];
+}
+
+function flashcardRendererSampleForAnimation(
+  animation: KpAnimationAsset
+): LinearSolveFlashcardRendererSample | undefined {
+  return animation.id === "animation.linear-solve.solve-x"
+    ? createLinearSolveFlashcardRendererSample()
+    : undefined;
+}
+
+function flashcardRendererSamplePreviewFields(
+  sample: LinearSolveFlashcardRendererSample | undefined
+): readonly DashboardAssetPreviewField[] {
+  if (sample === undefined) {
+    return [];
+  }
+
+  return [
+    { label: "Flashcard renderer sample", value: sample.id },
+    {
+      label: "Flashcard renderer diagnostics",
+      value: String(sample.diagnostics.length)
+    }
+  ];
+}
+
+function flashcardRendererSampleSearchFields(
+  sample: LinearSolveFlashcardRendererSample | undefined
+): readonly string[] {
+  if (sample === undefined) {
+    return [];
+  }
+
+  return [
+    "flashcard-renderer-sample",
+    sample.id,
+    sample.previewDataId,
+    sample.visualFrameId,
+    sample.clozeMask.id,
+    sample.predictNextPending.id,
+    sample.predictNextCorrect.id,
+    ...sample.itemIds,
+    ...sample.clozeMask.hiddenSelectorIds,
+    ...sample.predictNextPending.candidates.map(
+      (candidate) => `flashcard-renderer-candidate:${candidate.transformationId}`
+    )
+  ];
 }
 
 function splitMetadataIds(

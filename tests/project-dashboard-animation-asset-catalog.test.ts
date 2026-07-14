@@ -176,7 +176,17 @@ test("dashboard animation asset rows include flashcard preview renderer data", (
       value: "cloze, predict-next, review"
     }
   );
+  assert.deepEqual(
+    linearSolve?.previewFields.find(
+      (field) => field.label === "Flashcard renderer sample"
+    ),
+    {
+      label: "Flashcard renderer sample",
+      value: "flashcard-renderer-sample.animation.linear-solve.solve-x"
+    }
+  );
   assert.ok(linearSolve?.searchFields.includes("flashcard-preview-renderer"));
+  assert.ok(linearSolve?.searchFields.includes("flashcard-renderer-sample"));
   assert.ok(
     linearSolve?.searchFields.includes("flashcard-preview-interaction:cloze")
   );

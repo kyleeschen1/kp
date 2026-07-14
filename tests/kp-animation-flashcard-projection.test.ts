@@ -16,6 +16,9 @@ import {
 import {
   createKpAnimationPredictNextAnswerState
 } from "../src/animation/flashcard-predict-next-answer-state.ts";
+import {
+  createLinearSolveFlashcardRendererSample
+} from "../src/animation/flashcard-renderer-sample.ts";
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
 import { createKpFlashcardSpec } from "../src/semantic/asset-flashcard.ts";
 import { createLinearSolveKpAssetBundle } from "../src/semantic/linear-solve-asset.ts";
@@ -322,4 +325,37 @@ test("createKpAnimationPredictNextAnswerState evaluates selected transformation 
         "Selected transformation transform.linear-solve.missing is not a candidate for card.linear-solve.predict-subtract."
     }
   ]);
+});
+
+test("createLinearSolveFlashcardRendererSample surfaces renderable flashcard state", () => {
+  const sample = createLinearSolveFlashcardRendererSample();
+
+  assert.equal(
+    sample.id,
+    "flashcard-renderer-sample.animation.linear-solve.solve-x"
+  );
+  assert.equal(sample.kind, "animation-flashcard-renderer-sample");
+  assert.equal(sample.animationId, "animation.linear-solve.solve-x");
+  assert.equal(
+    sample.previewDataId,
+    "flashcard-preview.animation.linear-solve.solve-x"
+  );
+  assert.equal(sample.visualFrameId, "visual.linear-solve.visual-sample");
+  assert.deepEqual(sample.itemIds, [
+    "flashcard-preview-item.animation.linear-solve.solve-x.card.linear-solve.cloze-plus3",
+    "flashcard-preview-item.animation.linear-solve.solve-x.card.linear-solve.predict-subtract"
+  ]);
+  assert.deepEqual(sample.clozeMask.hiddenSelectorIds, [
+    "equation.linear-solve.initial.lhs.plus3"
+  ]);
+  assert.deepEqual(
+    sample.clozeMask.masks.map((entry) => [entry.nodeRef, entry.geometry?.x]),
+    [
+      ["tok.plus", 18],
+      ["tok.plus-three", 30]
+    ]
+  );
+  assert.equal(sample.predictNextPending.status, "pending");
+  assert.equal(sample.predictNextCorrect.status, "correct");
+  assert.deepEqual(sample.diagnostics, []);
 });
