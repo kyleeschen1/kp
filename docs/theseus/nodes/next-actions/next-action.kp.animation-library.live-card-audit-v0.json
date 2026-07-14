@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation-library.live-card-audit-v0",
   "kind": "next-action",
   "title": "Audit live x plus 3 equals 7 card path",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-audit-v0 in KP animation library expansion v0 loop.",
+  "summary": "Audited the live equation card path and documented the current split between deterministic equation sampling, runtime visual-frame contracts, and editor-owned DOM measurement, clone layers, controls, and motif rendering.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -35,6 +35,26 @@
       "kind": "file",
       "path": "tests/katex-transition.browser.spec.ts",
       "summary": "Browser coverage for KaTeX transition behavior and DOM-owned motion regressions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-live-equation-card-runtime-audit.md",
+      "summary": "Focused audit naming live card entry points, runtime-ready seams, DOM-owned behavior, implementation order, next tests, and risk."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Controller path audited for RAF playback, scrubber controls, DOM render context, measured deltas, token styling, clone layers, and motif rendering."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-sampler.ts",
+      "summary": "Shared deterministic equation sampler audited as the current equation-motion clock source."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/runtime-sampler.ts",
+      "summary": "AnimationAsset runtime frame sampler audited as the target semantic clock and identity source for live-card adoption."
     }
   ],
   "dependsOn": {
@@ -82,5 +102,29 @@
       "id": "focused-tests-for-next-live-card-slices-identified",
       "weight": "medium"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard TypeScript verification for live-card audit slice",
+      "checkedAt": "2026-07-14T19:03:01.877Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validation for live-card audit slice",
+      "checkedAt": "2026-07-14T19:03:01.907Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-14T19:03:01.951Z",
+      "scope": "Run-contract hygiene for live-card audit slice"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Audited the live equation card path and documented the current split between deterministic equation sampling, runtime visual-frame contracts, and editor-owned DOM measurement, clone layers, controls, and motif rendering."
+  }
 }

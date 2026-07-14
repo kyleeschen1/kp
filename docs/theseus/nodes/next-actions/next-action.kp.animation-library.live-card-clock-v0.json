@@ -1,0 +1,86 @@
+{
+  "id": "next-action.kp.animation-library.live-card-clock-v0",
+  "kind": "next-action",
+  "title": "Convert live equation card clock to runtime frames",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-clock-v0 in KP animation library expansion v0 loop.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation-library-expansion-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation-library.live-card-clock-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-live-equation-card-runtime-audit.md",
+      "summary": "Audit that identifies the controller-owned clock path and the intended runtime-frame bridge."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Live equation card controls, RAF playback, direction normalization, scrubber state, and frame rendering."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/linear-solve-adapter.ts",
+      "summary": "Linear-solve AnimationAsset that should supply the live card runtime clock."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/runtime-sampler.ts",
+      "summary": "Runtime sampler that should produce the live card clock, phase, and active transformation frame."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-visual-frame-scrubber.test.ts",
+      "summary": "Existing scrubber-clock test pattern for runtime and visual-frame sampling."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation-library-expansion-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Convert live equation card clock to runtime frames can be completed inside KP animation library expansion v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved animation-library expansion loop slices.",
+    "Grow KaTeX SemanticTransformation definitions, visual motifs, generated problem fixtures, graph runtime consumers, flashcard projections, and drill-down authoring through the AnimationAsset/runtime visual-frame protocol.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not add GIF or video encoders in this loop.",
+    "Do not add live CAS, live LSP, network integrations, or dynamic package loading; use deterministic fixtures.",
+    "Do not broaden into a dashboard redesign beyond search, progress rows, and sample previews needed for this loop.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "criteria": [
+    {
+      "id": "live-card-runtime-clock-sampled-from-animation-asset",
+      "weight": "high"
+    },
+    {
+      "id": "scrubber-beat-and-direction-reflected-in-runtime-frame",
+      "weight": "high"
+    },
+    {
+      "id": "existing-equation-motion-rendering-preserved",
+      "weight": "high"
+    },
+    {
+      "id": "focused-runtime-clock-test-added",
+      "weight": "medium"
+    }
+  ]
+}

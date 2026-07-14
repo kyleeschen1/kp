@@ -64,13 +64,14 @@
     {
       "id": "next-action.kp.animation-library.live-card-audit-v0",
       "title": "Audit live x plus 3 equals 7 card path",
-      "status": "ready",
-      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-audit-v0 in KP animation library expansion v0 loop."
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-audit-v0 in KP animation library expansion v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation-library.live-card-clock-v0",
       "title": "Convert live equation card clock to runtime frames",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation-library.live-card-clock-v0 in KP animation library expansion v0 loop."
     },
     {
       "id": "next-action.kp.animation-library.live-card-katex-visual-frame-v0",
