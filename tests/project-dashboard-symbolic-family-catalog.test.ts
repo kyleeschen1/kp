@@ -2805,6 +2805,172 @@ test("linear algebra matrix-vector family composes rows, entries, and graph maps
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("linear algebra matrix-matrix family composes dot-product cells and map composition", () => {
+  const family = symbolicManipulationFamilyById(
+    "family.linear-algebra.matrix-matrix-composition"
+  );
+
+  assert.ok(family);
+  assert.equal(family.status, "promoted");
+  assert.deepEqual(
+    family.objectRoles.map((role) => [
+      role.id,
+      role.objectType,
+      role.selectorRoles.map((selector) => selector.id)
+    ]),
+    [
+      [
+        "matrixMatrix.before",
+        "matrix-matrix-expression",
+        [
+          "left.matrix",
+          "left.row",
+          "left.entry",
+          "right.matrix",
+          "right.column",
+          "right.entry"
+        ]
+      ],
+      [
+        "matrixMatrix.after",
+        "matrix-matrix-result",
+        [
+          "result.matrix",
+          "result.entry",
+          "cell.dot.product",
+          "left.linear.map",
+          "right.linear.map",
+          "composed.linear.map"
+        ]
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions.map((definition) => [
+      definition.id,
+      definition.transformType,
+      definition.preserves,
+      definition.lawRefs?.[0]?.id
+    ]),
+    [
+      [
+        "definition.symbolic.linear-algebra.matrix-matrix-multiply",
+        "matrixMatrixMultiply",
+        ["value", "structure"],
+        "law.linear-algebra.matrix-matrix"
+      ],
+      [
+        "definition.symbolic.linear-algebra.cell-dot-products",
+        "cellDotProducts",
+        ["value", "structure"],
+        "law.linear-algebra.matrix-cell-dot"
+      ],
+      [
+        "definition.symbolic.linear-algebra.compose-linear-maps",
+        "composeLinearMaps",
+        ["value", "presentation"],
+        "law.linear-algebra.linear-map-composition"
+      ]
+    ]
+  );
+  assert.deepEqual(
+    family.transformationDefinitions[1]?.correspondenceTemplates.map(
+      (correspondence) => [
+        correspondence.sourceSelectorRole,
+        correspondence.targetSelectorRole,
+        correspondence.preserves
+      ]
+    ),
+    [
+      ["left.row", "cell.dot.product", ["identity", "role"]],
+      ["right.column", "cell.dot.product", ["identity", "role"]],
+      ["left.entry", "cell.dot.product", ["value", "role"]],
+      ["right.entry", "cell.dot.product", ["value", "role"]],
+      ["left.matrix", "result.matrix", ["value", "role"]],
+      ["right.matrix", "result.matrix", ["value", "role"]]
+    ]
+  );
+  assert.deepEqual(family.visualMotifs, [
+    {
+      id: "motif.linear-algebra.matrix-matrix.cell-dot-grid",
+      motifKind: "cell-dot-grid",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.cell-dot-products",
+        "definition.symbolic.linear-algebra.matrix-matrix-multiply"
+      ],
+      summary:
+        "Each output cell is staged as a row-column dot product in a reusable grid beat."
+    },
+    {
+      id: "motif.linear-algebra.matrix-matrix.map-composition",
+      motifKind: "linear-map-composition",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.compose-linear-maps"
+      ],
+      summary:
+        "The right map applies first, then the left map, matching the composed matrix order."
+    }
+  ]);
+  assert.deepEqual(family.runtimeSamples, [
+    {
+      id: "sample.animation.matrix-matrix.basic",
+      animationId: "animation.matrix-matrix.basic",
+      renderTargetKinds: ["equation", "matrix", "graph"],
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.matrix-matrix-multiply",
+        "definition.symbolic.linear-algebra.cell-dot-products",
+        "definition.symbolic.linear-algebra.compose-linear-maps"
+      ],
+      summary:
+        "Basic matrix-matrix sample composes cell dot products with a graph linear-map composition."
+    }
+  ]);
+  assert.deepEqual(family.graphEquivalents, [
+    {
+      id: "graph.linear-algebra.matrix-matrix.linear-map-composition",
+      title: "Matrix multiplication composes linear maps",
+      representationKind: "linear-map-composition",
+      exactness: "exact",
+      preserves: ["value", "presentation"],
+      lawRefs: [
+        {
+          id: "law.graph.matrix-matrix-linear-map-composition",
+          level: "strict"
+        }
+      ],
+      sampleAssetIds: ["animation.matrix-matrix.basic"],
+      summary:
+        "Matrix-matrix multiplication preserves the order-sensitive composition of the two linear maps."
+    }
+  ]);
+  assert.deepEqual(family.generatedProblemHooks, [
+    {
+      id: "hook.generated.linear-algebra-matrix-matrix",
+      fixtureFamilyId: "generated.linear-algebra-matrix-matrix",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.matrix-matrix-multiply",
+        "definition.symbolic.linear-algebra.cell-dot-products",
+        "definition.symbolic.linear-algebra.compose-linear-maps"
+      ],
+      summary:
+        "Generated matrix multiplication traces can map each result entry to row-column dot products and graph composition."
+    }
+  ]);
+  assert.deepEqual(family.flashcardHooks, [
+    {
+      id: "hook.flashcard.linear-algebra.matrix-matrix.cell",
+      kind: "predict-next",
+      transformationDefinitionIds: [
+        "definition.symbolic.linear-algebra.cell-dot-products",
+        "definition.symbolic.linear-algebra.matrix-matrix-multiply"
+      ],
+      summary:
+        "Predict-next cards can ask which row and column create a selected result cell."
+    }
+  ]);
+  assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+});
+
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
   assert.deepEqual(
     createSymbolicManipulationFamilyAgendaRows(

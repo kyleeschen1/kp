@@ -238,6 +238,7 @@ export function createSymbolicManipulationFamilyRegistry():
     createLinearAlgebraVectorAddScaleFamily(),
     createLinearAlgebraDotProjectionFamily(),
     createLinearAlgebraMatrixVectorFamily(),
+    createLinearAlgebraMatrixMatrixCompositionFamily(),
     ...symbolicManipulationFamilySeedSpecs
       .filter(
         (spec) =>
@@ -254,7 +255,8 @@ export function createSymbolicManipulationFamilyRegistry():
           spec.id !== "family.calculus.hessian-optimization" &&
           spec.id !== "family.linear-algebra.vector-add-scale" &&
           spec.id !== "family.linear-algebra.dot-projection" &&
-          spec.id !== "family.linear-algebra.matrix-vector"
+          spec.id !== "family.linear-algebra.matrix-vector" &&
+          spec.id !== "family.linear-algebra.matrix-matrix-composition"
       )
       .map(createSeedFamily)
   ];
@@ -3991,6 +3993,272 @@ function createMatrixVectorDefinition(input: {
         sourceObjectRole: "matrixVector.before",
         sourceSelectorRole: "matrix.entry",
         targetObjectRole: "matrixVector.after",
+        targetSelectorRole: "result.entry",
+        preserves: ["value", "role"]
+      }
+    ]
+  });
+}
+
+function createLinearAlgebraMatrixMatrixCompositionFamily():
+  KpSymbolicManipulationFamily {
+  const definitionIds = [
+    "definition.symbolic.linear-algebra.matrix-matrix-multiply",
+    "definition.symbolic.linear-algebra.cell-dot-products",
+    "definition.symbolic.linear-algebra.compose-linear-maps"
+  ];
+
+  return createKpSymbolicManipulationFamily({
+    id: "family.linear-algebra.matrix-matrix-composition",
+    title: "Matrix-matrix composition",
+    domain: "linear-algebra",
+    status: "promoted",
+    objectRoles: [
+      {
+        id: "matrixMatrix.before",
+        objectType: "matrix-matrix-expression",
+        title: "Matrix-matrix expression before multiplication",
+        selectorRoles: [
+          { id: "left.matrix", kind: "matrix" },
+          { id: "left.row", kind: "matrix-row" },
+          { id: "left.entry", kind: "matrix-entry" },
+          { id: "right.matrix", kind: "matrix" },
+          { id: "right.column", kind: "matrix-column" },
+          { id: "right.entry", kind: "matrix-entry" }
+        ]
+      },
+      {
+        id: "matrixMatrix.after",
+        objectType: "matrix-matrix-result",
+        title: "Matrix-matrix result",
+        selectorRoles: [
+          { id: "result.matrix", kind: "matrix" },
+          { id: "result.entry", kind: "matrix-entry" },
+          { id: "cell.dot.product", kind: "dot-product" },
+          { id: "left.linear.map", kind: "linear-map" },
+          { id: "right.linear.map", kind: "linear-map" },
+          { id: "composed.linear.map", kind: "linear-map-composition" }
+        ]
+      }
+    ],
+    transformationDefinitions: [
+      createMatrixMatrixDefinition({
+        id: "definition.symbolic.linear-algebra.matrix-matrix-multiply",
+        transformType: "matrixMatrixMultiply",
+        title: "Multiply two matrices",
+        lawId: "law.linear-algebra.matrix-matrix",
+        preserves: ["value", "structure"],
+        assumption:
+          "The left matrix column count equals the right matrix row count."
+      }),
+      createKpSemanticTransformationDefinition({
+        id: "definition.symbolic.linear-algebra.cell-dot-products",
+        transformType: "cellDotProducts",
+        title: "Compute each result cell as a row-column dot product",
+        sourceObjectRoles: ["matrixMatrix.before"],
+        targetObjectRoles: ["matrixMatrix.after"],
+        preserves: ["value", "structure"],
+        assumptions: [
+          "Each result entry is the dot product of one left row and one right column."
+        ],
+        lawRefs: [
+          {
+            id: "law.linear-algebra.matrix-cell-dot",
+            level: "strict"
+          }
+        ],
+        correspondenceTemplates: [
+          {
+            sourceObjectRole: "matrixMatrix.before",
+            sourceSelectorRole: "left.row",
+            targetObjectRole: "matrixMatrix.after",
+            targetSelectorRole: "cell.dot.product",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "matrixMatrix.before",
+            sourceSelectorRole: "right.column",
+            targetObjectRole: "matrixMatrix.after",
+            targetSelectorRole: "cell.dot.product",
+            preserves: ["identity", "role"]
+          },
+          {
+            sourceObjectRole: "matrixMatrix.before",
+            sourceSelectorRole: "left.entry",
+            targetObjectRole: "matrixMatrix.after",
+            targetSelectorRole: "cell.dot.product",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "matrixMatrix.before",
+            sourceSelectorRole: "right.entry",
+            targetObjectRole: "matrixMatrix.after",
+            targetSelectorRole: "cell.dot.product",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "matrixMatrix.before",
+            sourceSelectorRole: "left.matrix",
+            targetObjectRole: "matrixMatrix.after",
+            targetSelectorRole: "result.matrix",
+            preserves: ["value", "role"]
+          },
+          {
+            sourceObjectRole: "matrixMatrix.before",
+            sourceSelectorRole: "right.matrix",
+            targetObjectRole: "matrixMatrix.after",
+            targetSelectorRole: "result.matrix",
+            preserves: ["value", "role"]
+          }
+        ]
+      }),
+      createMatrixMatrixDefinition({
+        id: "definition.symbolic.linear-algebra.compose-linear-maps",
+        transformType: "composeLinearMaps",
+        title: "Compose the two matrices as linear maps",
+        lawId: "law.linear-algebra.linear-map-composition",
+        preserves: ["value", "presentation"],
+        assumption:
+          "Matrix multiplication represents order-sensitive composition of the represented linear maps."
+      })
+    ],
+    visualMotifs: [
+      {
+        id: "motif.linear-algebra.matrix-matrix.cell-dot-grid",
+        motifKind: "cell-dot-grid",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.cell-dot-products",
+          "definition.symbolic.linear-algebra.matrix-matrix-multiply"
+        ],
+        summary:
+          "Each output cell is staged as a row-column dot product in a reusable grid beat."
+      },
+      {
+        id: "motif.linear-algebra.matrix-matrix.map-composition",
+        motifKind: "linear-map-composition",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.compose-linear-maps"
+        ],
+        summary:
+          "The right map applies first, then the left map, matching the composed matrix order."
+      }
+    ],
+    runtimeSamples: [
+      {
+        id: "sample.animation.matrix-matrix.basic",
+        animationId: "animation.matrix-matrix.basic",
+        renderTargetKinds: ["equation", "matrix", "graph"],
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Basic matrix-matrix sample composes cell dot products with a graph linear-map composition."
+      }
+    ],
+    graphEquivalents: [
+      {
+        id: "graph.linear-algebra.matrix-matrix.linear-map-composition",
+        title: "Matrix multiplication composes linear maps",
+        representationKind: "linear-map-composition",
+        exactness: "exact",
+        preserves: ["value", "presentation"],
+        lawRefs: [
+          {
+            id: "law.graph.matrix-matrix-linear-map-composition",
+            level: "strict"
+          }
+        ],
+        sampleAssetIds: ["animation.matrix-matrix.basic"],
+        summary:
+          "Matrix-matrix multiplication preserves the order-sensitive composition of the two linear maps."
+      }
+    ],
+    generatedProblemHooks: [
+      {
+        id: "hook.generated.linear-algebra-matrix-matrix",
+        fixtureFamilyId: "generated.linear-algebra-matrix-matrix",
+        transformationDefinitionIds: definitionIds,
+        summary:
+          "Generated matrix multiplication traces can map each result entry to row-column dot products and graph composition."
+      }
+    ],
+    flashcardHooks: [
+      {
+        id: "hook.flashcard.linear-algebra.matrix-matrix.cell",
+        kind: "predict-next",
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.cell-dot-products",
+          "definition.symbolic.linear-algebra.matrix-matrix-multiply"
+        ],
+        summary:
+          "Predict-next cards can ask which row and column create a selected result cell."
+      }
+    ],
+    dashboard: {
+      rowId: symbolicManipulationFamilyRowId(
+        "family.linear-algebra.matrix-matrix-composition"
+      ),
+      tags: [
+        "matrix",
+        "composition",
+        "dot-product",
+        "linear-map",
+        "generated-problem",
+        "flashcard"
+      ]
+    },
+    metadata: {
+      summary:
+        "Promoted symbolic manipulation family for matrix multiplication as composed dot-product subanimations and linear-map composition.",
+      searchSummary:
+        "matrix multiplication dot products composition columns rows higher order animation linear map graph",
+      graphEquivalentKinds: "linear-map-composition",
+      composition: "matrix multiplication as composed dot products"
+    }
+  });
+}
+
+function createMatrixMatrixDefinition(input: {
+  readonly id: string;
+  readonly transformType: string;
+  readonly title: string;
+  readonly lawId: string;
+  readonly preserves: readonly ("value" | "structure" | "presentation")[];
+  readonly assumption: string;
+}) {
+  return createKpSemanticTransformationDefinition({
+    id: input.id,
+    transformType: input.transformType,
+    title: input.title,
+    sourceObjectRoles: ["matrixMatrix.before"],
+    targetObjectRoles: ["matrixMatrix.after"],
+    preserves: input.preserves,
+    assumptions: [input.assumption],
+    lawRefs: [{ id: input.lawId, level: "strict" }],
+    correspondenceTemplates: [
+      {
+        sourceObjectRole: "matrixMatrix.before",
+        sourceSelectorRole: "left.matrix",
+        targetObjectRole: "matrixMatrix.after",
+        targetSelectorRole: "left.linear.map",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "matrixMatrix.before",
+        sourceSelectorRole: "right.matrix",
+        targetObjectRole: "matrixMatrix.after",
+        targetSelectorRole: "right.linear.map",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "matrixMatrix.before",
+        sourceSelectorRole: "left.entry",
+        targetObjectRole: "matrixMatrix.after",
+        targetSelectorRole: "result.entry",
+        preserves: ["value", "role"]
+      },
+      {
+        sourceObjectRole: "matrixMatrix.before",
+        sourceSelectorRole: "right.entry",
+        targetObjectRole: "matrixMatrix.after",
         targetSelectorRole: "result.entry",
         preserves: ["value", "role"]
       }

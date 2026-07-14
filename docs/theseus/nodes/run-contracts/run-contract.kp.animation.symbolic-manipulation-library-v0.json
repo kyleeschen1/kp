@@ -186,7 +186,7 @@
       "id": "next-action.kp.animation.linear-algebra-matrix-matrix-composition-v0",
       "title": "Add matrix-matrix composition family",
       "summary": "Model matrix multiplication as composed dot products and test higher-order animation composition.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.linear-algebra-row-operations-family-v0",
