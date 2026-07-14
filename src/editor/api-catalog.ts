@@ -145,7 +145,9 @@ export const apiCatalogGroups: readonly ApiCatalogGroup[] = [
           "createKpExternalAnimationPort",
           "runKpExternalAnimationPort",
           "summarizeKpExternalAnimationPortDiagnostics",
-          "checkKpExternalAnimationPortLossDiagnostics"
+          "checkKpExternalAnimationPortLossDiagnostics",
+          "createProgrammingTraceExternalAnimationPort",
+          "createAdditionProgramTraceExternalAnimationPort"
         ],
         inputs: ["external deterministic trace", "fixture", "symbolic-system output"],
         outputs: [

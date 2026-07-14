@@ -132,7 +132,9 @@ test("API catalog covers notation and layout entities with the same metadata pro
     "createKpExternalAnimationPort",
     "runKpExternalAnimationPort",
     "summarizeKpExternalAnimationPortDiagnostics",
-    "checkKpExternalAnimationPortLossDiagnostics"
+    "checkKpExternalAnimationPortLossDiagnostics",
+    "createProgrammingTraceExternalAnimationPort",
+    "createAdditionProgramTraceExternalAnimationPort"
   ]);
   assert.deepEqual(externalAnimationPort?.item.details?.outputs, [
     "AnimationAsset",

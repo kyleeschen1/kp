@@ -100,7 +100,8 @@
     {
       "id": "next-action.kp.animation.program-trace-port-generalization-v0",
       "title": "Generalize programming trace import as animation port",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.program-trace-port-generalization-v0 in KP composable animation runtime v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.source-range-provenance-v0",
