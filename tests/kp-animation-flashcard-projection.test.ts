@@ -10,9 +10,15 @@ import {
 import {
   createKpAnimationFlashcardPreviewRendererData
 } from "../src/animation/flashcard-preview-renderer-data.ts";
+import {
+  createKpAnimationClozeVisualMaskData
+} from "../src/animation/flashcard-cloze-visual-mask.ts";
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
 import { createKpFlashcardSpec } from "../src/semantic/asset-flashcard.ts";
 import { createLinearSolveKpAssetBundle } from "../src/semantic/linear-solve-asset.ts";
+import {
+  createLinearSolveRuntimeVisualFrameSample
+} from "../src/rendering/linear-solve-runtime-visual-sample.ts";
 
 test("createKpAnimationFlashcardProjection binds flashcards to runtime frames", () => {
   const animation = createLinearSolveAnimationAsset();
@@ -195,4 +201,56 @@ test("createKpAnimationFlashcardPreviewRendererData summarizes projections for r
   assert.deepEqual(preview.items[2]?.activeTransformationIds, [
     "transform.linear-solve.cancel-left-additive-inverse"
   ]);
+});
+
+test("createKpAnimationClozeVisualMaskData maps hidden selectors to visual nodes", () => {
+  const animation = createLinearSolveAnimationAsset();
+  const semantic = createLinearSolveKpAssetBundle();
+  const preview = createKpAnimationFlashcardPreviewRendererData({
+    animation,
+    cards: semantic.flashcards,
+    progress: 0
+  });
+  const clozeItem = preview.items.find(
+    (item) => item.cardId === "card.linear-solve.cloze-plus3"
+  );
+  const sample = createLinearSolveRuntimeVisualFrameSample({ progress: 0 });
+
+  assert.ok(clozeItem);
+
+  const mask = createKpAnimationClozeVisualMaskData({
+    item: clozeItem,
+    visualFrame: sample.visualFrame
+  });
+
+  assert.equal(
+    mask.id,
+    "cloze-mask.visual.linear-solve.visual-sample.card.linear-solve.cloze-plus3"
+  );
+  assert.deepEqual(mask.hiddenSelectorIds, [
+    "equation.linear-solve.initial.lhs.plus3"
+  ]);
+  assert.deepEqual(
+    mask.masks.map((entry) => [
+      entry.selectorId,
+      entry.nodeId,
+      entry.nodeRef,
+      entry.geometry?.x
+    ]),
+    [
+      [
+        "equation.linear-solve.initial.lhs.plus3",
+        "katex-selector.equation.linear-solve.initial.lhs.plus3.tok.plus",
+        "tok.plus",
+        18
+      ],
+      [
+        "equation.linear-solve.initial.lhs.plus3",
+        "katex-selector.equation.linear-solve.initial.lhs.plus3.tok.plus-three",
+        "tok.plus-three",
+        30
+      ]
+    ]
+  );
+  assert.deepEqual(mask.diagnostics, []);
 });
