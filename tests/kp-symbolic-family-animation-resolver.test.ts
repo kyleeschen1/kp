@@ -219,6 +219,24 @@ test("integral area asset resolves the calculus graph sample", () => {
   );
 });
 
+test("vector scale and dot projection assets resolve linear-algebra samples", () => {
+  const resolutions = createKpSymbolicFamilyAnimationResolutions({
+    families: createSymbolicManipulationFamilyRegistry(),
+    assets: createKpAnimationAssets()
+  }).filter((candidate) =>
+    candidate.sampleId === "sample.animation.vector-add-scale.basic" ||
+    candidate.sampleId === "sample.animation.dot-projection.basic"
+  );
+
+  assert.deepEqual(
+    resolutions.map((resolution) => [resolution.animationId, resolution.status]),
+    [
+      ["animation.graph.vector.linear-map-scale", "resolved"],
+      ["animation.dot-projection.basic", "resolved"]
+    ]
+  );
+});
+
 test("family animation resolver requires explicit concrete availability and exact ids", () => {
   const asset = createLinearSolveAnimationAsset();
   const plannedFamily = familyWithSample({

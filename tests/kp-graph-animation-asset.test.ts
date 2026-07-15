@@ -105,7 +105,8 @@ test("graph animation placeholders are available through the animation catalog",
       "animation.graph.surface-mode.mesh-to-donut",
       "animation.graph.vector.linear-map-scale",
       "animation.derivative-rules.tangent-graph",
-      "animation.integral-ftc.area-sweep"
+      "animation.integral-ftc.area-sweep",
+      "animation.dot-projection.basic"
     ]
   );
   assert.ok(

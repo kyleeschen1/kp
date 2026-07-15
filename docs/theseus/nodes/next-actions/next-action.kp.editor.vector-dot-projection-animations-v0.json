@@ -1,0 +1,139 @@
+{
+  "id": "next-action.kp.editor.vector-dot-projection-animations-v0",
+  "kind": "next-action",
+  "title": "Add vector dot product and projection animations",
+  "status": "resolved",
+  "domain": "kp.editor",
+  "summary": "Promoted the existing vector-scale graph sample and added a synchronized dot-product/projection graph asset with exact scalar, projection, orthogonal residual, angle, drop-motion, and rewind laws.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.concrete-animation-library-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.editor.vector-dot-projection-animations-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-symbolic-manipulation-library-loop-closeout.md",
+      "summary": "Closed symbolic library loop and recommended concrete renderer and editor adoption."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "KP semantic runtime and dashboard editor direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-animation-catalog.ts",
+      "summary": "Current fixture-oriented editor animation catalog to evolve into a family-backed surface."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Concrete KpAnimationAsset registry to project into the editor."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/dot-projection-adapter.ts",
+      "summary": "Defines the concrete parallel dot-product and vector-projection AnimationAsset."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/dot-projection-runtime-frame.ts",
+      "summary": "Samples exact projection geometry and verifies orthogonality and rewind."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/graph-adapter.ts",
+      "summary": "Registers the dot-projection asset in the graph catalog."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/symbolic-manipulation-family-registry.ts",
+      "summary": "Promotes exact vector-scale and dot-projection family samples."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-dot-projection-animation.test.ts",
+      "summary": "Locks scalar/geometric synchronization and projection laws."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-library.browser.spec.ts",
+      "summary": "Verifies both linear-algebra family routes in Chromium."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.editor.concrete-animation-library-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add vector dot product and projection animations can be completed inside KP editor concrete animation library v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved KP editor concrete-animation slices.",
+    "Use existing KpAnimationAsset, symbolic family, runtime-frame, visual-frame, KaTeX, graph, dashboard, and editor contracts.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not build media encoders, live CAS or LSP integrations, curriculum generation, or dynamic package loading.",
+    "Do not create a separate graph animation clock or broadly redesign the editor.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-dot-projection-animation.test.ts tests/kp-graph-animation-asset.test.ts tests/kp-symbolic-family-animation-resolver.test.ts tests/kp-editor-animation-catalog-projection.test.ts tests/kp-editor-animation-picker.test.ts tests/kp-editor-animation-selection-route.test.ts tests/kp-editor-animation-surface-dispatch.test.ts tests/project-dashboard-animation-asset-catalog.test.ts tests/project-dashboard-symbolic-family-catalog.test.ts",
+      "status": "passed",
+      "scope": "focused vector, projection, graph, family, editor, and dashboard tests",
+      "checkedAt": "2026-07-15T02:08:19.548Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-library.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "Chromium editor routes",
+      "checkedAt": "2026-07-15T02:08:19.604Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "848 unit and integration tests",
+      "checkedAt": "2026-07-15T02:08:19.654Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript",
+      "checkedAt": "2026-07-15T02:08:19.703Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph",
+      "checkedAt": "2026-07-15T02:08:19.751Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-15T02:08:19.800Z",
+      "scope": "run-contract hygiene"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted the existing vector-scale graph sample and added a synchronized dot-product/projection graph asset with exact scalar, projection, orthogonal residual, angle, drop-motion, and rewind laws."
+  }
+}

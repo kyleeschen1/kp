@@ -31,6 +31,7 @@ import {
 import {
   createDerivativeTangentAnimationAsset
 } from "./derivative-tangent-adapter.ts";
+import { createDotProjectionAnimationAsset } from "./dot-projection-adapter.ts";
 import {
   createIntegralAreaSweepAnimationAsset
 } from "./integral-area-sweep-adapter.ts";
@@ -58,7 +59,8 @@ export function createGraphAnimationAssets(): readonly KpAnimationAsset[] {
     createGraphSurfaceModeAnimationAsset(),
     createLinearMapVectorAnimationAsset(),
     createDerivativeTangentAnimationAsset(),
-    createIntegralAreaSweepAnimationAsset()
+    createIntegralAreaSweepAnimationAsset(),
+    createDotProjectionAnimationAsset()
   ];
 }
 

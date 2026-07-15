@@ -300,3 +300,52 @@ test("integral area sweep opens on the graph surface", async ({ page }) => {
     library.locator("[data-kp-editor-animation-diagnostics-playback-laws]")
   ).toHaveText("2/2");
 });
+
+test("linear-algebra vector and projection samples open on graph surfaces", async ({
+  page
+}) => {
+  const samples = [
+    {
+      descriptorId:
+        "editor-animation.sample.animation.vector-add-scale.basic",
+      animationId: "animation.graph.vector.linear-map-scale",
+      familyId: "family.linear-algebra.vector-add-scale"
+    },
+    {
+      descriptorId: "editor-animation.sample.animation.dot-projection.basic",
+      animationId: "animation.dot-projection.basic",
+      familyId: "family.linear-algebra.dot-projection"
+    }
+  ] as const;
+
+  for (const sample of samples) {
+    await page.goto(`/?animation=${sample.descriptorId}`);
+    const library = page.locator("[data-kp-editor-animation-library]");
+
+    await expect(library).toHaveAttribute(
+      "data-kp-editor-animation-descriptor-id",
+      sample.descriptorId
+    );
+    await expect(library).toHaveAttribute(
+      "data-kp-editor-animation-id",
+      sample.animationId
+    );
+    await expect(library).toHaveAttribute(
+      "data-kp-editor-animation-surface",
+      "graph"
+    );
+    await expect(library).toContainText(sample.familyId);
+    await expect(
+      library.locator("[data-kp-editor-animation-diagnostics-counts]")
+    ).toContainText("0 errors");
+    await expect(
+      library.locator("[data-kp-editor-animation-diagnostics-playback-laws]")
+    ).toHaveText("2/2");
+  }
+
+  await expect(
+    page.locator(
+      '[data-action="set-editor-animation"] optgroup[label="Linear algebra"] option'
+    )
+  ).toHaveCount(samples.length);
+});

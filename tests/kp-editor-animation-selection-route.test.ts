@@ -25,7 +25,7 @@ test("editor renders every concrete asset through a stable descriptor selection"
     editorAnimationDescriptorId: selected.id
   });
 
-  assert.equal(descriptors.length, 36);
+  assert.equal(descriptors.length, 39);
   assert.match(html, /data-kp-editor-animation-library/);
   assert.match(
     html,
@@ -181,6 +181,44 @@ test("integral area sweep is selectable through its calculus family descriptor",
     html,
     /option value="editor-animation\.sample\.animation\.integral-ftc\.area-sweep" selected/
   );
+});
+
+test("vector scaling is selectable through its linear-algebra family descriptor", () => {
+  const descriptor = createKpEditorAnimationLibrary().find(
+    (candidate) =>
+      candidate.sampleId === "sample.animation.vector-add-scale.basic"
+  );
+  assert.ok(descriptor);
+
+  const html = renderEditorDocument(createInitialEditorDocument(), {
+    editorAnimationDescriptorId: descriptor.id
+  });
+
+  assert.match(
+    html,
+    /data-kp-editor-animation-id="animation\.graph\.vector\.linear-map-scale"/
+  );
+  assert.match(html, /family\.linear-algebra\.vector-add-scale/);
+  assert.match(html, /data-kp-editor-animation-surface="graph"/);
+});
+
+test("dot projection is selectable through its linear-algebra family descriptor", () => {
+  const descriptor = createKpEditorAnimationLibrary().find(
+    (candidate) =>
+      candidate.sampleId === "sample.animation.dot-projection.basic"
+  );
+  assert.ok(descriptor);
+
+  const html = renderEditorDocument(createInitialEditorDocument(), {
+    editorAnimationDescriptorId: descriptor.id
+  });
+
+  assert.match(
+    html,
+    /data-kp-editor-animation-id="animation\.dot-projection\.basic"/
+  );
+  assert.match(html, /family\.linear-algebra\.dot-projection/);
+  assert.match(html, /data-kp-editor-animation-surface="graph"/);
 });
 
 test("editor animation routes preserve unrelated query and hash state", () => {

@@ -3416,15 +3416,14 @@ function createLinearAlgebraVectorAddScaleFamily():
     runtimeSamples: [
       {
         id: "sample.animation.vector-add-scale.basic",
-        animationId: "animation.vector-add-scale.basic",
-        renderTargetKinds: ["equation", "graph"],
+        animationId: "animation.graph.vector.linear-map-scale",
+        availability: "concrete",
+        renderTargetKinds: ["graph"],
         transformationDefinitionIds: [
-          "definition.symbolic.linear-algebra.vector-addition",
-          "definition.symbolic.linear-algebra.scalar-multiplication",
-          "definition.symbolic.linear-algebra.graphical-vector-composition"
+          "definition.symbolic.linear-algebra.scalar-multiplication"
         ],
         summary:
-          "Basic vector sample links symbolic component operations to graph arrow composition."
+          "The scale-matrix graph sample stretches a vector while preserving component provenance."
       }
     ],
     graphEquivalents: [
@@ -3440,7 +3439,7 @@ function createLinearAlgebraVectorAddScaleFamily():
             level: "strict"
           }
         ],
-        sampleAssetIds: ["animation.vector-add-scale.basic"],
+        sampleAssetIds: ["animation.graph.vector.linear-map-scale"],
         summary:
           "Vector addition and scaling preserve the represented vector while changing arrow placement or length."
       }
@@ -3687,14 +3686,14 @@ function createLinearAlgebraDotProjectionFamily(): KpSymbolicManipulationFamily 
       {
         id: "sample.animation.dot-projection.basic",
         animationId: "animation.dot-projection.basic",
-        renderTargetKinds: ["equation", "graph"],
+        availability: "concrete",
+        renderTargetKinds: ["graph"],
         transformationDefinitionIds: [
           "definition.symbolic.linear-algebra.dot-product",
-          "definition.symbolic.linear-algebra.vector-projection",
-          "definition.symbolic.linear-algebra.angle-from-dot"
+          "definition.symbolic.linear-algebra.vector-projection"
         ],
         summary:
-          "Basic dot/projection sample links scalar dot products to projection and angle graph views."
+          "The dot/projection graph computes the scalar result while animating the exact perpendicular drop."
       }
     ],
     graphEquivalents: [

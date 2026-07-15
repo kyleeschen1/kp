@@ -1259,12 +1259,12 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
       ["Ready families", "18"],
       ["Transform definitions", "71"],
       ["Runtime sample refs", "23"],
-      ["Concrete runtime samples", "13"],
-      ["Planned runtime samples", "10"],
+      ["Concrete runtime samples", "15"],
+      ["Planned runtime samples", "8"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],
       ["Flashcard hooks", "18"],
-      ["Paused-frame drill-down candidates", "46"],
+      ["Paused-frame drill-down candidates", "43"],
       ["Blockers", "None"]
     ]
   );
@@ -2503,15 +2503,14 @@ test("linear algebra vector add-scale family preserves components and graph arro
   assert.deepEqual(family.runtimeSamples, [
     {
       id: "sample.animation.vector-add-scale.basic",
-      animationId: "animation.vector-add-scale.basic",
-      renderTargetKinds: ["equation", "graph"],
+      animationId: "animation.graph.vector.linear-map-scale",
+      availability: "concrete",
+      renderTargetKinds: ["graph"],
       transformationDefinitionIds: [
-        "definition.symbolic.linear-algebra.vector-addition",
-        "definition.symbolic.linear-algebra.scalar-multiplication",
-        "definition.symbolic.linear-algebra.graphical-vector-composition"
+        "definition.symbolic.linear-algebra.scalar-multiplication"
       ],
       summary:
-        "Basic vector sample links symbolic component operations to graph arrow composition."
+        "The scale-matrix graph sample stretches a vector while preserving component provenance."
     }
   ]);
   assert.deepEqual(family.graphEquivalents, [
@@ -2527,7 +2526,7 @@ test("linear algebra vector add-scale family preserves components and graph arro
           level: "strict"
         }
       ],
-      sampleAssetIds: ["animation.vector-add-scale.basic"],
+      sampleAssetIds: ["animation.graph.vector.linear-map-scale"],
       summary:
         "Vector addition and scaling preserve the represented vector while changing arrow placement or length."
     }
@@ -2686,14 +2685,14 @@ test("linear algebra dot-projection family links scalar, projection, and angle v
     {
       id: "sample.animation.dot-projection.basic",
       animationId: "animation.dot-projection.basic",
-      renderTargetKinds: ["equation", "graph"],
+      availability: "concrete",
+      renderTargetKinds: ["graph"],
       transformationDefinitionIds: [
         "definition.symbolic.linear-algebra.dot-product",
-        "definition.symbolic.linear-algebra.vector-projection",
-        "definition.symbolic.linear-algebra.angle-from-dot"
+        "definition.symbolic.linear-algebra.vector-projection"
       ],
       summary:
-        "Basic dot/projection sample links scalar dot products to projection and angle graph views."
+        "The dot/projection graph computes the scalar result while animating the exact perpendicular drop."
     }
   ]);
   assert.deepEqual(family.graphEquivalents, [
