@@ -337,6 +337,11 @@ test("inequality family animation visibly flips its relation", async ({ page }) 
     .toContainText("x<3");
   await expect(transition.locator("[data-kp-editor-equation-target]"))
     .toContainText("−2x>−6");
+  await expect(transition)
+    .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
+  await expect(
+    transition.locator('[data-kp-editor-equation-source] [data-kp-motion-id*="source.relation"]')
+  ).toHaveCSS("opacity", "0.5");
 });
 
 test("calculus equation families render derivative and FTC forms", async ({ page }) => {

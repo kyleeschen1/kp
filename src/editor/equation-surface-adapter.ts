@@ -46,6 +46,7 @@ import {
   bindKpExponentRadicalStructuralMotionIds,
   createKpExponentRadicalSelectorAnnotatedLatex
 } from "./exponent-radical-semantic-latex.ts";
+import { createKpInequalitySelectorAnnotatedLatex } from "./inequality-semantic-latex.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticGeometryCache = new WeakMap<HTMLElement, {
@@ -348,7 +349,8 @@ function annotatedLatexForStates(
   }) ?? createKpFractionSelectorAnnotatedLatex(state)
     ?? createKpFunctionWrapSelectorAnnotatedLatex(state)
     ?? createKpDistributionSelectorAnnotatedLatex(state)
-    ?? createKpExponentRadicalSelectorAnnotatedLatex(state));
+    ?? createKpExponentRadicalSelectorAnnotatedLatex(state)
+    ?? createKpInequalitySelectorAnnotatedLatex(state));
   return annotated.every((state): state is KpSelectorAnnotatedLatex => state !== undefined)
     ? annotated
     : undefined;
@@ -370,6 +372,9 @@ function annotatedLatexForObject(
     objectId: object.id,
     selectors: object.selectors
   }) ?? createKpExponentRadicalSelectorAnnotatedLatex({
+    objectId: object.id,
+    selectors: object.selectors
+  }) ?? createKpInequalitySelectorAnnotatedLatex({
     objectId: object.id,
     selectors: object.selectors
   });

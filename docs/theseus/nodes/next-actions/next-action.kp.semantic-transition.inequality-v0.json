@@ -1,0 +1,109 @@
+{
+  "id": "next-action.kp.semantic-transition.inequality-v0",
+  "kind": "next-action",
+  "title": "Animate inequality relation replacement",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Negative inequality scaling now renders explicit left-side, relation, and right-side replacement lifecycles instead of a whole-equation fade.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-incremental-transition-authoring-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.semantic-transition.inequality-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-incremental-transition-compiler-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Approved thirty-slice implementation plan and boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/inequality-sign-flip-adapter.ts",
+      "summary": "Defines complete replacement lifecycle semantics and removes the overlapping whole-equation selector."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "Treats separately authored endpoint lifecycles as authoritative over legacy shorthand pairs."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/inequality-semantic-latex.ts",
+      "summary": "Annotates the visible inequality sides and relation exactly once."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Selects inequality annotations in the shared semantic stage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/inequality-semantic-latex.test.ts",
+      "summary": "Covers replacement compilation and selector annotation closure."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Verifies the relation replacement is visibly semantic."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-incremental-transition-authoring-v0",
+      "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Animate inequality relation replacement can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, and test TypeScript projects.",
+      "checkedAt": "2026-07-15T20:58:20.627Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "All 925 unit and integration tests.",
+      "checkedAt": "2026-07-15T20:58:20.685Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph and event integrity.",
+      "checkedAt": "2026-07-15T20:58:20.753Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "checkedAt": "2026-07-15T20:58:20.821Z",
+      "scope": "All 19 editor animation browser scenarios."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Negative inequality scaling now renders explicit left-side, relation, and right-side replacement lifecycles instead of a whole-equation fade."
+  }
+}

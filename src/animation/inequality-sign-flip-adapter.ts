@@ -54,8 +54,18 @@ export function createInequalitySignFlipAnimationAsset(): KpAnimationAsset {
     sourceObjectIds: [source.id],
     targetObjectIds: [target.id],
     preserves: ["structure", "value", "role"],
+    correspondenceMap: {
+      id: `${transformationId}.correspondence`,
+      records: [
+        replacementExit("lhs"),
+        replacementEnter("lhs"),
+        replacementExit("relation"),
+        replacementEnter("relation"),
+        replacementExit("rhs"),
+        replacementEnter("rhs")
+      ]
+    },
     correspondence: [
-      correspondence("full", ["structure", "value"]),
       correspondence("lhs", ["structure", "role"]),
       correspondence("relation", ["role"]),
       correspondence("rhs", ["structure", "role"])
@@ -191,7 +201,6 @@ function createInequalityObject(input: {
     title: input.title,
     value: { latex: input.latex },
     selectors: [
-      selector(input.side, "full", input.latex),
       selector(input.side, "lhs", input.lhsLatex),
       selector(input.side, "relation", input.relationLatex, {
         semanticRole: input.side === "target" ? "relation.flip" : "relation.source"
@@ -208,7 +217,7 @@ function createInequalityObject(input: {
 
 function selector(
   side: "source" | "target",
-  role: "full" | "lhs" | "relation" | "rhs",
+  role: "lhs" | "relation" | "rhs",
   latex: string,
   metadata?: Readonly<Record<string, string>>
 ) {
@@ -222,18 +231,38 @@ function selector(
 
 function selectorId(
   side: "source" | "target",
-  role: "full" | "lhs" | "relation" | "rhs"
+  role: "lhs" | "relation" | "rhs"
 ): string {
   return `inequality.sign-flip.${side}.${role}`;
 }
 
 function correspondence(
-  role: "full" | "lhs" | "relation" | "rhs",
+  role: "lhs" | "relation" | "rhs",
   preserves: readonly ("structure" | "value" | "role")[]
 ) {
   return {
     sourceSelectorId: selectorId("source", role),
     targetSelectorId: selectorId("target", role),
     preserves
+  };
+}
+
+function replacementExit(role: "lhs" | "relation" | "rhs") {
+  return {
+    id: `${role}-exits`,
+    relation: "removal" as const,
+    sourceSelectorIds: [selectorId("source", role)],
+    targetSelectorIds: [],
+    summary: `The source ${role} exits under negative scaling.`
+  };
+}
+
+function replacementEnter(role: "lhs" | "relation" | "rhs") {
+  return {
+    id: `${role}-enters`,
+    relation: "introduction" as const,
+    sourceSelectorIds: [],
+    targetSelectorIds: [selectorId("target", role)],
+    summary: `The transformed ${role} enters after negative scaling.`
   };
 }

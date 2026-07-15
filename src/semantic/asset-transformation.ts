@@ -284,10 +284,16 @@ export function normalizeKpSemanticTransformationCorrespondence(
   const records = [...richMap.records];
 
   transformation.correspondence.forEach((pair, index) => {
-    const alreadyRepresented = records.some((record) =>
+    const sameRelation = records.some((record) =>
       record.sourceSelectorIds.includes(pair.sourceSelectorId) &&
       record.targetSelectorIds.includes(pair.targetSelectorId)
     );
+    const endpointsHaveLifecycles = records.some((record) =>
+      record.sourceSelectorIds.includes(pair.sourceSelectorId)
+    ) && records.some((record) =>
+      record.targetSelectorIds.includes(pair.targetSelectorId)
+    );
+    const alreadyRepresented = sameRelation || endpointsHaveLifecycles;
     if (alreadyRepresented) return;
 
     // Legacy pairs imply persistence; absence of role preservation narrows that
