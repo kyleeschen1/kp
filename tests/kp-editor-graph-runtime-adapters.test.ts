@@ -5,6 +5,7 @@ import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.
 import { sampleLinearMapVectorGraphRuntimeFrame } from "../src/animation/graph-runtime-frame.ts";
 import { sampleDerivativeTangentRuntimeFrame } from "../src/animation/derivative-tangent-runtime-frame.ts";
 import { sampleIntegralAreaSweepRuntimeFrame } from "../src/animation/integral-area-sweep-runtime-frame.ts";
+import { sampleDotProjectionRuntimeFrame } from "../src/animation/dot-projection-runtime-frame.ts";
 
 test("vector scaling exposes concrete start, midpoint, and end coordinates", () => {
   const animation = createKpAnimationAssets().find((a) => a.id === "animation.graph.vector.linear-map-scale");
@@ -16,6 +17,18 @@ test("vector scaling exposes concrete start, midpoint, and end coordinates", () 
     }).currentCoordinates
   );
   assert.deepEqual(coordinates, [[1, 2], [1.5, 4], [2, 6]]);
+});
+
+test("dot projection drops the source point onto the target vector", () => {
+  const animation = createKpAnimationAssets().find((a) => a.id === "animation.dot-projection.basic");
+  assert.ok(animation);
+  const drops = [0, 0.5, 1].map((progress) =>
+    sampleDotProjectionRuntimeFrame({
+      animation,
+      runtimeFrame: sampleKpAnimationRuntimeFrame({ animation, progress })
+    }).dropPoint
+  );
+  assert.deepEqual(drops, [[3, 4], [3, 2], [3, 0]]);
 });
 
 test("integral sweep grows its bound and accumulated area together", () => {

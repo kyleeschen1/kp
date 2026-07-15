@@ -520,3 +520,17 @@ test("the integral area and moving upper bound visibly sweep together", async ({
   await expect(player.locator("[data-kp-editor-graph-area-label]")).toHaveText("Area 9.00");
   expect(Number(await bound.getAttribute("x1"))).toBeGreaterThan(startX);
 });
+
+test("dot projection visibly drops the source point onto the target vector", async ({ page }) => {
+  await page.goto("/?animation=editor-animation.sample.animation.dot-projection.basic");
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const projection = player.locator("[data-kp-editor-graph-projection]");
+  const point = player.locator("[data-kp-editor-graph-projection-point]");
+  await expect(projection).toHaveAttribute("data-kp-editor-graph-drop-point", "3,4");
+  await expect(point).toHaveAttribute("data-kp-editor-graph-dot-product", "12");
+  const startY = Number(await projection.getAttribute("y2"));
+
+  await player.locator('[data-action="seek-editor-animation"]').fill("1");
+  await expect(projection).toHaveAttribute("data-kp-editor-graph-drop-point", "3,0");
+  expect(Number(await projection.getAttribute("y2"))).toBeGreaterThan(startY);
+});
