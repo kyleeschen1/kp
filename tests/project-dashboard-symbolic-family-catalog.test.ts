@@ -9,6 +9,7 @@ import {
   validateKpSymbolicManipulationFamily
 } from "../src/animation/symbolic-manipulation-family.ts";
 import {
+  createSymbolicManipulationLibraryProgressRows,
   createSymbolicManipulationFamilyAgendaRows,
   createSymbolicManipulationFamilyFlashcardProjectionRows
 } from "../src/project-dashboard/symbolic-family-catalog.ts";
@@ -1184,6 +1185,49 @@ test("symbolic manipulation family dashboard rows expose comparable readiness fi
       "maturity:practice-ready"
     ]
   });
+});
+
+test("symbolic library progress rows summarize cross-domain coverage and blockers", () => {
+  const rows = createSymbolicManipulationLibraryProgressRows("");
+  const overall = rows[0];
+
+  assert.equal(rows.length, 4);
+  assert.equal(overall?.id, "symbolic-library-progress-all");
+  assert.equal(overall?.detail, "18/18 families ready");
+  assert.deepEqual(
+    overall?.previewFields
+      .filter((field) =>
+        [
+          "Families",
+          "Ready families",
+          "Transform definitions",
+          "Runtime samples",
+          "Law status",
+          "Generated problem hooks",
+          "Flashcard hooks",
+          "Paused-frame drill-down candidates",
+          "Blockers"
+        ].includes(field.label)
+      )
+      .map((field) => [field.label, field.value]),
+    [
+      ["Families", "18"],
+      ["Ready families", "18"],
+      ["Transform definitions", "71"],
+      ["Runtime samples", "20"],
+      ["Law status", "passed"],
+      ["Generated problem hooks", "18"],
+      ["Flashcard hooks", "18"],
+      ["Paused-frame drill-down candidates", "47"],
+      ["Blockers", "None"]
+    ]
+  );
+  assert.deepEqual(
+    createSemanticAssetCatalogAgendaRows(
+      "symbolic library domain:linear-algebra law-status:passed blockers:none paused-frame-drilldown:available"
+    ).map((row) => row.id),
+    ["symbolic-library-progress-linear-algebra"]
+  );
 });
 
 test("algebra generated problem rows surface practice-ready maturity", () => {

@@ -16,6 +16,7 @@ import {
   type GeneratedAlgebraFixtureAgendaRow
 } from "./generated-algebra-catalog.ts";
 import {
+  createSymbolicManipulationLibraryProgressRows,
   createSymbolicManipulationFamilyAgendaRows,
   createSymbolicManipulationFamilyFlashcardProjectionRows,
   type SymbolicManipulationFamilyAgendaRow
@@ -53,6 +54,7 @@ export function createSemanticAssetCatalogAgendaRows(
   return [
     ...createLinearSolveDerivedAgendaRows(query),
     ...createAnimationAssetAgendaRows(query),
+    ...createSymbolicManipulationLibraryProgressRows(query),
     ...createSymbolicManipulationFamilyAgendaRows(query),
     ...createSymbolicManipulationFamilyFlashcardProjectionRows(query),
     ...createGeneratedProblemRegistryAgendaRows(query),

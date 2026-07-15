@@ -10,6 +10,7 @@ import {
 import type { KpAssetMetadataValue } from "../semantic/asset.ts";
 import { projectDashboardTextFieldsMatch } from "./model.ts";
 import type { SemanticAssetAgendaPreviewField } from "./semantic-asset-catalog.ts";
+import symbolicLibraryRunContract from "../../docs/theseus/nodes/run-contracts/run-contract.kp.animation.symbolic-manipulation-library-v0.json" with { type: "json" };
 
 export interface SymbolicManipulationFamilyAgendaRow {
   readonly id: string;
@@ -47,6 +48,224 @@ export function createSymbolicManipulationFamilyFlashcardProjectionRows(
       )
     )
     .filter((row) => symbolicManipulationFamilyRowMatchesQuery(row, query));
+}
+
+export function createSymbolicManipulationLibraryProgressRows(
+  query: string
+): readonly SymbolicManipulationFamilyAgendaRow[] {
+  const families = createSymbolicManipulationFamilyRegistry();
+  const rows = [
+    symbolicManipulationLibraryProgressRow("all", families),
+    ...(["algebra", "calculus", "linear-algebra"] as const).map((domain) =>
+      symbolicManipulationLibraryProgressRow(
+        domain,
+        families.filter((family) => family.domain === domain)
+      )
+    )
+  ];
+
+  return rows.filter((row) => symbolicManipulationFamilyRowMatchesQuery(row, query));
+}
+
+function symbolicManipulationLibraryProgressRow(
+  scope: "all" | KpSymbolicManipulationFamily["domain"],
+  families: readonly KpSymbolicManipulationFamily[]
+): SymbolicManipulationFamilyAgendaRow {
+  const metrics = symbolicManipulationLibraryProgressMetrics(families);
+  const completedSlices = symbolicLibraryRunContract.slices.filter(
+    (slice) => slice.status === "complete"
+  ).length;
+  const scopeLabel = scope === "all" ? "All domains" : scope;
+  const blockers = metrics.blockers.length === 0
+    ? "None"
+    : metrics.blockers.join(", ");
+
+  return {
+    id: `symbolic-library-progress-${scope}`,
+    title:
+      scope === "all"
+        ? "Symbolic manipulation library coverage"
+        : `${scopeLabel} symbolic library coverage`,
+    summary:
+      `Tracks ${scopeLabel.toLowerCase()} symbolic family readiness, laws, graph equivalents, ` +
+      "generated-problem hooks, flashcard hooks, and paused-frame drill-down coverage.",
+    status: metrics.readyFamilyCount === metrics.familyCount ? "active" : "blocked",
+    detail: `${metrics.readyFamilyCount}/${metrics.familyCount} families ready`,
+    kind: "report",
+    depth: 0,
+    tags: [
+      "symbolic-library",
+      "progress",
+      "coverage",
+      "readiness",
+      "law-status",
+      ...(scope === "all" ? ["cross-domain"] : [scope])
+    ],
+    dataAttributes: [
+      ["data-kp-symbolic-library-progress", scope],
+      ["data-kp-symbolic-library-run-contract", symbolicLibraryRunContract.id],
+      ["data-kp-symbolic-library-law-status", metrics.lawStatus]
+    ],
+    relatedIds: [
+      symbolicLibraryRunContract.id,
+      ...families.map((family) => family.id)
+    ],
+    previewFields: [
+      { label: "Scope", value: scopeLabel },
+      { label: "Run contract", value: symbolicLibraryRunContract.id },
+      {
+        label: "Loop progress",
+        value: `${completedSlices}/${symbolicLibraryRunContract.slices.length} slices complete`
+      },
+      { label: "Families", value: String(metrics.familyCount) },
+      { label: "Ready families", value: String(metrics.readyFamilyCount) },
+      {
+        label: "Transform definitions",
+        value: String(metrics.transformationDefinitionCount)
+      },
+      { label: "Runtime samples", value: String(metrics.runtimeSampleCount) },
+      { label: "Law checks", value: String(metrics.lawCheckCount) },
+      { label: "Law status", value: metrics.lawStatus },
+      {
+        label: "Graph equivalents",
+        value: String(metrics.graphEquivalentCount)
+      },
+      {
+        label: "Generated problem hooks",
+        value: String(metrics.generatedProblemHookCount)
+      },
+      {
+        label: "Flashcard hooks",
+        value: String(metrics.flashcardHookCount)
+      },
+      {
+        label: "Paused-frame drill-down candidates",
+        value: String(metrics.pausedFrameDrillDownCandidateCount)
+      },
+      { label: "Blockers", value: blockers }
+    ],
+    searchFields: [
+      "semantic asset catalog",
+      "symbolic manipulation library progress",
+      "symbolic library coverage",
+      "symbolic",
+      "library",
+      symbolicLibraryRunContract.id,
+      `domain:${scope}`,
+      `coverage:${metrics.readyFamilyCount}/${metrics.familyCount}`,
+      `law-status:${metrics.lawStatus}`,
+      `blockers:${metrics.blockers.length === 0 ? "none" : "present"}`,
+      `graph-equivalents:${metrics.graphEquivalentCount}`,
+      `generated-problem-hooks:${metrics.generatedProblemHookCount}`,
+      `flashcard-hooks:${metrics.flashcardHookCount}`,
+      "paused-frame-drilldown:available",
+      ...families.flatMap((family) => [
+        family.id,
+        family.title,
+        ...family.graphEquivalents.map((equivalent) => equivalent.id),
+        ...family.generatedProblemHooks.map((hook) => hook.id),
+        ...family.flashcardHooks.map((hook) => hook.id)
+      ])
+    ]
+  };
+}
+
+interface SymbolicManipulationLibraryProgressMetrics {
+  readonly familyCount: number;
+  readonly readyFamilyCount: number;
+  readonly transformationDefinitionCount: number;
+  readonly runtimeSampleCount: number;
+  readonly lawCheckCount: number;
+  readonly lawStatus: "passed" | "failed";
+  readonly graphEquivalentCount: number;
+  readonly generatedProblemHookCount: number;
+  readonly flashcardHookCount: number;
+  readonly pausedFrameDrillDownCandidateCount: number;
+  readonly blockers: readonly string[];
+}
+
+function symbolicManipulationLibraryProgressMetrics(
+  families: readonly KpSymbolicManipulationFamily[]
+): SymbolicManipulationLibraryProgressMetrics {
+  const blockers = families.flatMap((family) =>
+    symbolicManipulationFamilyProgressBlockers(family)
+  );
+
+  return {
+    familyCount: families.length,
+    readyFamilyCount: families.filter(
+      (family) => symbolicManipulationFamilyProgressBlockers(family).length === 0
+    ).length,
+    transformationDefinitionCount: families.reduce(
+      (count, family) => count + family.transformationDefinitions.length,
+      0
+    ),
+    runtimeSampleCount: families.reduce(
+      (count, family) => count + family.runtimeSamples.length,
+      0
+    ),
+    lawCheckCount: families.reduce(
+      (count, family) =>
+        count +
+        family.transformationDefinitions.reduce(
+          (definitionCount, definition) =>
+            definitionCount + (definition.lawRefs ?? []).length,
+          0
+        ) +
+        family.graphEquivalents.reduce(
+          (equivalentCount, equivalent) =>
+            equivalentCount + (equivalent.lawRefs ?? []).length,
+          0
+        ),
+      0
+    ),
+    lawStatus: blockers.some((blocker) => blocker.includes("validation"))
+      ? "failed"
+      : "passed",
+    graphEquivalentCount: families.reduce(
+      (count, family) => count + family.graphEquivalents.length,
+      0
+    ),
+    generatedProblemHookCount: families.reduce(
+      (count, family) => count + family.generatedProblemHooks.length,
+      0
+    ),
+    flashcardHookCount: families.reduce(
+      (count, family) => count + family.flashcardHooks.length,
+      0
+    ),
+    pausedFrameDrillDownCandidateCount: new Set(
+      families.flatMap((family) =>
+        family.runtimeSamples.flatMap(
+          (sample) => sample.transformationDefinitionIds ?? []
+        )
+      )
+    ).size,
+    blockers
+  };
+}
+
+function symbolicManipulationFamilyProgressBlockers(
+  family: KpSymbolicManipulationFamily
+): readonly string[] {
+  return [
+    ...validateKpSymbolicManipulationFamily(family).map(
+      (issue) => `${family.id}:validation:${issue.path}`
+    ),
+    ...(family.status === "seed" ? [`${family.id}:status:seed`] : []),
+    ...(family.runtimeSamples.length === 0
+      ? [`${family.id}:runtime-sample:missing`]
+      : []),
+    ...(family.graphEquivalents.length === 0
+      ? [`${family.id}:graph-equivalent:missing`]
+      : []),
+    ...(family.generatedProblemHooks.length === 0
+      ? [`${family.id}:generated-problem-hook:missing`]
+      : []),
+    ...(family.flashcardHooks.length === 0
+      ? [`${family.id}:flashcard-hook:missing`]
+      : [])
+  ];
 }
 
 function symbolicManipulationFamilyFlashcardProjectionRow(

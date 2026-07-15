@@ -228,7 +228,7 @@
       "id": "next-action.kp.animation.symbolic-dashboard-progress-v0",
       "title": "Update dashboard search and progress rows",
       "summary": "Surface symbolic family coverage, readiness, blockers, law status, graph equivalents, generated problem hooks, and flashcard hooks in the project dashboard.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.symbolic-library-closeout-report-v0",

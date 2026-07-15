@@ -1312,18 +1312,26 @@ test("renderProjectDashboard searches synthetic agenda rows", () => {
   assert.doesNotMatch(html, /data-kp-project-dashboard-animation-layout/);
 });
 
-test("renderProjectDashboard searches semantic capability advertisements", () => {
+test("renderProjectDashboard searches semantic capability and symbolic progress rows", () => {
   const html = renderProjectDashboard(projectDashboardData, {
     query: "matrix.linear-map",
     selectedAgendaRowId: "api-semantic-matrix"
   });
 
-  assert.match(html, /Showing 2 of \d+ rows/);
+  assert.match(html, /Showing 4 of \d+ rows/);
   assert.match(
     html,
     /data-kp-agenda-row="representation-equation-to-matrix-linear-map"/
   );
   assert.match(html, /data-kp-agenda-row="api-semantic-matrix"/);
+  assert.match(
+    html,
+    /data-kp-agenda-row="symbolic-library-progress-all"/
+  );
+  assert.match(
+    html,
+    /data-kp-agenda-row="symbolic-library-progress-linear-algebra"/
+  );
   assert.match(
     html,
     /data-kp-preview-field="Derive descriptors"[^>]*>matrix\.linear-map</
