@@ -1,0 +1,83 @@
+{
+  "id": "next-action.kp.semantic-transition.correspondence-laws-v0",
+  "kind": "next-action",
+  "title": "Add lifecycle composition and rewind laws",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Correspondence maps now have strict endpoint-shape validation, optional total semantic lifecycle coverage, and direction-neutral playback projection with an exact rewind endpoint law.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-incremental-transition-authoring-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.semantic-transition.correspondence-laws-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-incremental-transition-compiler-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Approved thirty-slice implementation plan and boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/correspondence.ts",
+      "summary": "Adds validation and bidirectional playback laws for rich correspondence."
+    },
+    {
+      "kind": "file",
+      "path": "tests/correspondence-composition.test.ts",
+      "summary": "Covers endpoint shapes, total lifecycle, visual-only overlays, and backward fan-in projection."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-incremental-transition-authoring-v0",
+      "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Add lifecycle composition and rewind laws can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/correspondence-composition.test.ts",
+      "status": "passed",
+      "scope": "Focused correspondence law tests.",
+      "checkedAt": "2026-07-15T19:42:34.293Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Type safety.",
+      "checkedAt": "2026-07-15T19:42:34.357Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-15T19:42:34.415Z",
+      "scope": "Graph integrity."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Correspondence maps now have strict endpoint-shape validation, optional total semantic lifecycle coverage, and direction-neutral playback projection with an exact rewind endpoint law."
+  }
+}

@@ -47,6 +47,24 @@ export interface CorrespondenceMap {
   readonly records: readonly SelectorCorrespondenceRecord[];
 }
 
+export interface CorrespondenceMapValidationIssue {
+  readonly path: string;
+  readonly message: string;
+}
+
+export interface CorrespondenceLifecycleExpectation {
+  readonly sourceSelectorIds: readonly string[];
+  readonly targetSelectorIds: readonly string[];
+}
+
+export interface SelectorCorrespondencePlaybackRecord {
+  readonly id: string;
+  readonly relation: SelectorCorrespondenceRelationId;
+  readonly fromSelectorIds: readonly string[];
+  readonly toSelectorIds: readonly string[];
+  readonly summary: string;
+}
+
 export const selectorCorrespondenceRelations: readonly SelectorCorrespondenceRelationDefinition[] = [
   {
     id: "identity",
@@ -136,6 +154,85 @@ export function cloneCorrespondenceMap(map: CorrespondenceMap): CorrespondenceMa
       summary: record.summary
     }))
   };
+}
+
+export function validateCorrespondenceMap(
+  map: CorrespondenceMap,
+  lifecycle?: CorrespondenceLifecycleExpectation
+): readonly CorrespondenceMapValidationIssue[] {
+  const issues: CorrespondenceMapValidationIssue[] = [];
+  const recordIds = new Set<string>();
+
+  if (map.id.trim().length === 0) {
+    issues.push({ path: "id", message: "Correspondence map id must not be empty." });
+  }
+
+  map.records.forEach((record, index) => {
+    const path = `records[${index}]`;
+    if (record.id.trim().length === 0) {
+      issues.push({ path: `${path}.id`, message: "Correspondence record id must not be empty." });
+    } else if (recordIds.has(record.id)) {
+      issues.push({
+        path: `${path}.id`,
+        message: `Correspondence map ${map.id} repeats record id ${record.id}.`
+      });
+    }
+    recordIds.add(record.id);
+
+    if (!recordHasExpectedEndpointShape(record)) {
+      const definition = findSelectorCorrespondenceRelation(record.relation);
+      issues.push({
+        path,
+        message:
+          `Correspondence record ${record.id} relation ${record.relation} requires endpoint shape ${definition.endpointShape}; received ${record.sourceSelectorIds.length} source and ${record.targetSelectorIds.length} target selector(s).`
+      });
+    }
+  });
+
+  if (lifecycle !== undefined) {
+    issues.push(...validateTotalLifecycle(map, lifecycle));
+  }
+
+  return issues;
+}
+
+export function projectCorrespondenceMapForPlayback(
+  map: CorrespondenceMap,
+  direction: "forward" | "backward"
+): readonly SelectorCorrespondencePlaybackRecord[] {
+  return map.records.map((record) => ({
+    id: record.id,
+    relation: record.relation,
+    fromSelectorIds: [
+      ...(direction === "forward" ? record.sourceSelectorIds : record.targetSelectorIds)
+    ],
+    toSelectorIds: [
+      ...(direction === "forward" ? record.targetSelectorIds : record.sourceSelectorIds)
+    ],
+    summary: record.summary
+  }));
+}
+
+export function checkCorrespondenceMapRewindLaw(
+  map: CorrespondenceMap
+): readonly CorrespondenceMapValidationIssue[] {
+  const forward = projectCorrespondenceMapForPlayback(map, "forward");
+  const backward = projectCorrespondenceMapForPlayback(map, "backward");
+
+  return forward.flatMap((record, index) => {
+    const reverseRecord = backward[index];
+    if (
+      reverseRecord !== undefined &&
+      stringArraysEqual(record.fromSelectorIds, reverseRecord.toSelectorIds) &&
+      stringArraysEqual(record.toSelectorIds, reverseRecord.fromSelectorIds)
+    ) {
+      return [];
+    }
+    return [{
+      path: `records[${index}]`,
+      message: `Correspondence record ${record.id} does not mirror its endpoints for backward playback.`
+    }];
+  });
 }
 
 export function composeCorrespondenceMapsSequence(
@@ -279,4 +376,95 @@ function validateCompositionInput(
       `Correspondence map composition ${id} requires at least one correspondence map.`
     );
   }
+}
+
+function recordHasExpectedEndpointShape(
+  record: SelectorCorrespondenceRecord
+): boolean {
+  const sourceCount = record.sourceSelectorIds.length;
+  const targetCount = record.targetSelectorIds.length;
+  switch (record.relation) {
+    case "identity":
+    case "role-change":
+      return sourceCount === 1 && targetCount === 1;
+    case "introduction":
+      return sourceCount === 0 && targetCount >= 1;
+    case "removal":
+    case "cancelation":
+      return sourceCount >= 1 && targetCount === 0;
+    case "fan-in":
+      return sourceCount >= 2 && targetCount === 1;
+    case "fan-out":
+      return sourceCount === 1 && targetCount >= 2;
+    case "artifact":
+    case "focus":
+      return sourceCount + targetCount >= 1;
+  }
+}
+
+function validateTotalLifecycle(
+  map: CorrespondenceMap,
+  expectation: CorrespondenceLifecycleExpectation
+): readonly CorrespondenceMapValidationIssue[] {
+  const semanticRecords = map.records.filter(
+    (record) => record.relation !== "artifact" && record.relation !== "focus"
+  );
+  return [
+    ...selectorLifecycleIssues(
+      map,
+      "source",
+      expectation.sourceSelectorIds,
+      semanticRecords.flatMap((record) => record.sourceSelectorIds)
+    ),
+    ...selectorLifecycleIssues(
+      map,
+      "target",
+      expectation.targetSelectorIds,
+      semanticRecords.flatMap((record) => record.targetSelectorIds)
+    )
+  ];
+}
+
+function selectorLifecycleIssues(
+  map: CorrespondenceMap,
+  side: "source" | "target",
+  expectedSelectorIds: readonly string[],
+  coveredSelectorIds: readonly string[]
+): readonly CorrespondenceMapValidationIssue[] {
+  const issues: CorrespondenceMapValidationIssue[] = [];
+  const expected = new Set(expectedSelectorIds);
+  const coverage = new Map<string, number>();
+  coveredSelectorIds.forEach((selectorId) => {
+    coverage.set(selectorId, (coverage.get(selectorId) ?? 0) + 1);
+  });
+
+  expectedSelectorIds.forEach((selectorId, index) => {
+    const count = coverage.get(selectorId) ?? 0;
+    if (count === 0) {
+      issues.push({
+        path: `lifecycle.${side}SelectorIds[${index}]`,
+        message: `Correspondence map ${map.id} leaves ${side} selector ${selectorId} without a semantic lifecycle relation.`
+      });
+    } else if (count > 1) {
+      issues.push({
+        path: `lifecycle.${side}SelectorIds[${index}]`,
+        message: `Correspondence map ${map.id} assigns ${side} selector ${selectorId} to ${count} semantic lifecycle relations.`
+      });
+    }
+  });
+
+  for (const selectorId of coverage.keys()) {
+    if (!expected.has(selectorId)) {
+      issues.push({
+        path: `lifecycle.${side}SelectorIds`,
+        message: `Correspondence map ${map.id} covers unexpected ${side} selector ${selectorId}.`
+      });
+    }
+  }
+
+  return issues;
+}
+
+function stringArraysEqual(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
 }

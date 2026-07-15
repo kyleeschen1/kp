@@ -61,7 +61,8 @@
     {
       "id": "next-action.kp.semantic-transition.correspondence-laws-v0",
       "title": "Add lifecycle composition and rewind laws",
-      "status": "planned"
+      "summary": "Rich correspondence now has endpoint, lifecycle, and rewind laws.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.equation-ir-v0",
