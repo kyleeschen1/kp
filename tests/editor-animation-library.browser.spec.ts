@@ -92,3 +92,24 @@ test("dashboard animation assets open their concrete editor selection", async ({
     /animation=editor-animation\.animation\.linear-solve\.solve-x/
   );
 });
+
+test("fraction family descriptor opens as a concrete editor animation", async ({
+  page
+}) => {
+  const descriptorId =
+    "editor-animation.sample.animation.fraction-simplification.basic";
+  await page.goto(`/?animation=${descriptorId}`);
+
+  const library = page.locator("[data-kp-editor-animation-library]");
+  await expect(library).toHaveAttribute(
+    "data-kp-editor-animation-descriptor-id",
+    descriptorId
+  );
+  await expect(library).toHaveAttribute(
+    "data-kp-editor-animation-id",
+    "animation.generated.fraction-expression.two-fourths"
+  );
+  await expect(library).toContainText(
+    "family.algebra.fraction-simplification"
+  );
+});

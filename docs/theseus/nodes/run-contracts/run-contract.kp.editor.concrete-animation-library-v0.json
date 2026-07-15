@@ -158,7 +158,8 @@
     {
       "id": "next-action.kp.editor.fraction-simplification-animation-v0",
       "title": "Add concrete fraction simplification animation",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.fraction-simplification-animation-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.exponent-combine-animation-v0",

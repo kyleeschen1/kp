@@ -682,7 +682,8 @@ test("algebra fraction simplification family covers bars, copies, and reciprocal
   assert.deepEqual(family.runtimeSamples, [
     {
       id: "sample.animation.fraction-simplification.basic",
-      animationId: "animation.fraction-simplification.basic",
+      animationId: "animation.generated.fraction-expression.two-fourths",
+      availability: "concrete",
       renderTargetKinds: ["equation"],
       transformationDefinitionIds: [
         "definition.symbolic.algebra.split-fraction-sum",
@@ -708,7 +709,9 @@ test("algebra fraction simplification family covers bars, copies, and reciprocal
           level: "strict"
         }
       ],
-      sampleAssetIds: ["animation.fraction-simplification.basic"],
+      sampleAssetIds: [
+        "animation.generated.fraction-expression.two-fourths"
+      ],
       summary:
         "Fraction rewrites keep the represented rational value fixed even when numerator, denominator, and bars are rearranged."
     }
@@ -1219,8 +1222,8 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
       ["Ready families", "18"],
       ["Transform definitions", "71"],
       ["Runtime sample refs", "20"],
-      ["Concrete runtime samples", "2"],
-      ["Planned runtime samples", "18"],
+      ["Concrete runtime samples", "3"],
+      ["Planned runtime samples", "17"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],
       ["Flashcard hooks", "18"],

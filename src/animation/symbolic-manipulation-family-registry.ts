@@ -1142,7 +1142,8 @@ function createAlgebraFractionSimplificationFamily(): KpSymbolicManipulationFami
     runtimeSamples: [
       {
         id: "sample.animation.fraction-simplification.basic",
-        animationId: "animation.fraction-simplification.basic",
+        animationId: "animation.generated.fraction-expression.two-fourths",
+        availability: "concrete",
         renderTargetKinds: ["equation"],
         transformationDefinitionIds: definitionIds,
         summary:
@@ -1162,7 +1163,9 @@ function createAlgebraFractionSimplificationFamily(): KpSymbolicManipulationFami
             level: "strict"
           }
         ],
-        sampleAssetIds: ["animation.fraction-simplification.basic"],
+        sampleAssetIds: [
+          "animation.generated.fraction-expression.two-fourths"
+        ],
         summary:
           "Fraction rewrites keep the represented rational value fixed even when numerator, denominator, and bars are rearranged."
       }

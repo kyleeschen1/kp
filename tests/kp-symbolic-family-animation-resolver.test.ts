@@ -51,6 +51,25 @@ test("canonical solve-x asset resolves both algebra family samples", () => {
   );
 });
 
+test("canonical fraction asset resolves its simplification family sample", () => {
+  const assets = createKpAnimationAssets();
+  const families = createSymbolicManipulationFamilyRegistry();
+  const resolution = createKpSymbolicFamilyAnimationResolutions({
+    families,
+    assets
+  }).find(
+    (candidate) =>
+      candidate.sampleId ===
+      "sample.animation.fraction-simplification.basic"
+  );
+
+  assert.equal(resolution?.status, "resolved");
+  assert.equal(
+    resolution?.animationId,
+    "animation.generated.fraction-expression.two-fourths"
+  );
+});
+
 test("family animation resolver requires explicit concrete availability and exact ids", () => {
   const asset = createLinearSolveAnimationAsset();
   const plannedFamily = familyWithSample({

@@ -25,7 +25,7 @@ test("editor renders every concrete asset through a stable descriptor selection"
     editorAnimationDescriptorId: selected.id
   });
 
-  assert.equal(descriptors.length, 22);
+  assert.equal(descriptors.length, 23);
   assert.match(html, /data-kp-editor-animation-library/);
   assert.match(
     html,
@@ -44,6 +44,29 @@ test("editor selection falls back to the first concrete descriptor", () => {
   assert.equal(
     selectKpEditorAnimationDescriptor(descriptors, "unknown").id,
     descriptors[0]?.id
+  );
+});
+
+test("fraction simplification is selectable through its family descriptor", () => {
+  const descriptor = createKpEditorAnimationLibrary().find(
+    (candidate) =>
+      candidate.sampleId ===
+      "sample.animation.fraction-simplification.basic"
+  );
+  assert.ok(descriptor);
+
+  const html = renderEditorDocument(createInitialEditorDocument(), {
+    editorAnimationDescriptorId: descriptor.id
+  });
+
+  assert.match(
+    html,
+    /data-kp-editor-animation-id="animation\.generated\.fraction-expression\.two-fourths"/
+  );
+  assert.match(html, /family\.algebra\.fraction-simplification/);
+  assert.match(
+    html,
+    /option value="editor-animation\.sample\.animation\.fraction-simplification\.basic" selected/
   );
 });
 
