@@ -648,3 +648,21 @@ test("migrated equation families keep semantic token motion active forward and b
     );
   }
 });
+
+test("accepted LLM draft renders as semantic token motion in the editor", async ({ page }) => {
+  await page.goto("/?animation=editor-animation.animation.generated.add-zero");
+  const player = page.locator("[data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-id",
+    "animation.generated.add-zero"
+  );
+  await player.locator('[data-action="seek-editor-animation"]').fill("0.43");
+  const transition = player.locator("[data-kp-editor-equation-transition-id]");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-semantic-motion",
+    "active"
+  );
+  await expect(transition.locator("[data-kp-motion-id]")).toHaveCount(7);
+  await expect(transition.locator("[data-kp-editor-equation-source]")).toContainText("x+0=4");
+  await expect(transition.locator("[data-kp-editor-equation-target]")).toContainText("x=4");
+});

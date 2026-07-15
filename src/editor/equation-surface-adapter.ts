@@ -51,6 +51,7 @@ import {
   bindKpMatrixStructuralMotionIds,
   createKpMatrixSelectorAnnotatedLatex
 } from "./matrix-semantic-latex.ts";
+import { createKpGenericSelectorAnnotatedLatex } from "./generic-semantic-latex.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticGeometryCache = new WeakMap<HTMLElement, {
@@ -339,6 +340,7 @@ function applySemanticTokenMotion(input: {
 function annotatedLatexForStates(
   states: readonly {
     readonly objectId: string;
+    readonly latex: string;
     readonly selectors: readonly {
       readonly id: string;
       readonly kind?: string | undefined;
@@ -355,7 +357,8 @@ function annotatedLatexForStates(
     ?? createKpDistributionSelectorAnnotatedLatex(state)
     ?? createKpExponentRadicalSelectorAnnotatedLatex(state)
     ?? createKpInequalitySelectorAnnotatedLatex(state)
-    ?? createKpMatrixSelectorAnnotatedLatex(state));
+    ?? createKpMatrixSelectorAnnotatedLatex(state)
+    ?? createKpGenericSelectorAnnotatedLatex(state));
   return annotated.every((state): state is KpSelectorAnnotatedLatex => state !== undefined)
     ? annotated
     : undefined;
@@ -384,6 +387,10 @@ function annotatedLatexForObject(
     selectors: object.selectors
   }) ?? createKpMatrixSelectorAnnotatedLatex({
     objectId: object.id,
+    selectors: object.selectors
+  }) ?? createKpGenericSelectorAnnotatedLatex({
+    objectId: object.id,
+    latex: object.latex,
     selectors: object.selectors
   });
 }

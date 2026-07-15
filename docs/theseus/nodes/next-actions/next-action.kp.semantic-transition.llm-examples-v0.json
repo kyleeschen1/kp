@@ -1,0 +1,104 @@
+{
+  "id": "next-action.kp.semantic-transition.llm-examples-v0",
+  "kind": "next-action",
+  "title": "Add accepted and rejected generated examples",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added an accepted model-authored additive-zero equation animation, exposed it as the 42nd KP editor descriptor, and verified visible semantic token motion in Chromium. Added rejected renderer-keyframe and incomplete-lifecycle examples with concrete repair guidance, plus a generic safe ordered-label-to-KaTeX annotation path.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-incremental-transition-authoring-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.semantic-transition.llm-examples-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-incremental-transition-compiler-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Approved thirty-slice implementation plan and boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/llm-animation-draft-examples.ts",
+      "summary": "Accepted and rejected constrained LLM draft examples."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/generic-semantic-latex.ts",
+      "summary": "Safe generic semantic selector annotation for generated equation states."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Generated LLM equation animation exposed in the KP editor catalog."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-llm-animation-draft-examples.test.ts",
+      "summary": "Example compilation, rejection guidance, catalog, and annotation coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Visible generated semantic token motion browser assertion."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-incremental-transition-authoring-v0",
+      "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Add accepted and rejected generated examples can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "936 unit tests pass and the accepted LLM-generated equation animation renders active token motion in the editor.",
+      "checkedAt": "2026-07-15T21:28:04.489Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "936 unit tests pass and the accepted LLM-generated equation animation renders active token motion in the editor.",
+      "checkedAt": "2026-07-15T21:28:04.555Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g accepted LLM draft",
+      "status": "passed",
+      "scope": "936 unit tests pass and the accepted LLM-generated equation animation renders active token motion in the editor.",
+      "checkedAt": "2026-07-15T21:28:04.621Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-15T21:28:04.685Z",
+      "scope": "936 unit tests pass and the accepted LLM-generated equation animation renders active token motion in the editor."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added an accepted model-authored additive-zero equation animation, exposed it as the 42nd KP editor descriptor, and verified visible semantic token motion in Chromium. Added rejected renderer-keyframe and incomplete-lifecycle examples with concrete repair guidance, plus a generic safe ordered-label-to-KaTeX annotation path."
+  }
+}

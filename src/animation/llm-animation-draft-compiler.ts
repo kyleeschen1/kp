@@ -190,6 +190,11 @@ function compileValidatedDraft(
         targetId: tree.id
       }
     ],
+    dashboard: {
+      rowId: draft.id.replaceAll(".", "-"),
+      tags: ["animation", "equation", "generated", "llm-authored"],
+      sourceRefIds: [draft.id]
+    },
     metadata: {
       authoringSchemaVersion: draft.schemaVersion,
       authoringSource: "llm-draft"

@@ -199,7 +199,8 @@
     {
       "id": "next-action.kp.semantic-transition.llm-examples-v0",
       "title": "Add accepted and rejected generated examples",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.semantic-transition.llm-examples-v0 in KP Semantic Incremental Transition And LLM Authoring V0.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.diagram-scene-v0",

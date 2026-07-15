@@ -23,6 +23,9 @@ import {
 import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
 import { createProgrammingAnimationAssets } from "./programming-adapter.ts";
 import {
+  createAcceptedGeneratedAddZeroAnimationAsset
+} from "./llm-animation-draft-examples.ts";
+import {
   createGeneratedCalculusProblemFixtures
 } from "../semantic/generated-calculus-problem-fixture.ts";
 import {
@@ -32,6 +35,7 @@ import {
 export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
   return [
     ...createGeneratedAlgebraAnimationAssets(),
+    createAcceptedGeneratedAddZeroAnimationAsset(),
     ...createGeneratedProblemAnimationAssets(),
     ...createGraphAnimationAssets(),
     ...createProgrammingAnimationAssets(),
