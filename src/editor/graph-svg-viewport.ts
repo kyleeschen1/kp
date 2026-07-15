@@ -112,7 +112,7 @@ function renderRuntimeContent(
       });
       const tangent = frame.tangentSegment.map((coordinates) => point(coordinates));
       const current = point([frame.x, frame.y]);
-      return `<polyline class="editor-graph-stage__curve" points="${curve.map((p) => p.join(",")).join(" ")}" /><line class="editor-graph-stage__tangent" data-kp-editor-graph-tangent x1="${tangent[0]![0]}" y1="${tangent[0]![1]}" x2="${tangent[1]![0]}" y2="${tangent[1]![1]}" /><circle class="editor-graph-stage__point" cx="${current[0]}" cy="${current[1]}" r="5" />`;
+      return `<polyline class="editor-graph-stage__curve" points="${curve.map((p) => p.join(",")).join(" ")}" /><line class="editor-graph-stage__tangent" data-kp-editor-graph-tangent data-kp-editor-graph-tangent-slope="${frame.slope}" x1="${tangent[0]![0]}" y1="${tangent[0]![1]}" x2="${tangent[1]![0]}" y2="${tangent[1]![1]}" /><circle class="editor-graph-stage__point" data-kp-editor-graph-tangent-point data-kp-editor-graph-tangent-x="${frame.x}" cx="${current[0]}" cy="${current[1]}" r="5" />`;
     }
     case "animation.integral-ftc.area-sweep": {
       const frame = sampleIntegralAreaSweepRuntimeFrame({ animation, runtimeFrame: state.runtimeFrame });

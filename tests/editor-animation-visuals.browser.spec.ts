@@ -487,3 +487,20 @@ test("vector scaling visibly travels from its source to transformed coordinates"
   await expect(vector).toHaveAttribute("data-kp-editor-graph-vector-coordinates", "2,6");
   expect(Number(await vector.getAttribute("y2"))).toBeLessThan(startY);
 });
+
+test("the derivative tangent and contact point move together along x cubed", async ({
+  page
+}) => {
+  await page.goto("/?animation=editor-animation.sample.animation.derivative-rules.tangent-graph");
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const tangent = player.locator("[data-kp-editor-graph-tangent]");
+  const point = player.locator("[data-kp-editor-graph-tangent-point]");
+  await expect(tangent).toHaveAttribute("data-kp-editor-graph-tangent-slope", "0");
+  await expect(point).toHaveAttribute("data-kp-editor-graph-tangent-x", "0");
+  const startX = Number(await point.getAttribute("cx"));
+
+  await player.locator('[data-action="seek-editor-animation"]').fill("1");
+  await expect(tangent).toHaveAttribute("data-kp-editor-graph-tangent-slope", "12");
+  await expect(point).toHaveAttribute("data-kp-editor-graph-tangent-x", "2");
+  expect(Number(await point.getAttribute("cx"))).toBeGreaterThan(startX);
+});
