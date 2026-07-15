@@ -1,0 +1,167 @@
+import type { KpAnimationAsset } from "../animation/asset.ts";
+import type {
+  KpEditorAnimationDescriptor
+} from "./animation-descriptor.ts";
+import {
+  createKpEditorAnimationPlayerState,
+  type KpEditorAnimationPlaybackStatus,
+  type KpEditorAnimationPlayerState
+} from "./animation-player-state.ts";
+
+export interface KpEditorAnimationPlaybackSession {
+  readonly kind: "editor-animation-playback-session";
+  readonly descriptor: KpEditorAnimationDescriptor;
+  readonly animation: KpAnimationAsset;
+  readonly catalog: readonly KpAnimationAsset[];
+  readonly player: KpEditorAnimationPlayerState;
+  readonly lastTickMs?: number | undefined;
+}
+
+export type KpEditorAnimationPlaybackAction =
+  | { readonly type: "play"; readonly nowMs: number }
+  | { readonly type: "pause"; readonly nowMs?: number | undefined }
+  | { readonly type: "tick"; readonly nowMs: number }
+  | { readonly type: "seek"; readonly progress: number }
+  | { readonly type: "step"; readonly delta?: number | undefined }
+  | { readonly type: "rewind"; readonly nowMs: number }
+  | { readonly type: "reset" };
+
+export function createKpEditorAnimationPlaybackSession(input: {
+  readonly descriptor: KpEditorAnimationDescriptor;
+  readonly animation: KpAnimationAsset;
+  readonly catalog?: readonly KpAnimationAsset[] | undefined;
+  readonly progress?: number | undefined;
+}): KpEditorAnimationPlaybackSession {
+  const catalog = [...(input.catalog ?? [])];
+
+  return {
+    kind: "editor-animation-playback-session",
+    descriptor: input.descriptor,
+    animation: input.animation,
+    catalog,
+    player: createKpEditorAnimationPlayerState({
+      descriptor: input.descriptor,
+      animation: input.animation,
+      catalog,
+      progress: input.progress
+    })
+  };
+}
+
+export function reduceKpEditorAnimationPlaybackSession(
+  session: KpEditorAnimationPlaybackSession,
+  action: KpEditorAnimationPlaybackAction
+): KpEditorAnimationPlaybackSession {
+  switch (action.type) {
+    case "play":
+      return resampleSession(session, {
+        playbackStatus: "playing",
+        progress: session.player.playbackStatus === "complete"
+          ? 0
+          : session.player.progress,
+        lastTickMs: normalizeTimestamp(action.nowMs)
+      });
+    case "pause": {
+      const sampled = action.nowMs === undefined
+        ? session
+        : advanceSession(session, action.nowMs);
+
+      return resampleSession(sampled, {
+        playbackStatus: "paused",
+        progress: sampled.player.progress
+      });
+    }
+    case "tick":
+      return advanceSession(session, action.nowMs);
+    case "seek":
+      return resampleSession(session, {
+        playbackStatus: "paused",
+        progress: action.progress
+      });
+    case "step":
+      return resampleSession(session, {
+        playbackStatus: "paused",
+        progress: session.player.progress + (action.delta ?? stepSize(session))
+      });
+    case "rewind":
+      return resampleSession(session, {
+        playbackStatus: "playing",
+        direction: "rewind",
+        // Rewind progress is mirrored so switching direction does not jump.
+        progress: session.player.direction === "rewind"
+          ? session.player.progress
+          : 1 - session.player.progress,
+        lastTickMs: normalizeTimestamp(action.nowMs)
+      });
+    case "reset":
+      return resampleSession(session, {
+        playbackStatus: "idle",
+        direction: "forward",
+        progress: 0
+      });
+  }
+}
+
+function advanceSession(
+  session: KpEditorAnimationPlaybackSession,
+  nowMs: number
+): KpEditorAnimationPlaybackSession {
+  if (
+    session.player.playbackStatus !== "playing" ||
+    session.lastTickMs === undefined
+  ) {
+    return session;
+  }
+
+  const durationMs = session.player.durationMs;
+  if (durationMs === undefined || !Number.isFinite(durationMs) || durationMs <= 0) {
+    throw new Error(
+      `Editor animation ${session.player.animationId} requires a positive duration for playback.`
+    );
+  }
+
+  const timestamp = normalizeTimestamp(nowMs);
+  const deltaMs = Math.max(0, timestamp - session.lastTickMs);
+  const progress = Math.min(1, session.player.progress + deltaMs / durationMs);
+  const complete = progress >= 1;
+
+  return resampleSession(session, {
+    playbackStatus: complete ? "complete" : "playing",
+    progress,
+    ...(complete ? {} : { lastTickMs: timestamp })
+  });
+}
+
+function resampleSession(
+  session: KpEditorAnimationPlaybackSession,
+  update: {
+    readonly playbackStatus: KpEditorAnimationPlaybackStatus;
+    readonly direction?: KpEditorAnimationPlayerState["direction"] | undefined;
+    readonly progress: number;
+    readonly lastTickMs?: number | undefined;
+  }
+): KpEditorAnimationPlaybackSession {
+  return {
+    ...session,
+    player: createKpEditorAnimationPlayerState({
+      descriptor: session.descriptor,
+      animation: session.animation,
+      catalog: session.catalog,
+      playbackStatus: update.playbackStatus,
+      direction: update.direction ?? session.player.direction,
+      progress: update.progress
+    }),
+    ...(update.lastTickMs === undefined
+      ? { lastTickMs: undefined }
+      : { lastTickMs: update.lastTickMs })
+  };
+}
+
+function stepSize(session: KpEditorAnimationPlaybackSession): number {
+  const beatCount = session.player.beatCount;
+  return beatCount === undefined || beatCount <= 0 ? 0.01 : 1 / beatCount;
+}
+
+function normalizeTimestamp(timestamp: number): number {
+  return Number.isFinite(timestamp) ? Math.max(0, timestamp) : 0;
+}

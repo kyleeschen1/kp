@@ -1,0 +1,102 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import { createKpAnimationAssets } from "../src/animation/catalog.ts";
+import { createKpEditorAnimationLibrary } from "../src/editor/animation-library.ts";
+import {
+  createKpEditorAnimationPlaybackSession,
+  reduceKpEditorAnimationPlaybackSession
+} from "../src/editor/animation-playback-session.ts";
+
+function createSolveXSession() {
+  const catalog = createKpAnimationAssets();
+  const descriptor = createKpEditorAnimationLibrary().find(
+    (candidate) => candidate.animationId === "animation.linear-solve.solve-x"
+  );
+  const animation = catalog.find(
+    (candidate) => candidate.id === descriptor?.animationId
+  );
+
+  assert.ok(descriptor);
+  assert.ok(animation);
+
+  return createKpEditorAnimationPlaybackSession({
+    descriptor,
+    animation,
+    catalog
+  });
+}
+
+test("editor playback session advances, pauses, seeks, and steps on the runtime clock", () => {
+  const initial = createSolveXSession();
+  const playing = reduceKpEditorAnimationPlaybackSession(initial, {
+    type: "play",
+    nowMs: 1_000
+  });
+  const advanced = reduceKpEditorAnimationPlaybackSession(playing, {
+    type: "tick",
+    nowMs: 1_600
+  });
+  const paused = reduceKpEditorAnimationPlaybackSession(advanced, {
+    type: "pause"
+  });
+  const sought = reduceKpEditorAnimationPlaybackSession(paused, {
+    type: "seek",
+    progress: 0.5
+  });
+  const stepped = reduceKpEditorAnimationPlaybackSession(sought, {
+    type: "step"
+  });
+
+  assert.equal(initial.player.playbackStatus, "idle");
+  assert.equal(playing.player.playbackStatus, "playing");
+  assert.equal(advanced.player.progress, 0.25);
+  assert.equal(advanced.player.runtimeFrame.clock.elapsedMs, 600);
+  assert.equal(paused.player.playbackStatus, "paused");
+  assert.equal(paused.lastTickMs, undefined);
+  assert.equal(sought.player.progress, 0.5);
+  assert.equal(
+    stepped.player.progress,
+    0.5 + 1 / (stepped.player.beatCount ?? 1)
+  );
+  assert.equal(stepped.player.runtimeFrame.clock.progress, stepped.player.progress);
+});
+
+test("editor playback session mirrors position before advancing rewind", () => {
+  const sought = reduceKpEditorAnimationPlaybackSession(createSolveXSession(), {
+    type: "seek",
+    progress: 0.25
+  });
+  const rewinding = reduceKpEditorAnimationPlaybackSession(sought, {
+    type: "rewind",
+    nowMs: 2_000
+  });
+  const advanced = reduceKpEditorAnimationPlaybackSession(rewinding, {
+    type: "tick",
+    nowMs: 2_600
+  });
+
+  assert.equal(rewinding.player.direction, "rewind");
+  assert.equal(rewinding.player.progress, 0.75);
+  assert.equal(advanced.player.progress, 1);
+  assert.equal(advanced.player.playbackStatus, "complete");
+  assert.equal(advanced.player.runtimeFrame.clock.direction, "rewind");
+});
+
+test("editor playback session reset restores the forward idle frame", () => {
+  const rewinding = reduceKpEditorAnimationPlaybackSession(
+    reduceKpEditorAnimationPlaybackSession(createSolveXSession(), {
+      type: "seek",
+      progress: 0.75
+    }),
+    { type: "rewind", nowMs: 100 }
+  );
+  const reset = reduceKpEditorAnimationPlaybackSession(rewinding, {
+    type: "reset"
+  });
+
+  assert.equal(reset.player.playbackStatus, "idle");
+  assert.equal(reset.player.direction, "forward");
+  assert.equal(reset.player.progress, 0);
+  assert.equal(reset.lastTickMs, undefined);
+});
