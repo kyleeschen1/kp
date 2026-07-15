@@ -57,6 +57,12 @@ test("selected editor animation controls play, pause, seek, step, rewind, and re
     .toHaveCSS("opacity", "0.5");
   await expect(equationStage.locator("[data-kp-editor-equation-target]"))
     .toHaveCSS("opacity", "0.5");
+  await expect(equationStage.locator("[data-kp-editor-equation-transition-id]"))
+    .toHaveAttribute("data-kp-editor-equation-motif", "cancelation");
+  await expect(equationStage.locator("[data-kp-editor-equation-motif-label]"))
+    .toHaveText("cancelation");
+  await expect(equationStage.locator("[data-kp-editor-equation-focus-token]"))
+    .toHaveCount(2);
 
   await player.getByRole("button", { name: "Step animation forward" }).click();
   expect(Number(await scrubber.inputValue())).toBeGreaterThan(0.5);

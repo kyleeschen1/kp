@@ -9,6 +9,10 @@ import {
   type KpEditorEquationRuntimeFrameProjection,
   type KpEditorEquationObjectProjection
 } from "./equation-runtime-frame-projection.ts";
+import {
+  createKpEditorEquationTransitionMotifFrame,
+  type KpEditorEquationTransitionMotifFrame
+} from "./equation-transition-motifs.ts";
 import type { KpEditorAnimationPlayerState } from "./animation-player-state.ts";
 import {
   kpEditorAnimationSurfaceAdapterRegistry,
@@ -21,6 +25,7 @@ export interface KpEditorEquationStageFrame {
   readonly projection: KpEditorEquationRuntimeFrameProjection;
   readonly localProgress: number;
   readonly easedProgress: number;
+  readonly motifs: readonly KpEditorEquationTransitionMotifFrame[];
 }
 
 export function createKpEditorEquationStageFrame(input: {
@@ -48,7 +53,13 @@ export function createKpEditorEquationStageFrame(input: {
   return {
     projection,
     localProgress,
-    easedProgress: localProgress * localProgress * (3 - 2 * localProgress)
+    easedProgress: localProgress * localProgress * (3 - 2 * localProgress),
+    motifs: projection.transitions.map((transition) =>
+      createKpEditorEquationTransitionMotifFrame({
+        transition,
+        progress: localProgress * localProgress * (3 - 2 * localProgress)
+      })
+    )
   };
 }
 
@@ -94,18 +105,29 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
     stage.dataset["kpEditorEquationPhaseId"] = frame.projection.phaseId;
     stage.dataset["kpEditorEquationLocalProgress"] = String(frame.localProgress);
     stage.style.setProperty("--kp-editor-equation-progress", String(frame.easedProgress));
-    stage.querySelectorAll<HTMLElement>("[data-kp-editor-equation-source]")
-      .forEach((layer) => {
-        layer.style.opacity = String(1 - frame.easedProgress);
-        layer.style.transform =
-          `translateY(${-6 * frame.easedProgress}px) scale(${1 - 0.02 * frame.easedProgress})`;
-      });
-    stage.querySelectorAll<HTMLElement>("[data-kp-editor-equation-target]")
-      .forEach((layer) => {
-        layer.style.opacity = String(frame.easedProgress);
-        layer.style.transform =
-          `translateY(${6 * (1 - frame.easedProgress)}px) scale(${0.98 + 0.02 * frame.easedProgress})`;
-      });
+    frame.projection.transitions.forEach((_transition, index) => {
+      const transitionElement = stage?.querySelector<HTMLElement>(
+        `[data-kp-editor-equation-transition-index="${index}"]`
+      );
+      const motif = frame.motifs[index];
+      if (transitionElement === null || transitionElement === undefined || motif === undefined) {
+        return;
+      }
+
+      transitionElement.dataset["kpEditorEquationMotif"] = motif.kind;
+      applyLayerMotion(
+        transitionElement.querySelector<HTMLElement>("[data-kp-editor-equation-source]"),
+        motif.source
+      );
+      applyLayerMotion(
+        transitionElement.querySelector<HTMLElement>("[data-kp-editor-equation-target]"),
+        motif.target
+      );
+      transitionElement.querySelectorAll<HTMLElement>("[data-kp-editor-equation-focus-token]")
+        .forEach((token) => {
+          token.style.setProperty("--kp-editor-equation-focus-progress", String(motif.progress));
+        });
+    });
   }
 };
 
@@ -118,15 +140,19 @@ export function registerKpEditorEquationSurfaceAdapter(): () => void {
 function renderStage(frame: KpEditorEquationStageFrame, frameKey: string): string {
   return `
     <div class="editor-equation-stage" data-kp-editor-equation-stage data-kp-editor-equation-frame-key="${escapeHtml(frameKey)}" data-kp-editor-equation-phase-id="${escapeHtml(frame.projection.phaseId)}" data-kp-editor-equation-local-progress="${frame.localProgress}">
-      ${frame.projection.transitions.map((transition) => `
-        <article class="editor-equation-stage__transition" data-kp-editor-equation-transition-id="${escapeHtml(transition.id)}" aria-label="${escapeHtml(transition.title)}">
+      ${frame.projection.transitions.map((transition, index) => `
+        <article class="editor-equation-stage__transition" data-kp-editor-equation-transition-id="${escapeHtml(transition.id)}" data-kp-editor-equation-transition-index="${index}" data-kp-editor-equation-motif="${frame.motifs[index]?.kind ?? "artifact-replace"}" aria-label="${escapeHtml(transition.title)}">
           <div class="editor-equation-stage__layer editor-equation-stage__layer--source" data-kp-editor-equation-source>
             ${renderEquationObjects(transition.source)}
           </div>
           <div class="editor-equation-stage__layer editor-equation-stage__layer--target" data-kp-editor-equation-target>
             ${renderEquationObjects(transition.target)}
           </div>
-          <p class="editor-equation-stage__caption">${escapeHtml(transition.title)}</p>
+          <div class="editor-equation-stage__caption">
+            <span data-kp-editor-equation-motif-label>${escapeHtml(motifLabel(frame.motifs[index]?.kind ?? "artifact-replace"))}</span>
+            <span>${escapeHtml(transition.title)}</span>
+            ${renderFocusTokens(frame.motifs[index]?.focusLabels ?? [])}
+          </div>
         </article>
       `).join("")}
     </div>
@@ -161,6 +187,29 @@ function measureStage(stage: HTMLElement): void {
       transition.dataset["kpEditorEquationTargetWidth"] = String(targetRect.width);
       transition.dataset["kpEditorEquationTargetHeight"] = String(targetRect.height);
     });
+}
+
+function applyLayerMotion(
+  layer: HTMLElement | null,
+  motion: KpEditorEquationTransitionMotifFrame["source"]
+): void {
+  if (layer === null) return;
+  layer.style.opacity = String(motion.opacity);
+  layer.style.transform =
+    `translate(${motion.translateX}px, ${motion.translateY}px) scale(${motion.scale})`;
+  layer.style.filter = motion.blurPx === 0 ? "none" : `blur(${motion.blurPx}px)`;
+}
+
+function renderFocusTokens(labels: readonly string[]): string {
+  return labels.length === 0
+    ? ""
+    : `<span class="editor-equation-stage__focus" aria-label="Focused terms">${labels.map((label) =>
+        `<span data-kp-editor-equation-focus-token>${escapeHtml(label)}</span>`
+      ).join("")}</span>`;
+}
+
+function motifLabel(kind: KpEditorEquationTransitionMotifFrame["kind"]): string {
+  return kind.replaceAll("-", " ");
 }
 
 function renderUnavailable(slot: HTMLElement, message: string): void {

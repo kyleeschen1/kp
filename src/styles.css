@@ -1560,6 +1560,11 @@ h2 {
 }
 
 .editor-equation-stage__caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
   grid-area: 2 / 1;
   margin: 0;
   border-top: 1px solid #e3e8ef;
@@ -1569,6 +1574,43 @@ h2 {
   font-size: 0.67rem;
   font-weight: 800;
   text-align: center;
+}
+
+.editor-equation-stage__caption [data-kp-editor-equation-motif-label] {
+  border-radius: 999px;
+  padding: 0.16rem 0.38rem;
+  color: #315b67;
+  background: #e8f2f4;
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.editor-equation-stage__focus {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.editor-equation-stage__focus span {
+  position: relative;
+  border: 1px solid #e3a849;
+  border-radius: 4px;
+  padding: 0.08rem 0.25rem;
+  color: #8a4b08;
+  background: #fff8e8;
+}
+
+.editor-equation-stage__focus span::after {
+  position: absolute;
+  top: 50%;
+  right: 0.12rem;
+  left: 0.12rem;
+  height: 1px;
+  background: #b42318;
+  content: "";
+  opacity: var(--kp-editor-equation-focus-progress, 0);
+  transform: scaleX(var(--kp-editor-equation-focus-progress, 0));
+  transform-origin: center;
 }
 
 .editor-equation-stage__unavailable {

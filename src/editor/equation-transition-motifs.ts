@@ -1,0 +1,111 @@
+import {
+  defaultEquationTransformVisualMotifRules
+} from "../rendering/equation-visual-motif-defaults.ts";
+import type { EquationVisualMotifKind } from "../rendering/visual-motif.ts";
+import type {
+  KpEditorEquationTransitionProjection
+} from "./equation-runtime-frame-projection.ts";
+
+export interface KpEditorEquationTransitionMotifFrame {
+  readonly kind: EquationVisualMotifKind;
+  readonly progress: number;
+  readonly source: KpEditorEquationTransitionLayerMotion;
+  readonly target: KpEditorEquationTransitionLayerMotion;
+  readonly focusLabels: readonly string[];
+}
+
+export interface KpEditorEquationTransitionLayerMotion {
+  readonly opacity: number;
+  readonly translateX: number;
+  readonly translateY: number;
+  readonly scale: number;
+  readonly blurPx: number;
+}
+
+export function createKpEditorEquationTransitionMotifFrame(input: {
+  readonly transition: KpEditorEquationTransitionProjection;
+  readonly progress: number;
+}): KpEditorEquationTransitionMotifFrame {
+  const progress = Math.min(1, Math.max(0, input.progress));
+  const kind = motifKindForTransition(input.transition);
+  const focusLabels = unique(
+    [...input.transition.source, ...input.transition.target]
+      .flatMap((object) => object.selectors)
+      .filter((selector) => selector.focused)
+      .flatMap((selector) => selector.label === undefined ? [] : [selector.label])
+  );
+
+  return {
+    kind,
+    progress,
+    source: sourceMotion(kind, progress),
+    target: targetMotion(kind, progress),
+    focusLabels
+  };
+}
+
+export function motifKindForTransition(
+  transition: KpEditorEquationTransitionProjection
+): EquationVisualMotifKind {
+  return defaultEquationTransformVisualMotifRules.find(
+    (rule) => rule.transformationKind === transition.transformType
+  )?.descriptor.kind ?? "artifact-replace";
+}
+
+function sourceMotion(
+  kind: EquationVisualMotifKind,
+  progress: number
+): KpEditorEquationTransitionLayerMotion {
+  switch (kind) {
+    case "append-after-shift":
+      return motion(1 - progress, -12 * progress, 0, 1, 0);
+    case "cancelation":
+      return motion(1 - progress, 0, 0, 1 - 0.18 * progress, 0.8 * progress);
+    case "simplify-into":
+      return motion(1 - progress, 0, 0, 1 - 0.12 * progress, 0);
+    case "wrap":
+      return motion(1 - progress, -6 * progress, 0, 1 - 0.04 * progress, 0);
+    case "unwrap":
+      return motion(1 - progress, 6 * progress, 0, 1 - 0.1 * progress, progress);
+    case "artifact-enter":
+    case "artifact-exit":
+    case "artifact-replace":
+      return motion(1 - progress, 0, -6 * progress, 1 - 0.02 * progress, 0);
+  }
+}
+
+function targetMotion(
+  kind: EquationVisualMotifKind,
+  progress: number
+): KpEditorEquationTransitionLayerMotion {
+  switch (kind) {
+    case "append-after-shift":
+      return motion(progress, 16 * (1 - progress), 0, 1, 0);
+    case "cancelation":
+      return motion(progress, 0, 0, 0.9 + 0.1 * progress, 0);
+    case "simplify-into":
+      return motion(progress, 0, 0, 0.86 + 0.14 * progress, 0);
+    case "wrap":
+      return motion(progress, 6 * (1 - progress), 0, 0.9 + 0.1 * progress, 0);
+    case "unwrap":
+      return motion(progress, -6 * (1 - progress), 0, 0.94 + 0.06 * progress, 0);
+    case "artifact-enter":
+    case "artifact-exit":
+    case "artifact-replace":
+      return motion(progress, 0, 6 * (1 - progress), 0.98 + 0.02 * progress, 0);
+  }
+}
+
+function motion(
+  opacity: number,
+  translateX: number,
+  translateY: number,
+  scale: number,
+  blurPx: number
+): KpEditorEquationTransitionLayerMotion {
+  return { opacity, translateX, translateY, scale, blurPx };
+}
+
+function unique(values: readonly string[]): readonly string[] {
+  return [...new Set(values)];
+}
