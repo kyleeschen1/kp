@@ -1,0 +1,83 @@
+{
+  "id": "next-action.kp.semantic-transition.llm-draft-schema-v0",
+  "kind": "next-action",
+  "title": "Define constrained LLM animation draft schema",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Defined kp.llm-animation-draft.v1 as a constrained equation-authoring boundary for semantic objects, selectors, transformations, lifecycle correspondence, ordered sequencing, and shared timing. Exact nested allowlists reject renderer-authored DOM, pixels, and keyframes before compilation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-incremental-transition-authoring-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.semantic-transition.llm-draft-schema-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-incremental-transition-compiler-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Approved thirty-slice implementation plan and boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/llm-animation-draft.ts",
+      "summary": "Versioned LLM animation draft types and structural validator."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-llm-animation-draft.test.ts",
+      "summary": "Accepted semantic intent and rejected renderer instruction coverage."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-incremental-transition-authoring-v0",
+      "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Define constrained LLM animation draft schema can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "930 unit tests pass; draft schema diagnostics identify invalid versions, relation vocabulary, and unknown fields by exact path.",
+      "checkedAt": "2026-07-15T21:18:37.490Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "930 unit tests pass; draft schema diagnostics identify invalid versions, relation vocabulary, and unknown fields by exact path.",
+      "checkedAt": "2026-07-15T21:18:37.564Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-15T21:18:37.644Z",
+      "scope": "930 unit tests pass; draft schema diagnostics identify invalid versions, relation vocabulary, and unknown fields by exact path."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined kp.llm-animation-draft.v1 as a constrained equation-authoring boundary for semantic objects, selectors, transformations, lifecycle correspondence, ordered sequencing, and shared timing. Exact nested allowlists reject renderer-authored DOM, pixels, and keyframes before compilation."
+  }
+}
