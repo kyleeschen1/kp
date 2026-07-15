@@ -252,3 +252,35 @@ test("function-wrap family animation visibly wraps and rewinds its argument", as
     .toContainText("x");
   await player.getByRole("button", { name: "Pause animation" }).click();
 });
+
+test("distribution and factoring family animations render opposite semantic directions", async ({
+  page
+}) => {
+  await page.goto("/");
+  const cases = [
+    {
+      descriptorId: "editor-animation.sample.animation.distribution.expand-a-sum",
+      motif: "artifact-replace",
+      sourceId: "expression.generated.distribution.expand-a-sum.factored",
+      targetId: "expression.generated.distribution.expand-a-sum.expanded"
+    },
+    {
+      descriptorId: "editor-animation.sample.animation.factoring.factor-common-a",
+      motif: "simplify-into",
+      sourceId: "expression.generated.distribution.factor-common-a.expanded",
+      targetId: "expression.generated.distribution.factor-common-a.factored"
+    }
+  ];
+
+  for (const item of cases) {
+    await page.locator('[data-action="set-editor-animation"]').selectOption(item.descriptorId);
+    const player = page.locator("[data-kp-editor-animation-player]");
+    await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
+    await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+      .toHaveAttribute("data-kp-editor-equation-motif", item.motif);
+    await expect(player.locator("[data-kp-editor-equation-source] [data-kp-editor-equation-object-id]"))
+      .toHaveAttribute("data-kp-editor-equation-object-id", item.sourceId);
+    await expect(player.locator("[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"))
+      .toHaveAttribute("data-kp-editor-equation-object-id", item.targetId);
+  }
+});
