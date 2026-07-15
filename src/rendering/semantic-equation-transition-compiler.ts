@@ -5,8 +5,13 @@ import type {
 import {
   normalizeKpSemanticTransformationCorrespondence,
   validateKpSemanticTransformation,
-  type KpSemanticTransformation
+  type KpSemanticTransformation,
+  type KpSemanticTransformationDefinition
 } from "../semantic/asset-transformation.ts";
+import {
+  bindKpTransformationDefinitionCorrespondence,
+  type KpTransformationDefinitionBindings
+} from "../semantic/transformation-definition-binding.ts";
 import {
   createKpEquationTransitionIr,
   type KpEquationTransitionIr,
@@ -16,6 +21,8 @@ import {
 export interface CompileKpSemanticEquationTransitionInput {
   readonly transformation: KpSemanticTransformation;
   readonly bundle: KpAssetBundle;
+  readonly definition?: KpSemanticTransformationDefinition | undefined;
+  readonly definitionBindings?: KpTransformationDefinitionBindings | undefined;
 }
 
 export function compileKpSemanticEquationTransition(
@@ -48,9 +55,29 @@ export function compileKpSemanticEquationTransition(
       input.transformation.targetObjectIds,
       input.bundle
     ),
-    correspondenceMap: normalizeKpSemanticTransformationCorrespondence(
-      input.transformation
-    )
+    correspondenceMap: correspondenceMapForCompilation(input)
+  });
+}
+
+function correspondenceMapForCompilation(
+  input: CompileKpSemanticEquationTransitionInput
+) {
+  const directMap = normalizeKpSemanticTransformationCorrespondence(
+    input.transformation
+  );
+  if (directMap.records.length > 0) return directMap;
+  if (input.definition === undefined && input.definitionBindings === undefined) {
+    return directMap;
+  }
+  if (input.definition === undefined || input.definitionBindings === undefined) {
+    throw new Error(
+      `Cannot compile semantic equation transformation ${input.transformation.id}: definition and definition bindings must be supplied together.`
+    );
+  }
+  return bindKpTransformationDefinitionCorrespondence({
+    transformation: input.transformation,
+    definition: input.definition,
+    bindings: input.definitionBindings
   });
 }
 

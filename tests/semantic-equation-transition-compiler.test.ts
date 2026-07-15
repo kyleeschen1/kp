@@ -5,7 +5,10 @@ import {
   createKpAssetBundle,
   createKpSemanticAssetObject
 } from "../src/semantic/asset.ts";
-import { createKpSemanticTransformation } from "../src/semantic/asset-transformation.ts";
+import {
+  createKpSemanticTransformation,
+  createKpSemanticTransformationDefinition
+} from "../src/semantic/asset-transformation.ts";
 import { compileKpSemanticEquationTransition } from "../src/rendering/semantic-equation-transition-compiler.ts";
 
 const source = createKpSemanticAssetObject({
@@ -98,4 +101,105 @@ test("compileKpSemanticEquationTransition rejects non-equation states before ren
     }),
     /target object graph.after does not expose non-empty LaTeX/
   );
+});
+
+test("compileKpSemanticEquationTransition resolves definition roles into selector correspondence", () => {
+  const definition = createKpSemanticTransformationDefinition({
+    id: "definition.solve.simplify",
+    transformType: "simplify",
+    title: "Simplify an equation",
+    sourceObjectRoles: ["before"],
+    targetObjectRoles: ["after"],
+    preserves: ["value"],
+    correspondenceTemplates: [{
+      sourceObjectRole: "before",
+      sourceSelectorRole: "unknown",
+      targetObjectRole: "after",
+      targetSelectorRole: "unknown",
+      preserves: ["identity", "role"],
+      summary: "The unknown persists."
+    }]
+  });
+  const transformation = createKpSemanticTransformation({
+    id: "transform.definition-bound",
+    definitionId: definition.id,
+    transformType: definition.transformType,
+    title: definition.title,
+    sourceObjectIds: [source.id],
+    targetObjectIds: [target.id],
+    preserves: ["value"]
+  });
+
+  const ir = compileKpSemanticEquationTransition({
+    transformation,
+    bundle,
+    definition,
+    definitionBindings: {
+      source: [{
+        objectRole: "before",
+        objectId: source.id,
+        selectorIdsByRole: { unknown: "before.x" }
+      }],
+      target: [{
+        objectRole: "after",
+        objectId: target.id,
+        selectorIdsByRole: { unknown: "after.x" }
+      }]
+    }
+  });
+
+  assert.deepEqual(ir.relations.map((relation) => ({
+    relation: relation.relation,
+    source: relation.sourceSelectorIds,
+    target: relation.targetSelectorIds
+  })), [{
+    relation: "identity",
+    source: ["before.x"],
+    target: ["after.x"]
+  }]);
+});
+
+test("definition binding rejects missing selector roles instead of guessing", () => {
+  const definition = createKpSemanticTransformationDefinition({
+    id: "definition.solve.missing-binding",
+    transformType: "simplify",
+    title: "Simplify an equation",
+    sourceObjectRoles: ["before"],
+    targetObjectRoles: ["after"],
+    preserves: ["value"],
+    correspondenceTemplates: [{
+      sourceObjectRole: "before",
+      sourceSelectorRole: "unknown",
+      targetObjectRole: "after",
+      targetSelectorRole: "unknown",
+      preserves: ["identity"]
+    }]
+  });
+  const transformation = createKpSemanticTransformation({
+    id: "transform.missing-binding",
+    definitionId: definition.id,
+    transformType: definition.transformType,
+    title: definition.title,
+    sourceObjectIds: [source.id],
+    targetObjectIds: [target.id],
+    preserves: ["value"]
+  });
+
+  assert.throws(() => compileKpSemanticEquationTransition({
+    transformation,
+    bundle,
+    definition,
+    definitionBindings: {
+      source: [{
+        objectRole: "before",
+        objectId: source.id,
+        selectorIdsByRole: {}
+      }],
+      target: [{
+        objectRole: "after",
+        objectId: target.id,
+        selectorIdsByRole: { unknown: "after.x" }
+      }]
+    }
+  }), /missing source selector role binding before.unknown/);
 });

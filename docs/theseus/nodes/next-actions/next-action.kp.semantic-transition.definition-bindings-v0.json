@@ -1,0 +1,88 @@
+{
+  "id": "next-action.kp.semantic-transition.definition-bindings-v0",
+  "kind": "next-action",
+  "title": "Resolve definitions roles and selectors",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added explicit definition object-role and selector-role bindings and taught the equation compiler to use them only when direct correspondence is absent; missing bindings fail instead of guessing.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-incremental-transition-authoring-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.semantic-transition.definition-bindings-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-incremental-transition-compiler-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Approved thirty-slice implementation plan and boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/transformation-definition-binding.ts",
+      "summary": "Resolves reusable definition templates into concrete selector correspondence."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/semantic-equation-transition-compiler.ts",
+      "summary": "Accepts paired definition and binding inputs as a compiler source."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-equation-transition-compiler.test.ts",
+      "summary": "Covers successful role resolution and missing-selector rejection."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-incremental-transition-authoring-v0",
+      "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Resolve definitions roles and selectors can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-equation-transition-compiler.test.ts tests/equation-transition-ir.test.ts",
+      "status": "passed",
+      "scope": "Focused definition binding and compiler tests.",
+      "checkedAt": "2026-07-15T19:48:53.680Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Type safety.",
+      "checkedAt": "2026-07-15T19:48:53.742Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-15T19:48:53.800Z",
+      "scope": "Graph integrity."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added explicit definition object-role and selector-role bindings and taught the equation compiler to use them only when direct correspondence is absent; missing bindings fail instead of guessing."
+  }
+}
