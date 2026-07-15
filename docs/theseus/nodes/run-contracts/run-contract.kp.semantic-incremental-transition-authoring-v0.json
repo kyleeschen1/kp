@@ -1,0 +1,195 @@
+{
+  "id": "run-contract.kp.semantic-incremental-transition-authoring-v0",
+  "kind": "run-contract",
+  "title": "KP Semantic Incremental Transition And LLM Authoring V0",
+  "status": "ready",
+  "domain": "kp.animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-incremental-transition-compiler-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Approved thirty-slice implementation plan and boundaries."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ],
+  "goal": "Run the approved 30-slice semantic transition compiler, representative equation motion, constrained LLM authoring, and minimal diagram loop.",
+  "target": "next-action.kp.semantic-incremental-transition-compiler-focus-v0",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when verification fails and needs product or architecture judgment.",
+    "Stop if stable token identity requires unsafe KaTeX internals or a broad editor rewrite.",
+    "Stop when the approved slice list is exhausted."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.semantic-transition.record-loop-v0",
+      "title": "Record approved semantic transition loop",
+      "status": "complete",
+      "summary": "Approved contract materialized with thirty ordered slices, scope boundaries, stop conditions, and verification cadence."
+    },
+    {
+      "id": "next-action.kp.semantic-transition.rich-correspondence-contract-v0",
+      "title": "Add rich correspondence to semantic transformations",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.correspondence-normalizer-v0",
+      "title": "Normalize correspondence shorthand and relations",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.correspondence-laws-v0",
+      "title": "Add lifecycle composition and rewind laws",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.equation-ir-v0",
+      "title": "Define renderer-neutral equation transition IR",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.compiler-v0",
+      "title": "Compile semantic transformations into transition IR",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.definition-bindings-v0",
+      "title": "Resolve definitions roles and selectors",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.compiler-diagnostics-v0",
+      "title": "Diagnose missing bindings and fallback causes",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.annotated-latex-contract-v0",
+      "title": "Define selector-annotated LaTeX contract",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.katex-motion-anchors-v0",
+      "title": "Render stable semantic motion anchors in KaTeX",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.structural-artifacts-v0",
+      "title": "Bind structural mathematical artifacts",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.measured-geometry-v0",
+      "title": "Measure corresponding source and target tokens",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.token-renderer-v0",
+      "title": "Extract reusable measured token renderer",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.persistent-stage-v0",
+      "title": "Preserve equation stage identity across phases",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.shared-player-adapter-v0",
+      "title": "Drive token frames from shared playback",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.fallback-diagnostics-v0",
+      "title": "Diagnose whole-layer fade fallback",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.solve-x-v0",
+      "title": "Migrate solve-x semantic motion",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.fraction-v0",
+      "title": "Implement fraction cancellation and fan-in",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.function-wrap-v0",
+      "title": "Implement wrapping and role-change",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.distribute-factor-v0",
+      "title": "Implement fan-out and fan-in inverse motion",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.exponent-radical-v0",
+      "title": "Animate exponent and radical artifacts",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.inequality-v0",
+      "title": "Animate inequality relation replacement",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.matrix-v0",
+      "title": "Animate matrix persistence and emphasis",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.browser-gate-v0",
+      "title": "Gate representative equation transitions",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.llm-draft-schema-v0",
+      "title": "Define constrained LLM animation draft schema",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.llm-draft-compiler-v0",
+      "title": "Compile validated LLM drafts",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.llm-examples-v0",
+      "title": "Add accepted and rejected generated examples",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.diagram-scene-v0",
+      "title": "Define DiagramScene and diagram render target",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.diagram-svg-v0",
+      "title": "Render a generated semantic SVG diagram",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.semantic-transition.loop-closeout-v0",
+      "title": "Run quality gate and close out loop",
+      "status": "planned"
+    }
+  ]
+}
