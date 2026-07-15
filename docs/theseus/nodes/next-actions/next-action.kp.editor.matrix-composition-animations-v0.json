@@ -1,0 +1,129 @@
+{
+  "id": "next-action.kp.editor.matrix-composition-animations-v0",
+  "kind": "next-action",
+  "title": "Add matrix vector and matrix matrix animations",
+  "status": "resolved",
+  "domain": "kp.editor",
+  "summary": "Promoted generated matrix-vector and matrix-matrix animations into the KP editor as exact concrete linear-algebra family samples with stable routes and browser coverage.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.concrete-animation-library-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.editor.matrix-composition-animations-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-symbolic-manipulation-library-loop-closeout.md",
+      "summary": "Closed symbolic library loop and recommended concrete renderer and editor adoption."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "KP semantic runtime and dashboard editor direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-animation-catalog.ts",
+      "summary": "Current fixture-oriented editor animation catalog to evolve into a family-backed surface."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Concrete KpAnimationAsset registry to project into the editor."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/symbolic-manipulation-family-registry.ts",
+      "summary": "Binds matrix family samples and graph-equivalent provenance to existing generated animation assets."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-symbolic-family-animation-resolver.test.ts",
+      "summary": "Proves exact matrix family sample resolution."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-animation-selection-route.test.ts",
+      "summary": "Proves stable matrix editor selections and equation surface dispatch."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-library.browser.spec.ts",
+      "summary": "Exercises all four concrete linear-algebra editor entries in Chromium."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.editor.concrete-animation-library-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add matrix vector and matrix matrix animations can be completed inside KP editor concrete animation library v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved KP editor concrete-animation slices.",
+    "Use existing KpAnimationAsset, symbolic family, runtime-frame, visual-frame, KaTeX, graph, dashboard, and editor contracts.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not build media encoders, live CAS or LSP integrations, curriculum generation, or dynamic package loading.",
+    "Do not create a separate graph animation clock or broadly redesign the editor.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-symbolic-paused-frame-drilldown.test.ts tests/project-dashboard-symbolic-family-catalog.test.ts tests/kp-editor-animation-catalog-projection.test.ts tests/kp-editor-animation-picker.test.ts tests/kp-editor-animation-selection-route.test.ts tests/kp-editor-animation-surface-dispatch.test.ts tests/kp-symbolic-family-animation-resolver.test.ts tests/kp-animation-generated-problem-import.test.ts",
+      "status": "passed",
+      "scope": "Focused matrix editor and symbolic family coverage: 66 passed.",
+      "checkedAt": "2026-07-15T02:16:23.008Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-library.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "Editor animation library browser coverage: 8 passed.",
+      "checkedAt": "2026-07-15T02:16:23.056Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full suite: 850 passed.",
+      "checkedAt": "2026-07-15T02:16:23.107Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, and test TypeScript projects.",
+      "checkedAt": "2026-07-15T02:16:23.153Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph valid: 392 nodes, 5115 events.",
+      "checkedAt": "2026-07-15T02:16:23.198Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-15T02:16:23.243Z",
+      "scope": "Run-contract hygiene passed with no items."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted generated matrix-vector and matrix-matrix animations into the KP editor as exact concrete linear-algebra family samples with stable routes and browser coverage."
+  }
+}

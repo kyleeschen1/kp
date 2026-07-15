@@ -3943,11 +3943,15 @@ function createLinearAlgebraMatrixVectorFamily(): KpSymbolicManipulationFamily {
     runtimeSamples: [
       {
         id: "sample.animation.matrix-vector.basic",
-        animationId: "animation.matrix-vector.basic",
-        renderTargetKinds: ["equation", "matrix", "graph"],
-        transformationDefinitionIds: definitionIds,
+        animationId:
+          "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        availability: "concrete",
+        renderTargetKinds: ["equation"],
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.matrix-vector-multiply"
+        ],
         summary:
-          "Basic matrix-vector sample links row dot products to a linear-map graph transform."
+          "Generated matrix-vector sample multiplies a two-by-two matrix by a vector and preserves each result component."
       }
     ],
     graphEquivalents: [
@@ -3963,7 +3967,9 @@ function createLinearAlgebraMatrixVectorFamily(): KpSymbolicManipulationFamily {
             level: "strict"
           }
         ],
-        sampleAssetIds: ["animation.matrix-vector.basic"],
+        sampleAssetIds: [
+          "animation.generated.linear-algebra.matrix-vector.two-by-two"
+        ],
         summary:
           "Matrix-vector multiplication preserves the linear-map relation between input and transformed output vectors."
       }
@@ -4200,11 +4206,15 @@ function createLinearAlgebraMatrixMatrixCompositionFamily():
     runtimeSamples: [
       {
         id: "sample.animation.matrix-matrix.basic",
-        animationId: "animation.matrix-matrix.basic",
-        renderTargetKinds: ["equation", "matrix", "graph"],
-        transformationDefinitionIds: definitionIds,
+        animationId:
+          "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        availability: "concrete",
+        renderTargetKinds: ["equation"],
+        transformationDefinitionIds: [
+          "definition.symbolic.linear-algebra.matrix-matrix-multiply"
+        ],
         summary:
-          "Basic matrix-matrix sample composes cell dot products with a graph linear-map composition."
+          "Generated matrix-matrix sample multiplies two two-by-two matrices and preserves the product matrix."
       }
     ],
     graphEquivalents: [
@@ -4220,7 +4230,9 @@ function createLinearAlgebraMatrixMatrixCompositionFamily():
             level: "strict"
           }
         ],
-        sampleAssetIds: ["animation.matrix-matrix.basic"],
+        sampleAssetIds: [
+          "animation.generated.linear-algebra.matrix-matrix.two-by-two"
+        ],
         summary:
           "Matrix-matrix multiplication preserves the order-sensitive composition of the two linear maps."
       }

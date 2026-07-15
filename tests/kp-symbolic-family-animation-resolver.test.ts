@@ -237,6 +237,30 @@ test("vector scale and dot projection assets resolve linear-algebra samples", ()
   );
 });
 
+test("generated matrix assets resolve linear-algebra composition samples", () => {
+  const resolutions = createKpSymbolicFamilyAnimationResolutions({
+    families: createSymbolicManipulationFamilyRegistry(),
+    assets: createKpAnimationAssets()
+  }).filter((candidate) =>
+    candidate.sampleId === "sample.animation.matrix-vector.basic" ||
+    candidate.sampleId === "sample.animation.matrix-matrix.basic"
+  );
+
+  assert.deepEqual(
+    resolutions.map((resolution) => [resolution.animationId, resolution.status]),
+    [
+      [
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+        "resolved"
+      ],
+      [
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+        "resolved"
+      ]
+    ]
+  );
+});
+
 test("family animation resolver requires explicit concrete availability and exact ids", () => {
   const asset = createLinearSolveAnimationAsset();
   const plannedFamily = familyWithSample({

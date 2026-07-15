@@ -301,7 +301,7 @@ test("integral area sweep opens on the graph surface", async ({ page }) => {
   ).toHaveText("2/2");
 });
 
-test("linear-algebra vector and projection samples open on graph surfaces", async ({
+test("linear-algebra concrete samples open on their supported surfaces", async ({
   page
 }) => {
   const samples = [
@@ -309,12 +309,28 @@ test("linear-algebra vector and projection samples open on graph surfaces", asyn
       descriptorId:
         "editor-animation.sample.animation.vector-add-scale.basic",
       animationId: "animation.graph.vector.linear-map-scale",
-      familyId: "family.linear-algebra.vector-add-scale"
+      familyId: "family.linear-algebra.vector-add-scale",
+      surface: "graph"
     },
     {
       descriptorId: "editor-animation.sample.animation.dot-projection.basic",
       animationId: "animation.dot-projection.basic",
-      familyId: "family.linear-algebra.dot-projection"
+      familyId: "family.linear-algebra.dot-projection",
+      surface: "graph"
+    },
+    {
+      descriptorId: "editor-animation.sample.animation.matrix-vector.basic",
+      animationId:
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+      familyId: "family.linear-algebra.matrix-vector",
+      surface: "equation"
+    },
+    {
+      descriptorId: "editor-animation.sample.animation.matrix-matrix.basic",
+      animationId:
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+      familyId: "family.linear-algebra.matrix-matrix-composition",
+      surface: "equation"
     }
   ] as const;
 
@@ -332,7 +348,7 @@ test("linear-algebra vector and projection samples open on graph surfaces", asyn
     );
     await expect(library).toHaveAttribute(
       "data-kp-editor-animation-surface",
-      "graph"
+      sample.surface
     );
     await expect(library).toContainText(sample.familyId);
     await expect(

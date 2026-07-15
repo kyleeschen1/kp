@@ -23,7 +23,10 @@ test("symbolic paused frame exposes matrix cell decomposition context", () => {
   });
 
   assert.equal(drillDown.kind, "symbolic-paused-frame-drilldown");
-  assert.equal(drillDown.animationId, "animation.matrix-matrix.basic");
+  assert.equal(
+    drillDown.animationId,
+    "animation.generated.linear-algebra.matrix-matrix.two-by-two"
+  );
   assert.equal(drillDown.selectedTransformation?.transformType, "cellDotProducts");
   assert.deepEqual(
     drillDown.correspondenceRows.slice(0, 2).map((row) => ({

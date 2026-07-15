@@ -25,7 +25,7 @@ test("editor renders every concrete asset through a stable descriptor selection"
     editorAnimationDescriptorId: selected.id
   });
 
-  assert.equal(descriptors.length, 39);
+  assert.equal(descriptors.length, 41);
   assert.match(html, /data-kp-editor-animation-library/);
   assert.match(
     html,
@@ -219,6 +219,38 @@ test("dot projection is selectable through its linear-algebra family descriptor"
   );
   assert.match(html, /family\.linear-algebra\.dot-projection/);
   assert.match(html, /data-kp-editor-animation-surface="graph"/);
+});
+
+test("matrix products are selectable through concrete linear-algebra family descriptors", () => {
+  const descriptors = createKpEditorAnimationLibrary();
+  const samples = [
+    {
+      sampleId: "sample.animation.matrix-vector.basic",
+      animationId:
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+      familyId: "family.linear-algebra.matrix-vector"
+    },
+    {
+      sampleId: "sample.animation.matrix-matrix.basic",
+      animationId:
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+      familyId: "family.linear-algebra.matrix-matrix-composition"
+    }
+  ] as const;
+
+  for (const sample of samples) {
+    const descriptor = descriptors.find(
+      (candidate) => candidate.sampleId === sample.sampleId
+    );
+    assert.ok(descriptor);
+    assert.equal(descriptor.animationId, sample.animationId);
+
+    const html = renderEditorDocument(createInitialEditorDocument(), {
+      editorAnimationDescriptorId: descriptor.id
+    });
+    assert.match(html, /data-kp-editor-animation-surface="equation"/);
+    assert.match(html, new RegExp(sample.familyId.replaceAll(".", "\\.")));
+  }
 });
 
 test("editor animation routes preserve unrelated query and hash state", () => {

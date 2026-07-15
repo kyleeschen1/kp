@@ -230,7 +230,8 @@
     {
       "id": "next-action.kp.editor.matrix-composition-animations-v0",
       "title": "Add matrix vector and matrix matrix animations",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.matrix-composition-animations-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.concrete-animation-library-closeout-v0",

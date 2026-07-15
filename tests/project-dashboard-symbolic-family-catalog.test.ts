@@ -1259,12 +1259,12 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
       ["Ready families", "18"],
       ["Transform definitions", "71"],
       ["Runtime sample refs", "23"],
-      ["Concrete runtime samples", "15"],
-      ["Planned runtime samples", "8"],
+      ["Concrete runtime samples", "17"],
+      ["Planned runtime samples", "6"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],
       ["Flashcard hooks", "18"],
-      ["Paused-frame drill-down candidates", "43"],
+      ["Paused-frame drill-down candidates", "39"],
       ["Blockers", "None"]
     ]
   );
@@ -2842,15 +2842,15 @@ test("linear algebra matrix-vector family composes rows, entries, and graph maps
   assert.deepEqual(family.runtimeSamples, [
     {
       id: "sample.animation.matrix-vector.basic",
-      animationId: "animation.matrix-vector.basic",
-      renderTargetKinds: ["equation", "matrix", "graph"],
+      animationId:
+        "animation.generated.linear-algebra.matrix-vector.two-by-two",
+      availability: "concrete",
+      renderTargetKinds: ["equation"],
       transformationDefinitionIds: [
-        "definition.symbolic.linear-algebra.matrix-vector-multiply",
-        "definition.symbolic.linear-algebra.row-dot-products",
-        "definition.symbolic.linear-algebra.apply-linear-map"
+        "definition.symbolic.linear-algebra.matrix-vector-multiply"
       ],
       summary:
-        "Basic matrix-vector sample links row dot products to a linear-map graph transform."
+        "Generated matrix-vector sample multiplies a two-by-two matrix by a vector and preserves each result component."
     }
   ]);
   assert.deepEqual(family.graphEquivalents, [
@@ -2866,7 +2866,9 @@ test("linear algebra matrix-vector family composes rows, entries, and graph maps
           level: "strict"
         }
       ],
-      sampleAssetIds: ["animation.matrix-vector.basic"],
+      sampleAssetIds: [
+        "animation.generated.linear-algebra.matrix-vector.two-by-two"
+      ],
       summary:
         "Matrix-vector multiplication preserves the linear-map relation between input and transformed output vectors."
     }
@@ -3008,15 +3010,15 @@ test("linear algebra matrix-matrix family composes dot-product cells and map com
   assert.deepEqual(family.runtimeSamples, [
     {
       id: "sample.animation.matrix-matrix.basic",
-      animationId: "animation.matrix-matrix.basic",
-      renderTargetKinds: ["equation", "matrix", "graph"],
+      animationId:
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+      availability: "concrete",
+      renderTargetKinds: ["equation"],
       transformationDefinitionIds: [
-        "definition.symbolic.linear-algebra.matrix-matrix-multiply",
-        "definition.symbolic.linear-algebra.cell-dot-products",
-        "definition.symbolic.linear-algebra.compose-linear-maps"
+        "definition.symbolic.linear-algebra.matrix-matrix-multiply"
       ],
       summary:
-        "Basic matrix-matrix sample composes cell dot products with a graph linear-map composition."
+        "Generated matrix-matrix sample multiplies two two-by-two matrices and preserves the product matrix."
     }
   ]);
   assert.deepEqual(family.graphEquivalents, [
@@ -3032,7 +3034,9 @@ test("linear algebra matrix-matrix family composes dot-product cells and map com
           level: "strict"
         }
       ],
-      sampleAssetIds: ["animation.matrix-matrix.basic"],
+      sampleAssetIds: [
+        "animation.generated.linear-algebra.matrix-matrix.two-by-two"
+      ],
       summary:
         "Matrix-matrix multiplication preserves the order-sensitive composition of the two linear maps."
     }
