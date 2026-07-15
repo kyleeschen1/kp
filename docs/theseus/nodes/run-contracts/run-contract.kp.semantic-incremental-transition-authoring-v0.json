@@ -91,7 +91,8 @@
     {
       "id": "next-action.kp.semantic-transition.annotated-latex-contract-v0",
       "title": "Define selector-annotated LaTeX contract",
-      "status": "planned"
+      "summary": "Selector-annotated LaTeX now provides the safe semantic-to-KaTeX identity contract.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.katex-motion-anchors-v0",

@@ -1,0 +1,83 @@
+{
+  "id": "next-action.kp.semantic-transition.annotated-latex-contract-v0",
+  "kind": "next-action",
+  "title": "Define selector-annotated LaTeX contract",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Defined a selector-annotated LaTeX contract that derives safe stable motion ids, composes trusted KaTeX htmlData annotations, and requires exact selector coverage without model-authored DOM.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-incremental-transition-authoring-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.semantic-transition.annotated-latex-contract-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-incremental-transition-compiler-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Approved thirty-slice implementation plan and boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/selector-annotated-latex.ts",
+      "summary": "Defines validated semantic selector segments and annotated LaTeX output."
+    },
+    {
+      "kind": "file",
+      "path": "tests/selector-annotated-latex.test.ts",
+      "summary": "Covers stable motion ids and missing, duplicate, and unsafe selector rejection."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-incremental-transition-authoring-v0",
+      "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Define selector-annotated LaTeX contract can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/selector-annotated-latex.test.ts",
+      "status": "passed",
+      "scope": "Focused annotated LaTeX contract tests.",
+      "checkedAt": "2026-07-15T19:52:28.244Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Type safety.",
+      "checkedAt": "2026-07-15T19:52:28.310Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-15T19:52:28.371Z",
+      "scope": "Graph integrity."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined a selector-annotated LaTeX contract that derives safe stable motion ids, composes trusted KaTeX htmlData annotations, and requires exact selector coverage without model-authored DOM."
+  }
+}
