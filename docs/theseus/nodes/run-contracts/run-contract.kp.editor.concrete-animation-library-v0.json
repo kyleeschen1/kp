@@ -116,7 +116,8 @@
     {
       "id": "next-action.kp.editor.dashboard-animation-deep-links-v0",
       "title": "Link dashboard animation samples into the editor",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.dashboard-animation-deep-links-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.animation-diagnostics-v0",

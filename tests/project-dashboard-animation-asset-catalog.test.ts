@@ -67,6 +67,29 @@ test("semantic asset dashboard catalog includes animation asset rows", () => {
   );
 });
 
+test("animation asset rows deep-link to their concrete editor descriptors", () => {
+  const row = createAnimationAssetAgendaRows("").find(
+    (candidate) => candidate.id === "animation-linear-solve-solve-x"
+  );
+
+  assert.deepEqual(row?.previewLinks, [
+    {
+      label: "Open Solve x + 3 = 7 in editor",
+      href:
+        "/?animation=editor-animation.animation.linear-solve.solve-x" +
+        "#editor-animation-library-title",
+      dataAttributes: [
+        ["data-kp-preview-link", "editor-animation"],
+        [
+          "data-kp-preview-editor-animation",
+          "editor-animation.animation.linear-solve.solve-x"
+        ],
+        ["data-kp-preview-animation-asset", "animation.linear-solve.solve-x"]
+      ]
+    }
+  ]);
+});
+
 test("dashboard animation asset rows include cross-domain component facets", () => {
   const rows = createAnimationAssetAgendaRows("");
   const rowIds = rows.map((row) => row.id);

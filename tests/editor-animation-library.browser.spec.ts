@@ -32,3 +32,30 @@ test("editor animation library restores and persists concrete selections", async
     equationDescriptorId
   );
 });
+
+test("dashboard animation assets open their concrete editor selection", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Project Dashboard" }).click();
+  await page
+    .locator('[data-kp-select-agenda-row="animation-linear-solve-solve-x"]')
+    .click();
+  await page
+    .locator(
+      '[data-kp-preview-link="editor-animation"]' +
+      '[data-kp-preview-animation-asset="animation.linear-solve.solve-x"]'
+    )
+    .click();
+
+  await expect(page.locator("[data-kp-project-dashboard]")).toHaveCount(0);
+  await expect(
+    page.locator("[data-kp-editor-animation-library]")
+  ).toHaveAttribute(
+    "data-kp-editor-animation-descriptor-id",
+    "editor-animation.animation.linear-solve.solve-x"
+  );
+  await expect(page).toHaveURL(
+    /animation=editor-animation\.animation\.linear-solve\.solve-x/
+  );
+});

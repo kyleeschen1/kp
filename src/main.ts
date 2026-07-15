@@ -113,6 +113,15 @@ appRoot.addEventListener("click", (event) => {
     return;
   }
 
+  const editorAnimationLink = event.target.closest<HTMLAnchorElement>(
+    'a[data-kp-preview-link="editor-animation"]'
+  );
+
+  if (editorAnimationLink !== null) {
+    openProjectDashboardEditorAnimation(editorAnimationLink, event);
+    return;
+  }
+
   const graphSurfaceLink = event.target.closest<HTMLAnchorElement>(
     'a[data-kp-preview-link="graph-surface-mode"]'
   );
@@ -360,6 +369,34 @@ function openProjectDashboardLiveAnimationPreview(
 
   document
     .getElementById("project-dashboard-animation-layout-title")
+    ?.scrollIntoView({ block: "start" });
+}
+
+function openProjectDashboardEditorAnimation(
+  link: HTMLAnchorElement,
+  event: Event
+): void {
+  event.preventDefault();
+  const requestedId = link.dataset["kpPreviewEditorAnimation"];
+  const selected = selectKpEditorAnimationDescriptor(
+    createKpEditorAnimationLibrary(),
+    requestedId
+  );
+
+  selectedEditorAnimationDescriptorId = selected.id;
+  window.history.replaceState(
+    null,
+    "",
+    kpEditorAnimationSelectionHref({
+      pathname: window.location.pathname,
+      search: window.location.search,
+      hash: "#editor-animation-library-title",
+      descriptorId: selected.id
+    })
+  );
+  renderEditor();
+  document
+    .getElementById("editor-animation-library-title")
     ?.scrollIntoView({ block: "start" });
 }
 

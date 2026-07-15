@@ -78,6 +78,10 @@ import {
   dashboardSampleTargetSearchFields,
   type DashboardSampleTargetPreviewLink
 } from "./sample-target-preview.ts";
+import { createKpEditorAnimationLibrary } from "../editor/animation-library.ts";
+import {
+  kpEditorAnimationSelectionHref
+} from "../editor/animation-selection-route.ts";
 
 export type GeneratedAlgebraAgendaPreviewField = DashboardAssetPreviewField;
 
@@ -219,6 +223,7 @@ function createAnimationAssetAgendaRowsForAssets(input: {
   readonly catalogSearchLabel: string;
   readonly query: string;
 }): readonly GeneratedAlgebraFixtureAgendaRow[] {
+  const editorDescriptors = createKpEditorAnimationLibrary();
   const rows = input.animations.map(
     (animation): GeneratedAlgebraFixtureAgendaRow => {
       const transformDefinitionIds = animationDefinitionIds(animation);
@@ -425,7 +430,22 @@ function createAnimationAssetAgendaRowsForAssets(input: {
           ...pausedFrameDrillDownPreviewFields(pausedFrameDrillDownSample),
           ...katexVisualPreviewFields(katexVisualSample)
         ],
-        previewLinks: [],
+        previewLinks: editorDescriptors
+          .filter((descriptor) => descriptor.animationId === animation.id)
+          .map((descriptor) => ({
+            label: `Open ${descriptor.title} in editor`,
+            href: kpEditorAnimationSelectionHref({
+              pathname: "/",
+              search: "",
+              hash: "#editor-animation-library-title",
+              descriptorId: descriptor.id
+            }),
+            dataAttributes: [
+              ["data-kp-preview-link", "editor-animation"],
+              ["data-kp-preview-editor-animation", descriptor.id],
+              ["data-kp-preview-animation-asset", animation.id]
+            ]
+          })),
         searchFields: [
           "semantic asset catalog",
           "animation asset catalog",
