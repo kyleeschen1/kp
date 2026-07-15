@@ -73,7 +73,8 @@
     {
       "id": "next-action.kp.semantic-transition.compiler-v0",
       "title": "Compile semantic transformations into transition IR",
-      "status": "planned"
+      "summary": "Semantic transformations now compile deterministically into equation transition IR.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.definition-bindings-v0",

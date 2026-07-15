@@ -1,0 +1,83 @@
+{
+  "id": "next-action.kp.semantic-transition.compiler-v0",
+  "kind": "next-action",
+  "title": "Compile semantic transformations into transition IR",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added the first semantic equation compiler from a validated KpSemanticTransformation and asset bundle into renderer-neutral transition IR with normalized correspondence.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-incremental-transition-authoring-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.semantic-transition.compiler-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-incremental-transition-compiler-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Approved thirty-slice implementation plan and boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/semantic-equation-transition-compiler.ts",
+      "summary": "Compiles semantic equation objects, selectors, LaTeX, and correspondence into IR."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-equation-transition-compiler.test.ts",
+      "summary": "Covers successful compilation and non-equation rejection."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-incremental-transition-authoring-v0",
+      "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Compile semantic transformations into transition IR can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-equation-transition-compiler.test.ts tests/equation-transition-ir.test.ts",
+      "status": "passed",
+      "scope": "Focused compiler and IR tests.",
+      "checkedAt": "2026-07-15T19:46:30.784Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Type safety.",
+      "checkedAt": "2026-07-15T19:46:30.844Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-15T19:46:30.903Z",
+      "scope": "Graph integrity."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added the first semantic equation compiler from a validated KpSemanticTransformation and asset bundle into renderer-neutral transition IR with normalized correspondence."
+  }
+}
