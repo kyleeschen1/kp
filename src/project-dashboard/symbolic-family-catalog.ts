@@ -446,20 +446,33 @@ function symbolicManipulationFamilyRowMatchesQuery(
   row: SymbolicManipulationFamilyAgendaRow,
   query: string
 ): boolean {
-  return projectDashboardTextFieldsMatch(
-    [
-      row.id,
-      row.title,
-      row.summary,
-      row.status,
-      row.detail,
-      row.kind,
-      ...row.tags,
-      ...row.searchFields,
-      ...row.previewFields.flatMap((field) => [field.label, field.value])
-    ],
-    query
+  const fields = [
+    row.id,
+    row.title,
+    row.summary,
+    row.status,
+    row.detail,
+    row.kind,
+    ...row.tags,
+    ...row.searchFields,
+    ...row.previewFields.flatMap((field) => [field.label, field.value])
+  ];
+  const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const facetTerms = terms.filter((term) => /[^a-z0-9]/.test(term));
+  const domainTerms = terms.filter((term) =>
+    ["algebra", "calculus", "linear-algebra", "graph"].includes(term)
   );
+  const textTerms = terms.filter(
+    (term) => !facetTerms.includes(term) && !domainTerms.includes(term)
+  );
+  const normalizedFields = fields.map((field) => field.toLowerCase());
+
+  // Symbolic facets contain punctuation that must remain exact while prose stays fuzzy.
+  return facetTerms.every((term) =>
+    normalizedFields.some((field) => field.includes(term))
+  ) && domainTerms.every((term) =>
+    row.tags.includes(term) || row.searchFields.includes(`domain:${term}`)
+  ) && projectDashboardTextFieldsMatch(fields, textTerms.join(" "));
 }
 
 function metadataString(

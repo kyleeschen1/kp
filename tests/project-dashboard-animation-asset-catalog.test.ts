@@ -410,7 +410,7 @@ test("semantic asset dashboard search resolves generated problem animation impor
   );
   assert.deepEqual(
     createSemanticAssetCatalogAgendaRows(
-      "generated-problem dot-product"
+      "generated-problem generated.linear-algebra.dot-product"
     ).map((row) => row.id),
     [
       "animation-generated-linear-algebra-dot-product-three-vector",

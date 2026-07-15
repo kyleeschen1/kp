@@ -2,9 +2,9 @@
   "id": "run-contract.kp.animation.symbolic-manipulation-library-v0",
   "kind": "run-contract",
   "title": "KP symbolic manipulation animation library v0 loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved candidate loop for expanding KP into a typed symbolic manipulation animation library across algebra, calculus, linear algebra, and graphical equivalents.",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -234,7 +234,7 @@
       "id": "next-action.kp.animation.symbolic-library-closeout-report-v0",
       "title": "Close symbolic manipulation library loop",
       "summary": "Write the closeout report with completed commits, verification evidence, residual risks, and recommended next slices.",
-      "status": "planned"
+      "status": "complete"
     }
   ]
 }

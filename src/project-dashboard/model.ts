@@ -507,11 +507,6 @@ function normalizeSearchText(value: string): string {
 }
 
 function fuzzyTermMatches(field: string, term: string): boolean {
-  // Preserve punctuation-bearing facet tokens before applying looser subsequence matching.
-  if (/[^a-z0-9]/.test(term)) {
-    return field.includes(term);
-  }
-
   if (term.length < 3) {
     return field.includes(term);
   }

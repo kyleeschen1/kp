@@ -1,0 +1,92 @@
+{
+  "id": "next-action.kp.animation.symbolic-library-closeout-report-v0",
+  "kind": "next-action",
+  "title": "Close symbolic manipulation library loop",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Closed the 28-slice symbolic manipulation library loop with verified flashcard projections, paused-frame drilldowns, dashboard progress, localized symbolic facet search, and a durable closeout report.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.symbolic-manipulation-library-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.symbolic-library-closeout-report-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md",
+      "summary": "Accepted long-term plan for major symbolic manipulation animation families."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/decisions/decision.kp.symbolic-manipulation-animation-library.json",
+      "summary": "Theseus decision node that makes symbolic manipulation animation-library expansion the current long-term KP direction."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap active focus and near-term priorities for symbolic manipulation family expansion."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/semantic-runtime.md",
+      "summary": "Semantic runtime thread describing how symbolic manipulation families should use existing semantic asset, runtime-frame, visual-frame, graph, dashboard, generated problem, and flashcard protocols."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/asset.ts",
+      "summary": "AnimationAsset container and timeline/render-target contracts that symbolic manipulation families should use."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "SemanticTransformation contract for symbolic manipulation definitions, correspondence, laws, and provenance."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-symbolic-manipulation-library-loop-closeout.md",
+      "summary": "Records completed work, verification, residual risks, and recommended follow-on slices for the symbolic manipulation library."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.symbolic-manipulation-library-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Close symbolic manipulation library loop can be completed inside KP symbolic manipulation animation library v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved symbolic manipulation animation-library slices.",
+    "Model reusable semantic animation asset families with SemanticTransformation definitions, correspondence, identity rules, visual motifs, runtime-frame samples, visual-frame samples, graph equivalents, generated problem hooks, flashcard hooks, law checks, and dashboard rows.",
+    "Use deterministic fixtures and existing KP asset/runtime/rendering contracts.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not build a full CAS or theorem prover in this loop.",
+    "Do not add GIF/video encoders, live LSP, network integrations, or dynamic package loading in this loop.",
+    "Do not make graph views a separate animation system; graph equivalents must project from the same semantic assets where honest.",
+    "Do not broaden into unrelated dashboard redesign or visual polish beyond what the active slice requires.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-symbolic-manipulation-library-closeout.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-15T00:24:22.086Z",
+      "scope": "symbolic manipulation library loop closeout evidence and recommendations"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Closed the 28-slice symbolic manipulation library loop with verified flashcard projections, paused-frame drilldowns, dashboard progress, localized symbolic facet search, and a durable closeout report."
+  }
+}
