@@ -193,7 +193,8 @@
     {
       "id": "next-action.kp.semantic-transition.llm-draft-compiler-v0",
       "title": "Compile validated LLM drafts",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.semantic-transition.llm-draft-compiler-v0 in KP Semantic Incremental Transition And LLM Authoring V0.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.llm-examples-v0",
