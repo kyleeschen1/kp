@@ -127,7 +127,8 @@
     {
       "id": "next-action.kp.semantic-transition.shared-player-adapter-v0",
       "title": "Drive token frames from shared playback",
-      "status": "planned"
+      "summary": "Semantic token frames now sample the existing editor player clock with exact rewind mirroring.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.fallback-diagnostics-v0",
