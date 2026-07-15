@@ -18,6 +18,10 @@ import {
   kpEditorAnimationSurfaceAdapterRegistry,
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
+import {
+  createKpEditorSolveXSharedPlayerFrame,
+  type KpEditorSolveXSharedPlayerFrame
+} from "./solve-x-shared-player.ts";
 
 const animationCatalog = createKpAnimationAssets();
 
@@ -26,6 +30,7 @@ export interface KpEditorEquationStageFrame {
   readonly localProgress: number;
   readonly easedProgress: number;
   readonly motifs: readonly KpEditorEquationTransitionMotifFrame[];
+  readonly solveX?: KpEditorSolveXSharedPlayerFrame | undefined;
 }
 
 export function createKpEditorEquationStageFrame(input: {
@@ -50,6 +55,8 @@ export function createKpEditorEquationStageFrame(input: {
         )
       );
 
+  const solveX = createKpEditorSolveXSharedPlayerFrame(input);
+
   return {
     projection,
     localProgress,
@@ -59,7 +66,8 @@ export function createKpEditorEquationStageFrame(input: {
         transition,
         progress: localProgress * localProgress * (3 - 2 * localProgress)
       })
-    )
+    ),
+    ...(solveX === undefined ? {} : { solveX })
   };
 }
 
@@ -105,6 +113,7 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
     stage.dataset["kpEditorEquationPhaseId"] = frame.projection.phaseId;
     stage.dataset["kpEditorEquationLocalProgress"] = String(frame.localProgress);
     stage.style.setProperty("--kp-editor-equation-progress", String(frame.easedProgress));
+    syncSolveXSequence(stage, frame.solveX);
     frame.projection.transitions.forEach((_transition, index) => {
       const transitionElement = stage?.querySelector<HTMLElement>(
         `[data-kp-editor-equation-transition-index="${index}"]`
@@ -155,6 +164,7 @@ function renderStage(frame: KpEditorEquationStageFrame, frameKey: string): strin
           </div>
         </article>
       `).join("")}
+      ${frame.solveX === undefined ? "" : renderSolveXSequence(frame.solveX)}
     </div>
   `;
 }
@@ -210,6 +220,36 @@ function renderFocusTokens(labels: readonly string[]): string {
 
 function motifLabel(kind: KpEditorEquationTransitionMotifFrame["kind"]): string {
   return kind.replaceAll("-", " ");
+}
+
+function renderSolveXSequence(frame: KpEditorSolveXSharedPlayerFrame): string {
+  return `
+    <ol class="editor-equation-stage__sequence" data-kp-editor-solve-x-sequence aria-label="Solve x sequence">
+      ${frame.steps.map((step, index) => `
+        <li data-kp-editor-solve-x-step="${index}" data-kp-editor-solve-x-step-status="${step.status}"${step.status === "active" ? ' aria-current="step"' : ""}>
+          <span>${index + 1}</span>
+          ${renderLatexToHtml(step.latex, { displayMode: false })}
+        </li>
+      `).join("")}
+    </ol>
+  `;
+}
+
+function syncSolveXSequence(
+  stage: HTMLElement,
+  frame: KpEditorSolveXSharedPlayerFrame | undefined
+): void {
+  if (frame === undefined) return;
+
+  stage.dataset["kpEditorSolveXVisualProgress"] = String(frame.visualProgress);
+  stage.querySelectorAll<HTMLElement>("[data-kp-editor-solve-x-step]")
+    .forEach((step, index) => {
+      const status = frame.steps[index]?.status;
+      if (status === undefined) return;
+      step.dataset["kpEditorSolveXStepStatus"] = status;
+      if (status === "active") step.setAttribute("aria-current", "step");
+      else step.removeAttribute("aria-current");
+    });
 }
 
 function renderUnavailable(slot: HTMLElement, message: string): void {

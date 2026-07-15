@@ -63,6 +63,11 @@ test("selected editor animation controls play, pause, seek, step, rewind, and re
     .toHaveText("cancelation");
   await expect(equationStage.locator("[data-kp-editor-equation-focus-token]"))
     .toHaveCount(2);
+  const solveSequence = equationStage.locator("[data-kp-editor-solve-x-sequence]");
+  await expect(solveSequence).toBeVisible();
+  await expect(solveSequence.locator("[data-kp-editor-solve-x-step]"))
+    .toHaveCount(4);
+  await expect(solveSequence.locator('[aria-current="step"]')).toContainText("3");
 
   await player.getByRole("button", { name: "Step animation forward" }).click();
   expect(Number(await scrubber.inputValue())).toBeGreaterThan(0.5);
@@ -105,4 +110,37 @@ test("editor animation player disposes cleanly across selection and dashboard re
   player = page.locator("[data-kp-editor-animation-player]");
   await expect(player).toHaveAttribute("data-kp-editor-animation-status", "idle");
   await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "0");
+});
+
+test("every solve-x descriptor route uses the same visible shared player", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  const descriptorIds = [
+    "editor-animation.animation.linear-solve.solve-x",
+    "editor-animation.sample.animation.solve-x.both-sides",
+    "editor-animation.sample.animation.solve-x.cancel-additive-inverses"
+  ];
+
+  for (const descriptorId of descriptorIds) {
+    await page.locator('[data-action="set-editor-animation"]').selectOption(descriptorId);
+    const player = page.locator("[data-kp-editor-animation-player]");
+    await expect(player).toHaveAttribute(
+      "data-kp-editor-animation-descriptor-id",
+      descriptorId
+    );
+    await expect(player).toHaveAttribute(
+      "data-kp-editor-animation-id",
+      "animation.linear-solve.solve-x"
+    );
+    await expect(player.locator("[data-kp-editor-solve-x-sequence]")).toBeVisible();
+
+    await player.locator('[data-action="seek-editor-animation"]').fill("1");
+    await expect(player.locator("[data-kp-editor-equation-target]")).toContainText("x=4");
+    await expect(player.locator("[data-kp-editor-equation-target]")).toHaveCSS(
+      "opacity",
+      "1"
+    );
+  }
 });
