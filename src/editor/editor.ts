@@ -57,6 +57,11 @@ import {
 import {
   dispatchKpEditorAnimationSurface
 } from "./animation-surface-dispatch.ts";
+import { createKpAnimationAssets } from "../animation/catalog.ts";
+import {
+  createKpEditorAnimationDiagnostics,
+  renderKpEditorAnimationDiagnostics
+} from "./animation-diagnostics.ts";
 
 export function createInitialEditorDocument(): KpDocument {
   return createKpDocument({
@@ -214,6 +219,16 @@ function renderEditorAnimationLibrary(
     selectedDescriptorId: selected.id
   });
   const surface = dispatchKpEditorAnimationSurface(selected);
+  const assets = createKpAnimationAssets();
+  const animation = assets.find((asset) => asset.id === selected.animationId);
+
+  if (animation === undefined) {
+    throw new Error(`Missing editor animation asset: ${selected.animationId}`);
+  }
+  const diagnostics = createKpEditorAnimationDiagnostics({
+    animation,
+    catalog: assets
+  });
 
   return `
     <section class="editor-animation-library" data-kp-editor-animation-library data-kp-editor-animation-descriptor-id="${escapeHtml(selected.id)}" data-kp-editor-animation-id="${escapeHtml(selected.animationId)}" data-kp-editor-animation-surface="${escapeHtml(surface.kind)}" aria-labelledby="editor-animation-library-title">
@@ -228,6 +243,7 @@ function renderEditorAnimationLibrary(
           ${selected.familyId === undefined ? "" : `<div><dt>Family</dt><dd>${escapeHtml(selected.familyId)}</dd></div>`}
         </dl>
       </div>
+      ${renderKpEditorAnimationDiagnostics(diagnostics)}
     </section>
   `;
 }

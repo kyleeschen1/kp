@@ -1488,6 +1488,82 @@ h2 {
   font-weight: 700;
 }
 
+.editor-animation-diagnostics {
+  border-top: 1px solid #e3e8ef;
+  background: #f8fafc;
+}
+
+.editor-animation-diagnostics summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1.1rem;
+  color: #405365;
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.editor-animation-diagnostics summary span {
+  color: #64748b;
+  font-weight: 700;
+}
+
+.editor-animation-diagnostics__body {
+  border-top: 1px solid #e3e8ef;
+  padding: 0.85rem 1.1rem 1rem;
+}
+
+.editor-animation-diagnostics__body dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.editor-animation-diagnostics__body dt {
+  color: #64748b;
+  font-size: 0.64rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.editor-animation-diagnostics__body dd {
+  margin: 0.12rem 0 0;
+  overflow-wrap: anywhere;
+  color: #334155;
+  font-size: 0.7rem;
+}
+
+.editor-animation-diagnostics__body ul {
+  display: grid;
+  gap: 0.4rem;
+  max-height: 14rem;
+  margin: 0.8rem 0 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.editor-animation-diagnostics__body li {
+  display: grid;
+  gap: 0.12rem;
+  border-left: 3px solid #d49a25;
+  padding: 0.38rem 0.55rem;
+  color: #526173;
+  background: #ffffff;
+  font-size: 0.7rem;
+}
+
+.editor-animation-diagnostics__body li[data-kp-editor-animation-diagnostic-severity="error"] {
+  border-left-color: #b42318;
+}
+
+.editor-animation-diagnostics__body li[data-kp-editor-animation-diagnostic-severity="info"] {
+  border-left-color: #4d7c8a;
+}
+
 .equation-motion:focus,
 .equation-motion:focus-within {
   border-color: #526173;

@@ -31,6 +31,20 @@ test("editor animation library restores and persists concrete selections", async
     "data-kp-editor-animation-descriptor-id",
     equationDescriptorId
   );
+  const diagnostics = library.locator(
+    "[data-kp-editor-animation-diagnostics]"
+  );
+  await expect(diagnostics).toHaveAttribute(
+    "data-kp-editor-animation-diagnostics-status",
+    "warning"
+  );
+  await diagnostics.locator("summary").click();
+  await expect(diagnostics).toContainText("Render targets bound");
+  await expect(
+    diagnostics.locator(
+      '[data-kp-editor-animation-diagnostic-code="visual-frame.render-target-unbound"]'
+    )
+  ).toBeVisible();
 });
 
 test("dashboard animation assets open their concrete editor selection", async ({
