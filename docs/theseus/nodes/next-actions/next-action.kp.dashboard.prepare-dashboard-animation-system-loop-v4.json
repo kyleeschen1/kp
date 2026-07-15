@@ -1,0 +1,82 @@
+{
+  "id": "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v4",
+  "kind": "next-action",
+  "title": "Prepare KP dashboard and semantic animation system Loop",
+  "status": "resolved",
+  "domain": "kp.dashboard",
+  "summary": "Prepared the dashboard-animation frontier into the approved durable KP editor visible-animation player run contract.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Frontier selected by loop-plan rank 1. Loop-plan selected this frontier because Workflow is active."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.visible-animation-player-v0.json",
+      "summary": "Durable 30-slice execution contract selected from the prepared frontier."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run theseus -- journey-report",
+    "npm run theseus -- loop-plan --limit 5"
+  ],
+  "expectedLearning": [
+    "Whether KP dashboard and semantic animation system should become active work now or remain deferred.",
+    "Whether the why-now rationale is sufficient: Loop-plan selected this frontier because Workflow is active."
+  ],
+  "allowedWork": [
+    "Read the frontier context and adjacent decisions before choosing work.",
+    "Create, link, or defer a concrete next action with source refs and verification.",
+    "Run only the selected concrete slice if the context makes it small and safe."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected frontier.",
+    "Do not start unrelated Spindle feature work."
+  ],
+  "criteria": [
+    {
+      "id": "frontier-context-reviewed",
+      "weight": "high"
+    },
+    {
+      "id": "frontier-needs-materialization-assessed",
+      "weight": "high"
+    },
+    {
+      "id": "concrete-next-action-created-or-deferred",
+      "weight": "high"
+    },
+    {
+      "id": "journey-report-updated-after-preparation",
+      "weight": "medium"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Graph valid after durable contract creation: 397 nodes, 5153 events.",
+      "checkedAt": "2026-07-15T16:35:30.399Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-15T16:35:30.478Z",
+      "scope": "Run-contract hygiene passed."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Prepared the dashboard-animation frontier into the approved durable KP editor visible-animation player run contract."
+  }
+}

@@ -86,7 +86,9 @@
     "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v3",
     "next-action.kp.animation-library.symbolic-manipulation-loop-v0",
     "run-contract.kp.animation.symbolic-manipulation-library-v0",
-    "next-action.kp.animation.symbolic-family-schema-v0"
+    "next-action.kp.animation.symbolic-family-schema-v0",
+    "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v4",
+    "next-action.kp.editor.visible-animation-player-focus-v0"
   ],
   "verificationRecords": [
     {

@@ -1,0 +1,204 @@
+{
+  "id": "run-contract.kp.editor.visible-animation-player-v0",
+  "kind": "run-contract",
+  "title": "KP editor visible animation player v0 loop",
+  "status": "ready",
+  "domain": "kp.editor",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.editor.visible-animation-player-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-editor-concrete-animation-library-loop-closeout.md",
+      "summary": "Closeout recommends mounting selected equation and graph runtime-frame consumers."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap names visible editor animation runtime mounting as the active focus."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "allowedWork": [
+    "Only implement the approved visible editor animation player slices.",
+    "Reuse the existing KpAnimationAsset runtime clock, semantic bundles, visual-frame adapters, KaTeX ownership rules, and graph samplers.",
+    "Add focused editor renderers, controls, browser checks, and closeout evidence."
+  ],
+  "disallowedWork": [
+    "Do not create a second animation clock or duplicate semantic animation assets.",
+    "Do not add media encoders, live CAS or LSP integrations, curriculum generation, dynamic package loading, or a broad editor redesign.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "goal": "Mount the approved concrete family-backed animations as visible, playable, scrubbable, and rewindable editor cards on the shared KP runtime clock.",
+  "target": "next-action.kp.editor.visible-animation-player-focus-v0",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop if a visual cannot be derived honestly from the asset semantics without product judgment.",
+    "Stop if shared player integration requires a broad editor rewrite beyond the approved contract.",
+    "Stop if verification fails and the fix is not local to the active slice.",
+    "Stop when all approved slices are complete."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.editor.visible-animation-player-focus-v0",
+      "title": "Record visible animation player tranche",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.editor.animation-player-state-v0",
+      "title": "Define selected animation player state",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.animation-playback-session-v0",
+      "title": "Add shared animation playback session",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.animation-player-shell-v0",
+      "title": "Render visible animation player shell",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.animation-player-controller-v0",
+      "title": "Hydrate visible animation controls",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.animation-surface-adapter-registry-v0",
+      "title": "Add visual surface adapter registry",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.animation-live-diagnostics-v0",
+      "title": "Synchronize live player diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.animation-player-lifecycle-v0",
+      "title": "Harden animation switching and cleanup",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.equation-runtime-frame-projection-v0",
+      "title": "Project equation runtime frames",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.katex-animation-stage-v0",
+      "title": "Mount measured KaTeX animation stage",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.equation-transition-motifs-v0",
+      "title": "Add reusable equation transition motifs",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.solve-x-shared-player-v0",
+      "title": "Move solve x onto shared player",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.fraction-visible-animation-v0",
+      "title": "Render fraction simplification",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.exponent-radical-visible-animations-v0",
+      "title": "Render exponent and radical rewrites",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.function-wrap-visible-animation-v0",
+      "title": "Render function wrapping",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.distribution-factoring-visible-animations-v0",
+      "title": "Render distribution and factoring",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.inequality-visible-animation-v0",
+      "title": "Render inequality sign flip",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.calculus-equation-visible-animations-v0",
+      "title": "Render derivative and FTC equations",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.matrix-vector-visible-animation-v0",
+      "title": "Render matrix vector multiplication",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.matrix-matrix-visible-animation-v0",
+      "title": "Render matrix matrix multiplication",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.equation-visual-browser-gate-v0",
+      "title": "Gate visible equation cohort in browser",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.graph-animation-svg-viewport-v0",
+      "title": "Build graph animation SVG viewport",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.graph-animation-runtime-adapters-v0",
+      "title": "Add graph visual runtime adapters",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.vector-scale-visible-animation-v0",
+      "title": "Render vector scaling",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.derivative-tangent-visible-animation-v0",
+      "title": "Render derivative tangent motion",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.integral-area-visible-animation-v0",
+      "title": "Render integral area sweep",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.dot-projection-visible-animation-v0",
+      "title": "Render dot product and projection",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.graph-animation-annotations-v0",
+      "title": "Add synchronized graph annotations",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.visible-animation-quality-gate-v0",
+      "title": "Run visible animation quality gates",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.visible-animation-player-closeout-v0",
+      "title": "Close visible animation player loop",
+      "status": "planned"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "id": "next-action.kp.editor.visible-animation-player-focus-v0",
+  "kind": "next-action",
+  "title": "Build visible editor animation player",
+  "status": "resolved",
+  "domain": "kp.editor",
+  "summary": "Recorded the approved visible-animation player tranche as a durable 30-slice run contract and made rendered play, scrub, seek, and rewind the delivery boundary.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-editor-concrete-animation-library-loop-closeout.md",
+      "summary": "Closeout identifies visible runtime mounting as the next editor tranche."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap names editor animation runtime mounting as the active focus."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Names the active visible-animation contract and its completion boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.visible-animation-player-v0.json",
+      "summary": "Persists the approved 30 ordered slices and scope boundaries."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Graph valid with 397 nodes and 5159 events before completion.",
+      "checkedAt": "2026-07-15T16:36:17.749Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "scope": "Run-contract hygiene passed.",
+      "checkedAt": "2026-07-15T16:36:17.810Z"
+    },
+    {
+      "command": "git diff --check",
+      "status": "passed",
+      "checkedAt": "2026-07-15T16:36:17.872Z",
+      "scope": "Focus changes contain no whitespace errors."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Recorded the approved visible-animation player tranche as a durable 30-slice run contract and made rendered play, scrub, seek, and rewind the delivery boundary."
+  }
+}

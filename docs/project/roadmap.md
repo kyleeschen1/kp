@@ -42,6 +42,13 @@ runtime-frame consumers for the selected descriptor, using solve-x as the
 measured KaTeX reference and the derivative/tangent, area, vector, and
 projection samplers as graph references.
 
+The active execution contract is
+`run-contract.kp.editor.visible-animation-player-v0`. It owns the approved
+30-slice path from a renderer-neutral player state and shared playback session
+through visible KaTeX equation motion, SVG graph motion, browser quality gates,
+and loop closeout. A concrete selection is not considered visually delivered
+until the editor can play, scrub, seek, and rewind its rendered frame.
+
 The doctrine, composition laws, authoring guide, core interfaces, executable
 law checks, pause-time inspection, drill-down hooks, flashcard specs, external
 port fixture, programming trace skeleton, equation-frame interpreter path,
