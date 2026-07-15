@@ -28,18 +28,19 @@ curriculum, or dynamic package loading.
 
 The symbolic manipulation family plan recorded in
 `decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
-closed its first 28-slice implementation loop. The active delivery plan is now
-`decisions/2026-07-14-kp-editor-concrete-animation-library-plan.md`: resolve
-family sample refs to executable assets and make a verified first cohort
-available in the KP editor.
+closed its first 28-slice implementation loop. The delivery plan in
+`decisions/2026-07-14-kp-editor-concrete-animation-library-plan.md` resolved
+family sample refs to executable assets and made a verified first cohort
+available in the KP editor; it has now closed its 30-slice implementation loop.
 
 ## Active Focus
 
-**KP editor concrete animation library.** The symbolic manipulation loop now
-provides 18 promoted families and 71 transformation definitions. The current
-focus is to connect those semantic definitions to catalog-resolved
-`KpAnimationAsset` records and expose a verified first cohort through the KP
-editor without inventing a second runtime or renderer path.
+**KP editor animation runtime mounting.** The concrete animation library loop
+now exposes 24 catalog assets plus 17 family-backed selections as 41 stable
+editor descriptors. The next focus is to mount visible equation and graph
+runtime-frame consumers for the selected descriptor, using solve-x as the
+measured KaTeX reference and the derivative/tangent, area, vector, and
+projection samplers as graph references.
 
 The doctrine, composition laws, authoring guide, core interfaces, executable
 law checks, pause-time inspection, drill-down hooks, flashcard specs, external
@@ -48,7 +49,7 @@ dashboard preview interpreter, runtime visual-frame adapters, generated algebra
 animation fixtures, generated problem imports, flashcard projections, graph
 visual-frame seams, and paused-frame decomposition examples are in place.
 
-The active tranche is now:
+The completed concrete-library tranche delivered:
 
 1. distinguish planned family samples from concrete catalog-resolved assets and
    enforce reference closure;
@@ -60,6 +61,10 @@ The active tranche is now:
    integral/area synchronized examples;
 5. expose vector, dot/projection, matrix-vector, and composed matrix-matrix
    examples through the same parent runtime clock.
+
+The next tranche should mount those selected assets as visible moving editor
+cards, add representative browser visual checks, and then promote the six
+remaining planned family samples.
 
 The goal remains practical: a KP intermediate representation with composition
 laws inspired by category theory and FRP, not a broad abstract category theory
@@ -235,27 +240,25 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Resolve concrete family samples against the animation catalog and report
-   planned refs honestly.
-2. Project resolved assets into the KP editor without duplicating the semantic
-   asset or runtime contracts.
-3. Stabilize the live solve-x KaTeX path with browser-level forward, seek,
-   rewind, font-readiness, and handoff checks.
-4. Add the approved algebra editor cohort: fraction, exponent, radical,
-   function wrapping, distribution/factoring, and inequality sign flip.
-5. Add synchronized derivative/tangent and integral/area editor animations on
-   the shared runtime clock.
-6. Add vector, dot/projection, matrix-vector, and composed matrix-matrix editor
-   animations.
-7. Harden `/api/compile`, export/embed boundaries, and future hosted capsules
+1. Mount visible equation and graph runtime-frame consumers for the selected
+   editor descriptor without creating a second playback clock.
+2. Add representative browser visual checks for fraction, inequality,
+   tangent, area, projection, matrix-vector, and matrix-matrix frames.
+3. Promote the six planned family samples for Taylor/local linearization,
+   gradient/Jacobian, Hessian/optimization, row operations,
+   determinant/inverse, and basis/eigen.
+4. Turn paused-frame drill-down blueprints into editor authoring actions.
+5. Add picker labels or filters that distinguish base catalog assets from
+   family-backed authoring selections while preserving stable routes.
+6. Harden `/api/compile`, export/embed boundaries, and future hosted capsules
    with explicit size, schema, error, auth, CSP, and dependency policies before
    inviting broad external input.
-8. Start GIF or video encoder integration only after the frame-sequence JSON
+7. Start GIF or video encoder integration only after the frame-sequence JSON
    artifact, HTML preview, browser probe, rewind check, dependency manifest,
    and capability package manifests stay stable.
-9. Expand graph diagnostics from current mesh/conformance checks into richer
+8. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-10. Defer dynamic package loading until at least one generated animation family
+9. Defer dynamic package loading until at least one generated animation family
    proves the metadata contract across math, graph, programming, and export
    examples.
 
