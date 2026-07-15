@@ -38,7 +38,11 @@ export interface KpEditorAnimationDiagnostics {
   readonly status: "passed" | "warning" | "error";
   readonly runtimeFrameId: string;
   readonly phaseId: string;
+  readonly direction: KpAnimationRuntimeFrame["clock"]["direction"];
   readonly progress: number;
+  readonly activeTransformationCount: number;
+  readonly activeRenderTargetCount: number;
+  readonly activeSelectorCount: number;
   readonly bindingSummary: KpAnimationVisualFrameBindingSummary;
   readonly playbackLaws: readonly KpLawCheckResult[];
   readonly severityCounts: Readonly<Record<KpEditorAnimationDiagnosticSeverity, number>>;
@@ -137,7 +141,11 @@ export function createKpEditorAnimationDiagnostics(input: {
           : "passed",
     runtimeFrameId: runtimeFrame.id,
     phaseId: runtimeFrame.phase.phaseId,
-    progress,
+    direction: runtimeFrame.clock.direction,
+    progress: runtimeFrame.clock.progress,
+    activeTransformationCount: runtimeFrame.activeTransformationIds.length,
+    activeRenderTargetCount: runtimeFrame.activeRenderTargets.length,
+    activeSelectorCount: runtimeFrame.selectorFrames.length,
     bindingSummary: bindingPanel.bindingSummary,
     playbackLaws,
     severityCounts,
@@ -162,6 +170,11 @@ export function renderKpEditorAnimationDiagnostics(
       <div class="editor-animation-diagnostics__body">
         <dl>
           <div><dt>Runtime phase</dt><dd data-kp-editor-animation-diagnostics-phase>${escapeHtml(diagnostics.phaseId)}</dd></div>
+          <div><dt>Progress</dt><dd data-kp-editor-animation-diagnostics-progress>${Math.round(diagnostics.progress * 100)}%</dd></div>
+          <div><dt>Direction</dt><dd data-kp-editor-animation-diagnostics-direction>${diagnostics.direction}</dd></div>
+          <div><dt>Active transforms</dt><dd data-kp-editor-animation-diagnostics-active-transformations>${diagnostics.activeTransformationCount}</dd></div>
+          <div><dt>Active targets</dt><dd data-kp-editor-animation-diagnostics-active-targets>${diagnostics.activeRenderTargetCount}</dd></div>
+          <div><dt>Active selectors</dt><dd data-kp-editor-animation-diagnostics-active-selectors>${diagnostics.activeSelectorCount}</dd></div>
           <div><dt>Render targets bound</dt><dd data-kp-editor-animation-diagnostics-targets>${binding.boundRenderTargetCount}/${binding.renderTargetCount}</dd></div>
           <div><dt>Selectors bound</dt><dd data-kp-editor-animation-diagnostics-selectors>${binding.boundSelectorCount}/${binding.selectorCount}</dd></div>
           <div><dt>Playback laws</dt><dd data-kp-editor-animation-diagnostics-playback-laws>${passedPlaybackLaws}/${diagnostics.playbackLaws.length}</dd></div>
