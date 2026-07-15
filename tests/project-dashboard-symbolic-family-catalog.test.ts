@@ -500,15 +500,26 @@ test("algebra distribution-factoring family models copied and grouped artifacts"
   ]);
   assert.deepEqual(family.runtimeSamples, [
     {
-      id: "sample.animation.distribution-factoring.basic",
-      animationId: "animation.distribution-factoring.basic",
+      id: "sample.animation.distribution.expand-a-sum",
+      animationId: "animation.generated.distribution.expand-a-sum",
+      availability: "concrete",
       renderTargetKinds: ["equation"],
       transformationDefinitionIds: [
-        "definition.symbolic.algebra.distribute-product-over-sum",
+        "definition.symbolic.algebra.distribute-product-over-sum"
+      ],
+      summary:
+        "The expand-a-sum animation copies a shared factor into both products with a reversible sweep."
+    },
+    {
+      id: "sample.animation.factoring.factor-common-a",
+      animationId: "animation.generated.distribution.factor-common-a",
+      availability: "concrete",
+      renderTargetKinds: ["equation"],
+      transformationDefinitionIds: [
         "definition.symbolic.algebra.factor-common-term"
       ],
       summary:
-        "Basic a(b + c) and ab + ac sample exercises distribution and factoring as reversible views."
+        "The factor-common-a animation reconciles matching factor copies before wrapping the remaining sum."
     }
   ]);
   assert.deepEqual(family.graphEquivalents, [
@@ -524,7 +535,10 @@ test("algebra distribution-factoring family models copied and grouped artifacts"
           level: "strict"
         }
       ],
-      sampleAssetIds: ["animation.distribution-factoring.basic"],
+      sampleAssetIds: [
+        "animation.generated.distribution.expand-a-sum",
+        "animation.generated.distribution.factor-common-a"
+      ],
       summary:
         "Distribution splits one rectangle into pieces while factoring regroups equal total area."
     }
@@ -1243,9 +1257,9 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
       ["Families", "18"],
       ["Ready families", "18"],
       ["Transform definitions", "71"],
-      ["Runtime sample refs", "22"],
-      ["Concrete runtime samples", "6"],
-      ["Planned runtime samples", "16"],
+      ["Runtime sample refs", "23"],
+      ["Concrete runtime samples", "8"],
+      ["Planned runtime samples", "15"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],
       ["Flashcard hooks", "18"],

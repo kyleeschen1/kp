@@ -120,6 +120,24 @@ test("canonical function-wrap asset resolves its family visual sample", () => {
   );
 });
 
+test("canonical distribution and factoring assets resolve inverse family samples", () => {
+  const resolutions = createKpSymbolicFamilyAnimationResolutions({
+    families: createSymbolicManipulationFamilyRegistry(),
+    assets: createKpAnimationAssets()
+  }).filter((candidate) =>
+    candidate.sampleId === "sample.animation.distribution.expand-a-sum" ||
+    candidate.sampleId === "sample.animation.factoring.factor-common-a"
+  );
+
+  assert.deepEqual(
+    resolutions.map((resolution) => [resolution.animationId, resolution.status]),
+    [
+      ["animation.generated.distribution.expand-a-sum", "resolved"],
+      ["animation.generated.distribution.factor-common-a", "resolved"]
+    ]
+  );
+});
+
 test("family animation resolver requires explicit concrete availability and exact ids", () => {
   const asset = createLinearSolveAnimationAsset();
   const plannedFamily = familyWithSample({

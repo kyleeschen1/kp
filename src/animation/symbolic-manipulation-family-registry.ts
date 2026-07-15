@@ -922,12 +922,26 @@ function createAlgebraDistributionFactoringFamily(): KpSymbolicManipulationFamil
     ],
     runtimeSamples: [
       {
-        id: "sample.animation.distribution-factoring.basic",
-        animationId: "animation.distribution-factoring.basic",
+        id: "sample.animation.distribution.expand-a-sum",
+        animationId: "animation.generated.distribution.expand-a-sum",
+        availability: "concrete",
         renderTargetKinds: ["equation"],
-        transformationDefinitionIds: definitionIds,
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.distribute-product-over-sum"
+        ],
         summary:
-          "Basic a(b + c) and ab + ac sample exercises distribution and factoring as reversible views."
+          "The expand-a-sum animation copies a shared factor into both products with a reversible sweep."
+      },
+      {
+        id: "sample.animation.factoring.factor-common-a",
+        animationId: "animation.generated.distribution.factor-common-a",
+        availability: "concrete",
+        renderTargetKinds: ["equation"],
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.factor-common-term"
+        ],
+        summary:
+          "The factor-common-a animation reconciles matching factor copies before wrapping the remaining sum."
       }
     ],
     graphEquivalents: [
@@ -943,7 +957,10 @@ function createAlgebraDistributionFactoringFamily(): KpSymbolicManipulationFamil
             level: "strict"
           }
         ],
-        sampleAssetIds: ["animation.distribution-factoring.basic"],
+        sampleAssetIds: [
+          "animation.generated.distribution.expand-a-sum",
+          "animation.generated.distribution.factor-common-a"
+        ],
         summary:
           "Distribution splits one rectangle into pieces while factoring regroups equal total area."
       }
