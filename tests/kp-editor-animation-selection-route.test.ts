@@ -25,7 +25,7 @@ test("editor renders every concrete asset through a stable descriptor selection"
     editorAnimationDescriptorId: selected.id
   });
 
-  assert.equal(descriptors.length, 25);
+  assert.equal(descriptors.length, 26);
   assert.match(html, /data-kp-editor-animation-library/);
   assert.match(
     html,

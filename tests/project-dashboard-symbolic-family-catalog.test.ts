@@ -924,6 +924,14 @@ test("algebra exponent-log family preserves bases and wrapped arguments", () => 
       ],
       summary:
         "The square-root-as-power animation folds rational exponent geometry into a radical while preserving the base."
+    },
+    {
+      id: "sample.animation.function-wrap.apply-f",
+      animationId: "animation.generated.function-wrap.apply-f",
+      availability: "concrete",
+      renderTargetKinds: ["equation"],
+      summary:
+        "The apply-f animation exercises the family function-wrap motif while preserving argument identity and wrapper ownership."
     }
   ]);
   assert.deepEqual(family.graphEquivalents, [
@@ -1235,8 +1243,8 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
       ["Families", "18"],
       ["Ready families", "18"],
       ["Transform definitions", "71"],
-      ["Runtime sample refs", "21"],
-      ["Concrete runtime samples", "5"],
+      ["Runtime sample refs", "22"],
+      ["Concrete runtime samples", "6"],
       ["Planned runtime samples", "16"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],

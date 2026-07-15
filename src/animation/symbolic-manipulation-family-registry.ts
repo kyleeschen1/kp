@@ -1443,6 +1443,14 @@ function createAlgebraExponentLogFamily(): KpSymbolicManipulationFamily {
         ],
         summary:
           "The square-root-as-power animation folds rational exponent geometry into a radical while preserving the base."
+      },
+      {
+        id: "sample.animation.function-wrap.apply-f",
+        animationId: "animation.generated.function-wrap.apply-f",
+        availability: "concrete",
+        renderTargetKinds: ["equation"],
+        summary:
+          "The apply-f animation exercises the family function-wrap motif while preserving argument identity and wrapper ownership."
       }
     ],
     graphEquivalents: [

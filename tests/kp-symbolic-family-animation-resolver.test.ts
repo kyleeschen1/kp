@@ -104,6 +104,22 @@ test("canonical radical asset resolves its exponent-law family sample", () => {
   );
 });
 
+test("canonical function-wrap asset resolves its family visual sample", () => {
+  const resolution = createKpSymbolicFamilyAnimationResolutions({
+    families: createSymbolicManipulationFamilyRegistry(),
+    assets: createKpAnimationAssets()
+  }).find(
+    (candidate) =>
+      candidate.sampleId === "sample.animation.function-wrap.apply-f"
+  );
+
+  assert.equal(resolution?.status, "resolved");
+  assert.equal(
+    resolution?.animationId,
+    "animation.generated.function-wrap.apply-f"
+  );
+});
+
 test("family animation resolver requires explicit concrete availability and exact ids", () => {
   const asset = createLinearSolveAnimationAsset();
   const plannedFamily = familyWithSample({
