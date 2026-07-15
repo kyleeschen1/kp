@@ -36,6 +36,10 @@ import {
   createKpEditorSemanticEquationTokenFrame
 } from "./semantic-equation-player-adapter.ts";
 import { createKpSolveXSelectorAnnotatedLatex } from "./solve-x-semantic-latex.ts";
+import {
+  bindKpFractionStructuralMotionIds,
+  createKpFractionSelectorAnnotatedLatex
+} from "./fraction-semantic-latex.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticGeometryCache = new WeakMap<HTMLElement, {
@@ -287,7 +291,15 @@ function applySemanticTokenMotion(input: {
       sourceRoot: input.state.direction === "forward" ? displayedSource : displayedTarget,
       targetRoot: input.state.direction === "forward" ? displayedTarget : displayedSource,
       sourceAnnotated,
-      targetAnnotated
+      targetAnnotated,
+      sourceMotionIdsBySelector: bindKpFractionStructuralMotionIds({
+        root: input.state.direction === "forward" ? displayedSource : displayedTarget,
+        states: compiled.ir.source
+      }),
+      targetMotionIdsBySelector: bindKpFractionStructuralMotionIds({
+        root: input.state.direction === "forward" ? displayedTarget : displayedSource,
+        states: compiled.ir.target
+      })
     });
     const existing = semanticGeometryCache.get(input.stage);
     const geometries = existing?.contentKey === input.frame.contentKey
@@ -314,12 +326,20 @@ function applySemanticTokenMotion(input: {
 }
 
 function annotatedLatexForStates(
-  states: readonly { readonly objectId: string; readonly selectors: readonly { readonly id: string }[] }[]
+  states: readonly {
+    readonly objectId: string;
+    readonly selectors: readonly {
+      readonly id: string;
+      readonly kind?: string | undefined;
+      readonly semanticKind?: string | undefined;
+      readonly label?: string | undefined;
+    }[];
+  }[]
 ): readonly KpSelectorAnnotatedLatex[] | undefined {
   const annotated = states.map((state) => createKpSolveXSelectorAnnotatedLatex({
     objectId: state.objectId,
     selectorIds: state.selectors.map((selector) => selector.id)
-  }));
+  }) ?? createKpFractionSelectorAnnotatedLatex(state));
   return annotated.every((state): state is KpSelectorAnnotatedLatex => state !== undefined)
     ? annotated
     : undefined;
@@ -331,6 +351,9 @@ function annotatedLatexForObject(
   return createKpSolveXSelectorAnnotatedLatex({
     objectId: object.id,
     selectorIds: object.selectors.map((selector) => selector.id)
+  }) ?? createKpFractionSelectorAnnotatedLatex({
+    objectId: object.id,
+    selectors: object.selectors
   });
 }
 

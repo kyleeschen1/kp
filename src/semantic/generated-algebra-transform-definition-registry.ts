@@ -13,6 +13,7 @@ import type {
   KpLawFailure
 } from "./asset-laws.ts";
 import type { GeneratedAlgebraFixtureFamilyId } from "./generated-algebra-fixture-registry.ts";
+import type { CorrespondenceMap } from "./correspondence.ts";
 
 export type GeneratedAlgebraTransformDefinitionStatus = "seed" | "promoted";
 
@@ -45,6 +46,7 @@ export interface CreateGeneratedAlgebraSemanticTransformationInput {
   readonly title?: string | undefined;
   readonly sourceObjectIds: readonly string[];
   readonly targetObjectIds: readonly string[];
+  readonly correspondenceMap?: CorrespondenceMap | undefined;
   readonly correspondence?: readonly KpSelectorCorrespondence[] | undefined;
 }
 
@@ -1107,6 +1109,7 @@ export function createGeneratedAlgebraSemanticTransformation(
     preserves: definition.preserves,
     assumptions: definition.assumptions,
     lawRefs: definition.lawRefs,
+    correspondenceMap: input.correspondenceMap,
     correspondence: input.correspondence
   });
 }

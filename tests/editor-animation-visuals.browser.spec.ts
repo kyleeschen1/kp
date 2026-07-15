@@ -188,6 +188,14 @@ test("fraction simplification renders factor, common-factor, and simplified stat
       "data-kp-editor-equation-object-id",
       "expression.generated.fraction-expression.two-fourths.common-factor"
     );
+  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+    .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
+  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+    .toHaveAttribute("data-kp-editor-equation-semantic-progress", "0.5");
+  await expect(player.locator("[data-kp-editor-equation-source] [data-kp-motion-id]"))
+    .toHaveCount(7);
+  await expect(player.locator("[data-kp-editor-equation-target] .frac-line[data-kp-motion-id]"))
+    .toHaveCount(2);
 
   await scrubber.fill("1");
   await expect(player.locator("[data-kp-editor-equation-transition-id]"))

@@ -1,0 +1,109 @@
+{
+  "id": "next-action.kp.semantic-transition.fraction-v0",
+  "kind": "next-action",
+  "title": "Implement fraction cancellation and fan-in",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Fraction simplification now renders semantic split, structural fraction-bar fan-out, product fan-in, and unit-factor cancellation on measured KaTeX geometry.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-incremental-transition-authoring-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.semantic-transition.fraction-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-incremental-transition-compiler-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Approved thirty-slice implementation plan and boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Adds complete lifecycle correspondence maps to generated fraction transformations."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-transform-definition-registry.ts",
+      "summary": "Carries rich correspondence through generated algebra transformation construction."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/fraction-semantic-latex.ts",
+      "summary": "Annotates fraction terms and binds KaTeX-owned fraction bars to semantic artifact selectors."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Supplies structural artifact motion identities to measured semantic geometry."
+    },
+    {
+      "kind": "file",
+      "path": "tests/fraction-semantic-latex.test.ts",
+      "summary": "Covers semantic lifecycle and annotation closure for fraction states."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Verifies measured fraction semantic motion in the editor."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-incremental-transition-authoring-v0",
+      "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Implement fraction cancellation and fan-in can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, and test TypeScript projects.",
+      "checkedAt": "2026-07-15T20:37:14.295Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "All 917 unit and integration tests.",
+      "checkedAt": "2026-07-15T20:37:14.383Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph and event integrity.",
+      "checkedAt": "2026-07-15T20:37:14.483Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "checkedAt": "2026-07-15T20:37:14.575Z",
+      "scope": "All 19 editor animation browser scenarios."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Fraction simplification now renders semantic split, structural fraction-bar fan-out, product fan-in, and unit-factor cancellation on measured KaTeX geometry."
+  }
+}

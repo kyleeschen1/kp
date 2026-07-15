@@ -634,6 +634,15 @@ function createGeneratedFractionExpressionTransformations(
       title: "Split numerator and denominator into common factors",
       sourceObjectIds: [ids.initial],
       targetObjectIds: [ids.factored],
+      correspondenceMap: {
+        id: `${ids.split}.correspondence`,
+        records: [
+          lifecycle("numerator-splits", "fan-out", [selectorId(ids.initial, "numerator")], [selectorId(ids.factored, "base-numerator"), selectorId(ids.factored, "common-numerator-factor")], "The numerator splits into its base and common factors."),
+          lifecycle("denominator-splits", "fan-out", [selectorId(ids.initial, "denominator")], [selectorId(ids.factored, "base-denominator"), selectorId(ids.factored, "common-denominator-factor")], "The denominator splits into its base and common factors."),
+          lifecycle("fraction-line-persists", "identity", [selectorId(ids.initial, "fraction-line")], [selectorId(ids.factored, "fraction-line")], "The fraction relationship persists."),
+          lifecycle("product-signs-enter", "introduction", [], [selectorId(ids.factored, "numerator-times"), selectorId(ids.factored, "denominator-times")], "Product signs enter with the exposed factors.")
+        ]
+      },
       correspondence: [
         {
           sourceSelectorId: `${ids.initial}.fraction-line`,
@@ -649,6 +658,17 @@ function createGeneratedFractionExpressionTransformations(
       title: "Separate the common fraction factor",
       sourceObjectIds: [ids.factored],
       targetObjectIds: [ids.commonFactor],
+      correspondenceMap: {
+        id: `${ids.merge}.correspondence`,
+        records: [
+          lifecycle("base-numerator-persists", "identity", [selectorId(ids.factored, "base-numerator")], [selectorId(ids.commonFactor, "base-numerator")], "The base numerator persists."),
+          lifecycle("base-denominator-persists", "identity", [selectorId(ids.factored, "base-denominator")], [selectorId(ids.commonFactor, "base-denominator")], "The base denominator persists."),
+          lifecycle("common-numerator-moves", "identity", [selectorId(ids.factored, "common-numerator-factor")], [selectorId(ids.commonFactor, "unit-numerator")], "The common numerator factor moves into the unit fraction."),
+          lifecycle("common-denominator-moves", "identity", [selectorId(ids.factored, "common-denominator-factor")], [selectorId(ids.commonFactor, "unit-denominator")], "The common denominator factor moves into the unit fraction."),
+          lifecycle("fraction-line-splits", "fan-out", [selectorId(ids.factored, "fraction-line")], [selectorId(ids.commonFactor, "base-fraction-line"), selectorId(ids.commonFactor, "unit-fraction-line")], "One fraction structure separates into base and unit fractions."),
+          lifecycle("product-signs-merge", "fan-in", [selectorId(ids.factored, "numerator-times"), selectorId(ids.factored, "denominator-times")], [selectorId(ids.commonFactor, "times")], "The two internal products become one product between fractions.")
+        ]
+      },
       correspondence: [
         correspondence(
           ids.factored,
@@ -671,6 +691,15 @@ function createGeneratedFractionExpressionTransformations(
       title: "Simplify the unit fraction factor",
       sourceObjectIds: [ids.commonFactor],
       targetObjectIds: [ids.simplified],
+      correspondenceMap: {
+        id: `${ids.simplify}.correspondence`,
+        records: [
+          lifecycle("base-numerator-persists", "identity", [selectorId(ids.commonFactor, "base-numerator")], [selectorId(ids.simplified, "numerator")], "The simplified numerator persists."),
+          lifecycle("base-denominator-persists", "identity", [selectorId(ids.commonFactor, "base-denominator")], [selectorId(ids.simplified, "denominator")], "The simplified denominator persists."),
+          lifecycle("base-fraction-line-persists", "identity", [selectorId(ids.commonFactor, "base-fraction-line")], [selectorId(ids.simplified, "fraction-line")], "The base fraction relationship persists."),
+          lifecycle("unit-factor-cancels", "cancelation", [selectorId(ids.commonFactor, "times"), selectorId(ids.commonFactor, "unit-numerator"), selectorId(ids.commonFactor, "unit-fraction-line"), selectorId(ids.commonFactor, "unit-denominator")], [], "The unit fraction factor cancels as one.")
+        ]
+      },
       correspondence: [
         correspondence(
           ids.commonFactor,
@@ -2320,6 +2349,20 @@ function correspondence(
     targetSelectorId: `${targetObjectId}.${targetSuffix}`,
     preserves: ["identity" as const]
   };
+}
+
+function selectorId(objectId: string, suffix: string): string {
+  return `${objectId}.${suffix}`;
+}
+
+function lifecycle(
+  id: string,
+  relation: "identity" | "introduction" | "cancelation" | "fan-in" | "fan-out",
+  sourceSelectorIds: readonly string[],
+  targetSelectorIds: readonly string[],
+  summary: string
+) {
+  return { id, relation, sourceSelectorIds, targetSelectorIds, summary };
 }
 
 function formatSignedTerm(value: number): string {
