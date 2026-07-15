@@ -16,15 +16,18 @@ import {
   validateKpEditorAnimationDescriptor
 } from "../src/editor/animation-descriptor.ts";
 
-test("editor catalog projection exposes concrete assets without claiming planned family refs", () => {
+test("editor catalog projection preserves asset entries and adds concrete family refs", () => {
   const assets = createKpAnimationAssets();
   const descriptors = projectKpAnimationAssetsToEditorDescriptors({
     assets,
     families: createSymbolicManipulationFamilyRegistry()
   });
 
-  assert.equal(descriptors.length, assets.length);
-  assert.equal(descriptors.some((descriptor) => descriptor.familyId !== undefined), false);
+  assert.equal(descriptors.length, assets.length + 2);
+  assert.equal(
+    descriptors.filter((descriptor) => descriptor.familyId !== undefined).length,
+    2
+  );
   assert.equal(
     descriptors.flatMap(validateKpEditorAnimationDescriptor).length,
     0
@@ -64,7 +67,7 @@ test("editor catalog projection attaches exact concrete family provenance", () =
     projectKpAnimationAssetsToEditorDescriptors({
       assets: [asset],
       families: [family]
-    })[0],
+    }).find((descriptor) => descriptor.familyId === family.id),
     {
       id: "editor-animation.sample.animation.solve-x.both-sides",
       kind: "editor-animation-descriptor",

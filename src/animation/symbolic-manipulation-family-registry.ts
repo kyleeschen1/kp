@@ -379,7 +379,8 @@ function createAlgebraBothSidesFamily(): KpSymbolicManipulationFamily {
     runtimeSamples: [
       {
         id: "sample.animation.solve-x.both-sides",
-        animationId: "animation.solve-x",
+        animationId: "animation.linear-solve.solve-x",
+        availability: "concrete",
         renderTargetKinds: ["equation"],
         transformationDefinitionIds: [
           "definition.symbolic.algebra.subtract-both-sides"
@@ -400,7 +401,7 @@ function createAlgebraBothSidesFamily(): KpSymbolicManipulationFamily {
             level: "qualitative"
           }
         ],
-        sampleAssetIds: ["animation.solve-x"],
+        sampleAssetIds: ["animation.linear-solve.solve-x"],
         summary:
           "Both-sides operations preserve the solution set even when the rendered equation changes."
       }
@@ -658,7 +659,8 @@ function createAlgebraCancelCombineFamily(): KpSymbolicManipulationFamily {
     runtimeSamples: [
       {
         id: "sample.animation.solve-x.cancel-additive-inverses",
-        animationId: "animation.solve-x",
+        animationId: "animation.linear-solve.solve-x",
+        availability: "concrete",
         renderTargetKinds: ["equation"],
         transformationDefinitionIds: [
           "definition.symbolic.algebra.cancel-additive-inverses"
@@ -680,7 +682,7 @@ function createAlgebraCancelCombineFamily(): KpSymbolicManipulationFamily {
             level: "strict"
           }
         ],
-        sampleAssetIds: ["animation.solve-x"],
+        sampleAssetIds: ["animation.linear-solve.solve-x"],
         summary:
           "Cancellation and combine-like-terms keep equivalent expressions or equation sides on the same value trace."
       }

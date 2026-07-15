@@ -17,12 +17,15 @@ import {
 
 test("editor renders every concrete asset through a stable descriptor selection", () => {
   const descriptors = createKpEditorAnimationLibrary();
-  const selected = descriptors[13]!;
+  const selected = descriptors.find(
+    (descriptor) => descriptor.animationId ===
+      "animation.graph.surface-mode.mesh-to-donut"
+  )!;
   const html = renderEditorDocument(createInitialEditorDocument(), {
     editorAnimationDescriptorId: selected.id
   });
 
-  assert.equal(descriptors.length, 20);
+  assert.equal(descriptors.length, 22);
   assert.match(html, /data-kp-editor-animation-library/);
   assert.match(
     html,

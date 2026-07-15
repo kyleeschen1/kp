@@ -431,7 +431,10 @@ function createAnimationAssetAgendaRowsForAssets(input: {
           ...katexVisualPreviewFields(katexVisualSample)
         ],
         previewLinks: editorDescriptors
-          .filter((descriptor) => descriptor.animationId === animation.id)
+          .filter(
+            (descriptor) =>
+              descriptor.id === `editor-animation.${animation.id}`
+          )
           .map((descriptor) => ({
             label: `Open ${descriptor.title} in editor`,
             href: kpEditorAnimationSelectionHref({

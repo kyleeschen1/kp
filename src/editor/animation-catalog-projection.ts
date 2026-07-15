@@ -24,13 +24,10 @@ export function projectKpAnimationAssetsToEditorDescriptors(input: {
       (resolution) => resolution.animationId === asset.id
     );
 
-    if (matches.length === 0) {
-      return [descriptorForAsset(asset)];
-    }
-
     // One concrete asset may demonstrate multiple family transformations. Each
-    // association remains separately addressable without duplicating the asset.
-    return matches.flatMap((resolution) => {
+    // association remains separately addressable while the stable asset-level
+    // descriptor remains available across later family promotions.
+    return [descriptorForAsset(asset), ...matches.flatMap((resolution) => {
       const family = familiesById.get(resolution.familyId);
       const sample = family?.runtimeSamples.find(
         (candidate) => candidate.id === resolution.sampleId
@@ -39,7 +36,7 @@ export function projectKpAnimationAssetsToEditorDescriptors(input: {
       return family === undefined || sample === undefined
         ? []
         : [descriptorForFamilySample(asset, family, sample)];
-    });
+    })];
   });
 }
 

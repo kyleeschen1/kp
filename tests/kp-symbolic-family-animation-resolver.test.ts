@@ -10,6 +10,46 @@ import {
 import {
   createKpSymbolicManipulationFamily
 } from "../src/animation/symbolic-manipulation-family.ts";
+import {
+  createSymbolicManipulationFamilyRegistry
+} from "../src/animation/symbolic-manipulation-family-registry.ts";
+import { createKpAnimationAssets } from "../src/animation/catalog.ts";
+
+test("canonical solve-x asset resolves both algebra family samples", () => {
+  const assets = createKpAnimationAssets();
+  const families = createSymbolicManipulationFamilyRegistry();
+  const solveXResolutions = createKpSymbolicFamilyAnimationResolutions({
+    families,
+    assets
+  }).filter(
+    (resolution) =>
+      resolution.animationId === "animation.linear-solve.solve-x"
+  );
+
+  assert.deepEqual(
+    solveXResolutions.map((resolution) => [
+      resolution.familyId,
+      resolution.sampleId,
+      resolution.status
+    ]),
+    [
+      [
+        "family.algebra.both-sides",
+        "sample.animation.solve-x.both-sides",
+        "resolved"
+      ],
+      [
+        "family.algebra.cancel-combine",
+        "sample.animation.solve-x.cancel-additive-inverses",
+        "resolved"
+      ]
+    ]
+  );
+  assert.equal(
+    checkKpSymbolicFamilyAnimationReferenceClosure({ families, assets }).passed,
+    true
+  );
+});
 
 test("family animation resolver requires explicit concrete availability and exact ids", () => {
   const asset = createLinearSolveAnimationAsset();

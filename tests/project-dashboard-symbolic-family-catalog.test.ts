@@ -139,7 +139,8 @@ test("algebra both-sides family promotes operation definitions and sample hooks"
   assert.deepEqual(family.runtimeSamples, [
     {
       id: "sample.animation.solve-x.both-sides",
-      animationId: "animation.solve-x",
+      animationId: "animation.linear-solve.solve-x",
+      availability: "concrete",
       renderTargetKinds: ["equation"],
       transformationDefinitionIds: [
         "definition.symbolic.algebra.subtract-both-sides"
@@ -160,7 +161,7 @@ test("algebra both-sides family promotes operation definitions and sample hooks"
           level: "qualitative"
         }
       ],
-      sampleAssetIds: ["animation.solve-x"],
+      sampleAssetIds: ["animation.linear-solve.solve-x"],
       summary:
         "Both-sides operations preserve the solution set even when the rendered equation changes."
     }
@@ -309,7 +310,8 @@ test("algebra cancel-combine family promotes inverse and like-term semantics", (
   assert.deepEqual(family.runtimeSamples, [
     {
       id: "sample.animation.solve-x.cancel-additive-inverses",
-      animationId: "animation.solve-x",
+      animationId: "animation.linear-solve.solve-x",
+      availability: "concrete",
       renderTargetKinds: ["equation"],
       transformationDefinitionIds: [
         "definition.symbolic.algebra.cancel-additive-inverses"
@@ -331,7 +333,7 @@ test("algebra cancel-combine family promotes inverse and like-term semantics", (
           level: "strict"
         }
       ],
-      sampleAssetIds: ["animation.solve-x"],
+      sampleAssetIds: ["animation.linear-solve.solve-x"],
       summary:
         "Cancellation and combine-like-terms keep equivalent expressions or equation sides on the same value trace."
     }
@@ -1217,8 +1219,8 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
       ["Ready families", "18"],
       ["Transform definitions", "71"],
       ["Runtime sample refs", "20"],
-      ["Concrete runtime samples", "0"],
-      ["Planned runtime samples", "20"],
+      ["Concrete runtime samples", "2"],
+      ["Planned runtime samples", "18"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],
       ["Flashcard hooks", "18"],
