@@ -172,6 +172,16 @@ function createLinearSolveTransformations(): readonly KpSemanticTransformation[]
           level: "strict"
         }
       ],
+      correspondenceMap: {
+        id: `${ids.subtract}.correspondence`,
+        records: [
+          richRecord("x-persists", "identity", [selectorId(ids.initial, "lhs.x")], [selectorId(ids.afterSubtract, "lhs.x")], "x persists."),
+          richRecord("left-constant-persists", "identity", [selectorId(ids.initial, "lhs.plus3")], [selectorId(ids.afterSubtract, "lhs.plus3")], "+3 persists before cancellation."),
+          richRecord("relation-persists", "identity", [selectorId(ids.initial, "equals")], [selectorId(ids.afterSubtract, "equals")], "Equality persists."),
+          richRecord("right-constant-persists", "identity", [selectorId(ids.initial, "rhs.7")], [selectorId(ids.afterSubtract, "rhs.7")], "7 persists."),
+          richRecord("inverse-terms-enter", "introduction", [], [selectorId(ids.afterSubtract, "lhs.minus3"), selectorId(ids.afterSubtract, "rhs.minus3")], "The balanced inverse terms enter together.")
+        ]
+      },
       correspondence: [
         correspondence(ids.initial, "lhs.x", ids.afterSubtract, "lhs.x"),
         correspondence(ids.initial, "lhs.plus3", ids.afterSubtract, "lhs.plus3"),
@@ -193,6 +203,16 @@ function createLinearSolveTransformations(): readonly KpSemanticTransformation[]
           level: "strict"
         }
       ],
+      correspondenceMap: {
+        id: `${ids.cancel}.correspondence`,
+        records: [
+          richRecord("x-persists", "identity", [selectorId(ids.afterSubtract, "lhs.x")], [selectorId(ids.leftSimplified, "lhs.x")], "x persists."),
+          richRecord("left-inverses-cancel", "cancelation", [selectorId(ids.afterSubtract, "lhs.plus3"), selectorId(ids.afterSubtract, "lhs.minus3")], [], "+3 and -3 cancel."),
+          richRecord("relation-persists", "identity", [selectorId(ids.afterSubtract, "equals")], [selectorId(ids.leftSimplified, "equals")], "Equality persists."),
+          richRecord("right-seven-persists", "identity", [selectorId(ids.afterSubtract, "rhs.7")], [selectorId(ids.leftSimplified, "rhs.7")], "7 persists."),
+          richRecord("right-inverse-persists", "identity", [selectorId(ids.afterSubtract, "rhs.minus3")], [selectorId(ids.leftSimplified, "rhs.minus3")], "The right inverse term persists until evaluation.")
+        ]
+      },
       correspondence: [
         correspondence(ids.afterSubtract, "lhs.x", ids.leftSimplified, "lhs.x"),
         correspondence(ids.afterSubtract, "equals", ids.leftSimplified, "equals"),
@@ -219,6 +239,14 @@ function createLinearSolveTransformations(): readonly KpSemanticTransformation[]
           level: "strict"
         }
       ],
+      correspondenceMap: {
+        id: `${ids.simplify}.correspondence`,
+        records: [
+          richRecord("x-persists", "identity", [selectorId(ids.leftSimplified, "lhs.x")], [selectorId(ids.solved, "lhs.x")], "x persists."),
+          richRecord("relation-persists", "identity", [selectorId(ids.leftSimplified, "equals")], [selectorId(ids.solved, "equals")], "Equality persists."),
+          richRecord("constants-merge", "fan-in", [selectorId(ids.leftSimplified, "rhs.7"), selectorId(ids.leftSimplified, "rhs.minus3")], [selectorId(ids.solved, "rhs.4")], "7 and -3 derive 4.")
+        ]
+      },
       correspondence: [
         correspondence(ids.leftSimplified, "lhs.x", ids.solved, "lhs.x"),
         correspondence(ids.leftSimplified, "equals", ids.solved, "equals")
@@ -390,4 +418,18 @@ function correspondence(
     targetSelectorId: `${targetObjectId}.${targetSelectorPath}`,
     preserves: ["identity", "role"] as const
   };
+}
+
+function selectorId(objectId: string, selectorPath: string): string {
+  return `${objectId}.${selectorPath}`;
+}
+
+function richRecord(
+  id: string,
+  relation: "identity" | "introduction" | "cancelation" | "fan-in",
+  sourceSelectorIds: readonly string[],
+  targetSelectorIds: readonly string[],
+  summary: string
+) {
+  return { id, relation, sourceSelectorIds, targetSelectorIds, summary };
 }

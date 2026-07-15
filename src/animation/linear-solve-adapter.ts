@@ -148,6 +148,9 @@ function attachLinearSolveDefinitionId(
     sourceObjectIds: transformation.sourceObjectIds,
     targetObjectIds: transformation.targetObjectIds,
     preserves: transformation.preserves,
+    ...(transformation.correspondenceMap === undefined
+      ? {}
+      : { correspondenceMap: transformation.correspondenceMap }),
     correspondence: transformation.correspondence,
     ...(transformation.assumptions === undefined
       ? {}

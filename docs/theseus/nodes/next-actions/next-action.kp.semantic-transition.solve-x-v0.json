@@ -1,0 +1,109 @@
+{
+  "id": "next-action.kp.semantic-transition.solve-x-v0",
+  "kind": "next-action",
+  "title": "Migrate solve-x semantic motion",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Solve-x now renders measured selector-level semantic motion for persistence, introduction, cancellation, and fan-in on the shared reversible editor clock.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-incremental-transition-authoring-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.semantic-transition.solve-x-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-incremental-transition-compiler-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Approved thirty-slice implementation plan and boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/linear-solve-asset.ts",
+      "summary": "Adds complete rich lifecycle correspondence for all three solve-x transformations."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/asset.ts",
+      "summary": "Preserves rich correspondence maps across AnimationAsset cloning."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/solve-x-semantic-latex.ts",
+      "summary": "Defines validated selector-annotated KaTeX for all four solve-x states."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Measures and applies semantic token geometry in the persistent equation stage with forward and rewind support."
+    },
+    {
+      "kind": "file",
+      "path": "tests/solve-x-semantic-latex.test.ts",
+      "summary": "Covers lifecycle completeness and selector annotation closure."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Verifies active semantic token motion in the KP editor."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-incremental-transition-authoring-v0",
+      "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Migrate solve-x semantic motion can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, and test TypeScript projects.",
+      "checkedAt": "2026-07-15T20:29:58.605Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full unit and integration suite.",
+      "checkedAt": "2026-07-15T20:29:58.666Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph and event integrity.",
+      "checkedAt": "2026-07-15T20:29:58.731Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "checkedAt": "2026-07-15T20:29:58.813Z",
+      "scope": "All 19 editor animation browser scenarios."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Solve-x now renders measured selector-level semantic motion for persistence, introduction, cancellation, and fan-in on the shared reversible editor clock."
+  }
+}

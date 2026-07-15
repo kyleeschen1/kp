@@ -1023,6 +1023,10 @@ function cloneKpSemanticTransformation(
     sourceObjectIds: transformation.sourceObjectIds,
     targetObjectIds: transformation.targetObjectIds,
     preserves: transformation.preserves,
+    // Renderer-facing asset copies must retain authored lifecycle semantics.
+    ...(transformation.correspondenceMap === undefined
+      ? {}
+      : { correspondenceMap: transformation.correspondenceMap }),
     correspondence: transformation.correspondence,
     ...(transformation.assumptions === undefined
       ? {}

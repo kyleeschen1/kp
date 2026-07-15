@@ -54,9 +54,21 @@ test("selected editor animation controls play, pause, seek, step, rewind, and re
     /\.forward\.1$/
   );
   await expect(equationStage.locator("[data-kp-editor-equation-source]"))
-    .toHaveCSS("opacity", "0.5");
+    .toHaveCSS("opacity", "1");
   await expect(equationStage.locator("[data-kp-editor-equation-target]"))
-    .toHaveCSS("opacity", "0.5");
+    .toHaveCSS("opacity", "1");
+  const semanticTransition = equationStage.locator(
+    "[data-kp-editor-equation-transition-id]"
+  );
+  await expect(semanticTransition)
+    .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
+  await expect(semanticTransition)
+    .toHaveAttribute("data-kp-editor-equation-semantic-progress", "0.5");
+  await expect(
+    equationStage.locator(
+      '[data-kp-editor-equation-source] [data-kp-motion-id*="after-subtract.lhs.plus3"]'
+    )
+  ).toHaveCSS("opacity", "0.5");
   await expect(equationStage.locator("[data-kp-editor-equation-transition-id]"))
     .toHaveAttribute("data-kp-editor-equation-motif", "cancelation");
   await expect(equationStage.locator("[data-kp-editor-equation-motif-label]"))

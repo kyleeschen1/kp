@@ -139,7 +139,8 @@
     {
       "id": "next-action.kp.semantic-transition.solve-x-v0",
       "title": "Migrate solve-x semantic motion",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.semantic-transition.solve-x-v0 in KP Semantic Incremental Transition And LLM Authoring V0.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.fraction-v0",

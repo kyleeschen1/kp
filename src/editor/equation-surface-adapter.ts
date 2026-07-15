@@ -3,7 +3,16 @@ import {
   type KpAnimationAsset
 } from "../animation/asset.ts";
 import { createKpAnimationAssets } from "../animation/catalog.ts";
-import { renderLatexToHtml } from "../rendering/katex-adapter.ts";
+import {
+  renderLatexToHtml,
+  renderSelectorAnnotatedLatexToHtml
+} from "../rendering/katex-adapter.ts";
+import {
+  measureKpEquationTransitionGeometry,
+  type KpMeasuredEquationTransitionGeometry
+} from "../rendering/equation-motion-dom.ts";
+import { compileKpSemanticEquationTransitionResult } from "../rendering/semantic-equation-transition-compiler.ts";
+import type { KpSelectorAnnotatedLatex } from "../rendering/selector-annotated-latex.ts";
 import {
   projectKpEditorEquationRuntimeFrame,
   type KpEditorEquationRuntimeFrameProjection,
@@ -22,8 +31,17 @@ import {
   createKpEditorSolveXSharedPlayerFrame,
   type KpEditorSolveXSharedPlayerFrame
 } from "./solve-x-shared-player.ts";
+import {
+  applyKpEditorSemanticEquationTokenFrame,
+  createKpEditorSemanticEquationTokenFrame
+} from "./semantic-equation-player-adapter.ts";
+import { createKpSolveXSelectorAnnotatedLatex } from "./solve-x-semantic-latex.ts";
 
 const animationCatalog = createKpAnimationAssets();
+const semanticGeometryCache = new WeakMap<HTMLElement, {
+  readonly contentKey: string;
+  readonly geometries: ReadonlyMap<number, KpMeasuredEquationTransitionGeometry>;
+}>();
 
 export interface KpEditorEquationStageFrame {
   readonly stageIdentityKey: string;
@@ -119,7 +137,7 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
     stage.dataset["kpEditorEquationLocalProgress"] = String(frame.localProgress);
     stage.style.setProperty("--kp-editor-equation-progress", String(frame.easedProgress));
     syncSolveXSequence(stage, frame.solveX);
-    frame.projection.transitions.forEach((_transition, index) => {
+    frame.projection.transitions.forEach((transition, index) => {
       const transitionElement = stage?.querySelector<HTMLElement>(
         `[data-kp-editor-equation-transition-index="${index}"]`
       );
@@ -129,14 +147,28 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       }
 
       transitionElement.dataset["kpEditorEquationMotif"] = motif.kind;
-      applyLayerMotion(
-        transitionElement.querySelector<HTMLElement>("[data-kp-editor-equation-source]"),
-        motif.source
-      );
-      applyLayerMotion(
-        transitionElement.querySelector<HTMLElement>("[data-kp-editor-equation-target]"),
-        motif.target
-      );
+      const semanticMotionApplied = transition.semanticStatus === "ready" &&
+        applySemanticTokenMotion({
+          stage,
+          transitionElement,
+          transitionIndex: index,
+          animation,
+          state,
+          frame
+        });
+      transitionElement.dataset["kpEditorEquationSemanticMotion"] = semanticMotionApplied
+        ? "active"
+        : "fallback";
+      if (!semanticMotionApplied) {
+        applyLayerMotion(
+          transitionElement.querySelector<HTMLElement>("[data-kp-editor-equation-source]"),
+          motif.source
+        );
+        applyLayerMotion(
+          transitionElement.querySelector<HTMLElement>("[data-kp-editor-equation-target]"),
+          motif.target
+        );
+      }
       transitionElement.querySelectorAll<HTMLElement>("[data-kp-editor-equation-focus-token]")
         .forEach((token) => {
           token.style.setProperty("--kp-editor-equation-focus-progress", String(motif.progress));
@@ -202,11 +234,115 @@ function replaceStageContent(
 function renderEquationObjects(
   objects: readonly KpEditorEquationObjectProjection[]
 ): string {
-  return objects.map((object) => `
+  return objects.map((object) => {
+    const annotated = annotatedLatexForObject(object);
+    return `
     <div class="editor-equation-stage__object" data-kp-editor-equation-object-id="${escapeHtml(object.id)}">
-      ${renderLatexToHtml(object.latex)}
+      ${annotated === undefined
+        ? renderLatexToHtml(object.latex)
+        : renderSelectorAnnotatedLatexToHtml(annotated)}
     </div>
-  `).join("");
+  `;
+  }).join("");
+}
+
+function applySemanticTokenMotion(input: {
+  readonly stage: HTMLElement;
+  readonly transitionElement: HTMLElement;
+  readonly transitionIndex: number;
+  readonly animation: KpAnimationAsset;
+  readonly state: KpEditorAnimationPlayerState;
+  readonly frame: KpEditorEquationStageFrame;
+}): boolean {
+  let geometry = semanticGeometryCache.get(input.stage)?.contentKey === input.frame.contentKey
+    ? semanticGeometryCache.get(input.stage)?.geometries.get(input.transitionIndex)
+    : undefined;
+
+  if (geometry === undefined) {
+    const transformation = input.animation.transformations.find(
+      (candidate) => candidate.id === input.frame.projection.transitions[input.transitionIndex]?.id
+    );
+    if (transformation === undefined) return false;
+    const compiled = compileKpSemanticEquationTransitionResult({
+      transformation,
+      bundle: input.animation.bundle
+    });
+    if (compiled.status !== "semantic" || compiled.ir === undefined) return false;
+
+    const sourceAnnotated = annotatedLatexForStates(compiled.ir.source);
+    const targetAnnotated = annotatedLatexForStates(compiled.ir.target);
+    if (sourceAnnotated === undefined || targetAnnotated === undefined) return false;
+    const displayedSource = input.transitionElement.querySelector<HTMLElement>(
+      "[data-kp-editor-equation-source]"
+    );
+    const displayedTarget = input.transitionElement.querySelector<HTMLElement>(
+      "[data-kp-editor-equation-target]"
+    );
+    if (displayedSource === null || displayedTarget === null) return false;
+
+    // IR remains forward-oriented; rewind swaps the displayed roots and samples
+    // semantic progress backward, so both directions share exactly one geometry.
+    geometry = measureKpEquationTransitionGeometry({
+      ir: compiled.ir,
+      sourceRoot: input.state.direction === "forward" ? displayedSource : displayedTarget,
+      targetRoot: input.state.direction === "forward" ? displayedTarget : displayedSource,
+      sourceAnnotated,
+      targetAnnotated
+    });
+    const existing = semanticGeometryCache.get(input.stage);
+    const geometries = existing?.contentKey === input.frame.contentKey
+      ? new Map(existing.geometries)
+      : new Map<number, KpMeasuredEquationTransitionGeometry>();
+    geometries.set(input.transitionIndex, geometry);
+    semanticGeometryCache.set(input.stage, {
+      contentKey: input.frame.contentKey,
+      geometries
+    });
+  }
+
+  resetLayerForSemanticMotion(input.transitionElement, "[data-kp-editor-equation-source]");
+  resetLayerForSemanticMotion(input.transitionElement, "[data-kp-editor-equation-target]");
+  const tokenFrame = createKpEditorSemanticEquationTokenFrame({
+    geometry,
+    playerState: input.state,
+    phaseLocalProgress: input.frame.localProgress
+  });
+  applyKpEditorSemanticEquationTokenFrame(geometry, tokenFrame);
+  input.transitionElement.dataset["kpEditorEquationSemanticProgress"] =
+    String(tokenFrame.semanticProgress);
+  return true;
+}
+
+function annotatedLatexForStates(
+  states: readonly { readonly objectId: string; readonly selectors: readonly { readonly id: string }[] }[]
+): readonly KpSelectorAnnotatedLatex[] | undefined {
+  const annotated = states.map((state) => createKpSolveXSelectorAnnotatedLatex({
+    objectId: state.objectId,
+    selectorIds: state.selectors.map((selector) => selector.id)
+  }));
+  return annotated.every((state): state is KpSelectorAnnotatedLatex => state !== undefined)
+    ? annotated
+    : undefined;
+}
+
+function annotatedLatexForObject(
+  object: KpEditorEquationObjectProjection
+): KpSelectorAnnotatedLatex | undefined {
+  return createKpSolveXSelectorAnnotatedLatex({
+    objectId: object.id,
+    selectorIds: object.selectors.map((selector) => selector.id)
+  });
+}
+
+function resetLayerForSemanticMotion(
+  transition: HTMLElement,
+  selector: string
+): void {
+  const layer = transition.querySelector<HTMLElement>(selector);
+  if (layer === null) return;
+  layer.style.opacity = "1";
+  layer.style.transform = "none";
+  layer.style.filter = "none";
 }
 
 function measureStage(stage: HTMLElement): void {
