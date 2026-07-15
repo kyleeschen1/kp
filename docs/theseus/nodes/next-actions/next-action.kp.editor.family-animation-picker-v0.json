@@ -1,0 +1,95 @@
+{
+  "id": "next-action.kp.editor.family-animation-picker-v0",
+  "kind": "next-action",
+  "title": "Group the editor animation picker by family",
+  "status": "resolved",
+  "domain": "kp.editor",
+  "summary": "Added a grouped editor animation picker model and accessible select/listbox markup that organizes family-backed entries by domain and remaining concrete assets by supported surface while preserving one stable flat keyboard index.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.concrete-animation-library-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.editor.family-animation-picker-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-symbolic-manipulation-library-loop-closeout.md",
+      "summary": "Closed symbolic library loop and recommended concrete renderer and editor adoption."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "KP semantic runtime and dashboard editor direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-animation-catalog.ts",
+      "summary": "Current fixture-oriented editor animation catalog to evolve into a family-backed surface."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Concrete KpAnimationAsset registry to project into the editor."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-picker.ts",
+      "summary": "Groups and renders concrete editor animation descriptor choices."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-animation-picker.test.ts",
+      "summary": "Covers catalog grouping, family-domain promotion, selection, markup, and duplicate ids."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.editor.concrete-animation-library-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Group the editor animation picker by family can be completed inside KP editor concrete animation library v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved KP editor concrete-animation slices.",
+    "Use existing KpAnimationAsset, symbolic family, runtime-frame, visual-frame, KaTeX, graph, dashboard, and editor contracts.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not build media encoders, live CAS or LSP integrations, curriculum generation, or dynamic package loading.",
+    "Do not create a separate graph animation clock or broadly redesign the editor.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-animation-picker.test.ts tests/kp-editor-animation-surface-dispatch.test.ts tests/kp-editor-animation-catalog-projection.test.ts",
+      "status": "passed",
+      "scope": "grouped editor animation picker",
+      "checkedAt": "2026-07-15T00:51:51.184Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-15T00:51:51.225Z",
+      "scope": "picker and descriptor integration"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a grouped editor animation picker model and accessible select/listbox markup that organizes family-backed entries by domain and remaining concrete assets by supported surface while preserving one stable flat keyboard index."
+  }
+}
