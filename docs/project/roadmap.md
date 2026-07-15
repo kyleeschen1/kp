@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-14
+Last Updated: 2026-07-15
 Status: active
 Active Thread: `threads/semantic-runtime.md`
 
@@ -35,19 +35,22 @@ available in the KP editor; it has now closed its 30-slice implementation loop.
 
 ## Active Focus
 
-**KP editor animation runtime mounting.** The concrete animation library loop
-now exposes 24 catalog assets plus 17 family-backed selections as 41 stable
-editor descriptors. The next focus is to mount visible equation and graph
-runtime-frame consumers for the selected descriptor, using solve-x as the
-measured KaTeX reference and the derivative/tangent, area, vector, and
-projection samplers as graph references.
+**Visible animation authoring on the shared runtime.** The concrete animation
+library still exposes 24 catalog assets plus 17 family-backed selections as 41
+stable editor descriptors. The visible-player loop now mounts every current
+pure-equation descriptor in a KaTeX stage and mounts the derivative/tangent,
+integral/area, vector-scale, and dot/projection families in a shared semantic
+SVG graph viewport. The same play, pause, scrub, seek, step, rewind, and reset
+session drives every mounted surface.
 
-The active execution contract is
-`run-contract.kp.editor.visible-animation-player-v0`. It owns the approved
-30-slice path from a renderer-neutral player state and shared playback session
-through visible KaTeX equation motion, SVG graph motion, browser quality gates,
-and loop closeout. A concrete selection is not considered visually delivered
-until the editor can play, scrub, seek, and rewind its rendered frame.
+The execution contract
+`run-contract.kp.editor.visible-animation-player-v0` closed its approved
+30-slice path on 2026-07-15. Its closeout is recorded in
+`reviews/2026-07-15-kp-editor-visible-animation-player-loop-closeout.md`.
+The next focus is to use the visible player as an authoring pressure test:
+promote the six remaining planned symbolic samples, deepen representation-aware
+matrix and graph composition, and expose paused-frame drill-down actions without
+creating a second clock or renderer-owned semantics.
 
 The doctrine, composition laws, authoring guide, core interfaces, executable
 law checks, pause-time inspection, drill-down hooks, flashcard specs, external
@@ -69,9 +72,20 @@ The completed concrete-library tranche delivered:
 5. expose vector, dot/projection, matrix-vector, and composed matrix-matrix
    examples through the same parent runtime clock.
 
-The next tranche should mount those selected assets as visible moving editor
-cards, add representative browser visual checks, and then promote the six
-remaining planned family samples.
+The completed visible-player tranche delivered:
+
+1. renderer-neutral player state, one shared playback session, lifecycle-safe
+   controls, surface dispatch, and live diagnostics;
+2. a generic KaTeX equation stage with reusable cancelation, simplification,
+   wrap, artifact replacement, and relation-flip motifs;
+3. visible equation coverage for solve-x, fractions, exponents, radicals,
+   function wrapping, distribution/factoring, inequalities, calculus forms,
+   and matrix products;
+4. a shared SVG graph viewport with live vector scaling, tangent motion, area
+   accumulation, dot projection, and synchronized mathematical readouts;
+5. exhaustive browser coverage for all 30 pure-equation descriptors at start,
+   midpoint, and end plus focused visible motion checks for all four graph
+   animations.
 
 The goal remains practical: a KP intermediate representation with composition
 laws inspired by category theory and FRP, not a broad abstract category theory

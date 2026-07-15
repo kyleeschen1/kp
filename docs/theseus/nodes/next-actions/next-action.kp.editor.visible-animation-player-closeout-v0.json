@@ -1,0 +1,104 @@
+{
+  "id": "next-action.kp.editor.visible-animation-player-closeout-v0",
+  "kind": "next-action",
+  "title": "Close visible animation player loop",
+  "status": "resolved",
+  "domain": "kp.editor",
+  "summary": "Closed the 30-slice visible animation player loop with an evidence-backed review, updated roadmap, explicit residual risks, and a prioritized next tranche.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.visible-animation-player-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.editor.visible-animation-player-closeout-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.editor.visible-animation-player-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-editor-concrete-animation-library-loop-closeout.md",
+      "summary": "Closeout recommends mounting selected equation and graph runtime-frame consumers."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap names visible editor animation runtime mounting as the active focus."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-kp-editor-visible-animation-player-loop-closeout.md",
+      "summary": "Loop outcomes, animation inventory, verification, risks, commits, and recommendations."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap now records the visible player as delivered and names the next authoring pressure tests."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.editor.visible-animation-player-v0",
+      "next-action.kp.editor.visible-animation-quality-gate-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.editor.visible-animation-quality-gate-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Close visible animation player loop can be completed inside KP editor visible animation player v0 loop."
+  ],
+  "allowedWork": [
+    "Only implement the approved visible editor animation player slices.",
+    "Reuse the existing KpAnimationAsset runtime clock, semantic bundles, visual-frame adapters, KaTeX ownership rules, and graph samplers.",
+    "Add focused editor renderers, controls, browser checks, and closeout evidence."
+  ],
+  "disallowedWork": [
+    "Do not create a second animation clock or duplicate semantic animation assets.",
+    "Do not add media encoders, live CAS or LSP integrations, curriculum generation, dynamic package loading, or a broad editor redesign.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "885 unit and server tests from the final quality gate",
+      "checkedAt": "2026-07-15T19:05:21.796Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production build from the final quality gate",
+      "checkedAt": "2026-07-15T19:05:21.863Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "19 visible animation Chromium scenarios from the final quality gate",
+      "checkedAt": "2026-07-15T19:05:21.925Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph and event log",
+      "checkedAt": "2026-07-15T19:05:21.984Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-15T19:05:22.039Z",
+      "scope": "run-contract hygiene"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Closed the 30-slice visible animation player loop with an evidence-backed review, updated roadmap, explicit residual risks, and a prioritized next tranche."
+  }
+}

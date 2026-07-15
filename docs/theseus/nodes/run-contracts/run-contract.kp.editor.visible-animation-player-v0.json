@@ -2,7 +2,7 @@
   "id": "run-contract.kp.editor.visible-animation-player-v0",
   "kind": "run-contract",
   "title": "KP editor visible animation player v0 loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.editor",
   "sourceRefs": [
     {
@@ -38,7 +38,7 @@
     "Do not stage unrelated dirty worktree files."
   ],
   "goal": "Mount the approved concrete family-backed animations as visible, playable, scrubbable, and rewindable editor cards on the shared KP runtime clock.",
-  "target": "next-action.kp.editor.visible-animation-quality-gate-v0",
+  "target": "next-action.kp.editor.visible-animation-player-closeout-v0",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -226,7 +226,9 @@
     {
       "id": "next-action.kp.editor.visible-animation-player-closeout-v0",
       "title": "Close visible animation player loop",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.visible-animation-player-closeout-v0 in KP editor visible animation player v0 loop.",
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }
