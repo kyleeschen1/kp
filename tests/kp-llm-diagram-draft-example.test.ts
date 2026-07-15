@@ -62,3 +62,18 @@ test("generated diagram mirrors local progress during rewind", () => {
   assert.match(svg, /data-kp-editor-diagram-progress="0.25"/);
   assert.match(svg, /data-kp-editor-diagram-direction="rewind"/);
 });
+
+test("diagram draft rejects model-authored SVG coordinates", () => {
+  const unsafe = structuredClone(acceptedGeneratedPipelineDiagramDraft) as unknown as Record<string, unknown>;
+  const objects = unsafe["objects"] as Array<Record<string, unknown>>;
+  const scene = objects[0]!["scene"] as Record<string, unknown>;
+  const nodes = scene["nodes"] as Array<Record<string, unknown>>;
+  nodes[0]!["x"] = 70;
+
+  const result = compileKpLlmAnimationDraft(unsafe);
+  assert.equal(result.status, "rejected");
+  assert.ok(result.diagnostics.some((diagnostic) =>
+    diagnostic.code === "draft.unknown-field" &&
+    diagnostic.path === "$.objects[0].scene.nodes[0].x"
+  ));
+});

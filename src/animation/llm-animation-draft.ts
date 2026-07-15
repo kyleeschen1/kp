@@ -4,7 +4,6 @@ import type {
 import type {
   KpTransformationPreservation
 } from "../semantic/asset-transformation.ts";
-import type { KpDiagramScene } from "../semantic/diagram-scene.ts";
 
 export const kpLlmAnimationDraftSchemaVersion =
   "kp.llm-animation-draft.v1" as const;
@@ -39,7 +38,44 @@ export interface KpLlmEquationDraftObject {
 export interface KpLlmDiagramDraftObject {
   readonly id: string;
   readonly title: string;
-  readonly scene: Omit<KpDiagramScene, "id" | "kind" | "title">;
+  readonly scene: KpLlmDiagramDraftScene;
+}
+
+export interface KpLlmDiagramDraftScene {
+  readonly nodes: readonly KpLlmDiagramDraftNode[];
+  readonly edges: readonly KpLlmDiagramDraftEdge[];
+  readonly groups: readonly KpLlmDiagramDraftGroup[];
+  readonly labels: readonly KpLlmDiagramDraftLabel[];
+}
+
+export interface KpLlmDiagramDraftNode {
+  readonly id: string;
+  readonly selectorId: string;
+  readonly shape: "rectangle" | "circle";
+  readonly label: string;
+}
+
+export interface KpLlmDiagramDraftEdge {
+  readonly id: string;
+  readonly selectorId: string;
+  readonly sourceNodeId: string;
+  readonly targetNodeId: string;
+  readonly directed: boolean;
+}
+
+export interface KpLlmDiagramDraftGroup {
+  readonly id: string;
+  readonly selectorId: string;
+  readonly nodeIds: readonly string[];
+  readonly label: string;
+}
+
+export interface KpLlmDiagramDraftLabel {
+  readonly id: string;
+  readonly selectorId: string;
+  readonly targetId: string;
+  readonly text: string;
+  readonly placement: "center" | "above" | "below";
 }
 
 export interface KpLlmAnimationDraftSelector {
@@ -190,9 +226,7 @@ function validateDiagramObject(
   expectNonEmptyString(value["title"], `${path}.title`, issues);
   const scene = value["scene"];
   if (!expectRecord(scene, `${path}.scene`, issues)) return;
-  rejectUnknownFields(scene, ["width", "height", "nodes", "edges", "groups", "labels"], `${path}.scene`, issues);
-  expectPositiveNumber(scene["width"], `${path}.scene.width`, issues);
-  expectPositiveNumber(scene["height"], `${path}.scene.height`, issues);
+  rejectUnknownFields(scene, ["nodes", "edges", "groups", "labels"], `${path}.scene`, issues);
   validateArray(scene["nodes"], `${path}.scene.nodes`, issues, validateDiagramNode, true);
   validateArray(scene["edges"], `${path}.scene.edges`, issues, validateDiagramEdge, false);
   validateArray(scene["groups"], `${path}.scene.groups`, issues, validateDiagramGroup, false);
@@ -201,14 +235,10 @@ function validateDiagramObject(
 
 function validateDiagramNode(value: unknown, path: string, issues: KpLlmAnimationDraftSchemaIssue[]): void {
   if (!expectRecord(value, path, issues)) return;
-  rejectUnknownFields(value, ["id", "selectorId", "shape", "x", "y", "width", "height", "label"], path, issues);
+  rejectUnknownFields(value, ["id", "selectorId", "shape", "label"], path, issues);
   expectNonEmptyString(value["id"], `${path}.id`, issues);
   expectNonEmptyString(value["selectorId"], `${path}.selectorId`, issues);
   expectEnum(value["shape"], new Set(["rectangle", "circle"]), `${path}.shape`, issues);
-  expectFiniteNumber(value["x"], `${path}.x`, issues);
-  expectFiniteNumber(value["y"], `${path}.y`, issues);
-  expectPositiveNumber(value["width"], `${path}.width`, issues);
-  expectPositiveNumber(value["height"], `${path}.height`, issues);
   expectNonEmptyString(value["label"], `${path}.label`, issues);
 }
 
@@ -224,12 +254,11 @@ function validateDiagramEdge(value: unknown, path: string, issues: KpLlmAnimatio
 
 function validateDiagramGroup(value: unknown, path: string, issues: KpLlmAnimationDraftSchemaIssue[]): void {
   if (!expectRecord(value, path, issues)) return;
-  rejectUnknownFields(value, ["id", "selectorId", "nodeIds", "label", "padding"], path, issues);
+  rejectUnknownFields(value, ["id", "selectorId", "nodeIds", "label"], path, issues);
   expectNonEmptyString(value["id"], `${path}.id`, issues);
   expectNonEmptyString(value["selectorId"], `${path}.selectorId`, issues);
   validateStringArray(value["nodeIds"], `${path}.nodeIds`, issues, true);
   expectNonEmptyString(value["label"], `${path}.label`, issues);
-  expectNonNegativeNumber(value["padding"], `${path}.padding`, issues);
 }
 
 function validateDiagramLabel(value: unknown, path: string, issues: KpLlmAnimationDraftSchemaIssue[]): void {
@@ -467,26 +496,6 @@ function expectPositiveNumber(
       code: "draft.value",
       message: `${path} must be a positive${integer ? " integer" : " number"}.`
     });
-  }
-}
-
-function expectFiniteNumber(
-  value: unknown,
-  path: string,
-  issues: KpLlmAnimationDraftSchemaIssue[]
-): void {
-  if (typeof value !== "number" || !Number.isFinite(value)) {
-    issues.push({ path, code: "draft.value", message: `${path} must be a finite number.` });
-  }
-}
-
-function expectNonNegativeNumber(
-  value: unknown,
-  path: string,
-  issues: KpLlmAnimationDraftSchemaIssue[]
-): void {
-  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
-    issues.push({ path, code: "draft.value", message: `${path} must be a non-negative number.` });
   }
 }
 

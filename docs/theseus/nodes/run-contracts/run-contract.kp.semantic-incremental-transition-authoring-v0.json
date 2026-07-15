@@ -2,7 +2,7 @@
   "id": "run-contract.kp.semantic-incremental-transition-authoring-v0",
   "kind": "run-contract",
   "title": "KP Semantic Incremental Transition And LLM Authoring V0",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
   "sourceRefs": [
     {
@@ -217,7 +217,9 @@
     {
       "id": "next-action.kp.semantic-transition.loop-closeout-v0",
       "title": "Run quality gate and close out loop",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.semantic-transition.loop-closeout-v0 in KP Semantic Incremental Transition And LLM Authoring V0.",
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }

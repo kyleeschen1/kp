@@ -6,6 +6,7 @@ import {
 import {
   validateKpLlmAnimationDraftSchema,
   type KpLlmAnimationDraft,
+  type KpLlmDiagramDraftScene,
   type KpLlmAnimationDraftSchemaIssue
 } from "./llm-animation-draft.ts";
 import {
@@ -117,7 +118,7 @@ function compileValidatedDraft(
       : createKpDiagramSceneSemanticObject(createKpDiagramScene({
           id: object.id,
           title: object.title,
-          ...object.scene
+          ...layoutDiagramDraftScene(object.scene)
         }))
   );
   const bundle = createKpAssetBundle({
@@ -252,6 +253,38 @@ function authoredProvenance(draft: KpLlmAnimationDraft) {
     kind: "authored" as const,
     sourceIds: [draft.id],
     summary: `Compiled from ${draft.schemaVersion}.`
+  };
+}
+
+function layoutDiagramDraftScene(
+  scene: KpLlmDiagramDraftScene
+): Omit<KpDiagramScene, "id" | "kind" | "title"> {
+  const width = 680;
+  const height = 320;
+  const nodeWidth = 120;
+  const nodeHeight = 64;
+  const left = 70;
+  const available = width - left * 2 - nodeWidth;
+  const step = scene.nodes.length <= 1 ? 0 : available / (scene.nodes.length - 1);
+
+  // Layout is deterministic compiler policy, never model-authored SVG geometry.
+  return {
+    width,
+    height,
+    nodes: scene.nodes.map((node, index) => ({
+      ...node,
+      x: left + step * index,
+      y: 120,
+      width: nodeWidth,
+      height: nodeHeight
+    })),
+    edges: scene.edges.map((edge) => ({ ...edge })),
+    groups: scene.groups.map((group) => ({
+      ...group,
+      nodeIds: [...group.nodeIds],
+      padding: 30
+    })),
+    labels: scene.labels.map((label) => ({ ...label }))
   };
 }
 

@@ -15,11 +15,9 @@ export const acceptedGeneratedPipelineDiagramDraft: KpLlmAnimationDraft = {
       id: "diagram.generated.pipeline.before",
       title: "Direct input to output",
       scene: {
-        width: 680,
-        height: 320,
         nodes: [
-          node("before.input", "before.input", 70, "Input"),
-          node("before.output", "before.output", 490, "Output")
+          node("before.input", "before.input", "Input"),
+          node("before.output", "before.output", "Output")
         ],
         edges: [edge("before.direct", "before.direct", "before.input", "before.output")],
         groups: [group("before.pipeline", "before.pipeline", ["before.input", "before.output"])],
@@ -30,12 +28,10 @@ export const acceptedGeneratedPipelineDiagramDraft: KpLlmAnimationDraft = {
       id: "diagram.generated.pipeline.after",
       title: "Input transformed into output",
       scene: {
-        width: 680,
-        height: 320,
         nodes: [
-          node("after.input", "after.input", 70, "Input"),
-          node("after.transform", "after.transform", 280, "Transform"),
-          node("after.output", "after.output", 490, "Output")
+          node("after.input", "after.input", "Input"),
+          node("after.transform", "after.transform", "Transform"),
+          node("after.output", "after.output", "Output")
         ],
         edges: [
           edge("after.into-transform", "after.into-transform", "after.input", "after.transform"),
@@ -80,8 +76,8 @@ export function createAcceptedGeneratedPipelineDiagramAnimationAsset(): KpAnimat
   return result.animation;
 }
 
-function node(id: string, selectorId: string, x: number, label: string) {
-  return { id, selectorId, shape: "rectangle" as const, x, y: 120, width: 120, height: 64, label };
+function node(id: string, selectorId: string, label: string) {
+  return { id, selectorId, shape: "rectangle" as const, label };
 }
 
 function edge(id: string, selectorId: string, sourceNodeId: string, targetNodeId: string) {
@@ -89,7 +85,7 @@ function edge(id: string, selectorId: string, sourceNodeId: string, targetNodeId
 }
 
 function group(id: string, selectorId: string, nodeIds: readonly string[]) {
-  return { id, selectorId, nodeIds, label: "Pipeline", padding: 30 };
+  return { id, selectorId, nodeIds, label: "Pipeline" };
 }
 
 function label(id: string, selectorId: string, targetId: string, text: string) {
