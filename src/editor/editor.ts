@@ -65,6 +65,12 @@ import {
 import {
   createLinearSolveRuntimeVisualFrameSample
 } from "../rendering/linear-solve-runtime-visual-sample.ts";
+import {
+  createKpEditorAnimationPlayerState
+} from "./animation-player-state.ts";
+import {
+  renderKpEditorAnimationPlayerShell
+} from "./animation-player-shell.ts";
 
 export function createInitialEditorDocument(): KpDocument {
   return createKpDocument({
@@ -228,6 +234,11 @@ function renderEditorAnimationLibrary(
   if (animation === undefined) {
     throw new Error(`Missing editor animation asset: ${selected.animationId}`);
   }
+  const player = createKpEditorAnimationPlayerState({
+    descriptor: selected,
+    animation,
+    catalog: assets
+  });
   const solveXVisualSample = animation.id === "animation.linear-solve.solve-x"
     ? createLinearSolveRuntimeVisualFrameSample({ progress: 0.5 })
     : undefined;
@@ -255,6 +266,7 @@ function renderEditorAnimationLibrary(
           ${selected.familyId === undefined ? "" : `<div><dt>Family</dt><dd>${escapeHtml(selected.familyId)}</dd></div>`}
         </dl>
       </div>
+      ${renderKpEditorAnimationPlayerShell({ descriptor: selected, player })}
       ${renderKpEditorAnimationDiagnostics(diagnostics)}
     </section>
   `;

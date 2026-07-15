@@ -1488,6 +1488,96 @@ h2 {
   font-weight: 700;
 }
 
+.editor-animation-player {
+  border-top: 1px solid #e3e8ef;
+  background: #ffffff;
+}
+
+.editor-animation-player__stage {
+  display: grid;
+  min-height: 12rem;
+  place-items: stretch;
+  padding: 1rem;
+  background:
+    radial-gradient(circle at 50% 40%, rgb(225 232 240 / 0.65), transparent 58%),
+    #f8fafc;
+}
+
+.editor-animation-player__surface {
+  display: grid;
+  min-height: 10rem;
+  place-items: center;
+  border: 1px dashed #b7c7d6;
+  border-radius: 10px;
+  color: #64748b;
+  background: rgb(255 255 255 / 0.78);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.editor-animation-player__controls {
+  display: grid;
+  gap: 0.7rem;
+  border-top: 1px solid #e3e8ef;
+  padding: 0.75rem 0.9rem;
+  background: #f8fafc;
+}
+
+.editor-animation-player__transport {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.editor-animation-player__transport button {
+  border: 1px solid #aebdcc;
+  border-radius: 6px;
+  padding: 0.42rem 0.65rem;
+  color: #27364a;
+  background: #ffffff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.editor-animation-player__transport button:first-child {
+  border-color: #1f4f5f;
+  color: #ffffff;
+  background: #1f4f5f;
+}
+
+.editor-animation-player__scrubber {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 2.8rem;
+  align-items: center;
+  gap: 0.6rem;
+  color: #526173;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.editor-animation-player__scrubber input {
+  width: 100%;
+  accent-color: #1f4f5f;
+}
+
+.editor-animation-player__scrubber output {
+  color: #334155;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.editor-animation-player__status {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
 .editor-animation-diagnostics {
   border-top: 1px solid #e3e8ef;
   background: #f8fafc;
