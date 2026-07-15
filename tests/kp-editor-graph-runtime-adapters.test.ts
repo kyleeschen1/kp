@@ -4,12 +4,14 @@ import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.ts";
 import { sampleLinearMapVectorGraphRuntimeFrame } from "../src/animation/graph-runtime-frame.ts";
 
-test("graph viewport consumes the existing vector runtime sampler", () => {
+test("vector scaling exposes concrete start, midpoint, and end coordinates", () => {
   const animation = createKpAnimationAssets().find((a) => a.id === "animation.graph.vector.linear-map-scale");
   assert.ok(animation);
-  const frame = sampleLinearMapVectorGraphRuntimeFrame({
-    animation,
-    runtimeFrame: sampleKpAnimationRuntimeFrame({ animation, progress: 0.5 })
-  });
-  assert.deepEqual(frame.currentCoordinates, [1.5, 4]);
+  const coordinates = [0, 0.5, 1].map((progress) =>
+    sampleLinearMapVectorGraphRuntimeFrame({
+      animation,
+      runtimeFrame: sampleKpAnimationRuntimeFrame({ animation, progress })
+    }).currentCoordinates
+  );
+  assert.deepEqual(coordinates, [[1, 2], [1.5, 4], [2, 6]]);
 });

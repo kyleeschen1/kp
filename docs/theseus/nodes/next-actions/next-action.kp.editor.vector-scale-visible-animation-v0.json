@@ -1,0 +1,102 @@
+{
+  "id": "next-action.kp.editor.vector-scale-visible-animation-v0",
+  "kind": "next-action",
+  "title": "Render vector scaling",
+  "status": "resolved",
+  "domain": "kp.editor",
+  "summary": "Rendered vector scaling as visible source, motion path, and live transformed vector geometry with concrete coordinate state.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.visible-animation-player-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.editor.vector-scale-visible-animation-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.editor.visible-animation-player-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-editor-concrete-animation-library-loop-closeout.md",
+      "summary": "Closeout recommends mounting selected equation and graph runtime-frame consumers."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap names visible editor animation runtime mounting as the active focus."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/graph-svg-viewport.ts",
+      "summary": "Vector renderer shows source ghost, path, and live coordinate-bearing vector."
+    },
+    {
+      "kind": "file",
+      "path": "src/styles.css",
+      "summary": "Source vector is visually distinguished from the animated vector."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-graph-runtime-adapters.test.ts",
+      "summary": "Start, midpoint, and end coordinates are exact."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Chromium proves the vector endpoint visibly travels."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.editor.visible-animation-player-v0",
+      "next-action.kp.editor.graph-animation-runtime-adapters-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.editor.graph-animation-runtime-adapters-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Render vector scaling can be completed inside KP editor visible animation player v0 loop."
+  ],
+  "allowedWork": [
+    "Only implement the approved visible editor animation player slices.",
+    "Reuse the existing KpAnimationAsset runtime clock, semantic bundles, visual-frame adapters, KaTeX ownership rules, and graph samplers.",
+    "Add focused editor renderers, controls, browser checks, and closeout evidence."
+  ],
+  "disallowedWork": [
+    "Do not create a second animation clock or duplicate semantic animation assets.",
+    "Do not add media encoders, live CAS or LSP integrations, curriculum generation, dynamic package loading, or a broad editor redesign.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-graph-runtime-adapters.test.ts",
+      "status": "passed",
+      "scope": "vector runtime frames",
+      "checkedAt": "2026-07-15T18:51:37.563Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript projects",
+      "checkedAt": "2026-07-15T18:51:37.634Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium --grep vector-scaling-visibly",
+      "status": "passed",
+      "checkedAt": "2026-07-15T18:51:37.699Z",
+      "scope": "visible vector travel in Chromium"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Rendered vector scaling as visible source, motion path, and live transformed vector geometry with concrete coordinate state."
+  }
+}

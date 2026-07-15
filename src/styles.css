@@ -1551,6 +1551,7 @@ h2 {
 
 .editor-graph-stage__path { stroke-dasharray: 5 5; }
 .editor-graph-stage__vector { stroke: #1f6f78; stroke-width: 4; }
+.editor-graph-stage__vector--ghost { opacity: 0.28; stroke-dasharray: 5 4; }
 .editor-graph-stage__vector--secondary { stroke: #9a5b1f; }
 .editor-graph-stage__tangent { stroke: #c2410c; stroke-width: 3; }
 .editor-graph-stage__projection { stroke: #c2410c; stroke-width: 2; stroke-dasharray: 4 3; }

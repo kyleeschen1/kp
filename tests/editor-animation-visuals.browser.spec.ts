@@ -472,3 +472,18 @@ test("graph runtime adapters render visible geometry for each graph animation", 
     }
   }
 });
+
+test("vector scaling visibly travels from its source to transformed coordinates", async ({
+  page
+}) => {
+  await page.goto("/?animation=editor-animation.sample.animation.vector-add-scale.basic");
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const vector = player.locator("[data-kp-editor-graph-vector]");
+  await expect(player.locator("[data-kp-editor-graph-vector-source]")).toBeVisible();
+  await expect(vector).toHaveAttribute("data-kp-editor-graph-vector-coordinates", "1,2");
+  const startY = Number(await vector.getAttribute("y2"));
+
+  await player.locator('[data-action="seek-editor-animation"]').fill("1");
+  await expect(vector).toHaveAttribute("data-kp-editor-graph-vector-coordinates", "2,6");
+  expect(Number(await vector.getAttribute("y2"))).toBeLessThan(startY);
+});

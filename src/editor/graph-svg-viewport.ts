@@ -99,9 +99,10 @@ function renderRuntimeContent(
   switch (animation.id) {
     case "animation.graph.vector.linear-map-scale": {
       const frame = sampleLinearMapVectorGraphRuntimeFrame({ animation, runtimeFrame: state.runtimeFrame });
+      const source = point(frame.sourceCoordinates);
       const end = point(frame.currentCoordinates);
       const target = point(frame.targetCoordinates);
-      return `<line class="editor-graph-stage__path" x1="${origin[0]}" y1="${origin[1]}" x2="${target[0]}" y2="${target[1]}" /><line class="editor-graph-stage__vector" data-kp-editor-graph-vector x1="${origin[0]}" y1="${origin[1]}" x2="${end[0]}" y2="${end[1]}" marker-end="url(#kp-editor-graph-arrow)" />`;
+      return `<line class="editor-graph-stage__path" x1="${source[0]}" y1="${source[1]}" x2="${target[0]}" y2="${target[1]}" /><line class="editor-graph-stage__vector editor-graph-stage__vector--ghost" data-kp-editor-graph-vector-source x1="${origin[0]}" y1="${origin[1]}" x2="${source[0]}" y2="${source[1]}" marker-end="url(#kp-editor-graph-arrow)" /><line class="editor-graph-stage__vector" data-kp-editor-graph-vector data-kp-editor-graph-vector-coordinates="${frame.currentCoordinates.join(",")}" x1="${origin[0]}" y1="${origin[1]}" x2="${end[0]}" y2="${end[1]}" marker-end="url(#kp-editor-graph-arrow)" />`;
     }
     case "animation.derivative-rules.tangent-graph": {
       const frame = sampleDerivativeTangentRuntimeFrame({ animation, runtimeFrame: state.runtimeFrame });
