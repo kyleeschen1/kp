@@ -1,0 +1,214 @@
+{
+  "id": "run-contract.kp.editor.concrete-animation-library-v0",
+  "kind": "run-contract",
+  "title": "KP editor concrete animation library v0 loop",
+  "status": "ready",
+  "domain": "kp.editor",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-symbolic-manipulation-library-loop-closeout.md",
+      "summary": "Closed symbolic library loop and recommended concrete renderer and editor adoption."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "KP semantic runtime and dashboard editor direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-animation-catalog.ts",
+      "summary": "Current fixture-oriented editor animation catalog to evolve into a family-backed surface."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Concrete KpAnimationAsset registry to project into the editor."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "allowedWork": [
+    "Only work on the approved KP editor concrete-animation slices.",
+    "Use existing KpAnimationAsset, symbolic family, runtime-frame, visual-frame, KaTeX, graph, dashboard, and editor contracts.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not build media encoders, live CAS or LSP integrations, curriculum generation, or dynamic package loading.",
+    "Do not create a separate graph animation clock or broadly redesign the editor.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "goal": "Make a verified first cohort of family-backed concrete animations discoverable, selectable, playable, scrubbable, and rewindable inside the KP editor.",
+  "target": "workflow.kp.dashboard-animation-system",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop if verification fails and the fix is not local to the active slice.",
+    "Stop if a slice requires a broad renderer or editor rewrite beyond the approved contract.",
+    "Stop if mathematical provenance or representation honesty cannot be established.",
+    "Stop when the approved slice list is exhausted."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.editor.record-concrete-animation-focus-v0",
+      "title": "Record concrete animation editor tranche",
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.record-concrete-animation-focus-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.editor.runtime-sample-status-v0",
+      "title": "Define executable runtime sample status",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.family-animation-resolver-v0",
+      "title": "Add family animation catalog resolution",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.runtime-sample-closure-law-v0",
+      "title": "Enforce runtime sample reference closure",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.animation-descriptor-v0",
+      "title": "Define renderer neutral editor animation descriptor",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.asset-catalog-projection-v0",
+      "title": "Project catalog assets into editor entries",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.animation-surface-dispatch-v0",
+      "title": "Dispatch editor cards by render surface",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.family-animation-picker-v0",
+      "title": "Group the editor animation picker by family",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.animation-selection-route-v0",
+      "title": "Add stable editor animation selection links",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.dashboard-animation-deep-links-v0",
+      "title": "Link dashboard animation samples into the editor",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.animation-diagnostics-v0",
+      "title": "Surface runtime and binding diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.solve-x-family-asset-v0",
+      "title": "Resolve solve x to canonical families and asset",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.solve-x-live-visual-frame-v0",
+      "title": "Bind solve x to live measured visual frames",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.katex-font-ownership-v0",
+      "title": "Stabilize KaTeX font readiness and DOM ownership",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.katex-overlay-handoff-v0",
+      "title": "Stabilize overlay handoff and fallback cleanup",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.solve-x-playback-laws-v0",
+      "title": "Lock solve x forward seek and rewind equivalence",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.fraction-simplification-animation-v0",
+      "title": "Add concrete fraction simplification animation",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.exponent-combine-animation-v0",
+      "title": "Add repeated factor exponent animation",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.radical-rewrite-animation-v0",
+      "title": "Add exponent to radical animation",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.function-wrap-animation-v0",
+      "title": "Add function wrapping animation",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.distribution-factoring-animation-v0",
+      "title": "Add distribution and factoring animation pair",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.inequality-sign-flip-animation-v0",
+      "title": "Add inequality sign flip animation",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.algebra-cohort-browser-gate-v0",
+      "title": "Run algebra editor cohort browser gate",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.derivative-power-rule-animation-v0",
+      "title": "Add derivative power rule animation",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.derivative-tangent-animation-v0",
+      "title": "Add synchronized derivative tangent animation",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.integral-ftc-animation-v0",
+      "title": "Add integral and FTC equation animation",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.integral-area-sweep-animation-v0",
+      "title": "Add synchronized integral area animation",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.vector-dot-projection-animations-v0",
+      "title": "Add vector dot product and projection animations",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.matrix-composition-animations-v0",
+      "title": "Add matrix vector and matrix matrix animations",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.concrete-animation-library-closeout-v0",
+      "title": "Close concrete animation editor loop",
+      "status": "planned"
+    }
+  ]
+}

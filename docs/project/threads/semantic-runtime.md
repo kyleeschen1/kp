@@ -2,10 +2,10 @@
 
 Status: active
 Last Updated: 2026-07-14
-Current Next Action: Expand KP into a symbolic manipulation animation library
-that models canonical algebra, calculus, linear algebra, and graphical
-equivalent transformations through the existing semantic asset, runtime frame,
-visual frame, dashboard, generated problem, flashcard, and graph protocols.
+Current Next Action: Make a verified first cohort of family-backed concrete
+animations discoverable, selectable, playable, scrubbable, and rewindable in
+the KP editor through the existing semantic asset, runtime-frame, visual-frame,
+KaTeX, graph, dashboard, and editor protocols.
 
 ## Goal
 
@@ -156,16 +156,19 @@ linear algebra fixtures, graph vector runtime consumers, graph rewind laws,
 flashcard renderer samples, paused-frame drill-down samples, dashboard
 progress rows, and an animation-library readiness closeout.
 
-The next priority is the symbolic manipulation animation library. KP should
-model major symbolic manipulations across algebra, calculus, linear algebra,
-and graphical equivalents as reusable semantic animation asset families. Each
-family should declare semantic objects and selectors, transformation
-definitions, identity and correspondence rules, visual motifs, runtime/visual
-samples, graphical equivalents where honest, generated problem hooks,
-flashcard hooks, law checks, and dashboard/search rows. Generated animation
-families, graph/visual runtime unification, tutorial cards, flashcards,
-program-trace visualizations, and future media should all use this library
-rather than running ahead of it.
+The symbolic manipulation animation-library loop closed on 2026-07-14 with 18
+promoted families, 71 transformation definitions, graph-equivalence laws,
+generated-problem hooks, flashcard projections, paused-frame drill-downs, and
+dashboard progress reporting. Its runtime sample refs describe intended family
+coverage, but they must now resolve explicitly to concrete catalog assets
+before the editor advertises them as executable.
+
+The active priority is the KP editor concrete-animation library. First enforce
+sample reference closure and project resolved `KpAnimationAsset` records into
+renderer-neutral editor descriptors. Then stabilize solve-x as the canonical
+end-to-end KaTeX path and add the approved algebra, calculus/graph, and
+linear-algebra cohort without introducing a separate editor-only animation
+model.
 
 The renderer adoption path is:
 

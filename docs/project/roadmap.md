@@ -26,21 +26,20 @@ semantic transformations, visual motifs, renderer-neutral frames, dashboard
 authoring actions, and verified export inputs before expanding into media,
 curriculum, or dynamic package loading.
 
-The current long-term library plan is recorded in
-`decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`.
-The next durable expansion is to model major symbolic manipulations across
-algebra, calculus, linear algebra, and their graphical equivalents as reusable
-semantic animation asset families.
+The symbolic manipulation family plan recorded in
+`decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md`
+closed its first 28-slice implementation loop. The active delivery plan is now
+`decisions/2026-07-14-kp-editor-concrete-animation-library-plan.md`: resolve
+family sample refs to executable assets and make a verified first cohort
+available in the KP editor.
 
 ## Active Focus
 
-**KP symbolic manipulation animation library.** KP now has the first encoded
-asset-calculus layer and renderer/interpreter seams for humans, LLMs,
-generated problem systems, external CAS/program-trace ports, renderers,
-exports, and flashcards to compose through one predictable semantic/time
-protocol. The current focus is to turn those contracts into a broad library of
-major symbolic manipulations across algebra, calculus, linear algebra, and
-their graphical equivalents.
+**KP editor concrete animation library.** The symbolic manipulation loop now
+provides 18 promoted families and 71 transformation definitions. The current
+focus is to connect those semantic definitions to catalog-resolved
+`KpAnimationAsset` records and expose a verified first cohort through the KP
+editor without inventing a second runtime or renderer path.
 
 The doctrine, composition laws, authoring guide, core interfaces, executable
 law checks, pause-time inspection, drill-down hooks, flashcard specs, external
@@ -51,23 +50,16 @@ visual-frame seams, and paused-frame decomposition examples are in place.
 
 The active tranche is now:
 
-1. define a shared symbolic manipulation family schema with semantic objects,
-   selectors, transformation definitions, correspondence, visual motifs,
-   runtime/visual samples, graph equivalents, generated problem hooks,
-   flashcard hooks, and dashboard rows;
-2. model canonical algebra manipulations: both-sides operations,
-   cancellation, combine like terms, distribution/factoring, fractions,
-   exponent/log laws, function wrapping, and inequalities;
-3. model canonical calculus manipulations: limits, derivative rules,
-   integrals, the Fundamental Theorem of Calculus, Taylor/local
-   linearization, gradient, Jacobian, Hessian, and optimization;
-4. model canonical linear algebra manipulations: vector add/scale, dot
-   product, projection, matrix-vector, matrix-matrix as composed dot products,
-   row operations, determinant, inverse, basis change, and eigen examples;
-5. attach graphical equivalents honestly: equation graphs, symbolic transform
-   mirrored as graph transform, derivative as tangent, integral as area,
-   matrix as linear map, Jacobian as local linear map, and Hessian as
-   curvature/quadratic form.
+1. distinguish planned family samples from concrete catalog-resolved assets and
+   enforce reference closure;
+2. project concrete assets into renderer-neutral editor animation descriptors,
+   grouped selection, stable links, and visible diagnostics;
+3. stabilize solve-x KaTeX measurement, font readiness, overlay handoff,
+   seeking, and rewind as the canonical vertical slice;
+4. expose the approved algebra cohort, then derivative/tangent and
+   integral/area synchronized examples;
+5. expose vector, dot/projection, matrix-vector, and composed matrix-matrix
+   examples through the same parent runtime clock.
 
 The goal remains practical: a KP intermediate representation with composition
 laws inspired by category theory and FRP, not a broad abstract category theory
@@ -243,22 +235,18 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Create the symbolic manipulation family schema and dashboard rows that make
-   algebra, calculus, linear algebra, and graph-equivalent families comparable.
-2. Promote algebra families first because they reuse existing generated
-   fixtures and stress token persistence, artifacts, wrappers, inverses, and
-   both-sides semantics.
-3. Add calculus families next, using derivative, integral, FTC, tangent,
-   area, Taylor, Jacobian, and Hessian examples to connect symbolic rules to
-   graphical views.
-4. Add linear algebra families with dot products and matrix multiplication as
-   the first higher-order composition test.
-5. Add law checks where composition matters: correspondence composition,
-   graph representation preservation, flashcard prompt/reference consistency,
-   generated problem provenance, and rewind.
-6. Move generated fixture family maturity from status rows into actionable
-   authoring controls: create fixture, inspect closure, open sample, run smoke,
-   and compare variants.
+1. Resolve concrete family samples against the animation catalog and report
+   planned refs honestly.
+2. Project resolved assets into the KP editor without duplicating the semantic
+   asset or runtime contracts.
+3. Stabilize the live solve-x KaTeX path with browser-level forward, seek,
+   rewind, font-readiness, and handoff checks.
+4. Add the approved algebra editor cohort: fraction, exponent, radical,
+   function wrapping, distribution/factoring, and inequality sign flip.
+5. Add synchronized derivative/tangent and integral/area editor animations on
+   the shared runtime clock.
+6. Add vector, dot/projection, matrix-vector, and composed matrix-matrix editor
+   animations.
 7. Harden `/api/compile`, export/embed boundaries, and future hosted capsules
    with explicit size, schema, error, auth, CSP, and dependency policies before
    inviting broad external input.
