@@ -3,6 +3,54 @@ import { expect, test } from "@playwright/test";
 const GRAPH_DESCRIPTOR_ID =
   "editor-animation.animation.graph.surface-mode.mesh-to-donut";
 
+const ALGEBRA_COHORT = [
+  {
+    sampleId: "sample.animation.solve-x.both-sides",
+    animationId: "animation.linear-solve.solve-x",
+    familyId: "family.algebra.both-sides"
+  },
+  {
+    sampleId: "sample.animation.solve-x.cancel-additive-inverses",
+    animationId: "animation.linear-solve.solve-x",
+    familyId: "family.algebra.cancel-combine"
+  },
+  {
+    sampleId: "sample.animation.distribution.expand-a-sum",
+    animationId: "animation.generated.distribution.expand-a-sum",
+    familyId: "family.algebra.distribution-factoring"
+  },
+  {
+    sampleId: "sample.animation.factoring.factor-common-a",
+    animationId: "animation.generated.distribution.factor-common-a",
+    familyId: "family.algebra.distribution-factoring"
+  },
+  {
+    sampleId: "sample.animation.fraction-simplification.basic",
+    animationId: "animation.generated.fraction-expression.two-fourths",
+    familyId: "family.algebra.fraction-simplification"
+  },
+  {
+    sampleId: "sample.animation.exponent-combine.square-as-product",
+    animationId: "animation.generated.exponent.square-as-product",
+    familyId: "family.algebra.exponent-log-laws"
+  },
+  {
+    sampleId: "sample.animation.radical-rewrite.square-root-as-power",
+    animationId: "animation.generated.radical.square-root-as-power",
+    familyId: "family.algebra.exponent-log-laws"
+  },
+  {
+    sampleId: "sample.animation.function-wrap.apply-f",
+    animationId: "animation.generated.function-wrap.apply-f",
+    familyId: "family.algebra.exponent-log-laws"
+  },
+  {
+    sampleId: "sample.animation.inequality.sign-flip.basic",
+    animationId: "animation.inequality.sign-flip.basic",
+    familyId: "family.algebra.inequality"
+  }
+] as const;
+
 test("editor animation library restores and persists concrete selections", async ({
   page
 }) => {
@@ -112,4 +160,53 @@ test("fraction family descriptor opens as a concrete editor animation", async ({
   await expect(library).toContainText(
     "family.algebra.fraction-simplification"
   );
+});
+
+test("algebra family cohort stays selectable and browser-safe", async ({
+  page
+}) => {
+  test.setTimeout(60_000);
+
+  for (const sample of ALGEBRA_COHORT) {
+    const descriptorId = `editor-animation.${sample.sampleId}`;
+    await page.goto(`/?animation=${descriptorId}`);
+
+    const library = page.locator("[data-kp-editor-animation-library]");
+    await expect(library).toHaveAttribute(
+      "data-kp-editor-animation-descriptor-id",
+      descriptorId
+    );
+    await expect(library).toHaveAttribute(
+      "data-kp-editor-animation-id",
+      sample.animationId
+    );
+    await expect(library).toHaveAttribute(
+      "data-kp-editor-animation-surface",
+      "equation"
+    );
+    await expect(library).toContainText(sample.familyId);
+    await expect(
+      library.locator("[data-kp-editor-animation-diagnostics]")
+    ).toHaveAttribute(
+      "data-kp-editor-animation-diagnostics-status",
+      /^(passed|warning)$/
+    );
+    await expect(
+      library.locator("[data-kp-editor-animation-diagnostics-counts]")
+    ).toContainText("0 errors");
+    await expect(
+      library.locator(
+        "[data-kp-editor-animation-diagnostics-playback-laws]"
+      )
+    ).toHaveText("2/2");
+    await expect(
+      library.locator('[data-action="set-editor-animation"]')
+    ).toHaveValue(descriptorId);
+  }
+
+  await expect(
+    page.locator(
+      '[data-action="set-editor-animation"] optgroup[label="Algebra"] option'
+    )
+  ).toHaveCount(ALGEBRA_COHORT.length);
 });

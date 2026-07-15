@@ -342,10 +342,20 @@ export function sampleKpAnimationAssetPhase(
     throw new Error(`Animation ${animation.id} has no ${input.direction} phases.`);
   }
 
-  const phaseIndex = Math.min(
-    Math.floor(input.progress * phases.length),
-    phases.length - 1
-  );
+  // A boundary belongs to the phase that begins there in forward playback and
+  // the phase that ends there in rewind, keeping p and 1 - p on the same node.
+  const phaseIndex = input.direction === "forward"
+    ? Math.min(
+        Math.floor(input.progress * phases.length),
+        phases.length - 1
+      )
+    : Math.max(
+        Math.min(
+          Math.ceil(input.progress * phases.length) - 1,
+          phases.length - 1
+        ),
+        0
+      );
   const phase = phases[phaseIndex]!;
 
   return {

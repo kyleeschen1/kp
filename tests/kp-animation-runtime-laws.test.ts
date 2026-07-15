@@ -10,6 +10,9 @@ import {
   createLinearSolveProgrammingComparisonAnimationAsset
 } from "../src/animation/comparison-layout-adapter.ts";
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
+import {
+  createExponentExpansionAnimationAsset
+} from "../src/animation/exponent-radical-adapter.ts";
 
 test("checkKpAnimationRuntimeCompositionLaw accepts shared-clock child sampling", () => {
   const animation = createLinearSolveProgrammingComparisonAnimationAsset();
@@ -55,6 +58,20 @@ test("checkKpAnimationRuntimeRewindClockLaw accepts mirrored linear solve sampli
   assert.deepEqual(
     checkKpAnimationRuntimeRewindClockLaw({
       animation: createLinearSolveAnimationAsset(),
+      progressSamples: [0.25, 0.5, 0.75]
+    }),
+    {
+      lawId: "animation-runtime.rewind-clock",
+      passed: true,
+      failures: []
+    }
+  );
+});
+
+test("rewind clock keeps even-phase midpoint boundaries on the mirrored node", () => {
+  assert.deepEqual(
+    checkKpAnimationRuntimeRewindClockLaw({
+      animation: createExponentExpansionAnimationAsset(),
       progressSamples: [0.25, 0.5, 0.75]
     }),
     {
