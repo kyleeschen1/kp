@@ -1,0 +1,95 @@
+{
+  "id": "next-action.kp.editor.animation-descriptor-v0",
+  "kind": "next-action",
+  "title": "Define renderer neutral editor animation descriptor",
+  "status": "resolved",
+  "domain": "kp.editor",
+  "summary": "Defined a renderer-neutral editor animation descriptor that projects concrete animation identity, optional family provenance, render targets, controls, timing, and tags without copying asset semantics or DOM and WebGL state.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.concrete-animation-library-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.editor.animation-descriptor-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-symbolic-manipulation-library-loop-closeout.md",
+      "summary": "Closed symbolic library loop and recommended concrete renderer and editor adoption."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "KP semantic runtime and dashboard editor direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-animation-catalog.ts",
+      "summary": "Current fixture-oriented editor animation catalog to evolve into a family-backed surface."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Concrete KpAnimationAsset registry to project into the editor."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-descriptor.ts",
+      "summary": "Typed editor-facing projection and validation boundary for concrete animations."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-animation-descriptor.test.ts",
+      "summary": "Proves descriptor normalization, validation, and renderer-state separation."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.editor.concrete-animation-library-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Define renderer neutral editor animation descriptor can be completed inside KP editor concrete animation library v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved KP editor concrete-animation slices.",
+    "Use existing KpAnimationAsset, symbolic family, runtime-frame, visual-frame, KaTeX, graph, dashboard, and editor contracts.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not build media encoders, live CAS or LSP integrations, curriculum generation, or dynamic package loading.",
+    "Do not create a separate graph animation clock or broadly redesign the editor.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-animation-descriptor.test.ts",
+      "status": "passed",
+      "scope": "editor animation descriptor contract",
+      "checkedAt": "2026-07-15T00:44:33.485Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-15T00:44:33.530Z",
+      "scope": "shared editor descriptor types"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined a renderer-neutral editor animation descriptor that projects concrete animation identity, optional family provenance, render targets, controls, timing, and tags without copying asset semantics or DOM and WebGL state."
+  }
+}
