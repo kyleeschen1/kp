@@ -67,7 +67,8 @@
     {
       "id": "next-action.kp.semantic-transition.equation-ir-v0",
       "title": "Define renderer-neutral equation transition IR",
-      "status": "planned"
+      "summary": "Renderer-neutral equation transition IR is defined and validated.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.compiler-v0",
