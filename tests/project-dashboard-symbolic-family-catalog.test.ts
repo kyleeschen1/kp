@@ -913,6 +913,17 @@ test("algebra exponent-log family preserves bases and wrapped arguments", () => 
       ],
       summary:
         "The square-as-product animation rewinds repeated factors into an exponent-combine view with a persistent base."
+    },
+    {
+      id: "sample.animation.radical-rewrite.square-root-as-power",
+      animationId: "animation.generated.radical.square-root-as-power",
+      availability: "concrete",
+      renderTargetKinds: ["equation"],
+      transformationDefinitionIds: [
+        "definition.symbolic.algebra.power-to-root"
+      ],
+      summary:
+        "The square-root-as-power animation folds rational exponent geometry into a radical while preserving the base."
     }
   ]);
   assert.deepEqual(family.graphEquivalents, [
@@ -928,7 +939,10 @@ test("algebra exponent-log family preserves bases and wrapped arguments", () => 
           level: "sampled"
         }
       ],
-      sampleAssetIds: ["animation.generated.exponent.square-as-product"],
+      sampleAssetIds: [
+        "animation.generated.exponent.square-as-product",
+        "animation.generated.radical.square-root-as-power"
+      ],
       summary:
         "Exponent, root, and logarithm rewrites preserve function values where the domain assumptions hold."
     }
@@ -1221,13 +1235,13 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
       ["Families", "18"],
       ["Ready families", "18"],
       ["Transform definitions", "71"],
-      ["Runtime sample refs", "20"],
-      ["Concrete runtime samples", "4"],
+      ["Runtime sample refs", "21"],
+      ["Concrete runtime samples", "5"],
       ["Planned runtime samples", "16"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],
       ["Flashcard hooks", "18"],
-      ["Paused-frame drill-down candidates", "46"],
+      ["Paused-frame drill-down candidates", "47"],
       ["Blockers", "None"]
     ]
   );

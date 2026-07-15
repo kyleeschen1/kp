@@ -1432,6 +1432,17 @@ function createAlgebraExponentLogFamily(): KpSymbolicManipulationFamily {
         ],
         summary:
           "The square-as-product animation rewinds repeated factors into an exponent-combine view with a persistent base."
+      },
+      {
+        id: "sample.animation.radical-rewrite.square-root-as-power",
+        animationId: "animation.generated.radical.square-root-as-power",
+        availability: "concrete",
+        renderTargetKinds: ["equation"],
+        transformationDefinitionIds: [
+          "definition.symbolic.algebra.power-to-root"
+        ],
+        summary:
+          "The square-root-as-power animation folds rational exponent geometry into a radical while preserving the base."
       }
     ],
     graphEquivalents: [
@@ -1447,7 +1458,10 @@ function createAlgebraExponentLogFamily(): KpSymbolicManipulationFamily {
             level: "sampled"
           }
         ],
-        sampleAssetIds: ["animation.generated.exponent.square-as-product"],
+        sampleAssetIds: [
+          "animation.generated.exponent.square-as-product",
+          "animation.generated.radical.square-root-as-power"
+        ],
         summary:
           "Exponent, root, and logarithm rewrites preserve function values where the domain assumptions hold."
       }
