@@ -1259,8 +1259,8 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
       ["Ready families", "18"],
       ["Transform definitions", "71"],
       ["Runtime sample refs", "23"],
-      ["Concrete runtime samples", "11"],
-      ["Planned runtime samples", "12"],
+      ["Concrete runtime samples", "12"],
+      ["Planned runtime samples", "11"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],
       ["Flashcard hooks", "18"],
@@ -1711,14 +1711,15 @@ test("calculus integral and FTC family preserves integrands and bounds", () => {
   assert.deepEqual(family.runtimeSamples, [
     {
       id: "sample.animation.integral-ftc.basic",
-      animationId: "animation.integral-ftc.basic",
-      renderTargetKinds: ["equation", "graph"],
+      animationId: "animation.sample.fundamental-theorem-calculus",
+      availability: "concrete",
+      renderTargetKinds: ["equation"],
       transformationDefinitionIds: [
         "definition.symbolic.calculus.definite-integral-ftc",
         "definition.symbolic.calculus.accumulation-derivative-ftc"
       ],
       summary:
-        "Basic FTC sample links bound movement, antiderivative evaluation, and area accumulation."
+        "The FTC comparison sample links accumulation-derivative and net-change equation forms on one clock."
     },
     {
       id: "sample.animation.integral-ftc.area-sweep",
@@ -1745,7 +1746,7 @@ test("calculus integral and FTC family preserves integrands and bounds", () => {
           level: "sampled"
         }
       ],
-      sampleAssetIds: ["animation.integral-ftc.basic"],
+      sampleAssetIds: ["animation.sample.fundamental-theorem-calculus"],
       summary:
         "Integral and FTC rewrites preserve the accumulated area represented between the lower and upper bounds."
     },
@@ -1831,7 +1832,7 @@ test("calculus integral family projects to area sweep graph samples", () => {
         "graph.calculus.integral.area-accumulation",
         "area-accumulation",
         "sampled",
-        ["animation.integral-ftc.basic"],
+        ["animation.sample.fundamental-theorem-calculus"],
         "Integral and FTC rewrites preserve the accumulated area represented between the lower and upper bounds."
       ],
       [

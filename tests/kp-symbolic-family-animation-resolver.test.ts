@@ -187,6 +187,22 @@ test("derivative tangent asset resolves the calculus graph sample", () => {
   );
 });
 
+test("FTC comparison asset resolves the calculus integral sample", () => {
+  const resolution = createKpSymbolicFamilyAnimationResolutions({
+    families: createSymbolicManipulationFamilyRegistry(),
+    assets: createKpAnimationAssets()
+  }).find(
+    (candidate) =>
+      candidate.sampleId === "sample.animation.integral-ftc.basic"
+  );
+
+  assert.equal(resolution?.status, "resolved");
+  assert.equal(
+    resolution?.animationId,
+    "animation.sample.fundamental-theorem-calculus"
+  );
+});
+
 test("family animation resolver requires explicit concrete availability and exact ids", () => {
   const asset = createLinearSolveAnimationAsset();
   const plannedFamily = familyWithSample({

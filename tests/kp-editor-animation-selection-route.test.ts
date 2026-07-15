@@ -25,7 +25,7 @@ test("editor renders every concrete asset through a stable descriptor selection"
     editorAnimationDescriptorId: selected.id
   });
 
-  assert.equal(descriptors.length, 33);
+  assert.equal(descriptors.length, 34);
   assert.match(html, /data-kp-editor-animation-library/);
   assert.match(
     html,
@@ -135,6 +135,28 @@ test("derivative tangent graph is selectable through its calculus family descrip
   assert.match(
     html,
     /option value="editor-animation\.sample\.animation\.derivative-rules\.tangent-graph" selected/
+  );
+});
+
+test("FTC forms are selectable through their calculus family descriptor", () => {
+  const descriptor = createKpEditorAnimationLibrary().find(
+    (candidate) =>
+      candidate.sampleId === "sample.animation.integral-ftc.basic"
+  );
+  assert.ok(descriptor);
+
+  const html = renderEditorDocument(createInitialEditorDocument(), {
+    editorAnimationDescriptorId: descriptor.id
+  });
+
+  assert.match(
+    html,
+    /data-kp-editor-animation-id="animation\.sample\.fundamental-theorem-calculus"/
+  );
+  assert.match(html, /family\.calculus\.integral-ftc/);
+  assert.match(
+    html,
+    /option value="editor-animation\.sample\.animation\.integral-ftc\.basic" selected/
   );
 });
 

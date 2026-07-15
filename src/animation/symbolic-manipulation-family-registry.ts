@@ -2331,14 +2331,15 @@ function createCalculusIntegralFtcFamily(): KpSymbolicManipulationFamily {
     runtimeSamples: [
       {
         id: "sample.animation.integral-ftc.basic",
-        animationId: "animation.integral-ftc.basic",
-        renderTargetKinds: ["equation", "graph"],
+        animationId: "animation.sample.fundamental-theorem-calculus",
+        availability: "concrete",
+        renderTargetKinds: ["equation"],
         transformationDefinitionIds: [
           "definition.symbolic.calculus.definite-integral-ftc",
           "definition.symbolic.calculus.accumulation-derivative-ftc"
         ],
         summary:
-          "Basic FTC sample links bound movement, antiderivative evaluation, and area accumulation."
+          "The FTC comparison sample links accumulation-derivative and net-change equation forms on one clock."
       },
       {
         id: "sample.animation.integral-ftc.area-sweep",
@@ -2365,7 +2366,7 @@ function createCalculusIntegralFtcFamily(): KpSymbolicManipulationFamily {
             level: "sampled"
           }
         ],
-        sampleAssetIds: ["animation.integral-ftc.basic"],
+        sampleAssetIds: ["animation.sample.fundamental-theorem-calculus"],
         summary:
           "Integral and FTC rewrites preserve the accumulated area represented between the lower and upper bounds."
       },
