@@ -92,7 +92,8 @@
     {
       "id": "next-action.kp.editor.asset-catalog-projection-v0",
       "title": "Project catalog assets into editor entries",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.asset-catalog-projection-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.animation-surface-dispatch-v0",
