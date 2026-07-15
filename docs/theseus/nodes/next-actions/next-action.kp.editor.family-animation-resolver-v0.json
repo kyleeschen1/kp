@@ -1,0 +1,95 @@
+{
+  "id": "next-action.kp.editor.family-animation-resolver-v0",
+  "kind": "next-action",
+  "title": "Add family animation catalog resolution",
+  "status": "resolved",
+  "domain": "kp.editor",
+  "summary": "Added deterministic family sample resolution that only treats explicitly concrete, exact animation ids as executable and reports planned, missing, or ambiguous records without fuzzy aliases.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.concrete-animation-library-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.editor.family-animation-resolver-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-symbolic-manipulation-library-loop-closeout.md",
+      "summary": "Closed symbolic library loop and recommended concrete renderer and editor adoption."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "KP semantic runtime and dashboard editor direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-animation-catalog.ts",
+      "summary": "Current fixture-oriented editor animation catalog to evolve into a family-backed surface."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Concrete KpAnimationAsset registry to project into the editor."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/symbolic-family-animation-resolver.ts",
+      "summary": "Resolves symbolic family samples against concrete animation assets with exact-id honesty."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-symbolic-family-animation-resolver.test.ts",
+      "summary": "Covers planned, resolved, missing alias, and duplicate-id ambiguity cases."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.editor.concrete-animation-library-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add family animation catalog resolution can be completed inside KP editor concrete animation library v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved KP editor concrete-animation slices.",
+    "Use existing KpAnimationAsset, symbolic family, runtime-frame, visual-frame, KaTeX, graph, dashboard, and editor contracts.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not build media encoders, live CAS or LSP integrations, curriculum generation, or dynamic package loading.",
+    "Do not create a separate graph animation clock or broadly redesign the editor.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-symbolic-family-animation-resolver.test.ts tests/kp-symbolic-manipulation-family.test.ts",
+      "status": "passed",
+      "scope": "family animation catalog resolution",
+      "checkedAt": "2026-07-15T00:40:25.424Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-15T00:40:25.501Z",
+      "scope": "shared resolver contract"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added deterministic family sample resolution that only treats explicitly concrete, exact animation ids as executable and reports planned, missing, or ambiguous records without fuzzy aliases."
+  }
+}
