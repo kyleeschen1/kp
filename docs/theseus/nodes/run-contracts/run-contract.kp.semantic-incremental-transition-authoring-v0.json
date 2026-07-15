@@ -115,7 +115,8 @@
     {
       "id": "next-action.kp.semantic-transition.token-renderer-v0",
       "title": "Extract reusable measured token renderer",
-      "status": "planned"
+      "summary": "Measured semantic relations now sample and apply lifecycle-aware token motion.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.persistent-stage-v0",
