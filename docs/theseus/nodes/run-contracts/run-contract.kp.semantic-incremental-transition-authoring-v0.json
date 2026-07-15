@@ -55,7 +55,8 @@
     {
       "id": "next-action.kp.semantic-transition.correspondence-normalizer-v0",
       "title": "Normalize correspondence shorthand and relations",
-      "status": "planned"
+      "summary": "Legacy and rich correspondence now normalize into one deterministic map.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.correspondence-laws-v0",

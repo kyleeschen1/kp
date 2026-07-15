@@ -9,6 +9,7 @@ import {
   canSequenceKpSemanticTransformations,
   createKpSemanticTransformationDefinition,
   createKpSemanticTransformation,
+  normalizeKpSemanticTransformationCorrespondence,
   validateKpSemanticTransformationDefinition,
   validateKpSemanticTransformation
 } from "../src/semantic/asset-transformation.ts";
@@ -245,6 +246,96 @@ test("validateKpSemanticTransformation reports missing rich correspondence selec
         "Transformation transform.bad-rich-correspondence references missing rich-correspondence target selector eq1.missing."
     }
   ]);
+});
+
+test("normalizeKpSemanticTransformationCorrespondence upgrades legacy pairs", () => {
+  const transformation = createKpSemanticTransformation({
+    id: "transform.normalize-legacy",
+    transformType: "rewrite",
+    title: "Normalize legacy selector pairs",
+    sourceObjectIds: ["equation.solve.initial"],
+    targetObjectIds: ["equation.solve.with-inverses"],
+    preserves: ["value"],
+    correspondence: [
+      {
+        sourceSelectorId: "eq0.x",
+        targetSelectorId: "eq1.x",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceSelectorId: "eq0.equals",
+        targetSelectorId: "eq1.equals",
+        preserves: ["identity"],
+        summary: "The relation keeps identity but changes presentation role."
+      }
+    ]
+  });
+
+  assert.deepEqual(normalizeKpSemanticTransformationCorrespondence(transformation), {
+    id: "transform.normalize-legacy.correspondence",
+    records: [
+      {
+        id: "legacy.0.eq0-x.to.eq1-x",
+        relation: "identity",
+        sourceSelectorIds: ["eq0.x"],
+        targetSelectorIds: ["eq1.x"],
+        summary: "Legacy selector correspondence from eq0.x to eq1.x."
+      },
+      {
+        id: "legacy.1.eq0-equals.to.eq1-equals",
+        relation: "role-change",
+        sourceSelectorIds: ["eq0.equals"],
+        targetSelectorIds: ["eq1.equals"],
+        summary: "The relation keeps identity but changes presentation role."
+      }
+    ]
+  });
+});
+
+test("normalizeKpSemanticTransformationCorrespondence preserves rich relations and supplements missing pairs", () => {
+  const transformation = createKpSemanticTransformation({
+    id: "transform.normalize-rich",
+    transformType: "simplify",
+    title: "Normalize rich relations",
+    sourceObjectIds: ["equation.solve.initial"],
+    targetObjectIds: ["equation.solve.with-inverses"],
+    preserves: ["value"],
+    correspondenceMap: {
+      id: "correspondence.normalize-rich",
+      records: [
+        {
+          id: "unknown-persists",
+          relation: "identity",
+          sourceSelectorIds: ["eq0.x"],
+          targetSelectorIds: ["eq1.x"],
+          summary: "Canonical rich identity."
+        }
+      ]
+    },
+    correspondence: [
+      {
+        sourceSelectorId: "eq0.x",
+        targetSelectorId: "eq1.x",
+        preserves: ["identity", "role"],
+        summary: "Duplicate shorthand should not replace the rich record."
+      },
+      {
+        sourceSelectorId: "eq0.equals",
+        targetSelectorId: "eq1.equals",
+        preserves: ["identity", "role"]
+      }
+    ]
+  });
+
+  assert.deepEqual(
+    normalizeKpSemanticTransformationCorrespondence(transformation).records.map(
+      (record) => [record.id, record.relation]
+    ),
+    [
+      ["unknown-persists", "identity"],
+      ["legacy.1.eq0-equals.to.eq1-equals", "identity"]
+    ]
+  );
 });
 
 test("canSequenceKpSemanticTransformations checks adjacent object boundaries", () => {

@@ -272,6 +272,45 @@ export function validateKpSemanticTransformation(
   return issues;
 }
 
+export function normalizeKpSemanticTransformationCorrespondence(
+  transformation: KpSemanticTransformation
+): CorrespondenceMap {
+  const richMap = transformation.correspondenceMap === undefined
+    ? {
+        id: `${transformation.id}.correspondence`,
+        records: []
+      }
+    : cloneCorrespondenceMap(transformation.correspondenceMap);
+  const records = [...richMap.records];
+
+  transformation.correspondence.forEach((pair, index) => {
+    const alreadyRepresented = records.some((record) =>
+      record.sourceSelectorIds.length === 1 &&
+      record.sourceSelectorIds[0] === pair.sourceSelectorId &&
+      record.targetSelectorIds.length === 1 &&
+      record.targetSelectorIds[0] === pair.targetSelectorId
+    );
+    if (alreadyRepresented) return;
+
+    // Legacy pairs imply persistence; absence of role preservation narrows that
+    // persistence to an explicit semantic role change.
+    const relation = pair.preserves.includes("role") ? "identity" : "role-change";
+    records.push({
+      id: `legacy.${index}.${correspondenceRecordIdPart(pair.sourceSelectorId)}.to.${correspondenceRecordIdPart(pair.targetSelectorId)}`,
+      relation,
+      sourceSelectorIds: [pair.sourceSelectorId],
+      targetSelectorIds: [pair.targetSelectorId],
+      summary: pair.summary ??
+        `Legacy selector correspondence from ${pair.sourceSelectorId} to ${pair.targetSelectorId}.`
+    });
+  });
+
+  return {
+    id: richMap.id,
+    records
+  };
+}
+
 export function validateKpSemanticTransformationDefinition(
   definition: KpSemanticTransformationDefinition
 ): readonly KpTransformationValidationIssue[] {
@@ -337,4 +376,8 @@ function assertNonEmpty(value: string, label: string): void {
   if (value.trim().length === 0) {
     throw new Error(`${label} must not be empty.`);
   }
+}
+
+function correspondenceRecordIdPart(selectorId: string): string {
+  return selectorId.replace(/[^a-zA-Z0-9_-]+/g, "-");
 }
