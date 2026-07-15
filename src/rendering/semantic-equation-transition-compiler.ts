@@ -12,6 +12,7 @@ import {
   bindKpTransformationDefinitionCorrespondence,
   type KpTransformationDefinitionBindings
 } from "../semantic/transformation-definition-binding.ts";
+import { validateCorrespondenceMap } from "../semantic/correspondence.ts";
 import {
   createKpEquationTransitionIr,
   type KpEquationTransitionIr,
@@ -23,6 +24,83 @@ export interface CompileKpSemanticEquationTransitionInput {
   readonly bundle: KpAssetBundle;
   readonly definition?: KpSemanticTransformationDefinition | undefined;
   readonly definitionBindings?: KpTransformationDefinitionBindings | undefined;
+}
+
+export type KpSemanticEquationTransitionCompileDiagnosticCode =
+  | "semantic-transition.invalid-reference"
+  | "semantic-transition.object-without-latex"
+  | "semantic-transition.invalid-correspondence"
+  | "semantic-transition.missing-definition-binding"
+  | "semantic-transition.no-correspondence"
+  | "semantic-transition.incomplete-lifecycle"
+  | "semantic-transition.compile-failed";
+
+export interface KpSemanticEquationTransitionCompileDiagnostic {
+  readonly code: KpSemanticEquationTransitionCompileDiagnosticCode;
+  readonly severity: "warning" | "error";
+  readonly message: string;
+}
+
+export interface KpSemanticEquationTransitionCompileResult {
+  readonly status: "semantic" | "fallback";
+  readonly ir?: KpEquationTransitionIr | undefined;
+  readonly diagnostics: readonly KpSemanticEquationTransitionCompileDiagnostic[];
+  readonly fallback?: {
+    readonly kind: "whole-equation-fade";
+    readonly reasons: readonly string[];
+  } | undefined;
+}
+
+export function compileKpSemanticEquationTransitionResult(
+  input: CompileKpSemanticEquationTransitionInput
+): KpSemanticEquationTransitionCompileResult {
+  let ir: KpEquationTransitionIr;
+  try {
+    ir = compileKpSemanticEquationTransition(input);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    const diagnostic = compileFailureDiagnostic(message);
+    return {
+      status: "fallback",
+      diagnostics: [diagnostic],
+      fallback: {
+        kind: "whole-equation-fade",
+        reasons: [diagnostic.code]
+      }
+    };
+  }
+
+  if (ir.correspondenceMap.records.length === 0) {
+    const diagnostic: KpSemanticEquationTransitionCompileDiagnostic = {
+      code: "semantic-transition.no-correspondence",
+      severity: "warning",
+      message:
+        `Transformation ${input.transformation.id} has no selector correspondence; semantic token motion is unavailable.`
+    };
+    return fallbackResult(ir, [diagnostic]);
+  }
+
+  const lifecycleIssues = validateCorrespondenceMap(ir.correspondenceMap, {
+    sourceSelectorIds: ir.source.flatMap((state) =>
+      state.selectors
+        .filter((selector) => selector.kind === "semantic")
+        .map((selector) => selector.id)
+    ),
+    targetSelectorIds: ir.target.flatMap((state) =>
+      state.selectors
+        .filter((selector) => selector.kind === "semantic")
+        .map((selector) => selector.id)
+    )
+  });
+  if (lifecycleIssues.length > 0) {
+    return fallbackResult(ir, lifecycleIssues.map((issue) => ({
+      code: "semantic-transition.incomplete-lifecycle",
+      severity: "warning",
+      message: issue.message
+    })));
+  }
+
+  return { status: "semantic", ir, diagnostics: [] };
 }
 
 export function compileKpSemanticEquationTransition(
@@ -79,6 +157,59 @@ function correspondenceMapForCompilation(
     definition: input.definition,
     bindings: input.definitionBindings
   });
+}
+
+function fallbackResult(
+  ir: KpEquationTransitionIr,
+  diagnostics: readonly KpSemanticEquationTransitionCompileDiagnostic[]
+): KpSemanticEquationTransitionCompileResult {
+  return {
+    status: "fallback",
+    ir,
+    diagnostics,
+    fallback: {
+      kind: "whole-equation-fade",
+      reasons: [...new Set(diagnostics.map((diagnostic) => diagnostic.code))]
+    }
+  };
+}
+
+function compileFailureDiagnostic(
+  message: string
+): KpSemanticEquationTransitionCompileDiagnostic {
+  if (message.includes("selector role binding") || message.includes("definition bindings")) {
+    return {
+      code: "semantic-transition.missing-definition-binding",
+      severity: "error",
+      message
+    };
+  }
+  if (message.includes("does not expose non-empty LaTeX")) {
+    return {
+      code: "semantic-transition.object-without-latex",
+      severity: "error",
+      message
+    };
+  }
+  if (message.includes("references missing") || message.includes("missing source object") || message.includes("missing target object")) {
+    return {
+      code: "semantic-transition.invalid-reference",
+      severity: "error",
+      message
+    };
+  }
+  if (message.includes("invalid correspondence") || message.includes("correspondence references")) {
+    return {
+      code: "semantic-transition.invalid-correspondence",
+      severity: "error",
+      message
+    };
+  }
+  return {
+    code: "semantic-transition.compile-failed",
+    severity: "error",
+    message
+  };
 }
 
 function compileEquationStates(

@@ -9,7 +9,10 @@ import {
   createKpSemanticTransformation,
   createKpSemanticTransformationDefinition
 } from "../src/semantic/asset-transformation.ts";
-import { compileKpSemanticEquationTransition } from "../src/rendering/semantic-equation-transition-compiler.ts";
+import {
+  compileKpSemanticEquationTransition,
+  compileKpSemanticEquationTransitionResult
+} from "../src/rendering/semantic-equation-transition-compiler.ts";
 
 const source = createKpSemanticAssetObject({
   id: "equation.before",
@@ -202,4 +205,92 @@ test("definition binding rejects missing selector roles instead of guessing", ()
       }]
     }
   }), /missing source selector role binding before.unknown/);
+});
+
+test("compile result selects semantic rendering only with total selector lifecycle coverage", () => {
+  const transformation = createKpSemanticTransformation({
+    id: "transform.total-lifecycle",
+    transformType: "simplify",
+    title: "Simplify with complete correspondence",
+    sourceObjectIds: [source.id],
+    targetObjectIds: [target.id],
+    preserves: ["value"],
+    correspondence: [
+      {
+        sourceSelectorId: "before.x",
+        targetSelectorId: "after.x",
+        preserves: ["identity", "role"]
+      },
+      {
+        sourceSelectorId: "before.equals",
+        targetSelectorId: "after.equals",
+        preserves: ["identity", "role"]
+      }
+    ]
+  });
+
+  assert.deepEqual(compileKpSemanticEquationTransitionResult({
+    transformation,
+    bundle
+  }).status, "semantic");
+});
+
+test("compile result diagnoses incomplete correspondence and whole-equation fallback", () => {
+  const transformation = createKpSemanticTransformation({
+    id: "transform.partial-lifecycle",
+    transformType: "simplify",
+    title: "Simplify with partial correspondence",
+    sourceObjectIds: [source.id],
+    targetObjectIds: [target.id],
+    preserves: ["value"],
+    correspondence: [{
+      sourceSelectorId: "before.x",
+      targetSelectorId: "after.x",
+      preserves: ["identity", "role"]
+    }]
+  });
+
+  const result = compileKpSemanticEquationTransitionResult({
+    transformation,
+    bundle
+  });
+
+  assert.equal(result.status, "fallback");
+  assert.equal(result.fallback?.kind, "whole-equation-fade");
+  assert.deepEqual(result.fallback?.reasons, [
+    "semantic-transition.incomplete-lifecycle"
+  ]);
+  assert.match(result.diagnostics[0]?.message ?? "", /before.equals/);
+});
+
+test("compile result classifies missing definition bindings", () => {
+  const definition = createKpSemanticTransformationDefinition({
+    id: "definition.compile-result",
+    transformType: "simplify",
+    title: "Compile result definition",
+    sourceObjectRoles: ["before"],
+    targetObjectRoles: ["after"],
+    preserves: ["value"]
+  });
+  const transformation = createKpSemanticTransformation({
+    id: "transform.compile-result",
+    definitionId: definition.id,
+    transformType: definition.transformType,
+    title: definition.title,
+    sourceObjectIds: [source.id],
+    targetObjectIds: [target.id],
+    preserves: ["value"]
+  });
+
+  const result = compileKpSemanticEquationTransitionResult({
+    transformation,
+    bundle,
+    definition
+  });
+
+  assert.equal(result.status, "fallback");
+  assert.equal(
+    result.diagnostics[0]?.code,
+    "semantic-transition.missing-definition-binding"
+  );
 });

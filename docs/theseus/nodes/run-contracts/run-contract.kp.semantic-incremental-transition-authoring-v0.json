@@ -85,7 +85,8 @@
     {
       "id": "next-action.kp.semantic-transition.compiler-diagnostics-v0",
       "title": "Diagnose missing bindings and fallback causes",
-      "status": "planned"
+      "summary": "Compiler failures and incomplete lifecycle now produce explicit diagnosed fallback results.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.annotated-latex-contract-v0",
