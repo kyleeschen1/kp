@@ -1,11 +1,11 @@
 # Semantic Runtime Thread
 
 Status: active
-Last Updated: 2026-07-14
-Current Next Action: Make a verified first cohort of family-backed concrete
-animations discoverable, selectable, playable, scrubbable, and rewindable in
-the KP editor through the existing semantic asset, runtime-frame, visual-frame,
-KaTeX, graph, dashboard, and editor protocols.
+Last Updated: 2026-07-15
+Current Next Action: Compile rich semantic correspondence into persistent,
+measured equation-token motion on the shared editor player, then expose that
+compiler through a constrained LLM animation-draft format and a minimal visual
+diagram surface.
 
 ## Goal
 
@@ -163,12 +163,20 @@ dashboard progress reporting. Its runtime sample refs describe intended family
 coverage, but they must now resolve explicitly to concrete catalog assets
 before the editor advertises them as executable.
 
-The active priority is the KP editor concrete-animation library. First enforce
-sample reference closure and project resolved `KpAnimationAsset` records into
-renderer-neutral editor descriptors. Then stabilize solve-x as the canonical
-end-to-end KaTeX path and add the approved algebra, calculus/graph, and
-linear-algebra cohort without introducing a separate editor-only animation
-model.
+The concrete-animation and visible-player loops have now closed. They proved
+stable descriptor resolution, shared playback, KaTeX and graph dispatch, and
+exact seek/rewind behavior. Their generic equation adapter also exposed the new
+active priority: replace whole-layer source/target fading with compiled semantic
+token identity, lifecycle, geometry, and motion. Whole-equation fading remains
+an explicit diagnosed fallback, not the preferred transition language.
+
+After the compiler works for a representative algebra and matrix cohort, expose
+a versioned LLM draft schema that references approved semantic definitions,
+selectors, correspondence relations, motifs, and timing intent. KP must validate
+and compile those drafts locally; models must not emit DOM, pixel geometry,
+arbitrary keyframes, or unverified target mathematics. Then prove the same
+contracts on a minimal visual `DiagramScene` and SVG adapter without adding a
+second clock or a general layout engine.
 
 The renderer adoption path is:
 

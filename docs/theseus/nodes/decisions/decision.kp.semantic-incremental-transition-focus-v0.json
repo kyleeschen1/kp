@@ -1,0 +1,24 @@
+{
+  "id": "decision.kp.semantic-incremental-transition-focus-v0",
+  "kind": "decision",
+  "title": "Prioritize Semantic Incremental Transitions And LLM Authoring",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Accepted on 2026-07-15: semantic incremental transitions, constrained LLM draft compilation, and a minimal shared-runtime diagram surface are the active focus.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-15-kp-semantic-incremental-transition-focus.md",
+      "summary": "Accepted product and runtime focus change."
+    },
+    {
+      "kind": "user-intent",
+      "intent": "Make semantic incremental transitions and LLM-generated informed transitions and diagrams the new focus.",
+      "occurredAt": "2026-07-15",
+      "summary": "The user explicitly requested this focus pivot before long-loop planning."
+    }
+  ],
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ]
+}

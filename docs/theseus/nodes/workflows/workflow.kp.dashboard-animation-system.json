@@ -19,7 +19,8 @@
     "decision.kp.semantic-animation-runtime-roadmap",
     "decision.kp.long-term-semantic-product-plan",
     "decision.kp.animation-asset-primary-unit",
-    "decision.kp.symbolic-manipulation-animation-library"
+    "decision.kp.symbolic-manipulation-animation-library",
+    "decision.kp.semantic-incremental-transition-focus-v0"
   ],
   "milestones": [
     "milestone.kp.long-term-semantic-product-plan-v0"
@@ -88,7 +89,8 @@
     "run-contract.kp.animation.symbolic-manipulation-library-v0",
     "next-action.kp.animation.symbolic-family-schema-v0",
     "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v4",
-    "next-action.kp.editor.visible-animation-player-focus-v0"
+    "next-action.kp.editor.visible-animation-player-focus-v0",
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
   ],
   "verificationRecords": [
     {

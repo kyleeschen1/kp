@@ -35,22 +35,24 @@ available in the KP editor; it has now closed its 30-slice implementation loop.
 
 ## Active Focus
 
-**Visible animation authoring on the shared runtime.** The concrete animation
-library still exposes 24 catalog assets plus 17 family-backed selections as 41
-stable editor descriptors. The visible-player loop now mounts every current
-pure-equation descriptor in a KaTeX stage and mounts the derivative/tangent,
-integral/area, vector-scale, and dot/projection families in a shared semantic
-SVG graph viewport. The same play, pause, scrub, seek, step, rewind, and reset
-session drives every mounted surface.
+**Semantic incremental transitions and LLM-authored animation compilation.**
+The visible player is now the stable clock and surface substrate. The active
+priority is to compile rich semantic correspondence into persistent equation
+tokens, measured geometry, and sampled motion so equations communicate which
+terms persist, cancel, split, merge, appear, disappear, or change role instead
+of replacing whole KaTeX layers with cross-fades.
 
 The execution contract
 `run-contract.kp.editor.visible-animation-player-v0` closed its approved
 30-slice path on 2026-07-15. Its closeout is recorded in
 `reviews/2026-07-15-kp-editor-visible-animation-player-loop-closeout.md`.
-The next focus is to use the visible player as an authoring pressure test:
-promote the six remaining planned symbolic samples, deepen representation-aware
-matrix and graph composition, and expose paused-frame drill-down actions without
-creating a second clock or renderer-owned semantics.
+The accepted focus change is recorded in
+`decisions/2026-07-15-kp-semantic-incremental-transition-focus.md`; its
+30-slice candidate loop and end-state expectations are recorded in
+`reviews/2026-07-15-semantic-incremental-transition-next-step-review.md`.
+After the semantic transition compiler is proven on a representative equation
+cohort, KP should expose a constrained LLM draft schema and compiler, then a
+minimal visual diagram scene using the same correspondence and shared clock.
 
 The doctrine, composition laws, authoring guide, core interfaces, executable
 law checks, pause-time inspection, drill-down hooks, flashcard specs, external
@@ -261,30 +263,37 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Mount visible equation and graph runtime-frame consumers for the selected
-   editor descriptor without creating a second playback clock.
-2. Add representative browser visual checks for fraction, inequality,
-   tangent, area, projection, matrix-vector, and matrix-matrix frames.
-3. Promote the six planned family samples for Taylor/local linearization,
-   gradient/Jacobian, Hessian/optimization, row operations,
-   determinant/inverse, and basis/eigen.
-4. Turn paused-frame drill-down blueprints into editor authoring actions.
-5. Add picker labels or filters that distinguish base catalog assets from
-   family-backed authoring selections while preserving stable routes.
-6. Harden `/api/compile`, export/embed boundaries, and future hosted capsules
+1. Make rich correspondence canonical while retaining one-to-one shorthand.
+2. Compile semantic transformations into a renderer-neutral token lifecycle and
+   motion plan with explicit fallback diagnostics.
+3. Render selector-annotated KaTeX through a persistent measured token stage
+   driven by the shared editor player.
+4. Prove incremental motion on solve-x, fractions, function wrapping,
+   distribution/factoring, exponent/radical, inequality, and matrix examples.
+5. Define and compile a constrained LLM semantic animation draft; reject invalid
+   or underspecified drafts before rendering.
+6. Add a minimal node-edge `DiagramScene` and deterministic SVG surface using
+   the same identity, correspondence, timing, and validation contracts.
+7. Turn paused-frame drill-down blueprints into editor authoring actions after
+   the semantic compiler and generated examples pass their quality gate.
+8. Harden `/api/compile`, export/embed boundaries, and future hosted capsules
    with explicit size, schema, error, auth, CSP, and dependency policies before
    inviting broad external input.
-7. Start GIF or video encoder integration only after the frame-sequence JSON
+9. Start GIF or video encoder integration only after the frame-sequence JSON
    artifact, HTML preview, browser probe, rewind check, dependency manifest,
    and capability package manifests stay stable.
-8. Expand graph diagnostics from current mesh/conformance checks into richer
+10. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
-9. Defer dynamic package loading until at least one generated animation family
+11. Defer dynamic package loading until at least one generated animation family
    proves the metadata contract across math, graph, programming, and export
    examples.
 
 ## Deferred
 
+- Promotion of Taylor/local linearization, gradient/Jacobian,
+  Hessian/optimization, row operations, determinant/inverse, and basis/eigen is
+  deferred until the semantic transition compiler passes its representative
+  equation and LLM-authoring quality gate.
 - Full curriculum and spaced repetition are deferred until object,
   transformation, and computation protocols are reliable.
 - GIF/video encoder integration is deferred until the frame-sequence artifact

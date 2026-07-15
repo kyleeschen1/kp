@@ -1,0 +1,57 @@
+{
+  "id": "next-action.kp.semantic-incremental-transition-compiler-focus-v0",
+  "kind": "next-action",
+  "title": "Build Semantic Incremental Transition And LLM Authoring Path",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Execute the approved 30-slice compiler, renderer, representative equation, constrained LLM draft, and minimal diagram loop without a second clock or renderer-owned semantics.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Thirty-slice proposal, expected end state, deferrals, and stop conditions."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "decision.kp.semantic-incremental-transition-focus-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether KP's rich correspondence model is sufficient to deterministically compile representative equation transitions with stable identity and exact reverse sampling.",
+    "Whether one constrained semantic draft contract can generate both an equation animation and a minimal node-edge diagram without renderer-owned semantics."
+  ],
+  "allowedWork": [
+    "Semantic correspondence, equation transition IR/compiler, selector-annotated KaTeX, measured token motion, shared-player integration, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene/SVG adapter, focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "A second playback clock, arbitrary CAS or target-math generation, LLM-authored DOM/pixels/keyframes, live model-provider integration, a general diagram layout engine, unrelated dashboard/export/media work, or the six deferred family promotions."
+  ],
+  "criteria": [
+    {
+      "id": "persistent-token-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "exact-bidirectional-sampling",
+      "weight": "high"
+    },
+    {
+      "id": "llm-draft-validation",
+      "weight": "high"
+    },
+    {
+      "id": "shared-diagram-runtime",
+      "weight": "medium"
+    }
+  ]
+}
