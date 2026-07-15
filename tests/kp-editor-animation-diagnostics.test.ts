@@ -52,5 +52,8 @@ test("selected editor animation includes its diagnostics panel", () => {
   });
 
   assert.match(html, /data-kp-editor-animation-diagnostics/);
+  assert.match(html, /data-kp-editor-animation-diagnostics-status="passed"/);
+  assert.match(html, /data-kp-editor-animation-diagnostics-targets>1\/1</);
+  assert.match(html, /data-kp-editor-animation-diagnostics-selectors>10\/10</);
   assert.match(html, /animation\.linear-solve\.solve-x\.forward/);
 });

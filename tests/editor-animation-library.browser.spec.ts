@@ -36,15 +36,29 @@ test("editor animation library restores and persists concrete selections", async
   );
   await expect(diagnostics).toHaveAttribute(
     "data-kp-editor-animation-diagnostics-status",
-    "warning"
+    "passed"
   );
   await diagnostics.locator("summary").click();
   await expect(diagnostics).toContainText("Render targets bound");
+  await expect(diagnostics).toContainText("1/1");
+  await page.evaluate(() => {
+    const demo = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+    if (demo === null) throw new Error("Expected equation motion demo.");
+    window.__kpEquationMotionSetProgress?.(demo, 0.5);
+  });
+  await expect(library).toHaveAttribute(
+    "data-kp-editor-animation-live-visual-frame-id",
+    "visual.live-equation-card.frame"
+  );
+  await expect(library).toHaveAttribute(
+    "data-kp-editor-animation-live-visual-unbound-selector-count",
+    "0"
+  );
   await expect(
-    diagnostics.locator(
-      '[data-kp-editor-animation-diagnostic-code="visual-frame.render-target-unbound"]'
-    )
-  ).toBeVisible();
+    diagnostics.locator("[data-kp-editor-animation-diagnostics-selectors]")
+  ).toHaveText("10/10");
 });
 
 test("dashboard animation assets open their concrete editor selection", async ({

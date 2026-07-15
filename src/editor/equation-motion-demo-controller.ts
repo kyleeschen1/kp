@@ -1002,6 +1002,84 @@ function syncLiveEquationVisualFrame(
   );
   demo.dataset["kpAnimationVisualRenderTargetCount"] =
     String(visualFrame.renderTargetVisuals.length);
+  syncEditorAnimationLibraryVisualFrame(demo, visualFrame);
+}
+
+function syncEditorAnimationLibraryVisualFrame(
+  demo: HTMLElement,
+  visualFrame: ReturnType<typeof createKatexDomRuntimeVisualFrame>
+): void {
+  const stage = demo.closest(".preview-stage");
+  const library = stage?.querySelector<HTMLElement>(
+    "[data-kp-editor-animation-library]"
+  );
+
+  if (
+    library === undefined ||
+    library === null ||
+    library.dataset["kpEditorAnimationId"] !== visualFrame.animationId
+  ) {
+    return;
+  }
+
+  const boundRenderTargets = visualFrame.renderTargetVisuals.filter(
+    (target) => target.nodeIds.length > 0
+  ).length;
+  const boundSelectors = visualFrame.selectorVisuals.filter(
+    (selector) => selector.nodeIds.length > 0
+  ).length;
+  const errors = visualFrame.diagnostics.filter(
+    (diagnostic) => diagnostic.severity === "error"
+  ).length;
+  const warnings = visualFrame.diagnostics.filter(
+    (diagnostic) => diagnostic.severity === "warning"
+  ).length;
+  const status = errors > 0 ? "error" : warnings > 0 ? "warning" : "passed";
+  const panel = library.querySelector<HTMLElement>(
+    "[data-kp-editor-animation-diagnostics]"
+  );
+
+  library.dataset["kpEditorAnimationLiveVisualFrameId"] = visualFrame.id;
+  library.dataset["kpEditorAnimationLiveVisualPhaseId"] = visualFrame.phaseId;
+  library.dataset["kpEditorAnimationLiveVisualNodeCount"] = String(
+    visualFrame.nodes.length
+  );
+  library.dataset["kpEditorAnimationLiveVisualBoundSelectorCount"] = String(
+    boundSelectors
+  );
+  library.dataset["kpEditorAnimationLiveVisualUnboundSelectorCount"] = String(
+    visualFrame.selectorVisuals.length - boundSelectors
+  );
+
+  if (panel === null) return;
+
+  panel.dataset["kpEditorAnimationDiagnosticsStatus"] = status;
+  setText(panel, "[data-kp-editor-animation-diagnostics-label]", `Diagnostics: ${status}`);
+  setText(
+    panel,
+    "[data-kp-editor-animation-diagnostics-counts]",
+    `${errors} errors · ${warnings} warnings`
+  );
+  setText(
+    panel,
+    "[data-kp-editor-animation-diagnostics-phase]",
+    visualFrame.phaseId
+  );
+  setText(
+    panel,
+    "[data-kp-editor-animation-diagnostics-targets]",
+    `${boundRenderTargets}/${visualFrame.renderTargetVisuals.length}`
+  );
+  setText(
+    panel,
+    "[data-kp-editor-animation-diagnostics-selectors]",
+    `${boundSelectors}/${visualFrame.selectorVisuals.length}`
+  );
+}
+
+function setText(root: ParentNode, selector: string, value: string): void {
+  const element = root.querySelector<HTMLElement>(selector);
+  if (element !== null) element.textContent = value;
 }
 
 function clearLiveEquationVisualFrame(demo: HTMLElement): void {

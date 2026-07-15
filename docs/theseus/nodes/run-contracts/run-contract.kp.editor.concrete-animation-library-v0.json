@@ -134,7 +134,8 @@
     {
       "id": "next-action.kp.editor.solve-x-live-visual-frame-v0",
       "title": "Bind solve x to live measured visual frames",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.solve-x-live-visual-frame-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.katex-font-ownership-v0",

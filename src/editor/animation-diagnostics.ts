@@ -3,11 +3,13 @@ import {
   type KpAnimationAsset
 } from "../animation/asset.ts";
 import {
-  sampleKpAnimationRuntimeFrame
+  sampleKpAnimationRuntimeFrame,
+  type KpAnimationRuntimeFrame
 } from "../animation/runtime-sampler.ts";
 import {
   createKpAnimationVisualFrame,
-  type KpAnimationVisualBinding
+  type KpAnimationVisualBinding,
+  type KpAnimationVisualFrame
 } from "../animation/visual-frame-adapter.ts";
 import {
   createKpAnimationVisualFrameDiagnosticsPanelData,
@@ -44,14 +46,16 @@ export function createKpEditorAnimationDiagnostics(input: {
   readonly catalog: readonly KpAnimationAsset[];
   readonly progress?: number | undefined;
   readonly bindings?: readonly KpAnimationVisualBinding[] | undefined;
+  readonly runtimeFrame?: KpAnimationRuntimeFrame | undefined;
+  readonly visualFrame?: KpAnimationVisualFrame | undefined;
 }): KpEditorAnimationDiagnostics {
   const progress = input.progress ?? 0.5;
-  const runtimeFrame = sampleKpAnimationRuntimeFrame({
+  const runtimeFrame = input.runtimeFrame ?? sampleKpAnimationRuntimeFrame({
     animation: input.animation,
     childAnimations: input.catalog,
     progress
   });
-  const visualFrame = createKpAnimationVisualFrame({
+  const visualFrame = input.visualFrame ?? createKpAnimationVisualFrame({
     id: `visual.editor.${input.animation.id}.${progress.toFixed(4)}`,
     runtimeFrame,
     bindings: input.bindings ?? []
@@ -127,14 +131,14 @@ export function renderKpEditorAnimationDiagnostics(
   return `
     <details class="editor-animation-diagnostics" data-kp-editor-animation-diagnostics data-kp-editor-animation-diagnostics-status="${diagnostics.status}">
       <summary>
-        Diagnostics: ${diagnostics.status}
-        <span>${diagnostics.severityCounts.error} errors · ${diagnostics.severityCounts.warning} warnings</span>
+        <span data-kp-editor-animation-diagnostics-label>Diagnostics: ${diagnostics.status}</span>
+        <span data-kp-editor-animation-diagnostics-counts>${diagnostics.severityCounts.error} errors · ${diagnostics.severityCounts.warning} warnings</span>
       </summary>
       <div class="editor-animation-diagnostics__body">
         <dl>
-          <div><dt>Runtime phase</dt><dd>${escapeHtml(diagnostics.phaseId)}</dd></div>
-          <div><dt>Render targets bound</dt><dd>${binding.boundRenderTargetCount}/${binding.renderTargetCount}</dd></div>
-          <div><dt>Selectors bound</dt><dd>${binding.boundSelectorCount}/${binding.selectorCount}</dd></div>
+          <div><dt>Runtime phase</dt><dd data-kp-editor-animation-diagnostics-phase>${escapeHtml(diagnostics.phaseId)}</dd></div>
+          <div><dt>Render targets bound</dt><dd data-kp-editor-animation-diagnostics-targets>${binding.boundRenderTargetCount}/${binding.renderTargetCount}</dd></div>
+          <div><dt>Selectors bound</dt><dd data-kp-editor-animation-diagnostics-selectors>${binding.boundSelectorCount}/${binding.selectorCount}</dd></div>
         </dl>
         <ul>
           ${diagnostics.rows.map((row) => `
