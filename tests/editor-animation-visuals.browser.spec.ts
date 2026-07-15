@@ -369,3 +369,42 @@ test("matrix-matrix family animation visibly resolves the result matrix", async 
   await expect(player.locator("[data-kp-editor-equation-target]"))
     .toContainText("41048");
 });
+
+test("every pure equation descriptor renders visible KaTeX at start, midpoint, and end", async ({
+  page
+}) => {
+  test.setTimeout(90_000);
+  await page.goto("/");
+
+  const descriptorIds = await page.locator('[data-action="set-editor-animation"] option')
+    .evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value));
+  let checked = 0;
+
+  for (const descriptorId of descriptorIds) {
+    await page.locator('[data-action="set-editor-animation"]').selectOption(descriptorId);
+    const library = page.locator("[data-kp-editor-animation-library]");
+    if (await library.getAttribute("data-kp-editor-animation-surface") !== "equation") {
+      continue;
+    }
+
+    checked += 1;
+    const player = page.locator("[data-kp-editor-animation-player]");
+    const slot = player.locator('[data-kp-editor-animation-surface-slot="equation"]');
+    await expect(slot, descriptorId).toHaveAttribute(
+      "data-kp-editor-animation-adapter-id",
+      "editor-animation-surface.equation.katex"
+    );
+
+    for (const progress of ["0", "0.5", "1"]) {
+      await player.locator('[data-action="seek-editor-animation"]').fill(progress);
+      await expect(player.locator("[data-kp-editor-equation-stage]"), `${descriptorId} @ ${progress}`)
+        .toHaveCount(1);
+      await expect(player.locator("[data-kp-editor-equation-stage] .katex").first())
+        .toBeAttached();
+      await expect(player.locator("[data-kp-editor-equation-unavailable]"))
+        .toHaveCount(0);
+    }
+  }
+
+  expect(checked).toBe(30);
+});
