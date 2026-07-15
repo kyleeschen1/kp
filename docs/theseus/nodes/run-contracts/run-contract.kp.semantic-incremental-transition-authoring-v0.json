@@ -121,7 +121,8 @@
     {
       "id": "next-action.kp.semantic-transition.persistent-stage-v0",
       "title": "Preserve equation stage identity across phases",
-      "status": "planned"
+      "summary": "Equation stage identity now survives semantic phase changes.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.shared-player-adapter-v0",

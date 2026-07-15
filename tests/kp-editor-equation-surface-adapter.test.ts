@@ -46,4 +46,7 @@ test("equation stage derives smooth local phase progress from the runtime clock"
     middle.projection.transitions[0]?.id,
     "transform.linear-solve.cancel-left-additive-inverse"
   );
+  assert.equal(start.stageIdentityKey, middle.stageIdentityKey);
+  assert.equal(middle.stageIdentityKey, end.stageIdentityKey);
+  assert.notEqual(start.contentKey, middle.contentKey);
 });

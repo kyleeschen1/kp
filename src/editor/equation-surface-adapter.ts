@@ -26,6 +26,8 @@ import {
 const animationCatalog = createKpAnimationAssets();
 
 export interface KpEditorEquationStageFrame {
+  readonly stageIdentityKey: string;
+  readonly contentKey: string;
   readonly projection: KpEditorEquationRuntimeFrameProjection;
   readonly localProgress: number;
   readonly easedProgress: number;
@@ -56,8 +58,12 @@ export function createKpEditorEquationStageFrame(input: {
       );
 
   const solveX = createKpEditorSolveXSharedPlayerFrame(input);
+  const stageIdentityKey = `${projection.animationId}:${projection.direction}`;
+  const contentKey = projection.transitions.map((transition) => transition.id).join(":");
 
   return {
+    stageIdentityKey,
+    contentKey,
     projection,
     localProgress,
     easedProgress: localProgress * localProgress * (3 - 2 * localProgress),
@@ -96,16 +102,15 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       return;
     }
 
-    const frameKey = [
-      frame.projection.direction,
-      ...frame.projection.transitions.map((transition) => transition.id)
-    ].join(":");
     let stage = slot.querySelector<HTMLElement>("[data-kp-editor-equation-stage]");
 
-    if (stage?.dataset["kpEditorEquationFrameKey"] !== frameKey) {
-      slot.innerHTML = renderStage(frame, frameKey);
+    if (stage?.dataset["kpEditorEquationStageIdentityKey"] !== frame.stageIdentityKey) {
+      slot.innerHTML = renderStage(frame);
       stage = slot.querySelector<HTMLElement>("[data-kp-editor-equation-stage]");
       if (stage !== null) measureStage(stage);
+    } else if (stage.dataset["kpEditorEquationContentKey"] !== frame.contentKey) {
+      replaceStageContent(stage, frame);
+      measureStage(stage);
     }
 
     if (stage === null) return;
@@ -146,10 +151,16 @@ export function registerKpEditorEquationSurfaceAdapter(): () => void {
   );
 }
 
-function renderStage(frame: KpEditorEquationStageFrame, frameKey: string): string {
+function renderStage(frame: KpEditorEquationStageFrame): string {
   return `
-    <div class="editor-equation-stage" data-kp-editor-equation-stage data-kp-editor-equation-frame-key="${escapeHtml(frameKey)}" data-kp-editor-equation-phase-id="${escapeHtml(frame.projection.phaseId)}" data-kp-editor-equation-local-progress="${frame.localProgress}">
-      ${frame.projection.transitions.map((transition, index) => `
+    <div class="editor-equation-stage" data-kp-editor-equation-stage data-kp-editor-equation-stage-identity-key="${escapeHtml(frame.stageIdentityKey)}" data-kp-editor-equation-content-key="${escapeHtml(frame.contentKey)}" data-kp-editor-equation-phase-id="${escapeHtml(frame.projection.phaseId)}" data-kp-editor-equation-local-progress="${frame.localProgress}">
+      ${renderStageContent(frame)}
+    </div>
+  `;
+}
+
+function renderStageContent(frame: KpEditorEquationStageFrame): string {
+  return `${frame.projection.transitions.map((transition, index) => `
         <article class="editor-equation-stage__transition" data-kp-editor-equation-transition-id="${escapeHtml(transition.id)}" data-kp-editor-equation-transition-index="${index}" data-kp-editor-equation-motif="${frame.motifs[index]?.kind ?? "artifact-replace"}" aria-label="${escapeHtml(transition.title)}">
           <div class="editor-equation-stage__layer editor-equation-stage__layer--source" data-kp-editor-equation-source>
             ${renderEquationObjects(transition.source)}
@@ -164,9 +175,17 @@ function renderStage(frame: KpEditorEquationStageFrame, frameKey: string): strin
           </div>
         </article>
       `).join("")}
-      ${frame.solveX === undefined ? "" : renderSolveXSequence(frame.solveX)}
-    </div>
-  `;
+      ${frame.solveX === undefined ? "" : renderSolveXSequence(frame.solveX)}`;
+}
+
+function replaceStageContent(
+  stage: HTMLElement,
+  frame: KpEditorEquationStageFrame
+): void {
+  const template = document.createElement("template");
+  template.innerHTML = renderStageContent(frame);
+  stage.replaceChildren(...template.content.childNodes);
+  stage.dataset["kpEditorEquationContentKey"] = frame.contentKey;
 }
 
 function renderEquationObjects(
