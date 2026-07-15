@@ -156,6 +156,97 @@ test("validateKpSemanticTransformation reports missing endpoints and selectors",
   ]);
 });
 
+test("createKpSemanticTransformation retains an isolated rich correspondence map", () => {
+  const correspondenceMap = {
+    id: "correspondence.subtract-both-sides",
+    records: [
+      {
+        id: "unknown-persists",
+        relation: "identity" as const,
+        sourceSelectorIds: ["eq0.x"],
+        targetSelectorIds: ["eq1.x"],
+        summary: "The unknown keeps its semantic identity."
+      },
+      {
+        id: "inverse-introduced",
+        relation: "introduction" as const,
+        sourceSelectorIds: [],
+        targetSelectorIds: ["eq1.equals"],
+        summary: "An inverse-operation marker enters the target presentation."
+      }
+    ]
+  };
+  const transformation = createKpSemanticTransformation({
+    id: "transform.rich-correspondence",
+    transformType: "subtractBothSides",
+    title: "Subtract using rich correspondence",
+    sourceObjectIds: ["equation.solve.initial"],
+    targetObjectIds: ["equation.solve.with-inverses"],
+    preserves: ["value"],
+    correspondenceMap
+  });
+
+  correspondenceMap.records[0]!.sourceSelectorIds[0] = "mutated-outside";
+
+  assert.deepEqual(transformation.correspondence, []);
+  assert.deepEqual(transformation.correspondenceMap, {
+    id: "correspondence.subtract-both-sides",
+    records: [
+      {
+        id: "unknown-persists",
+        relation: "identity",
+        sourceSelectorIds: ["eq0.x"],
+        targetSelectorIds: ["eq1.x"],
+        summary: "The unknown keeps its semantic identity."
+      },
+      {
+        id: "inverse-introduced",
+        relation: "introduction",
+        sourceSelectorIds: [],
+        targetSelectorIds: ["eq1.equals"],
+        summary: "An inverse-operation marker enters the target presentation."
+      }
+    ]
+  });
+  assert.deepEqual(validateKpSemanticTransformation(transformation, bundle), []);
+});
+
+test("validateKpSemanticTransformation reports missing rich correspondence selectors", () => {
+  const transformation = createKpSemanticTransformation({
+    id: "transform.bad-rich-correspondence",
+    transformType: "simplify",
+    title: "Broken rich correspondence",
+    sourceObjectIds: ["equation.solve.initial"],
+    targetObjectIds: ["equation.solve.with-inverses"],
+    preserves: ["value"],
+    correspondenceMap: {
+      id: "correspondence.bad",
+      records: [
+        {
+          id: "missing-endpoints",
+          relation: "identity",
+          sourceSelectorIds: ["eq0.missing"],
+          targetSelectorIds: ["eq1.missing"],
+          summary: "Invalid selectors should be diagnosed."
+        }
+      ]
+    }
+  });
+
+  assert.deepEqual(validateKpSemanticTransformation(transformation, bundle), [
+    {
+      path: "correspondenceMap.records[0].sourceSelectorIds[0]",
+      message:
+        "Transformation transform.bad-rich-correspondence references missing rich-correspondence source selector eq0.missing."
+    },
+    {
+      path: "correspondenceMap.records[0].targetSelectorIds[0]",
+      message:
+        "Transformation transform.bad-rich-correspondence references missing rich-correspondence target selector eq1.missing."
+    }
+  ]);
+});
+
 test("canSequenceKpSemanticTransformations checks adjacent object boundaries", () => {
   const first = createKpSemanticTransformation({
     id: "transform.first",

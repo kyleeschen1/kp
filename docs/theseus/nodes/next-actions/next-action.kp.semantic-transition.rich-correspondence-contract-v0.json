@@ -1,0 +1,83 @@
+{
+  "id": "next-action.kp.semantic-transition.rich-correspondence-contract-v0",
+  "kind": "next-action",
+  "title": "Add rich correspondence to semantic transformations",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Semantic transformations now carry an optional cloned rich CorrespondenceMap alongside the legacy pair shorthand, and validation diagnoses missing rich endpoints.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-incremental-transition-authoring-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.semantic-transition.rich-correspondence-contract-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-incremental-transition-compiler-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Approved thirty-slice implementation plan and boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "Adds the rich correspondence contract, cloning, and selector closure validation."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-asset-transformation.test.ts",
+      "summary": "Covers isolation, compatibility shorthand, valid rich relations, and missing endpoints."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-incremental-transition-authoring-v0",
+      "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Add rich correspondence to semantic transformations can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/kp-asset-transformation.test.ts",
+      "status": "passed",
+      "scope": "Semantic transformation contract and validation.",
+      "checkedAt": "2026-07-15T19:38:04.633Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, and test type safety.",
+      "checkedAt": "2026-07-15T19:38:04.830Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-15T19:38:05.146Z",
+      "scope": "Theseus graph integrity."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Semantic transformations now carry an optional cloned rich CorrespondenceMap alongside the legacy pair shorthand, and validation diagnoses missing rich endpoints."
+  }
+}

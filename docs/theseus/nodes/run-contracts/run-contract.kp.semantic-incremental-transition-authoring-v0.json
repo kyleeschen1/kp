@@ -43,13 +43,14 @@
     {
       "id": "next-action.kp.semantic-transition.record-loop-v0",
       "title": "Record approved semantic transition loop",
-      "status": "complete",
-      "summary": "Approved contract materialized with thirty ordered slices, scope boundaries, stop conditions, and verification cadence."
+      "summary": "Approved contract materialized with thirty ordered slices, scope boundaries, stop conditions, and verification cadence.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.rich-correspondence-contract-v0",
       "title": "Add rich correspondence to semantic transformations",
-      "status": "planned"
+      "summary": "Rich correspondence is available on semantic transformations without breaking legacy pairs.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.correspondence-normalizer-v0",

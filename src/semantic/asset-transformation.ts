@@ -2,6 +2,10 @@ import {
   findKpAssetSelector,
   type KpAssetBundle
 } from "./asset.ts";
+import {
+  cloneCorrespondenceMap,
+  type CorrespondenceMap
+} from "./correspondence.ts";
 
 export type KpTransformationPreservation =
   | "identity"
@@ -48,6 +52,8 @@ export interface KpSemanticTransformation {
   readonly sourceObjectIds: readonly string[];
   readonly targetObjectIds: readonly string[];
   readonly preserves: readonly KpTransformationPreservation[];
+  /** Rich lifecycle relations; the pair list remains a compatibility shorthand. */
+  readonly correspondenceMap?: CorrespondenceMap | undefined;
   readonly correspondence: readonly KpSelectorCorrespondence[];
   readonly assumptions?: readonly string[] | undefined;
   readonly lawRefs?: readonly KpTransformationLawRef[] | undefined;
@@ -74,6 +80,7 @@ export interface CreateKpSemanticTransformationInput {
   readonly sourceObjectIds: readonly string[];
   readonly targetObjectIds: readonly string[];
   readonly preserves: readonly KpTransformationPreservation[];
+  readonly correspondenceMap?: CorrespondenceMap | undefined;
   readonly correspondence?: readonly KpSelectorCorrespondence[] | undefined;
   readonly assumptions?: readonly string[] | undefined;
   readonly lawRefs?: readonly KpTransformationLawRef[] | undefined;
@@ -122,6 +129,9 @@ export function createKpSemanticTransformation(
     sourceObjectIds: [...input.sourceObjectIds],
     targetObjectIds: [...input.targetObjectIds],
     preserves: [...input.preserves],
+    ...(input.correspondenceMap === undefined
+      ? {}
+      : { correspondenceMap: cloneCorrespondenceMap(input.correspondenceMap) }),
     correspondence: (input.correspondence ?? []).map((correspondence) => ({
       sourceSelectorId: correspondence.sourceSelectorId,
       targetSelectorId: correspondence.targetSelectorId,
@@ -237,6 +247,26 @@ export function validateKpSemanticTransformation(
         message: `Transformation ${transformation.id} references missing target selector ${correspondence.targetSelectorId}.`
       });
     }
+  });
+
+  transformation.correspondenceMap?.records.forEach((record, recordIndex) => {
+    record.sourceSelectorIds.forEach((selectorId, selectorIndex) => {
+      if (findKpAssetSelector(bundle, selectorId) === undefined) {
+        issues.push({
+          path: `correspondenceMap.records[${recordIndex}].sourceSelectorIds[${selectorIndex}]`,
+          message: `Transformation ${transformation.id} references missing rich-correspondence source selector ${selectorId}.`
+        });
+      }
+    });
+
+    record.targetSelectorIds.forEach((selectorId, selectorIndex) => {
+      if (findKpAssetSelector(bundle, selectorId) === undefined) {
+        issues.push({
+          path: `correspondenceMap.records[${recordIndex}].targetSelectorIds[${selectorIndex}]`,
+          message: `Transformation ${transformation.id} references missing rich-correspondence target selector ${selectorId}.`
+        });
+      }
+    });
   });
 
   return issues;
