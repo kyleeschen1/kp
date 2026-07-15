@@ -181,7 +181,8 @@
     {
       "id": "next-action.kp.semantic-transition.browser-gate-v0",
       "title": "Gate representative equation transitions",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.semantic-transition.browser-gate-v0 in KP Semantic Incremental Transition And LLM Authoring V0.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.llm-draft-schema-v0",

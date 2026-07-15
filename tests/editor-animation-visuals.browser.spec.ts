@@ -598,3 +598,53 @@ test("graph annotations stay synchronized with the visible runtime geometry", as
     await expect(annotation).toHaveText(end);
   }
 });
+
+test("migrated equation families keep semantic token motion active forward and backward", async ({
+  page
+}) => {
+  test.setTimeout(90_000);
+  await page.goto("/");
+  const descriptorIds = [
+    "editor-animation.animation.linear-solve.solve-x",
+    "editor-animation.sample.animation.fraction-simplification.basic",
+    "editor-animation.sample.animation.exponent-combine.square-as-product",
+    "editor-animation.sample.animation.radical-rewrite.square-root-as-power",
+    "editor-animation.sample.animation.function-wrap.apply-f",
+    "editor-animation.sample.animation.distribution.expand-a-sum",
+    "editor-animation.sample.animation.factoring.factor-common-a",
+    "editor-animation.sample.animation.inequality.sign-flip.basic",
+    "editor-animation.sample.animation.matrix-vector.basic",
+    "editor-animation.sample.animation.matrix-matrix.basic"
+  ];
+
+  for (const descriptorId of descriptorIds) {
+    await page.locator('[data-action="set-editor-animation"]').selectOption(descriptorId);
+    const player = page.locator("[data-kp-editor-animation-player]");
+    const scrubber = player.locator('[data-action="seek-editor-animation"]');
+    await scrubber.fill("0.43");
+    let transition = player.locator("[data-kp-editor-equation-transition-id]");
+    await expect(transition).toHaveAttribute(
+      "data-kp-editor-equation-semantic-status",
+      "ready"
+    );
+    await expect(transition).toHaveAttribute(
+      "data-kp-editor-equation-semantic-motion",
+      "active"
+    );
+    expect(await transition.locator("[data-kp-motion-id]").count()).toBeGreaterThan(1);
+
+    await player.getByRole("button", { name: "Rewind animation" }).click();
+    await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "rewind");
+    await player.getByRole("button", { name: "Pause animation" }).click();
+    await scrubber.fill("0.43");
+    transition = player.locator("[data-kp-editor-equation-transition-id]");
+    await expect(transition).toHaveAttribute(
+      "data-kp-editor-equation-semantic-motion",
+      "active"
+    );
+    await expect(transition).toHaveAttribute(
+      "data-kp-editor-equation-semantic-progress",
+      /^(?!0$|1$)\d*\.?\d+$/
+    );
+  }
+});
