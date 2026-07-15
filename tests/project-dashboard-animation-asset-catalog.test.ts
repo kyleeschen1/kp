@@ -484,13 +484,19 @@ test("dashboard exposes generated problem registry rows", () => {
 test("dashboard animation asset rows expose complex KaTeX search aliases", () => {
   assert.deepEqual(
     createAnimationAssetAgendaRows("ftc duality").map((row) => row.id),
-    ["animation-sample-fundamental-theorem-calculus"]
+    [
+      "animation-integral-ftc-area-sweep",
+      "animation-sample-fundamental-theorem-calculus"
+    ]
   );
   assert.deepEqual(
     createAnimationAssetAgendaRows("fundamental theorem animation").map(
       (row) => row.id
     ),
-    ["animation-sample-fundamental-theorem-calculus"]
+    [
+      "animation-integral-ftc-area-sweep",
+      "animation-sample-fundamental-theorem-calculus"
+    ]
   );
   assert.deepEqual(
     createAnimationAssetAgendaRows("fourier kernel").map((row) => row.id),

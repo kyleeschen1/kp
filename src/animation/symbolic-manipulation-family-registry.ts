@@ -2344,13 +2344,13 @@ function createCalculusIntegralFtcFamily(): KpSymbolicManipulationFamily {
       {
         id: "sample.animation.integral-ftc.area-sweep",
         animationId: "animation.integral-ftc.area-sweep",
+        availability: "concrete",
         renderTargetKinds: ["graph"],
         transformationDefinitionIds: [
-          "definition.symbolic.calculus.definite-integral-ftc",
           "definition.symbolic.calculus.accumulation-derivative-ftc"
         ],
         summary:
-          "Graph-only area sweep sample preserves bound provenance while showing sampled accumulation."
+          "The t-squared area sweep preserves upper-bound provenance while sampling exact accumulation."
       }
     ],
     graphEquivalents: [
@@ -2366,7 +2366,7 @@ function createCalculusIntegralFtcFamily(): KpSymbolicManipulationFamily {
             level: "sampled"
           }
         ],
-        sampleAssetIds: ["animation.sample.fundamental-theorem-calculus"],
+        sampleAssetIds: ["animation.integral-ftc.area-sweep"],
         summary:
           "Integral and FTC rewrites preserve the accumulated area represented between the lower and upper bounds."
       },

@@ -203,6 +203,22 @@ test("FTC comparison asset resolves the calculus integral sample", () => {
   );
 });
 
+test("integral area asset resolves the calculus graph sample", () => {
+  const resolution = createKpSymbolicFamilyAnimationResolutions({
+    families: createSymbolicManipulationFamilyRegistry(),
+    assets: createKpAnimationAssets()
+  }).find(
+    (candidate) =>
+      candidate.sampleId === "sample.animation.integral-ftc.area-sweep"
+  );
+
+  assert.equal(resolution?.status, "resolved");
+  assert.equal(
+    resolution?.animationId,
+    "animation.integral-ftc.area-sweep"
+  );
+});
+
 test("family animation resolver requires explicit concrete availability and exact ids", () => {
   const asset = createLinearSolveAnimationAsset();
   const plannedFamily = familyWithSample({

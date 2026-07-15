@@ -1259,8 +1259,8 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
       ["Ready families", "18"],
       ["Transform definitions", "71"],
       ["Runtime sample refs", "23"],
-      ["Concrete runtime samples", "12"],
-      ["Planned runtime samples", "11"],
+      ["Concrete runtime samples", "13"],
+      ["Planned runtime samples", "10"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],
       ["Flashcard hooks", "18"],
@@ -1724,13 +1724,13 @@ test("calculus integral and FTC family preserves integrands and bounds", () => {
     {
       id: "sample.animation.integral-ftc.area-sweep",
       animationId: "animation.integral-ftc.area-sweep",
+      availability: "concrete",
       renderTargetKinds: ["graph"],
       transformationDefinitionIds: [
-        "definition.symbolic.calculus.definite-integral-ftc",
         "definition.symbolic.calculus.accumulation-derivative-ftc"
       ],
       summary:
-        "Graph-only area sweep sample preserves bound provenance while showing sampled accumulation."
+        "The t-squared area sweep preserves upper-bound provenance while sampling exact accumulation."
     }
   ]);
   assert.deepEqual(family.graphEquivalents, [
@@ -1746,7 +1746,7 @@ test("calculus integral and FTC family preserves integrands and bounds", () => {
           level: "sampled"
         }
       ],
-      sampleAssetIds: ["animation.sample.fundamental-theorem-calculus"],
+      sampleAssetIds: ["animation.integral-ftc.area-sweep"],
       summary:
         "Integral and FTC rewrites preserve the accumulated area represented between the lower and upper bounds."
     },
@@ -1809,13 +1809,13 @@ test("calculus integral family projects to area sweep graph samples", () => {
       {
         id: "sample.animation.integral-ftc.area-sweep",
         animationId: "animation.integral-ftc.area-sweep",
+        availability: "concrete",
         renderTargetKinds: ["graph"],
         transformationDefinitionIds: [
-          "definition.symbolic.calculus.definite-integral-ftc",
           "definition.symbolic.calculus.accumulation-derivative-ftc"
         ],
         summary:
-          "Graph-only area sweep sample preserves bound provenance while showing sampled accumulation."
+          "The t-squared area sweep preserves upper-bound provenance while sampling exact accumulation."
       }
     ]
   );
@@ -1832,7 +1832,7 @@ test("calculus integral family projects to area sweep graph samples", () => {
         "graph.calculus.integral.area-accumulation",
         "area-accumulation",
         "sampled",
-        ["animation.sample.fundamental-theorem-calculus"],
+        ["animation.integral-ftc.area-sweep"],
         "Integral and FTC rewrites preserve the accumulated area represented between the lower and upper bounds."
       ],
       [

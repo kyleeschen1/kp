@@ -242,7 +242,7 @@ test("derivative tangent family sample opens on the graph surface", async ({
     library.locator(
       '[data-action="set-editor-animation"] optgroup[label="Calculus"] option'
     )
-  ).toHaveCount(3);
+  ).toHaveCount(4);
 });
 
 test("FTC comparison opens through its calculus family selection", async ({
@@ -264,6 +264,33 @@ test("FTC comparison opens through its calculus family selection", async ({
   await expect(library).toHaveAttribute(
     "data-kp-editor-animation-surface",
     "equation"
+  );
+  await expect(library).toContainText("family.calculus.integral-ftc");
+  await expect(
+    library.locator("[data-kp-editor-animation-diagnostics-counts]")
+  ).toContainText("0 errors");
+  await expect(
+    library.locator("[data-kp-editor-animation-diagnostics-playback-laws]")
+  ).toHaveText("2/2");
+});
+
+test("integral area sweep opens on the graph surface", async ({ page }) => {
+  const descriptorId =
+    "editor-animation.sample.animation.integral-ftc.area-sweep";
+  await page.goto(`/?animation=${descriptorId}`);
+
+  const library = page.locator("[data-kp-editor-animation-library]");
+  await expect(library).toHaveAttribute(
+    "data-kp-editor-animation-descriptor-id",
+    descriptorId
+  );
+  await expect(library).toHaveAttribute(
+    "data-kp-editor-animation-id",
+    "animation.integral-ftc.area-sweep"
+  );
+  await expect(library).toHaveAttribute(
+    "data-kp-editor-animation-surface",
+    "graph"
   );
   await expect(library).toContainText("family.calculus.integral-ftc");
   await expect(

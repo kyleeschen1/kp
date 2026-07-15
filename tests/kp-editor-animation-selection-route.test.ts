@@ -25,7 +25,7 @@ test("editor renders every concrete asset through a stable descriptor selection"
     editorAnimationDescriptorId: selected.id
   });
 
-  assert.equal(descriptors.length, 34);
+  assert.equal(descriptors.length, 36);
   assert.match(html, /data-kp-editor-animation-library/);
   assert.match(
     html,
@@ -157,6 +157,29 @@ test("FTC forms are selectable through their calculus family descriptor", () => 
   assert.match(
     html,
     /option value="editor-animation\.sample\.animation\.integral-ftc\.basic" selected/
+  );
+});
+
+test("integral area sweep is selectable through its calculus family descriptor", () => {
+  const descriptor = createKpEditorAnimationLibrary().find(
+    (candidate) =>
+      candidate.sampleId === "sample.animation.integral-ftc.area-sweep"
+  );
+  assert.ok(descriptor);
+
+  const html = renderEditorDocument(createInitialEditorDocument(), {
+    editorAnimationDescriptorId: descriptor.id
+  });
+
+  assert.match(
+    html,
+    /data-kp-editor-animation-id="animation\.integral-ftc\.area-sweep"/
+  );
+  assert.match(html, /data-kp-editor-animation-surface="graph"/);
+  assert.match(html, /family\.calculus\.integral-ftc/);
+  assert.match(
+    html,
+    /option value="editor-animation\.sample\.animation\.integral-ftc\.area-sweep" selected/
   );
 });
 

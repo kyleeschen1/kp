@@ -31,6 +31,9 @@ import {
 import {
   createDerivativeTangentAnimationAsset
 } from "./derivative-tangent-adapter.ts";
+import {
+  createIntegralAreaSweepAnimationAsset
+} from "./integral-area-sweep-adapter.ts";
 
 interface VectorObject {
   readonly id: string;
@@ -54,7 +57,8 @@ export function createGraphAnimationAssets(): readonly KpAnimationAsset[] {
   return [
     createGraphSurfaceModeAnimationAsset(),
     createLinearMapVectorAnimationAsset(),
-    createDerivativeTangentAnimationAsset()
+    createDerivativeTangentAnimationAsset(),
+    createIntegralAreaSweepAnimationAsset()
   ];
 }
 
