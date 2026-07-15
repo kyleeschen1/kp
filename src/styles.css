@@ -1525,6 +1525,23 @@ h2 {
   text-transform: none;
 }
 
+.editor-animation-player__surface:has(.editor-graph-stage) {
+  border-style: solid;
+  background: #ffffff;
+}
+
+.editor-graph-stage {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 10rem;
+}
+
+.editor-graph-stage [data-kp-editor-graph-axis] {
+  stroke: #526173;
+  stroke-width: 1.5;
+}
+
 .editor-equation-stage {
   display: grid;
   width: 100%;

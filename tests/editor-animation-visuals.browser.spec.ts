@@ -408,3 +408,21 @@ test("every pure equation descriptor renders visible KaTeX at start, midpoint, a
 
   expect(checked).toBe(30);
 });
+
+test("graph animations mount the shared semantic SVG viewport", async ({ page }) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.derivative-rules.tangent-graph"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const slot = player.locator('[data-kp-editor-animation-surface-slot="graph"]');
+  await expect(slot).toHaveAttribute(
+    "data-kp-editor-animation-adapter-id",
+    "editor-animation-surface.graph.svg"
+  );
+  await expect(slot.locator("[data-kp-editor-graph-svg]")).toBeVisible();
+  await expect(slot.locator("[data-kp-editor-graph-axis]")).toHaveCount(2);
+  await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
+  await expect(slot.locator("[data-kp-editor-graph-svg]"))
+    .toHaveAttribute("data-kp-editor-graph-progress", "0.5");
+});
