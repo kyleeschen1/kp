@@ -4,6 +4,7 @@ import {
 import {
   symbolicManipulationFamilyDashboardTags,
   validateKpSymbolicManipulationFamily,
+  type KpSymbolicFlashcardHook,
   type KpSymbolicManipulationFamily
 } from "../animation/symbolic-manipulation-family.ts";
 import type { KpAssetMetadataValue } from "../semantic/asset.ts";
@@ -34,6 +35,101 @@ export function createSymbolicManipulationFamilyAgendaRows(
   return createSymbolicManipulationFamilyRegistry()
     .map(symbolicManipulationFamilyAgendaRow)
     .filter((row) => symbolicManipulationFamilyRowMatchesQuery(row, query));
+}
+
+export function createSymbolicManipulationFamilyFlashcardProjectionRows(
+  query: string
+): readonly SymbolicManipulationFamilyAgendaRow[] {
+  return createSymbolicManipulationFamilyRegistry()
+    .flatMap((family) =>
+      family.flashcardHooks.map((hook) =>
+        symbolicManipulationFamilyFlashcardProjectionRow(family, hook)
+      )
+    )
+    .filter((row) => symbolicManipulationFamilyRowMatchesQuery(row, query));
+}
+
+function symbolicManipulationFamilyFlashcardProjectionRow(
+  family: KpSymbolicManipulationFamily,
+  hook: KpSymbolicFlashcardHook
+): SymbolicManipulationFamilyAgendaRow {
+  const cardKind = symbolicFlashcardCardKind(hook.kind);
+
+  return {
+    id:
+      `symbolic-flashcard-${dashboardIdPart(family.id)}` +
+      `-${dashboardIdPart(hook.id)}`,
+    title: `${family.title}: ${cardKind}`,
+    summary:
+      hook.summary ??
+      `${cardKind} projection for symbolic family ${family.title}.`,
+    status: family.status === "seed" ? "planned" : "active",
+    detail: "symbolic flashcard hook",
+    kind: "protocol-api",
+    depth: 0,
+    tags: [
+      "symbolic-flashcard",
+      family.domain,
+      hook.kind,
+      cardKind,
+      "study"
+    ],
+    dataAttributes: [
+      ["data-kp-symbolic-flashcard-family", family.id],
+      ["data-kp-symbolic-flashcard-hook", hook.id],
+      ["data-kp-symbolic-flashcard-kind", cardKind]
+    ],
+    relatedIds: [
+      family.id,
+      hook.id,
+      ...hook.transformationDefinitionIds,
+      SYMBOLIC_LIBRARY_RUN_CONTRACT_ID
+    ],
+    previewFields: [
+      { label: "Symbolic family", value: family.id },
+      { label: "Flashcard hook", value: hook.id },
+      { label: "Hook kind", value: hook.kind },
+      { label: "Card kind", value: cardKind },
+      {
+        label: "Transform definitions",
+        value: hook.transformationDefinitionIds.join(", ")
+      },
+      { label: "Lesson markup", value: "not duplicated" }
+    ],
+    searchFields: [
+      "semantic asset catalog",
+      "symbolic family flashcard projection",
+      "symbolic-flashcard",
+      family.id,
+      family.title,
+      ...dashboardSearchTokens(family.title),
+      family.domain,
+      hook.id,
+      hook.kind,
+      cardKind,
+      `flashcard:${cardKind}`,
+      `hook-kind:${hook.kind}`,
+      "lesson-markup:false",
+      hook.summary ?? "",
+      ...hook.transformationDefinitionIds
+    ]
+  };
+}
+
+function symbolicFlashcardCardKind(
+  kind: KpSymbolicFlashcardHook["kind"]
+): "cloze" | "focus-relationship" | "predict-next" {
+  return kind === "focus" || kind === "relationship"
+    ? "focus-relationship"
+    : kind;
+}
+
+function dashboardIdPart(id: string): string {
+  return id.replaceAll(".", "-");
+}
+
+function dashboardSearchTokens(value: string): readonly string[] {
+  return value.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
 }
 
 function symbolicManipulationFamilyAgendaRow(

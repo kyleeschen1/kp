@@ -216,7 +216,7 @@
       "id": "next-action.kp.animation.symbolic-flashcard-hooks-v0",
       "title": "Add flashcard hooks for symbolic families",
       "summary": "Project selected family assets into cloze, focus, predict-next, and relationship prompt hooks without duplicating lesson markup.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.symbolic-paused-frame-drilldown-v0",

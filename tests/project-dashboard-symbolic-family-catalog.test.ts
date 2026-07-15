@@ -9,7 +9,8 @@ import {
   validateKpSymbolicManipulationFamily
 } from "../src/animation/symbolic-manipulation-family.ts";
 import {
-  createSymbolicManipulationFamilyAgendaRows
+  createSymbolicManipulationFamilyAgendaRows,
+  createSymbolicManipulationFamilyFlashcardProjectionRows
 } from "../src/project-dashboard/symbolic-family-catalog.ts";
 import {
   createSemanticAssetCatalogAgendaRows
@@ -3553,6 +3554,63 @@ test("linear algebra basis-eigen family tracks coordinate changes and eigenline 
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
 });
 
+test("symbolic family flashcard projection rows expose hooks without lesson markup", () => {
+  const clozeRows =
+    createSymbolicManipulationFamilyFlashcardProjectionRows(
+      "flashcard:cloze exponent-log"
+    );
+  assert.deepEqual(
+    clozeRows.map((row) => ({
+      id: row.id,
+      detail: row.detail,
+      tags: row.tags,
+      relatedIds: row.relatedIds.slice(0, 3),
+      cardKind: row.previewFields.find((field) => field.label === "Card kind")
+        ?.value
+    })),
+    [
+      {
+        id:
+          "symbolic-flashcard-family-algebra-exponent-log-laws-hook-flashcard-algebra-exponent-log-cloze",
+        detail: "symbolic flashcard hook",
+        tags: [
+          "symbolic-flashcard",
+          "algebra",
+          "cloze",
+          "cloze",
+          "study"
+        ],
+        relatedIds: [
+          "family.algebra.exponent-log-laws",
+          "hook.flashcard.algebra.exponent-log.cloze",
+          "definition.symbolic.algebra.multiply-same-base-powers"
+        ],
+        cardKind: "cloze"
+      }
+    ]
+  );
+
+  assert.deepEqual(
+    createSymbolicManipulationFamilyFlashcardProjectionRows(
+      "flashcard:focus-relationship determinant inverse"
+    )
+      .map((row) => [
+        row.id,
+        row.previewFields.find((field) => field.label === "Hook kind")?.value,
+        row.previewFields.find((field) => field.label === "Card kind")?.value,
+        row.searchFields.includes("lesson-markup:false")
+      ]),
+    [
+      [
+        "symbolic-flashcard-family-linear-algebra-determinant-inverse-hook-flashcard-linear-algebra-determinant-inverse-relationship",
+        "relationship",
+        "focus-relationship",
+        true
+      ]
+    ]
+  );
+});
+
 test("symbolic family rows are searchable through the semantic asset catalog", () => {
   assert.deepEqual(
     createSymbolicManipulationFamilyAgendaRows(
@@ -3565,5 +3623,13 @@ test("symbolic family rows are searchable through the semantic asset catalog", (
       "symbolic family hessian curvature graph-equivalent"
     ).map((row) => row.id),
     ["symbolic-family-calculus-hessian-optimization"]
+  );
+  assert.deepEqual(
+    createSemanticAssetCatalogAgendaRows(
+      "symbolic flashcard flashcard:focus-relationship determinant inverse"
+    ).map((row) => row.id),
+    [
+      "symbolic-flashcard-family-linear-algebra-determinant-inverse-hook-flashcard-linear-algebra-determinant-inverse-relationship"
+    ]
   );
 });
