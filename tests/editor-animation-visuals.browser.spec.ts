@@ -144,3 +144,47 @@ test("every solve-x descriptor route uses the same visible shared player", async
     );
   }
 });
+
+test("fraction simplification renders factor, common-factor, and simplified states", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.fraction-simplification.basic"
+  );
+
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-id",
+    "animation.generated.fraction-expression.two-fourths"
+  );
+
+  await scrubber.fill("0.5");
+  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+    .toHaveAttribute(
+      "data-kp-editor-equation-transition-id",
+      "transform.generated.fraction-expression.two-fourths.merge-common-factor"
+    );
+  await expect(player.locator("[data-kp-editor-equation-source] [data-kp-editor-equation-object-id]"))
+    .toHaveAttribute(
+      "data-kp-editor-equation-object-id",
+      "expression.generated.fraction-expression.two-fourths.factored"
+    );
+  await expect(player.locator("[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"))
+    .toHaveAttribute(
+      "data-kp-editor-equation-object-id",
+      "expression.generated.fraction-expression.two-fourths.common-factor"
+    );
+
+  await scrubber.fill("1");
+  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+    .toHaveAttribute("data-kp-editor-equation-motif", "simplify-into");
+  await expect(player.locator("[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"))
+    .toHaveAttribute(
+      "data-kp-editor-equation-object-id",
+      "expression.generated.fraction-expression.two-fourths.simplified"
+    );
+  await expect(player.locator("[data-kp-editor-equation-target]"))
+    .toHaveCSS("opacity", "1");
+});
