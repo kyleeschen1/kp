@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { createKpSelectorAnnotatedLatex } from "../src/rendering/selector-annotated-latex.ts";
+import { renderSelectorAnnotatedLatexToHtml } from "../src/rendering/katex-adapter.ts";
 
 test("createKpSelectorAnnotatedLatex derives stable motion ids from semantic selectors", () => {
   const annotated = createKpSelectorAnnotatedLatex({
@@ -53,4 +54,33 @@ test("createKpSelectorAnnotatedLatex rejects missing duplicate and unsafe select
     expectedSelectorIds: ["x}"],
     segments: [{ kind: "selector", selectorId: "x}", latex: "x" }]
   }), /data-attribute-safe id/);
+});
+
+test("renderSelectorAnnotatedLatexToHtml emits measurable semantic KaTeX anchors", () => {
+  const annotated = createKpSelectorAnnotatedLatex({
+    id: "equation.rendered",
+    expectedSelectorIds: ["lhs.x", "rhs.4"],
+    segments: [
+      { kind: "selector", selectorId: "lhs.x", latex: "x" },
+      { kind: "latex", latex: "=" },
+      { kind: "selector", selectorId: "rhs.4", latex: "4" }
+    ]
+  });
+
+  const html = renderSelectorAnnotatedLatexToHtml(annotated);
+
+  assert.match(html, /data-kp-motion-id="equation\.rendered\.lhs\.x"/);
+  assert.match(html, /data-kp-motion-id="equation\.rendered\.rhs\.4"/);
+});
+
+test("selector-annotated LaTeX keeps trusted commands inside the KP boundary", () => {
+  assert.throws(() => createKpSelectorAnnotatedLatex({
+    id: "equation.untrusted",
+    expectedSelectorIds: ["x"],
+    segments: [{
+      kind: "selector",
+      selectorId: "x",
+      latex: "\\htmlData{attacker=value}{x}"
+    }]
+  }), /cannot contain trusted HTML or URL commands/);
 });

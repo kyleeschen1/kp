@@ -44,6 +44,7 @@ export function createKpSelectorAnnotatedLatex(
   const annotatedParts: string[] = [];
 
   for (const segment of input.segments) {
+    assertUntrustedLatexSegment(segment.latex, input.id);
     if (segment.kind === "latex") {
       rawParts.push(segment.latex);
       annotatedParts.push(segment.latex);
@@ -100,5 +101,13 @@ export function createKpSelectorAnnotatedLatex(
 function assertSafeId(value: string, label: string): void {
   if (!/^[a-zA-Z0-9][a-zA-Z0-9._:-]*$/.test(value)) {
     throw new Error(`${label} must be a non-empty data-attribute-safe id.`);
+  }
+}
+
+function assertUntrustedLatexSegment(latex: string, id: string): void {
+  if (/\\(?:htmlData|htmlClass|htmlId|href|url|includegraphics)\b/.test(latex)) {
+    throw new Error(
+      `Selector-annotated LaTeX ${id} cannot contain trusted HTML or URL commands in authored segments.`
+    );
   }
 }

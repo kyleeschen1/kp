@@ -97,7 +97,8 @@
     {
       "id": "next-action.kp.semantic-transition.katex-motion-anchors-v0",
       "title": "Render stable semantic motion anchors in KaTeX",
-      "status": "planned"
+      "summary": "Validated semantic selectors now render as measurable stable KaTeX motion anchors.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.structural-artifacts-v0",
