@@ -136,6 +136,16 @@ function createGeneratedMatrixVectorProblemFixture(
   const ids = generatedMatrixVectorProblemIds(input);
   const result = multiplyMatrixVector(input.matrixRows, input.vector);
   const latex = generatedMatrixVectorProblemLatex(input, result);
+  const sourceSelectors = [
+    ...matrixEntrySelectors(ids.initial, input.matrixRows),
+    ...matrixBracketSelectors(ids.initial, "matrix"),
+    ...vectorSelectors(ids.initial, input.vector, "vector"),
+    ...matrixBracketSelectors(ids.initial, "vector")
+  ];
+  const resultSelectors = [
+    ...vectorSelectors(ids.result, result, "result"),
+    ...matrixBracketSelectors(ids.result, "result")
+  ];
   const bundle = createKpAssetBundle({
     id: ids.asset,
     title: input.title,
@@ -144,11 +154,7 @@ function createGeneratedMatrixVectorProblemFixture(
         ids.initial,
         "Matrix-vector product",
         latex.initial,
-        [
-          ...matrixRowSelectors(ids.initial, input.matrixRows),
-          ...matrixEntrySelectors(ids.initial, input.matrixRows),
-          ...vectorSelectors(ids.initial, input.vector, "vector")
-        ],
+        sourceSelectors,
         {
           matrixRows: input.matrixRows,
           vector: input.vector
@@ -158,7 +164,7 @@ function createGeneratedMatrixVectorProblemFixture(
         ids.result,
         "Computed product vector",
         latex.result,
-        vectorSelectors(ids.result, result, "result"),
+        resultSelectors,
         {
           result
         }
@@ -175,12 +181,14 @@ function createGeneratedMatrixVectorProblemFixture(
       sourceObjectIds: [ids.initial],
       targetObjectIds: [ids.result],
       preserves: ["value", "structure"],
-      correspondence: input.matrixRows.map((_, rowIndex) => ({
-        sourceSelectorId: `${ids.initial}.matrix.row.${rowIndex}`,
-        targetSelectorId: `${ids.result}.result.component.${rowIndex}`,
-        preserves: ["value" as const],
-        summary: `Row ${rowIndex + 1} dot product produces result component ${rowIndex + 1}.`
-      })),
+      correspondenceMap: replacementMap(
+        ids.transform,
+        sourceSelectors.map((selector) => selector.id),
+        resultSelectors.map((selector) => selector.id),
+        "Matrix and vector entries are consumed by row dot products.",
+        "Computed result components enter at their vector positions."
+      ),
+      correspondence: [],
       assumptions: [
         "The matrix column count equals the vector dimension.",
         "Each result component is the dot product of one matrix row with the vector."
@@ -308,6 +316,16 @@ function createGeneratedMatrixMatrixProblemFixture(
   const ids = generatedMatrixMatrixProblemIds(input);
   const result = multiplyMatrices(input.leftRows, input.rightRows);
   const latex = generatedMatrixMatrixProblemLatex(input, result);
+  const sourceSelectors = [
+    ...matrixEntrySelectors(ids.initial, input.leftRows, "left.matrix"),
+    ...matrixBracketSelectors(ids.initial, "left.matrix"),
+    ...matrixEntrySelectors(ids.initial, input.rightRows, "right.matrix"),
+    ...matrixBracketSelectors(ids.initial, "right.matrix")
+  ];
+  const resultSelectors = [
+    ...matrixEntrySelectors(ids.result, result, "result.matrix"),
+    ...matrixBracketSelectors(ids.result, "result.matrix")
+  ];
   const bundle = createKpAssetBundle({
     id: ids.asset,
     title: input.title,
@@ -316,12 +334,7 @@ function createGeneratedMatrixMatrixProblemFixture(
         ids.initial,
         "Matrix-matrix product",
         latex.initial,
-        [
-          ...matrixRowSelectors(ids.initial, input.leftRows, "left.matrix"),
-          ...matrixRowSelectors(ids.initial, input.rightRows, "right.matrix"),
-          ...matrixEntrySelectors(ids.initial, input.leftRows, "left.matrix"),
-          ...matrixEntrySelectors(ids.initial, input.rightRows, "right.matrix")
-        ],
+        sourceSelectors,
         {
           leftRows: input.leftRows,
           rightRows: input.rightRows
@@ -331,10 +344,7 @@ function createGeneratedMatrixMatrixProblemFixture(
         ids.result,
         "Computed matrix product",
         latex.result,
-        [
-          ...matrixRowSelectors(ids.result, result, "result.matrix"),
-          ...matrixEntrySelectors(ids.result, result, "result.matrix")
-        ],
+        resultSelectors,
         {
           result
         }
@@ -350,16 +360,14 @@ function createGeneratedMatrixMatrixProblemFixture(
       sourceObjectIds: [ids.initial],
       targetObjectIds: [ids.result],
       preserves: ["value", "structure"],
-      correspondence: result.flatMap((row, rowIndex) =>
-        row.map((_, columnIndex) => ({
-          sourceSelectorId: `${ids.initial}.left.matrix.row.${rowIndex}`,
-          targetSelectorId:
-            `${ids.result}.result.matrix.entry.${rowIndex}.${columnIndex}`,
-          preserves: ["value" as const],
-          summary:
-            `Left row ${rowIndex + 1} and right column ${columnIndex + 1} produce result entry (${rowIndex + 1}, ${columnIndex + 1}).`
-        }))
+      correspondenceMap: replacementMap(
+        ids.transform,
+        sourceSelectors.map((selector) => selector.id),
+        resultSelectors.map((selector) => selector.id),
+        "Both input matrices are consumed by row-column dot products.",
+        "Computed result entries enter at their matrix positions."
       ),
+      correspondence: [],
       assumptions: [
         "The left matrix column count equals the right matrix row count.",
         "Each result entry is a row-column dot product."
@@ -738,21 +746,6 @@ function expressionObject(
   });
 }
 
-function matrixRowSelectors(
-  objectId: string,
-  rows: readonly (readonly number[])[],
-  prefix = "matrix"
-): readonly CreateKpAssetSelectorInput[] {
-  return rows.map((row, rowIndex) =>
-    selector(
-      objectId,
-      `${prefix}.row.${rowIndex}`,
-      "row",
-      `[${row.join(", ")}]`
-    )
-  );
-}
-
 function matrixEntrySelectors(
   objectId: string,
   rows: readonly (readonly number[])[],
@@ -768,6 +761,16 @@ function matrixEntrySelectors(
       )
     )
   );
+}
+
+function matrixBracketSelectors(
+  objectId: string,
+  prefix: string
+): readonly CreateKpAssetSelectorInput[] {
+  return [
+    selector(objectId, `${prefix}.left-bracket`, "artifact", "["),
+    selector(objectId, `${prefix}.right-bracket`, "artifact", "]")
+  ];
 }
 
 function vectorSelectors(
@@ -790,6 +793,34 @@ function selector(
     id: `${objectId}.${suffix}`,
     kind,
     label
+  };
+}
+
+function replacementMap(
+  transformationId: string,
+  sourceSelectorIds: readonly string[],
+  targetSelectorIds: readonly string[],
+  sourceSummary: string,
+  targetSummary: string
+) {
+  return {
+    id: `${transformationId}.correspondence`,
+    records: [
+      {
+        id: "inputs-consumed",
+        relation: "removal" as const,
+        sourceSelectorIds,
+        targetSelectorIds: [],
+        summary: sourceSummary
+      },
+      {
+        id: "results-enter",
+        relation: "introduction" as const,
+        sourceSelectorIds: [],
+        targetSelectorIds,
+        summary: targetSummary
+      }
+    ]
   };
 }
 

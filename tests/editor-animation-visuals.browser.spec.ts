@@ -390,6 +390,10 @@ test("matrix-vector family animation visibly resolves the result vector", async 
     );
   await expect(player.locator("[data-kp-editor-equation-target]"))
     .toContainText("1315");
+  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+    .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
+  await expect(player.locator("[data-kp-editor-equation-target] .mopen[data-kp-motion-id]"))
+    .toHaveCount(1);
 });
 
 test("matrix-matrix family animation visibly resolves the result matrix", async ({ page }) => {
@@ -406,6 +410,10 @@ test("matrix-matrix family animation visibly resolves the result matrix", async 
     );
   await expect(player.locator("[data-kp-editor-equation-target]"))
     .toContainText("41048");
+  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+    .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
+  await expect(player.locator("[data-kp-editor-equation-target] [data-kp-motion-id]"))
+    .toHaveCount(6);
 });
 
 test("every pure equation descriptor renders visible KaTeX at start, midpoint, and end", async ({
