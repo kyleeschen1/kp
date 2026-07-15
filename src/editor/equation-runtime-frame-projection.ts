@@ -1,6 +1,10 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import type { KpAnimationRuntimeFrame } from "../animation/runtime-sampler.ts";
 import type { KpSemanticAssetObject } from "../semantic/asset.ts";
+import {
+  compileKpSemanticEquationTransitionResult,
+  type KpSemanticEquationTransitionCompileDiagnostic
+} from "../rendering/semantic-equation-transition-compiler.ts";
 
 export interface KpEditorEquationRuntimeFrameProjection {
   readonly kind: "editor-equation-runtime-frame";
@@ -21,6 +25,8 @@ export interface KpEditorEquationTransitionProjection {
   readonly source: readonly KpEditorEquationObjectProjection[];
   readonly target: readonly KpEditorEquationObjectProjection[];
   readonly correspondence: readonly KpEditorEquationSelectorCorrespondenceProjection[];
+  readonly semanticStatus: "ready" | "fallback";
+  readonly semanticDiagnostics: readonly KpSemanticEquationTransitionCompileDiagnostic[];
 }
 
 export interface KpEditorEquationObjectProjection {
@@ -89,6 +95,10 @@ export function projectKpEditorEquationRuntimeFrame(input: {
       );
 
       if (source.length === 0 && target.length === 0) return [];
+      const semanticResult = compileKpSemanticEquationTransitionResult({
+        transformation,
+        bundle: input.animation.bundle
+      });
 
       return [{
         id: transformation.id,
@@ -96,6 +106,12 @@ export function projectKpEditorEquationRuntimeFrame(input: {
         transformType: transformation.transformType,
         source,
         target,
+        semanticStatus: semanticResult.status === "semantic"
+          ? "ready" as const
+          : "fallback" as const,
+        semanticDiagnostics: semanticResult.diagnostics.map((diagnostic) => ({
+          ...diagnostic
+        })),
         correspondence: transformation.correspondence.map((correspondence) => ({
           sourceSelectorId: forward
             ? correspondence.sourceSelectorId

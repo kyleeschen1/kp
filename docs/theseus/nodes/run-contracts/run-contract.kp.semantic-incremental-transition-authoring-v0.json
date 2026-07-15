@@ -133,7 +133,8 @@
     {
       "id": "next-action.kp.semantic-transition.fallback-diagnostics-v0",
       "title": "Diagnose whole-layer fade fallback",
-      "status": "planned"
+      "summary": "Whole-equation fallback is now explicit and diagnosed in the editor transition projection and stage.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.solve-x-v0",

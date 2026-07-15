@@ -161,7 +161,7 @@ function renderStage(frame: KpEditorEquationStageFrame): string {
 
 function renderStageContent(frame: KpEditorEquationStageFrame): string {
   return `${frame.projection.transitions.map((transition, index) => `
-        <article class="editor-equation-stage__transition" data-kp-editor-equation-transition-id="${escapeHtml(transition.id)}" data-kp-editor-equation-transition-index="${index}" data-kp-editor-equation-motif="${frame.motifs[index]?.kind ?? "artifact-replace"}" aria-label="${escapeHtml(transition.title)}">
+        <article class="editor-equation-stage__transition" data-kp-editor-equation-transition-id="${escapeHtml(transition.id)}" data-kp-editor-equation-transition-index="${index}" data-kp-editor-equation-motif="${frame.motifs[index]?.kind ?? "artifact-replace"}" data-kp-editor-equation-semantic-status="${transition.semanticStatus}" aria-label="${escapeHtml(transition.title)}">
           <div class="editor-equation-stage__layer editor-equation-stage__layer--source" data-kp-editor-equation-source>
             ${renderEquationObjects(transition.source)}
           </div>
@@ -171,11 +171,22 @@ function renderStageContent(frame: KpEditorEquationStageFrame): string {
           <div class="editor-equation-stage__caption">
             <span data-kp-editor-equation-motif-label>${escapeHtml(motifLabel(frame.motifs[index]?.kind ?? "artifact-replace"))}</span>
             <span>${escapeHtml(transition.title)}</span>
+            <span data-kp-editor-equation-semantic-diagnostic>${escapeHtml(semanticStatusLabel(transition))}</span>
             ${renderFocusTokens(frame.motifs[index]?.focusLabels ?? [])}
           </div>
         </article>
       `).join("")}
       ${frame.solveX === undefined ? "" : renderSolveXSequence(frame.solveX)}`;
+}
+
+function semanticStatusLabel(
+  transition: KpEditorEquationRuntimeFrameProjection["transitions"][number]
+): string {
+  if (transition.semanticStatus === "ready") return "Semantic token motion ready";
+  const codes = [...new Set(
+    transition.semanticDiagnostics.map((diagnostic) => diagnostic.code)
+  )];
+  return `Whole-equation fallback: ${codes.join(", ") || "semantic coverage unavailable"}`;
 }
 
 function replaceStageContent(
