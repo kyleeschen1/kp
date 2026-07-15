@@ -20,6 +20,7 @@ export interface KpEditorEquationTransitionLayerMotion {
   readonly translateY: number;
   readonly scale: number;
   readonly blurPx: number;
+  readonly rotateY: number;
 }
 
 export function createKpEditorEquationTransitionMotifFrame(input: {
@@ -61,6 +62,8 @@ function sourceMotion(
       return motion(1 - progress, -12 * progress, 0, 1, 0);
     case "cancelation":
       return motion(1 - progress, 0, 0, 1 - 0.18 * progress, 0.8 * progress);
+    case "relation-flip":
+      return motion(1 - progress, 0, 0, 1, 0, -90 * progress);
     case "simplify-into":
       return motion(1 - progress, 0, 0, 1 - 0.12 * progress, 0);
     case "wrap":
@@ -83,6 +86,8 @@ function targetMotion(
       return motion(progress, 16 * (1 - progress), 0, 1, 0);
     case "cancelation":
       return motion(progress, 0, 0, 0.9 + 0.1 * progress, 0);
+    case "relation-flip":
+      return motion(progress, 0, 0, 1, 0, 90 * (1 - progress));
     case "simplify-into":
       return motion(progress, 0, 0, 0.86 + 0.14 * progress, 0);
     case "wrap":
@@ -101,9 +106,10 @@ function motion(
   translateX: number,
   translateY: number,
   scale: number,
-  blurPx: number
+  blurPx: number,
+  rotateY: number = 0
 ): KpEditorEquationTransitionLayerMotion {
-  return { opacity, translateX, translateY, scale, blurPx };
+  return { opacity, translateX, translateY, scale, blurPx, rotateY };
 }
 
 function unique(values: readonly string[]): readonly string[] {

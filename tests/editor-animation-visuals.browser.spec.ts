@@ -284,3 +284,24 @@ test("distribution and factoring family animations render opposite semantic dire
       .toHaveAttribute("data-kp-editor-equation-object-id", item.targetId);
   }
 });
+
+test("inequality family animation visibly flips its relation", async ({ page }) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.inequality.sign-flip.basic"
+  );
+
+  const player = page.locator("[data-kp-editor-animation-player]");
+  await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
+  const transition = player.locator("[data-kp-editor-equation-transition-id]");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-motif",
+    "relation-flip"
+  );
+  await expect(transition.locator("[data-kp-editor-equation-motif-label]"))
+    .toHaveText("relation flip");
+  await expect(transition.locator("[data-kp-editor-equation-source]"))
+    .toContainText("x<3");
+  await expect(transition.locator("[data-kp-editor-equation-target]"))
+    .toContainText("−2x>−6");
+});

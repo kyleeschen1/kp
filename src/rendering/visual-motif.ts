@@ -15,6 +15,7 @@ export type EquationVisualMotifKind =
   | "artifact-exit"
   | "artifact-replace"
   | "cancelation"
+  | "relation-flip"
   | "simplify-into"
   | "wrap"
   | "unwrap";
@@ -24,6 +25,7 @@ export const equationVisualMotifPhaseIds = [
   "artifact-exit",
   "layout-shift",
   "introduced-token-enter",
+  "relation-flip",
   "cancel-meet",
   "cancel-collapse",
   "post-cancel-layout-shift",
@@ -108,6 +110,12 @@ export const equationVisualMotifDescriptors: readonly EquationVisualMotifDescrip
     motionPrimitiveIds: ["vanish"],
     phaseIds: ["cancel-meet", "cancel-collapse", "post-cancel-layout-shift"],
     summary: "Matched inverse tokens meet, collapse, and leave layout room."
+  },
+  {
+    kind: "relation-flip",
+    motionPrimitiveIds: ["shift"],
+    phaseIds: ["relation-flip"],
+    summary: "An inequality relation turns as multiplication by a negative reverses its order."
   },
   {
     kind: "simplify-into",

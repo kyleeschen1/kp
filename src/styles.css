@@ -1586,6 +1586,11 @@ h2 {
   text-transform: uppercase;
 }
 
+.editor-equation-stage__transition[data-kp-editor-equation-motif="relation-flip"] [data-kp-editor-equation-motif-label] {
+  color: #7a3d08;
+  background: #fff1d6;
+}
+
 .editor-equation-stage__focus {
   display: inline-flex;
   gap: 0.25rem;

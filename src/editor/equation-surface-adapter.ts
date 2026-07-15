@@ -206,7 +206,7 @@ function applyLayerMotion(
   if (layer === null) return;
   layer.style.opacity = String(motion.opacity);
   layer.style.transform =
-    `translate(${motion.translateX}px, ${motion.translateY}px) scale(${motion.scale})`;
+    `translate(${motion.translateX}px, ${motion.translateY}px) rotateY(${motion.rotateY}deg) scale(${motion.scale})`;
   layer.style.filter = motion.blurPx === 0 ? "none" : `blur(${motion.blurPx}px)`;
 }
 

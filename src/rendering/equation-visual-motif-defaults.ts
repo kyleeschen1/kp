@@ -32,6 +32,11 @@ export const defaultEquationTransformVisualMotifRules:
       transformationKind: "unwrapFunction",
       descriptor: descriptorForEquationMotif("unwrap"),
       summary: "Function wrapper artifacts exit while persistent arguments shift."
+    },
+    {
+      transformationKind: "multiplyNegativeBothSidesInequality",
+      descriptor: descriptorForEquationMotif("relation-flip"),
+      summary: "The inequality relation turns while negative multiplication enters."
     }
   ];
 
