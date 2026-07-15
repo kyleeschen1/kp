@@ -337,3 +337,19 @@ test("calculus equation families render derivative and FTC forms", async ({ page
   await expect(player.locator('[data-kp-editor-equation-target] [data-kp-editor-equation-object-id="formula-ftc-net-change"]'))
     .toBeVisible();
 });
+
+test("matrix-vector family animation visibly resolves the result vector", async ({ page }) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.matrix-vector.basic"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  await player.locator('[data-action="seek-editor-animation"]').fill("1");
+  await expect(player.locator("[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"))
+    .toHaveAttribute(
+      "data-kp-editor-equation-object-id",
+      "expression.generated.linear-algebra.matrix-vector.two-by-two.result"
+    );
+  await expect(player.locator("[data-kp-editor-equation-target]"))
+    .toContainText("1315");
+});
