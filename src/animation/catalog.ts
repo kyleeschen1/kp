@@ -26,6 +26,9 @@ import {
   createAcceptedGeneratedAddZeroAnimationAsset
 } from "./llm-animation-draft-examples.ts";
 import {
+  createAcceptedGeneratedPipelineDiagramAnimationAsset
+} from "./llm-diagram-draft-example.ts";
+import {
   createGeneratedCalculusProblemFixtures
 } from "../semantic/generated-calculus-problem-fixture.ts";
 import {
@@ -36,6 +39,7 @@ export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
   return [
     ...createGeneratedAlgebraAnimationAssets(),
     createAcceptedGeneratedAddZeroAnimationAsset(),
+    createAcceptedGeneratedPipelineDiagramAnimationAsset(),
     ...createGeneratedProblemAnimationAssets(),
     ...createGraphAnimationAssets(),
     ...createProgrammingAnimationAssets(),

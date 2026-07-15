@@ -79,6 +79,7 @@ import {
   registerKpEditorEquationSurfaceAdapter
 } from "./editor/equation-surface-adapter.ts";
 import { registerKpEditorGraphSvgViewportAdapter } from "./editor/graph-svg-viewport.ts";
+import { registerKpEditorDiagramSvgAdapter } from "./editor/diagram-svg-adapter.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -112,6 +113,7 @@ declare global {
 
 window.__kpEquationMotionSetProgress = setEquationMotionProgress;
 registerKpEditorEquationSurfaceAdapter();
+registerKpEditorDiagramSvgAdapter();
 registerKpEditorGraphSvgViewportAdapter();
 
 renderEditor();

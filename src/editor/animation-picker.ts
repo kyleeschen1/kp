@@ -31,6 +31,7 @@ const GROUP_ORDER = [
   "calculus",
   "linear-algebra",
   "equation",
+  "diagram",
   "graph",
   "programming",
   "composite",
@@ -118,6 +119,7 @@ function pickerGroupLabel(groupId: string): string {
     case "calculus": return "Calculus";
     case "linear-algebra": return "Linear algebra";
     case "equation": return "Equation catalog";
+    case "diagram": return "Diagram catalog";
     case "graph": return "Graph catalog";
     case "programming": return "Programming catalog";
     case "composite": return "Composite catalog";

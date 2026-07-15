@@ -666,3 +666,40 @@ test("accepted LLM draft renders as semantic token motion in the editor", async 
   await expect(transition.locator("[data-kp-editor-equation-source]")).toContainText("x+0=4");
   await expect(transition.locator("[data-kp-editor-equation-target]")).toContainText("x=4");
 });
+
+test("generated semantic diagram renders incremental SVG lifecycles on the shared player", async ({
+  page
+}) => {
+  await page.goto("/?animation=editor-animation.animation.generated.pipeline-diagram");
+  const player = page.locator("[data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-id",
+    "animation.generated.pipeline-diagram"
+  );
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  await scrubber.fill("0.5");
+  const diagram = player.locator("[data-kp-editor-diagram-svg]");
+  await expect(diagram).toBeVisible();
+  await expect(diagram).toHaveAttribute("data-kp-editor-diagram-progress", "0.5");
+  await expect(diagram.locator('[data-kp-diagram-node="after.transform"]')).toHaveAttribute(
+    "data-kp-diagram-opacity",
+    "0.5"
+  );
+  await expect(diagram.locator('[data-kp-diagram-edge="before.direct"]')).toHaveAttribute(
+    "data-kp-diagram-relation",
+    "fan-out"
+  );
+  await expect(diagram.locator('[data-kp-diagram-edge="after.into-transform"]')).toHaveAttribute(
+    "data-kp-diagram-opacity",
+    "0.5"
+  );
+
+  await player.getByRole("button", { name: "Rewind animation" }).click();
+  await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "rewind");
+  await player.getByRole("button", { name: "Pause animation" }).click();
+  await scrubber.fill("0.75");
+  await expect(player.locator("[data-kp-editor-diagram-svg]")).toHaveAttribute(
+    "data-kp-editor-diagram-progress",
+    "0.25"
+  );
+});

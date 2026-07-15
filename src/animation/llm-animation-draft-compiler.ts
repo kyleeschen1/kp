@@ -10,8 +10,16 @@ import {
 } from "./llm-animation-draft.ts";
 import {
   createKpAssetBundle,
-  createKpSemanticAssetObject
+  createKpSemanticAssetObject,
+  type KpSemanticAssetObject
 } from "../semantic/asset.ts";
+import {
+  createKpDiagramScene,
+  createKpDiagramSceneSemanticObject,
+  createKpDiagramSceneTransition,
+  type KpDiagramScene,
+  type KpDiagramSceneTransition
+} from "../semantic/diagram-scene.ts";
 import {
   createKpSemanticTransformation,
   type KpSemanticTransformation
@@ -47,6 +55,7 @@ export interface KpLlmAnimationDraftCompileSuccess {
   readonly status: "accepted";
   readonly animation: KpAnimationAsset;
   readonly transitionIrs: readonly KpEquationTransitionIr[];
+  readonly diagramTransitions: readonly KpDiagramSceneTransition[];
   readonly diagnostics: readonly [];
 }
 
@@ -89,27 +98,32 @@ export function compileKpLlmAnimationDraft(
 function compileValidatedDraft(
   draft: KpLlmAnimationDraft
 ): KpLlmAnimationDraftCompileResult {
+  const compiledObjects = draft.objects.map((object) =>
+    "latex" in object
+      ? createKpSemanticAssetObject({
+          id: object.id,
+          objectType: "equation",
+          title: object.title,
+          value: { latex: object.latex },
+          selectors: object.selectors.map((selector) => ({
+            id: selector.id,
+            kind: selector.kind,
+            ...(selector.label === undefined ? {} : { label: selector.label }),
+            ...(selector.summary === undefined ? {} : { summary: selector.summary })
+          })),
+          provenance: authoredProvenance(draft),
+          metadata: { latex: object.latex }
+        })
+      : createKpDiagramSceneSemanticObject(createKpDiagramScene({
+          id: object.id,
+          title: object.title,
+          ...object.scene
+        }))
+  );
   const bundle = createKpAssetBundle({
     id: `${draft.id}.bundle`,
     title: `${draft.title} semantic states`,
-    objects: draft.objects.map((object) => createKpSemanticAssetObject({
-      id: object.id,
-      objectType: "equation",
-      title: object.title,
-      value: { latex: object.latex },
-      selectors: object.selectors.map((selector) => ({
-        id: selector.id,
-        kind: selector.kind,
-        ...(selector.label === undefined ? {} : { label: selector.label }),
-        ...(selector.summary === undefined ? {} : { summary: selector.summary })
-      })),
-      provenance: {
-        kind: "authored",
-        sourceIds: [draft.id],
-        summary: `Compiled from ${draft.schemaVersion}.`
-      },
-      metadata: { latex: object.latex }
-    }))
+    objects: compiledObjects
   });
   const transformations = draft.transformations.map((transformation) =>
     createKpSemanticTransformation({
@@ -125,9 +139,11 @@ function compileValidatedDraft(
         : { assumptions: transformation.assumptions })
     })
   );
-  const transitionResults = transformations.map((transformation) =>
-    compileKpSemanticEquationTransitionResult({ transformation, bundle })
-  );
+  const transitionResults = draft.renderTarget.kind === "equation"
+    ? transformations.map((transformation) =>
+        compileKpSemanticEquationTransitionResult({ transformation, bundle })
+      )
+    : [];
   const transitionIssues = transitionResults.flatMap((result, index) => {
     if (result.status === "semantic") return [];
     return result.diagnostics.map((diagnostic) => ({
@@ -140,6 +156,18 @@ function compileValidatedDraft(
     }));
   });
   if (transitionIssues.length > 0) return reject(transitionIssues);
+  const diagramTransitions = draft.renderTarget.kind === "diagram"
+    ? transformations.map((transformation) => {
+        const source = diagramSceneForObjectId(compiledObjects, transformation.sourceObjectIds[0]!);
+        const target = diagramSceneForObjectId(compiledObjects, transformation.targetObjectIds[0]!);
+        return createKpDiagramSceneTransition({
+          id: `diagram-transition.${transformation.id}`,
+          source,
+          target,
+          correspondenceMap: transformation.correspondenceMap!
+        });
+      })
+    : [];
 
   const transformationById = new Map(
     transformations.map((transformation) => [transformation.id, transformation])
@@ -167,14 +195,14 @@ function compileValidatedDraft(
     },
     renderTargets: [{
       id: draft.renderTarget.id,
-      kind: "equation",
+      kind: draft.renderTarget.kind,
       objectIds,
-      selectorIds: draft.objects.flatMap((object) =>
+      selectorIds: compiledObjects.flatMap((object) =>
         object.selectors.map((selector) => selector.id)
       ),
       transformationIds: [...draft.sequence],
       ...(draft.timeline === undefined ? {} : { timelineId: draft.timeline.id }),
-      summary: `Equation surface compiled from ${draft.schemaVersion}.`
+      summary: `${draft.renderTarget.kind} surface compiled from ${draft.schemaVersion}.`
     }],
     checks: [
       {
@@ -192,7 +220,7 @@ function compileValidatedDraft(
     ],
     dashboard: {
       rowId: draft.id.replaceAll(".", "-"),
-      tags: ["animation", "equation", "generated", "llm-authored"],
+      tags: ["animation", draft.renderTarget.kind, "generated", "llm-authored"],
       sourceRefIds: [draft.id]
     },
     metadata: {
@@ -214,8 +242,28 @@ function compileValidatedDraft(
     status: "accepted",
     animation,
     transitionIrs: transitionResults.map((result) => result.ir!),
+    diagramTransitions,
     diagnostics: []
   };
+}
+
+function authoredProvenance(draft: KpLlmAnimationDraft) {
+  return {
+    kind: "authored" as const,
+    sourceIds: [draft.id],
+    summary: `Compiled from ${draft.schemaVersion}.`
+  };
+}
+
+function diagramSceneForObjectId(
+  objects: readonly KpSemanticAssetObject[],
+  objectId: string
+): KpDiagramScene {
+  const object = objects.find((candidate) => candidate.id === objectId);
+  if (object?.objectType !== "diagram-scene") {
+    throw new Error(`Diagram draft references non-diagram object ${objectId}.`);
+  }
+  return object.value as KpDiagramScene;
 }
 
 function transformationLeaf(transformation: KpSemanticTransformation) {
@@ -239,7 +287,7 @@ function validateDraftSemanticClosure(
     issues
   );
   const selectorIds = collectUniqueIds(
-    draft.objects.flatMap((object) => object.selectors.map((selector) => selector.id)),
+    draft.objects.flatMap(draftObjectSelectorIds),
     "$.objects[*].selectors",
     issues
   );
@@ -248,11 +296,33 @@ function validateDraftSemanticClosure(
     "$.transformations",
     issues
   );
+  draft.objects.forEach((object, index) => {
+    const actualKind = "latex" in object ? "equation" : "diagram";
+    if (actualKind !== draft.renderTarget.kind) {
+      issues.push({
+        severity: "error",
+        code: "draft.invalid-reference",
+        path: `$.objects[${index}]`,
+        message: `${draft.renderTarget.kind} drafts cannot contain ${actualKind} objects.`
+      });
+    }
+  });
 
   draft.transformations.forEach((transformation, index) => {
     const path = `$.transformations[${index}]`;
     validateReferences(transformation.sourceObjectIds, objectIds, `${path}.sourceObjectIds`, "object", issues);
     validateReferences(transformation.targetObjectIds, objectIds, `${path}.targetObjectIds`, "object", issues);
+    if (
+      draft.renderTarget.kind === "diagram" &&
+      (transformation.sourceObjectIds.length !== 1 || transformation.targetObjectIds.length !== 1)
+    ) {
+      issues.push({
+        severity: "error",
+        code: "draft.invalid-reference",
+        path,
+        message: "Diagram transformations require exactly one source scene and one target scene."
+      });
+    }
     transformation.correspondenceMap.records.forEach((record, recordIndex) => {
       const recordPath = `${path}.correspondenceMap.records[${recordIndex}]`;
       validateReferences(record.sourceSelectorIds, selectorIds, `${recordPath}.sourceSelectorIds`, "selector", issues);
@@ -273,6 +343,18 @@ function validateDraftSemanticClosure(
   });
 
   return issues;
+}
+
+function draftObjectSelectorIds(
+  object: KpLlmAnimationDraft["objects"][number]
+): readonly string[] {
+  if ("latex" in object) return object.selectors.map((selector) => selector.id);
+  return [
+    ...object.scene.nodes.map((node) => node.selectorId),
+    ...object.scene.edges.map((edge) => edge.selectorId),
+    ...object.scene.groups.map((group) => group.selectorId),
+    ...object.scene.labels.map((label) => label.selectorId)
+  ];
 }
 
 function collectUniqueIds(

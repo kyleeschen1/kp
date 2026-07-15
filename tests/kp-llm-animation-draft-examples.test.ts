@@ -40,6 +40,8 @@ test("rejected generated examples carry diagnostics and repair guidance", () => 
 
 test("generic semantic LaTeX binds ordered LLM selector labels without renderer markup", () => {
   const state = acceptedGeneratedAddZeroDraft.objects[0]!;
+  assert.ok("latex" in state);
+  if (!("latex" in state)) return;
   const annotated = createKpGenericSelectorAnnotatedLatex({
     objectId: state.id,
     latex: state.latex,
