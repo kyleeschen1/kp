@@ -38,7 +38,7 @@
     "Do not stage unrelated dirty worktree files."
   ],
   "goal": "Mount the approved concrete family-backed animations as visible, playable, scrubbable, and rewindable editor cards on the shared KP runtime clock.",
-  "target": "next-action.kp.editor.animation-player-lifecycle-v0",
+  "target": "next-action.kp.editor.equation-runtime-frame-projection-v0",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -100,7 +100,8 @@
     {
       "id": "next-action.kp.editor.equation-runtime-frame-projection-v0",
       "title": "Project equation runtime frames",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.equation-runtime-frame-projection-v0 in KP editor visible animation player v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.katex-animation-stage-v0",
