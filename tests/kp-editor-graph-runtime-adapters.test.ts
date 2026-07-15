@@ -4,6 +4,7 @@ import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.ts";
 import { sampleLinearMapVectorGraphRuntimeFrame } from "../src/animation/graph-runtime-frame.ts";
 import { sampleDerivativeTangentRuntimeFrame } from "../src/animation/derivative-tangent-runtime-frame.ts";
+import { sampleIntegralAreaSweepRuntimeFrame } from "../src/animation/integral-area-sweep-runtime-frame.ts";
 
 test("vector scaling exposes concrete start, midpoint, and end coordinates", () => {
   const animation = createKpAnimationAssets().find((a) => a.id === "animation.graph.vector.linear-map-scale");
@@ -15,6 +16,19 @@ test("vector scaling exposes concrete start, midpoint, and end coordinates", () 
     }).currentCoordinates
   );
   assert.deepEqual(coordinates, [[1, 2], [1.5, 4], [2, 6]]);
+});
+
+test("integral sweep grows its bound and accumulated area together", () => {
+  const animation = createKpAnimationAssets().find((a) => a.id === "animation.integral-ftc.area-sweep");
+  assert.ok(animation);
+  const areas = [0, 0.5, 1].map((progress) => {
+    const frame = sampleIntegralAreaSweepRuntimeFrame({
+      animation,
+      runtimeFrame: sampleKpAnimationRuntimeFrame({ animation, progress })
+    });
+    return [frame.upperBound, frame.accumulatedArea];
+  });
+  assert.deepEqual(areas, [[0, 0], [1.5, 1.125], [3, 9]]);
 });
 
 test("derivative tangent moves along x cubed while its slope changes", () => {

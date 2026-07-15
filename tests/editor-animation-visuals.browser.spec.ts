@@ -504,3 +504,19 @@ test("the derivative tangent and contact point move together along x cubed", asy
   await expect(point).toHaveAttribute("data-kp-editor-graph-tangent-x", "2");
   expect(Number(await point.getAttribute("cx"))).toBeGreaterThan(startX);
 });
+
+test("the integral area and moving upper bound visibly sweep together", async ({ page }) => {
+  await page.goto("/?animation=editor-animation.sample.animation.integral-ftc.area-sweep");
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const area = player.locator("[data-kp-editor-graph-area]");
+  const bound = player.locator("[data-kp-editor-graph-area-bound]");
+  await expect(area).toHaveAttribute("data-kp-editor-graph-area-value", "0");
+  await expect(bound).toHaveAttribute("data-kp-editor-graph-upper-bound", "0");
+  const startX = Number(await bound.getAttribute("x1"));
+
+  await player.locator('[data-action="seek-editor-animation"]').fill("1");
+  await expect(area).toHaveAttribute("data-kp-editor-graph-area-value", "9");
+  await expect(bound).toHaveAttribute("data-kp-editor-graph-upper-bound", "3");
+  await expect(player.locator("[data-kp-editor-graph-area-label]")).toHaveText("Area 9.00");
+  expect(Number(await bound.getAttribute("x1"))).toBeGreaterThan(startX);
+});

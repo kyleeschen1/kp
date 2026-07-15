@@ -117,7 +117,9 @@ function renderRuntimeContent(
     case "animation.integral-ftc.area-sweep": {
       const frame = sampleIntegralAreaSweepRuntimeFrame({ animation, runtimeFrame: state.runtimeFrame });
       const polygon = frame.areaPolygon.map(point);
-      return `<polygon class="editor-graph-stage__area" data-kp-editor-graph-area points="${polygon.map((p) => p.join(",")).join(" ")}" /><text class="editor-graph-stage__label" x="${model.width - 130}" y="32">Area ${frame.accumulatedArea.toFixed(2)}</text>`;
+      const boundBase = point([frame.upperBound, 0]);
+      const boundTop = point([frame.upperBound, frame.integrandAtUpperBound]);
+      return `<polygon class="editor-graph-stage__area" data-kp-editor-graph-area data-kp-editor-graph-area-value="${frame.accumulatedArea}" points="${polygon.map((p) => p.join(",")).join(" ")}" /><line class="editor-graph-stage__sweep" data-kp-editor-graph-area-bound data-kp-editor-graph-upper-bound="${frame.upperBound}" x1="${boundBase[0]}" y1="${boundBase[1]}" x2="${boundTop[0]}" y2="${boundTop[1]}" /><text class="editor-graph-stage__label" data-kp-editor-graph-area-label x="${model.width - 130}" y="32">Area ${frame.accumulatedArea.toFixed(2)}</text>`;
     }
     case "animation.dot-projection.basic": {
       const frame = sampleDotProjectionRuntimeFrame({ animation, runtimeFrame: state.runtimeFrame });
