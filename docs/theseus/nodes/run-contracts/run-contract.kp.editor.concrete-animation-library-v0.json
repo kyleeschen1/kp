@@ -68,7 +68,8 @@
     {
       "id": "next-action.kp.editor.runtime-sample-status-v0",
       "title": "Define executable runtime sample status",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.runtime-sample-status-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.family-animation-resolver-v0",

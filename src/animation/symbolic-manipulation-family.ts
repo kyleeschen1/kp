@@ -31,6 +31,10 @@ export type KpSymbolicFlashcardHookKind =
   | "predict-next"
   | "relationship";
 
+export type KpSymbolicRuntimeSampleAvailability =
+  | "planned"
+  | "concrete";
+
 export interface KpSymbolicManipulationFamily {
   readonly id: string;
   readonly kind: "symbolic-manipulation-family";
@@ -76,10 +80,19 @@ export interface KpSymbolicVisualMotifRef {
 export interface KpSymbolicRuntimeSampleRef {
   readonly id: string;
   readonly animationId: string;
+  readonly availability?: KpSymbolicRuntimeSampleAvailability | undefined;
   readonly renderTargetKinds: readonly KpAnimationAssetRenderTargetKind[];
   readonly transformationDefinitionIds?: readonly string[] | undefined;
   readonly summary?: string | undefined;
   readonly metadata?: Readonly<Record<string, KpAssetMetadataValue>> | undefined;
+}
+
+export function symbolicRuntimeSampleAvailability(
+  sample: KpSymbolicRuntimeSampleRef
+): KpSymbolicRuntimeSampleAvailability {
+  // Existing family records predate executable catalog closure, so omission
+  // must remain planned instead of accidentally claiming a concrete asset.
+  return sample.availability ?? "planned";
 }
 
 export interface KpSymbolicGraphEquivalentRef {
@@ -461,6 +474,9 @@ function cloneRuntimeSampleRef(
   return {
     id: sample.id,
     animationId: sample.animationId,
+    ...(sample.availability === undefined
+      ? {}
+      : { availability: sample.availability }),
     renderTargetKinds: [...sample.renderTargetKinds],
     ...(sample.transformationDefinitionIds === undefined
       ? {}

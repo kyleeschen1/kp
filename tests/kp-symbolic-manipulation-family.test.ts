@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createKpSymbolicManipulationFamily,
+  symbolicRuntimeSampleAvailability,
   symbolicManipulationFamilyDashboardTags,
   validateKpSymbolicManipulationFamily
 } from "../src/animation/symbolic-manipulation-family.ts";
@@ -113,6 +114,42 @@ test("createKpSymbolicManipulationFamily captures one reusable manipulation fami
     ["symbolic-family", "algebra", "seed", "equation", "inverse-operation"]
   );
   assert.deepEqual(validateKpSymbolicManipulationFamily(family), []);
+  assert.equal(
+    symbolicRuntimeSampleAvailability(family.runtimeSamples[0]!),
+    "planned"
+  );
+});
+
+test("symbolic runtime samples distinguish planned refs from concrete assets", () => {
+  const family = createKpSymbolicManipulationFamily({
+    id: "family.algebra.concrete-sample",
+    title: "Concrete sample family",
+    domain: "algebra",
+    runtimeSamples: [
+      {
+        id: "sample.animation.linear-solve",
+        animationId: "animation.linear-solve.solve-x",
+        availability: "concrete",
+        renderTargetKinds: ["equation"]
+      },
+      {
+        id: "sample.animation.future",
+        animationId: "animation.future",
+        renderTargetKinds: ["equation"]
+      }
+    ]
+  });
+
+  assert.equal(
+    symbolicRuntimeSampleAvailability(family.runtimeSamples[0]!),
+    "concrete"
+  );
+  assert.equal(
+    symbolicRuntimeSampleAvailability(family.runtimeSamples[1]!),
+    "planned"
+  );
+  assert.equal(family.runtimeSamples[0]?.availability, "concrete");
+  assert.equal(family.runtimeSamples[1]?.availability, undefined);
 });
 
 test("validateKpSymbolicManipulationFamily reports broken family references", () => {
