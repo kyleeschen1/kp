@@ -1,0 +1,128 @@
+{
+  "id": "next-action.kp.editor.exponent-combine-animation-v0",
+  "kind": "next-action",
+  "title": "Add repeated factor exponent animation",
+  "status": "resolved",
+  "domain": "kp.editor",
+  "summary": "Promoted the square-as-product animation as a concrete exponent-combine family sample whose rewind coalesces repeated factors into a power.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.concrete-animation-library-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.editor.exponent-combine-animation-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-symbolic-manipulation-library-loop-closeout.md",
+      "summary": "Closed symbolic library loop and recommended concrete renderer and editor adoption."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "KP semantic runtime and dashboard editor direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-animation-catalog.ts",
+      "summary": "Current fixture-oriented editor animation catalog to evolve into a family-backed surface."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Concrete KpAnimationAsset registry to project into the editor."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/symbolic-manipulation-family-registry.ts",
+      "summary": "Promoted the square-as-product animation as a concrete exponent-combine family sample whose rewind coalesces repeated factors into a power."
+    },
+    {
+      "kind": "file",
+      "path": "tests/project-dashboard-symbolic-family-catalog.test.ts",
+      "summary": "Promoted the square-as-product animation as a concrete exponent-combine family sample whose rewind coalesces repeated factors into a power."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-symbolic-family-animation-resolver.test.ts",
+      "summary": "Promoted the square-as-product animation as a concrete exponent-combine family sample whose rewind coalesces repeated factors into a power."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-animation-catalog-projection.test.ts",
+      "summary": "Promoted the square-as-product animation as a concrete exponent-combine family sample whose rewind coalesces repeated factors into a power."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-animation-picker.test.ts",
+      "summary": "Promoted the square-as-product animation as a concrete exponent-combine family sample whose rewind coalesces repeated factors into a power."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-animation-selection-route.test.ts",
+      "summary": "Promoted the square-as-product animation as a concrete exponent-combine family sample whose rewind coalesces repeated factors into a power."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.editor.concrete-animation-library-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add repeated factor exponent animation can be completed inside KP editor concrete animation library v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved KP editor concrete-animation slices.",
+    "Use existing KpAnimationAsset, symbolic family, runtime-frame, visual-frame, KaTeX, graph, dashboard, and editor contracts.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not build media encoders, live CAS or LSP integrations, curriculum generation, or dynamic package loading.",
+    "Do not create a separate graph animation clock or broadly redesign the editor.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-symbolic-family-animation-resolver.test.ts tests/project-dashboard-symbolic-family-catalog.test.ts tests/kp-editor-animation-catalog-projection.test.ts tests/kp-editor-animation-picker.test.ts tests/kp-editor-animation-selection-route.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-15T01:22:17.673Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-library.browser.spec.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-15T01:22:17.728Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-15T01:22:17.787Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-15T01:22:17.839Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-15T01:22:17.883Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted the square-as-product animation as a concrete exponent-combine family sample whose rewind coalesces repeated factors into a power."
+  }
+}

@@ -904,15 +904,15 @@ test("algebra exponent-log family preserves bases and wrapped arguments", () => 
   ]);
   assert.deepEqual(family.runtimeSamples, [
     {
-      id: "sample.animation.power-radical-fold.basic",
-      animationId: "animation.power-radical-fold.basic",
+      id: "sample.animation.exponent-combine.square-as-product",
+      animationId: "animation.generated.exponent.square-as-product",
+      availability: "concrete",
       renderTargetKinds: ["equation"],
       transformationDefinitionIds: [
-        "definition.symbolic.algebra.power-to-root",
-        "definition.symbolic.algebra.log-exp-inverse"
+        "definition.symbolic.algebra.multiply-same-base-powers"
       ],
       summary:
-        "Basic exponent-to-root and log/exp inverse sample exercises persistent base and argument semantics."
+        "The square-as-product animation rewinds repeated factors into an exponent-combine view with a persistent base."
     }
   ]);
   assert.deepEqual(family.graphEquivalents, [
@@ -928,7 +928,7 @@ test("algebra exponent-log family preserves bases and wrapped arguments", () => 
           level: "sampled"
         }
       ],
-      sampleAssetIds: ["animation.power-radical-fold.basic"],
+      sampleAssetIds: ["animation.generated.exponent.square-as-product"],
       summary:
         "Exponent, root, and logarithm rewrites preserve function values where the domain assumptions hold."
     }
@@ -1222,12 +1222,12 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
       ["Ready families", "18"],
       ["Transform definitions", "71"],
       ["Runtime sample refs", "20"],
-      ["Concrete runtime samples", "3"],
-      ["Planned runtime samples", "17"],
+      ["Concrete runtime samples", "4"],
+      ["Planned runtime samples", "16"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],
       ["Flashcard hooks", "18"],
-      ["Paused-frame drill-down candidates", "47"],
+      ["Paused-frame drill-down candidates", "46"],
       ["Blockers", "None"]
     ]
   );

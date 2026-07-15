@@ -70,6 +70,23 @@ test("canonical fraction asset resolves its simplification family sample", () =>
   );
 });
 
+test("canonical exponent asset resolves its combine family sample", () => {
+  const resolution = createKpSymbolicFamilyAnimationResolutions({
+    families: createSymbolicManipulationFamilyRegistry(),
+    assets: createKpAnimationAssets()
+  }).find(
+    (candidate) =>
+      candidate.sampleId ===
+      "sample.animation.exponent-combine.square-as-product"
+  );
+
+  assert.equal(resolution?.status, "resolved");
+  assert.equal(
+    resolution?.animationId,
+    "animation.generated.exponent.square-as-product"
+  );
+});
+
 test("family animation resolver requires explicit concrete availability and exact ids", () => {
   const asset = createLinearSolveAnimationAsset();
   const plannedFamily = familyWithSample({

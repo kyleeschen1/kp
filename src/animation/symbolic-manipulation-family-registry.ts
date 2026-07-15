@@ -1423,15 +1423,15 @@ function createAlgebraExponentLogFamily(): KpSymbolicManipulationFamily {
     ],
     runtimeSamples: [
       {
-        id: "sample.animation.power-radical-fold.basic",
-        animationId: "animation.power-radical-fold.basic",
+        id: "sample.animation.exponent-combine.square-as-product",
+        animationId: "animation.generated.exponent.square-as-product",
+        availability: "concrete",
         renderTargetKinds: ["equation"],
         transformationDefinitionIds: [
-          "definition.symbolic.algebra.power-to-root",
-          "definition.symbolic.algebra.log-exp-inverse"
+          "definition.symbolic.algebra.multiply-same-base-powers"
         ],
         summary:
-          "Basic exponent-to-root and log/exp inverse sample exercises persistent base and argument semantics."
+          "The square-as-product animation rewinds repeated factors into an exponent-combine view with a persistent base."
       }
     ],
     graphEquivalents: [
@@ -1447,7 +1447,7 @@ function createAlgebraExponentLogFamily(): KpSymbolicManipulationFamily {
             level: "sampled"
           }
         ],
-        sampleAssetIds: ["animation.power-radical-fold.basic"],
+        sampleAssetIds: ["animation.generated.exponent.square-as-product"],
         summary:
           "Exponent, root, and logarithm rewrites preserve function values where the domain assumptions hold."
       }
