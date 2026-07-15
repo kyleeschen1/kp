@@ -42,6 +42,10 @@ import {
 } from "./fraction-semantic-latex.ts";
 import { createKpFunctionWrapSelectorAnnotatedLatex } from "./function-wrap-semantic-latex.ts";
 import { createKpDistributionSelectorAnnotatedLatex } from "./distribution-semantic-latex.ts";
+import {
+  bindKpExponentRadicalStructuralMotionIds,
+  createKpExponentRadicalSelectorAnnotatedLatex
+} from "./exponent-radical-semantic-latex.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticGeometryCache = new WeakMap<HTMLElement, {
@@ -294,14 +298,14 @@ function applySemanticTokenMotion(input: {
       targetRoot: input.state.direction === "forward" ? displayedTarget : displayedSource,
       sourceAnnotated,
       targetAnnotated,
-      sourceMotionIdsBySelector: bindKpFractionStructuralMotionIds({
-        root: input.state.direction === "forward" ? displayedSource : displayedTarget,
-        states: compiled.ir.source
-      }),
-      targetMotionIdsBySelector: bindKpFractionStructuralMotionIds({
-        root: input.state.direction === "forward" ? displayedTarget : displayedSource,
-        states: compiled.ir.target
-      })
+      sourceMotionIdsBySelector: bindStructuralMotionIds(
+        input.state.direction === "forward" ? displayedSource : displayedTarget,
+        compiled.ir.source
+      ),
+      targetMotionIdsBySelector: bindStructuralMotionIds(
+        input.state.direction === "forward" ? displayedTarget : displayedSource,
+        compiled.ir.target
+      )
     });
     const existing = semanticGeometryCache.get(input.stage);
     const geometries = existing?.contentKey === input.frame.contentKey
@@ -343,7 +347,8 @@ function annotatedLatexForStates(
     selectorIds: state.selectors.map((selector) => selector.id)
   }) ?? createKpFractionSelectorAnnotatedLatex(state)
     ?? createKpFunctionWrapSelectorAnnotatedLatex(state)
-    ?? createKpDistributionSelectorAnnotatedLatex(state));
+    ?? createKpDistributionSelectorAnnotatedLatex(state)
+    ?? createKpExponentRadicalSelectorAnnotatedLatex(state));
   return annotated.every((state): state is KpSelectorAnnotatedLatex => state !== undefined)
     ? annotated
     : undefined;
@@ -364,7 +369,23 @@ function annotatedLatexForObject(
   }) ?? createKpDistributionSelectorAnnotatedLatex({
     objectId: object.id,
     selectors: object.selectors
+  }) ?? createKpExponentRadicalSelectorAnnotatedLatex({
+    objectId: object.id,
+    selectors: object.selectors
   });
+}
+
+function bindStructuralMotionIds(
+  root: HTMLElement,
+  states: readonly {
+    readonly objectId: string;
+    readonly selectors: readonly { readonly id: string; readonly label?: string | undefined }[];
+  }[]
+): Readonly<Record<string, string>> {
+  return {
+    ...bindKpFractionStructuralMotionIds({ root, states }),
+    ...bindKpExponentRadicalStructuralMotionIds({ root, states })
+  };
 }
 
 function resetLayerForSemanticMotion(

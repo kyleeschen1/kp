@@ -839,7 +839,10 @@ export function createGeneratedExponentTutorialFixture(
       ])
     ]
   });
-  const transformations = createGeneratedExponentTransformations(ids);
+  const transformations = createGeneratedExponentTransformations(
+    ids,
+    input.exponent
+  );
   const diagram = createKpSemanticDiagramSequence({
     id: ids.diagram,
     title: `${input.title} sequence`,
@@ -860,8 +863,18 @@ export function createGeneratedExponentTutorialFixture(
 }
 
 function createGeneratedExponentTransformations(
-  ids: GeneratedExponentIds
+  ids: GeneratedExponentIds,
+  exponent: number
 ): readonly KpSemanticTransformation[] {
+  const expandedTailSelectorIds = Array.from(
+    { length: exponent - 1 },
+    (_, index) => index + 2
+  ).flatMap((factorIndex) => factorIndex === 2
+    ? [selectorId(ids.expanded, `factor-${factorIndex}`)]
+    : [
+        selectorId(ids.expanded, `times-${factorIndex - 1}`),
+        selectorId(ids.expanded, `factor-${factorIndex}`)
+      ]);
   return [
     createGeneratedAlgebraSemanticTransformation({
       familyId: "generated.exponent",
@@ -870,6 +883,13 @@ function createGeneratedExponentTransformations(
       title: "Lower the exponent by one factor",
       sourceObjectIds: [ids.initial],
       targetObjectIds: [ids.lowered],
+      correspondenceMap: {
+        id: `${ids.lower}.correspondence`,
+        records: [
+          lifecycle("base-splits", "fan-out", [selectorId(ids.initial, "base")], [selectorId(ids.lowered, "factor-1"), selectorId(ids.lowered, "residual-base")], "The base splits into an exposed factor and a residual power."),
+          lifecycle("exponent-lowers", "fan-out", [selectorId(ids.initial, "exponent")], [selectorId(ids.lowered, "times-1"), selectorId(ids.lowered, "residual-exponent")], "The exponent produces multiplication and a lowered exponent.")
+        ]
+      },
       correspondence: [
         correspondence(ids.initial, "base", ids.lowered, "factor-1"),
         correspondence(ids.initial, "base", ids.lowered, "residual-base")
@@ -882,6 +902,22 @@ function createGeneratedExponentTransformations(
       title: "Unwrap the unit exponent",
       sourceObjectIds: [ids.lowered],
       targetObjectIds: [ids.expanded],
+      correspondenceMap: {
+        id: `${ids.unwrap}.correspondence`,
+        records: [
+          lifecycle("first-factor-persists", "identity", [selectorId(ids.lowered, "factor-1")], [selectorId(ids.expanded, "factor-1")], "The exposed first factor persists."),
+          lifecycle("first-product-persists", "identity", [selectorId(ids.lowered, "times-1")], [selectorId(ids.expanded, "times-1")], "The first product operator persists."),
+          ...(exponent === 2
+            ? [
+                lifecycle("residual-base-persists", "identity", [selectorId(ids.lowered, "residual-base")], [selectorId(ids.expanded, "factor-2")], "The residual base becomes the second factor."),
+                lifecycle("unit-exponent-exits", "removal", [selectorId(ids.lowered, "residual-exponent")], [], "The unit exponent exits.")
+              ]
+            : [
+                lifecycle("residual-power-expands", "fan-out", [selectorId(ids.lowered, "residual-base")], expandedTailSelectorIds, "The residual power expands into the remaining product."),
+                lifecycle("residual-exponent-exits", "removal", [selectorId(ids.lowered, "residual-exponent")], [], "The residual exponent exits after expansion.")
+              ])
+        ]
+      },
       correspondence: [
         correspondence(ids.lowered, "factor-1", ids.expanded, "factor-1"),
         correspondence(ids.lowered, "residual-base", ids.expanded, "factor-2")
@@ -1018,6 +1054,13 @@ function createGeneratedRadicalTransformations(
       title: "Rewrite the rational exponent as a radical",
       sourceObjectIds: [ids.power],
       targetObjectIds: [ids.radical],
+      correspondenceMap: {
+        id: `${ids.rewrite}.correspondence`,
+        records: [
+          lifecycle("base-becomes-radicand", "role-change", [selectorId(ids.power, "base")], [selectorId(ids.radical, "radicand")], "The base persists as the radicand."),
+          lifecycle("exponent-becomes-radical", "fan-in", [selectorId(ids.power, "exponent-numerator"), selectorId(ids.power, "exponent-fraction-line"), selectorId(ids.power, "exponent-denominator")], [selectorId(ids.radical, "radical-symbol")], "The rational exponent derives the radical structure.")
+        ]
+      },
       correspondence: [
         correspondence(ids.power, "base", ids.radical, "radicand")
       ]

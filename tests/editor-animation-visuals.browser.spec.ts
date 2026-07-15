@@ -230,6 +230,8 @@ test("exponent and radical family animations render their semantic rewrite motif
       "data-kp-editor-equation-object-id",
       "expression.generated.exponent.square-as-product.expanded"
     );
+  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+    .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
 
   await page.locator('[data-action="set-editor-animation"]').selectOption(
     "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
@@ -244,6 +246,10 @@ test("exponent and radical family animations render their semantic rewrite motif
       "data-kp-editor-equation-object-id",
       "expression.generated.radical.square-root-as-power.radical"
     );
+  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+    .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
+  await expect(player.locator("[data-kp-editor-equation-target] .hide-tail[data-kp-motion-id]"))
+    .toHaveCount(1);
 });
 
 test("function-wrap family animation visibly wraps and rewinds its argument", async ({
