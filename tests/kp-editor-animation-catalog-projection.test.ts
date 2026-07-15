@@ -23,10 +23,10 @@ test("editor catalog projection preserves asset entries and adds concrete family
     families: createSymbolicManipulationFamilyRegistry()
   });
 
-  assert.equal(descriptors.length, assets.length + 9);
+  assert.equal(descriptors.length, assets.length + 10);
   assert.equal(
     descriptors.filter((descriptor) => descriptor.familyId !== undefined).length,
-    9
+    10
   );
   assert.equal(
     descriptors.flatMap(validateKpEditorAnimationDescriptor).length,

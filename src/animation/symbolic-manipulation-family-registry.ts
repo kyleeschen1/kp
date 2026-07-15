@@ -2040,14 +2040,15 @@ function createCalculusDerivativeRulesFamily(): KpSymbolicManipulationFamily {
     runtimeSamples: [
       {
         id: "sample.animation.derivative-rules.basic",
-        animationId: "animation.derivative-rules.basic",
+        animationId:
+          "animation.generated.calculus.derivative.power-rule-x-cubed",
+        availability: "concrete",
         renderTargetKinds: ["equation"],
         transformationDefinitionIds: [
-          "definition.symbolic.calculus.derivative-power-rule",
-          "definition.symbolic.calculus.derivative-chain-rule"
+          "definition.symbolic.calculus.derivative-power-rule"
         ],
         summary:
-          "Basic derivative sample exercises power-rule exponent drop and chain-rule nested persistence."
+          "Generated x-cubed derivative sample exercises the power-rule exponent drop into coefficient position."
       },
       {
         id: "sample.animation.derivative-rules.tangent-graph",
@@ -2074,7 +2075,9 @@ function createCalculusDerivativeRulesFamily(): KpSymbolicManipulationFamily {
             level: "sampled"
           }
         ],
-        sampleAssetIds: ["animation.derivative-rules.basic"],
+        sampleAssetIds: [
+          "animation.generated.calculus.derivative.power-rule-x-cubed"
+        ],
         summary:
           "Derivative-rule rewrites preserve the symbolic derivative whose value drives tangent slope samples."
       },

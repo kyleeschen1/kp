@@ -1259,8 +1259,8 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
       ["Ready families", "18"],
       ["Transform definitions", "71"],
       ["Runtime sample refs", "23"],
-      ["Concrete runtime samples", "9"],
-      ["Planned runtime samples", "14"],
+      ["Concrete runtime samples", "10"],
+      ["Planned runtime samples", "13"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],
       ["Flashcard hooks", "18"],
@@ -1448,14 +1448,15 @@ test("calculus derivative rules family models rule-specific persistence", () => 
   assert.deepEqual(family.runtimeSamples, [
     {
       id: "sample.animation.derivative-rules.basic",
-      animationId: "animation.derivative-rules.basic",
+      animationId:
+        "animation.generated.calculus.derivative.power-rule-x-cubed",
+      availability: "concrete",
       renderTargetKinds: ["equation"],
       transformationDefinitionIds: [
-        "definition.symbolic.calculus.derivative-power-rule",
-        "definition.symbolic.calculus.derivative-chain-rule"
+        "definition.symbolic.calculus.derivative-power-rule"
       ],
       summary:
-        "Basic derivative sample exercises power-rule exponent drop and chain-rule nested persistence."
+        "Generated x-cubed derivative sample exercises the power-rule exponent drop into coefficient position."
     },
     {
       id: "sample.animation.derivative-rules.tangent-graph",
@@ -1482,7 +1483,9 @@ test("calculus derivative rules family models rule-specific persistence", () => 
           level: "sampled"
         }
       ],
-      sampleAssetIds: ["animation.derivative-rules.basic"],
+      sampleAssetIds: [
+        "animation.generated.calculus.derivative.power-rule-x-cubed"
+      ],
       summary:
         "Derivative-rule rewrites preserve the symbolic derivative whose value drives tangent slope samples."
     },
@@ -1573,7 +1576,7 @@ test("calculus derivative rules family projects to tangent graph samples", () =>
       [
         "graph.calculus.derivative.tangent-line",
         "tangent-line",
-        ["animation.derivative-rules.basic"],
+        ["animation.generated.calculus.derivative.power-rule-x-cubed"],
         "Derivative-rule rewrites preserve the symbolic derivative whose value drives tangent slope samples."
       ],
       [

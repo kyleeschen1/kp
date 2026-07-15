@@ -200,7 +200,8 @@
     {
       "id": "next-action.kp.editor.derivative-power-rule-animation-v0",
       "title": "Add derivative power rule animation",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.derivative-power-rule-animation-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.derivative-tangent-animation-v0",

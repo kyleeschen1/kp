@@ -154,6 +154,22 @@ test("canonical inequality asset resolves the sign-flip family sample", () => {
   );
 });
 
+test("generated derivative asset resolves the calculus power-rule sample", () => {
+  const resolution = createKpSymbolicFamilyAnimationResolutions({
+    families: createSymbolicManipulationFamilyRegistry(),
+    assets: createKpAnimationAssets()
+  }).find(
+    (candidate) =>
+      candidate.sampleId === "sample.animation.derivative-rules.basic"
+  );
+
+  assert.equal(resolution?.status, "resolved");
+  assert.equal(
+    resolution?.animationId,
+    "animation.generated.calculus.derivative.power-rule-x-cubed"
+  );
+});
+
 test("family animation resolver requires explicit concrete availability and exact ids", () => {
   const asset = createLinearSolveAnimationAsset();
   const plannedFamily = familyWithSample({
