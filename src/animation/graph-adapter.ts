@@ -28,6 +28,9 @@ import {
   deriveLinearMapFromMatrix,
   type LinearMapObject
 } from "../semantic/linear-map.ts";
+import {
+  createDerivativeTangentAnimationAsset
+} from "./derivative-tangent-adapter.ts";
 
 interface VectorObject {
   readonly id: string;
@@ -50,7 +53,8 @@ const vectorTransformationId = "transform.graph.vector.apply-linear-map-scale";
 export function createGraphAnimationAssets(): readonly KpAnimationAsset[] {
   return [
     createGraphSurfaceModeAnimationAsset(),
-    createLinearMapVectorAnimationAsset()
+    createLinearMapVectorAnimationAsset(),
+    createDerivativeTangentAnimationAsset()
   ];
 }
 

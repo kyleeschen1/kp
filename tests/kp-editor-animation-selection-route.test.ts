@@ -25,7 +25,7 @@ test("editor renders every concrete asset through a stable descriptor selection"
     editorAnimationDescriptorId: selected.id
   });
 
-  assert.equal(descriptors.length, 31);
+  assert.equal(descriptors.length, 33);
   assert.match(html, /data-kp-editor-animation-library/);
   assert.match(
     html,
@@ -111,6 +111,30 @@ test("derivative power rule is selectable through its calculus family descriptor
   assert.match(
     html,
     /option value="editor-animation\.sample\.animation\.derivative-rules\.basic" selected/
+  );
+});
+
+test("derivative tangent graph is selectable through its calculus family descriptor", () => {
+  const descriptor = createKpEditorAnimationLibrary().find(
+    (candidate) =>
+      candidate.sampleId ===
+      "sample.animation.derivative-rules.tangent-graph"
+  );
+  assert.ok(descriptor);
+
+  const html = renderEditorDocument(createInitialEditorDocument(), {
+    editorAnimationDescriptorId: descriptor.id
+  });
+
+  assert.match(
+    html,
+    /data-kp-editor-animation-id="animation\.derivative-rules\.tangent-graph"/
+  );
+  assert.match(html, /data-kp-editor-animation-surface="graph"/);
+  assert.match(html, /family\.calculus\.derivative-rules/);
+  assert.match(
+    html,
+    /option value="editor-animation\.sample\.animation\.derivative-rules\.tangent-graph" selected/
   );
 });
 

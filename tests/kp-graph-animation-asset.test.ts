@@ -103,7 +103,8 @@ test("graph animation placeholders are available through the animation catalog",
     createGraphAnimationAssets().map((animation) => animation.id),
     [
       "animation.graph.surface-mode.mesh-to-donut",
-      "animation.graph.vector.linear-map-scale"
+      "animation.graph.vector.linear-map-scale",
+      "animation.derivative-rules.tangent-graph"
     ]
   );
   assert.ok(

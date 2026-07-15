@@ -170,6 +170,23 @@ test("generated derivative asset resolves the calculus power-rule sample", () =>
   );
 });
 
+test("derivative tangent asset resolves the calculus graph sample", () => {
+  const resolution = createKpSymbolicFamilyAnimationResolutions({
+    families: createSymbolicManipulationFamilyRegistry(),
+    assets: createKpAnimationAssets()
+  }).find(
+    (candidate) =>
+      candidate.sampleId ===
+      "sample.animation.derivative-rules.tangent-graph"
+  );
+
+  assert.equal(resolution?.status, "resolved");
+  assert.equal(
+    resolution?.animationId,
+    "animation.derivative-rules.tangent-graph"
+  );
+});
+
 test("family animation resolver requires explicit concrete availability and exact ids", () => {
   const asset = createLinearSolveAnimationAsset();
   const plannedFamily = familyWithSample({

@@ -210,3 +210,37 @@ test("algebra family cohort stays selectable and browser-safe", async ({
     )
   ).toHaveCount(ALGEBRA_COHORT.length);
 });
+
+test("derivative tangent family sample opens on the graph surface", async ({
+  page
+}) => {
+  const descriptorId =
+    "editor-animation.sample.animation.derivative-rules.tangent-graph";
+  await page.goto(`/?animation=${descriptorId}`);
+
+  const library = page.locator("[data-kp-editor-animation-library]");
+  await expect(library).toHaveAttribute(
+    "data-kp-editor-animation-descriptor-id",
+    descriptorId
+  );
+  await expect(library).toHaveAttribute(
+    "data-kp-editor-animation-id",
+    "animation.derivative-rules.tangent-graph"
+  );
+  await expect(library).toHaveAttribute(
+    "data-kp-editor-animation-surface",
+    "graph"
+  );
+  await expect(library).toContainText("family.calculus.derivative-rules");
+  await expect(
+    library.locator("[data-kp-editor-animation-diagnostics-counts]")
+  ).toContainText("0 errors");
+  await expect(
+    library.locator("[data-kp-editor-animation-diagnostics-playback-laws]")
+  ).toHaveText("2/2");
+  await expect(
+    library.locator(
+      '[data-action="set-editor-animation"] optgroup[label="Calculus"] option'
+    )
+  ).toHaveCount(2);
+});

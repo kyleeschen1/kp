@@ -26,14 +26,14 @@ test("editor animation picker groups the concrete catalog by supported surface",
     selectedDescriptorId: descriptors[13]?.id
   });
 
-  assert.equal(model.optionCount, 31);
+  assert.equal(model.optionCount, 33);
   assert.deepEqual(
     model.groups.map((group) => [group.id, group.options.length]),
     [
       ["algebra", 9],
-      ["calculus", 1],
+      ["calculus", 2],
       ["equation", 17],
-      ["graph", 2],
+      ["graph", 3],
       ["programming", 1],
       ["composite", 1]
     ]
@@ -48,7 +48,7 @@ test("editor animation picker groups the concrete catalog by supported surface",
   assert.match(html, /data-action="set-editor-animation"/);
   assert.match(html, /<optgroup label="Graph catalog">/);
   assert.match(html, /data-kp-editor-animation-picker-option/);
-  assert.match(html, /data-kp-editor-animation-index="30"/);
+  assert.match(html, /data-kp-editor-animation-index="32"/);
 });
 
 test("editor animation picker promotes exact family-backed entries into domain groups", () => {

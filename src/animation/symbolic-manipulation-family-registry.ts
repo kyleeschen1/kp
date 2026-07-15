@@ -2053,13 +2053,13 @@ function createCalculusDerivativeRulesFamily(): KpSymbolicManipulationFamily {
       {
         id: "sample.animation.derivative-rules.tangent-graph",
         animationId: "animation.derivative-rules.tangent-graph",
+        availability: "concrete",
         renderTargetKinds: ["graph"],
         transformationDefinitionIds: [
-          "definition.symbolic.calculus.derivative-power-rule",
-          "definition.symbolic.calculus.derivative-chain-rule"
+          "definition.symbolic.calculus.derivative-power-rule"
         ],
         summary:
-          "Graph sample projects derivative-rule steps onto tangent line and local-slope motion."
+          "The x-cubed graph sample synchronizes power-rule evaluation with tangent line and local-slope motion."
       }
     ],
     graphEquivalents: [

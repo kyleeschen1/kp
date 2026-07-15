@@ -1259,12 +1259,12 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
       ["Ready families", "18"],
       ["Transform definitions", "71"],
       ["Runtime sample refs", "23"],
-      ["Concrete runtime samples", "10"],
-      ["Planned runtime samples", "13"],
+      ["Concrete runtime samples", "11"],
+      ["Planned runtime samples", "12"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],
       ["Flashcard hooks", "18"],
-      ["Paused-frame drill-down candidates", "47"],
+      ["Paused-frame drill-down candidates", "46"],
       ["Blockers", "None"]
     ]
   );
@@ -1461,13 +1461,13 @@ test("calculus derivative rules family models rule-specific persistence", () => 
     {
       id: "sample.animation.derivative-rules.tangent-graph",
       animationId: "animation.derivative-rules.tangent-graph",
+      availability: "concrete",
       renderTargetKinds: ["graph"],
       transformationDefinitionIds: [
-        "definition.symbolic.calculus.derivative-power-rule",
-        "definition.symbolic.calculus.derivative-chain-rule"
+        "definition.symbolic.calculus.derivative-power-rule"
       ],
       summary:
-        "Graph sample projects derivative-rule steps onto tangent line and local-slope motion."
+        "The x-cubed graph sample synchronizes power-rule evaluation with tangent line and local-slope motion."
     }
   ]);
   assert.deepEqual(family.graphEquivalents, [
@@ -1555,13 +1555,13 @@ test("calculus derivative rules family projects to tangent graph samples", () =>
       {
         id: "sample.animation.derivative-rules.tangent-graph",
         animationId: "animation.derivative-rules.tangent-graph",
+        availability: "concrete",
         renderTargetKinds: ["graph"],
         transformationDefinitionIds: [
-          "definition.symbolic.calculus.derivative-power-rule",
-          "definition.symbolic.calculus.derivative-chain-rule"
+          "definition.symbolic.calculus.derivative-power-rule"
         ],
         summary:
-          "Graph sample projects derivative-rule steps onto tangent line and local-slope motion."
+          "The x-cubed graph sample synchronizes power-rule evaluation with tangent line and local-slope motion."
       }
     ]
   );
