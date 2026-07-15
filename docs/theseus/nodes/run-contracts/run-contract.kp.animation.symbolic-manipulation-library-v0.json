@@ -222,7 +222,7 @@
       "id": "next-action.kp.animation.symbolic-paused-frame-drilldown-v0",
       "title": "Add paused-frame drill-down for symbolic families",
       "summary": "Expose paused-frame transformation context so an author or LLM can decompose confusing steps into smaller animations.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.symbolic-dashboard-progress-v0",
