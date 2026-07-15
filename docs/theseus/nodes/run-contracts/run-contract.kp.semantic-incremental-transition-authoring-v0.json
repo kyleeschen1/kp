@@ -103,7 +103,8 @@
     {
       "id": "next-action.kp.semantic-transition.structural-artifacts-v0",
       "title": "Bind structural mathematical artifacts",
-      "status": "planned"
+      "summary": "Structural KaTeX artifacts can now receive stable semantic motion identities through controlled bindings.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.measured-geometry-v0",

@@ -1,0 +1,83 @@
+{
+  "id": "next-action.kp.semantic-transition.structural-artifacts-v0",
+  "kind": "next-action",
+  "title": "Bind structural mathematical artifacts",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added controlled structural artifact binding for fraction bars, radical parts, accents, and matrix delimiters using semantic artifact selectors and measured KaTeX token signatures instead of arbitrary CSS.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-incremental-transition-authoring-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.semantic-transition.structural-artifacts-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-incremental-transition-compiler-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Approved thirty-slice implementation plan and boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/katex-structural-artifact-binding.ts",
+      "summary": "Defines safe structural artifact specs, matching, stable motion ids, and diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-structural-artifact-binding.test.ts",
+      "summary": "Covers fraction and delimiter binding plus missing-token and invalid-spec diagnostics."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-incremental-transition-authoring-v0",
+      "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Bind structural mathematical artifacts can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/katex-structural-artifact-binding.test.ts tests/selector-annotated-latex.test.ts",
+      "status": "passed",
+      "scope": "Focused KaTeX structural artifact and anchor tests.",
+      "checkedAt": "2026-07-15T19:56:08.821Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Type safety.",
+      "checkedAt": "2026-07-15T19:56:08.885Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-15T19:56:08.949Z",
+      "scope": "Graph integrity."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added controlled structural artifact binding for fraction bars, radical parts, accents, and matrix delimiters using semantic artifact selectors and measured KaTeX token signatures instead of arbitrary CSS."
+  }
+}
