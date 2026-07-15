@@ -3,6 +3,7 @@ import test from "node:test";
 
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
 import {
+  checkKpSymbolicFamilyAnimationReferenceClosure,
   createKpSymbolicFamilyAnimationResolutions,
   resolveKpSymbolicFamilyAnimationSample
 } from "../src/animation/symbolic-family-animation-resolver.ts";
@@ -64,6 +65,52 @@ test("family animation resolver reports duplicate exact ids as ambiguous", () =>
       assets: [asset, asset]
     })[0]?.status,
     "ambiguous"
+  );
+  assert.equal(
+    checkKpSymbolicFamilyAnimationReferenceClosure({
+      families: [family],
+      assets: [asset, asset]
+    }).passed,
+    false
+  );
+});
+
+test("family animation reference closure ignores planned refs and rejects missing concrete refs", () => {
+  const asset = createLinearSolveAnimationAsset();
+  const planned = familyWithSample({ animationId: "animation.future" });
+  const resolved = familyWithSample({
+    animationId: asset.id,
+    availability: "concrete"
+  });
+  const missing = familyWithSample({
+    animationId: "animation.missing",
+    availability: "concrete"
+  });
+
+  assert.equal(
+    checkKpSymbolicFamilyAnimationReferenceClosure({
+      families: [planned, resolved],
+      assets: [asset]
+    }).passed,
+    true
+  );
+  assert.deepEqual(
+    checkKpSymbolicFamilyAnimationReferenceClosure({
+      families: [missing],
+      assets: [asset]
+    }),
+    {
+      lawId: "symbolic-family.animation-reference-closure",
+      passed: false,
+      failures: [
+        {
+          path:
+            "family.algebra.resolver-sample.runtimeSamples[sample.animation.resolver]",
+          message:
+            "Concrete symbolic sample sample.animation.resolver references missing animation animation.missing."
+        }
+      ]
+    }
   );
 });
 

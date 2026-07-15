@@ -80,7 +80,8 @@
     {
       "id": "next-action.kp.editor.runtime-sample-closure-law-v0",
       "title": "Enforce runtime sample reference closure",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.runtime-sample-closure-law-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.animation-descriptor-v0",

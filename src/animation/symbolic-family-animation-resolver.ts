@@ -1,4 +1,5 @@
 import type { KpAnimationAsset } from "./asset.ts";
+import type { KpLawCheckResult } from "../semantic/asset-laws.ts";
 import {
   symbolicRuntimeSampleAvailability,
   type KpSymbolicManipulationFamily,
@@ -65,6 +66,39 @@ export function createKpSymbolicFamilyAnimationResolutions(input: {
       })
     )
   );
+}
+
+export function checkKpSymbolicFamilyAnimationReferenceClosure(input: {
+  readonly families: readonly KpSymbolicManipulationFamily[];
+  readonly assets: readonly KpAnimationAsset[];
+}): KpLawCheckResult {
+  const failures = createKpSymbolicFamilyAnimationResolutions(input).flatMap(
+    (resolution) => {
+      if (resolution.status === "missing") {
+        return [{
+          path: `${resolution.familyId}.runtimeSamples[${resolution.sampleId}]`,
+          message:
+            `Concrete symbolic sample ${resolution.sampleId} references missing animation ${resolution.animationId}.`
+        }];
+      }
+
+      if (resolution.status === "ambiguous") {
+        return [{
+          path: `${resolution.familyId}.runtimeSamples[${resolution.sampleId}]`,
+          message:
+            `Concrete symbolic sample ${resolution.sampleId} resolves to duplicate animation id ${resolution.animationId}.`
+        }];
+      }
+
+      return [];
+    }
+  );
+
+  return {
+    lawId: "symbolic-family.animation-reference-closure",
+    passed: failures.length === 0,
+    failures
+  };
 }
 
 function resolutionBase(

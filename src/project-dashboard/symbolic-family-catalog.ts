@@ -1,6 +1,10 @@
 import {
   createSymbolicManipulationFamilyRegistry
 } from "../animation/symbolic-manipulation-family-registry.ts";
+import { createKpAnimationAssets } from "../animation/catalog.ts";
+import {
+  createKpSymbolicFamilyAnimationResolutions
+} from "../animation/symbolic-family-animation-resolver.ts";
 import {
   symbolicManipulationFamilyDashboardTags,
   validateKpSymbolicManipulationFamily,
@@ -123,7 +127,18 @@ function symbolicManipulationLibraryProgressRow(
         label: "Transform definitions",
         value: String(metrics.transformationDefinitionCount)
       },
-      { label: "Runtime samples", value: String(metrics.runtimeSampleCount) },
+      {
+        label: "Runtime sample refs",
+        value: String(metrics.runtimeSampleRefCount)
+      },
+      {
+        label: "Concrete runtime samples",
+        value: String(metrics.concreteRuntimeSampleCount)
+      },
+      {
+        label: "Planned runtime samples",
+        value: String(metrics.plannedRuntimeSampleCount)
+      },
       { label: "Law checks", value: String(metrics.lawCheckCount) },
       { label: "Law status", value: metrics.lawStatus },
       {
@@ -155,6 +170,9 @@ function symbolicManipulationLibraryProgressRow(
       `coverage:${metrics.readyFamilyCount}/${metrics.familyCount}`,
       `law-status:${metrics.lawStatus}`,
       `blockers:${metrics.blockers.length === 0 ? "none" : "present"}`,
+      `runtime-sample-refs:${metrics.runtimeSampleRefCount}`,
+      `concrete-runtime-samples:${metrics.concreteRuntimeSampleCount}`,
+      `planned-runtime-samples:${metrics.plannedRuntimeSampleCount}`,
       `graph-equivalents:${metrics.graphEquivalentCount}`,
       `generated-problem-hooks:${metrics.generatedProblemHookCount}`,
       `flashcard-hooks:${metrics.flashcardHookCount}`,
@@ -174,7 +192,9 @@ interface SymbolicManipulationLibraryProgressMetrics {
   readonly familyCount: number;
   readonly readyFamilyCount: number;
   readonly transformationDefinitionCount: number;
-  readonly runtimeSampleCount: number;
+  readonly runtimeSampleRefCount: number;
+  readonly concreteRuntimeSampleCount: number;
+  readonly plannedRuntimeSampleCount: number;
   readonly lawCheckCount: number;
   readonly lawStatus: "passed" | "failed";
   readonly graphEquivalentCount: number;
@@ -190,6 +210,10 @@ function symbolicManipulationLibraryProgressMetrics(
   const blockers = families.flatMap((family) =>
     symbolicManipulationFamilyProgressBlockers(family)
   );
+  const runtimeSampleResolutions = createKpSymbolicFamilyAnimationResolutions({
+    families,
+    assets: createKpAnimationAssets()
+  });
 
   return {
     familyCount: families.length,
@@ -200,10 +224,16 @@ function symbolicManipulationLibraryProgressMetrics(
       (count, family) => count + family.transformationDefinitions.length,
       0
     ),
-    runtimeSampleCount: families.reduce(
+    runtimeSampleRefCount: families.reduce(
       (count, family) => count + family.runtimeSamples.length,
       0
     ),
+    concreteRuntimeSampleCount: runtimeSampleResolutions.filter(
+      (resolution) => resolution.status === "resolved"
+    ).length,
+    plannedRuntimeSampleCount: runtimeSampleResolutions.filter(
+      (resolution) => resolution.status === "planned"
+    ).length,
     lawCheckCount: families.reduce(
       (count, family) =>
         count +
