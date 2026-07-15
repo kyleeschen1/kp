@@ -1,4 +1,6 @@
 import type { KatexTokenRect } from "./katex-transition-types.ts";
+import type { KpEquationTransitionIr } from "./equation-transition-ir.ts";
+import type { KpSelectorAnnotatedLatex } from "./selector-annotated-latex.ts";
 
 export interface AnnotatedMotionToken {
   readonly motionId: string;
@@ -6,6 +8,32 @@ export interface AnnotatedMotionToken {
   readonly rect: KatexTokenRect;
   readonly localRect: KatexTokenRect;
   readonly element: HTMLElement;
+}
+
+export interface KpMeasuredEquationTransitionEndpoint {
+  readonly selectorIds: readonly string[];
+  readonly motionIds: readonly string[];
+  readonly bounds: KatexTokenRect;
+}
+
+export interface KpMeasuredEquationTransitionRelationGeometry {
+  readonly recordId: string;
+  readonly lifecycle: KpEquationTransitionIr["relations"][number]["lifecycle"];
+  readonly source?: KpMeasuredEquationTransitionEndpoint | undefined;
+  readonly target?: KpMeasuredEquationTransitionEndpoint | undefined;
+  readonly delta?: {
+    readonly x: number;
+    readonly y: number;
+    readonly scaleX: number;
+    readonly scaleY: number;
+  } | undefined;
+}
+
+export interface KpMeasuredEquationTransitionGeometry {
+  readonly transitionId: string;
+  readonly sourceTokens: readonly AnnotatedMotionToken[];
+  readonly targetTokens: readonly AnnotatedMotionToken[];
+  readonly relations: readonly KpMeasuredEquationTransitionRelationGeometry[];
 }
 
 const toTokenRect = (rect: DOMRect): KatexTokenRect => ({
@@ -51,4 +79,124 @@ export function measureAnnotatedEquationMotionTokens(
   }
 
   return tokens;
+}
+
+export function measureKpEquationTransitionGeometry(input: {
+  readonly ir: KpEquationTransitionIr;
+  readonly sourceRoot: HTMLElement;
+  readonly targetRoot: HTMLElement;
+  readonly sourceAnnotated: readonly KpSelectorAnnotatedLatex[];
+  readonly targetAnnotated: readonly KpSelectorAnnotatedLatex[];
+  readonly sourceMotionIdsBySelector?: Readonly<Record<string, string>> | undefined;
+  readonly targetMotionIdsBySelector?: Readonly<Record<string, string>> | undefined;
+}): KpMeasuredEquationTransitionGeometry {
+  const sourceTokens = measureAnnotatedEquationMotionTokens(input.sourceRoot);
+  const targetTokens = measureAnnotatedEquationMotionTokens(input.targetRoot);
+  const sourceByMotionId = new Map(sourceTokens.map((token) => [token.motionId, token]));
+  const targetByMotionId = new Map(targetTokens.map((token) => [token.motionId, token]));
+  const sourceMotionIds = motionIdsBySelector(
+    input.sourceAnnotated,
+    input.sourceMotionIdsBySelector
+  );
+  const targetMotionIds = motionIdsBySelector(
+    input.targetAnnotated,
+    input.targetMotionIdsBySelector
+  );
+
+  return {
+    transitionId: input.ir.id,
+    sourceTokens,
+    targetTokens,
+    relations: input.ir.relations.map((relation) => {
+      const source = measuredEndpoint(
+        input.ir.id,
+        "source",
+        relation.sourceSelectorIds,
+        sourceMotionIds,
+        sourceByMotionId
+      );
+      const target = measuredEndpoint(
+        input.ir.id,
+        "target",
+        relation.targetSelectorIds,
+        targetMotionIds,
+        targetByMotionId
+      );
+      return {
+        recordId: relation.recordId,
+        lifecycle: relation.lifecycle,
+        ...(source === undefined ? {} : { source }),
+        ...(target === undefined ? {} : { target }),
+        ...(source === undefined || target === undefined
+          ? {}
+          : { delta: geometryDelta(source.bounds, target.bounds) })
+      };
+    })
+  };
+}
+
+function motionIdsBySelector(
+  annotatedStates: readonly KpSelectorAnnotatedLatex[],
+  additions: Readonly<Record<string, string>> | undefined
+): ReadonlyMap<string, string> {
+  return new Map([
+    ...annotatedStates.flatMap((state) =>
+      state.annotations.map((annotation) => [annotation.selectorId, annotation.motionId] as const)
+    ),
+    ...Object.entries(additions ?? {})
+  ]);
+}
+
+function measuredEndpoint(
+  transitionId: string,
+  side: "source" | "target",
+  selectorIds: readonly string[],
+  motionIdsBySelector: ReadonlyMap<string, string>,
+  tokensByMotionId: ReadonlyMap<string, AnnotatedMotionToken>
+): KpMeasuredEquationTransitionEndpoint | undefined {
+  if (selectorIds.length === 0) return undefined;
+  const motionIds = selectorIds.map((selectorId) => {
+    const motionId = motionIdsBySelector.get(selectorId);
+    if (motionId === undefined) {
+      throw new Error(
+        `Equation transition ${transitionId} ${side} selector ${selectorId} has no motion annotation.`
+      );
+    }
+    return motionId;
+  });
+  const tokens = motionIds.map((motionId) => {
+    const token = tokensByMotionId.get(motionId);
+    if (token === undefined) {
+      throw new Error(
+        `Equation transition ${transitionId} ${side} motion id ${motionId} was not measured.`
+      );
+    }
+    return token;
+  });
+  return {
+    selectorIds: [...selectorIds],
+    motionIds,
+    // Group bounds let fan-in and fan-out use the same geometry contract as identity.
+    bounds: unionRects(tokens.map((token) => token.localRect))
+  };
+}
+
+function unionRects(rects: readonly KatexTokenRect[]): KatexTokenRect {
+  const left = Math.min(...rects.map((rect) => rect.left));
+  const top = Math.min(...rects.map((rect) => rect.top));
+  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
+  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
+  return { left, top, width: right - left, height: bottom - top };
+}
+
+function geometryDelta(
+  source: KatexTokenRect,
+  target: KatexTokenRect
+): { x: number; y: number; scaleX: number; scaleY: number } {
+  return {
+    x: target.left + target.width / 2 - (source.left + source.width / 2),
+    y: target.top + target.height / 2 - (source.top + source.height / 2),
+    scaleX: source.width === 0 ? 1 : target.width / source.width,
+    scaleY: source.height === 0 ? 1 : target.height / source.height
+  };
 }

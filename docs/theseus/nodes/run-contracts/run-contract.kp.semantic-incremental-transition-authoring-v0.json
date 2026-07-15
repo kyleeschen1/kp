@@ -109,7 +109,8 @@
     {
       "id": "next-action.kp.semantic-transition.measured-geometry-v0",
       "title": "Measure corresponding source and target tokens",
-      "status": "planned"
+      "summary": "Annotated semantic selectors now resolve to measured relation geometry.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.token-renderer-v0",
