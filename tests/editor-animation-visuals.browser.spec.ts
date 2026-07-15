@@ -534,3 +534,21 @@ test("dot projection visibly drops the source point onto the target vector", asy
   await expect(projection).toHaveAttribute("data-kp-editor-graph-drop-point", "3,0");
   expect(Number(await projection.getAttribute("y2"))).toBeGreaterThan(startY);
 });
+
+test("graph annotations stay synchronized with the visible runtime geometry", async ({ page }) => {
+  const cases = [
+    ["editor-animation.sample.animation.vector-add-scale.basic", "v(t) = (1, 2)", "v(t) = (2, 6)"],
+    ["editor-animation.sample.animation.derivative-rules.tangent-graph", "x = 0 · slope = 0", "x = 2 · slope = 12"],
+    ["editor-animation.sample.animation.integral-ftc.area-sweep", "b = 0 · area = 0", "b = 3 · area = 9"],
+    ["editor-animation.sample.animation.dot-projection.basic", "a·b = 12 · drop = (3, 4)", "a·b = 12 · drop = (3, 0)"]
+  ] as const;
+
+  for (const [descriptorId, start, end] of cases) {
+    await page.goto(`/?animation=${descriptorId}`);
+    const player = page.locator("[data-kp-editor-animation-player]");
+    const annotation = player.locator("[data-kp-editor-graph-annotation]");
+    await expect(annotation).toHaveText(start);
+    await player.locator('[data-action="seek-editor-animation"]').fill("1");
+    await expect(annotation).toHaveText(end);
+  }
+});

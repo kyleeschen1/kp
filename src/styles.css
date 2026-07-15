@@ -1559,6 +1559,15 @@ h2 {
 .editor-graph-stage__point { fill: #c2410c; }
 .editor-graph-stage__area { fill: rgb(30 136 168 / 0.3); stroke: #1e88a8; stroke-width: 2; }
 .editor-graph-stage__label { fill: #334155; font-size: 14px; font-weight: 800; }
+.editor-graph-stage__annotation {
+  fill: #334155;
+  font-size: 14px;
+  font-weight: 800;
+  paint-order: stroke;
+  stroke: #ffffff;
+  stroke-linejoin: round;
+  stroke-width: 5px;
+}
 
 .editor-equation-stage {
   display: grid;

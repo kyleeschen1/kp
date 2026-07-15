@@ -102,7 +102,7 @@ function renderRuntimeContent(
       const source = point(frame.sourceCoordinates);
       const end = point(frame.currentCoordinates);
       const target = point(frame.targetCoordinates);
-      return `<line class="editor-graph-stage__path" x1="${source[0]}" y1="${source[1]}" x2="${target[0]}" y2="${target[1]}" /><line class="editor-graph-stage__vector editor-graph-stage__vector--ghost" data-kp-editor-graph-vector-source x1="${origin[0]}" y1="${origin[1]}" x2="${source[0]}" y2="${source[1]}" marker-end="url(#kp-editor-graph-arrow)" /><line class="editor-graph-stage__vector" data-kp-editor-graph-vector data-kp-editor-graph-vector-coordinates="${frame.currentCoordinates.join(",")}" x1="${origin[0]}" y1="${origin[1]}" x2="${end[0]}" y2="${end[1]}" marker-end="url(#kp-editor-graph-arrow)" />`;
+      return `<line class="editor-graph-stage__path" x1="${source[0]}" y1="${source[1]}" x2="${target[0]}" y2="${target[1]}" /><line class="editor-graph-stage__vector editor-graph-stage__vector--ghost" data-kp-editor-graph-vector-source x1="${origin[0]}" y1="${origin[1]}" x2="${source[0]}" y2="${source[1]}" marker-end="url(#kp-editor-graph-arrow)" /><line class="editor-graph-stage__vector" data-kp-editor-graph-vector data-kp-editor-graph-vector-coordinates="${frame.currentCoordinates.join(",")}" x1="${origin[0]}" y1="${origin[1]}" x2="${end[0]}" y2="${end[1]}" marker-end="url(#kp-editor-graph-arrow)" />${renderAnnotation(`v(t) = (${frame.currentCoordinates.map(formatNumber).join(", ")})`, model)}`;
     }
     case "animation.derivative-rules.tangent-graph": {
       const frame = sampleDerivativeTangentRuntimeFrame({ animation, runtimeFrame: state.runtimeFrame });
@@ -112,25 +112,33 @@ function renderRuntimeContent(
       });
       const tangent = frame.tangentSegment.map((coordinates) => point(coordinates));
       const current = point([frame.x, frame.y]);
-      return `<polyline class="editor-graph-stage__curve" points="${curve.map((p) => p.join(",")).join(" ")}" /><line class="editor-graph-stage__tangent" data-kp-editor-graph-tangent data-kp-editor-graph-tangent-slope="${frame.slope}" x1="${tangent[0]![0]}" y1="${tangent[0]![1]}" x2="${tangent[1]![0]}" y2="${tangent[1]![1]}" /><circle class="editor-graph-stage__point" data-kp-editor-graph-tangent-point data-kp-editor-graph-tangent-x="${frame.x}" cx="${current[0]}" cy="${current[1]}" r="5" />`;
+      return `<polyline class="editor-graph-stage__curve" points="${curve.map((p) => p.join(",")).join(" ")}" /><line class="editor-graph-stage__tangent" data-kp-editor-graph-tangent data-kp-editor-graph-tangent-slope="${frame.slope}" x1="${tangent[0]![0]}" y1="${tangent[0]![1]}" x2="${tangent[1]![0]}" y2="${tangent[1]![1]}" /><circle class="editor-graph-stage__point" data-kp-editor-graph-tangent-point data-kp-editor-graph-tangent-x="${frame.x}" cx="${current[0]}" cy="${current[1]}" r="5" />${renderAnnotation(`x = ${formatNumber(frame.x)} · slope = ${formatNumber(frame.slope)}`, model)}`;
     }
     case "animation.integral-ftc.area-sweep": {
       const frame = sampleIntegralAreaSweepRuntimeFrame({ animation, runtimeFrame: state.runtimeFrame });
       const polygon = frame.areaPolygon.map(point);
       const boundBase = point([frame.upperBound, 0]);
       const boundTop = point([frame.upperBound, frame.integrandAtUpperBound]);
-      return `<polygon class="editor-graph-stage__area" data-kp-editor-graph-area data-kp-editor-graph-area-value="${frame.accumulatedArea}" points="${polygon.map((p) => p.join(",")).join(" ")}" /><line class="editor-graph-stage__sweep" data-kp-editor-graph-area-bound data-kp-editor-graph-upper-bound="${frame.upperBound}" x1="${boundBase[0]}" y1="${boundBase[1]}" x2="${boundTop[0]}" y2="${boundTop[1]}" /><text class="editor-graph-stage__label" data-kp-editor-graph-area-label x="${model.width - 130}" y="32">Area ${frame.accumulatedArea.toFixed(2)}</text>`;
+      return `<polygon class="editor-graph-stage__area" data-kp-editor-graph-area data-kp-editor-graph-area-value="${frame.accumulatedArea}" points="${polygon.map((p) => p.join(",")).join(" ")}" /><line class="editor-graph-stage__sweep" data-kp-editor-graph-area-bound data-kp-editor-graph-upper-bound="${frame.upperBound}" x1="${boundBase[0]}" y1="${boundBase[1]}" x2="${boundTop[0]}" y2="${boundTop[1]}" /><text class="editor-graph-stage__label" data-kp-editor-graph-area-label x="${model.width - 130}" y="32">Area ${frame.accumulatedArea.toFixed(2)}</text>${renderAnnotation(`b = ${formatNumber(frame.upperBound)} · area = ${formatNumber(frame.accumulatedArea)}`, model)}`;
     }
     case "animation.dot-projection.basic": {
       const frame = sampleDotProjectionRuntimeFrame({ animation, runtimeFrame: state.runtimeFrame });
       const left = point(frame.leftVector);
       const right = point(frame.rightVector);
       const drop = point(frame.dropPoint);
-      return `<line class="editor-graph-stage__vector" x1="${origin[0]}" y1="${origin[1]}" x2="${left[0]}" y2="${left[1]}" marker-end="url(#kp-editor-graph-arrow)" /><line class="editor-graph-stage__vector editor-graph-stage__vector--secondary" x1="${origin[0]}" y1="${origin[1]}" x2="${right[0]}" y2="${right[1]}" marker-end="url(#kp-editor-graph-arrow)" /><line class="editor-graph-stage__projection" data-kp-editor-graph-projection data-kp-editor-graph-drop-point="${frame.dropPoint.join(",")}" x1="${left[0]}" y1="${left[1]}" x2="${drop[0]}" y2="${drop[1]}" /><circle class="editor-graph-stage__point" data-kp-editor-graph-projection-point data-kp-editor-graph-dot-product="${frame.dotProduct}" cx="${drop[0]}" cy="${drop[1]}" r="5" />`;
+      return `<line class="editor-graph-stage__vector" x1="${origin[0]}" y1="${origin[1]}" x2="${left[0]}" y2="${left[1]}" marker-end="url(#kp-editor-graph-arrow)" /><line class="editor-graph-stage__vector editor-graph-stage__vector--secondary" x1="${origin[0]}" y1="${origin[1]}" x2="${right[0]}" y2="${right[1]}" marker-end="url(#kp-editor-graph-arrow)" /><line class="editor-graph-stage__projection" data-kp-editor-graph-projection data-kp-editor-graph-drop-point="${frame.dropPoint.join(",")}" x1="${left[0]}" y1="${left[1]}" x2="${drop[0]}" y2="${drop[1]}" /><circle class="editor-graph-stage__point" data-kp-editor-graph-projection-point data-kp-editor-graph-dot-product="${frame.dotProduct}" cx="${drop[0]}" cy="${drop[1]}" r="5" />${renderAnnotation(`a·b = ${formatNumber(frame.dotProduct)} · drop = (${frame.dropPoint.map(formatNumber).join(", ")})`, model)}`;
     }
     default:
       return "";
   }
+}
+
+function renderAnnotation(value: string, model: KpEditorGraphSvgViewportModel): string {
+  return `<text class="editor-graph-stage__annotation" data-kp-editor-graph-annotation x="36" y="${model.height - 10}">${value}</text>`;
+}
+
+function formatNumber(value: number): string {
+  return Number(value.toFixed(2)).toString();
 }
 
 function scale(value: number, from: readonly [number, number], to: readonly [number, number]): number {
