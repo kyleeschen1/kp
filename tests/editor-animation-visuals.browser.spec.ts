@@ -188,3 +188,40 @@ test("fraction simplification renders factor, common-factor, and simplified stat
   await expect(player.locator("[data-kp-editor-equation-target]"))
     .toHaveCSS("opacity", "1");
 });
+
+test("exponent and radical family animations render their semantic rewrite motifs", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.exponent-combine.square-as-product"
+  );
+  let player = page.locator("[data-kp-editor-animation-player]");
+  let scrubber = player.locator('[data-action="seek-editor-animation"]');
+  await scrubber.fill("0.25");
+  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+    .toHaveAttribute("data-kp-editor-equation-motif", "append-after-shift");
+  await scrubber.fill("0.75");
+  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+    .toHaveAttribute("data-kp-editor-equation-motif", "unwrap");
+  await expect(player.locator("[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"))
+    .toHaveAttribute(
+      "data-kp-editor-equation-object-id",
+      "expression.generated.exponent.square-as-product.expanded"
+    );
+
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
+  );
+  player = page.locator("[data-kp-editor-animation-player]");
+  scrubber = player.locator('[data-action="seek-editor-animation"]');
+  await scrubber.fill("0.5");
+  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+    .toHaveAttribute("data-kp-editor-equation-motif", "artifact-replace");
+  await expect(player.locator("[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"))
+    .toHaveAttribute(
+      "data-kp-editor-equation-object-id",
+      "expression.generated.radical.square-root-as-power.radical"
+    );
+});
