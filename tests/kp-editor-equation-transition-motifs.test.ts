@@ -34,7 +34,7 @@ test("equation transition motifs map semantic transform types to reusable motion
   assert.deepEqual(frame.focusLabels, ["+3", "-3"]);
 });
 
-test("equation transition motifs use artifact replacement as an honest generic fallback", () => {
+test("inequality transitions use the explicit relation-flip motif", () => {
   const animation = createKpAnimationAssets().find(
     (candidate) => candidate.id === "animation.inequality.sign-flip.basic"
   );
@@ -47,6 +47,6 @@ test("equation transition motifs use artifact replacement as an honest generic f
 
   assert.equal(
     createKpEditorEquationTransitionMotifFrame({ transition, progress: 0.5 }).kind,
-    "artifact-replace"
+    "relation-flip"
   );
 });

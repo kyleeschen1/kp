@@ -129,6 +129,7 @@ test("semantic beat compiler exposes the current equation demo timeline", () => 
       ["artifact-exit", 0, 25, "ease-out"],
       ["layout-shift", 0, 25, "ease-in-out"],
       ["introduced-token-enter", 25, 50, "ease-out"],
+      ["relation-flip", 0, 50, "ease-in-out"],
       ["cancel-meet", 0, 20, "ease-in-out"],
       ["cancel-collapse", 20, 25, "ease-out"],
       ["post-cancel-layout-shift", 30, 50, "ease-in-out"],

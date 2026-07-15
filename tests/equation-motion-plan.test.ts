@@ -94,6 +94,7 @@ test("visual motif module exposes reusable equation motif descriptors", () => {
         ["vanish"],
         ["cancel-meet", "cancel-collapse", "post-cancel-layout-shift"]
       ],
+      ["relation-flip", ["shift"], ["relation-flip"]],
       [
         "simplify-into",
         ["vanish", "reveal"],

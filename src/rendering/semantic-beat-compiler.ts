@@ -70,6 +70,13 @@ export const linearEquationDemoBeatTimeline = compileSemanticBeatTimeline({
       summary: "New tokens fade and scale in after layout room exists."
     },
     {
+      id: "relation-flip",
+      startBeat: 0,
+      endBeat: 50,
+      easing: "ease-in-out",
+      summary: "An inequality relation turns through the full negative-multiplication transition."
+    },
+    {
       id: "cancel-meet",
       startBeat: 0,
       endBeat: 20,
