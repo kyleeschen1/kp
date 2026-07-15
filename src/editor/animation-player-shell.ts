@@ -51,6 +51,7 @@ function surfaceLabel(
 ): string {
   switch (kind) {
     case "equation": return "Equation animation stage";
+    case "diagram": return "Diagram animation stage";
     case "graph": return "Graph animation stage";
     case "programming": return "Programming animation stage";
   }

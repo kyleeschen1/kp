@@ -111,5 +111,5 @@ export function renderKpEditorAnimationSurfaceFrame(
 function isSurfaceSlotKind(
   value: string | undefined
 ): value is KpEditorAnimationSurfaceSlotKind {
-  return value === "equation" || value === "graph" || value === "programming";
+  return value === "equation" || value === "diagram" || value === "graph" || value === "programming";
 }

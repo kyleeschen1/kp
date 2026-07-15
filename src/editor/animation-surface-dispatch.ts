@@ -7,6 +7,7 @@ import type {
 
 export type KpEditorAnimationSurfaceKind =
   | "equation"
+  | "diagram"
   | "graph"
   | "programming"
   | "composite"
@@ -14,6 +15,7 @@ export type KpEditorAnimationSurfaceKind =
 
 export type KpEditorAnimationSurfaceSlotKind =
   | "equation"
+  | "diagram"
   | "graph"
   | "programming";
 
@@ -66,6 +68,8 @@ function surfaceSlotKind(
       return "equation";
     case "graph":
       return "graph";
+    case "diagram":
+      return "diagram";
     case "programming":
       return "programming";
     case "custom":

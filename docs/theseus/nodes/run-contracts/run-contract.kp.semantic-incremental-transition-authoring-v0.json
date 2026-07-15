@@ -205,7 +205,8 @@
     {
       "id": "next-action.kp.semantic-transition.diagram-scene-v0",
       "title": "Define DiagramScene and diagram render target",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.semantic-transition.diagram-scene-v0 in KP Semantic Incremental Transition And LLM Authoring V0.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.diagram-svg-v0",
