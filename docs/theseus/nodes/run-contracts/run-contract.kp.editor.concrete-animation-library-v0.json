@@ -110,7 +110,8 @@
     {
       "id": "next-action.kp.editor.animation-selection-route-v0",
       "title": "Add stable editor animation selection links",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.animation-selection-route-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.dashboard-animation-deep-links-v0",

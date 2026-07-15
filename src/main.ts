@@ -6,6 +6,14 @@ import {
   renderEditorDocument
 } from "./editor/editor.ts";
 import {
+  createKpEditorAnimationLibrary,
+  selectKpEditorAnimationDescriptor
+} from "./editor/animation-library.ts";
+import {
+  kpEditorAnimationSelectionHref,
+  readKpEditorAnimationSelection
+} from "./editor/animation-selection-route.ts";
+import {
   previewApiCatalogItem,
   selectApiCatalogItem
 } from "./editor/api-catalog.ts";
@@ -70,6 +78,10 @@ let projectDashboardSelectedAgendaRowId: string | undefined;
 let projectDashboardTocOnly = false;
 let projectDashboardSelectedKatexFixtureId: string | undefined;
 let selectedEquationAnimationId: string | undefined;
+let selectedEditorAnimationDescriptorId = selectKpEditorAnimationDescriptor(
+  createKpEditorAnimationLibrary(),
+  readKpEditorAnimationSelection(window.location.search)
+).id;
 type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
 let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
@@ -192,6 +204,11 @@ appRoot.addEventListener("change", (event) => {
 
   if (event.target.dataset["action"] === "set-equation-motion-animation") {
     selectEquationAnimation(event.target);
+    return;
+  }
+
+  if (event.target.dataset["action"] === "set-editor-animation") {
+    selectEditorAnimation(event.target);
   }
 });
 
@@ -257,10 +274,26 @@ async function compileDocument(): Promise<void> {
 function renderEditor(): void {
   disposeGraph3DWebGL(appRoot);
   appRoot.innerHTML = renderEditorDocument(editorDocument, {
-    equationAnimationId: selectedEquationAnimationId
+    equationAnimationId: selectedEquationAnimationId,
+    editorAnimationDescriptorId: selectedEditorAnimationDescriptorId
   });
   hydrateEquationMotionDemos(appRoot);
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);
+}
+
+function selectEditorAnimation(select: HTMLSelectElement): void {
+  selectedEditorAnimationDescriptorId = select.value;
+  window.history.replaceState(
+    null,
+    "",
+    kpEditorAnimationSelectionHref({
+      pathname: window.location.pathname,
+      search: window.location.search,
+      hash: window.location.hash,
+      descriptorId: selectedEditorAnimationDescriptorId
+    })
+  );
+  renderEditor();
 }
 
 function selectEquationAnimation(select: HTMLSelectElement): void {

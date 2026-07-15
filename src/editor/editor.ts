@@ -46,6 +46,17 @@ import {
 } from "../semantic/latex-form.ts";
 import { identityMatrix } from "../semantic/matrix.ts";
 import { validateKpDocument } from "../semantic/validation.ts";
+import {
+  createKpEditorAnimationLibrary,
+  selectKpEditorAnimationDescriptor
+} from "./animation-library.ts";
+import {
+  createKpEditorAnimationPickerModel,
+  renderKpEditorAnimationPicker
+} from "./animation-picker.ts";
+import {
+  dispatchKpEditorAnimationSurface
+} from "./animation-surface-dispatch.ts";
 
 export function createInitialEditorDocument(): KpDocument {
   return createKpDocument({
@@ -122,6 +133,7 @@ export function createInitialEditorDocument(): KpDocument {
 
 export interface EditorRenderOptions {
   readonly equationAnimationId?: string | undefined;
+  readonly editorAnimationDescriptorId?: string | undefined;
 }
 
 export function renderEditorDocument(
@@ -140,7 +152,8 @@ export function renderEditorDocument(
           .join("")}</ul>`;
   const renderedObjects = renderPreviewStage(
     document,
-    options.equationAnimationId
+    options.equationAnimationId,
+    options.editorAnimationDescriptorId
   );
 
   return `
@@ -178,12 +191,45 @@ export function renderEditorDocument(
 
 function renderPreviewStage(
   document: KpDocument,
-  equationAnimationId: string | undefined
+  equationAnimationId: string | undefined,
+  editorAnimationDescriptorId: string | undefined
 ): string {
   return [
+    renderEditorAnimationLibrary(editorAnimationDescriptorId),
     renderEquationMotionDemo(equationAnimationId),
     ...document.objects.map((object) => renderObjectPreview(object, document))
   ].join("");
+}
+
+function renderEditorAnimationLibrary(
+  requestedDescriptorId: string | undefined
+): string {
+  const descriptors = createKpEditorAnimationLibrary();
+  const selected = selectKpEditorAnimationDescriptor(
+    descriptors,
+    requestedDescriptorId
+  );
+  const picker = createKpEditorAnimationPickerModel({
+    descriptors,
+    selectedDescriptorId: selected.id
+  });
+  const surface = dispatchKpEditorAnimationSurface(selected);
+
+  return `
+    <section class="editor-animation-library" data-kp-editor-animation-library data-kp-editor-animation-descriptor-id="${escapeHtml(selected.id)}" data-kp-editor-animation-id="${escapeHtml(selected.animationId)}" data-kp-editor-animation-surface="${escapeHtml(surface.kind)}" aria-labelledby="editor-animation-library-title">
+      ${renderKpEditorAnimationPicker(picker)}
+      <div class="editor-animation-library__selection">
+        <p class="eyebrow">Concrete animation asset</p>
+        <h3 id="editor-animation-library-title">${escapeHtml(selected.title)}</h3>
+        <p>${escapeHtml(selected.summary)}</p>
+        <dl>
+          <div><dt>Surface</dt><dd>${escapeHtml(surface.kind)}</dd></div>
+          <div><dt>Animation ID</dt><dd>${escapeHtml(selected.animationId)}</dd></div>
+          ${selected.familyId === undefined ? "" : `<div><dt>Family</dt><dd>${escapeHtml(selected.familyId)}</dd></div>`}
+        </dl>
+      </div>
+    </section>
+  `;
 }
 
 function renderObjectPreview(object: KpSemanticObject, document: KpDocument): string {
