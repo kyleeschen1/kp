@@ -55,3 +55,32 @@ test("selected editor animation controls play, pause, seek, step, rewind, and re
   await expect(player).toHaveAttribute("data-kp-editor-animation-status", "idle");
   await expect(scrubber).toHaveValue("0");
 });
+
+test("editor animation player disposes cleanly across selection and dashboard rerenders", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  let player = page.locator("[data-kp-editor-animation-player]");
+  const initialDescriptorId = await player.getAttribute(
+    "data-kp-editor-animation-descriptor-id"
+  );
+  await player.getByRole("button", { name: "Play animation" }).click();
+  await expect(player).toHaveAttribute("data-kp-editor-animation-status", "playing");
+
+  await page.locator('[data-action="set-editor-animation"]').selectOption({ index: 1 });
+  player = page.locator("[data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-status", "idle");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "0");
+  expect(await player.getAttribute("data-kp-editor-animation-descriptor-id"))
+    .not.toBe(initialDescriptorId);
+
+  await player.getByRole("button", { name: "Play animation" }).click();
+  await page.getByRole("button", { name: "Project Dashboard" }).click();
+  await expect(page.locator("[data-kp-editor-animation-player]")).toHaveCount(0);
+
+  await page.getByRole("button", { name: "Back to Editor" }).click();
+  player = page.locator("[data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-status", "idle");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "0");
+});

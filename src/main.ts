@@ -65,7 +65,9 @@ import {
   renderProjectDashboard
 } from "./project-dashboard/render.ts";
 import {
-  hydrateKpEditorAnimationPlayers
+  disposeKpEditorAnimationPlayers,
+  hydrateKpEditorAnimationPlayers,
+  pauseKpEditorAnimationPlayers
 } from "./editor/animation-player-controller.ts";
 import {
   hydrateKpEditorAnimationSurfaces
@@ -107,6 +109,14 @@ declare global {
 window.__kpEquationMotionSetProgress = setEquationMotionProgress;
 
 renderEditor();
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) pauseKpEditorAnimationPlayers(appRoot);
+});
+
+window.addEventListener("pagehide", () => {
+  disposeKpEditorAnimationPlayers(appRoot);
+});
 
 appRoot.addEventListener("click", (event) => {
   if (!(event.target instanceof Element)) {
@@ -290,6 +300,7 @@ async function compileDocument(): Promise<void> {
 }
 
 function renderEditor(): void {
+  disposeKpEditorAnimationPlayers(appRoot);
   disposeGraph3DWebGL(appRoot);
   appRoot.innerHTML = renderEditorDocument(editorDocument, {
     equationAnimationId: selectedEquationAnimationId,
@@ -328,6 +339,7 @@ function renderProjectDashboardView(
   query = projectDashboardQuery
 ): void {
   projectDashboardQuery = query;
+  disposeKpEditorAnimationPlayers(appRoot);
   disposeGraph3DWebGL(appRoot);
   appRoot.innerHTML = renderProjectDashboard(projectDashboardData, {
     query,

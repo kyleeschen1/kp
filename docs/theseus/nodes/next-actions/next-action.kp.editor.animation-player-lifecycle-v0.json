@@ -1,0 +1,91 @@
+{
+  "id": "next-action.kp.editor.animation-player-lifecycle-v0",
+  "kind": "next-action",
+  "title": "Harden animation switching and cleanup",
+  "status": "resolved",
+  "domain": "kp.editor",
+  "summary": "Hardened animation switching and cleanup with explicit frame cancellation, listener/session disposal, hidden-page pause, and clean player rehydration across editor and dashboard rerenders.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.visible-animation-player-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.editor.animation-player-lifecycle-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.editor.visible-animation-player-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-editor-concrete-animation-library-loop-closeout.md",
+      "summary": "Closeout recommends mounting selected equation and graph runtime-frame consumers."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap names visible editor animation runtime mounting as the active focus."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-player-controller.ts",
+      "summary": "Player pause and disposal lifecycle APIs with requestAnimationFrame cleanup."
+    },
+    {
+      "kind": "file",
+      "path": "src/main.ts",
+      "summary": "Lifecycle hooks for rerenders, document visibility, and page exit."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Chromium coverage for selection replacement and editor/dashboard round trips during playback."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.editor.visible-animation-player-v0",
+      "next-action.kp.editor.animation-live-diagnostics-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.editor.animation-live-diagnostics-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Harden animation switching and cleanup can be completed inside KP editor visible animation player v0 loop."
+  ],
+  "allowedWork": [
+    "Only implement the approved visible editor animation player slices.",
+    "Reuse the existing KpAnimationAsset runtime clock, semantic bundles, visual-frame adapters, KaTeX ownership rules, and graph samplers.",
+    "Add focused editor renderers, controls, browser checks, and closeout evidence."
+  ],
+  "disallowedWork": [
+    "Do not create a second animation clock or duplicate semantic animation assets.",
+    "Do not add media encoders, live CAS or LSP integrations, curriculum generation, dynamic package loading, or a broad editor redesign.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript application, node, and test projects",
+      "checkedAt": "2026-07-15T17:12:45.751Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "checkedAt": "2026-07-15T17:12:45.815Z",
+      "scope": "player controls, switching, disposal, and rehydration in Chromium"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Hardened animation switching and cleanup with explicit frame cancellation, listener/session disposal, hidden-page pause, and clean player rehydration across editor and dashboard rerenders."
+  }
+}

@@ -19,6 +19,30 @@ export function hydrateKpEditorAnimationPlayers(root: ParentNode): void {
     .forEach(hydrateKpEditorAnimationPlayer);
 }
 
+export function pauseKpEditorAnimationPlayers(
+  root: ParentNode,
+  nowMs: number = performance.now()
+): void {
+  root.querySelectorAll<HTMLElement>("[data-kp-editor-animation-player]")
+    .forEach((player) => {
+      const session = sessions.get(player);
+      if (session?.player.playbackStatus !== "playing") return;
+      dispatchKpEditorAnimationPlaybackAction(player, { type: "pause", nowMs });
+    });
+}
+
+export function disposeKpEditorAnimationPlayers(root: ParentNode): void {
+  root.querySelectorAll<HTMLElement>("[data-kp-editor-animation-player]")
+    .forEach((player) => {
+      cancelPlayerFrame(player);
+      player.removeEventListener("click", handlePlayerClick);
+      player.removeEventListener("input", handlePlayerInput);
+      sessions.delete(player);
+      player.dataset["kpEditorAnimationDisposed"] = "true";
+      delete player.dataset["kpEditorAnimationHydrated"];
+    });
+}
+
 export function getKpEditorAnimationPlaybackSession(
   player: HTMLElement
 ): KpEditorAnimationPlaybackSession | undefined {
