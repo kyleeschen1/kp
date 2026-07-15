@@ -151,7 +151,8 @@
     {
       "id": "next-action.kp.semantic-transition.function-wrap-v0",
       "title": "Implement wrapping and role-change",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.semantic-transition.function-wrap-v0 in KP Semantic Incremental Transition And LLM Authoring V0.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.distribute-factor-v0",

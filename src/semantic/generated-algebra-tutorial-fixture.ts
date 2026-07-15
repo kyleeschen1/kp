@@ -1132,6 +1132,29 @@ function createGeneratedFunctionWrapTransformations(
       title: "Wrap the expression in a function application",
       sourceObjectIds: [ids.input],
       targetObjectIds: [ids.wrapped],
+      correspondenceMap: {
+        id: `${ids.wrap}.correspondence`,
+        records: [
+          lifecycle(
+            "value-becomes-argument",
+            "role-change",
+            [selectorId(ids.input, "value")],
+            [selectorId(ids.wrapped, "argument")],
+            "The input persists while taking the argument role."
+          ),
+          lifecycle(
+            "wrapper-enters",
+            "introduction",
+            [],
+            [
+              selectorId(ids.wrapped, "function"),
+              selectorId(ids.wrapped, "left-paren"),
+              selectorId(ids.wrapped, "right-paren")
+            ],
+            "The function and delimiters enter around the argument."
+          )
+        ]
+      },
       correspondence: [
         correspondence(ids.input, "value", ids.wrapped, "argument")
       ]
@@ -2357,7 +2380,7 @@ function selectorId(objectId: string, suffix: string): string {
 
 function lifecycle(
   id: string,
-  relation: "identity" | "introduction" | "cancelation" | "fan-in" | "fan-out",
+  relation: "identity" | "role-change" | "introduction" | "cancelation" | "fan-in" | "fan-out",
   sourceSelectorIds: readonly string[],
   targetSelectorIds: readonly string[],
   summary: string

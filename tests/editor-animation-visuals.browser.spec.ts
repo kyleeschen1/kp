@@ -263,6 +263,11 @@ test("function-wrap family animation visibly wraps and rewinds its argument", as
     .toContainText("x");
   await expect(player.locator("[data-kp-editor-equation-target]"))
     .toContainText("f(x)");
+  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+    .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
+  await expect(
+    player.locator('[data-kp-editor-equation-target] [data-kp-motion-id*="wrapped.function"]')
+  ).toHaveCSS("opacity", "0.5");
 
   await player.getByRole("button", { name: "Rewind animation" }).click();
   await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "rewind");
