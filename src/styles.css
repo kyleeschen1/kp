@@ -1517,6 +1517,68 @@ h2 {
   text-transform: uppercase;
 }
 
+.editor-animation-player__surface:has(.editor-equation-stage) {
+  border-style: solid;
+  color: #172033;
+  background: #ffffff;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.editor-equation-stage {
+  display: grid;
+  width: 100%;
+  min-height: 10rem;
+  place-items: stretch;
+}
+
+.editor-equation-stage__transition {
+  display: grid;
+  grid-template-rows: minmax(7.5rem, 1fr) auto;
+  margin: 0;
+}
+
+.editor-equation-stage__layer {
+  display: grid;
+  grid-area: 1 / 1;
+  min-width: 0;
+  place-items: center;
+  padding: 1rem 0.75rem;
+  transform-origin: center;
+  will-change: opacity, transform;
+}
+
+.editor-equation-stage__object {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 0.25rem;
+  font-size: clamp(0.82rem, 2.3vw, 1.2rem);
+}
+
+.editor-equation-stage__object .katex-display {
+  margin: 0;
+}
+
+.editor-equation-stage__caption {
+  grid-area: 2 / 1;
+  margin: 0;
+  border-top: 1px solid #e3e8ef;
+  padding: 0.55rem 0.7rem;
+  color: #64748b;
+  background: #f8fafc;
+  font-size: 0.67rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.editor-equation-stage__unavailable {
+  margin: 0;
+  padding: 1rem;
+  color: #8a4b08;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
 .editor-animation-player__controls {
   display: grid;
   gap: 0.7rem;

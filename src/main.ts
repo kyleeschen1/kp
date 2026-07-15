@@ -75,6 +75,9 @@ import {
 import {
   hydrateKpEditorAnimationLiveDiagnostics
 } from "./editor/animation-live-diagnostics.ts";
+import {
+  registerKpEditorEquationSurfaceAdapter
+} from "./editor/equation-surface-adapter.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -107,6 +110,7 @@ declare global {
 }
 
 window.__kpEquationMotionSetProgress = setEquationMotionProgress;
+registerKpEditorEquationSurfaceAdapter();
 
 renderEditor();
 

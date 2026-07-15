@@ -15,7 +15,14 @@ test("selected editor animation controls play, pause, seek, step, rewind, and re
     "true"
   );
   await expect(player.locator('[data-kp-editor-animation-surface-slot="equation"]'))
-    .toHaveAttribute("data-kp-editor-animation-adapter-status", "missing");
+    .toHaveAttribute("data-kp-editor-animation-adapter-status", "ready");
+  await expect(player.locator('[data-kp-editor-animation-surface-slot="equation"]'))
+    .toHaveAttribute(
+      "data-kp-editor-animation-adapter-id",
+      "editor-animation-surface.equation.katex"
+    );
+  await expect(player.locator("[data-kp-editor-equation-stage] .katex").first())
+    .toBeVisible();
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-diagnostics-hydrated",
     "true"
@@ -41,6 +48,15 @@ test("selected editor animation controls play, pause, seek, step, rewind, and re
   await expect(diagnostics).toHaveAttribute("data-kp-editor-animation-direction", "forward");
   await expect(diagnostics.locator("[data-kp-editor-animation-diagnostics-active-transformations]"))
     .toHaveText("1");
+  const equationStage = player.locator("[data-kp-editor-equation-stage]");
+  await expect(equationStage).toHaveAttribute(
+    "data-kp-editor-equation-phase-id",
+    /\.forward\.1$/
+  );
+  await expect(equationStage.locator("[data-kp-editor-equation-source]"))
+    .toHaveCSS("opacity", "0.5");
+  await expect(equationStage.locator("[data-kp-editor-equation-target]"))
+    .toHaveCSS("opacity", "0.5");
 
   await player.getByRole("button", { name: "Step animation forward" }).click();
   expect(Number(await scrubber.inputValue())).toBeGreaterThan(0.5);
