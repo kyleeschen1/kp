@@ -245,6 +245,12 @@ test("radical artifact keeps the source exponent DOM-owned after motion starts",
       return {
         progress,
         overlayExists: overlay !== null,
+        fontStatus: demoElement.dataset["kpKatexFontStatus"],
+        domOwnership: demoElement.dataset["kpKatexDomOwnership"],
+        cloneOwner: sourceExponentClone.dataset["kpKatexDomOwner"],
+        layoutOwner: demoElement.querySelector<HTMLElement>(
+          '[data-kp-equation-motion-state="0"] [data-kp-motion-id="radical.rewrite-power-as-root.source.exponent"]'
+        )?.dataset["kpKatexDomOwner"],
         sourceExponentVisibility: sourceStyle.visibility,
         sourceExponentOpacity: Number(sourceStyle.opacity)
       };
@@ -257,18 +263,84 @@ test("radical artifact keeps the source exponent DOM-owned after motion starts",
     {
       progress: 0.08,
       overlayExists: false,
+      fontStatus: "ready",
+      domOwnership: "layout-motion-clone",
+      cloneOwner: "motion-clone",
+      layoutOwner: "layout",
       sourceExponentVisibility: "visible",
       sourceExponentOpacity: expect.any(Number)
     },
     {
       progress: 0.1,
       overlayExists: false,
+      fontStatus: "ready",
+      domOwnership: "layout-motion-clone",
+      cloneOwner: "motion-clone",
+      layoutOwner: "layout",
       sourceExponentVisibility: "visible",
       sourceExponentOpacity: expect.any(Number)
     }
   ]);
   expect(states[0]?.sourceExponentOpacity).toBeGreaterThan(0.9);
   expect(states[1]?.sourceExponentOpacity).toBeGreaterThan(0.9);
+});
+
+test("equation motion remeasures owned KaTeX DOM after delayed fonts load", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  const state = await page.evaluate(async () => {
+    const originalFontsDescriptor = Object.getOwnPropertyDescriptor(
+      document,
+      "fonts"
+    );
+    let releaseFonts: (() => void) | undefined;
+    const ready = new Promise<void>((resolve) => {
+      releaseFonts = resolve;
+    });
+
+    Object.defineProperty(document, "fonts", {
+      configurable: true,
+      value: { status: "loading", ready }
+    });
+
+    try {
+      const select = document.querySelector<HTMLSelectElement>(
+        '[data-action="set-editor-animation"]'
+      );
+      if (select === null) throw new Error("Expected editor animation picker.");
+      select.dispatchEvent(new Event("change", { bubbles: true }));
+
+      const demo = document.querySelector<HTMLElement>(
+        "[data-kp-equation-motion-demo]"
+      );
+      if (demo === null) throw new Error("Expected equation motion demo.");
+      const statusBefore = demo.dataset["kpKatexFontStatus"];
+
+      releaseFonts?.();
+      await ready;
+      await Promise.resolve();
+
+      return {
+        statusBefore,
+        statusAfter: demo.dataset["kpKatexFontStatus"],
+        ownership: demo.dataset["kpKatexDomOwnership"]
+      };
+    } finally {
+      if (originalFontsDescriptor === undefined) {
+        delete (document as { fonts?: FontFaceSet }).fonts;
+      } else {
+        Object.defineProperty(document, "fonts", originalFontsDescriptor);
+      }
+    }
+  });
+
+  expect(state).toEqual({
+    statusBefore: "loading",
+    statusAfter: "ready",
+    ownership: "layout-motion-clone"
+  });
 });
 
 test("radical artifact moves DOM artifacts through the bundle without an overlay", async ({

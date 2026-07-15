@@ -140,7 +140,8 @@
     {
       "id": "next-action.kp.editor.katex-font-ownership-v0",
       "title": "Stabilize KaTeX font readiness and DOM ownership",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.katex-font-ownership-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.katex-overlay-handoff-v0",

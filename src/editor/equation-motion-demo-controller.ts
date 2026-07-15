@@ -144,6 +144,7 @@ export function hydrateEquationMotionDemos(root: ParentNode): void {
   root
     .querySelectorAll<HTMLElement>("[data-kp-equation-motion-demo]")
     .forEach((demo) => {
+      syncKatexFontReadiness(demo);
       syncEquationMotionActiveState(demo, readEquationMotionStep(demo));
       syncEquationMotionDurationControl(
         demo,
@@ -154,6 +155,37 @@ export function hydrateEquationMotionDemos(root: ParentNode): void {
         readEquationMotionCollapseScalePercent(demo)
       );
     });
+}
+
+function syncKatexFontReadiness(demo: HTMLElement): void {
+  const fonts = demo.ownerDocument.fonts;
+
+  demo.dataset["kpKatexDomOwnership"] = "layout-motion-clone";
+  if (fonts === undefined) {
+    demo.dataset["kpKatexFontStatus"] = "unsupported";
+    return;
+  }
+
+  if (fonts.status === "loaded") {
+    demo.dataset["kpKatexFontStatus"] = "ready";
+    return;
+  }
+
+  demo.dataset["kpKatexFontStatus"] = "loading";
+  void fonts.ready.then(
+    () => {
+      if (!demo.isConnected) return;
+
+      demo.dataset["kpKatexFontStatus"] = "ready";
+      // Font metrics can move KaTeX internals after first paint. Dropping the
+      // cached context makes the next sample measure the owned DOM again.
+      activeRenderContexts.delete(demo);
+      clearEquationMotionCloneLayers(demo);
+    },
+    () => {
+      if (demo.isConnected) demo.dataset["kpKatexFontStatus"] = "error";
+    }
+  );
 }
 
 export function stepEquationMotionDemo(
@@ -1691,6 +1723,9 @@ function createStableMotionToken(
   // KaTeX internals are layout nodes; motion uses external clones so matrices,
   // radicals, and fractions keep their native geometry intact.
   const usesExternalMotionClone = isInternalKatexMotionElement(token.element);
+  token.element.dataset["kpKatexDomOwner"] = usesExternalMotionClone
+    ? "layout"
+    : "layout-motion";
   const motionElement = usesExternalMotionClone
     ? createEquationMotionClone(token, state)
     : token.element;
@@ -1715,6 +1750,7 @@ function createEquationMotionClone(
 
   wrapper.className = "equation-motion__motion-clone";
   wrapper.dataset["kpEquationMotionCloneFor"] = token.motionId;
+  wrapper.dataset["kpKatexDomOwner"] = "motion-clone";
   wrapper.style.left = formatPixel(token.localRect.left);
   wrapper.style.top = formatPixel(token.localRect.top);
   wrapper.style.width = formatPixel(token.localRect.width);
