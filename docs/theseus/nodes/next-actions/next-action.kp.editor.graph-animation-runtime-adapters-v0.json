@@ -1,0 +1,102 @@
+{
+  "id": "next-action.kp.editor.graph-animation-runtime-adapters-v0",
+  "kind": "next-action",
+  "title": "Add graph visual runtime adapters",
+  "status": "resolved",
+  "domain": "kp.editor",
+  "summary": "Wired the four existing graph runtime samplers into the shared editor SVG viewport with live vector, tangent, area, and projection geometry.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.visible-animation-player-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.editor.graph-animation-runtime-adapters-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.editor.visible-animation-player-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-editor-concrete-animation-library-loop-closeout.md",
+      "summary": "Closeout recommends mounting selected equation and graph runtime-frame consumers."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Roadmap names visible editor animation runtime mounting as the active focus."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/graph-svg-viewport.ts",
+      "summary": "Shared graph SVG adapter now projects semantic runtime frames into visible geometry."
+    },
+    {
+      "kind": "file",
+      "path": "src/styles.css",
+      "summary": "Graph runtime primitives receive distinct visible styling."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-graph-runtime-adapters.test.ts",
+      "summary": "Focused runtime sampler consumption coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Chromium proof for all four graph runtime renderers."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.editor.visible-animation-player-v0",
+      "next-action.kp.editor.graph-animation-svg-viewport-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.editor.graph-animation-svg-viewport-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Add graph visual runtime adapters can be completed inside KP editor visible animation player v0 loop."
+  ],
+  "allowedWork": [
+    "Only implement the approved visible editor animation player slices.",
+    "Reuse the existing KpAnimationAsset runtime clock, semantic bundles, visual-frame adapters, KaTeX ownership rules, and graph samplers.",
+    "Add focused editor renderers, controls, browser checks, and closeout evidence."
+  ],
+  "disallowedWork": [
+    "Do not create a second animation clock or duplicate semantic animation assets.",
+    "Do not add media encoders, live CAS or LSP integrations, curriculum generation, dynamic package loading, or a broad editor redesign.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-graph-runtime-adapters.test.ts tests/kp-editor-graph-svg-viewport.test.ts",
+      "status": "passed",
+      "scope": "graph viewport and runtime adapters",
+      "checkedAt": "2026-07-15T18:49:40.688Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript application, node, and test projects",
+      "checkedAt": "2026-07-15T18:49:40.749Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium --grep graph-runtime-adapters",
+      "status": "passed",
+      "checkedAt": "2026-07-15T18:49:40.815Z",
+      "scope": "four visible graph runtime adapters in Chromium"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Wired the four existing graph runtime samplers into the shared editor SVG viewport with live vector, tangent, area, and projection geometry."
+  }
+}

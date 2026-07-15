@@ -1542,6 +1542,22 @@ h2 {
   stroke-width: 1.5;
 }
 
+.editor-graph-stage__curve,
+.editor-graph-stage__path {
+  fill: none;
+  stroke: #6f8794;
+  stroke-width: 2;
+}
+
+.editor-graph-stage__path { stroke-dasharray: 5 5; }
+.editor-graph-stage__vector { stroke: #1f6f78; stroke-width: 4; }
+.editor-graph-stage__vector--secondary { stroke: #9a5b1f; }
+.editor-graph-stage__tangent { stroke: #c2410c; stroke-width: 3; }
+.editor-graph-stage__projection { stroke: #c2410c; stroke-width: 2; stroke-dasharray: 4 3; }
+.editor-graph-stage__point { fill: #c2410c; }
+.editor-graph-stage__area { fill: rgb(30 136 168 / 0.3); stroke: #1e88a8; stroke-width: 2; }
+.editor-graph-stage__label { fill: #334155; font-size: 14px; font-weight: 800; }
+
 .editor-equation-stage {
   display: grid;
   width: 100%;

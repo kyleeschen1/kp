@@ -426,3 +426,49 @@ test("graph animations mount the shared semantic SVG viewport", async ({ page })
   await expect(slot.locator("[data-kp-editor-graph-svg]"))
     .toHaveAttribute("data-kp-editor-graph-progress", "0.5");
 });
+
+test("graph runtime adapters render visible geometry for each graph animation", async ({
+  page
+}) => {
+  await page.goto("/");
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const slot = player.locator('[data-kp-editor-animation-surface-slot="graph"]');
+  const cases = [
+    {
+      descriptorId: "editor-animation.sample.animation.vector-add-scale.basic",
+      selector: "[data-kp-editor-graph-vector]"
+    },
+    {
+      descriptorId: "editor-animation.sample.animation.derivative-rules.tangent-graph",
+      selector: "[data-kp-editor-graph-tangent]"
+    },
+    {
+      descriptorId: "editor-animation.sample.animation.integral-ftc.area-sweep",
+      selector: "[data-kp-editor-graph-area]"
+    },
+    {
+      descriptorId: "editor-animation.sample.animation.dot-projection.basic",
+      selector: "[data-kp-editor-graph-projection]",
+      vertical: true
+    }
+  ];
+
+  for (const graphCase of cases) {
+    await page.locator('[data-action="set-editor-animation"]').selectOption(
+      graphCase.descriptorId
+    );
+    await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
+    await expect(slot, graphCase.descriptorId).toHaveAttribute(
+      "data-kp-editor-animation-adapter-id",
+      "editor-animation-surface.graph.svg"
+    );
+    const geometry = slot.locator(graphCase.selector);
+    await expect(geometry, graphCase.descriptorId).toBeAttached();
+    if (graphCase.vertical === true) {
+      await expect(geometry).toHaveAttribute("y1", /\d/);
+      await expect(geometry).toHaveAttribute("y2", /\d/);
+    } else {
+      await expect(geometry).toBeVisible();
+    }
+  }
+});
