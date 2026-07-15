@@ -146,7 +146,8 @@
     {
       "id": "next-action.kp.editor.katex-overlay-handoff-v0",
       "title": "Stabilize overlay handoff and fallback cleanup",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.katex-overlay-handoff-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.solve-x-playback-laws-v0",

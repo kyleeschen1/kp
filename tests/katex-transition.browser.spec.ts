@@ -2298,6 +2298,8 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
         overlayVisible: boolean,
         sourceHidden: boolean,
         targetHidden: boolean,
+        overlayState: string | undefined,
+        overlayOwner: string | undefined,
         nonTransparentPixelCount: number,
         maxAlpha: number
       ) => {
@@ -2310,6 +2312,8 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
           overlayVisible,
           sourceHidden,
           targetHidden,
+          overlayState,
+          overlayOwner,
           nonTransparentPixelCount,
           maxAlpha
         });
@@ -2415,6 +2419,8 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
                 overlayVisible,
                 sourceHidden,
                 targetHidden,
+                activeOverlay.dataset["kpKatexTransitionOverlayState"],
+                activeOverlay.dataset["kpKatexDomOwner"],
                 pixelSample.nonTransparentPixelCount,
                 pixelSample.maxAlpha
               );
@@ -2455,6 +2461,8 @@ test("KaTeX WebGL transition blanks DOM during overlay and reveals target", asyn
     overlayVisible: true,
     sourceHidden: true,
     targetHidden: true,
+    overlayState: "active",
+    overlayOwner: "webgl-overlay",
     nonTransparentPixelCount: expect.any(Number),
     maxAlpha: expect.any(Number)
   });
@@ -2699,6 +2707,8 @@ declare global {
       overlayVisible: boolean;
       sourceHidden: boolean;
       targetHidden: boolean;
+      overlayState: string | undefined;
+      overlayOwner: string | undefined;
       nonTransparentPixelCount: number;
       maxAlpha: number;
     }>;

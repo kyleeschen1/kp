@@ -136,6 +136,11 @@ test("transitionKatexEquations falls back and cleans up when animation rendering
   assert.equal(result.fallbackReason, "render exploded");
   assert.equal(result.textureCount, 1);
   assert.equal(overlay.removeCount, 1);
+  assert.equal(
+    overlay.dataset["kpKatexTransitionOverlayState"],
+    "fallback-cleanup"
+  );
+  assert.equal(overlay.dataset["kpKatexDomOwner"], "webgl-overlay");
   assert.deepEqual(source.classList.values(), []);
   assert.deepEqual(target.classList.values(), []);
   assert.deepEqual(source.style.entries(), []);
@@ -231,6 +236,8 @@ test("transitionKatexEquations runs beforeCleanup before removing the WebGL over
   const overlay = fakeCanvas();
   const handoffStates: Array<{
     overlayRemoveCount: number;
+    overlayState: string | undefined;
+    overlayOwner: string | undefined;
     sourceClasses: string[];
     targetClasses: string[];
   }> = [];
@@ -248,6 +255,8 @@ test("transitionKatexEquations runs beforeCleanup before removing the WebGL over
       beforeCleanup() {
         handoffStates.push({
           overlayRemoveCount: overlay.removeCount,
+          overlayState: overlay.dataset["kpKatexTransitionOverlayState"],
+          overlayOwner: overlay.dataset["kpKatexDomOwner"],
           sourceClasses: Array.from(source.classList.values()),
           targetClasses: Array.from(target.classList.values())
         });
@@ -259,6 +268,8 @@ test("transitionKatexEquations runs beforeCleanup before removing the WebGL over
   assert.deepEqual(handoffStates, [
     {
       overlayRemoveCount: 0,
+      overlayState: "active",
+      overlayOwner: "webgl-overlay",
       sourceClasses: ["katex-transition-source-hidden"],
       targetClasses: ["katex-transition-target-hidden"]
     }

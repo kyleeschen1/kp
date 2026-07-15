@@ -122,6 +122,8 @@ async function transitionKatexEquationsWithDependencies(
 
     renderer = createKatexWebGLRenderer(overlay, namespaced.plan, atlas);
 
+    overlay.dataset["kpKatexTransitionOverlayState"] = "active";
+    overlay.dataset["kpKatexDomOwner"] = "webgl-overlay";
     dependencies.document.body.append(overlay);
     sourceEl.classList.add("katex-transition-source-hidden");
     targetEl.classList.add("katex-transition-target-hidden");
@@ -146,6 +148,15 @@ async function transitionKatexEquationsWithDependencies(
       atlas.pages.length
     );
   } catch (error: unknown) {
+    // A failed WebGL path must relinquish the visual surface before the DOM
+    // fallback begins, otherwise the stale overlay can cover the cross-fade.
+    renderer?.dispose();
+    renderer = undefined;
+    if (overlay !== undefined) {
+      overlay.dataset["kpKatexTransitionOverlayState"] = "fallback-cleanup";
+      overlay.remove();
+      overlay = undefined;
+    }
     sourceEl.classList.remove("katex-transition-source-hidden");
     targetEl.classList.remove("katex-transition-target-hidden");
     await runCssFallback(sourceEl, targetEl, durationMs, dependencies);
