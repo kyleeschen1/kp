@@ -1,4 +1,5 @@
 import {
+  checkKpAnimationAssetSeekRewindLaw,
   validateKpAnimationAsset,
   type KpAnimationAsset
 } from "../animation/asset.ts";
@@ -15,6 +16,8 @@ import {
   createKpAnimationVisualFrameDiagnosticsPanelData,
   type KpAnimationVisualFrameBindingSummary
 } from "../animation/visual-frame-diagnostics-panel.ts";
+import { checkKpAnimationRuntimeRewindClockLaw } from "../animation/runtime-laws.ts";
+import type { KpLawCheckResult } from "../semantic/asset-laws.ts";
 
 export type KpEditorAnimationDiagnosticSeverity =
   | "info"
@@ -23,7 +26,7 @@ export type KpEditorAnimationDiagnosticSeverity =
 
 export interface KpEditorAnimationDiagnosticRow {
   readonly id: string;
-  readonly scope: "asset" | "runtime" | "binding";
+  readonly scope: "asset" | "runtime" | "binding" | "playback";
   readonly severity: KpEditorAnimationDiagnosticSeverity;
   readonly code: string;
   readonly path: string;
@@ -37,6 +40,7 @@ export interface KpEditorAnimationDiagnostics {
   readonly phaseId: string;
   readonly progress: number;
   readonly bindingSummary: KpAnimationVisualFrameBindingSummary;
+  readonly playbackLaws: readonly KpLawCheckResult[];
   readonly severityCounts: Readonly<Record<KpEditorAnimationDiagnosticSeverity, number>>;
   readonly rows: readonly KpEditorAnimationDiagnosticRow[];
 }
@@ -63,6 +67,13 @@ export function createKpEditorAnimationDiagnostics(input: {
   const bindingPanel = createKpAnimationVisualFrameDiagnosticsPanelData(
     visualFrame
   );
+  const playbackLaws = [
+    checkKpAnimationAssetSeekRewindLaw(input.animation),
+    checkKpAnimationRuntimeRewindClockLaw({
+      animation: input.animation,
+      childAnimations: input.catalog
+    })
+  ];
   const rows: KpEditorAnimationDiagnosticRow[] = [
     ...validateKpAnimationAsset(input.animation).map((issue, index) => ({
       id: `asset.${index}`,
@@ -96,7 +107,17 @@ export function createKpEditorAnimationDiagnostics(input: {
       code: diagnostic.code,
       path: diagnostic.path,
       message: diagnostic.message
-    }))
+    })),
+    ...playbackLaws.flatMap((law) =>
+      law.failures.map((failure, index) => ({
+        id: `playback.${law.lawId}.${index}`,
+        scope: "playback" as const,
+        severity: "error" as const,
+        code: law.lawId,
+        path: failure.path,
+        message: failure.message
+      }))
+    )
   ];
   const severityCounts = rows.reduce(
     (counts, row) => ({
@@ -118,6 +139,7 @@ export function createKpEditorAnimationDiagnostics(input: {
     phaseId: runtimeFrame.phase.phaseId,
     progress,
     bindingSummary: bindingPanel.bindingSummary,
+    playbackLaws,
     severityCounts,
     rows
   };
@@ -127,6 +149,9 @@ export function renderKpEditorAnimationDiagnostics(
   diagnostics: KpEditorAnimationDiagnostics
 ): string {
   const binding = diagnostics.bindingSummary;
+  const passedPlaybackLaws = diagnostics.playbackLaws.filter(
+    (law) => law.passed
+  ).length;
 
   return `
     <details class="editor-animation-diagnostics" data-kp-editor-animation-diagnostics data-kp-editor-animation-diagnostics-status="${diagnostics.status}">
@@ -139,6 +164,7 @@ export function renderKpEditorAnimationDiagnostics(
           <div><dt>Runtime phase</dt><dd data-kp-editor-animation-diagnostics-phase>${escapeHtml(diagnostics.phaseId)}</dd></div>
           <div><dt>Render targets bound</dt><dd data-kp-editor-animation-diagnostics-targets>${binding.boundRenderTargetCount}/${binding.renderTargetCount}</dd></div>
           <div><dt>Selectors bound</dt><dd data-kp-editor-animation-diagnostics-selectors>${binding.boundSelectorCount}/${binding.selectorCount}</dd></div>
+          <div><dt>Playback laws</dt><dd data-kp-editor-animation-diagnostics-playback-laws>${passedPlaybackLaws}/${diagnostics.playbackLaws.length}</dd></div>
         </dl>
         <ul>
           ${diagnostics.rows.map((row) => `

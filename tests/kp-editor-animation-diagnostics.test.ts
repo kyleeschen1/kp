@@ -24,6 +24,13 @@ test("editor diagnostics expose sampled runtime state and missing bindings", () 
   assert.equal(diagnostics.bindingSummary.boundRenderTargetCount, 0);
   assert.ok(diagnostics.severityCounts.info > 0);
   assert.ok(diagnostics.severityCounts.warning > 0);
+  assert.deepEqual(
+    diagnostics.playbackLaws.map((law) => [law.lawId, law.passed]),
+    [
+      ["animation.seek-rewind", true],
+      ["animation-runtime.rewind-clock", true]
+    ]
+  );
   assert.ok(
     diagnostics.rows.some(
       (row) => row.code === "visual-frame.render-target-unbound"
@@ -41,6 +48,8 @@ test("editor diagnostics render inspectable severity and binding metadata", () =
 
   assert.match(html, /data-kp-editor-animation-diagnostics-status="warning"/);
   assert.match(html, /Render targets bound/);
+  assert.match(html, /Playback laws/);
+  assert.match(html, /data-kp-editor-animation-diagnostics-playback-laws>2\/2</);
   assert.match(html, /data-kp-editor-animation-diagnostic-scope="binding"/);
   assert.match(html, /visual-frame\.selector-unbound/);
 });

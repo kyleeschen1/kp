@@ -65,6 +65,25 @@ test("checkKpAnimationRuntimeRewindClockLaw accepts mirrored linear solve sampli
   );
 });
 
+test("solve-x playback remains seek and rewind equivalent across dense samples", () => {
+  const progressSamples = Array.from(
+    { length: 21 },
+    (_, index) => index / 20
+  );
+
+  assert.deepEqual(
+    checkKpAnimationRuntimeRewindClockLaw({
+      animation: createLinearSolveAnimationAsset(),
+      progressSamples
+    }),
+    {
+      lawId: "animation-runtime.rewind-clock",
+      passed: true,
+      failures: []
+    }
+  );
+});
+
 test("checkKpAnimationRuntimeRewindClockLaw accepts composed child sampling", () => {
   assert.deepEqual(
     checkKpAnimationRuntimeRewindClockLaw({

@@ -41,6 +41,11 @@ test("editor animation library restores and persists concrete selections", async
   await diagnostics.locator("summary").click();
   await expect(diagnostics).toContainText("Render targets bound");
   await expect(diagnostics).toContainText("1/1");
+  await expect(
+    diagnostics.locator(
+      "[data-kp-editor-animation-diagnostics-playback-laws]"
+    )
+  ).toHaveText("2/2");
   await page.evaluate(() => {
     const demo = document.querySelector<HTMLElement>(
       "[data-kp-equation-motion-demo]"
