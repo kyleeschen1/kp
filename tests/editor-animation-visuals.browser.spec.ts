@@ -305,3 +305,35 @@ test("inequality family animation visibly flips its relation", async ({ page }) 
   await expect(transition.locator("[data-kp-editor-equation-target]"))
     .toContainText("−2x>−6");
 });
+
+test("calculus equation families render derivative and FTC forms", async ({ page }) => {
+  await page.goto("/");
+
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.derivative-rules.basic"
+  );
+  let player = page.locator("[data-kp-editor-animation-player]");
+  await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
+  await expect(player.locator("[data-kp-editor-equation-source] [data-kp-editor-equation-object-id]"))
+    .toHaveAttribute(
+      "data-kp-editor-equation-object-id",
+      "expression.generated.calculus.derivative.power-rule-x-cubed.initial"
+    );
+  await expect(player.locator("[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"))
+    .toHaveAttribute(
+      "data-kp-editor-equation-object-id",
+      "expression.generated.calculus.derivative.power-rule-x-cubed.derived"
+    );
+
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.integral-ftc.basic"
+  );
+  player = page.locator("[data-kp-editor-animation-player]");
+  await player.locator('[data-action="seek-editor-animation"]').fill("1");
+  await expect(player.locator("[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"))
+    .toHaveCount(2);
+  await expect(player.locator('[data-kp-editor-equation-target] [data-kp-editor-equation-object-id="formula-ftc-derivative"]'))
+    .toBeVisible();
+  await expect(player.locator('[data-kp-editor-equation-target] [data-kp-editor-equation-object-id="formula-ftc-net-change"]'))
+    .toBeVisible();
+});
