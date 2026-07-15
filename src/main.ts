@@ -67,6 +67,9 @@ import {
 import {
   hydrateKpEditorAnimationPlayers
 } from "./editor/animation-player-controller.ts";
+import {
+  hydrateKpEditorAnimationSurfaces
+} from "./editor/animation-surface-adapter-registry.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -289,6 +292,9 @@ function renderEditor(): void {
     equationAnimationId: selectedEquationAnimationId,
     editorAnimationDescriptorId: selectedEditorAnimationDescriptorId
   });
+  // Surface listeners attach first so the controller's initial runtime frame
+  // is observable without an extra synthetic playback tick.
+  hydrateKpEditorAnimationSurfaces(appRoot);
   hydrateKpEditorAnimationPlayers(appRoot);
   hydrateEquationMotionDemos(appRoot);
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);

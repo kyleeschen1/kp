@@ -9,6 +9,12 @@ test("selected editor animation controls play, pause, seek, step, rewind, and re
   const scrubber = player.locator('[data-action="seek-editor-animation"]');
 
   await expect(player).toHaveAttribute("data-kp-editor-animation-hydrated", "true");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-surface-hydrated",
+    "true"
+  );
+  await expect(player.locator('[data-kp-editor-animation-surface-slot="equation"]'))
+    .toHaveAttribute("data-kp-editor-animation-adapter-status", "missing");
   await expect(player).toHaveAttribute("data-kp-editor-animation-status", "idle");
   await expect(player.getByRole("button", { name: "Pause animation" })).toBeDisabled();
 
