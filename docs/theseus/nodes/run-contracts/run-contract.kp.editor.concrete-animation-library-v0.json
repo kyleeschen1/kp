@@ -98,7 +98,8 @@
     {
       "id": "next-action.kp.editor.animation-surface-dispatch-v0",
       "title": "Dispatch editor cards by render surface",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.animation-surface-dispatch-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.family-animation-picker-v0",

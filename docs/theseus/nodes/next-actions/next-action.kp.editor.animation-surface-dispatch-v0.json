@@ -1,0 +1,101 @@
+{
+  "id": "next-action.kp.editor.animation-surface-dispatch-v0",
+  "kind": "next-action",
+  "title": "Dispatch editor cards by render surface",
+  "status": "resolved",
+  "domain": "kp.editor",
+  "summary": "Added an honest editor surface dispatcher that maps equation and matrix targets to equation slots, graph and programming targets to their native slots, composite assets to synchronized slots, and rejects partial rendering when any target is unsupported.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.concrete-animation-library-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.editor.animation-surface-dispatch-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-symbolic-manipulation-library-loop-closeout.md",
+      "summary": "Closed symbolic library loop and recommended concrete renderer and editor adoption."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "KP semantic runtime and dashboard editor direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-animation-catalog.ts",
+      "summary": "Current fixture-oriented editor animation catalog to evolve into a family-backed surface."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Concrete KpAnimationAsset registry to project into the editor."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-surface-dispatch.ts",
+      "summary": "Renderer-neutral surface dispatch for concrete editor animation descriptors."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-animation-surface-dispatch.test.ts",
+      "summary": "Proves all 20 current concrete assets dispatch and partial custom targets remain unsupported."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.editor.concrete-animation-library-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Dispatch editor cards by render surface can be completed inside KP editor concrete animation library v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved KP editor concrete-animation slices.",
+    "Use existing KpAnimationAsset, symbolic family, runtime-frame, visual-frame, KaTeX, graph, dashboard, and editor contracts.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not build media encoders, live CAS or LSP integrations, curriculum generation, or dynamic package loading.",
+    "Do not create a separate graph animation clock or broadly redesign the editor.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-animation-surface-dispatch.test.ts tests/kp-editor-animation-catalog-projection.test.ts tests/kp-editor-animation-descriptor.test.ts",
+      "status": "passed",
+      "scope": "editor animation surface dispatch",
+      "checkedAt": "2026-07-15T00:49:00.376Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full KP suite after shared dispatch",
+      "checkedAt": "2026-07-15T00:49:00.413Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-15T00:49:00.449Z",
+      "scope": "production build after shared dispatch"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added an honest editor surface dispatcher that maps equation and matrix targets to equation slots, graph and programming targets to their native slots, composite assets to synchronized slots, and rejects partial rendering when any target is unsupported."
+  }
+}
