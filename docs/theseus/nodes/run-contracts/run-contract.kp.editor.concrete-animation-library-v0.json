@@ -188,7 +188,8 @@
     {
       "id": "next-action.kp.editor.inequality-sign-flip-animation-v0",
       "title": "Add inequality sign flip animation",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.editor.inequality-sign-flip-animation-v0 in KP editor concrete animation library v0 loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.algebra-cohort-browser-gate-v0",

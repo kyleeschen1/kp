@@ -138,6 +138,22 @@ test("canonical distribution and factoring assets resolve inverse family samples
   );
 });
 
+test("canonical inequality asset resolves the sign-flip family sample", () => {
+  const resolution = createKpSymbolicFamilyAnimationResolutions({
+    families: createSymbolicManipulationFamilyRegistry(),
+    assets: createKpAnimationAssets()
+  }).find(
+    (candidate) =>
+      candidate.sampleId === "sample.animation.inequality.sign-flip.basic"
+  );
+
+  assert.equal(resolution?.status, "resolved");
+  assert.equal(
+    resolution?.animationId,
+    "animation.inequality.sign-flip.basic"
+  );
+});
+
 test("family animation resolver requires explicit concrete availability and exact ids", () => {
   const asset = createLinearSolveAnimationAsset();
   const plannedFamily = familyWithSample({

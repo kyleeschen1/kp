@@ -1729,6 +1729,7 @@ function createAlgebraInequalityFamily(): KpSymbolicManipulationFamily {
       {
         id: "sample.animation.inequality.sign-flip.basic",
         animationId: "animation.inequality.sign-flip.basic",
+        availability: "concrete",
         renderTargetKinds: ["equation"],
         transformationDefinitionIds: [
           "definition.symbolic.algebra.inequality-multiply-negative"

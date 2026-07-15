@@ -25,7 +25,7 @@ test("editor renders every concrete asset through a stable descriptor selection"
     editorAnimationDescriptorId: selected.id
   });
 
-  assert.equal(descriptors.length, 28);
+  assert.equal(descriptors.length, 30);
   assert.match(html, /data-kp-editor-animation-library/);
   assert.match(
     html,
@@ -67,6 +67,28 @@ test("fraction simplification is selectable through its family descriptor", () =
   assert.match(
     html,
     /option value="editor-animation\.sample\.animation\.fraction-simplification\.basic" selected/
+  );
+});
+
+test("inequality sign flip is selectable through its family descriptor", () => {
+  const descriptor = createKpEditorAnimationLibrary().find(
+    (candidate) =>
+      candidate.sampleId === "sample.animation.inequality.sign-flip.basic"
+  );
+  assert.ok(descriptor);
+
+  const html = renderEditorDocument(createInitialEditorDocument(), {
+    editorAnimationDescriptorId: descriptor.id
+  });
+
+  assert.match(
+    html,
+    /data-kp-editor-animation-id="animation\.inequality\.sign-flip\.basic"/
+  );
+  assert.match(html, /family\.algebra\.inequality/);
+  assert.match(
+    html,
+    /option value="editor-animation\.sample\.animation\.inequality\.sign-flip\.basic" selected/
   );
 });
 

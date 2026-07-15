@@ -1109,6 +1109,7 @@ test("algebra inequality family distinguishes preserving and sign-flip operation
     {
       id: "sample.animation.inequality.sign-flip.basic",
       animationId: "animation.inequality.sign-flip.basic",
+      availability: "concrete",
       renderTargetKinds: ["equation"],
       transformationDefinitionIds: [
         "definition.symbolic.algebra.inequality-multiply-negative"
@@ -1258,8 +1259,8 @@ test("symbolic library progress rows summarize cross-domain coverage and blocker
       ["Ready families", "18"],
       ["Transform definitions", "71"],
       ["Runtime sample refs", "23"],
-      ["Concrete runtime samples", "8"],
-      ["Planned runtime samples", "15"],
+      ["Concrete runtime samples", "9"],
+      ["Planned runtime samples", "14"],
       ["Law status", "passed"],
       ["Generated problem hooks", "18"],
       ["Flashcard hooks", "18"],

@@ -17,6 +17,9 @@ import { createFractionSimplificationAnimationAsset } from "./fraction-adapter.t
 import { createFunctionWrapAnimationAsset } from "./function-wrap-adapter.ts";
 import { createGeneratedProblemAnimationAsset } from "./generated-problem-import.ts";
 import { createGraphAnimationAssets } from "./graph-adapter.ts";
+import {
+  createInequalitySignFlipAnimationAsset
+} from "./inequality-sign-flip-adapter.ts";
 import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
 import { createProgrammingAnimationAssets } from "./programming-adapter.ts";
 import {
@@ -46,7 +49,8 @@ export function createGeneratedAlgebraAnimationAssets():
     createExponentRadicalRewriteAnimationAsset(),
     createFunctionWrapAnimationAsset(),
     createDistributionExpansionAnimationAsset(),
-    createDistributionFactoringAnimationAsset()
+    createDistributionFactoringAnimationAsset(),
+    createInequalitySignFlipAnimationAsset()
   ];
 }
 

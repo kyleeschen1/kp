@@ -1,0 +1,127 @@
+{
+  "id": "next-action.kp.editor.inequality-sign-flip-animation-v0",
+  "kind": "next-action",
+  "title": "Add inequality sign flip animation",
+  "status": "resolved",
+  "domain": "kp.editor",
+  "summary": "Added a concrete inequality sign-flip asset with explicit negative-multiplier law, semantic relation pivot, editor family selection, dashboard catalog entry, and seek/rewind coverage.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.editor.concrete-animation-library-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.editor.inequality-sign-flip-animation-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-14-kp-symbolic-manipulation-library-loop-closeout.md",
+      "summary": "Closed symbolic library loop and recommended concrete renderer and editor adoption."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "KP semantic runtime and dashboard editor direction."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-animation-catalog.ts",
+      "summary": "Current fixture-oriented editor animation catalog to evolve into a family-backed surface."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Concrete KpAnimationAsset registry to project into the editor."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/inequality-sign-flip-adapter.ts",
+      "summary": "Defines the concrete inequality sign-flip animation and its semantic relation pivot."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog.ts",
+      "summary": "Registers the new asset in the concrete algebra catalog."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/symbolic-manipulation-family-registry.ts",
+      "summary": "Promotes the exact inequality runtime sample from planned to concrete."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-inequality-sign-flip-animation.test.ts",
+      "summary": "Locks the sign-flip law, selector correspondence, catalog inclusion, and timeline behavior."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-symbolic-family-animation-resolver.test.ts",
+      "summary": "Verifies exact family sample resolution."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-animation-selection-route.test.ts",
+      "summary": "Verifies stable family-backed editor selection."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.editor.concrete-animation-library-v0",
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run theseus -- validate",
+    "npm run theseus -- run-contract-hygiene-report"
+  ],
+  "expectedLearning": [
+    "Whether Add inequality sign flip animation can be completed inside KP editor concrete animation library v0 loop."
+  ],
+  "allowedWork": [
+    "Only work on the approved KP editor concrete-animation slices.",
+    "Use existing KpAnimationAsset, symbolic family, runtime-frame, visual-frame, KaTeX, graph, dashboard, and editor contracts.",
+    "Commit after each verified slice and record Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not build media encoders, live CAS or LSP integrations, curriculum generation, or dynamic package loading.",
+    "Do not create a separate graph animation clock or broadly redesign the editor.",
+    "Do not stage unrelated dirty worktree files."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-inequality-sign-flip-animation.test.ts tests/kp-symbolic-family-animation-resolver.test.ts tests/kp-editor-animation-catalog-projection.test.ts tests/kp-editor-animation-picker.test.ts tests/kp-editor-animation-selection-route.test.ts tests/project-dashboard-animation-asset-catalog.test.ts tests/project-dashboard-symbolic-family-catalog.test.ts",
+      "status": "passed",
+      "scope": "focused inequality, family, editor, and dashboard tests",
+      "checkedAt": "2026-07-15T01:34:53.228Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript",
+      "checkedAt": "2026-07-15T01:34:53.271Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph",
+      "checkedAt": "2026-07-15T01:34:53.315Z"
+    },
+    {
+      "command": "npm run theseus -- run-contract-hygiene-report",
+      "status": "passed",
+      "checkedAt": "2026-07-15T01:34:53.361Z",
+      "scope": "run-contract hygiene"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a concrete inequality sign-flip asset with explicit negative-multiplier law, semantic relation pivot, editor family selection, dashboard catalog entry, and seek/rewind coverage."
+  }
+}

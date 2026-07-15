@@ -22,7 +22,8 @@ test("generated algebra dashboard catalog exposes animation asset rows", () => {
     "animation-generated-radical-square-root-as-power",
     "animation-generated-function-wrap-apply-f",
     "animation-generated-distribution-expand-a-sum",
-    "animation-generated-distribution-factor-common-a"
+    "animation-generated-distribution-factor-common-a",
+    "animation-inequality-sign-flip-basic"
   ]);
   assert.deepEqual(rows[1]?.previewFields.slice(0, 6), [
     {
