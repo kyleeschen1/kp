@@ -64,6 +64,9 @@ import {
   getProjectDashboardSearchQuery,
   renderProjectDashboard
 } from "./project-dashboard/render.ts";
+import {
+  hydrateKpEditorAnimationPlayers
+} from "./editor/animation-player-controller.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -286,6 +289,7 @@ function renderEditor(): void {
     equationAnimationId: selectedEquationAnimationId,
     editorAnimationDescriptorId: selectedEditorAnimationDescriptorId
   });
+  hydrateKpEditorAnimationPlayers(appRoot);
   hydrateEquationMotionDemos(appRoot);
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);
 }

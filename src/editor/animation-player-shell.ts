@@ -15,7 +15,7 @@ export function renderKpEditorAnimationPlayerShell(input: {
     descriptor.controlKinds.includes(kind);
 
   return `
-    <section class="editor-animation-player" data-kp-editor-animation-player data-kp-editor-animation-id="${escapeHtml(player.animationId)}" data-kp-editor-animation-status="${player.playbackStatus}" data-kp-editor-animation-direction="${player.direction}" data-kp-editor-animation-progress="${player.progress}" aria-label="${escapeHtml(descriptor.title)} animation player">
+    <section class="editor-animation-player" data-kp-editor-animation-player data-kp-editor-animation-descriptor-id="${escapeHtml(player.descriptorId)}" data-kp-editor-animation-id="${escapeHtml(player.animationId)}" data-kp-editor-animation-status="${player.playbackStatus}" data-kp-editor-animation-direction="${player.direction}" data-kp-editor-animation-progress="${player.progress}" aria-label="${escapeHtml(descriptor.title)} animation player">
       <div class="editor-animation-player__stage" data-kp-editor-animation-stage data-kp-editor-animation-surface="${player.surface.kind}">
         ${player.surface.slotKinds.map((slotKind) => `
           <div class="editor-animation-player__surface editor-animation-player__surface--${slotKind}" data-kp-editor-animation-surface-slot="${slotKind}" aria-label="${surfaceLabel(slotKind)}">
