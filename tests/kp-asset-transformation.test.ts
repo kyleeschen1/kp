@@ -309,6 +309,13 @@ test("normalizeKpSemanticTransformationCorrespondence preserves rich relations a
           sourceSelectorIds: ["eq0.x"],
           targetSelectorIds: ["eq1.x"],
           summary: "Canonical rich identity."
+        },
+        {
+          id: "terms-split",
+          relation: "fan-out",
+          sourceSelectorIds: ["eq0.factor"],
+          targetSelectorIds: ["eq1.left-factor", "eq1.right-factor"],
+          summary: "One factor becomes two."
         }
       ]
     },
@@ -323,6 +330,11 @@ test("normalizeKpSemanticTransformationCorrespondence preserves rich relations a
         sourceSelectorId: "eq0.equals",
         targetSelectorId: "eq1.equals",
         preserves: ["identity", "role"]
+      },
+      {
+        sourceSelectorId: "eq0.factor",
+        targetSelectorId: "eq1.right-factor",
+        preserves: ["identity", "role"]
       }
     ]
   });
@@ -333,6 +345,7 @@ test("normalizeKpSemanticTransformationCorrespondence preserves rich relations a
     ),
     [
       ["unknown-persists", "identity"],
+      ["terms-split", "fan-out"],
       ["legacy.1.eq0-equals.to.eq1-equals", "identity"]
     ]
   );

@@ -157,7 +157,8 @@
     {
       "id": "next-action.kp.semantic-transition.distribute-factor-v0",
       "title": "Implement fan-out and fan-in inverse motion",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.semantic-transition.distribute-factor-v0 in KP Semantic Incremental Transition And LLM Authoring V0.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.semantic-transition.exponent-radical-v0",

@@ -1,0 +1,114 @@
+{
+  "id": "next-action.kp.semantic-transition.distribute-factor-v0",
+  "kind": "next-action",
+  "title": "Implement fan-out and fan-in inverse motion",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Distribution and factoring now render as inverse semantic fan-out and fan-in motion with persistent terms, operators, and entering or exiting grouping delimiters.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-incremental-transition-authoring-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.semantic-transition.distribute-factor-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-incremental-transition-compiler-focus-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
+      "summary": "Approved thirty-slice implementation plan and boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-tutorial-fixture.ts",
+      "summary": "Defines complete inverse lifecycle maps for distribution and common-factor extraction."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/asset-transformation.ts",
+      "summary": "Prevents legacy pairs from duplicating selectors already covered by rich multi-endpoint relations."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/distribution-semantic-latex.ts",
+      "summary": "Annotates factors, terms, plus operators, and delimiters for measured KaTeX motion."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Selects distribution semantic annotations in the shared stage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/distribution-semantic-latex.test.ts",
+      "summary": "Covers inverse fan-out/fan-in compilation and annotation closure."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-asset-transformation.test.ts",
+      "summary": "Regresses rich multi-endpoint normalization precedence."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Verifies both directions use semantic motion in the editor."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-incremental-transition-authoring-v0",
+      "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
+  ],
+  "expectedLearning": [
+    "Whether Implement fan-out and fan-in inverse motion can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, and test TypeScript projects.",
+      "checkedAt": "2026-07-15T20:46:59.106Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "All 921 unit and integration tests.",
+      "checkedAt": "2026-07-15T20:46:59.163Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph and event integrity.",
+      "checkedAt": "2026-07-15T20:46:59.229Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "checkedAt": "2026-07-15T20:46:59.299Z",
+      "scope": "All 19 editor animation browser scenarios."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Distribution and factoring now render as inverse semantic fan-out and fan-in motion with persistent terms, operators, and entering or exiting grouping delimiters."
+  }
+}

@@ -307,6 +307,8 @@ test("distribution and factoring family animations render opposite semantic dire
       .toHaveAttribute("data-kp-editor-equation-object-id", item.sourceId);
     await expect(player.locator("[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"))
       .toHaveAttribute("data-kp-editor-equation-object-id", item.targetId);
+    await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+      .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
   }
 });
 

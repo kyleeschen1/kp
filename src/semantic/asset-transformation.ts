@@ -285,10 +285,8 @@ export function normalizeKpSemanticTransformationCorrespondence(
 
   transformation.correspondence.forEach((pair, index) => {
     const alreadyRepresented = records.some((record) =>
-      record.sourceSelectorIds.length === 1 &&
-      record.sourceSelectorIds[0] === pair.sourceSelectorId &&
-      record.targetSelectorIds.length === 1 &&
-      record.targetSelectorIds[0] === pair.targetSelectorId
+      record.sourceSelectorIds.includes(pair.sourceSelectorId) &&
+      record.targetSelectorIds.includes(pair.targetSelectorId)
     );
     if (alreadyRepresented) return;
 

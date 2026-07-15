@@ -41,6 +41,7 @@ import {
   createKpFractionSelectorAnnotatedLatex
 } from "./fraction-semantic-latex.ts";
 import { createKpFunctionWrapSelectorAnnotatedLatex } from "./function-wrap-semantic-latex.ts";
+import { createKpDistributionSelectorAnnotatedLatex } from "./distribution-semantic-latex.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticGeometryCache = new WeakMap<HTMLElement, {
@@ -341,7 +342,8 @@ function annotatedLatexForStates(
     objectId: state.objectId,
     selectorIds: state.selectors.map((selector) => selector.id)
   }) ?? createKpFractionSelectorAnnotatedLatex(state)
-    ?? createKpFunctionWrapSelectorAnnotatedLatex(state));
+    ?? createKpFunctionWrapSelectorAnnotatedLatex(state)
+    ?? createKpDistributionSelectorAnnotatedLatex(state));
   return annotated.every((state): state is KpSelectorAnnotatedLatex => state !== undefined)
     ? annotated
     : undefined;
@@ -357,6 +359,9 @@ function annotatedLatexForObject(
     objectId: object.id,
     selectors: object.selectors
   }) ?? createKpFunctionWrapSelectorAnnotatedLatex({
+    objectId: object.id,
+    selectors: object.selectors
+  }) ?? createKpDistributionSelectorAnnotatedLatex({
     objectId: object.id,
     selectors: object.selectors
   });
