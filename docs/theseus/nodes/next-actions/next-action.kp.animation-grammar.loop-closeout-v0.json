@@ -2,15 +2,20 @@
   "id": "next-action.kp.animation-grammar.loop-closeout-v0",
   "kind": "next-action",
   "title": "Close Governed Animation Grammar Loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Run focused and broad gates, review vertical-slice comprehension, record pins, migrations, residual risks, and Theseus evidence. Verification: broad.",
+  "summary": "Closed the approved 30-slice governed semantic animation grammar loop with exact version pins, v1-to-v2 migration guidance, delivered and deferred scope, residual risks, vertical-slice comprehension review, and a passing broad quality gate.",
   "severity": "high",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-governed-semantic-animation-grammar-loop-closeout.md",
+      "summary": "Records delivered contracts, product behavior, pins, migrations, verification, residual risks, and the recommended model-facing ingestion workflow."
     }
   ],
   "dependsOn": {
@@ -50,5 +55,41 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full unit and integration suite, 0 failures",
+      "checkedAt": "2026-07-16T03:15:52.302Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T03:15:52.371Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production Vite build with existing chunk-size advisory",
+      "checkedAt": "2026-07-16T03:15:52.415Z"
+    },
+    {
+      "command": "npx playwright test editor animation visuals chromium",
+      "status": "passed",
+      "scope": "25 editor browser tests",
+      "checkedAt": "2026-07-16T03:15:52.464Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T03:15:52.507Z",
+      "scope": "490 nodes and 6295 events before closeout completion"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Closed the approved 30-slice governed semantic animation grammar loop with exact version pins, v1-to-v2 migration guidance, delivered and deferred scope, residual risks, vertical-slice comprehension review, and a passing broad quality gate."
+  }
 }
