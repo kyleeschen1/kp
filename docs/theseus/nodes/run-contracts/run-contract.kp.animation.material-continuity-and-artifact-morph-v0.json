@@ -2,7 +2,7 @@
   "id": "run-contract.kp.animation.material-continuity-and-artifact-morph-v0",
   "kind": "run-contract",
   "title": "KP material continuity and artifact morph loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
   "sourceRefs": [
     {
@@ -183,7 +183,8 @@
     {
       "id": "next-action.kp.continuity.proof-cohort-closeout-v0",
       "title": "Gate promotion and close the continuity proof cohort",
-      "status": "planned"
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }

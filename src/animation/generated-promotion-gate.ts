@@ -2,6 +2,11 @@ import type { KpAnimationAsset } from "./asset.ts";
 import type { KpChoreographyQualityReport } from "./choreography-quality.ts";
 import type { KpGestaltRendererCapabilityResolution } from "./gestalt-renderer-capabilities.ts";
 import type { KpGestaltStyleRef } from "./gestalt-style.ts";
+import {
+  evaluateKpMaterialContinuityQuality,
+  type KpMaterialContinuityBoundarySample,
+  type KpMaterialReconciliationSample
+} from "./material-continuity-quality.ts";
 
 export const kpGeneratedPromotionHumanReviewRubric = [
   "causal-legibility",
@@ -36,6 +41,12 @@ export interface KpGeneratedPromotionEvidence {
     readonly projectionIds: readonly string[];
     readonly valid: boolean;
   };
+  readonly materialContinuity: {
+    readonly boundaries: readonly KpMaterialContinuityBoundarySample[];
+    readonly reconciliations: readonly KpMaterialReconciliationSample[];
+    readonly sampledDirections: readonly ("forward" | "rewind")[];
+    readonly inspectorExposed: boolean;
+  };
   readonly humanReview: Readonly<
     Record<KpGeneratedPromotionHumanReviewCriterion, "passed" | "failed" | "pending">
   >;
@@ -50,6 +61,8 @@ export interface KpGeneratedPromotionDiagnostic {
     | "promotion.style.fingerprint"
     | "promotion.style.incompatible"
     | "promotion.accessibility.incomplete"
+    | "promotion.continuity.incomplete"
+    | "promotion.continuity.quality"
     | "promotion.human-review.incomplete"
     | "promotion.legacy.unaudited";
   readonly severity: "warning" | "error";
@@ -80,7 +93,7 @@ export function gateKpGeneratedAnimationPromotion(input: {
         ? `Existing generated animation ${input.animation.id} remains visible with warning-first audit status.`
         : `Generated animation ${input.animation.id} has no promotion evidence.`,
       repair:
-        "Compile semantic choreography, resolve an exact compatible style, validate accessibility projections, run automated quality gates, and attach the complete human review rubric."
+        "Compile semantic choreography, resolve an exact compatible style, validate accessibility projections, attach forward and rewind material-continuity samples, run automated quality gates, and complete the human review rubric."
     };
     return {
       kind: "generated-animation-promotion-result",
@@ -160,6 +173,47 @@ export function gateKpGeneratedAnimationPromotion(input: {
       message: "Generated animation lacks the complete validated accessibility family.",
       repair:
         "Provide full, reduced, static, narrated, high-contrast, no-depth, keyboard, and rewind projections without changing semantic phases or traversal."
+    });
+  }
+  const continuitySampleCount =
+    evidence.materialContinuity.boundaries.length +
+    evidence.materialContinuity.reconciliations.length;
+  const missingDirections = (["forward", "rewind"] as const).filter(
+    (direction) =>
+      !evidence.materialContinuity.sampledDirections.includes(direction)
+  );
+  if (
+    continuitySampleCount === 0 ||
+    missingDirections.length > 0 ||
+    !evidence.materialContinuity.inspectorExposed
+  ) {
+    diagnostics.push({
+      code: "promotion.continuity.incomplete",
+      severity: "error",
+      path: continuitySampleCount === 0
+        ? "materialContinuity.boundaries"
+        : missingDirections.length > 0
+          ? "materialContinuity.sampledDirections"
+          : "materialContinuity.inspectorExposed",
+      message:
+        "Generated animation lacks complete inspectable material-continuity evidence.",
+      repair:
+        "Sample persistent ownership or artifact reconciliation in forward and rewind, expose the live owner and bundle diagnostics, and attach those samples to promotion evidence."
+    });
+  }
+  const continuityViolations = evaluateKpMaterialContinuityQuality({
+    boundaries: evidence.materialContinuity.boundaries,
+    reconciliations: evidence.materialContinuity.reconciliations
+  });
+  if (continuityViolations.length > 0) {
+    diagnostics.push({
+      code: "promotion.continuity.quality",
+      severity: "error",
+      path: `materialContinuity.${continuityViolations[0]!.sampleId}`,
+      message:
+        `Generated animation failed material continuity: ${continuityViolations.map((violation) => violation.lawId).join(", ")}.`,
+      repair:
+        "Preserve stable owners through boundaries, reconcile fragments at one bundle, settle into native geometry, protect structural notation from deformation, and rerun the continuity sampler."
     });
   }
   const incompleteReview = kpGeneratedPromotionHumanReviewRubric.filter(

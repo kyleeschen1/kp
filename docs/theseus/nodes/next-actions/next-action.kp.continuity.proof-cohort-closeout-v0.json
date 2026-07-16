@@ -2,9 +2,26 @@
   "id": "next-action.kp.continuity.proof-cohort-closeout-v0",
   "kind": "next-action",
   "title": "Gate promotion and close the continuity proof cohort",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 24 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Closed the continuity proof cohort: generated promotion now requires inspectable forward/rewind material samples with zero quality violations; full linear, radical, function-wrap, distribution, dot-product, editor-library, and KaTeX browser cohorts pass; closeout records guarantees, intentional-invalid-state compatibility, and remaining renderer/general-sampler work.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/animation/generated-promotion-gate.ts",
+      "summary": "Requires complete material-continuity evidence for generated animation promotion."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-promotion-gate.test.ts",
+      "summary": "Covers promoted, incomplete, and discontinuous continuity evidence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-material-continuity-artifact-morph-loop-closeout.md",
+      "summary": "Records the 24-slice outcome, verification, migration boundary, and remaining work."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +35,53 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "1,196 unit and integration tests",
+      "checkedAt": "2026-07-16T20:17:08.307Z"
+    },
+    {
+      "command": "Playwright editor animation visual suite",
+      "status": "passed",
+      "scope": "34 browser proof-cohort tests",
+      "checkedAt": "2026-07-16T20:17:08.374Z"
+    },
+    {
+      "command": "Playwright editor animation library suite",
+      "status": "passed",
+      "scope": "8 catalog and selection browser tests",
+      "checkedAt": "2026-07-16T20:17:08.441Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "12 KaTeX browser tests",
+      "checkedAt": "2026-07-16T20:17:08.504Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Typecheck and production build",
+      "checkedAt": "2026-07-16T20:17:08.568Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "548-node Theseus graph",
+      "checkedAt": "2026-07-16T20:17:08.633Z"
+    },
+    {
+      "command": "Manual linear and radical filmstrip review",
+      "status": "passed",
+      "checkedAt": "2026-07-16T20:17:08.698Z",
+      "scope": "Cancellation, bundle reconciliation, and native handoff"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Closed the continuity proof cohort: generated promotion now requires inspectable forward/rewind material samples with zero quality violations; full linear, radical, function-wrap, distribution, dot-product, editor-library, and KaTeX browser cohorts pass; closeout records guarantees, intentional-invalid-state compatibility, and remaining renderer/general-sampler work."
+  }
 }

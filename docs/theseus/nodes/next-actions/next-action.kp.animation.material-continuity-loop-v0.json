@@ -2,9 +2,16 @@
   "id": "next-action.kp.animation.material-continuity-loop-v0",
   "kind": "next-action",
   "title": "Repair material continuity and artifact morphs",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Execute the approved 24-slice repair loop for continuous linear solves, genuine exponent-radical succession, and continuity-aware gestalt realization.",
+  "summary": "Completed all 24 approved slices. KP now preserves equation material through linear solve boundaries and radical representational succession, applies continuity-aware gestalt realization, exposes live ownership and bundle diagnostics, and blocks generated promotion without measured forward/rewind continuity evidence.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-material-continuity-artifact-morph-loop-closeout.md",
+      "summary": "Final outcome and verification record for the approved long loop."
+    }
+  ],
   "dependsOn": {
     "preferred": [
       "workflow.kp.dashboard-animation-system"
@@ -17,7 +24,33 @@
     "npm run theseus -- validate"
   ],
   "progress": {
-    "state": "partial",
-    "summary": "Approved 24-slice material continuity loop is materialized and beginning with regression capture."
-  }
+    "state": "complete",
+    "summary": "Completed all 24 approved slices. KP now preserves equation material through linear solve boundaries and radical representational succession, applies continuity-aware gestalt realization, exposes live ownership and bundle diagnostics, and blocks generated promotion without measured forward/rewind continuity evidence."
+  },
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full repository test suite",
+      "checkedAt": "2026-07-16T20:17:16.612Z"
+    },
+    {
+      "command": "Playwright editor proof cohort",
+      "status": "passed",
+      "scope": "Visible animation behavior",
+      "checkedAt": "2026-07-16T20:17:16.675Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production readiness",
+      "checkedAt": "2026-07-16T20:17:16.733Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T20:17:16.790Z",
+      "scope": "Theseus graph integrity"
+    }
+  ]
 }

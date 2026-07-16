@@ -86,6 +86,49 @@ test("raw motion, incompatible style, and incomplete review return typed repairs
   assert.ok(result.diagnostics.every((diagnostic) => diagnostic.repair.length > 30));
 });
 
+test("promotion blocks incomplete or discontinuous material evidence", () => {
+  const base = completeEvidence();
+  const result = gateKpGeneratedAnimationPromotion({
+    animation,
+    evidence: {
+      ...base,
+      materialContinuity: {
+        boundaries: [{
+          id: "generated.owner-swap",
+          stableOwnershipRequired: true,
+          beforeOwnerId: "source.x",
+          afterOwnerId: "target.x",
+          before: {
+            x: 0,
+            y: 0,
+            velocityX: 0,
+            velocityY: 0,
+            attention: 0
+          },
+          after: {
+            x: 4,
+            y: 0,
+            velocityX: 3,
+            velocityY: 0,
+            attention: 0
+          }
+        }],
+        reconciliations: [],
+        sampledDirections: ["forward"],
+        inspectorExposed: false
+      }
+    }
+  });
+
+  assert.deepEqual(
+    result.diagnostics.map((diagnostic) => diagnostic.code),
+    [
+      "promotion.continuity.incomplete",
+      "promotion.continuity.quality"
+    ]
+  );
+});
+
 test("the existing generated catalog remains visible under warning-first audit", () => {
   const catalog = createKpAnimationAssets();
   const audit = auditKpGeneratedAnimationCatalog(catalog);
@@ -134,6 +177,31 @@ function completeEvidence(): KpGeneratedPromotionEvidence {
         "projection.rewind"
       ],
       valid: true
+    },
+    materialContinuity: {
+      boundaries: [{
+        id: "generated.stable-owner",
+        stableOwnershipRequired: true,
+        beforeOwnerId: "material.x",
+        afterOwnerId: "material.x",
+        before: {
+          x: 10,
+          y: 20,
+          velocityX: 0.2,
+          velocityY: 0,
+          attention: 0.2
+        },
+        after: {
+          x: 10.2,
+          y: 20.1,
+          velocityX: 0.3,
+          velocityY: 0,
+          attention: 0.18
+        }
+      }],
+      reconciliations: [],
+      sampledDirections: ["forward", "rewind"],
+      inspectorExposed: true
     },
     humanReview: Object.fromEntries(
       kpGeneratedPromotionHumanReviewRubric.map((criterion) => [
