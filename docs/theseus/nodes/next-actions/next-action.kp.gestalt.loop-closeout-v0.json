@@ -2,8 +2,9 @@
   "id": "next-action.kp.gestalt.loop-closeout-v0",
   "kind": "next-action",
   "title": "Close Choreography And Gestalt Style Loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Closed the 30-slice choreography and gestalt-style loop with a verified proof cohort, exact style pins, editor and focus review, generated promotion policy, migration guidance, residual risks, and final Theseus evidence.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,39 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-phase-ordered-choreography-gestalt-style-loop-closeout.md",
+      "summary": "Records delivered outcomes, verification, exact pins, migration sequence, deferred work, and honest residual risks."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-phase-ordered-choreography-gestalt-closeout.test.ts",
+      "summary": "Keeps closeout claims, verification counts, exact pins, and limitations inspectable."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.gestalt.generated-promotion-gate-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +63,46 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-phase-ordered-choreography-gestalt-closeout.test.ts tests/kp-generated-promotion-gate.test.ts tests/kp-elevated-focus-experiment.test.ts tests/kp-gestalt-base-styles.test.ts",
+      "status": "passed",
+      "scope": "12 focused closeout, promotion, focus, style, accessibility, and cohort tests passed.",
+      "checkedAt": "2026-07-16T18:57:06.507Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Final broad repository suite passed: 1170 tests.",
+      "checkedAt": "2026-07-16T18:57:06.587Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts",
+      "status": "passed",
+      "scope": "Final full editor visual suite passed: 30 browser tests.",
+      "checkedAt": "2026-07-16T18:57:06.665Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Final TypeScript gate passed.",
+      "checkedAt": "2026-07-16T18:57:06.734Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Final production build passed with only the existing chunk-size advisory.",
+      "checkedAt": "2026-07-16T18:57:06.803Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T18:57:06.875Z",
+      "scope": "Theseus graph validated immediately before closeout completion."
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.gestalt.generated-promotion-gate-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Closed the 30-slice choreography and gestalt-style loop with a verified proof cohort, exact style pins, editor and focus review, generated promotion policy, migration guidance, residual risks, and final Theseus evidence."
+  }
 }
