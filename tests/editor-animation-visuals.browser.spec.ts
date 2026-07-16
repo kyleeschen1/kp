@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { equationAnimationConformanceBaseline } from "./fixtures/equation-animation-conformance-baseline.ts";
 
 test("selected editor animation controls play, pause, seek, step, rewind, and reset", async ({
   page
@@ -316,6 +317,82 @@ test("distribution and factoring family animations render opposite semantic dire
     await expect(player.locator("[data-kp-editor-equation-transition-id]"))
       .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
   }
+});
+
+test("wrap and distribution record their current conformance gaps at semantic checkpoints", async ({
+  page
+}) => {
+  await page.goto("/");
+  const picker = page.locator('[data-action="set-editor-animation"]');
+
+  const wrapBaseline = equationAnimationConformanceBaseline(
+    "animation.generated.function-wrap.apply-f"
+  );
+  await picker.selectOption(wrapBaseline.descriptorId);
+  let player = page.locator("[data-kp-editor-animation-player]");
+  let scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const wrapSourceValue = player.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id$=".input.value"]'
+  );
+  const wrapTargetArgument = player.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".wrapped.argument"]'
+  );
+  const wrapTargetFunction = player.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".wrapped.function"]'
+  );
+
+  await scrubber.fill("0");
+  await expect(wrapSourceValue).toHaveCSS("opacity", "1");
+  await expect(wrapTargetArgument).toHaveCSS("opacity", "0");
+  await scrubber.fill("0.5");
+  await expect(wrapSourceValue).toHaveCSS("opacity", "1");
+  await expect(wrapTargetArgument).toHaveCSS("opacity", "0");
+  await expect(wrapTargetFunction).toHaveCSS("opacity", "0.5");
+  await scrubber.fill("1");
+  await expect(wrapSourceValue).toHaveCSS("opacity", "0");
+  await expect(wrapTargetArgument).toHaveCSS("opacity", "1");
+  await player.getByRole("button", { name: "Rewind animation" }).click();
+  await scrubber.fill("0.5");
+  await expect(player.locator('[data-kp-editor-equation-source] [data-kp-motion-id$=".wrapped.argument"]'))
+    .toHaveCSS("opacity", "0");
+  await expect(player.locator('[data-kp-editor-equation-target] [data-kp-motion-id$=".input.value"]'))
+    .toHaveCSS("opacity", "1");
+
+  const distributionBaseline = equationAnimationConformanceBaseline(
+    "animation.generated.distribution.expand-a-sum"
+  );
+  await picker.selectOption(distributionBaseline.descriptorId);
+  player = page.locator("[data-kp-editor-animation-player]");
+  scrubber = player.locator('[data-action="seek-editor-animation"]');
+  await scrubber.fill("0.5");
+  const transition = player.locator("[data-kp-editor-equation-transition-id]");
+  const sourceFactor = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id$=".factored.factor"]'
+  );
+  const targetFactors = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$="-factor"]'
+  );
+
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-motif",
+    distributionBaseline.observedMotif
+  );
+  await expect(sourceFactor).toHaveCSS("opacity", "1");
+  await expect(targetFactors).toHaveCount(2);
+  await expect(targetFactors.nth(0)).toHaveCSS("opacity", "0");
+  await expect(targetFactors.nth(1)).toHaveCSS("opacity", "0");
+  expect(await targetFactors.nth(0).evaluate((element) => getComputedStyle(element).transform))
+    .toBe(await targetFactors.nth(1).evaluate((element) => getComputedStyle(element).transform));
+
+  await scrubber.fill("1");
+  await expect(sourceFactor).toHaveCSS("opacity", "0");
+  await expect(targetFactors.nth(0)).toHaveCSS("opacity", "1");
+  await expect(targetFactors.nth(1)).toHaveCSS("opacity", "1");
+  await player.getByRole("button", { name: "Rewind animation" }).click();
+  await scrubber.fill("0.5");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "rewind");
+  await expect(player.locator('[data-kp-editor-equation-target] [data-kp-motion-id$=".factored.factor"]'))
+    .toHaveCSS("opacity", "1");
 });
 
 test("inequality family animation visibly flips its relation", async ({ page }) => {

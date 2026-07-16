@@ -2,15 +2,30 @@
   "id": "next-action.kp.animation-grammar.conformance-baseline-v0",
   "kind": "next-action",
   "title": "Capture Wrap And Distribution Conformance Baselines",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Record semantic checkpoints, geometry, and observed continuity failures for the curated wrap and current distribution examples. Verification: broad plus manual runtime.",
+  "summary": "Captured executable wrap and distribution conformance baselines, including the delayed wrap identity handoff, generic distribution motif, collapsed fan-out transform, and forward/rewind checkpoints.",
   "severity": "medium",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "tests/fixtures/equation-animation-conformance-baseline.ts",
+      "summary": "Declarative baseline requirements and known choreography gaps."
+    },
+    {
+      "kind": "file",
+      "path": "tests/equation-animation-conformance-baseline.test.ts",
+      "summary": "Semantic motif and fan-out mismatch evidence."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Runtime start, midpoint, settle, and rewind observations."
     }
   ],
   "dependsOn": {
@@ -47,5 +62,35 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/equation-motion-plan.test.ts",
+      "status": "passed",
+      "scope": "broad-unit",
+      "checkedAt": "2026-07-16T00:47:08.128Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-07-16T00:47:08.178Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "graph",
+      "checkedAt": "2026-07-16T00:47:08.215Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "checkedAt": "2026-07-16T00:47:08.250Z",
+      "scope": "browser"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Captured executable wrap and distribution conformance baselines, including the delayed wrap identity handoff, generic distribution motif, collapsed fan-out transform, and forward/rewind checkpoints."
+  }
 }
