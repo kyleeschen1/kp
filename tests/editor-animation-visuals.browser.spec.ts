@@ -273,9 +273,9 @@ test("function-wrap family animation visibly wraps and rewinds its argument", as
     .toContainText("f(x)");
   await expect(player.locator("[data-kp-editor-equation-transition-id]"))
     .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
-  await expect(
-    player.locator('[data-kp-editor-equation-target] [data-kp-motion-id*="wrapped.function"]')
-  ).toHaveCSS("opacity", "0.5");
+  expect(Number(await player.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*="wrapped.function"]'
+  ).evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.05);
 
   await player.getByRole("button", { name: "Rewind animation" }).click();
   await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "rewind");
@@ -320,7 +320,7 @@ test("distribution and factoring family animations render opposite semantic dire
   }
 });
 
-test("wrap and distribution record their current conformance gaps at semantic checkpoints", async ({
+test("wrap satisfies its choreography contract while distribution records current gaps", async ({
   page
 }) => {
   await page.goto("/");
@@ -335,6 +335,7 @@ test("wrap and distribution record their current conformance gaps at semantic ch
   await picker.selectOption(wrapBaseline.descriptorId);
   let player = page.locator("[data-kp-editor-animation-player]");
   let scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const wrapTransition = player.locator("[data-kp-editor-equation-transition-id]");
   const wrapSourceValue = player.locator(
     '[data-kp-editor-equation-source] [data-kp-motion-id$=".input.value"]'
   );
@@ -344,6 +345,15 @@ test("wrap and distribution record their current conformance gaps at semantic ch
   const wrapTargetFunction = player.locator(
     '[data-kp-editor-equation-target] [data-kp-motion-id$=".wrapped.function"]'
   );
+  const wrapTargetLeftParen = player.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".wrapped.left-paren"]'
+  );
+
+  expect(wrapBaseline.gaps).toEqual([]);
+  await expect(wrapTransition).toHaveAttribute(
+    "data-kp-editor-equation-enclosure-choreography",
+    "wrap"
+  );
 
   await scrubber.fill("0");
   await expect(wrapSourceValue).toHaveCSS("opacity", "1");
@@ -351,7 +361,17 @@ test("wrap and distribution record their current conformance gaps at semantic ch
   await scrubber.fill("0.5");
   await expect(wrapSourceValue).toHaveCSS("opacity", "1");
   await expect(wrapTargetArgument).toHaveCSS("opacity", "0");
-  await expect(wrapTargetFunction).toHaveCSS("opacity", "0.5");
+  await expect(wrapTransition).toHaveAttribute(
+    "data-kp-editor-equation-persistent-travel-progress",
+    "1"
+  );
+  expect(Number(await wrapTargetLeftParen.evaluate((element) => getComputedStyle(element).opacity)))
+    .toBeGreaterThan(0);
+  expect(Number(await wrapTargetFunction.evaluate((element) => getComputedStyle(element).opacity)))
+    .toBeLessThan(0.05);
+  await scrubber.fill("0.99");
+  await expect(wrapSourceValue).toHaveCSS("opacity", "1");
+  await expect(wrapTargetArgument).toHaveCSS("opacity", "0");
   await scrubber.fill("1");
   await expect(wrapSourceValue).toHaveCSS("opacity", "0");
   await expect(wrapTargetArgument).toHaveCSS("opacity", "1");

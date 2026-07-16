@@ -17,6 +17,7 @@ import {
   createRoleAwareMotionTrack,
   roleAwareMotionPrimitiveDescriptors
 } from "../src/rendering/role-aware-motion-primitives.ts";
+import { sampleKpEquationEnclosureChoreography } from "../src/rendering/equation-enclosure-choreography.ts";
 import {
   compileSemanticBeatTimeline,
   createSemanticBeatMotionTrack,
@@ -109,6 +110,27 @@ test("role-aware motion primitive descriptors compile to sampler tracks", () => 
   assert.ok(pose.scale > 0.72);
   assert.ok(pose.y < 0);
   assert.ok(pose.y > -14);
+});
+
+test("canonical enclosure choreography stages wrap and unwrap in reversible semantic order", () => {
+  const wrapEarly = sampleKpEquationEnclosureChoreography("wrap", 0.2);
+  const wrapMiddle = sampleKpEquationEnclosureChoreography("wrap", 0.5);
+  const wrapLate = sampleKpEquationEnclosureChoreography("wrap", 0.75);
+
+  assert.ok(wrapEarly.persistentTravelProgress > 0);
+  assert.equal(wrapEarly.enclosureVisibility, 0);
+  assert.equal(wrapEarly.outerArtifactVisibility, 0);
+  assert.equal(wrapMiddle.persistentTravelProgress, 1);
+  assert.ok(wrapMiddle.enclosureVisibility > wrapMiddle.outerArtifactVisibility);
+  assert.equal(wrapLate.enclosureVisibility, 1);
+  assert.ok(wrapLate.outerArtifactVisibility < 1);
+
+  const unwrapEarly = sampleKpEquationEnclosureChoreography("unwrap", 0.2);
+  const unwrapLate = sampleKpEquationEnclosureChoreography("unwrap", 0.75);
+  assert.ok(unwrapEarly.outerArtifactVisibility < unwrapEarly.enclosureVisibility);
+  assert.equal(unwrapEarly.persistentTravelProgress, 0);
+  assert.ok(unwrapLate.persistentTravelProgress > 0);
+  assert.equal(unwrapLate.enclosureVisibility, 0);
 });
 
 test("semantic beat compiler exposes the current equation demo timeline", () => {

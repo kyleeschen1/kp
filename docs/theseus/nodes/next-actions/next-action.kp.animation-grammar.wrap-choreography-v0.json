@@ -2,15 +2,20 @@
   "id": "next-action.kp.animation-grammar.wrap-choreography-v0",
   "kind": "next-action",
   "title": "Compile Canonical Wrap And Unwrap Choreography",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Preserve the argument while introducing or removing executable enclosure artifacts through the approved motif. Verification: broad.",
+  "summary": "Compiled registry-selected wrap and unwrap choreography with persistent argument travel, staged enclosure artifacts, real DOM interpolation, and editor conformance evidence.",
   "severity": "medium",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-enclosure-choreography.ts",
+      "summary": "Defines deterministic persistent-travel, enclosure, outer-artifact, and settle phases for wrap and unwrap."
     }
   ],
   "dependsOn": {
@@ -49,5 +54,35 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/equation-motion-plan.test.ts tests/equation-motion-sampler.test.ts tests/kp-editor-equation-transition-motifs.test.ts tests/semantic-equation-token-renderer.test.ts tests/equation-animation-conformance-baseline.test.ts tests/equation-visual-motif-conformance.test.ts",
+      "status": "passed",
+      "scope": "997 unit tests",
+      "checkedAt": "2026-07-16T01:47:37.607Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "23 editor browser tests",
+      "checkedAt": "2026-07-16T01:47:37.664Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript",
+      "checkedAt": "2026-07-16T01:47:37.709Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T01:47:37.754Z",
+      "scope": "490 nodes and 6180 events before completion"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Compiled registry-selected wrap and unwrap choreography with persistent argument travel, staged enclosure artifacts, real DOM interpolation, and editor conformance evidence."
+  }
 }

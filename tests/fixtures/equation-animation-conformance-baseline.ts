@@ -29,10 +29,7 @@ export const equationAnimationConformanceBaselines:
         { direction: "forward", progress: 1 },
         { direction: "rewind", progress: 0.5 }
       ],
-      gaps: [
-        "persistent argument uses a late source-to-target opacity handoff",
-        "selected motif is not yet checked against the curated enclosure choreography"
-      ]
+      gaps: []
     },
     {
       descriptorId: "editor-animation.sample.animation.distribution.expand-a-sum",
@@ -67,4 +64,3 @@ export function equationAnimationConformanceBaseline(
   }
   return baseline;
 }
-

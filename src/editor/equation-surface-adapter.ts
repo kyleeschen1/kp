@@ -295,6 +295,7 @@ function applySemanticTokenMotion(input: {
       "[data-kp-editor-equation-target]"
     );
     if (displayedSource === null || displayedTarget === null) return false;
+    const motifKind = input.frame.motifs[input.transitionIndex]?.kind;
 
     // IR remains forward-oriented; rewind swaps the displayed roots and samples
     // semantic progress backward, so both directions share exactly one geometry.
@@ -311,7 +312,10 @@ function applySemanticTokenMotion(input: {
       targetMotionIdsBySelector: bindStructuralMotionIds(
         input.state.direction === "forward" ? displayedTarget : displayedSource,
         compiled.ir.target
-      )
+      ),
+      ...(motifKind === "wrap" || motifKind === "unwrap"
+        ? { enclosureChoreographyKind: motifKind }
+        : {})
     });
     const existing = semanticGeometryCache.get(input.stage);
     const geometries = existing?.contentKey === input.frame.contentKey
@@ -334,6 +338,21 @@ function applySemanticTokenMotion(input: {
   applyKpEditorSemanticEquationTokenFrame(geometry, tokenFrame);
   input.transitionElement.dataset["kpEditorEquationSemanticProgress"] =
     String(tokenFrame.semanticProgress);
+  const choreography = tokenFrame.motion.enclosureChoreography;
+  if (choreography === undefined) {
+    delete input.transitionElement.dataset["kpEditorEquationEnclosureChoreography"];
+    delete input.transitionElement.dataset["kpEditorEquationPersistentTravelProgress"];
+    delete input.transitionElement.dataset["kpEditorEquationEnclosureVisibility"];
+    delete input.transitionElement.dataset["kpEditorEquationOuterArtifactVisibility"];
+  } else {
+    input.transitionElement.dataset["kpEditorEquationEnclosureChoreography"] = choreography.kind;
+    input.transitionElement.dataset["kpEditorEquationPersistentTravelProgress"] =
+      String(choreography.persistentTravelProgress);
+    input.transitionElement.dataset["kpEditorEquationEnclosureVisibility"] =
+      String(choreography.enclosureVisibility);
+    input.transitionElement.dataset["kpEditorEquationOuterArtifactVisibility"] =
+      String(choreography.outerArtifactVisibility);
+  }
   return true;
 }
 

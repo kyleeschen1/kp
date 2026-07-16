@@ -1603,6 +1603,12 @@ h2 {
   margin: 0;
 }
 
+.editor-equation-stage [data-kp-motion-id] {
+  display: inline-block;
+  position: relative;
+  will-change: opacity, transform;
+}
+
 .editor-equation-stage__caption {
   display: flex;
   flex-wrap: wrap;

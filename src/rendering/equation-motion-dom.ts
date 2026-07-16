@@ -1,6 +1,7 @@
 import type { KatexTokenRect } from "./katex-transition-types.ts";
 import type { KpEquationTransitionIr } from "./equation-transition-ir.ts";
 import type { KpSelectorAnnotatedLatex } from "./selector-annotated-latex.ts";
+import type { KpEquationEnclosureChoreographyKind } from "./equation-enclosure-choreography.ts";
 
 export interface AnnotatedMotionToken {
   readonly motionId: string;
@@ -31,6 +32,7 @@ export interface KpMeasuredEquationTransitionRelationGeometry {
 
 export interface KpMeasuredEquationTransitionGeometry {
   readonly transitionId: string;
+  readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
   readonly sourceTokens: readonly AnnotatedMotionToken[];
   readonly targetTokens: readonly AnnotatedMotionToken[];
   readonly relations: readonly KpMeasuredEquationTransitionRelationGeometry[];
@@ -89,6 +91,7 @@ export function measureKpEquationTransitionGeometry(input: {
   readonly targetAnnotated: readonly KpSelectorAnnotatedLatex[];
   readonly sourceMotionIdsBySelector?: Readonly<Record<string, string>> | undefined;
   readonly targetMotionIdsBySelector?: Readonly<Record<string, string>> | undefined;
+  readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
 }): KpMeasuredEquationTransitionGeometry {
   const sourceTokens = measureAnnotatedEquationMotionTokens(input.sourceRoot);
   const targetTokens = measureAnnotatedEquationMotionTokens(input.targetRoot);
@@ -105,6 +108,9 @@ export function measureKpEquationTransitionGeometry(input: {
 
   return {
     transitionId: input.ir.id,
+    ...(input.enclosureChoreographyKind === undefined
+      ? {}
+      : { enclosureChoreographyKind: input.enclosureChoreographyKind }),
     sourceTokens,
     targetTokens,
     relations: input.ir.relations.map((relation) => {

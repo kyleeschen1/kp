@@ -3,6 +3,10 @@ import type {
   KpMeasuredEquationTransitionGeometry,
   KpMeasuredEquationTransitionRelationGeometry
 } from "./equation-motion-dom.ts";
+import {
+  sampleKpEquationEnclosureChoreography,
+  type KpEquationEnclosureChoreographyFrame
+} from "./equation-enclosure-choreography.ts";
 
 export interface KpEquationTokenMotionPose {
   readonly opacity: number;
@@ -21,6 +25,16 @@ export interface KpEquationTokenMotionFrame {
   readonly transitionId: string;
   readonly progress: number;
   readonly tokens: readonly KpEquationTokenMotionFrameToken[];
+  readonly enclosureChoreography?: KpEquationEnclosureChoreographyFrame | undefined;
+}
+
+interface EnclosureChoreographyContext {
+  readonly frame: KpEquationEnclosureChoreographyFrame;
+  readonly persistentBounds: {
+    readonly left: number;
+    readonly width: number;
+  };
+  readonly enclosureMotionIds: ReadonlySet<string>;
 }
 
 export function sampleKpEquationTokenMotion(
@@ -29,15 +43,19 @@ export function sampleKpEquationTokenMotion(
 ): KpEquationTokenMotionFrame {
   const p = clamp01(progress);
   const tokens = new Map<string, KpEquationTokenMotionFrameToken>();
+  const enclosureChoreography = createEnclosureChoreographyContext(geometry, p);
   for (const relation of geometry.relations) {
-    for (const token of sampleRelation(geometry, relation, p)) {
+    for (const token of sampleRelation(geometry, relation, p, enclosureChoreography)) {
       tokens.set(`${token.side}:${token.motionId}`, token);
     }
   }
   return {
     transitionId: geometry.transitionId,
     progress: p,
-    tokens: [...tokens.values()]
+    tokens: [...tokens.values()],
+    ...(enclosureChoreography === undefined
+      ? {}
+      : { enclosureChoreography: enclosureChoreography.frame })
   };
 }
 
@@ -62,7 +80,8 @@ export function applyKpEquationTokenMotionFrame(
 function sampleRelation(
   geometry: KpMeasuredEquationTransitionGeometry,
   relation: KpMeasuredEquationTransitionRelationGeometry,
-  progress: number
+  progress: number,
+  enclosureChoreography: EnclosureChoreographyContext | undefined
 ): readonly KpEquationTokenMotionFrameToken[] {
   const sourceTokens = relationTokens(geometry.sourceTokens, relation.source?.motionIds ?? []);
   const targetTokens = relationTokens(geometry.targetTokens, relation.target?.motionIds ?? []);
@@ -70,12 +89,15 @@ function sampleRelation(
   switch (relation.lifecycle) {
     case "persist":
     case "role-change":
+      const travelProgress = relation.lifecycle === "role-change"
+        ? enclosureChoreography?.frame.persistentTravelProgress ?? eased
+        : eased;
       return [
         ...sourceTokens.map((token) => frameToken(token, "source", {
           opacity: progress === 1 ? 0 : 1,
-          x: (relation.delta?.x ?? 0) * eased,
-          y: (relation.delta?.y ?? 0) * eased,
-          scale: 1 + ((averageScale(relation) - 1) * eased)
+          x: (relation.delta?.x ?? 0) * travelProgress,
+          y: (relation.delta?.y ?? 0) * travelProgress,
+          scale: 1 + ((averageScale(relation) - 1) * travelProgress)
         })),
         ...targetTokens.map((token) => frameToken(token, "target", {
           opacity: progress === 1 ? 1 : 0,
@@ -85,6 +107,13 @@ function sampleRelation(
         }))
       ];
     case "enter":
+      if (enclosureChoreography?.frame.kind === "wrap") {
+        return targetTokens.map((token) => sampleEnclosureArtifactToken(
+          token,
+          "target",
+          enclosureChoreography
+        ));
+      }
       return targetTokens.map((token) => frameToken(token, "target", {
         opacity: eased,
         x: 0,
@@ -92,6 +121,19 @@ function sampleRelation(
         scale: 0.85 + 0.15 * eased
       }));
     case "exit":
+      if (enclosureChoreography?.frame.kind === "unwrap") {
+        return sourceTokens.map((token) => sampleEnclosureArtifactToken(
+          token,
+          "source",
+          enclosureChoreography
+        ));
+      }
+      return sourceTokens.map((token) => frameToken(token, "source", {
+        opacity: 1 - eased,
+        x: 0,
+        y: 0,
+        scale: 1 - 0.1 * eased
+      }));
     case "cancel":
       return sourceTokens.map((token) => frameToken(token, "source", {
         opacity: 1 - eased,
@@ -152,6 +194,93 @@ function sampleRelation(
         }))
       ];
   }
+}
+
+function createEnclosureChoreographyContext(
+  geometry: KpMeasuredEquationTransitionGeometry,
+  progress: number
+): EnclosureChoreographyContext | undefined {
+  const persistent = geometry.relations.find(
+    (relation) => relation.lifecycle === "role-change" && relation.source !== undefined && relation.target !== undefined
+  );
+  const kind = geometry.enclosureChoreographyKind;
+  if (persistent === undefined || kind === undefined) return undefined;
+
+  const entering = geometry.relations.filter(
+    (relation) => relation.lifecycle === "enter" && relation.target !== undefined
+  );
+  const exiting = geometry.relations.filter(
+    (relation) => relation.lifecycle === "exit" && relation.source !== undefined
+  );
+  if (kind === "wrap" && entering.length === 0) return undefined;
+  if (kind === "unwrap" && exiting.length === 0) return undefined;
+
+  const persistentBounds = kind === "wrap"
+    ? persistent.target!.bounds
+    : persistent.source!.bounds;
+  const artifactMotionIds = (kind === "wrap" ? entering : exiting).flatMap(
+    (relation) => kind === "wrap"
+      ? relation.target?.motionIds ?? []
+      : relation.source?.motionIds ?? []
+  );
+  const artifactTokens = relationTokens(
+    kind === "wrap" ? geometry.targetTokens : geometry.sourceTokens,
+    artifactMotionIds
+  );
+
+  return {
+    frame: sampleKpEquationEnclosureChoreography(kind, progress),
+    persistentBounds,
+    enclosureMotionIds: nearestEnclosureMotionIds(artifactTokens, persistentBounds)
+  };
+}
+
+function nearestEnclosureMotionIds(
+  tokens: readonly AnnotatedMotionToken[],
+  persistentBounds: { readonly left: number; readonly width: number }
+): ReadonlySet<string> {
+  // The closest artifact on each side is the enclosure; farther artifacts such
+  // as a function label use the later outer-artifact phase.
+  const center = persistentBounds.left + persistentBounds.width / 2;
+  const left = nearestToken(tokens.filter((token) => tokenCenterX(token) < center), center);
+  const right = nearestToken(tokens.filter((token) => tokenCenterX(token) >= center), center);
+  return new Set([left?.motionId, right?.motionId].filter(
+    (motionId): motionId is string => motionId !== undefined
+  ));
+}
+
+function nearestToken(
+  tokens: readonly AnnotatedMotionToken[],
+  center: number
+): AnnotatedMotionToken | undefined {
+  return [...tokens].sort(
+    (left, right) => Math.abs(tokenCenterX(left) - center) - Math.abs(tokenCenterX(right) - center)
+  )[0];
+}
+
+function sampleEnclosureArtifactToken(
+  token: AnnotatedMotionToken,
+  side: "source" | "target",
+  context: EnclosureChoreographyContext
+): KpEquationTokenMotionFrameToken {
+  const isEnclosure = context.enclosureMotionIds.has(token.motionId);
+  const visibility = isEnclosure
+    ? context.frame.enclosureVisibility
+    : context.frame.outerArtifactVisibility;
+  const center = context.persistentBounds.left + context.persistentBounds.width / 2;
+  const direction = tokenCenterX(token) < center ? -1 : 1;
+  const travel = 1 - visibility;
+
+  return frameToken(token, side, {
+    opacity: visibility,
+    x: direction * (isEnclosure ? 8 : 10) * travel,
+    y: 0,
+    scale: isEnclosure ? 1 : 0.35 + 0.65 * visibility
+  });
+}
+
+function tokenCenterX(token: AnnotatedMotionToken): number {
+  return token.localRect.left + token.localRect.width / 2;
 }
 
 function relationTokens(

@@ -19,11 +19,10 @@ test("wrap and distribution baselines name every semantic checkpoint", () => {
       { direction: "forward", progress: 1 },
       { direction: "rewind", progress: 0.5 }
     ]);
-    assert.ok(baseline.gaps.length > 0);
   }
 });
 
-test("function wrapping selects wrap semantics but retains an explicit choreography gap", () => {
+test("function wrapping selects wrap semantics with executable choreography conformance", () => {
   const animation = createFunctionWrapAnimationAsset();
   const baseline = equationAnimationConformanceBaseline(animation.id);
   const transformation = animation.transformations[0]!;
@@ -43,7 +42,7 @@ test("function wrapping selects wrap semantics but retains an explicit choreogra
   );
   assert.equal(observedMotif(animation), baseline.observedMotif);
   assert.equal(baseline.requiredMotif, "wrap");
-  assert.match(baseline.gaps[0]!, /opacity handoff/);
+  assert.deepEqual(baseline.gaps, []);
 });
 
 test("distribution fan-out is semantically rich but geometrically collapsed", () => {
