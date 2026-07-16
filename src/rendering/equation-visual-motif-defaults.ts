@@ -38,6 +38,13 @@ export const defaultEquationTransformVisualMotifRules:
       summary: "Function wrapper artifacts exit while persistent arguments shift."
     },
     {
+      transformationKind: "substituteValue",
+      descriptor: descriptorForEquationMotif("substitute"),
+      canonicalOperationIds: ["kp.core.substitute"],
+      trustedMotifIds: ["substitute"],
+      summary: "The supplied value persists through transmission before replacing the prior occupant."
+    },
+    {
       transformationKind: "multiplyNegativeBothSidesInequality",
       descriptor: descriptorForEquationMotif("relation-flip"),
       summary: "The inequality relation turns while negative multiplication enters."

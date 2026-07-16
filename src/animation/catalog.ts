@@ -23,7 +23,8 @@ import {
 import { createLinearSolveAnimationAsset } from "./linear-solve-adapter.ts";
 import { createProgrammingAnimationAssets } from "./programming-adapter.ts";
 import {
-  createAcceptedGeneratedAddZeroAnimationAsset
+  createAcceptedGeneratedAddZeroAnimationAsset,
+  createAcceptedGeneratedSubstitutionAnimationAsset
 } from "./llm-animation-draft-examples.ts";
 import {
   createAcceptedGeneratedPipelineDiagramAnimationAsset
@@ -39,6 +40,7 @@ export function createKpAnimationAssets(): readonly KpAnimationAsset[] {
   return [
     ...createGeneratedAlgebraAnimationAssets(),
     createAcceptedGeneratedAddZeroAnimationAsset(),
+    createAcceptedGeneratedSubstitutionAnimationAsset(),
     createAcceptedGeneratedPipelineDiagramAnimationAsset(),
     ...createGeneratedProblemAnimationAssets(),
     ...createGraphAnimationAssets(),

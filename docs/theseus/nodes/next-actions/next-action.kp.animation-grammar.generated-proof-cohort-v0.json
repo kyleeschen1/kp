@@ -2,15 +2,20 @@
   "id": "next-action.kp.animation-grammar.generated-proof-cohort-v0",
   "kind": "next-action",
   "title": "Add Generated Semantic Proof Cohort",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Ship generated wrap, distribution, substitution, and delayed invalid-step reveal through canonical operation resolution. Verification: broad plus manual runtime.",
+  "summary": "Added a generated semantic proof cohort with catalogued wrap, distribution, and substitution animations; substitution now transmits persistent value lineage along deterministic paths, intentional invalid states use on-request epistemic disclosure, and unknown operations return human-readable typed repair gaps.",
   "severity": "high",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/generated-semantic-proof-cohort.ts",
+      "summary": "Enforces canonical resolution and deterministic compile evidence for the generated cohort."
     }
   ],
   "dependsOn": {
@@ -49,5 +54,35 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test focused generated semantic animation tests",
+      "status": "passed",
+      "scope": "30 focused unit and editor coverage tests",
+      "checkedAt": "2026-07-16T03:06:08.878Z"
+    },
+    {
+      "command": "npx playwright test editor animation visuals chromium",
+      "status": "passed",
+      "scope": "24 editor browser tests",
+      "checkedAt": "2026-07-16T03:06:08.943Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T03:06:08.985Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T03:06:09.036Z",
+      "scope": "Theseus graph and event history"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a generated semantic proof cohort with catalogued wrap, distribution, and substitution animations; substitution now transmits persistent value lineage along deterministic paths, intentional invalid states use on-request epistemic disclosure, and unknown operations return human-readable typed repair gaps."
+  }
 }

@@ -55,7 +55,7 @@ interface EnclosureChoreographyContext {
 }
 
 interface LineageChoreographyContext {
-  readonly kind: "copy-fan-out" | "merge-fan-in";
+  readonly kind: "copy-fan-out" | "merge-fan-in" | "substitute";
   readonly relationRecordId: string;
   readonly frame: KpCopyFanOutChoreographyFrame;
   readonly motionPathsByMotionId: KpMeasuredEquationTransitionGeometry["precomputedMotionPathsByMotionId"];
@@ -186,7 +186,7 @@ function sampleRelation(
         scale: 0.85 + 0.15 * eased
       }));
     case "exit":
-      if (lineageChoreography?.kind === "copy-fan-out") {
+      if (lineageChoreography?.kind === "copy-fan-out" || lineageChoreography?.kind === "substitute") {
         const visibility = 1 - lineageChoreography.frame.phases["arrive-descendants"];
         return sourceTokens.map((token) => frameToken(token, "source", {
           opacity: visibility,
@@ -276,7 +276,7 @@ function createLineageChoreographyContext(
 ): LineageChoreographyContext | undefined {
   const kind = geometry.lineageChoreographyKind;
   const relation = geometry.relations.find((candidate) =>
-    kind === "copy-fan-out"
+    kind === "copy-fan-out" || kind === "substitute"
       ? candidate.lifecycle === "split" && candidate.source !== undefined && candidate.target !== undefined
       : kind === "merge-fan-in"
         ? candidate.lifecycle === "merge" && candidate.source !== undefined && candidate.target !== undefined
@@ -286,10 +286,10 @@ function createLineageChoreographyContext(
     return undefined;
   }
 
-  const sourceEntityId = kind === "copy-fan-out"
+  const sourceEntityId = kind === "copy-fan-out" || kind === "substitute"
     ? relation.source.selectorIds[0]
     : relation.target.selectorIds[0];
-  const descendantEntityIds = kind === "copy-fan-out"
+  const descendantEntityIds = kind === "copy-fan-out" || kind === "substitute"
     ? relation.target.selectorIds
     : relation.source.selectorIds;
   if (sourceEntityId === undefined || descendantEntityIds.length < 1) return undefined;
@@ -317,7 +317,7 @@ function createLineageChoreographyContext(
     frame: sampleKpCopyFanOutChoreography({
       plan,
       progress,
-      direction: kind === "copy-fan-out" ? "forward" : "rewind"
+      direction: kind === "copy-fan-out" || kind === "substitute" ? "forward" : "rewind"
     }),
     motionPathsByMotionId: geometry.precomputedMotionPathsByMotionId
   };
@@ -331,7 +331,7 @@ function sampleLineageRelation(
 ): readonly KpEquationTokenMotionFrameToken[] {
   if (relation.source === undefined || relation.target === undefined) return [];
 
-  if (context.kind === "copy-fan-out") {
+  if (context.kind === "copy-fan-out" || context.kind === "substitute") {
     const origin = relation.source.bounds;
     const settle = context.frame.phases["settle-descendants"];
     return [

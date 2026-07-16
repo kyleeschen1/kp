@@ -116,7 +116,7 @@ function lineageTokenPathPlans(
 ): ReadonlyMap<string, KpEquationMotionPathCandidate> {
   const kind = geometry.lineageChoreographyKind;
   const relation = geometry.relations.find((candidate) =>
-    kind === "copy-fan-out"
+    kind === "copy-fan-out" || kind === "substitute"
       ? candidate.lifecycle === "split"
       : kind === "merge-fan-in"
         ? candidate.lifecycle === "merge"
@@ -125,12 +125,16 @@ function lineageTokenPathPlans(
   if (kind === undefined || relation?.source === undefined || relation.target === undefined) {
     return new Map();
   }
-  const tokens = kind === "copy-fan-out" ? geometry.targetTokens : geometry.sourceTokens;
-  const motionIds = kind === "copy-fan-out"
+  const tokens = kind === "copy-fan-out" || kind === "substitute"
+    ? geometry.targetTokens
+    : geometry.sourceTokens;
+  const motionIds = kind === "copy-fan-out" || kind === "substitute"
     ? relation.target.motionIds
     : relation.source.motionIds;
   const origin = center(
-    kind === "copy-fan-out" ? relation.source.bounds : relation.target.bounds
+    kind === "copy-fan-out" || kind === "substitute"
+      ? relation.source.bounds
+      : relation.target.bounds
   );
   return new Map(motionIds.map((motionId, branchIndex) => {
     const token = tokens.find((candidate) => candidate.motionId === motionId);

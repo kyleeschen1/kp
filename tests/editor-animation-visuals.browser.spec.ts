@@ -627,7 +627,7 @@ test("every pure equation descriptor renders visible KaTeX at start, midpoint, a
     }
   }
 
-  expect(checked).toBe(31);
+  expect(checked).toBe(32);
 });
 
 test("graph animations mount the shared semantic SVG viewport", async ({ page }) => {
@@ -840,6 +840,23 @@ test("accepted LLM draft renders as semantic token motion in the editor", async 
   await expect(transition.locator("[data-kp-motion-id]")).toHaveCount(7);
   await expect(transition.locator("[data-kp-editor-equation-source]")).toContainText("x+0=4");
   await expect(transition.locator("[data-kp-editor-equation-target]")).toContainText("x=4");
+});
+
+test("generated substitution transmits a persistent value along semantic paths", async ({ page }) => {
+  await page.goto("/?animation=editor-animation.animation.generated.substitute-three");
+  const player = page.locator("[data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-id",
+    "animation.generated.substitute-three"
+  );
+  await player.locator('[data-action="seek-editor-animation"]').fill("0.58");
+  const transition = player.locator("[data-kp-editor-equation-transition-id]");
+  await expect(transition).toHaveAttribute("data-kp-editor-equation-motif", "substitute");
+  await expect(transition.locator("[data-kp-editor-equation-source]")).toContainText("3⇒x+2");
+  await expect(transition.locator("[data-kp-editor-equation-target]")).toContainText("3⇒3+2");
+  await expect(transition.locator('[data-kp-equation-lineage-path-id]')).toHaveCount(2);
+  await expect(transition.locator('[data-kp-equation-motion-path-variant="arc-above"]')).toHaveCount(1);
+  await expect(transition.locator('[data-kp-equation-motion-path-variant="arc-below"]')).toHaveCount(1);
 });
 
 test("generated semantic diagram renders incremental SVG lifecycles on the shared player", async ({

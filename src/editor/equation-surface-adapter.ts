@@ -333,7 +333,7 @@ function applySemanticTokenMotion(input: {
       ...(motifKind === "wrap" || motifKind === "unwrap"
         ? { enclosureChoreographyKind: motifKind }
         : {}),
-      ...(motifKind === "copy-fan-out" || motifKind === "merge-fan-in"
+      ...(motifKind === "copy-fan-out" || motifKind === "merge-fan-in" || motifKind === "substitute"
         ? { lineageChoreographyKind: motifKind }
         : {})
     });

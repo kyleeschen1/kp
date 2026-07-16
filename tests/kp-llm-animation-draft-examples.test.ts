@@ -6,7 +6,9 @@ import {
 } from "../src/animation/llm-animation-draft-compiler.ts";
 import {
   acceptedGeneratedAddZeroDraft,
+  acceptedGeneratedSubstitutionDraft,
   createAcceptedGeneratedAddZeroAnimationAsset,
+  createAcceptedGeneratedSubstitutionAnimationAsset,
   rejectedGeneratedAnimationDraftExamples
 } from "../src/animation/llm-animation-draft-examples.ts";
 import {
@@ -25,6 +27,19 @@ test("accepted generated equation example compiles and is available to the edito
     "generated",
     "llm-authored"
   ]);
+});
+
+test("generated substitution compiles into the editor with explicit value lineage", () => {
+  const result = compileKpLlmAnimationDraft(acceptedGeneratedSubstitutionDraft);
+  assert.equal(result.status, "accepted");
+  if (result.status !== "accepted") return;
+  assert.deepEqual(
+    result.transitionIrs[0]?.relations.map((relation) => relation.lifecycle),
+    ["split", "exit", "persist", "persist", "persist"]
+  );
+  const animation = createAcceptedGeneratedSubstitutionAnimationAsset();
+  assert.ok(createKpAnimationAssets().some((candidate) => candidate.id === animation.id));
+  assert.equal(animation.transformations[0]?.transformType, "substituteValue");
 });
 
 test("rejected generated examples carry diagnostics and repair guidance", () => {

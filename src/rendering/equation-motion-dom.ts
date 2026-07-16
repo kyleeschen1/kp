@@ -34,7 +34,7 @@ export interface KpMeasuredEquationTransitionRelationGeometry {
 export interface KpMeasuredEquationTransitionGeometry {
   readonly transitionId: string;
   readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
-  readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | undefined;
+  readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
   readonly precomputedMotionPathsByMotionId?: Readonly<
     Record<string, KpEquationMotionPathCandidate>
   > | undefined;
@@ -97,7 +97,7 @@ export function measureKpEquationTransitionGeometry(input: {
   readonly sourceMotionIdsBySelector?: Readonly<Record<string, string>> | undefined;
   readonly targetMotionIdsBySelector?: Readonly<Record<string, string>> | undefined;
   readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
-  readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | undefined;
+  readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
 }): KpMeasuredEquationTransitionGeometry {
   const sourceTokens = measureAnnotatedEquationMotionTokens(input.sourceRoot);
   const targetTokens = measureAnnotatedEquationMotionTokens(input.targetRoot);
