@@ -77,6 +77,35 @@ test("selected editor animation controls play, pause, seek, step, rewind, and re
   await equationStage.evaluate((element) => {
     element.dataset["kpBrowserPersistentStageProbe"] = "mounted";
   });
+  const initialMotionPlanId = await semanticTransition.getAttribute(
+    "data-kp-editor-equation-motion-plan-id"
+  );
+  await player.locator("[data-kp-editor-animation-authoring-controls] summary").click();
+  const regeneration = page.evaluate(() => new Promise((resolve) => {
+    document.addEventListener("kp-editor-animation-regeneration-request", (event) => {
+      resolve((event as CustomEvent).detail);
+    }, { once: true });
+  }));
+  await player.locator('[data-kp-animation-authoring-control="path-preference"]')
+    .selectOption("arc-below");
+  expect(await regeneration).toMatchObject({
+    kind: "editor-animation-regeneration-request",
+    animationId: "animation.linear-solve.solve-x",
+    authoringRevision: 1,
+    presentation: { pathPreference: "arc-below" }
+  });
+  await expect(player).toHaveAttribute("data-kp-editor-animation-authoring-revision", "1");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-motion-plan-invalidated", "false");
+  await expect(semanticTransition).toHaveAttribute(
+    "data-kp-editor-equation-authoring-revision",
+    "1"
+  );
+  expect(await semanticTransition.getAttribute("data-kp-editor-equation-motion-plan-id"))
+    .not.toBe(initialMotionPlanId);
+  await expect(equationStage).toHaveAttribute(
+    "data-kp-browser-persistent-stage-probe",
+    "mounted"
+  );
   await expect(
     equationStage.locator(
       '[data-kp-editor-equation-source] [data-kp-motion-id*="after-subtract.lhs.plus3"]'

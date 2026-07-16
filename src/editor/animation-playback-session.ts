@@ -17,6 +17,7 @@ export interface KpEditorAnimationPlaybackSession {
   readonly animation: KpAnimationAsset;
   readonly catalog: readonly KpAnimationAsset[];
   readonly player: KpEditorAnimationPlayerState;
+  readonly tempoMultiplier: number;
   readonly lastTickMs?: number | undefined;
   readonly semanticCheckpointId?: string | undefined;
 }
@@ -31,6 +32,7 @@ export type KpEditorAnimationPlaybackAction =
       readonly checkpoint: KpEquationSemanticTimelineCheckpoint;
     }
   | { readonly type: "step"; readonly delta?: number | undefined }
+  | { readonly type: "set-tempo"; readonly multiplier: number }
   | { readonly type: "rewind"; readonly nowMs: number }
   | { readonly type: "reset" };
 
@@ -47,6 +49,7 @@ export function createKpEditorAnimationPlaybackSession(input: {
     descriptor: input.descriptor,
     animation: input.animation,
     catalog,
+    tempoMultiplier: 1,
     player: createKpEditorAnimationPlayerState({
       descriptor: input.descriptor,
       animation: input.animation,
@@ -99,6 +102,11 @@ export function reduceKpEditorAnimationPlaybackSession(
         playbackStatus: "paused",
         progress: session.player.progress + (action.delta ?? stepSize(session))
       });
+    case "set-tempo":
+      if (!Number.isFinite(action.multiplier) || action.multiplier < 0.5 || action.multiplier > 2) {
+        throw new Error("Editor animation tempo multiplier must be between 0.5 and 2.");
+      }
+      return { ...session, tempoMultiplier: action.multiplier };
     case "rewind":
       return resampleSession(session, {
         playbackStatus: "playing",
@@ -138,7 +146,10 @@ function advanceSession(
 
   const timestamp = normalizeTimestamp(nowMs);
   const deltaMs = Math.max(0, timestamp - session.lastTickMs);
-  const progress = Math.min(1, session.player.progress + deltaMs / durationMs);
+  const progress = Math.min(
+    1,
+    session.player.progress + deltaMs * session.tempoMultiplier / durationMs
+  );
   const complete = progress >= 1;
 
   return resampleSession(session, {

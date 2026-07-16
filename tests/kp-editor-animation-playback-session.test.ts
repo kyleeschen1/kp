@@ -129,3 +129,22 @@ test("editor playback seeks stable semantic checkpoints without direction jumps"
   assert.equal(rewind.semanticCheckpointId, checkpoint.id);
   assert.equal(rewind.player.direction, "rewind");
 });
+
+test("editor playback applies authoring tempo without changing the shared clock contract", () => {
+  const faster = reduceKpEditorAnimationPlaybackSession(createSolveXSession(), {
+    type: "set-tempo",
+    multiplier: 2
+  });
+  const playing = reduceKpEditorAnimationPlaybackSession(faster, {
+    type: "play",
+    nowMs: 1_000
+  });
+  const advanced = reduceKpEditorAnimationPlaybackSession(playing, {
+    type: "tick",
+    nowMs: 1_300
+  });
+
+  assert.equal(faster.tempoMultiplier, 2);
+  assert.equal(advanced.player.progress, 0.25);
+  assert.equal(advanced.player.runtimeFrame.clock.progress, 0.25);
+});

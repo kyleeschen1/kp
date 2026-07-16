@@ -37,10 +37,22 @@ export function createKpEditorPrecomputedEquationMotionPlan(input: {
   readonly id: string;
   readonly geometry: KpMeasuredEquationTransitionGeometry;
   readonly motifKind: EquationVisualMotifKind;
+  readonly spacing?: "compact" | "balanced" | "spacious" | undefined;
+  readonly pathPreference?:
+    | "automatic"
+    | "arc-above"
+    | "arc-below"
+    | "around-left"
+    | "around-right"
+    | undefined;
 }): KpEditorPrecomputedEquationMotionPlan {
+  const spacing = input.spacing ?? "balanced";
+  const pathPreference = input.pathPreference ?? "automatic";
   const layoutPlan = createKpEquationLayoutPlan({
     id: `${input.id}.layout`,
-    geometry: input.geometry
+    geometry: input.geometry,
+    destinationPadding: spacing === "compact" ? 1 : spacing === "spacious" ? 4 : 2,
+    transitPadding: spacing === "compact" ? 4 : spacing === "spacious" ? 10 : 6
   });
   const relationPathPlans = new Map(
     input.geometry.relations.flatMap((relation) =>
@@ -49,11 +61,18 @@ export function createKpEditorPrecomputedEquationMotionPlan(input: {
         : [[relation.recordId, planKpEquationMotionPath({
             id: `${input.id}.path.${relation.recordId}`,
             layoutPlan,
-            relationRecordId: relation.recordId
+            relationRecordId: relation.recordId,
+            ...(pathPreference === "automatic"
+              ? {}
+              : { preferredVariant: pathPreference })
           })] as const]
     )
   );
-  const tokenPathPlans = lineageTokenPathPlans(input.geometry, input.id);
+  const tokenPathPlans = lineageTokenPathPlans(
+    input.geometry,
+    input.id,
+    pathPreference
+  );
   const geometry: KpMeasuredEquationTransitionGeometry = {
     ...input.geometry,
     precomputedMotionPathsByMotionId: Object.fromEntries(tokenPathPlans)
@@ -92,7 +111,8 @@ export function createKpEditorPrecomputedEquationMotionPlan(input: {
 
 function lineageTokenPathPlans(
   geometry: KpMeasuredEquationTransitionGeometry,
-  planId: string
+  planId: string,
+  pathPreference: "automatic" | "arc-above" | "arc-below" | "around-left" | "around-right"
 ): ReadonlyMap<string, KpEquationMotionPathCandidate> {
   const kind = geometry.lineageChoreographyKind;
   const relation = geometry.relations.find((candidate) =>
@@ -115,12 +135,17 @@ function lineageTokenPathPlans(
   return new Map(motionIds.map((motionId, branchIndex) => {
     const token = tokens.find((candidate) => candidate.motionId === motionId);
     if (token === undefined) throw new Error(`Missing lineage token ${motionId}.`);
-    const preferredVariant = branchIndex % 2 === 0 ? "arc-above" : "arc-below";
+    const preferredVariant = pathPreference === "automatic"
+      ? branchIndex % 2 === 0 ? "arc-above" : "arc-below"
+      : pathPreference;
+    const variants = pathPreference.startsWith("around")
+      ? ["around-left", "around-right"] as const
+      : ["arc-above", "arc-below"] as const;
     const path = planKpEquationMotionPathBetweenPoints({
       id: `${planId}.lineage.${branchIndex}`,
       start: origin,
       end: center(token.localRect),
-      variants: ["arc-above", "arc-below"],
+      variants,
       preferredVariant,
       clearance: 18 + branchIndex * 3,
       moverRadius: 0

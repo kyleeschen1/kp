@@ -8,10 +8,20 @@ import {
   type KpEditorAnimationPlaybackAction,
   type KpEditorAnimationPlaybackSession
 } from "./animation-playback-session.ts";
+import {
+  createKpEditorAnimationAuthoringState,
+  createKpEditorAnimationRegenerationRequest,
+  updateKpEditorAnimationAuthoringControl,
+  type KpEditorAnimationAuthoringControlId,
+  type KpEditorAnimationAuthoringState
+} from "./animation-authoring-controls.ts";
 
 export const KP_EDITOR_ANIMATION_FRAME_EVENT = "kp-editor-animation-frame";
+export const KP_EDITOR_ANIMATION_REGENERATION_EVENT =
+  "kp-editor-animation-regeneration-request";
 
 const sessions = new WeakMap<HTMLElement, KpEditorAnimationPlaybackSession>();
+const authoringStates = new WeakMap<HTMLElement, KpEditorAnimationAuthoringState>();
 const frameRequests = new WeakMap<HTMLElement, number>();
 
 export function hydrateKpEditorAnimationPlayers(root: ParentNode): void {
@@ -38,6 +48,7 @@ export function disposeKpEditorAnimationPlayers(root: ParentNode): void {
       player.removeEventListener("click", handlePlayerClick);
       player.removeEventListener("input", handlePlayerInput);
       sessions.delete(player);
+      authoringStates.delete(player);
       player.dataset["kpEditorAnimationDisposed"] = "true";
       delete player.dataset["kpEditorAnimationHydrated"];
     });
@@ -47,6 +58,12 @@ export function getKpEditorAnimationPlaybackSession(
   player: HTMLElement
 ): KpEditorAnimationPlaybackSession | undefined {
   return sessions.get(player);
+}
+
+export function getKpEditorAnimationAuthoringState(
+  player: HTMLElement
+): KpEditorAnimationAuthoringState | undefined {
+  return authoringStates.get(player);
 }
 
 export function dispatchKpEditorAnimationPlaybackAction(
@@ -97,6 +114,9 @@ function hydrateKpEditorAnimationPlayer(player: HTMLElement): void {
   });
 
   sessions.set(player, session);
+  const authoring = createKpEditorAnimationAuthoringState();
+  authoringStates.set(player, authoring);
+  syncAuthoringData(player, authoring);
   player.dataset["kpEditorAnimationHydrated"] = "true";
   player.addEventListener("click", handlePlayerClick);
   player.addEventListener("input", handlePlayerInput);
@@ -135,18 +155,82 @@ function handlePlayerInput(event: Event): void {
   const player = event.currentTarget;
   const input = event.target;
 
-  if (
-    !(player instanceof HTMLElement) ||
-    !(input instanceof HTMLInputElement) ||
-    input.dataset["action"] !== "seek-editor-animation"
-  ) {
+  if (!(player instanceof HTMLElement) || !(input instanceof HTMLInputElement || input instanceof HTMLSelectElement)) return;
+
+  const authoringControlId = input.dataset["kpAnimationAuthoringControl"] as
+    KpEditorAnimationAuthoringControlId | undefined;
+  if (authoringControlId !== undefined) {
+    updateAuthoringControl(player, authoringControlId, input);
     return;
   }
+
+  if (!(input instanceof HTMLInputElement) || input.dataset["action"] !== "seek-editor-animation") return;
 
   dispatchKpEditorAnimationPlaybackAction(player, {
     type: "seek",
     progress: Number(input.value)
   });
+}
+
+function updateAuthoringControl(
+  player: HTMLElement,
+  controlId: KpEditorAnimationAuthoringControlId,
+  input: HTMLInputElement | HTMLSelectElement
+): void {
+  const current = authoringStates.get(player) ?? createKpEditorAnimationAuthoringState();
+  const value = input instanceof HTMLInputElement && input.type === "checkbox"
+    ? input.checked
+    : input.value;
+  const next = updateKpEditorAnimationAuthoringControl({
+    state: current,
+    controlId,
+    value
+  });
+  authoringStates.set(player, next);
+  syncAuthoringData(player, next);
+  player.dataset["kpEditorAnimationMotionPlanInvalidated"] = "true";
+  player.querySelector<HTMLOutputElement>("[data-kp-editor-animation-authoring-status]")
+    ?.replaceChildren(document.createTextNode(
+      `Plan revision ${next.revision} · semantic edits regenerate canonical operations`
+    ));
+  if (controlId === "tempo") {
+    dispatchKpEditorAnimationPlaybackAction(player, {
+      type: "set-tempo",
+      multiplier: next.presentation.tempo
+    });
+  } else {
+    const session = sessions.get(player);
+    if (session !== undefined) syncPlayerDom(player, session);
+  }
+  player.dispatchEvent(new CustomEvent(KP_EDITOR_ANIMATION_REGENERATION_EVENT, {
+    bubbles: true,
+    detail: createKpEditorAnimationRegenerationRequest({
+      animationId: nextAnimationId(player),
+      state: next
+    })
+  }));
+}
+
+function syncAuthoringData(
+  player: HTMLElement,
+  state: KpEditorAnimationAuthoringState
+): void {
+  player.dataset["kpEditorAnimationAuthoringRevision"] = String(state.revision);
+  player.dataset["kpEditorAnimationSpacing"] = state.presentation.spacing;
+  player.dataset["kpEditorAnimationTempo"] = String(state.presentation.tempo);
+  player.dataset["kpEditorAnimationPathPreference"] = state.presentation.pathPreference;
+  player.dataset["kpEditorAnimationRoleMode"] = state.semantic.roleMode;
+  player.dataset["kpEditorAnimationLineageMode"] = state.semantic.lineageMode;
+  player.dataset["kpEditorAnimationProvenanceVisibility"] =
+    String(state.semantic.provenanceVisibility);
+  player.dataset["kpEditorAnimationSaliencePolicy"] = state.semantic.saliencePolicy;
+  player.dataset["kpEditorAnimationCorrectnessDisclosure"] =
+    state.semantic.correctnessDisclosure;
+  player.dataset["kpEditorAnimationGapPolicy"] = state.semantic.gapPolicy;
+}
+
+function nextAnimationId(player: HTMLElement): string {
+  return player.dataset["kpEditorAnimationId"] ?? "unknown-animation";
 }
 
 function schedulePlayerFrame(player: HTMLElement): void {

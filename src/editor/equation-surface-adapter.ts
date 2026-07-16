@@ -75,6 +75,7 @@ export interface KpEditorEquationStageFrame {
 export function createKpEditorEquationStageFrame(input: {
   readonly animation: KpAnimationAsset;
   readonly state: KpEditorAnimationPlayerState;
+  readonly authoringRevision?: number | undefined;
 }): KpEditorEquationStageFrame {
   const projection = projectKpEditorEquationRuntimeFrame({
     animation: input.animation,
@@ -98,7 +99,7 @@ export function createKpEditorEquationStageFrame(input: {
   const stageIdentityKey = projection.animationId;
   const contentKey = `${projection.direction}:${projection.transitions
     .map((transition) => transition.id)
-    .join(":")}`;
+    .join(":")}:authoring-${input.authoringRevision ?? 0}`;
 
   return {
     stageIdentityKey,
@@ -132,7 +133,15 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       return;
     }
 
-    const frame = createKpEditorEquationStageFrame({ animation, state });
+    const player = slot.closest<HTMLElement>("[data-kp-editor-animation-player]");
+    const authoringRevision = Number(
+      player?.dataset["kpEditorAnimationAuthoringRevision"] ?? 0
+    );
+    const frame = createKpEditorEquationStageFrame({
+      animation,
+      state,
+      authoringRevision
+    });
     if (frame.projection.transitions.length === 0) {
       renderUnavailable(
         slot,
@@ -195,6 +204,9 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
           token.style.setProperty("--kp-editor-equation-focus-progress", String(motif.progress));
         });
     });
+    if (player !== null) {
+      player.dataset["kpEditorAnimationMotionPlanInvalidated"] = "false";
+    }
   }
 };
 
@@ -328,7 +340,9 @@ function applySemanticTokenMotion(input: {
     precomputed = createKpEditorPrecomputedEquationMotionPlan({
       id: `${input.frame.contentKey}.transition.${input.transitionIndex}`,
       geometry,
-      motifKind: motifKind ?? "artifact-replace"
+      motifKind: motifKind ?? "artifact-replace",
+      spacing: editorSpacing(input.stage),
+      pathPreference: editorPathPreference(input.stage)
     });
     const existing = semanticMotionPlanCache.get(input.stage);
     const plans = existing?.contentKey === input.frame.contentKey
@@ -357,6 +371,8 @@ function applySemanticTokenMotion(input: {
   input.transitionElement.dataset["kpEditorEquationMotionPlanId"] = precomputed.id;
   input.transitionElement.dataset["kpEditorEquationLayoutPlanRevision"] =
     String(precomputed.layoutPlan.revision);
+  input.transitionElement.dataset["kpEditorEquationAuthoringRevision"] =
+    input.frame.contentKey.split(":authoring-").at(-1) ?? "0";
   input.transitionElement.dataset["kpEditorEquationPathPlanCount"] =
     String(precomputed.relationPathPlans.size + precomputed.tokenPathPlans.size);
   input.transitionElement.dataset["kpEditorEquationSemanticPreviousCheckpoint"] =
@@ -392,6 +408,25 @@ function applySemanticTokenMotion(input: {
       String(lineage.phases["transit-descendants"]);
   }
   return true;
+}
+
+function editorSpacing(
+  stage: HTMLElement
+): "compact" | "balanced" | "spacious" {
+  const value = stage.closest<HTMLElement>("[data-kp-editor-animation-player]")
+    ?.dataset["kpEditorAnimationSpacing"];
+  return value === "compact" || value === "spacious" ? value : "balanced";
+}
+
+function editorPathPreference(
+  stage: HTMLElement
+): "automatic" | "arc-above" | "arc-below" | "around-left" | "around-right" {
+  const value = stage.closest<HTMLElement>("[data-kp-editor-animation-player]")
+    ?.dataset["kpEditorAnimationPathPreference"];
+  return value === "arc-above" || value === "arc-below" ||
+    value === "around-left" || value === "around-right"
+    ? value
+    : "automatic";
 }
 
 function annotatedLatexForStates(

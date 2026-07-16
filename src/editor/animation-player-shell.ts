@@ -4,12 +4,18 @@ import type {
 import type {
   KpEditorAnimationPlayerState
 } from "./animation-player-state.ts";
+import {
+  createKpEditorAnimationAuthoringState,
+  type KpEditorAnimationAuthoringState
+} from "./animation-authoring-controls.ts";
 
 export function renderKpEditorAnimationPlayerShell(input: {
   readonly descriptor: KpEditorAnimationDescriptor;
   readonly player: KpEditorAnimationPlayerState;
+  readonly authoring?: KpEditorAnimationAuthoringState | undefined;
 }): string {
   const { descriptor, player } = input;
+  const authoring = input.authoring ?? createKpEditorAnimationAuthoringState();
   const progressPercent = Math.round(player.progress * 100);
   const hasControl = (kind: KpEditorAnimationDescriptor["controlKinds"][number]) =>
     descriptor.controlKinds.includes(kind);
@@ -42,8 +48,44 @@ export function renderKpEditorAnimationPlayerShell(input: {
         ` : ""}
         <p class="editor-animation-player__status" data-kp-editor-animation-status-label aria-live="polite">${statusLabel(player.playbackStatus, player.direction)}</p>
       </div>
+      ${renderAuthoringControls(authoring)}
     </section>
   `;
+}
+
+function renderAuthoringControls(state: KpEditorAnimationAuthoringState): string {
+  return `
+    <details class="editor-animation-player__authoring" data-kp-editor-animation-authoring-controls>
+      <summary>Semantic and motion authoring</summary>
+      <fieldset>
+        <legend>Semantic intent</legend>
+        ${selectControl("Role assignment", "role-mode", state.semantic.roleMode, ["canonical", "source-focused", "target-focused"])}
+        ${selectControl("Lineage", "lineage-mode", state.semantic.lineageMode, ["preserve", "copy", "merge", "replace"])}
+        <label>Provenance <input type="checkbox" data-kp-animation-authoring-control="provenance-visibility"${state.semantic.provenanceVisibility ? " checked" : ""} /></label>
+        ${selectControl("Salience", "salience-policy", state.semantic.saliencePolicy, ["source-to-target", "balanced", "target-first"])}
+        ${selectControl("Correctness disclosure", "correctness-disclosure", state.semantic.correctnessDisclosure, ["immediate", "checkpoint", "learner-request"])}
+        ${selectControl("Typed gaps", "gap-policy", state.semantic.gapPolicy, ["strict", "show-typed-gaps"])}
+      </fieldset>
+      <fieldset>
+        <legend>Presentation</legend>
+        ${selectControl("Spacing", "spacing", state.presentation.spacing, ["compact", "balanced", "spacious"])}
+        <label>Tempo <input type="range" min="0.5" max="2" step="0.1" value="${state.presentation.tempo}" data-kp-animation-authoring-control="tempo" /></label>
+        ${selectControl("Path", "path-preference", state.presentation.pathPreference, ["automatic", "arc-above", "arc-below", "around-left", "around-right"])}
+      </fieldset>
+      <output data-kp-editor-animation-authoring-status aria-live="polite">Plan revision ${state.revision} · semantic edits regenerate canonical operations</output>
+    </details>
+  `;
+}
+
+function selectControl(
+  label: string,
+  controlId: string,
+  value: string,
+  options: readonly string[]
+): string {
+  return `<label>${label} <select data-kp-animation-authoring-control="${controlId}">${options.map((option) =>
+    `<option value="${option}"${option === value ? " selected" : ""}>${option.replaceAll("-", " ")}</option>`
+  ).join("")}</select></label>`;
 }
 
 function surfaceLabel(

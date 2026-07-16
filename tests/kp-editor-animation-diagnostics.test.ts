@@ -10,6 +10,11 @@ import {
   createInitialEditorDocument,
   renderEditorDocument
 } from "../src/editor/editor.ts";
+import {
+  createKpEditorAnimationAuthoringState,
+  createKpEditorAnimationRegenerationRequest,
+  updateKpEditorAnimationAuthoringControl
+} from "../src/editor/animation-authoring-controls.ts";
 
 test("editor diagnostics expose sampled runtime state and missing bindings", () => {
   const catalog = createKpAnimationAssets();
@@ -65,4 +70,28 @@ test("selected editor animation includes its diagnostics panel", () => {
   assert.match(html, /data-kp-editor-animation-diagnostics-targets>1\/1</);
   assert.match(html, /data-kp-editor-animation-diagnostics-selectors>10\/10</);
   assert.match(html, /animation\.linear-solve\.solve-x\.forward/);
+});
+
+test("authoring controls produce inspectable canonical regeneration requests", () => {
+  const disclosure = updateKpEditorAnimationAuthoringControl({
+    state: createKpEditorAnimationAuthoringState(),
+    controlId: "correctness-disclosure",
+    value: "learner-request"
+  });
+  const gaps = updateKpEditorAnimationAuthoringControl({
+    state: disclosure,
+    controlId: "gap-policy",
+    value: "strict"
+  });
+  const request = createKpEditorAnimationRegenerationRequest({
+    animationId: "animation.generated.intentional-error",
+    state: gaps
+  });
+
+  assert.equal(request.authoringRevision, 2);
+  assert.equal(request.semantic.correctnessDisclosure, "learner-request");
+  assert.equal(request.semantic.gapPolicy, "strict");
+  assert.equal(request.presentation.pathPreference, "automatic");
+  assert.equal("coordinates" in request.presentation, false);
+  assert.equal("keyframes" in request.presentation, false);
 });

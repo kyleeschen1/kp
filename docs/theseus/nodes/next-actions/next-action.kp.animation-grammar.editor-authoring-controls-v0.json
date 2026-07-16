@@ -2,15 +2,20 @@
   "id": "next-action.kp.animation-grammar.editor-authoring-controls-v0",
   "kind": "next-action",
   "title": "Expose Semantic And Presentation Editing",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Expose role, lineage, provenance, salience, correctness, gaps, spacing, tempo, and path preferences as regenerable editor controls. Verification: broad.",
+  "summary": "Added separate semantic-intent and presentation authoring controls for roles, lineage, provenance, salience, correctness disclosure, typed gaps, spacing, tempo, and path preference; edits emit typed regeneration requests, revise cached plans, and preserve the mounted stage.",
   "severity": "high",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-authoring-controls.ts",
+      "summary": "Defines renderer-free authoring state and typed regeneration requests while keeping geometry and keyframes out of the model-facing contract."
     }
   ],
   "dependsOn": {
@@ -49,5 +54,35 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/kp-editor-animation-player-shell.test.ts tests/kp-editor-animation-diagnostics.test.ts",
+      "status": "passed",
+      "scope": "1026 unit tests",
+      "checkedAt": "2026-07-16T02:55:39.737Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "23 editor browser tests",
+      "checkedAt": "2026-07-16T02:55:39.800Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T02:55:39.844Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T02:55:39.888Z",
+      "scope": "Theseus graph and event history"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added separate semantic-intent and presentation authoring controls for roles, lineage, provenance, salience, correctness disclosure, typed gaps, spacing, tempo, and path preference; edits emit typed regeneration requests, revise cached plans, and preserve the mounted stage."
+  }
 }

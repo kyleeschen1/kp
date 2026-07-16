@@ -47,6 +47,21 @@ test("editor animation player shell renders an accessible surface and declared c
   assert.match(html, /value="0.25"/);
   assert.match(html, />25%<\/output>/);
   assert.match(html, /aria-live="polite">Paused · forward/);
+  assert.match(html, /data-kp-editor-animation-authoring-controls/);
+  for (const controlId of [
+    "role-mode",
+    "lineage-mode",
+    "provenance-visibility",
+    "salience-policy",
+    "correctness-disclosure",
+    "gap-policy",
+    "spacing",
+    "tempo",
+    "path-preference"
+  ]) {
+    assert.match(html, new RegExp(`data-kp-animation-authoring-control="${controlId}"`));
+  }
+  assert.match(html, /Plan revision 0/);
 });
 
 test("editor document mounts the selected animation player shell", () => {
