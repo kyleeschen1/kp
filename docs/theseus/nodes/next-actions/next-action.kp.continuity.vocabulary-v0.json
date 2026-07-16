@@ -2,9 +2,21 @@
   "id": "next-action.kp.continuity.vocabulary-v0",
   "kind": "next-action",
   "title": "Define visual material continuity vocabulary",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 2 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Defined material continuants, visual authority, non-semantic fragments, shared reconciliation bundles, and envelope bridges as a validated renderer-neutral vocabulary.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/animation/material-continuity.ts",
+      "summary": "Adds the typed material-continuity plan and validates all authority references."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-material-continuity.test.ts",
+      "summary": "Covers stable ownership, shared reconciliation, and rejection of ungrounded fragments or bridges."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +30,29 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-material-continuity.test.ts",
+      "status": "passed",
+      "scope": "material continuity vocabulary",
+      "checkedAt": "2026-07-16T19:12:57.368Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript contracts",
+      "checkedAt": "2026-07-16T19:12:57.438Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:12:57.501Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined material continuants, visual authority, non-semantic fragments, shared reconciliation bundles, and envelope bridges as a validated renderer-neutral vocabulary."
+  }
 }
