@@ -1,0 +1,93 @@
+{
+  "id": "next-action.kp.animation.no-nested-scroll-audit-v1",
+  "kind": "next-action",
+  "title": "Audit every animation descriptor for internal overflow",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Audited all 44 animation descriptors across 528 viewport/checkpoint samples; all 217 scrollbar findings are confined to equation object containers, with Fourier producing the largest 107px range.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.semantic-motion-library-loop-v1.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.no-nested-scroll-audit-v1 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.semantic-motion-library-loop-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-animation-design-diagnostic-audit.md",
+      "summary": "Catalog audit that establishes strategy cohorts and the ordered repair priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/animation-design-diagnostic-language.md",
+      "summary": "Diagnostic and promotion vocabulary governing the approved animation work."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-overflow.browser.spec.ts",
+      "summary": "Catalog-wide multi-viewport overflow audit and current-debt boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-animation-viewport-overflow-audit.md",
+      "summary": "Measured baseline, diagnosis, and repair boundary."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.semantic-motion-library-loop-v1",
+      "next-action.kp.animation.semantic-motion-library-loop-v1"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.semantic-motion-library-loop-v1"
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run typecheck",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts",
+    "npm test",
+    "npm run build"
+  ],
+  "expectedLearning": [
+    "Whether Audit every animation descriptor for internal overflow can be completed inside Semantic Motion Animation Library Long Loop."
+  ],
+  "allowedWork": [
+    "Only implement the 28 approved semantic-animation slices in stored order.",
+    "Eliminate nested animation scrollbars through responsive native layout while preserving glyph ink and traveling content.",
+    "Add canonical operations, correspondence, choreography, editor realization, tests, documentation, and Theseus evidence required by the approved slices."
+  ],
+  "disallowedWork": [
+    "Do not redesign unrelated dashboard, editor, graph, export, or page-level scrolling behavior.",
+    "Do not use whole-equation transform scaling or content clipping to hide overflow.",
+    "Do not add unapproved animation families or gestalt style packages."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/editor-animation-overflow.browser.spec.ts",
+      "status": "passed",
+      "scope": "44 descriptors, 528 samples",
+      "checkedAt": "2026-07-16T22:06:10.873Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript projects",
+      "checkedAt": "2026-07-16T22:06:10.935Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T22:06:11.004Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Audited all 44 animation descriptors across 528 viewport/checkpoint samples; all 217 scrollbar findings are confined to equation object containers, with Fourier producing the largest 107px range."
+  }
+}
