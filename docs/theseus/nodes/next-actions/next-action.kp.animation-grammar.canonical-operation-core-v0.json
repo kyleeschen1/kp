@@ -2,15 +2,25 @@
   "id": "next-action.kp.animation-grammar.canonical-operation-core-v0",
   "kind": "next-action",
   "title": "Define Canonical Operation Core",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Define renderer-neutral universal operation identifiers and semantic roles without algebra-specific target equations. Verification: standard.",
+  "summary": "Defined the versioned renderer-neutral canonical operation core, semantic role cardinalities, correspondence relations, and symmetric inverse pairs for persistence, lifecycle, substitution, copying, fan-out, merge, reorder, enclosure, grouping, and focus.",
   "severity": "low",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/canonical-operation.ts",
+      "summary": "Universal canonical operation identifiers and semantic roles."
+    },
+    {
+      "kind": "file",
+      "path": "tests/canonical-operation.test.ts",
+      "summary": "Core completeness, renderer-neutrality, copy persistence, and inverse-law coverage."
     }
   ],
   "dependsOn": {
@@ -48,5 +58,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-operation.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-16T00:49:27.810Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-07-16T00:49:27.856Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T00:49:27.893Z",
+      "scope": "graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined the versioned renderer-neutral canonical operation core, semantic role cardinalities, correspondence relations, and symmetric inverse pairs for persistence, lifecycle, substitution, copying, fan-out, merge, reorder, enclosure, grouping, and focus."
+  }
 }
