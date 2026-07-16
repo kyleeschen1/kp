@@ -30,6 +30,14 @@ const organicInput: KpGestaltStylePackageInput = {
     pacing: { tempo: 0.52, recognitionDwell: 0.64 },
     opacity: { continuantFloor: 0.96 }
   },
+  adaptation: {
+    numericBounds: [
+      { path: "path.curvature", minimum: 0.4, maximum: 0.8 },
+      { path: "microMotion.amplitude", minimum: 0, maximum: 0.2 }
+    ],
+    lockedChannelPaths: ["microMotion.function", "acceleration.character"]
+  },
+  lawIds: ["style.organic-subtle.exact-calm-settlement"],
   requiredCapabilities: ["motion.path.arc", "motion.seek.direct-sampling"],
   optionalCapabilities: ["focus.depth.css-2_5d"],
   trustedPrimitiveIds: ["kp.primitive.arc", "kp.primitive.identity-micro-motion"],
@@ -96,6 +104,31 @@ test("style validation rejects ranges, unbounded channels, and raw keyframes", (
   assert.ok(issues.some((issue) => issue.path === "version"));
   assert.ok(issues.some((issue) => issue.path === "channels.path.curvature"));
   assert.ok(issues.some((issue) => issue.path === "$.keyframes"));
+});
+
+test("style adaptation bounds contain published values and reject malformed ranges", () => {
+  const issues = validateKpGestaltStylePackage({
+    ...organicInput,
+    adaptation: {
+      numericBounds: [
+        { path: "path.curvature", minimum: 0.6, maximum: 0.5 },
+        { path: "microMotion.amplitude", minimum: 0.13, maximum: 0.2 }
+      ],
+      lockedChannelPaths: [
+        "microMotion.function",
+        "microMotion.function"
+      ]
+    }
+  });
+  assert.ok(issues.some((issue) =>
+    issue.message.includes("ordered normalized values")
+  ));
+  assert.ok(issues.some((issue) =>
+    issue.message.includes("falls outside its adaptation bounds")
+  ));
+  assert.ok(issues.some((issue) =>
+    issue.message.includes("Duplicate categorical channel path")
+  ));
 });
 
 test("base dependencies are exact and cannot self-reference", () => {

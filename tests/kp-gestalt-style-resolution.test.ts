@@ -22,6 +22,16 @@ const baseInput: KpGestaltStylePackageInput = {
     },
     focus: { profile: "flat", strength: 0.4 }
   },
+  adaptation: {
+    numericBounds: [
+      { path: "path.curvature", minimum: 0.1, maximum: 0.8 },
+      { path: "path.diagonalPreference", minimum: 0.1, maximum: 0.9 },
+      { path: "path.oppositeCornerPreference", minimum: 0.1, maximum: 1 },
+      { path: "focus.strength", minimum: 0.2, maximum: 0.8 }
+    ],
+    lockedChannelPaths: ["focus.profile"]
+  },
+  lawIds: ["style.base.exact-settlement"],
   requiredCapabilities: [],
   optionalCapabilities: [],
   trustedPrimitiveIds: ["kp.primitive.direct"],
@@ -47,6 +57,17 @@ const organicInput: KpGestaltStylePackageInput = {
     },
     microMotion: { function: "identity-sine", amplitude: 0.1 }
   },
+  adaptation: {
+    numericBounds: [
+      { path: "path.curvature", minimum: 0.5, maximum: 0.75 },
+      { path: "path.diagonalPreference", minimum: 0.6, maximum: 0.85 },
+      { path: "path.oppositeCornerPreference", minimum: 0.7, maximum: 1 },
+      { path: "microMotion.amplitude", minimum: 0.05, maximum: 0.15 },
+      { path: "focus.strength", minimum: 0.2, maximum: 0.8 }
+    ],
+    lockedChannelPaths: ["microMotion.function"]
+  },
+  lawIds: ["style.organic-subtle.exact-calm-settlement"],
   integrity: `sha256:${"c".repeat(64)}`
 };
 
@@ -159,5 +180,36 @@ test("runtime-imported style layers cannot override semantic choreography", () =
   assert.equal(
     (resolved.channels as unknown as { traversal?: unknown }).traversal,
     undefined
+  );
+});
+
+test("style layers remain inside the selected package adaptation family", () => {
+  const resolved = resolveKpGestaltStyle({
+    pinnedStyle: { id: "kp.organic-subtle", version: "1.0.0" },
+    catalog,
+    project: {
+      id: "project.too-restrained",
+      channels: {
+        path: {
+          curvature: 0.2,
+          diagonalPreference: 0.3,
+          oppositeCornerPreference: 0.4
+        },
+        microMotion: { function: "none", amplitude: 0.1 }
+      }
+    }
+  });
+  assert.equal(resolved.channels.path?.curvature, 0.6);
+  assert.equal(resolved.channels.path?.diagonalPreference, 0.7);
+  assert.equal(resolved.channels.microMotion?.function, "identity-sine");
+  assert.equal(resolved.channels.microMotion?.amplitude, 0.1);
+  assert.deepEqual(
+    resolved.diagnostics.map((diagnostic) => diagnostic.code),
+    [
+      "style.adaptation-bound-exceeded",
+      "style.adaptation-bound-exceeded",
+      "style.adaptation-bound-exceeded",
+      "style.locked-channel"
+    ]
   );
 });

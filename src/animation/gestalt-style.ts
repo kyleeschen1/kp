@@ -3,6 +3,46 @@ export interface KpGestaltStyleRef {
   readonly version: string;
 }
 
+export const kpGestaltNumericChannelPaths = [
+  "path.curvature",
+  "path.diagonalPreference",
+  "path.oppositeCornerPreference",
+  "propagation.strength",
+  "propagation.staggerStrength",
+  "microMotion.amplitude",
+  "deformation.tokenCeiling",
+  "deformation.fragmentCeiling",
+  "cohesion.strength",
+  "focus.strength",
+  "depth.strength",
+  "context.dimming",
+  "pacing.tempo",
+  "pacing.recognitionDwell",
+  "opacity.continuantFloor"
+] as const;
+
+export type KpGestaltNumericChannelPath =
+  (typeof kpGestaltNumericChannelPaths)[number];
+
+export const kpGestaltCategoricalChannelPaths = [
+  "microMotion.function",
+  "acceleration.character",
+  "focus.profile",
+  "depth.enabled"
+] as const;
+
+export type KpGestaltCategoricalChannelPath =
+  (typeof kpGestaltCategoricalChannelPaths)[number];
+
+export interface KpGestaltStyleAdaptation {
+  readonly numericBounds: readonly {
+    readonly path: KpGestaltNumericChannelPath;
+    readonly minimum: number;
+    readonly maximum: number;
+  }[];
+  readonly lockedChannelPaths: readonly KpGestaltCategoricalChannelPath[];
+}
+
 export interface KpGestaltStyleChannels {
   readonly path?: {
     readonly curvature: number;
@@ -45,6 +85,8 @@ export interface KpGestaltStylePackageInput extends KpGestaltStyleRef {
   readonly title: string;
   readonly base?: KpGestaltStyleRef | undefined;
   readonly channels: KpGestaltStyleChannels;
+  readonly adaptation: KpGestaltStyleAdaptation;
+  readonly lawIds: readonly string[];
   readonly requiredCapabilities: readonly string[];
   readonly optionalCapabilities: readonly string[];
   readonly trustedPrimitiveIds: readonly string[];
@@ -103,6 +145,8 @@ export function validateKpGestaltStylePackage(
     }
   }
   validateChannels(input.channels, issues);
+  validateAdaptation(input, issues);
+  requireIds(input.lawIds, "lawIds", issues);
   const requiredCapabilities = new Set(input.requiredCapabilities);
   input.optionalCapabilities.forEach((capability, index) => {
     if (requiredCapabilities.has(capability)) {
@@ -153,6 +197,84 @@ export function createKpGestaltStyleCatalog(
     catalog.set(key, structuredClone(style));
   });
   return catalog;
+}
+
+function validateAdaptation(
+  input: KpGestaltStylePackageInput,
+  issues: KpGestaltStyleIssue[]
+): void {
+  const knownNumericPaths = new Set<string>(kpGestaltNumericChannelPaths);
+  const numericPaths = new Set<string>();
+  input.adaptation.numericBounds.forEach((bound, index) => {
+    const path = `adaptation.numericBounds[${index}]`;
+    if (!knownNumericPaths.has(bound.path)) {
+      issue(`${path}.path`, `Unknown numeric channel path ${bound.path}.`, issues);
+    }
+    if (numericPaths.has(bound.path)) {
+      issue(`${path}.path`, `Duplicate numeric channel path ${bound.path}.`, issues);
+    }
+    numericPaths.add(bound.path);
+    if (
+      !Number.isFinite(bound.minimum) ||
+      !Number.isFinite(bound.maximum) ||
+      bound.minimum < 0 ||
+      bound.maximum > 1 ||
+      bound.minimum > bound.maximum
+    ) {
+      issue(
+        path,
+        "Adaptation bounds must be ordered normalized values between 0 and 1.",
+        issues
+      );
+    }
+    const channelValue = readChannelPath(input.channels, bound.path);
+    if (
+      typeof channelValue === "number" &&
+      (channelValue < bound.minimum || channelValue > bound.maximum)
+    ) {
+      issue(
+        path,
+        `Published channel value ${channelValue} falls outside its adaptation bounds.`,
+        issues
+      );
+    }
+  });
+  const knownLockedPaths = new Set<string>(kpGestaltCategoricalChannelPaths);
+  const lockedPaths = new Set<string>();
+  input.adaptation.lockedChannelPaths.forEach((path, index) => {
+    if (!knownLockedPaths.has(path)) {
+      issue(
+        `adaptation.lockedChannelPaths[${index}]`,
+        `Unknown categorical channel path ${path}.`,
+        issues
+      );
+    }
+    if (lockedPaths.has(path)) {
+      issue(
+        `adaptation.lockedChannelPaths[${index}]`,
+        `Duplicate categorical channel path ${path}.`,
+        issues
+      );
+    }
+    lockedPaths.add(path);
+  });
+}
+
+export function readKpGestaltChannelPath(
+  channels: KpGestaltStyleChannels,
+  path: KpGestaltNumericChannelPath | KpGestaltCategoricalChannelPath
+): unknown {
+  return readChannelPath(channels, path);
+}
+
+function readChannelPath(
+  channels: KpGestaltStyleChannels,
+  path: string
+): unknown {
+  return path.split(".").reduce<unknown>((value, key) => {
+    if (typeof value !== "object" || value === null) return undefined;
+    return (value as Record<string, unknown>)[key];
+  }, channels);
 }
 
 function validateChannels(

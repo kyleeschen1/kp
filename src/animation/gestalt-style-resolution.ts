@@ -1,5 +1,6 @@
 import {
   fingerprintKpGestaltStyleValue,
+  readKpGestaltChannelPath,
   type KpGestaltStyleChannels,
   type KpGestaltStylePackage,
   type KpGestaltStyleRef
@@ -27,6 +28,8 @@ export interface KpGestaltStyleResolutionDiagnostic {
     | "style.missing-package"
     | "style.base-cycle"
     | "style.semantic-override"
+    | "style.adaptation-bound-exceeded"
+    | "style.locked-channel"
     | "style.motif-constraint-applied";
   readonly path: string;
   readonly severity: "info" | "error";
@@ -49,14 +52,46 @@ export function resolveKpGestaltStyle(
   const diagnostics: KpGestaltStyleResolutionDiagnostic[] = [];
   const selectedStyle = input.viewerSubstitution ?? input.pinnedStyle;
   const chain = resolvePackageChain(selectedStyle, input.catalog, diagnostics);
+  const selectedPackage = chain.at(-1);
+  let selectedChannels = input.trustedPrimitiveDefaults ?? {};
+  chain.forEach((style) => {
+    selectedChannels = mergeChannels(selectedChannels, style.channels);
+  });
   const layers: Array<
     readonly [string, KpGestaltStyleChannels | undefined]
   > = [
     ["trusted-primitive-defaults", input.trustedPrimitiveDefaults],
     ...chain.map((style) => [`${style.id}@${style.version}`, style.channels] as const),
-    [input.project?.id ?? "project", input.project?.channels],
-    [input.animation?.id ?? "animation", input.animation?.channels],
-    [input.motif?.id ?? "motif", input.motif?.channels],
+    [
+      input.project?.id ?? "project",
+      constrainLayerToAdaptation(
+        input.project?.channels,
+        selectedPackage,
+        selectedChannels,
+        input.project?.id ?? "project",
+        diagnostics
+      )
+    ],
+    [
+      input.animation?.id ?? "animation",
+      constrainLayerToAdaptation(
+        input.animation?.channels,
+        selectedPackage,
+        selectedChannels,
+        input.animation?.id ?? "animation",
+        diagnostics
+      )
+    ],
+    [
+      input.motif?.id ?? "motif",
+      constrainLayerToAdaptation(
+        input.motif?.channels,
+        selectedPackage,
+        selectedChannels,
+        input.motif?.id ?? "motif",
+        diagnostics
+      )
+    ],
     [
       input.viewerSubstitution === undefined
         ? "viewer"
@@ -107,6 +142,61 @@ export function resolveKpGestaltStyle(
     diagnostics,
     fingerprint
   };
+}
+
+function constrainLayerToAdaptation(
+  layer: KpGestaltStyleChannels | undefined,
+  style: KpGestaltStylePackage | undefined,
+  selectedChannels: KpGestaltStyleChannels,
+  layerId: string,
+  diagnostics: KpGestaltStyleResolutionDiagnostic[]
+): KpGestaltStyleChannels | undefined {
+  if (layer === undefined || style === undefined) return layer;
+  const constrained = structuredClone(layer);
+  style.adaptation.numericBounds.forEach((bound) => {
+    const value = readKpGestaltChannelPath(constrained, bound.path);
+    if (
+      typeof value !== "number" ||
+      (value >= bound.minimum && value <= bound.maximum)
+    ) {
+      return;
+    }
+    diagnostics.push({
+      code: "style.adaptation-bound-exceeded",
+      path: `${layerId}.channels.${bound.path}`,
+      severity: "error",
+      message:
+        `Gestalt style layer ${layerId} requested ${bound.path}=${value}, outside ${style.id}@${style.version} bounds ${bound.minimum}–${bound.maximum}.`
+    });
+    deleteChannelPath(constrained, bound.path);
+  });
+  style.adaptation.lockedChannelPaths.forEach((path) => {
+    const value = readKpGestaltChannelPath(constrained, path);
+    const expected = readKpGestaltChannelPath(selectedChannels, path);
+    if (value === undefined || value === expected) return;
+    diagnostics.push({
+      code: "style.locked-channel",
+      path: `${layerId}.channels.${path}`,
+      severity: "error",
+      message:
+        `Gestalt style layer ${layerId} cannot change locked ${path} for ${style.id}@${style.version}.`
+    });
+    deleteChannelPath(constrained, path);
+  });
+  return constrained;
+}
+
+function deleteChannelPath(
+  channels: KpGestaltStyleChannels,
+  path: string
+): void {
+  const [group, property] = path.split(".");
+  if (group === undefined || property === undefined) return;
+  const record = channels as unknown as Record<string, Record<string, unknown> | undefined>;
+  const channel = record[group];
+  if (channel === undefined) return;
+  delete channel[property];
+  if (Object.keys(channel).length === 0) delete record[group];
 }
 
 function resolvePackageChain(
