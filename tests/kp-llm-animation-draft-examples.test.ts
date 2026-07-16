@@ -12,6 +12,7 @@ import {
 import {
   createKpGenericSelectorAnnotatedLatex
 } from "../src/editor/generic-semantic-latex.ts";
+import { readKpVersionedLlmAnimationDraft } from "../src/animation/llm-animation-draft-v2.ts";
 
 test("accepted generated equation example compiles and is available to the editor catalog", () => {
   const result = compileKpLlmAnimationDraft(acceptedGeneratedAddZeroDraft);
@@ -50,4 +51,15 @@ test("generic semantic LaTeX binds ordered LLM selector labels without renderer 
   assert.equal(annotated?.rawLatex, state.latex);
   assert.equal(annotated?.annotations.length, state.selectors.length);
   assert.match(annotated?.annotatedLatex ?? "", /kp-motion-id/);
+});
+
+test("the accepted v1 example migrates to a registered v2 derivation graph", () => {
+  const result = readKpVersionedLlmAnimationDraft(acceptedGeneratedAddZeroDraft);
+  assert.equal(result.status, "migrated-v1");
+  if (result.status !== "migrated-v1") return;
+  assert.equal(result.draft.states.length, 2);
+  assert.deepEqual(
+    result.draft.derivations[0]?.operations.map((operation) => operation.operationId),
+    ["kp.core.persist", "kp.core.eliminate", "kp.core.persist", "kp.core.persist"]
+  );
 });

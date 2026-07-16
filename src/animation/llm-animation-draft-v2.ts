@@ -1,0 +1,279 @@
+import {
+  createKpCanonicalOperationProjectPins,
+  type KpCanonicalOperationPackPin,
+  type KpCanonicalOperationProjectPins
+} from "../semantic/canonical-operation-pack.ts";
+import {
+  kpCanonicalOperationRegistry,
+  resolveKpCanonicalOperation
+} from "../semantic/canonical-operation-registry.ts";
+import { findKpCanonicalOperationCoreDescriptor } from "../semantic/canonical-operation.ts";
+import type { KpSemanticEntityProvenance } from "../semantic/semantic-entity-provenance.ts";
+import type { KpEpistemicAnnotation } from "../semantic/epistemic-status.ts";
+import type { KpAnimationSaliencePlan } from "./salience-plan.ts";
+import {
+  validateKpLlmAnimationDraftSchema,
+  type KpLlmAnimationDraft,
+  type KpLlmAnimationDraftCorrespondenceRecord
+} from "./llm-animation-draft.ts";
+
+export const kpLlmAnimationDraftV2SchemaVersion = "kp.llm-animation-draft.v2" as const;
+
+export interface KpLlmAnimationDraftV2Entity {
+  readonly id: string;
+  readonly semanticKind: string;
+  readonly label: string;
+  readonly parentId?: string | undefined;
+  readonly provenance: KpSemanticEntityProvenance;
+}
+
+export interface KpLlmAnimationDraftV2State {
+  readonly id: string;
+  readonly title: string;
+  readonly surfaceKind: "equation" | "diagram";
+  readonly content: { readonly latex: string } | { readonly sceneId: string };
+  readonly entities: readonly KpLlmAnimationDraftV2Entity[];
+  readonly epistemic: KpEpistemicAnnotation;
+}
+
+export interface KpLlmAnimationDraftV2Operation {
+  readonly id: string;
+  readonly operationId: string;
+  readonly roleBindings: Readonly<Record<string, readonly string[]>>;
+}
+
+export interface KpLlmAnimationDraftV2Derivation {
+  readonly id: string;
+  readonly title: string;
+  readonly sourceStateIds: readonly string[];
+  readonly targetStateIds: readonly string[];
+  readonly operations: readonly KpLlmAnimationDraftV2Operation[];
+  readonly provenance: KpSemanticEntityProvenance;
+  readonly epistemic: KpEpistemicAnnotation;
+}
+
+export interface KpLlmAnimationDraftV2 {
+  readonly schemaVersion: typeof kpLlmAnimationDraftV2SchemaVersion;
+  readonly id: string;
+  readonly title: string;
+  readonly operationPacks: readonly KpCanonicalOperationPackPin[];
+  readonly states: readonly KpLlmAnimationDraftV2State[];
+  readonly derivations: readonly KpLlmAnimationDraftV2Derivation[];
+  readonly saliencePlan: KpAnimationSaliencePlan;
+}
+
+export interface KpLlmAnimationDraftV2Issue {
+  readonly path: string;
+  readonly code: "draft-v2.type" | "draft-v2.required" | "draft-v2.reference" | "draft-v2.operation" | "draft-v2.unsafe";
+  readonly message: string;
+}
+
+export type KpVersionedLlmAnimationDraftReadResult =
+  | { readonly status: "accepted-v2"; readonly sourceVersion: "v2"; readonly draft: KpLlmAnimationDraftV2; readonly issues: readonly [] }
+  | { readonly status: "migrated-v1"; readonly sourceVersion: "v1"; readonly draft: KpLlmAnimationDraftV2; readonly issues: readonly [] }
+  | { readonly status: "rejected"; readonly issues: readonly KpLlmAnimationDraftV2Issue[] };
+
+export function readKpVersionedLlmAnimationDraft(value: unknown): KpVersionedLlmAnimationDraftReadResult {
+  if (isRecord(value) && value["schemaVersion"] === kpLlmAnimationDraftV2SchemaVersion) {
+    const issues = validateKpLlmAnimationDraftV2(value);
+    return issues.length === 0
+      ? { status: "accepted-v2", sourceVersion: "v2", draft: value as unknown as KpLlmAnimationDraftV2, issues: [] }
+      : { status: "rejected", issues };
+  }
+  const v1Issues = validateKpLlmAnimationDraftSchema(value);
+  if (v1Issues.length > 0) {
+    return {
+      status: "rejected",
+      issues: v1Issues.map((issue) => ({
+        path: issue.path,
+        code: "draft-v2.type" as const,
+        message: issue.message
+      }))
+    };
+  }
+  const draft = migrateKpLlmAnimationDraftV1(value as KpLlmAnimationDraft);
+  const issues = validateKpLlmAnimationDraftV2(draft);
+  return issues.length === 0
+    ? { status: "migrated-v1", sourceVersion: "v1", draft, issues: [] }
+    : { status: "rejected", issues };
+}
+
+export function validateKpLlmAnimationDraftV2(value: unknown): readonly KpLlmAnimationDraftV2Issue[] {
+  const issues: KpLlmAnimationDraftV2Issue[] = [];
+  if (!isRecord(value)) return [{ path: "$", code: "draft-v2.type", message: "Draft v2 must be an object." }];
+  if (value["schemaVersion"] !== kpLlmAnimationDraftV2SchemaVersion) {
+    issues.push({ path: "$.schemaVersion", code: "draft-v2.required", message: `Expected ${kpLlmAnimationDraftV2SchemaVersion}.` });
+  }
+  const draft = value as unknown as KpLlmAnimationDraftV2;
+  const pins = projectPins(draft.operationPacks, issues);
+  const stateIds = uniqueIds(draft.states, "$.states", issues);
+  const entityIds = new Set<string>();
+  draft.states.forEach((state, stateIndex) => {
+    requireText(state.id, `$.states[${stateIndex}].id`, issues);
+    if (state.epistemic?.subject.id !== state.id || state.epistemic?.subject.kind !== "state") {
+      issues.push({ path: `$.states[${stateIndex}].epistemic.subject`, code: "draft-v2.reference", message: `State ${state.id} epistemic subject must reference itself.` });
+    }
+    state.entities.forEach((entity, entityIndex) => {
+      if (entityIds.has(entity.id)) issues.push({ path: `$.states[${stateIndex}].entities[${entityIndex}].id`, code: "draft-v2.reference", message: `Duplicate draft entity ${entity.id}.` });
+      entityIds.add(entity.id);
+      requireText(entity.semanticKind, `$.states[${stateIndex}].entities[${entityIndex}].semanticKind`, issues);
+      validateProvenance(entity.provenance, `$.states[${stateIndex}].entities[${entityIndex}].provenance`, issues);
+    });
+  });
+  uniqueIds(draft.derivations, "$.derivations", issues);
+  draft.derivations.forEach((derivation, index) => {
+    const path = `$.derivations[${index}]`;
+    referenceIds(derivation.sourceStateIds, stateIds, `${path}.sourceStateIds`, issues);
+    referenceIds(derivation.targetStateIds, stateIds, `${path}.targetStateIds`, issues);
+    if (derivation.epistemic?.subject.id !== derivation.id || derivation.epistemic?.subject.kind !== "transition") {
+      issues.push({ path: `${path}.epistemic.subject`, code: "draft-v2.reference", message: `Derivation ${derivation.id} epistemic subject must reference itself.` });
+    }
+    validateProvenance(derivation.provenance, `${path}.provenance`, issues);
+    if (!Array.isArray(derivation.operations) || derivation.operations.length === 0) {
+      issues.push({ path: `${path}.operations`, code: "draft-v2.required", message: `Derivation ${derivation.id} requires a registered operation.` });
+      return;
+    }
+    derivation.operations.forEach((operation, operationIndex) =>
+      validateOperation(operation, `${path}.operations[${operationIndex}]`, pins, entityIds, issues)
+    );
+  });
+  salienceEntityRefs(draft.saliencePlan).forEach((id) => {
+    if (!entityIds.has(id)) issues.push({ path: "$.saliencePlan", code: "draft-v2.reference", message: `Salience plan references missing entity ${id}.` });
+  });
+  rejectUnsafe(value, issues);
+  return issues;
+}
+
+export function migrateKpLlmAnimationDraftV1(draft: KpLlmAnimationDraft): KpLlmAnimationDraftV2 {
+  const states: KpLlmAnimationDraftV2State[] = draft.objects.map((object) => {
+    const selectorData = "latex" in object
+      ? object.selectors.map((selector) => ({ id: selector.id, semanticKind: selector.kind, label: selector.label ?? selector.id }))
+      : [
+          ...object.scene.nodes.map((item) => ({ id: item.selectorId, semanticKind: "diagram-node", label: item.label })),
+          ...object.scene.edges.map((item) => ({ id: item.selectorId, semanticKind: "diagram-edge", label: item.id })),
+          ...object.scene.groups.map((item) => ({ id: item.selectorId, semanticKind: "diagram-group", label: item.label })),
+          ...object.scene.labels.map((item) => ({ id: item.selectorId, semanticKind: "diagram-label", label: item.text }))
+        ];
+    return {
+      id: object.id,
+      title: object.title,
+      surfaceKind: "latex" in object ? "equation" : "diagram",
+      content: "latex" in object ? { latex: object.latex } : { sceneId: object.id },
+      entities: selectorData.map((selector) => ({
+        ...selector,
+        provenance: { kind: "authored" as const, sourceId: draft.id }
+      })),
+      epistemic: epistemic(object.id, "state", "valid", `Migrated from trusted ${draft.schemaVersion} input.`)
+    };
+  });
+  return {
+    schemaVersion: kpLlmAnimationDraftV2SchemaVersion,
+    id: draft.id,
+    title: draft.title,
+    operationPacks: [{ packId: "kp.core", version: "1.0.0" }],
+    states,
+    derivations: draft.transformations.map((transformation) => ({
+      id: transformation.id,
+      title: transformation.title,
+      sourceStateIds: [...transformation.sourceObjectIds],
+      targetStateIds: [...transformation.targetObjectIds],
+      operations: transformation.correspondenceMap.records.flatMap((record) => migrateRecord(record)),
+      provenance: { kind: "authored", sourceId: draft.id },
+      epistemic: epistemic(transformation.id, "transition", "unverified", "Migrated semantics retain the v1 correspondence evidence and require v2 verification.")
+    })),
+    saliencePlan: { id: `${draft.id}.salience`, kind: "animation-salience-plan", intents: [] }
+  };
+}
+
+function migrateRecord(record: KpLlmAnimationDraftCorrespondenceRecord): readonly KpLlmAnimationDraftV2Operation[] {
+  const operation = (suffix: string, operationId: string, roleBindings: Readonly<Record<string, readonly string[]>>): KpLlmAnimationDraftV2Operation => ({
+    id: `${record.id}.${suffix}`,
+    operationId,
+    roleBindings
+  });
+  switch (record.relation) {
+    case "identity":
+    case "role-change":
+      return [operation("persist", "kp.core.persist", { before: [record.sourceSelectorIds[0]!], after: [record.targetSelectorIds[0]!] })];
+    case "introduction":
+      return record.targetSelectorIds.map((id, index) => operation(`introduce-${index}`, "kp.core.introduce", { introduced: [id] }));
+    case "removal":
+    case "cancelation":
+      return record.sourceSelectorIds.map((id, index) => operation(`eliminate-${index}`, "kp.core.eliminate", { eliminated: [id] }));
+    case "fan-in":
+      return [operation("merge", "kp.core.merge", { sources: record.sourceSelectorIds, result: record.targetSelectorIds })];
+    case "fan-out":
+      return [operation("fan-out", "kp.core.fan-out", { source: record.sourceSelectorIds, destinations: record.targetSelectorIds })];
+    case "artifact":
+      return record.targetSelectorIds.length > 0
+        ? record.targetSelectorIds.map((id, index) => operation(`introduce-artifact-${index}`, "kp.core.introduce", { introduced: [id] }))
+        : record.sourceSelectorIds.map((id, index) => operation(`eliminate-artifact-${index}`, "kp.core.eliminate", { eliminated: [id] }));
+    case "focus":
+      return [];
+  }
+}
+
+function validateOperation(operation: KpLlmAnimationDraftV2Operation, path: string, pins: KpCanonicalOperationProjectPins | undefined, entityIds: ReadonlySet<string>, issues: KpLlmAnimationDraftV2Issue[]): void {
+  if (pins === undefined) return;
+  const resolution = resolveKpCanonicalOperation({ registry: kpCanonicalOperationRegistry, pins, operationId: operation.operationId });
+  if (resolution.status !== "resolved") {
+    issues.push({ path: `${path}.operationId`, code: "draft-v2.operation", message: resolution.message });
+    return;
+  }
+  Object.entries(operation.roleBindings).forEach(([roleId, ids]) => ids.forEach((id) => {
+    if (!entityIds.has(id)) issues.push({ path: `${path}.roleBindings.${roleId}`, code: "draft-v2.reference", message: `Operation ${operation.id} references missing entity ${id}.` });
+  }));
+  if (operation.operationId.startsWith("kp.core.")) {
+    const descriptor = findKpCanonicalOperationCoreDescriptor(operation.operationId as Parameters<typeof findKpCanonicalOperationCoreDescriptor>[0]);
+    descriptor.roles.forEach((role) => {
+      const count = operation.roleBindings[role.id]?.length ?? 0;
+      const valid = role.cardinality === "exactly-one" ? count === 1 : role.cardinality === "zero-or-one" ? count <= 1 : count >= 1;
+      if (!valid) issues.push({ path: `${path}.roleBindings.${role.id}`, code: "draft-v2.operation", message: `Operation ${operation.id} role ${role.id} requires ${role.cardinality}; received ${count}.` });
+    });
+    Object.keys(operation.roleBindings).filter((roleId) => !descriptor.roles.some((role) => role.id === roleId)).forEach((roleId) => {
+      issues.push({ path: `${path}.roleBindings.${roleId}`, code: "draft-v2.operation", message: `Operation ${operation.id} binds unknown role ${roleId}.` });
+    });
+  }
+}
+
+function projectPins(value: readonly KpCanonicalOperationPackPin[] | undefined, issues: KpLlmAnimationDraftV2Issue[]): KpCanonicalOperationProjectPins | undefined {
+  try {
+    if (!Array.isArray(value) || value.length === 0) throw new Error("Draft v2 requires exact operation-pack pins.");
+    return createKpCanonicalOperationProjectPins(value);
+  } catch (error) {
+    issues.push({ path: "$.operationPacks", code: "draft-v2.operation", message: error instanceof Error ? error.message : String(error) });
+    return undefined;
+  }
+}
+
+function epistemic(id: string, kind: "state" | "transition", status: KpEpistemicAnnotation["status"], rationale: string): KpEpistemicAnnotation {
+  return { kind: "epistemic-annotation", subject: { kind, id }, status, rationale, evidenceIds: [], disclosure: { trigger: { kind: "immediate" }, announce: false } };
+}
+
+function validateProvenance(value: KpSemanticEntityProvenance | undefined, path: string, issues: KpLlmAnimationDraftV2Issue[]): void {
+  if (value === undefined || !["parsed", "inferred", "authored", "pedagogical"].includes(value.kind)) issues.push({ path, code: "draft-v2.required", message: `${path} requires explicit provenance.` });
+}
+
+function salienceEntityRefs(plan: KpAnimationSaliencePlan | undefined): readonly string[] {
+  if (plan === undefined || !Array.isArray(plan.intents)) return [];
+  return plan.intents.flatMap((intent) => {
+    switch (intent.kind) {
+      case "notice": case "predict": case "question": case "reveal": return intent.targetEntityIds;
+      case "compare": return [...intent.leftEntityIds, ...intent.rightEntityIds];
+      case "transmit": return [...intent.sourceEntityIds, ...intent.targetEntityIds];
+      case "supporting-context": return intent.contextEntityIds;
+    }
+  });
+}
+
+function uniqueIds(values: readonly { readonly id: string }[] | undefined, path: string, issues: KpLlmAnimationDraftV2Issue[]): ReadonlySet<string> {
+  const ids = new Set<string>();
+  if (!Array.isArray(values) || values.length === 0) { issues.push({ path, code: "draft-v2.required", message: `${path} must not be empty.` }); return ids; }
+  values.forEach((value, index) => { if (ids.has(value.id)) issues.push({ path: `${path}[${index}].id`, code: "draft-v2.reference", message: `Duplicate id ${value.id}.` }); ids.add(value.id); });
+  return ids;
+}
+
+function referenceIds(ids: readonly string[], available: ReadonlySet<string>, path: string, issues: KpLlmAnimationDraftV2Issue[]): void { ids.forEach((id) => { if (!available.has(id)) issues.push({ path, code: "draft-v2.reference", message: `Unknown state ${id}.` }); }); }
+function requireText(value: string, path: string, issues: KpLlmAnimationDraftV2Issue[]): void { if (typeof value !== "string" || value.trim().length === 0) issues.push({ path, code: "draft-v2.required", message: `${path} must not be empty.` }); }
+function rejectUnsafe(value: unknown, issues: KpLlmAnimationDraftV2Issue[], path = "$."): void { if (Array.isArray(value)) return void value.forEach((item, index) => rejectUnsafe(item, issues, `${path}[${index}]`)); if (!isRecord(value)) return; Object.entries(value).forEach(([key, child]) => { if (/^(dom|svg|html|pixels?|coordinates?|x|y|path|keyframes?|trajectory|timing|durationMs|delayMs)$/i.test(key)) issues.push({ path: `${path}.${key}`, code: "draft-v2.unsafe", message: `Renderer instruction ${key} is not allowed in draft v2.` }); rejectUnsafe(child, issues, `${path}.${key}`); }); }
+function isRecord(value: unknown): value is Record<string, unknown> { return typeof value === "object" && value !== null && !Array.isArray(value); }

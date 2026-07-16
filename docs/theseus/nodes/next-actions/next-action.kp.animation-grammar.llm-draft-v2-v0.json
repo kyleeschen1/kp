@@ -2,15 +2,30 @@
   "id": "next-action.kp.animation-grammar.llm-draft-v2-v0",
   "kind": "next-action",
   "title": "Define Derivation Graph Draft V2",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Add pinned operations, roles, provenance, salience, and epistemic status while preserving a v1 migration reader. Verification: standard.",
+  "summary": "Added a versioned derivation-graph draft v2 with exact operation-pack pins, registered operation role bindings, entity provenance, state and edge epistemic status, semantic salience, unsafe renderer-instruction rejection, and a deterministic v1 correspondence migration reader.",
   "severity": "high",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/llm-animation-draft-v2.ts",
+      "summary": "V2 draft schema, governance validation, versioned reader, and v1 semantic migration."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-llm-animation-draft.test.ts",
+      "summary": "V2 contract, v1 migration, unregistered rewrite, and unsafe motion coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-llm-animation-draft-examples.test.ts",
+      "summary": "Existing accepted example migration into registered canonical operations."
     }
   ],
   "dependsOn": {
@@ -48,5 +63,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-llm-animation-draft.test.ts tests/kp-llm-animation-draft-examples.test.ts",
+      "status": "passed",
+      "scope": "v2 draft and v1 migration reader",
+      "checkedAt": "2026-07-16T01:23:32.723Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T01:23:32.777Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T01:23:32.819Z",
+      "scope": "Theseus graph and event log"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a versioned derivation-graph draft v2 with exact operation-pack pins, registered operation role bindings, entity provenance, state and edge epistemic status, semantic salience, unsafe renderer-instruction rejection, and a deterministic v1 correspondence migration reader."
+  }
 }

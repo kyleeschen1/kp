@@ -5,6 +5,12 @@ import {
   validateKpLlmAnimationDraftSchema,
   type KpLlmAnimationDraft
 } from "../src/animation/llm-animation-draft.ts";
+import {
+  kpLlmAnimationDraftV2SchemaVersion,
+  readKpVersionedLlmAnimationDraft,
+  validateKpLlmAnimationDraftV2,
+  type KpLlmAnimationDraftV2
+} from "../src/animation/llm-animation-draft-v2.ts";
 
 const validDraft: KpLlmAnimationDraft = {
   schemaVersion: kpLlmAnimationDraftSchemaVersion,
@@ -132,4 +138,39 @@ test("constrained LLM animation draft schema reports version and relation errors
         "$.transformations[0].correspondenceMap.records[0].relation"
     )
   );
+});
+
+test("draft v2 requires pinned registered operations, roles, provenance, salience, and epistemic status", () => {
+  const migrated = readKpVersionedLlmAnimationDraft(validDraft);
+  assert.equal(migrated.status, "migrated-v1");
+  if (migrated.status !== "migrated-v1") return;
+  assert.equal(migrated.draft.schemaVersion, kpLlmAnimationDraftV2SchemaVersion);
+  assert.deepEqual(migrated.draft.operationPacks, [{ packId: "kp.core", version: "1.0.0" }]);
+  assert.ok(migrated.draft.derivations[0]?.operations.every((operation) => operation.operationId.startsWith("kp.core.")));
+  assert.equal(migrated.draft.states[0]?.entities[0]?.provenance.kind, "authored");
+  assert.equal(migrated.draft.states[0]?.epistemic.status, "valid");
+  assert.equal(migrated.draft.derivations[0]?.epistemic.status, "unverified");
+  assert.equal(migrated.draft.saliencePlan.kind, "animation-salience-plan");
+  assert.deepEqual(validateKpLlmAnimationDraftV2(migrated.draft), []);
+});
+
+test("draft v2 rejects unregistered rewrites and renderer-authored motion", () => {
+  const migrated = readKpVersionedLlmAnimationDraft(validDraft);
+  assert.notEqual(migrated.status, "rejected");
+  if (migrated.status === "rejected") return;
+  const firstDerivation = migrated.draft.derivations[0]!;
+  const invalid = {
+    ...migrated.draft,
+    derivations: [{
+      ...firstDerivation,
+      operations: [{
+        ...firstDerivation.operations[0]!,
+        operationId: "kp.core.teleport"
+      }, ...firstDerivation.operations.slice(1)]
+    }],
+    keyframes: [{ x: 10, y: 20 }]
+  } as unknown as KpLlmAnimationDraftV2;
+  const issues = validateKpLlmAnimationDraftV2(invalid);
+  assert.ok(issues.some((issue) => issue.code === "draft-v2.operation" && /Unknown canonical operation/.test(issue.message)));
+  assert.ok(issues.some((issue) => issue.code === "draft-v2.unsafe" && /keyframes/.test(issue.message)));
 });
