@@ -2,15 +2,25 @@
   "id": "next-action.kp.animation-grammar.semantic-entity-provenance-v0",
   "kind": "next-action",
   "title": "Define Semantic Identity And Provenance",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Separate semantic entity identity from display fragments and retain parsed, inferred, authored, and pedagogical provenance. Verification: standard.",
+  "summary": "Defined hierarchical semantic entities whose parsed, inferred, authored, or pedagogical provenance remains authoritative while any number of renderer-neutral display fragments refer back to that identity.",
   "severity": "medium",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/semantic-entity-provenance.ts",
+      "summary": "Hierarchical semantic identity, provenance variants, display fragments, and registry closure laws."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-entity-provenance.test.ts",
+      "summary": "Source spans, provenance variants, display copies, hierarchy, and orphan rejection."
     }
   ],
   "dependsOn": {
@@ -48,5 +58,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-entity-provenance.test.ts",
+      "status": "passed",
+      "scope": "semantic identity and provenance contracts",
+      "checkedAt": "2026-07-16T01:07:32.567Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T01:07:32.615Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T01:07:32.655Z",
+      "scope": "Theseus graph and event log"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined hierarchical semantic entities whose parsed, inferred, authored, or pedagogical provenance remains authoritative while any number of renderer-neutral display fragments refer back to that identity."
+  }
 }
