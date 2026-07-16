@@ -2,8 +2,9 @@
   "id": "next-action.kp.choreography.timeline-v0",
   "kind": "next-action",
   "title": "Compile Envelope Timeline",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Compiled the universal choreography envelope onto the animation's existing normalized shared clock. Added focus readiness, semantic checkpoints, optional governed reflow-act overlap, recognition dwell, release, compound attention bridges, stateless direct seek, and mirrored rewind sampling.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,39 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/choreography-timeline.ts",
+      "summary": "Provides the phase timeline compiler and direct sampler without hidden history, milliseconds, or a second playback clock."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-choreography-timeline.test.ts",
+      "summary": "Proves sequential and governed overlap windows, recognition timing, attention bridges, deterministic seek, and rewind equivalence."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.compiler-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +63,22 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-choreography-timeline.test.ts tests/kp-choreography-compiler.test.ts tests/kp-choreography-envelope-laws.test.ts",
+      "status": "passed",
+      "scope": "Choreography timeline, compiler, and envelope contracts",
+      "checkedAt": "2026-07-16T16:35:56.020Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-16T16:35:56.082Z",
+      "scope": "TypeScript project closure"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.choreography.compiler-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Compiled the universal choreography envelope onto the animation's existing normalized shared clock. Added focus readiness, semantic checkpoints, optional governed reflow-act overlap, recognition dwell, release, compound attention bridges, stateless direct seek, and mirrored rewind sampling."
+  }
 }
