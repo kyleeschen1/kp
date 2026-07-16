@@ -467,7 +467,8 @@ test("dashboard exposes generated problem registry rows", () => {
       "definition.generated.calculus.derivative.power-rule"
     ).map((row) => row.id),
     [
-      "generated-problem-registry-generated-calculus-derivative-power-rule-x-cubed"
+      "generated-problem-registry-generated-calculus-derivative-power-rule-x-cubed",
+      "generated-problem-registry-generated-calculus-derivative-sum-rule-polynomial"
     ]
   );
   assert.deepEqual(

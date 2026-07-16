@@ -132,9 +132,17 @@ export function diagnoseKpAnimationDesign(input: {
     });
   }
 
+  const targetSelectorKind = (selectorId: string): string | undefined =>
+    input.animation.bundle.objects
+      .flatMap((object) => object.selectors)
+      .find((selector) => selector.id === selectorId)?.kind;
   const lossyRecord = correspondence?.records.find((record) =>
     record.sourceSelectorIds.length >= 3 &&
-    record.targetSelectorIds.length === 1
+    record.targetSelectorIds.length === 1 &&
+    (
+      transformation.transformType === "computeDotProduct" ||
+      targetSelectorKind(record.targetSelectorIds[0]!) === "operator"
+    )
   );
   if (lossyRecord !== undefined) {
     issues.push({

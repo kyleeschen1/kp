@@ -22,6 +22,10 @@ import {
   createKpDerivativePowerRuleChoreography
 } from "../animation/derivative-power-choreography.ts";
 import {
+  createKpCalculusRuleChoreography,
+  kpPromotedCalculusRuleTransformTypes
+} from "../animation/calculus-rule-choreography.ts";
+import {
   createKpFunctionWrapChoreography
 } from "../animation/function-wrap-choreography.ts";
 import {
@@ -309,6 +313,17 @@ function inspectChoreography(
       timeline: choreography.timeline,
       focusGroupIds: [choreography.focus.groupId]
     };
+  } else if (animation.transformations.some((transformation) =>
+    transformation.id === activeTransformationId &&
+    kpPromotedCalculusRuleTransformTypes.includes(
+      transformation.transformType as typeof kpPromotedCalculusRuleTransformTypes[number]
+    )
+  )) {
+    const choreography = createKpCalculusRuleChoreography({
+      animation,
+      transformationId: activeTransformationId
+    });
+    result = choreography;
   } else if (animation.transformations.some((transformation) =>
     transformation.transformType === "subtractBothSides" ||
     transformation.transformType === "cancelAdditiveInverses" ||

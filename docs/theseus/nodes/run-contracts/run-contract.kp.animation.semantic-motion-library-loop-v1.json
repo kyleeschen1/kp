@@ -121,7 +121,8 @@
     {
       "id": "next-action.kp.animation.calculus-rule-promotion-v1",
       "title": "Promote the calculus rule family",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.calculus-rule-promotion-v1 in Semantic Motion Animation Library Long Loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.radical-fragment-semantics-v1",

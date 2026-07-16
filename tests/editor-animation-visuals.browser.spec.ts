@@ -328,6 +328,54 @@ test("design diagnostics distinguish promoted motion from incomplete succession"
   );
 });
 
+test("promoted calculus rules expose live envelope and salience diagnostics", async ({
+  page
+}) => {
+  await page.goto("/");
+  const selector = page.locator('[data-action="set-editor-animation"]');
+  const cases = [
+    [
+      "editor-animation.animation.generated.calculus.derivative.sum-rule-polynomial",
+      "0.25",
+      "copy-fan-out"
+    ],
+    [
+      "editor-animation.animation.generated.calculus.derivative.sum-rule-polynomial",
+      "0.75",
+      "merge-fan-in"
+    ],
+    [
+      "editor-animation.animation.generated.calculus.integral.power-rule-quadratic",
+      "0.25",
+      "copy-fan-out"
+    ],
+    [
+      "editor-animation.animation.generated.calculus.integral.power-rule-quadratic",
+      "0.75",
+      "merge-fan-in"
+    ]
+  ] as const;
+
+  for (const [animationId, progress, motif] of cases) {
+    await selector.selectOption(animationId);
+    const player = page.locator("[data-kp-editor-animation-player]");
+    await player.locator('[data-action="seek-editor-animation"]').fill(progress);
+    const diagnostics = player.locator(
+      "[data-kp-editor-animation-gestalt-diagnostics]"
+    );
+    await expect(diagnostics.locator("[data-kp-editor-design-strategy]"))
+      .toHaveText(`operation-specific · ${motif}`);
+    await expect(diagnostics.locator("[data-kp-editor-design-issues]"))
+      .toHaveText("none");
+    await expect(diagnostics.locator("[data-kp-editor-gestalt-envelope-phase]"))
+      .not.toHaveText("unavailable");
+    await expect(diagnostics.locator("[data-kp-editor-gestalt-salience]"))
+      .not.toHaveText("unavailable");
+    await expect(diagnostics.locator("[data-kp-editor-gestalt-traversal]"))
+      .toContainText("execution · 1 ranks");
+  }
+});
+
 test("elevated focus adds depth without changing token x/y motion or layout", async ({
   page
 }) => {
