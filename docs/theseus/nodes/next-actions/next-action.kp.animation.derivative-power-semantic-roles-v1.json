@@ -1,0 +1,103 @@
+{
+  "id": "next-action.kp.animation.derivative-power-semantic-roles-v1",
+  "kind": "next-action",
+  "title": "Decompose derivative power-rule semantics",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Introduced a typed derivative power-rule semantic role model covering the derivative operator, differentiation variable, base, source exponent, target coefficient, target base, and decremented target exponent; generated the existing fixture selectors from those roles and encoded the mathematical constraints that distinguish transmission from decrement.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.semantic-motion-library-loop-v1.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.derivative-power-semantic-roles-v1 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.semantic-motion-library-loop-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-animation-design-diagnostic-audit.md",
+      "summary": "Catalog audit that establishes strategy cohorts and the ordered repair priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/animation-design-diagnostic-language.md",
+      "summary": "Diagnostic and promotion vocabulary governing the approved animation work."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/derivative-power-rule-semantics.ts",
+      "summary": "Typed derivative power-rule roles, derivations, and constraints."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-calculus-problem-fixture.ts",
+      "summary": "Derivative fixture selector coverage is generated from the semantic role model."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-derivative-power-rule-semantics.test.ts",
+      "summary": "Role, derivation, constraint, and validation unit coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-calculus-problem-fixture.test.ts",
+      "summary": "Fixture integration preserves exact semantic selector coverage."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.semantic-motion-library-loop-v1",
+      "next-action.kp.animation.semantic-motion-library-loop-v1"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.semantic-motion-library-loop-v1"
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run typecheck",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts",
+    "npm test",
+    "npm run build"
+  ],
+  "expectedLearning": [
+    "Whether Decompose derivative power-rule semantics can be completed inside Semantic Motion Animation Library Long Loop."
+  ],
+  "allowedWork": [
+    "Only implement the 28 approved semantic-animation slices in stored order.",
+    "Eliminate nested animation scrollbars through responsive native layout while preserving glyph ink and traveling content.",
+    "Add canonical operations, correspondence, choreography, editor realization, tests, documentation, and Theseus evidence required by the approved slices."
+  ],
+  "disallowedWork": [
+    "Do not redesign unrelated dashboard, editor, graph, export, or page-level scrolling behavior.",
+    "Do not use whole-equation transform scaling or content clipping to hide overflow.",
+    "Do not add unapproved animation families or gestalt style packages."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/kp-derivative-power-rule-semantics.test.ts tests/generated-calculus-problem-fixture.test.ts tests/generated-problem-registry.test.ts tests/kp-animation-generated-problem-import.test.ts",
+      "status": "passed",
+      "scope": "derivative semantic roles and generated fixture integration",
+      "checkedAt": "2026-07-16T22:38:38.277Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript projects",
+      "checkedAt": "2026-07-16T22:38:38.333Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T22:38:38.388Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Introduced a typed derivative power-rule semantic role model covering the derivative operator, differentiation variable, base, source exponent, target coefficient, target base, and decremented target exponent; generated the existing fixture selectors from those roles and encoded the mathematical constraints that distinguish transmission from decrement."
+  }
+}

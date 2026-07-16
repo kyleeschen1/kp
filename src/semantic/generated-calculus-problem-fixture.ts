@@ -11,6 +11,10 @@ import { createKpFlashcardSpec, type KpFlashcardSpec } from "./asset-flashcard.t
 import { createKpSemanticTransformation } from "./asset-transformation.ts";
 import type { AlgebraTraceFixture } from "./algebra-trace-port-fixture.ts";
 import type { GeneratedProblemAnimationFixture } from "./generated-problem-fixture.ts";
+import {
+  createKpDerivativePowerRuleSemanticRoles,
+  type KpDerivativePowerRuleSemanticRole
+} from "./derivative-power-rule-semantics.ts";
 
 export type GeneratedCalculusProblemFamilyId =
   | "generated.calculus.derivative"
@@ -147,6 +151,13 @@ function createGeneratedDerivativeProblemFixture(
 
   const ids = generatedDerivativeProblemIds(input);
   const latex = generatedDerivativeProblemLatex(input);
+  const semanticRoles = createKpDerivativePowerRuleSemanticRoles({
+    sourceObjectId: ids.initial,
+    targetObjectId: ids.derived,
+    differentiationVariable: input.variable,
+    base: input.base,
+    exponent: input.exponent
+  });
   const bundle = createKpAssetBundle({
     id: ids.asset,
     title: input.title,
@@ -155,22 +166,13 @@ function createGeneratedDerivativeProblemFixture(
         ids.initial,
         "Derivative expression",
         latex.initial,
-        [
-          selector(ids.initial, "operator", "operator", "d/dx"),
-          selector(ids.initial, "operator-variable", "term", input.variable),
-          selector(ids.initial, "base", "term", input.base),
-          selector(ids.initial, "exponent", "term", String(input.exponent))
-        ]
+        semanticRoles.sourceRoles.map(derivativePowerRoleSelector)
       ),
       expressionObject(
         ids.derived,
         "After applying the power rule",
         latex.derived,
-        [
-          selector(ids.derived, "coefficient", "term", String(input.exponent)),
-          selector(ids.derived, "base", "term", input.base),
-          selector(ids.derived, "exponent", "term", String(input.exponent - 1))
-        ]
+        semanticRoles.targetRoles.map(derivativePowerRoleSelector)
       )
     ]
   });
@@ -773,6 +775,16 @@ function selector(
     id: `${objectId}.${suffix}`,
     kind,
     label
+  };
+}
+
+function derivativePowerRoleSelector(
+  role: KpDerivativePowerRuleSemanticRole
+): CreateKpAssetSelectorInput {
+  return {
+    id: role.selectorId,
+    kind: role.selectorKind,
+    label: role.label
   };
 }
 

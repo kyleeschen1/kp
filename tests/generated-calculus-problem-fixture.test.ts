@@ -22,6 +22,28 @@ test("generated calculus fixtures cover derivative and integral rules", () => {
     "generated.calculus.integral.power-rule-quadratic"
   ]);
 
+  const derivative = createGeneratedCalculusProblemFixture(
+    "generated.calculus.derivative.power-rule-x-cubed"
+  );
+  assert.deepEqual(
+    derivative.bundle.objects.map((object) =>
+      object.selectors.map((selector) => selector.id)
+    ),
+    [
+      [
+        "expression.generated.calculus.derivative.power-rule-x-cubed.initial.operator",
+        "expression.generated.calculus.derivative.power-rule-x-cubed.initial.operator-variable",
+        "expression.generated.calculus.derivative.power-rule-x-cubed.initial.base",
+        "expression.generated.calculus.derivative.power-rule-x-cubed.initial.exponent"
+      ],
+      [
+        "expression.generated.calculus.derivative.power-rule-x-cubed.derived.coefficient",
+        "expression.generated.calculus.derivative.power-rule-x-cubed.derived.base",
+        "expression.generated.calculus.derivative.power-rule-x-cubed.derived.exponent"
+      ]
+    ]
+  );
+
   const derivativeSum = createGeneratedCalculusProblemFixture(
     "generated.calculus.derivative.sum-rule-polynomial"
   );
