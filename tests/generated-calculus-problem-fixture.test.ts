@@ -12,6 +12,9 @@ import {
   createGeneratedCalculusProblemFixture,
   createGeneratedCalculusProblemFixtures
 } from "../src/semantic/generated-calculus-problem-fixture.ts";
+import {
+  compileKpSemanticEquationTransitionResult
+} from "../src/rendering/semantic-equation-transition-compiler.ts";
 
 test("generated calculus fixtures cover derivative and integral rules", () => {
   const fixtures = createGeneratedCalculusProblemFixtures();
@@ -43,6 +46,12 @@ test("generated calculus fixtures cover derivative and integral rules", () => {
       ]
     ]
   );
+  const derivativeTransition = compileKpSemanticEquationTransitionResult({
+    transformation: derivative.transformations[0]!,
+    bundle: derivative.bundle
+  });
+  assert.equal(derivativeTransition.status, "semantic");
+  assert.deepEqual(derivativeTransition.diagnostics, []);
 
   const derivativeSum = createGeneratedCalculusProblemFixture(
     "generated.calculus.derivative.sum-rule-polynomial"

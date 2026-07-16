@@ -12,6 +12,7 @@ import { createKpSemanticTransformation } from "./asset-transformation.ts";
 import type { AlgebraTraceFixture } from "./algebra-trace-port-fixture.ts";
 import type { GeneratedProblemAnimationFixture } from "./generated-problem-fixture.ts";
 import {
+  createKpDerivativePowerRuleCorrespondenceMap,
   createKpDerivativePowerRuleSemanticRoles,
   type KpDerivativePowerRuleSemanticRole
 } from "./derivative-power-rule-semantics.ts";
@@ -185,6 +186,10 @@ function createGeneratedDerivativeProblemFixture(
       sourceObjectIds: [ids.initial],
       targetObjectIds: [ids.derived],
       preserves: ["value", "structure"],
+      correspondenceMap: createKpDerivativePowerRuleCorrespondenceMap(
+        semanticRoles,
+        ids.transform
+      ),
       correspondence: [
         {
           sourceSelectorId: `${ids.initial}.base`,

@@ -2,6 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  checkCorrespondenceMapRewindLaw,
+  validateCorrespondenceMap
+} from "../src/semantic/correspondence.ts";
+import {
+  createKpDerivativePowerRuleCorrespondenceMap,
   createKpDerivativePowerRuleSemanticRoles
 } from "../src/semantic/derivative-power-rule-semantics.ts";
 
@@ -63,4 +68,34 @@ test("derivative power semantics reject unsupported exponents", () => {
     base: "x",
     exponent: 1
   }), /greater than one/);
+});
+
+test("derivative power correspondence gives every role one total lifecycle", () => {
+  const roles = createKpDerivativePowerRuleSemanticRoles({
+    sourceObjectId: "expression.source",
+    targetObjectId: "expression.target",
+    differentiationVariable: "x",
+    base: "x",
+    exponent: 3
+  });
+  const correspondence = createKpDerivativePowerRuleCorrespondenceMap(
+    roles,
+    "transform.derivative"
+  );
+
+  assert.deepEqual(correspondence.records.map((record) => record.relation), [
+    "removal",
+    "removal",
+    "identity",
+    "fan-out"
+  ]);
+  assert.deepEqual(
+    correspondence.records.at(-1)?.targetSelectorIds,
+    ["expression.target.coefficient", "expression.target.exponent"]
+  );
+  assert.deepEqual(validateCorrespondenceMap(correspondence, {
+    sourceSelectorIds: roles.sourceRoles.map((role) => role.selectorId),
+    targetSelectorIds: roles.targetRoles.map((role) => role.selectorId)
+  }), []);
+  assert.deepEqual(checkCorrespondenceMapRewindLaw(correspondence), []);
 });

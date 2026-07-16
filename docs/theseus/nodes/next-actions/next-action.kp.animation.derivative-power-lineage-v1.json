@@ -1,0 +1,108 @@
+{
+  "id": "next-action.kp.animation.derivative-power-lineage-v1",
+  "kind": "next-action",
+  "title": "Author derivative power-rule correspondence",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Authored a total derivative power-rule correspondence map: derivative operator and differentiation variable removals, persistent base identity, and exponent fan-out into coefficient transmission plus decrement. The compiler now accepts the fixture as semantic and diagnostics distinguish complete lineage from missing choreography.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.semantic-motion-library-loop-v1.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.derivative-power-lineage-v1 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.semantic-motion-library-loop-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-animation-design-diagnostic-audit.md",
+      "summary": "Catalog audit that establishes strategy cohorts and the ordered repair priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/animation-design-diagnostic-language.md",
+      "summary": "Diagnostic and promotion vocabulary governing the approved animation work."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/derivative-power-rule-semantics.ts",
+      "summary": "Total derivative power-rule correspondence builder."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-calculus-problem-fixture.ts",
+      "summary": "Generated derivative transformation now carries the rich lineage map."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-derivative-power-rule-semantics.test.ts",
+      "summary": "Lifecycle completeness and rewind-law coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-calculus-problem-fixture.test.ts",
+      "summary": "Semantic equation compiler acceptance for the derivative fixture."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-design-diagnostics.test.ts",
+      "summary": "Diagnostic boundary advances from fallback to lifecycle-generic."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.semantic-motion-library-loop-v1",
+      "next-action.kp.animation.semantic-motion-library-loop-v1"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.semantic-motion-library-loop-v1"
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run typecheck",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts",
+    "npm test",
+    "npm run build"
+  ],
+  "expectedLearning": [
+    "Whether Author derivative power-rule correspondence can be completed inside Semantic Motion Animation Library Long Loop."
+  ],
+  "allowedWork": [
+    "Only implement the 28 approved semantic-animation slices in stored order.",
+    "Eliminate nested animation scrollbars through responsive native layout while preserving glyph ink and traveling content.",
+    "Add canonical operations, correspondence, choreography, editor realization, tests, documentation, and Theseus evidence required by the approved slices."
+  ],
+  "disallowedWork": [
+    "Do not redesign unrelated dashboard, editor, graph, export, or page-level scrolling behavior.",
+    "Do not use whole-equation transform scaling or content clipping to hide overflow.",
+    "Do not add unapproved animation families or gestalt style packages."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/kp-derivative-power-rule-semantics.test.ts tests/generated-calculus-problem-fixture.test.ts tests/kp-animation-design-diagnostics.test.ts tests/kp-animation-generated-problem-import.test.ts",
+      "status": "passed",
+      "scope": "derivative lineage, compilation, diagnostics, and import",
+      "checkedAt": "2026-07-16T22:41:48.765Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript projects",
+      "checkedAt": "2026-07-16T22:41:48.819Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T22:41:48.872Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Authored a total derivative power-rule correspondence map: derivative operator and differentiation variable removals, persistent base identity, and exponent fan-out into coefficient transmission plus decrement. The compiler now accepts the fixture as semantic and diagnostics distinguish complete lineage from missing choreography."
+  }
+}

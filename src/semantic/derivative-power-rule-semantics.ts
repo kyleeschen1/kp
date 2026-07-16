@@ -1,3 +1,5 @@
+import type { CorrespondenceMap } from "./correspondence.ts";
+
 export type KpDerivativePowerRuleRoleId =
   | "source.derivative-operator"
   | "source.differentiation-variable"
@@ -155,6 +157,63 @@ export function createKpDerivativePowerRuleSemanticRoles(input: {
         id: "target-exponent-is-predecessor",
         roleIds: ["source.exponent", "target.exponent"],
         summary: "The surviving power is one less than the source exponent."
+      }
+    ]
+  };
+}
+
+export function createKpDerivativePowerRuleCorrespondenceMap(
+  roles: KpDerivativePowerRuleSemanticRoles,
+  transformationId: string
+): CorrespondenceMap {
+  if (transformationId.trim() === "") {
+    throw new Error("Derivative power-rule transformation id must not be empty.");
+  }
+  const selectorId = (roleId: KpDerivativePowerRuleRoleId): string => {
+    const semanticRole = [...roles.sourceRoles, ...roles.targetRoles].find(
+      (candidate) => candidate.id === roleId
+    );
+    if (semanticRole === undefined) {
+      throw new Error(`Derivative power-rule role ${roleId} is unavailable.`);
+    }
+    return semanticRole.selectorId;
+  };
+
+  return {
+    id: `${transformationId}.correspondence`,
+    records: [
+      {
+        id: "derivative-operator-consumed",
+        relation: "removal",
+        sourceSelectorIds: [selectorId("source.derivative-operator")],
+        targetSelectorIds: [],
+        summary: "Applying the rule consumes the derivative operator."
+      },
+      {
+        id: "differentiation-variable-consumed",
+        relation: "removal",
+        sourceSelectorIds: [selectorId("source.differentiation-variable")],
+        targetSelectorIds: [],
+        summary:
+          "The differentiation variable has constrained the operation and leaves with the operator."
+      },
+      {
+        id: "base-persists",
+        relation: "identity",
+        sourceSelectorIds: [selectorId("source.base")],
+        targetSelectorIds: [selectorId("target.base")],
+        summary: "The powered base persists as the derivative's base."
+      },
+      {
+        id: "exponent-branches",
+        relation: "fan-out",
+        sourceSelectorIds: [selectorId("source.exponent")],
+        targetSelectorIds: [
+          selectorId("target.coefficient"),
+          selectorId("target.exponent")
+        ],
+        summary:
+          "The source exponent branches into a transmitted coefficient and its decremented successor."
       }
     ]
   };

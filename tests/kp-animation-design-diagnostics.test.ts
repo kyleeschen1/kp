@@ -8,7 +8,7 @@ import {
 
 const catalog = createKpAnimationAssets();
 
-test("derivative power rule is identified as a fade-dominant fallback", () => {
+test("derivative power rule has total lineage but still needs choreography", () => {
   const animation = catalog.find(
     (candidate) =>
       candidate.id ===
@@ -16,13 +16,11 @@ test("derivative power rule is identified as a fade-dominant fallback", () => {
   )!;
   const diagnosis = diagnoseKpAnimationDesign({ animation })!;
 
-  assert.equal(diagnosis.visualStrategy, "whole-equation-fallback");
+  assert.equal(diagnosis.visualStrategy, "lifecycle-generic");
   assert.equal(diagnosis.motifKind, "artifact-replace");
   assert.deepEqual(
     diagnosis.issues.map((issue) => issue.code),
     [
-      "design.correspondence.missing",
-      "design.object-constancy.fade-dominant",
       "design.motif.generic-replacement",
       "design.staging.operation-unspecified"
     ]

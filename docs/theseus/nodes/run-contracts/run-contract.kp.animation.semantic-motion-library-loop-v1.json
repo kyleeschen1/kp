@@ -91,7 +91,8 @@
     {
       "id": "next-action.kp.animation.derivative-power-lineage-v1",
       "title": "Author derivative power-rule correspondence",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.derivative-power-lineage-v1 in Semantic Motion Animation Library Long Loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.derivative-power-choreography-v1",
