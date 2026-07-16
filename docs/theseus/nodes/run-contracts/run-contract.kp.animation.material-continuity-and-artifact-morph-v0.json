@@ -64,13 +64,14 @@
     {
       "id": "next-action.kp.continuity.material-owner-v0",
       "title": "Add stable visual material ownership",
-      "status": "ready",
-      "summary": "Continuity failures are now measurable; introduce stable owner selection and handoff sampling."
+      "summary": "Continuity failures are now measurable; introduce stable owner selection and handoff sampling.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.choreography.envelope-bridging-v0",
       "title": "Compose adjacent choreography envelopes",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Stable material ownership exists; bridge adjacent operation envelopes without attention gaps."
     },
     {
       "id": "next-action.kp.continuity.global-progress-v0",

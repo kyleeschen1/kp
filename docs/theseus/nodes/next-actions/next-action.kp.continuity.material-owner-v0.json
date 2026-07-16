@@ -2,9 +2,21 @@
   "id": "next-action.kp.continuity.material-owner-v0",
   "kind": "next-action",
   "title": "Add stable visual material ownership",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 4 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Added a renderer-neutral material-owner registry that binds source and target motion ids to one continuant and holds visual authority between native endpoints with exact rewind sampling.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-material-owner.ts",
+      "summary": "Defines stable material owner lookup and endpoint-native ownership frames."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-equation-material-owner.test.ts",
+      "summary": "Covers motion binding, intermediate material authority, endpoint handoff, and rewind symmetry."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +30,29 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-equation-material-owner.test.ts tests/kp-material-continuity.test.ts tests/kp-material-continuity-quality.test.ts",
+      "status": "passed",
+      "scope": "material ownership and continuity contracts",
+      "checkedAt": "2026-07-16T19:15:58.924Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript renderer ownership",
+      "checkedAt": "2026-07-16T19:15:58.991Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:15:59.054Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a renderer-neutral material-owner registry that binds source and target motion ids to one continuant and holds visual authority between native endpoints with exact rewind sampling."
+  }
 }
