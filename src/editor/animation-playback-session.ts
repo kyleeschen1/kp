@@ -7,6 +7,9 @@ import {
   type KpEditorAnimationPlaybackStatus,
   type KpEditorAnimationPlayerState
 } from "./animation-player-state.ts";
+import type {
+  KpEquationSemanticTimelineCheckpoint
+} from "../rendering/equation-visual-motif-timeline.ts";
 
 export interface KpEditorAnimationPlaybackSession {
   readonly kind: "editor-animation-playback-session";
@@ -15,6 +18,7 @@ export interface KpEditorAnimationPlaybackSession {
   readonly catalog: readonly KpAnimationAsset[];
   readonly player: KpEditorAnimationPlayerState;
   readonly lastTickMs?: number | undefined;
+  readonly semanticCheckpointId?: string | undefined;
 }
 
 export type KpEditorAnimationPlaybackAction =
@@ -22,6 +26,10 @@ export type KpEditorAnimationPlaybackAction =
   | { readonly type: "pause"; readonly nowMs?: number | undefined }
   | { readonly type: "tick"; readonly nowMs: number }
   | { readonly type: "seek"; readonly progress: number }
+  | {
+      readonly type: "seek-semantic-checkpoint";
+      readonly checkpoint: KpEquationSemanticTimelineCheckpoint;
+    }
   | { readonly type: "step"; readonly delta?: number | undefined }
   | { readonly type: "rewind"; readonly nowMs: number }
   | { readonly type: "reset" };
@@ -77,6 +85,14 @@ export function reduceKpEditorAnimationPlaybackSession(
       return resampleSession(session, {
         playbackStatus: "paused",
         progress: action.progress
+      });
+    case "seek-semantic-checkpoint":
+      return resampleSession(session, {
+        playbackStatus: "paused",
+        progress: session.player.direction === "forward"
+          ? action.checkpoint.progress
+          : 1 - action.checkpoint.progress,
+        semanticCheckpointId: action.checkpoint.id
       });
     case "step":
       return resampleSession(session, {
@@ -139,6 +155,7 @@ function resampleSession(
     readonly direction?: KpEditorAnimationPlayerState["direction"] | undefined;
     readonly progress: number;
     readonly lastTickMs?: number | undefined;
+    readonly semanticCheckpointId?: string | undefined;
   }
 ): KpEditorAnimationPlaybackSession {
   return {
@@ -153,7 +170,10 @@ function resampleSession(
     }),
     ...(update.lastTickMs === undefined
       ? { lastTickMs: undefined }
-      : { lastTickMs: update.lastTickMs })
+      : { lastTickMs: update.lastTickMs }),
+    ...(update.semanticCheckpointId === undefined
+      ? { semanticCheckpointId: undefined }
+      : { semanticCheckpointId: update.semanticCheckpointId })
   };
 }
 

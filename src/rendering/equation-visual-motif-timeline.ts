@@ -53,6 +53,43 @@ export interface EquationVisualMotifPhaseFrame {
   readonly active: boolean;
 }
 
+export interface KpEquationSemanticTimeline {
+  readonly kind: "equation-semantic-timeline";
+  readonly timelineId: string;
+  readonly beatCount: number;
+  readonly visualTimeline: EquationVisualMotifTimeline;
+  readonly phases: readonly KpEquationSemanticTimelinePhase[];
+  readonly checkpoints: readonly KpEquationSemanticTimelineCheckpoint[];
+}
+
+export interface KpEquationSemanticTimelinePhase {
+  readonly id: string;
+  readonly motifId: string;
+  readonly motifKind: EquationVisualMotifKind;
+  readonly phaseId: EquationVisualMotifPhaseId;
+  readonly start: number;
+  readonly end: number;
+  readonly summary: string;
+}
+
+export interface KpEquationSemanticTimelineCheckpoint {
+  readonly id: string;
+  readonly progress: number;
+  readonly beat: number;
+  readonly startingPhaseIds: readonly EquationVisualMotifPhaseId[];
+  readonly endingPhaseIds: readonly EquationVisualMotifPhaseId[];
+  readonly label: string;
+}
+
+export interface KpEquationSemanticTimelineFrame {
+  readonly progress: number;
+  readonly activePhaseIds: readonly EquationVisualMotifPhaseId[];
+  readonly completedPhaseIds: readonly EquationVisualMotifPhaseId[];
+  readonly previousCheckpointId: string;
+  readonly nextCheckpointId: string;
+  readonly visualFrame: EquationVisualMotifTimelineFrame;
+}
+
 export type EquationVisualMotifTimelineDirection = "forward" | "rewind";
 
 export interface SampleEquationVisualMotifTimelineOptions {
@@ -101,6 +138,96 @@ export function sampleEquationVisualMotifTimeline(
       )
     }))
   };
+}
+
+export function compileKpEquationSemanticTimeline(
+  visualTimeline: EquationVisualMotifTimeline
+): KpEquationSemanticTimeline {
+  const phases = visualTimeline.motifs.flatMap((motif) =>
+    motif.phases.map((phase) => ({
+      id: `${motif.motifId}.${phase.phaseId}`,
+      motifId: motif.motifId,
+      motifKind: motif.kind,
+      phaseId: phase.phaseId,
+      start: phase.start,
+      end: phase.end,
+      summary: phase.summary
+    }))
+  );
+  const progressValues = [...new Set([
+    0,
+    ...phases.flatMap((phase) => [phase.start, phase.end]),
+    1
+  ])].sort((left, right) => left - right);
+  const checkpoints = progressValues.map((progress) => {
+    const beat = normalizedProgress(progress * visualTimeline.beatCount);
+    const startingPhaseIds = uniquePhaseIds(phases
+      .filter((phase) => nearlyEqual(phase.start, progress))
+      .map((phase) => phase.phaseId));
+    const endingPhaseIds = uniquePhaseIds(phases
+      .filter((phase) => nearlyEqual(phase.end, progress))
+      .map((phase) => phase.phaseId));
+    return {
+      id: `${visualTimeline.timelineId}.semantic-checkpoint.${String(beat).replace(".", "-")}`,
+      progress,
+      beat,
+      startingPhaseIds,
+      endingPhaseIds,
+      label: checkpointLabel(beat, startingPhaseIds, endingPhaseIds)
+    };
+  });
+  return {
+    kind: "equation-semantic-timeline",
+    timelineId: visualTimeline.timelineId,
+    beatCount: visualTimeline.beatCount,
+    visualTimeline,
+    phases,
+    checkpoints
+  };
+}
+
+export function sampleKpEquationSemanticTimeline(
+  timeline: KpEquationSemanticTimeline,
+  progress: number,
+  options: SampleEquationVisualMotifTimelineOptions = {}
+): KpEquationSemanticTimelineFrame {
+  const visualFrame = sampleEquationVisualMotifTimeline(
+    timeline.visualTimeline,
+    progress,
+    options
+  );
+  const p = visualFrame.progress;
+  const activePhaseIds = uniquePhaseIds(timeline.phases
+    .filter((phase) => p >= phase.start && p <= phase.end)
+    .map((phase) => phase.phaseId));
+  const completedPhaseIds = uniquePhaseIds(timeline.phases
+    .filter((phase) => p >= phase.end)
+    .map((phase) => phase.phaseId));
+  const previous = [...timeline.checkpoints].reverse().find(
+    (checkpoint) => checkpoint.progress <= p
+  ) ?? timeline.checkpoints[0]!;
+  const next = timeline.checkpoints.find(
+    (checkpoint) => checkpoint.progress >= p
+  ) ?? timeline.checkpoints[timeline.checkpoints.length - 1]!;
+  return {
+    progress: p,
+    activePhaseIds,
+    completedPhaseIds,
+    previousCheckpointId: previous.id,
+    nextCheckpointId: next.id,
+    visualFrame
+  };
+}
+
+export function findKpEquationSemanticTimelineCheckpoint(
+  timeline: KpEquationSemanticTimeline,
+  checkpointId: string
+): KpEquationSemanticTimelineCheckpoint {
+  const checkpoint = timeline.checkpoints.find((candidate) => candidate.id === checkpointId);
+  if (checkpoint === undefined) {
+    throw new Error(`Unknown semantic checkpoint ${checkpointId} in ${timeline.timelineId}.`);
+  }
+  return checkpoint;
 }
 
 function timelineProgressForDirection(
@@ -172,4 +299,26 @@ function clamp01(value: number): number {
 
 function normalizedProgress(value: number): number {
   return Number(value.toFixed(12));
+}
+
+function uniquePhaseIds(
+  phaseIds: readonly EquationVisualMotifPhaseId[]
+): readonly EquationVisualMotifPhaseId[] {
+  return [...new Set(phaseIds)];
+}
+
+function checkpointLabel(
+  beat: number,
+  starting: readonly EquationVisualMotifPhaseId[],
+  ending: readonly EquationVisualMotifPhaseId[]
+): string {
+  const events = [
+    ...(ending.length === 0 ? [] : [`finish ${ending.join(", ")}`]),
+    ...(starting.length === 0 ? [] : [`start ${starting.join(", ")}`])
+  ];
+  return events.length === 0 ? `Beat ${beat}` : `Beat ${beat}: ${events.join("; ")}`;
+}
+
+function nearlyEqual(left: number, right: number): boolean {
+  return Math.abs(left - right) <= 1e-12;
 }

@@ -100,3 +100,32 @@ test("editor playback session reset restores the forward idle frame", () => {
   assert.equal(reset.player.progress, 0);
   assert.equal(reset.lastTickMs, undefined);
 });
+
+test("editor playback seeks stable semantic checkpoints without direction jumps", () => {
+  const checkpoint = {
+    id: "timeline.solve.semantic-checkpoint.20",
+    progress: 0.4,
+    beat: 20,
+    startingPhaseIds: ["cancel-collapse" as const],
+    endingPhaseIds: ["cancel-meet" as const],
+    label: "Finish meeting; begin collapse"
+  };
+  const forward = reduceKpEditorAnimationPlaybackSession(createSolveXSession(), {
+    type: "seek-semantic-checkpoint",
+    checkpoint
+  });
+  const rewindSession = reduceKpEditorAnimationPlaybackSession(
+    createSolveXSession(),
+    { type: "rewind", nowMs: 100 }
+  );
+  const rewind = reduceKpEditorAnimationPlaybackSession(rewindSession, {
+    type: "seek-semantic-checkpoint",
+    checkpoint
+  });
+
+  assert.equal(forward.player.progress, 0.4);
+  assert.equal(rewind.player.progress, 0.6);
+  assert.equal(forward.semanticCheckpointId, checkpoint.id);
+  assert.equal(rewind.semanticCheckpointId, checkpoint.id);
+  assert.equal(rewind.player.direction, "rewind");
+});

@@ -2,15 +2,20 @@
   "id": "next-action.kp.animation-grammar.semantic-timeline-v0",
   "kind": "next-action",
   "title": "Compile Reversible Semantic Timelines",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Map named explanatory phases to the existing shared clock with stable checkpoints and equivalent reverse sampling. Verification: standard.",
+  "summary": "Compiled reversible semantic timelines over visual motif beats with named stable checkpoints, active and completed phase state, nearest checkpoint navigation, and direction-aware editor checkpoint seeking.",
   "severity": "high",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-motif-timeline.ts",
+      "summary": "Maps explanatory motif phase boundaries onto the shared clock and samples identical semantic frames forward or in rewind."
     }
   ],
   "dependsOn": {
@@ -48,5 +53,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/equation-visual-motif-timeline.test.ts tests/kp-editor-animation-playback-session.test.ts",
+      "status": "passed",
+      "scope": "1022 unit tests",
+      "checkedAt": "2026-07-16T02:40:07.225Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T02:40:07.291Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T02:40:07.337Z",
+      "scope": "Theseus graph and event history"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Compiled reversible semantic timelines over visual motif beats with named stable checkpoints, active and completed phase state, nearest checkpoint navigation, and direction-aware editor checkpoint seeking."
+  }
 }
