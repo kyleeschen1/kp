@@ -109,9 +109,22 @@ export function syncKpEquationNativeFit(
       const horizontalPadding =
         Number.parseFloat(style.paddingLeft) +
         Number.parseFloat(style.paddingRight);
+      const renderedLines = [
+        ...object.querySelectorAll<HTMLElement>(".katex-display > .katex")
+      ];
+      // Visible overflow makes the grid item's scrollWidth collapse to its
+      // allocated track; the inline KaTeX line retains the natural ink width.
+      const renderedLineWidth = Math.max(
+        0,
+        ...renderedLines.map((line) => line.getBoundingClientRect().width)
+      );
       return {
         availableWidth: Math.max(1, object.clientWidth - horizontalPadding),
-        naturalWidth: Math.max(1, object.scrollWidth - horizontalPadding)
+        naturalWidth: Math.max(
+          1,
+          object.scrollWidth - horizontalPadding,
+          renderedLineWidth
+        )
       };
     });
     const mostConstrained = ratios.reduce((selected, candidate) =>

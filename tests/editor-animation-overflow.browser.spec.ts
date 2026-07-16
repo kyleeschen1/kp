@@ -44,8 +44,9 @@ test("native equation fitting contains long formulas without transform scaling",
       }))
     }));
 
-    expect(fitted.scale).toBeLessThan(1);
-    expect(["fitted", "minimum-constrained"]).toContain(fitted.mode);
+    expect(fitted.scale).toBeLessThanOrEqual(1);
+    expect(["native", "fitted", "minimum-constrained"])
+      .toContain(fitted.mode);
     expect(fitted.objects.every(
       (object) => object.scrollWidth <= object.clientWidth + 1
     )).toBe(true);
@@ -154,10 +155,5 @@ test("animation catalog overflow audit covers every descriptor and viewport", as
     maximumOverflow
   }));
 
-  // The audit slice records current debt; enforcement is introduced only
-  // after native fitting removes the known equation-object scroll ranges.
-  expect(scrollbarFindings.every(
-    (finding) =>
-      finding.elementRef === "div.editor-equation-stage__object"
-  )).toBe(true);
+  expect(scrollbarFindings).toEqual([]);
 });

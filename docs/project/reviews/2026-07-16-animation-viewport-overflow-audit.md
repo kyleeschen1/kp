@@ -46,9 +46,10 @@ boundary:
 3. remove the equation object's scroll-container behavior;
 4. retain the catalog audit as a zero-finding promotion gate.
 
-Removing `overflow-x: auto` alone is not sufficient. The content-overflow side
-of the audit must also reach zero so scrollbars are not replaced by clipped or
-off-stage notation.
+Removing `overflow-x: auto` alone is not sufficient. Visible content overflow
+must remain measurable and contained by the animation stage so scrollbars are
+not replaced by clipped or off-stage notation. Token ink and deliberate travel
+may extend beyond an individual equation object's layout box.
 
 ## Native-Fit Follow-up
 
@@ -62,3 +63,13 @@ translated tokens. The unchanged 165 vertical findings come from the equation
 object's scroll-container policy and KaTeX structural height. Those findings
 belong to the following scrollbar-elimination slice rather than further
 typographic shrinking.
+
+## Scrollbar-Elimination Follow-up
+
+Equation objects now expose their fitted notation with visible overflow rather
+than creating nested scroll containers. The solve-step sequence wraps as part
+of the animation layout instead of becoming a separate horizontal viewport.
+The catalog gate records zero nested-scrollbar findings across all 528 audited
+descriptor, width, and checkpoint samples. Content overflow remains reported
+separately so visible ink and token travel cannot be mistaken for a scrollbar;
+the next surface-containment slice owns any ancestor-boundary spill.

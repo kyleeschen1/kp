@@ -28,6 +28,7 @@ const animationLayoutSelector = [
   ".editor-equation-stage__transition",
   ".editor-equation-stage__layer",
   ".editor-equation-stage__object",
+  ".editor-equation-stage__sequence",
   "[data-kp-editor-graph-stage]",
   "[data-kp-editor-diagram-svg]"
 ].join(",");
