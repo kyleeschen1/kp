@@ -76,13 +76,14 @@
     {
       "id": "next-action.kp.continuity.global-progress-v0",
       "title": "Add animation-level semantic progress",
-      "status": "ready",
-      "summary": "Envelope bridges are deterministic; expose global semantic progress to renderer and style layers."
+      "summary": "Envelope bridges are deterministic; expose global semantic progress to renderer and style layers.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.linear.persistent-material-layer-v0",
       "title": "Build the persistent equation material layer",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Foundation tranche is complete; integrate stable visual ownership into the linear solve renderer."
     },
     {
       "id": "next-action.kp.linear.balanced-introduction-continuity-v0",

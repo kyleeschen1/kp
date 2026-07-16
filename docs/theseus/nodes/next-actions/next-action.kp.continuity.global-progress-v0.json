@@ -2,9 +2,21 @@
   "id": "next-action.kp.continuity.global-progress-v0",
   "kind": "next-action",
   "title": "Add animation-level semantic progress",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 6 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Exposed requested global progress and direction-normalized semantic progress on every equation stage, and moved gestalt realization from operation-local progress to the stable animation-level semantic clock.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Adds stage progress channels and prevents gestalt motion from resetting at every transformation boundary."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-equation-surface-adapter.test.ts",
+      "summary": "Covers forward and rewind semantic progress equivalence alongside local phase progress."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +30,29 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-equation-surface-adapter.test.ts tests/kp-organic-motion-primitives.test.ts",
+      "status": "passed",
+      "scope": "equation stage and organic semantic clock",
+      "checkedAt": "2026-07-16T19:19:35.903Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript editor frame integration",
+      "checkedAt": "2026-07-16T19:19:36.519Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:19:37.277Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Exposed requested global progress and direction-normalized semantic progress on every equation stage, and moved gestalt realization from operation-local progress to the stable animation-level semantic clock."
+  }
 }

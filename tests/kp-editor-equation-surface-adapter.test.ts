@@ -38,10 +38,16 @@ test("equation stage derives smooth local phase progress from the runtime clock"
   const end = stageFrame(1);
 
   assert.equal(start.localProgress, 0);
+  assert.equal(start.globalProgress, 0);
+  assert.equal(start.semanticProgress, 0);
   assert.equal(start.easedProgress, 0);
   assert.equal(middle.localProgress, 0.5);
+  assert.equal(middle.globalProgress, 0.5);
+  assert.equal(middle.semanticProgress, 0.5);
   assert.equal(middle.easedProgress, 0.5);
   assert.equal(end.localProgress, 1);
+  assert.equal(end.globalProgress, 1);
+  assert.equal(end.semanticProgress, 1);
   assert.equal(end.easedProgress, 1);
   assert.equal(
     middle.projection.transitions[0]?.id,
@@ -58,4 +64,8 @@ test("equation stage identity persists when playback direction changes", () => {
 
   assert.equal(forward.stageIdentityKey, rewind.stageIdentityKey);
   assert.equal(forward.stageIdentityKey, "animation.linear-solve.solve-x");
+  assert.equal(forward.semanticProgress, rewind.semanticProgress);
+  assert.equal(forward.semanticProgress, 0.35);
+  assert.equal(forward.globalProgress, 0.35);
+  assert.equal(rewind.globalProgress, 0.65);
 });

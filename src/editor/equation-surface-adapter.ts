@@ -113,6 +113,8 @@ export interface KpEditorEquationStageFrame {
   readonly stageIdentityKey: string;
   readonly contentKey: string;
   readonly projection: KpEditorEquationRuntimeFrameProjection;
+  readonly globalProgress: number;
+  readonly semanticProgress: number;
   readonly localProgress: number;
   readonly easedProgress: number;
   readonly motifs: readonly KpEditorEquationTransitionMotifFrame[];
@@ -160,6 +162,9 @@ export function createKpEditorEquationStageFrame(input: {
       );
 
   const easedProgress = localProgress * localProgress * (3 - 2 * localProgress);
+  const semanticProgress = input.state.direction === "forward"
+    ? input.state.progress
+    : 1 - input.state.progress;
   const solveX = createKpEditorSolveXSharedPlayerFrame(input);
   const functionWrap = createFunctionWrapFrame(
     input.animation,
@@ -192,6 +197,8 @@ export function createKpEditorEquationStageFrame(input: {
     stageIdentityKey,
     contentKey,
     projection,
+    globalProgress: input.state.progress,
+    semanticProgress,
     localProgress,
     easedProgress,
     motifs: projection.transitions.map((transition) =>
@@ -257,6 +264,10 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
     if (stage === null) return;
 
     stage.dataset["kpEditorEquationPhaseId"] = frame.projection.phaseId;
+    stage.dataset["kpEditorEquationGlobalProgress"] =
+      String(frame.globalProgress);
+    stage.dataset["kpEditorEquationSemanticProgress"] =
+      String(frame.semanticProgress);
     stage.dataset["kpEditorEquationLocalProgress"] = String(frame.localProgress);
     stage.dataset["kpEditorEquationGestaltStyle"] =
       player?.dataset["kpEditorAnimationGestaltSelectedStyle"] ?? "unresolved";
@@ -334,7 +345,7 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
     applyGestaltTokenRealization({
       stage,
       state,
-      progress: frame.localProgress,
+      progress: frame.semanticProgress,
       channels: gestaltChannels,
       accessibilityMode:
         player?.dataset["kpEditorAnimationAccessibilityMode"] ?? "full-motion"
@@ -1107,7 +1118,7 @@ function findMotionTokenByEntityId(
 
 function renderStage(frame: KpEditorEquationStageFrame): string {
   return `
-    <div class="editor-equation-stage" data-kp-editor-equation-stage data-kp-editor-equation-stage-identity-key="${escapeHtml(frame.stageIdentityKey)}" data-kp-editor-equation-content-key="${escapeHtml(frame.contentKey)}" data-kp-editor-equation-phase-id="${escapeHtml(frame.projection.phaseId)}" data-kp-editor-equation-local-progress="${frame.localProgress}">
+    <div class="editor-equation-stage" data-kp-editor-equation-stage data-kp-editor-equation-stage-identity-key="${escapeHtml(frame.stageIdentityKey)}" data-kp-editor-equation-content-key="${escapeHtml(frame.contentKey)}" data-kp-editor-equation-phase-id="${escapeHtml(frame.projection.phaseId)}" data-kp-editor-equation-global-progress="${frame.globalProgress}" data-kp-editor-equation-semantic-progress="${frame.semanticProgress}" data-kp-editor-equation-local-progress="${frame.localProgress}">
       ${renderStageContent(frame)}
     </div>
   `;
