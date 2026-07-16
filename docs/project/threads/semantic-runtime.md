@@ -1,11 +1,12 @@
 # Semantic Runtime Thread
 
 Status: active
-Last Updated: 2026-07-15
-Current Next Action: Compile rich semantic correspondence into persistent,
-measured equation-token motion on the shared editor player, then expose that
-compiler through a constrained LLM animation-draft format and a minimal visual
-diagram surface.
+Last Updated: 2026-07-16
+Current Next Action: Compile operation-specific motifs inside a shared
+orient/reflow/act/settle/release choreography envelope, using dashboard
+function-wrap, radical-rewrite, and linear-rearrangement behavior as the first
+conformance cohort. Then test trusted 2.5D depth and shadow profiles for focus
+without changing semantic paths or layout.
 
 ## Goal
 
@@ -169,6 +170,32 @@ exact seek/rewind behavior. Their generic equation adapter also exposed the new
 active priority: replace whole-layer source/target fading with compiled semantic
 token identity, lifecycle, geometry, and motion. Whole-equation fading remains
 an explicit diagnosed fallback, not the preferred transition language.
+
+The governed semantic animation grammar loop also closed on 2026-07-16. It
+added canonical operations and packs, semantic identity and lineage, salience,
+LLM draft v2 and typed repair, executable motifs, stable layout and path plans,
+motion-quality budgets, reversible semantic timelines, editor authoring
+controls, generated wrap/distribution/substitution proofs, and accessible
+presentation variants.
+
+The next correction is perceptual ordering. Numeric continuity and
+operation-specific phases do not by themselves ensure that the viewer sees the
+causal parts before they move, watches persistent content reflow before
+structural change, and receives a clean settle and attention release. KP will
+therefore compile a shared choreography envelope around motifs and promote the
+existing dashboard function-wrap, radical-rewrite, and linear-rearrangement
+treatments into conformance fixtures. Depth and shadow may be tested as
+presentation-only focus channels within that envelope, never as a separate
+semantic or timing system.
+
+The accepted grill-me decisions additionally separate immutable semantic
+choreography from configurable, versioned gestalt styles. New generated work
+should default to `kp.organic-subtle@1.0.0`, while
+`kp.restrained-editorial@1.0.0` proves substitutability and an elevated CSS
+2.5D focus override remains experimental. The normative design is in
+`docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md`;
+the proposed implementation contract is in
+`docs/project/reviews/2026-07-16-phase-ordered-choreography-gestalt-style-loop-proposal.md`.
 
 After the compiler works for a representative algebra and matrix cohort, expose
 a versioned LLM draft schema that references approved semantic definitions,

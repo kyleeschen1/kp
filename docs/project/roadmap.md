@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-15
+Last Updated: 2026-07-16
 Status: active
 Active Thread: `threads/semantic-runtime.md`
 
@@ -35,13 +35,20 @@ available in the KP editor; it has now closed its 30-slice implementation loop.
 
 ## Active Focus
 
-**Governed semantic animation grammar and constraint-planned choreography.**
-The semantic transition compiler and shared player are now the stable
-foundation. The active priority is to make generated derivations select
-versioned canonical operations, preserve explicit identity and lineage, reuse
-curated executable motifs, and compile salience into smooth preplanned motion.
-The first proof covers wrapping, distribution and factoring, substitution, and
-an intentional invalid step through one editor-visible vertical slice.
+**Phase-ordered choreography and perceptual conformance.** The governed
+semantic animation grammar and constraint-planned choreography loop is
+complete. The active priority is now to make every operation-specific motif
+obey a shared perceptual envelope: orient attention, reflow persistent
+entities, execute semantic change, settle the target, and release attention.
+The existing dashboard treatments for function wrapping, fractional exponent
+to radical, and linear rearrangement are the first conformance cohort.
+
+The accepted correction is recorded in
+`decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
+accepted design and 3D/shadow focus experiment are recorded in
+`docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md`.
+The proposed 30-slice implementation loop is recorded in
+`reviews/2026-07-16-phase-ordered-choreography-gestalt-style-loop-proposal.md`.
 
 The execution contract
 `run-contract.kp.editor.visible-animation-player-v0` closed its approved
@@ -57,8 +64,10 @@ minimal visual diagram scene using the same correspondence and shared clock.
 
 That compiler loop completed on 2026-07-15. Its successor decision is recorded
 in `decisions/2026-07-15-kp-governed-semantic-animation-grammar.md`; the
-proposed 30-slice grammar and motion-planning loop is recorded in
-`reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md`.
+completed 30-slice grammar and motion-planning loop is recorded in
+`reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md`, with
+its outcome in
+`reviews/2026-07-16-governed-semantic-animation-grammar-loop-closeout.md`.
 
 The doctrine, composition laws, authoring guide, core interfaces, executable
 law checks, pause-time inspection, drill-down hooks, flashcard specs, external
@@ -269,25 +278,17 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Make rich correspondence canonical while retaining one-to-one shorthand.
-2. Compile semantic transformations into a renderer-neutral token lifecycle and
-   motion plan with explicit fallback diagnostics.
-3. Render selector-annotated KaTeX through a persistent measured token stage
-   driven by the shared editor player.
-4. Prove incremental motion on solve-x, fractions, function wrapping,
-   distribution/factoring, exponent/radical, inequality, and matrix examples.
-5. Define and compile a constrained LLM semantic animation draft; reject invalid
-   or underspecified drafts before rendering.
-6. Add a minimal node-edge `DiagramScene` and deterministic SVG surface using
-   the same identity, correspondence, timing, and validation contracts.
-7. Turn paused-frame drill-down blueprints into editor authoring actions after
-   the semantic compiler and generated examples pass their quality gate.
-8. Harden `/api/compile`, export/embed boundaries, and future hosted capsules
-   with explicit size, schema, error, auth, CSP, and dependency policies before
-   inviting broad external input.
-9. Start GIF or video encoder integration only after the frame-sequence JSON
-   artifact, HTML preview, browser probe, rewind check, dependency manifest,
-   and capability package manifests stay stable.
+1. Capture dashboard function-wrap, radical-rewrite, and linear-rearrangement
+   treatments as phase-ordered conformance fixtures.
+2. Compile a shared orient/reflow/act/settle/release choreography envelope above
+   operation-specific motif timelines.
+3. Enforce focus-before-motion, persistent-reflow-before-change, and
+   settle-before-release laws in static and sampled quality gates.
+4. Expose envelope phases and violations in editor diagnostics.
+5. Experiment with trusted flat, elevated-shadow, and context-dim focus
+   profiles without changing layout, semantic paths, rewind, or accessibility.
+6. Gate generated drafts and editor catalog promotion on choreography
+   conformance before beginning live prompt or upload ingestion.
 10. Expand graph diagnostics from current mesh/conformance checks into richer
    graph transforms and synchronized comparison cards.
 11. Defer dynamic package loading until at least one generated animation family

@@ -1,0 +1,15 @@
+{
+  "id": "decision.kp.phase-ordered-choreography-gestalt-styles-v0",
+  "kind": "decision",
+  "title": "Adopt Phase-Ordered Choreography And Gestalt Styles",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
+      "summary": "Normative design accepted through the grill-me session."
+    }
+  ],
+  "summary": "Adopted the phase-ordered choreography envelope, semantic continuants, representational lineage, configurable gestalt styles, organic token choreography, and governed focus-depth experiments."
+}

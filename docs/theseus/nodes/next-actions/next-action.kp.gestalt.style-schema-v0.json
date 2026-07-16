@@ -1,0 +1,56 @@
+{
+  "id": "next-action.kp.gestalt.style-schema-v0",
+  "kind": "next-action",
+  "title": "Define Versioned Gestalt Style Packages",
+  "status": "ready",
+  "domain": "kp.animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-phase-ordered-choreography-gestalt-style-loop-proposal.md",
+      "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
+      "summary": "Accepted normative choreography and gestalt-style design."
+    }
+  ],
+  "allowedWork": [
+    "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-choreography",
+      "weight": "high"
+    },
+    {
+      "id": "perceptual-conformance",
+      "weight": "high"
+    },
+    {
+      "id": "focused-verification",
+      "weight": "high"
+    }
+  ],
+  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.motion-field-v0"
+    ]
+  },
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "id": "run-contract.kp.animation.phase-ordered-choreography-gestalt-styles-v0",
+  "kind": "run-contract",
+  "title": "Phase-Ordered Choreography And Gestalt Style Loop",
+  "status": "ready",
+  "domain": "kp.animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.choreography.dashboard-exemplar-baseline-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-phase-ordered-choreography-gestalt-style-loop-proposal.md",
+      "summary": "User-approved 30-slice implementation contract."
+    },
+    {
+      "kind": "file",
+      "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
+      "summary": "Accepted normative choreography and gestalt-style design."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Only the approved 30 slices, their focused tests, project documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No live model provider, public style marketplace, arbitrary style code, stateful physics, general diagram routing, second playback clock, or unrelated product expansion."
+  ],
+  "goal": "Run the approved 30-slice phase-ordered choreography and configurable gestalt-style loop.",
+  "target": "next-action.kp.choreography.dashboard-exemplar-baseline-v0",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when focused verification fails and needs product or architecture judgment.",
+    "Stop before work outside the approved slice list.",
+    "Stop if focus changes measured layout, organic motion becomes nondeterministic, or styles alter semantic choreography.",
+    "Stop when the approved slices are exhausted."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.choreography.dashboard-exemplar-baseline-v0",
+      "title": "Capture Dashboard Choreography Baselines",
+      "status": "ready"
+    },
+    {
+      "id": "next-action.kp.choreography.vocabulary-v0",
+      "title": "Define Choreography Vocabulary",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.plan-schema-v0",
+      "title": "Define Universal Choreography Plan",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.envelope-laws-v0",
+      "title": "Enforce Envelope Dependency Laws",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.lifecycle-cause-v0",
+      "title": "Classify Lifecycle And Introduction Causes",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.representational-lineage-v0",
+      "title": "Compile Representational Lineage",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.salience-graph-v0",
+      "title": "Compile Transferable Salience Graphs",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.semantic-traversal-v0",
+      "title": "Define Semantic Traversal Plans",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.motion-field-v0",
+      "title": "Define Group Motion Fields",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.gestalt.style-schema-v0",
+      "title": "Define Versioned Gestalt Style Packages",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.gestalt.style-resolution-v0",
+      "title": "Compile Gestalt Style Resolution",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.gestalt.renderer-capabilities-v0",
+      "title": "Add Renderer Style Capabilities",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.gestalt.accessibility-projections-v0",
+      "title": "Require Accessibility Style Projections",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.compiler-v0",
+      "title": "Compile Semantic Choreography Plans",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.timeline-v0",
+      "title": "Compile Envelope Timeline",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.perceptual-quality-v0",
+      "title": "Add Perceptual Order Quality Gates",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.gestalt.organic-primitives-v0",
+      "title": "Add Deterministic Organic Motion Primitives",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.fragment-hierarchy-v0",
+      "title": "Add Group Token And Fragment Choreography",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.organic-paths-v0",
+      "title": "Generalize Organic Path Families",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.propagation-v0",
+      "title": "Compile Propagation And Traversal Cascades",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.gestalt.focus-profiles-v0",
+      "title": "Add Flat Focus And Shared Shadow Profiles",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.function-wrap-v0",
+      "title": "Migrate Function Wrapping Choreography",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.radical-successor-v0",
+      "title": "Migrate Radical Representational Succession",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.linear-rearrangement-v0",
+      "title": "Migrate Linear Rearrangement Choreography",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.dot-product-traversal-v0",
+      "title": "Add Dot Product Traversal Proof",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.gestalt.base-styles-v0",
+      "title": "Ship Organic And Restrained Base Styles",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.gestalt.editor-controls-v0",
+      "title": "Expose Choreography And Style Editor Controls",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.gestalt.elevated-focus-experiment-v0",
+      "title": "Add Elevated Focus Comparison",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.gestalt.generated-promotion-gate-v0",
+      "title": "Gate Generated Choreography Promotion",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.gestalt.loop-closeout-v0",
+      "title": "Close Choreography And Gestalt Style Loop",
+      "status": "planned"
+    }
+  ]
+}
