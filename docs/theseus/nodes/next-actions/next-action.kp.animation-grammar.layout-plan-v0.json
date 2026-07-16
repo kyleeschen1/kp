@@ -2,15 +2,20 @@
   "id": "next-action.kp.animation-grammar.layout-plan-v0",
   "kind": "next-action",
   "title": "Plan Stable Layouts And Waypoints",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Precompute start and end layouts, transit reservations, and semantic waypoints without midflight reflow. Verification: standard.",
+  "summary": "Added deterministic equation layout-plan IR with measure-once start/end snapshots, destination and transit reservations, semantic clearance waypoints, and explicit between-step resize replanning.",
   "severity": "high",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-layout-plan.ts",
+      "summary": "Freezes measured geometry into a renderer-owned plan so playback never rereads changing DOM layout."
     }
   ],
   "dependsOn": {
@@ -48,5 +53,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/equation-layout-plan.test.ts tests/measured-equation-transition-geometry.test.ts",
+      "status": "passed",
+      "scope": "1010 unit tests",
+      "checkedAt": "2026-07-16T02:28:12.914Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T02:28:12.980Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T02:28:13.030Z",
+      "scope": "Theseus graph and event history"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added deterministic equation layout-plan IR with measure-once start/end snapshots, destination and transit reservations, semantic clearance waypoints, and explicit between-step resize replanning."
+  }
 }
