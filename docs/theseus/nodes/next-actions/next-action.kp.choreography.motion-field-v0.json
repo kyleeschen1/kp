@@ -2,8 +2,9 @@
   "id": "next-action.kp.choreography.motion-field-v0",
   "kind": "next-action",
   "title": "Define Group Motion Fields",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Added renderer-neutral group motion fields derived from semantic purpose, relative scene regions, reading direction, and traversal context. Fields select dominant direction, curvature family, reconciliation region, branch symmetry, depth plane, candidate families, and bounded cohesion without authoring concrete routes.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,39 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/motion-field.ts",
+      "summary": "Plans coherent semantic group fields while leaving measured geometry and collision scoring to renderer adapters."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-motion-field.test.ts",
+      "summary": "Proves opposite-corner radical succession, restrained continuant reflow, mirrored branching, cohesion validation, and rejection of arbitrary waypoints or coordinates."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.semantic-traversal-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +63,22 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-motion-field.test.ts tests/equation-motion-path-planner.test.ts",
+      "status": "passed",
+      "scope": "Semantic motion fields and existing concrete path planner",
+      "checkedAt": "2026-07-16T16:19:48.055Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-16T16:19:48.118Z",
+      "scope": "TypeScript project closure"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.choreography.semantic-traversal-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Added renderer-neutral group motion fields derived from semantic purpose, relative scene regions, reading direction, and traversal context. Fields select dominant direction, curvature family, reconciliation region, branch symmetry, depth plane, candidate families, and bounded cohesion without authoring concrete routes."
+  }
 }
