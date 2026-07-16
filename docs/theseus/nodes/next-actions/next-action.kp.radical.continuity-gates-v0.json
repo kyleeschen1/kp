@@ -2,9 +2,21 @@
   "id": "next-action.kp.radical.continuity-gates-v0",
   "kind": "next-action",
   "title": "Enforce radical morph quality",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 21 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Added browser-enforced radical quality budgets: every exponent fragment lands within the shared bundle tolerance, hook and overbar settlement centers coincide with native radical geometry, temporary fragments remain structurally undeformed, and forward-rewind owner identity remains stable.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Measures live exponent, fragment, and native radical geometry and feeds it into material continuity quality laws."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/material-continuity-quality.ts",
+      "summary": "Provides shared bundle, settlement, and structural deformation budgets used by the browser gate."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +30,39 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g radical",
+      "status": "passed",
+      "scope": "radical family, succession, rewind, bundle, and settlement browser gates",
+      "checkedAt": "2026-07-16T19:59:19.892Z",
+      "notes": "Manual radical filmstrip reviewed across focus, base reflow, bundle gathering, hook/overbar unfold, recognition, native settlement, and release."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-material-continuity-quality.test.ts tests/kp-radical-succession-choreography.test.ts tests/kp-equation-artifact-bundle-morph.test.ts tests/kp-radical-material-continuity.test.ts",
+      "status": "passed",
+      "scope": "radical continuity unit cohort",
+      "checkedAt": "2026-07-16T19:59:19.980Z",
+      "notes": "Manual radical filmstrip reviewed across focus, base reflow, bundle gathering, hook/overbar unfold, recognition, native settlement, and release."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript radical quality integration",
+      "checkedAt": "2026-07-16T19:59:20.052Z",
+      "notes": "Manual radical filmstrip reviewed across focus, base reflow, bundle gathering, hook/overbar unfold, recognition, native settlement, and release."
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:59:20.124Z",
+      "scope": "Theseus graph",
+      "notes": "Manual radical filmstrip reviewed across focus, base reflow, bundle gathering, hook/overbar unfold, recognition, native settlement, and release."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added browser-enforced radical quality budgets: every exponent fragment lands within the shared bundle tolerance, hook and overbar settlement centers coincide with native radical geometry, temporary fragments remain structurally undeformed, and forward-rewind owner identity remains stable."
+  }
 }

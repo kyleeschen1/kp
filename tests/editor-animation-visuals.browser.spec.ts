@@ -1038,6 +1038,85 @@ test("radical material succession is identical under semantic rewind", async ({
   ).toHaveCount(3);
 });
 
+test("radical bundle and native settlement satisfy continuity budgets", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  const transition = stage.locator(
+    "[data-kp-editor-equation-transition-id]"
+  );
+
+  await scrubber.fill("0.58");
+  const bundleSamples = await transition.evaluate((element) => {
+    const source = element.querySelector<HTMLElement>(
+      "[data-kp-editor-equation-source]"
+    )!;
+    const sourceRect = source.getBoundingClientRect();
+    const bundle = (
+      element.getAttribute("data-kp-editor-equation-succession-bundle") ?? "0,0"
+    ).split(",").map(Number);
+    return Array.from(
+      source.querySelectorAll<HTMLElement>(
+        '[data-kp-motion-id*=".power.exponent-"]'
+      )
+    ).map((token, index) => {
+      const rect = token.getBoundingClientRect();
+      return {
+        id: `exponent-fragment-${index}`,
+        sourceBundlePoint: {
+          x: rect.left + rect.width / 2 - sourceRect.left,
+          y: rect.top + rect.height / 2 - sourceRect.top
+        },
+        targetBundlePoint: { x: bundle[0]!, y: bundle[1]! },
+        residualTransformPx: 0,
+        structuralScaleAlong: 1,
+        structuralScaleAcross: 1
+      };
+    });
+  });
+
+  await scrubber.fill("0.92");
+  const settlementSamples = await stage.evaluate((element) => {
+    const native = element.querySelector<HTMLElement>(
+      '[data-kp-motion-id*=".radical.radical-symbol"]'
+    )!;
+    const nativeRect = native.getBoundingClientRect();
+    const nativeCenter = {
+      x: nativeRect.left + nativeRect.width / 2,
+      y: nativeRect.top + nativeRect.height / 2
+    };
+    return Array.from(
+      element.querySelectorAll<HTMLElement>(
+        '[data-kp-equation-material-fragment-role^="radical-"]'
+      )
+    ).map((fragment) => {
+      const rect = fragment.getBoundingClientRect();
+      return {
+        id:
+          fragment.dataset["kpEquationMaterialFragmentRole"] ??
+          "radical-fragment",
+        sourceBundlePoint: {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2
+        },
+        targetBundlePoint: nativeCenter,
+        residualTransformPx: 0,
+        structuralScaleAlong: 1,
+        structuralScaleAcross: 1
+      };
+    });
+  });
+  expect(evaluateKpMaterialContinuityQuality({
+    reconciliations: [...bundleSamples, ...settlementSamples]
+  })).toEqual([]);
+});
+
 test("function-wrap-family animation visibly wraps and rewinds its argument", async ({
   page
 }) => {

@@ -166,13 +166,14 @@
     {
       "id": "next-action.kp.radical.continuity-gates-v0",
       "title": "Enforce radical morph quality",
-      "status": "ready",
-      "summary": "Forward and reverse share one material story; add shared-bundle, ownership, settlement, and deformation browser gates."
+      "summary": "Forward and reverse share one material story; add shared-bundle, ownership, settlement, and deformation browser gates.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.gestalt.motion-eligibility-v0",
       "title": "Make gestalt realization continuity aware",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Linear and radical continuity gates pass; restrict organic motion by material role and lineage."
     },
     {
       "id": "next-action.kp.editor.continuity-inspector-v0",
