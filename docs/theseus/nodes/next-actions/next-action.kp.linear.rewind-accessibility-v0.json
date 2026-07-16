@@ -2,9 +2,21 @@
   "id": "next-action.kp.linear.rewind-accessibility-v0",
   "kind": "next-action",
   "title": "Verify linear rewind seeking and accessibility",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 12 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Removed double-mirrored gestalt sampling and proved the same linear material owner and pose survive forward-to-rewind direction changes and reduced-motion projection at equal semantic progress.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Samples organic realization on the already direction-normalized semantic clock."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Checks stable owner identity, bounded pose drift, semantic progress, and accessibility projection."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +30,35 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g linear",
+      "status": "passed",
+      "scope": "linear forward rewind and accessibility material ownership",
+      "checkedAt": "2026-07-16T19:34:25.103Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-equation-surface-adapter.test.ts tests/kp-organic-motion-primitives.test.ts tests/kp-choreography-envelope-bridge.test.ts",
+      "status": "passed",
+      "scope": "semantic clock and rewind sampling",
+      "checkedAt": "2026-07-16T19:34:25.185Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript rewind integration",
+      "checkedAt": "2026-07-16T19:34:25.260Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:34:25.338Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Removed double-mirrored gestalt sampling and proved the same linear material owner and pose survive forward-to-rewind direction changes and reduced-motion projection at equal semantic progress."
+  }
 }

@@ -543,7 +543,9 @@ function applyGestaltTokenRealization(input: {
           motionFieldId: input.state.animationId
         }),
         progress: realizationProgress,
-        direction: input.state.direction,
+        // Progress is already direction-normalized at the stage boundary.
+        // Mirroring again here would give rewind a different material pose.
+        direction: "forward",
         microMotionAmplitude: Math.min(1, amplitude),
         deformationCeiling: Math.min(1, deformation)
       });

@@ -575,6 +575,58 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   );
 });
 
+test("linear material owners survive rewind and accessibility projection", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.animation.linear-solve.solve-x"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  const xOwner = stage.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.lhs.x"]'
+  );
+
+  await scrubber.fill("0.35");
+  await xOwner.evaluate((element) => {
+    element.dataset["kpRewindOwnerProbe"] = "same-material";
+  });
+  const forwardRect = await xOwner.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { x: rect.x, y: rect.y };
+  });
+  await player.getByRole("button", { name: "Rewind" }).click();
+  await scrubber.fill("0.65");
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-semantic-progress",
+    "0.35"
+  );
+  await expect(xOwner).toHaveAttribute(
+    "data-kp-rewind-owner-probe",
+    "same-material"
+  );
+  const rewindRect = await xOwner.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { x: rect.x, y: rect.y };
+  });
+  expect(Math.abs(rewindRect.x - forwardRect.x)).toBeLessThan(0.75);
+  expect(Math.abs(rewindRect.y - forwardRect.y)).toBeLessThan(0.75);
+
+  await player.locator(
+    "[data-kp-editor-animation-accessibility-control]"
+  ).selectOption("reduced-motion");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-accessibility-mode",
+    "reduced-motion"
+  );
+  await expect(xOwner).toHaveAttribute(
+    "data-kp-rewind-owner-probe",
+    "same-material"
+  );
+});
+
 test("fraction simplification renders factor, common-factor, and simplified states", async ({
   page
 }) => {

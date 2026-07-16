@@ -112,13 +112,14 @@
     {
       "id": "next-action.kp.linear.rewind-accessibility-v0",
       "title": "Verify linear rewind seeking and accessibility",
-      "status": "ready",
-      "summary": "The solve is one bridged sequence; prove exact reverse ownership and accessibility projections."
+      "summary": "The solve is one bridged sequence; prove exact reverse ownership and accessibility projections.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.linear.continuity-gates-v0",
       "title": "Enforce linear continuity browser gates",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Forward, rewind, and accessibility share one material owner; add quantitative boundary gates and final filmstrip review."
     },
     {
       "id": "next-action.kp.radical.shared-bundle-primitive-v0",
