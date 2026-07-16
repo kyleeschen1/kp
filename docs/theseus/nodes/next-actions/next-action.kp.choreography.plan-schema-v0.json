@@ -2,8 +2,9 @@
   "id": "next-action.kp.choreography.plan-schema-v0",
   "kind": "next-action",
   "title": "Define Universal Choreography Plan",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Added a renderer-neutral universal choreography plan with one shared timeline reference, mandatory orient/reflow/act/settle/release phases, explicit justified no-ops, semantic activities, dependency and prerequisite references, and stable checkpoints.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,39 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/choreography-plan.ts",
+      "summary": "Defines builders and validation for the semantic envelope while rejecting coordinates, keyframes, DOM instructions, and a second timing system."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-choreography-plan.test.ts",
+      "summary": "Proves the exact five-phase shape, justified no-ops, reference closure, shared-clock contract, and low-level motion rejection."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.vocabulary-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +63,22 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-choreography-plan.test.ts tests/kp-choreography-vocabulary.test.ts",
+      "status": "passed",
+      "scope": "Choreography plan and vocabulary contracts",
+      "checkedAt": "2026-07-16T16:03:33.359Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-16T16:03:33.425Z",
+      "scope": "TypeScript project closure"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.choreography.vocabulary-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Added a renderer-neutral universal choreography plan with one shared timeline reference, mandatory orient/reflow/act/settle/release phases, explicit justified no-ops, semantic activities, dependency and prerequisite references, and stable checkpoints."
+  }
 }
