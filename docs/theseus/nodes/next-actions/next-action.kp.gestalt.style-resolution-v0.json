@@ -2,8 +2,9 @@
   "id": "next-action.kp.gestalt.style-resolution-v0",
   "kind": "next-action",
   "title": "Compile Gestalt Style Resolution",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Added deterministic gestalt-style inheritance and override resolution across trusted defaults, pinned base chains, project, animation, motif, viewer substitution, accessibility, and final canonical motif constraints. Resolution reports missing packages, base cycles, applied constraints, and strips attempted semantic choreography overrides.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,44 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/gestalt-style-resolution.ts",
+      "summary": "Resolves declarative channels with exact precedence, immutable pin provenance, diagnostics, and deterministic fingerprints."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/gestalt-style.ts",
+      "summary": "Exports the shared deterministic value fingerprint used by package and resolved-style contracts."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-gestalt-style-resolution.test.ts",
+      "summary": "Proves precedence, motif supremacy, stable fingerprints, nonmutating viewer substitution, missing/cyclic packages, and semantic override rejection."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.gestalt.style-schema-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +68,22 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-gestalt-style-resolution.test.ts tests/kp-gestalt-style.test.ts",
+      "status": "passed",
+      "scope": "Gestalt style package and resolution contracts",
+      "checkedAt": "2026-07-16T16:25:03.996Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-16T16:25:04.068Z",
+      "scope": "TypeScript project closure"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.gestalt.style-schema-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Added deterministic gestalt-style inheritance and override resolution across trusted defaults, pinned base chains, project, animation, motif, viewer substitution, accessibility, and final canonical motif constraints. Resolution reports missing packages, base cycles, applied constraints, and strips attempted semantic choreography overrides."
+  }
 }

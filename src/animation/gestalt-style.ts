@@ -80,7 +80,7 @@ export function createKpGestaltStylePackage(
   return {
     kind: "gestalt-style-package",
     ...cloned,
-    resolvedFingerprint: fingerprint(cloned)
+    resolvedFingerprint: fingerprintKpGestaltStyleValue(cloned)
   };
 }
 
@@ -201,7 +201,7 @@ function rejectExecutableStyle(
   });
 }
 
-function fingerprint(value: unknown): string {
+export function fingerprintKpGestaltStyleValue(value: unknown): string {
   const input = stableStringify(value);
   let hash = 0xcbf29ce484222325n;
   for (const character of input) {
