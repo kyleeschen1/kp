@@ -209,6 +209,16 @@ test("gestalt style switching preserves semantic progress and the mounted equati
     .not.toHaveText("pending");
   await expect(diagnostics.locator("[data-kp-editor-gestalt-capabilities]"))
     .toContainText("compatible");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-continuity-mode",
+    "persistent-owners"
+  );
+  await expect(diagnostics.locator("[data-kp-editor-continuity-ownership]"))
+    .toContainText(/owners · \d+ motion identities/);
+  await expect(diagnostics.locator("[data-kp-editor-continuity-bundle]"))
+    .toHaveText("none");
+  await expect(diagnostics.locator("[data-kp-editor-continuity-eligibility]"))
+    .toContainText("continuants");
   const organicRealization = await stage
     .locator("[data-kp-motion-id]")
     .evaluateAll((tokens) => tokens.slice(0, 8).map((token) => ({
@@ -1053,6 +1063,22 @@ test("radical bundle and native settlement satisfy continuity budgets", async ({
   );
 
   await scrubber.fill("0.58");
+  const continuityDiagnostics = player.locator(
+    "[data-kp-editor-animation-gestalt-diagnostics]"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-continuity-mode",
+    "persistent-owners-and-bundle"
+  );
+  await expect(
+    continuityDiagnostics.locator("[data-kp-editor-continuity-bundle]")
+  ).toContainText(/fragments →/);
+  await expect(
+    continuityDiagnostics.locator("[data-kp-editor-continuity-settlement]")
+  ).toHaveText("material fragments");
+  await expect(
+    continuityDiagnostics.locator("[data-kp-editor-continuity-eligibility]")
+  ).toContainText("structural exemptions");
   const sourceBase = transition.locator(
     '[data-kp-editor-equation-source] [data-kp-motion-id*=".power.base"]'
   );
@@ -1112,6 +1138,13 @@ test("radical bundle and native settlement satisfy continuity budgets", async ({
   });
 
   await scrubber.fill("0.92");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-continuity-settlement",
+    "native handoff"
+  );
+  await expect(
+    continuityDiagnostics.locator("[data-kp-editor-continuity-settlement]")
+  ).toHaveText("native handoff");
   const settlementSamples = await stage.evaluate((element) => {
     const native = element.querySelector<HTMLElement>(
       '[data-kp-motion-id*=".radical.radical-symbol"]'

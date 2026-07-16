@@ -2,9 +2,36 @@
   "id": "next-action.kp.editor.continuity-inspector-v0",
   "kind": "next-action",
   "title": "Expose continuity ownership and bundle diagnostics",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 23 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Added live material-continuity diagnostics to the KP editor inspector, exposing persistent owners, semantic motion identities, artifact bundle fragments and anchor, native settlement state, and structural motion exemptions without remounting the equation stage.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/equation-material-continuity-inspector.ts",
+      "summary": "Collects and summarizes live equation material continuity from the mounted stage."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-player-shell.ts",
+      "summary": "Adds ownership, bundle, settlement, and eligibility rows to the existing inspector."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Synchronizes continuity diagnostics after each material-layer realization."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-equation-material-continuity-inspector.test.ts",
+      "summary": "Covers ownership, bundle, handoff, settlement, and non-bundle summaries."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves live linear and radical continuity diagnostics in the editor."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +45,35 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript contracts",
+      "checkedAt": "2026-07-16T20:08:45.321Z"
+    },
+    {
+      "command": "node --test editor continuity and gestalt inspector tests",
+      "status": "passed",
+      "scope": "Inspector summaries",
+      "checkedAt": "2026-07-16T20:08:45.421Z"
+    },
+    {
+      "command": "Playwright gestalt switching and radical continuity tests",
+      "status": "passed",
+      "scope": "Mounted editor diagnostics",
+      "checkedAt": "2026-07-16T20:08:45.525Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T20:08:45.644Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added live material-continuity diagnostics to the KP editor inspector, exposing persistent owners, semantic motion identities, artifact bundle fragments and anchor, native settlement state, and structural motion exemptions without remounting the equation stage."
+  }
 }

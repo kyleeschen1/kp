@@ -98,6 +98,10 @@ function renderGestaltDiagnostics(): string {
           <div><dt>Salience graph</dt><dd data-kp-editor-gestalt-salience>pending</dd></div>
           <div><dt>Traversal</dt><dd data-kp-editor-gestalt-traversal>pending</dd></div>
           <div><dt>Capabilities</dt><dd data-kp-editor-gestalt-capabilities>pending</dd></div>
+          <div><dt>Material ownership</dt><dd data-kp-editor-continuity-ownership>pending</dd></div>
+          <div><dt>Artifact bundle</dt><dd data-kp-editor-continuity-bundle>pending</dd></div>
+          <div><dt>Native settlement</dt><dd data-kp-editor-continuity-settlement>pending</dd></div>
+          <div><dt>Motion eligibility</dt><dd data-kp-editor-continuity-eligibility>pending</dd></div>
           <div><dt>Focus experiment</dt><dd data-kp-editor-focus-experiment>flat</dd></div>
           <div><dt>x/y invariance</dt><dd data-kp-editor-focus-invariance>pending</dd></div>
         </dl>

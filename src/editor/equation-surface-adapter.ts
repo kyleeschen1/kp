@@ -23,6 +23,9 @@ import {
 } from "./equation-transition-motifs.ts";
 import type { KpEditorAnimationPlayerState } from "./animation-player-state.ts";
 import {
+  syncKpEditorEquationMaterialContinuityInspection
+} from "./equation-material-continuity-inspector.ts";
+import {
   kpEditorAnimationSurfaceAdapterRegistry,
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
@@ -374,6 +377,7 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       player?.dataset["kpEditorAnimationFocusExperiment"] ?? "flat"
     );
     if (player !== null) {
+      syncKpEditorEquationMaterialContinuityInspection({ player, stage });
       player.dataset["kpEditorAnimationMotionPlanInvalidated"] = "false";
     }
   }

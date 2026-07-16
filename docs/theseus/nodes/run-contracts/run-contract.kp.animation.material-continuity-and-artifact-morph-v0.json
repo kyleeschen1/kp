@@ -178,7 +178,7 @@
     {
       "id": "next-action.kp.editor.continuity-inspector-v0",
       "title": "Expose continuity ownership and bundle diagnostics",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.continuity.proof-cohort-closeout-v0",
