@@ -19,10 +19,10 @@ export function sampleKpEquationEnclosureChoreography(
     return {
       kind,
       progress: p,
-      persistentTravelProgress: intervalProgress(p, 0, 0.38),
-      enclosureVisibility: intervalProgress(p, 0.32, 0.7),
-      outerArtifactVisibility: intervalProgress(p, 0.48, 0.82),
-      settleProgress: intervalProgress(p, 0.72, 1)
+      persistentTravelProgress: intervalProgress(p, 0.08, 0.42),
+      enclosureVisibility: intervalProgress(p, 0.42, 0.7),
+      outerArtifactVisibility: intervalProgress(p, 0.58, 0.82),
+      settleProgress: intervalProgress(p, 0.76, 1)
     };
   }
 

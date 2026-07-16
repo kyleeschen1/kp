@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("project dashboard round trip keeps editor motion and graph controls usable", async ({
+test("project-dashboard-round-trip keeps editor motion and graph controls usable", async ({
   page
 }) => {
   await page.goto("/");

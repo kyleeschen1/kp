@@ -55,12 +55,21 @@ import {
   createKpEditorPrecomputedEquationMotionPlan,
   type KpEditorPrecomputedEquationMotionPlan
 } from "./precomputed-equation-motion.ts";
+import {
+  createKpFunctionWrapChoreography,
+  sampleKpFunctionWrapChoreography,
+  type KpFunctionWrapChoreography,
+  type KpFunctionWrapChoreographyFrame
+} from "../animation/function-wrap-choreography.ts";
+import { bindKpFocusFrameToCss } from "../animation/focus-profile.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
   readonly contentKey: string;
   readonly plans: ReadonlyMap<number, KpEditorPrecomputedEquationMotionPlan>;
 }>();
+const functionWrapChoreographyCache =
+  new Map<string, KpFunctionWrapChoreography>();
 
 export interface KpEditorEquationStageFrame {
   readonly stageIdentityKey: string;
@@ -70,6 +79,10 @@ export interface KpEditorEquationStageFrame {
   readonly easedProgress: number;
   readonly motifs: readonly KpEditorEquationTransitionMotifFrame[];
   readonly solveX?: KpEditorSolveXSharedPlayerFrame | undefined;
+  readonly functionWrap?: {
+    readonly choreography: KpFunctionWrapChoreography;
+    readonly frame: KpFunctionWrapChoreographyFrame;
+  } | undefined;
 }
 
 export function createKpEditorEquationStageFrame(input: {
@@ -96,6 +109,11 @@ export function createKpEditorEquationStageFrame(input: {
       );
 
   const solveX = createKpEditorSolveXSharedPlayerFrame(input);
+  const functionWrap = createFunctionWrapFrame(
+    input.animation,
+    input.state,
+    localProgress
+  );
   const stageIdentityKey = projection.animationId;
   const contentKey = `${projection.direction}:${projection.transitions
     .map((transition) => transition.id)
@@ -113,7 +131,8 @@ export function createKpEditorEquationStageFrame(input: {
         progress: localProgress * localProgress * (3 - 2 * localProgress)
       })
     ),
-    ...(solveX === undefined ? {} : { solveX })
+    ...(solveX === undefined ? {} : { solveX }),
+    ...(functionWrap === undefined ? {} : { functionWrap })
   };
 }
 
@@ -199,6 +218,14 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
           motif.target
         );
       }
+      if (index === 0 && frame.functionWrap !== undefined) {
+        applyFunctionWrapChoreography({
+          transitionElement,
+          direction: state.direction,
+          choreography: frame.functionWrap.choreography,
+          frame: frame.functionWrap.frame
+        });
+      }
       transitionElement.querySelectorAll<HTMLElement>("[data-kp-editor-equation-focus-token]")
         .forEach((token) => {
           token.style.setProperty("--kp-editor-equation-focus-progress", String(motif.progress));
@@ -213,6 +240,84 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
 export function registerKpEditorEquationSurfaceAdapter(): () => void {
   return kpEditorAnimationSurfaceAdapterRegistry.register(
     kpEditorEquationSurfaceAdapter
+  );
+}
+
+function createFunctionWrapFrame(
+  animation: KpAnimationAsset,
+  state: KpEditorAnimationPlayerState,
+  progress: number
+): KpEditorEquationStageFrame["functionWrap"] {
+  if (
+    !animation.transformations.some(
+      (transformation) => transformation.transformType === "wrapFunction"
+    )
+  ) {
+    return undefined;
+  }
+  let choreography = functionWrapChoreographyCache.get(animation.id);
+  if (choreography === undefined) {
+    choreography = createKpFunctionWrapChoreography(animation);
+    functionWrapChoreographyCache.set(animation.id, choreography);
+  }
+  return {
+    choreography,
+    frame: sampleKpFunctionWrapChoreography({
+      choreography,
+      progress,
+      direction: state.direction,
+      accessibilityMode: "full"
+    })
+  };
+}
+
+function applyFunctionWrapChoreography(input: {
+  readonly transitionElement: HTMLElement;
+  readonly direction: "forward" | "rewind";
+  readonly choreography: KpFunctionWrapChoreography;
+  readonly frame: KpFunctionWrapChoreographyFrame;
+}): void {
+  const accessibilityMode = (() => {
+    switch (editorAccessibilityMode(input.transitionElement)) {
+      case "reduced-motion": return "reduced" as const;
+      case "static": return "no-depth" as const;
+      default: return "full" as const;
+    }
+  })();
+  const sampled = accessibilityMode === "full"
+    ? input.frame
+    : sampleKpFunctionWrapChoreography({
+        choreography: input.choreography,
+        progress: input.frame.timeline.requestedProgress,
+        direction: input.direction,
+        accessibilityMode
+      });
+  input.transitionElement.dataset["kpEditorEquationChoreographyPlanId"] =
+    input.choreography.plan.id;
+  input.transitionElement.dataset["kpEditorEquationChoreographyPhase"] =
+    sampled.focus.phaseId;
+  input.transitionElement.dataset["kpEditorEquationChoreographyPreviousCheckpoint"] =
+    sampled.timeline.previousCheckpointId;
+  input.transitionElement.dataset["kpEditorEquationChoreographyNextCheckpoint"] =
+    sampled.timeline.nextCheckpointId;
+  input.transitionElement.dataset["kpEditorEquationContextDimming"] =
+    String(sampled.focus.contextDimming);
+
+  const selector = input.direction === "forward"
+    ? '[data-kp-editor-equation-source] [data-kp-motion-id$=".input.value"]'
+    : '[data-kp-editor-equation-source] [data-kp-motion-id$=".wrapped.argument"]';
+  const argument = input.transitionElement.querySelector<HTMLElement>(selector);
+  if (argument === null) return;
+  const binding = bindKpFocusFrameToCss(
+    input.choreography.focus,
+    sampled.focus
+  );
+  argument.classList.add(binding.className);
+  Object.entries(binding.attributes).forEach(([name, value]) =>
+    argument.setAttribute(name, value)
+  );
+  Object.entries(binding.variables).forEach(([name, value]) =>
+    argument.style.setProperty(name, value)
   );
 }
 

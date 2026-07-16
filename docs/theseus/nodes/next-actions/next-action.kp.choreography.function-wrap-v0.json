@@ -2,8 +2,9 @@
   "id": "next-action.kp.choreography.function-wrap-v0",
   "kind": "next-action",
   "title": "Migrate Function Wrapping Choreography",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Migrated the generated function-wrap editor animation onto a shared compiled choreography plan and timeline: focus argument, reflow through 0.42, introduce parentheses only after reflow, delay f until 0.58, hold recognition, then release focus exactly. Runtime exposes plan/phase/checkpoint evidence, preserves one stage and opaque x continuant through handoff, integrates layout-safe CSS depth without changing x/y paths, and updates the dashboard exemplar comparison honestly.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,69 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/function-wrap-choreography.ts",
+      "summary": "Builds the canonical wrap vocabulary, lifecycle, lineage, salience, traversal, compiled envelope, timeline, and focus profile from the generated asset."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Samples the shared function-wrap envelope in the editor, exposes runtime evidence, and binds focus to the persistent argument without remounting the stage."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-enclosure-choreography.ts",
+      "summary": "Sequences persistent argument travel before enclosure and delayed function-name entry."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/semantic-equation-token-renderer.ts",
+      "summary": "Composes focus z/scale variables with the existing semantic x/y token transform rather than replacing it."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-function-wrap-choreography.test.ts",
+      "summary": "Proves the five phases, strict reflow-before-act boundary, exact release, accessibility flattening, and rewind equivalence."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves visible orient, reflow, act, settle, release, persistent stage identity, opaque x, delayed wrapper entry, and exact focus cleanup."
+    },
+    {
+      "kind": "file",
+      "path": "tests/fixtures/choreography-exemplar-baseline.ts",
+      "summary": "Updates the dashboard comparison with observed shared-plan phases and retains the legacy fixture distinction as a known gap."
+    },
+    {
+      "kind": "file",
+      "path": "tests/choreography-exemplar-baseline.test.ts",
+      "summary": "Allows a migrated exemplar to close every phase while still reporting remaining comparison gaps."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.gestalt.focus-profiles-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +93,46 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-function-wrap-choreography.test.ts tests/kp-editor-function-wrap-visible-animation.test.ts tests/semantic-equation-token-renderer.test.ts tests/kp-choreography-compiler.test.ts",
+      "status": "passed",
+      "scope": "Function-wrap compiler, editor frame, and semantic token contract",
+      "checkedAt": "2026-07-16T17:17:32.445Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g function-wrap-family",
+      "status": "passed",
+      "scope": "Visible phase ordering, persistence, focus, and rewind",
+      "checkedAt": "2026-07-16T17:17:32.514Z"
+    },
+    {
+      "command": "npx playwright test tests/project-dashboard.browser.spec.ts --project=chromium -g project-dashboard-round-trip",
+      "status": "passed",
+      "scope": "Dashboard exemplar launch and editor round trip",
+      "checkedAt": "2026-07-16T17:17:32.573Z"
+    },
+    {
+      "command": "manual: inspect editor function wrap screenshots at 35 and 50 percent",
+      "status": "passed",
+      "scope": "Reflow-only and enclosure-entry visual comparison",
+      "checkedAt": "2026-07-16T17:17:32.635Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Broad unit and integration regression suite: 1138 tests",
+      "checkedAt": "2026-07-16T17:17:32.690Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-16T17:17:32.747Z",
+      "scope": "Production client build"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.gestalt.focus-profiles-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Migrated the generated function-wrap editor animation onto a shared compiled choreography plan and timeline: focus argument, reflow through 0.42, introduce parentheses only after reflow, delay f until 0.58, hold recognition, then release focus exactly. Runtime exposes plan/phase/checkpoint evidence, preserves one stage and opaque x continuant through handoff, integrates layout-safe CSS depth without changing x/y paths, and updates the dashboard exemplar comparison honestly."
+  }
 }

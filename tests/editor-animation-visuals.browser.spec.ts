@@ -329,7 +329,7 @@ test("exponent and radical family animations render their semantic rewrite motif
     .toHaveCount(1);
 });
 
-test("function-wrap family animation visibly wraps and rewinds its argument", async ({
+test("function-wrap-family animation visibly wraps and rewinds its argument", async ({
   page
 }) => {
   await page.goto("/");
@@ -339,9 +339,45 @@ test("function-wrap family animation visibly wraps and rewinds its argument", as
 
   const player = page.locator("[data-kp-editor-animation-player]");
   const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  const transition = player.locator("[data-kp-editor-equation-transition-id]");
+  const sourceArgument = player.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id$=".input.value"]'
+  );
+  const targetLeftParen = player.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".wrapped.left-paren"]'
+  );
+  await stage.evaluate((element) => {
+    element.dataset["kpFunctionWrapStageProbe"] = "persistent";
+  });
+
+  await scrubber.fill("0.1");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-choreography-phase",
+    "orient"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-choreography-plan-id",
+    /choreography\..*wrap-function/
+  );
+  await expect(sourceArgument).toHaveClass(/kp-focus-group/);
+  await expect(sourceArgument).toHaveCSS("opacity", "1");
+
+  await scrubber.fill("0.35");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-choreography-phase",
+    "reflow"
+  );
+  await expect(sourceArgument).toHaveCSS("opacity", "1");
+  await expect(targetLeftParen).toHaveCSS("opacity", "0");
+
   await scrubber.fill("0.5");
-  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+  await expect(transition)
     .toHaveAttribute("data-kp-editor-equation-motif", "wrap");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-choreography-phase",
+    "act"
+  );
   await expect(player.locator("[data-kp-editor-equation-source]"))
     .toContainText("x");
   await expect(player.locator("[data-kp-editor-equation-target]"))
@@ -351,6 +387,27 @@ test("function-wrap family animation visibly wraps and rewinds its argument", as
   expect(Number(await player.locator(
     '[data-kp-editor-equation-target] [data-kp-motion-id*="wrapped.function"]'
   ).evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.05);
+  expect(Number(await targetLeftParen.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeGreaterThan(0);
+  await expect(stage).toHaveAttribute(
+    "data-kp-function-wrap-stage-probe",
+    "persistent"
+  );
+
+  await scrubber.fill("0.85");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-choreography-phase",
+    "settle"
+  );
+  await scrubber.fill("1");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-choreography-phase",
+    "release"
+  );
+  await expect(sourceArgument).toHaveCSS("opacity", "0");
+  await expect(sourceArgument).toHaveCSS("--kp-focus-z", "0px");
+  await expect(sourceArgument).toHaveCSS("--kp-focus-scale", "1");
 
   await player.getByRole("button", { name: "Rewind animation" }).click();
   await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "rewind");

@@ -90,7 +90,9 @@ export function compileKpFocusProfile(
       outlineStrength:
         intent.accessibilityMode === "high-contrast"
           ? 1
-          : round(0.3 + intent.strength * 0.5)
+          : depthDisabled
+            ? round(0.3 + intent.strength * 0.5)
+            : 0
     },
     sharedShadow: {
       id: `${intent.id}.shared-shadow`,

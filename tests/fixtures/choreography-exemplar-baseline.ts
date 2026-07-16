@@ -86,6 +86,7 @@ export const choreographyExemplarBaselines:
       sourceRefs: [
         "src/editor/equation-animation-catalog.ts#createFunctionWrapFixtureTransition",
         "src/rendering/visual-motif.ts#wrap",
+        "src/animation/function-wrap-choreography.ts#createKpFunctionWrapChoreography",
         "tests/editor-animation-visuals.browser.spec.ts#function-wrap-family"
       ],
       continuants: [
@@ -111,16 +112,21 @@ export const choreographyExemplarBaselines:
         }
       ],
       phases: [
-        missingFocusPhase(
-          "orient",
-          "Focus the causal argument x before it changes role."
-        ),
+        {
+          phaseId: "orient",
+          status: "observed",
+          evidence: [
+            "The shared choreography timeline reserves normalized progress 0.00–0.14 for argument focus.",
+            "The editor binds the persistent x to the layout-safe focus profile."
+          ],
+          contract: "Focus the causal argument x before it changes role."
+        },
         {
           phaseId: "reflow",
           status: "observed",
           evidence: [
-            "wrapped-token-shift occupies normalized progress 0.00–0.40.",
-            "The x continuant reaches argument position before wrapper entry completes."
+            "The shared choreography timeline reserves normalized progress 0.14–0.42 for reflow.",
+            "Persistent travel completes before enclosure visibility begins at 0.42."
           ],
           contract: "Move the argument continuant into its target slot before wrapper artifacts dominate."
         },
@@ -129,21 +135,29 @@ export const choreographyExemplarBaselines:
           status: "observed",
           evidence: [
             "Parentheses enter over 0.42–0.70.",
-            "The function name enters over 0.50–0.78.",
+            "The function name enters later over 0.58–0.82.",
             "The wrapper phase is named wrap-artifact-enter."
           ],
           contract: "Introduce the delimiters and function name as consequences of wrapping."
         },
         {
           phaseId: "settle",
-          status: "implicit",
-          evidence: ["Wrapper tokens reach native opacity, scale, and position at their motion endpoints."],
+          status: "observed",
+          evidence: [
+            "The shared timeline holds settle over normalized progress 0.70–0.90.",
+            "Recognition is an explicit stable checkpoint before release."
+          ],
           contract: "Hold a fully recognizable f(x) checkpoint before attention releases."
         },
-        missingFocusPhase(
-          "release",
-          "Remove focus only after f(x) is stable and recognizable."
-        )
+        {
+          phaseId: "release",
+          status: "observed",
+          evidence: [
+            "Release occupies normalized progress 0.90–1.00.",
+            "Focus z, scale, shadow, outline, and context dimming return exactly to neutral."
+          ],
+          contract: "Remove focus only after f(x) is stable and recognizable."
+        }
       ],
       checkpoints: [
         {
@@ -154,13 +168,13 @@ export const choreographyExemplarBaselines:
         },
         {
           id: "focus-peak",
-          progress: 0,
-          status: "missing",
-          evidence: "The exemplar does not preview the argument with focus."
+          progress: 0.14,
+          status: "observed",
+          evidence: "The argument reaches full focus before reflow begins."
         },
         {
           id: "reflow-complete",
-          progress: 0.4,
+          progress: 0.42,
           status: "observed",
           evidence: "The wrapped-token-shift phase ends before artifact entry is established."
         },
@@ -172,15 +186,15 @@ export const choreographyExemplarBaselines:
         },
         {
           id: "settled",
-          progress: 1,
-          status: "implicit",
-          evidence: "All tokens are at native target geometry."
+          progress: 0.9,
+          status: "observed",
+          evidence: "The recognition checkpoint holds native target geometry before release."
         },
         {
           id: "released",
           progress: 1,
-          status: "missing",
-          evidence: "No distinct attention release follows the settled target."
+          status: "observed",
+          evidence: "The focus profile is exactly neutral at the release endpoint."
         },
         {
           id: "rewind",
@@ -203,9 +217,7 @@ export const choreographyExemplarBaselines:
         "The same semantic continuant must remain authoritative in both directions."
       ],
       knownGaps: [
-        "No orient or release phase.",
-        "No explicit recognition hold after the target becomes stable.",
-        "Entry paths are short linear offsets rather than scene-derived arcs."
+        "The legacy dashboard fixture remains a comparison exemplar rather than consuming the generated editor choreography plan directly."
       ]
     },
     {

@@ -106,7 +106,7 @@ export function applyKpEquationTokenMotionFrame(
     if (element === undefined) continue;
     element.style.opacity = String(token.pose.opacity);
     element.style.transform =
-      `translate(${token.pose.x}px, ${token.pose.y}px) scale(${token.pose.scale})`;
+      `translate(${token.pose.x}px, ${token.pose.y}px) translateZ(var(--kp-focus-z, 0px)) scale(${token.pose.scale}) scale(var(--kp-focus-scale, 1))`;
     element.style.transformOrigin = "center center";
     if (token.lineagePathId === undefined) {
       delete element.dataset["kpEquationLineagePathId"];
