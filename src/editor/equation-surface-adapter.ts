@@ -61,6 +61,9 @@ import {
   createKpDerivativeSumSelectorAnnotatedLatex
 } from "./derivative-sum-semantic-latex.ts";
 import {
+  createKpAntiderivativePowerSelectorAnnotatedLatex
+} from "./antiderivative-power-semantic-latex.ts";
+import {
   createKpEditorPrecomputedEquationMotionPlan,
   type KpEditorPrecomputedEquationMotionPlan
 } from "./precomputed-equation-motion.ts";
@@ -1892,6 +1895,7 @@ function annotatedLatexForStates(
     ?? createKpDistributionSelectorAnnotatedLatex(state)
     ?? createKpExponentRadicalSelectorAnnotatedLatex(state)
     ?? createKpDerivativeSumSelectorAnnotatedLatex(state)
+    ?? createKpAntiderivativePowerSelectorAnnotatedLatex(state)
     ?? createKpDerivativePowerSelectorAnnotatedLatex(state)
     ?? createKpInequalitySelectorAnnotatedLatex(state)
     ?? createKpMatrixSelectorAnnotatedLatex(state)
@@ -1923,6 +1927,9 @@ function annotatedLatexForObject(
     objectId: object.id,
     selectors: object.selectors
   }) ?? createKpDerivativeSumSelectorAnnotatedLatex({
+    objectId: object.id,
+    selectors: object.selectors
+  }) ?? createKpAntiderivativePowerSelectorAnnotatedLatex({
     objectId: object.id,
     selectors: object.selectors
   }) ?? createKpInequalitySelectorAnnotatedLatex({

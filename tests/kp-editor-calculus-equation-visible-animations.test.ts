@@ -31,11 +31,6 @@ test("generated calculus equations expose exact derivative and integral transiti
       "animation.generated.calculus.derivative.power-rule-x-cubed",
       "\\frac{d}{dx}x^{3}",
       "3x^{2}"
-    ],
-    [
-      "animation.generated.calculus.integral.power-rule-quadratic",
-      "\\int 6x^{2}\\,dx",
-      "2x^{3} + C"
     ]
   ] as const;
 
@@ -73,6 +68,34 @@ test("generated calculus equations expose exact derivative and integral transiti
   );
   assert.equal(resolved.projection.transitions[0]?.target[0]?.latex, "3x^{2} + 2");
   assert.equal(resolved.motifs[0]?.kind, "merge-fan-in");
+
+  const antiderivativeExpanded = frame(
+    "animation.generated.calculus.integral.power-rule-quadratic",
+    0.25
+  );
+  assert.equal(
+    antiderivativeExpanded.projection.transitions[0]?.source[0]?.latex,
+    "\\int 6x^{2}\\,dx"
+  );
+  assert.equal(
+    antiderivativeExpanded.projection.transitions[0]?.target[0]?.latex,
+    "\\frac{6}{2+1}x^{2+1}"
+  );
+  assert.equal(antiderivativeExpanded.motifs[0]?.kind, "copy-fan-out");
+
+  const antiderivativeResolved = frame(
+    "animation.generated.calculus.integral.power-rule-quadratic",
+    0.75
+  );
+  assert.equal(
+    antiderivativeResolved.projection.transitions[0]?.source[0]?.latex,
+    "\\frac{6}{2+1}x^{2+1}"
+  );
+  assert.equal(
+    antiderivativeResolved.projection.transitions[0]?.target[0]?.latex,
+    "2x^{3} + C"
+  );
+  assert.equal(antiderivativeResolved.motifs[0]?.kind, "merge-fan-in");
 });
 
 test("FTC equation animation expands its comparison into both visible theorem forms", () => {

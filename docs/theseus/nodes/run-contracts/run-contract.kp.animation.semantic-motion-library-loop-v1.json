@@ -115,7 +115,8 @@
     {
       "id": "next-action.kp.animation.antiderivative-power-lineage-v1",
       "title": "Implement antiderivative power rule",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.antiderivative-power-lineage-v1 in Semantic Motion Animation Library Long Loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.calculus-rule-promotion-v1",

@@ -53,6 +53,8 @@ const operationSpecificTransformTypes = new Set([
   "applyDerivativePowerRule",
   "applyDerivativeSumRule",
   "applyDerivativePowerRulesToTerms",
+  "applyAntiderivativePowerRule",
+  "simplifyAntiderivativePowerRule",
   "substituteValue"
 ]);
 

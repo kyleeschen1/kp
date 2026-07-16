@@ -63,6 +63,18 @@ export const defaultEquationTransformVisualMotifRules:
         "Each local operator, variable, and term resolves into one derivative result."
     },
     {
+      transformationKind: "applyAntiderivativePowerRule",
+      descriptor: descriptorForEquationMotif("copy-fan-out"),
+      summary:
+        "The source exponent branches into two successor expressions while the coefficient and base persist."
+    },
+    {
+      transformationKind: "simplifyAntiderivativePowerRule",
+      descriptor: descriptorForEquationMotif("merge-fan-in"),
+      summary:
+        "The quotient and successor groups resolve before the integration constant enters."
+    },
+    {
       transformationKind: "multiplyNegativeBothSidesInequality",
       descriptor: descriptorForEquationMotif("relation-flip"),
       summary: "The inequality relation turns while negative multiplication enters."

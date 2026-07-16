@@ -90,10 +90,11 @@ test("generated calculus fixtures cover derivative and integral rules", () => {
   assert.equal(integral.familyId, "generated.calculus.integral");
   assert.deepEqual(
     integral.transformations.map((transformation) => transformation.transformType),
-    ["applyAntiderivativePowerRule"]
+    ["applyAntiderivativePowerRule", "simplifyAntiderivativePowerRule"]
   );
   assert.deepEqual(calculusObjectLatex(integral), [
     "\\int 6x^{2}\\,dx",
+    "\\frac{6}{2+1}x^{2+1}",
     "2x^{3} + C"
   ]);
   assert.deepEqual(integral.transformations[0]?.lawRefs, [
@@ -102,6 +103,15 @@ test("generated calculus fixtures cover derivative and integral rules", () => {
       level: "strict"
     }
   ]);
+  assert.deepEqual(
+    integral.transformations.map((transformation) =>
+      compileKpSemanticEquationTransitionResult({
+        transformation,
+        bundle: integral.bundle
+      }).status
+    ),
+    ["semantic", "semantic"]
+  );
 });
 
 test("generated problem animation catalog imports all calculus fixtures", () => {

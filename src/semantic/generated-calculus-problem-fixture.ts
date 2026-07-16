@@ -19,6 +19,9 @@ import {
 import {
   createKpDerivativeSumRuleSemantics
 } from "./derivative-sum-rule-semantics.ts";
+import {
+  createKpAntiderivativePowerRuleSemantics
+} from "./antiderivative-power-rule-semantics.ts";
 
 export type GeneratedCalculusProblemFamilyId =
   | "generated.calculus.derivative"
@@ -379,6 +382,13 @@ function createGeneratedIntegralPowerProblemFixture(
   const ids = generatedIntegralPowerProblemIds(input);
   const antiderivative = integralPowerTermFor(input);
   const latex = generatedIntegralPowerProblemLatex(input, antiderivative);
+  const semantics = createKpAntiderivativePowerRuleSemantics({
+    sourceObjectId: ids.initial,
+    expandedObjectId: ids.expanded,
+    targetObjectId: ids.integrated,
+    expansionTransformationId: ids.expandTransform,
+    resolutionTransformationId: ids.resolveTransform
+  });
   const bundle = createKpAssetBundle({
     id: ids.asset,
     title: input.title,
@@ -391,7 +401,36 @@ function createGeneratedIntegralPowerProblemFixture(
           selector(ids.initial, "operator", "operator", "\\int"),
           selector(ids.initial, "coefficient", "coefficient", String(input.coefficient)),
           selector(ids.initial, "base", "term", input.base),
-          selector(ids.initial, "exponent", "term", String(input.exponent))
+          selector(ids.initial, "exponent", "term", String(input.exponent)),
+          selector(ids.initial, "differential", "operator", `d${input.variable}`)
+        ]
+      ),
+      expressionObject(
+        ids.expanded,
+        "Antiderivative power rule exposed",
+        latex.expanded,
+        [
+          selector(
+            ids.expanded,
+            "numerator-coefficient",
+            "coefficient",
+            String(input.coefficient)
+          ),
+          selector(
+            ids.expanded,
+            "denominator-exponent",
+            "term",
+            String(input.exponent)
+          ),
+          selector(ids.expanded, "denominator-increment", "constant", "1"),
+          selector(ids.expanded, "base", "term", input.base),
+          selector(
+            ids.expanded,
+            "power-exponent",
+            "term",
+            String(input.exponent)
+          ),
+          selector(ids.expanded, "power-increment", "constant", "1")
         ]
       ),
       expressionObject(
@@ -407,6 +446,7 @@ function createGeneratedIntegralPowerProblemFixture(
           ),
           selector(ids.integrated, "base", "term", antiderivative.base),
           selector(ids.integrated, "exponent", "term", String(antiderivative.exponent)),
+          selector(ids.integrated, "connector", "operator", "+"),
           selector(ids.integrated, "constant", "constant", "C")
         ]
       )
@@ -414,27 +454,14 @@ function createGeneratedIntegralPowerProblemFixture(
   });
   const transformations = [
     createKpSemanticTransformation({
-      id: ids.transform,
+      id: ids.expandTransform,
       definitionId: "definition.generated.calculus.integral.power-rule",
       transformType: "applyAntiderivativePowerRule",
-      title: "Apply the integral power rule",
+      title: "Expose the antiderivative power rule",
       sourceObjectIds: [ids.initial],
-      targetObjectIds: [ids.integrated],
+      targetObjectIds: [ids.expanded],
       preserves: ["value", "structure"],
-      correspondence: [
-        {
-          sourceSelectorId: `${ids.initial}.base`,
-          targetSelectorId: `${ids.integrated}.base`,
-          preserves: ["identity", "role"],
-          summary: "The base variable persists in the antiderivative."
-        },
-        {
-          sourceSelectorId: `${ids.initial}.exponent`,
-          targetSelectorId: `${ids.integrated}.exponent`,
-          preserves: ["structure"],
-          summary: "The exponent increases by one under the power rule."
-        }
-      ],
+      correspondenceMap: semantics.expansion,
       assumptions: [
         "The exponent is not -1.",
         "The constant of integration records the family of antiderivatives."
@@ -445,6 +472,21 @@ function createGeneratedIntegralPowerProblemFixture(
           level: "strict"
         }
       ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.resolveTransform,
+      definitionId: "definition.generated.calculus.integral.power-rule-resolution",
+      transformType: "simplifyAntiderivativePowerRule",
+      title: "Resolve the antiderivative coefficient and exponent",
+      sourceObjectIds: [ids.expanded],
+      targetObjectIds: [ids.integrated],
+      preserves: ["value", "structure"],
+      correspondenceMap: semantics.resolution,
+      assumptions: [
+        "The exposed successor expressions are arithmetically simplified.",
+        "The constant of integration is independent of the input term."
+      ],
+      lawRefs: [{ id: "law.calculus.integral.power-rule", level: "strict" }]
     })
   ];
   const diagram = createKpSemanticDiagramSequence({
@@ -506,12 +548,15 @@ interface GeneratedIntegralPowerProblemIds {
   readonly diagram: string;
   readonly trace: string;
   readonly initial: string;
+  readonly expanded: string;
   readonly integrated: string;
-  readonly transform: string;
+  readonly expandTransform: string;
+  readonly resolveTransform: string;
 }
 
 interface GeneratedIntegralPowerProblemLatex {
   readonly initial: string;
+  readonly expanded: string;
   readonly integrated: string;
 }
 
@@ -571,8 +616,10 @@ function generatedIntegralPowerProblemIds(
     diagram: `diagram.${input.id}.sequence`,
     trace: `trace.${input.id}`,
     initial: `expression.${input.id}.initial`,
+    expanded: `expression.${input.id}.expanded`,
     integrated: `expression.${input.id}.integrated`,
-    transform: `transform.${input.id}.apply-integral-power-rule`
+    expandTransform: `transform.${input.id}.expand-integral-power-rule`,
+    resolveTransform: `transform.${input.id}.resolve-integral-power-rule`
   };
 }
 
@@ -587,6 +634,8 @@ function generatedIntegralPowerProblemLatex(
         base: input.base,
         exponent: input.exponent
       })}\\,d${input.variable}`,
+    expanded:
+      `\\frac{${formatNumber(input.coefficient)}}{${input.exponent}+1}${input.base}^{${input.exponent}+1}`,
     integrated: `${formatUnsignedPolynomialTerm(antiderivative)} + C`
   };
 }
@@ -654,10 +703,16 @@ function createGeneratedIntegralPowerProblemTrace(
         latex: latex.initial
       },
       {
+        id: `${ids.trace}.expanded`,
+        latex: latex.expanded,
+        transformationId: ids.expandTransform,
+        rule: "applyAntiderivativePowerRule"
+      },
+      {
         id: `${ids.trace}.integrated`,
         latex: latex.integrated,
-        transformationId: ids.transform,
-        rule: "applyAntiderivativePowerRule"
+        transformationId: ids.resolveTransform,
+        rule: "simplifyAntiderivativePowerRule"
       }
     ]
   };
@@ -773,11 +828,11 @@ function createGeneratedIntegralPowerProblemFlashcards(
       title: "Predict the integral power-rule step",
       assetId: ids.asset,
       prompt: "Which transformation integrates this power expression?",
-      transformationIds: [ids.transform],
+      transformationIds: [ids.expandTransform],
       timeMs: 0,
       answer: {
         kind: "transformation",
-        value: ids.transform
+        value: ids.expandTransform
       }
     }),
     createKpFlashcardSpec({
@@ -799,8 +854,8 @@ function createGeneratedIntegralPowerProblemFlashcards(
       title: "Explain the integral power rule",
       assetId: ids.asset,
       prompt: "Why does the exponent increase and the coefficient divide?",
-      objectIds: [ids.initial, ids.integrated],
-      transformationIds: [ids.transform],
+      objectIds: [ids.initial, ids.expanded, ids.integrated],
+      transformationIds: [ids.expandTransform, ids.resolveTransform],
       timeMs: 1200,
       answer: {
         kind: "text",

@@ -1922,6 +1922,82 @@ test("derivative sum rule fans one operator across persistent addends before res
   await expect(resultTerms.nth(1)).toHaveCSS("opacity", "1");
 });
 
+test("antiderivative power rule branches the exponent before quotient settlement", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.animation.generated.calculus.integral.power-rule-quadratic"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const transition = player.locator("[data-kp-editor-equation-transition-id]");
+
+  await scrubber.fill("0.25");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-transition-id",
+    /expand-integral-power-rule/
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-semantic-motion",
+    "active"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-motif",
+    "copy-fan-out"
+  );
+  const exponentCopies = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*=".expanded."][data-kp-motion-id*="-exponent"]'
+  );
+  await expect(exponentCopies).toHaveCount(2);
+  await expect(exponentCopies.nth(0)).toHaveCSS("opacity", "1");
+  await expect(exponentCopies.nth(1)).toHaveCSS("opacity", "1");
+  await expect(exponentCopies.nth(0)).toHaveAttribute(
+    "data-kp-equation-motion-path-variant",
+    "arc-above"
+  );
+  await expect(exponentCopies.nth(1)).toHaveAttribute(
+    "data-kp-equation-motion-path-variant",
+    "arc-below"
+  );
+  const increments = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*="-increment"]'
+  );
+  await expect(increments).toHaveCount(2);
+  expect(await increments.evaluateAll((elements) => elements.every((element) => {
+    const opacity = Number(getComputedStyle(element).opacity);
+    return opacity > 0 && opacity < 1;
+  }))).toBe(true);
+
+  await scrubber.fill("0.75");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-transition-id",
+    /resolve-integral-power-rule/
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-motif",
+    "merge-fan-in"
+  );
+  const resolvingInputs = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id]'
+  );
+  await expect(resolvingInputs).toHaveCount(6);
+  expect(await resolvingInputs.evaluateAll((elements) => elements.filter((element) =>
+    element.getAttribute("data-kp-equation-motion-path-variant")?.startsWith("arc-")
+  ).length)).toBeGreaterThanOrEqual(3);
+  await expect(transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".constant"]'
+  )).toHaveCSS("opacity", "0");
+
+  await scrubber.fill("1");
+  await expect(transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".constant"]'
+  )).toHaveCSS("opacity", "1");
+  await expect(transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".base"]'
+  )).toHaveCSS("opacity", "1");
+});
+
 test("matrix-vector family animation visibly resolves the result vector", async ({ page }) => {
   await page.goto("/");
   await page.locator('[data-action="set-editor-animation"]').selectOption(
