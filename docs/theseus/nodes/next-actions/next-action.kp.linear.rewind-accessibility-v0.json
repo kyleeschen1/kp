@@ -1,0 +1,22 @@
+{
+  "id": "next-action.kp.linear.rewind-accessibility-v0",
+  "kind": "next-action",
+  "title": "Verify linear rewind seeking and accessibility",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Approved slice 12 of 24 in the material continuity and artifact morph repair loop.",
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation.material-continuity-loop-v0"
+    ],
+    "preferred": [
+      "next-action.kp.linear.solve-level-envelope-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ]
+}

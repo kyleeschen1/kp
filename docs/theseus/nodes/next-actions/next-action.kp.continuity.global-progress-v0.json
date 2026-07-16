@@ -1,0 +1,22 @@
+{
+  "id": "next-action.kp.continuity.global-progress-v0",
+  "kind": "next-action",
+  "title": "Add animation-level semantic progress",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Approved slice 6 of 24 in the material continuity and artifact morph repair loop.",
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation.material-continuity-loop-v0"
+    ],
+    "preferred": [
+      "next-action.kp.choreography.envelope-bridging-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ]
+}

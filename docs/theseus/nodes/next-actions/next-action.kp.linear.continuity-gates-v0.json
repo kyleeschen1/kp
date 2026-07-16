@@ -1,0 +1,22 @@
+{
+  "id": "next-action.kp.linear.continuity-gates-v0",
+  "kind": "next-action",
+  "title": "Enforce linear continuity browser gates",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Approved slice 13 of 24 in the material continuity and artifact morph repair loop.",
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation.material-continuity-loop-v0"
+    ],
+    "preferred": [
+      "next-action.kp.linear.rewind-accessibility-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "next-action.kp.continuity.vocabulary-v0",
+  "kind": "next-action",
+  "title": "Define visual material continuity vocabulary",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Approved slice 2 of 24 in the material continuity and artifact morph repair loop.",
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation.material-continuity-loop-v0"
+    ],
+    "preferred": [
+      "next-action.kp.continuity.capture-regressions-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ]
+}

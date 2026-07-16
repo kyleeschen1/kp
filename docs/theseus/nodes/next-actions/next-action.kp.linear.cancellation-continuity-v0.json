@@ -1,0 +1,22 @@
+{
+  "id": "next-action.kp.linear.cancellation-continuity-v0",
+  "kind": "next-action",
+  "title": "Repair cancellation continuity",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Approved slice 9 of 24 in the material continuity and artifact morph repair loop.",
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation.material-continuity-loop-v0"
+    ],
+    "preferred": [
+      "next-action.kp.linear.balanced-introduction-continuity-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ]
+}

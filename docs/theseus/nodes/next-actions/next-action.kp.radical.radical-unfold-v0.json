@@ -1,0 +1,22 @@
+{
+  "id": "next-action.kp.radical.radical-unfold-v0",
+  "kind": "next-action",
+  "title": "Unfold radical material from the same bundle",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Approved slice 17 of 24 in the material continuity and artifact morph repair loop.",
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation.material-continuity-loop-v0"
+    ],
+    "preferred": [
+      "next-action.kp.radical.exponent-collapse-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ]
+}

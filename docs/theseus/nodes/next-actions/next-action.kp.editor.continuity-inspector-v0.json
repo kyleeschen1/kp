@@ -1,0 +1,22 @@
+{
+  "id": "next-action.kp.editor.continuity-inspector-v0",
+  "kind": "next-action",
+  "title": "Expose continuity ownership and bundle diagnostics",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Approved slice 23 of 24 in the material continuity and artifact morph repair loop.",
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation.material-continuity-loop-v0"
+    ],
+    "preferred": [
+      "next-action.kp.gestalt.motion-eligibility-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ]
+}

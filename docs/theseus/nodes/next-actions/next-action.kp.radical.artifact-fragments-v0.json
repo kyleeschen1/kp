@@ -1,0 +1,22 @@
+{
+  "id": "next-action.kp.radical.artifact-fragments-v0",
+  "kind": "next-action",
+  "title": "Define structural artifact fragments",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Approved slice 15 of 24 in the material continuity and artifact morph repair loop.",
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation.material-continuity-loop-v0"
+    ],
+    "preferred": [
+      "next-action.kp.radical.shared-bundle-primitive-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ]
+}

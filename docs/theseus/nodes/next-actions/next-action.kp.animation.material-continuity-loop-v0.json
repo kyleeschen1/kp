@@ -1,0 +1,23 @@
+{
+  "id": "next-action.kp.animation.material-continuity-loop-v0",
+  "kind": "next-action",
+  "title": "Repair material continuity and artifact morphs",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Execute the approved 24-slice repair loop for continuous linear solves, genuine exponent-radical succession, and continuity-aware gestalt realization.",
+  "dependsOn": {
+    "preferred": [
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Approved 24-slice material continuity loop is materialized and beginning with regression capture."
+  }
+}

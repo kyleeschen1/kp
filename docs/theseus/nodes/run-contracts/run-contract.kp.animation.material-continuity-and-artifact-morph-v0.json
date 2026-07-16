@@ -1,0 +1,168 @@
+{
+  "id": "run-contract.kp.animation.material-continuity-and-artifact-morph-v0",
+  "kind": "run-contract",
+  "title": "KP material continuity and artifact morph loop",
+  "status": "ready",
+  "domain": "kp.animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.material-continuity-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-phase-ordered-choreography-gestalt-style-loop-closeout.md",
+      "summary": "The prior loop closeout whose visual continuity claims this repair loop tightens."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Authoritative dashboard fold-bundle-unfold reference for radical artifacts."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Only implement the approved linear solve, radical succession, continuity infrastructure, gestalt safety, diagnostics, and promotion-gate slices."
+  ],
+  "disallowedWork": [
+    "Do not expand to unrelated animation families, general diagram routing, live LLM ingestion, WebGL ownership, or public style marketplace work."
+  ],
+  "goal": "Execute the approved 24-slice loop so linear solves and exponent-radical rewrites have continuous material ownership, reversible artifact morphs, style-safe motion, and enforceable quality gates.",
+  "target": "next-action.kp.animation.material-continuity-loop-v0",
+  "runMode": "run",
+  "maxSlices": 24,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when a focused verification failure requires product or architecture judgment.",
+    "Stop if a slice requires replacing KaTeX or introducing history-dependent sampling.",
+    "Stop after all approved slices are complete and broad verification is recorded."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.continuity.capture-regressions-v0",
+      "title": "Capture failing visual continuity baselines",
+      "status": "ready",
+      "summary": "Approved first slice: capture deterministic failing continuity evidence."
+    },
+    {
+      "id": "next-action.kp.continuity.vocabulary-v0",
+      "title": "Define visual material continuity vocabulary",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.continuity.quality-laws-v0",
+      "title": "Define continuity quality laws and budgets",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.continuity.material-owner-v0",
+      "title": "Add stable visual material ownership",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.choreography.envelope-bridging-v0",
+      "title": "Compose adjacent choreography envelopes",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.continuity.global-progress-v0",
+      "title": "Add animation-level semantic progress",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.linear.persistent-material-layer-v0",
+      "title": "Build the persistent equation material layer",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.linear.balanced-introduction-continuity-v0",
+      "title": "Repair balanced operation introduction",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.linear.cancellation-continuity-v0",
+      "title": "Repair cancellation continuity",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.linear.constant-derivation-continuity-v0",
+      "title": "Repair constant derivation continuity",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.linear.solve-level-envelope-v0",
+      "title": "Bridge the complete solve sequence",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.linear.rewind-accessibility-v0",
+      "title": "Verify linear rewind seeking and accessibility",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.linear.continuity-gates-v0",
+      "title": "Enforce linear continuity browser gates",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.radical.shared-bundle-primitive-v0",
+      "title": "Extract the shared radical bundle primitive",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.radical.artifact-fragments-v0",
+      "title": "Define structural artifact fragments",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.radical.exponent-collapse-v0",
+      "title": "Collapse exponent material into one bundle",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.radical.radical-unfold-v0",
+      "title": "Unfold radical material from the same bundle",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.radical.base-continuity-v0",
+      "title": "Preserve base to radicand material",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.radical.native-settlement-v0",
+      "title": "Settle into native radical geometry",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.radical.reverse-succession-v0",
+      "title": "Implement genuine reverse radical succession",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.radical.continuity-gates-v0",
+      "title": "Enforce radical morph quality",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.gestalt.motion-eligibility-v0",
+      "title": "Make gestalt realization continuity aware",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.editor.continuity-inspector-v0",
+      "title": "Expose continuity ownership and bundle diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.continuity.proof-cohort-closeout-v0",
+      "title": "Gate promotion and close the continuity proof cohort",
+      "status": "planned"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "next-action.kp.linear.persistent-material-layer-v0",
+  "kind": "next-action",
+  "title": "Build the persistent equation material layer",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Approved slice 7 of 24 in the material continuity and artifact morph repair loop.",
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation.material-continuity-loop-v0"
+    ],
+    "preferred": [
+      "next-action.kp.continuity.global-progress-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ]
+}

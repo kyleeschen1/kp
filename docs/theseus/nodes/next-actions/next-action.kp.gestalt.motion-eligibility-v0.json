@@ -1,0 +1,22 @@
+{
+  "id": "next-action.kp.gestalt.motion-eligibility-v0",
+  "kind": "next-action",
+  "title": "Make gestalt realization continuity aware",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Approved slice 22 of 24 in the material continuity and artifact morph repair loop.",
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation.material-continuity-loop-v0"
+    ],
+    "preferred": [
+      "next-action.kp.radical.continuity-gates-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate"
+  ]
+}
