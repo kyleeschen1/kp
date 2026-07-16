@@ -2,8 +2,9 @@
   "id": "next-action.kp.choreography.salience-graph-v0",
   "kind": "next-action",
   "title": "Compile Transferable Salience Graphs",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Added renderer-neutral transferable salience graphs with semantic entity nodes, lineage-authorized handoffs, normalized readiness and release thresholds, bounded branch weights, explicit reunification, deterministic direct sampling, and attention-continuity validation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,39 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/salience-graph.ts",
+      "summary": "Defines and samples semantic attention transfer independently of DOM, CSS, renderer state, or a second clock."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-salience-graph.test.ts",
+      "summary": "Proves copy-lineage branching, continuous explanatory salience, deterministic sampling, result reunification, and rejection of premature release or fabricated visual branches."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.representational-lineage-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +63,22 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-salience-graph.test.ts tests/kp-representational-lineage-compiler.test.ts",
+      "status": "passed",
+      "scope": "Transferable salience and representational lineage contracts",
+      "checkedAt": "2026-07-16T16:15:16.460Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-16T16:15:16.520Z",
+      "scope": "TypeScript project closure"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.choreography.representational-lineage-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Added renderer-neutral transferable salience graphs with semantic entity nodes, lineage-authorized handoffs, normalized readiness and release thresholds, bounded branch weights, explicit reunification, deterministic direct sampling, and attention-continuity validation."
+  }
 }
