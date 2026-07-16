@@ -37,6 +37,9 @@ import {
   resolveKpGestaltStyle,
   type KpResolvedGestaltStyle
 } from "../animation/gestalt-style-resolution.ts";
+import {
+  gateKpGeneratedAnimationPromotion
+} from "../animation/generated-promotion-gate.ts";
 import type {
   KpGestaltStyleChannels,
   KpGestaltStyleRef
@@ -105,6 +108,14 @@ export function createKpEditorAnimationGestaltInspection(input: {
   const warnings: string[] = resolvedStyle.diagnostics.map(
     (diagnostic) => diagnostic.message
   );
+  if (input.animation.dashboard?.tags.includes("llm-authored")) {
+    warnings.push(
+      ...gateKpGeneratedAnimationPromotion({
+        animation: input.animation,
+        legacy: true
+      }).diagnostics.map((diagnostic) => diagnostic.message)
+    );
+  }
   const choreography = inspectChoreography(input.animation, input.state);
   if (choreography === undefined) {
     warnings.push(

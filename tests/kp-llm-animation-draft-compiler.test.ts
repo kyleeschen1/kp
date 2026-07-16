@@ -69,6 +69,11 @@ test("validated LLM draft compiles to AnimationAsset and semantic transition IR"
   const result = compileKpLlmAnimationDraft(additiveZeroDraft());
   assert.equal(result.status, "accepted");
   if (result.status !== "accepted") return;
+  assert.deepEqual(result.promotion, {
+    status: "candidate",
+    promotable: false,
+    requiredGate: "generated-animation-promotion"
+  });
 
   assert.equal(result.animation.id, "animation.generated.add-zero");
   assert.equal(result.animation.bundle.objects[0]?.value instanceof Object, true);

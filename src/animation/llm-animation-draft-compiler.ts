@@ -55,6 +55,11 @@ export interface KpLlmAnimationDraftCompileDiagnostic {
 
 export interface KpLlmAnimationDraftCompileSuccess {
   readonly status: "accepted";
+  readonly promotion: {
+    readonly status: "candidate";
+    readonly promotable: false;
+    readonly requiredGate: "generated-animation-promotion";
+  };
   readonly animation: KpAnimationAsset;
   readonly transitionIrs: readonly KpEquationTransitionIr[];
   readonly diagramTransitions: readonly KpDiagramSceneTransition[];
@@ -252,6 +257,11 @@ function compileValidatedDraft(
 
   return {
     status: "accepted",
+    promotion: {
+      status: "candidate",
+      promotable: false,
+      requiredGate: "generated-animation-promotion"
+    },
     animation,
     transitionIrs: generatedTransitionResults.map((result) => result.ir!),
     diagramTransitions,

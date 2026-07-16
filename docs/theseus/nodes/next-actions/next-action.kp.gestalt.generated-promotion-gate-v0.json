@@ -2,8 +2,9 @@
   "id": "next-action.kp.gestalt.generated-promotion-gate-v0",
   "kind": "next-action",
   "title": "Gate Generated Choreography Promotion",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Added strict generated-animation promotion evidence, compiler candidate status, typed repair diagnostics, exact style and accessibility requirements, complete human review, warning-first legacy catalog audit, and editor warnings for unaudited LLM assets.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,54 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/generated-promotion-gate.ts",
+      "summary": "Defines the semantic-only, choreography, style, accessibility, and human-review promotion gate plus legacy catalog audit."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/llm-animation-draft-compiler.ts",
+      "summary": "Marks successful LLM compilation as a non-promotable candidate requiring the generated-animation promotion gate."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-gestalt-inspector.ts",
+      "summary": "Surfaces warning-first promotion diagnostics for existing LLM-authored animations in the editor."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-generated-promotion-gate.test.ts",
+      "summary": "Proves complete promotion, typed repair failures, and legacy catalog visibility with warnings."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-llm-animation-draft-compiler.test.ts",
+      "summary": "Proves successful semantic compilation does not itself promote generated output."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.gestalt.elevated-focus-experiment-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +78,52 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-generated-promotion-gate.test.ts tests/kp-llm-animation-draft-compiler.test.ts tests/kp-llm-animation-draft-examples.test.ts tests/kp-editor-animation-gestalt-inspector.test.ts",
+      "status": "passed",
+      "scope": "16 focused promotion, compiler, catalog, and editor tests passed.",
+      "checkedAt": "2026-07-16T18:55:09.378Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts -g accepted",
+      "status": "passed",
+      "scope": "Generated LLM editor browser cohort passed; the exact targeted run also covered substitution and diagram output.",
+      "checkedAt": "2026-07-16T18:55:09.448Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full repository suite passed: 1170 tests.",
+      "checkedAt": "2026-07-16T18:55:09.520Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, and test TypeScript projects passed.",
+      "checkedAt": "2026-07-16T18:55:09.586Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production build passed with only the existing chunk-size advisory.",
+      "checkedAt": "2026-07-16T18:55:09.656Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph validated before slice completion.",
+      "checkedAt": "2026-07-16T18:55:09.738Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts -g accepted LLM draft generated substitution generated semantic diagram",
+      "status": "passed",
+      "checkedAt": "2026-07-16T18:55:17.670Z",
+      "scope": "Three generated LLM editor browser tests passed."
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.gestalt.elevated-focus-experiment-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Recorded the exact generated-output browser verification command."
+  }
 }
