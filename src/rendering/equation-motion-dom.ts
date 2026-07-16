@@ -33,6 +33,7 @@ export interface KpMeasuredEquationTransitionRelationGeometry {
 export interface KpMeasuredEquationTransitionGeometry {
   readonly transitionId: string;
   readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
+  readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | undefined;
   readonly sourceTokens: readonly AnnotatedMotionToken[];
   readonly targetTokens: readonly AnnotatedMotionToken[];
   readonly relations: readonly KpMeasuredEquationTransitionRelationGeometry[];
@@ -92,6 +93,7 @@ export function measureKpEquationTransitionGeometry(input: {
   readonly sourceMotionIdsBySelector?: Readonly<Record<string, string>> | undefined;
   readonly targetMotionIdsBySelector?: Readonly<Record<string, string>> | undefined;
   readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
+  readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | undefined;
 }): KpMeasuredEquationTransitionGeometry {
   const sourceTokens = measureAnnotatedEquationMotionTokens(input.sourceRoot);
   const targetTokens = measureAnnotatedEquationMotionTokens(input.targetRoot);
@@ -111,6 +113,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.enclosureChoreographyKind === undefined
       ? {}
       : { enclosureChoreographyKind: input.enclosureChoreographyKind }),
+    ...(input.lineageChoreographyKind === undefined
+      ? {}
+      : { lineageChoreographyKind: input.lineageChoreographyKind }),
     sourceTokens,
     targetTokens,
     relations: input.ir.relations.map((relation) => {

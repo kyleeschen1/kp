@@ -33,10 +33,10 @@ test("distribution and factoring visibly preserve their opposite semantic direct
     distribution.projection.transitions[0]?.source[0]?.latex,
     distribution.projection.transitions[0]?.target[0]?.latex,
     distribution.motifs[0]?.kind
-  ], ["a(b + c)", "ab + ac", "artifact-replace"]);
+  ], ["a(b + c)", "ab + ac", "copy-fan-out"]);
   assert.deepEqual([
     factoring.projection.transitions[0]?.source[0]?.latex,
     factoring.projection.transitions[0]?.target[0]?.latex,
     factoring.motifs[0]?.kind
-  ], ["ab + ac", "a(b + c)", "simplify-into"]);
+  ], ["ab + ac", "a(b + c)", "merge-fan-in"]);
 });

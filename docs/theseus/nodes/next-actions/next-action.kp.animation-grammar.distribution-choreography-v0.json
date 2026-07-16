@@ -2,15 +2,20 @@
   "id": "next-action.kp.animation-grammar.distribution-choreography-v0",
   "kind": "next-action",
   "title": "Move Distribution Onto Fan-Out Choreography",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Shift factors and transmit multiplier copies along inspectable arcs; compile factoring as the semantic inverse. Verification: broad plus manual runtime.",
+  "summary": "Compiled distribution and factoring through reversible lineage-aware fan-out and fan-in choreography with persistent sources, independent inspectable arcs, exact endpoints, and editor diagnostics.",
   "severity": "high",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/semantic-equation-token-renderer.ts",
+      "summary": "Samples registry-selected copy and merge motifs into source contraction, descendant branching, arc transit, arrival, and inverse coalescence."
     }
   ],
   "dependsOn": {
@@ -49,5 +54,35 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/equation-motion-plan.test.ts tests/equation-motion-sampler.test.ts tests/kp-editor-animation-catalog-projection.test.ts",
+      "status": "passed",
+      "scope": "1002 unit tests",
+      "checkedAt": "2026-07-16T02:15:09.227Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "23 editor browser tests",
+      "checkedAt": "2026-07-16T02:15:09.288Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T02:15:09.329Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T02:15:09.377Z",
+      "scope": "Theseus graph and event history"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Compiled distribution and factoring through reversible lineage-aware fan-out and fan-in choreography with persistent sources, independent inspectable arcs, exact endpoints, and editor diagnostics."
+  }
 }

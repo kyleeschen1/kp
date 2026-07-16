@@ -7,6 +7,12 @@ import {
   sampleKpEquationEnclosureChoreography,
   type KpEquationEnclosureChoreographyFrame
 } from "./equation-enclosure-choreography.ts";
+import {
+  compileKpCopyFanOutChoreography,
+  sampleKpCopyFanOutChoreography,
+  type KpCopyFanOutChoreographyFrame
+} from "../animation/copy-fan-out-choreography.ts";
+import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
 
 export interface KpEquationTokenMotionPose {
   readonly opacity: number;
@@ -19,6 +25,9 @@ export interface KpEquationTokenMotionFrameToken {
   readonly motionId: string;
   readonly side: "source" | "target";
   readonly pose: KpEquationTokenMotionPose;
+  readonly lineagePathId?: string | undefined;
+  readonly lineageEdgeId?: string | undefined;
+  readonly lineageBranchIndex?: number | undefined;
 }
 
 export interface KpEquationTokenMotionFrame {
@@ -26,6 +35,7 @@ export interface KpEquationTokenMotionFrame {
   readonly progress: number;
   readonly tokens: readonly KpEquationTokenMotionFrameToken[];
   readonly enclosureChoreography?: KpEquationEnclosureChoreographyFrame | undefined;
+  readonly lineageChoreography?: KpCopyFanOutChoreographyFrame | undefined;
 }
 
 interface EnclosureChoreographyContext {
@@ -37,6 +47,12 @@ interface EnclosureChoreographyContext {
   readonly enclosureMotionIds: ReadonlySet<string>;
 }
 
+interface LineageChoreographyContext {
+  readonly kind: "copy-fan-out" | "merge-fan-in";
+  readonly relationRecordId: string;
+  readonly frame: KpCopyFanOutChoreographyFrame;
+}
+
 export function sampleKpEquationTokenMotion(
   geometry: KpMeasuredEquationTransitionGeometry,
   progress: number
@@ -44,8 +60,15 @@ export function sampleKpEquationTokenMotion(
   const p = clamp01(progress);
   const tokens = new Map<string, KpEquationTokenMotionFrameToken>();
   const enclosureChoreography = createEnclosureChoreographyContext(geometry, p);
+  const lineageChoreography = createLineageChoreographyContext(geometry, p);
   for (const relation of geometry.relations) {
-    for (const token of sampleRelation(geometry, relation, p, enclosureChoreography)) {
+    for (const token of sampleRelation(
+      geometry,
+      relation,
+      p,
+      enclosureChoreography,
+      lineageChoreography
+    )) {
       tokens.set(`${token.side}:${token.motionId}`, token);
     }
   }
@@ -55,7 +78,10 @@ export function sampleKpEquationTokenMotion(
     tokens: [...tokens.values()],
     ...(enclosureChoreography === undefined
       ? {}
-      : { enclosureChoreography: enclosureChoreography.frame })
+      : { enclosureChoreography: enclosureChoreography.frame }),
+    ...(lineageChoreography === undefined
+      ? {}
+      : { lineageChoreography: lineageChoreography.frame })
   };
 }
 
@@ -74,6 +100,17 @@ export function applyKpEquationTokenMotionFrame(
     element.style.transform =
       `translate(${token.pose.x}px, ${token.pose.y}px) scale(${token.pose.scale})`;
     element.style.transformOrigin = "center center";
+    if (token.lineagePathId === undefined) {
+      delete element.dataset["kpEquationLineagePathId"];
+      delete element.dataset["kpEquationLineageEdgeId"];
+      delete element.dataset["kpEquationLineageBranchIndex"];
+    } else {
+      element.dataset["kpEquationLineagePathId"] = token.lineagePathId;
+      element.dataset["kpEquationLineageEdgeId"] = token.lineageEdgeId ?? "";
+      element.dataset["kpEquationLineageBranchIndex"] = String(
+        token.lineageBranchIndex ?? 0
+      );
+    }
   }
 }
 
@@ -81,11 +118,20 @@ function sampleRelation(
   geometry: KpMeasuredEquationTransitionGeometry,
   relation: KpMeasuredEquationTransitionRelationGeometry,
   progress: number,
-  enclosureChoreography: EnclosureChoreographyContext | undefined
+  enclosureChoreography: EnclosureChoreographyContext | undefined,
+  lineageChoreography: LineageChoreographyContext | undefined
 ): readonly KpEquationTokenMotionFrameToken[] {
   const sourceTokens = relationTokens(geometry.sourceTokens, relation.source?.motionIds ?? []);
   const targetTokens = relationTokens(geometry.targetTokens, relation.target?.motionIds ?? []);
   const eased = smoothstep(progress);
+  if (relation.recordId === lineageChoreography?.relationRecordId) {
+    return sampleLineageRelation(
+      relation,
+      sourceTokens,
+      targetTokens,
+      lineageChoreography
+    );
+  }
   switch (relation.lifecycle) {
     case "persist":
     case "role-change":
@@ -107,6 +153,15 @@ function sampleRelation(
         }))
       ];
     case "enter":
+      if (lineageChoreography?.kind === "merge-fan-in") {
+        const visibility = 1 - lineageChoreography.frame.phases["branch-descendants"];
+        return targetTokens.map((token) => frameToken(token, "target", {
+          opacity: visibility,
+          x: 0,
+          y: 4 * (1 - visibility),
+          scale: 0.9 + 0.1 * visibility
+        }));
+      }
       if (enclosureChoreography?.frame.kind === "wrap") {
         return targetTokens.map((token) => sampleEnclosureArtifactToken(
           token,
@@ -121,6 +176,15 @@ function sampleRelation(
         scale: 0.85 + 0.15 * eased
       }));
     case "exit":
+      if (lineageChoreography?.kind === "copy-fan-out") {
+        const visibility = 1 - lineageChoreography.frame.phases["arrive-descendants"];
+        return sourceTokens.map((token) => frameToken(token, "source", {
+          opacity: visibility,
+          x: 0,
+          y: 0,
+          scale: 1 - 0.1 * (1 - visibility)
+        }));
+      }
       if (enclosureChoreography?.frame.kind === "unwrap") {
         return sourceTokens.map((token) => sampleEnclosureArtifactToken(
           token,
@@ -194,6 +258,176 @@ function sampleRelation(
         }))
       ];
   }
+}
+
+function createLineageChoreographyContext(
+  geometry: KpMeasuredEquationTransitionGeometry,
+  progress: number
+): LineageChoreographyContext | undefined {
+  const kind = geometry.lineageChoreographyKind;
+  const relation = geometry.relations.find((candidate) =>
+    kind === "copy-fan-out"
+      ? candidate.lifecycle === "split" && candidate.source !== undefined && candidate.target !== undefined
+      : kind === "merge-fan-in"
+        ? candidate.lifecycle === "merge" && candidate.source !== undefined && candidate.target !== undefined
+        : false
+  );
+  if (kind === undefined || relation?.source === undefined || relation.target === undefined) {
+    return undefined;
+  }
+
+  const sourceEntityId = kind === "copy-fan-out"
+    ? relation.source.selectorIds[0]
+    : relation.target.selectorIds[0];
+  const descendantEntityIds = kind === "copy-fan-out"
+    ? relation.target.selectorIds
+    : relation.source.selectorIds;
+  if (sourceEntityId === undefined || descendantEntityIds.length < 1) return undefined;
+  const lineageGraph = createKpSemanticLineageGraph({
+    id: `${geometry.transitionId}.${relation.recordId}.lineage`,
+    sourceEntityIds: [sourceEntityId],
+    targetEntityIds: [...descendantEntityIds],
+    edges: [{
+      id: relation.recordId,
+      relation: "split",
+      sourceEntityIds: [sourceEntityId],
+      targetEntityIds: [...descendantEntityIds],
+      summary: `${relation.recordId} lineage choreography.`
+    }]
+  });
+  const plan = compileKpCopyFanOutChoreography({
+    id: `${geometry.transitionId}.${relation.recordId}.choreography`,
+    lineageGraph,
+    sourceEntityId
+  });
+
+  return {
+    kind,
+    relationRecordId: relation.recordId,
+    frame: sampleKpCopyFanOutChoreography({
+      plan,
+      progress,
+      direction: kind === "copy-fan-out" ? "forward" : "rewind"
+    })
+  };
+}
+
+function sampleLineageRelation(
+  relation: KpMeasuredEquationTransitionRelationGeometry,
+  sourceTokens: readonly AnnotatedMotionToken[],
+  targetTokens: readonly AnnotatedMotionToken[],
+  context: LineageChoreographyContext
+): readonly KpEquationTokenMotionFrameToken[] {
+  if (relation.source === undefined || relation.target === undefined) return [];
+
+  if (context.kind === "copy-fan-out") {
+    const origin = relation.source.bounds;
+    const settle = context.frame.phases["settle-descendants"];
+    return [
+      ...sourceTokens.map((token) => frameToken(token, "source", {
+        opacity: 1 - settle,
+        x: 0,
+        y: 0,
+        scale: context.frame.source.scale
+      })),
+      ...targetTokens.map((token) => lineageFrameToken({
+        token,
+        side: "target",
+        origin,
+        selectorIds: relation.target!.selectorIds,
+        motionIds: relation.target!.motionIds,
+        context
+      }))
+    ];
+  }
+
+  const origin = relation.target.bounds;
+  const sourceFrames = sourceTokens.map((token) => lineageFrameToken({
+    token,
+    side: "source",
+    origin,
+    selectorIds: relation.source!.selectorIds,
+    motionIds: relation.source!.motionIds,
+    context
+  }));
+  const descendantOpacity = Math.max(
+    0,
+    ...context.frame.descendants.map((descendant) => descendant.opacity)
+  );
+  return [
+    ...sourceFrames,
+    ...targetTokens.map((token) => frameToken(token, "target", {
+      opacity: 1 - descendantOpacity,
+      x: 0,
+      y: 0,
+      scale: context.frame.source.scale
+    }))
+  ];
+}
+
+function lineageFrameToken(input: {
+  readonly token: AnnotatedMotionToken;
+  readonly side: "source" | "target";
+  readonly origin: NonNullable<
+    KpMeasuredEquationTransitionRelationGeometry["source"]
+  >["bounds"];
+  readonly selectorIds: readonly string[];
+  readonly motionIds: readonly string[];
+  readonly context: LineageChoreographyContext;
+}): KpEquationTokenMotionFrameToken {
+  const motionIndex = input.motionIds.indexOf(input.token.motionId);
+  const selectorId = input.selectorIds[motionIndex];
+  const descendant = input.context.frame.descendants.find(
+    (candidate) => candidate.entityId === selectorId
+  );
+  if (descendant === undefined) {
+    throw new Error(`Missing lineage descendant frame for motion token ${input.token.motionId}.`);
+  }
+  const pose = lineagePathPose({
+    origin: input.origin,
+    destination: input.token.localRect,
+    pathProgress: descendant.pathProgress,
+    branchIndex: descendant.branchIndex,
+    opacity: descendant.opacity,
+    scale: descendant.scale
+  });
+  return {
+    motionId: input.token.motionId,
+    side: input.side,
+    pose,
+    lineagePathId: descendant.pathId,
+    lineageEdgeId: descendant.lineageEdgeId,
+    lineageBranchIndex: descendant.branchIndex
+  };
+}
+
+function lineagePathPose(input: {
+  readonly origin: { readonly left: number; readonly top: number; readonly width: number; readonly height: number };
+  readonly destination: { readonly left: number; readonly top: number; readonly width: number; readonly height: number };
+  readonly pathProgress: number;
+  readonly branchIndex: number;
+  readonly opacity: number;
+  readonly scale: number;
+}): KpEquationTokenMotionPose {
+  const originCenter = rectCenter(input.origin);
+  const destinationCenter = rectCenter(input.destination);
+  const remaining = 1 - input.pathProgress;
+  const arcLift = -(12 + input.branchIndex * 3) * Math.sin(Math.PI * input.pathProgress);
+  return {
+    opacity: input.opacity,
+    x: (originCenter.x - destinationCenter.x) * remaining,
+    y: (originCenter.y - destinationCenter.y) * remaining + arcLift,
+    scale: input.scale
+  };
+}
+
+function rectCenter(rect: {
+  readonly left: number;
+  readonly top: number;
+  readonly width: number;
+  readonly height: number;
+}): { readonly x: number; readonly y: number } {
+  return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
 }
 
 function createEnclosureChoreographyContext(

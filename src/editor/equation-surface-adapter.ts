@@ -315,6 +315,9 @@ function applySemanticTokenMotion(input: {
       ),
       ...(motifKind === "wrap" || motifKind === "unwrap"
         ? { enclosureChoreographyKind: motifKind }
+        : {}),
+      ...(motifKind === "copy-fan-out" || motifKind === "merge-fan-in"
+        ? { lineageChoreographyKind: motifKind }
         : {})
     });
     const existing = semanticGeometryCache.get(input.stage);
@@ -352,6 +355,19 @@ function applySemanticTokenMotion(input: {
       String(choreography.enclosureVisibility);
     input.transitionElement.dataset["kpEditorEquationOuterArtifactVisibility"] =
       String(choreography.outerArtifactVisibility);
+  }
+  const lineage = tokenFrame.motion.lineageChoreography;
+  if (lineage === undefined) {
+    delete input.transitionElement.dataset["kpEditorEquationLineageChoreography"];
+    delete input.transitionElement.dataset["kpEditorEquationLineagePathCount"];
+    delete input.transitionElement.dataset["kpEditorEquationLineageTransitProgress"];
+  } else {
+    input.transitionElement.dataset["kpEditorEquationLineageChoreography"] =
+      input.frame.motifs[input.transitionIndex]?.kind ?? "copy-fan-out";
+    input.transitionElement.dataset["kpEditorEquationLineagePathCount"] =
+      String(lineage.descendants.length);
+    input.transitionElement.dataset["kpEditorEquationLineageTransitProgress"] =
+      String(lineage.phases["transit-descendants"]);
   }
   return true;
 }

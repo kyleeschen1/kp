@@ -94,6 +94,28 @@ test("visual motif module exposes reusable equation motif descriptors", () => {
         ["vanish"],
         ["cancel-meet", "cancel-collapse", "post-cancel-layout-shift"]
       ],
+      [
+        "copy-fan-out",
+        ["copy", "shift"],
+        [
+          "contract-source",
+          "branch-descendants",
+          "transit-descendants",
+          "arrive-descendants",
+          "settle-descendants"
+        ]
+      ],
+      [
+        "merge-fan-in",
+        ["merge", "shift"],
+        [
+          "settle-descendants",
+          "arrive-descendants",
+          "transit-descendants",
+          "branch-descendants",
+          "contract-source"
+        ]
+      ],
       ["relation-flip", ["shift"], ["relation-flip"]],
       [
         "simplify-into",

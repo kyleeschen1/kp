@@ -36,7 +36,7 @@ export const equationAnimationConformanceBaselines:
       animationId: "animation.generated.distribution.expand-a-sum",
       transformType: "distributeMultiplication",
       definitionId: "definition.generated.distribution.distribute-multiplication",
-      observedMotif: "artifact-replace",
+      observedMotif: "copy-fan-out",
       requiredMotif: "copy-fan-out",
       checkpoints: [
         { direction: "forward", progress: 0 },
@@ -44,12 +44,7 @@ export const equationAnimationConformanceBaselines:
         { direction: "forward", progress: 1 },
         { direction: "rewind", progress: 0.5 }
       ],
-      gaps: [
-        "fan-out semantics select generic artifact replacement",
-        "two destinations share one union-bounds delta",
-        "copies remain invisible at the semantic midpoint",
-        "copy transit has no independently inspectable paths"
-      ]
+      gaps: []
     }
   ];
 

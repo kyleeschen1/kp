@@ -252,13 +252,13 @@ function generatedAlgebraEquationMotifDefaults():
     },
     {
       transformType: "distributeMultiplication",
-      motifKind: "artifact-replace",
-      summary: "Factored structure is replaced by expanded distributed terms."
+      motifKind: "copy-fan-out",
+      summary: "The shared factor contracts, branches, and travels independently to both addends."
     },
     {
       transformType: "factorCommonTerm",
-      motifKind: "simplify-into",
-      summary: "Duplicated factors collapse into a single factored expression."
+      motifKind: "merge-fan-in",
+      summary: "Repeated factors retrace their paths and coalesce into one common factor."
     }
   ];
 }

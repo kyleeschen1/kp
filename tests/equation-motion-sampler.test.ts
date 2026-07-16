@@ -197,7 +197,12 @@ test("semantic beat compiler exposes the current equation demo timeline", () => 
       ["final-simplify-reveal", 25, 35, "ease-in-out"],
       ["unwrap-artifact-exit", 0, 20, "ease-out"],
       ["wrap-artifact-enter", 20, 50, "ease-out"],
-      ["wrapped-token-shift", 0, 20, "ease-in-out"]
+      ["wrapped-token-shift", 0, 20, "ease-in-out"],
+      ["contract-source", 0, 10, "ease-in-out"],
+      ["branch-descendants", 10, 18, "ease-in-out"],
+      ["transit-descendants", 17, 39, "ease-in-out"],
+      ["arrive-descendants", 36, 46, "ease-in-out"],
+      ["settle-descendants", 45, 50, "ease-in-out"]
     ]
   );
   assert.equal(

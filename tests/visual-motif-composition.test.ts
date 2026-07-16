@@ -390,12 +390,12 @@ test("default equation visual motif rules cover promoted generated transform def
       ],
       [
         "distributeMultiplication",
-        "artifact-replace",
+        "copy-fan-out",
         ["definition.generated.distribution.distribute-multiplication"]
       ],
       [
         "factorCommonTerm",
-        "simplify-into",
+        "merge-fan-in",
         ["definition.generated.distribution.factor-common-term"]
       ]
     ]
@@ -414,11 +414,11 @@ test("canonical semantic events compile through one trusted executable motif gra
   ]);
 });
 
-test("generated distribution carries canonical fan-out grammar beside its compatibility motif", () => {
+test("generated distribution carries canonical fan-out grammar in its executable motif", () => {
   const rule = defaultEquationTransformVisualMotifRules.find(
     (candidate) => candidate.transformationKind === "distributeMultiplication"
   );
-  assert.equal(rule?.descriptor.kind, "artifact-replace");
+  assert.equal(rule?.descriptor.kind, "copy-fan-out");
   assert.deepEqual(rule?.canonicalOperationIds, [
     "kp.core.persist",
     "kp.core.fan-out",

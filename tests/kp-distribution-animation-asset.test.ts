@@ -27,7 +27,7 @@ test("createDistributionExpansionAnimationAsset adapts distribute sample into An
     fixtureId: "generated.distribution.expand-a-sum",
     transformId: "transform.generated.distribution.expand-a-sum.distribute",
     definitionId: "definition.generated.distribution.distribute-multiplication",
-    motifKind: "artifact-replace"
+    motifKind: "copy-fan-out"
   });
 });
 
@@ -39,7 +39,7 @@ test("createDistributionFactoringAnimationAsset adapts factoring sample into Ani
     fixtureId: "generated.distribution.factor-common-a",
     transformId: "transform.generated.distribution.factor-common-a.factor",
     definitionId: "definition.generated.distribution.factor-common-term",
-    motifKind: "simplify-into"
+    motifKind: "merge-fan-in"
   });
 });
 

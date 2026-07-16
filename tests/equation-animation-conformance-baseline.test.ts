@@ -45,7 +45,7 @@ test("function wrapping selects wrap semantics with executable choreography conf
   assert.deepEqual(baseline.gaps, []);
 });
 
-test("distribution fan-out is semantically rich but geometrically collapsed", () => {
+test("distribution fan-out selects executable copy choreography with no baseline gaps", () => {
   const animation = createDistributionExpansionAnimationAsset();
   const baseline = equationAnimationConformanceBaseline(animation.id);
   const transformation = animation.transformations[0]!;
@@ -61,14 +61,9 @@ test("distribution fan-out is semantically rich but geometrically collapsed", ()
   assert.equal(transformation.transformType, baseline.transformType);
   assert.equal(transformation.definitionId, baseline.definitionId);
   assert.equal(observedMotif(animation), baseline.observedMotif);
-  assert.equal(baseline.observedMotif, "artifact-replace");
+  assert.equal(baseline.observedMotif, "copy-fan-out");
   assert.equal(baseline.requiredMotif, "copy-fan-out");
-  assert.deepEqual(baseline.gaps, [
-    "fan-out semantics select generic artifact replacement",
-    "two destinations share one union-bounds delta",
-    "copies remain invisible at the semantic midpoint",
-    "copy transit has no independently inspectable paths"
-  ]);
+  assert.deepEqual(baseline.gaps, []);
 });
 
 function observedMotif(

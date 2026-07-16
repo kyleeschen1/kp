@@ -4,6 +4,7 @@ import type {
   MotionPose
 } from "./equation-motion-plan.ts";
 import type { EquationVisualMotifPhaseId } from "./visual-motif.ts";
+import { kpCopyFanOutPhaseIds } from "../animation/copy-fan-out-choreography.ts";
 
 export type SemanticBeatId = EquationVisualMotifPhaseId;
 
@@ -138,9 +139,28 @@ export const linearEquationDemoBeatTimeline = compileSemanticBeatTimeline({
       endBeat: 20,
       easing: "ease-in-out",
       summary: "Wrapped or unwrapped tokens move before delimiter artifacts finish."
-    }
+    },
+    ...kpCopyFanOutPhaseIds.map((id) => ({
+      id,
+      startBeat: copyFanOutBeatRange(id)[0],
+      endBeat: copyFanOutBeatRange(id)[1],
+      easing: "ease-in-out" as const,
+      summary: `Copy/fan-out ${id.replaceAll("-", " ")} phase.`
+    }))
   ]
 });
+
+function copyFanOutBeatRange(
+  id: typeof kpCopyFanOutPhaseIds[number]
+): readonly [number, number] {
+  switch (id) {
+    case "contract-source": return [0, 10];
+    case "branch-descendants": return [10, 18];
+    case "transit-descendants": return [17, 39];
+    case "arrive-descendants": return [36, 46];
+    case "settle-descendants": return [45, 50];
+  }
+}
 
 export function compileSemanticBeatTimeline(
   input: SemanticBeatTimelineInput

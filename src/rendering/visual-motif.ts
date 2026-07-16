@@ -1,9 +1,16 @@
+import {
+  kpCopyFanOutPhaseIds,
+  type KpCopyFanOutPhaseId
+} from "../animation/copy-fan-out-choreography.ts";
+
 export type VisualMotionPrimitiveId =
   | "enter"
   | "exit"
   | "reveal"
   | "shift"
   | "vanish"
+  | "copy"
+  | "merge"
   | "wrap"
   | "unwrap";
 
@@ -15,6 +22,8 @@ export type EquationVisualMotifKind =
   | "artifact-exit"
   | "artifact-replace"
   | "cancelation"
+  | "copy-fan-out"
+  | "merge-fan-in"
   | "relation-flip"
   | "simplify-into"
   | "wrap"
@@ -34,11 +43,12 @@ export const equationVisualMotifPhaseIds = [
   "final-simplify-reveal",
   "unwrap-artifact-exit",
   "wrap-artifact-enter",
-  "wrapped-token-shift"
+  "wrapped-token-shift",
+  ...kpCopyFanOutPhaseIds
 ] as const;
 
 export type EquationVisualMotifPhaseId =
-  (typeof equationVisualMotifPhaseIds)[number];
+  (typeof equationVisualMotifPhaseIds)[number] | KpCopyFanOutPhaseId;
 
 export interface VisualMotifPlan<
   TKind extends string = string,
@@ -110,6 +120,18 @@ export const equationVisualMotifDescriptors: readonly EquationVisualMotifDescrip
     motionPrimitiveIds: ["vanish"],
     phaseIds: ["cancel-meet", "cancel-collapse", "post-cancel-layout-shift"],
     summary: "Matched inverse tokens meet, collapse, and leave layout room."
+  },
+  {
+    kind: "copy-fan-out",
+    motionPrimitiveIds: ["copy", "shift"],
+    phaseIds: [...kpCopyFanOutPhaseIds],
+    summary: "A persistent source contracts while lineage-bearing copies branch and travel independently."
+  },
+  {
+    kind: "merge-fan-in",
+    motionPrimitiveIds: ["merge", "shift"],
+    phaseIds: [...kpCopyFanOutPhaseIds].reverse(),
+    summary: "Lineage-bearing sources retrace independent paths and coalesce into one result."
   },
   {
     kind: "relation-flip",

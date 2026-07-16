@@ -293,13 +293,13 @@ test("distribution and factoring family animations render opposite semantic dire
   const cases = [
     {
       descriptorId: "editor-animation.sample.animation.distribution.expand-a-sum",
-      motif: "artifact-replace",
+      motif: "copy-fan-out",
       sourceId: "expression.generated.distribution.expand-a-sum.factored",
       targetId: "expression.generated.distribution.expand-a-sum.expanded"
     },
     {
       descriptorId: "editor-animation.sample.animation.factoring.factor-common-a",
-      motif: "simplify-into",
+      motif: "merge-fan-in",
       sourceId: "expression.generated.distribution.factor-common-a.expanded",
       targetId: "expression.generated.distribution.factor-common-a.factored"
     }
@@ -320,7 +320,7 @@ test("distribution and factoring family animations render opposite semantic dire
   }
 });
 
-test("wrap satisfies its choreography contract while distribution records current gaps", async ({
+test("wrap and distribution satisfy their executable choreography contracts", async ({
   page
 }) => {
   await page.goto("/");
@@ -407,13 +407,35 @@ test("wrap satisfies its choreography contract while distribution records curren
     "data-kp-editor-equation-motif",
     distributionBaseline.observedMotif
   );
+  expect(distributionBaseline.gaps).toEqual([]);
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-lineage-choreography",
+    "copy-fan-out"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-lineage-path-count",
+    "2"
+  );
   await expect(sourceFactor).toHaveCSS("opacity", "1");
   await expect(targetFactors).toHaveCount(2);
-  await expect(targetFactors.nth(0)).toHaveCSS("opacity", "0");
-  await expect(targetFactors.nth(1)).toHaveCSS("opacity", "0");
+  await expect(targetFactors.nth(0)).toHaveCSS("opacity", "1");
+  await expect(targetFactors.nth(1)).toHaveCSS("opacity", "1");
+  const pathIds = await targetFactors.evaluateAll((elements) =>
+    elements.map((element) => element.getAttribute("data-kp-equation-lineage-path-id"))
+  );
+  expect(pathIds.every((pathId) => pathId !== null)).toBe(true);
+  expect(new Set(pathIds).size).toBe(2);
   expect(await targetFactors.nth(0).evaluate((element) => getComputedStyle(element).transform))
-    .toBe(await targetFactors.nth(1).evaluate((element) => getComputedStyle(element).transform));
+    .not.toBe(await targetFactors.nth(1).evaluate((element) => getComputedStyle(element).transform));
+  const transitProgress = Number(await transition.getAttribute(
+    "data-kp-editor-equation-lineage-transit-progress"
+  ));
+  expect(transitProgress).toBeGreaterThan(0);
+  expect(transitProgress).toBeLessThan(1);
 
+  await scrubber.fill("0.99");
+  expect(Number(await sourceFactor.evaluate((element) => getComputedStyle(element).opacity)))
+    .toBeGreaterThan(0);
   await scrubber.fill("1");
   await expect(sourceFactor).toHaveCSS("opacity", "0");
   await expect(targetFactors.nth(0)).toHaveCSS("opacity", "1");
