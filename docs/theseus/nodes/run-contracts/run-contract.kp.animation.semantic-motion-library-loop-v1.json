@@ -67,7 +67,8 @@
     {
       "id": "next-action.kp.animation.equation-native-fit-v1",
       "title": "Implement responsive equation fitting",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.equation-native-fit-v1 in Semantic Motion Animation Library Long Loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.equation-scrollbar-elimination-v1",

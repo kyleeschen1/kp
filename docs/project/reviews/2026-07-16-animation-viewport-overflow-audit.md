@@ -49,3 +49,16 @@ boundary:
 Removing `overflow-x: auto` alone is not sufficient. The content-overflow side
 of the audit must also reach zero so scrollbars are not replaced by clipped or
 off-stage notation.
+
+## Native-Fit Follow-up
+
+The responsive native-fit slice reduced the baseline from 217 to 201 nested
+scrollbar findings and from 52 to 36 horizontal findings. It eliminated the
+large Fourier range entirely: the long forward transform fits at both 360px
+and 768px using a shared source/target font size and no transform scaling.
+
+The remaining horizontal ranges are small motion excursions from independently
+translated tokens. The unchanged 165 vertical findings come from the equation
+object's scroll-container policy and KaTeX structural height. Those findings
+belong to the following scrollbar-elimination slice rather than further
+typographic shrinking.

@@ -109,6 +109,9 @@ import {
   syncKpEquationMaterialLayer,
   type KpEquationMaterialLayerOwnerFrame
 } from "../rendering/equation-material-layer-dom.ts";
+import {
+  syncKpEquationNativeFit
+} from "./equation-native-fit.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
@@ -268,16 +271,21 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
 
     let stage = slot.querySelector<HTMLElement>("[data-kp-editor-equation-stage]");
 
+    let contentChanged = false;
     if (stage?.dataset["kpEditorEquationStageIdentityKey"] !== frame.stageIdentityKey) {
       slot.innerHTML = renderStage(frame);
       stage = slot.querySelector<HTMLElement>("[data-kp-editor-equation-stage]");
-      if (stage !== null) measureStage(stage);
+      contentChanged = true;
     } else if (stage.dataset["kpEditorEquationContentKey"] !== frame.contentKey) {
       replaceStageContent(stage, frame);
-      measureStage(stage);
+      contentChanged = true;
     }
 
     if (stage === null) return;
+
+    const nativeFit = syncKpEquationNativeFit(stage);
+    if (nativeFit.changed) semanticMotionPlanCache.delete(stage);
+    if (contentChanged || nativeFit.changed) measureStage(stage);
 
     stage.dataset["kpEditorEquationPhaseId"] = frame.projection.phaseId;
     stage.dataset["kpEditorEquationGlobalProgress"] =

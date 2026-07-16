@@ -14,6 +14,49 @@ interface OverflowAuditSample {
 const viewportWidths = [360, 768, 1280] as const;
 const checkpoints = [0, 0.5, 0.92, 1] as const;
 
+test("native equation fitting contains long formulas without transform scaling", async ({
+  page
+}) => {
+  for (const viewportWidth of [360, 768]) {
+    await page.setViewportSize({ width: viewportWidth, height: 1000 });
+    await page.goto("/");
+    await page.locator('[data-action="set-editor-animation"]').selectOption(
+      "editor-animation.animation.sample.fourier-transform-pair"
+    );
+    const player = page.locator("[data-kp-editor-animation-player]");
+    await player.locator('[data-action="seek-editor-animation"]').fill("0");
+    const fitted = await player.locator(
+      "[data-kp-editor-equation-stage] .editor-equation-stage__transition"
+    ).first().evaluate((transition) => ({
+      scale: Number(
+        (transition as HTMLElement).dataset["kpEditorEquationNativeFitScale"]
+      ),
+      mode:
+        (transition as HTMLElement)
+          .dataset["kpEditorEquationNativeFitMode"],
+      objects: Array.from(transition.querySelectorAll<HTMLElement>(
+        ".editor-equation-stage__object"
+      )).map((object) => ({
+        clientWidth: object.clientWidth,
+        scrollWidth: object.scrollWidth,
+        fontSize: getComputedStyle(object).fontSize,
+        transform: getComputedStyle(object).transform
+      }))
+    }));
+
+    expect(fitted.scale).toBeLessThan(1);
+    expect(["fitted", "minimum-constrained"]).toContain(fitted.mode);
+    expect(fitted.objects.every(
+      (object) => object.scrollWidth <= object.clientWidth + 1
+    )).toBe(true);
+    expect(fitted.objects.every(
+      (object) => object.transform === "none"
+    )).toBe(true);
+    expect(new Set(fitted.objects.map((object) => object.fontSize)).size)
+      .toBe(1);
+  }
+});
+
 test("animation catalog overflow audit covers every descriptor and viewport", async ({
   page
 }) => {
