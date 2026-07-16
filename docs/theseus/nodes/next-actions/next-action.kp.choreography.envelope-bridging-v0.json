@@ -2,9 +2,21 @@
   "id": "next-action.kp.choreography.envelope-bridging-v0",
   "kind": "next-action",
   "title": "Compose adjacent choreography envelopes",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 5 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Added deterministic multi-step envelope composition with one bridge per operation boundary, attention hold or transfer policies, redundant orient and release suppression, and exact rewind sampling.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/animation/choreography-envelope-bridge.ts",
+      "summary": "Compiles and directly samples bridged choreography sequences across adjacent transformations."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-choreography-envelope-bridge.test.ts",
+      "summary": "Covers boundary overlap, attention suppression, and semantic rewind symmetry."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +30,29 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-choreography-envelope-bridge.test.ts tests/kp-equation-material-owner.test.ts",
+      "status": "passed",
+      "scope": "bridged envelopes and stable owners",
+      "checkedAt": "2026-07-16T19:18:00.523Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript envelope composition",
+      "checkedAt": "2026-07-16T19:18:00.588Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:18:00.648Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added deterministic multi-step envelope composition with one bridge per operation boundary, attention hold or transfer policies, redundant orient and release suppression, and exact rewind sampling."
+  }
 }

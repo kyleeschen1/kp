@@ -70,13 +70,14 @@
     {
       "id": "next-action.kp.choreography.envelope-bridging-v0",
       "title": "Compose adjacent choreography envelopes",
-      "status": "ready",
-      "summary": "Stable material ownership exists; bridge adjacent operation envelopes without attention gaps."
+      "summary": "Stable material ownership exists; bridge adjacent operation envelopes without attention gaps.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.continuity.global-progress-v0",
       "title": "Add animation-level semantic progress",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Envelope bridges are deterministic; expose global semantic progress to renderer and style layers."
     },
     {
       "id": "next-action.kp.linear.persistent-material-layer-v0",
