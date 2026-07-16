@@ -53,11 +53,15 @@ test("editor animation player shell renders an accessible surface and declared c
   assert.match(html, /data-kp-editor-animation-gestalt-style-control/);
   assert.match(html, /value="kp\.organic-subtle@1\.0\.0"/);
   assert.match(html, /value="kp\.restrained-editorial@1\.0\.0"/);
+  assert.match(html, /data-kp-editor-animation-focus-experiment-control/);
+  assert.match(html, /value="elevated"/);
+  assert.match(html, /value="no-depth"/);
   assert.match(html, /data-kp-editor-animation-gestalt-diagnostics/);
   assert.match(html, /data-kp-editor-gestalt-envelope-phase/);
   assert.match(html, /data-kp-editor-gestalt-salience/);
   assert.match(html, /data-kp-editor-gestalt-traversal/);
   assert.match(html, /data-kp-editor-gestalt-capabilities/);
+  assert.match(html, /data-kp-editor-focus-invariance/);
   assert.match(html, /data-kp-editor-animation-narration aria-live="polite"/);
   assert.match(html, /data-kp-editor-animation-authoring-controls/);
   for (const controlId of [

@@ -66,6 +66,13 @@ export function renderKpEditorAnimationPlayerShell(input: {
             <option value="${styleKey(kpRestrainedEditorialStyleRef)}">restrained editorial</option>
           </select>
         </label>
+        <label class="editor-animation-player__focus-experiment">Focus
+          <select data-kp-editor-animation-focus-experiment-control aria-label="Animation focus experiment">
+            <option value="flat">flat</option>
+            <option value="elevated">elevated 2.5D</option>
+            <option value="no-depth">no depth</option>
+          </select>
+        </label>
         <output data-kp-editor-animation-narration aria-live="polite">Animation checkpoint</output>
       </div>
       ${renderGestaltDiagnostics()}
@@ -91,6 +98,8 @@ function renderGestaltDiagnostics(): string {
           <div><dt>Salience graph</dt><dd data-kp-editor-gestalt-salience>pending</dd></div>
           <div><dt>Traversal</dt><dd data-kp-editor-gestalt-traversal>pending</dd></div>
           <div><dt>Capabilities</dt><dd data-kp-editor-gestalt-capabilities>pending</dd></div>
+          <div><dt>Focus experiment</dt><dd data-kp-editor-focus-experiment>flat</dd></div>
+          <div><dt>x/y invariance</dt><dd data-kp-editor-focus-invariance>pending</dd></div>
         </dl>
         <ul data-kp-editor-gestalt-warnings></ul>
       </div>

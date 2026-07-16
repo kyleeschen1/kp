@@ -339,11 +339,71 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       accessibilityMode:
         player?.dataset["kpEditorAnimationAccessibilityMode"] ?? "full-motion"
     });
+    applyFocusExperiment(
+      stage,
+      player?.dataset["kpEditorAnimationFocusExperiment"] ?? "flat"
+    );
     if (player !== null) {
       player.dataset["kpEditorAnimationMotionPlanInvalidated"] = "false";
     }
   }
 };
+
+function applyFocusExperiment(
+  stage: HTMLElement,
+  requestedMode: string
+): void {
+  const mode = requestedMode === "elevated"
+    ? "elevated"
+    : requestedMode === "no-depth"
+      ? "no-depth"
+      : "flat";
+  stage.dataset["kpEditorEquationFocusExperiment"] = mode;
+  let maximumAttention = 0;
+  stage.querySelectorAll<HTMLElement>(".kp-focus-group").forEach((group) => {
+    const existingZ = Math.abs(Number.parseFloat(
+      group.style.getPropertyValue("--kp-focus-z")
+    )) / 14;
+    const existingOutline = Number.parseFloat(
+      group.style.getPropertyValue("--kp-focus-outline-strength")
+    );
+    const existingDimming = Number.parseFloat(
+      group.style.getPropertyValue("--kp-focus-context-dimming")
+    ) / 0.24;
+    const attention = Math.min(
+      1,
+      Math.max(
+        0,
+        Number.isFinite(existingZ) ? existingZ : 0,
+        Number.isFinite(existingOutline) ? existingOutline : 0,
+        Number.isFinite(existingDimming) ? existingDimming : 0
+      )
+    );
+    maximumAttention = Math.max(maximumAttention, attention);
+    group.dataset["kpFocusProfile"] = mode === "elevated" ? "elevated" : "flat";
+    group.style.setProperty(
+      "--kp-focus-z",
+      mode === "elevated" ? `${12 * attention}px` : "0px"
+    );
+    group.style.setProperty(
+      "--kp-focus-scale",
+      mode === "elevated" ? String(1 + 0.018 * attention) : "1"
+    );
+    group.style.setProperty(
+      "--kp-focus-outline-strength",
+      mode === "elevated" ? "0" : String(0.55 * attention)
+    );
+    group.style.setProperty("--kp-focus-shadow-opacity", "0");
+  });
+  stage.querySelectorAll<HTMLElement>(
+    ".editor-equation-stage__shared-focus-shadow"
+  ).forEach((shadow) => {
+    shadow.style.setProperty(
+      "--kp-focus-shadow-opacity",
+      mode === "elevated" ? String(0.14 * maximumAttention) : "0"
+    );
+  });
+}
 
 function selectedGestaltChannels(
   player: HTMLElement | null

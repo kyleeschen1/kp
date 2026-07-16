@@ -241,6 +241,79 @@ test("gestalt style switching preserves semantic progress and the mounted equati
   expect(restrainedRealization).not.toEqual(organicRealization);
 });
 
+test("elevated focus adds depth without changing token x/y motion or layout", async ({
+  page
+}) => {
+  await page.goto("/");
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const focusControl = player.locator(
+    "[data-kp-editor-animation-focus-experiment-control]"
+  );
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+
+  await scrubber.fill("0.43");
+  const focusToken = stage.locator(".kp-focus-group").first();
+  await expect(focusToken).toBeVisible();
+  const flatGeometry = await focusToken.evaluate((element) => ({
+    left: (element as HTMLElement).offsetLeft,
+    top: (element as HTMLElement).offsetTop,
+    xYTransform: (element as HTMLElement).style.transform
+  }));
+  await stage.evaluate((element) => {
+    element.dataset["kpFocusPersistentStageProbe"] = "mounted";
+  });
+
+  await focusControl.selectOption("elevated");
+  await expect(scrubber).toHaveValue("0.43");
+  await expect(stage).toHaveAttribute(
+    "data-kp-focus-persistent-stage-probe",
+    "mounted"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-focus-experiment",
+    "elevated"
+  );
+  await expect(focusToken).toHaveAttribute("data-kp-focus-profile", "elevated");
+  const elevatedGeometry = await focusToken.evaluate((element) => ({
+    left: (element as HTMLElement).offsetLeft,
+    top: (element as HTMLElement).offsetTop,
+    xYTransform: (element as HTMLElement).style.transform,
+    transform: getComputedStyle(element).transform
+  }));
+  expect(elevatedGeometry.left).toBe(flatGeometry.left);
+  expect(elevatedGeometry.top).toBe(flatGeometry.top);
+  expect(elevatedGeometry.xYTransform).toBe(flatGeometry.xYTransform);
+  expect(elevatedGeometry.transform).not.toBe("none");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-focus-xy-invariant",
+    "true"
+  );
+  await expect(player.locator("[data-kp-editor-focus-invariance]"))
+    .toHaveText("pass · same x/y path");
+
+  await focusControl.selectOption("no-depth");
+  await expect(scrubber).toHaveValue("0.43");
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-focus-experiment",
+    "no-depth"
+  );
+  const noDepthGeometry = await focusToken.evaluate((element) => ({
+    left: (element as HTMLElement).offsetLeft,
+    top: (element as HTMLElement).offsetTop,
+    xYTransform: (element as HTMLElement).style.transform,
+    z: (element as HTMLElement).style.getPropertyValue("--kp-focus-z"),
+    scale: (element as HTMLElement).style.getPropertyValue("--kp-focus-scale")
+  }));
+  expect(noDepthGeometry).toMatchObject({
+    left: flatGeometry.left,
+    top: flatGeometry.top,
+    xYTransform: flatGeometry.xYTransform,
+    z: "0px",
+    scale: "1"
+  });
+});
+
 test("editor animation player disposes cleanly across selection and dashboard rerenders", async ({
   page
 }) => {

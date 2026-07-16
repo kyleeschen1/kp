@@ -20,6 +20,11 @@ import {
   parseKpEditorGestaltStyleRef
 } from "./animation-gestalt-inspector.ts";
 import type { KpGestaltStyleRef } from "../animation/gestalt-style.ts";
+import {
+  createKpElevatedFocusComparison,
+  type KpFocusExperimentMode
+} from "../animation/elevated-focus-experiment.ts";
+import type { KpChoreographyEnvelopePhaseId } from "../animation/choreography-plan.ts";
 
 export const KP_EDITOR_ANIMATION_FRAME_EVENT = "kp-editor-animation-frame";
 export const KP_EDITOR_ANIMATION_REGENERATION_EVENT =
@@ -28,6 +33,7 @@ export const KP_EDITOR_ANIMATION_REGENERATION_EVENT =
 const sessions = new WeakMap<HTMLElement, KpEditorAnimationPlaybackSession>();
 const authoringStates = new WeakMap<HTMLElement, KpEditorAnimationAuthoringState>();
 const gestaltStyles = new WeakMap<HTMLElement, KpGestaltStyleRef>();
+const focusExperimentModes = new WeakMap<HTMLElement, KpFocusExperimentMode>();
 const frameRequests = new WeakMap<HTMLElement, number>();
 
 export function hydrateKpEditorAnimationPlayers(root: ParentNode): void {
@@ -57,6 +63,7 @@ export function disposeKpEditorAnimationPlayers(root: ParentNode): void {
       sessions.delete(player);
       authoringStates.delete(player);
       gestaltStyles.delete(player);
+      focusExperimentModes.delete(player);
       player.dataset["kpEditorAnimationDisposed"] = "true";
       delete player.dataset["kpEditorAnimationHydrated"];
     });
@@ -130,6 +137,7 @@ function hydrateKpEditorAnimationPlayer(player: HTMLElement): void {
       player.dataset["kpEditorAnimationGestaltSelectedStyle"]
     )
   );
+  focusExperimentModes.set(player, "flat");
   syncAuthoringData(player, authoring);
   syncAccessibilityData(player, "system");
   player.dataset["kpEditorAnimationHydrated"] = "true";
@@ -181,6 +189,14 @@ function handlePlayerInput(event: Event): void {
     return;
   }
 
+  if (
+    input instanceof HTMLSelectElement &&
+    input.dataset["kpEditorAnimationFocusExperimentControl"] !== undefined
+  ) {
+    selectFocusExperiment(player, input.value);
+    return;
+  }
+
   if (input instanceof HTMLSelectElement && input.dataset["kpEditorAnimationAccessibilityControl"] !== undefined) {
     syncAccessibilityData(player, input.value);
     const session = sessions.get(player);
@@ -206,6 +222,28 @@ function handlePlayerInput(event: Event): void {
     type: "seek",
     progress: Number(input.value)
   });
+}
+
+function selectFocusExperiment(player: HTMLElement, value: string): void {
+  const mode: KpFocusExperimentMode =
+    value === "elevated" || value === "no-depth" ? value : "flat";
+  focusExperimentModes.set(player, mode);
+  player.dataset["kpEditorAnimationFocusExperiment"] = mode;
+  const session = sessions.get(player);
+  if (session === undefined) return;
+  const paused = session.player.playbackStatus === "playing"
+    ? reduceKpEditorAnimationPlaybackSession(session, {
+        type: "pause",
+        nowMs: performance.now()
+      })
+    : session;
+  const resampled = reduceKpEditorAnimationPlaybackSession(paused, {
+    type: "seek",
+    progress: paused.player.progress
+  });
+  sessions.set(player, resampled);
+  cancelPlayerFrame(player);
+  syncPlayerDom(player, resampled);
 }
 
 function selectGestaltStyle(player: HTMLElement, value: string): void {
@@ -500,6 +538,49 @@ function syncGestaltInspection(
       return item;
     })
   );
+  syncFocusExperiment(player, inspection);
+}
+
+function syncFocusExperiment(
+  player: HTMLElement,
+  inspection: ReturnType<typeof createKpEditorAnimationGestaltInspection>
+): void {
+  const mode = focusExperimentModes.get(player) ?? "flat";
+  const [phaseText, progressText] = inspection.envelopePhaseLabel.split(" · ");
+  const phaseId = isEnvelopePhase(phaseText) ? phaseText : "orient";
+  const phaseProgress = Math.min(
+    1,
+    Math.max(0, Number.parseFloat(progressText ?? "0") / 100)
+  );
+  const comparison = createKpElevatedFocusComparison({
+    id: `focus-experiment.${inspection.choreographyPlanId ?? "unmigrated"}`,
+    groupId: inspection.focusGroupLabel,
+    semanticEntityIds: [inspection.focusGroupLabel],
+    strength: inspection.channels.focus?.strength ?? 0.55,
+    contextDimming: inspection.channels.context?.dimming ?? 0.08,
+    phaseId,
+    phaseProgress
+  });
+  player.dataset["kpEditorAnimationFocusExperiment"] = mode;
+  player.dataset["kpEditorAnimationFocusXyInvariant"] =
+    String(comparison.invariance.passed);
+  const control = player.querySelector<HTMLSelectElement>(
+    "[data-kp-editor-animation-focus-experiment-control]"
+  );
+  if (control !== null) control.value = mode;
+  replaceText(player, "[data-kp-editor-focus-experiment]", mode);
+  replaceText(
+    player,
+    "[data-kp-editor-focus-invariance]",
+    comparison.invariance.passed ? "pass · same x/y path" : "fail"
+  );
+}
+
+function isEnvelopePhase(
+  value: string | undefined
+): value is KpChoreographyEnvelopePhaseId {
+  return value === "orient" || value === "reflow" || value === "act" ||
+    value === "settle" || value === "release";
 }
 
 function replaceText(

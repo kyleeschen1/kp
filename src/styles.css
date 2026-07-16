@@ -1865,7 +1865,8 @@ h2 {
 }
 
 .editor-animation-player__accessibility,
-.editor-animation-player__gestalt-style {
+.editor-animation-player__gestalt-style,
+.editor-animation-player__focus-experiment {
   display: flex;
   align-items: center;
   gap: 0.55rem;
@@ -1875,7 +1876,8 @@ h2 {
 }
 
 .editor-animation-player__accessibility select,
-.editor-animation-player__gestalt-style select {
+.editor-animation-player__gestalt-style select,
+.editor-animation-player__focus-experiment select {
   min-width: 10rem;
   border: 1px solid #aebdcc;
   border-radius: 6px;

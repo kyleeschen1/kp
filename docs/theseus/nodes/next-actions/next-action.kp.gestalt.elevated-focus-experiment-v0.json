@@ -2,8 +2,9 @@
   "id": "next-action.kp.gestalt.elevated-focus-experiment-v0",
   "kind": "next-action",
   "title": "Add Elevated Focus Comparison",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Added an experimental flat, elevated 2.5D, and no-depth focus comparison on the shared semantic clock, with lift-hold-release behavior, shared shadow treatment, persistent-stage switching, and explicit x/y and layout invariance diagnostics.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,59 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/elevated-focus-experiment.ts",
+      "summary": "Compiles synchronized flat, elevated, and no-depth samples and enforces identical x/y, phase, and layout participation."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-player-shell.ts",
+      "summary": "Adds focus experiment controls and x/y invariance review fields."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-player-controller.ts",
+      "summary": "Switches focus presentation at the same paused progress and publishes runtime invariance diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Applies composited z lift, scale, outline, and one shared shadow without changing token x/y transforms or layout."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-elevated-focus-experiment.test.ts",
+      "summary": "Proves bounded lift, hold, exact release, no-depth projection, and flat/elevated x/y equivalence."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves persistent-stage switching, unchanged offsets and x/y transforms, depth realization, and no-depth cleanup."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.gestalt.editor-controls-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +83,46 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-elevated-focus-experiment.test.ts tests/kp-focus-profile.test.ts tests/kp-editor-animation-player-shell.test.ts tests/kp-editor-animation-gestalt-inspector.test.ts",
+      "status": "passed",
+      "scope": "11 focused focus, editor shell, and inspector tests passed.",
+      "checkedAt": "2026-07-16T18:51:05.120Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts",
+      "status": "passed",
+      "scope": "All 30 editor browser tests passed, including elevated focus x/y and layout invariance.",
+      "checkedAt": "2026-07-16T18:51:05.191Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full repository suite passed: 1167 tests.",
+      "checkedAt": "2026-07-16T18:51:05.268Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, and test TypeScript projects passed.",
+      "checkedAt": "2026-07-16T18:51:05.331Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production build passed with only the existing chunk-size advisory.",
+      "checkedAt": "2026-07-16T18:51:05.403Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T18:51:05.477Z",
+      "scope": "Theseus graph validated before slice completion."
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.gestalt.editor-controls-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Added an experimental flat, elevated 2.5D, and no-depth focus comparison on the shared semantic clock, with lift-hold-release behavior, shared shadow treatment, persistent-stage switching, and explicit x/y and layout invariance diagnostics."
+  }
 }
