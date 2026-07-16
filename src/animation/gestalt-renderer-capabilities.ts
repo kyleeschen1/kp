@@ -126,6 +126,7 @@ export const kpEquationDomGestaltRenderer: KpGestaltRendererDeclaration = {
     "motion.path.arc",
     "motion.seek.direct-sampling",
     "focus.flat",
+    "focus.depth.css-2_5d",
     "opacity.token",
     "fragment.dom"
   ],

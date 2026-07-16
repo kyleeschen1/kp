@@ -17,7 +17,7 @@ const style = {
   optionalCapabilities: ["focus.depth.css-2_5d"]
 };
 
-test("equation DOM renderer reports a flat-focus fallback for optional depth", () => {
+test("equation DOM renderer realizes the CSS 2.5D focus profile", () => {
   const result = resolveKpGestaltRendererCapabilities({
     style,
     renderer: kpEquationDomGestaltRenderer
@@ -25,13 +25,11 @@ test("equation DOM renderer reports a flat-focus fallback for optional depth", (
   assert.equal(result.status, "compatible");
   assert.deepEqual(result.realizedCapabilityIds, [
     "motion.path.arc",
-    "motion.seek.direct-sampling"
+    "motion.seek.direct-sampling",
+    "focus.depth.css-2_5d"
   ]);
-  assert.deepEqual(result.fallbackCapabilityIds, ["focus.flat"]);
-  assert.equal(
-    result.diagnostics[0]?.code,
-    "style.capability.optional-fallback"
-  );
+  assert.deepEqual(result.fallbackCapabilityIds, []);
+  assert.deepEqual(result.diagnostics, []);
 });
 
 test("diagram SVG renderer uses the same reported optional fallback contract", () => {

@@ -1030,6 +1030,34 @@ h2 {
   background: #fbfdff;
 }
 
+.kp-focus-group {
+  --kp-focus-z: 0px;
+  --kp-focus-scale: 1;
+  --kp-focus-outline-strength: 0;
+  --kp-focus-shadow-y: 0px;
+  --kp-focus-shadow-blur: 0px;
+  --kp-focus-shadow-opacity: 0;
+  transform:
+    translateZ(var(--kp-focus-z))
+    scale(var(--kp-focus-scale));
+  transform-origin: center;
+  outline:
+    calc(2px * var(--kp-focus-outline-strength))
+    solid
+    rgb(31 79 95 / var(--kp-focus-outline-strength));
+  box-shadow:
+    0
+    var(--kp-focus-shadow-y)
+    var(--kp-focus-shadow-blur)
+    rgb(30 41 59 / var(--kp-focus-shadow-opacity));
+  will-change: transform, box-shadow, outline-color;
+}
+
+.kp-focus-context {
+  --kp-focus-context-dimming: 0;
+  opacity: calc(1 - var(--kp-focus-context-dimming));
+}
+
 .project-card--child {
   box-shadow: none;
 }

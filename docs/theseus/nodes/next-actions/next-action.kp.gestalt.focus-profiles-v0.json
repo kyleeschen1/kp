@@ -2,8 +2,9 @@
   "id": "next-action.kp.gestalt.focus-profiles-v0",
   "kind": "next-action",
   "title": "Add Flat Focus And Shared Shadow Profiles",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Added group-level flat and CSS 2.5D focus profiles with bounded elevation and scale, one shared shadow field across fragments, a separate context-dimming profile, accessibility flattening, exact phase sampling, and exact release to neutral. CSS bindings expose composited attention variables only and guarantee zero x/y motion and no layout participation.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,54 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/focus-profile.ts",
+      "summary": "Compiles and samples flat/elevated group focus, shared shadows, context dimming, accessibility modes, and CSS variable bindings."
+    },
+    {
+      "kind": "file",
+      "path": "src/styles.css",
+      "summary": "Defines composited focus-group and independent context-dimming CSS without layout-positioning properties."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/gestalt-renderer-capabilities.ts",
+      "summary": "Advertises CSS 2.5D focus realization for the equation DOM renderer while retaining flat SVG fallback."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-focus-profile.test.ts",
+      "summary": "Proves group shadow ownership, bounded depth, zero x/y displacement, exact neutral release, accessibility flattening, and layout-safe CSS."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-gestalt-renderer-capabilities.test.ts",
+      "summary": "Proves equation DOM realizes CSS depth and diagram SVG reports the flat fallback."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.propagation-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +78,34 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-focus-profile.test.ts tests/kp-gestalt-renderer-capabilities.test.ts tests/kp-gestalt-accessibility.test.ts",
+      "status": "passed",
+      "scope": "Focus profile, accessibility, and renderer capability contract",
+      "checkedAt": "2026-07-16T17:07:48.231Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript project closure",
+      "checkedAt": "2026-07-16T17:07:48.306Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Broad unit and integration regression suite: 1134 tests",
+      "checkedAt": "2026-07-16T17:07:48.380Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-16T17:07:48.455Z",
+      "scope": "Production CSS and client build"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.choreography.propagation-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Added group-level flat and CSS 2.5D focus profiles with bounded elevation and scale, one shared shadow field across fragments, a separate context-dimming profile, accessibility flattening, exact phase sampling, and exact release to neutral. CSS bindings expose composited attention variables only and guarantee zero x/y motion and no layout participation."
+  }
 }
