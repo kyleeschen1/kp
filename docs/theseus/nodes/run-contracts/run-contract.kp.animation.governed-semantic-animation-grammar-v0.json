@@ -27,7 +27,7 @@
     "No live model provider, general CAS, general graph layout, second playback clock, arbitrary model-authored geometry, automatic published-project migration, or unrelated feature expansion."
   ],
   "goal": "Run the approved 30-slice governed semantic animation grammar and constraint-planned choreography loop.",
-  "target": "next-action.kp.animation-grammar.salience-plan-v0",
+  "target": "next-action.kp.animation-grammar.llm-draft-v2-v0",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -102,7 +102,7 @@
     {
       "id": "next-action.kp.animation-grammar.salience-plan-v0",
       "title": "Salience plans",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation-grammar.llm-draft-v2-v0",

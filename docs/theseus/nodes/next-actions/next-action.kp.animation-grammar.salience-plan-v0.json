@@ -2,15 +2,25 @@
   "id": "next-action.kp.animation-grammar.salience-plan-v0",
   "kind": "next-action",
   "title": "Define LLM Salience Plans",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Represent notice, compare, transmit, predict, question, reveal, and supporting context without low-level timing or geometry. Verification: standard.",
+  "summary": "Defined LLM-authored salience plans for notice, compare, transmit, predict, question, reveal, and supporting context with scene-entity closure and explicit rejection of timing, coordinates, paths, trajectories, DOM, SVG, and keyframes.",
   "severity": "medium",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/salience-plan.ts",
+      "summary": "Renderer-neutral salience intent union and validation boundary."
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-salience-plan.test.ts",
+      "summary": "Complete intent vocabulary, reference closure, and renderer-instruction rejection."
     }
   ],
   "dependsOn": {
@@ -48,5 +58,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/animation-salience-plan.test.ts",
+      "status": "passed",
+      "scope": "salience intent and trust boundary",
+      "checkedAt": "2026-07-16T01:18:50.897Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T01:18:50.944Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T01:18:50.986Z",
+      "scope": "Theseus graph and event log"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined LLM-authored salience plans for notice, compare, transmit, predict, question, reveal, and supporting context with scene-entity closure and explicit rejection of timing, coordinates, paths, trajectories, DOM, SVG, and keyframes."
+  }
 }
