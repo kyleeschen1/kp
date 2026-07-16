@@ -1302,6 +1302,9 @@ function syncDotProductTraversalOverlay(
   const sourceRoot = transition.querySelector<HTMLElement>(
     "[data-kp-editor-equation-source] [data-kp-editor-equation-object-id]"
   )?.getBoundingClientRect();
+  const sourceInk = transition.querySelector<HTMLElement>(
+    "[data-kp-editor-equation-source] .katex-display > .katex"
+  )?.getBoundingClientRect() ?? sourceRoot;
   choreography.contributions.forEach((contribution) => {
     const contributionFrame = frame.motion.contributions.find(
       (candidate) => candidate.semanticIndex === contribution.semanticIndex
@@ -1321,7 +1324,8 @@ function syncDotProductTraversalOverlay(
       element === null ||
       left === undefined ||
       right === undefined ||
-      sourceRoot === undefined
+      sourceRoot === undefined ||
+      sourceInk === undefined
     ) {
       return;
     }
@@ -1331,7 +1335,14 @@ function syncDotProductTraversalOverlay(
       (leftRect.top + leftRect.height / 2 +
         rightRect.top + rightRect.height / 2) / 2 -
       transitionRect.top;
-    element.style.left = `${sourceRoot.right - transitionRect.left + 14}px`;
+    const preferredLeft = sourceInk.right - transitionRect.left + 14;
+    // Keep the product readable as a live overlay at narrow widths; clipping
+    // it would hide the very contribution the traversal is explaining.
+    const containedLeft = Math.min(
+      preferredLeft,
+      transitionRect.width - element.offsetWidth - 6
+    );
+    element.style.left = `${Math.max(6, containedLeft)}px`;
     element.style.top = `${pairY}px`;
     element.style.opacity = String(contributionFrame.productOpacity);
     element.style.transform =

@@ -79,7 +79,8 @@
     {
       "id": "next-action.kp.animation.surface-scrollbar-elimination-v1",
       "title": "Close non-equation animation overflow",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.surface-scrollbar-elimination-v1 in Semantic Motion Animation Library Long Loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.derivative-power-semantic-roles-v1",

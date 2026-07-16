@@ -73,3 +73,12 @@ The catalog gate records zero nested-scrollbar findings across all 528 audited
 descriptor, width, and checkpoint samples. Content overflow remains reported
 separately so visible ink and token travel cannot be mistaken for a scrollbar;
 the next surface-containment slice owns any ancestor-boundary spill.
+
+## Surface-Containment Follow-up
+
+The same catalog gate now rejects content overflow on every animation surface,
+equation stage, transition, layer, solve sequence, graph, and diagram boundary.
+The only permitted local extent is the equation object's visible KaTeX ink or
+structural box. This proves that graph and diagram renderers remain contained
+and that removing equation scrollbars did not replace scrolling with clipping
+at an ancestor boundary.

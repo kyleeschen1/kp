@@ -116,9 +116,17 @@ test("animation catalog overflow audit covers every descriptor and viewport", as
         overflowExtent: issue.overflowExtent
       }))
   );
-  const contentOverflowFindings = samples.reduce(
-    (count, sample) => count + sample.report.contentOverflowCount,
-    0
+  const contentOverflowFindings = samples.flatMap((sample) =>
+    sample.report.issues
+      .filter((issue) => issue.kind === "content-overflow")
+      .map((issue) => ({
+        descriptorId: sample.descriptorId,
+        viewportWidth: sample.viewportWidth,
+        progress: sample.progress,
+        elementRef: issue.elementRef,
+        axis: issue.axis,
+        overflowExtent: issue.overflowExtent
+      }))
   );
   const findingsByViewport = Object.fromEntries(viewportWidths.map(
     (viewportWidth) => [
@@ -149,11 +157,25 @@ test("animation catalog overflow audit covers every descriptor and viewport", as
     descriptorCount: descriptorIds.length,
     sampleCount: samples.length,
     nestedScrollbarCount: scrollbarFindings.length,
-    contentOverflowCount: contentOverflowFindings,
+    contentOverflowCount: contentOverflowFindings.length,
+    contentOverflowByElement: Object.fromEntries(
+      [...new Set(contentOverflowFindings.map(
+        (finding) => finding.elementRef
+      ))].map((elementRef) => [
+        elementRef,
+        contentOverflowFindings.filter(
+          (finding) => finding.elementRef === elementRef
+        ).length
+      ])
+    ),
     findingsByViewport,
     findingsByAxis,
     maximumOverflow
   }));
 
   expect(scrollbarFindings).toEqual([]);
+  expect(contentOverflowFindings.filter(
+    (finding) =>
+      finding.elementRef !== "div.editor-equation-stage__object"
+  )).toEqual([]);
 });

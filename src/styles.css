@@ -1690,6 +1690,9 @@ h2 {
 }
 
 .editor-equation-stage__object {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
   max-width: 100%;
   /* Native fitting owns containment; scrolling here split one equation into a
      competing viewport and also coerced the other axis to `auto`. */
