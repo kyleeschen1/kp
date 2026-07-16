@@ -48,7 +48,9 @@ export function syncKpEquationMaterialLayer(input: {
       visual.style.scale = "none";
       visual.style.width = "100%";
       visual.style.height = "100%";
-      visual.style.overflow = "hidden";
+      // Ordinary glyphs need visible ink overflow, while KaTeX uses hidden
+      // overflow selectively for structural crops such as radical tails.
+      // The computed clone already carries that distinction from its source.
       visual.style.position = "relative";
       visual.style.display = "block";
       visual.classList.add("editor-equation-stage__material-visual");

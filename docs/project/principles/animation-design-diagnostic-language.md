@@ -23,6 +23,13 @@ broken layer.
 8. **Typographic integrity** — Do font, baseline, glyph dimensions, and
    structural geometry remain stable throughout motion?
 
+Within typographic integrity, distinguish a glyph's **layout bounds** from its
+**ink bounds**. Layout bounds position the token and reserve advance width.
+Ink bounds include every painted pixel, including italic overhangs, radical
+strokes, antialiasing, outlines, and shadows. Motion may use layout bounds for
+alignment, but a visual clone must not clip to them unless the notation
+explicitly requires a structural crop.
+
 ## Critique Sentence
 
 Use this form:
@@ -70,6 +77,10 @@ Use these probes to turn critique into a regression test:
   before attention releases.
 - **Typographic drift:** font, width, height, and baseline change for a
   persistent glyph. Target: zero except browser subpixel rounding.
+- **Ink-bound clearance:** minimum visible bleed beyond a token's layout box
+  before an ancestor clips it. Ordinary glyph owners must preserve their
+  source overflow contract; intentional structural clips must be named and
+  tested separately.
 
 ## Canonical Examples
 
@@ -92,6 +103,16 @@ to invent hook and overbar correspondence. Evidence:
 `exponent-becomes-radical` maps three source selectors to one target selector.
 Repair: expose radical hook, overbar, index, and radicand roles at comparable
 granularity and bind each source fragment explicitly.
+
+### Premature glyph clipping
+
+During persistent motion, a glyph should retain all of its painted ink even
+when its layout rectangle is used to position the visual owner. Instead, the
+clone clips to that rectangle, shearing italic terminals, antialiased edges,
+or structural strokes. Evidence: the moving clone has `overflow: hidden`
+while its native KaTeX source has `overflow: visible`. Repair: preserve the
+source element's computed overflow contract, reserving hidden overflow for
+named KaTeX structural crops such as radical tails.
 
 ## Review Order
 

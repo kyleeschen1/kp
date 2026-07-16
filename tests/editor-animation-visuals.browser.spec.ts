@@ -919,6 +919,66 @@ test("KaTeX typography remains rigid across semantic equation families", async (
   }
 });
 
+test("persistent material clones preserve KaTeX ink overflow contracts", async ({
+  page
+}) => {
+  await page.goto("/");
+  const selector = page.locator('[data-action="set-editor-animation"]');
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  const readOverflowPairs = () => stage.evaluate((element) =>
+    Array.from(
+      element.querySelectorAll<HTMLElement>(
+        "[data-kp-equation-material-owner-id]"
+      )
+    ).map((owner) => {
+      const sourceMotionId =
+        owner.dataset["kpEquationMaterialSourceMotionId"] ?? "";
+      const source = element.querySelector<HTMLElement>(
+        `[data-kp-motion-id="${CSS.escape(sourceMotionId)}"]`
+      );
+      const visual = owner.querySelector<HTMLElement>(
+        ".editor-equation-stage__material-visual"
+      );
+      return {
+        ownerId: owner.dataset["kpEquationMaterialOwnerId"] ?? "",
+        sourceOverflow:
+          source === null ? "missing" : getComputedStyle(source).overflow,
+        visualOverflow:
+          visual === null ? "missing" : getComputedStyle(visual).overflow
+      };
+    })
+  );
+
+  await selector.selectOption(
+    "editor-animation.animation.linear-solve.solve-x"
+  );
+  await scrubber.fill("0.43");
+  const linearPairs = await readOverflowPairs();
+  expect(linearPairs.length).toBeGreaterThan(0);
+  expect(linearPairs.every(
+    (pair) =>
+      pair.sourceOverflow === pair.visualOverflow &&
+      pair.visualOverflow === "visible"
+  )).toBe(true);
+
+  await selector.selectOption(
+    "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
+  );
+  await scrubber.fill("0.65");
+  const radicalPairs = await readOverflowPairs();
+  expect(radicalPairs.length).toBeGreaterThan(0);
+  expect(radicalPairs.every(
+    (pair) => pair.sourceOverflow === pair.visualOverflow
+  )).toBe(true);
+  expect(radicalPairs.some(
+    (pair) =>
+      pair.ownerId.includes("root-notation") &&
+      pair.visualOverflow === "hidden"
+  )).toBe(true);
+});
+
 test("fraction simplification renders factor, common-factor, and simplified states", async ({
   page
 }) => {
