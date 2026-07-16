@@ -148,13 +148,14 @@
     {
       "id": "next-action.kp.radical.base-continuity-v0",
       "title": "Preserve base to radicand material",
-      "status": "ready",
-      "summary": "Root notation now folds and unfolds materially; keep x mounted as one stable base-radicand owner."
+      "summary": "Root notation now folds and unfolds materially; keep x mounted as one stable base-radicand owner.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.radical.native-settlement-v0",
       "title": "Settle into native radical geometry",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Both base and notation now have continuous material; make fragment cleanup and native handoff exact and non-snapping."
     },
     {
       "id": "next-action.kp.radical.reverse-succession-v0",

@@ -2,9 +2,21 @@
   "id": "next-action.kp.radical.base-continuity-v0",
   "kind": "next-action",
   "title": "Preserve base to radicand material",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 18 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Added one stage-owned base-radicand material owner for the entire radical rewrite, hiding both native endpoint tokens during motion and proving the same mounted owner survives reflow, artifact succession, and pre-release settlement.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Selects the authoritative base endpoint pose while preserving one visual owner from semantic start to end."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves the base owner identity survives progress 0.25, 0.55, and 0.95 before exact native target handoff at one."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +30,35 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g radical-succession",
+      "status": "passed",
+      "scope": "base to radicand DOM material continuity",
+      "checkedAt": "2026-07-16T19:51:49.207Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-equation-material-owner.test.ts tests/kp-radical-material-continuity.test.ts",
+      "status": "passed",
+      "scope": "material owner and radical plan contracts",
+      "checkedAt": "2026-07-16T19:51:49.289Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript radical base integration",
+      "checkedAt": "2026-07-16T19:51:49.367Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:51:49.445Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added one stage-owned base-radicand material owner for the entire radical rewrite, hiding both native endpoint tokens during motion and proving the same mounted owner survives reflow, artifact succession, and pre-release settlement."
+  }
 }

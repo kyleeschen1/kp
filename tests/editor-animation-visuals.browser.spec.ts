@@ -822,6 +822,9 @@ test("radical-succession uses independent opposite-corner tokens and native sett
   const targetRadical = transition.locator(
     '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radical-symbol"]'
   );
+  const targetBase = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radicand"]'
+  );
   await stage.evaluate((element) => {
     element.dataset["kpRadicalStageProbe"] = "persistent";
   });
@@ -856,6 +859,13 @@ test("radical-succession uses independent opposite-corner tokens and native sett
     "0"
   );
   expect(await sourceBase.getAttribute("style")).toContain("translate(");
+  const baseMaterialOwner = materialLayer.locator(
+    '[data-kp-equation-material-owner-id="radical-rewrite.base-radicand"]'
+  );
+  await expect(baseMaterialOwner).toHaveCSS("opacity", "1");
+  await baseMaterialOwner.evaluate((element) => {
+    element.dataset["kpRadicalBaseOwnerProbe"] = "same-base";
+  });
   await expect(sourceNotation).toHaveCount(3);
   for (const token of await sourceNotation.all()) {
     await expect(token).toHaveCSS("opacity", "1");
@@ -909,7 +919,16 @@ test("radical-succession uses independent opposite-corner tokens and native sett
     "data-kp-radical-stage-probe",
     "persistent"
   );
+  await expect(baseMaterialOwner).toHaveAttribute(
+    "data-kp-radical-base-owner-probe",
+    "same-base"
+  );
 
+  await scrubber.fill("0.95");
+  await expect(baseMaterialOwner).toHaveAttribute(
+    "data-kp-radical-base-owner-probe",
+    "same-base"
+  );
   await scrubber.fill("1");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-choreography-phase",
@@ -922,6 +941,8 @@ test("radical-succession uses independent opposite-corner tokens and native sett
     await expect(token).toHaveCSS("opacity", "0");
   }
   await expect(targetRadical).toHaveCSS("opacity", "1");
+  await expect(targetBase).toHaveCSS("opacity", "1");
+  await expect(baseMaterialOwner).toHaveCount(0);
   await expect(materialLayer.locator(
     '[data-kp-equation-material-fragment-role^="radical-"]'
   )).toHaveCount(0);

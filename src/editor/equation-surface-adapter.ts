@@ -99,7 +99,8 @@ import {
 } from "../animation/gestalt-base-styles.ts";
 import type { KpGestaltStyleChannels } from "../animation/gestalt-style.ts";
 import {
-  syncKpEquationMaterialLayer
+  syncKpEquationMaterialLayer,
+  type KpEquationMaterialLayerOwnerFrame
 } from "../rendering/equation-material-layer-dom.ts";
 
 const animationCatalog = createKpAnimationAssets();
@@ -449,35 +450,63 @@ function applyRadicalMaterialLayer(input: {
   const radical = input.stage.querySelector<HTMLElement>(
     '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radical-symbol"]'
   );
+  const sourceBase = input.stage.querySelector<HTMLElement>(
+    '[data-kp-editor-equation-source] [data-kp-motion-id*=".power.base"]'
+  );
+  const targetBase = input.stage.querySelector<HTMLElement>(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radicand"]'
+  );
   if (
     radical === null ||
-    input.semanticProgress < 0.42 ||
-    input.semanticProgress >= 0.92
+    sourceBase === null ||
+    targetBase === null ||
+    input.semanticProgress <= 0 ||
+    input.semanticProgress >= 1
   ) {
     syncKpEquationMaterialLayer({ stage: input.stage, owners: [] });
     return;
   }
-  const hookProgress = intervalProgress(
-    input.semanticProgress,
-    0.42,
-    0.78
-  );
-  const overbarProgress = intervalProgress(
-    input.semanticProgress,
-    0.52,
-    0.86
-  );
   const stageRect = input.stage.getBoundingClientRect();
-  const radicalRect = radical.getBoundingClientRect();
-  const rect = {
-    left: radicalRect.left - stageRect.left,
-    top: radicalRect.top - stageRect.top,
-    width: radicalRect.width,
-    height: radicalRect.height
-  };
-  syncKpEquationMaterialLayer({
-    stage: input.stage,
-    owners: [
+  const sourceBaseOpacity = Number.parseFloat(
+    getComputedStyle(sourceBase).opacity
+  );
+  const targetBaseOpacity = Number.parseFloat(
+    getComputedStyle(targetBase).opacity
+  );
+  const base = sourceBaseOpacity >= targetBaseOpacity ? sourceBase : targetBase;
+  const baseRect = base.getBoundingClientRect();
+  const owners: KpEquationMaterialLayerOwnerFrame[] = [{
+    ownerId: "radical-rewrite.base-radicand",
+    sourceElement: base,
+    rect: {
+      left: baseRect.left - stageRect.left,
+      top: baseRect.top - stageRect.top,
+      width: baseRect.width,
+      height: baseRect.height
+    },
+    opacity: Math.max(sourceBaseOpacity, targetBaseOpacity),
+    transform: "none"
+  }];
+
+  if (input.semanticProgress >= 0.42 && input.semanticProgress < 0.92) {
+    const hookProgress = intervalProgress(
+      input.semanticProgress,
+      0.42,
+      0.78
+    );
+    const overbarProgress = intervalProgress(
+      input.semanticProgress,
+      0.52,
+      0.86
+    );
+    const radicalRect = radical.getBoundingClientRect();
+    const rect = {
+      left: radicalRect.left - stageRect.left,
+      top: radicalRect.top - stageRect.top,
+      width: radicalRect.width,
+      height: radicalRect.height
+    };
+    owners.push(
       {
         ownerId: "radical-rewrite.root-notation.hook",
         sourceElement: radical,
@@ -498,10 +527,18 @@ function applyRadicalMaterialLayer(input: {
         clipPath: "inset(0 0 66% 28%)",
         fragmentRole: "radical-overbar"
       }
-    ]
+    );
+    radical.style.opacity = "0";
+    radical.dataset["kpEquationMaterialNativeHidden"] = "true";
+  }
+  syncKpEquationMaterialLayer({
+    stage: input.stage,
+    owners
   });
-  radical.style.opacity = "0";
-  radical.dataset["kpEquationMaterialNativeHidden"] = "true";
+  sourceBase.style.opacity = "0";
+  targetBase.style.opacity = "0";
+  sourceBase.dataset["kpEquationMaterialNativeHidden"] = "true";
+  targetBase.dataset["kpEquationMaterialNativeHidden"] = "true";
   input.stage.dataset["kpEditorEquationMaterialContinuity"] =
     "radical-rewrite";
 }
