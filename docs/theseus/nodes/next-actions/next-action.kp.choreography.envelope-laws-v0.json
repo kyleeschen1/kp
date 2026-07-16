@@ -2,8 +2,9 @@
   "id": "next-action.kp.choreography.envelope-laws-v0",
   "kind": "next-action",
   "title": "Enforce Envelope Dependency Laws",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Enforced focus-before-meaningful-motion, space reservation before continuant reflow, reflow completion before act with explicit governed-overlap escape, stable recognition before release, and exact mirrored rewind dependencies.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,39 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/choreography-envelope-laws.ts",
+      "summary": "Adds renderer-neutral envelope law checks and path-specific diagnostics over the universal choreography plan."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-choreography-envelope-laws.test.ts",
+      "summary": "Proves the default dependency sequence, failure diagnostics, governed causal overlap, and reversed rewind graph."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.plan-schema-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +63,22 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-choreography-envelope-laws.test.ts tests/kp-choreography-plan.test.ts",
+      "status": "passed",
+      "scope": "Envelope dependency and plan contracts",
+      "checkedAt": "2026-07-16T16:05:53.445Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-16T16:05:53.510Z",
+      "scope": "TypeScript project closure"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.choreography.plan-schema-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Enforced focus-before-meaningful-motion, space reservation before continuant reflow, reflow completion before act with explicit governed-overlap escape, stable recognition before release, and exact mirrored rewind dependencies."
+  }
 }
