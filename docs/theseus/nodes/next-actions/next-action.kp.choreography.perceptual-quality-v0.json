@@ -2,8 +2,9 @@
   "id": "next-action.kp.choreography.perceptual-quality-v0",
   "kind": "next-action",
   "title": "Add Perceptual Order Quality Gates",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Added exemplar-calibrated measurable choreography quality gates for focus lead, explanatory attention gaps, premature act or elimination, cohesion bounds, residual transforms and deformation, stable-checkpoint stillness, and perceptual material continuity. Governed overlaps are respected, and reports explicitly retain mandatory human perceptual review.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,39 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/choreography-quality.ts",
+      "summary": "Evaluates automatable perceptual-order and settlement invariants without claiming to automate subjective animation judgment."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-choreography-quality.test.ts",
+      "summary": "Proves calm passage, the full failure cohort, governed overlap handling, exemplar calibration provenance, and the retained human review rubric."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.timeline-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +63,22 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-choreography-quality.test.ts tests/equation-motion-quality.test.ts tests/kp-choreography-timeline.test.ts",
+      "status": "passed",
+      "scope": "Choreography perceptual order, concrete motion quality, and timeline contracts",
+      "checkedAt": "2026-07-16T16:38:36.074Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-16T16:38:36.142Z",
+      "scope": "TypeScript project closure"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.choreography.timeline-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Added exemplar-calibrated measurable choreography quality gates for focus lead, explanatory attention gaps, premature act or elimination, cohesion bounds, residual transforms and deformation, stable-checkpoint stillness, and perceptual material continuity. Governed overlaps are respected, and reports explicitly retain mandatory human perceptual review."
+  }
 }
