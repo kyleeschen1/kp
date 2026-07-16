@@ -2,9 +2,31 @@
   "id": "next-action.kp.gestalt.motion-eligibility-v0",
   "kind": "next-action",
   "title": "Make gestalt realization continuity aware",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 22 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Made gestalt realization material-continuity aware: stable semantic identities span linear and radical states, path-relative offsets preserve motion signatures, and structural notation is exempt from squash/stretch deformation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/animation/gestalt-motion-eligibility.ts",
+      "summary": "Defines continuity-aware motion identity, eligibility, and coordinate-space rules."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Applies stable identities and structural deformation constraints during editor realization."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-gestalt-motion-eligibility.test.ts",
+      "summary": "Covers stable identities and structural exemptions."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves radical material identities and structural scale invariants in-browser."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +40,29 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript contracts",
+      "checkedAt": "2026-07-16T20:05:27.264Z"
+    },
+    {
+      "command": "node --test gestalt eligibility and organic motion tests",
+      "status": "passed",
+      "scope": "Deterministic motion and eligibility laws",
+      "checkedAt": "2026-07-16T20:05:27.363Z"
+    },
+    {
+      "command": "Playwright linear and radical continuity gates",
+      "status": "passed",
+      "checkedAt": "2026-07-16T20:05:27.444Z",
+      "scope": "Browser material continuity"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Made gestalt realization material-continuity aware: stable semantic identities span linear and radical states, path-relative offsets preserve motion signatures, and structural notation is exempt from squash/stretch deformation."
+  }
 }

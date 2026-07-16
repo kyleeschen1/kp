@@ -1053,6 +1053,36 @@ test("radical bundle and native settlement satisfy continuity budgets", async ({
   );
 
   await scrubber.fill("0.58");
+  const sourceBase = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id*=".power.base"]'
+  );
+  const targetRadicand = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radicand"]'
+  );
+  await expect(sourceBase).toHaveAttribute(
+    "data-kp-editor-gestalt-motion-identity",
+    "radical-rewrite.base-radicand"
+  );
+  await expect(targetRadicand).toHaveAttribute(
+    "data-kp-editor-gestalt-motion-identity",
+    "radical-rewrite.base-radicand"
+  );
+  for (const selector of [
+    '[data-kp-motion-id*=".power.exponent-fraction-line"]',
+    '[data-kp-motion-id*=".radical.radical-symbol"]'
+  ]) {
+    const structuralFragment = transition.locator(selector);
+    await expect(structuralFragment).toHaveAttribute(
+      "data-kp-editor-gestalt-motion-eligibility",
+      "structural-fragment"
+    );
+    await expect(structuralFragment).toHaveAttribute(
+      "data-kp-editor-gestalt-coordinate-space",
+      "path-relative"
+    );
+    expect(await structuralFragment.evaluate((element) => element.style.scale))
+      .toBe("1");
+  }
   const bundleSamples = await transition.evaluate((element) => {
     const source = element.querySelector<HTMLElement>(
       "[data-kp-editor-equation-source]"

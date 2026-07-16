@@ -91,6 +91,10 @@ import {
   sampleKpOrganicProgress
 } from "../animation/organic-motion-primitives.ts";
 import {
+  projectKpGestaltOffsetToPath,
+  resolveKpGestaltMotionEligibility
+} from "../animation/gestalt-motion-eligibility.ts";
+import {
   sampleKpBridgedChoreographySequence,
   type KpBridgedChoreographyFrame
 } from "../animation/choreography-envelope-bridge.ts";
@@ -666,9 +670,10 @@ function applyGestaltTokenRealization(input: {
     .forEach((token) => {
       const identityId = token.dataset["kpMotionId"];
       if (identityId === undefined) return;
+      const eligibility = resolveKpGestaltMotionEligibility(identityId);
       const sample = sampleKpOrganicMotion({
         signature: deriveKpOrganicMotionSignature({
-          identityId,
+          identityId: eligibility.identityId,
           motifId: "editor-equation.gestalt",
           motionFieldId: input.state.animationId
         }),
@@ -676,13 +681,31 @@ function applyGestaltTokenRealization(input: {
         // Progress is already direction-normalized at the stage boundary.
         // Mirroring again here would give rewind a different material pose.
         direction: "forward",
-        microMotionAmplitude: Math.min(1, amplitude),
-        deformationCeiling: Math.min(1, deformation)
+        microMotionAmplitude: Math.min(
+          1,
+          amplitude * eligibility.microMotionScale
+        ),
+        deformationCeiling: Math.min(
+          1,
+          deformation * eligibility.deformationScale
+        )
       });
-      token.style.translate = `${sample.x}px ${sample.y}px`;
+      const offset = eligibility.coordinateSpace === "path-relative"
+        ? projectKpGestaltOffsetToPath({
+            x: sample.x,
+            y: sample.y,
+            transform: getComputedStyle(token).transform
+          })
+        : { x: sample.x, y: sample.y };
+      token.style.translate = `${offset.x}px ${offset.y}px`;
       token.style.scale = `${sample.scaleAlong} ${sample.scaleAcross}`;
       token.dataset["kpEditorGestaltTokenRealization"] =
         input.channels.acceleration?.character ?? "restrained";
+      token.dataset["kpEditorGestaltMotionEligibility"] = eligibility.mode;
+      token.dataset["kpEditorGestaltMotionIdentity"] =
+        eligibility.identityId;
+      token.dataset["kpEditorGestaltCoordinateSpace"] =
+        eligibility.coordinateSpace;
     });
 }
 

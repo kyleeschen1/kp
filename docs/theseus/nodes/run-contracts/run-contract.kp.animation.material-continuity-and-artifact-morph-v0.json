@@ -172,8 +172,8 @@
     {
       "id": "next-action.kp.gestalt.motion-eligibility-v0",
       "title": "Make gestalt realization continuity aware",
-      "status": "ready",
-      "summary": "Linear and radical continuity gates pass; restrict organic motion by material role and lineage."
+      "summary": "Linear and radical continuity gates pass; restrict organic motion by material role and lineage.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.editor.continuity-inspector-v0",
