@@ -18,6 +18,11 @@ import {
   createSemanticTransformationLeaf,
   createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
+import type { KpChoreographyLifecycle } from "./choreography-lifecycle.ts";
+import type { KpChoreographyVocabulary } from "./choreography-vocabulary.ts";
+import {
+  compileKpRepresentationalLineageGraph
+} from "./representational-lineage-compiler.ts";
 
 export const defaultExponentExpansionFixtureId =
   "generated.exponent.square-as-product";
@@ -57,6 +62,75 @@ export function createExponentRadicalRewriteAnimationAsset(
     fixture: createGeneratedRadicalTutorialFixture(spec),
     tags: ["animation", "equation", "radical", "generated"]
   });
+}
+
+export function createExponentRadicalRepresentationalLineageFixture() {
+  const animation = createExponentRadicalRewriteAnimationAsset();
+  const transformation = animation.transformations[0]!;
+  const notationRecord = transformation.correspondenceMap?.records.find(
+    (record) => record.id === "exponent-becomes-radical"
+  );
+  if (notationRecord === undefined) {
+    throw new Error(`Animation ${animation.id} lacks root-notation correspondence.`);
+  }
+  const sourceRepresentationId = `${transformation.sourceObjectIds[0]}.root-notation`;
+  const targetRepresentationId = `${transformation.targetObjectIds[0]}.root-notation`;
+  const lineageId = `${transformation.id}.representational-lineage`;
+  const vocabulary: KpChoreographyVocabulary = {
+    id: `${animation.id}.choreography-vocabulary`,
+    continuants: [],
+    representationalLineages: [{
+      id: lineageId,
+      meaning: "Rational exponent notation becomes radical notation without semantic identity.",
+      sourceRepresentation: {
+        entityId: sourceRepresentationId,
+        selectorIds: notationRecord.sourceSelectorIds
+      },
+      targetRepresentation: {
+        entityId: targetRepresentationId,
+        selectorIds: notationRecord.targetSelectorIds
+      },
+      cause: {
+        kind: "transformation",
+        transformationId: transformation.id,
+        correspondenceRecordIds: [notationRecord.id]
+      }
+    }],
+    objectConstancy: [],
+    materialContinuity: [{
+      id: `${lineageId}.material-continuity`,
+      mode: "shared-reconciliation",
+      sourceEntityIds: notationRecord.sourceSelectorIds,
+      targetEntityIds: notationRecord.targetSelectorIds,
+      authorityRef: {
+        kind: "representational-lineage",
+        lineageId
+      },
+      summary: "Exponent material reconciles into the successor radical representation."
+    }],
+    motionClassifications: []
+  };
+  const lifecycle: KpChoreographyLifecycle = {
+    id: `${animation.id}.choreography-lifecycle`,
+    records: [{
+      id: `${transformation.id}.root-notation-successor`,
+      kind: "successor",
+      representationalLineageId: lineageId,
+      sourceEntityIds: notationRecord.sourceSelectorIds,
+      targetEntityIds: notationRecord.targetSelectorIds,
+      summary: "The rational exponent causally succeeds into radical notation."
+    }]
+  };
+  return {
+    animation,
+    vocabulary,
+    lifecycle,
+    graph: compileKpRepresentationalLineageGraph({
+      id: `${animation.id}.representational-lineage-graph`,
+      vocabulary,
+      lifecycle
+    })
+  };
 }
 
 function createGeneratedEquationAnimationAsset(input: {

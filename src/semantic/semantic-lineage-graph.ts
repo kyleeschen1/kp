@@ -3,6 +3,7 @@ export type KpSemanticLineageRelation =
   | "copy"
   | "split"
   | "merge"
+  | "representation-succession"
   | "introduction"
   | "removal";
 
@@ -12,6 +13,7 @@ export interface KpSemanticLineageEdge {
   readonly sourceEntityIds: readonly string[];
   readonly targetEntityIds: readonly string[];
   readonly summary: string;
+  readonly representationAuthorityId?: string | undefined;
 }
 
 export interface KpSemanticLineageGraph {
@@ -31,6 +33,7 @@ export interface KpSemanticLineageIssue {
     | "lineage.incomplete-target"
     | "lineage.ambiguous-target"
     | "lineage.copy-without-persistence"
+    | "lineage.missing-representation-authority"
     | "lineage.cycle";
   readonly path: string;
   readonly message: string;
@@ -71,6 +74,16 @@ export function validateKpSemanticLineageGraph(
     if (edgeIds.has(edge.id)) duplicateIssue(`${path}.id`, `Duplicate lineage edge ${edge.id}.`, issues);
     edgeIds.add(edge.id);
     validateMultiplicity(edge, path, issues);
+    if (
+      edge.relation === "representation-succession" &&
+      (edge.representationAuthorityId?.trim().length ?? 0) === 0
+    ) {
+      issues.push({
+        code: "lineage.missing-representation-authority",
+        path: `${path}.representationAuthorityId`,
+        message: `Representation succession ${edge.id} requires an explicit semantic authority.`
+      });
+    }
     edge.sourceEntityIds.forEach((id) => {
       if (!sourceIds.has(id)) endpointIssue(`${path}.sourceEntityIds`, edge.id, id, "source", issues);
     });
@@ -139,8 +152,10 @@ function validateMultiplicity(
     ? sources === 1 && targets === 1
     : edge.relation === "split"
       ? sources === 1 && targets >= 2
-      : edge.relation === "merge"
-        ? sources >= 2 && targets === 1
+        : edge.relation === "merge"
+          ? sources >= 2 && targets === 1
+          : edge.relation === "representation-succession"
+            ? sources >= 1 && targets >= 1
         : edge.relation === "introduction"
           ? sources === 0 && targets >= 1
           : sources >= 1 && targets === 0;

@@ -2,8 +2,9 @@
   "id": "next-action.kp.choreography.representational-lineage-v0",
   "kind": "next-action",
   "title": "Compile Representational Lineage",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Extended semantic lineage with explicit representation-succession edges and compiled the generated fractional-exponent-to-radical fixture into that graph. The compiler binds transformation and correspondence authority, validates lifecycle endpoints, and never claims glyph persistence.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,49 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/semantic-lineage-graph.ts",
+      "summary": "Adds authority-bearing representation-succession as a distinct lineage relation with validation."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/representational-lineage-compiler.ts",
+      "summary": "Compiles authored representational lineage and successor lifecycle records into the shared lineage graph."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/exponent-radical-adapter.ts",
+      "summary": "Exposes the canonical generated radical rewrite as a real representational-lineage fixture."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-representational-lineage-compiler.test.ts",
+      "summary": "Proves three exponent components succeed into one radical representation without false identity and rejects mismatched or unauthoritative succession."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.lifecycle-cause-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +73,22 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-representational-lineage-compiler.test.ts tests/semantic-lineage-graph.test.ts tests/kp-exponent-radical-animation-asset.test.ts",
+      "status": "passed",
+      "scope": "Representational lineage graph, compiler, and radical fixture",
+      "checkedAt": "2026-07-16T16:12:32.978Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-16T16:12:33.034Z",
+      "scope": "TypeScript project closure"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.choreography.lifecycle-cause-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Extended semantic lineage with explicit representation-succession edges and compiled the generated fractional-exponent-to-radical fixture into that graph. The compiler binds transformation and correspondence authority, validates lifecycle endpoints, and never claims glyph persistence."
+  }
 }
