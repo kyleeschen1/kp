@@ -136,13 +136,14 @@
     {
       "id": "next-action.kp.radical.exponent-collapse-v0",
       "title": "Collapse exponent material into one bundle",
-      "status": "ready",
-      "summary": "Fragment roles and ranks are explicit; route all exponent material to the shared measured bundle."
+      "summary": "Fragment roles and ranks are explicit; route all exponent material to the shared measured bundle.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.radical.radical-unfold-v0",
       "title": "Unfold radical material from the same bundle",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Exponent fragments now share one bundle; split radical hook and overbar presentation from that same seed."
     },
     {
       "id": "next-action.kp.radical.base-continuity-v0",

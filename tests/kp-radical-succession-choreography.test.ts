@@ -110,6 +110,34 @@ test("token sampler uses opposite-corner gathering and far-side stagger", () => 
   assert.equal(base?.pose.scale, 1);
 });
 
+test("all exponent fragments finish gathering at one shared bundle", () => {
+  const sampledGeometry = geometry();
+  const gathered = sampleKpEquationTokenMotion(sampledGeometry, 0.58);
+  const bundle = gathered.representationalSuccession?.bundlePoint;
+  assert.ok(bundle);
+  const gatheredCenters = gathered.tokens
+    .filter(
+      (token) =>
+        token.side === "source" && token.motionId.startsWith("exponent.")
+    )
+    .map((token) => {
+      const source = sampledGeometry.sourceTokens.find(
+        (candidate) => candidate.motionId === token.motionId
+      )!;
+      return {
+        x: source.localRect.left + source.localRect.width / 2 + token.pose.x,
+        y: source.localRect.top + source.localRect.height / 2 + token.pose.y
+      };
+    });
+  assert.ok(
+    gatheredCenters.every(
+      (center) =>
+        Math.abs(center.x - bundle.x) < 0.000001 &&
+        Math.abs(center.y - bundle.y) < 0.000001
+    )
+  );
+});
+
 test("radical succession settles to exact native token endpoints", () => {
   const end = sampleKpEquationTokenMotion(geometry(), 1);
   assert.ok(

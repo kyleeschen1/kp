@@ -78,6 +78,9 @@ export function sampleKpEquationRepresentationalSuccession(input: {
       sourceAnchor: start,
       targetAnchor: targetCenter,
       targetBounds: input.relation.target!.bounds,
+      // One relation-level corner keeps numerator, rule, and denominator
+      // material from selecting contradictory vertical reconciliation points.
+      reconciliationAnchor: bundlePoint,
       readingContext: {
         direction: "left-to-right",
         baselineY: targetCenter.y

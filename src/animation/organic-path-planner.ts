@@ -83,6 +83,7 @@ export interface KpOrganicPathPlanInput {
   readonly sourceAnchor: KpOrganicPathPoint;
   readonly targetAnchor: KpOrganicPathPoint;
   readonly targetBounds: KpOrganicPathRect;
+  readonly reconciliationAnchor?: KpOrganicPathPoint | undefined;
   readonly obstacles?: readonly KpOrganicPathRect[] | undefined;
   readonly moverRadius?: number | undefined;
   readonly clearance?: number | undefined;
@@ -97,6 +98,9 @@ export function planKpOrganicPath(
   rejectAuthoredRouting(input);
   validatePoint(input.sourceAnchor, "sourceAnchor");
   validatePoint(input.targetAnchor, "targetAnchor");
+  if (input.reconciliationAnchor !== undefined) {
+    validatePoint(input.reconciliationAnchor, "reconciliationAnchor");
+  }
   validateRect(input.targetBounds, "targetBounds");
   input.obstacles?.forEach((obstacle, index) =>
     validateRect(obstacle, `obstacles[${index}]`)
@@ -316,10 +320,8 @@ function geometryForVariant(
         end
       };
     case "opposite-corner": {
-      const reconciliation = oppositeTargetCorner(
-        input.targetBounds,
-        input.sourceAnchor
-      );
+      const reconciliation = input.reconciliationAnchor ??
+        oppositeTargetCorner(input.targetBounds, input.sourceAnchor);
       return {
         kind: "opposite-corner-reconciliation",
         start,

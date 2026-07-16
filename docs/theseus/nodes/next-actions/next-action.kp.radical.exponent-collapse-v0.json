@@ -2,9 +2,26 @@
   "id": "next-action.kp.radical.exponent-collapse-v0",
   "kind": "next-action",
   "title": "Collapse exponent material into one bundle",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 16 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Added a relation-level reconciliation anchor so numerator, fraction rule, and denominator retain independent arcs but finish at the exact same measured opposite-corner bundle instead of choosing contradictory corners.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/animation/organic-path-planner.ts",
+      "summary": "Allows a canonical operation to supply one measured reconciliation anchor without authored control points."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-representational-succession.ts",
+      "summary": "Pins every exponent fragment path to the relation-level radical bundle."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-radical-succession-choreography.test.ts",
+      "summary": "Proves all exponent fragment centers coincide with the shared bundle when gathering completes."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +35,35 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-radical-succession-choreography.test.ts tests/kp-organic-path-planner.test.ts",
+      "status": "passed",
+      "scope": "shared exponent collapse paths",
+      "checkedAt": "2026-07-16T19:44:47.970Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g radical-succession",
+      "status": "passed",
+      "scope": "visible shared exponent bundle",
+      "checkedAt": "2026-07-16T19:44:48.050Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript organic path extension",
+      "checkedAt": "2026-07-16T19:44:48.131Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:44:48.209Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a relation-level reconciliation anchor so numerator, fraction rule, and denominator retain independent arcs but finish at the exact same measured opposite-corner bundle instead of choosing contradictory corners."
+  }
 }
