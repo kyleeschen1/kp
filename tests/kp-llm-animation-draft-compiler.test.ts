@@ -7,6 +7,12 @@ import {
   kpLlmAnimationDraftSchemaVersion,
   type KpLlmAnimationDraft
 } from "../src/animation/llm-animation-draft.ts";
+import { acceptedGeneratedAddZeroDraft } from "../src/animation/llm-animation-draft-examples.ts";
+import { readKpVersionedLlmAnimationDraft } from "../src/animation/llm-animation-draft-v2.ts";
+import {
+  applyKpLlmAnimationDraftV2Patch,
+  compileKpLlmAnimationDraftV2
+} from "../src/animation/llm-animation-draft-v2-compiler.ts";
 
 function additiveZeroDraft(): KpLlmAnimationDraft {
   return {
@@ -115,6 +121,78 @@ test("LLM draft compiler rejects unresolved object and sequence references", () 
   assert.equal(result.status, "rejected");
   assert.ok(result.diagnostics.some((issue) => issue.path.endsWith("targetObjectIds[0]")));
   assert.ok(result.diagnostics.some((issue) => issue.path === "$.sequence[0]"));
+});
+
+test("v2 compiler returns path-specific typed gaps and accepts a local operation patch", () => {
+  const read = readKpVersionedLlmAnimationDraft(acceptedGeneratedAddZeroDraft);
+  assert.equal(read.status, "migrated-v1");
+  if (read.status !== "migrated-v1") return;
+  const firstDerivation = read.draft.derivations[0]!;
+  const firstOperation = firstDerivation.operations[0]!;
+  const invalid = {
+    ...read.draft,
+    derivations: [{
+      ...firstDerivation,
+      operations: [{ ...firstOperation, operationId: "kp.core.teleport" }, ...firstDerivation.operations.slice(1)]
+    }]
+  };
+
+  const rejected = compileKpLlmAnimationDraftV2(invalid);
+  assert.equal(rejected.status, "repair-required");
+  if (rejected.status !== "repair-required") return;
+  assert.match(rejected.diagnostics[0]?.path ?? "", /^\$\.derivations\[0\]\.operations\[0\]\.operationId$/);
+  assert.equal(rejected.gaps[0]?.reason, "unsupported-operation");
+
+  const repaired = applyKpLlmAnimationDraftV2Patch({
+    draft: invalid,
+    patch: {
+      kind: "replace-operation-id",
+      derivationId: firstDerivation.id,
+      operationStepId: firstOperation.id,
+      expectedOperationId: "kp.core.teleport",
+      replacementOperationId: "kp.core.persist"
+    }
+  });
+  const accepted = compileKpLlmAnimationDraftV2(repaired);
+  assert.equal(accepted.status, "accepted");
+});
+
+test("local repair preserves provenance, unrelated nodes, and deterministic recompilation", () => {
+  const read = readKpVersionedLlmAnimationDraft(acceptedGeneratedAddZeroDraft);
+  assert.equal(read.status, "migrated-v1");
+  if (read.status !== "migrated-v1") return;
+  const original = read.draft;
+  const derivation = original.derivations[0]!;
+  const operation = derivation.operations[0]!;
+  const invalid = {
+    ...original,
+    derivations: [{
+      ...derivation,
+      operations: [{ ...operation, roleBindings: { ...operation.roleBindings, before: ["missing.entity"] } }, ...derivation.operations.slice(1)]
+    }]
+  };
+  const repaired = applyKpLlmAnimationDraftV2Patch({
+    draft: invalid,
+    patch: {
+      kind: "replace-role-binding",
+      derivationId: derivation.id,
+      operationStepId: operation.id,
+      roleId: "before",
+      expectedEntityIds: ["missing.entity"],
+      replacementEntityIds: operation.roleBindings["before"]!
+    }
+  });
+
+  assert.equal(repaired.states, invalid.states);
+  assert.equal(repaired.states[0]?.entities[0]?.provenance, invalid.states[0]?.entities[0]?.provenance);
+  const first = compileKpLlmAnimationDraftV2(repaired);
+  const second = compileKpLlmAnimationDraftV2(repaired);
+  assert.equal(first.status, "accepted");
+  assert.equal(second.status, "accepted");
+  assert.equal(
+    first.status === "accepted" ? first.fingerprint : "",
+    second.status === "accepted" ? second.fingerprint : ""
+  );
 });
 
 function relation(

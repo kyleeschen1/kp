@@ -2,15 +2,25 @@
   "id": "next-action.kp.animation-grammar.llm-repair-loop-v0",
   "kind": "next-action",
   "title": "Compile And Repair Drafts With Typed Patches",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Return local path-specific diagnostics and provenance-preserving repair patches with deterministic recompilation. Verification: standard.",
+  "summary": "Added deterministic v2 draft compilation with path-specific repair diagnostics and typed semantic gaps, plus narrow compare-and-replace operation and role-binding patches that preserve provenance and structurally share untouched states and derivations.",
   "severity": "high",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/llm-animation-draft-v2-compiler.ts",
+      "summary": "V2 compile, typed-gap diagnostics, deterministic fingerprint, and local typed patch API."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-llm-animation-draft-compiler.test.ts",
+      "summary": "Local operation/role repairs, provenance retention, typed gaps, and deterministic recompilation."
     }
   ],
   "dependsOn": {
@@ -48,5 +58,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-llm-animation-draft-compiler.test.ts",
+      "status": "passed",
+      "scope": "v2 compiler and repair loop",
+      "checkedAt": "2026-07-16T01:26:10.217Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T01:26:10.258Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T01:26:10.298Z",
+      "scope": "Theseus graph and event log"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added deterministic v2 draft compilation with path-specific repair diagnostics and typed semantic gaps, plus narrow compare-and-replace operation and role-binding patches that preserve provenance and structurally share untouched states and derivations."
+  }
 }

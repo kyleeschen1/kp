@@ -1,0 +1,176 @@
+import {
+  validateKpLlmAnimationDraftV2,
+  type KpLlmAnimationDraftV2,
+  type KpLlmAnimationDraftV2Issue
+} from "./llm-animation-draft-v2.ts";
+import {
+  createKpSemanticTransitionGap,
+  type KpSemanticTransitionGap
+} from "../semantic/semantic-transition-gap.ts";
+
+export type KpLlmAnimationDraftV2Patch =
+  | {
+      readonly kind: "replace-operation-id";
+      readonly derivationId: string;
+      readonly operationStepId: string;
+      readonly expectedOperationId: string;
+      readonly replacementOperationId: string;
+    }
+  | {
+      readonly kind: "replace-role-binding";
+      readonly derivationId: string;
+      readonly operationStepId: string;
+      readonly roleId: string;
+      readonly expectedEntityIds: readonly string[];
+      readonly replacementEntityIds: readonly string[];
+    };
+
+export interface KpLlmAnimationDraftV2CompileDiagnostic extends KpLlmAnimationDraftV2Issue {
+  readonly repair: {
+    readonly targetId: string;
+    readonly allowedPatchKinds: readonly KpLlmAnimationDraftV2Patch["kind"][];
+  };
+}
+
+export type KpLlmAnimationDraftV2CompileResult =
+  | {
+      readonly status: "accepted";
+      readonly draft: KpLlmAnimationDraftV2;
+      readonly fingerprint: string;
+      readonly diagnostics: readonly [];
+      readonly gaps: readonly [];
+    }
+  | {
+      readonly status: "repair-required";
+      readonly diagnostics: readonly KpLlmAnimationDraftV2CompileDiagnostic[];
+      readonly gaps: readonly KpSemanticTransitionGap[];
+    };
+
+export function compileKpLlmAnimationDraftV2(
+  draft: KpLlmAnimationDraftV2
+): KpLlmAnimationDraftV2CompileResult {
+  const issues = validateKpLlmAnimationDraftV2(draft);
+  if (issues.length === 0) {
+    return {
+      status: "accepted",
+      draft,
+      fingerprint: stableStringify(draft),
+      diagnostics: [],
+      gaps: []
+    };
+  }
+  const diagnostics = issues.map((issue) => diagnosticForIssue(draft, issue));
+  return {
+    status: "repair-required",
+    diagnostics,
+    gaps: diagnostics.map((diagnostic) => createKpSemanticTransitionGap({
+      transformationId: diagnostic.repair.targetId,
+      reason: diagnostic.code === "draft-v2.operation"
+        ? diagnostic.path.includes("roleBindings")
+          ? "missing-definition-binding"
+          : "unsupported-operation"
+        : diagnostic.code === "draft-v2.reference"
+          ? "invalid-reference"
+          : "compile-failed",
+      diagnostics: [{
+        code: diagnostic.code,
+        severity: "error",
+        message: `${diagnostic.path}: ${diagnostic.message}`
+      }]
+    }))
+  };
+}
+
+export function applyKpLlmAnimationDraftV2Patch(input: {
+  readonly draft: KpLlmAnimationDraftV2;
+  readonly patch: KpLlmAnimationDraftV2Patch;
+}): KpLlmAnimationDraftV2 {
+  const derivationIndex = input.draft.derivations.findIndex(
+    (derivation) => derivation.id === input.patch.derivationId
+  );
+  if (derivationIndex < 0) throw new Error(`Unknown derivation ${input.patch.derivationId}.`);
+  const derivation = input.draft.derivations[derivationIndex]!;
+  const operationIndex = derivation.operations.findIndex(
+    (operation) => operation.id === input.patch.operationStepId
+  );
+  if (operationIndex < 0) throw new Error(`Unknown operation step ${input.patch.operationStepId}.`);
+  const operation = derivation.operations[operationIndex]!;
+  const patchedOperation = input.patch.kind === "replace-operation-id"
+    ? replaceOperationId(operation, input.patch)
+    : replaceRoleBinding(operation, input.patch);
+  const patchedDerivation = {
+    ...derivation,
+    operations: derivation.operations.map((candidate, index) =>
+      index === operationIndex ? patchedOperation : candidate
+    )
+  };
+  return {
+    ...input.draft,
+    derivations: input.draft.derivations.map((candidate, index) =>
+      index === derivationIndex ? patchedDerivation : candidate
+    )
+  };
+}
+
+function replaceOperationId(
+  operation: KpLlmAnimationDraftV2["derivations"][number]["operations"][number],
+  patch: Extract<KpLlmAnimationDraftV2Patch, { readonly kind: "replace-operation-id" }>
+) {
+  if (operation.operationId !== patch.expectedOperationId) {
+    throw new Error(
+      `Operation patch expected ${patch.expectedOperationId}, received ${operation.operationId}.`
+    );
+  }
+  return { ...operation, operationId: patch.replacementOperationId };
+}
+
+function replaceRoleBinding(
+  operation: KpLlmAnimationDraftV2["derivations"][number]["operations"][number],
+  patch: Extract<KpLlmAnimationDraftV2Patch, { readonly kind: "replace-role-binding" }>
+) {
+  const current = operation.roleBindings[patch.roleId] ?? [];
+  if (!arraysEqual(current, patch.expectedEntityIds)) {
+    throw new Error(`Role patch expected ${patch.roleId}=${patch.expectedEntityIds.join(",")}.`);
+  }
+  return {
+    ...operation,
+    roleBindings: {
+      ...operation.roleBindings,
+      [patch.roleId]: [...patch.replacementEntityIds]
+    }
+  };
+}
+
+function diagnosticForIssue(
+  draft: KpLlmAnimationDraftV2,
+  issue: KpLlmAnimationDraftV2Issue
+): KpLlmAnimationDraftV2CompileDiagnostic {
+  const match = /^\$\.derivations\[(\d+)\]/.exec(issue.path);
+  const targetId = match === null
+    ? draft.id
+    : draft.derivations[Number(match[1])]?.id ?? draft.id;
+  return {
+    ...issue,
+    repair: {
+      targetId,
+      allowedPatchKinds: issue.path.includes("roleBindings")
+        ? ["replace-role-binding"]
+        : issue.path.includes("operationId")
+          ? ["replace-operation-id"]
+          : []
+    }
+  };
+}
+
+function stableStringify(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(stableStringify).join(",")}]`;
+  if (typeof value !== "object" || value === null) return JSON.stringify(value) ?? "null";
+  return `{${Object.entries(value)
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([key, child]) => `${JSON.stringify(key)}:${stableStringify(child)}`)
+    .join(",")}}`;
+}
+
+function arraysEqual(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((item, index) => item === right[index]);
+}
