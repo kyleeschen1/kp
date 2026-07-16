@@ -2,8 +2,9 @@
   "id": "next-action.kp.gestalt.renderer-capabilities-v0",
   "kind": "next-action",
   "title": "Add Renderer Style Capabilities",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Added renderer capability declarations and style compatibility resolution with explicit realized features, reported optional fallbacks or omissions, and typed non-promotable gaps for missing required behavior. Added equation DOM and diagram SVG adapters.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,39 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/gestalt-renderer-capabilities.ts",
+      "summary": "Defines required/optional capability resolution and concrete renderer declarations without silent degradation."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-gestalt-renderer-capabilities.test.ts",
+      "summary": "Proves equation and diagram compatibility, flat-focus depth fallback, optional omission diagnostics, and required WebGL incompatibility gaps."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.gestalt.style-resolution-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +63,22 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-gestalt-renderer-capabilities.test.ts tests/kp-gestalt-style-resolution.test.ts",
+      "status": "passed",
+      "scope": "Renderer capability and style resolution contracts",
+      "checkedAt": "2026-07-16T16:26:51.393Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-16T16:26:51.470Z",
+      "scope": "TypeScript project closure"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.gestalt.style-resolution-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Added renderer capability declarations and style compatibility resolution with explicit realized features, reported optional fallbacks or omissions, and typed non-promotable gaps for missing required behavior. Added equation DOM and diagram SVG adapters."
+  }
 }
