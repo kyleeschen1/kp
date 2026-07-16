@@ -2,9 +2,21 @@
   "id": "next-action.kp.continuity.quality-laws-v0",
   "kind": "next-action",
   "title": "Define continuity quality laws and budgets",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 3 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Added executable budgets for stable ownership, boundary displacement and velocity, attention continuity, shared-bundle convergence, native settlement, and structural deformation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/animation/material-continuity-quality.ts",
+      "summary": "Evaluates material continuity boundary and reconciliation samples against explicit budgets."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-material-continuity-quality.test.ts",
+      "summary": "Proves good samples pass and every diagnosed false-positive class is detected."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +30,29 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-material-continuity-quality.test.ts tests/kp-material-continuity.test.ts",
+      "status": "passed",
+      "scope": "material continuity laws and vocabulary",
+      "checkedAt": "2026-07-16T19:14:23.905Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript quality contracts",
+      "checkedAt": "2026-07-16T19:14:23.978Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:14:24.052Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added executable budgets for stable ownership, boundary displacement and velocity, attention continuity, shared-bundle convergence, native settlement, and structural deformation."
+  }
 }
