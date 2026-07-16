@@ -50,6 +50,24 @@ export function syncKpEquationMaterialLayer(input: {
       owner.append(visual);
       layer.append(owner);
     }
+    const visual = owner.firstElementChild as HTMLElement | null;
+    if (visual !== null) {
+      visual.classList.toggle(
+        "kp-focus-group",
+        frame.sourceElement.classList.contains("kp-focus-group")
+      );
+      for (const property of [
+        "--kp-focus-z",
+        "--kp-focus-scale",
+        "--kp-focus-outline-strength",
+        "--kp-focus-shadow-opacity",
+        "--kp-focus-context-dimming"
+      ]) {
+        const value = frame.sourceElement.style.getPropertyValue(property);
+        if (value === "") visual.style.removeProperty(property);
+        else visual.style.setProperty(property, value);
+      }
+    }
     owner.style.left = `${frame.rect.left}px`;
     owner.style.top = `${frame.rect.top}px`;
     owner.style.width = `${frame.rect.width}px`;

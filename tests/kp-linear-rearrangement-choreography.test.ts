@@ -67,6 +67,14 @@ test("linear rearrangement compiles one causal operation subgraph per solve step
       )
     )
   );
+  assert.deepEqual(
+    choreography.sequence.bridges.map((bridge) => bridge.attention),
+    ["transfer", "hold"]
+  );
+  assert.deepEqual(
+    choreography.sequence.bridges.map((bridge) => bridge.velocity),
+    ["settle-before-next", "continuous"]
+  );
 });
 
 test("linear rearrangement timeline reserves, acts, recognizes, then releases", () => {

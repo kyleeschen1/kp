@@ -32,6 +32,10 @@ import {
 } from "../semantic/semantic-lineage-graph.ts";
 import type { SelectorCorrespondenceRecord } from "../semantic/correspondence.ts";
 import type { KpEquationLinearRearrangementKind } from "../rendering/equation-linear-rearrangement.ts";
+import {
+  compileKpBridgedChoreographySequence,
+  type KpBridgedChoreographySequence
+} from "./choreography-envelope-bridge.ts";
 
 export const kpLinearRearrangementTiming = {
   orientEnd: 0.14,
@@ -74,6 +78,7 @@ export interface KpLinearRearrangementStep {
 export interface KpLinearRearrangementChoreography {
   readonly id: string;
   readonly steps: readonly KpLinearRearrangementStep[];
+  readonly sequence: KpBridgedChoreographySequence;
 }
 
 export interface KpLinearRearrangementChoreographyFrame {
@@ -96,11 +101,32 @@ export function createKpLinearRearrangementChoreography(
   if (transformations.length === 0) {
     throw new Error(`Animation ${animation.id} has no linear rearrangement steps.`);
   }
+  const steps = transformations.map((transformation) =>
+    createStep(animation, transformation)
+  );
+  const persistentMaterialContinuantIds = [
+    `material.${animation.id}.lhs.x`,
+    `material.${animation.id}.equals`
+  ];
   return {
     id: `choreography.${animation.id}.linear-rearrangement`,
-    steps: transformations.map((transformation) =>
-      createStep(animation, transformation)
-    )
+    steps,
+    sequence: compileKpBridgedChoreographySequence({
+      id: `sequence.${animation.id}.linear-rearrangement`,
+      steps: steps.map((step) => ({
+        transformationId: step.transformationId,
+        weight: 1
+      })),
+      bridges: steps.slice(0, -1).map((step, index) => ({
+        id: `bridge.${step.transformationId}.${steps[index + 1]!.transformationId}`,
+        fromTransformationId: step.transformationId,
+        toTransformationId: steps[index + 1]!.transformationId,
+        preserveMaterialContinuantIds: persistentMaterialContinuantIds,
+        attention: index === 0 ? "transfer" : "hold",
+        velocity: index === 0 ? "settle-before-next" : "continuous"
+      })),
+      bridgeSpan: 0.06
+    })
   };
 }
 

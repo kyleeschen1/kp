@@ -91,6 +91,10 @@ import {
   sampleKpOrganicProgress
 } from "../animation/organic-motion-primitives.ts";
 import {
+  sampleKpBridgedChoreographySequence,
+  type KpBridgedChoreographyFrame
+} from "../animation/choreography-envelope-bridge.ts";
+import {
   kpBaseGestaltStyleCatalog
 } from "../animation/gestalt-base-styles.ts";
 import type { KpGestaltStyleChannels } from "../animation/gestalt-style.ts";
@@ -133,6 +137,7 @@ export interface KpEditorEquationStageFrame {
   readonly linearRearrangement?: {
     readonly step: KpLinearRearrangementStep;
     readonly frame: KpLinearRearrangementChoreographyFrame;
+    readonly sequenceFrame: KpBridgedChoreographyFrame;
   } | undefined;
   readonly dotProductTraversal?: {
     readonly choreography: KpDotProductTraversalChoreography;
@@ -329,7 +334,8 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
           transitionElement,
           direction: state.direction,
           step: frame.linearRearrangement.step,
-          frame: frame.linearRearrangement.frame
+          frame: frame.linearRearrangement.frame,
+          sequenceFrame: frame.linearRearrangement.sequenceFrame
         });
       }
       if (index === 0 && frame.dotProductTraversal !== undefined) {
@@ -640,6 +646,11 @@ function createLinearRearrangementFrame(
       progress,
       direction: state.direction,
       accessibilityMode: "full"
+    }),
+    sequenceFrame: sampleKpBridgedChoreographySequence({
+      sequence: choreography.sequence,
+      progress: state.progress,
+      direction: state.direction
     })
   };
 }
@@ -825,6 +836,7 @@ function applyLinearRearrangementChoreography(input: {
   readonly direction: "forward" | "rewind";
   readonly step: KpLinearRearrangementStep;
   readonly frame: KpLinearRearrangementChoreographyFrame;
+  readonly sequenceFrame: KpBridgedChoreographyFrame;
 }): void {
   const accessibilityMode = (() => {
     switch (editorAccessibilityMode(input.transitionElement)) {
@@ -857,6 +869,19 @@ function applyLinearRearrangementChoreography(input: {
     String(sampled.recognitionProgress);
   input.transitionElement.dataset["kpEditorEquationReleaseProgress"] =
     String(sampled.releaseProgress);
+  const activeBridge = input.sequenceFrame.activeBridge;
+  if (activeBridge === undefined) {
+    delete input.transitionElement.dataset["kpEditorEquationEnvelopeBridgeId"];
+    delete input.transitionElement.dataset["kpEditorEquationEnvelopeBridgeProgress"];
+    delete input.transitionElement.dataset["kpEditorEquationEnvelopeBridgeAttention"];
+  } else {
+    input.transitionElement.dataset["kpEditorEquationEnvelopeBridgeId"] =
+      activeBridge.bridge.id;
+    input.transitionElement.dataset["kpEditorEquationEnvelopeBridgeProgress"] =
+      String(activeBridge.progress);
+    input.transitionElement.dataset["kpEditorEquationEnvelopeBridgeAttention"] =
+      activeBridge.bridge.attention;
+  }
 
   const focusTokens = [
     ...input.transitionElement.querySelectorAll<HTMLElement>("[data-kp-motion-id]")
@@ -873,7 +898,15 @@ function applyLinearRearrangementChoreography(input: {
     existingShadow?.remove();
     return;
   }
-  const binding = bindKpFocusFrameToCss(input.step.focus, sampled.focus);
+  const bridgedFocus = activeBridge === undefined
+    ? sampled.focus
+    : {
+        ...sampled.focus,
+        attentionProgress: Math.max(0.24, sampled.focus.attentionProgress),
+        outlineStrength: Math.max(0.12, sampled.focus.outlineStrength),
+        contextDimming: Math.max(0.04, sampled.focus.contextDimming)
+      };
+  const binding = bindKpFocusFrameToCss(input.step.focus, bridgedFocus);
   focusTokens.forEach((token) => {
     token.classList.add(binding.className);
     Object.entries(binding.attributes).forEach(([name, value]) =>
@@ -886,7 +919,7 @@ function applyLinearRearrangementChoreography(input: {
       )
     );
   });
-  if (sampled.focus.attentionProgress === 0) {
+  if (bridgedFocus.attentionProgress === 0) {
     existingShadow?.remove();
     return;
   }
@@ -917,7 +950,7 @@ function applyLinearRearrangementChoreography(input: {
   );
   shadow.style.setProperty(
     "--kp-focus-shadow-opacity",
-    String(sampled.focus.shadowOpacity)
+    String(bridgedFocus.shadowOpacity)
   );
   if (existingShadow === null) input.transitionElement.append(shadow);
 }

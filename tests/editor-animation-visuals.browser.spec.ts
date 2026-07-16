@@ -467,6 +467,15 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
     "data-kp-material-owner-probe",
     "same-introduced-owner"
   );
+  await scrubber.fill("0.333");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-envelope-bridge-attention",
+    "transfer"
+  );
+  expect(Number(await transition.getAttribute(
+    "data-kp-editor-equation-envelope-bridge-progress"
+  ))).toBeGreaterThan(0.45);
+  await scrubber.fill("0.5");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-active-subgraph-nodes",
     /meet-canceling-terms.*collapse-canceling-terms/

@@ -2,9 +2,26 @@
   "id": "next-action.kp.linear.solve-level-envelope-v0",
   "kind": "next-action",
   "title": "Bridge the complete solve sequence",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 11 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Compiled the three solve transformations into one bridged sequence, carried attention through both boundaries, declared settle-versus-continuous velocity policies, and exposed bridge state in the editor while preserving checkpoints.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/animation/linear-rearrangement-choreography.ts",
+      "summary": "Adds the solve-level bridged choreography sequence and material-preservation policies."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Samples global bridge state, maintains a focus floor, and surfaces bridge diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves an active attention-transfer bridge at the first solve boundary."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +35,35 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-linear-rearrangement-choreography.test.ts tests/kp-choreography-envelope-bridge.test.ts",
+      "status": "passed",
+      "scope": "solve-level envelope compilation",
+      "checkedAt": "2026-07-16T19:32:34.582Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g linear-rearrangement",
+      "status": "passed",
+      "scope": "visible solve bridge and stable material",
+      "checkedAt": "2026-07-16T19:32:34.655Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript solve envelope integration",
+      "checkedAt": "2026-07-16T19:32:34.729Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:32:34.803Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Compiled the three solve transformations into one bridged sequence, carried attention through both boundaries, declared settle-versus-continuous velocity policies, and exposed bridge state in the editor while preserving checkpoints."
+  }
 }
