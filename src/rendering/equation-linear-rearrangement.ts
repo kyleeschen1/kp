@@ -36,7 +36,7 @@ export function sampleKpEquationLinearRearrangementFrame(
       : reservationProgress,
     meetProgress: smooth(windowProgress(p, 0.38, 0.62)),
     collapseProgress: smooth(windowProgress(p, 0.58, 0.74)),
-    resultRevealProgress: smooth(windowProgress(p, 0.62, 0.82)),
+    resultRevealProgress: smooth(windowProgress(p, 0.7, 0.86)),
     recognitionProgress: smooth(windowProgress(p, 0.72, 0.9))
   };
 }
@@ -129,7 +129,7 @@ function sampleConstantDerivation(
   input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
 ): readonly KpEquationTokenMotionFrameToken[] {
   const destination = center(input.relation.target?.bounds);
-  const sourceOpacity = 1 - smooth(windowProgress(input.progress, 0.64, 0.8));
+  const sourceOpacity = 1 - smooth(windowProgress(input.progress, 0.68, 0.84));
   return [
     ...input.sourceTokens.map((token, index) => {
       const origin = center(token.localRect);
@@ -151,8 +151,8 @@ function sampleConstantDerivation(
     ...input.targetTokens.map((token) => frameToken(token, "target", {
       opacity: input.frame.resultRevealProgress,
       x: 0,
-      y: 5 * (1 - input.frame.resultRevealProgress),
-      scale: 0.88 + 0.12 * input.frame.resultRevealProgress
+      y: 0,
+      scale: 0.78 + 0.22 * input.frame.resultRevealProgress
     }))
   ];
 }

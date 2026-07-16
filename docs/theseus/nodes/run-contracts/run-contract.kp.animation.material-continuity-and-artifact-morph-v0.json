@@ -100,13 +100,14 @@
     {
       "id": "next-action.kp.linear.constant-derivation-continuity-v0",
       "title": "Repair constant derivation continuity",
-      "status": "ready",
-      "summary": "Cancellation now converges materially; make 7 and -3 resolve into 4 through one shared derivation bundle."
+      "summary": "Cancellation now converges materially; make 7 and -3 resolve into 4 through one shared derivation bundle.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.linear.solve-level-envelope-v0",
       "title": "Bridge the complete solve sequence",
-      "status": "planned"
+      "status": "ready",
+      "summary": "All three operation motifs now have continuous material; connect them with the solve-level envelope bridge."
     },
     {
       "id": "next-action.kp.linear.rewind-accessibility-v0",

@@ -2,9 +2,21 @@
   "id": "next-action.kp.linear.constant-derivation-continuity-v0",
   "kind": "next-action",
   "title": "Repair constant derivation continuity",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 10 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Delayed result recognition until both constant operands reach one shared derivation point, kept both operands visible during the handoff, and revealed 4 from that exact point without a vertical pop.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-linear-rearrangement.ts",
+      "summary": "Coordinates operand arrival, source release, and result reveal around one measured destination."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-linear-rearrangement-choreography.test.ts",
+      "summary": "Proves both operands reach the result center before the derived token becomes authoritative."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +30,35 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-linear-rearrangement-choreography.test.ts",
+      "status": "passed",
+      "scope": "constant derivation continuity",
+      "checkedAt": "2026-07-16T19:30:25.773Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g linear-rearrangement",
+      "status": "passed",
+      "scope": "visible derive-result handoff",
+      "checkedAt": "2026-07-16T19:30:25.844Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript derivation sampling",
+      "checkedAt": "2026-07-16T19:30:25.920Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:30:25.995Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Delayed result recognition until both constant operands reach one shared derivation point, kept both operands visible during the handoff, and revealed 4 from that exact point without a vertical pop."
+  }
 }

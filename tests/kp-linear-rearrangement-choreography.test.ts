@@ -201,11 +201,19 @@ test("constant operands travel independently on arcs before the derived result a
     (token) => token.side === "target" && token.motionId === "result.4"
   );
   assert.ok((derivedResult?.pose.opacity ?? 0) > 0);
-  assert.ok(
-    derived.tokens
-      .filter((token) => token.side === "source" && token.motionId.startsWith("operand."))
-      .every((token) => token.pose.opacity > 0)
+  const arrivingOperands = derived.tokens.filter(
+    (token) => token.side === "source" && token.motionId.startsWith("operand.")
   );
+  assert.ok(arrivingOperands.every((token) => token.pose.opacity > 0));
+  const targetCenter = 72 + 12 / 2;
+  for (const token of arrivingOperands) {
+    const native = constantDerivationGeometry().sourceTokens.find(
+      (candidate) => candidate.motionId === token.motionId
+    )!;
+    const center = native.localRect.left + native.localRect.width / 2;
+    assert.ok(Math.abs(center + token.pose.x - targetCenter) < 0.001);
+  }
+  assert.equal(derivedResult?.pose.y, 0);
 });
 
 test("linear rearrangement settles exactly to native target token endpoints", () => {
