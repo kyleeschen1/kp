@@ -2,8 +2,9 @@
   "id": "next-action.kp.gestalt.style-schema-v0",
   "kind": "next-action",
   "title": "Define Versioned Gestalt Style Packages",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Defined immutable versioned gestalt-style packages with lowercase namespaces, exact semver, pinned base dependencies, bounded declarative motion channels, capability strength, trusted primitives, accessibility projections, conformance evidence, provenance, integrity metadata, deterministic serialization, and resolved fingerprints.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,39 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/gestalt-style.ts",
+      "summary": "Provides the style schema, validator, immutable catalog, serialization, and fingerprint contract without executable code or raw motion geometry."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-gestalt-style.test.ts",
+      "summary": "Proves exact pins, deterministic fingerprints, published immutability, channel bounds, capability classification, projection requirements, and rejection of keyframes."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.motion-field-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +63,22 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-gestalt-style.test.ts tests/kp-motion-field.test.ts",
+      "status": "passed",
+      "scope": "Gestalt style packages and semantic motion-field boundary",
+      "checkedAt": "2026-07-16T16:22:29.682Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-16T16:22:29.751Z",
+      "scope": "TypeScript project closure"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.choreography.motion-field-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Defined immutable versioned gestalt-style packages with lowercase namespaces, exact semver, pinned base dependencies, bounded declarative motion channels, capability strength, trusted primitives, accessibility projections, conformance evidence, provenance, integrity metadata, deterministic serialization, and resolved fingerprints."
+  }
 }
