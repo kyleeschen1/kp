@@ -418,29 +418,54 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
     "data-kp-editor-equation-reservation-progress"
   ))).toBeLessThan(1);
   await expect(leftInverse).toHaveCSS("opacity", "0");
-  await expect(transition.locator(
-    '[data-kp-editor-equation-source] [data-kp-motion-id*="initial.lhs.x"]'
+  await expect(materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.lhs.x"]'
   )).toHaveCSS("opacity", "1");
 
   await scrubber.fill("0.14");
   expect(Number(await transition.getAttribute(
     "data-kp-editor-equation-reservation-progress"
   ))).toBe(1);
-  expect(Number(await leftInverse.evaluate(
+  expect(Number(await materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.lhs.minus3"]'
+  ).evaluate(
     (element) => getComputedStyle(element).opacity
   ))).toBeGreaterThan(0);
+  const xMaterialOwner = materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.lhs.x"]'
+  );
+  const leftInverseMaterialOwner = materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.lhs.minus3"]'
+  );
+  await expect(xMaterialOwner).toHaveCount(1);
+  await expect(leftInverseMaterialOwner).toHaveCount(1);
+  await xMaterialOwner.evaluate((element) => {
+    element.dataset["kpMaterialOwnerProbe"] = "same-owner";
+  });
+  await leftInverseMaterialOwner.evaluate((element) => {
+    element.dataset["kpMaterialOwnerProbe"] = "same-introduced-owner";
+  });
 
   await scrubber.fill("0.5");
   transition = player.locator("[data-kp-editor-equation-transition-id]");
-  const plusThree = transition.locator(
-    '[data-kp-editor-equation-source] [data-kp-motion-id*="after-subtract.lhs.plus3"]'
+  const plusThree = materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.lhs.plus3"]'
   );
-  const minusThree = transition.locator(
-    '[data-kp-editor-equation-source] [data-kp-motion-id*="after-subtract.lhs.minus3"]'
+  const minusThree = materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.lhs.minus3"]'
   );
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-linear-rearrangement",
     "cancel-additive-inverses"
+  );
+  await expect(materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.lhs.x"]'
+  )).toHaveAttribute("data-kp-material-owner-probe", "same-owner");
+  await expect(materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.lhs.minus3"]'
+  )).toHaveAttribute(
+    "data-kp-material-owner-probe",
+    "same-introduced-owner"
   );
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-active-subgraph-nodes",
@@ -450,13 +475,12 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   await expect(minusThree).toHaveCSS("opacity", "1");
   const meeting = await Promise.all([plusThree, minusThree].map((locator) =>
     locator.evaluate((element) => {
-      const matrix = new DOMMatrixReadOnly(getComputedStyle(element).transform);
-      return { x: matrix.m41, scale: matrix.a };
+      const rect = element.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, width: rect.width };
     })
   ));
-  expect(meeting[0]?.x).toBeGreaterThan(0);
-  expect(meeting[1]?.x).toBeLessThan(0);
-  expect(meeting.every((pose) => pose.scale > 0.75)).toBe(true);
+  expect(Math.abs(meeting[1]!.x - meeting[0]!.x)).toBeLessThan(35);
+  expect(meeting.every((pose) => pose.width > 24)).toBe(true);
 
   await scrubber.fill("0.56");
   expect(Number(await transition.getAttribute(
@@ -471,20 +495,20 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   expect(Number(await transition.getAttribute(
     "data-kp-editor-equation-persistent-reflow-progress"
   ))).toBeGreaterThan(0);
-  await expect(transition.locator(
-    '[data-kp-editor-equation-source] [data-kp-motion-id*="after-subtract.equals"]'
+  await expect(materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.equals"]'
   )).toHaveCSS("opacity", "1");
 
   await scrubber.fill("0.84");
   transition = player.locator("[data-kp-editor-equation-transition-id]");
-  const seven = transition.locator(
-    '[data-kp-editor-equation-source] [data-kp-motion-id*="left-simplified.rhs.7"]'
+  const seven = materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.rhs.7"]'
   );
-  const inverse = transition.locator(
-    '[data-kp-editor-equation-source] [data-kp-motion-id*="left-simplified.rhs.minus3"]'
+  const inverse = materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.rhs.minus3"]'
   );
-  const result = transition.locator(
-    '[data-kp-editor-equation-target] [data-kp-motion-id*="solved.rhs.4"]'
+  const result = materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.rhs.4"]'
   );
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-linear-rearrangement",
@@ -494,12 +518,12 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   await expect(seven).toHaveCSS("opacity", "1");
   await expect(inverse).toHaveCSS("opacity", "1");
   const operandArcs = await Promise.all([seven, inverse].map((locator) =>
-    locator.evaluate((element) =>
-      new DOMMatrixReadOnly(getComputedStyle(element).transform).m42
-    )
+    locator.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.top + rect.height / 2;
+    })
   ));
-  expect(operandArcs[0]).toBeLessThan(0);
-  expect(operandArcs[1]).toBeGreaterThan(0);
+  expect(operandArcs[0]).toBeLessThan(operandArcs[1]!);
 
   await scrubber.fill("0.92");
   const resultOpacity = Number(await result.evaluate(
@@ -516,14 +540,22 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   );
 
   await scrubber.fill("1");
+  const nativeResult = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*="solved.rhs.4"]'
+  );
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-choreography-phase",
     "release"
   );
-  await expect(result).toHaveCSS("opacity", "1");
+  await expect(nativeResult).toHaveCSS("opacity", "1");
+  await expect(materialLayer.locator(
+    "[data-kp-equation-material-owner-id]"
+  )).toHaveCount(0);
   await expect(transition.locator("[data-kp-editor-linear-shared-shadow]"))
     .toHaveCount(0);
-  await expect(seven).toHaveCSS("--kp-focus-z", "0px");
+  await expect(transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id*="left-simplified.rhs.7"]'
+  )).toHaveCSS("--kp-focus-z", "0px");
   await expect(stage).toHaveAttribute(
     "data-kp-linear-rearrangement-stage-probe",
     "persistent"

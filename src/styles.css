@@ -1655,6 +1655,7 @@ h2 {
   inset: 0;
   overflow: visible;
   pointer-events: none;
+  font-size: clamp(0.82rem, 2.3vw, 1.2rem);
 }
 
 .editor-equation-stage__material-owner {
@@ -1663,6 +1664,10 @@ h2 {
   place-items: center;
   transform-origin: center;
   will-change: opacity, transform;
+}
+
+.editor-equation-stage__material-visual {
+  display: inline-block;
 }
 
 .editor-equation-stage__transition {

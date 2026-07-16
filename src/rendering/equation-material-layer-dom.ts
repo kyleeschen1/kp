@@ -39,6 +39,11 @@ export function syncKpEquationMaterialLayer(input: {
       owner.setAttribute("aria-hidden", "true");
       const visual = frame.sourceElement.cloneNode(true) as HTMLElement;
       visual.removeAttribute("data-kp-motion-id");
+      visual.style.opacity = "1";
+      visual.style.transform = "none";
+      visual.style.translate = "none";
+      visual.style.scale = "none";
+      visual.classList.add("editor-equation-stage__material-visual");
       visual.querySelectorAll<HTMLElement>("[data-kp-motion-id]").forEach((token) =>
         token.removeAttribute("data-kp-motion-id")
       );
@@ -51,6 +56,7 @@ export function syncKpEquationMaterialLayer(input: {
     owner.style.height = `${frame.rect.height}px`;
     owner.style.opacity = String(frame.opacity);
     owner.style.transform = frame.transform;
+    owner.dataset["kpEquationMaterialSourceMotionId"] =
+      frame.sourceElement.dataset["kpMotionId"] ?? "";
   }
 }
-

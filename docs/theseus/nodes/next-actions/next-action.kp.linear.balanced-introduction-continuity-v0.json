@@ -2,9 +2,26 @@
   "id": "next-action.kp.linear.balanced-introduction-continuity-v0",
   "kind": "next-action",
   "title": "Repair balanced operation introduction",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 8 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Bound linear solve tokens to stable stage-owned material ids, hid replaceable native tokens during motion, and preserved both existing terms and newly introduced inverse terms across the first operation boundary.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Maps linear semantic roles to stable material owners and synchronizes their measured poses."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-material-layer-dom.ts",
+      "summary": "Normalizes cloned native visuals while retaining one mounted owner element."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves x and the introduced left inverse keep the same material owner into cancellation."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +35,29 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g linear-rearrangement",
+      "status": "passed",
+      "scope": "balanced introduction and cross-boundary material ownership",
+      "checkedAt": "2026-07-16T19:26:16.062Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript material-layer integration",
+      "checkedAt": "2026-07-16T19:26:16.139Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:26:16.217Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Bound linear solve tokens to stable stage-owned material ids, hid replaceable native tokens during motion, and preserved both existing terms and newly introduced inverse terms across the first operation boundary."
+  }
 }

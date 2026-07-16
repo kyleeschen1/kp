@@ -88,13 +88,14 @@
     {
       "id": "next-action.kp.linear.balanced-introduction-continuity-v0",
       "title": "Repair balanced operation introduction",
-      "status": "ready",
-      "summary": "The persistent layer survives content replacement; bind balanced-operation continuants and introduced terms into it."
+      "summary": "The persistent layer survives content replacement; bind balanced-operation continuants and introduced terms into it.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.linear.cancellation-continuity-v0",
       "title": "Repair cancellation continuity",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Balanced introduction now has stable owners; tune cancellation motion and survivor reflow on those owners."
     },
     {
       "id": "next-action.kp.linear.constant-derivation-continuity-v0",

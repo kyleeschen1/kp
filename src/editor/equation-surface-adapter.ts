@@ -94,6 +94,9 @@ import {
   kpBaseGestaltStyleCatalog
 } from "../animation/gestalt-base-styles.ts";
 import type { KpGestaltStyleChannels } from "../animation/gestalt-style.ts";
+import {
+  syncKpEquationMaterialLayer
+} from "../rendering/equation-material-layer-dom.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
@@ -350,6 +353,11 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       accessibilityMode:
         player?.dataset["kpEditorAnimationAccessibilityMode"] ?? "full-motion"
     });
+    applyLinearMaterialLayer({
+      stage,
+      animationId: state.animationId,
+      semanticProgress: frame.semanticProgress
+    });
     applyFocusExperiment(
       stage,
       player?.dataset["kpEditorAnimationFocusExperiment"] ?? "flat"
@@ -359,6 +367,81 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
     }
   }
 };
+
+function applyLinearMaterialLayer(input: {
+  readonly stage: HTMLElement;
+  readonly animationId: string;
+  readonly semanticProgress: number;
+}): void {
+  if (input.animationId !== "animation.linear-solve.solve-x") {
+    syncKpEquationMaterialLayer({ stage: input.stage, owners: [] });
+    return;
+  }
+  const tokens = [
+    ...input.stage.querySelectorAll<HTMLElement>("[data-kp-motion-id]")
+  ];
+  if (input.semanticProgress <= 0 || input.semanticProgress >= 1) {
+    syncKpEquationMaterialLayer({ stage: input.stage, owners: [] });
+    return;
+  }
+  const candidates = new Map<string, {
+    readonly token: HTMLElement;
+    readonly opacity: number;
+  }>();
+  for (const token of tokens) {
+    const motionId = token.dataset["kpMotionId"];
+    const ownerId = motionId === undefined
+      ? undefined
+      : linearMaterialOwnerId(motionId);
+    if (ownerId === undefined) continue;
+    const opacity = Number.parseFloat(getComputedStyle(token).opacity);
+    const existing = candidates.get(ownerId);
+    if (existing === undefined || opacity > existing.opacity) {
+      candidates.set(ownerId, { token, opacity });
+    }
+  }
+  const stageRect = input.stage.getBoundingClientRect();
+  syncKpEquationMaterialLayer({
+    stage: input.stage,
+    owners: [...candidates.entries()].map(([ownerId, candidate]) => {
+      const rect = candidate.token.getBoundingClientRect();
+      return {
+        ownerId,
+        sourceElement: candidate.token,
+        rect: {
+          left: rect.left - stageRect.left,
+          top: rect.top - stageRect.top,
+          width: rect.width,
+          height: rect.height
+        },
+        opacity: candidate.opacity,
+        transform: "none"
+      };
+    })
+  });
+  for (const token of tokens) {
+    const motionId = token.dataset["kpMotionId"];
+    if (motionId !== undefined && linearMaterialOwnerId(motionId) !== undefined) {
+      token.style.opacity = "0";
+      token.dataset["kpEquationMaterialNativeHidden"] = "true";
+    }
+  }
+  input.stage.dataset["kpEditorEquationMaterialContinuity"] = "linear-solve";
+}
+
+function linearMaterialOwnerId(motionId: string): string | undefined {
+  const roles = [
+    "lhs.x",
+    "lhs.plus3",
+    "lhs.minus3",
+    "equals",
+    "rhs.7",
+    "rhs.minus3",
+    "rhs.4"
+  ] as const;
+  const role = roles.find((candidate) => motionId.endsWith(`.${candidate}`));
+  return role === undefined ? undefined : `linear-solve.${role}`;
+}
 
 function applyFocusExperiment(
   stage: HTMLElement,
