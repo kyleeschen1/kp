@@ -2,8 +2,9 @@
   "id": "next-action.kp.choreography.fragment-hierarchy-v0",
   "kind": "next-action",
   "title": "Add Group Token And Fragment Choreography",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Added a renderer-neutral group, token, and temporary-fragment hierarchy with token anchors, bounded cohesion, explicit DOM/texture/mesh provenance, immutable semantic authority, and exhaustive native-renderer settlement. The radical fixture binds the existing opposite-corner fold/bundle/swap motif to this contract without making motion fragments semantic inspection targets.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,44 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/choreography-hierarchy.ts",
+      "summary": "Defines hierarchy, provenance, ownership projection, validation laws, and a radical representational-succession fixture."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-choreography-hierarchy.test.ts",
+      "summary": "Proves hierarchy closure, phase-specific presentation ownership, generated fragment provenance, authority isolation, token-only anchors, and exhaustive native settlement."
+    },
+    {
+      "kind": "file",
+      "path": "tests/katex-transition.browser.spec.ts",
+      "summary": "Existing focused radical coverage proves DOM-owned source persistence and fragment motion through the bundle without a canvas overlay."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.gestalt.organic-primitives-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +68,34 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-choreography-hierarchy.test.ts",
+      "status": "passed",
+      "scope": "Hierarchy and native-settlement contract",
+      "checkedAt": "2026-07-16T16:45:18.116Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript project closure",
+      "checkedAt": "2026-07-16T16:45:18.189Z"
+    },
+    {
+      "command": "npx playwright test tests/katex-transition.browser.spec.ts --project=chromium -g radical-artifact-focused",
+      "status": "passed",
+      "scope": "Focused radical KaTeX DOM ownership and bundle motion",
+      "checkedAt": "2026-07-16T16:45:18.262Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "checkedAt": "2026-07-16T16:48:00.452Z",
+      "scope": "Broad unit and integration regression suite: 1119 tests"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.gestalt.organic-primitives-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Added a renderer-neutral group, token, and temporary-fragment hierarchy with token anchors, bounded cohesion, explicit DOM/texture/mesh provenance, immutable semantic authority, and exhaustive native-renderer settlement. The radical fixture binds the existing opposite-corner fold/bundle/swap motif to this contract without making motion fragments semantic inspection targets."
+  }
 }

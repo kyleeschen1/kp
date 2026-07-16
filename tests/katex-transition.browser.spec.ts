@@ -435,6 +435,102 @@ test("radical artifact moves DOM artifacts through the bundle without an overlay
   expect(bundleState.artifactTargetRevealProgress).toBeGreaterThan(0);
 });
 
+test("radical-artifact-focused fragments yield presentation to native KaTeX on settle", async ({
+  page
+}) => {
+  await page.goto("/");
+
+  const demo = page.locator("[data-kp-equation-motion-demo]");
+  await demo
+    .locator('[data-action="set-equation-motion-animation"]')
+    .selectOption("fixture-radical-rewrite-power-as-root");
+  await demo
+    .locator('[data-action="set-equation-motion-duration"]')
+    .evaluate((element) => {
+      const input = element as HTMLInputElement;
+      input.value = "200";
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+
+  const acting = await page.evaluate(async () => {
+    const demoElement = document.querySelector<HTMLElement>(
+      "[data-kp-equation-motion-demo]"
+    );
+    if (demoElement === null) throw new Error("Expected equation motion demo.");
+
+    window.__kpEquationMotionSetProgress?.(demoElement, 0.5);
+    await new Promise<void>((resolve) =>
+      window.requestAnimationFrame(() => resolve())
+    );
+
+    const sourceFragment = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.source.exponent"]'
+    );
+    const targetFragment = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.target.radical"]'
+    );
+    const nativeTarget = demoElement.querySelector<HTMLElement>(
+      '[data-kp-equation-motion-state="1"] [data-kp-motion-id="radical.rewrite-power-as-root.target.radical"]'
+    );
+
+    return {
+      sourceOwner: sourceFragment?.dataset["kpKatexDomOwner"],
+      targetOwner: targetFragment?.dataset["kpKatexDomOwner"],
+      sourceVisible:
+        sourceFragment === null
+          ? false
+          : getComputedStyle(sourceFragment).visibility === "visible",
+      targetVisible:
+        targetFragment === null
+          ? false
+          : getComputedStyle(targetFragment).visibility === "visible",
+      nativeTargetVisible:
+        nativeTarget === null
+          ? false
+          : getComputedStyle(nativeTarget).visibility === "visible",
+      overlayExists:
+        demoElement.querySelector(
+          "[data-kp-equation-motion-artifact-overlay]"
+        ) !== null
+    };
+  });
+
+  expect(acting).toEqual({
+    sourceOwner: "motion-clone",
+    targetOwner: "motion-clone",
+    sourceVisible: true,
+    targetVisible: true,
+    nativeTargetVisible: false,
+    overlayExists: false
+  });
+
+  await demo.locator('[data-action="equation-motion-next"]').click();
+  await expect(demo).toHaveAttribute("data-kp-equation-motion-step", "1");
+  await expect
+    .poll(() =>
+      demo.evaluate((element) => {
+        const nativeTarget = element.querySelector<HTMLElement>(
+          '[data-kp-equation-motion-state="1"] [data-kp-motion-id="radical.rewrite-power-as-root.target.radical"]'
+        );
+        return {
+          fragmentCount: element.querySelectorAll(
+            '[data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.source.exponent"], [data-kp-equation-motion-clone-for="radical.rewrite-power-as-root.target.radical"]'
+          ).length,
+          nativeOwner: nativeTarget?.dataset["kpKatexDomOwner"],
+          nativeVisible:
+            nativeTarget === null
+              ? false
+              : getComputedStyle(nativeTarget).visibility === "visible"
+        };
+      })
+    )
+    .toEqual({
+      fragmentCount: 0,
+      nativeOwner: "layout",
+      nativeVisible: true
+    });
+});
+
 test("editor equation motion demo uses semantic playback plans", async ({
   page
 }) => {

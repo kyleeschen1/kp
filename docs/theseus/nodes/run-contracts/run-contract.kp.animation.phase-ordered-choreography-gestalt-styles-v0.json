@@ -32,7 +32,7 @@
     "No live model provider, public style marketplace, arbitrary style code, stateful physics, general diagram routing, second playback clock, or unrelated product expansion."
   ],
   "goal": "Run the approved 30-slice phase-ordered choreography and configurable gestalt-style loop.",
-  "target": "next-action.kp.choreography.fragment-hierarchy-v0",
+  "target": "next-action.kp.choreography.organic-paths-v0",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -132,7 +132,7 @@
     {
       "id": "next-action.kp.choreography.fragment-hierarchy-v0",
       "title": "Add Group Token And Fragment Choreography",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.choreography.organic-paths-v0",
