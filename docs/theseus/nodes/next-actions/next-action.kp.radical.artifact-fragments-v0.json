@@ -2,9 +2,26 @@
   "id": "next-action.kp.radical.artifact-fragments-v0",
   "kind": "next-action",
   "title": "Define structural artifact fragments",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 15 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Classified rational exponent numerator, fraction rule, denominator, radical hook, and overbar as non-semantic material fragments under one representational continuant and one required shared-point bundle.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/animation/radical-material-continuity.ts",
+      "summary": "Builds the radical-specific stable-base and root-notation material plan from authoritative correspondence."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/material-continuity.ts",
+      "summary": "Adds normalized fragment regions and propagation ranks without granting fragments semantic authority."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-radical-material-continuity.test.ts",
+      "summary": "Covers roles, ranks, ownership modes, bundle membership, and native-settlement requirement."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +35,29 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-radical-material-continuity.test.ts tests/kp-material-continuity.test.ts",
+      "status": "passed",
+      "scope": "radical structural material classification",
+      "checkedAt": "2026-07-16T19:42:09.180Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript radical material plan",
+      "checkedAt": "2026-07-16T19:42:09.259Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:42:09.335Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Classified rational exponent numerator, fraction rule, denominator, radical hook, and overbar as non-semantic material fragments under one representational continuant and one required shared-point bundle."
+  }
 }

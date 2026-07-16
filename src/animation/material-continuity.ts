@@ -49,6 +49,13 @@ export interface KpMaterialFragment {
     | "root-index";
   readonly sourceMotionIds: readonly string[];
   readonly targetMotionIds: readonly string[];
+  readonly normalizedRegion?: {
+    readonly x: number;
+    readonly y: number;
+    readonly width: number;
+    readonly height: number;
+  } | undefined;
+  readonly propagationRank?: number | undefined;
   readonly semanticAuthority: false;
 }
 
@@ -137,4 +144,3 @@ function assertUnique(ids: readonly string[], label: string): void {
     seen.add(id);
   }
 }
-

@@ -130,13 +130,14 @@
     {
       "id": "next-action.kp.radical.artifact-fragments-v0",
       "title": "Define structural artifact fragments",
-      "status": "ready",
-      "summary": "The shared bundle primitive is authoritative; classify exponent and radical structural material for semantic rendering."
+      "summary": "The shared bundle primitive is authoritative; classify exponent and radical structural material for semantic rendering.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.radical.exponent-collapse-v0",
       "title": "Collapse exponent material into one bundle",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Fragment roles and ranks are explicit; route all exponent material to the shared measured bundle."
     },
     {
       "id": "next-action.kp.radical.radical-unfold-v0",
