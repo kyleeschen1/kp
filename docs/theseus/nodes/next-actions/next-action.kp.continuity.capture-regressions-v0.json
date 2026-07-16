@@ -2,9 +2,21 @@
   "id": "next-action.kp.continuity.capture-regressions-v0",
   "kind": "next-action",
   "title": "Capture failing visual continuity baselines",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 1 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Captured deterministic known-bad continuity baselines for linear solve ownership and envelope resets, radical bundle separation and base ownership, and structural gestalt deformation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "tests/fixtures/material-continuity-regression-baseline.ts",
+      "summary": "Typed current regression observations and repair contracts for both proof-cohort animations."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-material-continuity-regression-baseline.md",
+      "summary": "Documents the manual fixed-progress reproduction and the stricter loop closeout gate."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +30,23 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/material-continuity-regression-baseline.test.ts",
+      "status": "passed",
+      "scope": "material continuity regression baseline contract",
+      "checkedAt": "2026-07-16T19:11:17.481Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:11:17.554Z",
+      "scope": "Theseus graph after baseline capture"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Captured deterministic known-bad continuity baselines for linear solve ownership and envelope resets, radical bundle separation and base ownership, and structural gestalt deformation."
+  }
 }

@@ -46,13 +46,14 @@
     {
       "id": "next-action.kp.continuity.capture-regressions-v0",
       "title": "Capture failing visual continuity baselines",
-      "status": "ready",
-      "summary": "Approved first slice: capture deterministic failing continuity evidence."
+      "summary": "Approved first slice: capture deterministic failing continuity evidence.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.continuity.vocabulary-v0",
       "title": "Define visual material continuity vocabulary",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Regression evidence is captured; formalize the visual-material authority vocabulary next."
     },
     {
       "id": "next-action.kp.continuity.quality-laws-v0",
