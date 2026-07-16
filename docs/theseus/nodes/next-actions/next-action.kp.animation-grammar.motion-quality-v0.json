@@ -2,15 +2,20 @@
   "id": "next-action.kp.animation-grammar.motion-quality-v0",
   "kind": "next-action",
   "title": "Enforce Motion Quality Budgets",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Measure continuity, velocity, acceleration, scale change, collisions, crowding, and salience across motif boundaries. Verification: standard.",
+  "summary": "Added continuous smootherstep path and scale interpolation plus deterministic hard and scored budgets for continuity, velocity, acceleration, motif boundaries, scale, collisions, crowding, and salience.",
   "severity": "high",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-quality.ts",
+      "summary": "Evaluates sampled semantic motion with machine-readable diagnostics so jerkiness and perceptual loss become enforceable regressions."
     }
   ],
   "dependsOn": {
@@ -48,5 +53,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/equation-motion-quality.test.ts tests/equation-motion-sampler.test.ts",
+      "status": "passed",
+      "scope": "1019 unit tests",
+      "checkedAt": "2026-07-16T02:36:14.848Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T02:36:14.911Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T02:36:14.954Z",
+      "scope": "Theseus graph and event history"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added continuous smootherstep path and scale interpolation plus deterministic hard and scored budgets for continuity, velocity, acceleration, motif boundaries, scale, collisions, crowding, and salience."
+  }
 }
