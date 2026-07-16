@@ -47,6 +47,10 @@ test("editor animation player shell renders an accessible surface and declared c
   assert.match(html, /value="0.25"/);
   assert.match(html, />25%<\/output>/);
   assert.match(html, /aria-live="polite">Paused · forward/);
+  assert.match(html, /aria-keyshortcuts="Space ArrowLeft ArrowRight Home End R"/);
+  assert.match(html, /data-kp-editor-animation-accessibility-control/);
+  assert.match(html, /value="reduced-motion"/);
+  assert.match(html, /data-kp-editor-animation-narration aria-live="polite"/);
   assert.match(html, /data-kp-editor-animation-authoring-controls/);
   for (const controlId of [
     "role-mode",

@@ -21,7 +21,7 @@ export function renderKpEditorAnimationPlayerShell(input: {
     descriptor.controlKinds.includes(kind);
 
   return `
-    <section class="editor-animation-player" data-kp-editor-animation-player data-kp-editor-animation-descriptor-id="${escapeHtml(player.descriptorId)}" data-kp-editor-animation-id="${escapeHtml(player.animationId)}" data-kp-editor-animation-status="${player.playbackStatus}" data-kp-editor-animation-direction="${player.direction}" data-kp-editor-animation-progress="${player.progress}" aria-label="${escapeHtml(descriptor.title)} animation player">
+    <section class="editor-animation-player" data-kp-editor-animation-player data-kp-editor-animation-descriptor-id="${escapeHtml(player.descriptorId)}" data-kp-editor-animation-id="${escapeHtml(player.animationId)}" data-kp-editor-animation-status="${player.playbackStatus}" data-kp-editor-animation-direction="${player.direction}" data-kp-editor-animation-progress="${player.progress}" aria-label="${escapeHtml(descriptor.title)} animation player" aria-keyshortcuts="Space ArrowLeft ArrowRight Home End R" tabindex="0">
       <div class="editor-animation-player__stage" data-kp-editor-animation-stage data-kp-editor-animation-surface="${player.surface.kind}">
         ${player.surface.slotKinds.map((slotKind) => `
           <div class="editor-animation-player__surface editor-animation-player__surface--${slotKind}" data-kp-editor-animation-surface-slot="${slotKind}" aria-label="${surfaceLabel(slotKind)}">
@@ -47,6 +47,16 @@ export function renderKpEditorAnimationPlayerShell(input: {
           </label>
         ` : ""}
         <p class="editor-animation-player__status" data-kp-editor-animation-status-label aria-live="polite">${statusLabel(player.playbackStatus, player.direction)}</p>
+        <label class="editor-animation-player__accessibility">Presentation
+          <select data-kp-editor-animation-accessibility-control aria-label="Animation accessibility presentation">
+            <option value="system">system preference</option>
+            <option value="full-motion">full motion</option>
+            <option value="reduced-motion">reduced motion</option>
+            <option value="static">static checkpoints</option>
+            <option value="narrated">narrated</option>
+          </select>
+        </label>
+        <output data-kp-editor-animation-narration aria-live="polite">Animation checkpoint</output>
       </div>
       ${renderAuthoringControls(authoring)}
     </section>

@@ -2,15 +2,20 @@
   "id": "next-action.kp.animation-grammar.accessible-motif-contract-v0",
   "kind": "next-action",
   "title": "Add Accessible Motif Variants",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Provide full, reduced-motion, static, narrated, keyboard, seek, and rewind forms with shared salience semantics. Verification: broad plus manual runtime.",
+  "summary": "Added executable full-motion, reduced-motion, static-checkpoint, and narrated motif variants that preserve semantic phases, salience IDs, seek, and rewind; the editor honors system motion preference, exposes presentation controls and narration, and provides keyboard transport on the shared clock.",
   "severity": "high",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motif-accessibility.ts",
+      "summary": "Defines shared semantic sampling, accessibility variants, narration, salience preservation, and keyboard contract."
     }
   ],
   "dependsOn": {
@@ -49,5 +54,35 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test focused accessibility and player tests",
+      "status": "passed",
+      "scope": "9 focused unit tests",
+      "checkedAt": "2026-07-16T03:12:23.056Z"
+    },
+    {
+      "command": "npx playwright test editor animation visuals chromium",
+      "status": "passed",
+      "scope": "25 editor browser tests",
+      "checkedAt": "2026-07-16T03:12:23.115Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T03:12:23.162Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T03:12:23.202Z",
+      "scope": "Theseus graph and event history"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added executable full-motion, reduced-motion, static-checkpoint, and narrated motif variants that preserve semantic phases, salience IDs, seek, and rewind; the editor honors system motion preference, exposes presentation controls and narration, and provides keyboard transport on the shared clock."
+  }
 }

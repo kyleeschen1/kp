@@ -47,6 +47,7 @@ export function disposeKpEditorAnimationPlayers(root: ParentNode): void {
       cancelPlayerFrame(player);
       player.removeEventListener("click", handlePlayerClick);
       player.removeEventListener("input", handlePlayerInput);
+      player.removeEventListener("keydown", handlePlayerKeydown);
       sessions.delete(player);
       authoringStates.delete(player);
       player.dataset["kpEditorAnimationDisposed"] = "true";
@@ -117,9 +118,11 @@ function hydrateKpEditorAnimationPlayer(player: HTMLElement): void {
   const authoring = createKpEditorAnimationAuthoringState();
   authoringStates.set(player, authoring);
   syncAuthoringData(player, authoring);
+  syncAccessibilityData(player, "system");
   player.dataset["kpEditorAnimationHydrated"] = "true";
   player.addEventListener("click", handlePlayerClick);
   player.addEventListener("input", handlePlayerInput);
+  player.addEventListener("keydown", handlePlayerKeydown);
   syncPlayerDom(player, session);
 }
 
@@ -157,6 +160,18 @@ function handlePlayerInput(event: Event): void {
 
   if (!(player instanceof HTMLElement) || !(input instanceof HTMLInputElement || input instanceof HTMLSelectElement)) return;
 
+  if (input instanceof HTMLSelectElement && input.dataset["kpEditorAnimationAccessibilityControl"] !== undefined) {
+    syncAccessibilityData(player, input.value);
+    const session = sessions.get(player);
+    if (session !== undefined) {
+      dispatchKpEditorAnimationPlaybackAction(player, {
+        type: "seek",
+        progress: session.player.progress
+      });
+    }
+    return;
+  }
+
   const authoringControlId = input.dataset["kpAnimationAuthoringControl"] as
     KpEditorAnimationAuthoringControlId | undefined;
   if (authoringControlId !== undefined) {
@@ -170,6 +185,61 @@ function handlePlayerInput(event: Event): void {
     type: "seek",
     progress: Number(input.value)
   });
+}
+
+function handlePlayerKeydown(event: KeyboardEvent): void {
+  const player = event.currentTarget;
+  if (!(player instanceof HTMLElement) || event.target !== player) return;
+  const session = sessions.get(player);
+  if (session === undefined) return;
+  const nowMs = performance.now();
+  switch (event.key) {
+    case " ":
+      event.preventDefault();
+      dispatchKpEditorAnimationPlaybackAction(player,
+        session.player.playbackStatus === "playing"
+          ? { type: "pause", nowMs }
+          : player.dataset["kpEditorAnimationAccessibilityMode"] === "static"
+            ? { type: "step" }
+            : { type: "play", nowMs });
+      return;
+    case "ArrowLeft":
+      event.preventDefault();
+      dispatchKpEditorAnimationPlaybackAction(player, { type: "step", delta: -keyboardStep(session) });
+      return;
+    case "ArrowRight":
+      event.preventDefault();
+      dispatchKpEditorAnimationPlaybackAction(player, { type: "step", delta: keyboardStep(session) });
+      return;
+    case "Home":
+      event.preventDefault();
+      dispatchKpEditorAnimationPlaybackAction(player, { type: "seek", progress: 0 });
+      return;
+    case "End":
+      event.preventDefault();
+      dispatchKpEditorAnimationPlaybackAction(player, { type: "seek", progress: 1 });
+      return;
+    case "r":
+    case "R":
+      event.preventDefault();
+      dispatchKpEditorAnimationPlaybackAction(player, { type: "rewind", nowMs });
+      return;
+  }
+}
+
+function keyboardStep(session: KpEditorAnimationPlaybackSession): number {
+  return 1 / Math.max(1, session.player.beatCount ?? 20);
+}
+
+function syncAccessibilityData(player: HTMLElement, preference: string): void {
+  const normalizedPreference = ["system", "full-motion", "reduced-motion", "static", "narrated"]
+    .includes(preference) ? preference : "system";
+  const reducedBySystem = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+  const mode = normalizedPreference === "system"
+    ? reducedBySystem ? "reduced-motion" : "full-motion"
+    : normalizedPreference;
+  player.dataset["kpEditorAnimationAccessibilityPreference"] = normalizedPreference;
+  player.dataset["kpEditorAnimationAccessibilityMode"] = mode;
 }
 
 function updateAuthoringControl(
@@ -280,7 +350,9 @@ function syncPlayerDom(
   const pauseButton = player.querySelector<HTMLButtonElement>(
     '[data-action="pause-editor-animation"]'
   );
-  if (playButton !== null) playButton.disabled = state.playbackStatus === "playing";
+  if (playButton !== null) playButton.disabled =
+    state.playbackStatus === "playing" ||
+    player.dataset["kpEditorAnimationAccessibilityMode"] === "static";
   if (pauseButton !== null) pauseButton.disabled = state.playbackStatus !== "playing";
 
   player.dispatchEvent(new CustomEvent(KP_EDITOR_ANIMATION_FRAME_EVENT, {

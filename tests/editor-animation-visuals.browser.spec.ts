@@ -139,6 +139,39 @@ test("selected editor animation controls play, pause, seek, step, rewind, and re
     .toHaveAttribute("data-kp-browser-persistent-stage-probe", "mounted");
 });
 
+test("accessible animation presentations share semantic checkpoints and keyboard transport", async ({ page }) => {
+  await page.goto("/?animation=editor-animation.animation.generated.substitute-three");
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const presentation = player.locator("[data-kp-editor-animation-accessibility-control]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const transition = player.locator("[data-kp-editor-equation-transition-id]");
+
+  await presentation.selectOption("reduced-motion");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-accessibility-mode", "reduced-motion");
+  await scrubber.fill("0.58");
+  await expect(transition).toHaveAttribute("data-kp-editor-equation-accessibility-mode", "reduced-motion");
+  await expect(transition).not.toHaveAttribute("data-kp-editor-equation-semantic-progress", "0.58");
+
+  await presentation.selectOption("narrated");
+  await scrubber.fill("0.58");
+  await expect(player.locator("[data-kp-editor-animation-narration]"))
+    .not.toHaveText("Animation checkpoint");
+
+  await presentation.selectOption("static");
+  await expect(player.getByRole("button", { name: "Play animation" })).toBeDisabled();
+
+  await presentation.selectOption("full-motion");
+  await player.focus();
+  await page.keyboard.press("Home");
+  await expect(scrubber).toHaveValue("0");
+  await page.keyboard.press("ArrowRight");
+  expect(Number(await scrubber.inputValue())).toBeGreaterThan(0);
+  await page.keyboard.press("End");
+  await expect(scrubber).toHaveValue("1");
+  await page.keyboard.press("r");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "rewind");
+});
+
 test("editor animation player disposes cleanly across selection and dashboard rerenders", async ({
   page
 }) => {

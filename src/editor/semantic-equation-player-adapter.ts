@@ -10,6 +10,11 @@ import {
   sampleKpEquationSemanticTimeline,
   type KpEquationSemanticTimelineFrame
 } from "../rendering/equation-visual-motif-timeline.ts";
+import {
+  createKpEquationMotifAccessibilityPlan,
+  sampleKpEquationMotifAccessibility,
+  type KpEquationMotifAccessibilityMode
+} from "../rendering/equation-motif-accessibility.ts";
 
 export interface KpEditorSemanticEquationTokenFrame {
   readonly kind: "editor-semantic-equation-token-frame";
@@ -22,6 +27,8 @@ export interface KpEditorSemanticEquationTokenFrame {
   readonly semanticProgress: number;
   readonly motion: KpEquationTokenMotionFrame;
   readonly semanticTimeline: KpEquationSemanticTimelineFrame;
+  readonly accessibilityMode: KpEquationMotifAccessibilityMode;
+  readonly narration: string;
 }
 
 export function createKpEditorSemanticEquationTokenFrame(input: {
@@ -29,12 +36,22 @@ export function createKpEditorSemanticEquationTokenFrame(input: {
   readonly playerState: KpEditorAnimationPlayerState;
   readonly phaseLocalProgress: number;
   readonly precomputedPlan?: KpEditorPrecomputedEquationMotionPlan | undefined;
+  readonly accessibilityMode?: KpEquationMotifAccessibilityMode | undefined;
 }): KpEditorSemanticEquationTokenFrame {
   const phaseLocalProgress = clamp01(input.phaseLocalProgress);
   const semanticProgress = input.playerState.direction === "forward"
     ? phaseLocalProgress
     : 1 - phaseLocalProgress;
   const semanticTimeline = input.precomputedPlan?.semanticTimeline;
+  const accessibilityMode = input.accessibilityMode ?? "full-motion";
+  const accessibility = semanticTimeline === undefined
+    ? undefined
+    : sampleKpEquationMotifAccessibility({
+        plan: createKpEquationMotifAccessibilityPlan({ timeline: semanticTimeline }),
+        mode: accessibilityMode,
+        progress: semanticProgress
+      });
+  const accessibleProgress = accessibility?.semanticProgress ?? semanticProgress;
   return {
     kind: "editor-semantic-equation-token-frame",
     animationId: input.playerState.animationId,
@@ -43,11 +60,15 @@ export function createKpEditorSemanticEquationTokenFrame(input: {
     direction: input.playerState.direction,
     globalProgress: input.playerState.progress,
     phaseLocalProgress,
-    semanticProgress,
-    motion: sampleKpEquationTokenMotion(input.geometry, semanticProgress),
-    semanticTimeline: semanticTimeline === undefined
-      ? fallbackSemanticTimelineFrame(semanticProgress)
-      : sampleKpEquationSemanticTimeline(semanticTimeline, semanticProgress)
+    semanticProgress: accessibleProgress,
+    motion: sampleKpEquationTokenMotion(input.geometry, accessibleProgress),
+    semanticTimeline: accessibility?.semanticTimeline ?? (
+      semanticTimeline === undefined
+        ? fallbackSemanticTimelineFrame(accessibleProgress)
+        : sampleKpEquationSemanticTimeline(semanticTimeline, accessibleProgress)
+    ),
+    accessibilityMode,
+    narration: accessibility?.narration ?? "Animation checkpoint"
   };
 }
 

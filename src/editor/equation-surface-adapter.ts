@@ -363,7 +363,8 @@ function applySemanticTokenMotion(input: {
     geometry,
     playerState: input.state,
     phaseLocalProgress: input.frame.localProgress,
-    precomputedPlan: precomputed
+    precomputedPlan: precomputed,
+    accessibilityMode: editorAccessibilityMode(input.stage)
   });
   applyKpEditorSemanticEquationTokenFrame(geometry, tokenFrame);
   input.transitionElement.dataset["kpEditorEquationSemanticProgress"] =
@@ -379,6 +380,13 @@ function applySemanticTokenMotion(input: {
     tokenFrame.semanticTimeline.previousCheckpointId;
   input.transitionElement.dataset["kpEditorEquationSemanticNextCheckpoint"] =
     tokenFrame.semanticTimeline.nextCheckpointId;
+  input.transitionElement.dataset["kpEditorEquationAccessibilityMode"] =
+    tokenFrame.accessibilityMode;
+  const narration = input.stage.closest<HTMLElement>("[data-kp-editor-animation-player]")
+    ?.querySelector<HTMLOutputElement>("[data-kp-editor-animation-narration]");
+  if (narration !== null && narration !== undefined) {
+    narration.replaceChildren(document.createTextNode(tokenFrame.narration));
+  }
   const choreography = tokenFrame.motion.enclosureChoreography;
   if (choreography === undefined) {
     delete input.transitionElement.dataset["kpEditorEquationEnclosureChoreography"];
@@ -416,6 +424,16 @@ function editorSpacing(
   const value = stage.closest<HTMLElement>("[data-kp-editor-animation-player]")
     ?.dataset["kpEditorAnimationSpacing"];
   return value === "compact" || value === "spacious" ? value : "balanced";
+}
+
+function editorAccessibilityMode(
+  stage: HTMLElement
+): "full-motion" | "reduced-motion" | "static" | "narrated" {
+  const value = stage.closest<HTMLElement>("[data-kp-editor-animation-player]")
+    ?.dataset["kpEditorAnimationAccessibilityMode"];
+  return value === "reduced-motion" || value === "static" || value === "narrated"
+    ? value
+    : "full-motion";
 }
 
 function editorPathPreference(
