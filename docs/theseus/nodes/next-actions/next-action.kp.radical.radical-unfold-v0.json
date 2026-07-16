@@ -2,9 +2,26 @@
   "id": "next-action.kp.radical.radical-unfold-v0",
   "kind": "next-action",
   "title": "Unfold radical material from the same bundle",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 17 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Split target radical presentation into independently clipped hook and overbar material owners, staggered their reveal from the shared seed, hid the native target only during reconciliation, and constrained KaTeX wide SVG geometry inside measured fragment owners.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Creates hook and overbar material frames with separate timing, clipping, and local motion."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-material-layer-dom.ts",
+      "summary": "Supports clipped structural fragments while constraining native KaTeX SVG geometry to measured owner bounds."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves two differently timed and clipped radical fragments replace the native glyph during act and disappear at native settlement."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +35,39 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g radical-succession",
+      "status": "passed",
+      "scope": "visible radical hook and overbar unfolding",
+      "checkedAt": "2026-07-16T19:49:29.800Z",
+      "notes": "Manual fixed-progress review confirmed bounded radical geometry at 0.55, 0.65, 0.78, and 0.86 after constraining KaTeX 400em SVG fragments."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-radical-succession-choreography.test.ts tests/kp-radical-material-continuity.test.ts",
+      "status": "passed",
+      "scope": "radical fragment plan and choreography",
+      "checkedAt": "2026-07-16T19:49:29.874Z",
+      "notes": "Manual fixed-progress review confirmed bounded radical geometry at 0.55, 0.65, 0.78, and 0.86 after constraining KaTeX 400em SVG fragments."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript radical material layer",
+      "checkedAt": "2026-07-16T19:49:29.947Z",
+      "notes": "Manual fixed-progress review confirmed bounded radical geometry at 0.55, 0.65, 0.78, and 0.86 after constraining KaTeX 400em SVG fragments."
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:49:30.019Z",
+      "scope": "Theseus graph",
+      "notes": "Manual fixed-progress review confirmed bounded radical geometry at 0.55, 0.65, 0.78, and 0.86 after constraining KaTeX 400em SVG fragments."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Split target radical presentation into independently clipped hook and overbar material owners, staggered their reveal from the shared seed, hid the native target only during reconciliation, and constrained KaTeX wide SVG geometry inside measured fragment owners."
+  }
 }

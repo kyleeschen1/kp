@@ -809,6 +809,9 @@ test("radical-succession uses independent opposite-corner tokens and native sett
   const player = page.locator("[data-kp-editor-animation-player]");
   const scrubber = player.locator('[data-action="seek-editor-animation"]');
   const stage = player.locator("[data-kp-editor-equation-stage]");
+  const materialLayer = stage.locator(
+    "[data-kp-editor-equation-material-layer]"
+  );
   const transition = player.locator("[data-kp-editor-equation-transition-id]");
   const sourceBase = transition.locator(
     '[data-kp-editor-equation-source] [data-kp-motion-id*=".power.base"]'
@@ -880,11 +883,22 @@ test("radical-succession uses independent opposite-corner tokens and native sett
     );
     expect(await token.getAttribute("style")).not.toContain("scale(0)");
   }
-  const radicalOpacity = Number(
-    await targetRadical.evaluate((element) => getComputedStyle(element).opacity)
+  await expect(targetRadical).toHaveCSS("opacity", "0");
+  const radicalFragments = materialLayer.locator(
+    '[data-kp-equation-material-fragment-role^="radical-"]'
   );
-  expect(radicalOpacity).toBeGreaterThan(0.01);
-  expect(radicalOpacity).toBeLessThan(1);
+  await expect(radicalFragments).toHaveCount(2);
+  const fragmentOpacities = await radicalFragments.evaluateAll((elements) =>
+    elements.map((element) => Number(getComputedStyle(element).opacity))
+  );
+  expect(fragmentOpacities.every((opacity) => opacity > 0 && opacity < 1))
+    .toBe(true);
+  expect(new Set(fragmentOpacities).size).toBe(2);
+  for (const fragment of await radicalFragments.all()) {
+    await expect(fragment.locator(
+      ".editor-equation-stage__material-visual"
+    )).not.toHaveCSS("clip-path", "none");
+  }
   await expect(
     transition.locator("[data-kp-editor-equation-source]")
   ).toHaveCSS("transform", "none");
@@ -908,6 +922,9 @@ test("radical-succession uses independent opposite-corner tokens and native sett
     await expect(token).toHaveCSS("opacity", "0");
   }
   await expect(targetRadical).toHaveCSS("opacity", "1");
+  await expect(materialLayer.locator(
+    '[data-kp-equation-material-fragment-role^="radical-"]'
+  )).toHaveCount(0);
   expect(await targetRadical.getAttribute("style")).toContain(
     "translate(0px, 0px)"
   );

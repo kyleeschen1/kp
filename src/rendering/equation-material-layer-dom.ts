@@ -9,6 +9,9 @@ export interface KpEquationMaterialLayerOwnerFrame {
   };
   readonly opacity: number;
   readonly transform: string;
+  readonly clipPath?: string | undefined;
+  readonly visualTransform?: string | undefined;
+  readonly fragmentRole?: string | undefined;
 }
 
 export function syncKpEquationMaterialLayer(input: {
@@ -43,6 +46,11 @@ export function syncKpEquationMaterialLayer(input: {
       visual.style.transform = "none";
       visual.style.translate = "none";
       visual.style.scale = "none";
+      visual.style.width = "100%";
+      visual.style.height = "100%";
+      visual.style.overflow = "hidden";
+      visual.style.position = "relative";
+      visual.style.display = "block";
       visual.classList.add("editor-equation-stage__material-visual");
       visual.querySelectorAll<HTMLElement>("[data-kp-motion-id]").forEach((token) =>
         token.removeAttribute("data-kp-motion-id")
@@ -67,6 +75,8 @@ export function syncKpEquationMaterialLayer(input: {
         if (value === "") visual.style.removeProperty(property);
         else visual.style.setProperty(property, value);
       }
+      visual.style.clipPath = frame.clipPath ?? "none";
+      visual.style.transform = frame.visualTransform ?? "none";
     }
     owner.style.left = `${frame.rect.left}px`;
     owner.style.top = `${frame.rect.top}px`;
@@ -76,5 +86,10 @@ export function syncKpEquationMaterialLayer(input: {
     owner.style.transform = frame.transform;
     owner.dataset["kpEquationMaterialSourceMotionId"] =
       frame.sourceElement.dataset["kpMotionId"] ?? "";
+    if (frame.fragmentRole === undefined) {
+      delete owner.dataset["kpEquationMaterialFragmentRole"];
+    } else {
+      owner.dataset["kpEquationMaterialFragmentRole"] = frame.fragmentRole;
+    }
   }
 }

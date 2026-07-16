@@ -142,13 +142,14 @@
     {
       "id": "next-action.kp.radical.radical-unfold-v0",
       "title": "Unfold radical material from the same bundle",
-      "status": "ready",
-      "summary": "Exponent fragments now share one bundle; split radical hook and overbar presentation from that same seed."
+      "summary": "Exponent fragments now share one bundle; split radical hook and overbar presentation from that same seed.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.radical.base-continuity-v0",
       "title": "Preserve base to radicand material",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Root notation now folds and unfolds materially; keep x mounted as one stable base-radicand owner."
     },
     {
       "id": "next-action.kp.radical.native-settlement-v0",
