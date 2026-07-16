@@ -3,6 +3,7 @@ import test from "node:test";
 
 import { createKpDiagramScene } from "../src/semantic/diagram-scene.ts";
 import {
+  composeKpSemanticScenes,
   createKpSemanticSceneTransition,
   projectKpDiagramSceneToSemanticScene,
   projectKpEquationTransitionStateToSemanticScene
@@ -41,6 +42,45 @@ test("DiagramScene projects through the same seam without promoting layout coord
   assert.deepEqual(scene.groups[0]?.memberEntityIds, ["selector.a", "selector.b"]);
   assert.equal(JSON.stringify(scene).includes('"x"'), false);
   assert.equal(JSON.stringify(scene).includes('"padding"'), false);
+});
+
+test("equation and diagram semantics compose without promoting either layout", () => {
+  const equation = projectKpEquationTransitionStateToSemanticScene({
+    ir: equationIr(),
+    side: "source"
+  });
+  const diagram = projectKpDiagramSceneToSemanticScene(createKpDiagramScene({
+    id: "diagram.input",
+    title: "Input",
+    width: 240,
+    height: 120,
+    nodes: [{
+      id: "node.value",
+      selectorId: "input.value",
+      shape: "circle",
+      x: 32,
+      y: 24,
+      width: 48,
+      height: 48,
+      label: "3"
+    }],
+    edges: [],
+    groups: [],
+    labels: []
+  }));
+  const mixed = composeKpSemanticScenes({
+    id: "scene.mixed.input-equation",
+    title: "Input and equation",
+    scenes: [diagram, equation]
+  });
+
+  assert.equal(mixed.surfaceKind, "mixed");
+  assert.deepEqual(mixed.registry.entities.map((entity) => entity.id), [
+    "input.value",
+    "before.x"
+  ]);
+  assert.equal(JSON.stringify(mixed).includes('"width"'), false);
+  assert.equal(JSON.stringify(mixed).includes('"x":'), false);
 });
 
 test("scene transitions share authoritative lineage across surface adapters", () => {

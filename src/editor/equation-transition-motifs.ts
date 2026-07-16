@@ -70,6 +70,8 @@ function sourceMotion(
       return motion(1 - progress, 0, 0, 1, 0, -90 * progress);
     case "simplify-into":
       return motion(1 - progress, 0, 0, 1 - 0.12 * progress, 0);
+    case "substitute":
+      return motion(1 - progress, 0, 0, 1 - 0.08 * progress, 0);
     case "wrap":
       return motion(1 - progress, -6 * progress, 0, 1 - 0.04 * progress, 0);
     case "unwrap":
@@ -98,6 +100,8 @@ function targetMotion(
       return motion(progress, 0, 0, 1, 0, 90 * (1 - progress));
     case "simplify-into":
       return motion(progress, 0, 0, 0.86 + 0.14 * progress, 0);
+    case "substitute":
+      return motion(progress, 0, 0, 0.82 + 0.18 * progress, 0);
     case "wrap":
       return motion(progress, 6 * (1 - progress), 0, 0.9 + 0.1 * progress, 0);
     case "unwrap":

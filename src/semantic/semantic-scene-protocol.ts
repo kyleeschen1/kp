@@ -122,6 +122,31 @@ export function createKpSemanticSceneTransition(input: {
   };
 }
 
+export function composeKpSemanticScenes(input: {
+  readonly id: string;
+  readonly title: string;
+  readonly scenes: readonly KpSemanticScene[];
+}): KpSemanticScene {
+  if (input.scenes.length < 2) {
+    throw new Error("A mixed semantic scene requires at least two component scenes.");
+  }
+  const registry = createKpSemanticEntityRegistry({
+    entities: input.scenes.flatMap((scene) => scene.registry.entities),
+    displayFragments: input.scenes.flatMap((scene) => scene.registry.displayFragments)
+  });
+  // Composition joins semantic registries only; layout remains owned by each
+  // surface adapter and cannot become model-authored scene authority here.
+  return createKpSemanticScene({
+    id: input.id,
+    surfaceKind: "mixed",
+    title: input.title,
+    registry,
+    relations: input.scenes.flatMap((scene) => scene.relations),
+    groups: input.scenes.flatMap((scene) => scene.groups),
+    regions: input.scenes.flatMap((scene) => scene.regions)
+  });
+}
+
 export function projectKpEquationTransitionStateToSemanticScene(input: {
   readonly ir: KpEquationTransitionIr;
   readonly side: "source" | "target";

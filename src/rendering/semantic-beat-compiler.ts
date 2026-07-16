@@ -5,6 +5,7 @@ import type {
 } from "./equation-motion-plan.ts";
 import type { EquationVisualMotifPhaseId } from "./visual-motif.ts";
 import { kpCopyFanOutPhaseIds } from "../animation/copy-fan-out-choreography.ts";
+import { kpSubstitutionPhaseIds } from "../animation/substitution-choreography.ts";
 
 export type SemanticBeatId = EquationVisualMotifPhaseId;
 
@@ -146,6 +147,13 @@ export const linearEquationDemoBeatTimeline = compileSemanticBeatTimeline({
       endBeat: copyFanOutBeatRange(id)[1],
       easing: "ease-in-out" as const,
       summary: `Copy/fan-out ${id.replaceAll("-", " ")} phase.`
+    })),
+    ...kpSubstitutionPhaseIds.map((id) => ({
+      id,
+      startBeat: substitutionBeatRange(id)[0],
+      endBeat: substitutionBeatRange(id)[1],
+      easing: "ease-in-out" as const,
+      summary: `Substitution ${id.replaceAll("-", " ")} phase.`
     }))
   ]
 });
@@ -159,6 +167,17 @@ function copyFanOutBeatRange(
     case "transit-descendants": return [17, 39];
     case "arrive-descendants": return [36, 46];
     case "settle-descendants": return [45, 50];
+  }
+}
+
+function substitutionBeatRange(
+  id: typeof kpSubstitutionPhaseIds[number]
+): readonly [number, number] {
+  switch (id) {
+    case "establish-value-source": return [0, 10];
+    case "transmit-substitution-value": return [7, 34];
+    case "replace-substitution-occupant": return [31, 42];
+    case "settle-substitution-replacement": return [40, 50];
   }
 }
 

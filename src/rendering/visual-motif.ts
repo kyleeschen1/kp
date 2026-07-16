@@ -2,6 +2,10 @@ import {
   kpCopyFanOutPhaseIds,
   type KpCopyFanOutPhaseId
 } from "../animation/copy-fan-out-choreography.ts";
+import {
+  kpSubstitutionPhaseIds,
+  type KpSubstitutionPhaseId
+} from "../animation/substitution-choreography.ts";
 
 export type VisualMotionPrimitiveId =
   | "enter"
@@ -11,6 +15,7 @@ export type VisualMotionPrimitiveId =
   | "vanish"
   | "copy"
   | "merge"
+  | "transmit"
   | "wrap"
   | "unwrap";
 
@@ -26,6 +31,7 @@ export type EquationVisualMotifKind =
   | "merge-fan-in"
   | "relation-flip"
   | "simplify-into"
+  | "substitute"
   | "wrap"
   | "unwrap";
 
@@ -44,11 +50,14 @@ export const equationVisualMotifPhaseIds = [
   "unwrap-artifact-exit",
   "wrap-artifact-enter",
   "wrapped-token-shift",
-  ...kpCopyFanOutPhaseIds
+  ...kpCopyFanOutPhaseIds,
+  ...kpSubstitutionPhaseIds
 ] as const;
 
 export type EquationVisualMotifPhaseId =
-  (typeof equationVisualMotifPhaseIds)[number] | KpCopyFanOutPhaseId;
+  (typeof equationVisualMotifPhaseIds)[number] |
+  KpCopyFanOutPhaseId |
+  KpSubstitutionPhaseId;
 
 export interface VisualMotifPlan<
   TKind extends string = string,
@@ -148,6 +157,12 @@ export const equationVisualMotifDescriptors: readonly EquationVisualMotifDescrip
       "final-simplify-reveal"
     ],
     summary: "Source tokens collapse into a newly revealed simplified token."
+  },
+  {
+    kind: "substitute",
+    motionPrimitiveIds: ["transmit", "exit", "enter"],
+    phaseIds: [...kpSubstitutionPhaseIds],
+    summary: "A value carries its identity to a destination before replacing its prior occupant."
   },
   {
     kind: "wrap",

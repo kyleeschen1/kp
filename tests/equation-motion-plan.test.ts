@@ -126,6 +126,16 @@ test("visual motif module exposes reusable equation motif descriptors", () => {
           "final-simplify-reveal"
         ]
       ],
+      [
+        "substitute",
+        ["transmit", "exit", "enter"],
+        [
+          "establish-value-source",
+          "transmit-substitution-value",
+          "replace-substitution-occupant",
+          "settle-substitution-replacement"
+        ]
+      ],
       ["wrap", ["wrap"], ["wrapped-token-shift", "wrap-artifact-enter"]],
       ["unwrap", ["unwrap"], ["unwrap-artifact-exit", "wrapped-token-shift"]]
     ]
