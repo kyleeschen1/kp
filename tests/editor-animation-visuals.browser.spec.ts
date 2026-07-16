@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { equationAnimationConformanceBaseline } from "./fixtures/equation-animation-conformance-baseline.ts";
+import { kpEquationVisualMotifConformanceFixture } from "../src/rendering/equation-visual-motif-conformance.ts";
 
 test("selected editor animation controls play, pause, seek, step, rewind, and reset", async ({
   page
@@ -328,6 +329,9 @@ test("wrap and distribution record their current conformance gaps at semantic ch
   const wrapBaseline = equationAnimationConformanceBaseline(
     "animation.generated.function-wrap.apply-f"
   );
+  const wrapFixture = kpEquationVisualMotifConformanceFixture(wrapBaseline.animationId);
+  expect(wrapFixture.requiredTrustedMotifIds).toContain("wrap");
+  expect(wrapFixture.rewindPhaseIds).toEqual([...wrapFixture.semanticPhaseIds].reverse());
   await picker.selectOption(wrapBaseline.descriptorId);
   let player = page.locator("[data-kp-editor-animation-player]");
   let scrubber = player.locator('[data-action="seek-editor-animation"]');
@@ -361,6 +365,12 @@ test("wrap and distribution record their current conformance gaps at semantic ch
   const distributionBaseline = equationAnimationConformanceBaseline(
     "animation.generated.distribution.expand-a-sum"
   );
+  const distributionFixture = kpEquationVisualMotifConformanceFixture(
+    distributionBaseline.animationId
+  );
+  expect(distributionFixture.requiredTrustedMotifIds).toContain("fan-out");
+  expect(distributionFixture.accessibility.find((variant) => variant.mode === "reduced-motion")?.preservesPhaseIds)
+    .toEqual(distributionFixture.semanticPhaseIds);
   await picker.selectOption(distributionBaseline.descriptorId);
   player = page.locator("[data-kp-editor-animation-player]");
   scrubber = player.locator('[data-action="seek-editor-animation"]');
