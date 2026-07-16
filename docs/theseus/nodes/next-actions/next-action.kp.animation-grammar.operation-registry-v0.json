@@ -2,15 +2,25 @@
   "id": "next-action.kp.animation-grammar.operation-registry-v0",
   "kind": "next-action",
   "title": "Resolve Layered Canonical Operations",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Resolve version-pinned operations across layered packs and adapt current generated algebra definitions. Verification: standard.",
+  "summary": "Added a layered exact-pin canonical operation registry and migrated every promoted generated algebra transform through compatibility entries without changing runtime behavior.",
   "severity": "medium",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/canonical-operation-registry.ts",
+      "summary": "Layered registry, exact resolution diagnostics, and generated algebra migration adapter."
+    },
+    {
+      "kind": "file",
+      "path": "tests/canonical-operation-registry.test.ts",
+      "summary": "Registry resolution, migration coverage, and dependency validation tests."
     }
   ],
   "dependsOn": {
@@ -48,5 +58,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-operation-registry.test.ts tests/semantic-equation-transition-compiler.test.ts",
+      "status": "passed",
+      "scope": "registry compatibility and unchanged semantic compiler behavior",
+      "checkedAt": "2026-07-16T01:00:00.195Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T01:00:00.234Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T01:00:00.274Z",
+      "scope": "Theseus graph and event log"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a layered exact-pin canonical operation registry and migrated every promoted generated algebra transform through compatibility entries without changing runtime behavior."
+  }
 }

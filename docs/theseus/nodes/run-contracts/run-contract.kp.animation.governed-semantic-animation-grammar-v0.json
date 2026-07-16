@@ -27,7 +27,7 @@
     "No live model provider, general CAS, general graph layout, second playback clock, arbitrary model-authored geometry, automatic published-project migration, or unrelated feature expansion."
   ],
   "goal": "Run the approved 30-slice governed semantic animation grammar and constraint-planned choreography loop.",
-  "target": "next-action.kp.animation-grammar.operation-registry-v0",
+  "target": "next-action.kp.animation-grammar.typed-gap-v0",
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
@@ -67,7 +67,7 @@
     {
       "id": "next-action.kp.animation-grammar.operation-registry-v0",
       "title": "Layered registry",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation-grammar.typed-gap-v0",
