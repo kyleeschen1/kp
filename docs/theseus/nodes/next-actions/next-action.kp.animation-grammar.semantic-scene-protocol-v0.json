@@ -2,15 +2,25 @@
   "id": "next-action.kp.animation-grammar.semantic-scene-protocol-v0",
   "kind": "next-action",
   "title": "Introduce Shared Semantic Scene Protocol",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Join equation and diagram entities, relations, groups, fragments, and lineage behind one renderer-neutral seam. Verification: standard.",
+  "summary": "Introduced one renderer-neutral semantic scene seam for equation and DiagramScene entities, relations, groups, regions, display fragments, correspondence, and authoritative lineage while deliberately excluding layout coordinates.",
   "severity": "medium",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/semantic-scene-protocol.ts",
+      "summary": "Shared semantic scene and transition contracts plus equation and diagram adapters."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-scene-protocol.test.ts",
+      "summary": "Equation/diagram conformance, coordinate exclusion, and shared lineage transition coverage."
     }
   ],
   "dependsOn": {
@@ -48,5 +58,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-scene-protocol.test.ts tests/kp-diagram-scene.test.ts",
+      "status": "passed",
+      "scope": "shared semantic scene and existing DiagramScene conformance",
+      "checkedAt": "2026-07-16T01:16:48.253Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T01:16:48.300Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T01:16:48.340Z",
+      "scope": "Theseus graph and event log"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Introduced one renderer-neutral semantic scene seam for equation and DiagramScene entities, relations, groups, regions, display fragments, correspondence, and authoritative lineage while deliberately excluding layout coordinates."
+  }
 }
