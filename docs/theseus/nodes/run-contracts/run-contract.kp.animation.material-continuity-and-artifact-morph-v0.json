@@ -124,13 +124,14 @@
     {
       "id": "next-action.kp.radical.shared-bundle-primitive-v0",
       "title": "Extract the shared radical bundle primitive",
-      "status": "ready",
-      "summary": "The linear tranche passes continuity gates; extract the dashboard fold-bundle-unfold primitive for semantic radical succession."
+      "summary": "The linear tranche passes continuity gates; extract the dashboard fold-bundle-unfold primitive for semantic radical succession.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.radical.artifact-fragments-v0",
       "title": "Define structural artifact fragments",
-      "status": "planned"
+      "status": "ready",
+      "summary": "The shared bundle primitive is authoritative; classify exponent and radical structural material for semantic rendering."
     },
     {
       "id": "next-action.kp.radical.exponent-collapse-v0",

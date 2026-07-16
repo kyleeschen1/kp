@@ -22,7 +22,11 @@ import {
   type EquationCancelParticleRenderer
 } from "../rendering/equation-cancel-particles-webgl.ts";
 import {
-  type KatexArtifactSeedRevealPlan
+  createKpRadicalArtifactBundlePlan,
+  sampleKpDomArtifactBundleMorph
+} from "../rendering/equation-artifact-bundle-morph.ts";
+import type {
+  KatexArtifactSeedRevealPlan
 } from "../rendering/katex-artifact-seed-reveal.ts";
 import { createKatexDomRuntimeVisualFrame } from "../rendering/katex-dom-visual-frame-adapter.ts";
 import { measureKatexTextureCaptureRect } from "../rendering/katex-texture-atlas.ts";
@@ -1534,62 +1538,21 @@ function createDomArtifactSeedRevealState(
   phases: RadicalArtifactFramePhases,
   collapseScale: number
 ): EquationArtifactRenderState {
-  const sourceCollapseProgress = phases.sourceExitProgress;
-  const sourceFadeProgress = phases.targetRevealProgress;
-  const targetRevealProgress = phases.targetRevealProgress;
-  const sourcePose = rectMorphPose(
-    plan.source.rect,
-    plan.bundleRect,
-    sourceCollapseProgress,
-    {
-      opacity: 1 - sourceFadeProgress,
-      scale: interpolateNumber(1, collapseScale, sourceCollapseProgress)
-    }
-  );
-  const targetPose = rectMorphPose(
-    plan.target.rect,
-    plan.bundleRect,
-    1 - targetRevealProgress,
-    {
-      opacity: targetRevealProgress,
-      scale: interpolateNumber(collapseScale, 1, targetRevealProgress)
-    }
-  );
+  const frame = sampleKpDomArtifactBundleMorph({
+    plan,
+    sourceCollapseProgress: phases.sourceExitProgress,
+    sourceFadeProgress: phases.targetRevealProgress,
+    targetRevealProgress: phases.targetRevealProgress,
+    collapseScale
+  });
 
   return {
     hiddenMotionIds: new Set(),
     domOpacityByMotionId: new Map(),
     domPoseByMotionId: new Map([
-      [sourceMotionId, sourcePose],
-      [targetMotionId, targetPose]
+      [sourceMotionId, frame.sourcePose],
+      [targetMotionId, frame.targetPose]
     ])
-  };
-}
-
-function rectMorphPose(
-  source: KatexTokenRect,
-  target: KatexTokenRect,
-  progress: number,
-  options: {
-    readonly opacity: number;
-    readonly scale: number;
-  }
-): MotionPose {
-  const sourceCenter = rectCenter(source);
-  const targetCenter = rectCenter(target);
-
-  return {
-    opacity: options.opacity,
-    x: (targetCenter.x - sourceCenter.x) * progress,
-    y: (targetCenter.y - sourceCenter.y) * progress,
-    scale: options.scale
-  };
-}
-
-function rectCenter(rect: KatexTokenRect): MotionPoint {
-  return {
-    x: rect.left + rect.width / 2,
-    y: rect.top + rect.height / 2
   };
 }
 
@@ -1627,55 +1590,18 @@ function createRadicalArtifactSeedRevealPlan(
   const targetCaptureRect = measureKatexTextureCaptureRect(targetToken.element);
   const sourceLocalRect = viewportRectToLocalRect(sourceCaptureRect, stageRect);
   const targetLocalRect = viewportRectToLocalRect(targetCaptureRect, stageRect);
-  const bundleRect = radicalBundleRect(targetLocalRect);
 
   return {
     key: `${context.key}:radical-artifact-seed-reveal`,
     sourceMotionId,
     targetMotionId,
-    seedRevealPlan: {
+    seedRevealPlan: createKpRadicalArtifactBundlePlan({
       id: "radical.rewrite-power-as-root.artifact-seed-reveal",
-      kind: "artifact-seed-reveal",
-      source: {
-        tokenId: sourceMotionId,
-        rect: sourceLocalRect
-      },
-      target: {
-        tokenId: targetMotionId,
-        rect: targetLocalRect
-      },
-      bundleRect,
-      sourceGrid: { columns: 6, rows: 2 },
-      targetGrid: { columns: 10, rows: 2 },
-      sourceMotion: {
-        kind: "collapse-to-bundle",
-        collapseEnd: 0.48,
-        fadeStart: 0.34,
-        fadeEnd: 0.56,
-        stagger: 0.08,
-        drift: 1.5
-      },
-      targetMotion: {
-        kind: "unfold-from-bundle",
-        revealStart: 0.42,
-        revealEnd: 1,
-        stagger: 0.18,
-        drift: 1.25,
-        dissolveFraction: 0
-      },
-      start: 0,
-      end: 1,
-      easing: "ease-in-out"
-    }
-  };
-}
-
-function radicalBundleRect(targetRect: KatexTokenRect): KatexTokenRect {
-  return {
-    left: targetRect.left + targetRect.width * 0.14,
-    top: targetRect.top + targetRect.height * 0.55,
-    width: Math.max(8, targetRect.width * 0.2),
-    height: Math.max(6, targetRect.height * 0.22)
+      sourceTokenId: sourceMotionId,
+      sourceRect: sourceLocalRect,
+      targetTokenId: targetMotionId,
+      targetRect: targetLocalRect
+    })
   };
 }
 

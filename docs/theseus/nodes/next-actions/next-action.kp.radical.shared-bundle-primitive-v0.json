@@ -2,9 +2,26 @@
   "id": "next-action.kp.radical.shared-bundle-primitive-v0",
   "kind": "next-action",
   "title": "Extract the shared radical bundle primitive",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 14 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Extracted the dashboard radical seed geometry and DOM source-target bundle morph into a renderer-neutral primitive, then routed the legacy controller through it without changing its visible behavior.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-artifact-bundle-morph.ts",
+      "summary": "Owns radical bundle planning and directly sampled DOM reconciliation poses."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-motion-demo-controller.ts",
+      "summary": "Consumes the shared primitive instead of local bundle and rect-morph helpers."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-equation-artifact-bundle-morph.test.ts",
+      "summary": "Proves dashboard grid defaults and exact source-target convergence through one bundle."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +35,35 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-equation-artifact-bundle-morph.test.ts tests/katex-artifact-seed-reveal.test.ts",
+      "status": "passed",
+      "scope": "shared radical artifact bundle primitive",
+      "checkedAt": "2026-07-16T19:40:04.311Z"
+    },
+    {
+      "command": "npx playwright test tests/katex-transition.browser.spec.ts --project=chromium -g radical.artifact",
+      "status": "passed",
+      "scope": "dashboard radical DOM regression",
+      "checkedAt": "2026-07-16T19:40:04.392Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript shared primitive extraction",
+      "checkedAt": "2026-07-16T19:40:04.463Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:40:04.538Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Extracted the dashboard radical seed geometry and DOM source-target bundle morph into a renderer-neutral primitive, then routed the legacy controller through it without changing its visible behavior."
+  }
 }
