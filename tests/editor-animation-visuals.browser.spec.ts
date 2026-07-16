@@ -425,6 +425,10 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   );
   expect(pathIds.every((pathId) => pathId !== null)).toBe(true);
   expect(new Set(pathIds).size).toBe(2);
+  const pathVariants = await targetFactors.evaluateAll((elements) =>
+    elements.map((element) => element.getAttribute("data-kp-equation-motion-path-variant"))
+  );
+  expect(new Set(pathVariants)).toEqual(new Set(["arc-above", "arc-below"]));
   expect(await targetFactors.nth(0).evaluate((element) => getComputedStyle(element).transform))
     .not.toBe(await targetFactors.nth(1).evaluate((element) => getComputedStyle(element).transform));
   const transitProgress = Number(await transition.getAttribute(

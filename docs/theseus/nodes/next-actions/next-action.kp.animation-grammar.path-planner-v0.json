@@ -2,15 +2,20 @@
   "id": "next-action.kp.animation-grammar.path-planner-v0",
   "kind": "next-action",
   "title": "Plan Deterministic Paths And Collisions",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Choose reviewed arc variants by collision, travel, reading order, and deterministic tie-break scores. Verification: standard.",
+  "summary": "Added deterministic motion-path variants with collision-first scoring, semantic lane preference, reading-order and travel costs, stable tie-breaking, and copy/fan-out integration using inspectable above/below arcs.",
   "severity": "high",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-path-planner.ts",
+      "summary": "Plans and samples bounded quadratic equation-motion routes from frozen layout snapshots without arbitrary diagram routing."
     }
   ],
   "dependsOn": {
@@ -48,5 +53,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/equation-motion-path-planner.test.ts",
+      "status": "passed",
+      "scope": "1015 unit tests",
+      "checkedAt": "2026-07-16T02:32:27.858Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T02:32:27.922Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T02:32:27.970Z",
+      "scope": "Theseus graph and event history"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added deterministic motion-path variants with collision-first scoring, semantic lane preference, reading-order and travel costs, stable tie-breaking, and copy/fan-out integration using inspectable above/below arcs."
+  }
 }
