@@ -9,7 +9,6 @@ import {
 } from "../rendering/katex-adapter.ts";
 import {
   measureKpEquationTransitionGeometry,
-  type KpMeasuredEquationTransitionGeometry
 } from "../rendering/equation-motion-dom.ts";
 import { compileKpSemanticEquationTransitionResult } from "../rendering/semantic-equation-transition-compiler.ts";
 import type { KpSelectorAnnotatedLatex } from "../rendering/selector-annotated-latex.ts";
@@ -52,11 +51,15 @@ import {
   createKpMatrixSelectorAnnotatedLatex
 } from "./matrix-semantic-latex.ts";
 import { createKpGenericSelectorAnnotatedLatex } from "./generic-semantic-latex.ts";
+import {
+  createKpEditorPrecomputedEquationMotionPlan,
+  type KpEditorPrecomputedEquationMotionPlan
+} from "./precomputed-equation-motion.ts";
 
 const animationCatalog = createKpAnimationAssets();
-const semanticGeometryCache = new WeakMap<HTMLElement, {
+const semanticMotionPlanCache = new WeakMap<HTMLElement, {
   readonly contentKey: string;
-  readonly geometries: ReadonlyMap<number, KpMeasuredEquationTransitionGeometry>;
+  readonly plans: ReadonlyMap<number, KpEditorPrecomputedEquationMotionPlan>;
 }>();
 
 export interface KpEditorEquationStageFrame {
@@ -92,8 +95,10 @@ export function createKpEditorEquationStageFrame(input: {
       );
 
   const solveX = createKpEditorSolveXSharedPlayerFrame(input);
-  const stageIdentityKey = `${projection.animationId}:${projection.direction}`;
-  const contentKey = projection.transitions.map((transition) => transition.id).join(":");
+  const stageIdentityKey = projection.animationId;
+  const contentKey = `${projection.direction}:${projection.transitions
+    .map((transition) => transition.id)
+    .join(":")}`;
 
   return {
     stageIdentityKey,
@@ -270,11 +275,11 @@ function applySemanticTokenMotion(input: {
   readonly state: KpEditorAnimationPlayerState;
   readonly frame: KpEditorEquationStageFrame;
 }): boolean {
-  let geometry = semanticGeometryCache.get(input.stage)?.contentKey === input.frame.contentKey
-    ? semanticGeometryCache.get(input.stage)?.geometries.get(input.transitionIndex)
+  let precomputed = semanticMotionPlanCache.get(input.stage)?.contentKey === input.frame.contentKey
+    ? semanticMotionPlanCache.get(input.stage)?.plans.get(input.transitionIndex)
     : undefined;
 
-  if (geometry === undefined) {
+  if (precomputed === undefined) {
     const transformation = input.animation.transformations.find(
       (candidate) => candidate.id === input.frame.projection.transitions[input.transitionIndex]?.id
     );
@@ -299,7 +304,7 @@ function applySemanticTokenMotion(input: {
 
     // IR remains forward-oriented; rewind swaps the displayed roots and samples
     // semantic progress backward, so both directions share exactly one geometry.
-    geometry = measureKpEquationTransitionGeometry({
+    const geometry = measureKpEquationTransitionGeometry({
       ir: compiled.ir,
       sourceRoot: input.state.direction === "forward" ? displayedSource : displayedTarget,
       targetRoot: input.state.direction === "forward" ? displayedTarget : displayedSource,
@@ -320,27 +325,44 @@ function applySemanticTokenMotion(input: {
         ? { lineageChoreographyKind: motifKind }
         : {})
     });
-    const existing = semanticGeometryCache.get(input.stage);
-    const geometries = existing?.contentKey === input.frame.contentKey
-      ? new Map(existing.geometries)
-      : new Map<number, KpMeasuredEquationTransitionGeometry>();
-    geometries.set(input.transitionIndex, geometry);
-    semanticGeometryCache.set(input.stage, {
+    precomputed = createKpEditorPrecomputedEquationMotionPlan({
+      id: `${input.frame.contentKey}.transition.${input.transitionIndex}`,
+      geometry,
+      motifKind: motifKind ?? "artifact-replace"
+    });
+    const existing = semanticMotionPlanCache.get(input.stage);
+    const plans = existing?.contentKey === input.frame.contentKey
+      ? new Map(existing.plans)
+      : new Map<number, KpEditorPrecomputedEquationMotionPlan>();
+    plans.set(input.transitionIndex, precomputed);
+    semanticMotionPlanCache.set(input.stage, {
       contentKey: input.frame.contentKey,
-      geometries
+      plans
     });
   }
+
+  const geometry = precomputed.geometry;
 
   resetLayerForSemanticMotion(input.transitionElement, "[data-kp-editor-equation-source]");
   resetLayerForSemanticMotion(input.transitionElement, "[data-kp-editor-equation-target]");
   const tokenFrame = createKpEditorSemanticEquationTokenFrame({
     geometry,
     playerState: input.state,
-    phaseLocalProgress: input.frame.localProgress
+    phaseLocalProgress: input.frame.localProgress,
+    precomputedPlan: precomputed
   });
   applyKpEditorSemanticEquationTokenFrame(geometry, tokenFrame);
   input.transitionElement.dataset["kpEditorEquationSemanticProgress"] =
     String(tokenFrame.semanticProgress);
+  input.transitionElement.dataset["kpEditorEquationMotionPlanId"] = precomputed.id;
+  input.transitionElement.dataset["kpEditorEquationLayoutPlanRevision"] =
+    String(precomputed.layoutPlan.revision);
+  input.transitionElement.dataset["kpEditorEquationPathPlanCount"] =
+    String(precomputed.relationPathPlans.size + precomputed.tokenPathPlans.size);
+  input.transitionElement.dataset["kpEditorEquationSemanticPreviousCheckpoint"] =
+    tokenFrame.semanticTimeline.previousCheckpointId;
+  input.transitionElement.dataset["kpEditorEquationSemanticNextCheckpoint"] =
+    tokenFrame.semanticTimeline.nextCheckpointId;
   const choreography = tokenFrame.motion.enclosureChoreography;
   if (choreography === undefined) {
     delete input.transitionElement.dataset["kpEditorEquationEnclosureChoreography"];

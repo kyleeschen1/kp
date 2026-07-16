@@ -5,6 +5,7 @@ import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import { createKpEditorAnimationLibrary } from "../src/editor/animation-library.ts";
 import { createKpEditorAnimationPlayerState } from "../src/editor/animation-player-state.ts";
 import { createKpEditorSemanticEquationTokenFrame } from "../src/editor/semantic-equation-player-adapter.ts";
+import { createKpEditorPrecomputedEquationMotionPlan } from "../src/editor/precomputed-equation-motion.ts";
 import type { KpMeasuredEquationTransitionGeometry } from "../src/rendering/equation-motion-dom.ts";
 
 const element = { style: {} } as unknown as HTMLElement;
@@ -88,4 +89,24 @@ test("rewind samples the same semantic token motion in reverse", () => {
 
   assert.equal(forward.semanticProgress, rewind.semanticProgress);
   assert.deepEqual(forward.motion, rewind.motion);
+});
+
+test("semantic token frames consume one precomputed layout path and timeline plan", () => {
+  const precomputedPlan = createKpEditorPrecomputedEquationMotionPlan({
+    id: "editor-plan.shared-player",
+    geometry,
+    motifKind: "artifact-replace"
+  });
+  const frame = createKpEditorSemanticEquationTokenFrame({
+    geometry: precomputedPlan.geometry,
+    playerState: player("forward", 0.4),
+    phaseLocalProgress: 0.5,
+    precomputedPlan
+  });
+
+  assert.equal(precomputedPlan.layoutPlan.geometryPolicy, "measure-once-per-step");
+  assert.equal(precomputedPlan.relationPathPlans.size, 1);
+  assert.equal(frame.semanticTimeline.progress, 0.5);
+  assert.match(frame.semanticTimeline.previousCheckpointId, /semantic-checkpoint/);
+  assert.match(frame.semanticTimeline.nextCheckpointId, /semantic-checkpoint/);
 });

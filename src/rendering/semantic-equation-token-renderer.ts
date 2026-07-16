@@ -16,6 +16,7 @@ import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph
 import {
   planKpEquationMotionPathBetweenPoints,
   sampleKpEquationMotionPath,
+  type KpEquationMotionPathCandidate,
   type KpEquationMotionPathVariantId
 } from "./equation-motion-path-planner.ts";
 
@@ -57,6 +58,7 @@ interface LineageChoreographyContext {
   readonly kind: "copy-fan-out" | "merge-fan-in";
   readonly relationRecordId: string;
   readonly frame: KpCopyFanOutChoreographyFrame;
+  readonly motionPathsByMotionId: KpMeasuredEquationTransitionGeometry["precomputedMotionPathsByMotionId"];
 }
 
 export function sampleKpEquationTokenMotion(
@@ -316,7 +318,8 @@ function createLineageChoreographyContext(
       plan,
       progress,
       direction: kind === "copy-fan-out" ? "forward" : "rewind"
-    })
+    }),
+    motionPathsByMotionId: geometry.precomputedMotionPathsByMotionId
   };
 }
 
@@ -397,7 +400,8 @@ function lineageFrameToken(input: {
     pathProgress: descendant.pathProgress,
     branchIndex: descendant.branchIndex,
     opacity: descendant.opacity,
-    scale: descendant.scale
+    scale: descendant.scale,
+    precomputedPath: input.context.motionPathsByMotionId?.[input.token.motionId]
   });
   return {
     motionId: input.token.motionId,
@@ -417,23 +421,23 @@ function lineagePathPose(input: {
   readonly branchIndex: number;
   readonly opacity: number;
   readonly scale: number;
+  readonly precomputedPath?: KpEquationMotionPathCandidate | undefined;
 }): {
   readonly pose: KpEquationTokenMotionPose;
   readonly variant: KpEquationMotionPathVariantId;
 } {
   const originCenter = rectCenter(input.origin);
   const destinationCenter = rectCenter(input.destination);
-  const preferredVariant = input.branchIndex % 2 === 0 ? "arc-above" : "arc-below";
-  const pathPlan = planKpEquationMotionPathBetweenPoints({
+  const path = input.precomputedPath ?? planKpEquationMotionPathBetweenPoints({
     id: `lineage.branch.${input.branchIndex}`,
     start: originCenter,
     end: destinationCenter,
     variants: ["arc-above", "arc-below"],
-    preferredVariant,
+    preferredVariant: input.branchIndex % 2 === 0 ? "arc-above" : "arc-below",
     clearance: 18 + input.branchIndex * 3,
     moverRadius: 0
-  });
-  const point = sampleKpEquationMotionPath(pathPlan.selected, input.pathProgress);
+  }).selected;
+  const point = sampleKpEquationMotionPath(path, input.pathProgress);
   return {
     pose: {
       opacity: input.opacity,
@@ -441,7 +445,7 @@ function lineagePathPose(input: {
       y: point.y - destinationCenter.y,
       scale: input.scale
     },
-    variant: pathPlan.selected.variant
+    variant: path.variant
   };
 }
 

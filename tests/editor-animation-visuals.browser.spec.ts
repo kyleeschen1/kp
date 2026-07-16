@@ -66,6 +66,17 @@ test("selected editor animation controls play, pause, seek, step, rewind, and re
     .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
   await expect(semanticTransition)
     .toHaveAttribute("data-kp-editor-equation-semantic-progress", "0.5");
+  await expect(semanticTransition)
+    .toHaveAttribute("data-kp-editor-equation-motion-plan-id", /transition\.0$/);
+  await expect(semanticTransition)
+    .toHaveAttribute("data-kp-editor-equation-layout-plan-revision", "0");
+  await expect(semanticTransition)
+    .toHaveAttribute("data-kp-editor-equation-path-plan-count", /[1-9]/);
+  await expect(semanticTransition)
+    .toHaveAttribute("data-kp-editor-equation-semantic-next-checkpoint", /semantic-checkpoint/);
+  await equationStage.evaluate((element) => {
+    element.dataset["kpBrowserPersistentStageProbe"] = "mounted";
+  });
   await expect(
     equationStage.locator(
       '[data-kp-editor-equation-source] [data-kp-motion-id*="after-subtract.lhs.plus3"]'
@@ -95,6 +106,8 @@ test("selected editor animation controls play, pause, seek, step, rewind, and re
   await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "forward");
   await expect(player).toHaveAttribute("data-kp-editor-animation-status", "idle");
   await expect(scrubber).toHaveValue("0");
+  await expect(player.locator("[data-kp-editor-equation-stage]"))
+    .toHaveAttribute("data-kp-browser-persistent-stage-probe", "mounted");
 });
 
 test("editor animation player disposes cleanly across selection and dashboard rerenders", async ({

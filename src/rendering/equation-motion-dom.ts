@@ -2,6 +2,7 @@ import type { KatexTokenRect } from "./katex-transition-types.ts";
 import type { KpEquationTransitionIr } from "./equation-transition-ir.ts";
 import type { KpSelectorAnnotatedLatex } from "./selector-annotated-latex.ts";
 import type { KpEquationEnclosureChoreographyKind } from "./equation-enclosure-choreography.ts";
+import type { KpEquationMotionPathCandidate } from "./equation-motion-path-planner.ts";
 
 export interface AnnotatedMotionToken {
   readonly motionId: string;
@@ -34,6 +35,9 @@ export interface KpMeasuredEquationTransitionGeometry {
   readonly transitionId: string;
   readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
   readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | undefined;
+  readonly precomputedMotionPathsByMotionId?: Readonly<
+    Record<string, KpEquationMotionPathCandidate>
+  > | undefined;
   readonly sourceTokens: readonly AnnotatedMotionToken[];
   readonly targetTokens: readonly AnnotatedMotionToken[];
   readonly relations: readonly KpMeasuredEquationTransitionRelationGeometry[];
