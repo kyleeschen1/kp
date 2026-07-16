@@ -1,0 +1,52 @@
+{
+  "id": "next-action.kp.animation-grammar.lineage-graph-v0",
+  "kind": "next-action",
+  "title": "Define Semantic Lineage Graph",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Represent copy, split, merge, introduction, and removal lineage with total multiplicity and continuity laws. Verification: standard.",
+  "severity": "medium",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
+      "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation-grammar.semantic-entity-provenance-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm test -- tests/semantic-lineage-graph.test.ts tests/correspondence-composition.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice advances the governed grammar while preserving deterministic semantic continuity and the existing shared player boundary."
+  ],
+  "allowedWork": [
+    "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a general CAS, general graph layout, a second playback clock, arbitrary model-authored geometry, or unrelated product work."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-compilation",
+      "weight": "high"
+    },
+    {
+      "id": "focused-verification",
+      "weight": "high"
+    }
+  ]
+}

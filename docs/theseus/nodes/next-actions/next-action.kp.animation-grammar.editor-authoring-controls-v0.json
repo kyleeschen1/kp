@@ -1,0 +1,53 @@
+{
+  "id": "next-action.kp.animation-grammar.editor-authoring-controls-v0",
+  "kind": "next-action",
+  "title": "Expose Semantic And Presentation Editing",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Expose role, lineage, provenance, salience, correctness, gaps, spacing, tempo, and path preferences as regenerable editor controls. Verification: broad.",
+  "severity": "high",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
+      "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation-grammar.editor-motion-integration-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm test -- tests/kp-editor-animation-player-shell.test.ts tests/kp-editor-animation-diagnostics.test.ts",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice advances the governed grammar while preserving deterministic semantic continuity and the existing shared player boundary."
+  ],
+  "allowedWork": [
+    "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a general CAS, general graph layout, a second playback clock, arbitrary model-authored geometry, or unrelated product work."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-compilation",
+      "weight": "high"
+    },
+    {
+      "id": "focused-verification",
+      "weight": "high"
+    }
+  ]
+}

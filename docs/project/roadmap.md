@@ -35,12 +35,13 @@ available in the KP editor; it has now closed its 30-slice implementation loop.
 
 ## Active Focus
 
-**Semantic incremental transitions and LLM-authored animation compilation.**
-The visible player is now the stable clock and surface substrate. The active
-priority is to compile rich semantic correspondence into persistent equation
-tokens, measured geometry, and sampled motion so equations communicate which
-terms persist, cancel, split, merge, appear, disappear, or change role instead
-of replacing whole KaTeX layers with cross-fades.
+**Governed semantic animation grammar and constraint-planned choreography.**
+The semantic transition compiler and shared player are now the stable
+foundation. The active priority is to make generated derivations select
+versioned canonical operations, preserve explicit identity and lineage, reuse
+curated executable motifs, and compile salience into smooth preplanned motion.
+The first proof covers wrapping, distribution and factoring, substitution, and
+an intentional invalid step through one editor-visible vertical slice.
 
 The execution contract
 `run-contract.kp.editor.visible-animation-player-v0` closed its approved
@@ -53,6 +54,11 @@ The accepted focus change is recorded in
 After the semantic transition compiler is proven on a representative equation
 cohort, KP should expose a constrained LLM draft schema and compiler, then a
 minimal visual diagram scene using the same correspondence and shared clock.
+
+That compiler loop completed on 2026-07-15. Its successor decision is recorded
+in `decisions/2026-07-15-kp-governed-semantic-animation-grammar.md`; the
+proposed 30-slice grammar and motion-planning loop is recorded in
+`reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md`.
 
 The doctrine, composition laws, authoring guide, core interfaces, executable
 law checks, pause-time inspection, drill-down hooks, flashcard specs, external

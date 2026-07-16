@@ -20,7 +20,8 @@
     "decision.kp.long-term-semantic-product-plan",
     "decision.kp.animation-asset-primary-unit",
     "decision.kp.symbolic-manipulation-animation-library",
-    "decision.kp.semantic-incremental-transition-focus-v0"
+    "decision.kp.semantic-incremental-transition-focus-v0",
+    "decision.kp.governed-semantic-animation-grammar-v0"
   ],
   "milestones": [
     "milestone.kp.long-term-semantic-product-plan-v0"
@@ -90,7 +91,37 @@
     "next-action.kp.animation.symbolic-family-schema-v0",
     "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v4",
     "next-action.kp.editor.visible-animation-player-focus-v0",
-    "next-action.kp.semantic-incremental-transition-compiler-focus-v0"
+    "next-action.kp.semantic-incremental-transition-compiler-focus-v0",
+    "next-action.kp.animation-grammar.conformance-baseline-v0",
+    "next-action.kp.animation-grammar.canonical-operation-core-v0",
+    "next-action.kp.animation-grammar.operation-pack-contract-v0",
+    "next-action.kp.animation-grammar.operation-spec-v0",
+    "next-action.kp.animation-grammar.operation-promotion-laws-v0",
+    "next-action.kp.animation-grammar.operation-registry-v0",
+    "next-action.kp.animation-grammar.typed-gap-v0",
+    "next-action.kp.animation-grammar.epistemic-status-v0",
+    "next-action.kp.animation-grammar.semantic-entity-provenance-v0",
+    "next-action.kp.animation-grammar.lineage-graph-v0",
+    "next-action.kp.animation-grammar.operation-lineage-binding-v0",
+    "next-action.kp.animation-grammar.semantic-scene-protocol-v0",
+    "next-action.kp.animation-grammar.salience-plan-v0",
+    "next-action.kp.animation-grammar.llm-draft-v2-v0",
+    "next-action.kp.animation-grammar.llm-repair-loop-v0",
+    "next-action.kp.animation-grammar.motif-grammar-v0",
+    "next-action.kp.animation-grammar.motif-conformance-v0",
+    "next-action.kp.animation-grammar.wrap-choreography-v0",
+    "next-action.kp.animation-grammar.copy-fanout-choreography-v0",
+    "next-action.kp.animation-grammar.distribution-choreography-v0",
+    "next-action.kp.animation-grammar.substitution-choreography-v0",
+    "next-action.kp.animation-grammar.layout-plan-v0",
+    "next-action.kp.animation-grammar.path-planner-v0",
+    "next-action.kp.animation-grammar.motion-quality-v0",
+    "next-action.kp.animation-grammar.semantic-timeline-v0",
+    "next-action.kp.animation-grammar.editor-motion-integration-v0",
+    "next-action.kp.animation-grammar.editor-authoring-controls-v0",
+    "next-action.kp.animation-grammar.generated-proof-cohort-v0",
+    "next-action.kp.animation-grammar.accessible-motif-contract-v0",
+    "next-action.kp.animation-grammar.loop-closeout-v0"
   ],
   "verificationRecords": [
     {

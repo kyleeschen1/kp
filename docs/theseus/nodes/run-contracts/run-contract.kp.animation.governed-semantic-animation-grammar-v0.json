@@ -1,0 +1,193 @@
+{
+  "id": "run-contract.kp.animation.governed-semantic-animation-grammar-v0",
+  "kind": "run-contract",
+  "title": "Governed Semantic Animation Grammar Loop",
+  "status": "ready",
+  "domain": "kp.animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation-grammar.conformance-baseline-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
+      "summary": "User-approved 30-slice contract with risks, checks, commit boundaries, and stop conditions."
+    }
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run typecheck"
+  ],
+  "allowedWork": [
+    "Only the approved 30 slices, their focused tests, project documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No live model provider, general CAS, general graph layout, second playback clock, arbitrary model-authored geometry, automatic published-project migration, or unrelated feature expansion."
+  ],
+  "goal": "Run the approved 30-slice governed semantic animation grammar and constraint-planned choreography loop.",
+  "target": "next-action.kp.animation-grammar.conformance-baseline-v0",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when focused verification fails and needs product or architecture judgment.",
+    "Stop before work outside the approved slice list.",
+    "Stop if implementation requires unsafe KaTeX internals, a second playback clock, arbitrary model geometry, a general CAS, or a general layout engine.",
+    "Stop when the approved slices are exhausted."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.animation-grammar.conformance-baseline-v0",
+      "title": "Capture baselines",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.canonical-operation-core-v0",
+      "title": "Canonical operation core",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.operation-pack-contract-v0",
+      "title": "Operation packs",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.operation-spec-v0",
+      "title": "Operation specifications",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.operation-promotion-laws-v0",
+      "title": "Promotion laws",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.operation-registry-v0",
+      "title": "Layered registry",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.typed-gap-v0",
+      "title": "Typed gaps",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.epistemic-status-v0",
+      "title": "Epistemic status",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.semantic-entity-provenance-v0",
+      "title": "Identity and provenance",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.lineage-graph-v0",
+      "title": "Lineage graph",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.operation-lineage-binding-v0",
+      "title": "Operation lineage binding",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.semantic-scene-protocol-v0",
+      "title": "Semantic scene protocol",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.salience-plan-v0",
+      "title": "Salience plans",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.llm-draft-v2-v0",
+      "title": "LLM draft v2",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.llm-repair-loop-v0",
+      "title": "Typed repair loop",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.motif-grammar-v0",
+      "title": "Executable motif grammar",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.motif-conformance-v0",
+      "title": "Motif conformance",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.wrap-choreography-v0",
+      "title": "Wrap choreography",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.copy-fanout-choreography-v0",
+      "title": "Copy fan-out choreography",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.distribution-choreography-v0",
+      "title": "Distribution choreography",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.substitution-choreography-v0",
+      "title": "Substitution choreography",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.layout-plan-v0",
+      "title": "Stable layout plan",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.path-planner-v0",
+      "title": "Path planner",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.motion-quality-v0",
+      "title": "Motion quality",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.semantic-timeline-v0",
+      "title": "Semantic timeline",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.editor-motion-integration-v0",
+      "title": "Editor motion integration",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.editor-authoring-controls-v0",
+      "title": "Editor authoring controls",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.generated-proof-cohort-v0",
+      "title": "Generated proof cohort",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.accessible-motif-contract-v0",
+      "title": "Accessible motif contract",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.animation-grammar.loop-closeout-v0",
+      "title": "Loop closeout",
+      "status": "planned"
+    }
+  ]
+}

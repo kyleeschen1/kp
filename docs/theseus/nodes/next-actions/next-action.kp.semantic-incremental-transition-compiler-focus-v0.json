@@ -2,14 +2,19 @@
   "id": "next-action.kp.semantic-incremental-transition-compiler-focus-v0",
   "kind": "next-action",
   "title": "Build Semantic Incremental Transition And LLM Authoring Path",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Execute the approved 30-slice compiler, renderer, representative equation, constrained LLM draft, and minimal diagram loop without a second clock or renderer-owned semantics.",
+  "summary": "The semantic compiler, constrained draft, generated equation, and minimal diagram loop completed in commit acf11ca; superseded by the governed animation grammar focus.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-next-step-review.md",
       "summary": "Thirty-slice proposal, expected end state, deferrals, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-semantic-incremental-transition-loop-closeout.md",
+      "summary": "Completed loop evidence and residual risks."
     }
   ],
   "dependsOn": {

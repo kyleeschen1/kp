@@ -1,0 +1,24 @@
+{
+  "id": "decision.kp.governed-semantic-animation-grammar-v0",
+  "kind": "decision",
+  "title": "Adopt Governed Semantic Animation Grammar",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Accepted after the grill-me session; governs the proposed 30-slice loop.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-15-kp-governed-semantic-animation-grammar.md",
+      "summary": "Accepted grammar, authoring, governance, motion, accessibility, and migration contracts."
+    },
+    {
+      "kind": "user-intent",
+      "intent": "Make generated animations reuse established semantic motifs, plan smooth symbolically aligned motion, support governed canonical-operation expansion, and remain suitable for LLM-authored explanations from prompts or uploaded material.",
+      "occurredAt": "2026-07-15",
+      "summary": "Outcome of the approved grill-me recommendations."
+    }
+  ],
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ]
+}

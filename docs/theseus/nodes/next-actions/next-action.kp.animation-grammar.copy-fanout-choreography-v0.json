@@ -1,0 +1,52 @@
+{
+  "id": "next-action.kp.animation-grammar.copy-fanout-choreography-v0",
+  "kind": "next-action",
+  "title": "Compile Copy And Fan-Out Choreography",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Preserve a nonzero source and move lineage-bearing descendants through reversible branch, transit, and arrival phases. Verification: standard.",
+  "severity": "high",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
+      "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation-grammar.wrap-choreography-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm test -- tests/equation-motion-plan.test.ts tests/equation-motion-sampler.test.ts tests/semantic-lineage-graph.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice advances the governed grammar while preserving deterministic semantic continuity and the existing shared player boundary."
+  ],
+  "allowedWork": [
+    "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a general CAS, general graph layout, a second playback clock, arbitrary model-authored geometry, or unrelated product work."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-compilation",
+      "weight": "high"
+    },
+    {
+      "id": "focused-verification",
+      "weight": "high"
+    }
+  ]
+}

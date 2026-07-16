@@ -1,0 +1,52 @@
+{
+  "id": "next-action.kp.animation-grammar.semantic-scene-protocol-v0",
+  "kind": "next-action",
+  "title": "Introduce Shared Semantic Scene Protocol",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Join equation and diagram entities, relations, groups, fragments, and lineage behind one renderer-neutral seam. Verification: standard.",
+  "severity": "medium",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
+      "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation-grammar.operation-lineage-binding-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm test -- tests/semantic-scene-protocol.test.ts tests/kp-diagram-scene.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice advances the governed grammar while preserving deterministic semantic continuity and the existing shared player boundary."
+  ],
+  "allowedWork": [
+    "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a general CAS, general graph layout, a second playback clock, arbitrary model-authored geometry, or unrelated product work."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-compilation",
+      "weight": "high"
+    },
+    {
+      "id": "focused-verification",
+      "weight": "high"
+    }
+  ]
+}

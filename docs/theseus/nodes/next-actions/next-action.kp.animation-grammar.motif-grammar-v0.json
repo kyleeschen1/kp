@@ -1,0 +1,52 @@
+{
+  "id": "next-action.kp.animation-grammar.motif-grammar-v0",
+  "kind": "next-action",
+  "title": "Centralize Executable Motif Grammar",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Map canonical semantic events to trusted motif compositions shared by authored and generated output. Verification: standard.",
+  "severity": "high",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
+      "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.animation-grammar.llm-repair-loop-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm test -- tests/visual-motif-composition.test.ts tests/kp-animation-visual-motif.test.ts",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice advances the governed grammar while preserving deterministic semantic continuity and the existing shared player boundary."
+  ],
+  "allowedWork": [
+    "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a general CAS, general graph layout, a second playback clock, arbitrary model-authored geometry, or unrelated product work."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-compilation",
+      "weight": "high"
+    },
+    {
+      "id": "focused-verification",
+      "weight": "high"
+    }
+  ]
+}
