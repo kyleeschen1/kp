@@ -118,13 +118,14 @@
     {
       "id": "next-action.kp.linear.continuity-gates-v0",
       "title": "Enforce linear continuity browser gates",
-      "status": "ready",
-      "summary": "Forward, rewind, and accessibility share one material owner; add quantitative boundary gates and final filmstrip review."
+      "summary": "Forward, rewind, and accessibility share one material owner; add quantitative boundary gates and final filmstrip review.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.radical.shared-bundle-primitive-v0",
       "title": "Extract the shared radical bundle primitive",
-      "status": "planned"
+      "status": "ready",
+      "summary": "The linear tranche passes continuity gates; extract the dashboard fold-bundle-unfold primitive for semantic radical succession."
     },
     {
       "id": "next-action.kp.radical.artifact-fragments-v0",

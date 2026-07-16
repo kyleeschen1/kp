@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test";
 import { equationAnimationConformanceBaseline } from "./fixtures/equation-animation-conformance-baseline.ts";
 import { kpEquationVisualMotifConformanceFixture } from "../src/rendering/equation-visual-motif-conformance.ts";
+import {
+  evaluateKpMaterialContinuityQuality
+} from "../src/animation/material-continuity-quality.ts";
 
 test("selected editor animation controls play, pause, seek, step, rewind, and reset", async ({
   page
@@ -108,7 +111,7 @@ test("selected editor animation controls play, pause, seek, step, rewind, and re
   );
   await expect(
     equationStage.locator(
-      '[data-kp-editor-equation-source] [data-kp-motion-id*="after-subtract.lhs.plus3"]'
+      '[data-kp-equation-material-owner-id="linear-solve.lhs.plus3"]'
     )
   ).toHaveCSS("opacity", "1");
   await expect(equationStage.locator("[data-kp-editor-equation-transition-id]"))
@@ -625,6 +628,79 @@ test("linear material owners survive rewind and accessibility projection", async
     "data-kp-rewind-owner-probe",
     "same-material"
   );
+});
+
+test("linear operation boundaries satisfy material continuity budgets", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.animation.linear-solve.solve-x"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  const owner = stage.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.lhs.x"]'
+  );
+
+  const poseAt = async (progress: number) => {
+    await scrubber.fill(progress.toFixed(3));
+    const transition = stage.locator(
+      "[data-kp-editor-equation-transition-id]"
+    );
+    const pose = await owner.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return {
+        ownerId: element.dataset["kpEquationMaterialOwnerId"] ?? "",
+        x: rect.x,
+        y: rect.y
+      };
+    });
+    return {
+      ...pose,
+      attention:
+        await transition.getAttribute(
+          "data-kp-editor-equation-envelope-bridge-attention"
+        ) === null
+          ? 0
+          : 0.24
+    };
+  };
+
+  const samples = [];
+  for (const [id, boundary] of [
+    ["subtract-cancel", 1 / 3],
+    ["cancel-derive", 2 / 3]
+  ] as const) {
+    const beforePrevious = await poseAt(boundary - 0.002);
+    const before = await poseAt(boundary - 0.001);
+    const after = await poseAt(boundary + 0.001);
+    const afterNext = await poseAt(boundary + 0.002);
+    samples.push({
+      id,
+      stableOwnershipRequired: true,
+      beforeOwnerId: before.ownerId,
+      afterOwnerId: after.ownerId,
+      before: {
+        x: before.x,
+        y: before.y,
+        velocityX: before.x - beforePrevious.x,
+        velocityY: before.y - beforePrevious.y,
+        attention: before.attention
+      },
+      after: {
+        x: after.x,
+        y: after.y,
+        velocityX: afterNext.x - after.x,
+        velocityY: afterNext.y - after.y,
+        attention: after.attention
+      }
+    });
+  }
+  expect(evaluateKpMaterialContinuityQuality({
+    boundaries: samples
+  })).toEqual([]);
 });
 
 test("fraction simplification renders factor, common-factor, and simplified states", async ({
