@@ -2,9 +2,21 @@
   "id": "next-action.kp.radical.native-settlement-v0",
   "kind": "next-action",
   "title": "Settle into native radical geometry",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 19 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Added a 0.89-0.95 native settlement window that cross-reconciles complete hook and overbar fragments with the native KaTeX radical at identical measured geometry, then removes temporary fragment owners before release.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Samples fragment release and native radical acquisition on one smooth settlement progress."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves the midpoint handoff retains both fragment owners, native opacity is partial, total material visibility remains one, and endpoint cleanup is exact."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +30,39 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g radical-succession",
+      "status": "passed",
+      "scope": "native radical settlement and cleanup",
+      "checkedAt": "2026-07-16T19:54:30.269Z",
+      "notes": "Manual settlement filmstrip reviewed at 0.89, 0.92, 0.949, 0.95, and 1.00."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-equation-artifact-bundle-morph.test.ts tests/kp-radical-succession-choreography.test.ts",
+      "status": "passed",
+      "scope": "bundle and endpoint geometry",
+      "checkedAt": "2026-07-16T19:54:30.343Z",
+      "notes": "Manual settlement filmstrip reviewed at 0.89, 0.92, 0.949, 0.95, and 1.00."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript settlement integration",
+      "checkedAt": "2026-07-16T19:54:30.417Z",
+      "notes": "Manual settlement filmstrip reviewed at 0.89, 0.92, 0.949, 0.95, and 1.00."
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:54:30.491Z",
+      "scope": "Theseus graph",
+      "notes": "Manual settlement filmstrip reviewed at 0.89, 0.92, 0.949, 0.95, and 1.00."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a 0.89-0.95 native settlement window that cross-reconciles complete hook and overbar fragments with the native KaTeX radical at identical measured geometry, then removes temporary fragment owners before release."
+  }
 }

@@ -924,6 +924,27 @@ test("radical-succession uses independent opposite-corner tokens and native sett
     "same-base"
   );
 
+  await scrubber.fill("0.92");
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-native-settlement-progress",
+    "0.5"
+  );
+  const settlingNativeOpacity = Number(
+    await targetRadical.evaluate((element) => getComputedStyle(element).opacity)
+  );
+  expect(settlingNativeOpacity).toBeGreaterThan(0);
+  expect(settlingNativeOpacity).toBeLessThan(1);
+  const settlingFragments = materialLayer.locator(
+    '[data-kp-equation-material-fragment-role^="radical-"]'
+  );
+  await expect(settlingFragments).toHaveCount(2);
+  const settlingFragmentOpacity = Number(
+    await settlingFragments.first().evaluate(
+      (element) => getComputedStyle(element).opacity
+    )
+  );
+  expect(settlingFragmentOpacity + settlingNativeOpacity).toBeCloseTo(1, 5);
+
   await scrubber.fill("0.95");
   await expect(baseMaterialOwner).toHaveAttribute(
     "data-kp-radical-base-owner-probe",
