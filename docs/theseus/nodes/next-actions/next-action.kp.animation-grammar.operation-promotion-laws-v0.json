@@ -2,15 +2,25 @@
   "id": "next-action.kp.animation-grammar.operation-promotion-laws-v0",
   "kind": "next-action",
   "title": "Implement Operation Promotion Laws",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Enforce proposed, experimental, and promoted lifecycle gates and require trusted primitive composition. Verification: standard.",
+  "summary": "Implemented proposed, experimental, and promoted operation lifecycle laws: proposals never execute, experimental operations require trusted primitive composition, and promotion requires complete examples, continuity, rewind, accessibility, and human-review evidence.",
   "severity": "medium",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/canonical-operation-promotion.ts",
+      "summary": "Operation lifecycle, trusted primitive, and promotion evidence laws."
+    },
+    {
+      "kind": "file",
+      "path": "tests/canonical-operation-promotion.test.ts",
+      "summary": "Proposal quarantine, experimental execution, and promotion gate coverage."
     }
   ],
   "dependsOn": {
@@ -48,5 +58,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-operation-promotion.test.ts tests/kp-animation-visual-motif.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-16T00:56:20.951Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-07-16T00:56:20.999Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T00:56:21.043Z",
+      "scope": "graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Implemented proposed, experimental, and promoted operation lifecycle laws: proposals never execute, experimental operations require trusted primitive composition, and promotion requires complete examples, continuity, rewind, accessibility, and human-review evidence."
+  }
 }
