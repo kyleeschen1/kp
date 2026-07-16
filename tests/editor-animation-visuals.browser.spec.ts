@@ -223,7 +223,10 @@ test("gestalt style switching preserves semantic progress and the mounted equati
     .locator("[data-kp-motion-id]")
     .evaluateAll((tokens) => tokens.slice(0, 8).map((token) => ({
       translate: (token as HTMLElement).style.translate,
-      scale: (token as HTMLElement).style.scale
+      scale: (token as HTMLElement).style.scale,
+      typography: (token as HTMLElement).dataset["kpEditorKatexTypography"],
+      realization:
+        (token as HTMLElement).dataset["kpEditorGestaltTokenRealization"]
     })));
 
   await style.selectOption("kp.restrained-editorial@1.0.0");
@@ -249,9 +252,25 @@ test("gestalt style switching preserves semantic progress and the mounted equati
     .locator("[data-kp-motion-id]")
     .evaluateAll((tokens) => tokens.slice(0, 8).map((token) => ({
       translate: (token as HTMLElement).style.translate,
-      scale: (token as HTMLElement).style.scale
+      scale: (token as HTMLElement).style.scale,
+      typography: (token as HTMLElement).dataset["kpEditorKatexTypography"],
+      realization:
+        (token as HTMLElement).dataset["kpEditorGestaltTokenRealization"]
     })));
-  expect(restrainedRealization).not.toEqual(organicRealization);
+  expect(organicRealization.every((token) =>
+    token.typography === "rigid" &&
+    (token.translate === "0px" || token.translate === "0px 0px") &&
+    token.scale === "1"
+  )).toBe(true);
+  expect(restrainedRealization.map(({ realization: _realization, ...pose }) => pose))
+    .toEqual(
+      organicRealization.map(({ realization: _realization, ...pose }) => pose)
+    );
+  expect(new Set(
+    restrainedRealization.map((token) => token.realization)
+  )).not.toEqual(
+    new Set(organicRealization.map((token) => token.realization))
+  );
 });
 
 test("elevated focus adds depth without changing token x/y motion or layout", async ({
@@ -438,7 +457,7 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   await scrubber.fill("0.14");
   expect(Number(await transition.getAttribute(
     "data-kp-editor-equation-reservation-progress"
-  ))).toBe(1);
+  ))).toBeGreaterThan(0.95);
   expect(Number(await materialLayer.locator(
     '[data-kp-equation-material-owner-id="linear-solve.lhs.minus3"]'
   ).evaluate(
@@ -480,6 +499,34 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
     "data-kp-material-owner-probe",
     "same-introduced-owner"
   );
+  const typography = await stage.evaluate((element) => {
+    const owner = element.querySelector<HTMLElement>(
+      '[data-kp-equation-material-owner-id="linear-solve.lhs.x"]'
+    )!;
+    const native = [...element.querySelectorAll<HTMLElement>(
+      '[data-kp-motion-id$=".lhs.x"]'
+    )].find((token) =>
+      token.closest("[data-kp-editor-equation-source]") !== null
+    )!;
+    const ownerGlyph =
+      owner.querySelector<HTMLElement>(".mathnormal, .mord") ??
+      owner.firstElementChild as HTMLElement;
+    const nativeGlyph =
+      native.querySelector<HTMLElement>(".mathnormal, .mord") ??
+      native;
+    const ownerStyle = getComputedStyle(ownerGlyph);
+    const nativeStyle = getComputedStyle(nativeGlyph);
+    return {
+      ownerFamily: ownerStyle.fontFamily,
+      nativeFamily: nativeStyle.fontFamily,
+      ownerSize: Number.parseFloat(ownerStyle.fontSize),
+      nativeSize: Number.parseFloat(nativeStyle.fontSize)
+    };
+  });
+  expect(typography.ownerFamily).toContain("KaTeX");
+  expect(typography.ownerFamily).toBe(typography.nativeFamily);
+  expect(Math.abs(typography.ownerSize - typography.nativeSize))
+    .toBeLessThan(0.01);
   await scrubber.fill("0.333");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-envelope-bridge-attention",
@@ -488,6 +535,21 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   expect(Number(await transition.getAttribute(
     "data-kp-editor-equation-envelope-bridge-progress"
   ))).toBeGreaterThan(0.45);
+  await scrubber.fill("0.43");
+  const previewClearance = await Promise.all([
+    materialLayer.locator(
+      '[data-kp-equation-material-owner-id="linear-solve.lhs.x"]'
+    ),
+    plusThree,
+    minusThree
+  ].map((locator) => locator.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { top: rect.top, bottom: rect.bottom };
+  })));
+  expect(Math.max(
+    previewClearance[1]!.bottom,
+    previewClearance[2]!.bottom
+  )).toBeLessThan(previewClearance[0]!.top + 1);
   await scrubber.fill("0.5");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-active-subgraph-nodes",
@@ -495,6 +557,7 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   );
   await expect(plusThree).toHaveCSS("opacity", "1");
   await expect(minusThree).toHaveCSS("opacity", "1");
+  await scrubber.fill("0.52");
   const meeting = await Promise.all([plusThree, minusThree].map((locator) =>
     locator.evaluate((element) => {
       const rect = element.getBoundingClientRect();
@@ -711,6 +774,96 @@ test("linear operation boundaries satisfy material continuity budgets", async ({
   expect(evaluateKpMaterialContinuityQuality({
     boundaries: samples
   })).toEqual([]);
+});
+
+test("linear invariants reflow monotonically with rigid KaTeX metrics", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.animation.linear-solve.solve-x"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  const samples: Array<{
+    x: { x: number; y: number; width: number; height: number };
+    equals: { x: number; y: number; width: number; height: number };
+  }> = [];
+  for (let progress = 0.36; progress <= 0.485; progress += 0.005) {
+    await scrubber.fill(String(Number(progress.toFixed(3))));
+    samples.push(await stage.evaluate((element) => {
+      const pose = (ownerId: string) => {
+        const owner = element.querySelector<HTMLElement>(
+          `[data-kp-equation-material-owner-id="${ownerId}"]`
+        )!;
+        const rect = owner.getBoundingClientRect();
+        return {
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2,
+          width: rect.width,
+          height: rect.height
+        };
+      };
+      return {
+        x: pose("linear-solve.lhs.x"),
+        equals: pose("linear-solve.equals")
+      };
+    }));
+  }
+  const xDeltas = samples.slice(1).map(
+    (sample, index) => sample.x.x - samples[index]!.x.x
+  );
+  const equalsDeltas = samples.slice(1).map(
+    (sample, index) => sample.equals.x - samples[index]!.equals.x
+  );
+  expect(Math.min(...xDeltas)).toBeGreaterThanOrEqual(-0.05);
+  expect(Math.max(...equalsDeltas)).toBeLessThanOrEqual(0.05);
+  expect(Math.max(...xDeltas.map(Math.abs))).toBeLessThan(4);
+  expect(Math.max(...equalsDeltas.map(Math.abs))).toBeLessThan(4);
+  for (const key of ["x", "equals"] as const) {
+    const widths = samples.map((sample) => sample[key].width);
+    const heights = samples.map((sample) => sample[key].height);
+    const ys = samples.map((sample) => sample[key].y);
+    expect(Math.max(...widths) - Math.min(...widths)).toBeLessThan(0.03);
+    expect(Math.max(...heights) - Math.min(...heights)).toBeLessThan(0.03);
+    expect(Math.max(...ys) - Math.min(...ys)).toBeLessThan(0.03);
+  }
+});
+
+test("KaTeX typography remains rigid across semantic equation families", async ({
+  page
+}) => {
+  await page.goto("/");
+  const selector = page.locator('[data-action="set-editor-animation"]');
+  for (const descriptorId of [
+    "editor-animation.animation.linear-solve.solve-x",
+    "editor-animation.sample.animation.radical-rewrite.square-root-as-power",
+    "editor-animation.sample.animation.function-wrap.apply-f",
+    "editor-animation.sample.animation.distribution.expand-a-sum",
+    "editor-animation.animation.generated.linear-algebra.dot-product.three-vector"
+  ]) {
+    await selector.selectOption(descriptorId);
+    const player = page.locator("[data-kp-editor-animation-player]");
+    await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
+    const typography = await player.locator(
+      "[data-kp-editor-equation-stage]"
+    ).evaluate((stage) =>
+      [...stage.querySelectorAll<HTMLElement>("[data-kp-motion-id]")]
+        .filter((token) => token.closest(".katex") !== null)
+        .map((token) => ({
+          mode: token.dataset["kpEditorKatexTypography"],
+          translate: token.style.translate,
+          scale: token.style.scale
+        }))
+    );
+    expect(typography.length).toBeGreaterThan(0);
+    expect(typography.every((token) =>
+      token.mode === "rigid" &&
+      (token.translate === "0px" || token.translate === "0px 0px") &&
+      token.scale === "1"
+    )).toBe(true);
+  }
 });
 
 test("fraction simplification renders factor, common-factor, and simplified states", async ({

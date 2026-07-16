@@ -146,7 +146,7 @@ test("balanced inverse terms remain absent until persistent reflow reserves spac
   );
 });
 
-test("cancellation meets at nonzero material size before collapse and survivor compaction", () => {
+test("persistent invariants reflow before cancellation meets and collapses", () => {
   const meeting = sampleKpEquationTokenMotion(cancellationGeometry(), 0.5);
   const canceling = meeting.tokens.filter(
     (token) => token.motionId.startsWith("cancel.")
@@ -154,12 +154,13 @@ test("cancellation meets at nonzero material size before collapse and survivor c
   assert.ok(canceling.every((token) => token.pose.opacity === 1));
   assert.ok(canceling.every((token) => token.pose.scale >= 0.78));
   assert.ok(canceling.every((token) => Math.abs(token.pose.x) > 0));
+  assert.ok(canceling.every((token) => token.pose.y < -24));
   assert.equal(
     meeting.linearRearrangement?.persistentReflowProgress,
-    0
+    1
   );
 
-  const met = sampleKpEquationTokenMotion(cancellationGeometry(), 0.62);
+  const met = sampleKpEquationTokenMotion(cancellationGeometry(), 0.68);
   const metTerms = met.tokens.filter(
     (token) => token.motionId.startsWith("cancel.")
   );

@@ -40,7 +40,7 @@ export function syncKpEquationMaterialLayer(input: {
       owner.className = "editor-equation-stage__material-owner";
       owner.dataset["kpEquationMaterialOwnerId"] = frame.ownerId;
       owner.setAttribute("aria-hidden", "true");
-      const visual = frame.sourceElement.cloneNode(true) as HTMLElement;
+      const visual = cloneWithComputedStyles(frame.sourceElement);
       visual.removeAttribute("data-kp-motion-id");
       visual.style.opacity = "1";
       visual.style.transform = "none";
@@ -92,4 +92,33 @@ export function syncKpEquationMaterialLayer(input: {
       owner.dataset["kpEquationMaterialFragmentRole"] = frame.fragmentRole;
     }
   }
+}
+
+function cloneWithComputedStyles(source: HTMLElement): HTMLElement {
+  const clone = source.cloneNode(true);
+  if (!(clone instanceof HTMLElement)) {
+    throw new Error("Equation material visuals must clone to HTMLElements.");
+  }
+  inlineComputedStyles(source, clone);
+  return clone;
+}
+
+function inlineComputedStyles(source: Element, clone: Element): void {
+  if (clone instanceof HTMLElement || clone instanceof SVGElement) {
+    const computed = getComputedStyle(source);
+    for (let index = 0; index < computed.length; index += 1) {
+      const property = computed.item(index);
+      clone.style.setProperty(
+        property,
+        computed.getPropertyValue(property),
+        computed.getPropertyPriority(property)
+      );
+    }
+  }
+  const sourceChildren = [...source.children];
+  const cloneChildren = [...clone.children];
+  sourceChildren.forEach((sourceChild, index) => {
+    const cloneChild = cloneChildren[index];
+    if (cloneChild !== undefined) inlineComputedStyles(sourceChild, cloneChild);
+  });
 }

@@ -675,6 +675,9 @@ function applyGestaltTokenRealization(input: {
       const identityId = token.dataset["kpMotionId"];
       if (identityId === undefined) return;
       const eligibility = resolveKpGestaltMotionEligibility(identityId);
+      // KaTeX glyphs are rigid typography. Organic character belongs in the
+      // semantic path and stagger, not periodic glyph translation or scaling.
+      const rigidKatexTypography = token.closest(".katex") !== null;
       const sample = sampleKpOrganicMotion({
         signature: deriveKpOrganicMotionSignature({
           identityId: eligibility.identityId,
@@ -687,11 +690,15 @@ function applyGestaltTokenRealization(input: {
         direction: "forward",
         microMotionAmplitude: Math.min(
           1,
-          amplitude * eligibility.microMotionScale
+          rigidKatexTypography
+            ? 0
+            : amplitude * eligibility.microMotionScale
         ),
         deformationCeiling: Math.min(
           1,
-          deformation * eligibility.deformationScale
+          rigidKatexTypography
+            ? 0
+            : deformation * eligibility.deformationScale
         )
       });
       const offset = eligibility.coordinateSpace === "path-relative"
@@ -710,6 +717,8 @@ function applyGestaltTokenRealization(input: {
         eligibility.identityId;
       token.dataset["kpEditorGestaltCoordinateSpace"] =
         eligibility.coordinateSpace;
+      token.dataset["kpEditorKatexTypography"] =
+        rigidKatexTypography ? "rigid" : "not-katex";
     });
 }
 

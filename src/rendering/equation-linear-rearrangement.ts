@@ -27,17 +27,17 @@ export function sampleKpEquationLinearRearrangementFrame(
   progress: number
 ): KpEquationLinearRearrangementFrame {
   const p = clamp01(progress);
-  const reservationProgress = smooth(windowProgress(p, 0.14, 0.38));
+  const reservationProgress = smooth(windowProgress(p, 0.1, 0.46));
   return {
     kind,
     reservationProgress,
     persistentReflowProgress: kind === "cancel-additive-inverses"
-      ? smooth(windowProgress(p, 0.64, 0.84))
+      ? smooth(windowProgress(p, 0.1, 0.46))
       : reservationProgress,
-    meetProgress: smooth(windowProgress(p, 0.38, 0.62)),
-    collapseProgress: smooth(windowProgress(p, 0.58, 0.74)),
-    resultRevealProgress: smooth(windowProgress(p, 0.7, 0.86)),
-    recognitionProgress: smooth(windowProgress(p, 0.72, 0.9))
+    meetProgress: smooth(windowProgress(p, 0.42, 0.68)),
+    collapseProgress: smooth(windowProgress(p, 0.62, 0.8)),
+    resultRevealProgress: smooth(windowProgress(p, 0.68, 0.88)),
+    recognitionProgress: smooth(windowProgress(p, 0.76, 0.92))
   };
 }
 
@@ -110,13 +110,16 @@ function sampleCancellation(
   input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
 ): readonly KpEquationTokenMotionFrameToken[] {
   const groupCenter = center(input.relation.source?.bounds);
+  const clearanceProgress = smooth(windowProgress(input.progress, 0.08, 0.3));
   return input.sourceTokens.map((token, index) => {
     const tokenCenter = center(token.localRect);
     const direction = index % 2 === 0 ? -1 : 1;
     return frameToken(token, "source", {
       opacity: 1 - input.frame.collapseProgress,
       x: (groupCenter.x - tokenCenter.x) * input.frame.meetProgress,
-      y: direction * 4 * Math.sin(Math.PI * input.frame.meetProgress),
+      y:
+        -30 * clearanceProgress +
+        direction * 4 * Math.sin(Math.PI * input.frame.meetProgress),
       scale:
         1 -
         0.16 * input.frame.meetProgress -
@@ -192,7 +195,8 @@ function windowProgress(progress: number, start: number, end: number): number {
 }
 
 function smooth(progress: number): number {
-  return progress * progress * (3 - 2 * progress);
+  return progress * progress * progress *
+    (progress * (progress * 6 - 15) + 10);
 }
 
 function clamp01(value: number): number {
