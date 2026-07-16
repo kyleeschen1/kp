@@ -10,6 +10,7 @@ import {
 } from "../semantic/asset-transformation.ts";
 import {
   bindKpTransformationDefinitionCorrespondence,
+  type KpCanonicalOperationExecutionResult,
   type KpTransformationDefinitionBindings
 } from "../semantic/transformation-definition-binding.ts";
 import { validateCorrespondenceMap } from "../semantic/correspondence.ts";
@@ -31,6 +32,7 @@ export interface CompileKpSemanticEquationTransitionInput {
   readonly bundle: KpAssetBundle;
   readonly definition?: KpSemanticTransformationDefinition | undefined;
   readonly definitionBindings?: KpTransformationDefinitionBindings | undefined;
+  readonly operationExecution?: KpCanonicalOperationExecutionResult | undefined;
   readonly unsupportedPolicy?: "typed-gap" | "legacy-fade" | undefined;
 }
 
@@ -139,6 +141,14 @@ export function compileKpSemanticEquationTransition(
 function correspondenceMapForCompilation(
   input: CompileKpSemanticEquationTransitionInput
 ) {
+  if (input.operationExecution !== undefined) {
+    if (input.operationExecution.transformationId !== input.transformation.id) {
+      throw new Error(
+        `Canonical operation execution ${input.operationExecution.transformationId} does not match transformation ${input.transformation.id}.`
+      );
+    }
+    return input.operationExecution.correspondenceMap;
+  }
   const directMap = normalizeKpSemanticTransformationCorrespondence(
     input.transformation
   );

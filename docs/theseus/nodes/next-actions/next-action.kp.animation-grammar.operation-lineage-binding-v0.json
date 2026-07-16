@@ -2,15 +2,35 @@
   "id": "next-action.kp.animation-grammar.operation-lineage-binding-v0",
   "kind": "next-action",
   "title": "Emit Identity And Lineage From Operation Binding",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Make canonical operation execution authoritative for identity and project compatibility correspondence maps. Verification: standard.",
+  "summary": "Canonical operation binding now validates role cardinality, emits authoritative semantic lineage, and projects a compatibility correspondence map consumed ahead of legacy transformation correspondence by the equation compiler.",
   "severity": "high",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/transformation-definition-binding.ts",
+      "summary": "Canonical operation execution result, role binding, lineage emission, and correspondence projection."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/semantic-equation-transition-compiler.ts",
+      "summary": "Equation compiler accepts authoritative operation execution before compatibility correspondence."
+    },
+    {
+      "kind": "file",
+      "path": "tests/transformation-definition-binding.test.ts",
+      "summary": "Canonical wrap lineage and binding cardinality coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-equation-transition-compiler.test.ts",
+      "summary": "Compiler authority ordering coverage."
     }
   ],
   "dependsOn": {
@@ -48,5 +68,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/transformation-definition-binding.test.ts tests/correspondence-composition.test.ts tests/semantic-equation-transition-compiler.test.ts",
+      "status": "passed",
+      "scope": "operation binding, correspondence compatibility, and semantic compilation",
+      "checkedAt": "2026-07-16T01:14:15.224Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T01:14:15.265Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T01:14:15.305Z",
+      "scope": "Theseus graph and event log"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Canonical operation binding now validates role cardinality, emits authoritative semantic lineage, and projects a compatibility correspondence map consumed ahead of legacy transformation correspondence by the equation compiler."
+  }
 }

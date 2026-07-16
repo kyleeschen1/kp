@@ -1,8 +1,14 @@
-import type { CorrespondenceMap } from "./correspondence.ts";
+import type { CorrespondenceMap, SelectorCorrespondenceRelationId } from "./correspondence.ts";
 import type {
   KpSemanticTransformation,
   KpSemanticTransformationDefinition
 } from "./asset-transformation.ts";
+import type { KpCanonicalOperationSpec } from "./canonical-operation-spec.ts";
+import {
+  createKpSemanticLineageGraph,
+  type KpSemanticLineageGraph,
+  type KpSemanticLineageRelation
+} from "./semantic-lineage-graph.ts";
 
 export interface KpTransformationObjectRoleBinding {
   readonly objectRole: string;
@@ -13,6 +19,61 @@ export interface KpTransformationObjectRoleBinding {
 export interface KpTransformationDefinitionBindings {
   readonly source: readonly KpTransformationObjectRoleBinding[];
   readonly target: readonly KpTransformationObjectRoleBinding[];
+}
+
+export type KpCanonicalOperationRoleBindings = Readonly<
+  Record<string, string | readonly string[]>
+>;
+
+export interface KpCanonicalOperationExecutionResult {
+  readonly kind: "canonical-operation-execution";
+  readonly transformationId: string;
+  readonly operationSpecId: string;
+  readonly roleBindings: Readonly<Record<string, readonly string[]>>;
+  readonly lineageGraph: KpSemanticLineageGraph;
+  readonly correspondenceMap: CorrespondenceMap;
+}
+
+export function executeKpCanonicalOperationBinding(input: {
+  readonly transformation: KpSemanticTransformation;
+  readonly operationSpec: KpCanonicalOperationSpec;
+  readonly roleBindings: KpCanonicalOperationRoleBindings;
+}): KpCanonicalOperationExecutionResult {
+  const roleBindings = normalizeCanonicalRoleBindings(input.operationSpec, input.roleBindings);
+  const sourceEntityIds = endpointBindings(input.operationSpec, roleBindings, "source");
+  const targetEntityIds = endpointBindings(input.operationSpec, roleBindings, "target");
+  const lineageGraph = createKpSemanticLineageGraph({
+    id: `${input.transformation.id}.lineage`,
+    sourceEntityIds,
+    targetEntityIds,
+    edges: input.operationSpec.lineage
+      .filter((template) => template.relation !== "focus")
+      .map((template) => ({
+        id: `${input.transformation.id}.${template.id}`,
+        relation: lineageRelation(template.relation, template.sourceRoleIds, template.targetRoleIds),
+        sourceEntityIds: template.sourceRoleIds.flatMap((roleId) => roleBindings[roleId] ?? []),
+        targetEntityIds: template.targetRoleIds.flatMap((roleId) => roleBindings[roleId] ?? []),
+        summary: template.summary
+      }))
+  });
+  const correspondenceMap: CorrespondenceMap = {
+    id: `${input.transformation.id}.operation-correspondence`,
+    records: input.operationSpec.lineage.map((template) => ({
+      id: `${input.transformation.id}.${template.id}`,
+      relation: template.relation,
+      sourceSelectorIds: template.sourceRoleIds.flatMap((roleId) => roleBindings[roleId] ?? []),
+      targetSelectorIds: template.targetRoleIds.flatMap((roleId) => roleBindings[roleId] ?? []),
+      summary: template.summary
+    }))
+  };
+  return {
+    kind: "canonical-operation-execution",
+    transformationId: input.transformation.id,
+    operationSpecId: input.operationSpec.id,
+    roleBindings,
+    lineageGraph,
+    correspondenceMap
+  };
 }
 
 export function bindKpTransformationDefinitionCorrespondence(input: {
@@ -154,4 +215,71 @@ function requiredSelectorBinding(
 
 function idPart(value: string): string {
   return value.replace(/[^a-zA-Z0-9_-]+/g, "-");
+}
+
+function normalizeCanonicalRoleBindings(
+  spec: KpCanonicalOperationSpec,
+  bindings: KpCanonicalOperationRoleBindings
+): Readonly<Record<string, readonly string[]>> {
+  const roleIds = new Set(spec.roles.map((role) => role.id));
+  Object.keys(bindings).forEach((roleId) => {
+    if (!roleIds.has(roleId)) throw new Error(`Operation ${spec.id} binds unknown role ${roleId}.`);
+  });
+  return Object.fromEntries(spec.roles.map((role) => {
+    const raw = bindings[role.id];
+    const values = raw === undefined ? [] : typeof raw === "string" ? [raw] : [...raw];
+    if (values.some((value) => value.trim().length === 0)) {
+      throw new Error(`Operation ${spec.id} role ${role.id} contains an empty entity id.`);
+    }
+    const cardinalityValid = role.cardinality === "exactly-one"
+      ? values.length === 1
+      : role.cardinality === "zero-or-one"
+        ? values.length <= 1
+        : values.length >= 1;
+    if (!cardinalityValid) {
+      throw new Error(
+        `Operation ${spec.id} role ${role.id} requires ${role.cardinality}; received ${values.length}.`
+      );
+    }
+    return [role.id, values];
+  }));
+}
+
+function endpointBindings(
+  spec: KpCanonicalOperationSpec,
+  bindings: Readonly<Record<string, readonly string[]>>,
+  endpoint: "source" | "target"
+): readonly string[] {
+  return [...new Set(spec.roles
+    .filter((role) => role.endpoint === endpoint)
+    .flatMap((role) => bindings[role.id] ?? []))];
+}
+
+function lineageRelation(
+  relation: SelectorCorrespondenceRelationId,
+  sourceRoleIds: readonly string[],
+  targetRoleIds: readonly string[]
+): KpSemanticLineageRelation {
+  switch (relation) {
+    case "identity":
+    case "role-change":
+      return "persist";
+    case "introduction":
+      return "introduction";
+    case "removal":
+    case "cancelation":
+      return "removal";
+    case "fan-in":
+      return "merge";
+    case "fan-out":
+      return "split";
+    case "artifact":
+      return sourceRoleIds.length === 0
+        ? "introduction"
+        : targetRoleIds.length === 0
+          ? "removal"
+          : "persist";
+    case "focus":
+      return "persist";
+  }
 }

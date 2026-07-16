@@ -13,6 +13,8 @@ import {
   compileKpSemanticEquationTransition,
   compileKpSemanticEquationTransitionResult
 } from "../src/rendering/semantic-equation-transition-compiler.ts";
+import { createKpSemanticLineageGraph } from "../src/semantic/semantic-lineage-graph.ts";
+import type { KpCanonicalOperationExecutionResult } from "../src/semantic/transformation-definition-binding.ts";
 
 const source = createKpSemanticAssetObject({
   id: "equation.before",
@@ -160,6 +162,61 @@ test("compileKpSemanticEquationTransition resolves definition roles into selecto
     source: ["before.x"],
     target: ["after.x"]
   }]);
+});
+
+test("semantic compilation consumes authoritative canonical operation execution", () => {
+  const transformation = createKpSemanticTransformation({
+    id: "transform.operation-execution",
+    transformType: "persist",
+    title: "Persist the unknown",
+    sourceObjectIds: [source.id],
+    targetObjectIds: [target.id],
+    preserves: ["identity"],
+    correspondence: [{
+      sourceSelectorId: "before.equals",
+      targetSelectorId: "after.equals",
+      preserves: ["identity", "role"]
+    }]
+  });
+  const operationExecution: KpCanonicalOperationExecutionResult = {
+    kind: "canonical-operation-execution",
+    transformationId: transformation.id,
+    operationSpecId: "kp.core.persist.test",
+    roleBindings: { before: ["before.x"], after: ["after.x"] },
+    lineageGraph: createKpSemanticLineageGraph({
+      id: "lineage.operation-execution",
+      sourceEntityIds: ["before.x"],
+      targetEntityIds: ["after.x"],
+      edges: [{
+        id: "persist-x",
+        relation: "persist",
+        sourceEntityIds: ["before.x"],
+        targetEntityIds: ["after.x"],
+        summary: "The operation preserves x."
+      }]
+    }),
+    correspondenceMap: {
+      id: "correspondence.operation-execution",
+      records: [{
+        id: "persist-x",
+        relation: "identity",
+        sourceSelectorIds: ["before.x"],
+        targetSelectorIds: ["after.x"],
+        summary: "Compatibility projection of authoritative identity."
+      }]
+    }
+  };
+
+  const ir = compileKpSemanticEquationTransition({
+    transformation,
+    bundle,
+    operationExecution
+  });
+  assert.deepEqual(ir.relations.map((relation) => ({
+    relation: relation.relation,
+    source: relation.sourceSelectorIds,
+    target: relation.targetSelectorIds
+  })), [{ relation: "identity", source: ["before.x"], target: ["after.x"] }]);
 });
 
 test("definition binding rejects missing selector roles instead of guessing", () => {
