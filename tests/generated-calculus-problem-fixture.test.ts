@@ -61,10 +61,11 @@ test("generated calculus fixtures cover derivative and integral rules", () => {
     derivativeSum.transformations.map(
       (transformation) => transformation.transformType
     ),
-    ["applyDerivativeSumRule"]
+    ["applyDerivativeSumRule", "applyDerivativePowerRulesToTerms"]
   );
   assert.deepEqual(calculusObjectLatex(derivativeSum), [
     "\\frac{d}{dx}(x^{3} + 2x)",
+    "\\frac{d}{dx}x^{3} + \\frac{d}{dx}2x",
     "3x^{2} + 2"
   ]);
   assert.deepEqual(derivativeSum.transformations[0]?.lawRefs, [
@@ -73,6 +74,15 @@ test("generated calculus fixtures cover derivative and integral rules", () => {
       level: "strict"
     }
   ]);
+  assert.deepEqual(
+    derivativeSum.transformations.map((transformation) =>
+      compileKpSemanticEquationTransitionResult({
+        transformation,
+        bundle: derivativeSum.bundle
+      }).status
+    ),
+    ["semantic", "semantic"]
+  );
 
   const integral = createGeneratedCalculusProblemFixture(
     "generated.calculus.integral.power-rule-quadratic"

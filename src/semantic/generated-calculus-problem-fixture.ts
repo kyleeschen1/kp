@@ -16,6 +16,9 @@ import {
   createKpDerivativePowerRuleSemanticRoles,
   type KpDerivativePowerRuleSemanticRole
 } from "./derivative-power-rule-semantics.ts";
+import {
+  createKpDerivativeSumRuleSemantics
+} from "./derivative-sum-rule-semantics.ts";
 
 export type GeneratedCalculusProblemFamilyId =
   | "generated.calculus.derivative"
@@ -246,6 +249,19 @@ function createGeneratedDerivativeSumProblemFixture(
   const ids = generatedDerivativeSumProblemIds(input);
   const latex = generatedDerivativeSumProblemLatex(input);
   const derivativeTerms = derivativeTermsFor(input.terms);
+  if (derivativeTerms.length !== input.terms.length) {
+    throw new Error(
+      `Generated calculus fixture ${input.id} requires explicit zero-term elimination before sum-rule fan-out.`
+    );
+  }
+  const semantics = createKpDerivativeSumRuleSemantics({
+    sourceObjectId: ids.initial,
+    distributedObjectId: ids.distributed,
+    targetObjectId: ids.derived,
+    distributionTransformationId: ids.distributeTransform,
+    resolutionTransformationId: ids.resolveTransform,
+    termCount: input.terms.length
+  });
   const bundle = createKpAssetBundle({
     id: ids.asset,
     title: input.title,
@@ -256,33 +272,43 @@ function createGeneratedDerivativeSumProblemFixture(
         latex.initial,
         [
           selector(ids.initial, "operator", "operator", "d/dx"),
-          ...calculusTermSelectors(ids.initial, "term", input.terms)
+          ...calculusTermSelectors(ids.initial, "term", input.terms),
+          ...calculusConnectorSelectors(ids.initial, input.terms)
+        ]
+      ),
+      expressionObject(
+        ids.distributed,
+        "Derivative distributed across the sum",
+        latex.distributed,
+        [
+          ...input.terms.flatMap((_term, index) => [
+            selector(ids.distributed, `operator.${index}`, "operator", "d/dx")
+          ]),
+          ...calculusTermSelectors(ids.distributed, "term", input.terms),
+          ...calculusConnectorSelectors(ids.distributed, input.terms)
         ]
       ),
       expressionObject(
         ids.derived,
         "After applying the derivative sum rule",
         latex.derived,
-        calculusTermSelectors(ids.derived, "derived.term", derivativeTerms)
+        [
+          ...calculusTermSelectors(ids.derived, "derived.term", derivativeTerms),
+          ...calculusConnectorSelectors(ids.derived, derivativeTerms)
+        ]
       )
     ]
   });
   const transformations = [
     createKpSemanticTransformation({
-      id: ids.transform,
+      id: ids.distributeTransform,
       definitionId: "definition.generated.calculus.derivative.sum-rule",
       transformType: "applyDerivativeSumRule",
-      title: "Apply the derivative sum rule",
+      title: "Distribute the derivative across the sum",
       sourceObjectIds: [ids.initial],
-      targetObjectIds: [ids.derived],
-      preserves: ["value", "structure"],
-      correspondence: derivativeTerms.map((_, index) => ({
-        sourceSelectorId: `${ids.initial}.term.${index}`,
-        targetSelectorId: `${ids.derived}.derived.term.${index}`,
-        preserves: ["role" as const],
-        summary:
-          `Term ${index + 1} is differentiated independently before recombining.`
-      })),
+      targetObjectIds: [ids.distributed],
+      preserves: ["value", "structure", "identity"],
+      correspondenceMap: semantics.distribution,
       assumptions: [
         "The derivative is linear over finite sums.",
         "Each term is a polynomial power of the differentiation variable."
@@ -292,6 +318,24 @@ function createGeneratedDerivativeSumProblemFixture(
           id: "law.calculus.derivative.sum-rule",
           level: "strict"
         }
+      ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.resolveTransform,
+      definitionId: "definition.generated.calculus.derivative.power-rule-terms",
+      transformType: "applyDerivativePowerRulesToTerms",
+      title: "Resolve each local derivative",
+      sourceObjectIds: [ids.distributed],
+      targetObjectIds: [ids.derived],
+      preserves: ["value", "structure"],
+      correspondenceMap: semantics.resolution,
+      assumptions: [
+        "Each distributed derivative acts only on its adjacent term.",
+        "Every source term has a nonzero polynomial exponent."
+      ],
+      lawRefs: [
+        { id: "law.calculus.derivative.sum-rule", level: "strict" },
+        { id: "law.calculus.derivative.power-rule", level: "strict" }
       ]
     })
   ];
@@ -445,12 +489,15 @@ interface GeneratedDerivativeSumProblemIds {
   readonly diagram: string;
   readonly trace: string;
   readonly initial: string;
+  readonly distributed: string;
   readonly derived: string;
-  readonly transform: string;
+  readonly distributeTransform: string;
+  readonly resolveTransform: string;
 }
 
 interface GeneratedDerivativeSumProblemLatex {
   readonly initial: string;
+  readonly distributed: string;
   readonly derived: string;
 }
 
@@ -498,8 +545,10 @@ function generatedDerivativeSumProblemIds(
     diagram: `diagram.${input.id}.sequence`,
     trace: `trace.${input.id}`,
     initial: `expression.${input.id}.initial`,
+    distributed: `expression.${input.id}.distributed`,
     derived: `expression.${input.id}.derived`,
-    transform: `transform.${input.id}.apply-sum-rule`
+    distributeTransform: `transform.${input.id}.distribute-sum-rule`,
+    resolveTransform: `transform.${input.id}.resolve-sum-terms`
   };
 }
 
@@ -509,6 +558,7 @@ function generatedDerivativeSumProblemLatex(
   return {
     initial:
       `\\frac{d}{d${input.variable}}(${formatPolynomialTerms(input.terms)})`,
+    distributed: formatDistributedDerivativeTerms(input.variable, input.terms),
     derived: formatPolynomialTerms(derivativeTermsFor(input.terms))
   };
 }
@@ -576,10 +626,16 @@ function createGeneratedDerivativeSumProblemTrace(
         latex: latex.initial
       },
       {
+        id: `${ids.trace}.distributed`,
+        latex: latex.distributed,
+        transformationId: ids.distributeTransform,
+        rule: "applyDerivativeSumRule"
+      },
+      {
         id: `${ids.trace}.derived`,
         latex: latex.derived,
-        transformationId: ids.transform,
-        rule: "applyDerivativeSumRule"
+        transformationId: ids.resolveTransform,
+        rule: "applyDerivativePowerRulesToTerms"
       }
     ]
   };
@@ -667,11 +723,11 @@ function createGeneratedDerivativeSumProblemFlashcards(
       title: "Predict the derivative sum-rule step",
       assetId: ids.asset,
       prompt: "Which transformation differentiates this polynomial sum?",
-      transformationIds: [ids.transform],
+      transformationIds: [ids.distributeTransform],
       timeMs: 0,
       answer: {
         kind: "transformation",
-        value: ids.transform
+        value: ids.distributeTransform
       }
     }),
     createKpFlashcardSpec({
@@ -693,8 +749,8 @@ function createGeneratedDerivativeSumProblemFlashcards(
       title: "Explain the derivative sum rule",
       assetId: ids.asset,
       prompt: "Why can each term be differentiated separately?",
-      objectIds: [ids.initial, ids.derived],
-      transformationIds: [ids.transform],
+      objectIds: [ids.initial, ids.distributed, ids.derived],
+      transformationIds: [ids.distributeTransform, ids.resolveTransform],
       timeMs: 1200,
       answer: {
         kind: "text",
@@ -808,6 +864,20 @@ function calculusTermSelectors(
   );
 }
 
+function calculusConnectorSelectors(
+  objectId: string,
+  terms: readonly GeneratedCalculusPolynomialTermSpec[]
+): readonly CreateKpAssetSelectorInput[] {
+  return terms.slice(1).map((term, index) =>
+    selector(
+      objectId,
+      `connector.${index}`,
+      "operator",
+      term.coefficient < 0 ? "-" : "+"
+    )
+  );
+}
+
 function derivativeTermsFor(
   terms: readonly GeneratedCalculusPolynomialTermSpec[]
 ): readonly GeneratedCalculusPolynomialTermSpec[] {
@@ -842,6 +912,22 @@ function formatPolynomialTerms(
   }
 
   return terms.map(formatSignedPolynomialTerm).join("");
+}
+
+function formatDistributedDerivativeTerms(
+  variable: string,
+  terms: readonly GeneratedCalculusPolynomialTermSpec[]
+): string {
+  return terms.map((term, index) => {
+    const connector = index === 0
+      ? term.coefficient < 0 ? "-" : ""
+      : term.coefficient < 0 ? " - " : " + ";
+    const unsigned = formatUnsignedPolynomialTerm({
+      ...term,
+      coefficient: Math.abs(term.coefficient)
+    });
+    return `${connector}\\frac{d}{d${variable}}${unsigned}`;
+  }).join("");
 }
 
 function formatSignedPolynomialTerm(

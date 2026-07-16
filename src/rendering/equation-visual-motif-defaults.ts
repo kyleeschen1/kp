@@ -51,6 +51,18 @@ export const defaultEquationTransformVisualMotifRules:
         "The exponent branches into coefficient and predecessor roles after the persistent base reflows."
     },
     {
+      transformationKind: "applyDerivativeSumRule",
+      descriptor: descriptorForEquationMotif("copy-fan-out"),
+      summary:
+        "The outer derivative branches into one local derivative per persistent addend."
+    },
+    {
+      transformationKind: "applyDerivativePowerRulesToTerms",
+      descriptor: descriptorForEquationMotif("merge-fan-in"),
+      summary:
+        "Each local operator, variable, and term resolves into one derivative result."
+    },
+    {
       transformationKind: "multiplyNegativeBothSidesInequality",
       descriptor: descriptorForEquationMotif("relation-flip"),
       summary: "The inequality relation turns while negative multiplication enters."

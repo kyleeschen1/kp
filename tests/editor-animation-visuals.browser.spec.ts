@@ -1851,6 +1851,77 @@ test("derivative power rule preserves exponent lineage through semantic arcs", a
   );
 });
 
+test("derivative sum rule fans one operator across persistent addends before resolving", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.animation.generated.calculus.derivative.sum-rule-polynomial"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const transition = player.locator("[data-kp-editor-equation-transition-id]");
+
+  await scrubber.fill("0.25");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-transition-id",
+    /distribute-sum-rule/
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-semantic-motion",
+    "active"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-motif",
+    "copy-fan-out"
+  );
+  const sourceTerms = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id*=".initial.term."]'
+  );
+  await expect(sourceTerms).toHaveCount(2);
+  await expect(sourceTerms.nth(0)).toHaveCSS("opacity", "1");
+  await expect(sourceTerms.nth(1)).toHaveCSS("opacity", "1");
+  const localOperators = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*=".distributed.operator."]'
+  );
+  await expect(localOperators).toHaveCount(2);
+  await expect(localOperators.nth(0)).toHaveCSS("opacity", "1");
+  await expect(localOperators.nth(1)).toHaveCSS("opacity", "1");
+  await expect(localOperators.nth(0)).toHaveAttribute(
+    "data-kp-equation-motion-path-variant",
+    "arc-above"
+  );
+  await expect(localOperators.nth(1)).toHaveAttribute(
+    "data-kp-equation-motion-path-variant",
+    "arc-below"
+  );
+
+  await scrubber.fill("0.75");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-transition-id",
+    /resolve-sum-terms/
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-motif",
+    "merge-fan-in"
+  );
+  const localInputs = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id]'
+  );
+  await expect(localInputs).toHaveCount(5);
+  expect(await localInputs.evaluateAll((elements) => elements.some((element) =>
+    element.getAttribute("data-kp-equation-motion-path-variant")?.startsWith("arc-")
+  ))).toBe(true);
+
+  await scrubber.fill("1");
+  const resultTerms = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*=".derived.term."]'
+  );
+  await expect(resultTerms).toHaveCount(2);
+  await expect(resultTerms.nth(0)).toHaveCSS("opacity", "1");
+  await expect(resultTerms.nth(1)).toHaveCSS("opacity", "1");
+});
+
 test("matrix-vector family animation visibly resolves the result vector", async ({ page }) => {
   await page.goto("/");
   await page.locator('[data-action="set-editor-animation"]').selectOption(

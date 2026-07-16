@@ -33,11 +33,6 @@ test("generated calculus equations expose exact derivative and integral transiti
       "3x^{2}"
     ],
     [
-      "animation.generated.calculus.derivative.sum-rule-polynomial",
-      "\\frac{d}{dx}(x^{3} + 2x)",
-      "3x^{2} + 2"
-    ],
-    [
       "animation.generated.calculus.integral.power-rule-quadratic",
       "\\int 6x^{2}\\,dx",
       "2x^{3} + C"
@@ -53,6 +48,31 @@ test("generated calculus equations expose exact derivative and integral transiti
       index === 0 ? "derivative-power" : "artifact-replace"
     );
   }
+
+  const distributed = frame(
+    "animation.generated.calculus.derivative.sum-rule-polynomial",
+    0.25
+  );
+  assert.equal(
+    distributed.projection.transitions[0]?.source[0]?.latex,
+    "\\frac{d}{dx}(x^{3} + 2x)"
+  );
+  assert.equal(
+    distributed.projection.transitions[0]?.target[0]?.latex,
+    "\\frac{d}{dx}x^{3} + \\frac{d}{dx}2x"
+  );
+  assert.equal(distributed.motifs[0]?.kind, "copy-fan-out");
+
+  const resolved = frame(
+    "animation.generated.calculus.derivative.sum-rule-polynomial",
+    0.75
+  );
+  assert.equal(
+    resolved.projection.transitions[0]?.source[0]?.latex,
+    "\\frac{d}{dx}x^{3} + \\frac{d}{dx}2x"
+  );
+  assert.equal(resolved.projection.transitions[0]?.target[0]?.latex, "3x^{2} + 2");
+  assert.equal(resolved.motifs[0]?.kind, "merge-fan-in");
 });
 
 test("FTC equation animation expands its comparison into both visible theorem forms", () => {

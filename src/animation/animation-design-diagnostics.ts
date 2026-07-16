@@ -51,6 +51,8 @@ const operationSpecificTransformTypes = new Set([
   "rewritePowerAsRoot",
   "computeDotProduct",
   "applyDerivativePowerRule",
+  "applyDerivativeSumRule",
+  "applyDerivativePowerRulesToTerms",
   "substituteValue"
 ]);
 

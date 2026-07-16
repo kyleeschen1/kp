@@ -109,7 +109,8 @@
     {
       "id": "next-action.kp.animation.derivative-sum-lineage-v1",
       "title": "Implement derivative sum-rule fan-out",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.derivative-sum-lineage-v1 in Semantic Motion Animation Library Long Loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.antiderivative-power-lineage-v1",
