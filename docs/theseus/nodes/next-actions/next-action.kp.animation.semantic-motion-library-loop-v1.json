@@ -1,0 +1,71 @@
+{
+  "id": "next-action.kp.animation.semantic-motion-library-loop-v1",
+  "kind": "next-action",
+  "title": "Build the semantic motion animation library",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Execute the user-approved 28-slice animation redesign in dependency order: eliminate nested animation scrollbars without clipping or whole-equation scaling, then implement calculus lineage, radical succession, fan-out and fan-in, algebra motifs, indexed accumulation, LLM authoring, and promotion gates.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-animation-design-diagnostic-audit.md",
+      "summary": "Catalog audit defining the operation-family repair order."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/animation-design-diagnostic-language.md",
+      "summary": "Semantic, geometric, typographic, and promotion constraints for the loop."
+    },
+    {
+      "kind": "user-intent",
+      "intent": "User approved the 28-slice semantic animation long loop, including eliminating scrollbars inside animations.",
+      "occurredAt": "2026-07-16",
+      "summary": "Explicit user approval authorizes the stored run contract."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts",
+    "npm test"
+  ],
+  "expectedLearning": [
+    "Whether canonical semantic lineage can replace fade-dominant generated equation transitions.",
+    "Whether responsive native layout can eliminate nested animation scrollbars without clipping ink or scaling whole equations."
+  ],
+  "allowedWork": [
+    "Only the 28 stored animation slices and their verification evidence."
+  ],
+  "disallowedWork": [
+    "No unrelated dashboard, editor, graph, export, or page-scroll redesign."
+  ],
+  "criteria": [
+    {
+      "id": "all-28-slices-recorded",
+      "weight": "high"
+    },
+    {
+      "id": "zero-nested-animation-scrollbars",
+      "weight": "high"
+    },
+    {
+      "id": "no-fade-dominant-promoted-continuants",
+      "weight": "high"
+    },
+    {
+      "id": "native-settlement-and-rewind-pass",
+      "weight": "high"
+    },
+    {
+      "id": "llm-operations-compile-without-authored-keyframes",
+      "weight": "high"
+    }
+  ]
+}

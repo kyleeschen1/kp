@@ -58,7 +58,9 @@
     "next-action.kp.gestalt.elevated-focus-experiment-v0",
     "next-action.kp.gestalt.generated-promotion-gate-v0",
     "next-action.kp.gestalt.loop-closeout-v0",
-    "next-action.kp.animation.material-continuity-loop-v0"
+    "next-action.kp.animation.material-continuity-loop-v0",
+    "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v5",
+    "next-action.kp.animation.semantic-motion-library-loop-v1"
   ],
   "verificationRecords": [
     {
