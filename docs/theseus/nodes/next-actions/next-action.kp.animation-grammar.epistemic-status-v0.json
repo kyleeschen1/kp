@@ -2,15 +2,25 @@
   "id": "next-action.kp.animation-grammar.epistemic-status-v0",
   "kind": "next-action",
   "title": "Add Epistemic Status And Disclosure",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Represent valid, hypothetical, unverified, misconception, invalid, and counterexample states separately from disclosure timing. Verification: standard.",
+  "summary": "Added explicit epistemic annotations for valid, hypothetical, unverified, misconception, invalid, and counterexample states and transitions, with correctness disclosure sampled independently by progress, checkpoint, or learner request.",
   "severity": "low",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/epistemic-status.ts",
+      "summary": "Renderer-neutral state and transition status plus independently sampled disclosure policy."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-epistemic-status.test.ts",
+      "summary": "All statuses, intentional invalidity, delayed reveal, and policy validation."
     }
   ],
   "dependsOn": {
@@ -48,5 +58,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-epistemic-status.test.ts",
+      "status": "passed",
+      "scope": "epistemic status and disclosure contract",
+      "checkedAt": "2026-07-16T01:05:24.488Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T01:05:24.536Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T01:05:24.579Z",
+      "scope": "Theseus graph and event log"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added explicit epistemic annotations for valid, hypothetical, unverified, misconception, invalid, and counterexample states and transitions, with correctness disclosure sampled independently by progress, checkpoint, or learner request."
+  }
 }
