@@ -71,6 +71,11 @@ test("animation asset visual motif timeline uses definition-backed defaults", ()
       ]
     ]
   );
+  assert.deepEqual(timeline.segments[0]?.canonicalOperationIds, [
+    "kp.core.persist",
+    "kp.core.introduce"
+  ]);
+  assert.deepEqual(timeline.segments[0]?.trustedMotifIds, ["persist", "introduce"]);
   assert.deepEqual(
     checkKpAnimationAssetVisualMotifDefinitionCoverage({
       animation,

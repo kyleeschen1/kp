@@ -16,6 +16,8 @@ import {
   type EquationVisualMotifKind,
   type EquationVisualMotifPhaseId
 } from "./visual-motif.ts";
+import { kpGeneratedAlgebraOperationEntries } from "../semantic/canonical-operation-registry.ts";
+import { compileKpExecutableMotifComposition } from "./executable-motif-grammar.ts";
 
 export type EquationTransformVisualMotifRule = TransformTreeVisualMotifRule<
   EquationVisualMotifKind,
@@ -31,6 +33,8 @@ export const defaultEquationTransformVisualMotifRules:
     {
       transformationKind: "unwrapFunction",
       descriptor: descriptorForEquationMotif("unwrap"),
+      canonicalOperationIds: ["kp.core.unwrap"],
+      trustedMotifIds: ["unwrap"],
       summary: "Function wrapper artifacts exit while persistent arguments shift."
     },
     {
@@ -271,11 +275,22 @@ function createGeneratedAlgebraEquationMotifRule(
       `No generated algebra transform definition for ${motifDefault.transformType}.`
     );
   }
+  const operationEntry = kpGeneratedAlgebraOperationEntries.find(
+    (entry) => entry.sourceDefinitionId === definition.id
+  );
+  if (operationEntry === undefined) {
+    throw new Error(`No canonical operation registry entry for ${definition.id}.`);
+  }
+  const composition = compileKpExecutableMotifComposition(
+    operationEntry.canonicalComposition
+  );
 
   return {
     transformationKind: definition.transformType,
     descriptor: descriptorForEquationMotif(motifDefault.motifKind),
     definitionIds: [definition.id],
+    canonicalOperationIds: [...composition.operationIds],
+    trustedMotifIds: composition.steps.map((step) => step.motifId),
     summary: motifDefault.summary
   };
 }

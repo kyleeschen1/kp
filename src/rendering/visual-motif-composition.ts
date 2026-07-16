@@ -23,6 +23,8 @@ export interface TransformTreeVisualMotifRule<
   readonly transformationKind: string;
   readonly descriptor: VisualMotifDescriptor<TKind, TPrimitiveId, TPhaseId>;
   readonly definitionIds?: readonly string[] | undefined;
+  readonly canonicalOperationIds?: readonly string[] | undefined;
+  readonly trustedMotifIds?: readonly string[] | undefined;
   readonly summary?: string | undefined;
 }
 
@@ -68,6 +70,8 @@ export interface TransformTreeVisualMotifSegment<
   readonly sourceObjectIds: readonly string[];
   readonly targetObjectIds: readonly string[];
   readonly definitionIds?: readonly string[] | undefined;
+  readonly canonicalOperationIds?: readonly string[] | undefined;
+  readonly trustedMotifIds?: readonly string[] | undefined;
   readonly motionPrimitiveIds: readonly TPrimitiveId[];
   readonly phaseIds: readonly TPhaseId[];
   readonly summary: string;
@@ -223,6 +227,8 @@ function createSegmentForLeaf<
     sourceObjectIds: [...leaf.sourceObjectIds],
     targetObjectIds: [...leaf.targetObjectIds],
     definitionIds: [...(rule.definitionIds ?? [])],
+    canonicalOperationIds: [...(rule.canonicalOperationIds ?? [])],
+    trustedMotifIds: [...(rule.trustedMotifIds ?? [])],
     motionPrimitiveIds: [...rule.descriptor.motionPrimitiveIds],
     phaseIds: [...rule.descriptor.phaseIds],
     summary: rule.summary ?? rule.descriptor.summary

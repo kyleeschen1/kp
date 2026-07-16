@@ -26,6 +26,11 @@ import type {
   EquationVisualMotifKind,
   EquationVisualMotifPhaseId
 } from "../src/rendering/visual-motif.ts";
+import {
+  compileKpExecutableMotifComposition,
+  kpExecutableMotifGrammar
+} from "../src/rendering/executable-motif-grammar.ts";
+import { kpCanonicalOperationCore } from "../src/semantic/canonical-operation.ts";
 
 type EquationMotifRule = TransformTreeVisualMotifRule<
   EquationVisualMotifKind,
@@ -395,6 +400,32 @@ test("default equation visual motif rules cover promoted generated transform def
       ]
     ]
   );
+});
+
+test("canonical semantic events compile through one trusted executable motif grammar", () => {
+  assert.deepEqual(
+    kpExecutableMotifGrammar.map((entry) => entry.operationId),
+    kpCanonicalOperationCore.map((operation) => operation.id)
+  );
+  const wrap = compileKpExecutableMotifComposition(["kp.core.persist", "kp.core.wrap"]);
+  assert.deepEqual(wrap.steps.map((step) => [step.motifId, step.primitiveIds]), [
+    ["persist", ["preserve-identity"]],
+    ["wrap", ["preserve-identity", "enclose"]]
+  ]);
+});
+
+test("generated distribution carries canonical fan-out grammar beside its compatibility motif", () => {
+  const rule = defaultEquationTransformVisualMotifRules.find(
+    (candidate) => candidate.transformationKind === "distributeMultiplication"
+  );
+  assert.equal(rule?.descriptor.kind, "artifact-replace");
+  assert.deepEqual(rule?.canonicalOperationIds, [
+    "kp.core.persist",
+    "kp.core.fan-out",
+    "kp.core.eliminate",
+    "kp.core.reorder"
+  ]);
+  assert.deepEqual(rule?.trustedMotifIds, ["persist", "fan-out", "eliminate", "reorder"]);
 });
 
 test("default equation visual motif coverage law reports missing promoted definitions", () => {
