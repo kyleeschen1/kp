@@ -15,6 +15,11 @@ import {
   type KpEditorAnimationAuthoringControlId,
   type KpEditorAnimationAuthoringState
 } from "./animation-authoring-controls.ts";
+import {
+  createKpEditorAnimationGestaltInspection,
+  parseKpEditorGestaltStyleRef
+} from "./animation-gestalt-inspector.ts";
+import type { KpGestaltStyleRef } from "../animation/gestalt-style.ts";
 
 export const KP_EDITOR_ANIMATION_FRAME_EVENT = "kp-editor-animation-frame";
 export const KP_EDITOR_ANIMATION_REGENERATION_EVENT =
@@ -22,6 +27,7 @@ export const KP_EDITOR_ANIMATION_REGENERATION_EVENT =
 
 const sessions = new WeakMap<HTMLElement, KpEditorAnimationPlaybackSession>();
 const authoringStates = new WeakMap<HTMLElement, KpEditorAnimationAuthoringState>();
+const gestaltStyles = new WeakMap<HTMLElement, KpGestaltStyleRef>();
 const frameRequests = new WeakMap<HTMLElement, number>();
 
 export function hydrateKpEditorAnimationPlayers(root: ParentNode): void {
@@ -50,6 +56,7 @@ export function disposeKpEditorAnimationPlayers(root: ParentNode): void {
       player.removeEventListener("keydown", handlePlayerKeydown);
       sessions.delete(player);
       authoringStates.delete(player);
+      gestaltStyles.delete(player);
       player.dataset["kpEditorAnimationDisposed"] = "true";
       delete player.dataset["kpEditorAnimationHydrated"];
     });
@@ -117,6 +124,12 @@ function hydrateKpEditorAnimationPlayer(player: HTMLElement): void {
   sessions.set(player, session);
   const authoring = createKpEditorAnimationAuthoringState();
   authoringStates.set(player, authoring);
+  gestaltStyles.set(
+    player,
+    parseKpEditorGestaltStyleRef(
+      player.dataset["kpEditorAnimationGestaltSelectedStyle"]
+    )
+  );
   syncAuthoringData(player, authoring);
   syncAccessibilityData(player, "system");
   player.dataset["kpEditorAnimationHydrated"] = "true";
@@ -160,6 +173,14 @@ function handlePlayerInput(event: Event): void {
 
   if (!(player instanceof HTMLElement) || !(input instanceof HTMLInputElement || input instanceof HTMLSelectElement)) return;
 
+  if (
+    input instanceof HTMLSelectElement &&
+    input.dataset["kpEditorAnimationGestaltStyleControl"] !== undefined
+  ) {
+    selectGestaltStyle(player, input.value);
+    return;
+  }
+
   if (input instanceof HTMLSelectElement && input.dataset["kpEditorAnimationAccessibilityControl"] !== undefined) {
     syncAccessibilityData(player, input.value);
     const session = sessions.get(player);
@@ -185,6 +206,26 @@ function handlePlayerInput(event: Event): void {
     type: "seek",
     progress: Number(input.value)
   });
+}
+
+function selectGestaltStyle(player: HTMLElement, value: string): void {
+  const selectedStyle = parseKpEditorGestaltStyleRef(value);
+  gestaltStyles.set(player, selectedStyle);
+  const session = sessions.get(player);
+  if (session === undefined) return;
+  const paused = session.player.playbackStatus === "playing"
+    ? reduceKpEditorAnimationPlaybackSession(session, {
+        type: "pause",
+        nowMs: performance.now()
+      })
+    : session;
+  const resampled = reduceKpEditorAnimationPlaybackSession(paused, {
+    type: "seek",
+    progress: paused.player.progress
+  });
+  sessions.set(player, resampled);
+  cancelPlayerFrame(player);
+  syncPlayerDom(player, resampled);
 }
 
 function handlePlayerKeydown(event: KeyboardEvent): void {
@@ -354,11 +395,120 @@ function syncPlayerDom(
     state.playbackStatus === "playing" ||
     player.dataset["kpEditorAnimationAccessibilityMode"] === "static";
   if (pauseButton !== null) pauseButton.disabled = state.playbackStatus !== "playing";
+  syncGestaltInspection(player, session);
 
   player.dispatchEvent(new CustomEvent(KP_EDITOR_ANIMATION_FRAME_EVENT, {
     bubbles: true,
     detail: state
   }));
+}
+
+function syncGestaltInspection(
+  player: HTMLElement,
+  session: KpEditorAnimationPlaybackSession
+): void {
+  const selectedStyle = gestaltStyles.get(player) ??
+    parseKpEditorGestaltStyleRef(undefined);
+  const inspection = createKpEditorAnimationGestaltInspection({
+    animation: session.animation,
+    state: session.player,
+    selectedStyle
+  });
+  player.dataset["kpEditorAnimationGestaltPinnedStyle"] =
+    inspection.pinnedStyleKey;
+  player.dataset["kpEditorAnimationGestaltSelectedStyle"] =
+    inspection.selectedStyleKey;
+  player.dataset["kpEditorAnimationGestaltStatus"] = inspection.status;
+  player.dataset["kpEditorAnimationGestaltFingerprint"] =
+    inspection.resolvedStyle.fingerprint;
+  player.dataset["kpEditorAnimationGestaltEnvelopePhase"] =
+    inspection.envelopePhaseLabel;
+  if (inspection.choreographyPlanId === undefined) {
+    delete player.dataset["kpEditorAnimationChoreographyPlanId"];
+  } else {
+    player.dataset["kpEditorAnimationChoreographyPlanId"] =
+      inspection.choreographyPlanId;
+  }
+  const styleControl = player.querySelector<HTMLSelectElement>(
+    "[data-kp-editor-animation-gestalt-style-control]"
+  );
+  if (styleControl !== null) styleControl.value = inspection.selectedStyleKey;
+  player.style.setProperty(
+    "--kp-editor-gestalt-micro-motion",
+    String(inspection.channels.microMotion?.amplitude ?? 0)
+  );
+  player.style.setProperty(
+    "--kp-editor-gestalt-focus-strength",
+    String(inspection.channels.focus?.strength ?? 0)
+  );
+  player.style.setProperty(
+    "--kp-editor-gestalt-context-dimming",
+    String(inspection.channels.context?.dimming ?? 0)
+  );
+  replaceText(
+    player,
+    "[data-kp-editor-gestalt-status]",
+    inspection.status
+  );
+  replaceText(
+    player,
+    "[data-kp-editor-gestalt-pinned-style]",
+    inspection.pinnedStyleKey
+  );
+  replaceText(
+    player,
+    "[data-kp-editor-gestalt-selected-style]",
+    inspection.selectedStyleKey
+  );
+  replaceText(
+    player,
+    "[data-kp-editor-gestalt-resolved-chain]",
+    inspection.resolvedChainLabel
+  );
+  replaceText(
+    player,
+    "[data-kp-editor-gestalt-envelope-phase]",
+    inspection.envelopePhaseLabel
+  );
+  replaceText(
+    player,
+    "[data-kp-editor-gestalt-focus-group]",
+    inspection.focusGroupLabel
+  );
+  replaceText(
+    player,
+    "[data-kp-editor-gestalt-salience]",
+    inspection.salienceLabel
+  );
+  replaceText(
+    player,
+    "[data-kp-editor-gestalt-traversal]",
+    inspection.traversalLabel
+  );
+  replaceText(
+    player,
+    "[data-kp-editor-gestalt-capabilities]",
+    inspection.capabilityLabel
+  );
+  const warnings = player.querySelector<HTMLElement>(
+    "[data-kp-editor-gestalt-warnings]"
+  );
+  warnings?.replaceChildren(
+    ...inspection.warnings.map((warning) => {
+      const item = document.createElement("li");
+      item.textContent = warning;
+      return item;
+    })
+  );
+}
+
+function replaceText(
+  root: ParentNode,
+  selector: string,
+  value: string
+): void {
+  root.querySelector<HTMLElement>(selector)
+    ?.replaceChildren(document.createTextNode(value));
 }
 
 function playerStatusLabel(session: KpEditorAnimationPlaybackSession): string {

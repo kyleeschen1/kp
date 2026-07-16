@@ -172,6 +172,75 @@ test("accessible animation presentations share semantic checkpoints and keyboard
   await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "rewind");
 });
 
+test("gestalt style switching preserves semantic progress and the mounted equation stage", async ({
+  page
+}) => {
+  await page.goto("/");
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const style = player.locator(
+    "[data-kp-editor-animation-gestalt-style-control]"
+  );
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  const diagnostics = player.locator(
+    "[data-kp-editor-animation-gestalt-diagnostics]"
+  );
+
+  await scrubber.fill("0.43");
+  await stage.evaluate((element) => {
+    element.dataset["kpGestaltPersistentStageProbe"] = "mounted";
+  });
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-gestalt-selected-style",
+    "kp.organic-subtle@1.0.0"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-choreography-plan-id",
+    /^choreography\./
+  );
+  await expect(diagnostics.locator("[data-kp-editor-gestalt-envelope-phase]"))
+    .toContainText(/orient|reflow|act|settle|release/);
+  await expect(diagnostics.locator("[data-kp-editor-gestalt-salience]"))
+    .toContainText(/nodes/);
+  await expect(diagnostics.locator("[data-kp-editor-gestalt-traversal]"))
+    .not.toHaveText("pending");
+  await expect(diagnostics.locator("[data-kp-editor-gestalt-capabilities]"))
+    .toContainText("compatible");
+  const organicRealization = await stage
+    .locator("[data-kp-motion-id]")
+    .evaluateAll((tokens) => tokens.slice(0, 8).map((token) => ({
+      translate: (token as HTMLElement).style.translate,
+      scale: (token as HTMLElement).style.scale
+    })));
+
+  await style.selectOption("kp.restrained-editorial@1.0.0");
+  await expect(scrubber).toHaveValue("0.43");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-status", "paused");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-gestalt-selected-style",
+    "kp.restrained-editorial@1.0.0"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-gestalt-persistent-stage-probe",
+    "mounted"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-gestalt-style",
+    "kp.restrained-editorial@1.0.0"
+  );
+  await expect(diagnostics.locator("[data-kp-editor-gestalt-selected-style]"))
+    .toHaveText("kp.restrained-editorial@1.0.0");
+  await expect(diagnostics.locator("[data-kp-editor-gestalt-resolved-chain]"))
+    .toContainText("kp.restrained-editorial@1.0.0");
+  const restrainedRealization = await stage
+    .locator("[data-kp-motion-id]")
+    .evaluateAll((tokens) => tokens.slice(0, 8).map((token) => ({
+      translate: (token as HTMLElement).style.translate,
+      scale: (token as HTMLElement).style.scale
+    })));
+  expect(restrainedRealization).not.toEqual(organicRealization);
+});
+
 test("editor animation player disposes cleanly across selection and dashboard rerenders", async ({
   page
 }) => {

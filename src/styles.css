@@ -1864,11 +1864,34 @@ h2 {
   text-transform: capitalize;
 }
 
+.editor-animation-player__accessibility,
+.editor-animation-player__gestalt-style {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: #526173;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.editor-animation-player__accessibility select,
+.editor-animation-player__gestalt-style select {
+  min-width: 10rem;
+  border: 1px solid #aebdcc;
+  border-radius: 6px;
+  padding: 0.34rem 0.45rem;
+  color: #27364a;
+  background: #ffffff;
+  font: inherit;
+}
+
+.editor-animation-gestalt-diagnostics,
 .editor-animation-diagnostics {
   border-top: 1px solid #e3e8ef;
   background: #f8fafc;
 }
 
+.editor-animation-gestalt-diagnostics summary,
 .editor-animation-diagnostics summary {
   display: flex;
   justify-content: space-between;
@@ -1881,16 +1904,19 @@ h2 {
   text-transform: capitalize;
 }
 
+.editor-animation-gestalt-diagnostics summary span,
 .editor-animation-diagnostics summary span {
   color: #64748b;
   font-weight: 700;
 }
 
+.editor-animation-gestalt-diagnostics__body,
 .editor-animation-diagnostics__body {
   border-top: 1px solid #e3e8ef;
   padding: 0.85rem 1.1rem 1rem;
 }
 
+.editor-animation-gestalt-diagnostics__body dl,
 .editor-animation-diagnostics__body dl {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
@@ -1898,6 +1924,7 @@ h2 {
   margin: 0;
 }
 
+.editor-animation-gestalt-diagnostics__body dt,
 .editor-animation-diagnostics__body dt {
   color: #64748b;
   font-size: 0.64rem;
@@ -1905,6 +1932,7 @@ h2 {
   text-transform: uppercase;
 }
 
+.editor-animation-gestalt-diagnostics__body dd,
 .editor-animation-diagnostics__body dd {
   margin: 0.12rem 0 0;
   overflow-wrap: anywhere;
@@ -1912,6 +1940,7 @@ h2 {
   font-size: 0.7rem;
 }
 
+.editor-animation-gestalt-diagnostics__body ul,
 .editor-animation-diagnostics__body ul {
   display: grid;
   gap: 0.4rem;
@@ -1922,6 +1951,7 @@ h2 {
   list-style: none;
 }
 
+.editor-animation-gestalt-diagnostics__body li,
 .editor-animation-diagnostics__body li {
   display: grid;
   gap: 0.12rem;
@@ -1930,6 +1960,10 @@ h2 {
   color: #526173;
   background: #ffffff;
   font-size: 0.7rem;
+}
+
+.editor-animation-gestalt-diagnostics__body ul:empty {
+  display: none;
 }
 
 .editor-animation-diagnostics__body li[data-kp-editor-animation-diagnostic-severity="error"] {

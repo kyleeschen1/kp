@@ -8,6 +8,10 @@ import {
   createKpEditorAnimationAuthoringState,
   type KpEditorAnimationAuthoringState
 } from "./animation-authoring-controls.ts";
+import {
+  kpOrganicSubtleStyleRef,
+  kpRestrainedEditorialStyleRef
+} from "../animation/gestalt-base-styles.ts";
 
 export function renderKpEditorAnimationPlayerShell(input: {
   readonly descriptor: KpEditorAnimationDescriptor;
@@ -21,7 +25,7 @@ export function renderKpEditorAnimationPlayerShell(input: {
     descriptor.controlKinds.includes(kind);
 
   return `
-    <section class="editor-animation-player" data-kp-editor-animation-player data-kp-editor-animation-descriptor-id="${escapeHtml(player.descriptorId)}" data-kp-editor-animation-id="${escapeHtml(player.animationId)}" data-kp-editor-animation-status="${player.playbackStatus}" data-kp-editor-animation-direction="${player.direction}" data-kp-editor-animation-progress="${player.progress}" aria-label="${escapeHtml(descriptor.title)} animation player" aria-keyshortcuts="Space ArrowLeft ArrowRight Home End R" tabindex="0">
+    <section class="editor-animation-player" data-kp-editor-animation-player data-kp-editor-animation-descriptor-id="${escapeHtml(player.descriptorId)}" data-kp-editor-animation-id="${escapeHtml(player.animationId)}" data-kp-editor-animation-status="${player.playbackStatus}" data-kp-editor-animation-direction="${player.direction}" data-kp-editor-animation-progress="${player.progress}" data-kp-editor-animation-gestalt-pinned-style="${styleKey(kpOrganicSubtleStyleRef)}" data-kp-editor-animation-gestalt-selected-style="${styleKey(kpOrganicSubtleStyleRef)}" aria-label="${escapeHtml(descriptor.title)} animation player" aria-keyshortcuts="Space ArrowLeft ArrowRight Home End R" tabindex="0">
       <div class="editor-animation-player__stage" data-kp-editor-animation-stage data-kp-editor-animation-surface="${player.surface.kind}">
         ${player.surface.slotKinds.map((slotKind) => `
           <div class="editor-animation-player__surface editor-animation-player__surface--${slotKind}" data-kp-editor-animation-surface-slot="${slotKind}" aria-label="${surfaceLabel(slotKind)}">
@@ -56,10 +60,41 @@ export function renderKpEditorAnimationPlayerShell(input: {
             <option value="narrated">narrated</option>
           </select>
         </label>
+        <label class="editor-animation-player__gestalt-style">Gestalt style
+          <select data-kp-editor-animation-gestalt-style-control aria-label="Animation gestalt style">
+            <option value="${styleKey(kpOrganicSubtleStyleRef)}">organic subtle</option>
+            <option value="${styleKey(kpRestrainedEditorialStyleRef)}">restrained editorial</option>
+          </select>
+        </label>
         <output data-kp-editor-animation-narration aria-live="polite">Animation checkpoint</output>
       </div>
+      ${renderGestaltDiagnostics()}
       ${renderAuthoringControls(authoring)}
     </section>
+  `;
+}
+
+function renderGestaltDiagnostics(): string {
+  return `
+    <details class="editor-animation-gestalt-diagnostics" data-kp-editor-animation-gestalt-diagnostics>
+      <summary>
+        <span>Choreography &amp; style</span>
+        <span data-kp-editor-gestalt-status>Inspecting</span>
+      </summary>
+      <div class="editor-animation-gestalt-diagnostics__body">
+        <dl>
+          <div><dt>Pinned style</dt><dd data-kp-editor-gestalt-pinned-style>${styleKey(kpOrganicSubtleStyleRef)}</dd></div>
+          <div><dt>Selected style</dt><dd data-kp-editor-gestalt-selected-style>${styleKey(kpOrganicSubtleStyleRef)}</dd></div>
+          <div><dt>Resolved chain</dt><dd data-kp-editor-gestalt-resolved-chain>pending</dd></div>
+          <div><dt>Envelope phase</dt><dd data-kp-editor-gestalt-envelope-phase>pending</dd></div>
+          <div><dt>Focus group</dt><dd data-kp-editor-gestalt-focus-group>pending</dd></div>
+          <div><dt>Salience graph</dt><dd data-kp-editor-gestalt-salience>pending</dd></div>
+          <div><dt>Traversal</dt><dd data-kp-editor-gestalt-traversal>pending</dd></div>
+          <div><dt>Capabilities</dt><dd data-kp-editor-gestalt-capabilities>pending</dd></div>
+        </dl>
+        <ul data-kp-editor-gestalt-warnings></ul>
+      </div>
+    </details>
   `;
 }
 
@@ -119,6 +154,10 @@ function statusLabel(
 
 function capitalize(value: string): string {
   return `${value.slice(0, 1).toUpperCase()}${value.slice(1)}`;
+}
+
+function styleKey(ref: { readonly id: string; readonly version: string }): string {
+  return `${ref.id}@${ref.version}`;
 }
 
 function escapeHtml(value: string): string {

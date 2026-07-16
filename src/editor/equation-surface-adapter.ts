@@ -85,6 +85,15 @@ import {
   type KpDotProductTraversalChoreography,
   type KpDotProductTraversalChoreographyFrame
 } from "../animation/dot-product-traversal-choreography.ts";
+import {
+  deriveKpOrganicMotionSignature,
+  sampleKpOrganicMotion,
+  sampleKpOrganicProgress
+} from "../animation/organic-motion-primitives.ts";
+import {
+  kpBaseGestaltStyleCatalog
+} from "../animation/gestalt-base-styles.ts";
+import type { KpGestaltStyleChannels } from "../animation/gestalt-style.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
@@ -130,6 +139,7 @@ export function createKpEditorEquationStageFrame(input: {
   readonly animation: KpAnimationAsset;
   readonly state: KpEditorAnimationPlayerState;
   readonly authoringRevision?: number | undefined;
+  readonly gestaltChannels?: KpGestaltStyleChannels | undefined;
 }): KpEditorEquationStageFrame {
   const projection = projectKpEditorEquationRuntimeFrame({
     animation: input.animation,
@@ -149,6 +159,7 @@ export function createKpEditorEquationStageFrame(input: {
         )
       );
 
+  const easedProgress = localProgress * localProgress * (3 - 2 * localProgress);
   const solveX = createKpEditorSolveXSharedPlayerFrame(input);
   const functionWrap = createFunctionWrapFrame(
     input.animation,
@@ -182,11 +193,11 @@ export function createKpEditorEquationStageFrame(input: {
     contentKey,
     projection,
     localProgress,
-    easedProgress: localProgress * localProgress * (3 - 2 * localProgress),
+    easedProgress,
     motifs: projection.transitions.map((transition) =>
       createKpEditorEquationTransitionMotifFrame({
         transition,
-        progress: localProgress * localProgress * (3 - 2 * localProgress)
+        progress: easedProgress
       })
     ),
     ...(solveX === undefined ? {} : { solveX }),
@@ -217,10 +228,12 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
     const authoringRevision = Number(
       player?.dataset["kpEditorAnimationAuthoringRevision"] ?? 0
     );
+    const gestaltChannels = selectedGestaltChannels(player);
     const frame = createKpEditorEquationStageFrame({
       animation,
       state,
-      authoringRevision
+      authoringRevision,
+      gestaltChannels
     });
     if (frame.projection.transitions.length === 0) {
       renderUnavailable(
@@ -245,6 +258,8 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
 
     stage.dataset["kpEditorEquationPhaseId"] = frame.projection.phaseId;
     stage.dataset["kpEditorEquationLocalProgress"] = String(frame.localProgress);
+    stage.dataset["kpEditorEquationGestaltStyle"] =
+      player?.dataset["kpEditorAnimationGestaltSelectedStyle"] ?? "unresolved";
     stage.style.setProperty("--kp-editor-equation-progress", String(frame.easedProgress));
     syncSolveXSequence(stage, frame.solveX);
     frame.projection.transitions.forEach((transition, index) => {
@@ -316,11 +331,68 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
           token.style.setProperty("--kp-editor-equation-focus-progress", String(motif.progress));
         });
     });
+    applyGestaltTokenRealization({
+      stage,
+      state,
+      progress: frame.localProgress,
+      channels: gestaltChannels,
+      accessibilityMode:
+        player?.dataset["kpEditorAnimationAccessibilityMode"] ?? "full-motion"
+    });
     if (player !== null) {
       player.dataset["kpEditorAnimationMotionPlanInvalidated"] = "false";
     }
   }
 };
+
+function selectedGestaltChannels(
+  player: HTMLElement | null
+): KpGestaltStyleChannels {
+  const selectedStyle =
+    player?.dataset["kpEditorAnimationGestaltSelectedStyle"] ??
+    "kp.organic-subtle@1.0.0";
+  return kpBaseGestaltStyleCatalog.get(selectedStyle)?.channels ?? {};
+}
+
+function applyGestaltTokenRealization(input: {
+  readonly stage: HTMLElement;
+  readonly state: KpEditorAnimationPlayerState;
+  readonly progress: number;
+  readonly channels: KpGestaltStyleChannels;
+  readonly accessibilityMode: string;
+}): void {
+  const fullMotion = input.accessibilityMode === "full-motion";
+  const amplitude = fullMotion
+    ? (input.channels.microMotion?.amplitude ?? 0) * 9
+    : 0;
+  const deformation = fullMotion
+    ? (input.channels.deformation?.tokenCeiling ?? 0) * 0.35
+    : 0;
+  const realizationProgress = sampleKpOrganicProgress({
+    progress: input.progress,
+    character: input.channels.acceleration?.character ?? "restrained"
+  });
+  input.stage.querySelectorAll<HTMLElement>("[data-kp-motion-id]")
+    .forEach((token) => {
+      const identityId = token.dataset["kpMotionId"];
+      if (identityId === undefined) return;
+      const sample = sampleKpOrganicMotion({
+        signature: deriveKpOrganicMotionSignature({
+          identityId,
+          motifId: "editor-equation.gestalt",
+          motionFieldId: input.state.animationId
+        }),
+        progress: realizationProgress,
+        direction: input.state.direction,
+        microMotionAmplitude: Math.min(1, amplitude),
+        deformationCeiling: Math.min(1, deformation)
+      });
+      token.style.translate = `${sample.x}px ${sample.y}px`;
+      token.style.scale = `${sample.scaleAlong} ${sample.scaleAcross}`;
+      token.dataset["kpEditorGestaltTokenRealization"] =
+        input.channels.acceleration?.character ?? "restrained";
+    });
+}
 
 export function registerKpEditorEquationSurfaceAdapter(): () => void {
   return kpEditorAnimationSurfaceAdapterRegistry.register(
