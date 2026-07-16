@@ -2,8 +2,9 @@
   "id": "next-action.kp.gestalt.organic-primitives-v0",
   "kind": "next-action",
   "title": "Add Deterministic Organic Motion Primitives",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Added deterministic analytic organic motion primitives: identity- and lineage-derived signatures, correlated branch variation, directly sampleable micro-motion, directional squash/stretch, and restrained/editorial/organic progress curves. Every primitive is bounded, stateless, rewind-equivalent, and exactly neutral at stable endpoints.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,39 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/organic-motion-primitives.ts",
+      "summary": "Implements the protozoan-like motion vocabulary without frame history, random state, or live physics."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-organic-motion-primitives.test.ts",
+      "summary": "Proves deterministic regeneration and seek, exact endpoint calm, mirrored rewind, inherited lineage correlation, branch variation, and bounded progress curves."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.perceptual-quality-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +63,22 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-organic-motion-primitives.test.ts",
+      "status": "passed",
+      "scope": "Deterministic organic motion primitive contract",
+      "checkedAt": "2026-07-16T16:40:21.241Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-16T16:40:21.312Z",
+      "scope": "TypeScript project closure"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.choreography.perceptual-quality-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Added deterministic analytic organic motion primitives: identity- and lineage-derived signatures, correlated branch variation, directly sampleable micro-motion, directional squash/stretch, and restrained/editorial/organic progress curves. Every primitive is bounded, stateless, rewind-equivalent, and exactly neutral at stable endpoints."
+  }
 }
