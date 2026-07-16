@@ -267,14 +267,26 @@ function createGeneratedDotProductProblemFixture(
       sourceObjectIds: [ids.initial],
       targetObjectIds: [ids.result],
       preserves: ["value", "structure"],
-      correspondence: [
-        {
-          sourceSelectorId: `${ids.initial}.leftVector.component.0`,
-          targetSelectorId: `${ids.result}.result.scalar`,
-          preserves: ["value"],
-          summary: "Componentwise products sum to the scalar dot product."
-        }
-      ],
+      correspondenceMap: {
+        id: `${ids.transform}.correspondence`,
+        records: [{
+          id: "component-pairs-accumulate",
+          relation: "fan-in",
+          sourceSelectorIds: [
+            ...input.leftVector.map(
+              (_component, index) =>
+                `${ids.initial}.leftVector.component.${index}`
+            ),
+            ...input.rightVector.map(
+              (_component, index) =>
+                `${ids.initial}.rightVector.component.${index}`
+            )
+          ],
+          targetSelectorIds: [`${ids.result}.result.scalar`],
+          summary:
+            "Index-matched component products accumulate into the scalar dot product."
+        }]
+      },
       assumptions: [
         "Both vectors have the same dimension.",
         "The dot product is the sum of componentwise products."

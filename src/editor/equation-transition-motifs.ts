@@ -48,6 +48,9 @@ export function createKpEditorEquationTransitionMotifFrame(input: {
 export function motifKindForTransition(
   transition: KpEditorEquationTransitionProjection
 ): EquationVisualMotifKind {
+  if (transition.transformType === "computeDotProduct") {
+    return "dot-product-accumulate";
+  }
   return defaultEquationTransformVisualMotifRules.find(
     (rule) => rule.transformationKind === transition.transformType
   )?.descriptor.kind ?? "artifact-replace";
@@ -64,6 +67,8 @@ function sourceMotion(
       return motion(1 - progress, 0, 0, 1 - 0.18 * progress, 0.8 * progress);
     case "copy-fan-out":
       return motion(1 - progress, 0, 0, 1 - 0.32 * progress, 0);
+    case "dot-product-accumulate":
+      return motion(1 - progress, 0, 0, 1, 0);
     case "merge-fan-in":
       return motion(1 - progress, 0, 0, 1, 0);
     case "relation-flip":
@@ -94,6 +99,8 @@ function targetMotion(
       return motion(progress, 0, 0, 0.9 + 0.1 * progress, 0);
     case "copy-fan-out":
       return motion(progress, 0, 0, 0.68 + 0.32 * progress, 0);
+    case "dot-product-accumulate":
+      return motion(progress, 0, 0, 0.9 + 0.1 * progress, 0);
     case "merge-fan-in":
       return motion(progress, 0, 0, 0.68 + 0.32 * progress, 0);
     case "relation-flip":

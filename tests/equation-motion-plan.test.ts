@@ -106,6 +106,16 @@ test("visual motif module exposes reusable equation motif descriptors", () => {
         ]
       ],
       [
+        "dot-product-accumulate",
+        ["transmit", "merge", "reveal"],
+        [
+          "dot-pair-focus",
+          "dot-product-form",
+          "dot-accumulate",
+          "dot-result-reveal"
+        ]
+      ],
+      [
         "merge-fan-in",
         ["merge", "shift"],
         [

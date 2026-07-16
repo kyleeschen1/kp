@@ -28,6 +28,7 @@ export type EquationVisualMotifKind =
   | "artifact-replace"
   | "cancelation"
   | "copy-fan-out"
+  | "dot-product-accumulate"
   | "merge-fan-in"
   | "relation-flip"
   | "simplify-into"
@@ -47,6 +48,10 @@ export const equationVisualMotifPhaseIds = [
   "final-simplify-meet",
   "final-simplify-collapse",
   "final-simplify-reveal",
+  "dot-pair-focus",
+  "dot-product-form",
+  "dot-accumulate",
+  "dot-result-reveal",
   "unwrap-artifact-exit",
   "wrap-artifact-enter",
   "wrapped-token-shift",
@@ -135,6 +140,18 @@ export const equationVisualMotifDescriptors: readonly EquationVisualMotifDescrip
     motionPrimitiveIds: ["copy", "shift"],
     phaseIds: [...kpCopyFanOutPhaseIds],
     summary: "A persistent source contracts while lineage-bearing copies branch and travel independently."
+  },
+  {
+    kind: "dot-product-accumulate",
+    motionPrimitiveIds: ["transmit", "merge", "reveal"],
+    phaseIds: [
+      "dot-pair-focus",
+      "dot-product-form",
+      "dot-accumulate",
+      "dot-result-reveal"
+    ],
+    summary:
+      "Index-matched component pairs form persistent products and accumulate into one scalar."
   },
   {
     kind: "merge-fan-in",

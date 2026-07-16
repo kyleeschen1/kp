@@ -121,6 +121,34 @@ export const linearEquationDemoBeatTimeline = compileSemanticBeatTimeline({
       summary: "The simplified target token grows from the shared midpoint."
     },
     {
+      id: "dot-pair-focus",
+      startBeat: 0,
+      endBeat: 12,
+      easing: "ease-in-out",
+      summary: "An index-matched component pair receives causal focus."
+    },
+    {
+      id: "dot-product-form",
+      startBeat: 10,
+      endBeat: 30,
+      easing: "ease-in-out",
+      summary: "The focused pair forms a persistent component product."
+    },
+    {
+      id: "dot-accumulate",
+      startBeat: 25,
+      endBeat: 42,
+      easing: "ease-in-out",
+      summary: "Completed component products persist in the running sum."
+    },
+    {
+      id: "dot-result-reveal",
+      startBeat: 39,
+      endBeat: 50,
+      easing: "ease-in-out",
+      summary: "The accumulated products hand off to the scalar result."
+    },
+    {
       id: "unwrap-artifact-exit",
       startBeat: 0,
       endBeat: 20,

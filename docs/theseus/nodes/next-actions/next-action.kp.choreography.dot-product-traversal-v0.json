@@ -2,8 +2,9 @@
   "id": "next-action.kp.choreography.dot-product-traversal-v0",
   "kind": "next-action",
   "title": "Add Dot Product Traversal Proof",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Added a three-term dot-product proof with honest six-component fan-in semantics, index-ranked pair traversal, bounded overlapping propagation, correlated organic focus, persistent product chips, partial-sum accumulation, optional compression metadata, late scalar handoff, and exact rewind/release.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,64 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-linear-algebra-problem-fixture.ts",
+      "summary": "Replaces the incomplete first-component mapping with one authoritative six-component fan-in to the scalar result."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/dot-product-traversal-choreography.ts",
+      "summary": "Compiles index traversal, propagation, salience, motion fields, organic signatures, focus profiles, lineage, and pattern-compression policy."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-dot-product-traversal.ts",
+      "summary": "Samples indexed pair motion, product persistence, accumulation, and scalar result handoff."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Binds dot-product traversal to the measured editor stage, focus shadows, contribution chips, partial sums, narration, and diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/visual-motif.ts",
+      "summary": "Adds the reusable dot-product-accumulate motif and semantic phases."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-dot-product-traversal-choreography.test.ts",
+      "summary": "Proves fan-in closure, index authority, bounded propagation, signature inheritance, persistent accumulation, exact rewind, and settlement."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves visible index handoff, persistent contribution products, partial sums, scalar overlap, narration, and persistent-stage release."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.linear-rearrangement-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +88,58 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-motion-plan.test.ts tests/equation-motion-sampler.test.ts tests/kp-dot-product-traversal-choreography.test.ts",
+      "status": "passed",
+      "scope": "dot-product motif, beat, traversal, renderer, rewind, and release tests",
+      "checkedAt": "2026-07-16T18:20:25.012Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts -g dot-product-traversal-or-pure-equation",
+      "status": "passed",
+      "scope": "final-state dot-product and pure equation browser proof",
+      "checkedAt": "2026-07-16T18:20:25.073Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts",
+      "status": "passed",
+      "scope": "complete editor animation browser suite: 28 passing",
+      "checkedAt": "2026-07-16T18:20:25.126Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript projects",
+      "checkedAt": "2026-07-16T18:20:25.184Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full unit suite: 1155 passing",
+      "checkedAt": "2026-07-16T18:20:25.240Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production build",
+      "checkedAt": "2026-07-16T18:20:25.302Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph",
+      "checkedAt": "2026-07-16T18:20:25.363Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts -g \"dot-product traversal|every pure equation descriptor\"",
+      "status": "passed",
+      "checkedAt": "2026-07-16T18:20:31.695Z",
+      "scope": "final-state dot-product and pure-equation browser proof"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.choreography.linear-rearrangement-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Added a three-term dot-product proof with honest six-component fan-in semantics, index-ranked pair traversal, bounded overlapping propagation, correlated organic focus, persistent product chips, partial-sum accumulation, optional compression metadata, late scalar handoff, and exact rewind/release."
+  }
 }

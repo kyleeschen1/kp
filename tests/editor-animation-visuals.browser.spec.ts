@@ -948,6 +948,129 @@ test("matrix-matrix family animation visibly resolves the result matrix", async 
     .toHaveCount(6);
 });
 
+test("dot-product traversal follows semantic indices and preserves accumulated products", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.animation.generated.linear-algebra.dot-product.three-vector"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  await stage.evaluate((element) => {
+    element.dataset["kpDotProductStageProbe"] = "persistent";
+  });
+
+  await scrubber.fill("0.18");
+  let transition = player.locator("[data-kp-editor-equation-transition-id]");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-motif",
+    "dot-product-accumulate"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-traversal-order",
+    "0 1 2"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-active-contribution-indices",
+    "0"
+  );
+  const contribution0 = transition.locator(
+    '[data-kp-editor-dot-product-contribution="0"]'
+  );
+  expect(Number(await contribution0.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeGreaterThan(0);
+  await expect(transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*="result.scalar"]'
+  )).toHaveCSS("opacity", "0");
+
+  await scrubber.fill("0.25");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-active-contribution-indices",
+    "0 1"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-accumulated-through-index",
+    "0"
+  );
+  await expect(transition.locator(
+    "[data-kp-editor-dot-product-accumulation]"
+  )).toContainText("4");
+
+  await scrubber.fill("0.33");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-active-contribution-indices",
+    "1 2"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-accumulated-through-index",
+    "1"
+  );
+  await expect(transition.locator(
+    "[data-kp-editor-dot-product-accumulation]"
+  )).toContainText("4+10=14");
+  await expect(contribution0).toHaveAttribute(
+    "data-kp-editor-dot-product-contribution-status",
+    "accumulated"
+  );
+  expect(Number(await contribution0.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeGreaterThan(0);
+
+  await scrubber.fill("0.42");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-active-contribution-indices",
+    "2"
+  );
+  await expect(transition.locator(
+    "[data-kp-editor-dot-product-accumulation]"
+  )).toContainText("4+10+18=32");
+  const contributionOpacities = await transition.locator(
+    "[data-kp-editor-dot-product-contribution]"
+  ).evaluateAll((elements) =>
+    elements.map((element) => Number(getComputedStyle(element).opacity))
+  );
+  expect(contributionOpacities[0]).toBeGreaterThan(0);
+  expect(contributionOpacities[1]).toBeGreaterThan(0);
+  expect(contributionOpacities[2]).toBe(1);
+  await expect(player.locator("[data-kp-editor-animation-narration]"))
+    .toContainText("Pair 3");
+
+  await scrubber.fill("0.85");
+  const sourceOpacity = Number(await transition.locator(
+    "[data-kp-editor-equation-source] [data-kp-motion-id]"
+  ).first().evaluate((element) => getComputedStyle(element).opacity));
+  const targetOpacity = Number(await transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*="result.scalar"]'
+  ).evaluate((element) => getComputedStyle(element).opacity));
+  expect(sourceOpacity).toBeGreaterThan(0);
+  expect(sourceOpacity).toBeLessThan(1);
+  expect(targetOpacity).toBeGreaterThan(0);
+  expect(targetOpacity).toBeLessThan(1);
+  await expect(player.locator("[data-kp-editor-animation-narration]"))
+    .toContainText("accumulate to 32");
+
+  await scrubber.fill("1");
+  await expect(transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*="result.scalar"]'
+  )).toHaveCSS("opacity", "1");
+  await expect(transition.locator(
+    "[data-kp-editor-equation-source] [data-kp-motion-id]"
+  ).first()).toHaveCSS("opacity", "0");
+  await expect(transition.locator(
+    "[data-kp-editor-dot-product-shared-shadow]"
+  )).toHaveCount(0);
+  await expect(transition.locator(
+    "[data-kp-editor-dot-product-contribution]"
+  ).first()).toHaveCSS("opacity", "0");
+  await expect(stage).toHaveAttribute(
+    "data-kp-dot-product-stage-probe",
+    "persistent"
+  );
+});
+
 test("every pure equation descriptor renders visible KaTeX at start, midpoint, and end", async ({
   page
 }) => {

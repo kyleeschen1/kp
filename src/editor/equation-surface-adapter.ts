@@ -61,7 +61,11 @@ import {
   type KpFunctionWrapChoreography,
   type KpFunctionWrapChoreographyFrame
 } from "../animation/function-wrap-choreography.ts";
-import { bindKpFocusFrameToCss } from "../animation/focus-profile.ts";
+import {
+  bindKpFocusFrameToCss,
+  type KpFocusProfileFrame,
+  type KpFocusProfilePlan
+} from "../animation/focus-profile.ts";
 import {
   createKpRadicalSuccessionChoreography,
   sampleKpRadicalSuccessionChoreography,
@@ -75,6 +79,12 @@ import {
   type KpLinearRearrangementChoreographyFrame,
   type KpLinearRearrangementStep
 } from "../animation/linear-rearrangement-choreography.ts";
+import {
+  createKpDotProductTraversalChoreography,
+  sampleKpDotProductTraversalChoreography,
+  type KpDotProductTraversalChoreography,
+  type KpDotProductTraversalChoreographyFrame
+} from "../animation/dot-product-traversal-choreography.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
@@ -87,6 +97,8 @@ const radicalSuccessionChoreographyCache =
   new Map<string, KpRadicalSuccessionChoreography>();
 const linearRearrangementChoreographyCache =
   new Map<string, KpLinearRearrangementChoreography>();
+const dotProductTraversalChoreographyCache =
+  new Map<string, KpDotProductTraversalChoreography>();
 
 export interface KpEditorEquationStageFrame {
   readonly stageIdentityKey: string;
@@ -107,6 +119,10 @@ export interface KpEditorEquationStageFrame {
   readonly linearRearrangement?: {
     readonly step: KpLinearRearrangementStep;
     readonly frame: KpLinearRearrangementChoreographyFrame;
+  } | undefined;
+  readonly dotProductTraversal?: {
+    readonly choreography: KpDotProductTraversalChoreography;
+    readonly frame: KpDotProductTraversalChoreographyFrame;
   } | undefined;
 }
 
@@ -150,6 +166,12 @@ export function createKpEditorEquationStageFrame(input: {
     projection.transitions[0]?.id,
     localProgress
   );
+  const dotProductTraversal = createDotProductTraversalFrame(
+    input.animation,
+    input.state,
+    projection.transitions[0]?.id,
+    localProgress
+  );
   const stageIdentityKey = projection.animationId;
   const contentKey = `${projection.direction}:${projection.transitions
     .map((transition) => transition.id)
@@ -170,7 +192,8 @@ export function createKpEditorEquationStageFrame(input: {
     ...(solveX === undefined ? {} : { solveX }),
     ...(functionWrap === undefined ? {} : { functionWrap }),
     ...(radicalSuccession === undefined ? {} : { radicalSuccession }),
-    ...(linearRearrangement === undefined ? {} : { linearRearrangement })
+    ...(linearRearrangement === undefined ? {} : { linearRearrangement }),
+    ...(dotProductTraversal === undefined ? {} : { dotProductTraversal })
   };
 }
 
@@ -280,6 +303,14 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
           frame: frame.linearRearrangement.frame
         });
       }
+      if (index === 0 && frame.dotProductTraversal !== undefined) {
+        applyDotProductTraversalChoreography({
+          transitionElement,
+          direction: state.direction,
+          choreography: frame.dotProductTraversal.choreography,
+          frame: frame.dotProductTraversal.frame
+        });
+      }
       transitionElement.querySelectorAll<HTMLElement>("[data-kp-editor-equation-focus-token]")
         .forEach((token) => {
           token.style.setProperty("--kp-editor-equation-focus-progress", String(motif.progress));
@@ -380,6 +411,38 @@ function createLinearRearrangementFrame(
     step,
     frame: sampleKpLinearRearrangementChoreography({
       step,
+      progress,
+      direction: state.direction,
+      accessibilityMode: "full"
+    })
+  };
+}
+
+function createDotProductTraversalFrame(
+  animation: KpAnimationAsset,
+  state: KpEditorAnimationPlayerState,
+  transformationId: string | undefined,
+  progress: number
+): KpEditorEquationStageFrame["dotProductTraversal"] {
+  if (
+    transformationId === undefined ||
+    !animation.transformations.some(
+      (transformation) =>
+        transformation.id === transformationId &&
+        transformation.transformType === "computeDotProduct"
+    )
+  ) {
+    return undefined;
+  }
+  let choreography = dotProductTraversalChoreographyCache.get(animation.id);
+  if (choreography === undefined) {
+    choreography = createKpDotProductTraversalChoreography(animation);
+    dotProductTraversalChoreographyCache.set(animation.id, choreography);
+  }
+  return {
+    choreography,
+    frame: sampleKpDotProductTraversalChoreography({
+      choreography,
       progress,
       direction: state.direction,
       accessibilityMode: "full"
@@ -633,6 +696,283 @@ function applyLinearRearrangementChoreography(input: {
   if (existingShadow === null) input.transitionElement.append(shadow);
 }
 
+function applyDotProductTraversalChoreography(input: {
+  readonly transitionElement: HTMLElement;
+  readonly direction: "forward" | "rewind";
+  readonly choreography: KpDotProductTraversalChoreography;
+  readonly frame: KpDotProductTraversalChoreographyFrame;
+}): void {
+  const accessibilityMode = (() => {
+    switch (editorAccessibilityMode(input.transitionElement)) {
+      case "reduced-motion": return "reduced" as const;
+      case "static": return "no-depth" as const;
+      default: return "full" as const;
+    }
+  })();
+  const sampled = accessibilityMode === "full"
+    ? input.frame
+    : sampleKpDotProductTraversalChoreography({
+        choreography: input.choreography,
+        progress: input.frame.motion.semanticProgress,
+        direction: input.direction,
+        accessibilityMode
+      });
+  input.transitionElement.dataset["kpEditorEquationChoreographyPlanId"] =
+    input.choreography.plan.id;
+  input.transitionElement.dataset["kpEditorEquationTraversalPlanId"] =
+    input.choreography.traversal.id;
+  input.transitionElement.dataset["kpEditorEquationTraversalOrder"] =
+    input.choreography.traversal.participants
+      .map((participant) => participant.semanticIndex)
+      .join(" ");
+  input.transitionElement.dataset["kpEditorEquationPropagationPlanId"] =
+    input.choreography.propagation.id;
+  input.transitionElement.dataset["kpEditorEquationPropagationStarts"] =
+    input.choreography.propagation.entries
+      .slice()
+      .sort((left, right) => left.rank - right.rank)
+      .map((entry) => entry.start)
+      .join(" ");
+  input.transitionElement.dataset["kpEditorEquationActiveContributionIndices"] =
+    sampled.motion.activeContributionIndices.join(" ");
+  input.transitionElement.dataset["kpEditorEquationAccumulatedThroughIndex"] =
+    sampled.motion.accumulatedThroughIndex === undefined
+      ? ""
+      : String(sampled.motion.accumulatedThroughIndex);
+  input.transitionElement.dataset["kpEditorEquationPatternCompression"] =
+    input.choreography.patternCompression.applied ? "applied" : "available";
+
+  const motionTokens = [
+    ...input.transitionElement.querySelectorAll<HTMLElement>(
+      "[data-kp-editor-equation-source] [data-kp-motion-id]"
+    )
+  ];
+  input.transitionElement.querySelectorAll<HTMLElement>(
+    "[data-kp-editor-dot-product-shared-shadow]"
+  ).forEach((shadow) => shadow.remove());
+  sampled.focusFrames.forEach((focus) => {
+    const focusTokens = motionTokens.filter((token) =>
+      focus.plan.semanticEntityIds.some((entityId) =>
+        token.dataset["kpMotionId"]?.includes(entityId)
+      )
+    );
+    if (focusTokens.length === 0) return;
+    const binding = bindKpFocusFrameToCss(focus.plan, focus.frame);
+    focusTokens.forEach((token) => {
+      token.classList.add(binding.className);
+      Object.entries(binding.attributes).forEach(([name, value]) =>
+        token.setAttribute(name, value)
+      );
+      Object.entries(binding.variables).forEach(([name, value]) =>
+        token.style.setProperty(
+          name,
+          name === "--kp-focus-shadow-opacity" ? "0" : value
+        )
+      );
+    });
+    if (focus.frame.attentionProgress === 0) return;
+    appendDotProductFocusShadow(
+      input.transitionElement,
+      focus.plan,
+      focus.frame,
+      focusTokens,
+      focus.semanticIndex
+    );
+  });
+  syncDotProductTraversalOverlay(
+    input.transitionElement,
+    input.choreography,
+    sampled
+  );
+  const narration = input.transitionElement
+    .closest<HTMLElement>("[data-kp-editor-animation-player]")
+    ?.querySelector<HTMLOutputElement>(
+      "[data-kp-editor-animation-narration]"
+    );
+  if (narration !== null && narration !== undefined) {
+    narration.replaceChildren(document.createTextNode(
+      dotProductNarration(input.choreography, sampled)
+    ));
+  }
+}
+
+function appendDotProductFocusShadow(
+  transition: HTMLElement,
+  plan: KpFocusProfilePlan,
+  frame: KpFocusProfileFrame,
+  tokens: readonly HTMLElement[],
+  semanticIndex: number
+): void {
+  const transitionRect = transition.getBoundingClientRect();
+  const rects = tokens.map((token) => token.getBoundingClientRect());
+  const shadow = document.createElement("span");
+  shadow.dataset["kpEditorDotProductSharedShadow"] = String(semanticIndex);
+  shadow.setAttribute("aria-hidden", "true");
+  shadow.className = "editor-equation-stage__shared-focus-shadow";
+  shadow.style.left = `${
+    Math.min(...rects.map((rect) => rect.left)) - transitionRect.left
+  }px`;
+  shadow.style.top = `${
+    Math.min(...rects.map((rect) => rect.top)) - transitionRect.top
+  }px`;
+  shadow.style.width = `${
+    Math.max(...rects.map((rect) => rect.right)) -
+    Math.min(...rects.map((rect) => rect.left))
+  }px`;
+  shadow.style.height = `${
+    Math.max(...rects.map((rect) => rect.bottom)) -
+    Math.min(...rects.map((rect) => rect.top))
+  }px`;
+  shadow.style.setProperty(
+    "--kp-focus-shadow-y",
+    `${plan.sharedShadow.offsetYPx}px`
+  );
+  shadow.style.setProperty(
+    "--kp-focus-shadow-blur",
+    `${plan.sharedShadow.blurPx}px`
+  );
+  shadow.style.setProperty(
+    "--kp-focus-shadow-opacity",
+    String(frame.shadowOpacity)
+  );
+  transition.append(shadow);
+}
+
+function syncDotProductTraversalOverlay(
+  transition: HTMLElement,
+  choreography: KpDotProductTraversalChoreography,
+  frame: KpDotProductTraversalChoreographyFrame
+): void {
+  let overlay = transition.querySelector<HTMLElement>(
+    "[data-kp-editor-dot-product-overlay]"
+  );
+  if (overlay === null) {
+    overlay = document.createElement("div");
+    overlay.className = "editor-equation-stage__dot-product-overlay";
+    overlay.dataset["kpEditorDotProductOverlay"] = choreography.id;
+    overlay.innerHTML = `
+      ${choreography.contributions.map((contribution) => `
+        <span class="editor-equation-stage__dot-product-contribution" data-kp-editor-dot-product-contribution="${contribution.semanticIndex}">
+          ${renderLatexToHtml(
+            `${contribution.leftValue} \\times ${contribution.rightValue} = ${contribution.product}`,
+            { displayMode: false }
+          )}
+        </span>
+      `).join("")}
+      <span class="editor-equation-stage__dot-product-accumulation" data-kp-editor-dot-product-accumulation></span>
+    `;
+    transition.append(overlay);
+  }
+  const transitionRect = transition.getBoundingClientRect();
+  const sourceRoot = transition.querySelector<HTMLElement>(
+    "[data-kp-editor-equation-source] [data-kp-editor-equation-object-id]"
+  )?.getBoundingClientRect();
+  choreography.contributions.forEach((contribution) => {
+    const contributionFrame = frame.motion.contributions.find(
+      (candidate) => candidate.semanticIndex === contribution.semanticIndex
+    )!;
+    const element = overlay!.querySelector<HTMLElement>(
+      `[data-kp-editor-dot-product-contribution="${contribution.semanticIndex}"]`
+    );
+    const left = findMotionTokenByEntityId(
+      transition,
+      contribution.leftSelectorId
+    );
+    const right = findMotionTokenByEntityId(
+      transition,
+      contribution.rightSelectorId
+    );
+    if (
+      element === null ||
+      left === undefined ||
+      right === undefined ||
+      sourceRoot === undefined
+    ) {
+      return;
+    }
+    const leftRect = left.getBoundingClientRect();
+    const rightRect = right.getBoundingClientRect();
+    const pairY =
+      (leftRect.top + leftRect.height / 2 +
+        rightRect.top + rightRect.height / 2) / 2 -
+      transitionRect.top;
+    element.style.left = `${sourceRoot.right - transitionRect.left + 14}px`;
+    element.style.top = `${pairY}px`;
+    element.style.opacity = String(contributionFrame.productOpacity);
+    element.style.transform =
+      `translateY(-50%) scale(${contributionFrame.productScale})`;
+    element.dataset["kpEditorDotProductContributionStatus"] =
+      contributionFrame.status;
+    element.dataset["kpEditorDotProductSemanticIndex"] =
+      String(contribution.semanticIndex);
+  });
+  const accumulation = overlay.querySelector<HTMLElement>(
+    "[data-kp-editor-dot-product-accumulation]"
+  );
+  if (accumulation === null || sourceRoot === undefined) return;
+  if (
+    accumulation.dataset["kpEditorDotProductAccumulationLatex"] !==
+    frame.motion.accumulationLatex
+  ) {
+    accumulation.dataset["kpEditorDotProductAccumulationLatex"] =
+      frame.motion.accumulationLatex;
+    accumulation.innerHTML = frame.motion.accumulationLatex === ""
+      ? ""
+      : renderLatexToHtml(frame.motion.accumulationLatex, {
+          displayMode: false
+        });
+  }
+  accumulation.style.left = `${
+    sourceRoot.left + sourceRoot.width / 2 - transitionRect.left
+  }px`;
+  const captionTop = transition.querySelector<HTMLElement>(
+    ".editor-equation-stage__caption"
+  )?.getBoundingClientRect().top;
+  const desiredTop = sourceRoot.bottom - transitionRect.top + 8;
+  const maximumTop = captionTop === undefined
+    ? desiredTop
+    : captionTop -
+      transitionRect.top -
+      accumulation.getBoundingClientRect().height -
+      5;
+  accumulation.style.top = `${Math.min(desiredTop, maximumTop)}px`;
+  accumulation.style.opacity = String(frame.motion.accumulationOpacity);
+  accumulation.style.transform = "translateX(-50%)";
+}
+
+function dotProductNarration(
+  choreography: KpDotProductTraversalChoreography,
+  frame: KpDotProductTraversalChoreographyFrame
+): string {
+  const activeIndex = frame.motion.activeContributionIndices.at(-1);
+  if (activeIndex !== undefined) {
+    const contribution = choreography.contributions.find(
+      (candidate) => candidate.semanticIndex === activeIndex
+    )!;
+    return `Pair ${activeIndex + 1}: ${contribution.leftValue} times ${contribution.rightValue} contributes ${contribution.product}.`;
+  }
+  if (frame.motion.resultRevealProgress > 0) {
+    return `The component products accumulate to ${
+      choreography.contributions.at(-1)!.accumulatedValue
+    }.`;
+  }
+  if (frame.motion.accumulationLatex !== "") {
+    return `Accumulated products: ${frame.motion.accumulationLatex}.`;
+  }
+  return "Follow matching vector components in semantic index order.";
+}
+
+function findMotionTokenByEntityId(
+  transition: HTMLElement,
+  entityId: string
+): HTMLElement | undefined {
+  return [
+    ...transition.querySelectorAll<HTMLElement>(
+      "[data-kp-editor-equation-source] [data-kp-motion-id]"
+    )
+  ].find((token) => token.dataset["kpMotionId"]?.includes(entityId));
+}
+
 function renderStage(frame: KpEditorEquationStageFrame): string {
   return `
     <div class="editor-equation-stage" data-kp-editor-equation-stage data-kp-editor-equation-stage-identity-key="${escapeHtml(frame.stageIdentityKey)}" data-kp-editor-equation-content-key="${escapeHtml(frame.contentKey)}" data-kp-editor-equation-phase-id="${escapeHtml(frame.projection.phaseId)}" data-kp-editor-equation-local-progress="${frame.localProgress}">
@@ -761,6 +1101,12 @@ function applySemanticTokenMotion(input: {
         : {
             linearRearrangementKind:
               input.frame.linearRearrangement.step.kind
+          }),
+      ...(input.frame.dotProductTraversal === undefined
+        ? {}
+        : {
+            dotProductTraversalPlan:
+              input.frame.dotProductTraversal.choreography.rendererPlan
           })
     });
     precomputed = createKpEditorPrecomputedEquationMotionPlan({
@@ -875,6 +1221,19 @@ function applySemanticTokenMotion(input: {
       String(linearRearrangement.collapseProgress);
     input.transitionElement.dataset["kpEditorEquationResultRevealProgress"] =
       String(linearRearrangement.resultRevealProgress);
+  }
+  const dotProduct = tokenFrame.motion.dotProductTraversal;
+  if (dotProduct === undefined) {
+    delete input.transitionElement.dataset["kpEditorEquationDotProductTraversal"];
+    delete input.transitionElement.dataset["kpEditorEquationDotProductActProgress"];
+    delete input.transitionElement.dataset["kpEditorEquationDotProductResultReveal"];
+  } else {
+    input.transitionElement.dataset["kpEditorEquationDotProductTraversal"] =
+      dotProduct.kind;
+    input.transitionElement.dataset["kpEditorEquationDotProductActProgress"] =
+      String(dotProduct.actProgress);
+    input.transitionElement.dataset["kpEditorEquationDotProductResultReveal"] =
+      String(dotProduct.resultRevealProgress);
   }
   return true;
 }

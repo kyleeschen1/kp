@@ -29,6 +29,11 @@ import {
   sampleKpEquationLinearRearrangementRelation,
   type KpEquationLinearRearrangementFrame
 } from "./equation-linear-rearrangement.ts";
+import {
+  sampleKpDotProductTraversalProgress,
+  sampleKpEquationDotProductRelation,
+  type KpDotProductTraversalProgressFrame
+} from "./equation-dot-product-traversal.ts";
 
 export interface KpEquationTokenMotionPose {
   readonly opacity: number;
@@ -58,6 +63,8 @@ export interface KpEquationTokenMotionFrame {
     KpEquationRepresentationalSuccessionFrame | undefined;
   readonly linearRearrangement?:
     KpEquationLinearRearrangementFrame | undefined;
+  readonly dotProductTraversal?:
+    KpDotProductTraversalProgressFrame | undefined;
 }
 
 interface EnclosureChoreographyContext {
@@ -98,6 +105,12 @@ export function sampleKpEquationTokenMotion(
         geometry.linearRearrangementKind,
         p
       );
+  const dotProductTraversal = geometry.dotProductTraversalPlan === undefined
+    ? undefined
+    : sampleKpDotProductTraversalProgress({
+        plan: geometry.dotProductTraversalPlan,
+        progress: p
+      });
   for (const relation of geometry.relations) {
     for (const token of sampleRelation(
       geometry,
@@ -106,7 +119,8 @@ export function sampleKpEquationTokenMotion(
       enclosureChoreography,
       lineageChoreography,
       representationalSuccession,
-      linearRearrangement
+      linearRearrangement,
+      dotProductTraversal
     )) {
       tokens.set(`${token.side}:${token.motionId}`, token);
     }
@@ -126,7 +140,10 @@ export function sampleKpEquationTokenMotion(
       : { representationalSuccession: representationalSuccession.frame }),
     ...(linearRearrangement === undefined
       ? {}
-      : { linearRearrangement })
+      : { linearRearrangement }),
+    ...(dotProductTraversal === undefined
+      ? {}
+      : { dotProductTraversal })
   };
 }
 
@@ -172,7 +189,8 @@ function sampleRelation(
   lineageChoreography: LineageChoreographyContext | undefined,
   representationalSuccession:
     RepresentationalSuccessionContext | undefined,
-  linearRearrangement: KpEquationLinearRearrangementFrame | undefined
+  linearRearrangement: KpEquationLinearRearrangementFrame | undefined,
+  dotProductTraversal: KpDotProductTraversalProgressFrame | undefined
 ): readonly KpEquationTokenMotionFrameToken[] {
   const sourceTokens = relationTokens(geometry.sourceTokens, relation.source?.motionIds ?? []);
   const targetTokens = relationTokens(geometry.targetTokens, relation.target?.motionIds ?? []);
@@ -197,6 +215,19 @@ function sampleRelation(
       frame: linearRearrangement
     });
     if (sampled !== undefined) return sampled;
+  }
+  if (
+    dotProductTraversal !== undefined &&
+    geometry.dotProductTraversalPlan !== undefined &&
+    relation.lifecycle === "merge"
+  ) {
+    return sampleKpEquationDotProductRelation({
+      plan: geometry.dotProductTraversalPlan,
+      frame: dotProductTraversal,
+      relation,
+      sourceTokens,
+      targetTokens
+    });
   }
   switch (relation.lifecycle) {
     case "persist":
