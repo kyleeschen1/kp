@@ -64,16 +64,6 @@ export interface ChoreographyExemplarBaseline {
   readonly knownGaps: readonly string[];
 }
 
-const missingFocusPhase = (
-  phaseId: "orient" | "release",
-  contract: string
-): ChoreographyExemplarPhaseObservation => ({
-  phaseId,
-  status: "missing",
-  evidence: ["No dedicated focus or attention-release phase is present."],
-  contract
-});
-
 export const choreographyExemplarBaselines:
   readonly ChoreographyExemplarBaseline[] = [
     {
@@ -230,6 +220,8 @@ export const choreographyExemplarBaselines:
       sourceRefs: [
         "src/editor/equation-animation-catalog.ts#createRadicalPowerAsRootFixtureTransition",
         "src/editor/equation-motion-demo-controller.ts#createRadicalArtifactSeedRevealPlan",
+        "src/animation/radical-succession-choreography.ts#createKpRadicalSuccessionChoreography",
+        "src/rendering/equation-representational-succession.ts#sampleKpEquationRepresentationalSuccession",
         "tests/katex-transition.browser.spec.ts#radical-artifact"
       ],
       continuants: [
@@ -255,16 +247,21 @@ export const choreographyExemplarBaselines:
         }
       ],
       phases: [
-        missingFocusPhase(
-          "orient",
-          "Focus the fractional exponent as the notation that will be transformed."
-        ),
+        {
+          phaseId: "orient",
+          status: "observed",
+          evidence: [
+            "The shared choreography timeline reserves normalized progress 0.00–0.12 for root-notation focus.",
+            "One shared focus shadow spans the independently addressable exponent tokens."
+          ],
+          contract: "Focus the fractional exponent as the notation that will be transformed."
+        },
         {
           phaseId: "reflow",
-          status: "partial",
+          status: "observed",
           evidence: [
-            "The x continuant has a DOM clone that interpolates to the radicand endpoint.",
-            "Its motion is not yet isolated into a named reflow window."
+            "The x continuant reflows independently over normalized progress 0.12–0.32.",
+            "Exponent gathering remains at zero until x reflow completes."
           ],
           contract: "Move x continuously to radicand position while keeping it independently recognizable."
         },
@@ -273,8 +270,8 @@ export const choreographyExemplarBaselines:
           status: "observed",
           evidence: [
             "The exponent collapses toward a shared bundle near the radical's opposite corner.",
-            "The radical unfolds from that bundle with separate source and target grids.",
-            "The handoff is DOM-owned and does not require a texture overlay."
+            "Generated editor tokens use measured opposite-corner paths and far-side reveal order.",
+            "The dashboard comparison retains its DOM fold/bundle/swap grids without a texture overlay."
           ],
           contract: "Transfer root-operation salience from exponent notation into radical notation through a shared bundle."
         },
@@ -283,14 +280,20 @@ export const choreographyExemplarBaselines:
           status: "observed",
           evidence: [
             "A late endpoint window keeps the target artifact clone visible before native target handoff.",
-            "At progress 1 the persistent x reaches exact target geometry."
+            "Generated source tokens remain independently transformed above nonzero scale.",
+            "At progress 1 both the persistent x and radical return to exact native target geometry."
           ],
           contract: "Complete the radical shape and native DOM handoff before release."
         },
-        missingFocusPhase(
-          "release",
-          "Release attention after the radical and radicand form a stable perceptual unit."
-        )
+        {
+          phaseId: "release",
+          status: "observed",
+          evidence: [
+            "Release occupies normalized progress 0.90–1.00.",
+            "The shared shadow is removed and the focus profile is exactly neutral."
+          ],
+          contract: "Release attention after the radical and radicand form a stable perceptual unit."
+        }
       ],
       checkpoints: [
         {
@@ -301,33 +304,33 @@ export const choreographyExemplarBaselines:
         },
         {
           id: "focus-peak",
-          progress: 0,
-          status: "missing",
-          evidence: "The exponent is not previewed with a dedicated focus phase."
+          progress: 0.12,
+          status: "observed",
+          evidence: "The exponent reaches full group focus before x reflow."
         },
         {
           id: "reflow-complete",
-          progress: 0.48,
-          status: "partial",
-          evidence: "The exponent collapse reaches its configured end, while x motion is still globally sampled."
+          progress: 0.32,
+          status: "observed",
+          evidence: "The x continuant reaches its radicand endpoint before exponent gathering begins."
         },
         {
           id: "act-midpoint",
-          progress: 0.5,
+          progress: 0.55,
           status: "observed",
-          evidence: "Source exponent and target radical clones coexist with partial opacity around the shared bundle."
+          evidence: "Independent exponent tokens converge near the shared bundle while the radical begins unfolding."
         },
         {
           id: "settled",
-          progress: 0.98,
+          progress: 0.9,
           status: "observed",
-          evidence: "The endpoint window holds the target clone immediately before native target ownership."
+          evidence: "The recognition window holds complete radical geometry before focus release."
         },
         {
           id: "released",
           progress: 1,
-          status: "missing",
-          evidence: "The target is native, but no separate focus release exists."
+          status: "observed",
+          evidence: "The target is native and the shared focus shadow has been removed."
         },
         {
           id: "rewind",
@@ -351,9 +354,7 @@ export const choreographyExemplarBaselines:
         "The representational lineage must reverse from radical notation to exponent notation."
       ],
       knownGaps: [
-        "No orient or release phase.",
-        "Persistent-x travel is not phase-gated independently from artifact transformation.",
-        "Artifact transfer uses a bespoke dashboard controller rather than a renderer-neutral plan."
+        "The legacy dashboard fixture still renders through its DOM fold/bundle/swap controller; the generated editor now supplies the renderer-neutral shared successor plan used for comparison."
       ]
     },
     {

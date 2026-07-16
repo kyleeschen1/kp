@@ -2,8 +2,9 @@
   "id": "next-action.kp.choreography.radical-successor-v0",
   "kind": "next-action",
   "title": "Migrate Radical Representational Succession",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Migrated the generated fractional-exponent-to-radical animation to a compiled representational-succession plan. The base x reflows independently before notation act; exponent numerator, line, and denominator retain individual DOM/token identity and nonzero scale while following measured opposite-corner paths; radical tokens unfold from the shared seed with measured far-side stagger; one shared focus shadow spans the source notation; and exact source/target native endpoints settle before release. The dashboard fold/bundle/swap exemplar remains the renderer comparison adapter rather than semantic authority.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,79 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/radical-succession-choreography.ts",
+      "summary": "Compiles continuant and representational lineage, lifecycle, salience, hierarchy, focus, path requirement, propagation rule, and phase timeline for radical succession."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-representational-succession.ts",
+      "summary": "Samples independent exponent tokens through a geometry-derived opposite corner and unfolds target tokens with far-side stagger and nonzero per-token scale."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-dom.ts",
+      "summary": "Carries representational-succession mode and precomputed relation paths in measured geometry."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/precomputed-equation-motion.ts",
+      "summary": "Attaches selected measured relation paths so the persistent base can use restrained collision-aware reflow."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/semantic-equation-token-renderer.ts",
+      "summary": "Uses the successor sampler for notation, isolates base reflow, preserves path evidence, and composes native focus transforms."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Samples the radical envelope, binds shared group focus, exposes hierarchy/path/propagation evidence, and removes the shared shadow on release."
+    },
+    {
+      "kind": "file",
+      "path": "src/styles.css",
+      "summary": "Adds one absolute nonsemantic shared shadow field without participating in equation layout."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-radical-succession-choreography.test.ts",
+      "summary": "Proves compiled lineage, hierarchy authority, phase isolation, opposite-corner token motion, far-side stagger, nonzero token scale, and exact settlement."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves visible orient/reflow/act/release, persistent stage identity, independent exponent tokens, no whole-layer scaling, opposite-corner paths, and native endpoint cleanup."
+    },
+    {
+      "kind": "file",
+      "path": "tests/fixtures/choreography-exemplar-baseline.ts",
+      "summary": "Updates the radical dashboard comparison to the observed generated shared plan while retaining the legacy adapter distinction."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.function-wrap-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +103,46 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/choreography-exemplar-baseline.test.ts tests/kp-radical-succession-choreography.test.ts tests/kp-editor-exponent-radical-visible-animations.test.ts tests/semantic-equation-token-renderer.test.ts tests/equation-motion-path-planner.test.ts",
+      "status": "passed",
+      "scope": "Radical compiler, hierarchy, token sampler, path, and baseline contract",
+      "checkedAt": "2026-07-16T17:33:14.469Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g radical-succession",
+      "status": "passed",
+      "scope": "Generated editor radical phase and motion proof",
+      "checkedAt": "2026-07-16T17:33:14.528Z"
+    },
+    {
+      "command": "npx playwright test tests/katex-transition.browser.spec.ts --project=chromium -g radical-artifact-focused",
+      "status": "passed",
+      "scope": "Dashboard DOM fragment ownership and native settlement comparison",
+      "checkedAt": "2026-07-16T17:33:14.584Z"
+    },
+    {
+      "command": "manual: inspect generated radical screenshots at 25, 55, and 72 percent",
+      "status": "passed",
+      "scope": "Base reflow, opposite-corner gathering, and radical recognition",
+      "checkedAt": "2026-07-16T17:33:14.648Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Broad unit and integration regression suite: 1143 tests",
+      "checkedAt": "2026-07-16T17:33:14.705Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-16T17:33:14.762Z",
+      "scope": "Production client build"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.choreography.function-wrap-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Migrated the generated fractional-exponent-to-radical animation to a compiled representational-succession plan. The base x reflows independently before notation act; exponent numerator, line, and denominator retain individual DOM/token identity and nonzero scale while following measured opposite-corner paths; radical tokens unfold from the shared seed with measured far-side stagger; one shared focus shadow spans the source notation; and exact source/target native endpoints settle before release. The dashboard fold/bundle/swap exemplar remains the renderer comparison adapter rather than semantic authority."
+  }
 }

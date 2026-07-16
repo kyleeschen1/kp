@@ -19,6 +19,11 @@ import {
   type KpEquationMotionPathCandidate,
   type KpEquationMotionPathVariantId
 } from "./equation-motion-path-planner.ts";
+import type { KpOrganicPathVariant } from "../animation/organic-path-planner.ts";
+import {
+  sampleKpEquationRepresentationalSuccession,
+  type KpEquationRepresentationalSuccessionFrame
+} from "./equation-representational-succession.ts";
 
 export interface KpEquationTokenMotionPose {
   readonly opacity: number;
@@ -34,7 +39,8 @@ export interface KpEquationTokenMotionFrameToken {
   readonly lineagePathId?: string | undefined;
   readonly lineageEdgeId?: string | undefined;
   readonly lineageBranchIndex?: number | undefined;
-  readonly motionPathVariant?: KpEquationMotionPathVariantId | undefined;
+  readonly motionPathVariant?:
+    KpEquationMotionPathVariantId | KpOrganicPathVariant | undefined;
 }
 
 export interface KpEquationTokenMotionFrame {
@@ -43,6 +49,8 @@ export interface KpEquationTokenMotionFrame {
   readonly tokens: readonly KpEquationTokenMotionFrameToken[];
   readonly enclosureChoreography?: KpEquationEnclosureChoreographyFrame | undefined;
   readonly lineageChoreography?: KpCopyFanOutChoreographyFrame | undefined;
+  readonly representationalSuccession?:
+    KpEquationRepresentationalSuccessionFrame | undefined;
 }
 
 interface EnclosureChoreographyContext {
@@ -61,6 +69,12 @@ interface LineageChoreographyContext {
   readonly motionPathsByMotionId: KpMeasuredEquationTransitionGeometry["precomputedMotionPathsByMotionId"];
 }
 
+interface RepresentationalSuccessionContext {
+  readonly relationRecordId: string;
+  readonly frame: KpEquationRepresentationalSuccessionFrame;
+  readonly tokens: readonly KpEquationTokenMotionFrameToken[];
+}
+
 export function sampleKpEquationTokenMotion(
   geometry: KpMeasuredEquationTransitionGeometry,
   progress: number
@@ -69,13 +83,16 @@ export function sampleKpEquationTokenMotion(
   const tokens = new Map<string, KpEquationTokenMotionFrameToken>();
   const enclosureChoreography = createEnclosureChoreographyContext(geometry, p);
   const lineageChoreography = createLineageChoreographyContext(geometry, p);
+  const representationalSuccession =
+    createRepresentationalSuccessionContext(geometry, p);
   for (const relation of geometry.relations) {
     for (const token of sampleRelation(
       geometry,
       relation,
       p,
       enclosureChoreography,
-      lineageChoreography
+      lineageChoreography,
+      representationalSuccession
     )) {
       tokens.set(`${token.side}:${token.motionId}`, token);
     }
@@ -89,7 +106,10 @@ export function sampleKpEquationTokenMotion(
       : { enclosureChoreography: enclosureChoreography.frame }),
     ...(lineageChoreography === undefined
       ? {}
-      : { lineageChoreography: lineageChoreography.frame })
+      : { lineageChoreography: lineageChoreography.frame }),
+    ...(representationalSuccession === undefined
+      ? {}
+      : { representationalSuccession: representationalSuccession.frame })
   };
 }
 
@@ -112,13 +132,16 @@ export function applyKpEquationTokenMotionFrame(
       delete element.dataset["kpEquationLineagePathId"];
       delete element.dataset["kpEquationLineageEdgeId"];
       delete element.dataset["kpEquationLineageBranchIndex"];
-      delete element.dataset["kpEquationMotionPathVariant"];
     } else {
       element.dataset["kpEquationLineagePathId"] = token.lineagePathId;
       element.dataset["kpEquationLineageEdgeId"] = token.lineageEdgeId ?? "";
       element.dataset["kpEquationLineageBranchIndex"] = String(
         token.lineageBranchIndex ?? 0
       );
+    }
+    if (token.motionPathVariant === undefined) {
+      delete element.dataset["kpEquationMotionPathVariant"];
+    } else {
       element.dataset["kpEquationMotionPathVariant"] = token.motionPathVariant ?? "direct";
     }
   }
@@ -129,11 +152,16 @@ function sampleRelation(
   relation: KpMeasuredEquationTransitionRelationGeometry,
   progress: number,
   enclosureChoreography: EnclosureChoreographyContext | undefined,
-  lineageChoreography: LineageChoreographyContext | undefined
+  lineageChoreography: LineageChoreographyContext | undefined,
+  representationalSuccession:
+    RepresentationalSuccessionContext | undefined
 ): readonly KpEquationTokenMotionFrameToken[] {
   const sourceTokens = relationTokens(geometry.sourceTokens, relation.source?.motionIds ?? []);
   const targetTokens = relationTokens(geometry.targetTokens, relation.target?.motionIds ?? []);
   const eased = smoothstep(progress);
+  if (relation.recordId === representationalSuccession?.relationRecordId) {
+    return representationalSuccession.tokens;
+  }
   if (relation.recordId === lineageChoreography?.relationRecordId) {
     return sampleLineageRelation(
       relation,
@@ -146,13 +174,28 @@ function sampleRelation(
     case "persist":
     case "role-change":
       const travelProgress = relation.lifecycle === "role-change"
-        ? enclosureChoreography?.frame.persistentTravelProgress ?? eased
+        ? representationalSuccession?.frame.continuantReflowProgress ??
+          enclosureChoreography?.frame.persistentTravelProgress ??
+          eased
         : eased;
+      const relationPath =
+        representationalSuccession === undefined
+          ? undefined
+          : geometry.precomputedRelationMotionPathsByRecordId?.[
+              relation.recordId
+            ];
+      const travelPoint = relationPath === undefined
+        ? undefined
+        : sampleKpEquationMotionPath(relationPath, travelProgress);
       return [
         ...sourceTokens.map((token) => frameToken(token, "source", {
           opacity: progress === 1 ? 0 : 1,
-          x: (relation.delta?.x ?? 0) * travelProgress,
-          y: (relation.delta?.y ?? 0) * travelProgress,
+          x: travelPoint === undefined || relationPath === undefined
+            ? (relation.delta?.x ?? 0) * travelProgress
+            : travelPoint.x - relationPath.start.x,
+          y: travelPoint === undefined || relationPath === undefined
+            ? (relation.delta?.y ?? 0) * travelProgress
+            : travelPoint.y - relationPath.start.y,
           scale: 1 + ((averageScale(relation) - 1) * travelProgress)
         })),
         ...targetTokens.map((token) => frameToken(token, "target", {
@@ -268,6 +311,51 @@ function sampleRelation(
         }))
       ];
   }
+}
+
+function createRepresentationalSuccessionContext(
+  geometry: KpMeasuredEquationTransitionGeometry,
+  progress: number
+): RepresentationalSuccessionContext | undefined {
+  if (
+    geometry.representationalSuccessionKind !== "opposite-corner-seed"
+  ) {
+    return undefined;
+  }
+  const relation = geometry.relations.find(
+    (candidate) =>
+      candidate.lifecycle === "merge" &&
+      candidate.source !== undefined &&
+      candidate.target !== undefined
+  );
+  if (relation === undefined) return undefined;
+  const sampled = sampleKpEquationRepresentationalSuccession({
+    relation,
+    sourceTokens: relationTokens(
+      geometry.sourceTokens,
+      relation.source!.motionIds
+    ),
+    targetTokens: relationTokens(
+      geometry.targetTokens,
+      relation.target!.motionIds
+    ),
+    progress
+  });
+  return {
+    relationRecordId: relation.recordId,
+    frame: sampled.frame,
+    tokens: sampled.tokens.map((token) => ({
+      motionId: token.motionId,
+      side: token.side,
+      pose: {
+        opacity: token.opacity,
+        x: token.x,
+        y: token.y,
+        scale: token.scale
+      },
+      motionPathVariant: token.pathVariant
+    }))
+  };
 }
 
 function createLineageChoreographyContext(

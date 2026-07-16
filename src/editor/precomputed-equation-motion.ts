@@ -75,7 +75,13 @@ export function createKpEditorPrecomputedEquationMotionPlan(input: {
   );
   const geometry: KpMeasuredEquationTransitionGeometry = {
     ...input.geometry,
-    precomputedMotionPathsByMotionId: Object.fromEntries(tokenPathPlans)
+    precomputedMotionPathsByMotionId: Object.fromEntries(tokenPathPlans),
+    precomputedRelationMotionPathsByRecordId: Object.fromEntries(
+      [...relationPathPlans].map(([recordId, plan]) => [
+        recordId,
+        plan.selected
+      ])
+    )
   };
   const motif = createVisualMotifPlan({
     id: `${input.id}.motif`,

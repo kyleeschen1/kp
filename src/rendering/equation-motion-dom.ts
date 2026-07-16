@@ -4,6 +4,9 @@ import type { KpSelectorAnnotatedLatex } from "./selector-annotated-latex.ts";
 import type { KpEquationEnclosureChoreographyKind } from "./equation-enclosure-choreography.ts";
 import type { KpEquationMotionPathCandidate } from "./equation-motion-path-planner.ts";
 
+export type KpEquationRepresentationalSuccessionKind =
+  "opposite-corner-seed";
+
 export interface AnnotatedMotionToken {
   readonly motionId: string;
   readonly text: string;
@@ -35,7 +38,12 @@ export interface KpMeasuredEquationTransitionGeometry {
   readonly transitionId: string;
   readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
   readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
+  readonly representationalSuccessionKind?:
+    KpEquationRepresentationalSuccessionKind | undefined;
   readonly precomputedMotionPathsByMotionId?: Readonly<
+    Record<string, KpEquationMotionPathCandidate>
+  > | undefined;
+  readonly precomputedRelationMotionPathsByRecordId?: Readonly<
     Record<string, KpEquationMotionPathCandidate>
   > | undefined;
   readonly sourceTokens: readonly AnnotatedMotionToken[];
@@ -98,6 +106,8 @@ export function measureKpEquationTransitionGeometry(input: {
   readonly targetMotionIdsBySelector?: Readonly<Record<string, string>> | undefined;
   readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
   readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
+  readonly representationalSuccessionKind?:
+    KpEquationRepresentationalSuccessionKind | undefined;
 }): KpMeasuredEquationTransitionGeometry {
   const sourceTokens = measureAnnotatedEquationMotionTokens(input.sourceRoot);
   const targetTokens = measureAnnotatedEquationMotionTokens(input.targetRoot);
@@ -120,6 +130,12 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.lineageChoreographyKind === undefined
       ? {}
       : { lineageChoreographyKind: input.lineageChoreographyKind }),
+    ...(input.representationalSuccessionKind === undefined
+      ? {}
+      : {
+          representationalSuccessionKind:
+            input.representationalSuccessionKind
+        }),
     sourceTokens,
     targetTokens,
     relations: input.ir.relations.map((relation) => {

@@ -1058,6 +1058,18 @@ h2 {
   opacity: calc(1 - var(--kp-focus-context-dimming));
 }
 
+.editor-equation-stage__shared-focus-shadow {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 999px;
+  box-shadow:
+    0
+    var(--kp-focus-shadow-y, 0px)
+    var(--kp-focus-shadow-blur, 0px)
+    rgb(30 41 59 / var(--kp-focus-shadow-opacity, 0));
+}
+
 .project-card--child {
   box-shadow: none;
 }
@@ -1605,6 +1617,7 @@ h2 {
 }
 
 .editor-equation-stage__transition {
+  position: relative;
   display: grid;
   grid-template-rows: minmax(7.5rem, 1fr) auto;
   margin: 0;

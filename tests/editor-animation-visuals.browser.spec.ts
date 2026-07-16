@@ -329,6 +329,125 @@ test("exponent and radical family animations render their semantic rewrite motif
     .toHaveCount(1);
 });
 
+test("radical-succession uses independent opposite-corner tokens and native settle", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
+  );
+
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  const transition = player.locator("[data-kp-editor-equation-transition-id]");
+  const sourceBase = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id*=".power.base"]'
+  );
+  const sourceNotation = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id*=".power.exponent-"]'
+  );
+  const targetRadical = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radical-symbol"]'
+  );
+  await stage.evaluate((element) => {
+    element.dataset["kpRadicalStageProbe"] = "persistent";
+  });
+
+  await scrubber.fill("0.1");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-choreography-phase",
+    "orient"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-path-requirement",
+    "opposite-corner"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-propagation-rule",
+    "far-to-near"
+  );
+  await expect(
+    transition.locator("[data-kp-editor-radical-shared-shadow]")
+  ).toHaveCount(1);
+
+  await scrubber.fill("0.25");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-choreography-phase",
+    "reflow"
+  );
+  expect(Number(await transition.getAttribute(
+    "data-kp-editor-equation-continuant-reflow-progress"
+  ))).toBeGreaterThan(0);
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-source-gather-progress",
+    "0"
+  );
+  expect(await sourceBase.getAttribute("style")).toContain("translate(");
+  await expect(sourceNotation).toHaveCount(3);
+  for (const token of await sourceNotation.all()) {
+    await expect(token).toHaveCSS("opacity", "1");
+    expect(await token.getAttribute("style")).toContain("translate(0px, 0px)");
+  }
+  await expect(targetRadical).toHaveCSS("opacity", "0");
+
+  await scrubber.fill("0.55");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-choreography-phase",
+    "act"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-representational-succession",
+    "opposite-corner-seed"
+  );
+  expect(Number(await transition.getAttribute(
+    "data-kp-editor-equation-source-gather-progress"
+  ))).toBeGreaterThan(0.9);
+  for (const token of await sourceNotation.all()) {
+    await expect(token).toHaveCSS("opacity", "1");
+    await expect(token).toHaveAttribute(
+      "data-kp-equation-motion-path-variant",
+      "opposite-corner"
+    );
+    expect(await token.getAttribute("style")).not.toContain("scale(0)");
+  }
+  const radicalOpacity = Number(
+    await targetRadical.evaluate((element) => getComputedStyle(element).opacity)
+  );
+  expect(radicalOpacity).toBeGreaterThan(0.01);
+  expect(radicalOpacity).toBeLessThan(1);
+  await expect(
+    transition.locator("[data-kp-editor-equation-source]")
+  ).toHaveCSS("transform", "none");
+  await expect(
+    transition.locator("[data-kp-editor-equation-target]")
+  ).toHaveCSS("transform", "none");
+  await expect(stage).toHaveAttribute(
+    "data-kp-radical-stage-probe",
+    "persistent"
+  );
+
+  await scrubber.fill("1");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-choreography-phase",
+    "release"
+  );
+  await expect(
+    transition.locator("[data-kp-editor-radical-shared-shadow]")
+  ).toHaveCount(0);
+  for (const token of await sourceNotation.all()) {
+    await expect(token).toHaveCSS("opacity", "0");
+  }
+  await expect(targetRadical).toHaveCSS("opacity", "1");
+  expect(await targetRadical.getAttribute("style")).toContain(
+    "translate(0px, 0px)"
+  );
+  expect(await targetRadical.getAttribute("style")).toContain("scale(1)");
+  await expect(
+    transition.locator("[data-kp-equation-motion-clone-for]")
+  ).toHaveCount(0);
+});
+
 test("function-wrap-family animation visibly wraps and rewinds its argument", async ({
   page
 }) => {
