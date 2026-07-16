@@ -2,15 +2,40 @@
   "id": "next-action.kp.animation-grammar.typed-gap-v0",
   "kind": "next-action",
   "title": "Represent Unsupported Semantics As Typed Gaps",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Make unsupported generated transitions explicit and preserve the isolated legacy playback boundary. Verification: standard.",
+  "summary": "Generated equation compilation now returns repairable typed semantic gaps and never disguises missing lifecycle semantics with a generic fade; legacy authored fading remains behind an explicit compatibility adapter.",
   "severity": "medium",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/semantic-transition-gap.ts",
+      "summary": "Typed gap reasons, repair targets, and isolated legacy fade adapter."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/semantic-equation-transition-compiler.ts",
+      "summary": "Compiler policy selects typed gaps for generated transitions while retaining the legacy boundary."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/llm-animation-draft-compiler.ts",
+      "summary": "LLM failures retain typed semantic gaps for later repair."
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-equation-transition-compiler.test.ts",
+      "summary": "Generated gap and legacy compatibility coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-llm-animation-draft-compiler.test.ts",
+      "summary": "Rejected generated drafts expose typed gaps without fallback playback."
     }
   ],
   "dependsOn": {
@@ -48,5 +73,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-equation-transition-compiler.test.ts tests/kp-llm-animation-draft-compiler.test.ts",
+      "status": "passed",
+      "scope": "typed gaps and LLM compiler boundary",
+      "checkedAt": "2026-07-16T01:03:39.836Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-16T01:03:39.876Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T01:03:39.916Z",
+      "scope": "Theseus graph and event log"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Generated equation compilation now returns repairable typed semantic gaps and never disguises missing lifecycle semantics with a generic fade; legacy authored fading remains behind an explicit compatibility adapter."
+  }
 }

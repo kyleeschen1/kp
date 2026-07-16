@@ -263,6 +263,33 @@ test("compile result diagnoses incomplete correspondence and whole-equation fall
   assert.match(result.diagnostics[0]?.message ?? "", /before.equals/);
 });
 
+test("generated compilation exposes an incomplete lifecycle as a typed gap without fading", () => {
+  const transformation = createKpSemanticTransformation({
+    id: "transform.generated-partial-lifecycle",
+    transformType: "simplify",
+    title: "Generated simplification with partial correspondence",
+    sourceObjectIds: [source.id],
+    targetObjectIds: [target.id],
+    preserves: ["value"],
+    correspondence: [{
+      sourceSelectorId: "before.x",
+      targetSelectorId: "after.x",
+      preserves: ["identity", "role"]
+    }]
+  });
+
+  const result = compileKpSemanticEquationTransitionResult({
+    transformation,
+    bundle,
+    unsupportedPolicy: "typed-gap"
+  });
+
+  assert.equal(result.status, "gap");
+  assert.equal(result.gap?.reason, "incomplete-lifecycle");
+  assert.equal(result.gap?.repair.kind, "supply-correspondence");
+  assert.equal(result.fallback, undefined);
+});
+
 test("compile result classifies missing definition bindings", () => {
   const definition = createKpSemanticTransformationDefinition({
     id: "definition.compile-result",

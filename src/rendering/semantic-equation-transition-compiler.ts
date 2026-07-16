@@ -18,12 +18,20 @@ import {
   type KpEquationTransitionIr,
   type KpEquationTransitionIrState
 } from "./equation-transition-ir.ts";
+import {
+  adaptKpSemanticTransitionGapToLegacyFade,
+  createKpSemanticTransitionGap,
+  type KpLegacyEquationFadeFallback,
+  type KpSemanticTransitionGap,
+  type KpSemanticTransitionGapReason
+} from "../semantic/semantic-transition-gap.ts";
 
 export interface CompileKpSemanticEquationTransitionInput {
   readonly transformation: KpSemanticTransformation;
   readonly bundle: KpAssetBundle;
   readonly definition?: KpSemanticTransformationDefinition | undefined;
   readonly definitionBindings?: KpTransformationDefinitionBindings | undefined;
+  readonly unsupportedPolicy?: "typed-gap" | "legacy-fade" | undefined;
 }
 
 export type KpSemanticEquationTransitionCompileDiagnosticCode =
@@ -42,13 +50,11 @@ export interface KpSemanticEquationTransitionCompileDiagnostic {
 }
 
 export interface KpSemanticEquationTransitionCompileResult {
-  readonly status: "semantic" | "fallback";
+  readonly status: "semantic" | "gap" | "fallback";
   readonly ir?: KpEquationTransitionIr | undefined;
   readonly diagnostics: readonly KpSemanticEquationTransitionCompileDiagnostic[];
-  readonly fallback?: {
-    readonly kind: "whole-equation-fade";
-    readonly reasons: readonly string[];
-  } | undefined;
+  readonly gap?: KpSemanticTransitionGap | undefined;
+  readonly fallback?: KpLegacyEquationFadeFallback | undefined;
 }
 
 export function compileKpSemanticEquationTransitionResult(
@@ -60,14 +66,7 @@ export function compileKpSemanticEquationTransitionResult(
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     const diagnostic = compileFailureDiagnostic(message);
-    return {
-      status: "fallback",
-      diagnostics: [diagnostic],
-      fallback: {
-        kind: "whole-equation-fade",
-        reasons: [diagnostic.code]
-      }
-    };
+    return unsupportedResult(input, undefined, [diagnostic]);
   }
 
   if (ir.correspondenceMap.records.length === 0) {
@@ -77,7 +76,7 @@ export function compileKpSemanticEquationTransitionResult(
       message:
         `Transformation ${input.transformation.id} has no selector correspondence; semantic token motion is unavailable.`
     };
-    return fallbackResult(ir, [diagnostic]);
+    return unsupportedResult(input, ir, [diagnostic]);
   }
 
   const lifecycleIssues = validateCorrespondenceMap(ir.correspondenceMap, {
@@ -93,7 +92,7 @@ export function compileKpSemanticEquationTransitionResult(
     )
   });
   if (lifecycleIssues.length > 0) {
-    return fallbackResult(ir, lifecycleIssues.map((issue) => ({
+    return unsupportedResult(input, ir, lifecycleIssues.map((issue) => ({
       code: "semantic-transition.incomplete-lifecycle",
       severity: "warning",
       message: issue.message
@@ -159,19 +158,52 @@ function correspondenceMapForCompilation(
   });
 }
 
-function fallbackResult(
-  ir: KpEquationTransitionIr,
+function unsupportedResult(
+  input: CompileKpSemanticEquationTransitionInput,
+  ir: KpEquationTransitionIr | undefined,
   diagnostics: readonly KpSemanticEquationTransitionCompileDiagnostic[]
 ): KpSemanticEquationTransitionCompileResult {
+  const gap = createKpSemanticTransitionGap({
+    transformationId: input.transformation.id,
+    reason: gapReason(diagnostics[0]?.code),
+    diagnostics
+  });
+  if (input.unsupportedPolicy === "typed-gap") {
+    return {
+      status: "gap",
+      ...(ir === undefined ? {} : { ir }),
+      diagnostics,
+      gap
+    };
+  }
   return {
     status: "fallback",
-    ir,
+    ...(ir === undefined ? {} : { ir }),
     diagnostics,
-    fallback: {
-      kind: "whole-equation-fade",
-      reasons: [...new Set(diagnostics.map((diagnostic) => diagnostic.code))]
-    }
+    gap,
+    fallback: adaptKpSemanticTransitionGapToLegacyFade(gap)
   };
+}
+
+function gapReason(
+  code: KpSemanticEquationTransitionCompileDiagnosticCode | undefined
+): KpSemanticTransitionGapReason {
+  switch (code) {
+    case "semantic-transition.no-correspondence":
+      return "missing-correspondence";
+    case "semantic-transition.incomplete-lifecycle":
+      return "incomplete-lifecycle";
+    case "semantic-transition.missing-definition-binding":
+      return "missing-definition-binding";
+    case "semantic-transition.invalid-reference":
+    case "semantic-transition.object-without-latex":
+      return "invalid-reference";
+    case "semantic-transition.invalid-correspondence":
+      return "invalid-correspondence";
+    case "semantic-transition.compile-failed":
+    case undefined:
+      return "compile-failed";
+  }
 }
 
 function compileFailureDiagnostic(

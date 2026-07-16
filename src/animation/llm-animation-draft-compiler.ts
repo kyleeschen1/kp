@@ -35,6 +35,7 @@ import {
   compileKpSemanticEquationTransitionResult
 } from "../rendering/semantic-equation-transition-compiler.ts";
 import type { KpEquationTransitionIr } from "../rendering/equation-transition-ir.ts";
+import type { KpSemanticTransitionGap } from "../semantic/semantic-transition-gap.ts";
 
 export type KpLlmAnimationDraftCompileDiagnosticCode =
   | KpLlmAnimationDraftSchemaIssue["code"]
@@ -63,6 +64,7 @@ export interface KpLlmAnimationDraftCompileSuccess {
 export interface KpLlmAnimationDraftCompileFailure {
   readonly status: "rejected";
   readonly diagnostics: readonly KpLlmAnimationDraftCompileDiagnostic[];
+  readonly gaps: readonly KpSemanticTransitionGap[];
 }
 
 export type KpLlmAnimationDraftCompileResult =
@@ -140,12 +142,16 @@ function compileValidatedDraft(
         : { assumptions: transformation.assumptions })
     })
   );
-  const transitionResults = draft.renderTarget.kind === "equation"
+  const generatedTransitionResults = draft.renderTarget.kind === "equation"
     ? transformations.map((transformation) =>
-        compileKpSemanticEquationTransitionResult({ transformation, bundle })
+        compileKpSemanticEquationTransitionResult({
+          transformation,
+          bundle,
+          unsupportedPolicy: "typed-gap"
+        })
       )
     : [];
-  const transitionIssues = transitionResults.flatMap((result, index) => {
+  const transitionIssues = generatedTransitionResults.flatMap((result, index) => {
     if (result.status === "semantic") return [];
     return result.diagnostics.map((diagnostic) => ({
       severity: "error" as const,
@@ -156,7 +162,12 @@ function compileValidatedDraft(
       message: diagnostic.message
     }));
   });
-  if (transitionIssues.length > 0) return reject(transitionIssues);
+  if (transitionIssues.length > 0) {
+    return reject(
+      transitionIssues,
+      generatedTransitionResults.flatMap((result) => result.gap === undefined ? [] : [result.gap])
+    );
+  }
   const diagramTransitions = draft.renderTarget.kind === "diagram"
     ? transformations.map((transformation) => {
         const source = diagramSceneForObjectId(compiledObjects, transformation.sourceObjectIds[0]!);
@@ -242,7 +253,7 @@ function compileValidatedDraft(
   return {
     status: "accepted",
     animation,
-    transitionIrs: transitionResults.map((result) => result.ir!),
+    transitionIrs: generatedTransitionResults.map((result) => result.ir!),
     diagramTransitions,
     diagnostics: []
   };
@@ -430,7 +441,8 @@ function validateReferences(
 }
 
 function reject(
-  diagnostics: readonly KpLlmAnimationDraftCompileDiagnostic[]
+  diagnostics: readonly KpLlmAnimationDraftCompileDiagnostic[],
+  gaps: readonly KpSemanticTransitionGap[] = []
 ): KpLlmAnimationDraftCompileFailure {
-  return { status: "rejected", diagnostics };
+  return { status: "rejected", diagnostics, gaps };
 }

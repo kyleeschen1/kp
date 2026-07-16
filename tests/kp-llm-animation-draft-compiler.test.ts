@@ -93,6 +93,11 @@ test("LLM draft compiler rejects incomplete selector lifecycles instead of fadin
   const result = compileKpLlmAnimationDraft(incomplete);
   assert.equal(result.status, "rejected");
   assert.ok(result.diagnostics.some((issue) => issue.code === "draft.incomplete-lifecycle"));
+  assert.equal(result.status === "rejected" ? result.gaps[0]?.reason : undefined, "incomplete-lifecycle");
+  assert.equal(
+    result.status === "rejected" && "fallback" in result,
+    false
+  );
 });
 
 test("LLM draft compiler rejects unresolved object and sequence references", () => {
