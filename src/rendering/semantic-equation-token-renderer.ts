@@ -24,6 +24,11 @@ import {
   sampleKpEquationRepresentationalSuccession,
   type KpEquationRepresentationalSuccessionFrame
 } from "./equation-representational-succession.ts";
+import {
+  sampleKpEquationLinearRearrangementFrame,
+  sampleKpEquationLinearRearrangementRelation,
+  type KpEquationLinearRearrangementFrame
+} from "./equation-linear-rearrangement.ts";
 
 export interface KpEquationTokenMotionPose {
   readonly opacity: number;
@@ -51,6 +56,8 @@ export interface KpEquationTokenMotionFrame {
   readonly lineageChoreography?: KpCopyFanOutChoreographyFrame | undefined;
   readonly representationalSuccession?:
     KpEquationRepresentationalSuccessionFrame | undefined;
+  readonly linearRearrangement?:
+    KpEquationLinearRearrangementFrame | undefined;
 }
 
 interface EnclosureChoreographyContext {
@@ -85,6 +92,12 @@ export function sampleKpEquationTokenMotion(
   const lineageChoreography = createLineageChoreographyContext(geometry, p);
   const representationalSuccession =
     createRepresentationalSuccessionContext(geometry, p);
+  const linearRearrangement = geometry.linearRearrangementKind === undefined
+    ? undefined
+    : sampleKpEquationLinearRearrangementFrame(
+        geometry.linearRearrangementKind,
+        p
+      );
   for (const relation of geometry.relations) {
     for (const token of sampleRelation(
       geometry,
@@ -92,7 +105,8 @@ export function sampleKpEquationTokenMotion(
       p,
       enclosureChoreography,
       lineageChoreography,
-      representationalSuccession
+      representationalSuccession,
+      linearRearrangement
     )) {
       tokens.set(`${token.side}:${token.motionId}`, token);
     }
@@ -109,7 +123,10 @@ export function sampleKpEquationTokenMotion(
       : { lineageChoreography: lineageChoreography.frame }),
     ...(representationalSuccession === undefined
       ? {}
-      : { representationalSuccession: representationalSuccession.frame })
+      : { representationalSuccession: representationalSuccession.frame }),
+    ...(linearRearrangement === undefined
+      ? {}
+      : { linearRearrangement })
   };
 }
 
@@ -154,7 +171,8 @@ function sampleRelation(
   enclosureChoreography: EnclosureChoreographyContext | undefined,
   lineageChoreography: LineageChoreographyContext | undefined,
   representationalSuccession:
-    RepresentationalSuccessionContext | undefined
+    RepresentationalSuccessionContext | undefined,
+  linearRearrangement: KpEquationLinearRearrangementFrame | undefined
 ): readonly KpEquationTokenMotionFrameToken[] {
   const sourceTokens = relationTokens(geometry.sourceTokens, relation.source?.motionIds ?? []);
   const targetTokens = relationTokens(geometry.targetTokens, relation.target?.motionIds ?? []);
@@ -169,6 +187,16 @@ function sampleRelation(
       targetTokens,
       lineageChoreography
     );
+  }
+  if (linearRearrangement !== undefined) {
+    const sampled = sampleKpEquationLinearRearrangementRelation({
+      relation,
+      sourceTokens,
+      targetTokens,
+      progress,
+      frame: linearRearrangement
+    });
+    if (sampled !== undefined) return sampled;
   }
   switch (relation.lifecycle) {
     case "persist":

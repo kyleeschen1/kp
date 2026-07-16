@@ -2,8 +2,9 @@
   "id": "next-action.kp.choreography.linear-rearrangement-v0",
   "kind": "next-action",
   "title": "Migrate Linear Rearrangement Choreography",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
+  "summary": "Migrated solve-x into compiled causal choreography steps with reserved-space balanced introduction, nonzero meet-collapse cancellation, arc-based constant derivation, persistent x and equality reflow, explicit recognition, and exact focus release.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -14,10 +15,59 @@
       "kind": "file",
       "path": "docs/superpowers/specs/2026-07-16-phase-ordered-choreography-and-gestalt-styles-design.md",
       "summary": "Accepted normative choreography and gestalt-style design."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/linear-rearrangement-choreography.ts",
+      "summary": "Compiles the three algebra operations into canonical choreography plans, timelines, focus profiles, and explicit operation subgraphs."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-linear-rearrangement.ts",
+      "summary": "Samples lifecycle-aware persistent reflow, balanced diagonal entry, cancellation meet-collapse, and arc-based result derivation."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Binds generated solve-x frames to linear choreography, shared focus shadows, measured geometry, and editor diagnostics."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-linear-rearrangement-choreography.test.ts",
+      "summary": "Proves reservation before entry, nonzero cancellation material, independent derivation arcs, continuity, and exact settlement."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves all three subgraphs in the persistent KP editor stage and exact focus/shadow release."
+    },
+    {
+      "kind": "file",
+      "path": "tests/fixtures/choreography-exemplar-baseline.ts",
+      "summary": "Updates the linear exemplar comparison from partial gaps to observed phase evidence."
     }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.choreography.radical-successor-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "Run the focused checks named for this slice in the approved loop proposal.",
+    "npm run typecheck",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
   ],
   "allowedWork": [
     "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
   ],
   "criteria": [
     {
@@ -33,24 +83,58 @@
       "weight": "high"
     }
   ],
-  "summary": "Implement the approved slice from the phase-ordered choreography and gestalt-style contract.",
-  "affects": [
-    "workflow.kp.dashboard-animation-system"
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-linear-rearrangement-choreography.test.ts tests/choreography-exemplar-baseline.test.ts tests/semantic-equation-token-renderer.test.ts tests/measured-equation-transition-geometry.test.ts tests/kp-editor-semantic-equation-player-adapter.test.ts",
+      "status": "passed",
+      "scope": "focused choreography, renderer, geometry, baseline, and editor adapter tests",
+      "checkedAt": "2026-07-16T18:00:08.577Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts",
+      "status": "passed",
+      "scope": "complete editor animation browser suite",
+      "checkedAt": "2026-07-16T18:00:08.713Z"
+    },
+    {
+      "command": "npx playwright test tests/katex-transition.browser.spec.ts -g semantic-playback-plans --timeout=60000",
+      "status": "passed",
+      "scope": "legacy dashboard comparison scenario",
+      "checkedAt": "2026-07-16T18:00:08.801Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript projects",
+      "checkedAt": "2026-07-16T18:00:08.869Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full unit suite: 1149 passing",
+      "checkedAt": "2026-07-16T18:00:08.933Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production build",
+      "checkedAt": "2026-07-16T18:00:08.999Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "scope": "Theseus graph",
+      "checkedAt": "2026-07-16T18:00:09.066Z"
+    },
+    {
+      "command": "npx playwright test tests/katex-transition.browser.spec.ts -g \"semantic playback plans\" --timeout=60000",
+      "status": "passed",
+      "checkedAt": "2026-07-16T18:00:40.518Z",
+      "scope": "legacy dashboard semantic playback comparison"
+    }
   ],
-  "dependsOn": {
-    "required": [
-      "next-action.kp.choreography.radical-successor-v0"
-    ]
-  },
-  "verification": [
-    "Run the focused checks named for this slice in the approved loop proposal.",
-    "npm run typecheck",
-    "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ]
+  "progress": {
+    "state": "complete",
+    "summary": "Migrated solve-x into compiled causal choreography steps with reserved-space balanced introduction, nonzero meet-collapse cancellation, arc-based constant derivation, persistent x and equality reflow, explicit recognition, and exact focus release."
+  }
 }

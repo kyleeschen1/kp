@@ -68,6 +68,13 @@ import {
   type KpRadicalSuccessionChoreography,
   type KpRadicalSuccessionChoreographyFrame
 } from "../animation/radical-succession-choreography.ts";
+import {
+  createKpLinearRearrangementChoreography,
+  sampleKpLinearRearrangementChoreography,
+  type KpLinearRearrangementChoreography,
+  type KpLinearRearrangementChoreographyFrame,
+  type KpLinearRearrangementStep
+} from "../animation/linear-rearrangement-choreography.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
@@ -78,6 +85,8 @@ const functionWrapChoreographyCache =
   new Map<string, KpFunctionWrapChoreography>();
 const radicalSuccessionChoreographyCache =
   new Map<string, KpRadicalSuccessionChoreography>();
+const linearRearrangementChoreographyCache =
+  new Map<string, KpLinearRearrangementChoreography>();
 
 export interface KpEditorEquationStageFrame {
   readonly stageIdentityKey: string;
@@ -94,6 +103,10 @@ export interface KpEditorEquationStageFrame {
   readonly radicalSuccession?: {
     readonly choreography: KpRadicalSuccessionChoreography;
     readonly frame: KpRadicalSuccessionChoreographyFrame;
+  } | undefined;
+  readonly linearRearrangement?: {
+    readonly step: KpLinearRearrangementStep;
+    readonly frame: KpLinearRearrangementChoreographyFrame;
   } | undefined;
 }
 
@@ -131,6 +144,12 @@ export function createKpEditorEquationStageFrame(input: {
     input.state,
     localProgress
   );
+  const linearRearrangement = createLinearRearrangementFrame(
+    input.animation,
+    input.state,
+    projection.transitions[0]?.id,
+    localProgress
+  );
   const stageIdentityKey = projection.animationId;
   const contentKey = `${projection.direction}:${projection.transitions
     .map((transition) => transition.id)
@@ -150,7 +169,8 @@ export function createKpEditorEquationStageFrame(input: {
     ),
     ...(solveX === undefined ? {} : { solveX }),
     ...(functionWrap === undefined ? {} : { functionWrap }),
-    ...(radicalSuccession === undefined ? {} : { radicalSuccession })
+    ...(radicalSuccession === undefined ? {} : { radicalSuccession }),
+    ...(linearRearrangement === undefined ? {} : { linearRearrangement })
   };
 }
 
@@ -252,6 +272,14 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
           frame: frame.radicalSuccession.frame
         });
       }
+      if (index === 0 && frame.linearRearrangement !== undefined) {
+        applyLinearRearrangementChoreography({
+          transitionElement,
+          direction: state.direction,
+          step: frame.linearRearrangement.step,
+          frame: frame.linearRearrangement.frame
+        });
+      }
       transitionElement.querySelectorAll<HTMLElement>("[data-kp-editor-equation-focus-token]")
         .forEach((token) => {
           token.style.setProperty("--kp-editor-equation-focus-progress", String(motif.progress));
@@ -318,6 +346,40 @@ function createFunctionWrapFrame(
     choreography,
     frame: sampleKpFunctionWrapChoreography({
       choreography,
+      progress,
+      direction: state.direction,
+      accessibilityMode: "full"
+    })
+  };
+}
+
+function createLinearRearrangementFrame(
+  animation: KpAnimationAsset,
+  state: KpEditorAnimationPlayerState,
+  transformationId: string | undefined,
+  progress: number
+): KpEditorEquationStageFrame["linearRearrangement"] {
+  if (transformationId === undefined) return undefined;
+  const hasLinearStep = animation.transformations.some(
+    (transformation) =>
+      transformation.transformType === "subtractBothSides" ||
+      transformation.transformType === "cancelAdditiveInverses" ||
+      transformation.transformType === "simplifyConstantDifference"
+  );
+  if (!hasLinearStep) return undefined;
+  let choreography = linearRearrangementChoreographyCache.get(animation.id);
+  if (choreography === undefined) {
+    choreography = createKpLinearRearrangementChoreography(animation);
+    linearRearrangementChoreographyCache.set(animation.id, choreography);
+  }
+  const step = choreography.steps.find(
+    (candidate) => candidate.transformationId === transformationId
+  );
+  if (step === undefined) return undefined;
+  return {
+    step,
+    frame: sampleKpLinearRearrangementChoreography({
+      step,
       progress,
       direction: state.direction,
       accessibilityMode: "full"
@@ -469,6 +531,108 @@ function applyRadicalSuccessionChoreography(input: {
   if (existingShadow === null) input.transitionElement.append(shadow);
 }
 
+function applyLinearRearrangementChoreography(input: {
+  readonly transitionElement: HTMLElement;
+  readonly direction: "forward" | "rewind";
+  readonly step: KpLinearRearrangementStep;
+  readonly frame: KpLinearRearrangementChoreographyFrame;
+}): void {
+  const accessibilityMode = (() => {
+    switch (editorAccessibilityMode(input.transitionElement)) {
+      case "reduced-motion": return "reduced" as const;
+      case "static": return "no-depth" as const;
+      default: return "full" as const;
+    }
+  })();
+  const sampled = accessibilityMode === "full"
+    ? input.frame
+    : sampleKpLinearRearrangementChoreography({
+        step: input.step,
+        progress: input.frame.timeline.requestedProgress,
+        direction: input.direction,
+        accessibilityMode
+      });
+  input.transitionElement.dataset["kpEditorEquationChoreographyPlanId"] =
+    input.step.plan.id;
+  input.transitionElement.dataset["kpEditorEquationChoreographyPhase"] =
+    sampled.focus.phaseId;
+  input.transitionElement.dataset["kpEditorEquationOperationSubgraph"] =
+    input.step.operationSubgraph.id;
+  input.transitionElement.dataset["kpEditorEquationOperationSubgraphNodes"] =
+    input.step.operationSubgraph.nodes.map((node) => node.id).join(" ");
+  input.transitionElement.dataset["kpEditorEquationActiveSubgraphNodes"] =
+    sampled.activeSubgraphNodeIds.join(" ");
+  input.transitionElement.dataset["kpEditorEquationReservationProgress"] =
+    String(sampled.reservationProgress);
+  input.transitionElement.dataset["kpEditorEquationRecognitionProgress"] =
+    String(sampled.recognitionProgress);
+  input.transitionElement.dataset["kpEditorEquationReleaseProgress"] =
+    String(sampled.releaseProgress);
+
+  const focusTokens = [
+    ...input.transitionElement.querySelectorAll<HTMLElement>("[data-kp-motion-id]")
+  ].filter((token) =>
+    input.step.focus.semanticEntityIds.some((entityId) =>
+      token.dataset["kpMotionId"]?.includes(entityId)
+    )
+  );
+  const existingShadow =
+    input.transitionElement.querySelector<HTMLElement>(
+      "[data-kp-editor-linear-shared-shadow]"
+    );
+  if (focusTokens.length === 0) {
+    existingShadow?.remove();
+    return;
+  }
+  const binding = bindKpFocusFrameToCss(input.step.focus, sampled.focus);
+  focusTokens.forEach((token) => {
+    token.classList.add(binding.className);
+    Object.entries(binding.attributes).forEach(([name, value]) =>
+      token.setAttribute(name, value)
+    );
+    Object.entries(binding.variables).forEach(([name, value]) =>
+      token.style.setProperty(
+        name,
+        name === "--kp-focus-shadow-opacity" ? "0" : value
+      )
+    );
+  });
+  if (sampled.focus.attentionProgress === 0) {
+    existingShadow?.remove();
+    return;
+  }
+  const transitionRect = input.transitionElement.getBoundingClientRect();
+  const rects = focusTokens.map((token) => token.getBoundingClientRect());
+  const bounds = {
+    left: Math.min(...rects.map((rect) => rect.left)) - transitionRect.left,
+    top: Math.min(...rects.map((rect) => rect.top)) - transitionRect.top,
+    right: Math.max(...rects.map((rect) => rect.right)) - transitionRect.left,
+    bottom: Math.max(...rects.map((rect) => rect.bottom)) - transitionRect.top
+  };
+  const shadow = existingShadow ?? document.createElement("span");
+  shadow.dataset["kpEditorLinearSharedShadow"] =
+    input.step.focus.sharedShadow.id;
+  shadow.setAttribute("aria-hidden", "true");
+  shadow.className = "editor-equation-stage__shared-focus-shadow";
+  shadow.style.left = `${bounds.left}px`;
+  shadow.style.top = `${bounds.top}px`;
+  shadow.style.width = `${bounds.right - bounds.left}px`;
+  shadow.style.height = `${bounds.bottom - bounds.top}px`;
+  shadow.style.setProperty(
+    "--kp-focus-shadow-y",
+    `${input.step.focus.sharedShadow.offsetYPx}px`
+  );
+  shadow.style.setProperty(
+    "--kp-focus-shadow-blur",
+    `${input.step.focus.sharedShadow.blurPx}px`
+  );
+  shadow.style.setProperty(
+    "--kp-focus-shadow-opacity",
+    String(sampled.focus.shadowOpacity)
+  );
+  if (existingShadow === null) input.transitionElement.append(shadow);
+}
+
 function renderStage(frame: KpEditorEquationStageFrame): string {
   return `
     <div class="editor-equation-stage" data-kp-editor-equation-stage data-kp-editor-equation-stage-identity-key="${escapeHtml(frame.stageIdentityKey)}" data-kp-editor-equation-content-key="${escapeHtml(frame.contentKey)}" data-kp-editor-equation-phase-id="${escapeHtml(frame.projection.phaseId)}" data-kp-editor-equation-local-progress="${frame.localProgress}">
@@ -591,7 +755,13 @@ function applySemanticTokenMotion(input: {
         : {}),
       ...(input.frame.radicalSuccession === undefined
         ? {}
-        : { representationalSuccessionKind: "opposite-corner-seed" as const })
+        : { representationalSuccessionKind: "opposite-corner-seed" as const }),
+      ...(input.frame.linearRearrangement === undefined
+        ? {}
+        : {
+            linearRearrangementKind:
+              input.frame.linearRearrangement.step.kind
+          })
     });
     precomputed = createKpEditorPrecomputedEquationMotionPlan({
       id: `${input.frame.contentKey}.transition.${input.transitionIndex}`,
@@ -686,6 +856,25 @@ function applySemanticTokenMotion(input: {
       String(succession.sourceGatherProgress);
     input.transitionElement.dataset["kpEditorEquationSuccessionBundle"] =
       `${succession.bundlePoint.x},${succession.bundlePoint.y}`;
+  }
+  const linearRearrangement = tokenFrame.motion.linearRearrangement;
+  if (linearRearrangement === undefined) {
+    delete input.transitionElement.dataset["kpEditorEquationLinearRearrangement"];
+    delete input.transitionElement.dataset["kpEditorEquationPersistentReflowProgress"];
+    delete input.transitionElement.dataset["kpEditorEquationMeetProgress"];
+    delete input.transitionElement.dataset["kpEditorEquationCollapseProgress"];
+    delete input.transitionElement.dataset["kpEditorEquationResultRevealProgress"];
+  } else {
+    input.transitionElement.dataset["kpEditorEquationLinearRearrangement"] =
+      linearRearrangement.kind;
+    input.transitionElement.dataset["kpEditorEquationPersistentReflowProgress"] =
+      String(linearRearrangement.persistentReflowProgress);
+    input.transitionElement.dataset["kpEditorEquationMeetProgress"] =
+      String(linearRearrangement.meetProgress);
+    input.transitionElement.dataset["kpEditorEquationCollapseProgress"] =
+      String(linearRearrangement.collapseProgress);
+    input.transitionElement.dataset["kpEditorEquationResultRevealProgress"] =
+      String(linearRearrangement.resultRevealProgress);
   }
   return true;
 }

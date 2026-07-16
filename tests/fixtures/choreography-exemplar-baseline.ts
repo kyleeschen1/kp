@@ -398,10 +398,11 @@ export const choreographyExemplarBaselines:
       phases: [
         {
           phaseId: "orient",
-          status: "partial",
+          status: "observed",
           evidence: [
-            "The cancellation transformation carries a focus annotation for +3 and -3.",
-            "Subtract and final simplify do not yet receive a uniform causal preview."
+            "Every generated solve step compiles a causal focus group before motion.",
+            "Subtract focuses the existing +3; cancellation and evaluation focus their complete operand groups.",
+            "One elevated group shadow follows each causal group without entering equation layout."
           ],
           contract: "Focus the smallest causal group for the active algebraic operation."
         },
@@ -409,8 +410,9 @@ export const choreographyExemplarBaselines:
           phaseId: "reflow",
           status: "observed",
           evidence: [
-            "layout-shift occupies beats 0–25 before introduced-token-enter occupies beats 25–50.",
-            "post-cancel-layout-shift begins after cancel-meet and cancel-collapse."
+            "Balanced introduction reaches reservation progress 1 before either inverse term becomes visible.",
+            "Cancellation holds survivor slots until meet/collapse, then compacts persistent tokens.",
+            "x and equality remain fully opaque while measured continuant geometry moves."
           ],
           contract: "Move persistent terms to their target slots before or after the semantic act according to the operation's causal order."
         },
@@ -418,25 +420,28 @@ export const choreographyExemplarBaselines:
           phaseId: "act",
           status: "observed",
           evidence: [
-            "Balanced inverse terms enter only after accommodation reflow.",
-            "Cancellation uses meet then collapse.",
-            "Final simplification uses meet, collapse, then reveal."
+            "Balanced inverse terms enter diagonally with bounded independent stagger after accommodation reflow.",
+            "Cancellation keeps both terms at nonzero scale through meet before collapse.",
+            "Final simplification moves 7 and -3 independently on opposite arcs before revealing 4."
           ],
           contract: "Execute operation-specific causal subgraphs rather than a whole-equation replacement."
         },
         {
           phaseId: "settle",
-          status: "partial",
+          status: "observed",
           evidence: [
-            "Cancellation leaves a short gap before post-cancel reflow.",
-            "Final reveal completes before the transformation endpoint."
+            "Each operation subgraph ends in an explicit recognize-result node.",
+            "The derived 4 overlaps its still-visible operands before holding at native geometry."
           ],
           contract: "Hold each algebraically recognizable result before advancing to the next semantic step."
         },
         {
           phaseId: "release",
-          status: "partial",
-          evidence: ["Focus annotations are scoped to a transformation but have no named release motion."],
+          status: "observed",
+          evidence: [
+            "Release is a named subgraph node and normalized envelope phase.",
+            "At the endpoint focus z, scale, outline, context dimming, and shared shadow return exactly to neutral."
+          ],
           contract: "Remove focus after the step's stable recognition checkpoint."
         }
       ],
@@ -449,33 +454,33 @@ export const choreographyExemplarBaselines:
         },
         {
           id: "focus-peak",
-          progress: 0,
-          status: "partial",
-          evidence: "Cancellation focus exists semantically, but has no normalized visual peak."
+          progress: 0.14,
+          status: "observed",
+          evidence: "Each causal group reaches full focus before the reflow phase."
         },
         {
           id: "reflow-complete",
-          progress: 0.5,
+          progress: 0.38,
           status: "observed",
-          evidence: "Subtract-both-sides finishes layout shift before inverse-term entry."
+          evidence: "Subtract-both-sides completes reserved-space reflow before inverse-term opacity rises above zero."
         },
         {
           id: "act-midpoint",
-          progress: 0.5,
+          progress: 0.55,
           status: "observed",
-          evidence: "Cancellation collapse ends and final simplification begins its reveal at the midpoint."
+          evidence: "Canceling or simplifying operands remain independently visible while converging through their operation subgraph."
         },
         {
           id: "settled",
-          progress: 0.7,
-          status: "partial",
-          evidence: "The final simplified value is revealed, but the recognition hold is implicit."
+          progress: 0.9,
+          status: "observed",
+          evidence: "The exact target holds under a named recognition checkpoint before release."
         },
         {
           id: "released",
           progress: 1,
-          status: "partial",
-          evidence: "Transformation boundaries clear active focus without a named release phase."
+          status: "observed",
+          evidence: "Native target ownership is exact and the shared focus shadow is removed."
         },
         {
           id: "rewind",
@@ -499,9 +504,7 @@ export const choreographyExemplarBaselines:
         "Persisted x and equality continuants remain authoritative throughout reverse sampling."
       ],
       knownGaps: [
-        "Orient and release are not uniformly realized as visual phases.",
-        "Recognition holds are implicit gaps or unused tail time.",
-        "Path geometry remains mostly linear and does not yet use scene-derived arcs."
+        "The legacy dashboard exemplar and generated editor now express the same causal ordering through separate runtime adapters; a future consolidation can share one renderer-neutral sampler."
       ]
     }
   ];

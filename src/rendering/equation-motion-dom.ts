@@ -3,6 +3,7 @@ import type { KpEquationTransitionIr } from "./equation-transition-ir.ts";
 import type { KpSelectorAnnotatedLatex } from "./selector-annotated-latex.ts";
 import type { KpEquationEnclosureChoreographyKind } from "./equation-enclosure-choreography.ts";
 import type { KpEquationMotionPathCandidate } from "./equation-motion-path-planner.ts";
+import type { KpEquationLinearRearrangementKind } from "./equation-linear-rearrangement.ts";
 
 export type KpEquationRepresentationalSuccessionKind =
   "opposite-corner-seed";
@@ -40,6 +41,8 @@ export interface KpMeasuredEquationTransitionGeometry {
   readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
+  readonly linearRearrangementKind?:
+    KpEquationLinearRearrangementKind | undefined;
   readonly precomputedMotionPathsByMotionId?: Readonly<
     Record<string, KpEquationMotionPathCandidate>
   > | undefined;
@@ -108,6 +111,8 @@ export function measureKpEquationTransitionGeometry(input: {
   readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
+  readonly linearRearrangementKind?:
+    KpEquationLinearRearrangementKind | undefined;
 }): KpMeasuredEquationTransitionGeometry {
   const sourceTokens = measureAnnotatedEquationMotionTokens(input.sourceRoot);
   const targetTokens = measureAnnotatedEquationMotionTokens(input.targetRoot);
@@ -136,6 +141,9 @@ export function measureKpEquationTransitionGeometry(input: {
           representationalSuccessionKind:
             input.representationalSuccessionKind
         }),
+    ...(input.linearRearrangementKind === undefined
+      ? {}
+      : { linearRearrangementKind: input.linearRearrangementKind }),
     sourceTokens,
     targetTokens,
     relations: input.ir.relations.map((relation) => {
