@@ -151,6 +151,19 @@ test("cancellation meets at nonzero material size before collapse and survivor c
     0
   );
 
+  const met = sampleKpEquationTokenMotion(cancellationGeometry(), 0.62);
+  const metTerms = met.tokens.filter(
+    (token) => token.motionId.startsWith("cancel.")
+  );
+  const centers = metTerms.map((token) => {
+    const native = cancellationGeometry().sourceTokens.find(
+      (candidate) => candidate.motionId === token.motionId
+    )!;
+    return native.localRect.left + native.localRect.width / 2 + token.pose.x;
+  });
+  assert.ok(Math.abs(centers[0]! - centers[1]!) < 0.001);
+  assert.ok(metTerms.every((token) => token.pose.scale > 0.65));
+
   const collapsing = sampleKpEquationTokenMotion(cancellationGeometry(), 0.69);
   assert.ok(
     collapsing.tokens

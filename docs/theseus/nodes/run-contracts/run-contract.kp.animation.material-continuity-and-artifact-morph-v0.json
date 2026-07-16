@@ -94,13 +94,14 @@
     {
       "id": "next-action.kp.linear.cancellation-continuity-v0",
       "title": "Repair cancellation continuity",
-      "status": "ready",
-      "summary": "Balanced introduction now has stable owners; tune cancellation motion and survivor reflow on those owners."
+      "summary": "Balanced introduction now has stable owners; tune cancellation motion and survivor reflow on those owners.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.linear.constant-derivation-continuity-v0",
       "title": "Repair constant derivation continuity",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Cancellation now converges materially; make 7 and -3 resolve into 4 through one shared derivation bundle."
     },
     {
       "id": "next-action.kp.linear.solve-level-envelope-v0",

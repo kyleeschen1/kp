@@ -2,9 +2,21 @@
   "id": "next-action.kp.linear.cancellation-continuity-v0",
   "kind": "next-action",
   "title": "Repair cancellation continuity",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 9 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Made inverse terms meet at one exact shared center with opposed arcs, retain nonzero individual size through contact, then contract further only as collapse begins while survivor reflow remains independently sampled.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-linear-rearrangement.ts",
+      "summary": "Refines cancellation geometry and separates meet shrink from collapse shrink."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-linear-rearrangement-choreography.test.ts",
+      "summary": "Proves exact center convergence and a nonzero material-size floor before disappearance."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +30,35 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-linear-rearrangement-choreography.test.ts",
+      "status": "passed",
+      "scope": "linear cancellation continuity",
+      "checkedAt": "2026-07-16T19:28:36.644Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g linear-rearrangement",
+      "status": "passed",
+      "scope": "visible cancellation material owners",
+      "checkedAt": "2026-07-16T19:28:36.725Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript cancellation sampling",
+      "checkedAt": "2026-07-16T19:28:36.800Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:28:36.873Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Made inverse terms meet at one exact shared center with opposed arcs, retain nonzero individual size through contact, then contract further only as collapse begins while survivor reflow remains independently sampled."
+  }
 }

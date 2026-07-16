@@ -115,9 +115,12 @@ function sampleCancellation(
     const direction = index % 2 === 0 ? -1 : 1;
     return frameToken(token, "source", {
       opacity: 1 - input.frame.collapseProgress,
-      x: (groupCenter.x - tokenCenter.x) * input.frame.meetProgress * 0.82,
-      y: direction * 3 * Math.sin(Math.PI * input.frame.meetProgress),
-      scale: 1 - 0.22 * input.frame.meetProgress
+      x: (groupCenter.x - tokenCenter.x) * input.frame.meetProgress,
+      y: direction * 4 * Math.sin(Math.PI * input.frame.meetProgress),
+      scale:
+        1 -
+        0.16 * input.frame.meetProgress -
+        0.18 * input.frame.collapseProgress
     });
   });
 }
