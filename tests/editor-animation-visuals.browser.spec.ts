@@ -149,6 +149,16 @@ test("accessible animation presentations share semantic checkpoints and keyboard
   const scrubber = player.locator('[data-action="seek-editor-animation"]');
   const transition = player.locator("[data-kp-editor-equation-transition-id]");
 
+  await expect(presentation).toHaveValue("full-motion");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-accessibility-preference",
+    "full-motion"
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-accessibility-mode",
+    "full-motion"
+  );
+
   await presentation.selectOption("reduced-motion");
   await expect(player).toHaveAttribute("data-kp-editor-animation-accessibility-mode", "reduced-motion");
   await scrubber.fill("0.58");
@@ -209,6 +219,10 @@ test("gestalt style switching preserves semantic progress and the mounted equati
     .not.toHaveText("pending");
   await expect(diagnostics.locator("[data-kp-editor-gestalt-capabilities]"))
     .toContainText("compatible");
+  await expect(diagnostics.locator("[data-kp-editor-design-strategy]"))
+    .toContainText("operation-specific");
+  await expect(diagnostics.locator("[data-kp-editor-design-issues]"))
+    .toHaveText("none");
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-continuity-mode",
     "persistent-owners"
@@ -270,6 +284,45 @@ test("gestalt style switching preserves semantic progress and the mounted equati
     restrainedRealization.map((token) => token.realization)
   )).not.toEqual(
     new Set(organicRealization.map((token) => token.realization))
+  );
+});
+
+test("design diagnostics distinguish fallback fades from incomplete succession", async ({
+  page
+}) => {
+  await page.goto("/");
+  const selector = page.locator('[data-action="set-editor-animation"]');
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const diagnostics = player.locator(
+    "[data-kp-editor-animation-gestalt-diagnostics]"
+  );
+
+  await selector.selectOption(
+    "editor-animation.sample.animation.derivative-rules.basic"
+  );
+  await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
+  await expect(diagnostics.locator("[data-kp-editor-design-strategy]"))
+    .toHaveText("whole-equation-fallback · artifact-replace");
+  await expect(diagnostics.locator("[data-kp-editor-design-issues]"))
+    .toContainText("4 issues");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-design-issue-codes",
+    /design\.correspondence\.missing/
+  );
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-design-issue-codes",
+    /design\.object-constancy\.fade-dominant/
+  );
+
+  await selector.selectOption(
+    "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
+  );
+  await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
+  await expect(diagnostics.locator("[data-kp-editor-design-strategy]"))
+    .toHaveText("operation-specific · artifact-replace");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-design-issue-codes",
+    /design\.representation\.granularity-loss/
   );
 });
 

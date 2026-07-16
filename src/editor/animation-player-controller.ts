@@ -139,7 +139,7 @@ function hydrateKpEditorAnimationPlayer(player: HTMLElement): void {
   );
   focusExperimentModes.set(player, "flat");
   syncAuthoringData(player, authoring);
-  syncAccessibilityData(player, "system");
+  syncAccessibilityData(player, "full-motion");
   player.dataset["kpEditorAnimationHydrated"] = "true";
   player.addEventListener("click", handlePlayerClick);
   player.addEventListener("input", handlePlayerInput);
@@ -461,6 +461,9 @@ function syncGestaltInspection(
     inspection.resolvedStyle.fingerprint;
   player.dataset["kpEditorAnimationGestaltEnvelopePhase"] =
     inspection.envelopePhaseLabel;
+  player.dataset["kpEditorAnimationDesignIssueCodes"] =
+    inspection.designDiagnosis?.issues.map((issue) => issue.code).join(" ") ??
+    "";
   if (inspection.choreographyPlanId === undefined) {
     delete player.dataset["kpEditorAnimationChoreographyPlanId"];
   } else {
@@ -527,6 +530,16 @@ function syncGestaltInspection(
     player,
     "[data-kp-editor-gestalt-capabilities]",
     inspection.capabilityLabel
+  );
+  replaceText(
+    player,
+    "[data-kp-editor-design-strategy]",
+    inspection.designStrategyLabel
+  );
+  replaceText(
+    player,
+    "[data-kp-editor-design-issues]",
+    inspection.designIssueLabel
   );
   const warnings = player.querySelector<HTMLElement>(
     "[data-kp-editor-gestalt-warnings]"

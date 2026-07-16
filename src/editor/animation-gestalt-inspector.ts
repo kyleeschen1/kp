@@ -44,6 +44,11 @@ import type {
   KpGestaltStyleChannels,
   KpGestaltStyleRef
 } from "../animation/gestalt-style.ts";
+import {
+  diagnoseKpAnimationDesign,
+  kpAnimationDesignIssueStatement,
+  type KpAnimationDesignDiagnosis
+} from "../animation/animation-design-diagnostics.ts";
 import type { KpEditorAnimationPlayerState } from "./animation-player-state.ts";
 
 export interface KpEditorAnimationGestaltInspection {
@@ -60,6 +65,9 @@ export interface KpEditorAnimationGestaltInspection {
   readonly salienceLabel: string;
   readonly traversalLabel: string;
   readonly capabilityLabel: string;
+  readonly designStrategyLabel: string;
+  readonly designIssueLabel: string;
+  readonly designDiagnosis?: KpAnimationDesignDiagnosis | undefined;
   readonly capabilityResolution?: KpGestaltRendererCapabilityResolution | undefined;
   readonly warnings: readonly string[];
 }
@@ -138,6 +146,15 @@ export function createKpEditorAnimationGestaltInspection(input: {
         .map((diagnostic) => diagnostic.message)
     );
   }
+  const designDiagnosis = diagnoseKpAnimationDesign({
+    animation: input.animation,
+    transformationId: input.state.runtimeFrame.activeTransformationIds[0]
+  });
+  if (designDiagnosis !== undefined) {
+    warnings.push(
+      ...designDiagnosis.issues.map(kpAnimationDesignIssueStatement)
+    );
+  }
   const localProgress = localKpEditorAnimationProgress(
     input.animation,
     input.state
@@ -197,6 +214,19 @@ export function createKpEditorAnimationGestaltInspection(input: {
       capabilityResolution === undefined
         ? "unreported"
         : `${capabilityResolution.status} · ${capabilityResolution.realizedCapabilityIds.length} realized · ${capabilityResolution.fallbackCapabilityIds.length} fallbacks`,
+    designStrategyLabel: designDiagnosis === undefined
+      ? "unreported"
+      : `${designDiagnosis.visualStrategy} · ${designDiagnosis.motifKind}`,
+    designIssueLabel: designDiagnosis === undefined
+      ? "unreported"
+      : designDiagnosis.issues.length === 0
+        ? "none"
+        : `${designDiagnosis.issues.length} issues · ${[
+            ...new Set(
+              designDiagnosis.issues.map((issue) => issue.dimension)
+            )
+          ].join(", ")}`,
+    ...(designDiagnosis === undefined ? {} : { designDiagnosis }),
     ...(capabilityResolution === undefined ? {} : { capabilityResolution }),
     warnings
   };

@@ -53,8 +53,8 @@ export function renderKpEditorAnimationPlayerShell(input: {
         <p class="editor-animation-player__status" data-kp-editor-animation-status-label aria-live="polite">${statusLabel(player.playbackStatus, player.direction)}</p>
         <label class="editor-animation-player__accessibility">Presentation
           <select data-kp-editor-animation-accessibility-control aria-label="Animation accessibility presentation">
+            <option value="full-motion" selected>full motion</option>
             <option value="system">system preference</option>
-            <option value="full-motion">full motion</option>
             <option value="reduced-motion">reduced motion</option>
             <option value="static">static checkpoints</option>
             <option value="narrated">narrated</option>
@@ -98,6 +98,8 @@ function renderGestaltDiagnostics(): string {
           <div><dt>Salience graph</dt><dd data-kp-editor-gestalt-salience>pending</dd></div>
           <div><dt>Traversal</dt><dd data-kp-editor-gestalt-traversal>pending</dd></div>
           <div><dt>Capabilities</dt><dd data-kp-editor-gestalt-capabilities>pending</dd></div>
+          <div><dt>Visual strategy</dt><dd data-kp-editor-design-strategy>pending</dd></div>
+          <div><dt>Design issues</dt><dd data-kp-editor-design-issues>pending</dd></div>
           <div><dt>Material ownership</dt><dd data-kp-editor-continuity-ownership>pending</dd></div>
           <div><dt>Artifact bundle</dt><dd data-kp-editor-continuity-bundle>pending</dd></div>
           <div><dt>Native settlement</dt><dd data-kp-editor-continuity-settlement>pending</dd></div>
