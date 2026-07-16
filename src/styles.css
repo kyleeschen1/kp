@@ -1638,10 +1638,31 @@ h2 {
 }
 
 .editor-equation-stage {
+  position: relative;
   display: grid;
   width: 100%;
   min-height: 10rem;
   place-items: stretch;
+}
+
+.editor-equation-stage__content {
+  display: contents;
+}
+
+.editor-equation-stage__material-layer {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.editor-equation-stage__material-owner {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  transform-origin: center;
+  will-change: opacity, transform;
 }
 
 .editor-equation-stage__transition {

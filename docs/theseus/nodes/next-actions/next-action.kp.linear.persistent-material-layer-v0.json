@@ -2,9 +2,26 @@
   "id": "next-action.kp.linear.persistent-material-layer-v0",
   "kind": "next-action",
   "title": "Build the persistent equation material layer",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 7 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Added a stage-owned persistent equation material layer outside replaceable transition content, plus a DOM synchronization primitive that keeps owner elements mounted across operation remounts.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-material-layer-dom.ts",
+      "summary": "Creates and updates persistent visual owner clones without granting them semantic motion ids."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Separates replaceable transition content from the persistent material layer."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves the material layer remains the same DOM element throughout the solve sequence."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +35,29 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g linear-rearrangement",
+      "status": "passed",
+      "scope": "persistent equation material layer in the editor",
+      "checkedAt": "2026-07-16T19:21:58.773Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript DOM integration",
+      "checkedAt": "2026-07-16T19:21:58.848Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:21:58.920Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added a stage-owned persistent equation material layer outside replaceable transition content, plus a DOM synchronization primitive that keeps owner elements mounted across operation remounts."
+  }
 }

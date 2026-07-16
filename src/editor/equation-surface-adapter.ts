@@ -1119,7 +1119,10 @@ function findMotionTokenByEntityId(
 function renderStage(frame: KpEditorEquationStageFrame): string {
   return `
     <div class="editor-equation-stage" data-kp-editor-equation-stage data-kp-editor-equation-stage-identity-key="${escapeHtml(frame.stageIdentityKey)}" data-kp-editor-equation-content-key="${escapeHtml(frame.contentKey)}" data-kp-editor-equation-phase-id="${escapeHtml(frame.projection.phaseId)}" data-kp-editor-equation-global-progress="${frame.globalProgress}" data-kp-editor-equation-semantic-progress="${frame.semanticProgress}" data-kp-editor-equation-local-progress="${frame.localProgress}">
-      ${renderStageContent(frame)}
+      <div class="editor-equation-stage__content" data-kp-editor-equation-content>
+        ${renderStageContent(frame)}
+      </div>
+      <div class="editor-equation-stage__material-layer" data-kp-editor-equation-material-layer aria-hidden="true"></div>
     </div>
   `;
 }
@@ -1160,7 +1163,13 @@ function replaceStageContent(
 ): void {
   const template = document.createElement("template");
   template.innerHTML = renderStageContent(frame);
-  stage.replaceChildren(...template.content.childNodes);
+  const content = stage.querySelector<HTMLElement>(
+    "[data-kp-editor-equation-content]"
+  );
+  if (content === null) {
+    throw new Error("Equation stage is missing its replaceable content layer.");
+  }
+  content.replaceChildren(...template.content.childNodes);
   stage.dataset["kpEditorEquationContentKey"] = frame.contentKey;
 }
 

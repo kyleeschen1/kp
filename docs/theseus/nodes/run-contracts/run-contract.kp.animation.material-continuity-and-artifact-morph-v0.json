@@ -82,13 +82,14 @@
     {
       "id": "next-action.kp.linear.persistent-material-layer-v0",
       "title": "Build the persistent equation material layer",
-      "status": "ready",
-      "summary": "Foundation tranche is complete; integrate stable visual ownership into the linear solve renderer."
+      "summary": "Foundation tranche is complete; integrate stable visual ownership into the linear solve renderer.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.linear.balanced-introduction-continuity-v0",
       "title": "Repair balanced operation introduction",
-      "status": "planned"
+      "status": "ready",
+      "summary": "The persistent layer survives content replacement; bind balanced-operation continuants and introduced terms into it."
     },
     {
       "id": "next-action.kp.linear.cancellation-continuity-v0",

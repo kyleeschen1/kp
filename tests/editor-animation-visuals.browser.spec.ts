@@ -387,8 +387,14 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   const player = page.locator("[data-kp-editor-animation-player]");
   const scrubber = player.locator('[data-action="seek-editor-animation"]');
   const stage = player.locator("[data-kp-editor-equation-stage]");
+  const materialLayer = stage.locator(
+    "[data-kp-editor-equation-material-layer]"
+  );
   await stage.evaluate((element) => {
     element.dataset["kpLinearRearrangementStageProbe"] = "persistent";
+  });
+  await materialLayer.evaluate((element) => {
+    element.dataset["kpMaterialLayerProbe"] = "persistent";
   });
 
   await scrubber.fill("0.1");
@@ -520,6 +526,10 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   await expect(seven).toHaveCSS("--kp-focus-z", "0px");
   await expect(stage).toHaveAttribute(
     "data-kp-linear-rearrangement-stage-probe",
+    "persistent"
+  );
+  await expect(materialLayer).toHaveAttribute(
+    "data-kp-material-layer-probe",
     "persistent"
   );
 });
