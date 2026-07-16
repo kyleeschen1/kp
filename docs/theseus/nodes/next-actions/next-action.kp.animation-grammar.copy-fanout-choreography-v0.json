@@ -2,15 +2,20 @@
   "id": "next-action.kp.animation-grammar.copy-fanout-choreography-v0",
   "kind": "next-action",
   "title": "Compile Copy And Fan-Out Choreography",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Preserve a nonzero source and move lineage-bearing descendants through reversible branch, transit, and arrival phases. Verification: standard.",
+  "summary": "Compiled renderer-neutral copy and fan-out choreography with lineage-derived path identities, nonzero source contraction, continuous branch/transit/arrival phases, and exact rewind sampling.",
   "severity": "high",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/copy-fan-out-choreography.ts",
+      "summary": "Compiles valid copy and split lineage into stable descendant paths and deterministic semantic phase frames."
     }
   ],
   "dependsOn": {
@@ -48,5 +53,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test -- tests/equation-motion-plan.test.ts tests/equation-motion-sampler.test.ts tests/semantic-lineage-graph.test.ts",
+      "status": "passed",
+      "scope": "1002 unit tests",
+      "checkedAt": "2026-07-16T02:02:54.537Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "application, node, and test TypeScript",
+      "checkedAt": "2026-07-16T02:02:54.592Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T02:02:54.635Z",
+      "scope": "Theseus graph and event log"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Compiled renderer-neutral copy and fan-out choreography with lineage-derived path identities, nonzero source contraction, continuous branch/transit/arrival phases, and exact rewind sampling."
+  }
 }

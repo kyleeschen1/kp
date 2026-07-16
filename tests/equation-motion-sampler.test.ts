@@ -19,6 +19,11 @@ import {
 } from "../src/rendering/role-aware-motion-primitives.ts";
 import { sampleKpEquationEnclosureChoreography } from "../src/rendering/equation-enclosure-choreography.ts";
 import {
+  compileKpCopyFanOutChoreography,
+  sampleKpCopyFanOutChoreography
+} from "../src/animation/copy-fan-out-choreography.ts";
+import { createKpSemanticLineageGraph } from "../src/semantic/semantic-lineage-graph.ts";
+import {
   compileSemanticBeatTimeline,
   createSemanticBeatMotionTrack,
   easedProgressBetweenSemanticBeat,
@@ -131,6 +136,38 @@ test("canonical enclosure choreography stages wrap and unwrap in reversible sema
   assert.equal(unwrapEarly.persistentTravelProgress, 0);
   assert.ok(unwrapLate.persistentTravelProgress > 0);
   assert.equal(unwrapLate.enclosureVisibility, 0);
+});
+
+test("copy/fan-out phase sampling keeps descendants at their source before transit", () => {
+  const plan = compileKpCopyFanOutChoreography({
+    id: "choreography.sampler-fan-out",
+    lineageGraph: createKpSemanticLineageGraph({
+      id: "lineage.sampler-fan-out",
+      sourceEntityIds: ["source"],
+      targetEntityIds: ["left", "right"],
+      edges: [{
+        id: "split-source",
+        relation: "split",
+        sourceEntityIds: ["source"],
+        targetEntityIds: ["left", "right"],
+        summary: "Branch source into two descendants."
+      }]
+    }),
+    sourceEntityId: "source"
+  });
+  const branch = sampleKpCopyFanOutChoreography({ plan, progress: 0.28 });
+  const transit = sampleKpCopyFanOutChoreography({ plan, progress: 0.56 });
+  const arrival = sampleKpCopyFanOutChoreography({ plan, progress: 0.92 });
+
+  assert.ok(branch.descendants.every((descendant) =>
+    descendant.opacity > 0 && descendant.pathProgress === 0
+  ));
+  assert.ok(transit.descendants.every((descendant) =>
+    descendant.opacity === 1 && descendant.pathProgress > 0 && descendant.pathProgress < 1
+  ));
+  assert.ok(arrival.descendants.every((descendant) =>
+    descendant.opacity === 1 && descendant.pathProgress === 1 && descendant.scale === 1
+  ));
 });
 
 test("semantic beat compiler exposes the current equation demo timeline", () => {
