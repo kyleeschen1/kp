@@ -2,15 +2,25 @@
   "id": "next-action.kp.animation-grammar.operation-pack-contract-v0",
   "kind": "next-action",
   "title": "Define Versioned Operation Packs",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Define pinned core, shared-domain, and namespaced project pack contracts with deterministic dependencies. Verification: standard.",
+  "summary": "Defined exact-version core, shared-domain, and project operation packs, dependency pins, project lock metadata, namespace laws, and no-silent-upgrade matching.",
   "severity": "low",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-15-governed-semantic-animation-grammar-loop-proposal.md",
       "summary": "Approved slice intent, risk, verification, commit boundary, and stop condition."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/canonical-operation-pack.ts",
+      "summary": "Versioned operation pack, dependency, and project pin contracts."
+    },
+    {
+      "kind": "file",
+      "path": "tests/canonical-operation-pack.test.ts",
+      "summary": "Scope, namespace, exact pin, duplicate, and version range coverage."
     }
   ],
   "dependsOn": {
@@ -48,5 +58,29 @@
       "id": "focused-verification",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-operation-pack.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-16T00:51:33.925Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "typecheck",
+      "checkedAt": "2026-07-16T00:51:33.974Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T00:51:34.014Z",
+      "scope": "graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined exact-version core, shared-domain, and project operation packs, dependency pins, project lock metadata, namespace laws, and no-silent-upgrade matching."
+  }
 }
