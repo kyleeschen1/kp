@@ -2,9 +2,21 @@
   "id": "next-action.kp.radical.reverse-succession-v0",
   "kind": "next-action",
   "title": "Implement genuine reverse radical succession",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Approved slice 20 of 24 in the material continuity and artifact morph repair loop.",
+  "summary": "Made radical material lookup direction-neutral and proved rewind reuses the same mounted base and hook owners at equal semantic progress while restoring exponent tokens as the target representation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Finds logical power and radical endpoints independent of displayed source-target direction."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Checks owner identity, sub-pixel pose equivalence, semantic progress, and reversed exponent target structure."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.animation.material-continuity-loop-v0"
@@ -18,5 +30,35 @@
   ],
   "verification": [
     "npm run theseus -- validate"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g radical",
+      "status": "passed",
+      "scope": "radical forward and rewind material succession",
+      "checkedAt": "2026-07-16T19:56:41.291Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-radical-succession-choreography.test.ts tests/kp-equation-material-owner.test.ts tests/kp-organic-motion-primitives.test.ts",
+      "status": "passed",
+      "scope": "radical and organic reverse sampling",
+      "checkedAt": "2026-07-16T19:56:41.372Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript direction-neutral radical integration",
+      "checkedAt": "2026-07-16T19:56:41.447Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-16T19:56:41.527Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Made radical material lookup direction-neutral and proved rewind reuses the same mounted base and hook owners at equal semantic progress while restoring exponent tokens as the target representation."
+  }
 }

@@ -160,13 +160,14 @@
     {
       "id": "next-action.kp.radical.reverse-succession-v0",
       "title": "Implement genuine reverse radical succession",
-      "status": "ready",
-      "summary": "Forward settlement is smooth and exact; prove rewind folds the radical back through the same fragments and bundle."
+      "summary": "Forward settlement is smooth and exact; prove rewind folds the radical back through the same fragments and bundle.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.radical.continuity-gates-v0",
       "title": "Enforce radical morph quality",
-      "status": "planned"
+      "status": "ready",
+      "summary": "Forward and reverse share one material story; add shared-bundle, ownership, settlement, and deformation browser gates."
     },
     {
       "id": "next-action.kp.gestalt.motion-eligibility-v0",

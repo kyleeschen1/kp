@@ -976,6 +976,68 @@ test("radical-succession uses independent opposite-corner tokens and native sett
   ).toHaveCount(0);
 });
 
+test("radical material succession is identical under semantic rewind", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  const baseOwner = stage.locator(
+    '[data-kp-equation-material-owner-id="radical-rewrite.base-radicand"]'
+  );
+  const hookOwner = stage.locator(
+    '[data-kp-equation-material-owner-id="radical-rewrite.root-notation.hook"]'
+  );
+
+  await scrubber.fill("0.65");
+  await baseOwner.evaluate((element) => {
+    element.dataset["kpRadicalRewindProbe"] = "base";
+  });
+  await hookOwner.evaluate((element) => {
+    element.dataset["kpRadicalRewindProbe"] = "hook";
+  });
+  const forwardRects = await Promise.all([baseOwner, hookOwner].map((locator) =>
+    locator.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return { x: rect.x, y: rect.y };
+    })
+  ));
+
+  await player.getByRole("button", { name: "Rewind" }).click();
+  await scrubber.fill("0.35");
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-semantic-progress",
+    "0.65"
+  );
+  await expect(baseOwner).toHaveAttribute(
+    "data-kp-radical-rewind-probe",
+    "base"
+  );
+  await expect(hookOwner).toHaveAttribute(
+    "data-kp-radical-rewind-probe",
+    "hook"
+  );
+  const rewindRects = await Promise.all([baseOwner, hookOwner].map((locator) =>
+    locator.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return { x: rect.x, y: rect.y };
+    })
+  ));
+  for (const [index, forward] of forwardRects.entries()) {
+    expect(Math.abs(rewindRects[index]!.x - forward.x)).toBeLessThan(0.75);
+    expect(Math.abs(rewindRects[index]!.y - forward.y)).toBeLessThan(0.75);
+  }
+  await expect(
+    stage.locator(
+      '[data-kp-editor-equation-target] [data-kp-motion-id*=".power.exponent-"]'
+    )
+  ).toHaveCount(3);
+});
+
 test("function-wrap-family animation visibly wraps and rewinds its argument", async ({
   page
 }) => {

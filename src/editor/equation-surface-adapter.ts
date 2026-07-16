@@ -448,13 +448,13 @@ function applyRadicalMaterialLayer(input: {
   readonly semanticProgress: number;
 }): void {
   const radical = input.stage.querySelector<HTMLElement>(
-    '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radical-symbol"]'
+    '[data-kp-motion-id*=".radical.radical-symbol"]'
   );
   const sourceBase = input.stage.querySelector<HTMLElement>(
-    '[data-kp-editor-equation-source] [data-kp-motion-id*=".power.base"]'
+    '[data-kp-motion-id*=".power.base"]'
   );
   const targetBase = input.stage.querySelector<HTMLElement>(
-    '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radicand"]'
+    '[data-kp-motion-id*=".radical.radicand"]'
   );
   if (
     radical === null ||
