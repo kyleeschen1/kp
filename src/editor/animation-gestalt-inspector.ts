@@ -19,6 +19,9 @@ import {
   createKpDotProductTraversalChoreography
 } from "../animation/dot-product-traversal-choreography.ts";
 import {
+  createKpDerivativePowerRuleChoreography
+} from "../animation/derivative-power-choreography.ts";
+import {
   createKpFunctionWrapChoreography
 } from "../animation/function-wrap-choreography.ts";
 import {
@@ -296,6 +299,15 @@ function inspectChoreography(
       focusGroupIds: choreography.contributions.map(
         (contribution) => contribution.focus.groupId
       )
+    };
+  } else if (animation.transformations.some(
+    (transformation) => transformation.transformType === "applyDerivativePowerRule"
+  )) {
+    const choreography = createKpDerivativePowerRuleChoreography(animation);
+    result = {
+      plan: choreography.plan,
+      timeline: choreography.timeline,
+      focusGroupIds: [choreography.focus.groupId]
     };
   } else if (animation.transformations.some((transformation) =>
     transformation.transformType === "subtractBothSides" ||

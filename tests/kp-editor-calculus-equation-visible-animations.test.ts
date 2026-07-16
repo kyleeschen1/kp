@@ -44,11 +44,14 @@ test("generated calculus equations expose exact derivative and integral transiti
     ]
   ] as const;
 
-  for (const [animationId, source, target] of cases) {
+  for (const [index, [animationId, source, target]] of cases.entries()) {
     const visible = frame(animationId);
     assert.equal(visible.projection.transitions[0]?.source[0]?.latex, source);
     assert.equal(visible.projection.transitions[0]?.target[0]?.latex, target);
-    assert.equal(visible.motifs[0]?.kind, "artifact-replace");
+    assert.equal(
+      visible.motifs[0]?.kind,
+      index === 0 ? "derivative-power" : "artifact-replace"
+    );
   }
 });
 

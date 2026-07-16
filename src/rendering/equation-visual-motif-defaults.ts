@@ -45,6 +45,12 @@ export const defaultEquationTransformVisualMotifRules:
       summary: "The supplied value persists through transmission before replacing the prior occupant."
     },
     {
+      transformationKind: "applyDerivativePowerRule",
+      descriptor: descriptorForEquationMotif("derivative-power"),
+      summary:
+        "The exponent branches into coefficient and predecessor roles after the persistent base reflows."
+    },
+    {
       transformationKind: "multiplyNegativeBothSidesInequality",
       descriptor: descriptorForEquationMotif("relation-flip"),
       summary: "The inequality relation turns while negative multiplication enters."

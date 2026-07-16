@@ -210,7 +210,14 @@ test("semantic beat compiler exposes the current equation demo timeline", () => 
       ["establish-value-source", 0, 10, "ease-in-out"],
       ["transmit-substitution-value", 7, 34, "ease-in-out"],
       ["replace-substitution-occupant", 31, 42, "ease-in-out"],
-      ["settle-substitution-replacement", 40, 50, "ease-in-out"]
+      ["settle-substitution-replacement", 40, 50, "ease-in-out"],
+      ["orient-exponent", 0, 9, "ease-in-out"],
+      ["reflow-continuants", 6, 17, "ease-in-out"],
+      ["branch-exponent", 14, 22, "ease-in-out"],
+      ["drop-coefficient", 18, 36, "ease-in-out"],
+      ["decrement-successor", 22, 38, "ease-in-out"],
+      ["settle-derivative", 37, 46, "ease-in-out"],
+      ["release-derivative-focus", 44, 50, "ease-in-out"]
     ]
   );
   assert.equal(

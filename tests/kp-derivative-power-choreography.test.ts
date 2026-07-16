@@ -3,13 +3,18 @@ import test from "node:test";
 
 import {
   compileKpDerivativePowerChoreography,
+  createKpDerivativePowerRuleChoreography,
   kpDerivativePowerPhaseIds,
   sampleKpDerivativePowerChoreography
 } from "../src/animation/derivative-power-choreography.ts";
+import { createGeneratedProblemAnimationAsset } from "../src/animation/generated-problem-import.ts";
 import {
   createKpDerivativePowerRuleCorrespondenceMap,
   createKpDerivativePowerRuleSemanticRoles
 } from "../src/semantic/derivative-power-rule-semantics.ts";
+import {
+  createGeneratedCalculusProblemFixture
+} from "../src/semantic/generated-calculus-problem-fixture.ts";
 
 function fixture() {
   const semanticRoles = createKpDerivativePowerRuleSemanticRoles({
@@ -51,6 +56,30 @@ test("derivative power choreography compiles semantic branch roles", () => {
     coefficientPathVariant: "arc-below",
     successorPathVariant: "arc-above"
   });
+});
+
+test("derivative power animation exposes its envelope and semantic inspector plan", () => {
+  const animation = createGeneratedProblemAnimationAsset(
+    createGeneratedCalculusProblemFixture(
+      "generated.calculus.derivative.power-rule-x-cubed"
+    )
+  );
+  const choreography = createKpDerivativePowerRuleChoreography(animation);
+
+  assert.deepEqual(
+    choreography.plan.phases.map((phase) => phase.id),
+    ["orient", "reflow", "act", "settle", "release"]
+  );
+  assert.equal(
+    choreography.plan.semantic.canonicalOperationId,
+    "kp.calculus.derivative.power-rule"
+  );
+  assert.deepEqual(choreography.plan.semantic.motifIds, ["derivative-power"]);
+  assert.equal(choreography.plan.semantic.salience.branchGroups.length, 1);
+  assert.deepEqual(
+    choreography.plan.semantic.traversal.ranks.map((rank) => rank.rank),
+    [0, 1, 2]
+  );
 });
 
 test("derivative power choreography previews, acts, settles, and releases", () => {

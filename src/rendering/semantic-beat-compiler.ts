@@ -6,6 +6,7 @@ import type {
 import type { EquationVisualMotifPhaseId } from "./visual-motif.ts";
 import { kpCopyFanOutPhaseIds } from "../animation/copy-fan-out-choreography.ts";
 import { kpSubstitutionPhaseIds } from "../animation/substitution-choreography.ts";
+import { kpDerivativePowerPhaseIds } from "../animation/derivative-power-choreography.ts";
 
 export type SemanticBeatId = EquationVisualMotifPhaseId;
 
@@ -182,6 +183,13 @@ export const linearEquationDemoBeatTimeline = compileSemanticBeatTimeline({
       endBeat: substitutionBeatRange(id)[1],
       easing: "ease-in-out" as const,
       summary: `Substitution ${id.replaceAll("-", " ")} phase.`
+    })),
+    ...kpDerivativePowerPhaseIds.map((id) => ({
+      id,
+      startBeat: derivativePowerBeatRange(id)[0],
+      endBeat: derivativePowerBeatRange(id)[1],
+      easing: "ease-in-out" as const,
+      summary: `Derivative power ${id.replaceAll("-", " ")} phase.`
     }))
   ]
 });
@@ -206,6 +214,20 @@ function substitutionBeatRange(
     case "transmit-substitution-value": return [7, 34];
     case "replace-substitution-occupant": return [31, 42];
     case "settle-substitution-replacement": return [40, 50];
+  }
+}
+
+function derivativePowerBeatRange(
+  id: typeof kpDerivativePowerPhaseIds[number]
+): readonly [number, number] {
+  switch (id) {
+    case "orient-exponent": return [0, 9];
+    case "reflow-continuants": return [6, 17];
+    case "branch-exponent": return [14, 22];
+    case "drop-coefficient": return [18, 36];
+    case "decrement-successor": return [22, 38];
+    case "settle-derivative": return [37, 46];
+    case "release-derivative-focus": return [44, 50];
   }
 }
 

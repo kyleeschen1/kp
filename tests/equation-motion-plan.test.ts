@@ -116,6 +116,19 @@ test("visual motif module exposes reusable equation motif descriptors", () => {
         ]
       ],
       [
+        "derivative-power",
+        ["transmit", "copy", "shift", "exit"],
+        [
+          "orient-exponent",
+          "reflow-continuants",
+          "branch-exponent",
+          "drop-coefficient",
+          "decrement-successor",
+          "settle-derivative",
+          "release-derivative-focus"
+        ]
+      ],
+      [
         "merge-fan-in",
         ["merge", "shift"],
         [

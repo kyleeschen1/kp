@@ -146,7 +146,8 @@ function lineageTokenPathPlans(
     const token = tokens.find((candidate) => candidate.motionId === motionId);
     if (token === undefined) throw new Error(`Missing lineage token ${motionId}.`);
     const preferredVariant = pathPreference === "automatic"
-      ? branchIndex % 2 === 0 ? "arc-above" : "arc-below"
+      ? derivativeBranchVariant(geometry, relation, motionId) ??
+        (branchIndex % 2 === 0 ? "arc-above" : "arc-below")
       : pathPreference;
     const variants = pathPreference.startsWith("around")
       ? ["around-left", "around-right"] as const
@@ -162,6 +163,24 @@ function lineageTokenPathPlans(
     });
     return [motionId, path.selected] as const;
   }));
+}
+
+function derivativeBranchVariant(
+  geometry: KpMeasuredEquationTransitionGeometry,
+  relation: KpMeasuredEquationTransitionGeometry["relations"][number],
+  motionId: string
+): "arc-above" | "arc-below" | undefined {
+  const plan = geometry.derivativePowerChoreographyPlan;
+  const motionIndex = relation.target?.motionIds.indexOf(motionId) ?? -1;
+  const selectorId = relation.target?.selectorIds[motionIndex];
+  if (plan === undefined || selectorId === undefined) return undefined;
+  if (selectorId === plan.exponent.coefficientSelectorId) {
+    return plan.exponent.coefficientPathVariant;
+  }
+  if (selectorId === plan.exponent.successorSelectorId) {
+    return plan.exponent.successorPathVariant;
+  }
+  return undefined;
 }
 
 function center(rect: {

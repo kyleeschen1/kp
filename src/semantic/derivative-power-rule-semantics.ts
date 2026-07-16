@@ -1,4 +1,9 @@
 import type { CorrespondenceMap } from "./correspondence.ts";
+import {
+  findKpAssetSelector,
+  type KpAssetBundle
+} from "./asset.ts";
+import type { KpSemanticTransformation } from "./asset-transformation.ts";
 
 export type KpDerivativePowerRuleRoleId =
   | "source.derivative-operator"
@@ -217,6 +222,46 @@ export function createKpDerivativePowerRuleCorrespondenceMap(
       }
     ]
   };
+}
+
+export function resolveKpDerivativePowerRuleSemanticRoles(input: {
+  readonly transformation: KpSemanticTransformation;
+  readonly bundle: KpAssetBundle;
+}): KpDerivativePowerRuleSemanticRoles {
+  if (
+    input.transformation.transformType !== "applyDerivativePowerRule" ||
+    input.transformation.sourceObjectIds.length !== 1 ||
+    input.transformation.targetObjectIds.length !== 1
+  ) {
+    throw new Error(
+      `Transformation ${input.transformation.id} is not a single-source derivative power rule.`
+    );
+  }
+  const sourceObjectId = input.transformation.sourceObjectIds[0]!;
+  const targetObjectId = input.transformation.targetObjectIds[0]!;
+  const label = (selectorId: string): string => {
+    const value = findKpAssetSelector(input.bundle, selectorId)?.label;
+    if (value === undefined || value.trim() === "") {
+      throw new Error(
+        `Derivative power-rule selector ${selectorId} requires a semantic label.`
+      );
+    }
+    return value;
+  };
+  const exponentLabel = label(`${sourceObjectId}.exponent`);
+  const exponent = Number(exponentLabel);
+  if (!Number.isInteger(exponent)) {
+    throw new Error(
+      `Derivative power-rule exponent ${exponentLabel} must be an integer.`
+    );
+  }
+  return createKpDerivativePowerRuleSemanticRoles({
+    sourceObjectId,
+    targetObjectId,
+    differentiationVariable: label(`${sourceObjectId}.operator-variable`),
+    base: label(`${sourceObjectId}.base`),
+    exponent
+  });
 }
 
 function role(

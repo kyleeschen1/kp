@@ -55,6 +55,9 @@ import {
 } from "./matrix-semantic-latex.ts";
 import { createKpGenericSelectorAnnotatedLatex } from "./generic-semantic-latex.ts";
 import {
+  createKpDerivativePowerSelectorAnnotatedLatex
+} from "./derivative-power-semantic-latex.ts";
+import {
   createKpEditorPrecomputedEquationMotionPlan,
   type KpEditorPrecomputedEquationMotionPlan
 } from "./precomputed-equation-motion.ts";
@@ -112,6 +115,15 @@ import {
 import {
   syncKpEquationNativeFit
 } from "./equation-native-fit.ts";
+import {
+  compileKpDerivativePowerChoreography,
+  sampleKpDerivativePowerChoreography,
+  type KpDerivativePowerChoreographyFrame,
+  type KpDerivativePowerChoreographyPlan
+} from "../animation/derivative-power-choreography.ts";
+import {
+  resolveKpDerivativePowerRuleSemanticRoles
+} from "../semantic/derivative-power-rule-semantics.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
@@ -126,6 +138,8 @@ const linearRearrangementChoreographyCache =
   new Map<string, KpLinearRearrangementChoreography>();
 const dotProductTraversalChoreographyCache =
   new Map<string, KpDotProductTraversalChoreography>();
+const derivativePowerChoreographyCache =
+  new Map<string, KpDerivativePowerChoreographyPlan>();
 
 export interface KpEditorEquationStageFrame {
   readonly stageIdentityKey: string;
@@ -153,6 +167,10 @@ export interface KpEditorEquationStageFrame {
   readonly dotProductTraversal?: {
     readonly choreography: KpDotProductTraversalChoreography;
     readonly frame: KpDotProductTraversalChoreographyFrame;
+  } | undefined;
+  readonly derivativePower?: {
+    readonly plan: KpDerivativePowerChoreographyPlan;
+    readonly frame: KpDerivativePowerChoreographyFrame;
   } | undefined;
 }
 
@@ -207,6 +225,12 @@ export function createKpEditorEquationStageFrame(input: {
     projection.transitions[0]?.id,
     localProgress
   );
+  const derivativePower = createDerivativePowerFrame(
+    input.animation,
+    input.state,
+    projection.transitions[0]?.id,
+    localProgress
+  );
   const stageIdentityKey = projection.animationId;
   const contentKey = `${projection.direction}:${projection.transitions
     .map((transition) => transition.id)
@@ -230,7 +254,8 @@ export function createKpEditorEquationStageFrame(input: {
     ...(functionWrap === undefined ? {} : { functionWrap }),
     ...(radicalSuccession === undefined ? {} : { radicalSuccession }),
     ...(linearRearrangement === undefined ? {} : { linearRearrangement }),
-    ...(dotProductTraversal === undefined ? {} : { dotProductTraversal })
+    ...(dotProductTraversal === undefined ? {} : { dotProductTraversal }),
+    ...(derivativePower === undefined ? {} : { derivativePower })
   };
 }
 
@@ -859,6 +884,41 @@ function createDotProductTraversalFrame(
       progress,
       direction: state.direction,
       accessibilityMode: "full"
+    })
+  };
+}
+
+function createDerivativePowerFrame(
+  animation: KpAnimationAsset,
+  state: KpEditorAnimationPlayerState,
+  transformationId: string | undefined,
+  progress: number
+): KpEditorEquationStageFrame["derivativePower"] {
+  const transformation = animation.transformations.find(
+    (candidate) =>
+      candidate.id === transformationId &&
+      candidate.transformType === "applyDerivativePowerRule"
+  );
+  if (transformation?.correspondenceMap === undefined) return undefined;
+  let plan = derivativePowerChoreographyCache.get(transformation.id);
+  if (plan === undefined) {
+    const semanticRoles = resolveKpDerivativePowerRuleSemanticRoles({
+      transformation,
+      bundle: animation.bundle
+    });
+    plan = compileKpDerivativePowerChoreography({
+      id: `choreography.${transformation.id}`,
+      semanticRoles,
+      correspondenceMap: transformation.correspondenceMap
+    });
+    derivativePowerChoreographyCache.set(transformation.id, plan);
+  }
+  return {
+    plan,
+    frame: sampleKpDerivativePowerChoreography({
+      plan,
+      progress,
+      direction: state.direction
     })
   };
 }
@@ -1545,7 +1605,13 @@ function applySemanticTokenMotion(input: {
       ...(motifKind === "wrap" || motifKind === "unwrap"
         ? { enclosureChoreographyKind: motifKind }
         : {}),
-      ...(motifKind === "copy-fan-out" || motifKind === "merge-fan-in" || motifKind === "substitute"
+      ...(input.frame.derivativePower !== undefined
+        ? {
+            lineageChoreographyKind: "copy-fan-out" as const,
+            derivativePowerChoreographyPlan:
+              input.frame.derivativePower.plan
+          }
+        : motifKind === "copy-fan-out" || motifKind === "merge-fan-in" || motifKind === "substitute"
         ? { lineageChoreographyKind: motifKind }
         : {}),
       ...(input.frame.radicalSuccession === undefined
@@ -1594,6 +1660,17 @@ function applySemanticTokenMotion(input: {
     accessibilityMode: editorAccessibilityMode(input.stage)
   });
   applyKpEditorSemanticEquationTokenFrame(geometry, tokenFrame);
+  if (
+    tokenFrame.motion.derivativePower !== undefined &&
+    geometry.derivativePowerChoreographyPlan !== undefined
+  ) {
+    applyDerivativePowerTokenFocus({
+      transition: input.transitionElement,
+      geometry,
+      plan: geometry.derivativePowerChoreographyPlan,
+      frame: tokenFrame.motion.derivativePower
+    });
+  }
   input.transitionElement.dataset["kpEditorEquationSemanticProgress"] =
     String(tokenFrame.semanticProgress);
   input.transitionElement.dataset["kpEditorEquationMotionPlanId"] = precomputed.id;
@@ -1693,6 +1770,76 @@ function applySemanticTokenMotion(input: {
   return true;
 }
 
+function applyDerivativePowerTokenFocus(input: {
+  readonly transition: HTMLElement;
+  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly plan: KpDerivativePowerChoreographyPlan;
+  readonly frame: KpDerivativePowerChoreographyFrame;
+}): void {
+  input.transition.dataset["kpEditorEquationDerivativePowerChoreography"] =
+    input.plan.id;
+  input.transition.dataset["kpEditorEquationDerivativePowerPhase"] =
+    activeDerivativePowerPhase(input.frame);
+  input.transition.dataset["kpEditorEquationDerivativePowerSettlement"] =
+    String(input.frame.settlementProgress);
+  const exponentRelation = input.geometry.relations.find(
+    (relation) => relation.recordId === "exponent-branches"
+  );
+  const sourceMotionId = exponentRelation?.source?.motionIds[0];
+  const sourceExponent = input.geometry.sourceTokens.find(
+    (token) => token.motionId === sourceMotionId
+  )?.element;
+  if (sourceExponent !== undefined) {
+    sourceExponent.classList.add("kp-focus-group");
+    sourceExponent.dataset["kpEditorDerivativePowerRole"] = "source-exponent";
+    sourceExponent.style.setProperty(
+      "--kp-focus-z",
+      `${6 * input.frame.focus.exponentEmphasis}px`
+    );
+    sourceExponent.style.setProperty(
+      "--kp-focus-scale",
+      String(1 + (0.08 * input.frame.focus.exponentEmphasis))
+    );
+    sourceExponent.style.setProperty(
+      "--kp-focus-shadow-y",
+      `${5 * input.frame.focus.exponentEmphasis}px`
+    );
+    sourceExponent.style.setProperty(
+      "--kp-focus-shadow-blur",
+      `${14 * input.frame.focus.exponentEmphasis}px`
+    );
+    sourceExponent.style.setProperty(
+      "--kp-focus-shadow-opacity",
+      String(input.frame.focus.shadowOpacity)
+    );
+  }
+  exponentRelation?.target?.motionIds.forEach((motionId, index) => {
+    const selectorId = exponentRelation.target?.selectorIds[index];
+    const token = input.geometry.targetTokens.find(
+      (candidate) => candidate.motionId === motionId
+    )?.element;
+    if (token === undefined || selectorId === undefined) return;
+    token.dataset["kpEditorDerivativePowerRole"] =
+      selectorId === input.plan.exponent.coefficientSelectorId
+        ? "coefficient-descendant"
+        : "successor-descendant";
+  });
+}
+
+function activeDerivativePowerPhase(
+  frame: KpDerivativePowerChoreographyFrame
+): string {
+  const active = Object.entries(frame.phases)
+    .filter(([, progress]) => progress > 0 && progress < 1)
+    .at(-1)?.[0];
+  if (active !== undefined) return active;
+  if (frame.semanticProgress === 0) return "ready";
+  if (frame.semanticProgress === 1) return "complete";
+  return Object.entries(frame.phases)
+    .filter(([, progress]) => progress === 1)
+    .at(-1)?.[0] ?? "ready";
+}
+
 function editorSpacing(
   stage: HTMLElement
 ): "compact" | "balanced" | "spacious" {
@@ -1741,6 +1888,7 @@ function annotatedLatexForStates(
     ?? createKpFunctionWrapSelectorAnnotatedLatex(state)
     ?? createKpDistributionSelectorAnnotatedLatex(state)
     ?? createKpExponentRadicalSelectorAnnotatedLatex(state)
+    ?? createKpDerivativePowerSelectorAnnotatedLatex(state)
     ?? createKpInequalitySelectorAnnotatedLatex(state)
     ?? createKpMatrixSelectorAnnotatedLatex(state)
     ?? createKpGenericSelectorAnnotatedLatex(state));
@@ -1765,6 +1913,9 @@ function annotatedLatexForObject(
     objectId: object.id,
     selectors: object.selectors
   }) ?? createKpExponentRadicalSelectorAnnotatedLatex({
+    objectId: object.id,
+    selectors: object.selectors
+  }) ?? createKpDerivativePowerSelectorAnnotatedLatex({
     objectId: object.id,
     selectors: object.selectors
   }) ?? createKpInequalitySelectorAnnotatedLatex({

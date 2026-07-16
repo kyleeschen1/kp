@@ -8,7 +8,7 @@ import {
 
 const catalog = createKpAnimationAssets();
 
-test("derivative power rule has total lineage but still needs choreography", () => {
+test("derivative power rule is promoted to operation-specific motion", () => {
   const animation = catalog.find(
     (candidate) =>
       candidate.id ===
@@ -16,15 +16,9 @@ test("derivative power rule has total lineage but still needs choreography", () 
   )!;
   const diagnosis = diagnoseKpAnimationDesign({ animation })!;
 
-  assert.equal(diagnosis.visualStrategy, "lifecycle-generic");
-  assert.equal(diagnosis.motifKind, "artifact-replace");
-  assert.deepEqual(
-    diagnosis.issues.map((issue) => issue.code),
-    [
-      "design.motif.generic-replacement",
-      "design.staging.operation-unspecified"
-    ]
-  );
+  assert.equal(diagnosis.visualStrategy, "operation-specific");
+  assert.equal(diagnosis.motifKind, "derivative-power");
+  assert.deepEqual(diagnosis.issues, []);
 });
 
 test("radical rewrite identifies target-fragment granularity loss", () => {

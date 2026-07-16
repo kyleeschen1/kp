@@ -6,6 +6,10 @@ import {
   kpSubstitutionPhaseIds,
   type KpSubstitutionPhaseId
 } from "../animation/substitution-choreography.ts";
+import {
+  kpDerivativePowerPhaseIds,
+  type KpDerivativePowerPhaseId
+} from "../animation/derivative-power-choreography.ts";
 
 export type VisualMotionPrimitiveId =
   | "enter"
@@ -28,6 +32,7 @@ export type EquationVisualMotifKind =
   | "artifact-replace"
   | "cancelation"
   | "copy-fan-out"
+  | "derivative-power"
   | "dot-product-accumulate"
   | "merge-fan-in"
   | "relation-flip"
@@ -56,13 +61,15 @@ export const equationVisualMotifPhaseIds = [
   "wrap-artifact-enter",
   "wrapped-token-shift",
   ...kpCopyFanOutPhaseIds,
-  ...kpSubstitutionPhaseIds
+  ...kpSubstitutionPhaseIds,
+  ...kpDerivativePowerPhaseIds
 ] as const;
 
 export type EquationVisualMotifPhaseId =
   (typeof equationVisualMotifPhaseIds)[number] |
   KpCopyFanOutPhaseId |
-  KpSubstitutionPhaseId;
+  KpSubstitutionPhaseId |
+  KpDerivativePowerPhaseId;
 
 export interface VisualMotifPlan<
   TKind extends string = string,
@@ -152,6 +159,13 @@ export const equationVisualMotifDescriptors: readonly EquationVisualMotifDescrip
     ],
     summary:
       "Index-matched component pairs form persistent products and accumulate into one scalar."
+  },
+  {
+    kind: "derivative-power",
+    motionPrimitiveIds: ["transmit", "copy", "shift", "exit"],
+    phaseIds: [...kpDerivativePowerPhaseIds],
+    summary:
+      "The exponent branches into a coefficient and decremented successor while the base persists."
   },
   {
     kind: "merge-fan-in",

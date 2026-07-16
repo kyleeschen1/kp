@@ -287,7 +287,7 @@ test("gestalt style switching preserves semantic progress and the mounted equati
   );
 });
 
-test("design diagnostics distinguish fallback fades from incomplete succession", async ({
+test("design diagnostics distinguish promoted motion from incomplete succession", async ({
   page
 }) => {
   await page.goto("/");
@@ -302,17 +302,19 @@ test("design diagnostics distinguish fallback fades from incomplete succession",
   );
   await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
   await expect(diagnostics.locator("[data-kp-editor-design-strategy]"))
-    .toHaveText("whole-equation-fallback · artifact-replace");
+    .toHaveText("operation-specific · derivative-power");
   await expect(diagnostics.locator("[data-kp-editor-design-issues]"))
-    .toContainText("4 issues");
+    .toHaveText("none");
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-design-issue-codes",
-    /design\.correspondence\.missing/
+    ""
   );
-  await expect(player).toHaveAttribute(
-    "data-kp-editor-animation-design-issue-codes",
-    /design\.object-constancy\.fade-dominant/
-  );
+  await expect(diagnostics.locator("[data-kp-editor-gestalt-envelope-phase]"))
+    .not.toHaveText("unavailable");
+  await expect(diagnostics.locator("[data-kp-editor-gestalt-salience]"))
+    .toContainText("4 nodes · 2 transfers");
+  await expect(diagnostics.locator("[data-kp-editor-gestalt-traversal]"))
+    .toContainText("symmetric · 3 ranks");
 
   await selector.selectOption(
     "editor-animation.sample.animation.radical-rewrite.square-root-as-power"
@@ -1756,6 +1758,97 @@ test("calculus equation families render derivative and FTC forms", async ({ page
     .toBeVisible();
   await expect(player.locator('[data-kp-editor-equation-target] [data-kp-editor-equation-object-id="formula-ftc-net-change"]'))
     .toBeVisible();
+});
+
+test("derivative power rule preserves exponent lineage through semantic arcs", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.animation.generated.calculus.derivative.power-rule-x-cubed"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const transition = player.locator(
+    "[data-kp-editor-equation-transition-id]"
+  );
+  const sourceExponent = transition.locator(
+    '[data-kp-editor-derivative-power-role="source-exponent"]'
+  );
+  const coefficient = transition.locator(
+    '[data-kp-editor-derivative-power-role="coefficient-descendant"]'
+  );
+  const successor = transition.locator(
+    '[data-kp-editor-derivative-power-role="successor-descendant"]'
+  );
+
+  await scrubber.fill("0.16");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-semantic-motion",
+    "active"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-motif",
+    "derivative-power"
+  );
+  await expect(sourceExponent).toHaveCSS("opacity", "1");
+  await expect(coefficient).toHaveCSS("opacity", "0");
+  await expect(successor).toHaveCSS("opacity", "0");
+
+  await scrubber.fill("0.56");
+  await expect(sourceExponent).toHaveCSS("opacity", "1");
+  await expect(coefficient).toHaveCSS("opacity", "1");
+  await expect(successor).toHaveCSS("opacity", "1");
+  await expect(coefficient).toHaveAttribute(
+    "data-kp-equation-motion-path-variant",
+    "arc-below"
+  );
+  await expect(successor).toHaveAttribute(
+    "data-kp-equation-motion-path-variant",
+    "arc-above"
+  );
+  const mid = await transition.evaluate((element) => {
+    const sourceBase = element.querySelector<HTMLElement>(
+      '[data-kp-editor-equation-source] [data-kp-motion-id$=".base"]'
+    )!;
+    const targetBase = element.querySelector<HTMLElement>(
+      '[data-kp-editor-equation-target] [data-kp-motion-id$=".base"]'
+    )!;
+    const sourceRect = sourceBase.getBoundingClientRect();
+    const targetRect = targetBase.getBoundingClientRect();
+    return {
+      baseCenterDelta: Math.hypot(
+        sourceRect.left + sourceRect.width / 2 -
+          (targetRect.left + targetRect.width / 2),
+        sourceRect.top + sourceRect.height / 2 -
+          (targetRect.top + targetRect.height / 2)
+      ),
+      sourceScale: new DOMMatrix(
+        getComputedStyle(element.querySelector<HTMLElement>(
+          '[data-kp-editor-derivative-power-role="source-exponent"]'
+        )!).transform
+      ).a
+    };
+  });
+  expect(mid.baseCenterDelta).toBeLessThan(1);
+  expect(mid.sourceScale).toBeGreaterThanOrEqual(0.7);
+  expect(mid.sourceScale).toBeLessThan(1);
+
+  await scrubber.fill("0.82");
+  const settlingOpacity = Number(await sourceExponent.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ));
+  expect(settlingOpacity).toBeGreaterThan(0);
+  expect(settlingOpacity).toBeLessThan(1);
+
+  await scrubber.fill("1");
+  await expect(sourceExponent).toHaveCSS("opacity", "0");
+  await expect(coefficient).toHaveCSS("opacity", "1");
+  await expect(successor).toHaveCSS("opacity", "1");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-derivative-power-phase",
+    "complete"
+  );
 });
 
 test("matrix-vector family animation visibly resolves the result vector", async ({ page }) => {

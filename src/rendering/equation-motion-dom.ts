@@ -5,6 +5,9 @@ import type { KpEquationEnclosureChoreographyKind } from "./equation-enclosure-c
 import type { KpEquationMotionPathCandidate } from "./equation-motion-path-planner.ts";
 import type { KpEquationLinearRearrangementKind } from "./equation-linear-rearrangement.ts";
 import type { KpDotProductRendererPlan } from "./equation-dot-product-traversal.ts";
+import type {
+  KpDerivativePowerChoreographyPlan
+} from "../animation/derivative-power-choreography.ts";
 
 export type KpEquationRepresentationalSuccessionKind =
   "opposite-corner-seed";
@@ -45,6 +48,8 @@ export interface KpMeasuredEquationTransitionGeometry {
   readonly linearRearrangementKind?:
     KpEquationLinearRearrangementKind | undefined;
   readonly dotProductTraversalPlan?: KpDotProductRendererPlan | undefined;
+  readonly derivativePowerChoreographyPlan?:
+    KpDerivativePowerChoreographyPlan | undefined;
   readonly precomputedMotionPathsByMotionId?: Readonly<
     Record<string, KpEquationMotionPathCandidate>
   > | undefined;
@@ -116,6 +121,8 @@ export function measureKpEquationTransitionGeometry(input: {
   readonly linearRearrangementKind?:
     KpEquationLinearRearrangementKind | undefined;
   readonly dotProductTraversalPlan?: KpDotProductRendererPlan | undefined;
+  readonly derivativePowerChoreographyPlan?:
+    KpDerivativePowerChoreographyPlan | undefined;
 }): KpMeasuredEquationTransitionGeometry {
   const sourceTokens = measureAnnotatedEquationMotionTokens(input.sourceRoot);
   const targetTokens = measureAnnotatedEquationMotionTokens(input.targetRoot);
@@ -150,6 +157,12 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.dotProductTraversalPlan === undefined
       ? {}
       : { dotProductTraversalPlan: input.dotProductTraversalPlan }),
+    ...(input.derivativePowerChoreographyPlan === undefined
+      ? {}
+      : {
+          derivativePowerChoreographyPlan:
+            input.derivativePowerChoreographyPlan
+        }),
     sourceTokens,
     targetTokens,
     relations: input.ir.relations.map((relation) => {
