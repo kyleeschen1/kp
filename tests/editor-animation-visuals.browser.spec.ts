@@ -1351,6 +1351,14 @@ test("radical-succession uses independent opposite-corner tokens and native sett
     "data-kp-editor-equation-representational-succession",
     "opposite-corner-seed"
   );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-material-junction-plan-id",
+    /^material-junction\./
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-material-junction-sources-ready",
+    "false"
+  );
   expect(Number(await transition.getAttribute(
     "data-kp-editor-equation-source-gather-progress"
   ))).toBeGreaterThan(0.8);
@@ -1365,6 +1373,10 @@ test("radical-succession uses independent opposite-corner tokens and native sett
   await expect(targetRadical).toHaveCSS("opacity", "0");
 
   await scrubber.fill("0.67");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-material-junction-sources-ready",
+    "true"
+  );
   await expect(targetRadical).toHaveAttribute(
     "data-kp-equation-motion-path-variant",
     "diagonal-arc-above"

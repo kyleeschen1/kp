@@ -75,6 +75,46 @@ test("native settlement waits for refined geometry and ends at exact native pose
   ));
 });
 
+test("absorbed source material participates in readiness without inventing a target", () => {
+  const plan = createKpMaterialJunctionPlan({
+    id: "junction.absorption",
+    ownershipMode: "fission-fusion",
+    sourceAnnotations: [annotation("absorbed", 1), annotation("successor-source", 0)],
+    targetAnnotations: [annotation("successor-target", 0)],
+    lineages: [
+      {
+        id: "lineage.absorbed",
+        kind: "absorption",
+        sourceAnnotationIds: ["absorbed"],
+        targetAnnotationIds: []
+      },
+      {
+        id: "lineage.successor",
+        kind: "succession",
+        sourceAnnotationIds: ["successor-source"],
+        targetAnnotationIds: ["successor-target"]
+      }
+    ],
+    measurements: {
+      absorbed: { left: 0, top: 0, width: 8, height: 8 },
+      "successor-source": { left: 0, top: 12, width: 8, height: 8 },
+      "successor-target": { left: 40, top: 10, width: 10, height: 10 }
+    },
+    anchorPolicy: "target-opposite-corner",
+    pathFamily: "opposite-corner"
+  });
+
+  assert.equal(
+    sampleKpMaterialJunction({ plan, progress: 0.6 }).allRequiredSourcesReady,
+    false
+  );
+  assert.equal(
+    sampleKpMaterialJunction({ plan, progress: 0.7 }).allRequiredSourcesReady,
+    true
+  );
+  assert.equal(plan.targetBundle.members.length, 1);
+});
+
 test("material junction rejects unmeasured and unlineaged annotations", () => {
   assert.throws(() => createKpMaterialJunctionPlan({
     id: "junction.invalid",

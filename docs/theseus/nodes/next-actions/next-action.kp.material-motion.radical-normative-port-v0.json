@@ -1,0 +1,126 @@
+{
+  "id": "next-action.kp.material-motion.radical-normative-port-v0",
+  "kind": "next-action",
+  "title": "Port normative radical transition",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Ported the fractional-exponent-to-radical exemplar onto the shared material-junction primitive with explicit absorption and succession lineage, reflow-before-gather timing, far-to-near token slots, alternating arcs, continuous ownership, cached measured plans, and exact native settlement.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.radical-normative-port-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/material-junction.ts",
+      "summary": "Adds absorption-aware lineage, operation timing, token slots, path policy, and staggered recognition to the shared junction."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-representational-succession.ts",
+      "summary": "Replaces the bespoke radical fragment sampler with a cached material-junction plan."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Publishes runtime junction identity and readiness diagnostics in the KP editor."
+    },
+    {
+      "kind": "file",
+      "path": "tests/material-junction.test.ts",
+      "summary": "Covers absorbed material, readiness, ownership, and settlement."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-radical-succession-choreography.test.ts",
+      "summary": "Proves the radical sampler is backed by the shared junction and preserves exemplar motion."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Proves live editor readiness, arcs, rewind, continuity, and native settlement."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Port normative radical transition can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, node, and browser test projects.",
+      "checkedAt": "2026-07-17T20:20:09.580Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "1318 unit tests.",
+      "checkedAt": "2026-07-17T20:20:09.659Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production build at 246.08 KB entry gzip.",
+      "checkedAt": "2026-07-17T20:20:09.752Z"
+    },
+    {
+      "command": "npx playwright test radical editor visuals and KaTeX transitions",
+      "status": "passed",
+      "scope": "8 Chromium radical and native-renderer tests.",
+      "checkedAt": "2026-07-17T20:20:09.836Z"
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "No performance regressions; cached layout reads remain bounded.",
+      "checkedAt": "2026-07-17T20:20:09.921Z"
+    },
+    {
+      "command": "manual screenshot inspection at 55, 67, 78, and 92 percent",
+      "status": "passed",
+      "checkedAt": "2026-07-17T20:20:10.006Z",
+      "scope": "Independent fragment gather, successor arcs, and native radical settlement."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Ported the fractional-exponent-to-radical exemplar onto the shared material-junction primitive with explicit absorption and succession lineage, reflow-before-gather timing, far-to-near token slots, alternating arcs, continuous ownership, cached measured plans, and exact native settlement."
+  }
+}

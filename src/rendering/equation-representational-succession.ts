@@ -11,6 +11,17 @@ import {
   type KpOrganicPathPoint,
   type KpOrganicPathVariant
 } from "../animation/organic-path-planner.ts";
+import {
+  createKpMaterialJunctionPlan,
+  sampleKpMaterialJunction,
+  type KpMaterialJunctionPlan,
+  type KpMaterialJunctionPathFamily
+} from "../animation/material-junction.ts";
+
+const radicalMaterialJunctionPlanCache = new WeakMap<
+  KpMeasuredEquationTransitionRelationGeometry,
+  KpMaterialJunctionPlan
+>();
 
 export interface KpEquationRepresentationalSuccessionFrame {
   readonly kind: "opposite-corner-seed";
@@ -20,6 +31,9 @@ export interface KpEquationRepresentationalSuccessionFrame {
   readonly sourceVisibility: number;
   readonly settleProgress: number;
   readonly bundlePoint: KpOrganicPathPoint;
+  readonly materialJunctionPlanId?: string | undefined;
+  readonly allRequiredSourcesReady?: boolean | undefined;
+  readonly targetRecognizable?: boolean | undefined;
 }
 
 export interface KpEquationRepresentationalSuccessionToken {
@@ -180,10 +194,68 @@ function sampleFragmentCornerTransfer(input: {
     throw new Error("Fragment corner transfer requires aggregate geometry.");
   }
   const p = clamp01(input.progress);
+  const cacheKey = input.fragmentRelations[0];
+  if (cacheKey === undefined) {
+    throw new Error("Fragment corner transfer requires semantic fragment lineage.");
+  }
+  let plan = radicalMaterialJunctionPlanCache.get(cacheKey);
+  if (plan === undefined) {
+    plan = createRadicalMaterialJunctionPlan(input);
+    // A measured relation object changes whenever geometry is explicitly
+    // replanned, so it is a safe identity key without reading layout per frame.
+    radicalMaterialJunctionPlanCache.set(cacheKey, plan);
+  }
+  const junction = sampleKpMaterialJunction({ plan, progress: p });
+  const sourceFrames = junction.sources.map((source) => ({
+    motionId: source.annotationId,
+    side: "source" as const,
+    opacity: p === 1 ? 0 : source.pose.opacity,
+    x: source.pose.x,
+    y: source.pose.y,
+    scale: source.pose.scale,
+    pathVariant: materialPathVariant(source.pathFamily, "source")
+  }));
+  const targetFrames = junction.targets.map((target) => ({
+    motionId: target.annotationId,
+    side: "target" as const,
+    opacity: p === 1 ? 1 : target.materialPose.opacity,
+    x: target.materialPose.x,
+    y: target.materialPose.y,
+    scale: target.materialPose.scale,
+    pathVariant: materialPathVariant(target.pathFamily, "target")
+  }));
+  return {
+    frame: {
+      kind: "opposite-corner-seed",
+      progress: p,
+      continuantReflowProgress: intervalProgress(p, 0.12, 0.32),
+      sourceGatherProgress: Math.min(
+        ...junction.sources.map((source) => source.arrivalProgress)
+      ),
+      sourceVisibility: Math.min(
+        ...junction.sources.map((source) => source.pose.opacity)
+      ),
+      settleProgress: intervalProgress(p, 0.82, 0.98),
+      bundlePoint: plan.junction,
+      materialJunctionPlanId: plan.id,
+      allRequiredSourcesReady: junction.allRequiredSourcesReady,
+      targetRecognizable: junction.targetRecognizable
+    },
+    tokens: [...sourceFrames, ...targetFrames]
+  };
+}
+
+function createRadicalMaterialJunctionPlan(input: {
+  readonly relation: KpMeasuredEquationTransitionRelationGeometry;
+  readonly fragmentRelations:
+    readonly KpMeasuredEquationTransitionRelationGeometry[];
+  readonly sourceTokens: readonly AnnotatedMotionToken[];
+  readonly targetTokens: readonly AnnotatedMotionToken[];
+}): KpMaterialJunctionPlan {
+  if (input.relation.target === undefined) {
+    throw new Error("Radical material junction requires target geometry.");
+  }
   const targetCenter = rectCenter(input.relation.target.bounds);
-  const sourceByMotionId = new Map(
-    input.sourceTokens.map((token) => [token.motionId, token])
-  );
   const orderedSources = [...input.sourceTokens].sort(
     (left, right) =>
       distance(tokenCenter(right), targetCenter) -
@@ -192,123 +264,73 @@ function sampleFragmentCornerTransfer(input: {
   const rankByMotionId = new Map(
     orderedSources.map((token, index) => [token.motionId, index])
   );
-  const maximumRank = Math.max(1, orderedSources.length - 1);
-  const corners = new Map<string, KpOrganicPathPoint>();
-  const cornerFor = (
-    relation: KpMeasuredEquationTransitionRelationGeometry,
-    source: AnnotatedMotionToken | undefined
-  ): KpOrganicPathPoint => {
-    const key = relation.recordId;
-    const cached = corners.get(key);
-    if (cached !== undefined) return cached;
-    const base = oppositeCorner(
-      relation.target?.bounds ?? input.relation.target!.bounds,
-      source === undefined
-        ? rectCenter(input.relation.source!.bounds)
-        : tokenCenter(source)
-    );
-    const rank = source === undefined
-      ? maximumRank
-      : rankByMotionId.get(source.motionId) ?? 0;
-    const corner = {
-      x: base.x + (rank - maximumRank / 2) * 3,
-      y: base.y + (rank % 2 === 0 ? -1 : 1) * (2 + rank)
-    };
-    corners.set(key, corner);
-    return corner;
-  };
+  const sourceIds = new Set(input.sourceTokens.map((token) => token.motionId));
+  const targetIds = new Set(input.targetTokens.map((token) => token.motionId));
+  const targetPathFamilies = Object.fromEntries(
+    input.targetTokens.map((token, index) => [
+      token.motionId,
+      index % 2 === 0 ? "arc-above" : "arc-below"
+    ] satisfies [string, KpMaterialJunctionPathFamily])
+  );
+  return createKpMaterialJunctionPlan({
+    id: `material-junction.${input.relation.recordId}`,
+    ownershipMode: "fission-fusion",
+    sourceAnnotations: input.sourceTokens.map((token) => ({
+      id: token.motionId,
+      semanticRole: "source-notation-fragment",
+      selectorIds: [token.motionId],
+      propagationRank: rankByMotionId.get(token.motionId) ?? 0
+    })),
+    targetAnnotations: input.targetTokens.map((token, index) => ({
+      id: token.motionId,
+      semanticRole: "target-notation-fragment",
+      selectorIds: [token.motionId],
+      propagationRank: index
+    })),
+    lineages: input.fragmentRelations.flatMap((relation) => {
+      const sources = (relation.source?.motionIds ?? []).filter((id) =>
+        sourceIds.has(id)
+      );
+      const targets = (relation.target?.motionIds ?? []).filter((id) =>
+        targetIds.has(id)
+      );
+      if (sources.length === 0) return [];
+      return [{
+        id: relation.recordId,
+        kind: targets.length === 0 ? "absorption" as const : "succession" as const,
+        sourceAnnotationIds: sources,
+        targetAnnotationIds: targets
+      }];
+    }),
+    measurements: Object.fromEntries(
+      [...input.sourceTokens, ...input.targetTokens].map((token) => [
+        token.motionId,
+        token.localRect
+      ])
+    ),
+    anchorPolicy: "target-opposite-corner",
+    pathFamily: "opposite-corner",
+    targetPathFamilies,
+    // The exemplar keeps every fragment legible while it changes notation;
+    // shrinking remains token-local and never impersonates a whole-expression zoom.
+    junctionScale: 0.82,
+    sourceArrivalStart: 0.3,
+    sourceArrivalEnd: 0.58,
+    sourceRankStaggerSpan: 0.05,
+    targetRankStaggerSpan: 0.08
+  });
+}
 
-  const sourceFrames = input.sourceTokens.map((token) => {
-    const relation = input.fragmentRelations.find((candidate) =>
-      candidate.source?.motionIds.includes(token.motionId)
-    );
-    const rank = rankByMotionId.get(token.motionId) ?? 0;
-    const stagger = rank * 0.025;
-    const start = tokenCenter(token);
-    const corner = relation === undefined
-      ? oppositeCorner(input.relation.target!.bounds, start)
-      : cornerFor(relation, token);
-    const travel = intervalProgress(p, 0.3 + stagger, 0.58 + stagger);
-    const control = {
-      x: start.x + (corner.x - start.x) * 0.52,
-      y: Math.min(start.y, corner.y) - 8 - rank * 2
-    };
-    const point = quadratic(start, control, corner, travel);
-    const handoff = intervalProgress(p, 0.58 + stagger, 0.72 + stagger);
-    return {
-      motionId: token.motionId,
-      side: "source" as const,
-      opacity: p === 1 ? 0 : 1 - handoff,
-      x: point.x - start.x,
-      y: point.y - start.y,
-      scale: 1 - travel * 0.18,
-      pathVariant: "opposite-corner" as const
-    };
-  });
-  const targetFrames = input.targetTokens.map((token, targetIndex) => {
-    const relation = input.fragmentRelations.find((candidate) =>
-      candidate.target?.motionIds.includes(token.motionId)
-    );
-    const sourceMotionId = relation?.source?.motionIds[0];
-    const source = sourceMotionId === undefined
-      ? undefined
-      : sourceByMotionId.get(sourceMotionId);
-    const rank = source === undefined
-      ? targetIndex
-      : rankByMotionId.get(source.motionId) ?? targetIndex;
-    const stagger = rank * 0.025;
-    const destination = tokenCenter(token);
-    const corner = relation === undefined
-      ? oppositeCorner(input.relation.target!.bounds, rectCenter(input.relation.source!.bounds))
-      : cornerFor(relation, source);
-    // Fragment paths finish before native settlement begins so the exact
-    // KaTeX radical crossfades only after every structural anchor is still.
-    const unfold = intervalProgress(p, 0.56 + stagger, 0.82 + stagger);
-    const handoff = intervalProgress(p, 0.58 + stagger, 0.72 + stagger);
-    const pathVariant = targetIndex % 2 === 0
-      ? "diagonal-arc-above" as const
-      : "diagonal-arc-below" as const;
-    const control = {
-      x: corner.x + (destination.x - corner.x) * 0.46,
-      y: pathVariant === "diagonal-arc-above"
-        ? Math.min(corner.y, destination.y) - 10 - rank
-        : Math.max(corner.y, destination.y) + 8 + rank
-    };
-    const point = quadratic(corner, control, destination, unfold);
-    return {
-      motionId: token.motionId,
-      side: "target" as const,
-      opacity: p === 1 ? 1 : handoff,
-      x: point.x - destination.x,
-      y: point.y - destination.y,
-      scale: 0.82 + unfold * 0.18,
-      pathVariant
-    };
-  });
-  const cornerPoints = [...corners.values()];
-  const bundlePoint = cornerPoints.length === 0
-    ? oppositeCorner(
-        input.relation.target.bounds,
-        rectCenter(input.relation.source.bounds)
-      )
-    : {
-        x: cornerPoints.reduce((sum, point) => sum + point.x, 0) /
-          cornerPoints.length,
-        y: cornerPoints.reduce((sum, point) => sum + point.y, 0) /
-          cornerPoints.length
-      };
-  return {
-    frame: {
-      kind: "opposite-corner-seed",
-      progress: p,
-      continuantReflowProgress: intervalProgress(p, 0.12, 0.32),
-      sourceGatherProgress: intervalProgress(p, 0.3, 0.63),
-      sourceVisibility: 1 - intervalProgress(p, 0.58, 0.78),
-      settleProgress: intervalProgress(p, 0.78, 0.94),
-      bundlePoint
-    },
-    tokens: [...sourceFrames, ...targetFrames]
-  };
+function materialPathVariant(
+  family: KpMaterialJunctionPathFamily,
+  side: "source" | "target"
+): KpOrganicPathVariant {
+  if (side === "source" || family === "opposite-corner") {
+    return "opposite-corner";
+  }
+  return family === "arc-above"
+    ? "diagonal-arc-above"
+    : "diagonal-arc-below";
 }
 
 function oppositeCorner(

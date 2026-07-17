@@ -82,6 +82,14 @@ test("token sampler uses opposite-corner gathering and far-side stagger", () => 
     midpoint.representationalSuccession?.kind,
     "opposite-corner-seed"
   );
+  assert.match(
+    midpoint.representationalSuccession?.materialJunctionPlanId ?? "",
+    /^material-junction\..*fraction-rule-becomes-radical-overbar/
+  );
+  assert.equal(
+    midpoint.representationalSuccession?.allRequiredSourcesReady,
+    false
+  );
   const sourceNotation = midpoint.tokens.filter(
     (token) => token.side === "source" && token.motionId.startsWith("exponent.")
   );
@@ -113,6 +121,11 @@ test("token sampler uses opposite-corner gathering and far-side stagger", () => 
     ["diagonal-arc-below", "diagonal-arc-above"]
   );
   assert.ok(targetTransfer.every((token) => token.pose.scale >= 0.82));
+  assert.equal(
+    sampleKpEquationTokenMotion(geometry(), 0.7)
+      .representationalSuccession?.allRequiredSourcesReady,
+    true
+  );
 
   const base = midpoint.tokens.find((token) => token.motionId === "base.x");
   assert.equal(base?.pose.opacity, 1);

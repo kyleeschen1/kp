@@ -2541,6 +2541,9 @@ function applySemanticTokenMotion(input: {
     delete input.transitionElement.dataset["kpEditorEquationContinuantReflowProgress"];
     delete input.transitionElement.dataset["kpEditorEquationSourceGatherProgress"];
     delete input.transitionElement.dataset["kpEditorEquationSuccessionBundle"];
+    delete input.transitionElement.dataset["kpEditorEquationMaterialJunctionPlanId"];
+    delete input.transitionElement.dataset["kpEditorEquationMaterialJunctionSourcesReady"];
+    delete input.transitionElement.dataset["kpEditorEquationMaterialJunctionTargetRecognizable"];
   } else {
     input.transitionElement.dataset["kpEditorEquationRepresentationalSuccession"] =
       succession.kind;
@@ -2550,6 +2553,18 @@ function applySemanticTokenMotion(input: {
       String(succession.sourceGatherProgress);
     input.transitionElement.dataset["kpEditorEquationSuccessionBundle"] =
       `${succession.bundlePoint.x},${succession.bundlePoint.y}`;
+    if (succession.materialJunctionPlanId === undefined) {
+      delete input.transitionElement.dataset["kpEditorEquationMaterialJunctionPlanId"];
+      delete input.transitionElement.dataset["kpEditorEquationMaterialJunctionSourcesReady"];
+      delete input.transitionElement.dataset["kpEditorEquationMaterialJunctionTargetRecognizable"];
+    } else {
+      input.transitionElement.dataset["kpEditorEquationMaterialJunctionPlanId"] =
+        succession.materialJunctionPlanId;
+      input.transitionElement.dataset["kpEditorEquationMaterialJunctionSourcesReady"] =
+        String(succession.allRequiredSourcesReady);
+      input.transitionElement.dataset["kpEditorEquationMaterialJunctionTargetRecognizable"] =
+        String(succession.targetRecognizable);
+    }
   }
   const linearRearrangement = tokenFrame.motion.linearRearrangement;
   if (linearRearrangement === undefined) {
