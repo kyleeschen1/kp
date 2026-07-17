@@ -139,7 +139,7 @@
       "id": "next-action.kp.material-motion.successor-synthesis-v0",
       "title": "Define successor synthesis",
       "summary": "Focused gate: successor planner, sampler, and law tests; typecheck; Theseus validate. No broad suite unless the shared material-junction contract changes.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.linear-successor-v0",
@@ -228,8 +228,8 @@
     {
       "id": "next-action.kp.material-motion.loop-closeout-v0",
       "title": "Verify and close or refill the loop",
-      "status": "planned",
-      "summary": "Mandatory broad closeout: full unit suite, typecheck, production build, all relevant browser, performance, overflow, and Theseus validation and reports."
+      "summary": "Mandatory broad closeout: full unit suite, typecheck, production build, all relevant browser, performance, overflow, and Theseus validation and reports.",
+      "status": "planned"
     }
   ]
 }

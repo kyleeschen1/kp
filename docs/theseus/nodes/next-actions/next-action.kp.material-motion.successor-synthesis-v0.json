@@ -1,0 +1,98 @@
+{
+  "id": "next-action.kp.material-motion.successor-synthesis-v0",
+  "kind": "next-action",
+  "title": "Define successor synthesis",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Defined a renderer-neutral successor-synthesis plan, sampler, and law evaluator with explicit operation authority, material-input versus catalyst roles, semantic-rank arc staggering, readiness-gated target birth, recognition-gated source retirement, continuous material ownership, nonzero token scale, and exact native settlement.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.successor-synthesis-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-risk-weighted-validation-cadence.md",
+      "summary": "Accepted risk-weighted verification policy governing this run."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/successor-synthesis.ts",
+      "summary": "Semantic successor plan, sampler, catalyst accounting, and conformance laws."
+    },
+    {
+      "kind": "file",
+      "path": "tests/fixtures/successor-synthesis-fixture.ts",
+      "summary": "Reusable seven-minus-four to three semantic and measured fixture."
+    },
+    {
+      "kind": "file",
+      "path": "tests/successor-synthesis.test.ts",
+      "summary": "Focused planner, sampler, role, readiness, retirement, ownership, and settlement tests."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "node --test <directly affected test files>",
+    "npm run typecheck when typed source or public contracts change",
+    "npx playwright test <smallest affected browser cohort> when visible behavior changes",
+    "npm run theseus -- workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether Define successor synthesis can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/successor-synthesis.test.ts",
+      "status": "passed",
+      "scope": "8 focused successor synthesis tests passed.",
+      "checkedAt": "2026-07-17T20:42:48.794Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, and test TypeScript projects passed.",
+      "checkedAt": "2026-07-17T20:42:48.882Z"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "checkedAt": "2026-07-17T20:42:48.968Z",
+      "scope": "600 nodes and 7740 events valid before completion."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined a renderer-neutral successor-synthesis plan, sampler, and law evaluator with explicit operation authority, material-input versus catalyst roles, semantic-rank arc staggering, readiness-gated target birth, recognition-gated source retirement, continuous material ownership, nonzero token scale, and exact native settlement."
+  }
+}
