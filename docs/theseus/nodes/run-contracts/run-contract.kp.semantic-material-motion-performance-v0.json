@@ -169,7 +169,7 @@
       "id": "next-action.kp.material-motion.fission-fusion-v0",
       "title": "Define ownership aware fission and fusion",
       "summary": "Focused gate: ownership, lineage, reverse-law, planner, and sampler tests; typecheck; Theseus validate.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.distribution-fission-v0",

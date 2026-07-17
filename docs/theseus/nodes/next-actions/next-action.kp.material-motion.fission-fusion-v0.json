@@ -1,0 +1,98 @@
+{
+  "id": "next-action.kp.material-motion.fission-fusion-v0",
+  "kind": "next-action",
+  "title": "Define ownership aware fission and fusion",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Defined renderer-neutral fission and fusion plans with exclusive semantic material ownership, shared birth or fusion events, semantic-order micro-stagger, readiness-gated fusion, nonzero material scale, explicit source retirement, exact target settlement, and separately planned reverse interpretation rather than mechanical time reversal.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.fission-fusion-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-risk-weighted-validation-cadence.md",
+      "summary": "Accepted risk-weighted verification policy governing this run."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/fission-fusion.ts",
+      "summary": "Ownership-aware compiler, sampler, explicit reverse planner, phase model, and forward/reverse conformance laws."
+    },
+    {
+      "kind": "file",
+      "path": "tests/fission-fusion.test.ts",
+      "summary": "Minimal distribution and factoring fixtures covering exclusive ownership, shared events, semantic ordering, readiness, reverse meaning, and rejection laws."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/semantic-lineage-graph.ts",
+      "summary": "Existing validated split and merge authority consumed by the fission/fusion compiler."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "node --test <directly affected test files>",
+    "npm run typecheck when typed source or public contracts change",
+    "npx playwright test <smallest affected browser cohort> when visible behavior changes",
+    "npm run theseus -- workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether Define ownership aware fission and fusion can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/fission-fusion.test.ts tests/semantic-lineage-graph.test.ts",
+      "status": "passed",
+      "scope": "14 focused ownership, lineage, planner, sampler, and reverse-law tests passed.",
+      "checkedAt": "2026-07-17T21:47:02.773Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, and test TypeScript projects passed.",
+      "checkedAt": "2026-07-17T21:47:02.852Z"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "checkedAt": "2026-07-17T21:47:02.930Z",
+      "scope": "605 nodes and 7806 events valid before completion."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Defined renderer-neutral fission and fusion plans with exclusive semantic material ownership, shared birth or fusion events, semantic-order micro-stagger, readiness-gated fusion, nonzero material scale, explicit source retirement, exact target settlement, and separately planned reverse interpretation rather than mechanical time reversal."
+  }
+}
