@@ -17,7 +17,7 @@ const choreography = createKpRadicalSuccessionChoreography(
   createExponentRadicalRewriteAnimationAsset()
 );
 
-test("radical rewrite compiles continuant and representational succession together", () => {
+test("radical rewrite compiles continuants and explicit fragment successions", () => {
   assert.deepEqual(
     choreography.plan.phases.map((phase) => phase.id),
     ["orient", "reflow", "act", "settle", "release"]
@@ -25,8 +25,9 @@ test("radical rewrite compiles continuant and representational succession togeth
   assert.equal(choreography.plan.vocabulary.continuants.length, 3);
   assert.equal(
     choreography.plan.vocabulary.representationalLineages.length,
-    1
+    2
   );
+  assert.equal(choreography.fragmentLineage.absorptions.length, 1);
   assert.equal(choreography.propagationRule, "far-to-near");
   assert.deepEqual(choreography.pathRequirement, {
     motifId: "radical.rewrite-power-as-root",

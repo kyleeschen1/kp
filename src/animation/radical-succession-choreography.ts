@@ -21,8 +21,11 @@ import {
   type KpFocusProfileFrame,
   type KpFocusProfilePlan
 } from "./focus-profile.ts";
-import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
 import { resolveKpRadicalFragmentSemantics } from "../semantic/radical-fragment-semantics.ts";
+import {
+  createKpRadicalFragmentLineage,
+  type KpRadicalFragmentLineagePlan
+} from "./radical-fragment-lineage.ts";
 
 export const kpRadicalSuccessionTiming = {
   orientEnd: 0.12,
@@ -39,6 +42,7 @@ export interface KpRadicalSuccessionChoreography {
   readonly timeline: KpChoreographyTimeline;
   readonly focus: KpFocusProfilePlan;
   readonly hierarchy: KpChoreographyHierarchyPlan;
+  readonly fragmentLineage: KpRadicalFragmentLineagePlan;
   readonly propagationRule: "far-to-near";
   readonly pathRequirement: {
     readonly motifId: "radical.rewrite-power-as-root";
@@ -68,14 +72,14 @@ export function createKpRadicalSuccessionChoreography(
     throw new Error("Radical succession requires base correspondence.");
   }
   const fragments = resolveKpRadicalFragmentSemantics(transformation);
+  const fragmentLineage = createKpRadicalFragmentLineage(animation);
   const notation = {
     sourceSelectorIds: fragments.notationRecords.flatMap(
       (record) => record.sourceSelectorIds
     ),
     targetSelectorIds: fragments.notationRecords.flatMap(
       (record) => record.targetSelectorIds
-    ),
-    recordIds: fragments.notationRecords.map((record) => record.id)
+    )
   };
   const fragmentContinuants = fragments.notationRecords
     .filter((record) =>
@@ -85,10 +89,7 @@ export function createKpRadicalSuccessionChoreography(
       id: `${transformation.id}.${record.id}-continuant`,
       record
     }));
-  const sourceRepresentationId = `${transformation.id}.source-root-notation`;
-  const targetRepresentationId = `${transformation.id}.target-root-notation`;
   const continuantId = `${transformation.id}.base-continuant`;
-  const lineageId = `${transformation.id}.root-notation-lineage`;
   const vocabulary: KpChoreographyVocabulary = {
     id: `vocabulary.${transformation.id}`,
     continuants: [
@@ -129,23 +130,7 @@ export function createKpRadicalSuccessionChoreography(
         }
       }))
     ],
-    representationalLineages: [{
-      id: lineageId,
-      meaning: "Fractional exponent notation succeeds into radical notation.",
-      sourceRepresentation: {
-        entityId: sourceRepresentationId,
-        selectorIds: notation.sourceSelectorIds
-      },
-      targetRepresentation: {
-        entityId: targetRepresentationId,
-        selectorIds: notation.targetSelectorIds
-      },
-      cause: {
-        kind: "transformation",
-        transformationId: transformation.id,
-        correspondenceRecordIds: notation.recordIds
-      }
-    }],
+    representationalLineages: fragmentLineage.representationalLineages,
     objectConstancy: [
       {
         id: `${continuantId}.constancy`,
@@ -165,17 +150,17 @@ export function createKpRadicalSuccessionChoreography(
         ]
       }))
     ],
-    materialContinuity: [{
-      id: `${lineageId}.continuity`,
-      mode: "shared-reconciliation",
-      sourceEntityIds: notation.sourceSelectorIds,
-      targetEntityIds: notation.targetSelectorIds,
+    materialContinuity: fragmentLineage.successions.map((succession) => ({
+      id: `${succession.lineageId}.continuity`,
+      mode: "shared-reconciliation" as const,
+      sourceEntityIds: succession.sourceSelectorIds,
+      targetEntityIds: succession.targetSelectorIds,
       authorityRef: {
-        kind: "representational-lineage",
-        lineageId
+        kind: "representational-lineage" as const,
+        lineageId: succession.lineageId
       },
-      summary: "Exponent material reconciles through the radical's opposite corner."
-    }],
+      summary: `${succession.summary} The fragment reconciles through the radical's opposite corner.`
+    })),
     motionClassifications: [{
       id: `${transformation.id}.notation-motion`,
       entityIds: [...notation.sourceSelectorIds, ...notation.targetSelectorIds],
@@ -230,34 +215,7 @@ export function createKpRadicalSuccessionChoreography(
         }))
     ]
   };
-  const lineage = createKpSemanticLineageGraph({
-    id: `lineage.${transformation.id}`,
-    sourceEntityIds: [
-      ...base.sourceSelectorIds,
-      ...notation.sourceSelectorIds
-    ],
-    targetEntityIds: [
-      ...base.targetSelectorIds,
-      ...notation.targetSelectorIds
-    ],
-    edges: [
-      {
-        id: `${transformation.id}.base-persist`,
-        relation: "persist",
-        sourceEntityIds: base.sourceSelectorIds,
-        targetEntityIds: base.targetSelectorIds,
-        summary: "The base persists as the radicand."
-      },
-      {
-        id: `${transformation.id}.notation-successor`,
-        relation: "representation-succession",
-        sourceEntityIds: notation.sourceSelectorIds,
-        targetEntityIds: notation.targetSelectorIds,
-        representationAuthorityId: lineageId,
-        summary: "Root notation changes representation."
-      }
-    ]
-  });
+  const lineage = fragmentLineage.graph;
   const result = compileKpChoreographyPlan({
     id: `choreography.${transformation.id}`,
     timelineRefId: animation.timeline?.id ?? `timeline.${animation.id}`,
@@ -270,28 +228,28 @@ export function createKpRadicalSuccessionChoreography(
     salience: {
       id: `salience.${transformation.id}`,
       kind: "transferable-salience-graph",
-      nodes: [
+      nodes: fragmentLineage.successions.flatMap((succession) => [
         {
-          id: `${transformation.id}.source-notation-salience`,
-          entityIds: notation.sourceSelectorIds,
-          role: "source",
+          id: `${succession.lineageId}.source-salience`,
+          entityIds: succession.sourceSelectorIds,
+          role: "source" as const,
           readinessThreshold: 0.6
         },
         {
-          id: `${transformation.id}.target-notation-salience`,
-          entityIds: notation.targetSelectorIds,
-          role: "target",
+          id: `${succession.lineageId}.target-salience`,
+          entityIds: succession.targetSelectorIds,
+          role: "target" as const,
           readinessThreshold: 0.72
         }
-      ],
-      edges: [{
-        id: `${transformation.id}.notation-handoff`,
-        sourceNodeId: `${transformation.id}.source-notation-salience`,
-        targetNodeId: `${transformation.id}.target-notation-salience`,
-        lineageEdgeId: `${transformation.id}.notation-successor`,
+      ]),
+      edges: fragmentLineage.successions.map((succession) => ({
+        id: `${succession.lineageId}.salience-handoff`,
+        sourceNodeId: `${succession.lineageId}.source-salience`,
+        targetNodeId: `${succession.lineageId}.target-salience`,
+        lineageEdgeId: succession.edgeId,
         targetReadyAt: 0.62,
         sourceReleaseAt: 0.78
-      }],
+      })),
       branchGroups: []
     },
     traversal: {
@@ -331,7 +289,10 @@ export function createKpRadicalSuccessionChoreography(
     id: `${transformation.id}.hierarchy`,
     groups: [{
       id: `${transformation.id}.notation-group`,
-      semanticEntityIds: [sourceRepresentationId, targetRepresentationId],
+      semanticEntityIds: [
+        ...notation.sourceSelectorIds,
+        ...notation.targetSelectorIds
+      ],
       tokenIds: [...notation.sourceSelectorIds, ...notation.targetSelectorIds],
       motionFieldId: `${transformation.id}.opposite-corner-field`,
       cohesion: {
@@ -350,7 +311,7 @@ export function createKpRadicalSuccessionChoreography(
         id,
         kind: "structural" as const,
         groupId: `${transformation.id}.notation-group`,
-        ownerSemanticEntityId: sourceRepresentationId,
+        ownerSemanticEntityId: id,
         selectorIds: [id],
         fragmentIds: [],
         nativeRendererOwnerId: "katex-dom"
@@ -359,7 +320,7 @@ export function createKpRadicalSuccessionChoreography(
         id,
         kind: "structural" as const,
         groupId: `${transformation.id}.notation-group`,
-        ownerSemanticEntityId: targetRepresentationId,
+        ownerSemanticEntityId: id,
         selectorIds: [id],
         fragmentIds: [],
         nativeRendererOwnerId: "katex-dom"
@@ -404,6 +365,7 @@ export function createKpRadicalSuccessionChoreography(
       accessibilityMode: "full"
     }),
     hierarchy,
+    fragmentLineage,
     propagationRule: "far-to-near",
     pathRequirement: {
       motifId: "radical.rewrite-power-as-root",

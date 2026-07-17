@@ -91,6 +91,37 @@ test("style substitution changes realization only and keeps the inspected plan s
   );
 });
 
+test("radical inspection exposes one salience transfer per fragment succession", () => {
+  const catalog = createKpAnimationAssets();
+  const descriptor = createKpEditorAnimationLibrary().find(
+    (candidate) =>
+      candidate.animationId ===
+      "animation.generated.radical.square-root-as-power"
+  )!;
+  const animation = catalog.find(
+    (candidate) => candidate.id === descriptor.animationId
+  )!;
+  const state = createKpEditorAnimationPlayerState({
+    descriptor,
+    animation,
+    catalog,
+    progress: 0.55,
+    playbackStatus: "paused"
+  });
+  const inspection = createKpEditorAnimationGestaltInspection({
+    animation,
+    state,
+    selectedStyle: kpOrganicSubtleStyleRef
+  });
+
+  assert.match(
+    inspection.choreographyPlanId ?? "",
+    /rewrite-power-as-root/
+  );
+  assert.equal(inspection.salienceLabel, "4 nodes · 2 transfers");
+  assert.equal(inspection.traversalLabel, "execution · 1 ranks");
+});
+
 test("unmigrated surfaces expose honest warnings and invalid style pins fall back", () => {
   const catalog = createKpAnimationAssets();
   const descriptor = createKpEditorAnimationLibrary().find(
