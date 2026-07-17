@@ -35,6 +35,7 @@ export type EquationVisualMotifKind =
   | "derivative-power"
   | "dot-product-accumulate"
   | "merge-fan-in"
+  | "radical-corner-transfer"
   | "relation-flip"
   | "simplify-into"
   | "substitute"
@@ -57,6 +58,10 @@ export const equationVisualMotifPhaseIds = [
   "dot-product-form",
   "dot-accumulate",
   "dot-result-reveal",
+  "radical-fragment-focus",
+  "radical-corner-gather",
+  "radical-representation-handoff",
+  "radical-native-settle",
   "unwrap-artifact-exit",
   "wrap-artifact-enter",
   "wrapped-token-shift",
@@ -172,6 +177,18 @@ export const equationVisualMotifDescriptors: readonly EquationVisualMotifDescrip
     motionPrimitiveIds: ["merge", "shift"],
     phaseIds: [...kpCopyFanOutPhaseIds].reverse(),
     summary: "Lineage-bearing sources retrace independent paths and coalesce into one result."
+  },
+  {
+    kind: "radical-corner-transfer",
+    motionPrimitiveIds: ["transmit", "shift", "exit", "reveal"],
+    phaseIds: [
+      "radical-fragment-focus",
+      "radical-corner-gather",
+      "radical-representation-handoff",
+      "radical-native-settle"
+    ],
+    summary:
+      "Fractional-exponent fragments gather into distinct opposite-corner slots and hand off to radical fragments before native settlement."
   },
   {
     kind: "relation-flip",

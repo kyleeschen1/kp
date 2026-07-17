@@ -47,5 +47,5 @@ test("radical rewrite visibly replaces the rational exponent with a root", () =>
     radical.projection.transitions[0]?.source[0]?.latex,
     radical.projection.transitions[0]?.target[0]?.latex,
     radical.motifs[0]?.kind
-  ], ["x^{\\frac{1}{2}}", "\\sqrt{x}", "artifact-replace"]);
+  ], ["x^{\\frac{1}{2}}", "\\sqrt{x}", "radical-corner-transfer"]);
 });

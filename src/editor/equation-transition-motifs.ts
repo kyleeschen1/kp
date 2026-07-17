@@ -73,6 +73,8 @@ function sourceMotion(
       return motion(1 - progress, 0, 0, 1, 0);
     case "merge-fan-in":
       return motion(1 - progress, 0, 0, 1, 0);
+    case "radical-corner-transfer":
+      return motion(1 - progress, 0, 0, 1, 0);
     case "relation-flip":
       return motion(1 - progress, 0, 0, 1, 0, -90 * progress);
     case "simplify-into":
@@ -107,6 +109,8 @@ function targetMotion(
       return motion(progress, 0, 0, 1, 0);
     case "merge-fan-in":
       return motion(progress, 0, 0, 0.68 + 0.32 * progress, 0);
+    case "radical-corner-transfer":
+      return motion(progress, 0, 0, 1, 0);
     case "relation-flip":
       return motion(progress, 0, 0, 1, 0, 90 * (1 - progress));
     case "simplify-into":

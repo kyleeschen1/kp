@@ -130,7 +130,7 @@ test("createExponentRadicalRewriteAnimationAsset adapts square root rewrite into
     [
       [
         "transform.generated.radical.square-root-as-power.rewrite-power-as-root",
-        "artifact-replace"
+        "radical-corner-transfer"
       ]
     ]
   );

@@ -155,24 +155,30 @@ function ensureRadicalFragmentElements(object: HTMLElement): {
   stack.style.height = hideTail.style.height;
   stack.style.overflow = "visible";
 
-  const overbar = document.createElement("span");
-  overbar.className = "kp-radical-structural-fragment kp-radical-structural-fragment--overbar";
-  overbar.dataset["kpRadicalStructuralFragment"] = "overbar";
-  overbar.style.cssText = hideTail.style.cssText;
-  overbar.style.position = "absolute";
-  overbar.style.inset = "0";
-  overbar.style.display = "inline-block";
-  overbar.style.clipPath = "inset(0 0 66% 28%)";
-  overbar.innerHTML = hideTail.innerHTML;
-
   hideTail.parentElement.replaceChild(stack, hideTail);
-  hideTail.dataset["kpRadicalStructuralFragment"] = "hook";
+  hideTail.dataset["kpRadicalNativeVisual"] = "true";
   hideTail.style.position = "absolute";
   hideTail.style.inset = "0";
   hideTail.style.display = "inline-block";
-  hideTail.style.clipPath = "inset(0 58% 0 0)";
-  stack.append(hideTail, overbar);
-  return { hook: hideTail, overbar };
+  const hook = radicalFragmentAnchor("hook");
+  const overbar = radicalFragmentAnchor("overbar");
+  stack.append(hideTail, hook, overbar);
+  return { hook, overbar };
+}
+
+function radicalFragmentAnchor(role: "hook" | "overbar"): HTMLElement {
+  const anchor = document.createElement("span");
+  anchor.className =
+    `kp-radical-structural-fragment kp-radical-structural-fragment--${role}`;
+  anchor.dataset["kpRadicalStructuralFragment"] = role;
+  anchor.style.position = "absolute";
+  anchor.style.inset = "0";
+  anchor.style.display = "inline-block";
+  anchor.style.pointerEvents = "none";
+  // Fragment anchors inherit the radical's structural-crop contract even
+  // though the native KaTeX SVG remains the visual source for exact ink.
+  anchor.style.overflow = "hidden";
+  return anchor;
 }
 
 function suffix(state: ExponentRadicalState, selectorId: string): string {

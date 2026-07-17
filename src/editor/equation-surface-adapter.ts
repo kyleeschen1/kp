@@ -500,6 +500,9 @@ function applyRadicalMaterialLayer(input: {
   const radicalOverbar = input.stage.querySelector<HTMLElement>(
     '[data-kp-motion-id*=".radical.radical-overbar"]'
   );
+  const radicalNative = input.stage.querySelector<HTMLElement>(
+    '[data-kp-radical-native-visual="true"]'
+  );
   const sourceBase = input.stage.querySelector<HTMLElement>(
     '[data-kp-motion-id*=".power.base"]'
   );
@@ -509,12 +512,16 @@ function applyRadicalMaterialLayer(input: {
   if (
     radicalHook === null ||
     radicalOverbar === null ||
+    radicalNative === null ||
     sourceBase === null ||
     targetBase === null ||
     input.semanticProgress <= 0 ||
     input.semanticProgress >= 1
   ) {
     syncKpEquationMaterialLayer({ stage: input.stage, owners: [] });
+    if (radicalNative !== null) {
+      radicalNative.style.opacity = input.semanticProgress >= 1 ? "1" : "0";
+    }
     input.stage.dataset["kpEditorEquationNativeSettlementProgress"] =
       input.semanticProgress >= 1 ? "1" : "0";
     return;
@@ -542,15 +549,11 @@ function applyRadicalMaterialLayer(input: {
   }];
 
   if (input.semanticProgress >= 0.42 && input.semanticProgress < 0.95) {
-    const hookProgress = intervalProgress(
-      input.semanticProgress,
-      0.42,
-      0.78
+    const hookProgress = Number.parseFloat(
+      getComputedStyle(radicalHook).opacity
     );
-    const overbarProgress = intervalProgress(
-      input.semanticProgress,
-      0.52,
-      0.86
+    const overbarProgress = Number.parseFloat(
+      getComputedStyle(radicalOverbar).opacity
     );
     const nativeSettlementProgress = intervalProgress(
       input.semanticProgress,
@@ -575,30 +578,31 @@ function applyRadicalMaterialLayer(input: {
     owners.push(
       {
         ownerId: "radical-rewrite.root-notation.hook",
-        sourceElement: radicalHook,
+        sourceElement: radicalNative,
+        sourceMotionId: radicalHook.dataset["kpMotionId"],
         rect: hook,
         opacity: hookProgress * fragmentRelease,
-        transform:
-          `translate(0px, ${2 * (1 - hookProgress)}px) scale(${0.9 + hookProgress * 0.1})`,
+        transform: "none",
+        clipPath: "inset(0 58% 0 0)",
         fragmentRole: "radical-hook"
       },
       {
         ownerId: "radical-rewrite.root-notation.overbar",
-        sourceElement: radicalOverbar,
+        sourceElement: radicalNative,
+        sourceMotionId: radicalOverbar.dataset["kpMotionId"],
         rect: overbar,
         opacity: overbarProgress * fragmentRelease,
-        transform:
-          `translate(${-4 * (1 - overbarProgress)}px, ${-2 * (1 - overbarProgress)}px) scale(${0.92 + overbarProgress * 0.08})`,
+        transform: "none",
+        clipPath: "inset(0 0 66% 28%)",
         fragmentRole: "radical-overbar"
       }
     );
-    radicalHook.style.opacity = String(nativeSettlementProgress);
-    radicalOverbar.style.opacity = String(nativeSettlementProgress);
-    radicalHook.dataset["kpEquationMaterialNativeHidden"] = "true";
-    radicalOverbar.dataset["kpEquationMaterialNativeHidden"] = "true";
+    radicalNative.style.opacity = String(nativeSettlementProgress);
+    radicalNative.dataset["kpEquationMaterialNativeHidden"] = "true";
     input.stage.dataset["kpEditorEquationNativeSettlementProgress"] =
       String(nativeSettlementProgress);
   } else {
+    radicalNative.style.opacity = input.semanticProgress < 0.42 ? "0" : "1";
     input.stage.dataset["kpEditorEquationNativeSettlementProgress"] = "1";
   }
   syncKpEquationMaterialLayer({

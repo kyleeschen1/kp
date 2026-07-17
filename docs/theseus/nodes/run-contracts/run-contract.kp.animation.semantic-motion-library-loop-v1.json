@@ -139,7 +139,8 @@
     {
       "id": "next-action.kp.animation.radical-corner-transfer-v1",
       "title": "Refine opposite-corner choreography",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.radical-corner-transfer-v1 in Semantic Motion Animation Library Long Loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.radical-settlement-v1",

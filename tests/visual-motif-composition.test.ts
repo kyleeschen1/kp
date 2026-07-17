@@ -380,7 +380,7 @@ test("default equation visual motif rules cover promoted generated transform def
       ],
       [
         "rewritePowerAsRoot",
-        "artifact-replace",
+        "radical-corner-transfer",
         ["definition.generated.radical.rewrite-power-as-root"]
       ],
       [

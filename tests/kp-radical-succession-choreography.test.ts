@@ -89,7 +89,7 @@ test("token sampler uses opposite-corner gathering and far-side stagger", () => 
     (token) => token.side === "target" && token.motionId.startsWith("radical.")
   );
   assert.equal(sourceNotation.length, 3);
-  assert.equal(targetNotation.length, 3);
+  assert.equal(targetNotation.length, 2);
   assert.ok(
     sourceNotation.every(
       (token) =>
@@ -103,17 +103,25 @@ test("token sampler uses opposite-corner gathering and far-side stagger", () => 
       sourceNotation.map((token) => `${token.pose.x},${token.pose.y}`)
     ).size > 1
   );
-  assert.ok(new Set(targetNotation.map((token) => token.pose.opacity)).size > 1);
-  assert.ok(targetNotation.every((token) => token.pose.scale >= 0.72));
+  const targetTransfer = sampleKpEquationTokenMotion(geometry(), 0.67).tokens
+    .filter(
+      (token) => token.side === "target" && token.motionId.startsWith("radical.")
+    );
+  assert.ok(new Set(targetTransfer.map((token) => token.pose.opacity)).size > 1);
+  assert.deepEqual(
+    targetTransfer.map((token) => token.motionPathVariant),
+    ["diagonal-arc-below", "diagonal-arc-above"]
+  );
+  assert.ok(targetTransfer.every((token) => token.pose.scale >= 0.82));
 
   const base = midpoint.tokens.find((token) => token.motionId === "base.x");
   assert.equal(base?.pose.opacity, 1);
   assert.equal(base?.pose.scale, 1);
 });
 
-test("all exponent fragments finish gathering at one shared bundle", () => {
+test("exponent fragments retain distinct slots inside one corner region", () => {
   const sampledGeometry = geometry();
-  const gathered = sampleKpEquationTokenMotion(sampledGeometry, 0.58);
+  const gathered = sampleKpEquationTokenMotion(sampledGeometry, 0.64);
   const bundle = gathered.representationalSuccession?.bundlePoint;
   assert.ok(bundle);
   const gatheredCenters = gathered.tokens
@@ -130,13 +138,13 @@ test("all exponent fragments finish gathering at one shared bundle", () => {
         y: source.localRect.top + source.localRect.height / 2 + token.pose.y
       };
     });
-  assert.ok(
-    gatheredCenters.every(
-      (center) =>
-        Math.abs(center.x - bundle.x) < 0.000001 &&
-        Math.abs(center.y - bundle.y) < 0.000001
-    )
+  assert.equal(
+    new Set(gatheredCenters.map((center) => `${center.x},${center.y}`)).size,
+    3
   );
+  assert.ok(gatheredCenters.every(
+    (center) => Math.hypot(center.x - bundle.x, center.y - bundle.y) < 30
+  ));
 });
 
 test("radical succession settles to exact native token endpoints", () => {
@@ -186,8 +194,7 @@ function geometry(): KpMeasuredEquationTransitionGeometry {
     targetTokens: [
       token("radicand.x", 38, 30, 14, 18),
       token("radical.glyph", 22, 24, 10, 26),
-      token("radical.bar", 30, 22, 28, 2),
-      token("radical.tail", 20, 38, 7, 10)
+      token("radical.bar", 30, 22, 28, 2)
     ],
     relations: [
       {
@@ -198,17 +205,38 @@ function geometry(): KpMeasuredEquationTransitionGeometry {
         delta: { x: 28, y: 0, scaleX: 1, scaleY: 1 }
       },
       {
-        recordId: "root-notation-succession",
-        lifecycle: "merge",
+        recordId: "unit-numerator-absorbed",
+        lifecycle: "exit",
         source: endpoint(
-          ["exponent.numerator", "exponent.line", "exponent.denominator"],
-          { left: 30, top: 4, width: 12, height: 22 }
+          ["exponent.numerator"],
+          { left: 32, top: 4, width: 8, height: 8 }
+        )
+      },
+      {
+        recordId: "fraction-rule-becomes-radical-overbar",
+        lifecycle: "role-change",
+        source: endpoint(
+          ["exponent.line"],
+          { left: 30, top: 13, width: 12, height: 2 }
         ),
         target: endpoint(
-          ["radical.glyph", "radical.bar", "radical.tail"],
-          { left: 20, top: 22, width: 38, height: 28 }
+          ["radical.bar"],
+          { left: 30, top: 22, width: 28, height: 2 }
         ),
-        delta: { x: 3, y: 21, scaleX: 1, scaleY: 1 }
+        delta: { x: 23, y: 8, scaleX: 1, scaleY: 1 }
+      },
+      {
+        recordId: "denominator-becomes-radical-hook",
+        lifecycle: "role-change",
+        source: endpoint(
+          ["exponent.denominator"],
+          { left: 32, top: 18, width: 8, height: 8 }
+        ),
+        target: endpoint(
+          ["radical.glyph"],
+          { left: 22, top: 24, width: 10, height: 26 }
+        ),
+        delta: { x: -9, y: 12, scaleX: 1, scaleY: 1 }
       }
     ]
   };

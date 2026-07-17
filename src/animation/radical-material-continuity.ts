@@ -131,7 +131,7 @@ export function createKpRadicalMaterialContinuity(
         targetFragmentIds: fragments
           .filter((candidate) => candidate.targetMotionIds.length > 0)
           .map((candidate) => candidate.id),
-        reconciliation: "shared-point",
+        reconciliation: "shared-region",
         nativeSettlementRequired: true
       }],
       envelopeBridges: []
@@ -156,4 +156,3 @@ function fragment(
     semanticAuthority: false
   };
 }
-

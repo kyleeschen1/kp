@@ -39,7 +39,7 @@ test("radical fragments reconcile through one required native-settlement bundle"
   );
   const bundle = continuity.plan.bundles[0]!;
   assert.equal(bundle.id, continuity.bundleId);
-  assert.equal(bundle.reconciliation, "shared-point");
+  assert.equal(bundle.reconciliation, "shared-region");
   assert.equal(bundle.nativeSettlementRequired, true);
   assert.equal(bundle.sourceFragmentIds.length, 3);
   assert.equal(bundle.targetFragmentIds.length, 2);

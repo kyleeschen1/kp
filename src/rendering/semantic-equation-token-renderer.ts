@@ -433,6 +433,9 @@ function createRepresentationalSuccessionContext(
   if (relation === undefined) return undefined;
   const sampled = sampleKpEquationRepresentationalSuccession({
     relation,
+    ...(mergedRelation === undefined
+      ? { fragmentRelations: explicitFragmentRelations }
+      : {}),
     sourceTokens: relationTokens(
       geometry.sourceTokens,
       relation.source!.motionIds
@@ -472,8 +475,10 @@ function relationContainsRadicalNotation(
     ...(relation.target?.motionIds ?? [])
   ].some((motionId) =>
     motionId.includes(".exponent-") ||
+    motionId.startsWith("exponent.") ||
     motionId.includes(".radical-hook") ||
     motionId.includes(".radical-overbar") ||
+    motionId.startsWith("radical.") ||
     motionId.includes(".root-index") ||
     motionId.includes(".radicand-exponent")
   );

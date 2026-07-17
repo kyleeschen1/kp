@@ -1,6 +1,7 @@
 export interface KpEquationMaterialLayerOwnerFrame {
   readonly ownerId: string;
   readonly sourceElement: HTMLElement;
+  readonly sourceMotionId?: string | undefined;
   readonly rect: {
     readonly left: number;
     readonly top: number;
@@ -87,7 +88,7 @@ export function syncKpEquationMaterialLayer(input: {
     owner.style.opacity = String(frame.opacity);
     owner.style.transform = frame.transform;
     owner.dataset["kpEquationMaterialSourceMotionId"] =
-      frame.sourceElement.dataset["kpMotionId"] ?? "";
+      frame.sourceMotionId ?? frame.sourceElement.dataset["kpMotionId"] ?? "";
     if (frame.fragmentRole === undefined) {
       delete owner.dataset["kpEquationMaterialFragmentRole"];
     } else {

@@ -2,7 +2,8 @@ import { expect, test } from "@playwright/test";
 import { equationAnimationConformanceBaseline } from "./fixtures/equation-animation-conformance-baseline.ts";
 import { kpEquationVisualMotifConformanceFixture } from "../src/rendering/equation-visual-motif-conformance.ts";
 import {
-  evaluateKpMaterialContinuityQuality
+  evaluateKpMaterialContinuityQuality,
+  kpDefaultMaterialContinuityQualityBudgets
 } from "../src/animation/material-continuity-quality.ts";
 
 test("selected editor animation controls play, pause, seek, step, rewind, and reset", async ({
@@ -321,11 +322,13 @@ test("design diagnostics distinguish promoted motion from incomplete succession"
   );
   await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
   await expect(diagnostics.locator("[data-kp-editor-design-strategy]"))
-    .toHaveText("operation-specific · artifact-replace");
+    .toHaveText("operation-specific · radical-corner-transfer");
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-design-issue-codes",
-    /design\.representation\.granularity-loss/
+    ""
   );
+  await expect(diagnostics.locator("[data-kp-editor-design-issues]"))
+    .toHaveText("none");
 });
 
 test("promoted calculus rules expose live envelope and salience diagnostics", async ({
@@ -1112,7 +1115,10 @@ test("exponent and radical family animations render their semantic rewrite motif
   scrubber = player.locator('[data-action="seek-editor-animation"]');
   await scrubber.fill("0.5");
   await expect(player.locator("[data-kp-editor-equation-transition-id]"))
-    .toHaveAttribute("data-kp-editor-equation-motif", "artifact-replace");
+    .toHaveAttribute(
+      "data-kp-editor-equation-motif",
+      "radical-corner-transfer"
+    );
   await expect(player.locator("[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"))
     .toHaveAttribute(
       "data-kp-editor-equation-object-id",
@@ -1120,8 +1126,11 @@ test("exponent and radical family animations render their semantic rewrite motif
     );
   await expect(player.locator("[data-kp-editor-equation-transition-id]"))
     .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
-  await expect(player.locator("[data-kp-editor-equation-target] .hide-tail[data-kp-motion-id]"))
+  await expect(player.locator("[data-kp-editor-equation-target] [data-kp-radical-native-visual]"))
     .toHaveCount(1);
+  await expect(player.locator(
+    "[data-kp-editor-equation-target] [data-kp-radical-structural-fragment][data-kp-motion-id]"
+  )).toHaveCount(2);
 });
 
 test("radical-succession uses independent opposite-corner tokens and native settle", async ({
@@ -1147,6 +1156,12 @@ test("radical-succession uses independent opposite-corner tokens and native sett
   );
   const targetRadical = transition.locator(
     '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radical-hook"]'
+  );
+  const targetOverbar = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radical-overbar"]'
+  );
+  const targetNativeRadical = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-radical-native-visual="true"]'
   );
   const targetBase = transition.locator(
     '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radicand"]'
@@ -1210,7 +1225,7 @@ test("radical-succession uses independent opposite-corner tokens and native sett
   );
   expect(Number(await transition.getAttribute(
     "data-kp-editor-equation-source-gather-progress"
-  ))).toBeGreaterThan(0.9);
+  ))).toBeGreaterThan(0.8);
   for (const token of await sourceNotation.all()) {
     await expect(token).toHaveCSS("opacity", "1");
     await expect(token).toHaveAttribute(
@@ -1220,6 +1235,23 @@ test("radical-succession uses independent opposite-corner tokens and native sett
     expect(await token.getAttribute("style")).not.toContain("scale(0)");
   }
   await expect(targetRadical).toHaveCSS("opacity", "0");
+
+  await scrubber.fill("0.67");
+  await expect(targetRadical).toHaveAttribute(
+    "data-kp-equation-motion-path-variant",
+    "diagonal-arc-above"
+  );
+  await expect(targetOverbar).toHaveAttribute(
+    "data-kp-equation-motion-path-variant",
+    "diagonal-arc-below"
+  );
+  const targetTransforms = await Promise.all([
+    targetRadical.getAttribute("style"),
+    targetOverbar.getAttribute("style")
+  ]);
+  expect(targetTransforms[0]).toContain("translate(");
+  expect(targetTransforms[1]).toContain("translate(");
+  expect(targetTransforms[0]).not.toBe(targetTransforms[1]);
   const radicalFragments = materialLayer.locator(
     '[data-kp-equation-material-fragment-role^="radical-"]'
   );
@@ -1233,7 +1265,7 @@ test("radical-succession uses independent opposite-corner tokens and native sett
   for (const fragment of await radicalFragments.all()) {
     await expect(fragment.locator(
       ".editor-equation-stage__material-visual"
-    )).toHaveCSS("clip-path", "none");
+    )).not.toHaveCSS("clip-path", "none");
   }
   await expect(
     transition.locator("[data-kp-editor-equation-source]")
@@ -1256,7 +1288,9 @@ test("radical-succession uses independent opposite-corner tokens and native sett
     "0.5"
   );
   const settlingNativeOpacity = Number(
-    await targetRadical.evaluate((element) => getComputedStyle(element).opacity)
+    await targetNativeRadical.evaluate(
+      (element) => getComputedStyle(element).opacity
+    )
   );
   expect(settlingNativeOpacity).toBeGreaterThan(0);
   expect(settlingNativeOpacity).toBeLessThan(1);
@@ -1288,6 +1322,7 @@ test("radical-succession uses independent opposite-corner tokens and native sett
     await expect(token).toHaveCSS("opacity", "0");
   }
   await expect(targetRadical).toHaveCSS("opacity", "1");
+  await expect(targetNativeRadical).toHaveCSS("opacity", "1");
   await expect(targetBase).toHaveCSS("opacity", "1");
   await expect(baseMaterialOwner).toHaveCount(0);
   await expect(materialLayer.locator(
@@ -1378,7 +1413,7 @@ test("radical bundle and native settlement satisfy continuity budgets", async ({
     "[data-kp-editor-equation-transition-id]"
   );
 
-  await scrubber.fill("0.58");
+  await scrubber.fill("0.64");
   const continuityDiagnostics = player.locator(
     "[data-kp-editor-animation-gestalt-diagnostics]"
   );
@@ -1493,7 +1528,11 @@ test("radical bundle and native settlement satisfy continuity budgets", async ({
     });
   });
   expect(evaluateKpMaterialContinuityQuality({
-    reconciliations: [...bundleSamples, ...settlementSamples]
+    reconciliations: [...bundleSamples, ...settlementSamples],
+    budgets: {
+      ...kpDefaultMaterialContinuityQualityBudgets,
+      maximumBundleSeparationPx: 30
+    }
   })).toEqual([]);
 });
 

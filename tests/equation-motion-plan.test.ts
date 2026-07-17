@@ -139,6 +139,16 @@ test("visual motif module exposes reusable equation motif descriptors", () => {
           "contract-source"
         ]
       ],
+      [
+        "radical-corner-transfer",
+        ["transmit", "shift", "exit", "reveal"],
+        [
+          "radical-fragment-focus",
+          "radical-corner-gather",
+          "radical-representation-handoff",
+          "radical-native-settle"
+        ]
+      ],
       ["relation-flip", ["shift"], ["relation-flip"]],
       [
         "simplify-into",

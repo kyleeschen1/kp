@@ -150,6 +150,34 @@ export const linearEquationDemoBeatTimeline = compileSemanticBeatTimeline({
       summary: "The accumulated products hand off to the scalar result."
     },
     {
+      id: "radical-fragment-focus",
+      startBeat: 0,
+      endBeat: 9,
+      easing: "ease-in-out",
+      summary: "Fractional-exponent fragments receive focus before they leave their source positions."
+    },
+    {
+      id: "radical-corner-gather",
+      startBeat: 7,
+      endBeat: 34,
+      easing: "ease-in-out",
+      summary: "Independent exponent fragments travel on staggered arcs into an opposite-corner region."
+    },
+    {
+      id: "radical-representation-handoff",
+      startBeat: 30,
+      endBeat: 43,
+      easing: "ease-in-out",
+      summary: "Gathered exponent material hands off to the radical hook and overbar representations."
+    },
+    {
+      id: "radical-native-settle",
+      startBeat: 41,
+      endBeat: 50,
+      easing: "ease-in-out",
+      summary: "Semantic radical fragments settle into the native KaTeX radical without a whole-expression scale."
+    },
+    {
       id: "unwrap-artifact-exit",
       startBeat: 0,
       endBeat: 20,

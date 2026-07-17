@@ -279,8 +279,8 @@ function generatedAlgebraEquationMotifDefaults():
     },
     {
       transformType: "rewritePowerAsRoot",
-      motifKind: "artifact-replace",
-      summary: "Rational exponent artifacts are replaced by radical structure."
+      motifKind: "radical-corner-transfer",
+      summary: "Rational exponent fragments hand off through opposite-corner arcs into radical structure."
     },
     {
       transformType: "wrapFunction",

@@ -29,13 +29,12 @@ test("radical rewrite closes target-fragment granularity loss", () => {
   const diagnosis = diagnoseKpAnimationDesign({ animation })!;
 
   assert.equal(diagnosis.visualStrategy, "operation-specific");
+  assert.equal(diagnosis.motifKind, "radical-corner-transfer");
   assert.ok(!diagnosis.issues.some(
     (issue) =>
       issue.code === "design.representation.granularity-loss"
   ));
-  assert.ok(diagnosis.issues.some(
-    (issue) => issue.code === "design.motif.generic-replacement"
-  ));
+  assert.deepEqual(diagnosis.issues, []);
 });
 
 test("linear solve operations retain operation-specific diagnoses", () => {
