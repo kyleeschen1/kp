@@ -199,7 +199,7 @@
       "id": "next-action.kp.material-motion.matrix-matrix-pacing-v0",
       "title": "Apply proportional matrix matrix timing",
       "summary": "Hot visible-motion gate: matrix-matrix unit and browser tests plus throttled performance evidence; no full suite after the adjacent checkpoint absent new shared impact.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.reverse-operations-v0",

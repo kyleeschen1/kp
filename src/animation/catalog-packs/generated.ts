@@ -1,8 +1,10 @@
 import type { KpAnimationAsset } from "../asset.ts";
 import {
   createGeneratedProblemAnimationAsset,
+  generatedProblemMatrixMatrixCellCount,
   generatedProblemMatrixVectorRowCount
 } from "../generated-problem-import.ts";
+import { createKpMatrixMatrixSemanticDuration } from "../matrix-matrix-semantic-duration.ts";
 import { createKpMatrixVectorSemanticDuration } from "../matrix-vector-semantic-duration.ts";
 import {
   createGeneratedCalculusProblemFixtures
@@ -19,16 +21,17 @@ export function createKpGeneratedProblemAnimationPack():
   ].map((fixture) => {
     const animation = createGeneratedProblemAnimationAsset(fixture);
     const rowCount = generatedProblemMatrixVectorRowCount(fixture);
-    if (rowCount === undefined) return animation;
-
-    // Full semantic compilation stays inside this lazy capability; the eager
-    // dashboard catalog shares only the arithmetic duration contract.
-    const duration = createKpMatrixVectorSemanticDuration({
-      id: fixture.id,
-      rowCount
-    });
-    if (animation.timeline?.durationMs !== duration.totalDurationMs) {
-      throw new Error(`Matrix-vector duration contract drifted for ${fixture.id}.`);
+    const cellCount = generatedProblemMatrixMatrixCellCount(fixture);
+    // Compile the full semantic plan only inside this lazy capability; eager
+    // catalogs share the smaller arithmetic duration contract.
+    const duration = rowCount === undefined
+      ? cellCount === undefined
+        ? undefined
+        : createKpMatrixMatrixSemanticDuration({ id: fixture.id, cellCount })
+      : createKpMatrixVectorSemanticDuration({ id: fixture.id, rowCount });
+    if (duration !== undefined &&
+        animation.timeline?.durationMs !== duration.totalDurationMs) {
+      throw new Error(`Matrix semantic duration contract drifted for ${fixture.id}.`);
     }
     return animation;
   });

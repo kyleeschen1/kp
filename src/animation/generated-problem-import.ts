@@ -12,6 +12,7 @@ import {
   createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
 import { matrixVectorSemanticDurationMs } from "./matrix-vector-duration-contract.ts";
+import { matrixMatrixSemanticDurationMs } from "./matrix-matrix-duration-contract.ts";
 
 export function createGeneratedProblemAnimationAsset(
   fixture: GeneratedProblemAnimationFixture
@@ -107,7 +108,9 @@ export function createGeneratedProblemAnimationAsset(
 
 function generatedProblemDurationMs(fixture: GeneratedProblemAnimationFixture): number {
   const rowCount = generatedProblemMatrixVectorRowCount(fixture);
-  return rowCount === undefined ? 2_400 : matrixVectorSemanticDurationMs(rowCount);
+  if (rowCount !== undefined) return matrixVectorSemanticDurationMs(rowCount);
+  const cellCount = generatedProblemMatrixMatrixCellCount(fixture);
+  return cellCount === undefined ? 2_400 : matrixMatrixSemanticDurationMs(cellCount);
 }
 
 export function generatedProblemMatrixVectorRowCount(
@@ -127,4 +130,25 @@ export function generatedProblemMatrixVectorRowCount(
     throw new Error("Matrix-vector animation duration requires authored matrix rows.");
   }
   return rows.length;
+}
+
+export function generatedProblemMatrixMatrixCellCount(
+  fixture: GeneratedProblemAnimationFixture
+): number | undefined {
+  const transformation = fixture.transformations.find(
+    (candidate) => candidate.transformType === "multiplyMatrices"
+  );
+  if (transformation === undefined) return undefined;
+  const target = fixture.bundle.objects.find(
+    (object) => object.id === transformation.targetObjectIds[0]
+  );
+  const result = typeof target?.value === "object" && target.value !== null
+    ? (target.value as Record<string, unknown>)["result"]
+    : undefined;
+  if (!Array.isArray(result) || result.length === 0 ||
+      !result.every((row) => Array.isArray(row) && row.length > 0) ||
+      !result.every((row) => row.length === (result[0] as unknown[]).length)) {
+    throw new Error("Matrix-matrix animation duration requires a rectangular result.");
+  }
+  return result.length * (result[0] as unknown[]).length;
 }

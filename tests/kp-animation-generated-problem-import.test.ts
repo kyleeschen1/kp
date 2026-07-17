@@ -181,3 +181,12 @@ test("createGeneratedProblemAnimationAsset imports generated linear algebra matr
     []
   );
 });
+
+test("matrix-matrix imports reserve one full duration window per result cell", () => {
+  const fixture = createGeneratedLinearAlgebraProblemFixture(
+    "generated.linear-algebra.matrix-matrix.two-by-two"
+  );
+  const animation = createGeneratedProblemAnimationAsset(fixture);
+
+  assert.equal(animation.timeline?.durationMs, 4_400);
+});

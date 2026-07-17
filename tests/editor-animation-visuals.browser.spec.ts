@@ -2597,11 +2597,19 @@ test("matrix-matrix family animation visibly resolves the result matrix", async 
   const player = page.locator("[data-kp-editor-animation-player]");
   const transition = player.locator("[data-kp-editor-equation-transition-id]");
   const scrubber = player.locator('[data-action="seek-editor-animation"]');
-  await scrubber.fill("0.14");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-matrix-matrix-composition",
     /matrix-matrix/
   );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-matrix-matrix-duration-ms",
+    "4400"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-matrix-matrix-semantic-action-count",
+    "4"
+  );
+  await scrubber.fill("0.14");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-matrix-matrix-active-cell",
     "0"
@@ -2614,7 +2622,7 @@ test("matrix-matrix family animation visibly resolves the result matrix", async 
   await expect(transition.locator('[data-kp-editor-matrix-matrix-cell="0"]'))
     .toContainText("1×2+2×1=4");
 
-  await scrubber.fill("0.27");
+  await scrubber.fill("0.28");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-matrix-matrix-resolved-through",
     "0"

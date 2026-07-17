@@ -2679,11 +2679,17 @@ function applySemanticTokenMotion(input: {
   if (matrixMatrix === undefined) {
     delete input.transitionElement.dataset["kpEditorEquationMatrixMatrixTokenPlan"];
     delete input.transitionElement.dataset["kpEditorEquationMatrixMatrixSourceOpacity"];
+    delete input.transitionElement.dataset["kpEditorEquationMatrixMatrixDurationMs"];
+    delete input.transitionElement.dataset["kpEditorEquationMatrixMatrixSemanticActionCount"];
   } else {
     input.transitionElement.dataset["kpEditorEquationMatrixMatrixTokenPlan"] =
       matrixMatrix.kind;
     input.transitionElement.dataset["kpEditorEquationMatrixMatrixSourceOpacity"] =
       String(matrixMatrix.sourceOpacity);
+    input.transitionElement.dataset["kpEditorEquationMatrixMatrixDurationMs"] =
+      String(matrixMatrix.semanticDurationMs);
+    input.transitionElement.dataset["kpEditorEquationMatrixMatrixSemanticActionCount"] =
+      String(matrixMatrix.semanticActionCount);
   }
   return true;
 }

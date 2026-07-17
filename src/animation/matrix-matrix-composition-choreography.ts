@@ -13,6 +13,12 @@ import {
 } from "./propagation-compiler.ts";
 import type { KpSemanticTraversalPlan } from "./semantic-traversal.ts";
 import {
+  KP_MATRIX_MATRIX_CELL_MINIMUM_DURATION_MS,
+  KP_MATRIX_MATRIX_ENVELOPE_LEAD_MS,
+  KP_MATRIX_MATRIX_ENVELOPE_RELEASE_MS,
+  matrixMatrixSemanticDurationMs
+} from "./matrix-matrix-duration-contract.ts";
+import {
   sampleKpMatrixMatrixCompositionProgress,
   type KpMatrixMatrixCompositionProgressFrame,
   type KpMatrixMatrixRendererCellPlan,
@@ -86,6 +92,10 @@ export function createKpMatrixMatrixCompositionChoreography(
     rank: cell.semanticIndex,
     semanticIndex: cell.semanticIndex
   }));
+  const semanticDurationMs = matrixMatrixSemanticDurationMs(cellInputs.length);
+  if (animation.timeline?.durationMs !== semanticDurationMs) {
+    throw new Error("Matrix-matrix timeline must preserve semantic cell duration.");
+  }
   const traversal: KpSemanticTraversalPlan = {
     id: `traversal.${transformation.id}.cells`,
     kind: "semantic-traversal-plan",
@@ -150,11 +160,6 @@ export function createKpMatrixMatrixCompositionChoreography(
         `Matrix-matrix cell ${cell.rowIndex},${cell.columnIndex} requires an exact authored row-column representation.`
       );
     }
-    const propagationEntry = propagation.entries.find(
-      (entry) =>
-        entry.participantId ===
-        `${transformation.id}.cell.${cell.semanticIndex}.visual`
-    )!;
     const sourceSelectorIds = [
       ...cell.leftSelectorIds,
       ...cell.rightSelectorIds
@@ -168,8 +173,12 @@ export function createKpMatrixMatrixCompositionChoreography(
       result: expected,
       intermediateObjectId: intermediate.id,
       cellLatex: stringValue(intermediate.value, "cellLatex"),
-      start: 0.09 + propagationEntry.start * 0.67,
-      end: 0.09 + propagationEntry.end * 0.67,
+      start: round((KP_MATRIX_MATRIX_ENVELOPE_LEAD_MS +
+        cell.semanticIndex * KP_MATRIX_MATRIX_CELL_MINIMUM_DURATION_MS) /
+        semanticDurationMs),
+      end: round((KP_MATRIX_MATRIX_ENVELOPE_LEAD_MS +
+        (cell.semanticIndex + 1) * KP_MATRIX_MATRIX_CELL_MINIMUM_DURATION_MS) /
+        semanticDurationMs),
       sourceSignatures: Object.fromEntries(sourceSelectorIds.map((selectorId, index) => [
         selectorId,
         deriveKpOrganicMotionSignature({
@@ -201,10 +210,14 @@ export function createKpMatrixMatrixCompositionChoreography(
       id: `renderer.${transformation.id}.matrix-matrix`,
       kind: "matrix-matrix-renderer-plan",
       cells,
-      sourceReleaseStart: 0.82,
-      sourceReleaseEnd: 0.97,
-      structureRevealStart: 0.08,
-      structureRevealEnd: 0.24
+      semanticDurationMs,
+      semanticActionCount: cellInputs.length,
+      sourceReleaseStart:
+        (semanticDurationMs - KP_MATRIX_MATRIX_ENVELOPE_RELEASE_MS) /
+        semanticDurationMs,
+      sourceReleaseEnd: 1,
+      structureRevealStart: 0.02,
+      structureRevealEnd: KP_MATRIX_MATRIX_ENVELOPE_LEAD_MS / semanticDurationMs
     },
     cells
   };

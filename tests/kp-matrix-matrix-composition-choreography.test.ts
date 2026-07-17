@@ -6,6 +6,7 @@ import {
   createKpMatrixMatrixCompositionChoreography,
   sampleKpMatrixMatrixCompositionChoreography
 } from "../src/animation/matrix-matrix-composition-choreography.ts";
+import { createKpMatrixMatrixSemanticDuration } from "../src/animation/matrix-matrix-semantic-duration.ts";
 import type { KpMeasuredEquationTransitionGeometry } from "../src/rendering/equation-motion-dom.ts";
 import { sampleKpEquationTokenMotion } from "../src/rendering/semantic-equation-token-renderer.ts";
 
@@ -16,7 +17,24 @@ const animation = createKpAnimationAssets().find(
 )!;
 const choreography = createKpMatrixMatrixCompositionChoreography(animation);
 
+test("matrix-matrix duration multiplies with cell work instead of accelerating", () => {
+  const sixCells = createKpMatrixMatrixSemanticDuration({
+    id: "matrix-matrix.six-cells",
+    cellCount: 6
+  });
+  assert.equal(sixCells.work.policy, "long-form");
+  assert.equal(sixCells.work.segments.length, 6);
+  assert.equal(sixCells.work.totalDurationMs, 6_000);
+  assert.equal(sixCells.totalDurationMs, 6_400);
+});
+
 test("matrix product cells are authored row-column dot-product representations", () => {
+  assert.equal(choreography.rendererPlan.semanticDurationMs, 4_400);
+  assert.equal(choreography.rendererPlan.semanticActionCount, 4);
+  assert.deepEqual(
+    choreography.cells.map((cell) => Math.round((cell.end - cell.start) * 4_400)),
+    [1_000, 1_000, 1_000, 1_000]
+  );
   assert.deepEqual(
     choreography.cells.map((cell) => ({
       index: cell.semanticIndex,
