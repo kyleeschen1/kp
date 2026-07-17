@@ -57,6 +57,12 @@ import {
   type KpFractionChoreographyFrame,
   type KpFractionChoreographyPlan
 } from "../animation/fraction-choreography.ts";
+import {
+  compileKpExponentLawChoreography,
+  sampleKpExponentLawChoreography,
+  type KpExponentLawChoreographyFrame,
+  type KpExponentLawChoreographyPlan
+} from "../animation/exponent-law-choreography.ts";
 
 export interface KpEquationTokenMotionPose {
   readonly opacity: number;
@@ -87,6 +93,7 @@ export interface KpEquationTokenMotionFrame {
     KpDistributionChoreographyFrame | undefined;
   readonly factoringChoreography?: KpFactoringChoreographyFrame | undefined;
   readonly fractionChoreography?: KpFractionChoreographyFrame | undefined;
+  readonly exponentLawChoreography?: KpExponentLawChoreographyFrame | undefined;
   readonly representationalSuccession?:
     KpEquationRepresentationalSuccessionFrame | undefined;
   readonly linearRearrangement?:
@@ -162,6 +169,20 @@ interface FractionChoreographyContext {
   readonly artifactRecordIds: ReadonlySet<string>;
 }
 
+interface ExponentLawChoreographyContext {
+  readonly plan: KpExponentLawChoreographyPlan;
+  readonly frame: KpExponentLawChoreographyFrame;
+  readonly continuantRecordIds: ReadonlySet<string>;
+  readonly emittedRecordIds: ReadonlySet<string>;
+  readonly exitRecordIds: ReadonlySet<string>;
+  readonly absorptionAnchorBounds?: {
+    readonly left: number;
+    readonly top: number;
+    readonly width: number;
+    readonly height: number;
+  } | undefined;
+}
+
 interface RepresentationalSuccessionContext {
   readonly relationRecordIds: ReadonlySet<string>;
   readonly frame: KpEquationRepresentationalSuccessionFrame;
@@ -189,6 +210,7 @@ export function sampleKpEquationTokenMotion(
   );
   const factoringChoreography = createFactoringChoreographyContext(geometry, p);
   const fractionChoreography = createFractionChoreographyContext(geometry, p);
+  const exponentLawChoreography = createExponentLawChoreographyContext(geometry, p);
   const representationalSuccession =
     createRepresentationalSuccessionContext(geometry, p);
   const linearRearrangement = geometry.linearRearrangementKind === undefined
@@ -217,6 +239,7 @@ export function sampleKpEquationTokenMotion(
       distributionChoreography,
       factoringChoreography,
       fractionChoreography,
+      exponentLawChoreography,
       representationalSuccession,
       linearRearrangement,
       dotProductTraversal,
@@ -244,6 +267,9 @@ export function sampleKpEquationTokenMotion(
     ...(fractionChoreography === undefined
       ? {}
       : { fractionChoreography: fractionChoreography.frame }),
+    ...(exponentLawChoreography === undefined
+      ? {}
+      : { exponentLawChoreography: exponentLawChoreography.frame }),
     ...(representationalSuccession === undefined
       ? {}
       : { representationalSuccession: representationalSuccession.frame }),
@@ -302,6 +328,7 @@ function sampleRelation(
   distributionChoreography: DistributionChoreographyContext | undefined,
   factoringChoreography: FactoringChoreographyContext | undefined,
   fractionChoreography: FractionChoreographyContext | undefined,
+  exponentLawChoreography: ExponentLawChoreographyContext | undefined,
   representationalSuccession:
     RepresentationalSuccessionContext | undefined,
   linearRearrangement: KpEquationLinearRearrangementFrame | undefined,
@@ -350,6 +377,15 @@ function sampleRelation(
         fractionChoreography
       );
   if (fractionTokens !== undefined) return fractionTokens;
+  const exponentLawTokens = exponentLawChoreography === undefined
+    ? undefined
+    : sampleExponentLawRelation(
+        relation,
+        sourceTokens,
+        targetTokens,
+        exponentLawChoreography
+      );
+  if (exponentLawTokens !== undefined) return exponentLawTokens;
   if (representationalSuccession?.relationRecordIds.has(relation.recordId)) {
     const sourceIds = new Set(relation.source?.motionIds ?? []);
     const targetIds = new Set(relation.target?.motionIds ?? []);
@@ -908,6 +944,38 @@ function createFractionChoreographyContext(
   };
 }
 
+function createExponentLawChoreographyContext(
+  geometry: KpMeasuredEquationTransitionGeometry,
+  progress: number
+): ExponentLawChoreographyContext | undefined {
+  const operationKind = geometry.exponentLawChoreographyKind;
+  if (operationKind === undefined) return undefined;
+  const emitted = geometry.relations.filter((relation) => relation.lifecycle === "split");
+  const continuants = geometry.relations.filter((relation) =>
+    relation.lifecycle === "persist" || relation.lifecycle === "role-change"
+  );
+  const exits = geometry.relations.filter((relation) => relation.lifecycle === "exit");
+  const focus = operationKind === "peel-one-factor" ? emitted : exits;
+  const plan = compileKpExponentLawChoreography({
+    id: `${geometry.transitionId}.exponent-law-choreography`,
+    operationKind,
+    focusRecordIds: focus.map((relation) => relation.recordId),
+    continuantRecordIds: continuants.map((relation) => relation.recordId),
+    emittedRecordIds: emitted.map((relation) => relation.recordId),
+    exitRecordIds: exits.map((relation) => relation.recordId)
+  });
+  return {
+    plan,
+    frame: sampleKpExponentLawChoreography({ plan, progress }),
+    continuantRecordIds: new Set(plan.continuantRecordIds),
+    emittedRecordIds: new Set(plan.emittedRecordIds),
+    exitRecordIds: new Set(plan.exitRecordIds),
+    absorptionAnchorBounds: geometry.relations.find(
+      (relation) => relation.recordId === "residual-base-persists"
+    )?.target?.bounds
+  };
+}
+
 function createLineageChoreographyContext(
   geometry: KpMeasuredEquationTransitionGeometry,
   progress: number
@@ -1347,6 +1415,139 @@ function sampleFractionRelation(
       })),
       ...targetTokens.map((token) => frameToken(token, "target", {
         opacity: progress === 1 ? 1 : 0,
+        x: 0,
+        y: 0,
+        scale: 1
+      }))
+    ];
+  }
+  return undefined;
+}
+
+function sampleExponentLawRelation(
+  relation: KpMeasuredEquationTransitionRelationGeometry,
+  sourceTokens: readonly AnnotatedMotionToken[],
+  targetTokens: readonly AnnotatedMotionToken[],
+  context: ExponentLawChoreographyContext
+): readonly KpEquationTokenMotionFrameToken[] | undefined {
+  if (
+    context.plan.operationKind === "peel-one-factor" &&
+    context.emittedRecordIds.has(relation.recordId) &&
+    relation.source !== undefined
+  ) {
+    const continuation = targetTokens[1];
+    const source = sourceTokens[0];
+    if (continuation === undefined || source === undefined) return [];
+    const sourceCenter = rectCenter(source.localRect);
+    const continuationCenter = rectCenter(continuation.localRect);
+    const anchorDelta = {
+      x: continuationCenter.x - sourceCenter.x,
+      y: continuationCenter.y - sourceCenter.y
+    };
+    const exponentEmission = relation.recordId.includes("exponent");
+    const emissionIndex = exponentEmission ? 1 : 0;
+    const emission = context.frame.emissions[emissionIndex]!;
+    const sourceOpacity = exponentEmission
+      ? 1 - context.frame.exponentChangeProgress
+      : 1 - context.frame.settlementProgress;
+    return [
+      ...sourceTokens.map((token) => frameToken(token, "source", {
+        opacity: sourceOpacity,
+        x: anchorDelta.x * context.frame.reflowProgress,
+        y: anchorDelta.y * context.frame.reflowProgress,
+        scale: 1 - 0.12 * context.frame.emissionProgress *
+          (1 - context.frame.settlementProgress)
+      })),
+      ...targetTokens.map((token, semanticIndex) => {
+        if (semanticIndex === 1) {
+          return frameToken(token, "target", {
+            opacity: exponentEmission
+              ? context.frame.exponentChangeProgress
+              : context.frame.settlementProgress,
+            x: 0,
+            y: 0,
+            scale: 1
+          });
+        }
+        const movingOrigin = {
+          ...relation.source!.bounds,
+          left: relation.source!.bounds.left +
+            anchorDelta.x * context.frame.reflowProgress,
+          top: relation.source!.bounds.top +
+            anchorDelta.y * context.frame.reflowProgress
+        };
+        const path = lineagePathPose({
+          origin: movingOrigin,
+          destination: token.localRect,
+          pathProgress: emission.pathProgress,
+          branchIndex: emissionIndex,
+          opacity: emission.opacity,
+          scale: emission.scale
+        });
+        return {
+          motionId: token.motionId,
+          side: "target" as const,
+          pose: path.pose,
+          lineagePathId: `${context.plan.id}.${relation.recordId}.emission`,
+          lineageEdgeId: relation.recordId,
+          lineageBranchIndex: emissionIndex,
+          motionPathVariant: path.variant
+        };
+      })
+    ];
+  }
+
+  if (
+    context.plan.operationKind === "absorb-unit-exponent" &&
+    context.exitRecordIds.has(relation.recordId)
+  ) {
+    const anchor = context.absorptionAnchorBounds;
+    if (anchor === undefined) {
+      throw new Error("Unit-exponent absorption is missing its residual-base anchor.");
+    }
+    return sourceTokens.map((token) => {
+      const start = rectCenter(token.localRect);
+      const end = rectCenter(anchor);
+      const path = planKpEquationMotionPathBetweenPoints({
+        id: `${context.plan.id}.unit-absorption`,
+        start,
+        end,
+        variants: ["arc-above", "arc-below"],
+        preferredVariant: "arc-below",
+        clearance: 14,
+        moverRadius: 0
+      }).selected;
+      const point = sampleKpEquationMotionPath(
+        path,
+        context.frame.exponentChangeProgress
+      );
+      return {
+        motionId: token.motionId,
+        side: "source" as const,
+        pose: {
+          opacity: 1 - context.frame.exponentChangeProgress,
+          x: point.x - start.x,
+          y: point.y - start.y,
+          scale: 1 - 0.12 * context.frame.exponentChangeProgress
+        },
+        lineagePathId: path.id,
+        lineageEdgeId: relation.recordId,
+        lineageBranchIndex: 0,
+        motionPathVariant: path.variant
+      };
+    });
+  }
+
+  if (context.continuantRecordIds.has(relation.recordId)) {
+    return [
+      ...sourceTokens.map((token) => frameToken(token, "source", {
+        opacity: 1 - context.frame.settlementProgress,
+        x: (relation.delta?.x ?? 0) * context.frame.reflowProgress,
+        y: (relation.delta?.y ?? 0) * context.frame.reflowProgress,
+        scale: 1
+      })),
+      ...targetTokens.map((token) => frameToken(token, "target", {
+        opacity: context.frame.settlementProgress,
         x: 0,
         y: 0,
         scale: 1

@@ -50,6 +50,10 @@ export interface KpMeasuredEquationTransitionGeometry {
     | "separate-common-factor"
     | "simplify-unit-factor"
     | undefined;
+  readonly exponentLawChoreographyKind?:
+    | "peel-one-factor"
+    | "absorb-unit-exponent"
+    | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
@@ -130,6 +134,10 @@ export function measureKpEquationTransitionGeometry(input: {
     | "separate-common-factor"
     | "simplify-unit-factor"
     | undefined;
+  readonly exponentLawChoreographyKind?:
+    | "peel-one-factor"
+    | "absorb-unit-exponent"
+    | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
@@ -168,6 +176,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.fractionChoreographyKind === undefined
       ? {}
       : { fractionChoreographyKind: input.fractionChoreographyKind }),
+    ...(input.exponentLawChoreographyKind === undefined
+      ? {}
+      : { exponentLawChoreographyKind: input.exponentLawChoreographyKind }),
     ...(input.representationalSuccessionKind === undefined
       ? {}
       : {

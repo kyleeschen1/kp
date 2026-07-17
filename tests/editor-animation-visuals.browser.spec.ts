@@ -1162,12 +1162,71 @@ test("exponent and radical family animations render their semantic rewrite motif
   );
   let player = page.locator("[data-kp-editor-animation-player]");
   let scrubber = player.locator('[data-action="seek-editor-animation"]');
+  let transition = player.locator("[data-kp-editor-equation-transition-id]");
+  await scrubber.fill("0.08");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-exponent-law-choreography",
+    "peel-one-factor"
+  );
+  await expect(transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-editor-exponent-law-focus-role="peel-one-factor"]'
+  )).toHaveCount(2);
+
+  await scrubber.fill("0.2");
+  const emissions = transition.locator(
+    "[data-kp-editor-equation-target] [data-kp-equation-lineage-edge-id]"
+  );
+  await expect(emissions).toHaveCount(2);
+  expect(new Set(await emissions.evaluateAll((elements) =>
+    elements.map((element) => element.getAttribute("data-kp-equation-motion-path-variant"))
+  ))).toEqual(new Set(["arc-above", "arc-below"]));
+  expect(await emissions.nth(0).evaluate((element) => getComputedStyle(element).transform))
+    .not.toBe(await emissions.nth(1).evaluate((element) => getComputedStyle(element).transform));
+
+  await scrubber.fill("0.35");
+  const sourceExponent = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id$=".initial.exponent"]'
+  );
+  const residualExponent = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".lowered.residual-exponent"]'
+  );
+  expect(Number(await sourceExponent.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeLessThan(0.5);
+  expect(Number(await residualExponent.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeGreaterThan(0.5);
+
   await scrubber.fill("0.25");
-  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+  await expect(transition)
     .toHaveAttribute("data-kp-editor-equation-motif", "append-after-shift");
   await scrubber.fill("0.75");
-  await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+  transition = player.locator("[data-kp-editor-equation-transition-id]");
+  await expect(transition)
     .toHaveAttribute("data-kp-editor-equation-motif", "unwrap");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-exponent-law-choreography",
+    "absorb-unit-exponent"
+  );
+  const unitExponent = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id$=".lowered.residual-exponent"]'
+  );
+  await expect(unitExponent).toHaveAttribute(
+    "data-kp-equation-motion-path-variant",
+    "arc-below"
+  );
+  await scrubber.fill("0.78");
+  const unitOpacity = Number(await unitExponent.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ));
+  expect(unitOpacity).toBeGreaterThan(0);
+  expect(unitOpacity).toBeLessThan(1);
+  await scrubber.fill("0.88");
+  expect(Number(await unitExponent.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeLessThan(0.1);
+  await expect(transition.locator("[data-kp-editor-equation-target]"))
+    .toContainText("x⋅x");
   await expect(player.locator("[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"))
     .toHaveAttribute(
       "data-kp-editor-equation-object-id",
