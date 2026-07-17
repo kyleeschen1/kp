@@ -1,0 +1,23 @@
+{
+  "id": "next-action.kp.tutorial.economics-supply-demand-lab-v0",
+  "kind": "next-action",
+  "title": "Build Parametric Supply Demand Policy Lab",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Add deterministic curves, equilibrium, tax and subsidy wedges, surplus, revenue or cost, deadweight-loss regions, and symbolic-region correspondence under parameter changes.",
+  "sourceRefs": [
+    { "kind": "file", "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md", "summary": "Economics laboratory milestone and exit condition." }
+  ],
+  "dependsOn": {
+    "required": ["next-action.kp.tutorial.code-network-bfs-v0"]
+  },
+  "affects": ["milestone.kp.cross-domain-tutorial-platform-v0"],
+  "verification": [
+    "Economic identity, intersection, and region-area tests",
+    "Parameter-state determinism and correspondence tests",
+    "Interactive graph accessibility and browser gates"
+  ],
+  "expectedLearning": [
+    "Whether the shared interaction model can preserve semantic region identity through quantitative parameter changes."
+  ]
+}

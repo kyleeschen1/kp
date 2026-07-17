@@ -1,0 +1,23 @@
+{
+  "id": "next-action.kp.tutorial.ftc-gold-exemplar-v0",
+  "kind": "next-action",
+  "title": "Build FTC Gold Tutorial Exemplar",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Prove synchronized symbolic reasoning, accumulated-area geometry, a movable bound, cross-view correspondence, shared-clock playback, and export through an interactive FTC module.",
+  "sourceRefs": [
+    { "kind": "file", "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md", "summary": "FTC exemplar behavior and exit conditions." }
+  ],
+  "dependsOn": {
+    "required": ["next-action.kp.tutorial.cross-domain-contract-v0"]
+  },
+  "affects": ["milestone.kp.cross-domain-tutorial-platform-v0"],
+  "verification": [
+    "Equation/graph correspondence and mathematical-law tests",
+    "Exemplar checkpoint review before generalization",
+    "Interaction, rewind, accessibility, performance, and export browser gates"
+  ],
+  "expectedLearning": [
+    "Whether the tutorial kernel explains reasoning across symbols and graphs without renderer-owned timing."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "decision.kp.cross-domain-tutorial-platform-roadmap-v0",
+  "kind": "decision",
+  "title": "Adopt Cross Domain Tutorial Platform Roadmap",
+  "status": "resolved",
+  "domain": "kp.roadmap",
+  "summary": "After the active motion loop closes, freeze a gold equation baseline and expand through FTC, BFS or Dijkstra, economics, physics, and governed LLM tutorial exemplars; attach human approval to novelty rather than every composition.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md",
+      "summary": "Accepted direction, rationale, consequences, alternatives, and follow-ups."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md",
+      "summary": "Evidence, candidate ranking, ordered milestones, exit conditions, and stale-plan audit."
+    },
+    {
+      "kind": "user-intent",
+      "intent": "Adopt the cross-domain tutorial platform plan as the action roadmap after the current animation loop closes.",
+      "occurredAt": "2026-07-17",
+      "summary": "User accepted the proposed plan and requested it be encoded in Theseus."
+    }
+  ],
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ]
+}

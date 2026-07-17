@@ -1,8 +1,9 @@
 # KP Roadmap
 
-Last Updated: 2026-07-16
+Last Updated: 2026-07-17
 Status: active
 Active Thread: `threads/semantic-runtime.md`
+Next Thread: `threads/cross-domain-tutorial-platform.md`
 
 ## Current Source Of Truth
 
@@ -33,15 +34,23 @@ closed its first 28-slice implementation loop. The delivery plan in
 family sample refs to executable assets and made a verified first cohort
 available in the KP editor; it has now closed its 30-slice implementation loop.
 
+The accepted successor direction is recorded in
+`decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md`. After the
+active semantic-material-motion loop closes, KP will freeze a small gold
+equation baseline and build a cross-domain tutorial/interaction kernel through
+FTC, code/network, economics, and physics exemplars. Approval will attach to
+novel primitives and combinations rather than every composition of promoted
+visual vocabulary.
+
 ## Active Focus
 
-**Phase-ordered choreography and perceptual conformance.** The governed
+**Close semantic-material-motion promotion, then pivot.** The governed
 semantic animation grammar and constraint-planned choreography loop is
-complete. The active priority is now to make every operation-specific motif
-obey a shared perceptual envelope: orient attention, reflow persistent
-entities, execute semantic change, settle the target, and release attention.
-The existing dashboard treatments for function wrapping, fractional exponent
-to radical, and linear rearrangement are the first conformance cohort.
+complete, and 28 of 30 slices in the active semantic-material-motion and
+performance loop are complete. The remaining work is the promotion matrix and
+broad closeout. After that, equation motion remains a bounded conformance lane
+while the primary product lane moves to the accepted cross-domain tutorial
+platform roadmap.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
@@ -265,6 +274,10 @@ Build the verified learning layer:
 - concept graph with prerequisites, misconceptions, canonical objects, and
   animation motifs.
 
+The accepted cross-domain tutorial kernel is platform composition work and is
+now queued next. Full curriculum generation, learner memory, and course-scale
+assessment remain parked under this phase.
+
 ### Phase 9: Export And Embed
 
 Status: active
@@ -278,22 +291,17 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Capture dashboard function-wrap, radical-rewrite, and linear-rearrangement
-   treatments as phase-ordered conformance fixtures.
-2. Compile a shared orient/reflow/act/settle/release choreography envelope above
-   operation-specific motif timelines.
-3. Enforce focus-before-motion, persistent-reflow-before-change, and
-   settle-before-release laws in static and sampled quality gates.
-4. Expose envelope phases and violations in editor diagnostics.
-5. Experiment with trusted flat, elevated-shadow, and context-dim focus
-   profiles without changing layout, semantic paths, rewind, or accessibility.
-6. Gate generated drafts and editor catalog promotion on choreography
-   conformance before beginning live prompt or upload ingestion.
-10. Expand graph diagnostics from current mesh/conformance checks into richer
-   graph transforms and synchronized comparison cards.
-11. Defer dynamic package loading until at least one generated animation family
-   proves the metadata contract across math, graph, programming, and export
-   examples.
+1. Complete the active promotion matrix and mandatory broad closeout.
+2. Freeze the gold equation cohort and add novelty/maturity promotion facets.
+3. Grill and accept the minimal tutorial storyboard, claim/evidence,
+   interaction-parameter, checkpoint, and cross-view correspondence contract.
+4. Build the FTC equation/graph gold exemplar on that contract.
+5. Open code, network, and data-structure views through BFS or Dijkstra.
+6. Add the parametric supply/demand/tax/subsidy economics laboratory.
+7. Add the work-energy equation/diagram/graph physics derivation.
+8. Expand governed prompt and upload authoring across the promoted vocabulary.
+9. Defer dynamic package loading until the metadata contract stays stable
+   across these renderer combinations.
 
 ## Deferred
 
@@ -301,15 +309,15 @@ Package executable animations as semantic capsules:
   Hessian/optimization, row operations, determinant/inverse, and basis/eigen is
   deferred until the semantic transition compiler passes its representative
   equation and LLM-authoring quality gate.
-- Full curriculum and spaced repetition are deferred until object,
-  transformation, and computation protocols are reliable.
+- Full curriculum, learner modeling, and spaced repetition remain deferred.
+  The minimal tutorial/interaction kernel is now accepted platform work.
 - GIF/video encoder integration is deferred until the frame-sequence artifact
   format and capability package manifests are accepted as the encoder input
   contract.
 - Dynamic package loading is deferred until package manifests stay stable across
   generated animation families and broader render domains.
-- Large media, graph, and curriculum loops are deferred until the KP Asset
-  Calculus doctrine/laws are captured well enough for future LLM sessions to
-  follow them without rediscovery.
+- Large media and course-scale curriculum loops remain deferred. Graph,
+  DiagramScene, code, table, and interaction work may now advance through the
+  accepted cross-domain exemplars.
 - Broad Theseus planner infrastructure is deferred unless it directly blocks KP
   roadmap execution.

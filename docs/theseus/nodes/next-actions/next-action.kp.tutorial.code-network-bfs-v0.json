@@ -1,0 +1,23 @@
+{
+  "id": "next-action.kp.tutorial.code-network-bfs-v0",
+  "kind": "next-action",
+  "title": "Open Code Network And Data Structure Views",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Use BFS or Dijkstra to synchronize SourceFile ranges, deterministic execution state, network traversal, frontier state, queue or priority queue, and table views.",
+  "sourceRefs": [
+    { "kind": "file", "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md", "summary": "Code, network, and data-structure milestone and exit condition." }
+  ],
+  "dependsOn": {
+    "required": ["next-action.kp.tutorial.ftc-gold-exemplar-v0"]
+  },
+  "affects": ["milestone.kp.cross-domain-tutorial-platform-v0"],
+  "verification": [
+    "Deterministic trace and stable-identity tests",
+    "Code/diagram/table seek and rewind browser gates",
+    "Exemplar checkpoint review before generalization"
+  ],
+  "expectedLearning": [
+    "Which DiagramScene and trace primitives are reusable across networks, data structures, and later physical diagrams."
+  ]
+}

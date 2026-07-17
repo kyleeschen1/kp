@@ -1,0 +1,26 @@
+{
+  "id": "next-action.kp.tutorial.novelty-maturity-promotion-v0",
+  "kind": "next-action",
+  "title": "Add Novelty And Maturity Promotion",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Freeze the gold equation cohort and add draft, reviewable, gold, and promoted maturity plus composition, new-combination, and new-primitive novelty facets.",
+  "sourceRefs": [
+    { "kind": "file", "path": "docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md", "summary": "Accepted approval-economy policy." }
+  ],
+  "dependsOn": {
+    "required": [
+      "decision.kp.cross-domain-tutorial-platform-roadmap-v0",
+      "run-contract.kp.semantic-material-motion-performance-v0"
+    ]
+  },
+  "affects": ["milestone.kp.cross-domain-tutorial-platform-v0"],
+  "verification": [
+    "Catalog facet and promotion-law tests",
+    "Representative editor browser checks",
+    "npm run theseus -- workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether human review can attach to novelty without weakening semantic and visual promotion gates."
+  ]
+}

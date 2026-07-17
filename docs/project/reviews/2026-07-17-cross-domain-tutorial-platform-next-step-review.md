@@ -1,7 +1,7 @@
 # Cross-domain Tutorial Platform Next-step Review
 
 Date: 2026-07-17  
-Status: proposed; pending user approval  
+Status: accepted
 Active thread: `threads/semantic-runtime.md`
 
 ## Recommendation
@@ -266,5 +266,5 @@ materialize an exemplar-first run contract.
   should no longer monopolize the active product lane after the current loop.
 - Existing graph, DiagramScene, SourceFile, and FTC plans are seeds to compose,
   not separate systems to restart.
-- No roadmap status was changed by this proposed review; update the active/next
-  phases only after user approval.
+- The user accepted this roadmap on 2026-07-17. Project memory and Theseus now
+  encode it as the ordered successor to the active motion-performance loop.

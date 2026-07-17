@@ -1,0 +1,48 @@
+{
+  "id": "milestone.kp.cross-domain-tutorial-platform-v0",
+  "kind": "milestone",
+  "title": "KP Cross Domain Tutorial Platform V0",
+  "status": "active",
+  "domain": "kp.roadmap",
+  "summary": "Ordered successor milestone for novelty-based promotion, a cross-domain tutorial kernel, FTC, code/network/data structures, economics, physics, and governed LLM/upload authoring.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md",
+      "summary": "Accepted roadmap decision."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/cross-domain-tutorial-platform.md",
+      "summary": "Living workstream scope, exclusions, and open questions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Current source of truth and handoff order."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "decision.kp.cross-domain-tutorial-platform-roadmap-v0",
+      "run-contract.kp.semantic-material-motion-performance-v0"
+    ]
+  },
+  "nextActions": [
+    "next-action.kp.tutorial.novelty-maturity-promotion-v0",
+    "next-action.kp.tutorial.cross-domain-contract-v0",
+    "next-action.kp.tutorial.ftc-gold-exemplar-v0",
+    "next-action.kp.tutorial.code-network-bfs-v0",
+    "next-action.kp.tutorial.economics-supply-demand-lab-v0",
+    "next-action.kp.tutorial.physics-work-energy-v0",
+    "next-action.kp.tutorial.governed-llm-upload-v0"
+  ],
+  "criteria": [
+    { "id": "novelty-based-promotion", "weight": "high" },
+    { "id": "cross-view-semantic-correspondence", "weight": "high" },
+    { "id": "deterministic-interaction-state", "weight": "high" },
+    { "id": "shared-runtime-clock", "weight": "high" },
+    { "id": "governed-llm-authoring", "weight": "high" },
+    { "id": "cross-domain-capability-reuse", "weight": "medium" }
+  ]
+}

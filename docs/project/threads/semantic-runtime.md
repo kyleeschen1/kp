@@ -1,12 +1,10 @@
 # Semantic Runtime Thread
 
 Status: active
-Last Updated: 2026-07-16
-Current Next Action: Compile operation-specific motifs inside a shared
-orient/reflow/act/settle/release choreography envelope, using dashboard
-function-wrap, radical-rewrite, and linear-rearrangement behavior as the first
-conformance cohort. Then test trusted 2.5D depth and shadow profiles for focus
-without changing semantic paths or layout.
+Last Updated: 2026-07-17
+Current Next Action: Complete the promotion-matrix and broad-closeout slices of
+the semantic-material-motion performance loop, freeze a gold equation cohort,
+then hand off to `threads/cross-domain-tutorial-platform.md`.
 
 ## Goal
 
@@ -34,6 +32,12 @@ the reusable unit is broader: a typed semantic animation can back a lesson, a
 comparison card, an embeddable capsule, a generated solution step, a
 spaced-repetition prompt, a graph/program trace, or a media export without
 changing its semantic core.
+
+The accepted successor is a cross-domain tutorial platform built from those
+animation assets. Human review attaches to novel combinations, primitives, and
+styles rather than every instantiation. The first gold exemplar is an
+interactive FTC equation/graph tutorial, followed by BFS or Dijkstra,
+supply/demand policy, and work-energy modules.
 
 ## Current State
 
@@ -302,6 +306,9 @@ same fixtures into tutorial-card and export/sample paths.
 
 - `docs/project/strategy.md`
 - `docs/project/roadmap.md`
+- `docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md`
+- `docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md`
+- `docs/project/threads/cross-domain-tutorial-platform.md`
 - `docs/project/reviews/2026-07-10-semantic-runtime-roadmap-loop-closeout.md`
 - `docs/project/reviews/2026-07-10-tutorial-card-runtime-loop-closeout.md`
 - `docs/project/reviews/2026-07-11-tutorial-card-export-embed-loop-closeout.md`

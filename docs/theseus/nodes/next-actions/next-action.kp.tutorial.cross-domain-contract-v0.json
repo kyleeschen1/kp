@@ -1,0 +1,24 @@
+{
+  "id": "next-action.kp.tutorial.cross-domain-contract-v0",
+  "kind": "next-action",
+  "title": "Grill Cross Domain Tutorial Contract",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Grill and accept the minimal storyboard, scene, claim/evidence, checkpoint, interaction-parameter, and cross-view correspondence contract around the FTC exemplar before implementation.",
+  "sourceRefs": [
+    { "kind": "file", "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md", "summary": "Accepted platform contract requirements and ordered roadmap." },
+    { "kind": "file", "path": "docs/project/principles/codex-collaboration-protocol.md", "summary": "Exemplar-first approval and rollback policy." }
+  ],
+  "dependsOn": {
+    "required": ["next-action.kp.tutorial.novelty-maturity-promotion-v0"]
+  },
+  "affects": ["milestone.kp.cross-domain-tutorial-platform-v0"],
+  "verification": [
+    "Accepted design decision with explicit scope and exemplar checkpoint",
+    "Typed run-contract proposal for the FTC vertical slice",
+    "npm run theseus -- workspace validate"
+  ],
+  "expectedLearning": [
+    "The smallest tutorial contract that composes existing animation assets without duplicating semantic or timing authority."
+  ]
+}

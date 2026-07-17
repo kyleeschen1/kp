@@ -1,0 +1,23 @@
+{
+  "id": "next-action.kp.tutorial.physics-work-energy-v0",
+  "kind": "next-action",
+  "title": "Build Work Energy Physics Derivation",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Synchronize a dimensionally valid symbolic derivation with force diagrams, vector and coordinate-frame correspondence, and a force-position graph.",
+  "sourceRefs": [
+    { "kind": "file", "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md", "summary": "Physics derivation milestone and exit condition." }
+  ],
+  "dependsOn": {
+    "required": ["next-action.kp.tutorial.economics-supply-demand-lab-v0"]
+  },
+  "affects": ["milestone.kp.cross-domain-tutorial-platform-v0"],
+  "verification": [
+    "Symbolic, assumption, and dimensional-validity tests",
+    "Equation/diagram/graph correspondence tests",
+    "Exemplar checkpoint review before generalization"
+  ],
+  "expectedLearning": [
+    "Whether deterministic units and vector ports can support explanatory physics without a general physics engine."
+  ]
+}

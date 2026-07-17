@@ -1,0 +1,24 @@
+{
+  "id": "next-action.kp.tutorial.governed-llm-upload-v0",
+  "kind": "next-action",
+  "title": "Expand Governed LLM And Upload Authoring",
+  "status": "ready",
+  "domain": "kp.tutorial",
+  "summary": "Allow prompts and uploaded LaTeX, prose, code, and structured data to propose semantic models, claims, storyboards, correspondence, and interactions across promoted cross-domain vocabulary.",
+  "sourceRefs": [
+    { "kind": "file", "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md", "summary": "Governed authoring milestone, safety boundary, and exit condition." },
+    { "kind": "file", "path": "docs/project/authoring/kp-animation-asset-llm-authoring-spec.md", "summary": "Existing constrained animation authoring boundary." }
+  ],
+  "dependsOn": {
+    "required": ["next-action.kp.tutorial.physics-work-energy-v0"]
+  },
+  "affects": ["milestone.kp.cross-domain-tutorial-platform-v0"],
+  "verification": [
+    "Accepted and rejected cross-domain draft tests",
+    "Novel-primitive escalation tests",
+    "Three representative renderer-combination browser and export gates"
+  ],
+  "expectedLearning": [
+    "Whether governed drafts can produce reviewable modules without emitting rendering code or bypassing domain validation."
+  ]
+}
