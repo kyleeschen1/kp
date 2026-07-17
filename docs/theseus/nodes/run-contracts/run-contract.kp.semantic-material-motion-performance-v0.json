@@ -187,7 +187,7 @@
       "id": "next-action.kp.material-motion.semantic-duration-v0",
       "title": "Add work proportional timing",
       "summary": "Focused gate: duration, compression, and semantic-work tests; typecheck; Theseus validate.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.matrix-vector-pacing-v0",
