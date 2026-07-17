@@ -2782,21 +2782,49 @@ test("migrated equation families keep semantic token motion active forward and b
   }
 });
 
-test("accepted LLM draft renders as semantic token motion in the editor", async ({ page }) => {
+test("accepted additive-identity draft folds and absorbs its identity bundle", async ({ page }) => {
   await page.goto("/?animation=editor-animation.animation.generated.add-zero");
   const player = page.locator("[data-kp-editor-animation-player]");
   await expect(player).toHaveAttribute(
     "data-kp-editor-animation-id",
     "animation.generated.add-zero"
   );
-  await player.locator('[data-action="seek-editor-animation"]').fill("0.43");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
   const transition = player.locator("[data-kp-editor-equation-transition-id]");
+  await scrubber.fill("0.12");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-motif",
+    "simplify-into"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-identity-absorption-choreography",
+    "absorb-additive-zero"
+  );
+  await expect(
+    transition.locator('[data-kp-editor-identity-absorption-focus-role="absorb-additive-zero"]')
+  ).toHaveCount(2);
+
+  await scrubber.fill("0.5");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-semantic-motion",
     "active"
   );
-  await expect(transition.locator("[data-kp-motion-id]")).toHaveCount(7);
+  await expect(transition.locator("[data-kp-motion-id]")).toHaveCount(8);
   await expect(transition.locator("[data-kp-editor-equation-source]")).toContainText("x+0=4");
+  await expect(transition.locator("[data-kp-editor-equation-target]")).toContainText("x=4");
+  const plus = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id]:has-text("+")'
+  );
+  const zero = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id]:has-text("0")'
+  );
+  await expect(plus).toHaveAttribute("data-kp-equation-motion-path-variant", "arc-above");
+  await expect(zero).toHaveAttribute("data-kp-equation-motion-path-variant", "arc-below");
+  expect(await plus.getAttribute("style")).not.toEqual(await zero.getAttribute("style"));
+
+  await scrubber.fill("0.88");
+  expect(Number(await plus.evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.1);
+  expect(Number(await zero.evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.1);
   await expect(transition.locator("[data-kp-editor-equation-target]")).toContainText("x=4");
 });
 

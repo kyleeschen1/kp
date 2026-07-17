@@ -55,7 +55,9 @@ const operationSpecificTransformTypes = new Set([
   "applyDerivativePowerRulesToTerms",
   "applyAntiderivativePowerRule",
   "simplifyAntiderivativePowerRule",
-  "substituteValue"
+  "substituteValue",
+  "simplify-additive-identity",
+  "simplify-multiplicative-identity"
 ]);
 
 export function diagnoseKpAnimationDesign(input: {

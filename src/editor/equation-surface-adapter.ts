@@ -147,6 +147,10 @@ import type {
   KpExponentLawChoreographyFrame,
   KpExponentLawChoreographyKind
 } from "../animation/exponent-law-choreography.ts";
+import type {
+  KpIdentityAbsorptionChoreographyFrame,
+  KpIdentityAbsorptionChoreographyKind
+} from "../animation/identity-absorption-choreography.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
@@ -1641,6 +1645,10 @@ function applySemanticTokenMotion(input: {
     );
     if (displayedSource === null || displayedTarget === null) return false;
     const motifKind = input.frame.motifs[input.transitionIndex]?.kind;
+    const identityAbsorptionRoles = identityAbsorptionRoleRecordIds(
+      transformation,
+      input.animation.bundle
+    );
 
     // IR remains forward-oriented; rewind swaps the displayed roots and samples
     // semantic progress backward, so both directions share exactly one geometry.
@@ -1690,6 +1698,17 @@ function applySemanticTokenMotion(input: {
               transformation.transformType
             )!
           }),
+      ...(identityAbsorptionChoreographyKind(transformation.transformType) === undefined
+        ? {}
+        : {
+            identityAbsorptionChoreographyKind:
+              identityAbsorptionChoreographyKind(
+                transformation.transformType
+              )!
+          }),
+      ...(identityAbsorptionRoles === undefined
+        ? {}
+        : { identityAbsorptionRoleRecordIds: identityAbsorptionRoles }),
       ...(input.frame.radicalSuccession === undefined
         ? {}
         : { representationalSuccessionKind: "opposite-corner-seed" as const }),
@@ -1773,6 +1792,13 @@ function applySemanticTokenMotion(input: {
       transition: input.transitionElement,
       geometry,
       frame: tokenFrame.motion.exponentLawChoreography
+    });
+  }
+  if (tokenFrame.motion.identityAbsorptionChoreography !== undefined) {
+    applyIdentityAbsorptionFocus({
+      transition: input.transitionElement,
+      geometry,
+      frame: tokenFrame.motion.identityAbsorptionChoreography
     });
   }
   input.transitionElement.dataset["kpEditorEquationSemanticProgress"] =
@@ -2380,6 +2406,144 @@ function renderFocusTokens(labels: readonly string[]): string {
     : `<span class="editor-equation-stage__focus" aria-label="Focused terms">${labels.map((label) =>
         `<span data-kp-editor-equation-focus-token>${escapeHtml(label)}</span>`
       ).join("")}</span>`;
+}
+
+function identityAbsorptionChoreographyKind(
+  transformType: string
+): KpIdentityAbsorptionChoreographyKind | undefined {
+  switch (transformType) {
+    case "simplify-additive-identity": return "absorb-additive-zero";
+    case "simplify-multiplicative-identity": return "absorb-multiplicative-one";
+    default: return undefined;
+  }
+}
+
+function identityAbsorptionRoleRecordIds(
+  transformation: KpAnimationAsset["transformations"][number],
+  bundle: KpAnimationAsset["bundle"]
+): {
+  readonly operatorRecordId: string;
+  readonly identityRecordId: string;
+  readonly anchorRecordId: string;
+} | undefined {
+  const kind = identityAbsorptionChoreographyKind(transformation.transformType);
+  const correspondenceMap = transformation.correspondenceMap;
+  const sourceObject = bundle.objects.find(
+    (object) => object.id === transformation.sourceObjectIds[0]
+  );
+  if (kind === undefined || correspondenceMap === undefined || sourceObject === undefined) {
+    return undefined;
+  }
+  const selectorById = new Map(
+    sourceObject.selectors.map((selector, index) => [
+      selector.id,
+      { selector, index }
+    ] as const)
+  );
+  const exits = correspondenceMap.records.filter(
+    (record) => record.relation === "removal" && record.sourceSelectorIds.length > 0
+  );
+  const identityLabel = kind === "absorb-additive-zero" ? "0" : "1";
+  const identity = exits.find((record) =>
+    record.sourceSelectorIds.some(
+      (selectorId) => selectorById.get(selectorId)?.selector.label === identityLabel
+    )
+  );
+  const operator = exits.find((record) =>
+    record.sourceSelectorIds.some(
+      (selectorId) => selectorById.get(selectorId)?.selector.kind === "operator"
+    )
+  );
+  const identityIndex = identity?.sourceSelectorIds
+    .map((selectorId) => selectorById.get(selectorId)?.index)
+    .find((index): index is number => index !== undefined);
+  if (identity === undefined || operator === undefined || identityIndex === undefined) {
+    return undefined;
+  }
+  const anchor = correspondenceMap.records
+    .filter((record) => record.relation === "identity" || record.relation === "role-change")
+    .flatMap((record) => record.sourceSelectorIds.map((selectorId) => ({
+      record,
+      entry: selectorById.get(selectorId)
+    })))
+    .filter(({ entry }) =>
+      entry !== undefined &&
+      entry.selector.kind !== "operator" &&
+      entry.selector.kind !== "relation"
+    )
+    .sort((left, right) =>
+      Math.abs(left.entry!.index - identityIndex) -
+      Math.abs(right.entry!.index - identityIndex)
+    )[0]?.record;
+  if (anchor === undefined) return undefined;
+  return {
+    operatorRecordId: operator.id,
+    identityRecordId: identity.id,
+    anchorRecordId: anchor.id
+  };
+}
+
+function applyIdentityAbsorptionFocus(input: {
+  readonly transition: HTMLElement;
+  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly frame: KpIdentityAbsorptionChoreographyFrame;
+}): void {
+  input.transition.dataset["kpEditorEquationIdentityAbsorptionChoreography"] =
+    input.frame.operationKind;
+  input.transition.dataset["kpEditorEquationIdentityAbsorptionPhase"] =
+    activeIdentityAbsorptionPhase(input.frame);
+  input.transition.dataset["kpEditorEquationIdentityAbsorptionReflow"] =
+    String(input.frame.reflowProgress);
+  input.transition.dataset["kpEditorEquationIdentityAbsorptionOperatorFold"] =
+    String(input.frame.operatorFoldProgress);
+  input.transition.dataset["kpEditorEquationIdentityAbsorptionProgress"] =
+    String(input.frame.identityAbsorptionProgress);
+  input.geometry.relations
+    .filter((relation) => relation.lifecycle === "exit")
+    .flatMap((relation) => relation.source?.motionIds ?? [])
+    .forEach((motionId) => {
+      const element = input.geometry.sourceTokens.find(
+        (token) => token.motionId === motionId
+      )?.element;
+      if (element === undefined) return;
+      element.classList.add("kp-focus-group");
+      element.dataset["kpEditorIdentityAbsorptionFocusRole"] =
+        input.frame.operationKind;
+      element.style.setProperty(
+        "--kp-focus-z",
+        `${5 * input.frame.focusStrength}px`
+      );
+      element.style.setProperty(
+        "--kp-focus-scale",
+        String(1 + 0.04 * input.frame.focusStrength)
+      );
+      element.style.setProperty(
+        "--kp-focus-outline-strength",
+        String(input.frame.focusStrength)
+      );
+      element.style.setProperty(
+        "--kp-focus-shadow-y",
+        `${3 * input.frame.focusStrength}px`
+      );
+      element.style.setProperty(
+        "--kp-focus-shadow-blur",
+        `${10 * input.frame.focusStrength}px`
+      );
+      element.style.setProperty(
+        "--kp-focus-shadow-opacity",
+        String(0.18 * input.frame.focusStrength)
+      );
+    });
+}
+
+function activeIdentityAbsorptionPhase(
+  frame: KpIdentityAbsorptionChoreographyFrame
+): string {
+  const active = Object.entries(frame.phases)
+    .filter(([, progress]) => progress > 0 && progress < 1)
+    .map(([phaseId]) => phaseId);
+  return active.at(-1) ??
+    (frame.progress >= 1 ? "complete" : "focus-identity-bundle");
 }
 
 function motifLabel(kind: KpEditorEquationTransitionMotifFrame["kind"]): string {

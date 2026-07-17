@@ -45,6 +45,22 @@ export const defaultEquationTransformVisualMotifRules:
       summary: "The supplied value persists through transmission before replacing the prior occupant."
     },
     {
+      transformationKind: "simplify-additive-identity",
+      descriptor: descriptorForEquationMotif("simplify-into"),
+      canonicalOperationIds: ["kp.core.persist", "kp.core.eliminate"],
+      trustedMotifIds: ["simplify-into"],
+      summary:
+        "The additive operator folds into zero before the identity is absorbed by its persistent operand."
+    },
+    {
+      transformationKind: "simplify-multiplicative-identity",
+      descriptor: descriptorForEquationMotif("simplify-into"),
+      canonicalOperationIds: ["kp.core.persist", "kp.core.eliminate"],
+      trustedMotifIds: ["simplify-into"],
+      summary:
+        "The multiplication operator folds into one before the identity is absorbed by its persistent operand."
+    },
+    {
       transformationKind: "applyDerivativePowerRule",
       descriptor: descriptorForEquationMotif("derivative-power"),
       summary:

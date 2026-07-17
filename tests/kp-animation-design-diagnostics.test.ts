@@ -66,3 +66,14 @@ test("dot product reports its specialized accumulation motif", () => {
     (issue) => issue.code === "design.motif.generic-replacement"
   ));
 });
+
+test("additive identity reports operation-specific absorption", () => {
+  const animation = catalog.find(
+    (candidate) => candidate.id === "animation.generated.add-zero"
+  )!;
+  const diagnosis = diagnoseKpAnimationDesign({ animation })!;
+
+  assert.equal(diagnosis.visualStrategy, "operation-specific");
+  assert.equal(diagnosis.motifKind, "simplify-into");
+  assert.deepEqual(diagnosis.issues, []);
+});

@@ -75,6 +75,12 @@ test("the accepted v1 example migrates to a registered v2 derivation graph", () 
   assert.equal(result.draft.states.length, 2);
   assert.deepEqual(
     result.draft.derivations[0]?.operations.map((operation) => operation.operationId),
-    ["kp.core.persist", "kp.core.eliminate", "kp.core.persist", "kp.core.persist"]
+    [
+      "kp.core.persist",
+      "kp.core.eliminate",
+      "kp.core.eliminate",
+      "kp.core.persist",
+      "kp.core.persist"
+    ]
   );
 });

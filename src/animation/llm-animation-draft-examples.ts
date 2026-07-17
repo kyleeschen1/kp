@@ -20,6 +20,7 @@ export const acceptedGeneratedAddZeroDraft: KpLlmAnimationDraft = {
       latex: "x + 0 = 4",
       selectors: [
         { id: "generated.add-zero.before.x", kind: "term", label: "x" },
+        { id: "generated.add-zero.before.plus", kind: "operator", label: "+" },
         { id: "generated.add-zero.before.zero", kind: "term", label: "0" },
         { id: "generated.add-zero.before.equals", kind: "relation", label: "=" },
         { id: "generated.add-zero.before.four", kind: "term", label: "4" }
@@ -47,6 +48,7 @@ export const acceptedGeneratedAddZeroDraft: KpLlmAnimationDraft = {
       id: "correspondence.generated.add-zero",
       records: [
         record("x", "identity", ["generated.add-zero.before.x"], ["generated.add-zero.after.x"]),
+        record("plus", "removal", ["generated.add-zero.before.plus"], []),
         record("zero", "removal", ["generated.add-zero.before.zero"], []),
         record("equals", "identity", ["generated.add-zero.before.equals"], ["generated.add-zero.after.equals"]),
         record("four", "identity", ["generated.add-zero.before.four"], ["generated.add-zero.after.four"])

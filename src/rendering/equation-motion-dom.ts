@@ -54,6 +54,15 @@ export interface KpMeasuredEquationTransitionGeometry {
     | "peel-one-factor"
     | "absorb-unit-exponent"
     | undefined;
+  readonly identityAbsorptionChoreographyKind?:
+    | "absorb-additive-zero"
+    | "absorb-multiplicative-one"
+    | undefined;
+  readonly identityAbsorptionRoleRecordIds?: {
+    readonly operatorRecordId: string;
+    readonly identityRecordId: string;
+    readonly anchorRecordId: string;
+  } | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
@@ -138,6 +147,15 @@ export function measureKpEquationTransitionGeometry(input: {
     | "peel-one-factor"
     | "absorb-unit-exponent"
     | undefined;
+  readonly identityAbsorptionChoreographyKind?:
+    | "absorb-additive-zero"
+    | "absorb-multiplicative-one"
+    | undefined;
+  readonly identityAbsorptionRoleRecordIds?: {
+    readonly operatorRecordId: string;
+    readonly identityRecordId: string;
+    readonly anchorRecordId: string;
+  } | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
@@ -179,6 +197,19 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.exponentLawChoreographyKind === undefined
       ? {}
       : { exponentLawChoreographyKind: input.exponentLawChoreographyKind }),
+    ...(input.identityAbsorptionChoreographyKind === undefined
+      ? {}
+      : {
+          identityAbsorptionChoreographyKind:
+            input.identityAbsorptionChoreographyKind
+        }),
+    ...(input.identityAbsorptionRoleRecordIds === undefined
+      ? {}
+      : {
+          identityAbsorptionRoleRecordIds: {
+            ...input.identityAbsorptionRoleRecordIds
+          }
+        }),
     ...(input.representationalSuccessionKind === undefined
       ? {}
       : {
