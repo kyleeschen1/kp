@@ -5,6 +5,7 @@ import {
   compileKpLlmAnimationDraftV2
 } from "../src/animation/llm-animation-draft-v2-compiler.ts";
 import {
+  kpLlmAuthorCompilerBoundaryVersion,
   kpLlmAnimationDraftV2SchemaVersion,
   type KpLlmAnimationDraftV2
 } from "../src/animation/llm-animation-draft-v2.ts";
@@ -27,6 +28,18 @@ test("LLM authoring catalog binds promoted operations to existing semantic motif
   assert.equal(byId.get("kp.semantic-motion.dot-product")?.visualMotif, "dot-product-accumulate");
   assert.equal(byId.get("kp.semantic-motion.matrix-vector")?.visualMotif, "matrix-row-compose");
   assert.equal(byId.get("kp.semantic-motion.matrix-matrix")?.visualMotif, "matrix-cell-compose");
+  assert.deepEqual(
+    byId.get("kp.semantic-motion.matrix-matrix")?.allowedLineageRelations,
+    ["identity", "role-change", "fan-out", "fan-in"]
+  );
+  assert.equal(
+    byId.get("kp.semantic-motion.matrix-matrix")?.ownershipMode,
+    "fission-fusion"
+  );
+  assert.deepEqual(
+    byId.get("kp.semantic-motion.matrix-matrix")?.explanationDepths,
+    ["compact", "standard", "expanded"]
+  );
   assert.ok(catalog.operations.every((operation) => operation.roles.length > 0));
   assert.ok(catalog.operations.every((operation) => operation.semanticPhaseIds.length > 0));
   assert.deepEqual(catalog.prohibitedAuthoringFields.slice(0, 4), [
@@ -35,6 +48,9 @@ test("LLM authoring catalog binds promoted operations to existing semantic motif
     "keyframes",
     "timing"
   ]);
+  for (const field of ["durations", "motion primitives", "easing", "opacity", "DOM", "SVG"]) {
+    assert.ok(catalog.prohibitedAuthoringFields.includes(field));
+  }
 });
 
 test("LLM compiler resolves matrix composition into the promoted transform and core grammar", () => {
@@ -65,7 +81,28 @@ test("LLM compiler resolves matrix composition into the promoted transform and c
         "target.result-cell-1-0",
         "target.result-cell-1-1"
       ]
-    }
+    },
+    lineageBindings: [{
+      relation: "fan-in",
+      sourceEntityIds: [
+        "source.left-row-0",
+        "source.left-row-1",
+        "source.right-column-0",
+        "source.right-column-1"
+      ],
+      targetEntityIds: [
+        "target.cell-product-0-0",
+        "target.cell-product-0-1",
+        "target.cell-product-1-0",
+        "target.cell-product-1-1",
+        "target.result-cell-0-0",
+        "target.result-cell-0-1",
+        "target.result-cell-1-0",
+        "target.result-cell-1-1"
+      ]
+    }],
+    ownershipMode: "fission-fusion",
+    explanationDepth: "expanded"
   }]);
 });
 
@@ -92,6 +129,41 @@ test("promoted operation role contracts reject missing semantic intermediates", 
   assert.equal(result.gaps[0]?.reason, "missing-definition-binding");
   assert.match(result.diagnostics[0]?.path ?? "", /roleBindings\.cell-products$/);
   assert.match(result.diagnostics[0]?.message ?? "", /requires one-or-more; received 0/);
+});
+
+test("LLM operation intent cannot override registered lineage or ownership", () => {
+  const draft = matrixMatrixDraft();
+  const operation = draft.derivations[0]!.operations[0]!;
+  const invalid = {
+    ...draft,
+    derivations: [{
+      ...draft.derivations[0]!,
+      operations: [{
+        ...operation,
+        ownershipMode: "continuant",
+        lineageBindings: [{
+          relation: "introduction",
+          sourceEntityIds: operation.lineageBindings[0]!.sourceEntityIds,
+          targetEntityIds: operation.lineageBindings[0]!.targetEntityIds
+        }],
+        explanationDepth: "cinematic"
+      }]
+    }]
+  } as unknown as KpLlmAnimationDraftV2;
+  const result = compileKpLlmAnimationDraftV2(invalid);
+  assert.equal(result.status, "repair-required");
+  if (result.status !== "repair-required") return;
+  assert.ok(result.diagnostics.some((diagnostic) =>
+    diagnostic.path.endsWith(".ownershipMode") &&
+    /requires fission-fusion ownership/.test(diagnostic.message)
+  ));
+  assert.ok(result.diagnostics.some((diagnostic) =>
+    diagnostic.path.endsWith(".lineageBindings[0].relation") &&
+    /does not permit introduction lineage/.test(diagnostic.message)
+  ));
+  assert.ok(result.diagnostics.some((diagnostic) =>
+    diagnostic.path.endsWith(".explanationDepth")
+  ));
 });
 
 function matrixMatrixDraft(): KpLlmAnimationDraftV2 {
@@ -121,6 +193,7 @@ function matrixMatrixDraft(): KpLlmAnimationDraftV2 {
   );
   return {
     schemaVersion: kpLlmAnimationDraftV2SchemaVersion,
+    authorCompilerBoundaryVersion: kpLlmAuthorCompilerBoundaryVersion,
     id: "animation.generated.matrix-matrix",
     title: "Generated matrix multiplication",
     operationPacks: [
@@ -158,7 +231,17 @@ function matrixMatrixDraft(): KpLlmAnimationDraftV2 {
           "right-columns": ["source.right-column-0", "source.right-column-1"],
           "cell-products": cellProducts.map((item) => item.id),
           "result-cells": resultCells.map((item) => item.id)
-        }
+        },
+        lineageBindings: [{
+          relation: "fan-in",
+          sourceEntityIds: sourceEntities.map((item) => item.id),
+          targetEntityIds: [
+            ...cellProducts.map((item) => item.id),
+            ...resultCells.map((item) => item.id)
+          ]
+        }],
+        ownershipMode: "fission-fusion",
+        explanationDepth: "expanded"
       }],
       provenance: { kind: "authored", sourceId: "prompt.matrix-matrix" },
       epistemic: epistemic("derivation.generated.matrix-matrix", "transition")

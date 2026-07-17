@@ -49,6 +49,9 @@ export interface KpLlmAnimationDraftV2ResolvedOperation {
   readonly canonicalComposition: readonly KpCanonicalOperationId[];
   readonly sourceTransformType?: string | undefined;
   readonly roleBindings: Readonly<Record<string, readonly string[]>>;
+  readonly lineageBindings: KpLlmAnimationDraftV2["derivations"][number]["operations"][number]["lineageBindings"];
+  readonly ownershipMode: KpLlmAnimationDraftV2["derivations"][number]["operations"][number]["ownershipMode"];
+  readonly explanationDepth: KpLlmAnimationDraftV2["derivations"][number]["operations"][number]["explanationDepth"];
 }
 
 export type KpLlmAnimationDraftV2CompileResult =
@@ -136,7 +139,14 @@ function resolveDraftOperations(
             roleId,
             [...ids]
           ])
-        )
+        ),
+        lineageBindings: operation.lineageBindings.map((lineage) => ({
+          ...lineage,
+          sourceEntityIds: [...lineage.sourceEntityIds],
+          targetEntityIds: [...lineage.targetEntityIds]
+        })),
+        ownershipMode: operation.ownershipMode,
+        explanationDepth: operation.explanationDepth
       };
     })
   );

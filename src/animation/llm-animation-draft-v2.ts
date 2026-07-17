@@ -10,6 +10,8 @@ import {
 import type { KpSemanticEntityProvenance } from "../semantic/semantic-entity-provenance.ts";
 import type { KpEpistemicAnnotation } from "../semantic/epistemic-status.ts";
 import type { KpAnimationSaliencePlan } from "./salience-plan.ts";
+import type { SelectorCorrespondenceRelationId } from "../semantic/correspondence.ts";
+import type { KpCanonicalOperationOwnershipMode } from "../semantic/canonical-operation-contract.ts";
 import {
   validateKpLlmAnimationDraftSchema,
   type KpLlmAnimationDraft,
@@ -17,6 +19,19 @@ import {
 } from "./llm-animation-draft.ts";
 
 export const kpLlmAnimationDraftV2SchemaVersion = "kp.llm-animation-draft.v2" as const;
+export const kpLlmAuthorCompilerBoundaryVersion =
+  "kp.author-compiler-boundary.v1" as const;
+
+export type KpLlmAnimationExplanationDepth =
+  | "compact"
+  | "standard"
+  | "expanded";
+
+export interface KpLlmAnimationDraftV2LineageBinding {
+  readonly relation: SelectorCorrespondenceRelationId;
+  readonly sourceEntityIds: readonly string[];
+  readonly targetEntityIds: readonly string[];
+}
 
 export interface KpLlmAnimationDraftV2Entity {
   readonly id: string;
@@ -39,6 +54,9 @@ export interface KpLlmAnimationDraftV2Operation {
   readonly id: string;
   readonly operationId: string;
   readonly roleBindings: Readonly<Record<string, readonly string[]>>;
+  readonly lineageBindings: readonly KpLlmAnimationDraftV2LineageBinding[];
+  readonly ownershipMode: KpCanonicalOperationOwnershipMode;
+  readonly explanationDepth: KpLlmAnimationExplanationDepth;
 }
 
 export interface KpLlmAnimationDraftV2Derivation {
@@ -53,6 +71,7 @@ export interface KpLlmAnimationDraftV2Derivation {
 
 export interface KpLlmAnimationDraftV2 {
   readonly schemaVersion: typeof kpLlmAnimationDraftV2SchemaVersion;
+  readonly authorCompilerBoundaryVersion: typeof kpLlmAuthorCompilerBoundaryVersion;
   readonly id: string;
   readonly title: string;
   readonly operationPacks: readonly KpCanonicalOperationPackPin[];
@@ -63,7 +82,7 @@ export interface KpLlmAnimationDraftV2 {
 
 export interface KpLlmAnimationDraftV2Issue {
   readonly path: string;
-  readonly code: "draft-v2.type" | "draft-v2.required" | "draft-v2.reference" | "draft-v2.operation" | "draft-v2.unsafe";
+  readonly code: "draft-v2.type" | "draft-v2.required" | "draft-v2.reference" | "draft-v2.operation" | "draft-v2.unsafe" | "draft-v2.compatibility";
   readonly message: string;
 }
 
@@ -102,6 +121,14 @@ export function validateKpLlmAnimationDraftV2(value: unknown): readonly KpLlmAni
   if (!isRecord(value)) return [{ path: "$", code: "draft-v2.type", message: "Draft v2 must be an object." }];
   if (value["schemaVersion"] !== kpLlmAnimationDraftV2SchemaVersion) {
     issues.push({ path: "$.schemaVersion", code: "draft-v2.required", message: `Expected ${kpLlmAnimationDraftV2SchemaVersion}.` });
+  }
+  if (value["authorCompilerBoundaryVersion"] !== kpLlmAuthorCompilerBoundaryVersion) {
+    issues.push({
+      path: "$.authorCompilerBoundaryVersion",
+      code: "draft-v2.compatibility",
+      message:
+        `Legacy V2 drafts must add ${kpLlmAuthorCompilerBoundaryVersion} and explicit lineageBindings, ownershipMode, and explanationDepth for every operation.`
+    });
   }
   const draft = value as unknown as KpLlmAnimationDraftV2;
   const pins = projectPins(draft.operationPacks, issues);
@@ -167,6 +194,7 @@ export function migrateKpLlmAnimationDraftV1(draft: KpLlmAnimationDraft): KpLlmA
   });
   return {
     schemaVersion: kpLlmAnimationDraftV2SchemaVersion,
+    authorCompilerBoundaryVersion: kpLlmAuthorCompilerBoundaryVersion,
     id: draft.id,
     title: draft.title,
     operationPacks: [{ packId: "kp.core", version: "1.0.0" }],
@@ -185,28 +213,45 @@ export function migrateKpLlmAnimationDraftV1(draft: KpLlmAnimationDraft): KpLlmA
 }
 
 function migrateRecord(record: KpLlmAnimationDraftCorrespondenceRecord): readonly KpLlmAnimationDraftV2Operation[] {
-  const operation = (suffix: string, operationId: string, roleBindings: Readonly<Record<string, readonly string[]>>): KpLlmAnimationDraftV2Operation => ({
+  const operation = (
+    suffix: string,
+    operationId: string,
+    roleBindings: Readonly<Record<string, readonly string[]>>,
+    lineage: KpLlmAnimationDraftV2LineageBinding,
+    ownershipMode: KpCanonicalOperationOwnershipMode = "continuant"
+  ): KpLlmAnimationDraftV2Operation => ({
     id: `${record.id}.${suffix}`,
     operationId,
-    roleBindings
+    roleBindings,
+    lineageBindings: [lineage],
+    ownershipMode,
+    explanationDepth: "standard"
+  });
+  const lineage = (
+    sourceEntityIds: readonly string[],
+    targetEntityIds: readonly string[]
+  ): KpLlmAnimationDraftV2LineageBinding => ({
+    relation: record.relation,
+    sourceEntityIds,
+    targetEntityIds
   });
   switch (record.relation) {
     case "identity":
     case "role-change":
-      return [operation("persist", "kp.core.persist", { before: [record.sourceSelectorIds[0]!], after: [record.targetSelectorIds[0]!] })];
+      return [operation("persist", "kp.core.persist", { before: [record.sourceSelectorIds[0]!], after: [record.targetSelectorIds[0]!] }, lineage(record.sourceSelectorIds, record.targetSelectorIds))];
     case "introduction":
-      return record.targetSelectorIds.map((id, index) => operation(`introduce-${index}`, "kp.core.introduce", { introduced: [id] }));
+      return record.targetSelectorIds.map((id, index) => operation(`introduce-${index}`, "kp.core.introduce", { introduced: [id] }, lineage([], [id])));
     case "removal":
     case "cancelation":
-      return record.sourceSelectorIds.map((id, index) => operation(`eliminate-${index}`, "kp.core.eliminate", { eliminated: [id] }));
+      return record.sourceSelectorIds.map((id, index) => operation(`eliminate-${index}`, "kp.core.eliminate", { eliminated: [id] }, lineage([id], [])));
     case "fan-in":
-      return [operation("merge", "kp.core.merge", { sources: record.sourceSelectorIds, result: record.targetSelectorIds })];
+      return [operation("merge", "kp.core.merge", { sources: record.sourceSelectorIds, result: record.targetSelectorIds }, lineage(record.sourceSelectorIds, record.targetSelectorIds), "fission-fusion")];
     case "fan-out":
-      return [operation("fan-out", "kp.core.fan-out", { source: record.sourceSelectorIds, destinations: record.targetSelectorIds })];
+      return [operation("fan-out", "kp.core.fan-out", { source: record.sourceSelectorIds, destinations: record.targetSelectorIds }, lineage(record.sourceSelectorIds, record.targetSelectorIds), "fission-fusion")];
     case "artifact":
       return record.targetSelectorIds.length > 0
-        ? record.targetSelectorIds.map((id, index) => operation(`introduce-artifact-${index}`, "kp.core.introduce", { introduced: [id] }))
-        : record.sourceSelectorIds.map((id, index) => operation(`eliminate-artifact-${index}`, "kp.core.eliminate", { eliminated: [id] }));
+        ? record.targetSelectorIds.map((id, index) => operation(`introduce-artifact-${index}`, "kp.core.introduce", { introduced: [id] }, lineage([], [id])))
+        : record.sourceSelectorIds.map((id, index) => operation(`eliminate-artifact-${index}`, "kp.core.eliminate", { eliminated: [id] }, lineage([id], [])));
     case "focus":
       return [];
   }
@@ -237,6 +282,47 @@ function validateOperation(operation: KpLlmAnimationDraftV2Operation, path: stri
     .forEach((roleId) => {
       issues.push({ path: `${path}.roleBindings.${roleId}`, code: "draft-v2.operation", message: `Operation ${operation.id} binds unknown role ${roleId}.` });
     });
+  if (operation.ownershipMode !== resolution.entry.contract.ownershipMode) {
+    issues.push({
+      path: `${path}.ownershipMode`,
+      code: "draft-v2.operation",
+      message:
+        `Operation ${operation.id} requires ${resolution.entry.contract.ownershipMode} ownership; received ${String(operation.ownershipMode)}.`
+    });
+  }
+  if (!["compact", "standard", "expanded"].includes(operation.explanationDepth)) {
+    issues.push({
+      path: `${path}.explanationDepth`,
+      code: "draft-v2.required",
+      message: `Operation ${operation.id} requires compact, standard, or expanded explanation depth.`
+    });
+  }
+  if (!Array.isArray(operation.lineageBindings) || operation.lineageBindings.length === 0) {
+    issues.push({
+      path: `${path}.lineageBindings`,
+      code: "draft-v2.required",
+      message: `Operation ${operation.id} requires explicit semantic lineage.`
+    });
+  } else {
+    const boundEntityIds = new Set(Object.values(operation.roleBindings).flat());
+    operation.lineageBindings.forEach((lineage, index) => {
+      const lineagePath = `${path}.lineageBindings[${index}]`;
+      if (!resolution.entry.contract.lineageRelationIds.includes(lineage.relation)) {
+        issues.push({
+          path: `${lineagePath}.relation`,
+          code: "draft-v2.operation",
+          message: `Operation ${operation.id} does not permit ${lineage.relation} lineage.`
+        });
+      }
+      [...lineage.sourceEntityIds, ...lineage.targetEntityIds].forEach((id) => {
+        if (!entityIds.has(id)) {
+          issues.push({ path: lineagePath, code: "draft-v2.reference", message: `Operation ${operation.id} lineage references missing entity ${id}.` });
+        } else if (!boundEntityIds.has(id)) {
+          issues.push({ path: lineagePath, code: "draft-v2.operation", message: `Operation ${operation.id} lineage entity ${id} is not bound to an operation role.` });
+        }
+      });
+    });
+  }
 }
 
 function projectPins(value: readonly KpCanonicalOperationPackPin[] | undefined, issues: KpLlmAnimationDraftV2Issue[]): KpCanonicalOperationProjectPins | undefined {
@@ -278,5 +364,5 @@ function uniqueIds(values: readonly { readonly id: string }[] | undefined, path:
 
 function referenceIds(ids: readonly string[], available: ReadonlySet<string>, path: string, issues: KpLlmAnimationDraftV2Issue[]): void { ids.forEach((id) => { if (!available.has(id)) issues.push({ path, code: "draft-v2.reference", message: `Unknown state ${id}.` }); }); }
 function requireText(value: string, path: string, issues: KpLlmAnimationDraftV2Issue[]): void { if (typeof value !== "string" || value.trim().length === 0) issues.push({ path, code: "draft-v2.required", message: `${path} must not be empty.` }); }
-function rejectUnsafe(value: unknown, issues: KpLlmAnimationDraftV2Issue[], path = "$."): void { if (Array.isArray(value)) return void value.forEach((item, index) => rejectUnsafe(item, issues, `${path}[${index}]`)); if (!isRecord(value)) return; Object.entries(value).forEach(([key, child]) => { if (/^(dom|svg|html|pixels?|coordinates?|x|y|path|keyframes?|trajectory|timing|durationMs|delayMs)$/i.test(key)) issues.push({ path: `${path}.${key}`, code: "draft-v2.unsafe", message: `Renderer instruction ${key} is not allowed in draft v2.` }); rejectUnsafe(child, issues, `${path}.${key}`); }); }
+function rejectUnsafe(value: unknown, issues: KpLlmAnimationDraftV2Issue[], path = "$"): void { if (Array.isArray(value)) return void value.forEach((item, index) => rejectUnsafe(item, issues, `${path}[${index}]`)); if (!isRecord(value)) return; Object.entries(value).forEach(([key, child]) => { if (/^(dom|svg|html|pixels?|coordinates?|x|y|z|path|motionPath|keyframes?|trajectory|timing|durationMs|delayMs|staggerMs|primitiveId|motionPrimitive|easing|bezier|spring|transform|translate|scale|rotate|opacity|shadow|zIndex)$/i.test(key)) issues.push({ path: `${path}.${key}`, code: "draft-v2.unsafe", message: `Renderer instruction ${key} is not allowed in draft v2.` }); rejectUnsafe(child, issues, `${path}.${key}`); }); }
 function isRecord(value: unknown): value is Record<string, unknown> { return typeof value === "object" && value !== null && !Array.isArray(value); }

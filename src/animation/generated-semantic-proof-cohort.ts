@@ -141,7 +141,21 @@ function createSubstitutionDraftV2(): KpLlmAnimationDraftV2 {
             value: ["generated.substitute-three.before.value"],
             replaced: ["generated.substitute-three.before.x"],
             replacement: ["generated.substitute-three.after.replacement"]
-          }
+          },
+          lineageBindings: [
+            {
+              relation: "role-change",
+              sourceEntityIds: ["generated.substitute-three.before.value"],
+              targetEntityIds: ["generated.substitute-three.after.replacement"]
+            },
+            {
+              relation: "removal",
+              sourceEntityIds: ["generated.substitute-three.before.x"],
+              targetEntityIds: []
+            }
+          ],
+          ownershipMode: "replacement",
+          explanationDepth: "expanded"
         },
         persistentOperation("arrow"),
         persistentOperation("plus"),
@@ -174,7 +188,14 @@ function persistentOperation(id: "arrow" | "plus" | "two") {
     roleBindings: {
       before: [`generated.substitute-three.before.${id}`],
       after: [`generated.substitute-three.after.${id}`]
-    }
+    },
+    lineageBindings: [{
+      relation: "identity" as const,
+      sourceEntityIds: [`generated.substitute-three.before.${id}`],
+      targetEntityIds: [`generated.substitute-three.after.${id}`]
+    }],
+    ownershipMode: "continuant" as const,
+    explanationDepth: "standard" as const
   };
 }
 

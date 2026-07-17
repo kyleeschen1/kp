@@ -6,6 +6,9 @@ import type {
   KpCanonicalOperationRole
 } from "../semantic/canonical-operation.ts";
 import type { KpCanonicalOperationPackPin } from "../semantic/canonical-operation-pack.ts";
+import type { KpCanonicalOperationOwnershipMode } from "../semantic/canonical-operation-contract.ts";
+import type { SelectorCorrespondenceRelationId } from "../semantic/correspondence.ts";
+import type { KpLlmAnimationExplanationDepth } from "./llm-animation-draft-v2.ts";
 import {
   defaultEquationTransformVisualMotifRules
 } from "../rendering/equation-visual-motif-defaults.ts";
@@ -21,6 +24,9 @@ export interface KpLlmPromotedOperationAuthoringDefinition {
   readonly transformType: string;
   readonly canonicalComposition: readonly KpCanonicalOperationId[];
   readonly roles: readonly KpCanonicalOperationRole[];
+  readonly allowedLineageRelations: readonly SelectorCorrespondenceRelationId[];
+  readonly ownershipMode: KpCanonicalOperationOwnershipMode;
+  readonly explanationDepths: readonly KpLlmAnimationExplanationDepth[];
   readonly visualMotif: EquationVisualMotifKind;
   readonly semanticPhaseIds: readonly EquationVisualMotifPhaseId[];
 }
@@ -59,6 +65,9 @@ export function createKpLlmSemanticMotionOperationCatalog():
         transformType: entry.sourceTransformType!,
         canonicalComposition: [...entry.canonicalComposition],
         roles: entry.contract.roles.map((role) => ({ ...role })),
+        allowedLineageRelations: [...entry.contract.lineageRelationIds],
+        ownershipMode: entry.contract.ownershipMode,
+        explanationDepths: ["compact", "standard", "expanded"],
         visualMotif: rule.descriptor.kind,
         semanticPhaseIds: [...rule.descriptor.phaseIds]
       };
@@ -78,8 +87,12 @@ export function createKpLlmSemanticMotionOperationCatalog():
       "paths",
       "keyframes",
       "timing",
+      "durations",
       "per-token delays",
+      "motion primitives",
+      "easing",
       "scale transforms",
+      "opacity",
       "shadows",
       "DOM",
       "SVG"

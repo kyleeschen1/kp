@@ -6,6 +6,7 @@ import {
   type KpLlmAnimationDraft
 } from "../src/animation/llm-animation-draft.ts";
 import {
+  kpLlmAuthorCompilerBoundaryVersion,
   kpLlmAnimationDraftV2SchemaVersion,
   readKpVersionedLlmAnimationDraft,
   validateKpLlmAnimationDraftV2,
@@ -145,13 +146,41 @@ test("draft v2 requires pinned registered operations, roles, provenance, salienc
   assert.equal(migrated.status, "migrated-v1");
   if (migrated.status !== "migrated-v1") return;
   assert.equal(migrated.draft.schemaVersion, kpLlmAnimationDraftV2SchemaVersion);
+  assert.equal(
+    migrated.draft.authorCompilerBoundaryVersion,
+    kpLlmAuthorCompilerBoundaryVersion
+  );
   assert.deepEqual(migrated.draft.operationPacks, [{ packId: "kp.core", version: "1.0.0" }]);
   assert.ok(migrated.draft.derivations[0]?.operations.every((operation) => operation.operationId.startsWith("kp.core.")));
   assert.equal(migrated.draft.states[0]?.entities[0]?.provenance.kind, "authored");
   assert.equal(migrated.draft.states[0]?.epistemic.status, "valid");
   assert.equal(migrated.draft.derivations[0]?.epistemic.status, "unverified");
   assert.equal(migrated.draft.saliencePlan.kind, "animation-salience-plan");
+  assert.ok(migrated.draft.derivations[0]?.operations.every((operation) =>
+    operation.lineageBindings.length > 0 &&
+    operation.ownershipMode.length > 0 &&
+    operation.explanationDepth === "standard"
+  ));
   assert.deepEqual(validateKpLlmAnimationDraftV2(migrated.draft), []);
+});
+
+test("legacy v2 drafts receive an explicit authority-boundary diagnostic", () => {
+  const migrated = readKpVersionedLlmAnimationDraft(validDraft);
+  assert.equal(migrated.status, "migrated-v1");
+  if (migrated.status !== "migrated-v1") return;
+  const legacy = structuredClone(migrated.draft) as unknown as Record<string, unknown>;
+  delete legacy["authorCompilerBoundaryVersion"];
+  const issues = validateKpLlmAnimationDraftV2(legacy);
+  assert.ok(issues.some((issue) =>
+    issue.code === "draft-v2.compatibility" &&
+    issue.path === "$.authorCompilerBoundaryVersion" &&
+    /lineageBindings, ownershipMode, and explanationDepth/.test(issue.message)
+  ));
+  const read = readKpVersionedLlmAnimationDraft(legacy);
+  assert.equal(read.status, "rejected");
+  assert.ok(read.status === "rejected" && read.issues.some(
+    (issue) => issue.code === "draft-v2.compatibility"
+  ));
 });
 
 test("draft v2 rejects unregistered rewrites and renderer-authored motion", () => {
@@ -168,9 +197,18 @@ test("draft v2 rejects unregistered rewrites and renderer-authored motion", () =
         operationId: "kp.core.teleport"
       }, ...firstDerivation.operations.slice(1)]
     }],
-    keyframes: [{ x: 10, y: 20 }]
+    keyframes: [{ x: 10, y: 20 }],
+    motionPrimitive: "teleport",
+    easing: "spring(2)",
+    opacity: 0,
+    durationMs: 40
   } as unknown as KpLlmAnimationDraftV2;
   const issues = validateKpLlmAnimationDraftV2(invalid);
   assert.ok(issues.some((issue) => issue.code === "draft-v2.operation" && /Unknown canonical operation/.test(issue.message)));
   assert.ok(issues.some((issue) => issue.code === "draft-v2.unsafe" && /keyframes/.test(issue.message)));
+  for (const field of ["motionPrimitive", "easing", "opacity", "durationMs"]) {
+    assert.ok(issues.some((issue) =>
+      issue.code === "draft-v2.unsafe" && issue.path.endsWith(field)
+    ));
+  }
 });
