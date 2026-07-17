@@ -1,0 +1,110 @@
+{
+  "id": "next-action.kp.material-motion.material-junction-v0",
+  "kind": "next-action",
+  "title": "Generalize material junction primitive",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Generalized semantic material junction planning and DOM realization with lineage-complete bundles, operation-selected anchors, readiness gates, continuous ownership, exact native settlement, and zero frame-loop layout reads.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.material-junction-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/material-junction.ts",
+      "summary": "Renderer-neutral material junction planner and sampler."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-material-junction-dom.ts",
+      "summary": "Public-geometry DOM adapter with composited frame writes and exact native cleanup."
+    },
+    {
+      "kind": "file",
+      "path": "tests/material-junction.test.ts",
+      "summary": "Semantic readiness, ownership, settlement, and invalid-input contracts."
+    },
+    {
+      "kind": "file",
+      "path": "tests/material-junction.browser.spec.ts",
+      "summary": "Browser proof for premeasurement-only layout reads and native ownership handoff."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Generalize material junction primitive can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript application, node, and test projects.",
+      "checkedAt": "2026-07-17T19:50:07.756Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test material and radical cohort",
+      "status": "passed",
+      "scope": "38 radical, lineage, material-continuity, and junction contracts.",
+      "checkedAt": "2026-07-17T19:50:07.836Z"
+    },
+    {
+      "command": "npx playwright test KaTeX transition and material junction specs",
+      "status": "passed",
+      "scope": "13 Chromium transition, font readiness, native settlement, and hot-path tests.",
+      "checkedAt": "2026-07-17T19:50:07.913Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "Full unit suite.",
+      "checkedAt": "2026-07-17T19:50:07.996Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-17T19:50:08.078Z",
+      "scope": "Production bundle."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Generalized semantic material junction planning and DOM realization with lineage-complete bundles, operation-selected anchors, readiness gates, continuous ownership, exact native settlement, and zero frame-loop layout reads."
+  }
+}
