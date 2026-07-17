@@ -79,7 +79,8 @@
     {
       "id": "next-action.kp.material-motion.diagnostics-cadence-v0",
       "title": "Remove diagnostics reconstruction from frame loop",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.material-motion.diagnostics-cadence-v0 in KP Semantic Material Motion And Performance V0.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.premeasured-hot-path-v0",

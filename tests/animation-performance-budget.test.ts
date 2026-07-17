@@ -76,6 +76,30 @@ test("runtime transfer accounts for every lazy initial capability chunk", () => 
   assert.equal(initialScriptTransferBytes(lazy), 358_256);
 });
 
+test("performance evaluation gates diagnostics below the frame loop", () => {
+  const chatty: KpAnimationPerformanceSnapshot = {
+    ...snapshot,
+    constrained: {
+      ...snapshot.constrained,
+      matrixFrame: {
+        ...snapshot.constrained.matrixFrame,
+        diagnosticPublishes: 41,
+        inspectionPublishes: 42
+      }
+    }
+  };
+
+  assert.deepEqual(
+    evaluateKpAnimationPerformance({ snapshot: chatty, baseline })
+      .filter((issue) => issue.metric.includes("Publishes"))
+      .map((issue) => issue.metric),
+    [
+      "constrained.matrixFrame.diagnosticPublishes",
+      "constrained.matrixFrame.inspectionPublishes"
+    ]
+  );
+});
+
 function runtime(options: {
   readonly hydrationMs?: number;
   readonly frameP95Ms?: number;

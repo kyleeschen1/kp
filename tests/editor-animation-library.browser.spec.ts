@@ -404,3 +404,57 @@ test("each lazy capability pack hydrates through the shared player shell", async
     ).toContainText("0 errors");
   }
 });
+
+test("diagnostics stay below frame cadence and settle exactly on pause", async ({
+  page
+}) => {
+  await page.goto("/?animation=editor-animation.animation.linear-solve.solve-x");
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const diagnostics = page.locator("[data-kp-editor-animation-diagnostics]");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+
+  await page.evaluate(() => {
+    const playerElement = document.querySelector<HTMLElement>(
+      "[data-kp-editor-animation-player]"
+    );
+    if (playerElement === null) throw new Error("Expected animation player.");
+    playerElement.dataset["kpTestFrameCount"] = "0";
+    playerElement.addEventListener("kp-editor-animation-frame", () => {
+      playerElement.dataset["kpTestFrameCount"] = String(
+        Number(playerElement.dataset["kpTestFrameCount"] ?? 0) + 1
+      );
+    });
+  });
+
+  await player.getByRole("button", { name: "Play animation" }).click();
+  await page.waitForTimeout(750);
+  await player.getByRole("button", { name: "Pause animation" }).click();
+
+  const counts = await player.evaluate((element) => ({
+    frames: Number(element.dataset["kpTestFrameCount"] ?? 0),
+    diagnostics: Number(
+      element.dataset["kpEditorAnimationDiagnosticsPublishCount"] ?? 0
+    ),
+    inspection: Number(
+      element.dataset["kpEditorAnimationInspectionPublishCount"] ?? 0
+    ),
+    playerProgress: Number(element.dataset["kpEditorAnimationProgress"] ?? 0)
+  }));
+  const diagnosticsProgress = Number(
+    await diagnostics.getAttribute("data-kp-editor-animation-progress")
+  );
+
+  expect(counts.frames).toBeGreaterThan(8);
+  expect(counts.diagnostics).toBeLessThan(counts.frames);
+  expect(counts.inspection).toBeLessThan(counts.frames);
+  expect(counts.diagnostics).toBeLessThanOrEqual(15);
+  expect(counts.inspection).toBeLessThanOrEqual(15);
+  expect(diagnosticsProgress).toBe(counts.playerProgress);
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-diagnostics-publish-reason",
+    "semantic-change"
+  );
+});

@@ -6,6 +6,8 @@ export interface KpAnimationFramePerformance {
   readonly maxMs: number;
   readonly over33Ms: number;
   readonly longestTaskMs: number;
+  readonly diagnosticPublishes?: number | undefined;
+  readonly inspectionPublishes?: number | undefined;
 }
 
 export interface KpAnimationPerformanceSnapshot {
@@ -51,6 +53,8 @@ export const kpAnimationPerformanceTargets = Object.freeze({
   constrainedFrameP95Ms: 33,
   constrainedFrameMaxMs: 100,
   longestTaskMs: 50,
+  frameWindowDiagnosticPublishes: 40,
+  frameWindowInspectionPublishes: 40,
   initialThreeRequested: false
 });
 
@@ -93,6 +97,20 @@ export function evaluateKpAnimationPerformance(input: {
     "normal.initialScriptTransferBytes.target",
     initialScriptTransferBytes(snapshot),
     kpAnimationPerformanceTargets.initialScriptTransferBytes,
+    "target"
+  );
+  optionalMaximumIssue(
+    issues,
+    "constrained.matrixFrame.diagnosticPublishes",
+    snapshot.constrained.matrixFrame.diagnosticPublishes,
+    kpAnimationPerformanceTargets.frameWindowDiagnosticPublishes,
+    "target"
+  );
+  optionalMaximumIssue(
+    issues,
+    "constrained.matrixFrame.inspectionPublishes",
+    snapshot.constrained.matrixFrame.inspectionPublishes,
+    kpAnimationPerformanceTargets.frameWindowInspectionPublishes,
     "target"
   );
   maximumIssue(
@@ -164,6 +182,17 @@ function maximumIssue(
     limit,
     message: `${metric} is ${formatNumber(actual)}; expected at most ${formatNumber(limit)}.`
   });
+}
+
+function optionalMaximumIssue(
+  issues: KpAnimationPerformanceIssue[],
+  metric: string,
+  actual: number | undefined,
+  limit: number,
+  severity: KpAnimationPerformanceIssue["severity"]
+): void {
+  if (actual === undefined) return;
+  maximumIssue(issues, metric, actual, limit, severity);
 }
 
 function formatNumber(value: number): string {

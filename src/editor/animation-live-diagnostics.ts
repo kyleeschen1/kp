@@ -4,6 +4,15 @@ import {
 import type {
   KpEditorAnimationPlayerState
 } from "./animation-player-state.ts";
+import {
+  decideKpEditorAnimationDiagnosticsCadence,
+  type KpEditorAnimationDiagnosticsCadenceState
+} from "./animation-diagnostics-cadence.ts";
+
+const cadenceStates = new WeakMap<
+  HTMLElement,
+  KpEditorAnimationDiagnosticsCadenceState
+>();
 
 export interface KpEditorAnimationLiveDiagnostics {
   readonly runtimeFrameId: string;
@@ -46,9 +55,30 @@ export function hydrateKpEditorAnimationLiveDiagnostics(root: ParentNode): void 
       player.dataset["kpEditorAnimationDiagnosticsHydrated"] = "true";
       player.addEventListener(KP_EDITOR_ANIMATION_FRAME_EVENT, (event) => {
         if (!(event instanceof CustomEvent)) return;
+        const decision = decideKpEditorAnimationDiagnosticsCadence({
+          state: event.detail,
+          nowMs: performance.now(),
+          revisionKey: diagnosticsRevisionKey(player),
+          previous: cadenceStates.get(player)
+        });
+        if (!decision.publish || decision.state === undefined) return;
+        cadenceStates.set(player, decision.state);
+        player.dataset["kpEditorAnimationDiagnosticsPublishCount"] =
+          String(decision.state.publishCount);
+        player.dataset["kpEditorAnimationDiagnosticsPublishReason"] =
+          decision.reason;
         syncLiveDiagnostics(player, createKpEditorAnimationLiveDiagnostics(event.detail));
       });
     });
+}
+
+function diagnosticsRevisionKey(player: HTMLElement): string {
+  return [
+    player.dataset["kpEditorAnimationDiagnosticsRevision"] ?? "0",
+    player.dataset["kpEditorAnimationAccessibilityMode"] ?? "unknown",
+    player.dataset["kpEditorAnimationGestaltSelectedStyle"] ?? "unknown",
+    player.dataset["kpEditorAnimationFocusExperiment"] ?? "unknown"
+  ].join(":");
 }
 
 function syncLiveDiagnostics(

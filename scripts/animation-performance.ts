@@ -182,6 +182,15 @@ async function measureFrames(page: Page): Promise<KpAnimationFramePerformance> {
       // Long-task observation is optional; frame intervals remain authoritative.
     }
     const deltas: number[] = [];
+    const player = document.querySelector<HTMLElement>(
+      "[data-kp-editor-animation-player]"
+    );
+    const initialDiagnosticPublishes = Number(
+      player?.dataset["kpEditorAnimationDiagnosticsPublishCount"] ?? 0
+    );
+    const initialInspectionPublishes = Number(
+      player?.dataset["kpEditorAnimationInspectionPublishCount"] ?? 0
+    );
     let previous: number | undefined;
     const startedAt = performance.now();
     document.querySelector<HTMLButtonElement>(
@@ -207,7 +216,17 @@ async function measureFrames(page: Page): Promise<KpAnimationFramePerformance> {
       p99Ms: percentile(0.99),
       maxMs: Math.max(...deltas),
       over33Ms: deltas.filter((value) => value > 33.4).length,
-      longestTaskMs: Math.max(0, ...longTasks)
+      longestTaskMs: Math.max(0, ...longTasks),
+      diagnosticPublishes: Math.max(
+        0,
+        Number(player?.dataset["kpEditorAnimationDiagnosticsPublishCount"] ?? 0) -
+          initialDiagnosticPublishes
+      ),
+      inspectionPublishes: Math.max(
+        0,
+        Number(player?.dataset["kpEditorAnimationInspectionPublishCount"] ?? 0) -
+          initialInspectionPublishes
+      )
     };
   });
 }

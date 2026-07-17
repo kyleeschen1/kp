@@ -33,6 +33,10 @@ import {
 import {
   createLinearSolveRuntimeVisualFrameSample
 } from "../rendering/linear-solve-runtime-visual-sample.ts";
+import {
+  decideKpEditorAnimationDiagnosticsCadence,
+  type KpEditorAnimationDiagnosticsCadenceState
+} from "./animation-diagnostics-cadence.ts";
 
 export const KP_EDITOR_ANIMATION_FRAME_EVENT = "kp-editor-animation-frame";
 export const KP_EDITOR_ANIMATION_REGENERATION_EVENT =
@@ -43,6 +47,10 @@ const authoringStates = new WeakMap<HTMLElement, KpEditorAnimationAuthoringState
 const gestaltStyles = new WeakMap<HTMLElement, KpGestaltStyleRef>();
 const focusExperimentModes = new WeakMap<HTMLElement, KpFocusExperimentMode>();
 const frameRequests = new WeakMap<HTMLElement, number>();
+const inspectionCadenceStates = new WeakMap<
+  HTMLElement,
+  KpEditorAnimationDiagnosticsCadenceState
+>();
 
 export function hydrateKpEditorAnimationPlayers(root: ParentNode): void {
   root.querySelectorAll<HTMLElement>("[data-kp-editor-animation-player]")
@@ -76,6 +84,7 @@ export function disposeKpEditorAnimationPlayers(root: ParentNode): void {
       authoringStates.delete(player);
       gestaltStyles.delete(player);
       focusExperimentModes.delete(player);
+      inspectionCadenceStates.delete(player);
       player.dataset["kpEditorAnimationDisposed"] = "true";
       delete player.dataset["kpEditorAnimationHydrated"];
     });
@@ -155,6 +164,7 @@ async function hydrateKpEditorAnimationPlayer(player: HTMLElement): Promise<void
   focusExperimentModes.set(player, "flat");
   syncAuthoringData(player, authoring);
   syncAccessibilityData(player, "full-motion");
+  player.dataset["kpEditorAnimationDiagnosticsRevision"] = "0";
   player.dataset["kpEditorAnimationPackId"] = packId;
   player.dataset["kpEditorAnimationHydrated"] = "true";
   delete player.dataset["kpEditorAnimationLoading"];
@@ -255,6 +265,7 @@ function handlePlayerInput(event: Event): void {
 
   if (input instanceof HTMLSelectElement && input.dataset["kpEditorAnimationAccessibilityControl"] !== undefined) {
     syncAccessibilityData(player, input.value);
+    invalidatePlayerDiagnostics(player);
     const session = sessions.get(player);
     if (session !== undefined) {
       dispatchKpEditorAnimationPlaybackAction(player, {
@@ -285,6 +296,7 @@ function selectFocusExperiment(player: HTMLElement, value: string): void {
     value === "elevated" || value === "no-depth" ? value : "flat";
   focusExperimentModes.set(player, mode);
   player.dataset["kpEditorAnimationFocusExperiment"] = mode;
+  invalidatePlayerDiagnostics(player);
   const session = sessions.get(player);
   if (session === undefined) return;
   const paused = session.player.playbackStatus === "playing"
@@ -305,6 +317,7 @@ function selectFocusExperiment(player: HTMLElement, value: string): void {
 function selectGestaltStyle(player: HTMLElement, value: string): void {
   const selectedStyle = parseKpEditorGestaltStyleRef(value);
   gestaltStyles.set(player, selectedStyle);
+  invalidatePlayerDiagnostics(player);
   const session = sessions.get(player);
   if (session === undefined) return;
   const paused = session.player.playbackStatus === "playing"
@@ -393,6 +406,7 @@ function updateAuthoringControl(
   });
   authoringStates.set(player, next);
   syncAuthoringData(player, next);
+  invalidatePlayerDiagnostics(player);
   player.dataset["kpEditorAnimationMotionPlanInvalidated"] = "true";
   player.querySelector<HTMLOutputElement>("[data-kp-editor-animation-authoring-status]")
     ?.replaceChildren(document.createTextNode(
@@ -489,12 +503,40 @@ function syncPlayerDom(
     state.playbackStatus === "playing" ||
     player.dataset["kpEditorAnimationAccessibilityMode"] === "static";
   if (pauseButton !== null) pauseButton.disabled = state.playbackStatus !== "playing";
-  syncGestaltInspection(player, session);
+  syncGestaltInspectionAtCadence(player, session);
 
   player.dispatchEvent(new CustomEvent(KP_EDITOR_ANIMATION_FRAME_EVENT, {
     bubbles: true,
     detail: state
   }));
+}
+
+function syncGestaltInspectionAtCadence(
+  player: HTMLElement,
+  session: KpEditorAnimationPlaybackSession
+): void {
+  const decision = decideKpEditorAnimationDiagnosticsCadence({
+    state: session.player,
+    nowMs: performance.now(),
+    revisionKey: player.dataset["kpEditorAnimationDiagnosticsRevision"],
+    previous: inspectionCadenceStates.get(player)
+  });
+  if (!decision.publish || decision.state === undefined) return;
+
+  inspectionCadenceStates.set(player, decision.state);
+  player.dataset["kpEditorAnimationInspectionPublishCount"] =
+    String(decision.state.publishCount);
+  player.dataset["kpEditorAnimationInspectionPublishReason"] = decision.reason;
+  syncGestaltInspection(player, session);
+}
+
+function invalidatePlayerDiagnostics(player: HTMLElement): void {
+  const revision = Number(
+    player.dataset["kpEditorAnimationDiagnosticsRevision"] ?? 0
+  );
+  player.dataset["kpEditorAnimationDiagnosticsRevision"] = String(
+    Number.isFinite(revision) ? revision + 1 : 1
+  );
 }
 
 function syncGestaltInspection(
