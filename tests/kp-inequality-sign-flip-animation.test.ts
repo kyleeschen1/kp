@@ -73,7 +73,7 @@ test("inequality sign-flip asset is a seekable equation animation in the concret
   assert.deepEqual(animation.renderTargets.map((target) => target.kind), [
     "equation"
   ]);
-  assert.equal(animation.renderTargets[0]?.selectorIds?.length, 6);
+  assert.equal(animation.renderTargets[0]?.selectorIds?.length, 7);
   const frame = sampleKpAnimationFrameDescriptor({
       id: "frame.inequality.sign-flip.middle",
       animation,

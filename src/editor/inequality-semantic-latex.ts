@@ -29,15 +29,25 @@ export function createKpInequalitySelectorAnnotatedLatex(
     }
     return { kind: "selector", selectorId: selector.id, latex: selector.label };
   };
+  const source = state.objectId.endsWith(".source");
   return createKpSelectorAnnotatedLatex({
     id: `inequality.${state.objectId}`,
     expectedSelectorIds: state.selectors.map((selector) => selector.id),
-    segments: [
-      segment("lhs"),
-      { kind: "latex", latex: "\\;" },
-      segment("relation"),
-      { kind: "latex", latex: "\\;" },
-      segment("rhs")
-    ]
+    segments: source
+      ? [
+          segment("lhs.operand"),
+          { kind: "latex", latex: "\\;" },
+          segment("relation"),
+          { kind: "latex", latex: "\\;" },
+          segment("rhs.operand")
+        ]
+      : [
+          segment("lhs.multiplier"),
+          segment("lhs.operand"),
+          { kind: "latex", latex: "\\;" },
+          segment("relation"),
+          { kind: "latex", latex: "\\;" },
+          segment("rhs.result")
+        ]
   });
 }

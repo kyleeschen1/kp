@@ -69,6 +69,12 @@ import {
   type KpIdentityAbsorptionChoreographyFrame,
   type KpIdentityAbsorptionChoreographyPlan
 } from "../animation/identity-absorption-choreography.ts";
+import {
+  compileKpInequalityPivotChoreography,
+  sampleKpInequalityPivotChoreography,
+  type KpInequalityPivotChoreographyFrame,
+  type KpInequalityPivotChoreographyPlan
+} from "../animation/inequality-pivot-choreography.ts";
 
 export interface KpEquationTokenMotionPose {
   readonly opacity: number;
@@ -76,6 +82,7 @@ export interface KpEquationTokenMotionPose {
   readonly y: number;
   readonly scale: number;
   readonly scaleX?: number | undefined;
+  readonly rotate?: number | undefined;
 }
 
 export interface KpEquationTokenMotionFrameToken {
@@ -102,6 +109,8 @@ export interface KpEquationTokenMotionFrame {
   readonly exponentLawChoreography?: KpExponentLawChoreographyFrame | undefined;
   readonly identityAbsorptionChoreography?:
     KpIdentityAbsorptionChoreographyFrame | undefined;
+  readonly inequalityPivotChoreography?:
+    KpInequalityPivotChoreographyFrame | undefined;
   readonly representationalSuccession?:
     KpEquationRepresentationalSuccessionFrame | undefined;
   readonly linearRearrangement?:
@@ -209,6 +218,25 @@ interface IdentityAbsorptionChoreographyContext {
   };
 }
 
+interface InequalityPivotChoreographyContext {
+  readonly plan: KpInequalityPivotChoreographyPlan;
+  readonly frame: KpInequalityPivotChoreographyFrame;
+  readonly continuantRecordIds: ReadonlySet<string>;
+  readonly sideChangeRecordIds: ReadonlySet<string>;
+  readonly rhsSourceBounds: {
+    readonly left: number;
+    readonly top: number;
+    readonly width: number;
+    readonly height: number;
+  };
+  readonly rhsTargetBounds: {
+    readonly left: number;
+    readonly top: number;
+    readonly width: number;
+    readonly height: number;
+  };
+}
+
 interface RepresentationalSuccessionContext {
   readonly relationRecordIds: ReadonlySet<string>;
   readonly frame: KpEquationRepresentationalSuccessionFrame;
@@ -239,6 +267,8 @@ export function sampleKpEquationTokenMotion(
   const exponentLawChoreography = createExponentLawChoreographyContext(geometry, p);
   const identityAbsorptionChoreography =
     createIdentityAbsorptionChoreographyContext(geometry, p);
+  const inequalityPivotChoreography =
+    createInequalityPivotChoreographyContext(geometry, p);
   const representationalSuccession =
     createRepresentationalSuccessionContext(geometry, p);
   const linearRearrangement = geometry.linearRearrangementKind === undefined
@@ -269,6 +299,7 @@ export function sampleKpEquationTokenMotion(
       fractionChoreography,
       exponentLawChoreography,
       identityAbsorptionChoreography,
+      inequalityPivotChoreography,
       representationalSuccession,
       linearRearrangement,
       dotProductTraversal,
@@ -305,6 +336,9 @@ export function sampleKpEquationTokenMotion(
           identityAbsorptionChoreography:
             identityAbsorptionChoreography.frame
         }),
+    ...(inequalityPivotChoreography === undefined
+      ? {}
+      : { inequalityPivotChoreography: inequalityPivotChoreography.frame }),
     ...(representationalSuccession === undefined
       ? {}
       : { representationalSuccession: representationalSuccession.frame }),
@@ -333,7 +367,7 @@ export function applyKpEquationTokenMotionFrame(
     if (element === undefined) continue;
     element.style.opacity = String(token.pose.opacity);
     element.style.transform =
-      `translate(${token.pose.x}px, ${token.pose.y}px) translateZ(var(--kp-focus-z, 0px)) scale(${token.pose.scale}) scaleX(${token.pose.scaleX ?? 1}) scale(var(--kp-focus-scale, 1))`;
+      `translate(${token.pose.x}px, ${token.pose.y}px) translateZ(var(--kp-focus-z, 0px)) rotate(${token.pose.rotate ?? 0}deg) scale(${token.pose.scale}) scaleX(${token.pose.scaleX ?? 1}) scale(var(--kp-focus-scale, 1))`;
     element.style.transformOrigin = "center center";
     if (token.lineagePathId === undefined) {
       delete element.dataset["kpEquationLineagePathId"];
@@ -366,6 +400,8 @@ function sampleRelation(
   exponentLawChoreography: ExponentLawChoreographyContext | undefined,
   identityAbsorptionChoreography:
     IdentityAbsorptionChoreographyContext | undefined,
+  inequalityPivotChoreography:
+    InequalityPivotChoreographyContext | undefined,
   representationalSuccession:
     RepresentationalSuccessionContext | undefined,
   linearRearrangement: KpEquationLinearRearrangementFrame | undefined,
@@ -432,6 +468,15 @@ function sampleRelation(
         identityAbsorptionChoreography
       );
   if (identityAbsorptionTokens !== undefined) return identityAbsorptionTokens;
+  const inequalityPivotTokens = inequalityPivotChoreography === undefined
+    ? undefined
+    : sampleInequalityPivotRelation(
+        relation,
+        sourceTokens,
+        targetTokens,
+        inequalityPivotChoreography
+      );
+  if (inequalityPivotTokens !== undefined) return inequalityPivotTokens;
   if (representationalSuccession?.relationRecordIds.has(relation.recordId)) {
     const sourceIds = new Set(relation.source?.motionIds ?? []);
     const targetIds = new Set(relation.target?.motionIds ?? []);
@@ -1067,6 +1112,54 @@ function createIdentityAbsorptionChoreographyContext(
     continuantRecordIds: new Set(plan.continuantRecordIds),
     absorptionAnchorBounds: anchor.target.bounds,
     identityBounds: identity.source.bounds
+  };
+}
+
+function createInequalityPivotChoreographyContext(
+  geometry: KpMeasuredEquationTransitionGeometry,
+  progress: number
+): InequalityPivotChoreographyContext | undefined {
+  if (geometry.inequalityPivotChoreographyKind === undefined) return undefined;
+  const relation = geometry.relations.find(
+    (candidate) =>
+      candidate.lifecycle === "role-change" &&
+      candidate.source !== undefined &&
+      candidate.target !== undefined &&
+      candidate.source.selectorIds.some((selectorId) => selectorId.endsWith(".relation"))
+  );
+  const continuants = geometry.relations.filter(
+    (candidate) =>
+      candidate !== relation &&
+      (candidate.lifecycle === "persist" || candidate.lifecycle === "role-change")
+  );
+  const sideChanges = geometry.relations.filter(
+    (candidate) => candidate.lifecycle === "enter" || candidate.lifecycle === "exit"
+  );
+  if (relation === undefined) {
+    throw new Error("Inequality pivot requires an explicit persistent relation role.");
+  }
+  const rhsSource = sideChanges.find(
+    (candidate) => candidate.recordId === "rhs-operand-exits"
+  )?.source;
+  const rhsTarget = sideChanges.find(
+    (candidate) => candidate.recordId === "rhs-scaled-result-enters"
+  )?.target;
+  if (rhsSource === undefined || rhsTarget === undefined) {
+    throw new Error("Inequality pivot requires explicit right-side scaling roles.");
+  }
+  const plan = compileKpInequalityPivotChoreography({
+    id: `${geometry.transitionId}.inequality-pivot-choreography`,
+    continuantRecordIds: continuants.map((candidate) => candidate.recordId),
+    sideChangeRecordIds: sideChanges.map((candidate) => candidate.recordId),
+    relationRecordId: relation.recordId
+  });
+  return {
+    plan,
+    frame: sampleKpInequalityPivotChoreography({ plan, progress }),
+    continuantRecordIds: new Set(plan.continuantRecordIds),
+    sideChangeRecordIds: new Set(plan.sideChangeRecordIds),
+    rhsSourceBounds: rhsSource.bounds,
+    rhsTargetBounds: rhsTarget.bounds
   };
 }
 
@@ -1717,6 +1810,106 @@ function sampleIdentityAbsorptionRelation(
       motionPathVariant: path.variant
     };
   });
+}
+
+function sampleInequalityPivotRelation(
+  relation: KpMeasuredEquationTransitionRelationGeometry,
+  sourceTokens: readonly AnnotatedMotionToken[],
+  targetTokens: readonly AnnotatedMotionToken[],
+  context: InequalityPivotChoreographyContext
+): readonly KpEquationTokenMotionFrameToken[] | undefined {
+  if (relation.recordId === context.plan.relationRecordId) {
+    return [
+      ...sourceTokens.map((token) => frameToken(token, "source", {
+        opacity: context.frame.progress === 1 ? 0 : 1,
+        x: (relation.delta?.x ?? 0) * context.frame.sideScaleProgress,
+        y: (relation.delta?.y ?? 0) * context.frame.sideScaleProgress,
+        scale: 1,
+        rotate: 180 * context.frame.relationPivotProgress
+      })),
+      ...targetTokens.map((token) => frameToken(token, "target", {
+        opacity: context.frame.progress === 1 ? 1 : 0,
+        x: 0,
+        y: 0,
+        scale: 1
+      }))
+    ];
+  }
+  if (context.continuantRecordIds.has(relation.recordId)) {
+    return [
+      ...sourceTokens.map((token) => frameToken(token, "source", {
+        opacity: context.frame.progress === 1 ? 0 : 1,
+        x: (relation.delta?.x ?? 0) * context.frame.sideScaleProgress,
+        y: (relation.delta?.y ?? 0) * context.frame.sideScaleProgress,
+        scale: 1
+      })),
+      ...targetTokens.map((token) => frameToken(token, "target", {
+        opacity: context.frame.progress === 1 ? 1 : 0,
+        x: 0,
+        y: 0,
+        scale: 1
+      }))
+    ];
+  }
+  if (relation.recordId === "rhs-operand-exits") {
+    const start = rectCenter(context.rhsSourceBounds);
+    const end = rectCenter(context.rhsTargetBounds);
+    const change = context.frame.sideScaleProgress;
+    return sourceTokens.map((token) => frameToken(token, "source", {
+      opacity: 1 - lateProgress(change),
+      x: (end.x - start.x) * change,
+      y: (end.y - start.y) * change - 8 * change,
+      scale: 1 - 0.45 * change
+    }));
+  }
+  if (relation.recordId === "rhs-scaled-result-enters") {
+    const reveal = lateProgress(context.frame.sideScaleProgress);
+    return targetTokens.map((token) => {
+      const destination = rectCenter(token.localRect);
+      const path = planKpEquationMotionPathBetweenPoints({
+        id: `${context.plan.id}.rhs-scaled-result`,
+        start: rectCenter(context.rhsSourceBounds),
+        end: destination,
+        variants: ["arc-below"],
+        preferredVariant: "arc-below",
+        clearance: 12,
+        moverRadius: 0
+      }).selected;
+      const point = sampleKpEquationMotionPath(
+        path,
+        context.frame.sideScaleProgress
+      );
+      return {
+        motionId: token.motionId,
+        side: "target" as const,
+        pose: {
+          opacity: reveal,
+          x: point.x - destination.x,
+          y: point.y - destination.y,
+          scale: 0.76 + 0.24 * context.frame.sideScaleProgress
+        },
+        lineagePathId: path.id,
+        lineageEdgeId: relation.recordId,
+        lineageBranchIndex: 0,
+        motionPathVariant: path.variant
+      };
+    });
+  }
+  if (!context.sideChangeRecordIds.has(relation.recordId)) return undefined;
+  if (relation.lifecycle === "enter") {
+    return targetTokens.map((token, index) => frameToken(token, "target", {
+      opacity: context.frame.sideScaleProgress,
+      x: (index % 2 === 0 ? -6 : 6) * (1 - context.frame.sideScaleProgress),
+      y: (index % 2 === 0 ? -4 : 4) * (1 - context.frame.sideScaleProgress),
+      scale: 0.88 + 0.12 * context.frame.sideScaleProgress
+    }));
+  }
+  return sourceTokens.map((token) => frameToken(token, "source", {
+    opacity: 1 - context.frame.sideScaleProgress,
+    x: 4 * context.frame.sideScaleProgress,
+    y: -5 * context.frame.sideScaleProgress,
+    scale: 1 - 0.12 * context.frame.sideScaleProgress
+  }));
 }
 
 function sampleDistributionRelation(

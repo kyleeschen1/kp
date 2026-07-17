@@ -5,7 +5,7 @@ import { createInequalitySignFlipAnimationAsset } from "../src/animation/inequal
 import { createKpInequalitySelectorAnnotatedLatex } from "../src/editor/inequality-semantic-latex.ts";
 import { compileKpSemanticEquationTransitionResult } from "../src/rendering/semantic-equation-transition-compiler.ts";
 
-test("inequality negative scaling compiles explicit side and relation replacement", () => {
+test("inequality negative scaling compiles persistence, scaling, and relation pivot", () => {
   const animation = createInequalitySignFlipAnimationAsset();
   const result = compileKpSemanticEquationTransitionResult({
     transformation: animation.transformations[0]!,
@@ -14,7 +14,7 @@ test("inequality negative scaling compiles explicit side and relation replacemen
   assert.equal(result.status, "semantic");
   assert.deepEqual(
     result.ir?.relations.map((relation) => relation.lifecycle),
-    ["exit", "enter", "exit", "enter", "exit", "enter"]
+    ["persist", "enter", "role-change", "exit", "enter"]
   );
 });
 

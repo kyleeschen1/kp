@@ -1,0 +1,151 @@
+{
+  "id": "next-action.kp.animation.inequality-pivot-v1",
+  "kind": "next-action",
+  "title": "Refine inequality relation pivot",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Refined negative inequality scaling into a causal relation pivot: the left operand persists independently, the negative multiplier appears first, the right-side result follows a separated evaluation path, and the persistent relation rotates continuously into its reversed native glyph before exact handoff.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.semantic-motion-library-loop-v1.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.inequality-pivot-v1 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.semantic-motion-library-loop-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-animation-design-diagnostic-audit.md",
+      "summary": "Catalog audit that establishes strategy cohorts and the ordered repair priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/animation-design-diagnostic-language.md",
+      "summary": "Diagnostic and promotion vocabulary governing the approved animation work."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/inequality-pivot-choreography.ts",
+      "summary": "Refined negative inequality scaling into a causal relation pivot: the left operand persists independently, the negative multiplier appears first, the right-side result follows a separated evaluation path, and the persistent relation rotates continuously into its reversed native glyph before exact handoff."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/inequality-sign-flip-adapter.ts",
+      "summary": "Refined negative inequality scaling into a causal relation pivot: the left operand persists independently, the negative multiplier appears first, the right-side result follows a separated evaluation path, and the persistent relation rotates continuously into its reversed native glyph before exact handoff."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/inequality-semantic-latex.ts",
+      "summary": "Refined negative inequality scaling into a causal relation pivot: the left operand persists independently, the negative multiplier appears first, the right-side result follows a separated evaluation path, and the persistent relation rotates continuously into its reversed native glyph before exact handoff."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Refined negative inequality scaling into a causal relation pivot: the left operand persists independently, the negative multiplier appears first, the right-side result follows a separated evaluation path, and the persistent relation rotates continuously into its reversed native glyph before exact handoff."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-dom.ts",
+      "summary": "Refined negative inequality scaling into a causal relation pivot: the left operand persists independently, the negative multiplier appears first, the right-side result follows a separated evaluation path, and the persistent relation rotates continuously into its reversed native glyph before exact handoff."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/semantic-equation-token-renderer.ts",
+      "summary": "Refined negative inequality scaling into a causal relation pivot: the left operand persists independently, the negative multiplier appears first, the right-side result follows a separated evaluation path, and the persistent relation rotates continuously into its reversed native glyph before exact handoff."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-inequality-pivot-choreography.test.ts",
+      "summary": "Refined negative inequality scaling into a causal relation pivot: the left operand persists independently, the negative multiplier appears first, the right-side result follows a separated evaluation path, and the persistent relation rotates continuously into its reversed native glyph before exact handoff."
+    },
+    {
+      "kind": "file",
+      "path": "tests/inequality-semantic-latex.test.ts",
+      "summary": "Refined negative inequality scaling into a causal relation pivot: the left operand persists independently, the negative multiplier appears first, the right-side result follows a separated evaluation path, and the persistent relation rotates continuously into its reversed native glyph before exact handoff."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-inequality-sign-flip-animation.test.ts",
+      "summary": "Refined negative inequality scaling into a causal relation pivot: the left operand persists independently, the negative multiplier appears first, the right-side result follows a separated evaluation path, and the persistent relation rotates continuously into its reversed native glyph before exact handoff."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Refined negative inequality scaling into a causal relation pivot: the left operand persists independently, the negative multiplier appears first, the right-side result follows a separated evaluation path, and the persistent relation rotates continuously into its reversed native glyph before exact handoff."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.semantic-motion-library-loop-v1",
+      "next-action.kp.animation.semantic-motion-library-loop-v1"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.semantic-motion-library-loop-v1"
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run typecheck",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts",
+    "npm test",
+    "npm run build"
+  ],
+  "expectedLearning": [
+    "Whether Refine inequality relation pivot can be completed inside Semantic Motion Animation Library Long Loop."
+  ],
+  "allowedWork": [
+    "Only implement the 28 approved semantic-animation slices in stored order.",
+    "Eliminate nested animation scrollbars through responsive native layout while preserving glyph ink and traveling content.",
+    "Add canonical operations, correspondence, choreography, editor realization, tests, documentation, and Theseus evidence required by the approved slices."
+  ],
+  "disallowedWork": [
+    "Do not redesign unrelated dashboard, editor, graph, export, or page-level scrolling behavior.",
+    "Do not use whole-equation transform scaling or content clipping to hide overflow.",
+    "Do not add unapproved animation families or gestalt style packages."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "1264 unit and integration tests",
+      "checkedAt": "2026-07-17T02:44:28.366Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-17T02:44:28.419Z"
+    },
+    {
+      "command": "playwright editor animation visuals",
+      "status": "passed",
+      "scope": "43 Chromium tests",
+      "checkedAt": "2026-07-17T02:44:28.470Z"
+    },
+    {
+      "command": "playwright editor animation overflow",
+      "status": "passed",
+      "scope": "528 catalog samples with zero nested scrollbars",
+      "checkedAt": "2026-07-17T02:44:28.522Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production bundle",
+      "checkedAt": "2026-07-17T02:44:28.571Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-17T02:44:28.621Z",
+      "scope": "575-node Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Refined negative inequality scaling into a causal relation pivot: the left operand persists independently, the negative multiplier appears first, the right-side result follows a separated evaluation path, and the persistent relation rotates continuously into its reversed native glyph before exact handoff."
+  }
+}

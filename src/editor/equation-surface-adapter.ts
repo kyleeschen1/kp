@@ -151,6 +151,9 @@ import type {
   KpIdentityAbsorptionChoreographyFrame,
   KpIdentityAbsorptionChoreographyKind
 } from "../animation/identity-absorption-choreography.ts";
+import type {
+  KpInequalityPivotChoreographyFrame
+} from "../animation/inequality-pivot-choreography.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
@@ -1709,6 +1712,9 @@ function applySemanticTokenMotion(input: {
       ...(identityAbsorptionRoles === undefined
         ? {}
         : { identityAbsorptionRoleRecordIds: identityAbsorptionRoles }),
+      ...(transformation.transformType === "multiplyNegativeBothSidesInequality"
+        ? { inequalityPivotChoreographyKind: "negative-scale-relation-pivot" as const }
+        : {}),
       ...(input.frame.radicalSuccession === undefined
         ? {}
         : { representationalSuccessionKind: "opposite-corner-seed" as const }),
@@ -1799,6 +1805,13 @@ function applySemanticTokenMotion(input: {
       transition: input.transitionElement,
       geometry,
       frame: tokenFrame.motion.identityAbsorptionChoreography
+    });
+  }
+  if (tokenFrame.motion.inequalityPivotChoreography !== undefined) {
+    applyInequalityPivotFocus({
+      transition: input.transitionElement,
+      geometry,
+      frame: tokenFrame.motion.inequalityPivotChoreography
     });
   }
   input.transitionElement.dataset["kpEditorEquationSemanticProgress"] =
@@ -2544,6 +2557,71 @@ function activeIdentityAbsorptionPhase(
     .map(([phaseId]) => phaseId);
   return active.at(-1) ??
     (frame.progress >= 1 ? "complete" : "focus-identity-bundle");
+}
+
+function applyInequalityPivotFocus(input: {
+  readonly transition: HTMLElement;
+  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly frame: KpInequalityPivotChoreographyFrame;
+}): void {
+  input.transition.dataset["kpEditorEquationInequalityPivotChoreography"] =
+    "negative-scale-relation-pivot";
+  input.transition.dataset["kpEditorEquationInequalityPivotPhase"] =
+    activeInequalityPivotPhase(input.frame);
+  input.transition.dataset["kpEditorEquationInequalitySideScale"] =
+    String(input.frame.sideScaleProgress);
+  input.transition.dataset["kpEditorEquationInequalityRelationPivot"] =
+    String(input.frame.relationPivotProgress);
+  const relation = input.geometry.relations.find(
+    (candidate) => candidate.recordId === "relation-pivots"
+  );
+  const focusMotionIds = new Set([
+    ...(relation?.source?.motionIds ?? []),
+    ...input.geometry.relations
+      .filter((candidate) => candidate.recordId.includes("negative-multiplier"))
+      .flatMap((candidate) => candidate.target?.motionIds ?? [])
+  ]);
+  [...input.geometry.sourceTokens, ...input.geometry.targetTokens]
+    .filter((token) => focusMotionIds.has(token.motionId))
+    .forEach((token) => {
+      token.element.classList.add("kp-focus-group");
+      token.element.dataset["kpEditorInequalityPivotFocusRole"] =
+        token.text.includes("2") ? "negative-cause" : "relation";
+      token.element.style.setProperty(
+        "--kp-focus-z",
+        `${5 * input.frame.focusStrength}px`
+      );
+      token.element.style.setProperty(
+        "--kp-focus-scale",
+        String(1 + 0.04 * input.frame.focusStrength)
+      );
+      token.element.style.setProperty(
+        "--kp-focus-outline-strength",
+        String(input.frame.focusStrength)
+      );
+      token.element.style.setProperty(
+        "--kp-focus-shadow-y",
+        `${3 * input.frame.focusStrength}px`
+      );
+      token.element.style.setProperty(
+        "--kp-focus-shadow-blur",
+        `${10 * input.frame.focusStrength}px`
+      );
+      token.element.style.setProperty(
+        "--kp-focus-shadow-opacity",
+        String(0.18 * input.frame.focusStrength)
+      );
+    });
+}
+
+function activeInequalityPivotPhase(
+  frame: KpInequalityPivotChoreographyFrame
+): string {
+  const active = Object.entries(frame.phases)
+    .filter(([, progress]) => progress > 0 && progress < 1)
+    .map(([phaseId]) => phaseId);
+  return active.at(-1) ??
+    (frame.progress >= 1 ? "complete" : "focus-negative-cause");
 }
 
 function motifLabel(kind: KpEditorEquationTransitionMotifFrame["kind"]): string {

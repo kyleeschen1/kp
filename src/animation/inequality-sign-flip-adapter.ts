@@ -33,18 +33,23 @@ export function createInequalitySignFlipAnimationAsset(): KpAnimationAsset {
     title: "Source inequality",
     latex: "x < 3",
     side: "source",
-    lhsLatex: "x",
-    relationLatex: "<",
-    rhsLatex: "3"
+    selectors: [
+      selector("source", "lhs.operand", "x"),
+      selector("source", "relation", "<", { semanticRole: "relation.source" }),
+      selector("source", "rhs.operand", "3")
+    ]
   });
   const target = createInequalityObject({
     id: targetObjectId,
     title: "Inequality after multiplying by -2",
     latex: "-2x > -6",
     side: "target",
-    lhsLatex: "-2x",
-    relationLatex: ">",
-    rhsLatex: "-6"
+    selectors: [
+      selector("target", "lhs.multiplier", "-2"),
+      selector("target", "lhs.operand", "x"),
+      selector("target", "relation", ">", { semanticRole: "relation.flip" }),
+      selector("target", "rhs.result", "-6")
+    ]
   });
   const transformation = createKpSemanticTransformation({
     id: transformationId,
@@ -57,18 +62,47 @@ export function createInequalitySignFlipAnimationAsset(): KpAnimationAsset {
     correspondenceMap: {
       id: `${transformationId}.correspondence`,
       records: [
-        replacementExit("lhs"),
-        replacementEnter("lhs"),
-        replacementExit("relation"),
-        replacementEnter("relation"),
-        replacementExit("rhs"),
-        replacementEnter("rhs")
+        {
+          id: "lhs-operand-persists",
+          relation: "identity",
+          sourceSelectorIds: [selectorId("source", "lhs.operand")],
+          targetSelectorIds: [selectorId("target", "lhs.operand")],
+          summary: "The left operand persists while its negative multiplier enters."
+        },
+        {
+          id: "lhs-negative-multiplier-enters",
+          relation: "introduction",
+          sourceSelectorIds: [],
+          targetSelectorIds: [selectorId("target", "lhs.multiplier")],
+          summary: "The negative scaling cause enters beside the persistent left operand."
+        },
+        {
+          id: "relation-pivots",
+          relation: "role-change",
+          sourceSelectorIds: [selectorId("source", "relation")],
+          targetSelectorIds: [selectorId("target", "relation")],
+          summary: "The relation persists as a role while its order pivots."
+        },
+        {
+          id: "rhs-operand-exits",
+          relation: "removal",
+          sourceSelectorIds: [selectorId("source", "rhs.operand")],
+          targetSelectorIds: [],
+          summary: "The source right operand exits as negative scaling is evaluated."
+        },
+        {
+          id: "rhs-scaled-result-enters",
+          relation: "introduction",
+          sourceSelectorIds: [],
+          targetSelectorIds: [selectorId("target", "rhs.result")],
+          summary: "The scaled right-side result enters before the relation pivots."
+        }
       ]
     },
     correspondence: [
-      correspondence("lhs", ["structure", "role"]),
+      correspondence("lhs.operand", "lhs.operand", ["structure", "role"]),
       correspondence("relation", ["role"]),
-      correspondence("rhs", ["structure", "role"])
+      correspondence("rhs.operand", "rhs.result", ["structure", "role"])
     ],
     assumptions: [
       "The multiplier -2 is negative, so the inequality relation must flip."
@@ -191,33 +225,25 @@ function createInequalityObject(input: {
   readonly title: string;
   readonly latex: string;
   readonly side: "source" | "target";
-  readonly lhsLatex: string;
-  readonly relationLatex: string;
-  readonly rhsLatex: string;
+  readonly selectors: readonly ReturnType<typeof selector>[];
 }) {
   return createKpSemanticAssetObject({
     id: input.id,
     objectType: "equation",
     title: input.title,
     value: { latex: input.latex },
-    selectors: [
-      selector(input.side, "lhs", input.lhsLatex),
-      selector(input.side, "relation", input.relationLatex, {
-        semanticRole: input.side === "target" ? "relation.flip" : "relation.source"
-      }),
-      selector(input.side, "rhs", input.rhsLatex)
-    ],
+    selectors: input.selectors,
     metadata: {
       latex: input.latex,
       representation: "inequality",
-      relation: input.relationLatex
+      relation: input.selectors.find((candidate) => candidate.kind === "relation")?.label ?? ""
     }
   });
 }
 
 function selector(
   side: "source" | "target",
-  role: "lhs" | "relation" | "rhs",
+  role: string,
   latex: string,
   metadata?: Readonly<Record<string, string>>
 ) {
@@ -231,38 +257,25 @@ function selector(
 
 function selectorId(
   side: "source" | "target",
-  role: "lhs" | "relation" | "rhs"
+  role: string
 ): string {
   return `inequality.sign-flip.${side}.${role}`;
 }
 
 function correspondence(
-  role: "lhs" | "relation" | "rhs",
-  preserves: readonly ("structure" | "value" | "role")[]
+  sourceRole: string,
+  targetRoleOrPreserves: string | readonly ("structure" | "value" | "role")[],
+  optionalPreserves?: readonly ("structure" | "value" | "role")[]
 ) {
+  const targetRole = typeof targetRoleOrPreserves === "string"
+    ? targetRoleOrPreserves
+    : sourceRole;
+  const preserves = typeof targetRoleOrPreserves === "string"
+    ? optionalPreserves!
+    : targetRoleOrPreserves;
   return {
-    sourceSelectorId: selectorId("source", role),
-    targetSelectorId: selectorId("target", role),
+    sourceSelectorId: selectorId("source", sourceRole),
+    targetSelectorId: selectorId("target", targetRole),
     preserves
-  };
-}
-
-function replacementExit(role: "lhs" | "relation" | "rhs") {
-  return {
-    id: `${role}-exits`,
-    relation: "removal" as const,
-    sourceSelectorIds: [selectorId("source", role)],
-    targetSelectorIds: [],
-    summary: `The source ${role} exits under negative scaling.`
-  };
-}
-
-function replacementEnter(role: "lhs" | "relation" | "rhs") {
-  return {
-    id: `${role}-enters`,
-    relation: "introduction" as const,
-    sourceSelectorIds: [],
-    targetSelectorIds: [selectorId("target", role)],
-    summary: `The transformed ${role} enters after negative scaling.`
   };
 }

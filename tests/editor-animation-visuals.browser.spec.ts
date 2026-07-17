@@ -301,7 +301,8 @@ test("design diagnostics distinguish promoted motion from incomplete succession"
   await selector.selectOption(
     "editor-animation.sample.animation.derivative-rules.basic"
   );
-  await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  await scrubber.fill("0.4");
   await expect(diagnostics.locator("[data-kp-editor-design-strategy]"))
     .toHaveText("operation-specific · derivative-power");
   await expect(diagnostics.locator("[data-kp-editor-design-issues]"))
@@ -2097,7 +2098,8 @@ test("inequality family animation visibly flips its relation", async ({ page }) 
   );
 
   const player = page.locator("[data-kp-editor-animation-player]");
-  await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  await scrubber.fill("0.4");
   const transition = player.locator("[data-kp-editor-equation-transition-id]");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-motif",
@@ -2111,9 +2113,34 @@ test("inequality family animation visibly flips its relation", async ({ page }) 
     .toContainText("−2x>−6");
   await expect(transition)
     .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-inequality-pivot-choreography",
+    "negative-scale-relation-pivot"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-inequality-relation-pivot",
+    "0"
+  );
+  const sourceRelation = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id*="source.relation"]'
+  );
+  const targetMultiplier = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*="target.lhs.multiplier"]'
+  );
   await expect(
-    transition.locator('[data-kp-editor-equation-source] [data-kp-motion-id*="source.relation"]')
-  ).toHaveCSS("opacity", "0.5");
+    targetMultiplier
+  ).not.toHaveCSS("opacity", "0");
+
+  await scrubber.fill("0.65");
+  await expect(sourceRelation).toHaveCSS("opacity", "1");
+  expect(await sourceRelation.getAttribute("style")).toContain("rotate(");
+  expect(await sourceRelation.getAttribute("style")).not.toContain("rotate(0deg)");
+
+  await scrubber.fill("1");
+  await expect(sourceRelation).toHaveCSS("opacity", "0");
+  await expect(
+    transition.locator('[data-kp-editor-equation-target] [data-kp-motion-id*="target.relation"]')
+  ).toHaveCSS("opacity", "1");
 });
 
 test("calculus equation families render derivative and FTC forms", async ({ page }) => {

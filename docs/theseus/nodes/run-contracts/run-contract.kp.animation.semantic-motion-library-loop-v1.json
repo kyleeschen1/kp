@@ -187,7 +187,8 @@
     {
       "id": "next-action.kp.animation.inequality-pivot-v1",
       "title": "Refine inequality relation pivot",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.inequality-pivot-v1 in Semantic Motion Animation Library Long Loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.dot-product-intermediates-v1",

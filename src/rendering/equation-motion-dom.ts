@@ -63,6 +63,8 @@ export interface KpMeasuredEquationTransitionGeometry {
     readonly identityRecordId: string;
     readonly anchorRecordId: string;
   } | undefined;
+  readonly inequalityPivotChoreographyKind?:
+    "negative-scale-relation-pivot" | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
@@ -156,6 +158,8 @@ export function measureKpEquationTransitionGeometry(input: {
     readonly identityRecordId: string;
     readonly anchorRecordId: string;
   } | undefined;
+  readonly inequalityPivotChoreographyKind?:
+    "negative-scale-relation-pivot" | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
@@ -209,6 +213,12 @@ export function measureKpEquationTransitionGeometry(input: {
           identityAbsorptionRoleRecordIds: {
             ...input.identityAbsorptionRoleRecordIds
           }
+        }),
+    ...(input.inequalityPivotChoreographyKind === undefined
+      ? {}
+      : {
+          inequalityPivotChoreographyKind:
+            input.inequalityPivotChoreographyKind
         }),
     ...(input.representationalSuccessionKind === undefined
       ? {}
