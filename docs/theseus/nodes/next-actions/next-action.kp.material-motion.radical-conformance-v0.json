@@ -1,0 +1,111 @@
+{
+  "id": "next-action.kp.material-motion.radical-conformance-v0",
+  "kind": "next-action",
+  "title": "Gate radical continuity and settlement",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added an explicit normative radical conformance evaluator and browser baseline covering grouping, readiness-gated target birth, diagonal paths, per-token scale floors, no whole-structure transforms, stage containment, KaTeX typography identity, semantic rewind, and exact native settlement without screenshot-tolerance pass criteria.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.radical-conformance-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/radical-conformance.ts",
+      "summary": "Typed baseline, observation contract, and visible-discontinuity laws for the dashboard exemplar."
+    },
+    {
+      "kind": "file",
+      "path": "tests/radical-conformance.test.ts",
+      "summary": "Positive baseline and complete failure-class evaluator coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/radical-conformance.browser.spec.ts",
+      "summary": "Live editor observations for motion, clipping, font, rewind, and native settlement."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Gate radical continuity and settlement can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/radical-conformance.test.ts",
+      "status": "passed",
+      "scope": "Three evaluator and baseline tests.",
+      "checkedAt": "2026-07-17T20:27:36.335Z"
+    },
+    {
+      "command": "npx playwright test tests/radical-conformance.browser.spec.ts and radical visual cohort",
+      "status": "passed",
+      "scope": "Five live radical conformance and visual tests.",
+      "checkedAt": "2026-07-17T20:27:36.410Z"
+    },
+    {
+      "command": "npm run test:browser:katex",
+      "status": "passed",
+      "scope": "Twelve KaTeX font, artifact, and settlement tests.",
+      "checkedAt": "2026-07-17T20:27:36.490Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-overflow.browser.spec.ts",
+      "status": "passed",
+      "scope": "44 descriptors, 528 samples, zero nested scrollbars.",
+      "checkedAt": "2026-07-17T20:27:36.561Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production build and typecheck; 246.08 KB entry gzip.",
+      "checkedAt": "2026-07-17T20:27:36.641Z"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "checkedAt": "2026-07-17T20:27:36.720Z",
+      "scope": "598 nodes and 7704 events before completion."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added an explicit normative radical conformance evaluator and browser baseline covering grouping, readiness-gated target birth, diagonal paths, per-token scale floors, no whole-structure transforms, stage containment, KaTeX typography identity, semantic rewind, and exact native settlement without screenshot-tolerance pass criteria."
+  }
+}
