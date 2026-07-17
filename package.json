@@ -17,7 +17,9 @@
     "test": "node --disable-warning=ExperimentalWarning --test server/*.test.ts tests/*.test.ts",
     "preview": "vite preview --port 8000 --strictPort",
     "test:browser:katex": "playwright test tests/katex-transition.browser.spec.ts --project=chromium",
-    "test:browser:dashboard": "playwright test tests/project-dashboard.browser.spec.ts --project=chromium"
+    "test:browser:dashboard": "playwright test tests/project-dashboard.browser.spec.ts --project=chromium",
+    "perf:animation": "node --disable-warning=ExperimentalWarning scripts/animation-performance.ts",
+    "perf:animation:strict": "node --disable-warning=ExperimentalWarning scripts/animation-performance.ts --strict-targets"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",

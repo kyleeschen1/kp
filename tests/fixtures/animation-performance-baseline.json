@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "kp.animation-performance-baseline.v1",
+  "snapshot": {
+    "capturedAt": "2026-07-17T00:00:00.000Z",
+    "artifacts": {
+      "entryScriptBytes": 1531626,
+      "entryScriptGzipBytes": 357656,
+      "threeScriptBytes": 525577,
+      "threeScriptGzipBytes": 130823
+    },
+    "normal": {
+      "hydrationMs": 808,
+      "initialScriptTransferBytes": 489079,
+      "initialFontTransferBytes": 56028,
+      "initialScriptNames": [
+        "index-C1LzJGDD.js",
+        "graph-webgl-three-ClNEWjCb.js"
+      ],
+      "matrixFrame": {
+        "frames": 181,
+        "meanMs": 16.6674,
+        "p95Ms": 16.8,
+        "p99Ms": 17.6,
+        "maxMs": 17.7,
+        "over33Ms": 0,
+        "longestTaskMs": 0
+      }
+    },
+    "constrained": {
+      "hydrationMs": 3436,
+      "initialScriptTransferBytes": 489079,
+      "initialFontTransferBytes": 56028,
+      "initialScriptNames": [
+        "index-C1LzJGDD.js",
+        "graph-webgl-three-ClNEWjCb.js"
+      ],
+      "matrixFrame": {
+        "frames": 146,
+        "meanMs": 20.6671,
+        "p95Ms": 34,
+        "p99Ms": 34.3,
+        "maxMs": 66.8,
+        "over33Ms": 16,
+        "longestTaskMs": 0
+      }
+    }
+  },
+  "regressionAllowance": {
+    "artifactRatio": 1.05,
+    "transferRatio": 1.1
+  }
+}

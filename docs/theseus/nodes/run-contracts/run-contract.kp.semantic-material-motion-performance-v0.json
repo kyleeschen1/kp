@@ -55,7 +55,8 @@
     {
       "id": "next-action.kp.material-motion.performance-baseline-v0",
       "title": "Establish reproducible performance baselines",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.material-motion.performance-baseline-v0 in KP Semantic Material Motion And Performance V0.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.lazy-three-v0",
