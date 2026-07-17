@@ -21,7 +21,7 @@ test("dashboard asset preview fields adapt interpreter output for agenda rows", 
   ]);
   assert.deepEqual(dashboardAssetPreviewFields(interpretation).slice(0, 3), [
     { label: "Dashboard interpreter", value: "interpreter.dashboard.asset-preview" },
-    { label: "Asset summary", value: "4 objects, 17 selectors" },
+    { label: "Asset summary", value: "4 objects, 19 selectors" },
     { label: "Asset id", value: "asset.linear-solve" }
   ]);
   assert.ok(

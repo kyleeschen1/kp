@@ -1,9 +1,9 @@
 import type { KpAssetBundle } from "./asset.ts";
 import type { KpSemanticTransformation } from "./asset-transformation.ts";
+import type { KpCanonicalOperationRegistry } from "./canonical-operation-registry.ts";
 import {
-  kpCanonicalOperationRegistry,
-  type KpCanonicalOperationRegistry
-} from "./canonical-operation-registry.ts";
+  cancellationOperationAuthority
+} from "./cancellation-operation-authority.ts";
 
 export type KpCancellationWitnessId =
   | "witness.additive-identity.zero"
@@ -102,16 +102,20 @@ export function deriveKpCancellationWitness(input: {
   readonly survivorAnchorSelectorIds: readonly string[];
   readonly registry?: KpCanonicalOperationRegistry | undefined;
 }): KpCancellationWitness {
-  const registry = input.registry ?? kpCanonicalOperationRegistry;
-  const entry = registry.entries.find((candidate) =>
+  const registryEntry = input.registry?.entries.find((candidate) =>
     candidate.id === input.operationId
   );
-  if (entry === undefined) {
+  const defaultAuthority = input.registry === undefined
+    ? cancellationOperationAuthority(input.operationId)
+    : undefined;
+  if (registryEntry === undefined && defaultAuthority === undefined) {
     throw new Error(`Unknown cancellation operation ${input.operationId}.`);
   }
+  const sourceTransformType = registryEntry?.sourceTransformType ??
+    defaultAuthority!.sourceTransformType;
   if (
-    entry.sourceTransformType !== undefined &&
-    entry.sourceTransformType !== input.transformation.transformType
+    sourceTransformType !== undefined &&
+    sourceTransformType !== input.transformation.transformType
   ) {
     throw new Error(
       `Cancellation operation ${input.operationId} does not authorize transform ${input.transformation.transformType}.`
@@ -119,7 +123,7 @@ export function deriveKpCancellationWitness(input: {
   }
   const descriptor = witnessDescriptorForContract(
     input.operationId,
-    entry.contract.witnessIds
+    registryEntry?.contract.witnessIds ?? [defaultAuthority!.witnessId]
   );
   const record = input.transformation.correspondenceMap?.records.find(
     (candidate) => candidate.id === input.cancellationRecordId
@@ -167,7 +171,9 @@ export function deriveKpCancellationWitness(input: {
     semanticValue: { ...descriptor.semanticValue },
     authority: {
       operationContractAuthorityId:
-        `${entry.contract.authority.kind}:${entry.contract.authority.refId}`,
+        registryEntry === undefined
+          ? `${defaultAuthority!.authority.kind}:${defaultAuthority!.authority.refId}`
+          : `${registryEntry.contract.authority.kind}:${registryEntry.contract.authority.refId}`,
       lawId: descriptor.lawId
     },
     slot: {
@@ -184,7 +190,7 @@ export function deriveKpCancellationWitness(input: {
   };
   const issues = validateKpCancellationWitness({
     witness,
-    declaredWitnessIds: entry.contract.witnessIds,
+    declaredWitnessIds: registryEntry?.contract.witnessIds ?? [defaultAuthority!.witnessId],
     cancellationSourceSelectorIds: record.sourceSelectorIds,
     selectorOwners
   });

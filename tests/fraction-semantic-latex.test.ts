@@ -4,6 +4,7 @@ import test from "node:test";
 import { createFractionSimplificationAnimationAsset } from "../src/animation/fraction-adapter.ts";
 import { createKpFractionSelectorAnnotatedLatex } from "../src/editor/fraction-semantic-latex.ts";
 import { compileKpSemanticEquationTransitionResult } from "../src/rendering/semantic-equation-transition-compiler.ts";
+import { createKpWitnessedAnnihilationBinding } from "../src/animation/witnessed-annihilation.ts";
 
 test("fraction transformations cover split, fan-in, and cancellation lifecycles", () => {
   const animation = createFractionSimplificationAnimationAsset();
@@ -43,4 +44,23 @@ test("fraction states annotate semantic terms while reserving bars for structura
     );
     assert.match(annotated.rawLatex, /\\frac/);
   }
+});
+
+test("unit fraction cancellation compiles the multiplicative identity witness", () => {
+  const animation = createFractionSimplificationAnimationAsset();
+  const transformation = animation.transformations[2]!;
+  const binding = createKpWitnessedAnnihilationBinding({
+    operationId: "kp.algebra.simplify-unit-fraction-factor",
+    transformation,
+    bundle: animation.bundle,
+    cancellationRecordId: "unit-factor-cancels"
+  });
+  assert.equal(binding.witness.descriptorId, "witness.multiplicative-identity.one");
+  assert.equal(binding.witness.semanticValue.latex, "1");
+  assert.equal(binding.sources.length, 4);
+  assert.deepEqual(binding.survivorRecordIds, [
+    "base-numerator-persists",
+    "base-denominator-persists",
+    "base-fraction-line-persists"
+  ]);
 });

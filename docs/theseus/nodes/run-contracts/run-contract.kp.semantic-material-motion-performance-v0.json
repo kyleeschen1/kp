@@ -163,7 +163,7 @@
       "id": "next-action.kp.material-motion.annihilation-adapters-v0",
       "title": "Apply annihilation across representative operations",
       "summary": "Broad checkpoint 19: focused linear and fraction adapter tests plus visual browser review, then full unit suite and production build.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.fission-fusion-v0",

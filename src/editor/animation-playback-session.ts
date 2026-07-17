@@ -27,6 +27,7 @@ export type KpEditorAnimationPlaybackAction =
   | { readonly type: "pause"; readonly nowMs?: number | undefined }
   | { readonly type: "tick"; readonly nowMs: number }
   | { readonly type: "seek"; readonly progress: number }
+  | { readonly type: "resample" }
   | {
       readonly type: "seek-semantic-checkpoint";
       readonly checkpoint: KpEquationSemanticTimelineCheckpoint;
@@ -88,6 +89,11 @@ export function reduceKpEditorAnimationPlaybackSession(
       return resampleSession(session, {
         playbackStatus: "paused",
         progress: action.progress
+      });
+    case "resample":
+      return resampleSession(session, {
+        playbackStatus: session.player.playbackStatus,
+        progress: session.player.progress
       });
     case "seek-semantic-checkpoint":
       return resampleSession(session, {

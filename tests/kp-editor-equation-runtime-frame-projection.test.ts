@@ -32,7 +32,7 @@ test("equation runtime projection exposes honest source, target, focus, and corr
   assert.deepEqual(transition?.target.map((object) => object.latex), [
     "x = 7 - 3"
   ]);
-  assert.equal(transition?.correspondence.length, 4);
+  assert.equal(transition?.correspondence.length, 5);
   assert.equal(transition?.semanticStatus, "ready");
   assert.deepEqual(transition?.semanticDiagnostics, []);
   assert.deepEqual(projection.focusSelectorIds, [

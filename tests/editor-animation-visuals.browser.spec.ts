@@ -643,20 +643,14 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
     "data-kp-editor-equation-envelope-bridge-progress"
   ))).toBeGreaterThan(0.45);
   await scrubber.fill("0.43");
-  const previewClearance = await Promise.all([
-    materialLayer.locator(
-      '[data-kp-equation-material-owner-id="linear-solve.lhs.x"]'
-    ),
-    plusThree,
-    minusThree
-  ].map((locator) => locator.evaluate((element) => {
-    const rect = element.getBoundingClientRect();
-    return { top: rect.top, bottom: rect.bottom };
-  })));
-  expect(Math.max(
-    previewClearance[1]!.bottom,
-    previewClearance[2]!.bottom
-  )).toBeLessThan(previewClearance[0]!.top + 1);
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-annihilation-phase",
+    "contact"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-annihilation-witness-readable",
+    "false"
+  );
   await scrubber.fill("0.5");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-active-subgraph-nodes",
@@ -664,6 +658,13 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   );
   await expect(plusThree).toHaveCSS("opacity", "1");
   await expect(minusThree).toHaveCSS("opacity", "1");
+  const compressedScales = await Promise.all([plusThree, minusThree].map(
+    (locator) => locator.evaluate((element) => {
+      const transform = getComputedStyle(element).transform;
+      return new DOMMatrixReadOnly(transform).a;
+    })
+  ));
+  expect(compressedScales.every((scale) => scale > 0.7 && scale < 1)).toBe(true);
   await scrubber.fill("0.52");
   const meeting = await Promise.all([plusThree, minusThree].map((locator) =>
     locator.evaluate((element) => {
@@ -671,13 +672,21 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
       return { x: rect.left + rect.width / 2, width: rect.width };
     })
   ));
-  expect(Math.abs(meeting[1]!.x - meeting[0]!.x)).toBeLessThan(35);
-  expect(meeting.every((pose) => pose.width > 24)).toBe(true);
+  expect(Math.abs(meeting[1]!.x - meeting[0]!.x)).toBeLessThan(42);
+  expect(meeting.every((pose) => pose.width > 20)).toBe(true);
 
   await scrubber.fill("0.56");
-  expect(Number(await transition.getAttribute(
-    "data-kp-editor-equation-collapse-progress"
-  ))).toBeGreaterThan(0);
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-annihilation-phase",
+    "witness-dwell"
+  );
+  const additiveWitness = transition.locator(
+    "[data-kp-editor-annihilation-witness]"
+  );
+  await expect(additiveWitness).toHaveCount(1);
+  await expect(additiveWitness).toContainText("0");
+  await expect(additiveWitness.locator(".katex")).toHaveCount(1);
+  await expect(additiveWitness).toHaveCSS("opacity", "1");
   expect(Number(await plusThree.evaluate(
     (element) => getComputedStyle(element).opacity
   ))).toBeGreaterThan(0);
@@ -690,6 +699,13 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   await expect(materialLayer.locator(
     '[data-kp-equation-material-owner-id="linear-solve.equals"]'
   )).toHaveCSS("opacity", "1");
+  await scrubber.fill("0.6");
+  expect(Number(await plusThree.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeGreaterThan(0);
+  expect(Number(await plusThree.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeLessThan(1);
 
   await scrubber.fill("0.84");
   transition = player.locator("[data-kp-editor-equation-transition-id]");
@@ -1159,10 +1175,27 @@ test("fraction simplification renders factor, common-factor, and simplified stat
   );
   await expect(cancelBundle).toHaveCount(4);
   await scrubber.fill("0.86");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-annihilation-phase",
+    "compress"
+  );
+  const multiplicativeWitness = transition.locator(
+    "[data-kp-editor-annihilation-witness]"
+  );
+  await expect(multiplicativeWitness).toContainText("1");
+  await expect(multiplicativeWitness.locator(".katex")).toHaveCount(1);
+  expect(Number(await multiplicativeWitness.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeGreaterThan(0);
+  await scrubber.fill("0.94");
   const cancelOpacities = await cancelBundle.evaluateAll((elements) =>
     elements.map((element) => Number(getComputedStyle(element).opacity))
   );
-  expect(cancelOpacities.some((opacity) => opacity > 0 && opacity < 1)).toBe(true);
+  expect(cancelOpacities.every((opacity) => opacity > 0 && opacity < 1)).toBe(true);
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-annihilation-compaction",
+    "0"
+  );
 
   await scrubber.fill("1");
   await expect(player.locator("[data-kp-editor-equation-transition-id]"))

@@ -23,6 +23,9 @@ import {
 } from "../rendering/visual-motif.ts";
 import type { EquationMotionPlan } from "../rendering/equation-motion-plan.ts";
 import { createKpEquationSuccessorSynthesisPlan } from "../rendering/equation-linear-rearrangement.ts";
+import {
+  kpEquationWitnessedAnnihilationRuntime
+} from "../rendering/equation-witnessed-annihilation-runtime.ts";
 
 export interface KpEditorPrecomputedEquationMotionPlan {
   readonly kind: "editor-precomputed-equation-motion-plan";
@@ -53,11 +56,23 @@ export function createKpEditorPrecomputedEquationMotionPlan(input: {
   const successorSynthesisPlan = createKpEquationSuccessorSynthesisPlan(
     input.geometry
   );
+  const witnessedAnnihilationPlan = input.geometry.witnessedAnnihilationBinding === undefined
+    ? undefined
+    : kpEquationWitnessedAnnihilationRuntime()?.createPlan(input.geometry);
+  if (
+    input.geometry.witnessedAnnihilationBinding !== undefined &&
+    witnessedAnnihilationPlan === undefined
+  ) {
+    throw new Error("Witnessed annihilation was not registered by the selected capability pack.");
+  }
   const measuredGeometry: KpMeasuredEquationTransitionGeometry = {
     ...input.geometry,
     ...(successorSynthesisPlan === undefined
       ? {}
-      : { successorSynthesisPlan })
+      : { successorSynthesisPlan }),
+    ...(witnessedAnnihilationPlan === undefined
+      ? {}
+      : { witnessedAnnihilationPlan })
   };
   const layoutPlan = createKpEquationLayoutPlan({
     id: `${input.id}.layout`,

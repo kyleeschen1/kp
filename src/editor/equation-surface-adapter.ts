@@ -98,6 +98,9 @@ import {
   type KpLinearRearrangementStep
 } from "../animation/linear-rearrangement-choreography.ts";
 import {
+  kpEquationWitnessedAnnihilationRuntime
+} from "../rendering/equation-witnessed-annihilation-runtime.ts";
+import {
   createKpDotProductTraversalChoreography,
   sampleKpDotProductTraversalChoreography,
   type KpDotProductTraversalChoreography,
@@ -611,8 +614,7 @@ function invalidateEquationStageMeasurements(
     queueMicrotask(() => {
       if (!player.isConnected) return;
       dispatchKpEditorAnimationPlaybackAction(player, {
-        type: "seek",
-        progress: session.player.progress
+        type: "resample"
       });
     });
   }
@@ -2347,6 +2349,17 @@ function applySemanticTokenMotion(input: {
       transformation,
       input.animation.bundle
     );
+    const annihilationOperationId = witnessedAnnihilationOperationId(
+      transformation.transformType
+    );
+    const witnessedAnnihilationBinding = annihilationOperationId === undefined
+      ? undefined
+      : requiredWitnessedAnnihilationRuntime().createBinding({
+          operationId: annihilationOperationId,
+          transformation,
+          bundle: input.animation.bundle,
+          cancellationRecordId: requiredCancellationRecordId(transformation)
+        });
 
     // IR remains forward-oriented; rewind swaps the displayed roots and samples
     // semantic progress backward, so both directions share exactly one geometry.
@@ -2425,6 +2438,9 @@ function applySemanticTokenMotion(input: {
                     input.frame.linearRearrangement.step.successorSynthesisBinding
                 })
           }),
+      ...(witnessedAnnihilationBinding === undefined
+        ? {}
+        : { witnessedAnnihilationBinding }),
       ...(input.frame.dotProductTraversal === undefined
         ? {}
         : {
@@ -2474,6 +2490,11 @@ function applySemanticTokenMotion(input: {
     accessibilityMode: editorAccessibilityMode(input.stage)
   });
   applyKpEditorSemanticEquationTokenFrame(geometry, tokenFrame);
+  syncWitnessedAnnihilationOverlay({
+    transition: input.transitionElement,
+    geometry,
+    frame: tokenFrame.motion.witnessedAnnihilation
+  });
   if (
     tokenFrame.motion.derivativePower !== undefined &&
     geometry.derivativePowerChoreographyPlan !== undefined
@@ -2804,6 +2825,93 @@ function fractionChoreographyKind(
     case "simplifyUnitFractionFactor": return "simplify-unit-factor";
     default: return undefined;
   }
+}
+
+function requiredCancellationRecordId(
+  transformation: KpAnimationAsset["transformations"][number]
+): string {
+  const record = transformation.correspondenceMap?.records.find((candidate) =>
+    candidate.relation === "cancelation"
+  );
+  if (record === undefined) {
+    throw new Error(`Transformation ${transformation.id} requires a cancellation record.`);
+  }
+  return record.id;
+}
+
+function witnessedAnnihilationOperationId(
+  transformType: string
+): string | undefined {
+  switch (transformType) {
+    case "cancelAdditiveInverses": return "kp.algebra.cancel-additive-inverses";
+    case "cancelMultiplicativeInverses": return "kp.algebra.cancel-multiplicative-inverses";
+    case "simplifyUnitFractionFactor": return "kp.algebra.simplify-unit-fraction-factor";
+    default: return undefined;
+  }
+}
+
+function requiredWitnessedAnnihilationRuntime() {
+  const runtime = kpEquationWitnessedAnnihilationRuntime();
+  if (runtime === undefined) {
+    throw new Error("The selected capability pack did not register witnessed annihilation.");
+  }
+  return runtime;
+}
+
+function syncWitnessedAnnihilationOverlay(input: {
+  readonly transition: HTMLElement;
+  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly frame: ReturnType<typeof createKpEditorSemanticEquationTokenFrame>["motion"]["witnessedAnnihilation"];
+}): void {
+  const existing = input.transition.querySelector<HTMLElement>(
+    "[data-kp-editor-annihilation-witness]"
+  );
+  if (
+    input.frame === undefined ||
+    input.geometry.witnessedAnnihilationPlan === undefined
+  ) {
+    existing?.remove();
+    return;
+  }
+  const source = input.transition.querySelector<HTMLElement>(
+    "[data-kp-editor-equation-source]"
+  );
+  if (source === null) return;
+  const witness = existing ?? document.createElement("span");
+  if (existing === null) {
+    witness.dataset["kpEditorAnnihilationWitness"] = "true";
+    witness.innerHTML = renderLatexToHtml(input.frame.witness.latex, {
+      displayMode: false
+    });
+    witness.style.position = "absolute";
+    witness.style.pointerEvents = "none";
+    witness.style.zIndex = "4";
+    witness.style.transformOrigin = "center";
+    witness.style.padding = "0.02em 0.16em";
+    witness.style.borderRadius = "999px";
+    witness.style.background = "rgba(248, 251, 255, 0.86)";
+    source.style.position = "relative";
+    source.style.overflow = "visible";
+    source.append(witness);
+  }
+  const pose = input.frame.witness.pose;
+  const contact = input.geometry.witnessedAnnihilationPlan.contactPoint;
+  witness.style.left = `${contact.x}px`;
+  witness.style.top = `${contact.y}px`;
+  witness.style.opacity = String(pose.opacity);
+  witness.style.transform =
+    `translate(calc(-50% + ${pose.x}px), calc(-50% + ${pose.y}px)) scale(${pose.scale})`;
+  witness.style.filter = input.frame.inwardPulse <= 0
+    ? "none"
+    : `drop-shadow(0 ${2 * input.frame.inwardPulse}px ${5 * input.frame.inwardPulse}px rgba(70, 115, 190, ${0.42 * input.frame.inwardPulse}))`;
+  witness.dataset["kpEditorAnnihilationDescriptorId"] =
+    input.frame.witness.descriptorId;
+  witness.dataset["kpEditorAnnihilationSlotId"] = input.frame.witness.slotId;
+  input.transition.dataset["kpEditorAnnihilationPhase"] = input.frame.phase;
+  input.transition.dataset["kpEditorAnnihilationWitnessReadable"] =
+    String(input.frame.witnessReadable);
+  input.transition.dataset["kpEditorAnnihilationCompaction"] =
+    String(input.frame.survivorCompactionProgress);
 }
 
 function applyFractionRoleFocus(input: {

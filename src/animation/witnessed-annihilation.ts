@@ -1,11 +1,71 @@
 import type { KpMaterialJunctionRect } from "./material-junction.ts";
-import type { KpCancellationWitness } from "../semantic/cancellation-witness.ts";
+import {
+  deriveKpCancellationWitness,
+  type KpCancellationWitness
+} from "../semantic/cancellation-witness.ts";
+import type { KpAssetBundle } from "../semantic/asset.ts";
+import type { KpSemanticTransformation } from "../semantic/asset-transformation.ts";
+
+export interface KpWitnessedAnnihilationBinding {
+  readonly kind: "witnessed-annihilation-binding";
+  readonly id: string;
+  readonly relationRecordId: string;
+  readonly witness: KpCancellationWitness;
+  readonly sources: readonly KpWitnessedAnnihilationSource[];
+  readonly survivorRecordIds: readonly string[];
+}
 
 export interface KpWitnessedAnnihilationSource {
   readonly id: string;
   readonly selectorIds: readonly string[];
   readonly semanticRole: string;
   readonly semanticRank: number;
+}
+
+export function createKpWitnessedAnnihilationBinding(input: {
+  readonly operationId: string;
+  readonly transformation: KpSemanticTransformation;
+  readonly bundle: KpAssetBundle;
+  readonly cancellationRecordId: string;
+  readonly slotId?: string | undefined;
+}): KpWitnessedAnnihilationBinding {
+  const records = input.transformation.correspondenceMap?.records ?? [];
+  const cancellation = records.find((record) =>
+    record.id === input.cancellationRecordId
+  );
+  if (cancellation?.relation !== "cancelation") {
+    throw new Error(`Missing cancellation record ${input.cancellationRecordId}.`);
+  }
+  const survivors = records.filter((record) =>
+    record.relation === "identity" || record.relation === "role-change"
+  );
+  const survivorAnchorSelectorIds = survivors.flatMap((record) =>
+    record.sourceSelectorIds
+  );
+  const witness = deriveKpCancellationWitness({
+    operationId: input.operationId,
+    transformation: input.transformation,
+    bundle: input.bundle,
+    cancellationRecordId: cancellation.id,
+    slotId: input.slotId ?? `slot.${input.transformation.id}.${cancellation.id}`,
+    survivorAnchorSelectorIds
+  });
+  const selectors = new Map(input.bundle.objects.flatMap((object) =>
+    object.selectors.map((selector) => [selector.id, selector] as const)
+  ));
+  return {
+    kind: "witnessed-annihilation-binding",
+    id: `annihilation.${input.transformation.id}.${cancellation.id}`,
+    relationRecordId: cancellation.id,
+    witness,
+    sources: cancellation.sourceSelectorIds.map((selectorId, semanticRank) => ({
+      id: selectorId,
+      selectorIds: [selectorId],
+      semanticRole: selectors.get(selectorId)?.kind ?? "canceled-material",
+      semanticRank
+    })),
+    survivorRecordIds: survivors.map((record) => record.id)
+  };
 }
 
 export interface KpWitnessedAnnihilationSurvivor {
@@ -80,21 +140,6 @@ export interface KpWitnessedAnnihilationFrame {
     readonly pose: KpWitnessedAnnihilationPose;
     readonly nativeOpacity: number;
   }[];
-}
-
-export type KpWitnessedAnnihilationLawId =
-  | "annihilation.symmetric-contact"
-  | "annihilation.visible-compression"
-  | "annihilation.witness-after-contact"
-  | "annihilation.witness-dwell"
-  | "annihilation.compaction-after-absorption"
-  | "annihilation.continuous-ownership"
-  | "annihilation.exact-settlement";
-
-export interface KpWitnessedAnnihilationViolation {
-  readonly lawId: KpWitnessedAnnihilationLawId;
-  readonly progress: number;
-  readonly message: string;
 }
 
 export function createKpWitnessedAnnihilationPlan(input: {
@@ -191,9 +236,11 @@ export function sampleKpWitnessedAnnihilation(input: {
     input.plan.witnessReadableAt,
     input.plan.witnessDwellEnd
   );
-  const sourceAbsorption = witnessReadable
-    ? easeInOut(interval(p, input.plan.witnessDwellEnd - 0.04, input.plan.sourceAbsorptionEnd))
-    : 0;
+  const sourceAbsorption = easeInOut(interval(
+    p,
+    input.plan.witnessBirthStart + 0.04,
+    input.plan.sourceAbsorptionEnd
+  ));
   const witnessAbsorptionProgress = easeInOut(interval(
     p,
     input.plan.witnessDwellEnd,
@@ -210,13 +257,27 @@ export function sampleKpWitnessedAnnihilation(input: {
   const orderedSources = [...input.plan.sources].sort(
     (left, right) => left.semanticRank - right.semanticRank || left.id.localeCompare(right.id)
   );
+  const pairContactSpacing = orderedSources.length === 2
+    ? Math.max(
+        16,
+        orderedSources.reduce((sum, source) => sum + source.rect.width, 0) *
+          input.plan.compressedScale / 2 + 16
+      )
+    : 0;
   const sources = orderedSources.map((source, index) => {
     const origin = center(source.rect);
     const centeredIndex = index - (orderedSources.length - 1) / 2;
-    const contactSlot = {
-      x: input.plan.contactPoint.x + centeredIndex * 1.5,
-      y: input.plan.contactPoint.y + (index % 2 === 0 ? -1 : 1)
-    };
+    // Binary inverses flank the witness; multi-token factors retain enough of
+    // their internal topology to remain recognizable while compressing.
+    const contactSlot = orderedSources.length === 2
+      ? {
+          x: input.plan.contactPoint.x + centeredIndex * pairContactSpacing,
+          y: input.plan.contactPoint.y + (index % 2 === 0 ? -1 : 1)
+        }
+      : {
+          x: input.plan.contactPoint.x + (origin.x - input.plan.contactPoint.x) * 0.48,
+          y: input.plan.contactPoint.y + (origin.y - input.plan.contactPoint.y) * 0.48
+        };
     const arc = index % 2 === 0 ? -1 : 1;
     return {
       id: source.id,
@@ -282,64 +343,6 @@ export function sampleKpWitnessedAnnihilation(input: {
   };
 }
 
-export function evaluateKpWitnessedAnnihilationLaws(
-  plan: KpWitnessedAnnihilationPlan,
-  sampleCount = 100
-): readonly KpWitnessedAnnihilationViolation[] {
-  const violations: KpWitnessedAnnihilationViolation[] = [];
-  for (let index = 0; index <= sampleCount; index += 1) {
-    const progress = index / sampleCount;
-    const frame = sampleKpWitnessedAnnihilation({ plan, progress });
-    if (frame.witness.pose.opacity > 0 && frame.contactProgress < 0.9) {
-      add(violations, "annihilation.witness-after-contact", progress, "Witness appears before canceling material makes contact.");
-    }
-    if (frame.sources.some((source) => source.pose.scale <= 0)) {
-      add(violations, "annihilation.visible-compression", progress, "Canceling material collapses to zero scale.");
-    }
-    if (
-      frame.survivorCompactionProgress > 0 &&
-      frame.witnessAbsorptionProgress < 1
-    ) {
-      add(violations, "annihilation.compaction-after-absorption", progress, "Survivors compact before the witness is absorbed.");
-    }
-    const visible = Math.max(
-      ...frame.sources.map((source) => source.pose.opacity),
-      frame.witness.pose.opacity,
-      ...frame.survivors.map((survivor) => survivor.pose.opacity + survivor.nativeOpacity)
-    );
-    if (visible <= 0) {
-      add(violations, "annihilation.continuous-ownership", progress, "No visible material owns the annihilation frame.");
-    }
-  }
-  if (plan.witnessDwellEnd - plan.witnessReadableAt < 0.12) {
-    add(violations, "annihilation.witness-dwell", plan.witnessDwellEnd, "Witness dwell is too short to read.");
-  }
-  const contact = sampleKpWitnessedAnnihilation({ plan, progress: plan.contactEnd });
-  const centers = contact.sources.map((source, index) => {
-    const native = center([...plan.sources].sort(
-      (left, right) => left.semanticRank - right.semanticRank || left.id.localeCompare(right.id)
-    )[index]!.rect);
-    return { x: native.x + source.pose.x, y: native.y + source.pose.y };
-  });
-  const radialDistances = centers.map((point) =>
-    Math.hypot(point.x - plan.contactPoint.x, point.y - plan.contactPoint.y)
-  );
-  if (Math.max(...radialDistances) - Math.min(...radialDistances) > 2) {
-    add(violations, "annihilation.symmetric-contact", plan.contactEnd, "Canceling sources do not meet symmetrically.");
-  }
-  const settled = sampleKpWitnessedAnnihilation({ plan, progress: 1 });
-  if (
-    settled.sources.some((source) => source.pose.opacity !== 0) ||
-    settled.witness.pose.opacity !== 0 ||
-    settled.survivors.some((survivor) =>
-      survivor.pose.opacity !== 0 || survivor.nativeOpacity !== 1
-    )
-  ) {
-    add(violations, "annihilation.exact-settlement", 1, "Annihilation does not settle to native survivors only.");
-  }
-  return violations;
-}
-
 function unionRect(rects: readonly KpMaterialJunctionRect[]): KpMaterialJunctionRect {
   const left = Math.min(...rects.map((rect) => rect.left));
   const top = Math.min(...rects.map((rect) => rect.top));
@@ -385,13 +388,4 @@ function easeOut(value: number): number {
 
 function mix(from: number, to: number, progress: number): number {
   return from + (to - from) * progress;
-}
-
-function add(
-  violations: KpWitnessedAnnihilationViolation[],
-  lawId: KpWitnessedAnnihilationLawId,
-  progress: number,
-  message: string
-): void {
-  violations.push({ lawId, progress, message });
 }

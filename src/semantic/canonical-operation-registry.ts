@@ -33,6 +33,9 @@ import {
 import {
   canonicalCompositionForGeneratedTransform
 } from "./generated-algebra-canonical-composition.ts";
+import {
+  cancellationWitnessIdsForOperation
+} from "./cancellation-operation-authority.ts";
 
 export interface KpCanonicalOperationRegistryEntry {
   readonly id: string;
@@ -227,7 +230,7 @@ function coreOperationContract(
     lineageRelationIds: operation.correspondenceRelations,
     ownershipMode: ownershipForOperation(operation.id, [operation.id]),
     lawIds: [`law.${operation.id}`],
-    witnessIds: witnessIdsForOperation(operation.id),
+    witnessIds: cancellationWitnessIdsForOperation(operation.id),
     reverse: operation.reversibleAs === undefined
       ? { kind: "one-way" }
       : operation.reversibleAs === operation.id
@@ -254,7 +257,7 @@ function generatedTransformContract(
     lineageRelationIds: coreRelations(canonicalComposition),
     ownershipMode: ownershipForOperation(id, canonicalComposition),
     lawIds: definition.lawRefs?.map((law) => law.id) ?? [],
-    witnessIds: witnessIdsForOperation(id),
+    witnessIds: cancellationWitnessIdsForOperation(id),
     reverse: reverseForGeneratedOperation(id),
     fixtureIds: [definition.templateId]
   });
@@ -276,7 +279,7 @@ function semanticMotionContract(
       definition.canonicalComposition
     ),
     lawIds: [`law.${definition.transformType}`],
-    witnessIds: witnessIdsForOperation(definition.id),
+    witnessIds: cancellationWitnessIdsForOperation(definition.id),
     reverse: { kind: "one-way" },
     fixtureIds: [`fixture.${definition.transformType}`]
   });
@@ -349,17 +352,6 @@ function ownershipForOperation(
     composition.includes("kp.core.merge")
   ) return "fission-fusion";
   return "continuant";
-}
-
-function witnessIdsForOperation(operationId: string): readonly string[] {
-  if (operationId.includes("additive") || operationId.includes("cancel-additive")) {
-    return ["witness.additive-identity.zero"];
-  }
-  if (
-    operationId.includes("multiplicative") ||
-    operationId.includes("cancel-multiplicative")
-  ) return ["witness.multiplicative-identity.one"];
-  return [];
 }
 
 function reverseForGeneratedOperation(

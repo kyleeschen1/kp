@@ -37,6 +37,6 @@ test("live editor diagnostics project the selected runtime frame", () => {
   assert.match(diagnostics.phaseId, /\.rewind\./);
   assert.equal(diagnostics.activeTransformationCount, 1);
   assert.equal(diagnostics.activeRenderTargetCount, 1);
-  assert.equal(diagnostics.activeSelectorCount, 10);
+  assert.equal(diagnostics.activeSelectorCount, 12);
   assert.ok(diagnostics.runtimeDiagnosticCount > 0);
 });

@@ -13,6 +13,11 @@ import type {
 } from "../src/rendering/equation-motion-dom.ts";
 import { sampleKpEquationTokenMotion } from "../src/rendering/semantic-equation-token-renderer.ts";
 import { createKpEquationSuccessorSynthesisPlan } from "../src/rendering/equation-linear-rearrangement.ts";
+import {
+  createKpWitnessedAnnihilationBinding,
+  createKpWitnessedAnnihilationPlan
+} from "../src/animation/witnessed-annihilation.ts";
+import "../src/rendering/equation-witnessed-annihilation-register.ts";
 
 const choreography = createKpLinearRearrangementChoreography(
   createLinearSolveAnimationAsset()
@@ -178,21 +183,21 @@ test("balanced inverse terms remain absent until persistent reflow reserves spac
   );
 });
 
-test("persistent invariants reflow before cancellation meets and collapses", () => {
+test("shared witnessed annihilation meets, witnesses, then compacts survivors", () => {
   const meeting = sampleKpEquationTokenMotion(cancellationGeometry(), 0.5);
   const canceling = meeting.tokens.filter(
     (token) => token.motionId.startsWith("cancel.")
   );
   assert.ok(canceling.every((token) => token.pose.opacity === 1));
-  assert.ok(canceling.every((token) => token.pose.scale >= 0.78));
+  assert.ok(canceling.every((token) => token.pose.scale >= 0.72));
   assert.ok(canceling.every((token) => Math.abs(token.pose.x) > 0));
-  assert.ok(canceling.every((token) => token.pose.y < -24));
+  assert.equal(new Set(canceling.map((token) => Math.sign(token.pose.y))).size, 2);
   assert.equal(
     meeting.linearRearrangement?.persistentReflowProgress,
     1
   );
 
-  const met = sampleKpEquationTokenMotion(cancellationGeometry(), 0.68);
+  const met = sampleKpEquationTokenMotion(cancellationGeometry(), 0.7);
   const metTerms = met.tokens.filter(
     (token) => token.motionId.startsWith("cancel.")
   );
@@ -202,10 +207,12 @@ test("persistent invariants reflow before cancellation meets and collapses", () 
     )!;
     return native.localRect.left + native.localRect.width / 2 + token.pose.x;
   });
-  assert.ok(Math.abs(centers[0]! - centers[1]!) < 0.001);
-  assert.ok(metTerms.every((token) => token.pose.scale > 0.65));
+  assert.ok(Math.abs(centers[0]! - centers[1]!) < 26);
+  assert.ok(metTerms.every((token) => token.pose.scale === 0.72));
+  assert.equal(met.witnessedAnnihilation?.witnessReadable, true);
+  assert.equal(met.witnessedAnnihilation?.witness.latex, "0");
 
-  const collapsing = sampleKpEquationTokenMotion(cancellationGeometry(), 0.69);
+  const collapsing = sampleKpEquationTokenMotion(cancellationGeometry(), 0.82);
   assert.ok(
     collapsing.tokens
       .filter((token) => token.motionId.startsWith("cancel."))
@@ -213,6 +220,12 @@ test("persistent invariants reflow before cancellation meets and collapses", () 
   );
   assert.ok(
     collapsing.tokens
+      .filter((token) => token.motionId.startsWith("persist."))
+      .every((token) => Math.abs(token.pose.x) === 0)
+  );
+  const compacting = sampleKpEquationTokenMotion(cancellationGeometry(), 0.94);
+  assert.ok(
+    compacting.tokens
       .filter((token) => token.motionId.startsWith("persist."))
       .some((token) => Math.abs(token.pose.x) > 0)
   );
@@ -313,7 +326,7 @@ function balancedIntroductionGeometry(): KpMeasuredEquationTransitionGeometry {
 }
 
 function cancellationGeometry(): KpMeasuredEquationTransitionGeometry {
-  return {
+  const geometry: KpMeasuredEquationTransitionGeometry = {
     transitionId: "transition.cancel",
     linearRearrangementKind: "cancel-additive-inverses",
     sourceTokens: [
@@ -335,6 +348,57 @@ function cancellationGeometry(): KpMeasuredEquationTransitionGeometry {
       },
       relation("equals", "persist", ["persist.equals"], ["target.equals"], -44)
     ]
+  };
+  const animation = createLinearSolveAnimationAsset();
+  const transformation = animation.transformations.find((candidate) =>
+    candidate.transformType === "cancelAdditiveInverses"
+  )!;
+  const binding = createKpWitnessedAnnihilationBinding({
+    operationId: "kp.algebra.cancel-additive-inverses",
+    transformation,
+    bundle: animation.bundle,
+    cancellationRecordId: "left-inverses-cancel"
+  });
+  return {
+    ...geometry,
+    witnessedAnnihilationPlan: createKpWitnessedAnnihilationPlan({
+      id: binding.id,
+      witness: binding.witness,
+      sources: [
+        {
+          id: "cancel.plus3",
+          selectorIds: [binding.sources[0]!.selectorIds[0]!],
+          semanticRole: "additive-term",
+          semanticRank: 0
+        },
+        {
+          id: "cancel.minus3",
+          selectorIds: [binding.sources[1]!.selectorIds[0]!],
+          semanticRole: "additive-inverse",
+          semanticRank: 1
+        }
+      ],
+      measurements: {
+        "cancel.plus3": geometry.sourceTokens[1]!.localRect,
+        "cancel.minus3": geometry.sourceTokens[2]!.localRect
+      },
+      survivors: [
+        {
+          id: "persist.x",
+          sourceSelectorIds: ["x"],
+          targetSelectorIds: ["x.target"],
+          sourceRect: geometry.sourceTokens[0]!.localRect,
+          targetRect: geometry.targetTokens[0]!.localRect
+        },
+        {
+          id: "persist.equals",
+          sourceSelectorIds: ["equals"],
+          targetSelectorIds: ["equals.target"],
+          sourceRect: geometry.sourceTokens[3]!.localRect,
+          targetRect: geometry.targetTokens[1]!.localRect
+        }
+      ]
+    })
   };
 }
 

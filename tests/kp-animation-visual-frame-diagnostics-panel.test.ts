@@ -36,8 +36,8 @@ test("createKpAnimationVisualFrameDiagnosticsPanelData summarizes a clean visual
       renderTargetCount: 1,
       boundRenderTargetCount: 1,
       unboundRenderTargetCount: 0,
-      selectorCount: 10,
-      boundSelectorCount: 10,
+      selectorCount: 12,
+      boundSelectorCount: 12,
       unboundSelectorCount: 0
     },
     diagnostics: [],
@@ -50,7 +50,7 @@ test("createKpAnimationVisualFrameDiagnosticsPanelData summarizes a clean visual
       "visual-diagnostics-warning:0",
       "visual-diagnostics-error:0",
       "visual-bindings-targets:1/1",
-      "visual-bindings-selectors:10/10",
+      "visual-bindings-selectors:12/12",
       "visual-bindings-nodes:15"
     ]
   });
@@ -71,7 +71,7 @@ test("createKpAnimationVisualFrameDiagnosticsPanelData reports unbound visual fr
   assert.equal(panel.status, "warning");
   assert.deepEqual(panel.severityCounts, {
     info: 0,
-    warning: 11,
+    warning: 13,
     error: 0
   });
   assert.deepEqual(panel.bindingSummary, {
@@ -79,9 +79,9 @@ test("createKpAnimationVisualFrameDiagnosticsPanelData reports unbound visual fr
     renderTargetCount: 1,
     boundRenderTargetCount: 0,
     unboundRenderTargetCount: 1,
-    selectorCount: 10,
+    selectorCount: 12,
     boundSelectorCount: 0,
-    unboundSelectorCount: 10
+    unboundSelectorCount: 12
   });
   assert.deepEqual(panel.diagnostics[0], {
     id: "diagnostic.visual.linear-solve.unbound.0",

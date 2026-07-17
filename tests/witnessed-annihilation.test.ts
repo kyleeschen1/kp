@@ -3,9 +3,11 @@ import test from "node:test";
 
 import {
   createKpWitnessedAnnihilationPlan,
-  evaluateKpWitnessedAnnihilationLaws,
   sampleKpWitnessedAnnihilation
 } from "../src/animation/witnessed-annihilation.ts";
+import {
+  evaluateKpWitnessedAnnihilationLaws
+} from "../src/animation/witnessed-annihilation-conformance.ts";
 import { deriveKpCancellationWitness } from "../src/semantic/cancellation-witness.ts";
 import { createLinearSolveKpAssetBundle } from "../src/semantic/linear-solve-asset.ts";
 

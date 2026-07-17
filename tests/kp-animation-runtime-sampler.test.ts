@@ -230,7 +230,7 @@ test("sampleKpAnimationRuntimeFrame exposes phase and selector diagnostics", () 
       severity: "info",
       code: "runtime.selector.context",
       path: "selectorFrames",
-      message: "10 selector(s) are in the active source/target context."
+      message: "12 selector(s) are in the active source/target context."
     },
     {
       severity: "info",

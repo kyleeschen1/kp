@@ -337,7 +337,7 @@ test("dashboard animation asset rows include KaTeX runtime visual preview facets
     ),
     {
       label: "KaTeX binding coverage",
-      value: "targets 1/1, selectors 10/10, nodes 15"
+      value: "targets 1/1, selectors 12/12, nodes 15"
     }
   );
   assert.ok(linearSolve?.searchFields.includes("katex-visual-frame"));
@@ -349,7 +349,7 @@ test("dashboard animation asset rows include KaTeX runtime visual preview facets
     linearSolve?.searchFields.includes("visual-frame-diagnostics-panel")
   );
   assert.ok(
-    linearSolve?.searchFields.includes("visual-bindings-selectors:10/10")
+    linearSolve?.searchFields.includes("visual-bindings-selectors:12/12")
   );
 });
 

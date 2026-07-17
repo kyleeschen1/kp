@@ -85,6 +85,10 @@ import {
   type KpInequalityPivotChoreographyFrame,
   type KpInequalityPivotChoreographyPlan
 } from "../animation/inequality-pivot-choreography.ts";
+import type { KpWitnessedAnnihilationFrame } from "../animation/witnessed-annihilation.ts";
+import {
+  kpEquationWitnessedAnnihilationRuntime
+} from "./equation-witnessed-annihilation-runtime.ts";
 
 export interface KpEquationTokenMotionPose {
   readonly opacity: number;
@@ -132,6 +136,7 @@ export interface KpEquationTokenMotionFrame {
   readonly matrixMatrixComposition?:
     KpMatrixMatrixCompositionProgressFrame | undefined;
   readonly derivativePower?: KpDerivativePowerChoreographyFrame | undefined;
+  readonly witnessedAnnihilation?: KpWitnessedAnnihilationFrame | undefined;
 }
 
 interface EnclosureChoreographyContext {
@@ -270,6 +275,12 @@ export function sampleKpEquationTokenMotion(
 ): KpEquationTokenMotionFrame {
   const p = clamp01(progress);
   const tokens = new Map<string, KpEquationTokenMotionFrameToken>();
+  const witnessedAnnihilation = geometry.witnessedAnnihilationPlan === undefined
+    ? undefined
+    : requiredWitnessedAnnihilationRuntime().sample(
+        geometry.witnessedAnnihilationPlan,
+        p
+      );
   const enclosureChoreography = createEnclosureChoreographyContext(geometry, p);
   const lineageChoreography = createLineageChoreographyContext(geometry, p);
   const distributionChoreography = createDistributionChoreographyContext(
@@ -333,7 +344,8 @@ export function sampleKpEquationTokenMotion(
       dotProductTraversal,
       matrixVectorComposition,
       matrixMatrixComposition,
-      derivativePower
+      derivativePower,
+      witnessedAnnihilation
     )) {
       tokens.set(`${token.side}:${token.motionId}`, token);
     }
@@ -386,7 +398,10 @@ export function sampleKpEquationTokenMotion(
       : { matrixMatrixComposition }),
     ...(derivativePower === undefined
       ? {}
-      : { derivativePower: derivativePower.frame })
+      : { derivativePower: derivativePower.frame }),
+    ...(witnessedAnnihilation === undefined
+      ? {}
+      : { witnessedAnnihilation })
   };
 }
 
@@ -444,11 +459,25 @@ function sampleRelation(
   dotProductTraversal: KpDotProductTraversalProgressFrame | undefined,
   matrixVectorComposition: KpMatrixVectorCompositionProgressFrame | undefined,
   matrixMatrixComposition: KpMatrixMatrixCompositionProgressFrame | undefined,
-  derivativePower: DerivativePowerChoreographyContext | undefined
+  derivativePower: DerivativePowerChoreographyContext | undefined,
+  witnessedAnnihilation: KpWitnessedAnnihilationFrame | undefined
 ): readonly KpEquationTokenMotionFrameToken[] {
   const sourceTokens = relationTokens(geometry.sourceTokens, relation.source?.motionIds ?? []);
   const targetTokens = relationTokens(geometry.targetTokens, relation.target?.motionIds ?? []);
   const eased = smoothstep(progress);
+  if (
+    witnessedAnnihilation !== undefined &&
+    geometry.witnessedAnnihilationPlan !== undefined
+  ) {
+    const annihilationTokens = requiredWitnessedAnnihilationRuntime().sampleRelation({
+      plan: geometry.witnessedAnnihilationPlan,
+      frame: witnessedAnnihilation,
+      relation,
+      sourceTokens,
+      targetTokens
+    });
+    if (annihilationTokens !== undefined) return annihilationTokens;
+  }
   const derivativeTokens = derivativePower === undefined
     ? undefined
     : sampleDerivativePowerRelation(
@@ -723,6 +752,14 @@ function sampleRelation(
         }))
       ];
   }
+}
+
+function requiredWitnessedAnnihilationRuntime() {
+  const runtime = kpEquationWitnessedAnnihilationRuntime();
+  if (runtime === undefined) {
+    throw new Error("Witnessed annihilation was not registered by the selected capability pack.");
+  }
+  return runtime;
 }
 
 function createRepresentationalSuccessionContext(

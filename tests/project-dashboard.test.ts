@@ -131,14 +131,14 @@ test("renderProjectDashboard uses semantic preview interpreter for the linear-so
   );
   assert.match(
     html,
-    /data-kp-preview-field="Asset summary"[^>]*>4 objects, 17 selectors</
+    /data-kp-preview-field="Asset summary"[^>]*>4 objects, 19 selectors</
   );
   assert.match(
     html,
     /data-kp-preview-field="Asset id"[^>]*>asset\.linear-solve</
   );
   assert.match(html, /data-kp-preview-field="Objects"[^>]*>4</);
-  assert.match(html, /data-kp-preview-field="Selectors"[^>]*>17</);
+  assert.match(html, /data-kp-preview-field="Selectors"[^>]*>19</);
   assert.match(
     html,
     /data-kp-preview-field="Object types"[^>]*>equation</

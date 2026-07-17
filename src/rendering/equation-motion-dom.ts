@@ -14,6 +14,10 @@ import type {
   KpSuccessorSynthesisBinding,
   KpSuccessorSynthesisPlan
 } from "../animation/successor-synthesis.ts";
+import type {
+  KpWitnessedAnnihilationBinding,
+  KpWitnessedAnnihilationPlan
+} from "../animation/witnessed-annihilation.ts";
 
 export type KpEquationRepresentationalSuccessionKind =
   "opposite-corner-seed";
@@ -78,6 +82,9 @@ export interface KpMeasuredEquationTransitionGeometry {
   readonly successorSynthesisBinding?:
     KpSuccessorSynthesisBinding | undefined;
   readonly successorSynthesisPlan?: KpSuccessorSynthesisPlan | undefined;
+  readonly witnessedAnnihilationBinding?:
+    KpWitnessedAnnihilationBinding | undefined;
+  readonly witnessedAnnihilationPlan?: KpWitnessedAnnihilationPlan | undefined;
   readonly dotProductTraversalPlan?: KpDotProductRendererPlan | undefined;
   readonly matrixVectorCompositionPlan?: KpMatrixVectorRendererPlan | undefined;
   readonly matrixMatrixCompositionPlan?: KpMatrixMatrixRendererPlan | undefined;
@@ -177,6 +184,8 @@ export function measureKpEquationTransitionGeometry(input: {
     KpEquationLinearRearrangementKind | undefined;
   readonly successorSynthesisBinding?:
     KpSuccessorSynthesisBinding | undefined;
+  readonly witnessedAnnihilationBinding?:
+    KpWitnessedAnnihilationBinding | undefined;
   readonly dotProductTraversalPlan?: KpDotProductRendererPlan | undefined;
   readonly matrixVectorCompositionPlan?: KpMatrixVectorRendererPlan | undefined;
   readonly matrixMatrixCompositionPlan?: KpMatrixMatrixRendererPlan | undefined;
@@ -247,6 +256,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.successorSynthesisBinding === undefined
       ? {}
       : { successorSynthesisBinding: input.successorSynthesisBinding }),
+    ...(input.witnessedAnnihilationBinding === undefined
+      ? {}
+      : { witnessedAnnihilationBinding: input.witnessedAnnihilationBinding }),
     ...(input.dotProductTraversalPlan === undefined
       ? {}
       : { dotProductTraversalPlan: input.dotProductTraversalPlan }),
