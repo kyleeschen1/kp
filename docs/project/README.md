@@ -39,6 +39,13 @@ conversation or design record
 - `inbox/`: raw imported plans; keep immutable after import.
 - `archive/`: superseded historical material.
 
+## Collaboration Entry Points
+
+- `principles/codex-collaboration-protocol.md`: enforceable working sequence for
+  subjective visual and generated-output work.
+- `authoring/codex-collaboration-prompt-card.md`: short prompts for diagnosis,
+  exemplar review, grill-me sessions, and visual long loops.
+
 ## Current Focus
 
 The current focus is the semantic animation runtime and dashboard-backed

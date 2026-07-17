@@ -1,0 +1,29 @@
+{
+  "id": "decision.kp.exemplar-first-codex-collaboration-v0",
+  "kind": "decision",
+  "title": "Adopt Exemplar First Codex Collaboration",
+  "status": "resolved",
+  "domain": "kp.workflow",
+  "summary": "Subjective visual and generated-output work separates diagnosis from implementation, declares preservation and rollback boundaries, perfects one canonical exemplar before generalization, and batches low-impact grill-me decisions.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "AGENTS.md",
+      "summary": "Enforceable repository rules for mode boundaries, exemplar checkpoints, rollback scope, and visual run contracts."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/codex-collaboration-protocol.md",
+      "summary": "Human-readable rationale and the accepted exemplar-first collaboration sequence."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/authoring/codex-collaboration-prompt-card.md",
+      "summary": "Short reusable prompts for diagnosis, exemplar work, grill-me sessions, long loops, and non-global formalization."
+    }
+  ],
+  "affects": [
+    "workflow.kp.dashboard-animation-system",
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ]
+}
