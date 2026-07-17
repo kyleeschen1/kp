@@ -205,7 +205,7 @@
       "id": "next-action.kp.material-motion.reverse-operations-v0",
       "title": "Add explicit reverse choreography laws",
       "summary": "Cross-family focused gate: reverse semantic laws, representative rewind browser scenarios, typecheck, and Theseus validate.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.provisional-incorrect-state-v0",

@@ -173,7 +173,17 @@ test("a pinned extension pack can add a complete operation contract", () => {
         ownershipMode: "continuant",
         lawIds: ["law.test.rotation-preserves-members"],
         witnessIds: [],
-        reverse: { kind: "self", operationId: "project.test-extension.rotate-terms" },
+        reverse: {
+          kind: "self",
+          operationId: "project.test-extension.rotate-terms",
+          interpretation: "Rotate the same terms back to their authored positions.",
+          validity: "identity",
+          choreography: {
+            kind: "identity",
+            causalEmphasis: "continuants",
+            narration: "The same terms return to their earlier positions."
+          }
+        },
         motifRequirementIds: ["motif.kp.core.reorder"],
         pacing: { kind: "single" },
         cost: {
@@ -209,7 +219,7 @@ test("registry validation closes reverse-operation references", () => {
       ...wrap,
       contract: {
         ...wrap.contract,
-        reverse: { kind: "inverse", operationId: "kp.core.missing" }
+        reverse: { ...wrap.contract.reverse, operationId: "kp.core.missing" }
       }
     }]
   }), /references missing reverse operation kp\.core\.missing/);

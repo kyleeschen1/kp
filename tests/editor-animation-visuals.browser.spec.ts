@@ -821,6 +821,19 @@ test("linear material owners survive rewind and accessibility projection", async
   });
   await player.getByRole("button", { name: "Rewind" }).click();
   await scrubber.fill("0.65");
+  const reverseTransition = stage.locator(
+    "[data-kp-editor-equation-transition-id]"
+  );
+  await expect(reverseTransition).toHaveAttribute(
+    "data-kp-editor-equation-reverse-choreography",
+    "introduce-neutral-pair"
+  );
+  await expect(reverseTransition).toHaveAttribute(
+    "data-kp-editor-equation-reverse-validity",
+    "authored-history-only"
+  );
+  await expect(player.locator("[data-kp-editor-animation-narration]"))
+    .toContainText("neutral witness opens into the authored inverse pair");
   await expect(stage).toHaveAttribute(
     "data-kp-editor-equation-semantic-progress",
     "0.35"
@@ -1860,12 +1873,14 @@ test("distribution and factoring family animations render opposite semantic dire
     {
       descriptorId: "editor-animation.sample.animation.distribution.expand-a-sum",
       motif: "copy-fan-out",
+      reverseChoreography: "fusion",
       sourceId: "expression.generated.distribution.expand-a-sum.factored",
       targetId: "expression.generated.distribution.expand-a-sum.expanded"
     },
     {
       descriptorId: "editor-animation.sample.animation.factoring.factor-common-a",
       motif: "merge-fan-in",
+      reverseChoreography: "fission",
       sourceId: "expression.generated.distribution.factor-common-a.expanded",
       targetId: "expression.generated.distribution.factor-common-a.factored"
     }
@@ -1883,6 +1898,18 @@ test("distribution and factoring family animations render opposite semantic dire
       .toHaveAttribute("data-kp-editor-equation-object-id", item.targetId);
     await expect(player.locator("[data-kp-editor-equation-transition-id]"))
       .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
+    await player.getByRole("button", { name: "Rewind animation" }).click();
+    await player.locator('[data-action="seek-editor-animation"]').fill("0.5");
+    await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+      .toHaveAttribute(
+        "data-kp-editor-equation-reverse-choreography",
+        item.reverseChoreography
+      );
+    await expect(player.locator("[data-kp-editor-equation-transition-id]"))
+      .toHaveAttribute(
+        "data-kp-editor-equation-reverse-validity",
+        "mathematical-inverse"
+      );
   }
 });
 

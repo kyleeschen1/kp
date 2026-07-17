@@ -19,6 +19,7 @@ import "../../rendering/equation-witnessed-annihilation-register.ts";
 import "../fission-fusion-register.ts";
 import "../distribution-choreography-register.ts";
 import "../factoring-choreography-register.ts";
+import "./algebra-reverse-runtime.ts";
 
 export function createKpAlgebraAnimationPack(): readonly KpAnimationAsset[] {
   return [

@@ -119,6 +119,9 @@ import {
   type KpMatrixMatrixCompositionChoreographyFrame
 } from "../animation/matrix-matrix-composition-choreography.ts";
 import {
+  canonicalReverseRuntimePlanForTransformationType
+} from "../animation/canonical-reverse-runtime.ts";
+import {
   deriveKpOrganicMotionSignature,
   sampleKpOrganicMotion,
   sampleKpOrganicProgress
@@ -513,6 +516,13 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
           frame: frame.matrixMatrixComposition.frame
         });
       }
+      applyCanonicalReverseChoreography({
+        transitionElement,
+        animation,
+        transformationId: transition.id,
+        direction: state.direction,
+        announce: index === 0
+      });
       transitionNodes.focusTokens.forEach((token) => {
           token.style.setProperty("--kp-editor-equation-focus-progress", String(motif.progress));
       });
@@ -2692,6 +2702,46 @@ function applySemanticTokenMotion(input: {
       String(matrixMatrix.semanticActionCount);
   }
   return true;
+}
+
+function applyCanonicalReverseChoreography(input: {
+  readonly transitionElement: HTMLElement;
+  readonly animation: KpAnimationAsset;
+  readonly transformationId: string;
+  readonly direction: "forward" | "rewind";
+  readonly announce: boolean;
+}): void {
+  const transformation = input.animation.transformations.find(
+    (candidate) => candidate.id === input.transformationId
+  );
+  const plan = transformation === undefined
+    ? undefined
+    : canonicalReverseRuntimePlanForTransformationType(
+        transformation.transformType
+      );
+  if (input.direction !== "rewind" || plan === undefined) {
+    delete input.transitionElement.dataset["kpEditorEquationReverseOperationId"];
+    delete input.transitionElement.dataset["kpEditorEquationReverseChoreography"];
+    delete input.transitionElement.dataset["kpEditorEquationReverseValidity"];
+    delete input.transitionElement.dataset["kpEditorEquationReverseCausalEmphasis"];
+    delete input.transitionElement.dataset["kpEditorEquationReverseTraversal"];
+    return;
+  }
+  input.transitionElement.dataset["kpEditorEquationReverseOperationId"] =
+    plan.sourceOperationId;
+  input.transitionElement.dataset["kpEditorEquationReverseChoreography"] =
+    plan.choreographyKind;
+  input.transitionElement.dataset["kpEditorEquationReverseValidity"] =
+    plan.validity;
+  input.transitionElement.dataset["kpEditorEquationReverseCausalEmphasis"] =
+    plan.causalEmphasis;
+  input.transitionElement.dataset["kpEditorEquationReverseTraversal"] =
+    plan.traversal;
+  if (!input.announce) return;
+  const narration = input.transitionElement
+    .closest<HTMLElement>("[data-kp-editor-animation-player]")
+    ?.querySelector<HTMLOutputElement>("[data-kp-editor-animation-narration]");
+  narration?.replaceChildren(document.createTextNode(plan.narration));
 }
 
 function applyDistributionFactorFocus(input: {

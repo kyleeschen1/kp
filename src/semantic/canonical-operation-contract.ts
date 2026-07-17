@@ -7,9 +7,26 @@ export type KpCanonicalOperationOwnershipMode =
   | "persistent-source-copying"
   | "fission-fusion";
 
+export type KpCanonicalReverseChoreographyKind =
+  | "identity"
+  | "apply-inverse-operation"
+  | "introduce-neutral-pair"
+  | "fission"
+  | "fusion"
+  | "decompose-successor"
+  | "restore-predecessor"
+  | "historical-reconstruction";
+
+export type KpCanonicalReverseCausalEmphasis =
+  | "continuants"
+  | "inverse-operation"
+  | "witness"
+  | "junction"
+  | "predecessor";
+
 export interface KpCanonicalOperationContract {
   readonly kind: "canonical-operation-contract";
-  readonly schemaVersion: "kp.canonical-operation-contract.v1";
+  readonly schemaVersion: "kp.canonical-operation-contract.v2";
   readonly authority: {
     readonly kind: "core-descriptor" | "transformation-definition" | "operation-spec";
     readonly refId: string;
@@ -22,6 +39,13 @@ export interface KpCanonicalOperationContract {
   readonly reverse: {
     readonly kind: "self" | "inverse" | "one-way";
     readonly operationId?: string | undefined;
+    readonly interpretation: string;
+    readonly validity: "identity" | "mathematical-inverse" | "authored-history-only";
+    readonly choreography: {
+      readonly kind: KpCanonicalReverseChoreographyKind;
+      readonly causalEmphasis: KpCanonicalReverseCausalEmphasis;
+      readonly narration: string;
+    };
   };
   readonly motifRequirementIds: readonly string[];
   readonly pacing: {
@@ -44,13 +68,16 @@ export function createKpCanonicalOperationContract(
   const contract: KpCanonicalOperationContract = {
     ...input,
     kind: "canonical-operation-contract",
-    schemaVersion: "kp.canonical-operation-contract.v1",
+    schemaVersion: "kp.canonical-operation-contract.v2",
     authority: { ...input.authority },
     roles: input.roles.map((role) => ({ ...role })),
     lineageRelationIds: [...input.lineageRelationIds],
     lawIds: [...input.lawIds],
     witnessIds: [...input.witnessIds],
-    reverse: { ...input.reverse },
+    reverse: {
+      ...input.reverse,
+      choreography: { ...input.reverse.choreography }
+    },
     motifRequirementIds: [...input.motifRequirementIds],
     pacing: { ...input.pacing },
     cost: {
@@ -105,6 +132,23 @@ export function validateKpCanonicalOperationContract(
     contract.reverse.kind === "one-way" &&
     contract.reverse.operationId !== undefined
   ) issues.push("One-way reverse meaning cannot name an operationId.");
+  requireValues(contract.reverse.interpretation, "reverse.interpretation", issues);
+  requireValues(
+    contract.reverse.choreography.narration,
+    "reverse.choreography.narration",
+    issues
+  );
+  if (contract.reverse.kind === "self" && contract.reverse.validity !== "identity") {
+    issues.push("Self reverse meaning requires identity validity.");
+  }
+  if (contract.reverse.kind === "inverse" &&
+      contract.reverse.validity !== "mathematical-inverse") {
+    issues.push("Inverse reverse meaning requires mathematical-inverse validity.");
+  }
+  if (contract.reverse.kind === "one-way" &&
+      contract.reverse.validity !== "authored-history-only") {
+    issues.push("One-way reverse playback must be authored-history-only.");
+  }
   return issues;
 }
 

@@ -152,6 +152,21 @@ export function createKpCanonicalOperationRegistry(input: {
         `Canonical operation ${entry.id} references missing reverse operation ${reverseOperationId}.`
       );
     }
+    if (entry.contract.reverse.kind === "self" && reverseOperationId !== entry.id) {
+      throw new Error(
+        `Canonical operation ${entry.id} claims a self reverse through ${reverseOperationId}.`
+      );
+    }
+    if (entry.contract.reverse.kind === "inverse") {
+      const inverse = input.entries.find((candidate) => candidate.id === reverseOperationId);
+      if (inverse !== undefined &&
+          (inverse.contract.reverse.kind !== "inverse" ||
+            inverse.contract.reverse.operationId !== entry.id)) {
+        throw new Error(
+          `Canonical inverse ${entry.id} -> ${reverseOperationId} is not reciprocal.`
+        );
+      }
+    }
   });
   return {
     kind: "canonical-operation-registry",
@@ -224,6 +239,7 @@ function coreOperationContract(
   operation: KpCanonicalOperationCoreDescriptor
 ): KpCanonicalOperationContract {
   return operationContract({
+    operationId: operation.id,
     authority: { kind: "core-descriptor", refId: operation.id },
     roles: operation.roles,
     canonicalComposition: [operation.id],
@@ -249,6 +265,7 @@ function generatedTransformContract(
     definition.transformType
   );
   return operationContract({
+    operationId: id,
     authority: definition.transformType === "distributeMultiplication"
       ? { kind: "operation-spec", refId: kpDistributionCanonicalOperationSpec.id }
       : { kind: "transformation-definition", refId: definition.id },
@@ -267,6 +284,7 @@ function semanticMotionContract(
   definition: KpSemanticMotionOperationDefinition
 ): KpCanonicalOperationContract {
   return operationContract({
+    operationId: definition.id,
     authority: {
       kind: "transformation-definition",
       refId: `transform-type.${definition.transformType}`
@@ -286,6 +304,7 @@ function semanticMotionContract(
 }
 
 function operationContract(input: {
+  readonly operationId: string;
   readonly authority: KpCanonicalOperationContract["authority"];
   readonly roles: readonly KpCanonicalOperationRole[];
   readonly canonicalComposition: readonly KpCanonicalOperationId[];
@@ -293,7 +312,7 @@ function operationContract(input: {
   readonly ownershipMode: KpCanonicalOperationOwnershipMode;
   readonly lawIds: readonly string[];
   readonly witnessIds: readonly string[];
-  readonly reverse: KpCanonicalOperationContract["reverse"];
+  readonly reverse: Pick<KpCanonicalOperationContract["reverse"], "kind" | "operationId">;
   readonly fixtureIds: readonly string[];
 }): KpCanonicalOperationContract {
   const unitRoleId = pacingRole(input.authority.refId, input.roles);
@@ -308,7 +327,13 @@ function operationContract(input: {
     ownershipMode: input.ownershipMode,
     lawIds: input.lawIds,
     witnessIds: input.witnessIds,
-    reverse: input.reverse,
+    reverse: reverseSemantics({
+      operationId: input.operationId,
+      reverse: input.reverse,
+      ownershipMode: input.ownershipMode,
+      canonicalComposition: input.canonicalComposition,
+      witnessIds: input.witnessIds
+    }),
     motifRequirementIds: input.authority.refId === kpDistributionCanonicalOperationSpec.id
       ? kpDistributionCanonicalOperationSpec.motif.map((step) => step.id)
       : input.canonicalComposition.map((id) => `motif.${id}`),
@@ -356,7 +381,7 @@ function ownershipForOperation(
 
 function reverseForGeneratedOperation(
   operationId: string
-): KpCanonicalOperationContract["reverse"] {
+): Pick<KpCanonicalOperationContract["reverse"], "kind" | "operationId"> {
   const inverse = new Map<string, string>([
     ["kp.algebra.subtract-both-sides", "kp.algebra.add-both-sides"],
     ["kp.algebra.add-both-sides", "kp.algebra.subtract-both-sides"],
@@ -368,6 +393,94 @@ function reverseForGeneratedOperation(
   return inverse === undefined
     ? { kind: "one-way" }
     : { kind: "inverse", operationId: inverse };
+}
+
+function reverseSemantics(input: {
+  readonly operationId: string;
+  readonly reverse: Pick<KpCanonicalOperationContract["reverse"], "kind" | "operationId">;
+  readonly ownershipMode: KpCanonicalOperationOwnershipMode;
+  readonly canonicalComposition: readonly KpCanonicalOperationId[];
+  readonly witnessIds: readonly string[];
+}): KpCanonicalOperationContract["reverse"] {
+  if (input.reverse.kind === "self") {
+    return {
+      ...input.reverse,
+      interpretation: "Replay the same meaning while continuants return to their authored source roles.",
+      validity: "identity",
+      choreography: {
+        kind: "identity",
+        causalEmphasis: "continuants",
+        narration: "The same semantic objects return to their earlier roles."
+      }
+    };
+  }
+
+  if (input.reverse.kind === "inverse") {
+    const fissionFusion = input.ownershipMode === "fission-fusion";
+    const forwardIsFusion = input.operationId.includes("factor-common") ||
+      input.operationId.includes("merge-fraction");
+    const kind = fissionFusion
+      ? forwardIsFusion ? "fission" as const : "fusion" as const
+      : "apply-inverse-operation" as const;
+    return {
+      ...input.reverse,
+      interpretation: fissionFusion
+        ? forwardIsFusion
+          ? "Split the joined origin into its lineage-bearing descendants."
+          : "Collect the descendants into their shared semantic origin."
+        : `Apply the registered inverse operation ${input.reverse.operationId}.`,
+      validity: "mathematical-inverse",
+      choreography: {
+        kind,
+        causalEmphasis: fissionFusion ? "junction" : "inverse-operation",
+        narration: fissionFusion
+          ? forwardIsFusion
+            ? "The shared origin splits into complete descendants at the junction."
+            : "The descendants meet and become their shared origin at the junction."
+          : `The registered inverse operation ${input.reverse.operationId} restores the prior state.`
+      }
+    };
+  }
+
+  const isAnnihilation = input.witnessIds.length > 0;
+  const isSuccessor = input.operationId.includes("simplify-constant") ||
+    input.operationId.includes("simplify-quotient");
+  const restoresPredecessor = input.ownershipMode === "replacement" ||
+    input.canonicalComposition.includes("kp.core.substitute");
+  const choreography = isAnnihilation
+    ? {
+        kind: "introduce-neutral-pair" as const,
+        causalEmphasis: "witness" as const,
+        narration:
+          "The neutral witness opens into the authored inverse pair; this reconstructs the recorded step, not a unique algebraic inverse."
+      }
+    : isSuccessor
+      ? {
+          kind: "decompose-successor" as const,
+          causalEmphasis: "predecessor" as const,
+          narration:
+            "The successor separates into its authored inputs and catalyst; this is historical reconstruction, not free inversion."
+        }
+      : restoresPredecessor
+        ? {
+            kind: "restore-predecessor" as const,
+            causalEmphasis: "predecessor" as const,
+            narration:
+              "The authored predecessor representation is restored from this recorded transformation."
+          }
+        : {
+            kind: "historical-reconstruction" as const,
+            causalEmphasis: "continuants" as const,
+            narration:
+              "Rewind reconstructs the authored prior state without claiming a mathematical inverse."
+          };
+  return {
+    kind: "one-way",
+    interpretation:
+      "Reconstruct the exact authored predecessor without exposing this path as a mathematical inverse.",
+    validity: "authored-history-only",
+    choreography
+  };
 }
 
 function pacingKindFor(
