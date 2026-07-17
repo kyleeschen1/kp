@@ -345,11 +345,13 @@ Deferred:
 
 ## Verification Cadence
 
-- Focused helper/contract slices: relevant Node tests.
-- Standard slices: focused tests, `npm run typecheck`, and
-  `npm run theseus -- validate`.
-- Shared rendering/loading slices: standard checks plus focused Playwright
-  browser tests.
-- Major boundaries and closeout: `npm test`, `npm run build`, the production
-  bundle/frame budget harness, and representative editor-animation browser
-  suites.
+This loop follows the accepted
+[risk-weighted validation cadence](../decisions/2026-07-17-kp-risk-weighted-validation-cadence.md).
+Focused verification is the run default; browser, build, performance, overflow,
+KaTeX, and accessibility checks are added only when the slice touches those
+risks.
+
+The remaining broad checkpoints are slices 19, 24, 29, and the mandatory
+closeout at slice 30. The full suite completed after slice 13 is the baseline for
+slices 14–18. Heavy full-suite, browser, and performance jobs run separately so
+resource contention does not inflate feedback time or corrupt timing evidence.

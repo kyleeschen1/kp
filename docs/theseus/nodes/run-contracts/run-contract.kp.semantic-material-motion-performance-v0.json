@@ -19,13 +19,18 @@
       "kind": "file",
       "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
       "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-risk-weighted-validation-cadence.md",
+      "summary": "Accepted risk-weighted verification policy governing this run."
     }
   ],
   "verification": [
-    "npm run typecheck",
-    "npm test",
-    "npm run build",
-    "npm run theseus -- validate"
+    "node --test <directly affected test files>",
+    "npm run typecheck when typed source or public contracts change",
+    "npx playwright test <smallest affected browser cohort> when visible behavior changes",
+    "npm run theseus -- workspace validate"
   ],
   "allowedWork": [
     "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
@@ -38,7 +43,7 @@
   "runMode": "run",
   "maxSlices": 30,
   "commitCadence": "Commit after each verified slice.",
-  "verificationLevel": "standard",
+  "verificationLevel": "focused",
   "stopConditions": [
     "Stop when verification fails and needs product or architecture judgment.",
     "Stop if exact KaTeX continuity requires unsafe private internals.",
@@ -133,82 +138,98 @@
     {
       "id": "next-action.kp.material-motion.successor-synthesis-v0",
       "title": "Define successor synthesis",
+      "summary": "Focused gate: successor planner, sampler, and law tests; typecheck; Theseus validate. No broad suite unless the shared material-junction contract changes.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.linear-successor-v0",
       "title": "Apply successor synthesis to linear solve",
+      "summary": "Visible-motion gate: focused linear unit tests, editor browser scenario, and checkpoint-frame review; add build only if an import or export boundary changes.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.cancellation-witness-v0",
       "title": "Define cancellation witnesses",
+      "summary": "Focused gate: witness, semantic-law, and slot-contract tests; typecheck; Theseus validate.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.annihilation-v0",
       "title": "Implement organic witnessed annihilation",
+      "summary": "Visible-motion gate: focused sampler and renderer tests, browser scenario, and checkpoint-frame review; add build only for renderer or import-boundary changes.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.annihilation-adapters-v0",
       "title": "Apply annihilation across representative operations",
+      "summary": "Broad checkpoint 19: focused linear and fraction adapter tests plus visual browser review, then full unit suite and production build.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.fission-fusion-v0",
       "title": "Define ownership aware fission and fusion",
+      "summary": "Focused gate: ownership, lineage, reverse-law, planner, and sampler tests; typecheck; Theseus validate.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.distribution-fission-v0",
       "title": "Apply fission to distribution",
+      "summary": "Hot visible-motion gate: focused distribution unit and browser tests plus performance harness; no full suite absent cross-family impact.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.factoring-fusion-v0",
       "title": "Apply fusion to factoring",
+      "summary": "Visible-motion gate: focused factoring, reverse, and browser tests plus runtime frame review; no full suite absent cross-family impact.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.semantic-duration-v0",
       "title": "Add work proportional timing",
+      "summary": "Focused gate: duration, compression, and semantic-work tests; typecheck; Theseus validate.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.matrix-vector-pacing-v0",
       "title": "Apply proportional matrix vector timing",
+      "summary": "Broad checkpoint 24: matrix-vector unit, browser, and frame review followed by full unit suite and production build.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.matrix-matrix-pacing-v0",
       "title": "Apply proportional matrix matrix timing",
+      "summary": "Hot visible-motion gate: matrix-matrix unit and browser tests plus throttled performance evidence; no full suite after the adjacent checkpoint absent new shared impact.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.reverse-operations-v0",
       "title": "Add explicit reverse choreography laws",
+      "summary": "Cross-family focused gate: reverse semantic laws, representative rewind browser scenarios, typecheck, and Theseus validate.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.provisional-incorrect-state-v0",
       "title": "Add epistemic channels and provisional branches",
+      "summary": "Semantic UI gate: correctness and provisional-state tests, focused editor and accessibility browser checks, typecheck, and Theseus validate.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.llm-operation-compiler-v0",
       "title": "Integrate governed operations into LLM compilation",
+      "summary": "Standard compiler gate: accepted and rejected draft tests, typecheck, representative editor smoke, and Theseus validate; build only if public loading boundaries change.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.promotion-matrix-v0",
       "title": "Gate motif style complexity and quality",
+      "summary": "Broad checkpoint 29: promotion tests, request and bundle audit, throttled performance, representative editor browser cohort, full unit suite, and production build.",
       "status": "planned"
     },
     {
       "id": "next-action.kp.material-motion.loop-closeout-v0",
       "title": "Verify and close or refill the loop",
-      "status": "planned"
+      "status": "planned",
+      "summary": "Mandatory broad closeout: full unit suite, typecheck, production build, all relevant browser, performance, overflow, and Theseus validation and reports."
     }
   ]
 }

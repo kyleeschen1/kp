@@ -1,0 +1,18 @@
+{
+  "id": "decision.kp.risk-weighted-validation-cadence-v0",
+  "kind": "decision",
+  "title": "Adopt Risk Weighted Validation Cadence",
+  "status": "resolved",
+  "domain": "kp.workflow",
+  "summary": "User approved focused-by-default validation, risk-triggered escalation, isolated heavyweight jobs, and five-slice broad checkpoints.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-risk-weighted-validation-cadence.md",
+      "summary": "Durable project-level validation policy for current and future autonomous loops."
+    }
+  ],
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ]
+}
