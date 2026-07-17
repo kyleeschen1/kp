@@ -14,11 +14,15 @@ import {
   listGeneratedAlgebraTransformDefinitions,
   type GeneratedAlgebraTransformDefinition
 } from "./generated-algebra-transform-definition-registry.ts";
+import {
+  kpDistributionCanonicalOperationSpec
+} from "./distribution-canonical-operation.ts";
 
 export interface KpCanonicalOperationRegistryEntry {
   readonly id: string;
   readonly packId: string;
   readonly canonicalComposition: readonly KpCanonicalOperationId[];
+  readonly operationSpecId?: string | undefined;
   readonly sourceDefinitionId?: string | undefined;
   readonly sourceTransformType?: string | undefined;
 }
@@ -158,6 +162,9 @@ export function migrateGeneratedAlgebraTransformDefinition(
     id: `kp.algebra.${kebabCase(definition.transformType)}`,
     packId: "kp.algebra",
     canonicalComposition: canonicalCompositionForGeneratedTransform(definition.transformType),
+    ...(definition.transformType === "distributeMultiplication"
+      ? { operationSpecId: kpDistributionCanonicalOperationSpec.id }
+      : {}),
     sourceDefinitionId: definition.id,
     sourceTransformType: definition.transformType
   };

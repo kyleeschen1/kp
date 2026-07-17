@@ -42,27 +42,50 @@ export function executeKpCanonicalOperationBinding(input: {
   const roleBindings = normalizeCanonicalRoleBindings(input.operationSpec, input.roleBindings);
   const sourceEntityIds = endpointBindings(input.operationSpec, roleBindings, "source");
   const targetEntityIds = endpointBindings(input.operationSpec, roleBindings, "target");
+  const expandedLineage = input.operationSpec.lineage.flatMap((template) => {
+    const sourceEntityIds = template.sourceRoleIds.flatMap(
+      (roleId) => roleBindings[roleId] ?? []
+    );
+    const targetEntityIds = template.targetRoleIds.flatMap(
+      (roleId) => roleBindings[roleId] ?? []
+    );
+    if (template.mapping !== "pairwise") {
+      return [{ template, id: template.id, sourceEntityIds, targetEntityIds }];
+    }
+    if (sourceEntityIds.length !== targetEntityIds.length) {
+      throw new Error(
+        `Operation ${input.operationSpec.id} pairwise lineage ${template.id} ` +
+        `requires equal cardinality; received ${sourceEntityIds.length}:${targetEntityIds.length}.`
+      );
+    }
+    return sourceEntityIds.map((sourceEntityId, index) => ({
+      template,
+      id: `${template.id}.pair-${index}`,
+      sourceEntityIds: [sourceEntityId],
+      targetEntityIds: [targetEntityIds[index]!]
+    }));
+  });
   const lineageGraph = createKpSemanticLineageGraph({
     id: `${input.transformation.id}.lineage`,
     sourceEntityIds,
     targetEntityIds,
-    edges: input.operationSpec.lineage
-      .filter((template) => template.relation !== "focus")
-      .map((template) => ({
-        id: `${input.transformation.id}.${template.id}`,
-        relation: lineageRelation(template.relation, template.sourceRoleIds, template.targetRoleIds),
-        sourceEntityIds: template.sourceRoleIds.flatMap((roleId) => roleBindings[roleId] ?? []),
-        targetEntityIds: template.targetRoleIds.flatMap((roleId) => roleBindings[roleId] ?? []),
+    edges: expandedLineage
+      .filter(({ template }) => template.relation !== "focus")
+      .map(({ template, id, sourceEntityIds, targetEntityIds }) => ({
+        id: `${input.transformation.id}.${id}`,
+        relation: lineageRelation(template.relation, sourceEntityIds, targetEntityIds),
+        sourceEntityIds,
+        targetEntityIds,
         summary: template.summary
       }))
   });
   const correspondenceMap: CorrespondenceMap = {
     id: `${input.transformation.id}.operation-correspondence`,
-    records: input.operationSpec.lineage.map((template) => ({
-      id: `${input.transformation.id}.${template.id}`,
+    records: expandedLineage.map(({ template, id, sourceEntityIds, targetEntityIds }) => ({
+      id: `${input.transformation.id}.${id}`,
       relation: template.relation,
-      sourceSelectorIds: template.sourceRoleIds.flatMap((roleId) => roleBindings[roleId] ?? []),
-      targetSelectorIds: template.targetRoleIds.flatMap((roleId) => roleBindings[roleId] ?? []),
+      sourceSelectorIds: sourceEntityIds,
+      targetSelectorIds: targetEntityIds,
       summary: template.summary
     }))
   };

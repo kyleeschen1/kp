@@ -27,6 +27,7 @@ export interface KpCanonicalOperationPattern {
 export interface KpCanonicalOperationLineageTemplate {
   readonly id: string;
   readonly relation: SelectorCorrespondenceRelationId;
+  readonly mapping?: "aggregate" | "pairwise" | undefined;
   readonly sourceRoleIds: readonly string[];
   readonly targetRoleIds: readonly string[];
   readonly summary: string;
@@ -44,7 +45,7 @@ export interface KpCanonicalOperationMotifStep {
 export interface KpCanonicalOperationExample {
   readonly id: string;
   readonly kind: "positive" | "counterexample" | "ambiguous";
-  readonly roleBindings: Readonly<Record<string, string>>;
+  readonly roleBindings: Readonly<Record<string, string | readonly string[]>>;
   readonly expected: "accepted" | "rejected" | "needs-review";
   readonly summary: string;
 }
@@ -109,7 +110,12 @@ export function createKpCanonicalOperationSpec(
     })),
     examples: input.examples.map((example) => ({
       ...example,
-      roleBindings: { ...example.roleBindings }
+      roleBindings: Object.fromEntries(Object.entries(example.roleBindings).map(
+        ([roleId, binding]) => [
+          roleId,
+          typeof binding === "string" ? binding : [...binding]
+        ]
+      ))
     })),
     rewind: {
       ...input.rewind,
@@ -156,6 +162,15 @@ export function validateKpCanonicalOperationSpec(
   spec.lineage.forEach((lineage, index) => {
     validateRoleRefs(lineage.sourceRoleIds, `lineage[${index}].sourceRoleIds`, roleIds, issues);
     validateRoleRefs(lineage.targetRoleIds, `lineage[${index}].targetRoleIds`, roleIds, issues);
+    if (
+      lineage.mapping === "pairwise" &&
+      (lineage.sourceRoleIds.length === 0 || lineage.targetRoleIds.length === 0)
+    ) {
+      issues.push({
+        path: `lineage[${index}].mapping`,
+        message: "Pairwise lineage requires source and target roles."
+      });
+    }
   });
   if (spec.motif.length === 0) {
     issues.push({ path: "motif", message: "Operation spec must compose a trusted motif." });
@@ -271,4 +286,3 @@ function requireNonEmpty(
 ): void {
   if (value.trim().length === 0) issues.push({ path, message: `${path} must not be empty.` });
 }
-
