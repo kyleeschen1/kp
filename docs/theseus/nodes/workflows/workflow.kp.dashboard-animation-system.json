@@ -22,7 +22,8 @@
     "decision.kp.symbolic-manipulation-animation-library",
     "decision.kp.semantic-incremental-transition-focus-v0",
     "decision.kp.governed-semantic-animation-grammar-v0",
-    "decision.kp.phase-ordered-choreography-gestalt-styles-v0"
+    "decision.kp.phase-ordered-choreography-gestalt-styles-v0",
+    "decision.kp.semantic-material-motion-performance-v0"
   ],
   "milestones": [
     "milestone.kp.long-term-semantic-product-plan-v0"
@@ -60,7 +61,8 @@
     "next-action.kp.gestalt.loop-closeout-v0",
     "next-action.kp.animation.material-continuity-loop-v0",
     "next-action.kp.dashboard.prepare-dashboard-animation-system-loop-v5",
-    "next-action.kp.animation.semantic-motion-library-loop-v1"
+    "next-action.kp.animation.semantic-motion-library-loop-v1",
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
   ],
   "verificationRecords": [
     {

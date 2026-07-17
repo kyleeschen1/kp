@@ -1,0 +1,67 @@
+{
+  "id": "next-action.kp.semantic-material-motion-performance-loop-v0",
+  "kind": "next-action",
+  "title": "Execute Semantic Material Motion And Performance Loop",
+  "status": "ready",
+  "domain": "kp.animation",
+  "summary": "Await approval to execute the proposed 30-slice loop for performance foundations, material-junction morphs, witnessed cancellation, fission/fusion, work-proportional pacing, reverse semantics, incorrect-state branches, and governed LLM compilation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Proposed ordered 30-slice loop, scope, deferrals, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract that governs every proposed slice."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "decision.kp.semantic-material-motion-performance-v0",
+      "measurement.kp.animation-production-performance-baseline-2026-07-17"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether shared material operations eliminate visual discontinuities without expanding per-example JavaScript.",
+    "Whether lazy capability packs and a reduced hot path meet the low-end frame and transfer budgets."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "symbolic-correctness",
+      "weight": "high"
+    },
+    {
+      "id": "performance-budget",
+      "weight": "high"
+    },
+    {
+      "id": "llm-governance",
+      "weight": "high"
+    },
+    {
+      "id": "extensibility",
+      "weight": "medium"
+    }
+  ]
+}

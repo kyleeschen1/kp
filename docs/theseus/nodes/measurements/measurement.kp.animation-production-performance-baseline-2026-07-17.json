@@ -1,0 +1,24 @@
+{
+  "id": "measurement.kp.animation-production-performance-baseline-2026-07-17",
+  "kind": "measurement",
+  "title": "Animation Production Performance Baseline 2026-07-17",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Current initial transfer is about 561 KB; main JS is 360.39 KB compressed, immediate Three.js is 132.20 KB compressed, and 6x CPU playback reaches 34 ms p95 frames with a 67 ms maximum hitch.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Records reproducible build sizes, transfer observations, throttled hydration, frame performance, and initial budgets."
+    },
+    {
+      "kind": "test-run",
+      "command": "npm run build",
+      "status": "passed",
+      "summary": "Production build emitted 1,531.62 KB main JS and 525.57 KB Three.js before compression."
+    }
+  ],
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ]
+}

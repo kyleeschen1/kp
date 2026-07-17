@@ -1,0 +1,201 @@
+{
+  "id": "run-contract.kp.semantic-material-motion-performance-v0",
+  "kind": "run-contract",
+  "title": "KP Semantic Material Motion And Performance V0",
+  "status": "ready",
+  "domain": "kp.animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run theseus -- validate"
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "goal": "Run the approved 30-slice semantic material motion and performance loop.",
+  "target": "next-action.kp.semantic-material-motion-performance-loop-v0",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit after each verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when verification fails and needs product or architecture judgment.",
+    "Stop if exact KaTeX continuity requires unsafe private internals.",
+    "Stop if a performance optimization changes semantic ordering, witnesses, duration, or correctness disclosure.",
+    "Stop when the approved slice list is exhausted."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.material-motion.record-contract-v0",
+      "title": "Materialize approved run contract",
+      "summary": "Materialized from stored run-contract slice next-action.kp.material-motion.record-contract-v0 in KP Semantic Material Motion And Performance V0.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.material-motion.performance-baseline-v0",
+      "title": "Establish reproducible performance baselines",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.lazy-three-v0",
+      "title": "Defer Three.js until visible 3D demand",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.catalog-metadata-v0",
+      "title": "Separate catalog metadata from asset construction",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.lazy-family-packs-v0",
+      "title": "Load animation families as capability packs",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.diagnostics-cadence-v0",
+      "title": "Remove diagnostics reconstruction from frame loop",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.premeasured-hot-path-v0",
+      "title": "Cache playback nodes and geometry",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.quality-tiers-v0",
+      "title": "Define frozen render quality tiers",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.cost-model-v0",
+      "title": "Add static animation cost model",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.operation-registry-v0",
+      "title": "Define canonical operation registry",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.author-compiler-boundary-v0",
+      "title": "Enforce author compiler authority boundary",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.material-junction-v0",
+      "title": "Generalize material junction primitive",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.radical-normative-port-v0",
+      "title": "Port normative radical transition",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.radical-conformance-v0",
+      "title": "Gate radical continuity and settlement",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.successor-synthesis-v0",
+      "title": "Define successor synthesis",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.linear-successor-v0",
+      "title": "Apply successor synthesis to linear solve",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.cancellation-witness-v0",
+      "title": "Define cancellation witnesses",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.annihilation-v0",
+      "title": "Implement organic witnessed annihilation",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.annihilation-adapters-v0",
+      "title": "Apply annihilation across representative operations",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.fission-fusion-v0",
+      "title": "Define ownership aware fission and fusion",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.distribution-fission-v0",
+      "title": "Apply fission to distribution",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.factoring-fusion-v0",
+      "title": "Apply fusion to factoring",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.semantic-duration-v0",
+      "title": "Add work proportional timing",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.matrix-vector-pacing-v0",
+      "title": "Apply proportional matrix vector timing",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.matrix-matrix-pacing-v0",
+      "title": "Apply proportional matrix matrix timing",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.reverse-operations-v0",
+      "title": "Add explicit reverse choreography laws",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.provisional-incorrect-state-v0",
+      "title": "Add epistemic channels and provisional branches",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.llm-operation-compiler-v0",
+      "title": "Integrate governed operations into LLM compilation",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.promotion-matrix-v0",
+      "title": "Gate motif style complexity and quality",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.material-motion.loop-closeout-v0",
+      "title": "Verify and close or refill the loop",
+      "status": "planned"
+    }
+  ]
+}

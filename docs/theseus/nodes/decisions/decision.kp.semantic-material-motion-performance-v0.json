@@ -1,0 +1,24 @@
+{
+  "id": "decision.kp.semantic-material-motion-performance-v0",
+  "kind": "decision",
+  "title": "Semantic Material Motion And Performance",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Accepted through the completed grill-me session.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted semantic material motion, extensibility, performance, quality, reverse, and epistemic-state contracts."
+    },
+    {
+      "kind": "user-intent",
+      "intent": "Make semantic animations materially continuous, operation-aware, configurable, LLM-generatable, and performant without sacrificing explanatory meaning on slow devices.",
+      "occurredAt": "2026-07-17",
+      "summary": "Accepted recommendations from the completed grill-me session."
+    }
+  ],
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ]
+}
