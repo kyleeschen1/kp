@@ -49,12 +49,13 @@ import {
   type KpDerivativePowerChoreographyFrame,
   type KpDerivativePowerChoreographyPlan
 } from "../animation/derivative-power-choreography.ts";
-import {
-  compileKpDistributionChoreography,
-  sampleKpDistributionChoreography,
-  type KpDistributionChoreographyFrame,
-  type KpDistributionChoreographyPlan
+import type {
+  KpDistributionChoreographyFrame,
+  KpDistributionChoreographyPlan
 } from "../animation/distribution-choreography.ts";
+import {
+  kpDistributionChoreographyRuntime
+} from "../animation/distribution-choreography-runtime.ts";
 import {
   compileKpFactoringChoreography,
   sampleKpFactoringChoreography,
@@ -914,7 +915,8 @@ function createDistributionChoreographyContext(
   ) {
     throw new Error("Canonical distribution geometry is missing factor fan-out.");
   }
-  const plan = compileKpDistributionChoreography({
+  const runtime = kpDistributionChoreographyRuntime();
+  const plan = runtime.compile({
     id: `${geometry.transitionId}.distribution-choreography`,
     sourceFactorId,
     factorCopyIds: factorRelation.target.selectorIds,
@@ -978,7 +980,7 @@ function createDistributionChoreographyContext(
   );
   return {
     plan,
-    frame: sampleKpDistributionChoreography({ plan, progress }),
+    frame: runtime.sample({ plan, progress }),
     factorRelationRecordId: factorRelation.recordId,
     reflowRelationRecordIds: new Set(
       persistentRelations.map((relation) => relation.recordId)

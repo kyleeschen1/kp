@@ -2695,6 +2695,12 @@ function applyDistributionFactorFocus(input: {
     String(input.frame.addendReflowProgress);
   input.transition.dataset["kpEditorEquationDistributionGroupingOpacity"] =
     String(input.frame.groupingOpacity);
+  input.transition.dataset["kpEditorEquationDistributionOwnerSide"] =
+    input.frame.fission.ownership.ownerSide;
+  input.transition.dataset["kpEditorEquationDistributionOwnerIds"] =
+    input.frame.fission.ownership.ownerEntityIds.join(" ");
+  input.transition.dataset["kpEditorEquationDistributionTransferEvent"] =
+    input.frame.fission.ownership.transferEventId;
   const factorRelation = input.geometry.relations.find(
     (relation) => relation.lifecycle === "split"
   );

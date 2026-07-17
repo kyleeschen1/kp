@@ -175,7 +175,7 @@
       "id": "next-action.kp.material-motion.distribution-fission-v0",
       "title": "Apply fission to distribution",
       "summary": "Hot visible-motion gate: focused distribution unit and browser tests plus performance harness; no full suite absent cross-family impact.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.factoring-fusion-v0",

@@ -1,0 +1,120 @@
+{
+  "id": "next-action.kp.material-motion.distribution-fission-v0",
+  "kind": "next-action",
+  "title": "Apply fission to distribution",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Migrated distribution to exclusive fission ownership: the original factor remains rigid and nonzero through preview, is wholly replaced by both descendants at one geometrically co-located birth event, then descendants depart on semantic-order arcs while addends reflow and grouping retires. Registered the compiler and choreography in the lazy algebra pack to preserve startup budget.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.distribution-fission-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-risk-weighted-validation-cadence.md",
+      "summary": "Accepted risk-weighted verification policy governing this run."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/distribution-choreography.ts",
+      "summary": "Distribution now composes the shared fission compiler and sampler instead of partially thinning a persistent source."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/precomputed-equation-motion.ts",
+      "summary": "Precomputes arc origins at the preview-reflow handoff point so the ownership swap is geometrically continuous without active layout measurement."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/semantic-equation-token-renderer.ts",
+      "summary": "Samples registered lazy distribution choreography into measured token arcs and exact target settlement."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Live Chromium evidence for exclusive owner state, co-located shared birth, ordered arcs, and exact settlement."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/distribution-choreography-runtime.ts",
+      "summary": "Capability registry keeps operation-specific distribution and fission machinery out of the generic startup path."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "node --test <directly affected test files>",
+    "npm run typecheck when typed source or public contracts change",
+    "npx playwright test <smallest affected browser cohort> when visible behavior changes",
+    "npm run theseus -- workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether Apply fission to distribution can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test focused distribution fission and catalog tests",
+      "status": "passed",
+      "scope": "14 directly affected ownership, choreography, visible-fixture, and lazy-loader tests passed.",
+      "checkedAt": "2026-07-17T22:03:01.416Z"
+    },
+    {
+      "command": "npx playwright test focused distribution choreography scenario",
+      "status": "passed",
+      "scope": "One live Chromium scenario passed, including shared-birth geometry and ownership assertions.",
+      "checkedAt": "2026-07-17T22:03:01.491Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "TypeScript and production build passed; entry remained under budget at 249.62 KB gzip and algebra pack measured 6.23 KB gzip.",
+      "checkedAt": "2026-07-17T22:03:01.580Z"
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "Performance harness passed with zero regressions, no normal long tasks, no active-motion layout rebuilds or overlay measures, and known target warnings unchanged in kind.",
+      "checkedAt": "2026-07-17T22:03:01.663Z"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "checkedAt": "2026-07-17T22:03:01.738Z",
+      "scope": "606 nodes and 7817 events valid before completion."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Migrated distribution to exclusive fission ownership: the original factor remains rigid and nonzero through preview, is wholly replaced by both descendants at one geometrically co-located birth event, then descendants depart on semantic-order arcs while addends reflow and grouping retires. Registered the compiler and choreography in the lazy algebra pack to preserve startup budget."
+  }
+}

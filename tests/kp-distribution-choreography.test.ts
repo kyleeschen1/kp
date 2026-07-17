@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import "../src/animation/fission-fusion-register.ts";
+
 import {
   compileKpDistributionChoreography,
   sampleKpDistributionChoreography
@@ -15,14 +17,16 @@ test("distribution previews factor focus and addend reflow before copy transit",
   assert.equal(preview.groupingOpacity, 1);
 });
 
-test("the first factor remains anchored while later copies travel in semantic order", () => {
+test("the source is wholly replaced before factor descendants travel in semantic order", () => {
   const frame = sampleKpDistributionChoreography({
     plan: distributionPlan(),
     progress: 0.5
   });
+  assert.equal(frame.sourceFactor.opacity, 0);
   assert.ok(frame.sourceFactor.scale > 0 && frame.sourceFactor.scale < 1);
-  assert.equal(frame.factorCopies[0]!.opacity, 0);
-  assert.equal(frame.factorCopies[0]!.pathProgress, 0);
+  assert.equal(frame.fission.ownership.ownerSide, "targets");
+  assert.ok(frame.factorCopies.every((copy) => copy.opacity === 1));
+  assert.ok(frame.factorCopies[0]!.pathProgress > frame.factorCopies[1]!.pathProgress);
   assert.equal(frame.factorCopies[1]!.opacity, 1);
   assert.ok(frame.factorCopies[1]!.pathProgress > 0);
   assert.deepEqual(frame.factorCopies.map((copy) => copy.semanticIndex), [0, 1]);
@@ -32,17 +36,34 @@ test("the first factor remains anchored while later copies travel in semantic or
 test("grouping leaves after branching and native products settle exactly", () => {
   const plan = distributionPlan();
   const removal = sampleKpDistributionChoreography({ plan, progress: 0.68 });
-  assert.equal(removal.factorCopies[0]!.opacity, 0);
+  assert.equal(removal.factorCopies[0]!.opacity, 1);
   assert.equal(removal.factorCopies[1]!.opacity, 1);
   assert.ok(removal.groupingOpacity > 0 && removal.groupingOpacity < 1);
   const settled = sampleKpDistributionChoreography({ plan, progress: 1 });
   assert.equal(settled.sourceFactor.opacity, 0);
-  assert.equal(settled.sourceFactor.scale, 1);
+  assert.ok(settled.sourceFactor.scale > 0);
   assert.equal(settled.groupingOpacity, 0);
   assert.ok(settled.factorCopies.every(
     (copy) => copy.opacity === 1 && copy.scale === 1 && copy.pathProgress === 1
   ));
   assert.equal(settled.focusStrength, 0);
+});
+
+test("distribution uses one shared semantic birth rather than partial source thinning", () => {
+  const plan = distributionPlan();
+  const before = sampleKpDistributionChoreography({
+    plan,
+    progress: plan.fissionPlan.transferEvent.progress - 0.001
+  });
+  const after = sampleKpDistributionChoreography({
+    plan,
+    progress: plan.fissionPlan.transferEvent.progress
+  });
+  assert.equal(before.sourceFactor.opacity, 1);
+  assert.ok(before.factorCopies.every((copy) => copy.opacity === 0));
+  assert.equal(after.sourceFactor.opacity, 0);
+  assert.ok(after.factorCopies.every((copy) => copy.opacity === 1));
+  assert.deepEqual(after.fission.ownership.ownerEntityIds, plan.factorCopyIds);
 });
 
 test("distribution refuses incomplete operation roles", () => {

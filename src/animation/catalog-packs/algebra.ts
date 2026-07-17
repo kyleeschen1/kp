@@ -16,6 +16,8 @@ import {
 // Register material-motion semantics with the lazy algebra pack so the generic
 // editor shell does not pay for operation-specific choreography at startup.
 import "../../rendering/equation-witnessed-annihilation-register.ts";
+import "../fission-fusion-register.ts";
+import "../distribution-choreography-register.ts";
 
 export function createKpAlgebraAnimationPack(): readonly KpAnimationAsset[] {
   return [

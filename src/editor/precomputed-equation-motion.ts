@@ -179,7 +179,7 @@ function lineageTokenPathPlans(
   const motionIds = kind === "copy-fan-out" || kind === "substitute"
     ? relation.target.motionIds
     : relation.source.motionIds;
-  const origin = center(
+  const origin = distributionFissionOrigin(geometry, relation) ?? center(
     kind === "copy-fan-out" || kind === "substitute"
       ? relation.source.bounds
       : relation.target.bounds
@@ -205,6 +205,30 @@ function lineageTokenPathPlans(
     });
     return [motionId, path.selected] as const;
   }));
+}
+
+function distributionFissionOrigin(
+  geometry: KpMeasuredEquationTransitionGeometry,
+  relation: KpMeasuredEquationTransitionGeometry["relations"][number]
+): { readonly x: number; readonly y: number } | undefined {
+  if (
+    geometry.distributionChoreographyKind !== "canonical-fan-out" ||
+    relation.lifecycle !== "split" ||
+    relation.source === undefined ||
+    relation.target === undefined
+  ) return undefined;
+  const firstTarget = geometry.targetTokens.find(
+    (token) => token.motionId === relation.target!.motionIds[0]
+  );
+  if (firstTarget === undefined) return undefined;
+  const source = center(relation.source.bounds);
+  const target = center(firstTarget.localRect);
+  // Distribution previews 18% of persistent reflow before the shared birth.
+  // Starting both paths there makes the ownership swap geometrically invisible.
+  return {
+    x: source.x + (target.x - source.x) * 0.18,
+    y: source.y + (target.y - source.y) * 0.18
+  };
 }
 
 function derivativeBranchVariant(

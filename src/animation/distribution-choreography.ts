@@ -1,3 +1,10 @@
+import type {
+  KpFissionFusionFrame,
+  KpFissionFusionPlan
+} from "./fission-fusion.ts";
+import { kpFissionFusionRuntime } from "./fission-fusion-runtime.ts";
+import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
+
 export const kpDistributionChoreographyPhaseIds = [
   "focus-factor",
   "reflow-addends",
@@ -29,6 +36,7 @@ export interface KpDistributionChoreographyPlan {
   readonly groupingArtifactIds: readonly string[];
   readonly phaseIds: readonly KpDistributionChoreographyPhaseId[];
   readonly sourceMinimumScale: number;
+  readonly fissionPlan: KpFissionFusionPlan;
 }
 
 export interface KpDistributionChoreographyFrame {
@@ -39,6 +47,7 @@ export interface KpDistributionChoreographyFrame {
   readonly focusStrength: number;
   readonly addendReflowProgress: number;
   readonly groupingOpacity: number;
+  readonly fission: KpFissionFusionFrame;
   readonly sourceFactor: {
     readonly opacity: number;
     readonly scale: number;
@@ -77,6 +86,24 @@ export function compileKpDistributionChoreography(input: {
   if (!(sourceMinimumScale > 0 && sourceMinimumScale <= 1)) {
     throw new Error("Distribution source minimum scale must be greater than zero and at most one.");
   }
+  const fissionPlan = kpFissionFusionRuntime().compile({
+    id: `${input.id}.factor-fission`,
+    mode: "fission",
+    lineageGraph: createKpSemanticLineageGraph({
+      id: `${input.id}.factor-lineage`,
+      sourceEntityIds: [input.sourceFactorId],
+      targetEntityIds: [...input.factorCopyIds],
+      edges: [{
+        id: `${input.id}.factor-split`,
+        relation: "split",
+        sourceEntityIds: [input.sourceFactorId],
+        targetEntityIds: [...input.factorCopyIds],
+        summary: "Common factor splits across addends."
+      }]
+    }),
+    semanticOrder: input.factorCopyIds,
+    junctionScale: sourceMinimumScale
+  });
   return {
     kind: "distribution-choreography-plan",
     id: input.id,
@@ -86,7 +113,8 @@ export function compileKpDistributionChoreography(input: {
     connectorPairs: input.connectorPairs.map((pair) => ({ ...pair })),
     groupingArtifactIds: [...input.groupingArtifactIds],
     phaseIds: [...kpDistributionChoreographyPhaseIds],
-    sourceMinimumScale
+    sourceMinimumScale,
+    fissionPlan
   };
 }
 
@@ -95,16 +123,19 @@ export function sampleKpDistributionChoreography(input: {
   readonly progress: number;
 }): KpDistributionChoreographyFrame {
   const progress = clamp01(input.progress);
+  const fission = kpFissionFusionRuntime().sample({
+    plan: input.plan.fissionPlan,
+    progress
+  });
   const phases = {
     "focus-factor": intervalProgress(progress, 0, 0.12),
     "reflow-addends": intervalProgress(progress, 0.08, 0.78),
-    "branch-factor-copies": intervalProgress(progress, 0.22, 0.4),
-    "transit-factor-copies": intervalProgress(progress, 0.28, 0.78),
+    "branch-factor-copies": fission.phases["transfer-ownership"],
+    "transit-factor-copies": fission.phases["transit-material"],
     "remove-grouping": intervalProgress(progress, 0.5, 0.72),
     "settle-products": intervalProgress(progress, 0.72, 0.94),
     "release-factor-focus": intervalProgress(progress, 0.72, 0.9)
   };
-  const nativeSettlement = phases["settle-products"];
   // A small preview shift anchors attention; the topology-changing reflow waits
   // until grouping removal makes enough horizontal room for the products.
   const addendReflowProgress =
@@ -119,37 +150,22 @@ export function sampleKpDistributionChoreography(input: {
       phases["focus-factor"] * (1 - phases["release-factor-focus"]),
     addendReflowProgress,
     groupingOpacity: 1 - phases["remove-grouping"],
+    fission,
     sourceFactor: {
-      opacity: 1 - intervalProgress(progress, 0.94, 1),
-      scale: interpolate(
-        interpolate(
-          1,
-          input.plan.sourceMinimumScale,
-          phases["branch-factor-copies"]
-        ),
-        1,
-        nativeSettlement
-      )
+      opacity: fission.sources[0]!.opacity,
+      scale: fission.sources[0]!.scale
     },
     factorCopies: input.plan.factorCopyIds.map((entityId, semanticIndex) => {
-      if (semanticIndex === 0) {
-        return {
-          entityId,
-          semanticIndex,
-          opacity: intervalProgress(progress, 0.72, 0.9),
-          scale: interpolate(input.plan.sourceMinimumScale, 1, nativeSettlement),
-          pathProgress: nativeSettlement
-        };
+      const material = fission.targets.find((target) => target.entityId === entityId);
+      if (material === undefined) {
+        throw new Error(`Missing distribution target ${entityId}.`);
       }
-      const stagger = (semanticIndex - 1) * 0.04;
-      const pathProgress = intervalProgress(progress, 0.28 + stagger, 0.72 + stagger);
-      const arrival = intervalProgress(progress, 0.66 + stagger, 0.88 + stagger);
       return {
         entityId,
         semanticIndex,
-        opacity: intervalProgress(progress, 0.22 + stagger, 0.38 + stagger),
-        scale: interpolate(input.plan.sourceMinimumScale, 1, arrival),
-        pathProgress
+        opacity: material.opacity,
+        scale: material.scale,
+        pathProgress: material.pathProgress
       };
     })
   };
@@ -160,10 +176,6 @@ function intervalProgress(progress: number, start: number, end: number): number 
   if (progress >= end) return 1;
   const local = (progress - start) / (end - start);
   return local * local * (3 - 2 * local);
-}
-
-function interpolate(from: number, to: number, progress: number): number {
-  return from + (to - from) * progress;
 }
 
 function clamp01(value: number): number {
