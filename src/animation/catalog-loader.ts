@@ -46,7 +46,8 @@ export function kpAnimationCatalogPackId(
   ) return "algebra";
   if (animationId === "animation.generated.pipeline-diagram" ||
     animationId === "animation.generated.add-zero" ||
-    animationId === "animation.generated.substitute-three") {
+    animationId === "animation.generated.substitute-three" ||
+    animationId === "animation.generated.substitute-three.provisional-incorrect") {
     return "generated-drafts";
   }
   if (animationId.startsWith("animation.generated.calculus.") ||

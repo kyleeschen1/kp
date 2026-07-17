@@ -122,6 +122,11 @@ import {
   canonicalReverseRuntimePlanForTransformationType
 } from "../animation/canonical-reverse-runtime.ts";
 import {
+  applyKpAnimationEpistemicBranch,
+  sampleKpAnimationEpistemicBranch,
+  type KpEpistemicBranchRuntimeFrame
+} from "../animation/epistemic-branch-runtime.ts";
+import {
   deriveKpOrganicMotionSignature,
   sampleKpOrganicMotion,
   sampleKpOrganicProgress
@@ -225,6 +230,7 @@ export interface KpEditorEquationStageFrame {
   readonly localProgress: number;
   readonly easedProgress: number;
   readonly motifs: readonly KpEditorEquationTransitionMotifFrame[];
+  readonly epistemicBranch?: KpEpistemicBranchRuntimeFrame | undefined;
   readonly solveX?: KpEditorSolveXSharedPlayerFrame | undefined;
   readonly functionWrap?: {
     readonly choreography: KpFunctionWrapChoreography;
@@ -285,6 +291,10 @@ export function createKpEditorEquationStageFrame(input: {
   const semanticProgress = input.state.direction === "forward"
     ? input.state.progress
     : 1 - input.state.progress;
+  const epistemicBranch = sampleKpAnimationEpistemicBranch({
+    animation: input.animation,
+    progress: semanticProgress
+  });
   const solveX = createKpEditorSolveXSharedPlayerFrame(input);
   const functionWrap = createFunctionWrapFrame(
     input.animation,
@@ -339,6 +349,7 @@ export function createKpEditorEquationStageFrame(input: {
     semanticProgress,
     localProgress,
     easedProgress,
+    ...(epistemicBranch === undefined ? {} : { epistemicBranch }),
     motifs: projection.transitions.map((transition) =>
       createKpEditorEquationTransitionMotifFrame({
         transition,
@@ -522,6 +533,11 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
         transformationId: transition.id,
         direction: state.direction,
         announce: index === 0
+      });
+      applyKpAnimationEpistemicBranch({
+        transitionElement,
+        transitionId: transition.id,
+        frame: frame.epistemicBranch
       });
       transitionNodes.focusTokens.forEach((token) => {
           token.style.setProperty("--kp-editor-equation-focus-progress", String(motif.progress));

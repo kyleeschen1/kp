@@ -211,7 +211,7 @@
       "id": "next-action.kp.material-motion.provisional-incorrect-state-v0",
       "title": "Add epistemic channels and provisional branches",
       "summary": "Semantic UI gate: correctness and provisional-state tests, focused editor and accessibility browser checks, typecheck, and Theseus validate.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.llm-operation-compiler-v0",

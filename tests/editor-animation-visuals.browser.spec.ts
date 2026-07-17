@@ -3114,6 +3114,53 @@ test("generated substitution transmits a persistent value along semantic paths",
   await expect(transition.locator('[data-kp-equation-motion-path-variant="arc-below"]')).toHaveCount(1);
 });
 
+test("provisional incorrect steps remain anchored to the trusted state with an accessible cue", async ({
+  page
+}) => {
+  await page.goto(
+    "/?animation=editor-animation.animation.generated.substitute-three.provisional-incorrect"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-id",
+    "animation.generated.substitute-three.provisional-incorrect"
+  );
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  await scrubber.fill("1");
+  const transition = player.locator("[data-kp-editor-equation-transition-id]");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-epistemic-branch-status",
+    "provisional"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-epistemic-settlement",
+    "held-provisional"
+  );
+  const cue = transition.locator("[data-kp-editor-epistemic-branch-cue]");
+  await expect(cue).toHaveAttribute("role", "status");
+  await expect(cue).toHaveAttribute("aria-live", "polite");
+  await expect(cue).toContainText("Provisional step");
+  await expect(cue).toContainText("Awaiting semantic validation");
+  await expect(transition.locator("[data-kp-editor-equation-source]"))
+    .toContainText("3⇒x+2");
+  await expect(transition.locator("[data-kp-editor-equation-target]"))
+    .toContainText("3⇒3+3");
+  const trustedOpacity = Number(await transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id$=".x"]'
+  ).evaluate((element) => getComputedStyle(element).opacity));
+  const proposedOpacity = Number(await transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".two"]'
+  ).evaluate((element) => getComputedStyle(element).opacity));
+  expect(trustedOpacity).toBeGreaterThan(0);
+  expect(proposedOpacity).toBeLessThan(1);
+
+  await player.locator(
+    "[data-kp-editor-animation-accessibility-control]"
+  ).selectOption("reduced-motion");
+  await expect(cue).toBeVisible();
+  await expect(cue).toContainText("Provisional step");
+});
+
 test("generated semantic diagram renders incremental SVG lifecycles on the shared player", async ({
   page
 }) => {

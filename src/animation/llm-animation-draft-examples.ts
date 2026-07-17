@@ -127,6 +127,16 @@ export const acceptedGeneratedSubstitutionDraft: KpLlmAnimationDraft = {
   timeline: { id: "timeline.generated.substitute-three", durationMs: 1800, beatCount: 36 }
 };
 
+export const provisionalIncorrectSubstitutionDraft: KpLlmAnimationDraft = {
+  ...acceptedGeneratedSubstitutionDraft,
+  id: "animation.generated.substitute-three.provisional-incorrect",
+  title: "Provisional learner step: substitute 3 for x and 2",
+  objects: [
+    acceptedGeneratedSubstitutionDraft.objects[0]!,
+    provisionalIncorrectTargetObject()
+  ]
+};
+
 export interface KpRejectedLlmAnimationDraftExample {
   readonly id: string;
   readonly draft: unknown;
@@ -185,6 +195,35 @@ export function createAcceptedGeneratedSubstitutionAnimationAsset(): KpAnimation
   return result.animation;
 }
 
+export function createProvisionalIncorrectSubstitutionAnimationAsset(): KpAnimationAsset {
+  const result = compileKpLlmAnimationDraft(provisionalIncorrectSubstitutionDraft);
+  if (result.status !== "accepted") {
+    throw new Error(
+      `Provisional generated draft failed compilation: ${result.diagnostics[0]?.message ?? "unknown error"}`
+    );
+  }
+  return {
+    ...result.animation,
+    dashboard: {
+      rowId: "animation-generated-substitute-three-provisional-incorrect",
+      tags: ["animation", "generated", "provisional", "incorrect"],
+      sourceRefIds: [provisionalIncorrectSubstitutionDraft.id]
+    },
+    metadata: {
+      ...(result.animation.metadata ?? {}),
+      epistemicBranchId: "branch.generated.substitute-three.provisional-incorrect",
+      epistemicBranchOrigin: "student-prompt",
+      epistemicBranchStatus: "provisional",
+      epistemicTrustedStateId: "equation.generated.substitute-three.before",
+      epistemicProposedStateId: "equation.generated.substitute-three.after",
+      epistemicTransitionId: "transform.generated.substitute-three",
+      epistemicStatus: "hypothesis",
+      epistemicRationale:
+        "Only x is bound to 3; changing the constant 2 remains an unvalidated learner proposal."
+    }
+  };
+}
+
 function record(
   id: string,
   relation: "identity" | "removal",
@@ -207,5 +246,20 @@ function substitutionPersistentRecord(id: "arrow" | "plus" | "two") {
     sourceSelectorIds: [`generated.substitute-three.before.${id}`],
     targetSelectorIds: [`generated.substitute-three.after.${id}`],
     summary: `${id} persists while the value is substituted.`
+  };
+}
+
+function provisionalIncorrectTargetObject(): KpLlmAnimationDraft["objects"][number] {
+  const target = acceptedGeneratedSubstitutionDraft.objects[1]!;
+  if (!("latex" in target) || !("selectors" in target)) {
+    throw new Error("Substitution target must be an equation draft object.");
+  }
+  return {
+    ...target,
+    title: "Unvalidated learner proposal",
+    latex: "3 \\Rightarrow 3 + 3",
+    selectors: target.selectors.map((selector) => selector.id.endsWith(".two")
+      ? { ...selector, label: "3" }
+      : selector)
   };
 }

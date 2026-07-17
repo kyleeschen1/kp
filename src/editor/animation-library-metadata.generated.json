@@ -499,6 +499,30 @@
     ]
   },
   {
+    "id": "editor-animation.animation.generated.substitute-three.provisional-incorrect",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.substitute-three.provisional-incorrect",
+    "title": "Provisional learner step: substitute 3 for x and 2",
+    "summary": "Provisional learner step: substitute 3 for x and 2",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 1800,
+    "beatCount": 36,
+    "tags": [
+      "animation",
+      "generated",
+      "provisional",
+      "incorrect"
+    ]
+  },
+  {
     "id": "editor-animation.animation.generated.pipeline-diagram",
     "kind": "editor-animation-descriptor",
     "animationId": "animation.generated.pipeline-diagram",
@@ -708,7 +732,7 @@
       "scrubber",
       "rewind"
     ],
-    "durationMs": 2400,
+    "durationMs": 4400,
     "beatCount": 50,
     "tags": [
       "animation",
@@ -734,7 +758,7 @@
       "scrubber",
       "rewind"
     ],
-    "durationMs": 2400,
+    "durationMs": 4400,
     "beatCount": 50,
     "tags": [
       "animation",
