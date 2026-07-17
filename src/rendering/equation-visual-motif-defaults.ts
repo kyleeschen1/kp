@@ -96,6 +96,12 @@ export const defaultEquationTransformVisualMotifRules:
       summary: "The inequality relation turns while negative multiplication enters."
     },
     {
+      transformationKind: "computeDotProduct",
+      descriptor: descriptorForEquationMotif("dot-product-accumulate"),
+      summary:
+        "Semantic component pairs form persistent products before their partial sums resolve."
+    },
+    {
       transformationKind: "multiplyMatrixVector",
       descriptor: descriptorForEquationMotif("matrix-row-compose"),
       summary:

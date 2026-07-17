@@ -1,6 +1,6 @@
 # KP Animation Asset LLM Authoring Spec
 
-Date: 2026-07-14
+Date: 2026-07-17
 Audience: LLM authors, Codex sessions, human authors, external-port authors
 
 ## Goal
@@ -111,6 +111,36 @@ External ports should not call renderers directly. They should produce
 animation assets that renderers, exports, flashcards, and dashboards can
 consume.
 
+## Governed Semantic Motion Operations
+
+New model-authored work should target `kp.llm-animation-draft.v2`, not author a
+`KpAnimationAsset` or visual timeline directly. Load
+`createKpLlmSemanticMotionOperationCatalog()` and give the model only its exact
+pack pins, operation ids, semantic role contracts, motif names, and phase ids.
+
+The catalog currently joins two domain packs to the universal core:
+
+- `kp.algebra@0.1.0` covers the promoted algebra compatibility operations,
+  including rational-power succession, distribution, factoring, fractions,
+  exponent rewrites, wrapping, and linear equation operations.
+- `kp.semantic-motion@0.1.0` covers promoted identity absorption,
+  substitution, inequality pivot, derivative and antiderivative rules, dot
+  products, matrix-vector traversal, and matrix-matrix cell composition.
+
+An LLM draft names a high-level operation and binds its required semantic
+roles. The compiler validates cardinality and references, resolves the exact
+pack, and emits a resolved operation containing the existing KP transform type
+and its universal core composition. The authoring catalog maps that transform
+type to the established visual motif and semantic phases. This is the contract
+that makes generated matrix multiplication use `matrix-cell-compose`, for
+example, instead of falling back to an unrelated fade.
+
+Models must not provide coordinates, paths, keyframes, timing, per-token
+delays, scale transforms, shadows, DOM, or SVG. KP derives those choices from
+the selected operation, semantic role bindings, salience plan, measured
+layout, and active gestalt style. Missing roles or unknown operations produce
+typed repair gaps; they never select a generic animation as a silent fallback.
+
 ## Verification
 
 Every new animation asset should have focused tests that prove:
@@ -210,16 +240,17 @@ Avoid:
 
 For a new animation, an LLM should proceed in this order:
 
-1. Name the asset id, bundle id, timeline id, layout id, and render target ids.
-2. List semantic objects and selectors.
-3. List transformations and correspondence.
-4. Choose sequence, parallel, or layout composition.
-5. Add checks and dashboard metadata.
-6. Write a focused test that proves the contract.
-7. Implement the asset through `createKpAnimationAsset` or
-   `createKpAnimationAssetBuilder`.
-8. Add the asset to the appropriate catalog function.
-9. Run focused tests, typecheck, and Theseus validation.
+1. Choose exact operation-pack pins from the semantic-motion authoring catalog.
+2. Declare source, target, and meaningful intermediate semantic entities with
+   provenance and epistemic status.
+3. Choose registered high-level operations and bind every required role.
+4. Author salience intent and disclosure; do not author concrete motion.
+5. Compile the v2 draft and repair only the typed rejected paths.
+6. Inspect the resolved operation, inherited motif, and semantic phase ids.
+7. Compile or adapt the accepted draft into an animation asset and add it to
+   the appropriate catalog.
+8. Run focused compiler, role-contract, visual, overflow, rewind, and
+   accessibility checks before promotion.
 
 The result should be concise enough for an LLM to author, but strict enough
 that another LLM can inspect, decompose, compose, and extend it without

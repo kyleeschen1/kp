@@ -211,7 +211,8 @@
     {
       "id": "next-action.kp.animation.llm-operation-authoring-v1",
       "title": "Teach the LLM compiler the promoted operations",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.llm-operation-authoring-v1 in Semantic Motion Animation Library Long Loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.semantic-motion-promotion-gate-v1",

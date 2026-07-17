@@ -7,6 +7,14 @@ import {
   createKpSemanticTransitionGap,
   type KpSemanticTransitionGap
 } from "../semantic/semantic-transition-gap.ts";
+import {
+  createKpCanonicalOperationProjectPins
+} from "../semantic/canonical-operation-pack.ts";
+import {
+  kpCanonicalOperationRegistry,
+  resolveKpCanonicalOperation
+} from "../semantic/canonical-operation-registry.ts";
+import type { KpCanonicalOperationId } from "../semantic/canonical-operation.ts";
 
 export type KpLlmAnimationDraftV2Patch =
   | {
@@ -32,11 +40,23 @@ export interface KpLlmAnimationDraftV2CompileDiagnostic extends KpLlmAnimationDr
   };
 }
 
+export interface KpLlmAnimationDraftV2ResolvedOperation {
+  readonly kind: "llm-resolved-operation";
+  readonly derivationId: string;
+  readonly operationStepId: string;
+  readonly operationId: string;
+  readonly operationPack: { readonly packId: string; readonly version: string };
+  readonly canonicalComposition: readonly KpCanonicalOperationId[];
+  readonly sourceTransformType?: string | undefined;
+  readonly roleBindings: Readonly<Record<string, readonly string[]>>;
+}
+
 export type KpLlmAnimationDraftV2CompileResult =
   | {
       readonly status: "accepted";
       readonly draft: KpLlmAnimationDraftV2;
       readonly fingerprint: string;
+      readonly resolvedOperations: readonly KpLlmAnimationDraftV2ResolvedOperation[];
       readonly diagnostics: readonly [];
       readonly gaps: readonly [];
     }
@@ -55,6 +75,7 @@ export function compileKpLlmAnimationDraftV2(
       status: "accepted",
       draft,
       fingerprint: stableStringify(draft),
+      resolvedOperations: resolveDraftOperations(draft),
       diagnostics: [],
       gaps: []
     };
@@ -79,6 +100,46 @@ export function compileKpLlmAnimationDraftV2(
       }]
     }))
   };
+}
+
+function resolveDraftOperations(
+  draft: KpLlmAnimationDraftV2
+): readonly KpLlmAnimationDraftV2ResolvedOperation[] {
+  const pins = createKpCanonicalOperationProjectPins(draft.operationPacks);
+  return draft.derivations.flatMap((derivation) =>
+    derivation.operations.map((operation) => {
+      const resolution = resolveKpCanonicalOperation({
+        registry: kpCanonicalOperationRegistry,
+        pins,
+        operationId: operation.operationId
+      });
+      // Validation owns repair diagnostics, so an accepted draft reaching this
+      // branch must resolve without introducing a second fallback path.
+      if (resolution.status !== "resolved") {
+        throw new Error(resolution.message);
+      }
+      return {
+        kind: "llm-resolved-operation" as const,
+        derivationId: derivation.id,
+        operationStepId: operation.id,
+        operationId: operation.operationId,
+        operationPack: {
+          packId: resolution.pack.id,
+          version: resolution.pack.version
+        },
+        canonicalComposition: [...resolution.entry.canonicalComposition],
+        ...(resolution.entry.sourceTransformType === undefined
+          ? {}
+          : { sourceTransformType: resolution.entry.sourceTransformType }),
+        roleBindings: Object.fromEntries(
+          Object.entries(operation.roleBindings).map(([roleId, ids]) => [
+            roleId,
+            [...ids]
+          ])
+        )
+      };
+    })
+  );
 }
 
 export function applyKpLlmAnimationDraftV2Patch(input: {

@@ -223,16 +223,28 @@ function validateOperation(operation: KpLlmAnimationDraftV2Operation, path: stri
   Object.entries(operation.roleBindings).forEach(([roleId, ids]) => ids.forEach((id) => {
     if (!entityIds.has(id)) issues.push({ path: `${path}.roleBindings.${roleId}`, code: "draft-v2.reference", message: `Operation ${operation.id} references missing entity ${id}.` });
   }));
-  if (operation.operationId.startsWith("kp.core.")) {
-    const descriptor = findKpCanonicalOperationCoreDescriptor(operation.operationId as Parameters<typeof findKpCanonicalOperationCoreDescriptor>[0]);
-    descriptor.roles.forEach((role) => {
-      const count = operation.roleBindings[role.id]?.length ?? 0;
-      const valid = role.cardinality === "exactly-one" ? count === 1 : role.cardinality === "zero-or-one" ? count <= 1 : count >= 1;
-      if (!valid) issues.push({ path: `${path}.roleBindings.${role.id}`, code: "draft-v2.operation", message: `Operation ${operation.id} role ${role.id} requires ${role.cardinality}; received ${count}.` });
-    });
-    Object.keys(operation.roleBindings).filter((roleId) => !descriptor.roles.some((role) => role.id === roleId)).forEach((roleId) => {
-      issues.push({ path: `${path}.roleBindings.${roleId}`, code: "draft-v2.operation", message: `Operation ${operation.id} binds unknown role ${roleId}.` });
-    });
+  const roles = resolution.entry.authoringRoles ?? (
+    operation.operationId.startsWith("kp.core.")
+      ? findKpCanonicalOperationCoreDescriptor(
+          operation.operationId as Parameters<typeof findKpCanonicalOperationCoreDescriptor>[0]
+        ).roles
+      : undefined
+  );
+  roles?.forEach((role) => {
+    const count = operation.roleBindings[role.id]?.length ?? 0;
+    const valid = role.cardinality === "exactly-one"
+      ? count === 1
+      : role.cardinality === "zero-or-one"
+        ? count <= 1
+        : count >= 1;
+    if (!valid) issues.push({ path: `${path}.roleBindings.${role.id}`, code: "draft-v2.operation", message: `Operation ${operation.id} role ${role.id} requires ${role.cardinality}; received ${count}.` });
+  });
+  if (roles !== undefined) {
+    Object.keys(operation.roleBindings)
+      .filter((roleId) => !roles.some((role) => role.id === roleId))
+      .forEach((roleId) => {
+        issues.push({ path: `${path}.roleBindings.${roleId}`, code: "draft-v2.operation", message: `Operation ${operation.id} binds unknown role ${roleId}.` });
+      });
   }
 }
 

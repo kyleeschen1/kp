@@ -1,7 +1,9 @@
 import {
   findKpCanonicalOperationCoreDescriptor,
   kpCanonicalOperationCore,
-  type KpCanonicalOperationId
+  type KpCanonicalOperationId,
+  type KpCanonicalOperationRole,
+  type KpCanonicalOperationRoleCardinality
 } from "./canonical-operation.ts";
 import {
   createKpCanonicalOperationPack,
@@ -17,6 +19,10 @@ import {
 import {
   kpDistributionCanonicalOperationSpec
 } from "./distribution-canonical-operation.ts";
+import {
+  kpSemanticMotionOperationDefinitions,
+  kpSemanticMotionOperationPack
+} from "./semantic-motion-operation-pack.ts";
 
 export interface KpCanonicalOperationRegistryEntry {
   readonly id: string;
@@ -25,6 +31,8 @@ export interface KpCanonicalOperationRegistryEntry {
   readonly operationSpecId?: string | undefined;
   readonly sourceDefinitionId?: string | undefined;
   readonly sourceTransformType?: string | undefined;
+  readonly authoringSummary?: string | undefined;
+  readonly authoringRoles?: readonly KpCanonicalOperationRole[] | undefined;
 }
 
 export interface KpCanonicalOperationRegistry {
@@ -61,15 +69,31 @@ export const kpGeneratedAlgebraOperationPack = createKpCanonicalOperationPack({
   dependencies: [{ packId: kpCanonicalOperationCorePack.id, version: kpCanonicalOperationCorePack.version }]
 });
 
+export const kpSemanticMotionOperationEntries:
+  readonly KpCanonicalOperationRegistryEntry[] =
+  kpSemanticMotionOperationDefinitions.map((definition) => ({
+    id: definition.id,
+    packId: kpSemanticMotionOperationPack.id,
+    canonicalComposition: definition.canonicalComposition,
+    sourceTransformType: definition.transformType,
+    authoringSummary: definition.summary,
+    authoringRoles: definition.authoringRoles
+  }));
+
 export const kpCanonicalOperationRegistry = createKpCanonicalOperationRegistry({
-  packs: [kpCanonicalOperationCorePack, kpGeneratedAlgebraOperationPack],
+  packs: [
+    kpCanonicalOperationCorePack,
+    kpGeneratedAlgebraOperationPack,
+    kpSemanticMotionOperationPack
+  ],
   entries: [
     ...kpCanonicalOperationCore.map((operation) => ({
       id: operation.id,
       packId: kpCanonicalOperationCorePack.id,
       canonicalComposition: [operation.id]
     })),
-    ...kpGeneratedAlgebraOperationEntries
+    ...kpGeneratedAlgebraOperationEntries,
+    ...kpSemanticMotionOperationEntries
   ]
 });
 
@@ -105,6 +129,13 @@ export function createKpCanonicalOperationRegistry(input: {
     entry.canonicalComposition.forEach((operationId) =>
       findKpCanonicalOperationCoreDescriptor(operationId)
     );
+    const roleIds = new Set<string>();
+    entry.authoringRoles?.forEach((role) => {
+      if (roleIds.has(role.id)) {
+        throw new Error(`Canonical operation ${entry.id} repeats authoring role ${role.id}.`);
+      }
+      roleIds.add(role.id);
+    });
   });
   return {
     kind: "canonical-operation-registry",
@@ -115,7 +146,10 @@ export function createKpCanonicalOperationRegistry(input: {
     })),
     entries: input.entries.map((entry) => ({
       ...entry,
-      canonicalComposition: [...entry.canonicalComposition]
+      canonicalComposition: [...entry.canonicalComposition],
+      ...(entry.authoringRoles === undefined
+        ? {}
+        : { authoringRoles: entry.authoringRoles.map((role) => ({ ...role })) })
     }))
   };
 }
@@ -166,7 +200,126 @@ export function migrateGeneratedAlgebraTransformDefinition(
       ? { operationSpecId: kpDistributionCanonicalOperationSpec.id }
       : {}),
     sourceDefinitionId: definition.id,
-    sourceTransformType: definition.transformType
+    sourceTransformType: definition.transformType,
+    authoringSummary: definition.title,
+    authoringRoles: generatedTransformAuthoringRoles(definition.transformType)
+  };
+}
+
+function generatedTransformAuthoringRoles(
+  transformType: string
+): readonly KpCanonicalOperationRole[] {
+  switch (transformType) {
+    case "subtractBothSides":
+    case "addBothSides":
+    case "divideBothSides":
+      return [
+        entityRole("equation-before", "source"),
+        entityRole("operation-value", "source", "zero-or-one"),
+        entityRole("equation-after", "target"),
+        entityRole("introduced-terms", "target", "one-or-more")
+      ];
+    case "cancelAdditiveInverses":
+    case "cancelMultiplicativeInverses":
+      return [
+        entityRole("context-before", "source"),
+        entityRole("inverse-terms", "source", "one-or-more"),
+        entityRole("context-after", "target")
+      ];
+    case "simplifyConstantDifference":
+    case "simplifyConstantSum":
+    case "simplifyConstantQuotient":
+      return [
+        entityRole("operands-before", "source", "one-or-more"),
+        entityRole("result-after", "target")
+      ];
+    case "splitFractionFactors":
+      return [
+        entityRole("fraction-before", "source"),
+        entityRole("factors-after", "target", "one-or-more"),
+        artifactRole("fraction-structure-after", "target", "one-or-more")
+      ];
+    case "mergeFractionCommonFactor":
+      return [
+        entityRole("factors-before", "source", "one-or-more"),
+        entityRole("common-factor-after", "target"),
+        entityRole("fraction-after", "target")
+      ];
+    case "simplifyUnitFractionFactor":
+      return [
+        entityRole("fraction-before", "source"),
+        entityRole("unit-factor", "source"),
+        entityRole("fraction-after", "target")
+      ];
+    case "lowerExponent":
+      return [
+        entityRole("base-before", "source"),
+        entityRole("exponent-before", "source"),
+        entityRole("base-after", "target"),
+        entityRole("factors-after", "target", "one-or-more")
+      ];
+    case "unwrapUnitExponent":
+      return [
+        entityRole("base-before", "source"),
+        entityRole("unit-exponent", "source"),
+        entityRole("base-after", "target")
+      ];
+    case "rewritePowerAsRoot":
+      return [
+        entityRole("base-before", "source"),
+        entityRole("exponent-fragments", "source", "one-or-more"),
+        entityRole("radicand-after", "target"),
+        artifactRole("radical-fragments", "target", "one-or-more")
+      ];
+    case "wrapFunction":
+      return [
+        entityRole("content-before", "source"),
+        entityRole("content-after", "target"),
+        artifactRole("wrapper", "target", "one-or-more")
+      ];
+    case "distributeMultiplication":
+      return [
+        entityRole("factor-before", "source"),
+        entityRole("addends-before", "source", "one-or-more"),
+        entityRole("factor-copies", "target", "one-or-more"),
+        entityRole("products-after", "target", "one-or-more")
+      ];
+    case "factorCommonTerm":
+      return [
+        entityRole("products-before", "source", "one-or-more"),
+        entityRole("common-factor-after", "target"),
+        entityRole("grouped-terms-after", "target", "one-or-more")
+      ];
+    default:
+      throw new Error(`Generated transform ${transformType} has no LLM authoring role contract.`);
+  }
+}
+
+function entityRole(
+  id: string,
+  endpoint: "source" | "target",
+  cardinality: KpCanonicalOperationRoleCardinality = "exactly-one"
+): KpCanonicalOperationRole {
+  return {
+    id,
+    endpoint,
+    kind: "semantic-entity",
+    cardinality,
+    summary: `${endpoint} semantic entity role ${id}`
+  };
+}
+
+function artifactRole(
+  id: string,
+  endpoint: "source" | "target",
+  cardinality: KpCanonicalOperationRoleCardinality
+): KpCanonicalOperationRole {
+  return {
+    id,
+    endpoint,
+    kind: "structural-artifact",
+    cardinality,
+    summary: `${endpoint} structural artifact role ${id}`
   };
 }
 

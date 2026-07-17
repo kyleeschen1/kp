@@ -6,13 +6,15 @@ import {
   createKpCanonicalOperationRegistry,
   kpCanonicalOperationRegistry,
   kpGeneratedAlgebraOperationEntries,
+  kpSemanticMotionOperationEntries,
   resolveKpCanonicalOperation
 } from "../src/semantic/canonical-operation-registry.ts";
 import { listGeneratedAlgebraTransformDefinitions } from "../src/semantic/generated-algebra-transform-definition-registry.ts";
 
 const pins = createKpCanonicalOperationProjectPins([
   { packId: "kp.core", version: "1.0.0" },
-  { packId: "kp.algebra", version: "0.1.0" }
+  { packId: "kp.algebra", version: "0.1.0" },
+  { packId: "kp.semantic-motion", version: "0.1.0" }
 ]);
 
 test("default registry resolves exact core and algebra pins deterministically", () => {
@@ -28,6 +30,21 @@ test("default registry resolves exact core and algebra pins deterministically", 
   assert.deepEqual(
     distribute.status === "resolved" ? distribute.entry.canonicalComposition : [],
     ["kp.core.persist", "kp.core.fan-out", "kp.core.eliminate", "kp.core.reorder"]
+  );
+  const matrix = resolveKpCanonicalOperation({
+    pins,
+    operationId: "kp.semantic-motion.matrix-matrix"
+  });
+  assert.equal(matrix.status, "resolved");
+  assert.equal(
+    matrix.status === "resolved" ? matrix.entry.sourceTransformType : undefined,
+    "multiplyMatrices"
+  );
+  assert.deepEqual(
+    matrix.status === "resolved"
+      ? matrix.entry.authoringRoles?.map((role) => role.id)
+      : [],
+    ["left-rows", "right-columns", "cell-products", "result-cells"]
   );
 });
 
@@ -66,6 +83,15 @@ test("every promoted generated algebra definition has one compatibility entry", 
     new Set(kpGeneratedAlgebraOperationEntries.map((entry) => entry.id)).size,
     definitions.length
   );
+});
+
+test("semantic motion pack exposes only operations with explicit role contracts", () => {
+  assert.equal(kpSemanticMotionOperationEntries.length, 12);
+  assert.ok(kpSemanticMotionOperationEntries.every(
+    (entry) => entry.sourceTransformType !== undefined
+      && entry.authoringRoles !== undefined
+      && entry.authoringRoles.length > 0
+  ));
 });
 
 test("registry rejects duplicate operations and unsatisfied exact dependencies", () => {
