@@ -2503,6 +2503,16 @@ test("dot-product traversal follows semantic indices and preserves accumulated p
   await expect(transition.locator(
     "[data-kp-editor-dot-product-accumulation]"
   )).toContainText("4");
+  await expect(contribution0).toHaveAttribute(
+    "data-kp-editor-dot-product-product-object-id",
+    /intermediate\.product\.0$/
+  );
+  await expect(transition.locator(
+    "[data-kp-editor-dot-product-accumulation]"
+  )).toHaveAttribute(
+    "data-kp-editor-dot-product-partial-sum-object-id",
+    /intermediate\.partial-sum\.0$/
+  );
 
   await scrubber.fill("0.33");
   await expect(transition).toHaveAttribute(
@@ -2516,6 +2526,12 @@ test("dot-product traversal follows semantic indices and preserves accumulated p
   await expect(transition.locator(
     "[data-kp-editor-dot-product-accumulation]"
   )).toContainText("4+10=14");
+  await expect(transition.locator(
+    "[data-kp-editor-dot-product-accumulation]"
+  )).toHaveAttribute(
+    "data-kp-editor-dot-product-partial-sum-object-id",
+    /intermediate\.partial-sum\.1$/
+  );
   await expect(contribution0).toHaveAttribute(
     "data-kp-editor-dot-product-contribution-status",
     "accumulated"

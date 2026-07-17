@@ -230,6 +230,7 @@ function createGeneratedDotProductProblemFixture(
   const ids = generatedDotProductProblemIds(input);
   const result = dotProduct(input.leftVector, input.rightVector);
   const latex = generatedDotProductProblemLatex(input, result);
+  const intermediates = createGeneratedDotProductIntermediateObjects(input, ids);
   const bundle = createKpAssetBundle({
     id: ids.asset,
     title: input.title,
@@ -247,6 +248,7 @@ function createGeneratedDotProductProblemFixture(
           rightVector: input.rightVector
         }
       ),
+      ...intermediates,
       expressionObject(
         ids.result,
         "Computed dot product",
@@ -316,6 +318,65 @@ function createGeneratedDotProductProblemFixture(
     drillDownHooks: [],
     flashcards: createGeneratedDotProductProblemFlashcards(input, ids, result)
   };
+}
+
+function createGeneratedDotProductIntermediateObjects(
+  input: GeneratedDotProductProblemFixtureSpec,
+  ids: GeneratedDotProductProblemIds
+) {
+  let accumulatedValue = 0;
+  const products: number[] = [];
+  return input.leftVector.flatMap((leftValue, semanticIndex) => {
+    const rightValue = input.rightVector[semanticIndex]!;
+    const product = leftValue * rightValue;
+    products.push(product);
+    accumulatedValue += product;
+    const productObjectId = `${ids.initial}.intermediate.product.${semanticIndex}`;
+    const partialSumObjectId = `${ids.initial}.intermediate.partial-sum.${semanticIndex}`;
+    const productLatex = `${leftValue} \\times ${rightValue} = ${product}`;
+    const partialSumLatex = products.length === 1
+      ? String(product)
+      : `${products.join(" + ")} = ${accumulatedValue}`;
+    return [
+      expressionObject(
+        productObjectId,
+        `Dot-product contribution ${semanticIndex + 1}`,
+        productLatex,
+        [
+          selector(productObjectId, "left", "component", String(leftValue)),
+          selector(productObjectId, "right", "component", String(rightValue)),
+          selector(productObjectId, "product", "product", String(product))
+        ],
+        {
+          representation: "dot-product-product",
+          semanticIndex,
+          leftValue,
+          rightValue,
+          product,
+          productLatex
+        }
+      ),
+      expressionObject(
+        partialSumObjectId,
+        `Dot-product partial sum ${semanticIndex + 1}`,
+        partialSumLatex,
+        [
+          selector(
+            partialSumObjectId,
+            "accumulated-value",
+            "partial-sum",
+            String(accumulatedValue)
+          )
+        ],
+        {
+          representation: "dot-product-partial-sum",
+          semanticIndex,
+          accumulatedValue,
+          partialSumLatex
+        }
+      )
+    ];
+  });
 }
 
 function createGeneratedMatrixMatrixProblemFixture(

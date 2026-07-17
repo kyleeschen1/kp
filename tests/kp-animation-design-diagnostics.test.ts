@@ -65,6 +65,7 @@ test("dot product reports its specialized accumulation motif", () => {
   assert.ok(!diagnosis.issues.some(
     (issue) => issue.code === "design.motif.generic-replacement"
   ));
+  assert.deepEqual(diagnosis.issues, []);
 });
 
 test("additive identity reports operation-specific absorption", () => {

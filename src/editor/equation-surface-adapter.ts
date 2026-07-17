@@ -1412,7 +1412,7 @@ function syncDotProductTraversalOverlay(
       ${choreography.contributions.map((contribution) => `
         <span class="editor-equation-stage__dot-product-contribution" data-kp-editor-dot-product-contribution="${contribution.semanticIndex}">
           ${renderLatexToHtml(
-            `${contribution.leftValue} \\times ${contribution.rightValue} = ${contribution.product}`,
+            contribution.productLatex,
             { displayMode: false }
           )}
         </span>
@@ -1474,6 +1474,8 @@ function syncDotProductTraversalOverlay(
       contributionFrame.status;
     element.dataset["kpEditorDotProductSemanticIndex"] =
       String(contribution.semanticIndex);
+    element.dataset["kpEditorDotProductProductObjectId"] =
+      contribution.productObjectId;
   });
   const accumulation = overlay.querySelector<HTMLElement>(
     "[data-kp-editor-dot-product-accumulation]"
@@ -1507,6 +1509,16 @@ function syncDotProductTraversalOverlay(
   accumulation.style.top = `${Math.min(desiredTop, maximumTop)}px`;
   accumulation.style.opacity = String(frame.motion.accumulationOpacity);
   accumulation.style.transform = "translateX(-50%)";
+  const partialSum = choreography.contributions.find(
+    (contribution) =>
+      contribution.semanticIndex === frame.motion.accumulatedThroughIndex
+  );
+  if (partialSum === undefined) {
+    delete accumulation.dataset["kpEditorDotProductPartialSumObjectId"];
+  } else {
+    accumulation.dataset["kpEditorDotProductPartialSumObjectId"] =
+      partialSum.partialSumObjectId;
+  }
 }
 
 function dotProductNarration(

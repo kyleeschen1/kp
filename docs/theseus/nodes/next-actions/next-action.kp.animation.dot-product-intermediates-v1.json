@@ -1,0 +1,146 @@
+{
+  "id": "next-action.kp.animation.dot-product-intermediates-v1",
+  "kind": "next-action",
+  "title": "Expose dot-product products and partial sums",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Promoted every indexed dot-product product and partial sum into authored semantic bundle objects with stable IDs and selectors; traversal now validates and consumes those representations, editor overlays expose their provenance, and missing intermediates fail compilation instead of being invented by the renderer.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.animation.semantic-motion-library-loop-v1.json",
+      "summary": "Run contract whose stored slice next-action.kp.animation.dot-product-intermediates-v1 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.semantic-motion-library-loop-v1.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-16-animation-design-diagnostic-audit.md",
+      "summary": "Catalog audit that establishes strategy cohorts and the ordered repair priorities."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/principles/animation-design-diagnostic-language.md",
+      "summary": "Diagnostic and promotion vocabulary governing the approved animation work."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-linear-algebra-problem-fixture.ts",
+      "summary": "Promoted every indexed dot-product product and partial sum into authored semantic bundle objects with stable IDs and selectors; traversal now validates and consumes those representations, editor overlays expose their provenance, and missing intermediates fail compilation instead of being invented by the renderer."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/dot-product-traversal-choreography.ts",
+      "summary": "Promoted every indexed dot-product product and partial sum into authored semantic bundle objects with stable IDs and selectors; traversal now validates and consumes those representations, editor overlays expose their provenance, and missing intermediates fail compilation instead of being invented by the renderer."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/animation-design-diagnostics.ts",
+      "summary": "Promoted every indexed dot-product product and partial sum into authored semantic bundle objects with stable IDs and selectors; traversal now validates and consumes those representations, editor overlays expose their provenance, and missing intermediates fail compilation instead of being invented by the renderer."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-dot-product-traversal.ts",
+      "summary": "Promoted every indexed dot-product product and partial sum into authored semantic bundle objects with stable IDs and selectors; traversal now validates and consumes those representations, editor overlays expose their provenance, and missing intermediates fail compilation instead of being invented by the renderer."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Promoted every indexed dot-product product and partial sum into authored semantic bundle objects with stable IDs and selectors; traversal now validates and consumes those representations, editor overlays expose their provenance, and missing intermediates fail compilation instead of being invented by the renderer."
+    },
+    {
+      "kind": "file",
+      "path": "tests/generated-linear-algebra-problem-fixture.test.ts",
+      "summary": "Promoted every indexed dot-product product and partial sum into authored semantic bundle objects with stable IDs and selectors; traversal now validates and consumes those representations, editor overlays expose their provenance, and missing intermediates fail compilation instead of being invented by the renderer."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-dot-product-traversal-choreography.test.ts",
+      "summary": "Promoted every indexed dot-product product and partial sum into authored semantic bundle objects with stable IDs and selectors; traversal now validates and consumes those representations, editor overlays expose their provenance, and missing intermediates fail compilation instead of being invented by the renderer."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-animation-design-diagnostics.test.ts",
+      "summary": "Promoted every indexed dot-product product and partial sum into authored semantic bundle objects with stable IDs and selectors; traversal now validates and consumes those representations, editor overlays expose their provenance, and missing intermediates fail compilation instead of being invented by the renderer."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Promoted every indexed dot-product product and partial sum into authored semantic bundle objects with stable IDs and selectors; traversal now validates and consumes those representations, editor overlays expose their provenance, and missing intermediates fail compilation instead of being invented by the renderer."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.animation.semantic-motion-library-loop-v1",
+      "next-action.kp.animation.semantic-motion-library-loop-v1"
+    ]
+  },
+  "affects": [
+    "next-action.kp.animation.semantic-motion-library-loop-v1"
+  ],
+  "verification": [
+    "npm run theseus -- validate",
+    "npm run typecheck",
+    "npx playwright test tests/editor-animation-visuals.browser.spec.ts",
+    "npm test",
+    "npm run build"
+  ],
+  "expectedLearning": [
+    "Whether Expose dot-product products and partial sums can be completed inside Semantic Motion Animation Library Long Loop."
+  ],
+  "allowedWork": [
+    "Only implement the 28 approved semantic-animation slices in stored order.",
+    "Eliminate nested animation scrollbars through responsive native layout while preserving glyph ink and traveling content.",
+    "Add canonical operations, correspondence, choreography, editor realization, tests, documentation, and Theseus evidence required by the approved slices."
+  ],
+  "disallowedWork": [
+    "Do not redesign unrelated dashboard, editor, graph, export, or page-level scrolling behavior.",
+    "Do not use whole-equation transform scaling or content clipping to hide overflow.",
+    "Do not add unapproved animation families or gestalt style packages."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "1266 unit and integration tests",
+      "checkedAt": "2026-07-17T02:57:57.104Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, node, and test TypeScript projects",
+      "checkedAt": "2026-07-17T02:57:57.162Z"
+    },
+    {
+      "command": "playwright editor animation visuals",
+      "status": "passed",
+      "scope": "43 Chromium tests",
+      "checkedAt": "2026-07-17T02:57:57.214Z"
+    },
+    {
+      "command": "playwright editor animation overflow",
+      "status": "passed",
+      "scope": "528 catalog samples with zero nested scrollbars",
+      "checkedAt": "2026-07-17T02:57:57.270Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production bundle",
+      "checkedAt": "2026-07-17T02:57:57.337Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-17T02:57:57.392Z",
+      "scope": "576-node Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Promoted every indexed dot-product product and partial sum into authored semantic bundle objects with stable IDs and selectors; traversal now validates and consumes those representations, editor overlays expose their provenance, and missing intermediates fail compilation instead of being invented by the renderer."
+  }
+}

@@ -104,6 +104,11 @@ export function createKpDotProductTraversalChoreography(
     rank: semanticIndex,
     semanticIndex
   }));
+  const intermediateObjects = animation.bundle.objects.filter((object) => {
+    const representation = optionalStringValue(object.value, "representation");
+    return representation === "dot-product-product" ||
+      representation === "dot-product-partial-sum";
+  });
   const traversal: KpSemanticTraversalPlan = {
     id: `traversal.${transformation.id}`,
     kind: "semantic-traversal-plan",
@@ -149,6 +154,27 @@ export function createKpDotProductTraversalChoreography(
       const product =
         leftVector[semanticIndex]! * rightVector[semanticIndex]!;
       accumulatedValue += product;
+      const productObject = intermediateObjects.find((object) =>
+        stringValue(object.value, "representation") === "dot-product-product" &&
+        numericValue(object.value, "semanticIndex") === semanticIndex
+      );
+      const partialSumObject = intermediateObjects.find((object) =>
+        stringValue(object.value, "representation") === "dot-product-partial-sum" &&
+        numericValue(object.value, "semanticIndex") === semanticIndex
+      );
+      if (productObject === undefined || partialSumObject === undefined) {
+        throw new Error(
+          `Dot-product contribution ${semanticIndex} requires authored product and partial-sum representations.`
+        );
+      }
+      if (
+        numericValue(productObject.value, "product") !== product ||
+        numericValue(partialSumObject.value, "accumulatedValue") !== accumulatedValue
+      ) {
+        throw new Error(
+          `Dot-product contribution ${semanticIndex} intermediate values do not match the computation.`
+        );
+      }
       const propagationEntry = propagation.entries.find(
         (entry) => entry.participantId === `${participant.id}.visual`
       )!;
@@ -185,6 +211,10 @@ export function createKpDotProductTraversalChoreography(
         rightValue: rightVector[semanticIndex]!,
         product,
         accumulatedValue,
+        productObjectId: productObject.id,
+        partialSumObjectId: partialSumObject.id,
+        productLatex: stringValue(productObject.value, "productLatex"),
+        partialSumLatex: stringValue(partialSumObject.value, "partialSumLatex"),
         start: propagationEntry.start,
         end: propagationEntry.end,
         traversalParticipantId: participant.id,
@@ -463,6 +493,23 @@ function numericValue(value: unknown, key: string): number {
     throw new Error(`Dot-product target requires numeric ${key}.`);
   }
   return candidate;
+}
+
+function stringValue(value: unknown, key: string): string {
+  const candidate = typeof value === "object" && value !== null
+    ? (value as Record<string, unknown>)[key]
+    : undefined;
+  if (typeof candidate !== "string" || candidate.length === 0) {
+    throw new Error(`Dot-product intermediate requires string ${key}.`);
+  }
+  return candidate;
+}
+
+function optionalStringValue(value: unknown, key: string): string | undefined {
+  const candidate = typeof value === "object" && value !== null
+    ? (value as Record<string, unknown>)[key]
+    : undefined;
+  return typeof candidate === "string" ? candidate : undefined;
 }
 
 function round(value: number): number {

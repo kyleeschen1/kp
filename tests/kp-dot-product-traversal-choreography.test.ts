@@ -27,6 +27,61 @@ test("dot-product fixture exposes one honest six-component semantic fan-in", () 
   assert.equal(choreography.plan.equationTransition.relations[0]?.lifecycle, "merge");
 });
 
+test("products and partial sums are authored semantic representations", () => {
+  const intermediates = animation.bundle.objects.filter((object) =>
+    typeof object.value === "object" &&
+    object.value !== null &&
+    "representation" in object.value
+  );
+  assert.equal(intermediates.length, 6);
+  assert.deepEqual(
+    choreography.contributions.map((contribution) => ({
+      productObjectId: contribution.productObjectId,
+      partialSumObjectId: contribution.partialSumObjectId,
+      productLatex: contribution.productLatex,
+      partialSumLatex: contribution.partialSumLatex
+    })),
+    [
+      {
+        productObjectId: `${animation.bundle.objects[0]!.id}.intermediate.product.0`,
+        partialSumObjectId: `${animation.bundle.objects[0]!.id}.intermediate.partial-sum.0`,
+        productLatex: "1 \\times 4 = 4",
+        partialSumLatex: "4"
+      },
+      {
+        productObjectId: `${animation.bundle.objects[0]!.id}.intermediate.product.1`,
+        partialSumObjectId: `${animation.bundle.objects[0]!.id}.intermediate.partial-sum.1`,
+        productLatex: "2 \\times 5 = 10",
+        partialSumLatex: "4 + 10 = 14"
+      },
+      {
+        productObjectId: `${animation.bundle.objects[0]!.id}.intermediate.product.2`,
+        partialSumObjectId: `${animation.bundle.objects[0]!.id}.intermediate.partial-sum.2`,
+        productLatex: "3 \\times 6 = 18",
+        partialSumLatex: "4 + 10 + 18 = 32"
+      }
+    ]
+  );
+});
+
+test("dot-product choreography refuses renderer-invented intermediates", () => {
+  const withoutIntermediates = {
+    ...animation,
+    bundle: {
+      ...animation.bundle,
+      objects: animation.bundle.objects.filter((object) =>
+        typeof object.value !== "object" ||
+        object.value === null ||
+        !("representation" in object.value)
+      )
+    }
+  };
+  assert.throws(
+    () => createKpDotProductTraversalChoreography(withoutIntermediates),
+    /requires authored product and partial-sum representations/
+  );
+});
+
 test("dot-product traversal and propagation follow semantic index order", () => {
   assert.deepEqual(
     choreography.traversal.participants.map(

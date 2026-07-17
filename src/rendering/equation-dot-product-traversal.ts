@@ -20,6 +20,10 @@ export interface KpDotProductRendererContributionPlan {
   readonly rightValue: number;
   readonly product: number;
   readonly accumulatedValue: number;
+  readonly productObjectId: string;
+  readonly partialSumObjectId: string;
+  readonly productLatex: string;
+  readonly partialSumLatex: string;
   readonly start: number;
   readonly end: number;
   readonly leftSignature: KpOrganicMotionSignature;
@@ -203,16 +207,9 @@ function accumulationLatex(
   throughIndex: number | undefined
 ): string {
   if (throughIndex === undefined) return "";
-  const contributions = plan.contributions.filter(
-    (contribution) => contribution.semanticIndex <= throughIndex
-  );
-  const products = contributions.map((contribution) =>
-    String(contribution.product)
-  );
-  const accumulated = contributions.at(-1)!.accumulatedValue;
-  return products.length === 1
-    ? `${products[0]}`
-    : `${products.join(" + ")} = ${accumulated}`;
+  return plan.contributions.find(
+    (contribution) => contribution.semanticIndex === throughIndex
+  )?.partialSumLatex ?? "";
 }
 
 function frameToken(

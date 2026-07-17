@@ -138,11 +138,24 @@ export function diagnoseKpAnimationDesign(input: {
     input.animation.bundle.objects
       .flatMap((object) => object.selectors)
       .find((selector) => selector.id === selectorId)?.kind;
+  const explicitIntermediateRepresentations = new Set(
+    input.animation.bundle.objects.flatMap((object) => {
+      if (typeof object.value !== "object" || object.value === null) return [];
+      const representation = (object.value as Record<string, unknown>)["representation"];
+      return typeof representation === "string" ? [representation] : [];
+    })
+  );
+  const dotProductIntermediatesComplete =
+    explicitIntermediateRepresentations.has("dot-product-product") &&
+    explicitIntermediateRepresentations.has("dot-product-partial-sum");
   const lossyRecord = correspondence?.records.find((record) =>
     record.sourceSelectorIds.length >= 3 &&
     record.targetSelectorIds.length === 1 &&
     (
-      transformation.transformType === "computeDotProduct" ||
+      (
+        transformation.transformType === "computeDotProduct" &&
+        !dotProductIntermediatesComplete
+      ) ||
       targetSelectorKind(record.targetSelectorIds[0]!) === "operator"
     )
   );
