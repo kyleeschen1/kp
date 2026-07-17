@@ -56,12 +56,13 @@ import type {
 import {
   kpDistributionChoreographyRuntime
 } from "../animation/distribution-choreography-runtime.ts";
-import {
-  compileKpFactoringChoreography,
-  sampleKpFactoringChoreography,
-  type KpFactoringChoreographyFrame,
-  type KpFactoringChoreographyPlan
+import type {
+  KpFactoringChoreographyFrame,
+  KpFactoringChoreographyPlan
 } from "../animation/factoring-choreography.ts";
+import {
+  kpFactoringChoreographyRuntime
+} from "../animation/factoring-choreography-runtime.ts";
 import {
   compileKpFractionChoreography,
   sampleKpFractionChoreography,
@@ -1036,7 +1037,8 @@ function createFactoringChoreographyContext(
   ) {
     throw new Error("Canonical factoring geometry is missing factor fan-in.");
   }
-  const plan = compileKpFactoringChoreography({
+  const runtime = kpFactoringChoreographyRuntime();
+  const plan = runtime.compile({
     id: `${geometry.transitionId}.factoring-choreography`,
     factorCopyIds: factorRelation.source.selectorIds,
     commonFactorId,
@@ -1070,7 +1072,7 @@ function createFactoringChoreographyContext(
   );
   return {
     plan,
-    frame: sampleKpFactoringChoreography({ plan, progress }),
+    frame: runtime.sample({ plan, progress }),
     factorRelationRecordId: factorRelation.recordId,
     reflowRelationRecordIds: new Set(
       persistentRelations.map((relation) => relation.recordId)

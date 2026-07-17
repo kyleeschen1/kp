@@ -181,7 +181,7 @@
       "id": "next-action.kp.material-motion.factoring-fusion-v0",
       "title": "Apply fusion to factoring",
       "summary": "Visible-motion gate: focused factoring, reverse, and browser tests plus runtime frame review; no full suite absent cross-family impact.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.semantic-duration-v0",

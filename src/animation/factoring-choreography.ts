@@ -1,3 +1,10 @@
+import type {
+  KpFissionFusionFrame,
+  KpFissionFusionPlan
+} from "./fission-fusion.ts";
+import { kpFissionFusionRuntime } from "./fission-fusion-runtime.ts";
+import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
+
 export const kpFactoringChoreographyPhaseIds = [
   "focus-factor-copies",
   "preview-compaction",
@@ -29,6 +36,7 @@ export interface KpFactoringChoreographyPlan {
   readonly groupingArtifactIds: readonly string[];
   readonly phaseIds: readonly KpFactoringChoreographyPhaseId[];
   readonly factorMinimumScale: number;
+  readonly fusionPlan: KpFissionFusionPlan;
 }
 
 export interface KpFactoringChoreographyFrame {
@@ -39,6 +47,7 @@ export interface KpFactoringChoreographyFrame {
   readonly focusStrength: number;
   readonly addendCompactionProgress: number;
   readonly groupingOpacity: number;
+  readonly fusion: KpFissionFusionFrame;
   readonly commonFactor: { readonly opacity: number; readonly scale: number };
   readonly factorCopies: readonly {
     readonly entityId: string;
@@ -74,6 +83,24 @@ export function compileKpFactoringChoreography(input: {
   if (!(factorMinimumScale > 0 && factorMinimumScale <= 1)) {
     throw new Error("Factoring factorMinimumScale must be greater than zero and at most one.");
   }
+  const fusionPlan = kpFissionFusionRuntime().compile({
+    id: `${input.id}.factor-fusion`,
+    mode: "fusion",
+    lineageGraph: createKpSemanticLineageGraph({
+      id: `${input.id}.factor-lineage`,
+      sourceEntityIds: [...input.factorCopyIds],
+      targetEntityIds: [input.commonFactorId],
+      edges: [{
+        id: `${input.id}.factor-merge`,
+        relation: "merge",
+        sourceEntityIds: [...input.factorCopyIds],
+        targetEntityIds: [input.commonFactorId],
+        summary: "Repeated factors fuse into one common factor."
+      }]
+    }),
+    semanticOrder: input.factorCopyIds,
+    junctionScale: factorMinimumScale
+  });
   return {
     kind: "factoring-choreography-plan",
     id: input.id,
@@ -83,7 +110,8 @@ export function compileKpFactoringChoreography(input: {
     connectorPairs: input.connectorPairs.map((pair) => ({ ...pair })),
     groupingArtifactIds: [...input.groupingArtifactIds],
     phaseIds: [...kpFactoringChoreographyPhaseIds],
-    factorMinimumScale
+    factorMinimumScale,
+    fusionPlan
   };
 }
 
@@ -92,19 +120,22 @@ export function sampleKpFactoringChoreography(input: {
   readonly progress: number;
 }): KpFactoringChoreographyFrame {
   const progress = clamp01(input.progress);
+  const fusion = kpFissionFusionRuntime().sample({
+    plan: input.plan.fusionPlan,
+    progress
+  });
   const phases = {
     "focus-factor-copies": intervalProgress(progress, 0, 0.12),
     "preview-compaction": intervalProgress(progress, 0.08, 0.28),
-    "collect-factor-copies": intervalProgress(progress, 0.28, 0.78),
+    "collect-factor-copies": fusion.phases["approach-junction"],
     "introduce-grouping": intervalProgress(progress, 0.5, 0.72),
     "compact-addends": intervalProgress(progress, 0.08, 0.78),
-    "settle-common-factor": intervalProgress(progress, 0.72, 0.94),
+    "settle-common-factor": fusion.phases["transit-material"],
     "release-factor-focus": intervalProgress(progress, 0.72, 0.9)
   };
   const addendCompactionProgress =
     0.18 * phases["preview-compaction"] +
     0.82 * intervalProgress(progress, 0.52, 0.78);
-  const settlement = phases["settle-common-factor"];
   return {
     kind: "factoring-choreography-frame",
     planId: input.plan.id,
@@ -114,27 +145,22 @@ export function sampleKpFactoringChoreography(input: {
       phases["focus-factor-copies"] * (1 - phases["release-factor-focus"]),
     addendCompactionProgress,
     groupingOpacity: phases["introduce-grouping"],
+    fusion,
     commonFactor: {
-      opacity: intervalProgress(progress, 0.72, 0.9),
-      scale: interpolate(input.plan.factorMinimumScale, 1, settlement)
+      opacity: fusion.targets[0]!.opacity,
+      scale: fusion.targets[0]!.scale
     },
     factorCopies: input.plan.factorCopyIds.map((entityId, semanticIndex) => {
-      const stagger = Math.max(0, semanticIndex - 1) * 0.04;
-      const collecting = semanticIndex === 0
-        ? addendCompactionProgress
-        : intervalProgress(progress, 0.28 + stagger, 0.72 + stagger);
+      const material = fusion.sources.find((source) => source.entityId === entityId);
+      if (material === undefined) {
+        throw new Error(`Missing factoring source ${entityId}.`);
+      }
       return {
         entityId,
         semanticIndex,
-        opacity: semanticIndex === 0
-          ? 1 - intervalProgress(progress, 0.94, 1)
-          : 1 - intervalProgress(collecting, 0.45, 1),
-        scale: interpolate(
-          interpolate(1, input.plan.factorMinimumScale, phases["collect-factor-copies"]),
-          1,
-          settlement
-        ),
-        pathProgress: collecting
+        opacity: material.opacity,
+        scale: material.scale,
+        pathProgress: material.junctionProgress
       };
     })
   };
@@ -145,10 +171,6 @@ function intervalProgress(progress: number, start: number, end: number): number 
   if (progress >= end) return 1;
   const local = (progress - start) / (end - start);
   return local * local * (3 - 2 * local);
-}
-
-function interpolate(from: number, to: number, progress: number): number {
-  return from + (to - from) * progress;
 }
 
 function clamp01(value: number): number {

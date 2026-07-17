@@ -2130,9 +2130,11 @@ test("factoring coalesces repeated factors through its inverse choreography", as
     "1"
   );
   await expect(sourceFactors.nth(0)).toHaveCSS("opacity", "1");
-  expect(Number(await sourceFactors.nth(1).evaluate(
-    (element) => getComputedStyle(element).opacity
-  ))).toBeGreaterThan(0.9);
+  await expect(sourceFactors.nth(1)).toHaveCSS("opacity", "1");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-factoring-owner-side",
+    "sources"
+  );
   expect(await sourceFactors.nth(0).evaluate((element) => getComputedStyle(element).transform))
     .not.toBe(await sourceFactors.nth(1).evaluate((element) => getComputedStyle(element).transform));
   const pathVariants = await sourceFactors.evaluateAll((elements) =>
@@ -2146,9 +2148,13 @@ test("factoring coalesces repeated factors through its inverse choreography", as
   ));
   expect(groupingOpacity).toBeGreaterThan(0);
   expect(groupingOpacity).toBeLessThan(1);
-  expect(Number(await sourceFactors.nth(1).evaluate(
-    (element) => getComputedStyle(element).opacity
-  ))).toBeLessThan(0.5);
+  await expect(sourceFactors.nth(0)).toHaveCSS("opacity", "0");
+  await expect(sourceFactors.nth(1)).toHaveCSS("opacity", "0");
+  await expect(commonFactor).toHaveCSS("opacity", "1");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-factoring-owner-side",
+    "targets"
+  );
 
   await scrubber.fill("0.9");
   await expect(commonFactor).toHaveCSS("opacity", "1");
@@ -2159,10 +2165,28 @@ test("factoring coalesces repeated factors through its inverse choreography", as
   );
   await expect(sourceFactors.nth(0)).toHaveCSS("--kp-focus-outline-strength", "0");
 
-  await scrubber.fill("0.99");
-  expect(Number(await sourceFactors.nth(0).evaluate(
-    (element) => getComputedStyle(element).opacity
-  ))).toBeGreaterThan(0);
+  await scrubber.fill("0.599");
+  await expect(sourceFactors.nth(0)).toHaveCSS("opacity", "1");
+  await expect(sourceFactors.nth(1)).toHaveCSS("opacity", "1");
+  await expect(commonFactor).toHaveCSS("opacity", "0");
+  await scrubber.fill("0.6");
+  const fusionCenters = await sourceFactors.evaluateAll((elements) =>
+    elements.map((element) => {
+      const rect = element.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    })
+  );
+  const commonFactorCenter = await commonFactor.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+  });
+  expect(fusionCenters.every((center) =>
+    Math.abs(center.x - commonFactorCenter.x) < 1 &&
+    Math.abs(center.y - commonFactorCenter.y) < 1
+  )).toBe(true);
+  await expect(sourceFactors.nth(0)).toHaveCSS("opacity", "0");
+  await expect(sourceFactors.nth(1)).toHaveCSS("opacity", "0");
+  await expect(commonFactor).toHaveCSS("opacity", "1");
   await scrubber.fill("1");
   await expect(sourceFactors.nth(0)).toHaveCSS("opacity", "0");
   await expect(sourceFactors.nth(1)).toHaveCSS("opacity", "0");

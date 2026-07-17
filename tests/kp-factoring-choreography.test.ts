@@ -1,10 +1,16 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import "../src/animation/fission-fusion-register.ts";
+
 import {
   compileKpFactoringChoreography,
   sampleKpFactoringChoreography
 } from "../src/animation/factoring-choreography.ts";
+import {
+  evaluateKpFissionFusionLaws,
+  reverseKpFissionFusionPlan
+} from "../src/animation/fission-fusion.ts";
 
 test("factoring previews repeated-factor focus before collection", () => {
   const preview = sampleKpFactoringChoreography({
@@ -18,16 +24,51 @@ test("factoring previews repeated-factor focus before collection", () => {
   assert.equal(preview.factorCopies[1]!.pathProgress, 0);
 });
 
-test("later factor copies collect toward the anchored first factor", () => {
+test("factor copies collect in semantic order while retaining ownership", () => {
   const frame = sampleKpFactoringChoreography({
     plan: factoringPlan(),
     progress: 0.5
   });
-  assert.ok(frame.factorCopies[0]!.pathProgress < frame.factorCopies[1]!.pathProgress);
+  assert.ok(frame.factorCopies[0]!.pathProgress > frame.factorCopies[1]!.pathProgress);
   assert.equal(frame.factorCopies[0]!.opacity, 1);
-  assert.ok(frame.factorCopies[1]!.opacity > 0.9);
+  assert.equal(frame.factorCopies[1]!.opacity, 1);
   assert.equal(frame.commonFactor.opacity, 0);
+  assert.equal(frame.fusion.ownership.ownerSide, "sources");
   assert.deepEqual(frame.factorCopies.map((copy) => copy.semanticIndex), [0, 1]);
+});
+
+test("factoring waits for every origin before one shared semantic fusion", () => {
+  const plan = factoringPlan();
+  const before = sampleKpFactoringChoreography({
+    plan,
+    progress: plan.fusionPlan.transferEvent.progress - 0.001
+  });
+  const after = sampleKpFactoringChoreography({
+    plan,
+    progress: plan.fusionPlan.transferEvent.progress
+  });
+  assert.equal(before.fusion.allRequiredSourcesReady, true);
+  assert.ok(before.factorCopies.every((copy) => copy.opacity === 1));
+  assert.equal(before.commonFactor.opacity, 0);
+  assert.ok(after.factorCopies.every((copy) => copy.opacity === 0));
+  assert.equal(after.commonFactor.opacity, 1);
+  assert.deepEqual(after.fusion.ownership.ownerEntityIds, [plan.commonFactorId]);
+});
+
+test("factoring declares distribution fission as an explicit semantic reverse", () => {
+  const fusion = factoringPlan().fusionPlan;
+  const distribution = reverseKpFissionFusionPlan({
+    id: `${fusion.id}.distribution-reverse`,
+    plan: fusion
+  });
+  assert.equal(distribution.mode, "fission");
+  assert.equal(distribution.reverseOfPlanId, fusion.id);
+  assert.deepEqual(distribution.sourceEntityIds, fusion.targetEntityIds);
+  assert.deepEqual(distribution.targetEntityIds, fusion.sourceEntityIds);
+  assert.deepEqual(
+    evaluateKpFissionFusionLaws({ plan: fusion, reversePlan: distribution }),
+    []
+  );
 });
 
 test("grouping enters as products compact and settlement is exact", () => {

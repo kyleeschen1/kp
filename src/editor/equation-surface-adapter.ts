@@ -2770,6 +2770,12 @@ function applyFactoringFactorFocus(input: {
     String(input.frame.addendCompactionProgress);
   input.transition.dataset["kpEditorEquationFactoringGroupingOpacity"] =
     String(input.frame.groupingOpacity);
+  input.transition.dataset["kpEditorEquationFactoringOwnerSide"] =
+    input.frame.fusion.ownership.ownerSide;
+  input.transition.dataset["kpEditorEquationFactoringOwnerIds"] =
+    input.frame.fusion.ownership.ownerEntityIds.join(" ");
+  input.transition.dataset["kpEditorEquationFactoringTransferEvent"] =
+    input.frame.fusion.ownership.transferEventId;
   const factorRelation = input.geometry.relations.find(
     (relation) => relation.lifecycle === "merge"
   );
