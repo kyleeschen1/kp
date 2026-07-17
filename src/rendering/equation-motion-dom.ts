@@ -43,6 +43,7 @@ export interface KpMeasuredEquationTransitionGeometry {
   readonly transitionId: string;
   readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
   readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
+  readonly distributionChoreographyKind?: "canonical-fan-out" | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
@@ -116,6 +117,7 @@ export function measureKpEquationTransitionGeometry(input: {
   readonly targetMotionIdsBySelector?: Readonly<Record<string, string>> | undefined;
   readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
   readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
+  readonly distributionChoreographyKind?: "canonical-fan-out" | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
@@ -145,6 +147,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.lineageChoreographyKind === undefined
       ? {}
       : { lineageChoreographyKind: input.lineageChoreographyKind }),
+    ...(input.distributionChoreographyKind === undefined
+      ? {}
+      : { distributionChoreographyKind: input.distributionChoreographyKind }),
     ...(input.representationalSuccessionKind === undefined
       ? {}
       : {

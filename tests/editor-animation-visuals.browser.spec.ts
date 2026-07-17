@@ -1773,6 +1773,33 @@ test("wrap and distribution satisfy their executable choreography contracts", as
     '[data-kp-editor-equation-target] [data-kp-motion-id$="-factor"]'
   );
 
+  await scrubber.fill("0.18");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-distribution-choreography",
+    /distribution-choreography$/
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-distribution-phase",
+    "reflow-addends"
+  );
+  const previewReflow = Number(await transition.getAttribute(
+    "data-kp-editor-equation-distribution-addend-reflow"
+  ));
+  expect(previewReflow).toBeGreaterThan(0);
+  expect(previewReflow).toBeLessThan(0.2);
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-distribution-grouping-opacity",
+    "1"
+  );
+  expect(parseFloat(await sourceFactor.evaluate(
+    (element) => (element as HTMLElement).style.getPropertyValue(
+      "--kp-focus-outline-strength"
+    )
+  ))).toBeGreaterThan(0);
+  await expect(targetFactors.nth(0)).toHaveCSS("opacity", "0");
+  await expect(targetFactors.nth(1)).toHaveCSS("opacity", "0");
+
+  await scrubber.fill("0.5");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-motif",
     distributionBaseline.observedMotif
@@ -1788,8 +1815,16 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   );
   await expect(sourceFactor).toHaveCSS("opacity", "1");
   await expect(targetFactors).toHaveCount(2);
-  await expect(targetFactors.nth(0)).toHaveCSS("opacity", "1");
+  await expect(targetFactors.nth(0)).toHaveCSS("opacity", "0");
   await expect(targetFactors.nth(1)).toHaveCSS("opacity", "1");
+  await expect(targetFactors.nth(0)).toHaveAttribute(
+    "data-kp-editor-distribution-semantic-index",
+    "0"
+  );
+  await expect(targetFactors.nth(1)).toHaveAttribute(
+    "data-kp-editor-distribution-semantic-index",
+    "1"
+  );
   const pathIds = await targetFactors.evaluateAll((elements) =>
     elements.map((element) => element.getAttribute("data-kp-equation-lineage-path-id"))
   );
@@ -1807,6 +1842,13 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   expect(transitProgress).toBeGreaterThan(0);
   expect(transitProgress).toBeLessThan(1);
 
+  await scrubber.fill("0.68");
+  const groupingOpacity = Number(await transition.getAttribute(
+    "data-kp-editor-equation-distribution-grouping-opacity"
+  ));
+  expect(groupingOpacity).toBeGreaterThan(0);
+  expect(groupingOpacity).toBeLessThan(1);
+
   await scrubber.fill("0.99");
   expect(Number(await sourceFactor.evaluate((element) => getComputedStyle(element).opacity)))
     .toBeGreaterThan(0);
@@ -1814,6 +1856,9 @@ test("wrap and distribution satisfy their executable choreography contracts", as
   await expect(sourceFactor).toHaveCSS("opacity", "0");
   await expect(targetFactors.nth(0)).toHaveCSS("opacity", "1");
   await expect(targetFactors.nth(1)).toHaveCSS("opacity", "1");
+  await expect(sourceFactor).toHaveCSS("--kp-focus-z", "0px");
+  await expect(sourceFactor).toHaveCSS("--kp-focus-scale", "1");
+  await expect(sourceFactor).toHaveCSS("--kp-focus-outline-strength", "0");
   await player.getByRole("button", { name: "Rewind animation" }).click();
   await scrubber.fill("0.5");
   await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "rewind");

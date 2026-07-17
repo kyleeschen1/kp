@@ -39,6 +39,12 @@ import {
   type KpDerivativePowerChoreographyFrame,
   type KpDerivativePowerChoreographyPlan
 } from "../animation/derivative-power-choreography.ts";
+import {
+  compileKpDistributionChoreography,
+  sampleKpDistributionChoreography,
+  type KpDistributionChoreographyFrame,
+  type KpDistributionChoreographyPlan
+} from "../animation/distribution-choreography.ts";
 
 export interface KpEquationTokenMotionPose {
   readonly opacity: number;
@@ -64,6 +70,8 @@ export interface KpEquationTokenMotionFrame {
   readonly tokens: readonly KpEquationTokenMotionFrameToken[];
   readonly enclosureChoreography?: KpEquationEnclosureChoreographyFrame | undefined;
   readonly lineageChoreography?: KpCopyFanOutChoreographyFrame | undefined;
+  readonly distributionChoreography?:
+    KpDistributionChoreographyFrame | undefined;
   readonly representationalSuccession?:
     KpEquationRepresentationalSuccessionFrame | undefined;
   readonly linearRearrangement?:
@@ -89,6 +97,27 @@ interface LineageChoreographyContext {
   readonly motionPathsByMotionId: KpMeasuredEquationTransitionGeometry["precomputedMotionPathsByMotionId"];
 }
 
+interface DistributionChoreographyContext {
+  readonly plan: KpDistributionChoreographyPlan;
+  readonly frame: KpDistributionChoreographyFrame;
+  readonly factorRelationRecordId: string;
+  readonly reflowRelationRecordIds: ReadonlySet<string>;
+  readonly groupingRelationRecordIds: ReadonlySet<string>;
+  readonly sourceFactorAnchorDelta: { readonly x: number; readonly y: number };
+  readonly sourceFactorAnchorBounds: {
+    readonly left: number;
+    readonly top: number;
+    readonly width: number;
+    readonly height: number;
+  };
+  readonly groupingReflowByMotionId: ReadonlyMap<
+    string,
+    { readonly x: number; readonly y: number }
+  >;
+  readonly motionPathsByMotionId:
+    KpMeasuredEquationTransitionGeometry["precomputedMotionPathsByMotionId"];
+}
+
 interface RepresentationalSuccessionContext {
   readonly relationRecordIds: ReadonlySet<string>;
   readonly frame: KpEquationRepresentationalSuccessionFrame;
@@ -110,6 +139,10 @@ export function sampleKpEquationTokenMotion(
   const tokens = new Map<string, KpEquationTokenMotionFrameToken>();
   const enclosureChoreography = createEnclosureChoreographyContext(geometry, p);
   const lineageChoreography = createLineageChoreographyContext(geometry, p);
+  const distributionChoreography = createDistributionChoreographyContext(
+    geometry,
+    p
+  );
   const representationalSuccession =
     createRepresentationalSuccessionContext(geometry, p);
   const linearRearrangement = geometry.linearRearrangementKind === undefined
@@ -135,6 +168,7 @@ export function sampleKpEquationTokenMotion(
       p,
       enclosureChoreography,
       lineageChoreography,
+      distributionChoreography,
       representationalSuccession,
       linearRearrangement,
       dotProductTraversal,
@@ -153,6 +187,9 @@ export function sampleKpEquationTokenMotion(
     ...(lineageChoreography === undefined
       ? {}
       : { lineageChoreography: lineageChoreography.frame }),
+    ...(distributionChoreography === undefined
+      ? {}
+      : { distributionChoreography: distributionChoreography.frame }),
     ...(representationalSuccession === undefined
       ? {}
       : { representationalSuccession: representationalSuccession.frame }),
@@ -208,6 +245,7 @@ function sampleRelation(
   progress: number,
   enclosureChoreography: EnclosureChoreographyContext | undefined,
   lineageChoreography: LineageChoreographyContext | undefined,
+  distributionChoreography: DistributionChoreographyContext | undefined,
   representationalSuccession:
     RepresentationalSuccessionContext | undefined,
   linearRearrangement: KpEquationLinearRearrangementFrame | undefined,
@@ -226,6 +264,16 @@ function sampleRelation(
         derivativePower
       );
   if (derivativeTokens !== undefined) return derivativeTokens;
+  const distributionTokens = distributionChoreography === undefined
+    ? undefined
+    : sampleDistributionRelation(
+        relation,
+        sourceTokens,
+        targetTokens,
+        progress,
+        distributionChoreography
+      );
+  if (distributionTokens !== undefined) return distributionTokens;
   if (representationalSuccession?.relationRecordIds.has(relation.recordId)) {
     const sourceIds = new Set(relation.source?.motionIds ?? []);
     const targetIds = new Set(relation.target?.motionIds ?? []);
@@ -525,6 +573,126 @@ function unionBounds(
   return { left, top, width: right - left, height: bottom - top };
 }
 
+function createDistributionChoreographyContext(
+  geometry: KpMeasuredEquationTransitionGeometry,
+  progress: number
+): DistributionChoreographyContext | undefined {
+  if (geometry.distributionChoreographyKind !== "canonical-fan-out") {
+    return undefined;
+  }
+  const factorRelation = geometry.relations.find(
+    (relation) =>
+      relation.lifecycle === "split" &&
+      relation.source !== undefined &&
+      relation.target !== undefined
+  );
+  const persistentRelations = geometry.relations.filter(
+    (relation) =>
+      relation.lifecycle === "persist" &&
+      relation.source !== undefined &&
+      relation.target !== undefined
+  );
+  const addendRelations = persistentRelations.filter((relation) =>
+    relation.recordId.includes("term")
+  );
+  const connectorRelations = persistentRelations.filter(
+    (relation) => !addendRelations.includes(relation)
+  );
+  const groupingRelations = geometry.relations.filter(
+    (relation) => relation.lifecycle === "exit" && relation.source !== undefined
+  );
+  const sourceFactorId = factorRelation?.source?.selectorIds[0];
+  if (
+    factorRelation?.source === undefined ||
+    factorRelation.target === undefined ||
+    sourceFactorId === undefined
+  ) {
+    throw new Error("Canonical distribution geometry is missing factor fan-out.");
+  }
+  const plan = compileKpDistributionChoreography({
+    id: `${geometry.transitionId}.distribution-choreography`,
+    sourceFactorId,
+    factorCopyIds: factorRelation.target.selectorIds,
+    addendPairs: addendRelations.map((relation, semanticIndex) => ({
+      sourceId: relation.source!.selectorIds[0]!,
+      targetId: relation.target!.selectorIds[0]!,
+      semanticIndex
+    })),
+    connectorPairs: connectorRelations.map((relation, semanticIndex) => ({
+      sourceId: relation.source!.selectorIds[0]!,
+      targetId: relation.target!.selectorIds[0]!,
+      semanticIndex
+    })),
+    groupingArtifactIds: groupingRelations.flatMap(
+      (relation) => relation.source?.selectorIds ?? []
+    )
+  });
+  const sourceFactorBounds = factorRelation.source.bounds;
+  const firstFactorMotionId = factorRelation.target.motionIds[0];
+  const firstFactorBounds = geometry.targetTokens.find(
+    (token) => token.motionId === firstFactorMotionId
+  )?.localRect;
+  if (firstFactorBounds === undefined) {
+    throw new Error("Canonical distribution geometry is missing its first factor copy.");
+  }
+  const sourceFactorCenter = rectCenter(sourceFactorBounds);
+  const firstFactorCenter = rectCenter(firstFactorBounds);
+  const sourceFactorAnchorDelta = {
+    x: firstFactorCenter.x - sourceFactorCenter.x,
+    y: firstFactorCenter.y - sourceFactorCenter.y
+  };
+  const orderedAddends = [...addendRelations].sort(
+    (left, right) => rectCenter(left.target!.bounds).x - rectCenter(right.target!.bounds).x
+  );
+  const groupingTokens = groupingRelations
+    .flatMap((relation) => relation.source?.motionIds ?? [])
+    .map((motionId) => geometry.sourceTokens.find((token) => token.motionId === motionId))
+    .filter((token): token is AnnotatedMotionToken => token !== undefined)
+    .sort((left, right) => rectCenter(left.localRect).x - rectCenter(right.localRect).x);
+  const groupingReflowByMotionId = new Map(
+    groupingTokens.map((token, index) => {
+      const isLeftBoundary = index < groupingTokens.length / 2;
+      const addendBounds = isLeftBoundary
+        ? orderedAddends[0]!.target!.bounds
+        : orderedAddends.at(-1)!.target!.bounds;
+      const sourceCenter = rectCenter(token.localRect);
+      const destinationCenter = {
+        x: isLeftBoundary
+          ? addendBounds.left - token.localRect.width / 2 - 1
+          : addendBounds.left + addendBounds.width + token.localRect.width / 2 + 1,
+        y: rectCenter(addendBounds).y
+      };
+      return [
+        token.motionId,
+        {
+          x: destinationCenter.x - sourceCenter.x,
+          y: destinationCenter.y - sourceCenter.y
+        }
+      ] as const;
+    })
+  );
+  return {
+    plan,
+    frame: sampleKpDistributionChoreography({ plan, progress }),
+    factorRelationRecordId: factorRelation.recordId,
+    reflowRelationRecordIds: new Set(
+      persistentRelations.map((relation) => relation.recordId)
+    ),
+    groupingRelationRecordIds: new Set(
+      groupingRelations.map((relation) => relation.recordId)
+    ),
+    sourceFactorAnchorDelta,
+    sourceFactorAnchorBounds: {
+      left: sourceFactorBounds.left + sourceFactorAnchorDelta.x,
+      top: sourceFactorBounds.top + sourceFactorAnchorDelta.y,
+      width: sourceFactorBounds.width,
+      height: sourceFactorBounds.height
+    },
+    groupingReflowByMotionId,
+    motionPathsByMotionId: geometry.precomputedMotionPathsByMotionId
+  };
+}
+
 function createLineageChoreographyContext(
   geometry: KpMeasuredEquationTransitionGeometry,
   progress: number
@@ -714,6 +882,96 @@ function sampleLineageRelation(
       scale: context.frame.source.scale
     }))
   ];
+}
+
+function sampleDistributionRelation(
+  relation: KpMeasuredEquationTransitionRelationGeometry,
+  sourceTokens: readonly AnnotatedMotionToken[],
+  targetTokens: readonly AnnotatedMotionToken[],
+  progress: number,
+  context: DistributionChoreographyContext
+): readonly KpEquationTokenMotionFrameToken[] | undefined {
+  if (
+    relation.recordId === context.factorRelationRecordId &&
+    relation.source !== undefined &&
+    relation.target !== undefined
+  ) {
+    return [
+      ...sourceTokens.map((token) => frameToken(token, "source", {
+        opacity: context.frame.sourceFactor.opacity,
+        x: context.sourceFactorAnchorDelta.x * context.frame.addendReflowProgress,
+        y: context.sourceFactorAnchorDelta.y * context.frame.addendReflowProgress,
+        scale: context.frame.sourceFactor.scale
+      })),
+      ...targetTokens.map((token) => {
+        const motionIndex = relation.target!.motionIds.indexOf(token.motionId);
+        const selectorId = relation.target!.selectorIds[motionIndex];
+        const copy = context.frame.factorCopies.find(
+          (candidate) => candidate.entityId === selectorId
+        );
+        if (copy === undefined) {
+          throw new Error(`Missing distribution factor copy ${selectorId ?? token.motionId}.`);
+        }
+        const path = lineagePathPose({
+          origin: {
+            ...context.sourceFactorAnchorBounds,
+            left: context.sourceFactorAnchorBounds.left -
+              context.sourceFactorAnchorDelta.x * (1 - context.frame.addendReflowProgress),
+            top: context.sourceFactorAnchorBounds.top -
+              context.sourceFactorAnchorDelta.y * (1 - context.frame.addendReflowProgress)
+          },
+          destination: token.localRect,
+          pathProgress: copy.pathProgress,
+          branchIndex: copy.semanticIndex,
+          opacity: copy.opacity,
+          scale: copy.scale,
+          precomputedPath: context.motionPathsByMotionId?.[token.motionId]
+        });
+        return {
+          motionId: token.motionId,
+          side: "target" as const,
+          pose: path.pose,
+          lineagePathId: `${context.plan.id}.factor-copy.${copy.semanticIndex}`,
+          lineageEdgeId: relation.recordId,
+          lineageBranchIndex: copy.semanticIndex,
+          motionPathVariant: path.variant
+        };
+      })
+    ];
+  }
+  if (context.reflowRelationRecordIds.has(relation.recordId)) {
+    const reflow = context.frame.addendReflowProgress;
+    return [
+      ...sourceTokens.map((token) => frameToken(token, "source", {
+        opacity: progress === 1 ? 0 : 1,
+        x: (relation.delta?.x ?? 0) * reflow,
+        y: (relation.delta?.y ?? 0) * reflow,
+        scale: 1
+      })),
+      ...targetTokens.map((token) => frameToken(token, "target", {
+        opacity: progress === 1 ? 1 : 0,
+        x: 0,
+        y: 0,
+        scale: 1
+      }))
+    ];
+  }
+  if (context.groupingRelationRecordIds.has(relation.recordId)) {
+    return sourceTokens.map((token) => {
+      // Each delimiter follows its adjacent addend so the opening group remains legible.
+      const reflow = context.groupingReflowByMotionId.get(token.motionId) ?? {
+        x: 0,
+        y: 0
+      };
+      return frameToken(token, "source", {
+        opacity: context.frame.groupingOpacity,
+        x: reflow.x * context.frame.addendReflowProgress,
+        y: reflow.y * context.frame.addendReflowProgress,
+        scale: 1
+      });
+    });
+  }
+  return undefined;
 }
 
 function lineageFrameToken(input: {

@@ -133,6 +133,9 @@ import {
 import {
   resolveKpDerivativePowerRuleSemanticRoles
 } from "../semantic/derivative-power-rule-semantics.ts";
+import type {
+  KpDistributionChoreographyFrame
+} from "../animation/distribution-choreography.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
@@ -1656,6 +1659,9 @@ function applySemanticTokenMotion(input: {
         : motifKind === "copy-fan-out" || motifKind === "merge-fan-in" || motifKind === "substitute"
         ? { lineageChoreographyKind: motifKind }
         : {}),
+      ...(transformation.transformType === "distributeMultiplication"
+        ? { distributionChoreographyKind: "canonical-fan-out" as const }
+        : {}),
       ...(input.frame.radicalSuccession === undefined
         ? {}
         : { representationalSuccessionKind: "opposite-corner-seed" as const }),
@@ -1711,6 +1717,13 @@ function applySemanticTokenMotion(input: {
       geometry,
       plan: geometry.derivativePowerChoreographyPlan,
       frame: tokenFrame.motion.derivativePower
+    });
+  }
+  if (tokenFrame.motion.distributionChoreography !== undefined) {
+    applyDistributionFactorFocus({
+      transition: input.transitionElement,
+      geometry,
+      frame: tokenFrame.motion.distributionChoreography
     });
   }
   input.transitionElement.dataset["kpEditorEquationSemanticProgress"] =
@@ -1810,6 +1823,75 @@ function applySemanticTokenMotion(input: {
       String(dotProduct.resultRevealProgress);
   }
   return true;
+}
+
+function applyDistributionFactorFocus(input: {
+  readonly transition: HTMLElement;
+  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly frame: KpDistributionChoreographyFrame;
+}): void {
+  input.transition.dataset["kpEditorEquationDistributionChoreography"] =
+    input.frame.planId;
+  input.transition.dataset["kpEditorEquationDistributionPhase"] =
+    activeDistributionPhase(input.frame);
+  input.transition.dataset["kpEditorEquationDistributionAddendReflow"] =
+    String(input.frame.addendReflowProgress);
+  input.transition.dataset["kpEditorEquationDistributionGroupingOpacity"] =
+    String(input.frame.groupingOpacity);
+  const factorRelation = input.geometry.relations.find(
+    (relation) => relation.lifecycle === "split"
+  );
+  const sourceMotionId = factorRelation?.source?.motionIds[0];
+  const sourceFactor = input.geometry.sourceTokens.find(
+    (token) => token.motionId === sourceMotionId
+  )?.element;
+  if (sourceFactor !== undefined) {
+    sourceFactor.classList.add("kp-focus-group");
+    sourceFactor.dataset["kpEditorDistributionRole"] = "common-factor";
+    sourceFactor.style.setProperty(
+      "--kp-focus-z",
+      `${5 * input.frame.focusStrength}px`
+    );
+    sourceFactor.style.setProperty(
+      "--kp-focus-scale",
+      String(1 + (0.04 * input.frame.focusStrength))
+    );
+    sourceFactor.style.setProperty(
+      "--kp-focus-outline-strength",
+      String(input.frame.focusStrength)
+    );
+    sourceFactor.style.setProperty(
+      "--kp-focus-shadow-y",
+      `${4 * input.frame.focusStrength}px`
+    );
+    sourceFactor.style.setProperty(
+      "--kp-focus-shadow-blur",
+      `${12 * input.frame.focusStrength}px`
+    );
+    sourceFactor.style.setProperty(
+      "--kp-focus-shadow-opacity",
+      String(0.2 * input.frame.focusStrength)
+    );
+  }
+  factorRelation?.target?.motionIds.forEach((motionId, semanticIndex) => {
+    const factorCopy = input.geometry.targetTokens.find(
+      (token) => token.motionId === motionId
+    )?.element;
+    if (factorCopy !== undefined) {
+      factorCopy.dataset["kpEditorDistributionRole"] = "factor-copy";
+      factorCopy.dataset["kpEditorDistributionSemanticIndex"] =
+        String(semanticIndex);
+    }
+  });
+}
+
+function activeDistributionPhase(
+  frame: KpDistributionChoreographyFrame
+): string {
+  const active = Object.entries(frame.phases)
+    .filter(([, progress]) => progress > 0 && progress < 1)
+    .map(([phaseId]) => phaseId);
+  return active.at(-1) ?? (frame.progress >= 1 ? "complete" : "focus-factor");
 }
 
 function applyDerivativePowerTokenFocus(input: {
