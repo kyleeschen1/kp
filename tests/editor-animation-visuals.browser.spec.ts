@@ -1146,7 +1146,7 @@ test("radical-succession uses independent opposite-corner tokens and native sett
     '[data-kp-editor-equation-source] [data-kp-motion-id*=".power.exponent-"]'
   );
   const targetRadical = transition.locator(
-    '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radical-symbol"]'
+    '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radical-hook"]'
   );
   const targetBase = transition.locator(
     '[data-kp-editor-equation-target] [data-kp-motion-id*=".radical.radicand"]'
@@ -1233,7 +1233,7 @@ test("radical-succession uses independent opposite-corner tokens and native sett
   for (const fragment of await radicalFragments.all()) {
     await expect(fragment.locator(
       ".editor-equation-stage__material-visual"
-    )).not.toHaveCSS("clip-path", "none");
+    )).toHaveCSS("clip-path", "none");
   }
   await expect(
     transition.locator("[data-kp-editor-equation-source]")
@@ -1411,7 +1411,8 @@ test("radical bundle and native settlement satisfy continuity budgets", async ({
   );
   for (const selector of [
     '[data-kp-motion-id*=".power.exponent-fraction-line"]',
-    '[data-kp-motion-id*=".radical.radical-symbol"]'
+    '[data-kp-motion-id*=".radical.radical-hook"]',
+    '[data-kp-motion-id*=".radical.radical-overbar"]'
   ]) {
     const structuralFragment = transition.locator(selector);
     await expect(structuralFragment).toHaveAttribute(
@@ -1463,7 +1464,7 @@ test("radical bundle and native settlement satisfy continuity budgets", async ({
   ).toHaveText("native handoff");
   const settlementSamples = await stage.evaluate((element) => {
     const native = element.querySelector<HTMLElement>(
-      '[data-kp-motion-id*=".radical.radical-symbol"]'
+      '[data-kp-motion-id*=".radical.radical-hook"]'
     )!;
     const nativeRect = native.getBoundingClientRect();
     const nativeCenter = {

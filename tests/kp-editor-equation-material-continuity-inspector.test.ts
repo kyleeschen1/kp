@@ -16,7 +16,7 @@ test("inspector reports persistent ownership and an active artifact bundle", () 
     ],
     motionIdentityIds: [
       "radical-rewrite.base-radicand",
-      "radical-rewrite.root-notation.radical-symbol"
+      "radical-rewrite.root-notation.radical-hook"
     ],
     materialContinuantCount: 5,
     structuralFragmentCount: 2,

@@ -31,7 +31,8 @@ test("base and radicand inherit one material motion signature", () => {
 test("thin structural notation has no nonuniform deformation", () => {
   for (const motionId of [
     "radical.power.exponent-fraction-line",
-    "radical.radical.radical-symbol"
+    "radical.radical.radical-hook",
+    "radical.radical.radical-overbar"
   ]) {
     const eligibility = resolveKpGestaltMotionEligibility(motionId);
     assert.equal(eligibility.mode, "structural-fragment");

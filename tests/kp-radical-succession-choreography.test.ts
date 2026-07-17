@@ -22,7 +22,7 @@ test("radical rewrite compiles continuant and representational succession togeth
     choreography.plan.phases.map((phase) => phase.id),
     ["orient", "reflow", "act", "settle", "release"]
   );
-  assert.equal(choreography.plan.vocabulary.continuants.length, 1);
+  assert.equal(choreography.plan.vocabulary.continuants.length, 3);
   assert.equal(
     choreography.plan.vocabulary.representationalLineages.length,
     1
@@ -41,7 +41,7 @@ test("radical hierarchy keeps semantic authority above independently moving toke
     []
   );
   assert.equal(choreography.hierarchy.groups.length, 1);
-  assert.equal(choreography.hierarchy.tokens.length, 4);
+  assert.equal(choreography.hierarchy.tokens.length, 5);
   assert.ok(
     choreography.hierarchy.tokens.every(
       (token) => token.kind === "structural"
@@ -197,7 +197,7 @@ function geometry(): KpMeasuredEquationTransitionGeometry {
         delta: { x: 28, y: 0, scaleX: 1, scaleY: 1 }
       },
       {
-        recordId: "exponent-becomes-radical",
+        recordId: "root-notation-succession",
         lifecycle: "merge",
         source: endpoint(
           ["exponent.numerator", "exponent.line", "exponent.denominator"],

@@ -1018,12 +1018,29 @@ export function createGeneratedRadicalTutorialFixture(
         )
       ]),
       expressionObject(ids.radical, "Radical form", latex.radical, [
-        selector(ids.radical, "radical-symbol", "operator", "\\sqrt"),
-        selector(ids.radical, "radicand", "term", input.base)
+        selector(ids.radical, "radical-hook", "operator", "\\sqrt"),
+        selector(ids.radical, "radical-overbar", "operator", "\\overline"),
+        ...(input.index === 2
+          ? []
+          : [selector(
+              ids.radical,
+              "root-index",
+              "term",
+              formatLatexNumber(input.index)
+            )]),
+        selector(ids.radical, "radicand", "term", input.base),
+        ...(input.exponentNumerator === 1
+          ? []
+          : [selector(
+              ids.radical,
+              "radicand-exponent",
+              "term",
+              formatLatexNumber(input.exponentNumerator)
+            )])
       ])
     ]
   });
-  const transformations = createGeneratedRadicalTransformations(ids);
+  const transformations = createGeneratedRadicalTransformations(input, ids);
   const diagram = createKpSemanticDiagramSequence({
     id: ids.diagram,
     title: `${input.title} sequence`,
@@ -1044,8 +1061,48 @@ export function createGeneratedRadicalTutorialFixture(
 }
 
 function createGeneratedRadicalTransformations(
+  input: GeneratedRadicalTutorialFixtureSpec,
   ids: GeneratedRadicalIds
 ): readonly KpSemanticTransformation[] {
+  const numeratorRecord = input.exponentNumerator === 1
+    ? lifecycle(
+        "unit-numerator-absorbed",
+        "removal",
+        [selectorId(ids.power, "exponent-numerator")],
+        [],
+        "The unit numerator is absorbed by conventional root notation."
+      )
+    : lifecycle(
+        "numerator-becomes-radicand-exponent",
+        "role-change",
+        [selectorId(ids.power, "exponent-numerator")],
+        [selectorId(ids.radical, "radicand-exponent")],
+        "The exponent numerator persists on the radicand."
+      );
+  const denominatorRecords = input.index === 2
+    ? [lifecycle(
+        "denominator-becomes-radical-hook",
+        "role-change",
+        [selectorId(ids.power, "exponent-denominator")],
+        [selectorId(ids.radical, "radical-hook")],
+        "The denominator two becomes the implicit square-root hook."
+      )]
+    : [
+        lifecycle(
+          "denominator-becomes-root-index",
+          "role-change",
+          [selectorId(ids.power, "exponent-denominator")],
+          [selectorId(ids.radical, "root-index")],
+          "The exponent denominator persists as the explicit root index."
+        ),
+        lifecycle(
+          "radical-hook-introduced",
+          "introduction",
+          [],
+          [selectorId(ids.radical, "radical-hook")],
+          "The rewrite operation introduces the radical hook."
+        )
+      ];
   return [
     createGeneratedAlgebraSemanticTransformation({
       familyId: "generated.radical",
@@ -1058,7 +1115,15 @@ function createGeneratedRadicalTransformations(
         id: `${ids.rewrite}.correspondence`,
         records: [
           lifecycle("base-becomes-radicand", "role-change", [selectorId(ids.power, "base")], [selectorId(ids.radical, "radicand")], "The base persists as the radicand."),
-          lifecycle("exponent-becomes-radical", "fan-in", [selectorId(ids.power, "exponent-numerator"), selectorId(ids.power, "exponent-fraction-line"), selectorId(ids.power, "exponent-denominator")], [selectorId(ids.radical, "radical-symbol")], "The rational exponent derives the radical structure.")
+          numeratorRecord,
+          lifecycle(
+            "fraction-rule-becomes-radical-overbar",
+            "role-change",
+            [selectorId(ids.power, "exponent-fraction-line")],
+            [selectorId(ids.radical, "radical-overbar")],
+            "The fraction rule persists as the radical overbar."
+          ),
+          ...denominatorRecords
         ]
       },
       correspondence: [

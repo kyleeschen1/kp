@@ -711,7 +711,8 @@ test("createGeneratedRadicalTutorialFixture builds a semantic radical asset", ()
         objectType: "expression",
         value: { latex: "\\sqrt{x}" },
         selectorIds: [
-          "expression.generated.radical.square-root-as-power.radical.radical-symbol",
+          "expression.generated.radical.square-root-as-power.radical.radical-hook",
+          "expression.generated.radical.square-root-as-power.radical.radical-overbar",
           "expression.generated.radical.square-root-as-power.radical.radicand"
         ]
       }

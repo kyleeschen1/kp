@@ -43,12 +43,14 @@ export function resolveKpGestaltMotionEligibility(
     "exponent-numerator",
     "exponent-fraction-line",
     "exponent-denominator",
-    "radical-symbol"
+    "radical-hook",
+    "radical-overbar"
   ].find((candidate) => motionId.endsWith(`.${candidate}`));
   if (radicalFragment !== undefined) {
     const structural =
       radicalFragment === "exponent-fraction-line" ||
-      radicalFragment === "radical-symbol";
+      radicalFragment === "radical-hook" ||
+      radicalFragment === "radical-overbar";
     return {
       identityId: `radical-rewrite.root-notation.${radicalFragment}`,
       mode: structural ? "structural-fragment" : "material-continuant",

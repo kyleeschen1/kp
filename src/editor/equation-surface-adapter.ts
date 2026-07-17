@@ -494,8 +494,11 @@ function applyRadicalMaterialLayer(input: {
   readonly stage: HTMLElement;
   readonly semanticProgress: number;
 }): void {
-  const radical = input.stage.querySelector<HTMLElement>(
-    '[data-kp-motion-id*=".radical.radical-symbol"]'
+  const radicalHook = input.stage.querySelector<HTMLElement>(
+    '[data-kp-motion-id*=".radical.radical-hook"]'
+  );
+  const radicalOverbar = input.stage.querySelector<HTMLElement>(
+    '[data-kp-motion-id*=".radical.radical-overbar"]'
   );
   const sourceBase = input.stage.querySelector<HTMLElement>(
     '[data-kp-motion-id*=".power.base"]'
@@ -504,7 +507,8 @@ function applyRadicalMaterialLayer(input: {
     '[data-kp-motion-id*=".radical.radicand"]'
   );
   if (
-    radical === null ||
+    radicalHook === null ||
+    radicalOverbar === null ||
     sourceBase === null ||
     targetBase === null ||
     input.semanticProgress <= 0 ||
@@ -554,37 +558,44 @@ function applyRadicalMaterialLayer(input: {
       0.95
     );
     const fragmentRelease = 1 - nativeSettlementProgress;
-    const radicalRect = radical.getBoundingClientRect();
-    const rect = {
-      left: radicalRect.left - stageRect.left,
-      top: radicalRect.top - stageRect.top,
-      width: radicalRect.width,
-      height: radicalRect.height
+    const hookRect = radicalHook.getBoundingClientRect();
+    const overbarRect = radicalOverbar.getBoundingClientRect();
+    const hook = {
+      left: hookRect.left - stageRect.left,
+      top: hookRect.top - stageRect.top,
+      width: hookRect.width,
+      height: hookRect.height
+    };
+    const overbar = {
+      left: overbarRect.left - stageRect.left,
+      top: overbarRect.top - stageRect.top,
+      width: overbarRect.width,
+      height: overbarRect.height
     };
     owners.push(
       {
         ownerId: "radical-rewrite.root-notation.hook",
-        sourceElement: radical,
-        rect,
+        sourceElement: radicalHook,
+        rect: hook,
         opacity: hookProgress * fragmentRelease,
         transform:
           `translate(0px, ${2 * (1 - hookProgress)}px) scale(${0.9 + hookProgress * 0.1})`,
-        clipPath: "inset(0 58% 0 0)",
         fragmentRole: "radical-hook"
       },
       {
         ownerId: "radical-rewrite.root-notation.overbar",
-        sourceElement: radical,
-        rect,
+        sourceElement: radicalOverbar,
+        rect: overbar,
         opacity: overbarProgress * fragmentRelease,
         transform:
           `translate(${-4 * (1 - overbarProgress)}px, ${-2 * (1 - overbarProgress)}px) scale(${0.92 + overbarProgress * 0.08})`,
-        clipPath: "inset(0 0 66% 28%)",
         fragmentRole: "radical-overbar"
       }
     );
-    radical.style.opacity = String(nativeSettlementProgress);
-    radical.dataset["kpEquationMaterialNativeHidden"] = "true";
+    radicalHook.style.opacity = String(nativeSettlementProgress);
+    radicalOverbar.style.opacity = String(nativeSettlementProgress);
+    radicalHook.dataset["kpEquationMaterialNativeHidden"] = "true";
+    radicalOverbar.dataset["kpEquationMaterialNativeHidden"] = "true";
     input.stage.dataset["kpEditorEquationNativeSettlementProgress"] =
       String(nativeSettlementProgress);
   } else {
@@ -1013,7 +1024,7 @@ function applyRadicalSuccessionChoreography(input: {
 
   const selector = input.direction === "forward"
     ? '[data-kp-editor-equation-source] [data-kp-motion-id*=".power.exponent-"]'
-    : '[data-kp-editor-equation-source] [data-kp-motion-id*=".radical.radical-symbol"]';
+    : '[data-kp-editor-equation-source] [data-kp-motion-id*=".radical.radical-"]';
   const notationTokens = [
     ...input.transitionElement.querySelectorAll<HTMLElement>(selector)
   ];

@@ -4,6 +4,7 @@ import {
   type KpMaterialContinuityPlan,
   type KpMaterialFragment
 } from "./material-continuity.ts";
+import { resolveKpRadicalFragmentSemantics } from "../semantic/radical-fragment-semantics.ts";
 
 export interface KpRadicalMaterialContinuity {
   readonly plan: KpMaterialContinuityPlan;
@@ -21,12 +22,16 @@ export function createKpRadicalMaterialContinuity(
   const base = transformation?.correspondenceMap?.records.find(
     (record) => record.id === "base-becomes-radicand"
   );
-  const notation = transformation?.correspondenceMap?.records.find(
-    (record) => record.id === "exponent-becomes-radical"
-  );
-  if (transformation === undefined || base === undefined || notation === undefined) {
+  if (transformation === undefined || base === undefined) {
     throw new Error(`Animation ${animation.id} lacks radical material correspondence.`);
   }
+  const semantics = resolveKpRadicalFragmentSemantics(transformation);
+  const sourceNotationIds = semantics.notationRecords.flatMap(
+    (record) => record.sourceSelectorIds
+  );
+  const targetNotationIds = semantics.notationRecords.flatMap(
+    (record) => record.targetSelectorIds
+  );
   const baseContinuantId = `material.${transformation.id}.base`;
   const notationContinuantId = `material.${transformation.id}.root-notation`;
   const fragments: readonly KpMaterialFragment[] = [
@@ -34,21 +39,21 @@ export function createKpRadicalMaterialContinuity(
       `${notationContinuantId}.numerator`,
       notationContinuantId,
       "numerator",
-      selectorWithSuffix(notation.sourceSelectorIds, "exponent-numerator"),
+      semantics.source.numeratorSelectorId,
       0
     ),
     fragment(
       `${notationContinuantId}.fraction-rule`,
       notationContinuantId,
       "fraction-rule",
-      selectorWithSuffix(notation.sourceSelectorIds, "exponent-fraction-line"),
+      semantics.source.fractionRuleSelectorId,
       1
     ),
     fragment(
       `${notationContinuantId}.denominator`,
       notationContinuantId,
       "denominator",
-      selectorWithSuffix(notation.sourceSelectorIds, "exponent-denominator"),
+      semantics.source.denominatorSelectorId,
       2
     ),
     {
@@ -56,7 +61,7 @@ export function createKpRadicalMaterialContinuity(
       materialContinuantId: notationContinuantId,
       role: "radical-hook",
       sourceMotionIds: [],
-      targetMotionIds: [...notation.targetSelectorIds],
+      targetMotionIds: [semantics.target.hookSelectorId],
       normalizedRegion: { x: 0, y: 0, width: 0.42, height: 1 },
       propagationRank: 0,
       semanticAuthority: false
@@ -66,7 +71,7 @@ export function createKpRadicalMaterialContinuity(
       materialContinuantId: notationContinuantId,
       role: "radical-overbar",
       sourceMotionIds: [],
-      targetMotionIds: [...notation.targetSelectorIds],
+      targetMotionIds: [semantics.target.overbarSelectorId],
       normalizedRegion: { x: 0.28, y: 0, width: 0.72, height: 0.34 },
       propagationRank: 1,
       semanticAuthority: false
@@ -107,11 +112,11 @@ export function createKpRadicalMaterialContinuity(
             lineageId: `${transformation.id}.root-notation-lineage`
           },
           semanticEntityIds: [
-            ...notation.sourceSelectorIds,
-            ...notation.targetSelectorIds
+            ...sourceNotationIds,
+            ...targetNotationIds
           ],
-          sourceMotionIds: [...notation.sourceSelectorIds],
-          targetMotionIds: [...notation.targetSelectorIds],
+          sourceMotionIds: [...sourceNotationIds],
+          targetMotionIds: [...targetNotationIds],
           ownership: "shared-reconciliation",
           preserveThrough: ["movement", "seek", "rewind", "renderer-handoff"]
         }
@@ -150,18 +155,5 @@ function fragment(
     propagationRank,
     semanticAuthority: false
   };
-}
-
-function selectorWithSuffix(
-  selectorIds: readonly string[],
-  suffix: string
-): string {
-  const selectorId = selectorIds.find((candidate) =>
-    candidate.endsWith(`.${suffix}`)
-  );
-  if (selectorId === undefined) {
-    throw new Error(`Radical material continuity is missing ${suffix}.`);
-  }
-  return selectorId;
 }
 

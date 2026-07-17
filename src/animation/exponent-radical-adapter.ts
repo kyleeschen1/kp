@@ -23,6 +23,7 @@ import type { KpChoreographyVocabulary } from "./choreography-vocabulary.ts";
 import {
   compileKpRepresentationalLineageGraph
 } from "./representational-lineage-compiler.ts";
+import { resolveKpRadicalFragmentSemantics } from "../semantic/radical-fragment-semantics.ts";
 
 export const defaultExponentExpansionFixtureId =
   "generated.exponent.square-as-product";
@@ -67,12 +68,13 @@ export function createExponentRadicalRewriteAnimationAsset(
 export function createExponentRadicalRepresentationalLineageFixture() {
   const animation = createExponentRadicalRewriteAnimationAsset();
   const transformation = animation.transformations[0]!;
-  const notationRecord = transformation.correspondenceMap?.records.find(
-    (record) => record.id === "exponent-becomes-radical"
+  const fragments = resolveKpRadicalFragmentSemantics(transformation);
+  const sourceSelectorIds = fragments.notationRecords.flatMap(
+    (record) => record.sourceSelectorIds
   );
-  if (notationRecord === undefined) {
-    throw new Error(`Animation ${animation.id} lacks root-notation correspondence.`);
-  }
+  const targetSelectorIds = fragments.notationRecords.flatMap(
+    (record) => record.targetSelectorIds
+  );
   const sourceRepresentationId = `${transformation.sourceObjectIds[0]}.root-notation`;
   const targetRepresentationId = `${transformation.targetObjectIds[0]}.root-notation`;
   const lineageId = `${transformation.id}.representational-lineage`;
@@ -84,24 +86,24 @@ export function createExponentRadicalRepresentationalLineageFixture() {
       meaning: "Rational exponent notation becomes radical notation without semantic identity.",
       sourceRepresentation: {
         entityId: sourceRepresentationId,
-        selectorIds: notationRecord.sourceSelectorIds
+        selectorIds: sourceSelectorIds
       },
       targetRepresentation: {
         entityId: targetRepresentationId,
-        selectorIds: notationRecord.targetSelectorIds
+        selectorIds: targetSelectorIds
       },
       cause: {
         kind: "transformation",
         transformationId: transformation.id,
-        correspondenceRecordIds: [notationRecord.id]
+        correspondenceRecordIds: fragments.notationRecords.map((record) => record.id)
       }
     }],
     objectConstancy: [],
     materialContinuity: [{
       id: `${lineageId}.material-continuity`,
       mode: "shared-reconciliation",
-      sourceEntityIds: notationRecord.sourceSelectorIds,
-      targetEntityIds: notationRecord.targetSelectorIds,
+      sourceEntityIds: sourceSelectorIds,
+      targetEntityIds: targetSelectorIds,
       authorityRef: {
         kind: "representational-lineage",
         lineageId
@@ -116,8 +118,8 @@ export function createExponentRadicalRepresentationalLineageFixture() {
       id: `${transformation.id}.root-notation-successor`,
       kind: "successor",
       representationalLineageId: lineageId,
-      sourceEntityIds: notationRecord.sourceSelectorIds,
-      targetEntityIds: notationRecord.targetSelectorIds,
+      sourceEntityIds: sourceSelectorIds,
+      targetEntityIds: targetSelectorIds,
       summary: "The rational exponent causally succeeds into radical notation."
     }]
   };

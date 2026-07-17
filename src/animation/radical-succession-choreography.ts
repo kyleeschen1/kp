@@ -22,6 +22,7 @@ import {
   type KpFocusProfilePlan
 } from "./focus-profile.ts";
 import { createKpSemanticLineageGraph } from "../semantic/semantic-lineage-graph.ts";
+import { resolveKpRadicalFragmentSemantics } from "../semantic/radical-fragment-semantics.ts";
 
 export const kpRadicalSuccessionTiming = {
   orientEnd: 0.12,
@@ -63,36 +64,71 @@ export function createKpRadicalSuccessionChoreography(
   const base = transformation.correspondenceMap?.records.find(
     (record) => record.id === "base-becomes-radicand"
   );
-  const notation = transformation.correspondenceMap?.records.find(
-    (record) => record.id === "exponent-becomes-radical"
-  );
-  if (base === undefined || notation === undefined) {
-    throw new Error("Radical succession requires base and notation correspondence.");
+  if (base === undefined) {
+    throw new Error("Radical succession requires base correspondence.");
   }
+  const fragments = resolveKpRadicalFragmentSemantics(transformation);
+  const notation = {
+    sourceSelectorIds: fragments.notationRecords.flatMap(
+      (record) => record.sourceSelectorIds
+    ),
+    targetSelectorIds: fragments.notationRecords.flatMap(
+      (record) => record.targetSelectorIds
+    ),
+    recordIds: fragments.notationRecords.map((record) => record.id)
+  };
+  const fragmentContinuants = fragments.notationRecords
+    .filter((record) =>
+      record.relation === "identity" || record.relation === "role-change"
+    )
+    .map((record) => ({
+      id: `${transformation.id}.${record.id}-continuant`,
+      record
+    }));
   const sourceRepresentationId = `${transformation.id}.source-root-notation`;
   const targetRepresentationId = `${transformation.id}.target-root-notation`;
   const continuantId = `${transformation.id}.base-continuant`;
   const lineageId = `${transformation.id}.root-notation-lineage`;
   const vocabulary: KpChoreographyVocabulary = {
     id: `vocabulary.${transformation.id}`,
-    continuants: [{
-      id: continuantId,
-      meaning: "The same base becomes the radical's radicand.",
-      relation: "role-change",
-      source: {
-        entityId: base.sourceSelectorIds[0]!,
-        selectorIds: base.sourceSelectorIds
+    continuants: [
+      {
+        id: continuantId,
+        meaning: "The same base becomes the radical's radicand.",
+        relation: "role-change",
+        source: {
+          entityId: base.sourceSelectorIds[0]!,
+          selectorIds: base.sourceSelectorIds
+        },
+        target: {
+          entityId: base.targetSelectorIds[0]!,
+          selectorIds: base.targetSelectorIds
+        },
+        identityAuthority: {
+          kind: "correspondence",
+          transformationId: transformation.id,
+          correspondenceRecordId: base.id
+        }
       },
-      target: {
-        entityId: base.targetSelectorIds[0]!,
-        selectorIds: base.targetSelectorIds
-      },
-      identityAuthority: {
-        kind: "correspondence",
-        transformationId: transformation.id,
-        correspondenceRecordId: base.id
-      }
-    }],
+      ...fragmentContinuants.map(({ id, record }) => ({
+        id,
+        meaning: record.summary,
+        relation: record.relation as "identity" | "role-change",
+        source: {
+          entityId: record.sourceSelectorIds[0]!,
+          selectorIds: record.sourceSelectorIds
+        },
+        target: {
+          entityId: record.targetSelectorIds[0]!,
+          selectorIds: record.targetSelectorIds
+        },
+        identityAuthority: {
+          kind: "correspondence" as const,
+          transformationId: transformation.id,
+          correspondenceRecordId: record.id
+        }
+      }))
+    ],
     representationalLineages: [{
       id: lineageId,
       meaning: "Fractional exponent notation succeeds into radical notation.",
@@ -107,15 +143,28 @@ export function createKpRadicalSuccessionChoreography(
       cause: {
         kind: "transformation",
         transformationId: transformation.id,
-        correspondenceRecordIds: [notation.id]
+        correspondenceRecordIds: notation.recordIds
       }
     }],
-    objectConstancy: [{
-      id: `${continuantId}.constancy`,
-      continuantId,
-      mode: "continuous",
-      preserveThrough: ["movement", "seek", "rewind", "renderer-handoff"]
-    }],
+    objectConstancy: [
+      {
+        id: `${continuantId}.constancy`,
+        continuantId,
+        mode: "continuous",
+        preserveThrough: ["movement", "seek", "rewind", "renderer-handoff"]
+      },
+      ...fragmentContinuants.map(({ id }) => ({
+        id: `${id}.constancy`,
+        continuantId: id,
+        mode: "continuous" as const,
+        preserveThrough: [
+          "movement" as const,
+          "seek" as const,
+          "rewind" as const,
+          "renderer-handoff" as const
+        ]
+      }))
+    ],
     materialContinuity: [{
       id: `${lineageId}.continuity`,
       mode: "shared-reconciliation",
@@ -145,14 +194,40 @@ export function createKpRadicalSuccessionChoreography(
         targetEntityIds: base.targetSelectorIds,
         summary: "The base persists as the radicand."
       },
-      {
-        id: `${transformation.id}.notation`,
-        kind: "successor" as const,
-        representationalLineageId: lineageId,
-        sourceEntityIds: notation.sourceSelectorIds,
-        targetEntityIds: notation.targetSelectorIds,
-        summary: "Fractional exponent notation succeeds into a radical."
-      }
+      ...fragmentContinuants.map(({ id, record }) => ({
+        id: `${transformation.id}.${record.id}`,
+        kind: "continuant" as const,
+        continuantId: id,
+        sourceEntityIds: record.sourceSelectorIds,
+        targetEntityIds: record.targetSelectorIds,
+        summary: record.summary
+      })),
+      ...fragments.notationRecords
+        .filter((record) => record.relation === "removal")
+        .map((record) => ({
+          id: `${transformation.id}.${record.id}`,
+          kind: "elimination" as const,
+          sourceEntityIds: record.sourceSelectorIds,
+          targetEntityIds: record.targetSelectorIds,
+          cause: {
+            kind: "structural-retirement" as const,
+            authorityId: transformation.id
+          },
+          summary: record.summary
+        })),
+      ...fragments.notationRecords
+        .filter((record) => record.relation === "introduction")
+        .map((record) => ({
+          id: `${transformation.id}.${record.id}`,
+          kind: "introduction" as const,
+          sourceEntityIds: record.sourceSelectorIds,
+          targetEntityIds: record.targetSelectorIds,
+          cause: {
+            kind: "structural-realization" as const,
+            authorityId: transformation.id
+          },
+          summary: record.summary
+        }))
     ]
   };
   const lineage = createKpSemanticLineageGraph({
@@ -178,7 +253,7 @@ export function createKpRadicalSuccessionChoreography(
         relation: "representation-succession",
         sourceEntityIds: notation.sourceSelectorIds,
         targetEntityIds: notation.targetSelectorIds,
-        representationAuthorityId: `${transformation.id}#${notation.id}`,
+        representationAuthorityId: lineageId,
         summary: "Root notation changes representation."
       }
     ]

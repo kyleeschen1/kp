@@ -21,7 +21,7 @@ test("derivative power rule is promoted to operation-specific motion", () => {
   assert.deepEqual(diagnosis.issues, []);
 });
 
-test("radical rewrite identifies target-fragment granularity loss", () => {
+test("radical rewrite closes target-fragment granularity loss", () => {
   const animation = catalog.find(
     (candidate) =>
       candidate.id === "animation.generated.radical.square-root-as-power"
@@ -29,7 +29,7 @@ test("radical rewrite identifies target-fragment granularity loss", () => {
   const diagnosis = diagnoseKpAnimationDesign({ animation })!;
 
   assert.equal(diagnosis.visualStrategy, "operation-specific");
-  assert.ok(diagnosis.issues.some(
+  assert.ok(!diagnosis.issues.some(
     (issue) =>
       issue.code === "design.representation.granularity-loss"
   ));

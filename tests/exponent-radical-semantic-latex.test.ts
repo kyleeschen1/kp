@@ -37,7 +37,8 @@ test("exponent and radical states reserve structural glyphs for DOM binding", ()
       assert.ok(annotated, object.id);
       const structural = object.selectors.filter((selector) =>
         selector.id.endsWith(".exponent-fraction-line") ||
-        selector.id.endsWith(".radical-symbol")
+        selector.id.endsWith(".radical-hook") ||
+        selector.id.endsWith(".radical-overbar")
       );
       assert.equal(annotated.annotations.length, object.selectors.length - structural.length);
     }

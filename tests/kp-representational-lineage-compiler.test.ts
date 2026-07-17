@@ -25,8 +25,8 @@ test("radical fixture compiles notation succession without false semantic identi
   ]), [[
     "representation-succession",
     3,
-    1,
-    "transform.generated.radical.square-root-as-power.rewrite-power-as-root#exponent-becomes-radical"
+    2,
+    "transform.generated.radical.square-root-as-power.rewrite-power-as-root#unit-numerator-absorbed+fraction-rule-becomes-radical-overbar+denominator-becomes-radical-hook"
   ]]);
   assert.equal(
     fixture.graph.edges.some((edge) => edge.relation === "persist"),

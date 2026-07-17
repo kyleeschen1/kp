@@ -19,7 +19,11 @@ export function createKpExponentRadicalSelectorAnnotatedLatex(
   const radical = state.objectId.startsWith("expression.generated.radical.");
   if (!exponent && !radical) return undefined;
 
-  const structuralSuffixes = new Set(["exponent-fraction-line", "radical-symbol"]);
+  const structuralSuffixes = new Set([
+    "exponent-fraction-line",
+    "radical-hook",
+    "radical-overbar"
+  ]);
   const semanticSelectors = state.selectors.filter(
     (selector) => !structuralSuffixes.has(suffix(state, selector.id))
   );
@@ -65,9 +69,21 @@ export function createKpExponentRadicalSelectorAnnotatedLatex(
       { kind: "latex", latex: "}}" }
     ];
   } else if (state.objectId.endsWith(".radical")) {
+    const rootIndex = bySuffix.get("root-index");
+    const radicandExponent = bySuffix.get("radicand-exponent");
     segments = [
-      { kind: "latex", latex: "\\sqrt{" },
+      { kind: "latex", latex: rootIndex === undefined ? "\\sqrt{" : "\\sqrt[" },
+      ...(rootIndex === undefined
+        ? []
+        : [segment("root-index"), { kind: "latex" as const, latex: "]{" }]),
       segment("radicand"),
+      ...(radicandExponent === undefined
+        ? []
+        : [
+            { kind: "latex" as const, latex: "^{" },
+            segment("radicand-exponent"),
+            { kind: "latex" as const, latex: "}" }
+          ]),
       { kind: "latex", latex: "}" }
     ];
   } else {
@@ -91,12 +107,17 @@ export function bindKpExponentRadicalStructuralMotionIds(input: {
       `[data-kp-editor-equation-object-id="${CSS.escape(state.objectId)}"]`
     );
     if (object === null) continue;
+    const radicalFragments = state.objectId.endsWith(".radical")
+      ? ensureRadicalFragmentElements(object)
+      : undefined;
     for (const selector of state.selectors) {
       const name = suffix(state, selector.id);
       const element = name === "exponent-fraction-line"
         ? object.querySelector<HTMLElement>(".frac-line")
-        : name === "radical-symbol"
-          ? object.querySelector<HTMLElement>(".hide-tail")
+        : name === "radical-hook"
+          ? radicalFragments?.hook ?? null
+          : name === "radical-overbar"
+            ? radicalFragments?.overbar ?? null
           : null;
       if (element === null) continue;
       const motionId = `exponent-radical.${state.objectId}.${selector.id}`;
@@ -105,6 +126,53 @@ export function bindKpExponentRadicalStructuralMotionIds(input: {
     }
   }
   return motionIds;
+}
+
+function ensureRadicalFragmentElements(object: HTMLElement): {
+  readonly hook: HTMLElement;
+  readonly overbar: HTMLElement;
+} | undefined {
+  const existingHook = object.querySelector<HTMLElement>(
+    '[data-kp-radical-structural-fragment="hook"]'
+  );
+  const existingOverbar = object.querySelector<HTMLElement>(
+    '[data-kp-radical-structural-fragment="overbar"]'
+  );
+  if (existingHook !== null && existingOverbar !== null) {
+    return { hook: existingHook, overbar: existingOverbar };
+  }
+  const hideTail = object.querySelector<HTMLElement>(".hide-tail");
+  if (hideTail === null || hideTail.parentElement === null) return undefined;
+
+  // KaTeX emits the hook and overbar as one SVG, so split visual owners here
+  // while keeping the native inline box and each semantic fragment addressable.
+  const stack = document.createElement("span");
+  stack.className = "kp-radical-structural-fragment-stack";
+  stack.style.display = "inline-block";
+  stack.style.position = "relative";
+  stack.style.minWidth = hideTail.style.minWidth;
+  stack.style.width = hideTail.style.minWidth;
+  stack.style.height = hideTail.style.height;
+  stack.style.overflow = "visible";
+
+  const overbar = document.createElement("span");
+  overbar.className = "kp-radical-structural-fragment kp-radical-structural-fragment--overbar";
+  overbar.dataset["kpRadicalStructuralFragment"] = "overbar";
+  overbar.style.cssText = hideTail.style.cssText;
+  overbar.style.position = "absolute";
+  overbar.style.inset = "0";
+  overbar.style.display = "inline-block";
+  overbar.style.clipPath = "inset(0 0 66% 28%)";
+  overbar.innerHTML = hideTail.innerHTML;
+
+  hideTail.parentElement.replaceChild(stack, hideTail);
+  hideTail.dataset["kpRadicalStructuralFragment"] = "hook";
+  hideTail.style.position = "absolute";
+  hideTail.style.inset = "0";
+  hideTail.style.display = "inline-block";
+  hideTail.style.clipPath = "inset(0 58% 0 0)";
+  stack.append(hideTail, overbar);
+  return { hook: hideTail, overbar };
 }
 
 function suffix(state: ExponentRadicalState, selectorId: string): string {

@@ -90,7 +90,7 @@ interface LineageChoreographyContext {
 }
 
 interface RepresentationalSuccessionContext {
-  readonly relationRecordId: string;
+  readonly relationRecordIds: ReadonlySet<string>;
   readonly frame: KpEquationRepresentationalSuccessionFrame;
   readonly tokens: readonly KpEquationTokenMotionFrameToken[];
 }
@@ -226,8 +226,14 @@ function sampleRelation(
         derivativePower
       );
   if (derivativeTokens !== undefined) return derivativeTokens;
-  if (relation.recordId === representationalSuccession?.relationRecordId) {
-    return representationalSuccession.tokens;
+  if (representationalSuccession?.relationRecordIds.has(relation.recordId)) {
+    const sourceIds = new Set(relation.source?.motionIds ?? []);
+    const targetIds = new Set(relation.target?.motionIds ?? []);
+    return representationalSuccession.tokens.filter((token) =>
+      token.side === "source"
+        ? sourceIds.has(token.motionId)
+        : targetIds.has(token.motionId)
+    );
   }
   if (relation.recordId === lineageChoreography?.relationRecordId) {
     return sampleLineageRelation(
@@ -412,11 +418,17 @@ function createRepresentationalSuccessionContext(
   ) {
     return undefined;
   }
-  const relation = geometry.relations.find(
+  const mergedRelation = geometry.relations.find(
     (candidate) =>
       candidate.lifecycle === "merge" &&
       candidate.source !== undefined &&
       candidate.target !== undefined
+  );
+  const explicitFragmentRelations = geometry.relations.filter((candidate) =>
+    relationContainsRadicalNotation(candidate)
+  );
+  const relation = mergedRelation ?? aggregateRadicalFragmentRelations(
+    explicitFragmentRelations
   );
   if (relation === undefined) return undefined;
   const sampled = sampleKpEquationRepresentationalSuccession({
@@ -432,7 +444,11 @@ function createRepresentationalSuccessionContext(
     progress
   });
   return {
-    relationRecordId: relation.recordId,
+    relationRecordIds: new Set(
+      mergedRelation === undefined
+        ? explicitFragmentRelations.map((candidate) => candidate.recordId)
+        : [mergedRelation.recordId]
+    ),
     frame: sampled.frame,
     tokens: sampled.tokens.map((token) => ({
       motionId: token.motionId,
@@ -446,6 +462,62 @@ function createRepresentationalSuccessionContext(
       motionPathVariant: token.pathVariant
     }))
   };
+}
+
+function relationContainsRadicalNotation(
+  relation: KpMeasuredEquationTransitionRelationGeometry
+): boolean {
+  return [
+    ...(relation.source?.motionIds ?? []),
+    ...(relation.target?.motionIds ?? [])
+  ].some((motionId) =>
+    motionId.includes(".exponent-") ||
+    motionId.includes(".radical-hook") ||
+    motionId.includes(".radical-overbar") ||
+    motionId.includes(".root-index") ||
+    motionId.includes(".radicand-exponent")
+  );
+}
+
+function aggregateRadicalFragmentRelations(
+  relations: readonly KpMeasuredEquationTransitionRelationGeometry[]
+): KpMeasuredEquationTransitionRelationGeometry | undefined {
+  const sources = relations.flatMap((relation) =>
+    relation.source === undefined ? [] : [relation.source]
+  );
+  const targets = relations.flatMap((relation) =>
+    relation.target === undefined ? [] : [relation.target]
+  );
+  if (sources.length === 0 || targets.length === 0) return undefined;
+  return {
+    recordId: relations.map((relation) => relation.recordId).join("+"),
+    lifecycle: "merge",
+    source: {
+      selectorIds: [...new Set(sources.flatMap((endpoint) => endpoint.selectorIds))],
+      motionIds: [...new Set(sources.flatMap((endpoint) => endpoint.motionIds))],
+      bounds: unionBounds(sources.map((endpoint) => endpoint.bounds))
+    },
+    target: {
+      selectorIds: [...new Set(targets.flatMap((endpoint) => endpoint.selectorIds))],
+      motionIds: [...new Set(targets.flatMap((endpoint) => endpoint.motionIds))],
+      bounds: unionBounds(targets.map((endpoint) => endpoint.bounds))
+    }
+  };
+}
+
+function unionBounds(
+  bounds: readonly {
+    readonly left: number;
+    readonly top: number;
+    readonly width: number;
+    readonly height: number;
+  }[]
+): { readonly left: number; readonly top: number; readonly width: number; readonly height: number } {
+  const left = Math.min(...bounds.map((rect) => rect.left));
+  const top = Math.min(...bounds.map((rect) => rect.top));
+  const right = Math.max(...bounds.map((rect) => rect.left + rect.width));
+  const bottom = Math.max(...bounds.map((rect) => rect.top + rect.height));
+  return { left, top, width: right - left, height: bottom - top };
 }
 
 function createLineageChoreographyContext(
