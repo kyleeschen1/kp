@@ -151,7 +151,7 @@
       "id": "next-action.kp.material-motion.cancellation-witness-v0",
       "title": "Define cancellation witnesses",
       "summary": "Focused gate: witness, semantic-law, and slot-contract tests; typecheck; Theseus validate.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.annihilation-v0",
