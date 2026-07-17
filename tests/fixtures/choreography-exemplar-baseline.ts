@@ -386,7 +386,8 @@ export const choreographyExemplarBaselines:
         {
           targetSelectorIds: [
             "equation.linear-solve.after-subtract.lhs.minus3",
-            "equation.linear-solve.after-subtract.rhs.minus3"
+            "equation.linear-solve.after-subtract.rhs.minus",
+            "equation.linear-solve.after-subtract.rhs.3"
           ],
           cause: "Subtracting the same value from both sides introduces balanced inverse terms."
         },

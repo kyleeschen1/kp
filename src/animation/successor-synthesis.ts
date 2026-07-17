@@ -23,6 +23,15 @@ export interface KpSuccessorSynthesisLineage {
   readonly targetAnnotationIds: readonly string[];
 }
 
+export interface KpSuccessorSynthesisBinding {
+  readonly id: string;
+  readonly relationRecordId: string;
+  readonly authority: KpSuccessorSynthesisPlan["authority"];
+  readonly sourceAnnotations: readonly KpSuccessorSynthesisSourceAnnotation[];
+  readonly targetAnnotations: readonly KpSuccessorSynthesisTargetAnnotation[];
+  readonly lineages: readonly KpSuccessorSynthesisLineage[];
+}
+
 export interface KpSuccessorSynthesisMember {
   readonly id: string;
   readonly semanticRole: string;
@@ -171,8 +180,8 @@ export function createKpSuccessorSynthesisPlan(input: {
     targetBirthStart: 0.6,
     targetBirthEnd: 0.82,
     targetRankStaggerSpan: 0.06,
-    retirementStart: 0.78,
-    retirementEnd: 0.94,
+    retirementStart: 0.7,
+    retirementEnd: 0.9,
     inputJunctionScale,
     targetSeedScale
   };
@@ -442,11 +451,14 @@ function catalystPose(
   retirementProgress: number
 ): KpSuccessorSynthesisPose {
   const origin = center(member.rect);
-  const attraction = 0.08 * activationProgress;
+  const attraction = 0.42 * activationProgress;
   return {
     x: (junction.x - origin.x) * attraction,
     y: (junction.y - origin.y) * attraction - Math.sin(activationProgress * Math.PI) * 1.5,
-    scale: 1 + Math.sin(activationProgress * Math.PI) * 0.045,
+    scale:
+      1 +
+      0.025 * activationProgress +
+      Math.sin(activationProgress * Math.PI) * 0.025,
     opacity: 1 - retirementProgress
   };
 }
@@ -478,8 +490,8 @@ function junctionSlot(
 ): { readonly x: number; readonly y: number } {
   const centered = index - (plan.materialInputs.length - 1) / 2;
   return {
-    x: plan.junction.x + centered * 3.5,
-    y: plan.junction.y + (index % 2 === 0 ? -2 : 2)
+    x: plan.junction.x + centered * 8,
+    y: plan.junction.y + (index % 2 === 0 ? -3.5 : 3.5)
   };
 }
 

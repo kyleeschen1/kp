@@ -10,6 +10,10 @@ import type { KpMatrixMatrixRendererPlan } from "./equation-matrix-matrix-compos
 import type {
   KpDerivativePowerChoreographyPlan
 } from "../animation/derivative-power-choreography.ts";
+import type {
+  KpSuccessorSynthesisBinding,
+  KpSuccessorSynthesisPlan
+} from "../animation/successor-synthesis.ts";
 
 export type KpEquationRepresentationalSuccessionKind =
   "opposite-corner-seed";
@@ -71,6 +75,9 @@ export interface KpMeasuredEquationTransitionGeometry {
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
     KpEquationLinearRearrangementKind | undefined;
+  readonly successorSynthesisBinding?:
+    KpSuccessorSynthesisBinding | undefined;
+  readonly successorSynthesisPlan?: KpSuccessorSynthesisPlan | undefined;
   readonly dotProductTraversalPlan?: KpDotProductRendererPlan | undefined;
   readonly matrixVectorCompositionPlan?: KpMatrixVectorRendererPlan | undefined;
   readonly matrixMatrixCompositionPlan?: KpMatrixMatrixRendererPlan | undefined;
@@ -168,6 +175,8 @@ export function measureKpEquationTransitionGeometry(input: {
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
     KpEquationLinearRearrangementKind | undefined;
+  readonly successorSynthesisBinding?:
+    KpSuccessorSynthesisBinding | undefined;
   readonly dotProductTraversalPlan?: KpDotProductRendererPlan | undefined;
   readonly matrixVectorCompositionPlan?: KpMatrixVectorRendererPlan | undefined;
   readonly matrixMatrixCompositionPlan?: KpMatrixMatrixRendererPlan | undefined;
@@ -235,6 +244,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.linearRearrangementKind === undefined
       ? {}
       : { linearRearrangementKind: input.linearRearrangementKind }),
+    ...(input.successorSynthesisBinding === undefined
+      ? {}
+      : { successorSynthesisBinding: input.successorSynthesisBinding }),
     ...(input.dotProductTraversalPlan === undefined
       ? {}
       : { dotProductTraversalPlan: input.dotProductTraversalPlan }),

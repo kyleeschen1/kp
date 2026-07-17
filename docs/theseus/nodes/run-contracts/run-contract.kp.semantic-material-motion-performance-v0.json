@@ -145,7 +145,7 @@
       "id": "next-action.kp.material-motion.linear-successor-v0",
       "title": "Apply successor synthesis to linear solve",
       "summary": "Visible-motion gate: focused linear unit tests, editor browser scenario, and checkpoint-frame review; add build only if an import or export boundary changes.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.cancellation-witness-v0",

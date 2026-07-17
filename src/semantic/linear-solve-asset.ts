@@ -84,7 +84,8 @@ export function createLinearSolveKpAssetBundle(): LinearSolveKpAsset {
           selector(ids.afterSubtract, "lhs.minus3", "term", "-3"),
           selector(ids.afterSubtract, "equals", "relation", "="),
           selector(ids.afterSubtract, "rhs.7", "term", "7"),
-          selector(ids.afterSubtract, "rhs.minus3", "term", "-3")
+          selector(ids.afterSubtract, "rhs.minus", "operator", "−"),
+          selector(ids.afterSubtract, "rhs.3", "term", "3")
         ],
         provenance: {
           kind: "transformed",
@@ -100,8 +101,21 @@ export function createLinearSolveKpAssetBundle(): LinearSolveKpAsset {
         selectors: [
           selector(ids.leftSimplified, "lhs.x", "term", "x"),
           selector(ids.leftSimplified, "equals", "relation", "="),
-          selector(ids.leftSimplified, "rhs.7", "term", "7"),
-          selector(ids.leftSimplified, "rhs.minus3", "term", "-3")
+          selector(ids.leftSimplified, "rhs.7", "term", "7", {
+            successorContribution: "material-input",
+            successorRole: "minuend",
+            successorRank: 0
+          }),
+          selector(ids.leftSimplified, "rhs.minus", "operator", "−", {
+            successorContribution: "catalyst",
+            successorRole: "subtraction-operator",
+            successorRank: 0
+          }),
+          selector(ids.leftSimplified, "rhs.3", "term", "3", {
+            successorContribution: "material-input",
+            successorRole: "subtrahend",
+            successorRank: 1
+          })
         ],
         provenance: {
           kind: "transformed",
@@ -117,7 +131,11 @@ export function createLinearSolveKpAssetBundle(): LinearSolveKpAsset {
         selectors: [
           selector(ids.solved, "lhs.x", "term", "x"),
           selector(ids.solved, "equals", "relation", "="),
-          selector(ids.solved, "rhs.4", "term", "4")
+          selector(ids.solved, "rhs.4", "term", "4", {
+            successorTarget: true,
+            successorRole: "evaluated-difference",
+            successorRank: 0
+          })
         ],
         provenance: {
           kind: "transformed",
@@ -179,7 +197,7 @@ function createLinearSolveTransformations(): readonly KpSemanticTransformation[]
           richRecord("left-constant-persists", "identity", [selectorId(ids.initial, "lhs.plus3")], [selectorId(ids.afterSubtract, "lhs.plus3")], "+3 persists before cancellation."),
           richRecord("relation-persists", "identity", [selectorId(ids.initial, "equals")], [selectorId(ids.afterSubtract, "equals")], "Equality persists."),
           richRecord("right-constant-persists", "identity", [selectorId(ids.initial, "rhs.7")], [selectorId(ids.afterSubtract, "rhs.7")], "7 persists."),
-          richRecord("inverse-terms-enter", "introduction", [], [selectorId(ids.afterSubtract, "lhs.minus3"), selectorId(ids.afterSubtract, "rhs.minus3")], "The balanced inverse terms enter together.")
+          richRecord("inverse-terms-enter", "introduction", [], [selectorId(ids.afterSubtract, "lhs.minus3"), selectorId(ids.afterSubtract, "rhs.minus"), selectorId(ids.afterSubtract, "rhs.3")], "The balanced inverse terms enter together.")
         ]
       },
       correspondence: [
@@ -210,19 +228,16 @@ function createLinearSolveTransformations(): readonly KpSemanticTransformation[]
           richRecord("left-inverses-cancel", "cancelation", [selectorId(ids.afterSubtract, "lhs.plus3"), selectorId(ids.afterSubtract, "lhs.minus3")], [], "+3 and -3 cancel."),
           richRecord("relation-persists", "identity", [selectorId(ids.afterSubtract, "equals")], [selectorId(ids.leftSimplified, "equals")], "Equality persists."),
           richRecord("right-seven-persists", "identity", [selectorId(ids.afterSubtract, "rhs.7")], [selectorId(ids.leftSimplified, "rhs.7")], "7 persists."),
-          richRecord("right-inverse-persists", "identity", [selectorId(ids.afterSubtract, "rhs.minus3")], [selectorId(ids.leftSimplified, "rhs.minus3")], "The right inverse term persists until evaluation.")
+          richRecord("right-minus-persists", "identity", [selectorId(ids.afterSubtract, "rhs.minus")], [selectorId(ids.leftSimplified, "rhs.minus")], "The right subtraction operator persists until evaluation."),
+          richRecord("right-three-persists", "identity", [selectorId(ids.afterSubtract, "rhs.3")], [selectorId(ids.leftSimplified, "rhs.3")], "The right subtrahend persists until evaluation.")
         ]
       },
       correspondence: [
         correspondence(ids.afterSubtract, "lhs.x", ids.leftSimplified, "lhs.x"),
         correspondence(ids.afterSubtract, "equals", ids.leftSimplified, "equals"),
         correspondence(ids.afterSubtract, "rhs.7", ids.leftSimplified, "rhs.7"),
-        correspondence(
-          ids.afterSubtract,
-          "rhs.minus3",
-          ids.leftSimplified,
-          "rhs.minus3"
-        )
+        correspondence(ids.afterSubtract, "rhs.minus", ids.leftSimplified, "rhs.minus"),
+        correspondence(ids.afterSubtract, "rhs.3", ids.leftSimplified, "rhs.3")
       ]
     }),
     createKpSemanticTransformation({
@@ -244,7 +259,7 @@ function createLinearSolveTransformations(): readonly KpSemanticTransformation[]
         records: [
           richRecord("x-persists", "identity", [selectorId(ids.leftSimplified, "lhs.x")], [selectorId(ids.solved, "lhs.x")], "x persists."),
           richRecord("relation-persists", "identity", [selectorId(ids.leftSimplified, "equals")], [selectorId(ids.solved, "equals")], "Equality persists."),
-          richRecord("constants-merge", "fan-in", [selectorId(ids.leftSimplified, "rhs.7"), selectorId(ids.leftSimplified, "rhs.minus3")], [selectorId(ids.solved, "rhs.4")], "7 and -3 derive 4.")
+          richRecord("constants-merge", "fan-in", [selectorId(ids.leftSimplified, "rhs.7"), selectorId(ids.leftSimplified, "rhs.minus"), selectorId(ids.leftSimplified, "rhs.3")], [selectorId(ids.solved, "rhs.4")], "7 and 3 supply material while subtraction catalyzes their derivation of 4.")
         ]
       },
       correspondence: [
@@ -398,12 +413,14 @@ function selector(
   objectId: string,
   selectorPath: string,
   kind: string,
-  label: string
+  label: string,
+  metadata?: Readonly<Record<string, string | number | boolean>>
 ) {
   return {
     id: `${objectId}.${selectorPath}`,
     kind,
-    label
+    label,
+    ...(metadata === undefined ? {} : { metadata })
   };
 }
 

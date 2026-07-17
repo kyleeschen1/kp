@@ -538,7 +538,8 @@ function sampleRelation(
       sourceTokens,
       targetTokens,
       progress,
-      frame: linearRearrangement
+      frame: linearRearrangement,
+      successorSynthesisPlan: geometry.successorSynthesisPlan
     });
     if (sampled !== undefined) return sampled;
   }

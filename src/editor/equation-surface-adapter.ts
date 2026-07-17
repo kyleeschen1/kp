@@ -883,6 +883,8 @@ function linearMaterialOwnerId(motionId: string): string | undefined {
     "equals",
     "rhs.7",
     "rhs.minus3",
+    "rhs.minus",
+    "rhs.3",
     "rhs.4"
   ] as const;
   const role = roles.find((candidate) => motionId.endsWith(`.${candidate}`));
@@ -1445,6 +1447,38 @@ function applyLinearRearrangementChoreography(input: {
     String(sampled.recognitionProgress);
   input.transitionElement.dataset["kpEditorEquationReleaseProgress"] =
     String(sampled.releaseProgress);
+  const successorBinding = input.step.successorSynthesisBinding;
+  if (successorBinding === undefined) {
+    delete input.transitionElement.dataset["kpEditorSuccessorSynthesisPlan"];
+    delete input.transitionElement.dataset["kpEditorSuccessorSynthesisAuthority"];
+  } else {
+    input.transitionElement.dataset["kpEditorSuccessorSynthesisPlan"] =
+      successorBinding.id;
+    input.transitionElement.dataset["kpEditorSuccessorSynthesisAuthority"] =
+      `${successorBinding.authority.operationId}#${successorBinding.authority.bindingId}`;
+    for (const annotation of successorBinding.sourceAnnotations) {
+      const token = [...input.transitionElement.querySelectorAll<HTMLElement>(
+        "[data-kp-motion-id]"
+      )].find((candidate) =>
+        candidate.dataset["kpMotionId"]?.endsWith(annotation.id)
+      );
+      if (token === undefined) continue;
+      token.dataset["kpEditorSuccessorContribution"] = annotation.contribution;
+      token.dataset["kpEditorSuccessorSemanticRole"] = annotation.semanticRole;
+      token.dataset["kpEditorSuccessorRank"] = String(annotation.propagationRank);
+    }
+    for (const annotation of successorBinding.targetAnnotations) {
+      const token = [...input.transitionElement.querySelectorAll<HTMLElement>(
+        "[data-kp-motion-id]"
+      )].find((candidate) =>
+        candidate.dataset["kpMotionId"]?.endsWith(annotation.id)
+      );
+      if (token === undefined) continue;
+      token.dataset["kpEditorSuccessorContribution"] = "successor-target";
+      token.dataset["kpEditorSuccessorSemanticRole"] = annotation.semanticRole;
+      token.dataset["kpEditorSuccessorRank"] = String(annotation.propagationRank);
+    }
+  }
   const activeBridge = input.sequenceFrame.activeBridge;
   if (activeBridge === undefined) {
     delete input.transitionElement.dataset["kpEditorEquationEnvelopeBridgeId"];
@@ -2383,7 +2417,13 @@ function applySemanticTokenMotion(input: {
         ? {}
         : {
             linearRearrangementKind:
-              input.frame.linearRearrangement.step.kind
+              input.frame.linearRearrangement.step.kind,
+            ...(input.frame.linearRearrangement.step.successorSynthesisBinding === undefined
+              ? {}
+              : {
+                  successorSynthesisBinding:
+                    input.frame.linearRearrangement.step.successorSynthesisBinding
+                })
           }),
       ...(input.frame.dotProductTraversal === undefined
         ? {}

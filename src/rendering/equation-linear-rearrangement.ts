@@ -1,11 +1,17 @@
 import type {
   AnnotatedMotionToken,
+  KpMeasuredEquationTransitionGeometry,
   KpMeasuredEquationTransitionRelationGeometry
 } from "./equation-motion-dom.ts";
 import type {
   KpEquationTokenMotionFrameToken,
   KpEquationTokenMotionPose
 } from "./semantic-equation-token-renderer.ts";
+import {
+  createKpSuccessorSynthesisPlan,
+  sampleKpSuccessorSynthesis,
+  type KpSuccessorSynthesisPlan
+} from "../animation/successor-synthesis.ts";
 
 export type KpEquationLinearRearrangementKind =
   | "balanced-introduction"
@@ -47,6 +53,7 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
   readonly targetTokens: readonly AnnotatedMotionToken[];
   readonly progress: number;
   readonly frame: KpEquationLinearRearrangementFrame;
+  readonly successorSynthesisPlan?: KpSuccessorSynthesisPlan | undefined;
 }): readonly KpEquationTokenMotionFrameToken[] | undefined {
   switch (input.relation.lifecycle) {
     case "persist":
@@ -131,33 +138,128 @@ function sampleCancellation(
 function sampleConstantDerivation(
   input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
 ): readonly KpEquationTokenMotionFrameToken[] {
-  const destination = center(input.relation.target?.bounds);
-  const sourceOpacity = 1 - smooth(windowProgress(input.progress, 0.68, 0.84));
+  if (input.successorSynthesisPlan === undefined) {
+    throw new Error(
+      `Linear successor relation ${input.relation.recordId} requires an explicit semantic synthesis plan.`
+    );
+  }
+  const synthesis = sampleKpSuccessorSynthesis({
+    plan: input.successorSynthesisPlan,
+    progress: input.progress
+  });
   return [
-    ...input.sourceTokens.map((token, index) => {
-      const origin = center(token.localRect);
-      const staggered = smooth(windowProgress(
-        input.progress,
-        0.38 + index * 0.025,
-        0.68 + index * 0.025
-      ));
-      const arcDirection = index % 2 === 0 ? -1 : 1;
-      return frameToken(token, "source", {
-        opacity: sourceOpacity,
-        x: (destination.x - origin.x) * staggered,
-        y:
-          (destination.y - origin.y) * staggered +
-          arcDirection * 8 * Math.sin(Math.PI * staggered),
-        scale: 1 - 0.2 * staggered
-      });
+    ...synthesis.sources.map((source) => {
+      const token = input.sourceTokens.find(
+        (candidate) => candidate.motionId === source.annotationId
+      );
+      if (token === undefined) {
+        throw new Error(`Missing successor source token ${source.annotationId}.`);
+      }
+      return frameToken(token, "source", source.pose);
     }),
-    ...input.targetTokens.map((token) => frameToken(token, "target", {
-      opacity: input.frame.resultRevealProgress,
-      x: 0,
-      y: 0,
-      scale: 0.78 + 0.22 * input.frame.resultRevealProgress
-    }))
+    ...synthesis.targets.map((target) => {
+      const token = input.targetTokens.find(
+        (candidate) => candidate.motionId === target.annotationId
+      );
+      if (token === undefined) {
+        throw new Error(`Missing successor target token ${target.annotationId}.`);
+      }
+      return frameToken(token, "target", target.pose);
+    })
   ];
+}
+
+export function createKpEquationSuccessorSynthesisPlan(
+  geometry: KpMeasuredEquationTransitionGeometry
+): KpSuccessorSynthesisPlan | undefined {
+  const binding = geometry.successorSynthesisBinding;
+  if (binding === undefined) return undefined;
+  const relation = geometry.relations.find(
+    (candidate) => candidate.recordId === binding.relationRecordId
+  );
+  if (relation?.source === undefined || relation.target === undefined) {
+    throw new Error(
+      `Successor binding ${binding.id} requires measured relation ${binding.relationRecordId}.`
+    );
+  }
+  const sourceMotionIdBySelector = new Map(
+    relation.source.selectorIds.map((selectorId, index) => [
+      selectorId,
+      relation.source!.motionIds[index]!
+    ])
+  );
+  const targetMotionIdBySelector = new Map(
+    relation.target.selectorIds.map((selectorId, index) => [
+      selectorId,
+      relation.target!.motionIds[index]!
+    ])
+  );
+  const sourceAnnotations = binding.sourceAnnotations.map((annotation) => ({
+    ...annotation,
+    id: requiredMotionId(sourceMotionIdBySelector, annotation.id, binding.id),
+    selectorIds: [annotation.id]
+  }));
+  const targetAnnotations = binding.targetAnnotations.map((annotation) => ({
+    ...annotation,
+    id: requiredMotionId(targetMotionIdBySelector, annotation.id, binding.id),
+    selectorIds: [annotation.id]
+  }));
+  const sourceAnnotationIdBySelector = new Map(
+    binding.sourceAnnotations.map((annotation, index) => [
+      annotation.id,
+      sourceAnnotations[index]!.id
+    ])
+  );
+  const targetAnnotationIdBySelector = new Map(
+    binding.targetAnnotations.map((annotation, index) => [
+      annotation.id,
+      targetAnnotations[index]!.id
+    ])
+  );
+  const measurements = Object.fromEntries([
+    ...sourceAnnotations.map((annotation) => {
+      const token = geometry.sourceTokens.find(
+        (candidate) => candidate.motionId === annotation.id
+      );
+      if (token === undefined) throw new Error(`Missing measured successor source ${annotation.id}.`);
+      return [annotation.id, token.localRect] as const;
+    }),
+    ...targetAnnotations.map((annotation) => {
+      const token = geometry.targetTokens.find(
+        (candidate) => candidate.motionId === annotation.id
+      );
+      if (token === undefined) throw new Error(`Missing measured successor target ${annotation.id}.`);
+      return [annotation.id, token.localRect] as const;
+    })
+  ]);
+  return createKpSuccessorSynthesisPlan({
+    id: binding.id,
+    authority: binding.authority,
+    sourceAnnotations,
+    targetAnnotations,
+    lineages: binding.lineages.map((lineage) => ({
+      ...lineage,
+      sourceAnnotationIds: lineage.sourceAnnotationIds.map((id) =>
+        requiredMotionId(sourceAnnotationIdBySelector, id, lineage.id)
+      ),
+      targetAnnotationIds: lineage.targetAnnotationIds.map((id) =>
+        requiredMotionId(targetAnnotationIdBySelector, id, lineage.id)
+      )
+    })),
+    measurements
+  });
+}
+
+function requiredMotionId(
+  motionIds: ReadonlyMap<string, string>,
+  selectorId: string,
+  ownerId: string
+): string {
+  const motionId = motionIds.get(selectorId);
+  if (motionId === undefined) {
+    throw new Error(`${ownerId} cannot bind semantic selector ${selectorId} to measured motion.`);
+  }
+  return motionId;
 }
 
 function frameToken(

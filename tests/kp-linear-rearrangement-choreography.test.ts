@@ -12,6 +12,7 @@ import type {
   KpMeasuredEquationTransitionGeometry
 } from "../src/rendering/equation-motion-dom.ts";
 import { sampleKpEquationTokenMotion } from "../src/rendering/semantic-equation-token-renderer.ts";
+import { createKpEquationSuccessorSynthesisPlan } from "../src/rendering/equation-linear-rearrangement.ts";
 
 const choreography = createKpLinearRearrangementChoreography(
   createLinearSolveAnimationAsset()
@@ -101,6 +102,37 @@ test("linear rearrangement timeline reserves, acts, recognizes, then releases", 
   assert.equal(release.focus.translateZ, 0);
   assert.equal(release.focus.scale, 1);
   assert.equal(release.releaseProgress, 1);
+});
+
+test("linear successor binding excludes the subtraction catalyst from result material", () => {
+  const step = choreography.steps[2]!;
+  const binding = step.successorSynthesisBinding!;
+  assert.equal(binding.authority.operationId, "kp.algebra.simplify-constant-difference");
+  assert.deepEqual(
+    binding.sourceAnnotations.map((annotation) => [
+      annotation.semanticRole,
+      annotation.contribution,
+      annotation.propagationRank
+    ]),
+    [
+      ["minuend", "material-input", 0],
+      ["subtraction-operator", "catalyst", 0],
+      ["subtrahend", "material-input", 1]
+    ]
+  );
+  const successor = step.plan.semantic.lifecycle.records.find(
+    (record) => record.kind === "successor"
+  );
+  const catalyst = step.plan.semantic.lifecycle.records.find(
+    (record) => record.id.endsWith(".catalyst-retirement")
+  );
+  assert.deepEqual(successor?.sourceEntityIds, [
+    "equation.linear-solve.left-simplified.rhs.7",
+    "equation.linear-solve.left-simplified.rhs.3"
+  ]);
+  assert.deepEqual(catalyst?.sourceEntityIds, [
+    "equation.linear-solve.left-simplified.rhs.minus"
+  ]);
 });
 
 test("balanced inverse terms remain absent until persistent reflow reserves space", () => {
@@ -198,7 +230,7 @@ test("constant operands travel independently on arcs before the derived result a
     (token) => token.side === "target" && token.motionId === "result.4"
   );
   assert.ok(operands.every((token) => token.pose.opacity === 1));
-  assert.ok(operands.every((token) => token.pose.scale >= 0.8));
+  assert.ok(operands.every((token) => token.pose.scale >= 0.68));
   assert.equal(new Set(operands.map((token) => token.pose.y)).size, 2);
   assert.equal(result?.pose.opacity, 0);
 
@@ -220,9 +252,10 @@ test("constant operands travel independently on arcs before the derived result a
       (candidate) => candidate.motionId === token.motionId
     )!;
     const center = native.localRect.left + native.localRect.width / 2;
-    assert.ok(Math.abs(center + token.pose.x - targetCenter) < 0.001);
+    assert.ok(Math.abs(center + token.pose.x - targetCenter) <= 4.01);
   }
-  assert.equal(derivedResult?.pose.y, 0);
+  assert.ok(Math.abs(derivedResult?.pose.y ?? 0) > 0.25);
+  assert.ok(Math.abs(derivedResult?.pose.y ?? 0) < 3);
 });
 
 test("linear rearrangement settles exactly to native target token endpoints", () => {
@@ -306,14 +339,57 @@ function cancellationGeometry(): KpMeasuredEquationTransitionGeometry {
 }
 
 function constantDerivationGeometry(): KpMeasuredEquationTransitionGeometry {
-  return {
+  const geometry: KpMeasuredEquationTransitionGeometry = {
     transitionId: "transition.derive",
     linearRearrangementKind: "simplify-constant-difference",
+    successorSynthesisBinding: {
+      id: "successor.transition.derive",
+      relationRecordId: "constants-merge",
+      authority: {
+        operationId: "kp.algebra.simplify-constant-difference",
+        bindingId: "binding.transition.derive"
+      },
+      sourceAnnotations: [
+        {
+          id: "operand.7",
+          semanticRole: "minuend",
+          selectorIds: ["operand.7"],
+          contribution: "material-input",
+          propagationRank: 0
+        },
+        {
+          id: "operator.minus",
+          semanticRole: "subtraction-operator",
+          selectorIds: ["operator.minus"],
+          contribution: "catalyst",
+          propagationRank: 0
+        },
+        {
+          id: "operand.3",
+          semanticRole: "subtrahend",
+          selectorIds: ["operand.3"],
+          contribution: "material-input",
+          propagationRank: 1
+        }
+      ],
+      targetAnnotations: [{
+        id: "result.4",
+        semanticRole: "evaluated-difference",
+        selectorIds: ["result.4"],
+        propagationRank: 0
+      }],
+      lineages: [{
+        id: "lineage.transition.derive",
+        sourceAnnotationIds: ["operand.7", "operand.3"],
+        targetAnnotationIds: ["result.4"]
+      }]
+    },
     sourceTokens: [
       token("persist.x", 8),
       token("persist.equals", 38),
       token("operand.7", 66),
-      token("operand.minus3", 92)
+      token("operator.minus", 88),
+      token("operand.3", 100)
     ],
     targetTokens: [
       token("target.x", 8),
@@ -326,11 +402,15 @@ function constantDerivationGeometry(): KpMeasuredEquationTransitionGeometry {
       {
         recordId: "constants-merge",
         lifecycle: "merge",
-        source: endpoint(["operand.7", "operand.minus3"], 66, 38),
+        source: endpoint(["operand.7", "operator.minus", "operand.3"], 66, 46),
         target: endpoint(["result.4"], 72, 12),
         delta: { x: -7, y: 0, scaleX: 1, scaleY: 1 }
       }
     ]
+  };
+  return {
+    ...geometry,
+    successorSynthesisPlan: createKpEquationSuccessorSynthesisPlan(geometry)
   };
 }
 

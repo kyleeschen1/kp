@@ -696,8 +696,11 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   const seven = materialLayer.locator(
     '[data-kp-equation-material-owner-id="linear-solve.rhs.7"]'
   );
-  const inverse = materialLayer.locator(
-    '[data-kp-equation-material-owner-id="linear-solve.rhs.minus3"]'
+  const minus = materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.rhs.minus"]'
+  );
+  const subtrahend = materialLayer.locator(
+    '[data-kp-equation-material-owner-id="linear-solve.rhs.3"]'
   );
   const result = materialLayer.locator(
     '[data-kp-equation-material-owner-id="linear-solve.rhs.4"]'
@@ -708,8 +711,19 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   );
   await expect(result).toHaveCSS("opacity", "0");
   await expect(seven).toHaveCSS("opacity", "1");
-  await expect(inverse).toHaveCSS("opacity", "1");
-  const operandArcs = await Promise.all([seven, inverse].map((locator) =>
+  await expect(minus).toHaveCSS("opacity", "1");
+  await expect(subtrahend).toHaveCSS("opacity", "1");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-successor-synthesis-plan",
+    /constants-merge/
+  );
+  await expect(transition.locator(
+    '[data-kp-editor-successor-contribution="catalyst"]'
+  )).toHaveCount(1);
+  await expect(transition.locator(
+    '[data-kp-editor-successor-contribution="material-input"]'
+  )).toHaveCount(2);
+  const operandArcs = await Promise.all([seven, subtrahend].map((locator) =>
     locator.evaluate((element) => {
       const rect = element.getBoundingClientRect();
       return rect.top + rect.height / 2;
@@ -730,6 +744,15 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
     "data-kp-editor-equation-active-subgraph-nodes",
     /recognize/
   );
+  const successorOverflow = await player.locator(
+    "[data-kp-editor-animation-stage]"
+  ).evaluate(async (animationStage) => {
+    const modulePath = "/src/editor/animation-viewport-overflow.ts";
+    const { measureKpAnimationViewportOverflow } = await import(modulePath) as
+      typeof import("../src/editor/animation-viewport-overflow.ts");
+    return measureKpAnimationViewportOverflow(animationStage as HTMLElement);
+  });
+  expect(successorOverflow.nestedScrollbarCount).toBe(0);
 
   await scrubber.fill("1");
   const nativeResult = transition.locator(

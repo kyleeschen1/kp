@@ -50,8 +50,10 @@ test("linear-solve equation frame interpreter samples the active cancel transfor
       "equation.linear-solve.left-simplified.equals",
       "equation.linear-solve.after-subtract.rhs.7",
       "equation.linear-solve.left-simplified.rhs.7",
-      "equation.linear-solve.after-subtract.rhs.minus3",
-      "equation.linear-solve.left-simplified.rhs.minus3"
+      "equation.linear-solve.after-subtract.rhs.minus",
+      "equation.linear-solve.left-simplified.rhs.minus",
+      "equation.linear-solve.after-subtract.rhs.3",
+      "equation.linear-solve.left-simplified.rhs.3"
     ]
   );
   assert.deepEqual(interpretation.output.selectorCorrespondenceRefs, [
@@ -71,8 +73,13 @@ test("linear-solve equation frame interpreter samples the active cancel transfor
       preserves: ["identity", "role"]
     },
     {
-      sourceSelectorId: "equation.linear-solve.after-subtract.rhs.minus3",
-      targetSelectorId: "equation.linear-solve.left-simplified.rhs.minus3",
+      sourceSelectorId: "equation.linear-solve.after-subtract.rhs.minus",
+      targetSelectorId: "equation.linear-solve.left-simplified.rhs.minus",
+      preserves: ["identity", "role"]
+    },
+    {
+      sourceSelectorId: "equation.linear-solve.after-subtract.rhs.3",
+      targetSelectorId: "equation.linear-solve.left-simplified.rhs.3",
       preserves: ["identity", "role"]
     }
   ]);
@@ -133,8 +140,10 @@ test("linear-solve equation frame behavior exposes active semantic transformatio
       "equation.linear-solve.left-simplified.equals",
       "equation.linear-solve.after-subtract.rhs.7",
       "equation.linear-solve.left-simplified.rhs.7",
-      "equation.linear-solve.after-subtract.rhs.minus3",
-      "equation.linear-solve.left-simplified.rhs.minus3"
+      "equation.linear-solve.after-subtract.rhs.minus",
+      "equation.linear-solve.left-simplified.rhs.minus",
+      "equation.linear-solve.after-subtract.rhs.3",
+      "equation.linear-solve.left-simplified.rhs.3"
     ]
   });
 });

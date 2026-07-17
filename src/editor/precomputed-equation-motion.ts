@@ -22,6 +22,7 @@ import {
   type EquationVisualMotifKind
 } from "../rendering/visual-motif.ts";
 import type { EquationMotionPlan } from "../rendering/equation-motion-plan.ts";
+import { createKpEquationSuccessorSynthesisPlan } from "../rendering/equation-linear-rearrangement.ts";
 
 export interface KpEditorPrecomputedEquationMotionPlan {
   readonly kind: "editor-precomputed-equation-motion-plan";
@@ -49,14 +50,23 @@ export function createKpEditorPrecomputedEquationMotionPlan(input: {
   const spacing = input.spacing ?? "balanced";
   const pathPreference = input.pathPreference ?? "automatic";
   const timelineMotifKind = baseTimelineMotifKind(input.motifKind);
+  const successorSynthesisPlan = createKpEquationSuccessorSynthesisPlan(
+    input.geometry
+  );
+  const measuredGeometry: KpMeasuredEquationTransitionGeometry = {
+    ...input.geometry,
+    ...(successorSynthesisPlan === undefined
+      ? {}
+      : { successorSynthesisPlan })
+  };
   const layoutPlan = createKpEquationLayoutPlan({
     id: `${input.id}.layout`,
-    geometry: input.geometry,
+    geometry: measuredGeometry,
     destinationPadding: spacing === "compact" ? 1 : spacing === "spacious" ? 4 : 2,
     transitPadding: spacing === "compact" ? 4 : spacing === "spacious" ? 10 : 6
   });
   const relationPathPlans = new Map(
-    input.geometry.relations.flatMap((relation) =>
+    measuredGeometry.relations.flatMap((relation) =>
       relation.source === undefined || relation.target === undefined
         ? []
         : [[relation.recordId, planKpEquationMotionPath({
@@ -70,12 +80,12 @@ export function createKpEditorPrecomputedEquationMotionPlan(input: {
     )
   );
   const tokenPathPlans = lineageTokenPathPlans(
-    input.geometry,
+    measuredGeometry,
     input.id,
     pathPreference
   );
   const geometry: KpMeasuredEquationTransitionGeometry = {
-    ...input.geometry,
+    ...measuredGeometry,
     precomputedMotionPathsByMotionId: Object.fromEntries(tokenPathPlans),
     precomputedRelationMotionPathsByRecordId: Object.fromEntries(
       [...relationPathPlans].map(([recordId, plan]) => [

@@ -1,0 +1,125 @@
+{
+  "id": "next-action.kp.material-motion.linear-successor-v0",
+  "kind": "next-action",
+  "title": "Apply successor synthesis to linear solve",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Applied shared successor synthesis to the live linear solve by splitting the semantic subtraction operator from its operand, authoring material-input/catalyst/target roles, excluding the catalyst from result lineage, compiling and caching the measured successor plan, replacing bespoke merge motion with shared sampling, preserving rigid continuants and KaTeX metrics, exposing inspectable editor roles, and refining live handoff timing from checkpoint-frame review.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.linear-successor-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-risk-weighted-validation-cadence.md",
+      "summary": "Accepted risk-weighted verification policy governing this run."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/linear-solve-asset.ts",
+      "summary": "Explicit operator, operand, target, rank, and successor contribution semantics for the canonical solve."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/linear-rearrangement-choreography.ts",
+      "summary": "Governed successor binding, catalyst lifecycle, and material-only representational lineage."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-linear-rearrangement.ts",
+      "summary": "Measured semantic binding adapter and shared successor sampler integration."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/precomputed-equation-motion.ts",
+      "summary": "Cached successor compilation outside the animation frame loop."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Binding handoff and inspectable successor role metadata in the KP editor."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-visuals.browser.spec.ts",
+      "summary": "Live motion, KaTeX, rewind, continuity, ink overflow, and nested-scrollbar assertions."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "node --test <directly affected test files>",
+    "npm run typecheck when typed source or public contracts change",
+    "npx playwright test <smallest affected browser cohort> when visible behavior changes",
+    "npm run theseus -- workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether Apply successor synthesis to linear solve can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test focused successor, linear, semantic, lifecycle, and compiler cohorts",
+      "status": "passed",
+      "scope": "31 unique focused tests passed; final linear cohort 7 of 7.",
+      "checkedAt": "2026-07-17T20:57:56.123Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts focused linear and KaTeX cohort",
+      "status": "passed",
+      "scope": "6 live Chromium scenarios passed, including zero nested scrollbars at successor recognition.",
+      "checkedAt": "2026-07-17T20:57:56.202Z"
+    },
+    {
+      "command": "manual checkpoint review at 84, 88, 92, and 96 percent",
+      "status": "passed",
+      "scope": "Verified independent glyphs, opposite arcs, catalyst follow, overlapping ownership, earlier retirement, and exact native 4 settlement.",
+      "checkedAt": "2026-07-17T20:57:56.277Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production build and full typecheck passed; entry 248.74 KB gzip, 2.66 KB above the slice-13 baseline.",
+      "checkedAt": "2026-07-17T20:57:56.352Z"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "checkedAt": "2026-07-17T20:57:56.436Z",
+      "scope": "601 nodes and 7751 events valid before completion."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Applied shared successor synthesis to the live linear solve by splitting the semantic subtraction operator from its operand, authoring material-input/catalyst/target roles, excluding the catalyst from result lineage, compiling and caching the measured successor plan, replacing bespoke merge motion with shared sampling, preserving rigid continuants and KaTeX metrics, exposing inspectable editor roles, and refining live handoff timing from checkpoint-frame review."
+  }
+}

@@ -30,7 +30,8 @@ const solveXSegments: Readonly<Record<string, readonly KpSelectorAnnotatedLatexS
     gap(),
     semantic("equation.linear-solve.after-subtract.rhs.7", "7"),
     gap(),
-    semantic("equation.linear-solve.after-subtract.rhs.minus3", "-3")
+    semantic("equation.linear-solve.after-subtract.rhs.minus", "-"),
+    semantic("equation.linear-solve.after-subtract.rhs.3", "3")
   ],
   "equation.linear-solve.left-simplified": [
     semantic("equation.linear-solve.left-simplified.lhs.x", "x"),
@@ -39,7 +40,8 @@ const solveXSegments: Readonly<Record<string, readonly KpSelectorAnnotatedLatexS
     gap(),
     semantic("equation.linear-solve.left-simplified.rhs.7", "7"),
     gap(),
-    semantic("equation.linear-solve.left-simplified.rhs.minus3", "-3")
+    semantic("equation.linear-solve.left-simplified.rhs.minus", "-"),
+    semantic("equation.linear-solve.left-simplified.rhs.3", "3")
   ],
   "equation.linear-solve.solved": [
     semantic("equation.linear-solve.solved.lhs.x", "x"),

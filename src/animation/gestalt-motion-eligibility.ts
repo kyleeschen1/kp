@@ -19,6 +19,8 @@ export function resolveKpGestaltMotionEligibility(
     "equals",
     "rhs.7",
     "rhs.minus3",
+    "rhs.minus",
+    "rhs.3",
     "rhs.4"
   ].find((candidate) => motionId.endsWith(`.${candidate}`));
   if (linearRole !== undefined) {

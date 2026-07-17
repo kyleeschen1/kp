@@ -36,6 +36,7 @@ import {
   compileKpBridgedChoreographySequence,
   type KpBridgedChoreographySequence
 } from "./choreography-envelope-bridge.ts";
+import type { KpSuccessorSynthesisBinding } from "./successor-synthesis.ts";
 
 export const kpLinearRearrangementTiming = {
   orientEnd: 0.14,
@@ -73,6 +74,7 @@ export interface KpLinearRearrangementStep {
     readonly id: string;
     readonly nodes: readonly KpLinearRearrangementSubgraphNode[];
   };
+  readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
 }
 
 export interface KpLinearRearrangementChoreography {
@@ -206,20 +208,25 @@ function createStep(
   if (causalRecord === undefined) {
     throw new Error(`Linear rearrangement ${transformation.id} requires a causal record.`);
   }
+  const successorSynthesisBinding = kind === "simplify-constant-difference"
+    ? createSuccessorSynthesisBinding(animation, transformation, causalRecord)
+    : undefined;
   const vocabulary = vocabularyForStep(
     transformation,
     kind,
     continuants,
-    causalRecord
+    causalRecord,
+    successorSynthesisBinding
   );
   const lifecycle = lifecycleForStep(
     transformation,
     kind,
     continuants,
-    causalRecord
+    causalRecord,
+    successorSynthesisBinding
   );
-  const lineageEdges = records.map((record) =>
-    lineageEdgeForRecord(transformation, record)
+  const lineageEdges = records.flatMap((record) =>
+    lineageEdgesForRecord(transformation, record, successorSynthesisBinding)
   );
   const sourceEntityIds = records.flatMap((record) => record.sourceSelectorIds);
   const targetEntityIds = records.flatMap((record) => record.targetSelectorIds);
@@ -331,7 +338,10 @@ function createStep(
       contextDimming: 0.1,
       accessibilityMode: "full"
     }),
-    operationSubgraph: operationSubgraph(transformation.id, kind)
+    operationSubgraph: operationSubgraph(transformation.id, kind),
+    ...(successorSynthesisBinding === undefined
+      ? {}
+      : { successorSynthesisBinding })
   };
 }
 
@@ -339,7 +349,8 @@ function vocabularyForStep(
   transformation: KpSemanticTransformation,
   kind: KpEquationLinearRearrangementKind,
   continuants: readonly KpSemanticContinuant[],
-  causalRecord: SelectorCorrespondenceRecord
+  causalRecord: SelectorCorrespondenceRecord,
+  successorSynthesisBinding: KpSuccessorSynthesisBinding | undefined
 ): KpChoreographyVocabulary {
   const lineageId = `${transformation.id}.derived-result`;
   return {
@@ -351,11 +362,14 @@ function vocabularyForStep(
           meaning: "The constant expression succeeds into its evaluated value.",
           sourceRepresentation: {
             entityId: `${transformation.id}.source-expression`,
-            selectorIds: causalRecord.sourceSelectorIds
+            selectorIds: successorSynthesisBinding?.sourceAnnotations
+              .filter((annotation) => annotation.contribution === "material-input")
+              .map((annotation) => annotation.id) ?? causalRecord.sourceSelectorIds
           },
           targetRepresentation: {
             entityId: `${transformation.id}.target-value`,
-            selectorIds: causalRecord.targetSelectorIds
+            selectorIds: successorSynthesisBinding?.targetAnnotations
+              .map((annotation) => annotation.id) ?? causalRecord.targetSelectorIds
           },
           cause: {
             kind: "transformation",
@@ -386,8 +400,11 @@ function vocabularyForStep(
         ? [{
             id: `${lineageId}.continuity`,
             mode: "causal-derivation" as const,
-            sourceEntityIds: causalRecord.sourceSelectorIds,
-            targetEntityIds: causalRecord.targetSelectorIds,
+            sourceEntityIds: successorSynthesisBinding?.sourceAnnotations
+              .filter((annotation) => annotation.contribution === "material-input")
+              .map((annotation) => annotation.id) ?? causalRecord.sourceSelectorIds,
+            targetEntityIds: successorSynthesisBinding?.targetAnnotations
+              .map((annotation) => annotation.id) ?? causalRecord.targetSelectorIds,
             authorityRef: {
               kind: "representational-lineage" as const,
               lineageId
@@ -412,7 +429,8 @@ function lifecycleForStep(
   transformation: KpSemanticTransformation,
   kind: KpEquationLinearRearrangementKind,
   continuants: readonly KpSemanticContinuant[],
-  causalRecord: SelectorCorrespondenceRecord
+  causalRecord: SelectorCorrespondenceRecord,
+  successorSynthesisBinding: KpSuccessorSynthesisBinding | undefined
 ): KpChoreographyLifecycle {
   const records: KpChoreographyLifecycleRecord[] = continuants.map(
     (continuant) => ({
@@ -449,14 +467,33 @@ function lifecycleForStep(
       summary: "The additive inverse pair meets and collapses before survivor compaction."
     });
   } else {
+    const materialSourceIds = successorSynthesisBinding?.sourceAnnotations
+      .filter((annotation) => annotation.contribution === "material-input")
+      .map((annotation) => annotation.id) ?? causalRecord.sourceSelectorIds;
+    const catalystSourceIds = successorSynthesisBinding?.sourceAnnotations
+      .filter((annotation) => annotation.contribution === "catalyst")
+      .map((annotation) => annotation.id) ?? [];
     records.push({
       id: `${transformation.id}.successor`,
       kind: "successor",
       representationalLineageId: `${transformation.id}.derived-result`,
-      sourceEntityIds: causalRecord.sourceSelectorIds,
+      sourceEntityIds: materialSourceIds,
       targetEntityIds: causalRecord.targetSelectorIds,
       summary: "The constant expression succeeds into its evaluated result."
     });
+    if (catalystSourceIds.length > 0) {
+      records.push({
+        id: `${transformation.id}.catalyst-retirement`,
+        kind: "elimination",
+        cause: {
+          kind: "consumption",
+          authorityId: `${transformation.id}#${causalRecord.id}.catalyst`
+        },
+        sourceEntityIds: catalystSourceIds,
+        targetEntityIds: [],
+        summary: "The operator shapes the synthesis but contributes no result material."
+      });
+    }
   }
   return { id: `lifecycle.${transformation.id}`, records };
 }
@@ -485,10 +522,11 @@ function continuantForRecord(
   };
 }
 
-function lineageEdgeForRecord(
+function lineageEdgesForRecord(
   transformation: KpSemanticTransformation,
-  record: SelectorCorrespondenceRecord
-): KpSemanticLineageEdge {
+  record: SelectorCorrespondenceRecord,
+  successorSynthesisBinding: KpSuccessorSynthesisBinding | undefined
+): readonly KpSemanticLineageEdge[] {
   const relation = (() => {
     switch (record.relation) {
       case "identity": return "persist" as const;
@@ -501,15 +539,106 @@ function lineageEdgeForRecord(
         );
     }
   })();
-  return {
+  const materialSourceIds = relation === "representation-succession"
+    ? successorSynthesisBinding?.sourceAnnotations
+      .filter((annotation) => annotation.contribution === "material-input")
+      .map((annotation) => annotation.id) ?? record.sourceSelectorIds
+    : record.sourceSelectorIds;
+  const primary: KpSemanticLineageEdge = {
     id: `${transformation.id}.${record.id}`,
     relation,
-    sourceEntityIds: record.sourceSelectorIds,
+    sourceEntityIds: materialSourceIds,
     targetEntityIds: record.targetSelectorIds,
     ...(relation === "representation-succession"
       ? { representationAuthorityId: `${transformation.id}#${record.id}` }
       : {}),
     summary: record.summary
+  };
+  const catalystSourceIds = relation === "representation-succession"
+    ? successorSynthesisBinding?.sourceAnnotations
+      .filter((annotation) => annotation.contribution === "catalyst")
+      .map((annotation) => annotation.id) ?? []
+    : [];
+  return catalystSourceIds.length === 0
+    ? [primary]
+    : [
+        primary,
+        {
+          id: `${transformation.id}.${record.id}.catalyst-retirement`,
+          relation: "removal",
+          sourceEntityIds: catalystSourceIds,
+          targetEntityIds: [],
+          summary: "The operator retires after catalyzing the successor synthesis."
+        }
+      ];
+}
+
+function createSuccessorSynthesisBinding(
+  animation: KpAnimationAsset,
+  transformation: KpSemanticTransformation,
+  causalRecord: SelectorCorrespondenceRecord
+): KpSuccessorSynthesisBinding {
+  const selectors = new Map(
+    animation.bundle.objects.flatMap((object) => object.selectors).map((selector) => [
+      selector.id,
+      selector
+    ])
+  );
+  const sourceAnnotations = causalRecord.sourceSelectorIds.map((id, index) => {
+    const selector = selectors.get(id);
+    const contribution = selector?.metadata?.["successorContribution"];
+    const semanticRole = selector?.metadata?.["successorRole"];
+    const propagationRank = selector?.metadata?.["successorRank"];
+    if (
+      (contribution !== "material-input" && contribution !== "catalyst") ||
+      typeof semanticRole !== "string" ||
+      typeof propagationRank !== "number"
+    ) {
+      throw new Error(
+        `Successor source ${id} requires authored contribution, role, and rank metadata at index ${index}.`
+      );
+    }
+    const typedContribution: "material-input" | "catalyst" = contribution;
+    return {
+      id,
+      semanticRole,
+      selectorIds: [id],
+      contribution: typedContribution,
+      propagationRank
+    };
+  });
+  const targetAnnotations = causalRecord.targetSelectorIds.map((id, index) => {
+    const selector = selectors.get(id);
+    const semanticRole = selector?.metadata?.["successorRole"];
+    const propagationRank = selector?.metadata?.["successorRank"];
+    if (
+      selector?.metadata?.["successorTarget"] !== true ||
+      typeof semanticRole !== "string" ||
+      typeof propagationRank !== "number"
+    ) {
+      throw new Error(
+        `Successor target ${id} requires authored target, role, and rank metadata at index ${index}.`
+      );
+    }
+    return { id, semanticRole, selectorIds: [id], propagationRank };
+  });
+  const materialSourceIds = sourceAnnotations
+    .filter((annotation) => annotation.contribution === "material-input")
+    .map((annotation) => annotation.id);
+  return {
+    id: `successor.${transformation.id}.${causalRecord.id}`,
+    relationRecordId: causalRecord.id,
+    authority: {
+      operationId: `kp.algebra.${kebabCase(transformation.transformType)}`,
+      bindingId: `${transformation.id}#${causalRecord.id}`
+    },
+    sourceAnnotations,
+    targetAnnotations,
+    lineages: [{
+      id: `lineage.${transformation.id}.${causalRecord.id}.material`,
+      sourceAnnotationIds: materialSourceIds,
+      targetAnnotationIds: targetAnnotations.map((annotation) => annotation.id)
+    }]
   };
 }
 
