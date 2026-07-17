@@ -69,6 +69,14 @@ function sourceMotion(
       return motion(1 - progress, 0, 0, 1 - 0.32 * progress, 0);
     case "dot-product-accumulate":
       return motion(1 - progress, 0, 0, 1, 0);
+    case "exponent-factor-peel":
+    case "fraction-factor-split":
+      return motion(1 - progress, 0, 0, 1 - 0.18 * progress, 0);
+    case "fraction-common-factor-extract":
+      return motion(1 - progress, 0, 0, 1, 0);
+    case "exponent-unit-absorb":
+    case "fraction-unit-absorb":
+      return motion(1 - progress, 0, 0, 1 - 0.08 * progress, 0);
     case "derivative-power":
       return motion(1 - progress, 0, 0, 1, 0);
     case "merge-fan-in":
@@ -109,6 +117,14 @@ function targetMotion(
       return motion(progress, 0, 0, 0.68 + 0.32 * progress, 0);
     case "dot-product-accumulate":
       return motion(progress, 0, 0, 0.9 + 0.1 * progress, 0);
+    case "exponent-factor-peel":
+    case "fraction-factor-split":
+      return motion(progress, 0, 0, 0.82 + 0.18 * progress, 0);
+    case "fraction-common-factor-extract":
+      return motion(progress, 0, 0, 0.88 + 0.12 * progress, 0);
+    case "exponent-unit-absorb":
+    case "fraction-unit-absorb":
+      return motion(progress, 0, 0, 0.92 + 0.08 * progress, 0);
     case "derivative-power":
       return motion(progress, 0, 0, 1, 0);
     case "merge-fan-in":

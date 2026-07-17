@@ -2,9 +2,9 @@
   "id": "next-action.kp.animation.semantic-motion-library-loop-v1",
   "kind": "next-action",
   "title": "Build the semantic motion animation library",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Execute the user-approved 28-slice animation redesign in dependency order: eliminate nested animation scrollbars without clipping or whole-equation scaling, then implement calculus lineage, radical succession, fan-out and fan-in, algebra motifs, indexed accumulation, LLM authoring, and promotion gates.",
+  "summary": "Completed all 28 approved semantic-motion slices, promoted the operation-specific library and constrained LLM authoring catalog, verified native settlement and rewind across the browser cohort, and eliminated nested animation scrollbars without clipping or whole-equation scaling.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -21,6 +21,16 @@
       "intent": "User approved the 28-slice semantic animation long loop, including eliminating scrollbars inside animations.",
       "occurredAt": "2026-07-16",
       "summary": "Explicit user approval authorizes the stored run contract."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-motion-library-loop-closeout.md",
+      "summary": "Durable closeout for the approved semantic motion library action."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/semantic-motion-library-promotion.ts",
+      "summary": "Catalog-wide promotion enforcement for the completed action."
     }
   ],
   "dependsOn": {
@@ -67,5 +77,41 @@
       "id": "llm-operations-compile-without-authored-keyframes",
       "weight": "high"
     }
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "1287 unit and integration tests.",
+      "checkedAt": "2026-07-17T04:33:34.690Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript application, node, and test projects.",
+      "checkedAt": "2026-07-17T04:33:34.752Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production build with bundled KaTeX font assets.",
+      "checkedAt": "2026-07-17T04:33:34.810Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts",
+      "status": "passed",
+      "scope": "43 editor animation visual browser tests.",
+      "checkedAt": "2026-07-17T04:33:34.872Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-overflow.browser.spec.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-17T04:33:34.930Z",
+      "scope": "44 descriptors and 528 viewport samples with zero nested scrollbars."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Completed all 28 approved semantic-motion slices, promoted the operation-specific library and constrained LLM authoring catalog, verified native settlement and rewind across the browser cohort, and eliminated nested animation scrollbars without clipping or whole-equation scaling."
+  }
 }

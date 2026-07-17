@@ -1143,7 +1143,7 @@ test("fraction simplification renders factor, common-factor, and simplified stat
 
   await scrubber.fill("1");
   await expect(player.locator("[data-kp-editor-equation-transition-id]"))
-    .toHaveAttribute("data-kp-editor-equation-motif", "simplify-into");
+    .toHaveAttribute("data-kp-editor-equation-motif", "fraction-unit-absorb");
   await expect(player.locator("[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"))
     .toHaveAttribute(
       "data-kp-editor-equation-object-id",
@@ -1200,11 +1200,11 @@ test("exponent and radical family animations render their semantic rewrite motif
 
   await scrubber.fill("0.25");
   await expect(transition)
-    .toHaveAttribute("data-kp-editor-equation-motif", "append-after-shift");
+    .toHaveAttribute("data-kp-editor-equation-motif", "exponent-factor-peel");
   await scrubber.fill("0.75");
   transition = player.locator("[data-kp-editor-equation-transition-id]");
   await expect(transition)
-    .toHaveAttribute("data-kp-editor-equation-motif", "unwrap");
+    .toHaveAttribute("data-kp-editor-equation-motif", "exponent-unit-absorb");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-exponent-law-choreography",
     "absorb-unit-exponent"

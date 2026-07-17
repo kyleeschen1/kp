@@ -37,8 +37,8 @@ test("fraction simplification projects each semantic phase into the visible equa
     ["\\frac{1 \\cdot 2}{2 \\cdot 2}", "\\frac{1}{2} \\cdot \\frac{2}{2}", "\\frac{1}{2}"]
   );
   assert.deepEqual(frames.map((frame) => frame.motifs[0]?.kind), [
-    "artifact-replace",
-    "artifact-replace",
-    "simplify-into"
+    "fraction-factor-split",
+    "fraction-common-factor-extract",
+    "fraction-unit-absorb"
   ]);
 });

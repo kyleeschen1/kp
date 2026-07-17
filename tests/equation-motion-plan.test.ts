@@ -116,6 +116,66 @@ test("visual motif module exposes reusable equation motif descriptors", () => {
         ]
       ],
       [
+        "exponent-factor-peel",
+        ["copy", "shift", "reveal"],
+        [
+          "focus-power-role",
+          "reserve-product-layout",
+          "emit-factor-and-operator",
+          "decrement-or-absorb-exponent",
+          "settle-native-product",
+          "release-power-focus"
+        ]
+      ],
+      [
+        "exponent-unit-absorb",
+        ["shift", "vanish"],
+        [
+          "focus-power-role",
+          "reserve-product-layout",
+          "emit-factor-and-operator",
+          "decrement-or-absorb-exponent",
+          "settle-native-product",
+          "release-power-focus"
+        ]
+      ],
+      [
+        "fraction-factor-split",
+        ["copy", "shift", "reveal"],
+        [
+          "focus-roles",
+          "reflow-continuants",
+          "transmit-structure",
+          "change-artifacts",
+          "settle-native",
+          "release-focus"
+        ]
+      ],
+      [
+        "fraction-common-factor-extract",
+        ["merge", "shift", "reveal"],
+        [
+          "focus-roles",
+          "reflow-continuants",
+          "transmit-structure",
+          "change-artifacts",
+          "settle-native",
+          "release-focus"
+        ]
+      ],
+      [
+        "fraction-unit-absorb",
+        ["shift", "vanish", "reveal"],
+        [
+          "focus-roles",
+          "reflow-continuants",
+          "transmit-structure",
+          "change-artifacts",
+          "settle-native",
+          "release-focus"
+        ]
+      ],
+      [
         "matrix-row-compose",
         ["shift", "transmit", "reveal"],
         [

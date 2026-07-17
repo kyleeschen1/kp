@@ -2,7 +2,7 @@
   "id": "run-contract.kp.animation.semantic-motion-library-loop-v1",
   "kind": "run-contract",
   "title": "Semantic Motion Animation Library Long Loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
   "sourceRefs": [
     {
@@ -217,7 +217,9 @@
     {
       "id": "next-action.kp.animation.semantic-motion-promotion-gate-v1",
       "title": "Enforce promotion and close the loop",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.semantic-motion-promotion-gate-v1 in Semantic Motion Animation Library Long Loop.",
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }

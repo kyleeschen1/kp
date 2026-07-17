@@ -355,27 +355,27 @@ test("default equation visual motif rules cover promoted generated transform def
       ],
       [
         "splitFractionFactors",
-        "artifact-replace",
+        "fraction-factor-split",
         ["definition.generated.fraction-expression.split-fraction-factors"]
       ],
       [
         "mergeFractionCommonFactor",
-        "artifact-replace",
+        "fraction-common-factor-extract",
         ["definition.generated.fraction-expression.merge-common-factor"]
       ],
       [
         "simplifyUnitFractionFactor",
-        "simplify-into",
+        "fraction-unit-absorb",
         ["definition.generated.fraction-expression.simplify-unit-factor"]
       ],
       [
         "lowerExponent",
-        "append-after-shift",
+        "exponent-factor-peel",
         ["definition.generated.exponent.lower-exponent"]
       ],
       [
         "unwrapUnitExponent",
-        "unwrap",
+        "exponent-unit-absorb",
         ["definition.generated.exponent.unwrap-unit-exponent"]
       ],
       [

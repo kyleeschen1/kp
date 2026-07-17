@@ -62,11 +62,11 @@ test("createExponentExpansionAnimationAsset adapts square expansion into Animati
     [
       [
         "transform.generated.exponent.square-as-product.lower-exponent",
-        "append-after-shift"
+        "exponent-factor-peel"
       ],
       [
         "transform.generated.exponent.square-as-product.unwrap-unit-exponent",
-        "unwrap"
+        "exponent-unit-absorb"
       ]
     ]
   );

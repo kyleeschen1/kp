@@ -48,6 +48,7 @@ export function createKpEditorPrecomputedEquationMotionPlan(input: {
 }): KpEditorPrecomputedEquationMotionPlan {
   const spacing = input.spacing ?? "balanced";
   const pathPreference = input.pathPreference ?? "automatic";
+  const timelineMotifKind = baseTimelineMotifKind(input.motifKind);
   const layoutPlan = createKpEquationLayoutPlan({
     id: `${input.id}.layout`,
     geometry: input.geometry,
@@ -85,13 +86,13 @@ export function createKpEditorPrecomputedEquationMotionPlan(input: {
   };
   const motif = createVisualMotifPlan({
     id: `${input.id}.motif`,
-    kind: input.motifKind,
+    kind: timelineMotifKind,
     correspondenceRecordId: input.geometry.relations[0]?.recordId ?? "transition",
     sourceTokenIds: input.geometry.sourceTokens.map((token) => token.motionId),
     targetTokenIds: input.geometry.targetTokens.map((token) => token.motionId),
-    motionPrimitiveIds: primitiveIdsForEquationVisualMotifKind(input.motifKind),
-    phaseIds: phaseIdsForEquationVisualMotifKind(input.motifKind),
-    summary: `${input.motifKind} semantic editor timeline.`
+    motionPrimitiveIds: primitiveIdsForEquationVisualMotifKind(timelineMotifKind),
+    phaseIds: phaseIdsForEquationVisualMotifKind(timelineMotifKind),
+    summary: `${timelineMotifKind} semantic editor timeline.`
   });
   const motionPlan: EquationMotionPlan = {
     sourceLatex: "",
@@ -113,6 +114,22 @@ export function createKpEditorPrecomputedEquationMotionPlan(input: {
     tokenPathPlans,
     semanticTimeline
   };
+}
+
+function baseTimelineMotifKind(
+  motifKind: EquationVisualMotifKind
+): EquationVisualMotifKind {
+  // Fraction and exponent choreography has its own causal phase clock. The
+  // shared token timeline only supplies its preview/change/outro envelope, so
+  // compiling those specialized phase IDs here would create a second clock.
+  switch (motifKind) {
+    case "fraction-factor-split": return "copy-fan-out";
+    case "fraction-common-factor-extract": return "merge-fan-in";
+    case "fraction-unit-absorb": return "simplify-into";
+    case "exponent-factor-peel": return "append-after-shift";
+    case "exponent-unit-absorb": return "unwrap";
+    default: return motifKind;
+  }
 }
 
 function lineageTokenPathPlans(

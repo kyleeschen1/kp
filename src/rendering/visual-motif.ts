@@ -10,6 +10,14 @@ import {
   kpDerivativePowerPhaseIds,
   type KpDerivativePowerPhaseId
 } from "../animation/derivative-power-choreography.ts";
+import {
+  kpExponentLawChoreographyPhaseIds,
+  type KpExponentLawChoreographyPhaseId
+} from "../animation/exponent-law-choreography.ts";
+import {
+  kpFractionChoreographyPhaseIds,
+  type KpFractionChoreographyPhaseId
+} from "../animation/fraction-choreography.ts";
 
 export type VisualMotionPrimitiveId =
   | "enter"
@@ -34,6 +42,11 @@ export type EquationVisualMotifKind =
   | "copy-fan-out"
   | "derivative-power"
   | "dot-product-accumulate"
+  | "exponent-factor-peel"
+  | "exponent-unit-absorb"
+  | "fraction-factor-split"
+  | "fraction-common-factor-extract"
+  | "fraction-unit-absorb"
   | "merge-fan-in"
   | "matrix-row-compose"
   | "matrix-cell-compose"
@@ -76,7 +89,9 @@ export type EquationVisualMotifPhaseId =
   (typeof equationVisualMotifPhaseIds)[number] |
   KpCopyFanOutPhaseId |
   KpSubstitutionPhaseId |
-  KpDerivativePowerPhaseId;
+  KpDerivativePowerPhaseId |
+  KpExponentLawChoreographyPhaseId |
+  KpFractionChoreographyPhaseId;
 
 export interface VisualMotifPlan<
   TKind extends string = string,
@@ -166,6 +181,41 @@ export const equationVisualMotifDescriptors: readonly EquationVisualMotifDescrip
     ],
     summary:
       "Index-matched component pairs form persistent products and accumulate into one scalar."
+  },
+  {
+    kind: "exponent-factor-peel",
+    motionPrimitiveIds: ["copy", "shift", "reveal"],
+    phaseIds: [...kpExponentLawChoreographyPhaseIds],
+    summary:
+      "The power role focuses, reserves product space, and emits independent factor and operator tokens before native settlement."
+  },
+  {
+    kind: "exponent-unit-absorb",
+    motionPrimitiveIds: ["shift", "vanish"],
+    phaseIds: [...kpExponentLawChoreographyPhaseIds],
+    summary:
+      "The persistent base reflows before the unit exponent is absorbed and focus releases."
+  },
+  {
+    kind: "fraction-factor-split",
+    motionPrimitiveIds: ["copy", "shift", "reveal"],
+    phaseIds: [...kpFractionChoreographyPhaseIds],
+    summary:
+      "Fraction roles focus and reflow before factor structure transmits through independent branches."
+  },
+  {
+    kind: "fraction-common-factor-extract",
+    motionPrimitiveIds: ["merge", "shift", "reveal"],
+    phaseIds: [...kpFractionChoreographyPhaseIds],
+    summary:
+      "Repeated fraction factors coalesce into one separated common factor before native settlement."
+  },
+  {
+    kind: "fraction-unit-absorb",
+    motionPrimitiveIds: ["shift", "vanish", "reveal"],
+    phaseIds: [...kpFractionChoreographyPhaseIds],
+    summary:
+      "The fraction continuant reflows while its explicit unit factor is absorbed and native structure settles."
   },
   {
     kind: "matrix-row-compose",

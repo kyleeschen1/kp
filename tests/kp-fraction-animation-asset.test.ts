@@ -100,15 +100,15 @@ test("createFractionSimplificationAnimationAsset adapts two fourths into Animati
     [
       [
         "transform.generated.fraction-expression.two-fourths.split-factors",
-        "artifact-replace"
+        "fraction-factor-split"
       ],
       [
         "transform.generated.fraction-expression.two-fourths.merge-common-factor",
-        "artifact-replace"
+        "fraction-common-factor-extract"
       ],
       [
         "transform.generated.fraction-expression.two-fourths.simplify-unit-factor",
-        "simplify-into"
+        "fraction-unit-absorb"
       ]
     ]
   );

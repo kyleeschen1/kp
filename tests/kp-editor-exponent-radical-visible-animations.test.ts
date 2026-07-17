@@ -33,12 +33,12 @@ test("exponent expansion visibly lowers then unwraps the unit exponent", () => {
     lower.projection.transitions[0]?.source[0]?.latex,
     lower.projection.transitions[0]?.target[0]?.latex,
     lower.motifs[0]?.kind
-  ], ["x^{2}", "x \\cdot x^{1}", "append-after-shift"]);
+  ], ["x^{2}", "x \\cdot x^{1}", "exponent-factor-peel"]);
   assert.deepEqual([
     unwrap.projection.transitions[0]?.source[0]?.latex,
     unwrap.projection.transitions[0]?.target[0]?.latex,
     unwrap.motifs[0]?.kind
-  ], ["x \\cdot x^{1}", "x \\cdot x", "unwrap"]);
+  ], ["x \\cdot x^{1}", "x \\cdot x", "exponent-unit-absorb"]);
 });
 
 test("radical rewrite visibly replaces the rational exponent with a root", () => {

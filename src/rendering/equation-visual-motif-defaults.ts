@@ -288,28 +288,28 @@ function generatedAlgebraEquationMotifDefaults():
     },
     {
       transformType: "splitFractionFactors",
-      motifKind: "artifact-replace",
-      summary: "A compact fraction expression is replaced by factored structure."
+      motifKind: "fraction-factor-split",
+      summary: "Factor structure branches from the focused fraction after continuants reflow."
     },
     {
       transformType: "mergeFractionCommonFactor",
-      motifKind: "artifact-replace",
-      summary: "Common factor structure is reorganized into a separated factor."
+      motifKind: "fraction-common-factor-extract",
+      summary: "Repeated factor structure coalesces into one separated common factor."
     },
     {
       transformType: "simplifyUnitFractionFactor",
-      motifKind: "simplify-into",
-      summary: "A unit fraction factor collapses away to the simplified fraction."
+      motifKind: "fraction-unit-absorb",
+      summary: "A unit fraction factor is absorbed after the persistent fraction reflows."
     },
     {
       transformType: "lowerExponent",
-      motifKind: "append-after-shift",
-      summary: "The persistent base shifts while the next factor enters."
+      motifKind: "exponent-factor-peel",
+      summary: "The power role emits an independent factor and operator after reserving product space."
     },
     {
       transformType: "unwrapUnitExponent",
-      motifKind: "unwrap",
-      summary: "The unit exponent artifact exits while the base persists."
+      motifKind: "exponent-unit-absorb",
+      summary: "The persistent base settles before the unit exponent is absorbed."
     },
     {
       transformType: "rewritePowerAsRoot",

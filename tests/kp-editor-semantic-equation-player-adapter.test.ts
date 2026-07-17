@@ -110,3 +110,19 @@ test("semantic token frames consume one precomputed layout path and timeline pla
   assert.match(frame.semanticTimeline.previousCheckpointId, /semantic-checkpoint/);
   assert.match(frame.semanticTimeline.nextCheckpointId, /semantic-checkpoint/);
 });
+
+test("specialized choreography motifs reuse the base token timeline envelope", () => {
+  const fraction = createKpEditorPrecomputedEquationMotionPlan({
+    id: "editor-plan.fraction-factor-split",
+    geometry,
+    motifKind: "fraction-factor-split"
+  });
+  const exponent = createKpEditorPrecomputedEquationMotionPlan({
+    id: "editor-plan.exponent-factor-peel",
+    geometry,
+    motifKind: "exponent-factor-peel"
+  });
+
+  assert.equal(fraction.semanticTimeline.visualTimeline.motifs[0]?.kind, "copy-fan-out");
+  assert.equal(exponent.semanticTimeline.visualTimeline.motifs[0]?.kind, "append-after-shift");
+});
