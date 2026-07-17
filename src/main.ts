@@ -75,6 +75,9 @@ import {
 } from "./editor/equation-surface-adapter.ts";
 import { registerKpEditorGraphSvgViewportAdapter } from "./editor/graph-svg-viewport.ts";
 import { registerKpEditorDiagramSvgAdapter } from "./editor/diagram-svg-adapter.ts";
+import {
+  disposeKpEditorEquationStageHotPathCaches
+} from "./editor/equation-stage-hot-path-cache.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -131,6 +134,7 @@ document.addEventListener("visibilitychange", () => {
 
 window.addEventListener("pagehide", () => {
   disposeKpEditorAnimationPlayers(appRoot);
+  disposeKpEditorEquationStageHotPathCaches(appRoot);
 });
 
 appRoot.addEventListener("click", (event) => {
@@ -318,6 +322,7 @@ function renderEditor(): void {
   activeView = "editor";
   viewRevision += 1;
   disposeKpEditorAnimationPlayers(appRoot);
+  disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
   appRoot.innerHTML = renderEditorDocument(editorDocument, {
     equationAnimationId: selectedEquationAnimationId,
@@ -359,6 +364,7 @@ async function renderProjectDashboardView(
   const revision = ++viewRevision;
   projectDashboardQuery = query;
   disposeKpEditorAnimationPlayers(appRoot);
+  disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
   const client = await loadProjectDashboardClient();
   if (activeView !== "dashboard" || revision !== viewRevision) return;

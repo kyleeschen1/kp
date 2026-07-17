@@ -191,6 +191,15 @@ async function measureFrames(page: Page): Promise<KpAnimationFramePerformance> {
     const initialInspectionPublishes = Number(
       player?.dataset["kpEditorAnimationInspectionPublishCount"] ?? 0
     );
+    const stage = player?.querySelector<HTMLElement>(
+      "[data-kp-editor-equation-stage]"
+    );
+    const initialLayoutCacheBuilds = Number(
+      stage?.dataset["kpEditorEquationCacheBuildCount"] ?? 0
+    );
+    const initialOverlayGeometryMeasures = Number(
+      stage?.dataset["kpEditorEquationOverlayGeometryMeasureCount"] ?? 0
+    );
     let previous: number | undefined;
     const startedAt = performance.now();
     document.querySelector<HTMLButtonElement>(
@@ -226,6 +235,17 @@ async function measureFrames(page: Page): Promise<KpAnimationFramePerformance> {
         0,
         Number(player?.dataset["kpEditorAnimationInspectionPublishCount"] ?? 0) -
           initialInspectionPublishes
+      ),
+      layoutCacheBuilds: Math.max(
+        0,
+        Number(stage?.dataset["kpEditorEquationCacheBuildCount"] ?? 0) -
+          initialLayoutCacheBuilds
+      ),
+      overlayGeometryMeasures: Math.max(
+        0,
+        Number(
+          stage?.dataset["kpEditorEquationOverlayGeometryMeasureCount"] ?? 0
+        ) - initialOverlayGeometryMeasures
       )
     };
   });

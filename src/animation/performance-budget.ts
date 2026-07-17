@@ -8,6 +8,8 @@ export interface KpAnimationFramePerformance {
   readonly longestTaskMs: number;
   readonly diagnosticPublishes?: number | undefined;
   readonly inspectionPublishes?: number | undefined;
+  readonly layoutCacheBuilds?: number | undefined;
+  readonly overlayGeometryMeasures?: number | undefined;
 }
 
 export interface KpAnimationPerformanceSnapshot {
@@ -55,6 +57,8 @@ export const kpAnimationPerformanceTargets = Object.freeze({
   longestTaskMs: 50,
   frameWindowDiagnosticPublishes: 40,
   frameWindowInspectionPublishes: 40,
+  frameWindowLayoutCacheBuilds: 24,
+  frameWindowOverlayGeometryMeasures: 24,
   initialThreeRequested: false
 });
 
@@ -111,6 +115,20 @@ export function evaluateKpAnimationPerformance(input: {
     "constrained.matrixFrame.inspectionPublishes",
     snapshot.constrained.matrixFrame.inspectionPublishes,
     kpAnimationPerformanceTargets.frameWindowInspectionPublishes,
+    "target"
+  );
+  optionalMaximumIssue(
+    issues,
+    "constrained.matrixFrame.layoutCacheBuilds",
+    snapshot.constrained.matrixFrame.layoutCacheBuilds,
+    kpAnimationPerformanceTargets.frameWindowLayoutCacheBuilds,
+    "target"
+  );
+  optionalMaximumIssue(
+    issues,
+    "constrained.matrixFrame.overlayGeometryMeasures",
+    snapshot.constrained.matrixFrame.overlayGeometryMeasures,
+    kpAnimationPerformanceTargets.frameWindowOverlayGeometryMeasures,
     "target"
   );
   maximumIssue(

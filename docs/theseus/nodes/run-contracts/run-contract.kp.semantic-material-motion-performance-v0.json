@@ -85,7 +85,8 @@
     {
       "id": "next-action.kp.material-motion.premeasured-hot-path-v0",
       "title": "Cache playback nodes and geometry",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.material-motion.premeasured-hot-path-v0 in KP Semantic Material Motion And Performance V0.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.quality-tiers-v0",

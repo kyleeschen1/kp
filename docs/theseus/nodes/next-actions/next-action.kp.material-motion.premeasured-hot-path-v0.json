@@ -1,0 +1,137 @@
+{
+  "id": "next-action.kp.material-motion.premeasured-hot-path-v0",
+  "kind": "next-action",
+  "title": "Cache playback nodes and geometry",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Cached stable equation-stage DOM references and native geometry outside active playback; invalidated explicitly on content, font, resize, native-fit, and disposal boundaries; resampled paused stages after invalidation; reduced matrix overlay geometry to revision-bound measurement; retained live radical-fragment geometry where semantic binding is dynamic; verified zero catalog viewport findings and bounded rebuild counts.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.premeasured-hot-path-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-stage-hot-path-cache.ts",
+      "summary": "Lifecycle-owned stage reference and native geometry cache with explicit invalidation."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts",
+      "summary": "Cached playback reads, native reset ordering, overlay revision measurement, and paused resampling."
+    },
+    {
+      "kind": "file",
+      "path": "src/main.ts",
+      "summary": "Disposes stage caches at application lifecycle and render boundaries."
+    },
+    {
+      "kind": "file",
+      "path": "scripts/animation-performance.ts",
+      "summary": "Measures cache rebuild and overlay geometry counts in the frame harness."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/performance-budget.ts",
+      "summary": "Adds bounded hot-path measurement targets."
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-performance-budget.test.ts",
+      "summary": "Covers performance cache-count evaluation."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-library.browser.spec.ts",
+      "summary": "Proves cache stability plus resize and font invalidation in the browser."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Cache playback nodes and geometry can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript",
+      "checkedAt": "2026-07-17T18:59:07.855Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "1299 unit and contract tests",
+      "checkedAt": "2026-07-17T18:59:07.938Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production build",
+      "checkedAt": "2026-07-17T18:59:08.021Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-library.browser.spec.ts",
+      "status": "passed",
+      "scope": "11 editor library browser tests",
+      "checkedAt": "2026-07-17T18:59:08.103Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-overflow.browser.spec.ts",
+      "status": "passed",
+      "scope": "44 descriptors, 528 states, 3 viewports",
+      "checkedAt": "2026-07-17T18:59:08.183Z"
+    },
+    {
+      "command": "npm run perf:animation-gallery",
+      "status": "passed",
+      "scope": "Normal and constrained animation frame budget",
+      "checkedAt": "2026-07-17T18:59:08.267Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-17T18:59:08.349Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Cached stable equation-stage DOM references and native geometry outside active playback; invalidated explicitly on content, font, resize, native-fit, and disposal boundaries; resampled paused stages after invalidation; reduced matrix overlay geometry to revision-bound measurement; retained live radical-fragment geometry where semantic binding is dynamic; verified zero catalog viewport findings and bounded rebuild counts."
+  }
+}

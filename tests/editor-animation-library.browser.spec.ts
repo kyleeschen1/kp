@@ -458,3 +458,75 @@ test("diagnostics stay below frame cadence and settle exactly on pause", async (
     "semantic-change"
   );
 });
+
+test("equation geometry stays cached until an explicit resize invalidates it", async ({
+  page
+}) => {
+  await page.goto(
+    "/?animation=editor-animation.sample.animation.matrix-matrix.basic"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const stage = player.locator("[data-kp-editor-equation-stage]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-hydrated",
+    "true"
+  );
+  await expect(stage).toHaveAttribute("data-kp-editor-equation-cache-status", "ready");
+
+  const initialBuilds = Number(
+    await stage.getAttribute("data-kp-editor-equation-cache-build-count")
+  );
+  const initialMeasures = Number(
+    await stage.getAttribute(
+      "data-kp-editor-equation-overlay-geometry-measure-count"
+    )
+  );
+  for (const progress of ["0.01", "0.02", "0.03", "0.04"]) {
+    await scrubber.fill(progress);
+  }
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-cache-build-count",
+    String(initialBuilds)
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-overlay-geometry-measure-count",
+    String(initialMeasures)
+  );
+
+  await stage.evaluate((element) => {
+    element.style.width = `${Math.max(320, element.clientWidth - 96)}px`;
+  });
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-cache-invalidation-reason",
+    "resize"
+  );
+  await scrubber.fill("0.05");
+
+  expect(Number(
+    await stage.getAttribute("data-kp-editor-equation-cache-build-count")
+  )).toBeGreaterThan(initialBuilds);
+  expect(Number(
+    await stage.getAttribute(
+      "data-kp-editor-equation-overlay-geometry-measure-count"
+    )
+  )).toBeGreaterThan(initialMeasures);
+
+  const buildsAfterResize = Number(
+    await stage.getAttribute("data-kp-editor-equation-cache-build-count")
+  );
+  await page.evaluate(() => {
+    document.fonts.dispatchEvent(new Event("loadingdone"));
+  });
+  await expect.poll(async () => Number(
+    await stage.getAttribute("data-kp-editor-equation-cache-build-count")
+  )).toBeGreaterThan(buildsAfterResize);
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-cache-invalidation-reason",
+    "fonts"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-cache-status",
+    "ready"
+  );
+});

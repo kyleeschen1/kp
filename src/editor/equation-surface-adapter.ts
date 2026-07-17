@@ -21,7 +21,10 @@ import {
   type KpEditorEquationTransitionMotifFrame
 } from "./equation-transition-motifs.ts";
 import type { KpEditorAnimationPlayerState } from "./animation-player-state.ts";
-import { getKpEditorAnimationPlaybackSession } from "./animation-player-controller.ts";
+import {
+  dispatchKpEditorAnimationPlaybackAction,
+  getKpEditorAnimationPlaybackSession
+} from "./animation-player-controller.ts";
 import {
   syncKpEditorEquationMaterialContinuityInspection
 } from "./equation-material-continuity-inspector.ts";
@@ -134,8 +137,21 @@ import {
   type KpEquationMaterialLayerOwnerFrame
 } from "../rendering/equation-material-layer-dom.ts";
 import {
+  invalidateKpEquationNativeFit,
   syncKpEquationNativeFit
 } from "./equation-native-fit.ts";
+import {
+  disposeKpEditorEquationStageHotPathCache,
+  getKpEditorEquationStageHotPathCache,
+  invalidateKpEditorEquationStageHotPathCache,
+  isKpEditorEquationStageHotPathCacheValid,
+  type KpEditorEquationStageCacheInvalidationReason,
+  type KpEditorEquationStageHotPathCache
+} from "./equation-stage-hot-path-cache.ts";
+import {
+  decideKpEditorAnimationDiagnosticsCadence,
+  type KpEditorAnimationDiagnosticsCadenceState
+} from "./animation-diagnostics-cadence.ts";
 import {
   compileKpDerivativePowerChoreography,
   sampleKpDerivativePowerChoreography,
@@ -170,6 +186,14 @@ import type {
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
   readonly contentKey: string;
   readonly plans: ReadonlyMap<number, KpEditorPrecomputedEquationMotionPlan>;
+}>();
+const continuityCadenceStates = new WeakMap<
+  HTMLElement,
+  KpEditorAnimationDiagnosticsCadenceState
+>();
+const gestaltMotionTokenCache = new WeakMap<HTMLElement, {
+  readonly contentKey: string;
+  readonly tokens: readonly HTMLElement[];
 }>();
 const functionWrapChoreographyCache =
   new Map<string, KpFunctionWrapChoreography>();
@@ -366,19 +390,35 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
 
     let contentChanged = false;
     if (stage?.dataset["kpEditorEquationStageIdentityKey"] !== frame.stageIdentityKey) {
+      if (stage !== null) disposeKpEditorEquationStageHotPathCache(stage);
       slot.innerHTML = renderStage(frame);
       stage = slot.querySelector<HTMLElement>("[data-kp-editor-equation-stage]");
       contentChanged = true;
     } else if (stage.dataset["kpEditorEquationContentKey"] !== frame.contentKey) {
+      invalidateKpEditorEquationStageHotPathCache(stage, "content");
       replaceStageContent(stage, frame);
       contentChanged = true;
     }
 
     if (stage === null) return;
 
-    const nativeFit = syncKpEquationNativeFit(stage);
-    if (nativeFit.changed) semanticMotionPlanCache.delete(stage);
-    if (contentChanged || nativeFit.changed) measureStage(stage);
+    const cacheReady = isKpEditorEquationStageHotPathCacheValid(
+      stage,
+      frame.contentKey
+    );
+    if (contentChanged || !cacheReady) {
+      resetEquationStageForMeasurement(stage);
+      const nativeFit = syncKpEquationNativeFit(stage);
+      if (nativeFit.changed) {
+        invalidateKpEditorEquationStageHotPathCache(stage, "native-fit");
+        semanticMotionPlanCache.delete(stage);
+      }
+    }
+    const hotPath = getKpEditorEquationStageHotPathCache({
+      stage,
+      contentKey: frame.contentKey,
+      onInvalidate: invalidateEquationStageMeasurements
+    });
 
     stage.dataset["kpEditorEquationPhaseId"] = frame.projection.phaseId;
     stage.dataset["kpEditorEquationGlobalProgress"] =
@@ -391,13 +431,12 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
     stage.style.setProperty("--kp-editor-equation-progress", String(frame.easedProgress));
     syncSolveXSequence(stage, frame.solveX);
     frame.projection.transitions.forEach((transition, index) => {
-      const transitionElement = stage?.querySelector<HTMLElement>(
-        `[data-kp-editor-equation-transition-index="${index}"]`
-      );
+      const transitionNodes = hotPath.transitions[index];
       const motif = frame.motifs[index];
-      if (transitionElement === null || transitionElement === undefined || motif === undefined) {
+      if (transitionNodes === undefined || motif === undefined) {
         return;
       }
+      const transitionElement = transitionNodes.element;
 
       transitionElement.dataset["kpEditorEquationMotif"] = motif.kind;
       const semanticMotionApplied = transition.semanticStatus === "ready" &&
@@ -414,11 +453,11 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
         : "fallback";
       if (!semanticMotionApplied) {
         applyLayerMotion(
-          transitionElement.querySelector<HTMLElement>("[data-kp-editor-equation-source]"),
+          transitionNodes.source,
           motif.source
         );
         applyLayerMotion(
-          transitionElement.querySelector<HTMLElement>("[data-kp-editor-equation-target]"),
+          transitionNodes.target,
           motif.target
         );
       }
@@ -471,39 +510,149 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
           frame: frame.matrixMatrixComposition.frame
         });
       }
-      transitionElement.querySelectorAll<HTMLElement>("[data-kp-editor-equation-focus-token]")
-        .forEach((token) => {
+      transitionNodes.focusTokens.forEach((token) => {
           token.style.setProperty("--kp-editor-equation-focus-progress", String(motif.progress));
-        });
+      });
     });
+    const gestaltTokens = postBindingGestaltMotionTokens(
+      stage,
+      frame.contentKey
+    );
     applyGestaltTokenRealization({
       stage,
       state,
       progress: frame.semanticProgress,
       channels: gestaltChannels,
+      tokens: gestaltTokens,
       accessibilityMode:
         player?.dataset["kpEditorAnimationAccessibilityMode"] ?? "full-motion"
     });
     applyEquationMaterialLayer({
       stage,
       animationId: state.animationId,
-      semanticProgress: frame.semanticProgress
+      semanticProgress: frame.semanticProgress,
+      hotPath
     });
     applyFocusExperiment(
       stage,
       player?.dataset["kpEditorAnimationFocusExperiment"] ?? "flat"
     );
-    if (player !== null) {
+    if (shouldSyncContinuityInspection(stage, player, state)) {
       syncKpEditorEquationMaterialContinuityInspection({ player, stage });
       player.dataset["kpEditorAnimationMotionPlanInvalidated"] = "false";
     }
   }
 };
 
+function postBindingGestaltMotionTokens(
+  stage: HTMLElement,
+  contentKey: string
+): readonly HTMLElement[] {
+  const cached = gestaltMotionTokenCache.get(stage);
+  if (cached?.contentKey === contentKey) return cached.tokens;
+
+  // Structural KaTeX spans receive motion ids while the semantic plan binds
+  // on the first frame. Cache only after that binding boundary so later frames
+  // include fraction bars and radical fragments without rescanning the stage.
+  const tokens = [
+    ...stage.querySelectorAll<HTMLElement>("[data-kp-motion-id]")
+  ];
+  gestaltMotionTokenCache.set(stage, { contentKey, tokens });
+  return tokens;
+}
+
+function shouldSyncContinuityInspection(
+  stage: HTMLElement,
+  player: HTMLElement,
+  state: KpEditorAnimationPlayerState
+): boolean {
+  const decision = decideKpEditorAnimationDiagnosticsCadence({
+    state,
+    nowMs: performance.now(),
+    revisionKey: player.dataset["kpEditorAnimationDiagnosticsRevision"],
+    previous: continuityCadenceStates.get(stage)
+  });
+  if (!decision.publish || decision.state === undefined) return false;
+  continuityCadenceStates.set(stage, decision.state);
+  stage.dataset["kpEditorEquationContinuityPublishCount"] = String(
+    decision.state.publishCount
+  );
+  return true;
+}
+
+function invalidateEquationStageMeasurements(
+  stage: HTMLElement,
+  reason: KpEditorEquationStageCacheInvalidationReason
+): void {
+  semanticMotionPlanCache.delete(stage);
+  if (reason === "fonts") invalidateKpEquationNativeFit(stage);
+  const player = stage.closest<HTMLElement>(
+    "[data-kp-editor-animation-player]"
+  );
+  player?.setAttribute(
+    "data-kp-editor-animation-motion-plan-invalidated",
+    "true"
+  );
+  const session = player === null
+    ? undefined
+    : getKpEditorAnimationPlaybackSession(player);
+  if (
+    player !== null &&
+    session !== undefined &&
+    session.player.playbackStatus !== "playing" &&
+    (reason === "fonts" || reason === "resize")
+  ) {
+    // Paused players have no next RAF to consume an invalidation. Resample the
+    // same semantic instant after the observer callback so changed fonts or
+    // width can never leave stale geometry waiting for user interaction.
+    queueMicrotask(() => {
+      if (!player.isConnected) return;
+      dispatchKpEditorAnimationPlaybackAction(player, {
+        type: "seek",
+        progress: session.player.progress
+      });
+    });
+  }
+}
+
+function resetEquationStageForMeasurement(stage: HTMLElement): void {
+  // Invalidation may arrive between playback frames. Measure native KaTeX
+  // layout, never the previous frame's presentation transforms, or resize and
+  // font recovery would bake transient motion into the next plan.
+  stage.querySelectorAll<HTMLElement>("[data-kp-motion-id]").forEach((token) => {
+    token.style.transform = "none";
+    token.style.translate = "none";
+    token.style.scale = "none";
+  });
+  stage.querySelectorAll<HTMLElement>(
+    "[data-kp-editor-equation-source], [data-kp-editor-equation-target]"
+  ).forEach((layer) => {
+    layer.style.transform = "none";
+    layer.style.filter = "none";
+  });
+  stage.dataset["kpEditorEquationNativePreparationCount"] = String(
+    Number(stage.dataset["kpEditorEquationNativePreparationCount"] ?? 0) + 1
+  );
+}
+
+function inlineOpacity(element: HTMLElement): number {
+  const opacity = Number.parseFloat(element.style.opacity);
+  return Number.isFinite(opacity) ? opacity : 1;
+}
+
+function materialOwnerTransform(element: HTMLElement): string {
+  const transform = element.style.transform
+    .replace(/\s*translateZ\(var\([^)]*\)\)/g, "")
+    .replace(/\s*scale\(var\([^)]*\)\)/g, "")
+    .trim();
+  return transform === "" ? "none" : transform;
+}
+
 function applyEquationMaterialLayer(input: {
   readonly stage: HTMLElement;
   readonly animationId: string;
   readonly semanticProgress: number;
+  readonly hotPath: KpEditorEquationStageHotPathCache;
 }): void {
   if (
     input.animationId ===
@@ -520,9 +669,7 @@ function applyEquationMaterialLayer(input: {
     delete input.stage.dataset["kpEditorEquationNativeSettlementResidual"];
     return;
   }
-  const tokens = [
-    ...input.stage.querySelectorAll<HTMLElement>("[data-kp-motion-id]")
-  ];
+  const tokens = input.hotPath.motionTokens;
   if (input.semanticProgress <= 0 || input.semanticProgress >= 1) {
     syncKpEquationMaterialLayer({ stage: input.stage, owners: [] });
     return;
@@ -537,28 +684,30 @@ function applyEquationMaterialLayer(input: {
       ? undefined
       : linearMaterialOwnerId(motionId);
     if (ownerId === undefined) continue;
-    const opacity = Number.parseFloat(getComputedStyle(token).opacity);
+    const opacity = inlineOpacity(token);
     const existing = candidates.get(ownerId);
     if (existing === undefined || opacity > existing.opacity) {
       candidates.set(ownerId, { token, opacity });
     }
   }
-  const stageRect = input.stage.getBoundingClientRect();
   syncKpEquationMaterialLayer({
     stage: input.stage,
     owners: [...candidates.entries()].map(([ownerId, candidate]) => {
-      const rect = candidate.token.getBoundingClientRect();
+      const rect = input.hotPath.motionTokenRects.get(candidate.token);
+      if (rect === undefined) {
+        throw new Error("Cached equation token geometry is incomplete.");
+      }
       return {
         ownerId,
         sourceElement: candidate.token,
         rect: {
-          left: rect.left - stageRect.left,
-          top: rect.top - stageRect.top,
+          left: rect.left,
+          top: rect.top,
           width: rect.width,
           height: rect.height
         },
         opacity: candidate.opacity,
-        transform: "none"
+        transform: materialOwnerTransform(candidate.token)
       };
     })
   });
@@ -808,6 +957,7 @@ function applyGestaltTokenRealization(input: {
   readonly progress: number;
   readonly channels: KpGestaltStyleChannels;
   readonly accessibilityMode: string;
+  readonly tokens: readonly HTMLElement[];
 }): void {
   const fullMotion = input.accessibilityMode === "full-motion";
   const amplitude = fullMotion
@@ -820,8 +970,7 @@ function applyGestaltTokenRealization(input: {
     progress: input.progress,
     character: input.channels.acceleration?.character ?? "restrained"
   });
-  input.stage.querySelectorAll<HTMLElement>("[data-kp-motion-id]")
-    .forEach((token) => {
+  input.tokens.forEach((token) => {
       const identityId = token.dataset["kpMotionId"];
       if (identityId === undefined) return;
       const eligibility = resolveKpGestaltMotionEligibility(identityId);
@@ -855,7 +1004,7 @@ function applyGestaltTokenRealization(input: {
         ? projectKpGestaltOffsetToPath({
             x: sample.x,
             y: sample.y,
-            transform: getComputedStyle(token).transform
+            transform: materialOwnerTransform(token)
           })
         : { x: sample.x, y: sample.y };
       token.style.translate = `${offset.x}px ${offset.y}px`;
@@ -869,7 +1018,7 @@ function applyGestaltTokenRealization(input: {
         eligibility.coordinateSpace;
       token.dataset["kpEditorKatexTypography"] =
         rigidKatexTypography ? "rigid" : "not-katex";
-    });
+  });
 }
 
 export function registerKpEditorEquationSurfaceAdapter(): () => void {
@@ -1539,13 +1688,38 @@ function syncDotProductTraversalOverlay(
     `;
     transition.append(overlay);
   }
-  const transitionRect = transition.getBoundingClientRect();
-  const sourceRoot = transition.querySelector<HTMLElement>(
-    "[data-kp-editor-equation-source] [data-kp-editor-equation-object-id]"
-  )?.getBoundingClientRect();
-  const sourceInk = transition.querySelector<HTMLElement>(
-    "[data-kp-editor-equation-source] .katex-display > .katex"
-  )?.getBoundingClientRect() ?? sourceRoot;
+  const accumulation = overlay.querySelector<HTMLElement>(
+    "[data-kp-editor-dot-product-accumulation]"
+  );
+  if (accumulation === null) return;
+  const accumulationChanged =
+    accumulation.dataset["kpEditorDotProductAccumulationLatex"] !==
+      frame.motion.accumulationLatex;
+  if (accumulationChanged) {
+    accumulation.dataset["kpEditorDotProductAccumulationLatex"] =
+      frame.motion.accumulationLatex;
+    accumulation.innerHTML = frame.motion.accumulationLatex === ""
+      ? ""
+      : renderLatexToHtml(frame.motion.accumulationLatex, {
+          displayMode: false
+        });
+  }
+  const geometryRevision = equationOverlayGeometryRevision(transition);
+  const measureGeometry = accumulationChanged ||
+    overlay.dataset["kpEditorOverlayGeometryRevision"] !== geometryRevision;
+  const transitionRect = measureGeometry
+    ? transition.getBoundingClientRect()
+    : undefined;
+  const sourceRoot = measureGeometry
+    ? transition.querySelector<HTMLElement>(
+        "[data-kp-editor-equation-source] [data-kp-editor-equation-object-id]"
+      )?.getBoundingClientRect()
+    : undefined;
+  const sourceInk = measureGeometry
+    ? transition.querySelector<HTMLElement>(
+        "[data-kp-editor-equation-source] .katex-display > .katex"
+      )?.getBoundingClientRect() ?? sourceRoot
+    : undefined;
   choreography.contributions.forEach((contribution) => {
     const contributionFrame = frame.motion.contributions.find(
       (candidate) => candidate.semanticIndex === contribution.semanticIndex
@@ -1553,38 +1727,39 @@ function syncDotProductTraversalOverlay(
     const element = overlay!.querySelector<HTMLElement>(
       `[data-kp-editor-dot-product-contribution="${contribution.semanticIndex}"]`
     );
-    const left = findMotionTokenByEntityId(
-      transition,
-      contribution.leftSelectorId
-    );
-    const right = findMotionTokenByEntityId(
-      transition,
-      contribution.rightSelectorId
-    );
+    if (element === null) return;
     if (
-      element === null ||
-      left === undefined ||
-      right === undefined ||
-      sourceRoot === undefined ||
-      sourceInk === undefined
+      measureGeometry &&
+      transitionRect !== undefined &&
+      sourceRoot !== undefined &&
+      sourceInk !== undefined
     ) {
-      return;
+      const left = findMotionTokenByEntityId(
+        transition,
+        contribution.leftSelectorId
+      );
+      const right = findMotionTokenByEntityId(
+        transition,
+        contribution.rightSelectorId
+      );
+      if (left !== undefined && right !== undefined) {
+        const leftRect = left.getBoundingClientRect();
+        const rightRect = right.getBoundingClientRect();
+        const pairY =
+          (leftRect.top + leftRect.height / 2 +
+            rightRect.top + rightRect.height / 2) / 2 -
+          transitionRect.top;
+        const preferredLeft = sourceInk.right - transitionRect.left + 14;
+        // Keep the product readable as a live overlay at narrow widths;
+        // clipping would hide the contribution the traversal is explaining.
+        const containedLeft = Math.min(
+          preferredLeft,
+          transitionRect.width - element.offsetWidth - 6
+        );
+        element.style.left = `${Math.max(6, containedLeft)}px`;
+        element.style.top = `${pairY}px`;
+      }
     }
-    const leftRect = left.getBoundingClientRect();
-    const rightRect = right.getBoundingClientRect();
-    const pairY =
-      (leftRect.top + leftRect.height / 2 +
-        rightRect.top + rightRect.height / 2) / 2 -
-      transitionRect.top;
-    const preferredLeft = sourceInk.right - transitionRect.left + 14;
-    // Keep the product readable as a live overlay at narrow widths; clipping
-    // it would hide the very contribution the traversal is explaining.
-    const containedLeft = Math.min(
-      preferredLeft,
-      transitionRect.width - element.offsetWidth - 6
-    );
-    element.style.left = `${Math.max(6, containedLeft)}px`;
-    element.style.top = `${pairY}px`;
     element.style.opacity = String(contributionFrame.productOpacity);
     element.style.transform =
       `translateY(-50%) scale(${contributionFrame.productScale})`;
@@ -1595,36 +1770,27 @@ function syncDotProductTraversalOverlay(
     element.dataset["kpEditorDotProductProductObjectId"] =
       contribution.productObjectId;
   });
-  const accumulation = overlay.querySelector<HTMLElement>(
-    "[data-kp-editor-dot-product-accumulation]"
-  );
-  if (accumulation === null || sourceRoot === undefined) return;
   if (
-    accumulation.dataset["kpEditorDotProductAccumulationLatex"] !==
-    frame.motion.accumulationLatex
+    measureGeometry &&
+    transitionRect !== undefined &&
+    sourceRoot !== undefined
   ) {
-    accumulation.dataset["kpEditorDotProductAccumulationLatex"] =
-      frame.motion.accumulationLatex;
-    accumulation.innerHTML = frame.motion.accumulationLatex === ""
-      ? ""
-      : renderLatexToHtml(frame.motion.accumulationLatex, {
-          displayMode: false
-        });
+    accumulation.style.left = `${
+      sourceRoot.left + sourceRoot.width / 2 - transitionRect.left
+    }px`;
+    const captionTop = transition.querySelector<HTMLElement>(
+      ".editor-equation-stage__caption"
+    )?.getBoundingClientRect().top;
+    const desiredTop = sourceRoot.bottom - transitionRect.top + 8;
+    const maximumTop = captionTop === undefined
+      ? desiredTop
+      : captionTop -
+        transitionRect.top -
+        accumulation.getBoundingClientRect().height -
+        5;
+    accumulation.style.top = `${Math.min(desiredTop, maximumTop)}px`;
+    markEquationOverlayGeometryMeasured(overlay, geometryRevision);
   }
-  accumulation.style.left = `${
-    sourceRoot.left + sourceRoot.width / 2 - transitionRect.left
-  }px`;
-  const captionTop = transition.querySelector<HTMLElement>(
-    ".editor-equation-stage__caption"
-  )?.getBoundingClientRect().top;
-  const desiredTop = sourceRoot.bottom - transitionRect.top + 8;
-  const maximumTop = captionTop === undefined
-    ? desiredTop
-    : captionTop -
-      transitionRect.top -
-      accumulation.getBoundingClientRect().height -
-      5;
-  accumulation.style.top = `${Math.min(desiredTop, maximumTop)}px`;
   accumulation.style.opacity = String(frame.motion.accumulationOpacity);
   accumulation.style.transform = "translateX(-50%)";
   const partialSum = choreography.contributions.find(
@@ -1767,10 +1933,17 @@ function syncMatrixVectorCompositionOverlay(
     `).join("");
     transition.append(overlay);
   }
-  const transitionRect = transition.getBoundingClientRect();
-  const sourceInk = transition.querySelector<HTMLElement>(
-    "[data-kp-editor-equation-source] .katex-display > .katex"
-  )?.getBoundingClientRect();
+  const geometryRevision = equationOverlayGeometryRevision(transition);
+  const measureGeometry =
+    overlay.dataset["kpEditorOverlayGeometryRevision"] !== geometryRevision;
+  const transitionRect = measureGeometry
+    ? transition.getBoundingClientRect()
+    : undefined;
+  const sourceInk = measureGeometry
+    ? transition.querySelector<HTMLElement>(
+        "[data-kp-editor-equation-source] .katex-display > .katex"
+      )?.getBoundingClientRect()
+    : undefined;
   choreography.rows.forEach((row) => {
     const rowFrame = frame.motion.rows.find(
       (candidate) => candidate.semanticIndex === row.semanticIndex
@@ -1778,34 +1951,38 @@ function syncMatrixVectorCompositionOverlay(
     const element = overlay!.querySelector<HTMLElement>(
       `[data-kp-editor-matrix-vector-row="${row.semanticIndex}"]`
     );
-    const rowTokens = row.matrixSelectorIds
-      .map((selectorId) => findMotionTokenByEntityId(transition, selectorId))
-      .filter((token): token is HTMLElement => token !== undefined);
-    if (element === null || sourceInk === undefined || rowTokens.length === 0) return;
-    const rowRects = rowTokens.map((token) => token.getBoundingClientRect());
-    const rowCenter = rowRects.reduce(
-      (sum, rect) => sum + rect.top + rect.height / 2,
-      0
-    ) / rowRects.length - transitionRect.top;
-    if (transitionRect.width < 400) {
-      element.style.left = String(Math.max(
-        6,
-        (transitionRect.width - element.offsetWidth) / 2
-      )) + "px";
-      element.style.top = String(
-        sourceInk.bottom -
-        transitionRect.top +
-        13 +
-        row.semanticIndex * 25
-      ) + "px";
-    } else {
-      const preferredLeft = sourceInk.right - transitionRect.left + 14;
-      const containedLeft = Math.min(
-        preferredLeft,
-        transitionRect.width - element.offsetWidth - 6
-      );
-      element.style.left = `${Math.max(6, containedLeft)}px`;
-      element.style.top = `${rowCenter}px`;
+    if (element === null) return;
+    if (measureGeometry && transitionRect !== undefined && sourceInk !== undefined) {
+      const rowTokens = row.matrixSelectorIds
+        .map((selectorId) => findMotionTokenByEntityId(transition, selectorId))
+        .filter((token): token is HTMLElement => token !== undefined);
+      if (rowTokens.length > 0) {
+        const rowRects = rowTokens.map((token) => token.getBoundingClientRect());
+        const rowCenter = rowRects.reduce(
+          (sum, rect) => sum + rect.top + rect.height / 2,
+          0
+        ) / rowRects.length - transitionRect.top;
+        if (transitionRect.width < 400) {
+          element.style.left = String(Math.max(
+            6,
+            (transitionRect.width - element.offsetWidth) / 2
+          )) + "px";
+          element.style.top = String(
+            sourceInk.bottom -
+            transitionRect.top +
+            13 +
+            row.semanticIndex * 25
+          ) + "px";
+        } else {
+          const preferredLeft = sourceInk.right - transitionRect.left + 14;
+          const containedLeft = Math.min(
+            preferredLeft,
+            transitionRect.width - element.offsetWidth - 6
+          );
+          element.style.left = `${Math.max(6, containedLeft)}px`;
+          element.style.top = `${rowCenter}px`;
+        }
+      }
     }
     element.style.opacity = String(
       rowFrame.calculationOpacity * frame.motion.sourceOpacity
@@ -1816,6 +1993,13 @@ function syncMatrixVectorCompositionOverlay(
     element.dataset["kpEditorMatrixVectorRowStatus"] = rowFrame.status;
     element.dataset["kpEditorMatrixVectorResult"] = String(row.result);
   });
+  if (
+    measureGeometry &&
+    transitionRect !== undefined &&
+    sourceInk !== undefined
+  ) {
+    markEquationOverlayGeometryMeasured(overlay, geometryRevision);
+  }
 }
 
 function applyMatrixMatrixCompositionChoreography(input: {
@@ -1926,11 +2110,17 @@ function syncMatrixMatrixCompositionOverlay(
     `).join("");
     transition.append(overlay);
   }
-  const transitionRect = transition.getBoundingClientRect();
-  const sourceInk = transition.querySelector<HTMLElement>(
-    "[data-kp-editor-equation-source] .katex-display > .katex"
-  )?.getBoundingClientRect();
-  if (sourceInk === undefined) return;
+  const geometryRevision = equationOverlayGeometryRevision(transition);
+  const measureGeometry =
+    overlay.dataset["kpEditorOverlayGeometryRevision"] !== geometryRevision;
+  const transitionRect = measureGeometry
+    ? transition.getBoundingClientRect()
+    : undefined;
+  const sourceInk = measureGeometry
+    ? transition.querySelector<HTMLElement>(
+        "[data-kp-editor-equation-source] .katex-display > .katex"
+      )?.getBoundingClientRect()
+    : undefined;
   choreography.cells.forEach((cell) => {
     const cellFrame = frame.motion.cells.find(
       (candidate) => candidate.semanticIndex === cell.semanticIndex
@@ -1939,13 +2129,15 @@ function syncMatrixMatrixCompositionOverlay(
       `[data-kp-editor-matrix-matrix-cell="${cell.semanticIndex}"]`
     );
     if (element === null) return;
-    element.style.left = String(Math.max(
-      6,
-      (transitionRect.width - element.offsetWidth) / 2
-    )) + "px";
-    element.style.top = String(
-      sourceInk.bottom - transitionRect.top + 14
-    ) + "px";
+    if (measureGeometry && transitionRect !== undefined && sourceInk !== undefined) {
+      element.style.left = String(Math.max(
+        6,
+        (transitionRect.width - element.offsetWidth) / 2
+      )) + "px";
+      element.style.top = String(
+        sourceInk.bottom - transitionRect.top + 14
+      ) + "px";
+    }
     element.style.opacity = String(
       cellFrame.calculationOpacity * frame.motion.sourceOpacity
     );
@@ -1958,6 +2150,36 @@ function syncMatrixMatrixCompositionOverlay(
     element.dataset["kpEditorMatrixMatrixRow"] = String(cell.rowIndex);
     element.dataset["kpEditorMatrixMatrixColumn"] = String(cell.columnIndex);
   });
+  if (
+    measureGeometry &&
+    transitionRect !== undefined &&
+    sourceInk !== undefined
+  ) {
+    markEquationOverlayGeometryMeasured(overlay, geometryRevision);
+  }
+}
+
+function equationOverlayGeometryRevision(transition: HTMLElement): string {
+  return transition.closest<HTMLElement>("[data-kp-editor-equation-stage]")
+    ?.dataset["kpEditorEquationCacheRevision"] ?? "0";
+}
+
+function markEquationOverlayGeometryMeasured(
+  overlay: HTMLElement,
+  revision: string
+): void {
+  overlay.dataset["kpEditorOverlayGeometryRevision"] = revision;
+  overlay.dataset["kpEditorOverlayGeometryMeasureCount"] = String(
+    Number(overlay.dataset["kpEditorOverlayGeometryMeasureCount"] ?? 0) + 1
+  );
+  const stage = overlay.closest<HTMLElement>("[data-kp-editor-equation-stage]");
+  if (stage !== null) {
+    stage.dataset["kpEditorEquationOverlayGeometryMeasureCount"] = String(
+      Number(
+        stage.dataset["kpEditorEquationOverlayGeometryMeasureCount"] ?? 0
+      ) + 1
+    );
+  }
 }
 
 function findMotionTokenByEntityId(
@@ -2841,26 +3063,6 @@ function resetLayerForSemanticMotion(
   layer.style.opacity = "1";
   layer.style.transform = "none";
   layer.style.filter = "none";
-}
-
-function measureStage(stage: HTMLElement): void {
-  stage.querySelectorAll<HTMLElement>(".editor-equation-stage__transition")
-    .forEach((transition) => {
-      const source = transition.querySelector<HTMLElement>(
-        "[data-kp-editor-equation-source]"
-      );
-      const target = transition.querySelector<HTMLElement>(
-        "[data-kp-editor-equation-target]"
-      );
-      if (source === null || target === null) return;
-
-      const sourceRect = source.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-      transition.dataset["kpEditorEquationSourceWidth"] = String(sourceRect.width);
-      transition.dataset["kpEditorEquationSourceHeight"] = String(sourceRect.height);
-      transition.dataset["kpEditorEquationTargetWidth"] = String(targetRect.width);
-      transition.dataset["kpEditorEquationTargetHeight"] = String(targetRect.height);
-    });
 }
 
 function applyLayerMotion(

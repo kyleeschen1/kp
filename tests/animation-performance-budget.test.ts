@@ -84,18 +84,27 @@ test("performance evaluation gates diagnostics below the frame loop", () => {
       matrixFrame: {
         ...snapshot.constrained.matrixFrame,
         diagnosticPublishes: 41,
-        inspectionPublishes: 42
+        inspectionPublishes: 42,
+        layoutCacheBuilds: 25,
+        overlayGeometryMeasures: 26
       }
     }
   };
 
   assert.deepEqual(
     evaluateKpAnimationPerformance({ snapshot: chatty, baseline })
-      .filter((issue) => issue.metric.includes("Publishes"))
+      .filter((issue) => [
+        "constrained.matrixFrame.diagnosticPublishes",
+        "constrained.matrixFrame.inspectionPublishes",
+        "constrained.matrixFrame.layoutCacheBuilds",
+        "constrained.matrixFrame.overlayGeometryMeasures"
+      ].includes(issue.metric))
       .map((issue) => issue.metric),
     [
       "constrained.matrixFrame.diagnosticPublishes",
-      "constrained.matrixFrame.inspectionPublishes"
+      "constrained.matrixFrame.inspectionPublishes",
+      "constrained.matrixFrame.layoutCacheBuilds",
+      "constrained.matrixFrame.overlayGeometryMeasures"
     ]
   );
 });
