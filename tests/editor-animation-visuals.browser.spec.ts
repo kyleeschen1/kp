@@ -2539,6 +2539,14 @@ test("matrix-vector family animation visibly resolves the result vector", async 
     "data-kp-editor-equation-matrix-vector-active-row",
     "0"
   );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-matrix-vector-duration-ms",
+    "2400"
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-matrix-vector-semantic-action-count",
+    "2"
+  );
   await expect(transition.locator('[data-kp-editor-matrix-vector-row="0"]'))
     .toHaveAttribute(
       "data-kp-editor-matrix-vector-intermediate-object-id",
@@ -2547,7 +2555,7 @@ test("matrix-vector family animation visibly resolves the result vector", async 
   await expect(transition.locator('[data-kp-editor-matrix-vector-row="0"]'))
     .toContainText("2×4+1×5=13");
 
-  await scrubber.fill("0.35");
+  await scrubber.fill("0.52");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-matrix-vector-resolved-through",
     "0"

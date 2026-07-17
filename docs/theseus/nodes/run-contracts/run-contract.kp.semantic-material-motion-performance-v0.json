@@ -193,7 +193,7 @@
       "id": "next-action.kp.material-motion.matrix-vector-pacing-v0",
       "title": "Apply proportional matrix vector timing",
       "summary": "Broad checkpoint 24: matrix-vector unit, browser, and frame review followed by full unit suite and production build.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.matrix-matrix-pacing-v0",

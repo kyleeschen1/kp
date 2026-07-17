@@ -49,6 +49,7 @@ test("createGeneratedProblemAnimationAsset imports generated solution steps into
   });
   assert.equal(checkKpAnimationAssetReferenceClosure(animation).passed, true);
   assert.equal(checkKpAnimationAssetSeekRewindLaw(animation).passed, true);
+  assert.equal(animation.timeline?.durationMs, 2_400);
 
   const frame = sampleKpAnimationRuntimeFrame({
     animation,

@@ -1,0 +1,95 @@
+{
+  "id": "next-action.kp.material-motion.matrix-vector-pacing-v0",
+  "kind": "next-action",
+  "title": "Apply proportional matrix vector timing",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Applied work-proportional matrix-vector timing with one-second semantic row windows, row-order accumulation, explicit duration metadata, and lazy semantic-plan validation while retaining the sub-250 KB initial bundle target.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.matrix-vector-pacing-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-risk-weighted-validation-cadence.md",
+      "summary": "Accepted risk-weighted verification policy governing this run."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "node --test <directly affected test files>",
+    "npm run typecheck when typed source or public contracts change",
+    "npx playwright test <smallest affected browser cohort> when visible behavior changes",
+    "npm run theseus -- workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether Apply proportional matrix vector timing can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test focused matrix-vector and duration cohorts",
+      "status": "passed",
+      "scope": "19 focused tests passed after the bundle-boundary refactor",
+      "checkedAt": "2026-07-17T22:25:33.989Z"
+    },
+    {
+      "command": "npx playwright test editor animation visuals matrix-vector cohort",
+      "status": "passed",
+      "scope": "1 Chromium scenario passed",
+      "checkedAt": "2026-07-17T22:25:34.093Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "1357 tests passed at the broad checkpoint",
+      "checkedAt": "2026-07-17T22:25:34.181Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "typecheck passed; production entry 249.40 KB gzip",
+      "checkedAt": "2026-07-17T22:25:34.266Z"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "checkedAt": "2026-07-17T22:25:34.344Z",
+      "scope": "609 nodes and 7858 events valid"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Applied work-proportional matrix-vector timing with one-second semantic row windows, row-order accumulation, explicit duration metadata, and lazy semantic-plan validation while retaining the sub-250 KB initial bundle target."
+  }
+}

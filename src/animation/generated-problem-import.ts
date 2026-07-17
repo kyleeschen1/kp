@@ -11,6 +11,7 @@ import {
   createSemanticTransformationLeaf,
   createSemanticTransformationSequence
 } from "../semantic/transformation-composition.ts";
+import { matrixVectorSemanticDurationMs } from "./matrix-vector-duration-contract.ts";
 
 export function createGeneratedProblemAnimationAsset(
   fixture: GeneratedProblemAnimationFixture
@@ -22,6 +23,7 @@ export function createGeneratedProblemAnimationAsset(
     (transformation) => transformation.id
   );
   const objectIds = fixture.bundle.objects.map((object) => object.id);
+  const durationMs = generatedProblemDurationMs(fixture);
   const treeRoot = createSemanticTransformationSequence({
     id: `diagram.${fixture.id}.generated-problem-animation`,
     label: `${fixture.title} generated problem animation`,
@@ -51,7 +53,7 @@ export function createGeneratedProblemAnimationAsset(
     }),
     timeline: {
       id: timelineId,
-      durationMs: 2400,
+      durationMs,
       beatCount: 50
     },
     layout: {
@@ -101,4 +103,28 @@ export function createGeneratedProblemAnimationAsset(
       sourceTraceId: fixture.trace.id
     }
   });
+}
+
+function generatedProblemDurationMs(fixture: GeneratedProblemAnimationFixture): number {
+  const rowCount = generatedProblemMatrixVectorRowCount(fixture);
+  return rowCount === undefined ? 2_400 : matrixVectorSemanticDurationMs(rowCount);
+}
+
+export function generatedProblemMatrixVectorRowCount(
+  fixture: GeneratedProblemAnimationFixture
+): number | undefined {
+  const transformation = fixture.transformations.find(
+    (candidate) => candidate.transformType === "multiplyMatrixVector"
+  );
+  if (transformation === undefined) return undefined;
+  const source = fixture.bundle.objects.find(
+    (object) => object.id === transformation.sourceObjectIds[0]
+  );
+  const rows = typeof source?.value === "object" && source.value !== null
+    ? (source.value as Record<string, unknown>)["matrixRows"]
+    : undefined;
+  if (!Array.isArray(rows)) {
+    throw new Error("Matrix-vector animation duration requires authored matrix rows.");
+  }
+  return rows.length;
 }

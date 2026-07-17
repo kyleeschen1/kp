@@ -31,6 +31,8 @@ export interface KpMatrixVectorRendererPlan {
   readonly id: string;
   readonly kind: "matrix-vector-renderer-plan";
   readonly rows: readonly KpMatrixVectorRendererRowPlan[];
+  readonly semanticDurationMs: number;
+  readonly semanticActionCount: number;
   readonly sourceReleaseStart: number;
   readonly sourceReleaseEnd: number;
   readonly structureRevealStart: number;
@@ -49,6 +51,8 @@ export interface KpMatrixVectorRowFrame {
 export interface KpMatrixVectorCompositionProgressFrame {
   readonly kind: "matrix-vector-row-composition";
   readonly semanticProgress: number;
+  readonly semanticDurationMs: number;
+  readonly semanticActionCount: number;
   readonly rows: readonly KpMatrixVectorRowFrame[];
   readonly activeRowIndex: number | undefined;
   readonly resolvedThroughRowIndex: number | undefined;
@@ -93,6 +97,8 @@ export function sampleKpMatrixVectorCompositionProgress(input: {
   return {
     kind: "matrix-vector-row-composition",
     semanticProgress,
+    semanticDurationMs: input.plan.semanticDurationMs,
+    semanticActionCount: input.plan.semanticActionCount,
     rows,
     activeRowIndex: rows
       .filter((row) => row.status === "active")

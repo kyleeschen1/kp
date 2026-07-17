@@ -2663,11 +2663,17 @@ function applySemanticTokenMotion(input: {
   if (matrixVector === undefined) {
     delete input.transitionElement.dataset["kpEditorEquationMatrixVectorTokenPlan"];
     delete input.transitionElement.dataset["kpEditorEquationMatrixVectorSourceOpacity"];
+    delete input.transitionElement.dataset["kpEditorEquationMatrixVectorDurationMs"];
+    delete input.transitionElement.dataset["kpEditorEquationMatrixVectorSemanticActionCount"];
   } else {
     input.transitionElement.dataset["kpEditorEquationMatrixVectorTokenPlan"] =
       matrixVector.kind;
     input.transitionElement.dataset["kpEditorEquationMatrixVectorSourceOpacity"] =
       String(matrixVector.sourceOpacity);
+    input.transitionElement.dataset["kpEditorEquationMatrixVectorDurationMs"] =
+      String(matrixVector.semanticDurationMs);
+    input.transitionElement.dataset["kpEditorEquationMatrixVectorSemanticActionCount"] =
+      String(matrixVector.semanticActionCount);
   }
   const matrixMatrix = tokenFrame.motion.matrixMatrixComposition;
   if (matrixMatrix === undefined) {
