@@ -46,7 +46,7 @@ export function createKpLlmSemanticMotionOperationCatalog():
           `Promoted operation ${entry.id} has no equation visual motif for ${entry.sourceTransformType}.`
         );
       }
-      if (entry.authoringRoles === undefined || entry.authoringRoles.length === 0) {
+      if (entry.contract.roles.length === 0) {
         throw new Error(`Promoted operation ${entry.id} has no LLM authoring role contract.`);
       }
       const pack = kpCanonicalOperationRegistry.packs.find(
@@ -58,7 +58,7 @@ export function createKpLlmSemanticMotionOperationCatalog():
         summary: entry.authoringSummary ?? rule.summary ?? entry.sourceTransformType!,
         transformType: entry.sourceTransformType!,
         canonicalComposition: [...entry.canonicalComposition],
-        roles: entry.authoringRoles.map((role) => ({ ...role })),
+        roles: entry.contract.roles.map((role) => ({ ...role })),
         visualMotif: rule.descriptor.kind,
         semanticPhaseIds: [...rule.descriptor.phaseIds]
       };

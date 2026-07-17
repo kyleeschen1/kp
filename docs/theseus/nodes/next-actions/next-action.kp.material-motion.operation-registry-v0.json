@@ -1,0 +1,131 @@
+{
+  "id": "next-action.kp.material-motion.operation-registry-v0",
+  "kind": "next-action",
+  "title": "Define canonical operation registry",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Extended the versioned canonical-operation registry with one authority-linked contract covering roles, lineage relations, ownership, law and witness refs, reverse meaning, motif requirements, pacing, static-cost roles, and fixtures; migrated core, generated algebra, semantic-motion, and LLM consumers; validated reverse closure and project extension packs; split a compact canonical-composition projection from the heavy registry so governed metadata stays off the initial render path and entry gzip remains 243.99 KB.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.operation-registry-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/canonical-operation-contract.ts",
+      "summary": "Extensible governed operation contract and validation."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/canonical-operation-registry.ts",
+      "summary": "Core, generated, and semantic registrations plus reverse-reference closure."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/generated-algebra-canonical-composition.ts",
+      "summary": "Compact runtime projection that prevents full registry bundling."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-motif-defaults.ts",
+      "summary": "Consumes the lightweight canonical composition projection."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/llm-semantic-motion-operation-authoring.ts",
+      "summary": "Projects authoring roles from the authoritative operation contract."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/llm-animation-draft-v2.ts",
+      "summary": "Validates model role bindings against the authoritative operation contract."
+    },
+    {
+      "kind": "file",
+      "path": "tests/canonical-operation-registry.test.ts",
+      "summary": "Covers complete registrations, reverse closure, and project extension law."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Define canonical operation registry can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript",
+      "checkedAt": "2026-07-17T19:30:50.732Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "1310 unit and contract tests",
+      "checkedAt": "2026-07-17T19:30:50.805Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production build; 243.99 KB entry gzip",
+      "checkedAt": "2026-07-17T19:30:50.881Z"
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "Normal and constrained periodic performance gate",
+      "checkedAt": "2026-07-17T19:30:50.954Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test focused semantic registry and LLM suites",
+      "status": "passed",
+      "scope": "40 semantic integration tests",
+      "checkedAt": "2026-07-17T19:30:51.029Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-17T19:30:51.109Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Extended the versioned canonical-operation registry with one authority-linked contract covering roles, lineage relations, ownership, law and witness refs, reverse meaning, motif requirements, pacing, static-cost roles, and fixtures; migrated core, generated algebra, semantic-motion, and LLM consumers; validated reverse closure and project extension packs; split a compact canonical-composition projection from the heavy registry so governed metadata stays off the initial render path and entry gzip remains 243.99 KB."
+  }
+}

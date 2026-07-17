@@ -16,7 +16,9 @@ import {
   type EquationVisualMotifKind,
   type EquationVisualMotifPhaseId
 } from "./visual-motif.ts";
-import { kpGeneratedAlgebraOperationEntries } from "../semantic/canonical-operation-registry.ts";
+import {
+  canonicalCompositionForGeneratedTransform
+} from "../semantic/generated-algebra-canonical-composition.ts";
 import { compileKpExecutableMotifComposition } from "./executable-motif-grammar.ts";
 
 export type EquationTransformVisualMotifRule = TransformTreeVisualMotifRule<
@@ -346,14 +348,8 @@ function createGeneratedAlgebraEquationMotifRule(
       `No generated algebra transform definition for ${motifDefault.transformType}.`
     );
   }
-  const operationEntry = kpGeneratedAlgebraOperationEntries.find(
-    (entry) => entry.sourceDefinitionId === definition.id
-  );
-  if (operationEntry === undefined) {
-    throw new Error(`No canonical operation registry entry for ${definition.id}.`);
-  }
   const composition = compileKpExecutableMotifComposition(
-    operationEntry.canonicalComposition
+    canonicalCompositionForGeneratedTransform(definition.transformType)
   );
 
   return {

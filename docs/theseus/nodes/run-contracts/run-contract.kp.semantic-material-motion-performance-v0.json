@@ -103,7 +103,8 @@
     {
       "id": "next-action.kp.material-motion.operation-registry-v0",
       "title": "Define canonical operation registry",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.material-motion.operation-registry-v0 in KP Semantic Material Motion And Performance V0.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.author-compiler-boundary-v0",

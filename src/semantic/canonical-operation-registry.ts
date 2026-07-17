@@ -2,6 +2,7 @@ import {
   findKpCanonicalOperationCoreDescriptor,
   kpCanonicalOperationCore,
   type KpCanonicalOperationId,
+  type KpCanonicalOperationCoreDescriptor,
   type KpCanonicalOperationRole,
   type KpCanonicalOperationRoleCardinality
 } from "./canonical-operation.ts";
@@ -21,8 +22,17 @@ import {
 } from "./distribution-canonical-operation.ts";
 import {
   kpSemanticMotionOperationDefinitions,
-  kpSemanticMotionOperationPack
+  kpSemanticMotionOperationPack,
+  type KpSemanticMotionOperationDefinition
 } from "./semantic-motion-operation-pack.ts";
+import {
+  createKpCanonicalOperationContract,
+  type KpCanonicalOperationContract,
+  type KpCanonicalOperationOwnershipMode
+} from "./canonical-operation-contract.ts";
+import {
+  canonicalCompositionForGeneratedTransform
+} from "./generated-algebra-canonical-composition.ts";
 
 export interface KpCanonicalOperationRegistryEntry {
   readonly id: string;
@@ -32,7 +42,7 @@ export interface KpCanonicalOperationRegistryEntry {
   readonly sourceDefinitionId?: string | undefined;
   readonly sourceTransformType?: string | undefined;
   readonly authoringSummary?: string | undefined;
-  readonly authoringRoles?: readonly KpCanonicalOperationRole[] | undefined;
+  readonly contract: KpCanonicalOperationContract;
 }
 
 export interface KpCanonicalOperationRegistry {
@@ -77,7 +87,7 @@ export const kpSemanticMotionOperationEntries:
     canonicalComposition: definition.canonicalComposition,
     sourceTransformType: definition.transformType,
     authoringSummary: definition.summary,
-    authoringRoles: definition.authoringRoles
+    contract: semanticMotionContract(definition)
   }));
 
 export const kpCanonicalOperationRegistry = createKpCanonicalOperationRegistry({
@@ -90,7 +100,8 @@ export const kpCanonicalOperationRegistry = createKpCanonicalOperationRegistry({
     ...kpCanonicalOperationCore.map((operation) => ({
       id: operation.id,
       packId: kpCanonicalOperationCorePack.id,
-      canonicalComposition: [operation.id]
+      canonicalComposition: [operation.id],
+      contract: coreOperationContract(operation)
     })),
     ...kpGeneratedAlgebraOperationEntries,
     ...kpSemanticMotionOperationEntries
@@ -129,13 +140,15 @@ export function createKpCanonicalOperationRegistry(input: {
     entry.canonicalComposition.forEach((operationId) =>
       findKpCanonicalOperationCoreDescriptor(operationId)
     );
-    const roleIds = new Set<string>();
-    entry.authoringRoles?.forEach((role) => {
-      if (roleIds.has(role.id)) {
-        throw new Error(`Canonical operation ${entry.id} repeats authoring role ${role.id}.`);
-      }
-      roleIds.add(role.id);
-    });
+    createKpCanonicalOperationContract(entry.contract);
+  });
+  input.entries.forEach((entry) => {
+    const reverseOperationId = entry.contract.reverse.operationId;
+    if (reverseOperationId !== undefined && !entryIds.has(reverseOperationId)) {
+      throw new Error(
+        `Canonical operation ${entry.id} references missing reverse operation ${reverseOperationId}.`
+      );
+    }
   });
   return {
     kind: "canonical-operation-registry",
@@ -147,9 +160,7 @@ export function createKpCanonicalOperationRegistry(input: {
     entries: input.entries.map((entry) => ({
       ...entry,
       canonicalComposition: [...entry.canonicalComposition],
-      ...(entry.authoringRoles === undefined
-        ? {}
-        : { authoringRoles: entry.authoringRoles.map((role) => ({ ...role })) })
+      contract: createKpCanonicalOperationContract(entry.contract)
     }))
   };
 }
@@ -202,8 +213,201 @@ export function migrateGeneratedAlgebraTransformDefinition(
     sourceDefinitionId: definition.id,
     sourceTransformType: definition.transformType,
     authoringSummary: definition.title,
-    authoringRoles: generatedTransformAuthoringRoles(definition.transformType)
+    contract: generatedTransformContract(definition)
   };
+}
+
+function coreOperationContract(
+  operation: KpCanonicalOperationCoreDescriptor
+): KpCanonicalOperationContract {
+  return operationContract({
+    authority: { kind: "core-descriptor", refId: operation.id },
+    roles: operation.roles,
+    canonicalComposition: [operation.id],
+    lineageRelationIds: operation.correspondenceRelations,
+    ownershipMode: ownershipForOperation(operation.id, [operation.id]),
+    lawIds: [`law.${operation.id}`],
+    witnessIds: witnessIdsForOperation(operation.id),
+    reverse: operation.reversibleAs === undefined
+      ? { kind: "one-way" }
+      : operation.reversibleAs === operation.id
+        ? { kind: "self", operationId: operation.id }
+        : { kind: "inverse", operationId: operation.reversibleAs },
+    fixtureIds: [`fixture.${operation.id}`]
+  });
+}
+
+function generatedTransformContract(
+  definition: GeneratedAlgebraTransformDefinition
+): KpCanonicalOperationContract {
+  const id = `kp.algebra.${kebabCase(definition.transformType)}`;
+  const roles = generatedTransformAuthoringRoles(definition.transformType);
+  const canonicalComposition = canonicalCompositionForGeneratedTransform(
+    definition.transformType
+  );
+  return operationContract({
+    authority: definition.transformType === "distributeMultiplication"
+      ? { kind: "operation-spec", refId: kpDistributionCanonicalOperationSpec.id }
+      : { kind: "transformation-definition", refId: definition.id },
+    roles,
+    canonicalComposition,
+    lineageRelationIds: coreRelations(canonicalComposition),
+    ownershipMode: ownershipForOperation(id, canonicalComposition),
+    lawIds: definition.lawRefs?.map((law) => law.id) ?? [],
+    witnessIds: witnessIdsForOperation(id),
+    reverse: reverseForGeneratedOperation(id),
+    fixtureIds: [definition.templateId]
+  });
+}
+
+function semanticMotionContract(
+  definition: KpSemanticMotionOperationDefinition
+): KpCanonicalOperationContract {
+  return operationContract({
+    authority: {
+      kind: "transformation-definition",
+      refId: `transform-type.${definition.transformType}`
+    },
+    roles: definition.authoringRoles,
+    canonicalComposition: definition.canonicalComposition,
+    lineageRelationIds: coreRelations(definition.canonicalComposition),
+    ownershipMode: ownershipForOperation(
+      definition.id,
+      definition.canonicalComposition
+    ),
+    lawIds: [`law.${definition.transformType}`],
+    witnessIds: witnessIdsForOperation(definition.id),
+    reverse: { kind: "one-way" },
+    fixtureIds: [`fixture.${definition.transformType}`]
+  });
+}
+
+function operationContract(input: {
+  readonly authority: KpCanonicalOperationContract["authority"];
+  readonly roles: readonly KpCanonicalOperationRole[];
+  readonly canonicalComposition: readonly KpCanonicalOperationId[];
+  readonly lineageRelationIds: KpCanonicalOperationContract["lineageRelationIds"];
+  readonly ownershipMode: KpCanonicalOperationOwnershipMode;
+  readonly lawIds: readonly string[];
+  readonly witnessIds: readonly string[];
+  readonly reverse: KpCanonicalOperationContract["reverse"];
+  readonly fixtureIds: readonly string[];
+}): KpCanonicalOperationContract {
+  const unitRoleId = pacingRole(input.authority.refId, input.roles);
+  const pacingKind = pacingKindFor(input.authority.refId);
+  const structuralRoleIds = input.roles
+    .filter((role) => role.kind === "structural-artifact")
+    .map((role) => role.id);
+  return createKpCanonicalOperationContract({
+    authority: input.authority,
+    roles: input.roles,
+    lineageRelationIds: input.lineageRelationIds,
+    ownershipMode: input.ownershipMode,
+    lawIds: input.lawIds,
+    witnessIds: input.witnessIds,
+    reverse: input.reverse,
+    motifRequirementIds: input.authority.refId === kpDistributionCanonicalOperationSpec.id
+      ? kpDistributionCanonicalOperationSpec.motif.map((step) => step.id)
+      : input.canonicalComposition.map((id) => `motif.${id}`),
+    pacing: {
+      kind: pacingKind,
+      ...(pacingKind === "single" ? {} : { unitRoleId: unitRoleId! })
+    },
+    cost: {
+      tokenRoleIds: input.roles
+        .filter((role) => role.kind === "semantic-entity")
+        .map((role) => role.id),
+      simultaneousGroupRoleIds: input.roles
+        .filter((role) => role.cardinality === "one-or-more")
+        .map((role) => role.id),
+      fragmentRoleIds: structuralRoleIds,
+      shadowPolicy: "optional",
+      threeDPolicy: "optional"
+    },
+    fixtureIds: input.fixtureIds
+  });
+}
+
+function coreRelations(
+  composition: readonly KpCanonicalOperationId[]
+): KpCanonicalOperationContract["lineageRelationIds"] {
+  return [...new Set(composition.flatMap((id) =>
+    findKpCanonicalOperationCoreDescriptor(id).correspondenceRelations
+  ))];
+}
+
+function ownershipForOperation(
+  operationId: string,
+  composition: readonly KpCanonicalOperationId[]
+): KpCanonicalOperationOwnershipMode {
+  if (operationId.includes("substitute")) return "replacement";
+  if (operationId === "kp.core.copy") return "persistent-source-copying";
+  if (
+    operationId.includes("distribut") ||
+    operationId.includes("factor-common") ||
+    composition.includes("kp.core.fan-out") ||
+    composition.includes("kp.core.merge")
+  ) return "fission-fusion";
+  return "continuant";
+}
+
+function witnessIdsForOperation(operationId: string): readonly string[] {
+  if (operationId.includes("additive") || operationId.includes("cancel-additive")) {
+    return ["witness.additive-identity.zero"];
+  }
+  if (
+    operationId.includes("multiplicative") ||
+    operationId.includes("cancel-multiplicative")
+  ) return ["witness.multiplicative-identity.one"];
+  return [];
+}
+
+function reverseForGeneratedOperation(
+  operationId: string
+): KpCanonicalOperationContract["reverse"] {
+  const inverse = new Map<string, string>([
+    ["kp.algebra.subtract-both-sides", "kp.algebra.add-both-sides"],
+    ["kp.algebra.add-both-sides", "kp.algebra.subtract-both-sides"],
+    ["kp.algebra.split-fraction-factors", "kp.algebra.merge-fraction-common-factor"],
+    ["kp.algebra.merge-fraction-common-factor", "kp.algebra.split-fraction-factors"],
+    ["kp.algebra.distribute-multiplication", "kp.algebra.factor-common-term"],
+    ["kp.algebra.factor-common-term", "kp.algebra.distribute-multiplication"]
+  ]).get(operationId);
+  return inverse === undefined
+    ? { kind: "one-way" }
+    : { kind: "inverse", operationId: inverse };
+}
+
+function pacingKindFor(
+  authorityRef: string
+): KpCanonicalOperationContract["pacing"]["kind"] {
+  if (authorityRef.includes("multiplyMatrices")) return "per-cell";
+  if (
+    authorityRef.includes("DotProduct") ||
+    authorityRef.includes("multiplyMatrixVector")
+  ) return "per-index";
+  if (authorityRef.includes("distribute") || authorityRef.includes("fan-out")) {
+    return "per-descendant";
+  }
+  return "single";
+}
+
+function pacingRole(
+  authorityRef: string,
+  roles: readonly KpCanonicalOperationRole[]
+): string | undefined {
+  const preferred = authorityRef.includes("multiplyMatrices")
+    ? "result-cells"
+    : authorityRef.includes("multiplyMatrixVector")
+      ? "result-entries"
+      : authorityRef.includes("DotProduct")
+        ? "products"
+        : authorityRef.includes("distribute")
+          ? "factor-copies"
+          : authorityRef.includes("fan-out")
+            ? "destinations"
+            : undefined;
+  return roles.find((role) => role.id === preferred)?.id;
 }
 
 function generatedTransformAuthoringRoles(
@@ -321,43 +525,6 @@ function artifactRole(
     cardinality,
     summary: `${endpoint} structural artifact role ${id}`
   };
-}
-
-function canonicalCompositionForGeneratedTransform(
-  transformType: string
-): readonly KpCanonicalOperationId[] {
-  switch (transformType) {
-    case "subtractBothSides":
-    case "addBothSides":
-      return ["kp.core.persist", "kp.core.introduce"];
-    case "divideBothSides":
-      return ["kp.core.persist", "kp.core.wrap"];
-    case "cancelAdditiveInverses":
-    case "cancelMultiplicativeInverses":
-    case "simplifyUnitFractionFactor":
-      return ["kp.core.persist", "kp.core.eliminate"];
-    case "simplifyConstantDifference":
-    case "simplifyConstantSum":
-    case "simplifyConstantQuotient":
-    case "mergeFractionCommonFactor":
-      return ["kp.core.merge"];
-    case "splitFractionFactors":
-      return ["kp.core.persist", "kp.core.reorder", "kp.core.wrap"];
-    case "lowerExponent":
-      return ["kp.core.persist", "kp.core.reorder"];
-    case "unwrapUnitExponent":
-      return ["kp.core.unwrap", "kp.core.eliminate"];
-    case "rewritePowerAsRoot":
-      return ["kp.core.persist", "kp.core.substitute", "kp.core.wrap"];
-    case "wrapFunction":
-      return ["kp.core.wrap"];
-    case "distributeMultiplication":
-      return ["kp.core.persist", "kp.core.fan-out", "kp.core.eliminate", "kp.core.reorder"];
-    case "factorCommonTerm":
-      return ["kp.core.persist", "kp.core.merge", "kp.core.group"];
-    default:
-      throw new Error(`Generated transform ${transformType} has no canonical operation composition.`);
-  }
 }
 
 function kebabCase(value: string): string {
