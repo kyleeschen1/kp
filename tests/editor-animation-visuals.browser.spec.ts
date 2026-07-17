@@ -644,13 +644,29 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   ))).toBeGreaterThan(0.45);
   await scrubber.fill("0.43");
   await expect(transition).toHaveAttribute(
-    "data-kp-editor-annihilation-phase",
-    "contact"
+    "data-kp-editor-equation-presentation-recipe",
+    "continuity-v1"
   );
   await expect(transition).toHaveAttribute(
-    "data-kp-editor-annihilation-witness-readable",
+    "data-kp-editor-equation-witnessed-annihilation-active",
     "false"
   );
+  await expect(transition.locator("[data-kp-editor-annihilation-witness]"))
+    .toHaveCount(0);
+  const previewClearance = await Promise.all([
+    materialLayer.locator(
+      '[data-kp-equation-material-owner-id="linear-solve.lhs.x"]'
+    ),
+    plusThree,
+    minusThree
+  ].map((locator) => locator.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { top: rect.top, bottom: rect.bottom };
+  })));
+  expect(Math.max(
+    previewClearance[1]!.bottom,
+    previewClearance[2]!.bottom
+  )).toBeLessThan(previewClearance[0]!.top + 1);
   await scrubber.fill("0.5");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-active-subgraph-nodes",
@@ -658,13 +674,6 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   );
   await expect(plusThree).toHaveCSS("opacity", "1");
   await expect(minusThree).toHaveCSS("opacity", "1");
-  const compressedScales = await Promise.all([plusThree, minusThree].map(
-    (locator) => locator.evaluate((element) => {
-      const transform = getComputedStyle(element).transform;
-      return new DOMMatrixReadOnly(transform).a;
-    })
-  ));
-  expect(compressedScales.every((scale) => scale > 0.7 && scale < 1)).toBe(true);
   await scrubber.fill("0.52");
   const meeting = await Promise.all([plusThree, minusThree].map((locator) =>
     locator.evaluate((element) => {
@@ -672,21 +681,13 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
       return { x: rect.left + rect.width / 2, width: rect.width };
     })
   ));
-  expect(Math.abs(meeting[1]!.x - meeting[0]!.x)).toBeLessThan(42);
-  expect(meeting.every((pose) => pose.width > 20)).toBe(true);
+  expect(Math.abs(meeting[1]!.x - meeting[0]!.x)).toBeLessThan(35);
+  expect(meeting.every((pose) => pose.width > 24)).toBe(true);
 
   await scrubber.fill("0.56");
-  await expect(transition).toHaveAttribute(
-    "data-kp-editor-annihilation-phase",
-    "witness-dwell"
-  );
-  const additiveWitness = transition.locator(
-    "[data-kp-editor-annihilation-witness]"
-  );
-  await expect(additiveWitness).toHaveCount(1);
-  await expect(additiveWitness).toContainText("0");
-  await expect(additiveWitness.locator(".katex")).toHaveCount(1);
-  await expect(additiveWitness).toHaveCSS("opacity", "1");
+  expect(Number(await transition.getAttribute(
+    "data-kp-editor-equation-collapse-progress"
+  ))).toBeGreaterThan(0);
   expect(Number(await plusThree.evaluate(
     (element) => getComputedStyle(element).opacity
   ))).toBeGreaterThan(0);
@@ -699,13 +700,6 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   await expect(materialLayer.locator(
     '[data-kp-equation-material-owner-id="linear-solve.equals"]'
   )).toHaveCSS("opacity", "1");
-  await scrubber.fill("0.6");
-  expect(Number(await plusThree.evaluate(
-    (element) => getComputedStyle(element).opacity
-  ))).toBeGreaterThan(0);
-  expect(Number(await plusThree.evaluate(
-    (element) => getComputedStyle(element).opacity
-  ))).toBeLessThan(1);
 
   await scrubber.fill("0.84");
   transition = player.locator("[data-kp-editor-equation-transition-id]");
@@ -730,16 +724,10 @@ test("linear-rearrangement choreography reserves, cancels, derives, recognizes, 
   await expect(minus).toHaveCSS("opacity", "1");
   await expect(subtrahend).toHaveCSS("opacity", "1");
   await expect(transition).toHaveAttribute(
-    "data-kp-editor-successor-synthesis-plan",
-    /constants-merge/
+    "data-kp-editor-equation-successor-synthesis-active",
+    "false"
   );
-  await expect(transition.locator(
-    '[data-kp-editor-successor-contribution="catalyst"]'
-  )).toHaveCount(1);
-  await expect(transition.locator(
-    '[data-kp-editor-successor-contribution="material-input"]'
-  )).toHaveCount(2);
-  const operandArcs = await Promise.all([seven, subtrahend].map((locator) =>
+  const operandArcs = await Promise.all([seven, minus].map((locator) =>
     locator.evaluate((element) => {
       const rect = element.getBoundingClientRect();
       return rect.top + rect.height / 2;

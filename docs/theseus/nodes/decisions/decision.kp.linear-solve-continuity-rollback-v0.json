@@ -1,0 +1,23 @@
+{
+  "id": "decision.kp.linear-solve-continuity-rollback-v0",
+  "kind": "decision",
+  "title": "Restore Linear Solve Continuity Presentation",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "The canonical x + 3 = 7 asset selects continuity-v1 presentation while retaining witnessed-annihilation and successor-synthesis semantics for isolated refinement.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-linear-solve-continuity-rollback.md",
+      "summary": "Accepted rollback boundary, rationale, and re-promotion rule."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-presentation-policy.ts",
+      "summary": "Cross-cutting presentation policy selected by animation asset metadata."
+    }
+  ],
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ]
+}

@@ -130,7 +130,10 @@ export function createLinearSolveAnimationAsset(): KpAnimationAsset {
       sourceRefIds: [source.sourceAnimationId]
     },
     metadata: {
-      sourceAnimationId: source.sourceAnimationId
+      sourceAnimationId: source.sourceAnimationId,
+      // Preserve the successful canonical motion while newer material motifs
+      // remain available semantically for isolated refinement and promotion.
+      equationMotionPresentationRecipe: "continuity-v1"
     }
   });
 }

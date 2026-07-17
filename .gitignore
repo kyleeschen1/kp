@@ -28,6 +28,9 @@ coverage/
 # Local linked worktrees
 .worktrees/
 
+# Repo-local agent scratch tooling and artifacts
+/tmp/codex/
+
 # Editor and OS files
 .DS_Store
 .idea/

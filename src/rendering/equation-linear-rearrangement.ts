@@ -139,9 +139,9 @@ function sampleConstantDerivation(
   input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
 ): readonly KpEquationTokenMotionFrameToken[] {
   if (input.successorSynthesisPlan === undefined) {
-    throw new Error(
-      `Linear successor relation ${input.relation.recordId} requires an explicit semantic synthesis plan.`
-    );
+    // Canonical assets may retain successor semantics while selecting their
+    // proven continuity presentation until the newer motif clears review.
+    return sampleContinuityConstantDerivation(input);
   }
   const synthesis = sampleKpSuccessorSynthesis({
     plan: input.successorSynthesisPlan,
@@ -166,6 +166,38 @@ function sampleConstantDerivation(
       }
       return frameToken(token, "target", target.pose);
     })
+  ];
+}
+
+function sampleContinuityConstantDerivation(
+  input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
+): readonly KpEquationTokenMotionFrameToken[] {
+  const destination = center(input.relation.target?.bounds);
+  const sourceOpacity = 1 - smooth(windowProgress(input.progress, 0.68, 0.84));
+  return [
+    ...input.sourceTokens.map((token, index) => {
+      const origin = center(token.localRect);
+      const staggered = smooth(windowProgress(
+        input.progress,
+        0.38 + index * 0.025,
+        0.68 + index * 0.025
+      ));
+      const arcDirection = index % 2 === 0 ? -1 : 1;
+      return frameToken(token, "source", {
+        opacity: sourceOpacity,
+        x: (destination.x - origin.x) * staggered,
+        y:
+          (destination.y - origin.y) * staggered +
+          arcDirection * 8 * Math.sin(Math.PI * staggered),
+        scale: 1 - 0.2 * staggered
+      });
+    }),
+    ...input.targetTokens.map((token) => frameToken(token, "target", {
+      opacity: input.frame.resultRevealProgress,
+      x: 0,
+      y: 0,
+      scale: 0.78 + 0.22 * input.frame.resultRevealProgress
+    }))
   ];
 }
 

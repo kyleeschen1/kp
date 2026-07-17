@@ -1,0 +1,24 @@
+{
+  "id": "decision.kp.repo-local-scratch-tooling-v0",
+  "kind": "decision",
+  "title": "Keep Scratch Tooling Repo Local",
+  "status": "resolved",
+  "domain": "kp.workflow",
+  "summary": "Disposable scripts and artifacts use gitignored tmp/codex storage, are removed after use, and are promoted into committed scripts or tests when they become repeatable validation.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "AGENTS.md",
+      "summary": "Repository-level agent instruction that applies the policy across future sessions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-repo-local-scratch-tooling.md",
+      "summary": "Accepted rationale, lifecycle, promotion threshold, and escalation boundary."
+    }
+  ],
+  "affects": [
+    "workflow.kp.dashboard-animation-system",
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ]
+}

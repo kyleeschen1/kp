@@ -101,6 +101,9 @@ import {
   kpEquationWitnessedAnnihilationRuntime
 } from "../rendering/equation-witnessed-annihilation-runtime.ts";
 import {
+  kpEquationPresentationPolicy
+} from "../rendering/equation-presentation-policy.ts";
+import {
   createKpDotProductTraversalChoreography,
   sampleKpDotProductTraversalChoreography,
   type KpDotProductTraversalChoreography,
@@ -2371,6 +2374,9 @@ function applySemanticTokenMotion(input: {
     );
     if (displayedSource === null || displayedTarget === null) return false;
     const motifKind = input.frame.motifs[input.transitionIndex]?.kind;
+    const presentationPolicy = kpEquationPresentationPolicy(input.animation);
+    input.transitionElement.dataset["kpEditorEquationPresentationRecipe"] =
+      presentationPolicy.recipe;
     const identityAbsorptionRoles = identityAbsorptionRoleRecordIds(
       transformation,
       input.animation.bundle
@@ -2378,7 +2384,9 @@ function applySemanticTokenMotion(input: {
     const annihilationOperationId = witnessedAnnihilationOperationId(
       transformation.transformType
     );
-    const witnessedAnnihilationBinding = annihilationOperationId === undefined
+    const witnessedAnnihilationBinding =
+      !presentationPolicy.applyWitnessedAnnihilation ||
+      annihilationOperationId === undefined
       ? undefined
       : requiredWitnessedAnnihilationRuntime().createBinding({
           operationId: annihilationOperationId,
@@ -2457,7 +2465,8 @@ function applySemanticTokenMotion(input: {
         : {
             linearRearrangementKind:
               input.frame.linearRearrangement.step.kind,
-            ...(input.frame.linearRearrangement.step.successorSynthesisBinding === undefined
+            ...(!presentationPolicy.applySuccessorSynthesis ||
+              input.frame.linearRearrangement.step.successorSynthesisBinding === undefined
               ? {}
               : {
                   successorSynthesisBinding:
@@ -2505,6 +2514,10 @@ function applySemanticTokenMotion(input: {
   }
 
   const geometry = precomputed.geometry;
+  input.transitionElement.dataset["kpEditorEquationWitnessedAnnihilationActive"] =
+    String(geometry.witnessedAnnihilationPlan !== undefined);
+  input.transitionElement.dataset["kpEditorEquationSuccessorSynthesisActive"] =
+    String(geometry.successorSynthesisPlan !== undefined);
 
   resetLayerForSemanticMotion(input.transitionElement, "[data-kp-editor-equation-source]");
   resetLayerForSemanticMotion(input.transitionElement, "[data-kp-editor-equation-target]");
