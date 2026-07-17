@@ -68,6 +68,19 @@ test("dot product reports its specialized accumulation motif", () => {
   assert.deepEqual(diagnosis.issues, []);
 });
 
+test("matrix-vector multiplication reports row composition instead of replacement", () => {
+  const animation = catalog.find(
+    (candidate) =>
+      candidate.id ===
+      "animation.generated.linear-algebra.matrix-vector.two-by-two"
+  )!;
+  const diagnosis = diagnoseKpAnimationDesign({ animation })!;
+
+  assert.equal(diagnosis.visualStrategy, "operation-specific");
+  assert.equal(diagnosis.motifKind, "matrix-row-compose");
+  assert.deepEqual(diagnosis.issues, []);
+});
+
 test("additive identity reports operation-specific absorption", () => {
   const animation = catalog.find(
     (candidate) => candidate.id === "animation.generated.add-zero"

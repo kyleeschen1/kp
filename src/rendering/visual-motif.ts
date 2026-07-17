@@ -35,6 +35,7 @@ export type EquationVisualMotifKind =
   | "derivative-power"
   | "dot-product-accumulate"
   | "merge-fan-in"
+  | "matrix-row-compose"
   | "radical-corner-transfer"
   | "relation-flip"
   | "simplify-into"
@@ -164,6 +165,18 @@ export const equationVisualMotifDescriptors: readonly EquationVisualMotifDescrip
     ],
     summary:
       "Index-matched component pairs form persistent products and accumulate into one scalar."
+  },
+  {
+    kind: "matrix-row-compose",
+    motionPrimitiveIds: ["shift", "transmit", "reveal"],
+    phaseIds: [
+      "dot-pair-focus",
+      "dot-product-form",
+      "dot-accumulate",
+      "dot-result-reveal"
+    ],
+    summary:
+      "Matrix rows meet the shared vector in semantic order and leave persistent result entries."
   },
   {
     kind: "derivative-power",

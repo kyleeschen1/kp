@@ -20,5 +20,13 @@ test("matrix-vector multiplication visibly resolves its exact result vector", ()
 
   assert.match(frame.projection.transitions[0]?.source[0]?.latex ?? "", /2 & 1/);
   assert.match(frame.projection.transitions[0]?.target[0]?.latex ?? "", /13 \\\\ 15/);
-  assert.equal(frame.motifs[0]?.kind, "artifact-replace");
+  assert.equal(frame.motifs[0]?.kind, "matrix-row-compose");
+  assert.equal(
+    frame.matrixVectorComposition?.choreography.rendererPlan.kind,
+    "matrix-vector-renderer-plan"
+  );
+  assert.deepEqual(
+    frame.matrixVectorComposition?.choreography.rows.map((row) => row.result),
+    [13, 15]
+  );
 });

@@ -2419,7 +2419,38 @@ test("matrix-vector family animation visibly resolves the result vector", async 
     "editor-animation.sample.animation.matrix-vector.basic"
   );
   const player = page.locator("[data-kp-editor-animation-player]");
-  await player.locator('[data-action="seek-editor-animation"]').fill("1");
+  const transition = player.locator("[data-kp-editor-equation-transition-id]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  await scrubber.fill("0.18");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-matrix-vector-composition",
+    /matrix-vector/
+  );
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-matrix-vector-active-row",
+    "0"
+  );
+  await expect(transition.locator('[data-kp-editor-matrix-vector-row="0"]'))
+    .toHaveAttribute(
+      "data-kp-editor-matrix-vector-intermediate-object-id",
+      /intermediate\.row-dot-product\.0$/
+    );
+  await expect(transition.locator('[data-kp-editor-matrix-vector-row="0"]'))
+    .toContainText("2×4+1×5=13");
+
+  await scrubber.fill("0.35");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-matrix-vector-resolved-through",
+    "0"
+  );
+  await expect(transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*=".result.component.0"]'
+  )).toHaveCSS("opacity", "1");
+  await expect(transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id*=".result.component.1"]'
+  )).toHaveCSS("opacity", "0");
+
+  await scrubber.fill("1");
   await expect(player.locator("[data-kp-editor-equation-target] [data-kp-editor-equation-object-id]"))
     .toHaveAttribute(
       "data-kp-editor-equation-object-id",
@@ -2429,6 +2460,14 @@ test("matrix-vector family animation visibly resolves the result vector", async 
     .toContainText("1315");
   await expect(player.locator("[data-kp-editor-equation-transition-id]"))
     .toHaveAttribute("data-kp-editor-equation-semantic-motion", "active");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-matrix-vector-source-opacity",
+    "0"
+  );
+  await expect(transition.locator(
+    "[data-kp-editor-equation-source] [data-kp-motion-id]"
+  ).first())
+    .toHaveCSS("opacity", "0");
   await expect(player.locator("[data-kp-editor-equation-target] .mopen[data-kp-motion-id]"))
     .toHaveCount(1);
 });

@@ -5,6 +5,7 @@ import type { KpEquationEnclosureChoreographyKind } from "./equation-enclosure-c
 import type { KpEquationMotionPathCandidate } from "./equation-motion-path-planner.ts";
 import type { KpEquationLinearRearrangementKind } from "./equation-linear-rearrangement.ts";
 import type { KpDotProductRendererPlan } from "./equation-dot-product-traversal.ts";
+import type { KpMatrixVectorRendererPlan } from "./equation-matrix-vector-composition.ts";
 import type {
   KpDerivativePowerChoreographyPlan
 } from "../animation/derivative-power-choreography.ts";
@@ -70,6 +71,7 @@ export interface KpMeasuredEquationTransitionGeometry {
   readonly linearRearrangementKind?:
     KpEquationLinearRearrangementKind | undefined;
   readonly dotProductTraversalPlan?: KpDotProductRendererPlan | undefined;
+  readonly matrixVectorCompositionPlan?: KpMatrixVectorRendererPlan | undefined;
   readonly derivativePowerChoreographyPlan?:
     KpDerivativePowerChoreographyPlan | undefined;
   readonly precomputedMotionPathsByMotionId?: Readonly<
@@ -165,6 +167,7 @@ export function measureKpEquationTransitionGeometry(input: {
   readonly linearRearrangementKind?:
     KpEquationLinearRearrangementKind | undefined;
   readonly dotProductTraversalPlan?: KpDotProductRendererPlan | undefined;
+  readonly matrixVectorCompositionPlan?: KpMatrixVectorRendererPlan | undefined;
   readonly derivativePowerChoreographyPlan?:
     KpDerivativePowerChoreographyPlan | undefined;
 }): KpMeasuredEquationTransitionGeometry {
@@ -232,6 +235,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.dotProductTraversalPlan === undefined
       ? {}
       : { dotProductTraversalPlan: input.dotProductTraversalPlan }),
+    ...(input.matrixVectorCompositionPlan === undefined
+      ? {}
+      : { matrixVectorCompositionPlan: input.matrixVectorCompositionPlan }),
     ...(input.derivativePowerChoreographyPlan === undefined
       ? {}
       : {

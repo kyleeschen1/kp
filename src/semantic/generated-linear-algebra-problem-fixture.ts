@@ -136,6 +136,11 @@ function createGeneratedMatrixVectorProblemFixture(
   const ids = generatedMatrixVectorProblemIds(input);
   const result = multiplyMatrixVector(input.matrixRows, input.vector);
   const latex = generatedMatrixVectorProblemLatex(input, result);
+  const intermediates = createGeneratedMatrixVectorIntermediateObjects(
+    input,
+    ids,
+    result
+  );
   const sourceSelectors = [
     ...matrixEntrySelectors(ids.initial, input.matrixRows),
     ...matrixBracketSelectors(ids.initial, "matrix"),
@@ -160,6 +165,7 @@ function createGeneratedMatrixVectorProblemFixture(
           vector: input.vector
         }
       ),
+      ...intermediates,
       expressionObject(
         ids.result,
         "Computed product vector",
@@ -218,6 +224,60 @@ function createGeneratedMatrixVectorProblemFixture(
     drillDownHooks: [],
     flashcards: createGeneratedMatrixVectorProblemFlashcards(input, ids, result)
   };
+}
+
+function createGeneratedMatrixVectorIntermediateObjects(
+  input: GeneratedMatrixVectorProblemFixtureSpec,
+  ids: GeneratedMatrixVectorProblemIds,
+  result: readonly number[]
+) {
+  return input.matrixRows.map((row, semanticIndex) => {
+    const products = row.map((value, columnIndex) =>
+      value * input.vector[columnIndex]!
+    );
+    const rowObjectId = `${ids.initial}.intermediate.row-dot-product.${semanticIndex}`;
+    const rowLatex = `${row.map((value, columnIndex) =>
+      `${value} \\times ${input.vector[columnIndex]!}`
+    ).join(" + ")} = ${result[semanticIndex]}`;
+    return expressionObject(
+      rowObjectId,
+      `Matrix-vector row ${semanticIndex + 1} dot product`,
+      rowLatex,
+      [
+        ...row.map((value, columnIndex) =>
+          selector(
+            rowObjectId,
+            `matrix-entry.${columnIndex}`,
+            "entry",
+            String(value)
+          )
+        ),
+        ...input.vector.map((value, columnIndex) =>
+          selector(
+            rowObjectId,
+            `vector-component.${columnIndex}`,
+            "component",
+            String(value)
+          )
+        ),
+        selector(
+          rowObjectId,
+          "result-component",
+          "component",
+          String(result[semanticIndex])
+        )
+      ],
+      {
+        representation: "matrix-vector-row-dot-product",
+        semanticIndex,
+        rowValues: row,
+        vectorValues: input.vector,
+        products,
+        result: result[semanticIndex],
+        rowLatex
+      }
+    );
+  });
 }
 
 function createGeneratedDotProductProblemFixture(

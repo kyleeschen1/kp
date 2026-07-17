@@ -94,6 +94,12 @@ export const defaultEquationTransformVisualMotifRules:
       transformationKind: "multiplyNegativeBothSidesInequality",
       descriptor: descriptorForEquationMotif("relation-flip"),
       summary: "The inequality relation turns while negative multiplication enters."
+    },
+    {
+      transformationKind: "multiplyMatrixVector",
+      descriptor: descriptorForEquationMotif("matrix-row-compose"),
+      summary:
+        "Rows focus and meet the shared vector before each persistent result component appears."
     }
   ];
 

@@ -199,7 +199,8 @@
     {
       "id": "next-action.kp.animation.matrix-vector-composition-v1",
       "title": "Compose matrix-vector multiplication",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.matrix-vector-composition-v1 in Semantic Motion Animation Library Long Loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.matrix-matrix-composition-v1",
