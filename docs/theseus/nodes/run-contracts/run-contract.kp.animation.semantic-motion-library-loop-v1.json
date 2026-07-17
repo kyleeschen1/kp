@@ -169,7 +169,8 @@
     {
       "id": "next-action.kp.animation.fraction-motifs-v1",
       "title": "Give fractions operation-specific visual verbs",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.fraction-motifs-v1 in Semantic Motion Animation Library Long Loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.exponent-motifs-v1",

@@ -45,6 +45,11 @@ export interface KpMeasuredEquationTransitionGeometry {
   readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
   readonly distributionChoreographyKind?: "canonical-fan-out" | undefined;
   readonly factoringChoreographyKind?: "canonical-fan-in" | undefined;
+  readonly fractionChoreographyKind?:
+    | "split-factors"
+    | "separate-common-factor"
+    | "simplify-unit-factor"
+    | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
@@ -120,6 +125,11 @@ export function measureKpEquationTransitionGeometry(input: {
   readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
   readonly distributionChoreographyKind?: "canonical-fan-out" | undefined;
   readonly factoringChoreographyKind?: "canonical-fan-in" | undefined;
+  readonly fractionChoreographyKind?:
+    | "split-factors"
+    | "separate-common-factor"
+    | "simplify-unit-factor"
+    | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
@@ -155,6 +165,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.factoringChoreographyKind === undefined
       ? {}
       : { factoringChoreographyKind: input.factoringChoreographyKind }),
+    ...(input.fractionChoreographyKind === undefined
+      ? {}
+      : { fractionChoreographyKind: input.fractionChoreographyKind }),
     ...(input.representationalSuccessionKind === undefined
       ? {}
       : {

@@ -51,12 +51,19 @@ import {
   type KpFactoringChoreographyFrame,
   type KpFactoringChoreographyPlan
 } from "../animation/factoring-choreography.ts";
+import {
+  compileKpFractionChoreography,
+  sampleKpFractionChoreography,
+  type KpFractionChoreographyFrame,
+  type KpFractionChoreographyPlan
+} from "../animation/fraction-choreography.ts";
 
 export interface KpEquationTokenMotionPose {
   readonly opacity: number;
   readonly x: number;
   readonly y: number;
   readonly scale: number;
+  readonly scaleX?: number | undefined;
 }
 
 export interface KpEquationTokenMotionFrameToken {
@@ -79,6 +86,7 @@ export interface KpEquationTokenMotionFrame {
   readonly distributionChoreography?:
     KpDistributionChoreographyFrame | undefined;
   readonly factoringChoreography?: KpFactoringChoreographyFrame | undefined;
+  readonly fractionChoreography?: KpFractionChoreographyFrame | undefined;
   readonly representationalSuccession?:
     KpEquationRepresentationalSuccessionFrame | undefined;
   readonly linearRearrangement?:
@@ -145,6 +153,15 @@ interface FactoringChoreographyContext {
     KpMeasuredEquationTransitionGeometry["precomputedMotionPathsByMotionId"];
 }
 
+interface FractionChoreographyContext {
+  readonly plan: KpFractionChoreographyPlan;
+  readonly frame: KpFractionChoreographyFrame;
+  readonly focusRecordIds: ReadonlySet<string>;
+  readonly continuantRecordIds: ReadonlySet<string>;
+  readonly structuralRecordIds: ReadonlySet<string>;
+  readonly artifactRecordIds: ReadonlySet<string>;
+}
+
 interface RepresentationalSuccessionContext {
   readonly relationRecordIds: ReadonlySet<string>;
   readonly frame: KpEquationRepresentationalSuccessionFrame;
@@ -171,6 +188,7 @@ export function sampleKpEquationTokenMotion(
     p
   );
   const factoringChoreography = createFactoringChoreographyContext(geometry, p);
+  const fractionChoreography = createFractionChoreographyContext(geometry, p);
   const representationalSuccession =
     createRepresentationalSuccessionContext(geometry, p);
   const linearRearrangement = geometry.linearRearrangementKind === undefined
@@ -198,6 +216,7 @@ export function sampleKpEquationTokenMotion(
       lineageChoreography,
       distributionChoreography,
       factoringChoreography,
+      fractionChoreography,
       representationalSuccession,
       linearRearrangement,
       dotProductTraversal,
@@ -222,6 +241,9 @@ export function sampleKpEquationTokenMotion(
     ...(factoringChoreography === undefined
       ? {}
       : { factoringChoreography: factoringChoreography.frame }),
+    ...(fractionChoreography === undefined
+      ? {}
+      : { fractionChoreography: fractionChoreography.frame }),
     ...(representationalSuccession === undefined
       ? {}
       : { representationalSuccession: representationalSuccession.frame }),
@@ -250,7 +272,7 @@ export function applyKpEquationTokenMotionFrame(
     if (element === undefined) continue;
     element.style.opacity = String(token.pose.opacity);
     element.style.transform =
-      `translate(${token.pose.x}px, ${token.pose.y}px) translateZ(var(--kp-focus-z, 0px)) scale(${token.pose.scale}) scale(var(--kp-focus-scale, 1))`;
+      `translate(${token.pose.x}px, ${token.pose.y}px) translateZ(var(--kp-focus-z, 0px)) scale(${token.pose.scale}) scaleX(${token.pose.scaleX ?? 1}) scale(var(--kp-focus-scale, 1))`;
     element.style.transformOrigin = "center center";
     if (token.lineagePathId === undefined) {
       delete element.dataset["kpEquationLineagePathId"];
@@ -279,6 +301,7 @@ function sampleRelation(
   lineageChoreography: LineageChoreographyContext | undefined,
   distributionChoreography: DistributionChoreographyContext | undefined,
   factoringChoreography: FactoringChoreographyContext | undefined,
+  fractionChoreography: FractionChoreographyContext | undefined,
   representationalSuccession:
     RepresentationalSuccessionContext | undefined,
   linearRearrangement: KpEquationLinearRearrangementFrame | undefined,
@@ -317,6 +340,16 @@ function sampleRelation(
         factoringChoreography
       );
   if (factoringTokens !== undefined) return factoringTokens;
+  const fractionTokens = fractionChoreography === undefined
+    ? undefined
+    : sampleFractionRelation(
+        relation,
+        sourceTokens,
+        targetTokens,
+        progress,
+        fractionChoreography
+      );
+  if (fractionTokens !== undefined) return fractionTokens;
   if (representationalSuccession?.relationRecordIds.has(relation.recordId)) {
     const sourceIds = new Set(relation.source?.motionIds ?? []);
     const targetIds = new Set(relation.target?.motionIds ?? []);
@@ -820,6 +853,61 @@ function createFactoringChoreographyContext(
   };
 }
 
+function createFractionChoreographyContext(
+  geometry: KpMeasuredEquationTransitionGeometry,
+  progress: number
+): FractionChoreographyContext | undefined {
+  const operationKind = geometry.fractionChoreographyKind;
+  if (operationKind === undefined) return undefined;
+  const continuants = geometry.relations.filter((relation) =>
+    relation.lifecycle === "persist" || relation.lifecycle === "role-change"
+  );
+  const focus = geometry.relations.filter((relation) => {
+    switch (operationKind) {
+      case "split-factors": return relation.lifecycle === "split";
+      case "separate-common-factor": return relation.recordId.startsWith("common-");
+      case "simplify-unit-factor": return relation.lifecycle === "cancel";
+    }
+  });
+  const structural = geometry.relations.filter((relation) => {
+    switch (operationKind) {
+      case "split-factors": return relation.lifecycle === "split";
+      case "separate-common-factor": return relation.recordId === "fraction-line-splits";
+      case "simplify-unit-factor": return relation.lifecycle === "cancel";
+    }
+  });
+  const artifacts = geometry.relations.filter((relation) => {
+    switch (operationKind) {
+      case "split-factors": return relation.lifecycle === "enter";
+      case "separate-common-factor": return relation.lifecycle === "merge";
+      case "simplify-unit-factor": return relation.lifecycle === "cancel";
+    }
+  });
+  const plan = compileKpFractionChoreography({
+    id: `${geometry.transitionId}.fraction-choreography`,
+    operationKind,
+    focusRecordIds: focus.map((relation) => relation.recordId),
+    continuantRecordIds: continuants.map((relation) => relation.recordId),
+    structuralRecordIds: structural.map((relation) => relation.recordId),
+    artifactRecordIds: artifacts.map((relation) => relation.recordId),
+    maximumBranchCount: Math.max(
+      1,
+      ...structural.map((relation) => Math.max(
+        relation.source?.motionIds.length ?? 0,
+        relation.target?.motionIds.length ?? 0
+      ))
+    )
+  });
+  return {
+    plan,
+    frame: sampleKpFractionChoreography({ plan, progress }),
+    focusRecordIds: new Set(plan.focusRecordIds),
+    continuantRecordIds: new Set(plan.continuantRecordIds),
+    structuralRecordIds: new Set(plan.structuralRecordIds),
+    artifactRecordIds: new Set(plan.artifactRecordIds)
+  };
+}
+
 function createLineageChoreographyContext(
   geometry: KpMeasuredEquationTransitionGeometry,
   progress: number
@@ -1090,6 +1178,180 @@ function sampleFactoringRelation(
         scale: 1
       });
     });
+  }
+  return undefined;
+}
+
+function sampleFractionRelation(
+  relation: KpMeasuredEquationTransitionRelationGeometry,
+  sourceTokens: readonly AnnotatedMotionToken[],
+  targetTokens: readonly AnnotatedMotionToken[],
+  progress: number,
+  context: FractionChoreographyContext
+): readonly KpEquationTokenMotionFrameToken[] | undefined {
+  if (context.plan.operationKind === "split-factors") {
+    if (context.structuralRecordIds.has(relation.recordId) && relation.source !== undefined) {
+      return [
+        ...sourceTokens.map((token) => frameToken(token, "source", {
+          opacity: 1 - context.frame.settlementProgress,
+          x: 0,
+          y: 0,
+          scale: 1 - 0.16 * context.frame.structuralProgress
+        })),
+        ...targetTokens.map((token, semanticIndex) => {
+          const branch = context.frame.branches[semanticIndex] ?? context.frame.branches.at(-1)!;
+          const path = lineagePathPose({
+            origin: relation.source!.bounds,
+            destination: token.localRect,
+            pathProgress: branch.pathProgress,
+            branchIndex: semanticIndex,
+            opacity: branch.opacity,
+            scale: branch.scale
+          });
+          return {
+            motionId: token.motionId,
+            side: "target" as const,
+            pose: path.pose,
+            lineagePathId: `${context.plan.id}.${relation.recordId}.${semanticIndex}`,
+            lineageEdgeId: relation.recordId,
+            lineageBranchIndex: semanticIndex,
+            motionPathVariant: path.variant
+          };
+        })
+      ];
+    }
+    if (context.artifactRecordIds.has(relation.recordId)) {
+      return targetTokens.map((token, semanticIndex) => frameToken(token, "target", {
+        opacity: context.frame.artifactProgress,
+        x: (semanticIndex % 2 === 0 ? -5 : 5) * (1 - context.frame.artifactProgress),
+        y: (semanticIndex % 2 === 0 ? -3 : 3) * (1 - context.frame.artifactProgress),
+        scale: 1
+      }));
+    }
+  }
+
+  if (context.plan.operationKind === "separate-common-factor") {
+    if (
+      context.structuralRecordIds.has(relation.recordId) &&
+      relation.source !== undefined &&
+      relation.target !== undefined
+    ) {
+      const baseBar = targetTokens[0];
+      const sourceBar = sourceTokens[0];
+      if (baseBar === undefined || sourceBar === undefined) return [];
+      const sourceCenter = rectCenter(sourceBar.localRect);
+      const baseCenter = rectCenter(baseBar.localRect);
+      return [
+        ...sourceTokens.map((token) => frameToken(token, "source", {
+          opacity: progress === 1 ? 0 : 1,
+          x: (baseCenter.x - sourceCenter.x) * context.frame.reflowProgress,
+          y: (baseCenter.y - sourceCenter.y) * context.frame.reflowProgress,
+          scale: 1,
+          scaleX: 1 + (
+            (baseBar.localRect.width / Math.max(1, sourceBar.localRect.width)) - 1
+          ) * context.frame.reflowProgress
+        })),
+        ...targetTokens.map((token, semanticIndex) => {
+          if (semanticIndex === 0) {
+            return frameToken(token, "target", {
+              opacity: progress === 1 ? 1 : 0,
+              x: 0,
+              y: 0,
+              scale: 1
+            });
+          }
+          const branch = context.frame.branches[semanticIndex] ?? context.frame.branches.at(-1)!;
+          const path = lineagePathPose({
+            origin: baseBar.localRect,
+            destination: token.localRect,
+            pathProgress: branch.pathProgress,
+            branchIndex: semanticIndex,
+            opacity: branch.opacity,
+            scale: 1
+          });
+          return {
+            motionId: token.motionId,
+            side: "target" as const,
+            pose: path.pose,
+            lineagePathId: `${context.plan.id}.fraction-bar.${semanticIndex}`,
+            lineageEdgeId: relation.recordId,
+            lineageBranchIndex: semanticIndex,
+            motionPathVariant: path.variant
+          };
+        })
+      ];
+    }
+    if (
+      context.artifactRecordIds.has(relation.recordId) &&
+      relation.target !== undefined
+    ) {
+      return [
+        ...sourceTokens.map((token, semanticIndex) => {
+          const path = lineagePathPose({
+            origin: relation.target!.bounds,
+            destination: token.localRect,
+            pathProgress: 1 - context.frame.structuralProgress,
+            branchIndex: semanticIndex,
+            opacity: semanticIndex === 0
+              ? 1 - context.frame.settlementProgress
+              : 1 - context.frame.artifactProgress,
+            scale: 1
+          });
+          return {
+            motionId: token.motionId,
+            side: "source" as const,
+            pose: path.pose,
+            lineagePathId: `${context.plan.id}.product-sign.${semanticIndex}`,
+            lineageEdgeId: relation.recordId,
+            lineageBranchIndex: semanticIndex,
+            motionPathVariant: path.variant
+          };
+        }),
+        ...targetTokens.map((token) => frameToken(token, "target", {
+          opacity: context.frame.artifactProgress,
+          x: 0,
+          y: 0,
+          scale: 1
+        }))
+      ];
+    }
+  }
+
+  if (
+    context.plan.operationKind === "simplify-unit-factor" &&
+    context.structuralRecordIds.has(relation.recordId)
+  ) {
+    const bundleBounds = unionBounds(sourceTokens.map((token) => token.localRect));
+    const bundleCenter = rectCenter(bundleBounds);
+    return sourceTokens.map((token, semanticIndex) => {
+      const center = rectCenter(token.localRect);
+      const jostle = semanticIndex % 2 === 0 ? -1 : 1;
+      return frameToken(token, "source", {
+        opacity: 1 - context.frame.artifactProgress,
+        x: (bundleCenter.x - center.x) * 0.18 * context.frame.artifactProgress +
+          jostle * context.frame.artifactProgress,
+        y: (bundleCenter.y - center.y) * 0.18 * context.frame.artifactProgress -
+          jostle * context.frame.artifactProgress,
+        scale: 1 - 0.08 * context.frame.artifactProgress
+      });
+    });
+  }
+
+  if (context.continuantRecordIds.has(relation.recordId)) {
+    return [
+      ...sourceTokens.map((token) => frameToken(token, "source", {
+        opacity: progress === 1 ? 0 : 1,
+        x: (relation.delta?.x ?? 0) * context.frame.reflowProgress,
+        y: (relation.delta?.y ?? 0) * context.frame.reflowProgress,
+        scale: 1
+      })),
+      ...targetTokens.map((token) => frameToken(token, "target", {
+        opacity: progress === 1 ? 1 : 0,
+        x: 0,
+        y: 0,
+        scale: 1
+      }))
+    ];
   }
   return undefined;
 }

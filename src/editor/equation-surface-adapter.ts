@@ -139,6 +139,10 @@ import type {
 import type {
   KpFactoringChoreographyFrame
 } from "../animation/factoring-choreography.ts";
+import type {
+  KpFractionChoreographyFrame,
+  KpFractionChoreographyKind
+} from "../animation/fraction-choreography.ts";
 
 const animationCatalog = createKpAnimationAssets();
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
@@ -1668,6 +1672,13 @@ function applySemanticTokenMotion(input: {
       ...(transformation.transformType === "factorCommonTerm"
         ? { factoringChoreographyKind: "canonical-fan-in" as const }
         : {}),
+      ...(fractionChoreographyKind(transformation.transformType) === undefined
+        ? {}
+        : {
+            fractionChoreographyKind: fractionChoreographyKind(
+              transformation.transformType
+            )!
+          }),
       ...(input.frame.radicalSuccession === undefined
         ? {}
         : { representationalSuccessionKind: "opposite-corner-seed" as const }),
@@ -1737,6 +1748,13 @@ function applySemanticTokenMotion(input: {
       transition: input.transitionElement,
       geometry,
       frame: tokenFrame.motion.factoringChoreography
+    });
+  }
+  if (tokenFrame.motion.fractionChoreography !== undefined) {
+    applyFractionRoleFocus({
+      transition: input.transitionElement,
+      geometry,
+      frame: tokenFrame.motion.fractionChoreography
     });
   }
   input.transitionElement.dataset["kpEditorEquationSemanticProgress"] =
@@ -1970,6 +1988,78 @@ function activeFactoringPhase(frame: KpFactoringChoreographyFrame): string {
     .filter(([, progress]) => progress > 0 && progress < 1)
     .map(([phaseId]) => phaseId);
   return active.at(-1) ?? (frame.progress >= 1 ? "complete" : "focus-factor-copies");
+}
+
+function fractionChoreographyKind(
+  transformType: string
+): KpFractionChoreographyKind | undefined {
+  switch (transformType) {
+    case "splitFractionFactors": return "split-factors";
+    case "mergeFractionCommonFactor": return "separate-common-factor";
+    case "simplifyUnitFractionFactor": return "simplify-unit-factor";
+    default: return undefined;
+  }
+}
+
+function applyFractionRoleFocus(input: {
+  readonly transition: HTMLElement;
+  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly frame: KpFractionChoreographyFrame;
+}): void {
+  input.transition.dataset["kpEditorEquationFractionChoreography"] =
+    input.frame.operationKind;
+  input.transition.dataset["kpEditorEquationFractionPhase"] =
+    activeFractionPhase(input.frame);
+  input.transition.dataset["kpEditorEquationFractionReflow"] =
+    String(input.frame.reflowProgress);
+  input.transition.dataset["kpEditorEquationFractionStructuralProgress"] =
+    String(input.frame.structuralProgress);
+  input.transition.dataset["kpEditorEquationFractionArtifactProgress"] =
+    String(input.frame.artifactProgress);
+  const focusRelations = input.geometry.relations.filter((relation) => {
+    switch (input.frame.operationKind) {
+      case "split-factors": return relation.lifecycle === "split";
+      case "separate-common-factor": return relation.recordId.startsWith("common-");
+      case "simplify-unit-factor": return relation.lifecycle === "cancel";
+    }
+  });
+  const focusMotionIds = new Set(
+    focusRelations.flatMap((relation) => relation.source?.motionIds ?? [])
+  );
+  input.geometry.sourceTokens.forEach((token) => {
+    if (!focusMotionIds.has(token.motionId)) return;
+    const element = token.element;
+    element.classList.add("kp-focus-group");
+    element.dataset["kpEditorFractionFocusRole"] = input.frame.operationKind;
+    element.style.setProperty("--kp-focus-z", `${5 * input.frame.focusStrength}px`);
+    element.style.setProperty(
+      "--kp-focus-scale",
+      String(1 + 0.035 * input.frame.focusStrength)
+    );
+    element.style.setProperty(
+      "--kp-focus-outline-strength",
+      String(input.frame.focusStrength)
+    );
+    element.style.setProperty(
+      "--kp-focus-shadow-y",
+      `${3 * input.frame.focusStrength}px`
+    );
+    element.style.setProperty(
+      "--kp-focus-shadow-blur",
+      `${10 * input.frame.focusStrength}px`
+    );
+    element.style.setProperty(
+      "--kp-focus-shadow-opacity",
+      String(0.18 * input.frame.focusStrength)
+    );
+  });
+}
+
+function activeFractionPhase(frame: KpFractionChoreographyFrame): string {
+  const active = Object.entries(frame.phases)
+    .filter(([, progress]) => progress > 0 && progress < 1)
+    .map(([phaseId]) => phaseId);
+  return active.at(-1) ?? (frame.progress >= 1 ? "complete" : "focus-roles");
 }
 
 function applyDerivativePowerTokenFocus(input: {

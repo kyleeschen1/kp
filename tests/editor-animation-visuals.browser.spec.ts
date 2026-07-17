@@ -1047,7 +1047,59 @@ test("fraction simplification renders factor, common-factor, and simplified stat
     "animation.generated.fraction-expression.two-fourths"
   );
 
+  let transition = player.locator("[data-kp-editor-equation-transition-id]");
+  await scrubber.fill("0.08");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-fraction-choreography",
+    "split-factors"
+  );
+  await expect(transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-editor-fraction-focus-role="split-factors"]'
+  )).toHaveCount(2);
+
+  await scrubber.fill("0.18");
+  const splitDescendants = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-equation-lineage-edge-id$="-splits"]'
+  );
+  await expect(splitDescendants).toHaveCount(4);
+  expect(new Set(await splitDescendants.evaluateAll((elements) =>
+    elements.map((element) => element.getAttribute("data-kp-equation-motion-path-variant"))
+  ))).toEqual(new Set(["arc-above", "arc-below"]));
+  const splitTransforms = await splitDescendants.evaluateAll((elements) =>
+    elements.map((element) => getComputedStyle(element).transform)
+  );
+  expect(new Set(splitTransforms).size).toBe(2);
+
   await scrubber.fill("0.5");
+  transition = player.locator("[data-kp-editor-equation-transition-id]");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-fraction-choreography",
+    "separate-common-factor"
+  );
+  const sourceBar = transition.locator(
+    "[data-kp-editor-equation-source] .frac-line[data-kp-motion-id]"
+  );
+  const targetBars = transition.locator(
+    "[data-kp-editor-equation-target] .frac-line[data-kp-motion-id]"
+  );
+  await expect(sourceBar).toHaveCount(1);
+  await expect(targetBars).toHaveCount(2);
+  expect(await sourceBar.evaluate((element) => (element as HTMLElement).style.transform))
+    .toContain("scaleX(");
+  await expect(targetBars.nth(0)).toHaveCSS("opacity", "0");
+  expect(Number(await targetBars.nth(1).evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeGreaterThan(0);
+  const mergingProductSigns = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-equation-lineage-edge-id="product-signs-merge"]'
+  );
+  await expect(mergingProductSigns).toHaveCount(2);
+  expect(await mergingProductSigns.nth(0).evaluate(
+    (element) => getComputedStyle(element).transform
+  )).not.toBe(await mergingProductSigns.nth(1).evaluate(
+    (element) => getComputedStyle(element).transform
+  ));
+
   await expect(player.locator("[data-kp-editor-equation-transition-id]"))
     .toHaveAttribute(
       "data-kp-editor-equation-transition-id",
@@ -1071,6 +1123,22 @@ test("fraction simplification renders factor, common-factor, and simplified stat
     .toHaveCount(7);
   await expect(player.locator("[data-kp-editor-equation-target] .frac-line[data-kp-motion-id]"))
     .toHaveCount(2);
+
+  await scrubber.fill("0.75");
+  transition = player.locator("[data-kp-editor-equation-transition-id]");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-fraction-choreography",
+    "simplify-unit-factor"
+  );
+  const cancelBundle = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-editor-fraction-focus-role="simplify-unit-factor"]'
+  );
+  await expect(cancelBundle).toHaveCount(4);
+  await scrubber.fill("0.86");
+  const cancelOpacities = await cancelBundle.evaluateAll((elements) =>
+    elements.map((element) => Number(getComputedStyle(element).opacity))
+  );
+  expect(cancelOpacities.some((opacity) => opacity > 0 && opacity < 1)).toBe(true);
 
   await scrubber.fill("1");
   await expect(player.locator("[data-kp-editor-equation-transition-id]"))
