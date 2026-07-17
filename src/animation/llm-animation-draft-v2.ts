@@ -20,7 +20,7 @@ import {
 
 export const kpLlmAnimationDraftV2SchemaVersion = "kp.llm-animation-draft.v2" as const;
 export const kpLlmAuthorCompilerBoundaryVersion =
-  "kp.author-compiler-boundary.v1" as const;
+  "kp.author-compiler-boundary.v2" as const;
 
 export type KpLlmAnimationExplanationDepth =
   | "compact"
@@ -74,6 +74,11 @@ export interface KpLlmAnimationDraftV2 {
   readonly authorCompilerBoundaryVersion: typeof kpLlmAuthorCompilerBoundaryVersion;
   readonly id: string;
   readonly title: string;
+  readonly authoringContext: {
+    readonly source: "student-prompt" | "uploaded-material";
+    readonly targetMathAuthority: "requires-validation" | "trusted-source-evidence";
+    readonly historicalReplayRequested: boolean;
+  };
   readonly operationPacks: readonly KpCanonicalOperationPackPin[];
   readonly states: readonly KpLlmAnimationDraftV2State[];
   readonly derivations: readonly KpLlmAnimationDraftV2Derivation[];
@@ -127,10 +132,11 @@ export function validateKpLlmAnimationDraftV2(value: unknown): readonly KpLlmAni
       path: "$.authorCompilerBoundaryVersion",
       code: "draft-v2.compatibility",
       message:
-        `Legacy V2 drafts must add ${kpLlmAuthorCompilerBoundaryVersion} and explicit lineageBindings, ownershipMode, and explanationDepth for every operation.`
+        `Legacy V2 drafts must add ${kpLlmAuthorCompilerBoundaryVersion}, authoringContext, and explicit lineageBindings, ownershipMode, and explanationDepth for every operation.`
     });
   }
   const draft = value as unknown as KpLlmAnimationDraftV2;
+  validateAuthoringContext(draft, issues);
   const pins = projectPins(draft.operationPacks, issues);
   const stateIds = uniqueIds(draft.states, "$.states", issues);
   const entityIds = new Set<string>();
@@ -163,6 +169,7 @@ export function validateKpLlmAnimationDraftV2(value: unknown): readonly KpLlmAni
       validateOperation(operation, `${path}.operations[${operationIndex}]`, pins, entityIds, issues)
     );
   });
+  validateTargetMathAuthority(draft, issues);
   salienceEntityRefs(draft.saliencePlan).forEach((id) => {
     if (!entityIds.has(id)) issues.push({ path: "$.saliencePlan", code: "draft-v2.reference", message: `Salience plan references missing entity ${id}.` });
   });
@@ -197,6 +204,11 @@ export function migrateKpLlmAnimationDraftV1(draft: KpLlmAnimationDraft): KpLlmA
     authorCompilerBoundaryVersion: kpLlmAuthorCompilerBoundaryVersion,
     id: draft.id,
     title: draft.title,
+    authoringContext: {
+      source: "uploaded-material",
+      targetMathAuthority: "requires-validation",
+      historicalReplayRequested: false
+    },
     operationPacks: [{ packId: "kp.core", version: "1.0.0" }],
     states,
     derivations: draft.transformations.map((transformation) => ({
@@ -341,6 +353,75 @@ function epistemic(id: string, kind: "state" | "transition", status: KpEpistemic
 
 function validateProvenance(value: KpSemanticEntityProvenance | undefined, path: string, issues: KpLlmAnimationDraftV2Issue[]): void {
   if (value === undefined || !["parsed", "inferred", "authored", "pedagogical"].includes(value.kind)) issues.push({ path, code: "draft-v2.required", message: `${path} requires explicit provenance.` });
+}
+
+function validateAuthoringContext(
+  draft: KpLlmAnimationDraftV2,
+  issues: KpLlmAnimationDraftV2Issue[]
+): void {
+  const context = draft.authoringContext;
+  if (context === undefined ||
+      !["student-prompt", "uploaded-material"].includes(context.source) ||
+      !["requires-validation", "trusted-source-evidence"].includes(
+        context.targetMathAuthority
+      ) ||
+      typeof context.historicalReplayRequested !== "boolean") {
+    issues.push({
+      path: "$.authoringContext",
+      code: "draft-v2.required",
+      message:
+        "Draft v2 requires an explicit source, target-math authority, and historical-replay choice."
+    });
+    return;
+  }
+  if (context.source === "student-prompt" &&
+      context.targetMathAuthority !== "requires-validation") {
+    issues.push({
+      path: "$.authoringContext.targetMathAuthority",
+      code: "draft-v2.unsafe",
+      message: "Student prompts cannot self-authorize target mathematics."
+    });
+  }
+  if (context.historicalReplayRequested && context.source !== "uploaded-material") {
+    issues.push({
+      path: "$.authoringContext.historicalReplayRequested",
+      code: "draft-v2.unsafe",
+      message: "Historical incorrect replay is available only for uploaded material."
+    });
+  }
+}
+
+function validateTargetMathAuthority(
+  draft: KpLlmAnimationDraftV2,
+  issues: KpLlmAnimationDraftV2Issue[]
+): void {
+  const context = draft.authoringContext;
+  if (context === undefined) return;
+  const targetIds = new Set(draft.derivations.flatMap((item) => item.targetStateIds));
+  const targets = draft.states.filter((state) => targetIds.has(state.id));
+  if (context.targetMathAuthority === "trusted-source-evidence") {
+    targets.forEach((state) => {
+      if (state.epistemic.status !== "valid" || state.epistemic.evidenceIds.length === 0) {
+        issues.push({
+          path: `$.states[${draft.states.indexOf(state)}].epistemic`,
+          code: "draft-v2.unsafe",
+          message: `Target state ${state.id} requires valid source evidence before trusted settlement.`
+        });
+      }
+    });
+  }
+  if (context.historicalReplayRequested) {
+    const hasIncorrectTarget = targets.some((state) =>
+      ["invalid", "misconception", "counterexample"].includes(state.epistemic.status)
+    );
+    if (!hasIncorrectTarget) {
+      issues.push({
+        path: "$.authoringContext.historicalReplayRequested",
+        code: "draft-v2.unsafe",
+        message: "Historical replay requires an explicitly incorrect target state."
+      });
+    }
+  }
 }
 
 function salienceEntityRefs(plan: KpAnimationSaliencePlan | undefined): readonly string[] {

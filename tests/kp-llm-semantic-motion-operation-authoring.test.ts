@@ -36,6 +36,19 @@ test("LLM authoring catalog binds promoted operations to existing semantic motif
     byId.get("kp.semantic-motion.matrix-matrix")?.ownershipMode,
     "fission-fusion"
   );
+  assert.deepEqual(byId.get("kp.semantic-motion.matrix-matrix")?.pacing, {
+    kind: "per-cell",
+    unitRoleId: "result-cells"
+  });
+  assert.equal(
+    byId.get("kp.semantic-motion.matrix-matrix")?.reverse.validity,
+    "authored-history-only"
+  );
+  assert.ok(
+    byId.get("kp.semantic-motion.matrix-matrix")?.cost.tokenRoleIds.includes(
+      "result-cells"
+    )
+  );
   assert.deepEqual(
     byId.get("kp.semantic-motion.matrix-matrix")?.explanationDepths,
     ["compact", "standard", "expanded"]
@@ -58,7 +71,9 @@ test("LLM compiler resolves matrix composition into the promoted transform and c
   assert.equal(result.status, "accepted");
   if (result.status !== "accepted") return;
 
-  assert.deepEqual(result.resolvedOperations, [{
+  const compiled = result.resolvedOperations[0]!;
+  const { governance, ...resolved } = compiled;
+  assert.deepEqual([resolved], [{
     kind: "llm-resolved-operation",
     derivationId: "derivation.generated.matrix-matrix",
     operationStepId: "operation.generated.matrix-matrix",
@@ -104,6 +119,76 @@ test("LLM compiler resolves matrix composition into the promoted transform and c
     ownershipMode: "fission-fusion",
     explanationDepth: "expanded"
   }]);
+  assert.equal(result.targetTrust, "provisional");
+  assert.equal(result.epistemicBranches[0]?.status, "provisional");
+  assert.deepEqual(governance.pacing, {
+    kind: "per-cell",
+    semanticUnitCount: 4
+  });
+  assert.equal(governance.cost.tokenCount, 12);
+  assert.equal(governance.reverse.validity, "authored-history-only");
+  assert.equal(governance.reverse.choreographyKind, "historical-reconstruction");
+});
+
+test("LLM target mathematics stays provisional unless external evidence authorizes it", () => {
+  const student = matrixMatrixDraft();
+  const selfAuthorized: KpLlmAnimationDraftV2 = {
+    ...student,
+    authoringContext: {
+      ...student.authoringContext,
+      targetMathAuthority: "trusted-source-evidence"
+    }
+  };
+  const rejectedStudent = compileKpLlmAnimationDraftV2(selfAuthorized);
+  assert.equal(rejectedStudent.status, "repair-required");
+  assert.ok(rejectedStudent.status === "repair-required" &&
+    rejectedStudent.diagnostics.some((item) =>
+      /cannot self-authorize target mathematics/.test(item.message)
+    ));
+
+  const uploaded = matrixMatrixDraft();
+  const unsupportedEvidence: KpLlmAnimationDraftV2 = {
+    ...uploaded,
+    authoringContext: {
+      source: "uploaded-material",
+      targetMathAuthority: "trusted-source-evidence",
+      historicalReplayRequested: false
+    }
+  };
+  const rejectedUpload = compileKpLlmAnimationDraftV2(unsupportedEvidence);
+  assert.equal(rejectedUpload.status, "repair-required");
+  assert.ok(rejectedUpload.status === "repair-required" &&
+    rejectedUpload.diagnostics.some((item) =>
+      /requires valid source evidence/.test(item.message)
+    ));
+});
+
+test("uploaded incorrect mathematics compiles only as explicit historical replay", () => {
+  const draft = matrixMatrixDraft();
+  const target = draft.states[1]!;
+  const historical: KpLlmAnimationDraftV2 = {
+    ...draft,
+    authoringContext: {
+      source: "uploaded-material",
+      targetMathAuthority: "requires-validation",
+      historicalReplayRequested: true
+    },
+    states: [draft.states[0]!, {
+      ...target,
+      epistemic: {
+        ...target.epistemic,
+        status: "invalid",
+        rationale: "The uploaded derivation records an incorrect product."
+      }
+    }]
+  };
+  const result = compileKpLlmAnimationDraftV2(historical);
+  assert.equal(result.status, "accepted");
+  assert.equal(result.status === "accepted" && result.targetTrust, "historical-replay");
+  assert.equal(
+    result.status === "accepted" && result.epistemicBranches[0]?.status,
+    "historical-invalid"
+  );
 });
 
 test("promoted operation role contracts reject missing semantic intermediates", () => {
@@ -196,6 +281,11 @@ function matrixMatrixDraft(): KpLlmAnimationDraftV2 {
     authorCompilerBoundaryVersion: kpLlmAuthorCompilerBoundaryVersion,
     id: "animation.generated.matrix-matrix",
     title: "Generated matrix multiplication",
+    authoringContext: {
+      source: "student-prompt",
+      targetMathAuthority: "requires-validation",
+      historicalReplayRequested: false
+    },
     operationPacks: [
       { packId: "kp.core", version: "1.0.0" },
       { packId: "kp.semantic-motion", version: "0.1.0" }

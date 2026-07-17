@@ -217,7 +217,7 @@
       "id": "next-action.kp.material-motion.llm-operation-compiler-v0",
       "title": "Integrate governed operations into LLM compilation",
       "summary": "Standard compiler gate: accepted and rejected draft tests, typecheck, representative editor smoke, and Theseus validate; build only if public loading boundaries change.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.promotion-matrix-v0",

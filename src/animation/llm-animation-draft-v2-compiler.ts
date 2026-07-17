@@ -15,6 +15,11 @@ import {
   resolveKpCanonicalOperation
 } from "../semantic/canonical-operation-registry.ts";
 import type { KpCanonicalOperationId } from "../semantic/canonical-operation.ts";
+import type { KpCanonicalOperationContract } from "../semantic/canonical-operation-contract.ts";
+import {
+  createKpEpistemicBranch,
+  type KpEpistemicBranch
+} from "../semantic/epistemic-branch.ts";
 
 export type KpLlmAnimationDraftV2Patch =
   | {
@@ -52,6 +57,27 @@ export interface KpLlmAnimationDraftV2ResolvedOperation {
   readonly lineageBindings: KpLlmAnimationDraftV2["derivations"][number]["operations"][number]["lineageBindings"];
   readonly ownershipMode: KpLlmAnimationDraftV2["derivations"][number]["operations"][number]["ownershipMode"];
   readonly explanationDepth: KpLlmAnimationDraftV2["derivations"][number]["operations"][number]["explanationDepth"];
+  readonly governance: {
+    readonly lawIds: readonly string[];
+    readonly witnessIds: readonly string[];
+    readonly motifRequirementIds: readonly string[];
+    readonly pacing: {
+      readonly kind: "single" | "per-descendant" | "per-index" | "per-cell";
+      readonly semanticUnitCount: number;
+    };
+    readonly reverse: {
+      readonly validity: "identity" | "mathematical-inverse" | "authored-history-only";
+      readonly choreographyKind: string;
+      readonly causalEmphasis: string;
+    };
+    readonly cost: {
+      readonly tokenCount: number;
+      readonly simultaneousGroupCount: number;
+      readonly fragmentCount: number;
+      readonly shadowPolicy: "none" | "optional" | "required";
+      readonly threeDPolicy: "none" | "optional";
+    };
+  };
 }
 
 export type KpLlmAnimationDraftV2CompileResult =
@@ -60,6 +86,8 @@ export type KpLlmAnimationDraftV2CompileResult =
       readonly draft: KpLlmAnimationDraftV2;
       readonly fingerprint: string;
       readonly resolvedOperations: readonly KpLlmAnimationDraftV2ResolvedOperation[];
+      readonly targetTrust: "validated" | "provisional" | "historical-replay";
+      readonly epistemicBranches: readonly KpEpistemicBranch[];
       readonly diagnostics: readonly [];
       readonly gaps: readonly [];
     }
@@ -74,11 +102,20 @@ export function compileKpLlmAnimationDraftV2(
 ): KpLlmAnimationDraftV2CompileResult {
   const issues = validateKpLlmAnimationDraftV2(draft);
   if (issues.length === 0) {
+    const targetTrust = draft.authoringContext.historicalReplayRequested
+      ? "historical-replay" as const
+      : draft.authoringContext.targetMathAuthority === "trusted-source-evidence"
+        ? "validated" as const
+        : "provisional" as const;
     return {
       status: "accepted",
       draft,
       fingerprint: stableStringify(draft),
       resolvedOperations: resolveDraftOperations(draft),
+      targetTrust,
+      epistemicBranches: targetTrust === "validated"
+        ? []
+        : compileEpistemicBranches(draft),
       diagnostics: [],
       gaps: []
     };
@@ -146,10 +183,68 @@ function resolveDraftOperations(
           targetEntityIds: [...lineage.targetEntityIds]
         })),
         ownershipMode: operation.ownershipMode,
-        explanationDepth: operation.explanationDepth
+        explanationDepth: operation.explanationDepth,
+        governance: governanceForOperation(
+          operation,
+          resolution.entry.contract
+        )
       };
     })
   );
+}
+
+function compileEpistemicBranches(
+  draft: KpLlmAnimationDraftV2
+): readonly KpEpistemicBranch[] {
+  return draft.derivations.map((derivation) => {
+    const trustedStateId = derivation.sourceStateIds[0]!;
+    const proposedStateId = derivation.targetStateIds[0]!;
+    const target = draft.states.find((state) => state.id === proposedStateId)!;
+    return createKpEpistemicBranch({
+      id: `branch.${derivation.id}`,
+      origin: draft.authoringContext.source,
+      trustedStateId,
+      proposedStateId,
+      transitionId: derivation.id,
+      annotation: target.epistemic,
+      ...(draft.authoringContext.historicalReplayRequested
+        ? { historicalReplayRequested: true }
+        : {})
+    });
+  });
+}
+
+function governanceForOperation(
+  operation: KpLlmAnimationDraftV2["derivations"][number]["operations"][number],
+  contract: KpCanonicalOperationContract
+): KpLlmAnimationDraftV2ResolvedOperation["governance"] {
+  const roleCount = (roleIds: readonly string[]): number => roleIds.reduce(
+    (count, roleId) => count + (operation.roleBindings[roleId]?.length ?? 0),
+    0
+  );
+  return {
+    lawIds: [...contract.lawIds],
+    witnessIds: [...contract.witnessIds],
+    motifRequirementIds: [...contract.motifRequirementIds],
+    pacing: {
+      kind: contract.pacing.kind,
+      semanticUnitCount: contract.pacing.unitRoleId === undefined
+        ? 1
+        : operation.roleBindings[contract.pacing.unitRoleId]?.length ?? 0
+    },
+    reverse: {
+      validity: contract.reverse.validity,
+      choreographyKind: contract.reverse.choreography.kind,
+      causalEmphasis: contract.reverse.choreography.causalEmphasis
+    },
+    cost: {
+      tokenCount: roleCount(contract.cost.tokenRoleIds),
+      simultaneousGroupCount: roleCount(contract.cost.simultaneousGroupRoleIds),
+      fragmentCount: roleCount(contract.cost.fragmentRoleIds),
+      shadowPolicy: contract.cost.shadowPolicy,
+      threeDPolicy: contract.cost.threeDPolicy
+    }
+  };
 }
 
 export function applyKpLlmAnimationDraftV2Patch(input: {

@@ -26,6 +26,22 @@ export interface KpLlmPromotedOperationAuthoringDefinition {
   readonly roles: readonly KpCanonicalOperationRole[];
   readonly allowedLineageRelations: readonly SelectorCorrespondenceRelationId[];
   readonly ownershipMode: KpCanonicalOperationOwnershipMode;
+  readonly pacing: {
+    readonly kind: "single" | "per-descendant" | "per-index" | "per-cell";
+    readonly unitRoleId?: string | undefined;
+  };
+  readonly reverse: {
+    readonly validity: "identity" | "mathematical-inverse" | "authored-history-only";
+    readonly choreographyKind: string;
+    readonly causalEmphasis: string;
+  };
+  readonly cost: {
+    readonly tokenRoleIds: readonly string[];
+    readonly simultaneousGroupRoleIds: readonly string[];
+    readonly fragmentRoleIds: readonly string[];
+    readonly shadowPolicy: "none" | "optional" | "required";
+    readonly threeDPolicy: "none" | "optional";
+  };
   readonly explanationDepths: readonly KpLlmAnimationExplanationDepth[];
   readonly visualMotif: EquationVisualMotifKind;
   readonly semanticPhaseIds: readonly EquationVisualMotifPhaseId[];
@@ -67,6 +83,20 @@ export function createKpLlmSemanticMotionOperationCatalog():
         roles: entry.contract.roles.map((role) => ({ ...role })),
         allowedLineageRelations: [...entry.contract.lineageRelationIds],
         ownershipMode: entry.contract.ownershipMode,
+        pacing: { ...entry.contract.pacing },
+        reverse: {
+          validity: entry.contract.reverse.validity,
+          choreographyKind: entry.contract.reverse.choreography.kind,
+          causalEmphasis: entry.contract.reverse.choreography.causalEmphasis
+        },
+        cost: {
+          ...entry.contract.cost,
+          tokenRoleIds: [...entry.contract.cost.tokenRoleIds],
+          simultaneousGroupRoleIds: [
+            ...entry.contract.cost.simultaneousGroupRoleIds
+          ],
+          fragmentRoleIds: [...entry.contract.cost.fragmentRoleIds]
+        },
         explanationDepths: ["compact", "standard", "expanded"],
         visualMotif: rule.descriptor.kind,
         semanticPhaseIds: [...rule.descriptor.phaseIds]

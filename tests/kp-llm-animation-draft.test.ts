@@ -151,6 +151,11 @@ test("draft v2 requires pinned registered operations, roles, provenance, salienc
     kpLlmAuthorCompilerBoundaryVersion
   );
   assert.deepEqual(migrated.draft.operationPacks, [{ packId: "kp.core", version: "1.0.0" }]);
+  assert.deepEqual(migrated.draft.authoringContext, {
+    source: "uploaded-material",
+    targetMathAuthority: "requires-validation",
+    historicalReplayRequested: false
+  });
   assert.ok(migrated.draft.derivations[0]?.operations.every((operation) => operation.operationId.startsWith("kp.core.")));
   assert.equal(migrated.draft.states[0]?.entities[0]?.provenance.kind, "authored");
   assert.equal(migrated.draft.states[0]?.epistemic.status, "valid");

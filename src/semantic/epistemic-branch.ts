@@ -61,10 +61,8 @@ export function createKpEpistemicBranch(input: {
       input.annotation.subject.id !== input.proposedStateId) {
     throw new Error("Epistemic branch annotation must describe the proposed state.");
   }
-  if (input.origin === "uploaded-material") {
-    if (input.historicalReplayRequested !== true) {
-      throw new Error("Uploaded incorrect material requires explicit historical replay.");
-    }
+  if (input.origin === "uploaded-material" &&
+      input.historicalReplayRequested === true) {
     if (!incorrect(input.annotation)) {
       throw new Error("Historical replay requires an explicitly incorrect epistemic status.");
     }
@@ -85,6 +83,9 @@ export function createKpEpistemicBranch(input: {
         explanation: input.annotation.rationale
       }
     };
+  }
+  if (input.origin === "uploaded-material" && incorrect(input.annotation)) {
+    throw new Error("Uploaded incorrect material requires explicit historical replay.");
   }
   return {
     kind: "epistemic-branch",
