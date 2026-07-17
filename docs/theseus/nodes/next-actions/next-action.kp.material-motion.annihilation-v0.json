@@ -1,0 +1,115 @@
+{
+  "id": "next-action.kp.material-motion.annihilation-v0",
+  "kind": "next-action",
+  "title": "Implement organic witnessed annihilation",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Implemented compiler-authorized witnessed annihilation with symmetric semantic-rank contact, nonzero compression, semantic witness birth and readable dwell, absorption-ordered survivor compaction, exact native settlement, a renderer-neutral sampler and law evaluator, and a DOM adapter that validates rather than invents the witness.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.annihilation-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-risk-weighted-validation-cadence.md",
+      "summary": "Accepted risk-weighted verification policy governing this run."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/witnessed-annihilation.ts",
+      "summary": "Renderer-neutral witnessed annihilation plan, organic sampler, timing phases, semantic witness ownership, and conformance laws."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/witnessed-annihilation-dom.ts",
+      "summary": "DOM binding validation and frame application with inspectable semantic timing and exact native settlement."
+    },
+    {
+      "kind": "file",
+      "path": "tests/witnessed-annihilation.test.ts",
+      "summary": "Focused sampler, ownership, ordering, settlement, and invalid-plan coverage."
+    },
+    {
+      "kind": "file",
+      "path": "tests/witnessed-annihilation.browser.spec.ts",
+      "summary": "Browser conformance fixture covering contact, witness dwell, absorption-before-compaction, and native settlement."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "node --test <directly affected test files>",
+    "npm run typecheck when typed source or public contracts change",
+    "npx playwright test <smallest affected browser cohort> when visible behavior changes",
+    "npm run theseus -- workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether Implement organic witnessed annihilation can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/witnessed-annihilation.test.ts tests/cancellation-witness.test.ts",
+      "status": "passed",
+      "scope": "11 focused annihilation and witness tests passed.",
+      "checkedAt": "2026-07-17T21:10:53.316Z"
+    },
+    {
+      "command": "npx playwright test tests/witnessed-annihilation.browser.spec.ts",
+      "status": "passed",
+      "scope": "One focused Chromium semantic-timing and DOM-settlement scenario passed.",
+      "checkedAt": "2026-07-17T21:10:53.389Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, and test TypeScript projects passed.",
+      "checkedAt": "2026-07-17T21:10:53.471Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production build passed; entry bundle remained 248.74 KB gzip because the new adapter is not yet on the live import path.",
+      "checkedAt": "2026-07-17T21:10:53.550Z"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "checkedAt": "2026-07-17T21:10:53.622Z",
+      "scope": "603 nodes and 7777 events valid before completion."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Implemented compiler-authorized witnessed annihilation with symmetric semantic-rank contact, nonzero compression, semantic witness birth and readable dwell, absorption-ordered survivor compaction, exact native settlement, a renderer-neutral sampler and law evaluator, and a DOM adapter that validates rather than invents the witness."
+  }
+}

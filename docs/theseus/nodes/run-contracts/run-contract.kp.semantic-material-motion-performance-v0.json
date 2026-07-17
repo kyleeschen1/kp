@@ -157,7 +157,7 @@
       "id": "next-action.kp.material-motion.annihilation-v0",
       "title": "Implement organic witnessed annihilation",
       "summary": "Visible-motion gate: focused sampler and renderer tests, browser scenario, and checkpoint-frame review; add build only for renderer or import-boundary changes.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.annihilation-adapters-v0",
