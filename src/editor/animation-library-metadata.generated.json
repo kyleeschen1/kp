@@ -1,0 +1,1140 @@
+[
+  {
+    "id": "editor-animation.animation.linear-solve.solve-x",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.linear-solve.solve-x",
+    "title": "Solve x + 3 = 7",
+    "summary": "Solve x + 3 = 7",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "linear-solve"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.solve-x.both-sides",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.linear-solve.solve-x",
+    "title": "Solve x + 3 = 7",
+    "summary": "Existing x + 3 = 7 animation exercises subtract-both-sides.",
+    "domain": "algebra",
+    "familyId": "family.algebra.both-sides",
+    "sampleId": "sample.animation.solve-x.both-sides",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "linear-solve",
+      "family-backed",
+      "algebra"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.solve-x.cancel-additive-inverses",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.linear-solve.solve-x",
+    "title": "Solve x + 3 = 7",
+    "summary": "Existing x + 3 - 3 cancellation exercises additive inverse vanish.",
+    "domain": "algebra",
+    "familyId": "family.algebra.cancel-combine",
+    "sampleId": "sample.animation.solve-x.cancel-additive-inverses",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "linear-solve",
+      "family-backed",
+      "algebra"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.fraction-expression.two-fourths",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.fraction-expression.two-fourths",
+    "title": "Generated simplify two fourths",
+    "summary": "Generated simplify two fourths",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "fraction",
+      "generated"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.fraction-simplification.basic",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.fraction-expression.two-fourths",
+    "title": "Generated simplify two fourths",
+    "summary": "Basic rational-expression sample exercises split, merge, simplify, common-denominator, and reciprocal forms.",
+    "domain": "algebra",
+    "familyId": "family.algebra.fraction-simplification",
+    "sampleId": "sample.animation.fraction-simplification.basic",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "fraction",
+      "generated",
+      "family-backed",
+      "algebra"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.exponent.square-as-product",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.exponent.square-as-product",
+    "title": "Generated expand square as product",
+    "summary": "Generated expand square as product",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "exponent",
+      "generated"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.exponent-combine.square-as-product",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.exponent.square-as-product",
+    "title": "Generated expand square as product",
+    "summary": "The square-as-product animation rewinds repeated factors into an exponent-combine view with a persistent base.",
+    "domain": "algebra",
+    "familyId": "family.algebra.exponent-log-laws",
+    "sampleId": "sample.animation.exponent-combine.square-as-product",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "exponent",
+      "generated",
+      "family-backed",
+      "algebra"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.radical.square-root-as-power",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.radical.square-root-as-power",
+    "title": "Generated rewrite square root as power",
+    "summary": "Generated rewrite square root as power",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "radical",
+      "generated"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.radical-rewrite.square-root-as-power",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.radical.square-root-as-power",
+    "title": "Generated rewrite square root as power",
+    "summary": "The square-root-as-power animation folds rational exponent geometry into a radical while preserving the base.",
+    "domain": "algebra",
+    "familyId": "family.algebra.exponent-log-laws",
+    "sampleId": "sample.animation.radical-rewrite.square-root-as-power",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "radical",
+      "generated",
+      "family-backed",
+      "algebra"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.function-wrap.apply-f",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.function-wrap.apply-f",
+    "title": "Generated wrap x with f",
+    "summary": "Generated wrap x with f",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "function-wrap",
+      "generated"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.function-wrap.apply-f",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.function-wrap.apply-f",
+    "title": "Generated wrap x with f",
+    "summary": "The apply-f animation exercises the family function-wrap motif while preserving argument identity and wrapper ownership.",
+    "domain": "algebra",
+    "familyId": "family.algebra.exponent-log-laws",
+    "sampleId": "sample.animation.function-wrap.apply-f",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "function-wrap",
+      "generated",
+      "family-backed",
+      "algebra"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.distribution.expand-a-sum",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.distribution.expand-a-sum",
+    "title": "Generated distribute a over sum",
+    "summary": "Generated distribute a over sum",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "distribution",
+      "generated"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.distribution.expand-a-sum",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.distribution.expand-a-sum",
+    "title": "Generated distribute a over sum",
+    "summary": "The expand-a-sum animation copies a shared factor into both products with a reversible sweep.",
+    "domain": "algebra",
+    "familyId": "family.algebra.distribution-factoring",
+    "sampleId": "sample.animation.distribution.expand-a-sum",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "distribution",
+      "generated",
+      "family-backed",
+      "algebra"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.distribution.factor-common-a",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.distribution.factor-common-a",
+    "title": "Generated factor common a",
+    "summary": "Generated factor common a",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "distribution",
+      "generated"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.factoring.factor-common-a",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.distribution.factor-common-a",
+    "title": "Generated factor common a",
+    "summary": "The factor-common-a animation reconciles matching factor copies before wrapping the remaining sum.",
+    "domain": "algebra",
+    "familyId": "family.algebra.distribution-factoring",
+    "sampleId": "sample.animation.factoring.factor-common-a",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "distribution",
+      "generated",
+      "family-backed",
+      "algebra"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.inequality.sign-flip.basic",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.inequality.sign-flip.basic",
+    "title": "Inequality sign flip",
+    "summary": "Multiply an inequality by a negative quantity while the relation flips to preserve its solution set.",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "inequality",
+      "sign-flip",
+      "algebra"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.inequality.sign-flip.basic",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.inequality.sign-flip.basic",
+    "title": "Inequality sign flip",
+    "summary": "Basic inequality sign-flip sample exercises relation.flip semantics for negative scaling.",
+    "domain": "algebra",
+    "familyId": "family.algebra.inequality",
+    "sampleId": "sample.animation.inequality.sign-flip.basic",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "inequality",
+      "sign-flip",
+      "algebra",
+      "family-backed"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.add-zero",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.add-zero",
+    "title": "Generated: remove additive zero",
+    "summary": "Generated: remove additive zero",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 1400,
+    "beatCount": 28,
+    "tags": [
+      "animation",
+      "equation",
+      "generated",
+      "llm-authored"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.substitute-three",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.substitute-three",
+    "title": "Generated: substitute 3 for x",
+    "summary": "Generated: substitute 3 for x",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 1800,
+    "beatCount": 36,
+    "tags": [
+      "animation",
+      "equation",
+      "generated",
+      "llm-authored"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.pipeline-diagram",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.pipeline-diagram",
+    "title": "Generated: reveal a transformation pipeline",
+    "summary": "Generated: reveal a transformation pipeline",
+    "renderTargetKinds": [
+      "diagram"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 1800,
+    "beatCount": 36,
+    "tags": [
+      "animation",
+      "diagram",
+      "generated",
+      "llm-authored"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.calculus.derivative.power-rule-x-cubed",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.calculus.derivative.power-rule-x-cubed",
+    "title": "Generated derivative power rule for x cubed",
+    "summary": "Generated derivative power rule for x cubed",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "generated-problem",
+      "generated.calculus.derivative"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.derivative-rules.basic",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.calculus.derivative.power-rule-x-cubed",
+    "title": "Generated derivative power rule for x cubed",
+    "summary": "Generated x-cubed derivative sample exercises the power-rule exponent drop into coefficient position.",
+    "domain": "calculus",
+    "familyId": "family.calculus.derivative-rules",
+    "sampleId": "sample.animation.derivative-rules.basic",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "generated-problem",
+      "generated.calculus.derivative",
+      "family-backed",
+      "calculus"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.calculus.derivative.sum-rule-polynomial",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.calculus.derivative.sum-rule-polynomial",
+    "title": "Generated derivative sum rule for a polynomial",
+    "summary": "Generated derivative sum rule for a polynomial",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "generated-problem",
+      "generated.calculus.derivative"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.calculus.integral.power-rule-quadratic",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.calculus.integral.power-rule-quadratic",
+    "title": "Generated integral power rule for a quadratic",
+    "summary": "Generated integral power rule for a quadratic",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "generated-problem",
+      "generated.calculus.integral"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.linear-algebra.matrix-vector.two-by-two",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
+    "title": "Generated matrix-vector product",
+    "summary": "Generated matrix-vector product",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "generated-problem",
+      "generated.linear-algebra.matrix-vector"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.matrix-vector.basic",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.linear-algebra.matrix-vector.two-by-two",
+    "title": "Generated matrix-vector product",
+    "summary": "Generated matrix-vector sample multiplies a two-by-two matrix by a vector and preserves each result component.",
+    "domain": "linear-algebra",
+    "familyId": "family.linear-algebra.matrix-vector",
+    "sampleId": "sample.animation.matrix-vector.basic",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "generated-problem",
+      "generated.linear-algebra.matrix-vector",
+      "family-backed",
+      "linear-algebra"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.linear-algebra.dot-product.three-vector",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.linear-algebra.dot-product.three-vector",
+    "title": "Generated dot product",
+    "summary": "Generated dot product",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "generated-problem",
+      "generated.linear-algebra.dot-product"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.generated.linear-algebra.matrix-matrix.two-by-two",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+    "title": "Generated matrix-matrix product",
+    "summary": "Generated matrix-matrix product",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "generated-problem",
+      "generated.linear-algebra.matrix-matrix"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.matrix-matrix.basic",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+    "title": "Generated matrix-matrix product",
+    "summary": "Generated matrix-matrix sample multiplies two two-by-two matrices and preserves the product matrix.",
+    "domain": "linear-algebra",
+    "familyId": "family.linear-algebra.matrix-matrix-composition",
+    "sampleId": "sample.animation.matrix-matrix.basic",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "generated-problem",
+      "generated.linear-algebra.matrix-matrix",
+      "family-backed",
+      "linear-algebra"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.graph.surface-mode.mesh-to-donut",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.graph.surface-mode.mesh-to-donut",
+    "title": "Saddle surface mesh to donut",
+    "summary": "Saddle surface mesh to donut",
+    "renderTargetKinds": [
+      "graph"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 1800,
+    "beatCount": 24,
+    "tags": [
+      "animation",
+      "graph",
+      "webgl",
+      "surface-mode"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.graph.vector.linear-map-scale",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.graph.vector.linear-map-scale",
+    "title": "Apply a scale matrix to a vector",
+    "summary": "Apply a scale matrix to a vector",
+    "renderTargetKinds": [
+      "graph"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 1600,
+    "beatCount": 20,
+    "tags": [
+      "animation",
+      "graph",
+      "vector",
+      "linear-algebra"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.vector-add-scale.basic",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.graph.vector.linear-map-scale",
+    "title": "Apply a scale matrix to a vector",
+    "summary": "The scale-matrix graph sample stretches a vector while preserving component provenance.",
+    "domain": "linear-algebra",
+    "familyId": "family.linear-algebra.vector-add-scale",
+    "sampleId": "sample.animation.vector-add-scale.basic",
+    "renderTargetKinds": [
+      "graph"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 1600,
+    "beatCount": 20,
+    "tags": [
+      "animation",
+      "graph",
+      "vector",
+      "linear-algebra",
+      "family-backed"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.derivative-rules.tangent-graph",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.derivative-rules.tangent-graph",
+    "title": "Power rule with synchronized tangent",
+    "summary": "Synchronizes the power-rule derivative with a moving point and tangent line on x cubed.",
+    "renderTargetKinds": [
+      "graph"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "graph",
+      "calculus",
+      "derivative",
+      "tangent"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.derivative-rules.tangent-graph",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.derivative-rules.tangent-graph",
+    "title": "Power rule with synchronized tangent",
+    "summary": "The x-cubed graph sample synchronizes power-rule evaluation with tangent line and local-slope motion.",
+    "domain": "calculus",
+    "familyId": "family.calculus.derivative-rules",
+    "sampleId": "sample.animation.derivative-rules.tangent-graph",
+    "renderTargetKinds": [
+      "graph"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "graph",
+      "calculus",
+      "derivative",
+      "tangent",
+      "family-backed"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.integral-ftc.area-sweep",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.integral-ftc.area-sweep",
+    "title": "Integral area sweep",
+    "summary": "Sweeps a provenance-preserving upper bound while accumulating the exact area under t squared.",
+    "renderTargetKinds": [
+      "graph"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "graph",
+      "calculus",
+      "integral",
+      "area-sweep"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.integral-ftc.area-sweep",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.integral-ftc.area-sweep",
+    "title": "Integral area sweep",
+    "summary": "The t-squared area sweep preserves upper-bound provenance while sampling exact accumulation.",
+    "domain": "calculus",
+    "familyId": "family.calculus.integral-ftc",
+    "sampleId": "sample.animation.integral-ftc.area-sweep",
+    "renderTargetKinds": [
+      "graph"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "graph",
+      "calculus",
+      "integral",
+      "area-sweep",
+      "family-backed"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.dot-projection.basic",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.dot-projection.basic",
+    "title": "Dot product and vector projection",
+    "summary": "Computes a dot product while dropping one vector onto its exact projection.",
+    "renderTargetKinds": [
+      "graph"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2200,
+    "beatCount": 44,
+    "tags": [
+      "animation",
+      "graph",
+      "linear-algebra",
+      "dot-product",
+      "projection"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.dot-projection.basic",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.dot-projection.basic",
+    "title": "Dot product and vector projection",
+    "summary": "The dot/projection graph computes the scalar result while animating the exact perpendicular drop.",
+    "domain": "linear-algebra",
+    "familyId": "family.linear-algebra.dot-projection",
+    "sampleId": "sample.animation.dot-projection.basic",
+    "renderTargetKinds": [
+      "graph"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2200,
+    "beatCount": 44,
+    "tags": [
+      "animation",
+      "graph",
+      "linear-algebra",
+      "dot-product",
+      "projection",
+      "family-backed"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.programming.add.execution-trace",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.programming.add.execution-trace",
+    "title": "Addition execution trace",
+    "summary": "Addition execution trace",
+    "renderTargetKinds": [
+      "programming"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 1200,
+    "beatCount": 40,
+    "tags": [
+      "animation",
+      "programming",
+      "source-file",
+      "execution-trace"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.comparison.linear-solve-programming",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.comparison.linear-solve-programming",
+    "title": "Linear solve and programming trace comparison",
+    "summary": "Linear solve and programming trace comparison",
+    "renderTargetKinds": [
+      "equation",
+      "programming"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 2400,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "comparison",
+      "layout",
+      "programming",
+      "equation"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.comparison.jacobian-hessian",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.comparison.jacobian-hessian",
+    "title": "Jacobian and Hessian comparison",
+    "summary": "Jacobian and Hessian comparison",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 1800,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "comparison",
+      "layout",
+      "equation",
+      "calculus",
+      "linear-algebra"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.sample.fundamental-theorem-calculus",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.sample.fundamental-theorem-calculus",
+    "title": "Fundamental Theorem of Calculus forms",
+    "summary": "Fundamental Theorem of Calculus forms",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 1800,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "calculus",
+      "fundamental-theorem",
+      "sample"
+    ]
+  },
+  {
+    "id": "editor-animation.sample.animation.integral-ftc.basic",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.sample.fundamental-theorem-calculus",
+    "title": "Fundamental Theorem of Calculus forms",
+    "summary": "The FTC comparison sample links accumulation-derivative and net-change equation forms on one clock.",
+    "domain": "calculus",
+    "familyId": "family.calculus.integral-ftc",
+    "sampleId": "sample.animation.integral-ftc.basic",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 1800,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "calculus",
+      "fundamental-theorem",
+      "sample",
+      "family-backed"
+    ]
+  },
+  {
+    "id": "editor-animation.animation.sample.fourier-transform-pair",
+    "kind": "editor-animation-descriptor",
+    "animationId": "animation.sample.fourier-transform-pair",
+    "title": "Fourier transform pair",
+    "summary": "Fourier transform pair",
+    "renderTargetKinds": [
+      "equation"
+    ],
+    "controlKinds": [
+      "playback",
+      "step",
+      "scrubber",
+      "rewind"
+    ],
+    "durationMs": 1800,
+    "beatCount": 50,
+    "tags": [
+      "animation",
+      "equation",
+      "analysis",
+      "fourier",
+      "sample"
+    ]
+  }
+]

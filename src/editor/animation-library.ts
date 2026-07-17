@@ -1,20 +1,13 @@
-import { createKpAnimationAssets } from "../animation/catalog.ts";
 import {
-  createSymbolicManipulationFamilyRegistry
-} from "../animation/symbolic-manipulation-family-registry.ts";
-import {
-  projectKpAnimationAssetsToEditorDescriptors
-} from "./animation-catalog-projection.ts";
+  createKpEditorAnimationMetadataLibrary
+} from "./animation-library-metadata.ts";
 import type {
   KpEditorAnimationDescriptor
 } from "./animation-descriptor.ts";
 
 export function createKpEditorAnimationLibrary():
   readonly KpEditorAnimationDescriptor[] {
-  return projectKpAnimationAssetsToEditorDescriptors({
-    assets: createKpAnimationAssets(),
-    families: createSymbolicManipulationFamilyRegistry()
-  });
+  return createKpEditorAnimationMetadataLibrary();
 }
 
 export function selectKpEditorAnimationDescriptor(
