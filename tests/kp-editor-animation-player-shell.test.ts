@@ -50,6 +50,11 @@ test("editor animation player shell renders an accessible surface and declared c
   assert.match(html, /aria-keyshortcuts="Space ArrowLeft ArrowRight Home End R"/);
   assert.match(html, /data-kp-editor-animation-accessibility-control/);
   assert.match(html, /value="reduced-motion"/);
+  assert.match(html, /data-kp-editor-animation-quality-control/);
+  assert.match(html, /data-kp-editor-animation-quality-status/);
+  assert.match(html, /value="auto"/);
+  assert.match(html, /value="balanced"/);
+  assert.match(html, /value="efficient"/);
   assert.match(html, /data-kp-editor-animation-gestalt-style-control/);
   assert.match(html, /value="kp\.organic-subtle@1\.0\.0"/);
   assert.match(html, /value="kp\.restrained-editorial@1\.0\.0"/);

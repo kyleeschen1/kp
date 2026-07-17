@@ -525,7 +525,10 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
       channels: gestaltChannels,
       tokens: gestaltTokens,
       accessibilityMode:
-        player?.dataset["kpEditorAnimationAccessibilityMode"] ?? "full-motion"
+        player?.dataset["kpEditorAnimationAccessibilityMode"] ?? "full-motion",
+      qualityMicroMotionScale: boundedUnit(
+        player?.dataset["kpEditorAnimationQualityMicroMotionScale"]
+      )
     });
     applyEquationMaterialLayer({
       stage,
@@ -957,11 +960,13 @@ function applyGestaltTokenRealization(input: {
   readonly progress: number;
   readonly channels: KpGestaltStyleChannels;
   readonly accessibilityMode: string;
+  readonly qualityMicroMotionScale: number;
   readonly tokens: readonly HTMLElement[];
 }): void {
   const fullMotion = input.accessibilityMode === "full-motion";
   const amplitude = fullMotion
-    ? (input.channels.microMotion?.amplitude ?? 0) * 9
+    ? (input.channels.microMotion?.amplitude ?? 0) *
+      9 * input.qualityMicroMotionScale
     : 0;
   const deformation = fullMotion
     ? (input.channels.deformation?.tokenCeiling ?? 0) * 0.35
@@ -1019,6 +1024,11 @@ function applyGestaltTokenRealization(input: {
       token.dataset["kpEditorKatexTypography"] =
         rigidKatexTypography ? "rigid" : "not-katex";
   });
+}
+
+function boundedUnit(value: string | undefined): number {
+  const numeric = Number(value ?? 1);
+  return Number.isFinite(numeric) ? Math.min(1, Math.max(0, numeric)) : 1;
 }
 
 export function registerKpEditorEquationSurfaceAdapter(): () => void {

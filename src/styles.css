@@ -1049,7 +1049,10 @@ h2 {
     0
     var(--kp-focus-shadow-y)
     var(--kp-focus-shadow-blur)
-    rgb(30 41 59 / var(--kp-focus-shadow-opacity));
+    rgb(30 41 59 / calc(
+      var(--kp-focus-shadow-opacity) *
+      var(--kp-render-quality-shadow-scale, 1)
+    ));
   will-change: transform, box-shadow, outline-color;
 }
 
@@ -1067,7 +1070,10 @@ h2 {
     0
     var(--kp-focus-shadow-y, 0px)
     var(--kp-focus-shadow-blur, 0px)
-    rgb(30 41 59 / var(--kp-focus-shadow-opacity, 0));
+    rgb(30 41 59 / calc(
+      var(--kp-focus-shadow-opacity, 0) *
+      var(--kp-render-quality-shadow-scale, 1)
+    ));
 }
 
 .editor-equation-stage__dot-product-overlay {
@@ -1951,6 +1957,7 @@ h2 {
 }
 
 .editor-animation-player__accessibility,
+.editor-animation-player__quality,
 .editor-animation-player__gestalt-style,
 .editor-animation-player__focus-experiment {
   display: flex;
@@ -1962,6 +1969,7 @@ h2 {
 }
 
 .editor-animation-player__accessibility select,
+.editor-animation-player__quality select,
 .editor-animation-player__gestalt-style select,
 .editor-animation-player__focus-experiment select {
   min-width: 10rem;
@@ -1971,6 +1979,12 @@ h2 {
   color: #27364a;
   background: #ffffff;
   font: inherit;
+}
+
+.editor-animation-player__quality output {
+  color: #64748b;
+  font-size: 0.64rem;
+  white-space: nowrap;
 }
 
 .editor-animation-gestalt-diagnostics,
@@ -2268,6 +2282,7 @@ h2 {
   inset: 0;
   pointer-events: none;
   z-index: 2;
+  opacity: var(--kp-render-quality-particle-density-scale, 1);
 }
 
 .equation-motion__artifact-canvas {

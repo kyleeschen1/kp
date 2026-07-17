@@ -37,15 +37,28 @@ import {
   decideKpEditorAnimationDiagnosticsCadence,
   type KpEditorAnimationDiagnosticsCadenceState
 } from "./animation-diagnostics-cadence.ts";
+import {
+  createKpRenderQualityState,
+  freezeKpRenderQualityState,
+  kpRenderQualityPreferencePending,
+  normalizeKpRenderQualityPreference,
+  releaseKpRenderQualityState,
+  selectKpRenderQualityPreference,
+  type KpRenderQualityCapabilities,
+  type KpRenderQualityState
+} from "../animation/render-quality.ts";
 
 export const KP_EDITOR_ANIMATION_FRAME_EVENT = "kp-editor-animation-frame";
 export const KP_EDITOR_ANIMATION_REGENERATION_EVENT =
   "kp-editor-animation-regeneration-request";
+export const KP_EDITOR_RENDER_QUALITY_STORAGE_KEY =
+  "kp.editor.animation.render-quality.v1";
 
 const sessions = new WeakMap<HTMLElement, KpEditorAnimationPlaybackSession>();
 const authoringStates = new WeakMap<HTMLElement, KpEditorAnimationAuthoringState>();
 const gestaltStyles = new WeakMap<HTMLElement, KpGestaltStyleRef>();
 const focusExperimentModes = new WeakMap<HTMLElement, KpFocusExperimentMode>();
+const renderQualityStates = new WeakMap<HTMLElement, KpRenderQualityState>();
 const frameRequests = new WeakMap<HTMLElement, number>();
 const inspectionCadenceStates = new WeakMap<
   HTMLElement,
@@ -84,6 +97,7 @@ export function disposeKpEditorAnimationPlayers(root: ParentNode): void {
       authoringStates.delete(player);
       gestaltStyles.delete(player);
       focusExperimentModes.delete(player);
+      renderQualityStates.delete(player);
       inspectionCadenceStates.delete(player);
       player.dataset["kpEditorAnimationDisposed"] = "true";
       delete player.dataset["kpEditorAnimationHydrated"];
@@ -108,6 +122,8 @@ export function dispatchKpEditorAnimationPlaybackAction(
 ): void {
   const session = sessions.get(player);
   if (session === undefined) return;
+
+  syncRenderQualityForPlaybackAction(player, session, action);
 
   if (action.type !== "play" && action.type !== "tick" && action.type !== "rewind") {
     cancelPlayerFrame(player);
@@ -162,8 +178,13 @@ async function hydrateKpEditorAnimationPlayer(player: HTMLElement): Promise<void
     )
   );
   focusExperimentModes.set(player, "flat");
+  renderQualityStates.set(player, createKpRenderQualityState({
+    preference: readPersistedRenderQualityPreference(),
+    capabilities: currentRenderQualityCapabilities()
+  }));
   syncAuthoringData(player, authoring);
   syncAccessibilityData(player, "full-motion");
+  syncRenderQualityData(player);
   player.dataset["kpEditorAnimationDiagnosticsRevision"] = "0";
   player.dataset["kpEditorAnimationPackId"] = packId;
   player.dataset["kpEditorAnimationHydrated"] = "true";
@@ -273,6 +294,14 @@ function handlePlayerInput(event: Event): void {
         progress: session.player.progress
       });
     }
+    return;
+  }
+
+  if (
+    input instanceof HTMLSelectElement &&
+    input.dataset["kpEditorAnimationQualityControl"] !== undefined
+  ) {
+    selectRenderQuality(player, input.value);
     return;
   }
 
@@ -388,6 +417,135 @@ function syncAccessibilityData(player: HTMLElement, preference: string): void {
     : normalizedPreference;
   player.dataset["kpEditorAnimationAccessibilityPreference"] = normalizedPreference;
   player.dataset["kpEditorAnimationAccessibilityMode"] = mode;
+}
+
+function selectRenderQuality(player: HTMLElement, value: string): void {
+  const preference = normalizeKpRenderQualityPreference(value);
+  persistRenderQualityPreference(preference);
+  const current = renderQualityStates.get(player) ?? createKpRenderQualityState();
+  const next = selectKpRenderQualityPreference({
+    state: current,
+    preference,
+    capabilities: currentRenderQualityCapabilities()
+  });
+  renderQualityStates.set(player, next);
+  syncRenderQualityData(player);
+  invalidatePlayerDiagnostics(player);
+  if (next.frozen) return;
+
+  const session = sessions.get(player);
+  if (session !== undefined) {
+    dispatchKpEditorAnimationPlaybackAction(player, {
+      type: "seek",
+      progress: session.player.progress
+    });
+  }
+}
+
+function syncRenderQualityForPlaybackAction(
+  player: HTMLElement,
+  session: KpEditorAnimationPlaybackSession,
+  action: KpEditorAnimationPlaybackAction
+): void {
+  const current = renderQualityStates.get(player) ?? createKpRenderQualityState({
+    capabilities: currentRenderQualityCapabilities()
+  });
+  const capabilities = currentRenderQualityCapabilities();
+  const next = action.type === "reset"
+    ? releaseKpRenderQualityState({ state: current, capabilities })
+    : action.type === "play" || action.type === "rewind"
+      ? freezeKpRenderQualityState({
+          state: session.player.playbackStatus === "complete"
+            ? releaseKpRenderQualityState({ state: current, capabilities })
+            : current,
+          capabilities
+        })
+      : current;
+  if (next === current) return;
+  renderQualityStates.set(player, next);
+  syncRenderQualityData(player);
+}
+
+function syncRenderQualityData(player: HTMLElement): void {
+  const state = renderQualityStates.get(player);
+  if (state === undefined) return;
+  const pending = kpRenderQualityPreferencePending(state);
+  player.dataset["kpEditorAnimationQualityPreference"] = state.preference;
+  player.dataset["kpEditorAnimationQualityResolvedPreference"] =
+    state.resolvedPreference;
+  player.dataset["kpEditorAnimationQualityTier"] = state.profile.tier;
+  player.dataset["kpEditorAnimationQualityFrozen"] = String(state.frozen);
+  player.dataset["kpEditorAnimationQualityPending"] = String(pending);
+  player.dataset["kpEditorAnimationQualityRevision"] = String(state.revision);
+  player.dataset["kpEditorAnimationQualityMicroMotionScale"] =
+    String(state.profile.microMotionScale);
+  player.style.setProperty(
+    "--kp-render-quality-shadow-scale",
+    String(state.profile.shadowScale)
+  );
+  player.style.setProperty(
+    "--kp-render-quality-depth-scale",
+    String(state.profile.depthScale)
+  );
+  player.style.setProperty(
+    "--kp-render-quality-texture-subdivision-scale",
+    String(state.profile.textureSubdivisionScale)
+  );
+  player.style.setProperty(
+    "--kp-render-quality-particle-density-scale",
+    String(state.profile.particleDensityScale)
+  );
+  player.style.setProperty(
+    "--kp-render-quality-micro-motion-scale",
+    String(state.profile.microMotionScale)
+  );
+  const control = player.querySelector<HTMLSelectElement>(
+    "[data-kp-editor-animation-quality-control]"
+  );
+  if (control !== null) control.value = state.preference;
+  player.querySelector<HTMLOutputElement>(
+    "[data-kp-editor-animation-quality-status]"
+  )?.replaceChildren(document.createTextNode(
+    pending
+      ? `${state.profile.tier} · ${state.preference} next playback`
+      : state.preference === state.profile.tier
+        ? state.profile.tier
+        : `${state.preference} → ${state.profile.tier}`
+  ));
+}
+
+function currentRenderQualityCapabilities(): KpRenderQualityCapabilities {
+  const extendedNavigator = navigator as Navigator & {
+    readonly deviceMemory?: number | undefined;
+    readonly connection?: { readonly saveData?: boolean | undefined } | undefined;
+  };
+  return {
+    hardwareConcurrency: navigator.hardwareConcurrency,
+    deviceMemoryGb: extendedNavigator.deviceMemory,
+    saveData: extendedNavigator.connection?.saveData
+  };
+}
+
+function readPersistedRenderQualityPreference() {
+  try {
+    return normalizeKpRenderQualityPreference(
+      globalThis.localStorage?.getItem(KP_EDITOR_RENDER_QUALITY_STORAGE_KEY)
+    );
+  } catch {
+    return "auto" as const;
+  }
+}
+
+function persistRenderQualityPreference(preference: string): void {
+  try {
+    globalThis.localStorage?.setItem(
+      KP_EDITOR_RENDER_QUALITY_STORAGE_KEY,
+      preference
+    );
+  } catch {
+    // Storage can be denied in embedded or privacy-restricted contexts; the
+    // in-memory selection still applies to the current player.
+  }
 }
 
 function updateAuthoringControl(

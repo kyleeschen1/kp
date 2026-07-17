@@ -114,6 +114,58 @@ test("editor animation library restores and persists concrete selections", async
   ).toHaveText("10/10");
 });
 
+test("render quality persists independently and stays frozen during playback", async ({
+  page
+}) => {
+  const descriptorId = "editor-animation.animation.linear-solve.solve-x";
+  await page.goto(`/?animation=${descriptorId}`);
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const quality = player.locator("[data-kp-editor-animation-quality-control]");
+  const accessibility = player.locator(
+    "[data-kp-editor-animation-accessibility-control]"
+  );
+  await expect(player).toHaveAttribute("data-kp-editor-animation-hydrated", "true");
+  await expect(quality).toHaveValue("auto");
+
+  await quality.selectOption("full");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-quality-tier", "full");
+  await player.locator('[data-action="play-editor-animation"]').click();
+  await expect(player).toHaveAttribute("data-kp-editor-animation-quality-frozen", "true");
+
+  await quality.selectOption("efficient");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-quality-preference",
+    "efficient"
+  );
+  await expect(player).toHaveAttribute("data-kp-editor-animation-quality-tier", "full");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-quality-pending", "true");
+
+  await accessibility.selectOption("reduced-motion");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-accessibility-mode",
+    "reduced-motion"
+  );
+  await expect(player).toHaveAttribute("data-kp-editor-animation-quality-tier", "full");
+
+  await player.locator('[data-action="reset-editor-animation"]').click();
+  await expect(player).toHaveAttribute("data-kp-editor-animation-quality-tier", "efficient");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-quality-frozen", "false");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-quality-pending", "false");
+
+  await quality.selectOption("balanced");
+  await page.reload();
+  await expect(player).toHaveAttribute("data-kp-editor-animation-hydrated", "true");
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-quality-preference",
+    "balanced"
+  );
+  await expect(player).toHaveAttribute("data-kp-editor-animation-quality-tier", "balanced");
+  await expect(quality).toHaveValue("balanced");
+});
+
 test("dashboard animation assets open their concrete editor selection", async ({
   page
 }) => {

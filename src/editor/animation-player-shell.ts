@@ -68,6 +68,15 @@ export function renderKpEditorAnimationPlayerShell(input: {
             <option value="narrated">narrated</option>
           </select>
         </label>
+        <label class="editor-animation-player__quality">Quality
+          <select data-kp-editor-animation-quality-control aria-label="Animation render quality">
+            <option value="auto" selected>auto</option>
+            <option value="full">full</option>
+            <option value="balanced">balanced</option>
+            <option value="efficient">efficient</option>
+          </select>
+          <output data-kp-editor-animation-quality-status>auto</output>
+        </label>
         <label class="editor-animation-player__gestalt-style">Gestalt style
           <select data-kp-editor-animation-gestalt-style-control aria-label="Animation gestalt style">
             <option value="${styleKey(kpOrganicSubtleStyleRef)}">organic subtle</option>
