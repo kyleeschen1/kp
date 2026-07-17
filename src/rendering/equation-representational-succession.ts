@@ -261,7 +261,9 @@ function sampleFragmentCornerTransfer(input: {
     const corner = relation === undefined
       ? oppositeCorner(input.relation.target!.bounds, rectCenter(input.relation.source!.bounds))
       : cornerFor(relation, source);
-    const unfold = intervalProgress(p, 0.58 + stagger, 0.86 + stagger);
+    // Fragment paths finish before native settlement begins so the exact
+    // KaTeX radical crossfades only after every structural anchor is still.
+    const unfold = intervalProgress(p, 0.56 + stagger, 0.82 + stagger);
     const handoff = intervalProgress(p, 0.58 + stagger, 0.72 + stagger);
     const pathVariant = targetIndex % 2 === 0
       ? "diagonal-arc-above" as const

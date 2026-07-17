@@ -85,6 +85,9 @@ import {
   type KpRadicalSuccessionChoreographyFrame
 } from "../animation/radical-succession-choreography.ts";
 import {
+  sampleKpRadicalNativeSettlement
+} from "../animation/radical-native-settlement.ts";
+import {
   createKpLinearRearrangementChoreography,
   sampleKpLinearRearrangementChoreography,
   type KpLinearRearrangementChoreography,
@@ -436,6 +439,10 @@ function applyEquationMaterialLayer(input: {
   }
   if (input.animationId !== "animation.linear-solve.solve-x") {
     syncKpEquationMaterialLayer({ stage: input.stage, owners: [] });
+    delete input.stage.dataset["kpEditorEquationNativeSettlementProgress"];
+    delete input.stage.dataset["kpEditorEquationNativeSettlementPhase"];
+    delete input.stage.dataset["kpEditorEquationNativeSettlementReady"];
+    delete input.stage.dataset["kpEditorEquationNativeSettlementResidual"];
     return;
   }
   const tokens = [
@@ -522,8 +529,14 @@ function applyRadicalMaterialLayer(input: {
     if (radicalNative !== null) {
       radicalNative.style.opacity = input.semanticProgress >= 1 ? "1" : "0";
     }
-    input.stage.dataset["kpEditorEquationNativeSettlementProgress"] =
-      input.semanticProgress >= 1 ? "1" : "0";
+    setRadicalSettlementDataset(input.stage, {
+      progress: input.semanticProgress >= 1 ? 1 : 0,
+      phase: input.semanticProgress >= 1
+        ? "native-geometry"
+        : "material-fragments",
+      geometryReady: input.semanticProgress >= 1,
+      maximumGeometryResidualPx: 0
+    });
     return;
   }
   const stageRect = input.stage.getBoundingClientRect();
@@ -548,21 +561,24 @@ function applyRadicalMaterialLayer(input: {
     transform: "none"
   }];
 
-  if (input.semanticProgress >= 0.42 && input.semanticProgress < 0.95) {
+  const hookRect = radicalHook.getBoundingClientRect();
+  const overbarRect = radicalOverbar.getBoundingClientRect();
+  const nativeRect = radicalNative.getBoundingClientRect();
+  const settlement = sampleKpRadicalNativeSettlement({
+    semanticProgress: input.semanticProgress,
+    fragmentRects: [hookRect, overbarRect],
+    nativeRect
+  });
+  setRadicalSettlementDataset(input.stage, settlement);
+
+  if (input.semanticProgress >= 0.42 && settlement.fragmentOpacity > 0) {
     const hookProgress = Number.parseFloat(
       getComputedStyle(radicalHook).opacity
     );
     const overbarProgress = Number.parseFloat(
       getComputedStyle(radicalOverbar).opacity
     );
-    const nativeSettlementProgress = intervalProgress(
-      input.semanticProgress,
-      0.89,
-      0.95
-    );
-    const fragmentRelease = 1 - nativeSettlementProgress;
-    const hookRect = radicalHook.getBoundingClientRect();
-    const overbarRect = radicalOverbar.getBoundingClientRect();
+    const fragmentRelease = settlement.fragmentOpacity;
     const hook = {
       left: hookRect.left - stageRect.left,
       top: hookRect.top - stageRect.top,
@@ -597,13 +613,10 @@ function applyRadicalMaterialLayer(input: {
         fragmentRole: "radical-overbar"
       }
     );
-    radicalNative.style.opacity = String(nativeSettlementProgress);
+    radicalNative.style.opacity = String(settlement.nativeOpacity);
     radicalNative.dataset["kpEquationMaterialNativeHidden"] = "true";
-    input.stage.dataset["kpEditorEquationNativeSettlementProgress"] =
-      String(nativeSettlementProgress);
   } else {
-    radicalNative.style.opacity = input.semanticProgress < 0.42 ? "0" : "1";
-    input.stage.dataset["kpEditorEquationNativeSettlementProgress"] = "1";
+    radicalNative.style.opacity = String(settlement.nativeOpacity);
   }
   syncKpEquationMaterialLayer({
     stage: input.stage,
@@ -617,14 +630,22 @@ function applyRadicalMaterialLayer(input: {
     "radical-rewrite";
 }
 
-function intervalProgress(
-  progress: number,
-  start: number,
-  end: number
-): number {
-  if (end <= start) return progress >= end ? 1 : 0;
-  const p = Math.max(0, Math.min(1, (progress - start) / (end - start)));
-  return Math.round(p * p * (3 - 2 * p) * 1_000_000) / 1_000_000;
+function setRadicalSettlementDataset(
+  stage: HTMLElement,
+  settlement: {
+    readonly progress: number;
+    readonly phase: string;
+    readonly geometryReady: boolean;
+    readonly maximumGeometryResidualPx: number;
+  }
+): void {
+  stage.dataset["kpEditorEquationNativeSettlementProgress"] =
+    String(settlement.progress);
+  stage.dataset["kpEditorEquationNativeSettlementPhase"] = settlement.phase;
+  stage.dataset["kpEditorEquationNativeSettlementReady"] =
+    String(settlement.geometryReady);
+  stage.dataset["kpEditorEquationNativeSettlementResidual"] =
+    String(settlement.maximumGeometryResidualPx);
 }
 
 function linearMaterialOwnerId(motionId: string): string | undefined {

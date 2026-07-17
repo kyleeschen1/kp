@@ -1283,10 +1283,22 @@ test("radical-succession uses independent opposite-corner tokens and native sett
   );
 
   await scrubber.fill("0.92");
+  const settlementProgress = Number(await stage.getAttribute(
+    "data-kp-editor-equation-native-settlement-progress"
+  ));
+  expect(settlementProgress).toBeGreaterThan(0);
+  expect(settlementProgress).toBeLessThan(1);
   await expect(stage).toHaveAttribute(
-    "data-kp-editor-equation-native-settlement-progress",
-    "0.5"
+    "data-kp-editor-equation-native-settlement-phase",
+    "native-handoff"
   );
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-native-settlement-ready",
+    "true"
+  );
+  expect(Number(await stage.getAttribute(
+    "data-kp-editor-equation-native-settlement-residual"
+  ))).toBeLessThanOrEqual(0.25);
   const settlingNativeOpacity = Number(
     await targetNativeRadical.evaluate(
       (element) => getComputedStyle(element).opacity
@@ -1310,6 +1322,19 @@ test("radical-succession uses independent opposite-corner tokens and native sett
     "data-kp-radical-base-owner-probe",
     "same-base"
   );
+  await scrubber.fill("0.98");
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-native-settlement-progress",
+    "1"
+  );
+  await expect(stage).toHaveAttribute(
+    "data-kp-editor-equation-native-settlement-phase",
+    "native-geometry"
+  );
+  await expect(materialLayer.locator(
+    '[data-kp-equation-material-fragment-role^="radical-"]'
+  )).toHaveCount(0);
+  await expect(targetNativeRadical).toHaveCSS("opacity", "1");
   await scrubber.fill("1");
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-choreography-phase",
@@ -1499,7 +1524,7 @@ test("radical bundle and native settlement satisfy continuity budgets", async ({
   ).toHaveText("native handoff");
   const settlementSamples = await stage.evaluate((element) => {
     const native = element.querySelector<HTMLElement>(
-      '[data-kp-motion-id*=".radical.radical-hook"]'
+      '[data-kp-radical-native-visual="true"]'
     )!;
     const nativeRect = native.getBoundingClientRect();
     const nativeCenter = {
@@ -1512,6 +1537,12 @@ test("radical bundle and native settlement satisfy continuity budgets", async ({
       )
     ).map((fragment) => {
       const rect = fragment.getBoundingClientRect();
+      const residualTransformPx = Math.max(
+        Math.abs(rect.left - nativeRect.left),
+        Math.abs(rect.top - nativeRect.top),
+        Math.abs(rect.width - nativeRect.width),
+        Math.abs(rect.height - nativeRect.height)
+      );
       return {
         id:
           fragment.dataset["kpEquationMaterialFragmentRole"] ??
@@ -1521,7 +1552,7 @@ test("radical bundle and native settlement satisfy continuity budgets", async ({
           y: rect.top + rect.height / 2
         },
         targetBundlePoint: nativeCenter,
-        residualTransformPx: 0,
+        residualTransformPx,
         structuralScaleAlong: 1,
         structuralScaleAcross: 1
       };

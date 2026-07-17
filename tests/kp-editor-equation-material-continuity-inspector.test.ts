@@ -41,20 +41,21 @@ test("inspector distinguishes native handoff from settled geometry", () => {
     motionIdentityIds: ["radical-rewrite.base-radicand"],
     materialContinuantCount: 1,
     structuralFragmentCount: 1,
-    bundleAnchor: "40,20"
+    bundleAnchor: "40,20",
+    semanticProgress: 0.92
   } as const;
 
   assert.equal(
     inspectKpEditorEquationMaterialContinuity({
       ...snapshot,
-      semanticProgress: 0.92
+      nativeSettlementProgress: 0.5
     }).settlementLabel,
     "native handoff"
   );
   assert.equal(
     inspectKpEditorEquationMaterialContinuity({
       ...snapshot,
-      semanticProgress: 0.96
+      nativeSettlementProgress: 1
     }).settlementLabel,
     "native geometry"
   );

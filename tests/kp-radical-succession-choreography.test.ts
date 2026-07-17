@@ -167,6 +167,18 @@ test("radical succession settles to exact native token endpoints", () => {
   );
 });
 
+test("radical target fragments are still before native settlement begins", () => {
+  const sampledGeometry = geometry();
+  const settlementStart = sampleKpEquationTokenMotion(sampledGeometry, 0.88);
+  const targetNotation = settlementStart.tokens.filter(
+    (token) => token.side === "target" && token.motionId.startsWith("radical.")
+  );
+  assert.equal(targetNotation.length, 2);
+  assert.ok(targetNotation.every(
+    (token) => token.pose.x === 0 && token.pose.y === 0 && token.pose.scale === 1
+  ));
+});
+
 function geometry(): KpMeasuredEquationTransitionGeometry {
   const element = () => ({ style: {}, dataset: {} }) as unknown as HTMLElement;
   const token = (

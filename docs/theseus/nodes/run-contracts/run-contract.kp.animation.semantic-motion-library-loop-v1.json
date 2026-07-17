@@ -145,7 +145,8 @@
     {
       "id": "next-action.kp.animation.radical-settlement-v1",
       "title": "Harden radical native handoff",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.animation.radical-settlement-v1 in Semantic Motion Animation Library Long Loop.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.animation.distribution-operation-v1",
