@@ -40,6 +40,11 @@ import {
   type KpMatrixVectorCompositionProgressFrame
 } from "./equation-matrix-vector-composition.ts";
 import {
+  sampleKpEquationMatrixMatrixRelation,
+  sampleKpMatrixMatrixCompositionProgress,
+  type KpMatrixMatrixCompositionProgressFrame
+} from "./equation-matrix-matrix-composition.ts";
+import {
   sampleKpDerivativePowerChoreography,
   type KpDerivativePowerChoreographyFrame,
   type KpDerivativePowerChoreographyPlan
@@ -124,6 +129,8 @@ export interface KpEquationTokenMotionFrame {
     KpDotProductTraversalProgressFrame | undefined;
   readonly matrixVectorComposition?:
     KpMatrixVectorCompositionProgressFrame | undefined;
+  readonly matrixMatrixComposition?:
+    KpMatrixMatrixCompositionProgressFrame | undefined;
   readonly derivativePower?: KpDerivativePowerChoreographyFrame | undefined;
 }
 
@@ -297,6 +304,13 @@ export function sampleKpEquationTokenMotion(
           plan: geometry.matrixVectorCompositionPlan,
           progress: p
         });
+  const matrixMatrixComposition =
+    geometry.matrixMatrixCompositionPlan === undefined
+      ? undefined
+      : sampleKpMatrixMatrixCompositionProgress({
+          plan: geometry.matrixMatrixCompositionPlan,
+          progress: p
+        });
   const derivativePower = createDerivativePowerChoreographyContext(
     geometry,
     p
@@ -318,6 +332,7 @@ export function sampleKpEquationTokenMotion(
       linearRearrangement,
       dotProductTraversal,
       matrixVectorComposition,
+      matrixMatrixComposition,
       derivativePower
     )) {
       tokens.set(`${token.side}:${token.motionId}`, token);
@@ -366,6 +381,9 @@ export function sampleKpEquationTokenMotion(
     ...(matrixVectorComposition === undefined
       ? {}
       : { matrixVectorComposition }),
+    ...(matrixMatrixComposition === undefined
+      ? {}
+      : { matrixMatrixComposition }),
     ...(derivativePower === undefined
       ? {}
       : { derivativePower: derivativePower.frame })
@@ -425,6 +443,7 @@ function sampleRelation(
   linearRearrangement: KpEquationLinearRearrangementFrame | undefined,
   dotProductTraversal: KpDotProductTraversalProgressFrame | undefined,
   matrixVectorComposition: KpMatrixVectorCompositionProgressFrame | undefined,
+  matrixMatrixComposition: KpMatrixMatrixCompositionProgressFrame | undefined,
   derivativePower: DerivativePowerChoreographyContext | undefined
 ): readonly KpEquationTokenMotionFrameToken[] {
   const sourceTokens = relationTokens(geometry.sourceTokens, relation.source?.motionIds ?? []);
@@ -543,6 +562,19 @@ function sampleRelation(
     const sampled = sampleKpEquationMatrixVectorRelation({
       plan: geometry.matrixVectorCompositionPlan,
       frame: matrixVectorComposition,
+      relation,
+      sourceTokens,
+      targetTokens
+    });
+    if (sampled !== undefined) return sampled;
+  }
+  if (
+    matrixMatrixComposition !== undefined &&
+    geometry.matrixMatrixCompositionPlan !== undefined
+  ) {
+    const sampled = sampleKpEquationMatrixMatrixRelation({
+      plan: geometry.matrixMatrixCompositionPlan,
+      frame: matrixMatrixComposition,
       relation,
       sourceTokens,
       targetTokens

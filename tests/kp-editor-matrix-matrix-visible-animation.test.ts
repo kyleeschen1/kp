@@ -21,4 +21,13 @@ test("matrix-matrix multiplication visibly resolves its exact result matrix", ()
   assert.match(frame.projection.transitions[0]?.source[0]?.latex ?? "", /1 & 2/);
   assert.match(frame.projection.transitions[0]?.target[0]?.latex ?? "", /4 & 4 \\\\ 10 & 8/);
   assert.equal(frame.projection.transitions[0]?.semanticStatus, "ready");
+  assert.equal(frame.motifs[0]?.kind, "matrix-cell-compose");
+  assert.equal(
+    frame.matrixMatrixComposition?.choreography.rendererPlan.kind,
+    "matrix-matrix-renderer-plan"
+  );
+  assert.deepEqual(
+    frame.matrixMatrixComposition?.choreography.cells.map((cell) => cell.result),
+    [4, 4, 10, 8]
+  );
 });

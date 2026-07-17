@@ -36,6 +36,7 @@ export type EquationVisualMotifKind =
   | "dot-product-accumulate"
   | "merge-fan-in"
   | "matrix-row-compose"
+  | "matrix-cell-compose"
   | "radical-corner-transfer"
   | "relation-flip"
   | "simplify-into"
@@ -177,6 +178,18 @@ export const equationVisualMotifDescriptors: readonly EquationVisualMotifDescrip
     ],
     summary:
       "Matrix rows meet the shared vector in semantic order and leave persistent result entries."
+  },
+  {
+    kind: "matrix-cell-compose",
+    motionPrimitiveIds: ["shift", "transmit", "reveal"],
+    phaseIds: [
+      "dot-pair-focus",
+      "dot-product-form",
+      "dot-accumulate",
+      "dot-result-reveal"
+    ],
+    summary:
+      "Left rows meet right columns in semantic cell order and leave persistent product entries."
   },
   {
     kind: "derivative-power",

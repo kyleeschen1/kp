@@ -449,6 +449,11 @@ function createGeneratedMatrixMatrixProblemFixture(
   const ids = generatedMatrixMatrixProblemIds(input);
   const result = multiplyMatrices(input.leftRows, input.rightRows);
   const latex = generatedMatrixMatrixProblemLatex(input, result);
+  const intermediates = createGeneratedMatrixMatrixIntermediateObjects(
+    input,
+    ids,
+    result
+  );
   const sourceSelectors = [
     ...matrixEntrySelectors(ids.initial, input.leftRows, "left.matrix"),
     ...matrixBracketSelectors(ids.initial, "left.matrix"),
@@ -473,6 +478,7 @@ function createGeneratedMatrixMatrixProblemFixture(
           rightRows: input.rightRows
         }
       ),
+      ...intermediates,
       expressionObject(
         ids.result,
         "Computed matrix product",
@@ -530,6 +536,68 @@ function createGeneratedMatrixMatrixProblemFixture(
     drillDownHooks: [],
     flashcards: createGeneratedMatrixMatrixProblemFlashcards(input, ids, result)
   };
+}
+
+function createGeneratedMatrixMatrixIntermediateObjects(
+  input: GeneratedMatrixMatrixProblemFixtureSpec,
+  ids: GeneratedMatrixMatrixProblemIds,
+  result: readonly (readonly number[])[]
+) {
+  const columnCount = input.rightRows[0]?.length ?? 0;
+  return input.leftRows.flatMap((leftRow, rowIndex) =>
+    Array.from({ length: columnCount }, (_, columnIndex) => {
+      const rightColumn = input.rightRows.map((row) => row[columnIndex]!);
+      const products = leftRow.map((value, sharedIndex) =>
+        value * rightColumn[sharedIndex]!
+      );
+      const semanticIndex = rowIndex * columnCount + columnIndex;
+      const cellObjectId =
+        `${ids.initial}.intermediate.cell-dot-product.${rowIndex}.${columnIndex}`;
+      const cellLatex = `${leftRow.map((value, sharedIndex) =>
+        `${value} \\times ${rightColumn[sharedIndex]!}`
+      ).join(" + ")} = ${result[rowIndex]?.[columnIndex]}`;
+      return expressionObject(
+        cellObjectId,
+        `Matrix product entry ${rowIndex + 1}, ${columnIndex + 1}`,
+        cellLatex,
+        [
+          ...leftRow.map((value, sharedIndex) =>
+            selector(
+              cellObjectId,
+              `left-entry.${sharedIndex}`,
+              "entry",
+              String(value)
+            )
+          ),
+          ...rightColumn.map((value, sharedIndex) =>
+            selector(
+              cellObjectId,
+              `right-entry.${sharedIndex}`,
+              "entry",
+              String(value)
+            )
+          ),
+          selector(
+            cellObjectId,
+            "result-entry",
+            "entry",
+            String(result[rowIndex]?.[columnIndex])
+          )
+        ],
+        {
+          representation: "matrix-matrix-cell-dot-product",
+          semanticIndex,
+          rowIndex,
+          columnIndex,
+          leftValues: leftRow,
+          rightValues: rightColumn,
+          products,
+          result: result[rowIndex]?.[columnIndex],
+          cellLatex
+        }
+      );
+    })
+  );
 }
 
 interface GeneratedMatrixVectorProblemIds {

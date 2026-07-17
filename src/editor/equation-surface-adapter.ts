@@ -107,6 +107,12 @@ import {
   type KpMatrixVectorCompositionChoreographyFrame
 } from "../animation/matrix-vector-composition-choreography.ts";
 import {
+  createKpMatrixMatrixCompositionChoreography,
+  sampleKpMatrixMatrixCompositionChoreography,
+  type KpMatrixMatrixCompositionChoreography,
+  type KpMatrixMatrixCompositionChoreographyFrame
+} from "../animation/matrix-matrix-composition-choreography.ts";
+import {
   deriveKpOrganicMotionSignature,
   sampleKpOrganicMotion,
   sampleKpOrganicProgress
@@ -176,6 +182,8 @@ const dotProductTraversalChoreographyCache =
   new Map<string, KpDotProductTraversalChoreography>();
 const matrixVectorCompositionChoreographyCache =
   new Map<string, KpMatrixVectorCompositionChoreography>();
+const matrixMatrixCompositionChoreographyCache =
+  new Map<string, KpMatrixMatrixCompositionChoreography>();
 const derivativePowerChoreographyCache =
   new Map<string, KpDerivativePowerChoreographyPlan>();
 
@@ -209,6 +217,10 @@ export interface KpEditorEquationStageFrame {
   readonly matrixVectorComposition?: {
     readonly choreography: KpMatrixVectorCompositionChoreography;
     readonly frame: KpMatrixVectorCompositionChoreographyFrame;
+  } | undefined;
+  readonly matrixMatrixComposition?: {
+    readonly choreography: KpMatrixMatrixCompositionChoreography;
+    readonly frame: KpMatrixMatrixCompositionChoreographyFrame;
   } | undefined;
   readonly derivativePower?: {
     readonly plan: KpDerivativePowerChoreographyPlan;
@@ -273,6 +285,12 @@ export function createKpEditorEquationStageFrame(input: {
     projection.transitions[0]?.id,
     localProgress
   );
+  const matrixMatrixComposition = createMatrixMatrixCompositionFrame(
+    input.animation,
+    input.state,
+    projection.transitions[0]?.id,
+    localProgress
+  );
   const derivativePower = createDerivativePowerFrame(
     input.animation,
     input.state,
@@ -306,6 +324,9 @@ export function createKpEditorEquationStageFrame(input: {
     ...(matrixVectorComposition === undefined
       ? {}
       : { matrixVectorComposition }),
+    ...(matrixMatrixComposition === undefined
+      ? {}
+      : { matrixMatrixComposition }),
     ...(derivativePower === undefined ? {} : { derivativePower })
   };
 }
@@ -444,6 +465,14 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
           direction: state.direction,
           choreography: frame.matrixVectorComposition.choreography,
           frame: frame.matrixVectorComposition.frame
+        });
+      }
+      if (index === 0 && frame.matrixMatrixComposition !== undefined) {
+        applyMatrixMatrixCompositionChoreography({
+          transitionElement,
+          direction: state.direction,
+          choreography: frame.matrixMatrixComposition.choreography,
+          frame: frame.matrixMatrixComposition.frame
         });
       }
       transitionElement.querySelectorAll<HTMLElement>("[data-kp-editor-equation-focus-token]")
@@ -1004,6 +1033,38 @@ function createMatrixVectorCompositionFrame(
   return {
     choreography,
     frame: sampleKpMatrixVectorCompositionChoreography({
+      choreography,
+      progress,
+      direction: state.direction,
+      accessibilityMode: "full"
+    })
+  };
+}
+
+function createMatrixMatrixCompositionFrame(
+  animation: KpAnimationAsset,
+  state: KpEditorAnimationPlayerState,
+  transformationId: string | undefined,
+  progress: number
+): KpEditorEquationStageFrame["matrixMatrixComposition"] {
+  if (
+    transformationId === undefined ||
+    !animation.transformations.some(
+      (transformation) =>
+        transformation.id === transformationId &&
+        transformation.transformType === "multiplyMatrices"
+    )
+  ) {
+    return undefined;
+  }
+  let choreography = matrixMatrixCompositionChoreographyCache.get(animation.id);
+  if (choreography === undefined) {
+    choreography = createKpMatrixMatrixCompositionChoreography(animation);
+    matrixMatrixCompositionChoreographyCache.set(animation.id, choreography);
+  }
+  return {
+    choreography,
+    frame: sampleKpMatrixMatrixCompositionChoreography({
       choreography,
       progress,
       direction: state.direction,
@@ -1761,6 +1822,148 @@ function syncMatrixVectorCompositionOverlay(
   });
 }
 
+function applyMatrixMatrixCompositionChoreography(input: {
+  readonly transitionElement: HTMLElement;
+  readonly direction: "forward" | "rewind";
+  readonly choreography: KpMatrixMatrixCompositionChoreography;
+  readonly frame: KpMatrixMatrixCompositionChoreographyFrame;
+}): void {
+  const accessibilityMode = (() => {
+    switch (editorAccessibilityMode(input.transitionElement)) {
+      case "reduced-motion": return "reduced" as const;
+      case "static": return "no-depth" as const;
+      default: return "full" as const;
+    }
+  })();
+  const sampled = accessibilityMode === "full"
+    ? input.frame
+    : sampleKpMatrixMatrixCompositionChoreography({
+        choreography: input.choreography,
+        progress: input.frame.motion.semanticProgress,
+        direction: input.direction,
+        accessibilityMode
+      });
+  input.transitionElement.dataset["kpEditorEquationMatrixMatrixComposition"] =
+    input.choreography.id;
+  input.transitionElement.dataset["kpEditorEquationMatrixMatrixTraversalOrder"] =
+    input.choreography.traversal.participants
+      .map((participant) => participant.semanticIndex)
+      .join(" ");
+  input.transitionElement.dataset["kpEditorEquationMatrixMatrixActiveCell"] =
+    sampled.motion.activeCellIndex === undefined
+      ? ""
+      : String(sampled.motion.activeCellIndex);
+  input.transitionElement.dataset["kpEditorEquationMatrixMatrixResolvedThrough"] =
+    sampled.motion.resolvedThroughCellIndex === undefined
+      ? ""
+      : String(sampled.motion.resolvedThroughCellIndex);
+
+  const sourceTokens = [
+    ...input.transitionElement.querySelectorAll<HTMLElement>(
+      "[data-kp-editor-equation-source] [data-kp-motion-id]"
+    )
+  ];
+  sampled.focusFrames.forEach((focus) => {
+    if (focus.frame.attentionProgress <= 0) return;
+    const tokens = sourceTokens.filter((token) =>
+      focus.plan.semanticEntityIds.some((entityId) =>
+        token.dataset["kpMotionId"]?.includes(entityId)
+      )
+    );
+    if (tokens.length === 0) return;
+    const binding = bindKpFocusFrameToCss(focus.plan, focus.frame);
+    tokens.forEach((token) => {
+      token.classList.add(binding.className);
+      Object.entries(binding.attributes).forEach(([name, value]) =>
+        token.setAttribute(name, value)
+      );
+      Object.entries(binding.variables).forEach(([name, value]) =>
+        token.style.setProperty(name, value)
+      );
+      token.dataset["kpEditorMatrixMatrixFocusCell"] =
+        String(focus.semanticIndex);
+    });
+  });
+  syncMatrixMatrixCompositionOverlay(
+    input.transitionElement,
+    input.choreography,
+    sampled
+  );
+  const narration = input.transitionElement
+    .closest<HTMLElement>("[data-kp-editor-animation-player]")
+    ?.querySelector<HTMLOutputElement>("[data-kp-editor-animation-narration]");
+  if (narration !== null && narration !== undefined) {
+    const active = input.choreography.cells.find(
+      (cell) => cell.semanticIndex === sampled.motion.activeCellIndex
+    );
+    narration.replaceChildren(document.createTextNode(
+      active === undefined
+        ? "Resolved entries persist while the product matrix settles."
+        : "Entry " + (active.rowIndex + 1) + "," +
+          (active.columnIndex + 1) + ": " +
+          active.leftValues
+            .map((value, index) =>
+              value + " times " + active.rightValues[index]
+            )
+            .join(" plus ") +
+          " equals " + active.result + "."
+    ));
+  }
+}
+
+function syncMatrixMatrixCompositionOverlay(
+  transition: HTMLElement,
+  choreography: KpMatrixMatrixCompositionChoreography,
+  frame: KpMatrixMatrixCompositionChoreographyFrame
+): void {
+  let overlay = transition.querySelector<HTMLElement>(
+    "[data-kp-editor-matrix-matrix-overlay]"
+  );
+  if (overlay === null) {
+    overlay = document.createElement("div");
+    overlay.className = "editor-equation-stage__matrix-matrix-overlay";
+    overlay.dataset["kpEditorMatrixMatrixOverlay"] = choreography.id;
+    overlay.innerHTML = choreography.cells.map((cell) => `
+      <span class="editor-equation-stage__matrix-matrix-cell" data-kp-editor-matrix-matrix-cell="${cell.semanticIndex}" data-kp-editor-matrix-matrix-intermediate-object-id="${cell.intermediateObjectId}">
+        ${renderLatexToHtml(cell.cellLatex, { displayMode: false })}
+      </span>
+    `).join("");
+    transition.append(overlay);
+  }
+  const transitionRect = transition.getBoundingClientRect();
+  const sourceInk = transition.querySelector<HTMLElement>(
+    "[data-kp-editor-equation-source] .katex-display > .katex"
+  )?.getBoundingClientRect();
+  if (sourceInk === undefined) return;
+  choreography.cells.forEach((cell) => {
+    const cellFrame = frame.motion.cells.find(
+      (candidate) => candidate.semanticIndex === cell.semanticIndex
+    )!;
+    const element = overlay!.querySelector<HTMLElement>(
+      `[data-kp-editor-matrix-matrix-cell="${cell.semanticIndex}"]`
+    );
+    if (element === null) return;
+    element.style.left = String(Math.max(
+      6,
+      (transitionRect.width - element.offsetWidth) / 2
+    )) + "px";
+    element.style.top = String(
+      sourceInk.bottom - transitionRect.top + 14
+    ) + "px";
+    element.style.opacity = String(
+      cellFrame.calculationOpacity * frame.motion.sourceOpacity
+    );
+    element.style.transform =
+      "translateY(-50%) translateX(" +
+      (5 * (1 - cellFrame.localProgress)) +
+      "px)";
+    element.dataset["kpEditorMatrixMatrixCellStatus"] = cellFrame.status;
+    element.dataset["kpEditorMatrixMatrixResult"] = String(cell.result);
+    element.dataset["kpEditorMatrixMatrixRow"] = String(cell.rowIndex);
+    element.dataset["kpEditorMatrixMatrixColumn"] = String(cell.columnIndex);
+  });
+}
+
 function findMotionTokenByEntityId(
   transition: HTMLElement,
   entityId: string
@@ -1965,6 +2168,12 @@ function applySemanticTokenMotion(input: {
         : {
             matrixVectorCompositionPlan:
               input.frame.matrixVectorComposition.choreography.rendererPlan
+          }),
+      ...(input.frame.matrixMatrixComposition === undefined
+        ? {}
+        : {
+            matrixMatrixCompositionPlan:
+              input.frame.matrixMatrixComposition.choreography.rendererPlan
           })
     });
     precomputed = createKpEditorPrecomputedEquationMotionPlan({
@@ -2155,6 +2364,16 @@ function applySemanticTokenMotion(input: {
       matrixVector.kind;
     input.transitionElement.dataset["kpEditorEquationMatrixVectorSourceOpacity"] =
       String(matrixVector.sourceOpacity);
+  }
+  const matrixMatrix = tokenFrame.motion.matrixMatrixComposition;
+  if (matrixMatrix === undefined) {
+    delete input.transitionElement.dataset["kpEditorEquationMatrixMatrixTokenPlan"];
+    delete input.transitionElement.dataset["kpEditorEquationMatrixMatrixSourceOpacity"];
+  } else {
+    input.transitionElement.dataset["kpEditorEquationMatrixMatrixTokenPlan"] =
+      matrixMatrix.kind;
+    input.transitionElement.dataset["kpEditorEquationMatrixMatrixSourceOpacity"] =
+      String(matrixMatrix.sourceOpacity);
   }
   return true;
 }

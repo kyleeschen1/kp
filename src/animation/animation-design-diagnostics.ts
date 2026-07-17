@@ -51,6 +51,7 @@ const operationSpecificTransformTypes = new Set([
   "rewritePowerAsRoot",
   "computeDotProduct",
   "multiplyMatrixVector",
+  "multiplyMatrices",
   "applyDerivativePowerRule",
   "applyDerivativeSumRule",
   "applyDerivativePowerRulesToTerms",

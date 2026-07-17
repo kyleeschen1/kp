@@ -6,6 +6,7 @@ import type { KpEquationMotionPathCandidate } from "./equation-motion-path-plann
 import type { KpEquationLinearRearrangementKind } from "./equation-linear-rearrangement.ts";
 import type { KpDotProductRendererPlan } from "./equation-dot-product-traversal.ts";
 import type { KpMatrixVectorRendererPlan } from "./equation-matrix-vector-composition.ts";
+import type { KpMatrixMatrixRendererPlan } from "./equation-matrix-matrix-composition.ts";
 import type {
   KpDerivativePowerChoreographyPlan
 } from "../animation/derivative-power-choreography.ts";
@@ -72,6 +73,7 @@ export interface KpMeasuredEquationTransitionGeometry {
     KpEquationLinearRearrangementKind | undefined;
   readonly dotProductTraversalPlan?: KpDotProductRendererPlan | undefined;
   readonly matrixVectorCompositionPlan?: KpMatrixVectorRendererPlan | undefined;
+  readonly matrixMatrixCompositionPlan?: KpMatrixMatrixRendererPlan | undefined;
   readonly derivativePowerChoreographyPlan?:
     KpDerivativePowerChoreographyPlan | undefined;
   readonly precomputedMotionPathsByMotionId?: Readonly<
@@ -168,6 +170,7 @@ export function measureKpEquationTransitionGeometry(input: {
     KpEquationLinearRearrangementKind | undefined;
   readonly dotProductTraversalPlan?: KpDotProductRendererPlan | undefined;
   readonly matrixVectorCompositionPlan?: KpMatrixVectorRendererPlan | undefined;
+  readonly matrixMatrixCompositionPlan?: KpMatrixMatrixRendererPlan | undefined;
   readonly derivativePowerChoreographyPlan?:
     KpDerivativePowerChoreographyPlan | undefined;
 }): KpMeasuredEquationTransitionGeometry {
@@ -238,6 +241,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.matrixVectorCompositionPlan === undefined
       ? {}
       : { matrixVectorCompositionPlan: input.matrixVectorCompositionPlan }),
+    ...(input.matrixMatrixCompositionPlan === undefined
+      ? {}
+      : { matrixMatrixCompositionPlan: input.matrixMatrixCompositionPlan }),
     ...(input.derivativePowerChoreographyPlan === undefined
       ? {}
       : {

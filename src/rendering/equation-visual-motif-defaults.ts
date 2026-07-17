@@ -100,6 +100,12 @@ export const defaultEquationTransformVisualMotifRules:
       descriptor: descriptorForEquationMotif("matrix-row-compose"),
       summary:
         "Rows focus and meet the shared vector before each persistent result component appears."
+    },
+    {
+      transformationKind: "multiplyMatrices",
+      descriptor: descriptorForEquationMotif("matrix-cell-compose"),
+      summary:
+        "Left rows and right columns focus before each persistent result cell appears."
     }
   ];
 

@@ -1084,6 +1084,13 @@ h2 {
   pointer-events: none;
 }
 
+.editor-equation-stage__matrix-matrix-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
 .editor-equation-stage__matrix-vector-row {
   position: absolute;
   border: 1px solid rgb(62 104 117 / 0.2);
@@ -1098,7 +1105,24 @@ h2 {
   will-change: opacity, transform;
 }
 
-.editor-equation-stage__transition:has(.editor-equation-stage__matrix-vector-overlay) {
+.editor-equation-stage__matrix-matrix-cell {
+  position: absolute;
+  border: 1px solid rgb(62 104 117 / 0.2);
+  border-radius: 999px;
+  padding: 0.12rem 0.35rem;
+  color: #315b67;
+  background: rgb(239 248 249 / 0.94);
+  box-shadow: 0 5px 16px rgb(30 41 59 / 0.08);
+  font-size: 0.7rem;
+  transform-origin: center;
+  white-space: nowrap;
+  will-change: opacity, transform;
+}
+
+.editor-equation-stage__transition:has(
+  .editor-equation-stage__matrix-vector-overlay,
+  .editor-equation-stage__matrix-matrix-overlay
+) {
   grid-template-rows: minmax(9.25rem, 1fr) auto;
 }
 

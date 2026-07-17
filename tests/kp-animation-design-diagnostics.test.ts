@@ -81,6 +81,19 @@ test("matrix-vector multiplication reports row composition instead of replacemen
   assert.deepEqual(diagnosis.issues, []);
 });
 
+test("matrix-matrix multiplication reports cell composition instead of replacement", () => {
+  const animation = catalog.find(
+    (candidate) =>
+      candidate.id ===
+      "animation.generated.linear-algebra.matrix-matrix.two-by-two"
+  )!;
+  const diagnosis = diagnoseKpAnimationDesign({ animation })!;
+
+  assert.equal(diagnosis.visualStrategy, "operation-specific");
+  assert.equal(diagnosis.motifKind, "matrix-cell-compose");
+  assert.deepEqual(diagnosis.issues, []);
+});
+
 test("additive identity reports operation-specific absorption", () => {
   const animation = catalog.find(
     (candidate) => candidate.id === "animation.generated.add-zero"

@@ -61,6 +61,10 @@ test("generated linear algebra fixtures cover vector and matrix products", () =>
   );
   assert.deepEqual(linearAlgebraObjectLatex(matrixMatrix), [
     String.raw`\begin{bmatrix}1 & 2 \\ 3 & 4\end{bmatrix}\begin{bmatrix}2 & 0 \\ 1 & 2\end{bmatrix}`,
+    String.raw`1 \times 2 + 2 \times 1 = 4`,
+    String.raw`1 \times 0 + 2 \times 2 = 4`,
+    String.raw`3 \times 2 + 4 \times 1 = 10`,
+    String.raw`3 \times 0 + 4 \times 2 = 8`,
     String.raw`\begin{bmatrix}4 & 4 \\ 10 & 8\end{bmatrix}`
   ]);
   assert.deepEqual(matrixMatrix.transformations[0]?.lawRefs, [

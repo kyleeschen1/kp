@@ -126,6 +126,16 @@ test("visual motif module exposes reusable equation motif descriptors", () => {
         ]
       ],
       [
+        "matrix-cell-compose",
+        ["shift", "transmit", "reveal"],
+        [
+          "dot-pair-focus",
+          "dot-product-form",
+          "dot-accumulate",
+          "dot-result-reveal"
+        ]
+      ],
+      [
         "derivative-power",
         ["transmit", "copy", "shift", "exit"],
         [
