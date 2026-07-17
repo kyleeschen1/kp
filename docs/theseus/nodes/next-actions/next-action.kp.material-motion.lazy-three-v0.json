@@ -1,0 +1,101 @@
+{
+  "id": "next-action.kp.material-motion.lazy-three-v0",
+  "kind": "next-action",
+  "title": "Defer Three.js until visible 3D demand",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Deferred the Three.js capability until a graph shell intersects the viewport, while explicit graph navigation still hydrates correctly. Initial script transfer fell from 489079 to 358081 bytes and normal hydration from about 788 to 370 ms; the remaining compressed initial-JS target miss is isolated to the main entry.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.lazy-three-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "src/main.ts",
+      "summary": "Visibility-gates WebGL capability loading and disposes pending observers with shell lifecycle."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Defer Three.js until visible 3D demand can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/graph-webgl.test.ts tests/editor.test.ts",
+      "status": "passed",
+      "scope": "Graph renderer and editor shell",
+      "checkedAt": "2026-07-17T17:17:01.220Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript projects",
+      "checkedAt": "2026-07-17T17:17:01.301Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production chunk boundary",
+      "checkedAt": "2026-07-17T17:17:01.391Z"
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "Initial request and constrained runtime",
+      "checkedAt": "2026-07-17T17:17:01.470Z"
+    },
+    {
+      "command": "npx playwright test tests/project-dashboard.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "Explicit graph selection and WebGL hydration",
+      "checkedAt": "2026-07-17T17:17:01.552Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-17T17:17:01.626Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Deferred the Three.js capability until a graph shell intersects the viewport, while explicit graph navigation still hydrates correctly. Initial script transfer fell from 489079 to 358081 bytes and normal hydration from about 788 to 370 ms; the remaining compressed initial-JS target miss is isolated to the main entry."
+  }
+}

@@ -61,7 +61,8 @@
     {
       "id": "next-action.kp.material-motion.lazy-three-v0",
       "title": "Defer Three.js until visible 3D demand",
-      "status": "planned"
+      "summary": "Materialized from stored run-contract slice next-action.kp.material-motion.lazy-three-v0 in KP Semantic Material Motion And Performance V0.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.catalog-metadata-v0",

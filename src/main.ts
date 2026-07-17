@@ -101,6 +101,10 @@ let selectedEditorAnimationDescriptorId = selectKpEditorAnimationDescriptor(
 type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
 let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
+const graph3DWebGLVisibilityObservers = new WeakMap<
+  HTMLElement,
+  IntersectionObserver
+>();
 
 declare global {
   interface Window {
@@ -500,15 +504,9 @@ function hydrateGraph3DWebGL(
   objects: readonly KpSemanticObject[],
   previousObjects?: readonly KpSemanticObject[]
 ): void {
-  const rootNode = root instanceof Node ? root : undefined;
-
-  void loadGraph3DWebGLClient().then((client) => {
-    if (rootNode !== undefined && !rootNode.isConnected) {
-      return;
-    }
-
-    client.hydrateGraph3DWebGLShells(root, objects, { previousObjects });
-  });
+  root.querySelectorAll<HTMLElement>(".graph-webgl").forEach((shell) =>
+    hydrateGraph3DWebGLShell(shell, objects, previousObjects)
+  );
 }
 
 function hydrateGraph3DWebGLShell(
@@ -516,21 +514,50 @@ function hydrateGraph3DWebGLShell(
   objects: readonly KpSemanticObject[],
   previousObjects?: readonly KpSemanticObject[]
 ): void {
-  void loadGraph3DWebGLClient().then((client) => {
-    if (!shell.isConnected) {
-      return;
-    }
+  stopGraph3DWebGLVisibilityObserver(shell);
 
-    client.hydrateGraph3DWebGLShell(shell, objects, { previousObjects });
-  });
+  if (typeof IntersectionObserver === "undefined") {
+    hydrateVisibleGraph3DWebGLShell(shell, objects, previousObjects);
+    return;
+  }
+
+  // The editor keeps rich previews mounted below the fold. Loading Three for a
+  // mounted but unseen shell defeats capability splitting and spends GPU setup
+  // work before the learner has requested that surface.
+  const observer = new IntersectionObserver((entries) => {
+    if (!entries.some((entry) => entry.isIntersecting)) return;
+    stopGraph3DWebGLVisibilityObserver(shell);
+    hydrateVisibleGraph3DWebGLShell(shell, objects, previousObjects);
+  }, { rootMargin: "160px" });
+  graph3DWebGLVisibilityObservers.set(shell, observer);
+  observer.observe(shell);
 }
 
 function disposeGraph3DWebGL(root: ParentNode): void {
+  root.querySelectorAll<HTMLElement>(".graph-webgl")
+    .forEach(stopGraph3DWebGLVisibilityObserver);
   graph3DWebGLClient?.disposeGraph3DWebGLShells(root);
 }
 
 function disposeGraph3DWebGLShell(shell: HTMLElement): void {
+  stopGraph3DWebGLVisibilityObserver(shell);
   graph3DWebGLClient?.disposeGraph3DWebGLShell(shell);
+}
+
+function hydrateVisibleGraph3DWebGLShell(
+  shell: HTMLElement,
+  objects: readonly KpSemanticObject[],
+  previousObjects?: readonly KpSemanticObject[]
+): void {
+  void loadGraph3DWebGLClient().then((client) => {
+    if (!shell.isConnected) return;
+    client.hydrateGraph3DWebGLShell(shell, objects, { previousObjects });
+  });
+}
+
+function stopGraph3DWebGLVisibilityObserver(shell: HTMLElement): void {
+  graph3DWebGLVisibilityObservers.get(shell)?.disconnect();
+  graph3DWebGLVisibilityObservers.delete(shell);
 }
 
 function loadGraph3DWebGLClient(): Promise<Graph3DWebGLClient> {
