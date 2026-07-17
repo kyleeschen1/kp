@@ -4,7 +4,7 @@ import { chromium, type Page } from "playwright";
 import { preview, type PreviewServer } from "vite";
 import {
   evaluateKpAnimationPerformance,
-  initialScriptGzipBytes,
+  initialScriptTransferBytes,
   type KpAnimationFramePerformance,
   type KpAnimationPerformanceBaseline,
   type KpAnimationPerformanceSnapshot,
@@ -44,7 +44,7 @@ try {
     console.log(JSON.stringify({
       snapshot,
       derived: {
-        initialScriptGzipBytes: initialScriptGzipBytes(snapshot)
+        initialScriptTransferBytes: initialScriptTransferBytes(snapshot)
       },
       regressions,
       targets,

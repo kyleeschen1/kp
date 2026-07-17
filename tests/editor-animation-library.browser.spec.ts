@@ -365,3 +365,42 @@ test("linear-algebra concrete samples open on their supported surfaces", async (
     )
   ).toHaveCount(samples.length);
 });
+
+test("each lazy capability pack hydrates through the shared player shell", async ({
+  page
+}) => {
+  test.setTimeout(60_000);
+  const representatives = [
+    ["editor-animation.animation.linear-solve.solve-x", "algebra"],
+    ["editor-animation.animation.generated.pipeline-diagram", "generated-drafts"],
+    [
+      "editor-animation.sample.animation.matrix-matrix.basic",
+      "generated-problems"
+    ],
+    [GRAPH_DESCRIPTOR_ID, "graph"],
+    ["editor-animation.animation.programming.add.execution-trace", "programming"],
+    [
+      "editor-animation.animation.comparison.linear-solve-programming",
+      "comparison"
+    ],
+    ["editor-animation.animation.sample.fourier-transform-pair", "complex-katex"]
+  ] as const;
+
+  for (const [descriptorId, packId] of representatives) {
+    await page.goto(`/?animation=${descriptorId}`);
+    const library = page.locator("[data-kp-editor-animation-library]");
+    const player = library.locator("[data-kp-editor-animation-player]");
+
+    await expect(player).toHaveAttribute(
+      "data-kp-editor-animation-pack-id",
+      packId
+    );
+    await expect(player).toHaveAttribute(
+      "data-kp-editor-animation-hydrated",
+      "true"
+    );
+    await expect(
+      library.locator("[data-kp-editor-animation-diagnostics-counts]")
+    ).toContainText("0 errors");
+  }
+});

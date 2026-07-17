@@ -59,11 +59,6 @@ import {
   type Graph3DViewMode,
   type Surface3DObject
 } from "./semantic/graph.ts";
-import { projectDashboardData } from "./project-dashboard/data.ts";
-import {
-  getProjectDashboardSearchQuery,
-  renderProjectDashboard
-} from "./project-dashboard/render.ts";
 import {
   disposeKpEditorAnimationPlayers,
   hydrateKpEditorAnimationPlayers,
@@ -99,8 +94,16 @@ let selectedEditorAnimationDescriptorId = selectKpEditorAnimationDescriptor(
   readKpEditorAnimationSelection(window.location.search)
 ).id;
 type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
+type ProjectDashboardDataClient = typeof import("./project-dashboard/data.ts");
+type ProjectDashboardRenderClient = typeof import("./project-dashboard/render.ts");
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
 let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
+let projectDashboardClientPromise: Promise<{
+  readonly data: ProjectDashboardDataClient;
+  readonly render: ProjectDashboardRenderClient;
+}> | undefined;
+let activeView: "editor" | "dashboard" = "editor";
+let viewRevision = 0;
 const graph3DWebGLVisibilityObservers = new WeakMap<
   HTMLElement,
   IntersectionObserver
@@ -179,7 +182,7 @@ appRoot.addEventListener("click", (event) => {
 
   switch (button.dataset["action"]) {
     case "show-project-dashboard":
-      renderProjectDashboardView();
+      void renderProjectDashboardView();
       return;
     case "show-editor":
       renderEditor();
@@ -286,7 +289,7 @@ appRoot.addEventListener("input", (event) => {
       setEquationMotionCollapseScale(event.target);
       return;
     case "filter-project-dashboard":
-      filterProjectDashboardFromInput(event.target);
+      void filterProjectDashboardFromInput(event.target);
       return;
     case "toggle-project-dashboard-toc":
       toggleProjectDashboardTocFromInput(event.target);
@@ -312,6 +315,8 @@ async function compileDocument(): Promise<void> {
 }
 
 function renderEditor(): void {
+  activeView = "editor";
+  viewRevision += 1;
   disposeKpEditorAnimationPlayers(appRoot);
   disposeGraph3DWebGL(appRoot);
   appRoot.innerHTML = renderEditorDocument(editorDocument, {
@@ -347,35 +352,62 @@ function selectEquationAnimation(select: HTMLSelectElement): void {
   renderEditor();
 }
 
-function renderProjectDashboardView(
+async function renderProjectDashboardView(
   query = projectDashboardQuery
-): void {
+): Promise<void> {
+  activeView = "dashboard";
+  const revision = ++viewRevision;
   projectDashboardQuery = query;
   disposeKpEditorAnimationPlayers(appRoot);
   disposeGraph3DWebGL(appRoot);
-  appRoot.innerHTML = renderProjectDashboard(projectDashboardData, {
-    query,
-    selectedAgendaRowId: projectDashboardSelectedAgendaRowId,
-    tocOnly: projectDashboardTocOnly,
-    selectedKatexFixtureId: projectDashboardSelectedKatexFixtureId
-  });
+  const client = await loadProjectDashboardClient();
+  if (activeView !== "dashboard" || revision !== viewRevision) return;
+  appRoot.innerHTML = client.render.renderProjectDashboard(
+    client.data.projectDashboardData,
+    {
+      query,
+      selectedAgendaRowId: projectDashboardSelectedAgendaRowId,
+      tocOnly: projectDashboardTocOnly,
+      selectedKatexFixtureId: projectDashboardSelectedKatexFixtureId
+    }
+  );
+}
+
+function loadProjectDashboardClient(): Promise<{
+  readonly data: ProjectDashboardDataClient;
+  readonly render: ProjectDashboardRenderClient;
+}> {
+  if (projectDashboardClientPromise === undefined) {
+    // The dashboard imports every showcase family. Keep that authoring surface
+    // behind an explicit navigation boundary so the editor starts with only
+    // the capability pack selected for playback.
+    projectDashboardClientPromise = Promise.all([
+      import("./project-dashboard/data.ts"),
+      import("./project-dashboard/render.ts")
+    ]).then(([data, render]) => ({ data, render }));
+  }
+
+  return projectDashboardClientPromise;
 }
 
 function selectKatexTransformFixture(button: HTMLButtonElement): void {
   projectDashboardSelectedKatexFixtureId =
     button.dataset["kpKatexTransformFixture"];
-  renderProjectDashboardView(projectDashboardQuery);
+  void renderProjectDashboardView(projectDashboardQuery);
 }
 
 function selectProjectAgendaRow(button: HTMLButtonElement): void {
   projectDashboardSelectedAgendaRowId = button.dataset["kpSelectAgendaRow"];
-  renderProjectDashboardView(projectDashboardQuery);
+  void renderProjectDashboardView(projectDashboardQuery);
 }
 
-function filterProjectDashboardFromInput(input: HTMLInputElement): void {
-  const query = getProjectDashboardSearchQuery(input);
+async function filterProjectDashboardFromInput(
+  input: HTMLInputElement
+): Promise<void> {
+  const client = await loadProjectDashboardClient();
+  const query = client.render.getProjectDashboardSearchQuery(input);
 
-  renderProjectDashboardView(query);
+  await renderProjectDashboardView(query);
 
   const nextInput = appRoot.querySelector<HTMLInputElement>(
     "[data-kp-project-dashboard-search]"
@@ -389,7 +421,7 @@ function filterProjectDashboardFromInput(input: HTMLInputElement): void {
 
 function toggleProjectDashboardTocFromInput(input: HTMLInputElement): void {
   projectDashboardTocOnly = input.checked;
-  renderProjectDashboardView(projectDashboardQuery);
+  void renderProjectDashboardView(projectDashboardQuery);
 }
 
 function openProjectDashboardLiveAnimationPreview(
@@ -403,11 +435,11 @@ function openProjectDashboardLiveAnimationPreview(
     link.dataset["kpPreviewKatexTransformFixture"] ??
     projectDashboardSelectedKatexFixtureId;
   projectDashboardTocOnly = false;
-  renderProjectDashboardView("");
-
-  document
-    .getElementById("project-dashboard-animation-layout-title")
-    ?.scrollIntoView({ block: "start" });
+  void renderProjectDashboardView("").then(() => {
+    document
+      .getElementById("project-dashboard-animation-layout-title")
+      ?.scrollIntoView({ block: "start" });
+  });
 }
 
 function openProjectDashboardEditorAnimation(

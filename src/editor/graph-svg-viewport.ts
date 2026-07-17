@@ -1,4 +1,3 @@
-import { createKpAnimationAssets } from "../animation/catalog.ts";
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import type { KpEditorAnimationPlayerState } from "./animation-player-state.ts";
 import { sampleLinearMapVectorGraphRuntimeFrame } from "../animation/graph-runtime-frame.ts";
@@ -9,8 +8,7 @@ import {
   kpEditorAnimationSurfaceAdapterRegistry,
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
-
-const catalog = createKpAnimationAssets();
+import { getKpEditorAnimationPlaybackSession } from "./animation-player-controller.ts";
 
 export interface KpEditorGraphSvgViewportModel {
   readonly width: number;
@@ -48,8 +46,8 @@ export const kpEditorGraphSvgViewportAdapter: KpEditorAnimationSurfaceAdapter = 
   supports(state) {
     return state.surface.slotKinds.includes("graph");
   },
-  render({ slot, state }) {
-    const animation = catalog.find((candidate) => candidate.id === state.animationId);
+  render({ player, slot, state }) {
+    const animation = getKpEditorAnimationPlaybackSession(player)?.animation;
     if (animation === undefined) return;
     const model = createKpEditorGraphSvgViewportModel(animation);
     let svg = slot.querySelector<SVGSVGElement>("[data-kp-editor-graph-svg]");

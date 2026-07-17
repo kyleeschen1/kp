@@ -2,7 +2,6 @@ import {
   describeKpAnimationAssetTransformationTree,
   type KpAnimationAsset
 } from "../animation/asset.ts";
-import { createKpAnimationAssets } from "../animation/catalog.ts";
 import {
   renderLatexToHtml,
   renderSelectorAnnotatedLatexToHtml
@@ -22,6 +21,7 @@ import {
   type KpEditorEquationTransitionMotifFrame
 } from "./equation-transition-motifs.ts";
 import type { KpEditorAnimationPlayerState } from "./animation-player-state.ts";
+import { getKpEditorAnimationPlaybackSession } from "./animation-player-controller.ts";
 import {
   syncKpEditorEquationMaterialContinuityInspection
 } from "./equation-material-continuity-inspector.ts";
@@ -167,7 +167,6 @@ import type {
   KpInequalityPivotChoreographyFrame
 } from "../animation/inequality-pivot-choreography.ts";
 
-const animationCatalog = createKpAnimationAssets();
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
   readonly contentKey: string;
   readonly plans: ReadonlyMap<number, KpEditorPrecomputedEquationMotionPlan>;
@@ -338,18 +337,15 @@ export const kpEditorEquationSurfaceAdapter: KpEditorAnimationSurfaceAdapter = {
   supports(state) {
     return state.surface.slotKinds.includes("equation");
   },
-  render({ slot, state }) {
-    const animation = animationCatalog.find(
-      (candidate) => candidate.id === state.animationId
-    );
+  render({ player, slot, state }) {
+    const animation = getKpEditorAnimationPlaybackSession(player)?.animation;
     if (animation === undefined) {
       renderUnavailable(slot, `Missing equation animation ${state.animationId}.`);
       return;
     }
 
-    const player = slot.closest<HTMLElement>("[data-kp-editor-animation-player]");
     const authoringRevision = Number(
-      player?.dataset["kpEditorAnimationAuthoringRevision"] ?? 0
+      player.dataset["kpEditorAnimationAuthoringRevision"] ?? 0
     );
     const gestaltChannels = selectedGestaltChannels(player);
     const frame = createKpEditorEquationStageFrame({

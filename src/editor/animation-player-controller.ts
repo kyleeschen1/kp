@@ -1,4 +1,5 @@
-import { createKpAnimationAssets } from "../animation/catalog.ts";
+import { loadKpAnimationAsset } from "../animation/catalog-loader.ts";
+import type { KpAnimationAsset } from "../animation/asset.ts";
 import {
   createKpEditorAnimationLibrary
 } from "./animation-library.ts";
@@ -25,6 +26,13 @@ import {
   type KpFocusExperimentMode
 } from "../animation/elevated-focus-experiment.ts";
 import type { KpChoreographyEnvelopePhaseId } from "../animation/choreography-plan.ts";
+import {
+  createKpEditorAnimationDiagnostics,
+  renderKpEditorAnimationDiagnostics
+} from "./animation-diagnostics.ts";
+import {
+  createLinearSolveRuntimeVisualFrameSample
+} from "../rendering/linear-solve-runtime-visual-sample.ts";
 
 export const KP_EDITOR_ANIMATION_FRAME_EVENT = "kp-editor-animation-frame";
 export const KP_EDITOR_ANIMATION_REGENERATION_EVENT =
@@ -38,7 +46,11 @@ const frameRequests = new WeakMap<HTMLElement, number>();
 
 export function hydrateKpEditorAnimationPlayers(root: ParentNode): void {
   root.querySelectorAll<HTMLElement>("[data-kp-editor-animation-player]")
-    .forEach(hydrateKpEditorAnimationPlayer);
+    .forEach((player) => {
+      void hydrateKpEditorAnimationPlayer(player).catch((error: unknown) => {
+        markPlayerLoadFailure(player, error);
+      });
+    });
 }
 
 export function pauseKpEditorAnimationPlayers(
@@ -103,21 +115,24 @@ export function dispatchKpEditorAnimationPlaybackAction(
   }
 }
 
-function hydrateKpEditorAnimationPlayer(player: HTMLElement): void {
-  if (player.dataset["kpEditorAnimationHydrated"] === "true") return;
+async function hydrateKpEditorAnimationPlayer(player: HTMLElement): Promise<void> {
+  if (player.dataset["kpEditorAnimationHydrated"] === "true" ||
+    player.dataset["kpEditorAnimationLoading"] === "true") return;
+  player.dataset["kpEditorAnimationLoading"] = "true";
 
   const descriptorId = player.dataset["kpEditorAnimationDescriptorId"];
   const animationId = player.dataset["kpEditorAnimationId"];
   const descriptor = createKpEditorAnimationLibrary().find(
     (candidate) => candidate.id === descriptorId
   );
-  const catalog = createKpAnimationAssets();
-  const animation = catalog.find((candidate) => candidate.id === animationId);
-
-  if (descriptor === undefined || animation === undefined) {
+  if (descriptor === undefined || animationId === undefined) {
     throw new Error(
       `Cannot hydrate editor animation player for ${descriptorId ?? "unknown descriptor"} / ${animationId ?? "unknown animation"}.`
     );
+  }
+  const { animation, catalog, packId } = await loadKpAnimationAsset(animationId);
+  if (!player.isConnected || player.dataset["kpEditorAnimationDisposed"] === "true") {
+    return;
   }
 
   const progress = Number(player.dataset["kpEditorAnimationProgress"] ?? 0);
@@ -140,11 +155,52 @@ function hydrateKpEditorAnimationPlayer(player: HTMLElement): void {
   focusExperimentModes.set(player, "flat");
   syncAuthoringData(player, authoring);
   syncAccessibilityData(player, "full-motion");
+  player.dataset["kpEditorAnimationPackId"] = packId;
   player.dataset["kpEditorAnimationHydrated"] = "true";
+  delete player.dataset["kpEditorAnimationLoading"];
   player.addEventListener("click", handlePlayerClick);
   player.addEventListener("input", handlePlayerInput);
   player.addEventListener("keydown", handlePlayerKeydown);
+  syncLoadedDiagnostics(player, animation, catalog);
   syncPlayerDom(player, session);
+}
+
+function syncLoadedDiagnostics(
+  player: HTMLElement,
+  animation: KpAnimationAsset,
+  catalog: readonly KpAnimationAsset[]
+): void {
+  const solveXVisualSample = animation.id === "animation.linear-solve.solve-x"
+    ? createLinearSolveRuntimeVisualFrameSample({ progress: 0.5 })
+    : undefined;
+  const diagnostics = createKpEditorAnimationDiagnostics({
+    animation,
+    catalog,
+    ...(solveXVisualSample === undefined ? {} : {
+      runtimeFrame: solveXVisualSample.runtimeFrame,
+      visualFrame: solveXVisualSample.visualFrame
+    })
+  });
+  const current = player.closest("[data-kp-editor-animation-library]")
+    ?.querySelector<HTMLElement>("[data-kp-editor-animation-diagnostics]");
+  if (current !== null && current !== undefined) {
+    current.outerHTML = renderKpEditorAnimationDiagnostics(diagnostics);
+  }
+}
+
+function markPlayerLoadFailure(player: HTMLElement, error: unknown): void {
+  delete player.dataset["kpEditorAnimationLoading"];
+  player.dataset["kpEditorAnimationLoadError"] = "true";
+  const message = error instanceof Error ? error.message : "Animation pack failed to load.";
+  const diagnostics = player.closest("[data-kp-editor-animation-library]")
+    ?.querySelector<HTMLElement>("[data-kp-editor-animation-diagnostics]");
+  if (diagnostics !== null && diagnostics !== undefined) {
+    diagnostics.dataset["kpEditorAnimationDiagnosticsStatus"] = "error";
+    diagnostics.querySelector<HTMLElement>("[data-kp-editor-animation-diagnostics-label]")
+      ?.replaceChildren(document.createTextNode("Diagnostics: load error"));
+    diagnostics.querySelector<HTMLElement>("[data-kp-editor-animation-diagnostics-counts]")
+      ?.replaceChildren(document.createTextNode(message));
+  }
 }
 
 function handlePlayerClick(event: MouseEvent): void {

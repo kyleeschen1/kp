@@ -1,0 +1,122 @@
+{
+  "id": "next-action.kp.material-motion.lazy-family-packs-v0",
+  "kind": "next-action",
+  "title": "Load animation families as capability packs",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Split concrete animation assets into seven lazy capability packs, defer the full dashboard behind navigation, hydrate the selected player asynchronously with stale-view protection, preserve composite child clocks, and make runtime transfer the authoritative payload metric. Initial script transfer fell from 489079 to 278451 bytes with no regressions.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.lazy-family-packs-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/catalog-loader.ts",
+      "summary": "Literal dynamic-import router and pack cache."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-player-controller.ts",
+      "summary": "Asynchronous selected-pack player hydration and diagnostics transition."
+    },
+    {
+      "kind": "file",
+      "path": "src/main.ts",
+      "summary": "On-demand dashboard loading with stale render protection."
+    },
+    {
+      "kind": "file",
+      "path": "tests/animation-catalog-loader.test.ts",
+      "summary": "Catalog parity, pack coverage, literal split, and child-clock closure."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run theseus -- validate"
+  ],
+  "expectedLearning": [
+    "Whether Load animation families as capability packs can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "TypeScript contracts",
+      "checkedAt": "2026-07-17T17:48:47.347Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "1295 unit tests",
+      "checkedAt": "2026-07-17T17:48:47.419Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production capability chunks",
+      "checkedAt": "2026-07-17T17:48:47.490Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-library.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "Editor family playback",
+      "checkedAt": "2026-07-17T17:48:47.567Z"
+    },
+    {
+      "command": "npx playwright test tests/project-dashboard.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "Lazy dashboard round trip",
+      "checkedAt": "2026-07-17T17:48:47.639Z"
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "Payload hydration and frame baseline",
+      "checkedAt": "2026-07-17T17:48:47.711Z"
+    },
+    {
+      "command": "npm run theseus -- validate",
+      "status": "passed",
+      "checkedAt": "2026-07-17T17:48:47.785Z",
+      "scope": "Theseus graph"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Split concrete animation assets into seven lazy capability packs, defer the full dashboard behind navigation, hydrate the selected player asynchronously with stale-view protection, preserve composite child clocks, and make runtime transfer the authoritative payload metric. Initial script transfer fell from 489079 to 278451 bytes with no regressions."
+  }
+}

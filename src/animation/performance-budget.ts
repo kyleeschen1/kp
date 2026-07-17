@@ -46,7 +46,7 @@ export interface KpAnimationPerformanceIssue {
 }
 
 export const kpAnimationPerformanceTargets = Object.freeze({
-  initialScriptGzipBytes: 250_000,
+  initialScriptTransferBytes: 250_000,
   constrainedHydrationMs: 5_000,
   constrainedFrameP95Ms: 33,
   constrainedFrameMaxMs: 100,
@@ -90,9 +90,9 @@ export function evaluateKpAnimationPerformance(input: {
 
   maximumIssue(
     issues,
-    "initialScriptGzipBytes",
-    initialScriptGzipBytes(snapshot),
-    kpAnimationPerformanceTargets.initialScriptGzipBytes,
+    "normal.initialScriptTransferBytes.target",
+    initialScriptTransferBytes(snapshot),
+    kpAnimationPerformanceTargets.initialScriptTransferBytes,
     "target"
   );
   maximumIssue(
@@ -140,14 +140,13 @@ export function evaluateKpAnimationPerformance(input: {
   return issues;
 }
 
-export function initialScriptGzipBytes(
+export function initialScriptTransferBytes(
   snapshot: KpAnimationPerformanceSnapshot
 ): number {
-  const threeRequested = snapshot.normal.initialScriptNames.some((name) =>
-    name.startsWith("graph-webgl-three-")
-  );
-  return snapshot.artifacts.entryScriptGzipBytes +
-    (threeRequested ? snapshot.artifacts.threeScriptGzipBytes : 0);
+  // Runtime transfer is authoritative once capability packs are lazy: summing
+  // only the entry and Three artifacts would silently omit selected packs and
+  // shared chunks fetched during hydration.
+  return snapshot.normal.initialScriptTransferBytes;
 }
 
 function maximumIssue(

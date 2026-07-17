@@ -4,6 +4,7 @@ import type {
 import type {
   KpEditorAnimationPlayerState
 } from "./animation-player-state.ts";
+import { dispatchKpEditorAnimationSurface } from "./animation-surface-dispatch.ts";
 import {
   createKpEditorAnimationAuthoringState,
   type KpEditorAnimationAuthoringState
@@ -15,19 +16,26 @@ import {
 
 export function renderKpEditorAnimationPlayerShell(input: {
   readonly descriptor: KpEditorAnimationDescriptor;
-  readonly player: KpEditorAnimationPlayerState;
+  readonly player?: KpEditorAnimationPlayerState | undefined;
   readonly authoring?: KpEditorAnimationAuthoringState | undefined;
 }): string {
-  const { descriptor, player } = input;
+  const { descriptor } = input;
+  const player = input.player;
   const authoring = input.authoring ?? createKpEditorAnimationAuthoringState();
-  const progressPercent = Math.round(player.progress * 100);
+  const descriptorId = player?.descriptorId ?? descriptor.id;
+  const animationId = player?.animationId ?? descriptor.animationId;
+  const playbackStatus = player?.playbackStatus ?? "idle";
+  const direction = player?.direction ?? "forward";
+  const progress = player?.progress ?? 0;
+  const surface = player?.surface ?? dispatchKpEditorAnimationSurface(descriptor);
+  const progressPercent = Math.round(progress * 100);
   const hasControl = (kind: KpEditorAnimationDescriptor["controlKinds"][number]) =>
     descriptor.controlKinds.includes(kind);
 
   return `
-    <section class="editor-animation-player" data-kp-editor-animation-player data-kp-editor-animation-descriptor-id="${escapeHtml(player.descriptorId)}" data-kp-editor-animation-id="${escapeHtml(player.animationId)}" data-kp-editor-animation-status="${player.playbackStatus}" data-kp-editor-animation-direction="${player.direction}" data-kp-editor-animation-progress="${player.progress}" data-kp-editor-animation-gestalt-pinned-style="${styleKey(kpOrganicSubtleStyleRef)}" data-kp-editor-animation-gestalt-selected-style="${styleKey(kpOrganicSubtleStyleRef)}" aria-label="${escapeHtml(descriptor.title)} animation player" aria-keyshortcuts="Space ArrowLeft ArrowRight Home End R" tabindex="0">
-      <div class="editor-animation-player__stage" data-kp-editor-animation-stage data-kp-editor-animation-surface="${player.surface.kind}">
-        ${player.surface.slotKinds.map((slotKind) => `
+    <section class="editor-animation-player" data-kp-editor-animation-player data-kp-editor-animation-descriptor-id="${escapeHtml(descriptorId)}" data-kp-editor-animation-id="${escapeHtml(animationId)}" data-kp-editor-animation-status="${playbackStatus}" data-kp-editor-animation-direction="${direction}" data-kp-editor-animation-progress="${progress}" data-kp-editor-animation-gestalt-pinned-style="${styleKey(kpOrganicSubtleStyleRef)}" data-kp-editor-animation-gestalt-selected-style="${styleKey(kpOrganicSubtleStyleRef)}" aria-label="${escapeHtml(descriptor.title)} animation player" aria-keyshortcuts="Space ArrowLeft ArrowRight Home End R" tabindex="0">
+      <div class="editor-animation-player__stage" data-kp-editor-animation-stage data-kp-editor-animation-surface="${surface.kind}">
+        ${surface.slotKinds.map((slotKind) => `
           <div class="editor-animation-player__surface editor-animation-player__surface--${slotKind}" data-kp-editor-animation-surface-slot="${slotKind}" aria-label="${surfaceLabel(slotKind)}">
             <span>${surfaceLabel(slotKind)}</span>
           </div>
@@ -46,11 +54,11 @@ export function renderKpEditorAnimationPlayerShell(input: {
         ${hasControl("scrubber") ? `
           <label class="editor-animation-player__scrubber">
             <span>Progress</span>
-            <input type="range" min="0" max="1" step="0.001" value="${player.progress}" data-action="seek-editor-animation" aria-label="Scrub animation progress" />
+            <input type="range" min="0" max="1" step="0.001" value="${progress}" data-action="seek-editor-animation" aria-label="Scrub animation progress" />
             <output data-kp-editor-animation-progress-label>${progressPercent}%</output>
           </label>
         ` : ""}
-        <p class="editor-animation-player__status" data-kp-editor-animation-status-label aria-live="polite">${statusLabel(player.playbackStatus, player.direction)}</p>
+        <p class="editor-animation-player__status" data-kp-editor-animation-status-label aria-live="polite">${statusLabel(playbackStatus, direction)}</p>
         <label class="editor-animation-player__accessibility">Presentation
           <select data-kp-editor-animation-accessibility-control aria-label="Animation accessibility presentation">
             <option value="full-motion" selected>full motion</option>

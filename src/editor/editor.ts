@@ -57,17 +57,9 @@ import {
 import {
   dispatchKpEditorAnimationSurface
 } from "./animation-surface-dispatch.ts";
-import { createKpAnimationAssets } from "../animation/catalog.ts";
 import {
-  createKpEditorAnimationDiagnostics,
-  renderKpEditorAnimationDiagnostics
+  renderKpEditorAnimationDiagnosticsLoading
 } from "./animation-diagnostics.ts";
-import {
-  createLinearSolveRuntimeVisualFrameSample
-} from "../rendering/linear-solve-runtime-visual-sample.ts";
-import {
-  createKpEditorAnimationPlayerState
-} from "./animation-player-state.ts";
 import {
   renderKpEditorAnimationPlayerShell
 } from "./animation-player-shell.ts";
@@ -228,30 +220,6 @@ function renderEditorAnimationLibrary(
     selectedDescriptorId: selected.id
   });
   const surface = dispatchKpEditorAnimationSurface(selected);
-  const assets = createKpAnimationAssets();
-  const animation = assets.find((asset) => asset.id === selected.animationId);
-
-  if (animation === undefined) {
-    throw new Error(`Missing editor animation asset: ${selected.animationId}`);
-  }
-  const player = createKpEditorAnimationPlayerState({
-    descriptor: selected,
-    animation,
-    catalog: assets
-  });
-  const solveXVisualSample = animation.id === "animation.linear-solve.solve-x"
-    ? createLinearSolveRuntimeVisualFrameSample({ progress: 0.5 })
-    : undefined;
-  const diagnostics = createKpEditorAnimationDiagnostics({
-    animation,
-    catalog: assets,
-    ...(solveXVisualSample === undefined
-      ? {}
-      : {
-          runtimeFrame: solveXVisualSample.runtimeFrame,
-          visualFrame: solveXVisualSample.visualFrame
-        })
-  });
 
   return `
     <section class="editor-animation-library" data-kp-editor-animation-library data-kp-editor-animation-descriptor-id="${escapeHtml(selected.id)}" data-kp-editor-animation-id="${escapeHtml(selected.animationId)}" data-kp-editor-animation-surface="${escapeHtml(surface.kind)}" aria-labelledby="editor-animation-library-title">
@@ -266,8 +234,8 @@ function renderEditorAnimationLibrary(
           ${selected.familyId === undefined ? "" : `<div><dt>Family</dt><dd>${escapeHtml(selected.familyId)}</dd></div>`}
         </dl>
       </div>
-      ${renderKpEditorAnimationPlayerShell({ descriptor: selected, player })}
-      ${renderKpEditorAnimationDiagnostics(diagnostics)}
+      ${renderKpEditorAnimationPlayerShell({ descriptor: selected })}
+      ${renderKpEditorAnimationDiagnosticsLoading(selected)}
     </section>
   `;
 }

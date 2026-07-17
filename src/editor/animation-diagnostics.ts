@@ -18,6 +18,7 @@ import {
 } from "../animation/visual-frame-diagnostics-panel.ts";
 import { checkKpAnimationRuntimeRewindClockLaw } from "../animation/runtime-laws.ts";
 import type { KpLawCheckResult } from "../semantic/asset-laws.ts";
+import type { KpEditorAnimationDescriptor } from "./animation-descriptor.ts";
 
 export type KpEditorAnimationDiagnosticSeverity =
   | "info"
@@ -187,6 +188,33 @@ export function renderKpEditorAnimationDiagnostics(
             </li>
           `).join("")}
         </ul>
+      </div>
+    </details>
+  `;
+}
+
+export function renderKpEditorAnimationDiagnosticsLoading(
+  descriptor: KpEditorAnimationDescriptor
+): string {
+  return `
+    <details class="editor-animation-diagnostics" data-kp-editor-animation-diagnostics data-kp-editor-animation-diagnostics-status="loading">
+      <summary>
+        <span data-kp-editor-animation-diagnostics-label>Diagnostics: loading</span>
+        <span data-kp-editor-animation-diagnostics-counts>loading ${escapeHtml(descriptor.animationId)}</span>
+      </summary>
+      <div class="editor-animation-diagnostics__body">
+        <dl>
+          <div><dt>Runtime phase</dt><dd data-kp-editor-animation-diagnostics-phase>loading</dd></div>
+          <div><dt>Progress</dt><dd data-kp-editor-animation-diagnostics-progress>0%</dd></div>
+          <div><dt>Direction</dt><dd data-kp-editor-animation-diagnostics-direction>forward</dd></div>
+          <div><dt>Active transforms</dt><dd data-kp-editor-animation-diagnostics-active-transformations>0</dd></div>
+          <div><dt>Active targets</dt><dd data-kp-editor-animation-diagnostics-active-targets>0</dd></div>
+          <div><dt>Active selectors</dt><dd data-kp-editor-animation-diagnostics-active-selectors>0</dd></div>
+          <div><dt>Render targets bound</dt><dd data-kp-editor-animation-diagnostics-targets>0/0</dd></div>
+          <div><dt>Selectors bound</dt><dd data-kp-editor-animation-diagnostics-selectors>0/0</dd></div>
+          <div><dt>Playback laws</dt><dd data-kp-editor-animation-diagnostics-playback-laws>0/0</dd></div>
+        </dl>
+        <ul></ul>
       </div>
     </details>
   `;

@@ -1,4 +1,3 @@
-import { createKpAnimationAssets } from "../animation/catalog.ts";
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import type { KpEditorAnimationPlayerState } from "./animation-player-state.ts";
 import {
@@ -16,8 +15,7 @@ import {
   kpEditorAnimationSurfaceAdapterRegistry,
   type KpEditorAnimationSurfaceAdapter
 } from "./animation-surface-adapter-registry.ts";
-
-const catalog = createKpAnimationAssets();
+import { getKpEditorAnimationPlaybackSession } from "./animation-player-controller.ts";
 
 export const kpEditorDiagramSvgAdapter: KpEditorAnimationSurfaceAdapter = {
   id: "editor-animation-surface.diagram.svg",
@@ -26,8 +24,8 @@ export const kpEditorDiagramSvgAdapter: KpEditorAnimationSurfaceAdapter = {
   supports(state) {
     return state.surface.slotKinds.includes("diagram");
   },
-  render({ slot, state }) {
-    const animation = catalog.find((candidate) => candidate.id === state.animationId);
+  render({ player, slot, state }) {
+    const animation = getKpEditorAnimationPlaybackSession(player)?.animation;
     if (animation === undefined) return;
     slot.innerHTML = renderDiagramAnimation(animation, state);
   }

@@ -59,17 +59,17 @@ test("editor diagnostics render inspectable severity and binding metadata", () =
   assert.match(html, /visual-frame\.selector-unbound/);
 });
 
-test("selected editor animation includes its diagnostics panel", () => {
+test("selected editor animation renders diagnostics loading state before its pack arrives", () => {
   const html = renderEditorDocument(createInitialEditorDocument(), {
     editorAnimationDescriptorId:
       "editor-animation.animation.linear-solve.solve-x"
   });
 
   assert.match(html, /data-kp-editor-animation-diagnostics/);
-  assert.match(html, /data-kp-editor-animation-diagnostics-status="passed"/);
-  assert.match(html, /data-kp-editor-animation-diagnostics-targets>1\/1</);
-  assert.match(html, /data-kp-editor-animation-diagnostics-selectors>10\/10</);
-  assert.match(html, /animation\.linear-solve\.solve-x\.forward/);
+  assert.match(html, /data-kp-editor-animation-diagnostics-status="loading"/);
+  assert.match(html, /loading animation\.linear-solve\.solve-x/);
+  assert.match(html, /data-kp-editor-animation-diagnostics-targets>0\/0</);
+  assert.match(html, /data-kp-editor-animation-diagnostics-selectors>0\/0</);
 });
 
 test("authoring controls produce inspectable canonical regeneration requests", () => {

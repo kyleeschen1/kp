@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   evaluateKpAnimationPerformance,
-  initialScriptGzipBytes,
+  initialScriptTransferBytes,
   type KpAnimationPerformanceBaseline,
   type KpAnimationPerformanceSnapshot
 } from "../src/animation/performance-budget.ts";
@@ -34,9 +34,9 @@ test("performance evaluation separates regression gates from product targets", (
   assert.equal(issues.some((issue) => issue.severity === "regression"), false);
   assert.deepEqual(
     issues.filter((issue) => issue.severity === "target").map((issue) => issue.metric),
-    ["initialScriptGzipBytes", "normal.initialThreeRequested"]
+    ["normal.initialScriptTransferBytes.target", "normal.initialThreeRequested"]
   );
-  assert.equal(initialScriptGzipBytes(snapshot), 492_590);
+  assert.equal(initialScriptTransferBytes(snapshot), 489_079);
 });
 
 test("performance evaluation detects artifact and transfer regressions", () => {
@@ -63,16 +63,17 @@ test("performance evaluation detects artifact and transfer regressions", () => {
   );
 });
 
-test("removing the initial Three request changes the compressed initial total", () => {
+test("runtime transfer accounts for every lazy initial capability chunk", () => {
   const lazy: KpAnimationPerformanceSnapshot = {
     ...snapshot,
     normal: {
       ...snapshot.normal,
+      initialScriptTransferBytes: 358_256,
       initialScriptNames: ["index-current.js"]
     }
   };
 
-  assert.equal(initialScriptGzipBytes(lazy), 360_390);
+  assert.equal(initialScriptTransferBytes(lazy), 358_256);
 });
 
 function runtime(options: {
