@@ -1866,6 +1866,103 @@ test("wrap and distribution satisfy their executable choreography contracts", as
     .toHaveCSS("opacity", "1");
 });
 
+test("factoring coalesces repeated factors through its inverse choreography", async ({
+  page
+}) => {
+  await page.goto("/");
+  await page.locator('[data-action="set-editor-animation"]').selectOption(
+    "editor-animation.sample.animation.factoring.factor-common-a"
+  );
+  const player = page.locator("[data-kp-editor-animation-player]");
+  const scrubber = player.locator('[data-action="seek-editor-animation"]');
+  const transition = player.locator("[data-kp-editor-equation-transition-id]");
+  const sourceFactors = transition.locator(
+    '[data-kp-editor-equation-source] [data-kp-motion-id$="-factor"]'
+  );
+  const commonFactor = transition.locator(
+    '[data-kp-editor-equation-target] [data-kp-motion-id$=".factored.factor"]'
+  );
+
+  await scrubber.fill("0.18");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-factoring-choreography",
+    /factoring-choreography$/
+  );
+  await expect(sourceFactors).toHaveCount(2);
+  await expect(sourceFactors.nth(0)).toHaveCSS("opacity", "1");
+  await expect(sourceFactors.nth(1)).toHaveCSS("opacity", "1");
+  await expect(commonFactor).toHaveCSS("opacity", "0");
+  const previewCompaction = Number(await transition.getAttribute(
+    "data-kp-editor-equation-factoring-addend-compaction"
+  ));
+  expect(previewCompaction).toBeGreaterThan(0);
+  expect(previewCompaction).toBeLessThan(0.2);
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-factoring-grouping-opacity",
+    "0"
+  );
+  expect(parseFloat(await sourceFactors.nth(0).evaluate(
+    (element) => (element as HTMLElement).style.getPropertyValue(
+      "--kp-focus-outline-strength"
+    )
+  ))).toBeGreaterThan(0);
+
+  await scrubber.fill("0.5");
+  await expect(sourceFactors.nth(0)).toHaveAttribute(
+    "data-kp-editor-factoring-semantic-index",
+    "0"
+  );
+  await expect(sourceFactors.nth(1)).toHaveAttribute(
+    "data-kp-editor-factoring-semantic-index",
+    "1"
+  );
+  await expect(sourceFactors.nth(0)).toHaveCSS("opacity", "1");
+  expect(Number(await sourceFactors.nth(1).evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeGreaterThan(0.9);
+  expect(await sourceFactors.nth(0).evaluate((element) => getComputedStyle(element).transform))
+    .not.toBe(await sourceFactors.nth(1).evaluate((element) => getComputedStyle(element).transform));
+  const pathVariants = await sourceFactors.evaluateAll((elements) =>
+    elements.map((element) => element.getAttribute("data-kp-equation-motion-path-variant"))
+  );
+  expect(new Set(pathVariants)).toEqual(new Set(["arc-above", "arc-below"]));
+
+  await scrubber.fill("0.68");
+  const groupingOpacity = Number(await transition.getAttribute(
+    "data-kp-editor-equation-factoring-grouping-opacity"
+  ));
+  expect(groupingOpacity).toBeGreaterThan(0);
+  expect(groupingOpacity).toBeLessThan(1);
+  expect(Number(await sourceFactors.nth(1).evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeLessThan(0.5);
+
+  await scrubber.fill("0.9");
+  await expect(commonFactor).toHaveCSS("opacity", "1");
+  await expect(sourceFactors.nth(1)).toHaveCSS("opacity", "0");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-factoring-grouping-opacity",
+    "1"
+  );
+  await expect(sourceFactors.nth(0)).toHaveCSS("--kp-focus-outline-strength", "0");
+
+  await scrubber.fill("0.99");
+  expect(Number(await sourceFactors.nth(0).evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeGreaterThan(0);
+  await scrubber.fill("1");
+  await expect(sourceFactors.nth(0)).toHaveCSS("opacity", "0");
+  await expect(sourceFactors.nth(1)).toHaveCSS("opacity", "0");
+  await expect(commonFactor).toHaveCSS("opacity", "1");
+  await player.getByRole("button", { name: "Rewind animation" }).click();
+  await scrubber.fill("0.5");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-direction", "rewind");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-factoring-choreography",
+    /factoring-choreography$/
+  );
+});
+
 test("inequality family animation visibly flips its relation", async ({ page }) => {
   await page.goto("/");
   await page.locator('[data-action="set-editor-animation"]').selectOption(

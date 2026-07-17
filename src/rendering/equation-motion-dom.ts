@@ -44,6 +44,7 @@ export interface KpMeasuredEquationTransitionGeometry {
   readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
   readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
   readonly distributionChoreographyKind?: "canonical-fan-out" | undefined;
+  readonly factoringChoreographyKind?: "canonical-fan-in" | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
@@ -118,6 +119,7 @@ export function measureKpEquationTransitionGeometry(input: {
   readonly enclosureChoreographyKind?: KpEquationEnclosureChoreographyKind | undefined;
   readonly lineageChoreographyKind?: "copy-fan-out" | "merge-fan-in" | "substitute" | undefined;
   readonly distributionChoreographyKind?: "canonical-fan-out" | undefined;
+  readonly factoringChoreographyKind?: "canonical-fan-in" | undefined;
   readonly representationalSuccessionKind?:
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
@@ -150,6 +152,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.distributionChoreographyKind === undefined
       ? {}
       : { distributionChoreographyKind: input.distributionChoreographyKind }),
+    ...(input.factoringChoreographyKind === undefined
+      ? {}
+      : { factoringChoreographyKind: input.factoringChoreographyKind }),
     ...(input.representationalSuccessionKind === undefined
       ? {}
       : {

@@ -45,6 +45,12 @@ import {
   type KpDistributionChoreographyFrame,
   type KpDistributionChoreographyPlan
 } from "../animation/distribution-choreography.ts";
+import {
+  compileKpFactoringChoreography,
+  sampleKpFactoringChoreography,
+  type KpFactoringChoreographyFrame,
+  type KpFactoringChoreographyPlan
+} from "../animation/factoring-choreography.ts";
 
 export interface KpEquationTokenMotionPose {
   readonly opacity: number;
@@ -72,6 +78,7 @@ export interface KpEquationTokenMotionFrame {
   readonly lineageChoreography?: KpCopyFanOutChoreographyFrame | undefined;
   readonly distributionChoreography?:
     KpDistributionChoreographyFrame | undefined;
+  readonly factoringChoreography?: KpFactoringChoreographyFrame | undefined;
   readonly representationalSuccession?:
     KpEquationRepresentationalSuccessionFrame | undefined;
   readonly linearRearrangement?:
@@ -118,6 +125,26 @@ interface DistributionChoreographyContext {
     KpMeasuredEquationTransitionGeometry["precomputedMotionPathsByMotionId"];
 }
 
+interface FactoringChoreographyContext {
+  readonly plan: KpFactoringChoreographyPlan;
+  readonly frame: KpFactoringChoreographyFrame;
+  readonly factorRelationRecordId: string;
+  readonly reflowRelationRecordIds: ReadonlySet<string>;
+  readonly groupingRelationRecordIds: ReadonlySet<string>;
+  readonly commonFactorBounds: {
+    readonly left: number;
+    readonly top: number;
+    readonly width: number;
+    readonly height: number;
+  };
+  readonly groupingEntryByMotionId: ReadonlyMap<
+    string,
+    { readonly x: number; readonly y: number }
+  >;
+  readonly motionPathsByMotionId:
+    KpMeasuredEquationTransitionGeometry["precomputedMotionPathsByMotionId"];
+}
+
 interface RepresentationalSuccessionContext {
   readonly relationRecordIds: ReadonlySet<string>;
   readonly frame: KpEquationRepresentationalSuccessionFrame;
@@ -143,6 +170,7 @@ export function sampleKpEquationTokenMotion(
     geometry,
     p
   );
+  const factoringChoreography = createFactoringChoreographyContext(geometry, p);
   const representationalSuccession =
     createRepresentationalSuccessionContext(geometry, p);
   const linearRearrangement = geometry.linearRearrangementKind === undefined
@@ -169,6 +197,7 @@ export function sampleKpEquationTokenMotion(
       enclosureChoreography,
       lineageChoreography,
       distributionChoreography,
+      factoringChoreography,
       representationalSuccession,
       linearRearrangement,
       dotProductTraversal,
@@ -190,6 +219,9 @@ export function sampleKpEquationTokenMotion(
     ...(distributionChoreography === undefined
       ? {}
       : { distributionChoreography: distributionChoreography.frame }),
+    ...(factoringChoreography === undefined
+      ? {}
+      : { factoringChoreography: factoringChoreography.frame }),
     ...(representationalSuccession === undefined
       ? {}
       : { representationalSuccession: representationalSuccession.frame }),
@@ -246,6 +278,7 @@ function sampleRelation(
   enclosureChoreography: EnclosureChoreographyContext | undefined,
   lineageChoreography: LineageChoreographyContext | undefined,
   distributionChoreography: DistributionChoreographyContext | undefined,
+  factoringChoreography: FactoringChoreographyContext | undefined,
   representationalSuccession:
     RepresentationalSuccessionContext | undefined,
   linearRearrangement: KpEquationLinearRearrangementFrame | undefined,
@@ -274,6 +307,16 @@ function sampleRelation(
         distributionChoreography
       );
   if (distributionTokens !== undefined) return distributionTokens;
+  const factoringTokens = factoringChoreography === undefined
+    ? undefined
+    : sampleFactoringRelation(
+        relation,
+        sourceTokens,
+        targetTokens,
+        progress,
+        factoringChoreography
+      );
+  if (factoringTokens !== undefined) return factoringTokens;
   if (representationalSuccession?.relationRecordIds.has(relation.recordId)) {
     const sourceIds = new Set(relation.source?.motionIds ?? []);
     const targetIds = new Set(relation.target?.motionIds ?? []);
@@ -693,6 +736,90 @@ function createDistributionChoreographyContext(
   };
 }
 
+function createFactoringChoreographyContext(
+  geometry: KpMeasuredEquationTransitionGeometry,
+  progress: number
+): FactoringChoreographyContext | undefined {
+  if (geometry.factoringChoreographyKind !== "canonical-fan-in") {
+    return undefined;
+  }
+  const factorRelation = geometry.relations.find(
+    (relation) =>
+      relation.lifecycle === "merge" &&
+      relation.source !== undefined &&
+      relation.target !== undefined
+  );
+  const persistentRelations = geometry.relations.filter(
+    (relation) =>
+      relation.lifecycle === "persist" &&
+      relation.source !== undefined &&
+      relation.target !== undefined
+  );
+  const addendRelations = persistentRelations.filter((relation) =>
+    relation.recordId.includes("term")
+  );
+  const connectorRelations = persistentRelations.filter(
+    (relation) => !addendRelations.includes(relation)
+  );
+  const groupingRelations = geometry.relations.filter(
+    (relation) => relation.lifecycle === "enter" && relation.target !== undefined
+  );
+  const commonFactorId = factorRelation?.target?.selectorIds[0];
+  if (
+    factorRelation?.source === undefined ||
+    factorRelation.target === undefined ||
+    commonFactorId === undefined
+  ) {
+    throw new Error("Canonical factoring geometry is missing factor fan-in.");
+  }
+  const plan = compileKpFactoringChoreography({
+    id: `${geometry.transitionId}.factoring-choreography`,
+    factorCopyIds: factorRelation.source.selectorIds,
+    commonFactorId,
+    addendPairs: addendRelations.map((relation, semanticIndex) => ({
+      sourceId: relation.source!.selectorIds[0]!,
+      targetId: relation.target!.selectorIds[0]!,
+      semanticIndex
+    })),
+    connectorPairs: connectorRelations.map((relation, semanticIndex) => ({
+      sourceId: relation.source!.selectorIds[0]!,
+      targetId: relation.target!.selectorIds[0]!,
+      semanticIndex
+    })),
+    groupingArtifactIds: groupingRelations.flatMap(
+      (relation) => relation.target?.selectorIds ?? []
+    )
+  });
+  const groupingTokens = groupingRelations
+    .flatMap((relation) => relation.target?.motionIds ?? [])
+    .map((motionId) => geometry.targetTokens.find((token) => token.motionId === motionId))
+    .filter((token): token is AnnotatedMotionToken => token !== undefined)
+    .sort((left, right) => rectCenter(left.localRect).x - rectCenter(right.localRect).x);
+  const groupingEntryByMotionId = new Map(
+    groupingTokens.map((token, semanticIndex) => [
+      token.motionId,
+      {
+        x: semanticIndex < groupingTokens.length / 2 ? -6 : 6,
+        y: semanticIndex % 2 === 0 ? -4 : 4
+      }
+    ] as const)
+  );
+  return {
+    plan,
+    frame: sampleKpFactoringChoreography({ plan, progress }),
+    factorRelationRecordId: factorRelation.recordId,
+    reflowRelationRecordIds: new Set(
+      persistentRelations.map((relation) => relation.recordId)
+    ),
+    groupingRelationRecordIds: new Set(
+      groupingRelations.map((relation) => relation.recordId)
+    ),
+    commonFactorBounds: factorRelation.target.bounds,
+    groupingEntryByMotionId,
+    motionPathsByMotionId: geometry.precomputedMotionPathsByMotionId
+  };
+}
+
 function createLineageChoreographyContext(
   geometry: KpMeasuredEquationTransitionGeometry,
   progress: number
@@ -882,6 +1009,89 @@ function sampleLineageRelation(
       scale: context.frame.source.scale
     }))
   ];
+}
+
+function sampleFactoringRelation(
+  relation: KpMeasuredEquationTransitionRelationGeometry,
+  sourceTokens: readonly AnnotatedMotionToken[],
+  targetTokens: readonly AnnotatedMotionToken[],
+  progress: number,
+  context: FactoringChoreographyContext
+): readonly KpEquationTokenMotionFrameToken[] | undefined {
+  if (
+    relation.recordId === context.factorRelationRecordId &&
+    relation.source !== undefined &&
+    relation.target !== undefined
+  ) {
+    return [
+      ...sourceTokens.map((token) => {
+        const motionIndex = relation.source!.motionIds.indexOf(token.motionId);
+        const selectorId = relation.source!.selectorIds[motionIndex];
+        const copy = context.frame.factorCopies.find(
+          (candidate) => candidate.entityId === selectorId
+        );
+        if (copy === undefined) {
+          throw new Error(`Missing factoring factor copy ${selectorId ?? token.motionId}.`);
+        }
+        const path = lineagePathPose({
+          origin: context.commonFactorBounds,
+          destination: token.localRect,
+          pathProgress: 1 - copy.pathProgress,
+          branchIndex: copy.semanticIndex,
+          opacity: copy.opacity,
+          scale: copy.scale,
+          precomputedPath: context.motionPathsByMotionId?.[token.motionId]
+        });
+        return {
+          motionId: token.motionId,
+          side: "source" as const,
+          pose: path.pose,
+          lineagePathId: `${context.plan.id}.factor-copy.${copy.semanticIndex}`,
+          lineageEdgeId: relation.recordId,
+          lineageBranchIndex: copy.semanticIndex,
+          motionPathVariant: path.variant
+        };
+      }),
+      ...targetTokens.map((token) => frameToken(token, "target", {
+        opacity: context.frame.commonFactor.opacity,
+        x: 0,
+        y: 0,
+        scale: context.frame.commonFactor.scale
+      }))
+    ];
+  }
+  if (context.reflowRelationRecordIds.has(relation.recordId)) {
+    const reflow = context.frame.addendCompactionProgress;
+    return [
+      ...sourceTokens.map((token) => frameToken(token, "source", {
+        opacity: progress === 1 ? 0 : 1,
+        x: (relation.delta?.x ?? 0) * reflow,
+        y: (relation.delta?.y ?? 0) * reflow,
+        scale: 1
+      })),
+      ...targetTokens.map((token) => frameToken(token, "target", {
+        opacity: progress === 1 ? 1 : 0,
+        x: 0,
+        y: 0,
+        scale: 1
+      }))
+    ];
+  }
+  if (context.groupingRelationRecordIds.has(relation.recordId)) {
+    return targetTokens.map((token) => {
+      const entry = context.groupingEntryByMotionId.get(token.motionId) ?? {
+        x: 0,
+        y: 0
+      };
+      return frameToken(token, "target", {
+        opacity: context.frame.groupingOpacity,
+        x: entry.x * (1 - context.frame.groupingOpacity),
+        y: entry.y * (1 - context.frame.groupingOpacity),
+        scale: 1
+      });
+    });
+  }
+  return undefined;
 }
 
 function sampleDistributionRelation(
