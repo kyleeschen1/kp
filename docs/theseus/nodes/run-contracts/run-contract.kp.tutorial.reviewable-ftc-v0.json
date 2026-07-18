@@ -71,7 +71,8 @@
     {
       "id": "next-action.kp.ftc.reference-live-state-v0",
       "title": "Add reference and live state",
-      "status": "planned"
+      "summary": "Added immutable reference and live exploration snapshots with stable parameter identities and explicit diffs.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.branch-rejoin-v0",
