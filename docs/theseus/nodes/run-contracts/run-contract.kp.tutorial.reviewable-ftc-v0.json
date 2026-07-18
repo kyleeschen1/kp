@@ -131,7 +131,8 @@
     {
       "id": "next-action.kp.ftc.learner-shell-v0",
       "title": "Add learner tutorial shell",
-      "status": "planned"
+      "summary": "Added a responsive graph-led learner shell with a quiet claim rail, shared playback, part/whole inspection, rejoin, and no nested scrollbars.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.function-lens-v0",
