@@ -1,0 +1,364 @@
+{
+  "schemaVersion": "theseus.workspace-migration-operation.v1",
+  "operation": "plan",
+  "operationId": "workspace-migration-plan:migration.kp.unified-workspace.rc6.v2.a34a057e809b",
+  "status": "no-op",
+  "summary": "no-op migration plan generated read-only; mutation remains unapproved.",
+  "counts": {
+    "stages": 6,
+    "noOp": 6,
+    "changeRequired": 0,
+    "blocked": 0,
+    "restartRequired": 0,
+    "drainRequired": 0
+  },
+  "items": [
+    {
+      "id": "package-identity",
+      "kind": "package",
+      "status": "no-op",
+      "coordination": "online",
+      "summary": "Selected package matches theseus@0.1.0-rc.6 and target kp.",
+      "affectedPaths": [
+        "/Users/kyleeschen/Code/theseus/package.json",
+        "/Users/kyleeschen/Code/theseus/bin/theseus.mjs"
+      ],
+      "preconditions": [
+        "Every recorded input digest still matches immediately before apply."
+      ],
+      "verification": [
+        "Rerun workspace doctor and verify this stage's desired state."
+      ],
+      "rollback": [
+        "Restore exact pre-stage bytes from the verified external rollback bundle."
+      ]
+    },
+    {
+      "id": "package-dependency",
+      "kind": "package",
+      "status": "no-op",
+      "coordination": "restart-required",
+      "summary": "Host dependency already resolves file:../theseus.",
+      "affectedPaths": [
+        "/Users/kyleeschen/Code/kp/package.json"
+      ],
+      "preconditions": [
+        "Every recorded input digest still matches immediately before apply."
+      ],
+      "verification": [
+        "Rerun workspace doctor and verify this stage's desired state."
+      ],
+      "rollback": [
+        "Restore exact pre-stage bytes from the verified external rollback bundle."
+      ]
+    },
+    {
+      "id": "workspace-capabilities",
+      "kind": "capabilities",
+      "status": "no-op",
+      "coordination": "online",
+      "summary": "Workspace schema and capabilities already match.",
+      "affectedPaths": [
+        "/Users/kyleeschen/Code/kp/theseus.config.json"
+      ],
+      "preconditions": [
+        "Every recorded input digest still matches immediately before apply."
+      ],
+      "verification": [
+        "Rerun workspace doctor and verify this stage's desired state."
+      ],
+      "rollback": [
+        "Restore exact pre-stage bytes from the verified external rollback bundle."
+      ]
+    },
+    {
+      "id": "invocation",
+      "kind": "invocation",
+      "status": "no-op",
+      "coordination": "restart-required",
+      "summary": "Bare theseus and host npm script are available.",
+      "affectedPaths": [
+        "/Users/kyleeschen/Code/kp/package.json"
+      ],
+      "preconditions": [
+        "Every recorded input digest still matches immediately before apply."
+      ],
+      "verification": [
+        "Rerun workspace doctor and verify this stage's desired state."
+      ],
+      "rollback": [
+        "Restore exact pre-stage bytes from the verified external rollback bundle."
+      ]
+    },
+    {
+      "id": "context-run-writer",
+      "kind": "writer",
+      "status": "no-op",
+      "coordination": "drain-required",
+      "summary": "Context-run writer already uses theseus.event-envelope.v2.",
+      "affectedPaths": [
+        "/Users/kyleeschen/Code/kp/theseus.config.json"
+      ],
+      "preconditions": [
+        "Every recorded input digest still matches immediately before apply."
+      ],
+      "verification": [
+        "Rerun workspace doctor and verify this stage's desired state."
+      ],
+      "rollback": [
+        "Restore exact pre-stage bytes from the verified external rollback bundle."
+      ]
+    },
+    {
+      "id": "source-boundary",
+      "kind": "source-boundary",
+      "status": "no-op",
+      "coordination": "restart-required",
+      "summary": "Legacy fallback disposition already matches desired state.",
+      "affectedPaths": [
+        "/Users/kyleeschen/Code/kp/src/theseus",
+        "/Users/kyleeschen/Code/kp/theseus.config.json"
+      ],
+      "preconditions": [
+        "Every recorded input digest still matches immediately before apply."
+      ],
+      "verification": [
+        "Rerun workspace doctor and verify this stage's desired state."
+      ],
+      "rollback": [
+        "Restore exact pre-stage bytes from the verified external rollback bundle."
+      ]
+    }
+  ],
+  "nextCommands": [
+    "theseus workspace migrate plan --input <manifest.json> --approve-by <identity> --output <approved-plan-result.json>"
+  ],
+  "result": {
+    "plan": {
+      "schemaVersion": "theseus.workspace-migration-plan.v1",
+      "manifestId": "migration.kp.unified-workspace.rc6.v2",
+      "manifestDigest": "sha256:017d74b4b14822d62fac77f63a933db8e223913bcf5cb89500882d025c846c5e",
+      "readOnly": true,
+      "status": "no-op",
+      "project": {
+        "id": "kp",
+        "root": "/Users/kyleeschen/Code/kp"
+      },
+      "package": {
+        "root": "/Users/kyleeschen/Code/theseus",
+        "version": "0.1.0-rc.6"
+      },
+      "desired": {
+        "package": {
+          "name": "theseus",
+          "version": "0.1.0-rc.6",
+          "dependency": {
+            "kind": "file",
+            "spec": "file:../theseus"
+          }
+        },
+        "workspace": {
+          "schemaVersion": 1,
+          "requiredCapabilities": [
+            "context-packet-v1",
+            "event-envelope-v2-canary-write",
+            "project-status-v1",
+            "run-contract-v1"
+          ]
+        },
+        "contextRunWriter": {
+          "id": "theseus.event-envelope.v2",
+          "requiredCapability": "event-envelope-v2-canary-write"
+        },
+        "invocation": {
+          "bareCommand": "theseus",
+          "npmScript": "theseus"
+        },
+        "sourceBoundary": {
+          "legacyFallbackPath": "src/theseus",
+          "fallbackDisposition": "remove-when-verified",
+          "preserveSourceAliases": true
+        }
+      },
+      "inputs": [
+        {
+          "id": "workspace-config",
+          "path": "/Users/kyleeschen/Code/kp/theseus.config.json",
+          "exists": true,
+          "digest": "sha256:72f6aeaa81dc7f18fa827117e337753232b0aded812d7611fe847cac7b68fe17"
+        },
+        {
+          "id": "host-package",
+          "path": "/Users/kyleeschen/Code/kp/package.json",
+          "exists": true,
+          "digest": "sha256:9f1e4843a956feec9eacd11df524c5e8d63318fb151b3d6fcae126e3d300e66f"
+        },
+        {
+          "id": "theseus-package",
+          "path": "/Users/kyleeschen/Code/theseus/package.json",
+          "exists": true,
+          "digest": "sha256:6dd06bda11e7e9e30540de959d72f82d7ba3253152c2b66f594b4ff084ae9bd3"
+        },
+        {
+          "id": "theseus-executable",
+          "path": "/Users/kyleeschen/Code/theseus/bin/theseus.mjs",
+          "exists": true,
+          "digest": "sha256:7b1b425d51b72f04b9d695cd09598958e20e14d2cf8b6cc6ad5a0cb7ba066853"
+        },
+        {
+          "id": "graph",
+          "path": "/Users/kyleeschen/Code/kp/docs/theseus/nodes",
+          "exists": true,
+          "digest": "sha256:4a85007e2d80b087a2657ca46f2f709a31d5caecb790d044b40a84234e2cddd5"
+        },
+        {
+          "id": "events",
+          "path": "/Users/kyleeschen/Code/kp/docs/theseus/events",
+          "exists": true,
+          "digest": "sha256:e71aa8ed32bea9bba7998c2751955981513081237b8a0b303cd92f0f07dbda2c"
+        },
+        {
+          "id": "legacy-fallback",
+          "path": "/Users/kyleeschen/Code/kp/src/theseus",
+          "exists": false,
+          "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ],
+      "stages": [
+        {
+          "id": "package-identity",
+          "kind": "package",
+          "status": "no-op",
+          "coordination": "online",
+          "summary": "Selected package matches theseus@0.1.0-rc.6 and target kp.",
+          "affectedPaths": [
+            "/Users/kyleeschen/Code/theseus/package.json",
+            "/Users/kyleeschen/Code/theseus/bin/theseus.mjs"
+          ],
+          "preconditions": [
+            "Every recorded input digest still matches immediately before apply."
+          ],
+          "verification": [
+            "Rerun workspace doctor and verify this stage's desired state."
+          ],
+          "rollback": [
+            "Restore exact pre-stage bytes from the verified external rollback bundle."
+          ]
+        },
+        {
+          "id": "package-dependency",
+          "kind": "package",
+          "status": "no-op",
+          "coordination": "restart-required",
+          "summary": "Host dependency already resolves file:../theseus.",
+          "affectedPaths": [
+            "/Users/kyleeschen/Code/kp/package.json"
+          ],
+          "preconditions": [
+            "Every recorded input digest still matches immediately before apply."
+          ],
+          "verification": [
+            "Rerun workspace doctor and verify this stage's desired state."
+          ],
+          "rollback": [
+            "Restore exact pre-stage bytes from the verified external rollback bundle."
+          ]
+        },
+        {
+          "id": "workspace-capabilities",
+          "kind": "capabilities",
+          "status": "no-op",
+          "coordination": "online",
+          "summary": "Workspace schema and capabilities already match.",
+          "affectedPaths": [
+            "/Users/kyleeschen/Code/kp/theseus.config.json"
+          ],
+          "preconditions": [
+            "Every recorded input digest still matches immediately before apply."
+          ],
+          "verification": [
+            "Rerun workspace doctor and verify this stage's desired state."
+          ],
+          "rollback": [
+            "Restore exact pre-stage bytes from the verified external rollback bundle."
+          ]
+        },
+        {
+          "id": "invocation",
+          "kind": "invocation",
+          "status": "no-op",
+          "coordination": "restart-required",
+          "summary": "Bare theseus and host npm script are available.",
+          "affectedPaths": [
+            "/Users/kyleeschen/Code/kp/package.json"
+          ],
+          "preconditions": [
+            "Every recorded input digest still matches immediately before apply."
+          ],
+          "verification": [
+            "Rerun workspace doctor and verify this stage's desired state."
+          ],
+          "rollback": [
+            "Restore exact pre-stage bytes from the verified external rollback bundle."
+          ]
+        },
+        {
+          "id": "context-run-writer",
+          "kind": "writer",
+          "status": "no-op",
+          "coordination": "drain-required",
+          "summary": "Context-run writer already uses theseus.event-envelope.v2.",
+          "affectedPaths": [
+            "/Users/kyleeschen/Code/kp/theseus.config.json"
+          ],
+          "preconditions": [
+            "Every recorded input digest still matches immediately before apply."
+          ],
+          "verification": [
+            "Rerun workspace doctor and verify this stage's desired state."
+          ],
+          "rollback": [
+            "Restore exact pre-stage bytes from the verified external rollback bundle."
+          ]
+        },
+        {
+          "id": "source-boundary",
+          "kind": "source-boundary",
+          "status": "no-op",
+          "coordination": "restart-required",
+          "summary": "Legacy fallback disposition already matches desired state.",
+          "affectedPaths": [
+            "/Users/kyleeschen/Code/kp/src/theseus",
+            "/Users/kyleeschen/Code/kp/theseus.config.json"
+          ],
+          "preconditions": [
+            "Every recorded input digest still matches immediately before apply."
+          ],
+          "verification": [
+            "Rerun workspace doctor and verify this stage's desired state."
+          ],
+          "rollback": [
+            "Restore exact pre-stage bytes from the verified external rollback bundle."
+          ]
+        }
+      ],
+      "counts": {
+        "stages": 6,
+        "noOp": 6,
+        "changeRequired": 0,
+        "blocked": 0,
+        "restartRequired": 0,
+        "drainRequired": 0
+      },
+      "id": "migration.kp.unified-workspace.rc6.v2.a34a057e809b",
+      "planDigest": "sha256:a34a057e809b22d825040eb79fff5f1b8d92450524ced05c956ac6a5c7267b2a",
+      "nextCommands": [
+        {
+          "label": "Verify no-op",
+          "command": "theseus workspace migrate verify --input -",
+          "when": "After persisting and approving this no-op plan."
+        }
+      ]
+    }
+  }
+}
