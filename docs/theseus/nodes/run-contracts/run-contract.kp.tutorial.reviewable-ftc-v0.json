@@ -179,7 +179,8 @@
     {
       "id": "next-action.kp.ftc.epistemic-probe-v0",
       "title": "Add optional epistemic probe",
-      "status": "planned"
+      "summary": "Added one optional unscored finite-versus-limit probe with explicit intentional-invalid feedback and no effect on canonical progress.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.runtime-laws-v0",
