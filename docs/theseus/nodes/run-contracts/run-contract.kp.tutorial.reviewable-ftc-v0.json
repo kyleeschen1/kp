@@ -95,7 +95,8 @@
     {
       "id": "next-action.kp.ftc.attention-transmission-v0",
       "title": "Compile attention transmission",
-      "status": "planned"
+      "summary": "Compiled authored directional cross-view correspondences into renderer-neutral salience transmissions with explicit release and receive members.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.epistemic-narration-v0",
