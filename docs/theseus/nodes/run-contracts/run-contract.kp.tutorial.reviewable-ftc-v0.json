@@ -167,7 +167,8 @@
     {
       "id": "next-action.kp.ftc.reintegration-v0",
       "title": "Reintegrate derivative identity",
-      "status": "planned"
+      "summary": "Assembled the canonical FTC module and reintegration sequence: finite quotient, continuity-qualified limit, then A prime of x equals f of x with stable cross-view identities and attention.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.net-change-v0",
