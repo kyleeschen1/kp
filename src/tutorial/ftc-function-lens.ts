@@ -70,6 +70,28 @@ export function sampleKpFtcFunctionLens(
   return { lensId: id, t: clamped, integrand, accumulatedArea };
 }
 
+export function rangeKpFtcFunctionLens(
+  id: KpFtcFunctionLensId,
+  start: number,
+  end: number
+): readonly [minimum: number, maximum: number] {
+  const lens = getKpFtcFunctionLens(id);
+  const left = Math.min(lens.domain[1], Math.max(lens.domain[0], Math.min(start, end)));
+  const right = Math.min(lens.domain[1], Math.max(lens.domain[0], Math.max(start, end)));
+  const candidates = [
+    sampleKpFtcFunctionLens(id, left).integrand,
+    sampleKpFtcFunctionLens(id, right).integrand
+  ];
+
+  // The sine lens has one interior maximum on the curated domain; naming the
+  // critical point keeps the displayed rectangle an actual bound, not a plot sample.
+  if (id === "sine-offset" && left <= Math.PI / 2 && right >= Math.PI / 2) {
+    candidates.push(2);
+  }
+
+  return [Math.min(...candidates), Math.max(...candidates)];
+}
+
 export const kpFtcGenericContinuousClaim = Object.freeze({
   id: "claim.ftc.generic-continuous",
   statement:
