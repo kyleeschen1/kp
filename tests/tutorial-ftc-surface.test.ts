@@ -21,6 +21,6 @@ test("FTC editor surface embeds the learner surface and semantic inspector", () 
   assert.match(html, /data-kp-ftc-editor-surface/);
   assert.match(html, /data-kp-ftc-tutorial-host/);
   assert.match(html, /data-kp-tutorial-inspector=/);
-  assert.match(html, /data-kp-artifact-maturity="draft"/);
+  assert.match(html, /data-kp-artifact-maturity="reviewable"/);
   assert.match(html, /data-action="show-ftc-tutorial"/);
 });

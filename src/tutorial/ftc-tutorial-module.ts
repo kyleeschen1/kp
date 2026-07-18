@@ -169,7 +169,7 @@ export function createKpFtcTutorialDefinition(): KpFtcTutorialDefinition {
       narrationIds: narrations.map(({ id }) => id)
     }),
     promotion: {
-      maturity: "draft",
+      maturity: "reviewable",
       novelty: "new-combination",
       humanReviewRequired: true,
       goldCohort: false

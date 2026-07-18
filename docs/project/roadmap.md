@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-17
+Last Updated: 2026-07-18
 Status: active
 Active Thread: `threads/cross-domain-tutorial-platform.md`
 Supporting Thread: `threads/semantic-runtime.md`
@@ -44,12 +44,15 @@ visual vocabulary.
 
 ## Active Focus
 
-**Add novelty/maturity governance, then build the reviewable FTC exemplar.**
+**Human-review the reviewable FTC exemplar before gold or generalization.**
 The governed semantic animation grammar and all 30 slices of the
 semantic-material-motion performance loop are complete. Equation motion is now
-a bounded conformance lane while the primary product lane moves to the accepted
-cross-domain tutorial platform roadmap. The next exact action freezes the gold
-equation cohort and makes novelty and maturity independent promotion facets.
+a bounded conformance lane. Novelty/maturity governance and the 26-slice
+reviewable FTC tutorial loop are complete. The primary product lane remains the
+accepted cross-domain tutorial platform roadmap, but its next exact action is a
+human perceptual and pedagogical review of the FTC exemplar. Do not promote it
+to gold or begin BFS/economics/physics generalization until that review records
+the remaining motion, explanation, and accessibility changes.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the

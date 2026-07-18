@@ -1,6 +1,6 @@
 # Waiting For
 
-Last Updated: 2026-07-10
+Last Updated: 2026-07-18
 
-- User approval before executing any proposed `$theseus-long-loop` run
-  contract.
+- Human perceptual, pedagogical, and accessibility review of the reviewable FTC
+  exemplar before gold promotion or cross-domain generalization.

@@ -2,11 +2,15 @@
   "id": "next-action.kp.tutorial.ftc-gold-exemplar-v0",
   "kind": "next-action",
   "title": "Build Reviewable FTC Tutorial Exemplar",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Implement the accepted tutorial core and prove synchronized symbolic reasoning, finite-strip convergence, accumulated-area geometry, a movable bound, cross-view correspondence, interpretive cycles, shared-clock playback, accessibility, and export through a reviewable FTC module; stop before gold promotion.",
+  "summary": "Delivered the accepted tutorial core and reviewable FTC exemplar in editor and learner surfaces; stopped before gold.",
   "sourceRefs": [
-    { "kind": "file", "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md", "summary": "FTC exemplar behavior and exit conditions." }
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md",
+      "summary": "FTC exemplar behavior and exit conditions."
+    }
   ],
   "dependsOn": {
     "required": [
@@ -15,7 +19,9 @@
       "decision.kp.hermeneutic-cross-domain-tutorial-contract-v0"
     ]
   },
-  "affects": ["milestone.kp.cross-domain-tutorial-platform-v0"],
+  "affects": [
+    "milestone.kp.cross-domain-tutorial-platform-v0"
+  ],
   "verification": [
     "Equation/graph correspondence and mathematical-law tests",
     "Exemplar checkpoint review before generalization",

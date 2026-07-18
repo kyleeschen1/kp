@@ -1,10 +1,9 @@
 # Cross-domain Tutorial Platform Thread
 
 Status: active
-Last Updated: 2026-07-17
-Current Next Action: Add the minimal novelty/maturity promotion model, then
-implement the accepted tutorial core and FTC module through the reviewable
-checkpoint.
+Last Updated: 2026-07-18
+Current Next Action: Human-review the delivered reviewable FTC module; record
+required changes before gold promotion or cross-domain generalization.
 
 ## Goal
 
@@ -24,7 +23,30 @@ The core pedagogical principle is the hermeneutic loop, realized as sparse
 typed interpretive cycles that establish a whole, isolate a part, relate it
 across evidence views, and reintegrate it into changed understanding. Guided
 and exploratory views share explicit deterministic state. The autonomous v0
-boundary stops at a reviewable FTC Part I exemplar.
+boundary stopped at a reviewable FTC exemplar with a Part I interpretive cycle
+and a later net-change scene. The module is available in the editor through an
+on-demand launcher and directly at `?view=ftc-tutorial`.
+
+## Delivered Reviewable Checkpoint
+
+- versioned module, scene, checkpoint, view, claim graph, and separate scene
+  graph contracts;
+- explicit whole/part/relation/reintegration cycles and graph/equation
+  correspondence;
+- reference/live exploration, immutable patches, locks, diffs, and animated
+  rejoin;
+- curated exact lenses for `t²`, `1+t`, and `1+sin(t)`;
+- persistent accumulated area, finite added strip, true rectangle bounds,
+  guided `Δx` convergence, difference quotient, limiting step, and
+  `A'(x)=f(x)` reintegration;
+- claim-level epistemic status, scope, validity, provenance, uncertainty, and
+  one optional non-gating probe;
+- deterministic seek/rewind/export/accessibility laws and lazy editor/learner
+  loading;
+- a later net-change scene reusing the accumulator identity.
+
+The automated gates approve `reviewable`; gold remains human-gated because this
+is a new combination of tutorial, graph, equation, and interaction vocabulary.
 
 ## Accepted Scope
 
@@ -46,13 +68,18 @@ boundary stops at a reviewable FTC Part I exemplar.
 - LLM-authored DOM, pixels, arbitrary keyframes, or unverified claims;
 - dynamic package loading before cross-domain manifests stabilize.
 
-## Open Questions
+## Human Review Questions
 
-- What is the smallest tutorial storyboard contract that composes existing
-  animation assets without duplicating their semantic or timing authority?
-- Which parameter and derived-state laws are shared by FTC bounds, economics
-  policy controls, code traces, and physics models?
-- What evidence should promote a new combination from reviewable to gold?
+- Does the finite strip remain perceptually continuous as it narrows, and is
+  its transmission into `ΔA` and the quotient sufficiently legible?
+- Do the notation changes at the quotient/limit/identity boundaries need
+  token-level morphing before gold, or is stable claim-level replacement enough?
+- Does the narration honestly distinguish finite evidence, continuity-based
+  convergence, and the theorem statement without over-teaching or overstating?
+- Do keyboard, reduced/static, high-contrast, no-depth, and screen-reader
+  projections preserve the same causal explanation in human use?
+- Which findings are FTC-specific, and which should become requirements for the
+  later BFS capability pack?
 - Which DiagramScene additions are required by BFS but remain reusable for
   physics diagrams and economic annotations?
 - At what point can prompt/upload drafts be accepted without a new primitive
@@ -63,6 +90,7 @@ boundary stops at a reviewable FTC Part I exemplar.
 - `docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md`
 - `docs/project/decisions/2026-07-17-kp-hermeneutic-cross-domain-tutorial-contract.md`
 - `docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md`
+- `docs/project/reviews/2026-07-18-reviewable-ftc-tutorial-loop-closeout.md`
 - `docs/project/principles/codex-collaboration-protocol.md`
 - `docs/project/threads/semantic-runtime.md`
 - `docs/theseus/nodes/milestones/milestone.kp.cross-domain-tutorial-platform-v0.json`

@@ -2,7 +2,7 @@
   "id": "run-contract.kp.tutorial.reviewable-ftc-v0",
   "kind": "run-contract",
   "title": "Reviewable FTC Tutorial Loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "sourceRefs": [
     {
@@ -197,7 +197,9 @@
     {
       "id": "next-action.kp.ftc.reviewable-closeout-v0",
       "title": "Close at reviewable maturity",
-      "status": "planned"
+      "summary": "Promoted the validated FTC exemplar to reviewable, wrote the closeout, updated project memory, and created the human-review frontier.",
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Completed all 26 approved slices and hard-stopped at the reviewable FTC checkpoint."
 }
