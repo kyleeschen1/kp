@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "theseus.context-writer-cutover-decision.v1",
+  "status": "retained",
+  "contractId": "cutover.kp.context-run-v2.rc5.20260717",
+  "rollbackBundleId": "077343af7c3cdd9aa4f9e373",
+  "decidedAt": "2026-07-18T02:19:54.087Z",
+  "decidedBy": "user",
+  "configDigest": "sha256:cd29ba57d44a9a91e3b7a63b41e5bb0a0c3bd3cf2812000af468b6c42468853a",
+  "rollbackEvidenceRetained": true
+}

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "theseus.kp-context-writer-cutover-closeout.v1",
+  "status": "retained",
+  "scope": {
+    "project": "kp",
+    "mutationFamily": "context-run",
+    "writer": "theseus.event-envelope.v2",
+    "defaultWriter": "legacy-v1",
+    "spindleChanged": false,
+    "historicalEventsRewritten": false,
+    "dualWriteEnabled": false
+  },
+  "release": {
+    "version": "0.1.0-rc.5",
+    "gitRevision": "d3aa3624c07631f4037358d1c1c8b15750233abe",
+    "artifactDigest": "sha256:aadef61e56649ac6ba0a4907271e786569c15dd78da6225402a6f10b33c7041f"
+  },
+  "rollback": {
+    "bundleId": "077343af7c3cdd9aa4f9e373",
+    "status": "pass",
+    "graphDigest": "sha256:4a85007e2d80b087a2657ca46f2f709a31d5caecb790d044b40a84234e2cddd5",
+    "eventDigest": "sha256:3acd7dc562f65443b084de16d8f77c83d8085c4e0ee6b0274d90463093be3caf",
+    "retainUntil": "2026-08-17T02:15:35.411Z",
+    "root": "/Users/kyleeschen/Library/Caches/theseus/kp-a6a0ebc0ff29/rollback-v1/bundles/077343af7c3cdd9aa4f9e373"
+  },
+  "soak": {
+    "status": "pass",
+    "completed": 3,
+    "useful": 2,
+    "partial": 1,
+    "failed": 0,
+    "wrongWriter": 0,
+    "dualWritten": 0,
+    "estimatedNetTokensSaved": 189
+  },
+  "verification": {
+    "hostTests": "1430 passed, 0 failed",
+    "typecheck": "passed",
+    "workspaceValidation": "valid 656 nodes, 8084 events",
+    "compatibility": "compatible",
+    "configDigestMatchesApplication": true
+  },
+  "knownFollowUp": {
+    "status": "not-blocking",
+    "summary": "Manual CLI canaries persist context-run token baselines and usefulness, but they do not exercise provider usage, summary-cache hits, or the separate automatic runner receipt API. Validate those fields during the next real KP LLM loop."
+  }
+}
