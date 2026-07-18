@@ -119,7 +119,8 @@
     {
       "id": "next-action.kp.ftc.canonical-export-v0",
       "title": "Add canonical export sampling",
-      "status": "planned"
+      "summary": "Added canonical-spine checkpoint export sampling with branch history excluded unless explicitly opted in.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.editor-inspector-v0",
