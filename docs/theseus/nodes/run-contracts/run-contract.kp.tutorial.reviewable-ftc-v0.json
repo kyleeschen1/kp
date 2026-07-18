@@ -185,7 +185,8 @@
     {
       "id": "next-action.kp.ftc.runtime-laws-v0",
       "title": "Verify deterministic runtime laws",
-      "status": "planned"
+      "summary": "Added one pure FTC module sampler and laws for direct seek, order independence, exact mirrored rewind, and branch rejoin; normalized semantic clock precision at the sampler boundary.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.promotion-gates-v0",
