@@ -1,0 +1,52 @@
+{
+  "id": "next-action.kp.ftc.branch-rejoin-v0",
+  "kind": "next-action",
+  "title": "Add branch and rejoin semantics",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Added tested optional exploration branches and animated canonical rejoin semantics.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.tutorial.reviewable-ftc-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.ftc.branch-rejoin-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.tutorial.ftc-gold-exemplar-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-18-reviewable-ftc-tutorial-long-loop-proposal.md",
+      "summary": "Approved 26-slice FTC tutorial loop, verification cadence, expected end state, and hard boundaries."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.tutorial.reviewable-ftc-v0",
+      "next-action.kp.tutorial.ftc-gold-exemplar-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.tutorial.ftc-gold-exemplar-v0"
+  ],
+  "verification": [
+    "Run focused unit tests after each deterministic model or contract slice.",
+    "Run typecheck after public typed-contract changes.",
+    "Run small browser cohorts for visible slices and broad checkpoints after slices 15, 21, 25, and 26.",
+    "Run performance validation in isolation."
+  ],
+  "expectedLearning": [
+    "Whether Add branch and rejoin semantics can be completed inside Reviewable FTC Tutorial Loop."
+  ],
+  "allowedWork": [
+    "Build only the smallest contracts proven necessary by the FTC exemplar.",
+    "Implement editor and learner surfaces, deterministic export, accessibility projections, and proportionate tests.",
+    "Repair shared tutorial-kernel gaps only when the exemplar demonstrates them."
+  ],
+  "disallowedWork": [
+    "Do not promote the exemplar to gold or trusted publication.",
+    "Do not implement BFS, economics, physics, arbitrary function entry, voice synthesis, learner modeling, gamification, general upload generation, or universal scene infrastructure."
+  ]
+}

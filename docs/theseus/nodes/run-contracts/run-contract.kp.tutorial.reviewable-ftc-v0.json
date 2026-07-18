@@ -77,7 +77,8 @@
     {
       "id": "next-action.kp.ftc.branch-rejoin-v0",
       "title": "Add branch and rejoin semantics",
-      "status": "planned"
+      "summary": "Added immutable branch patches, locks, visible diffs, and deterministic interpolation back to the reference state.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.interaction-state-v0",
