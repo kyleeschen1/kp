@@ -11,6 +11,10 @@
   "requiredCapabilities": [
     "project-status-v1",
     "context-packet-v1",
-    "run-contract-v1"
-  ]
+    "run-contract-v1",
+    "event-envelope-v2-canary-write"
+  ],
+  "writerPolicy": {
+    "context-run": "theseus.event-envelope.v2"
+  }
 }

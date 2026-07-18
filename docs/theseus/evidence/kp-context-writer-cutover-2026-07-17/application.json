@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "theseus.context-writer-cutover-application.v1",
+  "status": "applied",
+  "contractId": "cutover.kp.context-run-v2.rc5.20260717",
+  "rollbackBundleId": "077343af7c3cdd9aa4f9e373",
+  "appliedAt": "2026-07-18T02:17:43.758Z",
+  "stateRoot": "/Users/kyleeschen/Library/Caches/theseus/kp-a6a0ebc0ff29/cutovers/cutover.kp.context-run-v2.rc5.20260717",
+  "config": {
+    "path": "/Users/kyleeschen/Code/kp/theseus.config.json",
+    "beforePath": "/Users/kyleeschen/Library/Caches/theseus/kp-a6a0ebc0ff29/cutovers/cutover.kp.context-run-v2.rc5.20260717/before-theseus.config.json",
+    "beforeDigest": "sha256:7f8ccd6bc7252dcaf5b9ed4a9c77f6700dbffcfc0f40c7a633784ac88aaeac75",
+    "afterDigest": "sha256:cd29ba57d44a9a91e3b7a63b41e5bb0a0c3bd3cf2812000af468b6c42468853a"
+  }
+}
