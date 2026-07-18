@@ -42,7 +42,13 @@ test("editor catalog projection preserves asset entries and adds concrete family
     controlKinds: ["playback", "step", "scrubber", "rewind"],
     durationMs: 2400,
     beatCount: 50,
-    tags: ["animation", "equation", "linear-solve"]
+    tags: ["animation", "equation", "linear-solve"],
+    promotion: {
+      maturity: "gold",
+      novelty: "composition",
+      humanReviewRequired: false,
+      goldCohort: true
+    }
   });
 });
 
@@ -81,7 +87,13 @@ test("editor catalog projection attaches exact concrete family provenance", () =
       controlKinds: ["playback", "step", "scrubber", "rewind"],
       durationMs: 2400,
       beatCount: 50,
-      tags: ["animation", "equation", "linear-solve", "family-backed", "algebra"]
+      tags: ["animation", "equation", "linear-solve", "family-backed", "algebra"],
+      promotion: {
+        maturity: "gold",
+        novelty: "composition",
+        humanReviewRequired: false,
+        goldCohort: true
+      }
     }
   );
 });

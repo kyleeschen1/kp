@@ -201,10 +201,17 @@ function renderPreviewStage(
   editorAnimationDescriptorId: string | undefined
 ): string {
   return [
+    renderKpFtcTutorialEditorLauncher(),
     renderEditorAnimationLibrary(editorAnimationDescriptorId),
     renderEquationMotionDemo(equationAnimationId),
     ...document.objects.map((object) => renderObjectPreview(object, document))
   ].join("");
+}
+
+function renderKpFtcTutorialEditorLauncher(): string {
+  return `<section class="kp-ftc-editor-surface" data-kp-ftc-editor-launcher aria-labelledby="kp-ftc-editor-launcher-title">
+    <header><p class="eyebrow">Reviewable tutorial exemplar</p><h2 id="kp-ftc-editor-launcher-title">Fundamental Theorem of Calculus</h2><p>Load the graph-led learner surface and its semantic inspector on demand.</p><button type="button" data-action="load-ftc-tutorial-editor">Load FTC exemplar</button></header>
+  </section>`;
 }
 
 function renderEditorAnimationLibrary(

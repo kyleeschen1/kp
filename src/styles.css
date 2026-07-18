@@ -1439,6 +1439,95 @@ h2 {
   background-size: 28px 28px;
 }
 
+.kp-ftc-editor-surface {
+  display: grid;
+  gap: 1rem;
+  width: min(100%, 68rem);
+  overflow: clip;
+  border: 1px solid #cad6e3;
+  border-radius: 14px;
+  padding: 1rem;
+  background: #fffdf7;
+}
+
+.kp-ftc-editor-surface > header {
+  display: grid;
+  justify-items: start;
+  gap: 0.45rem;
+}
+
+.kp-ftc-editor-surface > header h2,
+.kp-ftc-editor-surface > header p {
+  margin: 0;
+}
+
+.kp-ftc-editor-surface > header button,
+.kp-ftc-learner-view > nav button {
+  border: 1px solid #31584a;
+  border-radius: 999px;
+  padding: 0.5rem 0.85rem;
+  color: #18352a;
+  background: #f7f3e8;
+  font-weight: 700;
+}
+
+.kp-ftc-editor-surface [data-kp-tutorial-inspector] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.75rem;
+  overflow: clip;
+  border-top: 1px solid #d8d4ca;
+  padding-top: 1rem;
+}
+
+.kp-ftc-editor-surface [data-kp-tutorial-inspector] > h2 {
+  grid-column: 1 / -1;
+}
+
+.kp-ftc-editor-surface [data-kp-tutorial-inspector] h2,
+.kp-ftc-editor-surface [data-kp-tutorial-inspector] h3,
+.kp-ftc-editor-surface [data-kp-tutorial-inspector] ul {
+  margin: 0;
+}
+
+.kp-ftc-editor-surface [data-kp-tutorial-inspector] ul {
+  padding-left: 1.1rem;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.kp-ftc-learner-view {
+  display: grid;
+  gap: 1rem;
+  max-width: 78rem;
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  overflow: clip;
+}
+
+.kp-ftc-probe {
+  margin-top: 0.75rem;
+  overflow: clip;
+  border: 1px solid #d7bd88;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  color: #2c3f37;
+  background: #fff9e9;
+}
+
+.kp-ftc-probe summary {
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.kp-ftc-probe summary span {
+  margin-left: 0.4rem;
+  color: #8b5d2c;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
 .object-preview {
   width: min(100%, 34rem);
   border: 1px solid #cad6e3;

@@ -15,7 +15,7 @@ export function renderKpHermeneuticLearnerShell(
   input: KpHermeneuticLearnerShellInput
 ): string {
   const progress = String(input.frame.progress);
-  return `<article class="kp-hermeneutic-tutorial" data-kp-hermeneutic-tutorial="${escapeHtml(input.module.id)}" data-kp-tutorial-clock="${escapeHtml(input.module.clockId)}" data-kp-tutorial-progress="${progress}" data-kp-active-claim="${escapeHtml(input.frame.activeClaimId)}" data-kp-active-checkpoint="${escapeHtml(input.frame.activeCheckpointId)}">
+  return `<article class="kp-hermeneutic-tutorial" data-kp-hermeneutic-tutorial="${escapeHtml(input.module.id)}" data-kp-motion-profile="full" data-kp-tutorial-clock="${escapeHtml(input.module.clockId)}" data-kp-tutorial-progress="${progress}" data-kp-active-claim="${escapeHtml(input.frame.activeClaimId)}" data-kp-active-checkpoint="${escapeHtml(input.frame.activeCheckpointId)}">
   <style>${learnerShellCss}</style>
   <header class="kp-hermeneutic-header">
     <p class="kp-hermeneutic-kicker">Part ↔ whole</p>

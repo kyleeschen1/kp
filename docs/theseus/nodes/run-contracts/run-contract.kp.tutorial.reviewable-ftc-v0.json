@@ -191,7 +191,8 @@
     {
       "id": "next-action.kp.ftc.promotion-gates-v0",
       "title": "Run reviewable promotion gates",
-      "status": "planned"
+      "summary": "Mounted the deterministic FTC surface in lazy editor and learner contexts; passed semantic, accessibility, export, overflow, loading, browser, KaTeX stability, build, and performance gates; automated promotion approves reviewable only.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.reviewable-closeout-v0",

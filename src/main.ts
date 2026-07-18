@@ -99,13 +99,17 @@ let selectedEditorAnimationDescriptorId = selectKpEditorAnimationDescriptor(
 type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
 type ProjectDashboardDataClient = typeof import("./project-dashboard/data.ts");
 type ProjectDashboardRenderClient = typeof import("./project-dashboard/render.ts");
+type FtcTutorialSurfaceClient = typeof import("./tutorial/ftc-surface.ts");
+type FtcTutorialEditorClient = typeof import("./editor/ftc-tutorial-editor-surface.ts");
 let graph3DWebGLClient: Graph3DWebGLClient | undefined;
 let graph3DWebGLClientPromise: Promise<Graph3DWebGLClient> | undefined;
 let projectDashboardClientPromise: Promise<{
   readonly data: ProjectDashboardDataClient;
   readonly render: ProjectDashboardRenderClient;
 }> | undefined;
-let activeView: "editor" | "dashboard" = "editor";
+let ftcTutorialSurfaceClientPromise: Promise<FtcTutorialSurfaceClient> | undefined;
+let ftcTutorialEditorClientPromise: Promise<FtcTutorialEditorClient> | undefined;
+let activeView: "dashboard" | "editor" | "ftc-tutorial" = "editor";
 let viewRevision = 0;
 const graph3DWebGLVisibilityObservers = new WeakMap<
   HTMLElement,
@@ -126,7 +130,11 @@ registerKpEditorEquationSurfaceAdapter();
 registerKpEditorDiagramSvgAdapter();
 registerKpEditorGraphSvgViewportAdapter();
 
-renderEditor();
+if (new URLSearchParams(window.location.search).get("view") === "ftc-tutorial") {
+  void renderFtcTutorialView();
+} else {
+  renderEditor();
+}
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) pauseKpEditorAnimationPlayers(appRoot);
@@ -189,7 +197,15 @@ appRoot.addEventListener("click", (event) => {
       void renderProjectDashboardView();
       return;
     case "show-editor":
+      navigateToView("editor");
       renderEditor();
+      return;
+    case "show-ftc-tutorial":
+      navigateToView("ftc-tutorial");
+      void renderFtcTutorialView();
+      return;
+    case "load-ftc-tutorial-editor":
+      void loadFtcTutorialIntoEditor();
       return;
     case "compile-document":
       void compileDocument();
@@ -335,6 +351,55 @@ function renderEditor(): void {
   hydrateKpEditorAnimationPlayers(appRoot);
   hydrateEquationMotionDemos(appRoot);
   hydrateGraph3DWebGL(appRoot, editorDocument.objects);
+}
+
+async function renderFtcTutorialView(): Promise<void> {
+  activeView = "ftc-tutorial";
+  const revision = ++viewRevision;
+  disposeKpEditorAnimationPlayers(appRoot);
+  disposeKpEditorEquationStageHotPathCaches(appRoot);
+  disposeGraph3DWebGL(appRoot);
+  appRoot.innerHTML = `<main class="kp-ftc-learner-view" data-kp-ftc-learner-loading aria-busy="true"><p>Loading FTC tutorial…</p></main>`;
+  const client = await loadFtcTutorialSurfaceClient();
+  if (activeView !== "ftc-tutorial" || revision !== viewRevision) return;
+  appRoot.innerHTML = `<main class="kp-ftc-learner-view" data-kp-ftc-learner-view>
+    <nav><button type="button" data-action="show-editor">Back to editor</button></nav>
+    ${client.renderKpFtcTutorialSurface()}
+  </main>`;
+  client.hydrateKpFtcTutorialSurfaces(appRoot);
+}
+
+async function loadFtcTutorialIntoEditor(): Promise<void> {
+  const launcher = appRoot.querySelector<HTMLElement>(
+    "[data-kp-ftc-editor-launcher]"
+  );
+  if (launcher === null) return;
+  launcher.setAttribute("aria-busy", "true");
+  const [editorClient, surfaceClient] = await Promise.all([
+    loadFtcTutorialEditorClient(),
+    loadFtcTutorialSurfaceClient()
+  ]);
+  launcher.outerHTML = editorClient.renderKpFtcTutorialEditorSurface();
+  surfaceClient.hydrateKpFtcTutorialSurfaces(appRoot);
+}
+
+function loadFtcTutorialSurfaceClient(): Promise<FtcTutorialSurfaceClient> {
+  ftcTutorialSurfaceClientPromise ??= import("./tutorial/ftc-surface.ts");
+  return ftcTutorialSurfaceClientPromise;
+}
+
+function loadFtcTutorialEditorClient(): Promise<FtcTutorialEditorClient> {
+  ftcTutorialEditorClientPromise ??= import(
+    "./editor/ftc-tutorial-editor-surface.ts"
+  );
+  return ftcTutorialEditorClientPromise;
+}
+
+function navigateToView(view: "editor" | "ftc-tutorial"): void {
+  const url = new URL(window.location.href);
+  if (view === "ftc-tutorial") url.searchParams.set("view", view);
+  else url.searchParams.delete("view");
+  window.history.replaceState(null, "", url);
 }
 
 function selectEditorAnimation(select: HTMLSelectElement): void {
