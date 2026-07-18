@@ -143,7 +143,8 @@
     {
       "id": "next-action.kp.ftc.accumulator-area-v0",
       "title": "Animate accumulator area",
-      "status": "planned"
+      "summary": "Added stable-frame FTC graph sampling with a persistent curve and axes, movable upper bound, and exact accumulated-area material.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.finite-strip-v0",
