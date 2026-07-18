@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "theseus.workspace-migration-manifest.v1",
+  "id": "migration.kp.unified-workspace.rc6.v2",
+  "target": {
+    "projectId": "kp"
+  },
+  "desired": {
+    "package": {
+      "name": "theseus",
+      "version": "0.1.0-rc.6",
+      "dependency": {
+        "kind": "file",
+        "spec": "file:../theseus"
+      }
+    },
+    "workspace": {
+      "schemaVersion": 1,
+      "requiredCapabilities": [
+        "context-packet-v1",
+        "event-envelope-v2-canary-write",
+        "project-status-v1",
+        "run-contract-v1"
+      ]
+    },
+    "contextRunWriter": {
+      "id": "theseus.event-envelope.v2",
+      "requiredCapability": "event-envelope-v2-canary-write"
+    },
+    "invocation": {
+      "bareCommand": "theseus",
+      "npmScript": "theseus"
+    },
+    "sourceBoundary": {
+      "legacyFallbackPath": "src/theseus",
+      "fallbackDisposition": "remove-when-verified",
+      "preserveSourceAliases": true
+    }
+  },
+  "safety": {
+    "planning": "read-only",
+    "historicalEvents": "immutable",
+    "historicalSourceRefs": "alias-preserved",
+    "rollback": "exact-bytes",
+    "refillAuthority": "approval-required"
+  }
+}
