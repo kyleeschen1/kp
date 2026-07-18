@@ -53,7 +53,8 @@
     {
       "id": "next-action.kp.ftc.tutorial-core-contracts-v0",
       "title": "Define tutorial core contracts",
-      "status": "planned"
+      "summary": "Added versioned module, scene, checkpoint, and view contracts with shared-clock and reference validation.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.claim-scene-graphs-v0",
