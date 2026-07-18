@@ -59,7 +59,8 @@
     {
       "id": "next-action.kp.ftc.claim-scene-graphs-v0",
       "title": "Separate claim and scene graphs",
-      "status": "planned"
+      "summary": "Separated pedagogical claim relations from render-scene structure with explicit validated bindings.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.interpretive-cycles-v0",
