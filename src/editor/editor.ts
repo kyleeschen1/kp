@@ -222,7 +222,7 @@ function renderEditorAnimationLibrary(
   const surface = dispatchKpEditorAnimationSurface(selected);
 
   return `
-    <section class="editor-animation-library" data-kp-editor-animation-library data-kp-editor-animation-descriptor-id="${escapeHtml(selected.id)}" data-kp-editor-animation-id="${escapeHtml(selected.animationId)}" data-kp-editor-animation-surface="${escapeHtml(surface.kind)}" aria-labelledby="editor-animation-library-title">
+    <section class="editor-animation-library" data-kp-editor-animation-library data-kp-editor-animation-descriptor-id="${escapeHtml(selected.id)}" data-kp-editor-animation-id="${escapeHtml(selected.animationId)}" data-kp-editor-animation-surface="${escapeHtml(surface.kind)}" data-kp-editor-animation-maturity="${selected.promotion?.maturity ?? "unclassified"}" data-kp-editor-animation-novelty="${selected.promotion?.novelty ?? "unclassified"}" data-kp-editor-animation-gold-cohort="${selected.promotion?.goldCohort === true}" aria-labelledby="editor-animation-library-title">
       ${renderKpEditorAnimationPicker(picker)}
       <div class="editor-animation-library__selection">
         <p class="eyebrow">Concrete animation asset</p>

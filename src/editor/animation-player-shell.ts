@@ -29,11 +29,12 @@ export function renderKpEditorAnimationPlayerShell(input: {
   const progress = player?.progress ?? 0;
   const surface = player?.surface ?? dispatchKpEditorAnimationSurface(descriptor);
   const progressPercent = Math.round(progress * 100);
+  const promotion = descriptor.promotion;
   const hasControl = (kind: KpEditorAnimationDescriptor["controlKinds"][number]) =>
     descriptor.controlKinds.includes(kind);
 
   return `
-    <section class="editor-animation-player" data-kp-editor-animation-player data-kp-editor-animation-descriptor-id="${escapeHtml(descriptorId)}" data-kp-editor-animation-id="${escapeHtml(animationId)}" data-kp-editor-animation-status="${playbackStatus}" data-kp-editor-animation-direction="${direction}" data-kp-editor-animation-progress="${progress}" data-kp-editor-animation-gestalt-pinned-style="${styleKey(kpOrganicSubtleStyleRef)}" data-kp-editor-animation-gestalt-selected-style="${styleKey(kpOrganicSubtleStyleRef)}" aria-label="${escapeHtml(descriptor.title)} animation player" aria-keyshortcuts="Space ArrowLeft ArrowRight Home End R" tabindex="0">
+    <section class="editor-animation-player" data-kp-editor-animation-player data-kp-editor-animation-descriptor-id="${escapeHtml(descriptorId)}" data-kp-editor-animation-id="${escapeHtml(animationId)}" data-kp-editor-animation-status="${playbackStatus}" data-kp-editor-animation-direction="${direction}" data-kp-editor-animation-progress="${progress}" data-kp-editor-animation-maturity="${promotion?.maturity ?? "unclassified"}" data-kp-editor-animation-novelty="${promotion?.novelty ?? "unclassified"}" data-kp-editor-animation-gold-cohort="${promotion?.goldCohort === true}" data-kp-editor-animation-gestalt-pinned-style="${styleKey(kpOrganicSubtleStyleRef)}" data-kp-editor-animation-gestalt-selected-style="${styleKey(kpOrganicSubtleStyleRef)}" aria-label="${escapeHtml(descriptor.title)} animation player" aria-keyshortcuts="Space ArrowLeft ArrowRight Home End R" tabindex="0">
       <div class="editor-animation-player__stage" data-kp-editor-animation-stage data-kp-editor-animation-surface="${surface.kind}">
         ${surface.slotKinds.map((slotKind) => `
           <div class="editor-animation-player__surface editor-animation-player__surface--${slotKind}" data-kp-editor-animation-surface-slot="${slotKind}" aria-label="${surfaceLabel(slotKind)}">

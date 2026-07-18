@@ -1,4 +1,5 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
+import { resolveKpAnimationPromotionFacet } from "../animation/artifact-promotion.ts";
 import {
   createKpSymbolicFamilyAnimationResolutions
 } from "../animation/symbolic-family-animation-resolver.ts";
@@ -54,7 +55,8 @@ function descriptorForAsset(
     ...(asset.timeline?.beatCount === undefined
       ? {}
       : { beatCount: asset.timeline.beatCount }),
-    tags: asset.dashboard?.tags ?? []
+    tags: asset.dashboard?.tags ?? [],
+    promotion: resolveKpAnimationPromotionFacet({ animationId: asset.id })
   });
 }
 
@@ -82,7 +84,8 @@ function descriptorForFamilySample(
       ...(asset.dashboard?.tags ?? []),
       "family-backed",
       family.domain
-    ]
+    ],
+    promotion: resolveKpAnimationPromotionFacet({ animationId: asset.id })
   });
 }
 

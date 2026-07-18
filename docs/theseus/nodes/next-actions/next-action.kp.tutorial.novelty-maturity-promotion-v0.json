@@ -2,11 +2,30 @@
   "id": "next-action.kp.tutorial.novelty-maturity-promotion-v0",
   "kind": "next-action",
   "title": "Add Novelty And Maturity Promotion",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Freeze the gold equation cohort and add draft, reviewable, gold, and promoted maturity plus composition, new-combination, and new-primitive novelty facets.",
+  "summary": "Added independent draft, reviewable, gold, and promoted maturity plus composition, new-combination, and new-primitive novelty facets. Froze a four-animation gold equation cohort, exposed facets in editor metadata and player DOM, and enforced automated, human, conformance, cohort, and canonical-exemplar promotion checkpoints.",
   "sourceRefs": [
-    { "kind": "file", "path": "docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md", "summary": "Accepted approval-economy policy." }
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md",
+      "summary": "Accepted approval-economy policy."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/artifact-promotion.ts",
+      "summary": "Novelty and maturity vocabulary, gold cohort, and promotion decisions."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-descriptor.ts",
+      "summary": "Editor descriptors carry independent promotion facets."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-artifact-promotion.test.ts",
+      "summary": "Gold cohort, approval economy, and editor exposure laws."
+    }
   ],
   "dependsOn": {
     "required": [
@@ -15,7 +34,9 @@
       "run-contract.kp.semantic-material-motion-performance-v0"
     ]
   },
-  "affects": ["milestone.kp.cross-domain-tutorial-platform-v0"],
+  "affects": [
+    "milestone.kp.cross-domain-tutorial-platform-v0"
+  ],
   "verification": [
     "Catalog facet and promotion-law tests",
     "Representative editor browser checks",
@@ -23,5 +44,35 @@
   ],
   "expectedLearning": [
     "Whether human review can attach to novelty without weakening semantic and visual promotion gates."
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test focused artifact promotion and editor tests",
+      "status": "passed",
+      "scope": "11 tests passed.",
+      "checkedAt": "2026-07-18T00:45:03.577Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, and test projects passed.",
+      "checkedAt": "2026-07-18T00:45:03.664Z"
+    },
+    {
+      "command": "npx playwright test focused editor library scenario",
+      "status": "passed",
+      "scope": "One Chromium editor selection scenario passed.",
+      "checkedAt": "2026-07-18T00:45:03.749Z"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "checkedAt": "2026-07-18T00:45:03.839Z",
+      "scope": "Workspace valid before completion."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added independent draft, reviewable, gold, and promoted maturity plus composition, new-combination, and new-primitive novelty facets. Froze a four-animation gold equation cohort, exposed facets in editor metadata and player DOM, and enforced automated, human, conformance, cohort, and canonical-exemplar promotion checkpoints."
+  }
 }

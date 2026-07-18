@@ -4,6 +4,9 @@ import type {
 import type {
   KpSymbolicManipulationDomain
 } from "../animation/symbolic-manipulation-family.ts";
+import type {
+  KpArtifactPromotionFacet
+} from "../animation/artifact-promotion.ts";
 
 export type KpEditorAnimationControlKind =
   | "playback"
@@ -25,6 +28,7 @@ export interface KpEditorAnimationDescriptor {
   readonly durationMs?: number | undefined;
   readonly beatCount?: number | undefined;
   readonly tags: readonly string[];
+  readonly promotion?: KpArtifactPromotionFacet | undefined;
 }
 
 export interface CreateKpEditorAnimationDescriptorInput {
@@ -40,6 +44,7 @@ export interface CreateKpEditorAnimationDescriptorInput {
   readonly durationMs?: number | undefined;
   readonly beatCount?: number | undefined;
   readonly tags?: readonly string[] | undefined;
+  readonly promotion?: KpArtifactPromotionFacet | undefined;
 }
 
 export interface KpEditorAnimationDescriptorValidationIssue {
@@ -65,7 +70,8 @@ export function createKpEditorAnimationDescriptor(
     ),
     ...(input.durationMs === undefined ? {} : { durationMs: input.durationMs }),
     ...(input.beatCount === undefined ? {} : { beatCount: input.beatCount }),
-    tags: unique(input.tags ?? [])
+    tags: unique(input.tags ?? []),
+    ...(input.promotion === undefined ? {} : { promotion: { ...input.promotion } })
   };
 }
 

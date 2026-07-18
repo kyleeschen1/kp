@@ -20,7 +20,13 @@
       "animation",
       "equation",
       "linear-solve"
-    ]
+    ],
+    "promotion": {
+      "maturity": "gold",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": true
+    }
   },
   {
     "id": "editor-animation.sample.animation.solve-x.both-sides",
@@ -48,7 +54,13 @@
       "linear-solve",
       "family-backed",
       "algebra"
-    ]
+    ],
+    "promotion": {
+      "maturity": "gold",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": true
+    }
   },
   {
     "id": "editor-animation.sample.animation.solve-x.cancel-additive-inverses",
@@ -76,7 +88,13 @@
       "linear-solve",
       "family-backed",
       "algebra"
-    ]
+    ],
+    "promotion": {
+      "maturity": "gold",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": true
+    }
   },
   {
     "id": "editor-animation.animation.generated.fraction-expression.two-fourths",
@@ -100,7 +118,13 @@
       "equation",
       "fraction",
       "generated"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.sample.animation.fraction-simplification.basic",
@@ -129,7 +153,13 @@
       "generated",
       "family-backed",
       "algebra"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.generated.exponent.square-as-product",
@@ -153,7 +183,13 @@
       "equation",
       "exponent",
       "generated"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.sample.animation.exponent-combine.square-as-product",
@@ -182,7 +218,13 @@
       "generated",
       "family-backed",
       "algebra"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.generated.radical.square-root-as-power",
@@ -206,7 +248,13 @@
       "equation",
       "radical",
       "generated"
-    ]
+    ],
+    "promotion": {
+      "maturity": "gold",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": true
+    }
   },
   {
     "id": "editor-animation.sample.animation.radical-rewrite.square-root-as-power",
@@ -235,7 +283,13 @@
       "generated",
       "family-backed",
       "algebra"
-    ]
+    ],
+    "promotion": {
+      "maturity": "gold",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": true
+    }
   },
   {
     "id": "editor-animation.animation.generated.function-wrap.apply-f",
@@ -259,7 +313,13 @@
       "equation",
       "function-wrap",
       "generated"
-    ]
+    ],
+    "promotion": {
+      "maturity": "gold",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": true
+    }
   },
   {
     "id": "editor-animation.sample.animation.function-wrap.apply-f",
@@ -288,7 +348,13 @@
       "generated",
       "family-backed",
       "algebra"
-    ]
+    ],
+    "promotion": {
+      "maturity": "gold",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": true
+    }
   },
   {
     "id": "editor-animation.animation.generated.distribution.expand-a-sum",
@@ -312,7 +378,13 @@
       "equation",
       "distribution",
       "generated"
-    ]
+    ],
+    "promotion": {
+      "maturity": "gold",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": true
+    }
   },
   {
     "id": "editor-animation.sample.animation.distribution.expand-a-sum",
@@ -341,7 +413,13 @@
       "generated",
       "family-backed",
       "algebra"
-    ]
+    ],
+    "promotion": {
+      "maturity": "gold",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": true
+    }
   },
   {
     "id": "editor-animation.animation.generated.distribution.factor-common-a",
@@ -365,7 +443,13 @@
       "equation",
       "distribution",
       "generated"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.sample.animation.factoring.factor-common-a",
@@ -394,7 +478,13 @@
       "generated",
       "family-backed",
       "algebra"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.inequality.sign-flip.basic",
@@ -419,7 +509,13 @@
       "inequality",
       "sign-flip",
       "algebra"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.sample.animation.inequality.sign-flip.basic",
@@ -448,7 +544,13 @@
       "sign-flip",
       "algebra",
       "family-backed"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.generated.add-zero",
@@ -472,7 +574,13 @@
       "equation",
       "generated",
       "llm-authored"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.generated.substitute-three",
@@ -496,7 +604,13 @@
       "equation",
       "generated",
       "llm-authored"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.generated.substitute-three.provisional-incorrect",
@@ -520,7 +634,13 @@
       "generated",
       "provisional",
       "incorrect"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.generated.pipeline-diagram",
@@ -544,7 +664,13 @@
       "diagram",
       "generated",
       "llm-authored"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.generated.calculus.derivative.power-rule-x-cubed",
@@ -567,7 +693,13 @@
       "animation",
       "generated-problem",
       "generated.calculus.derivative"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.sample.animation.derivative-rules.basic",
@@ -595,7 +727,13 @@
       "generated.calculus.derivative",
       "family-backed",
       "calculus"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.generated.calculus.derivative.sum-rule-polynomial",
@@ -618,7 +756,13 @@
       "animation",
       "generated-problem",
       "generated.calculus.derivative"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.generated.calculus.integral.power-rule-quadratic",
@@ -641,7 +785,13 @@
       "animation",
       "generated-problem",
       "generated.calculus.integral"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.generated.linear-algebra.matrix-vector.two-by-two",
@@ -664,7 +814,13 @@
       "animation",
       "generated-problem",
       "generated.linear-algebra.matrix-vector"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.sample.animation.matrix-vector.basic",
@@ -692,7 +848,13 @@
       "generated.linear-algebra.matrix-vector",
       "family-backed",
       "linear-algebra"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.generated.linear-algebra.dot-product.three-vector",
@@ -715,7 +877,13 @@
       "animation",
       "generated-problem",
       "generated.linear-algebra.dot-product"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.generated.linear-algebra.matrix-matrix.two-by-two",
@@ -738,7 +906,13 @@
       "animation",
       "generated-problem",
       "generated.linear-algebra.matrix-matrix"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.sample.animation.matrix-matrix.basic",
@@ -766,7 +940,13 @@
       "generated.linear-algebra.matrix-matrix",
       "family-backed",
       "linear-algebra"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.graph.surface-mode.mesh-to-donut",
@@ -790,7 +970,13 @@
       "graph",
       "webgl",
       "surface-mode"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.graph.vector.linear-map-scale",
@@ -814,7 +1000,13 @@
       "graph",
       "vector",
       "linear-algebra"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.sample.animation.vector-add-scale.basic",
@@ -842,7 +1034,13 @@
       "vector",
       "linear-algebra",
       "family-backed"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.derivative-rules.tangent-graph",
@@ -867,7 +1065,13 @@
       "calculus",
       "derivative",
       "tangent"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.sample.animation.derivative-rules.tangent-graph",
@@ -896,7 +1100,13 @@
       "derivative",
       "tangent",
       "family-backed"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.integral-ftc.area-sweep",
@@ -921,7 +1131,13 @@
       "calculus",
       "integral",
       "area-sweep"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.sample.animation.integral-ftc.area-sweep",
@@ -950,7 +1166,13 @@
       "integral",
       "area-sweep",
       "family-backed"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.dot-projection.basic",
@@ -975,7 +1197,13 @@
       "linear-algebra",
       "dot-product",
       "projection"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.sample.animation.dot-projection.basic",
@@ -1004,7 +1232,13 @@
       "dot-product",
       "projection",
       "family-backed"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.programming.add.execution-trace",
@@ -1028,7 +1262,13 @@
       "programming",
       "source-file",
       "execution-trace"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.comparison.linear-solve-programming",
@@ -1054,7 +1294,13 @@
       "layout",
       "programming",
       "equation"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.comparison.jacobian-hessian",
@@ -1080,7 +1326,13 @@
       "equation",
       "calculus",
       "linear-algebra"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.sample.fundamental-theorem-calculus",
@@ -1105,7 +1357,13 @@
       "calculus",
       "fundamental-theorem",
       "sample"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.sample.animation.integral-ftc.basic",
@@ -1134,7 +1392,13 @@
       "fundamental-theorem",
       "sample",
       "family-backed"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   },
   {
     "id": "editor-animation.animation.sample.fourier-transform-pair",
@@ -1159,6 +1423,12 @@
       "analysis",
       "fourier",
       "sample"
-    ]
+    ],
+    "promotion": {
+      "maturity": "reviewable",
+      "novelty": "composition",
+      "humanReviewRequired": false,
+      "goldCohort": false
+    }
   }
 ]
