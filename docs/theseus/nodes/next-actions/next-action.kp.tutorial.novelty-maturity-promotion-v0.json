@@ -11,6 +11,7 @@
   "dependsOn": {
     "required": [
       "decision.kp.cross-domain-tutorial-platform-roadmap-v0",
+      "decision.kp.hermeneutic-cross-domain-tutorial-contract-v0",
       "run-contract.kp.semantic-material-motion-performance-v0"
     ]
   },

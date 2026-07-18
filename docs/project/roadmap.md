@@ -291,12 +291,14 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Complete the active promotion matrix and mandatory broad closeout.
-2. Freeze the gold equation cohort and add novelty/maturity promotion facets.
-3. Grill and accept the minimal tutorial storyboard, claim/evidence,
-   interaction-parameter, checkpoint, and cross-view correspondence contract.
-4. Build the FTC equation/graph gold exemplar on that contract.
-5. Open code, network, and data-structure views through BFS or Dijkstra.
+1. Complete the accepted hermeneutic tutorial-contract grill and encode its
+   decisions. This is now complete.
+2. Complete the active promotion matrix and mandatory broad closeout.
+3. Freeze the gold equation cohort and add novelty/maturity promotion facets.
+4. Build the reviewable FTC equation/graph exemplar on the accepted contract,
+   then stop before gold promotion.
+5. After human review, open code, network, and data-structure views through BFS
+   or Dijkstra.
 6. Add the parametric supply/demand/tax/subsidy economics laboratory.
 7. Add the work-energy equation/diagram/graph physics derivation.
 8. Expand governed prompt and upload authoring across the promoted vocabulary.

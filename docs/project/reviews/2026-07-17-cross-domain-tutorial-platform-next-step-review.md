@@ -4,6 +4,10 @@ Date: 2026-07-17
 Status: accepted
 Active thread: `threads/semantic-runtime.md`
 
+The tutorial contract was subsequently resolved through the accepted
+51-question grill recorded in
+`docs/project/decisions/2026-07-17-kp-hermeneutic-cross-domain-tutorial-contract.md`.
+
 ## Recommendation
 
 Finish the two remaining slices of the active semantic-material-motion loop,

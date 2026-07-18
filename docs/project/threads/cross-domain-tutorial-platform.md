@@ -2,9 +2,10 @@
 
 Status: next
 Last Updated: 2026-07-17
-Current Next Action: After the active motion-performance run closes, add
-novelty/maturity promotion facets and grill the minimal tutorial/interaction
-contract around the FTC gold exemplar.
+Current Next Action: The hermeneutic tutorial contract is accepted. After the
+active motion-performance run closes, add the minimal novelty/maturity
+promotion model, then implement the tutorial core and FTC module through the
+reviewable checkpoint.
 
 ## Goal
 
@@ -19,6 +20,12 @@ perfecting every equation first or building universal renderer abstractions in
 advance. Use FTC, BFS or Dijkstra, supply/demand policy, and work-energy in that
 order. Review new visual vocabulary carefully, but allow compositions of
 promoted vocabulary to scale through automated gates and cohort review.
+
+The core pedagogical principle is the hermeneutic loop, realized as sparse
+typed interpretive cycles that establish a whole, isolate a part, relate it
+across evidence views, and reintegrate it into changed understanding. Guided
+and exploratory views share explicit deterministic state. The autonomous v0
+boundary stops at a reviewable FTC Part I exemplar.
 
 ## Accepted Scope
 
@@ -55,8 +62,8 @@ promoted vocabulary to scale through automated gates and cohort review.
 ## Links
 
 - `docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md`
+- `docs/project/decisions/2026-07-17-kp-hermeneutic-cross-domain-tutorial-contract.md`
 - `docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md`
 - `docs/project/principles/codex-collaboration-protocol.md`
 - `docs/project/threads/semantic-runtime.md`
 - `docs/theseus/nodes/milestones/milestone.kp.cross-domain-tutorial-platform-v0.json`
-

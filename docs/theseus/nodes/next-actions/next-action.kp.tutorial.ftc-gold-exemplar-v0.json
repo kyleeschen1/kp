@@ -1,15 +1,19 @@
 {
   "id": "next-action.kp.tutorial.ftc-gold-exemplar-v0",
   "kind": "next-action",
-  "title": "Build FTC Gold Tutorial Exemplar",
+  "title": "Build Reviewable FTC Tutorial Exemplar",
   "status": "ready",
   "domain": "kp.tutorial",
-  "summary": "Prove synchronized symbolic reasoning, accumulated-area geometry, a movable bound, cross-view correspondence, shared-clock playback, and export through an interactive FTC module.",
+  "summary": "Implement the accepted tutorial core and prove synchronized symbolic reasoning, finite-strip convergence, accumulated-area geometry, a movable bound, cross-view correspondence, interpretive cycles, shared-clock playback, accessibility, and export through a reviewable FTC module; stop before gold promotion.",
   "sourceRefs": [
     { "kind": "file", "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md", "summary": "FTC exemplar behavior and exit conditions." }
   ],
   "dependsOn": {
-    "required": ["next-action.kp.tutorial.cross-domain-contract-v0"]
+    "required": [
+      "next-action.kp.tutorial.cross-domain-contract-v0",
+      "next-action.kp.tutorial.novelty-maturity-promotion-v0",
+      "decision.kp.hermeneutic-cross-domain-tutorial-contract-v0"
+    ]
   },
   "affects": ["milestone.kp.cross-domain-tutorial-platform-v0"],
   "verification": [
@@ -19,5 +23,8 @@
   ],
   "expectedLearning": [
     "Whether the tutorial kernel explains reasoning across symbols and graphs without renderer-owned timing."
+  ],
+  "disallowedWork": [
+    "No gold promotion, cross-domain generalization, arbitrary function entry, voice synthesis, learner modeling, gamification, or universal scene infrastructure before human review."
   ]
 }

@@ -2,15 +2,16 @@
   "id": "next-action.kp.tutorial.cross-domain-contract-v0",
   "kind": "next-action",
   "title": "Grill Cross Domain Tutorial Contract",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.tutorial",
-  "summary": "Grill and accept the minimal storyboard, scene, claim/evidence, checkpoint, interaction-parameter, and cross-view correspondence contract around the FTC exemplar before implementation.",
+  "summary": "Completed a 51-question grill and accepted the hermeneutic tutorial contract, including the reviewable FTC autonomous boundary and hard stop before gold promotion.",
   "sourceRefs": [
     { "kind": "file", "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md", "summary": "Accepted platform contract requirements and ordered roadmap." },
-    { "kind": "file", "path": "docs/project/principles/codex-collaboration-protocol.md", "summary": "Exemplar-first approval and rollback policy." }
+    { "kind": "file", "path": "docs/project/principles/codex-collaboration-protocol.md", "summary": "Exemplar-first approval and rollback policy." },
+    { "kind": "file", "path": "docs/project/decisions/2026-07-17-kp-hermeneutic-cross-domain-tutorial-contract.md", "summary": "Accepted results of the completed design interview." }
   ],
   "dependsOn": {
-    "required": ["next-action.kp.tutorial.novelty-maturity-promotion-v0"]
+    "required": ["decision.kp.cross-domain-tutorial-platform-roadmap-v0"]
   },
   "affects": ["milestone.kp.cross-domain-tutorial-platform-v0"],
   "verification": [
@@ -20,5 +21,8 @@
   ],
   "expectedLearning": [
     "The smallest tutorial contract that composes existing animation assets without duplicating semantic or timing authority."
-  ]
+  ],
+  "result": {
+    "summary": "Accepted guided/exploratory module semantics, claim and scene graphs, interpretive cycles, deterministic interaction, epistemic and rigor channels, promotion policy, and FTC review boundary."
+  }
 }

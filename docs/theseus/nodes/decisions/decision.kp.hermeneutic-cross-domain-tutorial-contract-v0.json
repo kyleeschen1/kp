@@ -1,0 +1,24 @@
+{
+  "id": "decision.kp.hermeneutic-cross-domain-tutorial-contract-v0",
+  "kind": "decision",
+  "title": "Adopt Hermeneutic Cross Domain Tutorial Contract",
+  "status": "resolved",
+  "domain": "kp.tutorial",
+  "summary": "Accepted 51-question grill: tutorials combine guided and exploratory views, claim/evidence checkpoints, hermeneutic interpretive cycles, deterministic state, semantic attention transmission, novelty-based promotion, and a reviewable FTC Part I autonomous boundary.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-hermeneutic-cross-domain-tutorial-contract.md",
+      "summary": "Accepted module, pedagogy, interaction, epistemic, authoring, rendering, promotion, and FTC contracts."
+    },
+    {
+      "kind": "user-intent",
+      "intent": "Use KP's hermeneutic part-whole strength to build a guided and exploratory tutorial system distinct from gated micro-interaction products, then implement through a reviewable FTC exemplar.",
+      "occurredAt": "2026-07-17",
+      "summary": "Accepted recommendations from the completed 51-question grill-me session."
+    }
+  ],
+  "affects": [
+    "milestone.kp.cross-domain-tutorial-platform-v0"
+  ]
+}

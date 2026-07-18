@@ -25,12 +25,12 @@
   "dependsOn": {
     "required": [
       "decision.kp.cross-domain-tutorial-platform-roadmap-v0",
-      "run-contract.kp.semantic-material-motion-performance-v0"
+      "decision.kp.hermeneutic-cross-domain-tutorial-contract-v0"
     ]
   },
   "nextActions": [
-    "next-action.kp.tutorial.novelty-maturity-promotion-v0",
     "next-action.kp.tutorial.cross-domain-contract-v0",
+    "next-action.kp.tutorial.novelty-maturity-promotion-v0",
     "next-action.kp.tutorial.ftc-gold-exemplar-v0",
     "next-action.kp.tutorial.code-network-bfs-v0",
     "next-action.kp.tutorial.economics-supply-demand-lab-v0",
