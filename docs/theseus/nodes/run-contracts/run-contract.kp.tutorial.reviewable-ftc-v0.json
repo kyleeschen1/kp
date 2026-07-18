@@ -83,7 +83,8 @@
     {
       "id": "next-action.kp.ftc.interaction-state-v0",
       "title": "Define deterministic interaction state",
-      "status": "planned"
+      "summary": "Added normalized semantic parameters and ordered named derived laws with explicit capability evaluators and determinism checks.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.cross-view-correspondence-v0",
