@@ -113,7 +113,8 @@
     {
       "id": "next-action.kp.ftc.accessibility-projections-v0",
       "title": "Add accessibility projections",
-      "status": "planned"
+      "summary": "Added all eight tutorial accessibility projections, reusing Gestalt modes while preserving claims, checkpoints, identities, evidence, and narration.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.canonical-export-v0",
