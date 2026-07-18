@@ -65,7 +65,8 @@
     {
       "id": "next-action.kp.ftc.interpretive-cycles-v0",
       "title": "Define interpretive cycles",
-      "status": "planned"
+      "summary": "Defined a strict authored whole-part-relation-reintegration cycle bound to claims, checkpoints, and focus bindings.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.reference-live-state-v0",
