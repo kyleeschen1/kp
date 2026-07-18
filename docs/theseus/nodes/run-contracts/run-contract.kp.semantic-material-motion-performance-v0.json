@@ -2,7 +2,7 @@
   "id": "run-contract.kp.semantic-material-motion-performance-v0",
   "kind": "run-contract",
   "title": "KP Semantic Material Motion And Performance V0",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
   "sourceRefs": [
     {
@@ -223,13 +223,14 @@
       "id": "next-action.kp.material-motion.promotion-matrix-v0",
       "title": "Gate motif style complexity and quality",
       "summary": "Broad checkpoint 29: promotion tests, request and bundle audit, throttled performance, representative editor browser cohort, full unit suite, and production build.",
-      "status": "planned"
+      "status": "complete"
     },
     {
       "id": "next-action.kp.material-motion.loop-closeout-v0",
       "title": "Verify and close or refill the loop",
       "summary": "Mandatory broad closeout: full unit suite, typecheck, production build, all relevant browser, performance, overflow, and Theseus validation and reports.",
-      "status": "planned"
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }

@@ -6,8 +6,8 @@ These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
 
 1. Record the completed hermeneutic tutorial-contract grill. Complete.
-2. Complete the active semantic-motion promotion matrix.
-3. Run the mandatory broad closeout and freeze the gold equation cohort.
+2. Complete the active semantic-motion promotion matrix. Complete.
+3. Run the mandatory broad closeout. Complete.
 4. Add novelty and maturity promotion facets to the catalog.
 5. Materialize and run the tutorial-core and reviewable FTC-exemplar contract.
 6. Stop for human review before gold promotion, then open code, network, and

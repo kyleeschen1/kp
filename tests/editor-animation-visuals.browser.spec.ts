@@ -2842,7 +2842,7 @@ test("every pure equation descriptor renders visible KaTeX at start, midpoint, a
     }
   }
 
-  expect(checked).toBe(32);
+  expect(checked).toBe(33);
 });
 
 test("graph animations mount the shared semantic SVG viewport", async ({ page }) => {

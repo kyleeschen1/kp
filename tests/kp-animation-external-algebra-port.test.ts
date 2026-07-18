@@ -33,6 +33,7 @@ test("linear solve algebra trace imports as a sampleable AnimationAsset", () => 
   assert.equal(result.animation.id, "animation.linear-solve.solve-x");
   assert.deepEqual(result.animation.metadata, {
     sourceAnimationId: "linear-equation-solve-x",
+    equationMotionPresentationRecipe: "continuity-v1",
     sourcePortId: "port.fixture.algebra-trace.linear-solve",
     sourceSystem: "fixture.algebra-trace",
     sourceTraceId: "trace.linear-solve"

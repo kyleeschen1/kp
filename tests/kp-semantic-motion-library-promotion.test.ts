@@ -3,6 +3,8 @@ import test from "node:test";
 
 import {
   auditKpSemanticMotionLibraryPromotion,
+  createKpSemanticMotionPromotionMatrix,
+  kpSemanticMotionPromotionFixtures,
   kpSemanticMotionPromotionRequirements
 } from "../src/animation/semantic-motion-library-promotion.ts";
 import { createKpAnimationAssets } from "../src/animation/catalog.ts";
@@ -15,7 +17,29 @@ test("semantic motion library passes its catalog-wide promotion contract", () =>
   assert.ok(report.animationCount >= 15);
   assert.ok(report.transformationCount >= report.requirementCount);
   assert.ok(report.llmOperationCount >= report.requirementCount);
+  assert.equal(report.matrixCellCount, 18);
+  assert.deepEqual(report.complexityLevels, ["low", "medium", "high"]);
+  assert.deepEqual(report.qualityTiers, ["full", "balanced", "efficient"]);
+  assert.equal(report.gestaltStyleKeys.length, 2);
+  assert.equal(report.hotPathLayoutReadBudget, 0);
+  assert.equal(report.surpriseInitialLoadBudget, 0);
   assert.deepEqual(report.gaps, []);
+});
+
+test("promotion matrix preserves semantic identity across complexity quality and style", () => {
+  const matrix = createKpSemanticMotionPromotionMatrix();
+
+  kpSemanticMotionPromotionFixtures.forEach((fixture) => {
+    const cells = matrix.filter((cell) => cell.fixtureId === fixture.id);
+    assert.equal(cells.length, 6);
+    assert.equal(new Set(cells.map((cell) => cell.semanticIdentity)).size, 1);
+    assert.ok(cells.every((cell) => cell.styleCompatible));
+    assert.ok(cells.every((cell) => cell.staticCostStatus === "accepted"));
+  });
+  assert.deepEqual(
+    kpSemanticMotionPromotionFixtures.map((fixture) => fixture.complexity),
+    ["low", "medium", "high"]
+  );
 });
 
 test("promotion reports a missing operation family instead of silently narrowing scope", () => {

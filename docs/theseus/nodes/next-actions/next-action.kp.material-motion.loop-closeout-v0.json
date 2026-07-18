@@ -1,0 +1,121 @@
+{
+  "id": "next-action.kp.material-motion.loop-closeout-v0",
+  "kind": "next-action",
+  "title": "Verify and close or refill the loop",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Closed the approved 30-slice semantic material motion and performance loop. Recorded promotion, browser, overflow, build, unit, and performance evidence; repaired final stale descriptor and selector expectations; documented explicit transfer and severe-throttle pacing debt; and handed project memory to novelty/maturity governance followed by the reviewable FTC exemplar.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.loop-closeout-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-risk-weighted-validation-cadence.md",
+      "summary": "Accepted risk-weighted verification policy governing this run."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-loop-closeout.md",
+      "summary": "Final delivered scope, verification evidence, residual debt, and exact handoff."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-semantic-material-motion-performance-closeout.test.ts",
+      "summary": "Executable closeout evidence contract."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Primary product lane now points to the cross-domain tutorial platform."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/threads/cross-domain-tutorial-platform.md",
+      "summary": "Active thread begins with novelty and maturity promotion."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "node --test <directly affected test files>",
+    "npm run typecheck when typed source or public contracts change",
+    "npx playwright test <smallest affected browser cohort> when visible behavior changes",
+    "npm run theseus -- workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether Verify and close or refill the loop can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "1376 unit and server tests passed before the documentation-only closeout changes.",
+      "checkedAt": "2026-07-18T00:41:22.354Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "Application, Node, and test projects passed after all closeout test changes.",
+      "checkedAt": "2026-07-18T00:41:22.450Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Production build passed; entry artifact 247.64 KB gzip.",
+      "checkedAt": "2026-07-18T00:41:22.542Z"
+    },
+    {
+      "command": "npx playwright test relevant semantic motion cohorts",
+      "status": "passed",
+      "scope": "59 editor, KaTeX, conformance, junction, and annihilation scenarios passed; 14 editor library scenarios and 540 overflow samples passed with zero nested scrollbars.",
+      "checkedAt": "2026-07-18T00:41:22.652Z"
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "No regressions; normal p95 17.7 ms, initial transfer 289.35 KB, and severe 6x-throttled p95 about 50 ms retained as product debt.",
+      "checkedAt": "2026-07-18T00:41:22.773Z"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "checkedAt": "2026-07-18T00:41:22.874Z",
+      "scope": "628 nodes and 7920 events valid before final completion."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Closed the approved 30-slice semantic material motion and performance loop. Recorded promotion, browser, overflow, build, unit, and performance evidence; repaired final stale descriptor and selector expectations; documented explicit transfer and severe-throttle pacing debt; and handed project memory to novelty/maturity governance followed by the reviewable FTC exemplar."
+  }
+}

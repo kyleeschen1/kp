@@ -1,10 +1,10 @@
 # Semantic Runtime Thread
 
-Status: active
+Status: stable-supporting
 Last Updated: 2026-07-17
-Current Next Action: Complete the promotion-matrix and broad-closeout slices of
-the semantic-material-motion performance loop, freeze a gold equation cohort,
-then hand off to `threads/cross-domain-tutorial-platform.md`.
+Current Next Action: Maintain equation motion as a bounded conformance lane.
+Primary product work has handed off to
+`threads/cross-domain-tutorial-platform.md`.
 
 ## Goal
 

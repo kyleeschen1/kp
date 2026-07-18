@@ -208,6 +208,10 @@ function createIntentionalInvalidDraft(
     ...draft,
     id: "animation.generated.intentional-invalid-substitution",
     title: "Generated: reveal an incorrect substitution on request",
+    authoringContext: {
+      ...draft.authoringContext,
+      historicalReplayRequested: true
+    },
     states: [draft.states[0]!, {
       ...target,
       title: "Intentionally incorrect learner proposal: replace x and 2 with 3",

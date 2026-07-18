@@ -2,8 +2,8 @@
 
 Last Updated: 2026-07-17
 Status: active
-Active Thread: `threads/semantic-runtime.md`
-Next Thread: `threads/cross-domain-tutorial-platform.md`
+Active Thread: `threads/cross-domain-tutorial-platform.md`
+Supporting Thread: `threads/semantic-runtime.md`
 
 ## Current Source Of Truth
 
@@ -35,8 +35,8 @@ family sample refs to executable assets and made a verified first cohort
 available in the KP editor; it has now closed its 30-slice implementation loop.
 
 The accepted successor direction is recorded in
-`decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md`. After the
-active semantic-material-motion loop closes, KP will freeze a small gold
+`decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md`. The active
+semantic-material-motion loop is closed; KP will now freeze a small gold
 equation baseline and build a cross-domain tutorial/interaction kernel through
 FTC, code/network, economics, and physics exemplars. Approval will attach to
 novel primitives and combinations rather than every composition of promoted
@@ -44,13 +44,12 @@ visual vocabulary.
 
 ## Active Focus
 
-**Close semantic-material-motion promotion, then pivot.** The governed
-semantic animation grammar and constraint-planned choreography loop is
-complete, and 28 of 30 slices in the active semantic-material-motion and
-performance loop are complete. The remaining work is the promotion matrix and
-broad closeout. After that, equation motion remains a bounded conformance lane
-while the primary product lane moves to the accepted cross-domain tutorial
-platform roadmap.
+**Add novelty/maturity governance, then build the reviewable FTC exemplar.**
+The governed semantic animation grammar and all 30 slices of the
+semantic-material-motion performance loop are complete. Equation motion is now
+a bounded conformance lane while the primary product lane moves to the accepted
+cross-domain tutorial platform roadmap. The next exact action freezes the gold
+equation cohort and makes novelty and maturity independent promotion facets.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the

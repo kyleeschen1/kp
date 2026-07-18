@@ -111,7 +111,7 @@ test("editor animation library restores and persists concrete selections", async
   );
   await expect(
     diagnostics.locator("[data-kp-editor-animation-diagnostics-selectors]")
-  ).toHaveText("10/10");
+  ).toHaveText("12/12");
 });
 
 test("render quality persists independently and stays frozen during playback", async ({

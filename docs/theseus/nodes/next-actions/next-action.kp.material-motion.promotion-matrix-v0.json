@@ -1,0 +1,121 @@
+{
+  "id": "next-action.kp.material-motion.promotion-matrix-v0",
+  "kind": "next-action",
+  "title": "Gate motif style complexity and quality",
+  "status": "resolved",
+  "domain": "kp.animation",
+  "summary": "Added an explicit 18-cell promotion matrix spanning low, medium, and high complexity, all render-quality tiers, and both pinned Gestalt styles while preserving semantic identity and accepted static-cost realizations. Repaired accumulated closeout contract drift for intentional historical replay, catalog counts, diagnostics, metadata, and dashboard search. Broad validation passed; performance has no regressions, while the known initial-transfer target and a 6x-throttled frame-pacing target remain explicit product debt.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.semantic-material-motion-performance-v0.json",
+      "summary": "Run contract whose stored slice next-action.kp.material-motion.promotion-matrix-v0 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.semantic-material-motion-performance-loop-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-semantic-material-motion-performance-long-loop-proposal.md",
+      "summary": "Approved ordered loop, scope, verification cadence, and stop conditions."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-semantic-material-motion-and-performance.md",
+      "summary": "Accepted design contract governing every slice."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-risk-weighted-validation-cadence.md",
+      "summary": "Accepted risk-weighted verification policy governing this run."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/semantic-motion-library-promotion.ts",
+      "summary": "Cross-product promotion matrix and zero-tolerance policy budgets."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/generated-semantic-proof-cohort.ts",
+      "summary": "Intentional invalid generated fixture now explicitly requests historical replay."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-semantic-motion-library-promotion.test.ts",
+      "summary": "Promotion coverage and semantic-parity laws."
+    },
+    {
+      "kind": "file",
+      "path": "tests/editor-animation-library.browser.spec.ts",
+      "summary": "Updated live selector coverage for the expanded linear equation state."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.semantic-material-motion-performance-v0",
+      "next-action.kp.semantic-material-motion-performance-loop-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.semantic-material-motion-performance-loop-v0"
+  ],
+  "verification": [
+    "node --test <directly affected test files>",
+    "npm run typecheck when typed source or public contracts change",
+    "npx playwright test <smallest affected browser cohort> when visible behavior changes",
+    "npm run theseus -- workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether Gate motif style complexity and quality can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test focused promotion and closeout cohorts",
+      "status": "passed",
+      "scope": "88 focused promotion, invalid-state, catalog, surface, port, and dashboard tests passed.",
+      "checkedAt": "2026-07-18T00:35:34.553Z"
+    },
+    {
+      "command": "npx playwright test editor library and overflow cohorts",
+      "status": "passed",
+      "scope": "Overflow audit covered 45 descriptors across 540 samples with zero nested scrollbars; isolated library selection and cadence checks passed.",
+      "checkedAt": "2026-07-18T00:35:34.625Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "1376 unit and server tests passed.",
+      "checkedAt": "2026-07-18T00:35:34.698Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "Typecheck and production build passed; entry is 247.64 KB gzip artifact and 289.35 KB runtime initial transfer.",
+      "checkedAt": "2026-07-18T00:35:34.768Z"
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "No regression issues; normal p95 17.7 ms, zero normal playback layout reads, one constrained preflight cache measure, with transfer and 6x-throttled p95 retained as explicit target debt.",
+      "checkedAt": "2026-07-18T00:35:34.842Z"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "checkedAt": "2026-07-18T00:35:34.913Z",
+      "scope": "627 nodes and 7905 events valid before completion."
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added an explicit 18-cell promotion matrix spanning low, medium, and high complexity, all render-quality tiers, and both pinned Gestalt styles while preserving semantic identity and accepted static-cost realizations. Repaired accumulated closeout contract drift for intentional historical replay, catalog counts, diagnostics, metadata, and dashboard search. Broad validation passed; performance has no regressions, while the known initial-transfer target and a 6x-throttled frame-pacing target remain explicit product debt."
+  }
+}

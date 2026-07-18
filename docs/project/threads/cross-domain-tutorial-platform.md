@@ -1,11 +1,10 @@
 # Cross-domain Tutorial Platform Thread
 
-Status: next
+Status: active
 Last Updated: 2026-07-17
-Current Next Action: The hermeneutic tutorial contract is accepted. After the
-active motion-performance run closes, add the minimal novelty/maturity
-promotion model, then implement the tutorial core and FTC module through the
-reviewable checkpoint.
+Current Next Action: Add the minimal novelty/maturity promotion model, then
+implement the accepted tutorial core and FTC module through the reviewable
+checkpoint.
 
 ## Goal
 

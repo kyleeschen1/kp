@@ -8,6 +8,23 @@ import {
   createKpLlmSemanticMotionOperationCatalog
 } from "./llm-semantic-motion-operation-authoring.ts";
 import {
+  kpBaseGestaltStyleCatalog,
+  kpGestaltStyleKey
+} from "./gestalt-base-styles.ts";
+import {
+  kpEquationDomGestaltRenderer,
+  resolveKpGestaltRendererCapabilities
+} from "./gestalt-renderer-capabilities.ts";
+import { resolveKpGestaltStyle } from "./gestalt-style-resolution.ts";
+import {
+  resolveKpRenderQualityProfile,
+  type KpRenderQualityTier
+} from "./render-quality.ts";
+import {
+  evaluateKpAnimationStaticCost,
+  type KpAnimationStaticCostInput
+} from "./static-cost-model.ts";
+import {
   compileKpSemanticEquationTransitionResult
 } from "../rendering/semantic-equation-transition-compiler.ts";
 import type { EquationVisualMotifKind } from "../rendering/visual-motif.ts";
@@ -24,7 +41,36 @@ export interface KpSemanticMotionLibraryPromotionReport {
   readonly animationCount: number;
   readonly transformationCount: number;
   readonly llmOperationCount: number;
+  readonly matrixCellCount: number;
+  readonly complexityLevels: readonly KpSemanticMotionComplexityLevel[];
+  readonly qualityTiers: readonly KpRenderQualityTier[];
+  readonly gestaltStyleKeys: readonly string[];
+  readonly hotPathLayoutReadBudget: 0;
+  readonly surpriseInitialLoadBudget: 0;
   readonly gaps: readonly string[];
+}
+
+export type KpSemanticMotionComplexityLevel = "low" | "medium" | "high";
+
+export interface KpSemanticMotionPromotionFixture {
+  readonly id: string;
+  readonly animationId: string;
+  readonly transformType: string;
+  readonly complexity: KpSemanticMotionComplexityLevel;
+  readonly cost: KpAnimationStaticCostInput;
+}
+
+export interface KpSemanticMotionPromotionMatrixCell {
+  readonly fixtureId: string;
+  readonly animationId: string;
+  readonly transformType: string;
+  readonly complexity: KpSemanticMotionComplexityLevel;
+  readonly qualityTier: KpRenderQualityTier;
+  readonly gestaltStyleKey: string;
+  readonly semanticIdentity: string;
+  readonly staticCostStatus: "accepted" | "compression-required" | "rejected";
+  readonly recommendedTier?: KpRenderQualityTier | undefined;
+  readonly styleCompatible: boolean;
 }
 
 export const kpSemanticMotionPromotionRequirements:
@@ -54,11 +100,113 @@ export const kpSemanticMotionPromotionRequirements:
     requirement("multiplyMatrices", "matrix-cell-compose")
   ];
 
+export const kpSemanticMotionPromotionFixtures:
+  readonly KpSemanticMotionPromotionFixture[] = [
+    {
+      id: "fixture.promotion.low.function-wrap",
+      animationId: "animation.generated.function-wrap.apply-f",
+      transformType: "wrapFunction",
+      complexity: "low",
+      cost: {
+        tokenCount: 16,
+        simultaneousMovingGroupCount: 1,
+        fragmentCount: 8,
+        shadowLayerCount: 1,
+        threeDLayerCount: 0
+      }
+    },
+    {
+      id: "fixture.promotion.medium.distribution",
+      animationId: "animation.generated.distribution.expand-a-sum",
+      transformType: "distributeMultiplication",
+      complexity: "medium",
+      cost: {
+        tokenCount: 48,
+        simultaneousMovingGroupCount: 4,
+        fragmentCount: 64,
+        shadowLayerCount: 2,
+        threeDLayerCount: 0
+      }
+    },
+    {
+      id: "fixture.promotion.high.matrix-matrix",
+      animationId: "animation.generated.linear-algebra.matrix-matrix.two-by-two",
+      transformType: "multiplyMatrices",
+      complexity: "high",
+      cost: {
+        tokenCount: 96,
+        simultaneousMovingGroupCount: 7,
+        fragmentCount: 160,
+        shadowLayerCount: 4,
+        threeDLayerCount: 1
+      }
+    }
+  ];
+
+const promotionQualityTiers = ["full", "balanced", "efficient"] as const;
+
+export function createKpSemanticMotionPromotionMatrix(input: {
+  readonly catalog?: readonly KpAnimationAsset[] | undefined;
+} = {}): readonly KpSemanticMotionPromotionMatrixCell[] {
+  const catalog = input.catalog ?? createKpAnimationAssets();
+  return kpSemanticMotionPromotionFixtures.flatMap((fixture) => {
+    const animation = catalog.find((candidate) => candidate.id === fixture.animationId);
+    const transformation = animation?.transformations.find(
+      (candidate) => candidate.transformType === fixture.transformType
+    );
+    const semanticIdentity = transformation === undefined
+      ? `missing:${fixture.animationId}:${fixture.transformType}`
+      : [
+          transformation.transformType,
+          ...transformation.sourceObjectIds.map((id) => `source:${id}`),
+          ...transformation.targetObjectIds.map((id) => `target:${id}`)
+        ].join("|");
+    const staticCost = evaluateKpAnimationStaticCost(fixture.cost);
+
+    return [...kpBaseGestaltStyleCatalog.values()].flatMap((style) => {
+      const resolvedStyle = resolveKpGestaltStyle({
+        pinnedStyle: { id: style.id, version: style.version },
+        catalog: kpBaseGestaltStyleCatalog
+      });
+      const compatibility = resolveKpGestaltRendererCapabilities({
+        style,
+        renderer: kpEquationDomGestaltRenderer
+      });
+      return promotionQualityTiers.map((qualityTier) => {
+        const quality = resolveKpRenderQualityProfile({ preference: qualityTier });
+        const preservesSemantics =
+          quality.semanticStepScale === 1 &&
+          quality.witnessVisibility === "preserve" &&
+          quality.durationScale === 1;
+        return {
+          fixtureId: fixture.id,
+          animationId: fixture.animationId,
+          transformType: fixture.transformType,
+          complexity: fixture.complexity,
+          qualityTier,
+          gestaltStyleKey: kpGestaltStyleKey(style),
+          semanticIdentity: preservesSemantics
+            ? semanticIdentity
+            : `quality-semantic-drift:${semanticIdentity}`,
+          staticCostStatus: staticCost.status,
+          ...(staticCost.status === "accepted"
+            ? { recommendedTier: staticCost.recommendedTier }
+            : {}),
+          styleCompatible:
+            compatibility.status === "compatible" &&
+            !resolvedStyle.diagnostics.some((diagnostic) => diagnostic.severity === "error")
+        };
+      });
+    });
+  });
+}
+
 export function auditKpSemanticMotionLibraryPromotion(input: {
   readonly catalog?: readonly KpAnimationAsset[] | undefined;
 } = {}): KpSemanticMotionLibraryPromotionReport {
   const catalog = input.catalog ?? createKpAnimationAssets();
   const llmCatalog = createKpLlmSemanticMotionOperationCatalog();
+  const promotionMatrix = createKpSemanticMotionPromotionMatrix({ catalog });
   const gaps: string[] = [];
   const matchedAnimationIds = new Set<string>();
   let transformationCount = 0;
@@ -120,6 +268,26 @@ export function auditKpSemanticMotionLibraryPromotion(input: {
     }
   });
 
+  kpSemanticMotionPromotionFixtures.forEach((fixture) => {
+    const cells = promotionMatrix.filter((cell) => cell.fixtureId === fixture.id);
+    if (cells.length !== promotionQualityTiers.length * kpBaseGestaltStyleCatalog.size) {
+      gaps.push(`${fixture.id} does not cover every quality and Gestalt style.`);
+      return;
+    }
+    if (cells.some((cell) => cell.semanticIdentity.startsWith("missing:"))) {
+      gaps.push(`${fixture.id} does not resolve its promoted semantic operation.`);
+    }
+    if (new Set(cells.map((cell) => cell.semanticIdentity)).size !== 1) {
+      gaps.push(`${fixture.id} changes semantic identity across quality or style.`);
+    }
+    if (cells.some((cell) => !cell.styleCompatible)) {
+      gaps.push(`${fixture.id} has an incompatible Gestalt style cell.`);
+    }
+    if (cells.some((cell) => cell.staticCostStatus !== "accepted")) {
+      gaps.push(`${fixture.id} does not have an accepted static-cost realization.`);
+    }
+  });
+
   return {
     kind: "semantic-motion-library-promotion-report",
     status: gaps.length === 0 ? "promoted" : "blocked",
@@ -127,6 +295,16 @@ export function auditKpSemanticMotionLibraryPromotion(input: {
     animationCount: matchedAnimationIds.size,
     transformationCount,
     llmOperationCount: llmCatalog.operations.length,
+    matrixCellCount: promotionMatrix.length,
+    complexityLevels: [...new Set(promotionMatrix.map((cell) => cell.complexity))],
+    qualityTiers: [...promotionQualityTiers],
+    gestaltStyleKeys: [...new Set(
+      promotionMatrix.map((cell) => cell.gestaltStyleKey)
+    )],
+    // Runtime instrumentation enforces these zero-tolerance budgets under
+    // throttling; the matrix makes them part of catalog promotion policy.
+    hotPathLayoutReadBudget: 0,
+    surpriseInitialLoadBudget: 0,
     gaps
   };
 }

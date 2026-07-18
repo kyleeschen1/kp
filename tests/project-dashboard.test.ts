@@ -1264,12 +1264,16 @@ test("renderProjectDashboard searches all dashboard data", () => {
 
   assert.match(html, /data-action="filter-project-dashboard"/);
   assert.match(html, /value="dnt"/);
-  assert.match(html, /Showing 3 of \d+ rows/);
+  assert.match(html, /Showing 4 of \d+ rows/);
   assert.match(html, /data-kp-agenda-row="visual-donut-surface"/);
   assert.match(html, /data-kp-agenda-row="visual-webgl-graph"/);
   assert.match(
     html,
     /data-kp-agenda-row="animation-graph-surface-mode-mesh-to-donut"/
+  );
+  assert.match(
+    html,
+    /data-kp-agenda-row="animation-generated-substitute-three-provisional-incorrect"/
   );
   assert.doesNotMatch(html, /data-kp-agenda-row="visual-mesh-graph"/);
   assert.doesNotMatch(html, /data-kp-agenda-row="work-project-dashboard-v1"/);
