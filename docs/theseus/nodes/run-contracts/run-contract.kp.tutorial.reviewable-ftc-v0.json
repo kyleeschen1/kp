@@ -125,7 +125,8 @@
     {
       "id": "next-action.kp.ftc.editor-inspector-v0",
       "title": "Add editor tutorial inspector",
-      "status": "planned"
+      "summary": "Added an editor inspector model and accessible HTML exposing claims, cycles, live/reference diffs, correspondences, narration, and independent promotion facets.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.learner-shell-v0",
