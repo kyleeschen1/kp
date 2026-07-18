@@ -89,7 +89,8 @@
     {
       "id": "next-action.kp.ftc.cross-view-correspondence-v0",
       "title": "Define cross-view correspondence",
-      "status": "planned"
+      "summary": "Added cross-view semantic identity groups and separate directional correspondences with unambiguous member ownership.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.attention-transmission-v0",
