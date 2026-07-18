@@ -5,6 +5,7 @@ import { validateKpClaimSceneGraphBundle } from "../src/tutorial/claim-scene-gra
 import { validateKpCrossViewCorrespondenceMap } from "../src/tutorial/cross-view-correspondence.ts";
 import { validateKpTutorialEpistemicNarration } from "../src/tutorial/epistemic-narration.ts";
 import {
+  createKpFtcNetChangeFrame,
   createKpFtcReintegrationFrames,
   createKpFtcTutorialDefinition
 } from "../src/tutorial/ftc-tutorial-module.ts";
@@ -32,6 +33,22 @@ test("FTC module closes claims, scenes, cycles, correspondence, narration, and a
   );
   assert.deepEqual(validateKpTutorialAccessibilityFamily(definition.accessibility), []);
   assert.equal(definition.timeline.clockId, definition.module.clockId);
+});
+
+test("FTC net change follows and reuses the accumulator interpretation", () => {
+  const definition = createKpFtcTutorialDefinition();
+  const frame = createKpFtcNetChangeFrame();
+
+  assert.deepEqual(definition.module.canonicalSceneIds, [
+    "scene.ftc.accumulator-derivative",
+    "scene.ftc.net-change"
+  ]);
+  assert.equal(definition.module.checkpoints.at(-1)?.id, "checkpoint.ftc.net-change");
+  assert.equal(frame.latex, "A(b)-A(a)=\\int_a^b f(t)\\,dt");
+  assert.ok(frame.persistentSelectorIds.includes("ftc.symbol.accumulator-A"));
+  assert.deepEqual(frame.activeCorrespondenceIds, [
+    "correspondence.ftc.area-to-net-change"
+  ]);
 });
 
 test("FTC reintegration introduces the limit before the derivative identity", () => {

@@ -173,7 +173,8 @@
     {
       "id": "next-action.kp.ftc.net-change-v0",
       "title": "Add net change scene",
-      "status": "planned"
+      "summary": "Added a later canonical net-change scene that reuses the same accumulator, filled area, and A identity as endpoint difference A of b minus A of a.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.epistemic-probe-v0",

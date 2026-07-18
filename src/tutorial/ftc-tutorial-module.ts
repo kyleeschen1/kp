@@ -41,7 +41,8 @@ const checkpoints = [
   ["checkpoint.ftc.finite-strip", 0.32, "Isolate the added strip"],
   ["checkpoint.ftc.convergence", 0.52, "Narrow the strip"],
   ["checkpoint.ftc.quotient", 0.72, "Relate area change to width"],
-  ["checkpoint.ftc.reintegrate", 0.9, "Return to the theorem identity"]
+  ["checkpoint.ftc.reintegrate", 0.9, "Return to the theorem identity"],
+  ["checkpoint.ftc.net-change", 1, "Read total change between endpoints"]
 ] as const;
 
 export function createKpFtcTutorialDefinition(): KpFtcTutorialDefinition {
@@ -50,7 +51,10 @@ export function createKpFtcTutorialDefinition(): KpFtcTutorialDefinition {
     version: 1,
     title: "When accumulated area becomes local change",
     clockId: kpFtcTutorialClockId,
-    canonicalSceneIds: ["scene.ftc.accumulator-derivative"],
+    canonicalSceneIds: [
+      "scene.ftc.accumulator-derivative",
+      "scene.ftc.net-change"
+    ],
     views: [
       {
         id: "view.ftc.graph",
@@ -95,12 +99,25 @@ export function createKpFtcTutorialDefinition(): KpFtcTutorialDefinition {
           "view.ftc.narration",
           "view.ftc.controls"
         ],
-        checkpointIds: checkpoints.map(([id]) => id)
+        checkpointIds: checkpoints.slice(0, -1).map(([id]) => id)
+      },
+      {
+        id: "scene.ftc.net-change",
+        title: "FTC Part II: net change",
+        viewIds: [
+          "view.ftc.graph",
+          "view.ftc.equation",
+          "view.ftc.narration"
+        ],
+        checkpointIds: ["checkpoint.ftc.net-change"]
       }
     ],
-    checkpoints: checkpoints.map(([id, progress, label]) => ({
+    checkpoints: checkpoints.map(([id, progress, label], index) => ({
       id,
-      sceneId: "scene.ftc.accumulator-derivative",
+      sceneId:
+        index === checkpoints.length - 1
+          ? "scene.ftc.net-change"
+          : "scene.ftc.accumulator-derivative",
       progress,
       viewIds: ["view.ftc.graph", "view.ftc.equation", "view.ftc.narration"],
       label
@@ -121,7 +138,8 @@ export function createKpFtcTutorialDefinition(): KpFtcTutorialDefinition {
       pace("strip", "claim.ftc.finite-strip", "checkpoint.ftc.finite-strip", 3),
       pace("convergence", "claim.ftc.convergence", "checkpoint.ftc.convergence", 4),
       pace("quotient", "claim.ftc.quotient", "checkpoint.ftc.quotient", 3),
-      pace("identity", "claim.ftc.identity", "checkpoint.ftc.reintegrate", 3)
+      pace("identity", "claim.ftc.identity", "checkpoint.ftc.reintegrate", 3),
+      pace("net-change", "claim.ftc.net-change", "checkpoint.ftc.net-change", 2)
     ]
   });
   const attention = compileKpCrossViewAttentionPlan({
@@ -194,8 +212,23 @@ export function createKpFtcReintegrationFrames(): readonly KpFtcReintegrationFra
   ];
 }
 
+export function createKpFtcNetChangeFrame(): KpFtcReintegrationFrame {
+  return {
+    id: "frame.ftc.net-change",
+    stage: "identity",
+    latex: "A(b)-A(a)=\\int_a^b f(t)\\,dt",
+    persistentSelectorIds: [
+      "ftc.symbol.accumulator-A",
+      "ftc.symbol.integrand-f-x",
+      "ftc.graph.accumulated-area"
+    ],
+    activeCorrespondenceIds: ["correspondence.ftc.area-to-net-change"],
+    proofStatus: "proof-sketch"
+  };
+}
+
 function createGraphs(): KpClaimSceneGraphBundle {
-  const claimIds = ["whole", "accumulated-area", "finite-strip", "convergence", "quotient", "identity"];
+  const claimIds = ["whole", "accumulated-area", "finite-strip", "convergence", "quotient", "identity", "net-change"];
   return {
     claimGraph: {
       id: "claims.ftc.accumulator-derivative",
@@ -205,14 +238,16 @@ function createGraphs(): KpClaimSceneGraphBundle {
         claim("finite-strip", "A finite added strip is bounded by rectangles.", ["evidence.ftc.strip-bounds"]),
         claim("convergence", "As Δx shrinks, the quotient bounds converge to f(x).", ["evidence.ftc.continuity-squeeze"]),
         claim("quotient", "The strip area divided by its width is the finite difference quotient."),
-        claim("identity", "Under continuity, the accumulator's local rate is f(x).", ["evidence.ftc.limit"])
+        claim("identity", "Under continuity, the accumulator's local rate is f(x).", ["evidence.ftc.limit"]),
+        claim("net-change", "The total accumulated change from a to b is A(b)-A(a).", ["evidence.ftc.endpoint-difference"])
       ],
       edges: [
         claimEdge("area-from-whole", "accumulated-area", "whole", "depends-on"),
         claimEdge("strip-from-area", "finite-strip", "accumulated-area", "depends-on"),
         claimEdge("convergence-from-strip", "convergence", "finite-strip", "evidenced-by"),
         claimEdge("quotient-from-strip", "quotient", "finite-strip", "depends-on"),
-        claimEdge("identity-reintegrates", "identity", "whole", "reintegrates")
+        claimEdge("identity-reintegrates", "identity", "whole", "reintegrates"),
+        claimEdge("net-change-reuses-accumulator", "net-change", "identity", "depends-on")
       ]
     },
     sceneGraph: {
@@ -222,7 +257,8 @@ function createGraphs(): KpClaimSceneGraphBundle {
         { id: "scene-node.ftc.area", kind: "semantic-object", semanticObjectId: "region.ftc.area" },
         { id: "scene-node.ftc.strip", kind: "semantic-object", semanticObjectId: "region.ftc.strip" },
         { id: "scene-node.ftc.quotient", kind: "semantic-object", semanticObjectId: "equation.ftc.quotient" },
-        { id: "scene-node.ftc.identity", kind: "semantic-object", semanticObjectId: "equation.ftc.identity" }
+        { id: "scene-node.ftc.identity", kind: "semantic-object", semanticObjectId: "equation.ftc.identity" },
+        { id: "scene-node.ftc.net-change", kind: "semantic-object", semanticObjectId: "equation.ftc.net-change" }
       ],
       edges: [
         sceneEdge("area", "scene-node.ftc.graph", "scene-node.ftc.area"),
@@ -233,7 +269,9 @@ function createGraphs(): KpClaimSceneGraphBundle {
       id: `binding.ftc.${id}`,
       claimId: `claim.ftc.${id}`,
       sceneNodeIds: [
-        id === "quotient"
+        id === "net-change"
+          ? "scene-node.ftc.net-change"
+          : id === "quotient"
           ? "scene-node.ftc.quotient"
           : id === "identity"
             ? "scene-node.ftc.identity"
@@ -255,17 +293,21 @@ function createCorrespondence(): KpCrossViewCorrespondenceMap {
       member("strip", "view.ftc.graph", "ftc.graph.added-strip", "finite added area"),
       member("delta-area", "view.ftc.equation", "ftc.symbol.delta-area", "finite area change"),
       member("height", "view.ftc.graph", "ftc.graph.height-at-x", "graph height"),
-      member("integrand", "view.ftc.equation", "ftc.symbol.integrand-f-x", "integrand value")
+      member("integrand", "view.ftc.equation", "ftc.symbol.integrand-f-x", "integrand value"),
+      member("area-total", "view.ftc.graph", "ftc.graph.accumulated-area", "total area from a to b"),
+      member("net-change", "view.ftc.equation", "ftc.symbol.net-change", "endpoint difference A(b)-A(a)")
     ],
     identities: [
       { id: "identity.ftc.upper-bound-x", meaning: "The same chosen x in graph and symbols.", memberIds: ["member.ftc.graph-x", "member.ftc.equation-x"] },
       { id: "identity.ftc.finite-area-change", meaning: "The same finite added area in graph and numerator.", memberIds: ["member.ftc.strip", "member.ftc.delta-area"] },
-      { id: "identity.ftc.local-height", meaning: "The graph height and symbolic f(x) name one value.", memberIds: ["member.ftc.height", "member.ftc.integrand"] }
+      { id: "identity.ftc.local-height", meaning: "The graph height and symbolic f(x) name one value.", memberIds: ["member.ftc.height", "member.ftc.integrand"] },
+      { id: "identity.ftc.net-change-area", meaning: "The filled area from a to b is the endpoint change in A.", memberIds: ["member.ftc.area-total", "member.ftc.net-change"] }
     ],
     correspondences: [
       correspondence("graph-x-to-equation-x", "graph-x", "equation-x", "representation-to-representation", true, "Carry the moving graph boundary into every symbolic x."),
       correspondence("strip-to-delta-area", "strip", "delta-area", "evidence-to-claim", false, "Carry the persistent strip area into ΔA."),
-      correspondence("height-to-integrand", "height", "integrand", "evidence-to-claim", false, "Carry the converged graph height into f(x).")
+      correspondence("height-to-integrand", "height", "integrand", "evidence-to-claim", false, "Carry the converged graph height into f(x)."),
+      correspondence("area-to-net-change", "area-total", "net-change", "evidence-to-claim", false, "Carry the persistent filled area into the endpoint difference A(b)-A(a).")
     ]
   };
 }
@@ -290,7 +332,8 @@ function createNarrations(): readonly KpTutorialEpistemicNarration[] {
     narration("finite-strip", "For a finite Δx, the added strip lies between honest lower and upper rectangles.", "proof-sketch", "generic", "bounded", "These are finite bounds, not yet the derivative."),
     narration("convergence", "Continuity makes those height bounds close around f(x) as the strip narrows.", "proof-sketch", "generic", "qualitative", "The display illustrates the squeeze; it does not replace a formal ε–δ proof."),
     narration("quotient", "Dividing the same strip area by its same width produces a finite average rate.", "computation", "generic", "bounded", "Δx remains nonzero in this frame."),
-    narration("identity", "At the limiting step, the local rate of accumulated area is the graph height f(x).", "proof-sketch", "generic", "none", "Continuity is the stated theorem assumption.")
+    narration("identity", "At the limiting step, the local rate of accumulated area is the graph height f(x).", "proof-sketch", "generic", "none", "Continuity is the stated theorem assumption."),
+    narration("net-change", "The same accumulator now compares two endpoints: their difference is the signed area gathered between them.", "proof-sketch", "generic", "none", "This reuses the Part I accumulator rather than replacing its meaning.")
   ];
 }
 
