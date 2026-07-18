@@ -161,7 +161,8 @@
     {
       "id": "next-action.kp.ftc.difference-quotient-v0",
       "title": "Relate difference quotient",
-      "status": "planned"
+      "summary": "Added an authored strip-to-delta-A-to-finite-ratio notation sequence with persistent semantic roles and no premature derivative or limit notation.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.reintegration-v0",
