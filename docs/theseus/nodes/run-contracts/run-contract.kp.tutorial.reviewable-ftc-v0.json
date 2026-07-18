@@ -1,0 +1,179 @@
+{
+  "id": "run-contract.kp.tutorial.reviewable-ftc-v0",
+  "kind": "run-contract",
+  "title": "Reviewable FTC Tutorial Loop",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.tutorial.ftc-gold-exemplar-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-18-reviewable-ftc-tutorial-long-loop-proposal.md",
+      "summary": "Approved 26-slice FTC tutorial loop, verification cadence, expected end state, and hard boundaries."
+    }
+  ],
+  "verification": [
+    "Run focused unit tests after each deterministic model or contract slice.",
+    "Run typecheck after public typed-contract changes.",
+    "Run small browser cohorts for visible slices and broad checkpoints after slices 15, 21, 25, and 26.",
+    "Run performance validation in isolation."
+  ],
+  "allowedWork": [
+    "Build only the smallest contracts proven necessary by the FTC exemplar.",
+    "Implement editor and learner surfaces, deterministic export, accessibility projections, and proportionate tests.",
+    "Repair shared tutorial-kernel gaps only when the exemplar demonstrates them."
+  ],
+  "disallowedWork": [
+    "Do not promote the exemplar to gold or trusted publication.",
+    "Do not implement BFS, economics, physics, arbitrary function entry, voice synthesis, learner modeling, gamification, general upload generation, or universal scene infrastructure."
+  ],
+  "goal": "Build a reviewable FTC Part I module on a minimal versioned hermeneutic tutorial kernel, then stop for human review.",
+  "target": "next-action.kp.tutorial.ftc-gold-exemplar-v0",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "Commit after each verified slice; checkpoint broadly only after visible integration milestones.",
+  "verificationLevel": "focused",
+  "stopConditions": [
+    "Stop before gold promotion or cross-domain generalization.",
+    "Stop if the compiler would need to invent a pedagogical relation absent from the claim graph.",
+    "Stop if rendering or scroll position becomes a second semantic clock.",
+    "Stop if epistemic scope is overstated or accessibility removes causal meaning."
+  ],
+  "slices": [
+    {
+      "id": "next-action.kp.ftc.record-contract-v0",
+      "title": "Record approved contract and boundary",
+      "summary": "Approved 26-slice contract, validation cadence, and hard stop encoded.",
+      "status": "complete"
+    },
+    {
+      "id": "next-action.kp.ftc.tutorial-core-contracts-v0",
+      "title": "Define tutorial core contracts",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.claim-scene-graphs-v0",
+      "title": "Separate claim and scene graphs",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.interpretive-cycles-v0",
+      "title": "Define interpretive cycles",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.reference-live-state-v0",
+      "title": "Add reference and live state",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.branch-rejoin-v0",
+      "title": "Add branch and rejoin semantics",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.interaction-state-v0",
+      "title": "Define deterministic interaction state",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.cross-view-correspondence-v0",
+      "title": "Define cross-view correspondence",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.attention-transmission-v0",
+      "title": "Compile attention transmission",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.epistemic-narration-v0",
+      "title": "Add epistemic narration channels",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.claim-paced-clock-v0",
+      "title": "Compile claim-paced timing",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.accessibility-projections-v0",
+      "title": "Add accessibility projections",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.canonical-export-v0",
+      "title": "Add canonical export sampling",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.editor-inspector-v0",
+      "title": "Add editor tutorial inspector",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.learner-shell-v0",
+      "title": "Add learner tutorial shell",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.function-lens-v0",
+      "title": "Add curated function lens",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.accumulator-area-v0",
+      "title": "Animate accumulator area",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.finite-strip-v0",
+      "title": "Animate finite added strip",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.delta-convergence-v0",
+      "title": "Show guided convergence",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.difference-quotient-v0",
+      "title": "Relate difference quotient",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.reintegration-v0",
+      "title": "Reintegrate derivative identity",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.net-change-v0",
+      "title": "Add net change scene",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.epistemic-probe-v0",
+      "title": "Add optional epistemic probe",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.runtime-laws-v0",
+      "title": "Verify deterministic runtime laws",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.promotion-gates-v0",
+      "title": "Run reviewable promotion gates",
+      "status": "planned"
+    },
+    {
+      "id": "next-action.kp.ftc.reviewable-closeout-v0",
+      "title": "Close at reviewable maturity",
+      "status": "planned"
+    }
+  ]
+}
