@@ -101,7 +101,8 @@
     {
       "id": "next-action.kp.ftc.epistemic-narration-v0",
       "title": "Add epistemic narration channels",
-      "status": "planned"
+      "summary": "Added separate narration, proof status, scope, validity, provenance, and uncertainty channels with intentional-invalid safeguards.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.claim-paced-clock-v0",
