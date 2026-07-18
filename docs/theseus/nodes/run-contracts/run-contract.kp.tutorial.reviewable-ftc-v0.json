@@ -137,7 +137,8 @@
     {
       "id": "next-action.kp.ftc.function-lens-v0",
       "title": "Add curated function lens",
-      "status": "planned"
+      "summary": "Added a generic continuity-qualified FTC claim and three curated exact function lenses, reusing t squared as the canonical visual lens.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.accumulator-area-v0",
