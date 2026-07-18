@@ -6,5 +6,11 @@
     "src",
     "docs"
   ],
-  "qualityGateProfile": "generic"
+  "qualityGateProfile": "generic",
+  "workspaceSchemaVersion": 1,
+  "requiredCapabilities": [
+    "project-status-v1",
+    "context-packet-v1",
+    "run-contract-v1"
+  ]
 }
