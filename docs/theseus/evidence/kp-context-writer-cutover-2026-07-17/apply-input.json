@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "theseus.actor-input.v1",
+  "action": "cutover",
+  "id": "cutover.kp.context-run-v2.rc5.20260717",
+  "value": "apply",
+  "fields": {
+    "contractPath": "/Users/kyleeschen/Code/kp/docs/theseus/evidence/kp-context-writer-cutover-2026-07-17/contract.json",
+    "planPath": "/Users/kyleeschen/Code/kp/docs/theseus/evidence/kp-context-writer-cutover-2026-07-17/config-plan.json",
+    "rollbackBundleId": "077343af7c3cdd9aa4f9e373",
+    "rollbackBundleStatus": "pass",
+    "stateRoot": "/Users/kyleeschen/Library/Caches/theseus/kp-a6a0ebc0ff29"
+  }
+}
