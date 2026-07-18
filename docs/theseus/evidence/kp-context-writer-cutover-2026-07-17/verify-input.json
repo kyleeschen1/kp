@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "theseus.actor-input.v1",
+  "action": "cutover",
+  "id": "cutover.kp.context-run-v2.rc5.20260717",
+  "value": "verify",
+  "fields": {
+    "contractPath": "/Users/kyleeschen/Code/kp/docs/theseus/evidence/kp-context-writer-cutover-2026-07-17/contract.json",
+    "applicationPath": "/Users/kyleeschen/Code/kp/docs/theseus/evidence/kp-context-writer-cutover-2026-07-17/application.json"
+  }
+}

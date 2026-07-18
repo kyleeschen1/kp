@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "theseus.context-writer-cutover-soak.v1",
+  "status": "pass",
+  "contractId": "cutover.kp.context-run-v2.rc5.20260717",
+  "applicationDigestMatches": true,
+  "writer": "theseus.event-envelope.v2",
+  "counts": {
+    "eligible": 3,
+    "completed": 3,
+    "useful": 2,
+    "failed": 0,
+    "wrongWriter": 0,
+    "dualWritten": 0
+  },
+  "runIds": [
+    "event.context-run-issued.next-action.kp.tutorial.ftc-human-review-v0.20260718021902373.1",
+    "event.context-run-issued.next-action.kp.tutorial.code-network-bfs-v0.20260718021853109.1",
+    "event.context-run-issued.next-action.kp.semantic-material-motion-performance-loop-v0.20260718021839737.1"
+  ],
+  "failures": []
+}

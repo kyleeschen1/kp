@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "theseus.kp-context-writer-canary-verification.v1",
+  "status": "passed",
+  "writer": "theseus.event-envelope.v2",
+  "soak": {
+    "completed": 3,
+    "useful": 2,
+    "partial": 1,
+    "failed": 0,
+    "wrongWriter": 0,
+    "dualWritten": 0
+  },
+  "tokenBaseline": {
+    "packetTokens": 1763,
+    "coldStartTokens": 1952,
+    "estimatedNetTokensSaved": 189,
+    "runs": [
+      {
+        "targetId": "next-action.kp.semantic-material-motion-performance-loop-v0",
+        "packetTokens": 689,
+        "coldStartTokens": 927,
+        "estimatedNetTokensSaved": 238,
+        "usefulness": "useful"
+      },
+      {
+        "targetId": "next-action.kp.tutorial.code-network-bfs-v0",
+        "packetTokens": 557,
+        "coldStartTokens": 566,
+        "estimatedNetTokensSaved": 9,
+        "usefulness": "useful"
+      },
+      {
+        "targetId": "next-action.kp.tutorial.ftc-human-review-v0",
+        "packetTokens": 517,
+        "coldStartTokens": 459,
+        "estimatedNetTokensSaved": -58,
+        "usefulness": "partial"
+      }
+    ]
+  },
+  "automaticContextReceipts": {
+    "count": 0,
+    "status": "not-exercised",
+    "summary": "The CLI canaries exercised durable context-run token baselines and usefulness outcomes. Provider usage, summary-cache hits, and the separate automatic runner receipt API require a real LLM runner integration rather than manual CLI lifecycle canaries."
+  },
+  "verification": [
+    {
+      "command": "npm test",
+      "status": "passed",
+      "summary": "1430 tests passed; 0 failed."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "summary": "Valid 656 nodes and 8084 events."
+    },
+    {
+      "command": "npm run theseus -- plan compatibility",
+      "status": "passed",
+      "summary": "Schema 1 and all four required capabilities are supported; context-run resolves to v2."
+    }
+  ]
+}
