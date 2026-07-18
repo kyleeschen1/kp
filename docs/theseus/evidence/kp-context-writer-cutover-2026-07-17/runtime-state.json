@@ -1,0 +1,7 @@
+{
+  "schemaVersion": "theseus.kp-cutover-runtime-state.v1",
+  "contractId": "cutover.kp.context-run-v2.rc5.20260717",
+  "runtimeStateRoot": "/Users/kyleeschen/Library/Caches/theseus/kp-a6a0ebc0ff29",
+  "rollbackStoreRoot": "/Users/kyleeschen/Library/Caches/theseus/kp-a6a0ebc0ff29/rollback-v1",
+  "rollbackBundleId": "077343af7c3cdd9aa4f9e373"
+}

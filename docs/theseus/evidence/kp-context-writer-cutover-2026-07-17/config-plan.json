@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "theseus.context-writer-config-plan.v1",
+  "status": "change-required",
+  "path": "/Users/kyleeschen/Code/kp/theseus.config.json",
+  "before": {
+    "digest": "sha256:7f8ccd6bc7252dcaf5b9ed4a9c77f6700dbffcfc0f40c7a633784ac88aaeac75",
+    "text": "{\n  \"projectId\": \"kp\",\n  \"graphRoot\": \"docs/theseus/nodes\",\n  \"eventsRoot\": \"docs/theseus/events\",\n  \"sourceRoots\": [\n    \"src\",\n    \"docs\"\n  ],\n  \"qualityGateProfile\": \"generic\",\n  \"workspaceSchemaVersion\": 1,\n  \"requiredCapabilities\": [\n    \"project-status-v1\",\n    \"context-packet-v1\",\n    \"run-contract-v1\"\n  ]\n}\n"
+  },
+  "after": {
+    "digest": "sha256:cd29ba57d44a9a91e3b7a63b41e5bb0a0c3bd3cf2812000af468b6c42468853a",
+    "text": "{\n  \"projectId\": \"kp\",\n  \"graphRoot\": \"docs/theseus/nodes\",\n  \"eventsRoot\": \"docs/theseus/events\",\n  \"sourceRoots\": [\n    \"src\",\n    \"docs\"\n  ],\n  \"qualityGateProfile\": \"generic\",\n  \"workspaceSchemaVersion\": 1,\n  \"requiredCapabilities\": [\n    \"project-status-v1\",\n    \"context-packet-v1\",\n    \"run-contract-v1\",\n    \"event-envelope-v2-canary-write\"\n  ],\n  \"writerPolicy\": {\n    \"context-run\": \"theseus.event-envelope.v2\"\n  }\n}\n"
+  },
+  "changes": [
+    {
+      "path": "requiredCapabilities",
+      "before": [
+        "project-status-v1",
+        "context-packet-v1",
+        "run-contract-v1"
+      ],
+      "after": [
+        "project-status-v1",
+        "context-packet-v1",
+        "run-contract-v1",
+        "event-envelope-v2-canary-write"
+      ]
+    },
+    {
+      "path": "writerPolicy.context-run",
+      "after": "theseus.event-envelope.v2"
+    }
+  ]
+}

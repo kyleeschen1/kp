@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "theseus.rollback-bundle.v1",
+  "id": "077343af7c3cdd9aa4f9e373",
+  "project": {
+    "id": "kp",
+    "root": "/Users/kyleeschen/Code/kp"
+  },
+  "createdAt": "2026-07-18T02:15:35.411Z",
+  "graphDigest": "sha256:4a85007e2d80b087a2657ca46f2f709a31d5caecb790d044b40a84234e2cddd5",
+  "eventDigest": "sha256:3acd7dc562f65443b084de16d8f77c83d8085c4e0ee6b0274d90463093be3caf",
+  "artifact": {
+    "filename": "theseus-0.1.0-rc.5.tgz",
+    "digest": "sha256:aadef61e56649ac6ba0a4907271e786569c15dd78da6225402a6f10b33c7041f",
+    "packageVersion": "0.1.0-rc.5",
+    "retainedBytes": true
+  },
+  "writerPolicy": {
+    "families": {
+      "context-run": "legacy-v1"
+    }
+  },
+  "retention": {
+    "retainUntil": "2026-08-17T02:15:35.411Z"
+  },
+  "root": "/Users/kyleeschen/Library/Caches/theseus/kp-a6a0ebc0ff29/rollback-v1/bundles/077343af7c3cdd9aa4f9e373",
+  "graphRoot": "/Users/kyleeschen/Library/Caches/theseus/kp-a6a0ebc0ff29/rollback-v1/bundles/077343af7c3cdd9aa4f9e373/nodes",
+  "eventsRoot": "/Users/kyleeschen/Library/Caches/theseus/kp-a6a0ebc0ff29/rollback-v1/bundles/077343af7c3cdd9aa4f9e373/events",
+  "artifactPath": "/Users/kyleeschen/Library/Caches/theseus/kp-a6a0ebc0ff29/rollback-v1/bundles/077343af7c3cdd9aa4f9e373/artifacts/theseus-0.1.0-rc.5.tgz"
+}

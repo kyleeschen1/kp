@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "theseus.context-writer-cutover-contract.v1",
+  "id": "cutover.kp.context-run-v2.rc5.20260717",
+  "project": {
+    "id": "kp",
+    "root": "/Users/kyleeschen/Code/kp",
+    "configPath": "/Users/kyleeschen/Code/kp/theseus.config.json"
+  },
+  "targetId": "next-action.kp.semantic-material-motion-performance-loop-v0",
+  "artifact": {
+    "path": "/private/tmp/theseus-release-4400439/theseus-0.1.0-rc.5.tgz",
+    "filename": "theseus-0.1.0-rc.5.tgz",
+    "digest": "sha256:aadef61e56649ac6ba0a4907271e786569c15dd78da6225402a6f10b33c7041f",
+    "packageVersion": "0.1.0-rc.5"
+  },
+  "desired": {
+    "writer": "theseus.event-envelope.v2",
+    "requiredCapability": "event-envelope-v2-canary-write"
+  },
+  "soak": {
+    "minimumCompletedRuns": 3,
+    "minimumUsefulRuns": 2,
+    "maximumFailedRuns": 0
+  },
+  "approval": {
+    "status": "approved",
+    "approvedBy": "user",
+    "approvedAt": "2026-07-18T02:15:35.411Z"
+  },
+  "createdAt": "2026-07-18T02:15:35.411Z",
+  "preconditions": [
+    "Package artifact digest matches retained bytes.",
+    "Workspace is drained and writer history passes isolation audit.",
+    "Rollback bundle retains graph, events, config, artifact bytes, and legacy writer policy.",
+    "Config digest still matches the approved plan immediately before apply."
+  ]
+}

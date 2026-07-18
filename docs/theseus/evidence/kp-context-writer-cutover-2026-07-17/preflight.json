@@ -1,0 +1,243 @@
+{
+  "schemaVersion": "theseus.context-writer-cutover-preflight.v1",
+  "status": "passed",
+  "contract": {
+    "schemaVersion": "theseus.context-writer-cutover-contract.v1",
+    "id": "cutover.kp.context-run-v2.rc5.20260717",
+    "project": {
+      "id": "kp",
+      "root": "/Users/kyleeschen/Code/kp",
+      "configPath": "/Users/kyleeschen/Code/kp/theseus.config.json"
+    },
+    "targetId": "next-action.kp.semantic-material-motion-performance-loop-v0",
+    "artifact": {
+      "path": "/private/tmp/theseus-release-4400439/theseus-0.1.0-rc.5.tgz",
+      "filename": "theseus-0.1.0-rc.5.tgz",
+      "digest": "sha256:aadef61e56649ac6ba0a4907271e786569c15dd78da6225402a6f10b33c7041f",
+      "packageVersion": "0.1.0-rc.5"
+    },
+    "desired": {
+      "writer": "theseus.event-envelope.v2",
+      "requiredCapability": "event-envelope-v2-canary-write"
+    },
+    "soak": {
+      "minimumCompletedRuns": 3,
+      "minimumUsefulRuns": 2,
+      "maximumFailedRuns": 0
+    },
+    "approval": {
+      "status": "approved",
+      "approvedBy": "user",
+      "approvedAt": "2026-07-18T02:15:35.411Z"
+    },
+    "createdAt": "2026-07-18T02:15:35.411Z",
+    "preconditions": [
+      "Package artifact digest matches retained bytes.",
+      "Workspace is drained and writer history passes isolation audit.",
+      "Rollback bundle retains graph, events, config, artifact bytes, and legacy writer policy.",
+      "Config digest still matches the approved plan immediately before apply."
+    ]
+  },
+  "config": {
+    "path": "/Users/kyleeschen/Code/kp/theseus.config.json",
+    "digest": "sha256:7f8ccd6bc7252dcaf5b9ed4a9c77f6700dbffcfc0f40c7a633784ac88aaeac75"
+  },
+  "artifact": {
+    "path": "/private/tmp/theseus-release-4400439/theseus-0.1.0-rc.5.tgz",
+    "digest": "sha256:aadef61e56649ac6ba0a4907271e786569c15dd78da6225402a6f10b33c7041f",
+    "retainedByPackagePreflight": true
+  },
+  "packagePreflight": {
+    "schemaVersion": "theseus.context-writer-preflight.v1",
+    "status": "passed",
+    "generatedAt": "2026-07-18T02:15:35.411Z",
+    "git": {
+      "revision": "d3aa3624c07631f4037358d1c1c8b15750233abe",
+      "clean": true
+    },
+    "artifact": {
+      "schemaVersion": "theseus.release-provenance.v1",
+      "packageName": "theseus",
+      "packageVersion": "0.1.0-rc.5",
+      "gitRevision": "d3aa3624c07631f4037358d1c1c8b15750233abe",
+      "contractDigest": "sha256:950ca06005aa83ccd67b8f91b4a2995d0e77c7bcc29ad3e579bad06212e8422b",
+      "artifact": {
+        "filename": "theseus-0.1.0-rc.5.tgz",
+        "digest": "sha256:aadef61e56649ac6ba0a4907271e786569c15dd78da6225402a6f10b33c7041f"
+      },
+      "createdAt": "2026-07-16T21:59:28.667Z"
+    },
+    "writer": "legacy-v1",
+    "writerAudit": {
+      "status": "pass",
+      "counts": {
+        "contextMutations": 50,
+        "runs": 25,
+        "legacyMutations": 50,
+        "v2Mutations": 0,
+        "dualWrittenRuns": 0
+      },
+      "formats": {
+        "event.context-run-issued.next-action.kp.animation-grammar.accessible-motif-contract-v0.20260716030641514.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.copy-fanout-choreography-v0.20260716015837997.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.distribution-choreography-v0.20260716020329971.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.editor-authoring-controls-v0.20260716024833991.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.editor-motion-integration-v0.20260716024056965.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.epistemic-status-v0.20260716010357604.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.generated-proof-cohort-v0.20260716025610350.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.layout-plan-v0.20260716022423236.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.lineage-graph-v0.20260716010744881.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.llm-draft-v2-v0.20260716011905638.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.llm-repair-loop-v0.20260716012347146.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.loop-closeout-v0.20260716031251306.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.motif-conformance-v0.20260716012928725.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.motif-grammar-v0.20260716012626074.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.motion-quality-v0.20260716023254684.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.operation-lineage-binding-v0.20260716011004312.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.path-planner-v0.20260716022839726.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.salience-plan-v0.20260716011703358.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.semantic-entity-provenance-v0.20260716010544015.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.semantic-scene-protocol-v0.20260716011429947.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.semantic-timeline-v0.20260716023638596.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.substitution-choreography-v0.20260716021540573.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.typed-gap-v0.20260716010104887.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.animation-grammar.wrap-choreography-v0.20260716013355308.1": [
+          "legacy-v1"
+        ],
+        "event.context-run-issued.next-action.kp.choreography.dashboard-exemplar-baseline-v0.20260716155130016.1": [
+          "legacy-v1"
+        ]
+      },
+      "violations": []
+    },
+    "storage": {
+      "status": "pass",
+      "measurements": {
+        "replayMs": 18.419667000000118,
+        "indexRebuildMs": 18.546041999999943
+      },
+      "budgets": {
+        "maxReplayMs": 3000,
+        "maxIndexRebuildMs": 3000
+      },
+      "counts": {
+        "contextRuns": 25,
+        "indexedEvents": 0,
+        "indexedContextEvents": 0
+      },
+      "failures": [],
+      "indexSourceDigest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "rehearsal": {
+      "schemaVersion": "theseus.context-writer-rehearsal.v1",
+      "status": "passed",
+      "liveUnchanged": true,
+      "liveEventDigest": "sha256:3acd7dc562f65443b084de16d8f77c83d8085c4e0ee6b0274d90463093be3caf",
+      "drain": {
+        "openContextRuns": 0
+      },
+      "rollbackCopy": {
+        "eventsRoot": "/Users/kyleeschen/Library/Caches/theseus/kp-a6a0ebc0ff29/preflight/cutover.kp.context-run-v2.rc5.20260717/writer-rehearsal/backup/events",
+        "eventDigest": "sha256:3acd7dc562f65443b084de16d8f77c83d8085c4e0ee6b0274d90463093be3caf",
+        "matchesLive": true
+      },
+      "canary": {
+        "runId": "context-run.writer-canary.20260718021535411",
+        "writer": "theseus.event-envelope.v2",
+        "status": "completed"
+      },
+      "rollback": {
+        "runId": "context-run.writer-rollback.20260718021535411",
+        "writer": "legacy-v1",
+        "status": "completed"
+      },
+      "quarantine": {
+        "root": "/Users/kyleeschen/Library/Caches/theseus/kp-a6a0ebc0ff29/preflight/cutover.kp.context-run-v2.rc5.20260717/writer-rehearsal/quarantine",
+        "segmentFiles": 2,
+        "outsideCanonicalHistory": true
+      }
+    },
+    "rollback": {
+      "eventsRoot": "/Users/kyleeschen/Library/Caches/theseus/kp-a6a0ebc0ff29/preflight/cutover.kp.context-run-v2.rc5.20260717/writer-rehearsal/backup/events",
+      "eventDigest": "sha256:3acd7dc562f65443b084de16d8f77c83d8085c4e0ee6b0274d90463093be3caf"
+    }
+  },
+  "checks": [
+    {
+      "id": "artifact-identity",
+      "status": "passed",
+      "summary": "Artifact bytes, package preflight, and cutover contract agree."
+    },
+    {
+      "id": "legacy-writer",
+      "status": "passed",
+      "summary": "Preflight ran before enabling the v2 writer."
+    },
+    {
+      "id": "drain",
+      "status": "passed",
+      "summary": "No context runs remain open."
+    },
+    {
+      "id": "writer-isolation",
+      "status": "passed",
+      "summary": "Writer history has no dual-written runs."
+    },
+    {
+      "id": "rollback-rehearsal",
+      "status": "passed",
+      "summary": "Shadow v2 and legacy rollback runs passed without changing live history."
+    },
+    {
+      "id": "config-pinned",
+      "status": "passed",
+      "summary": "Config bytes are pinned at sha256:7f8ccd6bc7252dcaf5b9ed4a9c77f6700dbffcfc0f40c7a633784ac88aaeac75."
+    }
+  ]
+}
