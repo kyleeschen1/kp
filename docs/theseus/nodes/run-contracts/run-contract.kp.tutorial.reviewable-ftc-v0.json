@@ -155,7 +155,8 @@
     {
       "id": "next-action.kp.ftc.delta-convergence-v0",
       "title": "Show guided convergence",
-      "status": "planned"
+      "summary": "Added strictly decreasing guided delta-x levels whose persistent strip, quotient bounds, and error visibly contract while every frame remains labeled finite approximation.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.difference-quotient-v0",
