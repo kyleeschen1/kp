@@ -107,7 +107,8 @@
     {
       "id": "next-action.kp.ftc.claim-paced-clock-v0",
       "title": "Compile claim-paced timing",
-      "status": "planned"
+      "summary": "Compiled authored claim units into proportional spans on one shared deterministic clock, multiplying duration for multi-step reasoning.",
+      "status": "complete"
     },
     {
       "id": "next-action.kp.ftc.accessibility-projections-v0",
