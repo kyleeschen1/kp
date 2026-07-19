@@ -29,6 +29,11 @@
       "kind": "file",
       "path": "src/app-adapters/concept-room-theme-adapters.ts",
       "summary": "Deterministic adapters for DOM CSS variables, SVG values, and Review accessibility projections."
+    },
+    {
+      "kind": "file",
+      "path": "src/projections/concept-room-correspondence.ts",
+      "summary": "Pure explicit semantic correspondence index and separate hover keyboard pinned focus projection."
     }
   ],
   "verification": [
@@ -87,11 +92,23 @@
       "status": "passed",
       "scope": "s03 adapter public surface",
       "checkedAt": "2026-07-19T21:16:30.157Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-room-correspondence.test.ts tests/concept-room-route.test.ts",
+      "status": "passed",
+      "scope": "s04 explicit correspondence focus channels and URL focus roundtrip",
+      "checkedAt": "2026-07-19T21:18:34.985Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s04 projection contract",
+      "checkedAt": "2026-07-19T21:18:35.729Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s03 emits one locked theme through DOM, KaTeX, SVG, Review, print, reduced-motion, and forced-color channels."
+    "summary": "s04 added explicit cross-surface correspondence and kept ephemeral hover separate from durable URL focus."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."

@@ -65,7 +65,8 @@
     {
       "id": "s04",
       "title": "Focus and correspondence contract",
-      "status": "planned"
+      "summary": "Added pure explicit prose/symbolic/balance correspondence with distinct hover, keyboard, and pinned channels; focused tests, URL roundtrip, typecheck, and validation pass.",
+      "status": "complete"
     },
     {
       "id": "s05",

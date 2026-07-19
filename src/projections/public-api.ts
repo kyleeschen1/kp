@@ -17,3 +17,15 @@ export {
   type KpBalanceSideIr,
   type KpBalanceTermIr
 } from "./linear-equation-balance-exemplar.ts";
+
+export {
+  correspondenceTargetsFor,
+  createConceptRoomCorrespondenceIndex,
+  projectConceptRoomFocus,
+  type KpConceptRoomCorrespondenceIndex,
+  type KpConceptRoomCorrespondenceSurface,
+  type KpConceptRoomCorrespondenceTarget,
+  type KpConceptRoomFocusChannel,
+  type KpConceptRoomFocusProjection,
+  type KpConceptRoomFocusTarget
+} from "./concept-room-correspondence.ts";
