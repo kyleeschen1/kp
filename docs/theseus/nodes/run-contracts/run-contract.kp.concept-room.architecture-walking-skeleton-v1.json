@@ -116,13 +116,14 @@
     {
       "id": "s13",
       "title": "Canonical content source",
-      "status": "in-progress",
-      "summary": "Authoring the canonical plain 2x + 3 = 8 concept source against the manifest boundary."
+      "summary": "Added the canonical four-checkpoint 2x + 3 = 8 content draft and enforced content-to-authoring public imports.",
+      "status": "complete"
     },
     {
       "id": "s14",
       "title": "Deterministic publisher",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Building deterministic publication, resolved dependencies, asset references, and integrity digest."
     },
     {
       "id": "s15",

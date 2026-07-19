@@ -13,6 +13,8 @@ export {
 } from "./handles.ts";
 
 export {
+  conceptCapabilityRefSchema,
+  conceptProviderRefSchema,
   createConceptDraft,
   draftConceptManifestSchema,
   publishedConceptManifestSchema,
@@ -20,3 +22,12 @@ export {
   type KpPublishedConceptManifest
 } from "./concept-manifest.ts";
 
+export {
+  canonicalJson,
+  conceptAssetReferenceSchema,
+  publishConceptDraft,
+  publishedConceptArtifactSchema,
+  verifyPublishedConceptArtifact,
+  type KpConceptAssetReference,
+  type KpPublishedConceptArtifact
+} from "./publish-concept.ts";

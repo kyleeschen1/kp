@@ -340,12 +340,37 @@
     {
       "command": "npm run typecheck",
       "status": "passed",
-      "checkedAt": "2026-07-19T18:25:03.702Z",
-      "scope": "s13 repository type safety"
+      "scope": "s13 repository type safety",
+      "checkedAt": "2026-07-19T18:25:03.702Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-publisher.test.ts tests/concept-manifest.test.ts tests/canonical-linear-equation-content.test.ts",
+      "status": "passed",
+      "scope": "s14 deterministic publisher",
+      "checkedAt": "2026-07-19T18:29:59.212Z",
+      "notes": "Repeat publication is byte-canonical, mutations change the digest, asset order is normalized, artifacts are immutable, and tampering is detected."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s14 headless inference",
+      "checkedAt": "2026-07-19T18:30:00.323Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s14 repository type safety",
+      "checkedAt": "2026-07-19T18:30:01.445Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-07-19T18:30:02.478Z",
+      "scope": "s14 dependency boundary"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s13 adds the sole canonical 2x + 3 = 8 content source with four declarative checkpoints, inferred capability/provider references, searchable Review copy, and a merge-blocking content-to-authoring public-API boundary."
+    "summary": "s14 adds a portable deterministic publisher that emits a deeply immutable content-addressed artifact with resolved capability/provider dependencies, validated asset references, canonical JSON, provenance, and tamper verification without DOM, Node, or WebCrypto dependencies."
   }
 }

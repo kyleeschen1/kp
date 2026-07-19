@@ -22,11 +22,11 @@ const checkpointSchema = protocolObject({
   progressPermille: protocolInteger({ min: 0, max: 1000 }),
   semanticRefs: protocolArray(protocolString({ minLength: 1 }))
 });
-const capabilityRefSchema = protocolObject({
+export const conceptCapabilityRefSchema = protocolObject({
   id: protocolString({ pattern: /^[a-z0-9]+(?:[.-][a-z0-9]+)*$/ }),
   major: protocolInteger({ min: 1 })
 });
-const providerRefSchema = protocolObject({
+export const conceptProviderRefSchema = protocolObject({
   id: protocolString({ pattern: /^[a-z0-9]+(?:[.-][a-z0-9]+)*$/ }),
   protocol: protocolString({ pattern: /^[a-z0-9]+(?:-[a-z0-9]+)*\.v[1-9][0-9]*$/ }),
   version: protocolString({ pattern: /^\d+\.\d+\.\d+$/ })
@@ -40,8 +40,8 @@ const conceptFields = {
   projections: protocolArray(protocolEnum(["symbolic", "balance"] as const)),
   semanticRefs: protocolArray(semanticRefSchema),
   checkpoints: protocolArray(checkpointSchema),
-  capabilities: protocolArray(capabilityRefSchema),
-  providers: protocolArray(providerRefSchema),
+  capabilities: protocolArray(conceptCapabilityRefSchema),
+  providers: protocolArray(conceptProviderRefSchema),
   route: protocolObject({
     canonicalPath: protocolString({ pattern: /^\/concepts\/[a-z0-9/-]+$/ }),
     legacyAliases: protocolArray(protocolString({ pattern: /^\// }))
@@ -129,4 +129,3 @@ function deepFreeze<Value>(value: Value): DeepReadonly<Value> {
   for (const nested of Object.values(value)) deepFreeze(nested);
   return Object.freeze(value) as DeepReadonly<Value>;
 }
-
