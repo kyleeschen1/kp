@@ -2,10 +2,11 @@ import { strict as assert } from "node:assert";
 import type { Server } from "node:http";
 import test from "node:test";
 
+import { createExactRationalLinearProblemProvider } from "../providers/linear-problems/public-api.ts";
 import { createAppServer } from "./app.ts";
 
 test("GET /api/health returns the backend health payload", async () => {
-  const server = createAppServer();
+  const server = testServer();
   const baseUrl = await listen(server);
 
   try {
@@ -22,7 +23,7 @@ test("GET /api/health returns the backend health payload", async () => {
 });
 
 test("unknown API routes return a JSON 404", async () => {
-  const server = createAppServer();
+  const server = testServer();
   const baseUrl = await listen(server);
 
   try {
@@ -36,7 +37,7 @@ test("unknown API routes return a JSON 404", async () => {
 });
 
 test("POST /api/compile returns a compiled HTML asset", async () => {
-  const server = createAppServer();
+  const server = testServer();
   const baseUrl = await listen(server);
 
   try {
@@ -71,6 +72,68 @@ test("POST /api/compile returns a compiled HTML asset", async () => {
     await close(server);
   }
 });
+
+test("POST /api/v1/linear-problems dispatches deterministic validated protocol requests", async () => {
+  const server = testServer();
+  const baseUrl = await listen(server);
+  const request = {
+    schemaVersion: "linear-problem.generate.request.v1",
+    seed: "http-fixture",
+    constraints: {
+      minimumCoefficient: -9,
+      maximumCoefficient: 9,
+      allowFractionalSolution: true
+    }
+  };
+
+  try {
+    const first = await postJson(baseUrl, request);
+    const second = await postJson(baseUrl, request);
+    assert.equal(first.status, 200);
+    assert.deepEqual(await first.json(), await second.json());
+  } finally {
+    await close(server);
+  }
+});
+
+test("linear-problem transport returns structured errors for malformed and oversized bodies", async () => {
+  const server = testServer();
+  const baseUrl = await listen(server);
+
+  try {
+    const malformed = await fetch(`${baseUrl}/api/v1/linear-problems`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: "{"
+    });
+    assert.equal(malformed.status, 400);
+    assert.equal((await malformed.json() as { code: string }).code, "invalid-request");
+
+    const oversized = await fetch(`${baseUrl}/api/v1/linear-problems`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ schemaVersion: "linear-problem.generate.request.v1", padding: "x".repeat(70_000) })
+    });
+    assert.equal(oversized.status, 413);
+    assert.equal((await oversized.json() as { code: string }).code, "payload-too-large");
+  } finally {
+    await close(server);
+  }
+});
+
+function testServer(): Server {
+  return createAppServer({
+    linearProblemProvider: createExactRationalLinearProblemProvider()
+  });
+}
+
+function postJson(baseUrl: string, body: unknown): Promise<Response> {
+  return fetch(`${baseUrl}/api/v1/linear-problems`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(body)
+  });
+}
 
 async function listen(server: Server): Promise<string> {
   await new Promise<void>((resolve) => {

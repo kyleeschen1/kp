@@ -248,12 +248,36 @@
     {
       "command": "npm run check:architecture",
       "status": "passed",
-      "checkedAt": "2026-07-19T17:53:13.993Z",
-      "scope": "standard"
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:53:13.993Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test server/app.test.ts",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-19T18:11:19.376Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T18:11:20.125Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T18:11:20.837Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-19T18:11:21.541Z",
+      "scope": "broad"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s09 added exact substitution-based solution verification, an immutable validated provider facade, versioned capability metadata, structured errors, and a neutral provider conformance suite."
+    "summary": "s10 added the injected /api/v1/linear-problems adapter with unknown-to-schema dispatch, 64 KiB body limits, structured errors, deterministic responses, explicit server composition, and preserved /api/compile behavior."
   }
 }

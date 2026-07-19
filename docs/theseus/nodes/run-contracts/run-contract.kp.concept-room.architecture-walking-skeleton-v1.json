@@ -92,13 +92,14 @@
     {
       "id": "s09",
       "title": "Solution verification and provider facade",
-      "status": "in-progress",
-      "summary": "Adding solution substitution, immutable provider facade, capability metadata, and shared protocol conformance."
+      "summary": "Added substitution-based solution verification, immutable validated provider facade, versioned capability descriptor, structured errors, and a protocol-owned conformance suite.",
+      "status": "complete"
     },
     {
       "id": "s10",
       "title": "Versioned HTTP adapter",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Adding an injected versioned HTTP transport with bounded bodies and structured protocol errors."
     },
     {
       "id": "s11",

@@ -1,11 +1,14 @@
 import { createAppServer } from "./app.ts";
+import { createExactRationalLinearProblemProvider } from "../providers/linear-problems/public-api.ts";
 
 const DEFAULT_HOST = "127.0.0.1";
 const DEFAULT_PORT = 8001;
 
 const host = process.env["HOST"] ?? DEFAULT_HOST;
 const port = readPort(process.env["PORT"]);
-const server = createAppServer();
+const server = createAppServer({
+  linearProblemProvider: createExactRationalLinearProblemProvider()
+});
 
 server.listen(port, host, () => {
   console.log(`[api] listening on http://${host}:${port}`);
