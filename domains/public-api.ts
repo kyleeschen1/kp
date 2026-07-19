@@ -1,4 +1,11 @@
-// Versioned subject packs will be exported here without exposing their
-// implementation layout to content or projections.
-export {};
-
+export {
+  validateKpLinearEquationTrace,
+  type KpExactRational,
+  type KpLinearEquation,
+  type KpLinearEquationFrame,
+  type KpLinearEquationOperation,
+  type KpLinearEquationTrace,
+  type KpLinearExpression,
+  type KpLinearTraceDiagnostic,
+  type KpLinearTraceProvenance
+} from "./algebra/linear-equation-trace.ts";

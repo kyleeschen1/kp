@@ -164,13 +164,14 @@
     {
       "id": "s21",
       "title": "Strangler route shell",
-      "status": "in-progress",
-      "summary": "Mounting one generated concept-room route beside the legacy app with lazy loading and clean disposal."
+      "summary": "Added a bootstrap strangler route with generated resolution, lazy shell/artifact chunks, reducer-driven checkpoint navigation, popstate restoration, clean disposal, and untouched legacy fallback.",
+      "status": "complete"
     },
     {
       "id": "s22",
       "title": "Anti-corruption mapper",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Mapping validated linear-problem protocol DTOs into one KP-owned exact semantic trace with loss diagnostics."
     },
     {
       "id": "s23",

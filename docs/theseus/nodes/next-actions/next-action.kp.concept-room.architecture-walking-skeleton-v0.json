@@ -543,12 +543,37 @@
     {
       "command": "npm run check:architecture",
       "status": "passed",
-      "checkedAt": "2026-07-19T19:05:35.716Z",
-      "scope": "s21 dependency boundary"
+      "scope": "s21 dependency boundary",
+      "checkedAt": "2026-07-19T19:05:35.716Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-problem-trace-mapper.test.ts tests/linear-problem-provider.test.ts tests/linear-problem-step-verifier.test.ts",
+      "status": "passed",
+      "scope": "s22 anti-corruption mapper",
+      "checkedAt": "2026-07-19T19:11:40.775Z",
+      "notes": "Canonical and generated exact traces, stable semantic IDs, verified operations, provider conformance, and named lossy diagnostics pass."
+    },
+    {
+      "command": "npm run typecheck:domains",
+      "status": "passed",
+      "scope": "s22 independent algebra domain",
+      "checkedAt": "2026-07-19T19:11:41.820Z"
+    },
+    {
+      "command": "npm run typecheck:protocols",
+      "status": "passed",
+      "scope": "s22 neutral protocol boundary",
+      "checkedAt": "2026-07-19T19:11:42.821Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-07-19T19:11:43.794Z",
+      "scope": "s22 sole mapper dependency boundary"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s21 adds a bootstrap composition root that resolves generated concept metadata before falling back to the untouched legacy main entrypoint; the canonical room route lazy-loads its isolated shell and artifact, navigates checkpoints through reducer plus URL effects, restores on popstate, disposes listeners/coordinator/root cleanly, and produces separate production chunks without a new main.ts action branch."
+    "summary": "s22 adds a KP-owned exact linear-equation trace in the algebra domain and the sole protocol-to-KP mapper. It consumes schema-validated problem, step-verification, and solution-verification evidence; preserves stable semantic IDs, exact rationals, operations, assumptions, and provenance; works for generated equations; and surfaces discontinuity, rejection, provenance, operation, solution, and invariant loss explicitly without importing the provider engine."
   }
 }
