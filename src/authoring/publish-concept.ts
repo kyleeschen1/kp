@@ -14,7 +14,7 @@ import {
   conceptProviderRefSchema,
   draftConceptManifestSchema,
   publishedConceptManifestSchema,
-  type KpConceptDraft
+  type KpConceptDraftSource
 } from "./concept-manifest.ts";
 
 const integritySchema = protocolString({ pattern: /^sha256:[a-f0-9]{64}$/ });
@@ -48,7 +48,7 @@ export type KpConceptAssetReference = InferProtocolSchema<typeof conceptAssetRef
 export type KpPublishedConceptArtifact = InferProtocolSchema<typeof publishedConceptArtifactSchema>;
 
 export async function publishConceptDraft(
-  input: KpConceptDraft,
+  input: KpConceptDraftSource,
   options: { readonly assets?: readonly KpConceptAssetReference[] } = {}
 ): Promise<KpPublishedConceptArtifact> {
   const draft = draftConceptManifestSchema.parse(input);

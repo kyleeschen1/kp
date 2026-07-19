@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { solveWithBalanceConcept } from "../content/public-api.ts";
+import { solveWithBalanceConcept } from "../content/mathematics/linear-equations/solve-with-balance/concept.ts";
 import { draftConceptManifestSchema } from "../src/authoring/public-api.ts";
 
 test("canonical linear-equation content is a valid declarative draft", () => {

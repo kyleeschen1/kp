@@ -122,13 +122,14 @@
     {
       "id": "s14",
       "title": "Deterministic publisher",
-      "status": "in-progress",
-      "summary": "Building deterministic publication, resolved dependencies, asset references, and integrity digest."
+      "summary": "Added portable canonical publication with resolved dependencies, validated asset references, immutable output, and deterministic SHA-256 integrity.",
+      "status": "complete"
     },
     {
       "id": "s15",
       "title": "Generated discovery",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Generating catalog, route, lazy-load, preload, and search metadata from discovered validated content."
     },
     {
       "id": "s16",

@@ -365,12 +365,43 @@
     {
       "command": "npm run check:architecture",
       "status": "passed",
-      "checkedAt": "2026-07-19T18:30:02.478Z",
-      "scope": "s14 dependency boundary"
+      "scope": "s14 dependency boundary",
+      "checkedAt": "2026-07-19T18:30:02.478Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-catalog.test.ts tests/concept-publisher.test.ts tests/canonical-linear-equation-content.test.ts",
+      "status": "passed",
+      "scope": "s15 generated discovery",
+      "checkedAt": "2026-07-19T18:35:47.507Z",
+      "notes": "Generated route/search/preload metadata and lazy validated artifact loading pass; duplicate IDs and routes fail."
+    },
+    {
+      "command": "npm run check:concept-catalog",
+      "status": "passed",
+      "scope": "s15 generated output freshness",
+      "checkedAt": "2026-07-19T18:35:48.524Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s15 catalog inference",
+      "checkedAt": "2026-07-19T18:35:49.677Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15 repository type safety",
+      "checkedAt": "2026-07-19T18:35:50.965Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-07-19T18:35:52.052Z",
+      "scope": "s15 dependency boundary"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s14 adds a portable deterministic publisher that emits a deeply immutable content-addressed artifact with resolved capability/provider dependencies, validated asset references, canonical JSON, provenance, and tamper verification without DOM, Node, or WebCrypto dependencies."
+    "summary": "s15 adds filesystem discovery and deterministic generated artifacts/catalog metadata, with typed lazy loaders, canonical and legacy routes, preload and search fields, collision rejection, stable ordering, and a merge-blocking freshness gate; no per-room handwritten registry import is required."
   }
 }

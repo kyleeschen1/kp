@@ -76,6 +76,7 @@ export const publishedConceptManifestSchema = protocolSchema((input) =>
 );
 
 type InferredConceptDraft = InferProtocolSchema<typeof draftConceptManifestSchema>;
+export type KpConceptDraftSource = InferredConceptDraft;
 export type KpConceptDraft = DeepMutable<InferredConceptDraft>;
 export type KpPublishedConceptManifest = InferProtocolSchema<typeof publishedConceptManifestSchema>;
 

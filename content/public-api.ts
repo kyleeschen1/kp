@@ -1,2 +1,4 @@
-export { solveWithBalanceConcept } from "./mathematics/linear-equations/solve-with-balance/concept.ts";
-
+export {
+  generatedConceptCatalog,
+  type GeneratedConceptCatalogEntry
+} from "./generated/catalog.ts";

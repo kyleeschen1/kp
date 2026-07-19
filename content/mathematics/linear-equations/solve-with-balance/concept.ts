@@ -87,3 +87,5 @@ export const solveWithBalanceConcept = createConceptDraft({
   },
   publicationStatus: "draft"
 });
+
+export default solveWithBalanceConcept;

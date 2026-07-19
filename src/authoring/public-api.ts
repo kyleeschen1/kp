@@ -19,6 +19,7 @@ export {
   draftConceptManifestSchema,
   publishedConceptManifestSchema,
   type KpConceptDraft,
+  type KpConceptDraftSource,
   type KpPublishedConceptManifest
 } from "./concept-manifest.ts";
 
@@ -31,3 +32,8 @@ export {
   type KpConceptAssetReference,
   type KpPublishedConceptArtifact
 } from "./publish-concept.ts";
+
+export {
+  defineConceptCatalog,
+  type KpGeneratedConceptCatalogEntry
+} from "./concept-catalog.ts";
