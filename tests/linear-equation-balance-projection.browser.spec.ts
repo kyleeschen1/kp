@@ -31,7 +31,8 @@ test("symbolic and SVG balance views share frames, roles, focus, and KaTeX", asy
   await expect(balance).toHaveAttribute("data-kp-frame-id", "frame.initial");
   await expect(balance).toHaveAttribute("role", "img");
   await expect(balance).toHaveAttribute("aria-label", /2 times x plus 3 equals 8/);
-  await expect(balance.locator("foreignObject .katex")).toHaveCount(3);
+  await expect(balance.locator("[data-kp-balance-unit]")).toHaveCount(13);
+  await expect(balance.locator("[data-kp-balance-unit] .katex")).toHaveCount(13);
   await expect(balance.locator("animate, animateTransform")).toHaveCount(0);
   await expect(balance.locator('[data-kp-balance-side="left"]')).toHaveCount(1);
   await expect(balance.locator('[data-kp-balance-side="right"]')).toHaveCount(1);
@@ -62,7 +63,8 @@ test("symbolic and SVG balance views share frames, roles, focus, and KaTeX", asy
   });
   await expect(symbolic).toHaveAttribute("data-kp-frame-id", "frame.step.2");
   await expect(balance).toHaveAttribute("data-kp-frame-id", "frame.step.2");
-  await expect(balance.locator("foreignObject .katex")).toHaveCount(2);
+  await expect(balance.locator("[data-kp-balance-unit]")).toHaveCount(7);
+  await expect(balance.locator('[data-kp-balance-math-label="result"] .katex')).toHaveCount(1);
   await expect(balance).toHaveAttribute("aria-label", /x equals 5 over 2/);
 });
 

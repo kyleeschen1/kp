@@ -294,13 +294,31 @@
     {
       "command": "npm run typecheck and npm run build",
       "status": "passed",
-      "checkedAt": "2026-07-19T23:14:45.587Z",
-      "scope": "s15 public inferred geometry types and production build"
+      "scope": "s15 public inferred geometry types and production build",
+      "checkedAt": "2026-07-19T23:14:45.587Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s16 full repository suite: 1533 tests plus architecture, inference, and catalog gates",
+      "checkedAt": "2026-07-19T23:37:17.378Z"
+    },
+    {
+      "command": "playwright static balance, projection parity, route smoke, and responsive shell cohorts",
+      "status": "passed",
+      "scope": "s16 15 browser checks for themed SVG and KaTeX, accessible groups, exact endpoints, focus parity, no canvas, responsive bounds, routing, and failure fallback",
+      "checkedAt": "2026-07-19T23:37:18.621Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-19T23:37:19.674Z",
+      "scope": "s16 production build after desktop and phone manual visual inspection"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s15 complete: exemplar-local v2 balance IR preserves 13 physical identities, exact equality at all three frames, three matched removals, two 5/2 partition groups, one explicitly unsplit shared remainder, cumulative operation paths, and symbolic correspondences while rejecting noncanonical traces."
+    "summary": "s16 complete: polished route-local static balance uses quiet themed SVG, KaTeX object and operation labels, persistent variable and integer units, exact grouping guides with an unsplit shared remainder, consistent focus roles, accessible group narration, responsive bounds, and zero canvas."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."
