@@ -152,13 +152,14 @@
     {
       "id": "s19",
       "title": "Room-scoped effect coordinator",
-      "status": "in-progress",
-      "summary": "Implementing room-scoped provider, URL, persistence, and lazy-load effects with cancellation and stale-result protection."
+      "summary": "Added room-scoped effect coordination with request IDs, lane cancellation, disposal, revision anchoring, and stale-result suppression.",
+      "status": "complete"
     },
     {
       "id": "s20",
       "title": "Browser provider client",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Implementing a browser fetch client over only the versioned validated linear-problem JSON protocol."
     },
     {
       "id": "s21",

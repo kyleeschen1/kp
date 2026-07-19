@@ -497,13 +497,32 @@
     {
       "command": "npm run build",
       "status": "passed",
-      "checkedAt": "2026-07-19T18:54:59.076Z",
       "scope": "s19 browser integration",
+      "checkedAt": "2026-07-19T18:54:59.076Z",
       "notes": "Build passes with the pre-existing large-chunk warning only."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-problem-client.test.ts",
+      "status": "passed",
+      "scope": "s20 browser provider client",
+      "checkedAt": "2026-07-19T18:58:50.566Z",
+      "notes": "Versioned endpoint, JSON request/response validation, AbortSignal forwarding, structured protocol errors, transport failures, invalid JSON, schema rejection, and provider-engine exclusion pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20 repository type safety",
+      "checkedAt": "2026-07-19T18:58:51.598Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-07-19T18:58:52.571Z",
+      "scope": "s20 integration dependency boundary"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s19 adds an explicitly constructed room-scoped effect coordinator for provider, canonical URL, validated persistence, and independent lazy-load lanes, with monotonic request IDs, AbortSignal cancellation, same-lane supersession, revision-anchored stale-result suppression, structured failures, disposal, and no global event bus."
+    "summary": "s20 adds a transport-only browser client for /api/v1/linear-problems: all requests and successful responses are runtime-schema validated, structured provider errors survive intact, transport/JSON/schema failures are distinguished, AbortSignals propagate, unversioned endpoints are refused, and no provider engine or KP mapping enters the client."
   }
 }
