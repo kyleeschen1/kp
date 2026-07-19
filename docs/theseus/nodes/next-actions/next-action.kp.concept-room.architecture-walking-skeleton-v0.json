@@ -140,12 +140,36 @@
     {
       "command": "npm run check:architecture",
       "status": "passed",
-      "checkedAt": "2026-07-19T17:38:28.286Z",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:38:28.286Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-problem-rational.test.ts tests/linear-provider-boundary.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-19T17:41:47.063Z"
+    },
+    {
+      "command": "npm run typecheck:linear-provider",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:41:47.793Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:41:48.504Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-07-19T17:41:49.205Z",
       "scope": "standard"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s05 defined strict neutral runtime schemas and inferred DTOs for exact rationals, equations, generation, step and solution verification, provenance, and structured errors; headless protocol compilation passes."
+    "summary": "s06 implemented normalized bigint rational arithmetic and exact linear-expression operations in an independently compiled, presentation-free provider boundary."
   }
 }

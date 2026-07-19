@@ -17,6 +17,7 @@
     "check:architecture": "node --disable-warning=ExperimentalWarning scripts/check-concept-room-boundaries.ts",
     "check:inference": "node --disable-warning=ExperimentalWarning scripts/check-inference-contracts.ts",
     "typecheck:protocols": "tsc --project protocols/tsconfig.json --noEmit",
+    "typecheck:linear-provider": "tsc --project providers/linear-problems/tsconfig.json --noEmit",
     "test": "npm run check:architecture && npm run check:inference && node --disable-warning=ExperimentalWarning --test server/*.test.ts tests/*.test.ts",
     "preview": "vite preview --port 8000 --strictPort",
     "test:browser:katex": "playwright test tests/katex-transition.browser.spec.ts --project=chromium",
