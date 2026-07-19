@@ -158,13 +158,14 @@
     {
       "id": "s20",
       "title": "Browser provider client",
-      "status": "in-progress",
-      "summary": "Implementing a browser fetch client over only the versioned validated linear-problem JSON protocol."
+      "summary": "Added a transport-only versioned linear-problem browser client with request, response, error, and AbortSignal contracts.",
+      "status": "complete"
     },
     {
       "id": "s21",
       "title": "Strangler route shell",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Mounting one generated concept-room route beside the legacy app with lazy loading and clean disposal."
     },
     {
       "id": "s22",

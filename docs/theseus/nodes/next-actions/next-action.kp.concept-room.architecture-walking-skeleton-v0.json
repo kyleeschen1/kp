@@ -517,12 +517,38 @@
     {
       "command": "npm run check:architecture",
       "status": "passed",
-      "checkedAt": "2026-07-19T18:58:52.571Z",
-      "scope": "s20 integration dependency boundary"
+      "scope": "s20 integration dependency boundary",
+      "checkedAt": "2026-07-19T18:58:52.571Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-room-shell.test.ts tests/concept-room-route.test.ts tests/concept-room-state.test.ts",
+      "status": "passed",
+      "scope": "s21 shell and legacy characterization",
+      "checkedAt": "2026-07-19T19:05:30.240Z"
+    },
+    {
+      "command": "npx playwright test tests/concept-room-route-shell.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s21 focused browser route",
+      "checkedAt": "2026-07-19T19:05:32.011Z",
+      "notes": "Direct mount, canonical navigation, browser rewind, disposal, and untouched legacy root pass in Chromium."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s21 lazy chunk integration",
+      "checkedAt": "2026-07-19T19:05:33.400Z",
+      "notes": "Concept shell and artifact build as separate lazy chunks; build passes with the pre-existing large-chunk warning only."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-07-19T19:05:35.716Z",
+      "scope": "s21 dependency boundary"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s20 adds a transport-only browser client for /api/v1/linear-problems: all requests and successful responses are runtime-schema validated, structured provider errors survive intact, transport/JSON/schema failures are distinguished, AbortSignals propagate, unversioned endpoints are refused, and no provider engine or KP mapping enters the client."
+    "summary": "s21 adds a bootstrap composition root that resolves generated concept metadata before falling back to the untouched legacy main entrypoint; the canonical room route lazy-loads its isolated shell and artifact, navigates checkpoints through reducer plus URL effects, restores on popstate, disposes listeners/coordinator/root cleanly, and produces separate production chunks without a new main.ts action branch."
   }
 }
