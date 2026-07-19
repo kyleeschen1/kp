@@ -2,9 +2,9 @@
 
 Status: active
 Last Updated: 2026-07-19
-Current Next Action: Propose a bounded visual-exemplar loop for the accepted
-linear-equation concept room; stop for approval before implementation and stop
-again for human visual review before generalization.
+Current Next Action: Review the proposed 25-slice visual-exemplar loop for the
+accepted linear-equation concept room; stop for approval before implementation
+and stop again for human visual review before generalization.
 
 ## Goal
 
@@ -27,6 +27,13 @@ review preserves the exemplar-local provider input and route composition seams,
 accepts the current searchable browser fallback, and authorizes planning one
 polished `2x + 3 = 8` exemplar without generalization. The decision is recorded
 in `decisions/2026-07-19-kp-concept-room-architecture-review.md`.
+
+The visual-exemplar proposal is recorded in
+`reviews/2026-07-19-linear-equation-visual-exemplar-loop-proposal.md`. It uses
+the verified equation trace as truth, the hand-tuned `x + 3 = 7`
+`continuity-v1` presentation as the motion reference, and the FTC learner
+surface as a deliberately simplified composition reference. It is awaiting
+explicit execution approval.
 
 FTC remains a valuable reviewable artifact, but its human review and the BFS,
 economics, programming, and physics breadth sequence are parked until the
@@ -117,6 +124,7 @@ is a new combination of tutorial, graph, equation, and interaction vocabulary.
 ## Links
 
 - `docs/project/decisions/2026-07-19-kp-concept-room-architecture-review.md`
+- `docs/project/reviews/2026-07-19-linear-equation-visual-exemplar-loop-proposal.md`
 - `docs/project/reviews/2026-07-19-concept-room-architecture-walking-skeleton-closeout.md`
 - `docs/project/decisions/2026-07-19-kp-concept-room-architecture.md`
 - `docs/project/reviews/2026-07-19-linear-equation-architecture-stabilization-proposal.md`

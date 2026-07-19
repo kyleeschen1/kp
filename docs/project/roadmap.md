@@ -58,15 +58,18 @@ second concept supplies evidence for promotion.
 
 ## Active Focus
 
-**Propose one polished linear-equation exemplar.** The architecture walking
-skeleton is complete and accepted. The next candidate is a bounded visual loop
-for exactly the `2x + 3 = 8` concept room: establish the canonical visual
-reference, house typography and color roles, consistent focus affordances,
-traditional symbolic choreography, synchronized algebra/balance motion,
-hover-linked prose, and frictionless Explore/Review navigation. The proposal
+**Review the proposed polished linear-equation exemplar loop.** The architecture
+walking skeleton is complete and accepted. A bounded 25-slice visual loop for
+exactly the `2x + 3 = 8` concept room is recorded in
+`reviews/2026-07-19-linear-equation-visual-exemplar-loop-proposal.md`. It would
+establish the canonical visual reference, house typography and color roles,
+consistent focus affordances, traditional symbolic choreography, synchronized
+algebra/balance motion, hover-linked prose, and frictionless Explore/Review
+navigation. The plan
 must preserve the verified semantic trace, URLs, publication, provider, and
 failure boundaries and must stop for human visual review before generalizing
-any style, motion, projection, or interaction contract.
+any style, motion, projection, or interaction contract. Implementation is
+awaiting explicit approval.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
