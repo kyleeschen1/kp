@@ -2,7 +2,7 @@
   "id": "run-contract.kp.concept-room.architecture-walking-skeleton-v1",
   "kind": "run-contract",
   "title": "KP concept-room architecture walking skeleton",
-  "status": "ready",
+  "status": "resolved",
   "sourceRefs": [
     {
       "kind": "file",
@@ -194,13 +194,15 @@
     {
       "id": "s26",
       "title": "Failure containment and end-to-end smoke",
-      "status": "in-progress",
-      "summary": "Proving failure containment and the canonical end-to-end room across direct URLs, provider and capability failures, renderer absence, invalid artifacts, mount/switch/dispose, and legacy preservation."
+      "summary": "Wired the canonical browser room through deterministic generation and verification to shared symbolic/balance projections; direct and snapshot routes, switching, Review, disposal, structured failure containment, no-WebGL operation, and legacy preservation pass.",
+      "status": "complete"
     },
     {
       "id": "s27",
       "title": "Architecture closeout and mandatory stop",
-      "status": "planned"
+      "summary": "Completed the architecture audit and closeout evidence; full gates pass, residual risks and review questions are recorded, and the mandatory stop before visual polish is active.",
+      "status": "complete"
     }
-  ]
+  ],
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped."
 }

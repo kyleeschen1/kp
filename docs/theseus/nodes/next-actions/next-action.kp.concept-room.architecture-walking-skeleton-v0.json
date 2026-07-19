@@ -2,7 +2,7 @@
   "id": "next-action.kp.concept-room.architecture-walking-skeleton-v0",
   "kind": "next-action",
   "title": "Build Linear Equation Architecture Walking Skeleton",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.architecture",
   "summary": "Approved 27-slice architecture walking-skeleton implementation is ready to run under its typed contract.",
   "sourceRefs": [
@@ -10,6 +10,11 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-07-19-linear-equation-architecture-stabilization-proposal.md",
       "summary": "Approved implementation candidate and required stop boundary; execution remains gated on the review action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-19-concept-room-architecture-walking-skeleton-closeout.md",
+      "summary": "Records delivered boundaries, full verification evidence, architecture assessment, residual risks, mandatory stop, and human review questions."
     }
   ],
   "dependsOn": {
@@ -23,40 +28,6 @@
   ],
   "verification": [
     "Architecture, schema, inference, provider conformance, deterministic state, URL round-trip, projection parity, Review fallback, focused browser, and project gates pass."
-  ],
-  "expectedLearning": [
-    "Whether independently versioned content, neutral protocols, provider isolation, a sole KP mapper, canonical state and URLs, synchronized projections, and Review fallback form an honest end-to-end product boundary."
-  ],
-  "allowedWork": [
-    "New architecture boundaries and the plain end-to-end 2x + 3 = 8 walking skeleton described by the proposal."
-  ],
-  "disallowedWork": [
-    "No broad legacy migration, visual polish, capability promotion, LLM execution, BFS, economics, programming, physics, new WebGL work, package split, or microservice deployment."
-  ],
-  "criteria": [
-    {
-      "id": "architecture-boundaries",
-      "weight": "high"
-    },
-    {
-      "id": "provider-independence",
-      "weight": "high"
-    },
-    {
-      "id": "deterministic-room-state",
-      "weight": "high"
-    },
-    {
-      "id": "static-review-fallback",
-      "weight": "high"
-    },
-    {
-      "id": "legacy-preservation",
-      "weight": "high"
-    }
-  ],
-  "revisitWhen": [
-    "The user explicitly approves execution of the stabilization proposal."
   ],
   "verificationRecords": [
     {
@@ -706,13 +677,81 @@
     {
       "command": "npm run build",
       "status": "passed",
-      "checkedAt": "2026-07-19T20:22:01.569Z",
       "scope": "s26 production integration",
+      "checkedAt": "2026-07-19T20:22:01.569Z",
       "notes": "Build passes with the pre-existing large-chunk warning only; the temporary ineffective dynamic-import warning was removed."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s27 full repository closeout",
+      "checkedAt": "2026-07-19T20:29:24.690Z",
+      "notes": "1,510 tests passed after correcting the boundary inventory test to import its previously omitted declared content entrypoint; 0 failures remain."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s27 production closeout",
+      "checkedAt": "2026-07-19T20:29:25.732Z",
+      "notes": "Application, Node, test, and independent domain typechecks plus production build pass with only the pre-existing large-chunk warning."
+    },
+    {
+      "command": "npm run smoke:linear-equation",
+      "status": "passed",
+      "scope": "s27 canonical and failure route review",
+      "checkedAt": "2026-07-19T20:29:26.676Z",
+      "notes": "Two Chromium scenarios pass across exact provider integration, snapshot URL, projection and mode switching, Review, no WebGL, disposal, and the structured failure matrix."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s27 dependency and legacy audit",
+      "checkedAt": "2026-07-19T20:29:27.617Z",
+      "notes": "Eight boundaries remain acyclic across 40 gated files; seven legacy exceptions remain frozen."
+    },
+    {
+      "command": "npm run check:concept-catalog",
+      "status": "passed",
+      "scope": "s27 generated publication freshness",
+      "checkedAt": "2026-07-19T20:29:28.562Z"
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "s26 wires the canonical room through the versioned browser client to deterministic generation, exact intermediate and solution verification, the sole KP mapper, and lazy symbolic or balance rendering. Direct canonical and snapshot URLs mount; projection, checkpoint, Touch, and Review switches preserve shared frames and URLs; disposal is clean; no WebGL is required. Provider, Ask, invalid artifact, unavailable or unsupported capability, and renderer failures produce structured diagnostic codes while retaining searchable Review content. Existing concept, Review, and legacy browser routes remain intact."
-  }
+    "state": "complete",
+    "summary": "Completed all 27 approved architecture slices. The plain 2x + 3 = 8 room now spans independent content publication, exact external generation and verification, one KP trace, deterministic URL/state/effects, synchronized KaTeX and SVG projections, searchable no-JS Review, and structured failure containment. Full tests, build, smoke, architecture, inference, catalog freshness, and workspace gates pass. Mandatory stop reached before all visual polish and generalization."
+  },
+  "revisitWhen": [
+    "The user explicitly approves execution of the stabilization proposal."
+  ],
+  "expectedLearning": [
+    "Whether independently versioned content, neutral protocols, provider isolation, a sole KP mapper, canonical state and URLs, synchronized projections, and Review fallback form an honest end-to-end product boundary."
+  ],
+  "allowedWork": [
+    "New architecture boundaries and the plain end-to-end 2x + 3 = 8 walking skeleton described by the proposal."
+  ],
+  "disallowedWork": [
+    "No broad legacy migration, visual polish, capability promotion, LLM execution, BFS, economics, programming, physics, new WebGL work, package split, or microservice deployment."
+  ],
+  "criteria": [
+    {
+      "id": "architecture-boundaries",
+      "weight": "high"
+    },
+    {
+      "id": "provider-independence",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-room-state",
+      "weight": "high"
+    },
+    {
+      "id": "static-review-fallback",
+      "weight": "high"
+    },
+    {
+      "id": "legacy-preservation",
+      "weight": "high"
+    }
+  ]
 }

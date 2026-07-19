@@ -36,6 +36,7 @@ test("concept-room boundaries expose one narrow public entrypoint each", async (
   }
 
   const modules = await Promise.all([
+    import("../content/public-api.ts"),
     import("../protocols/public-api.ts"),
     import("../domains/public-api.ts"),
     import("../src/kernel/public-api.ts"),
