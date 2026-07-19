@@ -90,13 +90,17 @@ export function validateKpLinearEquationTrace(
 ): readonly KpLinearTraceDiagnostic[] {
   const diagnostics: KpLinearTraceDiagnostic[] = [];
   const frameIds = new Set(trace.frames.map((frame) => frame.id));
-  const semanticIds = trace.frames.flatMap((frame) => Object.values(frame.semanticIds));
+  const equationSemanticIds = trace.frames.map((frame) => frame.semanticIds.equation);
   if (trace.frames.length === 0) invariant("frames", "Trace requires at least one equation frame.", diagnostics);
   if (frameIds.size !== trace.frames.length) invariant("frames", "Equation frame IDs must be unique.", diagnostics);
-  if (new Set(semanticIds).size !== semanticIds.length) {
-    invariant("frames[].semanticIds", "Frame semantic IDs must be unique across the trace.", diagnostics);
+  if (new Set(equationSemanticIds).size !== equationSemanticIds.length) {
+    invariant("frames[].semanticIds.equation", "Equation semantic IDs must be unique across the trace.", diagnostics);
   }
   trace.frames.forEach((frame, index) => {
+    const frameSemanticIds = Object.values(frame.semanticIds);
+    if (new Set(frameSemanticIds).size !== frameSemanticIds.length) {
+      invariant(`frames[${index}].semanticIds`, "Semantic IDs must be unique within each frame.", diagnostics);
+    }
     if (frame.equation.left.variable !== trace.variable || frame.equation.right.variable !== trace.variable) {
       invariant(`frames[${index}].equation`, "Every expression must use the trace variable.", diagnostics);
     }

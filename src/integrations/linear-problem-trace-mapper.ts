@@ -80,7 +80,7 @@ export function mapLinearProblemToKpTrace(input: {
     const fromFrame = frames.at(-1)!;
     const toFrame = frame(
       `frame.step.${index + 1}`,
-      equationSemanticIds(step.semanticIds.equation, index + 1),
+      equationSemanticIds(step.semanticIds.equation, fromFrame.semanticIds),
       request.candidate
     );
     const operationKind = mapOperationKind(response.operation);
@@ -159,13 +159,16 @@ function frame(
   return { id, semanticIds, equation: mapEquation(equation) };
 }
 
-function equationSemanticIds(equation: string, index: number): KpLinearEquationFrame["semanticIds"] {
+function equationSemanticIds(
+  equation: string,
+  previous: KpLinearEquationFrame["semanticIds"]
+): KpLinearEquationFrame["semanticIds"] {
   return {
     equation,
-    leftVariable: `${equation}.left-variable.${index}`,
-    leftConstant: `${equation}.left-constant.${index}`,
-    rightVariable: `${equation}.right-variable.${index}`,
-    rightConstant: `${equation}.right-constant.${index}`
+    leftVariable: previous.leftVariable,
+    leftConstant: previous.leftConstant,
+    rightVariable: previous.rightVariable,
+    rightConstant: previous.rightConstant
   };
 }
 
