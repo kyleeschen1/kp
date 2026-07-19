@@ -16,6 +16,10 @@ export {
 
 export { verifyLinearStep } from "./step-verifier.ts";
 
+export { createExactRationalLinearProblemProvider } from "./provider.ts";
+
+export { verifyLinearSolution } from "./solution-verifier.ts";
+
 export {
   addRational,
   divideRational,

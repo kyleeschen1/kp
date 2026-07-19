@@ -21,6 +21,7 @@ export {
   linearEquationSchema,
   linearExpressionSchema,
   linearProblemErrorSchema,
+  linearProblemProviderDescriptorSchema,
   linearProblemProvenanceSchema,
   linearProblemSchema,
   linearStepClassificationSchema,
@@ -35,6 +36,7 @@ export {
   type LinearExpressionDto,
   type LinearProblemDto,
   type LinearProblemErrorDto,
+  type LinearProblemProviderDescriptorDto,
   type LinearProblemProvenanceDto,
   type LinearStepClassificationDto,
   type VerifyLinearSolutionRequestDto,
@@ -42,4 +44,10 @@ export {
   type VerifyLinearStepRequestDto,
   type VerifyLinearStepResponseDto
 } from "./linear-problem-v1.ts";
+
+export {
+  checkLinearProblemProviderConformance,
+  type LinearProblemProviderConformanceResult,
+  type LinearProblemProviderV1
+} from "./linear-problem-provider-v1.ts";
 

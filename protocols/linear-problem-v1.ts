@@ -114,6 +114,18 @@ export const linearProblemErrorSchema = protocolObject({
   retryable: protocolBoolean()
 });
 
+export const linearProblemProviderDescriptorSchema = protocolObject({
+  providerId: protocolString({ minLength: 1 }),
+  providerVersion: protocolString({ pattern: /^\d+\.\d+\.\d+$/ }),
+  protocolVersion: protocolLiteral("linear-problem.v1"),
+  capabilities: protocolArray(protocolEnum([
+    "generate",
+    "verify-step",
+    "verify-solution"
+  ] as const)),
+  deterministic: protocolBoolean()
+});
+
 export type ExactRationalDto = InferProtocolSchema<typeof exactRationalSchema>;
 export type LinearExpressionDto = InferProtocolSchema<typeof linearExpressionSchema>;
 export type LinearEquationDto = InferProtocolSchema<typeof linearEquationSchema>;
@@ -127,6 +139,9 @@ export type VerifyLinearStepResponseDto = InferProtocolSchema<typeof verifyLinea
 export type VerifyLinearSolutionRequestDto = InferProtocolSchema<typeof verifyLinearSolutionRequestSchema>;
 export type VerifyLinearSolutionResponseDto = InferProtocolSchema<typeof verifyLinearSolutionResponseSchema>;
 export type LinearProblemErrorDto = InferProtocolSchema<typeof linearProblemErrorSchema>;
+export type LinearProblemProviderDescriptorDto = InferProtocolSchema<
+  typeof linearProblemProviderDescriptorSchema
+>;
 
 function absBigInt(value: string): bigint {
   const parsed = BigInt(value);
@@ -139,4 +154,3 @@ function gcd(left: bigint, right: bigint): bigint {
   while (b !== 0n) [a, b] = [b, a % b];
   return a;
 }
-

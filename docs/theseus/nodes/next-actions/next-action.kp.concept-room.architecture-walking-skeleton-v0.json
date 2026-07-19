@@ -212,12 +212,48 @@
     {
       "command": "npm run check:architecture",
       "status": "passed",
-      "checkedAt": "2026-07-19T17:50:06.767Z",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:50:06.767Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-problem-provider.test.ts tests/linear-problem-step-verifier.test.ts tests/linear-problem-protocol.test.ts tests/linear-provider-boundary.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-19T17:53:10.423Z"
+    },
+    {
+      "command": "npm run typecheck:protocols",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:53:11.122Z"
+    },
+    {
+      "command": "npm run typecheck:linear-provider",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:53:11.846Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:53:12.566Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:53:13.280Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-07-19T17:53:13.993Z",
       "scope": "standard"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s08 verifies intermediate steps by exact solution-set equivalence and classifies canonical operations, compressed rewrites, simplification, one-sided mutation, arithmetic failure, unsupported forms, and ambiguity across generated and adversarial cases."
+    "summary": "s09 added exact substitution-based solution verification, an immutable validated provider facade, versioned capability metadata, structured errors, and a neutral provider conformance suite."
   }
 }

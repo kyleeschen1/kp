@@ -86,13 +86,14 @@
     {
       "id": "s08",
       "title": "Intermediate-step verifier",
-      "status": "in-progress",
-      "summary": "Implementing exact algebraic equivalence and the full intermediate-step classification matrix."
+      "summary": "Implemented exact solution-set equivalence and the full named step-classification matrix with generated property coverage and adversarial invalid cases; no LaTeX or canonical-trace comparison is used.",
+      "status": "complete"
     },
     {
       "id": "s09",
       "title": "Solution verification and provider facade",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Adding solution substitution, immutable provider facade, capability metadata, and shared protocol conformance."
     },
     {
       "id": "s10",
