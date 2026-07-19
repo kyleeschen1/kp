@@ -16,7 +16,7 @@ test("generated catalog exposes route, lazy load, preload, and search metadata",
   assert.match(entry.searchableText, /divide both sides by 2/);
   assert.deepEqual(entry.preload, []);
   const artifact = await entry.load();
-  assert.equal(artifact.integrity, "sha256:c97f83668b545f7a5744d5eca1f27c4109fe4696b8c03172114f8eb013a279ec");
+  assert.equal(artifact.integrity, "sha256:e2eca97718b03757566a977d4adfcdd2a52a1fd15cff4c1084e11601f19bc84b");
 });
 
 test("catalog rejects duplicate concept versions and routes", () => {

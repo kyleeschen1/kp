@@ -16,6 +16,12 @@ const artifact = {
       "symbolic",
       "balance"
     ],
+    "styleRoles": [
+      "equation.expression",
+      "equation.operation",
+      "diagram.balance",
+      "focus.primary"
+    ],
     "semanticRefs": [
       {
         "id": "equation.initial",
@@ -130,7 +136,7 @@ const artifact = {
       "compilerVersion": "1.0.0"
     },
     "publicationStatus": "published",
-    "integrity": "sha256:c97f83668b545f7a5744d5eca1f27c4109fe4696b8c03172114f8eb013a279ec"
+    "integrity": "sha256:e2eca97718b03757566a977d4adfcdd2a52a1fd15cff4c1084e11601f19bc84b"
   },
   "dependencies": {
     "capabilities": [
@@ -148,7 +154,7 @@ const artifact = {
     ]
   },
   "assets": [],
-  "integrity": "sha256:c97f83668b545f7a5744d5eca1f27c4109fe4696b8c03172114f8eb013a279ec"
+  "integrity": "sha256:e2eca97718b03757566a977d4adfcdd2a52a1fd15cff4c1084e11601f19bc84b"
 } as const;
 
 export default artifact;

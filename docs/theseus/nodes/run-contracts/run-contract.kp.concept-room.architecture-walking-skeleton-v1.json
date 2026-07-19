@@ -128,13 +128,14 @@
     {
       "id": "s15",
       "title": "Generated discovery",
-      "status": "in-progress",
-      "summary": "Generating catalog, route, lazy-load, preload, and search metadata from discovered validated content."
+      "summary": "Added discovered deterministic artifacts and a typed generated catalog with route, lazy-load, preload, search, collision, ordering, and freshness contracts.",
+      "status": "complete"
     },
     {
       "id": "s16",
       "title": "Publication fitness gate",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Enforcing exact capability majors, provider protocols, immutable integrity, and semantic style-role publication fitness."
     },
     {
       "id": "s17",

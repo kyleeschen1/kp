@@ -14,6 +14,7 @@ const draft = {
   title: "Solve a linear equation",
   modes: ["watch", "touch", "review"],
   projections: ["symbolic", "balance"],
+  styleRoles: ["equation.expression", "diagram.balance"],
   semanticRefs: [
     { id: "equation.initial", kind: "equation" },
     { id: "operation.subtract", kind: "operation" },
@@ -91,4 +92,3 @@ test("concept schemas reject duplicate, dangling, executable, and style-owned da
   assert.equal(draftConceptManifestSchema.safeParse({ ...draft, onEnter: () => undefined }).success, false);
   assert.equal(draftConceptManifestSchema.safeParse({ ...draft, rawColor: "#ff0000" }).success, false);
 });
-

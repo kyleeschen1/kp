@@ -38,6 +38,7 @@ const conceptFields = {
   title: protocolString({ minLength: 1 }),
   modes: protocolArray(protocolEnum(["watch", "touch", "ask", "review"] as const)),
   projections: protocolArray(protocolEnum(["symbolic", "balance"] as const)),
+  styleRoles: protocolArray(protocolString({ pattern: /^[a-z0-9]+(?:[.-][a-z0-9]+)*$/ })),
   semanticRefs: protocolArray(semanticRefSchema),
   checkpoints: protocolArray(checkpointSchema),
   capabilities: protocolArray(conceptCapabilityRefSchema),
@@ -86,6 +87,7 @@ export function createConceptDraft(input: InferredConceptDraft): KpConceptDraft 
 }
 
 type ConceptReferenceShape = {
+  readonly styleRoles: readonly string[];
   readonly semanticRefs: readonly { readonly id: string }[];
   readonly checkpoints: readonly {
     readonly id: string;
@@ -101,7 +103,8 @@ function hasClosedUniqueReferences(manifest: ConceptReferenceShape): boolean {
   const capabilityKeys = manifest.capabilities.map((item) => `${item.id}@${item.major}`);
   const providerKeys = manifest.providers.map((item) => `${item.id}@${item.version}:${item.protocol}`);
   const knownSemanticIds = new Set(semanticIds);
-  return unique(semanticIds) && unique(checkpointIds) && unique(capabilityKeys) && unique(providerKeys) &&
+  return unique(manifest.styleRoles) && unique(semanticIds) && unique(checkpointIds) &&
+    unique(capabilityKeys) && unique(providerKeys) &&
     manifest.checkpoints.every((checkpoint) =>
       checkpoint.semanticRefs.every((reference) => knownSemanticIds.has(reference))
     );

@@ -14,7 +14,7 @@ test("publisher emits a deterministic deeply immutable canonical artifact", asyn
   const second = await publishConceptDraft(solveWithBalanceConcept);
 
   assert.deepEqual(first, second);
-  assert.equal(first.integrity, "sha256:c97f83668b545f7a5744d5eca1f27c4109fe4696b8c03172114f8eb013a279ec");
+  assert.equal(first.integrity, "sha256:e2eca97718b03757566a977d4adfcdd2a52a1fd15cff4c1084e11601f19bc84b");
   assert.equal(first.manifest.integrity, first.integrity);
   assert.deepEqual(first.dependencies, {
     capabilities: [{ id: "kp.equation", major: 1 }],

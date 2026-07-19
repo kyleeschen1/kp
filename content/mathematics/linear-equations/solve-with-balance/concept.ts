@@ -26,6 +26,12 @@ export const solveWithBalanceConcept = createConceptDraft({
   title: "Solve a linear equation",
   modes: ["watch", "touch", "ask", "review"],
   projections: ["symbolic", "balance"],
+  styleRoles: [
+    "equation.expression",
+    "equation.operation",
+    "diagram.balance",
+    "focus.primary"
+  ],
   semanticRefs: [
     { id: "equation.initial", kind: "equation" },
     { id: "term.two-x", kind: "term" },

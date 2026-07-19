@@ -37,3 +37,16 @@ export {
   defineConceptCatalog,
   type KpGeneratedConceptCatalogEntry
 } from "./concept-catalog.ts";
+
+export {
+  KpPublicationFitnessError,
+  assertConceptPublicationFit,
+  definePublicationEnvironment,
+  evaluateConceptPublicationFitness,
+  type KpCapabilityAvailability,
+  type KpProviderAvailability,
+  type KpPublicationEnvironment,
+  type KpPublicationFitnessIssue,
+  type KpPublicationFitnessIssueCode,
+  type KpPublicationFitnessReport
+} from "./publication-fitness.ts";
