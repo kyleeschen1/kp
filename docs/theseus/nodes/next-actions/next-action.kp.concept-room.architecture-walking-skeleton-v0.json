@@ -427,12 +427,38 @@
     {
       "command": "npm run check:architecture",
       "status": "passed",
-      "checkedAt": "2026-07-19T18:40:24.027Z",
-      "scope": "s16 dependency boundary"
+      "scope": "s16 dependency boundary",
+      "checkedAt": "2026-07-19T18:40:24.027Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-room-route.test.ts",
+      "status": "passed",
+      "scope": "s17 canonical route",
+      "checkedAt": "2026-07-19T18:44:41.674Z",
+      "notes": "Full durable state round trips, 64 generated route variants, malformed and old-schema rejection, and server/browser parity pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s17 headless inference",
+      "checkedAt": "2026-07-19T18:44:42.682Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s17 dependency boundary",
+      "checkedAt": "2026-07-19T18:44:43.651Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-19T18:44:44.601Z",
+      "scope": "s17 server and client integration",
+      "notes": "Build passes with the pre-existing large-chunk warning only."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s16 adds a non-repairing publication fitness gate: artifacts must be schema-valid, immutable and digest-authentic; exact capability majors coexist and resolve independently; provider protocol/version and semantic style roles must be available; authored runtime or raw style structures remain invalid."
+    "summary": "s17 adds a headless canonical route contract for concept/version, checkpoint/time, mode/projection, parameters, focus, branch, provider provenance, and snapshot identity, with strict malformed/old-schema handling and thin browser/server adapters over one parser and formatter."
   }
 }

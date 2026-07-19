@@ -1,4 +1,11 @@
-// The headless room kernel will expose only stable, framework-neutral contracts
-// through this facade.
-export {};
-
+export {
+  KpConceptRoomRouteError,
+  canonicalizeConceptRoomRoute,
+  formatConceptRoomRoute,
+  parseConceptRoomRoute,
+  type KpConceptRoomMode,
+  type KpConceptRoomProjection,
+  type KpConceptRoomProviderRouteState,
+  type KpConceptRoomRoute,
+  type KpConceptRoomSnapshotRouteState
+} from "./concept-room-route.ts";

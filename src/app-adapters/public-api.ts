@@ -1,4 +1,4 @@
-// Host adapters compose published content and runtime capabilities; lower
-// layers must never import this application-facing facade.
-export {};
-
+export {
+  formatBrowserConceptRoomRoute,
+  parseBrowserConceptRoomRoute
+} from "./concept-room-route.ts";

@@ -134,13 +134,14 @@
     {
       "id": "s16",
       "title": "Publication fitness gate",
-      "status": "in-progress",
-      "summary": "Enforcing exact capability majors, provider protocols, immutable integrity, and semantic style-role publication fitness."
+      "summary": "Added non-repairing publication fitness for immutable integrity, exact parallel capability majors, provider protocol/version compatibility, and semantic style roles.",
+      "status": "complete"
     },
     {
       "id": "s17",
       "title": "Canonical route contract",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Implementing a headless canonical route shared by browser and server for exact linkable room state."
     },
     {
       "id": "s18",
