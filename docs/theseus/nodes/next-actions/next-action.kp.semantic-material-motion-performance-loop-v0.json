@@ -2,9 +2,9 @@
   "id": "next-action.kp.semantic-material-motion-performance-loop-v0",
   "kind": "next-action",
   "title": "Execute Semantic Material Motion And Performance Loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
-  "summary": "Await approval to execute the proposed 30-slice loop for performance foundations, material-junction morphs, witnessed cancellation, fission/fusion, work-proportional pacing, reverse semantics, incorrect-state branches, and governed LLM compilation.",
+  "summary": "Closed after run contract run-contract.kp.semantic-material-motion-performance-v0 completed all 30 stored slices.",
   "sourceRefs": [
     {
       "kind": "file",
