@@ -289,6 +289,7 @@ test("equation motion remeasures owned KaTeX DOM after delayed fonts load", asyn
   page
 }) => {
   await page.goto("/");
+  await expect(page.locator('[data-action="set-editor-animation"]')).toBeAttached();
 
   const state = await page.evaluate(async () => {
     const originalFontsDescriptor = Object.getOwnPropertyDescriptor(
@@ -349,6 +350,7 @@ test("radical artifact moves DOM artifacts through the bundle without an overlay
   await page.goto("/");
 
   const demo = page.locator("[data-kp-equation-motion-demo]");
+  await expect(demo).toBeAttached();
   const animationSelect = demo.locator(
     '[data-action="set-equation-motion-animation"]'
   );
@@ -537,6 +539,7 @@ test("editor equation motion demo uses semantic playback plans", async ({
   await page.goto("/");
 
   const demo = page.locator("[data-kp-equation-motion-demo]");
+  await expect(demo).toBeAttached();
   const next = demo.locator('[data-action="equation-motion-next"]');
   const rewind = demo.locator('[data-action="equation-motion-rewind"]');
   const animationSelect = demo.locator(
@@ -1992,6 +1995,7 @@ test("editor equation motion demo exposes the runtime frame clock while scrubbin
   await page.goto("/");
 
   const demo = page.locator("[data-kp-equation-motion-demo]");
+  await expect(demo).toBeAttached();
 
   const runtimeState = await page.evaluate(async () => {
     const demoElement = document.querySelector<HTMLElement>(
@@ -2100,6 +2104,7 @@ test("editor equation motion demo mirrors runtime datasets when rewound", async 
   await page.goto("/");
 
   const demo = page.locator("[data-kp-equation-motion-demo]");
+  await expect(demo).toBeAttached();
   const next = demo.locator('[data-action="equation-motion-next"]');
   const rewind = demo.locator('[data-action="equation-motion-rewind"]');
   const captureRuntimeState = async (progress: number) =>
@@ -2584,6 +2589,8 @@ test("KaTeX texture atlas preserves nested fraction geometry for grouped capture
   page
 }) => {
   await page.goto("/");
+  // The atlas measures rendered structure, so stylesheet readiness is part of the observable precondition.
+  await expect(page.locator(".katex").first()).toBeVisible();
   await page.evaluate(async () => {
     const katexAdapterPath = "/src/rendering/katex-adapter.ts";
     const katexTextureAtlasPath = "/src/rendering/katex-texture-atlas.ts";

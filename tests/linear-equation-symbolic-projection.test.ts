@@ -76,6 +76,8 @@ test("authored operation windows align verified transitions with concept checkpo
   assert.equal(projectLinearEquationTrace(trace, 401, options).transition?.operationId, trace.operations[1]!.id);
   assert.equal(projectLinearEquationTrace(trace, 750, options).transition?.phase, "target");
   assert.equal(projectLinearEquationTrace(trace, 1000, options).transition?.phase, "target");
+  assert.equal(projectLinearEquationTrace(trace, 1000, options).transition?.operationId, trace.operations[1]!.id);
+  assert.equal(projectLinearEquationTrace(trace, 1000, options).transition?.targetLayout.frameId, trace.frames[2]!.id);
   assert.throws(() => projectLinearEquationTrace(trace, 500, {
     operationWindows: [{ operationId: "wrong", startPermille: 0, endPermille: 1000 }]
   }), /operation windows/);

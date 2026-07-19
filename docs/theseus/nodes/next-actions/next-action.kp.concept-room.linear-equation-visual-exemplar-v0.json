@@ -252,13 +252,37 @@
     {
       "command": "npm run build && npm run smoke:linear-equation",
       "status": "passed",
-      "checkedAt": "2026-07-19T22:49:51.346Z",
-      "scope": "s13 production build and concept-room smoke"
+      "scope": "s13 production build and concept-room smoke",
+      "checkedAt": "2026-07-19T22:49:51.346Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s14 full repository architecture, inference, catalog, and 1528-test suite",
+      "checkedAt": "2026-07-19T23:03:43.605Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s14 application, node, test, and domain TypeScript contracts",
+      "checkedAt": "2026-07-19T23:03:44.858Z"
+    },
+    {
+      "command": "playwright symbolic conformance and KaTeX cohorts",
+      "status": "passed",
+      "scope": "s14 27 browser checks covering phase order, identity, endpoints, direct seek, rewind, reduced motion, resize, route shell, and KaTeX regressions",
+      "checkedAt": "2026-07-19T23:03:46.054Z"
+    },
+    {
+      "command": "npm run perf:animation and npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-19T23:03:47.136Z",
+      "scope": "s14 animation regression budget and production build"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s13 complete: exact trace-derived division by two, matched KaTeX fraction structures, localized coefficient/divisor cancellation that preserves x, continuously readable equality, exact 5/2 ownership, native settlement, and deterministic seek/rewind and reduced motion."
+    "summary": "s14 complete: symbolic conformance gate enforces authored operation hold identity, ordered phases, persistent tokens, bounded opacity and DOM, exact endpoints, deterministic seek/rewind, reduced-motion checkpoints, resize stability, KaTeX compatibility, and animation regression budgets."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."

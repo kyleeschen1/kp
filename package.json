@@ -24,6 +24,7 @@
     "test": "npm run check:architecture && npm run check:inference && npm run check:concept-catalog && node --disable-warning=ExperimentalWarning --test server/*.test.ts tests/*.test.ts",
     "preview": "vite preview --port 8000 --strictPort",
     "test:browser:katex": "playwright test tests/katex-transition.browser.spec.ts --project=chromium",
+    "test:browser:linear-equation-conformance": "playwright test tests/linear-equation-symbolic-conformance.browser.spec.ts --project=chromium",
     "test:browser:dashboard": "playwright test tests/project-dashboard.browser.spec.ts --project=chromium",
     "smoke:linear-equation": "playwright test tests/linear-equation-concept-room-smoke.browser.spec.ts --project=chromium",
     "visual:linear-equation": "node --disable-warning=ExperimentalWarning scripts/capture-linear-equation-visual-baseline.ts",

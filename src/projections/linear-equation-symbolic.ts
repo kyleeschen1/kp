@@ -210,7 +210,9 @@ function projectTransition(
   if (trace.operations.length === 0) return undefined;
   const windows = requestedWindows ?? equalOperationWindows(trace.operations);
   requireOperationWindows(trace.operations, windows);
-  const operationIndex = Math.max(0, windows.findIndex((window) => progressPermille <= window.endPermille));
+  const matchingWindow = windows.findIndex((window) => progressPermille <= window.endPermille);
+  // A lesson may reserve a stable hold after its last operation; that hold still belongs to the final transition.
+  const operationIndex = matchingWindow === -1 ? windows.length - 1 : matchingWindow;
   const operation = trace.operations[operationIndex]!;
   const window = windows[operationIndex]!;
   const fromFrame = requireFrame(trace, operation.fromFrameId);
