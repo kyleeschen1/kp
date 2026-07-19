@@ -26,6 +26,7 @@
     "test:browser:katex": "playwright test tests/katex-transition.browser.spec.ts --project=chromium",
     "test:browser:dashboard": "playwright test tests/project-dashboard.browser.spec.ts --project=chromium",
     "smoke:linear-equation": "playwright test tests/linear-equation-concept-room-smoke.browser.spec.ts --project=chromium",
+    "visual:linear-equation": "node --disable-warning=ExperimentalWarning scripts/capture-linear-equation-visual-baseline.ts",
     "perf:animation": "node --disable-warning=ExperimentalWarning scripts/animation-performance.ts",
     "perf:animation:strict": "node --disable-warning=ExperimentalWarning scripts/animation-performance.ts --strict-targets",
     "generate:animation-library-metadata": "node --disable-warning=ExperimentalWarning scripts/generate-animation-library-metadata.ts"

@@ -47,7 +47,8 @@
     {
       "id": "s01",
       "title": "Repeatable visual baseline",
-      "status": "planned"
+      "summary": "Added repeatable named-state captures for the plain room, FTC composition, and continuity reference plus a phase-by-phase audit; capture and typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s02",

@@ -9,6 +9,16 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-07-19-linear-equation-visual-exemplar-loop-proposal.md",
       "summary": "Approved visual-exemplar plan, exact slices, checks, boundaries, and mandatory review."
+    },
+    {
+      "kind": "file",
+      "path": "scripts/capture-linear-equation-visual-baseline.ts",
+      "summary": "Repeatable named-state screenshot harness used by s01 and the final review package."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-19-linear-equation-visual-baseline-audit.md",
+      "summary": "Phase-by-phase comparison of the plain room, FTC composition, continuity motion, and proposed exemplar."
     }
   ],
   "verification": [
@@ -16,6 +26,34 @@
     "npm run build",
     "npm run smoke:linear-equation",
     "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s01 capture harness and project types",
+      "checkedAt": "2026-07-19T21:11:33.419Z"
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s01 repeatable route and timeline baseline capture",
+      "checkedAt": "2026-07-19T21:11:33.653Z",
+      "notes": "Captured eight named states under tmp/codex; outputs are disposable manual evidence, not pixel goldens."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s01 repeatable route and timeline baseline capture",
+      "checkedAt": "2026-07-19T21:11:43.973Z",
+      "notes": "Captured eight named states under tmp/codex; outputs are disposable manual evidence, not pixel goldens."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s01 capture harness and project types",
+      "checkedAt": "2026-07-19T21:11:44.664Z"
+    }
   ],
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."
@@ -43,5 +81,9 @@
       "id": "accessibility",
       "weight": "high"
     }
-  ]
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "s01 completed a repeatable eight-state capture harness and durable visual gap audit; implementation remains in later approved slices."
+  }
 }
