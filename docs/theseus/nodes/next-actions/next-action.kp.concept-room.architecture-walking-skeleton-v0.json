@@ -452,13 +452,38 @@
     {
       "command": "npm run build",
       "status": "passed",
-      "checkedAt": "2026-07-19T18:44:44.601Z",
       "scope": "s17 server and client integration",
+      "checkedAt": "2026-07-19T18:44:44.601Z",
       "notes": "Build passes with the pre-existing large-chunk warning only."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-room-state.test.ts tests/concept-room-route.test.ts",
+      "status": "passed",
+      "scope": "s18 room reducer and snapshots",
+      "checkedAt": "2026-07-19T18:48:48.243Z",
+      "notes": "Immutable deterministic transitions, no-op identity, replay, invalid commands, JSON snapshot restoration, version isolation, and ephemeral-state exclusion pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s18 exhaustive command inference",
+      "checkedAt": "2026-07-19T18:48:49.281Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18 repository type safety",
+      "checkedAt": "2026-07-19T18:48:50.242Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-07-19T18:48:51.243Z",
+      "scope": "s18 headless boundary"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s17 adds a headless canonical route contract for concept/version, checkpoint/time, mode/projection, parameters, focus, branch, provider provenance, and snapshot identity, with strict malformed/old-schema handling and thin browser/server adapters over one parser and formatter."
+    "summary": "s18 adds deeply immutable serializable room state, an exhaustive pure command reducer, monotonic semantic revisions, deterministic replay, canonical route projection, JSON snapshot parsing/restoration limited to the same immutable concept version, and explicit separation of hover/layout view state."
   }
 }

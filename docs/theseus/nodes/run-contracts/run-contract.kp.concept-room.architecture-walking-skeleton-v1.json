@@ -140,13 +140,14 @@
     {
       "id": "s17",
       "title": "Canonical route contract",
-      "status": "in-progress",
-      "summary": "Implementing a headless canonical route shared by browser and server for exact linkable room state."
+      "summary": "Added one headless canonical URL contract with strict full-state round trips and shared browser/server adapters.",
+      "status": "complete"
     },
     {
       "id": "s18",
       "title": "Room state and reducer",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Implementing immutable serializable state, exhaustive pure commands, replay, and snapshot restoration."
     },
     {
       "id": "s19",
