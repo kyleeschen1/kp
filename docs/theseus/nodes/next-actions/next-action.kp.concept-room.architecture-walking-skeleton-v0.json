@@ -110,12 +110,42 @@
     {
       "command": "npm run check:architecture",
       "status": "passed",
-      "checkedAt": "2026-07-19T17:34:50.276Z",
-      "scope": "focused"
+      "scope": "focused",
+      "checkedAt": "2026-07-19T17:34:50.276Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-problem-protocol.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-19T17:38:25.445Z"
+    },
+    {
+      "command": "npm run typecheck:protocols",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-19T17:38:26.163Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:38:26.861Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:38:27.547Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-07-19T17:38:28.286Z",
+      "scope": "standard"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s04 established compile-only inference fixtures for literal IDs, provider output propagation, local invalid-reference errors, exhaustive commands, and no-any guarantees; compiler cost is sampled against explicit ceilings."
+    "summary": "s05 defined strict neutral runtime schemas and inferred DTOs for exact rationals, equations, generation, step and solution verification, provenance, and structured errors; headless protocol compilation passes."
   }
 }

@@ -62,13 +62,14 @@
     {
       "id": "s04",
       "title": "Inference contract harness",
-      "status": "in-progress",
-      "summary": "Adding inference conformance fixtures and compiler-cost sampling without speculative production builders."
+      "summary": "Added compile-only inference fixtures for literal preservation, typed provider outputs, local invalid references, exhaustiveness, and no-any behavior plus compiler-cost ceilings.",
+      "status": "complete"
     },
     {
       "id": "s05",
       "title": "Linear-problem protocol",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Defining runtime-schema-first neutral linear-problem DTOs and inferred TypeScript contracts."
     },
     {
       "id": "s06",

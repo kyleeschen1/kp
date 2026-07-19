@@ -1,4 +1,45 @@
-// Neutral wire contracts will be exported here; the shell prevents consumers
-// from establishing deep-import paths while the first protocol is introduced.
-export {};
+export {
+  ProtocolSchemaError,
+  protocolArray,
+  protocolBoolean,
+  protocolEnum,
+  protocolInteger,
+  protocolLiteral,
+  protocolObject,
+  protocolRefine,
+  protocolSchema,
+  protocolString,
+  type InferProtocolSchema,
+  type ProtocolSchema,
+  type ProtocolSchemaIssue
+} from "./runtime-schema.ts";
+
+export {
+  exactRationalSchema,
+  generateLinearProblemRequestSchema,
+  generateLinearProblemResponseSchema,
+  linearEquationSchema,
+  linearExpressionSchema,
+  linearProblemErrorSchema,
+  linearProblemProvenanceSchema,
+  linearProblemSchema,
+  linearStepClassificationSchema,
+  verifyLinearSolutionRequestSchema,
+  verifyLinearSolutionResponseSchema,
+  verifyLinearStepRequestSchema,
+  verifyLinearStepResponseSchema,
+  type ExactRationalDto,
+  type GenerateLinearProblemRequestDto,
+  type GenerateLinearProblemResponseDto,
+  type LinearEquationDto,
+  type LinearExpressionDto,
+  type LinearProblemDto,
+  type LinearProblemErrorDto,
+  type LinearProblemProvenanceDto,
+  type LinearStepClassificationDto,
+  type VerifyLinearSolutionRequestDto,
+  type VerifyLinearSolutionResponseDto,
+  type VerifyLinearStepRequestDto,
+  type VerifyLinearStepResponseDto
+} from "./linear-problem-v1.ts";
 
