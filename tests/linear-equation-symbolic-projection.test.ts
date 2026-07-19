@@ -107,3 +107,19 @@ test("subtract-both-sides presentation derives paired exact operands and transfo
   assert.equal(transition.lineage.find((item) => item.continuantId === "term.two-x")?.continuity, "persistent");
   assert.equal(transition.lineage.find((item) => item.continuantId === "term.eight")?.continuity, "transformed");
 });
+
+test("divide-both-sides presentation derives matched exact fraction structures", () => {
+  const transition = projectLinearEquationTrace(createCanonicalConceptRoomTrace(), 750).transition!;
+  assert.equal(transition.operationApplications[0].kind, "divide-both-sides");
+  assert.deepEqual(transition.operationApplications.map((application) => application.operand), [
+    { numerator: "2", denominator: "1" },
+    { numerator: "2", denominator: "1" }
+  ]);
+  assert.deepEqual(transition.expandedLayout?.tokens.map((token) => token.latex), [
+    "\\frac{2x}{2}", "=", "\\frac{5}{2}"
+  ]);
+  assert.equal(transition.expandedLayout?.accessibleText, "2 times x divided by 2 equals 5 divided by 2");
+  assert.equal(transition.expandedLayout?.tokens.filter((token) => token.id.endsWith(".fraction")).length, 2);
+  assert.equal(transition.targetLayout.tokens.find((token) => token.side === "right")?.latex, "\\frac{5}{2}");
+  assert.equal(transition.lineage.find((item) => item.continuantId === "term.two-x")?.continuity, "transformed");
+});

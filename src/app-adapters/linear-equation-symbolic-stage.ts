@@ -68,16 +68,15 @@ export function createLinearEquationSymbolicStage(
       const overlay = layer("overlay");
       overlay.setAttribute("aria-hidden", "true");
       overlay.style.visibility = "hidden";
-      const sourceVisual = layer(transition.expandedLayout === undefined ? "source" : "expanded");
+      const sourceVisual = layer("source");
+      const expandedVisual = layer("expanded");
       const targetVisual = layer("target");
-      renderLayout(
-        sourceVisual,
-        projection,
-        transition.expandedLayout ?? transition.sourceLayout,
-        options
-      );
+      renderLayout(sourceVisual, projection, transition.sourceLayout, options);
+      if (transition.expandedLayout !== undefined) {
+        renderLayout(expandedVisual, projection, transition.expandedLayout, options);
+      }
       renderLayout(targetVisual, projection, transition.targetLayout, options);
-      overlay.append(sourceVisual, targetVisual);
+      overlay.append(sourceVisual, expandedVisual, targetVisual);
       stage.append(nativeLayer, measurementLayer, overlay);
       root.replaceChildren(stage);
       await root.ownerDocument.fonts.ready;
@@ -89,16 +88,29 @@ export function createLinearEquationSymbolicStage(
       }
       const operationKind = transition.operationApplications[0].kind;
       if (operationKind === "subtract-both-sides" && transition.expandedLayout !== undefined) {
+        sourceVisual.style.display = "none";
         choreographSubtractBothSides({
           transition,
           sourceMeasure,
           expandedMeasure,
           targetMeasure,
-          expandedVisual: sourceVisual,
+          expandedVisual,
           targetVisual
         });
         stage.dataset["kpSymbolicChoreography"] = "subtract-both-sides";
+      } else if (operationKind === "divide-both-sides" && transition.expandedLayout !== undefined) {
+        choreographDivideBothSides({
+          transition,
+          sourceMeasure,
+          expandedMeasure,
+          targetMeasure,
+          sourceVisual,
+          expandedVisual,
+          targetVisual
+        });
+        stage.dataset["kpSymbolicChoreography"] = "divide-both-sides";
       } else {
+        expandedVisual.style.display = "none";
         const progress = transition.progressPermille / 1000;
         sourceVisual.style.opacity = String(1 - progress);
         targetVisual.style.opacity = String(progress);
@@ -224,6 +236,150 @@ function choreographSubtractBothSides(layers: SubtractStageLayers): void {
     targetToken.style.transform = `scale(${0.84 + revealProgress * 0.16})`;
     targetToken.dataset["kpSymbolicMotionRole"] = "causal-derivation-result";
   }
+}
+
+interface DivideStageLayers extends SubtractStageLayers {
+  readonly sourceVisual: HTMLElement;
+}
+
+function choreographDivideBothSides(layers: DivideStageLayers): void {
+  const {
+    transition,
+    sourceMeasure,
+    expandedMeasure,
+    targetMeasure,
+    sourceVisual,
+    expandedVisual,
+    targetVisual
+  } = layers;
+  const rawProgress = transition.phaseProgressPermille / 1000;
+  const progress = transition.phase === "introduce-operation" ? ease(rawProgress) : rawProgress;
+  const applications = new Map(transition.operationApplications.map((item) => [item.side, item]));
+  const relationId = transition.sourceLayout.tokens.find((token) => token.side === "relation")!.id;
+
+  for (const visualLayer of [sourceVisual, expandedVisual, targetVisual]) {
+    visualLayer.style.opacity = "1";
+    visualLayer.dataset["kpSymbolicLayerOpacityMode"] = "token-owned";
+  }
+  for (const targetToken of tokens(targetVisual)) {
+    targetToken.style.opacity = "0";
+    targetToken.dataset["kpSymbolicMotionRole"] = "target-reserve";
+  }
+
+  if (transition.phase === "introduce-operation") {
+    for (const sourceToken of tokens(sourceVisual)) {
+      const tokenId = requiredTokenId(sourceToken);
+      if (tokenId === relationId) {
+        sourceToken.style.opacity = "0";
+        continue;
+      }
+      const side = sourceToken.dataset["kpSymbolicSide"] as "left" | "right";
+      const fraction = tokenFor(expandedMeasure, applications.get(side)?.fractionTokenId);
+      moveTowardTarget(sourceToken, tokenFor(sourceMeasure, tokenId), fraction, progress);
+      sourceToken.style.opacity = String(1 - smoothstep(0.58, 1, progress));
+      sourceToken.dataset["kpSymbolicMotionRole"] = "fraction-numerator-source";
+    }
+    for (const expandedToken of tokens(expandedVisual)) {
+      const tokenId = requiredTokenId(expandedToken);
+      if (tokenId === relationId) {
+        moveBetweenLayouts(
+          expandedToken,
+          tokenFor(sourceMeasure, relationId),
+          tokenFor(expandedMeasure, relationId),
+          progress
+        );
+        expandedToken.dataset["kpSymbolicMotionRole"] = "persistent-equality";
+        continue;
+      }
+      const reveal = smoothstep(0.3, 0.92, progress);
+      expandedToken.style.opacity = String(reveal);
+      expandedToken.style.transform = `scaleY(${0.82 + reveal * 0.18})`;
+      expandedToken.dataset["kpSymbolicMotionRole"] = "matched-fraction-structure";
+    }
+    return;
+  }
+
+  sourceVisual.style.display = "none";
+  const transformProgress = transition.phase === "settle" ? 1 : progress;
+  const cancellationReveal = smoothstep(0.48, 0.84, transformProgress);
+  const leftTarget = tokenForSide(targetMeasure, "left");
+  const rightTarget = tokenForSide(targetMeasure, "right");
+  const relationTarget = tokenFor(targetMeasure,
+    transition.targetLayout.tokens.find((token) => token.side === "relation")?.id
+  );
+
+  for (const expandedToken of tokens(expandedVisual)) {
+    const tokenId = requiredTokenId(expandedToken);
+    if (tokenId === relationId) {
+      moveFromLayoutToTarget(
+        expandedToken,
+        tokenFor(expandedMeasure, tokenId),
+        relationTarget,
+        transformProgress
+      );
+      expandedToken.dataset["kpSymbolicMotionRole"] = "persistent-equality";
+      continue;
+    }
+    const side = expandedToken.dataset["kpSymbolicSide"] as "left" | "right";
+    const target = side === "left" ? leftTarget : rightTarget;
+    moveFromLayoutToTarget(
+      expandedToken,
+      tokenFor(expandedMeasure, tokenId),
+      target,
+      transformProgress
+    );
+    if (side === "right") {
+      expandedToken.style.opacity = "1";
+      expandedToken.dataset["kpSymbolicMotionRole"] = "exact-fraction-persistent";
+      continue;
+    }
+    scaleTowardTargetWidth(
+      expandedToken,
+      tokenFor(expandedMeasure, tokenId),
+      target,
+      transformProgress
+    );
+    expandedToken.style.transform += ` translateX(${-0.12 * transformProgress}em)`;
+    expandedToken.style.opacity = String(1 - cancellationReveal);
+    expandedToken.dataset["kpSymbolicMotionRole"] = "coefficient-divisor-cancellation";
+    for (const part of ["coefficient", "divisor"] as const) {
+      const mark = document.createElement("span");
+      mark.dataset["kpSymbolicCancellationMark"] = part;
+      mark.style.opacity = String(cancellationMarkOpacity(transformProgress));
+      expandedToken.append(mark);
+    }
+  }
+
+  const targetLeftVisual = tokenForSide(targetVisual, "left");
+  if (targetLeftVisual !== undefined) {
+    targetLeftVisual.style.opacity = String(cancellationReveal);
+    targetLeftVisual.style.transform = `scale(${0.86 + cancellationReveal * 0.14})`;
+    targetLeftVisual.dataset["kpSymbolicMotionRole"] = "cancellation-result";
+  }
+}
+
+function scaleTowardTargetWidth(
+  visual: HTMLElement,
+  from: HTMLElement | undefined,
+  to: HTMLElement | undefined,
+  progress: number
+): void {
+  const fromWidth = from?.getBoundingClientRect().width ?? 0;
+  const toWidth = to?.getBoundingClientRect().width ?? 0;
+  if (fromWidth <= 0 || toWidth <= 0) return;
+  const scale = 1 + (toWidth / fromWidth - 1) * progress;
+  visual.style.transform += ` scale(${scale})`;
+}
+
+function tokenForSide(root: HTMLElement, side: "left" | "right"): HTMLElement | undefined {
+  return tokens(root).find((token) =>
+    token.dataset["kpSymbolicSide"] === side && token.dataset["kpSymbolicTokenKind"] === "term"
+  );
+}
+
+function cancellationMarkOpacity(progress: number): number {
+  if (progress <= 0.08 || progress >= 0.86) return 0;
+  return Math.sin(Math.PI * (progress - 0.08) / 0.78);
 }
 
 function tokens(root: HTMLElement): HTMLElement[] {

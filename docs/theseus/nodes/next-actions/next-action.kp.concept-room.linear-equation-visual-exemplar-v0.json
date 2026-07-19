@@ -234,13 +234,31 @@
     {
       "command": "npm run build && npm run smoke:linear-equation",
       "status": "passed",
-      "checkedAt": "2026-07-19T22:30:19.483Z",
-      "scope": "s12 production build and concept-room smoke"
+      "scope": "s12 production build and concept-room smoke",
+      "checkedAt": "2026-07-19T22:30:19.483Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s13 full repository suite: 1528 tests plus architecture, inference, and catalog gates",
+      "checkedAt": "2026-07-19T22:49:49.270Z"
+    },
+    {
+      "command": "npx playwright test tests/linear-equation-symbolic-stage.browser.spec.ts tests/linear-equation-visual-shell.browser.spec.ts",
+      "status": "passed",
+      "scope": "s13 fraction structure, localized cancellation, equality clearance, seek/rewind, reduced motion, and route regression",
+      "checkedAt": "2026-07-19T22:49:50.356Z"
+    },
+    {
+      "command": "npm run build && npm run smoke:linear-equation",
+      "status": "passed",
+      "checkedAt": "2026-07-19T22:49:51.346Z",
+      "scope": "s13 production build and concept-room smoke"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s12 complete: exact trace-derived paired subtraction, expanded KaTeX layout, token-owned persistent motion, meet-and-collapse cancellation, causal right-side derivation, deterministic seek/rewind, reduced-motion native fallback, and repaired DOM-aware inference gate."
+    "summary": "s13 complete: exact trace-derived division by two, matched KaTeX fraction structures, localized coefficient/divisor cancellation that preserves x, continuously readable equality, exact 5/2 ownership, native settlement, and deterministic seek/rewind and reduced motion."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."

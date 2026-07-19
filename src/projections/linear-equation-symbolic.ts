@@ -46,6 +46,7 @@ export interface KpSymbolicOperationApplicationIr {
   readonly operand?: KpExactRational;
   readonly operatorTokenId?: string;
   readonly operandTokenId?: string;
+  readonly fractionTokenId?: string;
 }
 
 export type KpSymbolicTransitionPhase =
@@ -244,7 +245,7 @@ function operationApplicationIr(
   fromFrame: KpLinearEquationFrame,
   toFrame: KpLinearEquationFrame
 ): readonly [KpSymbolicOperationApplicationIr, KpSymbolicOperationApplicationIr] {
-  const operand = translationOperand(operation, fromFrame, toFrame);
+  const operand = operationOperand(operation, fromFrame, toFrame);
   return ["left", "right"].map((side) => {
     const id = `${operation.id}.${side}`;
     return {
@@ -256,24 +257,35 @@ function operationApplicationIr(
       sourceOperation: operation.sourceOperation,
       classification: operation.classification,
       ...(operand === undefined ? {} : {
-        operatorLatex: operation.kind === "subtract-both-sides" ? "-" : "+",
-        operatorSpoken: operation.kind === "subtract-both-sides" ? "minus" : "plus",
+        operatorLatex: operation.kind === "subtract-both-sides" ? "-" :
+          operation.kind === "add-both-sides" ? "+" : "\\div",
+        operatorSpoken: operation.kind === "subtract-both-sides" ? "minus" :
+          operation.kind === "add-both-sides" ? "plus" : "divided by",
         operand,
         operatorTokenId: `${id}.operator`,
-        operandTokenId: `${id}.operand`
+        operandTokenId: `${id}.operand`,
+        ...(operation.kind === "divide-both-sides" ? { fractionTokenId: `${id}.fraction` } : {})
       })
     };
   }) as [KpSymbolicOperationApplicationIr, KpSymbolicOperationApplicationIr];
 }
 
-function translationOperand(
+function operationOperand(
   operation: KpLinearEquationOperation,
   fromFrame: KpLinearEquationFrame,
   toFrame: KpLinearEquationFrame
 ): KpExactRational | undefined {
-  if (operation.kind !== "subtract-both-sides" && operation.kind !== "add-both-sides") return undefined;
-  const change = subtractRational(toFrame.equation.left.constant, fromFrame.equation.left.constant);
-  return absolute(change);
+  if (operation.kind === "subtract-both-sides" || operation.kind === "add-both-sides") {
+    const change = subtractRational(toFrame.equation.left.constant, fromFrame.equation.left.constant);
+    return absolute(change);
+  }
+  if (operation.kind === "divide-both-sides") {
+    return absolute(divideRational(
+      fromFrame.equation.left.coefficient,
+      toFrame.equation.left.coefficient
+    ));
+  }
+  return undefined;
 }
 
 function expandedOperationLayout(
@@ -282,6 +294,9 @@ function expandedOperationLayout(
   applications: readonly [KpSymbolicOperationApplicationIr, KpSymbolicOperationApplicationIr]
 ): KpSymbolicEquationLayoutIr | undefined {
   if (applications.some((application) => application.operand === undefined)) return undefined;
+  if (applications[0].kind === "divide-both-sides") {
+    return matchedFractionLayout(frame, source, applications);
+  }
   const relationIndex = source.tokens.findIndex((token) => token.side === "relation");
   const left = source.tokens.slice(0, relationIndex);
   const relation = source.tokens[relationIndex]!;
@@ -309,6 +324,34 @@ function expandedOperationLayout(
     relation,
     ...right,
     ...applicationTokens(applications[1])
+  ]);
+}
+
+function matchedFractionLayout(
+  frame: KpLinearEquationFrame,
+  source: KpSymbolicEquationLayoutIr,
+  applications: readonly [KpSymbolicOperationApplicationIr, KpSymbolicOperationApplicationIr]
+): KpSymbolicEquationLayoutIr {
+  const relation = source.tokens.find((token) => token.side === "relation")!;
+  const fraction = (
+    side: "left" | "right",
+    application: KpSymbolicOperationApplicationIr
+  ): KpSymbolicEquationToken => {
+    const numerator = source.tokens.filter((token) => token.side === side);
+    return {
+      id: application.fractionTokenId!,
+      continuantId: `${application.operationSemanticId}.${side}.fraction`,
+      semanticId: application.operationSemanticId,
+      kind: "term",
+      side,
+      latex: `\\frac{${numerator.map((token) => token.latex).join("")}}{${rationalLatex(application.operand!)}}`,
+      spoken: `${numerator.map((token) => token.spoken).join(" ")} divided by ${rationalSpoken(application.operand!)}`
+    };
+  };
+  return equationLayout(frame, [
+    fraction("left", applications[0]),
+    relation,
+    fraction("right", applications[1])
   ]);
 }
 
@@ -449,6 +492,18 @@ function subtractRational(left: KpExactRational, right: KpExactRational): KpExac
   const numerator = BigInt(left.numerator) * BigInt(right.denominator) -
     BigInt(right.numerator) * BigInt(left.denominator);
   const denominator = BigInt(left.denominator) * BigInt(right.denominator);
+  const divisor = greatestCommonDivisor(numerator, denominator);
+  const sign = denominator / divisor < 0n ? -1n : 1n;
+  return {
+    numerator: String(numerator / divisor * sign),
+    denominator: String(denominator / divisor * sign)
+  };
+}
+
+function divideRational(left: KpExactRational, right: KpExactRational): KpExactRational {
+  if (right.numerator === "0") throw new RangeError("Symbolic operation divisor must be nonzero.");
+  const numerator = BigInt(left.numerator) * BigInt(right.denominator);
+  const denominator = BigInt(left.denominator) * BigInt(right.numerator);
   const divisor = greatestCommonDivisor(numerator, denominator);
   const sign = denominator / divisor < 0n ? -1n : 1n;
   return {
