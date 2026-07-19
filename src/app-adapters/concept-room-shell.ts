@@ -21,6 +21,9 @@ import {
   type KpConceptRoomRuntime,
   type KpConceptRoomRuntimeSession
 } from "./concept-room-runtime.ts";
+import { applyConceptRoomTheme } from "./concept-room-theme-adapters.ts";
+import { linearEquationExemplarTheme } from "./concept-room-theme.ts";
+import { linearEquationExemplarCss } from "./linear-equation-exemplar-style.ts";
 
 export type {
   KpConceptRoomArtifactLike,
@@ -256,15 +259,20 @@ function renderShell(
   main.dataset["kpConceptVersion"] = artifact.manifest.version;
   main.dataset["kpConceptCheckpoint"] = checkpoint.id;
   main.dataset["kpConceptProjection"] = state.projection;
+  applyConceptRoomTheme(main, linearEquationExemplarTheme);
 
   const header = document.createElement("header");
+  header.dataset["kpConceptRoomHeader"] = "true";
   const productTag = document.createElement("p");
+  productTag.dataset["kpConceptRoomProductTag"] = "true";
   productTag.textContent = "See concepts move";
   const title = document.createElement("h1");
+  title.dataset["kpConceptRoomTitle"] = "true";
   title.textContent = artifact.manifest.title;
   header.append(productTag, title);
 
   const explanation = document.createElement("section");
+  explanation.dataset["kpConceptExplanation"] = "true";
   explanation.setAttribute("aria-labelledby", "kp-concept-checkpoint-title");
   const checkpointTitle = document.createElement("h2");
   checkpointTitle.id = "kp-concept-checkpoint-title";
@@ -274,6 +282,7 @@ function renderShell(
   explanation.append(checkpointTitle, copy);
 
   const navigation = document.createElement("nav");
+  navigation.dataset["kpConceptCheckpoints"] = "true";
   navigation.setAttribute("aria-label", "Concept checkpoints");
   const list = document.createElement("ol");
   artifact.manifest.checkpoints.forEach((item) => {
@@ -317,8 +326,25 @@ function renderShell(
   const viewport = document.createElement("section");
   viewport.dataset["kpConceptViewport"] = "true";
   viewport.setAttribute("aria-label", "Concept view");
-  main.append(header, explanation, navigation, viewControls, viewport);
-  root.replaceChildren(main);
+  const visualField = document.createElement("section");
+  visualField.dataset["kpConceptVisualField"] = "true";
+  visualField.setAttribute("aria-label", "Synchronized concept stage");
+  visualField.append(viewport);
+  const copyRail = document.createElement("aside");
+  copyRail.dataset["kpConceptCopyRail"] = "true";
+  copyRail.setAttribute("aria-label", "Concept explanation");
+  copyRail.append(explanation, navigation);
+  const stage = document.createElement("div");
+  stage.dataset["kpConceptRoomStage"] = "true";
+  stage.append(visualField, copyRail);
+  const controls = document.createElement("footer");
+  controls.dataset["kpConceptControls"] = "true";
+  controls.append(viewControls);
+  main.append(header, stage, controls);
+  const style = document.createElement("style");
+  style.dataset["kpLinearEquationExemplarStyle"] = "true";
+  style.textContent = linearEquationExemplarCss();
+  root.replaceChildren(style, main);
   return viewport;
 }
 

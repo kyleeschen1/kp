@@ -34,6 +34,11 @@
       "kind": "file",
       "path": "src/projections/concept-room-correspondence.ts",
       "summary": "Pure explicit semantic correspondence index and separate hover keyboard pinned focus projection."
+    },
+    {
+      "kind": "file",
+      "path": "src/app-adapters/linear-equation-exemplar-style.ts",
+      "summary": "Route-local visual composition and responsive starting point for the accepted exemplar."
     }
   ],
   "verification": [
@@ -104,11 +109,30 @@
       "status": "passed",
       "scope": "s04 projection contract",
       "checkedAt": "2026-07-19T21:18:35.729Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s05 route-local composition and production build",
+      "checkedAt": "2026-07-19T21:24:44.893Z"
+    },
+    {
+      "command": "npx playwright test tests/linear-equation-visual-shell.browser.spec.ts tests/linear-equation-concept-room-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s05 themed stage landmarks route isolation and adjacent smoke",
+      "checkedAt": "2026-07-19T21:24:45.705Z"
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s05 manual desktop composition capture",
+      "checkedAt": "2026-07-19T21:24:46.477Z",
+      "notes": "Manual inspection confirms one warm-paper surface, a wide unclipped KaTeX stage, narrow copy rail, and one control row; motion and control reductions remain later slices."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s04 added explicit cross-surface correspondence and kept ephemeral hover separate from durable URL focus."
+    "summary": "s05 replaced browser defaults with one route-local warm-paper stage and narrow explanation rail while preserving other routes."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."

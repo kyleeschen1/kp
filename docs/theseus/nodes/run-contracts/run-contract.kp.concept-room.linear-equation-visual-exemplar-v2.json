@@ -71,7 +71,8 @@
     {
       "id": "s05",
       "title": "Route-local visual composition",
-      "status": "planned"
+      "summary": "Mounted one themed centered stage, wide visual field, narrow copy rail, and single control row; build, focused browser tests, smoke, and manual capture pass with no legacy leakage.",
+      "status": "complete"
     },
     {
       "id": "s06",
