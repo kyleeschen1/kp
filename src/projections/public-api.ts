@@ -19,9 +19,16 @@ export {
 
 export {
   projectLinearEquationBalanceExemplar,
+  type KpBalanceEqualityIr,
+  type KpBalanceExemplarStage,
   type KpBalanceOperationApplicationIr,
+  type KpBalanceOperationPathIr,
+  type KpBalancePartitionGroupIr,
+  type KpBalancePhysicalUnitIr,
   type KpBalanceSceneIr,
   type KpBalanceSideIr,
+  type KpBalanceSymbolicCorrespondenceIr,
+  type KpBalanceUnitPlacementIr,
   type KpBalanceTermIr
 } from "./linear-equation-balance-exemplar.ts";
 

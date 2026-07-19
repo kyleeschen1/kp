@@ -24,7 +24,8 @@ test("symbolic and SVG balance views share frames, roles, focus, and KaTeX", asy
     window.__kpProjectionParityFixture = { symbolic, balance };
   }, trace);
 
-  const symbolic = page.locator("[data-kp-symbolic-equation]");
+  // Scope to this projection fixture because the canonical route now mounts its own symbolic stage too.
+  const symbolic = page.locator("#symbolic-theme-fixture [data-kp-symbolic-equation]");
   const balance = page.locator("svg[data-kp-balance-scene]");
   await expect(symbolic).toHaveAttribute("data-kp-frame-id", "frame.initial");
   await expect(balance).toHaveAttribute("data-kp-frame-id", "frame.initial");
