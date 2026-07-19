@@ -56,13 +56,14 @@
     {
       "id": "s03",
       "title": "Architecture fitness gate",
-      "status": "in-progress",
-      "summary": "Implementing the dependency-direction and public-entrypoint fitness ratchet with legacy exceptions frozen."
+      "summary": "Added a merge-blocking dependency-direction gate, public-entrypoint deep-import enforcement, positive and negative fixtures, and a frozen legacy evidence ratchet.",
+      "status": "complete"
     },
     {
       "id": "s04",
       "title": "Inference contract harness",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Adding inference conformance fixtures and compiler-cost sampling without speculative production builders."
     },
     {
       "id": "s05",
