@@ -128,11 +128,23 @@
       "scope": "s05 manual desktop composition capture",
       "checkedAt": "2026-07-19T21:24:46.477Z",
       "notes": "Manual inspection confirms one warm-paper surface, a wide unclipped KaTeX stage, narrow copy rail, and one control row; motion and control reductions remain later slices."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s06 searchable checkpoint document build",
+      "checkedAt": "2026-07-19T21:27:18.856Z"
+    },
+    {
+      "command": "npx playwright test tests/linear-equation-visual-shell.browser.spec.ts tests/concept-review-publication.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "checkedAt": "2026-07-19T21:27:19.650Z",
+      "scope": "s06 all checkpoint prose semantic links and no-JS browser Find"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s05 replaced browser defaults with one route-local warm-paper stage and narrow explanation rail while preserving other routes."
+    "summary": "s06 keeps all four checkpoint explanations in DOM order with compact canonical TOC and explicit semantic phrase links."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."

@@ -17,9 +17,13 @@ ${routeSelector} [data-kp-concept-visual-field]{display:grid;align-items:center;
 ${routeSelector} [data-kp-concept-viewport]{min-width:0}
 ${routeSelector} [data-kp-concept-viewport] [data-kp-symbolic-equation]{display:flex;align-items:center;justify-content:center;gap:.15em;font-size:clamp(2rem,5vw,4.25rem);min-height:10rem}
 ${routeSelector} [data-kp-concept-viewport] [data-kp-balance-scene]{display:block;width:100%;height:auto;max-height:430px}
-${routeSelector} [data-kp-concept-copy-rail]{align-content:center;display:grid;gap:var(--kp-concept-space-section);min-width:0;border-left:2px solid color-mix(in srgb,var(--kp-concept-accent) 48%,transparent);padding:var(--kp-concept-space-control) 0 var(--kp-concept-space-control) var(--kp-concept-space-section)}
+${routeSelector} [data-kp-concept-copy-rail]{align-content:start;display:grid;gap:var(--kp-concept-space-section);min-width:0;border-left:2px solid color-mix(in srgb,var(--kp-concept-accent) 48%,transparent);padding:var(--kp-concept-space-control) 0 var(--kp-concept-space-control) var(--kp-concept-space-section)}
 ${routeSelector} [data-kp-concept-explanation] h2{margin:0 0 var(--kp-concept-space-compact);font-family:var(--kp-concept-font-display);font-size:clamp(1.15rem,2vw,1.45rem);line-height:1.25}
 ${routeSelector} [data-kp-concept-explanation] p{margin:0;color:var(--kp-concept-muted-ink)}
+${routeSelector} [data-kp-concept-checkpoint-sections]{display:grid;gap:var(--kp-concept-space-section)}
+${routeSelector} [data-kp-concept-explanation]{padding-left:var(--kp-concept-space-control);border-left:2px solid transparent}
+${routeSelector} [data-kp-concept-explanation][aria-current=step]{border-left-color:var(--kp-concept-accent)}
+${routeSelector} [data-kp-concept-explanation]:not([aria-current=step]) h2{font-size:1.02rem}
 ${routeSelector} [data-kp-concept-checkpoints] ol{display:grid;gap:.35rem;margin:0;padding-left:1.25rem}
 ${routeSelector} a{color:var(--kp-concept-relation);text-decoration-color:color-mix(in srgb,var(--kp-concept-relation) 42%,transparent);text-underline-offset:.18em}
 ${routeSelector} a[aria-current]{color:var(--kp-concept-ink);font-weight:700;text-decoration-color:var(--kp-concept-accent)}

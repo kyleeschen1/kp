@@ -77,7 +77,8 @@
     {
       "id": "s06",
       "title": "Searchable checkpoint rail",
-      "status": "planned"
+      "summary": "Rendered all checkpoint prose as normal anchored document sections with canonical focus links; build and browser Find/Review tests pass.",
+      "status": "complete"
     },
     {
       "id": "s07",

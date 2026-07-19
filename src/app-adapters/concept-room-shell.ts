@@ -271,16 +271,6 @@ function renderShell(
   title.textContent = artifact.manifest.title;
   header.append(productTag, title);
 
-  const explanation = document.createElement("section");
-  explanation.dataset["kpConceptExplanation"] = "true";
-  explanation.setAttribute("aria-labelledby", "kp-concept-checkpoint-title");
-  const checkpointTitle = document.createElement("h2");
-  checkpointTitle.id = "kp-concept-checkpoint-title";
-  checkpointTitle.textContent = checkpoint.title;
-  const copy = document.createElement("p");
-  copy.textContent = checkpoint.explanation;
-  explanation.append(checkpointTitle, copy);
-
   const navigation = document.createElement("nav");
   navigation.dataset["kpConceptCheckpoints"] = "true";
   navigation.setAttribute("aria-label", "Concept checkpoints");
@@ -302,6 +292,25 @@ function renderShell(
     list.append(listItem);
   });
   navigation.append(list);
+
+  const checkpointSections = document.createElement("div");
+  checkpointSections.dataset["kpConceptCheckpointSections"] = "true";
+  artifact.manifest.checkpoints.forEach((item) => {
+    const section = document.createElement("section");
+    section.id = `checkpoint-${item.id}`;
+    section.dataset["kpConceptExplanation"] = item.id;
+    section.dataset["kpSemanticRefs"] = item.semanticRefs.join(" ");
+    section.dataset["kpConceptCheckpointActive"] = String(item.id === checkpoint.id);
+    if (item.id === checkpoint.id) section.setAttribute("aria-current", "step");
+    const heading = document.createElement("h2");
+    heading.id = `kp-concept-checkpoint-${item.id}-title`;
+    heading.textContent = item.title;
+    const copy = document.createElement("p");
+    appendLinkedExplanation(copy, item, state);
+    section.setAttribute("aria-labelledby", heading.id);
+    section.append(heading, copy);
+    checkpointSections.append(section);
+  });
 
   const viewControls = document.createElement("nav");
   viewControls.setAttribute("aria-label", "Concept views");
@@ -333,7 +342,7 @@ function renderShell(
   const copyRail = document.createElement("aside");
   copyRail.dataset["kpConceptCopyRail"] = "true";
   copyRail.setAttribute("aria-label", "Concept explanation");
-  copyRail.append(explanation, navigation);
+  copyRail.append(navigation, checkpointSections);
   const stage = document.createElement("div");
   stage.dataset["kpConceptRoomStage"] = "true";
   stage.append(visualField, copyRail);
@@ -346,6 +355,58 @@ function renderShell(
   style.textContent = linearEquationExemplarCss();
   root.replaceChildren(style, main);
   return viewport;
+}
+
+const exemplarSemanticPhrases: Readonly<Record<string, readonly {
+  readonly phrase: string;
+  readonly semanticId: string;
+}[]>> = {
+  start: [
+    { phrase: "2x + 3 = 8", semanticId: "equation.initial" },
+    { phrase: "one side must also change on the other", semanticId: "diagram.balance" }
+  ],
+  "subtract-three": [
+    { phrase: "Subtract 3 from both sides", semanticId: "operation.subtract-three" },
+    { phrase: "+3 and -3 cancel", semanticId: "equation.after-subtract" }
+  ],
+  "divide-two": [
+    { phrase: "Divide both sides by 2", semanticId: "operation.divide-two" },
+    { phrase: "5/2", semanticId: "equation.solved" }
+  ],
+  solved: [
+    { phrase: "x = 5/2", semanticId: "equation.solved" },
+    { phrase: "Substitution confirms", semanticId: "equation.solved" }
+  ]
+};
+
+function appendLinkedExplanation(
+  root: HTMLParagraphElement,
+  checkpoint: KpConceptRoomArtifactLike["manifest"]["checkpoints"][number],
+  state: KpConceptRoomState
+): void {
+  const phrases = exemplarSemanticPhrases[checkpoint.id] ?? [];
+  const ordered = phrases
+    .map((item) => ({ ...item, index: checkpoint.explanation.indexOf(item.phrase) }))
+    .filter((item) => item.index >= 0)
+    .sort((left, right) => left.index - right.index);
+  let cursor = 0;
+  for (const item of ordered) {
+    root.append(document.createTextNode(checkpoint.explanation.slice(cursor, item.index)));
+    const link = document.createElement("a");
+    link.dataset["kpConceptRoomLink"] = "semantic";
+    link.dataset["kpConceptCheckpointLink"] = checkpoint.id;
+    link.dataset["kpConceptSemanticLink"] = item.semanticId;
+    link.href = formatConceptRoomRoute({
+      ...conceptRoomStateRoute(state),
+      checkpoint: checkpoint.id,
+      timePermille: checkpoint.progressPermille,
+      focus: [item.semanticId]
+    });
+    link.textContent = item.phrase;
+    root.append(link);
+    cursor = item.index + item.phrase.length;
+  }
+  root.append(document.createTextNode(checkpoint.explanation.slice(cursor)));
 }
 
 function loadingShell(): HTMLElement {
