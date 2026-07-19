@@ -272,12 +272,36 @@
     {
       "command": "npm run build",
       "status": "passed",
-      "checkedAt": "2026-07-19T18:11:21.541Z",
-      "scope": "broad"
+      "scope": "broad",
+      "checkedAt": "2026-07-19T18:11:21.541Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-authoring-handles.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-19T18:14:56.715Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T18:14:57.466Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T18:14:58.234Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-07-19T18:14:58.977Z",
+      "scope": "standard"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s10 added the injected /api/v1/linear-problems adapter with unknown-to-schema dispatch, 64 KiB body limits, structured errors, deterministic responses, explicit server composition, and preserved /api/compile behavior."
+    "summary": "s11 introduced literal-preserving capability and provider handles plus scoped declarative reference builders with compile-time unavailable-handle errors, runtime forgery rejection, frozen values, and no required generics."
   }
 }

@@ -1,3 +1,9 @@
+import {
+  defineCapability,
+  defineConceptScope,
+  defineProviderRef
+} from "../../src/authoring/public-api.ts";
+
 type Equal<Left, Right> =
   (<Value>() => Value extends Left ? 1 : 2) extends
   (<Value>() => Value extends Right ? 1 : 2) ? true : false;
@@ -5,55 +11,28 @@ type Expect<Value extends true> = Value;
 type IsAny<Value> = 0 extends (1 & Value) ? true : false;
 type Not<Value extends boolean> = Value extends true ? false : true;
 
-interface FixtureCapabilityHandle<Id extends string, Major extends number> {
-  readonly kind: "capability";
-  readonly id: Id;
-  readonly major: Major;
-}
-
-interface FixtureProviderHandle<Id extends string, Output> {
-  readonly kind: "provider";
-  readonly id: Id;
-  readonly output: Output;
-}
-
-declare function defineFixtureCapability<const Id extends string, const Major extends number>(
-  input: { readonly id: Id; readonly major: Major }
-): FixtureCapabilityHandle<Id, Major>;
-
-declare function defineFixtureProvider<const Id extends string, Output>(
-  input: { readonly id: Id; readonly output: Output }
-): FixtureProviderHandle<Id, Output>;
-
-declare function beginFixtureConcept<
-  const Available extends readonly FixtureCapabilityHandle<string, number>[]
->(input: { readonly capabilities: Available }): <
-  const Used extends readonly Available[number][]
->(definition: { readonly uses: Used }) => {
-  readonly capabilities: Available;
-  readonly uses: Used;
-};
-
-export const equationCapability = defineFixtureCapability({
-  id: "kp.equation",
-  major: 1
-});
-export const balanceCapability = defineFixtureCapability({
-  id: "kp.balance",
-  major: 1
-});
-export const linearProvider = defineFixtureProvider({
+export const equationCapability = defineCapability({ id: "kp.equation", major: 1 });
+export const balanceCapability = defineCapability({ id: "kp.balance", major: 1 });
+export const linearProvider = defineProviderRef({
   id: "linear-problems.exact-rational",
-  output: { numerator: 5, denominator: 2 } as const
+  protocol: "linear-problem.v1",
+  version: "1.0.0"
 });
-export const equationConcept = beginFixtureConcept({
-  capabilities: [equationCapability] as const
-})({
-  uses: [equationCapability] as const
+export const scope = defineConceptScope({
+  capabilities: [equationCapability] as const,
+  providers: [linearProvider] as const
 });
+export const equationRef = scope.capability(equationCapability);
+export const providerRef = scope.provider(linearProvider);
 
 // @ts-expect-error balance is not in this concept's available capability tuple.
-beginFixtureConcept({ capabilities: [equationCapability] as const })({ uses: [balanceCapability] });
+scope.capability(balanceCapability);
+// @ts-expect-error capability majors must be positive integers.
+defineCapability({ id: "kp.invalid", major: 0 });
+// @ts-expect-error provider versions are exact semantic versions.
+defineProviderRef({ id: "provider.invalid", protocol: "linear-problem.v1", version: "latest" });
+// @ts-expect-error protocol versions are explicitly versioned.
+defineProviderRef({ id: "provider.invalid", protocol: "linear-problem", version: "1.0.0" });
 
 export type LiteralCapabilityIdIsPreserved = Expect<
   Equal<typeof equationCapability.id, "kp.equation">
@@ -61,14 +40,14 @@ export type LiteralCapabilityIdIsPreserved = Expect<
 export type LiteralCapabilityMajorIsPreserved = Expect<
   Equal<typeof equationCapability.major, 1>
 >;
-export type ProviderOutputIsPropagated = Expect<
-  Equal<typeof linearProvider.output, { readonly numerator: 5; readonly denominator: 2 }>
+export type ProviderProtocolIsPreserved = Expect<
+  Equal<typeof providerRef.protocol, "linear-problem.v1">
 >;
-export type ConceptUseStaysNarrow = Expect<
-  Equal<typeof equationConcept.uses[number]["id"], "kp.equation">
+export type DeclarativeCapabilityRefIsNarrow = Expect<
+  Equal<typeof equationRef, { readonly id: "kp.equation"; readonly major: 1 }>
 >;
-export type PublicFixtureDoesNotLeakAny = Expect<
-  Not<IsAny<typeof equationConcept | typeof linearProvider>>
+export type PublicAuthoringSurfaceDoesNotLeakAny = Expect<
+  Not<IsAny<typeof scope | typeof equationRef | typeof providerRef>>
 >;
 
 export type FixtureRoomCommand =

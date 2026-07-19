@@ -98,13 +98,14 @@
     {
       "id": "s10",
       "title": "Versioned HTTP adapter",
-      "status": "in-progress",
-      "summary": "Adding an injected versioned HTTP transport with bounded bodies and structured protocol errors."
+      "summary": "Added an injected bounded /api/v1/linear-problems adapter with validated schema dispatch, structured errors, deterministic response tests, and preserved health and compile routes.",
+      "status": "complete"
     },
     {
       "id": "s11",
       "title": "Inference-first authoring handles",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Implementing inference-first capability/provider handles and scoped declarative reference builders."
     },
     {
       "id": "s12",
