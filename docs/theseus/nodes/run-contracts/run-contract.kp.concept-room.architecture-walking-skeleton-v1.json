@@ -44,7 +44,8 @@
     {
       "id": "s01",
       "title": "Legacy characterization",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Characterizing existing architecture exceptions without changing runtime behavior."
     },
     {
       "id": "s02",

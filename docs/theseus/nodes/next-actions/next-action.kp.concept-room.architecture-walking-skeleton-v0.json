@@ -57,5 +57,17 @@
   ],
   "revisitWhen": [
     "The user explicitly approves execution of the stabilization proposal."
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/legacy-architecture-exception-baseline.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-19T17:24:00.744Z",
+      "scope": "focused"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "s01 characterized seven reviewed legacy architecture exceptions with a closed schema and source-evidence test; runtime behavior is unchanged."
+  }
 }
