@@ -50,13 +50,14 @@
     {
       "id": "s02",
       "title": "Boundary declarations",
-      "status": "in-progress",
-      "summary": "Adding logical boundary declarations and empty-safe public API facades without switching production consumers."
+      "summary": "Declared acyclic protocols, kernel, domains, authoring, integrations, projections, and app-adapter boundaries with resolvable public API shells; no production imports changed.",
+      "status": "complete"
     },
     {
       "id": "s03",
       "title": "Architecture fitness gate",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Implementing the dependency-direction and public-entrypoint fitness ratchet with legacy exceptions frozen."
     },
     {
       "id": "s04",

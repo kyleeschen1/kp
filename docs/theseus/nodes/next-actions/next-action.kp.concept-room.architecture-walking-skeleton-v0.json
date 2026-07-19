@@ -74,12 +74,30 @@
     {
       "command": "npm run typecheck",
       "status": "passed",
-      "checkedAt": "2026-07-19T17:27:43.643Z",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:27:43.643Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-19T17:31:33.073Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-room-import-fitness.test.ts tests/concept-room-boundaries.test.ts tests/legacy-architecture-exception-baseline.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-19T17:31:33.922Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-19T17:31:34.743Z",
       "scope": "standard"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s02 declared an acyclic seven-boundary dependency map and resolvable empty-safe public entrypoints without switching any production consumer."
+    "summary": "s03 added a merge-blocking architecture gate with positive and negative dependency fixtures, public-entrypoint enforcement, and a frozen seven-exception legacy ratchet."
   }
 }
