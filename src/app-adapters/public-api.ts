@@ -25,6 +25,15 @@ export {
   type KpConceptRoomThemeTokens
 } from "./concept-room-theme.ts";
 
+export {
+  applyConceptRoomTheme,
+  conceptRoomReviewThemeCss,
+  conceptRoomSvgTheme,
+  conceptRoomThemeCss,
+  conceptRoomThemeVariables,
+  type KpConceptRoomSvgTheme
+} from "./concept-room-theme-adapters.ts";
+
 export type {
   KpConceptRoomArtifactLike,
   KpConceptRoomCatalogEntryLike

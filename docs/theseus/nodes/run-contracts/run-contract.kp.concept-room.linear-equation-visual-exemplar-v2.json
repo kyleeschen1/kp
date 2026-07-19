@@ -59,7 +59,8 @@
     {
       "id": "s03",
       "title": "Theme adapters",
-      "status": "planned"
+      "summary": "Added deterministic theme adapters and parity tests without changing learner composition; focused tests and typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s04",

@@ -24,6 +24,11 @@
       "kind": "file",
       "path": "src/app-adapters/concept-room-theme.ts",
       "summary": "Versioned exemplar-local typed theme and locked values."
+    },
+    {
+      "kind": "file",
+      "path": "src/app-adapters/concept-room-theme-adapters.ts",
+      "summary": "Deterministic adapters for DOM CSS variables, SVG values, and Review accessibility projections."
     }
   ],
   "verification": [
@@ -70,11 +75,23 @@
       "status": "passed",
       "scope": "s02 inference fixtures and public theme surface",
       "checkedAt": "2026-07-19T21:14:13.141Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-room-exemplar-theme.test.ts tests/concept-room-theme-adapters.test.ts",
+      "status": "passed",
+      "scope": "s03 DOM KaTeX SVG Review print and accessibility theme adapters",
+      "checkedAt": "2026-07-19T21:16:29.330Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03 adapter public surface",
+      "checkedAt": "2026-07-19T21:16:30.157Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s02 added the inference-first deeply immutable local theme value set; renderer emission remains in s03."
+    "summary": "s03 emits one locked theme through DOM, KaTeX, SVG, Review, print, reduced-motion, and forced-color channels."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."
