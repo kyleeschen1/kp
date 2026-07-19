@@ -478,12 +478,32 @@
     {
       "command": "npm run check:architecture",
       "status": "passed",
-      "checkedAt": "2026-07-19T18:48:51.243Z",
-      "scope": "s18 headless boundary"
+      "scope": "s18 headless boundary",
+      "checkedAt": "2026-07-19T18:48:51.243Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/room-effect-coordinator.test.ts tests/concept-room-state.test.ts",
+      "status": "passed",
+      "scope": "s19 effect coordination",
+      "checkedAt": "2026-07-19T18:54:56.061Z",
+      "notes": "Revision anchoring, stale suppression, same-lane supersession, cancellation, URL/persistence/lazy ports, disposal, and concurrent-room isolation pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s19 dependency boundary",
+      "checkedAt": "2026-07-19T18:54:57.792Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-19T18:54:59.076Z",
+      "scope": "s19 browser integration",
+      "notes": "Build passes with the pre-existing large-chunk warning only."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s18 adds deeply immutable serializable room state, an exhaustive pure command reducer, monotonic semantic revisions, deterministic replay, canonical route projection, JSON snapshot parsing/restoration limited to the same immutable concept version, and explicit separation of hover/layout view state."
+    "summary": "s19 adds an explicitly constructed room-scoped effect coordinator for provider, canonical URL, validated persistence, and independent lazy-load lanes, with monotonic request IDs, AbortSignal cancellation, same-lane supersession, revision-anchored stale-result suppression, structured failures, disposal, and no global event bus."
   }
 }
