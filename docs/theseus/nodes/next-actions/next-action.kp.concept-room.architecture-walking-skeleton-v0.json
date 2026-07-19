@@ -62,12 +62,24 @@
     {
       "command": "node --disable-warning=ExperimentalWarning --test tests/legacy-architecture-exception-baseline.test.ts",
       "status": "passed",
-      "checkedAt": "2026-07-19T17:24:00.744Z",
-      "scope": "focused"
+      "scope": "focused",
+      "checkedAt": "2026-07-19T17:24:00.744Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-room-boundaries.test.ts tests/legacy-architecture-exception-baseline.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-19T17:27:36.989Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-19T17:27:43.643Z",
+      "scope": "standard"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01 characterized seven reviewed legacy architecture exceptions with a closed schema and source-evidence test; runtime behavior is unchanged."
+    "summary": "s02 declared an acyclic seven-boundary dependency map and resolvable empty-safe public entrypoints without switching any production consumer."
   }
 }

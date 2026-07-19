@@ -44,13 +44,14 @@
     {
       "id": "s01",
       "title": "Legacy characterization",
-      "status": "in-progress",
-      "summary": "Characterizing existing architecture exceptions without changing runtime behavior."
+      "summary": "Recorded seven reviewed legacy exceptions across central composition, mutable registries, route branching, and content-owned styles; source-evidence tests pass and runtime behavior is unchanged.",
+      "status": "complete"
     },
     {
       "id": "s02",
       "title": "Boundary declarations",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Adding logical boundary declarations and empty-safe public API facades without switching production consumers."
     },
     {
       "id": "s03",
