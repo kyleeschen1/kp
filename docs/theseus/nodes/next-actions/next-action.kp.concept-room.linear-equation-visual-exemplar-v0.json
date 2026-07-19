@@ -174,13 +174,25 @@
     {
       "command": "npm run build",
       "status": "passed",
-      "checkedAt": "2026-07-19T21:51:53.000Z",
-      "scope": "s08 production build and type contracts"
+      "scope": "s08 production build and type contracts",
+      "checkedAt": "2026-07-19T21:51:53.000Z"
+    },
+    {
+      "command": "npx playwright test tests/linear-equation-visual-shell.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s09 desktop tablet phone overflow sticky safety and print document order",
+      "checkedAt": "2026-07-19T21:55:53.809Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-19T21:55:54.845Z",
+      "scope": "s09 responsive and print production build"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s08 adds minimal playback and a native scrubber over canonical room time, preserves stable controls during animation, keeps URLs synchronized, and removes unavailable Ask from primary chrome."
+    "summary": "s09 keeps one responsive document tree across desktop, tablet, phone, and print; narrow layouts disable sticky positioning, remain unclipped, and preserve searchable prose order."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."

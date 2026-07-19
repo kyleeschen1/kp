@@ -139,6 +139,48 @@ test("reduced motion jumps between sections and disposal disconnects observation
   ).__kpObserverDisconnects ?? 0)).toBeGreaterThan(beforeDispose);
 });
 
+test("the same document fits desktop, tablet, and phone without horizontal overflow", async ({ page }) => {
+  for (const viewport of [
+    { width: 1440, height: 1000, sticky: true },
+    { width: 768, height: 1024, sticky: false },
+    { width: 390, height: 844, sticky: false }
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto(conceptPath);
+    await expect(page.locator("[data-kp-concept-room-shell]")).toBeVisible();
+    const layout = await page.evaluate(() => {
+      const visual = document.querySelector<HTMLElement>("[data-kp-concept-visual-field]");
+      const shell = document.querySelector<HTMLElement>("[data-kp-concept-room-shell]");
+      if (visual === null || shell === null) throw new Error("Expected concept layout.");
+      const shellBounds = shell.getBoundingClientRect();
+      return {
+        overflow: document.documentElement.scrollWidth > window.innerWidth,
+        visualPosition: getComputedStyle(visual).position,
+        shellLeft: shellBounds.left,
+        shellRight: shellBounds.right
+      };
+    });
+    expect(layout.overflow).toBe(false);
+    expect(layout.visualPosition).toBe(viewport.sticky ? "sticky" : "relative");
+    expect(layout.shellLeft).toBeGreaterThanOrEqual(0);
+    expect(layout.shellRight).toBeLessThanOrEqual(viewport.width);
+    await expect(page.getByRole("slider", { name: "Scrub concept timeline" })).toBeVisible();
+  }
+});
+
+test("print keeps the visual and all prose in document order without interactive chrome", async ({ page }) => {
+  await page.goto(conceptPath);
+  await page.emulateMedia({ media: "print" });
+  await expect(page.locator("[data-kp-concept-controls]")).toHaveCSS("display", "none");
+  await expect(page.locator("[data-kp-concept-visual-field]")).toHaveCSS("position", "static");
+  await expect(page.locator("[data-kp-concept-room-stage]")).toHaveCSS("display", "block");
+  await expect(page.locator("[data-kp-concept-checkpoint-sections] > section")).toHaveCount(4);
+  const order = await page.locator("[data-kp-concept-room-shell] > *").evaluateAll((elements) =>
+    elements.map((element) => element.tagName.toLowerCase())
+  );
+  expect(order).toEqual(["header", "div"]);
+});
+
 test("route-local exemplar styling does not leak into the legacy root", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("[data-kp-concept-room-shell]"))
