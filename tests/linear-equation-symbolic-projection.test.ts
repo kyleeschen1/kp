@@ -42,3 +42,52 @@ test("projection reads trace frames without inventing or mutating mathematics", 
   assert.deepEqual(trace.frames[1], frame);
   assert.throws(() => projectLinearEquationTrace(trace, -1), /progress/);
 });
+
+test("transition IR derives source, target, operation, and lineage only from the verified trace", () => {
+  const trace = createCanonicalConceptRoomTrace();
+  const start = projectLinearEquationTrace(trace, 0);
+  const subtractMid = projectLinearEquationTrace(trace, 250);
+  const divideStart = projectLinearEquationTrace(trace, 501);
+  const end = projectLinearEquationTrace(trace, 1000);
+
+  assert.equal(start.transition?.operationId, trace.operations[0]?.id);
+  assert.equal(start.transition?.phase, "source");
+  assert.equal(subtractMid.transition?.phase, "transform");
+  assert.equal(subtractMid.transition?.sourceLayout.frameId, trace.frames[0]?.id);
+  assert.equal(subtractMid.transition?.targetLayout.frameId, trace.frames[1]?.id);
+  assert.deepEqual(subtractMid.transition?.operationApplications.map((item) => item.side), ["left", "right"]);
+  assert.equal(divideStart.transition?.operationId, trace.operations[1]?.id);
+  assert.equal(divideStart.transition?.phase, "introduce-operation");
+  assert.equal(end.transition?.phase, "target");
+  assert.equal(end.transition?.targetLayout.frameId, trace.frames[2]?.id);
+  assert.equal(Object.isFrozen(subtractMid.transition?.lineage), true);
+  assert.deepEqual(trace.frames.map((frame) => frame.id), ["frame.initial", "frame.step.1", "frame.step.2"]);
+});
+
+test("authored operation windows align verified transitions with concept checkpoints", () => {
+  const trace = createCanonicalConceptRoomTrace();
+  const options = {
+    operationWindows: [
+      { operationId: trace.operations[0]!.id, startPermille: 0, endPermille: 400 },
+      { operationId: trace.operations[1]!.id, startPermille: 400, endPermille: 750 }
+    ]
+  } as const;
+  assert.equal(projectLinearEquationTrace(trace, 400, options).transition?.phase, "target");
+  assert.equal(projectLinearEquationTrace(trace, 401, options).transition?.operationId, trace.operations[1]!.id);
+  assert.equal(projectLinearEquationTrace(trace, 750, options).transition?.phase, "target");
+  assert.equal(projectLinearEquationTrace(trace, 1000, options).transition?.phase, "target");
+  assert.throws(() => projectLinearEquationTrace(trace, 500, {
+    operationWindows: [{ operationId: "wrong", startPermille: 0, endPermille: 1000 }]
+  }), /operation windows/);
+});
+
+test("persistent continuants map source and target token IDs without glyph inference", () => {
+  const transition = projectLinearEquationTrace(createCanonicalConceptRoomTrace(), 250).transition;
+  const variable = transition?.lineage.find((item) => item.continuantId === "term.two-x");
+  const equality = transition?.lineage.find((item) => item.continuantId === "relation.equals");
+  assert.equal(variable?.continuity, "persistent");
+  assert.match(variable?.sourceTokenId ?? "", /frame\.initial/);
+  assert.match(variable?.targetTokenId ?? "", /frame\.step\.1/);
+  assert.equal(equality?.continuity, "persistent");
+  assert.equal(transition?.lineage.some((item) => item.continuantId.includes("latex")), false);
+});

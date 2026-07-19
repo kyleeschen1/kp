@@ -1,7 +1,8 @@
 import type { KpLinearEquationTrace } from "../../domains/public-api.ts";
 import {
   projectLinearEquationBalanceExemplar,
-  projectLinearEquationTrace
+  projectLinearEquationTrace,
+  type KpSymbolicOperationWindow
 } from "../projections/public-api.ts";
 import {
   createLinearProblemClient,
@@ -67,7 +68,7 @@ export function createLinearEquationConceptRuntime(options: {
           "The provider did not return a strict verified concept trace."
         );
       }
-      return runtimeSession(trace, loadSymbolic, loadBalance);
+      return runtimeSession(trace, operationWindows(artifact, trace), loadSymbolic, loadBalance);
     }
   };
   return Object.freeze(runtime);
@@ -75,6 +76,7 @@ export function createLinearEquationConceptRuntime(options: {
 
 function runtimeSession(
   trace: KpLinearEquationTrace,
+  symbolicOperationWindows: readonly KpSymbolicOperationWindow[],
   loadSymbolic: () => Promise<SymbolicRendererModule>,
   loadBalance: () => Promise<BalanceRendererModule>
 ): KpConceptRoomRuntimeSession {
@@ -85,7 +87,9 @@ function runtimeSession(
       try {
         if (state.projection === "symbolic") {
           const renderer = await loadSymbolic();
-          renderer.renderSymbolicEquation(root, projectLinearEquationTrace(trace, state.timePermille), {
+          renderer.renderSymbolicEquation(root, projectLinearEquationTrace(trace, state.timePermille, {
+            operationWindows: symbolicOperationWindows
+          }), {
             focusSemanticIds: state.focus
           });
           return;
@@ -118,6 +122,24 @@ function runtimeSession(
       disposed = true;
     }
   };
+}
+
+function operationWindows(
+  artifact: KpConceptRoomArtifactLike,
+  trace: KpLinearEquationTrace
+): readonly KpSymbolicOperationWindow[] {
+  const operationCheckpoints = artifact.manifest.checkpoints.slice(1, trace.operations.length + 1);
+  if (operationCheckpoints.length !== trace.operations.length) {
+    throw new KpConceptRoomRuntimeError(
+      "artifact-invalid",
+      "The concept checkpoint timeline does not cover every verified operation."
+    );
+  }
+  return trace.operations.map((operation, index) => ({
+    operationId: operation.id,
+    startPermille: index === 0 ? 0 : operationCheckpoints[index - 1]!.progressPermille,
+    endPermille: operationCheckpoints[index]!.progressPermille
+  }));
 }
 
 function requireLinearEquationArtifact(artifact: KpConceptRoomArtifactLike): void {

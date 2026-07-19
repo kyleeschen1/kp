@@ -15,7 +15,7 @@ test("KaTeX adapter renders, seeks, rewinds, and preserves semantic token identi
     controller.render(0);
     (window as typeof window & { __kpSymbolicFixture?: typeof controller }).__kpSymbolicFixture = controller;
   }, trace);
-  const equation = page.locator("[data-kp-symbolic-equation]");
+  const equation = page.locator("#symbolic-projection-browser-fixture [data-kp-symbolic-equation]");
   await expect(equation).toHaveAttribute("data-kp-frame-id", "frame.initial");
   await expect(equation.locator(".katex")).toHaveCount(5);
   await expect(equation.locator('[data-kp-semantic-id="term.two-x"]')).toHaveCount(1);

@@ -186,13 +186,31 @@
     {
       "command": "npm run build",
       "status": "passed",
-      "checkedAt": "2026-07-19T21:55:54.845Z",
-      "scope": "s09 responsive and print production build"
+      "scope": "s09 responsive and print production build",
+      "checkedAt": "2026-07-19T21:55:54.845Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-equation-symbolic-projection.test.ts tests/linear-equation-concept-runtime.test.ts tests/linear-equation-balance-projection.test.ts",
+      "status": "passed",
+      "scope": "s10 transition IR exact trace ownership source target lineage phases and cross-projection clock",
+      "checkedAt": "2026-07-19T22:02:17.390Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s10 inference-first symbolic IR and runtime timeline integration",
+      "checkedAt": "2026-07-19T22:02:18.526Z"
+    },
+    {
+      "command": "npx playwright test tests/linear-equation-symbolic-projection.browser.spec.ts tests/linear-equation-concept-room-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "checkedAt": "2026-07-19T22:02:19.753Z",
+      "scope": "s10 native KaTeX endpoints and room regression"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s09 keeps one responsive document tree across desktop, tablet, phone, and print; narrow layouts disable sticky positioning, remain unclipped, and preserve searchable prose order."
+    "summary": "s10 extends the pure symbolic projection with verified operation windows, source and target layouts, explicit continuant lineage, paired side applications, and deterministic phase progress while preserving native endpoint equations."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."

@@ -1,6 +1,7 @@
 import type {
   KpExactRational,
   KpLinearEquationFrame,
+  KpLinearEquationOperation,
   KpLinearEquationTrace,
   KpLinearExpression
 } from "../../domains/public-api.ts";
@@ -9,11 +10,71 @@ import { sampleLinearEquationTrace } from "./linear-equation-frame.ts";
 
 export interface KpSymbolicEquationToken {
   readonly id: string;
+  readonly continuantId: string;
   readonly semanticId: string;
   readonly kind: "term" | "operator" | "relation";
   readonly side: "left" | "relation" | "right";
   readonly latex: string;
   readonly spoken: string;
+}
+
+export interface KpSymbolicEquationLayoutIr {
+  readonly frameId: string;
+  readonly equationSemanticId: string;
+  readonly tokens: readonly KpSymbolicEquationToken[];
+  readonly accessibleText: string;
+}
+
+export interface KpSymbolicTokenLineageIr {
+  readonly continuantId: string;
+  readonly semanticId: string;
+  readonly continuity: "persistent" | "introduced" | "retired";
+  readonly sourceTokenId?: string;
+  readonly targetTokenId?: string;
+}
+
+export interface KpSymbolicOperationApplicationIr {
+  readonly id: string;
+  readonly operationId: string;
+  readonly operationSemanticId: string;
+  readonly side: "left" | "right";
+  readonly kind: KpLinearEquationOperation["kind"];
+  readonly sourceOperation: string;
+  readonly classification: KpLinearEquationOperation["classification"];
+}
+
+export type KpSymbolicTransitionPhase =
+  | "source"
+  | "introduce-operation"
+  | "transform"
+  | "settle"
+  | "target";
+
+export interface KpSymbolicEquationTransitionIr {
+  readonly operationId: string;
+  readonly operationSemanticId: string;
+  readonly fromFrameId: string;
+  readonly toFrameId: string;
+  readonly progressPermille: number;
+  readonly phase: KpSymbolicTransitionPhase;
+  readonly phaseProgressPermille: number;
+  readonly sourceLayout: KpSymbolicEquationLayoutIr;
+  readonly targetLayout: KpSymbolicEquationLayoutIr;
+  readonly lineage: readonly KpSymbolicTokenLineageIr[];
+  readonly operationApplications: readonly [
+    KpSymbolicOperationApplicationIr,
+    KpSymbolicOperationApplicationIr
+  ];
+}
+
+export interface KpSymbolicOperationWindow {
+  readonly operationId: string;
+  readonly startPermille: number;
+  readonly endPermille: number;
+}
+
+export interface KpSymbolicEquationProjectionOptions {
+  readonly operationWindows?: readonly KpSymbolicOperationWindow[];
 }
 
 export interface KpSymbolicEquationIr {
@@ -23,16 +84,24 @@ export interface KpSymbolicEquationIr {
   readonly equationSemanticId: string;
   readonly progressPermille: number;
   readonly tokens: readonly KpSymbolicEquationToken[];
+  readonly nativeLayout: KpSymbolicEquationLayoutIr;
+  readonly transition?: KpSymbolicEquationTransitionIr;
   readonly accessibleText: string;
   readonly diagnostics: readonly string[];
 }
 
 export function projectLinearEquationTrace(
   trace: KpLinearEquationTrace,
-  progressPermille: number
+  progressPermille: number,
+  options: KpSymbolicEquationProjectionOptions = {}
 ): KpSymbolicEquationIr {
   const sample = sampleLinearEquationTrace(trace, progressPermille);
-  return projectLinearEquationFrame(trace, sample.frame, progressPermille);
+  const native = projectLinearEquationFrame(trace, sample.frame, progressPermille);
+  const transition = projectTransition(trace, progressPermille, options.operationWindows);
+  return deepFreeze({
+    ...native,
+    ...(transition === undefined ? {} : { transition })
+  });
 }
 
 export function projectLinearEquationFrame(
@@ -46,6 +115,7 @@ export function projectLinearEquationFrame(
   const left = expressionTokens(frame, "left");
   const relation: KpSymbolicEquationToken = {
     id: `${frame.id}.relation.equals`,
+    continuantId: "relation.equals",
     semanticId: `${frame.semanticIds.equation}.relation.equals`,
     kind: "relation",
     side: "relation",
@@ -54,6 +124,7 @@ export function projectLinearEquationFrame(
   };
   const right = expressionTokens(frame, "right");
   const tokens = [...left, relation, ...right];
+  const nativeLayout = equationLayout(frame, tokens);
   return deepFreeze({
     schemaVersion: "kp.symbolic-equation-ir.v1" as const,
     traceId: trace.id,
@@ -61,7 +132,8 @@ export function projectLinearEquationFrame(
     equationSemanticId: frame.semanticIds.equation,
     progressPermille,
     tokens,
-    accessibleText: tokens.map((token) => token.spoken).join(" "),
+    nativeLayout,
+    accessibleText: nativeLayout.accessibleText,
     diagnostics: trace.diagnostics.map((diagnostic) => `${diagnostic.code}: ${diagnostic.message}`)
   });
 }
@@ -78,6 +150,7 @@ function expressionTokens(
   if (!isZero(expression.coefficient)) {
     tokens.push({
       id: `${frame.id}.${side}.variable`,
+      continuantId: variableSemanticId,
       semanticId: variableSemanticId,
       kind: "term",
       side,
@@ -90,6 +163,7 @@ function expressionTokens(
     if (tokens.length > 0) {
       tokens.push({
         id: `${frame.id}.${side}.constant-operator`,
+        continuantId: `${constantSemanticId}.operator`,
         semanticId: `${constantSemanticId}.operator`,
         kind: "operator",
         side,
@@ -99,6 +173,7 @@ function expressionTokens(
     }
     tokens.push({
       id: `${frame.id}.${side}.constant`,
+      continuantId: constantSemanticId,
       semanticId: constantSemanticId,
       kind: "term",
       side,
@@ -109,6 +184,7 @@ function expressionTokens(
   if (tokens.length === 0) {
     tokens.push({
       id: `${frame.id}.${side}.zero`,
+      continuantId: constantSemanticId,
       semanticId: constantSemanticId,
       kind: "term",
       side,
@@ -117,6 +193,147 @@ function expressionTokens(
     });
   }
   return tokens;
+}
+
+function projectTransition(
+  trace: KpLinearEquationTrace,
+  progressPermille: number,
+  requestedWindows: readonly KpSymbolicOperationWindow[] | undefined
+): KpSymbolicEquationTransitionIr | undefined {
+  if (trace.operations.length === 0) return undefined;
+  const windows = requestedWindows ?? equalOperationWindows(trace.operations);
+  requireOperationWindows(trace.operations, windows);
+  const operationIndex = Math.max(0, windows.findIndex((window) => progressPermille <= window.endPermille));
+  const operation = trace.operations[operationIndex]!;
+  const window = windows[operationIndex]!;
+  const fromFrame = requireFrame(trace, operation.fromFrameId);
+  const toFrame = requireFrame(trace, operation.toFrameId);
+  const transitionProgress = Math.max(0, Math.min(1000,
+    Math.round((progressPermille - window.startPermille) * 1000 /
+      Math.max(1, window.endPermille - window.startPermille))
+  ));
+  const sourceLayout = layoutForFrame(fromFrame);
+  const targetLayout = layoutForFrame(toFrame);
+  const phase = transitionPhase(transitionProgress);
+  return {
+    operationId: operation.id,
+    operationSemanticId: operation.semanticId,
+    fromFrameId: fromFrame.id,
+    toFrameId: toFrame.id,
+    progressPermille: transitionProgress,
+    phase: phase.name,
+    phaseProgressPermille: phase.progressPermille,
+    sourceLayout,
+    targetLayout,
+    lineage: tokenLineage(sourceLayout.tokens, targetLayout.tokens),
+    operationApplications: ["left", "right"].map((side) => ({
+      id: `${operation.id}.${side}`,
+      operationId: operation.id,
+      operationSemanticId: operation.semanticId,
+      side,
+      kind: operation.kind,
+      sourceOperation: operation.sourceOperation,
+      classification: operation.classification
+    })) as [KpSymbolicOperationApplicationIr, KpSymbolicOperationApplicationIr]
+  };
+}
+
+function equalOperationWindows(
+  operations: readonly KpLinearEquationOperation[]
+): readonly KpSymbolicOperationWindow[] {
+  return operations.map((operation, index) => ({
+    operationId: operation.id,
+    startPermille: Math.round(index * 1000 / operations.length),
+    endPermille: Math.round((index + 1) * 1000 / operations.length)
+  }));
+}
+
+function requireOperationWindows(
+  operations: readonly KpLinearEquationOperation[],
+  windows: readonly KpSymbolicOperationWindow[]
+): void {
+  if (windows.length !== operations.length || windows.some((window, index) =>
+    window.operationId !== operations[index]?.id ||
+    !Number.isInteger(window.startPermille) || !Number.isInteger(window.endPermille) ||
+    window.startPermille < 0 || window.endPermille > 1000 ||
+    window.startPermille >= window.endPermille ||
+    (index > 0 && window.startPermille !== windows[index - 1]?.endPermille)
+  )) {
+    throw new TypeError("Symbolic operation windows must follow trace operation order without gaps.");
+  }
+}
+
+function layoutForFrame(frame: KpLinearEquationFrame): KpSymbolicEquationLayoutIr {
+  const left = expressionTokens(frame, "left");
+  const relation: KpSymbolicEquationToken = {
+    id: `${frame.id}.relation.equals`,
+    continuantId: "relation.equals",
+    semanticId: `${frame.semanticIds.equation}.relation.equals`,
+    kind: "relation",
+    side: "relation",
+    latex: "=",
+    spoken: "equals"
+  };
+  return equationLayout(frame, [...left, relation, ...expressionTokens(frame, "right")]);
+}
+
+function equationLayout(
+  frame: KpLinearEquationFrame,
+  tokens: readonly KpSymbolicEquationToken[]
+): KpSymbolicEquationLayoutIr {
+  return {
+    frameId: frame.id,
+    equationSemanticId: frame.semanticIds.equation,
+    tokens,
+    accessibleText: tokens.map((token) => token.spoken).join(" ")
+  };
+}
+
+function tokenLineage(
+  source: readonly KpSymbolicEquationToken[],
+  target: readonly KpSymbolicEquationToken[]
+): KpSymbolicTokenLineageIr[] {
+  const sourceById = new Map(source.map((token) => [token.continuantId, token]));
+  const targetById = new Map(target.map((token) => [token.continuantId, token]));
+  return [...new Set([...sourceById.keys(), ...targetById.keys()])].map((continuantId) => {
+    const sourceToken = sourceById.get(continuantId);
+    const targetToken = targetById.get(continuantId);
+    return {
+      continuantId,
+      semanticId: targetToken?.semanticId ?? sourceToken!.semanticId,
+      continuity: sourceToken !== undefined && targetToken !== undefined
+        ? "persistent" as const
+        : sourceToken === undefined ? "introduced" as const : "retired" as const,
+      ...(sourceToken === undefined ? {} : { sourceTokenId: sourceToken.id }),
+      ...(targetToken === undefined ? {} : { targetTokenId: targetToken.id })
+    };
+  });
+}
+
+function transitionPhase(progressPermille: number): {
+  readonly name: KpSymbolicTransitionPhase;
+  readonly progressPermille: number;
+} {
+  if (progressPermille === 0) return { name: "source", progressPermille: 0 };
+  if (progressPermille === 1000) return { name: "target", progressPermille: 1000 };
+  if (progressPermille <= 200) return {
+    name: "introduce-operation",
+    progressPermille: Math.round(progressPermille * 1000 / 200)
+  };
+  if (progressPermille <= 780) return {
+    name: "transform",
+    progressPermille: Math.round((progressPermille - 200) * 1000 / 580)
+  };
+  return {
+    name: "settle",
+    progressPermille: Math.round((progressPermille - 780) * 1000 / 220)
+  };
+}
+
+function requireFrame(trace: KpLinearEquationTrace, frameId: string): KpLinearEquationFrame {
+  const frame = trace.frames.find((candidate) => candidate.id === frameId);
+  if (frame === undefined) throw new Error(`Operation references missing equation frame ${frameId}.`);
+  return frame;
 }
 
 function variableLatex(expression: KpLinearExpression): string {
@@ -153,8 +370,8 @@ function isZero(value: KpExactRational): boolean {
   return value.numerator === "0";
 }
 
-type DeepReadonly<Value> = Value extends readonly (infer Item)[]
-  ? readonly DeepReadonly<Item>[]
+type DeepReadonly<Value> = Value extends readonly unknown[]
+  ? { readonly [Index in keyof Value]: DeepReadonly<Value[Index]> }
   : Value extends object
     ? { readonly [Key in keyof Value]: DeepReadonly<Value[Key]> }
     : Value;

@@ -1,8 +1,15 @@
 export {
   projectLinearEquationFrame,
   projectLinearEquationTrace,
+  type KpSymbolicEquationLayoutIr,
   type KpSymbolicEquationIr,
-  type KpSymbolicEquationToken
+  type KpSymbolicEquationToken,
+  type KpSymbolicEquationTransitionIr,
+  type KpSymbolicOperationApplicationIr,
+  type KpSymbolicOperationWindow,
+  type KpSymbolicEquationProjectionOptions,
+  type KpSymbolicTokenLineageIr,
+  type KpSymbolicTransitionPhase
 } from "./linear-equation-symbolic.ts";
 
 export {
