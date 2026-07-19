@@ -73,6 +73,29 @@ test("POST /api/compile returns a compiled HTML asset", async () => {
   }
 });
 
+test("GET canonical concept route returns meaningful no-JS Review HTML", async () => {
+  const server = testServer();
+  const baseUrl = await listen(server);
+
+  try {
+    const response = await fetch(
+      `${baseUrl}/concepts/mathematics/linear-equations/solve-with-balance`
+    );
+    const html = await response.text();
+    assert.equal(response.status, 200);
+    assert.match(response.headers.get("content-type") ?? "", /text\/html/);
+    assert.match(response.headers.get("x-kp-artifact-integrity") ?? "", /^sha256:/);
+    assert.match(html, /data-kp-concept-review="true"/);
+    assert.match(html, /Keep both sides equal/);
+    assert.match(html, /class="katex-display"/);
+    assert.match(html, /data-kp-review-balance-svg/);
+    assert.match(html, /data-kp-review-inspection/);
+    assert.doesNotMatch(html, /<script type="module"/);
+  } finally {
+    await close(server);
+  }
+});
+
 test("POST /api/v1/linear-problems dispatches deterministic validated protocol requests", async () => {
   const server = testServer();
   const baseUrl = await listen(server);

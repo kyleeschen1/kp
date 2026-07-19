@@ -633,13 +633,46 @@
     {
       "command": "npm run build",
       "status": "passed",
-      "checkedAt": "2026-07-19T19:32:58.909Z",
       "scope": "s24 production integration",
+      "checkedAt": "2026-07-19T19:32:58.909Z",
       "notes": "Typecheck and build pass with the pre-existing large-chunk warning only."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-review-publication.test.ts server/app.test.ts",
+      "status": "passed",
+      "scope": "s25 Review publication and no-JS server route",
+      "checkedAt": "2026-07-19T20:05:25.073Z",
+      "notes": "Deterministic HTML, exact checkpoint projection, static KaTeX and SVG, schema validation, route delivery, API preservation, and divergence refusal pass; localhost suite ran with permitted bind access."
+    },
+    {
+      "command": "npx playwright test tests/concept-review-publication.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s25 no-JS readability and browser Find",
+      "checkedAt": "2026-07-19T20:05:26.193Z",
+      "notes": "Four checkpoints remain readable with JavaScript disabled; real browser Find locates checkpoint prose; checkpoint Explore URL is exact."
+    },
+    {
+      "command": "npm run check:concept-catalog",
+      "status": "passed",
+      "scope": "s25 generated artifact freshness",
+      "checkedAt": "2026-07-19T20:05:27.150Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s25 Review adapter boundaries",
+      "checkedAt": "2026-07-19T20:05:28.148Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-19T20:05:29.167Z",
+      "scope": "s25 typecheck and production build",
+      "notes": "Build passes with the pre-existing large-chunk warning only."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s24 adds one exemplar-local balance scene IR and static SVG adapter over the same shared trace sampler as the symbolic projection. Both views preserve term IDs, progress, equation frames, exact fractions, accessibility, and typed semantic theme and focus roles; operations are structurally paired across left and right. The slice intentionally defines no palette, font, animation, aesthetic geometry, or platform-wide balance contract."
+    "summary": "s25 adds deterministic linear-equation Review publication from the validated published artifact plus verified shared trace: meaningful no-JS HTML, visible searchable checkpoint prose, server-rendered KaTeX, static balance SVG, TOC anchors, print rules, exact Explore-state URLs, and a runtime-validated immutable inspection capsule. The server serves this fallback at the canonical route, rejects checkpoint/math divergence, and preserves existing health, compile, and provider endpoints."
   }
 }

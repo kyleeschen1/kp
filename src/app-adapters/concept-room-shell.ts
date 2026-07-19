@@ -10,38 +10,15 @@ import {
 } from "../kernel/public-api.ts";
 
 import { createRoomEffectCoordinator } from "./room-effect-coordinator.ts";
+import type {
+  KpConceptRoomArtifactLike,
+  KpConceptRoomCatalogEntryLike
+} from "./concept-room-artifact.ts";
 
-export interface KpConceptRoomArtifactLike {
-  readonly integrity: string;
-  readonly manifest: {
-    readonly conceptId: string;
-    readonly version: string;
-    readonly title: string;
-    readonly modes: readonly ("watch" | "touch" | "ask" | "review")[];
-    readonly projections: readonly ("symbolic" | "balance")[];
-    readonly checkpoints: readonly {
-      readonly id: string;
-      readonly title: string;
-      readonly explanation: string;
-      readonly progressPermille: number;
-      readonly semanticRefs: readonly string[];
-    }[];
-    readonly providers: readonly {
-      readonly id: string;
-      readonly protocol: string;
-      readonly version: string;
-    }[];
-    readonly provenance: { readonly sourcePath: string };
-  };
-}
-
-export interface KpConceptRoomCatalogEntryLike {
-  readonly conceptId: string;
-  readonly version: string;
-  readonly canonicalPath: string;
-  readonly legacyAliases: readonly string[];
-  load(): Promise<KpConceptRoomArtifactLike>;
-}
+export type {
+  KpConceptRoomArtifactLike,
+  KpConceptRoomCatalogEntryLike
+} from "./concept-room-artifact.ts";
 
 export interface KpConceptRoomNavigationHost {
   current(): { readonly pathname: string; readonly search: string };

@@ -22,3 +22,18 @@ export {
   type KpConceptRoomStyleRole,
   type KpConceptRoomThemeShape
 } from "./concept-room-theme.ts";
+
+export type {
+  KpConceptRoomArtifactLike,
+  KpConceptRoomCatalogEntryLike
+} from "./concept-room-artifact.ts";
+
+export {
+  conceptReviewInspectionSchema,
+  type KpConceptReviewInspection
+} from "./concept-review-inspection.ts";
+
+export {
+  publishLinearEquationConceptReview,
+  type KpLinearEquationConceptReviewPublication
+} from "./concept-review-html.ts";

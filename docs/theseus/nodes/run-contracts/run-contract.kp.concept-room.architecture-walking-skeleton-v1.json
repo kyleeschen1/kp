@@ -182,13 +182,14 @@
     {
       "id": "s24",
       "title": "Placeholder balance projection and theme plumbing",
-      "status": "in-progress",
-      "summary": "Mapping the same trace into an exemplar-local structural balance scene and shared typed theme roles without aesthetic polish."
+      "summary": "Added an exemplar-local balance scene IR and static SVG adapter sharing the symbolic frame clock, exact terms, KaTeX labels, semantic identity, two-sided operation structure, accessibility, and typed theme/focus roles without aesthetic styling.",
+      "status": "complete"
     },
     {
       "id": "s25",
       "title": "Review publication",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Generating deterministic searchable Review HTML, static math and balance SVG, checkpoint links, print structure, and a machine-readable inspection capsule from the published artifact."
     },
     {
       "id": "s26",
