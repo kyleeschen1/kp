@@ -74,13 +74,14 @@
     {
       "id": "s06",
       "title": "Exact rational kernel",
-      "status": "in-progress",
-      "summary": "Implementing normalized bigint rational arithmetic and linear-expression operations in the independent provider."
+      "summary": "Implemented canonical bigint rational arithmetic and exact linear-expression operations in a headless independently compiled provider with dependency and presentation-boundary tests.",
+      "status": "complete"
     },
     {
       "id": "s07",
       "title": "Deterministic generator",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Implementing seeded bounded linear-problem generation and the canonical 2x + 3 = 8 fixture."
     },
     {
       "id": "s08",

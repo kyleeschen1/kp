@@ -164,12 +164,36 @@
     {
       "command": "npm run check:architecture",
       "status": "passed",
-      "checkedAt": "2026-07-19T17:41:49.205Z",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:41:49.205Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-problem-generator.test.ts tests/linear-provider-boundary.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-19T17:45:30.827Z"
+    },
+    {
+      "command": "npm run typecheck:linear-provider",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:45:31.596Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-19T17:45:32.300Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-07-19T17:45:33.034Z",
       "scope": "standard"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s06 implemented normalized bigint rational arithmetic and exact linear-expression operations in an independently compiled, presentation-free provider boundary."
+    "summary": "s07 added version-seeded bounded ax+b=c generation, exact solutions, integer-only generation, stable problem IDs and provenance, and the immutable 2x + 3 = 8 fixture."
   }
 }

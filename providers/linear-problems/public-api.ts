@@ -10,6 +10,11 @@ export {
 } from "./linear-expression.ts";
 
 export {
+  canonicalLinearProblem,
+  generateLinearProblem
+} from "./generator.ts";
+
+export {
   addRational,
   divideRational,
   equalRational,
@@ -22,4 +27,3 @@ export {
   subtractRational,
   type ExactRational
 } from "./rational.ts";
-
