@@ -1,0 +1,47 @@
+{
+  "id": "next-action.kp.concept-room.linear-equation-visual-exemplar-v0",
+  "kind": "next-action",
+  "title": "Polish Linear Equation Visual Exemplar",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-19-linear-equation-visual-exemplar-loop-proposal.md",
+      "summary": "Approved visual-exemplar plan, exact slices, checks, boundaries, and mandatory review."
+    }
+  ],
+  "verification": [
+    "npm test",
+    "npm run build",
+    "npm run smoke:linear-equation",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."
+  ],
+  "allowedWork": [
+    "Execute only the approved 25-slice visual exemplar."
+  ],
+  "disallowedWork": [
+    "Do not generalize before human visual acceptance."
+  ],
+  "criteria": [
+    {
+      "id": "clarity",
+      "weight": "high"
+    },
+    {
+      "id": "continuity",
+      "weight": "high"
+    },
+    {
+      "id": "searchability",
+      "weight": "high"
+    },
+    {
+      "id": "accessibility",
+      "weight": "high"
+    }
+  ]
+}

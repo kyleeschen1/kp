@@ -1,0 +1,163 @@
+{
+  "id": "run-contract.kp.concept-room.linear-equation-visual-exemplar-v1",
+  "kind": "run-contract",
+  "title": "Linear Equation Visual Exemplar v1",
+  "status": "superseded",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.concept-room.linear-equation-visual-exemplar-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-19-linear-equation-visual-exemplar-loop-proposal.md",
+      "summary": "Sole approved human-readable plan with canonical references, acceptance criteria, 25 exact slices, preservation boundary, rollback units, verification levels, stop conditions, deferrals, and mandatory review."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run smoke:linear-equation",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Only the 25 ordered slices and preservation boundaries in the approved visual-exemplar proposal.",
+    "One focused verified commit per slice; route-local DOM, KaTeX, SVG, Review, accessibility, tests, and durable evidence."
+  ],
+  "disallowedWork": [
+    "No other concepts, Ask or LLM execution, remote snapshots, global theme rollout, balance promotion, generic registry, provider ownership changes, WebGL, modal slideshow, quiz system, or generalization.",
+    "No implementation may continue after the s25 human visual-review checkpoint without new explicit approval."
+  ],
+  "goal": "Polish exactly the verified 2x + 3 = 8 concept room into KP's first clear, searchable, synchronized algebra-and-geometry exemplar, then stop for human visual review before generalization.",
+  "target": "next-action.kp.concept-room.linear-equation-visual-exemplar-v0",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Repeatable visual baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Inference-first exemplar theme",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Theme adapters",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Focus and correspondence contract",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Route-local visual composition",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Searchable checkpoint rail",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Global-scroll checkpoint coordinator",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Minimal playback controls",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Responsive and printable shell",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Transition-capable symbolic IR",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Measured KaTeX motion stage",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Subtract-both-sides choreography",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Divide-both-sides choreography",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Symbolic conformance gate",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Exemplar-local geometric IR",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Polished static balance stage",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Synchronized subtraction geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Synchronized division geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Coordinated primary stage",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Cross-representation semantic links",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Frictionless Watch Touch Review modes",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Share and verification inspection",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Accessibility and failure matrix",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Anti-template and performance audit",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Full gate and mandatory exemplar review package",
+      "status": "planned"
+    }
+  ],
+  "summary": "Administrative contract omitted required autonomy hygiene fields; replaced before implementation by the identical approved 25-slice v2 contract."
+}

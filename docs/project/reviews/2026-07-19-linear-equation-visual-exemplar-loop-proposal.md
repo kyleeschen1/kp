@@ -3,7 +3,12 @@
 Date: 2026-07-19  
 Status: proposed; explicit execution approval required  
 Candidate target: `next-action.kp.concept-room.linear-equation-visual-exemplar-v0`  
-Candidate contract: `run-contract.kp.concept-room.linear-equation-visual-exemplar-v1`
+Execution contract: `run-contract.kp.concept-room.linear-equation-visual-exemplar-v2`
+
+The initially created `v1` contract was superseded before implementation because
+its command omitted required autonomy-hygiene fields. `v2` preserves the exact
+approved slices and adds the run mode, 25-slice limit, per-slice commit cadence,
+broad verification level, and structured stop conditions.
 
 ## Recommendation
 
@@ -242,4 +247,3 @@ No visual implementation is authorized by this proposal. Explicit `approve`,
 create the exact typed Theseus run contract, validate it, and execute one
 verified commit per slice until a stop condition or the mandatory `s25` human
 review checkpoint fires.
-
