@@ -37,3 +37,10 @@ export {
   publishLinearEquationConceptReview,
   type KpLinearEquationConceptReviewPublication
 } from "./concept-review-html.ts";
+
+export {
+  canonicalLinearEquationGenerationRequest,
+  canonicalLinearEquationRequests,
+  mapCanonicalLinearEquationTrace,
+  type KpCanonicalLinearEquationRequests
+} from "./linear-equation-canonical-provider.ts";

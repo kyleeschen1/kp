@@ -1,4 +1,3 @@
-import "katex/dist/katex.min.css";
 import katex from "katex";
 
 import type { KpLinearEquationTrace } from "../../domains/public-api.ts";

@@ -19,6 +19,10 @@ export interface KpConceptRoomArtifactLike {
       readonly progressPermille: number;
       readonly semanticRefs: readonly string[];
     }[];
+    readonly capabilities: readonly {
+      readonly id: string;
+      readonly major: number;
+    }[];
     readonly providers: readonly {
       readonly id: string;
       readonly protocol: string;
@@ -48,5 +52,9 @@ export interface KpConceptRoomCatalogEntryLike {
   readonly version: string;
   readonly canonicalPath: string;
   readonly legacyAliases: readonly string[];
+  readonly title: string;
+  readonly summary: string;
+  readonly searchableText: string;
+  readonly checkpointIds: readonly string[];
   load(): Promise<KpConceptRoomArtifactLike>;
 }

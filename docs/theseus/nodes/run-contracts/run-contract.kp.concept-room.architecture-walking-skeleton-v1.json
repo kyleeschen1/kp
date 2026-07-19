@@ -188,13 +188,14 @@
     {
       "id": "s25",
       "title": "Review publication",
-      "status": "in-progress",
-      "summary": "Generating deterministic searchable Review HTML, static math and balance SVG, checkpoint links, print structure, and a machine-readable inspection capsule from the published artifact."
+      "summary": "Added deterministic searchable no-JS Review HTML with server KaTeX, static balance SVG, TOC anchors, print rules, exact Explore URLs, a validated inspection capsule, canonical server routing, and checkpoint/math divergence refusal.",
+      "status": "complete"
     },
     {
       "id": "s26",
       "title": "Failure containment and end-to-end smoke",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Proving failure containment and the canonical end-to-end room across direct URLs, provider and capability failures, renderer absence, invalid artifacts, mount/switch/dispose, and legacy preservation."
     },
     {
       "id": "s27",

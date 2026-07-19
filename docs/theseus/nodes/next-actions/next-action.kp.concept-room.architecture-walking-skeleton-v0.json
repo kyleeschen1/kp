@@ -666,13 +666,53 @@
     {
       "command": "npm run build",
       "status": "passed",
-      "checkedAt": "2026-07-19T20:05:29.167Z",
       "scope": "s25 typecheck and production build",
+      "checkedAt": "2026-07-19T20:05:29.167Z",
       "notes": "Build passes with the pre-existing large-chunk warning only."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test server/app.test.ts tests/linear-equation-concept-runtime.test.ts",
+      "status": "passed",
+      "scope": "s26 provider and server integration",
+      "checkedAt": "2026-07-19T20:21:56.573Z",
+      "notes": "Generator seed, exact requests, step and solution verification, strict mapper trace, runtime projections, structured failures, canonical Review route, and preserved APIs pass."
+    },
+    {
+      "command": "npm run smoke:linear-equation",
+      "status": "passed",
+      "scope": "s26 canonical end-to-end and failure matrix",
+      "checkedAt": "2026-07-19T20:21:57.623Z",
+      "notes": "Direct snapshot URL, successful provider flow, symbolic/balance switch, shared frames, Review and Touch modes, no WebGL, disposal, and provider/Ask/artifact/capability/renderer fallback cases pass."
+    },
+    {
+      "command": "npx playwright test tests/concept-room-route-shell.browser.spec.ts tests/linear-equation-symbolic-projection.browser.spec.ts tests/linear-equation-balance-projection.browser.spec.ts tests/concept-review-publication.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s26 adjacent browser regression",
+      "checkedAt": "2026-07-19T20:21:58.623Z",
+      "notes": "Legacy fallback, direct route navigation and rewind, KaTeX seek/rewind, SVG parity, no-JS Review, and browser Find pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s26 repository type safety",
+      "checkedAt": "2026-07-19T20:21:59.583Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s26 runtime and fallback boundaries",
+      "checkedAt": "2026-07-19T20:22:00.572Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-19T20:22:01.569Z",
+      "scope": "s26 production integration",
+      "notes": "Build passes with the pre-existing large-chunk warning only; the temporary ineffective dynamic-import warning was removed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s25 adds deterministic linear-equation Review publication from the validated published artifact plus verified shared trace: meaningful no-JS HTML, visible searchable checkpoint prose, server-rendered KaTeX, static balance SVG, TOC anchors, print rules, exact Explore-state URLs, and a runtime-validated immutable inspection capsule. The server serves this fallback at the canonical route, rejects checkpoint/math divergence, and preserves existing health, compile, and provider endpoints."
+    "summary": "s26 wires the canonical room through the versioned browser client to deterministic generation, exact intermediate and solution verification, the sole KP mapper, and lazy symbolic or balance rendering. Direct canonical and snapshot URLs mount; projection, checkpoint, Touch, and Review switches preserve shared frames and URLs; disposal is clean; no WebGL is required. Provider, Ask, invalid artifact, unavailable or unsupported capability, and renderer failures produce structured diagnostic codes while retaining searchable Review content. Existing concept, Review, and legacy browser routes remain intact."
   }
 }
