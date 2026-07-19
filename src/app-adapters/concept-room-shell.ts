@@ -10,6 +10,10 @@ import {
 } from "../kernel/public-api.ts";
 
 import { createRoomEffectCoordinator } from "./room-effect-coordinator.ts";
+import {
+  createConceptRoomScrollCoordinator,
+  type KpConceptRoomScrollCoordinator
+} from "./concept-room-scroll-coordinator.ts";
 import type {
   KpConceptRoomArtifactLike,
   KpConceptRoomCatalogEntryLike
@@ -82,7 +86,9 @@ export async function tryMountConceptRoomRoute(input: {
   const abortController = new AbortController();
   let runtimeSession: KpConceptRoomRuntimeSession | undefined;
   let startupDiagnostic: RoomDiagnostic | undefined;
-  const coordinator = createRoomEffectCoordinator({
+  let scrollCoordinator: KpConceptRoomScrollCoordinator | undefined;
+  let initialCheckpointToRestore = location.search.length > 0 ? state.checkpoint : undefined;
+  const roomEffects = createRoomEffectCoordinator({
     roomId: `concept.${entry.conceptId}`,
     getState: () => state,
     ports: {
@@ -100,6 +106,11 @@ export async function tryMountConceptRoomRoute(input: {
   const render = async () => {
     const request = ++renderRequest;
     const viewport = renderShell(input.root, artifact, state);
+    scrollCoordinator?.refresh();
+    if (initialCheckpointToRestore !== undefined) {
+      scrollCoordinator?.scrollTo(initialCheckpointToRestore, "auto");
+      initialCheckpointToRestore = undefined;
+    }
     if (state.mode === "ask") {
       renderArtifactReviewFallback(
         viewport,
@@ -136,7 +147,9 @@ export async function tryMountConceptRoomRoute(input: {
     if (link === null || !input.root.contains(link)) return;
     event.preventDefault();
     const nextRoute = parseConceptRoomRoute(link.getAttribute("href") ?? "");
+    let explicitCheckpoint: string | undefined;
     if (link.dataset["kpConceptCheckpointLink"] !== undefined) {
+      explicitCheckpoint = nextRoute.checkpoint;
       state = reduceConceptRoomState(state, {
         kind: "seek",
         checkpoint: nextRoute.checkpoint,
@@ -149,11 +162,14 @@ export async function tryMountConceptRoomRoute(input: {
       state = reduceConceptRoomState(state, { kind: "set-mode", mode: nextRoute.mode });
     }
     void render();
-    coordinator.start({
+    roomEffects.start({
       kind: "url",
       route: formatConceptRoomRoute(conceptRoomStateRoute(state)),
       strategy: "push"
     });
+    if (explicitCheckpoint !== undefined) {
+      scrollCoordinator?.scrollTo(explicitCheckpoint, "smooth");
+    }
   };
   const onPopState = () => {
     if (isDisposed) return;
@@ -162,10 +178,33 @@ export async function tryMountConceptRoomRoute(input: {
     if (currentEntry?.conceptId !== entry.conceptId) return;
     state = stateForLocation(entry, artifact, current, navigation);
     void render();
+    scrollCoordinator?.scrollTo(state.checkpoint, "auto");
   };
+  scrollCoordinator = createConceptRoomScrollCoordinator({
+    root: input.root,
+    checkpoints: artifact.manifest.checkpoints,
+    currentCheckpoint: () => state.checkpoint,
+    onCheckpoint(checkpoint) {
+      if (checkpoint.id === state.checkpoint || isDisposed) return;
+      state = reduceConceptRoomState(state, {
+        kind: "seek",
+        checkpoint: checkpoint.id,
+        timePermille: checkpoint.progressPermille
+      });
+      state = reduceConceptRoomState(state, {
+        kind: "set-focus",
+        focus: checkpoint.semanticRefs
+      });
+      void render();
+      roomEffects.start({
+        kind: "url",
+        route: formatConceptRoomRoute(conceptRoomStateRoute(state)),
+        strategy: "replace"
+      });
+    }
+  });
   input.root.addEventListener("click", onClick);
   const unsubscribe = navigation.subscribe(onPopState);
-  renderShell(input.root, artifact, state);
   if (input.runtime === undefined) {
     startupDiagnostic = diagnostic("renderer-unavailable", "No interactive runtime was registered.");
   } else {
@@ -176,6 +215,7 @@ export async function tryMountConceptRoomRoute(input: {
     }
   }
   await render();
+  if (location.search.length > 0) scrollCoordinator.scrollTo(state.checkpoint, "auto");
 
   return {
     conceptId: entry.conceptId,
@@ -186,7 +226,8 @@ export async function tryMountConceptRoomRoute(input: {
       renderRequest += 1;
       abortController.abort();
       runtimeSession?.dispose();
-      coordinator.dispose();
+      scrollCoordinator?.dispose();
+      roomEffects.dispose();
       unsubscribe();
       input.root.removeEventListener("click", onClick);
       input.root.replaceChildren();

@@ -138,13 +138,31 @@
     {
       "command": "npx playwright test tests/linear-equation-visual-shell.browser.spec.ts tests/concept-review-publication.browser.spec.ts --project=chromium",
       "status": "passed",
-      "checkedAt": "2026-07-19T21:27:19.650Z",
-      "scope": "s06 all checkpoint prose semantic links and no-JS browser Find"
+      "scope": "s06 all checkpoint prose semantic links and no-JS browser Find",
+      "checkedAt": "2026-07-19T21:27:19.650Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s07 scroll coordinator types and browser contracts",
+      "checkedAt": "2026-07-19T21:37:42.357Z"
+    },
+    {
+      "command": "npx playwright test tests/linear-equation-visual-shell.browser.spec.ts tests/concept-room-route-shell.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s07 passive scroll explicit navigation history deep-link reduced-motion and disposal cohort",
+      "checkedAt": "2026-07-19T21:37:43.810Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-19T21:37:45.309Z",
+      "scope": "s07 production build"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s06 keeps all four checkpoint explanations in DOM order with compact canonical TOC and explicit semantic phrase links."
+    "summary": "s07 maps ordinary document scrolling into the shared checkpoint clock with hysteresis, passive URL replacement, explicit push navigation, reduced-motion jumps, deep-link restoration, and disposal."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."
