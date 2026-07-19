@@ -12,3 +12,11 @@ export {
   type SemanticVersion
 } from "./handles.ts";
 
+export {
+  createConceptDraft,
+  draftConceptManifestSchema,
+  publishedConceptManifestSchema,
+  type KpConceptDraft,
+  type KpPublishedConceptManifest
+} from "./concept-manifest.ts";
+

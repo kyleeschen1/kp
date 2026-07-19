@@ -104,13 +104,14 @@
     {
       "id": "s11",
       "title": "Inference-first authoring handles",
-      "status": "in-progress",
-      "summary": "Implementing inference-first capability/provider handles and scoped declarative reference builders."
+      "summary": "Added literal-preserving capability/provider handles and scoped declarative reference builders with compile-time unavailable-handle errors, runtime forgery rejection, frozen values, and no required generics.",
+      "status": "complete"
     },
     {
       "id": "s12",
       "title": "Content manifest contract",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Defining mutable draft and immutable published concept-manifest schemas with closed references."
     },
     {
       "id": "s13",

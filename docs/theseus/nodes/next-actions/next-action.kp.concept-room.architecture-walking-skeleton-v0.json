@@ -296,12 +296,37 @@
     {
       "command": "npm run check:architecture",
       "status": "passed",
-      "checkedAt": "2026-07-19T18:14:58.977Z",
-      "scope": "standard"
+      "scope": "standard",
+      "checkedAt": "2026-07-19T18:14:58.977Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-manifest.test.ts tests/concept-authoring-handles.test.ts",
+      "status": "passed",
+      "scope": "s12 concept manifest contract",
+      "checkedAt": "2026-07-19T18:21:22.943Z",
+      "notes": "Mutable drafts, deeply immutable published manifests, closed references, and rejection of executable or style-owned fields."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s12 inference contract",
+      "checkedAt": "2026-07-19T18:21:23.938Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s12 repository type safety",
+      "checkedAt": "2026-07-19T18:21:24.906Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "checkedAt": "2026-07-19T18:21:25.874Z",
+      "scope": "s12 dependency boundary"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s11 introduced literal-preserving capability and provider handles plus scoped declarative reference builders with compile-time unavailable-handle errors, runtime forgery rejection, frozen values, and no required generics."
+    "summary": "s12 defines the schema-validated concept manifest boundary: ergonomic mutable drafts, deeply frozen published values, closed semantic references, publication integrity, routing/review/provenance metadata, and no executable callbacks or raw styling."
   }
 }

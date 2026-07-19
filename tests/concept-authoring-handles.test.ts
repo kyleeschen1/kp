@@ -33,6 +33,5 @@ test("authoring scopes reject forged unavailable handles at runtime", () => {
     kind: "capability-handle",
     id: "kp.equation",
     major: 2
-  } as typeof equation), /not available/);
+  } as unknown as typeof equation), /not available/);
 });
-
