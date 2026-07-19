@@ -110,13 +110,14 @@
     {
       "id": "s12",
       "title": "Content manifest contract",
-      "status": "in-progress",
-      "summary": "Defining mutable draft and immutable published concept-manifest schemas with closed references."
+      "summary": "Added inferred manifest schemas with mutable authoring drafts, deeply immutable published values, closed references, and publication integrity; focused and repository gates pass.",
+      "status": "complete"
     },
     {
       "id": "s13",
       "title": "Canonical content source",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Authoring the canonical plain 2x + 3 = 8 concept source against the manifest boundary."
     },
     {
       "id": "s14",

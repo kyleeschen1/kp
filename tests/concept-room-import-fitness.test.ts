@@ -52,3 +52,20 @@ test("architecture fitness rejects cross-boundary deep imports", () => {
   ]);
 });
 
+test("content can consume authoring only through its public API", () => {
+  assert.deepEqual(checkKpConceptRoomImports([
+    {
+      path: "content/mathematics/example/concept.ts",
+      source: 'import {} from "../../../src/authoring/handles.ts";'
+    }
+  ]), [
+    {
+      sourceFile: "content/mathematics/example/concept.ts",
+      specifier: "../../../src/authoring/handles.ts",
+      sourceBoundary: "content",
+      targetBoundary: "authoring",
+      kind: "cross-boundary-deep-import",
+      message: "content must import src/authoring/public-api.ts"
+    }
+  ]);
+});

@@ -1,4 +1,5 @@
 export type KpConceptRoomBoundaryId =
+  | "content"
   | "protocols"
   | "kernel"
   | "domains"
@@ -17,6 +18,12 @@ export interface KpConceptRoomBoundary {
 // This map declares the intended dependency graph before consumers move onto
 // it, so later enforcement can distinguish new architecture from legacy code.
 export const kpConceptRoomBoundaries = [
+  {
+    id: "content",
+    root: "content",
+    publicEntryPoint: "content/public-api.ts",
+    mayImport: ["authoring"]
+  },
   {
     id: "protocols",
     root: "protocols",
@@ -60,4 +67,3 @@ export const kpConceptRoomBoundaries = [
     mayImport: ["protocols", "kernel", "domains", "integrations", "projections"]
   }
 ] as const satisfies readonly KpConceptRoomBoundary[];
-

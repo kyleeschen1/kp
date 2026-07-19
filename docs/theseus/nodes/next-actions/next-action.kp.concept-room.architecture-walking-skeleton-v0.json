@@ -321,12 +321,31 @@
     {
       "command": "npm run check:architecture",
       "status": "passed",
-      "checkedAt": "2026-07-19T18:21:25.874Z",
-      "scope": "s12 dependency boundary"
+      "scope": "s12 dependency boundary",
+      "checkedAt": "2026-07-19T18:21:25.874Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/canonical-linear-equation-content.test.ts tests/concept-room-import-fitness.test.ts",
+      "status": "passed",
+      "scope": "s13 canonical content",
+      "checkedAt": "2026-07-19T18:25:01.739Z",
+      "notes": "Validated four checkpoints, typed capability/provider references, and absence of content-owned runtime presentation."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s13 content import boundary",
+      "checkedAt": "2026-07-19T18:25:02.742Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-19T18:25:03.702Z",
+      "scope": "s13 repository type safety"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s12 defines the schema-validated concept manifest boundary: ergonomic mutable drafts, deeply frozen published values, closed semantic references, publication integrity, routing/review/provenance metadata, and no executable callbacks or raw styling."
+    "summary": "s13 adds the sole canonical 2x + 3 = 8 content source with four declarative checkpoints, inferred capability/provider references, searchable Review copy, and a merge-blocking content-to-authoring public-API boundary."
   }
 }
