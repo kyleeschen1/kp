@@ -12,3 +12,13 @@ export {
   type KpRoomEffectPorts,
   type KpRoomEffectRequest
 } from "./room-effect-coordinator.ts";
+
+export {
+  applyConceptRoomThemeRoles,
+  conceptRoomStyleRoles,
+  defineConceptRoomTheme,
+  structuralConceptRoomTheme,
+  type KpConceptRoomRoleBinding,
+  type KpConceptRoomStyleRole,
+  type KpConceptRoomThemeShape
+} from "./concept-room-theme.ts";

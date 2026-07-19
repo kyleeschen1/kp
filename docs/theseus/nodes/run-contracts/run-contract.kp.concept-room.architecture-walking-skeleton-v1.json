@@ -176,13 +176,14 @@
     {
       "id": "s23",
       "title": "Plain symbolic projection",
-      "status": "in-progress",
-      "summary": "Projecting the shared exact trace into a minimal persistent-identity equation IR and KaTeX DOM adapter."
+      "summary": "Added a pure exact symbolic equation IR and thin KaTeX DOM interpreter with externally owned progress, exact fractions, accessible text, persistent term identity, and seek/rewind coverage.",
+      "status": "complete"
     },
     {
       "id": "s24",
       "title": "Placeholder balance projection and theme plumbing",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Mapping the same trace into an exemplar-local structural balance scene and shared typed theme roles without aesthetic polish."
     },
     {
       "id": "s25",

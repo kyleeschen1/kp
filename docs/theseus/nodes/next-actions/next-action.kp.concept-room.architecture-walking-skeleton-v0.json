@@ -568,12 +568,78 @@
     {
       "command": "npm run check:architecture",
       "status": "passed",
-      "checkedAt": "2026-07-19T19:11:43.794Z",
-      "scope": "s22 sole mapper dependency boundary"
+      "scope": "s22 sole mapper dependency boundary",
+      "checkedAt": "2026-07-19T19:11:43.794Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-equation-symbolic-projection.test.ts tests/linear-problem-trace-mapper.test.ts",
+      "status": "passed",
+      "scope": "s23 pure symbolic projection and identity continuity",
+      "checkedAt": "2026-07-19T19:23:10.917Z",
+      "notes": "Start, checkpoint, end, rewind, exact mathematics, immutability, generated mapping, and loss diagnostics pass."
+    },
+    {
+      "command": "npx playwright test tests/linear-equation-symbolic-projection.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s23 KaTeX browser adapter",
+      "checkedAt": "2026-07-19T19:23:12.010Z",
+      "notes": "Real KaTeX output, seek, rewind, reduced-motion structure, accessible text, and persistent semantic token identity pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s23 repository type safety",
+      "checkedAt": "2026-07-19T19:23:13.000Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s23 projection and adapter boundaries",
+      "checkedAt": "2026-07-19T19:23:13.976Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s23 production integration",
+      "checkedAt": "2026-07-19T19:23:14.948Z",
+      "notes": "Build passes with the pre-existing large-chunk warning only."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/linear-equation-balance-projection.test.ts tests/linear-equation-symbolic-projection.test.ts",
+      "status": "passed",
+      "scope": "s24 cross-projection structure",
+      "checkedAt": "2026-07-19T19:32:54.695Z",
+      "notes": "Shared frame sampling, exact fraction labels, persistent term identity, frozen IR, and two-sided operation invariants pass."
+    },
+    {
+      "command": "npx playwright test tests/linear-equation-balance-projection.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s24 structural SVG and theme parity",
+      "checkedAt": "2026-07-19T19:32:55.841Z",
+      "notes": "Static SVG, two balance sides, KaTeX graph labels, accessible naming, shared frame clock, semantic identity, typed style roles, and focus parity pass."
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s24 inferred theme and projection APIs",
+      "checkedAt": "2026-07-19T19:32:56.935Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s24 projection and adapter boundaries",
+      "checkedAt": "2026-07-19T19:32:57.906Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-19T19:32:58.909Z",
+      "scope": "s24 production integration",
+      "notes": "Typecheck and build pass with the pre-existing large-chunk warning only."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s22 adds a KP-owned exact linear-equation trace in the algebra domain and the sole protocol-to-KP mapper. It consumes schema-validated problem, step-verification, and solution-verification evidence; preserves stable semantic IDs, exact rationals, operations, assumptions, and provenance; works for generated equations; and surfaces discontinuity, rejection, provenance, operation, solution, and invariant loss explicitly without importing the provider engine."
+    "summary": "s24 adds one exemplar-local balance scene IR and static SVG adapter over the same shared trace sampler as the symbolic projection. Both views preserve term IDs, progress, equation frames, exact fractions, accessibility, and typed semantic theme and focus roles; operations are structurally paired across left and right. The slice intentionally defines no palette, font, animation, aesthetic geometry, or platform-wide balance contract."
   }
 }

@@ -7,21 +7,32 @@ import {
   type KpSymbolicEquationIr
 } from "../projections/public-api.ts";
 
+import {
+  applyConceptRoomThemeRoles,
+  structuralConceptRoomTheme,
+  type KpConceptRoomStyleRole,
+  type KpConceptRoomThemeShape
+} from "./concept-room-theme.ts";
+
 export interface KpSymbolicEquationController {
-  render(progressPermille: number): KpSymbolicEquationIr;
+  render(progressPermille: number, focusSemanticIds?: readonly string[]): KpSymbolicEquationIr;
   dispose(): void;
 }
 
 export function createSymbolicEquationController(
   root: HTMLElement,
-  trace: KpLinearEquationTrace
+  trace: KpLinearEquationTrace,
+  options: { readonly theme?: KpConceptRoomThemeShape } = {}
 ): KpSymbolicEquationController {
   let disposed = false;
   return {
-    render(progressPermille) {
+    render(progressPermille, focusSemanticIds = []) {
       if (disposed) throw new Error("Symbolic equation controller is disposed.");
       const projection = projectLinearEquationTrace(trace, progressPermille);
-      renderSymbolicEquation(root, projection);
+      renderSymbolicEquation(root, projection, {
+        focusSemanticIds,
+        theme: options.theme ?? structuralConceptRoomTheme
+      });
       return projection;
     },
     dispose() {
@@ -32,7 +43,16 @@ export function createSymbolicEquationController(
   };
 }
 
-export function renderSymbolicEquation(root: HTMLElement, projection: KpSymbolicEquationIr): void {
+export function renderSymbolicEquation(
+  root: HTMLElement,
+  projection: KpSymbolicEquationIr,
+  options: {
+    readonly focusSemanticIds?: readonly string[];
+    readonly theme?: KpConceptRoomThemeShape;
+  } = {}
+): void {
+  const focusSemanticIds = new Set(options.focusSemanticIds ?? []);
+  const theme = options.theme ?? structuralConceptRoomTheme;
   const equation = document.createElement("div");
   equation.dataset["kpSymbolicEquation"] = "true";
   equation.dataset["kpTraceId"] = projection.traceId;
@@ -41,12 +61,18 @@ export function renderSymbolicEquation(root: HTMLElement, projection: KpSymbolic
   equation.dataset["kpProgressPermille"] = String(projection.progressPermille);
   equation.setAttribute("role", "math");
   equation.setAttribute("aria-label", projection.accessibleText);
+  applyConceptRoomThemeRoles(equation, ["equation.expression"], theme);
   projection.tokens.forEach((token) => {
     const span = document.createElement("span");
     span.dataset["kpSymbolicToken"] = token.id;
     span.dataset["kpSemanticId"] = token.semanticId;
     span.dataset["kpSymbolicTokenKind"] = token.kind;
     span.dataset["kpSymbolicSide"] = token.side;
+    const roles: KpConceptRoomStyleRole[] = [
+      token.kind === "operator" ? "equation.operation" : "equation.expression"
+    ];
+    if (focusSemanticIds.has(token.semanticId)) roles.push("focus.primary");
+    applyConceptRoomThemeRoles(span, roles, theme);
     katex.render(token.latex, span, {
       displayMode: false,
       output: "htmlAndMathml",

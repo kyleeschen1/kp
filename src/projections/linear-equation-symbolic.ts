@@ -5,6 +5,8 @@ import type {
   KpLinearExpression
 } from "../../domains/public-api.ts";
 
+import { sampleLinearEquationTrace } from "./linear-equation-frame.ts";
+
 export interface KpSymbolicEquationToken {
   readonly id: string;
   readonly semanticId: string;
@@ -29,15 +31,8 @@ export function projectLinearEquationTrace(
   trace: KpLinearEquationTrace,
   progressPermille: number
 ): KpSymbolicEquationIr {
-  if (!Number.isInteger(progressPermille) || progressPermille < 0 || progressPermille > 1000) {
-    throw new RangeError("Symbolic projection progress must be an integer from 0 through 1000.");
-  }
-  if (trace.frames.length === 0) throw new Error("Cannot project an empty linear-equation trace.");
-  const frameIndex = Math.min(
-    trace.frames.length - 1,
-    Math.floor(progressPermille * trace.frames.length / 1001)
-  );
-  return projectLinearEquationFrame(trace, trace.frames[frameIndex]!, progressPermille);
+  const sample = sampleLinearEquationTrace(trace, progressPermille);
+  return projectLinearEquationFrame(trace, sample.frame, progressPermille);
 }
 
 export function projectLinearEquationFrame(
