@@ -91,3 +91,19 @@ test("persistent continuants map source and target token IDs without glyph infer
   assert.equal(equality?.continuity, "persistent");
   assert.equal(transition?.lineage.some((item) => item.continuantId.includes("latex")), false);
 });
+
+test("subtract-both-sides presentation derives paired exact operands and transformed material", () => {
+  const transition = projectLinearEquationTrace(createCanonicalConceptRoomTrace(), 250).transition!;
+  assert.equal(transition.operationApplications[0].kind, "subtract-both-sides");
+  assert.deepEqual(transition.operationApplications.map((application) => application.operand), [
+    { numerator: "3", denominator: "1" },
+    { numerator: "3", denominator: "1" }
+  ]);
+  assert.deepEqual(transition.operationApplications.map((application) => application.operatorLatex), ["-", "-"]);
+  assert.equal(transition.expandedLayout?.accessibleText, "2 times x plus 3 minus 3 equals 8 minus 3");
+  assert.equal(transition.expandedLayout?.tokens.filter((token) =>
+    token.semanticId === "operation.subtract-three"
+  ).length, 4);
+  assert.equal(transition.lineage.find((item) => item.continuantId === "term.two-x")?.continuity, "persistent");
+  assert.equal(transition.lineage.find((item) => item.continuantId === "term.eight")?.continuity, "transformed");
+});

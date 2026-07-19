@@ -28,7 +28,7 @@ export interface KpSymbolicEquationLayoutIr {
 export interface KpSymbolicTokenLineageIr {
   readonly continuantId: string;
   readonly semanticId: string;
-  readonly continuity: "persistent" | "introduced" | "retired";
+  readonly continuity: "persistent" | "transformed" | "introduced" | "retired";
   readonly sourceTokenId?: string;
   readonly targetTokenId?: string;
 }
@@ -41,6 +41,11 @@ export interface KpSymbolicOperationApplicationIr {
   readonly kind: KpLinearEquationOperation["kind"];
   readonly sourceOperation: string;
   readonly classification: KpLinearEquationOperation["classification"];
+  readonly operatorLatex?: string;
+  readonly operatorSpoken?: string;
+  readonly operand?: KpExactRational;
+  readonly operatorTokenId?: string;
+  readonly operandTokenId?: string;
 }
 
 export type KpSymbolicTransitionPhase =
@@ -60,6 +65,7 @@ export interface KpSymbolicEquationTransitionIr {
   readonly phaseProgressPermille: number;
   readonly sourceLayout: KpSymbolicEquationLayoutIr;
   readonly targetLayout: KpSymbolicEquationLayoutIr;
+  readonly expandedLayout?: KpSymbolicEquationLayoutIr;
   readonly lineage: readonly KpSymbolicTokenLineageIr[];
   readonly operationApplications: readonly [
     KpSymbolicOperationApplicationIr,
@@ -214,6 +220,8 @@ function projectTransition(
   ));
   const sourceLayout = layoutForFrame(fromFrame);
   const targetLayout = layoutForFrame(toFrame);
+  const operationApplications = operationApplicationIr(operation, fromFrame, toFrame);
+  const expandedLayout = expandedOperationLayout(fromFrame, sourceLayout, operationApplications);
   const phase = transitionPhase(transitionProgress);
   return {
     operationId: operation.id,
@@ -225,17 +233,83 @@ function projectTransition(
     phaseProgressPermille: phase.progressPermille,
     sourceLayout,
     targetLayout,
+    ...(expandedLayout === undefined ? {} : { expandedLayout }),
     lineage: tokenLineage(sourceLayout.tokens, targetLayout.tokens),
-    operationApplications: ["left", "right"].map((side) => ({
-      id: `${operation.id}.${side}`,
+    operationApplications
+  };
+}
+
+function operationApplicationIr(
+  operation: KpLinearEquationOperation,
+  fromFrame: KpLinearEquationFrame,
+  toFrame: KpLinearEquationFrame
+): readonly [KpSymbolicOperationApplicationIr, KpSymbolicOperationApplicationIr] {
+  const operand = translationOperand(operation, fromFrame, toFrame);
+  return ["left", "right"].map((side) => {
+    const id = `${operation.id}.${side}`;
+    return {
+      id,
       operationId: operation.id,
       operationSemanticId: operation.semanticId,
       side,
       kind: operation.kind,
       sourceOperation: operation.sourceOperation,
-      classification: operation.classification
-    })) as [KpSymbolicOperationApplicationIr, KpSymbolicOperationApplicationIr]
-  };
+      classification: operation.classification,
+      ...(operand === undefined ? {} : {
+        operatorLatex: operation.kind === "subtract-both-sides" ? "-" : "+",
+        operatorSpoken: operation.kind === "subtract-both-sides" ? "minus" : "plus",
+        operand,
+        operatorTokenId: `${id}.operator`,
+        operandTokenId: `${id}.operand`
+      })
+    };
+  }) as [KpSymbolicOperationApplicationIr, KpSymbolicOperationApplicationIr];
+}
+
+function translationOperand(
+  operation: KpLinearEquationOperation,
+  fromFrame: KpLinearEquationFrame,
+  toFrame: KpLinearEquationFrame
+): KpExactRational | undefined {
+  if (operation.kind !== "subtract-both-sides" && operation.kind !== "add-both-sides") return undefined;
+  const change = subtractRational(toFrame.equation.left.constant, fromFrame.equation.left.constant);
+  return absolute(change);
+}
+
+function expandedOperationLayout(
+  frame: KpLinearEquationFrame,
+  source: KpSymbolicEquationLayoutIr,
+  applications: readonly [KpSymbolicOperationApplicationIr, KpSymbolicOperationApplicationIr]
+): KpSymbolicEquationLayoutIr | undefined {
+  if (applications.some((application) => application.operand === undefined)) return undefined;
+  const relationIndex = source.tokens.findIndex((token) => token.side === "relation");
+  const left = source.tokens.slice(0, relationIndex);
+  const relation = source.tokens[relationIndex]!;
+  const right = source.tokens.slice(relationIndex + 1);
+  const applicationTokens = (application: KpSymbolicOperationApplicationIr): KpSymbolicEquationToken[] => [{
+    id: application.operatorTokenId!,
+    continuantId: `${application.operationSemanticId}.${application.side}.operator`,
+    semanticId: application.operationSemanticId,
+    kind: "operator",
+    side: application.side,
+    latex: application.operatorLatex!,
+    spoken: application.operatorSpoken!
+  }, {
+    id: application.operandTokenId!,
+    continuantId: `${application.operationSemanticId}.${application.side}.operand`,
+    semanticId: application.operationSemanticId,
+    kind: "term",
+    side: application.side,
+    latex: rationalLatex(application.operand!),
+    spoken: rationalSpoken(application.operand!)
+  }];
+  return equationLayout(frame, [
+    ...left,
+    ...applicationTokens(applications[0]),
+    relation,
+    ...right,
+    ...applicationTokens(applications[1])
+  ]);
 }
 
 function equalOperationWindows(
@@ -293,6 +367,7 @@ function tokenLineage(
   source: readonly KpSymbolicEquationToken[],
   target: readonly KpSymbolicEquationToken[]
 ): KpSymbolicTokenLineageIr[] {
+  // A semantic slot can survive an operation while its displayed value changes; motion must not imply material identity.
   const sourceById = new Map(source.map((token) => [token.continuantId, token]));
   const targetById = new Map(target.map((token) => [token.continuantId, token]));
   return [...new Set([...sourceById.keys(), ...targetById.keys()])].map((continuantId) => {
@@ -302,7 +377,7 @@ function tokenLineage(
       continuantId,
       semanticId: targetToken?.semanticId ?? sourceToken!.semanticId,
       continuity: sourceToken !== undefined && targetToken !== undefined
-        ? "persistent" as const
+        ? sourceToken.latex === targetToken.latex ? "persistent" as const : "transformed" as const
         : sourceToken === undefined ? "introduced" as const : "retired" as const,
       ...(sourceToken === undefined ? {} : { sourceTokenId: sourceToken.id }),
       ...(targetToken === undefined ? {} : { targetTokenId: targetToken.id })
@@ -368,6 +443,25 @@ function absolute(value: KpExactRational): KpExactRational {
 
 function isZero(value: KpExactRational): boolean {
   return value.numerator === "0";
+}
+
+function subtractRational(left: KpExactRational, right: KpExactRational): KpExactRational {
+  const numerator = BigInt(left.numerator) * BigInt(right.denominator) -
+    BigInt(right.numerator) * BigInt(left.denominator);
+  const denominator = BigInt(left.denominator) * BigInt(right.denominator);
+  const divisor = greatestCommonDivisor(numerator, denominator);
+  const sign = denominator / divisor < 0n ? -1n : 1n;
+  return {
+    numerator: String(numerator / divisor * sign),
+    denominator: String(denominator / divisor * sign)
+  };
+}
+
+function greatestCommonDivisor(left: bigint, right: bigint): bigint {
+  let a = left < 0n ? -left : left;
+  let b = right < 0n ? -right : right;
+  while (b !== 0n) [a, b] = [b, a % b];
+  return a === 0n ? 1n : a;
 }
 
 type DeepReadonly<Value> = Value extends readonly unknown[]

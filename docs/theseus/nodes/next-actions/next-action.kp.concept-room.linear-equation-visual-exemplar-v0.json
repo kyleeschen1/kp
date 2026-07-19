@@ -216,13 +216,31 @@
     {
       "command": "npm run build",
       "status": "passed",
-      "checkedAt": "2026-07-19T22:08:53.168Z",
-      "scope": "s11 measured symbolic stage production build"
+      "scope": "s11 measured symbolic stage production build",
+      "checkedAt": "2026-07-19T22:08:53.168Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s12 full repository suite: 1527 tests, architecture, inference, and catalog gates",
+      "checkedAt": "2026-07-19T22:30:15.814Z"
+    },
+    {
+      "command": "npx playwright test tests/linear-equation-symbolic-stage.browser.spec.ts tests/linear-equation-visual-shell.browser.spec.ts",
+      "status": "passed",
+      "scope": "s12 named choreography, seek and rewind, reduced motion, clipping, and route preservation",
+      "checkedAt": "2026-07-19T22:30:17.912Z"
+    },
+    {
+      "command": "npm run build && npm run smoke:linear-equation",
+      "status": "passed",
+      "checkedAt": "2026-07-19T22:30:19.483Z",
+      "scope": "s12 production build and concept-room smoke"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s11 adds a route-local measured DOM and KaTeX motion stage with font gating, explicit overlay ownership, resize invalidation, stale-render safety, reduced-motion fallback, native endpoint settlement, and no WebGL canvas."
+    "summary": "s12 complete: exact trace-derived paired subtraction, expanded KaTeX layout, token-owned persistent motion, meet-and-collapse cancellation, causal right-side derivation, deterministic seek/rewind, reduced-motion native fallback, and repaired DOM-aware inference gate."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."
