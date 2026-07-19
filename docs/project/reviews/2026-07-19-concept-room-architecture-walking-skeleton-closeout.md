@@ -1,9 +1,12 @@
 # Concept Room Architecture Walking Skeleton Closeout
 
 Date: 2026-07-19
-Status: architecture review required
+Status: architecture accepted on 2026-07-19
 Run contract: `run-contract.kp.concept-room.architecture-walking-skeleton-v1`
 Canonical plan: `docs/project/reviews/2026-07-19-linear-equation-architecture-stabilization-proposal.md`
+
+Architecture review decision:
+`docs/project/decisions/2026-07-19-kp-concept-room-architecture-review.md`
 
 ## Outcome
 
@@ -115,10 +118,10 @@ needed to establish the new path.
 - The existing seven legacy exceptions and the pre-existing production
   large-chunk warning remain. Neither was widened by the concept-room work.
 
-## Mandatory Stop And Review Questions
+## Resolved Stop And Review Questions
 
-No visual-polish or generalization work is authorized by this closeout. Human
-architecture review should decide:
+The mandatory stop was honored. Human review accepted the recommended answer to
+all four questions on 2026-07-19:
 
 1. Is the provider-input placement acceptable for the first exemplar, with a
    second-concept gate before formalizing it?
@@ -130,3 +133,8 @@ architecture review should decide:
 4. If the boundaries are accepted, should the next plan polish exactly this one
    linear-equation exemplar—without generalizing—under the exemplar-first visual
    review protocol?
+
+The accepted answers are yes: retain the first-exemplar seams, accept the
+searchable fallback at this stage, and propose one visual-exemplar loop. This
+acceptance authorizes planning only; implementation still requires approval of
+the new loop, and visual work must stop for human review before generalization.

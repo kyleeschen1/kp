@@ -2,8 +2,9 @@
 
 Status: active
 Last Updated: 2026-07-19
-Current Next Action: Execute the approved 27-slice concept-room architecture
-stabilization loop; stop for architecture review before visual polish.
+Current Next Action: Propose a bounded visual-exemplar loop for the accepted
+linear-equation concept room; stop for approval before implementation and stop
+again for human visual review before generalization.
 
 ## Goal
 
@@ -20,6 +21,12 @@ then perfect traditional symbolic manipulation and its optional synchronized
 balance projection. The missing-middle area model follows as the second simple
 front-door concept. This ordering is recorded in
 `decisions/2026-07-19-kp-concept-room-architecture.md`.
+
+The walking skeleton is now complete and its architecture is accepted. The
+review preserves the exemplar-local provider input and route composition seams,
+accepts the current searchable browser fallback, and authorizes planning one
+polished `2x + 3 = 8` exemplar without generalization. The decision is recorded
+in `decisions/2026-07-19-kp-concept-room-architecture-review.md`.
 
 FTC remains a valuable reviewable artifact, but its human review and the BFS,
 economics, programming, and physics breadth sequence are parked until the
@@ -38,6 +45,18 @@ and a later net-change scene. The module is available in the editor through an
 on-demand launcher and directly at `?view=ftc-tutorial`.
 
 ## Delivered Reviewable Checkpoint
+
+The concept-room architecture checkpoint additionally delivers:
+
+- independently versioned declarative content and generated discovery;
+- a neutral exact-rational provider protocol and independently compiled
+  generator/verifier;
+- one KP anti-corruption trace with shared symbolic and balance projections;
+- deterministic room state, canonical URLs, searchable Review publication, and
+  structured fallbacks;
+- an accepted architecture boundary for the first polished exemplar.
+
+The retained FTC checkpoint delivers:
 
 - versioned module, scene, checkpoint, view, claim graph, and separate scene
   graph contracts;
@@ -97,6 +116,8 @@ is a new combination of tutorial, graph, equation, and interaction vocabulary.
 
 ## Links
 
+- `docs/project/decisions/2026-07-19-kp-concept-room-architecture-review.md`
+- `docs/project/reviews/2026-07-19-concept-room-architecture-walking-skeleton-closeout.md`
 - `docs/project/decisions/2026-07-19-kp-concept-room-architecture.md`
 - `docs/project/reviews/2026-07-19-linear-equation-architecture-stabilization-proposal.md`
 - `docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md`

@@ -50,17 +50,23 @@ walking skeleton, a polished symbolic exemplar, an optional balance
 projection, and the missing-middle area model. FTC remains retained evidence;
 BFS and later breadth are parked rather than discarded.
 
+The walking skeleton completed its 27-slice loop and passed architecture review
+on 2026-07-19. The accepted review decisions are recorded in
+`decisions/2026-07-19-kp-concept-room-architecture-review.md`. The provider
+input and content-specific composition seams remain intentionally local until a
+second concept supplies evidence for promotion.
+
 ## Active Focus
 
-**Execute the approved concept-room architecture stabilization loop.** The
-governed semantic animation grammar, semantic-material-
-motion performance loop, novelty/maturity governance, and reviewable FTC
-tutorial loop are complete. The next implementation candidate is a deliberately
-plain `2x + 3 = 8` walking skeleton that proves independently versioned content,
-neutral protocols, a headless provider, one KP anti-corruption mapper,
-canonical room state and URLs, generated discovery, plain synchronized
-projections, and static Review fallback. The 27-slice loop was approved on
-2026-07-19 and must stop for architecture review before visual polish.
+**Propose one polished linear-equation exemplar.** The architecture walking
+skeleton is complete and accepted. The next candidate is a bounded visual loop
+for exactly the `2x + 3 = 8` concept room: establish the canonical visual
+reference, house typography and color roles, consistent focus affordances,
+traditional symbolic choreography, synchronized algebra/balance motion,
+hover-linked prose, and frictionless Explore/Review navigation. The proposal
+must preserve the verified semantic trace, URLs, publication, provider, and
+failure boundaries and must stop for human visual review before generalizing
+any style, motion, projection, or interaction contract.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
