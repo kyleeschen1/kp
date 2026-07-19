@@ -5,6 +5,13 @@
   "status": "deferred",
   "domain": "kp.tutorial",
   "summary": "FTC remains retained reviewable evidence but is no longer the immediate front-door product lane.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-18-reviewable-ftc-tutorial-loop-closeout.md",
+      "summary": "Closeout defining the delivered reviewable FTC checkpoint and the remaining human-review boundary."
+    }
+  ],
   "dependsOn": {
     "required": [
       "next-action.kp.tutorial.ftc-gold-exemplar-v0"

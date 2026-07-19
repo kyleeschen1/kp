@@ -2,16 +2,24 @@
   "id": "next-action.kp.tutorial.physics-work-energy-v0",
   "kind": "next-action",
   "title": "Build Work Energy Physics Derivation",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp.tutorial",
-  "summary": "Synchronize a dimensionally valid symbolic derivation with force diagrams, vector and coordinate-frame correspondence, and a force-position graph.",
+  "summary": "Parked while KP proves the simple front-door concept-room architecture and product language.",
   "sourceRefs": [
-    { "kind": "file", "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md", "summary": "Physics derivation milestone and exit condition." }
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md",
+      "summary": "Physics derivation milestone and exit condition."
+    }
   ],
   "dependsOn": {
-    "required": ["next-action.kp.tutorial.economics-supply-demand-lab-v0"]
+    "required": [
+      "next-action.kp.tutorial.economics-supply-demand-lab-v0"
+    ]
   },
-  "affects": ["milestone.kp.cross-domain-tutorial-platform-v0"],
+  "affects": [
+    "milestone.kp.cross-domain-tutorial-platform-v0"
+  ],
   "verification": [
     "Symbolic, assumption, and dimensional-validity tests",
     "Equation/diagram/graph correspondence tests",
@@ -19,5 +27,8 @@
   ],
   "expectedLearning": [
     "Whether deterministic units and vector ports can support explanatory physics without a general physics engine."
+  ],
+  "revisitWhen": [
+    "The linear-equation architecture, symbolic exemplar, balance projection, and missing-middle demo have passed their review checkpoints."
   ]
 }
