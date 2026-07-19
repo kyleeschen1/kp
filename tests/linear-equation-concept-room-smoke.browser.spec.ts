@@ -84,7 +84,11 @@ test("provider, Ask, artifact, capability, and renderer failures preserve Review
     "data-kp-diagnostic-code", "provider-unavailable"
   );
   await expect(viewport).toContainText("Subtract 3 from both sides");
-  await page.getByRole("link", { name: "Ask", exact: true }).click();
+  const touchHref = await page.getByRole("link", { name: "Touch", exact: true }).getAttribute("href");
+  if (touchHref === null) throw new Error("Expected a canonical Touch URL.");
+  const askUrl = new URL(touchHref, page.url());
+  askUrl.searchParams.set("mode", "ask");
+  await page.goto(askUrl.toString());
   await expect(viewport.locator("[data-kp-concept-review-fallback]")).toHaveAttribute(
     "data-kp-diagnostic-code", "ask-unavailable"
   );

@@ -14,6 +14,11 @@ import {
   createConceptRoomScrollCoordinator,
   type KpConceptRoomScrollCoordinator
 } from "./concept-room-scroll-coordinator.ts";
+import {
+  createConceptRoomPlaybackController,
+  type KpConceptRoomPlaybackController,
+  type KpConceptRoomPlaybackSeekSource
+} from "./concept-room-playback-controller.ts";
 import type {
   KpConceptRoomArtifactLike,
   KpConceptRoomCatalogEntryLike
@@ -87,6 +92,7 @@ export async function tryMountConceptRoomRoute(input: {
   let runtimeSession: KpConceptRoomRuntimeSession | undefined;
   let startupDiagnostic: RoomDiagnostic | undefined;
   let scrollCoordinator: KpConceptRoomScrollCoordinator | undefined;
+  let playbackController: KpConceptRoomPlaybackController | undefined;
   let initialCheckpointToRestore = location.search.length > 0 ? state.checkpoint : undefined;
   const roomEffects = createRoomEffectCoordinator({
     roomId: `concept.${entry.conceptId}`,
@@ -103,13 +109,19 @@ export async function tryMountConceptRoomRoute(input: {
     onApplied: () => undefined
   });
 
-  const render = async () => {
+  const render = async (options: { readonly preserveShell?: boolean } = {}) => {
     const request = ++renderRequest;
-    const viewport = renderShell(input.root, artifact, state);
-    scrollCoordinator?.refresh();
-    if (initialCheckpointToRestore !== undefined) {
-      scrollCoordinator?.scrollTo(initialCheckpointToRestore, "auto");
-      initialCheckpointToRestore = undefined;
+    const playing = playbackController?.playing ?? false;
+    const preservedViewport = options.preserveShell
+      ? updateRenderedShell(input.root, artifact, state, playing)
+      : undefined;
+    const viewport = preservedViewport ?? renderShell(input.root, artifact, state, playing);
+    if (preservedViewport === undefined) {
+      scrollCoordinator?.refresh();
+      if (initialCheckpointToRestore !== undefined) {
+        scrollCoordinator?.scrollTo(initialCheckpointToRestore, "auto");
+        initialCheckpointToRestore = undefined;
+      }
     }
     if (state.mode === "ask") {
       renderArtifactReviewFallback(
@@ -144,32 +156,51 @@ export async function tryMountConceptRoomRoute(input: {
   const onClick = (event: Event) => {
     if (!(event.target instanceof Element)) return;
     const link = event.target.closest<HTMLAnchorElement>("a[data-kp-concept-room-link]");
-    if (link === null || !input.root.contains(link)) return;
-    event.preventDefault();
-    const nextRoute = parseConceptRoomRoute(link.getAttribute("href") ?? "");
-    let explicitCheckpoint: string | undefined;
-    if (link.dataset["kpConceptCheckpointLink"] !== undefined) {
-      explicitCheckpoint = nextRoute.checkpoint;
-      state = reduceConceptRoomState(state, {
-        kind: "seek",
-        checkpoint: nextRoute.checkpoint,
-        timePermille: nextRoute.timePermille
+    if (link !== null && input.root.contains(link)) {
+      event.preventDefault();
+      const nextRoute = parseConceptRoomRoute(link.getAttribute("href") ?? "");
+      let explicitCheckpoint: string | undefined;
+      if (link.dataset["kpConceptCheckpointLink"] !== undefined) {
+        explicitCheckpoint = nextRoute.checkpoint;
+        playbackController?.pause();
+        state = reduceConceptRoomState(state, {
+          kind: "seek",
+          checkpoint: nextRoute.checkpoint,
+          timePermille: nextRoute.timePermille
+        });
+        state = reduceConceptRoomState(state, { kind: "set-focus", focus: nextRoute.focus });
+      } else if (link.dataset["kpConceptProjectionLink"] !== undefined) {
+        state = reduceConceptRoomState(state, { kind: "set-projection", projection: nextRoute.projection });
+      } else if (link.dataset["kpConceptModeLink"] !== undefined) {
+        state = reduceConceptRoomState(state, { kind: "set-mode", mode: nextRoute.mode });
+      }
+      void render();
+      roomEffects.start({
+        kind: "url",
+        route: formatConceptRoomRoute(conceptRoomStateRoute(state)),
+        strategy: "push"
       });
-      state = reduceConceptRoomState(state, { kind: "set-focus", focus: nextRoute.focus });
-    } else if (link.dataset["kpConceptProjectionLink"] !== undefined) {
-      state = reduceConceptRoomState(state, { kind: "set-projection", projection: nextRoute.projection });
-    } else if (link.dataset["kpConceptModeLink"] !== undefined) {
-      state = reduceConceptRoomState(state, { kind: "set-mode", mode: nextRoute.mode });
+      if (explicitCheckpoint !== undefined) {
+        scrollCoordinator?.scrollTo(explicitCheckpoint, "smooth");
+      }
+      return;
     }
-    void render();
-    roomEffects.start({
-      kind: "url",
-      route: formatConceptRoomRoute(conceptRoomStateRoute(state)),
-      strategy: "push"
-    });
-    if (explicitCheckpoint !== undefined) {
-      scrollCoordinator?.scrollTo(explicitCheckpoint, "smooth");
+    const button = event.target.closest<HTMLButtonElement>("button[data-kp-concept-playback-action]");
+    if (button === null || !input.root.contains(button)) return;
+    switch (button.dataset["kpConceptPlaybackAction"]) {
+      case "play-pause":
+        if (playbackController?.playing) playbackController.pause();
+        else playbackController?.play();
+        return;
+      case "replay": playbackController?.replay(); return;
+      case "previous": playbackController?.previous(); return;
+      case "next": playbackController?.next(); return;
     }
+  };
+  const onInput = (event: Event) => {
+    if (!(event.target instanceof HTMLInputElement) ||
+      event.target.dataset["kpConceptPlaybackAction"] !== "scrub") return;
+    playbackController?.scrub(event.target.valueAsNumber);
   };
   const onPopState = () => {
     if (isDisposed) return;
@@ -203,7 +234,41 @@ export async function tryMountConceptRoomRoute(input: {
       });
     }
   });
+  playbackController = createConceptRoomPlaybackController({
+    checkpointTimes: artifact.manifest.checkpoints.map((checkpoint) => checkpoint.progressPermille),
+    durationMs: exemplarPlaybackDurationMs(),
+    getTimePermille: () => state.timePermille,
+    onSeek(timePermille, source) {
+      if (isDisposed) return;
+      applyPlaybackSeek(timePermille, source);
+    },
+    onPlayingChange(playing) {
+      syncPlaybackControls(input.root, playing);
+    }
+  });
+  function applyPlaybackSeek(timePermille: number, source: KpConceptRoomPlaybackSeekSource): void {
+    const checkpoint = checkpointAtTime(artifact, timePermille);
+    const checkpointChanged = checkpoint.id !== state.checkpoint;
+    state = reduceConceptRoomState(state, {
+      kind: "seek",
+      checkpoint: checkpoint.id,
+      timePermille
+    });
+    if (checkpointChanged) {
+      state = reduceConceptRoomState(state, { kind: "set-focus", focus: checkpoint.semanticRefs });
+    }
+    void render({ preserveShell: source === "playback" });
+    if (checkpointChanged) {
+      scrollCoordinator?.scrollTo(checkpoint.id, source === "scrub" ? "auto" : "smooth");
+    }
+    roomEffects.start({
+      kind: "url",
+      route: formatConceptRoomRoute(conceptRoomStateRoute(state)),
+      strategy: source === "step" || source === "replay" ? "push" : "replace"
+    });
+  }
   input.root.addEventListener("click", onClick);
+  input.root.addEventListener("input", onInput);
   const unsubscribe = navigation.subscribe(onPopState);
   if (input.runtime === undefined) {
     startupDiagnostic = diagnostic("renderer-unavailable", "No interactive runtime was registered.");
@@ -226,10 +291,12 @@ export async function tryMountConceptRoomRoute(input: {
       renderRequest += 1;
       abortController.abort();
       runtimeSession?.dispose();
+      playbackController?.dispose();
       scrollCoordinator?.dispose();
       roomEffects.dispose();
       unsubscribe();
       input.root.removeEventListener("click", onClick);
+      input.root.removeEventListener("input", onInput);
       input.root.replaceChildren();
     }
   };
@@ -290,7 +357,8 @@ function providerRouteState(
 function renderShell(
   root: HTMLElement,
   artifact: KpConceptRoomArtifactLike,
-  state: KpConceptRoomState
+  state: KpConceptRoomState,
+  playing: boolean
 ): HTMLElement {
   const checkpoint = artifact.manifest.checkpoints.find((item) => item.id === state.checkpoint);
   if (checkpoint === undefined) throw new Error(`Unknown concept checkpoint ${state.checkpoint}.`);
@@ -300,6 +368,7 @@ function renderShell(
   main.dataset["kpConceptVersion"] = artifact.manifest.version;
   main.dataset["kpConceptCheckpoint"] = checkpoint.id;
   main.dataset["kpConceptProjection"] = state.projection;
+  main.dataset["kpConceptPlaying"] = String(playing);
   applyConceptRoomTheme(main, linearEquationExemplarTheme);
 
   const header = document.createElement("header");
@@ -364,7 +433,7 @@ function renderShell(
     if (projection === state.projection) link.setAttribute("aria-current", "page");
     viewControls.append(link);
   });
-  artifact.manifest.modes.forEach((mode) => {
+  artifact.manifest.modes.filter((mode) => mode !== "ask").forEach((mode) => {
     const link = document.createElement("a");
     link.dataset["kpConceptRoomLink"] = "mode";
     link.dataset["kpConceptModeLink"] = mode;
@@ -373,13 +442,16 @@ function renderShell(
     if (mode === state.mode) link.setAttribute("aria-current", "page");
     viewControls.append(link);
   });
+  const controls = document.createElement("footer");
+  controls.dataset["kpConceptControls"] = "true";
+  controls.append(playbackControls(state, playing), viewControls);
   const viewport = document.createElement("section");
   viewport.dataset["kpConceptViewport"] = "true";
   viewport.setAttribute("aria-label", "Concept view");
   const visualField = document.createElement("section");
   visualField.dataset["kpConceptVisualField"] = "true";
   visualField.setAttribute("aria-label", "Synchronized concept stage");
-  visualField.append(viewport);
+  visualField.append(viewport, controls);
   const copyRail = document.createElement("aside");
   copyRail.dataset["kpConceptCopyRail"] = "true";
   copyRail.setAttribute("aria-label", "Concept explanation");
@@ -387,15 +459,126 @@ function renderShell(
   const stage = document.createElement("div");
   stage.dataset["kpConceptRoomStage"] = "true";
   stage.append(visualField, copyRail);
-  const controls = document.createElement("footer");
-  controls.dataset["kpConceptControls"] = "true";
-  controls.append(viewControls);
-  main.append(header, stage, controls);
+  main.append(header, stage);
   const style = document.createElement("style");
   style.dataset["kpLinearEquationExemplarStyle"] = "true";
   style.textContent = linearEquationExemplarCss();
   root.replaceChildren(style, main);
   return viewport;
+}
+
+function updateRenderedShell(
+  root: HTMLElement,
+  artifact: KpConceptRoomArtifactLike,
+  state: KpConceptRoomState,
+  playing: boolean
+): HTMLElement | undefined {
+  const shell = root.querySelector<HTMLElement>("[data-kp-concept-room-shell]");
+  const viewport = shell?.querySelector<HTMLElement>("[data-kp-concept-viewport]");
+  if (shell === null || shell === undefined || viewport === null || viewport === undefined) return undefined;
+  shell.dataset["kpConceptCheckpoint"] = state.checkpoint;
+  shell.dataset["kpConceptProjection"] = state.projection;
+  shell.dataset["kpConceptPlaying"] = String(playing);
+  const route = conceptRoomStateRoute(state);
+  artifact.manifest.checkpoints.forEach((checkpoint) => {
+    const link = shell.querySelector<HTMLAnchorElement>(
+      `[data-kp-concept-checkpoints] [data-kp-concept-checkpoint-link="${checkpoint.id}"]`
+    );
+    if (link !== null) {
+      link.href = formatConceptRoomRoute({
+        ...route,
+        checkpoint: checkpoint.id,
+        timePermille: checkpoint.progressPermille,
+        focus: checkpoint.semanticRefs
+      });
+      setCurrent(link, checkpoint.id === state.checkpoint, "step");
+    }
+    const section = shell.querySelector<HTMLElement>(
+      `[data-kp-concept-explanation="${checkpoint.id}"]`
+    );
+    if (section !== null) {
+      section.dataset["kpConceptCheckpointActive"] = String(checkpoint.id === state.checkpoint);
+      setCurrent(section, checkpoint.id === state.checkpoint, "step");
+    }
+  });
+  artifact.manifest.projections.forEach((projection) => {
+    const link = shell.querySelector<HTMLAnchorElement>(`[data-kp-concept-projection-link="${projection}"]`);
+    if (link === null) return;
+    link.href = formatConceptRoomRoute({ ...route, projection });
+    setCurrent(link, projection === state.projection, "page");
+  });
+  artifact.manifest.modes.filter((mode) => mode !== "ask").forEach((mode) => {
+    const link = shell.querySelector<HTMLAnchorElement>(`[data-kp-concept-mode-link="${mode}"]`);
+    if (link === null) return;
+    link.href = formatConceptRoomRoute({ ...route, mode });
+    setCurrent(link, mode === state.mode, "page");
+  });
+  const scrubber = shell.querySelector<HTMLInputElement>('[data-kp-concept-playback-action="scrub"]');
+  if (scrubber !== null) scrubber.value = String(state.timePermille);
+  syncPlaybackControls(root, playing);
+  return viewport;
+}
+
+function setCurrent(element: Element, current: boolean, value: "page" | "step"): void {
+  if (current) element.setAttribute("aria-current", value);
+  else element.removeAttribute("aria-current");
+}
+
+function playbackControls(state: KpConceptRoomState, playing: boolean): HTMLElement {
+  const group = document.createElement("div");
+  group.dataset["kpConceptPlaybackControls"] = "true";
+  group.setAttribute("role", "group");
+  group.setAttribute("aria-label", "Concept playback");
+  group.append(
+    playbackButton("previous", "Previous step", "Back"),
+    playbackButton("play-pause", playing ? "Pause concept" : "Play concept", playing ? "Pause" : "Play"),
+    playbackButton("replay", "Replay concept", "Replay"),
+    playbackButton("next", "Next step", "Next")
+  );
+  const scrubber = document.createElement("input");
+  scrubber.type = "range";
+  scrubber.min = "0";
+  scrubber.max = "1000";
+  scrubber.step = "1";
+  scrubber.value = String(state.timePermille);
+  scrubber.dataset["kpConceptPlaybackAction"] = "scrub";
+  scrubber.setAttribute("aria-label", "Scrub concept timeline");
+  group.append(scrubber);
+  return group;
+}
+
+function playbackButton(action: string, label: string, text: string): HTMLButtonElement {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.dataset["kpConceptPlaybackAction"] = action;
+  button.setAttribute("aria-label", label);
+  button.textContent = text;
+  return button;
+}
+
+function syncPlaybackControls(root: HTMLElement, playing: boolean): void {
+  const shell = root.querySelector<HTMLElement>("[data-kp-concept-room-shell]");
+  if (shell !== null) shell.dataset["kpConceptPlaying"] = String(playing);
+  const button = root.querySelector<HTMLButtonElement>('[data-kp-concept-playback-action="play-pause"]');
+  if (button === null) return;
+  button.textContent = playing ? "Pause" : "Play";
+  button.setAttribute("aria-label", playing ? "Pause concept" : "Play concept");
+}
+
+function checkpointAtTime(
+  artifact: KpConceptRoomArtifactLike,
+  timePermille: number
+): KpConceptRoomArtifactLike["manifest"]["checkpoints"][number] {
+  const checkpoint = [...artifact.manifest.checkpoints]
+    .reverse()
+    .find((candidate) => candidate.progressPermille <= timePermille);
+  if (checkpoint === undefined) throw new Error("Concept timeline requires an initial checkpoint at zero.");
+  return checkpoint;
+}
+
+function exemplarPlaybackDurationMs(): number {
+  const motion = linearEquationExemplarTheme.tokens.motion;
+  return (motion.focusMs + motion.reflowMs + motion.actMs + motion.settleMs) * 4;
 }
 
 const exemplarSemanticPhrases: Readonly<Record<string, readonly {

@@ -156,13 +156,31 @@
     {
       "command": "npm run build",
       "status": "passed",
-      "checkedAt": "2026-07-19T21:37:45.309Z",
-      "scope": "s07 production build"
+      "scope": "s07 production build",
+      "checkedAt": "2026-07-19T21:37:45.309Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-room-playback-controller.test.ts",
+      "status": "passed",
+      "scope": "s08 deterministic playback stepping scrubbing replay pause and disposal",
+      "checkedAt": "2026-07-19T21:51:50.880Z"
+    },
+    {
+      "command": "npx playwright test tests/linear-equation-visual-shell.browser.spec.ts tests/concept-room-route-shell.browser.spec.ts tests/linear-equation-concept-room-smoke.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s08 accessible controls canonical URL timing stable mounted shell and Ask deep-link fallback",
+      "checkedAt": "2026-07-19T21:51:52.028Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "checkedAt": "2026-07-19T21:51:53.000Z",
+      "scope": "s08 production build and type contracts"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s07 maps ordinary document scrolling into the shared checkpoint clock with hysteresis, passive URL replacement, explicit push navigation, reduced-motion jumps, deep-link restoration, and disposal."
+    "summary": "s08 adds minimal playback and a native scrubber over canonical room time, preserves stable controls during animation, keeps URLs synchronized, and removes unavailable Ask from primary chrome."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."

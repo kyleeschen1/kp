@@ -19,6 +19,9 @@ test("linear equation room mounts one themed stage and explanation rail", async 
     .toHaveCount(1);
   await expect(shell.locator("[data-kp-concept-controls]"))
     .toHaveCount(1);
+  await expect(shell.getByRole("slider", { name: "Scrub concept timeline" }))
+    .toHaveValue("0");
+  await expect(shell.getByRole("link", { name: "Ask" })).toHaveCount(0);
   await expect(shell.getByRole("heading", { level: 1 }))
     .toHaveText("Solve a linear equation");
   await expect(shell.locator("[data-kp-symbolic-equation] .katex").first())
@@ -29,6 +32,28 @@ test("linear equation room mounts one themed stage and explanation rail", async 
     .toHaveText("Subtract 3 from both sides");
   await expect(shell.locator('[data-kp-concept-explanation="start"]'))
     .toHaveAttribute("aria-current", "step");
+});
+
+test("playback, stepping, replay, and scrubbing share canonical room time", async ({ page }) => {
+  await page.goto(conceptPath);
+  const shell = page.locator("[data-kp-concept-room-shell]");
+  await shell.getByRole("button", { name: "Next step" }).click();
+  await expect(shell).toHaveAttribute("data-kp-concept-checkpoint", "subtract-three");
+  await expect(page).toHaveURL(/t=400/);
+  await page.goBack();
+  await expect(shell).toHaveAttribute("data-kp-concept-checkpoint", "start");
+
+  const scrubber = shell.getByRole("slider", { name: "Scrub concept timeline" });
+  await scrubber.fill("750");
+  await expect(shell).toHaveAttribute("data-kp-concept-checkpoint", "divide-two");
+  await expect(page).toHaveURL(/t=750/);
+
+  await shell.getByRole("button", { name: "Replay concept" }).click();
+  await expect(shell).toHaveAttribute("data-kp-concept-playing", "true");
+  await shell.getByRole("button", { name: "Pause concept" }).click();
+  await expect(shell).toHaveAttribute("data-kp-concept-playing", "false");
+  await expect(shell).toHaveAttribute("data-kp-concept-checkpoint", "start");
+  expect(Number(new URL(page.url()).searchParams.get("t"))).toBeLessThan(400);
 });
 
 test("all checkpoint prose remains browser-findable and canonically linked", async ({ page }) => {
