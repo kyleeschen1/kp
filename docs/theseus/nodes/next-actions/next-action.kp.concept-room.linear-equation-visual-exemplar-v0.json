@@ -19,6 +19,11 @@
       "kind": "file",
       "path": "docs/project/reviews/2026-07-19-linear-equation-visual-baseline-audit.md",
       "summary": "Phase-by-phase comparison of the plain room, FTC composition, continuity motion, and proposed exemplar."
+    },
+    {
+      "kind": "file",
+      "path": "src/app-adapters/concept-room-theme.ts",
+      "summary": "Versioned exemplar-local typed theme and locked values."
     }
   ],
   "verification": [
@@ -53,8 +58,24 @@
       "status": "passed",
       "scope": "s01 capture harness and project types",
       "checkedAt": "2026-07-19T21:11:44.664Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/concept-room-exemplar-theme.test.ts",
+      "status": "passed",
+      "scope": "s02 locked theme values and deep immutability",
+      "checkedAt": "2026-07-19T21:14:12.381Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02 inference fixtures and public theme surface",
+      "checkedAt": "2026-07-19T21:14:13.141Z"
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "s02 added the inference-first deeply immutable local theme value set; renderer emission remains in s03."
+  },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."
   ],
@@ -81,9 +102,5 @@
       "id": "accessibility",
       "weight": "high"
     }
-  ],
-  "progress": {
-    "state": "partial",
-    "summary": "s01 completed a repeatable eight-state capture harness and durable visual gap audit; implementation remains in later approved slices."
-  }
+  ]
 }

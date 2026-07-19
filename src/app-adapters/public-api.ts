@@ -17,10 +17,12 @@ export {
   applyConceptRoomThemeRoles,
   conceptRoomStyleRoles,
   defineConceptRoomTheme,
+  linearEquationExemplarTheme,
   structuralConceptRoomTheme,
   type KpConceptRoomRoleBinding,
   type KpConceptRoomStyleRole,
-  type KpConceptRoomThemeShape
+  type KpConceptRoomThemeShape,
+  type KpConceptRoomThemeTokens
 } from "./concept-room-theme.ts";
 
 export type {

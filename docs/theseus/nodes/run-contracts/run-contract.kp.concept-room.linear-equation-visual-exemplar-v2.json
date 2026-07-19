@@ -53,7 +53,8 @@
     {
       "id": "s02",
       "title": "Inference-first exemplar theme",
-      "status": "planned"
+      "summary": "Defined and tested one locked inference-first exemplar theme with KaTeX math typography, semantic colors, spacing, shape, focus, and motion channels; no learner composition changed.",
+      "status": "complete"
     },
     {
       "id": "s03",
