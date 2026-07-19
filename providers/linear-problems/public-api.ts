@@ -14,6 +14,8 @@ export {
   generateLinearProblem
 } from "./generator.ts";
 
+export { verifyLinearStep } from "./step-verifier.ts";
+
 export {
   addRational,
   divideRational,

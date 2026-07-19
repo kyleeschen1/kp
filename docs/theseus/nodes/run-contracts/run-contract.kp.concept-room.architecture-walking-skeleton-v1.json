@@ -80,13 +80,14 @@
     {
       "id": "s07",
       "title": "Deterministic generator",
-      "status": "in-progress",
-      "summary": "Implementing seeded bounded linear-problem generation and the canonical 2x + 3 = 8 fixture."
+      "summary": "Added version-seeded bounded ax+b=c generation with exact solutions, stable IDs and provenance, integer-only support, and the immutable 2x + 3 = 8 canonical fixture.",
+      "status": "complete"
     },
     {
       "id": "s08",
       "title": "Intermediate-step verifier",
-      "status": "planned"
+      "status": "in-progress",
+      "summary": "Implementing exact algebraic equivalence and the full intermediate-step classification matrix."
     },
     {
       "id": "s09",
