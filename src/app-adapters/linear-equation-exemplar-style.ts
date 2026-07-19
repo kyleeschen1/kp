@@ -15,6 +15,12 @@ ${routeSelector} [data-kp-concept-room-title]{margin:.18rem 0 0;font-family:var(
 ${routeSelector} [data-kp-concept-room-stage]{display:grid;grid-template-columns:minmax(0,2fr) minmax(16rem,1fr);gap:clamp(16px,2vw,28px);align-items:start}
 ${routeSelector} [data-kp-concept-visual-field]{position:sticky;top:clamp(16px,4vh,36px);display:grid;grid-template-rows:1fr auto;align-items:center;min-width:0;min-height:430px;background:var(--kp-concept-surface);border-radius:calc(var(--kp-concept-surface-radius) - .25rem);padding:clamp(18px,3vw,36px);overflow:clip}
 ${routeSelector} [data-kp-concept-viewport]{min-width:0;align-self:center}
+${routeSelector} [data-kp-symbolic-motion-stage]{position:relative;display:grid;place-items:center;min-height:10rem}
+${routeSelector} [data-kp-symbolic-stage-layer]{grid-area:1/1;min-width:0}
+${routeSelector} [data-kp-symbolic-stage-layer=native]{opacity:0;pointer-events:none}
+${routeSelector} [data-kp-symbolic-stage-layer=measurement]{position:absolute;inset:0;display:grid;place-items:center;visibility:hidden;pointer-events:none}
+${routeSelector} [data-kp-symbolic-stage-layer=source-measure],${routeSelector} [data-kp-symbolic-stage-layer=target-measure],${routeSelector} [data-kp-symbolic-stage-layer=source],${routeSelector} [data-kp-symbolic-stage-layer=target]{grid-area:1/1}
+${routeSelector} [data-kp-symbolic-stage-layer=overlay]{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
 ${routeSelector} [data-kp-concept-viewport] [data-kp-symbolic-equation]{display:flex;align-items:center;justify-content:center;gap:.15em;font-size:clamp(2rem,5vw,4.25rem);min-height:10rem}
 ${routeSelector} [data-kp-concept-viewport] [data-kp-balance-scene]{display:block;width:100%;height:auto;max-height:430px}
 ${routeSelector} [data-kp-concept-copy-rail]{align-content:start;display:grid;gap:var(--kp-concept-space-section);min-width:0;overflow:visible;border-left:2px solid color-mix(in srgb,var(--kp-concept-accent) 48%,transparent);padding:var(--kp-concept-space-control) 0 var(--kp-concept-space-control) var(--kp-concept-space-section)}

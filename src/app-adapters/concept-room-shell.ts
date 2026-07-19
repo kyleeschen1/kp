@@ -145,6 +145,10 @@ export async function tryMountConceptRoomRoute(input: {
     }
     const detached = document.createElement("div");
     try {
+      if (preservedViewport !== undefined) {
+        await runtimeSession.render(viewport, state);
+        return;
+      }
       await runtimeSession.render(detached, state);
       if (isDisposed || request !== renderRequest) return;
       viewport.replaceChildren(...detached.childNodes);

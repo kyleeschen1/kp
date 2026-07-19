@@ -18,6 +18,11 @@ export interface KpSymbolicEquationController {
   dispose(): void;
 }
 
+export interface KpSymbolicEquationRenderOptions {
+  readonly focusSemanticIds?: readonly string[];
+  readonly theme?: KpConceptRoomThemeShape;
+}
+
 export function createSymbolicEquationController(
   root: HTMLElement,
   trace: KpLinearEquationTrace,
@@ -45,10 +50,7 @@ export function createSymbolicEquationController(
 export function renderSymbolicEquation(
   root: HTMLElement,
   projection: KpSymbolicEquationIr,
-  options: {
-    readonly focusSemanticIds?: readonly string[];
-    readonly theme?: KpConceptRoomThemeShape;
-  } = {}
+  options: KpSymbolicEquationRenderOptions = {}
 ): void {
   const focusSemanticIds = new Set(options.focusSemanticIds ?? []);
   const theme = options.theme ?? structuralConceptRoomTheme;
@@ -64,6 +66,7 @@ export function renderSymbolicEquation(
   projection.tokens.forEach((token) => {
     const span = document.createElement("span");
     span.dataset["kpSymbolicToken"] = token.id;
+    span.dataset["kpContinuantId"] = token.continuantId;
     span.dataset["kpSemanticId"] = token.semanticId;
     span.dataset["kpSymbolicTokenKind"] = token.kind;
     span.dataset["kpSymbolicSide"] = token.side;

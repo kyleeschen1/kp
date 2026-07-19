@@ -47,6 +47,7 @@ async function bootstrap(): Promise<void> {
     return;
   }
   window.addEventListener("pagehide", () => handle.dispose(), { once: true });
+  root.dataset["kpConceptRoomMounted"] = "true";
 }
 
 void bootstrap();

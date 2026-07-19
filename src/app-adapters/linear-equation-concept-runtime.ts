@@ -23,6 +23,8 @@ import {
 
 interface SymbolicRendererModule {
   renderSymbolicEquation: typeof import("./symbolic-equation-dom.ts")["renderSymbolicEquation"];
+  createLinearEquationSymbolicStage?:
+    typeof import("./linear-equation-symbolic-stage.ts")["createLinearEquationSymbolicStage"];
 }
 
 interface BalanceRendererModule {
@@ -35,7 +37,7 @@ export function createLinearEquationConceptRuntime(options: {
   readonly loadBalanceRenderer?: () => Promise<BalanceRendererModule>;
 } = {}): KpConceptRoomRuntime {
   const client = options.client ?? createLinearProblemClient();
-  const loadSymbolic = options.loadSymbolicRenderer ?? (async () => import("./symbolic-equation-dom.ts"));
+  const loadSymbolic = options.loadSymbolicRenderer ?? (async () => import("./linear-equation-symbolic-stage.ts"));
   const loadBalance = options.loadBalanceRenderer ?? (async () => import("./linear-equation-balance-svg.ts"));
   const runtime: KpConceptRoomRuntime = {
     async prepare(artifact, { signal }) {
@@ -81,20 +83,35 @@ function runtimeSession(
   loadBalance: () => Promise<BalanceRendererModule>
 ): KpConceptRoomRuntimeSession {
   let disposed = false;
+  let symbolicStage: ReturnType<NonNullable<SymbolicRendererModule["createLinearEquationSymbolicStage"]>> | undefined;
+  let symbolicStageRoot: HTMLElement | undefined;
   return {
     async render(root, state) {
       if (disposed) throw new Error("Linear-equation concept runtime is disposed.");
       try {
         if (state.projection === "symbolic") {
           const renderer = await loadSymbolic();
-          renderer.renderSymbolicEquation(root, projectLinearEquationTrace(trace, state.timePermille, {
+          const projection = projectLinearEquationTrace(trace, state.timePermille, {
             operationWindows: symbolicOperationWindows
-          }), {
-            focusSemanticIds: state.focus
           });
+          if (renderer.createLinearEquationSymbolicStage !== undefined) {
+            if (symbolicStageRoot !== root) {
+              symbolicStage?.dispose();
+              symbolicStage = renderer.createLinearEquationSymbolicStage(root);
+              symbolicStageRoot = root;
+            }
+            const stage = symbolicStage;
+            if (stage === undefined) throw new Error("Symbolic stage failed to initialize.");
+            await stage.render(projection, { focusSemanticIds: state.focus });
+          } else {
+            renderer.renderSymbolicEquation(root, projection, { focusSemanticIds: state.focus });
+          }
           return;
         }
         if (state.projection === "balance") {
+          symbolicStage?.dispose();
+          symbolicStage = undefined;
+          symbolicStageRoot = undefined;
           const renderer = await loadBalance();
           renderer.renderBalanceScene(
             root,
@@ -120,6 +137,7 @@ function runtimeSession(
     },
     dispose() {
       disposed = true;
+      symbolicStage?.dispose();
     }
   };
 }

@@ -130,6 +130,7 @@ test("reduced motion jumps between sections and disposal disconnects observation
   await expect.poll(() => page.evaluate(() => (
     window as typeof window & { __kpScrollBehavior?: ScrollBehavior }
   ).__kpScrollBehavior)).toBe("auto");
+  await expect(page.locator("[data-kp-concept-room-mounted=true]")).toHaveCount(1);
   const beforeDispose = await page.evaluate(() => (
     window as typeof window & { __kpObserverDisconnects?: number }
   ).__kpObserverDisconnects ?? 0);
