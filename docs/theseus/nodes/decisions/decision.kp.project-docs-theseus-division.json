@@ -4,7 +4,7 @@
   "title": "Split KP project docs from Theseus execution",
   "status": "resolved",
   "domain": "kp.project-control",
-  "summary": "Use docs/project for durable human-readable strategy, roadmap, threads, decisions, and reviews; use Theseus for executable next-actions, run contracts, source refs, verification, and provenance.",
+  "summary": "Use docs/project for one human-readable plan and Theseus for one executable contract; never maintain a second phase-plan copy unless explicitly requested, and keep per-slice status only in Theseus.",
   "sourceRefs": [
     {
       "kind": "file",

@@ -2,16 +2,24 @@
   "id": "next-action.kp.tutorial.code-network-bfs-v0",
   "kind": "next-action",
   "title": "Open Code Network And Data Structure Views",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp.tutorial",
-  "summary": "Use BFS or Dijkstra to synchronize SourceFile ranges, deterministic execution state, network traversal, frontier state, queue or priority queue, and table views.",
+  "summary": "Parked while KP proves the simple concept-room architecture and front-door algebra product language.",
   "sourceRefs": [
-    { "kind": "file", "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md", "summary": "Code, network, and data-structure milestone and exit condition." }
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md",
+      "summary": "Code, network, and data-structure milestone and exit condition."
+    }
   ],
   "dependsOn": {
-    "required": ["next-action.kp.tutorial.ftc-gold-exemplar-v0"]
+    "required": [
+      "next-action.kp.tutorial.ftc-gold-exemplar-v0"
+    ]
   },
-  "affects": ["milestone.kp.cross-domain-tutorial-platform-v0"],
+  "affects": [
+    "milestone.kp.cross-domain-tutorial-platform-v0"
+  ],
   "verification": [
     "Deterministic trace and stable-identity tests",
     "Code/diagram/table seek and rewind browser gates",
@@ -19,5 +27,8 @@
   ],
   "expectedLearning": [
     "Which DiagramScene and trace primitives are reusable across networks, data structures, and later physical diagrams."
+  ],
+  "revisitWhen": [
+    "The linear-equation architecture skeleton, polished symbolic exemplar, optional balance projection, and missing-middle demo have been reviewed."
   ]
 }

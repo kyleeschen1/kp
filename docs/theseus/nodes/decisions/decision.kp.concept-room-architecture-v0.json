@@ -1,0 +1,24 @@
+{
+  "id": "decision.kp.concept-room-architecture-v0",
+  "kind": "decision",
+  "title": "Adopt KP Concept Room And Library Architecture",
+  "status": "resolved",
+  "domain": "kp.architecture",
+  "summary": "Accepted after the completed architecture grill; formalized as the current concept-room and library boundary decision.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-19-kp-concept-room-architecture.md",
+      "summary": "Accepted architecture, library boundaries, migration strategy, and product ordering from the completed grill."
+    },
+    {
+      "kind": "user-intent",
+      "intent": "Keep KP platform code, content, domain knowledge, and auxiliary generators appropriately separate while scaling serious demos; use inference-first TypeScript APIs and avoid large future debt.",
+      "occurredAt": "2026-07-19",
+      "summary": "User accepted the completed concept-room architecture grill and approved formalization and reprioritization."
+    }
+  ],
+  "affects": [
+    "milestone.kp.cross-domain-tutorial-platform-v0"
+  ]
+}

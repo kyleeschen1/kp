@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-18
+Last Updated: 2026-07-19
 Status: active
 Active Thread: `threads/cross-domain-tutorial-platform.md`
 Supporting Thread: `threads/semantic-runtime.md`
@@ -34,7 +34,7 @@ closed its first 28-slice implementation loop. The delivery plan in
 family sample refs to executable assets and made a verified first cohort
 available in the KP editor; it has now closed its 30-slice implementation loop.
 
-The accepted successor direction is recorded in
+The accepted cross-domain direction is recorded in
 `decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md`. The active
 semantic-material-motion loop is closed; KP will now freeze a small gold
 equation baseline and build a cross-domain tutorial/interaction kernel through
@@ -42,17 +42,25 @@ FTC, code/network, economics, and physics exemplars. Approval will attach to
 novel primitives and combinations rather than every composition of promoted
 visual vocabulary.
 
+The immediate ordering was revised by
+`decisions/2026-07-19-kp-concept-room-architecture.md`. Before adding more
+subject breadth, KP will prove a clean content/platform/provider boundary and
+the simple front-door product language through a linear-equation architecture
+walking skeleton, a polished symbolic exemplar, an optional balance
+projection, and the missing-middle area model. FTC remains retained evidence;
+BFS and later breadth are parked rather than discarded.
+
 ## Active Focus
 
-**Human-review the reviewable FTC exemplar before gold or generalization.**
-The governed semantic animation grammar and all 30 slices of the
-semantic-material-motion performance loop are complete. Equation motion is now
-a bounded conformance lane. Novelty/maturity governance and the 26-slice
-reviewable FTC tutorial loop are complete. The primary product lane remains the
-accepted cross-domain tutorial platform roadmap, but its next exact action is a
-human perceptual and pedagogical review of the FTC exemplar. Do not promote it
-to gold or begin BFS/economics/physics generalization until that review records
-the remaining motion, explanation, and accessibility changes.
+**Execute the approved concept-room architecture stabilization loop.** The
+governed semantic animation grammar, semantic-material-
+motion performance loop, novelty/maturity governance, and reviewable FTC
+tutorial loop are complete. The next implementation candidate is a deliberately
+plain `2x + 3 = 8` walking skeleton that proves independently versioned content,
+neutral protocols, a headless provider, one KP anti-corruption mapper,
+canonical room state and URLs, generated discovery, plain synchronized
+projections, and static Review fallback. The 27-slice loop was approved on
+2026-07-19 and must stop for architecture review before visual polish.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
@@ -293,18 +301,15 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Complete the accepted hermeneutic tutorial-contract grill and encode its
-   decisions. This is now complete.
-2. Complete the active promotion matrix and mandatory broad closeout.
-3. Freeze the gold equation cohort and add novelty/maturity promotion facets.
-4. Build the reviewable FTC equation/graph exemplar on the accepted contract,
-   then stop before gold promotion.
-5. After human review, open code, network, and data-structure views through BFS
-   or Dijkstra.
-6. Add the parametric supply/demand/tax/subsidy economics laboratory.
-7. Add the work-energy equation/diagram/graph physics derivation.
-8. Expand governed prompt and upload authoring across the promoted vocabulary.
-9. Defer dynamic package loading until the metadata contract stays stable
+1. Implement the approved plain linear-equation walking skeleton and stop for
+   architecture review.
+2. Perfect the traditional symbolic-manipulation exemplar for `2x + 3 = 8`.
+3. Add and review its optional synchronized abstract balance projection.
+4. Build the missing-middle `(a+b)^2` area model as the second simple demo.
+5. Revisit FTC human review and broader dot-product, BFS, economics,
+   programming, physics, and governed authoring work after the front-door
+   product language is clear.
+6. Defer dynamic package loading until the metadata contract stays stable
    across these renderer combinations.
 
 ## Deferred

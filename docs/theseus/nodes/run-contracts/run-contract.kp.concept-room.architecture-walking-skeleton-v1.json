@@ -1,0 +1,180 @@
+{
+  "id": "run-contract.kp.concept-room.architecture-walking-skeleton-v1",
+  "kind": "run-contract",
+  "title": "KP concept-room architecture walking skeleton",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.concept-room.architecture-walking-skeleton-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-19-linear-equation-architecture-stabilization-proposal.md",
+      "summary": "Sole human-readable plan containing the approved slice intents, risks, checks, commit boundaries, stop conditions, preservation boundary, and deferrals."
+    }
+  ],
+  "verification": [
+    "Run each slice's exact checks from the approved proposal before marking it complete.",
+    "Run npm run typecheck and theseus workspace validate for every standard slice.",
+    "Run the relevant build, server, browser, smoke, and integration checks for every broad slice."
+  ],
+  "allowedWork": [
+    "Only the new architecture boundaries and plain end-to-end 2x + 3 = 8 walking skeleton described by the approved proposal.",
+    "Keep every slice independently verified, recorded in Theseus, and committed before continuing."
+  ],
+  "disallowedWork": [
+    "No broad legacy migration, visual polish, capability promotion, LLM execution, BFS, economics, programming, physics, new WebGL work, package split, or microservice deployment.",
+    "Do not create or maintain a duplicate execution plan under docs/superpowers/plans; the reviewed proposal is the sole human-readable plan."
+  ],
+  "goal": "Execute the approved 27-slice plain 2x + 3 = 8 architecture stabilization loop and stop for human architecture review before visual polish.",
+  "target": "next-action.kp.concept-room.architecture-walking-skeleton-v0",
+  "runMode": "run",
+  "maxSlices": 27,
+  "commitCadence": "Commit after each independently verified slice.",
+  "verificationLevel": "standard",
+  "stopConditions": [
+    "Stop when any slice verification fails and needs user judgment.",
+    "Stop before work would exceed the proposal's allowed scope or preservation boundary.",
+    "Stop when the approved slice list is exhausted.",
+    "Always stop after s27 for human architecture review before typography, color, choreography, hover links, balance aesthetics, or any visual generalization."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Legacy characterization",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Boundary declarations",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Architecture fitness gate",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Inference contract harness",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Linear-problem protocol",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Exact rational kernel",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Deterministic generator",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Intermediate-step verifier",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Solution verification and provider facade",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Versioned HTTP adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Inference-first authoring handles",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Content manifest contract",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Canonical content source",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Deterministic publisher",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Generated discovery",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Publication fitness gate",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Canonical route contract",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Room state and reducer",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Room-scoped effect coordinator",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Browser provider client",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Strangler route shell",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Anti-corruption mapper",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Plain symbolic projection",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Placeholder balance projection and theme plumbing",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Review publication",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Failure containment and end-to-end smoke",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Architecture closeout and mandatory stop",
+      "status": "planned"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "id": "next-action.kp.concept-room.architecture-walking-skeleton-v0",
+  "kind": "next-action",
+  "title": "Build Linear Equation Architecture Walking Skeleton",
+  "status": "ready",
+  "domain": "kp.architecture",
+  "summary": "Approved 27-slice architecture walking-skeleton implementation is ready to run under its typed contract.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-19-linear-equation-architecture-stabilization-proposal.md",
+      "summary": "Approved implementation candidate and required stop boundary; execution remains gated on the review action."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "decision.kp.concept-room-architecture-v0",
+      "next-action.kp.concept-room.architecture-plan-review-v0"
+    ]
+  },
+  "affects": [
+    "milestone.kp.cross-domain-tutorial-platform-v0"
+  ],
+  "verification": [
+    "Architecture, schema, inference, provider conformance, deterministic state, URL round-trip, projection parity, Review fallback, focused browser, and project gates pass."
+  ],
+  "expectedLearning": [
+    "Whether independently versioned content, neutral protocols, provider isolation, a sole KP mapper, canonical state and URLs, synchronized projections, and Review fallback form an honest end-to-end product boundary."
+  ],
+  "allowedWork": [
+    "New architecture boundaries and the plain end-to-end 2x + 3 = 8 walking skeleton described by the proposal."
+  ],
+  "disallowedWork": [
+    "No broad legacy migration, visual polish, capability promotion, LLM execution, BFS, economics, programming, physics, new WebGL work, package split, or microservice deployment."
+  ],
+  "criteria": [
+    {
+      "id": "architecture-boundaries",
+      "weight": "high"
+    },
+    {
+      "id": "provider-independence",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-room-state",
+      "weight": "high"
+    },
+    {
+      "id": "static-review-fallback",
+      "weight": "high"
+    },
+    {
+      "id": "legacy-preservation",
+      "weight": "high"
+    }
+  ],
+  "revisitWhen": [
+    "The user explicitly approves execution of the stabilization proposal."
+  ]
+}

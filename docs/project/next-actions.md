@@ -1,6 +1,6 @@
 # KP Next Actions
 
-Last Updated: 2026-07-18
+Last Updated: 2026-07-19
 
 These are human-readable candidates. Theseus stores the executable versions
 with source refs, verification, run-contract slices, and completion evidence.
@@ -11,9 +11,14 @@ with source refs, verification, run-contract slices, and completion evidence.
 4. Add novelty and maturity promotion facets to the catalog. Complete.
 5. Materialize and run the tutorial-core and reviewable FTC-exemplar contract.
    Complete.
-6. Human-review the FTC exemplar and record required changes before gold.
-7. After that review, open code, network, and
-   data-structure views through BFS or Dijkstra.
-8. Add the parametric supply/demand/tax/subsidy economics laboratory.
-9. Add the work-energy equation/diagram/graph physics derivation.
-10. Expand governed LLM prompt and upload authoring across promoted vocabulary.
+6. Review and explicitly approve the bounded concept-room architecture
+   stabilization proposal. Complete.
+7. Implement the approved plain `2x + 3 = 8` architecture walking
+   skeleton and stop for architecture review.
+8. Build and human-review the polished traditional symbolic-manipulation
+   exemplar, then its optional synchronized balance projection.
+9. Build the missing-middle `(a+b)^2` area-model demo as the second simple
+   front-door concept.
+10. Retain FTC human review, BFS, economics, programming, and broader governed
+    LLM authoring as parked breadth work after the simple product language is
+    proven.

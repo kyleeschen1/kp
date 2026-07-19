@@ -35,14 +35,37 @@
     "next-action.kp.tutorial.code-network-bfs-v0",
     "next-action.kp.tutorial.economics-supply-demand-lab-v0",
     "next-action.kp.tutorial.physics-work-energy-v0",
-    "next-action.kp.tutorial.governed-llm-upload-v0"
+    "next-action.kp.tutorial.governed-llm-upload-v0",
+    "next-action.kp.concept-room.architecture-plan-review-v0",
+    "next-action.kp.concept-room.architecture-walking-skeleton-v0"
   ],
   "criteria": [
-    { "id": "novelty-based-promotion", "weight": "high" },
-    { "id": "cross-view-semantic-correspondence", "weight": "high" },
-    { "id": "deterministic-interaction-state", "weight": "high" },
-    { "id": "shared-runtime-clock", "weight": "high" },
-    { "id": "governed-llm-authoring", "weight": "high" },
-    { "id": "cross-domain-capability-reuse", "weight": "medium" }
+    {
+      "id": "novelty-based-promotion",
+      "weight": "high"
+    },
+    {
+      "id": "cross-view-semantic-correspondence",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-interaction-state",
+      "weight": "high"
+    },
+    {
+      "id": "shared-runtime-clock",
+      "weight": "high"
+    },
+    {
+      "id": "governed-llm-authoring",
+      "weight": "high"
+    },
+    {
+      "id": "cross-domain-capability-reuse",
+      "weight": "medium"
+    }
+  ],
+  "decisions": [
+    "decision.kp.concept-room-architecture-v0"
   ]
 }

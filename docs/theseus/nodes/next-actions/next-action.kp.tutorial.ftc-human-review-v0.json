@@ -2,9 +2,9 @@
   "id": "next-action.kp.tutorial.ftc-human-review-v0",
   "kind": "next-action",
   "title": "Human-review FTC tutorial exemplar",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp.tutorial",
-  "summary": "Reviewable FTC delivery is complete and awaiting human review.",
+  "summary": "FTC remains retained reviewable evidence but is no longer the immediate front-door product lane.",
   "dependsOn": {
     "required": [
       "next-action.kp.tutorial.ftc-gold-exemplar-v0"
@@ -16,5 +16,8 @@
   "verification": [
     "Human review records motion, explanation, interaction, and accessibility findings.",
     "Gold promotion decision cites the reviewable closeout and bounded change list."
+  ],
+  "revisitWhen": [
+    "The simple linear-equation and missing-middle product language has been reviewed, or a specific FTC regression requires earlier review."
   ]
 }

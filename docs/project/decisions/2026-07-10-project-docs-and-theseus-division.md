@@ -26,6 +26,15 @@ evidence.
   from roadmap direction.
 - Future pivots should update both layers when they affect implementation
   order.
+- A Theseus-backed loop has exactly one human-readable plan and one executable
+  control record. The project proposal owns rationale and approved scope; the
+  Theseus run contract owns exact slice order, live status, verification, and
+  stop state.
+- Do not create a second manually maintained phase-plan copy under
+  `docs/superpowers/plans/` for a Theseus-backed loop unless the user explicitly
+  requests that separate artifact.
+- Roadmaps, threads, and next-action files should summarize and link rather
+  than reproduce slice tables. Per-slice progress belongs only in Theseus.
 - Dashboard rows should eventually read from project docs and Theseus together.
 
 ## Alternatives Considered

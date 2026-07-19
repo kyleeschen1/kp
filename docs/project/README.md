@@ -12,6 +12,10 @@ provenance.
   current, what is deferred, and how priorities relate.
 - Theseus answers: what exact node is next, what source refs changed, what
   verification passed, what is blocked, and what a Codex loop may safely run.
+- Theseus-backed loops keep one reviewed proposal in `docs/project/` and one
+  executable run contract. Do not maintain another copy under
+  `docs/superpowers/plans/`; strategy files summarize and link, while Theseus
+  alone tracks slice progress.
 
 Accepted direction should move through this path:
 

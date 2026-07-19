@@ -20,3 +20,19 @@ Apply this protocol to subjective visual, motion, interaction, and LLM-generated
 - Treat “formalize this” and “enforce this globally” as separate decisions. Record a principle without making it universal unless global enforcement is explicitly approved.
 - In grill-me sessions, batch low-impact decisions behind recommended defaults and interrupt only for choices that materially affect architecture, product behavior, or aesthetics.
 - Visual run contracts must identify their exemplar checkpoint, promotion criteria, preservation boundary, rollback unit, and post-approval generalization slices.
+
+## Plan and execution ownership
+
+- Keep one human-readable plan and one executable control record. For a
+  Theseus-backed long loop, the reviewed proposal in `docs/project/` owns the
+  rationale and approved scope; the Theseus run contract owns slice order,
+  live status, verification evidence, and stop state.
+- Do not copy a Theseus-backed plan into `docs/superpowers/plans/` or another
+  manually maintained phase-plan tree unless the user explicitly requests a
+  separate artifact. The reviewed proposal should be the run contract's source
+  reference.
+- Roadmaps, threads, and next-action summaries may link to and summarize the
+  plan, but must not duplicate its full slice table or track per-slice status.
+- After approval, update execution progress only through Theseus. Update
+  project memory when direction, priority, or durable conclusions change, not
+  after every slice.

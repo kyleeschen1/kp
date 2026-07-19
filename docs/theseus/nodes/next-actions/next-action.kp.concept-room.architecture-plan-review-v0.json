@@ -1,0 +1,38 @@
+{
+  "id": "next-action.kp.concept-room.architecture-plan-review-v0",
+  "kind": "next-action",
+  "title": "Review Concept Room Architecture Stabilization Proposal",
+  "status": "resolved",
+  "domain": "kp.architecture",
+  "summary": "User approved the exact 27-slice stabilization loop on 2026-07-19; implementation may proceed under a typed run contract.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-19-linear-equation-architecture-stabilization-proposal.md",
+      "summary": "Bounded six-phase proposal, architecture acceptance criteria, preservation boundary, rollback unit, deferrals, and approval gate."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "decision.kp.concept-room-architecture-v0"
+    ]
+  },
+  "affects": [
+    "milestone.kp.cross-domain-tutorial-platform-v0"
+  ],
+  "verification": [
+    "Explicit user approval to execute the bounded proposal is recorded before any implementation begins."
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "User approved the exact 27-slice proposal; v1 typed execution contract is active and the duplicate-plan prohibition is now a repo-wide standard."
+  },
+  "verificationRecords": [
+    {
+      "command": "Explicit user approval recorded in conversation on 2026-07-19",
+      "status": "passed",
+      "checkedAt": "2026-07-19T17:13:58.274Z",
+      "scope": "focused"
+    }
+  ]
+}

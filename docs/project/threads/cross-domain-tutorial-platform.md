@@ -1,9 +1,9 @@
 # Cross-domain Tutorial Platform Thread
 
 Status: active
-Last Updated: 2026-07-18
-Current Next Action: Human-review the delivered reviewable FTC module; record
-required changes before gold promotion or cross-domain generalization.
+Last Updated: 2026-07-19
+Current Next Action: Execute the approved 27-slice concept-room architecture
+stabilization loop; stop for architecture review before visual polish.
 
 ## Goal
 
@@ -13,11 +13,21 @@ models from one semantic storyboard and shared runtime clock.
 
 ## Current Decision
 
-Expand through capability-opening vertical exemplars instead of either
-perfecting every equation first or building universal renderer abstractions in
-advance. Use FTC, BFS or Dijkstra, supply/demand policy, and work-energy in that
-order. Review new visual vocabulary carefully, but allow compositions of
-promoted vocabulary to scale through automated gates and cohort review.
+The immediate product order now begins with the simple linear-equation concept
+room rather than another subject expansion. KP will first prove clean
+content/platform/provider boundaries with a plain architecture walking skeleton,
+then perfect traditional symbolic manipulation and its optional synchronized
+balance projection. The missing-middle area model follows as the second simple
+front-door concept. This ordering is recorded in
+`decisions/2026-07-19-kp-concept-room-architecture.md`.
+
+FTC remains a valuable reviewable artifact, but its human review and the BFS,
+economics, programming, and physics breadth sequence are parked until the
+front-door product language and architecture are proven.
+
+The retained cross-domain decision is to expand through capability-opening
+vertical exemplars instead of either perfecting every equation indefinitely or
+building universal renderer abstractions in advance.
 
 The core pedagogical principle is the hermeneutic loop, realized as sparse
 typed interpretive cycles that establish a whole, isolate a part, relate it
@@ -87,6 +97,8 @@ is a new combination of tutorial, graph, equation, and interaction vocabulary.
 
 ## Links
 
+- `docs/project/decisions/2026-07-19-kp-concept-room-architecture.md`
+- `docs/project/reviews/2026-07-19-linear-equation-architecture-stabilization-proposal.md`
 - `docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md`
 - `docs/project/decisions/2026-07-17-kp-hermeneutic-cross-domain-tutorial-contract.md`
 - `docs/project/reviews/2026-07-17-cross-domain-tutorial-platform-next-step-review.md`
