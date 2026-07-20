@@ -129,7 +129,8 @@
     {
       "id": "s15-reader-capture-provider",
       "title": "Reader capture provider",
-      "status": "planned"
+      "summary": "Dev reader frames now expose exact checkpoint, progress, transformation, phase, focus, motion, fit, layout, font, owner, and temporal evidence after render, with production-gated emission.",
+      "status": "complete"
     },
     {
       "id": "s16-shadow-dom-review-shell",

@@ -122,6 +122,8 @@ let activeBeat = beats[0];
 let scrollClock = createScrollClock();
 let settleTimer: number | undefined;
 let scrollFrame: number | undefined;
+let previousReviewFrameAtMs: number | undefined;
+let previousReviewScrollY = window.scrollY;
 
 const staticPlans = new Map(animation.transformations.map((transformation, index) => {
   const progress = (index + 0.5) / animation.transformations.length;
@@ -167,6 +169,9 @@ document.addEventListener("focusout", onSemanticLeave);
 window.addEventListener("pagehide", dispose, { once: true });
 reducedMotion.addEventListener("change", renderCurrentSample);
 motionSelect.addEventListener("change", onMotionPreferenceChange);
+if (import.meta.env.DEV) {
+  window.addEventListener("kp:reader-dev-review-request-frame", renderCurrentSample);
+}
 
 const unsubscribeFontReadiness = fontReadiness.subscribe(() => {
   scheduler.invalidate("fonts");
@@ -386,6 +391,41 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   document.body.dataset["kpReaderTransition"] = transitionId;
   document.body.dataset["kpReaderFramePlans"] = String(scheduler.inspect().framePlanCount + 1);
   updateActiveBeat(visualSample.progressPermille);
+  if (import.meta.env.DEV) {
+    const atMs = performance.now();
+    const schedulerState = scheduler.inspect();
+    window.dispatchEvent(new CustomEvent("kp:reader-dev-review-frame", { detail: {
+      atMs,
+      documentId,
+      documentVersion,
+      assetId: animation.id,
+      checkpointId: visualSample.checkpointId,
+      progressPermille: visualSample.progressPermille,
+      projectionId: "equation.symbolic",
+      activeTransformationIds: [...runtimeFrame.activeTransformationIds],
+      activePhase: runtimeFrame.phase.phaseId,
+      focusSource: focusSnapshot.activeSource,
+      focusRefs: [...focusSnapshot.objectRefs],
+      motionPreference,
+      motionMode: projection.mode,
+      playbackDirection: sample.direction,
+      rendererId: "reader.equation.material-layer",
+      motionAuthority: motion.samplingAuthority,
+      fitStatus: context.fit.status,
+      fitScale: context.fit.scale,
+      layoutRevision: schedulerState.layoutRevision,
+      layoutReadCount: schedulerState.readCount,
+      fontRevision: fontReadiness.revision,
+      fontReady: fontReadiness.status === "ready",
+      ownerIds: frames.map((frame) => frame.ownerId),
+      ...(previousReviewFrameAtMs === undefined
+        ? {}
+        : { frameIntervalMs: atMs - previousReviewFrameAtMs }),
+      scrollDeltaY: window.scrollY - previousReviewScrollY
+    } }));
+    previousReviewFrameAtMs = atMs;
+    previousReviewScrollY = window.scrollY;
+  }
 }
 
 function syncAnnihilationWitness(
@@ -631,6 +671,9 @@ function dispose(): void {
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
   motionSelect.removeEventListener("change", onMotionPreferenceChange);
+  if (import.meta.env.DEV) {
+    window.removeEventListener("kp:reader-dev-review-request-frame", renderCurrentSample);
+  }
   unsubscribeFontReadiness();
   fontReadiness.dispose();
   scheduler.dispose();

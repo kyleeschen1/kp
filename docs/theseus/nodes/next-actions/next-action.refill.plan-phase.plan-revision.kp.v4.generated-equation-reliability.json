@@ -102,6 +102,12 @@
       "status": "passed",
       "scope": "s14 surface-neutral capture provider boundary",
       "checkedAt": "2026-07-20T23:44:41.103Z"
+    },
+    {
+      "command": "reader provider and temporal tests plus typecheck and architecture gates",
+      "status": "passed",
+      "scope": "s15 exact semantic reader capture provider",
+      "checkedAt": "2026-07-20T23:48:18.262Z"
     }
   ],
   "expectedLearning": [
