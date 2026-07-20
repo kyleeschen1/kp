@@ -131,7 +131,8 @@
     {
       "id": "s14",
       "title": "Add reader adapter registry and lifecycle",
-      "status": "planned"
+      "summary": "Added the reader adapter registry and deterministic lifecycle. Focused tests, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s15",

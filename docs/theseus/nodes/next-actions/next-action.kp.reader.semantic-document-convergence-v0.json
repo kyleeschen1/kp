@@ -344,11 +344,23 @@
       "status": "passed",
       "scope": "s13 canonical compiler asset integration and types",
       "checkedAt": "2026-07-20T17:16:36.123Z"
+    },
+    {
+      "command": "node --test adapter registry artifact contracts and architecture suites",
+      "status": "passed",
+      "scope": "s14 13 lifecycle generic contract and boundary tests",
+      "checkedAt": "2026-07-20T17:18:46.583Z"
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s14 inferred registry types and layer fitness",
+      "checkedAt": "2026-07-20T17:18:47.729Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s13 proves the complete build path from committed Markdown and the canonical semantic asset to a searchable no-JavaScript HTML artifact with four MathML checkpoints and isolated hydration data."
+    "summary": "s14 gives each hydrated block one explicit renderer owner and a deterministic lifecycle without coupling the runtime to DOM or equation specifics."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",
