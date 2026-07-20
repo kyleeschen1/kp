@@ -95,7 +95,8 @@
     {
       "id": "s08",
       "title": "Parse minimal source-located KP Markdown",
-      "status": "planned"
+      "summary": "Parsed minimal source-located KP Markdown into LessonDocument. Focused tests, architecture gates, and all TypeScript projects pass.",
+      "status": "complete"
     },
     {
       "id": "s09",

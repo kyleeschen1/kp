@@ -260,11 +260,29 @@
       "status": "passed",
       "scope": "s07 compiler boundary and build tooling types",
       "checkedAt": "2026-07-20T17:00:04.276Z"
+    },
+    {
+      "command": "node --test five semantic reader document and compiler suites",
+      "status": "passed",
+      "scope": "s08 19 parser IR authoring and architecture tests",
+      "checkedAt": "2026-07-20T17:03:57.896Z"
+    },
+    {
+      "command": "four direct TypeScript project checks",
+      "status": "passed",
+      "scope": "s08 app node test and domains type safety",
+      "checkedAt": "2026-07-20T17:03:58.957Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s08 compiler-to-document public boundary",
+      "checkedAt": "2026-07-20T17:03:59.977Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s07 selects a narrow CommonMark AST parser with source positions and keeps its types and code private to the build-only compiler layer."
+    "summary": "s08 compiles the exemplar's intentionally narrow Markdown vocabulary into source-located LessonDocument blocks and rejects silent or unsafe syntax expansion."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",
