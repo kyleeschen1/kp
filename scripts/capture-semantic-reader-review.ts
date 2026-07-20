@@ -5,6 +5,11 @@ import { gzipSync } from "node:zlib";
 import { chromium, type Page } from "playwright";
 import { preview, type PreviewServer } from "vite";
 
+import {
+  checkKpSemanticReaderRouteBudget,
+  kpSemanticReaderRouteBudget
+} from "../src/architecture/semantic-reader-route-budget.ts";
+
 const route = "/reader/solve-x/";
 const outputRoot = path.resolve("tmp/codex/semantic-reader-review");
 const viewport = { width: 1280, height: 900 } as const;
@@ -96,11 +101,10 @@ try {
       asset.kind === "javascript" || asset.kind === "css"
     );
     const entryAssets = codeAssets.filter((asset) =>
+      asset.kind === "javascript" &&
       /reader-solve-x|modulepreload-polyfill/.test(asset.name)
     );
-    const forbiddenAssets = assets.filter((asset) =>
-      /editor|equation-surface-adapter|animation-player|three|webgl|katex-.*\.js/i.test(asset.name)
-    );
+    const routeBudgetIssues = checkKpSemanticReaderRouteBudget(assets);
     const result = {
       schemaVersion: "kp.semantic-reader-review.v1",
       capturedAt: new Date().toISOString(),
@@ -118,9 +122,12 @@ try {
         javascriptAndCssRawBytes: sum(codeAssets.map((asset) => asset.rawBytes)),
         javascriptAndCssGzipBytes: sum(codeAssets.map((asset) => asset.gzipBytes)),
         readerEntryGzipBytes: sum(entryAssets.map((asset) => asset.gzipBytes)),
-        forbiddenAssetNames: forbiddenAssets.map((asset) => asset.name),
-        fullEquationBudgetGzipBytes: 100 * 1_024,
-        readerEntryBudgetGzipBytes: 20 * 1_024
+        forbiddenAssetNames: routeBudgetIssues.flatMap((issue) =>
+          issue.assetName === undefined ? [] : [issue.assetName]
+        ),
+        fullEquationBudgetGzipBytes: kpSemanticReaderRouteBudget.fullEquationGzipBytes,
+        readerEntryBudgetGzipBytes: kpSemanticReaderRouteBudget.readerEntryGzipBytes,
+        issues: routeBudgetIssues
       },
       motion,
       accessibility: {
@@ -130,9 +137,11 @@ try {
       },
       captures
     } as const;
-    assertReview(result);
     const reportPath = path.join(outputRoot, "review.json");
     await writeFile(reportPath, `${JSON.stringify(result, null, 2)}\n`, "utf8");
+    // Preserve the measured closure even when a gate fails so regressions can
+    // be diagnosed from durable evidence instead of rerunning the capture.
+    assertReview(result);
     console.log(JSON.stringify({
       output: path.relative(process.cwd(), reportPath),
       initialHtml: result.initialHtml,
@@ -247,7 +256,7 @@ function assetKind(name: string): AssetSummary["kind"] {
 function assertReview(result: {
   readonly initialHtml: { readonly containsSearchableLesson: boolean; readonly containsMathMl: boolean };
   readonly noJavaScript: { readonly bodyTextLength: number; readonly headingCount: number; readonly visibleStaticMathCount: number };
-  readonly routeAssets: { readonly javascriptAndCssGzipBytes: number; readonly readerEntryGzipBytes: number; readonly forbiddenAssetNames: readonly string[]; readonly fullEquationBudgetGzipBytes: number; readonly readerEntryBudgetGzipBytes: number };
+  readonly routeAssets: { readonly issues: readonly { readonly message: string }[] };
   readonly motion: { readonly deltaAfterSmallScroll: number; readonly rewindErrorPermille: number; readonly layoutReadsBefore: number; readonly layoutReadsAfter: number };
   readonly accessibility: { readonly reducedMode: string | null; readonly reducedProgress: number };
 }): void {
@@ -257,14 +266,8 @@ function assertReview(result: {
   if (result.noJavaScript.bodyTextLength < 300 || result.noJavaScript.headingCount < 5 || result.noJavaScript.visibleStaticMathCount < 1) {
     throw new Error("JavaScript-disabled reader output is incomplete.");
   }
-  if (result.routeAssets.forbiddenAssetNames.length > 0) {
-    throw new Error(`Reader loaded forbidden assets: ${result.routeAssets.forbiddenAssetNames.join(", ")}`);
-  }
-  if (result.routeAssets.javascriptAndCssGzipBytes > result.routeAssets.fullEquationBudgetGzipBytes) {
-    throw new Error("Reader route exceeds the provisional full-equation gzip budget.");
-  }
-  if (result.routeAssets.readerEntryGzipBytes > result.routeAssets.readerEntryBudgetGzipBytes) {
-    throw new Error("Reader entry exceeds the provisional core gzip budget.");
+  if (result.routeAssets.issues.length > 0) {
+    throw new Error(result.routeAssets.issues.map((issue) => issue.message).join("\n"));
   }
   if (result.motion.deltaAfterSmallScroll <= 0 || result.motion.rewindErrorPermille > 3) {
     throw new Error("Reader scroll motion is not continuous and reversible.");
@@ -272,8 +275,8 @@ function assertReview(result: {
   if (result.motion.layoutReadsBefore !== result.motion.layoutReadsAfter) {
     throw new Error("Ordinary reader frames performed additional layout reads.");
   }
-  if (result.accessibility.reducedMode !== "checkpoint" || result.accessibility.reducedProgress !== 667) {
-    throw new Error("Reduced-motion reader did not project to the directional checkpoint.");
+  if (result.accessibility.reducedMode !== "essential" || result.accessibility.reducedProgress !== 500) {
+    throw new Error("Reduced-motion reader did not preserve essential causal motion.");
   }
 }
 

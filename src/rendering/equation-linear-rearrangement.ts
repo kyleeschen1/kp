@@ -18,6 +18,17 @@ export type KpEquationLinearRearrangementKind =
   | "cancel-additive-inverses"
   | "simplify-constant-difference";
 
+export function kpEquationLinearRearrangementKindForTransformType(
+  transformType: string
+): KpEquationLinearRearrangementKind | undefined {
+  switch (transformType) {
+    case "subtractBothSides": return "balanced-introduction";
+    case "cancelAdditiveInverses": return "cancel-additive-inverses";
+    case "simplifyConstantDifference": return "simplify-constant-difference";
+    default: return undefined;
+  }
+}
+
 export interface KpEquationLinearRearrangementFrame {
   readonly kind: KpEquationLinearRearrangementKind;
   readonly reservationProgress: number;

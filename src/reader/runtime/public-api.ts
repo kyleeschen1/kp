@@ -9,6 +9,7 @@ export {
   type KpReaderClockListener,
   type KpReaderClockSample,
   type KpReaderClockSource,
+  type KpReaderAnimationFrame,
   type KpReaderPlaybackClock
 } from "./playback-clock.ts";
 export {

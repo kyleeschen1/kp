@@ -4,7 +4,6 @@ import test from "node:test";
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
 import { createKpWitnessedAnnihilationBinding } from "../src/animation/witnessed-annihilation.ts";
 import { createKpLinearRearrangementChoreography } from "../src/animation/linear-rearrangement-choreography.ts";
-import "../src/rendering/equation-witnessed-annihilation-register.ts";
 import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.ts";
 import {
   compileKpReaderEquationMaterialPlan,

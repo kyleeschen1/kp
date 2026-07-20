@@ -1,12 +1,11 @@
 import { createLinearSolveAnimationAsset } from "../../animation/linear-solve-adapter.ts";
 import {
-  createKpLinearRearrangementChoreography
-} from "../../animation/linear-rearrangement-choreography.ts";
+  createKpEquationLinearRearrangementBindings
+} from "../../rendering/equation-linear-rearrangement-bindings.ts";
 import {
   createKpWitnessedAnnihilationBinding
 } from "../../animation/witnessed-annihilation.ts";
 import { createKpEquationFontReadiness } from "../../rendering/equation-font-readiness.ts";
-import "../../rendering/equation-witnessed-annihilation-register.ts";
 import {
   applyKpReaderEquationResponsiveFit,
   compileKpReaderEquationMaterialPlan,
@@ -63,7 +62,9 @@ const documentVersion = "1";
 // otherwise race a requested frame when moving between two lesson URLs.
 window.history.scrollRestoration = "manual";
 const animation = createLinearSolveAnimationAsset();
-const linearChoreography = createKpLinearRearrangementChoreography(animation);
+const linearRearrangementBindings = createKpEquationLinearRearrangementBindings(
+  animation
+);
 const story = requireElement<HTMLElement>("[data-kp-asset]");
 const staticSurface = requireElement<HTMLElement>("[data-kp-animation-static]");
 const template = requireElement<HTMLTemplateElement>("template[data-kp-reader-exemplar-template]");
@@ -307,7 +308,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     runtimeFrame.phase.phaseIndex,
     animation.transformations.length
   );
-  const choreographyStep = linearChoreography.steps.find(
+  const choreographyStep = linearRearrangementBindings.find(
     (step) => step.transformationId === transitionId
   );
   const motion = sampleKpReaderEquationSymbolMotion({

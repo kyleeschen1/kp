@@ -57,7 +57,7 @@ test("reader clock rejects invalid progress, sequence, and checkpoint identity",
   );
 });
 
-test("reader clock samples the existing renderer-neutral animation runtime", () => {
+test("reader clock projects the canonical asset phase without the catalog runtime", () => {
   const animation = createLinearSolveAnimationAsset();
   const clock = createKpReaderClockSample({
     source: "scroll",
@@ -74,7 +74,7 @@ test("reader clock samples the existing renderer-neutral animation runtime", () 
   assert.deepEqual(second, first);
 });
 
-test("reader rewind delegates directly to the canonical runtime sampler", () => {
+test("reader rewind preserves the canonical asset phase direction", () => {
   const animation = createLinearSolveAnimationAsset();
   const frame = sampleKpReaderAnimationFrame({
     animation,

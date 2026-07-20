@@ -31,12 +31,18 @@ import {
   type KpSemanticLineageEdge
 } from "../semantic/semantic-lineage-graph.ts";
 import type { SelectorCorrespondenceRecord } from "../semantic/correspondence.ts";
-import type { KpEquationLinearRearrangementKind } from "../rendering/equation-linear-rearrangement.ts";
+import {
+  kpEquationLinearRearrangementKindForTransformType,
+  type KpEquationLinearRearrangementKind
+} from "../rendering/equation-linear-rearrangement.ts";
 import {
   compileKpBridgedChoreographySequence,
   type KpBridgedChoreographySequence
 } from "./choreography-envelope-bridge.ts";
-import type { KpSuccessorSynthesisBinding } from "./successor-synthesis.ts";
+import {
+  createKpSuccessorSynthesisBindingFromMetadata,
+  type KpSuccessorSynthesisBinding
+} from "./successor-synthesis.ts";
 
 export const kpLinearRearrangementTiming = {
   orientEnd: 0.14,
@@ -98,7 +104,7 @@ export function createKpLinearRearrangementChoreography(
   animation: KpAnimationAsset
 ): KpLinearRearrangementChoreography {
   const transformations = animation.transformations.filter((candidate) =>
-    linearRearrangementKind(candidate.transformType) !== undefined
+    kpEquationLinearRearrangementKindForTransformType(candidate.transformType) !== undefined
   );
   if (transformations.length === 0) {
     throw new Error(`Animation ${animation.id} has no linear rearrangement steps.`);
@@ -195,7 +201,9 @@ function createStep(
   animation: KpAnimationAsset,
   transformation: KpSemanticTransformation
 ): KpLinearRearrangementStep {
-  const kind = linearRearrangementKind(transformation.transformType);
+  const kind = kpEquationLinearRearrangementKindForTransformType(
+    transformation.transformType
+  );
   if (kind === undefined || transformation.correspondenceMap === undefined) {
     throw new Error(`Transformation ${transformation.id} is not a complete rearrangement step.`);
   }
@@ -209,7 +217,12 @@ function createStep(
     throw new Error(`Linear rearrangement ${transformation.id} requires a causal record.`);
   }
   const successorSynthesisBinding = kind === "simplify-constant-difference"
-    ? createSuccessorSynthesisBinding(animation, transformation, causalRecord)
+    ? createKpSuccessorSynthesisBindingFromMetadata({
+        bundle: animation.bundle,
+        transformation,
+        correspondence: causalRecord,
+        operationId: `kp.algebra.${kebabCase(transformation.transformType)}`
+      })
     : undefined;
   const vocabulary = vocabularyForStep(
     transformation,
@@ -573,75 +586,6 @@ function lineageEdgesForRecord(
       ];
 }
 
-function createSuccessorSynthesisBinding(
-  animation: KpAnimationAsset,
-  transformation: KpSemanticTransformation,
-  causalRecord: SelectorCorrespondenceRecord
-): KpSuccessorSynthesisBinding {
-  const selectors = new Map(
-    animation.bundle.objects.flatMap((object) => object.selectors).map((selector) => [
-      selector.id,
-      selector
-    ])
-  );
-  const sourceAnnotations = causalRecord.sourceSelectorIds.map((id, index) => {
-    const selector = selectors.get(id);
-    const contribution = selector?.metadata?.["successorContribution"];
-    const semanticRole = selector?.metadata?.["successorRole"];
-    const propagationRank = selector?.metadata?.["successorRank"];
-    if (
-      (contribution !== "material-input" && contribution !== "catalyst") ||
-      typeof semanticRole !== "string" ||
-      typeof propagationRank !== "number"
-    ) {
-      throw new Error(
-        `Successor source ${id} requires authored contribution, role, and rank metadata at index ${index}.`
-      );
-    }
-    const typedContribution: "material-input" | "catalyst" = contribution;
-    return {
-      id,
-      semanticRole,
-      selectorIds: [id],
-      contribution: typedContribution,
-      propagationRank
-    };
-  });
-  const targetAnnotations = causalRecord.targetSelectorIds.map((id, index) => {
-    const selector = selectors.get(id);
-    const semanticRole = selector?.metadata?.["successorRole"];
-    const propagationRank = selector?.metadata?.["successorRank"];
-    if (
-      selector?.metadata?.["successorTarget"] !== true ||
-      typeof semanticRole !== "string" ||
-      typeof propagationRank !== "number"
-    ) {
-      throw new Error(
-        `Successor target ${id} requires authored target, role, and rank metadata at index ${index}.`
-      );
-    }
-    return { id, semanticRole, selectorIds: [id], propagationRank };
-  });
-  const materialSourceIds = sourceAnnotations
-    .filter((annotation) => annotation.contribution === "material-input")
-    .map((annotation) => annotation.id);
-  return {
-    id: `successor.${transformation.id}.${causalRecord.id}`,
-    relationRecordId: causalRecord.id,
-    authority: {
-      operationId: `kp.algebra.${kebabCase(transformation.transformType)}`,
-      bindingId: `${transformation.id}#${causalRecord.id}`
-    },
-    sourceAnnotations,
-    targetAnnotations,
-    lineages: [{
-      id: `lineage.${transformation.id}.${causalRecord.id}.material`,
-      sourceAnnotationIds: materialSourceIds,
-      targetAnnotationIds: targetAnnotations.map((annotation) => annotation.id)
-    }]
-  };
-}
-
 function focusEntityIdsForStep(
   transformation: KpSemanticTransformation,
   causalRecord: SelectorCorrespondenceRecord
@@ -762,17 +706,6 @@ function operationSubgraph(
     id: `${transformationId}.operation-subgraph`,
     nodes
   };
-}
-
-function linearRearrangementKind(
-  transformType: string
-): KpEquationLinearRearrangementKind | undefined {
-  switch (transformType) {
-    case "subtractBothSides": return "balanced-introduction";
-    case "cancelAdditiveInverses": return "cancel-additive-inverses";
-    case "simplifyConstantDifference": return "simplify-constant-difference";
-    default: return undefined;
-  }
 }
 
 function motifIdsForKind(

@@ -1,4 +1,7 @@
 import type { KpMaterialJunctionRect } from "./material-junction.ts";
+import type { KpAssetBundle } from "../semantic/asset.ts";
+import type { KpSemanticTransformation } from "../semantic/asset-transformation.ts";
+import type { SelectorCorrespondenceRecord } from "../semantic/correspondence.ts";
 
 export type KpSuccessorSynthesisPathFamily = "arc-above" | "arc-below";
 
@@ -102,6 +105,76 @@ export interface KpSuccessorSynthesisFrame {
     readonly pathFamily: KpSuccessorSynthesisPathFamily;
     readonly pose: KpSuccessorSynthesisPose;
   }[];
+}
+
+export function createKpSuccessorSynthesisBindingFromMetadata(input: {
+  readonly bundle: KpAssetBundle;
+  readonly transformation: KpSemanticTransformation;
+  readonly correspondence: SelectorCorrespondenceRecord;
+  readonly operationId: string;
+}): KpSuccessorSynthesisBinding {
+  const selectors = new Map(
+    input.bundle.objects.flatMap((object) => object.selectors).map((selector) => [
+      selector.id,
+      selector
+    ])
+  );
+  const sourceAnnotations = input.correspondence.sourceSelectorIds.map((id, index) => {
+    const selector = selectors.get(id);
+    const contribution = selector?.metadata?.["successorContribution"];
+    const semanticRole = selector?.metadata?.["successorRole"];
+    const propagationRank = selector?.metadata?.["successorRank"];
+    if (
+      (contribution !== "material-input" && contribution !== "catalyst") ||
+      typeof semanticRole !== "string" ||
+      typeof propagationRank !== "number"
+    ) {
+      throw new Error(
+        `Successor source ${id} requires authored contribution, role, and rank metadata at index ${index}.`
+      );
+    }
+    const typedContribution: "material-input" | "catalyst" = contribution;
+    return {
+      id,
+      semanticRole,
+      selectorIds: [id],
+      contribution: typedContribution,
+      propagationRank
+    };
+  });
+  const targetAnnotations = input.correspondence.targetSelectorIds.map((id, index) => {
+    const selector = selectors.get(id);
+    const semanticRole = selector?.metadata?.["successorRole"];
+    const propagationRank = selector?.metadata?.["successorRank"];
+    if (
+      selector?.metadata?.["successorTarget"] !== true ||
+      typeof semanticRole !== "string" ||
+      typeof propagationRank !== "number"
+    ) {
+      throw new Error(
+        `Successor target ${id} requires authored target, role, and rank metadata at index ${index}.`
+      );
+    }
+    return { id, semanticRole, selectorIds: [id], propagationRank };
+  });
+  const materialSourceIds = sourceAnnotations
+    .filter((annotation) => annotation.contribution === "material-input")
+    .map((annotation) => annotation.id);
+  return {
+    id: `successor.${input.transformation.id}.${input.correspondence.id}`,
+    relationRecordId: input.correspondence.id,
+    authority: {
+      operationId: input.operationId,
+      bindingId: `${input.transformation.id}#${input.correspondence.id}`
+    },
+    sourceAnnotations,
+    targetAnnotations,
+    lineages: [{
+      id: `lineage.${input.transformation.id}.${input.correspondence.id}.material`,
+      sourceAnnotationIds: materialSourceIds,
+      targetAnnotationIds: targetAnnotations.map((annotation) => annotation.id)
+    }]
+  };
 }
 
 export type KpSuccessorSynthesisLawId =

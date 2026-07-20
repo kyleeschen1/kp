@@ -109,6 +109,8 @@ function isForbiddenLearnerDependency(target: string): boolean {
     || target.startsWith("three/")
     || target.startsWith("src/editor/")
     || target.includes("/src/editor/")
+    || target.includes("animation/runtime-sampler")
+    || target.includes("animation/linear-rearrangement-choreography")
     || target.includes("graph-webgl-three");
 }
 

@@ -3,7 +3,8 @@ import type {
 } from "./equation-linear-rearrangement.ts";
 import {
   sampleKpEquationLinearRearrangementFrame,
-  sampleKpEquationLinearRearrangementRelation
+  sampleKpEquationLinearRearrangementRelation,
+  type KpEquationLinearRearrangementFrame
 } from "./equation-linear-rearrangement.ts";
 import type {
   AnnotatedMotionToken,
@@ -21,14 +22,16 @@ import type { KpReaderEquationTransitionMaterialPlan } from "../reader/renderers
 import type { KpReaderEquationLayoutSnapshot } from "../reader/renderers/equation-layout-snapshot.ts";
 import type { KpReaderEquationPerceptualAlignmentPlan } from "../reader/renderers/equation-perceptual-alignment.ts";
 import {
-  createKpEquationWitnessedAnnihilationPlan
+  createKpEquationWitnessedAnnihilationPlan,
+  sampleKpEquationWitnessedAnnihilation,
+  sampleKpEquationWitnessedAnnihilationRelation
 } from "./equation-witnessed-annihilation.ts";
 import {
   createKpEquationSuccessorSynthesisPlan
 } from "./equation-linear-rearrangement.ts";
-import {
-  sampleKpEquationTokenMotion,
-  type KpEquationTokenMotionFrame
+import type {
+  KpEquationTokenMotionFrame,
+  KpEquationTokenMotionFrameToken
 } from "./semantic-equation-token-renderer.ts";
 import type { KpMeasuredEquationTransitionGeometry } from "./equation-motion-dom.ts";
 
@@ -130,8 +133,95 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
   };
   return {
     geometry,
-    motion: sampleKpEquationTokenMotion(geometry, input.progress)
+    motion: sampleLinearRearrangementMotion(geometry, input.progress)
   };
+}
+
+function sampleLinearRearrangementMotion(
+  geometry: KpMeasuredEquationTransitionGeometry,
+  progress: number
+): KpEquationTokenMotionFrame {
+  const p = clamp01(progress);
+  const linearRearrangement = sampleKpEquationLinearRearrangementFrame(
+    geometry.linearRearrangementKind!,
+    p
+  );
+  const witnessedAnnihilation = geometry.witnessedAnnihilationPlan === undefined
+    ? undefined
+    : sampleKpEquationWitnessedAnnihilation(
+        geometry.witnessedAnnihilationPlan,
+        p
+      );
+  const tokens = new Map<string, KpEquationTokenMotionFrameToken>();
+  for (const relation of geometry.relations) {
+    const sourceTokens = tokensForRelation(
+      geometry.sourceTokens,
+      relation.source?.motionIds ?? []
+    );
+    const targetTokens = tokensForRelation(
+      geometry.targetTokens,
+      relation.target?.motionIds ?? []
+    );
+    const witnessed = witnessedAnnihilation === undefined ||
+        geometry.witnessedAnnihilationPlan === undefined
+      ? undefined
+      : sampleKpEquationWitnessedAnnihilationRelation({
+          plan: geometry.witnessedAnnihilationPlan,
+          frame: witnessedAnnihilation,
+          relation,
+          sourceTokens,
+          targetTokens
+        });
+    const sampled = witnessed ?? sampleRequiredLinearRelation({
+      geometry,
+      relation,
+      sourceTokens,
+      targetTokens,
+      progress: p,
+      frame: linearRearrangement
+    });
+    for (const token of sampled) tokens.set(`${token.side}:${token.motionId}`, token);
+  }
+  return {
+    transitionId: geometry.transitionId,
+    progress: p,
+    tokens: [...tokens.values()],
+    linearRearrangement,
+    ...(witnessedAnnihilation === undefined ? {} : { witnessedAnnihilation })
+  };
+}
+
+function sampleRequiredLinearRelation(input: {
+  readonly geometry: KpMeasuredEquationTransitionGeometry;
+  readonly relation: KpMeasuredEquationTransitionRelationGeometry;
+  readonly sourceTokens: readonly AnnotatedMotionToken[];
+  readonly targetTokens: readonly AnnotatedMotionToken[];
+  readonly progress: number;
+  readonly frame: KpEquationLinearRearrangementFrame;
+}): readonly KpEquationTokenMotionFrameToken[] {
+  const sampled = sampleKpEquationLinearRearrangementRelation({
+    relation: input.relation,
+    sourceTokens: input.sourceTokens,
+    targetTokens: input.targetTokens,
+    progress: input.progress,
+    frame: input.frame,
+    successorSynthesisPlan: input.geometry.successorSynthesisPlan
+  });
+  if (sampled === undefined) {
+    throw new Error(
+      `Linear rearrangement ${input.geometry.transitionId} does not support ` +
+      `relation ${input.relation.recordId}.`
+    );
+  }
+  return sampled;
+}
+
+function tokensForRelation(
+  tokens: readonly AnnotatedMotionToken[],
+  motionIds: readonly string[]
+): readonly AnnotatedMotionToken[] {
+  const ids = new Set(motionIds);
+  return tokens.filter((token) => ids.has(token.motionId));
 }
 
 export function sampleKpEquationLinearRearrangementOwnerMotion(input: {
@@ -251,4 +341,11 @@ function center(rect: KpEquationOwnerMotionAnchor["rect"]) {
     x: rect.left + rect.width / 2,
     y: rect.top + rect.height / 2
   };
+}
+
+function clamp01(value: number): number {
+  if (!Number.isFinite(value)) {
+    throw new Error("Linear rearrangement owner progress must be finite.");
+  }
+  return Math.max(0, Math.min(1, value));
 }

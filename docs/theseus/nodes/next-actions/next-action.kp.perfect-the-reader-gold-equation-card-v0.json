@@ -94,6 +94,14 @@
     {
       "kind": "file",
       "path": "tests/semantic-reader-exemplar-responsive-fit.browser.spec.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/architecture/semantic-reader-route-budget.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-linear-rearrangement-bindings.ts"
     }
   ],
   "dependsOn": {
@@ -348,6 +356,18 @@
       "status": "passed",
       "scope": "s24 browser operation authority and unchanged gold motion",
       "checkedAt": "2026-07-20T21:53:53.980Z"
+    },
+    {
+      "command": "node capture-semantic-reader-review production route",
+      "status": "passed",
+      "scope": "s25 93278-byte gzip closure 13310-byte entry zero forbidden assets searchable no-JS essential motion",
+      "checkedAt": "2026-07-20T22:27:47.132Z"
+    },
+    {
+      "command": "node --test route budget architecture lightweight binding and reader frame suites plus architecture and typecheck",
+      "status": "passed",
+      "scope": "s25 closure enforcement and canonical semantic parity",
+      "checkedAt": "2026-07-20T22:27:48.494Z"
     }
   ],
   "progress": {

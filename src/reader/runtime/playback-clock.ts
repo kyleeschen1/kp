@@ -1,8 +1,7 @@
-import type { KpAnimationAsset } from "../../animation/asset.ts";
 import {
-  sampleKpAnimationRuntimeFrame,
-  type KpAnimationRuntimeFrame
-} from "../../animation/runtime-sampler.ts";
+  sampleKpAnimationAssetPhase,
+  type KpAnimationAsset
+} from "../../animation/asset.ts";
 
 export type KpReaderClockSource =
   | "initial"
@@ -29,6 +28,24 @@ export interface KpReaderPlaybackClock {
   getSnapshot(): KpReaderClockSample;
   subscribe(listener: KpReaderClockListener): () => void;
   dispose(): void;
+}
+
+export interface KpReaderAnimationFrame {
+  readonly id: string;
+  readonly kind: "reader-animation-frame";
+  readonly rendererNeutral: true;
+  readonly animationId: string;
+  readonly title: string;
+  readonly clock: {
+    readonly direction: "forward" | "rewind";
+    readonly progress: number;
+  };
+  readonly phase: {
+    readonly phaseIndex: number;
+    readonly phaseId: string;
+  };
+  readonly activeTransformationIds: readonly string[];
+  readonly focusSelectorIds: readonly string[];
 }
 
 export function createKpReaderClockSample(input: {
@@ -65,14 +82,48 @@ export function createKpReaderClockSample(input: {
 export function sampleKpReaderAnimationFrame(input: {
   readonly animation: KpAnimationAsset;
   readonly clock: KpReaderClockSample;
-  readonly childAnimations?: readonly KpAnimationAsset[] | undefined;
-}): KpAnimationRuntimeFrame {
-  return sampleKpAnimationRuntimeFrame({
-    animation: input.animation,
-    childAnimations: input.childAnimations,
+}): KpReaderAnimationFrame {
+  const phase = sampleKpAnimationAssetPhase(input.animation, {
     direction: input.clock.direction,
     progress: input.clock.progress
   });
+  const transformationIds = new Set(
+    input.animation.transformations.map((transformation) => transformation.id)
+  );
+  const activeAnnotationIds = new Set([
+    ...phase.annotationIdsByPlacement.before,
+    ...phase.annotationIdsByPlacement.during,
+    ...phase.annotationIdsByPlacement.after
+  ]);
+  const focusSelectorIds = [...new Set(
+    input.animation.transformationTree.annotations
+      .filter((annotation) =>
+        activeAnnotationIds.has(annotation.id) &&
+        (annotation.kind === "focus" || annotation.kind === "emphasis")
+      )
+      .flatMap((annotation) => annotation.selectorIds ?? [])
+  )];
+  return {
+    id:
+      `reader-frame.${input.animation.id}.` +
+      `${input.clock.direction}.${input.clock.progress.toFixed(4)}`,
+    kind: "reader-animation-frame",
+    rendererNeutral: true,
+    animationId: input.animation.id,
+    title: input.animation.title,
+    clock: {
+      direction: input.clock.direction,
+      progress: input.clock.progress
+    },
+    phase: {
+      phaseIndex: phase.phaseIndex,
+      phaseId: phase.phaseId
+    },
+    activeTransformationIds: phase.nodeIds.filter((id) =>
+      transformationIds.has(id)
+    ),
+    focusSelectorIds
+  };
 }
 
 function requireProgress(value: number): number {

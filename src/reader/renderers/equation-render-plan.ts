@@ -1,5 +1,5 @@
 import type { KpAnimationAsset } from "../../animation/asset.ts";
-import type { KpAnimationRuntimeFrame } from "../../animation/runtime-sampler.ts";
+import type { KpReaderAnimationFrame } from "../runtime/public-api.ts";
 import type {
   KpEquationTransitionLifecycleKind,
   KpEquationTransitionIrRelation,
@@ -17,7 +17,7 @@ export interface KpReaderEquationRenderPlan {
   readonly animationId: string;
   readonly runtimeFrameId: string;
   readonly phaseId: string;
-  readonly direction: KpAnimationRuntimeFrame["clock"]["direction"];
+  readonly direction: KpReaderAnimationFrame["clock"]["direction"];
   readonly progress: number;
   readonly focusSelectorIds: readonly string[];
   readonly transitions: readonly KpReaderEquationTransitionPlan[];
@@ -67,9 +67,19 @@ export interface KpReaderEquationRenderPlanDiagnostic {
   readonly transformationId?: string | undefined;
 }
 
+type KpReaderEquationAnimationFrame = Pick<
+  KpReaderAnimationFrame,
+  | "id"
+  | "animationId"
+  | "clock"
+  | "phase"
+  | "activeTransformationIds"
+  | "focusSelectorIds"
+>;
+
 export function projectKpReaderEquationRenderPlan(input: {
   readonly animation: KpAnimationAsset;
-  readonly runtimeFrame: KpAnimationRuntimeFrame;
+  readonly runtimeFrame: KpReaderEquationAnimationFrame;
 }): KpReaderEquationRenderPlan {
   if (input.animation.id !== input.runtimeFrame.animationId) {
     throw new Error(

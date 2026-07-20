@@ -183,7 +183,8 @@
     {
       "id": "s25-route-budgets",
       "title": "Enforce architecture and route budgets",
-      "status": "planned"
+      "summary": "The production reader now loads 93,278 gzip bytes of JS/CSS with a 13,310-byte executable entry and zero forbidden assets. Lightweight phase and operation-binding projections preserve canonical IDs and choreography semantics without fetching the catalog runtime or choreography compiler.",
+      "status": "complete"
     },
     {
       "id": "s26-visual-review-gate",

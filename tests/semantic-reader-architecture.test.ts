@@ -78,9 +78,17 @@ test("semantic reader rejects editor and Three.js dependencies at every layer", 
     {
       path: "src/reader/runtime/load.ts",
       source: 'const module = import("../../rendering/graph-webgl-three.ts");'
+    },
+    {
+      path: "src/reader/runtime/frame.ts",
+      source: 'import { sampleKpAnimationRuntimeFrame } from "../../animation/runtime-sampler.ts";'
+    },
+    {
+      path: "src/reader/app/equation.ts",
+      source: 'import { createKpLinearRearrangementChoreography } from "../../animation/linear-rearrangement-choreography.ts";'
     }
   ]);
-  assert.equal(violations.length, 3);
+  assert.equal(violations.length, 5);
   assert.ok(violations.every((violation) =>
     violation.kind === "forbidden-learner-dependency"
   ));
