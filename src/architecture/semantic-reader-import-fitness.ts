@@ -16,7 +16,8 @@ export interface KpSemanticReaderImportViolation {
   readonly kind:
     | "cross-layer-deep-import"
     | "dependency-direction"
-    | "forbidden-learner-dependency";
+    | "forbidden-learner-dependency"
+    | "build-only-dependency-leak";
   readonly message: string;
 }
 
@@ -41,6 +42,16 @@ export function checkKpSemanticReaderImports(
           sourceLayer: sourceLayer.id,
           kind: "forbidden-learner-dependency",
           message: "semantic reader code may not depend on editor or Three.js modules"
+        });
+        continue;
+      }
+      if (sourceLayer.id !== "compiler" && isBuildOnlyParserDependency(specifier)) {
+        violations.push({
+          sourceFile: file.path,
+          specifier,
+          sourceLayer: sourceLayer.id,
+          kind: "build-only-dependency-leak",
+          message: "Markdown parser packages are restricted to the build-only compiler layer"
         });
         continue;
       }
@@ -75,6 +86,15 @@ export function checkKpSemanticReaderImports(
     left.sourceFile.localeCompare(right.sourceFile)
       || left.specifier.localeCompare(right.specifier)
   );
+}
+
+function isBuildOnlyParserDependency(specifier: string): boolean {
+  return specifier === "mdast-util-from-markdown"
+    || specifier.startsWith("mdast-util-from-markdown/")
+    || specifier === "mdast"
+    || specifier.startsWith("mdast/")
+    || specifier === "micromark"
+    || specifier.startsWith("micromark/");
 }
 
 function findLayer(

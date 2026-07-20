@@ -86,6 +86,33 @@ test("semantic reader rejects editor and Three.js dependencies at every layer", 
   ));
 });
 
+test("Markdown AST dependencies remain confined to the build-only compiler", () => {
+  const allowed = checkKpSemanticReaderImports([{
+    path: "src/reader/compiler/markdown-ast-parser.ts",
+    source: 'import { fromMarkdown } from "mdast-util-from-markdown";'
+  }]);
+  assert.deepEqual(allowed, []);
+
+  const violations = checkKpSemanticReaderImports([
+    {
+      path: "src/reader/document/markdown.ts",
+      source: 'import type { Root } from "mdast";'
+    },
+    {
+      path: "src/reader/runtime/hydrate.ts",
+      source: 'import { fromMarkdown } from "mdast-util-from-markdown";'
+    },
+    {
+      path: "src/reader/app/mount.ts",
+      source: 'import { micromark } from "micromark";'
+    }
+  ]);
+  assert.equal(violations.length, 3);
+  assert.ok(violations.every((violation) =>
+    violation.kind === "build-only-dependency-leak"
+  ));
+});
+
 test("semantic reader exemplar contract names references, rollback, and promotion gate", () => {
   assert.equal(kpSemanticReaderExemplarContract.canonicalReferences.length, 5);
   assert.ok(kpSemanticReaderExemplarContract.rollbackUnit.includes("isolated src/reader"));

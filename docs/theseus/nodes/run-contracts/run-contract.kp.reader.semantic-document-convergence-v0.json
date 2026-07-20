@@ -89,7 +89,8 @@
     {
       "id": "s07",
       "title": "Select and isolate build-only Markdown AST parser",
-      "status": "planned"
+      "summary": "Selected and isolated the build-only Markdown AST parser. Position tests, architecture gates, production build, bundle scan, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s08",

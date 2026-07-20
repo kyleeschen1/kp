@@ -242,11 +242,29 @@
       "status": "passed",
       "scope": "s06 app node test and domain type safety",
       "checkedAt": "2026-07-20T16:55:46.787Z"
+    },
+    {
+      "command": "node --test semantic reader parser and architecture tests",
+      "status": "passed",
+      "scope": "s07 positioned AST behavior and dependency confinement",
+      "checkedAt": "2026-07-20T17:00:02.078Z"
+    },
+    {
+      "command": "npm run build and npm run check:reader-parser-isolation",
+      "status": "passed",
+      "scope": "s07 production bundle closure",
+      "checkedAt": "2026-07-20T17:00:03.289Z"
+    },
+    {
+      "command": "npm run check:architecture and node TypeScript check",
+      "status": "passed",
+      "scope": "s07 compiler boundary and build tooling types",
+      "checkedAt": "2026-07-20T17:00:04.276Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s06 adds a terse inference-first lesson authoring API with literal identity, shorthand prose, input copying, and validation at definition time."
+    "summary": "s07 selects a narrow CommonMark AST parser with source positions and keeps its types and code private to the build-only compiler layer."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",
