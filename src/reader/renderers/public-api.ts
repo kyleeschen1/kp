@@ -25,3 +25,12 @@ export {
   type KpReaderEquationMaterialPlanDiagnostic,
   type KpReaderEquationTransitionMaterialPlan
 } from "./equation-material-plan.ts";
+export {
+  createKpReaderEquationLayoutSnapshot,
+  measureKpReaderEquationLayoutSnapshot,
+  type KpReaderEquationAnchorMeasurement,
+  type KpReaderEquationLayoutSnapshot,
+  type KpReaderEquationMeasuredAnchor,
+  type KpReaderEquationMeasuredOwner,
+  type KpReaderLayoutRect
+} from "./equation-layout-snapshot.ts";

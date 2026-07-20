@@ -185,7 +185,8 @@
     {
       "id": "s23",
       "title": "Measure hidden KaTeX into layout snapshots",
-      "status": "planned"
+      "summary": "Measured hidden semantic KaTeX into immutable layout snapshots. Focused tests, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s24",
