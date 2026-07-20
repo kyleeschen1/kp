@@ -41,7 +41,7 @@ export interface LinearSolveKpAsset {
 export type LinearSolveKpBehavior =
   KpBehavior<LinearSolveTutorialCardSampleFrame>;
 
-const ids = {
+export const linearSolveAssetIds = {
   initial: "equation.linear-solve.initial",
   afterSubtract: "equation.linear-solve.after-subtract",
   leftSimplified: "equation.linear-solve.left-simplified",
@@ -50,6 +50,8 @@ const ids = {
   cancel: "transform.linear-solve.cancel-left-additive-inverse",
   simplify: "transform.linear-solve.simplify-right-difference"
 } as const;
+
+const ids = linearSolveAssetIds;
 
 export function createLinearSolveKpAssetBundle(): LinearSolveKpAsset {
   const bundle = createKpAssetBundle({

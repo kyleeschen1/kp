@@ -62,11 +62,25 @@
       "scope": "s02 presentation policy typing",
       "checkedAt": "2026-07-20T13:47:49.337Z",
       "notes": "All TypeScript projects pass."
+    },
+    {
+      "command": "node test linear equation symbolic story",
+      "status": "passed",
+      "scope": "s03 searchable story and semantic references",
+      "checkedAt": "2026-07-20T13:50:20.472Z",
+      "notes": "Four ordered beats resolve to canonical object and transformation ids."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03 story model typing",
+      "checkedAt": "2026-07-20T13:50:21.580Z",
+      "notes": "All TypeScript projects pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s02 defines symbolic-first, left-to-right, non-scrubbed opening defaults and retains advanced features behind a disclosure without changing runtime behavior."
+    "summary": "Slice s03 adds content-owned searchable x plus 3 equals 7 prose at four stable progress targets, with semantic focus references backed by the existing asset."
   },
   "allowedWork": [
     "Route-local concept-room presentation, content composition, adapter, style, tests, stable visual checks, and review evidence for the approved x plus 3 equals 7 exemplar.",
@@ -91,12 +105,13 @@
     {
       "id": "s02-presentation-policy",
       "title": "Define route-local symbolic-first presentation policy",
-      "status": "in-progress"
+      "summary": "Defined the route-local inferred symbolic-first presentation policy in commit e7178f6; global concept-room contracts and runtime behavior remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "s03-story-model",
       "title": "Define the x plus 3 equals 7 story model",
-      "status": "planned"
+      "status": "in-progress"
     },
     {
       "id": "s04-shared-animation-adapter",
