@@ -55,3 +55,8 @@ export {
   type KpReaderEquationFrameSchedulerState,
   type KpReaderEquationLayoutInvalidationReason
 } from "./equation-frame-scheduler.ts";
+export {
+  sampleKpReaderEquationSymbolMotion,
+  type KpReaderEquationSymbolMotionFrame,
+  type KpReaderEquationSymbolOwnerPose
+} from "./equation-symbol-motion.ts";

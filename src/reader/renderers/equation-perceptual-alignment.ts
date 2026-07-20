@@ -91,9 +91,18 @@ export function planKpReaderEquationPerceptualAlignment(input: {
     x: clampSymmetric(raw.x, policy.maxInlineCorrectionPx),
     y: clampSymmetric(raw.y, policy.maxBlockCorrectionPx)
   };
+  const sourceCorrection = {
+    x: -correction.x / 2,
+    y: -correction.y / 2
+  };
+  const targetCorrection = {
+    x: correction.x / 2,
+    y: correction.y / 2
+  };
 
-  // A single bounded correction keeps the equation's semantic spine stable
-  // without allowing one unusual glyph box to override responsive layout.
+  // Split correction across both endpoints so reversing direction retraces
+  // the same absolute path, while bounds keep unusual glyphs from dragging
+  // the equation outside its responsive layout.
   return {
     id: `alignment.${input.layout.id}`,
     kind: "reader-equation-perceptual-alignment-plan",
@@ -109,10 +118,10 @@ export function planKpReaderEquationPerceptualAlignment(input: {
       ownerId: owner.ownerId,
       ...(owner.sourceBounds === undefined
         ? {}
-        : { sourceBounds: { ...owner.sourceBounds } }),
+        : { sourceBounds: shiftRect(owner.sourceBounds, sourceCorrection) }),
       ...(owner.targetBounds === undefined
         ? {}
-        : { targetBounds: shiftRect(owner.targetBounds, correction) })
+        : { targetBounds: shiftRect(owner.targetBounds, targetCorrection) })
     }))
   };
 }

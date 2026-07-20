@@ -495,11 +495,23 @@
       "status": "passed",
       "scope": "s26 generic inferred scheduler contracts and dependency fitness",
       "checkedAt": "2026-07-20T18:25:15.622Z"
+    },
+    {
+      "command": "node --test symbol motion perceptual alignment scheduler and architecture suites",
+      "status": "passed",
+      "scope": "s27 fifteen endpoint handoff complementary path continuity salience and boundary tests",
+      "checkedAt": "2026-07-20T18:30:04.607Z"
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s27 pure motion frame contracts and reader dependency fitness",
+      "checkedAt": "2026-07-20T18:30:05.699Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s26 structurally confines layout reads to batched mount resize font or content invalidation; ordinary scroll frames reuse cached plans and perform write-only updates."
+    "summary": "s27 samples continuous semantic symbol poses with mirrored native handoff, cancellation and introduction, smooth focus salience, and exact forward-t versus rewind-one-minus-t geometry."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

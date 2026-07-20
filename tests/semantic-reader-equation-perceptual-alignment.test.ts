@@ -71,9 +71,12 @@ test("perceptual alignment anchors the equation spine with bounded correction", 
   )!;
   assert.equal(
     referenceAfter.targetBounds!.left,
-    referenceBefore.targetBounds!.left + 12
+    referenceBefore.targetBounds!.left + 6
   );
-  assert.deepEqual(referenceAfter.sourceBounds, referenceBefore.sourceBounds);
+  assert.equal(
+    referenceAfter.sourceBounds!.left,
+    referenceBefore.sourceBounds!.left - 6
+  );
 });
 
 test("perceptual alignment is directionally reversible", () => {
