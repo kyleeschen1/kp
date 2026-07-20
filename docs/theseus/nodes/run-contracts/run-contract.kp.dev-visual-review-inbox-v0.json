@@ -63,7 +63,8 @@
     {
       "id": "s04-build-environment-identity",
       "title": "Build and environment identity",
-      "status": "planned"
+      "summary": "Captured normalized browser, viewport, accessibility preferences, and build fingerprints without personal or filesystem fields.",
+      "status": "complete"
     },
     {
       "id": "s05-temporal-ring-buffer",
