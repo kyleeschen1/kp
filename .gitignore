@@ -31,6 +31,9 @@ coverage/
 # Repo-local agent scratch tooling and artifacts
 /tmp/codex/
 
+# Durable local visual-review inbox (private, never a source artifact)
+/.kp/review-logs/
+
 # Editor and OS files
 .DS_Store
 .idea/

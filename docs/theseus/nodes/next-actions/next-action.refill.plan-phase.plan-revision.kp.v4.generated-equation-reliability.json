@@ -84,6 +84,12 @@
       "status": "passed",
       "scope": "s11 default development enablement and default server exclusion",
       "checkedAt": "2026-07-20T23:38:50.424Z"
+    },
+    {
+      "command": "node --test review retention and acceptance plus TypeScript checks",
+      "status": "passed",
+      "scope": "s12 local durability and source exclusion policy",
+      "checkedAt": "2026-07-20T23:40:07.772Z"
     }
   ],
   "expectedLearning": [

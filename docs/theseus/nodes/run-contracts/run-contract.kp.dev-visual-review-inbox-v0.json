@@ -111,7 +111,8 @@
     {
       "id": "s12-path-retention-policy",
       "title": "Repository ignore and retention policy",
-      "status": "planned"
+      "summary": "Review logs survive runs under gitignored .kp storage, never auto-expire or upload, and remain separate from disposable scratch and source evidence.",
+      "status": "complete"
     },
     {
       "id": "s13-typed-browser-client",
