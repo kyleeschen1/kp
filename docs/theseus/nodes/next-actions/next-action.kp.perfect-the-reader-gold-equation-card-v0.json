@@ -34,6 +34,10 @@
     {
       "kind": "file",
       "path": "src/rendering/equation-gold-parity.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/computed-style-clone.ts"
     }
   ],
   "dependsOn": {
@@ -70,6 +74,12 @@
       "status": "passed",
       "scope": "s02 parity contract",
       "checkedAt": "2026-07-20T20:29:40.166Z"
+    },
+    {
+      "command": "npx playwright test tests/equation-computed-style-clone.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s03 inherited and nested style preservation",
+      "checkedAt": "2026-07-20T20:31:22.229Z"
     }
   ],
   "progress": {

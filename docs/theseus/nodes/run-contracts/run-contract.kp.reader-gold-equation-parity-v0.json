@@ -51,7 +51,8 @@
     {
       "id": "s03-style-clone",
       "title": "Extract computed-style clone primitive",
-      "status": "planned"
+      "summary": "Added and browser-proved a neutral recursive computed-style clone primitive without changing either surface.",
+      "status": "complete"
     },
     {
       "id": "s04-font-readiness",
