@@ -2,7 +2,8 @@
   "id": "run-contract.kp.reader-gold-equation-parity-v0",
   "kind": "run-contract",
   "title": "Reader gold equation parity",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -189,7 +190,8 @@
     {
       "id": "s26-visual-review-gate",
       "title": "Run full conformance and stop for review",
-      "status": "planned"
+      "summary": "All architecture unit browser accessibility performance production route-budget and named visual capture gates pass; the exemplar is running and ready for the required human visual review.",
+      "status": "complete"
     }
   ]
 }

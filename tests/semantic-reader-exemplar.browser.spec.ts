@@ -73,7 +73,7 @@ test("one material stage retains persistent semantic owners across transitions",
   await expect(xOwner).toBeAttached();
   await xOwner.evaluate((element) => { element.dataset["kpPersistenceWitness"] = "same-node"; });
 
-  await page.locator("#beat\\.simplify").scrollIntoViewIfNeeded();
+  await page.locator("#beat\\.solve").scrollIntoViewIfNeeded();
   await page.evaluate(() => window.scrollBy(0, 120));
   await expect.poll(async () => page.locator("body").getAttribute(
     "data-kp-reader-transition"
