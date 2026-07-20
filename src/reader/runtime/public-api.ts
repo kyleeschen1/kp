@@ -44,3 +44,10 @@ export {
   type KpReaderControlModel,
   type KpReaderMotionProjection
 } from "./accessible-controls.ts";
+export {
+  parseKpReaderMotionPreference,
+  resolveKpReaderMotionPolicy,
+  type KpReaderMotionPolicy,
+  type KpReaderMotionPreference,
+  type KpReaderResolvedMotionMode
+} from "./motion-policy.ts";

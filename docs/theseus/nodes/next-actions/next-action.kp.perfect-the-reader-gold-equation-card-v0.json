@@ -74,6 +74,10 @@
     {
       "kind": "file",
       "path": "tests/semantic-reader-url-restoration.browser.spec.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/runtime/motion-policy.ts"
     }
   ],
   "dependsOn": {
@@ -262,6 +266,12 @@
       "status": "passed",
       "scope": "s18 synchronized production named-frame capture",
       "checkedAt": "2026-07-20T21:30:40.234Z"
+    },
+    {
+      "command": "node --test tests/semantic-reader-motion-policy.test.ts",
+      "status": "passed",
+      "scope": "s19 motion policy truth table and parser",
+      "checkedAt": "2026-07-20T21:32:43.429Z"
     }
   ],
   "progress": {

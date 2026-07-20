@@ -147,7 +147,8 @@
     {
       "id": "s19-motion-policy",
       "title": "Define motion preference policy",
-      "status": "planned"
+      "summary": "The reader now has a closed policy contract: System follows the OS, Reduced retains essential continuous causality, Full forces complete motion, and only Static snaps to checkpoints.",
+      "status": "complete"
     },
     {
       "id": "s20-essential-reduced-motion",
