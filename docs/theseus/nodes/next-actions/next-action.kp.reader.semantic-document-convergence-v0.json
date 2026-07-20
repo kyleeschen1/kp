@@ -398,11 +398,23 @@
       "status": "passed",
       "scope": "s18 14 focus precedence closure lifecycle and boundary tests",
       "checkedAt": "2026-07-20T17:27:50.194Z"
+    },
+    {
+      "command": "node --test near-viewport hydration adapter registry and architecture suites",
+      "status": "passed",
+      "scope": "s19 13 static fallback retry late-mount lifecycle and boundary tests",
+      "checkedAt": "2026-07-20T18:00:55.183Z"
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s19 app orchestration types and layer fitness",
+      "checkedAt": "2026-07-20T18:00:56.322Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s18 lets prose hover keyboard URL and story state address the same semantic objects without coupling focus behavior to a renderer."
+    "summary": "s19 makes interaction a near-viewport progressive enhancement while static prose and MathML remain the durable fallback for offscreen failed and torn-down blocks."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

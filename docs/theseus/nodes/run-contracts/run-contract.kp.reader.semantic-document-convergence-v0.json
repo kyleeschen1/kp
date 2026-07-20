@@ -161,7 +161,8 @@
     {
       "id": "s19",
       "title": "Add static-preserving near-viewport hydration",
-      "status": "planned"
+      "summary": "Added static-preserving near-viewport hydration with retry and deterministic teardown. Focused tests, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s20",
