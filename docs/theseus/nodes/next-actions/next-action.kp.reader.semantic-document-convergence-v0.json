@@ -434,11 +434,23 @@
       "status": "passed",
       "scope": "s21 reader-owned render-plan types and dependency fitness",
       "checkedAt": "2026-07-20T18:08:14.512Z"
+    },
+    {
+      "command": "node --test material plan render plan and architecture suites",
+      "status": "passed",
+      "scope": "s22 twelve ownership anchor rewind and boundary tests",
+      "checkedAt": "2026-07-20T18:11:23.941Z"
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s22 material-plan contracts and dependency fitness",
+      "checkedAt": "2026-07-20T18:11:25.031Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s21 projects canonical runtime frames into reader-owned equation plans, including focus, semantic diagnostics, and direction-aware endpoints and lifecycles, without DOM or editor coupling."
+    "summary": "s22 compiles correspondence-authorized stable material owners and measurable selector anchors; owner identity survives rewind while endpoint ownership reverses."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

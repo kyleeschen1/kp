@@ -17,3 +17,11 @@ export {
   type KpReaderEquationStatePlan,
   type KpReaderEquationTransitionPlan
 } from "./equation-render-plan.ts";
+export {
+  compileKpReaderEquationMaterialPlan,
+  type KpReaderEquationAnchorPlan,
+  type KpReaderEquationMaterialOwnerPlan,
+  type KpReaderEquationMaterialPlan,
+  type KpReaderEquationMaterialPlanDiagnostic,
+  type KpReaderEquationTransitionMaterialPlan
+} from "./equation-material-plan.ts";
