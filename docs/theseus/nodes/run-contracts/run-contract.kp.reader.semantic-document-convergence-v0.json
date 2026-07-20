@@ -77,7 +77,8 @@
     {
       "id": "s05",
       "title": "Define minimal LessonDocument IR",
-      "status": "planned"
+      "summary": "Defined and verified the minimal headings, paragraphs, semantic links, animation story, beat, checkpoint, focus, and source-location IR.",
+      "status": "complete"
     },
     {
       "id": "s06",

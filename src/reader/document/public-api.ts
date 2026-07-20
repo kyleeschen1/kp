@@ -7,3 +7,18 @@ export {
   type KpReaderSourceLocation,
   type KpReaderSourcePosition
 } from "./artifacts.ts";
+export {
+  validateKpLessonDocument,
+  type KpLessonAnimationStoryBlock,
+  type KpLessonBeat,
+  type KpLessonBlock,
+  type KpLessonBlockBase,
+  type KpLessonCheckpoint,
+  type KpLessonDocument,
+  type KpLessonDocumentIssue,
+  type KpLessonHeadingBlock,
+  type KpLessonInline,
+  type KpLessonParagraphBlock,
+  type KpLessonSemanticLink,
+  type KpLessonText
+} from "./lesson-document.ts";

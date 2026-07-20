@@ -170,11 +170,47 @@
       "status": "passed",
       "scope": "s04 domains TypeScript",
       "checkedAt": "2026-07-20T16:41:00.057Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-reader-lesson-document.test.ts tests/semantic-reader-artifact-contracts.test.ts tests/semantic-reader-architecture.test.ts",
+      "status": "passed",
+      "scope": "s05 13 lesson IR, validation, artifact, and architecture tests",
+      "checkedAt": "2026-07-20T16:49:10.536Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s05 eight-file semantic-reader architecture gate",
+      "checkedAt": "2026-07-20T16:49:11.440Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s05 app TypeScript",
+      "checkedAt": "2026-07-20T16:49:12.214Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.node.json --noEmit",
+      "status": "passed",
+      "scope": "s05 node TypeScript",
+      "checkedAt": "2026-07-20T16:49:13.011Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s05 test TypeScript",
+      "checkedAt": "2026-07-20T16:49:13.785Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project domains/tsconfig.json --noEmit",
+      "status": "passed",
+      "scope": "s05 domains TypeScript",
+      "checkedAt": "2026-07-20T16:49:14.545Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s04 introduced a pure clock sample and playback interface plus a direct bridge from reader progress to the canonical renderer-neutral animation sampler. It owns no timer or DOM and preserves deterministic forward and rewind sampling."
+    "summary": "s05 added a narrow source-located LessonDocument IR with ordinary prose blocks and semantic animation-story beats, plus deterministic structural validation. It contains no subject-specific choreography or Markdown parser concerns."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",
