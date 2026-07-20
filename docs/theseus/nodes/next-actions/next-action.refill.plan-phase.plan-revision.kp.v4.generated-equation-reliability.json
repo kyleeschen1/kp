@@ -114,6 +114,12 @@
       "status": "passed",
       "scope": "s16 fixed Shadow DOM shell focus responsive fit and zero reflow",
       "checkedAt": "2026-07-20T23:53:09.723Z"
+    },
+    {
+      "command": "focused composer and shell browser checks plus npm run typecheck",
+      "status": "passed",
+      "scope": "s17 locked comment capture interaction",
+      "checkedAt": "2026-07-20T23:57:08.673Z"
     }
   ],
   "expectedLearning": [

@@ -141,7 +141,8 @@
     {
       "id": "s17-comment-capture-interaction",
       "title": "Comment capture interaction",
-      "status": "planned"
+      "summary": "Opening captures exactly once, displays checkpoint progress phase and route, submits by button or command-enter, preserves failed text, and recaptures only on a fresh open.",
+      "status": "complete"
     },
     {
       "id": "s18-dev-mount-production-removal",
