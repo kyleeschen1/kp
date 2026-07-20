@@ -46,15 +46,31 @@ export function protocolSchema<T>(parser: Parser<T>): ProtocolSchema<T> {
 export function protocolString(options: {
   readonly pattern?: RegExp;
   readonly minLength?: number;
+  readonly maxLength?: number;
 } = {}): ProtocolSchema<string> {
   return protocolSchema((input, path) => {
     if (typeof input !== "string") fail(path, "expected string");
     if (options.minLength !== undefined && input.length < options.minLength) {
       fail(path, `expected at least ${options.minLength} character(s)`);
     }
+    if (options.maxLength !== undefined && input.length > options.maxLength) {
+      fail(path, `expected at most ${options.maxLength} character(s)`);
+    }
     if (options.pattern !== undefined && !options.pattern.test(input)) {
       fail(path, `expected string matching ${options.pattern}`);
     }
+    return input;
+  });
+}
+
+export function protocolNumber(options: {
+  readonly min?: number;
+  readonly max?: number;
+} = {}): ProtocolSchema<number> {
+  return protocolSchema((input, path) => {
+    if (typeof input !== "number" || !Number.isFinite(input)) fail(path, "expected finite number");
+    if (options.min !== undefined && input < options.min) fail(path, `expected value >= ${options.min}`);
+    if (options.max !== undefined && input > options.max) fail(path, `expected value <= ${options.max}`);
     return input;
   });
 }
@@ -99,11 +115,28 @@ export function protocolEnum<const Values extends readonly [string, ...string[]]
   });
 }
 
-export function protocolArray<Item>(schema: ProtocolSchema<Item>): ProtocolSchema<readonly Item[]> {
+export function protocolArray<Item>(
+  schema: ProtocolSchema<Item>,
+  options: { readonly minLength?: number; readonly maxLength?: number } = {}
+): ProtocolSchema<readonly Item[]> {
   return protocolSchema((input, path) => {
     if (!Array.isArray(input)) fail(path, "expected array");
+    if (options.minLength !== undefined && input.length < options.minLength) {
+      fail(path, `expected at least ${options.minLength} item(s)`);
+    }
+    if (options.maxLength !== undefined && input.length > options.maxLength) {
+      fail(path, `expected at most ${options.maxLength} item(s)`);
+    }
     return input.map((item, index) => parseAt(schema, item, `${path}[${index}]`));
   });
+}
+
+export function protocolOptional<Value>(
+  schema: ProtocolSchema<Value>
+): ProtocolSchema<Value | undefined> {
+  return protocolSchema((input, path) =>
+    input === undefined ? undefined : parseAt(schema, input, path)
+  );
 }
 
 type ProtocolSchemaShape = Readonly<Record<string, ProtocolSchema<unknown>>>;
@@ -158,4 +191,3 @@ function fail(path: string, message: string): never {
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
-

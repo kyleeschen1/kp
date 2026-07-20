@@ -5,7 +5,9 @@ export {
   protocolEnum,
   protocolInteger,
   protocolLiteral,
+  protocolNumber,
   protocolObject,
+  protocolOptional,
   protocolRefine,
   protocolSchema,
   protocolString,
@@ -66,3 +68,9 @@ export {
   type KpDevReviewTemporalSampleV1,
   type KpDevReviewViewportV1
 } from "./dev-review-v1.ts";
+
+export {
+  kpDevReviewCreateRequestSchema,
+  kpDevReviewEventSchema,
+  kpDevReviewProtocolLimits
+} from "./dev-review-schema.ts";

@@ -30,6 +30,12 @@
       "status": "passed",
       "scope": "s02 versioned dev review protocol",
       "checkedAt": "2026-07-20T23:16:50.222Z"
+    },
+    {
+      "command": "node --test dev review schema and protocol plus protocol typecheck",
+      "status": "passed",
+      "scope": "s03 strict bounded review payload validation",
+      "checkedAt": "2026-07-20T23:21:04.246Z"
     }
   ],
   "expectedLearning": [

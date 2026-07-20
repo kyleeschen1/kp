@@ -57,7 +57,8 @@
     {
       "id": "s03-strict-validation-limits",
       "title": "Strict validation and limits",
-      "status": "planned"
+      "summary": "Strict schemas reject unknown, unsafe, oversized, malformed, and out-of-range review payload fields.",
+      "status": "complete"
     },
     {
       "id": "s04-build-environment-identity",
