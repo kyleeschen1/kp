@@ -62,6 +62,10 @@
     {
       "kind": "file",
       "path": "tests/semantic-reader-cancellation.browser.spec.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-reader-successor.browser.spec.ts"
     }
   ],
   "dependsOn": {
@@ -202,6 +206,18 @@
       "status": "passed",
       "scope": "s14 visible witness-dwell semantics",
       "checkedAt": "2026-07-20T21:06:07.459Z"
+    },
+    {
+      "command": "node --test tests/semantic-reader-equation-symbol-motion.test.ts",
+      "status": "passed",
+      "scope": "s15 successor synthesis fragment poses and target inclusion",
+      "checkedAt": "2026-07-20T21:09:43.631Z"
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader-successor.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s15 visible derived-four ownership",
+      "checkedAt": "2026-07-20T21:09:44.448Z"
     }
   ],
   "progress": {

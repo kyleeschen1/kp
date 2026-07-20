@@ -123,7 +123,8 @@
     {
       "id": "s15-successor-synthesis",
       "title": "Transfer successor synthesis",
-      "status": "planned"
+      "summary": "The reader now carries 7, minus, and 3 along the accepted synthesis paths and materializes 4 before the final native handoff.",
+      "status": "complete"
     },
     {
       "id": "s16-native-handoff",

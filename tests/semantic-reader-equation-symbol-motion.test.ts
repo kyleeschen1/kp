@@ -3,6 +3,7 @@ import test from "node:test";
 
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
 import { createKpWitnessedAnnihilationBinding } from "../src/animation/witnessed-annihilation.ts";
+import { createKpLinearRearrangementChoreography } from "../src/animation/linear-rearrangement-choreography.ts";
 import "../src/rendering/equation-witnessed-annihilation-register.ts";
 import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.ts";
 import {
@@ -13,13 +14,13 @@ import {
   sampleKpReaderEquationSymbolMotion
 } from "../src/reader/renderers/public-api.ts";
 
-function fixture(direction: "forward" | "rewind") {
+function fixture(direction: "forward" | "rewind", globalProgress = 0.5) {
   const animation = createLinearSolveAnimationAsset();
   const runtimeFrame = sampleKpAnimationRuntimeFrame({
     id: `runtime.reader.motion.${direction}`,
     animation,
     direction,
-    progress: 0.5
+    progress: globalProgress
   });
   const materialPlan = compileKpReaderEquationMaterialPlan(
     projectKpReaderEquationRenderPlan({ animation, runtimeFrame })
@@ -180,6 +181,35 @@ test("reader cancellation meets through a readable zero before compaction", () =
   assert.equal(cancellationOwner.fragmentPoses.length, 2);
   assert.ok(cancellationOwner.fragmentPoses.every(
     (fragment) => fragment.pose.scale === 0.72
+  ));
+});
+
+test("reader successor synthesis converges inputs before revealing four", () => {
+  const animation = createLinearSolveAnimationAsset();
+  const step = createKpLinearRearrangementChoreography(animation).steps.find(
+    (candidate) => candidate.kind === "simplify-constant-difference"
+  )!;
+  const frame = sampleKpReaderEquationSymbolMotion({
+    ...fixture("forward", 0.84),
+    progress: 0.8,
+    linearRearrangementKind: step.kind,
+    successorSynthesisBinding: step.successorSynthesisBinding
+  });
+  const derived = frame.owners.find(
+    (owner) => owner.ownerId === "material-owner.constants-merge"
+  )!;
+  const source = derived.fragmentPoses.filter(
+    (fragment) => fragment.side === "source"
+  );
+  const target = derived.fragmentPoses.find(
+    (fragment) => fragment.side === "target"
+  );
+  assert.equal(source.length, 3);
+  assert.ok(source.every((fragment) => fragment.pose.opacity < 1));
+  assert.ok(source.some((fragment) => Math.abs(fragment.pose.x) > 0));
+  assert.ok((target?.pose.opacity ?? 0) > 0);
+  assert.ok(derived.visualAnchorIds.includes(
+    "anchor.equation.linear-solve.solved.rhs.4"
   ));
 });
 

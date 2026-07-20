@@ -178,11 +178,13 @@ function sampleOwner(
     continuity: owner.continuity,
     sourceAnchorIds: [...owner.sourceAnchorIds],
     targetAnchorIds: [...owner.targetAnchorIds],
-    visualAnchorIds: [
-      ...(owner.sourceAnchorIds.length > 0
-        ? owner.sourceAnchorIds
-        : owner.targetAnchorIds)
-    ],
+    visualAnchorIds: fragmentPoses.length > 0
+      ? fragmentPoses.map((fragment) => fragment.anchorId)
+      : [
+          ...(owner.sourceAnchorIds.length > 0
+            ? owner.sourceAnchorIds
+            : owner.targetAnchorIds)
+        ],
     currentBounds,
     materialOpacity: handoff.materialOpacity,
     sourceNativeOpacity: handoff.sourceNativeOpacity,
