@@ -81,7 +81,8 @@
     {
       "id": "s07-review-session-model",
       "title": "Review session model",
-      "status": "planned"
+      "summary": "Review sessions remain stable across tab reloads, rotate by build, and store no user, cookie, or filesystem identity.",
+      "status": "complete"
     },
     {
       "id": "s08-append-only-local-store",

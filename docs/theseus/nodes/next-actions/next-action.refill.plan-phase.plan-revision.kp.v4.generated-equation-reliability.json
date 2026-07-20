@@ -54,6 +54,12 @@
       "status": "passed",
       "scope": "s06 stable semantic pointer evidence",
       "checkedAt": "2026-07-20T23:28:36.978Z"
+    },
+    {
+      "command": "node --test dev review session and npm run typecheck",
+      "status": "passed",
+      "scope": "s07 anonymous build-scoped session identity",
+      "checkedAt": "2026-07-20T23:30:09.927Z"
     }
   ],
   "expectedLearning": [
