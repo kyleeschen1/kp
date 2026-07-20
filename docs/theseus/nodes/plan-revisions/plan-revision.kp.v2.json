@@ -1,0 +1,115 @@
+{
+  "id": "plan-revision.kp.v2",
+  "kind": "plan-revision",
+  "title": "Kinetic Press clarity-first product roadmap v2",
+  "status": "active",
+  "domain": "kp",
+  "summary": "Perfect the gold equation reader first; promote its shared contracts only after visual approval; then prove geometric, graphical, code, provider, review, and cross-domain breadth.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Aim first at transferring the loved x + 3 = 7 motion into the semantic reader, with motion as core content and a durable path to beautiful cards, providers, multiple content types, and flashcards.",
+      "summary": "Current approved product priority and preservation boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Existing narrative product roadmap retained as historical and strategic context."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/strategy.md",
+      "summary": "Existing product strategy and differentiation context."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-14-kp-symbolic-manipulation-animation-library-plan.md",
+      "summary": "Accepted symbolic manipulation animation direction."
+    }
+  ],
+  "affects": [
+    "workflow.kp.delivery",
+    "next-action.kp.perfect-the-reader-gold-equation-card-v0"
+  ],
+  "planRevision": {
+    "schemaVersion": "theseus.plan-revision.v1",
+    "revision": 2,
+    "objective": "Deliver visually beautiful, scrollable, searchable, URL-addressable semantic cards whose coordinated motion makes Kinetic Press's value proposition instantly distinct from static text, video, and conventional interactive lessons.",
+    "assumptions": [
+      {
+        "id": "gold-card-before-breadth",
+        "statement": "One canonical equation card must establish visual and motion quality before renderer breadth is valuable.",
+        "status": "validated"
+      },
+      {
+        "id": "neutral-runtime-boundary",
+        "statement": "The accepted editor realization can be extracted behind neutral renderer contracts without coupling the semantic reader to the editor.",
+        "status": "active"
+      },
+      {
+        "id": "essential-motion-accessibility",
+        "statement": "Reduced motion should retain essential explanatory movement while removing nonessential acceleration, depth, scale, and flourish; fully static presentation remains explicit.",
+        "status": "active"
+      },
+      {
+        "id": "searchable-reader-preservation",
+        "statement": "Visual parity can be reached without sacrificing static prose, search, print, no-JavaScript output, exact scroll navigation, or precise URLs.",
+        "status": "active"
+      }
+    ],
+    "phases": [
+      {
+        "id": "gold-equation-reader",
+        "title": "Gold equation reader parity",
+        "objective": "Match the accepted x + 3 = 7 card in the semantic reader at named forward and reverse frames, preserve reader strengths, add essential reduced motion, and stop for human visual approval.",
+        "horizon": "now",
+        "status": "active",
+        "evidence": [
+          "next-action.kp.perfect-the-reader-gold-equation-card-v0"
+        ]
+      },
+      {
+        "id": "missing-middle-geometry",
+        "title": "Missing-middle algebra and geometry",
+        "objective": "Use the approved renderer contracts to coordinate algebraic symbols with a simple geometric representation as the second clarity exemplar.",
+        "horizon": "next",
+        "status": "planned"
+      },
+      {
+        "id": "svg-diagrams-graphs",
+        "title": "SVG diagrams and graphs",
+        "objective": "Prove stylistically unified lightweight diagrams and graphs, including KaTeX-compatible labeling and shared focus and salience affordances.",
+        "horizon": "next",
+        "status": "planned"
+      },
+      {
+        "id": "code-refactor-motion",
+        "title": "Code transformation card",
+        "objective": "Prove modal flexibility with collapsing, morphing, and refactoring code while preserving semantic identity and reviewability.",
+        "horizon": "later",
+        "status": "planned"
+      },
+      {
+        "id": "providers-review-modes",
+        "title": "Providers and review modes",
+        "objective": "Compose verified problem generators, LLM providers, flashcards, and correction workflows around stable semantic card and transformation contracts.",
+        "horizon": "later",
+        "status": "planned"
+      },
+      {
+        "id": "cross-domain-webgl",
+        "title": "Cross-domain and WebGL breadth",
+        "objective": "Demonstrate network, economics, FTC, physics, and lazy WebGL experiences only where their dimensionality materially improves explanation.",
+        "horizon": "someday",
+        "status": "planned"
+      }
+    ],
+    "approval": {
+      "status": "approved",
+      "decidedAt": "2026-07-20T20:17:06.000Z",
+      "decidedBy": "user",
+      "rationale": "Turn the accepted product direction into an ordered roadmap with one exemplar-first current priority and explicit deferrals."
+    },
+    "supersedes": "plan-revision.kp.v1"
+  }
+}

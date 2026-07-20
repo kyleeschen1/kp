@@ -1,0 +1,51 @@
+{
+  "id": "priority-change.kp.gold-equation-reader-first-v0",
+  "kind": "priority-change",
+  "title": "Gold equation reader first",
+  "status": "active",
+  "domain": "kp",
+  "summary": "Motion is the product premise, and the accepted individual x + 3 = 7 card is the canonical exemplar; establish visual parity in the semantic reader before breadth.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Motion is the product premise, and the accepted individual x + 3 = 7 card is the canonical exemplar; establish visual parity in the semantic reader before breadth.",
+      "occurredAt": "2026-07-20T20:17:06.000Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v2"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v2"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v2",
+    "rationale": "Motion is the product premise, and the accepted individual x + 3 = 7 card is the canonical exemplar; establish visual parity in the semantic reader before breadth.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "gold-equation-reader",
+        "to": "now"
+      },
+      {
+        "subject": "missing-middle-and-svg",
+        "to": "next"
+      },
+      {
+        "subject": "code-and-provider-composition",
+        "to": "later"
+      },
+      {
+        "subject": "cross-domain-and-webgl",
+        "to": "someday"
+      }
+    ],
+    "effectiveAt": "2026-07-20T20:17:06.000Z",
+    "requestedBy": "user"
+  }
+}

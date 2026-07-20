@@ -1,0 +1,32 @@
+{
+  "id": "workflow.kp.delivery",
+  "kind": "workflow",
+  "title": "Kinetic Press delivery",
+  "status": "active",
+  "domain": "kp",
+  "summary": "Clarity-first delivery frontier: perfect the gold equation reader and stop for visual review.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Make Kinetic Press instantly legible as the medium where people see concepts move: perfect one visually beautiful, scrollable, searchable, URL-addressable equation card before generalizing the shared semantic runtime across geometry, graphs, code, providers, and review modes.",
+      "summary": "Approved project brief goal."
+    }
+  ],
+  "nextActions": [
+    "next-action.kp.perfect-the-reader-gold-equation-card-v0"
+  ],
+  "allowedWork": [
+    "The semantic reader matches the accepted x + 3 = 7 animation card at named forward and reverse frames without typography changes, collisions, or discontinuities.",
+    "Motion communicates algebraic causality while prose, static HTML, search, print, precise URLs, and accessible focus remain first-class.",
+    "The accepted visual runtime lives behind neutral renderer contracts that the editor and reader can share without coupling either surface to the other.",
+    "A visible motion policy preserves essential semantic motion under reduced-motion preferences and retains an explicit static option.",
+    "Human visual approval of the gold equation exemplar is required before the architecture is generalized to other asset families."
+  ],
+  "disallowedWork": [
+    "Preserve the semantic asset model, reader compiler, continuous scroll clock, exact rewind, URL restoration, static and no-JavaScript output, searchability, printability, and current editor behavior.",
+    "Do not import editor code into the reader; extract accepted behavior into neutral rendering modules with inferred TypeScript APIs.",
+    "Do not generalize to missing-middle, graphs, diagrams, code, networks, providers, flashcards, WebGL, FTC, economics, or physics before the gold equation exemplar passes human visual review.",
+    "Keep the exemplar rollback independently reversible to the shared equation visual renderer and reader adapter.",
+    "Avoid Three.js, WebGL, client-side KaTeX, or unrelated bundle growth on the equation reader route."
+  ]
+}

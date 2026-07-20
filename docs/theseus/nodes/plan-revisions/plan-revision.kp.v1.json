@@ -1,0 +1,70 @@
+{
+  "id": "plan-revision.kp.v1",
+  "kind": "plan-revision",
+  "title": "Kinetic Press plan v1",
+  "status": "superseded",
+  "domain": "kp",
+  "summary": "Make Kinetic Press instantly legible as the medium where people see concepts move: perfect one visually beautiful, scrollable, searchable, URL-addressable equation card before generalizing the shared semantic runtime across geometry, graphs, code, providers, and review modes.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Make Kinetic Press instantly legible as the medium where people see concepts move: perfect one visually beautiful, scrollable, searchable, URL-addressable equation card before generalizing the shared semantic runtime across geometry, graphs, code, providers, and review modes.",
+      "summary": "Approved project brief goal."
+    }
+  ],
+  "affects": [
+    "workflow.kp.delivery",
+    "next-action.kp.perfect-the-reader-gold-equation-card-v0"
+  ],
+  "planRevision": {
+    "schemaVersion": "theseus.plan-revision.v1",
+    "revision": 1,
+    "objective": "Make Kinetic Press instantly legible as the medium where people see concepts move: perfect one visually beautiful, scrollable, searchable, URL-addressable equation card before generalizing the shared semantic runtime across geometry, graphs, code, providers, and review modes.",
+    "assumptions": [
+      {
+        "id": "constraint-1",
+        "statement": "Preserve the semantic asset model, reader compiler, continuous scroll clock, exact rewind, URL restoration, static and no-JavaScript output, searchability, printability, and current editor behavior.",
+        "status": "active"
+      },
+      {
+        "id": "constraint-2",
+        "statement": "Do not import editor code into the reader; extract accepted behavior into neutral rendering modules with inferred TypeScript APIs.",
+        "status": "active"
+      },
+      {
+        "id": "constraint-3",
+        "statement": "Do not generalize to missing-middle, graphs, diagrams, code, networks, providers, flashcards, WebGL, FTC, economics, or physics before the gold equation exemplar passes human visual review.",
+        "status": "active"
+      },
+      {
+        "id": "constraint-4",
+        "statement": "Keep the exemplar rollback independently reversible to the shared equation visual renderer and reader adapter.",
+        "status": "active"
+      },
+      {
+        "id": "constraint-5",
+        "statement": "Avoid Three.js, WebGL, client-side KaTeX, or unrelated bundle growth on the equation reader route.",
+        "status": "active"
+      }
+    ],
+    "phases": [
+      {
+        "id": "initial-1",
+        "title": "Perfect the reader gold equation card",
+        "objective": "Transfer the accepted individual x + 3 = 7 typography, operation-specific choreography, stable material ownership, exact seek and rewind, semantic focus, and essential reduced motion into the scrollable semantic reader, then stop for human visual review.",
+        "horizon": "now",
+        "status": "active",
+        "evidence": [
+          "next-action.kp.perfect-the-reader-gold-equation-card-v0"
+        ]
+      }
+    ],
+    "approval": {
+      "status": "superseded",
+      "decidedAt": "2026-07-20T20:17:06.000Z",
+      "decidedBy": "user",
+      "rationale": "Superseded by plan-revision.kp.v2."
+    },
+    "supersededBy": "plan-revision.kp.v2"
+  }
+}

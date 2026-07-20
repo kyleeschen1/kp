@@ -2,9 +2,9 @@
   "id": "workflow.kp.dashboard-animation-system",
   "kind": "workflow",
   "title": "KP dashboard and semantic animation system",
-  "status": "active",
+  "status": "deferred",
   "domain": "kp.dashboard",
-  "summary": "Current KP frontier is the dashboard-backed semantic animation system.",
+  "summary": "Superseded as the active frontier by the clarity-first delivery workflow.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -132,5 +132,8 @@
   "progress": {
     "state": "partial",
     "summary": "Completed the approved read-only comparison of the current KP repository and the legacy kinetic-press lineage. The durable audit recommends convergence rather than rollback: keep current semantic assets, inferred TypeScript APIs, renderer abstractions, URL/provenance and provider boundaries; adapt legacy document compilation, static reading, TOC, lazy hydration, and continuous local scroll sampling. Next proposed implementation is a single x-plus-3 document/compiler/lightweight-reader pilot, subject to visual review."
-  }
+  },
+  "revisitWhen": [
+    "The gold equation reader passes human visual review and the roadmap explicitly promotes generalization work."
+  ]
 }

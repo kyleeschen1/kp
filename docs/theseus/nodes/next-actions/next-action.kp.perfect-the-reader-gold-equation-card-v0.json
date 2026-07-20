@@ -1,0 +1,95 @@
+{
+  "id": "next-action.kp.perfect-the-reader-gold-equation-card-v0",
+  "kind": "next-action",
+  "title": "Perfect the reader gold equation card",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Transfer the accepted individual x + 3 = 7 typography, operation-specific choreography, stable material ownership, exact seek and rewind, semantic focus, and essential reduced motion into the scrollable semantic reader, then stop for human visual review.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Make Kinetic Press instantly legible as the medium where people see concepts move: perfect one visually beautiful, scrollable, searchable, URL-addressable equation card before generalizing the shared semantic runtime across geometry, graphs, code, providers, and review modes.",
+      "summary": "Approved project brief goal."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/equation-surface-adapter.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-material-layer-dom.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/renderers/equation-material-layer.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/renderers/equation-symbol-motion.ts"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "plan-revision.kp.v2"
+    ]
+  },
+  "affects": [
+    "workflow.kp.delivery"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run test:browser:linear-equation-conformance",
+    "npm run visual:linear-equation",
+    "npm run perf:linear-equation",
+    "npm run build"
+  ],
+  "expectedLearning": [
+    "Whether the accepted editor animation realization can become a neutral renderer without visual regression",
+    "Which motion remains essential for algebraic causality under reduced-motion preferences",
+    "Whether reader typography, scroll seeking, URL restoration, and static output remain stable under the shared runtime"
+  ],
+  "allowedWork": [
+    "Use animation.linear-solve.solve-x in its accepted individual card as the canonical visual and motion reference",
+    "Capture and compare start, subtraction entry, cancellation, successor synthesis, final, and reverse frames",
+    "Extract computed-style cloning, measurement, motion planning, token projection, and stable material ownership into neutral rendering modules",
+    "Adapt the semantic reader to the shared runtime while preserving its compiler, document, clock, routing, prose, focus, and static layers",
+    "Add explicit system, reduced, full, and static motion behavior with essential explanatory motion in reduced mode",
+    "Stop at a human visual-review checkpoint before any renderer-family generalization"
+  ],
+  "disallowedWork": [
+    "Do not redesign the semantic asset model, compiler, document structure, scroll clock, URL contract, or accepted editor animation",
+    "Do not generalize to missing-middle, graphs, diagrams, code, networks, providers, flashcards, WebGL, FTC, economics, or physics",
+    "Do not import editor modules into reader modules",
+    "Do not add Three.js, WebGL, client-side KaTeX, or unrelated route dependencies"
+  ],
+  "criteria": [
+    {
+      "id": "canonical-visual-parity",
+      "weight": "high"
+    },
+    {
+      "id": "stable-typography",
+      "weight": "high"
+    },
+    {
+      "id": "causal-operation-choreography",
+      "weight": "high"
+    },
+    {
+      "id": "exact-forward-reverse-seeking",
+      "weight": "high"
+    },
+    {
+      "id": "essential-reduced-motion",
+      "weight": "high"
+    },
+    {
+      "id": "reader-preservation-boundary",
+      "weight": "high"
+    },
+    {
+      "id": "human-exemplar-approval",
+      "weight": "high"
+    }
+  ]
+}
