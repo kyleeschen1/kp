@@ -4,20 +4,14 @@ import path from "node:path";
 import { chromium, type Locator, type Page } from "playwright";
 import { preview, type PreviewServer } from "vite";
 
+import { kpGoldEquationParityFrames } from "../src/rendering/equation-gold-parity.ts";
+
 const outputRoot = path.resolve(
   process.env["KP_READER_GOLD_PARITY_OUTPUT"]
     ?? "tmp/codex/reader-gold-equation-parity"
 );
 const viewport = { width: 1280, height: 900 } as const;
-const frames = [
-  { id: "start", progress: 0 },
-  { id: "subtraction-entry", progress: 0.167 },
-  { id: "subtraction-settled", progress: 0.333 },
-  { id: "cancellation-meet", progress: 0.5 },
-  { id: "cancellation-settled", progress: 0.667 },
-  { id: "successor-synthesis", progress: 0.833 },
-  { id: "final", progress: 1 }
-] as const;
+const frames = kpGoldEquationParityFrames.filter((frame) => frame.direction === "forward");
 
 interface InkMetric {
   readonly id: string;

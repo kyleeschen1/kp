@@ -30,6 +30,10 @@
     {
       "kind": "file",
       "path": "scripts/capture-reader-gold-equation-parity.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-gold-parity.ts"
     }
   ],
   "dependsOn": {
@@ -54,6 +58,18 @@
       "scope": "s01 canonical editor and reader baselines",
       "checkedAt": "2026-07-20T20:27:26.024Z",
       "notes": "Captured seven named frames on both surfaces and exposed the reader clone font-family mismatch."
+    },
+    {
+      "command": "node --test tests/reader-gold-equation-parity.test.ts",
+      "status": "passed",
+      "scope": "s02 parity contract",
+      "checkedAt": "2026-07-20T20:29:39.400Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02 parity contract",
+      "checkedAt": "2026-07-20T20:29:40.166Z"
     }
   ],
   "progress": {

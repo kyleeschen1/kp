@@ -45,7 +45,8 @@
     {
       "id": "s02-parity-contract",
       "title": "Encode named parity frames",
-      "status": "planned"
+      "summary": "Encoded seven forward story beats plus exact reverse cancellation with renderer-neutral evidence requirements; capture tooling now consumes the shared contract.",
+      "status": "complete"
     },
     {
       "id": "s03-style-clone",
