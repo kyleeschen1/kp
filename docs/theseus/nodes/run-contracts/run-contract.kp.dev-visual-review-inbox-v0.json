@@ -87,7 +87,8 @@
     {
       "id": "s08-append-only-local-store",
       "title": "Append-only local store",
-      "status": "planned"
+      "summary": "Validated events append in call order to private local JSONL, replay strictly, and fail closed on corrupt input.",
+      "status": "complete"
     },
     {
       "id": "s09-query-status-cursor",
