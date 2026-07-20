@@ -1,34 +1,34 @@
 import {
   createKpEquationLayoutPlan,
   type KpEquationLayoutPlan
-} from "../rendering/equation-layout-plan.ts";
-import type { KpMeasuredEquationTransitionGeometry } from "../rendering/equation-motion-dom.ts";
+} from "./equation-layout-plan.ts";
+import type { KpMeasuredEquationTransitionGeometry } from "./equation-motion-dom.ts";
 import {
   planKpEquationMotionPath,
   planKpEquationMotionPathBetweenPoints,
   type KpEquationMotionPathCandidate,
   type KpEquationMotionPathPlan
-} from "../rendering/equation-motion-path-planner.ts";
+} from "./equation-motion-path-planner.ts";
 import {
   compileKpEquationSemanticTimeline,
   createEquationVisualMotifTimeline,
   type KpEquationSemanticTimeline
-} from "../rendering/equation-visual-motif-timeline.ts";
-import { linearEquationDemoBeatTimeline } from "../rendering/semantic-beat-compiler.ts";
+} from "./equation-visual-motif-timeline.ts";
+import { linearEquationDemoBeatTimeline } from "./semantic-beat-compiler.ts";
 import {
   createVisualMotifPlan,
   phaseIdsForEquationVisualMotifKind,
   primitiveIdsForEquationVisualMotifKind,
   type EquationVisualMotifKind
-} from "../rendering/visual-motif.ts";
-import type { EquationMotionPlan } from "../rendering/equation-motion-plan.ts";
-import { createKpEquationSuccessorSynthesisPlan } from "../rendering/equation-linear-rearrangement.ts";
+} from "./visual-motif.ts";
+import type { EquationMotionPlan } from "./equation-motion-plan.ts";
+import { createKpEquationSuccessorSynthesisPlan } from "./equation-linear-rearrangement.ts";
 import {
   kpEquationWitnessedAnnihilationRuntime
-} from "../rendering/equation-witnessed-annihilation-runtime.ts";
+} from "./equation-witnessed-annihilation-runtime.ts";
 
-export interface KpEditorPrecomputedEquationMotionPlan {
-  readonly kind: "editor-precomputed-equation-motion-plan";
+export interface KpPrecomputedEquationMotionPlan {
+  readonly kind: "precomputed-equation-motion-plan";
   readonly id: string;
   readonly geometry: KpMeasuredEquationTransitionGeometry;
   readonly layoutPlan: KpEquationLayoutPlan;
@@ -37,7 +37,7 @@ export interface KpEditorPrecomputedEquationMotionPlan {
   readonly semanticTimeline: KpEquationSemanticTimeline;
 }
 
-export function createKpEditorPrecomputedEquationMotionPlan(input: {
+export function createKpPrecomputedEquationMotionPlan(input: {
   readonly id: string;
   readonly geometry: KpMeasuredEquationTransitionGeometry;
   readonly motifKind: EquationVisualMotifKind;
@@ -49,7 +49,7 @@ export function createKpEditorPrecomputedEquationMotionPlan(input: {
     | "around-left"
     | "around-right"
     | undefined;
-}): KpEditorPrecomputedEquationMotionPlan {
+}): KpPrecomputedEquationMotionPlan {
   const spacing = input.spacing ?? "balanced";
   const pathPreference = input.pathPreference ?? "automatic";
   const timelineMotifKind = baseTimelineMotifKind(input.motifKind);
@@ -131,7 +131,7 @@ export function createKpEditorPrecomputedEquationMotionPlan(input: {
     createEquationVisualMotifTimeline(motionPlan, linearEquationDemoBeatTimeline)
   );
   return {
-    kind: "editor-precomputed-equation-motion-plan",
+    kind: "precomputed-equation-motion-plan",
     id: input.id,
     geometry,
     layoutPlan,

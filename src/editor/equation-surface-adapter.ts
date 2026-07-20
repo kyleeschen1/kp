@@ -67,9 +67,9 @@ import {
   createKpAntiderivativePowerSelectorAnnotatedLatex
 } from "./antiderivative-power-semantic-latex.ts";
 import {
-  createKpEditorPrecomputedEquationMotionPlan,
-  type KpEditorPrecomputedEquationMotionPlan
-} from "./precomputed-equation-motion.ts";
+  createKpPrecomputedEquationMotionPlan,
+  type KpPrecomputedEquationMotionPlan
+} from "../rendering/precomputed-equation-motion.ts";
 import {
   createKpFunctionWrapChoreography,
   sampleKpFunctionWrapChoreography,
@@ -199,7 +199,7 @@ import type {
 
 const semanticMotionPlanCache = new WeakMap<HTMLElement, {
   readonly contentKey: string;
-  readonly plans: ReadonlyMap<number, KpEditorPrecomputedEquationMotionPlan>;
+  readonly plans: ReadonlyMap<number, KpPrecomputedEquationMotionPlan>;
 }>();
 const continuityCadenceStates = new WeakMap<
   HTMLElement,
@@ -2495,7 +2495,7 @@ function applySemanticTokenMotion(input: {
               input.frame.matrixMatrixComposition.choreography.rendererPlan
           })
     });
-    precomputed = createKpEditorPrecomputedEquationMotionPlan({
+    precomputed = createKpPrecomputedEquationMotionPlan({
       id: `${input.frame.contentKey}.transition.${input.transitionIndex}`,
       geometry,
       motifKind: motifKind ?? "artifact-replace",
@@ -2505,7 +2505,7 @@ function applySemanticTokenMotion(input: {
     const existing = semanticMotionPlanCache.get(input.stage);
     const plans = existing?.contentKey === input.frame.contentKey
       ? new Map(existing.plans)
-      : new Map<number, KpEditorPrecomputedEquationMotionPlan>();
+      : new Map<number, KpPrecomputedEquationMotionPlan>();
     plans.set(input.transitionIndex, precomputed);
     semanticMotionPlanCache.set(input.stage, {
       contentKey: input.frame.contentKey,
@@ -2775,7 +2775,7 @@ function applyCanonicalReverseChoreography(input: {
 
 function applyDistributionFactorFocus(input: {
   readonly transition: HTMLElement;
-  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
   readonly frame: KpDistributionChoreographyFrame;
 }): void {
   input.transition.dataset["kpEditorEquationDistributionChoreography"] =
@@ -2850,7 +2850,7 @@ function activeDistributionPhase(
 
 function applyFactoringFactorFocus(input: {
   readonly transition: HTMLElement;
-  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
   readonly frame: KpFactoringChoreographyFrame;
 }): void {
   input.transition.dataset["kpEditorEquationFactoringChoreography"] =
@@ -2963,7 +2963,7 @@ function requiredWitnessedAnnihilationRuntime() {
 
 function syncWitnessedAnnihilationOverlay(input: {
   readonly transition: HTMLElement;
-  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
   readonly frame: ReturnType<typeof createKpEditorSemanticEquationTokenFrame>["motion"]["witnessedAnnihilation"];
 }): void {
   const existing = input.transition.querySelector<HTMLElement>(
@@ -3019,7 +3019,7 @@ function syncWitnessedAnnihilationOverlay(input: {
 
 function applyFractionRoleFocus(input: {
   readonly transition: HTMLElement;
-  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
   readonly frame: KpFractionChoreographyFrame;
 }): void {
   input.transition.dataset["kpEditorEquationFractionChoreography"] =
@@ -3090,7 +3090,7 @@ function exponentLawChoreographyKind(
 
 function applyExponentLawFocus(input: {
   readonly transition: HTMLElement;
-  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
   readonly frame: KpExponentLawChoreographyFrame;
 }): void {
   input.transition.dataset["kpEditorEquationExponentLawChoreography"] =
@@ -3149,7 +3149,7 @@ function activeExponentLawPhase(frame: KpExponentLawChoreographyFrame): string {
 
 function applyDerivativePowerTokenFocus(input: {
   readonly transition: HTMLElement;
-  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
   readonly plan: KpDerivativePowerChoreographyPlan;
   readonly frame: KpDerivativePowerChoreographyFrame;
 }): void {
@@ -3437,7 +3437,7 @@ function identityAbsorptionRoleRecordIds(
 
 function applyIdentityAbsorptionFocus(input: {
   readonly transition: HTMLElement;
-  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
   readonly frame: KpIdentityAbsorptionChoreographyFrame;
 }): void {
   input.transition.dataset["kpEditorEquationIdentityAbsorptionChoreography"] =
@@ -3500,7 +3500,7 @@ function activeIdentityAbsorptionPhase(
 
 function applyInequalityPivotFocus(input: {
   readonly transition: HTMLElement;
-  readonly geometry: KpEditorPrecomputedEquationMotionPlan["geometry"];
+  readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
   readonly frame: KpInequalityPivotChoreographyFrame;
 }): void {
   input.transition.dataset["kpEditorEquationInequalityPivotChoreography"] =

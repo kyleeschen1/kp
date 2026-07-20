@@ -87,7 +87,8 @@
     {
       "id": "s09-motion-planner",
       "title": "Extract accepted motion planner",
-      "status": "planned"
+      "summary": "Moved and renamed the accepted precomputed motion planner into rendering; editor semantics, rewind, path reuse, and specialized envelopes remain proven.",
+      "status": "complete"
     },
     {
       "id": "s10-token-projection",

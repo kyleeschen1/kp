@@ -5,7 +5,7 @@ import {
   type KpEquationTokenMotionFrame
 } from "../rendering/semantic-equation-token-renderer.ts";
 import type { KpEditorAnimationPlayerState } from "./animation-player-state.ts";
-import type { KpEditorPrecomputedEquationMotionPlan } from "./precomputed-equation-motion.ts";
+import type { KpPrecomputedEquationMotionPlan } from "../rendering/precomputed-equation-motion.ts";
 import {
   sampleKpEquationSemanticTimeline,
   type KpEquationSemanticTimelineFrame
@@ -35,7 +35,7 @@ export function createKpEditorSemanticEquationTokenFrame(input: {
   readonly geometry: KpMeasuredEquationTransitionGeometry;
   readonly playerState: KpEditorAnimationPlayerState;
   readonly phaseLocalProgress: number;
-  readonly precomputedPlan?: KpEditorPrecomputedEquationMotionPlan | undefined;
+  readonly precomputedPlan?: KpPrecomputedEquationMotionPlan | undefined;
   readonly accessibilityMode?: KpEquationMotifAccessibilityMode | undefined;
 }): KpEditorSemanticEquationTokenFrame {
   const phaseLocalProgress = clamp01(input.phaseLocalProgress);

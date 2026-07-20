@@ -5,7 +5,7 @@ import { createKpAnimationAssets } from "../src/animation/catalog.ts";
 import { createKpEditorAnimationLibrary } from "../src/editor/animation-library.ts";
 import { createKpEditorAnimationPlayerState } from "../src/editor/animation-player-state.ts";
 import { createKpEditorSemanticEquationTokenFrame } from "../src/editor/semantic-equation-player-adapter.ts";
-import { createKpEditorPrecomputedEquationMotionPlan } from "../src/editor/precomputed-equation-motion.ts";
+import { createKpPrecomputedEquationMotionPlan } from "../src/rendering/precomputed-equation-motion.ts";
 import type { KpMeasuredEquationTransitionGeometry } from "../src/rendering/equation-motion-dom.ts";
 
 const element = { style: {} } as unknown as HTMLElement;
@@ -92,7 +92,7 @@ test("rewind samples the same semantic token motion in reverse", () => {
 });
 
 test("semantic token frames consume one precomputed layout path and timeline plan", () => {
-  const precomputedPlan = createKpEditorPrecomputedEquationMotionPlan({
+  const precomputedPlan = createKpPrecomputedEquationMotionPlan({
     id: "editor-plan.shared-player",
     geometry,
     motifKind: "artifact-replace"
@@ -112,12 +112,12 @@ test("semantic token frames consume one precomputed layout path and timeline pla
 });
 
 test("specialized choreography motifs reuse the base token timeline envelope", () => {
-  const fraction = createKpEditorPrecomputedEquationMotionPlan({
+  const fraction = createKpPrecomputedEquationMotionPlan({
     id: "editor-plan.fraction-factor-split",
     geometry,
     motifKind: "fraction-factor-split"
   });
-  const exponent = createKpEditorPrecomputedEquationMotionPlan({
+  const exponent = createKpPrecomputedEquationMotionPlan({
     id: "editor-plan.exponent-factor-peel",
     geometry,
     motifKind: "exponent-factor-peel"

@@ -46,6 +46,10 @@
     {
       "kind": "file",
       "path": "src/rendering/equation-visual-frame.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/precomputed-equation-motion.ts"
     }
   ],
   "dependsOn": {
@@ -138,6 +142,12 @@
       "status": "passed",
       "scope": "s08 inferred frame API",
       "checkedAt": "2026-07-20T20:41:42.145Z"
+    },
+    {
+      "command": "node --test tests/kp-editor-semantic-equation-player-adapter.test.ts",
+      "status": "passed",
+      "scope": "s09 neutral precomputed planner",
+      "checkedAt": "2026-07-20T20:43:57.684Z"
     }
   ],
   "progress": {
