@@ -15,6 +15,8 @@ interface CaptureRecord {
   readonly selector: string;
   readonly output: string;
   readonly progress?: number;
+  readonly time?: number;
+  readonly viewport?: { readonly width: number; readonly height: number };
 }
 
 await mkdir(outputRoot, { recursive: true });
@@ -31,6 +33,8 @@ try {
   await page.getByRole("link", { name: "Balance", exact: true }).click();
   await page.locator("[data-kp-balance-scene]").waitFor();
   await captureCurrent("linear-room-plain-balance", "[data-kp-concept-room-shell]");
+  await captureDivisionCheckpoints(page.url());
+  await page.setViewportSize(viewport);
 
   await capturePage({
     id: "ftc-composition-reference",
@@ -89,8 +93,47 @@ async function captureElement(
     url: page.url(),
     selector: "[data-kp-editor-animation-player]",
     output: path.relative(process.cwd(), output),
-    progress
+    progress,
+    viewport: page.viewportSize() ?? undefined
   });
+}
+
+async function captureDivisionCheckpoints(canonicalConceptUrl: string): Promise<void> {
+  const checkpoints = [
+    { time: 470, viewport: { width: 1280, height: 900 }, suffix: "desktop" },
+    { time: 575, viewport: { width: 1280, height: 900 }, suffix: "desktop" },
+    { time: 650, viewport: { width: 1280, height: 900 }, suffix: "desktop" },
+    { time: 720, viewport: { width: 1280, height: 900 }, suffix: "desktop" },
+    { time: 575, viewport: { width: 390, height: 844 }, suffix: "phone" },
+    { time: 720, viewport: { width: 390, height: 844 }, suffix: "phone" }
+  ] as const;
+
+  for (const checkpoint of checkpoints) {
+    await page.setViewportSize(checkpoint.viewport);
+    // Preserve the route's required version and mode fields while varying only the reviewed visual state.
+    const url = new URL(canonicalConceptUrl);
+    url.searchParams.set("checkpoint", "subtract-three");
+    url.searchParams.set("t", String(checkpoint.time));
+    url.searchParams.set("projection", "balance");
+    url.searchParams.append("focus", "operation.divide-two");
+    const id = `linear-room-division-${checkpoint.time}-${checkpoint.suffix}`;
+    console.log(`capturing ${id}`);
+    await page.goto(url.href, { waitUntil: "domcontentloaded", timeout: 15_000 });
+    await page.locator("[data-kp-concept-room-mounted=true]").waitFor({ state: "attached", timeout: 15_000 });
+    const scene = page.locator("[data-kp-concept-viewport] [data-kp-balance-stage-root]");
+    await scene.waitFor();
+    await settle(page);
+    const output = path.join(outputRoot, `${id}.png`);
+    await scene.screenshot({ path: output });
+    captures.push({
+      id,
+      url: page.url(),
+      selector: "[data-kp-concept-viewport] [data-kp-balance-stage-root]",
+      output: path.relative(process.cwd(), output),
+      time: checkpoint.time,
+      viewport: checkpoint.viewport
+    });
+  }
 }
 
 async function settle(target: Page): Promise<void> {

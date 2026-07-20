@@ -8,6 +8,13 @@
 - Use an OS-level temporary directory only when a tool technically requires it; filesystem escalation must not be introduced merely to store disposable tooling.
 - Durable Theseus evidence should cite committed commands or tests, not ephemeral scratch paths.
 
+## Visual check commands
+
+- Put browser-driving visual checks in a repo-owned `scripts/` or `tests/` entrypoint and expose them through a stable, scope-specific `npm run visual:<scope>` command.
+- Do not execute changing `tmp/codex/` Node scripts for visual checks that require browser or filesystem approval. `tmp/codex/` may hold their disposable screenshots and reports.
+- Reuse the approved scoped npm command throughout a long loop. Extend its committed entrypoint when later slices need new captures instead of requesting approval for each scratch filename.
+- Keep visual outputs disposable unless the repository explicitly adopts them as reviewed goldens; durable evidence should cite the stable npm command and its observable checkpoints.
+
 ## Exemplar-first collaboration
 
 Apply this protocol to subjective visual, motion, interaction, and LLM-generated-output work. Do not add its review ceremony to objective maintenance or exact bug fixes with deterministic acceptance tests.

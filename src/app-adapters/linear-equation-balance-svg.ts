@@ -3,8 +3,10 @@ import katex from "katex";
 import type { KpLinearEquationTrace } from "../../domains/public-api.ts";
 import {
   projectLinearEquationBalanceExemplar,
+  type KpBalanceExactPartitionMotionIr,
   type KpBalanceOperationApplicationIr,
   type KpBalanceMatchedRemovalMotionIr,
+  type KpBalanceMotionIr,
   type KpBalancePartitionGroupIr,
   type KpBalancePhysicalUnitIr,
   type KpBalanceSceneIr,
@@ -87,6 +89,11 @@ export function renderBalanceScene(
     svg.dataset["kpBalanceMotionPhase"] = projection.motion.phase;
     svg.dataset["kpBalanceMotionOperationId"] = projection.motion.operationSemanticId;
     svg.dataset["kpBalanceBeamTiltDegrees"] = String(projection.motion.beamTiltDegrees);
+    if (projection.motion.kind === "exact-partition") {
+      svg.dataset["kpBalanceSharedRemainderUnitId"] = projection.motion.sharedRemainder.unitId;
+      svg.dataset["kpBalancePhysicalCuttingAllowed"] = String(projection.motion.physicalCuttingAllowed);
+      svg.dataset["kpBalanceRoundingAllowed"] = String(projection.motion.roundingAllowed);
+    }
   }
   svg.setAttribute("viewBox", "0 0 720 390");
   svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
@@ -114,7 +121,9 @@ export function renderBalanceScene(
     projection.motion.phase !== "source" && projection.motion.phase !== "target" &&
     !prefersReducedMotion(root);
   if (motionActive) {
-    svg.append(renderMatchedRemovalSides(projection, projection.motion!, focusSemanticIds, theme));
+    svg.append(projection.motion!.kind === "matched-removal"
+      ? renderMatchedRemovalSides(projection, projection.motion!, focusSemanticIds, theme)
+      : renderExactPartitionMotion(projection, projection.motion!, focusSemanticIds, theme));
   } else if (projection.stage === "solved-partition") {
     svg.append(renderPartitionedSides(projection, focusSemanticIds, theme));
   } else {
@@ -122,23 +131,156 @@ export function renderBalanceScene(
       svg.append(renderPanSide(side, projection.physicalUnits, focusSemanticIds, theme));
     });
   }
-  const supportOverlay = svgElement("svg");
+  const supportOverlay = document.createElement("div");
   supportOverlay.dataset["kpBalanceSupportOverlay"] = "true";
-  supportOverlay.setAttribute("viewBox", "0 0 720 390");
-  supportOverlay.setAttribute("preserveAspectRatio", "xMidYMid meet");
   supportOverlay.setAttribute("aria-hidden", "true");
   supportOverlay.style.position = "relative";
   supportOverlay.style.gridArea = "1 / 1";
   supportOverlay.style.width = "100%";
-  supportOverlay.style.height = "auto";
+  supportOverlay.style.aspectRatio = "720 / 390";
   supportOverlay.style.pointerEvents = "none";
   supportOverlay.style.zIndex = "2";
-  supportOverlay.style.transform = "translateZ(0)";
+  supportOverlay.style.transform = "translate3d(0, 0, 1px)";
   supportOverlay.style.willChange = "transform";
-  supportOverlay.append(centralSupport());
-  // Chrome composites SVG foreignObjects independently; a sibling overlay keeps the fulcrum visible without duplicating math.
+  const supportSvg = svgElement("svg");
+  supportSvg.setAttribute("viewBox", "0 0 720 390");
+  supportSvg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+  supportSvg.style.display = "block";
+  supportSvg.style.width = "100%";
+  supportSvg.style.height = "100%";
+  supportSvg.append(centralSupport());
+  supportOverlay.append(supportSvg);
+  // Chrome composites SVG foreignObjects independently; an HTML stacking boundary keeps the support above math layers.
   stageRoot.append(svg, supportOverlay);
   root.replaceChildren(stageRoot);
+}
+
+function renderExactPartitionMotion(
+  projection: KpBalanceSceneIr,
+  motion: KpBalanceExactPartitionMotionIr,
+  focusSemanticIds: ReadonlySet<string>,
+  theme: KpConceptRoomThemeShape
+): SVGGElement {
+  const root = svgElement("g");
+  root.dataset["kpBalanceExactPartition"] = "true";
+  applyConceptRoomThemeRoles(
+    root,
+    rolesFor(motion.operationSemanticId, "equation.operation", focusSemanticIds),
+    theme
+  );
+  const variableUnits = motion.groups.map((group) => requireUnit(projection, group.variableUnitId));
+  const rightUnits = [
+    ...motion.groups.flatMap((group) => group.wholeRightUnitIds.map((unitId) => requireUnit(projection, unitId))),
+    requireUnit(projection, motion.sharedRemainder.unitId)
+  ];
+  const sourceLayouts = {
+    left: rowLayout(variableUnits, panCenters.left),
+    right: rowLayout(rightUnits, panCenters.right)
+  } as const;
+  const targetLayouts = new Map<string, { x: number; y: number; width: number; height: number }>();
+  motion.groups.forEach((group) => {
+    targetLayouts.set(group.variableUnitId, {
+      x: group.groupIndex === 0 ? 144 : 208, y: 239, width: 48, height: 48
+    });
+    group.wholeRightUnitIds.forEach((unitId, index) => targetLayouts.set(unitId, {
+      x: (group.groupIndex === 0 ? 427 : 571) + index * 29,
+      y: 258,
+      width: 24,
+      height: 24
+    }));
+  });
+  targetLayouts.set(motion.sharedRemainder.unitId, { x: 508, y: 258, width: 24, height: 24 });
+  const phaseProgress = motion.phaseProgressPermille / 1000;
+  const partitionProgress = motion.phase === "transform" ? easeInOut(phaseProgress) :
+    motion.phase === "settle" ? 1 : 0;
+  const guideProgress = motion.phase === "transform" ? smoothstep(.12, .82, phaseProgress) :
+    motion.phase === "settle" ? 1 : 0;
+  const shareProgress = motion.phase === "transform" ? smoothstep(.58, 1, phaseProgress) :
+    motion.phase === "settle" ? 1 : 0;
+  const selectionProgress = motion.phase === "settle" ? easeInOut(phaseProgress) : 0;
+
+  const leftSide = svgElement("g");
+  leftSide.dataset["kpBalanceSide"] = "left";
+  leftSide.dataset["kpBalancePartitionMotionSide"] = "left";
+  leftSide.setAttribute("role", "group");
+  leftSide.setAttribute("aria-label", "left side divided into two exact groups");
+  const variableGroup = semanticGroup(variableUnits[0]!.semanticId, "two x units divided into two groups",
+    focusSemanticIds, theme);
+  variableUnits.forEach((unit) => variableGroup.append(renderPartitionMotionUnit(
+    unit,
+    sourceLayouts.left.get(unit.id)!,
+    targetLayouts.get(unit.id)!,
+    partitionProgress,
+    motion
+  )));
+  leftSide.append(variableGroup);
+
+  const rightSide = svgElement("g");
+  rightSide.dataset["kpBalanceSide"] = "right";
+  rightSide.dataset["kpBalancePartitionMotionSide"] = "right";
+  rightSide.setAttribute("role", "group");
+  rightSide.setAttribute("aria-label", "right side divided into two exact groups with one whole shared remainder");
+  const constantGroup = semanticGroup(rightUnits[0]!.semanticId,
+    "five whole units divided exactly without cutting the remainder", focusSemanticIds, theme);
+  rightUnits.forEach((unit) => constantGroup.append(renderPartitionMotionUnit(
+    unit,
+    sourceLayouts.right.get(unit.id)!,
+    targetLayouts.get(unit.id)!,
+    partitionProgress,
+    motion
+  )));
+  rightSide.append(constantGroup);
+  root.append(leftSide, rightSide);
+
+  if (guideProgress > .001) {
+    motion.groups.forEach((group) => {
+      const guide = renderPartitionGuide(group, focusSemanticIds, theme, selectionProgress > .5);
+      guide.dataset["kpBalancePartitionMotionGuide"] = group.id;
+      guide.setAttribute("opacity", String(guideProgress));
+      root.append(guide);
+    });
+  }
+  if (shareProgress > .001) {
+    const links = sharedRemainderLinks({ opacity: shareProgress, transientLabels: true });
+    links.dataset["kpBalancePartitionMotionRemainder"] = motion.sharedRemainder.unitId;
+    root.append(links);
+  }
+  if (selectionProgress > .001) {
+    const result = mathLabel({
+      x: 110, y: 142, width: 180, height: 48, latex: "x=\\frac{5}{2}",
+      color: "var(--kp-concept-relation)", kind: "result"
+    });
+    result.dataset["kpBalancePartitionMotionResult"] = motion.selectedGroupId;
+    result.style.opacity = String(selectionProgress);
+    root.append(result);
+  }
+  return root;
+}
+
+function renderPartitionMotionUnit(
+  unit: KpBalancePhysicalUnitIr,
+  source: { readonly x: number; readonly y: number; readonly width: number; readonly height: number },
+  target: { readonly x: number; readonly y: number; readonly width: number; readonly height: number },
+  progress: number,
+  motion: KpBalanceExactPartitionMotionIr
+): SVGGElement {
+  const isSharedRemainder = unit.id === motion.sharedRemainder.unitId;
+  // The whole remainder changes horizontal order; a lifted lane prevents it from crossing another physical unit.
+  const arcY = isSharedRemainder ? -56 * Math.sin(Math.PI * progress) : 0;
+  const box = {
+    x: source.x + (target.x - source.x) * progress,
+    y: source.y + (target.y - source.y) * progress + arcY,
+    width: source.width + (target.width - source.width) * progress,
+    height: source.height + (target.height - source.height) * progress
+  };
+  const node = isSharedRemainder ? renderMovingIntegerUnit(unit, box) : renderUnit(unit, box);
+  node.dataset["kpBalanceMotionRole"] = isSharedRemainder
+    ? "unsplit-shared-remainder"
+    : "partition-assignment-unit";
+  node.dataset["kpOperationSemanticId"] = motion.operationSemanticId;
+  node.dataset["kpBalancePartitionProgress"] = String(progress);
+  node.dataset["kpBalancePartitionArcY"] = String(arcY);
+  return node;
 }
 
 function renderMatchedRemovalSides(
@@ -371,12 +513,12 @@ function renderPartitionedSides(
 function renderPartitionGuide(
   group: KpBalancePartitionGroupIr,
   focusSemanticIds: ReadonlySet<string>,
-  theme: KpConceptRoomThemeShape
+  theme: KpConceptRoomThemeShape,
+  selectionVisible = true
 ): SVGGElement {
   const node = svgElement("g");
   node.dataset["kpBalancePartitionGroup"] = group.id;
   node.dataset["kpBalancePartitionGroupIndex"] = String(group.groupIndex);
-  node.dataset["kpBalancePartitionSelected"] = String(group.selectedAsRepresentative);
   applyConceptRoomThemeRoles(
     node,
     rolesFor(group.operationSemanticId, "equation.operation", focusSemanticIds),
@@ -386,14 +528,16 @@ function renderPartitionGuide(
   const rightGuide = svgElement("rect");
   const leftX = group.groupIndex === 0 ? 136 : 200;
   const rightX = group.groupIndex === 0 ? 419 : 563;
+  const selected = group.selectedAsRepresentative && selectionVisible;
+  node.dataset["kpBalancePartitionSelected"] = String(selected);
   [leftGuide, rightGuide].forEach((guide) => {
     guide.dataset["kpBalanceGroupGuide"] = "true";
     guide.setAttribute("fill", "none");
-    guide.setAttribute("stroke", group.selectedAsRepresentative
+    guide.setAttribute("stroke", selected
       ? "var(--kp-concept-relation)"
       : "var(--kp-concept-line)");
-    guide.setAttribute("stroke-width", group.selectedAsRepresentative ? "2" : "1.5");
-    guide.setAttribute("stroke-dasharray", group.selectedAsRepresentative ? "none" : "5 5");
+    guide.setAttribute("stroke-width", selected ? "2" : "1.5");
+    guide.setAttribute("stroke-dasharray", selected ? "none" : "5 5");
     guide.setAttribute("rx", "10");
   });
   setAttributes(leftGuide, { x: String(leftX), y: "231", width: "64", height: "64" });
@@ -402,7 +546,10 @@ function renderPartitionGuide(
   return node;
 }
 
-function sharedRemainderLinks(): SVGGElement {
+function sharedRemainderLinks(options: {
+  readonly opacity?: number;
+  readonly transientLabels?: boolean;
+} = {}): SVGGElement {
   const group = svgElement("g");
   group.dataset["kpBalanceSharedRemainder"] = "true";
   group.setAttribute("aria-hidden", "true");
@@ -416,19 +563,76 @@ function sharedRemainderLinks(): SVGGElement {
     d: "M 520 254 Q 537 232 558 247", fill: "none", stroke: "var(--kp-concept-accent)",
     "stroke-width": "1.5", "stroke-dasharray": "3 4"
   });
-  group.append(left, right,
-    mathLabel({ x: 474, y: 218, width: 40, height: 32, latex: "\\frac12", color: "var(--kp-concept-accent)", kind: "share" }),
-    mathLabel({ x: 526, y: 218, width: 40, height: 32, latex: "\\frac12", color: "var(--kp-concept-accent)", kind: "share" })
-  );
+  const opacity = options.opacity ?? 1;
+  left.setAttribute("opacity", String(opacity));
+  right.setAttribute("opacity", String(opacity));
+  const leftLabel = options.transientLabels === true
+    ? transientHalfLabel(494)
+    : mathLabel({
+      x: 474, y: 218, width: 40, height: 32, latex: "\\frac12",
+      color: "var(--kp-concept-accent)", kind: "share"
+    });
+  const rightLabel = options.transientLabels === true
+    ? transientHalfLabel(546)
+    : mathLabel({
+      x: 526, y: 218, width: 40, height: 32, latex: "\\frac12",
+      color: "var(--kp-concept-accent)", kind: "share"
+    });
+  leftLabel.dataset["kpBalanceSymbolicHalfShare"] = "true";
+  rightLabel.dataset["kpBalanceSymbolicHalfShare"] = "true";
+  leftLabel.style.opacity = String(opacity);
+  rightLabel.style.opacity = String(opacity);
+  group.append(left, right, leftLabel, rightLabel);
   return group;
+}
+
+function transientHalfLabel(x: number): SVGTextElement {
+  // Transient SVG labels avoid Chrome's foreignObject compositor bug; the settled fraction remains KaTeX.
+  const label = svgElement("text");
+  setAttributes(label, {
+    x: String(x), y: "239",
+    fill: "var(--kp-concept-accent)",
+    "font-family": "KaTeX_Main, serif",
+    "font-size": "16",
+    "text-anchor": "middle"
+  });
+  label.textContent = "½";
+  return label;
 }
 
 function renderOperation(
   application: KpBalanceOperationApplicationIr,
-  motion: KpBalanceMatchedRemovalMotionIr | undefined,
+  motion: KpBalanceMotionIr | undefined,
   focusSemanticIds: ReadonlySet<string>,
   theme: KpConceptRoomThemeShape
-): SVGForeignObjectElement {
+): SVGElement {
+  if (motion?.kind === "exact-partition") {
+    const phaseProgress = motion.phaseProgressPermille / 1000;
+    const opacity = motion.phase === "introduce-operation" ? easeInOut(phaseProgress) :
+      motion.phase === "settle" ? 1 - easeInOut(phaseProgress) : 1;
+    const label = svgElement("text");
+    label.dataset["kpBalanceOperationApplication"] = application.id;
+    label.dataset["kpOperationSemanticId"] = application.operationSemanticId;
+    label.dataset["kpBalanceSide"] = application.side;
+    label.dataset["kpBalanceTransientOperationLabel"] = "true";
+    setAttributes(label, {
+      x: String(application.side === "left" ? 200 : 520),
+      y: String(89 - (1 - opacity) * 8),
+      fill: "var(--kp-concept-accent)",
+      opacity: String(opacity),
+      "font-family": "KaTeX_Main, serif",
+      "font-size": "16",
+      "text-anchor": "middle",
+      "dominant-baseline": "central"
+    });
+    label.textContent = "÷2";
+    applyConceptRoomThemeRoles(
+      label,
+      rolesFor(application.operationSemanticId, "equation.operation", focusSemanticIds),
+      theme
+    );
+    return label;
+  }
   const label = mathLabel({
     x: application.side === "left" ? 158 : 478,
     y: 68,

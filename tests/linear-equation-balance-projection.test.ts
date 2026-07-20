@@ -84,7 +84,9 @@ test("matched subtraction uses the exact authored symbolic phase and paired iden
     assert.equal(scene.motion?.phaseProgressPermille, symbolic[index]?.transition?.phaseProgressPermille);
     assert.equal(scene.motion?.beamTiltDegrees, 0);
     assert.equal(scene.motion?.equalityPreserved, true);
-    assert.deepEqual(scene.motion?.pairs.map((pair) => [pair.leftUnitId, pair.rightUnitId]), [
+    assert.equal(scene.motion?.kind, "matched-removal");
+    if (scene.motion?.kind !== "matched-removal") assert.fail("Expected matched-removal motion.");
+    assert.deepEqual(scene.motion.pairs.map((pair) => [pair.leftUnitId, pair.rightUnitId]), [
       ["balance.left.unit.0", "balance.right.unit.5"],
       ["balance.left.unit.1", "balance.right.unit.6"],
       ["balance.left.unit.2", "balance.right.unit.7"]
@@ -92,6 +94,74 @@ test("matched subtraction uses the exact authored symbolic phase and paired iden
   });
   assert.deepEqual(scenes[1]!.operationApplications.map((application) => application.side), ["left", "right"]);
   assert.deepEqual(scenes[4]!.operationApplications, []);
+});
+
+test("exact division uses the symbolic phase and preserves one whole shared remainder", () => {
+  const trace = createCanonicalConceptRoomTrace();
+  const times = [400, 470, 575, 680, 750];
+  const scenes = times.map((progress) => projectLinearEquationBalanceExemplar(trace, progress, {
+    diagramSemanticId: "diagram.balance",
+    operationWindows: authoredWindows(trace)
+  }));
+  const symbolic = times.map((progress) => projectLinearEquationTrace(trace, progress, {
+    operationWindows: authoredWindows(trace)
+  }));
+  assert.deepEqual(scenes.map((scene) => scene.motion?.phase), [
+    "target", "introduce-operation", "transform", "settle", "target"
+  ]);
+  assert.deepEqual(scenes.map((scene) => scene.stage), [
+    "after-subtraction", "after-subtraction", "after-subtraction", "solved-partition", "solved-partition"
+  ]);
+  scenes.forEach((scene, index) => {
+    assert.equal(scene.motion?.operationId, symbolic[index]?.transition?.operationId);
+    assert.equal(scene.motion?.phaseProgressPermille, symbolic[index]?.transition?.phaseProgressPermille);
+  });
+  assert.equal(scenes[0]!.motion?.kind, "matched-removal");
+  scenes.slice(1).forEach((scene) => {
+    assert.equal(scene.motion?.kind, "exact-partition");
+    if (scene.motion?.kind !== "exact-partition") assert.fail("Expected exact-partition motion.");
+    assert.equal(scene.motion.beamTiltDegrees, 0);
+    assert.equal(scene.motion.equalityPreserved, true);
+    assert.equal(scene.motion.roundingAllowed, false);
+    assert.equal(scene.motion.physicalCuttingAllowed, false);
+    assert.deepEqual(scene.motion.groups.map((group) => ({
+      id: group.id,
+      variable: group.variableUnitId,
+      wholes: group.wholeRightUnitIds,
+      exact: group.exactRightValue
+    })), [
+      {
+        id: "balance.partition.0",
+        variable: "balance.left.variable.0",
+        wholes: ["balance.right.unit.0", "balance.right.unit.1"],
+        exact: { numerator: "5", denominator: "2" }
+      },
+      {
+        id: "balance.partition.1",
+        variable: "balance.left.variable.1",
+        wholes: ["balance.right.unit.2", "balance.right.unit.3"],
+        exact: { numerator: "5", denominator: "2" }
+      }
+    ]);
+    assert.deepEqual(scene.motion.sharedRemainder, {
+      unitId: "balance.right.unit.4",
+      exactSharePerGroup: { numerator: "1", denominator: "2" },
+      representation: "one-unsplit-unit-with-two-symbolic-half-shares",
+      remainsWhole: true
+    });
+  });
+  assert.deepEqual(scenes[1]!.operationApplications.map((application) => application.side), ["left", "right"]);
+  assert.deepEqual(scenes[4]!.operationApplications, []);
+});
+
+test("exact division sampling is deterministic through direct seek and rewind", () => {
+  const trace = createCanonicalConceptRoomTrace();
+  const sample = (progress: number) => projectLinearEquationBalanceExemplar(trace, progress, {
+    diagramSemanticId: "diagram.balance",
+    operationWindows: authoredWindows(trace)
+  });
+  const times = [400, 470, 575, 680, 750];
+  assert.deepEqual([...times].reverse().map(sample).reverse(), times.map(sample));
 });
 
 test("matched subtraction sampling is deterministic through direct seek and rewind", () => {

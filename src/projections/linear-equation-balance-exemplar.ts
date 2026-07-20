@@ -113,6 +113,32 @@ export interface KpBalanceMatchedRemovalMotionIr {
   readonly equalityPreserved: true;
 }
 
+export interface KpBalanceExactPartitionMotionIr {
+  readonly kind: "exact-partition";
+  readonly operationId: string;
+  readonly operationSemanticId: string;
+  readonly phase: KpSymbolicTransitionPhase;
+  readonly phaseProgressPermille: number;
+  readonly sourceFrameId: string;
+  readonly targetFrameId: string;
+  readonly groups: readonly KpBalancePartitionGroupIr[];
+  readonly sharedRemainder: {
+    readonly unitId: string;
+    readonly exactSharePerGroup: KpExactRational;
+    readonly representation: "one-unsplit-unit-with-two-symbolic-half-shares";
+    readonly remainsWhole: true;
+  };
+  readonly selectedGroupId: string;
+  readonly beamTiltDegrees: 0;
+  readonly equalityPreserved: true;
+  readonly roundingAllowed: false;
+  readonly physicalCuttingAllowed: false;
+}
+
+export type KpBalanceMotionIr =
+  | KpBalanceMatchedRemovalMotionIr
+  | KpBalanceExactPartitionMotionIr;
+
 export interface KpBalanceProjectionOptions {
   readonly diagramSemanticId: string;
   readonly operationWindows?: readonly KpSymbolicOperationWindow[];
@@ -141,7 +167,7 @@ export interface KpBalanceSceneIr {
   readonly operationPaths: readonly KpBalanceOperationPathIr[];
   readonly symbolicCorrespondences: readonly KpBalanceSymbolicCorrespondenceIr[];
   readonly equality: KpBalanceEqualityIr;
-  readonly motion?: KpBalanceMatchedRemovalMotionIr;
+  readonly motion?: KpBalanceMotionIr;
   readonly operationApplications: readonly KpBalanceOperationApplicationIr[];
   readonly accessibleText: string;
   readonly diagnostics: readonly string[];
@@ -173,7 +199,9 @@ export function projectLinearEquationBalanceExemplar(
     : projectTwoSidedOperation(operation);
   const motion = operation.kind === "subtract-both-sides"
     ? projectMatchedRemovalMotion(trace, transition.phase, transition.phaseProgressPermille)
-    : undefined;
+    : operation.kind === "divide-both-sides"
+      ? projectExactPartitionMotion(trace, transition.phase, transition.phaseProgressPermille)
+      : undefined;
   const operationText = operationApplications[0]?.spoken;
   return deepFreeze({
     schemaVersion: "kp.balance-exemplar-ir.v2" as const,
@@ -199,13 +227,18 @@ export function projectLinearEquationBalanceExemplar(
     operationApplications,
     accessibleText: [
       `Balanced equation: ${left.accessibleText} equals ${right.accessibleText}.`,
-      motion === undefined || motion.phase === "source" || motion.phase === "target"
-        ? undefined
-        : "Three matched unit pairs leave together while the beam stays level.",
+      motionNarration(motion),
       operationText === undefined ? undefined : `${operationText} on both sides.`
     ].filter((value): value is string => value !== undefined).join(" "),
     diagnostics: trace.diagnostics.map((diagnostic) => `${diagnostic.code}: ${diagnostic.message}`)
   });
+}
+
+function motionNarration(motion: KpBalanceMotionIr | undefined): string | undefined {
+  if (motion === undefined || motion.phase === "source" || motion.phase === "target") return undefined;
+  return motion.kind === "matched-removal"
+    ? "Three matched unit pairs leave together while the beam stays level."
+    : "Two exact groups form around one x block and two whole units each; one remainder stays whole and contributes one symbolic half to each group.";
 }
 
 function projectMatchedRemovalMotion(
@@ -231,6 +264,36 @@ function projectMatchedRemovalMotion(
     })),
     beamTiltDegrees: 0,
     equalityPreserved: true
+  };
+}
+
+function projectExactPartitionMotion(
+  trace: KpLinearEquationTrace,
+  phase: KpSymbolicTransitionPhase,
+  phaseProgressPermille: number
+): KpBalanceExactPartitionMotionIr {
+  const operation = trace.operations[1]!;
+  const groups = projectPartitionGroups(trace);
+  return {
+    kind: "exact-partition",
+    operationId: operation.id,
+    operationSemanticId: operation.semanticId,
+    phase,
+    phaseProgressPermille,
+    sourceFrameId: operation.fromFrameId,
+    targetFrameId: operation.toFrameId,
+    groups,
+    sharedRemainder: {
+      unitId: integerUnitId("right", 4),
+      exactSharePerGroup: half(),
+      representation: "one-unsplit-unit-with-two-symbolic-half-shares",
+      remainsWhole: true
+    },
+    selectedGroupId: groups[0]!.id,
+    beamTiltDegrees: 0,
+    equalityPreserved: true,
+    roundingAllowed: false,
+    physicalCuttingAllowed: false
   };
 }
 

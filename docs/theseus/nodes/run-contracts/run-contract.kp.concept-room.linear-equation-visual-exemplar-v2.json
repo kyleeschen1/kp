@@ -139,7 +139,8 @@
     {
       "id": "s18",
       "title": "Synchronized division geometry",
-      "status": "planned"
+      "summary": "Synchronized exact division geometry implemented and verified.",
+      "status": "complete"
     },
     {
       "id": "s19",
