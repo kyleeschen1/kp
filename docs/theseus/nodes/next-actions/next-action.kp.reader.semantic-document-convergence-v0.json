@@ -302,11 +302,23 @@
       "status": "passed",
       "scope": "s10 compiler HTML types and import fitness",
       "checkedAt": "2026-07-20T17:08:52.555Z"
+    },
+    {
+      "command": "node --test static math prose and architecture suites",
+      "status": "passed",
+      "scope": "s11 11 KaTeX MathML strictness static HTML and boundary tests",
+      "checkedAt": "2026-07-20T17:11:02.989Z"
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s11 compile-time math projection types and imports",
+      "checkedAt": "2026-07-20T17:11:04.138Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s10 makes the lesson readable searchable printable and navigable before hydration, with semantic focus affordances preserved as native controls."
+    "summary": "s11 turns semantic checkpoints into strict build-time KaTeX visual markup plus MathML, so the initial equation does not depend on client rendering."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

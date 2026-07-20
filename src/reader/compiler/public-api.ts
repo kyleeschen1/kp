@@ -19,3 +19,11 @@ export {
   compileKpStaticLessonProse,
   type KpStaticLessonHtml
 } from "./static-prose-compiler.ts";
+export {
+  compileKpStaticMathStates,
+  type KpStaticMathBlock,
+  type KpStaticMathProjection,
+  type KpStaticMathProjectionInput,
+  type KpStaticMathProjector,
+  type KpStaticMathState
+} from "./static-math-compiler.ts";

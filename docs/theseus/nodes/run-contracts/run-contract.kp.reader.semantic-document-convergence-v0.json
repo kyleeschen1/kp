@@ -113,7 +113,8 @@
     {
       "id": "s11",
       "title": "Compile build-time KaTeX MathML and static states",
-      "status": "planned"
+      "summary": "Compiled build-time KaTeX HTML MathML and static checkpoint states. Focused tests, strictness checks, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s12",
