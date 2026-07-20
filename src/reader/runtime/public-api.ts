@@ -37,3 +37,10 @@ export {
   type KpReaderFocusSource,
   type KpReaderSemanticFocusService
 } from "./semantic-focus.ts";
+export {
+  createKpReaderControlModel,
+  projectKpReaderMotion,
+  type KpReaderAccessibleCheckpoint,
+  type KpReaderControlModel,
+  type KpReaderMotionProjection
+} from "./accessible-controls.ts";

@@ -410,11 +410,23 @@
       "status": "passed",
       "scope": "s19 app orchestration types and layer fitness",
       "checkedAt": "2026-07-20T18:00:56.322Z"
+    },
+    {
+      "command": "node --test accessible controls continuous scroll and architecture suites",
+      "status": "passed",
+      "scope": "s20 14 control labels checkpoint projection continuity and boundary tests",
+      "checkedAt": "2026-07-20T18:03:04.562Z"
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s20 accessible control types and layer fitness",
+      "checkedAt": "2026-07-20T18:03:05.726Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s19 makes interaction a near-viewport progressive enhancement while static prose and MathML remain the durable fallback for offscreen failed and torn-down blocks."
+    "summary": "s20 preserves exact scroll motion by default while reduced-motion users receive the same conceptual sequence as stable labeled checkpoints and native control metadata."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

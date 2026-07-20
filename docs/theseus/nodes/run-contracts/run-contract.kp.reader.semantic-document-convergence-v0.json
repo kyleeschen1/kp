@@ -167,7 +167,8 @@
     {
       "id": "s20",
       "title": "Add accessible controls and reduced-motion projection",
-      "status": "planned"
+      "summary": "Added accessible control semantics and checkpoint-based reduced-motion projection. Focused tests, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s21",
