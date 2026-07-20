@@ -30,3 +30,10 @@ export {
   decodeKpReaderSessionUrl,
   encodeKpReaderSessionUrl
 } from "./lesson-url-codec.ts";
+export {
+  createKpReaderSemanticFocusService,
+  type KpReaderFocusListener,
+  type KpReaderFocusSnapshot,
+  type KpReaderFocusSource,
+  type KpReaderSemanticFocusService
+} from "./semantic-focus.ts";

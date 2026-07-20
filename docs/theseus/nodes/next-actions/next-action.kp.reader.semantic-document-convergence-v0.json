@@ -392,11 +392,17 @@
       "status": "passed",
       "scope": "s17 URL codec types and layer fitness",
       "checkedAt": "2026-07-20T17:25:58.232Z"
+    },
+    {
+      "command": "node --test semantic focus URL and architecture suites",
+      "status": "passed",
+      "scope": "s18 14 focus precedence closure lifecycle and boundary tests",
+      "checkedAt": "2026-07-20T17:27:50.194Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s17 makes exact points of confusion durable and teacher-shareable through canonical version-aware URLs without requiring per-frame history updates."
+    "summary": "s18 lets prose hover keyboard URL and story state address the same semantic objects without coupling focus behavior to a renderer."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

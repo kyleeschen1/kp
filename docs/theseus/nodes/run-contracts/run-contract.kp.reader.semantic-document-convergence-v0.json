@@ -155,7 +155,8 @@
     {
       "id": "s18",
       "title": "Add renderer-neutral semantic focus service",
-      "status": "planned"
+      "summary": "Added layered renderer-neutral semantic focus. Focused tests, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s19",
