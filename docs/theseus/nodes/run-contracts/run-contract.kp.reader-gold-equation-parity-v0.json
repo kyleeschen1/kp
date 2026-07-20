@@ -159,7 +159,8 @@
     {
       "id": "s21-motion-selector",
       "title": "Add persistent motion selector",
-      "status": "planned"
+      "summary": "A compact accessible selector now exposes System, Reduced, Full, and Static; its inferred policy persists locally and travels in shareable URLs.",
+      "status": "complete"
     },
     {
       "id": "s22-focus-salience",

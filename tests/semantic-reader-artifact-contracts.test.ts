@@ -59,6 +59,7 @@ test("reader sessions validate bounded progress and copy focus identity", () => 
   ]);
   assert.equal(session.location.progressPermille, 333);
   assert.equal(session.reducedMotion, true);
+  assert.equal(session.motionPreference, "reduced");
   assert.throws(
     () => createKpReaderSessionSnapshot({
       documentId: "lesson.solve-x",

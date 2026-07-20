@@ -14,7 +14,8 @@ test("lesson location round trips through a canonical shareable URL", () => {
     checkpointId: "checkpoint.beat.cancel",
     progressPermille: 667,
     projectionId: "projection.symbolic",
-    focusRefs: ["equation.x", "equation.left"]
+    focusRefs: ["equation.x", "equation.left"],
+    motionPreference: "reduced"
   });
   const encoded = encodeKpReaderSessionUrl(
     "https://kinetic.press/lessons/solve-x?utm_source=teacher#beat.cancel",
@@ -24,6 +25,7 @@ test("lesson location round trips through a canonical shareable URL", () => {
   assert.equal(url.searchParams.get("utm_source"), "teacher");
   assert.equal(url.hash, "#beat.cancel");
   assert.equal(url.searchParams.get("kpProgress"), "667");
+  assert.equal(url.searchParams.get("kpMotion"), "reduced");
   assert.deepEqual(url.searchParams.getAll("kpFocus"), ["equation.left", "equation.x"]);
   assert.deepEqual(decodeKpReaderSessionUrl(encoded), {
     ...session,

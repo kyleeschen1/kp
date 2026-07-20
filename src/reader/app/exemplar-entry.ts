@@ -32,10 +32,12 @@ import {
   decodeKpReaderSessionUrl,
   encodeKpReaderSessionUrl,
   projectKpReaderMotion,
+  parseKpReaderMotionPreference,
   resolveKpReaderMotionPolicy,
   sampleKpReaderAnimationFrame,
   type KpReaderClockSample,
-  type KpReaderContinuousScrollClock
+  type KpReaderContinuousScrollClock,
+  type KpReaderMotionPreference
 } from "../runtime/public-api.ts";
 
 interface TransitionContext {
@@ -78,6 +80,9 @@ const annihilationWitness = requireElement<HTMLElement>(
 );
 const status = requireElement<HTMLOutputElement>("[data-kp-reader-stage-status]");
 const progressBar = requireElement<HTMLElement>("[data-kp-reader-progress-bar]");
+const motionSelect = requireElement<HTMLSelectElement>(
+  "[data-kp-reader-motion-preference]"
+);
 const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
 const accessibleCheckpoints = beats.map((beat) => ({
@@ -86,6 +91,9 @@ const accessibleCheckpoints = beats.map((beat) => ({
   progressPermille: Number(requiredData(beat, "kpCheckpoint"))
 }));
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const motionPreferenceStorageKey = "kp.reader.motion-preference.v1";
+let motionPreference = initialMotionPreference();
+motionSelect.value = motionPreference;
 const fontReadiness = createKpEquationFontReadiness(document);
 const transitionElements = [
   ...stage.querySelectorAll<HTMLElement>("[data-kp-reader-transition]")
@@ -155,6 +163,7 @@ document.addEventListener("focusin", onSemanticEnter);
 document.addEventListener("focusout", onSemanticLeave);
 window.addEventListener("pagehide", dispose, { once: true });
 reducedMotion.addEventListener("change", renderCurrentSample);
+motionSelect.addEventListener("change", onMotionPreferenceChange);
 
 const unsubscribeFontReadiness = fontReadiness.subscribe(() => {
   scheduler.invalidate("fonts");
@@ -275,7 +284,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     clock: sample,
     checkpoints: accessibleCheckpoints,
     policy: resolveKpReaderMotionPolicy({
-      preference: "system",
+      preference: motionPreference,
       systemReducedMotion: reducedMotion.matches
     })
   });
@@ -368,7 +377,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   progressBar.style.transform = `scaleX(${visualSample.progress})`;
   document.body.dataset["kpReaderProgress"] = String(visualSample.progressPermille);
   document.body.dataset["kpReaderMotionMode"] = projection.mode;
-  document.body.dataset["kpReaderMotionPreference"] = "system";
+  document.body.dataset["kpReaderMotionPreference"] = motionPreference;
   document.body.dataset["kpReaderTransition"] = transitionId;
   document.body.dataset["kpReaderFramePlans"] = String(scheduler.inspect().framePlanCount + 1);
   updateActiveBeat(visualSample.progressPermille);
@@ -515,8 +524,36 @@ function readerHref(sample: KpReaderClockSample): string {
     checkpointId: sample.checkpointId,
     progressPermille: sample.progressPermille,
     projectionId: "equation.symbolic",
-    focusRefs: focus.getSnapshot().objectRefs
+    focusRefs: focus.getSnapshot().objectRefs,
+    motionPreference
   }));
+}
+
+function initialMotionPreference(): KpReaderMotionPreference {
+  const urlPreference = parseKpReaderMotionPreference(
+    new URL(window.location.href).searchParams.get("kpMotion")
+  );
+  if (urlPreference !== undefined) return urlPreference;
+  try {
+    return parseKpReaderMotionPreference(
+      window.localStorage.getItem(motionPreferenceStorageKey)
+    ) ?? "system";
+  } catch {
+    return "system";
+  }
+}
+
+function onMotionPreferenceChange(): void {
+  const next = parseKpReaderMotionPreference(motionSelect.value);
+  if (next === undefined) return;
+  motionPreference = next;
+  try {
+    window.localStorage.setItem(motionPreferenceStorageKey, next);
+  } catch {
+    // Storage is an enhancement; the current session and URL remain valid.
+  }
+  renderCurrentSample();
+  settleLocation();
 }
 
 function restoreUrlLocation(): void {
@@ -572,6 +609,7 @@ function dispose(): void {
   if (settleTimer !== undefined) window.clearTimeout(settleTimer);
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
+  motionSelect.removeEventListener("change", onMotionPreferenceChange);
   unsubscribeFontReadiness();
   fontReadiness.dispose();
   scheduler.dispose();

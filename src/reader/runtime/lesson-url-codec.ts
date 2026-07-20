@@ -2,6 +2,7 @@ import {
   createKpReaderSessionSnapshot,
   type KpReaderSessionSnapshot
 } from "./session.ts";
+import { parseKpReaderMotionPreference } from "./motion-policy.ts";
 
 const params = {
   lesson: "kpLesson",
@@ -9,7 +10,8 @@ const params = {
   checkpoint: "kpCheckpoint",
   progress: "kpProgress",
   projection: "kpProjection",
-  focus: "kpFocus"
+  focus: "kpFocus",
+  motion: "kpMotion"
 } as const;
 
 export function encodeKpReaderSessionUrl(
@@ -29,6 +31,7 @@ export function encodeKpReaderSessionUrl(
   if (session.location.projectionId !== undefined) {
     url.searchParams.set(params.projection, session.location.projectionId);
   }
+  url.searchParams.set(params.motion, session.motionPreference);
   [...session.location.focusRefs].sort().forEach((focusRef) =>
     url.searchParams.append(params.focus, focusRef)
   );
@@ -65,7 +68,10 @@ export function decodeKpReaderSessionUrl(
     ...(url.searchParams.get(params.projection) === null
       ? {}
       : { projectionId: requiredParam(url, params.projection) }),
-    focusRefs: url.searchParams.getAll(params.focus)
+    focusRefs: url.searchParams.getAll(params.focus),
+    motionPreference: parseKpReaderMotionPreference(
+      url.searchParams.get(params.motion)
+    ) ?? "system"
   });
 }
 

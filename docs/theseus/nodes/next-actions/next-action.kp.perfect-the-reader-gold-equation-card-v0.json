@@ -82,6 +82,10 @@
     {
       "kind": "file",
       "path": "tests/semantic-reader-essential-motion.browser.spec.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-reader-motion-selector.browser.spec.ts"
     }
   ],
   "dependsOn": {
@@ -288,6 +292,18 @@
       "status": "passed",
       "scope": "s20 OS-reduced causal motion and no flourish",
       "checkedAt": "2026-07-20T21:35:32.314Z"
+    },
+    {
+      "command": "node --test focused reader session URL and motion policy suites",
+      "status": "passed",
+      "scope": "s21 serialized motion preference",
+      "checkedAt": "2026-07-20T21:39:02.355Z"
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader-motion-selector.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s21 selector override persistence and static mode",
+      "checkedAt": "2026-07-20T21:39:03.222Z"
     }
   ],
   "progress": {

@@ -2,6 +2,7 @@ import {
   createKpReaderArtifactRef,
   type KpReaderArtifactRef
 } from "../document/public-api.ts";
+import type { KpReaderMotionPreference } from "./motion-policy.ts";
 
 export interface KpReaderLocation {
   readonly checkpointId?: string | undefined;
@@ -15,6 +16,7 @@ export interface KpReaderSessionSnapshot {
   readonly document: KpReaderArtifactRef<"lesson-document">;
   readonly location: KpReaderLocation;
   readonly reducedMotion: boolean;
+  readonly motionPreference: KpReaderMotionPreference;
 }
 
 export function createKpReaderSessionSnapshot(input: {
@@ -25,6 +27,7 @@ export function createKpReaderSessionSnapshot(input: {
   readonly projectionId?: string | undefined;
   readonly focusRefs?: readonly string[] | undefined;
   readonly reducedMotion?: boolean | undefined;
+  readonly motionPreference?: KpReaderMotionPreference | undefined;
 }): KpReaderSessionSnapshot {
   if (
     input.progressPermille !== undefined
@@ -35,6 +38,8 @@ export function createKpReaderSessionSnapshot(input: {
     throw new Error("reader progress must be an integer from 0 through 1000.");
   }
   const focusRefs = uniqueNonEmpty(input.focusRefs ?? [], "focus ref");
+  const motionPreference = input.motionPreference ??
+    (input.reducedMotion ? "reduced" : "system");
   return {
     kind: "reader-session",
     document: createKpReaderArtifactRef({
@@ -54,7 +59,8 @@ export function createKpReaderSessionSnapshot(input: {
         : { projectionId: requireText(input.projectionId, "projection id") }),
       focusRefs
     },
-    reducedMotion: input.reducedMotion ?? false
+    motionPreference,
+    reducedMotion: motionPreference === "reduced"
   };
 }
 

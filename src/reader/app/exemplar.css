@@ -78,6 +78,8 @@ body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-stat
 .kp-reader-equation-stage-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; min-height: 1.6rem; }
 .kp-reader-equation-stage-heading > span { color: var(--kp-accent); font-size: .64rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
 .kp-reader-equation-stage-heading output { color: var(--kp-muted); font-family: var(--kp-serif); font-size: .82rem; }
+.kp-reader-motion-control { display: inline-flex; align-items: center; gap: .38rem; margin-left: auto; color: var(--kp-muted); font-size: .65rem; }
+.kp-reader-motion-control select { padding: .2rem 1.35rem .2rem .42rem; border: 1px solid var(--kp-line); border-radius: .4rem; color: var(--kp-ink); background: var(--kp-surface); font: inherit; }
 .kp-reader-equation-viewport { position: relative; min-height: clamp(245px, 48vh, 440px); overflow: hidden; }
 .kp-reader-equation-transition { position: absolute; inset: 0; display: block !important; visibility: hidden; }
 .kp-reader-equation-transition[data-kp-reader-transition-active="true"] { visibility: visible; }
