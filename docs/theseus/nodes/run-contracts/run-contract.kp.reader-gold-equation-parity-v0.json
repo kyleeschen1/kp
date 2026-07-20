@@ -105,7 +105,8 @@
     {
       "id": "s12-persistent-reader-stage",
       "title": "Persist reader material stage",
-      "status": "planned"
+      "summary": "The reader now has one viewport-level material stage; repeated relation identities retain the same DOM owner across adjacent transformations.",
+      "status": "complete"
     },
     {
       "id": "s13-subtraction",

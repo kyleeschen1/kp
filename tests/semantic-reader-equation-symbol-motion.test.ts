@@ -64,9 +64,8 @@ test("symbol motion continuously hands persistent material between native endpoi
   const start = sampleKpReaderEquationSymbolMotion({ ...context, progress: 0 });
   const middle = sampleKpReaderEquationSymbolMotion({ ...context, progress: 0.5 });
   const end = sampleKpReaderEquationSymbolMotion({ ...context, progress: 1 });
-  const xId = "material-owner.transform.linear-solve.cancel-left-additive-inverse.x-persists";
-  const cancellationId =
-    "material-owner.transform.linear-solve.cancel-left-additive-inverse.left-inverses-cancel";
+  const xId = "material-owner.x-persists";
+  const cancellationId = "material-owner.left-inverses-cancel";
   const xStart = start.owners.find((owner) => owner.ownerId === xId)!;
   const xMiddle = middle.owners.find((owner) => owner.ownerId === xId)!;
   const xEnd = end.owners.find((owner) => owner.ownerId === xId)!;
@@ -131,8 +130,7 @@ test("forward and rewind retrace every owner at complementary progress", () => {
 
 test("focused cancellation gains salience without discontinuous geometry", () => {
   const context = fixture("forward");
-  const cancellationId =
-    "material-owner.transform.linear-solve.cancel-left-additive-inverse.left-inverses-cancel";
+  const cancellationId = "material-owner.left-inverses-cancel";
   const samples = [0.2, 0.21, 0.22].map((progress) =>
     sampleKpReaderEquationSymbolMotion({ ...context, progress }).owners.find(
       (owner) => owner.ownerId === cancellationId

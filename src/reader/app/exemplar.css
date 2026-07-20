@@ -80,7 +80,7 @@ body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-stat
 .kp-reader-equation-viewport { position: relative; min-height: clamp(245px, 48vh, 440px); overflow: hidden; }
 .kp-reader-equation-transition { position: absolute; inset: 0; display: block !important; visibility: hidden; }
 .kp-reader-equation-transition[data-kp-reader-transition-active="true"] { visibility: visible; }
-.kp-reader-equation-fit-surface, .kp-reader-equation-measurement { position: absolute; inset: 0; }
+.kp-reader-equation-fit-surface, .kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { position: absolute; inset: 0; }
 .kp-reader-equation-measurement { font-size: clamp(1.85rem, 4.6vw, 3.45rem); }
 .kp-reader-equation-native { position: absolute; inset: 0; display: grid; place-items: center; }
 .kp-reader-equation-state { width: max-content; }

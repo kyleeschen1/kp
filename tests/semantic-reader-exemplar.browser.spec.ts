@@ -62,3 +62,21 @@ test("settled reader location is linkable and restores its progress", async ({ p
     "data-kp-reader-progress"
   ))).toBeCloseTo(progress, -1);
 });
+
+test("one material stage retains persistent semantic owners across transitions", async ({ page }) => {
+  await page.goto("/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpProgress=300");
+  const layers = page.locator("[data-kp-reader-equation-material-layer]");
+  await expect(layers).toHaveCount(1);
+  const xOwner = page.locator(
+    '[data-kp-reader-equation-material-owner-id="material-owner.x-persists"]'
+  );
+  await expect(xOwner).toBeAttached();
+  await xOwner.evaluate((element) => { element.dataset["kpPersistenceWitness"] = "same-node"; });
+
+  await page.locator("#beat\\.simplify").scrollIntoViewIfNeeded();
+  await page.evaluate(() => window.scrollBy(0, 120));
+  await expect.poll(async () => page.locator("body").getAttribute(
+    "data-kp-reader-transition"
+  )).toContain("simplify-right-difference");
+  await expect(xOwner).toHaveAttribute("data-kp-persistence-witness", "same-node");
+});

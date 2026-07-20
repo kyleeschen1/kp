@@ -115,7 +115,9 @@ function compileTransitionMaterialPlan(
     // Correspondence records, rather than DOM similarity, authorize stable
     // visual ownership. This ID therefore survives endpoint reversal.
     return [{
-      id: `material-owner.${transition.id}.${relation.recordId}`,
+      // Relation record IDs are the semantic identity across adjacent
+      // transformations; transition IDs describe only the current geometry.
+      id: `material-owner.${relation.recordId}`,
       transitionId: transition.id,
       relationRecordId: relation.recordId,
       relation: relation.relation,

@@ -164,6 +164,12 @@
       "status": "passed",
       "scope": "s11 neutral native/material/target handoff policy",
       "checkedAt": "2026-07-20T20:50:35.817Z"
+    },
+    {
+      "command": "npx playwright test focused semantic reader exemplar and typography suites",
+      "status": "passed",
+      "scope": "s12 single persistent viewport material stage and owner-node continuity",
+      "checkedAt": "2026-07-20T20:53:35.984Z"
     }
   ],
   "progress": {

@@ -11,7 +11,6 @@ import {
   projectKpReaderEquationRenderPlan,
   sampleKpReaderEquationSymbolMotion,
   type KpReaderEquationLayoutSnapshot,
-  type KpReaderEquationMaterialLayer,
   type KpReaderEquationMaterialOwnerFrame,
   type KpReaderEquationMaterialPlan,
   type KpReaderEquationPerceptualAlignmentPlan,
@@ -36,7 +35,6 @@ interface TransitionContext {
   readonly fitSurface: HTMLElement;
   readonly measurementRoot: HTMLElement;
   readonly materialPlan: KpReaderEquationMaterialPlan;
-  readonly materialLayer: KpReaderEquationMaterialLayer;
   readonly anchorElements: ReadonlyMap<string, HTMLElement>;
   readonly layout: KpReaderEquationLayoutSnapshot;
   readonly alignment: KpReaderEquationPerceptualAlignmentPlan;
@@ -59,6 +57,9 @@ document.body.dataset["kpReaderHydrated"] = "true";
 
 const stage = requireElement<HTMLElement>("[data-kp-reader-equation-stage]");
 const viewport = requireElement<HTMLElement>("[data-kp-reader-equation-viewport]");
+const materialFitSurface = requireElement<HTMLElement>(
+  "[data-kp-reader-material-fit-surface]"
+);
 const status = requireElement<HTMLOutputElement>("[data-kp-reader-stage-status]");
 const progressBar = requireElement<HTMLElement>("[data-kp-reader-progress-bar]");
 const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
@@ -90,14 +91,9 @@ const staticPlans = new Map(animation.transformations.map((transformation, index
   const renderPlan = projectKpReaderEquationRenderPlan({ animation, runtimeFrame });
   return [transformation.id, compileKpReaderEquationMaterialPlan(renderPlan)] as const;
 }));
-const materialLayers = new Map(transitionElements.map((element) => {
-  const id = requiredData(element, "kpReaderTransition");
-  const layer = requireDescendant<HTMLElement>(
-    element,
-    "[data-kp-reader-equation-material-layer]"
-  );
-  return [id, createKpReaderEquationMaterialLayer(layer)] as const;
-}));
+const materialLayer = createKpReaderEquationMaterialLayer(
+  requireDescendant<HTMLElement>(viewport, "[data-kp-reader-equation-material-layer]")
+);
 
 const scheduler = createKpReaderEquationFrameScheduler<
   KpReaderClockSample,
@@ -200,8 +196,7 @@ function measureLayout(revision: number): LayoutState {
   for (const element of transitionElements) {
     const id = requiredData(element, "kpReaderTransition");
     const materialPlan = staticPlans.get(id);
-    const materialLayer = materialLayers.get(id);
-    if (materialPlan === undefined || materialLayer === undefined) {
+    if (materialPlan === undefined) {
       throw new Error(`Equation transition ${id} is missing its reader plan.`);
     }
     const measurementRoot = requireDescendant<HTMLElement>(
@@ -236,7 +231,6 @@ function measureLayout(revision: number): LayoutState {
       fitSurface,
       measurementRoot,
       materialPlan,
-      materialLayer,
       anchorElements: anchorElementIndex(measurementRoot),
       layout,
       alignment,
@@ -281,8 +275,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     const active = candidate.id === transitionId;
     candidate.element.hidden = !active;
     candidate.element.dataset["kpReaderTransitionActive"] = String(active);
-    if (!active) candidate.materialLayer.clear();
   }
+  applyKpReaderEquationResponsiveFit(materialFitSurface, context.fit);
   for (const element of context.anchorElements.values()) element.style.opacity = "0";
   const frames = motion.owners.map((owner): KpReaderEquationMaterialOwnerFrame => {
     setAnchorOpacity(context, owner.sourceAnchorIds, owner.sourceNativeOpacity);
@@ -314,7 +308,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
       fragments
     };
   });
-  context.materialLayer.sync(frames);
+  materialLayer.sync(frames);
   applyFocus(focusedRefs);
   progressBar.style.transform = `scaleX(${visualSample.progress})`;
   document.body.dataset["kpReaderProgress"] = String(visualSample.progressPermille);
@@ -501,5 +495,5 @@ function dispose(): void {
   scrollClock.dispose();
   focus.dispose();
   unsubscribeFocus();
-  for (const layer of materialLayers.values()) layer.dispose();
+  materialLayer.dispose();
 }

@@ -34,7 +34,7 @@ test("material plans derive stable owners and anchors from semantic corresponden
     (owner) => owner.relationRecordId === "x-persists"
   );
   assert.deepEqual(xOwner, {
-    id: "material-owner.transform.linear-solve.cancel-left-additive-inverse.x-persists",
+    id: "material-owner.x-persists",
     transitionId: "transform.linear-solve.cancel-left-additive-inverse",
     relationRecordId: "x-persists",
     relation: "identity",

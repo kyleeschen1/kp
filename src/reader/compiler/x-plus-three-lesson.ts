@@ -107,7 +107,6 @@ function compileEquationExemplarTemplate(
       `<div class="kp-reader-equation-measurement" data-kp-reader-equation-measurement="true" aria-hidden="true">`,
       `<div class="kp-reader-equation-native kp-reader-equation-native--source" data-kp-reader-native="source">${source}</div>`,
       `<div class="kp-reader-equation-native kp-reader-equation-native--target" data-kp-reader-native="target">${target}</div>`,
-      `<div class="kp-reader-equation-material" data-kp-reader-equation-material-layer="true"></div>`,
       `</div>`,
       `</div>`,
       `</div>`
@@ -122,6 +121,9 @@ function compileEquationExemplarTemplate(
     `</div>`,
     `<div class="kp-reader-equation-viewport" data-kp-reader-equation-viewport>`,
     transitions.join("\n"),
+    `<div class="kp-reader-equation-material-fit-surface" data-kp-reader-material-fit-surface>`,
+    `<div class="kp-reader-equation-material" data-kp-reader-equation-material-layer="true"></div>`,
+    `</div>`,
     `</div>`,
     `<div class="kp-reader-equation-progress" aria-hidden="true"><span data-kp-reader-progress-bar></span></div>`,
     `<p class="kp-reader-equation-hint">Scroll to move the equation. Scroll back to rewind.</p>`,
