@@ -51,7 +51,8 @@
     {
       "id": "s02-versioned-review-protocol",
       "title": "Versioned review protocol",
-      "status": "planned"
+      "summary": "Added and typechecked the renderer-neutral kp.dev-review.v1 wire contract.",
+      "status": "complete"
     },
     {
       "id": "s03-strict-validation-limits",

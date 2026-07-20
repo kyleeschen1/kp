@@ -24,6 +24,12 @@
       "status": "passed",
       "scope": "s01 review acceptance contract",
       "checkedAt": "2026-07-20T23:13:59.414Z"
+    },
+    {
+      "command": "node --test tests/dev-review-protocol.test.ts and npm run typecheck:protocols",
+      "status": "passed",
+      "scope": "s02 versioned dev review protocol",
+      "checkedAt": "2026-07-20T23:16:50.222Z"
     }
   ],
   "expectedLearning": [
