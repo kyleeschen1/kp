@@ -93,7 +93,8 @@
     {
       "id": "s10-token-projection",
       "title": "Extract semantic token projection",
-      "status": "planned"
+      "summary": "Moved semantic token sampling and application behind a neutral clock; the editor adapter is now a thin inferred mapping and all forward/rewind/accessibility tests pass.",
+      "status": "complete"
     },
     {
       "id": "s11-owner-renderer",

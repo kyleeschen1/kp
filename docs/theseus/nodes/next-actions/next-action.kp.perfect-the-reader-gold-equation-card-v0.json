@@ -50,6 +50,10 @@
     {
       "kind": "file",
       "path": "src/rendering/precomputed-equation-motion.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/semantic-equation-frame.ts"
     }
   ],
   "dependsOn": {
@@ -148,6 +152,12 @@
       "status": "passed",
       "scope": "s09 neutral precomputed planner",
       "checkedAt": "2026-07-20T20:43:57.684Z"
+    },
+    {
+      "command": "node --test tests/kp-editor-semantic-equation-player-adapter.test.ts",
+      "status": "passed",
+      "scope": "s10 neutral semantic token projection",
+      "checkedAt": "2026-07-20T20:46:42.083Z"
     }
   ],
   "progress": {
