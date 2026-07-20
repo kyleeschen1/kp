@@ -59,6 +59,7 @@ export function renderSymbolicEquation(
   equation.dataset["kpTraceId"] = projection.traceId;
   equation.dataset["kpFrameId"] = projection.frameId;
   equation.dataset["kpEquationSemanticId"] = projection.equationSemanticId;
+  equation.dataset["kpSemanticId"] = projection.equationSemanticId;
   equation.dataset["kpProgressPermille"] = String(projection.progressPermille);
   equation.setAttribute("role", "math");
   equation.setAttribute("aria-label", projection.accessibleText);

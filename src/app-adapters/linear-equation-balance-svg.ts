@@ -82,6 +82,7 @@ export function renderBalanceScene(
   svg.dataset["kpTraceId"] = projection.traceId;
   svg.dataset["kpFrameId"] = projection.frameId;
   svg.dataset["kpEquationSemanticId"] = projection.equationSemanticId;
+  svg.dataset["kpSemanticId"] = projection.equationSemanticId;
   svg.dataset["kpDiagramSemanticId"] = projection.diagramSemanticId;
   svg.dataset["kpProgressPermille"] = String(projection.progressPermille);
   if (projection.motion !== undefined) {
@@ -163,6 +164,7 @@ function renderExactPartitionMotion(
 ): SVGGElement {
   const root = svgElement("g");
   root.dataset["kpBalanceExactPartition"] = "true";
+  root.dataset["kpSemanticId"] = motion.operationSemanticId;
   applyConceptRoomThemeRoles(
     root,
     rolesFor(motion.operationSemanticId, "equation.operation", focusSemanticIds),
@@ -291,6 +293,7 @@ function renderMatchedRemovalSides(
 ): SVGGElement {
   const root = svgElement("g");
   root.dataset["kpBalanceMatchedRemoval"] = "true";
+  root.dataset["kpSemanticId"] = motion.operationSemanticId;
   const removedIds = new Set(motion.pairs.flatMap((pair) => [pair.leftUnitId, pair.rightUnitId]));
   const sourceBySide = {
     left: projection.physicalUnits.filter((unit) => unit.side === "left"),
@@ -518,6 +521,7 @@ function renderPartitionGuide(
 ): SVGGElement {
   const node = svgElement("g");
   node.dataset["kpBalancePartitionGroup"] = group.id;
+  node.dataset["kpSemanticId"] = group.operationSemanticId;
   node.dataset["kpBalancePartitionGroupIndex"] = String(group.groupIndex);
   applyConceptRoomThemeRoles(
     node,
@@ -613,6 +617,7 @@ function renderOperation(
     const label = svgElement("text");
     label.dataset["kpBalanceOperationApplication"] = application.id;
     label.dataset["kpOperationSemanticId"] = application.operationSemanticId;
+    label.dataset["kpSemanticId"] = application.operationSemanticId;
     label.dataset["kpBalanceSide"] = application.side;
     label.dataset["kpBalanceTransientOperationLabel"] = "true";
     setAttributes(label, {
@@ -644,6 +649,7 @@ function renderOperation(
   });
   label.dataset["kpBalanceOperationApplication"] = application.id;
   label.dataset["kpOperationSemanticId"] = application.operationSemanticId;
+  label.dataset["kpSemanticId"] = application.operationSemanticId;
   label.dataset["kpBalanceSide"] = application.side;
   applyConceptRoomThemeRoles(
     label,

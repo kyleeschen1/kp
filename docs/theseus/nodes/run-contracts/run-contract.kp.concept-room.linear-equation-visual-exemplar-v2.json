@@ -151,7 +151,8 @@
     {
       "id": "s20",
       "title": "Cross-representation semantic links",
-      "status": "planned"
+      "summary": "Cross-representation semantic links implemented and verified.",
+      "status": "complete"
     },
     {
       "id": "s21",

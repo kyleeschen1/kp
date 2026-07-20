@@ -388,11 +388,36 @@
       "status": "passed",
       "scope": "s19 inferred coordinated projection contracts, production chunks, direct projection switching, Review fallback, and clean disposal",
       "checkedAt": "2026-07-20T01:27:19.741Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s20 full repository suite: 1537 tests plus architecture, inference, and concept-catalog gates",
+      "checkedAt": "2026-07-20T01:45:21.645Z"
+    },
+    {
+      "command": "playwright correspondence, coordinated stage, visual shell, and concept smoke cohorts",
+      "status": "passed",
+      "scope": "s20 18 browser checks for pointer, keyboard, click and touch-equivalent focus; URL pin restoration; shared semantic identities; projection switching; responsive bounds; Review and failure fallback",
+      "checkedAt": "2026-07-20T01:45:22.664Z"
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s20 stable visual command captured 21 states including desktop hover and phone pinned correspondence exemplars",
+      "checkedAt": "2026-07-20T01:45:23.692Z",
+      "notes": "Manual inspection confirmed clear prose-equation-geometry focus, quiet inline definitions, visible focus wash and rings, readable phone composition, and no clipping."
+    },
+    {
+      "command": "npm run typecheck, npm run build, and npm run smoke:linear-equation",
+      "status": "passed",
+      "scope": "s20 inferred correspondence adapter contracts, production build, canonical and snapshot routes, projection switching, Review fallback, and clean disposal",
+      "checkedAt": "2026-07-20T01:45:24.713Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s19 complete: Together is the front-door projection and composes the measured KaTeX equation above exact balance geometry from one trace and one clock. Equation-only and Balance-only canonical URLs remain valid, view switching disposes prior stages, responsive desktop tablet and phone layouts stay bounded, and the stable visual command reproduces the reviewed composite states."
+    "summary": "s20 complete: explicit authored semantic identities now bind prose, the KaTeX equation, and balance geometry. Hover and keyboard focus remain ephemeral; click, Enter, Space, and touch-equivalent activation create one canonical URL-restorable pin. Quiet definitions explain the selected idea, focus affordances are consistent across DOM and SVG, and glyph or layout similarity never carries semantic authority."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."

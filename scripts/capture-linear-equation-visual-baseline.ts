@@ -39,6 +39,7 @@ try {
   await captureCurrent("linear-room-plain-balance", "[data-kp-concept-room-shell]");
   await captureDivisionCheckpoints(canonicalConceptUrl);
   await captureCoordinatedCheckpoints(canonicalConceptUrl);
+  await captureCorrespondenceCheckpoints(canonicalConceptUrl);
   await page.setViewportSize(viewport);
 
   await capturePage({
@@ -175,6 +176,49 @@ async function captureCoordinatedCheckpoints(canonicalConceptUrl: string): Promi
       viewport: checkpoint.viewport
     });
   }
+}
+
+async function captureCorrespondenceCheckpoints(canonicalConceptUrl: string): Promise<void> {
+  const url = new URL(canonicalConceptUrl);
+  url.searchParams.set("checkpoint", "start");
+  url.searchParams.set("t", "0");
+  url.searchParams.set("projection", "coordinated");
+  url.searchParams.delete("focus");
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(url.href, { waitUntil: "domcontentloaded", timeout: 15_000 });
+  await page.locator('[data-kp-concept-semantic-link="term.two-x"]').first().hover();
+  await settle(page);
+  const desktopId = "linear-room-correspondence-hover-desktop";
+  const desktopOutput = path.join(outputRoot, `${desktopId}.png`);
+  await page.locator("[data-kp-concept-visual-field]").screenshot({ path: desktopOutput });
+  captures.push({
+    id: desktopId,
+    url: page.url(),
+    selector: "[data-kp-concept-visual-field]",
+    output: path.relative(process.cwd(), desktopOutput),
+    time: 0,
+    viewport: { width: 1280, height: 900 }
+  });
+
+  url.searchParams.set("checkpoint", "subtract-three");
+  url.searchParams.set("t", "575");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(url.href, { waitUntil: "domcontentloaded", timeout: 15_000 });
+  await page.locator(
+    '[data-kp-correspondence-surface="balance"][data-kp-correspondence-semantic-id="operation.divide-two"]'
+  ).first().dispatchEvent("click");
+  await settle(page);
+  const phoneId = "linear-room-correspondence-pinned-phone";
+  const phoneOutput = path.join(outputRoot, `${phoneId}.png`);
+  await page.locator("[data-kp-concept-visual-field]").screenshot({ path: phoneOutput });
+  captures.push({
+    id: phoneId,
+    url: page.url(),
+    selector: "[data-kp-concept-visual-field]",
+    output: path.relative(process.cwd(), phoneOutput),
+    time: 575,
+    viewport: { width: 390, height: 844 }
+  });
 }
 
 async function settle(target: Page): Promise<void> {

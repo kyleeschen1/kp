@@ -33,6 +33,10 @@ import {
 import { applyConceptRoomTheme } from "./concept-room-theme-adapters.ts";
 import { linearEquationExemplarTheme } from "./concept-room-theme.ts";
 import { linearEquationExemplarCss } from "./linear-equation-exemplar-style.ts";
+import {
+  createLinearEquationCorrespondenceController,
+  type KpLinearEquationCorrespondenceController
+} from "./linear-equation-correspondence-controller.ts";
 
 export type {
   KpConceptRoomArtifactLike,
@@ -93,6 +97,7 @@ export async function tryMountConceptRoomRoute(input: {
   let startupDiagnostic: RoomDiagnostic | undefined;
   let scrollCoordinator: KpConceptRoomScrollCoordinator | undefined;
   let playbackController: KpConceptRoomPlaybackController | undefined;
+  let correspondenceController: KpLinearEquationCorrespondenceController | undefined;
   let initialCheckpointToRestore = location.search.length > 0 ? state.checkpoint : undefined;
   const roomEffects = createRoomEffectCoordinator({
     roomId: `concept.${entry.conceptId}`,
@@ -129,10 +134,12 @@ export async function tryMountConceptRoomRoute(input: {
         artifact,
         diagnostic("ask-unavailable", "Ask is not connected in this architecture exemplar.")
       );
+      correspondenceController?.refresh(state.focus);
       return;
     }
     if (state.mode === "review") {
       renderArtifactReviewFallback(viewport, artifact);
+      correspondenceController?.refresh(state.focus);
       return;
     }
     if (startupDiagnostic !== undefined || runtimeSession === undefined) {
@@ -141,17 +148,20 @@ export async function tryMountConceptRoomRoute(input: {
         artifact,
         startupDiagnostic ?? diagnostic("renderer-unavailable", "The interactive renderer is unavailable.")
       );
+      correspondenceController?.refresh(state.focus);
       return;
     }
     const detached = document.createElement("div");
     try {
       if (preservedViewport !== undefined) {
         await runtimeSession.render(viewport, state);
+        correspondenceController?.refresh(state.focus);
         return;
       }
       await runtimeSession.render(detached, state);
       if (isDisposed || request !== renderRequest) return;
       viewport.replaceChildren(...detached.childNodes);
+      correspondenceController?.refresh(state.focus);
     } catch (error) {
       if (isDisposed || request !== renderRequest) return;
       renderArtifactReviewFallback(viewport, artifact, diagnosticFrom(error, "renderer-unavailable"));
@@ -271,6 +281,21 @@ export async function tryMountConceptRoomRoute(input: {
       strategy: source === "step" || source === "replay" ? "push" : "replace"
     });
   }
+  function togglePinnedFocus(semanticId: string): void {
+    if (isDisposed) return;
+    const focus = state.focus.length === 1 && state.focus[0] === semanticId ? [] : [semanticId];
+    state = reduceConceptRoomState(state, { kind: "set-focus", focus });
+    void render({ preserveShell: true });
+    roomEffects.start({
+      kind: "url",
+      route: formatConceptRoomRoute(conceptRoomStateRoute(state)),
+      strategy: "push"
+    });
+  }
+  correspondenceController = createLinearEquationCorrespondenceController({
+    root: input.root,
+    onPin: togglePinnedFocus
+  });
   input.root.addEventListener("click", onClick);
   input.root.addEventListener("input", onInput);
   const unsubscribe = navigation.subscribe(onPopState);
@@ -297,6 +322,7 @@ export async function tryMountConceptRoomRoute(input: {
       runtimeSession?.dispose();
       playbackController?.dispose();
       scrollCoordinator?.dispose();
+      correspondenceController?.dispose();
       roomEffects.dispose();
       unsubscribe();
       input.root.removeEventListener("click", onClick);
@@ -455,7 +481,13 @@ function renderShell(
   const visualField = document.createElement("section");
   visualField.dataset["kpConceptVisualField"] = "true";
   visualField.setAttribute("aria-label", "Synchronized concept stage");
-  visualField.append(viewport, controls);
+  const semanticDefinition = document.createElement("p");
+  semanticDefinition.id = "kp-linear-equation-semantic-definition";
+  semanticDefinition.dataset["kpConceptSemanticDefinition"] = "true";
+  semanticDefinition.dataset["kpConceptSemanticDefinitionActive"] = "false";
+  semanticDefinition.setAttribute("role", "status");
+  semanticDefinition.textContent = "Select a linked idea to trace it through the equation and balance.";
+  visualField.append(viewport, semanticDefinition, controls);
   const copyRail = document.createElement("aside");
   copyRail.dataset["kpConceptCopyRail"] = "true";
   copyRail.setAttribute("aria-label", "Concept explanation");
@@ -595,7 +627,9 @@ const exemplarSemanticPhrases: Readonly<Record<string, readonly {
   readonly semanticId: string;
 }[]>> = {
   start: [
-    { phrase: "2x + 3 = 8", semanticId: "equation.initial" },
+    { phrase: "2x", semanticId: "term.two-x" },
+    { phrase: "+ 3", semanticId: "term.add-three" },
+    { phrase: "8", semanticId: "term.eight" },
     { phrase: "one side must also change on the other", semanticId: "diagram.balance" }
   ],
   "subtract-three": [
@@ -604,6 +638,7 @@ const exemplarSemanticPhrases: Readonly<Record<string, readonly {
   ],
   "divide-two": [
     { phrase: "Divide both sides by 2", semanticId: "operation.divide-two" },
+    { phrase: "Two copies of x", semanticId: "term.two-x" },
     { phrase: "5/2", semanticId: "equation.solved" }
   ],
   solved: [
