@@ -1,0 +1,142 @@
+{
+  "id": "plan-revision.kp.v4",
+  "kind": "plan-revision",
+  "title": "Kinetic Press generated-quality roadmap v4",
+  "status": "active",
+  "domain": "kp",
+  "summary": "Treat gold reader parity as the completed foundation; use its human visual feedback to calibrate a generated-equation quality envelope before expanding to geometry, SVG, code, providers, and cross-domain surfaces.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Adopt the generated-equation reliability phase and pipeline fixes, beginning with the remaining gold-card visual issues, before broadening to other exemplars.",
+      "summary": "Explicit approval for the revised roadmap frontier."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v3.json",
+      "summary": "Approved predecessor that introduced generated-equation reliability."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-motion-quality.ts",
+      "summary": "Quantitative motion-quality evaluator to promote into the generated-output gate."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/generated-promotion-gate.ts",
+      "summary": "Semantic-only promotion boundary and typed repair protocol."
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/renderers/equation-responsive-fit.ts",
+      "summary": "Responsive fit contract to evolve into timeline-wide typography and layout planning."
+    }
+  ],
+  "affects": [
+    "workflow.kp.delivery",
+    "next-action.kp.perfect-the-reader-gold-equation-card-v0"
+  ],
+  "planRevision": {
+    "schemaVersion": "theseus.plan-revision.v1",
+    "revision": 4,
+    "objective": "Deliver visually beautiful, scrollable, searchable, URL-addressable semantic cards whose coordinated motion remains smooth and trustworthy under generated content and controlled LLM editing, making Kinetic Press instantly distinct from static text, video, and conventional interactive lessons.",
+    "assumptions": [
+      {
+        "id": "gold-card-before-breadth",
+        "statement": "One canonical equation card must establish the architectural and interaction foundation before renderer breadth is valuable.",
+        "status": "validated"
+      },
+      {
+        "id": "neutral-runtime-boundary",
+        "statement": "The accepted editor realization can be extracted behind neutral renderer contracts without coupling the semantic reader to the editor.",
+        "status": "validated"
+      },
+      {
+        "id": "essential-motion-accessibility",
+        "statement": "Reduced motion should retain essential explanatory movement while removing nonessential acceleration, depth, scale, and flourish; fully static presentation remains explicit.",
+        "status": "validated"
+      },
+      {
+        "id": "searchable-reader-preservation",
+        "statement": "Visual parity can be reached without sacrificing static prose, search, print, no-JavaScript output, exact scroll navigation, or precise URLs.",
+        "status": "validated"
+      },
+      {
+        "id": "semantic-llm-boundary",
+        "statement": "LLMs can safely edit semantic objects, transformations, correspondence, explanatory focus, and bounded presentation intent while deterministic compilers retain authority over geometry, timing, typography, and rendering.",
+        "status": "active"
+      },
+      {
+        "id": "primitive-amortization",
+        "statement": "Human animation effort should scale with genuinely new visual primitives and renderer topologies, not with the number of generated lessons that compose reviewed primitives.",
+        "status": "active"
+      },
+      {
+        "id": "generated-quality-envelope",
+        "statement": "Dense rendered-frame validation, timeline-wide layout planning, typed repair, and representative human calibration can make established animation families smooth without card-by-card visual tuning.",
+        "status": "active"
+      }
+    ],
+    "phases": [
+      {
+        "id": "gold-equation-reader",
+        "title": "Gold equation reader parity foundation",
+        "objective": "Transfer the accepted equation choreography into a searchable, scrollable, URL-addressable reader with stable typography, ownership, exact rewind, motion policy, accessibility, responsive containment, and a lightweight production route.",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "next-action.kp.perfect-the-reader-gold-equation-card-v0"
+        ]
+      },
+      {
+        "id": "generated-equation-reliability",
+        "title": "Generated equation reliability and gold calibration",
+        "objective": "Begin with the remaining human-reported gold-card typography, trajectory, handoff, pacing, and boundary defects; convert every accepted repair into a reusable invariant; then compile a stress cohort spanning expression length, signs, fractions, and division with no card-specific motion coordinates or CSS; select one timeline-wide typography and layout plan; densely gate rendered motion, ownership, boundaries, collisions, overflow, focus, accessibility, responsive fit, exact seek, and rewind; and demonstrate a controlled LLM semantic edit that either publishes through reviewed motifs or returns a typed repair.",
+        "horizon": "now",
+        "status": "planned"
+      },
+      {
+        "id": "missing-middle-geometry",
+        "title": "Missing-middle algebra and geometry",
+        "objective": "Use the promoted generated-equation contracts to coordinate algebraic symbols with a simple geometric representation as the second clarity exemplar.",
+        "horizon": "next",
+        "status": "planned"
+      },
+      {
+        "id": "svg-diagrams-graphs",
+        "title": "SVG diagrams and graphs",
+        "objective": "Prove stylistically unified lightweight diagrams and graphs, including KaTeX-compatible labeling and shared focus and salience affordances.",
+        "horizon": "next",
+        "status": "planned"
+      },
+      {
+        "id": "code-refactor-motion",
+        "title": "Code transformation card",
+        "objective": "Prove modal flexibility with collapsing, morphing, and refactoring code while preserving semantic identity, deterministic motion, overflow safety, and reviewability.",
+        "horizon": "later",
+        "status": "planned"
+      },
+      {
+        "id": "providers-review-modes",
+        "title": "Providers and review modes",
+        "objective": "Generalize the equation-family provider proof into verified problem generators, LLM providers, flashcards, and correction workflows around stable semantic card and transformation contracts.",
+        "horizon": "later",
+        "status": "planned"
+      },
+      {
+        "id": "cross-domain-webgl",
+        "title": "Cross-domain and WebGL breadth",
+        "objective": "Demonstrate network, economics, FTC, physics, and lazy WebGL experiences only where their dimensionality materially improves explanation.",
+        "horizon": "someday",
+        "status": "planned"
+      }
+    ],
+    "approval": {
+      "status": "approved",
+      "decidedAt": "2026-07-20T22:58:27.000Z",
+      "decidedBy": "user",
+      "rationale": "Reconcile terminal gold-parity evidence with the approved generated-reliability frontier: preserve the completed foundation and move human-reported polish plus reusable quality enforcement into the current generated-equation phase."
+    },
+    "supersedes": "plan-revision.kp.v3"
+  }
+}

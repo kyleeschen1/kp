@@ -13,7 +13,8 @@
     }
   ],
   "nextActions": [
-    "next-action.kp.perfect-the-reader-gold-equation-card-v0"
+    "next-action.kp.perfect-the-reader-gold-equation-card-v0",
+    "next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability"
   ],
   "allowedWork": [
     "The semantic reader matches the accepted x + 3 = 7 animation card at named forward and reverse frames without typography changes, collisions, or discontinuities.",

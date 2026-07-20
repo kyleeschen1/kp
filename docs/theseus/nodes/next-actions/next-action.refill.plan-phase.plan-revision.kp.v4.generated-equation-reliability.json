@@ -1,0 +1,40 @@
+{
+  "id": "next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability",
+  "kind": "next-action",
+  "title": "Advance Generated equation reliability and gold calibration",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Begin with the remaining human-reported gold-card typography, trajectory, handoff, pacing, and boundary defects; convert every accepted repair into a reusable invariant; then compile a stress cohort spanning expression length, signs, fractions, and division with no card-specific motion coordinates or CSS; select one timeline-wide typography and layout plan; densely gate rendered motion, ownership, boundaries, collisions, overflow, focus, accessibility, responsive fit, exact seek, and rewind; and demonstrate a controlled LLM semantic edit that either publishes through reviewed motifs or returns a typed repair. Selection rationale: The user explicitly approved generated-equation reliability and gold calibration as the current phase before missing-middle or broader renderer work.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Approved refill option refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability: The user explicitly approved generated-equation reliability and gold calibration as the current phase before missing-middle or broader renderer work.",
+      "occurredAt": "2026-07-20T22:58:53.739Z"
+    }
+  ],
+  "affects": [
+    "plan-revision.kp.v4"
+  ],
+  "verification": [
+    "theseus validate"
+  ],
+  "expectedLearning": [
+    "Approved revision 4 places this planned phase in now."
+  ],
+  "allowedWork": [
+    "Begin with the remaining human-reported gold-card typography, trajectory, handoff, pacing, and boundary defects; convert every accepted repair into a reusable invariant; then compile a stress cohort spanning expression length, signs, fractions, and division with no card-specific motion coordinates or CSS; select one timeline-wide typography and layout plan; densely gate rendered motion, ownership, boundaries, collisions, overflow, focus, accessibility, responsive fit, exact seek, and rewind; and demonstrate a controlled LLM semantic edit that either publishes through reviewed motifs or returns a typed repair."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected refill option without another approval."
+  ],
+  "criteria": [
+    {
+      "id": "selected-option-addressed",
+      "weight": "high"
+    },
+    {
+      "id": "selection-provenance-preserved",
+      "weight": "high"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "id": "plan-revision.kp.v2",
   "kind": "plan-revision",
   "title": "Kinetic Press clarity-first product roadmap v2",
-  "status": "active",
+  "status": "superseded",
   "domain": "kp",
   "summary": "Perfect the gold equation reader first; promote its shared contracts only after visual approval; then prove geometric, graphical, code, provider, review, and cross-domain breadth.",
   "sourceRefs": [
@@ -105,11 +105,12 @@
       }
     ],
     "approval": {
-      "status": "approved",
-      "decidedAt": "2026-07-20T20:17:06.000Z",
+      "status": "superseded",
+      "decidedAt": "2026-07-20T22:56:22.000Z",
       "decidedBy": "user",
-      "rationale": "Turn the accepted product direction into an ordered roadmap with one exemplar-first current priority and explicit deferrals."
+      "rationale": "Superseded by plan-revision.kp.v3."
     },
-    "supersedes": "plan-revision.kp.v1"
+    "supersedes": "plan-revision.kp.v1",
+    "supersededBy": "plan-revision.kp.v3"
   }
 }
