@@ -26,3 +26,38 @@ test("opening story keeps searchable prose before its canonical animation stage"
     window as typeof window & { find(text: string): boolean }
   ).find("The two −3 terms enter together"))).toBe(true);
 });
+
+test("desktop story uses ordinary document scroll with left prose and a sticky right stage", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(conceptPath);
+  await page.locator("[data-kp-symbolic-story-player]").waitFor();
+
+  const layout = await page.locator("[data-kp-symbolic-story]").evaluate((story) => {
+    const explanation = story.querySelector<HTMLElement>("[data-kp-symbolic-story-explanation]")!;
+    const visual = story.querySelector<HTMLElement>("[data-kp-symbolic-story-visual]")!;
+    const firstBeat = story.querySelector<HTMLElement>("[data-kp-symbolic-story-beat]")!;
+    const secondary = document.querySelector<HTMLElement>("[data-kp-concept-secondary-surface]")!;
+    return {
+      columns: getComputedStyle(story).gridTemplateColumns.split(" ").length,
+      explanationLeft: explanation.getBoundingClientRect().left,
+      visualLeft: visual.getBoundingClientRect().left,
+      visualPosition: getComputedStyle(visual).position,
+      explanationOverflow: getComputedStyle(explanation).overflowY,
+      firstBeatHeight: firstBeat.getBoundingClientRect().height,
+      storyBottom: story.getBoundingClientRect().bottom,
+      secondaryTop: secondary.getBoundingClientRect().top,
+      documentScrolls: document.documentElement.scrollHeight > innerHeight
+    };
+  });
+
+  expect(layout.columns).toBe(2);
+  expect(layout.explanationLeft).toBeLessThan(layout.visualLeft);
+  expect(layout.visualPosition).toBe("sticky");
+  expect(layout.explanationOverflow).toBe("visible");
+  expect(layout.firstBeatHeight).toBeGreaterThan(250);
+  expect(layout.secondaryTop).toBeGreaterThan(layout.storyBottom);
+  expect(layout.documentScrolls).toBe(true);
+  await expect(page.getByRole("heading", { name: "Explore the harder example" })).toBeVisible();
+});

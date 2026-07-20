@@ -612,11 +612,21 @@ function renderShell(
   narration.setAttribute("aria-atomic", "true");
   narration.textContent = narrationForState(artifact, state);
   const verification = verificationDisclosure(artifact);
+  const secondary = document.createElement("section");
+  secondary.dataset["kpConceptSecondarySurface"] = "true";
+  secondary.setAttribute("aria-labelledby", "kp-concept-secondary-title");
+  const secondaryHeading = document.createElement("h2");
+  secondaryHeading.id = "kp-concept-secondary-title";
+  secondaryHeading.textContent = "Explore the harder example";
+  const secondaryCopy = document.createElement("p");
+  secondaryCopy.textContent =
+    "Continue to division and fractions, or compare the same steps with a balance model.";
+  secondary.append(secondaryHeading, secondaryCopy, stage);
   main.append(header, narration);
   if (symbolicStory !== undefined) {
     main.append(renderLinearEquationSymbolicStory(symbolicStory));
   }
-  main.append(stage, shareStatus, verification);
+  main.append(secondary, shareStatus, verification);
   const style = document.createElement("style");
   style.dataset["kpLinearEquationExemplarStyle"] = "true";
   style.textContent = linearEquationExemplarCss();
