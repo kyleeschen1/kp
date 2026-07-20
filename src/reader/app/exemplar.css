@@ -50,7 +50,7 @@ a { color: var(--kp-relation); text-underline-offset: .2em; }
 .kp-lesson-toc a { color: var(--kp-muted); text-decoration: none; }
 .kp-lesson-toc a:hover { color: var(--kp-relation); }
 
-.kp-lesson { min-width: 0; padding: clamp(4rem, 10vh, 7.5rem) 0 18vh; }
+.kp-lesson { min-width: 0; padding: clamp(4rem, 10vh, 7.5rem) 0 max(34vh, 14rem); }
 .kp-lesson > h1 { max-width: 760px; margin: 0; font-family: var(--kp-serif); font-size: clamp(3rem, 7vw, 6rem); font-weight: 500; letter-spacing: -.055em; line-height: .94; }
 .kp-lesson > p { max-width: 700px; margin: 1.25rem 0; color: var(--kp-muted); font-family: var(--kp-serif); font-size: clamp(1.15rem, 2vw, 1.42rem); line-height: 1.6; }
 .kp-semantic-link { appearance: none; padding: 0 .08em; border: 0; border-radius: .18rem; color: var(--kp-relation); background: transparent; font: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--kp-relation) 42%, transparent); text-underline-offset: .2em; cursor: help; }

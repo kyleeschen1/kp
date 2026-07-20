@@ -135,7 +135,8 @@
     {
       "id": "s17-scroll-clock",
       "title": "Bridge continuous scroll clock",
-      "status": "planned"
+      "summary": "The global page now provides enough semantic tail dwell for the reader line to reach progress 1000 on desktop and mobile, while retaining continuous bidirectional scroll.",
+      "status": "complete"
     },
     {
       "id": "s18-url-restoration",
