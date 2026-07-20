@@ -116,6 +116,12 @@
       "scope": "s06 typography repair",
       "checkedAt": "2026-07-20T20:37:16.577Z",
       "notes": "Every reader material frame now resolves to KaTeX_Main or KaTeX_Math; the Inter clone regression is gone."
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader-typography-conformance.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s07 clone-source and first-scroll typography",
+      "checkedAt": "2026-07-20T20:38:54.888Z"
     }
   ],
   "progress": {

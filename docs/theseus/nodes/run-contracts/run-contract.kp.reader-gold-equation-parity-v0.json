@@ -75,7 +75,8 @@
     {
       "id": "s07-typography-conformance",
       "title": "Prove typography and geometry parity",
-      "status": "planned"
+      "summary": "Added executable conformance proving every visible reader clone matches its source KaTeX font properties, never resolves to Inter, and remains stable through first scroll without new layout reads.",
+      "status": "complete"
     },
     {
       "id": "s08-neutral-frame-api",
