@@ -203,7 +203,8 @@
     {
       "id": "s26",
       "title": "Add read-plan-write scheduler and invalidation",
-      "status": "planned"
+      "summary": "Added coalesced read-plan-write scheduler and explicit invalidation. Focused tests, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s27",

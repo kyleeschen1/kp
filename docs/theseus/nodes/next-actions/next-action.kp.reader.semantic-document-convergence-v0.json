@@ -483,11 +483,23 @@
       "status": "passed",
       "scope": "s25 DOM write-sink contracts and dependency fitness",
       "checkedAt": "2026-07-20T18:22:28.673Z"
+    },
+    {
+      "command": "node --test equation scheduler layout snapshot and architecture suites",
+      "status": "passed",
+      "scope": "s26 eleven batching hot-path invalidation disposal and boundary tests",
+      "checkedAt": "2026-07-20T18:25:14.568Z"
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s26 generic inferred scheduler contracts and dependency fitness",
+      "checkedAt": "2026-07-20T18:25:15.622Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s25 provides a persistent semantic-keyed material-owner layer that mutates only retained presentation nodes, sanitizes cloned KaTeX visuals, and supports deterministic removal and disposal."
+    "summary": "s26 structurally confines layout reads to batched mount resize font or content invalidation; ordinary scroll frames reuse cached plans and perform write-only updates."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

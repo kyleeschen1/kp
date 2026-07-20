@@ -48,3 +48,10 @@ export {
   type KpReaderEquationMaterialLayerSyncResult,
   type KpReaderEquationMaterialOwnerFrame
 } from "./equation-material-layer.ts";
+export {
+  createKpReaderEquationFrameScheduler,
+  type KpReaderEquationFrameClock,
+  type KpReaderEquationFrameScheduler,
+  type KpReaderEquationFrameSchedulerState,
+  type KpReaderEquationLayoutInvalidationReason
+} from "./equation-frame-scheduler.ts";
