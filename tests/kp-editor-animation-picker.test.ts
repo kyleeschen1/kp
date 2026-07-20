@@ -15,6 +15,9 @@ import {
   createKpEditorAnimationPickerModel,
   renderKpEditorAnimationPicker
 } from "../src/editor/animation-picker.ts";
+import {
+  createKpEditorAnimationPickerProtocolState
+} from "../src/editor/animation-picker-protocol.ts";
 
 test("editor animation picker groups the concrete catalog by supported surface", () => {
   const descriptors = projectKpAnimationAssetsToEditorDescriptors({
@@ -93,4 +96,25 @@ test("editor animation picker rejects duplicate descriptor ids", () => {
     }),
     /Duplicate editor animation descriptor id/
   );
+});
+
+test("editor animation picker projects a renderer-neutral protocol snapshot", () => {
+  const descriptors = projectKpAnimationAssetsToEditorDescriptors({
+    assets: createKpAnimationAssets(),
+    families: createSymbolicManipulationFamilyRegistry()
+  });
+  const selectedDescriptorId = descriptors[13]!.id;
+  const state = createKpEditorAnimationPickerProtocolState(
+    createKpEditorAnimationPickerModel({ descriptors, selectedDescriptorId }),
+    { query: "matrix" }
+  );
+
+  assert.equal(state.surfaceId, "kp.editor.animation-picker");
+  assert.equal(state.providerId, "kp.editor.animation-descriptors");
+  assert.equal(state.query, "matrix");
+  assert.equal(state.rows.length, 45);
+  assert.equal(state.cursorRowId, selectedDescriptorId);
+  assert.equal(state.rows[state.cursorIndex]?.id, selectedDescriptorId);
+  assert.ok(state.rows.every((row) => row.id !== row.label));
+  assert.ok(state.rows.some((row) => row.fields.groupId === "linear-algebra"));
 });

@@ -9,6 +9,11 @@
       "kind": "file",
       "path": "src/editor/animation-picker.ts",
       "summary": "KP grouped animation picker model and renderer boundary."
+    },
+    {
+      "kind": "file",
+      "path": "src/editor/animation-picker-protocol.ts",
+      "summary": "KP-owned adapter from grouped animation descriptors to renderer-neutral picker state, navigation commands, and tagged selection intents."
     }
   ],
   "dependsOn": {
@@ -24,6 +29,26 @@
     "npm run typecheck",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-animation-picker.test.ts",
+      "status": "passed",
+      "scope": "KP protocol adapter",
+      "checkedAt": "2026-07-20T00:22:38.662Z",
+      "notes": "Four tests pass, including renderer-neutral stable-identity projection over 45 grouped animation descriptors."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "KP protocol types",
+      "checkedAt": "2026-07-20T00:22:47.694Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass from the isolated worktree using KP's existing dependency tree."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "KP now adapts its existing grouped animation picker to a local renderer-neutral snapshot with stable descriptor identity, cursor projection, clamped navigation commands, and tagged selection intents carrying surface/provider/query provenance; conformance cases remain to be pinned."
+  },
   "expectedLearning": [
     "Whether KP can consume the language-neutral Spindle picker state and intent boundary without depending on Spindle implementation code."
   ],
