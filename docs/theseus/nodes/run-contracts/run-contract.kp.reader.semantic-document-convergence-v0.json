@@ -137,7 +137,8 @@
     {
       "id": "s15",
       "title": "Implement pure clock authority coordinator",
-      "status": "planned"
+      "summary": "Implemented pure clock authority arbitration. Focused tests, canonical sampler checks, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s16",

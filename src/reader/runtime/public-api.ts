@@ -11,3 +11,11 @@ export {
   type KpReaderClockSource,
   type KpReaderPlaybackClock
 } from "./playback-clock.ts";
+export {
+  createKpReaderClockAuthorityState,
+  reduceKpReaderClockAuthority,
+  type KpReaderClockAuthorityDecision,
+  type KpReaderClockAuthorityEvent,
+  type KpReaderClockAuthorityEventKind,
+  type KpReaderClockAuthorityState
+} from "./clock-authority.ts";
