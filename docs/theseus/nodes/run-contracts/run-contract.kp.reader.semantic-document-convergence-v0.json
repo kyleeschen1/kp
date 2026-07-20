@@ -1,0 +1,204 @@
+{
+  "id": "run-contract.kp.reader.semantic-document-convergence-v0",
+  "kind": "run-contract",
+  "title": "Semantic Document Reader Convergence Long Loop",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.semantic-document-convergence-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-20-legacy-current-architecture-parity-audit.md",
+      "summary": "Approved architecture evidence, convergence design, preservation boundary, budgets, and exemplar-first migration order."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run build",
+    "npm run smoke:linear-equation",
+    "npm run test:browser:linear-equation-conformance",
+    "npm run perf:linear-equation",
+    "npm run visual:linear-equation",
+    "npm test",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Implement only the approved 30-slice x-plus-3 document compiler, reader kernel, equation adapter, isolated exemplar, tests, performance evidence, and review package.",
+    "Adapt legacy continuous scroll progress, real KaTeX measurement, perceptual alignment, persistent material owners, static output, and lazy hydration behind current semantic interfaces without editing the legacy repository.",
+    "Add narrow architecture seams and compatibility facades required by the exemplar; commit each verified slice independently and record durable Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not port the legacy parser, monolithic runtimes, or page CSS wholesale and do not modify the legacy repository.",
+    "Do not generalize styles, clocks, focus behavior, Markdown vocabulary, budgets, or renderer contracts beyond the exemplar before human visual acceptance.",
+    "Do not implement FTC, economics, programming, graph, diagram, provider, LLM, or WebGL breadth, and do not redesign the semantic kernel or editor player.",
+    "Do not import editor or Three.js code into the learner reader, require JavaScript for reading, update URLs on every scroll frame, or parse HTML or remeasure layout during ordinary animation frames."
+  ],
+  "goal": "Prove one reversible x-plus-3 learner route that combines KP's typed semantic animation kernel with static document delivery, continuous learner-controlled symbolic motion, a lightweight DOM reader adapter, shareable URLs, and accessible semantic focus, then stop for human visual review.",
+  "target": "next-action.kp.reader.semantic-document-convergence-v0",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "one verified focused commit per completed slice",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if the semantic asset requires broad redesign or the new reader cannot consume the current renderer-neutral sampler.",
+    "Stop if implementation would modify the legacy repository, require arbitrary trusted HTML, or broaden into a deferred asset family.",
+    "Stop if the learner route imports editor or Three.js code, static reading requires JavaScript, or route isolation cannot be enforced.",
+    "Stop if ordinary frames require repeated HTML parsing or DOM measurement, or if scroll progress cannot remain deterministic and reversible.",
+    "Stop when human visual judgment is required after the s30 review package; do not promote or generalize without new approval."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Capture reproducible current x-plus-3 baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Enforce preservation and import boundaries",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Define document reader artifact contracts",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Introduce renderer-neutral playback clock seam",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Define minimal LessonDocument IR",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Add inference-first LessonDocument authoring",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Select and isolate build-only Markdown AST parser",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Parse minimal source-located KP Markdown",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Resolve semantic asset and focus references",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Compile accessible static prose and TOC",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Compile build-time KaTeX MathML and static states",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Emit versioned hydration manifest",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Compile complete static x-plus-3 lesson",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Add reader adapter registry and lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Implement pure clock authority coordinator",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Implement continuous scroll clock",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Implement lesson URL codec",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Add renderer-neutral semantic focus service",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Add static-preserving near-viewport hydration",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Add accessible controls and reduced-motion projection",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Project neutral frames into EquationRenderPlan",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Compile semantic material ownership and anchors",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Measure hidden KaTeX into layout snapshots",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Add bounded perceptual alignment policy",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Implement persistent keyed material-owner layer",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Add read-plan-write scheduler and invalidation",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Implement continuous reversible symbol interpolation",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Harden equation conformance and responsive behavior",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Assemble isolated semantic document reader exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Run broad gate and assemble human review package",
+      "status": "planned"
+    }
+  ]
+}
