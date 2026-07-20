@@ -157,7 +157,8 @@
     {
       "id": "s21",
       "title": "Frictionless Watch Touch Review modes",
-      "status": "planned"
+      "summary": "Frictionless Watch Touch Review modes implemented and verified.",
+      "status": "complete"
     },
     {
       "id": "s22",

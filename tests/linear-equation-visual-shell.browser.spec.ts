@@ -19,8 +19,9 @@ test("linear equation room mounts one themed stage and explanation rail", async 
     .toHaveCount(1);
   await expect(shell.locator("[data-kp-concept-controls]"))
     .toHaveCount(1);
+  await expect(shell).toHaveAttribute("data-kp-concept-mode", "watch");
   await expect(shell.getByRole("slider", { name: "Scrub concept timeline" }))
-    .toHaveValue("0");
+    .toHaveCount(0);
   await expect(shell.getByRole("link", { name: "Ask" })).toHaveCount(0);
   await expect(shell.getByRole("heading", { level: 1 }))
     .toHaveText("Solve a linear equation");
@@ -37,6 +38,7 @@ test("linear equation room mounts one themed stage and explanation rail", async 
 test("playback, stepping, replay, and scrubbing share canonical room time", async ({ page }) => {
   await page.goto(conceptPath);
   const shell = page.locator("[data-kp-concept-room-shell]");
+  await shell.getByRole("link", { name: "Touch", exact: true }).click();
   await shell.getByRole("button", { name: "Next step" }).click();
   await expect(shell).toHaveAttribute("data-kp-concept-checkpoint", "subtract-three");
   await expect(page).toHaveURL(/t=400/);
@@ -71,6 +73,7 @@ test("all checkpoint prose remains browser-findable and canonically linked", asy
 test("global scrolling replaces checkpoint state without creating an internal rail", async ({ page }) => {
   await page.goto(conceptPath);
   const shell = page.locator("[data-kp-concept-room-shell]");
+  await shell.getByRole("link", { name: "Touch", exact: true }).click();
   const rail = shell.locator("[data-kp-concept-copy-rail]");
   await expect(rail).toHaveCSS("overflow-y", "visible");
   const historyLength = await page.evaluate(() => window.history.length);
@@ -85,6 +88,7 @@ test("global scrolling replaces checkpoint state without creating an internal ra
 
 test("explicit checkpoint navigation pushes and direct URLs restore their section", async ({ page }) => {
   await page.goto(conceptPath);
+  await page.getByRole("link", { name: "Touch", exact: true }).click();
   const divideLink = page.locator('[data-kp-concept-checkpoints] [data-kp-concept-checkpoint-link="divide-two"]');
   const directUrl = await divideLink.getAttribute("href");
   expect(directUrl).not.toBeNull();
@@ -126,6 +130,7 @@ test("reduced motion jumps between sections and disposal disconnects observation
     };
   });
   await page.goto(conceptPath);
+  await page.getByRole("link", { name: "Touch", exact: true }).click();
   await page.locator('[data-kp-concept-checkpoints] [data-kp-concept-checkpoint-link="divide-two"]').click();
   await expect.poll(() => page.evaluate(() => (
     window as typeof window & { __kpScrollBehavior?: ScrollBehavior }
@@ -148,6 +153,7 @@ test("the same document fits desktop, tablet, and phone without horizontal overf
   ]) {
     await page.setViewportSize(viewport);
     await page.goto(conceptPath);
+    await page.getByRole("link", { name: "Touch", exact: true }).click();
     await expect(page.locator("[data-kp-concept-room-shell]")).toBeVisible();
     const layout = await page.evaluate(() => {
       const visual = document.querySelector<HTMLElement>("[data-kp-concept-visual-field]");

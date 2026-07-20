@@ -413,11 +413,36 @@
       "status": "passed",
       "scope": "s20 inferred correspondence adapter contracts, production build, canonical and snapshot routes, projection switching, Review fallback, and clean disposal",
       "checkedAt": "2026-07-20T01:45:24.713Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s21 full repository suite: 1537 tests plus architecture, inference, concept-catalog, and no-JS server gates",
+      "checkedAt": "2026-07-20T02:00:02.179Z"
+    },
+    {
+      "command": "playwright mode, correspondence, visual shell, concept smoke, and no-JS Review cohorts",
+      "status": "passed",
+      "scope": "s21 18 browser checks for mode URL history, explicit Watch playback, exact shared trace, Touch keyboard and pointer affordances, static searchable Review, no quiz UI, correspondence persistence, responsive layout, failure fallback, and JavaScript-disabled Review",
+      "checkedAt": "2026-07-20T02:00:03.325Z"
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s21 stable visual command captured 22 states including Watch, Touch correspondence, and Review presentations",
+      "checkedAt": "2026-07-20T02:00:04.358Z",
+      "notes": "Manual inspection confirmed minimal Watch controls, complete Touch controls, one clean non-duplicated Review article, consistent typography and color, and no clipping."
+    },
+    {
+      "command": "npm run build and npm run smoke:linear-equation",
+      "status": "passed",
+      "scope": "s21 inferred mode presentation, production build, direct and snapshot URL switching, Review preservation, failure fallbacks, and disposal",
+      "checkedAt": "2026-07-20T02:00:05.373Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s20 complete: explicit authored semantic identities now bind prose, the KaTeX equation, and balance geometry. Hover and keyboard focus remain ephemeral; click, Enter, Space, and touch-equivalent activation create one canonical URL-restorable pin. Quiet definitions explain the selected idea, focus affordances are consistent across DOM and SVG, and glyph or layout similarity never carries semantic authority."
+    "summary": "s21 complete: Watch presents only causal play and replay and starts only from an explicit Watch gesture, while direct Watch URLs remain paused at their exact frame. Touch owns passive scroll coordination and exposes stepping, scrubbing, focus, projection, and section navigation. Review renders one searchable static article without duplicate lesson content, projection chrome, or quiz correctness UI. All modes preserve the same canonical checkpoint, time, focus, projection, provider, snapshot, and shared trace through URL history."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."

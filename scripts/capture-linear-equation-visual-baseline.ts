@@ -40,6 +40,7 @@ try {
   await captureDivisionCheckpoints(canonicalConceptUrl);
   await captureCoordinatedCheckpoints(canonicalConceptUrl);
   await captureCorrespondenceCheckpoints(canonicalConceptUrl);
+  await captureReviewMode(canonicalConceptUrl);
   await page.setViewportSize(viewport);
 
   await capturePage({
@@ -183,6 +184,7 @@ async function captureCorrespondenceCheckpoints(canonicalConceptUrl: string): Pr
   url.searchParams.set("checkpoint", "start");
   url.searchParams.set("t", "0");
   url.searchParams.set("projection", "coordinated");
+  url.searchParams.set("mode", "touch");
   url.searchParams.delete("focus");
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(url.href, { waitUntil: "domcontentloaded", timeout: 15_000 });
@@ -218,6 +220,31 @@ async function captureCorrespondenceCheckpoints(canonicalConceptUrl: string): Pr
     output: path.relative(process.cwd(), phoneOutput),
     time: 575,
     viewport: { width: 390, height: 844 }
+  });
+}
+
+async function captureReviewMode(canonicalConceptUrl: string): Promise<void> {
+  const url = new URL(canonicalConceptUrl);
+  url.searchParams.set("checkpoint", "divide-two");
+  url.searchParams.set("t", "750");
+  url.searchParams.set("projection", "coordinated");
+  url.searchParams.set("mode", "review");
+  url.searchParams.delete("focus");
+  await page.setViewportSize({ width: 900, height: 900 });
+  await page.goto(url.href, { waitUntil: "domcontentloaded", timeout: 15_000 });
+  const review = page.locator("[data-kp-concept-review-mode]");
+  await review.waitFor();
+  await settle(page);
+  const id = "linear-room-review-desktop";
+  const output = path.join(outputRoot, `${id}.png`);
+  await page.locator("[data-kp-concept-room-shell]").screenshot({ path: output });
+  captures.push({
+    id,
+    url: page.url(),
+    selector: "[data-kp-concept-room-shell]",
+    output: path.relative(process.cwd(), output),
+    time: 750,
+    viewport: { width: 900, height: 900 }
   });
 }
 
