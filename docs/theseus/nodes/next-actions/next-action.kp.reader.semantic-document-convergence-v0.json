@@ -458,11 +458,23 @@
       "status": "passed",
       "scope": "s23 DOM measurement boundary and snapshot types",
       "checkedAt": "2026-07-20T18:14:57.921Z"
+    },
+    {
+      "command": "node --test perceptual alignment layout snapshot and architecture suites",
+      "status": "passed",
+      "scope": "s24 eleven bounded correction reversal validation and boundary tests",
+      "checkedAt": "2026-07-20T18:18:40.339Z"
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s24 alignment policy contracts and dependency fitness",
+      "checkedAt": "2026-07-20T18:18:41.398Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s23 measures aria-hidden semantic KaTeX anchors during explicit refresh and emits revisioned local-coordinate snapshots with no live DOM references for ordinary frames."
+    "summary": "s24 aligns the equation around a prioritized semantic spine with bounded whole-target correction; forward and rewind corrections are exact directional inverses."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

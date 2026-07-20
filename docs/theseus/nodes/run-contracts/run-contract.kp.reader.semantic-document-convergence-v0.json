@@ -191,7 +191,8 @@
     {
       "id": "s24",
       "title": "Add bounded perceptual alignment policy",
-      "status": "planned"
+      "summary": "Added bounded reversible perceptual alignment policy. Focused tests, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s25",

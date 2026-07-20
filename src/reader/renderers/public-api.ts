@@ -34,3 +34,10 @@ export {
   type KpReaderEquationMeasuredOwner,
   type KpReaderLayoutRect
 } from "./equation-layout-snapshot.ts";
+export {
+  kpReaderEquationDefaultAlignmentPolicy,
+  planKpReaderEquationPerceptualAlignment,
+  type KpReaderEquationAlignedOwner,
+  type KpReaderEquationPerceptualAlignmentPlan,
+  type KpReaderEquationPerceptualAlignmentPolicy
+} from "./equation-perceptual-alignment.ts";
