@@ -1,4 +1,5 @@
 import type { KpReaderClockSample } from "./playback-clock.ts";
+import type { KpReaderMotionPolicy } from "./motion-policy.ts";
 
 export interface KpReaderAccessibleCheckpoint {
   readonly id: string;
@@ -7,7 +8,7 @@ export interface KpReaderAccessibleCheckpoint {
 }
 
 export interface KpReaderMotionProjection {
-  readonly mode: "continuous" | "checkpoint";
+  readonly mode: "continuous" | "essential" | "checkpoint";
   readonly progress: number;
   readonly progressPermille: number;
   readonly checkpointId: string;
@@ -39,19 +40,24 @@ export interface KpReaderControlModel {
 export function projectKpReaderMotion(input: {
   readonly clock: KpReaderClockSample;
   readonly checkpoints: readonly KpReaderAccessibleCheckpoint[];
-  readonly reducedMotion: boolean;
+  readonly policy: KpReaderMotionPolicy;
 }): KpReaderMotionProjection {
   const checkpoints = validate(input.checkpoints);
-  const index = input.reducedMotion
+  const checkpointSampling = input.policy.sampling === "checkpoint";
+  const index = checkpointSampling
     ? nearestIndex(input.clock.progressPermille, input.clock.direction, checkpoints)
     : activeIndex(input.clock.progressPermille, checkpoints);
   const checkpoint = checkpoints[index]!;
   return {
-    mode: input.reducedMotion ? "checkpoint" : "continuous",
-    progress: input.reducedMotion
+    mode: checkpointSampling
+      ? "checkpoint"
+      : input.policy.resolvedMode === "essential"
+        ? "essential"
+        : "continuous",
+    progress: checkpointSampling
       ? checkpoint.progressPermille / 1_000
       : input.clock.progress,
-    progressPermille: input.reducedMotion
+    progressPermille: checkpointSampling
       ? checkpoint.progressPermille
       : input.clock.progressPermille,
     checkpointId: checkpoint.id,

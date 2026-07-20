@@ -4,7 +4,8 @@ import test from "node:test";
 import {
   createKpReaderClockSample,
   createKpReaderControlModel,
-  projectKpReaderMotion
+  projectKpReaderMotion,
+  resolveKpReaderMotionPolicy
 } from "../src/reader/runtime/public-api.ts";
 
 const checkpoints = [
@@ -13,12 +14,24 @@ const checkpoints = [
   { id: "cancel", label: "Cancel opposites", progressPermille: 667 },
   { id: "solve", label: "Read the solution", progressPermille: 1_000 }
 ] as const;
+const full = resolveKpReaderMotionPolicy({
+  preference: "full",
+  systemReducedMotion: false
+});
+const essential = resolveKpReaderMotionPolicy({
+  preference: "reduced",
+  systemReducedMotion: false
+});
+const staticPolicy = resolveKpReaderMotionPolicy({
+  preference: "static",
+  systemReducedMotion: false
+});
 
 test("ordinary motion preserves exact continuous learner progress", () => {
   const projection = projectKpReaderMotion({
     clock: createKpReaderClockSample({ source: "scroll", progress: 0.5 }),
     checkpoints,
-    reducedMotion: false
+    policy: full
   });
   assert.deepEqual(projection, {
     mode: "continuous",
@@ -29,7 +42,7 @@ test("ordinary motion preserves exact continuous learner progress", () => {
   });
 });
 
-test("reduced motion snaps to meaningful checkpoints with directional ties", () => {
+test("only static motion snaps to meaningful checkpoints with directional ties", () => {
   const forward = projectKpReaderMotion({
     clock: createKpReaderClockSample({
       source: "controls",
@@ -37,7 +50,7 @@ test("reduced motion snaps to meaningful checkpoints with directional ties", () 
       previousProgress: 0.4
     }),
     checkpoints: [checkpoints[0], { ...checkpoints[1], progressPermille: 400 }, { ...checkpoints[2], progressPermille: 600 }, checkpoints[3]],
-    reducedMotion: true
+    policy: staticPolicy
   });
   const rewind = projectKpReaderMotion({
     clock: createKpReaderClockSample({
@@ -46,17 +59,28 @@ test("reduced motion snaps to meaningful checkpoints with directional ties", () 
       previousProgress: 0.6
     }),
     checkpoints: [checkpoints[0], { ...checkpoints[1], progressPermille: 400 }, { ...checkpoints[2], progressPermille: 600 }, checkpoints[3]],
-    reducedMotion: true
+    policy: staticPolicy
   });
   assert.equal(forward.progressPermille, 600);
   assert.equal(rewind.progressPermille, 400);
+});
+
+test("essential motion preserves exact continuous learner progress", () => {
+  const projection = projectKpReaderMotion({
+    clock: createKpReaderClockSample({ source: "scroll", progress: 0.553 }),
+    checkpoints,
+    policy: essential
+  });
+  assert.equal(projection.mode, "essential");
+  assert.equal(projection.progressPermille, 553);
+  assert.equal(projection.progress, 0.553);
 });
 
 test("control model exposes native slider values and descriptive navigation labels", () => {
   const projection = projectKpReaderMotion({
     clock: createKpReaderClockSample({ source: "controls", progress: 0.667 }),
     checkpoints,
-    reducedMotion: true
+    policy: essential
   });
   const controls = createKpReaderControlModel({ projection, checkpoints });
   assert.equal(controls.groupLabel, "Animation controls");
@@ -72,7 +96,7 @@ test("first and last checkpoint navigation disables unavailable actions", () => 
     projection: projectKpReaderMotion({
       clock: createKpReaderClockSample({ source: "initial", progress: 0 }),
       checkpoints,
-      reducedMotion: true
+      policy: staticPolicy
     }),
     checkpoints
   });
@@ -80,7 +104,7 @@ test("first and last checkpoint navigation disables unavailable actions", () => 
     projection: projectKpReaderMotion({
       clock: createKpReaderClockSample({ source: "controls", progress: 1 }),
       checkpoints,
-      reducedMotion: true
+      policy: staticPolicy
     }),
     checkpoints
   });

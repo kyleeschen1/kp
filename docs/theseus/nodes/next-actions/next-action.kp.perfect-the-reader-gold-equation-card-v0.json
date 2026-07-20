@@ -78,6 +78,10 @@
     {
       "kind": "file",
       "path": "src/reader/runtime/motion-policy.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-reader-essential-motion.browser.spec.ts"
     }
   ],
   "dependsOn": {
@@ -272,6 +276,18 @@
       "status": "passed",
       "scope": "s19 motion policy truth table and parser",
       "checkedAt": "2026-07-20T21:32:43.429Z"
+    },
+    {
+      "command": "node --test tests/semantic-reader-accessible-controls.test.ts tests/semantic-reader-motion-policy.test.ts",
+      "status": "passed",
+      "scope": "s20 essential versus static sampling",
+      "checkedAt": "2026-07-20T21:35:31.551Z"
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader-essential-motion.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s20 OS-reduced causal motion and no flourish",
+      "checkedAt": "2026-07-20T21:35:32.314Z"
     }
   ],
   "progress": {

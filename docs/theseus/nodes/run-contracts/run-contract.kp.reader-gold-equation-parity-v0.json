@@ -153,7 +153,8 @@
     {
       "id": "s20-essential-reduced-motion",
       "title": "Implement essential reduced motion",
-      "status": "planned"
+      "summary": "System under OS reduced-motion now keeps continuous subtraction, cancellation, witness, and synthesis causality while removing decorative shadows; Static alone snaps.",
+      "status": "complete"
     },
     {
       "id": "s21-motion-selector",

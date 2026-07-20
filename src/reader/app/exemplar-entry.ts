@@ -32,6 +32,7 @@ import {
   decodeKpReaderSessionUrl,
   encodeKpReaderSessionUrl,
   projectKpReaderMotion,
+  resolveKpReaderMotionPolicy,
   sampleKpReaderAnimationFrame,
   type KpReaderClockSample,
   type KpReaderContinuousScrollClock
@@ -273,7 +274,10 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   const projection = projectKpReaderMotion({
     clock: sample,
     checkpoints: accessibleCheckpoints,
-    reducedMotion: reducedMotion.matches
+    policy: resolveKpReaderMotionPolicy({
+      preference: "system",
+      systemReducedMotion: reducedMotion.matches
+    })
   });
   const visualSample = {
     ...sample,
@@ -356,18 +360,23 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     };
   });
   materialLayer.sync(frames);
-  syncAnnihilationWitness(motion.witnessedAnnihilation);
+  syncAnnihilationWitness(
+    motion.witnessedAnnihilation,
+    projection.mode !== "essential"
+  );
   applyFocus(focusedRefs);
   progressBar.style.transform = `scaleX(${visualSample.progress})`;
   document.body.dataset["kpReaderProgress"] = String(visualSample.progressPermille);
   document.body.dataset["kpReaderMotionMode"] = projection.mode;
+  document.body.dataset["kpReaderMotionPreference"] = "system";
   document.body.dataset["kpReaderTransition"] = transitionId;
   document.body.dataset["kpReaderFramePlans"] = String(scheduler.inspect().framePlanCount + 1);
   updateActiveBeat(visualSample.progressPermille);
 }
 
 function syncAnnihilationWitness(
-  witnessed: KpReaderEquationSymbolMotionFrame["witnessedAnnihilation"]
+  witnessed: KpReaderEquationSymbolMotionFrame["witnessedAnnihilation"],
+  decorativeMotion: boolean
 ): void {
   if (witnessed === undefined) {
     annihilationWitness.style.opacity = "0";
@@ -382,7 +391,7 @@ function syncAnnihilationWitness(
   annihilationWitness.style.transform =
     `translate(calc(-50% + ${pose.x}px), calc(-50% + ${pose.y}px)) ` +
     `scale(${pose.scale})`;
-  annihilationWitness.style.filter = witnessed.frame.inwardPulse <= 0
+  annihilationWitness.style.filter = !decorativeMotion || witnessed.frame.inwardPulse <= 0
     ? "none"
     : `drop-shadow(0 ${2 * witnessed.frame.inwardPulse}px ` +
       `${5 * witnessed.frame.inwardPulse}px rgb(223 112 71 / ` +
