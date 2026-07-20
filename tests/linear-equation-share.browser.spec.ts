@@ -24,7 +24,7 @@ test("copy actions preserve exact frame and checkpoint URLs that mount directly"
     '[data-kp-correspondence-surface="symbolic"][data-kp-correspondence-semantic-id="term.two-x"]'
   ).first().dispatchEvent("click");
 
-  await shell.getByRole("button", { name: "Copy frame link", exact: true }).click();
+  await shell.getByRole("button", { name: "Copy link to current frame", exact: true }).click();
   await expect(shell.locator("[data-kp-concept-share-status]"))
     .toHaveText("Link copied.");
   const frameUrl = await copiedUrl(page);
@@ -42,7 +42,7 @@ test("copy actions preserve exact frame and checkpoint URLs that mount directly"
     .toHaveAttribute("data-kp-coordinated-time-permille", "575");
 
   const divide = shell.locator('[data-kp-concept-explanation="divide-two"]');
-  await divide.getByRole("button", { name: "Copy step link", exact: true }).click();
+  await divide.getByRole("button", { name: "Copy link to Reveal one x step", exact: true }).click();
   const stepUrl = await copiedUrl(page);
   const stepRoute = new URL(stepUrl);
   expect(stepRoute.searchParams.get("checkpoint")).toBe("divide-two");
@@ -74,6 +74,8 @@ test("verification disclosure is exact, quiet, and omits internal diagnostics", 
 
 test("clipboard failure leaves the canonical URL visible and reports no raw error", async ({ page }) => {
   await page.goto(conceptPath);
+  await expect(page.locator('[data-kp-concept-room-mounted="true"]')).toBeAttached();
+  await expect(page).toHaveURL(/route=1/);
   await page.evaluate(() => {
     Object.defineProperty(navigator, "clipboard", {
       configurable: true,
@@ -81,7 +83,7 @@ test("clipboard failure leaves the canonical URL visible and reports no raw erro
     });
   });
   const before = page.url();
-  await page.getByRole("button", { name: "Copy frame link", exact: true }).click();
+  await page.getByRole("button", { name: "Copy link to current frame", exact: true }).click();
   const status = page.locator("[data-kp-concept-share-status]");
   await expect(status).toHaveText("Copy is unavailable. The current URL is still shareable.");
   await expect(status).not.toContainText("fixture secret");

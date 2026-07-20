@@ -15,7 +15,19 @@ test("the front door composes equation and balance on one canonical clock", asyn
   await expect(balanceRegion.locator("[data-kp-balance-scene]")).toBeVisible();
   await expect(page.locator("canvas")).toHaveCount(0);
 
+  await shell.getByRole("link", { name: "Touch", exact: true }).click();
   const scrubber = shell.getByRole("slider", { name: "Scrub concept timeline" });
+  await scrubber.fill("200");
+  await expect(stage).toHaveAttribute("data-kp-coordinated-settled-time-permille", "200");
+  // Coordinated mode exists to make the algebraic operation and geometric change move together.
+  await expect(symbolicRegion.locator("[data-kp-symbolic-motion-stage]"))
+    .toHaveAttribute("data-kp-symbolic-choreography", "subtract-both-sides");
+  const operationTokens = symbolicRegion.locator(
+    '[data-kp-symbolic-stage-layer="expanded"] [data-kp-semantic-id="operation.subtract-three"]'
+  );
+  await expect(operationTokens).toHaveCount(4);
+  await expect(operationTokens.first()).toBeVisible();
+
   for (const time of [0, 250, 575, 720, 1000]) {
     await scrubber.fill(String(time));
     await expect(stage).toHaveAttribute("data-kp-coordinated-time-permille", String(time));

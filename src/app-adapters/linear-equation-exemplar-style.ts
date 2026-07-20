@@ -28,7 +28,7 @@ ${routeSelector} [data-kp-linear-equation-coordinated-stage]{display:grid;grid-t
 ${routeSelector} [data-kp-coordinated-projection]{min-width:0}
 ${routeSelector} [data-kp-coordinated-projection=symbolic]{display:grid;place-items:center;min-height:8rem}
 ${routeSelector} [data-kp-coordinated-projection=balance]{display:grid;place-items:center;width:min(100%,38rem);margin-inline:auto}
-${routeSelector} [data-kp-symbolic-motion-stage]{position:relative;display:grid;place-items:center;min-height:10rem}
+${routeSelector} [data-kp-symbolic-motion-stage]{position:relative;display:grid;place-items:center;width:100%;min-height:10rem}
 ${routeSelector} [data-kp-symbolic-stage-layer]{grid-area:1/1;min-width:0}
 ${routeSelector} [data-kp-symbolic-stage-layer=native]{opacity:0;pointer-events:none}
 ${routeSelector} [data-kp-symbolic-stage-layer=measurement]{position:absolute;inset:0;display:grid;place-items:center;visibility:hidden;pointer-events:none}

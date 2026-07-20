@@ -39,6 +39,7 @@ try {
   await captureCurrent("linear-room-plain-balance", "[data-kp-concept-room-shell]");
   await captureDivisionCheckpoints(canonicalConceptUrl);
   await captureCoordinatedCheckpoints(canonicalConceptUrl);
+  await captureMandatoryReviewStates(canonicalConceptUrl);
   await captureCorrespondenceCheckpoints(canonicalConceptUrl);
   await captureReviewMode(canonicalConceptUrl);
   await captureAccessibilityStates(canonicalConceptUrl);
@@ -177,6 +178,53 @@ async function captureCoordinatedCheckpoints(canonicalConceptUrl: string): Promi
       time: checkpoint.time,
       viewport: checkpoint.viewport
     });
+  }
+}
+
+async function captureMandatoryReviewStates(canonicalConceptUrl: string): Promise<void> {
+  const states = [
+    { id: "initial", checkpoint: "start", time: 0, focus: "equation.initial" },
+    { id: "subtraction-transit", checkpoint: "start", time: 200, focus: "operation.subtract-three" },
+    { id: "subtraction-settlement", checkpoint: "subtract-three", time: 400, focus: "operation.subtract-three" },
+    { id: "division-transit", checkpoint: "subtract-three", time: 575, focus: "operation.divide-two" },
+    { id: "final", checkpoint: "solved", time: 1000, focus: "equation.solved" }
+  ] as const;
+  const viewports = [
+    { width: 1280, height: 900, suffix: "desktop" },
+    { width: 390, height: 844, suffix: "phone" }
+  ] as const;
+
+  for (const state of states) {
+    for (const target of viewports) {
+      await page.setViewportSize(target);
+      const url = new URL(canonicalConceptUrl);
+      url.searchParams.set("checkpoint", state.checkpoint);
+      url.searchParams.set("t", String(state.time));
+      url.searchParams.set("projection", "coordinated");
+      url.searchParams.set("mode", "touch");
+      url.searchParams.delete("focus");
+      url.searchParams.append("focus", state.focus);
+      await page.goto(url.href, { waitUntil: "domcontentloaded", timeout: 15_000 });
+      const visualField = page.locator("[data-kp-concept-visual-field]");
+      await visualField.locator("[data-kp-linear-equation-coordinated-stage]").waitFor();
+      await page.locator("[data-kp-linear-equation-coordinated-stage]")
+        .waitFor({ state: "visible" });
+      await page.locator(
+        `[data-kp-linear-equation-coordinated-stage][data-kp-coordinated-settled-time-permille="${state.time}"]`
+      ).waitFor();
+      await settle(page);
+      const id = `linear-room-review-${state.id}-${target.suffix}`;
+      const output = path.join(outputRoot, `${id}.png`);
+      await visualField.screenshot({ path: output });
+      captures.push({
+        id,
+        url: page.url(),
+        selector: "[data-kp-concept-visual-field]",
+        output: path.relative(process.cwd(), output),
+        time: state.time,
+        viewport: target
+      });
+    }
   }
 }
 

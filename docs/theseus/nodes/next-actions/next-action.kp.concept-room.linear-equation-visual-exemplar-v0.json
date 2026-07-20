@@ -2,7 +2,7 @@
   "id": "next-action.kp.concept-room.linear-equation-visual-exemplar-v0",
   "kind": "next-action",
   "title": "Polish Linear Equation Visual Exemplar",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
   "sourceRefs": [
     {
@@ -39,6 +39,10 @@
       "kind": "file",
       "path": "src/app-adapters/linear-equation-exemplar-style.ts",
       "summary": "Route-local visual composition and responsive starting point for the accepted exemplar."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-20-linear-equation-visual-exemplar-review-package.md"
     }
   ],
   "verification": [
@@ -533,11 +537,54 @@
       "status": "passed",
       "scope": "s24 production build",
       "checkedAt": "2026-07-20T02:34:07.137Z"
+    },
+    {
+      "command": "./node_modules/.bin/playwright test linear-equation --project=chromium",
+      "status": "passed",
+      "scope": "s25 46-test linear-equation browser cohort",
+      "checkedAt": "2026-07-20T03:17:50.622Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s25 full unit architecture inference and catalog gate",
+      "checkedAt": "2026-07-20T03:17:51.651Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s25 production build and TypeScript projects",
+      "checkedAt": "2026-07-20T03:17:52.700Z"
+    },
+    {
+      "command": "npm run smoke:linear-equation",
+      "status": "passed",
+      "scope": "s25 canonical exact-state and fallback smoke",
+      "checkedAt": "2026-07-20T03:17:53.723Z"
+    },
+    {
+      "command": "npm run perf:linear-equation",
+      "status": "passed",
+      "scope": "s25 DOM layout frame budget and zero-WebGL audit",
+      "checkedAt": "2026-07-20T03:17:54.753Z"
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s25 34-state desktop phone reduced forced-color review package",
+      "checkedAt": "2026-07-20T03:17:55.777Z",
+      "notes": "Disposable captures under tmp/codex; stable committed harness is the durable evidence."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s25 durable closeout graph: 664 nodes and 8493 events",
+      "checkedAt": "2026-07-20T03:18:28.689Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s24 adds a stable repo-owned performance and anti-template audit. The exemplar retains exactly one stage, one control row, and one searchable rail, with no generic card/badge/panel/form/dialog chrome or internal scroll. Direct seeks hold stage dimensions and horizontal fit; Watch stays within the bounded frame and CLS gates and opens no Canvas/WebGL context. No production UI reduction was justified by evidence."
+    "summary": "All 25 approved slices and automated gates are complete. The 34-state review package is ready; promotion and generalization are stopped pending explicit human visual acceptance."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."

@@ -157,16 +157,10 @@ export async function tryMountConceptRoomRoute(input: {
       correspondenceController?.refresh(state.focus);
       return;
     }
-    const detached = document.createElement("div");
     try {
-      if (preservedViewport !== undefined) {
-        await runtimeSession.render(viewport, state);
-        correspondenceController?.refresh(state.focus);
-        return;
-      }
-      await runtimeSession.render(detached, state);
+      // Motion and diagram renderers measure real layout, so their viewport must be connected.
+      await runtimeSession.render(viewport, state);
       if (isDisposed || request !== renderRequest) return;
-      viewport.replaceChildren(...detached.childNodes);
       correspondenceController?.refresh(state.focus);
     } catch (error) {
       if (isDisposed || request !== renderRequest) return;

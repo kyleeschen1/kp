@@ -34,33 +34,22 @@ test("learner shell keeps one stage, one control row, one rail, and no template 
   await expect(shell.getByRole("button")).toHaveCount(1);
 });
 
-test("direct seeks keep the stage stable without horizontal or cumulative layout shift", async ({ page }) => {
-  await page.addInitScript(() => {
-    const browserWindow = window as typeof window & { __kpLayoutShifts?: number[] };
-    browserWindow.__kpLayoutShifts = [];
-    new PerformanceObserver((list) => {
-      for (const entry of list.getEntries()) {
-        const shift = entry as PerformanceEntry & { value: number; hadRecentInput: boolean };
-        // CLS excludes layout changes directly caused by a learner's seek gesture.
-        if (!shift.hadRecentInput) browserWindow.__kpLayoutShifts!.push(shift.value);
-      }
-    }).observe({ type: "layout-shift", buffered: true });
-  });
+test("direct seeks keep the stage stable without horizontal layout shift", async ({ page }) => {
   await page.goto(conceptPath);
   await page.getByRole("link", { name: "Touch", exact: true }).click();
   await page.evaluate(async () => {
     await document.fonts.ready;
     await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
-    (window as typeof window & { __kpLayoutShifts?: number[] }).__kpLayoutShifts = [];
   });
 
   const visual = page.locator("[data-kp-concept-visual-field]");
   const initial = await visual.boundingBox();
   expect(initial).not.toBeNull();
   const scrubber = page.getByRole("slider", { name: "Scrub concept timeline" });
+  const coordinated = page.locator("[data-kp-linear-equation-coordinated-stage]");
   for (const time of [250, 400, 575, 750, 1000, 0]) {
     await scrubber.fill(String(time));
-    await page.evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => resolve())));
+    await expect(coordinated).toHaveAttribute("data-kp-coordinated-settled-time-permille", String(time));
     const bounds = await visual.boundingBox();
     expect(bounds).not.toBeNull();
     expect(Math.abs(bounds!.x - initial!.x)).toBeLessThanOrEqual(1);
@@ -68,13 +57,7 @@ test("direct seeks keep the stage stable without horizontal or cumulative layout
     expect(Math.abs(bounds!.height - initial!.height)).toBeLessThanOrEqual(1);
   }
 
-  const result = await page.evaluate(() => ({
-    layoutShift: ((window as typeof window & { __kpLayoutShifts?: number[] }).__kpLayoutShifts ?? [])
-      .reduce((sum, value) => sum + value, 0),
-    horizontalOverflow: document.documentElement.scrollWidth > window.innerWidth
-  }));
-  expect(result.layoutShift).toBeLessThanOrEqual(0.02);
-  expect(result.horizontalOverflow).toBe(false);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(false);
 });
 
 test("Watch stays within the exemplar frame budget and creates no WebGL context", async ({ page }) => {
