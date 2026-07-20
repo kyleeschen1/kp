@@ -175,7 +175,8 @@
     {
       "id": "s24",
       "title": "Anti-template and performance audit",
-      "status": "planned"
+      "summary": "Anti-template and performance audit passed; no evidence-based learner UI reduction was required.",
+      "status": "complete"
     },
     {
       "id": "s25",
