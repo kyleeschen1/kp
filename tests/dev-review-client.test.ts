@@ -1,0 +1,52 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+
+import type { KpDevReviewCreateRequestV1 } from "../protocols/dev-review-v1.ts";
+import { KpDevReviewClient, KpDevReviewClientError } from "../src/dev-review/client.ts";
+
+function request(): KpDevReviewCreateRequestV1 {
+  return {
+    schemaVersion: "kp.dev-review.v1",
+    sessionId: "review.client.1",
+    comment: "The result appears too abruptly.",
+    capture: {
+      route: "http://127.0.0.1:8000/reader/solve-x/",
+      capturedAt: "2026-07-20T20:00:00.000Z",
+      environment: {
+        browserName: "Chrome", language: "en-US",
+        viewport: { width: 1280, height: 720, devicePixelRatio: 2, scrollX: 0, scrollY: 300 },
+        reducedMotion: false, forcedColors: false, colorScheme: "light",
+        build: { commit: "abc123", fingerprint: "dev-abc123", dirty: false }
+      },
+      semantic: { activeTransformationIds: [], focusRefs: [] },
+      render: { ownerIds: [] },
+      temporalTrace: []
+    }
+  };
+}
+
+test("typed client sends the capability and validates the returned note", async () => {
+  let observed: { input: string; init: RequestInit | undefined } | undefined;
+  const client = new KpDevReviewClient({
+    fetch: async (input, init) => {
+      observed = { input, init };
+      return Response.json({ ...request(), id: "review-note.1.abc", sequence: 1, status: "new" }, { status: 201 });
+    }
+  });
+
+  const note = await client.create(request());
+  assert.equal(note.sequence, 1);
+  assert.equal(observed?.input, "/api/dev/reviews");
+  assert.equal(new Headers(observed?.init?.headers).get("x-kp-dev-review"), "1");
+  assert.deepEqual(JSON.parse(String(observed?.init?.body)), request());
+});
+
+test("typed client rejects transport errors and malformed inbox responses", async () => {
+  const unavailable = new KpDevReviewClient({ fetch: async () => new Response(null, { status: 404 }) });
+  await assert.rejects(() => unavailable.read(), (error) =>
+    error instanceof KpDevReviewClientError && error.status === 404
+  );
+
+  const malformed = new KpDevReviewClient({ fetch: async () => Response.json({ notes: [] }) });
+  await assert.rejects(() => malformed.read(), /schemaVersion/);
+});

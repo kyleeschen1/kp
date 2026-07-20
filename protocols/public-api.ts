@@ -8,6 +8,7 @@ export {
   protocolNumber,
   protocolObject,
   protocolOptional,
+  protocolRecord,
   protocolRefine,
   protocolSchema,
   protocolString,
@@ -71,6 +72,8 @@ export {
 
 export {
   kpDevReviewCreateRequestSchema,
+  kpDevReviewInboxSchema,
+  kpDevReviewNoteSchema,
   kpDevReviewEventSchema,
   kpDevReviewProtocolLimits
 } from "./dev-review-schema.ts";

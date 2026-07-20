@@ -117,7 +117,8 @@
     {
       "id": "s13-typed-browser-client",
       "title": "Typed browser client",
-      "status": "planned"
+      "summary": "The browser client infers protocol types, attaches the local capability, validates outgoing captures and incoming notes or inboxes, and surfaces typed transport failures.",
+      "status": "complete"
     },
     {
       "id": "s14-capture-provider-registry",

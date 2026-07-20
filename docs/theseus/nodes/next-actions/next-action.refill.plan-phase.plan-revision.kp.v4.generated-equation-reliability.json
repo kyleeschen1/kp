@@ -90,6 +90,12 @@
       "status": "passed",
       "scope": "s12 local durability and source exclusion policy",
       "checkedAt": "2026-07-20T23:40:07.772Z"
+    },
+    {
+      "command": "node --test typed review client and schemas plus protocol and app TypeScript checks",
+      "status": "passed",
+      "scope": "s13 typed browser boundary",
+      "checkedAt": "2026-07-20T23:42:50.190Z"
     }
   ],
   "expectedLearning": [

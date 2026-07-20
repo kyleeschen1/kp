@@ -139,6 +139,21 @@ export function protocolOptional<Value>(
   );
 }
 
+export function protocolRecord<Value>(
+  valueSchema: ProtocolSchema<Value>,
+  keySchema: ProtocolSchema<string> = protocolString({ minLength: 1 })
+): ProtocolSchema<Readonly<Record<string, Value>>> {
+  return protocolSchema((input, path) => {
+    if (!isRecord(input)) fail(path, "expected object");
+    const result: Record<string, Value> = {};
+    for (const [key, value] of Object.entries(input)) {
+      parseAt(keySchema, key, `${path}.${key}#key`);
+      result[key] = parseAt(valueSchema, value, `${path}.${key}`);
+    }
+    return result;
+  });
+}
+
 type ProtocolSchemaShape = Readonly<Record<string, ProtocolSchema<unknown>>>;
 type InferProtocolShape<Shape extends ProtocolSchemaShape> = {
   readonly [Key in keyof Shape]: InferProtocolSchema<Shape[Key]>;

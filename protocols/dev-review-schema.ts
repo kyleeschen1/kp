@@ -7,6 +7,7 @@ import {
   protocolNumber,
   protocolObject,
   protocolOptional,
+  protocolRecord,
   protocolRefine,
   protocolString,
   type ProtocolSchema
@@ -151,7 +152,7 @@ export const kpDevReviewCreateRequestSchema = protocolObject({
 const status = protocolEnum([
   "new", "discussed", "grouped", "accepted", "fixed", "verified", "dismissed"
 ]);
-const note = protocolObject({
+export const kpDevReviewNoteSchema = protocolObject({
   schemaVersion: protocolLiteral(KP_DEV_REVIEW_SCHEMA_VERSION),
   sessionId: id,
   comment: protocolString({ minLength: 1, maxLength: kpDevReviewProtocolLimits.commentCharacters }),
@@ -164,7 +165,7 @@ const noteCreated = protocolObject({
   schemaVersion: protocolLiteral(KP_DEV_REVIEW_SCHEMA_VERSION),
   kind: protocolLiteral("note-created"),
   occurredAt: isoTimestamp,
-  note
+  note: kpDevReviewNoteSchema
 });
 const statusChanged = protocolObject({
   schemaVersion: protocolLiteral(KP_DEV_REVIEW_SCHEMA_VERSION),
@@ -206,3 +207,9 @@ export const kpDevReviewEventSchema: ProtocolSchema<KpDevReviewEventV1> = {
     }
   }
 };
+
+export const kpDevReviewInboxSchema = protocolObject({
+  schemaVersion: protocolLiteral(KP_DEV_REVIEW_SCHEMA_VERSION),
+  notes: protocolArray(kpDevReviewNoteSchema, { maxLength: 10_000 }),
+  cursors: protocolRecord(protocolInteger({ min: 0 }), id)
+});
