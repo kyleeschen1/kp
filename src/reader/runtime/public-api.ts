@@ -19,3 +19,10 @@ export {
   type KpReaderClockAuthorityEventKind,
   type KpReaderClockAuthorityState
 } from "./clock-authority.ts";
+export {
+  createKpReaderContinuousScrollClock,
+  sampleKpReaderScrollProgress,
+  type KpReaderContinuousScrollClock,
+  type KpReaderScrollCheckpoint,
+  type KpReaderScrollGeometry
+} from "./continuous-scroll-clock.ts";

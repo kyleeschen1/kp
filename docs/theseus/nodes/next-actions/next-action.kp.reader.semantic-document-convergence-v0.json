@@ -368,11 +368,23 @@
       "status": "passed",
       "scope": "s15 pure clock state types and imports",
       "checkedAt": "2026-07-20T17:21:33.192Z"
+    },
+    {
+      "command": "node --test continuous scroll authority playback and architecture suites",
+      "status": "passed",
+      "scope": "s16 19 continuity reversal geometry sampling and boundary tests",
+      "checkedAt": "2026-07-20T17:23:56.238Z"
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s16 continuous clock types and layer fitness",
+      "checkedAt": "2026-07-20T17:23:57.414Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s15 establishes one deterministic owner of reader time and prevents URL or autoplay updates from fighting direct learner scroll and control input."
+    "summary": "s16 replaces discrete seek behavior with exact learner-controlled scroll progress while isolating layout measurement behind explicit geometry updates."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",
