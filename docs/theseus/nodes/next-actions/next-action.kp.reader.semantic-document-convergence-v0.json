@@ -278,11 +278,23 @@
       "status": "passed",
       "scope": "s08 compiler-to-document public boundary",
       "checkedAt": "2026-07-20T17:03:59.977Z"
+    },
+    {
+      "command": "node --test reference resolver Markdown and architecture suites",
+      "status": "passed",
+      "scope": "s09 13 catalog resolution and boundary tests",
+      "checkedAt": "2026-07-20T17:06:29.893Z"
+    },
+    {
+      "command": "three direct TypeScript project checks and npm run check:architecture",
+      "status": "passed",
+      "scope": "s09 compiler resolution types and import fitness",
+      "checkedAt": "2026-07-20T17:06:31.043Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s08 compiles the exemplar's intentionally narrow Markdown vocabulary into source-located LessonDocument blocks and rejects silent or unsafe syntax expansion."
+    "summary": "s09 separates author-named semantic references from catalog-backed asset and object resolution, producing deterministic bindings or source-located compiler failures."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

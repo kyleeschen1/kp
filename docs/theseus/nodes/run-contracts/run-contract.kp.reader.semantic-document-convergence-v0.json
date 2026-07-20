@@ -101,7 +101,8 @@
     {
       "id": "s09",
       "title": "Resolve semantic asset and focus references",
-      "status": "planned"
+      "summary": "Resolved semantic assets and focus references through an inferred compiler catalog. Focused tests, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s10",
