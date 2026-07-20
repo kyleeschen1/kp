@@ -4,7 +4,6 @@ import {
 } from "../protocols/dev-review-schema.ts";
 import {
   KP_DEV_REVIEW_SCHEMA_VERSION,
-  type KpDevReviewCreateRequestV1,
   type KpDevReviewEventV1,
   type KpDevReviewInboxV1,
   type KpDevReviewNoteV1,
@@ -30,7 +29,7 @@ export class KpDevReviewInboxService {
     return projectKpDevReviewInbox(this.#store.readAll());
   }
 
-  createNote(request: KpDevReviewCreateRequestV1): Promise<KpDevReviewNoteV1> {
+  createNote(request: unknown): Promise<KpDevReviewNoteV1> {
     return this.#enqueue(async () => {
       const validated = kpDevReviewCreateRequestSchema.parse(request);
       const inbox = this.read();

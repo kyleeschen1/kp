@@ -99,7 +99,8 @@
     {
       "id": "s10-dev-only-http-adapter",
       "title": "Dev-only HTTP adapter",
-      "status": "planned"
+      "summary": "Review routes are absent without an injected service and capability header, enforce JSON and size limits, and preserve existing API behavior.",
+      "status": "complete"
     },
     {
       "id": "s11-default-dev-server",

@@ -6,6 +6,8 @@ import { compileHtmlDocument } from "../src/compiler/html-asset.ts";
 import type { KpDocument } from "../src/semantic/document.ts";
 import { createCanonicalConceptReviewHttpAdapter } from "./concept-review-route.ts";
 import { createLinearProblemHttpAdapter } from "./linear-problem-http-adapter.ts";
+import { createKpDevReviewHttpAdapter } from "./dev-review-http-adapter.ts";
+import type { KpDevReviewInboxService } from "./dev-review-inbox.ts";
 
 interface HealthResponse {
   status: "ok";
@@ -24,11 +26,13 @@ type ApiResponse = HealthResponse | NotFoundResponse | InvalidRequestResponse;
 
 export function createAppServer(options: {
   readonly linearProblemProvider: LinearProblemProviderV1;
+  readonly devReviewService?: KpDevReviewInboxService | undefined;
 }): Server {
   const linearProblemAdapter = createLinearProblemHttpAdapter(options.linearProblemProvider);
   const conceptReviewAdapter = createCanonicalConceptReviewHttpAdapter(options.linearProblemProvider);
+  const devReviewAdapter = createKpDevReviewHttpAdapter(options.devReviewService);
   return createServer((request, response) => {
-    handleRequest(request, response, linearProblemAdapter, conceptReviewAdapter).catch((error: unknown) => {
+    handleRequest(request, response, linearProblemAdapter, conceptReviewAdapter, devReviewAdapter).catch((error: unknown) => {
       console.error(error);
       sendJson(response, 400, { error: "invalid_request" });
     });
@@ -39,7 +43,8 @@ async function handleRequest(
   request: IncomingMessage,
   response: ServerResponse,
   linearProblemAdapter: ReturnType<typeof createLinearProblemHttpAdapter>,
-  conceptReviewAdapter: ReturnType<typeof createCanonicalConceptReviewHttpAdapter>
+  conceptReviewAdapter: ReturnType<typeof createCanonicalConceptReviewHttpAdapter>,
+  devReviewAdapter: ReturnType<typeof createKpDevReviewHttpAdapter>
 ): Promise<void> {
   const url = new URL(
     request.url ?? "/",
@@ -48,6 +53,7 @@ async function handleRequest(
 
   if (await linearProblemAdapter.handle(request, response, url)) return;
   if (conceptReviewAdapter.handle(request, response, url)) return;
+  if (await devReviewAdapter.handle(request, response, url)) return;
 
   if (request.method === "GET" && url.pathname === "/api/health") {
     sendJson(response, 200, {

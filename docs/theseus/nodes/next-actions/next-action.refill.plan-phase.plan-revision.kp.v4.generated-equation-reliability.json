@@ -72,6 +72,12 @@
       "status": "passed",
       "scope": "s09 event projection and cursor model",
       "checkedAt": "2026-07-20T23:34:33.226Z"
+    },
+    {
+      "command": "node --test focused dev review HTTP and app suites plus npm run typecheck",
+      "status": "passed",
+      "scope": "s10 explicitly injected dev-only HTTP adapter",
+      "checkedAt": "2026-07-20T23:37:01.756Z"
     }
   ],
   "expectedLearning": [
