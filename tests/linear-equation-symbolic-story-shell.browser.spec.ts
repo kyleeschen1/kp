@@ -81,6 +81,35 @@ test("scrolling selects discrete story beats without changing the harder example
   expect(new URL(page.url()).searchParams.get("checkpoint")).toBe("start");
   expect(new URL(page.url()).searchParams.get("t")).toBe("0");
 
+  const salience = await player.evaluate((element) => {
+    const visual = element.closest("[data-kp-symbolic-story-visual]")!.getBoundingClientRect();
+    const owners = [...element.querySelectorAll<HTMLElement>(
+      "[data-kp-equation-material-owner-id]"
+    )].filter((owner) => Number.parseFloat(getComputedStyle(owner).opacity) > 0.05);
+    const owner = (id: string) => element.querySelector<HTMLElement>(
+      `[data-kp-equation-material-owner-id="${id}"] .editor-equation-stage__material-visual`
+    )!;
+    const ink = (id: string) => {
+      const visualOwner = owner(id);
+      const glyph = visualOwner.querySelector<HTMLElement>(".mord,.mbin,.mrel,.mathnormal");
+      return getComputedStyle(glyph ?? visualOwner).color;
+    };
+    return {
+      operation: ink("linear-solve.lhs.minus3"),
+      persistent: ink("linear-solve.lhs.x"),
+      equality: ink("linear-solve.equals"),
+      left: Math.min(...owners.map((item) => item.getBoundingClientRect().left)),
+      right: Math.max(...owners.map((item) => item.getBoundingClientRect().right)),
+      visualLeft: visual.left,
+      visualRight: visual.right
+    };
+  });
+  expect(salience.operation).toBe("rgb(223, 112, 71)");
+  expect(salience.persistent).toBe("rgb(31, 99, 113)");
+  expect(salience.equality).toBe("rgb(22, 35, 29)");
+  expect(salience.left).toBeGreaterThanOrEqual(salience.visualLeft);
+  expect(salience.right).toBeLessThanOrEqual(salience.visualRight);
+
   await page.evaluate(() => window.scrollBy({ top: 60 }));
   await page.waitForTimeout(100);
   await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "0.333");

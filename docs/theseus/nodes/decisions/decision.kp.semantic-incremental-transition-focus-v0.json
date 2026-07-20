@@ -49,10 +49,31 @@
       "scope": "focused",
       "checkedAt": "2026-07-20T14:20:28.388Z",
       "notes": "The existing linear-equation room smoke suite passes unchanged."
+    },
+    {
+      "command": "npx playwright test symbolic story shell and animation stage",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-20T15:05:05.787Z",
+      "notes": "Five browser checks pass for scroll activation, exact frames, salience colors, fitted visible owners, direct URLs, and canonical player reuse."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-20T15:05:06.588Z",
+      "notes": "All TypeScript projects pass after route-local visual polish."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-07-20T15:05:07.332Z",
+      "notes": "The concept-room boundary gate remains green with no runtime generalization."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "The exemplar now maps prose section entry to short exact animation targets and p.story URLs without coupling ordinary scroll to the legacy timeline."
+    "summary": "The subtraction beat now fits cleanly, recenters during equation growth, and coordinates restrained operation salience between prose and persistent KaTeX material."
   }
 }

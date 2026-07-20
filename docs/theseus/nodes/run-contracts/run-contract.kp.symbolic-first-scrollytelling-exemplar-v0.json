@@ -198,12 +198,14 @@
     {
       "id": "s07-scroll-activation",
       "title": "Drive checkpoints from ordinary document scroll",
-      "status": "in-progress"
+      "summary": "Discrete reading-band entry now selects short exact x+3 animation targets, updates independent p.story URL state, and restores direct story links without disturbing the harder example timeline.",
+      "status": "complete"
     },
     {
       "id": "s08-subtraction-salience",
       "title": "Perfect the subtraction salience exemplar",
-      "status": "planned"
+      "summary": "Starting the single subtraction transition salience exemplar; shared runtime and later beats remain within the preservation boundary.",
+      "status": "in-progress"
     },
     {
       "id": "s09-human-review-package",

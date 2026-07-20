@@ -81,6 +81,8 @@ export function createLinearEquationStoryScrollCoordinator(input: {
 }
 
 export function syncLinearEquationStoryBeat(root: HTMLElement, beatId: string): void {
+  const story = root.querySelector<HTMLElement>("[data-kp-symbolic-story]");
+  if (story !== null) story.dataset["kpSymbolicStoryActiveBeat"] = beatId;
   root.querySelectorAll<HTMLElement>("[data-kp-symbolic-story-beat]").forEach((section) => {
     const active = section.dataset["kpSymbolicStoryBeat"] === beatId;
     section.dataset["kpSymbolicStoryActive"] = String(active);

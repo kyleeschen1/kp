@@ -21,6 +21,9 @@ export function renderLinearEquationSymbolicStory(
 ): HTMLElement {
   const region = document.createElement("section");
   region.dataset["kpSymbolicStory"] = story.id;
+  if (activeBeatId !== undefined) {
+    region.dataset["kpSymbolicStoryActiveBeat"] = activeBeatId;
+  }
   region.setAttribute("aria-labelledby", "kp-symbolic-story-title");
 
   const explanation = document.createElement("article");
