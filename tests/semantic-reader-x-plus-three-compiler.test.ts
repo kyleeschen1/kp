@@ -17,6 +17,9 @@ test("canonical Markdown compiles through the current semantic asset into one st
   assert.match(artifact.html, /application\/x-tex">x \+ 3 = 7/);
   assert.match(artifact.html, /application\/x-tex">x = 4/);
   assert.match(artifact.html, /data-kp-static-state data-kp-progress="333" hidden/);
+  assert.match(artifact.html, /data-kp-reader-equation-anchor-id="anchor\.equation\.linear-solve\.initial\.lhs\.x"/);
+  assert.match(artifact.html, /data-kp-reader-exemplar-template/);
+  assert.match(artifact.html, /src="\/src\/reader\/app\/exemplar-entry\.ts"/);
   assert.match(artifact.html, /<script type="application\/json" data-kp-hydration>/);
   assert.equal(artifact.hydration.blocks[0]?.checkpoints.length, 4);
   assert.equal(artifact.hydration.blocks[0]?.asset.id, "animation.linear-solve.solve-x");
@@ -28,6 +31,7 @@ test("compiled x-plus-3 HTML retains searchable prose and no trusted author HTML
   assert.match(artifact.html, /Make the same move twice/);
   assert.match(artifact.html, /Let opposites cancel/);
   assert.match(artifact.html, /Read the solution/);
+  assert.match(artifact.html, /data-kp-beat="beat\.cancel"[^>]+data-kp-focus="equation\.linear-solve\.left-simplified\.lhs\.x"/);
   assert.equal(artifact.html.includes("kp-animation-story\n{"), false);
   assert.equal(artifact.html.includes("renderEditorDocument"), false);
 });

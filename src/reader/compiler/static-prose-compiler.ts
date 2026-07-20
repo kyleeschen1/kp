@@ -73,7 +73,7 @@ function storyHtml(
     "</div>",
     `<ol class="kp-animation-beats" aria-label="Explanation steps">`,
     ...block.beats.map((beat) => [
-      `<li id="${attribute(beat.id)}" data-kp-beat="${attribute(beat.id)}" data-kp-checkpoint="${beat.checkpoint.progressPermille}">`,
+      `<li id="${attribute(beat.id)}" data-kp-beat="${attribute(beat.id)}" data-kp-checkpoint="${beat.checkpoint.progressPermille}" data-kp-focus="${attribute(beat.focusRefs.join(" "))}">`,
       `<h2>${text(beat.title)}</h2>`,
       `<p>${inlineHtml(beat.content)}</p>`,
       "</li>"

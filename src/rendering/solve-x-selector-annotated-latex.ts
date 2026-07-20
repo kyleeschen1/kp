@@ -2,7 +2,7 @@ import {
   createKpSelectorAnnotatedLatex,
   type KpSelectorAnnotatedLatex,
   type KpSelectorAnnotatedLatexSegment
-} from "../rendering/selector-annotated-latex.ts";
+} from "./selector-annotated-latex.ts";
 
 interface SolveXAnnotatedLatexInput {
   readonly objectId: string;

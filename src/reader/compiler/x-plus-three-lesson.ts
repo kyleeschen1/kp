@@ -1,6 +1,8 @@
 import { compileKpAnimationAssetSemanticRefs } from "../../animation/asset.ts";
 import { createLinearSolveAnimationAsset } from "../../animation/linear-solve-adapter.ts";
 import type { KpSemanticAssetObject } from "../../semantic/asset.ts";
+import { renderSelectorAnnotatedLatexToHtml } from "../../rendering/katex-adapter.ts";
+import { createKpSolveXSelectorAnnotatedLatex } from "../../rendering/solve-x-selector-annotated-latex.ts";
 import { createKpCompiledLessonArtifact } from "../document/public-api.ts";
 import {
   emitKpReaderHydrationManifest,
@@ -45,6 +47,7 @@ export function compileKpXPlusThreeLesson(markdown: string) {
   });
   const prose = compileKpStaticLessonProse(document, { staticMath });
   const hydration = emitKpReaderHydrationManifest(resolved, staticMath);
+  const equationTemplate = compileEquationExemplarTemplate(animation);
   const html = [
     "<!doctype html>",
     `<html lang="en">`,
@@ -52,11 +55,22 @@ export function compileKpXPlusThreeLesson(markdown: string) {
     `<meta charset="utf-8">`,
     `<meta name="viewport" content="width=device-width, initial-scale=1">`,
     `<title>Solve x + 3 = 7</title>`,
+    `<meta name="description" content="See algebra move through a searchable, shareable explanation.">`,
+    `<link rel="stylesheet" href="/src/reader/app/exemplar.css">`,
     "</head>",
     `<body data-kp-reader="semantic-document">`,
+    `<header class="kp-reader-masthead">`,
+    `<a class="kp-reader-wordmark" href="/">Kinetic Press</a>`,
+    `<span class="kp-reader-tagline">See concepts move</span>`,
+    `<a class="kp-reader-share" href="#story.solve-x" data-kp-reader-share>Link this moment</a>`,
+    `</header>`,
+    `<main class="kp-reader-layout">`,
     prose.tocHtml,
     prose.articleHtml,
+    `</main>`,
+    equationTemplate,
     `<script type="application/json" data-kp-hydration>${serializeKpReaderHydrationManifest(hydration)}</script>`,
+    `<script type="module" src="/src/reader/app/exemplar-entry.ts"></script>`,
     "</body>",
     "</html>"
   ].join("\n");
@@ -68,6 +82,70 @@ export function compileKpXPlusThreeLesson(markdown: string) {
     tocHtml: prose.tocHtml,
     hydration
   });
+}
+
+function compileEquationExemplarTemplate(
+  animation: ReturnType<typeof createLinearSolveAnimationAsset>
+): string {
+  const objects = new Map(animation.bundle.objects.map((object) => [object.id, object]));
+  const states = new Map(animation.bundle.objects.map((object) => [
+    object.id,
+    compileAnnotatedState(object)
+  ]));
+  const transitions = animation.transformations.map((transformation) => {
+    const source = transformation.sourceObjectIds.map((id) => {
+      if (!objects.has(id)) throw new Error(`missing equation source ${id}`);
+      return states.get(id)!;
+    }).join("\n");
+    const target = transformation.targetObjectIds.map((id) => {
+      if (!objects.has(id)) throw new Error(`missing equation target ${id}`);
+      return states.get(id)!;
+    }).join("\n");
+    return [
+      `<div class="kp-reader-equation-transition" data-kp-reader-transition="${attribute(transformation.id)}" hidden>`,
+      `<div class="kp-reader-equation-fit-surface" data-kp-reader-fit-surface>`,
+      `<div class="kp-reader-equation-measurement" data-kp-reader-equation-measurement="true" aria-hidden="true">`,
+      `<div class="kp-reader-equation-native kp-reader-equation-native--source" data-kp-reader-native="source">${source}</div>`,
+      `<div class="kp-reader-equation-native kp-reader-equation-native--target" data-kp-reader-native="target">${target}</div>`,
+      `<div class="kp-reader-equation-material" data-kp-reader-equation-material-layer="true"></div>`,
+      `</div>`,
+      `</div>`,
+      `</div>`
+    ].join("\n");
+  });
+  return [
+    `<template data-kp-reader-exemplar-template>`,
+    `<div class="kp-reader-equation-stage" data-kp-reader-equation-stage>`,
+    `<div class="kp-reader-equation-stage-heading">`,
+    `<span data-kp-reader-stage-kicker>Follow the symbols</span>`,
+    `<output data-kp-reader-stage-status aria-live="polite">Read the equality</output>`,
+    `</div>`,
+    `<div class="kp-reader-equation-viewport" data-kp-reader-equation-viewport>`,
+    transitions.join("\n"),
+    `</div>`,
+    `<div class="kp-reader-equation-progress" aria-hidden="true"><span data-kp-reader-progress-bar></span></div>`,
+    `<p class="kp-reader-equation-hint">Scroll to move the equation. Scroll back to rewind.</p>`,
+    `</div>`,
+    `</template>`
+  ].join("\n");
+}
+
+function compileAnnotatedState(object: KpSemanticAssetObject): string {
+  const annotated = createKpSolveXSelectorAnnotatedLatex({
+    objectId: object.id,
+    selectorIds: object.selectors.map((selector) => selector.id)
+  });
+  if (annotated === undefined) {
+    throw new Error(`canonical equation object ${object.id} has no annotated LaTeX`);
+  }
+  let html = renderSelectorAnnotatedLatexToHtml(annotated);
+  for (const annotation of annotated.annotations) {
+    html = html.replaceAll(
+      `data-kp-motion-id="${annotation.motionId}"`,
+      `data-kp-reader-equation-anchor-id="anchor.${annotation.selectorId}" data-kp-reader-selector-id="${annotation.selectorId}"`
+    );
+  }
+  return `<div class="kp-reader-equation-state" data-kp-reader-equation-state="${attribute(object.id)}">${html}</div>`;
 }
 
 function equationObjectSequence(
@@ -96,4 +174,13 @@ function latexValue(object: KpSemanticAssetObject): string {
     throw new Error(`canonical equation object ${object.id} has no LaTeX value`);
   }
   return value.latex;
+}
+
+function attribute(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 }

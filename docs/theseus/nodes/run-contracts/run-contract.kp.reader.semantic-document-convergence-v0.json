@@ -221,7 +221,8 @@
     {
       "id": "s29",
       "title": "Assemble isolated semantic document reader exemplar",
-      "status": "planned"
+      "summary": "Assembled and verified the isolated static-first semantic document reader exemplar at /reader/solve-x/.",
+      "status": "complete"
     },
     {
       "id": "s30",

@@ -1,0 +1,130 @@
+@import "katex/dist/katex.min.css";
+
+:root {
+  color: #16231d;
+  background: #f7f3e8;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  --kp-paper: #f7f3e8;
+  --kp-surface: #fffaf0;
+  --kp-ink: #16231d;
+  --kp-muted: #59645e;
+  --kp-accent: #df7047;
+  --kp-relation: #1f6371;
+  --kp-line: #d2d7cd;
+  --kp-serif: Iowan Old Style, Palatino Linotype, Book Antiqua, Palatino, Georgia, serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: auto; }
+body { margin: 0; background: var(--kp-paper); color: var(--kp-ink); line-height: 1.58; }
+a { color: var(--kp-relation); text-underline-offset: .2em; }
+:focus-visible { outline: 3px solid var(--kp-relation); outline-offset: 4px; }
+
+.kp-reader-masthead {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--kp-ink) 14%, transparent);
+}
+.kp-reader-wordmark { color: var(--kp-ink); font-family: var(--kp-serif); font-size: 1.06rem; font-weight: 700; text-decoration: none; }
+.kp-reader-tagline { color: var(--kp-accent); font-size: .7rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+.kp-reader-share { margin-left: auto; font-size: .78rem; font-weight: 650; }
+
+.kp-reader-layout {
+  display: grid;
+  grid-template-columns: 12rem minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 5.5rem);
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+}
+.kp-lesson-toc { position: sticky; top: 1.5rem; align-self: start; padding-top: 5.8rem; }
+.kp-lesson-toc ol { display: grid; gap: .72rem; margin: 0; padding: 0; list-style: none; }
+.kp-lesson-toc li { font-size: .75rem; line-height: 1.35; }
+.kp-lesson-toc [data-kp-toc-level="2"] { padding-left: .75rem; }
+.kp-lesson-toc a { color: var(--kp-muted); text-decoration: none; }
+.kp-lesson-toc a:hover { color: var(--kp-relation); }
+
+.kp-lesson { min-width: 0; padding: clamp(4rem, 10vh, 7.5rem) 0 18vh; }
+.kp-lesson > h1 { max-width: 760px; margin: 0; font-family: var(--kp-serif); font-size: clamp(3rem, 7vw, 6rem); font-weight: 500; letter-spacing: -.055em; line-height: .94; }
+.kp-lesson > p { max-width: 700px; margin: 1.25rem 0; color: var(--kp-muted); font-family: var(--kp-serif); font-size: clamp(1.15rem, 2vw, 1.42rem); line-height: 1.6; }
+.kp-semantic-link { appearance: none; padding: 0 .08em; border: 0; border-radius: .18rem; color: var(--kp-relation); background: transparent; font: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--kp-relation) 42%, transparent); text-underline-offset: .2em; cursor: help; }
+.kp-semantic-link:hover, .kp-semantic-link.kp-reader-semantic-focus { background: color-mix(in srgb, var(--kp-relation) 10%, transparent); text-decoration-color: var(--kp-relation); }
+
+.kp-animation-story {
+  display: grid;
+  grid-template-columns: minmax(18rem, .78fr) minmax(25rem, 1.22fr);
+  grid-template-areas: "beats visual";
+  gap: clamp(2.5rem, 7vw, 7rem);
+  align-items: start;
+  margin-top: clamp(5rem, 12vh, 9rem);
+}
+.kp-animation-beats { grid-area: beats; margin: 0; padding: 0; list-style: none; }
+.kp-animation-beats > li { display: grid; align-content: center; min-height: clamp(330px, 72vh, 680px); padding: 4rem 0 4rem 1.4rem; border-left: 2px solid color-mix(in srgb, var(--kp-line) 65%, transparent); opacity: .46; transition: opacity 160ms ease, border-color 160ms ease; scroll-margin-block: 18vh; }
+.kp-animation-beats > li[data-kp-beat-active="true"] { border-left-color: var(--kp-accent); opacity: 1; }
+.kp-animation-beats h2 { margin: 0 0 .6rem; font-family: var(--kp-serif); font-size: clamp(1.45rem, 2.6vw, 2.15rem); font-weight: 600; line-height: 1.1; }
+.kp-animation-beats p { margin: 0; color: var(--kp-muted); font-size: clamp(.98rem, 1.35vw, 1.08rem); }
+.kp-animation-static { grid-area: visual; position: sticky; top: clamp(2rem, 9vh, 5.5rem); min-width: 0; }
+.kp-animation-static > [data-kp-static-state] { display: grid; place-items: center; min-height: clamp(340px, 62vh, 570px); border: 1px solid var(--kp-line); border-radius: 1.15rem; background: var(--kp-surface); font-size: clamp(1.7rem, 4vw, 3.2rem); }
+body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-state] { display: none; }
+
+.kp-reader-equation-stage { min-height: clamp(340px, 62vh, 570px); padding: 1.15rem; border: 1px solid var(--kp-line); border-radius: 1.15rem; background: var(--kp-surface); box-shadow: 0 22px 60px rgb(22 35 29 / 7%); overflow: hidden; }
+.kp-reader-equation-stage-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; min-height: 1.6rem; }
+.kp-reader-equation-stage-heading > span { color: var(--kp-accent); font-size: .64rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.kp-reader-equation-stage-heading output { color: var(--kp-muted); font-family: var(--kp-serif); font-size: .82rem; }
+.kp-reader-equation-viewport { position: relative; min-height: clamp(245px, 48vh, 440px); overflow: hidden; }
+.kp-reader-equation-transition { position: absolute; inset: 0; display: block !important; visibility: hidden; }
+.kp-reader-equation-transition[data-kp-reader-transition-active="true"] { visibility: visible; }
+.kp-reader-equation-fit-surface, .kp-reader-equation-measurement { position: absolute; inset: 0; }
+.kp-reader-equation-measurement { font-size: clamp(1.85rem, 4.6vw, 3.45rem); }
+.kp-reader-equation-native { position: absolute; inset: 0; display: grid; place-items: center; }
+.kp-reader-equation-state { width: max-content; }
+.kp-reader-equation-state .katex-display { margin: 0; }
+.kp-reader-equation-state [data-kp-reader-equation-anchor-id] { position: relative; display: inline-block; will-change: opacity; transition: color 120ms ease; }
+.kp-reader-equation-material { position: absolute; z-index: 3; inset: 0; pointer-events: none; }
+.kp-reader-equation-material-owner { will-change: transform, opacity; }
+.kp-reader-equation-material-fragment { display: block; }
+.kp-reader-equation-material-visual { display: inline-block; width: max-content; }
+.kp-reader-equation-material-owner--focused, .kp-reader-semantic-focus { color: var(--kp-accent) !important; }
+.kp-reader-equation-material-owner--focused .kp-reader-equation-material-visual { filter: drop-shadow(0 .08em .16em rgb(223 112 71 / 18%)); }
+.kp-reader-equation-progress { height: 2px; margin: .1rem .3rem 0; background: color-mix(in srgb, var(--kp-line) 72%, transparent); overflow: hidden; }
+.kp-reader-equation-progress span { display: block; width: 100%; height: 100%; background: var(--kp-accent); transform: scaleX(0); transform-origin: left; }
+.kp-reader-equation-hint { margin: .68rem 0 0; color: var(--kp-muted); font-size: .7rem; text-align: center; }
+
+@media (max-width: 880px) {
+  .kp-reader-layout { grid-template-columns: 1fr; width: min(100% - 28px, 700px); }
+  .kp-lesson-toc { position: static; padding-top: 2rem; }
+  .kp-lesson-toc ol { display: flex; flex-wrap: wrap; gap: .6rem 1rem; }
+  .kp-lesson { padding-top: 2.5rem; }
+  .kp-animation-story { grid-template-columns: minmax(0, 1fr); grid-template-areas: "visual" "beats"; gap: 1.25rem; }
+  .kp-animation-static { top: .75rem; z-index: 4; }
+  .kp-reader-equation-stage { min-height: 280px; }
+  .kp-reader-equation-viewport { min-height: 190px; }
+  .kp-animation-beats > li { min-height: 62vh; padding-block: 3rem; }
+}
+
+@media (max-width: 520px) {
+  .kp-reader-masthead { width: calc(100% - 28px); gap: .65rem; }
+  .kp-reader-tagline { display: none; }
+  .kp-lesson > h1 { font-size: clamp(2.8rem, 16vw, 4.6rem); }
+  .kp-reader-equation-stage-heading { display: block; }
+  .kp-reader-equation-stage-heading output { display: block; }
+  .kp-reader-equation-measurement { font-size: clamp(1.65rem, 9vw, 2.5rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kp-animation-beats > li, .kp-reader-equation-state [data-kp-reader-equation-anchor-id] { transition: none; }
+}
+
+@media print {
+  .kp-reader-masthead, .kp-lesson-toc, .kp-reader-equation-stage { display: none; }
+  .kp-reader-layout, .kp-animation-story { display: block; width: 100%; }
+  .kp-lesson { padding: 0; }
+  .kp-animation-static > [data-kp-static-state] { display: grid !important; min-height: 7rem; margin: 1rem 0; border: 0; }
+  .kp-animation-beats > li { min-height: 0; opacity: 1; break-inside: avoid; }
+}

@@ -40,7 +40,7 @@ import {
   applyKpEditorSemanticEquationTokenFrame,
   createKpEditorSemanticEquationTokenFrame
 } from "./semantic-equation-player-adapter.ts";
-import { createKpSolveXSelectorAnnotatedLatex } from "./solve-x-semantic-latex.ts";
+import { createKpSolveXSelectorAnnotatedLatex } from "../rendering/solve-x-selector-annotated-latex.ts";
 import {
   bindKpFractionStructuralMotionIds,
   createKpFractionSelectorAnnotatedLatex

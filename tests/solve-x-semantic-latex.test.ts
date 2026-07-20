@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
-import { createKpSolveXSelectorAnnotatedLatex } from "../src/editor/solve-x-semantic-latex.ts";
+import { createKpSolveXSelectorAnnotatedLatex } from "../src/rendering/solve-x-selector-annotated-latex.ts";
 import { compileKpSemanticEquationTransitionResult } from "../src/rendering/semantic-equation-transition-compiler.ts";
 
 test("solve-x transformations retain complete semantic lifecycle maps", () => {

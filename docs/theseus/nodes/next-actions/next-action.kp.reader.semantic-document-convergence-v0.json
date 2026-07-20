@@ -525,11 +525,35 @@
       "status": "passed",
       "scope": "s28 responsive conformance contracts and dependency fitness",
       "checkedAt": "2026-07-20T18:33:37.710Z"
+    },
+    {
+      "command": "npm run typecheck && npm run build",
+      "status": "passed",
+      "scope": "s29 multi-page route, compiler integration, TypeScript, and production build",
+      "checkedAt": "2026-07-20T19:18:46.599Z"
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader-exemplar.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s29 no-JS reading, continuous scroll, write-only ordinary frames, URL restore, and no WebGL",
+      "checkedAt": "2026-07-20T19:18:52.710Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s29 reader and concept-room import boundaries",
+      "checkedAt": "2026-07-20T19:18:55.520Z"
+    },
+    {
+      "command": "node --test focused semantic reader compiler and equation suites",
+      "status": "passed",
+      "scope": "s29 compiler anchors, static prose, semantic LaTeX, motion, and responsive fit",
+      "checkedAt": "2026-07-20T19:18:58.549Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s28 enforces no-wrap centered responsive fitting, maintains an accepted minimum math scale, reports overflow explicitly, and checks every material pose against the fitted inline viewport."
+    "summary": "s29 delivers the isolated searchable x-plus-3 route at /reader/solve-x/ with build-time KaTeX anchors, left-prose/right-sticky continuous symbol motion, semantic focus, responsive no-wrap fit, print/no-JS fallback, and settled share URLs. Broad gate and review package remain in s30."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",
