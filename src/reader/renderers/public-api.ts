@@ -41,3 +41,10 @@ export {
   type KpReaderEquationPerceptualAlignmentPlan,
   type KpReaderEquationPerceptualAlignmentPolicy
 } from "./equation-perceptual-alignment.ts";
+export {
+  createKpReaderEquationMaterialLayer,
+  type KpReaderEquationMaterialFragmentFrame,
+  type KpReaderEquationMaterialLayer,
+  type KpReaderEquationMaterialLayerSyncResult,
+  type KpReaderEquationMaterialOwnerFrame
+} from "./equation-material-layer.ts";

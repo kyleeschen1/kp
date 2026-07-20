@@ -197,7 +197,8 @@
     {
       "id": "s25",
       "title": "Implement persistent keyed material-owner layer",
-      "status": "planned"
+      "summary": "Implemented persistent keyed reader material-owner DOM layer. Chromium, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s26",

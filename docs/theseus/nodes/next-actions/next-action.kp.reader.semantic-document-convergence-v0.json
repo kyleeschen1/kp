@@ -470,11 +470,24 @@
       "status": "passed",
       "scope": "s24 alignment policy contracts and dependency fitness",
       "checkedAt": "2026-07-20T18:18:41.398Z"
+    },
+    {
+      "command": "npx playwright test semantic reader material owner layer",
+      "status": "passed",
+      "scope": "s25 one Chromium persistence sanitization focus removal and disposal test",
+      "checkedAt": "2026-07-20T18:22:27.551Z",
+      "notes": "Initial sandboxed server bind returned EPERM; approved elevated rerun passed."
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s25 DOM write-sink contracts and dependency fitness",
+      "checkedAt": "2026-07-20T18:22:28.673Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s24 aligns the equation around a prioritized semantic spine with bounded whole-target correction; forward and rewind corrections are exact directional inverses."
+    "summary": "s25 provides a persistent semantic-keyed material-owner layer that mutates only retained presentation nodes, sanitizes cloned KaTeX visuals, and supports deterministic removal and disposal."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",
