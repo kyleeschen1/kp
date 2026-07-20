@@ -69,7 +69,8 @@
     {
       "id": "s05-temporal-ring-buffer",
       "title": "Temporal ring buffer",
-      "status": "planned"
+      "summary": "The bounded trace retains recent immutable render samples, excludes future frames, and rejects competing clock order.",
+      "status": "complete"
     },
     {
       "id": "s06-semantic-pointer-target",
