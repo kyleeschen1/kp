@@ -1,0 +1,111 @@
+{
+  "id": "next-action.kp.reader.semantic-document-convergence-v0",
+  "kind": "next-action",
+  "title": "Prove the semantic document reader convergence",
+  "status": "ready",
+  "domain": "kp.reader",
+  "summary": "Build one reversible x-plus-3 walking skeleton that combines KP's typed semantic animation kernel, URL/provenance/provider boundaries, and inferred authoring with document-first static delivery, continuous learner-controlled scroll sampling, a lightweight equation DOM adapter, shared focus, and a mandatory human visual-review stop before generalization.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-20-legacy-current-architecture-parity-audit.md",
+      "summary": "Approved evidence, target architecture, asset parity, budgets, migration order, and exemplar gate."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Current semantic-animation and concept-room strategy that the convergence action must preserve."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/asset.ts",
+      "summary": "Current semantic animation asset and transformation-composition contract to preserve."
+    },
+    {
+      "kind": "file",
+      "path": "src/animation/runtime-sampler.ts",
+      "summary": "Renderer-neutral Time-to-Frame sampling spine for all reader clocks."
+    },
+    {
+      "kind": "file",
+      "path": "src/app-adapters/linear-equation-story-scroll-coordinator.ts",
+      "summary": "Current discrete story clock whose learner behavior the new reader clock must replace without destabilizing other routes."
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-material-layer-dom.ts",
+      "summary": "Current persistent semantic material-owner technique to retain and simplify in the reader adapter."
+    },
+    {
+      "kind": "file",
+      "path": "src/compiler/html-asset.ts",
+      "summary": "Current compiler-to-editor coupling seam the walking skeleton must replace."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "decision.kp.concept-room-architecture-v0"
+    ],
+    "preferred": [
+      "next-action.kp.concept-room.linear-equation-visual-exemplar-v0"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run build",
+    "npm run smoke:linear-equation",
+    "npm run test:browser:linear-equation-conformance",
+    "npm run perf:linear-equation",
+    "npm run visual:linear-equation",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",
+    "Whether one renderer-neutral clock, focus, URL, and hydration contract is sufficient for later SVG, code, graph, provider, and WebGL exemplars without generalizing them now."
+  ],
+  "allowedWork": [
+    "Characterize and preserve the current x-plus-3 semantics, URL/provenance/provider contracts, and legacy motion behavior.",
+    "Add the minimum LessonDocument, static compiler, reader clock/URL/focus/hydration seams, and equation DOM adapter needed for one isolated x-plus-3 route.",
+    "Adapt continuous scroll progress, actual KaTeX measurement, perceptual anchor alignment, persistent material owners, lazy hydration, static HTML, and deterministic verification behind current semantic interfaces.",
+    "Add focused architecture, compiler, runtime, browser, accessibility, performance, route-closure, and visual evidence; commit each verified slice independently."
+  ],
+  "disallowedWork": [
+    "Do not port the legacy parser, focus-widget runtime, code-projection runtime, page CSS system, or legacy repository wholesale.",
+    "Do not change the general semantic asset model, editor player, unrelated routes, FTC, economics, programming, graph, diagram, provider, or WebGL implementations except for narrow compatibility seams proven necessary by the exemplar.",
+    "Do not promote exemplar-local styles, clocks, focus behavior, Markdown vocabulary, budgets, or renderer APIs across families before explicit human visual acceptance.",
+    "Do not import editor or Three.js code into the learner route, require JavaScript for reading, update URLs on every scroll frame, or parse HTML during ordinary animation frames."
+  ],
+  "criteria": [
+    {
+      "id": "clarity",
+      "weight": "high"
+    },
+    {
+      "id": "continuity",
+      "weight": "high"
+    },
+    {
+      "id": "searchability",
+      "weight": "high"
+    },
+    {
+      "id": "accessibility",
+      "weight": "high"
+    },
+    {
+      "id": "architecture-boundaries",
+      "weight": "high"
+    },
+    {
+      "id": "route-cost",
+      "weight": "high"
+    },
+    {
+      "id": "reversibility",
+      "weight": "high"
+    }
+  ]
+}

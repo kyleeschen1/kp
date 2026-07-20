@@ -70,7 +70,8 @@
     "next-action.kp.animation.semantic-motion-library-loop-v1",
     "next-action.kp.semantic-material-motion-performance-loop-v0",
     "next-action.kp.concept-room.architecture-plan-review-v0",
-    "next-action.kp.concept-room.architecture-walking-skeleton-v0"
+    "next-action.kp.concept-room.architecture-walking-skeleton-v0",
+    "next-action.kp.reader.semantic-document-convergence-v0"
   ],
   "verificationRecords": [
     {
