@@ -58,9 +58,11 @@ export function sampleKpEquationMaterialOwnerHandoff(input: {
     : 0;
   const materialOpacity = input.sourcePresent && input.targetPresent
     ? Math.min(1 - sourceNativeOpacity, 1 - targetNativeOpacity)
-    : progress === 0 || progress === 1
-      ? 0
-      : Math.sin(Math.PI * progress);
+    : input.sourcePresent
+      ? progress === 1 ? 0 : 1 - sourceNativeOpacity
+      : input.targetPresent
+        ? progress === 0 ? 0 : 1 - targetNativeOpacity
+        : 0;
 
   return {
     ownerId: input.ownerId,

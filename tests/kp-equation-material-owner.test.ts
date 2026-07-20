@@ -135,6 +135,46 @@ test("neutral handoff policy covers persistent, departing, and arriving owners",
   assert.equal(arriving.targetNativeOpacity, 1);
 });
 
+test("one-sided material reaches full authority without a handoff flicker", () => {
+  const departing = [0, 0.04, 0.08, 0.5, 0.999, 1].map((progress) =>
+    sampleKpEquationMaterialOwnerHandoff({
+      ownerId: "owner.canceling-pair",
+      progress,
+      sourcePresent: true,
+      targetPresent: false
+    })
+  );
+  assert.equal(departing[0]!.sourceNativeOpacity, 1);
+  assert.equal(departing[0]!.materialOpacity, 0);
+  assert.ok(departing[1]!.sourceNativeOpacity > 0);
+  assert.ok(departing[1]!.materialOpacity > 0);
+  assert.equal(
+    departing[1]!.sourceNativeOpacity + departing[1]!.materialOpacity,
+    1
+  );
+  assert.equal(departing[2]!.materialOpacity, 1);
+  assert.equal(departing[4]!.materialOpacity, 1);
+  assert.equal(departing[5]!.materialOpacity, 0);
+
+  const arriving = [0, 0.001, 0.5, 0.92, 0.96, 1].map((progress) =>
+    sampleKpEquationMaterialOwnerHandoff({
+      ownerId: "owner.derived-result",
+      progress,
+      sourcePresent: false,
+      targetPresent: true
+    })
+  );
+  assert.equal(arriving[0]!.materialOpacity, 0);
+  assert.equal(arriving[1]!.materialOpacity, 1);
+  assert.equal(arriving[2]!.materialOpacity, 1);
+  assert.equal(
+    arriving[4]!.materialOpacity + arriving[4]!.targetNativeOpacity,
+    1
+  );
+  assert.equal(arriving[5]!.targetNativeOpacity, 1);
+  assert.equal(arriving[5]!.materialOpacity, 0);
+});
+
 test("neutral handoff policy rejects unsafe timing windows", () => {
   assert.throws(
     () => sampleKpEquationMaterialOwnerHandoff({

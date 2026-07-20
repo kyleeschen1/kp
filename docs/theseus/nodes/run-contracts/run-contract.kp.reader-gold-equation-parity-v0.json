@@ -129,7 +129,8 @@
     {
       "id": "s16-native-handoff",
       "title": "Complete stable ownership and handoff",
-      "status": "planned"
+      "summary": "Persistent and one-sided material now take full visual authority between native endpoints with complementary opacity and no ownership dip.",
+      "status": "complete"
     },
     {
       "id": "s17-scroll-clock",
