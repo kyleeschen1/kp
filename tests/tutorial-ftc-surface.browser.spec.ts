@@ -47,12 +47,16 @@ test("FTC tutorial is available inside the editor and as a learner view", async 
 }) => {
   await page.goto("/", { waitUntil: "networkidle" });
   const cards = page.locator(".preview-stage > *");
-  const conceptLauncher = page.locator("[data-kp-linear-equation-editor-launcher]");
-  await expect(cards.nth(0)).toHaveAttribute("data-kp-linear-equation-editor-launcher", "");
+  const experienceLibrary = page.locator("[data-kp-learner-experience-library]");
+  await expect(cards.nth(0)).toHaveAttribute("data-kp-learner-experience-library", "");
   await expect(cards.nth(1)).toHaveAttribute("data-kp-editor-animation-library", "");
   await expect(cards.nth(2)).toHaveAttribute("data-kp-type", "graph-3d");
   await expect(cards.last()).toHaveAttribute("data-kp-ftc-editor-launcher", "");
-  await expect(conceptLauncher.getByRole("link", { name: "Open concept room" })).toHaveAttribute(
+  await expect(experienceLibrary.getByRole("link", { name: "Open scroll lesson" })).toHaveAttribute(
+    "href",
+    "/reader/solve-x/"
+  );
+  await expect(experienceLibrary.getByRole("link", { name: "Open concept room" })).toHaveAttribute(
     "href",
     "/concepts/mathematics/linear-equations/solve-with-balance"
   );
@@ -62,6 +66,14 @@ test("FTC tutorial is available inside the editor and as a learner view", async 
   await page.locator('[data-action="show-ftc-tutorial"]').click();
   await expect(page.locator("[data-kp-ftc-learner-view]")).toBeVisible();
   await expect(page).toHaveURL(/view=ftc-tutorial/);
+});
+
+test("semantic editor opens the solve-x scroll lesson", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  await page.getByRole("link", { name: "Open scroll lesson" }).click();
+  await expect(page).toHaveURL(/\/reader\/solve-x\//);
+  await expect(page.getByRole("heading", { name: "Solve for x", exact: true })).toBeVisible();
+  await expect(page.locator("[data-kp-reader-hydrated]")).toBeAttached();
 });
 
 test("linear-equation editor card opens the canonical concept room", async ({ page }) => {

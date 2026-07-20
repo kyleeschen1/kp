@@ -63,6 +63,10 @@ import {
 import {
   renderKpEditorAnimationPlayerShell
 } from "./animation-player-shell.ts";
+import {
+  createKpLearnerExperienceLibrary,
+  type KpLearnerExperienceDescriptor
+} from "./learner-experience-library.ts";
 
 export function createInitialEditorDocument(): KpDocument {
   return createKpDocument({
@@ -209,7 +213,7 @@ function renderPreviewStage(
 
   // Keep the product entry points and primary visual capability ahead of the longer asset catalog.
   return [
-    renderLinearEquationConceptRoomLauncher(),
+    renderLearnerExperienceLibrary(),
     renderEditorAnimationLibrary(editorAnimationDescriptorId),
     ...graph3DPreviews,
     renderEquationMotionDemo(equationAnimationId),
@@ -218,10 +222,31 @@ function renderPreviewStage(
   ].join("");
 }
 
-function renderLinearEquationConceptRoomLauncher(): string {
-  return `<section class="kp-editor-exemplar-card" data-kp-linear-equation-editor-launcher aria-labelledby="kp-linear-equation-editor-launcher-title">
-    <header><p class="eyebrow">See concepts move</p><h2 id="kp-linear-equation-editor-launcher-title">Solve a linear equation</h2><p>Watch algebraic symbols and balance geometry transform together, then inspect or share any exact state.</p><a href="/concepts/mathematics/linear-equations/solve-with-balance">Open concept room</a></header>
+function renderLearnerExperienceLibrary(): string {
+  return `<section class="kp-editor-exemplar-card kp-learner-experience-library" data-kp-learner-experience-library aria-labelledby="kp-learner-experience-library-title">
+    <header>
+      <p class="eyebrow">See concepts move</p>
+      <h2 id="kp-learner-experience-library-title">Lesson previews</h2>
+      <p>Open a lesson, explore it, and share any moment.</p>
+    </header>
+    <ul>${createKpLearnerExperienceLibrary().map(renderLearnerExperience).join("")}</ul>
   </section>`;
+}
+
+function renderLearnerExperience(
+  experience: KpLearnerExperienceDescriptor
+): string {
+  const kind = experience.kind === "scroll-lesson"
+    ? "Scroll lesson"
+    : "Concept room";
+  return `<li data-kp-learner-experience="${escapeHtml(experience.id)}">
+    <div class="kp-learner-experience__copy">
+      <p class="kp-learner-experience__meta"><span>${kind}</span><span>${escapeHtml(experience.status)}</span></p>
+      <h3>${escapeHtml(experience.title)}</h3>
+      <p>${escapeHtml(experience.summary)}</p>
+    </div>
+    <a href="${escapeHtml(experience.href)}">${escapeHtml(experience.actionLabel)}</a>
+  </li>`;
 }
 
 function renderKpFtcTutorialEditorLauncher(): string {

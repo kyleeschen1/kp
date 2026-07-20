@@ -16,10 +16,10 @@ const page = await browser.newPage({ viewport });
 try {
   await page.goto(baseUrl, { waitUntil: "networkidle" });
   const column = page.locator(".preview-stage");
-  const concept = page.locator("[data-kp-linear-equation-editor-launcher]");
+  const experiences = page.locator("[data-kp-learner-experience-library]");
   const graph = page.locator('.preview-stage > [data-kp-type="graph-3d"]').first();
   const ftc = page.locator("[data-kp-ftc-editor-launcher]");
-  await concept.waitFor();
+  await experiences.waitFor();
   await graph.waitFor();
   await ftc.waitFor();
   await graph.scrollIntoViewIfNeeded();
@@ -37,20 +37,20 @@ try {
 
   const order = await column.locator(":scope > *").evaluateAll((cards) => cards.map((card) => {
     const element = card as HTMLElement;
-    if (element.dataset["kpLinearEquationEditorLauncher"] !== undefined) return "linear-equation";
+    if (element.dataset["kpLearnerExperienceLibrary"] !== undefined) return "learner-experiences";
     if (element.dataset["kpEditorAnimationLibrary"] !== undefined) return "animation-library";
     if (element.dataset["kpType"] === "graph-3d") return "graph-3d";
     if (element.dataset["kpEquationMotionDemo"] !== undefined) return "equation-motion";
     if (element.dataset["kpFtcEditorLauncher"] !== undefined) return "ftc";
     return element.dataset["kpObject"] ?? element.tagName.toLowerCase();
   }));
-  if (order[0] !== "linear-equation" || order[1] !== "animation-library" ||
+  if (order[0] !== "learner-experiences" || order[1] !== "animation-library" ||
     order[2] !== "graph-3d" || order.at(-1) !== "ftc") {
     throw new Error(`Unexpected editor card order: ${order.join(", ")}`);
   }
 
   const captures = [
-    { id: "editor-card-first-linear-equation", locator: concept },
+    { id: "editor-card-first-learner-experiences", locator: experiences },
     { id: "editor-card-third-graph-3d", locator: graph },
     { id: "editor-card-last-ftc", locator: ftc },
     { id: "editor-card-column", locator: column }

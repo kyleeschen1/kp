@@ -585,6 +585,12 @@
       "status": "passed",
       "scope": "s30 final durable graph: 667 nodes and 8,828 events",
       "checkedAt": "2026-07-20T19:32:45.500Z"
+    },
+    {
+      "command": "npm test; npm run build; focused Playwright editor navigation; visual editor card capture",
+      "status": "passed",
+      "scope": "Post-review semantic editor lesson discovery follow-up",
+      "checkedAt": "2026-07-20T19:45:13.924Z"
     }
   ],
   "progress": {
