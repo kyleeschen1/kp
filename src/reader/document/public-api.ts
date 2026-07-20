@@ -22,3 +22,15 @@ export {
   type KpLessonSemanticLink,
   type KpLessonText
 } from "./lesson-document.ts";
+export {
+  KpLessonAuthoringError,
+  createKpLessonAnimationStory,
+  createKpLessonBeat,
+  createKpLessonHeading,
+  createKpLessonParagraph,
+  createKpLessonSemanticLink,
+  createKpLessonText,
+  defineKpLessonDocument,
+  kpLesson,
+  type KpLessonInlineInput
+} from "./authoring.ts";

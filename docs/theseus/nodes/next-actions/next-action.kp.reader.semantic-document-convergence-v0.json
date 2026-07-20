@@ -206,11 +206,47 @@
       "status": "passed",
       "scope": "s05 domains TypeScript",
       "checkedAt": "2026-07-20T16:49:14.545Z"
+    },
+    {
+      "command": "node",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-07-20T16:55:21.471Z"
+    },
+    {
+      "command": "npm",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-07-20T16:55:22.667Z"
+    },
+    {
+      "command": "four",
+      "status": "passed",
+      "scope": "s06",
+      "checkedAt": "2026-07-20T16:55:23.772Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-reader-authoring.test.ts tests/semantic-reader-lesson-document.test.ts tests/semantic-reader-architecture.test.ts",
+      "status": "passed",
+      "scope": "s06 inferred authoring behavior and reader boundaries",
+      "checkedAt": "2026-07-20T16:55:44.689Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s06 semantic reader import fitness",
+      "checkedAt": "2026-07-20T16:55:45.789Z"
+    },
+    {
+      "command": "four direct TypeScript project checks",
+      "status": "passed",
+      "scope": "s06 app node test and domain type safety",
+      "checkedAt": "2026-07-20T16:55:46.787Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s05 added a narrow source-located LessonDocument IR with ordinary prose blocks and semantic animation-story beats, plus deterministic structural validation. It contains no subject-specific choreography or Markdown parser concerns."
+    "summary": "s06 adds a terse inference-first lesson authoring API with literal identity, shorthand prose, input copying, and validation at definition time."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

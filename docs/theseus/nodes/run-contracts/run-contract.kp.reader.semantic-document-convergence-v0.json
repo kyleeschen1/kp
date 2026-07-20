@@ -83,7 +83,8 @@
     {
       "id": "s06",
       "title": "Add inference-first LessonDocument authoring",
-      "status": "planned"
+      "summary": "Added inferred lesson document builders and structured authoring failures. Focused tests, architecture gates, and all TypeScript projects pass.",
+      "status": "complete"
     },
     {
       "id": "s07",
