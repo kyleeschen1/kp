@@ -88,13 +88,14 @@ async function captureElement(
 ): Promise<void> {
   const output = path.join(outputRoot, `${id}.png`);
   await locator.screenshot({ path: output });
+  const currentViewport = page.viewportSize();
   captures.push({
     id,
     url: page.url(),
     selector: "[data-kp-editor-animation-player]",
     output: path.relative(process.cwd(), output),
     progress,
-    viewport: page.viewportSize() ?? undefined
+    ...(currentViewport === null ? {} : { viewport: currentViewport })
   });
 }
 
