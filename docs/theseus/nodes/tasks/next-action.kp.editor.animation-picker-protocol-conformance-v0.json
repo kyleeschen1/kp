@@ -1,0 +1,50 @@
+{
+  "id": "next-action.kp.editor.animation-picker-protocol-conformance-v0",
+  "kind": "task",
+  "title": "Prove KP animation picker protocol conformance",
+  "status": "ready",
+  "domain": "kp.editor",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "src/editor/animation-picker.ts",
+      "summary": "KP grouped animation picker model and renderer boundary."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "workflow.kp.dashboard-animation-system"
+    ]
+  },
+  "affects": [
+    "workflow.kp.dashboard-animation-system"
+  ],
+  "verification": [
+    "node --disable-warning=ExperimentalWarning --test tests/kp-editor-animation-picker.test.ts",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether KP can consume the language-neutral Spindle picker state and intent boundary without depending on Spindle implementation code."
+  ],
+  "allowedWork": [
+    "Bounded KP animation picker model, renderer adapter, protocol conformance tests, and owner-local Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No Spindle dependency, no picker framework, no fuzzy-scoring policy, no visual redesign, and no unrelated concept-room work."
+  ],
+  "criteria": [
+    {
+      "id": "stable-picker-identity-and-navigation",
+      "weight": "high"
+    },
+    {
+      "id": "tagged-selection-intents-with-provenance",
+      "weight": "high"
+    },
+    {
+      "id": "owner-types-and-tests-pass",
+      "weight": "high"
+    }
+  ]
+}
