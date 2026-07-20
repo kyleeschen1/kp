@@ -102,11 +102,25 @@
       "status": "passed",
       "scope": "s05 editor-backed story surface",
       "checkedAt": "2026-07-20T20:34:44.745Z"
+    },
+    {
+      "command": "npx playwright test semantic-reader material-owner and exemplar specs",
+      "status": "passed",
+      "scope": "s06 reader clone and font-gated measurement",
+      "checkedAt": "2026-07-20T20:37:15.737Z",
+      "notes": "Four browser tests passed; static/no-JS, URL restoration, layout-read budget, and persistent owner behavior preserved."
+    },
+    {
+      "command": "npm run visual:reader-gold-parity",
+      "status": "passed",
+      "scope": "s06 typography repair",
+      "checkedAt": "2026-07-20T20:37:16.577Z",
+      "notes": "Every reader material frame now resolves to KaTeX_Main or KaTeX_Math; the Inter clone regression is gone."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Captured deterministic editor/reader baselines; reader material clones resolve to Inter while canonical KaTeX ink retains KaTeX_Main and KaTeX_Math."
+    "summary": "Reader material typography is repaired and first measurement is font-gated; operation-specific choreography remains the next major parity gap."
   },
   "expectedLearning": [
     "Whether the accepted editor animation realization can become a neutral renderer without visual regression",

@@ -1,4 +1,5 @@
 import type { KpReaderLayoutRect } from "./equation-layout-snapshot.ts";
+import { cloneElementWithComputedStyles } from "../../rendering/computed-style-clone.ts";
 
 export interface KpReaderEquationMaterialFragmentFrame {
   readonly id: string;
@@ -158,10 +159,7 @@ function replaceFragmentVisual(
   record: KpReaderMaterialFragmentDomRecord,
   frame: KpReaderEquationMaterialFragmentFrame
 ): void {
-  const visual = frame.sourceElement.cloneNode(true);
-  if (!(visual instanceof HTMLElement)) {
-    throw new Error("Equation material visuals must clone to HTMLElements.");
-  }
+  const visual = cloneElementWithComputedStyles(frame.sourceElement);
   sanitizeVisualClone(visual);
   visual.classList.add("kp-reader-equation-material-visual");
   visual.style.visibility = "visible";

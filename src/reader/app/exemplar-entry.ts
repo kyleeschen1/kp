@@ -1,4 +1,5 @@
 import { createLinearSolveAnimationAsset } from "../../animation/linear-solve-adapter.ts";
+import { createKpEquationFontReadiness } from "../../rendering/equation-font-readiness.ts";
 import {
   applyKpReaderEquationResponsiveFit,
   compileKpReaderEquationMaterialPlan,
@@ -68,6 +69,7 @@ const accessibleCheckpoints = beats.map((beat) => ({
   progressPermille: Number(requiredData(beat, "kpCheckpoint"))
 }));
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const fontReadiness = createKpEquationFontReadiness(document);
 const transitionElements = [
   ...stage.querySelectorAll<HTMLElement>("[data-kp-reader-transition]")
 ];
@@ -130,10 +132,18 @@ document.addEventListener("focusout", onSemanticLeave);
 window.addEventListener("pagehide", dispose, { once: true });
 reducedMotion.addEventListener("change", renderCurrentSample);
 
-void document.fonts.ready.then(() => scheduler.invalidate("fonts"));
+const unsubscribeFontReadiness = fontReadiness.subscribe(() => {
+  scheduler.invalidate("fonts");
+  scheduleScrollSample();
+});
 updateScrollGeometry();
 restoreUrlLocation();
-scheduleScrollSample();
+// Initial geometry must be measured from final KaTeX fonts. Rendering before
+// this gate creates a visible first-frame font and width swap on slow loads.
+void fontReadiness.whenReady().then(() => {
+  scheduler.invalidate("fonts");
+  scheduleScrollSample();
+});
 
 function createScrollClock(): KpReaderContinuousScrollClock {
   const geometry = scrollGeometry();
@@ -485,6 +495,8 @@ function dispose(): void {
   if (settleTimer !== undefined) window.clearTimeout(settleTimer);
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
+  unsubscribeFontReadiness();
+  fontReadiness.dispose();
   scheduler.dispose();
   scrollClock.dispose();
   focus.dispose();

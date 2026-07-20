@@ -69,7 +69,8 @@
     {
       "id": "s06-reader-clone-migration",
       "title": "Migrate reader material clone",
-      "status": "planned"
+      "summary": "Reader material owners now use computed-style clones and initial rendering waits for final fonts; deterministic capture confirms the font-family swap is eliminated.",
+      "status": "complete"
     },
     {
       "id": "s07-typography-conformance",
