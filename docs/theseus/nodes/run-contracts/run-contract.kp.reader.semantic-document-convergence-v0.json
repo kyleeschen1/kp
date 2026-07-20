@@ -2,7 +2,8 @@
   "id": "run-contract.kp.reader.semantic-document-convergence-v0",
   "kind": "run-contract",
   "title": "Semantic Document Reader Convergence Long Loop",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -227,7 +228,8 @@
     {
       "id": "s30",
       "title": "Run broad gate and assemble human review package",
-      "status": "planned"
+      "summary": "Completed broad gates and the reproducible human review package; stopped before any generalization as required.",
+      "status": "complete"
     }
   ]
 }

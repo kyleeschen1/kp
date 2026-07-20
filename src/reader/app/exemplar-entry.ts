@@ -23,6 +23,7 @@ import {
   createKpReaderSessionSnapshot,
   decodeKpReaderSessionUrl,
   encodeKpReaderSessionUrl,
+  projectKpReaderMotion,
   sampleKpReaderAnimationFrame,
   type KpReaderClockSample,
   type KpReaderContinuousScrollClock
@@ -61,6 +62,12 @@ const status = requireElement<HTMLOutputElement>("[data-kp-reader-stage-status]"
 const progressBar = requireElement<HTMLElement>("[data-kp-reader-progress-bar]");
 const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
+const accessibleCheckpoints = beats.map((beat) => ({
+  id: requiredData(beat, "kpBeat"),
+  label: beat.querySelector("h2")?.textContent?.trim() ?? requiredData(beat, "kpBeat"),
+  progressPermille: Number(requiredData(beat, "kpCheckpoint"))
+}));
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const transitionElements = [
   ...stage.querySelectorAll<HTMLElement>("[data-kp-reader-transition]")
 ];
@@ -121,6 +128,7 @@ document.addEventListener("pointerout", onSemanticLeave);
 document.addEventListener("focusin", onSemanticEnter);
 document.addEventListener("focusout", onSemanticLeave);
 window.addEventListener("pagehide", dispose, { once: true });
+reducedMotion.addEventListener("change", renderCurrentSample);
 
 void document.fonts.ready.then(() => scheduler.invalidate("fonts"));
 updateScrollGeometry();
@@ -230,14 +238,25 @@ function measureLayout(revision: number): LayoutState {
 }
 
 function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
-  const forwardClock = { ...sample, direction: "forward" as const };
+  const projection = projectKpReaderMotion({
+    clock: sample,
+    checkpoints: accessibleCheckpoints,
+    reducedMotion: reducedMotion.matches
+  });
+  const visualSample = {
+    ...sample,
+    progress: projection.progress,
+    progressPermille: projection.progressPermille,
+    checkpointId: projection.checkpointId
+  };
+  const forwardClock = { ...visualSample, direction: "forward" as const };
   const runtimeFrame = sampleKpReaderAnimationFrame({ animation, clock: forwardClock });
   const transitionId = runtimeFrame.activeTransformationIds[0];
   if (transitionId === undefined) return;
   const context = layout.contexts.get(transitionId);
   if (context === undefined) throw new Error(`No measured transition ${transitionId}.`);
   const phaseProgress = localPhaseProgress(
-    sample.progress,
+    visualSample.progress,
     runtimeFrame.phase.phaseIndex,
     animation.transformations.length
   );
@@ -287,11 +306,16 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   });
   context.materialLayer.sync(frames);
   applyFocus(focusedRefs);
-  progressBar.style.transform = `scaleX(${sample.progress})`;
-  document.body.dataset["kpReaderProgress"] = String(sample.progressPermille);
+  progressBar.style.transform = `scaleX(${visualSample.progress})`;
+  document.body.dataset["kpReaderProgress"] = String(visualSample.progressPermille);
+  document.body.dataset["kpReaderMotionMode"] = projection.mode;
   document.body.dataset["kpReaderTransition"] = transitionId;
   document.body.dataset["kpReaderFramePlans"] = String(scheduler.inspect().framePlanCount + 1);
-  updateActiveBeat(sample.progressPermille);
+  updateActiveBeat(visualSample.progressPermille);
+}
+
+function renderCurrentSample(): void {
+  scheduler.render(lastSample());
 }
 
 function localPhaseProgress(progress: number, phaseIndex: number, phaseCount: number): number {
@@ -460,6 +484,7 @@ function dispose(): void {
   if (scrollFrame !== undefined) window.cancelAnimationFrame(scrollFrame);
   if (settleTimer !== undefined) window.clearTimeout(settleTimer);
   resizeObserver.disconnect();
+  reducedMotion.removeEventListener("change", renderCurrentSample);
   scheduler.dispose();
   scrollClock.dispose();
   focus.dispose();

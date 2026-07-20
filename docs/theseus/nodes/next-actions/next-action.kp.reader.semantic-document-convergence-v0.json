@@ -2,7 +2,7 @@
   "id": "next-action.kp.reader.semantic-document-convergence-v0",
   "kind": "next-action",
   "title": "Prove the semantic document reader convergence",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.reader",
   "summary": "Build one reversible x-plus-3 walking skeleton that combines KP's typed semantic animation kernel, URL/provenance/provider boundaries, and inferred authoring with document-first static delivery, continuous learner-controlled scroll sampling, a lightweight equation DOM adapter, shared focus, and a mandatory human visual-review stop before generalization.",
   "sourceRefs": [
@@ -549,11 +549,47 @@
       "status": "passed",
       "scope": "s29 compiler anchors, static prose, semantic LaTeX, motion, and responsive fit",
       "checkedAt": "2026-07-20T19:18:58.549Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s30 full unit, server, architecture, inference, catalog, content, and domain gate",
+      "checkedAt": "2026-07-20T19:31:30.461Z"
+    },
+    {
+      "command": "npm run review:semantic-reader",
+      "status": "passed",
+      "scope": "s30 production build, 12-state review package, 84,139-byte gzip route closure, no-JS output, budgets, rewind, reduced motion, forced colors, mobile, and zero forbidden assets",
+      "checkedAt": "2026-07-20T19:31:44.255Z"
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader-exemplar.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "s30 reader no-JS, continuous motion, layout-read, URL, and zero-WebGL browser contracts",
+      "checkedAt": "2026-07-20T19:31:52.200Z"
+    },
+    {
+      "command": "npm run smoke:linear-equation && npm run test:browser:linear-equation-conformance && npm run perf:linear-equation",
+      "status": "passed",
+      "scope": "s30 preserved canonical route smoke, exact endpoints, seek-rewind, resize, frame budget, and zero WebGL",
+      "checkedAt": "2026-07-20T19:31:56.139Z"
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s30 regenerated 39 existing visual baseline states",
+      "checkedAt": "2026-07-20T19:32:00.991Z"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "scope": "s30 final durable graph: 667 nodes and 8,828 events",
+      "checkedAt": "2026-07-20T19:32:45.500Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s29 delivers the isolated searchable x-plus-3 route at /reader/solve-x/ with build-time KaTeX anchors, left-prose/right-sticky continuous symbol motion, semantic focus, responsive no-wrap fit, print/no-JS fallback, and settled share URLs. Broad gate and review package remain in s30."
+    "summary": "The 30-slice semantic reader convergence implementation and automated review package are complete. The route is static-first, continuously reversible, linkable, accessible, isolated, and under provisional budgets. Human visual acceptance is now mandatory; cancellation collision, late solution-glyph handoff, salience breadth, and mobile whitespace are explicitly unresolved."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

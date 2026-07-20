@@ -15,7 +15,6 @@ const solveXMarkdown = readFileSync(
 );
 
 export default defineConfig({
-  appType: "mpa",
   plugins: [{
     name: "kp-semantic-reader-route",
     transformIndexHtml: {
