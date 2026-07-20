@@ -1,0 +1,170 @@
+{
+  "id": "run-contract.kp.reader-gold-equation-parity-v0",
+  "kind": "run-contract",
+  "title": "Reader gold equation parity",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.perfect-the-reader-gold-equation-card-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v2.json",
+      "summary": "Approved clarity-first roadmap and exemplar gate."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run test:browser:linear-equation-conformance",
+    "npm run visual:linear-equation",
+    "npm run perf:linear-equation",
+    "npm run build"
+  ],
+  "allowedWork": [
+    "Canonical animation.linear-solve.solve-x visual parity in the semantic reader",
+    "Neutral shared equation rendering contracts used by editor and reader",
+    "System, reduced, full, and static motion projections",
+    "Focused conformance, visual, accessibility, performance, and route-closure tests"
+  ],
+  "disallowedWork": [
+    "Missing-middle, graph, diagram, code, network, provider, flashcard, WebGL, FTC, economics, or physics implementation",
+    "Semantic asset, compiler, document, scroll-clock, URL, static-output, or accepted editor redesign",
+    "Editor imports from reader or reader imports from editor"
+  ],
+  "goal": "Transfer the accepted x + 3 = 7 typography and causal choreography into the semantic reader without sacrificing its searchable, scrollable, URL-addressable architecture, then stop for human visual approval.",
+  "target": "next-action.kp.perfect-the-reader-gold-equation-card-v0",
+  "slices": [
+    {
+      "id": "s01-canonical-baseline",
+      "title": "Capture canonical and reader baselines",
+      "status": "planned"
+    },
+    {
+      "id": "s02-parity-contract",
+      "title": "Encode named parity frames",
+      "status": "planned"
+    },
+    {
+      "id": "s03-style-clone",
+      "title": "Extract computed-style clone primitive",
+      "status": "planned"
+    },
+    {
+      "id": "s04-font-readiness",
+      "title": "Add font readiness and invalidation",
+      "status": "planned"
+    },
+    {
+      "id": "s05-editor-clone-migration",
+      "title": "Migrate editor material clone",
+      "status": "planned"
+    },
+    {
+      "id": "s06-reader-clone-migration",
+      "title": "Migrate reader material clone",
+      "status": "planned"
+    },
+    {
+      "id": "s07-typography-conformance",
+      "title": "Prove typography and geometry parity",
+      "status": "planned"
+    },
+    {
+      "id": "s08-neutral-frame-api",
+      "title": "Define neutral visual frame API",
+      "status": "planned"
+    },
+    {
+      "id": "s09-motion-planner",
+      "title": "Extract accepted motion planner",
+      "status": "planned"
+    },
+    {
+      "id": "s10-token-projection",
+      "title": "Extract semantic token projection",
+      "status": "planned"
+    },
+    {
+      "id": "s11-owner-renderer",
+      "title": "Generalize stable owner renderer",
+      "status": "planned"
+    },
+    {
+      "id": "s12-persistent-reader-stage",
+      "title": "Persist reader material stage",
+      "status": "planned"
+    },
+    {
+      "id": "s13-subtraction",
+      "title": "Transfer subtraction choreography",
+      "status": "planned"
+    },
+    {
+      "id": "s14-cancellation",
+      "title": "Transfer cancellation choreography",
+      "status": "planned"
+    },
+    {
+      "id": "s15-successor-synthesis",
+      "title": "Transfer successor synthesis",
+      "status": "planned"
+    },
+    {
+      "id": "s16-native-handoff",
+      "title": "Complete stable ownership and handoff",
+      "status": "planned"
+    },
+    {
+      "id": "s17-scroll-clock",
+      "title": "Bridge continuous scroll clock",
+      "status": "planned"
+    },
+    {
+      "id": "s18-url-restoration",
+      "title": "Prove exact URL restoration",
+      "status": "planned"
+    },
+    {
+      "id": "s19-motion-policy",
+      "title": "Define motion preference policy",
+      "status": "planned"
+    },
+    {
+      "id": "s20-essential-reduced-motion",
+      "title": "Implement essential reduced motion",
+      "status": "planned"
+    },
+    {
+      "id": "s21-motion-selector",
+      "title": "Add persistent motion selector",
+      "status": "planned"
+    },
+    {
+      "id": "s22-focus-salience",
+      "title": "Align prose and equation focus",
+      "status": "planned"
+    },
+    {
+      "id": "s23-responsive-fit",
+      "title": "Harden responsive equation fit",
+      "status": "planned"
+    },
+    {
+      "id": "s24-remove-generic-sampler",
+      "title": "Remove superseded reader sampler",
+      "status": "planned"
+    },
+    {
+      "id": "s25-route-budgets",
+      "title": "Enforce architecture and route budgets",
+      "status": "planned"
+    },
+    {
+      "id": "s26-visual-review-gate",
+      "title": "Run full conformance and stop for review",
+      "status": "planned"
+    }
+  ]
+}
