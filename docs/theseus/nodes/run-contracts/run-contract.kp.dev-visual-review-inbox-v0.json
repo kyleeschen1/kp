@@ -135,7 +135,8 @@
     {
       "id": "s16-shadow-dom-review-shell",
       "title": "Shadow DOM review shell",
-      "status": "planned"
+      "summary": "The isolated fixed shell matches reader color, typography, and focus tokens; opens and closes by keyboard; fits 320px; prints nothing; and does not alter document dimensions.",
+      "status": "complete"
     },
     {
       "id": "s17-comment-capture-interaction",

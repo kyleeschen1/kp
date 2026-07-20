@@ -108,6 +108,12 @@
       "status": "passed",
       "scope": "s15 exact semantic reader capture provider",
       "checkedAt": "2026-07-20T23:48:18.262Z"
+    },
+    {
+      "command": "focused review shell browser checks and npm run typecheck",
+      "status": "passed",
+      "scope": "s16 fixed Shadow DOM shell focus responsive fit and zero reflow",
+      "checkedAt": "2026-07-20T23:53:09.723Z"
     }
   ],
   "expectedLearning": [

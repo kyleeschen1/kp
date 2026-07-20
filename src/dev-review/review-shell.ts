@@ -1,0 +1,208 @@
+export interface KpDevReviewShell {
+  readonly host: HTMLElement;
+  readonly root: ShadowRoot;
+  readonly launcher: HTMLButtonElement;
+  readonly panel: HTMLElement;
+  readonly content: HTMLElement;
+  readonly status: HTMLOutputElement;
+  open(): void;
+  close(): void;
+  dispose(): void;
+}
+
+export function mountKpDevReviewShell(ownerDocument: Document): KpDevReviewShell {
+  if (ownerDocument.querySelector("[data-kp-dev-review-shell]") !== null) {
+    throw new Error("The visual review shell is already mounted");
+  }
+
+  const host = ownerDocument.createElement("div");
+  host.dataset["kpDevReviewShell"] = "true";
+  host.setAttribute("aria-hidden", "false");
+  const root = host.attachShadow({ mode: "open" });
+  const style = ownerDocument.createElement("style");
+  style.textContent = shellStyles;
+
+  const launcher = button(ownerDocument, "launcher", "Review");
+  launcher.type = "button";
+  launcher.setAttribute("aria-expanded", "false");
+  launcher.setAttribute("aria-controls", "review-panel");
+  launcher.innerHTML = `<span aria-hidden="true">✦</span><span>Review</span>`;
+
+  const panel = ownerDocument.createElement("section");
+  panel.id = "review-panel";
+  panel.className = "panel";
+  panel.hidden = true;
+  panel.setAttribute("role", "dialog");
+  panel.setAttribute("aria-modal", "false");
+  panel.setAttribute("aria-labelledby", "review-title");
+
+  const header = ownerDocument.createElement("header");
+  const heading = ownerDocument.createElement("div");
+  const eyebrow = ownerDocument.createElement("span");
+  eyebrow.className = "eyebrow";
+  eyebrow.textContent = "Developer feedback";
+  const title = ownerDocument.createElement("h2");
+  title.id = "review-title";
+  title.textContent = "Review this moment";
+  heading.append(eyebrow, title);
+  const closeButton = button(ownerDocument, "close", "Close visual review");
+  closeButton.type = "button";
+  closeButton.textContent = "×";
+  header.append(heading, closeButton);
+
+  const content = ownerDocument.createElement("div");
+  content.className = "content";
+  const status = ownerDocument.createElement("output");
+  status.className = "status";
+  status.setAttribute("aria-live", "polite");
+  panel.append(header, content, status);
+  root.append(style, launcher, panel);
+  ownerDocument.body.append(host);
+
+  const open = (): void => {
+    panel.hidden = false;
+    launcher.hidden = true;
+    launcher.setAttribute("aria-expanded", "true");
+    closeButton.focus();
+  };
+  const close = (): void => {
+    panel.hidden = true;
+    launcher.hidden = false;
+    launcher.setAttribute("aria-expanded", "false");
+    launcher.focus();
+  };
+  const onKeyDown = (event: Event): void => {
+    if (event instanceof KeyboardEvent && event.key === "Escape" && !panel.hidden) {
+      event.preventDefault();
+      close();
+    }
+  };
+  launcher.addEventListener("click", open);
+  closeButton.addEventListener("click", close);
+  root.addEventListener("keydown", onKeyDown);
+
+  return {
+    host,
+    root,
+    launcher,
+    panel,
+    content,
+    status,
+    open,
+    close,
+    dispose() {
+      launcher.removeEventListener("click", open);
+      closeButton.removeEventListener("click", close);
+      root.removeEventListener("keydown", onKeyDown);
+      host.remove();
+    }
+  };
+}
+
+function button(ownerDocument: Document, className: string, label: string): HTMLButtonElement {
+  const element = ownerDocument.createElement("button");
+  element.className = className;
+  element.setAttribute("aria-label", label);
+  return element;
+}
+
+const shellStyles = `
+  :host {
+    --paper: #f7f3e8;
+    --surface: #fffaf0;
+    --ink: #16231d;
+    --muted: #59645e;
+    --accent: #df7047;
+    --relation: #1f6371;
+    --line: #d2d7cd;
+    position: fixed;
+    z-index: 2147483000;
+    right: 18px;
+    bottom: 18px;
+    color: var(--ink);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-synthesis: none;
+    line-height: 1.4;
+    pointer-events: none;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  button { color: inherit; font: inherit; }
+  button:focus-visible, textarea:focus-visible {
+    outline: 3px solid var(--relation);
+    outline-offset: 4px;
+  }
+  .launcher {
+    display: inline-flex;
+    align-items: center;
+    gap: .48rem;
+    min-height: 42px;
+    padding: .62rem .9rem;
+    border: 1px solid color-mix(in srgb, var(--ink) 16%, var(--line));
+    border-radius: 999px;
+    color: var(--surface);
+    background: var(--ink);
+    box-shadow: 0 12px 34px rgb(22 35 29 / 16%);
+    font-size: .78rem;
+    font-weight: 750;
+    letter-spacing: .01em;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .launcher > [aria-hidden] { color: var(--accent); font-size: .9rem; }
+  .panel {
+    width: min(360px, calc(100vw - 24px));
+    border: 1px solid color-mix(in srgb, var(--ink) 14%, var(--line));
+    border-radius: 1rem;
+    background: var(--surface);
+    box-shadow: 0 24px 70px rgb(22 35 29 / 18%);
+    overflow: hidden;
+    pointer-events: auto;
+  }
+  .panel[hidden] { display: none; }
+  header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1rem .78rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+  }
+  .eyebrow {
+    display: block;
+    margin-bottom: .18rem;
+    color: var(--accent);
+    font-size: .61rem;
+    font-weight: 800;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+  }
+  h2 {
+    margin: 0;
+    font-family: Iowan Old Style, Palatino Linotype, Book Antiqua, Palatino, Georgia, serif;
+    font-size: 1.12rem;
+    font-weight: 650;
+    letter-spacing: -.015em;
+  }
+  .close {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: var(--muted);
+    background: transparent;
+    font-size: 1.35rem;
+    line-height: 1;
+    place-items: center;
+    cursor: pointer;
+  }
+  .close:hover { color: var(--ink); background: color-mix(in srgb, var(--line) 42%, transparent); }
+  .content { padding: 1rem; }
+  .status { display: block; min-height: 1.2rem; padding: 0 1rem .75rem; color: var(--muted); font-size: .7rem; }
+  @media (max-width: 520px) {
+    :host { right: 12px; bottom: 12px; }
+    .panel { width: calc(100vw - 24px); }
+  }
+  @media print { :host { display: none; } }
+`;
