@@ -66,6 +66,12 @@
       "status": "passed",
       "scope": "s08 append-only local event store",
       "checkedAt": "2026-07-20T23:32:28.252Z"
+    },
+    {
+      "command": "node --test dev review inbox and store plus npm run typecheck",
+      "status": "passed",
+      "scope": "s09 event projection and cursor model",
+      "checkedAt": "2026-07-20T23:34:33.226Z"
     }
   ],
   "expectedLearning": [

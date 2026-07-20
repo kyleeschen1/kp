@@ -93,7 +93,8 @@
     {
       "id": "s09-query-status-cursor",
       "title": "Query status and cursor projection",
-      "status": "planned"
+      "summary": "Derived inbox state preserves append-only storage while supporting ordered concurrent notes, lifecycle status, and monotonic per-consumer cursors.",
+      "status": "complete"
     },
     {
       "id": "s10-dev-only-http-adapter",
