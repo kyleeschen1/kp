@@ -98,11 +98,29 @@
       "status": "passed",
       "scope": "s01 durable graph",
       "checkedAt": "2026-07-20T16:26:54.052Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-reader-architecture.test.ts",
+      "status": "passed",
+      "scope": "s02 five boundary direction, forbidden dependency, preservation, and rollback tests",
+      "checkedAt": "2026-07-20T16:32:34.543Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s02 existing concept-room and new semantic-reader architecture gates",
+      "checkedAt": "2026-07-20T16:32:35.458Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s02 public architecture contracts and all TypeScript projects",
+      "checkedAt": "2026-07-20T16:32:36.266Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s01 established a repeatable current production-route baseline: 325-byte empty initial HTML, no no-JS content, 36 assets and 309171 gzip bytes of loaded JS/CSS, three editor chunks, no loaded Three.js, and a 648.7ms timed seek with 36 intermediate samples but no scroll-controlled progress. The canonical 39-state visual and three performance checks remain green."
+    "summary": "s02 made the reader preservation boundary executable: five acyclic layers, public cross-layer entrypoints, no backward imports, no learner editor or Three.js dependencies, and an explicit x-plus-3 canonical-reference, promotion, preservation, and rollback contract."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

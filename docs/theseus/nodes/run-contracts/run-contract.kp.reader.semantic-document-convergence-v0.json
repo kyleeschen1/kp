@@ -59,7 +59,8 @@
     {
       "id": "s02",
       "title": "Enforce preservation and import boundaries",
-      "status": "planned"
+      "summary": "Added and verified semantic-reader dependency fitness, forbidden learner dependencies, canonical references, preservation boundary, promotion gate, and rollback unit.",
+      "status": "complete"
     },
     {
       "id": "s03",
