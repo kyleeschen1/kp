@@ -93,23 +93,29 @@ function requiredElement(
 function waitForHydration(player: HTMLElement): Promise<void> {
   if (player.dataset["kpEditorAnimationHydrated"] === "true") return Promise.resolve();
   return new Promise((resolve, reject) => {
-    const timeout = window.setTimeout(() => {
-      observer.disconnect();
-      reject(new Error("Timed out while hydrating the symbolic story animation."));
-    }, 5_000);
-    const observer = new MutationObserver(() => {
+    const startedAt = performance.now();
+    const check = () => {
+      // A newer shell render may replace this host while its lazy asset is loading.
+      // Treat detachment as cancellation so stale work cannot reject globally.
+      if (!player.isConnected) {
+        resolve();
+        return;
+      }
       if (player.dataset["kpEditorAnimationLoadError"] === "true") {
-        window.clearTimeout(timeout);
-        observer.disconnect();
         reject(new Error("The canonical symbolic story animation failed to load."));
         return;
       }
-      if (player.dataset["kpEditorAnimationHydrated"] !== "true") return;
-      window.clearTimeout(timeout);
-      observer.disconnect();
-      resolve();
-    });
-    observer.observe(player, { attributes: true });
+      if (player.dataset["kpEditorAnimationHydrated"] === "true") {
+        resolve();
+        return;
+      }
+      if (performance.now() - startedAt >= 5_000) {
+        reject(new Error("Timed out while hydrating the symbolic story animation."));
+        return;
+      }
+      window.requestAnimationFrame(check);
+    };
+    window.requestAnimationFrame(check);
   });
 }
 

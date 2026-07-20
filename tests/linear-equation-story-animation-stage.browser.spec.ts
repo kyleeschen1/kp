@@ -7,6 +7,7 @@ test("symbolic story stage reuses the canonical continuity player without editor
 }) => {
   await page.goto(conceptPath);
   const result = await page.evaluate(async () => {
+    // @ts-expect-error This absolute specifier is resolved by the browser's Vite server.
     const module = await import("/src/app-adapters/linear-equation-story-animation-stage.ts");
     const host = document.createElement("section");
     host.dataset["kpStoryAdapterProbe"] = "true";
@@ -17,9 +18,9 @@ test("symbolic story stage reuses the canonical continuity player without editor
       animationId: stage.animationId,
       progress: stage.getProgress(),
       playerId: stage.player.dataset["kpEditorAnimationId"],
-      recipe: stage.player.querySelector<HTMLElement>(
+      recipe: (stage.player.querySelector(
         "[data-kp-editor-equation-transition-id]"
-      )?.dataset["kpEditorEquationPresentationRecipe"]
+      ) as HTMLElement | null)?.dataset["kpEditorEquationPresentationRecipe"]
     };
   });
 

@@ -37,6 +37,14 @@ import {
   createLinearEquationCorrespondenceController,
   type KpLinearEquationCorrespondenceController
 } from "./linear-equation-correspondence-controller.ts";
+import {
+  createLinearEquationStoryAnimationStage,
+  type KpLinearEquationStoryAnimationStage
+} from "./linear-equation-story-animation-stage.ts";
+import {
+  renderLinearEquationSymbolicStory,
+  type KpLinearEquationSymbolicStoryLike
+} from "./linear-equation-symbolic-story-dom.ts";
 
 export type {
   KpConceptRoomArtifactLike,
@@ -76,6 +84,7 @@ export async function tryMountConceptRoomRoute(input: {
   readonly clipboard?: KpConceptRoomClipboard;
   readonly runtime?: KpConceptRoomRuntime;
   readonly validateArtifact?: KpConceptRoomArtifactValidator;
+  readonly symbolicStory?: KpLinearEquationSymbolicStoryLike;
 }): Promise<KpConceptRoomShellHandle | null> {
   const navigation = input.navigation ?? browserNavigationHost();
   const clipboard = input.clipboard ?? browserClipboard();
@@ -104,6 +113,8 @@ export async function tryMountConceptRoomRoute(input: {
   let scrollCoordinator: KpConceptRoomScrollCoordinator | undefined;
   let playbackController: KpConceptRoomPlaybackController | undefined;
   let correspondenceController: KpLinearEquationCorrespondenceController | undefined;
+  let storyAnimationStage: KpLinearEquationStoryAnimationStage | undefined;
+  let storyAnimationHost: HTMLElement | undefined;
   let initialCheckpointToRestore = location.search.length > 0 ? state.checkpoint : undefined;
   const roomEffects = createRoomEffectCoordinator({
     roomId: `concept.${entry.conceptId}`,
@@ -126,7 +137,38 @@ export async function tryMountConceptRoomRoute(input: {
     const preservedViewport = options.preserveShell
       ? updateRenderedShell(input.root, artifact, state, playing)
       : undefined;
-    const viewport = preservedViewport ?? renderShell(input.root, artifact, state, playing);
+    const viewport = preservedViewport ?? renderShell(
+      input.root,
+      artifact,
+      state,
+      playing,
+      input.symbolicStory
+    );
+    if (input.symbolicStory !== undefined) {
+      const storyHost = input.root.querySelector<HTMLElement>(
+        "[data-kp-symbolic-story-animation-host]"
+      );
+      if (storyHost !== null && storyHost !== storyAnimationHost) {
+        storyAnimationHost = storyHost;
+        storyAnimationStage?.dispose();
+        storyAnimationStage = undefined;
+        void createLinearEquationStoryAnimationStage(storyHost).then((nextStage) => {
+          if (isDisposed || storyAnimationHost !== storyHost || !storyHost.isConnected) {
+            nextStage.dispose();
+            return;
+          }
+          storyAnimationStage = nextStage;
+          nextStage.setProgress(state.timePermille / 1000);
+        }).catch((error: unknown) => {
+          if (isDisposed || storyAnimationHost !== storyHost || !storyHost.isConnected) return;
+          storyHost.dataset["kpSymbolicStoryAnimationError"] = "true";
+          storyHost.textContent = error instanceof Error
+            ? error.message
+            : "The symbolic animation is unavailable.";
+        });
+      }
+      storyAnimationStage?.setProgress(state.timePermille / 1000);
+    }
     if (preservedViewport === undefined) {
       scrollCoordinator?.refresh();
       if (initialCheckpointToRestore !== undefined) {
@@ -192,7 +234,7 @@ export async function tryMountConceptRoomRoute(input: {
           explicitCheckpoint = state.checkpoint;
         }
       }
-      void render();
+      void render({ preserveShell: link.dataset["kpConceptModeLink"] === undefined });
       roomEffects.start({
         kind: "url",
         route: formatConceptRoomRoute(conceptRoomStateRoute(state)),
@@ -235,8 +277,9 @@ export async function tryMountConceptRoomRoute(input: {
     const current = navigation.current();
     const currentEntry = resolveConceptRoomCatalogEntry(input.catalog, current.pathname);
     if (currentEntry?.conceptId !== entry.conceptId) return;
+    const previousMode = state.mode;
     state = stateForLocation(entry, artifact, current, navigation);
-    void render();
+    void render({ preserveShell: previousMode === state.mode });
     scrollCoordinator?.scrollTo(state.checkpoint, "auto");
   };
   scrollCoordinator = createConceptRoomScrollCoordinator({
@@ -339,6 +382,8 @@ export async function tryMountConceptRoomRoute(input: {
       playbackController?.dispose();
       scrollCoordinator?.dispose();
       correspondenceController?.dispose();
+      storyAnimationStage?.dispose();
+      storyAnimationHost = undefined;
       roomEffects.dispose();
       unsubscribe();
       input.root.removeEventListener("click", onClick);
@@ -404,7 +449,8 @@ function renderShell(
   root: HTMLElement,
   artifact: KpConceptRoomArtifactLike,
   state: KpConceptRoomState,
-  playing: boolean
+  playing: boolean,
+  symbolicStory?: KpLinearEquationSymbolicStoryLike
 ): HTMLElement {
   const checkpoint = artifact.manifest.checkpoints.find((item) => item.id === state.checkpoint);
   if (checkpoint === undefined) throw new Error(`Unknown concept checkpoint ${state.checkpoint}.`);
@@ -461,7 +507,22 @@ function renderShell(
     if (item.id === checkpoint.id) section.setAttribute("aria-current", "step");
     const heading = document.createElement("h2");
     heading.id = `kp-concept-checkpoint-${item.id}-title`;
-    heading.textContent = item.title;
+    if (state.mode === "touch") {
+      heading.textContent = item.title;
+    } else {
+      const headingLink = document.createElement("a");
+      headingLink.dataset["kpConceptRoomLink"] = "checkpoint";
+      headingLink.dataset["kpConceptCheckpointLink"] = item.id;
+      headingLink.href = formatConceptRoomRoute({
+        ...conceptRoomStateRoute(state),
+        checkpoint: item.id,
+        timePermille: item.progressPermille,
+        focus: item.semanticRefs
+      });
+      headingLink.textContent = item.title;
+      if (item.id === checkpoint.id) headingLink.setAttribute("aria-current", "step");
+      heading.append(headingLink);
+    }
     const copy = document.createElement("p");
     appendLinkedExplanation(copy, item, state);
     section.setAttribute("aria-labelledby", heading.id);
@@ -551,7 +612,11 @@ function renderShell(
   narration.setAttribute("aria-atomic", "true");
   narration.textContent = narrationForState(artifact, state);
   const verification = verificationDisclosure(artifact);
-  main.append(header, narration, stage, shareStatus, verification);
+  main.append(header, narration);
+  if (symbolicStory !== undefined) {
+    main.append(renderLinearEquationSymbolicStory(symbolicStory));
+  }
+  main.append(stage, shareStatus, verification);
   const style = document.createElement("style");
   style.dataset["kpLinearEquationExemplarStyle"] = "true";
   style.textContent = linearEquationExemplarCss();
@@ -580,10 +645,9 @@ function updateRenderedShell(
     if (narration.textContent !== nextNarration) narration.textContent = nextNarration;
   }
   artifact.manifest.checkpoints.forEach((checkpoint) => {
-    const link = shell.querySelector<HTMLAnchorElement>(
-      `[data-kp-concept-checkpoints] [data-kp-concept-checkpoint-link="${checkpoint.id}"]`
-    );
-    if (link !== null) {
+    shell.querySelectorAll<HTMLAnchorElement>(
+      `[data-kp-concept-checkpoint-link="${checkpoint.id}"]`
+    ).forEach((link) => {
       link.href = formatConceptRoomRoute({
         ...route,
         checkpoint: checkpoint.id,
@@ -591,7 +655,7 @@ function updateRenderedShell(
         focus: checkpoint.semanticRefs
       });
       setCurrent(link, checkpoint.id === state.checkpoint, "step");
-    }
+    });
     const section = shell.querySelector<HTMLElement>(
       `[data-kp-concept-explanation="${checkpoint.id}"]`
     );

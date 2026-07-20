@@ -1,5 +1,6 @@
 import {
   generatedConceptCatalog,
+  solveXPlusThreeSymbolicStory,
   type GeneratedConceptCatalogEntry
 } from "../content/public-api.ts";
 import {
@@ -40,6 +41,7 @@ async function bootstrap(): Promise<void> {
     root,
     catalog: conceptCatalog,
     runtime: runtimeModule.createLinearEquationConceptRuntime(),
+    symbolicStory: solveXPlusThreeSymbolicStory,
     validateArtifact: (artifact) => assertConceptPublicationFit(artifact, environment)
   });
   if (handle === null) {

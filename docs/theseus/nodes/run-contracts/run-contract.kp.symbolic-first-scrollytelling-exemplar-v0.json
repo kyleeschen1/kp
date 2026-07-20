@@ -97,11 +97,32 @@
       "scope": "s04 shared adapter typing",
       "checkedAt": "2026-07-20T13:56:36.322Z",
       "notes": "All TypeScript projects pass."
+    },
+    {
+      "command": "playwright symbolic story shell and route lifecycle",
+      "status": "passed",
+      "scope": "s05 semantic DOM order and lifecycle",
+      "checkedAt": "2026-07-20T14:05:51.065Z",
+      "notes": "Four browser checks pass for prose-before-stage order, search, canonical player, deep links, back navigation, and disposal."
+    },
+    {
+      "command": "npm run smoke:linear-equation",
+      "status": "passed",
+      "scope": "s05 preserved concept runtime",
+      "checkedAt": "2026-07-20T14:05:52.459Z",
+      "notes": "Two canonical, snapshot, review, provider, and fallback smoke tests pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s05 shell composition typing",
+      "checkedAt": "2026-07-20T14:05:53.389Z",
+      "notes": "All TypeScript projects pass."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Slice s04 mounts and seeks the canonical continuity-v1 solve-x player through a route-local registry; product composition is not yet switched."
+    "summary": "Slice s05 renders searchable x plus 3 equals 7 prose before its lazy canonical animation in DOM order while preserving the existing concept viewport and lifecycle."
   },
   "allowedWork": [
     "Route-local concept-room presentation, content composition, adapter, style, tests, stable visual checks, and review evidence for the approved x plus 3 equals 7 exemplar.",
@@ -138,12 +159,13 @@
     {
       "id": "s04-shared-animation-adapter",
       "title": "Reuse the continuity-v1 animation in the concept room",
-      "status": "in-progress"
+      "summary": "Mounted and seeked the canonical continuity-v1 solve-x player through a route-local explicit surface registry in commit 8e36ca4; no editor controls or global registry ownership leak into the stage.",
+      "status": "complete"
     },
     {
       "id": "s05-semantic-dom-order",
       "title": "Render prose before the visual field",
-      "status": "planned"
+      "status": "in-progress"
     },
     {
       "id": "s06-left-text-layout",

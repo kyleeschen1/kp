@@ -1,6 +1,10 @@
-import {
-  linearSolveAssetIds
-} from "../../../../src/semantic/linear-solve-asset.ts";
+const storySemanticRefs = {
+  initial: "equation.linear-solve.initial",
+  solved: "equation.linear-solve.solved",
+  subtract: "transform.linear-solve.subtract-both-sides-3",
+  cancel: "transform.linear-solve.cancel-left-additive-inverse",
+  simplify: "transform.linear-solve.simplify-right-difference"
+} as const;
 
 export interface KpLinearEquationStorySegment {
   readonly text: string;
@@ -40,10 +44,10 @@ export const solveXPlusThreeSymbolicStory = defineLinearEquationSymbolicStory({
       id: "read-equality",
       title: "Read the equality",
       progressPermille: 0,
-      focus: [linearSolveAssetIds.initial],
+      focus: [storySemanticRefs.initial],
       segments: [
         { text: "Begin with " },
-        { text: "x + 3 = 7", semanticRef: linearSolveAssetIds.initial },
+        { text: "x + 3 = 7", semanticRef: storySemanticRefs.initial },
         { text: ". The equals sign is a promise: both sides still name the same value." }
       ]
     },
@@ -51,10 +55,10 @@ export const solveXPlusThreeSymbolicStory = defineLinearEquationSymbolicStory({
       id: "subtract-both-sides",
       title: "Make the same move twice",
       progressPermille: 333,
-      focus: [linearSolveAssetIds.subtract],
+      focus: [storySemanticRefs.subtract],
       segments: [
         { text: "Subtract 3 from both sides. " },
-        { text: "The two −3 terms enter together", semanticRef: linearSolveAssetIds.subtract },
+        { text: "The two −3 terms enter together", semanticRef: storySemanticRefs.subtract },
         { text: ", so equality never breaks." }
       ]
     },
@@ -62,10 +66,10 @@ export const solveXPlusThreeSymbolicStory = defineLinearEquationSymbolicStory({
       id: "cancel-opposites",
       title: "Let opposites cancel",
       progressPermille: 667,
-      focus: [linearSolveAssetIds.cancel],
+      focus: [storySemanticRefs.cancel],
       segments: [
         { text: "On the left, " },
-        { text: "+3 and −3 cancel", semanticRef: linearSolveAssetIds.cancel },
+        { text: "+3 and −3 cancel", semanticRef: storySemanticRefs.cancel },
         { text: ". The x remains the same object throughout the rearrangement." }
       ]
     },
@@ -73,10 +77,10 @@ export const solveXPlusThreeSymbolicStory = defineLinearEquationSymbolicStory({
       id: "read-solution",
       title: "Read what remains",
       progressPermille: 1000,
-      focus: [linearSolveAssetIds.simplify, linearSolveAssetIds.solved],
+      focus: [storySemanticRefs.simplify, storySemanticRefs.solved],
       segments: [
         { text: "On the right, 7 − 3 becomes 4. The equation settles at " },
-        { text: "x = 4", semanticRef: linearSolveAssetIds.solved },
+        { text: "x = 4", semanticRef: storySemanticRefs.solved },
         { text: "." }
       ]
     }
