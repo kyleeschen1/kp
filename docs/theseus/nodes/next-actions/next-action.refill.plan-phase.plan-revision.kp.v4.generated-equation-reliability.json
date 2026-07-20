@@ -48,6 +48,12 @@
       "status": "passed",
       "scope": "s05 bounded render-clock temporal evidence",
       "checkedAt": "2026-07-20T23:24:55.753Z"
+    },
+    {
+      "command": "node --test dev review semantic target and npm run typecheck",
+      "status": "passed",
+      "scope": "s06 stable semantic pointer evidence",
+      "checkedAt": "2026-07-20T23:28:36.978Z"
     }
   ],
   "expectedLearning": [

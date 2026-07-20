@@ -75,7 +75,8 @@
     {
       "id": "s06-semantic-pointer-target",
       "title": "Semantic pointer target",
-      "status": "planned"
+      "summary": "Pointer feedback resolves reader selector, object, transformation, and material-owner ids plus clamped normalized geometry.",
+      "status": "complete"
     },
     {
       "id": "s07-review-session-model",
