@@ -422,11 +422,23 @@
       "status": "passed",
       "scope": "s20 accessible control types and layer fitness",
       "checkedAt": "2026-07-20T18:03:05.726Z"
+    },
+    {
+      "command": "node --test semantic reader equation render plan and architecture suites",
+      "status": "passed",
+      "scope": "s21 nine forward rewind mismatch and layer-boundary tests",
+      "checkedAt": "2026-07-20T18:08:13.402Z"
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s21 reader-owned render-plan types and dependency fitness",
+      "checkedAt": "2026-07-20T18:08:14.512Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s20 preserves exact scroll motion by default while reduced-motion users receive the same conceptual sequence as stable labeled checkpoints and native control metadata."
+    "summary": "s21 projects canonical runtime frames into reader-owned equation plans, including focus, semantic diagnostics, and direction-aware endpoints and lifecycles, without DOM or editor coupling."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

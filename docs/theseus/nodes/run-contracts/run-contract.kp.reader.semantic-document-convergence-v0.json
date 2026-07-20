@@ -173,7 +173,8 @@
     {
       "id": "s21",
       "title": "Project neutral frames into EquationRenderPlan",
-      "status": "planned"
+      "summary": "Projected neutral frames into immutable reader equation render plans. Focused tests, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s22",

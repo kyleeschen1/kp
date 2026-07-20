@@ -8,3 +8,12 @@ export {
   type KpReaderAdapterRegistry,
   type KpReaderMountedAdapter
 } from "./adapter-registry.ts";
+export {
+  projectKpReaderEquationRenderPlan,
+  type KpReaderEquationRelationPlan,
+  type KpReaderEquationRenderPlan,
+  type KpReaderEquationRenderPlanDiagnostic,
+  type KpReaderEquationSelectorPlan,
+  type KpReaderEquationStatePlan,
+  type KpReaderEquationTransitionPlan
+} from "./equation-render-plan.ts";
