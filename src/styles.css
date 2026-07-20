@@ -1439,6 +1439,7 @@ h2 {
   background-size: 28px 28px;
 }
 
+.kp-editor-exemplar-card,
 .kp-ftc-editor-surface {
   display: grid;
   gap: 1rem;
@@ -1450,17 +1451,21 @@ h2 {
   background: #fffdf7;
 }
 
+.kp-editor-exemplar-card > header,
 .kp-ftc-editor-surface > header {
   display: grid;
   justify-items: start;
   gap: 0.45rem;
 }
 
+.kp-editor-exemplar-card > header h2,
+.kp-editor-exemplar-card > header p,
 .kp-ftc-editor-surface > header h2,
 .kp-ftc-editor-surface > header p {
   margin: 0;
 }
 
+.kp-editor-exemplar-card > header a,
 .kp-ftc-editor-surface > header button,
 .kp-ftc-learner-view > nav button {
   border: 1px solid #31584a;
@@ -1469,6 +1474,7 @@ h2 {
   color: #18352a;
   background: #f7f3e8;
   font-weight: 700;
+  text-decoration: none;
 }
 
 .kp-ftc-editor-surface [data-kp-tutorial-inspector] {

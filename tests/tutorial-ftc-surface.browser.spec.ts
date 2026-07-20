@@ -46,12 +46,31 @@ test("FTC tutorial is available inside the editor and as a learner view", async 
   page
 }) => {
   await page.goto("/", { waitUntil: "networkidle" });
+  const cards = page.locator(".preview-stage > *");
+  const conceptLauncher = page.locator("[data-kp-linear-equation-editor-launcher]");
+  await expect(cards.nth(0)).toHaveAttribute("data-kp-linear-equation-editor-launcher", "");
+  await expect(cards.nth(1)).toHaveAttribute("data-kp-editor-animation-library", "");
+  await expect(cards.nth(2)).toHaveAttribute("data-kp-type", "graph-3d");
+  await expect(cards.last()).toHaveAttribute("data-kp-ftc-editor-launcher", "");
+  await expect(conceptLauncher.getByRole("link", { name: "Open concept room" })).toHaveAttribute(
+    "href",
+    "/concepts/mathematics/linear-equations/solve-with-balance"
+  );
   await expect(page.locator("[data-kp-ftc-editor-launcher]")).toBeVisible();
   await page.locator('[data-action="load-ftc-tutorial-editor"]').click();
   await expect(page.locator("[data-kp-ftc-editor-surface]")).toBeVisible();
   await page.locator('[data-action="show-ftc-tutorial"]').click();
   await expect(page.locator("[data-kp-ftc-learner-view]")).toBeVisible();
   await expect(page).toHaveURL(/view=ftc-tutorial/);
+});
+
+test("linear-equation editor card opens the canonical concept room", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  await page.getByRole("link", { name: "Open concept room" }).click();
+  await expect(page).toHaveURL(
+    /\/concepts\/mathematics\/linear-equations\/solve-with-balance/
+  );
+  await expect(page.locator('[data-kp-concept-room-mounted="true"]')).toBeAttached();
 });
 
 test("FTC full-motion playback keeps KaTeX geometry stable within a claim", async ({

@@ -200,16 +200,32 @@ function renderPreviewStage(
   equationAnimationId: string | undefined,
   editorAnimationDescriptorId: string | undefined
 ): string {
+  const graph3DPreviews = document.objects
+    .filter((object) => object.type === "graph-3d")
+    .map((object) => renderObjectPreview(object, document));
+  const remainingPreviews = document.objects
+    .filter((object) => object.type !== "graph-3d")
+    .map((object) => renderObjectPreview(object, document));
+
+  // Keep the product entry points and primary visual capability ahead of the longer asset catalog.
   return [
-    renderKpFtcTutorialEditorLauncher(),
+    renderLinearEquationConceptRoomLauncher(),
     renderEditorAnimationLibrary(editorAnimationDescriptorId),
+    ...graph3DPreviews,
     renderEquationMotionDemo(equationAnimationId),
-    ...document.objects.map((object) => renderObjectPreview(object, document))
+    ...remainingPreviews,
+    renderKpFtcTutorialEditorLauncher()
   ].join("");
 }
 
+function renderLinearEquationConceptRoomLauncher(): string {
+  return `<section class="kp-editor-exemplar-card" data-kp-linear-equation-editor-launcher aria-labelledby="kp-linear-equation-editor-launcher-title">
+    <header><p class="eyebrow">See concepts move</p><h2 id="kp-linear-equation-editor-launcher-title">Solve a linear equation</h2><p>Watch algebraic symbols and balance geometry transform together, then inspect or share any exact state.</p><a href="/concepts/mathematics/linear-equations/solve-with-balance">Open concept room</a></header>
+  </section>`;
+}
+
 function renderKpFtcTutorialEditorLauncher(): string {
-  return `<section class="kp-ftc-editor-surface" data-kp-ftc-editor-launcher aria-labelledby="kp-ftc-editor-launcher-title">
+  return `<section class="kp-editor-exemplar-card kp-ftc-editor-surface" data-kp-ftc-editor-launcher aria-labelledby="kp-ftc-editor-launcher-title">
     <header><p class="eyebrow">Reviewable tutorial exemplar</p><h2 id="kp-ftc-editor-launcher-title">Fundamental Theorem of Calculus</h2><p>Load the graph-led learner surface and its semantic inspector on demand.</p><button type="button" data-action="load-ftc-tutorial-editor">Load FTC exemplar</button></header>
   </section>`;
 }
