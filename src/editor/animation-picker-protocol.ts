@@ -93,10 +93,24 @@ export function navigateKpEditorAnimationPicker(
   };
 }
 
+export function refreshKpEditorAnimationPicker(
+  state: KpEditorAnimationPickerProtocolState,
+  model: KpEditorAnimationPickerModel
+): KpEditorAnimationPickerProtocolState {
+  return createKpEditorAnimationPickerProtocolState(model, {
+    ...(state.cursorRowId === undefined
+      ? {}
+      : { cursorDescriptorId: state.cursorRowId }),
+    query: state.query
+  });
+}
+
 export function acceptKpEditorAnimationPicker(
   state: KpEditorAnimationPickerProtocolState
 ): KpEditorAnimationPickerSelectionIntent {
-  const rowId = state.cursorRowId;
+  const rowId = state.rows.some((row) => row.id === state.cursorRowId)
+    ? state.cursorRowId
+    : undefined;
   const outcome: KpEditorAnimationPickerSelectionOutcome = rowId === undefined
     ? { kind: "no-selection" }
     : { kind: "accepted", rowIds: [rowId] };

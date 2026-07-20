@@ -14,6 +14,11 @@
       "kind": "file",
       "path": "src/editor/animation-picker-protocol.ts",
       "summary": "KP-owned adapter from grouped animation descriptors to renderer-neutral picker state, navigation commands, and tagged selection intents."
+    },
+    {
+      "kind": "file",
+      "path": "tests/kp-editor-animation-picker-protocol.test.ts",
+      "summary": "Language-neutral KP conformance cases for cursor identity, clamped navigation, refresh reconciliation, and tagged outcomes."
     }
   ],
   "dependsOn": {
@@ -43,11 +48,25 @@
       "scope": "KP protocol types",
       "checkedAt": "2026-07-20T00:22:47.694Z",
       "notes": "Application, Node, test, and domain TypeScript projects pass from the isolated worktree using KP's existing dependency tree."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-animation-picker.test.ts tests/kp-editor-animation-picker-protocol.test.ts",
+      "status": "passed",
+      "scope": "KP picker conformance",
+      "checkedAt": "2026-07-20T00:26:30.961Z",
+      "notes": "Eight tests pass: grouped snapshot projection, clamped navigation, empty state, identity-based refresh, stale identity rejection, and distinct accepted/no-selection/cancelled intents."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "KP conformance types",
+      "checkedAt": "2026-07-20T00:26:42.427Z",
+      "notes": "All KP application, Node, test, and domain TypeScript projects pass after refresh and stale-identity coverage."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "KP now adapts its existing grouped animation picker to a local renderer-neutral snapshot with stable descriptor identity, cursor projection, clamped navigation commands, and tagged selection intents carrying surface/provider/query provenance; conformance cases remain to be pinned."
+    "summary": "KP conformance now pins clamped navigation, empty no-cursor state, refresh by row identity across reordering and relabeling, valid fallback after deletion, stale cursor rejection, and distinct tagged selection outcomes. Cross-consumer receipt remains."
   },
   "expectedLearning": [
     "Whether KP can consume the language-neutral Spindle picker state and intent boundary without depending on Spindle implementation code."
