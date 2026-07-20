@@ -26,3 +26,7 @@ export {
   type KpReaderScrollCheckpoint,
   type KpReaderScrollGeometry
 } from "./continuous-scroll-clock.ts";
+export {
+  decodeKpReaderSessionUrl,
+  encodeKpReaderSessionUrl
+} from "./lesson-url-codec.ts";

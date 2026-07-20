@@ -380,11 +380,23 @@
       "status": "passed",
       "scope": "s16 continuous clock types and layer fitness",
       "checkedAt": "2026-07-20T17:23:57.414Z"
+    },
+    {
+      "command": "node --test lesson URL continuous scroll and architecture suites",
+      "status": "passed",
+      "scope": "s17 14 round-trip malformed version continuity and boundary tests",
+      "checkedAt": "2026-07-20T17:25:57.070Z"
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s17 URL codec types and layer fitness",
+      "checkedAt": "2026-07-20T17:25:58.232Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s16 replaces discrete seek behavior with exact learner-controlled scroll progress while isolating layout measurement behind explicit geometry updates."
+    "summary": "s17 makes exact points of confusion durable and teacher-shareable through canonical version-aware URLs without requiring per-frame history updates."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

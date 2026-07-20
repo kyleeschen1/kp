@@ -149,7 +149,8 @@
     {
       "id": "s17",
       "title": "Implement lesson URL codec",
-      "status": "planned"
+      "summary": "Implemented canonical shareable lesson URL encoding and strict decoding. Focused tests, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s18",
