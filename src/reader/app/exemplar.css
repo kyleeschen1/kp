@@ -50,7 +50,7 @@ a { color: var(--kp-relation); text-underline-offset: .2em; }
 .kp-lesson-toc a { color: var(--kp-muted); text-decoration: none; }
 .kp-lesson-toc a:hover { color: var(--kp-relation); }
 
-.kp-lesson { min-width: 0; padding: clamp(4rem, 10vh, 7.5rem) 0 max(34vh, 14rem); }
+.kp-lesson { min-width: 0; padding: clamp(4rem, 10vh, 7.5rem) 0 18vh; }
 .kp-lesson > h1 { max-width: 760px; margin: 0; font-family: var(--kp-serif); font-size: clamp(3rem, 7vw, 6rem); font-weight: 500; letter-spacing: -.055em; line-height: .94; }
 .kp-lesson > p { max-width: 700px; margin: 1.25rem 0; color: var(--kp-muted); font-family: var(--kp-serif); font-size: clamp(1.15rem, 2vw, 1.42rem); line-height: 1.6; }
 .kp-semantic-link { appearance: none; padding: 0 .08em; border: 0; border-radius: .18rem; color: var(--kp-relation); background: transparent; font: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--kp-relation) 42%, transparent); text-underline-offset: .2em; cursor: help; }
@@ -63,6 +63,7 @@ a { color: var(--kp-relation); text-underline-offset: .2em; }
   gap: clamp(2.5rem, 7vw, 7rem);
   align-items: start;
   margin-top: clamp(5rem, 12vh, 9rem);
+  padding-bottom: max(20vh, 12rem);
 }
 .kp-animation-beats { grid-area: beats; margin: 0; padding: 0; list-style: none; }
 .kp-animation-beats > li { display: grid; align-content: center; min-height: clamp(330px, 72vh, 680px); padding: 4rem 0 4rem 1.4rem; border-left: 2px solid color-mix(in srgb, var(--kp-line) 65%, transparent); opacity: .46; transition: opacity 160ms ease, border-color 160ms ease; scroll-margin-block: 18vh; }

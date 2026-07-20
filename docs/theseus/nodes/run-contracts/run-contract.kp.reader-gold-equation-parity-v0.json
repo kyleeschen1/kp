@@ -141,7 +141,8 @@
     {
       "id": "s18-url-restoration",
       "title": "Prove exact URL restoration",
-      "status": "planned"
+      "summary": "Semantic frame URLs now override browser scroll restoration, wait for font-ready layout, survive reload, restore focus, reverse-seek exactly, and keep the final card fully visible.",
+      "status": "complete"
     },
     {
       "id": "s19-motion-policy",

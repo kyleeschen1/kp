@@ -55,6 +55,9 @@ interface LayoutState {
 
 const documentId = "lesson.solve-x.x-plus-3";
 const documentVersion = "1";
+// The semantic URL is the scroll authority. Browser history restoration can
+// otherwise race a requested frame when moving between two lesson URLs.
+window.history.scrollRestoration = "manual";
 const animation = createLinearSolveAnimationAsset();
 const linearChoreography = createKpLinearRearrangementChoreography(animation);
 const story = requireElement<HTMLElement>("[data-kp-asset]");
@@ -157,10 +160,11 @@ const unsubscribeFontReadiness = fontReadiness.subscribe(() => {
   scheduleScrollSample();
 });
 updateScrollGeometry();
-restoreUrlLocation();
 // Initial geometry must be measured from final KaTeX fonts. Rendering before
 // this gate creates a visible first-frame font and width swap on slow loads.
 void fontReadiness.whenReady().then(() => {
+  restoreUrlLocation();
+  updateScrollGeometry();
   scheduler.invalidate("fonts");
   scheduleScrollSample();
 });

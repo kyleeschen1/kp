@@ -111,25 +111,40 @@ async function captureEditor(page: Page, baseUrl: string): Promise<readonly Surf
 async function captureReader(page: Page, baseUrl: string): Promise<readonly SurfaceFrame[]> {
   const output: SurfaceFrame[] = [];
   for (const frame of frames) {
-    const url = new URL("/reader/solve-x/", baseUrl);
-    url.searchParams.set("kpLesson", "lesson.solve-x.x-plus-3");
-    url.searchParams.set("kpVersion", "1");
-    url.searchParams.set("kpProgress", String(Math.round(frame.progress * 1_000)));
-    await page.goto(url.toString(), { waitUntil: "networkidle" });
-    await page.locator('body[data-kp-reader-hydrated="true"]').waitFor();
-    await fontsReady(page);
-    const stage = page.locator("[data-kp-reader-equation-stage]");
-    await stage.waitFor();
-    await settle(page);
-    output.push(await captureSurface({
-      page,
-      surface: stage,
-      stageSelector: ":scope",
-      ownerSelector: "[data-kp-reader-equation-material-owner-id]",
-      fallbackSelector: "[data-kp-reader-equation-anchor-id]",
-      surfaceName: "reader",
-      ...frame
-    }));
+    // A fresh document makes each URL the sole frame authority; scroll state
+    // from a previous named capture must not contaminate parity evidence.
+    const browser = page.context().browser();
+    if (browser === null) throw new Error("Reader capture requires a browser context.");
+    const frameContext = await browser.newContext({ viewport });
+    const framePage = await frameContext.newPage();
+    try {
+      const url = new URL("/reader/solve-x/", baseUrl);
+      url.searchParams.set("kpLesson", "lesson.solve-x.x-plus-3");
+      url.searchParams.set("kpVersion", "1");
+      url.searchParams.set("kpProgress", String(Math.round(frame.progress * 1_000)));
+      await framePage.goto(url.toString(), { waitUntil: "networkidle" });
+      await framePage.locator('body[data-kp-reader-hydrated="true"]').waitFor();
+      await fontsReady(framePage);
+      await framePage.waitForFunction(
+        (progressPermille) => document.body.dataset["kpReaderProgress"] ===
+          String(progressPermille),
+        frame.progressPermille
+      );
+      const stage = framePage.locator("[data-kp-reader-equation-stage]");
+      await stage.waitFor();
+      await settle(framePage);
+      output.push(await captureSurface({
+        page: framePage,
+        surface: stage,
+        stageSelector: ":scope",
+        ownerSelector: "[data-kp-reader-equation-material-owner-id]",
+        fallbackSelector: "[data-kp-reader-equation-anchor-id]",
+        surfaceName: "reader",
+        ...frame
+      }));
+    } finally {
+      await frameContext.close();
+    }
   }
   return output;
 }
