@@ -116,7 +116,8 @@ function runtimeSession(
           renderer.renderBalanceScene(
             root,
             projectLinearEquationBalanceExemplar(trace, state.timePermille, {
-              diagramSemanticId: "diagram.balance"
+              diagramSemanticId: "diagram.balance",
+              operationWindows: symbolicOperationWindows
             }),
             { focusSemanticIds: state.focus }
           );

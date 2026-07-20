@@ -6,7 +6,11 @@ import type {
   KpLinearExpression
 } from "../../domains/public-api.ts";
 
-import { sampleLinearEquationTrace } from "./linear-equation-frame.ts";
+import {
+  projectLinearEquationTrace,
+  type KpSymbolicOperationWindow,
+  type KpSymbolicTransitionPhase
+} from "./linear-equation-symbolic.ts";
 
 export interface KpBalanceTermIr {
   readonly id: string;
@@ -88,6 +92,32 @@ export interface KpBalanceEqualityIr {
   readonly isEqual: true;
 }
 
+export interface KpBalanceMatchedRemovalPairIr {
+  readonly id: string;
+  readonly pairIndex: number;
+  readonly leftUnitId: string;
+  readonly rightUnitId: string;
+  readonly pathId: string;
+}
+
+export interface KpBalanceMatchedRemovalMotionIr {
+  readonly kind: "matched-removal";
+  readonly operationId: string;
+  readonly operationSemanticId: string;
+  readonly phase: KpSymbolicTransitionPhase;
+  readonly phaseProgressPermille: number;
+  readonly sourceFrameId: string;
+  readonly targetFrameId: string;
+  readonly pairs: readonly KpBalanceMatchedRemovalPairIr[];
+  readonly beamTiltDegrees: 0;
+  readonly equalityPreserved: true;
+}
+
+export interface KpBalanceProjectionOptions {
+  readonly diagramSemanticId: string;
+  readonly operationWindows?: readonly KpSymbolicOperationWindow[];
+}
+
 export interface KpBalanceOperationApplicationIr {
   readonly id: string;
   readonly operationSemanticId: string;
@@ -111,6 +141,7 @@ export interface KpBalanceSceneIr {
   readonly operationPaths: readonly KpBalanceOperationPathIr[];
   readonly symbolicCorrespondences: readonly KpBalanceSymbolicCorrespondenceIr[];
   readonly equality: KpBalanceEqualityIr;
+  readonly motion?: KpBalanceMatchedRemovalMotionIr;
   readonly operationApplications: readonly KpBalanceOperationApplicationIr[];
   readonly accessibleText: string;
   readonly diagnostics: readonly string[];
@@ -119,27 +150,38 @@ export interface KpBalanceSceneIr {
 export function projectLinearEquationBalanceExemplar(
   trace: KpLinearEquationTrace,
   progressPermille: number,
-  options: { readonly diagramSemanticId: string }
+  options: KpBalanceProjectionOptions
 ): KpBalanceSceneIr {
   requireCanonicalExemplarTrace(trace);
-  const sample = sampleLinearEquationTrace(trace, progressPermille);
-  const stage = stageFor(sample.frameIndex);
-  const left = projectSide(sample.frame, "left", trace.solution);
-  const right = projectSide(sample.frame, "right", trace.solution);
+  const symbolic = projectLinearEquationTrace(trace, progressPermille, {
+    ...(options.operationWindows === undefined ? {} : { operationWindows: options.operationWindows })
+  });
+  const transition = symbolic.transition;
+  if (transition === undefined) throw new Error("Canonical balance exemplar requires an operation transition.");
+  const targetOwnsFrame = transition.phase === "settle" || transition.phase === "target";
+  const frame = requireFrame(trace, targetOwnsFrame ? transition.toFrameId : transition.fromFrameId);
+  const frameIndex = trace.frames.findIndex((candidate) => candidate.id === frame.id);
+  const stage = stageFor(frameIndex);
+  const left = projectSide(frame, "left", trace.solution);
+  const right = projectSide(frame, "right", trace.solution);
   const operationPaths = projectOperationPaths(trace, stage);
   const partitionGroups = stage === "solved-partition" ? projectPartitionGroups(trace) : [];
   const physicalUnits = projectPhysicalUnits(trace, stage);
-  const operationApplications = sample.enteringOperation === undefined
+  const operation = trace.operations.find((candidate) => candidate.id === transition.operationId)!;
+  const operationApplications = transition.phase === "source" || transition.phase === "target"
     ? []
-    : projectTwoSidedOperation(sample.enteringOperation);
+    : projectTwoSidedOperation(operation);
+  const motion = operation.kind === "subtract-both-sides"
+    ? projectMatchedRemovalMotion(trace, transition.phase, transition.phaseProgressPermille)
+    : undefined;
   const operationText = operationApplications[0]?.spoken;
   return deepFreeze({
     schemaVersion: "kp.balance-exemplar-ir.v2" as const,
     exemplarKind: "canonical-two-x-plus-three" as const,
     stage,
     traceId: trace.id,
-    frameId: sample.frame.id,
-    equationSemanticId: sample.frame.semanticIds.equation,
+    frameId: frame.id,
+    equationSemanticId: frame.semanticIds.equation,
     diagramSemanticId: options.diagramSemanticId,
     progressPermille,
     sides: [left, right] as const,
@@ -153,13 +195,49 @@ export function projectLinearEquationBalanceExemplar(
       operationPaths
     ),
     equality: exactEquality(left.exactLoadAtVerifiedSolution, right.exactLoadAtVerifiedSolution),
+    ...(motion === undefined ? {} : { motion }),
     operationApplications,
     accessibleText: [
       `Balanced equation: ${left.accessibleText} equals ${right.accessibleText}.`,
+      motion === undefined || motion.phase === "source" || motion.phase === "target"
+        ? undefined
+        : "Three matched unit pairs leave together while the beam stays level.",
       operationText === undefined ? undefined : `${operationText} on both sides.`
     ].filter((value): value is string => value !== undefined).join(" "),
     diagnostics: trace.diagnostics.map((diagnostic) => `${diagnostic.code}: ${diagnostic.message}`)
   });
+}
+
+function projectMatchedRemovalMotion(
+  trace: KpLinearEquationTrace,
+  phase: KpSymbolicTransitionPhase,
+  phaseProgressPermille: number
+): KpBalanceMatchedRemovalMotionIr {
+  const operation = trace.operations[0]!;
+  return {
+    kind: "matched-removal",
+    operationId: operation.id,
+    operationSemanticId: operation.semanticId,
+    phase,
+    phaseProgressPermille,
+    sourceFrameId: operation.fromFrameId,
+    targetFrameId: operation.toFrameId,
+    pairs: [0, 1, 2].map((pairIndex) => ({
+      id: `balance.removal-pair.${pairIndex}`,
+      pairIndex,
+      leftUnitId: integerUnitId("left", pairIndex),
+      rightUnitId: integerUnitId("right", pairIndex + 5),
+      pathId: removalPathId(pairIndex)
+    })),
+    beamTiltDegrees: 0,
+    equalityPreserved: true
+  };
+}
+
+function requireFrame(trace: KpLinearEquationTrace, frameId: string): KpLinearEquationFrame {
+  const frame = trace.frames.find((candidate) => candidate.id === frameId);
+  if (frame === undefined) throw new Error(`Balance transition references missing frame ${frameId}.`);
+  return frame;
 }
 
 function projectSide(

@@ -47,15 +47,21 @@ test("symbolic and SVG balance views share frames, roles, focus, and KaTeX", asy
   await expect(balance).toHaveClass(/kp-role-focus-primary/);
 
   await page.evaluate(() => {
-    window.__kpProjectionParityFixture?.symbolic.render(500, ["operation.subtract-three"]);
-    window.__kpProjectionParityFixture?.balance.render(500, ["operation.subtract-three"]);
+    window.__kpProjectionParityFixture?.symbolic.render(250, ["operation.subtract-three"]);
+    window.__kpProjectionParityFixture?.balance.render(250, ["operation.subtract-three"]);
   });
-  await expect(symbolic).toHaveAttribute("data-kp-frame-id", "frame.step.1");
-  await expect(balance).toHaveAttribute("data-kp-frame-id", "frame.step.1");
-  await expect(balance.locator('[data-kp-operation-semantic-id="operation.subtract-three"]')).toHaveCount(2);
+  await expect(symbolic).toHaveAttribute("data-kp-frame-id", "frame.initial");
+  await expect(balance).toHaveAttribute("data-kp-frame-id", "frame.initial");
+  await expect(balance.locator("[data-kp-balance-operation-application]")).toHaveCount(2);
   await expect(balance.locator("[data-kp-balance-operation-application]").first()).toHaveClass(
     /kp-role-focus-primary/
   );
+  await page.evaluate(() => {
+    window.__kpProjectionParityFixture?.symbolic.render(500);
+    window.__kpProjectionParityFixture?.balance.render(500);
+  });
+  await expect(symbolic).toHaveAttribute("data-kp-frame-id", "frame.step.1");
+  await expect(balance).toHaveAttribute("data-kp-frame-id", "frame.step.1");
 
   await page.evaluate(() => {
     window.__kpProjectionParityFixture?.symbolic.render(1000);

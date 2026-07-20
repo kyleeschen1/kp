@@ -10,9 +10,10 @@ import { createCanonicalConceptRoomTrace } from "./fixtures/canonical-concept-ro
 test("symbolic and balance projections share one semantic clock", () => {
   const trace = createCanonicalConceptRoomTrace();
   for (const progress of [0, 400, 500, 750, 1000]) {
-    const symbolic = projectLinearEquationTrace(trace, progress);
+    const symbolic = projectLinearEquationTrace(trace, progress, { operationWindows: authoredWindows(trace) });
     const balance = projectLinearEquationBalanceExemplar(trace, progress, {
-      diagramSemanticId: "diagram.balance"
+      diagramSemanticId: "diagram.balance",
+      operationWindows: authoredWindows(trace)
     });
     assert.equal(balance.frameId, symbolic.frameId);
     assert.equal(balance.equationSemanticId, symbolic.equationSemanticId);
@@ -41,7 +42,7 @@ test("balance terms preserve symbolic semantic identity and exact fractions", ()
 
 test("each entering operation is represented on both sides", () => {
   const trace = createCanonicalConceptRoomTrace();
-  const subtract = projectLinearEquationBalanceExemplar(trace, 500, {
+  const subtract = projectLinearEquationBalanceExemplar(trace, 250, {
     diagramSemanticId: "diagram.balance"
   });
   assert.deepEqual(subtract.operationApplications.map((application) => application.side), [
@@ -57,6 +58,52 @@ test("each entering operation is represented on both sides", () => {
     diagramSemanticId: "diagram.balance"
   });
   assert.deepEqual(start.operationApplications, []);
+});
+
+test("matched subtraction uses the exact authored symbolic phase and paired identities", () => {
+  const trace = createCanonicalConceptRoomTrace();
+  const times = [0, 40, 200, 350, 400];
+  const scenes = times.map((progress) => projectLinearEquationBalanceExemplar(trace, progress, {
+    diagramSemanticId: "diagram.balance",
+    operationWindows: authoredWindows(trace)
+  }));
+  const symbolic = times.map((progress) => projectLinearEquationTrace(trace, progress, {
+    operationWindows: authoredWindows(trace)
+  }));
+  assert.deepEqual(scenes.map((scene) => scene.motion?.phase),
+    symbolic.map((scene) => scene.transition?.phase));
+  assert.deepEqual(scenes.map((scene) => scene.motion?.phase), [
+    "source", "introduce-operation", "transform", "settle", "target"
+  ]);
+  assert.deepEqual(scenes.map((scene) => scene.stage), [
+    "initial", "initial", "initial", "after-subtraction", "after-subtraction"
+  ]);
+  scenes.forEach((scene, index) => {
+    assert.equal(scene.motion?.operationId, symbolic[index]?.transition?.operationId);
+    assert.equal(scene.motion?.operationSemanticId, symbolic[index]?.transition?.operationSemanticId);
+    assert.equal(scene.motion?.phaseProgressPermille, symbolic[index]?.transition?.phaseProgressPermille);
+    assert.equal(scene.motion?.beamTiltDegrees, 0);
+    assert.equal(scene.motion?.equalityPreserved, true);
+    assert.deepEqual(scene.motion?.pairs.map((pair) => [pair.leftUnitId, pair.rightUnitId]), [
+      ["balance.left.unit.0", "balance.right.unit.5"],
+      ["balance.left.unit.1", "balance.right.unit.6"],
+      ["balance.left.unit.2", "balance.right.unit.7"]
+    ]);
+  });
+  assert.deepEqual(scenes[1]!.operationApplications.map((application) => application.side), ["left", "right"]);
+  assert.deepEqual(scenes[4]!.operationApplications, []);
+});
+
+test("matched subtraction sampling is deterministic through direct seek and rewind", () => {
+  const trace = createCanonicalConceptRoomTrace();
+  const sample = (progress: number) => projectLinearEquationBalanceExemplar(trace, progress, {
+    diagramSemanticId: "diagram.balance",
+    operationWindows: authoredWindows(trace)
+  });
+  const times = [0, 40, 200, 350, 400];
+  const forward = times.map(sample);
+  const reverse = [...times].reverse().map(sample).reverse();
+  assert.deepEqual(reverse, forward);
 });
 
 test("canonical start, middle, and end scenes preserve exact physical counts and equality", () => {
@@ -176,3 +223,10 @@ test("the exemplar projection rejects traces outside its fixed physical interpre
     diagramSemanticId: "diagram.balance"
   }), /canonical 2x \+ 3 = 8 trace/);
 });
+
+function authoredWindows(trace: ReturnType<typeof createCanonicalConceptRoomTrace>) {
+  return [
+    { operationId: trace.operations[0]!.id, startPermille: 0, endPermille: 400 },
+    { operationId: trace.operations[1]!.id, startPermille: 400, endPermille: 750 }
+  ] as const;
+}

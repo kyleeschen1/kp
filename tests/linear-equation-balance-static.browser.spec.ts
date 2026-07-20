@@ -62,8 +62,7 @@ test("static endpoints expose matched subtraction and the exact unsplit-remainde
   await expect(stageRoot.locator("[data-kp-balance-pivot]")).toBeVisible();
   await expect(stageRoot.locator('[data-kp-balance-support="fulcrum"]')).toBeVisible();
   await expect(scene.locator("[data-kp-balance-unit]")).toHaveCount(7);
-  await expect(scene.locator('[data-kp-balance-math-label="operation"] .katex')).toHaveCount(2);
-  await expect(scene.locator('[data-kp-operation-semantic-id="operation.subtract-three"]')).toHaveCount(2);
+  await expect(scene.locator('[data-kp-balance-math-label="operation"] .katex')).toHaveCount(0);
 
   await page.evaluate(() => window.__kpBalanceStatic!.render(1000, ["operation.divide-two"]));
   await expect(scene).toHaveAttribute("data-kp-balance-stage", "solved-partition");

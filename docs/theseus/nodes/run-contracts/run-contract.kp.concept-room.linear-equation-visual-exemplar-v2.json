@@ -133,7 +133,8 @@
     {
       "id": "s17",
       "title": "Synchronized subtraction geometry",
-      "status": "planned"
+      "summary": "Synchronized subtraction geometry implemented and verified.",
+      "status": "complete"
     },
     {
       "id": "s18",

@@ -4,10 +4,12 @@ import type { KpLinearEquationTrace } from "../../domains/public-api.ts";
 import {
   projectLinearEquationBalanceExemplar,
   type KpBalanceOperationApplicationIr,
+  type KpBalanceMatchedRemovalMotionIr,
   type KpBalancePartitionGroupIr,
   type KpBalancePhysicalUnitIr,
   type KpBalanceSceneIr,
-  type KpBalanceSideIr
+  type KpBalanceSideIr,
+  type KpSymbolicOperationWindow
 } from "../projections/public-api.ts";
 
 import { applyConceptRoomTheme } from "./concept-room-theme-adapters.ts";
@@ -32,6 +34,7 @@ export function createBalanceSceneController(
   trace: KpLinearEquationTrace,
   options: {
     readonly diagramSemanticId: string;
+    readonly operationWindows?: readonly KpSymbolicOperationWindow[];
     readonly theme?: KpConceptRoomThemeShape;
   }
 ): KpBalanceSceneController {
@@ -67,6 +70,7 @@ export function renderBalanceScene(
   const stageRoot = document.createElement("div");
   stageRoot.dataset["kpBalanceStageRoot"] = "true";
   stageRoot.style.position = "relative";
+  stageRoot.style.display = "grid";
   stageRoot.style.width = "100%";
   stageRoot.style.isolation = "isolate";
   applyConceptRoomTheme(stageRoot, theme);
@@ -78,11 +82,18 @@ export function renderBalanceScene(
   svg.dataset["kpEquationSemanticId"] = projection.equationSemanticId;
   svg.dataset["kpDiagramSemanticId"] = projection.diagramSemanticId;
   svg.dataset["kpProgressPermille"] = String(projection.progressPermille);
+  if (projection.motion !== undefined) {
+    svg.dataset["kpBalanceMotionKind"] = projection.motion.kind;
+    svg.dataset["kpBalanceMotionPhase"] = projection.motion.phase;
+    svg.dataset["kpBalanceMotionOperationId"] = projection.motion.operationSemanticId;
+    svg.dataset["kpBalanceBeamTiltDegrees"] = String(projection.motion.beamTiltDegrees);
+  }
   svg.setAttribute("viewBox", "0 0 720 390");
   svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
   svg.setAttribute("role", "img");
   svg.setAttribute("aria-label", projection.accessibleText);
   svg.style.position = "relative";
+  svg.style.gridArea = "1 / 1";
   svg.style.zIndex = "1";
   applyConceptRoomTheme(svg, theme);
   applyConceptRoomThemeRoles(
@@ -97,9 +108,14 @@ export function renderBalanceScene(
   description.textContent = accessibleGeometryDescription(projection);
   svg.append(title, description, structuralBalance());
   projection.operationApplications.forEach((application) => {
-    svg.append(renderOperation(application, focusSemanticIds, theme));
+    svg.append(renderOperation(application, projection.motion, focusSemanticIds, theme));
   });
-  if (projection.stage === "solved-partition") {
+  const motionActive = projection.motion !== undefined &&
+    projection.motion.phase !== "source" && projection.motion.phase !== "target" &&
+    !prefersReducedMotion(root);
+  if (motionActive) {
+    svg.append(renderMatchedRemovalSides(projection, projection.motion!, focusSemanticIds, theme));
+  } else if (projection.stage === "solved-partition") {
     svg.append(renderPartitionedSides(projection, focusSemanticIds, theme));
   } else {
     projection.sides.forEach((side) => {
@@ -111,16 +127,112 @@ export function renderBalanceScene(
   supportOverlay.setAttribute("viewBox", "0 0 720 390");
   supportOverlay.setAttribute("preserveAspectRatio", "xMidYMid meet");
   supportOverlay.setAttribute("aria-hidden", "true");
-  supportOverlay.style.position = "absolute";
-  supportOverlay.style.inset = "0";
+  supportOverlay.style.position = "relative";
+  supportOverlay.style.gridArea = "1 / 1";
   supportOverlay.style.width = "100%";
-  supportOverlay.style.height = "100%";
+  supportOverlay.style.height = "auto";
   supportOverlay.style.pointerEvents = "none";
   supportOverlay.style.zIndex = "2";
+  supportOverlay.style.transform = "translateZ(0)";
+  supportOverlay.style.willChange = "transform";
   supportOverlay.append(centralSupport());
   // Chrome composites SVG foreignObjects independently; a sibling overlay keeps the fulcrum visible without duplicating math.
   stageRoot.append(svg, supportOverlay);
   root.replaceChildren(stageRoot);
+}
+
+function renderMatchedRemovalSides(
+  projection: KpBalanceSceneIr,
+  motion: KpBalanceMatchedRemovalMotionIr,
+  focusSemanticIds: ReadonlySet<string>,
+  theme: KpConceptRoomThemeShape
+): SVGGElement {
+  const root = svgElement("g");
+  root.dataset["kpBalanceMatchedRemoval"] = "true";
+  const removedIds = new Set(motion.pairs.flatMap((pair) => [pair.leftUnitId, pair.rightUnitId]));
+  const sourceBySide = {
+    left: projection.physicalUnits.filter((unit) => unit.side === "left"),
+    right: projection.physicalUnits.filter((unit) => unit.side === "right")
+  } as const;
+  const targetBySide = {
+    left: sourceBySide.left.filter((unit) => !removedIds.has(unit.id)),
+    right: sourceBySide.right.filter((unit) => !removedIds.has(unit.id))
+  } as const;
+  const phaseProgress = motion.phaseProgressPermille / 1000;
+  const removalProgress = motion.phase === "transform" ? easeInOut(phaseProgress) :
+    motion.phase === "settle" ? 1 : 0;
+  // Reflow waits for settle so paired removal remains the sole causal act during transformation.
+  const reflowProgress = motion.phase === "settle" ? easeInOut(phaseProgress) : 0;
+
+  (["left", "right"] as const).forEach((side) => {
+    const sideGroup = svgElement("g");
+    sideGroup.dataset["kpBalanceSide"] = side;
+    sideGroup.dataset["kpBalanceMotionSide"] = side;
+    sideGroup.setAttribute("role", "group");
+    sideGroup.setAttribute("aria-label", `${side} side of the matched removal`);
+    const sourceLayout = rowLayout(sourceBySide[side], panCenters[side]);
+    const targetLayout = rowLayout(targetBySide[side], panCenters[side]);
+    const termGroups = new Map<string, SVGGElement>();
+    sourceBySide[side].forEach((unit) => {
+      let termGroup = termGroups.get(unit.semanticId);
+      if (termGroup === undefined) {
+        termGroup = semanticGroup(unit.semanticId, unit.kind === "variable-unit" ? "x units" : "unit weights",
+          focusSemanticIds, theme);
+        termGroups.set(unit.semanticId, termGroup);
+        sideGroup.append(termGroup);
+      }
+      const sourceBox = sourceLayout.get(unit.id)!;
+      let renderedBox = sourceBox;
+      let removalPair: KpBalanceMatchedRemovalMotionIr["pairs"][number] | undefined;
+      let removalX = 0;
+      let removalY = 0;
+      if (removedIds.has(unit.id)) {
+        removalPair = motion.pairs.find((candidate) =>
+          candidate.leftUnitId === unit.id || candidate.rightUnitId === unit.id
+        )!;
+        const direction = side === "left" ? 1 : -1;
+        removalX = direction * 52 * removalProgress;
+        removalY = -96 * removalProgress;
+        renderedBox = {
+          ...sourceBox,
+          x: sourceBox.x + removalX,
+          y: sourceBox.y + removalY
+        };
+      } else {
+        const targetBox = targetLayout.get(unit.id)!;
+        renderedBox = {
+          ...sourceBox,
+          x: sourceBox.x + (targetBox.x - sourceBox.x) * reflowProgress,
+          y: sourceBox.y + (targetBox.y - sourceBox.y) * reflowProgress
+        };
+      }
+      const unitNode = removalPair === undefined
+        ? renderUnit(unit, renderedBox)
+        : renderMovingIntegerUnit(unit, renderedBox);
+      if (removalPair !== undefined) {
+        const removalOpacity = 1 - smoothstep(0.62, 1, removalProgress);
+        // Retired copies leave the tree so focus semantics and the per-frame object budget stay exact.
+        if (removalOpacity <= .001) return;
+        unitNode.dataset["kpBalanceMotionRole"] = "matched-removal-unit";
+        unitNode.dataset["kpBalanceRemovalPair"] = removalPair.id;
+        unitNode.dataset["kpBalanceRemovalPairIndex"] = String(removalPair.pairIndex);
+        unitNode.dataset["kpBalanceTranslationX"] = String(removalX);
+        unitNode.dataset["kpBalanceTranslationY"] = String(removalY);
+        unitNode.dataset["kpOperationSemanticId"] = motion.operationSemanticId;
+        unitNode.setAttribute("opacity", String(removalOpacity));
+        applyConceptRoomThemeRoles(
+          unitNode,
+          rolesFor(motion.operationSemanticId, "equation.operation", focusSemanticIds),
+          theme
+        );
+      } else {
+        unitNode.dataset["kpBalanceMotionRole"] = "persistent-balance-unit";
+      }
+      termGroup.append(unitNode);
+    });
+    root.append(sideGroup);
+  });
+  return root;
 }
 
 function structuralBalance(): SVGGElement {
@@ -313,6 +425,7 @@ function sharedRemainderLinks(): SVGGElement {
 
 function renderOperation(
   application: KpBalanceOperationApplicationIr,
+  motion: KpBalanceMatchedRemovalMotionIr | undefined,
   focusSemanticIds: ReadonlySet<string>,
   theme: KpConceptRoomThemeShape
 ): SVGForeignObjectElement {
@@ -333,6 +446,13 @@ function renderOperation(
     rolesFor(application.operationSemanticId, "equation.operation", focusSemanticIds),
     theme
   );
+  if (motion !== undefined) {
+    const phaseProgress = motion.phaseProgressPermille / 1000;
+    const opacity = motion.phase === "introduce-operation" ? easeInOut(phaseProgress) :
+      motion.phase === "settle" ? 1 - easeInOut(phaseProgress) : 1;
+    label.style.opacity = String(opacity);
+    label.style.transform = `translateY(${(1 - opacity) * -8}px)`;
+  }
   return label;
 }
 
@@ -355,11 +475,54 @@ function renderUnit(
   unit: KpBalancePhysicalUnitIr,
   box: { readonly x: number; readonly y: number; readonly width: number; readonly height: number }
 ): SVGGElement {
+  const group = unitGroup(unit);
+  const shape = unitShape(unit, box);
+  const label = mathLabel({
+    ...box,
+    latex: unit.latex,
+    color: unit.kind === "variable-unit" ? "var(--kp-concept-variable)" : "var(--kp-concept-ink)",
+    kind: unit.kind === "variable-unit" ? "variable" : "unit"
+  });
+  group.append(shape, label);
+  return group;
+}
+
+function renderMovingIntegerUnit(
+  unit: KpBalancePhysicalUnitIr,
+  box: { readonly x: number; readonly y: number; readonly width: number; readonly height: number }
+): SVGGElement {
+  if (unit.kind !== "integer-unit") throw new Error("Matched subtraction can move only integer units.");
+  const group = unitGroup(unit);
+  // Moving foreignObjects can erase sibling SVG layers in Chrome; this transient numeral uses KaTeX's own font.
+  const label = svgElement("text");
+  label.dataset["kpBalanceMotionLabel"] = "unit";
+  setAttributes(label, {
+    x: String(box.x + box.width / 2),
+    y: String(box.y + box.height / 2),
+    fill: "var(--kp-concept-ink)",
+    "font-family": "KaTeX_Main, serif",
+    "font-size": "13",
+    "text-anchor": "middle",
+    "dominant-baseline": "central"
+  });
+  label.textContent = unit.latex;
+  group.append(unitShape(unit, box), label);
+  return group;
+}
+
+function unitGroup(unit: KpBalancePhysicalUnitIr): SVGGElement {
   const group = svgElement("g");
   group.dataset["kpBalanceUnit"] = unit.id;
   group.dataset["kpBalanceUnitKind"] = unit.kind;
   group.dataset["kpBalanceUnitOrdinal"] = String(unit.ordinal);
   group.setAttribute("aria-hidden", "true");
+  return group;
+}
+
+function unitShape(
+  unit: KpBalancePhysicalUnitIr,
+  box: { readonly x: number; readonly y: number; readonly width: number; readonly height: number }
+): SVGRectElement {
   const shape = svgElement("rect");
   shape.dataset["kpBalanceObjectShape"] = "true";
   setAttributes(shape, {
@@ -370,14 +533,7 @@ function renderUnit(
     stroke: unit.kind === "variable-unit" ? "var(--kp-concept-variable)" : "var(--kp-concept-unit)",
     "stroke-width": unit.kind === "variable-unit" ? "2.5" : "2"
   });
-  const label = mathLabel({
-    ...box,
-    latex: unit.latex,
-    color: unit.kind === "variable-unit" ? "var(--kp-concept-variable)" : "var(--kp-concept-ink)",
-    kind: unit.kind === "variable-unit" ? "variable" : "unit"
-  });
-  group.append(shape, label);
-  return group;
+  return shape;
 }
 
 function rowLayout(
@@ -395,6 +551,20 @@ function rowLayout(
     cursor += width + gap;
     return [unit.id, box] as const;
   }));
+}
+
+function easeInOut(value: number): number {
+  const clamped = Math.max(0, Math.min(1, value));
+  return clamped * clamped * (3 - 2 * clamped);
+}
+
+function smoothstep(start: number, end: number, value: number): number {
+  const progress = Math.max(0, Math.min(1, (value - start) / Math.max(.0001, end - start)));
+  return progress * progress * (3 - 2 * progress);
+}
+
+function prefersReducedMotion(root: HTMLElement): boolean {
+  return root.ownerDocument.defaultView?.matchMedia("(prefers-reduced-motion: reduce)").matches ?? false;
 }
 
 function mathLabel(input: {

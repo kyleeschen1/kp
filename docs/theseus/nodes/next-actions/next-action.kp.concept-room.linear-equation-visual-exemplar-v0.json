@@ -312,13 +312,37 @@
     {
       "command": "npm run build",
       "status": "passed",
-      "checkedAt": "2026-07-19T23:37:19.674Z",
-      "scope": "s16 production build after desktop and phone manual visual inspection"
+      "scope": "s16 production build after desktop and phone manual visual inspection",
+      "checkedAt": "2026-07-19T23:37:19.674Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s17 full repository suite: 1535 tests plus architecture, inference, and catalog gates",
+      "checkedAt": "2026-07-20T00:25:50.202Z"
+    },
+    {
+      "command": "playwright subtraction geometry, balance parity, static balance, and symbolic conformance cohorts",
+      "status": "passed",
+      "scope": "s17 10 browser checks for exact three-pair motion, level beam, no object overlap, shared operation focus, direct seek and rewind, reduced motion, KaTeX endpoints, and projection parity",
+      "checkedAt": "2026-07-20T00:25:51.927Z"
+    },
+    {
+      "command": "npm run typecheck, npm run build, and npm run smoke:linear-equation",
+      "status": "passed",
+      "scope": "s17 inferred public motion types, production build, canonical and snapshot routes, view switching, Review, disposal, and failure fallbacks",
+      "checkedAt": "2026-07-20T00:25:53.182Z"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "scope": "s17 durable contract, evidence records, and 664-node 8417-event workspace graph",
+      "checkedAt": "2026-07-20T00:34:58.367Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s16 complete: polished route-local static balance uses quiet themed SVG, KaTeX object and operation labels, persistent variable and integer units, exact grouping guides with an unsplit shared remainder, consistent focus roles, accessible group narration, responsive bounds, and zero canvas."
+    "summary": "s17 complete: subtraction geometry shares the authored symbolic clock and operation identity, lifts exactly three matched unit pairs inward without crossing persistent objects, holds the beam level, delays survivor reflow until settle, preserves focus through seek and rewind, and snaps to exact endpoints under reduced motion. Named live-route captures passed manual visual inspection after containing Chrome SVG foreignObject compositing."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."
