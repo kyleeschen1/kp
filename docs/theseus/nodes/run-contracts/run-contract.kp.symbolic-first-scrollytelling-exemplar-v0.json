@@ -204,13 +204,14 @@
     {
       "id": "s08-subtraction-salience",
       "title": "Perfect the subtraction salience exemplar",
-      "summary": "Starting the single subtraction transition salience exemplar; shared runtime and later beats remain within the preservation boundary.",
-      "status": "in-progress"
+      "summary": "The subtraction beat now fits within the stage, recenters as the equation grows, and coordinates a restrained orange operation underline with linked prose while preserving persistent material and equality.",
+      "status": "complete"
     },
     {
       "id": "s09-human-review-package",
       "title": "Capture review evidence and stop",
-      "status": "planned"
+      "summary": "Starting durable story-state captures, broad verification, and the mandatory human visual-review stop.",
+      "status": "in-progress"
     }
   ]
 }

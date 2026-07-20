@@ -10,6 +10,10 @@
       "kind": "file",
       "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
       "summary": "Active KP workflow queue for dashboard-backed semantic animation system work."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-20-symbolic-first-linear-equation-exemplar-review.md"
     }
   ],
   "decisions": [
@@ -80,10 +84,52 @@
       "status": "passed",
       "scope": "KP graph valid after closeout queue compaction and run-contract closure.",
       "checkedAt": "2026-07-10T08:49:09.069Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-20T15:13:51.010Z",
+      "notes": "All 1541 unit, server, architecture, inference, catalog, content, runtime, and project tests pass."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production",
+      "checkedAt": "2026-07-20T15:13:51.880Z",
+      "notes": "Typecheck and production Vite build pass."
+    },
+    {
+      "command": "npm run smoke:linear-equation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-20T15:13:52.788Z",
+      "notes": "Two canonical, snapshot, failure, and disposal smoke tests pass."
+    },
+    {
+      "command": "npm run test:browser:linear-equation-conformance",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-20T15:13:53.666Z",
+      "notes": "Three exact endpoint, seek/rewind, resize, and reduced-motion conformance tests pass."
+    },
+    {
+      "command": "npm run perf:linear-equation",
+      "status": "passed",
+      "scope": "performance",
+      "checkedAt": "2026-07-20T15:13:54.643Z",
+      "notes": "Three shell-shape, direct-seek stability, frame-budget, and zero-WebGL tests pass."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "visual-review",
+      "checkedAt": "2026-07-20T15:13:55.581Z",
+      "notes": "Captured 39 deterministic review states, including four linkable desktop story beats and the searchable phone document flow."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Current KP frontier is now composable semantic animation assets: define a typed artifact that can feed tutorials, cards, exports, flashcards, generated solutions, graph/code panels, and media consumers without making tutorial cards the core abstraction."
+    "summary": "The approved symbolic-first x+3 exemplar is implemented and verified through its mandatory human visual-review stop; promotion and generalization remain pending acceptance."
   }
 }

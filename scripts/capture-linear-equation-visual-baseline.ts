@@ -14,7 +14,10 @@ interface CaptureRecord {
   readonly url: string;
   readonly selector: string;
   readonly output: string;
-  readonly reference?: "current-concept-room" | "canonical-symbolic-motion";
+  readonly reference?:
+    | "current-concept-room"
+    | "canonical-symbolic-motion"
+    | "symbolic-story-exemplar";
   readonly progress?: number;
   readonly time?: number;
   readonly viewport?: { readonly width: number; readonly height: number };
@@ -33,6 +36,7 @@ try {
     reference: "current-concept-room"
   });
   const canonicalConceptUrl = page.url();
+  await captureSymbolicStoryStates(canonicalConceptUrl);
   await page.getByRole("link", { name: "Equation", exact: true }).click();
   await page.locator("[data-kp-symbolic-equation]").waitFor();
   await captureCurrent("linear-room-plain-symbolic", "[data-kp-concept-room-shell]");
@@ -178,6 +182,68 @@ async function captureDivisionCheckpoints(canonicalConceptUrl: string): Promise<
       viewport: checkpoint.viewport
     });
   }
+}
+
+async function captureSymbolicStoryStates(canonicalConceptUrl: string): Promise<void> {
+  const beats = [
+    { id: "read-equality", progress: 0 },
+    { id: "subtract-both-sides", progress: 0.333 },
+    { id: "cancel-opposites", progress: 0.667 },
+    { id: "read-solution", progress: 1 }
+  ] as const;
+
+  await page.setViewportSize(viewport);
+  for (const beat of beats) {
+    const url = new URL(canonicalConceptUrl);
+    url.searchParams.set("p.story", beat.id);
+    await page.goto(url.href, { waitUntil: "domcontentloaded", timeout: 15_000 });
+    const active = page.locator(`[data-kp-symbolic-story-beat="${beat.id}"]`);
+    await active.waitFor();
+    await requireAttribute(active, "aria-current", "step");
+    const player = page.locator("[data-kp-symbolic-story-player]");
+    await player.waitFor();
+    await page.waitForFunction((expected) =>
+      document.querySelector("[data-kp-symbolic-story-player]")
+        ?.getAttribute("data-kp-editor-animation-progress") === expected,
+    String(beat.progress));
+    await settle(page);
+    const id = `symbolic-story-${beat.id}-desktop`;
+    const output = path.join(outputRoot, `${id}.png`);
+    await page.screenshot({ path: output, fullPage: false });
+    captures.push({
+      id,
+      url: page.url(),
+      selector: "[data-kp-symbolic-story]",
+      output: path.relative(process.cwd(), output),
+      reference: "symbolic-story-exemplar",
+      progress: beat.progress,
+      viewport
+    });
+  }
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  const phoneUrl = new URL(canonicalConceptUrl);
+  phoneUrl.searchParams.set("p.story", "read-equality");
+  await page.goto(phoneUrl.href, { waitUntil: "domcontentloaded", timeout: 15_000 });
+  const story = page.locator("[data-kp-symbolic-story]");
+  await story.locator("[data-kp-symbolic-story-player]").waitFor();
+  await settle(page);
+  const phoneId = "symbolic-story-document-flow-phone";
+  const phoneOutput = path.join(outputRoot, `${phoneId}.png`);
+  await story.screenshot({ path: phoneOutput });
+  captures.push({
+    id: phoneId,
+    url: page.url(),
+    selector: "[data-kp-symbolic-story]",
+    output: path.relative(process.cwd(), phoneOutput),
+    reference: "symbolic-story-exemplar",
+    progress: 0,
+    viewport: { width: 390, height: 844 }
+  });
+
+  await page.setViewportSize(viewport);
+  await page.goto(canonicalConceptUrl, { waitUntil: "domcontentloaded", timeout: 15_000 });
+  await page.locator("[data-kp-linear-equation-coordinated-stage]").waitFor();
 }
 
 async function captureCoordinatedCheckpoints(canonicalConceptUrl: string): Promise<void> {
