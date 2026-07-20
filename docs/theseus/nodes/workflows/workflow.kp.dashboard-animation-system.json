@@ -130,6 +130,6 @@
   ],
   "progress": {
     "state": "partial",
-    "summary": "The approved symbolic-first x+3 exemplar is implemented and verified through its mandatory human visual-review stop; promotion and generalization remain pending acceptance."
+    "summary": "Post-review gap: the symbolic story reuses canonical frames but its 620ms beat seek does not yet expose the independent x+3 card's legible material-motion experience. Preserve smaller-symbol feedback for the same focused repair."
   }
 }
