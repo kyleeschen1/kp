@@ -187,7 +187,7 @@ test("print keeps the visual and all prose in document order without interactive
   const order = await page.locator("[data-kp-concept-room-shell] > *").evaluateAll((elements) =>
     elements.map((element) => element.tagName.toLowerCase())
   );
-  expect(order).toEqual(["header", "div", "p", "details"]);
+  expect(order).toEqual(["header", "p", "div", "p", "details"]);
 });
 
 test("route-local exemplar styling does not leak into the legacy root", async ({ page }) => {

@@ -134,6 +134,7 @@ function decorateTargets(root: HTMLElement): void {
     "[data-kp-balance-scene][data-kp-semantic-id]",
     "[data-kp-balance-scene] [data-kp-semantic-id]"
   ].join(","))];
+  const keyboardTargets = new Set<string>();
   elements.forEach((element, index) => {
     const semanticId = element instanceof HTMLAnchorElement
       ? element.dataset["kpConceptSemanticLink"]
@@ -147,7 +148,23 @@ function decorateTargets(root: HTMLElement): void {
     element.setAttribute("title", definitionFor(semanticId));
     element.setAttribute("aria-describedby", "kp-linear-equation-semantic-definition");
     if (!(element instanceof HTMLAnchorElement) && element.getAttribute("aria-hidden") !== "true") {
-      element.setAttribute("tabindex", "0");
+      const keyboardKey = `${surface}.${semanticId}`;
+      if (!keyboardTargets.has(keyboardKey)) {
+        keyboardTargets.add(keyboardKey);
+        element.dataset["kpCorrespondenceKeyboardTarget"] = "true";
+        element.setAttribute("tabindex", "0");
+        if (!element.hasAttribute("aria-label")) {
+          element.dataset["kpCorrespondenceGeneratedLabel"] = "true";
+          element.setAttribute("aria-label", definitionFor(semanticId));
+        }
+      } else {
+        delete element.dataset["kpCorrespondenceKeyboardTarget"];
+        element.removeAttribute("tabindex");
+        if (element.dataset["kpCorrespondenceGeneratedLabel"] === "true") {
+          delete element.dataset["kpCorrespondenceGeneratedLabel"];
+          element.removeAttribute("aria-label");
+        }
+      }
     }
   });
 }

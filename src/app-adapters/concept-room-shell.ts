@@ -481,7 +481,8 @@ function renderShell(
           timePermille: item.progressPermille,
           focus: item.semanticRefs
         }),
-        item.id
+        item.id,
+        `Copy link to ${item.title} step`
       ));
     }
     checkpointSections.append(section);
@@ -519,7 +520,8 @@ function renderShell(
   controls.append(shareButton(
     "Copy frame link",
     formatConceptRoomRoute(conceptRoomStateRoute(state)),
-    "current"
+    "current",
+    "Copy link to current frame"
   ));
   controls.append(modeControls);
   const viewport = document.createElement("section");
@@ -548,8 +550,14 @@ function renderShell(
   shareStatus.dataset["kpConceptShareStatus"] = "true";
   shareStatus.setAttribute("role", "status");
   shareStatus.setAttribute("aria-live", "polite");
+  const narration = document.createElement("p");
+  narration.dataset["kpConceptNarration"] = "true";
+  narration.setAttribute("role", "status");
+  narration.setAttribute("aria-live", "polite");
+  narration.setAttribute("aria-atomic", "true");
+  narration.textContent = narrationForState(artifact, state);
   const verification = verificationDisclosure(artifact);
-  main.append(header, stage, shareStatus, verification);
+  main.append(header, narration, stage, shareStatus, verification);
   const style = document.createElement("style");
   style.dataset["kpLinearEquationExemplarStyle"] = "true";
   style.textContent = linearEquationExemplarCss();
@@ -571,6 +579,12 @@ function updateRenderedShell(
   shell.dataset["kpConceptProjection"] = state.projection;
   shell.dataset["kpConceptPlaying"] = String(playing);
   const route = conceptRoomStateRoute(state);
+  const narration = shell.querySelector<HTMLElement>("[data-kp-concept-narration]");
+  if (narration !== null) {
+    const nextNarration = narrationForState(artifact, state);
+    // Avoid re-announcing unchanged prose on every animation frame.
+    if (narration.textContent !== nextNarration) narration.textContent = nextNarration;
+  }
   artifact.manifest.checkpoints.forEach((checkpoint) => {
     const link = shell.querySelector<HTMLAnchorElement>(
       `[data-kp-concept-checkpoints] [data-kp-concept-checkpoint-link="${checkpoint.id}"]`
@@ -665,14 +679,34 @@ function playbackButton(action: string, label: string, text: string): HTMLButton
   return button;
 }
 
-function shareButton(text: string, route: string, checkpoint: string): HTMLButtonElement {
+function shareButton(
+  text: string,
+  route: string,
+  checkpoint: string,
+  accessibleLabel: string
+): HTMLButtonElement {
   const button = document.createElement("button");
   button.type = "button";
   button.dataset["kpConceptShareAction"] = "copy-link";
   button.dataset["kpConceptShareCheckpoint"] = checkpoint;
   button.dataset["kpConceptShareRoute"] = route;
+  button.setAttribute("aria-label", accessibleLabel);
   button.textContent = text;
   return button;
+}
+
+function narrationForState(
+  artifact: KpConceptRoomArtifactLike,
+  state: KpConceptRoomState
+): string {
+  const checkpointIndex = artifact.manifest.checkpoints.findIndex((item) => item.id === state.checkpoint);
+  const checkpoint = artifact.manifest.checkpoints[checkpointIndex];
+  if (checkpoint === undefined) return "Concept state is unavailable.";
+  const next = artifact.manifest.checkpoints[checkpointIndex + 1];
+  if (next !== undefined && state.timePermille > checkpoint.progressPermille) {
+    return `Moving toward ${next.title}. ${next.explanation}`;
+  }
+  return `${checkpoint.title}. ${checkpoint.explanation}`;
 }
 
 function verificationDisclosure(artifact: KpConceptRoomArtifactLike): HTMLElement {

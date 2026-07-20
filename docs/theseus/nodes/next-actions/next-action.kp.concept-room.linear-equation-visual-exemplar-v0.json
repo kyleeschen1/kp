@@ -472,11 +472,45 @@
       "scope": "s22 stable visual inspection",
       "checkedAt": "2026-07-20T02:10:34.459Z",
       "notes": "22 deterministic states captured; share actions remain subordinate and verification remains collapsed."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s23 full unit and architecture suite",
+      "checkedAt": "2026-07-20T02:23:48.434Z",
+      "notes": "1537 tests passed."
+    },
+    {
+      "command": "playwright accessibility failure correspondence shell cohort",
+      "status": "passed",
+      "scope": "s23 keyboard narration reduced motion forced colors failures and searchability",
+      "checkedAt": "2026-07-20T02:23:49.559Z",
+      "notes": "18 browser checks passed."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s23 stable reduced-motion and forced-color captures",
+      "checkedAt": "2026-07-20T02:23:50.559Z",
+      "notes": "24 deterministic states captured; accessibility variants manually inspected."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s23 production build",
+      "checkedAt": "2026-07-20T02:23:51.566Z"
+    },
+    {
+      "command": "npm run smoke:linear-equation",
+      "status": "passed",
+      "scope": "s23 exact degraded direct routes",
+      "checkedAt": "2026-07-20T02:23:52.528Z",
+      "notes": "2 smoke checks passed; provider, artifact, capability, renderer, and Ask failures preserve searchable Review content."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s22 adds quiet exact-frame and exact-step copy links through a narrow clipboard adapter, canonical direct-mount restoration, a collapsed learner-safe verification disclosure, and sanitized copy failure. Full tests, browser checks, build, smoke, and manual visual inspection pass."
+    "summary": "s23 bounds duplicate semantic keyboard stops, adds contextual copy names and atomic operation narration, preserves visible focus in forced colors, emits static complete reduced-motion frames, and verifies searchable Review fallbacks at exact deep-linked states. Full tests, browser matrix, build, smoke, and 24-state visual inspection pass."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."

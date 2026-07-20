@@ -169,7 +169,8 @@
     {
       "id": "s23",
       "title": "Accessibility and failure matrix",
-      "status": "planned"
+      "summary": "Accessibility and degraded-state resilience reconciled and verified across keyboard, narration, forced colors, reduced motion, and exact direct URLs.",
+      "status": "complete"
     },
     {
       "id": "s24",

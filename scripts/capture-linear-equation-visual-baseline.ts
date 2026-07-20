@@ -41,6 +41,7 @@ try {
   await captureCoordinatedCheckpoints(canonicalConceptUrl);
   await captureCorrespondenceCheckpoints(canonicalConceptUrl);
   await captureReviewMode(canonicalConceptUrl);
+  await captureAccessibilityStates(canonicalConceptUrl);
   await page.setViewportSize(viewport);
 
   await capturePage({
@@ -245,6 +246,47 @@ async function captureReviewMode(canonicalConceptUrl: string): Promise<void> {
     output: path.relative(process.cwd(), output),
     time: 750,
     viewport: { width: 900, height: 900 }
+  });
+}
+
+async function captureAccessibilityStates(canonicalConceptUrl: string): Promise<void> {
+  const url = new URL(canonicalConceptUrl);
+  url.searchParams.set("checkpoint", "subtract-three");
+  url.searchParams.set("t", "575");
+  url.searchParams.set("projection", "coordinated");
+  url.searchParams.set("mode", "touch");
+  url.searchParams.delete("focus");
+  await page.setViewportSize({ width: 1280, height: 900 });
+
+  await page.emulateMedia({ reducedMotion: "reduce", forcedColors: "none" });
+  await page.goto(url.href, { waitUntil: "domcontentloaded", timeout: 15_000 });
+  await page.locator('[data-kp-symbolic-motion-state="native-reduced-motion"]').waitFor();
+  await settle(page);
+  await captureAccessibilityState("linear-room-reduced-motion-desktop", url.href);
+
+  await page.emulateMedia({ reducedMotion: "no-preference", forcedColors: "active" });
+  url.searchParams.append("focus", "term.two-x");
+  await page.goto(url.href, { waitUntil: "domcontentloaded", timeout: 15_000 });
+  await page.locator([
+    '[data-kp-correspondence-keyboard-target="true"]',
+    '[data-kp-correspondence-semantic-id="term.two-x"]'
+  ].join("")).first().focus();
+  await settle(page);
+  await captureAccessibilityState("linear-room-forced-colors-desktop", url.href);
+
+  await page.emulateMedia({ reducedMotion: "no-preference", forcedColors: "none" });
+}
+
+async function captureAccessibilityState(id: string, url: string): Promise<void> {
+  const output = path.join(outputRoot, `${id}.png`);
+  await page.locator("[data-kp-concept-visual-field]").screenshot({ path: output });
+  captures.push({
+    id,
+    url,
+    selector: "[data-kp-concept-visual-field]",
+    output: path.relative(process.cwd(), output),
+    time: 575,
+    viewport: { width: 1280, height: 900 }
   });
 }
 

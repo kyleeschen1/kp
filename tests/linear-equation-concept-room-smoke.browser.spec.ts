@@ -4,7 +4,6 @@ import canonicalArtifactSource from "../content/generated/artifacts/mathematics.
 import { createExactRationalLinearProblemProvider } from "../providers/linear-problems/public-api.ts";
 import { formatConceptRoomRoute } from "../src/kernel/public-api.ts";
 
-const conceptPath = "/concepts/mathematics/linear-equations/solve-with-balance";
 const artifact = canonicalArtifactSource;
 
 test("canonical and snapshot URLs mount, switch synchronized views, review, and dispose", async ({ page }) => {
@@ -85,12 +84,33 @@ test("provider, Ask, artifact, capability, and renderer failures preserve Review
       })
     });
   });
-  await page.goto(conceptPath);
+  await page.goto(formatConceptRoomRoute({
+    schemaVersion: "kp.room-route.v1",
+    conceptId: artifact.manifest.conceptId,
+    conceptVersion: artifact.manifest.version,
+    checkpoint: "divide-two",
+    timePermille: 575,
+    mode: "touch",
+    projection: "coordinated",
+    parameters: {},
+    focus: ["operation.divide-two"],
+    provider: {
+      id: "linear-problems.exact-rational",
+      protocol: "linear-problem.v1",
+      version: "1.0.0",
+      provenance: "smoke.failure-provider"
+    }
+  }));
   const viewport = page.locator("[data-kp-concept-viewport]");
   await expect(viewport.locator("[data-kp-concept-review-fallback]")).toHaveAttribute(
     "data-kp-diagnostic-code", "provider-unavailable"
   );
   await expect(viewport).toContainText("Subtract 3 from both sides");
+  await expect(page).toHaveURL(/checkpoint=divide-two/);
+  await expect(page).toHaveURL(/t=575/);
+  expect(await page.evaluate(() => (
+    window as unknown as { find(text: string): boolean }
+  ).find("Two copies of x become one"))).toBe(true);
   const touchHref = await page.getByRole("link", { name: "Touch", exact: true }).getAttribute("href");
   if (touchHref === null) throw new Error("Expected a canonical Touch URL.");
   const askUrl = new URL(touchHref, page.url());
@@ -106,6 +126,7 @@ test("provider, Ask, artifact, capability, and renderer failures preserve Review
     "data-kp-diagnostic-code", "artifact-invalid"
   );
   await expect(page.locator("#invalid-artifact-fixture")).toContainText("Preserve equality");
+  await expect(page).toHaveURL(/checkpoint=divide-two/);
 
   await mountCapabilityFallback(page, artifact);
   await expect(page.locator("#capability-fixture [data-kp-concept-review-fallback]")).toHaveAttribute(
@@ -119,6 +140,8 @@ test("provider, Ask, artifact, capability, and renderer failures preserve Review
     "data-kp-diagnostic-code", "renderer-unavailable"
   );
   await expect(page.locator("#renderer-fixture")).toContainText("x = 5/2");
+  expect(await page.locator("#renderer-fixture").evaluate((root) => root.textContent?.includes("Subtract 3 from both sides")))
+    .toBe(true);
 });
 
 async function serveProvider(page: Page): Promise<void> {
