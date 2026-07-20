@@ -1,7 +1,10 @@
 import { compileKpAnimationAssetSemanticRefs } from "../../animation/asset.ts";
 import { createLinearSolveAnimationAsset } from "../../animation/linear-solve-adapter.ts";
 import type { KpSemanticAssetObject } from "../../semantic/asset.ts";
-import { renderSelectorAnnotatedLatexToHtml } from "../../rendering/katex-adapter.ts";
+import {
+  renderLatexToHtml,
+  renderSelectorAnnotatedLatexToHtml
+} from "../../rendering/katex-adapter.ts";
 import { createKpSolveXSelectorAnnotatedLatex } from "../../rendering/solve-x-selector-annotated-latex.ts";
 import { createKpCompiledLessonArtifact } from "../document/public-api.ts";
 import {
@@ -123,6 +126,7 @@ function compileEquationExemplarTemplate(
     transitions.join("\n"),
     `<div class="kp-reader-equation-material-fit-surface" data-kp-reader-material-fit-surface>`,
     `<div class="kp-reader-equation-material" data-kp-reader-equation-material-layer="true"></div>`,
+    `<span class="kp-reader-equation-annihilation-witness" data-kp-reader-annihilation-witness aria-hidden="true">${renderLatexToHtml("0", { displayMode: false })}</span>`,
     `</div>`,
     `</div>`,
     `<div class="kp-reader-equation-progress" aria-hidden="true"><span data-kp-reader-progress-bar></span></div>`,

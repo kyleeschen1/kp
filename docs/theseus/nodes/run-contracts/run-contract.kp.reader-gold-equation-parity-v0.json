@@ -117,7 +117,8 @@
     {
       "id": "s14-cancellation",
       "title": "Transfer cancellation choreography",
-      "status": "planned"
+      "summary": "The reader now uses the accepted witnessed-annihilation motif: inverse terms meet and compress, a semantic zero becomes readable, then survivors compact.",
+      "status": "complete"
     },
     {
       "id": "s15-successor-synthesis",

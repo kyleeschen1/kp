@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { createLinearSolveAnimationAsset } from "../src/animation/linear-solve-adapter.ts";
+import { createKpWitnessedAnnihilationBinding } from "../src/animation/witnessed-annihilation.ts";
+import "../src/rendering/equation-witnessed-annihilation-register.ts";
 import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.ts";
 import {
   compileKpReaderEquationMaterialPlan,
@@ -56,7 +58,7 @@ function fixture(direction: "forward" | "rewind") {
       anchorPriority: ["relation-center", "ink-center", "operator-center"]
     }
   });
-  return { materialPlan, alignment };
+  return { materialPlan, alignment, layout };
 }
 
 test("symbol motion continuously hands persistent material between native endpoints", () => {
@@ -147,6 +149,38 @@ test("focused cancellation gains salience without discontinuous geometry", () =>
     }),
     /must be finite/
   );
+});
+
+test("reader cancellation meets through a readable zero before compaction", () => {
+  const animation = createLinearSolveAnimationAsset();
+  const transformation = animation.transformations.find(
+    (candidate) => candidate.transformType === "cancelAdditiveInverses"
+  )!;
+  const cancellation = transformation.correspondenceMap!.records.find(
+    (record) => record.relation === "cancelation"
+  )!;
+  const binding = createKpWitnessedAnnihilationBinding({
+    operationId: "kp.algebra.cancel-additive-inverses",
+    transformation,
+    bundle: animation.bundle,
+    cancellationRecordId: cancellation.id
+  });
+  const frame = sampleKpReaderEquationSymbolMotion({
+    ...fixture("forward"),
+    progress: 0.66,
+    linearRearrangementKind: "cancel-additive-inverses",
+    witnessedAnnihilationBinding: binding
+  });
+  assert.equal(frame.witnessedAnnihilation?.frame.witnessReadable, true);
+  assert.equal(frame.witnessedAnnihilation?.frame.witness.latex, "0");
+  assert.equal(frame.witnessedAnnihilation?.frame.phase, "witness-dwell");
+  const cancellationOwner = frame.owners.find(
+    (owner) => owner.ownerId === "material-owner.left-inverses-cancel"
+  )!;
+  assert.equal(cancellationOwner.fragmentPoses.length, 2);
+  assert.ok(cancellationOwner.fragmentPoses.every(
+    (fragment) => fragment.pose.scale === 0.72
+  ));
 });
 
 function assertRectApproximatelyEqual(

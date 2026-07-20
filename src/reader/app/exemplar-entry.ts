@@ -2,7 +2,11 @@ import { createLinearSolveAnimationAsset } from "../../animation/linear-solve-ad
 import {
   createKpLinearRearrangementChoreography
 } from "../../animation/linear-rearrangement-choreography.ts";
+import {
+  createKpWitnessedAnnihilationBinding
+} from "../../animation/witnessed-annihilation.ts";
 import { createKpEquationFontReadiness } from "../../rendering/equation-font-readiness.ts";
+import "../../rendering/equation-witnessed-annihilation-register.ts";
 import {
   applyKpReaderEquationResponsiveFit,
   compileKpReaderEquationMaterialPlan,
@@ -17,7 +21,8 @@ import {
   type KpReaderEquationMaterialOwnerFrame,
   type KpReaderEquationMaterialPlan,
   type KpReaderEquationPerceptualAlignmentPlan,
-  type KpReaderEquationResponsiveFitPlan
+  type KpReaderEquationResponsiveFitPlan,
+  type KpReaderEquationSymbolMotionFrame
 } from "../renderers/public-api.ts";
 import {
   createKpReaderClockSample,
@@ -64,6 +69,9 @@ const viewport = requireElement<HTMLElement>("[data-kp-reader-equation-viewport]
 const materialFitSurface = requireElement<HTMLElement>(
   "[data-kp-reader-material-fit-surface]"
 );
+const annihilationWitness = requireElement<HTMLElement>(
+  "[data-kp-reader-annihilation-witness]"
+);
 const status = requireElement<HTMLOutputElement>("[data-kp-reader-stage-status]");
 const progressBar = requireElement<HTMLElement>("[data-kp-reader-progress-bar]");
 const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
@@ -78,6 +86,18 @@ const fontReadiness = createKpEquationFontReadiness(document);
 const transitionElements = [
   ...stage.querySelectorAll<HTMLElement>("[data-kp-reader-transition]")
 ];
+const witnessedBindings = new Map(animation.transformations.flatMap((transformation) => {
+  const cancellation = transformation.correspondenceMap?.records.find(
+    (record) => record.relation === "cancelation"
+  );
+  if (cancellation === undefined) return [];
+  return [[transformation.id, createKpWitnessedAnnihilationBinding({
+    operationId: "kp.algebra.cancel-additive-inverses",
+    transformation,
+    bundle: animation.bundle,
+    cancellationRecordId: cancellation.id
+  })] as const];
+}));
 const allowedFocusRefs = animation.bundle.objects.flatMap((object) => [
   object.id,
   ...object.selectors.map((selector) => selector.id)
@@ -268,13 +288,16 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     runtimeFrame.phase.phaseIndex,
     animation.transformations.length
   );
+  const choreographyStep = linearChoreography.steps.find(
+    (step) => step.transformationId === transitionId
+  );
   const motion = sampleKpReaderEquationSymbolMotion({
     materialPlan: context.materialPlan,
     alignment: context.alignment,
     layout: context.layout,
-    linearRearrangementKind: linearChoreography.steps.find(
-      (step) => step.transformationId === transitionId
-    )?.kind,
+    linearRearrangementKind: choreographyStep?.kind,
+    witnessedAnnihilationBinding: witnessedBindings.get(transitionId),
+    successorSynthesisBinding: choreographyStep?.successorSynthesisBinding,
     progress: phaseProgress
   });
   const focusedRefs = focus.getSnapshot().objectRefs;
@@ -329,6 +352,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     };
   });
   materialLayer.sync(frames);
+  syncAnnihilationWitness(motion.witnessedAnnihilation);
   applyFocus(focusedRefs);
   progressBar.style.transform = `scaleX(${visualSample.progress})`;
   document.body.dataset["kpReaderProgress"] = String(visualSample.progressPermille);
@@ -336,6 +360,32 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   document.body.dataset["kpReaderTransition"] = transitionId;
   document.body.dataset["kpReaderFramePlans"] = String(scheduler.inspect().framePlanCount + 1);
   updateActiveBeat(visualSample.progressPermille);
+}
+
+function syncAnnihilationWitness(
+  witnessed: KpReaderEquationSymbolMotionFrame["witnessedAnnihilation"]
+): void {
+  if (witnessed === undefined) {
+    annihilationWitness.style.opacity = "0";
+    delete stage.dataset["kpReaderAnnihilationPhase"];
+    delete stage.dataset["kpReaderAnnihilationWitnessReadable"];
+    return;
+  }
+  const pose = witnessed.frame.witness.pose;
+  annihilationWitness.style.left = `${witnessed.contactPoint.x}px`;
+  annihilationWitness.style.top = `${witnessed.contactPoint.y}px`;
+  annihilationWitness.style.opacity = String(pose.opacity);
+  annihilationWitness.style.transform =
+    `translate(calc(-50% + ${pose.x}px), calc(-50% + ${pose.y}px)) ` +
+    `scale(${pose.scale})`;
+  annihilationWitness.style.filter = witnessed.frame.inwardPulse <= 0
+    ? "none"
+    : `drop-shadow(0 ${2 * witnessed.frame.inwardPulse}px ` +
+      `${5 * witnessed.frame.inwardPulse}px rgb(223 112 71 / ` +
+      `${0.32 * witnessed.frame.inwardPulse}))`;
+  stage.dataset["kpReaderAnnihilationPhase"] = witnessed.frame.phase;
+  stage.dataset["kpReaderAnnihilationWitnessReadable"] =
+    String(witnessed.frame.witnessReadable);
 }
 
 function renderCurrentSample(): void {

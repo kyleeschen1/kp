@@ -16,11 +16,14 @@ import {
   sampleKpEquationMaterialOwnerHandoff
 } from "../../rendering/equation-material-owner.ts";
 import {
-  sampleKpEquationLinearRearrangementOwnerMotion,
+  sampleKpEquationLinearRearrangementOwners,
   type KpEquationOwnerFragmentMotion
 } from "../../rendering/equation-linear-rearrangement-owner-motion.ts";
 import type { KpEquationLinearRearrangementKind } from "../../rendering/equation-linear-rearrangement.ts";
 import type { KpReaderEquationLayoutSnapshot } from "./equation-layout-snapshot.ts";
+import type { KpWitnessedAnnihilationBinding } from "../../animation/witnessed-annihilation.ts";
+import type { KpSuccessorSynthesisBinding } from "../../animation/successor-synthesis.ts";
+import type { KpEquationTokenMotionFrame } from "../../rendering/semantic-equation-token-renderer.ts";
 
 export interface KpReaderEquationSymbolMotionFrame extends KpEquationVisualFrame<
   KpReaderEquationSymbolOwnerPose
@@ -33,6 +36,10 @@ export interface KpReaderEquationSymbolMotionFrame extends KpEquationVisualFrame
   readonly easedProgress: number;
   readonly direction: "forward" | "rewind";
   readonly owners: readonly KpReaderEquationSymbolOwnerPose[];
+  readonly witnessedAnnihilation?: {
+    readonly contactPoint: { readonly x: number; readonly y: number };
+    readonly frame: NonNullable<KpEquationTokenMotionFrame["witnessedAnnihilation"]>;
+  } | undefined;
 }
 
 export interface KpReaderEquationSymbolOwnerPose extends KpEquationVisualOwnerPose {
@@ -55,6 +62,8 @@ export function sampleKpReaderEquationSymbolMotion(input: {
   readonly alignment: KpReaderEquationPerceptualAlignmentPlan;
   readonly layout?: KpReaderEquationLayoutSnapshot | undefined;
   readonly linearRearrangementKind?: KpEquationLinearRearrangementKind | undefined;
+  readonly witnessedAnnihilationBinding?: KpWitnessedAnnihilationBinding | undefined;
+  readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
   readonly progress: number;
   readonly direction?: "forward" | "rewind" | undefined;
 }): KpReaderEquationSymbolMotionFrame {
@@ -72,6 +81,21 @@ export function sampleKpReaderEquationSymbolMotion(input: {
   const materialOwners = input.materialPlan.transitions.flatMap(
     (transition) => transition.owners
   );
+  const transition = input.materialPlan.transitions.find(
+    (candidate) => candidate.transitionId === input.layout?.transitionId
+  );
+  const operation = input.layout === undefined ||
+      input.linearRearrangementKind === undefined || transition === undefined
+    ? undefined
+    : sampleKpEquationLinearRearrangementOwners({
+        kind: input.linearRearrangementKind,
+        transition,
+        layout: input.layout,
+        alignment: input.alignment,
+        progress,
+        witnessedAnnihilationBinding: input.witnessedAnnihilationBinding,
+        successorSynthesisBinding: input.successorSynthesisBinding
+      });
   const owners = materialOwners.map((owner) => {
     const aligned = ownersById.get(owner.id);
     if (aligned === undefined) {
@@ -82,8 +106,7 @@ export function sampleKpReaderEquationSymbolMotion(input: {
       aligned,
       progress,
       easedProgress,
-      input.layout,
-      input.linearRearrangementKind
+      operation?.motion
     );
   });
   if (ownersById.size !== owners.length) {
@@ -98,7 +121,16 @@ export function sampleKpReaderEquationSymbolMotion(input: {
     progress,
     easedProgress,
     direction: input.direction ?? "forward",
-    owners
+    owners,
+    ...(operation?.motion.witnessedAnnihilation === undefined ||
+      operation.geometry.witnessedAnnihilationPlan === undefined
+      ? {}
+      : {
+          witnessedAnnihilation: {
+            contactPoint: operation.geometry.witnessedAnnihilationPlan.contactPoint,
+            frame: operation.motion.witnessedAnnihilation
+          }
+        })
   };
   assertKpEquationVisualFrame(frame);
   return frame;
@@ -109,8 +141,7 @@ function sampleOwner(
   aligned: KpReaderEquationAlignedOwner,
   progress: number,
   easedProgress: number,
-  layout: KpReaderEquationLayoutSnapshot | undefined,
-  linearRearrangementKind: KpEquationLinearRearrangementKind | undefined
+  operationMotion: KpEquationTokenMotionFrame | undefined
 ): KpReaderEquationSymbolOwnerPose {
   const source = aligned.sourceBounds;
   const target = aligned.targetBounds;
@@ -130,16 +161,16 @@ function sampleOwner(
     sourcePresent: source !== undefined,
     targetPresent: target !== undefined
   });
-  const fragmentPoses = layout === undefined || linearRearrangementKind === undefined
-    ? []
-    : sampleKpEquationLinearRearrangementOwnerMotion({
-        kind: linearRearrangementKind,
-        relationRecordId: owner.relationRecordId,
-        lifecycle: owner.lifecycle,
-        sourceAnchors: anchorsForOwner(layout, owner.sourceAnchorIds, source, aligned.sourceBounds),
-        targetAnchors: anchorsForOwner(layout, owner.targetAnchorIds, target, aligned.targetBounds),
-        progress
-      });
+  const ownerAnchorIds = new Set([
+    ...owner.sourceAnchorIds,
+    ...owner.targetAnchorIds
+  ]);
+  const fragmentPoses: readonly KpEquationOwnerFragmentMotion[] =
+    operationMotion?.tokens.flatMap((token) =>
+      ownerAnchorIds.has(token.motionId)
+        ? [{ anchorId: token.motionId, side: token.side, pose: token.pose }]
+        : []
+    ) ?? [];
 
   return {
     ownerId: owner.id,
@@ -161,34 +192,6 @@ function sampleOwner(
       ? 0.35 + 0.65 * Math.sin(Math.PI * progress)
       : 0
   };
-}
-
-function anchorsForOwner(
-  layout: KpReaderEquationLayoutSnapshot,
-  anchorIds: readonly string[],
-  rawBounds: KpReaderLayoutRect | undefined,
-  alignedBounds: KpReaderLayoutRect | undefined
-) {
-  const correction = rawBounds === undefined || alignedBounds === undefined
-    ? { x: 0, y: 0 }
-    : {
-        x: alignedBounds.left - rawBounds.left,
-        y: alignedBounds.top - rawBounds.top
-      };
-  return anchorIds.map((anchorId) => {
-    const anchor = layout.anchors.find((candidate) => candidate.id === anchorId);
-    if (anchor === undefined) {
-      throw new Error(`Equation owner references missing layout anchor ${anchorId}.`);
-    }
-    return {
-      id: anchorId,
-      rect: {
-        ...anchor.rect,
-        left: anchor.rect.left + correction.x,
-        top: anchor.rect.top + correction.y
-      }
-    };
-  });
 }
 
 function vanishedRect(rect: KpReaderLayoutRect): KpReaderLayoutRect {

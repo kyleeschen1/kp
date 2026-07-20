@@ -13,6 +13,24 @@ import type {
   KpEquationTokenMotionPose
 } from "./semantic-equation-token-renderer.ts";
 import type { KpEquationTransitionLifecycleKind } from "./equation-transition-ir.ts";
+import type {
+  KpWitnessedAnnihilationBinding
+} from "../animation/witnessed-annihilation.ts";
+import type { KpSuccessorSynthesisBinding } from "../animation/successor-synthesis.ts";
+import type { KpReaderEquationTransitionMaterialPlan } from "../reader/renderers/equation-material-plan.ts";
+import type { KpReaderEquationLayoutSnapshot } from "../reader/renderers/equation-layout-snapshot.ts";
+import type { KpReaderEquationPerceptualAlignmentPlan } from "../reader/renderers/equation-perceptual-alignment.ts";
+import {
+  createKpEquationWitnessedAnnihilationPlan
+} from "./equation-witnessed-annihilation.ts";
+import {
+  createKpEquationSuccessorSynthesisPlan
+} from "./equation-linear-rearrangement.ts";
+import {
+  sampleKpEquationTokenMotion,
+  type KpEquationTokenMotionFrame
+} from "./semantic-equation-token-renderer.ts";
+import type { KpMeasuredEquationTransitionGeometry } from "./equation-motion-dom.ts";
 
 export interface KpEquationOwnerMotionAnchor {
   readonly id: string;
@@ -28,6 +46,92 @@ export interface KpEquationOwnerFragmentMotion {
   readonly anchorId: string;
   readonly side: "source" | "target";
   readonly pose: KpEquationTokenMotionPose;
+}
+
+export interface KpEquationLinearRearrangementOwnerFrame {
+  readonly motion: KpEquationTokenMotionFrame;
+  readonly geometry: KpMeasuredEquationTransitionGeometry;
+}
+
+export function sampleKpEquationLinearRearrangementOwners(input: {
+  readonly kind: KpEquationLinearRearrangementKind;
+  readonly transition: KpReaderEquationTransitionMaterialPlan;
+  readonly layout: KpReaderEquationLayoutSnapshot;
+  readonly alignment: KpReaderEquationPerceptualAlignmentPlan;
+  readonly progress: number;
+  readonly witnessedAnnihilationBinding?: KpWitnessedAnnihilationBinding | undefined;
+  readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
+}): KpEquationLinearRearrangementOwnerFrame {
+  const alignedById = new Map(
+    input.alignment.owners.map((owner) => [owner.ownerId, owner])
+  );
+  const anchorsById = new Map(
+    input.layout.anchors.map((anchor) => [anchor.id, anchor])
+  );
+  const sourceTokens: AnnotatedMotionToken[] = [];
+  const targetTokens: AnnotatedMotionToken[] = [];
+  const relations = input.transition.owners.map((owner) => {
+    const aligned = alignedById.get(owner.id);
+    if (aligned === undefined) {
+      throw new Error(`Missing aligned equation owner ${owner.id}.`);
+    }
+    const sourceAnchors = correctedAnchors(
+      owner.sourceAnchorIds,
+      anchorsById,
+      aligned.sourceBounds
+    );
+    const targetAnchors = correctedAnchors(
+      owner.targetAnchorIds,
+      anchorsById,
+      aligned.targetBounds
+    );
+    const ownerSourceTokens = sourceAnchors.map(tokenForAnchor);
+    const ownerTargetTokens = targetAnchors.map(tokenForAnchor);
+    sourceTokens.push(...ownerSourceTokens);
+    targetTokens.push(...ownerTargetTokens);
+    const source = endpointWithSelectors(ownerSourceTokens, sourceAnchors);
+    const target = endpointWithSelectors(ownerTargetTokens, targetAnchors);
+    return {
+      recordId: owner.relationRecordId,
+      lifecycle: owner.lifecycle,
+      ...(source === undefined ? {} : { source }),
+      ...(target === undefined ? {} : { target }),
+      ...(source === undefined || target === undefined
+        ? {}
+        : {
+            delta: {
+              x: center(target.bounds).x - center(source.bounds).x,
+              y: center(target.bounds).y - center(source.bounds).y,
+              scaleX: target.bounds.width / source.bounds.width,
+              scaleY: target.bounds.height / source.bounds.height
+            }
+          })
+    } satisfies KpMeasuredEquationTransitionRelationGeometry;
+  });
+  const base: KpMeasuredEquationTransitionGeometry = {
+    transitionId: input.transition.transitionId,
+    linearRearrangementKind: input.kind,
+    ...(input.witnessedAnnihilationBinding === undefined
+      ? {}
+      : { witnessedAnnihilationBinding: input.witnessedAnnihilationBinding }),
+    ...(input.successorSynthesisBinding === undefined
+      ? {}
+      : { successorSynthesisBinding: input.successorSynthesisBinding }),
+    sourceTokens,
+    targetTokens,
+    relations
+  };
+  const witnessedAnnihilationPlan = createKpEquationWitnessedAnnihilationPlan(base);
+  const successorSynthesisPlan = createKpEquationSuccessorSynthesisPlan(base);
+  const geometry = {
+    ...base,
+    ...(witnessedAnnihilationPlan === undefined ? {} : { witnessedAnnihilationPlan }),
+    ...(successorSynthesisPlan === undefined ? {} : { successorSynthesisPlan })
+  };
+  return {
+    geometry,
+    motion: sampleKpEquationTokenMotion(geometry, input.progress)
+  };
 }
 
 export function sampleKpEquationLinearRearrangementOwnerMotion(input: {
@@ -91,6 +195,47 @@ function endpoint(tokens: readonly AnnotatedMotionToken[]) {
     motionIds: tokens.map((token) => token.motionId),
     bounds: union(tokens.map((token) => token.localRect))
   };
+}
+
+function endpointWithSelectors(
+  tokens: readonly AnnotatedMotionToken[],
+  anchors: readonly (KpEquationOwnerMotionAnchor & { readonly selectorId: string })[]
+) {
+  if (tokens.length === 0) return undefined;
+  return {
+    selectorIds: anchors.map((anchor) => anchor.selectorId),
+    motionIds: tokens.map((token) => token.motionId),
+    bounds: union(tokens.map((token) => token.localRect))
+  };
+}
+
+function correctedAnchors(
+  anchorIds: readonly string[],
+  anchorsById: ReadonlyMap<string, KpReaderEquationLayoutSnapshot["anchors"][number]>,
+  alignedBounds: KpEquationOwnerMotionAnchor["rect"] | undefined
+) {
+  const anchors = anchorIds.map((id) => {
+    const anchor = anchorsById.get(id);
+    if (anchor === undefined) throw new Error(`Missing equation anchor ${id}.`);
+    return anchor;
+  });
+  if (anchors.length === 0) return [];
+  const rawBounds = union(anchors.map((anchor) => anchor.rect));
+  const correction = alignedBounds === undefined
+    ? { x: 0, y: 0 }
+    : {
+        x: alignedBounds.left - rawBounds.left,
+        y: alignedBounds.top - rawBounds.top
+      };
+  return anchors.map((anchor) => ({
+    id: anchor.id,
+    selectorId: anchor.selectorId,
+    rect: {
+      ...anchor.rect,
+      left: anchor.rect.left + correction.x,
+      top: anchor.rect.top + correction.y
+    }
+  }));
 }
 
 function union(rects: readonly KpEquationOwnerMotionAnchor["rect"][]) {

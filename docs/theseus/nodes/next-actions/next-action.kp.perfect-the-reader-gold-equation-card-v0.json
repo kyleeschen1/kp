@@ -58,6 +58,10 @@
     {
       "kind": "file",
       "path": "src/rendering/equation-linear-rearrangement-owner-motion.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-reader-cancellation.browser.spec.ts"
     }
   ],
   "dependsOn": {
@@ -186,6 +190,18 @@
       "status": "passed",
       "scope": "s13 named reader subtraction entry visual capture",
       "checkedAt": "2026-07-20T21:00:12.728Z"
+    },
+    {
+      "command": "node --test tests/semantic-reader-equation-symbol-motion.test.ts",
+      "status": "passed",
+      "scope": "s14 witnessed cancellation geometry and readable zero",
+      "checkedAt": "2026-07-20T21:06:06.543Z"
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader-cancellation.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s14 visible witness-dwell semantics",
+      "checkedAt": "2026-07-20T21:06:07.459Z"
     }
   ],
   "progress": {
