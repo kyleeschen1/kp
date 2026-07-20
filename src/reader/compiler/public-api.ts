@@ -15,3 +15,7 @@ export {
   type KpResolvedFocusReference,
   type KpResolvedLessonReferences
 } from "./reference-resolver.ts";
+export {
+  compileKpStaticLessonProse,
+  type KpStaticLessonHtml
+} from "./static-prose-compiler.ts";

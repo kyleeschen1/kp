@@ -107,7 +107,8 @@
     {
       "id": "s10",
       "title": "Compile accessible static prose and TOC",
-      "status": "planned"
+      "summary": "Compiled accessible static prose animation beats and TOC. Focused tests, escaping checks, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s11",

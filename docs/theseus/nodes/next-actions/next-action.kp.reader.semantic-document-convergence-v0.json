@@ -290,11 +290,23 @@
       "status": "passed",
       "scope": "s09 compiler resolution types and import fitness",
       "checkedAt": "2026-07-20T17:06:31.043Z"
+    },
+    {
+      "command": "node --test static prose reference resolver and architecture suites",
+      "status": "passed",
+      "scope": "s10 12 no-JavaScript HTML TOC escaping and boundary tests",
+      "checkedAt": "2026-07-20T17:08:51.423Z"
+    },
+    {
+      "command": "three direct TypeScript project checks and npm run check:architecture",
+      "status": "passed",
+      "scope": "s10 compiler HTML types and import fitness",
+      "checkedAt": "2026-07-20T17:08:52.555Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s09 separates author-named semantic references from catalog-backed asset and object resolution, producing deterministic bindings or source-located compiler failures."
+    "summary": "s10 makes the lesson readable searchable printable and navigable before hydration, with semantic focus affordances preserved as native controls."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",
