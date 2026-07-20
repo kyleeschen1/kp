@@ -19,6 +19,63 @@ export interface KpEquationMaterialOwnershipFrame {
   readonly nativeHandoff: "source" | "material" | "target";
 }
 
+export interface KpEquationMaterialOwnerHandoff {
+  readonly ownerId: string;
+  readonly progress: number;
+  readonly materialOpacity: number;
+  readonly sourceNativeOpacity: number;
+  readonly targetNativeOpacity: number;
+  readonly nativeHandoff: "source" | "material" | "target";
+}
+
+const defaultNativeHandoffFraction = 0.08;
+
+export function sampleKpEquationMaterialOwnerHandoff(input: {
+  readonly ownerId: string;
+  readonly progress: number;
+  readonly sourcePresent: boolean;
+  readonly targetPresent: boolean;
+  readonly nativeHandoffFraction?: number;
+}): KpEquationMaterialOwnerHandoff {
+  const progress = clamp01(input.progress);
+  const handoffFraction = input.nativeHandoffFraction
+    ?? defaultNativeHandoffFraction;
+  if (
+    !Number.isFinite(handoffFraction)
+    || handoffFraction <= 0
+    || handoffFraction > 0.5
+  ) {
+    throw new Error("Native handoff fraction must be within (0, 0.5].");
+  }
+
+  const sourceNativeOpacity = input.sourcePresent
+    ? 1 - smoothstep(clamp01(progress / handoffFraction))
+    : 0;
+  const targetNativeOpacity = input.targetPresent
+    ? smoothstep(clamp01(
+      (progress - (1 - handoffFraction)) / handoffFraction
+    ))
+    : 0;
+  const materialOpacity = input.sourcePresent && input.targetPresent
+    ? Math.min(1 - sourceNativeOpacity, 1 - targetNativeOpacity)
+    : progress === 0 || progress === 1
+      ? 0
+      : Math.sin(Math.PI * progress);
+
+  return {
+    ownerId: input.ownerId,
+    progress,
+    materialOpacity: clamp01(materialOpacity),
+    sourceNativeOpacity,
+    targetNativeOpacity,
+    nativeHandoff: sourceNativeOpacity > 0
+      ? "source"
+      : targetNativeOpacity > 0
+        ? "target"
+        : "material"
+  };
+}
+
 export function createKpEquationMaterialOwnerRegistry(
   plan: KpMaterialContinuityPlan
 ): KpEquationMaterialOwnerRegistry {
@@ -109,3 +166,6 @@ function clamp01(value: number): number {
   return Math.max(0, Math.min(1, value));
 }
 
+function smoothstep(progress: number): number {
+  return progress * progress * (3 - 2 * progress);
+}

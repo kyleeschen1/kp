@@ -158,6 +158,12 @@
       "status": "passed",
       "scope": "s10 neutral semantic token projection",
       "checkedAt": "2026-07-20T20:46:42.083Z"
+    },
+    {
+      "command": "node --test focused material owner and reader symbol motion suites",
+      "status": "passed",
+      "scope": "s11 neutral native/material/target handoff policy",
+      "checkedAt": "2026-07-20T20:50:35.817Z"
     }
   ],
   "progress": {

@@ -6,6 +6,7 @@ import {
 } from "../src/animation/material-continuity.ts";
 import {
   createKpEquationMaterialOwnerRegistry,
+  sampleKpEquationMaterialOwnerHandoff,
   sampleKpEquationMaterialOwnership
 } from "../src/rendering/equation-material-owner.ts";
 
@@ -99,4 +100,50 @@ test("material ownership rewind is the exact semantic inverse", () => {
     direction: "rewind"
   });
   assert.deepEqual(rewind, forward);
+});
+
+test("neutral handoff policy covers persistent, departing, and arriving owners", () => {
+  const persistent = sampleKpEquationMaterialOwnerHandoff({
+    ownerId: "owner.x",
+    progress: 0.5,
+    sourcePresent: true,
+    targetPresent: true
+  });
+  assert.equal(persistent.nativeHandoff, "material");
+  assert.equal(persistent.materialOpacity, 1);
+  assert.equal(persistent.sourceNativeOpacity, 0);
+  assert.equal(persistent.targetNativeOpacity, 0);
+
+  const departing = sampleKpEquationMaterialOwnerHandoff({
+    ownerId: "owner.plus-three",
+    progress: 0.5,
+    sourcePresent: true,
+    targetPresent: false
+  });
+  assert.equal(departing.nativeHandoff, "material");
+  assert.equal(departing.materialOpacity, 1);
+  assert.equal(departing.targetNativeOpacity, 0);
+
+  const arriving = sampleKpEquationMaterialOwnerHandoff({
+    ownerId: "owner.four",
+    progress: 1,
+    sourcePresent: false,
+    targetPresent: true
+  });
+  assert.equal(arriving.nativeHandoff, "target");
+  assert.equal(arriving.materialOpacity, 0);
+  assert.equal(arriving.targetNativeOpacity, 1);
+});
+
+test("neutral handoff policy rejects unsafe timing windows", () => {
+  assert.throws(
+    () => sampleKpEquationMaterialOwnerHandoff({
+      ownerId: "owner.x",
+      progress: 0.5,
+      sourcePresent: true,
+      targetPresent: true,
+      nativeHandoffFraction: 0
+    }),
+    /must be within/
+  );
 });

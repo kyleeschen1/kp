@@ -99,7 +99,8 @@
     {
       "id": "s11-owner-renderer",
       "title": "Generalize stable owner renderer",
-      "status": "planned"
+      "summary": "Reader symbol motion now consumes a neutral, tested native/material/target handoff policy for persistent, departing, and arriving owners.",
+      "status": "complete"
     },
     {
       "id": "s12-persistent-reader-stage",

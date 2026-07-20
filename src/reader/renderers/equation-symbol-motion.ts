@@ -12,6 +12,9 @@ import {
   type KpEquationVisualFrame,
   type KpEquationVisualOwnerPose
 } from "../../rendering/equation-visual-frame.ts";
+import {
+  sampleKpEquationMaterialOwnerHandoff
+} from "../../rendering/equation-material-owner.ts";
 
 export interface KpReaderEquationSymbolMotionFrame extends KpEquationVisualFrame<
   KpReaderEquationSymbolOwnerPose
@@ -39,8 +42,6 @@ export interface KpReaderEquationSymbolOwnerPose extends KpEquationVisualOwnerPo
   readonly targetNativeOpacity: number;
   readonly focusStrength: number;
 }
-
-const nativeHandoffFraction = 0.08;
 
 export function sampleKpReaderEquationSymbolMotion(input: {
   readonly materialPlan: KpReaderEquationMaterialPlan;
@@ -105,19 +106,12 @@ function sampleOwner(
   if (currentBounds === undefined) {
     throw new Error(`Material owner ${owner.id} has no aligned endpoint geometry.`);
   }
-  const sourceNativeOpacity = source === undefined
-    ? 0
-    : 1 - smoothstep(clamp01(progress / nativeHandoffFraction));
-  const targetNativeOpacity = target === undefined
-    ? 0
-    : smoothstep(clamp01(
-      (progress - (1 - nativeHandoffFraction)) / nativeHandoffFraction
-    ));
-  const materialOpacity = source !== undefined && target !== undefined
-    ? Math.min(1 - sourceNativeOpacity, 1 - targetNativeOpacity)
-    : progress === 0 || progress === 1
-      ? 0
-      : Math.sin(Math.PI * progress);
+  const handoff = sampleKpEquationMaterialOwnerHandoff({
+    ownerId: owner.id,
+    progress,
+    sourcePresent: source !== undefined,
+    targetPresent: target !== undefined
+  });
 
   return {
     ownerId: owner.id,
@@ -131,9 +125,9 @@ function sampleOwner(
         : owner.targetAnchorIds)
     ],
     currentBounds,
-    materialOpacity: clamp01(materialOpacity),
-    sourceNativeOpacity,
-    targetNativeOpacity,
+    materialOpacity: handoff.materialOpacity,
+    sourceNativeOpacity: handoff.sourceNativeOpacity,
+    targetNativeOpacity: handoff.targetNativeOpacity,
     focusStrength: owner.focused
       ? 0.35 + 0.65 * Math.sin(Math.PI * progress)
       : 0
