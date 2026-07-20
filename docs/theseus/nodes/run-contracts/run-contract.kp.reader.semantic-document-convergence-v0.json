@@ -53,7 +53,8 @@
     {
       "id": "s01",
       "title": "Capture reproducible current x-plus-3 baseline",
-      "status": "planned"
+      "summary": "Committed reproducible current-route, no-JS, asset-closure, motion-timing, performance, and visual baseline evidence; corrected the earlier claim that Three.js loads on this equation route.",
+      "status": "complete"
     },
     {
       "id": "s02",

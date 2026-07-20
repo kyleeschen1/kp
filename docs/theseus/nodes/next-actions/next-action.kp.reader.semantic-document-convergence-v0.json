@@ -62,6 +62,48 @@
     "npm run visual:linear-equation",
     "theseus workspace validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s01 baseline harness and project TypeScript",
+      "checkedAt": "2026-07-20T16:26:50.022Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s01 production build and asset inventory",
+      "checkedAt": "2026-07-20T16:26:51.000Z"
+    },
+    {
+      "command": "npm run baseline:semantic-reader",
+      "status": "passed",
+      "scope": "s01 production route, no-JS, asset closure, timing, and screenshots",
+      "checkedAt": "2026-07-20T16:26:51.761Z"
+    },
+    {
+      "command": "npm run perf:linear-equation",
+      "status": "passed",
+      "scope": "s01 three focused learner-shell, layout-stability, frame-budget, and zero-WebGL checks",
+      "checkedAt": "2026-07-20T16:26:52.521Z"
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s01 39-state repeatable current visual baseline",
+      "checkedAt": "2026-07-20T16:26:53.289Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 durable graph",
+      "checkedAt": "2026-07-20T16:26:54.052Z"
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "s01 established a repeatable current production-route baseline: 325-byte empty initial HTML, no no-JS content, 36 assets and 309171 gzip bytes of loaded JS/CSS, three editor chunks, no loaded Three.js, and a 648.7ms timed seek with 36 intermediate samples but no scroll-controlled progress. The canonical 39-state visual and three performance checks remain green."
+  },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",
     "Whether one renderer-neutral clock, focus, URL, and hydration contract is sufficient for later SVG, code, graph, provider, and WebGL exemplars without generalizing them now."
