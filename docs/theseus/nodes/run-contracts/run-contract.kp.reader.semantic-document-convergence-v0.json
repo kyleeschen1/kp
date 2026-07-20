@@ -215,7 +215,8 @@
     {
       "id": "s28",
       "title": "Harden equation conformance and responsive behavior",
-      "status": "planned"
+      "summary": "Hardened no-wrap responsive fit and equation motion conformance. Node, Chromium, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s29",

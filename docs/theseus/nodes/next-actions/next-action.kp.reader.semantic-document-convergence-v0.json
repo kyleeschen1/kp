@@ -507,11 +507,29 @@
       "status": "passed",
       "scope": "s27 pure motion frame contracts and reader dependency fitness",
       "checkedAt": "2026-07-20T18:30:05.699Z"
+    },
+    {
+      "command": "node --test responsive fit symbol motion and architecture suites",
+      "status": "passed",
+      "scope": "s28 twelve fit overflow frame-bound and boundary tests",
+      "checkedAt": "2026-07-20T18:33:35.609Z"
+    },
+    {
+      "command": "npx playwright test responsive fit and material owner browser specs",
+      "status": "passed",
+      "scope": "s28 two Chromium centered no-wrap persistence and cleanup tests",
+      "checkedAt": "2026-07-20T18:33:36.724Z"
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s28 responsive conformance contracts and dependency fitness",
+      "checkedAt": "2026-07-20T18:33:37.710Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s27 samples continuous semantic symbol poses with mirrored native handoff, cancellation and introduction, smooth focus salience, and exact forward-t versus rewind-one-minus-t geometry."
+    "summary": "s28 enforces no-wrap centered responsive fitting, maintains an accepted minimum math scale, reports overflow explicitly, and checks every material pose against the fitted inline viewport."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

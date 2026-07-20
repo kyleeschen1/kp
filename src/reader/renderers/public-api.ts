@@ -60,3 +60,10 @@ export {
   type KpReaderEquationSymbolMotionFrame,
   type KpReaderEquationSymbolOwnerPose
 } from "./equation-symbol-motion.ts";
+export {
+  applyKpReaderEquationResponsiveFit,
+  checkKpReaderEquationMotionConformance,
+  planKpReaderEquationResponsiveFit,
+  type KpReaderEquationConformanceIssue,
+  type KpReaderEquationResponsiveFitPlan
+} from "./equation-responsive-fit.ts";
