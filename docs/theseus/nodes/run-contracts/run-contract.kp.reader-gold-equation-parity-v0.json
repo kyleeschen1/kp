@@ -63,7 +63,8 @@
     {
       "id": "s05-editor-clone-migration",
       "title": "Migrate editor material clone",
-      "status": "planned"
+      "summary": "The accepted editor material layer now consumes the neutral style-clone primitive; continuity and story-shell browser checks remain unchanged.",
+      "status": "complete"
     },
     {
       "id": "s06-reader-clone-migration",

@@ -90,6 +90,18 @@
       "status": "passed",
       "scope": "s04 font readiness lifecycle",
       "checkedAt": "2026-07-20T20:33:04.562Z"
+    },
+    {
+      "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium -g linear-operation-boundaries",
+      "status": "passed",
+      "scope": "s05 accepted material continuity",
+      "checkedAt": "2026-07-20T20:34:43.905Z"
+    },
+    {
+      "command": "npx playwright test tests/linear-equation-symbolic-story-shell.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "s05 editor-backed story surface",
+      "checkedAt": "2026-07-20T20:34:44.745Z"
     }
   ],
   "progress": {
