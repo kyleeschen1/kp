@@ -314,11 +314,23 @@
       "status": "passed",
       "scope": "s11 compile-time math projection types and imports",
       "checkedAt": "2026-07-20T17:11:04.138Z"
+    },
+    {
+      "command": "node --test hydration manifest static math and architecture suites",
+      "status": "passed",
+      "scope": "s12 11 manifest closure alignment safety and boundary tests",
+      "checkedAt": "2026-07-20T17:13:00.974Z"
+    },
+    {
+      "command": "app and test TypeScript checks plus npm run check:architecture",
+      "status": "passed",
+      "scope": "s12 versioned manifest types and imports",
+      "checkedAt": "2026-07-20T17:13:02.105Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s11 turns semantic checkpoints into strict build-time KaTeX visual markup plus MathML, so the initial equation does not depend on client rendering."
+    "summary": "s12 cleanly separates searchable static content from a small versioned behavior manifest that is safe to embed and strict about checkpoint alignment."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

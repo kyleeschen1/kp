@@ -119,7 +119,8 @@
     {
       "id": "s12",
       "title": "Emit versioned hydration manifest",
-      "status": "planned"
+      "summary": "Emitted a versioned hydration manifest with script-safe serialization and checkpoint closure. Focused tests, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s13",

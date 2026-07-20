@@ -27,3 +27,11 @@ export {
   type KpStaticMathProjector,
   type KpStaticMathState
 } from "./static-math-compiler.ts";
+export {
+  emitKpReaderHydrationManifest,
+  kpReaderHydrationManifestSchemaVersion,
+  serializeKpReaderHydrationManifest,
+  type KpReaderHydrationBlock,
+  type KpReaderHydrationCheckpoint,
+  type KpReaderHydrationManifest
+} from "./hydration-manifest.ts";
