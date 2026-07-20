@@ -86,6 +86,10 @@
     {
       "kind": "file",
       "path": "tests/semantic-reader-motion-selector.browser.spec.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-reader-focus-salience.browser.spec.ts"
     }
   ],
   "dependsOn": {
@@ -304,6 +308,18 @@
       "status": "passed",
       "scope": "s21 selector override persistence and static mode",
       "checkedAt": "2026-07-20T21:39:03.222Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22 inferred focus snapshot integration",
+      "checkedAt": "2026-07-20T21:44:38.210Z"
+    },
+    {
+      "command": "npx playwright test focused semantic focus and URL restoration suites",
+      "status": "passed",
+      "scope": "s22 restrained narrative salience and interactive semantic correspondence",
+      "checkedAt": "2026-07-20T21:44:39.326Z"
     }
   ],
   "progress": {

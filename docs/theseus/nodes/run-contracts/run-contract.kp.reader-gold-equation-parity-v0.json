@@ -165,7 +165,8 @@
     {
       "id": "s22-focus-salience",
       "title": "Align prose and equation focus",
-      "status": "planned"
+      "summary": "Narrative object scope no longer floods whole equations; pointer, keyboard, and URL focus use the shared relation color and immediately update native and moving material symbols.",
+      "status": "complete"
     },
     {
       "id": "s23-responsive-fit",

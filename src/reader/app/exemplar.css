@@ -95,6 +95,11 @@ body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-stat
 .kp-reader-equation-material-visual { display: inline-block; width: max-content; }
 .kp-reader-equation-annihilation-witness { position: absolute; z-index: 4; padding: .02em .16em; border-radius: 999px; background: color-mix(in srgb, var(--kp-surface) 88%, transparent); pointer-events: none; transform-origin: center; opacity: 0; }
 .kp-reader-equation-material-owner--focused, .kp-reader-semantic-focus { color: var(--kp-accent) !important; }
+.kp-reader-equation-stage:is(
+  [data-kp-reader-focus-source="pointer"],
+  [data-kp-reader-focus-source="keyboard"],
+  [data-kp-reader-focus-source="url"]
+) :is(.kp-reader-equation-material-owner--focused, .kp-reader-semantic-focus) { color: var(--kp-relation) !important; }
 .kp-reader-equation-material-owner--focused .kp-reader-equation-material-visual { filter: drop-shadow(0 .08em .16em rgb(223 112 71 / 18%)); }
 body[data-kp-reader-motion-mode="essential"] .kp-reader-equation-material-owner--focused .kp-reader-equation-material-visual { filter: none; }
 .kp-reader-equation-progress { height: 2px; margin: .1rem .3rem 0; background: color-mix(in srgb, var(--kp-line) 72%, transparent); overflow: hidden; }

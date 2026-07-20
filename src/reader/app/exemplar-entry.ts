@@ -37,6 +37,7 @@ import {
   sampleKpReaderAnimationFrame,
   type KpReaderClockSample,
   type KpReaderContinuousScrollClock,
+  type KpReaderFocusSnapshot,
   type KpReaderMotionPreference
 } from "../runtime/public-api.ts";
 
@@ -114,6 +115,7 @@ const allowedFocusRefs = animation.bundle.objects.flatMap((object) => [
   object.id,
   ...object.selectors.map((selector) => selector.id)
 ]);
+const equationObjectRefs = new Set(animation.bundle.objects.map((object) => object.id));
 const focus = createKpReaderSemanticFocusService(allowedFocusRefs);
 let activeBeat = beats[0];
 let scrollClock = createScrollClock();
@@ -144,7 +146,7 @@ const scheduler = createKpReaderEquationFrameScheduler<
 });
 
 const unsubscribeFocus = focus.subscribe((snapshot) => {
-  applyFocus(snapshot.objectRefs);
+  applyFocus(snapshot);
   updateShareLink(lastSample());
 });
 const resizeObserver = new ResizeObserver(() => {
@@ -317,7 +319,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     successorSynthesisBinding: choreographyStep?.successorSynthesisBinding,
     progress: phaseProgress
   });
-  const focusedRefs = focus.getSnapshot().objectRefs;
+  const focusSnapshot = focus.getSnapshot();
+  const focusedRefs = visualFocusRefs(focusSnapshot);
 
   for (const candidate of layout.contexts.values()) {
     const active = candidate.id === transitionId;
@@ -373,7 +376,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     motion.witnessedAnnihilation,
     projection.mode !== "essential"
   );
-  applyFocus(focusedRefs);
+  applyFocus(focusSnapshot);
   progressBar.style.transform = `scaleX(${visualSample.progress})`;
   document.body.dataset["kpReaderProgress"] = String(visualSample.progressPermille);
   document.body.dataset["kpReaderMotionMode"] = projection.mode;
@@ -468,15 +471,31 @@ function onSemanticEnter(event: Event): void {
   const link = target.closest<HTMLElement>(".kp-semantic-link");
   if (link === null) return;
   focus.set(event.type === "focusin" ? "keyboard" : "pointer", dataRefs(link));
+  renderCurrentSample();
 }
 
 function onSemanticLeave(event: Event): void {
   const target = event.target;
   if (!(target instanceof Element) || target.closest(".kp-semantic-link") === null) return;
   focus.clear(event.type === "focusout" ? "keyboard" : "pointer");
+  renderCurrentSample();
 }
 
-function applyFocus(refs: readonly string[]): void {
+function visualFocusRefs(snapshot: KpReaderFocusSnapshot): readonly string[] {
+  // Story-level object refs describe narrative scope, not a request to color an
+  // entire equation. Exact selector refs remain visibly salient.
+  return snapshot.activeSource === "story"
+    ? snapshot.objectRefs.filter((ref) => !equationObjectRefs.has(ref))
+    : snapshot.objectRefs;
+}
+
+function applyFocus(snapshot: KpReaderFocusSnapshot): void {
+  const refs = visualFocusRefs(snapshot);
+  if (snapshot.activeSource === undefined) {
+    delete stage.dataset["kpReaderFocusSource"];
+  } else {
+    stage.dataset["kpReaderFocusSource"] = snapshot.activeSource;
+  }
   const matches = (selectorId: string): boolean => refs.some(
     (ref) => selectorId === ref || selectorId.startsWith(`${ref}.`)
   );
