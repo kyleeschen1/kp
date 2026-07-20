@@ -57,7 +57,8 @@
     {
       "id": "s04-font-readiness",
       "title": "Add font readiness and invalidation",
-      "status": "planned"
+      "summary": "Added a shared awaitable font gate with loading-done revisions and disposal, proved in Chromium.",
+      "status": "complete"
     },
     {
       "id": "s05-editor-clone-migration",
