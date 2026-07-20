@@ -39,7 +39,8 @@
     {
       "id": "s01-canonical-baseline",
       "title": "Capture canonical and reader baselines",
-      "status": "planned"
+      "summary": "Added a repeatable seven-frame cross-surface capture with font and geometry metrics; verified the exact typography discrepancy.",
+      "status": "complete"
     },
     {
       "id": "s02-parity-contract",

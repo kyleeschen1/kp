@@ -26,6 +26,10 @@
     {
       "kind": "file",
       "path": "src/reader/renderers/equation-symbol-motion.ts"
+    },
+    {
+      "kind": "file",
+      "path": "scripts/capture-reader-gold-equation-parity.ts"
     }
   ],
   "dependsOn": {
@@ -43,6 +47,19 @@
     "npm run perf:linear-equation",
     "npm run build"
   ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:reader-gold-parity",
+      "status": "passed",
+      "scope": "s01 canonical editor and reader baselines",
+      "checkedAt": "2026-07-20T20:27:26.024Z",
+      "notes": "Captured seven named frames on both surfaces and exposed the reader clone font-family mismatch."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Captured deterministic editor/reader baselines; reader material clones resolve to Inter while canonical KaTeX ink retains KaTeX_Main and KaTeX_Math."
+  },
   "expectedLearning": [
     "Whether the accepted editor animation realization can become a neutral renderer without visual regression",
     "Which motion remains essential for algebraic causality under reduced-motion preferences",
