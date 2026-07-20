@@ -134,11 +134,47 @@
       "status": "passed",
       "scope": "s03 reader public contracts and all TypeScript projects",
       "checkedAt": "2026-07-20T16:36:50.046Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-reader-playback-clock.test.ts tests/semantic-reader-artifact-contracts.test.ts tests/semantic-reader-architecture.test.ts",
+      "status": "passed",
+      "scope": "s04 14 clock, sampler, artifact, and architecture tests",
+      "checkedAt": "2026-07-20T16:40:55.962Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s04 seven-file semantic-reader architecture gate",
+      "checkedAt": "2026-07-20T16:40:56.907Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.app.json --noEmit",
+      "status": "passed",
+      "scope": "s04 application TypeScript",
+      "checkedAt": "2026-07-20T16:40:57.691Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.node.json --noEmit",
+      "status": "passed",
+      "scope": "s04 Node TypeScript",
+      "checkedAt": "2026-07-20T16:40:58.464Z"
+    },
+    {
+      "command": "./node_modules/.bin/tsc --project tsconfig.test.json --noEmit",
+      "status": "passed",
+      "scope": "s04 test TypeScript",
+      "checkedAt": "2026-07-20T16:40:59.258Z"
+    },
+    {
+      "command": "npm run typecheck:domains",
+      "status": "passed",
+      "scope": "s04 domains TypeScript",
+      "checkedAt": "2026-07-20T16:41:00.057Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s03 added the minimal reader artifact vocabulary without choosing content syntax: literal-inferred versioned refs, generic lesson and compiled-static artifacts, bounded immutable session snapshots, and renderer lifecycle contracts."
+    "summary": "s04 introduced a pure clock sample and playback interface plus a direct bridge from reader progress to the canonical renderer-neutral animation sampler. It owns no timer or DOM and preserves deterministic forward and rewind sampling."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

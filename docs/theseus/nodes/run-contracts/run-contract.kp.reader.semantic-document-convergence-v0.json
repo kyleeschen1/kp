@@ -71,7 +71,8 @@
     {
       "id": "s04",
       "title": "Introduce renderer-neutral playback clock seam",
-      "status": "planned"
+      "summary": "Added and verified normalized reader clock samples, subscription contract, direction derivation, validation, and direct canonical runtime sampling.",
+      "status": "complete"
     },
     {
       "id": "s05",
