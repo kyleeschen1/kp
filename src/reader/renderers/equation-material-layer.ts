@@ -6,6 +6,10 @@ export interface KpReaderEquationMaterialFragmentFrame {
   readonly visualRevision: string;
   readonly sourceElement: HTMLElement;
   readonly rect: KpReaderLayoutRect;
+  readonly translateX?: number | undefined;
+  readonly translateY?: number | undefined;
+  readonly scale?: number | undefined;
+  readonly opacity?: number | undefined;
 }
 
 export interface KpReaderEquationMaterialOwnerFrame {
@@ -124,7 +128,7 @@ function syncOwner(
     } else if (fragmentRecord.visualRevision !== fragment.visualRevision) {
       replaceFragmentVisual(fragmentRecord, fragment);
     }
-    positionFragment(fragmentRecord.element, frame.rect, fragment.rect);
+    positionFragment(fragmentRecord.element, frame.rect, fragment);
   }
 
   const element = record.element;
@@ -182,12 +186,18 @@ function sanitizeVisualClone(visual: HTMLElement): void {
 function positionFragment(
   element: HTMLElement,
   ownerRect: KpReaderLayoutRect,
-  fragmentRect: KpReaderLayoutRect
+  fragment: KpReaderEquationMaterialFragmentFrame
 ): void {
+  const fragmentRect = fragment.rect;
   element.style.left = `${fragmentRect.left - ownerRect.left}px`;
   element.style.top = `${fragmentRect.top - ownerRect.top}px`;
   element.style.width = `${fragmentRect.width}px`;
   element.style.height = `${fragmentRect.height}px`;
+  element.style.opacity = String(fragment.opacity ?? 1);
+  element.style.transformOrigin = "center center";
+  element.style.transform =
+    `translate(${fragment.translateX ?? 0}px, ${fragment.translateY ?? 0}px) ` +
+    `scale(${fragment.scale ?? 1})`;
 }
 
 function assertUniqueFrames(

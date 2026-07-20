@@ -15,6 +15,12 @@ import {
 import {
   sampleKpEquationMaterialOwnerHandoff
 } from "../../rendering/equation-material-owner.ts";
+import {
+  sampleKpEquationLinearRearrangementOwnerMotion,
+  type KpEquationOwnerFragmentMotion
+} from "../../rendering/equation-linear-rearrangement-owner-motion.ts";
+import type { KpEquationLinearRearrangementKind } from "../../rendering/equation-linear-rearrangement.ts";
+import type { KpReaderEquationLayoutSnapshot } from "./equation-layout-snapshot.ts";
 
 export interface KpReaderEquationSymbolMotionFrame extends KpEquationVisualFrame<
   KpReaderEquationSymbolOwnerPose
@@ -41,11 +47,14 @@ export interface KpReaderEquationSymbolOwnerPose extends KpEquationVisualOwnerPo
   readonly sourceNativeOpacity: number;
   readonly targetNativeOpacity: number;
   readonly focusStrength: number;
+  readonly fragmentPoses: readonly KpEquationOwnerFragmentMotion[];
 }
 
 export function sampleKpReaderEquationSymbolMotion(input: {
   readonly materialPlan: KpReaderEquationMaterialPlan;
   readonly alignment: KpReaderEquationPerceptualAlignmentPlan;
+  readonly layout?: KpReaderEquationLayoutSnapshot | undefined;
+  readonly linearRearrangementKind?: KpEquationLinearRearrangementKind | undefined;
   readonly progress: number;
   readonly direction?: "forward" | "rewind" | undefined;
 }): KpReaderEquationSymbolMotionFrame {
@@ -68,7 +77,14 @@ export function sampleKpReaderEquationSymbolMotion(input: {
     if (aligned === undefined) {
       throw new Error(`Alignment plan is missing material owner ${owner.id}.`);
     }
-    return sampleOwner(owner, aligned, progress, easedProgress);
+    return sampleOwner(
+      owner,
+      aligned,
+      progress,
+      easedProgress,
+      input.layout,
+      input.linearRearrangementKind
+    );
   });
   if (ownersById.size !== owners.length) {
     throw new Error("Alignment plan and material plan have different owner closure.");
@@ -92,7 +108,9 @@ function sampleOwner(
   owner: KpReaderEquationMaterialOwnerPlan,
   aligned: KpReaderEquationAlignedOwner,
   progress: number,
-  easedProgress: number
+  easedProgress: number,
+  layout: KpReaderEquationLayoutSnapshot | undefined,
+  linearRearrangementKind: KpEquationLinearRearrangementKind | undefined
 ): KpReaderEquationSymbolOwnerPose {
   const source = aligned.sourceBounds;
   const target = aligned.targetBounds;
@@ -112,6 +130,16 @@ function sampleOwner(
     sourcePresent: source !== undefined,
     targetPresent: target !== undefined
   });
+  const fragmentPoses = layout === undefined || linearRearrangementKind === undefined
+    ? []
+    : sampleKpEquationLinearRearrangementOwnerMotion({
+        kind: linearRearrangementKind,
+        relationRecordId: owner.relationRecordId,
+        lifecycle: owner.lifecycle,
+        sourceAnchors: anchorsForOwner(layout, owner.sourceAnchorIds, source, aligned.sourceBounds),
+        targetAnchors: anchorsForOwner(layout, owner.targetAnchorIds, target, aligned.targetBounds),
+        progress
+      });
 
   return {
     ownerId: owner.id,
@@ -128,10 +156,39 @@ function sampleOwner(
     materialOpacity: handoff.materialOpacity,
     sourceNativeOpacity: handoff.sourceNativeOpacity,
     targetNativeOpacity: handoff.targetNativeOpacity,
+    fragmentPoses,
     focusStrength: owner.focused
       ? 0.35 + 0.65 * Math.sin(Math.PI * progress)
       : 0
   };
+}
+
+function anchorsForOwner(
+  layout: KpReaderEquationLayoutSnapshot,
+  anchorIds: readonly string[],
+  rawBounds: KpReaderLayoutRect | undefined,
+  alignedBounds: KpReaderLayoutRect | undefined
+) {
+  const correction = rawBounds === undefined || alignedBounds === undefined
+    ? { x: 0, y: 0 }
+    : {
+        x: alignedBounds.left - rawBounds.left,
+        y: alignedBounds.top - rawBounds.top
+      };
+  return anchorIds.map((anchorId) => {
+    const anchor = layout.anchors.find((candidate) => candidate.id === anchorId);
+    if (anchor === undefined) {
+      throw new Error(`Equation owner references missing layout anchor ${anchorId}.`);
+    }
+    return {
+      id: anchorId,
+      rect: {
+        ...anchor.rect,
+        left: anchor.rect.left + correction.x,
+        top: anchor.rect.top + correction.y
+      }
+    };
+  });
 }
 
 function vanishedRect(rect: KpReaderLayoutRect): KpReaderLayoutRect {

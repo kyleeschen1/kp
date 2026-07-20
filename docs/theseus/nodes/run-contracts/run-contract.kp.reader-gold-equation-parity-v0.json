@@ -111,7 +111,8 @@
     {
       "id": "s13-subtraction",
       "title": "Transfer subtraction choreography",
-      "status": "planned"
+      "summary": "Reader fragments now consume the accepted balanced-introduction timing: persistent symbols reserve space first, then inverse terms enter together along opposed diagonals.",
+      "status": "complete"
     },
     {
       "id": "s14-cancellation",

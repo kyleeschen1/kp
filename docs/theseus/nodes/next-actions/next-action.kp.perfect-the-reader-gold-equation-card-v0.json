@@ -54,6 +54,10 @@
     {
       "kind": "file",
       "path": "src/rendering/semantic-equation-frame.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-linear-rearrangement-owner-motion.ts"
     }
   ],
   "dependsOn": {
@@ -170,6 +174,18 @@
       "status": "passed",
       "scope": "s12 single persistent viewport material stage and owner-node continuity",
       "checkedAt": "2026-07-20T20:53:35.984Z"
+    },
+    {
+      "command": "node --test focused linear rearrangement owner motion and reader conformance suites",
+      "status": "passed",
+      "scope": "s13 balanced subtraction reservation and simultaneous inverse-term entry",
+      "checkedAt": "2026-07-20T21:00:11.891Z"
+    },
+    {
+      "command": "node scripts/capture-reader-gold-equation-parity.ts",
+      "status": "passed",
+      "scope": "s13 named reader subtraction entry visual capture",
+      "checkedAt": "2026-07-20T21:00:12.728Z"
     }
   ],
   "progress": {

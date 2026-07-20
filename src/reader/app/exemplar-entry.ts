@@ -1,4 +1,7 @@
 import { createLinearSolveAnimationAsset } from "../../animation/linear-solve-adapter.ts";
+import {
+  createKpLinearRearrangementChoreography
+} from "../../animation/linear-rearrangement-choreography.ts";
 import { createKpEquationFontReadiness } from "../../rendering/equation-font-readiness.ts";
 import {
   applyKpReaderEquationResponsiveFit,
@@ -48,6 +51,7 @@ interface LayoutState {
 const documentId = "lesson.solve-x.x-plus-3";
 const documentVersion = "1";
 const animation = createLinearSolveAnimationAsset();
+const linearChoreography = createKpLinearRearrangementChoreography(animation);
 const story = requireElement<HTMLElement>("[data-kp-asset]");
 const staticSurface = requireElement<HTMLElement>("[data-kp-animation-static]");
 const template = requireElement<HTMLTemplateElement>("template[data-kp-reader-exemplar-template]");
@@ -267,6 +271,10 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   const motion = sampleKpReaderEquationSymbolMotion({
     materialPlan: context.materialPlan,
     alignment: context.alignment,
+    layout: context.layout,
+    linearRearrangementKind: linearChoreography.steps.find(
+      (step) => step.transformationId === transitionId
+    )?.kind,
     progress: phaseProgress
   });
   const focusedRefs = focus.getSnapshot().objectRefs;
@@ -289,20 +297,32 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
       if (element === undefined || anchor === undefined) {
         throw new Error(`Equation visual anchor ${anchorId} is not measurable.`);
       }
+      const pose = owner.fragmentPoses.find(
+        (candidate) => candidate.anchorId === anchorId
+      )?.pose;
       return {
         id: anchorId,
         visualRevision: `${transitionId}.${anchorId}`,
         sourceElement: element,
-        rect: anchor.rect
+        rect: anchor.rect,
+        ...(pose === undefined
+          ? {}
+          : {
+              translateX: pose.x,
+              translateY: pose.y,
+              scale: pose.scale,
+              opacity: pose.opacity
+            })
       };
     });
+    const fragmentDriven = owner.fragmentPoses.length > 0;
     return {
       ownerId: owner.ownerId,
       rect: rawBounds,
-      translateX: owner.currentBounds.left - rawBounds.left,
-      translateY: owner.currentBounds.top - rawBounds.top,
-      scaleX: owner.currentBounds.width / rawBounds.width,
-      scaleY: owner.currentBounds.height / rawBounds.height,
+      translateX: fragmentDriven ? 0 : owner.currentBounds.left - rawBounds.left,
+      translateY: fragmentDriven ? 0 : owner.currentBounds.top - rawBounds.top,
+      scaleX: fragmentDriven ? 1 : owner.currentBounds.width / rawBounds.width,
+      scaleY: fragmentDriven ? 1 : owner.currentBounds.height / rawBounds.height,
       opacity: owner.materialOpacity,
       focused: owner.focusStrength > 0 || ownerMatchesFocus(owner, focusedRefs),
       fragments

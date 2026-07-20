@@ -77,7 +77,8 @@ test("motion conformance reports overflow and fitted owner escapes", () => {
       materialOpacity: 1,
       sourceNativeOpacity: 0,
       targetNativeOpacity: 0,
-      focusStrength: 0
+      focusStrength: 0,
+      fragmentPoses: []
     }]
   };
   assert.deepEqual(
