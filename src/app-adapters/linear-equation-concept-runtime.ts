@@ -20,6 +20,10 @@ import {
   type KpConceptRoomRuntime,
   type KpConceptRoomRuntimeSession
 } from "./concept-room-runtime.ts";
+import {
+  createLinearEquationCoordinatedStage,
+  type KpLinearEquationCoordinatedStage
+} from "./linear-equation-coordinated-stage.ts";
 
 interface SymbolicRendererModule {
   renderSymbolicEquation: typeof import("./symbolic-equation-dom.ts")["renderSymbolicEquation"];
@@ -85,11 +89,16 @@ function runtimeSession(
   let disposed = false;
   let symbolicStage: ReturnType<NonNullable<SymbolicRendererModule["createLinearEquationSymbolicStage"]>> | undefined;
   let symbolicStageRoot: HTMLElement | undefined;
+  let coordinatedStage: KpLinearEquationCoordinatedStage | undefined;
+  let coordinatedStageRoot: HTMLElement | undefined;
   return {
     async render(root, state) {
       if (disposed) throw new Error("Linear-equation concept runtime is disposed.");
       try {
         if (state.projection === "symbolic") {
+          coordinatedStage?.dispose();
+          coordinatedStage = undefined;
+          coordinatedStageRoot = undefined;
           const renderer = await loadSymbolic();
           const projection = projectLinearEquationTrace(trace, state.timePermille, {
             operationWindows: symbolicOperationWindows
@@ -109,6 +118,9 @@ function runtimeSession(
           return;
         }
         if (state.projection === "balance") {
+          coordinatedStage?.dispose();
+          coordinatedStage = undefined;
+          coordinatedStageRoot = undefined;
           symbolicStage?.dispose();
           symbolicStage = undefined;
           symbolicStageRoot = undefined;
@@ -121,6 +133,34 @@ function runtimeSession(
             }),
             { focusSemanticIds: state.focus }
           );
+          return;
+        }
+        if (state.projection === "coordinated") {
+          symbolicStage?.dispose();
+          symbolicStage = undefined;
+          symbolicStageRoot = undefined;
+          const [symbolicRenderer, balanceRenderer] = await Promise.all([loadSymbolic(), loadBalance()]);
+          if (coordinatedStageRoot !== root) {
+            coordinatedStage?.dispose();
+            coordinatedStage = createLinearEquationCoordinatedStage(root, {
+              ...(symbolicRenderer.createLinearEquationSymbolicStage === undefined
+                ? {}
+                : { createSymbolicStage: symbolicRenderer.createLinearEquationSymbolicStage }),
+              renderSymbolicEquation: symbolicRenderer.renderSymbolicEquation,
+              renderBalanceScene: balanceRenderer.renderBalanceScene
+            });
+            coordinatedStageRoot = root;
+          }
+          const stage = coordinatedStage;
+          if (stage === undefined) throw new Error("Coordinated stage failed to initialize.");
+          const symbolic = projectLinearEquationTrace(trace, state.timePermille, {
+            operationWindows: symbolicOperationWindows
+          });
+          const balance = projectLinearEquationBalanceExemplar(trace, state.timePermille, {
+            diagramSemanticId: "diagram.balance",
+            operationWindows: symbolicOperationWindows
+          });
+          await stage.render(symbolic, balance, { focusSemanticIds: state.focus });
           return;
         }
         throw new KpConceptRoomRuntimeError(
@@ -139,6 +179,7 @@ function runtimeSession(
     dispose() {
       disposed = true;
       symbolicStage?.dispose();
+      coordinatedStage?.dispose();
     }
   };
 }
@@ -168,7 +209,8 @@ function requireLinearEquationArtifact(artifact: KpConceptRoomArtifactLike): voi
     artifact.manifest.projections.includes("symbolic");
   const balanceProjection = artifact.manifest.styleRoles.includes("diagram.balance") &&
     artifact.manifest.projections.includes("balance");
-  if (!equationCapability || !balanceProjection) {
+  const coordinatedProjection = artifact.manifest.projections.includes("coordinated");
+  if (!equationCapability || !balanceProjection || !coordinatedProjection) {
     throw new KpConceptRoomRuntimeError(
       "capability-unavailable",
       "The published artifact does not declare the linear-equation projection contract."

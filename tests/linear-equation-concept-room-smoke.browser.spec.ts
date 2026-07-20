@@ -50,13 +50,20 @@ test("canonical and snapshot URLs mount, switch synchronized views, review, and 
   await expect(viewport.locator("[data-kp-symbolic-equation]")).toHaveAttribute(
     "data-kp-frame-id", "frame.step.2"
   );
+  await page.getByRole("link", { name: "Together", exact: true }).click();
+  await expect(shell).toHaveAttribute("data-kp-concept-projection", "coordinated");
+  await expect(viewport.locator('[data-kp-coordinated-projection="symbolic"] [data-kp-symbolic-equation]'))
+    .toHaveAttribute("data-kp-progress-permille", "750");
+  await expect(viewport.locator('[data-kp-coordinated-projection="balance"] [data-kp-balance-scene]'))
+    .toHaveAttribute("data-kp-progress-permille", "750");
   await page.getByRole("link", { name: "Review", exact: true }).click();
   await expect(viewport.locator("[data-kp-concept-review-fallback]")).toContainText(
     "Two copies of x become one"
   );
   await expect(viewport.locator("[data-kp-diagnostic-code]")).toHaveCount(0);
   await page.getByRole("link", { name: "Touch", exact: true }).click();
-  await expect(viewport.locator("[data-kp-symbolic-equation]")).toHaveAttribute(
+  await expect(viewport.locator('[data-kp-coordinated-projection="symbolic"] [data-kp-symbolic-equation]'))
+    .toHaveAttribute(
     "data-kp-frame-id", "frame.step.2"
   );
 

@@ -53,7 +53,7 @@ test("room routes round trip every durable state field canonically", () => {
 
 test("route round trips hold across modes, projections, checkpoints, and times", () => {
   const modes = ["watch", "touch", "ask", "review"] as const;
-  const projections = ["symbolic", "balance"] as const;
+  const projections = ["coordinated", "symbolic", "balance"] as const;
   for (let index = 0; index < 64; index += 1) {
     const route: KpConceptRoomRoute = {
       ...canonicalRoute,

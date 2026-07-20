@@ -145,7 +145,8 @@
     {
       "id": "s19",
       "title": "Coordinated primary stage",
-      "status": "planned"
+      "summary": "Coordinated one-clock primary stage implemented and verified.",
+      "status": "complete"
     },
     {
       "id": "s20",

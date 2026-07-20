@@ -6,7 +6,7 @@ export interface KpConceptRoomArtifactLike {
     readonly version: string;
     readonly title: string;
     readonly modes: readonly ("watch" | "touch" | "ask" | "review")[];
-    readonly projections: readonly ("symbolic" | "balance")[];
+    readonly projections: readonly ("coordinated" | "symbolic" | "balance")[];
     readonly styleRoles: readonly string[];
     readonly semanticRefs: readonly {
       readonly id: string;

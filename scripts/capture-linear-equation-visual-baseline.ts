@@ -26,14 +26,19 @@ const captures: CaptureRecord[] = [];
 
 try {
   await capturePage({
-    id: "linear-room-plain-symbolic",
+    id: "linear-room-coordinated-start",
     url: "/concepts/mathematics/linear-equations/solve-with-balance",
-    ready: "[data-kp-symbolic-equation]"
+    ready: "[data-kp-linear-equation-coordinated-stage]"
   });
+  const canonicalConceptUrl = page.url();
+  await page.getByRole("link", { name: "Equation", exact: true }).click();
+  await page.locator("[data-kp-symbolic-equation]").waitFor();
+  await captureCurrent("linear-room-plain-symbolic", "[data-kp-concept-room-shell]");
   await page.getByRole("link", { name: "Balance", exact: true }).click();
   await page.locator("[data-kp-balance-scene]").waitFor();
   await captureCurrent("linear-room-plain-balance", "[data-kp-concept-room-shell]");
-  await captureDivisionCheckpoints(page.url());
+  await captureDivisionCheckpoints(canonicalConceptUrl);
+  await captureCoordinatedCheckpoints(canonicalConceptUrl);
   await page.setViewportSize(viewport);
 
   await capturePage({
@@ -130,6 +135,41 @@ async function captureDivisionCheckpoints(canonicalConceptUrl: string): Promise<
       id,
       url: page.url(),
       selector: "[data-kp-concept-viewport] [data-kp-balance-stage-root]",
+      output: path.relative(process.cwd(), output),
+      time: checkpoint.time,
+      viewport: checkpoint.viewport
+    });
+  }
+}
+
+async function captureCoordinatedCheckpoints(canonicalConceptUrl: string): Promise<void> {
+  const checkpoints = [
+    { time: 575, viewport: { width: 1280, height: 900 }, suffix: "desktop" },
+    { time: 720, viewport: { width: 1280, height: 900 }, suffix: "desktop" },
+    { time: 575, viewport: { width: 390, height: 844 }, suffix: "phone" },
+    { time: 720, viewport: { width: 390, height: 844 }, suffix: "phone" }
+  ] as const;
+
+  for (const checkpoint of checkpoints) {
+    await page.setViewportSize(checkpoint.viewport);
+    const url = new URL(canonicalConceptUrl);
+    url.searchParams.set("checkpoint", "subtract-three");
+    url.searchParams.set("t", String(checkpoint.time));
+    url.searchParams.set("projection", "coordinated");
+    url.searchParams.append("focus", "operation.divide-two");
+    const id = `linear-room-coordinated-${checkpoint.time}-${checkpoint.suffix}`;
+    console.log(`capturing ${id}`);
+    await page.goto(url.href, { waitUntil: "domcontentloaded", timeout: 15_000 });
+    await page.locator("[data-kp-concept-room-mounted=true]").waitFor({ state: "attached", timeout: 15_000 });
+    const visualField = page.locator("[data-kp-concept-visual-field]");
+    await visualField.locator("[data-kp-linear-equation-coordinated-stage]").waitFor();
+    await settle(page);
+    const output = path.join(outputRoot, `${id}.png`);
+    await visualField.screenshot({ path: output });
+    captures.push({
+      id,
+      url: page.url(),
+      selector: "[data-kp-concept-visual-field]",
       output: path.relative(process.cwd(), output),
       time: checkpoint.time,
       viewport: checkpoint.viewport

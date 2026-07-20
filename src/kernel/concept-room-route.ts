@@ -1,5 +1,5 @@
 export type KpConceptRoomMode = "watch" | "touch" | "ask" | "review";
-export type KpConceptRoomProjection = "symbolic" | "balance";
+export type KpConceptRoomProjection = "coordinated" | "symbolic" | "balance";
 
 export interface KpConceptRoomProviderRouteState {
   readonly id: string;
@@ -39,7 +39,7 @@ export class KpConceptRoomRouteError extends Error {
 }
 
 const modes = new Set<KpConceptRoomMode>(["watch", "touch", "ask", "review"]);
-const projections = new Set<KpConceptRoomProjection>(["symbolic", "balance"]);
+const projections = new Set<KpConceptRoomProjection>(["coordinated", "symbolic", "balance"]);
 const singletonKeys = new Set([
   "route", "v", "checkpoint", "t", "mode", "projection", "branch",
   "provider", "providerProtocol", "providerVersion", "providerProvenance",

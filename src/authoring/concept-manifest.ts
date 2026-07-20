@@ -37,7 +37,7 @@ const conceptFields = {
   version: protocolString({ pattern: /^\d+\.\d+\.\d+$/ }),
   title: protocolString({ minLength: 1 }),
   modes: protocolArray(protocolEnum(["watch", "touch", "ask", "review"] as const)),
-  projections: protocolArray(protocolEnum(["symbolic", "balance"] as const)),
+  projections: protocolArray(protocolEnum(["coordinated", "symbolic", "balance"] as const)),
   styleRoles: protocolArray(protocolString({ pattern: /^[a-z0-9]+(?:[.-][a-z0-9]+)*$/ })),
   semanticRefs: protocolArray(semanticRefSchema),
   checkpoints: protocolArray(checkpointSchema),

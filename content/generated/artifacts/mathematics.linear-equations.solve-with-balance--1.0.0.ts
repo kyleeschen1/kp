@@ -13,6 +13,7 @@ const artifact = {
       "review"
     ],
     "projections": [
+      "coordinated",
       "symbolic",
       "balance"
     ],
@@ -136,7 +137,7 @@ const artifact = {
       "compilerVersion": "1.0.0"
     },
     "publicationStatus": "published",
-    "integrity": "sha256:e2eca97718b03757566a977d4adfcdd2a52a1fd15cff4c1084e11601f19bc84b"
+    "integrity": "sha256:825d5d6608fe28b28175a1aa9feb3f314e19e3119b09352301f50f5e29717256"
   },
   "dependencies": {
     "capabilities": [
@@ -154,7 +155,7 @@ const artifact = {
     ]
   },
   "assets": [],
-  "integrity": "sha256:e2eca97718b03757566a977d4adfcdd2a52a1fd15cff4c1084e11601f19bc84b"
+  "integrity": "sha256:825d5d6608fe28b28175a1aa9feb3f314e19e3119b09352301f50f5e29717256"
 } as const;
 
 export default artifact;

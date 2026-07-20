@@ -25,7 +25,7 @@ export const solveWithBalanceConcept = createConceptDraft({
   version: "1.0.0",
   title: "Solve a linear equation",
   modes: ["watch", "touch", "ask", "review"],
-  projections: ["symbolic", "balance"],
+  projections: ["coordinated", "symbolic", "balance"],
   styleRoles: [
     "equation.expression",
     "equation.operation",

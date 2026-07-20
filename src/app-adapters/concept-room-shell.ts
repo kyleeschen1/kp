@@ -433,7 +433,7 @@ function renderShell(
     link.dataset["kpConceptRoomLink"] = "projection";
     link.dataset["kpConceptProjectionLink"] = projection;
     link.href = formatConceptRoomRoute({ ...conceptRoomStateRoute(state), projection });
-    link.textContent = projection === "symbolic" ? "Equation" : "Balance";
+    link.textContent = projectionLabel(projection);
     if (projection === state.projection) link.setAttribute("aria-current", "page");
     viewControls.append(link);
   });
@@ -526,6 +526,11 @@ function updateRenderedShell(
 function setCurrent(element: Element, current: boolean, value: "page" | "step"): void {
   if (current) element.setAttribute("aria-current", value);
   else element.removeAttribute("aria-current");
+}
+
+function projectionLabel(projection: KpConceptRoomState["projection"]): string {
+  if (projection === "coordinated") return "Together";
+  return projection === "symbolic" ? "Equation" : "Balance";
 }
 
 function playbackControls(state: KpConceptRoomState, playing: boolean): HTMLElement {

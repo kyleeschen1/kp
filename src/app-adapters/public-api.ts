@@ -55,3 +55,9 @@ export {
   mapCanonicalLinearEquationTrace,
   type KpCanonicalLinearEquationRequests
 } from "./linear-equation-canonical-provider.ts";
+
+export {
+  createLinearEquationCoordinatedStage,
+  type KpLinearEquationCoordinatedRenderers,
+  type KpLinearEquationCoordinatedStage
+} from "./linear-equation-coordinated-stage.ts";
