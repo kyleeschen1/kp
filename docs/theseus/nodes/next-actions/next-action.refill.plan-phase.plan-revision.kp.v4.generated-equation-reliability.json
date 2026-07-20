@@ -96,6 +96,12 @@
       "status": "passed",
       "scope": "s13 typed browser boundary",
       "checkedAt": "2026-07-20T23:42:50.190Z"
+    },
+    {
+      "command": "node --test capture provider registry plus npm run typecheck",
+      "status": "passed",
+      "scope": "s14 surface-neutral capture provider boundary",
+      "checkedAt": "2026-07-20T23:44:41.103Z"
     }
   ],
   "expectedLearning": [

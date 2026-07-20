@@ -123,7 +123,8 @@
     {
       "id": "s14-capture-provider-registry",
       "title": "Capture-provider registry",
-      "status": "planned"
+      "summary": "The review shell can select registered providers by capability and priority without importing reader, editor, graph, or code internals.",
+      "status": "complete"
     },
     {
       "id": "s15-reader-capture-provider",
