@@ -81,7 +81,8 @@
     {
       "id": "s08-neutral-frame-api",
       "title": "Define neutral visual frame API",
-      "status": "planned"
+      "summary": "Defined and validated the renderer-neutral frame/owner pose contract; the reader sampler now satisfies it through inference while retaining its public compatibility fields.",
+      "status": "complete"
     },
     {
       "id": "s09-motion-planner",

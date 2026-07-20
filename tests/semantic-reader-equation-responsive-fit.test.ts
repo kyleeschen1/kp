@@ -65,6 +65,7 @@ test("motion conformance reports overflow and fitted owner escapes", () => {
     alignmentPlanId: alignment.id,
     progress: 0.5,
     easedProgress: 0.5,
+    direction: "forward",
     owners: [{
       ownerId: "owner.x",
       lifecycle: "persist",

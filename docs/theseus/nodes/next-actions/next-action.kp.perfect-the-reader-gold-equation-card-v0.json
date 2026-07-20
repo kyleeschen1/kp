@@ -42,6 +42,10 @@
     {
       "kind": "file",
       "path": "src/rendering/equation-font-readiness.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/rendering/equation-visual-frame.ts"
     }
   ],
   "dependsOn": {
@@ -122,6 +126,18 @@
       "status": "passed",
       "scope": "s07 clone-source and first-scroll typography",
       "checkedAt": "2026-07-20T20:38:54.888Z"
+    },
+    {
+      "command": "node --test equation-visual-frame and reader-symbol-motion tests",
+      "status": "passed",
+      "scope": "s08 neutral frame inference and compatibility",
+      "checkedAt": "2026-07-20T20:41:41.358Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08 inferred frame API",
+      "checkedAt": "2026-07-20T20:41:42.145Z"
     }
   ],
   "progress": {

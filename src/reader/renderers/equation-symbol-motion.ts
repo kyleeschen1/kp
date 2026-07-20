@@ -7,18 +7,26 @@ import type {
   KpReaderEquationAlignedOwner,
   KpReaderEquationPerceptualAlignmentPlan
 } from "./equation-perceptual-alignment.ts";
+import {
+  assertKpEquationVisualFrame,
+  type KpEquationVisualFrame,
+  type KpEquationVisualOwnerPose
+} from "../../rendering/equation-visual-frame.ts";
 
-export interface KpReaderEquationSymbolMotionFrame {
+export interface KpReaderEquationSymbolMotionFrame extends KpEquationVisualFrame<
+  KpReaderEquationSymbolOwnerPose
+> {
   readonly id: string;
   readonly kind: "reader-equation-symbol-motion-frame";
   readonly materialPlanId: string;
   readonly alignmentPlanId: string;
   readonly progress: number;
   readonly easedProgress: number;
+  readonly direction: "forward" | "rewind";
   readonly owners: readonly KpReaderEquationSymbolOwnerPose[];
 }
 
-export interface KpReaderEquationSymbolOwnerPose {
+export interface KpReaderEquationSymbolOwnerPose extends KpEquationVisualOwnerPose {
   readonly ownerId: string;
   readonly lifecycle: KpReaderEquationMaterialOwnerPlan["lifecycle"];
   readonly continuity: KpReaderEquationMaterialOwnerPlan["continuity"];
@@ -38,6 +46,7 @@ export function sampleKpReaderEquationSymbolMotion(input: {
   readonly materialPlan: KpReaderEquationMaterialPlan;
   readonly alignment: KpReaderEquationPerceptualAlignmentPlan;
   readonly progress: number;
+  readonly direction?: "forward" | "rewind" | undefined;
 }): KpReaderEquationSymbolMotionFrame {
   if (input.alignment.layoutSnapshotId === "") {
     throw new Error("Equation symbol motion requires a layout-backed alignment plan.");
@@ -64,15 +73,18 @@ export function sampleKpReaderEquationSymbolMotion(input: {
     throw new Error("Alignment plan and material plan have different owner closure.");
   }
 
-  return {
+  const frame: KpReaderEquationSymbolMotionFrame = {
     id: `motion.${input.alignment.id}.${progress.toFixed(4)}`,
     kind: "reader-equation-symbol-motion-frame",
     materialPlanId: input.materialPlan.id,
     alignmentPlanId: input.alignment.id,
     progress,
     easedProgress,
+    direction: input.direction ?? "forward",
     owners
   };
+  assertKpEquationVisualFrame(frame);
+  return frame;
 }
 
 function sampleOwner(
