@@ -3,6 +3,7 @@ import type {
   KpLessonDocument,
   KpLessonInline
 } from "../document/public-api.ts";
+import type { KpStaticMathBlock } from "./static-math-compiler.ts";
 
 export interface KpStaticLessonHtml {
   readonly articleHtml: string;
@@ -10,8 +11,10 @@ export interface KpStaticLessonHtml {
 }
 
 export function compileKpStaticLessonProse(
-  document: KpLessonDocument
+  document: KpLessonDocument,
+  options: { readonly staticMath?: readonly KpStaticMathBlock[] | undefined } = {}
 ): KpStaticLessonHtml {
+  const staticMath = new Map((options.staticMath ?? []).map((block) => [block.blockId, block]));
   const article = document.blocks.map((block) => {
     if (block.kind === "heading") {
       return `<h${block.level} id="${attribute(block.id)}" data-kp-block="${attribute(block.id)}">${inlineHtml(block.content)}</h${block.level}>`;
@@ -19,7 +22,7 @@ export function compileKpStaticLessonProse(
     if (block.kind === "paragraph") {
       return `<p id="${attribute(block.id)}" data-kp-block="${attribute(block.id)}">${inlineHtml(block.content)}</p>`;
     }
-    return storyHtml(block);
+    return storyHtml(block, staticMath.get(block.id));
   }).join("\n");
   const tocItems = document.blocks.flatMap((block) => {
     if (block.kind === "heading") {
@@ -54,11 +57,19 @@ export function compileKpStaticLessonProse(
   };
 }
 
-function storyHtml(block: KpLessonAnimationStoryBlock): string {
+function storyHtml(
+  block: KpLessonAnimationStoryBlock,
+  staticMath: KpStaticMathBlock | undefined
+): string {
+  const staticStates = staticMath === undefined
+    ? `<p class="kp-animation-static-label">See this concept move</p>`
+    : staticMath.states.map((state, index) =>
+      `<div id="static.${attribute(block.id)}.${attribute(state.checkpointId)}" data-kp-static-state data-kp-progress="${state.progressPermille}"${index === 0 ? "" : " hidden"}>${state.html}</div>`
+    ).join("\n");
   return [
     `<section id="${attribute(block.id)}" class="kp-animation-story" data-kp-block="${attribute(block.id)}" data-kp-asset="${attribute(block.asset.id)}" data-kp-asset-version="${attribute(block.asset.version)}">`,
     `<div class="kp-animation-static" data-kp-animation-static aria-label="Interactive explanation">`,
-    `<p class="kp-animation-static-label">See this concept move</p>`,
+    staticStates,
     "</div>",
     `<ol class="kp-animation-beats" aria-label="Explanation steps">`,
     ...block.beats.map((beat) => [

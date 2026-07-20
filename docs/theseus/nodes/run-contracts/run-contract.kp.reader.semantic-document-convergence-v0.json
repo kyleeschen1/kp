@@ -125,7 +125,8 @@
     {
       "id": "s13",
       "title": "Compile complete static x-plus-3 lesson",
-      "status": "planned"
+      "summary": "Compiled the complete static x-plus-3 lesson through the current semantic asset. End-to-end tests, production build, bundle isolation, architecture gates, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s14",

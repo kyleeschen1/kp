@@ -326,11 +326,29 @@
       "status": "passed",
       "scope": "s12 versioned manifest types and imports",
       "checkedAt": "2026-07-20T17:13:02.105Z"
+    },
+    {
+      "command": "node --test x-plus-3 static compiler and supporting semantic reader suites",
+      "status": "passed",
+      "scope": "s13 14 end-to-end static artifact and boundary tests",
+      "checkedAt": "2026-07-20T17:16:33.857Z"
+    },
+    {
+      "command": "npm run build and npm run check:reader-parser-isolation",
+      "status": "passed",
+      "scope": "s13 production build and parser route closure",
+      "checkedAt": "2026-07-20T17:16:35.111Z"
+    },
+    {
+      "command": "three direct TypeScript project checks and npm run check:architecture",
+      "status": "passed",
+      "scope": "s13 canonical compiler asset integration and types",
+      "checkedAt": "2026-07-20T17:16:36.123Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s12 cleanly separates searchable static content from a small versioned behavior manifest that is safe to embed and strict about checkpoint alignment."
+    "summary": "s13 proves the complete build path from committed Markdown and the canonical semantic asset to a searchable no-JavaScript HTML artifact with four MathML checkpoints and isolated hydration data."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",
