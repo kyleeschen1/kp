@@ -2,8 +2,9 @@
   "id": "next-action.kp.editor.animation-picker-protocol-conformance-v0",
   "kind": "task",
   "title": "Prove KP animation picker protocol conformance",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.editor",
+  "summary": "KP independently consumes the language-neutral picker state and intent boundary over 45 existing animation descriptors, with stable identity, clamped navigation, refresh reconciliation, and tagged outcomes.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -62,11 +63,29 @@
       "scope": "KP conformance types",
       "checkedAt": "2026-07-20T00:26:42.427Z",
       "notes": "All KP application, Node, test, and domain TypeScript projects pass after refresh and stale-identity coverage."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/kp-editor-animation-picker.test.ts tests/kp-editor-animation-picker-protocol.test.ts",
+      "status": "passed",
+      "scope": "eight KP picker tests",
+      "checkedAt": "2026-07-20T00:30:11.777Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "KP application Node test and domain types",
+      "checkedAt": "2026-07-20T00:30:11.970Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "KP project memory",
+      "checkedAt": "2026-07-20T00:30:12.143Z"
     }
   ],
   "progress": {
-    "state": "partial",
-    "summary": "KP conformance now pins clamped navigation, empty no-cursor state, refresh by row identity across reordering and relabeling, valid fallback after deletion, stale cursor rejection, and distinct tagged selection outcomes. Cross-consumer receipt remains."
+    "state": "complete",
+    "summary": "KP independently consumes the language-neutral picker state and intent boundary over 45 existing animation descriptors, with stable identity, clamped navigation, refresh reconciliation, and tagged outcomes."
   },
   "expectedLearning": [
     "Whether KP can consume the language-neutral Spindle picker state and intent boundary without depending on Spindle implementation code."
