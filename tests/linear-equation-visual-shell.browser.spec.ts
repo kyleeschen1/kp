@@ -179,13 +179,15 @@ test("print keeps the visual and all prose in document order without interactive
   await page.goto(conceptPath);
   await page.emulateMedia({ media: "print" });
   await expect(page.locator("[data-kp-concept-controls]")).toHaveCSS("display", "none");
+  await expect(page.locator("[data-kp-concept-share-status]")).toHaveCSS("display", "none");
+  await expect(page.locator("[data-kp-concept-verification]")).toHaveCSS("display", "none");
   await expect(page.locator("[data-kp-concept-visual-field]")).toHaveCSS("position", "static");
   await expect(page.locator("[data-kp-concept-room-stage]")).toHaveCSS("display", "block");
   await expect(page.locator("[data-kp-concept-checkpoint-sections] > section")).toHaveCount(4);
   const order = await page.locator("[data-kp-concept-room-shell] > *").evaluateAll((elements) =>
     elements.map((element) => element.tagName.toLowerCase())
   );
-  expect(order).toEqual(["header", "div"]);
+  expect(order).toEqual(["header", "div", "p", "details"]);
 });
 
 test("route-local exemplar styling does not leak into the legacy root", async ({ page }) => {

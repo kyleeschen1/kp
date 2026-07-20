@@ -438,11 +438,45 @@
       "status": "passed",
       "scope": "s21 inferred mode presentation, production build, direct and snapshot URL switching, Review preservation, failure fallbacks, and disposal",
       "checkedAt": "2026-07-20T02:00:05.373Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "s22 full unit and architecture suite",
+      "checkedAt": "2026-07-20T02:10:30.442Z",
+      "notes": "1537 tests passed."
+    },
+    {
+      "command": "playwright focused concept-room cohort",
+      "status": "passed",
+      "scope": "s22 sharing modes correspondence shell smoke",
+      "checkedAt": "2026-07-20T02:10:31.462Z",
+      "notes": "20 browser checks passed, including exact copied-state remount and sanitized clipboard failure."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s22 production build",
+      "checkedAt": "2026-07-20T02:10:32.459Z"
+    },
+    {
+      "command": "npm run smoke:linear-equation",
+      "status": "passed",
+      "scope": "s22 canonical and degraded route smoke",
+      "checkedAt": "2026-07-20T02:10:33.450Z",
+      "notes": "2 browser smoke checks passed."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s22 stable visual inspection",
+      "checkedAt": "2026-07-20T02:10:34.459Z",
+      "notes": "22 deterministic states captured; share actions remain subordinate and verification remains collapsed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s21 complete: Watch presents only causal play and replay and starts only from an explicit Watch gesture, while direct Watch URLs remain paused at their exact frame. Touch owns passive scroll coordination and exposes stepping, scrubbing, focus, projection, and section navigation. Review renders one searchable static article without duplicate lesson content, projection chrome, or quiz correctness UI. All modes preserve the same canonical checkpoint, time, focus, projection, provider, snapshot, and shared trace through URL history."
+    "summary": "s22 adds quiet exact-frame and exact-step copy links through a narrow clipboard adapter, canonical direct-mount restoration, a collapsed learner-safe verification disclosure, and sanitized copy failure. Full tests, browser checks, build, smoke, and manual visual inspection pass."
   },
   "expectedLearning": [
     "Whether synchronized algebra, balance geometry, searchable text, and direct state linking make KP's value proposition instantly clear."

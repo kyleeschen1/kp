@@ -50,6 +50,10 @@ export interface KpConceptRoomNavigationHost {
   subscribe(listener: () => void): () => void;
 }
 
+export interface KpConceptRoomClipboard {
+  writeText(text: string): Promise<void>;
+}
+
 export interface KpConceptRoomShellHandle {
   readonly conceptId: string;
   readonly disposed: boolean;
@@ -69,10 +73,12 @@ export async function tryMountConceptRoomRoute(input: {
   readonly root: HTMLElement;
   readonly catalog: readonly KpConceptRoomCatalogEntryLike[];
   readonly navigation?: KpConceptRoomNavigationHost;
+  readonly clipboard?: KpConceptRoomClipboard;
   readonly runtime?: KpConceptRoomRuntime;
   readonly validateArtifact?: KpConceptRoomArtifactValidator;
 }): Promise<KpConceptRoomShellHandle | null> {
   const navigation = input.navigation ?? browserNavigationHost();
+  const clipboard = input.clipboard ?? browserClipboard();
   const location = navigation.current();
   const entry = resolveConceptRoomCatalogEntry(input.catalog, location.pathname);
   if (entry === undefined) return null;
@@ -207,6 +213,12 @@ export async function tryMountConceptRoomRoute(input: {
       return;
     }
     const button = event.target.closest<HTMLButtonElement>("button[data-kp-concept-playback-action]");
+    const shareButton = event.target.closest<HTMLButtonElement>("button[data-kp-concept-share-route]");
+    if (shareButton !== null && input.root.contains(shareButton)) {
+      const route = shareButton.dataset["kpConceptShareRoute"];
+      if (route !== undefined) void copyConceptRoomRoute(input.root, clipboard, route);
+      return;
+    }
     if (button === null || !input.root.contains(button)) return;
     switch (button.dataset["kpConceptPlaybackAction"]) {
       case "play-pause":
@@ -460,6 +472,18 @@ function renderShell(
     appendLinkedExplanation(copy, item, state);
     section.setAttribute("aria-labelledby", heading.id);
     section.append(heading, copy);
+    if (state.mode === "touch") {
+      section.append(shareButton(
+        "Copy step link",
+        formatConceptRoomRoute({
+          ...conceptRoomStateRoute(state),
+          checkpoint: item.id,
+          timePermille: item.progressPermille,
+          focus: item.semanticRefs
+        }),
+        item.id
+      ));
+    }
     checkpointSections.append(section);
   });
 
@@ -492,6 +516,11 @@ function renderShell(
   const playback = playbackControls(state, playing);
   if (playback !== undefined) controls.append(playback);
   if (state.mode !== "review") controls.append(viewControls);
+  controls.append(shareButton(
+    "Copy frame link",
+    formatConceptRoomRoute(conceptRoomStateRoute(state)),
+    "current"
+  ));
   controls.append(modeControls);
   const viewport = document.createElement("section");
   viewport.dataset["kpConceptViewport"] = "true";
@@ -515,7 +544,12 @@ function renderShell(
   stage.dataset["kpConceptRoomStage"] = "true";
   stage.append(visualField);
   if (state.mode !== "review") stage.append(copyRail);
-  main.append(header, stage);
+  const shareStatus = document.createElement("p");
+  shareStatus.dataset["kpConceptShareStatus"] = "true";
+  shareStatus.setAttribute("role", "status");
+  shareStatus.setAttribute("aria-live", "polite");
+  const verification = verificationDisclosure(artifact);
+  main.append(header, stage, shareStatus, verification);
   const style = document.createElement("style");
   style.dataset["kpLinearEquationExemplarStyle"] = "true";
   style.textContent = linearEquationExemplarCss();
@@ -556,6 +590,15 @@ function updateRenderedShell(
     if (section !== null) {
       section.dataset["kpConceptCheckpointActive"] = String(checkpoint.id === state.checkpoint);
       setCurrent(section, checkpoint.id === state.checkpoint, "step");
+      const share = section.querySelector<HTMLButtonElement>("[data-kp-concept-share-checkpoint]");
+      if (share !== null) {
+        share.dataset["kpConceptShareRoute"] = formatConceptRoomRoute({
+          ...route,
+          checkpoint: checkpoint.id,
+          timePermille: checkpoint.progressPermille,
+          focus: checkpoint.semanticRefs
+        });
+      }
     }
   });
   artifact.manifest.projections.forEach((projection) => {
@@ -572,6 +615,8 @@ function updateRenderedShell(
   });
   const scrubber = shell.querySelector<HTMLInputElement>('[data-kp-concept-playback-action="scrub"]');
   if (scrubber !== null) scrubber.value = String(state.timePermille);
+  const currentShare = shell.querySelector<HTMLButtonElement>('[data-kp-concept-share-checkpoint="current"]');
+  if (currentShare !== null) currentShare.dataset["kpConceptShareRoute"] = formatConceptRoomRoute(route);
   syncPlaybackControls(root, playing);
   return viewport;
 }
@@ -618,6 +663,55 @@ function playbackButton(action: string, label: string, text: string): HTMLButton
   button.setAttribute("aria-label", label);
   button.textContent = text;
   return button;
+}
+
+function shareButton(text: string, route: string, checkpoint: string): HTMLButtonElement {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.dataset["kpConceptShareAction"] = "copy-link";
+  button.dataset["kpConceptShareCheckpoint"] = checkpoint;
+  button.dataset["kpConceptShareRoute"] = route;
+  button.textContent = text;
+  return button;
+}
+
+function verificationDisclosure(artifact: KpConceptRoomArtifactLike): HTMLElement {
+  const disclosure = document.createElement("details");
+  disclosure.dataset["kpConceptVerification"] = "true";
+  const summary = document.createElement("summary");
+  summary.textContent = "Verification";
+  const list = document.createElement("ul");
+  const provider = artifact.manifest.providers[0];
+  if (provider !== undefined) {
+    const providerItem = document.createElement("li");
+    providerItem.dataset["kpConceptVerificationProvider"] = provider.id;
+    providerItem.textContent = `Exact rational arithmetic checked with ${provider.protocol}, version ${provider.version}.`;
+    list.append(providerItem);
+  }
+  const provenanceItem = document.createElement("li");
+  provenanceItem.dataset["kpConceptVerificationProvenance"] = artifact.manifest.provenance.authoredBy;
+  provenanceItem.textContent = `Source authorship: ${artifact.manifest.provenance.authoredBy}. Published with Kinetic Press ${artifact.manifest.provenance.compilerVersion}.`;
+  const integrityItem = document.createElement("li");
+  integrityItem.dataset["kpConceptVerificationIntegrity"] = artifact.integrity;
+  integrityItem.textContent = `Published artifact ${artifact.manifest.version} is integrity-checked.`;
+  list.append(provenanceItem, integrityItem);
+  disclosure.append(summary, list);
+  return disclosure;
+}
+
+async function copyConceptRoomRoute(
+  root: HTMLElement,
+  clipboard: KpConceptRoomClipboard,
+  route: string
+): Promise<void> {
+  const status = root.querySelector<HTMLElement>("[data-kp-concept-share-status]");
+  try {
+    const origin = root.ownerDocument.defaultView?.location.origin ?? "http://localhost";
+    await clipboard.writeText(new URL(route, origin).href);
+    if (status !== null) status.textContent = "Link copied.";
+  } catch {
+    if (status !== null) status.textContent = "Copy is unavailable. The current URL is still shareable.";
+  }
 }
 
 function syncPlaybackControls(root: HTMLElement, playing: boolean): void {
@@ -852,6 +946,15 @@ function browserNavigationHost(): KpConceptRoomNavigationHost {
     subscribe(listener) {
       window.addEventListener("popstate", listener);
       return () => window.removeEventListener("popstate", listener);
+    }
+  };
+}
+
+function browserClipboard(): KpConceptRoomClipboard {
+  return {
+    async writeText(text) {
+      if (navigator.clipboard === undefined) throw new Error("Clipboard is unavailable.");
+      await navigator.clipboard.writeText(text);
     }
   };
 }
