@@ -18,6 +18,14 @@
   "verification": [
     "theseus validate"
   ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/dev-review-acceptance.test.ts",
+      "status": "passed",
+      "scope": "s01 review acceptance contract",
+      "checkedAt": "2026-07-20T23:13:59.414Z"
+    }
+  ],
   "expectedLearning": [
     "Approved revision 4 places this planned phase in now."
   ],

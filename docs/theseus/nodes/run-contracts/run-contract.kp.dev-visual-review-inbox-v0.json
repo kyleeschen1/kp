@@ -1,0 +1,182 @@
+{
+  "id": "run-contract.kp.dev-visual-review-inbox-v0",
+  "kind": "run-contract",
+  "title": "KP dev visual review inbox",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v4.json",
+      "summary": "Approved generated-quality roadmap and current phase."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability.json",
+      "summary": "Approved target and work boundary."
+    }
+  ],
+  "verification": [
+    "npm test",
+    "npm run typecheck",
+    "npx playwright test focused dev review reader and editor browser cohorts",
+    "npm run build",
+    "node production route closure and review skill validation",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Dev-only visual review protocol, capture providers, overlay, local persistence, repository CLI, and personal kp-review-logs skill.",
+    "Semantic reader exemplar first, with a mandatory human visual checkpoint before other development surfaces.",
+    "Focused tests, one commit per slice, durable Theseus evidence, and production-closure proof."
+  ],
+  "disallowedWork": [
+    "Do not repair animation visuals or change mathematical content, choreography, routing, scroll authority, or static output.",
+    "Do not add production review UI or enabled production review endpoints.",
+    "Do not add cloud sync, automatic screenshots or video, drawing tools, issue-tracker integration, or automatic conversion into Theseus work.",
+    "Do not generalize beyond the reader before human approval at s20."
+  ],
+  "goal": "Build a default-development, production-excluded visual review inbox that captures reproducible semantic and temporal feedback, persists append-only comments, and exposes unread review logs through a validated kp-review-logs Codex skill.",
+  "target": "next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability",
+  "slices": [
+    {
+      "id": "s01-review-acceptance-contract",
+      "title": "Review acceptance contract",
+      "summary": "Encoded and tested the immutable dev-review acceptance boundary before implementation.",
+      "status": "complete"
+    },
+    {
+      "id": "s02-versioned-review-protocol",
+      "title": "Versioned review protocol",
+      "status": "planned"
+    },
+    {
+      "id": "s03-strict-validation-limits",
+      "title": "Strict validation and limits",
+      "status": "planned"
+    },
+    {
+      "id": "s04-build-environment-identity",
+      "title": "Build and environment identity",
+      "status": "planned"
+    },
+    {
+      "id": "s05-temporal-ring-buffer",
+      "title": "Temporal ring buffer",
+      "status": "planned"
+    },
+    {
+      "id": "s06-semantic-pointer-target",
+      "title": "Semantic pointer target",
+      "status": "planned"
+    },
+    {
+      "id": "s07-review-session-model",
+      "title": "Review session model",
+      "status": "planned"
+    },
+    {
+      "id": "s08-append-only-local-store",
+      "title": "Append-only local store",
+      "status": "planned"
+    },
+    {
+      "id": "s09-query-status-cursor",
+      "title": "Query status and cursor projection",
+      "status": "planned"
+    },
+    {
+      "id": "s10-dev-only-http-adapter",
+      "title": "Dev-only HTTP adapter",
+      "status": "planned"
+    },
+    {
+      "id": "s11-default-dev-server",
+      "title": "Default dev-server enablement",
+      "status": "planned"
+    },
+    {
+      "id": "s12-path-retention-policy",
+      "title": "Repository ignore and retention policy",
+      "status": "planned"
+    },
+    {
+      "id": "s13-typed-browser-client",
+      "title": "Typed browser client",
+      "status": "planned"
+    },
+    {
+      "id": "s14-capture-provider-registry",
+      "title": "Capture-provider registry",
+      "status": "planned"
+    },
+    {
+      "id": "s15-reader-capture-provider",
+      "title": "Reader capture provider",
+      "status": "planned"
+    },
+    {
+      "id": "s16-shadow-dom-review-shell",
+      "title": "Shadow DOM review shell",
+      "status": "planned"
+    },
+    {
+      "id": "s17-comment-capture-interaction",
+      "title": "Comment capture interaction",
+      "status": "planned"
+    },
+    {
+      "id": "s18-dev-mount-production-removal",
+      "title": "Default dev mount and production removal",
+      "status": "planned"
+    },
+    {
+      "id": "s19-reader-end-to-end",
+      "title": "End-to-end reader capture",
+      "status": "planned"
+    },
+    {
+      "id": "s20-human-exemplar-checkpoint",
+      "title": "Human exemplar checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s21-recent-note-view",
+      "title": "Recent-note view",
+      "status": "planned"
+    },
+    {
+      "id": "s22-generic-fallback-provider",
+      "title": "Generic fallback provider",
+      "status": "planned"
+    },
+    {
+      "id": "s23-semantic-editor-integration",
+      "title": "Semantic-editor integration",
+      "status": "planned"
+    },
+    {
+      "id": "s24-review-log-cli",
+      "title": "Review-log CLI",
+      "status": "planned"
+    },
+    {
+      "id": "s25-triage-cursor-cli",
+      "title": "Triage and cursor CLI",
+      "status": "planned"
+    },
+    {
+      "id": "s26-kp-review-logs-skill",
+      "title": "Create and validate kp-review-logs skill",
+      "status": "planned"
+    },
+    {
+      "id": "s27-full-release-gate",
+      "title": "Full release gate and handoff",
+      "status": "planned"
+    }
+  ]
+}
