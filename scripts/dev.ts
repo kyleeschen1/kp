@@ -1,17 +1,24 @@
 import { spawn } from "node:child_process";
 import type { ChildProcess } from "node:child_process";
+import { resolve } from "node:path";
 
 interface DevProcess {
   name: string;
   command: string;
   args: readonly string[];
+  env?: NodeJS.ProcessEnv;
 }
 
 const processes: readonly DevProcess[] = [
   {
     name: "api",
     command: process.execPath,
-    args: ["--disable-warning=ExperimentalWarning", "--watch", "server/main.ts"]
+    args: ["--disable-warning=ExperimentalWarning", "--watch", "server/main.ts"],
+    env: {
+      ...process.env,
+      KP_DEV_REVIEW: "1",
+      KP_DEV_REVIEW_ROOT: resolve(process.cwd(), ".kp/review-logs")
+    }
   },
   {
     name: "web",
@@ -25,7 +32,7 @@ let shuttingDown = false;
 
 for (const devProcess of processes) {
   const child = spawn(devProcess.command, devProcess.args, {
-    env: process.env,
+    env: devProcess.env ?? process.env,
     shell: process.platform === "win32",
     stdio: "inherit"
   });

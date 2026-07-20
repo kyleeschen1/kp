@@ -105,7 +105,8 @@
     {
       "id": "s11-default-dev-server",
       "title": "Default dev-server enablement",
-      "status": "planned"
+      "summary": "npm run dev injects an absolute local review root; direct and production server starts remain disabled unless explicitly configured.",
+      "status": "complete"
     },
     {
       "id": "s12-path-retention-policy",

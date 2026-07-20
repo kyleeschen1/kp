@@ -78,6 +78,12 @@
       "status": "passed",
       "scope": "s10 explicitly injected dev-only HTTP adapter",
       "checkedAt": "2026-07-20T23:37:01.756Z"
+    },
+    {
+      "command": "focused dev review config and HTTP tests plus npm run typecheck",
+      "status": "passed",
+      "scope": "s11 default development enablement and default server exclusion",
+      "checkedAt": "2026-07-20T23:38:50.424Z"
     }
   ],
   "expectedLearning": [
