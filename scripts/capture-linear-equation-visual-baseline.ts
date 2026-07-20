@@ -14,6 +14,7 @@ interface CaptureRecord {
   readonly url: string;
   readonly selector: string;
   readonly output: string;
+  readonly reference?: "current-concept-room" | "canonical-symbolic-motion";
   readonly progress?: number;
   readonly time?: number;
   readonly viewport?: { readonly width: number; readonly height: number };
@@ -28,7 +29,8 @@ try {
   await capturePage({
     id: "linear-room-coordinated-start",
     url: "/concepts/mathematics/linear-equations/solve-with-balance",
-    ready: "[data-kp-linear-equation-coordinated-stage]"
+    ready: "[data-kp-linear-equation-coordinated-stage]",
+    reference: "current-concept-room"
   });
   const canonicalConceptUrl = page.url();
   await page.getByRole("link", { name: "Equation", exact: true }).click();
@@ -54,13 +56,21 @@ try {
   await page.goto(`${baseUrl}/?animation=editor-animation.animation.linear-solve.solve-x`);
   const player = page.locator("[data-kp-editor-animation-player]");
   await player.waitFor();
+  // The editor route selects the catalogue entry, while the mounted player exposes
+  // the shared runtime asset id; pin the latter so this remains a true motion reference.
+  await requireAttribute(player, "data-kp-editor-animation-id", "animation.linear-solve.solve-x");
   await player.locator("[data-kp-editor-equation-stage] .katex").first().waitFor();
+  await requireAttribute(
+    player.locator("[data-kp-editor-equation-transition-id]").first(),
+    "data-kp-editor-equation-presentation-recipe",
+    "continuity-v1"
+  );
   const scrubber = player.locator('[data-action="seek-editor-animation"]');
   for (const progress of [0, 0.25, 0.5, 0.75, 1]) {
     await scrubber.fill(String(progress));
     await settle(page);
     const id = `continuity-reference-${String(Math.round(progress * 100)).padStart(3, "0")}`;
-    await captureElement(id, player, progress);
+    await captureElement(id, player, progress, "canonical-symbolic-motion");
   }
 
   await writeFile(
@@ -77,23 +87,35 @@ async function capturePage(input: {
   readonly id: string;
   readonly url: string;
   readonly ready: string;
+  readonly reference?: CaptureRecord["reference"];
 }): Promise<void> {
   await page.goto(`${baseUrl}${input.url}`);
   await page.locator(input.ready).waitFor();
   await settle(page);
-  await captureCurrent(input.id, "body");
+  await captureCurrent(input.id, "body", input.reference);
 }
 
-async function captureCurrent(id: string, selector: string): Promise<void> {
+async function captureCurrent(
+  id: string,
+  selector: string,
+  reference?: CaptureRecord["reference"]
+): Promise<void> {
   const output = path.join(outputRoot, `${id}.png`);
   await page.screenshot({ path: output, fullPage: true });
-  captures.push({ id, url: page.url(), selector, output: path.relative(process.cwd(), output) });
+  captures.push({
+    id,
+    url: page.url(),
+    selector,
+    output: path.relative(process.cwd(), output),
+    ...(reference === undefined ? {} : { reference })
+  });
 }
 
 async function captureElement(
   id: string,
   locator: ReturnType<Page["locator"]>,
-  progress: number
+  progress: number,
+  reference?: CaptureRecord["reference"]
 ): Promise<void> {
   const output = path.join(outputRoot, `${id}.png`);
   await locator.screenshot({ path: output });
@@ -104,8 +126,20 @@ async function captureElement(
     selector: "[data-kp-editor-animation-player]",
     output: path.relative(process.cwd(), output),
     progress,
+    ...(reference === undefined ? {} : { reference }),
     ...(currentViewport === null ? {} : { viewport: currentViewport })
   });
+}
+
+async function requireAttribute(
+  locator: ReturnType<Page["locator"]>,
+  name: string,
+  expected: string
+): Promise<void> {
+  const actual = await locator.getAttribute(name);
+  if (actual !== expected) {
+    throw new Error(`Visual reference requires ${name}=${expected}; received ${String(actual)}.`);
+  }
 }
 
 async function captureDivisionCheckpoints(canonicalConceptUrl: string): Promise<void> {

@@ -1,0 +1,117 @@
+{
+  "id": "run-contract.kp.symbolic-first-scrollytelling-exemplar-v0",
+  "kind": "run-contract",
+  "title": "Symbolic-first linear-equation scrollytelling exemplar",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/workflows/workflow.kp.dashboard-animation-system.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "AGENTS.md",
+      "summary": "Repository exemplar-first checkpoint, preservation, rollback, and visual-contract rules."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-linear-solve-continuity-rollback.md",
+      "summary": "Canonical continuity-v1 x plus 3 equals 7 motion reference and preservation boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-19-kp-concept-room-architecture.md",
+      "summary": "Concept-room separation and inference-first architecture boundary."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run smoke:linear-equation",
+    "npm run test:browser:linear-equation-conformance",
+    "npm run visual:linear-equation",
+    "npm run build",
+    "npm test",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s01 deterministic concept-room and continuity-v1 references",
+      "checkedAt": "2026-07-20T13:45:26.821Z",
+      "notes": "Captured 34 states; manifest labels current-concept-room and canonical-symbolic-motion references."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s01 visual baseline typing",
+      "checkedAt": "2026-07-20T13:45:28.018Z",
+      "notes": "Application, node, tests, and domain projects typechecked."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "Slice s01 pins deterministic before-state and canonical motion references; product presentation is unchanged."
+  },
+  "allowedWork": [
+    "Route-local concept-room presentation, content composition, adapter, style, tests, stable visual checks, and review evidence for the approved x plus 3 equals 7 exemplar.",
+    "One focused commit after each verified slice, with bounded Theseus context receipts and workspace validation.",
+    "Preserve direct URLs, searchability, accessibility, review and print behavior while making symbolic scrollytelling the default."
+  ],
+  "disallowedWork": [
+    "Do not execute post-review slices 10 through 26 without new user approval.",
+    "Do not generalize the presentation policy or scrollytelling shell across concepts.",
+    "Do not rewrite the semantic animation runtime, route kernel, generator, verifier, existing two-x-plus-three artifact, balance renderer, or public APIs without a proven blocking defect and user approval.",
+    "Do not work on FTC, missing-middle, economics, programming, LLM correction UI, WebGL, or global design-system enforcement."
+  ],
+  "goal": "Make x plus 3 equals 7 the searchable left-text and sticky symbolic-stage opening story, with secondary features retained but off by default, then stop for human visual review.",
+  "target": "workflow.kp.dashboard-animation-system",
+  "slices": [
+    {
+      "id": "s01-reference-baseline",
+      "title": "Capture deterministic reference baselines",
+      "status": "in-progress"
+    },
+    {
+      "id": "s02-presentation-policy",
+      "title": "Define route-local symbolic-first presentation policy",
+      "status": "planned"
+    },
+    {
+      "id": "s03-story-model",
+      "title": "Define the x plus 3 equals 7 story model",
+      "status": "planned"
+    },
+    {
+      "id": "s04-shared-animation-adapter",
+      "title": "Reuse the continuity-v1 animation in the concept room",
+      "status": "planned"
+    },
+    {
+      "id": "s05-semantic-dom-order",
+      "title": "Render prose before the visual field",
+      "status": "planned"
+    },
+    {
+      "id": "s06-left-text-layout",
+      "title": "Compose left prose and right sticky stage",
+      "status": "planned"
+    },
+    {
+      "id": "s07-scroll-activation",
+      "title": "Drive checkpoints from ordinary document scroll",
+      "status": "planned"
+    },
+    {
+      "id": "s08-subtraction-salience",
+      "title": "Perfect the subtraction salience exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s09-human-review-package",
+      "title": "Capture review evidence and stop",
+      "status": "planned"
+    }
+  ]
+}
