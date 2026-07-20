@@ -116,11 +116,29 @@
       "status": "passed",
       "scope": "s02 public architecture contracts and all TypeScript projects",
       "checkedAt": "2026-07-20T16:32:36.266Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-reader-artifact-contracts.test.ts tests/semantic-reader-architecture.test.ts",
+      "status": "passed",
+      "scope": "s03 artifact inference, validation, renderer generics, and architecture",
+      "checkedAt": "2026-07-20T16:36:48.368Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s03 six-file semantic-reader dependency gate",
+      "checkedAt": "2026-07-20T16:36:49.275Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s03 reader public contracts and all TypeScript projects",
+      "checkedAt": "2026-07-20T16:36:50.046Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "s02 made the reader preservation boundary executable: five acyclic layers, public cross-layer entrypoints, no backward imports, no learner editor or Three.js dependencies, and an explicit x-plus-3 canonical-reference, promotion, preservation, and rollback contract."
+    "summary": "s03 added the minimal reader artifact vocabulary without choosing content syntax: literal-inferred versioned refs, generic lesson and compiled-static artifacts, bounded immutable session snapshots, and renderer lifecycle contracts."
   },
   "expectedLearning": [
     "Whether a compact document compiler and lightweight reader can expose the existing semantic kernel with legacy-quality continuous symbolic motion and dramatically lower learner-route cost.",

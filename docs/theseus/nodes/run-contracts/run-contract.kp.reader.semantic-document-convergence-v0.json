@@ -65,7 +65,8 @@
     {
       "id": "s03",
       "title": "Define document reader artifact contracts",
-      "status": "planned"
+      "summary": "Defined and verified minimal document, compiled lesson, reader session, and generic renderer adapter contracts behind the enforced reader public entrypoints.",
+      "status": "complete"
     },
     {
       "id": "s04",
