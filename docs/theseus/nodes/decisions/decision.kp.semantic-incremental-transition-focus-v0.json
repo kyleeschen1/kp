@@ -20,5 +20,39 @@
   ],
   "affects": [
     "workflow.kp.dashboard-animation-system"
-  ]
+  ],
+  "verificationRecords": [
+    {
+      "command": "npx playwright test tests/linear-equation-symbolic-story-shell.browser.spec.ts --project=chromium",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-20T14:20:25.698Z",
+      "notes": "Four browser checks pass, including discrete beat activation, exact frame landing, URL independence, and direct story restoration."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository",
+      "checkedAt": "2026-07-20T14:20:26.726Z",
+      "notes": "Application, node, test, and domain TypeScript checks pass."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "architecture",
+      "checkedAt": "2026-07-20T14:20:27.557Z",
+      "notes": "Concept-room boundary gate passes with the route-local story coordinators."
+    },
+    {
+      "command": "npm run smoke:linear-equation",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-20T14:20:28.388Z",
+      "notes": "The existing linear-equation room smoke suite passes unchanged."
+    }
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "The exemplar now maps prose section entry to short exact animation targets and p.story URLs without coupling ordinary scroll to the legacy timeline."
+  }
 }

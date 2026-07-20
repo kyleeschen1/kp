@@ -16,7 +16,8 @@ export interface KpLinearEquationSymbolicStoryLike {
 }
 
 export function renderLinearEquationSymbolicStory(
-  story: KpLinearEquationSymbolicStoryLike
+  story: KpLinearEquationSymbolicStoryLike,
+  activeBeatId = story.beats[0]?.id
 ): HTMLElement {
   const region = document.createElement("section");
   region.dataset["kpSymbolicStory"] = story.id;
@@ -34,14 +35,15 @@ export function renderLinearEquationSymbolicStory(
 
   const beats = document.createElement("div");
   beats.dataset["kpSymbolicStoryBeats"] = "true";
-  story.beats.forEach((beat, index) => {
+  story.beats.forEach((beat) => {
     const section = document.createElement("section");
     section.id = `story-${beat.id}`;
     section.dataset["kpSymbolicStoryBeat"] = beat.id;
     section.dataset["kpSymbolicStoryProgressPermille"] = String(beat.progressPermille);
-    section.dataset["kpSymbolicStoryActive"] = String(index === 0);
+    const active = beat.id === activeBeatId;
+    section.dataset["kpSymbolicStoryActive"] = String(active);
     section.dataset["kpSemanticRefs"] = beat.focus.join(" ");
-    if (index === 0) section.setAttribute("aria-current", "step");
+    if (active) section.setAttribute("aria-current", "step");
     const heading = document.createElement("h3");
     heading.textContent = beat.title;
     const copy = document.createElement("p");

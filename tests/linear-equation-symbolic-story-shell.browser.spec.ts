@@ -61,3 +61,44 @@ test("desktop story uses ordinary document scroll with left prose and a sticky r
   expect(layout.documentScrolls).toBe(true);
   await expect(page.getByRole("heading", { name: "Explore the harder example" })).toBeVisible();
 });
+
+test("scrolling selects discrete story beats without changing the harder example timeline", async ({
+  page
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(conceptPath);
+  const player = page.locator("[data-kp-symbolic-story-player]");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "0");
+
+  await page.locator('[data-kp-symbolic-story-beat="subtract-both-sides"]').evaluate((beat) => {
+    beat.scrollIntoView({ block: "center" });
+  });
+
+  await expect(page).toHaveURL(/p\.story=subtract-both-sides/);
+  await expect(page.locator('[data-kp-symbolic-story-beat="subtract-both-sides"]'))
+    .toHaveAttribute("aria-current", "step");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "0.333");
+  expect(new URL(page.url()).searchParams.get("checkpoint")).toBe("start");
+  expect(new URL(page.url()).searchParams.get("t")).toBe("0");
+
+  await page.evaluate(() => window.scrollBy({ top: 60 }));
+  await page.waitForTimeout(100);
+  await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "0.333");
+});
+
+test("a story URL restores its prose beat and kinetic frame", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(conceptPath);
+  await expect(page).toHaveURL(/route=1/);
+  const direct = new URL(page.url());
+  direct.searchParams.set("p.story", "cancel-opposites");
+  await page.goto(direct.href);
+
+  const activeBeat = page.locator('[data-kp-symbolic-story-beat="cancel-opposites"]');
+  await expect(activeBeat).toHaveAttribute("aria-current", "step");
+  await expect(page.locator("[data-kp-symbolic-story-player]"))
+    .toHaveAttribute("data-kp-editor-animation-progress", "0.667");
+  await expect(activeBeat).toBeInViewport();
+  await expect(page.locator("[data-kp-concept-secondary-surface]"))
+    .not.toBeInViewport();
+});

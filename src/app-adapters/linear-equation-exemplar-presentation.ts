@@ -8,6 +8,8 @@ export const linearEquationSecondaryFeatureIds = [
   "verification"
 ] as const;
 
+export const linearEquationStoryRouteParameter = "story" as const;
+
 export type KpLinearEquationSecondaryFeatureId =
   typeof linearEquationSecondaryFeatureIds[number];
 

@@ -33,6 +33,7 @@ import {
 import { applyConceptRoomTheme } from "./concept-room-theme-adapters.ts";
 import { linearEquationExemplarTheme } from "./concept-room-theme.ts";
 import { linearEquationExemplarCss } from "./linear-equation-exemplar-style.ts";
+import { linearEquationStoryRouteParameter } from "./linear-equation-exemplar-presentation.ts";
 import {
   createLinearEquationCorrespondenceController,
   type KpLinearEquationCorrespondenceController
@@ -41,6 +42,15 @@ import {
   createLinearEquationStoryAnimationStage,
   type KpLinearEquationStoryAnimationStage
 } from "./linear-equation-story-animation-stage.ts";
+import {
+  createLinearEquationStoryProgressController
+} from "./linear-equation-story-progress-controller.ts";
+import {
+  createLinearEquationStoryScrollCoordinator,
+  syncLinearEquationStoryBeat,
+  type KpLinearEquationStoryBeatLike,
+  type KpLinearEquationStoryScrollCoordinator
+} from "./linear-equation-story-scroll-coordinator.ts";
 import {
   renderLinearEquationSymbolicStory,
   type KpLinearEquationSymbolicStoryLike
@@ -115,7 +125,16 @@ export async function tryMountConceptRoomRoute(input: {
   let correspondenceController: KpLinearEquationCorrespondenceController | undefined;
   let storyAnimationStage: KpLinearEquationStoryAnimationStage | undefined;
   let storyAnimationHost: HTMLElement | undefined;
-  let initialCheckpointToRestore = location.search.length > 0 ? state.checkpoint : undefined;
+  let storyScrollCoordinator: KpLinearEquationStoryScrollCoordinator | undefined;
+  const storyProgressController = createLinearEquationStoryProgressController();
+  const initialStoryBeat = storyBeatForState(input.symbolicStory, state);
+  let initialStoryBeatToRestore = initialStoryBeat !== undefined &&
+    state.parameters[linearEquationStoryRouteParameter] === initialStoryBeat.id
+    ? initialStoryBeat.id
+    : undefined;
+  let initialCheckpointToRestore = location.search.length > 0 && initialStoryBeatToRestore === undefined
+    ? state.checkpoint
+    : undefined;
   const roomEffects = createRoomEffectCoordinator({
     roomId: `concept.${entry.conceptId}`,
     getState: () => state,
@@ -150,6 +169,7 @@ export async function tryMountConceptRoomRoute(input: {
       );
       if (storyHost !== null && storyHost !== storyAnimationHost) {
         storyAnimationHost = storyHost;
+        storyProgressController.unbind();
         storyAnimationStage?.dispose();
         storyAnimationStage = undefined;
         void createLinearEquationStoryAnimationStage(storyHost).then((nextStage) => {
@@ -158,7 +178,7 @@ export async function tryMountConceptRoomRoute(input: {
             return;
           }
           storyAnimationStage = nextStage;
-          nextStage.setProgress(state.timePermille / 1000);
+          storyProgressController.bind(nextStage);
         }).catch((error: unknown) => {
           if (isDisposed || storyAnimationHost !== storyHost || !storyHost.isConnected) return;
           storyHost.dataset["kpSymbolicStoryAnimationError"] = "true";
@@ -167,10 +187,19 @@ export async function tryMountConceptRoomRoute(input: {
             : "The symbolic animation is unavailable.";
         });
       }
-      storyAnimationStage?.setProgress(state.timePermille / 1000);
+      const storyBeat = storyBeatForState(input.symbolicStory, state);
+      if (storyBeat !== undefined) {
+        syncLinearEquationStoryBeat(input.root, storyBeat.id);
+        storyProgressController.seek(storyBeat.progressPermille, false);
+      }
     }
     if (preservedViewport === undefined) {
       scrollCoordinator?.refresh();
+      storyScrollCoordinator?.refresh();
+      if (initialStoryBeatToRestore !== undefined) {
+        storyScrollCoordinator?.scrollTo(initialStoryBeatToRestore, "auto");
+        initialStoryBeatToRestore = undefined;
+      }
       if (initialCheckpointToRestore !== undefined) {
         scrollCoordinator?.scrollTo(initialCheckpointToRestore, "auto");
         initialCheckpointToRestore = undefined;
@@ -280,7 +309,12 @@ export async function tryMountConceptRoomRoute(input: {
     const previousMode = state.mode;
     state = stateForLocation(entry, artifact, current, navigation);
     void render({ preserveShell: previousMode === state.mode });
-    scrollCoordinator?.scrollTo(state.checkpoint, "auto");
+    const storyBeat = storyBeatForState(input.symbolicStory, state);
+    if (storyBeat !== undefined && state.parameters[linearEquationStoryRouteParameter] === storyBeat.id) {
+      storyScrollCoordinator?.scrollTo(storyBeat.id, "auto");
+    } else {
+      scrollCoordinator?.scrollTo(state.checkpoint, "auto");
+    }
   };
   scrollCoordinator = createConceptRoomScrollCoordinator({
     root: input.root,
@@ -307,6 +341,30 @@ export async function tryMountConceptRoomRoute(input: {
       });
     }
   });
+  if (input.symbolicStory !== undefined) {
+    storyScrollCoordinator = createLinearEquationStoryScrollCoordinator({
+      root: input.root,
+      beats: input.symbolicStory.beats,
+      currentBeat: () => storyBeatForState(input.symbolicStory, state)?.id
+        ?? input.symbolicStory!.beats[0]?.id
+        ?? "",
+      onBeat(beat) {
+        if (isDisposed || state.parameters[linearEquationStoryRouteParameter] === beat.id) return;
+        state = reduceConceptRoomState(state, {
+          kind: "set-parameter",
+          key: linearEquationStoryRouteParameter,
+          value: beat.id
+        });
+        syncLinearEquationStoryBeat(input.root, beat.id);
+        storyProgressController.seek(beat.progressPermille, true);
+        roomEffects.start({
+          kind: "url",
+          route: formatConceptRoomRoute(conceptRoomStateRoute(state)),
+          strategy: "replace"
+        });
+      }
+    });
+  }
   playbackController = createConceptRoomPlaybackController({
     checkpointTimes: artifact.manifest.checkpoints.map((checkpoint) => checkpoint.progressPermille),
     durationMs: exemplarPlaybackDurationMs(),
@@ -368,7 +426,6 @@ export async function tryMountConceptRoomRoute(input: {
     }
   }
   await render();
-  if (location.search.length > 0) scrollCoordinator.scrollTo(state.checkpoint, "auto");
 
   return {
     conceptId: entry.conceptId,
@@ -381,8 +438,10 @@ export async function tryMountConceptRoomRoute(input: {
       runtimeSession?.dispose();
       playbackController?.dispose();
       scrollCoordinator?.dispose();
+      storyScrollCoordinator?.dispose();
       correspondenceController?.dispose();
       storyAnimationStage?.dispose();
+      storyProgressController.dispose();
       storyAnimationHost = undefined;
       roomEffects.dispose();
       unsubscribe();
@@ -408,6 +467,15 @@ function stateForLocation(
   const canonical = formatConceptRoomRoute(route);
   if (`${location.pathname}${location.search}` !== canonical) navigation.replace(canonical);
   return createConceptRoomState(route, artifact.integrity);
+}
+
+function storyBeatForState(
+  story: KpLinearEquationSymbolicStoryLike | undefined,
+  state: KpConceptRoomState
+): KpLinearEquationStoryBeatLike | undefined {
+  if (story === undefined) return undefined;
+  const requested = state.parameters[linearEquationStoryRouteParameter];
+  return story.beats.find((beat) => beat.id === requested) ?? story.beats[0];
 }
 
 function defaultRoute(artifact: KpConceptRoomArtifactLike): KpConceptRoomRoute {
@@ -624,7 +692,10 @@ function renderShell(
   secondary.append(secondaryHeading, secondaryCopy, stage);
   main.append(header, narration);
   if (symbolicStory !== undefined) {
-    main.append(renderLinearEquationSymbolicStory(symbolicStory));
+    main.append(renderLinearEquationSymbolicStory(
+      symbolicStory,
+      storyBeatForState(symbolicStory, state)?.id
+    ));
   }
   main.append(secondary, shareStatus, verification);
   const style = document.createElement("style");

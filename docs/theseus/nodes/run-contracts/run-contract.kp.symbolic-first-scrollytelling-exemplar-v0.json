@@ -192,12 +192,13 @@
     {
       "id": "s06-left-text-layout",
       "title": "Compose left prose and right sticky stage",
-      "status": "in-progress"
+      "summary": "Styled the route as left-side searchable reading beats with a large sticky right-side KaTeX equation, preserving the harder balance example below the primary story, in commit 08e4200.",
+      "status": "complete"
     },
     {
       "id": "s07-scroll-activation",
       "title": "Drive checkpoints from ordinary document scroll",
-      "status": "planned"
+      "status": "in-progress"
     },
     {
       "id": "s08-subtraction-salience",
