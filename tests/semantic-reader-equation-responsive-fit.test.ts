@@ -66,6 +66,7 @@ test("motion conformance reports overflow and fitted owner escapes", () => {
     progress: 0.5,
     easedProgress: 0.5,
     direction: "forward",
+    samplingAuthority: "operation-specific",
     owners: [{
       ownerId: "owner.x",
       lifecycle: "persist",

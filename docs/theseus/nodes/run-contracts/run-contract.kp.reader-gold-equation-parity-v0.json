@@ -177,7 +177,8 @@
     {
       "id": "s24-remove-generic-sampler",
       "title": "Remove superseded reader sampler",
-      "status": "planned"
+      "summary": "The gold reader frame now has one motion authority: operation fragment poses also supply conformance bounds and semantic focus. Generic interpolation survives only behind an explicit fallback used when operation semantics are absent.",
+      "status": "complete"
     },
     {
       "id": "s25-route-budgets",

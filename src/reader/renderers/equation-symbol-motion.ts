@@ -17,6 +17,7 @@ import {
 } from "../../rendering/equation-material-owner.ts";
 import {
   sampleKpEquationLinearRearrangementOwners,
+  type KpEquationLinearRearrangementOwnerFrame,
   type KpEquationOwnerFragmentMotion
 } from "../../rendering/equation-linear-rearrangement-owner-motion.ts";
 import type { KpEquationLinearRearrangementKind } from "../../rendering/equation-linear-rearrangement.ts";
@@ -35,6 +36,7 @@ export interface KpReaderEquationSymbolMotionFrame extends KpEquationVisualFrame
   readonly progress: number;
   readonly easedProgress: number;
   readonly direction: "forward" | "rewind";
+  readonly samplingAuthority: "operation-specific" | "generic-fallback";
   readonly owners: readonly KpReaderEquationSymbolOwnerPose[];
   readonly witnessedAnnihilation?: {
     readonly contactPoint: { readonly x: number; readonly y: number };
@@ -106,7 +108,8 @@ export function sampleKpReaderEquationSymbolMotion(input: {
       aligned,
       progress,
       easedProgress,
-      operation?.motion
+      input.layout,
+      operation
     );
   });
   if (ownersById.size !== owners.length) {
@@ -121,6 +124,9 @@ export function sampleKpReaderEquationSymbolMotion(input: {
     progress,
     easedProgress,
     direction: input.direction ?? "forward",
+    samplingAuthority: operation === undefined
+      ? "generic-fallback"
+      : "operation-specific",
     owners,
     ...(operation?.motion.witnessedAnnihilation === undefined ||
       operation.geometry.witnessedAnnihilationPlan === undefined
@@ -141,20 +147,11 @@ function sampleOwner(
   aligned: KpReaderEquationAlignedOwner,
   progress: number,
   easedProgress: number,
-  operationMotion: KpEquationTokenMotionFrame | undefined
+  layout: KpReaderEquationLayoutSnapshot | undefined,
+  operation: KpEquationLinearRearrangementOwnerFrame | undefined
 ): KpReaderEquationSymbolOwnerPose {
   const source = aligned.sourceBounds;
   const target = aligned.targetBounds;
-  const currentBounds = source !== undefined && target !== undefined
-    ? lerpRect(source, target, easedProgress)
-    : source !== undefined
-      ? lerpRect(source, vanishedRect(source), easedProgress)
-      : target !== undefined
-        ? lerpRect(vanishedRect(target), target, easedProgress)
-        : undefined;
-  if (currentBounds === undefined) {
-    throw new Error(`Material owner ${owner.id} has no aligned endpoint geometry.`);
-  }
   const handoff = sampleKpEquationMaterialOwnerHandoff({
     ownerId: owner.id,
     progress,
@@ -166,11 +163,19 @@ function sampleOwner(
     ...owner.targetAnchorIds
   ]);
   const fragmentPoses: readonly KpEquationOwnerFragmentMotion[] =
-    operationMotion?.tokens.flatMap((token) =>
+    operation?.motion.tokens.flatMap((token) =>
       ownerAnchorIds.has(token.motionId)
         ? [{ anchorId: token.motionId, side: token.side, pose: token.pose }]
         : []
     ) ?? [];
+  if (operation !== undefined && fragmentPoses.length === 0) {
+    throw new Error(
+      `Operation-specific motion is missing material owner ${owner.id}.`
+    );
+  }
+  const currentBounds = operation === undefined
+    ? sampleGenericFallbackBounds(owner.id, source, target, easedProgress)
+    : operationFragmentBounds(owner.id, fragmentPoses, layout);
 
   return {
     ownerId: owner.id,
@@ -190,13 +195,68 @@ function sampleOwner(
     sourceNativeOpacity: handoff.sourceNativeOpacity,
     targetNativeOpacity: handoff.targetNativeOpacity,
     fragmentPoses,
-    focusStrength: owner.focused
-      ? 0.35 + 0.65 * Math.sin(Math.PI * progress)
-      : 0
+    // Operation frames already encode their temporal emphasis in fragment
+    // poses. Focus is therefore a semantic flag, not a second motion sampler.
+    focusStrength: owner.focused ? 1 : 0
   };
 }
 
-function vanishedRect(rect: KpReaderLayoutRect): KpReaderLayoutRect {
+function sampleGenericFallbackBounds(
+  ownerId: string,
+  source: KpReaderLayoutRect | undefined,
+  target: KpReaderLayoutRect | undefined,
+  progress: number
+): KpReaderLayoutRect {
+  const bounds = source !== undefined && target !== undefined
+    ? lerpFallbackRect(source, target, progress)
+    : source !== undefined
+      ? lerpFallbackRect(source, vanishedFallbackRect(source), progress)
+      : target !== undefined
+        ? lerpFallbackRect(vanishedFallbackRect(target), target, progress)
+        : undefined;
+  if (bounds === undefined) {
+    throw new Error(`Material owner ${ownerId} has no aligned endpoint geometry.`);
+  }
+  return bounds;
+}
+
+function operationFragmentBounds(
+  ownerId: string,
+  fragments: readonly KpEquationOwnerFragmentMotion[],
+  layout: KpReaderEquationLayoutSnapshot | undefined
+): KpReaderLayoutRect {
+  if (layout === undefined) {
+    throw new Error(`Operation-specific owner ${ownerId} requires layout geometry.`);
+  }
+  const anchors = new Map(layout.anchors.map((anchor) => [anchor.id, anchor.rect]));
+  const visible = fragments.filter((fragment) => fragment.pose.opacity > 0.001);
+  const contributing = visible.length > 0 ? visible : fragments;
+  const rects = contributing.map((fragment) => {
+    const rect = anchors.get(fragment.anchorId);
+    if (rect === undefined) {
+      throw new Error(`Operation-specific owner ${ownerId} is missing ${fragment.anchorId}.`);
+    }
+    const scale = fragment.pose.scale;
+    return {
+      left: rect.left + fragment.pose.x + rect.width * (1 - scale) / 2,
+      top: rect.top + fragment.pose.y + rect.height * (1 - scale) / 2,
+      width: rect.width * scale,
+      height: rect.height * scale
+    };
+  });
+  return unionRects(rects);
+}
+
+function unionRects(rects: readonly KpReaderLayoutRect[]): KpReaderLayoutRect {
+  if (rects.length === 0) throw new Error("Operation-specific owner has no fragment bounds.");
+  const left = Math.min(...rects.map((rect) => rect.left));
+  const top = Math.min(...rects.map((rect) => rect.top));
+  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
+  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
+  return { left, top, width: right - left, height: bottom - top };
+}
+
+function vanishedFallbackRect(rect: KpReaderLayoutRect): KpReaderLayoutRect {
   const scale = 0.84;
   const width = rect.width * scale;
   const height = rect.height * scale;
@@ -208,7 +268,7 @@ function vanishedRect(rect: KpReaderLayoutRect): KpReaderLayoutRect {
   };
 }
 
-function lerpRect(
+function lerpFallbackRect(
   source: KpReaderLayoutRect,
   target: KpReaderLayoutRect,
   progress: number

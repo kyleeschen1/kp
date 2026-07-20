@@ -67,6 +67,7 @@ test("symbol motion continuously hands persistent material between native endpoi
   const start = sampleKpReaderEquationSymbolMotion({ ...context, progress: 0 });
   const middle = sampleKpReaderEquationSymbolMotion({ ...context, progress: 0.5 });
   const end = sampleKpReaderEquationSymbolMotion({ ...context, progress: 1 });
+  assert.equal(middle.samplingAuthority, "generic-fallback");
   const xId = "material-owner.x-persists";
   const cancellationId = "material-owner.left-inverses-cancel";
   const xStart = start.owners.find((owner) => owner.ownerId === xId)!;
@@ -131,7 +132,7 @@ test("forward and rewind retrace every owner at complementary progress", () => {
   }
 });
 
-test("focused cancellation gains salience without discontinuous geometry", () => {
+test("generic fallback keeps continuous geometry and semantic focus", () => {
   const context = fixture("forward");
   const cancellationId = "material-owner.left-inverses-cancel";
   const samples = [0.2, 0.21, 0.22].map((progress) =>
@@ -141,8 +142,7 @@ test("focused cancellation gains salience without discontinuous geometry", () =>
   );
   assert.ok(samples[1]!.currentBounds.top < samples[0]!.currentBounds.top);
   assert.ok(samples[2]!.currentBounds.top < samples[1]!.currentBounds.top);
-  assert.ok(samples[1]!.focusStrength > samples[0]!.focusStrength);
-  assert.ok(samples[2]!.focusStrength > samples[1]!.focusStrength);
+  assert.ok(samples.every((sample) => sample.focusStrength === 1));
   assert.throws(
     () => sampleKpReaderEquationSymbolMotion({
       ...context,
@@ -173,6 +173,7 @@ test("reader cancellation meets through a readable zero before compaction", () =
     witnessedAnnihilationBinding: binding
   });
   assert.equal(frame.witnessedAnnihilation?.frame.witnessReadable, true);
+  assert.equal(frame.samplingAuthority, "operation-specific");
   assert.equal(frame.witnessedAnnihilation?.frame.witness.latex, "0");
   assert.equal(frame.witnessedAnnihilation?.frame.phase, "witness-dwell");
   const cancellationOwner = frame.owners.find(
@@ -182,6 +183,11 @@ test("reader cancellation meets through a readable zero before compaction", () =
   assert.ok(cancellationOwner.fragmentPoses.every(
     (fragment) => fragment.pose.scale === 0.72
   ));
+  assert.equal(cancellationOwner.focusStrength, 1);
+  assert.deepEqual(
+    cancellationOwner.currentBounds,
+    posedFragmentBounds(cancellationOwner.fragmentPoses, fixture("forward").layout)
+  );
 });
 
 test("reader successor synthesis converges inputs before revealing four", () => {
@@ -211,7 +217,33 @@ test("reader successor synthesis converges inputs before revealing four", () => 
   assert.ok(derived.visualAnchorIds.includes(
     "anchor.equation.linear-solve.solved.rhs.4"
   ));
+  assert.equal(frame.samplingAuthority, "operation-specific");
 });
+
+function posedFragmentBounds(
+  fragments: readonly {
+    readonly anchorId: string;
+    readonly pose: { readonly opacity: number; readonly x: number; readonly y: number; readonly scale: number };
+  }[],
+  layout: ReturnType<typeof fixture>["layout"]
+) {
+  const anchors = new Map(layout.anchors.map((anchor) => [anchor.id, anchor.rect]));
+  const visible = fragments.filter((fragment) => fragment.pose.opacity > 0.001);
+  const rects = (visible.length > 0 ? visible : fragments).map((fragment) => {
+    const rect = anchors.get(fragment.anchorId)!;
+    return {
+      left: rect.left + fragment.pose.x + rect.width * (1 - fragment.pose.scale) / 2,
+      top: rect.top + fragment.pose.y + rect.height * (1 - fragment.pose.scale) / 2,
+      width: rect.width * fragment.pose.scale,
+      height: rect.height * fragment.pose.scale
+    };
+  });
+  const left = Math.min(...rects.map((rect) => rect.left));
+  const top = Math.min(...rects.map((rect) => rect.top));
+  const right = Math.max(...rects.map((rect) => rect.left + rect.width));
+  const bottom = Math.max(...rects.map((rect) => rect.top + rect.height));
+  return { left, top, width: right - left, height: bottom - top };
+}
 
 function assertRectApproximatelyEqual(
   actual: { readonly left: number; readonly top: number; readonly width: number; readonly height: number },

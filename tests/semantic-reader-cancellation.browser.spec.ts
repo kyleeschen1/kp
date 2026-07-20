@@ -6,6 +6,10 @@ test("cancellation material meets through a readable zero witness", async ({ pag
   );
   const stage = page.locator("[data-kp-reader-equation-stage]");
   await expect(stage).toHaveAttribute(
+    "data-kp-reader-motion-authority",
+    "operation-specific"
+  );
+  await expect(stage).toHaveAttribute(
     "data-kp-reader-annihilation-witness-readable",
     "true"
   );

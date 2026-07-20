@@ -336,6 +336,18 @@
       "status": "passed",
       "scope": "s23 fit contract and inferred integration",
       "checkedAt": "2026-07-20T21:49:44.594Z"
+    },
+    {
+      "command": "node --test focused symbol motion material owner and responsive fit suites",
+      "status": "passed",
+      "scope": "s24 authority separation and operation-derived conformance bounds",
+      "checkedAt": "2026-07-20T21:53:52.954Z"
+    },
+    {
+      "command": "npx playwright test cancellation successor and exemplar responsive suites plus npm run typecheck",
+      "status": "passed",
+      "scope": "s24 browser operation authority and unchanged gold motion",
+      "checkedAt": "2026-07-20T21:53:53.980Z"
     }
   ],
   "progress": {
