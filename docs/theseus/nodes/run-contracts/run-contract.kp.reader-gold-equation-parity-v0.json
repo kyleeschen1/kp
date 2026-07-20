@@ -171,7 +171,8 @@
     {
       "id": "s23-responsive-fit",
       "title": "Harden responsive equation fit",
-      "status": "planned"
+      "summary": "The reader equation now uses a deliberately compact KaTeX scale; seven sampled frames remain single-line and in bounds from 375px phones through desktop, with the stage heading also protected from clipping.",
+      "status": "complete"
     },
     {
       "id": "s24-remove-generic-sampler",

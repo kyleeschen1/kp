@@ -77,14 +77,14 @@ body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-stat
 .kp-reader-equation-stage { min-height: clamp(340px, 62vh, 570px); padding: 1.15rem; border: 1px solid var(--kp-line); border-radius: 1.15rem; background: var(--kp-surface); box-shadow: 0 22px 60px rgb(22 35 29 / 7%); overflow: hidden; }
 .kp-reader-equation-stage-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; min-height: 1.6rem; }
 .kp-reader-equation-stage-heading > span { color: var(--kp-accent); font-size: .64rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
-.kp-reader-equation-stage-heading output { color: var(--kp-muted); font-family: var(--kp-serif); font-size: .82rem; }
-.kp-reader-motion-control { display: inline-flex; align-items: center; gap: .38rem; margin-left: auto; color: var(--kp-muted); font-size: .65rem; }
+.kp-reader-equation-stage-heading output { color: var(--kp-muted); font-family: var(--kp-serif); font-size: .82rem; white-space: nowrap; }
+.kp-reader-motion-control { display: inline-flex; align-items: center; gap: .38rem; margin-left: auto; color: var(--kp-muted); font-size: .65rem; white-space: nowrap; }
 .kp-reader-motion-control select { padding: .2rem 1.35rem .2rem .42rem; border: 1px solid var(--kp-line); border-radius: .4rem; color: var(--kp-ink); background: var(--kp-surface); font: inherit; }
 .kp-reader-equation-viewport { position: relative; min-height: clamp(245px, 48vh, 440px); overflow: hidden; }
 .kp-reader-equation-transition { position: absolute; inset: 0; display: block !important; visibility: hidden; }
 .kp-reader-equation-transition[data-kp-reader-transition-active="true"] { visibility: visible; }
 .kp-reader-equation-fit-surface, .kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { position: absolute; inset: 0; }
-.kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { font-size: clamp(1.85rem, 4.6vw, 3.45rem); }
+.kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { font-size: clamp(1.45rem, 2.6vw, 2rem); }
 .kp-reader-equation-native { position: absolute; inset: 0; display: grid; place-items: center; }
 .kp-reader-equation-state { width: max-content; }
 .kp-reader-equation-state .katex-display { margin: 0; }
@@ -124,7 +124,7 @@ body[data-kp-reader-motion-mode="essential"] .kp-reader-equation-material-owner-
   .kp-lesson > h1 { font-size: clamp(2.8rem, 16vw, 4.6rem); }
   .kp-reader-equation-stage-heading { display: block; }
   .kp-reader-equation-stage-heading output { display: block; }
-  .kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { font-size: clamp(1.65rem, 9vw, 2.5rem); }
+  .kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { font-size: clamp(1.25rem, 6.4vw, 1.85rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {

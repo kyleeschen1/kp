@@ -90,6 +90,10 @@
     {
       "kind": "file",
       "path": "tests/semantic-reader-focus-salience.browser.spec.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-reader-exemplar-responsive-fit.browser.spec.ts"
     }
   ],
   "dependsOn": {
@@ -320,6 +324,18 @@
       "status": "passed",
       "scope": "s22 restrained narrative salience and interactive semantic correspondence",
       "checkedAt": "2026-07-20T21:44:39.326Z"
+    },
+    {
+      "command": "npx playwright test reader exemplar responsive fit and typography conformance",
+      "status": "passed",
+      "scope": "s23 compact no-wrap KaTeX geometry across desktop compact and phone",
+      "checkedAt": "2026-07-20T21:49:43.518Z"
+    },
+    {
+      "command": "node --test tests/semantic-reader-equation-responsive-fit.test.ts and npm run typecheck",
+      "status": "passed",
+      "scope": "s23 fit contract and inferred integration",
+      "checkedAt": "2026-07-20T21:49:44.594Z"
     }
   ],
   "progress": {
