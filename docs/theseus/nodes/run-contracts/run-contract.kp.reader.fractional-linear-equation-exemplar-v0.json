@@ -82,7 +82,8 @@
     {
       "id": "s08-fraction-geometry",
       "title": "Expose fraction structural geometry",
-      "status": "planned"
+      "summary": "Added complete annotated LaTeX for all seven states. Semantic ink receives stable anchors; KaTeX keeps ownership of the fraction rule, which is bound after render without reconstructing its geometry.",
+      "status": "complete"
     },
     {
       "id": "s09-timeline-layout-plan",

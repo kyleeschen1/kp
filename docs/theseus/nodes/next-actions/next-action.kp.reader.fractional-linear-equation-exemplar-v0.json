@@ -60,6 +60,12 @@
       "status": "passed",
       "scope": "s07 searchable static lesson",
       "checkedAt": "2026-07-21T21:58:14.594Z"
+    },
+    {
+      "command": "focused fractional annotated LaTeX and solve-x compatibility tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s08 semantic KaTeX fraction geometry",
+      "checkedAt": "2026-07-21T22:00:31.030Z"
     }
   ]
 }
