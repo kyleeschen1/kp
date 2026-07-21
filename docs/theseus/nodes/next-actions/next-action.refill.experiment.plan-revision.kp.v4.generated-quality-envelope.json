@@ -1,0 +1,40 @@
+{
+  "id": "next-action.refill.experiment.plan-revision.kp.v4.generated-quality-envelope",
+  "kind": "next-action",
+  "title": "Test generated-quality-envelope",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Run a bounded uncertainty-reduction experiment for: Dense rendered-frame validation, timeline-wide layout planning, typed repair, and representative human calibration can make established animation families smooth without card-by-card visual tuning. Selection rationale: The approved fraction division suite will test whether dense rendered-frame validation, timeline-wide layout planning, typed repair, and human calibration eliminate card-by-card tuning.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Approved refill option refill.experiment.plan-revision.kp.v4.generated-quality-envelope: The approved fraction division suite will test whether dense rendered-frame validation, timeline-wide layout planning, typed repair, and human calibration eliminate card-by-card tuning.",
+      "occurredAt": "2026-07-21T23:20:37.905Z"
+    }
+  ],
+  "affects": [
+    "plan-revision.kp.v4"
+  ],
+  "verification": [
+    "theseus validate"
+  ],
+  "expectedLearning": [
+    "An approved plan depends on an active assumption without outcome evidence."
+  ],
+  "allowedWork": [
+    "Run a bounded uncertainty-reduction experiment for: Dense rendered-frame validation, timeline-wide layout planning, typed repair, and representative human calibration can make established animation families smooth without card-by-card visual tuning."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected refill option without another approval."
+  ],
+  "criteria": [
+    {
+      "id": "selected-option-addressed",
+      "weight": "high"
+    },
+    {
+      "id": "selection-provenance-preserved",
+      "weight": "high"
+    }
+  ]
+}

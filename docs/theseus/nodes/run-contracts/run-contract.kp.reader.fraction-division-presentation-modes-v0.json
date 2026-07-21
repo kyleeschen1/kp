@@ -1,0 +1,190 @@
+{
+  "id": "run-contract.kp.reader.fraction-division-presentation-modes-v0",
+  "kind": "run-contract",
+  "title": "Fraction division presentation modes",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.fraction-division-presentation-modes-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reader.fractional-linear-equation-exemplar-v0.json",
+      "summary": "Completed fractional exemplar, accepted preservation boundary, and prior human checkpoint."
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/renderers/equation-material-layer.ts",
+      "summary": "Material-clone boundary behind the captured fraction-rule displacement."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/fractional-linear-equation-asset.ts",
+      "summary": "Canonical exact fraction semantics and both-sides transformation trace."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "focused semantic, rendering, compiler, policy, URL, and provider tests",
+    "focused Playwright checks for geometry, seek, rewind, responsive containment, static output, accessibility, and profile routing",
+    "npm run visual:fractional-linear-equation",
+    "npm run visual:linear-equation",
+    "npm run visual:contact-sheet",
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:dev-review-production",
+    "npm run perf:animation",
+    "npm run theseus -- workspace validate"
+  ],
+  "allowedWork": [
+    "Repair fraction-rule material geometry and its visual gate; add the named 3x=12 divide, (2x+6)/2 split-merge, and x/2=4 fluent transfer exemplars; add derivation and identity presentation profiles, URL state, compiler and editor discovery, typed provider or LLM selection boundaries, focused stress tests, and durable evidence.",
+    "Approval preauthorizes implementation of all three named exemplars before one final human review, but not promotion beyond those exact exemplars."
+  ],
+  "disallowedWork": [
+    "Do not generalize distribution, factoring, roots, exponents, function wrapping, logarithms, trigonometric inverses, calculus, graphs, code, or WebGL.",
+    "Do not introduce a generic move-across-equality primitive, LLM-controlled geometry or timing, unproved semantic identity, transient unexplained identity witnesses, or changes to unrelated dirty roadmap and exploratory documents."
+  ],
+  "goal": "Deliver correct fraction structural geometry, reusable divide and numerator split-merge choreography, and a certified fluent transfer projection through URL-addressable Explain, Standard, and Fluent profiles while preserving canonical algebra and stopping before family promotion.",
+  "target": "next-action.kp.reader.fraction-division-presentation-modes-v0",
+  "slices": [
+    {
+      "id": "s01-contract",
+      "title": "Persist approved target and typed contract",
+      "summary": "Persisted the exact approved 27-slice contract, selected the generated-quality and primitive-amortization experiments it tests, and preserved the completed fractional exemplar as the rollback boundary.",
+      "status": "complete"
+    },
+    {
+      "id": "s02-defect-baseline",
+      "title": "Capture exact fraction-rule displacement baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s03-structural-contract",
+      "title": "Define structural artifact rendering contract",
+      "status": "planned"
+    },
+    {
+      "id": "s04-fraction-rule-renderer",
+      "title": "Normalize fraction-rule material rendering",
+      "status": "planned"
+    },
+    {
+      "id": "s05-persistence-gate",
+      "title": "Require lifecycle-correct visible fraction ink",
+      "status": "planned"
+    },
+    {
+      "id": "s06-alignment-budget",
+      "title": "Gate anchor-to-ink alignment across motion",
+      "status": "planned"
+    },
+    {
+      "id": "s07-preservation-boundary",
+      "title": "Prove existing equation behavior is preserved",
+      "status": "planned"
+    },
+    {
+      "id": "s08-presentation-axes",
+      "title": "Define derivation and identity presentation axes",
+      "status": "planned"
+    },
+    {
+      "id": "s09-profile-presets",
+      "title": "Define Explain Standard and Fluent profiles",
+      "status": "planned"
+    },
+    {
+      "id": "s10-profile-url",
+      "title": "Make presentation profiles URL-addressable",
+      "status": "planned"
+    },
+    {
+      "id": "s11-compiler-selection",
+      "title": "Thread profile selection through compiler and reader",
+      "status": "planned"
+    },
+    {
+      "id": "s12-identity-witness",
+      "title": "Hold or omit identities without transient flashes",
+      "status": "planned"
+    },
+    {
+      "id": "s13-divide-trace",
+      "title": "Define exact divide-both-sides trace",
+      "status": "planned"
+    },
+    {
+      "id": "s14-divide-correspondence",
+      "title": "Define total divide semantic correspondence",
+      "status": "planned"
+    },
+    {
+      "id": "s15-divide-layout",
+      "title": "Reserve whole-side fraction geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s16-divide-entry",
+      "title": "Animate simultaneous divisor and fraction-bar entry",
+      "status": "planned"
+    },
+    {
+      "id": "s17-divide-settlement",
+      "title": "Compose cancellation quotient synthesis and settlement",
+      "status": "planned"
+    },
+    {
+      "id": "s18-divide-gate",
+      "title": "Gate complete divide-both-sides exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s19-split-trace",
+      "title": "Define reversible numerator split-merge transform",
+      "status": "planned"
+    },
+    {
+      "id": "s20-split-lineage",
+      "title": "Encode denominator copy and plus role change",
+      "status": "planned"
+    },
+    {
+      "id": "s21-split-layout",
+      "title": "Plan widest split state and hierarchy geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s22-split-motion",
+      "title": "Animate bar bifurcation denominator branch and plus descent",
+      "status": "planned"
+    },
+    {
+      "id": "s23-merge-motion",
+      "title": "Implement exact inverse fraction merge",
+      "status": "planned"
+    },
+    {
+      "id": "s24-split-gate",
+      "title": "Gate split-merge clarity containment and rewind",
+      "status": "planned"
+    },
+    {
+      "id": "s25-transfer-projection",
+      "title": "Define certified fluent transfer macro",
+      "status": "planned"
+    },
+    {
+      "id": "s26-profile-surface",
+      "title": "Animate transfer and expose restrained profile selection",
+      "status": "planned"
+    },
+    {
+      "id": "s27-release-checkpoint",
+      "title": "Run broad gates and stop for human review",
+      "status": "planned"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "next-action.refill.experiment.plan-revision.kp.v4.primitive-amortization",
+  "kind": "next-action",
+  "title": "Test primitive-amortization",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Run a bounded uncertainty-reduction experiment for: Human animation effort should scale with genuinely new visual primitives and renderer topologies, not with the number of generated lessons that compose reviewed primitives. Selection rationale: The approved divide, split-merge, and transfer exemplars will measure whether new effort concentrates in reusable primitives rather than each generated lesson.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Approved refill option refill.experiment.plan-revision.kp.v4.primitive-amortization: The approved divide, split-merge, and transfer exemplars will measure whether new effort concentrates in reusable primitives rather than each generated lesson.",
+      "occurredAt": "2026-07-21T23:20:39.200Z"
+    }
+  ],
+  "affects": [
+    "plan-revision.kp.v4"
+  ],
+  "verification": [
+    "theseus validate"
+  ],
+  "expectedLearning": [
+    "An approved plan depends on an active assumption without outcome evidence."
+  ],
+  "allowedWork": [
+    "Run a bounded uncertainty-reduction experiment for: Human animation effort should scale with genuinely new visual primitives and renderer topologies, not with the number of generated lessons that compose reviewed primitives."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected refill option without another approval."
+  ],
+  "criteria": [
+    {
+      "id": "selected-option-addressed",
+      "weight": "high"
+    },
+    {
+      "id": "selection-provenance-preserved",
+      "weight": "high"
+    }
+  ]
+}

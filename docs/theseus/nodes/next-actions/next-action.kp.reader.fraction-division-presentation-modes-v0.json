@@ -1,0 +1,29 @@
+{
+  "id": "next-action.kp.reader.fraction-division-presentation-modes-v0",
+  "kind": "next-action",
+  "title": "Build fraction division presentation modes",
+  "status": "ready",
+  "domain": "kp.reader",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reader.fractional-linear-equation-exemplar-v0.json"
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/renderers/equation-material-layer.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/fractional-linear-equation-asset.ts"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "scope": "s01 approved target and 27-slice typed contract",
+      "checkedAt": "2026-07-21T23:21:30.006Z"
+    }
+  ]
+}
