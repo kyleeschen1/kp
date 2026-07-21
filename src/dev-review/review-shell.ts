@@ -215,7 +215,9 @@ const shellStyles = `
     width: min(360px, calc(100vw - 24px));
     border: 1px solid color-mix(in srgb, var(--ink) 14%, var(--line));
     border-radius: 1rem;
-    background: var(--surface);
+    /* The captured page remains inspectable through the chrome; the writing
+       surface below stays opaque so feedback itself never loses contrast. */
+    background: rgb(255 250 240 / 86%);
     box-shadow: 0 24px 70px rgb(22 35 29 / 18%);
     overflow: hidden;
     pointer-events: auto;

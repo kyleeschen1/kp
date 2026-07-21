@@ -16,6 +16,7 @@ test("shadow review shell opens without reflow and restores focus on escape", as
 
   const host = page.locator("[data-kp-dev-review-shell]");
   const launcher = host.locator("button.launcher");
+  const panel = host.locator("[role=dialog]");
   await expect(launcher).toHaveAccessibleName("Review");
   await launcher.click();
   await expect(host.locator("[role=dialog]")).toBeVisible();
@@ -32,6 +33,7 @@ test("shadow review shell opens without reflow and restores focus on escape", as
   await expect(host.locator("output.review-round")).toHaveText("Round 3 · Solve-x polish");
   await expect(host.locator("output.inbox-count"))
     .toHaveAccessibleName("Current round contains 4 unread notes");
+  await expect(panel).toHaveCSS("background-color", "rgba(255, 250, 240, 0.86)");
   await expect(host.locator("button.close")).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(launcher).toBeFocused();

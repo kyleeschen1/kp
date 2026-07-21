@@ -66,8 +66,8 @@
     {
       "id": "s04-review-panel-translucency",
       "title": "Review panel translucency",
-      "summary": "Expose annotated content beneath the review panel while preserving composer legibility.",
-      "status": "ready"
+      "summary": "Changed only the review chrome to 86% surface opacity while retaining the fully opaque textarea. Focused review-shell browser tests prove the panel alpha, no page reflow, Escape focus restoration, and narrow-viewport fit.",
+      "status": "complete"
     },
     {
       "id": "s05-review-panel-focus",
