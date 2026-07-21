@@ -8,5 +8,12 @@ test("reader mounts the review shell by default in Vite development", async ({ p
   await host.locator("button.launcher").click();
   await expect(host.locator("textarea")).toBeEnabled();
   await expect(host.locator(".meta")).not.toContainText("State unavailable");
+  await expect(host.locator(".meta")).toContainText("Type to capture this moment");
+  await expect(host.locator(".route")).toBeEmpty();
+
+  // Opening the tool is intentionally capture-free; first input establishes
+  // the immutable moment so idle review UI never freezes stale reader state.
+  await host.locator("textarea").fill("Check this moment");
+  await expect(host.locator(".meta")).toContainText("Locked");
   await expect(host.locator(".route")).toHaveText("/reader/solve-x/");
 });

@@ -2,8 +2,9 @@
   "id": "run-contract.kp.dev-review-and-adaptive-loop-v1",
   "kind": "run-contract",
   "title": "Principled review state and adaptive Theseus loop",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "All 27 approved slices completed with per-slice commits and the final broad gate passed; stop for human approval before generated-animation generalization.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -213,7 +214,8 @@
     {
       "id": "s27-release-gate-handoff",
       "title": "Run-full-gate-and-stop-for-human-approval",
-      "status": "planned"
+      "summary": "Completed the broad release gate and prepared the explicit human checkpoint before any animation generalization.",
+      "status": "complete"
     }
   ]
 }

@@ -2,8 +2,9 @@
   "id": "next-action.kp.dev-review.current-state-and-adaptive-loop-v1",
   "kind": "next-action",
   "title": "Complete principled review state and adaptive Theseus loops",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
+  "summary": "Principled current review state, bounded querying and triage, adaptive loop selection, verification automation, visual contact sheets, and unified personal skills are implemented and release-verified.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -179,6 +180,13 @@
       "scope": "s26 zero-mutation integrated review and adaptive-loop forward test",
       "checkedAt": "2026-07-21T16:22:19.746Z",
       "notes": "Live review source remained 47,098 bytes at sha256:2884f5d0bf93cf703b9b67a0b0a914b2f79655ccf19f82412f83945426e61b87 before and after; four current unread notes remained unmodified."
+    },
+    {
+      "command": "release impact gate, 1716-test suite, production build, nine focused browser tests, contact sheet, live audit, skill validation, production closure, and typecheck",
+      "status": "passed",
+      "scope": "s27 final broad release and human-review handoff",
+      "checkedAt": "2026-07-21T16:29:31.492Z",
+      "notes": "A supplemental dev-mount assertion exposed an obsolete eager-capture expectation; it was updated to prove intentional lazy immutable capture, then the complete nine-test cohort passed. Live source remained 47,098 bytes at sha256:2884f5d0bf93cf703b9b67a0b0a914b2f79655ccf19f82412f83945426e61b87."
     }
   ],
   "expectedLearning": [
