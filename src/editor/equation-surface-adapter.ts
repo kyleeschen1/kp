@@ -2379,6 +2379,8 @@ function applySemanticTokenMotion(input: {
     const presentationPolicy = kpEquationPresentationPolicy(input.animation);
     input.transitionElement.dataset["kpEditorEquationPresentationRecipe"] =
       presentationPolicy.recipe;
+    input.transitionElement.dataset["kpEditorEquationContinuantRecipe"] =
+      presentationPolicy.continuants;
     const identityAbsorptionRoles = identityAbsorptionRoleRecordIds(
       transformation,
       input.animation.bundle
@@ -2471,6 +2473,7 @@ function applySemanticTokenMotion(input: {
             zeroWitnessPresentationRecipe: presentationPolicy.zeroWitness,
             successorPresentationRecipe: presentationPolicy.successor,
             depthPresentationRecipe: presentationPolicy.depth,
+            continuantPresentationRecipe: presentationPolicy.continuants,
             ...(presentationPolicy.successor === "native-handoff-v1" ||
               input.frame.linearRearrangement.step.successorSynthesisBinding === undefined
               ? {}
@@ -2681,6 +2684,7 @@ function applySemanticTokenMotion(input: {
   if (linearRearrangement === undefined) {
     delete input.transitionElement.dataset["kpEditorEquationLinearRearrangement"];
     delete input.transitionElement.dataset["kpEditorEquationPersistentReflowProgress"];
+    delete input.transitionElement.dataset["kpEditorEquationFocalTransitProgress"];
     delete input.transitionElement.dataset["kpEditorEquationMeetProgress"];
     delete input.transitionElement.dataset["kpEditorEquationCollapseProgress"];
     delete input.transitionElement.dataset["kpEditorEquationResultRevealProgress"];
@@ -2689,6 +2693,8 @@ function applySemanticTokenMotion(input: {
       linearRearrangement.kind;
     input.transitionElement.dataset["kpEditorEquationPersistentReflowProgress"] =
       String(linearRearrangement.persistentReflowProgress);
+    input.transitionElement.dataset["kpEditorEquationFocalTransitProgress"] =
+      String(linearRearrangement.focalTransitProgress);
     input.transitionElement.dataset["kpEditorEquationMeetProgress"] =
       String(linearRearrangement.meetProgress);
     input.transitionElement.dataset["kpEditorEquationCollapseProgress"] =

@@ -317,7 +317,8 @@ export function sampleKpEquationTokenMotion(
     : sampleKpEquationLinearRearrangementFrame(
         geometry.linearRearrangementKind,
         p,
-        geometry.cancellationPresentationRecipe
+        geometry.cancellationPresentationRecipe,
+        geometry.continuantPresentationRecipe
       );
   const dotProductTraversal = geometry.dotProductTraversalPlan === undefined
     ? undefined
@@ -611,6 +612,7 @@ function sampleRelation(
       progress,
       frame: linearRearrangement,
       cancellationPresentationRecipe: geometry.cancellationPresentationRecipe,
+      continuantPresentationRecipe: geometry.continuantPresentationRecipe,
       successorPresentationRecipe: geometry.successorPresentationRecipe,
       successorSynthesisBinding: geometry.successorSynthesisBinding,
       successorSynthesisPlan: geometry.successorSynthesisPlan

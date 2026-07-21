@@ -8,7 +8,8 @@ const presentation = {
   cancellation: "native-handoff-v1",
   zeroWitness: "none",
   successor: "native-handoff-v1",
-  depth: "flat-v1"
+  depth: "flat-v1",
+  continuants: "concurrent-v1"
 } as const;
 
 test("editor and reader frames normalize into one translation-independent contract", () => {

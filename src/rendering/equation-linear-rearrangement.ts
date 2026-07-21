@@ -15,6 +15,7 @@ import {
 } from "../animation/successor-synthesis.ts";
 import type {
   KpEquationCancellationPresentationRecipe,
+  KpEquationContinuantPresentationRecipe,
   KpEquationSuccessorPresentationRecipe
 } from "./equation-presentation-policy.ts";
 
@@ -38,6 +39,7 @@ export interface KpEquationLinearRearrangementFrame {
   readonly kind: KpEquationLinearRearrangementKind;
   readonly reservationProgress: number;
   readonly persistentReflowProgress: number;
+  readonly focalTransitProgress: number;
   readonly meetProgress: number;
   readonly collapseProgress: number;
   readonly resultRevealProgress: number;
@@ -48,19 +50,25 @@ export function sampleKpEquationLinearRearrangementFrame(
   kind: KpEquationLinearRearrangementKind,
   progress: number,
   cancellationPresentationRecipe?:
-    KpEquationCancellationPresentationRecipe | undefined
+    KpEquationCancellationPresentationRecipe | undefined,
+  continuantPresentationRecipe?:
+    KpEquationContinuantPresentationRecipe | undefined
 ): KpEquationLinearRearrangementFrame {
   const p = clamp01(progress);
   const reservationProgress = smooth(windowProgress(p, 0.1, 0.46));
-  const persistentReflowProgress =
-    kind === "cancel-additive-inverses" &&
+  const reserveThenTransit = kind === "simplify-constant-difference" &&
+    continuantPresentationRecipe === "reserve-then-transit-v1";
+  const persistentReflowProgress = kind === "cancel-additive-inverses" &&
       cancellationPresentationRecipe === "counter-orbit-v1"
-      ? smooth(windowProgress(p, 0.94, 0.99))
+    ? smooth(windowProgress(p, 0.94, 0.99))
+    : reserveThenTransit
+      ? smooth(windowProgress(p, 0.08, 0.26))
       : reservationProgress;
   return {
     kind,
     reservationProgress,
     persistentReflowProgress,
+    focalTransitProgress: smooth(windowProgress(p, reserveThenTransit ? 0.32 : 0.28, 0.7)),
     meetProgress: smooth(windowProgress(p, 0.42, 0.68)),
     collapseProgress: smooth(windowProgress(p, 0.62, 0.8)),
     resultRevealProgress: smooth(windowProgress(p, 0.68, 0.88)),
@@ -80,6 +88,8 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
   readonly successorPresentationRecipe?:
     KpEquationSuccessorPresentationRecipe | undefined;
+  readonly continuantPresentationRecipe?:
+    KpEquationContinuantPresentationRecipe | undefined;
 }): readonly KpEquationTokenMotionFrameToken[] | undefined {
   switch (input.relation.lifecycle) {
     case "persist":
@@ -261,7 +271,7 @@ function sampleConvergenceConstantDerivation(
 ): readonly KpEquationTokenMotionFrameToken[] {
   const sourceCenter = center(input.relation.source?.bounds);
   const destination = center(input.relation.target?.bounds);
-  const convergence = smooth(windowProgress(input.progress, 0.28, 0.7));
+  const convergence = input.frame.focalTransitProgress;
   const materialOpacity = 1 - smooth(windowProgress(input.progress, 0.7, 0.82));
   const catalystOpacity = 1 - smooth(windowProgress(input.progress, 0.6, 0.74));
   const targetReveal = smooth(windowProgress(input.progress, 0.84, 0.96));

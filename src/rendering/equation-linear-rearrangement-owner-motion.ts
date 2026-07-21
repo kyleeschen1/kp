@@ -36,6 +36,7 @@ import type {
 import type { KpMeasuredEquationTransitionGeometry } from "./equation-motion-dom.ts";
 import type {
   KpEquationCancellationPresentationRecipe,
+  KpEquationContinuantPresentationRecipe,
   KpEquationDepthPresentationRecipe,
   KpEquationSuccessorPresentationRecipe,
   KpEquationZeroWitnessPresentationRecipe
@@ -84,6 +85,8 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
     KpEquationSuccessorPresentationRecipe | undefined;
   readonly depthPresentationRecipe?:
     KpEquationDepthPresentationRecipe | undefined;
+  readonly continuantPresentationRecipe?:
+    KpEquationContinuantPresentationRecipe | undefined;
   readonly witnessedAnnihilationBinding?: KpWitnessedAnnihilationBinding | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
 }): KpEquationLinearRearrangementOwnerFrame {
@@ -148,6 +151,9 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
     ...(input.depthPresentationRecipe === undefined
       ? {}
       : { depthPresentationRecipe: input.depthPresentationRecipe }),
+    ...(input.continuantPresentationRecipe === undefined
+      ? {}
+      : { continuantPresentationRecipe: input.continuantPresentationRecipe }),
     ...(input.witnessedAnnihilationBinding === undefined
       ? {}
       : { witnessedAnnihilationBinding: input.witnessedAnnihilationBinding }),
@@ -185,7 +191,8 @@ function sampleLinearRearrangementMotion(
   const linearRearrangement = sampleKpEquationLinearRearrangementFrame(
     geometry.linearRearrangementKind!,
     p,
-    geometry.cancellationPresentationRecipe
+    geometry.cancellationPresentationRecipe,
+    geometry.continuantPresentationRecipe
   );
   const witnessedAnnihilation = geometry.witnessedAnnihilationPlan === undefined
     ? undefined
@@ -262,6 +269,7 @@ function sampleRequiredLinearRelation(input: {
     progress: input.progress,
     frame: input.frame,
     cancellationPresentationRecipe: input.geometry.cancellationPresentationRecipe,
+    continuantPresentationRecipe: input.geometry.continuantPresentationRecipe,
     successorPresentationRecipe: input.geometry.successorPresentationRecipe,
     successorSynthesisBinding: input.geometry.successorSynthesisBinding,
     successorSynthesisPlan: input.geometry.successorSynthesisPlan
@@ -292,6 +300,8 @@ export function sampleKpEquationLinearRearrangementOwnerMotion(input: {
   readonly progress: number;
   readonly cancellationPresentationRecipe?:
     KpEquationCancellationPresentationRecipe | undefined;
+  readonly continuantPresentationRecipe?:
+    KpEquationContinuantPresentationRecipe | undefined;
 }): readonly KpEquationOwnerFragmentMotion[] {
   const sourceTokens = input.sourceAnchors.map(tokenForAnchor);
   const targetTokens = input.targetAnchors.map(tokenForAnchor);
@@ -321,9 +331,11 @@ export function sampleKpEquationLinearRearrangementOwnerMotion(input: {
     frame: sampleKpEquationLinearRearrangementFrame(
       input.kind,
       input.progress,
-      input.cancellationPresentationRecipe
+      input.cancellationPresentationRecipe,
+      input.continuantPresentationRecipe
     ),
-    cancellationPresentationRecipe: input.cancellationPresentationRecipe
+    cancellationPresentationRecipe: input.cancellationPresentationRecipe,
+    continuantPresentationRecipe: input.continuantPresentationRecipe
   });
   return (sampled ?? []).map((fragment) => ({
     anchorId: fragment.motionId,

@@ -356,6 +356,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     cancellationPresentationRecipe: presentationProfile.cancellation,
     zeroWitnessPresentationRecipe: presentationProfile.zeroWitness,
     successorPresentationRecipe: presentationProfile.successor,
+    continuantPresentationRecipe: presentationProfile.continuants,
     depthPresentationRecipe:
       projection.mode === "continuous" ? presentationProfile.depth : "flat-v1",
     witnessedAnnihilationBinding: witnessedBindings.get(transitionId),
@@ -367,6 +368,15 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     progress: phaseProgress
   });
   const focusSnapshot = focus.getSnapshot();
+  if (motion.linearRearrangement === undefined) {
+    delete stage.dataset["kpReaderEquationPersistentReflowProgress"];
+    delete stage.dataset["kpReaderEquationFocalTransitProgress"];
+  } else {
+    stage.dataset["kpReaderEquationPersistentReflowProgress"] =
+      String(motion.linearRearrangement.persistentReflowProgress);
+    stage.dataset["kpReaderEquationFocalTransitProgress"] =
+      String(motion.linearRearrangement.focalTransitProgress);
+  }
   const focusedRefs = visualFocusRefs(focusSnapshot);
   syncNativeEndpointEvidence(motion, context, phaseProgress);
 

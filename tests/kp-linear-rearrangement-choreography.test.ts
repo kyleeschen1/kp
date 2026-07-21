@@ -12,7 +12,10 @@ import type {
   KpMeasuredEquationTransitionGeometry
 } from "../src/rendering/equation-motion-dom.ts";
 import { sampleKpEquationTokenMotion } from "../src/rendering/semantic-equation-token-renderer.ts";
-import { createKpEquationSuccessorSynthesisPlan } from "../src/rendering/equation-linear-rearrangement.ts";
+import {
+  createKpEquationSuccessorSynthesisPlan,
+  sampleKpEquationLinearRearrangementFrame
+} from "../src/rendering/equation-linear-rearrangement.ts";
 import {
   createKpWitnessedAnnihilationBinding,
   createKpWitnessedAnnihilationPlan
@@ -22,6 +25,35 @@ import "../src/rendering/equation-witnessed-annihilation-register.ts";
 const choreography = createKpLinearRearrangementChoreography(
   createLinearSolveAnimationAsset()
 );
+
+test("reserve-then-transit settles continuants before focal motion", () => {
+  const reserved = sampleKpEquationLinearRearrangementFrame(
+    "simplify-constant-difference",
+    0.26,
+    undefined,
+    "reserve-then-transit-v1"
+  );
+  assert.equal(reserved.persistentReflowProgress, 1);
+  assert.equal(reserved.focalTransitProgress, 0);
+
+  const transit = sampleKpEquationLinearRearrangementFrame(
+    "simplify-constant-difference",
+    0.5,
+    undefined,
+    "reserve-then-transit-v1"
+  );
+  assert.equal(transit.persistentReflowProgress, 1);
+  assert.ok(transit.focalTransitProgress > 0);
+
+  const concurrent = sampleKpEquationLinearRearrangementFrame(
+    "simplify-constant-difference",
+    0.3,
+    undefined,
+    "concurrent-v1"
+  );
+  assert.ok(concurrent.persistentReflowProgress < 1);
+  assert.ok(concurrent.focalTransitProgress > 0);
+});
 
 test("linear rearrangement compiles one causal operation subgraph per solve step", () => {
   assert.deepEqual(

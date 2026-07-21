@@ -28,6 +28,7 @@ import type { KpSuccessorSynthesisBinding } from "../../animation/successor-synt
 import type { KpEquationTokenMotionFrame } from "../../rendering/semantic-equation-token-renderer.ts";
 import type {
   KpEquationCancellationPresentationRecipe,
+  KpEquationContinuantPresentationRecipe,
   KpEquationDepthPresentationRecipe,
   KpEquationSuccessorPresentationRecipe,
   KpEquationZeroWitnessPresentationRecipe
@@ -45,6 +46,8 @@ export interface KpReaderEquationSymbolMotionFrame extends KpEquationVisualFrame
   readonly direction: "forward" | "rewind";
   readonly samplingAuthority: "operation-specific" | "generic-fallback";
   readonly owners: readonly KpReaderEquationSymbolOwnerPose[];
+  readonly linearRearrangement?:
+    KpEquationTokenMotionFrame["linearRearrangement"] | undefined;
   readonly witnessedAnnihilation?: {
     readonly contactPoint: { readonly x: number; readonly y: number };
     readonly frame: NonNullable<KpEquationTokenMotionFrame["witnessedAnnihilation"]>;
@@ -83,6 +86,8 @@ export function sampleKpReaderEquationSymbolMotion(input: {
     KpEquationSuccessorPresentationRecipe | undefined;
   readonly depthPresentationRecipe?:
     KpEquationDepthPresentationRecipe | undefined;
+  readonly continuantPresentationRecipe?:
+    KpEquationContinuantPresentationRecipe | undefined;
   readonly witnessedAnnihilationBinding?: KpWitnessedAnnihilationBinding | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
   readonly progress: number;
@@ -118,6 +123,7 @@ export function sampleKpReaderEquationSymbolMotion(input: {
         zeroWitnessPresentationRecipe: input.zeroWitnessPresentationRecipe,
         successorPresentationRecipe: input.successorPresentationRecipe,
         depthPresentationRecipe: input.depthPresentationRecipe,
+        continuantPresentationRecipe: input.continuantPresentationRecipe,
         witnessedAnnihilationBinding: input.witnessedAnnihilationBinding,
         successorSynthesisBinding: input.successorSynthesisBinding
       });
@@ -155,6 +161,9 @@ export function sampleKpReaderEquationSymbolMotion(input: {
       ? "generic-fallback"
       : "operation-specific",
     owners,
+    ...(operation?.motion.linearRearrangement === undefined
+      ? {}
+      : { linearRearrangement: operation.motion.linearRearrangement }),
     ...(operation?.motion.witnessedAnnihilation === undefined ||
       operation.geometry.witnessedAnnihilationPlan === undefined
       ? {}

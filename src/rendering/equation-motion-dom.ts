@@ -6,6 +6,7 @@ import type { KpEquationMotionPathCandidate } from "./equation-motion-path-plann
 import type { KpEquationLinearRearrangementKind } from "./equation-linear-rearrangement.ts";
 import type {
   KpEquationCancellationPresentationRecipe,
+  KpEquationContinuantPresentationRecipe,
   KpEquationDepthPresentationRecipe,
   KpEquationSuccessorPresentationRecipe,
   KpEquationZeroWitnessPresentationRecipe
@@ -98,6 +99,8 @@ export interface KpMeasuredEquationTransitionGeometry {
     KpEquationSuccessorPresentationRecipe | undefined;
   readonly depthPresentationRecipe?:
     KpEquationDepthPresentationRecipe | undefined;
+  readonly continuantPresentationRecipe?:
+    KpEquationContinuantPresentationRecipe | undefined;
   readonly successorSynthesisBinding?:
     KpSuccessorSynthesisBinding | undefined;
   readonly successorSynthesisPlan?: KpSuccessorSynthesisPlan | undefined;
@@ -209,6 +212,8 @@ export function measureKpEquationTransitionGeometry(input: {
     KpEquationSuccessorPresentationRecipe | undefined;
   readonly depthPresentationRecipe?:
     KpEquationDepthPresentationRecipe | undefined;
+  readonly continuantPresentationRecipe?:
+    KpEquationContinuantPresentationRecipe | undefined;
   readonly successorSynthesisBinding?:
     KpSuccessorSynthesisBinding | undefined;
   readonly witnessedAnnihilationBinding?:
@@ -292,6 +297,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.depthPresentationRecipe === undefined
       ? {}
       : { depthPresentationRecipe: input.depthPresentationRecipe }),
+    ...(input.continuantPresentationRecipe === undefined
+      ? {}
+      : { continuantPresentationRecipe: input.continuantPresentationRecipe }),
     ...(input.successorSynthesisBinding === undefined
       ? {}
       : { successorSynthesisBinding: input.successorSynthesisBinding }),

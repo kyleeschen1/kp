@@ -108,8 +108,8 @@
     {
       "id": "s11-continuant-ordering",
       "title": "Continuant ordering",
-      "summary": "Require solve-x surrounding-symbol reflow to settle before focal-symbol travel.",
-      "status": "ready"
+      "summary": "Wired reserve-then-transit through measured geometry, editor and reader sampling. In solve-x, persistent x and equals reflow from 0.08 to 0.26, pause, and fully settle before focal transit begins at 0.32; concurrent remains the default elsewhere. Fifteen unit laws, four successor browser tests, exact rewind, and the full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s12-solve-x-collision-gate",
