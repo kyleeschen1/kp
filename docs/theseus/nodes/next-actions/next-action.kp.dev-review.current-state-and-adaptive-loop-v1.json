@@ -51,6 +51,12 @@
       "status": "passed",
       "scope": "s03 strict versioned review-round wire contract",
       "checkedAt": "2026-07-21T14:54:24.145Z"
+    },
+    {
+      "command": "legacy migration, inbox, and v2 protocol tests plus full typecheck",
+      "status": "passed",
+      "scope": "s04 deterministic non-mutating v1 session-to-round projection",
+      "checkedAt": "2026-07-21T14:57:20.846Z"
     }
   ],
   "expectedLearning": [

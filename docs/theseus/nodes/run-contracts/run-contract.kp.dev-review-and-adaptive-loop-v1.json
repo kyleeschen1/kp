@@ -75,7 +75,8 @@
     {
       "id": "s04-legacy-round-migration",
       "title": "Project-v1-history-into-synthetic-rounds",
-      "status": "planned"
+      "summary": "Added deterministic replay-only v1 migration: sessions become synthetic rounds, prior rounds close, the latest remains current, round-scoped cursors retain meaning, and original note/source data remains byte-stable.",
+      "status": "complete"
     },
     {
       "id": "s05-round-projection-service",
