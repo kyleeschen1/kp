@@ -131,8 +131,10 @@ body[data-kp-reader-motion-mode="essential"] .kp-reader-equation-material-owner-
 }
 
 @media (max-width: 520px) {
-  .kp-reader-masthead { gap: .65rem; padding-inline: 14px; }
+  .kp-reader-masthead { gap: .45rem; padding-inline: 12px; }
   .kp-reader-tagline { display: none; }
+  .kp-reader-wordmark { font-size: 1rem; }
+  .kp-reader-mode, .kp-reader-share { font-size: .7rem; white-space: nowrap; }
   .kp-lesson > h1 { font-size: clamp(2.8rem, 16vw, 4.6rem); }
   .kp-reader-equation-stage-heading { display: block; }
   .kp-reader-equation-stage-heading output { display: block; }

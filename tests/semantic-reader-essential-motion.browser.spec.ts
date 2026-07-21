@@ -107,7 +107,8 @@ async function seekByScroll(
     const start = window.scrollY + firstRect.top + firstRect.height * 0.36;
     const end = window.scrollY + lastRect.top + lastRect.height * 0.64;
     const readerPosition = start + (end - start) * target / 1_000;
-    window.scrollTo(0, readerPosition - window.innerHeight * 0.48);
+    const anchor = Number(document.body.dataset["kpReaderViewportAnchor"] ?? "0.48");
+    window.scrollTo(0, readerPosition - window.innerHeight * anchor);
   }, progressPermille);
   await expect(page.locator("body")).toHaveAttribute(
     "data-kp-reader-progress",

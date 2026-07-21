@@ -180,8 +180,8 @@
     {
       "id": "s23-integrated-responsive-gate",
       "title": "Integrated responsive gate",
-      "summary": "Verify the full exemplar across desktop and phone with durable visual evidence.",
-      "status": "ready"
+      "summary": "The streamlined and teacher routes pass one integrated gate at 1440, 1024, 768, and 390px across named and transition checkpoints. It proves stable stage and masthead geometry, bounded masthead children, unobscured named beats in stacked layouts, zero horizontal or nested-scroll overflow, contained KaTeX ink, active TOC uniqueness, and exact native endpoints. The gate exposed mobile beat/card overlap and masthead clipping; a stacked reading anchor and compact phone header fixed both. The refreshed production review contains 15 inspected captures, searchable HTML for both routes, exact small-scroll rewind, one layout read, and no forbidden assets.",
+      "status": "complete"
     },
     {
       "id": "s24-production-release-gate",

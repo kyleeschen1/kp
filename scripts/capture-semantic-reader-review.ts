@@ -11,6 +11,7 @@ import {
 } from "../src/architecture/semantic-reader-route-budget.ts";
 
 const route = "/reader/solve-x/";
+const teacherRoute = "/reader/solve-x/teacher-zero/";
 const outputRoot = path.resolve("tmp/codex/semantic-reader-review");
 const viewport = { width: 1280, height: 900 } as const;
 const reviewStates = [
@@ -50,6 +51,10 @@ try {
     await openReader(page, baseUrl, 0);
     await page.locator(".kp-semantic-link").hover();
     captures.push(await capture(page, "semantic-focus-desktop.png"));
+    await openTeacherReader(page, baseUrl, 500);
+    captures.push(await capture(page, "teacher-zero-explicit-desktop.png"));
+    await openTeacherReader(page, baseUrl, 750);
+    captures.push(await capture(page, "teacher-zero-removed-desktop.png"));
     const motion = await measureContinuousMotion(page, baseUrl);
     await context.close();
 
@@ -60,6 +65,8 @@ try {
     const mobilePage = await mobile.newPage();
     await openReader(mobilePage, baseUrl, 500);
     captures.push(await capture(mobilePage, "cancel-motion-phone.png"));
+    await openTeacherReader(mobilePage, baseUrl, 500);
+    captures.push(await capture(mobilePage, "teacher-zero-explicit-phone.png"));
     await mobile.close();
 
     const reduced = await browser.newContext({ viewport, reducedMotion: "reduce" });
@@ -97,6 +104,9 @@ try {
     const initialHtmlBytes = await readFile(
       path.resolve("dist/reader/solve-x/index.html")
     );
+    const teacherInitialHtmlBytes = await readFile(
+      path.resolve("dist/reader/solve-x/teacher-zero/index.html")
+    );
     const codeAssets = assets.filter((asset) =>
       asset.kind === "javascript" || asset.kind === "css"
     );
@@ -115,6 +125,14 @@ try {
         gzipBytes: gzipSync(initialHtmlBytes).byteLength,
         containsSearchableLesson: initialHtmlBytes.includes(Buffer.from("An equation is a promise")),
         containsMathMl: initialHtmlBytes.includes(Buffer.from("<math"))
+      },
+      teacherInitialHtml: {
+        rawBytes: teacherInitialHtmlBytes.byteLength,
+        gzipBytes: gzipSync(teacherInitialHtmlBytes).byteLength,
+        containsSearchableZeroBeat: teacherInitialHtmlBytes.includes(
+          Buffer.from("x plus zero equals seven minus three")
+        ),
+        containsMathMl: teacherInitialHtmlBytes.includes(Buffer.from("<math"))
       },
       noJavaScript,
       routeAssets: {
@@ -145,6 +163,7 @@ try {
     console.log(JSON.stringify({
       output: path.relative(process.cwd(), reportPath),
       initialHtml: result.initialHtml,
+      teacherInitialHtml: result.teacherInitialHtml,
       noJavaScript: result.noJavaScript,
       routeAssets: {
         count: result.routeAssets.files.length,
@@ -179,6 +198,20 @@ async function startPreview(): Promise<string> {
 async function openReader(page: Page, baseUrl: string, progress: number): Promise<void> {
   const url = new URL(route, baseUrl);
   url.searchParams.set("kpLesson", "lesson.solve-x.x-plus-3");
+  url.searchParams.set("kpVersion", "1");
+  url.searchParams.set("kpProgress", String(progress));
+  await page.goto(url.toString(), { waitUntil: "networkidle" });
+  await page.locator('body[data-kp-reader-hydrated="true"]').waitFor();
+  await settle(page);
+}
+
+async function openTeacherReader(
+  page: Page,
+  baseUrl: string,
+  progress: number
+): Promise<void> {
+  const url = new URL(teacherRoute, baseUrl);
+  url.searchParams.set("kpLesson", "lesson.solve-x.x-plus-3.teacher-zero");
   url.searchParams.set("kpVersion", "1");
   url.searchParams.set("kpProgress", String(progress));
   await page.goto(url.toString(), { waitUntil: "networkidle" });
@@ -255,6 +288,7 @@ function assetKind(name: string): AssetSummary["kind"] {
 
 function assertReview(result: {
   readonly initialHtml: { readonly containsSearchableLesson: boolean; readonly containsMathMl: boolean };
+  readonly teacherInitialHtml: { readonly containsSearchableZeroBeat: boolean; readonly containsMathMl: boolean };
   readonly noJavaScript: { readonly bodyTextLength: number; readonly headingCount: number; readonly visibleStaticMathCount: number };
   readonly routeAssets: { readonly issues: readonly { readonly message: string }[] };
   readonly motion: { readonly deltaAfterSmallScroll: number; readonly rewindErrorPermille: number; readonly layoutReadsBefore: number; readonly layoutReadsAfter: number };
@@ -262,6 +296,10 @@ function assertReview(result: {
 }): void {
   if (!result.initialHtml.containsSearchableLesson || !result.initialHtml.containsMathMl) {
     throw new Error("Production reader HTML is not a complete searchable math document.");
+  }
+  if (!result.teacherInitialHtml.containsSearchableZeroBeat ||
+      !result.teacherInitialHtml.containsMathMl) {
+    throw new Error("Teacher reader HTML is not a searchable explicit-zero document.");
   }
   if (result.noJavaScript.bodyTextLength < 300 || result.noJavaScript.headingCount < 5 || result.noJavaScript.visibleStaticMathCount < 1) {
     throw new Error("JavaScript-disabled reader output is incomplete.");

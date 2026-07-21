@@ -237,6 +237,9 @@ function createScrollClock(): KpReaderContinuousScrollClock {
 
 function updateScrollGeometry(): void {
   const geometry = scrollGeometry();
+  document.body.dataset["kpReaderViewportAnchor"] = String(
+    readerViewportAnchorFraction()
+  );
   if (scrollClock === undefined) return;
   scrollClock.updateGeometry(geometry);
 }
@@ -255,7 +258,13 @@ function scrollGeometry(): { readonly startPx: number; readonly endPx: number } 
 }
 
 function readerPosition(): number {
-  return window.scrollY + window.innerHeight * 0.48;
+  return window.scrollY + window.innerHeight * readerViewportAnchorFraction();
+}
+
+function readerViewportAnchorFraction(): number {
+  // In the stacked layout, the reading focus sits below the sticky visual;
+  // desktop keeps the text and diagram centered side by side.
+  return window.matchMedia("(max-width: 880px)").matches ? 0.66 : 0.48;
 }
 
 function onScroll(): void {
@@ -801,7 +810,9 @@ function restoreUrlLocation(): void {
   if (progress === undefined) return;
   const geometry = scrollGeometry();
   const scrollPosition = geometry.startPx + (geometry.endPx - geometry.startPx) * progress / 1_000;
-  window.scrollTo({ top: scrollPosition - window.innerHeight * 0.48 });
+  window.scrollTo({
+    top: scrollPosition - window.innerHeight * readerViewportAnchorFraction()
+  });
 }
 
 function lastSample(): KpReaderClockSample {
