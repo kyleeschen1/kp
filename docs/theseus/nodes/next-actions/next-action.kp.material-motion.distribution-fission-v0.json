@@ -38,7 +38,7 @@
     },
     {
       "kind": "file",
-      "path": "src/editor/precomputed-equation-motion.ts",
+      "path": "src/rendering/precomputed-equation-motion.ts",
       "summary": "Precomputes arc origins at the preview-reflow handoff point so the ownership swap is geometrically continuous without active layout measurement."
     },
     {
@@ -72,15 +72,6 @@
     "npx playwright test <smallest affected browser cohort> when visible behavior changes",
     "npm run theseus -- workspace validate"
   ],
-  "expectedLearning": [
-    "Whether Apply fission to distribution can be completed inside KP Semantic Material Motion And Performance V0."
-  ],
-  "allowedWork": [
-    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
-  ],
-  "disallowedWork": [
-    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
-  ],
   "verificationRecords": [
     {
       "command": "node --test focused distribution fission and catalog tests",
@@ -109,12 +100,21 @@
     {
       "command": "npm run theseus -- workspace validate",
       "status": "passed",
-      "checkedAt": "2026-07-17T22:03:01.738Z",
-      "scope": "606 nodes and 7817 events valid before completion."
+      "scope": "606 nodes and 7817 events valid before completion.",
+      "checkedAt": "2026-07-17T22:03:01.738Z"
     }
   ],
   "progress": {
     "state": "complete",
     "summary": "Migrated distribution to exclusive fission ownership: the original factor remains rigid and nonzero through preview, is wholly replaced by both descendants at one geometrically co-located birth event, then descendants depart on semantic-order arcs while addends reflow and grouping retires. Registered the compiler and choreography in the lazy algebra pack to preserve startup budget."
-  }
+  },
+  "expectedLearning": [
+    "Whether Apply fission to distribution can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ]
 }

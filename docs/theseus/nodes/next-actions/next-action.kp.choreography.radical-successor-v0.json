@@ -33,7 +33,7 @@
     },
     {
       "kind": "file",
-      "path": "src/editor/precomputed-equation-motion.ts",
+      "path": "src/rendering/precomputed-equation-motion.ts",
       "summary": "Attaches selected measured relation paths so the persistent base can use restrained collision-aware reflow."
     },
     {
@@ -80,29 +80,6 @@
     "npm run typecheck",
     "npm run theseus -- validate"
   ],
-  "expectedLearning": [
-    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
-  ],
-  "allowedWork": [
-    "Only implement the named slice and its focused tests, docs, and Theseus evidence."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
-  ],
-  "criteria": [
-    {
-      "id": "semantic-choreography",
-      "weight": "high"
-    },
-    {
-      "id": "perceptual-conformance",
-      "weight": "high"
-    },
-    {
-      "id": "focused-verification",
-      "weight": "high"
-    }
-  ],
   "verificationRecords": [
     {
       "command": "node --disable-warning=ExperimentalWarning --test tests/choreography-exemplar-baseline.test.ts tests/kp-radical-succession-choreography.test.ts tests/kp-editor-exponent-radical-visible-animations.test.ts tests/semantic-equation-token-renderer.test.ts tests/equation-motion-path-planner.test.ts",
@@ -137,12 +114,35 @@
     {
       "command": "npm run build",
       "status": "passed",
-      "checkedAt": "2026-07-16T17:33:14.762Z",
-      "scope": "Production client build"
+      "scope": "Production client build",
+      "checkedAt": "2026-07-16T17:33:14.762Z"
     }
   ],
   "progress": {
     "state": "complete",
     "summary": "Migrated the generated fractional-exponent-to-radical animation to a compiled representational-succession plan. The base x reflows independently before notation act; exponent numerator, line, and denominator retain individual DOM/token identity and nonzero scale while following measured opposite-corner paths; radical tokens unfold from the shared seed with measured far-side stagger; one shared focus shadow spans the source notation; and exact source/target native endpoints settle before release. The dashboard fold/bundle/swap exemplar remains the renderer comparison adapter rather than semantic authority."
-  }
+  },
+  "expectedLearning": [
+    "Whether this slice preserves semantic choreography while improving perceptual conformance and configurable style realization."
+  ],
+  "allowedWork": [
+    "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a public style marketplace, arbitrary style code, stateful physics, general diagram routing, a second playback clock, or unrelated product work."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-choreography",
+      "weight": "high"
+    },
+    {
+      "id": "perceptual-conformance",
+      "weight": "high"
+    },
+    {
+      "id": "focused-verification",
+      "weight": "high"
+    }
+  ]
 }

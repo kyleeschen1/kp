@@ -12,6 +12,11 @@
       "occurredAt": "2026-07-20T22:58:53.739Z"
     }
   ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.reader.solve-x-visual-repair-v1"
+    ]
+  },
   "affects": [
     "plan-revision.kp.v4"
   ],

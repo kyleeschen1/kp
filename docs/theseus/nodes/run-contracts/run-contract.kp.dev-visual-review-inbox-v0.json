@@ -2,7 +2,8 @@
   "id": "run-contract.kp.dev-visual-review-inbox-v0",
   "kind": "run-contract",
   "title": "KP dev visual review inbox",
-  "status": "ready",
+  "status": "deferred",
+  "summary": "Superseded without discarding completed evidence by run-contract.kp.dev-review-and-adaptive-loop-v1, which carries the approved review-round, query, skill, and adaptive-loop scope under current typed autonomy fields.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -27,6 +28,9 @@
     "npm run build",
     "node production route closure and review skill validation",
     "theseus workspace validate"
+  ],
+  "revisitWhen": [
+    "Only if the replacement contract fails to preserve a legacy acceptance criterion."
   ],
   "allowedWork": [
     "Dev-only visual review protocol, capture providers, overlay, local persistence, repository CLI, and personal kp-review-logs skill.",

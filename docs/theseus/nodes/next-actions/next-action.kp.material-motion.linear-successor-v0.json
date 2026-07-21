@@ -48,7 +48,7 @@
     },
     {
       "kind": "file",
-      "path": "src/editor/precomputed-equation-motion.ts",
+      "path": "src/rendering/precomputed-equation-motion.ts",
       "summary": "Cached successor compilation outside the animation frame loop."
     },
     {
@@ -76,15 +76,6 @@
     "npm run typecheck when typed source or public contracts change",
     "npx playwright test <smallest affected browser cohort> when visible behavior changes",
     "npm run theseus -- workspace validate"
-  ],
-  "expectedLearning": [
-    "Whether Apply successor synthesis to linear solve can be completed inside KP Semantic Material Motion And Performance V0."
-  ],
-  "allowedWork": [
-    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
-  ],
-  "disallowedWork": [
-    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
   ],
   "verificationRecords": [
     {
@@ -114,12 +105,21 @@
     {
       "command": "npm run theseus -- workspace validate",
       "status": "passed",
-      "checkedAt": "2026-07-17T20:57:56.436Z",
-      "scope": "601 nodes and 7751 events valid before completion."
+      "scope": "601 nodes and 7751 events valid before completion.",
+      "checkedAt": "2026-07-17T20:57:56.436Z"
     }
   ],
   "progress": {
     "state": "complete",
     "summary": "Applied shared successor synthesis to the live linear solve by splitting the semantic subtraction operator from its operand, authoring material-input/catalyst/target roles, excluding the catalyst from result lineage, compiling and caching the measured successor plan, replacing bespoke merge motion with shared sampling, preserving rigid continuants and KaTeX metrics, exposing inspectable editor roles, and refining live handoff timing from checkpoint-frame review."
-  }
+  },
+  "expectedLearning": [
+    "Whether Apply successor synthesis to linear solve can be completed inside KP Semantic Material Motion And Performance V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic-motion, compiler, renderer, loading, performance, fixture, test, documentation, and Theseus-evidence slices."
+  ],
+  "disallowedWork": [
+    "No broad CAS, arbitrary LLM-authored rendering code, live provider, unrelated mathematical family expansion, general 3D rewrite, or unrelated dashboard/export work."
+  ]
 }

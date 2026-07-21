@@ -33,7 +33,7 @@
     },
     {
       "kind": "file",
-      "path": "src/editor/solve-x-semantic-latex.ts",
+      "path": "src/rendering/solve-x-selector-annotated-latex.ts",
       "summary": "Defines validated selector-annotated KaTeX for all four solve-x states."
     },
     {
@@ -67,15 +67,6 @@
     "npm run theseus -- validate",
     "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium"
   ],
-  "expectedLearning": [
-    "Whether Migrate solve-x semantic motion can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
-  ],
-  "allowedWork": [
-    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
-  ],
-  "disallowedWork": [
-    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
-  ],
   "verificationRecords": [
     {
       "command": "npm run typecheck",
@@ -98,12 +89,21 @@
     {
       "command": "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium",
       "status": "passed",
-      "checkedAt": "2026-07-15T20:29:58.813Z",
-      "scope": "All 19 editor animation browser scenarios."
+      "scope": "All 19 editor animation browser scenarios.",
+      "checkedAt": "2026-07-15T20:29:58.813Z"
     }
   ],
   "progress": {
     "state": "complete",
     "summary": "Solve-x now renders measured selector-level semantic motion for persistence, introduction, cancellation, and fan-in on the shared reversible editor clock."
-  }
+  },
+  "expectedLearning": [
+    "Whether Migrate solve-x semantic motion can be completed inside KP Semantic Incremental Transition And LLM Authoring V0."
+  ],
+  "allowedWork": [
+    "Only the approved semantic correspondence, equation compiler and renderer, representative equation migrations, constrained LLM draft compilation, minimal DiagramScene and SVG adapter, focused tests, documentation, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "No second clock, broad CAS, arbitrary target-math generation, LLM-authored DOM or pixels or keyframes, live model provider, general diagram layout engine, unrelated dashboard export media work, or deferred family expansion."
+  ]
 }

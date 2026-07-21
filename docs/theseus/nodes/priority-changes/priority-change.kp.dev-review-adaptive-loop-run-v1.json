@@ -1,0 +1,49 @@
+{
+  "id": "priority-change.kp.dev-review-adaptive-loop-run-v1",
+  "kind": "priority-change",
+  "title": "Execute the approved review and adaptive-loop contract",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The user approved the principled inbox, kp-review-logs, verification automation, and unified adaptive theseus-loop implementation plan. The replacement typed contract is current; generated-equation generalization remains next.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The user approved the principled inbox, kp-review-logs, verification automation, and unified adaptive theseus-loop implementation plan. The replacement typed contract is current; generated-equation generalization remains next.",
+      "occurredAt": "2026-07-21T14:42:54.892Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v4"
+    ],
+    "preferred": [
+      "run-contract.kp.dev-review-and-adaptive-loop-v1"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v4",
+    "run-contract.kp.dev-review-and-adaptive-loop-v1"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v4",
+    "rationale": "The user approved the principled inbox, kp-review-logs, verification automation, and unified adaptive theseus-loop implementation plan. The replacement typed contract is current; generated-equation generalization remains next.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.dev-review-and-adaptive-loop-v1"
+    ],
+    "changes": [
+      {
+        "subject": "run-contract.kp.dev-review-and-adaptive-loop-v1",
+        "to": "now"
+      },
+      {
+        "subject": "next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability",
+        "to": "next"
+      }
+    ],
+    "effectiveAt": "2026-07-21T14:42:54.892Z",
+    "requestedBy": "user"
+  }
+}

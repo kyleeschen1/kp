@@ -2,9 +2,9 @@
   "id": "priority-change.kp.review-inbox-current-state-v1",
   "kind": "priority-change",
   "title": "Make principled review-inbox querying the next step",
-  "status": "active",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "The user made the unfinished review-inbox lifecycle current before more generated-equation work: preserve append-only history, distinguish current review rounds from historical notes by explicit state, expose principled status and consumer-cursor queries, and validate the kp-review-logs skill before returning to animation generalization.",
+  "summary": "Applied by the approved replacement run contract, which now makes review current-state querying the active work and defers generated-equation generalization.",
   "sourceRefs": [
     {
       "kind": "user-intent",

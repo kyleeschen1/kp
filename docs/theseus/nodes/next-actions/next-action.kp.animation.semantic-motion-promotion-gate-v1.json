@@ -33,7 +33,7 @@
     },
     {
       "kind": "file",
-      "path": "src/editor/precomputed-equation-motion.ts",
+      "path": "src/rendering/precomputed-equation-motion.ts",
       "summary": "Keeps specialized causal choreography on its own clock while sharing the generic token lifecycle envelope."
     },
     {
@@ -57,19 +57,6 @@
     "npx playwright test tests/editor-animation-visuals.browser.spec.ts",
     "npm test",
     "npm run build"
-  ],
-  "expectedLearning": [
-    "Whether Enforce promotion and close the loop can be completed inside Semantic Motion Animation Library Long Loop."
-  ],
-  "allowedWork": [
-    "Only implement the 28 approved semantic-animation slices in stored order.",
-    "Eliminate nested animation scrollbars through responsive native layout while preserving glyph ink and traveling content.",
-    "Add canonical operations, correspondence, choreography, editor realization, tests, documentation, and Theseus evidence required by the approved slices."
-  ],
-  "disallowedWork": [
-    "Do not redesign unrelated dashboard, editor, graph, export, or page-level scrolling behavior.",
-    "Do not use whole-equation transform scaling or content clipping to hide overflow.",
-    "Do not add unapproved animation families or gestalt style packages."
   ],
   "verificationRecords": [
     {
@@ -99,12 +86,25 @@
     {
       "command": "npx playwright test tests/editor-animation-overflow.browser.spec.ts",
       "status": "passed",
-      "checkedAt": "2026-07-17T04:30:45.019Z",
-      "scope": "44 descriptors and 528 viewport samples with zero nested scrollbars."
+      "scope": "44 descriptors and 528 viewport samples with zero nested scrollbars.",
+      "checkedAt": "2026-07-17T04:30:45.019Z"
     }
   ],
   "progress": {
     "state": "complete",
     "summary": "Promoted the 23-operation semantic motion cohort across 17 animations and 26 transformations, added operation-specific fraction and exponent motifs without a second phase clock, enforced LLM authoring and seek-rewind conformance, verified zero nested scrollbars, and recorded the completed 28-slice loop with honest residual risks."
-  }
+  },
+  "expectedLearning": [
+    "Whether Enforce promotion and close the loop can be completed inside Semantic Motion Animation Library Long Loop."
+  ],
+  "allowedWork": [
+    "Only implement the 28 approved semantic-animation slices in stored order.",
+    "Eliminate nested animation scrollbars through responsive native layout while preserving glyph ink and traveling content.",
+    "Add canonical operations, correspondence, choreography, editor realization, tests, documentation, and Theseus evidence required by the approved slices."
+  ],
+  "disallowedWork": [
+    "Do not redesign unrelated dashboard, editor, graph, export, or page-level scrolling behavior.",
+    "Do not use whole-equation transform scaling or content clipping to hide overflow.",
+    "Do not add unapproved animation families or gestalt style packages."
+  ]
 }

@@ -2,9 +2,9 @@
   "id": "priority-change.kp.unified-theseus-loop-selector-v1",
   "kind": "priority-change",
   "title": "Use one adaptive Theseus loop skill",
-  "status": "active",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Use one user-facing theseus-loop skill with automatic risk- and scope-based recommendation between iteration and long modes. State the selected mode and reasons before approval, allow explicit user override, and never silently escalate an approved iteration into a long run. Retain theseus-long-loop only as a compatibility alias that forces long mode.",
+  "summary": "Applied by the approved replacement run contract, whose later slices deliver one adaptive theseus-loop skill and retain long mode as compatibility behavior.",
   "sourceRefs": [
     {
       "kind": "user-intent",

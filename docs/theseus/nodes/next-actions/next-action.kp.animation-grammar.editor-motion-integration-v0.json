@@ -14,8 +14,8 @@
     },
     {
       "kind": "file",
-      "path": "src/editor/precomputed-equation-motion.ts",
-      "summary": "Builds the complete editor motion plan once from measured step geometry and supplies it to token sampling without midflight measurement or path selection."
+      "path": "src/rendering/precomputed-equation-motion.ts",
+      "summary": "Builds the complete shared rendering motion plan once from measured step geometry and supplies it to token sampling without midflight measurement or path selection."
     }
   ],
   "dependsOn": {
@@ -31,29 +31,6 @@
     "npx playwright test tests/editor-animation-visuals.browser.spec.ts --project=chromium",
     "npm run typecheck",
     "npm run theseus -- validate"
-  ],
-  "expectedLearning": [
-    "Whether this slice advances the governed grammar while preserving deterministic semantic continuity and the existing shared player boundary."
-  ],
-  "allowedWork": [
-    "Only implement the named slice and its focused tests, docs, and Theseus evidence."
-  ],
-  "disallowedWork": [
-    "Do not broaden into live model providers, a general CAS, general graph layout, a second playback clock, arbitrary model-authored geometry, or unrelated product work."
-  ],
-  "criteria": [
-    {
-      "id": "semantic-continuity",
-      "weight": "high"
-    },
-    {
-      "id": "deterministic-compilation",
-      "weight": "high"
-    },
-    {
-      "id": "focused-verification",
-      "weight": "high"
-    }
   ],
   "verificationRecords": [
     {
@@ -77,12 +54,35 @@
     {
       "command": "npm run theseus -- validate",
       "status": "passed",
-      "checkedAt": "2026-07-16T02:48:06.945Z",
-      "scope": "Theseus graph and event history"
+      "scope": "Theseus graph and event history",
+      "checkedAt": "2026-07-16T02:48:06.945Z"
     }
   ],
   "progress": {
     "state": "complete",
     "summary": "Integrated frozen layout, relation and lineage path, and semantic timeline plans into the editor equation adapter; plans are cached per mounted stage and semantic step, while direction and content changes preserve the stage node and replan only at boundaries."
-  }
+  },
+  "expectedLearning": [
+    "Whether this slice advances the governed grammar while preserving deterministic semantic continuity and the existing shared player boundary."
+  ],
+  "allowedWork": [
+    "Only implement the named slice and its focused tests, docs, and Theseus evidence."
+  ],
+  "disallowedWork": [
+    "Do not broaden into live model providers, a general CAS, general graph layout, a second playback clock, arbitrary model-authored geometry, or unrelated product work."
+  ],
+  "criteria": [
+    {
+      "id": "semantic-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-compilation",
+      "weight": "high"
+    },
+    {
+      "id": "focused-verification",
+      "weight": "high"
+    }
+  ]
 }

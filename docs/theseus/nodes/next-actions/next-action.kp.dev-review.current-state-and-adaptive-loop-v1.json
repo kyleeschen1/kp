@@ -1,0 +1,80 @@
+{
+  "id": "next-action.kp.dev-review.current-state-and-adaptive-loop-v1",
+  "kind": "next-action",
+  "title": "Complete principled review state and adaptive Theseus loops",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.review-inbox-current-state-v1.json"
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.unified-theseus-loop-selector-v1.json"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "priority-change.kp.review-inbox-current-state-v1"
+    ],
+    "preferred": [
+      "priority-change.kp.unified-theseus-loop-selector-v1"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v4",
+    "next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability"
+  ],
+  "verification": [
+    "node --test focused dev-review and loop-policy suites",
+    "npx playwright test focused review UI and workflow cohorts",
+    "npm run typecheck and npm run build",
+    "npm run check:dev-review-production",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "theseus plan gate and workspace validation",
+      "status": "passed",
+      "scope": "s01 typed contract, done-contract, provenance, and queue hygiene",
+      "checkedAt": "2026-07-21T14:47:18.282Z"
+    }
+  ],
+  "expectedLearning": [
+    "Whether explicit review rounds, statuses, and per-consumer cursors eliminate historical-current ambiguity without deleting provenance.",
+    "Whether risk-tiered verification and one adaptive skill reduce iteration cost while preserving broad final proof."
+  ],
+  "allowedWork": [
+    "Complete the approved dev-review current-state, CLI, skill, verification automation, and adaptive Theseus loop plan."
+  ],
+  "disallowedWork": [
+    "Do not mutate live review-note lifecycle state during dry runs, leak review tooling into production, or resume animation generalization before the final checkpoint."
+  ],
+  "criteria": [
+    {
+      "id": "current-review-state-unambiguous",
+      "weight": "high"
+    },
+    {
+      "id": "append-only-history-preserved",
+      "weight": "high"
+    },
+    {
+      "id": "bounded-llm-querying",
+      "weight": "high"
+    },
+    {
+      "id": "production-exclusion-preserved",
+      "weight": "high"
+    },
+    {
+      "id": "adaptive-loop-explainable-and-overridable",
+      "weight": "high"
+    },
+    {
+      "id": "final-release-gate-passes",
+      "weight": "high"
+    }
+  ]
+}
