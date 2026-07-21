@@ -74,6 +74,13 @@
       "scope": "s12 handoff rewind and direct-seek gate",
       "checkedAt": "2026-07-21T19:55:18.702Z",
       "notes": "Eight seam samples across the 333 and 667 boundaries retrace exactly by semantic owner and fragment identity after forward/backward scrolling, and p323/p657 direct URLs match scrolled frames. Owner alpha stays binary; URL progress and rewind direction remain exact."
+    },
+    {
+      "command": "16-frame solve-x seam capture, six-state visual contact sheet, live alpha baseline, and rewind gate",
+      "status": "passed",
+      "scope": "s13 atomic handoff visual checkpoint",
+      "checkedAt": "2026-07-21T19:57:08.034Z",
+      "notes": "Accepted for continuation: start/interior/seam/final captures show solid equation ink, stable KaTeX metrics, no native/material ghosting, and no endpoint font substitution. Remaining prose salience transitions are isolated to the attention slices."
     }
   ]
 }

@@ -15,6 +15,10 @@ const progressSamples = [
   668, 677, 687, 693, 694,
   973, 974, 980, 990, 999, 1_000
 ] as const;
+const visualProgressSamples = new Set<number>([
+  0, 1, 10, 20, 323, 332, 343, 353,
+  657, 666, 677, 687, 980, 990, 999, 1_000
+]);
 
 await mkdir(outputDirectory, { recursive: true });
 const browser = await chromium.launch({ headless: true });
@@ -32,6 +36,12 @@ for (const progress of progressSamples) {
     ));
   });
   samples.push(await sampleFrame(page, progress));
+  if (visualProgressSamples.has(progress)) {
+    await page.screenshot({
+      path: `${outputDirectory}/progress-${String(progress).padStart(4, "0")}.png`,
+      fullPage: false
+    });
+  }
 }
 await browser.close();
 await writeFile(outputPath, `${JSON.stringify(samples, null, 2)}\n`, "utf8");

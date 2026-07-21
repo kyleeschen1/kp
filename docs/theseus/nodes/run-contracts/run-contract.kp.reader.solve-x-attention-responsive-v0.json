@@ -128,7 +128,8 @@
     {
       "id": "s13-handoff-visual-checkpoint",
       "title": "Handoff_visual_checkpoint",
-      "status": "planned"
+      "summary": "Accepted the atomic handoff visual stop gate after inspecting sixteen seam captures and the canonical contact sheet. Equation ink remains solid with stable KaTeX metrics and no duplicate ghost, dimming ramp, font swap, or endpoint jump; prose attention behavior remains explicitly separate.",
+      "status": "complete"
     },
     {
       "id": "s14-attention-phase-schema",
