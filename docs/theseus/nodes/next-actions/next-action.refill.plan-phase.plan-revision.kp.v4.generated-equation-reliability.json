@@ -295,6 +295,12 @@
       "status": "passed",
       "scope": "s25 responsive integrated reader visual gate",
       "checkedAt": "2026-07-21T03:36:22.141Z"
+    },
+    {
+      "command": "Production build; app, domain, protocol, and provider typechecks; 1696 unit/server tests; architecture, inference, catalog, parser-isolation, review-exclusion, integrated browser, deterministic capture, diff, and Theseus gates",
+      "status": "passed",
+      "scope": "s26 production and release closure",
+      "checkedAt": "2026-07-21T03:41:27.087Z"
     }
   ],
   "progress": {

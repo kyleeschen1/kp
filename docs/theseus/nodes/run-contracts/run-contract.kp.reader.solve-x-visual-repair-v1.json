@@ -197,7 +197,8 @@
     {
       "id": "s26-production-release-gate",
       "title": "Production and release gate",
-      "status": "planned"
+      "summary": "Closed the production gate across build, all TypeScript domains, architecture and inference contracts, 1,696 unit/server tests, review-tooling exclusion, reader parser isolation, the nineteen-test integrated browser cohort, deterministic eight-frame capture, diff hygiene, and Theseus validation. Updated one stale external-port metadata expectation.",
+      "status": "complete"
     },
     {
       "id": "s27-human-exemplar-checkpoint",
