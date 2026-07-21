@@ -2,7 +2,8 @@
   "id": "run-contract.kp.reader.solve-x-visual-repair-v1",
   "kind": "run-contract",
   "title": "Solve-x visual parity and review repair",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -203,8 +204,8 @@
     {
       "id": "s27-human-exemplar-checkpoint",
       "title": "Human exemplar checkpoint",
-      "summary": "Prepared the verified solve-x exemplar for explicit human visual approval. Do not generalize its presentation recipes before approval.",
-      "status": "in-progress"
+      "summary": "Checkpoint performed and failed visual approval; five durable notes identify review-surface, masthead, collision-ordering, counter-convergence, and zero-witness revisions. No family-wide generalization was performed.",
+      "status": "complete"
     }
   ]
 }
