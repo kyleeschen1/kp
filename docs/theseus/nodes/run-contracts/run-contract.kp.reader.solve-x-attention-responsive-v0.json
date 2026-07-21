@@ -1,0 +1,184 @@
+{
+  "id": "run-contract.kp.reader.solve-x-attention-responsive-v0",
+  "kind": "run-contract",
+  "title": "Solve-x attention and responsive exemplar",
+  "status": "ready",
+  "domain": "kp.reader",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.solve-x-attention-responsive-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-21-kp-symbolic-exemplar-sequence-and-responsive-attention.md",
+      "summary": "Accepted exemplar sequence, attention problem, and phone-specific projection constraint."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-21-solve-x-human-checkpoint-follow-up.md",
+      "summary": "Observed review occlusion, moving-native fade, overflow concerns, and open human checkpoint."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "focused unit and Playwright checks for each slice",
+    "npm run visual:contact-sheet",
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:dev-review-production",
+    "npm run review:semantic-reader",
+    "npm run theseus -- workspace validate"
+  ],
+  "allowedWork": [
+    "Solve-x reader, semantic lesson document, authoring, static compiler, hydration metadata, attention projection, accessible controls, responsive presentation, equation material ownership, reader-specific developer review placement, focused tests, deterministic captures, and durable evidence.",
+    "Preserve the existing searchable transcript, static and no-JavaScript output, semantic math and lineage, KaTeX identity and metrics, exact URLs, direct seek, rewind, review history, and production exclusion."
+  ],
+  "disallowedWork": [
+    "Do not implement or promote distribution, fractions, radicals, exponents, function wrapping, calculus, linear algebra, code, graphs, WebGL, providers, or other animation families.",
+    "Do not generalize the optional attention schema or solve-x visual recipes before final human approval; do not build arbitrary text, KaTeX, or code overflow infrastructure; do not add public review tooling."
+  ],
+  "goal": "Perfect solve-x as the single attention-responsive exemplar with non-occluding developer review, solid native handoff, phased prose-to-motion attention, wide stable-island scrollytelling, and a narrow focus stepper; stop for human approval before any family promotion.",
+  "target": "next-action.kp.reader.solve-x-attention-responsive-v0",
+  "runMode": "run",
+  "maxSlices": 25,
+  "commitCadence": "Commit after each independently verified reversible slice with its Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop immediately if semantic math or lineage, searchable prose, static output, URL restoration, seek or rewind authority, KaTeX identity or font metrics, review history, accessibility, or production exclusion regresses.",
+    "Stop at a visual checkpoint if review placement, native handoff, attention ownership, or phone clarity remains ambiguous; retain the smallest exemplar rollback unit.",
+    "Stop if implementation requires family-wide promotion, arbitrary overflow infrastructure, public review infrastructure, or scope outside the approved solve-x exemplar.",
+    "Stop after the final human exemplar checkpoint and do not promote the pattern without explicit approval."
+  ],
+  "slices": [
+    {
+      "id": "s01-close-prior-checkpoint",
+      "title": "Close_prior_checkpoint",
+      "summary": "Closed the predecessor only after its human checkpoint was performed and explicitly recorded as not accepted; preserved its history and no-generalization outcome.",
+      "status": "complete"
+    },
+    {
+      "id": "s02-successor-contract",
+      "title": "Create_successor_contract",
+      "summary": "Created the exact approved 25-slice solve-x-only run contract with broad verification, per-slice commits, preserved fallback projection, four visual stop gates, and explicit exclusions for family promotion and general overflow.",
+      "status": "complete"
+    },
+    {
+      "id": "s03-desktop-failure-baseline",
+      "title": "Desktop_failure_baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s04-phone-failure-baseline",
+      "title": "Phone_failure_baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s05-review-placement-policy",
+      "title": "Review_placement_policy",
+      "status": "planned"
+    },
+    {
+      "id": "s06-wide-review-dock",
+      "title": "Wide_review_dock",
+      "status": "planned"
+    },
+    {
+      "id": "s07-narrow-review-flow",
+      "title": "Narrow_review_flow",
+      "status": "planned"
+    },
+    {
+      "id": "s08-review-visual-checkpoint",
+      "title": "Review_visual_checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s09-handoff-instrumentation",
+      "title": "Handoff_instrumentation",
+      "status": "planned"
+    },
+    {
+      "id": "s10-solid-material-law",
+      "title": "Solid_material_handoff_law",
+      "status": "planned"
+    },
+    {
+      "id": "s11-solve-x-ownership-repair",
+      "title": "Solve-x_ownership_repair",
+      "status": "planned"
+    },
+    {
+      "id": "s12-handoff-rewind-gate",
+      "title": "Handoff_rewind_gate",
+      "status": "planned"
+    },
+    {
+      "id": "s13-handoff-visual-checkpoint",
+      "title": "Handoff_visual_checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s14-attention-phase-schema",
+      "title": "Attention_phase_schema",
+      "status": "planned"
+    },
+    {
+      "id": "s15-attention-authoring-validation",
+      "title": "Attention_authoring_validation",
+      "status": "planned"
+    },
+    {
+      "id": "s16-attention-projector",
+      "title": "Attention_projector",
+      "status": "planned"
+    },
+    {
+      "id": "s17-attention-static-compiler",
+      "title": "Attention_static_compiler",
+      "status": "planned"
+    },
+    {
+      "id": "s18-wide-stable-islands",
+      "title": "Wide_stable_islands",
+      "status": "planned"
+    },
+    {
+      "id": "s19-pre-cue-motion-gating",
+      "title": "Pre-cue_and_motion_gating",
+      "status": "planned"
+    },
+    {
+      "id": "s20-wide-solve-x-gate",
+      "title": "Wide_solve-x_gate",
+      "status": "planned"
+    },
+    {
+      "id": "s21-responsive-projection-selection",
+      "title": "Responsive_projection_selection",
+      "status": "planned"
+    },
+    {
+      "id": "s22-accessible-focus-stepper",
+      "title": "Accessible_focus_stepper",
+      "status": "planned"
+    },
+    {
+      "id": "s23-phone-layout",
+      "title": "Phone_layout",
+      "status": "planned"
+    },
+    {
+      "id": "s24-transcript-route-release-gate",
+      "title": "Transcript_route_and_release_gate",
+      "status": "planned"
+    },
+    {
+      "id": "s25-human-exemplar-checkpoint",
+      "title": "Human_exemplar_checkpoint",
+      "status": "planned"
+    }
+  ]
+}

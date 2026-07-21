@@ -2,7 +2,8 @@
   "id": "run-contract.kp.reader.solve-x-feedback-revision-v2",
   "kind": "run-contract",
   "title": "Solve-x human-feedback revision",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -196,8 +197,8 @@
     {
       "id": "s25-human-exemplar-checkpoint",
       "title": "Human exemplar checkpoint",
-      "summary": "Automated implementation and release gates are complete. The revised streamlined and teacher-detail solve-x routes are ready for explicit human visual review; no cross-family generalization will occur until approval.",
-      "status": "in-progress"
+      "summary": "Human checkpoint performed but not accepted. The animation is strong, while review-panel occlusion, moving-to-native fading, text-animation attention competition, and compressed phone scrollytelling require a bounded successor exemplar. No cross-family generalization occurred.",
+      "status": "complete"
     }
   ]
 }
