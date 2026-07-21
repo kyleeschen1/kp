@@ -18,6 +18,7 @@ import type {
 } from "../protocols/dev-review-v1.ts";
 import { projectKpDevReviewV1EventsToSyntheticRounds } from "./dev-review-legacy-round-migration.ts";
 import { KpDevReviewEventStore } from "./dev-review-store.ts";
+import { validateKpDevReviewLifecycleTransition } from "./dev-review-lifecycle.ts";
 import {
   queryKpDevReviewInbox,
   type KpDevReviewQueryInput,
@@ -137,16 +138,16 @@ export class KpDevReviewRoundInboxService {
 
   setStatus(noteId: string, status: KpDevReviewStatusV1, reason?: string): Promise<void> {
     return this.#enqueue(async () => {
-      if (!this.read().notes.some((note) => note.id === noteId)) {
-        throw new Error(`Unknown review note ${noteId}`);
-      }
+      const note = this.read().notes.find((candidate) => candidate.id === noteId);
+      if (note === undefined) throw new Error(`Unknown review note ${noteId}`);
+      const transition = validateKpDevReviewLifecycleTransition(note.status, status, reason);
       await this.#store.append(kpDevReviewEventV2Schema.parse({
         schemaVersion: KP_DEV_REVIEW_SCHEMA_VERSION_V2,
         kind: "status-changed",
         occurredAt: this.#now().toISOString(),
         noteId,
-        status,
-        ...(reason === undefined ? {} : { reason })
+        status: transition.to,
+        ...(transition.reason === undefined ? {} : { reason: transition.reason })
       }));
     });
   }

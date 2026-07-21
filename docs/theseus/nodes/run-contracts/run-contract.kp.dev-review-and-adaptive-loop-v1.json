@@ -117,7 +117,8 @@
     {
       "id": "s11-note-lifecycle-controls",
       "title": "Add-explicit-note-lifecycle-controls",
-      "status": "planned"
+      "summary": "Review lifecycle is now an enforced domain contract: explicit legal transitions, no silent no-ops or stage skips, and required reasons for dismissing or reopening terminal notes; the capture shell remains uncluttered.",
+      "status": "complete"
     },
     {
       "id": "s12-review-query-cli",

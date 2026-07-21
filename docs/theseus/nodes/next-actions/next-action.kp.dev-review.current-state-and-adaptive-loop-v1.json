@@ -93,6 +93,12 @@
       "status": "passed",
       "scope": "s10 current-round unread counter initialization, successful-submit increment, lifetime-sequence independence, and accessible naming",
       "checkedAt": "2026-07-21T15:32:07.768Z"
+    },
+    {
+      "command": "focused lifecycle, round service, and HTTP tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s11 explicit status graph, no-op and skip rejection, terminal rationale, and service enforcement",
+      "checkedAt": "2026-07-21T15:34:20.555Z"
     }
   ],
   "expectedLearning": [
