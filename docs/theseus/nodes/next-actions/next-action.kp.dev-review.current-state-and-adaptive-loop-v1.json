@@ -166,6 +166,12 @@
       "status": "passed",
       "scope": "s24 theseus-loop assessment, override, iteration, long, verification, resume, and handoff workflow",
       "checkedAt": "2026-07-21T16:11:37.434Z"
+    },
+    {
+      "command": "paired skill YAML, invocation, compatibility, receipt vocabulary, and commit-order validation",
+      "status": "passed",
+      "scope": "s25 theseus-long-loop force-long compatibility alias",
+      "checkedAt": "2026-07-21T16:20:12.700Z"
     }
   ],
   "expectedLearning": [

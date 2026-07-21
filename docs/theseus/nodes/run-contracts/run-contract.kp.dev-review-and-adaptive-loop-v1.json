@@ -201,7 +201,8 @@
     {
       "id": "s25-long-loop-compatibility",
       "title": "Make-theseus-long-loop-a-forced-mode-alias",
-      "status": "planned"
+      "summary": "Unified the legacy long-loop invocation as a validated force-long alias without maintaining a competing process.",
+      "status": "complete"
     },
     {
       "id": "s26-integrated-forward-test",
