@@ -1,5 +1,6 @@
 import type { KpDevReviewCaptureV1 } from "../../protocols/dev-review-v1.ts";
 import { KP_DEV_REVIEW_SCHEMA_VERSION_V2, type KpDevReviewRoundV2 } from "../../protocols/dev-review-v2.ts";
+import type { KpDevReviewQueryResult } from "../../protocols/dev-review-operations-v2.ts";
 import { browserKpDevReviewEnvironmentSource, captureKpDevReviewEnvironment } from "./build-environment.ts";
 import { KpDevReviewCaptureProviderRegistry } from "./capture-provider.ts";
 import { KpDevReviewClient } from "./client.ts";
@@ -34,7 +35,12 @@ export function mountKpReaderDevReview(ownerWindow: Window = window): () => void
   const unregisterReader = registry.register(createKpReaderDevReviewCaptureProvider(frames));
   const shell = mountKpDevReviewShell(ownerDocument);
   const client = new KpDevReviewClient();
-  const currentRound = resolveCurrentRound(client).then((round) => {
+  let currentUnread = 0;
+  const currentRound = client.query({ unreadBy: "codex.main" }).then(async (state) => {
+    currentUnread = state.counts.matching;
+    shell.setInboxCount(currentUnread);
+    return resolveCurrentRound(client, state);
+  }).then((round) => {
     shell.setReviewRound(round.label, round.sequence, round.synthetic);
     return round;
   }).catch((error: unknown) => {
@@ -85,13 +91,15 @@ export function mountKpReaderDevReview(ownerWindow: Window = window): () => void
     },
     submit: async ({ comment, capture }) => {
       const round = await currentRound;
-      return client.createNote({
+      const note = await client.createNote({
         schemaVersion: KP_DEV_REVIEW_SCHEMA_VERSION_V2,
         roundId: round.id,
         sessionId,
         comment,
         capture
       });
+      currentUnread += 1;
+      return { sequence: note.sequence, inboxCount: currentUnread };
     }
   });
 
@@ -110,9 +118,9 @@ export function mountKpReaderDevReview(ownerWindow: Window = window): () => void
 }
 
 async function resolveCurrentRound(
-  client: KpDevReviewClient
+  client: KpDevReviewClient,
+  state: KpDevReviewQueryResult
 ): Promise<Pick<KpDevReviewRoundV2, "id" | "label" | "sequence" | "synthetic">> {
-  const state = await client.query();
   const current = state.rounds.find((round) => round.status === "open");
   if (current !== undefined) return current;
   return client.openRound({

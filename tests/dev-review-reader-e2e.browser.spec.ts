@@ -7,14 +7,14 @@ test("real reader feedback captures a validated reproducible frame without movin
   let request: KpDevReviewCreateRequestV2 | undefined;
   await page.route("**/api/dev/reviews/v2/**", async (route) => {
     if (new URL(route.request().url()).pathname.endsWith("/query")) {
-      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(queryState()) });
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(queryState(2)) });
       return;
     }
     request = kpDevReviewCreateRequestV2Schema.parse(route.request().postDataJSON());
     await route.fulfill({
       status: 201,
       contentType: "application/json",
-      body: JSON.stringify({ ...request, id: "review-note.1.e2e", sequence: 1, status: "new" })
+      body: JSON.stringify({ ...request, id: "review-note.41.e2e", sequence: 41, status: "new" })
     });
   });
 
@@ -32,13 +32,14 @@ test("real reader feedback captures a validated reproducible frame without movin
 
   const host = page.locator("[data-kp-dev-review-shell]");
   await host.locator("button.launcher").click();
+  await expect(host.locator("output.inbox-count")).toHaveText("Inbox 2");
   await expect(host.locator("textarea")).toBeEnabled();
   await host.locator("textarea").fill("The selected symbol changes weight during the handoff.");
   await host.locator("button.save").click();
-  await expect(host.locator("output.status")).toHaveText("Saved note 1.");
-  await expect(host.locator("output.inbox-count")).toHaveText("Inbox 1");
+  await expect(host.locator("output.status")).toHaveText("Saved note 41.");
+  await expect(host.locator("output.inbox-count")).toHaveText("Inbox 3");
   await page.keyboard.press("Escape");
-  await expect(host.locator("output.launcher-count")).toHaveText("1");
+  await expect(host.locator("output.launcher-count")).toHaveText("3");
 
   const stateAfter = await page.evaluate(() => ({
     scrollY: window.scrollY,
@@ -138,7 +139,7 @@ test("an open reader inbox locks a fresh current frame for every submitted note"
   }
 });
 
-function queryState(): unknown {
+function queryState(unread = 0): unknown {
   return {
     query: { scope: "current", limit: 20, detail: "summary" },
     counts: {
@@ -146,7 +147,7 @@ function queryState(): unknown {
       current: 0,
       currentNew: 0,
       historical: 0,
-      matching: 0,
+      matching: unread,
       byStatus: {
         new: 0,
         discussed: 0,

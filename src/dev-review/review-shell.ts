@@ -73,7 +73,7 @@ export function mountKpDevReviewShell(ownerDocument: Document): KpDevReviewShell
   inboxCount.className = "inbox-count";
   inboxCount.setAttribute("aria-live", "polite");
   inboxCount.value = "Inbox 0";
-  inboxCount.setAttribute("aria-label", "Inbox contains 0 notes");
+  inboxCount.setAttribute("aria-label", "Current round contains 0 unread notes");
   headerActions.append(inboxCount, closeButton);
   header.append(heading, headerActions);
 
@@ -113,10 +113,10 @@ export function mountKpDevReviewShell(ownerDocument: Document): KpDevReviewShell
     if (!Number.isInteger(count) || count < 0) throw new RangeError("Inbox count must be a non-negative integer");
     const noun = count === 1 ? "note" : "notes";
     inboxCount.value = `Inbox ${count}`;
-    inboxCount.setAttribute("aria-label", `Inbox contains ${count} ${noun}`);
+    inboxCount.setAttribute("aria-label", `Current round contains ${count} unread ${noun}`);
     launcherCount.value = String(count);
     launcherCount.hidden = count === 0;
-    launcherCount.setAttribute("aria-label", `${count} ${noun} in inbox`);
+    launcherCount.setAttribute("aria-label", `${count} unread ${noun} in current round`);
   };
   const setReviewRound = (label: string, sequence: number, synthetic: boolean): void => {
     if (label.trim().length === 0) throw new TypeError("Review round label must not be empty");

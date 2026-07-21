@@ -15,7 +15,7 @@ export function mountKpDevReviewComposer(options: {
   readonly submit: (input: {
     readonly comment: string;
     readonly capture: KpDevReviewCaptureV1;
-  }) => Promise<{ readonly sequence: number }>;
+  }) => Promise<{ readonly sequence: number; readonly inboxCount?: number | undefined }>;
 }): KpDevReviewComposer {
   const ownerDocument = options.shell.host.ownerDocument;
   const intro = ownerDocument.createElement("p");
@@ -148,7 +148,7 @@ export function mountKpDevReviewComposer(options: {
       // input can therefore lock a later reader frame without closing the tool.
       snapshot = undefined;
       renderCapturePrompt();
-      options.shell.setInboxCount(note.sequence);
+      options.shell.setInboxCount(note.inboxCount ?? note.sequence);
       options.shell.status.value = `Saved note ${note.sequence}.`;
     } catch {
       options.shell.status.value = "Could not save. Your text is still here.";

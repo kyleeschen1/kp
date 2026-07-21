@@ -21,11 +21,17 @@ test("shadow review shell opens without reflow and restores focus on escape", as
   await expect(host.locator("[role=dialog]")).toBeVisible();
   await page.evaluate(() => {
     const shell = (window as typeof window & {
-      reviewShell?: { setReviewRound(label: string, sequence: number, synthetic: boolean): void }
+      reviewShell?: {
+        setReviewRound(label: string, sequence: number, synthetic: boolean): void;
+        setInboxCount(count: number): void;
+      }
     }).reviewShell;
     shell?.setReviewRound("Solve-x polish", 3, false);
+    shell?.setInboxCount(4);
   });
   await expect(host.locator("output.review-round")).toHaveText("Round 3 · Solve-x polish");
+  await expect(host.locator("output.inbox-count"))
+    .toHaveAccessibleName("Current round contains 4 unread notes");
   await expect(host.locator("button.close")).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(launcher).toBeFocused();

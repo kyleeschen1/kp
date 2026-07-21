@@ -87,6 +87,12 @@
       "status": "passed",
       "scope": "s09 active round presentation and v2 round-bound reader submissions with canonical shell preserved",
       "checkedAt": "2026-07-21T15:29:10.296Z"
+    },
+    {
+      "command": "focused review shell, composer, and reader browser tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s10 current-round unread counter initialization, successful-submit increment, lifetime-sequence independence, and accessible naming",
+      "checkedAt": "2026-07-21T15:32:07.768Z"
     }
   ],
   "expectedLearning": [

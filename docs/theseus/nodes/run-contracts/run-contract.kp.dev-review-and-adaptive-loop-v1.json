@@ -111,7 +111,8 @@
     {
       "id": "s10-current-unread-counter",
       "title": "Replace-lifetime-counter-with-current-unread-semantics",
-      "status": "planned"
+      "summary": "The inbox badge now reports current-round notes beyond the codex.main cursor, not lifetime sequence; it initializes from bounded query state, increments after a confirmed save, and exposes explicit accessible semantics.",
+      "status": "complete"
     },
     {
       "id": "s11-note-lifecycle-controls",
