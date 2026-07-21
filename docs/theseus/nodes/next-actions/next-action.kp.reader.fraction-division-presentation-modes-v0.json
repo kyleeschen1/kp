@@ -24,6 +24,13 @@
       "status": "passed",
       "scope": "s01 approved target and 27-slice typed contract",
       "checkedAt": "2026-07-21T23:21:30.006Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation",
+      "status": "passed",
+      "scope": "s02 exact structural-artifact baseline",
+      "checkedAt": "2026-07-21T23:23:26.841Z",
+      "notes": "The v2 report measures actual cloned fraction ink. Twenty-two sampled motion frames reproduce a 21 to 21.525px vertical displacement while existing gates otherwise pass."
     }
   ]
 }

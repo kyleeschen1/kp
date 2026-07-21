@@ -49,7 +49,7 @@ try {
     ))
   ];
   const report = {
-    schemaVersion: "kp.fractional-linear-equation-visual-check.v1",
+    schemaVersion: "kp.fractional-linear-equation-visual-check.v2",
     route: "/reader/solve-fractional-linear/",
     viewport: { width: 1280, height: 900 },
     samples,
@@ -129,6 +129,37 @@ async function sampleVisualFrame(page: Page, requestedProgress: number) {
     if (visibleFractionRules.some((item) => item.rect.width < 4 || item.rect.height < 0.5)) {
       failures.push("a visible fraction rule loses measurable ink");
     }
+    const materialFractionRules = [...stage.querySelectorAll<HTMLElement>(
+      '[data-kp-reader-equation-material-fragment-id$="fraction.rule"]'
+    )].flatMap((fragment) => {
+      const owner = fragment.closest<HTMLElement>(
+        "[data-kp-reader-equation-material-owner-id]"
+      );
+      const visual = fragment.querySelector<HTMLElement>(".frac-line");
+      if (owner === null || visual === null ||
+        Number(getComputedStyle(owner).opacity) <= 0.01 ||
+        Number(getComputedStyle(fragment).opacity) <= 0.01) return [];
+      const anchorRect = box(fragment);
+      const inkRect = box(visual);
+      return [{
+        anchorId: fragment.dataset["kpReaderEquationMaterialFragmentId"] ?? "unknown",
+        anchorRect,
+        inkRect,
+        centerOffsetPx: {
+          x: inkRect.left + inkRect.width / 2 -
+            (anchorRect.left + anchorRect.width / 2),
+          y: inkRect.top + inkRect.height / 2 -
+            (anchorRect.top + anchorRect.height / 2)
+        }
+      }];
+    });
+    const maxFractionRuleInkOffsetPx = materialFractionRules.reduce(
+      (maximum, rule) => Math.max(
+        maximum,
+        Math.hypot(rule.centerOffsetPx.x, rule.centerOffsetPx.y)
+      ),
+      0
+    );
     const katexFonts = [...new Set(
       [...stage.querySelectorAll<HTMLElement>(".katex")]
         .filter((element) => element.getBoundingClientRect().width > 0)
@@ -187,6 +218,8 @@ async function sampleVisualFrame(page: Page, requestedProgress: number) {
       },
       visibleInkCount: ink.length,
       visibleFractionRuleCount: visibleFractionRules.length,
+      materialFractionRules,
+      maxFractionRuleInkOffsetPx,
       materialCollisionCount: collisions.length,
       katexFonts,
       failures

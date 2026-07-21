@@ -59,7 +59,8 @@
     {
       "id": "s02-defect-baseline",
       "title": "Capture exact fraction-rule displacement baseline",
-      "status": "planned"
+      "summary": "Promoted review note 10 into repeatable browser evidence: the visible cloned KaTeX fraction rule sits 21 to 21.525px below its correctly measured material anchor in every sampled intermediate fraction frame.",
+      "status": "complete"
     },
     {
       "id": "s03-structural-contract",
