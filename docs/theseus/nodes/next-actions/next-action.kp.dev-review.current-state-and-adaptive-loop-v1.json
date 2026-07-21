@@ -45,6 +45,12 @@
       "status": "passed",
       "scope": "s02 immutable review-round and current-state acceptance boundary",
       "checkedAt": "2026-07-21T14:49:55.398Z"
+    },
+    {
+      "command": "focused v1 and v2 protocol tests, protocol typecheck, and full typecheck",
+      "status": "passed",
+      "scope": "s03 strict versioned review-round wire contract",
+      "checkedAt": "2026-07-21T14:54:24.145Z"
     }
   ],
   "expectedLearning": [

@@ -69,7 +69,8 @@
     {
       "id": "s03-versioned-round-protocol",
       "title": "Add-versioned-review-round-protocol",
-      "status": "planned"
+      "summary": "Introduced kp.dev-review.v2 with strict round lifecycle, baseline provenance, round-scoped notes and cursors, current-round inbox state, public exports, and full v1 compatibility.",
+      "status": "complete"
     },
     {
       "id": "s04-legacy-round-migration",

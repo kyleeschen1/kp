@@ -127,7 +127,7 @@ const temporalSample = protocolObject({
   phase: optionalText,
   layoutRevision: protocolOptional(protocolInteger({ min: 0 }))
 });
-const capture = protocolObject({
+export const kpDevReviewCaptureSchema = protocolObject({
   route,
   capturedAt: isoTimestamp,
   environment,
@@ -146,20 +146,20 @@ export const kpDevReviewCreateRequestSchema = protocolObject({
     (value) => value.trim().length > 0,
     "expected non-blank comment"
   ),
-  capture
+  capture: kpDevReviewCaptureSchema
 }) as ProtocolSchema<KpDevReviewCreateRequestV1>;
 
-const status = protocolEnum([
+export const kpDevReviewStatusSchema = protocolEnum([
   "new", "discussed", "grouped", "accepted", "fixed", "verified", "dismissed"
 ]);
 export const kpDevReviewNoteSchema = protocolObject({
   schemaVersion: protocolLiteral(KP_DEV_REVIEW_SCHEMA_VERSION),
   sessionId: id,
   comment: protocolString({ minLength: 1, maxLength: kpDevReviewProtocolLimits.commentCharacters }),
-  capture,
+  capture: kpDevReviewCaptureSchema,
   id,
   sequence: protocolInteger({ min: 1 }),
-  status
+  status: kpDevReviewStatusSchema
 });
 const noteCreated = protocolObject({
   schemaVersion: protocolLiteral(KP_DEV_REVIEW_SCHEMA_VERSION),
@@ -172,7 +172,7 @@ const statusChanged = protocolObject({
   kind: protocolLiteral("status-changed"),
   occurredAt: isoTimestamp,
   noteId: id,
-  status,
+  status: kpDevReviewStatusSchema,
   reason: protocolOptional(protocolString({
     minLength: 1,
     maxLength: kpDevReviewProtocolLimits.reasonCharacters

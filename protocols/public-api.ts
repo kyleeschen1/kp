@@ -77,3 +77,21 @@ export {
   kpDevReviewEventSchema,
   kpDevReviewProtocolLimits
 } from "./dev-review-schema.ts";
+
+export {
+  KP_DEV_REVIEW_SCHEMA_VERSION_V2,
+  type KpDevReviewCreateRequestV2,
+  type KpDevReviewEventV2,
+  type KpDevReviewInboxV2,
+  type KpDevReviewNoteV2,
+  type KpDevReviewRoundBaselineV2,
+  type KpDevReviewRoundV2
+} from "./dev-review-v2.ts";
+
+export {
+  kpDevReviewCreateRequestV2Schema,
+  kpDevReviewEventV2Schema,
+  kpDevReviewInboxV2Schema,
+  kpDevReviewNoteV2Schema,
+  kpDevReviewRoundV2Schema
+} from "./dev-review-v2-schema.ts";
