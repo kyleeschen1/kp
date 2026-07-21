@@ -85,7 +85,17 @@ export function bindKpFractionalLinearStructuralAnchors(input: {
   const fractionRuleId = annotated.structuralSelectorIds.find((id) => id.endsWith(".fraction.rule"));
   const fractionRule = input.root.querySelector<HTMLElement>(".frac-line");
   if (fractionRuleId !== undefined && fractionRule !== null) {
-    fractionRule.dataset["kpReaderEquationAnchorId"] = `anchor.${fractionRuleId}`;
-    fractionRule.dataset["kpReaderSelectorId"] = fractionRuleId;
+    bindAnchor(fractionRule, fractionRuleId);
   }
+  const leftParenId = annotated.structuralSelectorIds.find((id) => id.endsWith(".lhs.left-paren"));
+  const rightParenId = annotated.structuralSelectorIds.find((id) => id.endsWith(".lhs.right-paren"));
+  const leftParen = input.root.querySelector<HTMLElement>(".mopen");
+  const rightParen = input.root.querySelector<HTMLElement>(".mclose");
+  if (leftParenId !== undefined && leftParen !== null) bindAnchor(leftParen, leftParenId);
+  if (rightParenId !== undefined && rightParen !== null) bindAnchor(rightParen, rightParenId);
+}
+
+function bindAnchor(element: HTMLElement, selectorId: string): void {
+  element.dataset["kpReaderEquationAnchorId"] = `anchor.${selectorId}`;
+  element.dataset["kpReaderSelectorId"] = selectorId;
 }

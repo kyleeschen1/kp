@@ -3,6 +3,12 @@ import {
   createLinearSolveTeacherZeroAnimationAsset
 } from "../../animation/linear-solve-adapter.ts";
 import {
+  createFractionalLinearEquationAnimationAsset
+} from "../../animation/fractional-linear-equation-adapter.ts";
+import {
+  bindKpFractionalLinearStructuralAnchors
+} from "../../rendering/fractional-linear-selector-annotated-latex.ts";
+import {
   createKpEquationLinearRearrangementBindings
 } from "../../rendering/equation-linear-rearrangement-bindings.ts";
 import {
@@ -76,7 +82,9 @@ const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
 window.history.scrollRestoration = "manual";
 const animation = lessonVariant === "teacher-zero"
   ? createLinearSolveTeacherZeroAnimationAsset()
-  : createLinearSolveAnimationAsset();
+  : lessonVariant === "fractional-linear"
+    ? createFractionalLinearEquationAnimationAsset()
+    : createLinearSolveAnimationAsset();
 const presentationProfile = kpEquationPresentationProfile(animation);
 const linearRearrangementBindings = createKpEquationLinearRearrangementBindings(
   animation
@@ -86,6 +94,7 @@ const staticSurface = requireElement<HTMLElement>("[data-kp-animation-static]");
 const template = requireElement<HTMLTemplateElement>("template[data-kp-reader-exemplar-template]");
 const templateContent = template.content.cloneNode(true);
 staticSurface.append(templateContent);
+if (lessonVariant === "fractional-linear") bindFractionalStructuralAnchors();
 document.body.dataset["kpReaderHydrated"] = "true";
 
 const stage = requireElement<HTMLElement>("[data-kp-reader-equation-stage]");
@@ -1045,6 +1054,18 @@ function attentionKind(value: string): KpLessonAttentionPhaseKind {
     return value;
   }
   throw new Error(`Unknown reader attention phase kind ${value}.`);
+}
+
+function bindFractionalStructuralAnchors(): void {
+  const states = new Map(animation.bundle.objects.map((state) => [state.id, state]));
+  for (const element of staticSurface.querySelectorAll<HTMLElement>(
+    "[data-kp-reader-equation-state]"
+  )) {
+    const stateId = requiredData(element, "kpReaderEquationState");
+    const state = states.get(stateId);
+    if (state === undefined) throw new Error(`Missing fractional equation state ${stateId}.`);
+    bindKpFractionalLinearStructuralAnchors({ root: element, state });
+  }
 }
 
 function requiredData(element: HTMLElement, key: string): string {

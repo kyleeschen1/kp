@@ -141,6 +141,18 @@
       "scope": "s17 seek rewind",
       "checkedAt": "2026-07-21T22:19:52.814Z",
       "notes": "Dense sampling exposed and fixed boundary quantization in the shared runtime law and phase sampler."
+    },
+    {
+      "command": "focused fractional and solve-x compiler tests",
+      "status": "passed",
+      "scope": "s18 shared reader card",
+      "checkedAt": "2026-07-21T22:26:21.334Z"
+    },
+    {
+      "command": "four direct TypeScript projects; npm run check:architecture",
+      "status": "passed",
+      "scope": "s18 shared reader card",
+      "checkedAt": "2026-07-21T22:26:22.527Z"
     }
   ]
 }

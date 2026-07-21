@@ -142,7 +142,8 @@
     {
       "id": "s18-reader-card",
       "title": "Mount searchable reader card",
-      "status": "planned"
+      "summary": "The fractional lesson now compiles into the same searchable equation-card shell and runtime as Solve x. Shared page extraction preserved the canonical compiler, and structural fraction and delimiter anchors bind after KaTeX rendering.",
+      "status": "complete"
     },
     {
       "id": "s19-editor-route",

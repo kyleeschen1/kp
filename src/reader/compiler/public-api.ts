@@ -41,5 +41,8 @@ export {
 } from "./x-plus-three-lesson.ts";
 
 export {
+  compileKpFractionalLinearEquationLesson
+} from "./fractional-linear-equation-lesson.ts";
+export {
   compileKpFractionalLinearEquationLessonModel
 } from "./fractional-linear-equation-lesson-model.ts";
