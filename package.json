@@ -36,6 +36,7 @@
     "visual:contact-sheet": "node --disable-warning=ExperimentalWarning scripts/capture-visual-contact-sheet.ts",
     "visual:reader-gold-parity": "npm run build && node --disable-warning=ExperimentalWarning scripts/capture-reader-gold-equation-parity.ts",
     "baseline:semantic-reader": "node --disable-warning=ExperimentalWarning scripts/capture-semantic-reader-baseline.ts",
+    "baseline:solve-x-attention": "node --disable-warning=ExperimentalWarning scripts/capture-solve-x-attention-baseline.ts",
     "review:semantic-reader": "npm run build && node --disable-warning=ExperimentalWarning scripts/capture-semantic-reader-review.ts",
     "perf:linear-equation": "playwright test tests/linear-equation-audit.browser.spec.ts --project=chromium --workers=1",
     "perf:animation": "node --disable-warning=ExperimentalWarning scripts/animation-performance.ts",

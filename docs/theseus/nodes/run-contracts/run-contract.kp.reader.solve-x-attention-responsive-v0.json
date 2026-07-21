@@ -68,7 +68,8 @@
     {
       "id": "s03-desktop-failure-baseline",
       "title": "Desktop_failure_baseline",
-      "status": "planned"
+      "summary": "Added a repeatable desktop/phone baseline harness. At 1280x900 and progress 833, the open 360x413 review panel overlaps 60,131.625 square pixels of the 509x558 animation stage without changing scroll or semantic progress; the capture visibly obscures the active equation.",
+      "status": "complete"
     },
     {
       "id": "s04-phone-failure-baseline",

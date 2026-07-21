@@ -3,5 +3,14 @@
   "kind": "next-action",
   "title": "Perfect solve-x attention and responsive projection",
   "status": "ready",
-  "domain": "kp.reader"
+  "domain": "kp.reader",
+  "verificationRecords": [
+    {
+      "command": "npm run baseline:solve-x-attention and visual inspection",
+      "status": "passed",
+      "scope": "s03 desktop 1280x900 review failure baseline",
+      "checkedAt": "2026-07-21T19:28:53.913Z",
+      "notes": "At progress 833 the 360 by 413 panel overlaps 60,131.625 square pixels of the 509 by 558 equation stage while scroll and progress remain unchanged."
+    }
+  ]
 }
