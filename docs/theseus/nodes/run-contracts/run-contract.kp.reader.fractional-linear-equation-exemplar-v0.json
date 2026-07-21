@@ -2,7 +2,8 @@
   "id": "run-contract.kp.reader.fractional-linear-equation-exemplar-v0",
   "kind": "run-contract",
   "title": "Fractional linear equation exemplar",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -184,7 +185,8 @@
     {
       "id": "s25-human-checkpoint",
       "title": "Stop for human exemplar review",
-      "status": "planned"
+      "summary": "Stopped with the fractional linear equation exemplar live and reviewable from the Semantic Editor and direct URL. No fraction-family promotion or roots, exponents, functions, distribution, factoring, graph, code, or WebGL generalization occurred; human visual approval remains the promotion gate.",
+      "status": "complete"
     }
   ]
 }

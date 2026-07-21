@@ -2,7 +2,7 @@
   "id": "next-action.kp.reader.fractional-linear-equation-exemplar-v0",
   "kind": "next-action",
   "title": "Build fractional linear equation exemplar",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.reader",
   "sourceRefs": [
     {
@@ -272,5 +272,9 @@
       "checkedAt": "2026-07-21T22:59:47.860Z",
       "notes": "Selected repository type, architecture, visual, unit, and build gates; all applicable new-scope gates passed."
     }
-  ]
+  ],
+  "progress": {
+    "state": "partial",
+    "summary": "All 25 approved implementation slices are complete and the live exemplar is ready for human visual review. The next action remains open until the user approves or supplies visual feedback; automated family promotion is intentionally withheld."
+  }
 }
