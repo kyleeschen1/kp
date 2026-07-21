@@ -171,7 +171,8 @@
     {
       "id": "s20-persistent-visual-harness",
       "title": "Reuse-dev-server-and-browser-for-inner-loops",
-      "status": "planned"
+      "summary": "Added a lifecycle-safe persistent visual harness for multi-checkpoint inner loops with existing-server attachment support.",
+      "status": "complete"
     },
     {
       "id": "s21-contact-sheet-command",

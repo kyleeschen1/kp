@@ -136,6 +136,12 @@
       "status": "passed",
       "scope": "s19 inspect-first impacted verification CLI",
       "checkedAt": "2026-07-21T15:54:54.486Z"
+    },
+    {
+      "command": "visual harness lifecycle tests, live Vite and Chromium smoke, and npm run typecheck",
+      "status": "passed",
+      "scope": "s20 one-server one-browser reusable visual review harness",
+      "checkedAt": "2026-07-21T15:57:24.667Z"
     }
   ],
   "expectedLearning": [
