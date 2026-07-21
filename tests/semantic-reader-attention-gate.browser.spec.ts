@@ -91,6 +91,35 @@ test("responsive projection changes live without changing the semantic moment", 
   expect(await attentionFrame(page)).toEqual(before);
 });
 
+test("narrow focus stepper provides direct keyboard-native phase navigation", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route(500));
+  const stepper = page.locator("[data-kp-reader-focus-stepper]");
+  await expect(stepper).toBeVisible();
+  await expect(stepper).toHaveAttribute("aria-label", "Explanation controls");
+  await expect(page.getByRole("button", { name: "Previous explanation step" })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Next explanation step" })).toBeEnabled();
+  await expect(page.locator("[data-kp-reader-attention-status]"))
+    .toHaveText("Watch the opposites meet and cancel.");
+  await expect(page.locator("[data-kp-reader-attention-count]"))
+    .toHaveText("Step 6 of 12");
+
+  await page.getByRole("button", { name: "Next explanation step" }).click();
+  await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "600");
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-attention-phase",
+    "attention.cancel.settle"
+  );
+
+  await page.locator("[data-kp-reader-attention-scrubber]").fill("980");
+  await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "980");
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-attention-phase",
+    "attention.solve.inspect"
+  );
+  await expect.poll(() => new URL(page.url()).searchParams.get("kpProgress")).toBe("980");
+});
+
 async function attentionFrame(page: Page): Promise<unknown> {
   return page.locator("body").evaluate((body) => ({
     semantic: body.dataset["kpReaderProgress"],

@@ -107,6 +107,18 @@ const independentZeroWitness = requireElement<HTMLElement>(
   "[data-kp-reader-independent-zero-witness]"
 );
 const status = requireElement<HTMLOutputElement>("[data-kp-reader-stage-status]");
+const focusStepper = requireElement<HTMLElement>("[data-kp-reader-focus-stepper]");
+const attentionPrevious = requireElement<HTMLButtonElement>(
+  "[data-kp-reader-attention-previous]"
+);
+const attentionNext = requireElement<HTMLButtonElement>("[data-kp-reader-attention-next]");
+const attentionStatus = requireElement<HTMLOutputElement>(
+  "[data-kp-reader-attention-status]"
+);
+const attentionScrubber = requireElement<HTMLInputElement>(
+  "[data-kp-reader-attention-scrubber]"
+);
+const attentionCount = requireElement<HTMLElement>("[data-kp-reader-attention-count]");
 const progressBar = requireElement<HTMLElement>("[data-kp-reader-progress-bar]");
 const motionSelect = requireElement<HTMLSelectElement>(
   "[data-kp-reader-motion-preference]"
@@ -117,6 +129,7 @@ const attentionElements = [
   ...story.querySelectorAll<HTMLElement>("[data-kp-attention-phase]")
 ];
 const attention = readAttentionPlan();
+focusStepper.hidden = attention === undefined;
 applyResponsiveProjection();
 const toc = requireElement<HTMLElement>(".kp-lesson-toc");
 const tocLinks = [...toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
@@ -162,6 +175,7 @@ let scrollFrame: number | undefined;
 let previousReviewFrameAtMs: number | undefined;
 let previousReviewScrollY = window.scrollY;
 let urlAuthorityReady = false;
+let controlSample: KpReaderClockSample | undefined;
 
 const staticPlans = new Map(animation.transformations.map((transformation, index) => {
   const progress = (index + 0.5) / animation.transformations.length;
@@ -200,6 +214,10 @@ resizeObserver.observe(viewport);
 window.addEventListener("scroll", onScroll, { passive: true });
 window.addEventListener("resize", onResize, { passive: true });
 window.addEventListener("scrollend", settleLocation, { passive: true });
+window.addEventListener("wheel", releaseControlAuthority, { passive: true });
+window.addEventListener("touchstart", releaseControlAuthority, { passive: true });
+window.addEventListener("pointerdown", releaseControlAuthority, { passive: true });
+window.addEventListener("keydown", onReaderKeyDown);
 document.addEventListener("pointerover", onSemanticEnter);
 document.addEventListener("pointerout", onSemanticLeave);
 document.addEventListener("focusin", onSemanticEnter);
@@ -207,6 +225,9 @@ document.addEventListener("focusout", onSemanticLeave);
 window.addEventListener("pagehide", dispose, { once: true });
 reducedMotion.addEventListener("change", renderCurrentSample);
 motionSelect.addEventListener("change", onMotionPreferenceChange);
+attentionPrevious.addEventListener("click", onAttentionPrevious);
+attentionNext.addEventListener("click", onAttentionNext);
+attentionScrubber.addEventListener("input", onAttentionScrub);
 if (import.meta.env.DEV) {
   window.addEventListener("kp:reader-dev-review-request-frame", renderCurrentSample);
 }
@@ -303,11 +324,22 @@ function onScroll(): void {
   settleTimer = window.setTimeout(settleLocation, 180);
 }
 
+function onReaderKeyDown(event: KeyboardEvent): void {
+  if (["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "]
+    .includes(event.key)) {
+    releaseControlAuthority();
+  }
+}
+
+function releaseControlAuthority(): void {
+  controlSample = undefined;
+}
+
 function scheduleScrollSample(): void {
   if (scrollFrame !== undefined) return;
   scrollFrame = window.requestAnimationFrame(() => {
     scrollFrame = undefined;
-    scheduler.render(scrollClock.samplePosition(readerPosition()));
+    scheduler.render(controlSample ?? scrollClock.samplePosition(readerPosition()));
   });
 }
 
@@ -732,6 +764,66 @@ function syncActiveAttention(
     const active = requiredData(element, "kpAttentionPhase") === projection?.phaseId;
     element.dataset["kpAttentionPhaseActive"] = String(active);
   }
+  syncFocusStepper(projection);
+}
+
+function syncFocusStepper(projection: KpReaderAttentionProjection | undefined): void {
+  if (projection === undefined || attention === undefined) return;
+  const index = attention.phases.findIndex((phase) => phase.id === projection.phaseId);
+  if (index < 0) throw new Error(`Unknown active attention phase ${projection.phaseId}.`);
+  attentionStatus.value = projection.cue;
+  attentionCount.textContent = `Step ${index + 1} of ${attention.phases.length}`;
+  attentionScrubber.value = String(projection.semanticProgressPermille);
+  attentionScrubber.setAttribute(
+    "aria-valuetext",
+    `Step ${index + 1} of ${attention.phases.length}: ${projection.cue}`
+  );
+  attentionPrevious.disabled = index === 0;
+  attentionNext.disabled = index === attention.phases.length - 1;
+}
+
+function onAttentionPrevious(): void {
+  seekAttentionPhase(-1);
+}
+
+function onAttentionNext(): void {
+  seekAttentionPhase(1);
+}
+
+function seekAttentionPhase(offset: -1 | 1): void {
+  if (attention === undefined) return;
+  const activeId = document.body.dataset["kpReaderAttentionPhase"];
+  const index = attention.phases.findIndex((phase) => phase.id === activeId);
+  const target = attention.phases[index + offset];
+  if (target === undefined) return;
+  // Land inside the requested phase rather than on a shared boundary, where
+  // subpixel scroll rounding can alternate ownership between adjacent cues.
+  setControlProgress(Math.round(
+    (target.startProgressPermille + target.endProgressPermille) / 2
+  ));
+}
+
+function onAttentionScrub(): void {
+  setControlProgress(Number(attentionScrubber.value));
+}
+
+function setControlProgress(progressPermille: number): void {
+  const previous = lastSample();
+  const phase = attention?.phases.find((candidate, index, phases) =>
+    progressPermille >= candidate.startProgressPermille &&
+    (progressPermille < candidate.endProgressPermille ||
+      (index === phases.length - 1 && progressPermille === candidate.endProgressPermille))
+  );
+  controlSample = createKpReaderClockSample({
+    source: "controls",
+    progress: progressPermille / 1_000,
+    previousProgress: previous.progress,
+    sequence: previous.sequence + 1,
+    checkpointId: phase?.checkpointId
+  });
+  scrollToProgress(progressPermille);
+  scheduler.render(controlSample);
+  settleLocation();
 }
 
 function syncActiveToc(activeId: string): void {
@@ -889,7 +981,7 @@ function scrollToProgress(progressPermille: number): void {
 }
 
 function lastSample(): KpReaderClockSample {
-  return scrollClock.getSnapshot();
+  return controlSample ?? scrollClock.getSnapshot();
 }
 
 function anchorElementIndex(root: HTMLElement): ReadonlyMap<string, HTMLElement> {
@@ -950,6 +1042,13 @@ function dispose(): void {
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
   motionSelect.removeEventListener("change", onMotionPreferenceChange);
+  attentionPrevious.removeEventListener("click", onAttentionPrevious);
+  attentionNext.removeEventListener("click", onAttentionNext);
+  attentionScrubber.removeEventListener("input", onAttentionScrub);
+  window.removeEventListener("wheel", releaseControlAuthority);
+  window.removeEventListener("touchstart", releaseControlAuthority);
+  window.removeEventListener("pointerdown", releaseControlAuthority);
+  window.removeEventListener("keydown", onReaderKeyDown);
   if (import.meta.env.DEV) {
     window.removeEventListener("kp:reader-dev-review-request-frame", renderCurrentSample);
   }

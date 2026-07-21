@@ -21,6 +21,8 @@ test("canonical Markdown compiles through the current semantic asset into one st
   assert.match(artifact.html, /data-kp-reader-exemplar-template/);
   assert.match(artifact.html, /src="\/src\/reader\/app\/exemplar-entry\.ts"/);
   assert.match(artifact.html, /<script type="application\/json" data-kp-hydration>/);
+  assert.match(artifact.html, /data-kp-reader-focus-stepper aria-label="Explanation controls"/);
+  assert.match(artifact.html, /data-kp-reader-attention-scrubber aria-label="Scrub explanation"/);
   assert.equal(artifact.hydration.blocks[0]?.checkpoints.length, 4);
   assert.equal(artifact.hydration.blocks[0]?.asset.id, "animation.linear-solve.solve-x");
   assert.equal(artifact.hydration.blocks[0]?.adapterId, "renderer.equation-dom");

@@ -182,7 +182,8 @@
     {
       "id": "s22-accessible-focus-stepper",
       "title": "Accessible_focus_stepper",
-      "status": "planned"
+      "summary": "Narrow solve-x now exposes native Back, Next, and range controls with live cue, count, disabled endpoints, and exact shareable progress. Control input owns the semantic clock until genuine scrolling resumes, preventing geometry drift from rewriting the selected URL.",
+      "status": "complete"
     },
     {
       "id": "s23-phone-layout",
