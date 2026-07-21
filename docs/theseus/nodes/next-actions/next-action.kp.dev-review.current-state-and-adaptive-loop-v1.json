@@ -124,6 +124,12 @@
       "scope": "s17 kp-review-logs metadata, workflow forward test, bounded output, and zero live mutation",
       "checkedAt": "2026-07-21T15:49:04.921Z",
       "notes": "Official quick_validate.py was attempted but host PyYAML is absent; equivalent Ruby Psych validation passed. Delegated forward test unavailable by environment policy, so deterministic isolated workflow was used."
+    },
+    {
+      "command": "node test verification-impact and npm run typecheck",
+      "status": "passed",
+      "scope": "s18 deterministic risk-to-verification manifest",
+      "checkedAt": "2026-07-21T15:52:45.350Z"
     }
   ],
   "expectedLearning": [

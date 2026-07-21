@@ -159,7 +159,8 @@
     {
       "id": "s18-impact-verification-manifest",
       "title": "Define-risk-to-verification-selection",
-      "status": "planned"
+      "summary": "Added a typed verification-impact manifest with deterministic union, risk, release override, and fail-broad unknown-path behavior.",
+      "status": "complete"
     },
     {
       "id": "s19-focused-verification-command",
