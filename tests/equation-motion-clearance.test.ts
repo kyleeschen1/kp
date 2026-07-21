@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   evaluateKpEquationMotionClearanceFrame,
+  evaluateKpEquationMotionClearanceSequence,
   type KpEquationMotionClearanceFrame,
   type KpEquationMotionClearanceRequirement
 } from "../src/rendering/equation-motion-clearance.ts";
@@ -73,6 +74,42 @@ test("invisible moving ink does not create false collision evidence", () => {
   });
   assert.equal(report.passed, true);
   assert.equal(report.minimumClearancePx, null);
+});
+
+test("dense sampling detects a crossing hidden by safe endpoint poses", () => {
+  const report = evaluateKpEquationMotionClearanceSequence({
+    frames: [
+      { progress: 0, ink: [ink("seven", 0, 0), ink("three", 0, 30), ink("x", 20, 0), ink("equals", 60, 0)] },
+      { progress: 1, ink: [ink("seven", 40, 0), ink("three", 40, 30), ink("x", 20, 0), ink("equals", 60, 0)] }
+    ],
+    requirements: [requirement],
+    maxSpatialStepPx: 1,
+    maxProgressStep: 0.05
+  });
+
+  assert.equal(report.passed, false);
+  assert.equal(report.sourceFrameCount, 2);
+  assert.equal(report.sampledFrameCount, 41);
+  assert.ok(report.diagnostics.some((diagnostic) =>
+    diagnostic.code === "motion.ink-overlap" && diagnostic.movingId === "seven"
+  ));
+});
+
+test("dense sampling preserves a genuinely clear trajectory", () => {
+  const report = evaluateKpEquationMotionClearanceSequence({
+    frames: [
+      { progress: 0, ink: [ink("seven", 0, -20), ink("three", 0, 30), ink("x", 20, 0), ink("equals", 60, 0)] },
+      { progress: 0.5, ink: [ink("seven", 20, -20), ink("three", 20, 30), ink("x", 20, 0), ink("equals", 60, 0)] },
+      { progress: 1, ink: [ink("seven", 40, -20), ink("three", 40, 30), ink("x", 20, 0), ink("equals", 60, 0)] }
+    ],
+    requirements: [requirement],
+    maxSpatialStepPx: 2,
+    maxProgressStep: 0.1
+  });
+
+  assert.equal(report.passed, true);
+  assert.equal(report.minimumClearancePx, 10);
+  assert.equal(report.sampledFrameCount, 21);
 });
 
 function frame(inkSamples: KpEquationMotionClearanceFrame["ink"]): KpEquationMotionClearanceFrame {

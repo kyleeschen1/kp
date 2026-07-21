@@ -37,6 +37,13 @@ export interface KpEquationMotionClearanceReport {
   readonly diagnostics: readonly KpEquationMotionClearanceDiagnostic[];
 }
 
+export interface KpEquationMotionClearanceSequenceReport
+  extends Omit<KpEquationMotionClearanceReport, "kind"> {
+  readonly kind: "equation-motion-clearance-sequence-report";
+  readonly sourceFrameCount: number;
+  readonly sampledFrameCount: number;
+}
+
 /**
  * Evaluates configured semantic pairs rather than every glyph pair. Adjacent
  * operators are allowed to touch by typography; authored moving/protected
@@ -105,6 +112,107 @@ export function evaluateKpEquationMotionClearanceFrame(input: {
       : null,
     diagnostics
   };
+}
+
+/**
+ * Densifies neighboring measured frames before evaluating them. Safe endpoint
+ * poses alone cannot prove a safe transition because a glyph may cross an
+ * obstacle between those endpoints.
+ */
+export function evaluateKpEquationMotionClearanceSequence(input: {
+  readonly frames: readonly KpEquationMotionClearanceFrame[];
+  readonly requirements: readonly KpEquationMotionClearanceRequirement[];
+  readonly maxSpatialStepPx?: number | undefined;
+  readonly maxProgressStep?: number | undefined;
+  readonly visibleOpacityThreshold?: number | undefined;
+}): KpEquationMotionClearanceSequenceReport {
+  if (input.frames.length === 0) throw new Error("Clearance sampling requires at least one frame.");
+  const maxSpatialStepPx = positive(input.maxSpatialStepPx ?? 1, "maximum spatial sample step");
+  const maxProgressStep = positive(input.maxProgressStep ?? 0.01, "maximum progress sample step");
+  const sampledFrames: KpEquationMotionClearanceFrame[] = [];
+  input.frames.forEach((frame, index) => {
+    if (index === 0) {
+      sampledFrames.push(frame);
+      return;
+    }
+    const previous = input.frames[index - 1]!;
+    if (frame.progress <= previous.progress) {
+      throw new Error("Clearance source-frame progress must increase strictly.");
+    }
+    const previousById = new Map(previous.ink.map((ink) => [ink.id, ink]));
+    if (previousById.size !== previous.ink.length) {
+      throw new Error("Clearance source frames must not repeat ink ids.");
+    }
+    const spatialTravel = frame.ink.reduce((maximum, ink) => {
+      const before = previousById.get(ink.id);
+      if (before === undefined) {
+        throw new Error(`Clearance source frame adds ink ${ink.id} without an opacity-zero predecessor.`);
+      }
+      return Math.max(
+        maximum,
+        Math.abs(ink.left - before.left),
+        Math.abs(ink.top - before.top),
+        Math.abs(ink.width - before.width),
+        Math.abs(ink.height - before.height)
+      );
+    }, 0);
+    if (frame.ink.length !== previous.ink.length) {
+      throw new Error("Clearance source frames must retain stable ink identity.");
+    }
+    const subdivisions = Math.max(
+      1,
+      Math.ceil(spatialTravel / maxSpatialStepPx),
+      Math.ceil((frame.progress - previous.progress) / maxProgressStep)
+    );
+    for (let step = 1; step <= subdivisions; step += 1) {
+      sampledFrames.push(interpolateFrame(previous, frame, step / subdivisions));
+    }
+  });
+
+  const reports = sampledFrames.map((frame) => evaluateKpEquationMotionClearanceFrame({
+    frame,
+    requirements: input.requirements,
+    visibleOpacityThreshold: input.visibleOpacityThreshold
+  }));
+  const minimums = reports.flatMap((report) =>
+    report.minimumClearancePx === null ? [] : [report.minimumClearancePx]
+  );
+  const diagnostics = reports.flatMap((report) => report.diagnostics);
+  return {
+    kind: "equation-motion-clearance-sequence-report",
+    passed: diagnostics.length === 0,
+    minimumClearancePx: minimums.length === 0 ? null : Math.min(...minimums),
+    diagnostics,
+    sourceFrameCount: input.frames.length,
+    sampledFrameCount: sampledFrames.length
+  };
+}
+
+function interpolateFrame(
+  before: KpEquationMotionClearanceFrame,
+  after: KpEquationMotionClearanceFrame,
+  progress: number
+): KpEquationMotionClearanceFrame {
+  const afterById = new Map(after.ink.map((ink) => [ink.id, ink]));
+  return {
+    progress: mix(before.progress, after.progress, progress),
+    ink: before.ink.map((ink) => {
+      const target = afterById.get(ink.id);
+      if (target === undefined) throw new Error(`Clearance source frame removes ink ${ink.id}.`);
+      return {
+        id: ink.id,
+        left: mix(ink.left, target.left, progress),
+        top: mix(ink.top, target.top, progress),
+        width: mix(ink.width, target.width, progress),
+        height: mix(ink.height, target.height, progress),
+        opacity: mix(ink.opacity, target.opacity, progress)
+      };
+    })
+  };
+}
+
+function mix(from: number, to: number, progress: number): number {
+  return from + (to - from) * progress;
 }
 
 function rectClearance(
@@ -176,5 +284,11 @@ function finiteUnit(value: number, label: string): number {
 function nonNegative(value: number, label: string): number {
   finite(value, label);
   if (value < 0) throw new RangeError(`${label} must not be negative.`);
+  return value;
+}
+
+function positive(value: number, label: string): number {
+  finite(value, label);
+  if (value <= 0) throw new RangeError(`${label} must be positive.`);
   return value;
 }

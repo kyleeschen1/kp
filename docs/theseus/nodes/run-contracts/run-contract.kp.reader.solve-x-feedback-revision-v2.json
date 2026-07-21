@@ -96,8 +96,8 @@
     {
       "id": "s09-swept-bound-sampling",
       "title": "Swept-bound sampling",
-      "summary": "Sample moving ink bounds densely enough to detect crossings and near misses.",
-      "status": "ready"
+      "summary": "Extended clearance evidence with stable-identity temporal densification bounded by both spatial and progress steps. Safe endpoints can no longer hide an intervening crossing; five unit laws cover crossing detection, genuine clearance, visibility, overlap, and near misses, and the full typecheck passes.",
+      "status": "complete"
     },
     {
       "id": "s10-lane-reservation-policy",
