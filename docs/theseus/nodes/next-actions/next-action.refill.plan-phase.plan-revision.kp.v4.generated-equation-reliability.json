@@ -169,6 +169,12 @@
       "status": "passed",
       "scope": "s04 type safety and production exclusion",
       "checkedAt": "2026-07-21T01:26:33.625Z"
+    },
+    {
+      "command": "node --test focused equation presentation policy suite and npm run typecheck",
+      "status": "passed",
+      "scope": "s05 independent typed presentation recipes and compatibility",
+      "checkedAt": "2026-07-21T01:29:36.621Z"
     }
   ],
   "progress": {

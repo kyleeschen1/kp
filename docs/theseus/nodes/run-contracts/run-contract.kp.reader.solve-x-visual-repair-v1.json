@@ -71,7 +71,8 @@
     {
       "id": "s05-typed-presentation-profile",
       "title": "Typed presentation profile",
-      "status": "planned"
+      "summary": "Added an immutable typed equation presentation profile that independently selects trajectory, cancellation, zero witness, successor, and depth recipes; validates unknown metadata; and preserves the editor's current compatibility flags.",
+      "status": "complete"
     },
     {
       "id": "s06-reader-profile-authority",
