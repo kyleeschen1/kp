@@ -123,7 +123,8 @@
     {
       "id": "s12-review-query-cli",
       "title": "Add-bounded-review-log-query-CLI",
-      "status": "planned"
+      "summary": "Added npm run review:logs: bounded current-round JSON by default, explicit history or all scopes, status/route/unread filters, stable continuation, full-capture opt-in, and tests proving the query path does not mutate source events.",
+      "status": "complete"
     },
     {
       "id": "s13-review-triage-cli",

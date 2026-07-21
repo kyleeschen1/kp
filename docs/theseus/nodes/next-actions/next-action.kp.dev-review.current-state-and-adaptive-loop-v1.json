@@ -99,6 +99,12 @@
       "status": "passed",
       "scope": "s11 explicit status graph, no-op and skip rejection, terminal rationale, and service enforcement",
       "checkedAt": "2026-07-21T15:34:20.555Z"
+    },
+    {
+      "command": "focused dev-review CLI and query tests; npm run typecheck; live bounded read-only query",
+      "status": "passed",
+      "scope": "s12 current-default JSON CLI, explicit history, filters, pagination, full-detail opt-in, and source immutability",
+      "checkedAt": "2026-07-21T15:38:24.189Z"
     }
   ],
   "expectedLearning": [
