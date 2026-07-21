@@ -1,0 +1,199 @@
+{
+  "id": "run-contract.kp.reader.solve-x-feedback-revision-v2",
+  "kind": "run-contract",
+  "title": "Solve-x human-feedback revision",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reader.solve-x-visual-repair-v1.json",
+      "summary": "Rejected human exemplar checkpoint and preserved implementation provenance."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability.json",
+      "summary": "Approved generated-equation reliability target and preservation boundary."
+    }
+  ],
+  "verification": [
+    "focused unit and browser tests for each reversible slice",
+    "dense forward, rewind, direct-seek, desktop, and phone visual checks",
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:dev-review-production",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "The solve-x reader exemplar, its review shell and masthead presentation, renderer-neutral collision evidence, solve-x presentation recipes, one explicit teacher-mode zero step, URL restoration, focused tests, and durable visual checks.",
+    "Preserve semantic math and lineage, searchable prose, static and no-JS output, KaTeX identity and font metrics, scroll and rewind authority, authoring contracts, review-log history, and production exclusion of developer tooling."
+  ],
+  "disallowedWork": [
+    "Do not generalize any revised recipe or collision policy to other equation families, subjects, editor families, graphs, code, flashcards, or providers before the final human checkpoint.",
+    "Do not use WebGL for equation glyph motion, delete or rewrite review history, add public review infrastructure, or change generated-family authoring contracts."
+  ],
+  "goal": "Resolve the five rejected-checkpoint notes with a polished review surface, collision-free solve-x motion, semantically distinct counter-convergence, a streamlined default without a fleeting zero, and a shareable explicit teacher zero step; stop for human approval before generalization.",
+  "target": "next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability",
+  "runMode": "run",
+  "maxSlices": 25,
+  "commitCadence": "Commit after each independently verified slice and Theseus workspace validation.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop immediately if semantic math or lineage, searchable prose, URL restoration, scroll or rewind authority, static output, KaTeX identity, font metrics, review history, or production exclusion regresses.",
+    "Stop at the UI, collision, counter-convergence, and integrated visual gates if evidence remains ambiguous or a canonical behavior regresses; retain the smallest exemplar rollback unit.",
+    "Stop after the final human exemplar checkpoint. Do not generalize without explicit approval.",
+    "Stop if work requires WebGL glyph motion, public review infrastructure, generated-family promotion, or scope outside the approved solve-x exemplar."
+  ],
+  "slices": [
+    {
+      "id": "s01-successor-contract",
+      "title": "Successor contract",
+      "summary": "Created the approved 25-slice successor contract with explicit exemplar, preservation, rollback, verification, stop, and no-generalization boundaries; the rejected v1 checkpoint remains immutable history.",
+      "status": "complete"
+    },
+    {
+      "id": "s02-desktop-failure-baseline",
+      "title": "Desktop failure baseline",
+      "summary": "Capture reproducible desktop evidence for the five current feedback notes.",
+      "status": "ready"
+    },
+    {
+      "id": "s03-phone-failure-baseline",
+      "title": "Phone failure baseline",
+      "summary": "Capture narrow-width evidence for overlap, wrapping, panel interference, and masthead separation.",
+      "status": "ready"
+    },
+    {
+      "id": "s04-review-panel-translucency",
+      "title": "Review panel translucency",
+      "summary": "Expose annotated content beneath the review panel while preserving composer legibility.",
+      "status": "ready"
+    },
+    {
+      "id": "s05-review-panel-focus",
+      "title": "Review panel focus and stacking",
+      "summary": "Normalize panel focus, contrast, input opacity, and stacking behavior.",
+      "status": "ready"
+    },
+    {
+      "id": "s06-masthead-elevation",
+      "title": "Masthead elevation",
+      "summary": "Add restrained contact and diffuse elevation to the sticky reader masthead.",
+      "status": "ready"
+    },
+    {
+      "id": "s07-review-ui-visual-gate",
+      "title": "Review UI visual gate",
+      "summary": "Verify review-panel and masthead presentation across desktop and phone before motion work.",
+      "status": "ready"
+    },
+    {
+      "id": "s08-collision-invariant",
+      "title": "Collision-clearance invariant",
+      "summary": "Define renderer-neutral clearance evidence for moving and protected equation ink.",
+      "status": "ready"
+    },
+    {
+      "id": "s09-swept-bound-sampling",
+      "title": "Swept-bound sampling",
+      "summary": "Sample moving ink bounds densely enough to detect crossings and near misses.",
+      "status": "ready"
+    },
+    {
+      "id": "s10-lane-reservation-policy",
+      "title": "Lane reservation policy",
+      "summary": "Reserve motion lanes for persistent continuants before focal transit begins.",
+      "status": "ready"
+    },
+    {
+      "id": "s11-continuant-ordering",
+      "title": "Continuant ordering",
+      "summary": "Require solve-x surrounding-symbol reflow to settle before focal-symbol travel.",
+      "status": "ready"
+    },
+    {
+      "id": "s12-solve-x-collision-gate",
+      "title": "Solve-x collision gate",
+      "summary": "Prove collision clearance in the exemplar at dense desktop and phone samples.",
+      "status": "ready"
+    },
+    {
+      "id": "s13-seek-rewind-clearance",
+      "title": "Seek and rewind clearance",
+      "summary": "Prove the new ordering is deterministic under direct seek and exact rewind.",
+      "status": "ready"
+    },
+    {
+      "id": "s14-counter-convergence-roles",
+      "title": "Counter-convergence roles",
+      "summary": "Represent seven and three as material inputs and the minus sign as a catalyst.",
+      "status": "ready"
+    },
+    {
+      "id": "s15-counter-convergence-trajectories",
+      "title": "Counter-convergence trajectories",
+      "summary": "Move seven and three on legible opposing upper and lower paths.",
+      "status": "ready"
+    },
+    {
+      "id": "s16-counter-convergence-junction",
+      "title": "Counter-convergence junction",
+      "summary": "Retire the catalyst at a shared junction and gate result birth behind source retirement.",
+      "status": "ready"
+    },
+    {
+      "id": "s17-counter-convergence-gate",
+      "title": "Counter-convergence visual gate",
+      "summary": "Prove exact settlement, causal clarity, protected-symbol clearance, and rewind.",
+      "status": "ready"
+    },
+    {
+      "id": "s18-streamlined-zero-default",
+      "title": "Streamlined zero default",
+      "summary": "Remove the fleeting independent zero witness from the flagship presentation.",
+      "status": "ready"
+    },
+    {
+      "id": "s19-zero-transition-gate",
+      "title": "Zero-transition gate",
+      "summary": "Prove the default has no transient zero, flash, or empty timing discontinuity.",
+      "status": "ready"
+    },
+    {
+      "id": "s20-teacher-zero-state",
+      "title": "Teacher zero state",
+      "summary": "Add an explicit semantic x plus zero equals seven minus three lesson state.",
+      "status": "ready"
+    },
+    {
+      "id": "s21-teacher-zero-beat",
+      "title": "Teacher zero beat",
+      "summary": "Give x plus zero to x its own searchable, scrollable, seekable, and rewindable beat.",
+      "status": "ready"
+    },
+    {
+      "id": "s22-teacher-zero-routing",
+      "title": "Teacher zero routing",
+      "summary": "Restore teacher mode and its exact beat through a shareable URL.",
+      "status": "ready"
+    },
+    {
+      "id": "s23-integrated-responsive-gate",
+      "title": "Integrated responsive gate",
+      "summary": "Verify the full exemplar across desktop and phone with durable visual evidence.",
+      "status": "ready"
+    },
+    {
+      "id": "s24-production-release-gate",
+      "title": "Production and release gate",
+      "summary": "Run broad correctness, build, production-exclusion, and workspace validation gates.",
+      "status": "ready"
+    },
+    {
+      "id": "s25-human-exemplar-checkpoint",
+      "title": "Human exemplar checkpoint",
+      "summary": "Present the revised solve-x exemplar and stop for explicit human approval before generalization.",
+      "status": "ready"
+    }
+  ]
+}
