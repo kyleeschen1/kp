@@ -70,7 +70,8 @@
     {
       "id": "s06-composition-boundary",
       "title": "Establish renderer neutral composition boundary",
-      "status": "planned"
+      "summary": "Wrapped the seven states and six transformations in one renderer-neutral animation asset with one timeline, render target, atomic native handoff, reference closure, and seek-rewind laws.",
+      "status": "complete"
     },
     {
       "id": "s07-searchable-lesson",

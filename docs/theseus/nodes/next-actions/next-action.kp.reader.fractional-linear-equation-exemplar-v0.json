@@ -48,6 +48,12 @@
       "scope": "s05 semantic fraction lineage",
       "checkedAt": "2026-07-21T21:53:52.612Z",
       "notes": "Seven equation states and six transitions compile semantically with total selector ownership. The focused gate caught and repaired delimiter lifecycle classification before completion."
+    },
+    {
+      "command": "focused fractional animation asset tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s06 renderer-neutral composition boundary",
+      "checkedAt": "2026-07-21T21:55:39.458Z"
     }
   ]
 }
