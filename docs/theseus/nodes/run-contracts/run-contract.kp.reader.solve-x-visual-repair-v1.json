@@ -83,7 +83,8 @@
     {
       "id": "s07-cross-surface-frame-contract",
       "title": "Cross-surface frame contract",
-      "status": "planned"
+      "summary": "Added a strict immutable cross-surface equation frame that preserves semantic fragment identity, ownership, opacity, typography evidence, and both pixel and normalized geometry so editor and reader can be compared without sharing DOM implementation.",
+      "status": "complete"
     },
     {
       "id": "s08-canonical-parity-browser-gate",
