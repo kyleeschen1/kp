@@ -60,8 +60,8 @@
     {
       "id": "s03-phone-failure-baseline",
       "title": "Phone failure baseline",
-      "summary": "Capture narrow-width evidence for overlap, wrapping, panel interference, and masthead separation.",
-      "status": "ready"
+      "summary": "Captured the live 390x844 solve-x review state at progress 833. The 366px opaque panel consumes the lower 413px of the viewport and fully hides underlying annotated content; masthead separation remains border-only, while card geometry and global scrolling stay intact.",
+      "status": "complete"
     },
     {
       "id": "s04-review-panel-translucency",
