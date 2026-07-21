@@ -136,7 +136,8 @@
     {
       "id": "s17-seek-rewind-gate",
       "title": "Prove exact forward seek and rewind",
-      "status": "planned"
+      "summary": "Ninety-seven dense positions now seek deterministically and mirror to the same semantic rewind phase; shared runtime boundary snapping replaces progress quantization.",
+      "status": "complete"
     },
     {
       "id": "s18-reader-card",

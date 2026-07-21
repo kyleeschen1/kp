@@ -134,6 +134,13 @@
       "status": "passed",
       "scope": "s16 operation salience",
       "checkedAt": "2026-07-21T22:17:38.695Z"
+    },
+    {
+      "command": "focused dense runtime, animation asset, and typecheck gates",
+      "status": "passed",
+      "scope": "s17 seek rewind",
+      "checkedAt": "2026-07-21T22:19:52.814Z",
+      "notes": "Dense sampling exposed and fixed boundary quantization in the shared runtime law and phase sampler."
     }
   ]
 }

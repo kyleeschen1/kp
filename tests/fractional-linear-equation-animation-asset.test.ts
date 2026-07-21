@@ -6,6 +6,7 @@ import {
   createFractionalLinearEquationAnimationAsset
 } from "../src/animation/fractional-linear-equation-adapter.ts";
 import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.ts";
+import { checkKpAnimationRuntimeRewindClockLaw } from "../src/animation/runtime-laws.ts";
 import { createKpEquationLinearRearrangementBindings } from "../src/rendering/equation-linear-rearrangement-bindings.ts";
 import {
   compileKpReaderEquationMaterialPlan,
@@ -119,4 +120,24 @@ test("each operation focuses only its causal symbols", () => {
     assert.equal(frame.focusSelectorIds.length, expectedCount);
     assert.equal(frame.activeAnnotationIds.length, 1);
   });
+});
+
+test("dense direct seeks and rewinds preserve the exact semantic phase", () => {
+  const animation = createFractionalLinearEquationAnimationAsset();
+  const progressSamples = Array.from({ length: 97 }, (_, index) => index / 96);
+
+  assert.deepEqual(
+    checkKpAnimationRuntimeRewindClockLaw({ animation, progressSamples }),
+    {
+      lawId: "animation-runtime.rewind-clock",
+      passed: true,
+      failures: []
+    }
+  );
+
+  for (const progress of progressSamples) {
+    const first = sampleKpAnimationRuntimeFrame({ animation, progress });
+    const second = sampleKpAnimationRuntimeFrame({ animation, progress });
+    assert.deepEqual(second, first);
+  }
 });

@@ -345,14 +345,18 @@ export function sampleKpAnimationAssetPhase(
 
   // A boundary belongs to the phase that begins there in forward playback and
   // the phase that ends there in rewind, keeping p and 1 - p on the same node.
+  // Snap only values that are numerically indistinguishable from a phase
+  // boundary. This keeps p and 1 - p on the same semantic node without
+  // quantizing ordinary direct seeks.
+  const scaledProgress = snapPhaseBoundary(input.progress * phases.length);
   const phaseIndex = input.direction === "forward"
     ? Math.min(
-        Math.floor(input.progress * phases.length),
+        Math.floor(scaledProgress),
         phases.length - 1
       )
     : Math.max(
         Math.min(
-          Math.ceil(input.progress * phases.length) - 1,
+          Math.ceil(scaledProgress) - 1,
           phases.length - 1
         ),
         0
@@ -370,6 +374,11 @@ export function sampleKpAnimationAssetPhase(
       phase.annotationIdsByPlacement
     )
   };
+}
+
+function snapPhaseBoundary(value: number): number {
+  const boundary = Math.round(value);
+  return Math.abs(value - boundary) < 1e-10 ? boundary : value;
 }
 
 export function checkKpAnimationAssetSeekRewindLaw(

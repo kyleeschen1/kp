@@ -91,7 +91,7 @@ export function checkKpAnimationRuntimeRewindClockLaw(
     const progress = normalizeProgressSample(rawProgress);
     // Runtime progress is a seek position inside the chosen direction, so the
     // reverse of forward progress p is rewind progress 1 - p.
-    const mirrorProgress = roundClockProgress(1 - progress);
+    const mirrorProgress = normalizeProgressSample(1 - progress);
     const forwardFrame = sampleKpAnimationRuntimeFrame({
       animation: input.animation,
       childAnimations: input.childAnimations,
@@ -218,10 +218,6 @@ function normalizeProgressSample(progress: number): number {
   if (!Number.isFinite(progress)) return 0;
 
   return Math.min(Math.max(progress, 0), 1);
-}
-
-function roundClockProgress(progress: number): number {
-  return Number(progress.toFixed(6));
 }
 
 function clockValuesEqual(left: number, right: number): boolean {
