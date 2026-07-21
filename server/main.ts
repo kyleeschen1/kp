@@ -1,21 +1,22 @@
 import { createAppServer } from "./app.ts";
 import { createExactRationalLinearProblemProvider } from "../providers/linear-problems/public-api.ts";
-import { createKpDevReviewServiceFromEnvironment } from "./dev-review-config.ts";
+import { createKpDevReviewServicesFromEnvironment } from "./dev-review-config.ts";
 
 const DEFAULT_HOST = "127.0.0.1";
 const DEFAULT_PORT = 8001;
 
 const host = process.env["HOST"] ?? DEFAULT_HOST;
 const port = readPort(process.env["PORT"]);
-const devReviewService = await createKpDevReviewServiceFromEnvironment(process.env);
+const devReviewServices = await createKpDevReviewServicesFromEnvironment(process.env);
 const server = createAppServer({
   linearProblemProvider: createExactRationalLinearProblemProvider(),
-  devReviewService
+  devReviewService: devReviewServices?.legacy,
+  devReviewRoundService: devReviewServices?.rounds
 });
 
 server.listen(port, host, () => {
   console.log(`[api] listening on http://${host}:${port}`);
-  if (devReviewService !== undefined) console.log("[api] local visual review inbox enabled");
+  if (devReviewServices !== undefined) console.log("[api] local visual review inbox enabled");
 });
 
 process.once("SIGINT", shutdown);

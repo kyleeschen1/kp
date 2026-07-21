@@ -75,6 +75,12 @@
       "status": "passed",
       "scope": "s07 disposable derived checkpoint, source fingerprint, counter integrity, stale recovery, and in-memory projection cache",
       "checkedAt": "2026-07-21T15:12:08.180Z"
+    },
+    {
+      "command": "focused dev review HTTP, config, client, query, and round tests; npm run typecheck; production closure check",
+      "status": "passed",
+      "scope": "s08 typed v2 operations, capability-only HTTP transport, legacy compatibility, and production exclusion",
+      "checkedAt": "2026-07-21T15:21:56.180Z"
     }
   ],
   "expectedLearning": [

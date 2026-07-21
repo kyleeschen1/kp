@@ -50,3 +50,36 @@ test("typed client rejects transport errors and malformed inbox responses", asyn
   const malformed = new KpDevReviewClient({ fetch: async () => Response.json({ notes: [] }) });
   await assert.rejects(() => malformed.read(), /schemaVersion/);
 });
+
+test("v2 client validates operation inputs and returned round state", async () => {
+  let observed: { input: string; body: unknown } | undefined;
+  const client = new KpDevReviewClient({
+    fetch: async (input, init) => {
+      observed = { input, body: JSON.parse(String(init?.body)) };
+      return Response.json({
+        id: "round.1",
+        sequence: 1,
+        label: "Polish pass",
+        status: "open",
+        openedAt: "2026-07-21T00:00:00.000Z",
+        baseline: { commit: "abc", fingerprint: "abc", dirty: false },
+        synthetic: false
+      }, { status: 201 });
+    }
+  });
+
+  const round = await client.openRound({
+    label: "Polish pass",
+    baseline: { commit: "abc", fingerprint: "abc", dirty: false }
+  });
+  assert.equal(round.id, "round.1");
+  assert.equal(observed?.input, "/api/dev/reviews/v2/rounds/open");
+  assert.deepEqual(observed?.body, {
+    label: "Polish pass",
+    baseline: { commit: "abc", fingerprint: "abc", dirty: false }
+  });
+  await assert.rejects(
+    () => client.query({ scope: "all", roundId: "round.1" }),
+    /cannot be combined/
+  );
+});

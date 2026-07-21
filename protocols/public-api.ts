@@ -98,3 +98,27 @@ export {
 
 export { type KpDevReviewStoredEvent } from "./dev-review-stored.ts";
 export { kpDevReviewStoredEventSchema } from "./dev-review-stored-schema.ts";
+
+export type {
+  KpDevReviewAdvanceCursorOperationV2,
+  KpDevReviewCloseRoundOperationV2,
+  KpDevReviewCompactNoteEvidence,
+  KpDevReviewNormalizedQuery,
+  KpDevReviewOpenRoundOperationV2,
+  KpDevReviewOperationSuccessV2,
+  KpDevReviewQueryInput,
+  KpDevReviewQueryResult,
+  KpDevReviewQueryScope,
+  KpDevReviewRoundQuerySummary,
+  KpDevReviewSetStatusOperationV2
+} from "./dev-review-operations-v2.ts";
+
+export {
+  kpDevReviewAdvanceCursorOperationV2Schema,
+  kpDevReviewCloseRoundOperationV2Schema,
+  kpDevReviewOpenRoundOperationV2Schema,
+  kpDevReviewOperationSuccessV2Schema,
+  kpDevReviewQueryInputSchema,
+  kpDevReviewQueryResultSchema,
+  kpDevReviewSetStatusOperationV2Schema
+} from "./dev-review-operations-v2-schema.ts";

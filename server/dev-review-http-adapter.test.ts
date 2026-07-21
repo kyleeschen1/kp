@@ -8,6 +8,7 @@ import test from "node:test";
 import { createExactRationalLinearProblemProvider } from "../providers/linear-problems/public-api.ts";
 import { createAppServer } from "./app.ts";
 import { KpDevReviewInboxService } from "./dev-review-inbox.ts";
+import { KpDevReviewRoundInboxService } from "./dev-review-round-inbox.ts";
 import { KpDevReviewEventStore } from "./dev-review-store.ts";
 
 function reviewRequest(): unknown {
@@ -37,7 +38,9 @@ function reviewRequest(): unknown {
 test("dev review routes are absent unless the service and capability header are present", async (context) => {
   const root = join(tmpdir(), `kp-dev-review-http-${process.pid}-${Date.now()}`);
   context.after(() => rm(root, { recursive: true, force: true }));
-  const service = new KpDevReviewInboxService(await KpDevReviewEventStore.open(root));
+  const store = await KpDevReviewEventStore.open(root);
+  const service = new KpDevReviewInboxService(store);
+  const roundService = new KpDevReviewRoundInboxService(store);
 
   const disabled = createAppServer({ linearProblemProvider: createExactRationalLinearProblemProvider() });
   const disabledUrl = await listen(disabled);
@@ -46,7 +49,8 @@ test("dev review routes are absent unless the service and capability header are 
 
   const enabled = createAppServer({
     linearProblemProvider: createExactRationalLinearProblemProvider(),
-    devReviewService: service
+    devReviewService: service,
+    devReviewRoundService: roundService
   });
   context.after(() => close(enabled));
   const baseUrl = await listen(enabled);
@@ -63,6 +67,34 @@ test("dev review routes are absent unless the service and capability header are 
   const inbox = await fetch(`${baseUrl}/api/dev/reviews`, { headers: { "x-kp-dev-review": "1" } });
   assert.equal(inbox.status, 200);
   assert.equal((await inbox.json() as { notes: unknown[] }).notes.length, 1);
+
+  const query = await postV2(baseUrl, "query", {});
+  assert.equal(query.status, 200);
+  assert.equal((await query.json() as { counts: { current: number } }).counts.current, 1);
+
+  assert.equal((await postV2(baseUrl, "rounds/close", { reason: "New pass" })).status, 200);
+  const opened = await postV2(baseUrl, "rounds/open", {
+    label: "Explicit pass",
+    baseline: { commit: "abc123", fingerprint: "dev-abc123", dirty: false }
+  });
+  assert.equal(opened.status, 201);
+  const roundId = (await opened.json() as { id: string }).id;
+  const createdV2 = await postV2(baseUrl, "notes", {
+    ...(reviewRequest() as Record<string, unknown>),
+    schemaVersion: "kp.dev-review.v2",
+    roundId
+  });
+  const note = await createdV2.json() as { id: string; sequence: number };
+  assert.equal(createdV2.status, 201);
+  assert.equal((await postV2(baseUrl, "notes/status", {
+    noteId: note.id,
+    status: "accepted"
+  })).status, 200);
+  assert.equal((await postV2(baseUrl, "cursors/advance", {
+    consumerId: "codex.main",
+    roundId,
+    throughSequence: note.sequence
+  })).status, 200);
 });
 
 test("dev review transport rejects malformed, unsupported, and oversized input", async (context) => {
@@ -95,4 +127,12 @@ async function listen(server: Server): Promise<string> {
 async function close(server: Server): Promise<void> {
   if (!server.listening) return;
   await new Promise<void>((resolve, reject) => server.close((error) => error ? reject(error) : resolve()));
+}
+
+function postV2(baseUrl: string, path: string, body: unknown): Promise<Response> {
+  return fetch(`${baseUrl}/api/dev/reviews/v2/${path}`, {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-kp-dev-review": "1" },
+    body: JSON.stringify(body)
+  });
 }

@@ -8,6 +8,7 @@ import { createCanonicalConceptReviewHttpAdapter } from "./concept-review-route.
 import { createLinearProblemHttpAdapter } from "./linear-problem-http-adapter.ts";
 import { createKpDevReviewHttpAdapter } from "./dev-review-http-adapter.ts";
 import type { KpDevReviewInboxService } from "./dev-review-inbox.ts";
+import type { KpDevReviewRoundInboxService } from "./dev-review-round-inbox.ts";
 
 interface HealthResponse {
   status: "ok";
@@ -27,10 +28,14 @@ type ApiResponse = HealthResponse | NotFoundResponse | InvalidRequestResponse;
 export function createAppServer(options: {
   readonly linearProblemProvider: LinearProblemProviderV1;
   readonly devReviewService?: KpDevReviewInboxService | undefined;
+  readonly devReviewRoundService?: KpDevReviewRoundInboxService | undefined;
 }): Server {
   const linearProblemAdapter = createLinearProblemHttpAdapter(options.linearProblemProvider);
   const conceptReviewAdapter = createCanonicalConceptReviewHttpAdapter(options.linearProblemProvider);
-  const devReviewAdapter = createKpDevReviewHttpAdapter(options.devReviewService);
+  const devReviewAdapter = createKpDevReviewHttpAdapter(
+    options.devReviewService,
+    options.devReviewRoundService
+  );
   return createServer((request, response) => {
     handleRequest(request, response, linearProblemAdapter, conceptReviewAdapter, devReviewAdapter).catch((error: unknown) => {
       console.error(error);

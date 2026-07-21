@@ -99,7 +99,8 @@
     {
       "id": "s08-review-http-client",
       "title": "Expose-typed-dev-only-review-operations",
-      "status": "planned"
+      "summary": "Exposed strict v2 query, round, note, status, and cursor operations through a typed client and capability-gated HTTP adapter; dev configuration shares one store with legacy compatibility and production closure remains clean.",
+      "status": "complete"
     },
     {
       "id": "s09-current-round-shell",

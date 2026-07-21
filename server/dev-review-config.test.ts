@@ -6,6 +6,7 @@ import test from "node:test";
 
 import {
   createKpDevReviewServiceFromEnvironment,
+  createKpDevReviewServicesFromEnvironment,
   KP_DEV_REVIEW_ENABLE_ENV,
   KP_DEV_REVIEW_ROOT_ENV
 } from "./dev-review-config.ts";
@@ -33,4 +34,17 @@ test("explicit development configuration opens the local inbox", async (context)
     notes: [],
     cursors: {}
   });
+});
+
+test("explicit configuration shares one append-only store across legacy and round services", async (context) => {
+  const root = join(tmpdir(), `kp-dev-review-services-${process.pid}-${Date.now()}`);
+  context.after(() => rm(root, { recursive: true, force: true }));
+  const services = await createKpDevReviewServicesFromEnvironment({
+    [KP_DEV_REVIEW_ENABLE_ENV]: "1",
+    [KP_DEV_REVIEW_ROOT_ENV]: root
+  });
+
+  assert.ok(services);
+  assert.equal(services.legacy.read().notes.length, 0);
+  assert.equal(services.rounds.read().rounds.length, 0);
 });
