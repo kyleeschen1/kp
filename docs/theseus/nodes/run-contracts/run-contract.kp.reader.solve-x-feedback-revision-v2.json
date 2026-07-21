@@ -54,8 +54,8 @@
     {
       "id": "s02-desktop-failure-baseline",
       "title": "Desktop failure baseline",
-      "summary": "Capture reproducible desktop evidence for the five current feedback notes.",
-      "status": "ready"
+      "summary": "Captured the live 1280x900 solve-x review state at progress 833. Evidence confirms the panel is fully opaque, the textarea is independently opaque, and the translucent masthead has no elevation shadow; the panel obscures the annotated equation card.",
+      "status": "complete"
     },
     {
       "id": "s03-phone-failure-baseline",
