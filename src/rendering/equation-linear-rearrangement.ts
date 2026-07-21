@@ -30,7 +30,9 @@ export function kpEquationLinearRearrangementKindForTransformType(
   transformType: string
 ): KpEquationLinearRearrangementKind | undefined {
   switch (transformType) {
-    case "subtractBothSides": return "balanced-introduction";
+    case "subtractBothSides":
+    case "multiplyBothSides":
+      return "balanced-introduction";
     case "cancelAdditiveInverses": return "cancel-additive-inverses";
     case "simplifyConstantDifference": return "simplify-constant-difference";
     default: return undefined;

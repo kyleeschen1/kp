@@ -47,3 +47,13 @@ test("fractional additive cancellation and difference use reviewed motifs", () =
   ]);
   assert.ok(bindings[2]?.successorSynthesisBinding);
 });
+
+test("multiplication enters as one balanced operation on both sides", () => {
+  const bindings = createKpEquationLinearRearrangementBindings(
+    createFractionalLinearEquationAnimationAsset()
+  );
+  assert.deepEqual(bindings[3], {
+    transformationId: "transform.fractional-linear.multiply-both-sides-2",
+    kind: "balanced-introduction"
+  });
+});

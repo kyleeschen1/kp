@@ -84,6 +84,12 @@
       "status": "passed",
       "scope": "s11 additive cancellation and difference synthesis",
       "checkedAt": "2026-07-21T22:07:22.339Z"
+    },
+    {
+      "command": "focused fractional and linear rearrangement dispatch tests",
+      "status": "passed",
+      "scope": "s12 multiply both sides choreography",
+      "checkedAt": "2026-07-21T22:08:26.424Z"
     }
   ]
 }

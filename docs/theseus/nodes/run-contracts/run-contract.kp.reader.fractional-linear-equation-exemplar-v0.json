@@ -106,7 +106,8 @@
     {
       "id": "s12-multiply-both-sides",
       "title": "Introduce multiplication by two on both sides",
-      "status": "planned"
+      "summary": "Mapped multiply-both-sides to the same balanced-introduction engine as subtraction, so both factors enter under one operation-specific clock instead of independent generic fades.",
+      "status": "complete"
     },
     {
       "id": "s13-denominator-cancellation",
