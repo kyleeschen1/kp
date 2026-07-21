@@ -1,4 +1,6 @@
-import { isAbsolute, resolve } from "node:path";
+import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
+import { isAbsolute, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 
@@ -11,7 +13,7 @@ import type { KpDevReviewQueryInput } from "../protocols/dev-review-operations-v
 import type { KpDevReviewStatusV1 } from "../protocols/dev-review-v1.ts";
 import { KpDevReviewRoundInboxService } from "../server/dev-review-round-inbox.ts";
 import { validateKpDevReviewLifecycleTransition } from "../server/dev-review-lifecycle.ts";
-import { KpDevReviewEventStore } from "../server/dev-review-store.ts";
+import { KP_DEV_REVIEW_EVENTS_FILENAME, KpDevReviewEventStore } from "../server/dev-review-store.ts";
 import { KP_DEV_REVIEW_ROOT_ENV } from "../server/dev-review-config.ts";
 
 export interface KpDevReviewCliIo {
@@ -52,14 +54,47 @@ export async function runKpDevReviewCli(
     io.write(helpText);
     return;
   }
-  if (positionals.length > 1 || !["query", "status", "cursor"].includes(command)) {
+  if (positionals.length > 1 || !["query", "status", "cursor", "audit"].includes(command)) {
     throw new Error(`Unknown dev-review command ${positionals.join(" ")}`);
   }
   const root = values.root ?? environment[KP_DEV_REVIEW_ROOT_ENV] ?? resolve(".kp/review-logs");
   if (!isAbsolute(root)) {
     throw new Error(`--root and ${KP_DEV_REVIEW_ROOT_ENV} must be absolute paths`);
   }
-  const service = new KpDevReviewRoundInboxService(await KpDevReviewEventStore.open(root));
+  const sourceFile = join(root, KP_DEV_REVIEW_EVENTS_FILENAME);
+  const sourceBefore = command === "audit" ? await readOptionalFile(sourceFile) : undefined;
+  const store = await KpDevReviewEventStore.open(root);
+  const service = new KpDevReviewRoundInboxService(store);
+  if (command === "audit") {
+    const events = store.readAll();
+    const inbox = service.read();
+    const sourceAfter = await readOptionalFile(sourceFile);
+    const sourceNoteIds = events.flatMap((event) => event.kind === "note-created" ? [event.note.id] : []);
+    const projectedNoteIds = inbox.notes.map((note) => note.id);
+    const byteStable = sourceBefore === sourceAfter;
+    const identityStable = JSON.stringify(sourceNoteIds) === JSON.stringify(projectedNoteIds);
+    if (!byteStable || !identityStable) throw new Error("Live review compatibility audit failed");
+    writeJson(io, {
+      ok: true,
+      operation: "audit",
+      source: {
+        bytes: Buffer.byteLength(sourceAfter),
+        digest: `sha256:${createHash("sha256").update(sourceAfter).digest("hex")}`,
+        eventCount: events.length,
+        v1Events: events.filter((event) => event.schemaVersion === "kp.dev-review.v1").length,
+        v2Events: events.filter((event) => event.schemaVersion === "kp.dev-review.v2").length,
+        byteStable
+      },
+      projection: {
+        roundCount: inbox.rounds.length,
+        syntheticRounds: inbox.rounds.filter((round) => round.synthetic).length,
+        currentRoundId: inbox.currentRoundId,
+        noteCount: inbox.notes.length,
+        identityAndOrderStable: identityStable
+      }
+    });
+    return;
+  }
   if (command === "status") {
     const operation = kpDevReviewSetStatusOperationV2Schema.parse({
       noteId: values.note,
@@ -142,6 +177,15 @@ function integer(value: string, option: string): number {
   return Number(value);
 }
 
+async function readOptionalFile(path: string): Promise<string> {
+  try {
+    return await readFile(path, "utf8");
+  } catch (error) {
+    if (error instanceof Error && "code" in error && error.code === "ENOENT") return "";
+    throw error;
+  }
+}
+
 const helpText = `Usage: npm run review:logs -- query [options]
 
 Defaults to a bounded compact query of the current review round.
@@ -161,6 +205,7 @@ Mutation commands are explicit and support validation without append:
 
   status --note <id> --to <status> [--reason <text>] [--dry-run]
   cursor --consumer <id> --round <id> --through <sequence> [--dry-run]
+  audit                 Prove source bytes and projected note identity/order are stable
 `;
 
 const entryPath = process.argv[1];

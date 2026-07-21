@@ -135,7 +135,8 @@
     {
       "id": "s14-live-history-compatibility",
       "title": "Prove-live-history-migration-without-mutation",
-      "status": "planned"
+      "summary": "The repeatable audit fingerprints source before and after replay, verifies projected note identity/order, and passed on the live 8-event v1 inbox: 47,098 bytes unchanged, two synthetic rounds, eight notes preserved.",
+      "status": "complete"
     },
     {
       "id": "s15-kp-review-skill-scaffold",

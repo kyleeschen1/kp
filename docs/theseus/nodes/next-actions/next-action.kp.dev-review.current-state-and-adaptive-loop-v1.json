@@ -111,6 +111,12 @@
       "status": "passed",
       "scope": "s13 explicit status and cursor commands, dry-run non-mutation, lifecycle enforcement, and durable receipts",
       "checkedAt": "2026-07-21T15:40:36.381Z"
+    },
+    {
+      "command": "focused CLI and legacy migration tests; npm run typecheck; npm run review:logs audit on live inbox",
+      "status": "passed",
+      "scope": "s14 byte-stable live v1 history, synthetic-round projection, and exact note identity/order",
+      "checkedAt": "2026-07-21T15:42:42.606Z"
     }
   ],
   "expectedLearning": [

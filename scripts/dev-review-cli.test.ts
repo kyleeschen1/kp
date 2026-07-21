@@ -123,6 +123,37 @@ test("triage CLI validates dry runs without append and records explicit mutation
   assert.equal(reopened.read().cursors["codex.main"]?.["round.current"], 2);
 });
 
+test("audit proves replay-only compatibility and exact note identity ordering", async (context) => {
+  const root = join(tmpdir(), `kp-review-cli-audit-${process.pid}-${Date.now()}`);
+  context.after(() => rm(root, { recursive: true, force: true }));
+  const store = await KpDevReviewEventStore.open(root);
+  for (const event of fixtureEvents()) await store.append(event);
+  let output = "";
+
+  await runKpDevReviewCli(["audit", "--root", root], {}, {
+    write: (value) => { output = value; }
+  });
+  const result = JSON.parse(output) as {
+    source: { byteStable: boolean; eventCount: number; v2Events: number };
+    projection: { roundCount: number; noteCount: number; identityAndOrderStable: boolean };
+  };
+  assert.deepEqual(result.source, {
+    bytes: Buffer.byteLength(await readFile(join(root, KP_DEV_REVIEW_EVENTS_FILENAME), "utf8")),
+    digest: (JSON.parse(output) as { source: { digest: string } }).source.digest,
+    eventCount: 5,
+    v1Events: 0,
+    v2Events: 5,
+    byteStable: true
+  });
+  assert.deepEqual(result.projection, {
+    roundCount: 2,
+    syntheticRounds: 0,
+    currentRoundId: "round.current",
+    noteCount: 2,
+    identityAndOrderStable: true
+  });
+});
+
 function fixtureEvents(): readonly KpDevReviewEventV2[] {
   return [
     round("round.old", 1),
