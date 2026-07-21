@@ -19,7 +19,7 @@ test("canonical reader selects counter-orbit cancellation without enabling legac
   );
   await expect(stage).toHaveAttribute(
     "data-kp-reader-equation-successor-recipe",
-    "native-handoff-v1"
+    "convergence-v1"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-reader-equation-depth-recipe",

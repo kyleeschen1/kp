@@ -5,7 +5,7 @@ export type KpGoldEquationParityFrameId =
   | "cancellation-meet"
   | "zero-witness-dwell"
   | "cancellation-settled"
-  | "successor-synthesis"
+  | "successor-convergence"
   | "final"
   | "reverse-cancellation";
 
@@ -23,7 +23,7 @@ export type KpGoldEquationParityEvidence =
   | "persistent-token-reflow"
   | "witnessed-cancellation"
   | "independent-zero-witness"
-  | "successor-synthesis"
+  | "successor-convergence"
   | "exact-native-handoff"
   | "exact-reverse-seek";
 
@@ -57,14 +57,14 @@ export const kpGoldEquationParityFrames: readonly KpGoldEquationParityFrame[] = 
     "witnessed-cancellation",
     "exact-native-handoff"
   ]),
-  frame("successor-synthesis", "forward", 0.833, [
+  frame("successor-convergence", "forward", 0.833, [
     "stable-katex-typography",
-    "successor-synthesis",
+    "successor-convergence",
     "persistent-token-reflow"
   ]),
   frame("final", "forward", 1, [
     "stable-katex-typography",
-    "successor-synthesis",
+    "successor-convergence",
     "exact-native-handoff"
   ]),
   frame("reverse-cancellation", "rewind", 0.5, [

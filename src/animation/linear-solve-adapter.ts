@@ -135,7 +135,8 @@ export function createLinearSolveAnimationAsset(): KpAnimationAsset {
       // remain available semantically for isolated refinement and promotion.
       equationMotionPresentationRecipe: "continuity-v1",
       equationCancellationPresentationRecipe: "counter-orbit-v1",
-      equationZeroWitnessPresentationRecipe: "independent-zero-v1"
+      equationZeroWitnessPresentationRecipe: "independent-zero-v1",
+      equationSuccessorPresentationRecipe: "convergence-v1"
     }
   });
 }

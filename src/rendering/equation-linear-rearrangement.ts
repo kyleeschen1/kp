@@ -13,7 +13,8 @@ import {
   type KpSuccessorSynthesisPlan
 } from "../animation/successor-synthesis.ts";
 import type {
-  KpEquationCancellationPresentationRecipe
+  KpEquationCancellationPresentationRecipe,
+  KpEquationSuccessorPresentationRecipe
 } from "./equation-presentation-policy.ts";
 
 export type KpEquationLinearRearrangementKind =
@@ -75,6 +76,8 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
   readonly cancellationPresentationRecipe?:
     KpEquationCancellationPresentationRecipe | undefined;
   readonly successorSynthesisPlan?: KpSuccessorSynthesisPlan | undefined;
+  readonly successorPresentationRecipe?:
+    KpEquationSuccessorPresentationRecipe | undefined;
 }): readonly KpEquationTokenMotionFrameToken[] | undefined {
   switch (input.relation.lifecycle) {
     case "persist":
@@ -92,7 +95,9 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
         : undefined;
     case "merge":
       return input.frame.kind === "simplify-constant-difference"
-        ? sampleConstantDerivation(input)
+        ? input.successorPresentationRecipe === "convergence-v1"
+          ? sampleConvergenceConstantDerivation(input)
+          : sampleConstantDerivation(input)
         : undefined;
     default:
       return undefined;
@@ -245,6 +250,36 @@ function sampleContinuityConstantDerivation(
       x: 0,
       y: 0,
       scale: 0.78 + 0.22 * input.frame.resultRevealProgress
+    }))
+  ];
+}
+
+function sampleConvergenceConstantDerivation(
+  input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
+): readonly KpEquationTokenMotionFrameToken[] {
+  const sourceCenter = center(input.relation.source?.bounds);
+  const destination = center(input.relation.target?.bounds);
+  const convergence = smooth(windowProgress(input.progress, 0.28, 0.7));
+  const sourceOpacity = 1 - smooth(windowProgress(input.progress, 0.72, 0.84));
+  const targetReveal = smooth(windowProgress(input.progress, 0.84, 0.94));
+  return [
+    ...input.sourceTokens.map((token) => {
+      const origin = center(token.localRect);
+      // Compress the expression as one readable unit; individual glyphs keep
+      // their relative order and never claim the successor's final position.
+      const compressedX = destination.x + (origin.x - sourceCenter.x) * 0.46;
+      return frameToken(token, "source", {
+        opacity: sourceOpacity,
+        x: (compressedX - origin.x) * convergence,
+        y: (destination.y - origin.y) * convergence,
+        scale: 1 - 0.08 * convergence
+      });
+    }),
+    ...input.targetTokens.map((token) => frameToken(token, "target", {
+      opacity: targetReveal,
+      x: 0,
+      y: 0,
+      scale: 0.9 + 0.1 * targetReveal
     }))
   ];
 }

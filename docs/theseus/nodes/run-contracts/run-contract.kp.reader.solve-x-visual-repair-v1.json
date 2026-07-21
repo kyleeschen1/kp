@@ -143,7 +143,8 @@
     {
       "id": "s17-successor-convergence-recipe",
       "title": "Successor convergence recipe",
-      "status": "planned"
+      "summary": "Added convergence-v1 shared by editor and reader. The ordered 7 minus 3 expression compresses on one baseline, while 4 remains absent until later native handoff. Gold review vocabulary now names successor convergence.",
+      "status": "complete"
     },
     {
       "id": "s18-catalyst-and-target-gating",

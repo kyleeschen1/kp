@@ -14,7 +14,7 @@ test("gold equation parity contract names every accepted causal beat", () => {
     "cancellation-meet",
     "zero-witness-dwell",
     "cancellation-settled",
-    "successor-synthesis",
+    "successor-convergence",
     "final",
     "reverse-cancellation"
   ]);
@@ -42,8 +42,8 @@ test("parity contract distinguishes causal operations from endpoint handoff", ()
     .includes("witnessed-cancellation"));
   assert.ok(kpGoldEquationParityFrame("zero-witness-dwell").requiredEvidence
     .includes("independent-zero-witness"));
-  assert.ok(kpGoldEquationParityFrame("successor-synthesis").requiredEvidence
-    .includes("successor-synthesis"));
+  assert.ok(kpGoldEquationParityFrame("successor-convergence").requiredEvidence
+    .includes("successor-convergence"));
   assert.ok(kpGoldEquationParityFrame("final").requiredEvidence
     .includes("exact-native-handoff"));
 });

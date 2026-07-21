@@ -28,6 +28,7 @@ import type { KpSuccessorSynthesisBinding } from "../../animation/successor-synt
 import type { KpEquationTokenMotionFrame } from "../../rendering/semantic-equation-token-renderer.ts";
 import type {
   KpEquationCancellationPresentationRecipe,
+  KpEquationSuccessorPresentationRecipe,
   KpEquationZeroWitnessPresentationRecipe
 } from "../../rendering/equation-presentation-policy.ts";
 
@@ -77,6 +78,8 @@ export function sampleKpReaderEquationSymbolMotion(input: {
     KpEquationCancellationPresentationRecipe | undefined;
   readonly zeroWitnessPresentationRecipe?:
     KpEquationZeroWitnessPresentationRecipe | undefined;
+  readonly successorPresentationRecipe?:
+    KpEquationSuccessorPresentationRecipe | undefined;
   readonly witnessedAnnihilationBinding?: KpWitnessedAnnihilationBinding | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
   readonly progress: number;
@@ -110,6 +113,7 @@ export function sampleKpReaderEquationSymbolMotion(input: {
         progress,
         cancellationPresentationRecipe: input.cancellationPresentationRecipe,
         zeroWitnessPresentationRecipe: input.zeroWitnessPresentationRecipe,
+        successorPresentationRecipe: input.successorPresentationRecipe,
         witnessedAnnihilationBinding: input.witnessedAnnihilationBinding,
         successorSynthesisBinding: input.successorSynthesisBinding
       });

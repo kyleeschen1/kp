@@ -42,7 +42,7 @@ test("reload and reverse seek preserve exact frame and semantic focus", async ({
   await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "500");
   await expect(page.locator("[data-kp-reader-equation-stage]")).toHaveAttribute(
     "data-kp-reader-equation-cancellation-recipe",
-    "native-handoff-v1"
+    "counter-orbit-v1"
   );
   await expect(page.locator("[data-kp-reader-equation-stage]"))
     .not.toHaveAttribute("data-kp-reader-annihilation-phase");

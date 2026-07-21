@@ -271,6 +271,45 @@ test("constant operands travel independently on arcs before the derived result a
   assert.ok(Math.abs(derivedResult?.pose.y ?? 0) < 3);
 });
 
+test("convergence keeps the constant expression ordered while tightening toward its result", () => {
+  const geometry = {
+    ...constantDerivationGeometry(),
+    successorPresentationRecipe: "convergence-v1" as const
+  };
+  const converging = sampleKpEquationTokenMotion(geometry, 0.6);
+  const sources = converging.tokens.filter((token) => token.side === "source");
+  const nativeCenters = geometry.sourceTokens.map(
+    (token) => token.localRect.left + token.localRect.width / 2
+  );
+  const convergedCenters = sources.map((token) => {
+    const native = geometry.sourceTokens.find(
+      (candidate) => candidate.motionId === token.motionId
+    )!;
+    return native.localRect.left + native.localRect.width / 2 + token.pose.x;
+  });
+  assert.deepEqual([...convergedCenters].sort((left, right) => left - right), convergedCenters);
+  assert.ok(
+    Math.max(...convergedCenters) - Math.min(...convergedCenters) <
+    Math.max(...nativeCenters) - Math.min(...nativeCenters)
+  );
+  assert.ok(sources.every((token) => token.pose.opacity === 1));
+  assert.ok(sources.every((token) => Math.abs(token.pose.y) < 0.001));
+  assert.equal(
+    converging.tokens.find((token) => token.side === "target")?.pose.opacity,
+    0
+  );
+
+  const resolving = sampleKpEquationTokenMotion(geometry, 0.9);
+  assert.ok(resolving.tokens.filter((token) =>
+    token.side === "source" && token.motionId.startsWith("operand.")
+  )
+    .every((token) => token.pose.opacity === 0));
+  assert.ok((resolving.tokens.find((token) =>
+    token.side === "target" && token.motionId === "result.4"
+  )
+    ?.pose.opacity ?? 0) > 0.5);
+});
+
 test("linear rearrangement settles exactly to native target token endpoints", () => {
   for (const geometry of [
     balancedIntroductionGeometry(),

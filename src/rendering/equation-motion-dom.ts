@@ -6,6 +6,7 @@ import type { KpEquationMotionPathCandidate } from "./equation-motion-path-plann
 import type { KpEquationLinearRearrangementKind } from "./equation-linear-rearrangement.ts";
 import type {
   KpEquationCancellationPresentationRecipe,
+  KpEquationSuccessorPresentationRecipe,
   KpEquationZeroWitnessPresentationRecipe
 } from "./equation-presentation-policy.ts";
 import type {
@@ -92,6 +93,8 @@ export interface KpMeasuredEquationTransitionGeometry {
     KpEquationZeroWitnessPresentationRecipe | undefined;
   readonly independentZeroWitnessPlan?:
     KpIndependentZeroWitnessPlan | undefined;
+  readonly successorPresentationRecipe?:
+    KpEquationSuccessorPresentationRecipe | undefined;
   readonly successorSynthesisBinding?:
     KpSuccessorSynthesisBinding | undefined;
   readonly successorSynthesisPlan?: KpSuccessorSynthesisPlan | undefined;
@@ -199,6 +202,8 @@ export function measureKpEquationTransitionGeometry(input: {
     KpEquationCancellationPresentationRecipe | undefined;
   readonly zeroWitnessPresentationRecipe?:
     KpEquationZeroWitnessPresentationRecipe | undefined;
+  readonly successorPresentationRecipe?:
+    KpEquationSuccessorPresentationRecipe | undefined;
   readonly successorSynthesisBinding?:
     KpSuccessorSynthesisBinding | undefined;
   readonly witnessedAnnihilationBinding?:
@@ -276,6 +281,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.zeroWitnessPresentationRecipe === undefined
       ? {}
       : { zeroWitnessPresentationRecipe: input.zeroWitnessPresentationRecipe }),
+    ...(input.successorPresentationRecipe === undefined
+      ? {}
+      : { successorPresentationRecipe: input.successorPresentationRecipe }),
     ...(input.successorSynthesisBinding === undefined
       ? {}
       : { successorSynthesisBinding: input.successorSynthesisBinding }),

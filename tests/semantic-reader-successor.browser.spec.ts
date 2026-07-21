@@ -19,9 +19,7 @@ test("constant inputs converge before the derived four takes ownership", async (
     '[data-kp-reader-equation-material-fragment-id="anchor.equation.linear-solve.solved.rhs.4"]'
   );
   await expect(derived).toHaveText("4");
-  await expect.poll(async () => Number(await derived.evaluate(
-    (element) => getComputedStyle(element).opacity
-  ))).toBeGreaterThan(0.5);
+  await expect(derived).toHaveCSS("opacity", "0");
 
   const sourceTransforms = await owner.locator(
     '[data-kp-reader-equation-material-fragment-id*="left-simplified.rhs"]'
@@ -31,4 +29,12 @@ test("constant inputs converge before the derived four takes ownership", async (
   expect(sourceTransforms).toHaveLength(3);
   expect(sourceTransforms.some((transform) => !transform.includes("translate(0px, 0px)")))
     .toBe(true);
+
+  await page.goto(
+    "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpProgress=967"
+  );
+  await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "967");
+  await expect.poll(async () => Number(await derived.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeGreaterThan(0.5);
 });

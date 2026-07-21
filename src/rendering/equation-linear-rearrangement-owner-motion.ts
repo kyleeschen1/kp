@@ -36,6 +36,7 @@ import type {
 import type { KpMeasuredEquationTransitionGeometry } from "./equation-motion-dom.ts";
 import type {
   KpEquationCancellationPresentationRecipe,
+  KpEquationSuccessorPresentationRecipe,
   KpEquationZeroWitnessPresentationRecipe
 } from "./equation-presentation-policy.ts";
 import {
@@ -74,6 +75,8 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
     KpEquationCancellationPresentationRecipe | undefined;
   readonly zeroWitnessPresentationRecipe?:
     KpEquationZeroWitnessPresentationRecipe | undefined;
+  readonly successorPresentationRecipe?:
+    KpEquationSuccessorPresentationRecipe | undefined;
   readonly witnessedAnnihilationBinding?: KpWitnessedAnnihilationBinding | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
 }): KpEquationLinearRearrangementOwnerFrame {
@@ -132,6 +135,9 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
     ...(input.zeroWitnessPresentationRecipe === undefined
       ? {}
       : { zeroWitnessPresentationRecipe: input.zeroWitnessPresentationRecipe }),
+    ...(input.successorPresentationRecipe === undefined
+      ? {}
+      : { successorPresentationRecipe: input.successorPresentationRecipe }),
     ...(input.witnessedAnnihilationBinding === undefined
       ? {}
       : { witnessedAnnihilationBinding: input.witnessedAnnihilationBinding }),
@@ -233,6 +239,7 @@ function sampleRequiredLinearRelation(input: {
     progress: input.progress,
     frame: input.frame,
     cancellationPresentationRecipe: input.geometry.cancellationPresentationRecipe,
+    successorPresentationRecipe: input.geometry.successorPresentationRecipe,
     successorSynthesisPlan: input.geometry.successorSynthesisPlan
   });
   if (sampled === undefined) {
