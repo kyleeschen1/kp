@@ -9,6 +9,7 @@ import type {
 } from "./semantic-equation-token-renderer.ts";
 import {
   createKpSuccessorSynthesisPlan,
+  sampleKpCounterConvergence,
   sampleKpSuccessorSynthesis,
   type KpSuccessorSynthesisBinding,
   type KpSuccessorSynthesisPlan
@@ -212,10 +213,15 @@ function sampleConstantDerivation(
     // proven continuity presentation until the newer motif clears review.
     return sampleContinuityConstantDerivation(input);
   }
-  const synthesis = sampleKpSuccessorSynthesis({
-    plan: input.successorSynthesisPlan,
-    progress: input.progress
-  });
+  const synthesis = input.successorPresentationRecipe === "counter-convergence-v1"
+    ? sampleKpCounterConvergence({
+        plan: input.successorSynthesisPlan,
+        progress: input.progress
+      })
+    : sampleKpSuccessorSynthesis({
+        plan: input.successorSynthesisPlan,
+        progress: input.progress
+      });
   return [
     ...synthesis.sources.map((source) => {
       const token = input.sourceTokens.find(

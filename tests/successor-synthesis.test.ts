@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   createKpSuccessorSynthesisPlan,
   evaluateKpSuccessorSynthesisLaws,
+  sampleKpCounterConvergence,
   sampleKpSuccessorSynthesis
 } from "../src/animation/successor-synthesis.ts";
 import { createConstantDifferenceSuccessorFixture } from "./fixtures/successor-synthesis-fixture.ts";
@@ -101,6 +102,43 @@ test("constant-difference fixture satisfies successor synthesis laws", () => {
 test("successor synthesis rejects catalyst lineage and missing authority", () => {
   assert.throws(() => invalidPlan({ operationId: "" }), /authority.operationId/);
   assert.throws(() => invalidPlan({ catalystInLineage: true }), /cannot contribute result material/);
+});
+
+test("counter convergence retires its catalyst before seeding the result", () => {
+  const plan = createConstantDifferenceSuccessorFixture();
+  const approaching = sampleKpCounterConvergence({ plan, progress: 0.55 });
+  assert.deepEqual(
+    approaching.sources
+      .filter((source) => source.contribution === "material-input")
+      .map((source) => source.pathFamily),
+    ["arc-above", "arc-below"]
+  );
+  assert.ok(approaching.targets.every((target) => target.pose.opacity === 0));
+
+  const retiring = sampleKpCounterConvergence({ plan, progress: 0.72 });
+  const catalyst = retiring.sources.find((source) =>
+    source.contribution === "catalyst"
+  )!;
+  const materials = retiring.sources.filter((source) =>
+    source.contribution === "material-input"
+  );
+  assert.equal(catalyst.pose.opacity, 0);
+  assert.ok(materials.every((source) => source.pose.opacity > 0));
+  assert.ok(retiring.targets.every((target) => target.pose.opacity === 0));
+
+  const handoff = sampleKpCounterConvergence({ plan, progress: 0.79 });
+  assert.ok(handoff.sources.filter((source) => source.contribution === "material-input")
+    .every((source) => source.pose.opacity < 0.05));
+  assert.ok(handoff.targets.every((target) => target.pose.opacity > 0));
+
+  const settled = sampleKpCounterConvergence({ plan, progress: 1 });
+  assert.ok(settled.sources.every((source) => source.pose.opacity === 0));
+  assert.ok(settled.targets.every((target) =>
+    target.pose.opacity === 1 &&
+    target.pose.x === 0 &&
+    target.pose.y === 0 &&
+    target.pose.scale === 1
+  ));
 });
 
 function invalidPlan(options: {

@@ -314,7 +314,7 @@ test("constant operands travel independently on arcs before the derived result a
 
   const derived = sampleKpEquationTokenMotion(
     geometry,
-    0.72
+    0.79
   );
   const derivedResult = derived.tokens.find(
     (token) => token.side === "target" && token.motionId === "result.4"

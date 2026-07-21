@@ -38,7 +38,12 @@ test("constant inputs converge before the derived four takes ownership", async (
     '[data-kp-reader-equation-material-fragment-id="anchor.equation.linear-solve.solved.rhs.4"]'
   );
   await expect(derived).toHaveText("4");
-  await expect(derived).toHaveCSS("opacity", "0");
+  await expect.poll(async () => Number(await derived.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeGreaterThan(0);
+  await expect.poll(async () => Number(await derived.evaluate(
+    (element) => getComputedStyle(element).opacity
+  ))).toBeLessThan(1);
 
   const sourceTransforms = await owner.locator(
     '[data-kp-reader-equation-material-fragment-id*="left-simplified.rhs"]'

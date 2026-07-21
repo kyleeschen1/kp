@@ -35,20 +35,21 @@ test("successor phases preserve expression order and exclusive target ownership"
 
     const converging = await evidenceAt(page, 867);
     expect(converging.seven.opacity).toBeGreaterThan(0.99);
-    expect(converging.minus.opacity).toBeGreaterThan(0.99);
+    expect(converging.minus.opacity).toBeGreaterThan(0);
+    expect(converging.minus.opacity).toBeLessThan(0.99);
     expect(converging.three.opacity).toBeGreaterThan(0.99);
     expect(converging.four.opacity).toBe(0);
     expect(centerX(converging.seven)).toBeLessThan(centerX(converging.minus));
     expect(centerX(converging.minus)).toBeLessThan(centerX(converging.three));
-    expect(Math.abs(centerY(converging.seven) - centerY(converging.three)))
-      .toBeLessThan(0.5);
+    expect(centerY(converging.seven)).toBeLessThan(centerY(converging.three));
+    expect(centerY(converging.three) - centerY(converging.seven)).toBeGreaterThan(4);
     assertProtectedClearance(converging);
     assertWithinStage(converging);
 
     const catalystRetiring = await evidenceAt(page, 893);
-    expect(catalystRetiring.minus.opacity).toBeLessThan(0.99);
-    expect(catalystRetiring.seven.opacity).toBeGreaterThan(0.99);
-    expect(catalystRetiring.three.opacity).toBeGreaterThan(0.99);
+    expect(catalystRetiring.minus.opacity).toBeLessThan(0.2);
+    expect(catalystRetiring.seven.opacity).toBeGreaterThan(0.9);
+    expect(catalystRetiring.three.opacity).toBeGreaterThan(0.9);
     expect(catalystRetiring.four.opacity).toBe(0);
 
     const operandsRetiring = await evidenceAt(page, 917);
@@ -61,13 +62,13 @@ test("successor phases preserve expression order and exclusive target ownership"
     expect(sourcesCleared.seven.opacity).toBe(0);
     expect(sourcesCleared.minus.opacity).toBe(0);
     expect(sourcesCleared.three.opacity).toBe(0);
-    expect(sourcesCleared.four.opacity).toBe(0);
+    expect(sourcesCleared.four.opacity).toBeGreaterThan(0.5);
 
     const result = await evidenceAt(page, 967);
     expect(result.seven.opacity).toBe(0);
     expect(result.minus.opacity).toBe(0);
     expect(result.three.opacity).toBe(0);
-    expect(result.four.opacity).toBeGreaterThan(0.5);
+    expect(result.four.opacity).toBeGreaterThan(0.95);
     expect(result.four.fontFamily).toContain("KaTeX");
   }
 });
@@ -88,14 +89,19 @@ test("dense successor sampling remains continuous and exactly retraces", async (
     distance(sample.minus, samples[index]!.minus),
     distance(sample.three, samples[index]!.three)
   ]);
-  const opacityDelta = samples.slice(1).flatMap((sample, index) => [
-    Math.abs(sample.seven.opacity - samples[index]!.seven.opacity),
-    Math.abs(sample.minus.opacity - samples[index]!.minus.opacity),
-    Math.abs(sample.three.opacity - samples[index]!.three.opacity),
-    Math.abs(sample.four.opacity - samples[index]!.four.opacity)
-  ]);
+  const opacityDelta = samples.slice(1).flatMap((sample, index) =>
+    (["seven", "minus", "three", "four"] as const).map((symbol) => ({
+      symbol,
+      from: 840 + index * 4,
+      to: 844 + index * 4,
+      delta: Math.abs(sample[symbol].opacity - samples[index]![symbol].opacity)
+    }))
+  );
   expect(Math.max(...travel)).toBeLessThan(4);
-  expect(Math.max(...opacityDelta)).toBeLessThan(0.2);
+  const maximumOpacityDelta = [...opacityDelta].sort(
+    (left, right) => right.delta - left.delta
+  )[0]!;
+  expect(maximumOpacityDelta.delta, JSON.stringify(maximumOpacityDelta)).toBeLessThan(0.2);
 
   for (const progress of [968, 920, 880, 840]) {
     await seekByScroll(page, progress);

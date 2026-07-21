@@ -138,8 +138,8 @@
     {
       "id": "s16-counter-convergence-junction",
       "title": "Counter-convergence junction",
-      "summary": "Retire the catalyst at a shared junction and gate result birth behind source retirement.",
-      "status": "ready"
+      "summary": "Added counter-specific handoff timing on the existing measured junction. Seven and three approach on opposing arcs; minus retires continuously on its own catalyst clock; material inputs then retire; four seeds from the junction only near the end of retirement and settles natively. Nineteen unit laws, five desktop/phone browser gates, dense continuity, rewind, and typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s17-counter-convergence-gate",

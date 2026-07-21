@@ -380,6 +380,121 @@ export function sampleKpSuccessorSynthesis(input: {
   };
 }
 
+/**
+ * Counter-convergence keeps the generic successor semantics but gives
+ * subtraction its own visual grammar: material inputs approach on opposing
+ * paths, the catalyst retires first, and the result seeds only near the end of
+ * source retirement instead of overlapping the full synthesis.
+ */
+export function sampleKpCounterConvergence(input: {
+  readonly plan: KpSuccessorSynthesisPlan;
+  readonly progress: number;
+}): KpSuccessorSynthesisFrame {
+  const progress = clamp01(input.progress);
+  const maximumInputRank = maximumRank(input.plan.materialInputs);
+  const inputFrames = input.plan.materialInputs.map((member, index) => {
+    const rankOffset = rankOffsetFor(
+      member.propagationRank,
+      maximumInputRank,
+      input.plan.inputRankStaggerSpan
+    );
+    return {
+      member,
+      index,
+      arrivalProgress: easeInOut(interval(
+        progress,
+        input.plan.inputArrivalStart + rankOffset,
+        input.plan.inputArrivalEnd + rankOffset
+      ))
+    };
+  });
+  const allRequiredInputsReady = inputFrames.every(
+    (source) => source.arrivalProgress >= input.plan.targetSeedReadiness
+  );
+  const materialRetirement = allRequiredInputsReady
+    ? easeInOut(interval(progress, 0.66, 0.8))
+    : 0;
+  // The catalyst has no result material, so its retirement follows its own
+  // continuous clock instead of snapping when the last input becomes ready.
+  const catalystRetirement = easeInOut(interval(progress, 0.54, 0.7));
+  const targetGateOpen = materialRetirement >= 0.82 && catalystRetirement >= 1;
+  const maximumTargetRank = maximumRank(input.plan.targets);
+  const targetBirths = input.plan.targets.map((target) => {
+    const rankOffset = rankOffsetFor(
+      target.propagationRank,
+      maximumTargetRank,
+      input.plan.targetRankStaggerSpan
+    );
+    return targetGateOpen
+      ? easeOut(interval(progress, 0.76 + rankOffset, 0.96 + rankOffset))
+      : 0;
+  });
+  const targetRecognizable = targetBirths.every(
+    (birth) => birth >= input.plan.targetRecognition
+  );
+  const sources = [
+    ...inputFrames.map(({ member, index, arrivalProgress }) => ({
+      annotationId: member.id,
+      contribution: "material-input" as const,
+      arrivalProgress,
+      activationProgress: arrivalProgress,
+      retirementProgress: materialRetirement,
+      pathFamily: member.pathFamily,
+      pose: sourcePose(
+        member,
+        junctionSlot(input.plan, index),
+        arrivalProgress,
+        input.plan.inputJunctionScale,
+        materialRetirement
+      )
+    })),
+    ...input.plan.catalysts.map((member) => {
+      const activationProgress = easeInOut(interval(progress, 0.1, 0.5));
+      return {
+        annotationId: member.id,
+        contribution: "catalyst" as const,
+        arrivalProgress: 0,
+        activationProgress,
+        retirementProgress: catalystRetirement,
+        pathFamily: member.pathFamily,
+        pose: catalystPose(
+          member,
+          input.plan.junction,
+          activationProgress,
+          catalystRetirement
+        )
+      };
+    })
+  ];
+  const targets = input.plan.targets.map((target, index) => ({
+    annotationId: target.id,
+    birthProgress: targetBirths[index]!,
+    pathFamily: target.pathFamily,
+    pose: targetPose(
+      target,
+      input.plan.junction,
+      targetBirths[index]!,
+      input.plan.targetSeedScale
+    )
+  }));
+  return {
+    kind: "successor-synthesis-frame",
+    planId: input.plan.id,
+    progress,
+    phase: progress >= 1
+      ? "settled"
+      : materialRetirement > 0
+        ? targetBirths.some((birth) => birth > 0) ? "recognize" : "retire"
+        : inputFrames.some((source) => source.arrivalProgress > 0)
+          ? "converge"
+          : "orient",
+    allRequiredInputsReady,
+    targetRecognizable,
+    sources,
+    targets
+  };
+}
+
 export function evaluateKpSuccessorSynthesisLaws(
   plan: KpSuccessorSynthesisPlan,
   sampleCount = 100
