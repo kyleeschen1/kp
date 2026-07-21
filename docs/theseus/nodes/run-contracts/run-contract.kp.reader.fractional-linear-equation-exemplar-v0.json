@@ -100,7 +100,8 @@
     {
       "id": "s11-additive-cancellation",
       "title": "Cancel and simplify to x over 2 equals 4",
-      "status": "planned"
+      "summary": "Certified counter-orbit additive cancellation and successor synthesis of seven minus three into four through existing reviewed motifs with authored causal metadata.",
+      "status": "complete"
     },
     {
       "id": "s12-multiply-both-sides",

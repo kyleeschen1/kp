@@ -78,6 +78,12 @@
       "status": "passed",
       "scope": "s10 balanced subtract choreography",
       "checkedAt": "2026-07-21T22:06:18.862Z"
+    },
+    {
+      "command": "focused fractional animation binding tests",
+      "status": "passed",
+      "scope": "s11 additive cancellation and difference synthesis",
+      "checkedAt": "2026-07-21T22:07:22.339Z"
     }
   ]
 }

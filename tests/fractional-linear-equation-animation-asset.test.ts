@@ -27,3 +27,23 @@ test("fractional subtraction reuses the accepted balanced-introduction engine", 
     kind: "balanced-introduction"
   });
 });
+
+test("fractional additive cancellation and difference use reviewed motifs", () => {
+  const bindings = createKpEquationLinearRearrangementBindings(
+    createFractionalLinearEquationAnimationAsset()
+  );
+  assert.deepEqual(bindings.slice(1, 3).map(({ transformationId, kind }) => ({
+    transformationId,
+    kind
+  })), [
+    {
+      transformationId: "transform.fractional-linear.cancel-additive-inverses",
+      kind: "cancel-additive-inverses"
+    },
+    {
+      transformationId: "transform.fractional-linear.simplify-right-difference",
+      kind: "simplify-constant-difference"
+    }
+  ]);
+  assert.ok(bindings[2]?.successorSynthesisBinding);
+});
