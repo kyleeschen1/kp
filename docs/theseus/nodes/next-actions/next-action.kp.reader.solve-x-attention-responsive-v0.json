@@ -11,6 +11,13 @@
       "scope": "s03 desktop 1280x900 review failure baseline",
       "checkedAt": "2026-07-21T19:28:53.913Z",
       "notes": "At progress 833 the 360 by 413 panel overlaps 60,131.625 square pixels of the 509 by 558 equation stage while scroll and progress remain unchanged."
+    },
+    {
+      "command": "npm run baseline:solve-x-attention and visual inspection",
+      "status": "passed",
+      "scope": "s04 phone 390x844 attention failure baseline",
+      "checkedAt": "2026-07-21T19:30:10.825Z",
+      "notes": "At progress 833 the sticky 362x309 stage covers the active beat heading by 174 pixels; the next heading is visible far below instead. The open review panel consumes the lower 413 pixels, confirming a separate narrow review projection is required."
     }
   ]
 }

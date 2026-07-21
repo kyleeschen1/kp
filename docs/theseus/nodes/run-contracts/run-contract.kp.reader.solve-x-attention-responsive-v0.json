@@ -74,7 +74,8 @@
     {
       "id": "s04-phone-failure-baseline",
       "title": "Phone_failure_baseline",
-      "status": "planned"
+      "summary": "At 390x844 and progress 833, the sticky 362x309 stage covers the active heading by 174px while the next heading appears far below, so text and the relevant motion cannot be read together. The open review panel occupies the lower 413px; both behaviors are now captured by the repeatable baseline.",
+      "status": "complete"
     },
     {
       "id": "s05-review-placement-policy",

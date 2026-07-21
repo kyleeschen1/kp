@@ -39,6 +39,9 @@ async function geometry(page: Page): Promise<unknown> {
     const stage = box("[data-kp-reader-equation-stage]");
     const activeBeat = box("[data-kp-beat][data-kp-reader-active=true]")
       ?? box("[data-kp-beat][aria-current]");
+    const activeBeatHeading = document.querySelector<HTMLElement>(
+      "[data-kp-beat][data-kp-reader-active=true], [data-kp-beat][aria-current]"
+    )?.querySelector<HTMLElement>("h1, h2, h3")?.getBoundingClientRect();
     const masthead = box(".kp-reader-masthead");
     const host = document.querySelector<HTMLElement>("[data-kp-dev-review-shell]");
     const panel = host?.shadowRoot?.querySelector<HTMLElement>(".panel")?.getBoundingClientRect();
@@ -58,9 +61,13 @@ async function geometry(page: Page): Promise<unknown> {
       progress: document.body.dataset["kpReaderProgress"],
       stage: rect(stage),
       activeBeat: rect(activeBeat),
+      activeBeatHeading: rect(activeBeatHeading),
       masthead: rect(masthead),
       reviewPanel: rect(panel),
       reviewStageIntersectionArea: intersection(panel, stage),
+      stageToActiveHeadingGap: stage === undefined || activeBeatHeading === undefined
+        ? undefined
+        : activeBeatHeading.top - stage.bottom,
       bodyScrollHeight: document.documentElement.scrollHeight
     };
   });
