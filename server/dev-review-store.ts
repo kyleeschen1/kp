@@ -1,17 +1,17 @@
 import { mkdir, readFile, appendFile } from "node:fs/promises";
 import { join } from "node:path";
 
-import { kpDevReviewEventSchema } from "../protocols/dev-review-schema.ts";
-import type { KpDevReviewEventV1 } from "../protocols/dev-review-v1.ts";
+import { kpDevReviewStoredEventSchema } from "../protocols/dev-review-stored-schema.ts";
+import type { KpDevReviewStoredEvent } from "../protocols/dev-review-stored.ts";
 
 export const KP_DEV_REVIEW_EVENTS_FILENAME = "events.v1.jsonl";
 
 export class KpDevReviewEventStore {
   readonly #eventsFile: string;
-  #events: KpDevReviewEventV1[];
+  #events: KpDevReviewStoredEvent[];
   #writeTail: Promise<void> = Promise.resolve();
 
-  private constructor(eventsFile: string, events: KpDevReviewEventV1[]) {
+  private constructor(eventsFile: string, events: KpDevReviewStoredEvent[]) {
     this.#eventsFile = eventsFile;
     this.#events = events;
   }
@@ -23,12 +23,12 @@ export class KpDevReviewEventStore {
     return new KpDevReviewEventStore(eventsFile, events);
   }
 
-  readAll(): readonly KpDevReviewEventV1[] {
+  readAll(): readonly KpDevReviewStoredEvent[] {
     return this.#events.map((event) => structuredClone(event));
   }
 
-  async append(event: KpDevReviewEventV1): Promise<void> {
-    const validated = kpDevReviewEventSchema.parse(event);
+  async append(event: KpDevReviewStoredEvent): Promise<void> {
+    const validated = kpDevReviewStoredEventSchema.parse(event);
     const write = this.#writeTail.then(async () => {
       await appendFile(this.#eventsFile, `${JSON.stringify(validated)}\n`, {
         encoding: "utf8",
@@ -42,7 +42,7 @@ export class KpDevReviewEventStore {
   }
 }
 
-async function readExistingEvents(eventsFile: string): Promise<KpDevReviewEventV1[]> {
+async function readExistingEvents(eventsFile: string): Promise<KpDevReviewStoredEvent[]> {
   let source: string;
   try {
     source = await readFile(eventsFile, "utf8");
@@ -56,7 +56,7 @@ async function readExistingEvents(eventsFile: string): Promise<KpDevReviewEventV
     .filter((line) => line.trim().length > 0)
     .map((line, index) => {
       try {
-        return kpDevReviewEventSchema.parse(JSON.parse(line));
+        return kpDevReviewStoredEventSchema.parse(JSON.parse(line));
       } catch (error) {
         throw new Error(`Invalid dev review event at line ${index + 1}`, { cause: error });
       }

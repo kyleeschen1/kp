@@ -57,6 +57,12 @@
       "status": "passed",
       "scope": "s04 deterministic non-mutating v1 session-to-round projection",
       "checkedAt": "2026-07-21T14:57:20.846Z"
+    },
+    {
+      "command": "store, legacy inbox, migration, round service tests and full typecheck",
+      "status": "passed",
+      "scope": "s05 mixed-history projection and serialized current-round service",
+      "checkedAt": "2026-07-21T15:02:11.053Z"
     }
   ],
   "expectedLearning": [

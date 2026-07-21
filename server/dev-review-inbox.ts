@@ -26,11 +26,12 @@ export class KpDevReviewInboxService {
   }
 
   read(): KpDevReviewInboxV1 {
-    return projectKpDevReviewInbox(this.#store.readAll());
+    return projectKpDevReviewInbox(this.#legacyEvents());
   }
 
   createNote(request: unknown): Promise<KpDevReviewNoteV1> {
     return this.#enqueue(async () => {
+      this.#assertLegacyWritable();
       const validated = kpDevReviewCreateRequestSchema.parse(request);
       const inbox = this.read();
       const sequence = (inbox.notes.at(-1)?.sequence ?? 0) + 1;
@@ -53,6 +54,7 @@ export class KpDevReviewInboxService {
 
   setStatus(noteId: string, status: KpDevReviewStatusV1, reason?: string): Promise<void> {
     return this.#enqueue(async () => {
+      this.#assertLegacyWritable();
       if (!this.read().notes.some((note) => note.id === noteId)) {
         throw new Error(`Unknown review note ${noteId}`);
       }
@@ -69,6 +71,7 @@ export class KpDevReviewInboxService {
 
   advanceCursor(consumerId: string, throughSequence: number): Promise<void> {
     return this.#enqueue(async () => {
+      this.#assertLegacyWritable();
       const inbox = this.read();
       const highestSequence = inbox.notes.at(-1)?.sequence ?? 0;
       const current = inbox.cursors[consumerId] ?? 0;
@@ -89,6 +92,20 @@ export class KpDevReviewInboxService {
     const result = this.#mutationTail.then(mutation);
     this.#mutationTail = result.catch(() => undefined);
     return result;
+  }
+
+  #legacyEvents(): readonly KpDevReviewEventV1[] {
+    return this.#store.readAll().filter(
+      (event): event is KpDevReviewEventV1 => event.schemaVersion === KP_DEV_REVIEW_SCHEMA_VERSION
+    );
+  }
+
+  #assertLegacyWritable(): void {
+    if (this.#store.readAll().some(
+      (event) => event.schemaVersion !== KP_DEV_REVIEW_SCHEMA_VERSION
+    )) {
+      throw new Error("The v1 review service is read-only after v2 history begins");
+    }
   }
 }
 

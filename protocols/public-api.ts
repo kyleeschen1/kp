@@ -95,3 +95,6 @@ export {
   kpDevReviewNoteV2Schema,
   kpDevReviewRoundV2Schema
 } from "./dev-review-v2-schema.ts";
+
+export { type KpDevReviewStoredEvent } from "./dev-review-stored.ts";
+export { kpDevReviewStoredEventSchema } from "./dev-review-stored-schema.ts";

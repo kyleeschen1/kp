@@ -81,7 +81,8 @@
     {
       "id": "s05-round-projection-service",
       "title": "Add-current-round-projection-and-service",
-      "status": "planned"
+      "summary": "Delivered the mixed-version append-only store and round inbox service with explicit lifecycle, current-round authority, round-scoped cursors, serialized concurrent notes, fail-closed ordering, and restart-stable projection.",
+      "status": "complete"
     },
     {
       "id": "s06-bounded-review-query",
