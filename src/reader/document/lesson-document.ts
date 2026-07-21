@@ -50,6 +50,7 @@ export interface KpLessonAnimationStoryBlock extends KpLessonBlockBase {
 }
 
 export type KpLessonAttentionPhaseKind = "orient" | "act" | "settle" | "inspect";
+export const kpLessonAttentionPhaseOrder = ["orient", "act", "settle", "inspect"] as const;
 
 export interface KpLessonAttentionPlan {
   readonly kind: "phased-attention-v1";
@@ -137,9 +138,91 @@ export function validateKpLessonDocument(
       }
       previousProgress = progress;
     });
+    validateAttentionPlan(block, path, ids, issues);
   });
 
   return issues;
+}
+
+function validateAttentionPlan(
+  block: KpLessonAnimationStoryBlock,
+  path: string,
+  ids: Map<string, string>,
+  issues: KpLessonDocumentIssue[]
+): void {
+  const plan = block.attention;
+  if (plan === undefined) return;
+  const attentionPath = `${path}.attention`;
+  if (plan.kind !== "phased-attention-v1") {
+    issues.push({ path: `${attentionPath}.kind`, message: "unknown attention plan kind" });
+  }
+  if (plan.phases.length === 0) {
+    issues.push({ path: `${attentionPath}.phases`, message: "attention plan needs phases" });
+    return;
+  }
+  if (plan.phases.length % kpLessonAttentionPhaseOrder.length !== 0) {
+    issues.push({
+      path: `${attentionPath}.phases`,
+      message: "attention phases must form complete orient, act, settle, inspect cycles"
+    });
+  }
+  const beatsById = new Map(block.beats.map((beat) => [beat.id, beat]));
+  let previousEnd = 0;
+  plan.phases.forEach((phase, index) => {
+    const phasePath = `${attentionPath}.phases[${index}]`;
+    registerId(ids, phase.id, `${phasePath}.id`, issues);
+    const expectedKind = kpLessonAttentionPhaseOrder[index % kpLessonAttentionPhaseOrder.length];
+    if (phase.kind !== expectedKind) {
+      issues.push({
+        path: `${phasePath}.kind`,
+        message: `attention phase ${index} must be ${expectedKind}`
+      });
+    }
+    const beat = beatsById.get(phase.beatId);
+    if (beat === undefined) {
+      issues.push({ path: `${phasePath}.beatId`, message: `unknown beat ${phase.beatId}` });
+    } else if (beat.checkpoint.id !== phase.checkpointId) {
+      issues.push({
+        path: `${phasePath}.checkpointId`,
+        message: `checkpoint ${phase.checkpointId} does not belong to beat ${phase.beatId}`
+      });
+    }
+    requireText(phase.cue, `${phasePath}.cue`, issues);
+    validateUniqueText(phase.focusRefs, `${phasePath}.focusRefs`, issues);
+    if (phase.focusRefs.length === 0) {
+      issues.push({ path: `${phasePath}.focusRefs`, message: "attention phase needs a focus ref" });
+    }
+    for (const [label, progress] of [
+      ["startProgressPermille", phase.startProgressPermille],
+      ["endProgressPermille", phase.endProgressPermille]
+    ] as const) {
+      if (!Number.isInteger(progress) || progress < 0 || progress > 1_000) {
+        issues.push({
+          path: `${phasePath}.${label}`,
+          message: "attention progress must be an integer from 0 through 1000"
+        });
+      }
+    }
+    if (phase.startProgressPermille !== previousEnd) {
+      issues.push({
+        path: `${phasePath}.startProgressPermille`,
+        message: `attention phases must be contiguous from ${previousEnd}`
+      });
+    }
+    if (phase.endProgressPermille <= phase.startProgressPermille) {
+      issues.push({
+        path: `${phasePath}.endProgressPermille`,
+        message: "attention phase must have positive duration"
+      });
+    }
+    previousEnd = phase.endProgressPermille;
+  });
+  if (previousEnd !== 1_000) {
+    issues.push({
+      path: `${attentionPath}.phases`,
+      message: "attention phases must cover progress 0 through 1000"
+    });
+  }
 }
 
 function validateInlineContent(

@@ -157,6 +157,24 @@ export function resolveKpLessonReferences(
         });
       });
     });
+    block.attention?.phases.forEach((phase, phaseIndex) => {
+      phase.focusRefs.forEach((objectRef, refIndex) => {
+        if (entry === undefined || !entry.objectRefs.includes(objectRef)) {
+          issues.push({
+            path: `blocks[${blockIndex}].attention.phases[${phaseIndex}].focusRefs[${refIndex}]`,
+            message: `animation ${block.asset.id}@${block.asset.version} does not expose ${objectRef}`,
+            source: block.source
+          });
+          return;
+        }
+        focus.push({
+          ownerId: phase.id,
+          objectRef,
+          assetBlockIds: [block.id],
+          ...(block.source === undefined ? {} : { source: block.source })
+        });
+      });
+    });
   });
 
   if (issues.length > 0) throw new KpLessonReferenceError(issues);

@@ -63,6 +63,36 @@ test("semantic links are explicit and mutable author inputs are copied", () => {
   }]);
 });
 
+test("attention authoring copies phase and focus arrays before validation", () => {
+  const focusRefs = ["equation.x"];
+  const phases = (["orient", "act", "settle", "inspect"] as const).map((kind, index) => ({
+    id: `attention.solve.${kind}`,
+    kind,
+    beatId: "beat.solve",
+    checkpointId: "checkpoint.solve",
+    startProgressPermille: [0, 100, 700, 900][index]!,
+    endProgressPermille: [100, 700, 900, 1_000][index]!,
+    cue: `${kind} cue`,
+    focusRefs
+  }));
+  const story = kpLesson.animationStory({
+    id: "story.solve",
+    asset: { id: "animation.solve", version: "1" },
+    beats: [kpLesson.beat({
+      id: "beat.solve",
+      title: "Solve",
+      content: ["Solve the equation"],
+      checkpoint: { id: "checkpoint.solve", progressPermille: 0 },
+      focusRefs
+    })],
+    attention: { kind: "phased-attention-v1", phases }
+  });
+  focusRefs.push("equation.other");
+  phases[0]!.focusRefs.push("equation.late");
+
+  assert.deepEqual(story.attention?.phases[0]?.focusRefs, ["equation.x"]);
+});
+
 test("document definition fails at the authoring boundary with structured issues", () => {
   assert.throws(
     () => defineKpLessonDocument({

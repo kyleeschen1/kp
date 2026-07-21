@@ -9,6 +9,15 @@ import {
 const story = JSON.stringify({
   id: "story.solve-x",
   asset: { id: "animation.solve-x", version: "1" },
+  attention: {
+    kind: "phased-attention-v1",
+    phases: [
+      attentionPhase("orient", "beat.read", "equation.whole", 0, 100),
+      attentionPhase("act", "beat.subtract", "equation.left", 100, 700),
+      attentionPhase("settle", "beat.subtract", "equation.right", 700, 900),
+      attentionPhase("inspect", "beat.subtract", "equation.left", 900, 1_000)
+    ]
+  },
   beats: [
     {
       id: "beat.read",
@@ -65,6 +74,10 @@ test("minimal KP Markdown becomes a source-located LessonDocument", () => {
   if (animation?.kind !== "animation-story") return;
   assert.deepEqual(animation.beats.map((beat) => beat.checkpoint.progressPermille), [0, 500]);
   assert.deepEqual(animation.beats[1]?.focusRefs, ["equation.left", "equation.right"]);
+  assert.deepEqual(animation.attention?.phases.map((phase) => phase.kind), [
+    "orient", "act", "settle", "inspect"
+  ]);
+  assert.equal(animation.attention?.phases[1]?.beatId, "beat.subtract");
 });
 
 test("duplicate heading slugs receive deterministic suffixes", () => {
@@ -112,3 +125,22 @@ test("ordinary external links are not silently treated as semantic focus", () =>
     /only kp:focus semantic links are supported/
   );
 });
+
+function attentionPhase(
+  kind: "orient" | "act" | "settle" | "inspect",
+  beatId: "beat.read" | "beat.subtract",
+  focusRef: string,
+  startProgressPermille: number,
+  endProgressPermille: number
+) {
+  return {
+    id: `attention.${beatId}.${kind}`,
+    kind,
+    beatId,
+    checkpointId: `checkpoint.${beatId}`,
+    startProgressPermille,
+    endProgressPermille,
+    cue: `${kind} cue`,
+    focusRefs: [focusRef]
+  };
+}

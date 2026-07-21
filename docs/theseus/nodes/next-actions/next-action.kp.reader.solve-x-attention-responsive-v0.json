@@ -88,6 +88,13 @@
       "scope": "s14 optional phased attention schema",
       "checkedAt": "2026-07-21T19:59:45.811Z",
       "notes": "The optional sidecar represents orient/act/settle/inspect phases with stable phase, beat, checkpoint, progress, cue, and focus identities. Existing document literals and Markdown remain valid and runtime behavior is unchanged."
+    },
+    {
+      "command": "attention document/authoring/parser/reference/compiler unit cohort and repository typecheck",
+      "status": "passed",
+      "scope": "s15 solve-x attention authoring and validation",
+      "checkedAt": "2026-07-21T20:05:45.164Z",
+      "notes": "The canonical Markdown now authors twelve phases in three complete cycles covering 0-1000. Validation rejects incomplete/order-broken cycles, gaps, identity drift, invalid progress, empty cues/focus, and unresolved asset refs; mutable author inputs are copied."
     }
   ]
 }

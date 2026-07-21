@@ -3,6 +3,7 @@ import type { Code, Heading, Link, Paragraph, PhrasingContent, RootContent } fro
 import {
   defineKpLessonDocument,
   kpLesson,
+  type KpLessonAttentionPlan,
   type KpLessonBlock,
   type KpLessonInline,
   type KpReaderSourceLocation
@@ -36,6 +37,7 @@ interface KpStorySource {
   readonly id: string;
   readonly asset: { readonly id: string; readonly version: string };
   readonly presentation?: "scroll-scrub" | "step" | undefined;
+  readonly attention?: KpLessonAttentionPlan | undefined;
   readonly beats: readonly {
     readonly id: string;
     readonly title: string;
@@ -163,6 +165,7 @@ function parseAnimationStory(node: Code, sourceId: string) {
     id: story.id,
     asset: story.asset,
     presentation: story.presentation ?? "scroll-scrub",
+    ...(story.attention === undefined ? {} : { attention: story.attention }),
     beats: story.beats.map((beat) => kpLesson.beat({
       id: beat.id,
       title: beat.title,
@@ -187,6 +190,7 @@ function isStorySource(value: unknown): value is KpStorySource {
   if (value["presentation"] !== undefined
     && value["presentation"] !== "scroll-scrub"
     && value["presentation"] !== "step") return false;
+  if (value["attention"] !== undefined && !isAttentionPlan(value["attention"])) return false;
   if (!Array.isArray(value["beats"]) || value["beats"].length === 0) return false;
   return value["beats"].every((beat) => isRecord(beat)
     && typeof beat["id"] === "string"
@@ -197,6 +201,21 @@ function isStorySource(value: unknown): value is KpStorySource {
     && (beat["focusRefs"] === undefined
       || (Array.isArray(beat["focusRefs"])
         && beat["focusRefs"].every((ref) => typeof ref === "string"))));
+}
+
+function isAttentionPlan(value: unknown): value is KpLessonAttentionPlan {
+  if (!isRecord(value) || value["kind"] !== "phased-attention-v1"
+    || !Array.isArray(value["phases"])) return false;
+  return value["phases"].every((phase) => isRecord(phase)
+    && typeof phase["id"] === "string"
+    && ["orient", "act", "settle", "inspect"].includes(String(phase["kind"]))
+    && typeof phase["beatId"] === "string"
+    && typeof phase["checkpointId"] === "string"
+    && typeof phase["startProgressPermille"] === "number"
+    && typeof phase["endProgressPermille"] === "number"
+    && typeof phase["cue"] === "string"
+    && Array.isArray(phase["focusRefs"])
+    && phase["focusRefs"].every((ref) => typeof ref === "string"));
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

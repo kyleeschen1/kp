@@ -6,6 +6,7 @@ import {
 import {
   validateKpLessonDocument,
   type KpLessonAnimationStoryBlock,
+  type KpLessonAttentionPlan,
   type KpLessonBeat,
   type KpLessonDocument,
   type KpLessonDocumentIssue,
@@ -150,6 +151,7 @@ export function createKpLessonAnimationStory<
   readonly asset: { readonly id: TAssetId; readonly version: TAssetVersion };
   readonly presentation?: "scroll-scrub" | "step" | undefined;
   readonly beats: TBeats;
+  readonly attention?: KpLessonAttentionPlan | undefined;
   readonly source?: KpReaderSourceLocation | undefined;
 }): KpLessonAnimationStoryBlock & {
   readonly id: TId;
@@ -162,7 +164,18 @@ export function createKpLessonAnimationStory<
     asset: createKpReaderArtifactRef({ kind: "animation-asset", ...input.asset }),
     presentation: input.presentation ?? "scroll-scrub",
     beats: [...input.beats] as unknown as TBeats,
+    ...(input.attention === undefined ? {} : { attention: cloneAttention(input.attention) }),
     ...(input.source === undefined ? {} : { source: cloneSource(input.source) })
+  };
+}
+
+function cloneAttention(attention: KpLessonAttentionPlan): KpLessonAttentionPlan {
+  return {
+    kind: attention.kind,
+    phases: attention.phases.map((phase) => ({
+      ...phase,
+      focusRefs: [...phase.focusRefs]
+    }))
   };
 }
 

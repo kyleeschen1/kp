@@ -33,6 +33,11 @@ test("catalog inference and resolution bind assets and focus without runtime loo
       && binding.objectRef === "equation.x"
       && binding.assetBlockIds[0] === "story.solve-x"
   ));
+  assert.ok(resolved.focus.some((binding) =>
+    binding.ownerId === "attention.subtract.act"
+      && binding.objectRef === "equation.left"
+      && binding.assetBlockIds[0] === "story.solve-x"
+  ));
 });
 
 test("unknown asset versions and focus objects fail with source diagnostics", () => {
@@ -93,6 +98,15 @@ function document() {
       JSON.stringify({
         id: "story.solve-x",
         asset: { id: "animation.solve-x", version: "1" },
+        attention: {
+          kind: "phased-attention-v1",
+          phases: [
+            attentionPhase("orient", "equation.x", 0, 100),
+            attentionPhase("act", "equation.left", 100, 700),
+            attentionPhase("settle", "equation.right", 700, 900),
+            attentionPhase("inspect", "equation.x", 900, 1_000)
+          ]
+        },
         beats: [{
           id: "beat.subtract",
           title: "Subtract three",
@@ -104,4 +118,22 @@ function document() {
       "```"
     ].join("\n")
   });
+}
+
+function attentionPhase(
+  kind: "orient" | "act" | "settle" | "inspect",
+  focusRef: string,
+  startProgressPermille: number,
+  endProgressPermille: number
+) {
+  return {
+    id: `attention.subtract.${kind}`,
+    kind,
+    beatId: "beat.subtract",
+    checkpointId: "checkpoint.beat.subtract",
+    startProgressPermille,
+    endProgressPermille,
+    cue: `${kind} cue`,
+    focusRefs: [focusRef]
+  };
 }

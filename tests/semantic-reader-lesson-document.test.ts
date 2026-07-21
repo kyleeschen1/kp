@@ -42,16 +42,12 @@ test("optional attention phases reference stable lesson and semantic identities"
       ...story,
       attention: {
         kind: "phased-attention-v1",
-        phases: [{
-          id: "attention.read.orient",
-          kind: "orient",
-          beatId: story.beats[0]!.id,
-          checkpointId: story.beats[0]!.checkpoint.id,
-          startProgressPermille: 0,
-          endProgressPermille: 80,
-          cue: "Find the unknown before anything moves.",
-          focusRefs: ["equation.x"]
-        }]
+        phases: [
+          attentionPhase(story, "orient", 0, 0, 80),
+          attentionPhase(story, "act", 1, 80, 700),
+          attentionPhase(story, "settle", 2, 700, 900),
+          attentionPhase(story, "inspect", 3, 900, 1_000)
+        ]
       }
     }]
   };
@@ -117,6 +113,43 @@ test("lesson validation keeps semantic references explicit and unique", () => {
   assert.ok(issues.some((issue) => issue.message === "semantic link needs an object ref"));
 });
 
+test("attention validation rejects broken cycles, gaps, and lesson identity drift", () => {
+  const original = xPlusThreeDocument();
+  const story = original.blocks[1];
+  assert.equal(story?.kind, "animation-story");
+  if (story?.kind !== "animation-story") return;
+  const phases = [
+    attentionPhase(story, "orient", 0, 0, 80),
+    attentionPhase(story, "act", 1, 80, 700),
+    attentionPhase(story, "settle", 2, 700, 900),
+    attentionPhase(story, "inspect", 3, 900, 1_000)
+  ];
+  const document: KpLessonDocument = {
+    ...original,
+    blocks: [original.blocks[0]!, {
+      ...story,
+      attention: {
+        kind: "phased-attention-v1",
+        phases: phases.map((phase, index) => index === 1
+          ? {
+              ...phase,
+              kind: "settle",
+              beatId: "beat.missing",
+              checkpointId: "checkpoint.missing",
+              startProgressPermille: 90,
+              focusRefs: []
+            }
+          : phase)
+      }
+    }]
+  };
+  const issues = validateKpLessonDocument(document);
+  assert.ok(issues.some((issue) => issue.message === "attention phase 1 must be act"));
+  assert.ok(issues.some((issue) => issue.message === "unknown beat beat.missing"));
+  assert.ok(issues.some((issue) => issue.message === "attention phase needs a focus ref"));
+  assert.ok(issues.some((issue) => issue.message === "attention phases must be contiguous from 80"));
+});
+
 function xPlusThreeDocument(): KpLessonDocument {
   const source = {
     sourceId: "content/solve-x.md",
@@ -174,5 +207,25 @@ function beat(
     content: [{ kind: "text" as const, value: title }],
     checkpoint: { id: `checkpoint.${id}`, progressPermille },
     focusRefs
+  };
+}
+
+function attentionPhase(
+  story: Extract<KpLessonDocument["blocks"][number], { kind: "animation-story" }>,
+  kind: "orient" | "act" | "settle" | "inspect",
+  beatIndex: number,
+  startProgressPermille: number,
+  endProgressPermille: number
+) {
+  const beat = story.beats[beatIndex]!;
+  return {
+    id: `attention.${beat.id.replace(/-equality|-both-sides|-opposites|-solution/, "")}.${kind}`,
+    kind,
+    beatId: beat.id,
+    checkpointId: beat.checkpoint.id,
+    startProgressPermille,
+    endProgressPermille,
+    cue: kind === "orient" ? "Find the unknown before anything moves." : `${kind} cue`,
+    focusRefs: [beat.focusRefs[0]!]
   };
 }

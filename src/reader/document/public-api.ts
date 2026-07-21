@@ -9,6 +9,7 @@ export {
 } from "./artifacts.ts";
 export {
   validateKpLessonDocument,
+  kpLessonAttentionPhaseOrder,
   type KpLessonAttentionPhase,
   type KpLessonAttentionPhaseKind,
   type KpLessonAttentionPlan,

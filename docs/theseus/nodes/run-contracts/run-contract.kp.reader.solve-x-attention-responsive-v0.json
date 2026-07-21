@@ -140,7 +140,8 @@
     {
       "id": "s15-attention-authoring-validation",
       "title": "Attention_authoring_validation",
-      "status": "planned"
+      "summary": "Extended inference-friendly lesson authoring and Markdown parsing for phased attention, added strict cycle/coverage/identity/focus validation and semantic reference resolution, and authored the canonical solve-x lesson with three complete orient-act-settle-inspect cycles over progress 0-1000. No other lesson opts in.",
+      "status": "complete"
     },
     {
       "id": "s16-attention-projector",
