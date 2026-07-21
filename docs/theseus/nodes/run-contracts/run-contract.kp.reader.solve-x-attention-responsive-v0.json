@@ -170,7 +170,8 @@
     {
       "id": "s20-wide-solve-x-gate",
       "title": "Wide_solve-x_gate",
-      "status": "planned"
+      "summary": "Desktop browser evidence proves one active solid cue, exact gaze and motion ownership, hold-play-hold values, semantic URL stability, rewind determinism, and unchanged teacher-zero fallback.",
+      "status": "complete"
     },
     {
       "id": "s21-responsive-projection-selection",
