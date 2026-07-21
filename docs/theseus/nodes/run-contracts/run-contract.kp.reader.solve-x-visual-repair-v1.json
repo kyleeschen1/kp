@@ -155,7 +155,8 @@
     {
       "id": "s19-successor-visual-gate",
       "title": "Successor visual gate",
-      "status": "planned"
+      "summary": "Added a durable wide and narrow successor gate covering semantic ordering, baseline stability, protected-symbol clearance, overflow, KaTeX identity, exclusive source-target phases, bounded adjacent motion and opacity, and exact rewind. The gate found and repaired an overly abrupt fade window.",
+      "status": "complete"
     },
     {
       "id": "s20-depth-envelope-contract",

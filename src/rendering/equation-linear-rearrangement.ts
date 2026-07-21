@@ -262,9 +262,9 @@ function sampleConvergenceConstantDerivation(
   const sourceCenter = center(input.relation.source?.bounds);
   const destination = center(input.relation.target?.bounds);
   const convergence = smooth(windowProgress(input.progress, 0.28, 0.7));
-  const materialOpacity = 1 - smooth(windowProgress(input.progress, 0.72, 0.82));
-  const catalystOpacity = 1 - smooth(windowProgress(input.progress, 0.62, 0.72));
-  const targetReveal = smooth(windowProgress(input.progress, 0.84, 0.94));
+  const materialOpacity = 1 - smooth(windowProgress(input.progress, 0.7, 0.82));
+  const catalystOpacity = 1 - smooth(windowProgress(input.progress, 0.6, 0.74));
+  const targetReveal = smooth(windowProgress(input.progress, 0.84, 0.96));
   return [
     ...input.sourceTokens.map((token) => {
       const origin = center(token.localRect);
