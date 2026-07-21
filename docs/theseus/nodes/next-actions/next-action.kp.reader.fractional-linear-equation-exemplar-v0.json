@@ -8,6 +8,10 @@
     {
       "kind": "file",
       "path": "docs/project/reviews/2026-07-21-fractional-linear-equation-exemplar-long-loop-proposal.md"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-21-fractional-linear-equation-baseline.md"
     }
   ],
   "verificationRecords": [
@@ -16,6 +20,13 @@
       "status": "passed",
       "scope": "s01 approved proposal and typed contract",
       "checkedAt": "2026-07-21T21:39:34.591Z"
+    },
+    {
+      "command": "npm run baseline:fractional-linear-equation; npm run typecheck",
+      "status": "passed",
+      "scope": "s02 repeatable fraction and linear reference baseline",
+      "checkedAt": "2026-07-21T21:43:23.949Z",
+      "notes": "Captured five structural fraction states and three accepted linear reader states. Principal KaTeX is 23.232px; fraction late absorption currently fades and is explicitly not an acceptance reference."
     }
   ]
 }

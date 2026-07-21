@@ -46,7 +46,8 @@
     {
       "id": "s02-current-baselines",
       "title": "Capture current fraction and linear solve baselines",
-      "status": "planned"
+      "summary": "Added one stable visual-check command and durable baseline: accepted linear choreography is the motion reference, while the existing fraction player supplies structural roles only; its small witness typography and partial-opacity absorption are explicitly excluded.",
+      "status": "complete"
     },
     {
       "id": "s03-canonical-problem-trace",
