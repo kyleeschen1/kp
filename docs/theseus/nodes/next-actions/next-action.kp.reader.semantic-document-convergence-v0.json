@@ -603,6 +603,12 @@
       "status": "passed",
       "scope": "s18 streamlined solve-x default omits the optional independent zero while preserving its typed renderer and tests",
       "checkedAt": "2026-07-21T17:48:03.127Z"
+    },
+    {
+      "command": "dense desktop and phone cancellation sampling plus phase rewind, policy unit laws, and TypeScript",
+      "status": "passed",
+      "scope": "s19 no transient zero, no empty protected ink, bounded four-permille travel, zero-aware compaction timing, and exact rewind",
+      "checkedAt": "2026-07-21T17:54:35.662Z"
     }
   ],
   "progress": {

@@ -193,7 +193,8 @@ function sampleLinearRearrangementMotion(
     geometry.linearRearrangementKind!,
     p,
     geometry.cancellationPresentationRecipe,
-    geometry.continuantPresentationRecipe
+    geometry.continuantPresentationRecipe,
+    geometry.zeroWitnessPresentationRecipe
   );
   const witnessedAnnihilation = geometry.witnessedAnnihilationPlan === undefined
     ? undefined
@@ -303,6 +304,8 @@ export function sampleKpEquationLinearRearrangementOwnerMotion(input: {
     KpEquationCancellationPresentationRecipe | undefined;
   readonly continuantPresentationRecipe?:
     KpEquationContinuantPresentationRecipe | undefined;
+  readonly zeroWitnessPresentationRecipe?:
+    KpEquationZeroWitnessPresentationRecipe | undefined;
 }): readonly KpEquationOwnerFragmentMotion[] {
   const sourceTokens = input.sourceAnchors.map(tokenForAnchor);
   const targetTokens = input.targetAnchors.map(tokenForAnchor);
@@ -333,7 +336,8 @@ export function sampleKpEquationLinearRearrangementOwnerMotion(input: {
       input.kind,
       input.progress,
       input.cancellationPresentationRecipe,
-      input.continuantPresentationRecipe
+      input.continuantPresentationRecipe,
+      input.zeroWitnessPresentationRecipe
     ),
     cancellationPresentationRecipe: input.cancellationPresentationRecipe,
     continuantPresentationRecipe: input.continuantPresentationRecipe

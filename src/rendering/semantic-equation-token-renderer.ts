@@ -318,7 +318,8 @@ export function sampleKpEquationTokenMotion(
         geometry.linearRearrangementKind,
         p,
         geometry.cancellationPresentationRecipe,
-        geometry.continuantPresentationRecipe
+        geometry.continuantPresentationRecipe,
+        geometry.zeroWitnessPresentationRecipe
       );
   const dotProductTraversal = geometry.dotProductTraversalPlan === undefined
     ? undefined

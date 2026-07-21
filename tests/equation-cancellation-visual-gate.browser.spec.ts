@@ -60,15 +60,29 @@ test("cancellation phases keep protected symbols clear at wide and narrow widths
 });
 
 test("dense cancellation sampling stays continuous and retraces on rewind", async ({ page }) => {
+  for (const viewport of [
+    { width: 1280, height: 900 },
+    { width: 390, height: 844 }
+  ]) {
+    await page.setViewportSize(viewport);
+    await verifyDenseCancellation(page);
+  }
+});
+
+async function verifyDenseCancellation(page: Page): Promise<void> {
   await page.goto(route(480));
   const forward = new Map<number, CancellationEvidence>();
   const samples: CancellationEvidence[] = [];
-  for (let progress = 480; progress <= 600; progress += 4) {
+  for (let progress = 480; progress <= 680; progress += 4) {
     await seekByScroll(page, progress);
     const evidence = await cancellationEvidence(page);
     forward.set(progress, evidence);
     samples.push(evidence);
   }
+  expect(samples.every((sample) => sample.zero.opacity === 0)).toBe(true);
+  expect(samples.every(
+    (sample) => sample.x.opacity > 0.99 && sample.equals.opacity > 0.99
+  )).toBe(true);
   const travel = samples.slice(1).flatMap((sample, index) => [
     {
       symbol: "plus",
@@ -85,19 +99,39 @@ test("dense cancellation sampling stays continuous and retraces on rewind", asyn
       distance: distance(sample.minus, samples[index]!.minus),
       fromRect: samples[index]!.minus,
       toRect: sample.minus
+    },
+    {
+      symbol: "x",
+      from: 480 + index * 4,
+      to: 484 + index * 4,
+      distance: distance(sample.x, samples[index]!.x),
+      fromRect: samples[index]!.x,
+      toRect: sample.x
+    },
+    {
+      symbol: "equals",
+      from: 480 + index * 4,
+      to: 484 + index * 4,
+      distance: distance(sample.equals, samples[index]!.equals),
+      fromRect: samples[index]!.equals,
+      toRect: sample.equals
     }
   ]);
   const opacityDelta = samples.slice(1).flatMap((sample, index) => [
     Math.abs(sample.plus.opacity - samples[index]!.plus.opacity),
     Math.abs(sample.minus.opacity - samples[index]!.minus.opacity)
   ]);
-  const maximumTravel = [...travel].sort(
+  const continuousTravel = travel.filter(({ symbol, fromRect, toRect }) =>
+    symbol === "x" || symbol === "equals" ||
+    (fromRect.opacity > 0.001 && toRect.opacity > 0.001)
+  );
+  const maximumTravel = [...continuousTravel].sort(
     (left, right) => right.distance - left.distance
   )[0]!;
   expect(maximumTravel.distance, JSON.stringify(maximumTravel)).toBeLessThan(6);
   expect(Math.max(...opacityDelta)).toBeLessThan(0.18);
 
-  for (const progress of [600, 560, 520, 480]) {
+  for (const progress of [680, 640, 600, 560, 520, 480]) {
     await seekByScroll(page, progress);
     const rewound = await cancellationEvidence(page);
     const original = forward.get(progress)!;
@@ -105,12 +139,15 @@ test("dense cancellation sampling stays continuous and retraces on rewind", asyn
     expect(distance(rewound.minus, original.minus)).toBeLessThan(0.1);
     expect(rewound.plus.opacity).toBeCloseTo(original.plus.opacity, 4);
     expect(rewound.minus.opacity).toBeCloseTo(original.minus.opacity, 4);
+    expect(distance(rewound.x, original.x)).toBeLessThan(0.1);
+    expect(distance(rewound.equals, original.equals)).toBeLessThan(0.1);
+    expect(rewound.zero.opacity).toBe(0);
   }
   await expect(page.locator("body")).toHaveAttribute(
     "data-kp-reader-playback-direction",
     "rewind"
   );
-});
+}
 
 test("editor and reader both omit the optional +0 witness by default", async ({ page }) => {
   await page.goto("/?animation=editor-animation.animation.linear-solve.solve-x");
@@ -144,6 +181,12 @@ async function cancellationEvidence(page: Page): Promise<CancellationEvidence> {
       if (element === null) throw new Error(`Missing cancellation gate element ${selector}.`);
       return element;
     };
+    const evidenceOrHidden = (selector: string): RectEvidence => {
+      const element = stage.querySelector<HTMLElement>(selector);
+      return element === null
+        ? { left: 0, top: 0, width: 0, height: 0, opacity: 0 }
+        : evidence(element);
+    };
     const evidence = (element: HTMLElement): RectEvidence => {
       const bounds = element.getBoundingClientRect();
       let opacity = 1;
@@ -161,20 +204,61 @@ async function cancellationEvidence(page: Page): Promise<CancellationEvidence> {
         opacity
       };
     };
+    const roleEvidence = (roleSuffix: string): RectEvidence => {
+      const candidates = [...new Set([
+        ...stage.querySelectorAll<HTMLElement>(
+          `[data-kp-reader-equation-material-fragment-id$=".${roleSuffix}"]`
+        ),
+        ...stage.querySelectorAll<HTMLElement>(
+          `[data-kp-reader-transition-active="true"] [data-kp-reader-selector-id$=".${roleSuffix}"]`
+        ),
+        ...stage.querySelectorAll<HTMLElement>(
+          `[data-kp-reader-transition-active="true"] [data-kp-reader-equation-anchor-id$=".${roleSuffix}"]`
+        )
+      ])].map(evidence).filter((candidate) => candidate.opacity > 0.001);
+      const authority = candidates.reduce(
+        (sum, candidate) => sum + candidate.opacity,
+        0
+      );
+      if (authority === 0) {
+        throw new Error(`No visible cancellation gate ink for ${roleSuffix}.`);
+      }
+      const centerX = candidates.reduce(
+        (sum, candidate) => sum +
+          (candidate.left + candidate.width / 2) * candidate.opacity,
+        0
+      ) / authority;
+      const centerY = candidates.reduce(
+        (sum, candidate) => sum + centerYOf(candidate) * candidate.opacity,
+        0
+      ) / authority;
+      const width = candidates.reduce(
+        (sum, candidate) => sum + candidate.width * candidate.opacity,
+        0
+      ) / authority;
+      const height = candidates.reduce(
+        (sum, candidate) => sum + candidate.height * candidate.opacity,
+        0
+      ) / authority;
+      return {
+        left: centerX - width / 2,
+        top: centerY - height / 2,
+        width,
+        height,
+        opacity: Math.min(1, authority)
+      };
+    };
+    const centerYOf = (rect: RectEvidence): number => rect.top + rect.height / 2;
     return {
-      plus: evidence(find(
+      plus: evidenceOrHidden(
         '[data-kp-reader-equation-material-fragment-id*="after-subtract.lhs.plus3"]'
-      )),
-      minus: evidence(find(
+      ),
+      minus: evidenceOrHidden(
         '[data-kp-reader-equation-material-fragment-id*="after-subtract.lhs.minus3"]'
-      )),
+      ),
       zero: evidence(find("[data-kp-reader-independent-zero-witness]")),
-      x: evidence(find(
-        '[data-kp-reader-equation-material-fragment-id*="after-subtract.lhs.x"]'
-      )),
-      equals: evidence(find(
-        '[data-kp-reader-equation-material-fragment-id$="after-subtract.equals"]'
-      ))
+      x: roleEvidence("lhs.x"),
+      equals: roleEvidence("equals")
     };
   });
 }

@@ -26,6 +26,26 @@ const choreography = createKpLinearRearrangementChoreography(
   createLinearSolveAnimationAsset()
 );
 
+test("counter cancellation uses the zero-free interval for smooth compaction", () => {
+  const streamlined = sampleKpEquationLinearRearrangementFrame(
+    "cancel-additive-inverses",
+    0.88,
+    "counter-orbit-v1",
+    "concurrent-v1",
+    "none"
+  );
+  const teachingWitness = sampleKpEquationLinearRearrangementFrame(
+    "cancel-additive-inverses",
+    0.88,
+    "counter-orbit-v1",
+    "concurrent-v1",
+    "independent-zero-v1"
+  );
+
+  assert.ok(streamlined.persistentReflowProgress > 0);
+  assert.equal(teachingWitness.persistentReflowProgress, 0);
+});
+
 test("reserve-then-transit settles continuants before focal motion", () => {
   const reserved = sampleKpEquationLinearRearrangementFrame(
     "simplify-constant-difference",

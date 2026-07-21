@@ -156,8 +156,8 @@
     {
       "id": "s19-zero-transition-gate",
       "title": "Zero-transition gate",
-      "summary": "Prove the default has no transient zero, flash, or empty timing discontinuity.",
-      "status": "ready"
+      "summary": "Dense desktop and phone sampling now covers progress 480-680 every four permille forward and on rewind. It proves +0 remains absent, protected x and equals remain fully legible, cancellation ink retires continuously, and movement stays bounded. The gate exposed a 16px phase-boundary snap; zero-free presentations now distribute survivor compaction across the retiring-ink interval while explicit witness presentations retain their later timing. Five focused browser gates, fifteen choreography/policy laws, and TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s20-teacher-zero-state",

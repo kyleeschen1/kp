@@ -17,7 +17,8 @@ import {
 import type {
   KpEquationCancellationPresentationRecipe,
   KpEquationContinuantPresentationRecipe,
-  KpEquationSuccessorPresentationRecipe
+  KpEquationSuccessorPresentationRecipe,
+  KpEquationZeroWitnessPresentationRecipe
 } from "./equation-presentation-policy.ts";
 
 export type KpEquationLinearRearrangementKind =
@@ -53,7 +54,9 @@ export function sampleKpEquationLinearRearrangementFrame(
   cancellationPresentationRecipe?:
     KpEquationCancellationPresentationRecipe | undefined,
   continuantPresentationRecipe?:
-    KpEquationContinuantPresentationRecipe | undefined
+    KpEquationContinuantPresentationRecipe | undefined,
+  zeroWitnessPresentationRecipe?:
+    KpEquationZeroWitnessPresentationRecipe | undefined
 ): KpEquationLinearRearrangementFrame {
   const p = clamp01(progress);
   const reservationProgress = smooth(windowProgress(p, 0.1, 0.46));
@@ -61,9 +64,14 @@ export function sampleKpEquationLinearRearrangementFrame(
     continuantPresentationRecipe === "reserve-then-transit-v1";
   const transitThenReflow = kind === "simplify-constant-difference" &&
     continuantPresentationRecipe === "transit-then-reflow-v1";
+  // Without a +0 teaching beat, begin survivor compaction as the canceled ink
+  // finishes retiring instead of concentrating it at the phase boundary.
+  const counterOrbitReflowStart = zeroWitnessPresentationRecipe === "none"
+    ? 0.78
+    : 0.94;
   const persistentReflowProgress = kind === "cancel-additive-inverses" &&
       cancellationPresentationRecipe === "counter-orbit-v1"
-    ? smooth(windowProgress(p, 0.94, 0.99))
+    ? smooth(windowProgress(p, counterOrbitReflowStart, 0.99))
     : transitThenReflow
       ? smooth(windowProgress(p, 0.82, 0.94))
     : reserveThenTransit
