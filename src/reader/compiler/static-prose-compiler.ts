@@ -76,10 +76,28 @@ function storyHtml(
       `<li id="${attribute(beat.id)}" data-kp-beat="${attribute(beat.id)}" data-kp-checkpoint="${beat.checkpoint.progressPermille}" data-kp-focus="${attribute(beat.focusRefs.join(" "))}">`,
       `<h2>${text(beat.title)}</h2>`,
       `<p>${inlineHtml(beat.content)}</p>`,
+      attentionPhasesHtml(block, beat.id),
       "</li>"
     ].join("")),
     "</ol>",
     "</section>"
+  ].join("\n");
+}
+
+function attentionPhasesHtml(
+  block: KpLessonAnimationStoryBlock,
+  beatId: string
+): string {
+  const phases = block.attention?.phases.filter((phase) => phase.beatId === beatId) ?? [];
+  if (phases.length === 0) return "";
+  return [
+    `<ol class="kp-attention-phases" aria-label="Attention sequence">`,
+    ...phases.map((phase) => [
+      `<li id="${attribute(phase.id)}" data-kp-attention-phase="${attribute(phase.id)}" data-kp-attention-kind="${phase.kind}" data-kp-attention-start="${phase.startProgressPermille}" data-kp-attention-end="${phase.endProgressPermille}" data-kp-checkpoint-id="${attribute(phase.checkpointId)}" data-kp-focus="${attribute(phase.focusRefs.join(" "))}">`,
+      `<span class="kp-attention-cue">${text(phase.cue)}</span>`,
+      `</li>`
+    ].join("")),
+    `</ol>`
   ].join("\n");
 }
 

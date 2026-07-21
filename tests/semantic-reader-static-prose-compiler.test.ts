@@ -65,6 +65,38 @@ test("table of contents is deterministic and empty lessons remain valid landmark
   ].join("\n"));
 });
 
+test("optional attention cues compile as searchable static phase landmarks", () => {
+  const source = document();
+  const story = source.blocks.find((block) => block.kind === "animation-story");
+  assert.ok(story?.kind === "animation-story");
+  const output = compileKpStaticLessonProse({
+    ...source,
+    blocks: source.blocks.map((block) => block !== story ? block : {
+      ...block,
+      attention: {
+        kind: "phased-attention-v1",
+        phases: [
+          {
+            id: "attention.subtract.orient",
+            kind: "orient",
+            beatId: "beat.subtract",
+            checkpointId: "checkpoint.beat.subtract",
+            startProgressPermille: 0,
+            endProgressPermille: 1_000,
+            cue: "Find the same move on both sides.",
+            focusRefs: ["equation.left", "equation.right"]
+          }
+        ]
+      }
+    })
+  });
+
+  assert.match(output.articleHtml, /class="kp-attention-phases"/);
+  assert.match(output.articleHtml, /data-kp-attention-phase="attention\.subtract\.orient"/);
+  assert.match(output.articleHtml, /data-kp-attention-start="0" data-kp-attention-end="1000"/);
+  assert.match(output.articleHtml, /Find the same move on both sides\./);
+});
+
 function document() {
   return parseKpLessonMarkdown({
     sourceId: "content/solve-x.md",
