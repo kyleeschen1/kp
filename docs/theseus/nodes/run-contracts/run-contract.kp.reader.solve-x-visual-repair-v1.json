@@ -167,7 +167,8 @@
     {
       "id": "s21-katex-depth-presentation",
       "title": "KaTeX depth presentation",
-      "status": "planned"
+      "summary": "Enabled semantic-depth-v1 for the canonical solve-x asset and applied the bounded lift only to active KaTeX relation fragments. Editor and reader share elevation, transform, shadow, and diagnostics; persistent context stays flat and native endpoints remain exact.",
+      "status": "complete"
     },
     {
       "id": "s22-motion-accessibility-rewind",

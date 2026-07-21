@@ -12,6 +12,8 @@ export interface KpEquationMaterialLayerOwnerFrame {
   };
   readonly opacity: number;
   readonly transform: string;
+  readonly filter?: string | undefined;
+  readonly semanticDepth?: string | undefined;
   readonly clipPath?: string | undefined;
   readonly visualTransform?: string | undefined;
   readonly fragmentRole?: string | undefined;
@@ -89,6 +91,12 @@ export function syncKpEquationMaterialLayer(input: {
     owner.style.height = `${frame.rect.height}px`;
     owner.style.opacity = String(frame.opacity);
     owner.style.transform = frame.transform;
+    owner.style.filter = frame.filter ?? "none";
+    if (frame.semanticDepth === undefined) {
+      delete owner.dataset["kpEquationSemanticDepth"];
+    } else {
+      owner.dataset["kpEquationSemanticDepth"] = frame.semanticDepth;
+    }
     owner.dataset["kpEquationMaterialSourceMotionId"] =
       frame.sourceMotionId ?? frame.sourceElement.dataset["kpMotionId"] ?? "";
     if (frame.fragmentRole === undefined) {

@@ -741,7 +741,9 @@ function applyEquationMaterialLayer(input: {
           height: rect.height
         },
         opacity: candidate.opacity,
-        transform: materialOwnerTransform(candidate.token)
+        transform: materialOwnerTransform(candidate.token),
+        filter: candidate.token.style.filter,
+        semanticDepth: candidate.token.dataset["kpEquationSemanticDepth"]
       };
     })
   });
@@ -2468,6 +2470,7 @@ function applySemanticTokenMotion(input: {
             cancellationPresentationRecipe: presentationPolicy.cancellation,
             zeroWitnessPresentationRecipe: presentationPolicy.zeroWitness,
             successorPresentationRecipe: presentationPolicy.successor,
+            depthPresentationRecipe: presentationPolicy.depth,
             ...(presentationPolicy.successor === "native-handoff-v1" ||
               input.frame.linearRearrangement.step.successorSynthesisBinding === undefined
               ? {}

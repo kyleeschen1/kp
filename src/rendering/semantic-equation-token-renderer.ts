@@ -95,6 +95,11 @@ import {
   sampleKpIndependentZeroWitness,
   type KpIndependentZeroWitnessFrame
 } from "./equation-independent-zero-witness.ts";
+import {
+  createKpEquationSemanticDepthPlan,
+  sampleKpEquationSemanticDepth,
+  type KpEquationSemanticDepthPose
+} from "./equation-semantic-depth.ts";
 
 export interface KpEquationTokenMotionPose {
   readonly opacity: number;
@@ -103,6 +108,7 @@ export interface KpEquationTokenMotionPose {
   readonly scale: number;
   readonly scaleX?: number | undefined;
   readonly rotate?: number | undefined;
+  readonly depth?: KpEquationSemanticDepthPose | undefined;
 }
 
 export interface KpEquationTokenMotionFrameToken {
@@ -338,7 +344,7 @@ export function sampleKpEquationTokenMotion(
     p
   );
   for (const relation of geometry.relations) {
-    for (const token of sampleRelation(
+    const sampledTokens = sampleRelation(
       geometry,
       relation,
       p,
@@ -357,8 +363,18 @@ export function sampleKpEquationTokenMotion(
       matrixMatrixComposition,
       derivativePower,
       witnessedAnnihilation
-    )) {
-      tokens.set(`${token.side}:${token.motionId}`, token);
+    );
+    const depthPlan = geometry.depthPresentationRecipe === undefined
+      ? undefined
+      : createKpEquationSemanticDepthPlan(geometry.depthPresentationRecipe);
+    const depth = depthPlan === undefined ||
+        relation.lifecycle === "persist" || relation.lifecycle === "role-change"
+      ? undefined
+      : sampleKpEquationSemanticDepth(depthPlan, p);
+    for (const token of sampledTokens) {
+      tokens.set(`${token.side}:${token.motionId}`, depth === undefined
+        ? token
+        : { ...token, pose: { ...token.pose, depth } });
     }
   }
   return {
@@ -432,8 +448,15 @@ export function applyKpEquationTokenMotionFrame(
     if (element === undefined) continue;
     element.style.opacity = String(token.pose.opacity);
     element.style.transform =
-      `translate(${token.pose.x}px, ${token.pose.y}px) translateZ(var(--kp-focus-z, 0px)) rotate(${token.pose.rotate ?? 0}deg) scale(${token.pose.scale}) scaleX(${token.pose.scaleX ?? 1}) scale(var(--kp-focus-scale, 1))`;
+      `translate(${token.pose.x}px, ${token.pose.y + (token.pose.depth?.translateY ?? 0)}px) translateZ(var(--kp-focus-z, 0px)) rotate(${token.pose.rotate ?? 0}deg) scale(${token.pose.scale}) scaleX(${token.pose.scaleX ?? 1}) scale(${token.pose.depth?.scale ?? 1}) scale(var(--kp-focus-scale, 1))`;
     element.style.transformOrigin = "center center";
+    element.style.filter = depthFilter(token.pose.depth);
+    element.style.zIndex = String(token.pose.depth?.layer ?? 0);
+    if (token.pose.depth === undefined) {
+      delete element.dataset["kpEquationSemanticDepth"];
+    } else {
+      element.dataset["kpEquationSemanticDepth"] = String(token.pose.depth.elevation);
+    }
     if (token.lineagePathId === undefined) {
       delete element.dataset["kpEquationLineagePathId"];
       delete element.dataset["kpEquationLineageEdgeId"];
@@ -451,6 +474,11 @@ export function applyKpEquationTokenMotionFrame(
       element.dataset["kpEquationMotionPathVariant"] = token.motionPathVariant ?? "direct";
     }
   }
+}
+
+function depthFilter(depth: KpEquationSemanticDepthPose | undefined): string {
+  if (depth === undefined || depth.shadowOpacity === 0) return "none";
+  return `drop-shadow(0 1px ${depth.shadowBlurPx}px rgba(35, 46, 58, ${depth.shadowOpacity}))`;
 }
 
 function sampleRelation(

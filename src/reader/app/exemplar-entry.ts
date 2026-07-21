@@ -353,6 +353,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     cancellationPresentationRecipe: presentationProfile.cancellation,
     zeroWitnessPresentationRecipe: presentationProfile.zeroWitness,
     successorPresentationRecipe: presentationProfile.successor,
+    depthPresentationRecipe: presentationProfile.depth,
     witnessedAnnihilationBinding: witnessedBindings.get(transitionId),
     successorSynthesisBinding:
       presentationProfile.successor === "successor-synthesis-v1" ||
@@ -397,7 +398,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
               translateX: pose.x,
               translateY: pose.y,
               scale: pose.scale,
-              opacity: pose.opacity
+              opacity: pose.opacity,
+              depth: pose.depth
             })
       };
     });

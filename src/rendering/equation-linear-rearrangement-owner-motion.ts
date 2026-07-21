@@ -36,9 +36,14 @@ import type {
 import type { KpMeasuredEquationTransitionGeometry } from "./equation-motion-dom.ts";
 import type {
   KpEquationCancellationPresentationRecipe,
+  KpEquationDepthPresentationRecipe,
   KpEquationSuccessorPresentationRecipe,
   KpEquationZeroWitnessPresentationRecipe
 } from "./equation-presentation-policy.ts";
+import {
+  createKpEquationSemanticDepthPlan,
+  sampleKpEquationSemanticDepth
+} from "./equation-semantic-depth.ts";
 import {
   createKpIndependentZeroWitnessPlan,
   sampleKpIndependentZeroWitness
@@ -77,6 +82,8 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
     KpEquationZeroWitnessPresentationRecipe | undefined;
   readonly successorPresentationRecipe?:
     KpEquationSuccessorPresentationRecipe | undefined;
+  readonly depthPresentationRecipe?:
+    KpEquationDepthPresentationRecipe | undefined;
   readonly witnessedAnnihilationBinding?: KpWitnessedAnnihilationBinding | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
 }): KpEquationLinearRearrangementOwnerFrame {
@@ -138,6 +145,9 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
     ...(input.successorPresentationRecipe === undefined
       ? {}
       : { successorPresentationRecipe: input.successorPresentationRecipe }),
+    ...(input.depthPresentationRecipe === undefined
+      ? {}
+      : { depthPresentationRecipe: input.depthPresentationRecipe }),
     ...(input.witnessedAnnihilationBinding === undefined
       ? {}
       : { witnessedAnnihilationBinding: input.witnessedAnnihilationBinding }),
@@ -214,7 +224,18 @@ function sampleLinearRearrangementMotion(
       progress: p,
       frame: linearRearrangement
     });
-    for (const token of sampled) tokens.set(`${token.side}:${token.motionId}`, token);
+    const depthPlan = geometry.depthPresentationRecipe === undefined
+      ? undefined
+      : createKpEquationSemanticDepthPlan(geometry.depthPresentationRecipe);
+    const depth = depthPlan === undefined ||
+        relation.lifecycle === "persist" || relation.lifecycle === "role-change"
+      ? undefined
+      : sampleKpEquationSemanticDepth(depthPlan, p);
+    for (const token of sampled) {
+      tokens.set(`${token.side}:${token.motionId}`, depth === undefined
+        ? token
+        : { ...token, pose: { ...token.pose, depth } });
+    }
   }
   return {
     transitionId: geometry.transitionId,

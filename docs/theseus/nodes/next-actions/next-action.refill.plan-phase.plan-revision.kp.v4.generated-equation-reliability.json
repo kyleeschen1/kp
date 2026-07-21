@@ -265,6 +265,12 @@
       "status": "passed",
       "scope": "s20 renderer-neutral bounded depth envelope",
       "checkedAt": "2026-07-21T03:14:25.301Z"
+    },
+    {
+      "command": "Depth contract and presentation unit tests; shared editor-reader depth, cancellation, successor, parity, endpoint, rewind, responsive browser gates; build, typecheck, deterministic visual capture",
+      "status": "passed",
+      "scope": "s21 calibrated KaTeX semantic depth presentation",
+      "checkedAt": "2026-07-21T03:22:29.358Z"
     }
   ],
   "progress": {

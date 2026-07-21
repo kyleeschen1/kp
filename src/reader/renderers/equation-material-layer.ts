@@ -1,5 +1,6 @@
 import type { KpReaderLayoutRect } from "./equation-layout-snapshot.ts";
 import { cloneElementWithComputedStyles } from "../../rendering/computed-style-clone.ts";
+import type { KpEquationSemanticDepthPose } from "../../rendering/equation-semantic-depth.ts";
 
 export interface KpReaderEquationMaterialFragmentFrame {
   readonly id: string;
@@ -10,6 +11,7 @@ export interface KpReaderEquationMaterialFragmentFrame {
   readonly translateY?: number | undefined;
   readonly scale?: number | undefined;
   readonly opacity?: number | undefined;
+  readonly depth?: KpEquationSemanticDepthPose | undefined;
 }
 
 export interface KpReaderEquationMaterialOwnerFrame {
@@ -196,8 +198,17 @@ function positionFragment(
   element.style.opacity = String(fragment.opacity ?? 1);
   element.style.transformOrigin = "center center";
   element.style.transform =
-    `translate(${fragment.translateX ?? 0}px, ${fragment.translateY ?? 0}px) ` +
-    `scale(${fragment.scale ?? 1})`;
+    `translate(${fragment.translateX ?? 0}px, ${(fragment.translateY ?? 0) + (fragment.depth?.translateY ?? 0)}px) ` +
+    `scale(${fragment.scale ?? 1}) scale(${fragment.depth?.scale ?? 1})`;
+  element.style.filter = fragment.depth === undefined || fragment.depth.shadowOpacity === 0
+    ? "none"
+    : `drop-shadow(0 1px ${fragment.depth.shadowBlurPx}px rgba(35, 46, 58, ${fragment.depth.shadowOpacity}))`;
+  element.style.zIndex = String(fragment.depth?.layer ?? 0);
+  if (fragment.depth === undefined) {
+    delete element.dataset["kpReaderEquationSemanticDepth"];
+  } else {
+    element.dataset["kpReaderEquationSemanticDepth"] = String(fragment.depth.elevation);
+  }
 }
 
 function assertUniqueFrames(
