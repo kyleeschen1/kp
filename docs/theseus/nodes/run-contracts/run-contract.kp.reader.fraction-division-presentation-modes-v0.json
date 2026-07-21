@@ -65,7 +65,8 @@
     {
       "id": "s03-structural-contract",
       "title": "Define structural artifact rendering contract",
-      "status": "planned"
+      "summary": "Defined and exported an inferred material-visual contract: ordinary glyphs remain computed-style clones, while fraction rules take geometry from the measured fragment and paint from KaTeX's computed border.",
+      "status": "complete"
     },
     {
       "id": "s04-fraction-rule-renderer",

@@ -50,6 +50,10 @@ export {
   type KpReaderEquationMaterialOwnerFrame
 } from "./equation-material-layer.ts";
 export {
+  resolveKpReaderEquationMaterialVisualContract,
+  type KpReaderEquationMaterialVisualContract
+} from "./equation-material-visual-contract.ts";
+export {
   createKpReaderEquationFrameScheduler,
   type KpReaderEquationFrameClock,
   type KpReaderEquationFrameScheduler,

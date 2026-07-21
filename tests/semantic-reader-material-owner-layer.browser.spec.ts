@@ -114,3 +114,32 @@ test("reader material owners persist by semantic key and sanitize cloned visuals
   expect(result.ownerCountAfterDispose).toBe(0);
   expect(result.ariaHidden).toBe("true");
 });
+
+test("reader material visuals infer measured fraction rules without changing glyph clones", async ({
+  page
+}) => {
+  await page.goto("/");
+  const result = await page.evaluate(async () => {
+    const modulePath = "/src/reader/renderers/equation-material-visual-contract.ts";
+    const { resolveKpReaderEquationMaterialVisualContract } = await import(modulePath);
+    const glyph = document.createElement("span");
+    glyph.className = "mord";
+    const fractionRule = document.createElement("span");
+    fractionRule.className = "frac-line";
+    return {
+      glyph: resolveKpReaderEquationMaterialVisualContract(glyph),
+      fractionRule: resolveKpReaderEquationMaterialVisualContract(fractionRule)
+    };
+  });
+
+  expect(result.glyph).toEqual({
+    kind: "computed-style-clone",
+    geometryAuthority: "source-layout-context",
+    paintAuthority: "computed-style"
+  });
+  expect(result.fractionRule).toEqual({
+    kind: "measured-fraction-rule",
+    geometryAuthority: "material-fragment-rect",
+    paintAuthority: "computed-border"
+  });
+});

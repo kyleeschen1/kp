@@ -31,6 +31,13 @@
       "scope": "s02 exact structural-artifact baseline",
       "checkedAt": "2026-07-21T23:23:26.841Z",
       "notes": "The v2 report measures actual cloned fraction ink. Twenty-two sampled motion frames reproduce a 21 to 21.525px vertical displacement while existing gates otherwise pass."
+    },
+    {
+      "command": "focused material visual contract browser test; npm run typecheck",
+      "status": "passed",
+      "scope": "s03 structural artifact contract",
+      "checkedAt": "2026-07-21T23:25:41.638Z",
+      "notes": "Ordinary glyphs retain computed clones; KaTeX fraction rules infer measured fragment geometry and computed border paint authority."
     }
   ]
 }
