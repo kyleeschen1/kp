@@ -120,16 +120,12 @@ test("dense successor ink remains clear of protected continuants", async ({ page
     await page.setViewportSize(viewport);
     await page.goto(route(780));
     const frames = [];
+    const forward = new Map<number, SuccessorEvidence>();
     for (let progress = 780; progress <= 940; progress += 4) {
       await seekByScroll(page, progress);
       const evidence = await successorEvidence(page);
-      frames.push({
-        progress: progress / 1_000,
-        ink: (["seven", "minus", "three", "x", "equals"] as const).map((id) => ({
-          id,
-          ...evidence[id]
-        }))
-      });
+      forward.set(progress, evidence);
+      frames.push(clearanceFrame(progress, evidence));
     }
     const report = evaluateKpEquationMotionClearanceSequence({
       frames,
@@ -148,8 +144,49 @@ test("dense successor ink remains clear of protected continuants", async ({ page
     })).toBe(true);
     expect(report.minimumClearancePx).not.toBeNull();
     expect(report.sampledFrameCount).toBeGreaterThanOrEqual(frames.length);
+
+    const rewindFrames = [];
+    for (let progress = 940; progress >= 780; progress -= 4) {
+      await seekByScroll(page, progress);
+      const rewound = await successorEvidence(page);
+      const original = forward.get(progress)!;
+      for (const id of ["seven", "minus", "three", "x", "equals"] as const) {
+        expect(distance(rewound[id], original[id])).toBeLessThan(0.1);
+        expect(rewound[id].opacity).toBeCloseTo(original[id].opacity, 4);
+      }
+      rewindFrames.push(clearanceFrame(progress, rewound));
+    }
+    const rewindReport = evaluateKpEquationMotionClearanceSequence({
+      frames: rewindFrames.reverse(),
+      requirements: [{
+        id: "solve-x.successor-protected-continuants",
+        movingIds: ["seven", "minus", "three"],
+        protectedIds: ["x", "equals"],
+        minClearancePx: 2
+      }],
+      maxSpatialStepPx: 1,
+      maxProgressStep: 0.004
+    });
+    expect(
+      rewindReport.passed,
+      JSON.stringify(rewindReport.diagnostics.slice(0, 3))
+    ).toBe(true);
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-playback-direction",
+      "rewind"
+    );
   }
 });
+
+function clearanceFrame(progress: number, evidence: SuccessorEvidence) {
+  return {
+    progress: progress / 1_000,
+    ink: (["seven", "minus", "three", "x", "equals"] as const).map((id) => ({
+      id,
+      ...evidence[id]
+    }))
+  };
+}
 
 async function evidenceAt(page: Page, progress: number): Promise<SuccessorEvidence> {
   await page.goto(route(progress));

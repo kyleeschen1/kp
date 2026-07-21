@@ -120,8 +120,8 @@
     {
       "id": "s13-seek-rewind-clearance",
       "title": "Seek and rewind clearance",
-      "summary": "Prove the new ordering is deterministic under direct seek and exact rewind.",
-      "status": "ready"
+      "summary": "Extended the real-browser clearance gate through every 4-permille sample from 780 to 940 in both directions and both desktop and phone layouts. Every five-symbol pose retraces within 0.1px and four opacity decimals, remains collision-free after 1px interpolation, and reports rewind authority; the full typecheck passes.",
+      "status": "complete"
     },
     {
       "id": "s14-counter-convergence-roles",
