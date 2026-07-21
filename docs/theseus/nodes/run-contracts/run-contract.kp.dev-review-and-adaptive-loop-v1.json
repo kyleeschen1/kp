@@ -207,7 +207,8 @@
     {
       "id": "s26-integrated-forward-test",
       "title": "Forward-test-current-review-and-adaptive-loop-flow",
-      "status": "planned"
+      "summary": "Passed an integrated zero-mutation workflow test across live feedback, adaptive modes, override stops, verification selection, and personal skills.",
+      "status": "complete"
     },
     {
       "id": "s27-release-gate-handoff",
