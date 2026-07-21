@@ -1,3 +1,9 @@
+import type { KpDevReviewPlacement } from "./review-placement.ts";
+
+export interface KpDevReviewShellOptions {
+  readonly placement?: KpDevReviewPlacement;
+}
+
 export interface KpDevReviewShell {
   readonly host: HTMLElement;
   readonly root: ShadowRoot;
@@ -7,8 +13,10 @@ export interface KpDevReviewShell {
   readonly status: HTMLOutputElement;
   readonly inboxCount: HTMLOutputElement;
   readonly reviewRound: HTMLOutputElement;
+  readonly placement: KpDevReviewPlacement;
   setInboxCount(count: number): void;
   setReviewRound(label: string, sequence: number, synthetic: boolean): void;
+  setPlacement(placement: KpDevReviewPlacement): void;
   open(): void;
   close(): void;
   dispose(): void;
@@ -17,13 +25,18 @@ export interface KpDevReviewShell {
 export const KP_DEV_REVIEW_SHELL_OPEN_EVENT = "kp:dev-review-shell-open";
 export const KP_DEV_REVIEW_SHELL_CLOSE_EVENT = "kp:dev-review-shell-close";
 
-export function mountKpDevReviewShell(ownerDocument: Document): KpDevReviewShell {
+export function mountKpDevReviewShell(
+  ownerDocument: Document,
+  options: KpDevReviewShellOptions = {}
+): KpDevReviewShell {
   if (ownerDocument.querySelector("[data-kp-dev-review-shell]") !== null) {
     throw new Error("The visual review shell is already mounted");
   }
 
   const host = ownerDocument.createElement("div");
+  let placement = options.placement ?? "bottom-right";
   host.dataset["kpDevReviewShell"] = "true";
+  host.dataset["kpDevReviewPlacement"] = placement;
   host.setAttribute("aria-hidden", "false");
   const root = host.attachShadow({ mode: "open" });
   const style = ownerDocument.createElement("style");
@@ -125,6 +138,10 @@ export function mountKpDevReviewShell(ownerDocument: Document): KpDevReviewShell
     }
     reviewRound.value = `${synthetic ? "Imported" : "Round"} ${sequence} · ${label}`;
   };
+  const setPlacement = (nextPlacement: KpDevReviewPlacement): void => {
+    placement = nextPlacement;
+    host.dataset["kpDevReviewPlacement"] = nextPlacement;
+  };
 
   return {
     host,
@@ -135,8 +152,10 @@ export function mountKpDevReviewShell(ownerDocument: Document): KpDevReviewShell
     status,
     inboxCount,
     reviewRound,
+    get placement() { return placement; },
     setInboxCount,
     setReviewRound,
+    setPlacement,
     open,
     close,
     dispose() {
@@ -174,6 +193,10 @@ const shellStyles = `
     font-synthesis: none;
     line-height: 1.4;
     pointer-events: none;
+  }
+  :host([data-kp-dev-review-placement="left-prose-rail"]) {
+    right: auto;
+    left: 18px;
   }
   *, *::before, *::after { box-sizing: border-box; }
   button { color: inherit; font: inherit; }

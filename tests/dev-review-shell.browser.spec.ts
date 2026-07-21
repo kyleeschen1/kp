@@ -15,6 +15,7 @@ test("shadow review shell opens without reflow and restores focus on escape", as
   const before = await page.evaluate(() => ({ width: document.documentElement.scrollWidth, height: document.documentElement.scrollHeight }));
 
   const host = page.locator("[data-kp-dev-review-shell]");
+  await expect(host).toHaveAttribute("data-kp-dev-review-placement", "bottom-right");
   const launcher = host.locator("button.launcher");
   const panel = host.locator("[role=dialog]");
   await expect(launcher).toHaveAccessibleName("Review");

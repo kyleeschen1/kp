@@ -25,6 +25,13 @@
       "scope": "s05 reader-specific responsive review placement",
       "checkedAt": "2026-07-21T19:32:27.114Z",
       "notes": "Default consumers remain bottom-right; semantic readers select left prose rail at 881px and wider and captured-moment sheet below that exact reader layout boundary."
+    },
+    {
+      "command": "review shell and dev mount Playwright cohort, baseline capture, typecheck, and production closure",
+      "status": "passed",
+      "scope": "s06 wide semantic-reader review dock",
+      "checkedAt": "2026-07-21T19:36:27.039Z",
+      "notes": "At 1280x900 the panel moved from x902 to x18 and stage intersection fell from 60,131.625 square pixels to zero; focus, no-reflow, default placement, and production exclusion remain intact."
     }
   ]
 }

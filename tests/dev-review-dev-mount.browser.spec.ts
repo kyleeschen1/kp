@@ -5,6 +5,8 @@ test("reader mounts the review shell by default in Vite development", async ({ p
   await expect(page.locator("body")).toHaveAttribute("data-kp-dev-review-ready", "true");
   const host = page.locator("[data-kp-dev-review-shell]");
   await expect(host.locator("button.launcher")).toBeVisible();
+  await expect(host).toHaveAttribute("data-kp-dev-review-placement", "left-prose-rail");
+  await expect(host).toHaveCSS("left", "18px");
   await host.locator("button.launcher").click();
   await expect(host.locator("textarea")).toBeEnabled();
   await expect(host).toHaveCSS("z-index", "2147483000");
@@ -22,4 +24,10 @@ test("reader mounts the review shell by default in Vite development", async ({ p
   await host.locator("textarea").fill("Check this moment");
   await expect(host.locator(".meta")).toContainText("Locked");
   await expect(host.locator(".route")).toHaveText("/reader/solve-x/");
+
+  const stage = await page.locator("[data-kp-reader-equation-stage]").boundingBox();
+  const panel = await host.locator("[role=dialog]").boundingBox();
+  expect(stage).not.toBeNull();
+  expect(panel).not.toBeNull();
+  expect(panel!.x + panel!.width).toBeLessThanOrEqual(stage!.x);
 });

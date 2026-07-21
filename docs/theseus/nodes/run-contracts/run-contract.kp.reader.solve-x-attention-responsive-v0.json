@@ -86,7 +86,8 @@
     {
       "id": "s06-wide-review-dock",
       "title": "Wide_review_dock",
-      "status": "planned"
+      "summary": "Mounted semantic-reader review with an explicit left-prose-rail placement at the wide breakpoint. At 1280x900 the open panel moved from x=902 to x=18 and animation-stage overlap fell from 60,131.625px2 to zero, while scroll, semantic progress, focus restoration, generic-shell behavior, type safety, and production exclusion remained unchanged.",
+      "status": "complete"
     },
     {
       "id": "s07-narrow-review-flow",

@@ -12,6 +12,7 @@ import {
   type KpReaderDevReviewFrame
 } from "./reader-capture-provider.ts";
 import { mountKpDevReviewComposer } from "./review-composer.ts";
+import { resolveKpDevReviewPlacement } from "./review-placement.ts";
 import { getOrCreateKpDevReviewSessionId, type KpDevReviewSessionStorage } from "./review-session.ts";
 import { mountKpDevReviewShell } from "./review-shell.ts";
 import type { KpDevReviewPointerGeometry } from "./semantic-target.ts";
@@ -33,7 +34,12 @@ export function mountKpReaderDevReview(ownerWindow: Window = window): () => void
 
   const registry = new KpDevReviewCaptureProviderRegistry();
   const unregisterReader = registry.register(createKpReaderDevReviewCaptureProvider(frames));
-  const shell = mountKpDevReviewShell(ownerDocument);
+  const shell = mountKpDevReviewShell(ownerDocument, {
+    placement: resolveKpDevReviewPlacement({
+      surface: "semantic-reader",
+      viewportWidth: ownerWindow.innerWidth
+    })
+  });
   const client = new KpDevReviewClient();
   let currentUnread = 0;
   const currentRound = client.query({ unreadBy: "codex.main" }).then(async (state) => {
