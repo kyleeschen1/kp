@@ -15,7 +15,7 @@ test("canonical reader selects counter-orbit cancellation without enabling legac
   );
   await expect(stage).toHaveAttribute(
     "data-kp-reader-equation-zero-witness-recipe",
-    "independent-zero-v1"
+    "none"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-reader-equation-successor-recipe",
@@ -23,7 +23,7 @@ test("canonical reader selects counter-orbit cancellation without enabling legac
   );
   await expect(stage).toHaveAttribute(
     "data-kp-reader-equation-depth-recipe",
-    "flat-v1"
+    "semantic-depth-v1"
   );
   await expect(stage).not.toHaveAttribute("data-kp-reader-annihilation-phase");
   await expect(stage).not.toHaveAttribute("data-kp-reader-annihilation-witness-readable");
@@ -54,9 +54,12 @@ test("canonical reader selects counter-orbit cancellation without enabling legac
   await page.goto(
     "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpProgress=620"
   );
-  await expect(stage).toHaveAttribute("data-kp-reader-independent-zero-phase", "dwell");
-  await expect(stage).toHaveAttribute("data-kp-reader-independent-zero-readable", "true");
-  await expect(independentZero).toHaveCSS("opacity", "1");
-  await expect(independentZero).toContainText("+0");
+  expect(
+    await stage.getAttribute("data-kp-reader-independent-zero-phase")
+  ).toBeNull();
+  expect(
+    await stage.getAttribute("data-kp-reader-independent-zero-readable")
+  ).toBeNull();
+  await expect(independentZero).toHaveCSS("opacity", "0");
   await expect(witness).toHaveCSS("opacity", "0");
 });

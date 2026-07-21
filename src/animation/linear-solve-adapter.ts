@@ -135,7 +135,9 @@ export function createLinearSolveAnimationAsset(): KpAnimationAsset {
       // remain available semantically for isolated refinement and promotion.
       equationMotionPresentationRecipe: "continuity-v1",
       equationCancellationPresentationRecipe: "counter-orbit-v1",
-      equationZeroWitnessPresentationRecipe: "independent-zero-v1",
+      // The compact flagship path omits the optional +0 teaching beat. The
+      // recipe remains available for explicit lesson variants.
+      equationZeroWitnessPresentationRecipe: "none",
       equationSuccessorPresentationRecipe: "counter-convergence-v1",
       equationDepthPresentationRecipe: "semantic-depth-v1",
       equationContinuantPresentationRecipe: "transit-then-reflow-v1"

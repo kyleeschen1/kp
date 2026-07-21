@@ -14,7 +14,7 @@ test("canonical linear solve retains semantics but uses the continuity presentat
 
   assert.equal(policy.recipe, "continuity-v1");
   assert.equal(policy.cancellation, "counter-orbit-v1");
-  assert.equal(policy.zeroWitness, "independent-zero-v1");
+  assert.equal(policy.zeroWitness, "none");
   assert.equal(policy.successor, "counter-convergence-v1");
   assert.equal(policy.depth, "semantic-depth-v1");
   assert.equal(policy.continuants, "transit-then-reflow-v1");

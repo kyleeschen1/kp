@@ -42,12 +42,10 @@ test("cancellation phases keep protected symbols clear at wide and narrow widths
     expect(termsCleared.minus.opacity).toBeLessThan(0.00001);
     expect(termsCleared.zero.opacity).toBeLessThan(0.001);
 
-    const witness = await evidenceAt(page, 620);
-    expect(witness.plus.opacity).toBeLessThan(0.00001);
-    expect(witness.minus.opacity).toBeLessThan(0.00001);
-    expect(witness.zero.opacity).toBeGreaterThan(0.99);
-    expect(intersects(witness.zero, witness.x)).toBe(false);
-    expect(intersects(witness.zero, witness.equals)).toBe(false);
+    const compactPath = await evidenceAt(page, 620);
+    expect(compactPath.plus.opacity).toBeLessThan(0.00001);
+    expect(compactPath.minus.opacity).toBeLessThan(0.00001);
+    expect(compactPath.zero.opacity).toBe(0);
 
     const witnessCleared = await evidenceAt(page, 647);
     expect(witnessCleared.plus.opacity).toBeLessThan(0.00001);
@@ -114,43 +112,19 @@ test("dense cancellation sampling stays continuous and retraces on rewind", asyn
   );
 });
 
-test("editor and reader render the same independent KaTeX +0 witness", async ({ page }) => {
+test("editor and reader both omit the optional +0 witness by default", async ({ page }) => {
   await page.goto("/?animation=editor-animation.animation.linear-solve.solve-x");
   const player = page.locator("[data-kp-editor-animation-player]");
   await player.locator('[data-action="seek-editor-animation"]').fill("0.62");
   const editorZero = player.locator("[data-kp-editor-independent-zero-witness]");
-  await expect(editorZero).toBeVisible();
-  await expect(editorZero).toContainText("+0");
-  const editor = await normalizedWitness(
-    editorZero,
-    player.locator(
-      '[data-kp-equation-material-source-motion-id*="after-subtract.lhs.x"]'
-    ),
-    player.locator(
-      '[data-kp-equation-material-source-motion-id$="after-subtract.equals"]'
-    )
-  );
+  await expect(editorZero).toHaveCount(0);
 
   await page.goto(route(620));
+  await expect(
+    page.locator("[data-kp-reader-equation-stage]")
+  ).toHaveAttribute("data-kp-reader-equation-zero-witness-recipe", "none");
   const readerZero = page.locator("[data-kp-reader-independent-zero-witness]");
-  await expect(readerZero).toBeVisible();
-  await expect(readerZero).toContainText("+0");
-  const reader = await normalizedWitness(
-    readerZero,
-    page.locator(
-      '[data-kp-reader-equation-material-fragment-id*="after-subtract.lhs.x"]'
-    ),
-    page.locator(
-      '[data-kp-reader-equation-material-fragment-id$="after-subtract.equals"]'
-    )
-  );
-
-  expect(editor.fontFamily).toContain("KaTeX");
-  expect(reader.fontFamily).toContain("KaTeX");
-  expect(reader.fontSizePx / editor.fontSizePx).toBeGreaterThan(0.99);
-  expect(reader.fontSizePx / editor.fontSizePx).toBeLessThan(1.01);
-  expect(Math.abs(reader.relativeX - editor.relativeX)).toBeLessThan(0.05);
-  expect(Math.abs(reader.baselineOffset - editor.baselineOffset)).toBeLessThan(0.08);
+  await expect(readerZero).toHaveCSS("opacity", "0");
 });
 
 async function evidenceAt(page: Page, progress: number): Promise<CancellationEvidence> {
@@ -225,40 +199,6 @@ async function seekByScroll(page: Page, progressPermille: number): Promise<void>
   await page.evaluate(() => new Promise<void>((resolve) => {
     requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
   }));
-}
-
-async function normalizedWitness(
-  witness: ReturnType<Page["locator"]>,
-  x: ReturnType<Page["locator"]>,
-  equals: ReturnType<Page["locator"]>
-): Promise<{
-  relativeX: number;
-  baselineOffset: number;
-  fontFamily: string;
-  fontSizePx: number;
-}> {
-  const witnessBounds = await witness.boundingBox();
-  const xBounds = await x.boundingBox();
-  const equalsBounds = await equals.boundingBox();
-  if (witnessBounds === null || xBounds === null || equalsBounds === null) {
-    throw new Error("Witness reference geometry is not measurable.");
-  }
-  const typography = await witness.locator(".mord").first().evaluate((element) => {
-    const style = getComputedStyle(element);
-    return { fontFamily: style.fontFamily, fontSizePx: Number.parseFloat(style.fontSize) };
-  });
-  const witnessCenterX = witnessBounds.x + witnessBounds.width / 2;
-  const witnessCenterY = witnessBounds.y + witnessBounds.height / 2;
-  const xCenterX = xBounds.x + xBounds.width / 2;
-  const xCenterY = xBounds.y + xBounds.height / 2;
-  const equalsCenterX = equalsBounds.x + equalsBounds.width / 2;
-  const equalsCenterY = equalsBounds.y + equalsBounds.height / 2;
-  return {
-    relativeX: (witnessCenterX - xCenterX) / (equalsCenterX - xCenterX),
-    baselineOffset:
-      (witnessCenterY - (xCenterY + equalsCenterY) / 2) / typography.fontSizePx,
-    ...typography
-  };
 }
 
 function centerY(rect: RectEvidence): number {

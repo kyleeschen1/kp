@@ -150,8 +150,8 @@
     {
       "id": "s18-streamlined-zero-default",
       "title": "Streamlined zero default",
-      "summary": "Remove the fleeting independent zero witness from the flagship presentation.",
-      "status": "ready"
+      "summary": "The canonical solve-x presentation now explicitly selects zeroWitness none on both reader and editor surfaces. The independent-zero renderer, typed recipe, and its unit laws remain intact for an explicit teacher variant. Focused policy, external-port, cancellation, cross-surface, and TypeScript checks pass.",
+      "status": "complete"
     },
     {
       "id": "s19-zero-transition-gate",

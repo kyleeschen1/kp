@@ -35,9 +35,10 @@ test("linear solve algebra trace imports as a sampleable AnimationAsset", () => 
     sourceAnimationId: "linear-equation-solve-x",
     equationMotionPresentationRecipe: "continuity-v1",
     equationCancellationPresentationRecipe: "counter-orbit-v1",
-    equationZeroWitnessPresentationRecipe: "independent-zero-v1",
-    equationSuccessorPresentationRecipe: "convergence-v1",
+    equationZeroWitnessPresentationRecipe: "none",
+    equationSuccessorPresentationRecipe: "counter-convergence-v1",
     equationDepthPresentationRecipe: "semantic-depth-v1",
+    equationContinuantPresentationRecipe: "transit-then-reflow-v1",
     sourcePortId: "port.fixture.algebra-trace.linear-solve",
     sourceSystem: "fixture.algebra-trace",
     sourceTraceId: "trace.linear-solve"
