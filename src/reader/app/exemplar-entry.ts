@@ -98,6 +98,8 @@ const motionSelect = requireElement<HTMLSelectElement>(
 );
 const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
+const toc = requireElement<HTMLElement>(".kp-lesson-toc");
+const tocLinks = [...toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
 const accessibleCheckpoints = beats.map((beat) => ({
   id: requiredData(beat, "kpBeat"),
   label: beat.querySelector("h2")?.textContent?.trim() ?? requiredData(beat, "kpBeat"),
@@ -627,7 +629,28 @@ function updateActiveBeat(progressPermille: number): void {
     else beat.removeAttribute("aria-current");
   }
   status.value = activeBeat.querySelector("h2")?.textContent?.trim() ?? "Follow the symbols";
+  syncActiveToc(requiredData(activeBeat, "kpBeat"));
   focus.set("story", dataRefs(activeBeat));
+}
+
+function syncActiveToc(activeId: string): void {
+  let activeCount = 0;
+  for (const link of tocLinks) {
+    const href = link.getAttribute("href") ?? "";
+    const linkId = href.startsWith("#") ? decodeURIComponent(href.slice(1)) : "";
+    const active = linkId === activeId;
+    link.dataset["kpTocActive"] = String(active);
+    if (active) {
+      link.setAttribute("aria-current", "location");
+      activeCount += 1;
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  }
+  if (activeCount !== 1) {
+    throw new Error(`Reader TOC expected one link for active location ${activeId}.`);
+  }
+  toc.dataset["kpTocActiveId"] = activeId;
 }
 
 function onSemanticEnter(event: Event): void {

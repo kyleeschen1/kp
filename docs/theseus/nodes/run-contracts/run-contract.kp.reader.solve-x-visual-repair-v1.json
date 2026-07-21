@@ -185,7 +185,8 @@
     {
       "id": "s24-active-toc-state",
       "title": "Active table of contents state",
-      "status": "planned"
+      "summary": "Mirrored the canonical active beat into the static TOC with exactly one aria-current location, a restrained shared accent treatment, native hash navigation, sticky-header scroll margins, and desktop/narrow browser proof.",
+      "status": "complete"
     },
     {
       "id": "s25-responsive-integrated-gate",

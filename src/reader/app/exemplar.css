@@ -53,8 +53,10 @@ a { color: var(--kp-relation); text-underline-offset: .2em; }
 .kp-lesson-toc ol { display: grid; gap: .72rem; margin: 0; padding: 0; list-style: none; }
 .kp-lesson-toc li { font-size: .75rem; line-height: 1.35; }
 .kp-lesson-toc [data-kp-toc-level="2"] { padding-left: .75rem; }
-.kp-lesson-toc a { color: var(--kp-muted); text-decoration: none; }
-.kp-lesson-toc a:hover { color: var(--kp-relation); }
+.kp-lesson-toc a { display: block; padding: .18rem .38rem .18rem .55rem; border-left: 2px solid transparent; border-radius: 0 .35rem .35rem 0; color: var(--kp-muted); text-decoration: none; }
+.kp-lesson-toc a:hover { color: var(--kp-relation); background: color-mix(in srgb, var(--kp-relation) 5%, transparent); }
+.kp-lesson-toc a[data-kp-toc-active="true"] { border-left-color: var(--kp-accent); color: var(--kp-ink); background: color-mix(in srgb, var(--kp-accent) 7%, transparent); font-weight: 700; }
+.kp-lesson > [id], .kp-animation-story, .kp-animation-beats > li { scroll-margin-top: calc(var(--kp-reader-masthead-height) + 1rem); }
 
 .kp-lesson { min-width: 0; padding: clamp(4rem, 10vh, 7.5rem) 0 18vh; }
 .kp-lesson > h1 { max-width: 760px; margin: 0; font-family: var(--kp-serif); font-size: clamp(3rem, 7vw, 6rem); font-weight: 500; letter-spacing: -.055em; line-height: .94; }
