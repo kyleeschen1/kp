@@ -126,6 +126,12 @@
       "status": "passed",
       "scope": "s18 default dev mount with zero production review assets",
       "checkedAt": "2026-07-21T00:01:17.656Z"
+    },
+    {
+      "command": "focused real reader review browser flow server adapter inbox store suites and npm run typecheck",
+      "status": "passed",
+      "scope": "s19 end-to-end reader capture and preservation",
+      "checkedAt": "2026-07-21T00:04:23.972Z"
     }
   ],
   "expectedLearning": [

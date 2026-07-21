@@ -153,7 +153,8 @@
     {
       "id": "s19-reader-end-to-end",
       "title": "End-to-end reader capture",
-      "status": "planned"
+      "summary": "The actual solve-x reader produces validated semantic pointer, environment, layout, font, owner, and temporal evidence through the typed client and local append-only server path without changing scroll or animation state.",
+      "status": "complete"
     },
     {
       "id": "s20-human-exemplar-checkpoint",
