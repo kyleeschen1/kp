@@ -40,6 +40,38 @@ test("scroll rewind retraces visible ink across both phase boundaries", async ({
   }
 });
 
+test("atomic handoff retraces every sampled seam and matches direct URL seek", async ({ page }) => {
+  await page.goto(route(306));
+  const expected = new Map<number, Awaited<ReturnType<typeof ownerSnapshot>>>();
+
+  for (const seam of [
+    { samples: [306, 313, 323, 332], beyond: 346 },
+    { samples: [640, 647, 657, 666], beyond: 680 }
+  ]) {
+    for (const progress of seam.samples) {
+      await seekByScroll(page, progress);
+      await expectAtomicOwnerOpacity(page);
+      expected.set(progress, await ownerSnapshot(page));
+    }
+    await seekByScroll(page, seam.beyond);
+    for (const progress of [...seam.samples].reverse()) {
+      await seekByScroll(page, progress);
+      await expect(page.locator("body")).toHaveAttribute(
+        "data-kp-reader-playback-direction",
+        "rewind"
+      );
+      await expectAtomicOwnerOpacity(page);
+      expect(await ownerSnapshot(page)).toEqual(expected.get(progress));
+    }
+  }
+
+  for (const progress of [323, 657]) {
+    await page.goto(route(progress));
+    await expectAtomicOwnerOpacity(page);
+    expect(await ownerSnapshot(page)).toEqual(expected.get(progress));
+  }
+});
+
 async function seekByScroll(page: Page, progressPermille: number): Promise<void> {
   await page.evaluate((target) => {
     const beats = [...document.querySelectorAll<HTMLElement>("[data-kp-beat]")];
@@ -58,6 +90,48 @@ async function seekByScroll(page: Page, progressPermille: number): Promise<void>
     "data-kp-reader-progress",
     String(progressPermille)
   );
+  await expect.poll(() => new URL(page.url()).searchParams.get("kpProgress"))
+    .toBe(String(progressPermille));
+}
+
+async function expectAtomicOwnerOpacity(page: Page): Promise<void> {
+  const opacities = await page.locator(
+    '[data-kp-reader-transition-active="true"] [data-kp-reader-equation-anchor-id], ' +
+    "[data-kp-reader-equation-material-owner-id]"
+  ).evaluateAll((elements) => elements.map((element) =>
+    Number(getComputedStyle(element).opacity)
+  ));
+  expect(opacities.length).toBeGreaterThan(0);
+  expect(opacities.every((opacity) => opacity === 0 || opacity === 1)).toBe(true);
+}
+
+async function ownerSnapshot(page: Page): Promise<unknown> {
+  return page.locator("[data-kp-reader-equation-stage]").evaluate((stage) => {
+    const round = (value: number): number => Math.round(value * 10_000) / 10_000;
+    return [...stage.querySelectorAll<HTMLElement>(
+      "[data-kp-reader-equation-material-owner-id]"
+    )].map((owner) => {
+      const bounds = owner.getBoundingClientRect();
+      return {
+        id: owner.dataset["kpReaderEquationMaterialOwnerId"],
+        opacity: Number(getComputedStyle(owner).opacity),
+        transform: owner.style.transform,
+        bounds: {
+          left: round(bounds.left),
+          top: round(bounds.top),
+          width: round(bounds.width),
+          height: round(bounds.height)
+        },
+        fragments: [...owner.querySelectorAll<HTMLElement>(
+          "[data-kp-reader-equation-material-fragment-id]"
+        )].map((fragment) => ({
+          id: fragment.dataset["kpReaderEquationMaterialFragmentId"],
+          opacity: fragment.style.opacity,
+          transform: fragment.style.transform
+        })).sort((left, right) => String(left.id).localeCompare(String(right.id)))
+      };
+    }).sort((left, right) => String(left.id).localeCompare(String(right.id)));
+  });
 }
 
 async function visibleRelationInk(page: Page): Promise<{

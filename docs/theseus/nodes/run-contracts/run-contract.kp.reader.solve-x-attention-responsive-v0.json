@@ -122,7 +122,8 @@
     {
       "id": "s12-handoff-rewind-gate",
       "title": "Handoff_rewind_gate",
-      "status": "planned"
+      "summary": "Added a dense browser gate across both solve-x seams. Forward and reverse scroll, reload, and direct URL seek now prove identical owner geometry and fragment poses by semantic identity, exact atomic opacity, stable URL progress, and correct rewind direction; DOM insertion order is intentionally excluded from semantic authority.",
+      "status": "complete"
     },
     {
       "id": "s13-handoff-visual-checkpoint",

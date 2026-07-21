@@ -67,6 +67,13 @@
       "scope": "s11 solve-x ownership repair",
       "checkedAt": "2026-07-21T19:52:14.665Z",
       "notes": "The former partial samples are now solid: p10 and p990 report material opacity one with no visible native anchors; p0/p1000 report native one and material zero. The recipe is selected by asset metadata, and unrelated equation assets remain crossfade-v1."
+    },
+    {
+      "command": "dense phase rewind Playwright, atomic owner gate, URL restoration cohort, and typecheck",
+      "status": "passed",
+      "scope": "s12 handoff rewind and direct-seek gate",
+      "checkedAt": "2026-07-21T19:55:18.702Z",
+      "notes": "Eight seam samples across the 333 and 667 boundaries retrace exactly by semantic owner and fragment identity after forward/backward scrolling, and p323/p657 direct URLs match scrolled frames. Owner alpha stays binary; URL progress and rewind direction remain exact."
     }
   ]
 }
