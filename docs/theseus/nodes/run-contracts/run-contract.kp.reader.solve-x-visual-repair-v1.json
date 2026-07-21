@@ -95,7 +95,8 @@
     {
       "id": "s09-native-endpoint-laws",
       "title": "Native endpoint laws",
-      "status": "planned"
+      "summary": "Defined and tested a neutral native-endpoint law covering exact source/target progress, exclusive native authority, complete material/counterpart release, absent one-sided endpoints, and bounded geometry residual with typed diagnostics.",
+      "status": "complete"
     },
     {
       "id": "s10-alignment-path-repair",

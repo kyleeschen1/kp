@@ -193,6 +193,12 @@
       "status": "passed",
       "scope": "s08 semantic ordering, profile, KaTeX identity, known type-scale detection, and viewport evidence",
       "checkedAt": "2026-07-21T01:41:32.275Z"
+    },
+    {
+      "command": "Focused native endpoint law and material owner suites plus TypeScript typecheck",
+      "status": "passed",
+      "scope": "s09 exact endpoint authority, geometry, one-sided absence, and diagnostic codes",
+      "checkedAt": "2026-07-21T01:44:10.405Z"
     }
   ],
   "progress": {
