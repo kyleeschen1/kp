@@ -203,7 +203,8 @@
     {
       "id": "s27-human-exemplar-checkpoint",
       "title": "Human exemplar checkpoint",
-      "status": "planned"
+      "summary": "Prepared the verified solve-x exemplar for explicit human visual approval. Do not generalize its presentation recipes before approval.",
+      "status": "in-progress"
     }
   ]
 }

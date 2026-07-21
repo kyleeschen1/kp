@@ -301,6 +301,12 @@
       "status": "passed",
       "scope": "s26 production and release closure",
       "checkedAt": "2026-07-21T03:41:27.087Z"
+    },
+    {
+      "command": "Live 1280x900 solve-x checkpoint at cancellation and successor convergence with direct scroll geometry instrumentation and visually inspected alpha-flattened captures",
+      "status": "passed",
+      "scope": "s27 human exemplar checkpoint preparation",
+      "checkedAt": "2026-07-21T03:45:21.003Z"
     }
   ],
   "progress": {
