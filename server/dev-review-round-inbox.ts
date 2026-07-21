@@ -37,6 +37,10 @@ export class KpDevReviewRoundInboxService {
   readonly #store: KpDevReviewEventStore;
   readonly #now: () => Date;
   #mutationTail: Promise<unknown> = Promise.resolve();
+  #cachedProjection?: {
+    readonly revision: number;
+    readonly inbox: KpDevReviewInboxV2;
+  };
 
   constructor(
     store: KpDevReviewEventStore,
@@ -47,7 +51,14 @@ export class KpDevReviewRoundInboxService {
   }
 
   read(): KpDevReviewInboxV2 {
-    return projectKpDevReviewRoundInbox(this.#store.readAll());
+    const revision = this.#store.revision();
+    if (this.#cachedProjection?.revision !== revision) {
+      this.#cachedProjection = {
+        revision,
+        inbox: projectKpDevReviewRoundInbox(this.#store.readAll())
+      };
+    }
+    return structuredClone(this.#cachedProjection.inbox);
   }
 
   query(input: KpDevReviewQueryInput = {}): KpDevReviewQueryResult {

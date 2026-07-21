@@ -93,7 +93,8 @@
     {
       "id": "s07-review-index-checkpoint",
       "title": "Add-derived-index-and-checkpoint-policy",
-      "status": "planned"
+      "summary": "Added a revision-keyed in-memory projection cache and atomic durable derived index with source digest, validated counts, stale/corrupt fallback, and proof that source history is untouched.",
+      "status": "complete"
     },
     {
       "id": "s08-review-http-client",

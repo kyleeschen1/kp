@@ -27,6 +27,10 @@ export class KpDevReviewEventStore {
     return this.#events.map((event) => structuredClone(event));
   }
 
+  revision(): number {
+    return this.#events.length;
+  }
+
   async append(event: KpDevReviewStoredEvent): Promise<void> {
     const validated = kpDevReviewStoredEventSchema.parse(event);
     const write = this.#writeTail.then(async () => {
