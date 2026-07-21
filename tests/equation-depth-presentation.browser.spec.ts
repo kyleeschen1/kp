@@ -7,7 +7,12 @@ const readerRoute = (progress: number) =>
 test("active KaTeX terms share bounded semantic depth across editor and reader", async ({ page }) => {
   await page.goto("/?animation=editor-animation.animation.linear-solve.solve-x");
   const player = page.locator("[data-kp-editor-animation-player]");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-hydrated", "true");
   await player.locator('[data-action="seek-editor-animation"]').fill("0.517");
+  await expect(player).toHaveAttribute("data-kp-editor-animation-progress", "0.517");
+  await page.evaluate(() => new Promise<void>((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
   const editorPlus = player.locator(
     '[data-kp-equation-material-owner-id="linear-solve.lhs.plus3"]'
   );

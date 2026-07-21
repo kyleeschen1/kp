@@ -38,26 +38,26 @@ test("cancellation phases keep protected symbols clear at wide and narrow widths
     expect(intersects(orbit.minus, orbit.equals)).toBe(false);
 
     const termsCleared = await evidenceAt(page, 600);
-    expect(termsCleared.plus.opacity).toBe(0);
-    expect(termsCleared.minus.opacity).toBe(0);
+    expect(termsCleared.plus.opacity).toBeLessThan(0.00001);
+    expect(termsCleared.minus.opacity).toBeLessThan(0.00001);
     expect(termsCleared.zero.opacity).toBeLessThan(0.001);
 
     const witness = await evidenceAt(page, 620);
-    expect(witness.plus.opacity).toBe(0);
-    expect(witness.minus.opacity).toBe(0);
+    expect(witness.plus.opacity).toBeLessThan(0.00001);
+    expect(witness.minus.opacity).toBeLessThan(0.00001);
     expect(witness.zero.opacity).toBeGreaterThan(0.99);
     expect(intersects(witness.zero, witness.x)).toBe(false);
     expect(intersects(witness.zero, witness.equals)).toBe(false);
 
     const witnessCleared = await evidenceAt(page, 647);
-    expect(witnessCleared.plus.opacity).toBe(0);
-    expect(witnessCleared.minus.opacity).toBe(0);
-    expect(witnessCleared.zero.opacity).toBe(0);
+    expect(witnessCleared.plus.opacity).toBeLessThan(0.00001);
+    expect(witnessCleared.minus.opacity).toBeLessThan(0.00001);
+    expect(witnessCleared.zero.opacity).toBeLessThan(0.00001);
 
     const compacting = await evidenceAt(page, 655);
-    expect(compacting.plus.opacity).toBe(0);
-    expect(compacting.minus.opacity).toBe(0);
-    expect(compacting.zero.opacity).toBe(0);
+    expect(compacting.plus.opacity).toBeLessThan(0.00001);
+    expect(compacting.minus.opacity).toBeLessThan(0.00001);
+    expect(compacting.zero.opacity).toBeLessThan(0.00001);
   }
 });
 

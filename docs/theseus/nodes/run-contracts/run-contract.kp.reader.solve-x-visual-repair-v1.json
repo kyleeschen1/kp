@@ -191,7 +191,8 @@
     {
       "id": "s25-responsive-integrated-gate",
       "title": "Responsive integrated gate",
-      "status": "planned"
+      "summary": "Added an integrated reader gate across desktop, tablet, and phone sizes and seven causal instants. It enforces stable masthead/card geometry, one global scrollbar, no document or visible-ink overflow, one active TOC location, KaTeX identity, and exact final endpoint ownership; parallel visual checks now wait for hydration and use browser-realistic opacity epsilon.",
+      "status": "complete"
     },
     {
       "id": "s26-production-release-gate",
