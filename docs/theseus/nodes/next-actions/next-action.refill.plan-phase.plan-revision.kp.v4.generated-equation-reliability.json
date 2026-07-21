@@ -259,6 +259,12 @@
       "status": "passed",
       "scope": "s19 rendered successor continuity and exact retrace",
       "checkedAt": "2026-07-21T03:11:46.979Z"
+    },
+    {
+      "command": "Semantic depth and presentation policy unit tests plus TypeScript typecheck",
+      "status": "passed",
+      "scope": "s20 renderer-neutral bounded depth envelope",
+      "checkedAt": "2026-07-21T03:14:25.301Z"
     }
   ],
   "progress": {

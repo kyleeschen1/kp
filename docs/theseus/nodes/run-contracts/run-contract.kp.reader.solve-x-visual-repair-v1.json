@@ -161,7 +161,8 @@
     {
       "id": "s20-depth-envelope-contract",
       "title": "Depth envelope contract",
-      "status": "planned"
+      "summary": "Defined a renderer-neutral semantic-depth-v1 envelope with bounded transform and shadow values, exact flat endpoints, deterministic rewind, progress clamping, and no authority over opacity, ownership, measurement, or layout.",
+      "status": "complete"
     },
     {
       "id": "s21-katex-depth-presentation",
