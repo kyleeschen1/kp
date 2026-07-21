@@ -71,7 +71,8 @@
     {
       "id": "s04-fraction-rule-renderer",
       "title": "Normalize fraction-rule material rendering",
-      "status": "planned"
+      "summary": "Replaced source-context cloning only for measured KaTeX fraction rules; visible rule ink now aligns with its measured material fragment at every sampled frame.",
+      "status": "complete"
     },
     {
       "id": "s05-persistence-gate",

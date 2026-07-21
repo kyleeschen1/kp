@@ -38,6 +38,27 @@
       "scope": "s03 structural artifact contract",
       "checkedAt": "2026-07-21T23:25:41.638Z",
       "notes": "Ordinary glyphs retain computed clones; KaTeX fraction rules infer measured fragment geometry and computed border paint authority."
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader-material-owner-layer.browser.spec.ts --workers=1",
+      "status": "passed",
+      "scope": "s04 material visual contract browser regression",
+      "checkedAt": "2026-07-21T23:29:20.621Z",
+      "notes": "Three focused browser tests pass; measured fraction-rule ink is rebased to the fragment while computed paint is preserved."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation",
+      "status": "passed",
+      "scope": "s04 31-frame fraction rule visual gate",
+      "checkedAt": "2026-07-21T23:29:21.737Z",
+      "notes": "All 31 samples pass and maximum measured fraction-rule ink offset is 0px."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s04 TypeScript boundaries",
+      "checkedAt": "2026-07-21T23:29:22.773Z",
+      "notes": "Application, node, test, and domain projects typecheck."
     }
   ]
 }

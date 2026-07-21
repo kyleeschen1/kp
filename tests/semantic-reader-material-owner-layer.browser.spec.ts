@@ -143,3 +143,67 @@ test("reader material visuals infer measured fraction rules without changing gly
     paintAuthority: "computed-border"
   });
 });
+
+test("measured fraction-rule ink is rebased to its material fragment", async ({ page }) => {
+  await page.goto("/");
+  const result = await page.evaluate(async () => {
+    const modulePath = "/src/reader/renderers/equation-material-layer.ts";
+    const { createKpReaderEquationMaterialLayer } = await import(modulePath);
+    document.body.innerHTML = [
+      '<div data-kp-reader-equation-material-layer="true" style="position:relative"></div>',
+      '<span id="rule" class="frac-line" data-kp-reader-selector-id="fraction.rule" ',
+      'style="position:relative;top:21px;display:block;width:14px;height:1px;',
+      'border-bottom:1px solid rgb(20, 30, 40)"></span>'
+    ].join("");
+    const layer = document.querySelector<HTMLElement>(
+      "[data-kp-reader-equation-material-layer]"
+    )!;
+    const source = document.querySelector<HTMLElement>("#rule")!;
+    const controller = createKpReaderEquationMaterialLayer(layer);
+    controller.sync([{
+      ownerId: "owner.rule",
+      rect: { left: 10, top: 20, width: 14, height: 1 },
+      translateX: 0,
+      translateY: 0,
+      scaleX: 1,
+      scaleY: 1,
+      opacity: 1,
+      focused: false,
+      fragments: [{
+        id: "anchor.fraction.rule",
+        visualRevision: "r1",
+        sourceElement: source,
+        rect: { left: 10, top: 20, width: 14, height: 1 }
+      }]
+    }]);
+    const fragment = layer.querySelector<HTMLElement>(
+      '[data-kp-reader-equation-material-fragment-id="anchor.fraction.rule"]'
+    )!;
+    const visual = fragment.querySelector<HTMLElement>(".frac-line")!;
+    const fragmentRect = fragment.getBoundingClientRect();
+    const visualRect = visual.getBoundingClientRect();
+    const visualStyle = getComputedStyle(visual);
+    const borderBottomColor = visualStyle.borderBottomColor;
+    const borderBottomWidth = visualStyle.borderBottomWidth;
+    controller.dispose();
+    return {
+      offsetX: visualRect.left - fragmentRect.left,
+      offsetY: visualRect.top - fragmentRect.top,
+      widthDelta: visualRect.width - fragmentRect.width,
+      heightDelta: visualRect.height - fragmentRect.height,
+      kind: visual.dataset["kpReaderMaterialVisualKind"],
+      borderBottomColor,
+      borderBottomWidth
+    };
+  });
+
+  expect(result).toEqual({
+    offsetX: 0,
+    offsetY: 0,
+    widthDelta: 0,
+    heightDelta: 0,
+    kind: "measured-fraction-rule",
+    borderBottomColor: "rgb(20, 30, 40)",
+    borderBottomWidth: "1px"
+  });
+});

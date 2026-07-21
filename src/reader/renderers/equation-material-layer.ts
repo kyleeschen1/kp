@@ -1,6 +1,7 @@
 import type { KpReaderLayoutRect } from "./equation-layout-snapshot.ts";
 import { cloneElementWithComputedStyles } from "../../rendering/computed-style-clone.ts";
 import type { KpEquationSemanticDepthPose } from "../../rendering/equation-semantic-depth.ts";
+import { resolveKpReaderEquationMaterialVisualContract } from "./equation-material-visual-contract.ts";
 
 export interface KpReaderEquationMaterialFragmentFrame {
   readonly id: string;
@@ -165,7 +166,7 @@ function replaceFragmentVisual(
   record: KpReaderMaterialFragmentDomRecord,
   frame: KpReaderEquationMaterialFragmentFrame
 ): void {
-  const visual = cloneElementWithComputedStyles(frame.sourceElement);
+  const visual = createMaterialVisual(frame.sourceElement);
   sanitizeVisualClone(visual);
   visual.classList.add("kp-reader-equation-material-visual");
   visual.style.visibility = "visible";
@@ -175,6 +176,30 @@ function replaceFragmentVisual(
   record.visualRevision = frame.visualRevision;
   record.element.dataset["kpReaderEquationMaterialVisualRevision"] =
     frame.visualRevision;
+}
+
+function createMaterialVisual(source: HTMLElement): HTMLElement {
+  const contract = resolveKpReaderEquationMaterialVisualContract(source);
+  if (contract.kind === "computed-style-clone") {
+    return cloneElementWithComputedStyles(source);
+  }
+  const sourceStyle = getComputedStyle(source);
+  const visual = source.ownerDocument.createElement("span");
+  visual.className = source.className;
+  visual.dataset["kpReaderMaterialVisualKind"] = contract.kind;
+  const selectorId = source.dataset["kpReaderSelectorId"];
+  if (selectorId !== undefined) visual.dataset["kpReaderSelectorId"] = selectorId;
+  visual.style.position = "absolute";
+  visual.style.inset = "0";
+  visual.style.display = "block";
+  visual.style.width = "100%";
+  visual.style.height = "100%";
+  visual.style.boxSizing = "border-box";
+  visual.style.borderBottomColor = sourceStyle.borderBottomColor;
+  visual.style.borderBottomStyle = sourceStyle.borderBottomStyle;
+  visual.style.borderBottomWidth = sourceStyle.borderBottomWidth;
+  visual.style.color = sourceStyle.color;
+  return visual;
 }
 
 function sanitizeVisualClone(visual: HTMLElement): void {
