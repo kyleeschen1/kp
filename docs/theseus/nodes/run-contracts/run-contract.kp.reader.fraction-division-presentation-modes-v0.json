@@ -95,7 +95,8 @@
     {
       "id": "s08-presentation-axes",
       "title": "Define derivation and identity presentation axes",
-      "status": "planned"
+      "summary": "Defined independent balanced-operation versus certified-transfer derivation modes and held versus omitted transient identity modes as immutable inferred runtime choices that cannot author truth, geometry, or timing.",
+      "status": "complete"
     },
     {
       "id": "s09-profile-presets",

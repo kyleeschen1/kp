@@ -108,6 +108,20 @@
       "scope": "s07 human-inspected preservation contact sheet",
       "checkedAt": "2026-07-21T23:39:55.419Z",
       "notes": "Six deterministic frames retain the approved prose-card, equation-card, KaTeX, salience, focus, and phone presentation; the corrected fractional midpoint retains its prior composition with aligned rule ink."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/reader-equation-presentation-mode.test.ts",
+      "status": "passed",
+      "scope": "s08 presentation-axis contract",
+      "checkedAt": "2026-07-21T23:42:27.637Z",
+      "notes": "Two tests prove four independent certified combinations, immutable inference-friendly definitions, and rejection of provider-invented modes."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s08 public runtime API types",
+      "checkedAt": "2026-07-21T23:42:28.816Z",
+      "notes": "Application, node, test, and domain projects accept the new runtime axis contract and export."
     }
   ]
 }

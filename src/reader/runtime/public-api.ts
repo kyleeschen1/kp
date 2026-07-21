@@ -63,3 +63,11 @@ export {
   resolveKpReaderResponsiveProjection,
   type KpReaderResponsiveProjection
 } from "./responsive-projection.ts";
+export {
+  defineKpReaderEquationPresentationAxes,
+  kpReaderEquationDerivationModes,
+  kpReaderEquationIdentityModes,
+  type KpReaderEquationDerivationMode,
+  type KpReaderEquationIdentityMode,
+  type KpReaderEquationPresentationAxes
+} from "./equation-presentation-mode.ts";
