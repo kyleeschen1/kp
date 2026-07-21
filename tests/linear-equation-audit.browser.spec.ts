@@ -36,17 +36,22 @@ test("learner shell keeps one stage, one control row, one rail, and no template 
 
 test("direct seeks keep the stage stable without horizontal layout shift", async ({ page }) => {
   await page.goto(conceptPath);
-  await page.getByRole("link", { name: "Touch", exact: true }).click();
+  const touchHref = await page.getByRole("link", { name: "Touch", exact: true }).getAttribute("href");
+  expect(touchHref).not.toBeNull();
+  // Enter through the shareable route so this audit isolates seek stability from mode navigation.
+  await page.goto(touchHref!);
+  const visual = page.locator("[data-kp-concept-visual-field]");
+  const coordinated = page.locator("[data-kp-linear-equation-coordinated-stage]");
+  // Measure the mounted projection, not the transient shell immediately after mode navigation.
+  await expect(coordinated).toBeVisible();
   await page.evaluate(async () => {
     await document.fonts.ready;
     await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
   });
 
-  const visual = page.locator("[data-kp-concept-visual-field]");
   const initial = await visual.boundingBox();
   expect(initial).not.toBeNull();
   const scrubber = page.getByRole("slider", { name: "Scrub concept timeline" });
-  const coordinated = page.locator("[data-kp-linear-equation-coordinated-stage]");
   for (const time of [250, 400, 575, 750, 1000, 0]) {
     await scrubber.fill(String(time));
     await expect(coordinated).toHaveAttribute("data-kp-coordinated-settled-time-permille", String(time));

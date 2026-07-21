@@ -186,14 +186,14 @@
     {
       "id": "s24-production-release-gate",
       "title": "Production and release gate",
-      "summary": "Run broad correctness, build, production-exclusion, and workspace validation gates.",
-      "status": "ready"
+      "summary": "All broad gates pass: the serial 1,730-test repository suite, 24-test focused reader browser cohort, solve-x smoke and conformance, production exclusion and review build, responsive capture review, canonical performance audit, and visual baseline capture. The legacy direct-seek audit was made deterministic by entering through its canonical Touch URL and awaiting the mounted projection, separating layout measurement from an unrelated client-navigation race.",
+      "status": "complete"
     },
     {
       "id": "s25-human-exemplar-checkpoint",
       "title": "Human exemplar checkpoint",
-      "summary": "Present the revised solve-x exemplar and stop for explicit human approval before generalization.",
-      "status": "ready"
+      "summary": "Automated implementation and release gates are complete. The revised streamlined and teacher-detail solve-x routes are ready for explicit human visual review; no cross-family generalization will occur until approval.",
+      "status": "in-progress"
     }
   ]
 }
