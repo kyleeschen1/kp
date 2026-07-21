@@ -3,6 +3,10 @@ import {
   type KpReaderArtifactRef
 } from "../document/public-api.ts";
 import type { KpReaderMotionPreference } from "./motion-policy.ts";
+import {
+  resolveKpReaderEquationPresentationProfile,
+  type KpReaderEquationPresentationProfileId
+} from "./equation-presentation-mode.ts";
 
 export interface KpReaderLocation {
   readonly checkpointId?: string | undefined;
@@ -17,6 +21,7 @@ export interface KpReaderSessionSnapshot {
   readonly location: KpReaderLocation;
   readonly reducedMotion: boolean;
   readonly motionPreference: KpReaderMotionPreference;
+  readonly equationPresentationProfileId: KpReaderEquationPresentationProfileId;
 }
 
 export function createKpReaderSessionSnapshot(input: {
@@ -28,6 +33,7 @@ export function createKpReaderSessionSnapshot(input: {
   readonly focusRefs?: readonly string[] | undefined;
   readonly reducedMotion?: boolean | undefined;
   readonly motionPreference?: KpReaderMotionPreference | undefined;
+  readonly equationPresentationProfileId?: KpReaderEquationPresentationProfileId | undefined;
 }): KpReaderSessionSnapshot {
   if (
     input.progressPermille !== undefined
@@ -40,6 +46,9 @@ export function createKpReaderSessionSnapshot(input: {
   const focusRefs = uniqueNonEmpty(input.focusRefs ?? [], "focus ref");
   const motionPreference = input.motionPreference ??
     (input.reducedMotion ? "reduced" : "system");
+  const equationPresentationProfileId = resolveKpReaderEquationPresentationProfile(
+    input.equationPresentationProfileId
+  ).id;
   return {
     kind: "reader-session",
     document: createKpReaderArtifactRef({
@@ -60,7 +69,8 @@ export function createKpReaderSessionSnapshot(input: {
       focusRefs
     },
     motionPreference,
-    reducedMotion: motionPreference === "reduced"
+    reducedMotion: motionPreference === "reduced",
+    equationPresentationProfileId
   };
 }
 

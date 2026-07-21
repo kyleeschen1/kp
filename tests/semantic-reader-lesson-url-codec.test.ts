@@ -15,7 +15,8 @@ test("lesson location round trips through a canonical shareable URL", () => {
     progressPermille: 667,
     projectionId: "projection.symbolic",
     focusRefs: ["equation.x", "equation.left"],
-    motionPreference: "reduced"
+    motionPreference: "reduced",
+    equationPresentationProfileId: "explain"
   });
   const encoded = encodeKpReaderSessionUrl(
     "https://kinetic.press/lessons/solve-x?utm_source=teacher#beat.cancel",
@@ -26,6 +27,7 @@ test("lesson location round trips through a canonical shareable URL", () => {
   assert.equal(url.hash, "#beat.cancel");
   assert.equal(url.searchParams.get("kpProgress"), "667");
   assert.equal(url.searchParams.get("kpMotion"), "reduced");
+  assert.equal(url.searchParams.get("kpProfile"), "explain");
   assert.deepEqual(url.searchParams.getAll("kpFocus"), ["equation.left", "equation.x"]);
   assert.deepEqual(decodeKpReaderSessionUrl(encoded), {
     ...session,
@@ -57,11 +59,17 @@ test("decoder rejects malformed progress and cross-version links", () => {
     ),
     /kpVersion is required/
   );
+  assert.throws(
+    () => decodeKpReaderSessionUrl(
+      "https://kinetic.press/lesson?kpLesson=lesson.solve-x&kpVersion=1&kpProfile=magical"
+    ),
+    /Unknown reader equation presentation profile magical/
+  );
 });
 
 test("encoding replaces stale KP state without disturbing unrelated parameters", () => {
   const encoded = encodeKpReaderSessionUrl(
-    "https://kinetic.press/lesson?kpLesson=old&kpVersion=0&kpFocus=old&utm_campaign=class",
+    "https://kinetic.press/lesson?kpLesson=old&kpVersion=0&kpFocus=old&kpProfile=fluent&utm_campaign=class",
     createKpReaderSessionSnapshot({
       documentId: "lesson.new",
       documentVersion: "3"
@@ -70,5 +78,6 @@ test("encoding replaces stale KP state without disturbing unrelated parameters",
   const url = new URL(encoded);
   assert.equal(url.searchParams.get("kpLesson"), "lesson.new");
   assert.deepEqual(url.searchParams.getAll("kpFocus"), []);
+  assert.equal(url.searchParams.get("kpProfile"), "standard");
   assert.equal(url.searchParams.get("utm_campaign"), "class");
 });

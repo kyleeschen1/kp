@@ -107,7 +107,8 @@
     {
       "id": "s10-profile-url",
       "title": "Make presentation profiles URL-addressable",
-      "status": "planned"
+      "summary": "Added strict kpProfile session URL state: explicit Explain or Fluent choices round-trip, omitted values resolve to Standard, unknown values fail, and share links preserve all other reader and campaign state.",
+      "status": "complete"
     },
     {
       "id": "s11-compiler-selection",

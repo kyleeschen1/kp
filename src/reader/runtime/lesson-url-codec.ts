@@ -3,6 +3,7 @@ import {
   type KpReaderSessionSnapshot
 } from "./session.ts";
 import { parseKpReaderMotionPreference } from "./motion-policy.ts";
+import { resolveKpReaderEquationPresentationProfile } from "./equation-presentation-mode.ts";
 
 const params = {
   lesson: "kpLesson",
@@ -11,7 +12,8 @@ const params = {
   progress: "kpProgress",
   projection: "kpProjection",
   focus: "kpFocus",
-  motion: "kpMotion"
+  motion: "kpMotion",
+  equationProfile: "kpProfile"
 } as const;
 
 export function encodeKpReaderSessionUrl(
@@ -32,6 +34,10 @@ export function encodeKpReaderSessionUrl(
     url.searchParams.set(params.projection, session.location.projectionId);
   }
   url.searchParams.set(params.motion, session.motionPreference);
+  url.searchParams.set(
+    params.equationProfile,
+    session.equationPresentationProfileId
+  );
   [...session.location.focusRefs].sort().forEach((focusRef) =>
     url.searchParams.append(params.focus, focusRef)
   );
@@ -71,7 +77,10 @@ export function decodeKpReaderSessionUrl(
     focusRefs: url.searchParams.getAll(params.focus),
     motionPreference: parseKpReaderMotionPreference(
       url.searchParams.get(params.motion)
-    ) ?? "system"
+    ) ?? "system",
+    equationPresentationProfileId: resolveKpReaderEquationPresentationProfile(
+      url.searchParams.get(params.equationProfile)
+    ).id
   });
 }
 

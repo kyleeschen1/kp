@@ -136,6 +136,20 @@
       "scope": "s09 inferred preset API",
       "checkedAt": "2026-07-21T23:44:39.894Z",
       "notes": "The preset registry satisfies the complete profile-id record while retaining literal inference through the public runtime API."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-reader-lesson-url-codec.test.ts tests/semantic-reader-artifact-contracts.test.ts tests/semantic-reader-adapter-registry.test.ts",
+      "status": "passed",
+      "scope": "s10 canonical profile URL and session contract",
+      "checkedAt": "2026-07-21T23:46:52.969Z",
+      "notes": "Eleven focused tests pass: explicit profile round-trip, Standard fallback, stale-state replacement, unknown-profile rejection, focus ordering, campaign preservation, and unchanged adapter/session behavior."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s10 session and codec API types",
+      "checkedAt": "2026-07-21T23:46:54.164Z",
+      "notes": "All TypeScript projects accept the required resolved profile id on reader snapshots and kpProfile codec state."
     }
   ]
 }
