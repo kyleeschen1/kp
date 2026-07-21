@@ -153,7 +153,8 @@
     {
       "id": "s17-kp-review-skill-validation",
       "title": "Validate-and-forward-test-kp-review-logs",
-      "status": "planned"
+      "summary": "Validated kp-review-logs metadata and workflow, then forward-tested audit, bounded unread review, status dry-run, cursor dry-run, and repeat audit against live notes; source digest remained unchanged and no lifecycle state moved.",
+      "status": "complete"
     },
     {
       "id": "s18-impact-verification-manifest",

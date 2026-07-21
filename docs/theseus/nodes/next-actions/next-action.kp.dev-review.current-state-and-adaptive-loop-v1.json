@@ -117,6 +117,13 @@
       "status": "passed",
       "scope": "s14 byte-stable live v1 history, synthetic-round projection, and exact note identity/order",
       "checkedAt": "2026-07-21T15:42:42.606Z"
+    },
+    {
+      "command": "skill YAML structural validation; live audit, bounded unread query, status dry-run, cursor dry-run, repeat audit",
+      "status": "passed",
+      "scope": "s17 kp-review-logs metadata, workflow forward test, bounded output, and zero live mutation",
+      "checkedAt": "2026-07-21T15:49:04.921Z",
+      "notes": "Official quick_validate.py was attempted but host PyYAML is absent; equivalent Ruby Psych validation passed. Delegated forward test unavailable by environment policy, so deterministic isolated workflow was used."
     }
   ],
   "expectedLearning": [
