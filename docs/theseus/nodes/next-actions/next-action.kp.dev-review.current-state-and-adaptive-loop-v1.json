@@ -148,6 +148,12 @@
       "status": "passed",
       "scope": "s21 deterministic solve-x visual contact sheet",
       "checkedAt": "2026-07-21T16:00:36.022Z"
+    },
+    {
+      "command": "adaptive loop policy tests and npm run typecheck",
+      "status": "passed",
+      "scope": "s22 explainable iteration-long selection, override, approval, and envelope growth",
+      "checkedAt": "2026-07-21T16:02:54.786Z"
     }
   ],
   "expectedLearning": [

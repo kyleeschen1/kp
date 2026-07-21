@@ -183,7 +183,8 @@
     {
       "id": "s22-adaptive-loop-selection",
       "title": "Define-adaptive-loop-mode-selection",
-      "status": "planned"
+      "summary": "Added deterministic adaptive loop selection and runtime envelope checks with explicit approval and no silent escalation.",
+      "status": "complete"
     },
     {
       "id": "s23-theseus-loop-skill-scaffold",
