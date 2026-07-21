@@ -22,6 +22,7 @@ export interface KpReaderEquationPerceptualAlignmentPlan {
   readonly id: string;
   readonly kind: "reader-equation-perceptual-alignment-plan";
   readonly layoutSnapshotId: string;
+  readonly direction: "forward" | "rewind";
   readonly referenceOwnerId?: string | undefined;
   readonly correction: {
     readonly x: number;
@@ -91,22 +92,13 @@ export function planKpReaderEquationPerceptualAlignment(input: {
     x: clampSymmetric(raw.x, policy.maxInlineCorrectionPx),
     y: clampSymmetric(raw.y, policy.maxBlockCorrectionPx)
   };
-  const sourceCorrection = {
-    x: -correction.x / 2,
-    y: -correction.y / 2
-  };
-  const targetCorrection = {
-    x: correction.x / 2,
-    y: correction.y / 2
-  };
-
-  // Split correction across both endpoints so reversing direction retraces
-  // the same absolute path, while bounds keep unusual glyphs from dragging
-  // the equation outside its responsive layout.
+  // Native KaTeX owns both exact endpoints. The correction is therefore a
+  // path envelope, never a mutation of endpoint geometry.
   return {
     id: `alignment.${input.layout.id}`,
     kind: "reader-equation-perceptual-alignment-plan",
     layoutSnapshotId: input.layout.id,
+    direction: input.materialPlan.direction,
     ...(reference === undefined ? {} : { referenceOwnerId: reference.ownerId }),
     correction: {
       ...correction,
@@ -118,11 +110,27 @@ export function planKpReaderEquationPerceptualAlignment(input: {
       ownerId: owner.ownerId,
       ...(owner.sourceBounds === undefined
         ? {}
-        : { sourceBounds: shiftRect(owner.sourceBounds, sourceCorrection) }),
+        : { sourceBounds: owner.sourceBounds }),
       ...(owner.targetBounds === undefined
         ? {}
-        : { targetBounds: shiftRect(owner.targetBounds, targetCorrection) })
+        : { targetBounds: owner.targetBounds })
     }))
+  };
+}
+
+export function sampleKpReaderEquationPerceptualPathOffset(input: {
+  readonly alignment: KpReaderEquationPerceptualAlignmentPlan;
+  readonly progress: number;
+}): { readonly x: number; readonly y: number } {
+  if (!Number.isFinite(input.progress)) {
+    throw new Error("Equation perceptual path progress must be finite.");
+  }
+  const progress = Math.max(0, Math.min(1, input.progress));
+  const envelope = 2 * progress * (1 - progress);
+  const direction = input.alignment.direction === "forward" ? 1 : -1;
+  return {
+    x: direction * input.alignment.correction.x * envelope,
+    y: direction * input.alignment.correction.y * envelope
   };
 }
 
@@ -168,18 +176,6 @@ function centerCorrection(
   return {
     x: source.left + source.width / 2 - (target.left + target.width / 2),
     y: source.top + source.height / 2 - (target.top + target.height / 2)
-  };
-}
-
-function shiftRect(
-  rect: KpReaderLayoutRect,
-  correction: { readonly x: number; readonly y: number }
-): KpReaderLayoutRect {
-  return {
-    left: rect.left + correction.x,
-    top: rect.top + correction.y,
-    width: rect.width,
-    height: rect.height
   };
 }
 

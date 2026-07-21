@@ -101,7 +101,8 @@
     {
       "id": "s10-alignment-path-repair",
       "title": "Alignment path repair",
-      "status": "planned"
+      "summary": "Repaired alignment by keeping native source/target bounds exact, applying bounded perceptual correction only through a reversible endpoint-zero path envelope, propagating direction explicitly, and sharing one fit transform across the full solve-x sequence; visible relation ink now crosses both phase boundaries below the 2px gate.",
+      "status": "complete"
     },
     {
       "id": "s11-native-handoff-continuity",

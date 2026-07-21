@@ -37,6 +37,7 @@ export {
 export {
   kpReaderEquationDefaultAlignmentPolicy,
   planKpReaderEquationPerceptualAlignment,
+  sampleKpReaderEquationPerceptualPathOffset,
   type KpReaderEquationAlignedOwner,
   type KpReaderEquationPerceptualAlignmentPlan,
   type KpReaderEquationPerceptualAlignmentPolicy
@@ -64,6 +65,7 @@ export {
   applyKpReaderEquationResponsiveFit,
   checkKpReaderEquationMotionConformance,
   planKpReaderEquationResponsiveFit,
+  planKpReaderEquationSequenceResponsiveFit,
   type KpReaderEquationConformanceIssue,
   type KpReaderEquationResponsiveFitPlan
 } from "./equation-responsive-fit.ts";

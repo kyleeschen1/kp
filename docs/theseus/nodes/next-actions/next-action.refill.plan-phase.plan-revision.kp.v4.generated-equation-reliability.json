@@ -199,6 +199,12 @@
       "status": "passed",
       "scope": "s09 exact endpoint authority, geometry, one-sided absence, and diagnostic codes",
       "checkedAt": "2026-07-21T01:44:10.405Z"
+    },
+    {
+      "command": "Focused alignment, material-plan, symbol-motion, responsive-fit, endpoint-law unit cohort; TypeScript typecheck; and canonical alignment/parity/URL/exemplar browser cohort",
+      "status": "passed",
+      "scope": "s10 endpoint-zero reversible alignment path and sequence-wide fit",
+      "checkedAt": "2026-07-21T01:55:04.644Z"
     }
   ],
   "progress": {

@@ -54,8 +54,18 @@ async function captureEditorFrame(
   await expect(player).toHaveAttribute("data-kp-editor-animation-id", animation.id);
   await page.evaluate(() => document.fonts.ready);
   await player.locator('[data-action="seek-editor-animation"]').fill(String(progress));
+  await expect(player).toHaveAttribute(
+    "data-kp-editor-animation-progress",
+    String(progress)
+  );
   await settle(page);
   const transition = player.locator("[data-kp-editor-equation-transition-id]");
+  await expect(transition).toHaveAttribute(
+    "data-kp-editor-equation-transition-id",
+    progress === 1
+      ? "transform.linear-solve.simplify-right-difference"
+      : "transform.linear-solve.cancel-left-additive-inverse"
+  );
   await expect(transition).toHaveAttribute(
     "data-kp-editor-equation-presentation-recipe",
     presentation.recipe

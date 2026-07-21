@@ -31,6 +31,44 @@ export function planKpReaderEquationResponsiveFit(input: {
   readonly horizontalPadding?: number | undefined;
   readonly minScale?: number | undefined;
 }): KpReaderEquationResponsiveFitPlan {
+  return planFit({
+    id: `fit.${input.alignment.id}.${input.viewportWidth}`,
+    alignmentPlanId: input.alignment.id,
+    alignments: [input.alignment],
+    viewportWidth: input.viewportWidth,
+    horizontalPadding: input.horizontalPadding,
+    minScale: input.minScale
+  });
+}
+
+export function planKpReaderEquationSequenceResponsiveFit(input: {
+  readonly id: string;
+  readonly alignments: readonly KpReaderEquationPerceptualAlignmentPlan[];
+  readonly viewportWidth: number;
+  readonly horizontalPadding?: number | undefined;
+  readonly minScale?: number | undefined;
+}): KpReaderEquationResponsiveFitPlan {
+  if (input.id.trim() === "" || input.alignments.length === 0) {
+    throw new Error("Equation sequence fit requires an id and at least one alignment.");
+  }
+  return planFit({
+    id: `fit.sequence.${input.id}.${input.viewportWidth}`,
+    alignmentPlanId: `sequence.${input.id}`,
+    alignments: input.alignments,
+    viewportWidth: input.viewportWidth,
+    horizontalPadding: input.horizontalPadding,
+    minScale: input.minScale
+  });
+}
+
+function planFit(input: {
+  readonly id: string;
+  readonly alignmentPlanId: string;
+  readonly alignments: readonly KpReaderEquationPerceptualAlignmentPlan[];
+  readonly viewportWidth: number;
+  readonly horizontalPadding?: number | undefined;
+  readonly minScale?: number | undefined;
+}): KpReaderEquationResponsiveFitPlan {
   const horizontalPadding = input.horizontalPadding ?? 16;
   const minScale = input.minScale ?? 0.72;
   if (!Number.isFinite(input.viewportWidth) || input.viewportWidth <= 0) {
@@ -46,10 +84,12 @@ export function planKpReaderEquationResponsiveFit(input: {
   if (availableWidth <= 0) {
     throw new Error("Equation fit padding leaves no available inline space.");
   }
-  const contentBounds = unionRects(input.alignment.owners.flatMap((owner) => [
-    ...(owner.sourceBounds === undefined ? [] : [owner.sourceBounds]),
-    ...(owner.targetBounds === undefined ? [] : [owner.targetBounds])
-  ]));
+  const contentBounds = unionRects(input.alignments.flatMap((alignment) =>
+    alignment.owners.flatMap((owner) => [
+      ...(owner.sourceBounds === undefined ? [] : [owner.sourceBounds]),
+      ...(owner.targetBounds === undefined ? [] : [owner.targetBounds])
+    ])
+  ));
   const requiredScale = Math.min(1, availableWidth / contentBounds.width);
   const status = requiredScale >= 1
     ? "native" as const
@@ -62,9 +102,9 @@ export function planKpReaderEquationResponsiveFit(input: {
     contentBounds.left * scale;
 
   return {
-    id: `fit.${input.alignment.id}.${input.viewportWidth}`,
+    id: input.id,
     kind: "reader-equation-responsive-fit-plan",
-    alignmentPlanId: input.alignment.id,
+    alignmentPlanId: input.alignmentPlanId,
     viewportWidth: input.viewportWidth,
     horizontalPadding,
     contentBounds,

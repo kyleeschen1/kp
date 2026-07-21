@@ -7,7 +7,8 @@ import {
   compileKpReaderEquationMaterialPlan,
   createKpReaderEquationLayoutSnapshot,
   planKpReaderEquationPerceptualAlignment,
-  projectKpReaderEquationRenderPlan
+  projectKpReaderEquationRenderPlan,
+  sampleKpReaderEquationPerceptualPathOffset
 } from "../src/reader/renderers/public-api.ts";
 
 function fixture(direction: "forward" | "rewind") {
@@ -43,7 +44,7 @@ function fixture(direction: "forward" | "rewind") {
   return { materialPlan, layout };
 }
 
-test("perceptual alignment anchors the equation spine with bounded correction", () => {
+test("perceptual alignment keeps native endpoints exact and bounds the path correction", () => {
   const { materialPlan, layout } = fixture("forward");
   const plan = planKpReaderEquationPerceptualAlignment({
     materialPlan,
@@ -71,12 +72,24 @@ test("perceptual alignment anchors the equation spine with bounded correction", 
   )!;
   assert.equal(
     referenceAfter.targetBounds!.left,
-    referenceBefore.targetBounds!.left + 6
+    referenceBefore.targetBounds!.left
   );
   assert.equal(
     referenceAfter.sourceBounds!.left,
-    referenceBefore.sourceBounds!.left - 6
+    referenceBefore.sourceBounds!.left
   );
+  assert.deepEqual(sampleKpReaderEquationPerceptualPathOffset({
+    alignment: plan,
+    progress: 0
+  }), { x: 0, y: -0 });
+  assert.deepEqual(sampleKpReaderEquationPerceptualPathOffset({
+    alignment: plan,
+    progress: 0.5
+  }), { x: 6, y: -1.5 });
+  assert.deepEqual(sampleKpReaderEquationPerceptualPathOffset({
+    alignment: plan,
+    progress: 1
+  }), { x: 0, y: -0 });
 });
 
 test("perceptual alignment is directionally reversible", () => {
@@ -107,6 +120,10 @@ test("perceptual alignment is directionally reversible", () => {
   assert.equal(rewind.correction.y, -forward.correction.y);
   assert.equal(rewind.correction.rawX, -forward.correction.rawX);
   assert.equal(rewind.correction.rawY, -forward.correction.rawY);
+  assert.deepEqual(
+    sampleKpReaderEquationPerceptualPathOffset({ alignment: rewind, progress: 0.75 }),
+    sampleKpReaderEquationPerceptualPathOffset({ alignment: forward, progress: 0.25 })
+  );
 });
 
 test("perceptual alignment rejects unsafe correction budgets", () => {

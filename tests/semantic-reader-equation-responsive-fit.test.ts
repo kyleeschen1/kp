@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   checkKpReaderEquationMotionConformance,
   planKpReaderEquationResponsiveFit,
+  planKpReaderEquationSequenceResponsiveFit,
   type KpReaderEquationPerceptualAlignmentPlan,
   type KpReaderEquationSymbolMotionFrame
 } from "../src/reader/renderers/public-api.ts";
@@ -12,6 +13,7 @@ const alignment: KpReaderEquationPerceptualAlignmentPlan = {
   id: "alignment.solve",
   kind: "reader-equation-perceptual-alignment-plan",
   layoutSnapshotId: "layout.solve",
+  direction: "forward",
   correction: { x: 0, y: 0, rawX: 0, rawY: 0, clamped: false },
   owners: [{
     ownerId: "owner.x",
@@ -19,6 +21,33 @@ const alignment: KpReaderEquationPerceptualAlignmentPlan = {
     targetBounds: { left: 80, top: 10, width: 140, height: 20 }
   }]
 };
+
+test("a sequence shares one fit transform across transition envelopes", () => {
+  const second = {
+    ...alignment,
+    id: "alignment.solve.second",
+    owners: [{
+      ownerId: "owner.equals",
+      sourceBounds: { left: 60, top: 10, width: 10, height: 20 },
+      targetBounds: { left: 260, top: 10, width: 10, height: 20 }
+    }]
+  };
+  const fit = planKpReaderEquationSequenceResponsiveFit({
+    id: "solve-x",
+    alignments: [alignment, second],
+    viewportWidth: 300,
+    horizontalPadding: 10
+  });
+
+  assert.equal(fit.alignmentPlanId, "sequence.solve-x");
+  assert.deepEqual(fit.contentBounds, {
+    left: 20,
+    top: 10,
+    width: 250,
+    height: 20
+  });
+  assert.equal(fit.translateX, 5);
+});
 
 test("responsive fit preserves native size then scales without wrapping", () => {
   const wide = planKpReaderEquationResponsiveFit({

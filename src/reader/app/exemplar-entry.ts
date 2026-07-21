@@ -14,7 +14,7 @@ import {
   createKpReaderEquationMaterialLayer,
   measureKpReaderEquationLayoutSnapshot,
   planKpReaderEquationPerceptualAlignment,
-  planKpReaderEquationResponsiveFit,
+  planKpReaderEquationSequenceResponsiveFit,
   projectKpReaderEquationRenderPlan,
   sampleKpReaderEquationSymbolMotion,
   type KpReaderEquationLayoutSnapshot,
@@ -254,7 +254,7 @@ function scheduleScrollSample(): void {
 }
 
 function measureLayout(revision: number): LayoutState {
-  const contexts = new Map<string, TransitionContext>();
+  const measured: Omit<TransitionContext, "fit">[] = [];
   for (const element of transitionElements) {
     const id = requiredData(element, "kpReaderTransition");
     const materialPlan = staticPlans.get(id);
@@ -280,14 +280,7 @@ function measureLayout(revision: number): LayoutState {
       materialPlan,
       layout
     });
-    const fit = planKpReaderEquationResponsiveFit({
-      alignment,
-      viewportWidth: viewport.clientWidth,
-      horizontalPadding: 18,
-      minScale: 0.68
-    });
-    applyKpReaderEquationResponsiveFit(fitSurface, fit);
-    contexts.set(id, {
+    measured.push({
       id,
       element,
       fitSurface,
@@ -295,10 +288,20 @@ function measureLayout(revision: number): LayoutState {
       materialPlan,
       anchorElements: anchorElementIndex(measurementRoot),
       layout,
-      alignment,
-      fit
+      alignment
     });
   }
+  const fit = planKpReaderEquationSequenceResponsiveFit({
+    id: `${animation.id}.r${revision}`,
+    alignments: measured.map((context) => context.alignment),
+    viewportWidth: viewport.clientWidth,
+    horizontalPadding: 18,
+    minScale: 0.68
+  });
+  const contexts = new Map(measured.map((context) => {
+    applyKpReaderEquationResponsiveFit(context.fitSurface, fit);
+    return [context.id, { ...context, fit }] as const;
+  }));
   stage.dataset["kpReaderLayoutReads"] = String(scheduler.inspect().readCount + 1);
   return { contexts };
 }

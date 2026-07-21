@@ -41,9 +41,11 @@ test("reload and reverse seek preserve exact frame and semantic focus", async ({
   await page.goto(route(500));
   await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "500");
   await expect(page.locator("[data-kp-reader-equation-stage]")).toHaveAttribute(
-    "data-kp-reader-annihilation-phase",
-    /contact|compress/
+    "data-kp-reader-equation-cancellation-recipe",
+    "native-handoff-v1"
   );
+  await expect(page.locator("[data-kp-reader-equation-stage]"))
+    .not.toHaveAttribute("data-kp-reader-annihilation-phase");
 });
 
 test("the exact final URL presents the complete native solution", async ({ page }) => {

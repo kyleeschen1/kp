@@ -10,6 +10,7 @@ export interface KpReaderEquationMaterialPlan {
   readonly id: string;
   readonly kind: "reader-equation-material-plan";
   readonly renderPlanId: string;
+  readonly direction: KpReaderEquationRenderPlan["direction"];
   readonly transitions: readonly KpReaderEquationTransitionMaterialPlan[];
   readonly diagnostics: readonly KpReaderEquationMaterialPlanDiagnostic[];
 }
@@ -66,6 +67,7 @@ export function compileKpReaderEquationMaterialPlan(
     id: `material-plan.${renderPlan.id}`,
     kind: "reader-equation-material-plan",
     renderPlanId: renderPlan.id,
+    direction: renderPlan.direction,
     transitions,
     diagnostics
   };

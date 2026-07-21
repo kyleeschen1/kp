@@ -7,6 +7,7 @@ import type {
   KpReaderEquationAlignedOwner,
   KpReaderEquationPerceptualAlignmentPlan
 } from "./equation-perceptual-alignment.ts";
+import { sampleKpReaderEquationPerceptualPathOffset } from "./equation-perceptual-alignment.ts";
 import {
   assertKpEquationVisualFrame,
   type KpEquationVisualFrame,
@@ -108,6 +109,10 @@ export function sampleKpReaderEquationSymbolMotion(input: {
       aligned,
       progress,
       easedProgress,
+      sampleKpReaderEquationPerceptualPathOffset({
+        alignment: input.alignment,
+        progress
+      }),
       input.layout,
       operation
     );
@@ -147,6 +152,7 @@ function sampleOwner(
   aligned: KpReaderEquationAlignedOwner,
   progress: number,
   easedProgress: number,
+  pathOffset: { readonly x: number; readonly y: number },
   layout: KpReaderEquationLayoutSnapshot | undefined,
   operation: KpEquationLinearRearrangementOwnerFrame | undefined
 ): KpReaderEquationSymbolOwnerPose {
@@ -165,7 +171,15 @@ function sampleOwner(
   const fragmentPoses: readonly KpEquationOwnerFragmentMotion[] =
     operation?.motion.tokens.flatMap((token) =>
       ownerAnchorIds.has(token.motionId)
-        ? [{ anchorId: token.motionId, side: token.side, pose: token.pose }]
+        ? [{
+            anchorId: token.motionId,
+            side: token.side,
+            pose: {
+              ...token.pose,
+              x: token.pose.x + pathOffset.x,
+              y: token.pose.y + pathOffset.y
+            }
+          }]
         : []
     ) ?? [];
   if (operation !== undefined && fragmentPoses.length === 0) {
@@ -174,7 +188,10 @@ function sampleOwner(
     );
   }
   const currentBounds = operation === undefined
-    ? sampleGenericFallbackBounds(owner.id, source, target, easedProgress)
+    ? shiftBounds(
+        sampleGenericFallbackBounds(owner.id, source, target, easedProgress),
+        pathOffset
+      )
     : operationFragmentBounds(owner.id, fragmentPoses, layout);
 
   return {
@@ -198,6 +215,17 @@ function sampleOwner(
     // Operation frames already encode their temporal emphasis in fragment
     // poses. Focus is therefore a semantic flag, not a second motion sampler.
     focusStrength: owner.focused ? 1 : 0
+  };
+}
+
+function shiftBounds(
+  bounds: KpReaderLayoutRect,
+  offset: { readonly x: number; readonly y: number }
+): KpReaderLayoutRect {
+  return {
+    ...bounds,
+    left: bounds.left + offset.x,
+    top: bounds.top + offset.y
   };
 }
 
