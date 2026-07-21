@@ -34,6 +34,9 @@ import type {
   KpEquationTokenMotionFrameToken
 } from "./semantic-equation-token-renderer.ts";
 import type { KpMeasuredEquationTransitionGeometry } from "./equation-motion-dom.ts";
+import type {
+  KpEquationCancellationPresentationRecipe
+} from "./equation-presentation-policy.ts";
 
 export interface KpEquationOwnerMotionAnchor {
   readonly id: string;
@@ -62,6 +65,8 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
   readonly layout: KpReaderEquationLayoutSnapshot;
   readonly alignment: KpReaderEquationPerceptualAlignmentPlan;
   readonly progress: number;
+  readonly cancellationPresentationRecipe?:
+    KpEquationCancellationPresentationRecipe | undefined;
   readonly witnessedAnnihilationBinding?: KpWitnessedAnnihilationBinding | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
 }): KpEquationLinearRearrangementOwnerFrame {
@@ -114,6 +119,9 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
   const base: KpMeasuredEquationTransitionGeometry = {
     transitionId: input.transition.transitionId,
     linearRearrangementKind: input.kind,
+    ...(input.cancellationPresentationRecipe === undefined
+      ? {}
+      : { cancellationPresentationRecipe: input.cancellationPresentationRecipe }),
     ...(input.witnessedAnnihilationBinding === undefined
       ? {}
       : { witnessedAnnihilationBinding: input.witnessedAnnihilationBinding }),
@@ -144,7 +152,8 @@ function sampleLinearRearrangementMotion(
   const p = clamp01(progress);
   const linearRearrangement = sampleKpEquationLinearRearrangementFrame(
     geometry.linearRearrangementKind!,
-    p
+    p,
+    geometry.cancellationPresentationRecipe
   );
   const witnessedAnnihilation = geometry.witnessedAnnihilationPlan === undefined
     ? undefined
@@ -205,6 +214,7 @@ function sampleRequiredLinearRelation(input: {
     targetTokens: input.targetTokens,
     progress: input.progress,
     frame: input.frame,
+    cancellationPresentationRecipe: input.geometry.cancellationPresentationRecipe,
     successorSynthesisPlan: input.geometry.successorSynthesisPlan
   });
   if (sampled === undefined) {
@@ -231,6 +241,8 @@ export function sampleKpEquationLinearRearrangementOwnerMotion(input: {
   readonly sourceAnchors: readonly KpEquationOwnerMotionAnchor[];
   readonly targetAnchors: readonly KpEquationOwnerMotionAnchor[];
   readonly progress: number;
+  readonly cancellationPresentationRecipe?:
+    KpEquationCancellationPresentationRecipe | undefined;
 }): readonly KpEquationOwnerFragmentMotion[] {
   const sourceTokens = input.sourceAnchors.map(tokenForAnchor);
   const targetTokens = input.targetAnchors.map(tokenForAnchor);
@@ -257,7 +269,12 @@ export function sampleKpEquationLinearRearrangementOwnerMotion(input: {
     sourceTokens,
     targetTokens,
     progress: input.progress,
-    frame: sampleKpEquationLinearRearrangementFrame(input.kind, input.progress)
+    frame: sampleKpEquationLinearRearrangementFrame(
+      input.kind,
+      input.progress,
+      input.cancellationPresentationRecipe
+    ),
+    cancellationPresentationRecipe: input.cancellationPresentationRecipe
   });
   return (sampled ?? []).map((fragment) => ({
     anchorId: fragment.motionId,

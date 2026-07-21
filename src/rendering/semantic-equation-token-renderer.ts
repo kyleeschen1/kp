@@ -302,7 +302,8 @@ export function sampleKpEquationTokenMotion(
     ? undefined
     : sampleKpEquationLinearRearrangementFrame(
         geometry.linearRearrangementKind,
-        p
+        p,
+        geometry.cancellationPresentationRecipe
       );
   const dotProductTraversal = geometry.dotProductTraversalPlan === undefined
     ? undefined
@@ -570,6 +571,7 @@ function sampleRelation(
       targetTokens,
       progress,
       frame: linearRearrangement,
+      cancellationPresentationRecipe: geometry.cancellationPresentationRecipe,
       successorSynthesisPlan: geometry.successorSynthesisPlan
     });
     if (sampled !== undefined) return sampled;

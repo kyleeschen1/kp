@@ -13,7 +13,7 @@ test("canonical linear solve retains semantics but uses the continuity presentat
   const policy = kpEquationPresentationPolicy(animation);
 
   assert.equal(policy.recipe, "continuity-v1");
-  assert.equal(policy.cancellation, "native-handoff-v1");
+  assert.equal(policy.cancellation, "counter-orbit-v1");
   assert.equal(policy.zeroWitness, "none");
   assert.equal(policy.successor, "native-handoff-v1");
   assert.equal(policy.depth, "flat-v1");

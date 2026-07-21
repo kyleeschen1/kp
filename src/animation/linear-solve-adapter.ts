@@ -133,7 +133,8 @@ export function createLinearSolveAnimationAsset(): KpAnimationAsset {
       sourceAnimationId: source.sourceAnimationId,
       // Preserve the successful canonical motion while newer material motifs
       // remain available semantically for isolated refinement and promotion.
-      equationMotionPresentationRecipe: "continuity-v1"
+      equationMotionPresentationRecipe: "continuity-v1",
+      equationCancellationPresentationRecipe: "counter-orbit-v1"
     }
   });
 }

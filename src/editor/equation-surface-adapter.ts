@@ -2465,6 +2465,7 @@ function applySemanticTokenMotion(input: {
         : {
             linearRearrangementKind:
               input.frame.linearRearrangement.step.kind,
+            cancellationPresentationRecipe: presentationPolicy.cancellation,
             ...(!presentationPolicy.applySuccessorSynthesis ||
               input.frame.linearRearrangement.step.successorSynthesisBinding === undefined
               ? {}

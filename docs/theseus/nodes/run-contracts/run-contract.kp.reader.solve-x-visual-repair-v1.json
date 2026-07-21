@@ -125,7 +125,8 @@
     {
       "id": "s14-counter-orbit-recipe",
       "title": "Counter-orbit cancellation recipe",
-      "status": "planned"
+      "summary": "Added a typed, profile-selected counter-orbit recipe shared by editor and reader: inverse terms follow symmetric opposing arcs, return to baseline before fade, and survivor compaction waits until cancellation clears so x is never crossed.",
+      "status": "complete"
     },
     {
       "id": "s15-independent-zero-witness",

@@ -223,6 +223,12 @@
       "status": "passed",
       "scope": "s13 canonical KaTeX scale parity and responsive/static consistency",
       "checkedAt": "2026-07-21T02:05:49.135Z"
+    },
+    {
+      "command": "Focused counter-orbit and presentation unit cohort; canonical reader cancellation, cross-surface parity, native handoff, and phase rewind Playwright cohort; production build/typecheck; deterministic seven-frame visual capture",
+      "status": "passed",
+      "scope": "s14 profile-selected counter-orbit recipe and delayed survivor compaction",
+      "checkedAt": "2026-07-21T02:17:02.404Z"
     }
   ],
   "progress": {

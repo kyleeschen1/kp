@@ -64,3 +64,57 @@ test("persistent material moves during the reservation phase", () => {
   assert.equal(reserved.pose.x, -12);
   assert.equal(reserved.pose.opacity, 1);
 });
+
+test("counter-orbit cancellation keeps inverse terms distinct on symmetric paths", () => {
+  const input = {
+    kind: "cancel-additive-inverses" as const,
+    relationRecordId: "left-inverses-cancel",
+    lifecycle: "cancel" as const,
+    sourceAnchors: [
+      { id: "source.plus-three", rect: { left: 30, top: 20, width: 18, height: 20 } },
+      { id: "source.minus-three", rect: { left: 54, top: 20, width: 18, height: 20 } }
+    ],
+    targetAnchors: [],
+    cancellationPresentationRecipe: "counter-orbit-v1" as const
+  };
+  const start = sampleKpEquationLinearRearrangementOwnerMotion({
+    ...input,
+    progress: 0
+  });
+  assert.ok(start.every((fragment) => fragment.pose.x === 0 && fragment.pose.y === 0));
+
+  const orbiting = sampleKpEquationLinearRearrangementOwnerMotion({
+    ...input,
+    progress: 0.55
+  });
+  assert.deepEqual(orbiting.map((fragment) => Math.sign(fragment.pose.y)), [-1, 1]);
+  assert.ok(orbiting[0]!.pose.x > 0);
+  assert.ok(orbiting[1]!.pose.x < 0);
+  assert.ok(orbiting.every((fragment) => fragment.pose.opacity === 1));
+
+  const settled = sampleKpEquationLinearRearrangementOwnerMotion({
+    ...input,
+    progress: 1
+  });
+  assert.ok(settled.every((fragment) => fragment.pose.y === 0));
+  assert.ok(settled.every((fragment) => fragment.pose.opacity === 0));
+});
+
+test("counter-orbit cancellation compacts survivors only after inverse terms fade", () => {
+  const input = {
+    ...persistent,
+    kind: "cancel-additive-inverses" as const,
+    cancellationPresentationRecipe: "counter-orbit-v1" as const
+  };
+  const whileTermsOrbit = sampleKpEquationLinearRearrangementOwnerMotion({
+    ...input,
+    progress: 0.55
+  })[0]!;
+  const afterTermsFade = sampleKpEquationLinearRearrangementOwnerMotion({
+    ...input,
+    progress: 0.9
+  })[0]!;
+
+  assert.equal(Math.abs(whileTermsOrbit.pose.x), 0);
+  assert.ok(afterTermsFade.pose.x < 0);
+});

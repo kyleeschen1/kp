@@ -12,6 +12,9 @@ import {
   sampleKpSuccessorSynthesis,
   type KpSuccessorSynthesisPlan
 } from "../animation/successor-synthesis.ts";
+import type {
+  KpEquationCancellationPresentationRecipe
+} from "./equation-presentation-policy.ts";
 
 export type KpEquationLinearRearrangementKind =
   | "balanced-introduction"
@@ -41,16 +44,21 @@ export interface KpEquationLinearRearrangementFrame {
 
 export function sampleKpEquationLinearRearrangementFrame(
   kind: KpEquationLinearRearrangementKind,
-  progress: number
+  progress: number,
+  cancellationPresentationRecipe?:
+    KpEquationCancellationPresentationRecipe | undefined
 ): KpEquationLinearRearrangementFrame {
   const p = clamp01(progress);
   const reservationProgress = smooth(windowProgress(p, 0.1, 0.46));
+  const persistentReflowProgress =
+    kind === "cancel-additive-inverses" &&
+      cancellationPresentationRecipe === "counter-orbit-v1"
+      ? smooth(windowProgress(p, 0.8, 0.96))
+      : reservationProgress;
   return {
     kind,
     reservationProgress,
-    persistentReflowProgress: kind === "cancel-additive-inverses"
-      ? smooth(windowProgress(p, 0.1, 0.46))
-      : reservationProgress,
+    persistentReflowProgress,
     meetProgress: smooth(windowProgress(p, 0.42, 0.68)),
     collapseProgress: smooth(windowProgress(p, 0.62, 0.8)),
     resultRevealProgress: smooth(windowProgress(p, 0.68, 0.88)),
@@ -64,6 +72,8 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
   readonly targetTokens: readonly AnnotatedMotionToken[];
   readonly progress: number;
   readonly frame: KpEquationLinearRearrangementFrame;
+  readonly cancellationPresentationRecipe?:
+    KpEquationCancellationPresentationRecipe | undefined;
   readonly successorSynthesisPlan?: KpSuccessorSynthesisPlan | undefined;
 }): readonly KpEquationTokenMotionFrameToken[] | undefined {
   switch (input.relation.lifecycle) {
@@ -76,7 +86,9 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
         : undefined;
     case "cancel":
       return input.frame.kind === "cancel-additive-inverses"
-        ? sampleCancellation(input)
+        ? input.cancellationPresentationRecipe === "counter-orbit-v1"
+          ? sampleCounterOrbitCancellation(input)
+          : sampleCancellation(input)
         : undefined;
     case "merge":
       return input.frame.kind === "simplify-constant-difference"
@@ -142,6 +154,31 @@ function sampleCancellation(
         1 -
         0.16 * input.frame.meetProgress -
         0.18 * input.frame.collapseProgress
+    });
+  });
+}
+
+function sampleCounterOrbitCancellation(
+  input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
+): readonly KpEquationTokenMotionFrameToken[] {
+  const groupCenter = center(input.relation.source?.bounds);
+  return input.sourceTokens.map((token) => {
+    const tokenCenter = center(token.localRect);
+    const orbitDirection = tokenCenter.x <= groupCenter.x ? -1 : 1;
+    const travel = input.frame.meetProgress;
+    // Opposite terms remain individually legible while orbiting toward the
+    // shared cancellation point; the path returns to the baseline before fade.
+    const orbit = travel === 0 || travel === 1
+      ? 0
+      : Math.sin(Math.PI * travel);
+    return frameToken(token, "source", {
+      opacity: 1 - input.frame.collapseProgress,
+      x: (groupCenter.x - tokenCenter.x) * travel,
+      y: orbitDirection * 14 * orbit,
+      scale:
+        1 -
+        0.08 * travel -
+        0.14 * input.frame.collapseProgress
     });
   });
 }

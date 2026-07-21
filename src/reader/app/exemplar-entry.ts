@@ -347,6 +347,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     alignment: context.alignment,
     layout: context.layout,
     linearRearrangementKind: choreographyStep?.kind,
+    cancellationPresentationRecipe: presentationProfile.cancellation,
     witnessedAnnihilationBinding: witnessedBindings.get(transitionId),
     successorSynthesisBinding:
       presentationProfile.successor === "successor-synthesis-v1"

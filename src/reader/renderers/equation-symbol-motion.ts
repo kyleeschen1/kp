@@ -26,6 +26,9 @@ import type { KpReaderEquationLayoutSnapshot } from "./equation-layout-snapshot.
 import type { KpWitnessedAnnihilationBinding } from "../../animation/witnessed-annihilation.ts";
 import type { KpSuccessorSynthesisBinding } from "../../animation/successor-synthesis.ts";
 import type { KpEquationTokenMotionFrame } from "../../rendering/semantic-equation-token-renderer.ts";
+import type {
+  KpEquationCancellationPresentationRecipe
+} from "../../rendering/equation-presentation-policy.ts";
 
 export interface KpReaderEquationSymbolMotionFrame extends KpEquationVisualFrame<
   KpReaderEquationSymbolOwnerPose
@@ -65,6 +68,8 @@ export function sampleKpReaderEquationSymbolMotion(input: {
   readonly alignment: KpReaderEquationPerceptualAlignmentPlan;
   readonly layout?: KpReaderEquationLayoutSnapshot | undefined;
   readonly linearRearrangementKind?: KpEquationLinearRearrangementKind | undefined;
+  readonly cancellationPresentationRecipe?:
+    KpEquationCancellationPresentationRecipe | undefined;
   readonly witnessedAnnihilationBinding?: KpWitnessedAnnihilationBinding | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
   readonly progress: number;
@@ -96,6 +101,7 @@ export function sampleKpReaderEquationSymbolMotion(input: {
         layout: input.layout,
         alignment: input.alignment,
         progress,
+        cancellationPresentationRecipe: input.cancellationPresentationRecipe,
         witnessedAnnihilationBinding: input.witnessedAnnihilationBinding,
         successorSynthesisBinding: input.successorSynthesisBinding
       });

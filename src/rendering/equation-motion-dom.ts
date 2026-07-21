@@ -4,6 +4,9 @@ import type { KpSelectorAnnotatedLatex } from "./selector-annotated-latex.ts";
 import type { KpEquationEnclosureChoreographyKind } from "./equation-enclosure-choreography.ts";
 import type { KpEquationMotionPathCandidate } from "./equation-motion-path-planner.ts";
 import type { KpEquationLinearRearrangementKind } from "./equation-linear-rearrangement.ts";
+import type {
+  KpEquationCancellationPresentationRecipe
+} from "./equation-presentation-policy.ts";
 import type { KpDotProductRendererPlan } from "./equation-dot-product-traversal.ts";
 import type { KpMatrixVectorRendererPlan } from "./equation-matrix-vector-composition.ts";
 import type { KpMatrixMatrixRendererPlan } from "./equation-matrix-matrix-composition.ts";
@@ -79,6 +82,8 @@ export interface KpMeasuredEquationTransitionGeometry {
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
     KpEquationLinearRearrangementKind | undefined;
+  readonly cancellationPresentationRecipe?:
+    KpEquationCancellationPresentationRecipe | undefined;
   readonly successorSynthesisBinding?:
     KpSuccessorSynthesisBinding | undefined;
   readonly successorSynthesisPlan?: KpSuccessorSynthesisPlan | undefined;
@@ -182,6 +187,8 @@ export function measureKpEquationTransitionGeometry(input: {
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
     KpEquationLinearRearrangementKind | undefined;
+  readonly cancellationPresentationRecipe?:
+    KpEquationCancellationPresentationRecipe | undefined;
   readonly successorSynthesisBinding?:
     KpSuccessorSynthesisBinding | undefined;
   readonly witnessedAnnihilationBinding?:
@@ -253,6 +260,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.linearRearrangementKind === undefined
       ? {}
       : { linearRearrangementKind: input.linearRearrangementKind }),
+    ...(input.cancellationPresentationRecipe === undefined
+      ? {}
+      : { cancellationPresentationRecipe: input.cancellationPresentationRecipe }),
     ...(input.successorSynthesisBinding === undefined
       ? {}
       : { successorSynthesisBinding: input.successorSynthesisBinding }),
