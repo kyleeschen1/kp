@@ -3045,6 +3045,7 @@ function syncIndependentZeroWitnessOverlay(input: {
   if (source === null) return;
   const witness = existing ?? document.createElement("span");
   if (existing === null) {
+    witness.className = "editor-equation-stage__independent-zero-witness";
     witness.dataset["kpEditorIndependentZeroWitness"] = "true";
     witness.innerHTML = renderLatexToHtml(plan.latex, { displayMode: false });
     witness.style.position = "absolute";

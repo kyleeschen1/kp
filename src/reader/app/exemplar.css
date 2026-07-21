@@ -76,10 +76,10 @@ a { color: var(--kp-relation); text-underline-offset: .2em; }
 body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-state] { display: none; }
 
 .kp-reader-equation-stage { min-height: clamp(340px, 62vh, 570px); padding: 1.15rem; border: 1px solid var(--kp-line); border-radius: 1.15rem; background: var(--kp-surface); box-shadow: 0 22px 60px rgb(22 35 29 / 7%); overflow: hidden; }
-.kp-reader-equation-stage-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; min-height: 1.6rem; }
-.kp-reader-equation-stage-heading > span { color: var(--kp-accent); font-size: .64rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
-.kp-reader-equation-stage-heading output { color: var(--kp-muted); font-family: var(--kp-serif); font-size: .82rem; white-space: nowrap; }
-.kp-reader-motion-control { display: inline-flex; align-items: center; gap: .38rem; margin-left: auto; color: var(--kp-muted); font-size: .65rem; white-space: nowrap; }
+.kp-reader-equation-stage-heading { display: grid; grid-template-areas: "kicker control" "status status"; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: .25rem 1rem; min-height: 3rem; }
+.kp-reader-equation-stage-heading > span { grid-area: kicker; color: var(--kp-accent); font-size: .64rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+.kp-reader-equation-stage-heading output { grid-area: status; min-width: 0; overflow: hidden; color: var(--kp-muted); font-family: var(--kp-serif); font-size: .82rem; text-overflow: ellipsis; white-space: nowrap; }
+.kp-reader-motion-control { grid-area: control; display: inline-flex; align-items: center; gap: .38rem; margin-left: auto; color: var(--kp-muted); font-size: .65rem; white-space: nowrap; }
 .kp-reader-motion-control select { padding: .2rem 1.35rem .2rem .42rem; border: 1px solid var(--kp-line); border-radius: .4rem; color: var(--kp-ink); background: var(--kp-surface); font: inherit; }
 .kp-reader-equation-viewport { position: relative; min-height: clamp(245px, 48vh, 440px); overflow: hidden; }
 .kp-reader-equation-transition { position: absolute; inset: 0; display: block !important; visibility: hidden; }

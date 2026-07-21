@@ -50,6 +50,7 @@ async function captureEditorFrame(
   await page.goto("/?animation=editor-animation.animation.linear-solve.solve-x");
   const player = page.locator("[data-kp-editor-animation-player]");
   await expect(player).toHaveAttribute("data-kp-editor-animation-id", animation.id);
+  await expect(player).toHaveAttribute("data-kp-editor-animation-hydrated", "true");
   await page.evaluate(() => document.fonts.ready);
   await player.locator('[data-action="seek-editor-animation"]').fill(String(progress));
   await expect(player).toHaveAttribute(

@@ -137,7 +137,8 @@
     {
       "id": "s16-cancellation-visual-gate",
       "title": "Cancellation visual gate",
-      "status": "planned"
+      "summary": "Added a durable rendered cancellation gate across wide/narrow viewports and dense forward/rewind samples; it proves protected-symbol clearance, bounded adjacent travel and opacity, exclusive term/+0/compaction phases, KaTeX parity, and cross-surface placement, while fixing a 9.7px heading-reflow jerk and undersized editor +0.",
+      "status": "complete"
     },
     {
       "id": "s17-successor-convergence-recipe",

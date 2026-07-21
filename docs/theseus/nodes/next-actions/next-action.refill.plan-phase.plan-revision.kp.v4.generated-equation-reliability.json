@@ -235,6 +235,12 @@
       "status": "passed",
       "scope": "s15 independent +0 witness identity, causal ordering, and cross-surface presentation",
       "checkedAt": "2026-07-21T02:30:22.604Z"
+    },
+    {
+      "command": "Cancellation visual-gate Playwright suite plus canonical cancellation, parity, native-handoff, rewind, responsive-fit, URL, hydrated, and no-JS reader cohort; production build/typecheck; deterministic eight-frame visual capture",
+      "status": "passed",
+      "scope": "s16 dense collision, continuity, exclusivity, responsive, rewind, and cross-surface cancellation gate",
+      "checkedAt": "2026-07-21T02:45:18.324Z"
     }
   ],
   "progress": {
