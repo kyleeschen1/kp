@@ -80,7 +80,8 @@
     {
       "id": "s05-review-placement-policy",
       "title": "Review_placement_policy",
-      "status": "planned"
+      "summary": "Added a pure, validated placement policy tied to the reader's existing 881px two-column boundary: semantic readers choose left-prose-rail when wide and captured-moment-sheet when narrow, while every other review consumer retains bottom-right. Three focused laws and repository typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s06-wide-review-dock",
