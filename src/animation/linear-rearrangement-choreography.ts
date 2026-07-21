@@ -216,7 +216,7 @@ function createStep(
   if (causalRecord === undefined) {
     throw new Error(`Linear rearrangement ${transformation.id} requires a causal record.`);
   }
-  const successorSynthesisBinding = kind === "simplify-constant-difference"
+  const successorSynthesisBinding = isSuccessorKind(kind)
     ? createKpSuccessorSynthesisBindingFromMetadata({
         bundle: animation.bundle,
         transformation,
@@ -369,7 +369,7 @@ function vocabularyForStep(
   return {
     id: `vocabulary.${transformation.id}`,
     continuants,
-    representationalLineages: kind === "simplify-constant-difference"
+    representationalLineages: isSuccessorKind(kind)
       ? [{
           id: lineageId,
           meaning: "The constant expression succeeds into its evaluated value.",
@@ -409,7 +409,7 @@ function vocabularyForStep(
         },
         summary: `${continuant.meaning} It remains opaque while moving.`
       })),
-      ...(kind === "simplify-constant-difference"
+      ...(isSuccessorKind(kind)
         ? [{
             id: `${lineageId}.continuity`,
             mode: "causal-derivation" as const,
@@ -467,13 +467,15 @@ function lifecycleForStep(
       targetEntityIds: causalRecord.targetSelectorIds,
       summary: "Equal inverse terms enter only after both sides reserve space."
     });
-  } else if (kind === "cancel-additive-inverses") {
+  } else if (isCancellationKind(kind)) {
     records.push({
       id: `${transformation.id}.cancellation`,
       kind: "elimination",
       cause: {
         kind: "cancellation",
-        authorityId: `kp.algebra.cancel-additive-inverses#additive-inverse`
+        authorityId: kind === "cancel-additive-inverses"
+          ? "kp.algebra.cancel-additive-inverses#additive-inverse"
+          : "kp.algebra.cancel-multiplicative-inverses#multiplicative-inverse"
       },
       sourceEntityIds: causalRecord.sourceSelectorIds,
       targetEntityIds: [],
@@ -647,7 +649,7 @@ function operationSubgraph(
           dependsOnNodeIds: [introduce.id]
         }, release];
       })()
-    : kind === "cancel-additive-inverses"
+    : isCancellationKind(kind)
       ? (() => {
           const hold = node(
             "hold-layout",
@@ -716,6 +718,7 @@ function motifIdsForKind(
     case "cancel-additive-inverses": return ["cancelation", "meet-collapse"];
     case "cancel-multiplicative-inverses": return ["cancelation", "meet-collapse"];
     case "simplify-constant-difference": return ["merge-fan-in", "derive-result"];
+    case "simplify-constant-product": return ["merge-fan-in", "derive-result"];
   }
 }
 
@@ -731,7 +734,17 @@ function meaningfulMotionReason(
       return "Meet then collapse communicates multiplicative inverse cancellation.";
     case "simplify-constant-difference":
       return "Token convergence communicates that the operands causally derive the result.";
+    case "simplify-constant-product":
+      return "Token convergence communicates that the factors causally derive the product.";
   }
+}
+
+function isCancellationKind(kind: KpEquationLinearRearrangementKind): boolean {
+  return kind === "cancel-additive-inverses" || kind === "cancel-multiplicative-inverses";
+}
+
+function isSuccessorKind(kind: KpEquationLinearRearrangementKind): boolean {
+  return kind === "simplify-constant-difference" || kind === "simplify-constant-product";
 }
 
 function kebabCase(value: string): string {

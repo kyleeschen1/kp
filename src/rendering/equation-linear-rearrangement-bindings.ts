@@ -33,17 +33,21 @@ export function createKpEquationLinearRearrangementBindings(
     return [{
       transformationId: transformation.id,
       kind,
-      ...(kind === "simplify-constant-difference"
+      ...(isSuccessorKind(kind)
         ? {
             successorSynthesisBinding:
               createKpSuccessorSynthesisBindingFromMetadata({
                 bundle: animation.bundle,
                 transformation,
                 correspondence: causalRecord,
-                operationId: "kp.algebra.simplify-constant-difference"
+                operationId: `kp.algebra.${kind}`
               })
           }
         : {})
     }];
   });
+}
+
+function isSuccessorKind(kind: KpEquationLinearRearrangementKind): boolean {
+  return kind === "simplify-constant-difference" || kind === "simplify-constant-product";
 }

@@ -25,7 +25,8 @@ export type KpEquationLinearRearrangementKind =
   | "balanced-introduction"
   | "cancel-additive-inverses"
   | "cancel-multiplicative-inverses"
-  | "simplify-constant-difference";
+  | "simplify-constant-difference"
+  | "simplify-constant-product";
 
 export function kpEquationLinearRearrangementKindForTransformType(
   transformType: string
@@ -37,6 +38,7 @@ export function kpEquationLinearRearrangementKindForTransformType(
     case "cancelAdditiveInverses": return "cancel-additive-inverses";
     case "cancelMultiplicativeInverses": return "cancel-multiplicative-inverses";
     case "simplifyConstantDifference": return "simplify-constant-difference";
+    case "simplifyConstantProduct": return "simplify-constant-product";
     default: return undefined;
   }
 }
@@ -64,9 +66,9 @@ export function sampleKpEquationLinearRearrangementFrame(
 ): KpEquationLinearRearrangementFrame {
   const p = clamp01(progress);
   const reservationProgress = smooth(windowProgress(p, 0.1, 0.46));
-  const reserveThenTransit = kind === "simplify-constant-difference" &&
+  const reserveThenTransit = isSuccessorKind(kind) &&
     continuantPresentationRecipe === "reserve-then-transit-v1";
-  const transitThenReflow = kind === "simplify-constant-difference" &&
+  const transitThenReflow = isSuccessorKind(kind) &&
     continuantPresentationRecipe === "transit-then-reflow-v1";
   // Without a +0 teaching beat, begin survivor compaction as the canceled ink
   // finishes retiring instead of concentrating it at the phase boundary.
@@ -127,7 +129,7 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
     case "merge":
       return isCancellationKind(input.frame.kind)
         ? sampleExplicitCancellationTarget(input)
-        : input.frame.kind === "simplify-constant-difference"
+        : isSuccessorKind(input.frame.kind)
         ? input.successorPresentationRecipe === "convergence-v1"
           ? sampleConvergenceConstantDerivation(input)
           : sampleConstantDerivation(input)
@@ -139,6 +141,10 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
 
 function isCancellationKind(kind: KpEquationLinearRearrangementKind): boolean {
   return kind === "cancel-additive-inverses" || kind === "cancel-multiplicative-inverses";
+}
+
+function isSuccessorKind(kind: KpEquationLinearRearrangementKind): boolean {
+  return kind === "simplify-constant-difference" || kind === "simplify-constant-product";
 }
 
 function samplePersistentRelation(

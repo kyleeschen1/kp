@@ -67,3 +67,13 @@ test("denominator removal has an explicit multiplicative cancellation kind", () 
     kind: "cancel-multiplicative-inverses"
   });
 });
+
+test("two times four coalesces through explicit product synthesis", () => {
+  const bindings = createKpEquationLinearRearrangementBindings(
+    createFractionalLinearEquationAnimationAsset()
+  );
+  assert.equal(bindings[5]?.transformationId,
+    "transform.fractional-linear.simplify-right-product");
+  assert.equal(bindings[5]?.kind, "simplify-constant-product");
+  assert.ok(bindings[5]?.successorSynthesisBinding);
+});

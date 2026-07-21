@@ -103,6 +103,19 @@
       "status": "passed",
       "scope": "s13 denominator cancellation",
       "checkedAt": "2026-07-21T22:11:59.632Z"
+    },
+    {
+      "command": "focused fractional and linear rearrangement tests",
+      "status": "passed",
+      "scope": "s14 product coalescence",
+      "checkedAt": "2026-07-21T22:14:21.759Z",
+      "notes": "Constant product has an explicit kind and uses the reviewed successor-synthesis path."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s14 product coalescence",
+      "checkedAt": "2026-07-21T22:14:22.884Z"
     }
   ]
 }

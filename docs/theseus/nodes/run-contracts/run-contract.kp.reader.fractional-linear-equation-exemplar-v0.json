@@ -118,7 +118,8 @@
     {
       "id": "s14-product-coalescence",
       "title": "Coalesce two times four into eight",
-      "status": "planned"
+      "summary": "Two times four now converges into eight through explicit constant-product successor synthesis; multiplicative cancellation also follows the correct cancellation lifecycle.",
+      "status": "complete"
     },
     {
       "id": "s15-native-settlement",
