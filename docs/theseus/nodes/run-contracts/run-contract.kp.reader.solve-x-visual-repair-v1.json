@@ -149,7 +149,8 @@
     {
       "id": "s18-catalyst-and-target-gating",
       "title": "Catalyst and target gating",
-      "status": "planned"
+      "summary": "Convergence now reads authored material-input and catalyst roles without enabling successor synthesis. The minus catalyst retires first, operands remain legible longer, and the result cannot appear until every merge source is absent.",
+      "status": "complete"
     },
     {
       "id": "s19-successor-visual-gate",

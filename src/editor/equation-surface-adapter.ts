@@ -2468,7 +2468,7 @@ function applySemanticTokenMotion(input: {
             cancellationPresentationRecipe: presentationPolicy.cancellation,
             zeroWitnessPresentationRecipe: presentationPolicy.zeroWitness,
             successorPresentationRecipe: presentationPolicy.successor,
-            ...(!presentationPolicy.applySuccessorSynthesis ||
+            ...(presentationPolicy.successor === "native-handoff-v1" ||
               input.frame.linearRearrangement.step.successorSynthesisBinding === undefined
               ? {}
               : {

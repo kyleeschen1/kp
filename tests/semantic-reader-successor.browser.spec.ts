@@ -9,6 +9,8 @@ test("constant inputs converge before the derived four takes ownership", async (
   );
   await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "933");
   await expect(owner).toBeAttached();
+  await expect(page.locator("[data-kp-reader-equation-stage]"))
+    .toHaveAttribute("data-kp-reader-equation-successor-recipe", "convergence-v1");
   const fragmentIds = await owner.locator(
     "[data-kp-reader-equation-material-fragment-id]"
   ).evaluateAll((elements) => elements.map(

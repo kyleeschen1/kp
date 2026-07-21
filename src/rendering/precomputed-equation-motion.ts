@@ -56,9 +56,10 @@ export function createKpPrecomputedEquationMotionPlan(input: {
   const spacing = input.spacing ?? "balanced";
   const pathPreference = input.pathPreference ?? "automatic";
   const timelineMotifKind = baseTimelineMotifKind(input.motifKind);
-  const successorSynthesisPlan = createKpEquationSuccessorSynthesisPlan(
-    input.geometry
-  );
+  const successorSynthesisPlan =
+    input.geometry.successorPresentationRecipe === "successor-synthesis-v1"
+      ? createKpEquationSuccessorSynthesisPlan(input.geometry)
+      : undefined;
   const witnessedAnnihilationPlan = input.geometry.witnessedAnnihilationBinding === undefined
     ? undefined
     : kpEquationWitnessedAnnihilationRuntime()?.createPlan(input.geometry);

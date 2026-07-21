@@ -149,7 +149,9 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
     relations
   };
   const witnessedAnnihilationPlan = createKpEquationWitnessedAnnihilationPlan(base);
-  const successorSynthesisPlan = createKpEquationSuccessorSynthesisPlan(base);
+  const successorSynthesisPlan = input.successorPresentationRecipe === "successor-synthesis-v1"
+    ? createKpEquationSuccessorSynthesisPlan(base)
+    : undefined;
   const independentZeroWitnessPlan = createKpIndependentZeroWitnessPlan(base);
   const geometry = {
     ...base,
@@ -240,6 +242,7 @@ function sampleRequiredLinearRelation(input: {
     frame: input.frame,
     cancellationPresentationRecipe: input.geometry.cancellationPresentationRecipe,
     successorPresentationRecipe: input.geometry.successorPresentationRecipe,
+    successorSynthesisBinding: input.geometry.successorSynthesisBinding,
     successorSynthesisPlan: input.geometry.successorSynthesisPlan
   });
   if (sampled === undefined) {

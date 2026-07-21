@@ -10,6 +10,7 @@ import type {
 import {
   createKpSuccessorSynthesisPlan,
   sampleKpSuccessorSynthesis,
+  type KpSuccessorSynthesisBinding,
   type KpSuccessorSynthesisPlan
 } from "../animation/successor-synthesis.ts";
 import type {
@@ -76,6 +77,7 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
   readonly cancellationPresentationRecipe?:
     KpEquationCancellationPresentationRecipe | undefined;
   readonly successorSynthesisPlan?: KpSuccessorSynthesisPlan | undefined;
+  readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
   readonly successorPresentationRecipe?:
     KpEquationSuccessorPresentationRecipe | undefined;
 }): readonly KpEquationTokenMotionFrameToken[] | undefined {
@@ -260,7 +262,8 @@ function sampleConvergenceConstantDerivation(
   const sourceCenter = center(input.relation.source?.bounds);
   const destination = center(input.relation.target?.bounds);
   const convergence = smooth(windowProgress(input.progress, 0.28, 0.7));
-  const sourceOpacity = 1 - smooth(windowProgress(input.progress, 0.72, 0.84));
+  const materialOpacity = 1 - smooth(windowProgress(input.progress, 0.72, 0.82));
+  const catalystOpacity = 1 - smooth(windowProgress(input.progress, 0.62, 0.72));
   const targetReveal = smooth(windowProgress(input.progress, 0.84, 0.94));
   return [
     ...input.sourceTokens.map((token) => {
@@ -268,8 +271,9 @@ function sampleConvergenceConstantDerivation(
       // Compress the expression as one readable unit; individual glyphs keep
       // their relative order and never claim the successor's final position.
       const compressedX = destination.x + (origin.x - sourceCenter.x) * 0.46;
+      const contribution = successorContributionForToken(input, token.motionId);
       return frameToken(token, "source", {
-        opacity: sourceOpacity,
+        opacity: contribution === "catalyst" ? catalystOpacity : materialOpacity,
         x: (compressedX - origin.x) * convergence,
         y: (destination.y - origin.y) * convergence,
         scale: 1 - 0.08 * convergence
@@ -282,6 +286,21 @@ function sampleConvergenceConstantDerivation(
       scale: 0.9 + 0.1 * targetReveal
     }))
   ];
+}
+
+function successorContributionForToken(
+  input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0],
+  motionId: string
+): "material-input" | "catalyst" {
+  const binding = input.successorSynthesisBinding;
+  const source = input.relation.source;
+  if (binding === undefined || source === undefined) return "material-input";
+  const motionIndex = source.motionIds.indexOf(motionId);
+  const selectorId = source.selectorIds[motionIndex];
+  const annotation = binding.sourceAnnotations.find((candidate) =>
+    candidate.id === selectorId || candidate.selectorIds.includes(selectorId ?? "")
+  );
+  return annotation?.contribution ?? "material-input";
 }
 
 export function createKpEquationSuccessorSynthesisPlan(

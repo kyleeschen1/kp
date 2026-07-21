@@ -299,6 +299,27 @@ test("convergence keeps the constant expression ordered while tightening toward 
     0
   );
 
+  const catalystRetiring = sampleKpEquationTokenMotion(geometry, 0.68);
+  const catalyst = catalystRetiring.tokens.find((token) =>
+    token.side === "source" && token.motionId === "operator.minus"
+  );
+  const materialInputs = catalystRetiring.tokens.filter((token) =>
+    token.side === "source" && token.motionId.startsWith("operand.")
+  );
+  assert.ok((catalyst?.pose.opacity ?? 1) < 1);
+  assert.ok(materialInputs.every((token) => token.pose.opacity === 1));
+
+  const gated = sampleKpEquationTokenMotion(geometry, 0.83);
+  assert.ok(gated.tokens.filter((token) =>
+    token.side === "source" &&
+    (token.motionId.startsWith("operand.") || token.motionId === "operator.minus")
+  )
+    .every((token) => token.pose.opacity === 0));
+  assert.equal(
+    gated.tokens.find((token) => token.side === "target")?.pose.opacity,
+    0
+  );
+
   const resolving = sampleKpEquationTokenMotion(geometry, 0.9);
   assert.ok(resolving.tokens.filter((token) =>
     token.side === "source" && token.motionId.startsWith("operand.")

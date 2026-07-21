@@ -584,6 +584,7 @@ function sampleRelation(
       frame: linearRearrangement,
       cancellationPresentationRecipe: geometry.cancellationPresentationRecipe,
       successorPresentationRecipe: geometry.successorPresentationRecipe,
+      successorSynthesisBinding: geometry.successorSynthesisBinding,
       successorSynthesisPlan: geometry.successorSynthesisPlan
     });
     if (sampled !== undefined) return sampled;

@@ -247,6 +247,12 @@
       "status": "passed",
       "scope": "s17",
       "checkedAt": "2026-07-21T02:52:40.881Z"
+    },
+    {
+      "command": "Focused convergence and presentation unit tests, successor and cross-surface browser gates, TypeScript typecheck, and production build",
+      "status": "passed",
+      "scope": "s18 catalyst retirement and target absence gate",
+      "checkedAt": "2026-07-21T02:58:34.596Z"
     }
   ],
   "progress": {
