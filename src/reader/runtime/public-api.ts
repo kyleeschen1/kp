@@ -58,3 +58,8 @@ export {
   type KpReaderAttentionPrimaryTarget,
   type KpReaderAttentionProjection
 } from "./attention-projector.ts";
+export {
+  KP_READER_WIDE_MIN_WIDTH,
+  resolveKpReaderResponsiveProjection,
+  type KpReaderResponsiveProjection
+} from "./responsive-projection.ts";

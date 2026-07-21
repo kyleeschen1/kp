@@ -38,6 +38,7 @@ import {
   projectKpReaderMotion,
   parseKpReaderMotionPreference,
   projectKpReaderAttention,
+  resolveKpReaderResponsiveProjection,
   resolveKpReaderMotionPolicy,
   sampleKpReaderAnimationFrame,
   type KpReaderClockSample,
@@ -116,6 +117,7 @@ const attentionElements = [
   ...story.querySelectorAll<HTMLElement>("[data-kp-attention-phase]")
 ];
 const attention = readAttentionPlan();
+applyResponsiveProjection();
 const toc = requireElement<HTMLElement>(".kp-lesson-toc");
 const tocLinks = [...toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
 const accessibleCheckpoints = beats.map((beat) => ({
@@ -196,7 +198,7 @@ const resizeObserver = new ResizeObserver(() => {
 resizeObserver.observe(viewport);
 
 window.addEventListener("scroll", onScroll, { passive: true });
-window.addEventListener("resize", updateScrollGeometry, { passive: true });
+window.addEventListener("resize", onResize, { passive: true });
 window.addEventListener("scrollend", settleLocation, { passive: true });
 document.addEventListener("pointerover", onSemanticEnter);
 document.addEventListener("pointerout", onSemanticLeave);
@@ -253,6 +255,23 @@ function updateScrollGeometry(): void {
   );
   if (scrollClock === undefined) return;
   scrollClock.updateGeometry(geometry);
+}
+
+function onResize(): void {
+  const progressPermille = lastSample().progressPermille;
+  applyResponsiveProjection();
+  updateScrollGeometry();
+  // A breakpoint changes the document's geometry. Re-anchor the semantic
+  // moment so responsive projection cannot silently behave like navigation.
+  scrollToProgress(progressPermille);
+}
+
+function applyResponsiveProjection(): void {
+  document.body.dataset["kpReaderResponsiveProjection"] =
+    resolveKpReaderResponsiveProjection({
+      viewportWidth: window.innerWidth,
+      attentionAvailable: attention !== undefined
+    });
 }
 
 function scrollGeometry(): { readonly startPx: number; readonly endPx: number } {
@@ -857,8 +876,13 @@ function restoreUrlLocation(): void {
   }
   const progress = session.location.progressPermille;
   if (progress === undefined) return;
+  scrollToProgress(progress);
+}
+
+function scrollToProgress(progressPermille: number): void {
   const geometry = scrollGeometry();
-  const scrollPosition = geometry.startPx + (geometry.endPx - geometry.startPx) * progress / 1_000;
+  const scrollPosition = geometry.startPx +
+    (geometry.endPx - geometry.startPx) * progressPermille / 1_000;
   window.scrollTo({
     top: scrollPosition - window.innerHeight * readerViewportAnchorFraction()
   });

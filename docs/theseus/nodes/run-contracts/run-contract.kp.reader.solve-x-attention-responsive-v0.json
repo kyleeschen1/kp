@@ -176,7 +176,8 @@
     {
       "id": "s21-responsive-projection-selection",
       "title": "Responsive_projection_selection",
-      "status": "planned"
+      "summary": "A typed 881px policy now selects wide scrollytelling or focus stepper live. Breakpoint crossings re-anchor the same semantic moment, phase, and visual frame; no-attention lessons select fallback.",
+      "status": "complete"
     },
     {
       "id": "s22-accessible-focus-stepper",

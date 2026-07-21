@@ -66,6 +66,31 @@ test("a lesson without attention keeps the original visual projection", async ({
   await expect(body).toHaveAttribute("data-kp-reader-visual-progress", "625");
 });
 
+test("responsive projection changes live without changing the semantic moment", async ({ page }) => {
+  await page.setViewportSize({ width: 881, height: 844 });
+  await page.goto(route(500));
+  const body = page.locator("body");
+  await expect(body).toHaveAttribute(
+    "data-kp-reader-responsive-projection",
+    "wide-scrollytelling"
+  );
+  const before = await attentionFrame(page);
+
+  await page.setViewportSize({ width: 880, height: 844 });
+  await expect(body).toHaveAttribute(
+    "data-kp-reader-responsive-projection",
+    "focus-stepper"
+  );
+  expect(await attentionFrame(page)).toEqual(before);
+
+  await page.setViewportSize({ width: 881, height: 844 });
+  await expect(body).toHaveAttribute(
+    "data-kp-reader-responsive-projection",
+    "wide-scrollytelling"
+  );
+  expect(await attentionFrame(page)).toEqual(before);
+});
+
 async function attentionFrame(page: Page): Promise<unknown> {
   return page.locator("body").evaluate((body) => ({
     semantic: body.dataset["kpReaderProgress"],
