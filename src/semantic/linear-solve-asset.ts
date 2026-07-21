@@ -44,14 +44,58 @@ export type LinearSolveKpBehavior =
 export const linearSolveAssetIds = {
   initial: "equation.linear-solve.initial",
   afterSubtract: "equation.linear-solve.after-subtract",
+  teacherZero: "equation.linear-solve.teacher-zero",
   leftSimplified: "equation.linear-solve.left-simplified",
   solved: "equation.linear-solve.solved",
   subtract: "transform.linear-solve.subtract-both-sides-3",
   cancel: "transform.linear-solve.cancel-left-additive-inverse",
+  exposeZero: "transform.linear-solve.expose-left-zero",
+  removeZero: "transform.linear-solve.remove-left-zero",
   simplify: "transform.linear-solve.simplify-right-difference"
 } as const;
 
 const ids = linearSolveAssetIds;
+
+/** Optional semantic state used only by the explicit teacher-detail variant. */
+export function createLinearSolveTeacherZeroState() {
+  return createKpSemanticAssetObject({
+    id: ids.teacherZero,
+    objectType: "equation",
+    title: "Cancellation made explicit as zero",
+    value: { latex: "x + 0 = 7 - 3" },
+    selectors: [
+      selector(ids.teacherZero, "lhs.x", "term", "x"),
+      selector(ids.teacherZero, "lhs.plus", "operator", "+"),
+      selector(ids.teacherZero, "lhs.zero", "term", "0"),
+      selector(ids.teacherZero, "equals", "relation", "="),
+      selector(ids.teacherZero, "rhs.7", "term", "7", {
+        successorContribution: "material-input",
+        successorRole: "minuend",
+        successorRank: 0
+      }),
+      selector(ids.teacherZero, "rhs.minus", "operator", "−", {
+        successorContribution: "catalyst",
+        successorRole: "subtraction-operator",
+        successorRank: 0
+      }),
+      selector(ids.teacherZero, "rhs.3", "term", "3", {
+        successorContribution: "material-input",
+        successorRole: "subtrahend",
+        successorRank: 1
+      })
+    ],
+    provenance: {
+      kind: "transformed",
+      sourceIds: [ids.afterSubtract],
+      transformationId: ids.exposeZero,
+      summary: "Makes the additive-inverse result explicit before removing the identity."
+    },
+    metadata: {
+      lessonVariant: "teacher-zero",
+      optional: true
+    }
+  });
+}
 
 export function createLinearSolveKpAssetBundle(): LinearSolveKpAsset {
   const bundle = createKpAssetBundle({

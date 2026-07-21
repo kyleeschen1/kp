@@ -162,8 +162,8 @@
     {
       "id": "s20-teacher-zero-state",
       "title": "Teacher zero state",
-      "summary": "Add an explicit semantic x plus zero equals seven minus three lesson state.",
-      "status": "ready"
+      "summary": "Added an optional typed equation object for x + 0 = 7 - 3 with separately addressable x, plus, zero, equals, and right-side selectors; transformed provenance from the cancellation source; and preserved successor roles. A preservation law proves the state does not leak into the streamlined asset. Eleven focused semantic and animation laws plus TypeScript pass.",
+      "status": "complete"
     },
     {
       "id": "s21-teacher-zero-beat",
