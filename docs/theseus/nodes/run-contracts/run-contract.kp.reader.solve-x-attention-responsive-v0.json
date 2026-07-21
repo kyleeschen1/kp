@@ -110,7 +110,8 @@
     {
       "id": "s10-solid-material-law",
       "title": "Solid_material_handoff_law",
-      "status": "planned"
+      "summary": "Added and verified an opt-in atomic-v1 native/material handoff. It assigns each persistent visual frame to exactly one solid owner, handles one-sided arrival and retirement at exact endpoints, and preserves crossfade-v1 as the compatibility default until the solve-x exemplar explicitly selects atomic ownership.",
+      "status": "complete"
     },
     {
       "id": "s11-solve-x-ownership-repair",

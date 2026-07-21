@@ -175,6 +175,53 @@ test("one-sided material reaches full authority without a handoff flicker", () =
   assert.equal(arriving[5]!.materialOpacity, 0);
 });
 
+test("atomic handoff assigns every visible frame to exactly one solid owner", () => {
+  for (const progress of [0, Number.EPSILON, 0.04, 0.5, 0.96, 1 - Number.EPSILON, 1]) {
+    const frame = sampleKpEquationMaterialOwnerHandoff({
+      ownerId: "owner.x",
+      progress,
+      sourcePresent: true,
+      targetPresent: true,
+      handoffMode: "atomic-v1"
+    });
+    const opacities = [
+      frame.sourceNativeOpacity,
+      frame.materialOpacity,
+      frame.targetNativeOpacity
+    ];
+    assert.equal(opacities.reduce((sum, opacity) => sum + opacity, 0), 1);
+    assert.ok(opacities.every((opacity) => opacity === 0 || opacity === 1));
+  }
+});
+
+test("atomic one-sided owners retire and arrive only at exact endpoints", () => {
+  const departingEnd = sampleKpEquationMaterialOwnerHandoff({
+    ownerId: "owner.canceling-pair",
+    progress: 1,
+    sourcePresent: true,
+    targetPresent: false,
+    handoffMode: "atomic-v1"
+  });
+  assert.deepEqual([
+    departingEnd.sourceNativeOpacity,
+    departingEnd.materialOpacity,
+    departingEnd.targetNativeOpacity
+  ], [0, 0, 0]);
+
+  const arrivingStart = sampleKpEquationMaterialOwnerHandoff({
+    ownerId: "owner.derived-result",
+    progress: 0,
+    sourcePresent: false,
+    targetPresent: true,
+    handoffMode: "atomic-v1"
+  });
+  assert.deepEqual([
+    arrivingStart.sourceNativeOpacity,
+    arrivingStart.materialOpacity,
+    arrivingStart.targetNativeOpacity
+  ], [0, 0, 0]);
+});
+
 test("neutral handoff policy rejects unsafe timing windows", () => {
   assert.throws(
     () => sampleKpEquationMaterialOwnerHandoff({

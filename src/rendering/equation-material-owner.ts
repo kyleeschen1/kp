@@ -28,6 +28,8 @@ export interface KpEquationMaterialOwnerHandoff {
   readonly nativeHandoff: "source" | "material" | "target";
 }
 
+export type KpEquationMaterialHandoffMode = "crossfade-v1" | "atomic-v1";
+
 const defaultNativeHandoffFraction = 0.08;
 
 export function sampleKpEquationMaterialOwnerHandoff(input: {
@@ -35,9 +37,13 @@ export function sampleKpEquationMaterialOwnerHandoff(input: {
   readonly progress: number;
   readonly sourcePresent: boolean;
   readonly targetPresent: boolean;
+  readonly handoffMode?: KpEquationMaterialHandoffMode;
   readonly nativeHandoffFraction?: number;
 }): KpEquationMaterialOwnerHandoff {
   const progress = clamp01(input.progress);
+  if (input.handoffMode === "atomic-v1") {
+    return sampleAtomicHandoff({ ...input, progress });
+  }
   const handoffFraction = input.nativeHandoffFraction
     ?? defaultNativeHandoffFraction;
   if (
@@ -73,6 +79,35 @@ export function sampleKpEquationMaterialOwnerHandoff(input: {
     nativeHandoff: sourceNativeOpacity > 0
       ? "source"
       : targetNativeOpacity > 0
+        ? "target"
+        : "material"
+  };
+}
+
+function sampleAtomicHandoff(input: {
+  readonly ownerId: string;
+  readonly progress: number;
+  readonly sourcePresent: boolean;
+  readonly targetPresent: boolean;
+}): KpEquationMaterialOwnerHandoff {
+  const atSource = input.progress === 0;
+  const atTarget = input.progress === 1;
+  // Native nodes remain geometry authorities, but visual authority changes in
+  // one frame only after the moving clone occupies the identical endpoint.
+  const sourceNativeOpacity = atSource && input.sourcePresent ? 1 : 0;
+  const targetNativeOpacity = atTarget && input.targetPresent ? 1 : 0;
+  const materialOpacity = atSource || atTarget
+    ? 0
+    : input.sourcePresent || input.targetPresent ? 1 : 0;
+  return {
+    ownerId: input.ownerId,
+    progress: input.progress,
+    materialOpacity,
+    sourceNativeOpacity,
+    targetNativeOpacity,
+    nativeHandoff: sourceNativeOpacity === 1
+      ? "source"
+      : targetNativeOpacity === 1
         ? "target"
         : "material"
   };

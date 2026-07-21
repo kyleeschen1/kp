@@ -40,3 +40,30 @@ test("native and material CSS authority closes every persistent seam", async ({ 
   expect(seams[0]).toMatchObject({ source: 1, material: 0, target: 0 });
   expect(seams.at(-1)).toMatchObject({ source: 0, material: 0, target: 1 });
 });
+
+test("atomic CSS authority never blends native and moving material", async ({ page }) => {
+  await page.goto("/");
+  const modulePath = "/src/rendering/equation-material-owner.ts";
+  const seams = await page.evaluate(async ({ modulePath }) => {
+    const owner = await import(modulePath);
+    return [0, 0.001, 0.04, 0.5, 0.96, 0.999, 1].map((progress) =>
+      owner.sampleKpEquationMaterialOwnerHandoff({
+        ownerId: "owner.x",
+        progress,
+        sourcePresent: true,
+        targetPresent: true,
+        handoffMode: "atomic-v1"
+      })
+    );
+  }, { modulePath });
+
+  for (const seam of seams) {
+    const opacities = [
+      seam.sourceNativeOpacity,
+      seam.materialOpacity,
+      seam.targetNativeOpacity
+    ];
+    expect(opacities.reduce((sum, opacity) => sum + opacity, 0)).toBe(1);
+    expect(opacities.every((opacity) => opacity === 0 || opacity === 1)).toBe(true);
+  }
+});
