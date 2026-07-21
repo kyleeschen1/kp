@@ -90,8 +90,8 @@
     {
       "id": "s08-collision-invariant",
       "title": "Collision-clearance invariant",
-      "summary": "Define renderer-neutral clearance evidence for moving and protected equation ink.",
-      "status": "ready"
+      "summary": "Added renderer-neutral rectangular ink clearance evidence for explicitly authored moving/protected semantic pairs. It distinguishes overlap, insufficient clearance, safe diagonal separation, and invisible ink without imposing false constraints on normal adjacent typography; three unit laws and the full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s09-swept-bound-sampling",
