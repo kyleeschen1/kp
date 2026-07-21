@@ -306,7 +306,10 @@ function applyResponsiveProjection(): void {
   document.body.dataset["kpReaderResponsiveProjection"] =
     resolveKpReaderResponsiveProjection({
       viewportWidth: window.innerWidth,
-      attentionAvailable: attention !== undefined
+      attentionAvailable: attention !== undefined,
+      // The compact transcript is an explicit lesson capability. Treating a
+      // missing attention plan as sufficient changed legacy reader geometry.
+      compactTranscriptAvailable: lessonVariant === "fractional-linear"
     });
 }
 

@@ -21,14 +21,23 @@ test("attention stories switch projection at the reader layout boundary", () => 
 test("stories without attention use a finite compact transcript when narrow", () => {
   assert.equal(resolveKpReaderResponsiveProjection({
     viewportWidth: 390,
-    attentionAvailable: false
+    attentionAvailable: false,
+    compactTranscriptAvailable: true
   }), "compact-transcript");
   assert.equal(resolveKpReaderResponsiveProjection({
     viewportWidth: 1_440,
-    attentionAvailable: false
+    attentionAvailable: false,
+    compactTranscriptAvailable: true
   }), "fallback");
   assert.throws(() => resolveKpReaderResponsiveProjection({
     viewportWidth: 0,
     attentionAvailable: true
   }), /positive and finite/);
+});
+
+test("stories must opt in before missing attention becomes a compact transcript", () => {
+  assert.equal(resolveKpReaderResponsiveProjection({
+    viewportWidth: 390,
+    attentionAvailable: false
+  }), "fallback");
 });

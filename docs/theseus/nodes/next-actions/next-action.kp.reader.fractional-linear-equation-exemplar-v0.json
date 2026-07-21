@@ -198,6 +198,79 @@
       "status": "passed",
       "scope": "s23 visual containment",
       "checkedAt": "2026-07-21T22:43:58.442Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "full deterministic unit and architecture suite",
+      "checkedAt": "2026-07-21T22:59:24.734Z",
+      "notes": "1768 tests passed after the responsive projection preservation repair."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "repository TypeScript boundaries",
+      "checkedAt": "2026-07-21T22:59:25.907Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production bundle and generated reader routes",
+      "checkedAt": "2026-07-21T22:59:26.959Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "production review-inbox closure",
+      "checkedAt": "2026-07-21T22:59:28.034Z"
+    },
+    {
+      "command": "npm run perf:animation",
+      "status": "passed",
+      "scope": "animation performance regression gate",
+      "checkedAt": "2026-07-21T22:59:29.115Z",
+      "notes": "No measured regression. Existing product targets remain: normal initial transfer 317039 bytes, constrained p95 50.2 ms, constrained longest task 52 ms."
+    },
+    {
+      "command": "npm run visual:contact-sheet",
+      "status": "passed",
+      "scope": "cross-surface visual contact sheet",
+      "checkedAt": "2026-07-21T22:59:30.142Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation",
+      "status": "passed",
+      "scope": "31 fractional browser samples and seven checkpoint captures",
+      "checkedAt": "2026-07-21T22:59:31.207Z",
+      "notes": "Zero wrapping, collision, ink, containment, fraction-geometry, or font-continuity failures."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "canonical Solve x visual preservation baseline",
+      "checkedAt": "2026-07-21T22:59:32.269Z",
+      "notes": "Captured 39 existing exemplar states."
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader- tests/tutorial-ftc-surface.browser.spec.ts --workers=1",
+      "status": "failed",
+      "scope": "broad reader and FTC browser suite",
+      "checkedAt": "2026-07-21T22:59:45.491Z",
+      "notes": "51 of 54 passed. The three failures reproduce at commit 530389c5 parent: focus salience, narrow sticky surface, and successor opacity. The only new teacher-zero compact transcript regression was scoped away and its responsive gate now passes."
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "scope": "Theseus project graph",
+      "checkedAt": "2026-07-21T22:59:46.725Z",
+      "notes": "689 nodes and 9591 events validated before final slice recording."
+    },
+    {
+      "command": "npm run verify:impact -- --path changed files",
+      "status": "passed",
+      "scope": "high-risk impact selection",
+      "checkedAt": "2026-07-21T22:59:47.860Z",
+      "notes": "Selected repository type, architecture, visual, unit, and build gates; all applicable new-scope gates passed."
     }
   ]
 }

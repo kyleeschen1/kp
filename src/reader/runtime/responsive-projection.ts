@@ -9,12 +9,14 @@ export type KpReaderResponsiveProjection =
 export function resolveKpReaderResponsiveProjection(input: {
   readonly viewportWidth: number;
   readonly attentionAvailable: boolean;
+  readonly compactTranscriptAvailable?: boolean;
 }): KpReaderResponsiveProjection {
   if (!Number.isFinite(input.viewportWidth) || input.viewportWidth <= 0) {
     throw new RangeError("Reader projection viewport width must be positive and finite");
   }
   if (!input.attentionAvailable) {
-    return input.viewportWidth >= KP_READER_WIDE_MIN_WIDTH
+    return input.viewportWidth >= KP_READER_WIDE_MIN_WIDTH ||
+      input.compactTranscriptAvailable !== true
       ? "fallback"
       : "compact-transcript";
   }

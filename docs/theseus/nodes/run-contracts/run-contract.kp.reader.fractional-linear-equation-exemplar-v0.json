@@ -178,7 +178,8 @@
     {
       "id": "s24-release-gate",
       "title": "Run broad release and visual gates",
-      "status": "planned"
+      "summary": "Passed full unit, architecture, inference, type, build, production closure, impact, performance-regression, contact-sheet, canonical Solve x visual, and dedicated fractional visual/browser gates. Broad browser audit passed 51 of 54; all three failures reproduce at the pre-run parent. Fixed the one discovered preservation leak by requiring explicit compact-transcript capability, leaving teacher-zero geometry unchanged.",
+      "status": "complete"
     },
     {
       "id": "s25-human-checkpoint",

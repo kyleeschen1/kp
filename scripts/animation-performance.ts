@@ -80,7 +80,11 @@ async function startPreview(): Promise<string> {
 
 async function readArtifacts(): Promise<KpAnimationPerformanceSnapshot["artifacts"]> {
   const indexHtml = await readFile(new URL("../dist/index.html", import.meta.url), "utf8");
-  const entryName = indexHtml.match(/src="\/assets\/(index-[^"]+\.js)"/)?.[1];
+  // Rollup entry names follow the configured input key (currently `main`),
+  // so the production module tag is the authority rather than a filename prefix.
+  const entryName = indexHtml.match(
+    /<script\b[^>]*\btype="module"[^>]*\bsrc="\/assets\/([^"]+\.js)"/
+  )?.[1];
   if (entryName === undefined) {
     throw new Error("Build first: dist/index.html has no production entry script.");
   }
