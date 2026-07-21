@@ -145,11 +145,17 @@
       "scope": "s01 replacement run-contract schema and graph integrity",
       "checkedAt": "2026-07-21T01:14:25.520Z",
       "notes": "Validated typed run mode, 27-slice limit, broad gate, per-slice commits, preservation boundary, and human stop."
+    },
+    {
+      "command": "npx playwright test focused dev-review composer and real-reader cohorts plus npm run typecheck",
+      "status": "passed",
+      "scope": "s02 per-note capture lifecycle, retry stability, async generation safety, real reader preservation",
+      "checkedAt": "2026-07-21T01:19:41.348Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Failed solve-x visual review is converted into an advance-approved 27-slice exemplar repair contract; implementation begins with per-note review capture."
+    "summary": "Review notes now acquire distinct frame captures without closing the panel; failed saves retain their original locked moment and draft."
   },
   "expectedLearning": [
     "Approved revision 4 places this planned phase in now."

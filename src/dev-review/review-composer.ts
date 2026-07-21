@@ -51,54 +51,85 @@ export function mountKpDevReviewComposer(options: {
   options.shell.content.append(intro, meta, route, form);
 
   let snapshot: KpDevReviewCaptureV1 | undefined;
+  let capturePromise: Promise<KpDevReviewCaptureV1 | undefined> | undefined;
   let generation = 0;
   let submitting = false;
 
-  const onOpen = async (): Promise<void> => {
-    const currentGeneration = ++generation;
-    snapshot = undefined;
-    textarea.value = "";
-    count.textContent = "0 / 4000";
-    textarea.disabled = true;
-    save.disabled = true;
+  const renderCapturePrompt = (): void => {
+    meta.replaceChildren(pill(ownerDocument, "Type to capture this moment"));
+    route.textContent = "";
+  };
+  const lockCapture = (): Promise<KpDevReviewCaptureV1 | undefined> => {
+    if (snapshot !== undefined) return Promise.resolve(snapshot);
+    if (capturePromise !== undefined) return capturePromise;
+    const currentGeneration = generation;
     meta.replaceChildren(pill(ownerDocument, "Capturing state…"));
     route.textContent = "";
-    options.shell.status.value = "";
-    try {
-      const capture = await options.capture();
-      if (generation !== currentGeneration) return;
+    const pending = options.capture().then((capture) => {
+      if (generation !== currentGeneration) return undefined;
       snapshot = capture;
       renderCaptureMeta(meta, route, capture);
-      textarea.disabled = false;
+      options.shell.status.value = "Moment captured for this note.";
+      return capture;
+    }).catch(() => {
+      if (generation === currentGeneration) {
+        meta.replaceChildren(pill(ownerDocument, "State unavailable"));
+        options.shell.status.value = "Could not capture this moment. Try saving again.";
+      }
+      return undefined;
+    }).finally(() => {
+      // An obsolete capture may settle after close/reopen. It must not clear a
+      // newer note's in-flight lock.
+      if (capturePromise === pending) capturePromise = undefined;
       updateSubmitState();
-      textarea.focus();
-    } catch {
-      if (generation !== currentGeneration) return;
-      meta.replaceChildren(pill(ownerDocument, "State unavailable"));
-      options.shell.status.value = "Could not capture this moment.";
-    }
+    });
+    capturePromise = pending;
+    updateSubmitState();
+    return pending;
+  };
+  const onOpen = (): void => {
+    generation += 1;
+    snapshot = undefined;
+    capturePromise = undefined;
+    textarea.value = "";
+    count.textContent = "0 / 4000";
+    textarea.disabled = false;
+    renderCapturePrompt();
+    options.shell.status.value = "";
+    updateSubmitState();
+    textarea.focus();
   };
   const onClose = (): void => {
     generation += 1;
     snapshot = undefined;
+    capturePromise = undefined;
     textarea.value = "";
     count.textContent = "0 / 4000";
   };
   const updateSubmitState = (): void => {
     count.textContent = `${textarea.value.length} / 4000`;
-    save.disabled = snapshot === undefined || textarea.value.trim().length === 0 || submitting;
+    save.disabled = textarea.value.trim().length === 0 || submitting || capturePromise !== undefined;
   };
   const onSubmit = async (event: SubmitEvent): Promise<void> => {
     event.preventDefault();
     const comment = textarea.value.trim();
-    const captured = snapshot;
-    if (captured === undefined || comment.length === 0 || submitting) return;
+    if (comment.length === 0 || submitting) return;
     submitting = true;
     updateSubmitState();
+    const captured = await lockCapture();
+    if (captured === undefined) {
+      submitting = false;
+      updateSubmitState();
+      return;
+    }
     options.shell.status.value = "Saving…";
     try {
       const note = await options.submit({ comment, capture: captured });
       textarea.value = "";
+      // A successful save ends the note's immutable capture lifetime. The next
+      // input can therefore lock a later reader frame without closing the tool.
+      snapshot = undefined;
+      renderCapturePrompt();
       options.shell.setInboxCount(note.sequence);
       options.shell.status.value = `Saved note ${note.sequence}.`;
     } catch {
@@ -114,10 +145,16 @@ export function mountKpDevReviewComposer(options: {
       form.requestSubmit();
     }
   };
+  const onTextInput = (): void => {
+    updateSubmitState();
+    if (textarea.value.trim().length > 0 && snapshot === undefined) {
+      void lockCapture();
+    }
+  };
 
   options.shell.host.addEventListener(KP_DEV_REVIEW_SHELL_OPEN_EVENT, onOpen);
   options.shell.host.addEventListener(KP_DEV_REVIEW_SHELL_CLOSE_EVENT, onClose);
-  textarea.addEventListener("input", updateSubmitState);
+  textarea.addEventListener("input", onTextInput);
   textarea.addEventListener("keydown", onTextKeyDown);
   form.addEventListener("submit", onSubmit);
 
@@ -126,7 +163,7 @@ export function mountKpDevReviewComposer(options: {
       generation += 1;
       options.shell.host.removeEventListener(KP_DEV_REVIEW_SHELL_OPEN_EVENT, onOpen);
       options.shell.host.removeEventListener(KP_DEV_REVIEW_SHELL_CLOSE_EVENT, onClose);
-      textarea.removeEventListener("input", updateSubmitState);
+      textarea.removeEventListener("input", onTextInput);
       textarea.removeEventListener("keydown", onTextKeyDown);
       form.removeEventListener("submit", onSubmit);
       intro.remove();

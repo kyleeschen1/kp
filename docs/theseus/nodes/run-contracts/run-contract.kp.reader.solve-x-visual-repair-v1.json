@@ -53,7 +53,8 @@
     {
       "id": "s02-per-note-capture-lifecycle",
       "title": "Per-note capture lifecycle",
-      "status": "planned"
+      "summary": "Each note now locks a fresh frame on first meaningful input, releases it only after durable success, preserves it across failed retries, and isolates obsolete asynchronous captures across close/reopen.",
+      "status": "complete"
     },
     {
       "id": "s03-capture-lock-ui",
