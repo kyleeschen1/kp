@@ -141,7 +141,8 @@
     {
       "id": "s15-kp-review-skill-scaffold",
       "title": "Scaffold-kp-review-logs-skill",
-      "status": "planned"
+      "summary": "Created the personal kp-review-logs skill and metadata in the standard Codex skills directory; its boundary delegates state access to npm run review:logs and forbids raw-log mutation or automatic Theseus work creation.",
+      "status": "complete"
     },
     {
       "id": "s16-kp-review-skill-workflow",
