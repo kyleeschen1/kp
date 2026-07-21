@@ -13,6 +13,10 @@
       "kind": "file",
       "path": "docs/theseus/nodes/next-actions/next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability.json",
       "summary": "Approved generated-equation reliability target and preservation boundary."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-21-solve-x-human-checkpoint-follow-up.md"
     }
   ],
   "verification": [
