@@ -104,7 +104,8 @@
     {
       "id": "s09-handoff-instrumentation",
       "title": "Handoff_instrumentation",
-      "status": "planned"
+      "summary": "Added a repeatable 33-frame live solve-x handoff sampler covering every transformation seam with native/material opacity and bounding geometry. It proves the perceived fade is the current 8% smooth-crossfade policy: matching DOM owners coexist at partial opacity even though endpoint geometry is sound.",
+      "status": "complete"
     },
     {
       "id": "s10-solid-material-law",

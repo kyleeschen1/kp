@@ -46,6 +46,13 @@
       "scope": "s08 review placement visual checkpoint",
       "checkedAt": "2026-07-21T19:43:03.061Z",
       "notes": "Accepted for continuation: wide panel is isolated in the prose rail; narrow sheet is singular and bounded below the live stage; closed states are clean; no reader progress or scroll drift. Existing phone scrollytelling compression remains explicitly deferred to s21-s23."
+    },
+    {
+      "command": "npm run baseline:solve-x-handoff plus focused material/native Playwright cohort and typecheck",
+      "status": "passed",
+      "scope": "s09 live solve-x handoff instrumentation",
+      "checkedAt": "2026-07-21T19:45:57.443Z",
+      "notes": "The 33-frame live sampler isolates the defect: p10 has material/native alpha 0.312/0.688 and p990 has 0.319/0.681; endpoint geometry still closes within existing tolerance. Existing tests only enforce alpha sum and exact endpoints, so the visible smooth crossfade is intentional under the current law."
     }
   ]
 }
