@@ -52,3 +52,9 @@ export {
   type KpReaderMotionPreference,
   type KpReaderResolvedMotionMode
 } from "./motion-policy.ts";
+export {
+  projectKpReaderAttention,
+  type KpReaderAttentionMotionGate,
+  type KpReaderAttentionPrimaryTarget,
+  type KpReaderAttentionProjection
+} from "./attention-projector.ts";

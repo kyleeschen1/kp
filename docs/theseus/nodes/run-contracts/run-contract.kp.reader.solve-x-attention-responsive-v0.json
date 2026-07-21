@@ -146,7 +146,8 @@
     {
       "id": "s16-attention-projector",
       "title": "Attention_projector",
-      "status": "planned"
+      "summary": "Added a pure optional attention projector with exact semantic progress, gaze targets, reversible phase selection, and hold-play-hold visual remapping.",
+      "status": "complete"
     },
     {
       "id": "s17-attention-static-compiler",
