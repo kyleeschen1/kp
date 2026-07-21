@@ -174,8 +174,8 @@
     {
       "id": "s22-teacher-zero-routing",
       "title": "Teacher zero routing",
-      "summary": "Restore teacher mode and its exact beat through a shareable URL.",
-      "status": "ready"
+      "summary": "Added the static /reader/solve-x/teacher-zero/ production route with reciprocal Explain the zero and Skip the zero links. Teacher document identity, exact progress, reload, rewind, and share URLs restore independently from the streamlined route. A new guard prevents history writes before URL-selected scroll restoration. Seven canonical/teacher browser gates, no-JavaScript searchability, TypeScript, and the production build pass; the emitted teacher HTML is 3.47 kB gzip.",
+      "status": "complete"
     },
     {
       "id": "s23-integrated-responsive-gate",

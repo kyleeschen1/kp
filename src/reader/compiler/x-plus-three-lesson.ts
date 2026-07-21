@@ -84,6 +84,15 @@ function compileKpXPlusThreeLessonVariant(markdown: string, input: {
   const prose = compileKpStaticLessonProse(document, { staticMath });
   const hydration = emitKpReaderHydrationManifest(resolved, staticMath);
   const equationTemplate = compileEquationExemplarTemplate(animation);
+  const variantLink = input.variant === "streamlined"
+    ? {
+        href: "/reader/solve-x/teacher-zero/?kpLesson=lesson.solve-x.x-plus-3.teacher-zero&amp;kpVersion=1&amp;kpCheckpoint=beat.make-zero&amp;kpProgress=500",
+        label: "Explain the zero"
+      }
+    : {
+        href: "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&amp;kpVersion=1&amp;kpCheckpoint=beat.cancel&amp;kpProgress=667",
+        label: "Skip the zero"
+      };
   const html = [
     "<!doctype html>",
     `<html lang="en">`,
@@ -98,6 +107,7 @@ function compileKpXPlusThreeLessonVariant(markdown: string, input: {
     `<header class="kp-reader-masthead">`,
     `<a class="kp-reader-wordmark" href="/">Kinetic Press</a>`,
     `<span class="kp-reader-tagline">See concepts move</span>`,
+    `<a class="kp-reader-mode" href="${variantLink.href}">${variantLink.label}</a>`,
     `<a class="kp-reader-share" href="#story.solve-x" data-kp-reader-share>Link this moment</a>`,
     `</header>`,
     `<main class="kp-reader-layout">`,

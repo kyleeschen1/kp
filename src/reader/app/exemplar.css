@@ -41,6 +41,7 @@ a { color: var(--kp-relation); text-underline-offset: .2em; }
 }
 .kp-reader-wordmark { color: var(--kp-ink); font-family: var(--kp-serif); font-size: 1.06rem; font-weight: 700; text-decoration: none; }
 .kp-reader-tagline { color: var(--kp-accent); font-size: .7rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+.kp-reader-mode { color: var(--kp-relation); font-size: .75rem; font-weight: 650; }
 .kp-reader-share { margin-left: auto; font-size: .78rem; font-weight: 650; }
 
 .kp-reader-layout {

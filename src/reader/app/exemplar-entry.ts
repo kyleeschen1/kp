@@ -148,6 +148,7 @@ let settleTimer: number | undefined;
 let scrollFrame: number | undefined;
 let previousReviewFrameAtMs: number | undefined;
 let previousReviewScrollY = window.scrollY;
+let urlAuthorityReady = false;
 
 const staticPlans = new Map(animation.transformations.map((transformation, index) => {
   const progress = (index + 0.5) / animation.transformations.length;
@@ -209,6 +210,11 @@ void fontReadiness.whenReady().then(() => {
   updateScrollGeometry();
   scheduler.invalidate("fonts");
   scheduleScrollSample();
+  // History writes must wait until the URL-selected scroll position has
+  // produced its first frame; otherwise an early scrollend can persist zero.
+  window.requestAnimationFrame(() => {
+    urlAuthorityReady = true;
+  });
 });
 if (import.meta.env.DEV) {
   void import("../../dev-review/reader-review-bootstrap.ts").then(({ mountKpReaderDevReview }) => {
@@ -730,6 +736,7 @@ function ownerMatchesFocus(
 }
 
 function settleLocation(): void {
+  if (!urlAuthorityReady) return;
   const sample = lastSample();
   const href = readerHref(sample);
   window.history.replaceState(null, "", href);
