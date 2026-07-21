@@ -105,6 +105,12 @@
       "status": "passed",
       "scope": "s12 current-default JSON CLI, explicit history, filters, pagination, full-detail opt-in, and source immutability",
       "checkedAt": "2026-07-21T15:38:24.189Z"
+    },
+    {
+      "command": "focused review CLI, lifecycle, and round service tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s13 explicit status and cursor commands, dry-run non-mutation, lifecycle enforcement, and durable receipts",
+      "checkedAt": "2026-07-21T15:40:36.381Z"
     }
   ],
   "expectedLearning": [

@@ -6,6 +6,7 @@ import test from "node:test";
 
 import type { KpDevReviewEventV2 } from "../protocols/dev-review-v2.ts";
 import { KP_DEV_REVIEW_EVENTS_FILENAME, KpDevReviewEventStore } from "../server/dev-review-store.ts";
+import { KpDevReviewRoundInboxService } from "../server/dev-review-round-inbox.ts";
 import { runKpDevReviewCli } from "./dev-review-cli.ts";
 
 test("query CLI defaults to bounded current state and never mutates source history", async (context) => {
@@ -86,6 +87,40 @@ test("query CLI rejects ambiguous scope and invalid bounds before reading", asyn
     () => runKpDevReviewCli(["--root", "relative/reviews"], {}, { write() {} }),
     /must be absolute/
   );
+});
+
+test("triage CLI validates dry runs without append and records explicit mutations", async (context) => {
+  const root = join(tmpdir(), `kp-review-cli-triage-${process.pid}-${Date.now()}`);
+  context.after(() => rm(root, { recursive: true, force: true }));
+  const store = await KpDevReviewEventStore.open(root);
+  for (const event of fixtureEvents()) await store.append(event);
+  const sourceFile = join(root, KP_DEV_REVIEW_EVENTS_FILENAME);
+  const before = await readFile(sourceFile, "utf8");
+  let output = "";
+
+  await runKpDevReviewCli([
+    "status", "--root", root, "--note", "note.2", "--to", "discussed", "--dry-run"
+  ], {}, { write: (value) => { output = value; } });
+  assert.equal((JSON.parse(output) as { dryRun: boolean }).dryRun, true);
+  await runKpDevReviewCli([
+    "cursor", "--root", root, "--consumer", "codex.main",
+    "--round", "round.current", "--through", "2", "--dry-run"
+  ], {}, { write: (value) => { output = value; } });
+  assert.equal((JSON.parse(output) as { from: number; through: number }).through, 2);
+  assert.equal(await readFile(sourceFile, "utf8"), before);
+
+  await runKpDevReviewCli([
+    "status", "--root", root, "--note", "note.2", "--to", "discussed"
+  ], {}, { write: (value) => { output = value; } });
+  assert.equal((JSON.parse(output) as { dryRun: boolean }).dryRun, false);
+  await runKpDevReviewCli([
+    "cursor", "--root", root, "--consumer", "codex.main",
+    "--round", "round.current", "--through", "2"
+  ], {}, { write: (value) => { output = value; } });
+
+  const reopened = new KpDevReviewRoundInboxService(await KpDevReviewEventStore.open(root));
+  assert.equal(reopened.read().notes.find((note) => note.id === "note.2")?.status, "discussed");
+  assert.equal(reopened.read().cursors["codex.main"]?.["round.current"], 2);
 });
 
 function fixtureEvents(): readonly KpDevReviewEventV2[] {

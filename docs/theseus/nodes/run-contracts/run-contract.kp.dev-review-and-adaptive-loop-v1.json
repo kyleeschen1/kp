@@ -129,7 +129,8 @@
     {
       "id": "s13-review-triage-cli",
       "title": "Add-status-and-consumer-cursor-CLI",
-      "status": "planned"
+      "summary": "The review CLI now supports explicit status and consumer-cursor mutations plus validated --dry-run previews; tests prove previews append nothing and actual commands replay to the intended projected state.",
+      "status": "complete"
     },
     {
       "id": "s14-live-history-compatibility",
