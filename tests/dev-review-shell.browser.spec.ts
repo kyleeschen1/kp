@@ -21,6 +21,7 @@ test("shadow review shell opens without reflow and restores focus on escape", as
   await expect(launcher).toHaveAccessibleName("Review");
   await launcher.click();
   await expect(host.locator("[role=dialog]")).toBeVisible();
+  await expect(launcher).toBeHidden();
   await page.evaluate(() => {
     const shell = (window as typeof window & {
       reviewShell?: {

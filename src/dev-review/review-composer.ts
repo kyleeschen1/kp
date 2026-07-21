@@ -2,6 +2,7 @@ import type { KpDevReviewCaptureV1 } from "../../protocols/dev-review-v1.ts";
 import {
   KP_DEV_REVIEW_SHELL_CLOSE_EVENT,
   KP_DEV_REVIEW_SHELL_OPEN_EVENT,
+  KP_DEV_REVIEW_SHELL_PLACEMENT_EVENT,
   type KpDevReviewShell
 } from "./review-shell.ts";
 
@@ -113,9 +114,11 @@ export function mountKpDevReviewComposer(options: {
     count.textContent = "0 / 4000";
     textarea.disabled = false;
     renderCapturePrompt();
+    renderIntro();
     options.shell.status.value = "";
     updateSubmitState();
     textarea.focus();
+    if (options.shell.placement === "captured-moment-sheet") void lockCapture();
   };
   const onClose = (): void => {
     generation += 1;
@@ -176,9 +179,21 @@ export function mountKpDevReviewComposer(options: {
     options.shell.status.value = "Retaking the moment for this note…";
     void lockCapture();
   };
+  const renderIntro = (): void => {
+    intro.textContent = options.shell.placement === "captured-moment-sheet"
+      ? "The reader remains visible above. This note is attached to the moment locked when the sheet opened."
+      : "Describe what looks wrong. The exact reader state is attached automatically.";
+  };
+  const onPlacementChange = (): void => {
+    renderIntro();
+    if (!options.shell.panel.hidden && options.shell.placement === "captured-moment-sheet") {
+      void lockCapture();
+    }
+  };
 
   options.shell.host.addEventListener(KP_DEV_REVIEW_SHELL_OPEN_EVENT, onOpen);
   options.shell.host.addEventListener(KP_DEV_REVIEW_SHELL_CLOSE_EVENT, onClose);
+  options.shell.host.addEventListener(KP_DEV_REVIEW_SHELL_PLACEMENT_EVENT, onPlacementChange);
   textarea.addEventListener("input", onTextInput);
   textarea.addEventListener("keydown", onTextKeyDown);
   retake.addEventListener("click", onRetake);
@@ -189,6 +204,7 @@ export function mountKpDevReviewComposer(options: {
       generation += 1;
       options.shell.host.removeEventListener(KP_DEV_REVIEW_SHELL_OPEN_EVENT, onOpen);
       options.shell.host.removeEventListener(KP_DEV_REVIEW_SHELL_CLOSE_EVENT, onClose);
+      options.shell.host.removeEventListener(KP_DEV_REVIEW_SHELL_PLACEMENT_EVENT, onPlacementChange);
       textarea.removeEventListener("input", onTextInput);
       textarea.removeEventListener("keydown", onTextKeyDown);
       retake.removeEventListener("click", onRetake);

@@ -40,6 +40,13 @@ export function mountKpReaderDevReview(ownerWindow: Window = window): () => void
       viewportWidth: ownerWindow.innerWidth
     })
   });
+  const syncPlacement = (): void => {
+    shell.setPlacement(resolveKpDevReviewPlacement({
+      surface: "semantic-reader",
+      viewportWidth: ownerWindow.innerWidth
+    }));
+  };
+  ownerWindow.addEventListener("resize", syncPlacement, { passive: true });
   const client = new KpDevReviewClient();
   let currentUnread = 0;
   const currentRound = client.query({ unreadBy: "codex.main" }).then(async (state) => {
@@ -114,6 +121,7 @@ export function mountKpReaderDevReview(ownerWindow: Window = window): () => void
   const dispose = (): void => {
     delete ownerDocument.body.dataset["kpDevReviewReady"];
     ownerDocument.removeEventListener("pointermove", onPointerMove);
+    ownerWindow.removeEventListener("resize", syncPlacement);
     ownerWindow.removeEventListener(KP_READER_DEV_REVIEW_FRAME_EVENT, onReaderFrame);
     unregisterReader();
     composer.dispose();

@@ -32,6 +32,13 @@
       "scope": "s06 wide semantic-reader review dock",
       "checkedAt": "2026-07-21T19:36:27.039Z",
       "notes": "At 1280x900 the panel moved from x902 to x18 and stage intersection fell from 60,131.625 square pixels to zero; focus, no-reflow, default placement, and production exclusion remain intact."
+    },
+    {
+      "command": "focused dev-review Playwright, placement unit, typecheck, production exclusion, and solve-x baseline capture",
+      "status": "passed",
+      "scope": "s07 narrow captured-moment review flow",
+      "checkedAt": "2026-07-21T19:41:56.244Z",
+      "notes": "At 390x844 the open 366x320.7 sheet begins at y=511.3 below the stage bottom y=379.3, locks checkpoint metadata on open, retains scroll/progress, hides the launcher, and responds live across the 881px reader boundary."
     }
   ]
 }

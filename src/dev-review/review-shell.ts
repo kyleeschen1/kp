@@ -24,6 +24,7 @@ export interface KpDevReviewShell {
 
 export const KP_DEV_REVIEW_SHELL_OPEN_EVENT = "kp:dev-review-shell-open";
 export const KP_DEV_REVIEW_SHELL_CLOSE_EVENT = "kp:dev-review-shell-close";
+export const KP_DEV_REVIEW_SHELL_PLACEMENT_EVENT = "kp:dev-review-shell-placement";
 
 export function mountKpDevReviewShell(
   ownerDocument: Document,
@@ -139,8 +140,12 @@ export function mountKpDevReviewShell(
     reviewRound.value = `${synthetic ? "Imported" : "Round"} ${sequence} · ${label}`;
   };
   const setPlacement = (nextPlacement: KpDevReviewPlacement): void => {
+    if (placement === nextPlacement) return;
     placement = nextPlacement;
     host.dataset["kpDevReviewPlacement"] = nextPlacement;
+    host.dispatchEvent(new CustomEvent(KP_DEV_REVIEW_SHELL_PLACEMENT_EVENT, {
+      detail: { placement: nextPlacement }
+    }));
   };
 
   return {
@@ -198,6 +203,25 @@ const shellStyles = `
     right: auto;
     left: 18px;
   }
+  :host([data-kp-dev-review-placement="captured-moment-sheet"]) {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+  }
+  :host([data-kp-dev-review-placement="captured-moment-sheet"]) .panel {
+    display: grid;
+    width: 100%;
+    max-height: min(360px, 38svh);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+  :host([data-kp-dev-review-placement="captured-moment-sheet"]) .panel[hidden] {
+    display: none;
+  }
+  :host([data-kp-dev-review-placement="captured-moment-sheet"]) .content {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
   *, *::before, *::after { box-sizing: border-box; }
   button { color: inherit; font: inherit; }
   button:focus-visible, textarea:focus-visible {
@@ -221,6 +245,7 @@ const shellStyles = `
     cursor: pointer;
     pointer-events: auto;
   }
+  .launcher[hidden] { display: none; }
   .launcher > [aria-hidden] { color: var(--accent); font-size: .9rem; }
   .launcher-count {
     display: grid;
@@ -369,6 +394,7 @@ const shellStyles = `
   @media (max-width: 520px) {
     :host { right: 12px; bottom: 12px; }
     .panel { width: calc(100vw - 24px); }
+    :host([data-kp-dev-review-placement="captured-moment-sheet"]) .panel { width: 100%; }
   }
   @media print { :host { display: none; } }
 `;

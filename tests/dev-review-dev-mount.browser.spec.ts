@@ -31,3 +31,28 @@ test("reader mounts the review shell by default in Vite development", async ({ p
   expect(panel).not.toBeNull();
   expect(panel!.x + panel!.width).toBeLessThanOrEqual(stage!.x);
 });
+
+test("narrow reader locks a bounded captured-moment sheet and responds to breakpoint changes", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpProgress=833");
+  await expect(page.locator("body")).toHaveAttribute("data-kp-dev-review-ready", "true");
+  const host = page.locator("[data-kp-dev-review-shell]");
+  await expect(host).toHaveAttribute("data-kp-dev-review-placement", "captured-moment-sheet");
+  await expect(host.locator("[role=dialog]")).toBeHidden();
+  await expect(host.locator("button.launcher")).toBeVisible();
+  await host.locator("button.launcher").click();
+  await expect(host.locator("button.launcher")).toBeHidden();
+
+  await expect(host.locator(".intro")).toContainText("moment locked when the sheet opened");
+  await expect(host.locator(".meta")).toContainText("Locked");
+  const stage = await page.locator("[data-kp-reader-equation-stage]").boundingBox();
+  const panel = await host.locator("[role=dialog]").boundingBox();
+  expect(stage).not.toBeNull();
+  expect(panel).not.toBeNull();
+  expect(panel!.y).toBeGreaterThanOrEqual(stage!.y + stage!.height);
+  expect(panel!.height).toBeLessThanOrEqual(844 * 0.38 + 1);
+
+  await page.setViewportSize({ width: 1000, height: 844 });
+  await expect(host).toHaveAttribute("data-kp-dev-review-placement", "left-prose-rail");
+  await expect(host.locator(".intro")).toContainText("exact reader state is attached automatically");
+});

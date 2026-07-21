@@ -92,7 +92,8 @@
     {
       "id": "s07-narrow-review-flow",
       "title": "Narrow_review_flow",
-      "status": "planned"
+      "summary": "Added a live responsive semantic-reader review projection. Below 881px, opening review creates one bounded lower sheet, locks the current semantic moment immediately, leaves the 390x844 equation stage unobscured, and returns to the prose rail on resize; hidden state, focus, scroll, progress, review history, and production exclusion remain intact.",
+      "status": "complete"
     },
     {
       "id": "s08-review-visual-checkpoint",
