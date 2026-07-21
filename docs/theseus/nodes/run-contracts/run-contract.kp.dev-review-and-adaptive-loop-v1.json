@@ -177,7 +177,8 @@
     {
       "id": "s21-contact-sheet-command",
       "title": "Add-deterministic-visual-contact-sheets",
-      "status": "planned"
+      "summary": "Added a deterministic six-state solve-x visual contact sheet and manifest for rapid exemplar review.",
+      "status": "complete"
     },
     {
       "id": "s22-adaptive-loop-selection",
