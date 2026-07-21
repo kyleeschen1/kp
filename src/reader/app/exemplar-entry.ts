@@ -88,6 +88,9 @@ const materialFitSurface = requireElement<HTMLElement>(
 const annihilationWitness = requireElement<HTMLElement>(
   "[data-kp-reader-annihilation-witness]"
 );
+const independentZeroWitness = requireElement<HTMLElement>(
+  "[data-kp-reader-independent-zero-witness]"
+);
 const status = requireElement<HTMLOutputElement>("[data-kp-reader-stage-status]");
 const progressBar = requireElement<HTMLElement>("[data-kp-reader-progress-bar]");
 const motionSelect = requireElement<HTMLSelectElement>(
@@ -348,6 +351,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     layout: context.layout,
     linearRearrangementKind: choreographyStep?.kind,
     cancellationPresentationRecipe: presentationProfile.cancellation,
+    zeroWitnessPresentationRecipe: presentationProfile.zeroWitness,
     witnessedAnnihilationBinding: witnessedBindings.get(transitionId),
     successorSynthesisBinding:
       presentationProfile.successor === "successor-synthesis-v1"
@@ -413,6 +417,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     motion.witnessedAnnihilation,
     projection.mode !== "essential"
   );
+  syncIndependentZeroWitness(motion.independentZeroWitness);
   applyFocus(focusSnapshot);
   progressBar.style.transform = `scaleX(${visualSample.progress})`;
   document.body.dataset["kpReaderProgress"] = String(visualSample.progressPermille);
@@ -543,6 +548,27 @@ function syncAnnihilationWitness(
   stage.dataset["kpReaderAnnihilationPhase"] = witnessed.frame.phase;
   stage.dataset["kpReaderAnnihilationWitnessReadable"] =
     String(witnessed.frame.witnessReadable);
+}
+
+function syncIndependentZeroWitness(
+  witnessed: KpReaderEquationSymbolMotionFrame["independentZeroWitness"]
+): void {
+  if (witnessed === undefined) {
+    independentZeroWitness.style.opacity = "0";
+    delete stage.dataset["kpReaderIndependentZeroPhase"];
+    delete stage.dataset["kpReaderIndependentZeroReadable"];
+    return;
+  }
+  const pose = witnessed.frame.pose;
+  independentZeroWitness.style.left = `${witnessed.contactPoint.x}px`;
+  independentZeroWitness.style.top = `${witnessed.contactPoint.y}px`;
+  independentZeroWitness.style.opacity = String(pose.opacity);
+  independentZeroWitness.style.transform =
+    `translate(calc(-50% + ${pose.x}px), calc(-50% + ${pose.y}px)) ` +
+    `scale(${pose.scale})`;
+  stage.dataset["kpReaderIndependentZeroPhase"] = witnessed.frame.phase;
+  stage.dataset["kpReaderIndependentZeroReadable"] =
+    String(witnessed.frame.readable);
 }
 
 function renderCurrentSample(): void {

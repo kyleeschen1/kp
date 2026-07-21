@@ -229,6 +229,12 @@
       "status": "passed",
       "scope": "s14 profile-selected counter-orbit recipe and delayed survivor compaction",
       "checkedAt": "2026-07-21T02:17:02.404Z"
+    },
+    {
+      "command": "Independent-zero, owner-motion, presentation, and gold-parity unit cohort; cancellation, parity, native-handoff, rewind, and essential-motion Playwright cohort; production build/typecheck; deterministic eight-frame visual capture",
+      "status": "passed",
+      "scope": "s15 independent +0 witness identity, causal ordering, and cross-surface presentation",
+      "checkedAt": "2026-07-21T02:30:22.604Z"
     }
   ],
   "progress": {

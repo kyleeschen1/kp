@@ -136,6 +136,7 @@ function compileEquationExemplarTemplate(
     `<div class="kp-reader-equation-material-fit-surface" data-kp-reader-material-fit-surface>`,
     `<div class="kp-reader-equation-material" data-kp-reader-equation-material-layer="true"></div>`,
     `<span class="kp-reader-equation-annihilation-witness" data-kp-reader-annihilation-witness aria-hidden="true">${renderLatexToHtml("0", { displayMode: false })}</span>`,
+    `<span class="kp-reader-equation-independent-zero-witness" data-kp-reader-independent-zero-witness aria-hidden="true">${renderLatexToHtml("+0", { displayMode: false })}</span>`,
     `</div>`,
     `</div>`,
     `<div class="kp-reader-equation-progress" aria-hidden="true"><span data-kp-reader-progress-bar></span></div>`,

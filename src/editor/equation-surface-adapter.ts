@@ -2466,6 +2466,7 @@ function applySemanticTokenMotion(input: {
             linearRearrangementKind:
               input.frame.linearRearrangement.step.kind,
             cancellationPresentationRecipe: presentationPolicy.cancellation,
+            zeroWitnessPresentationRecipe: presentationPolicy.zeroWitness,
             ...(!presentationPolicy.applySuccessorSynthesis ||
               input.frame.linearRearrangement.step.successorSynthesisBinding === undefined
               ? {}
@@ -2534,6 +2535,11 @@ function applySemanticTokenMotion(input: {
     transition: input.transitionElement,
     geometry,
     frame: tokenFrame.motion.witnessedAnnihilation
+  });
+  syncIndependentZeroWitnessOverlay({
+    transition: input.transitionElement,
+    geometry,
+    frame: tokenFrame.motion.independentZeroWitness
   });
   if (
     tokenFrame.motion.derivativePower !== undefined &&
@@ -3016,6 +3022,49 @@ function syncWitnessedAnnihilationOverlay(input: {
     String(input.frame.witnessReadable);
   input.transition.dataset["kpEditorAnnihilationCompaction"] =
     String(input.frame.survivorCompactionProgress);
+}
+
+function syncIndependentZeroWitnessOverlay(input: {
+  readonly transition: HTMLElement;
+  readonly geometry: KpPrecomputedEquationMotionPlan["geometry"];
+  readonly frame: ReturnType<typeof createKpEditorSemanticEquationTokenFrame>["motion"]["independentZeroWitness"];
+}): void {
+  const existing = input.transition.querySelector<HTMLElement>(
+    "[data-kp-editor-independent-zero-witness]"
+  );
+  const plan = input.geometry.independentZeroWitnessPlan;
+  if (input.frame === undefined || plan === undefined) {
+    existing?.remove();
+    delete input.transition.dataset["kpEditorIndependentZeroPhase"];
+    delete input.transition.dataset["kpEditorIndependentZeroReadable"];
+    return;
+  }
+  const source = input.transition.querySelector<HTMLElement>(
+    "[data-kp-editor-equation-source]"
+  );
+  if (source === null) return;
+  const witness = existing ?? document.createElement("span");
+  if (existing === null) {
+    witness.dataset["kpEditorIndependentZeroWitness"] = "true";
+    witness.innerHTML = renderLatexToHtml(plan.latex, { displayMode: false });
+    witness.style.position = "absolute";
+    witness.style.pointerEvents = "none";
+    witness.style.zIndex = "4";
+    witness.style.transformOrigin = "center";
+    source.style.position = "relative";
+    source.style.overflow = "visible";
+    source.append(witness);
+  }
+  const pose = input.frame.pose;
+  witness.style.left = `${plan.contactPoint.x}px`;
+  witness.style.top = `${plan.contactPoint.y}px`;
+  witness.style.opacity = String(pose.opacity);
+  witness.style.transform =
+    `translate(calc(-50% + ${pose.x}px), calc(-50% + ${pose.y}px)) ` +
+    `scale(${pose.scale})`;
+  input.transition.dataset["kpEditorIndependentZeroPhase"] = input.frame.phase;
+  input.transition.dataset["kpEditorIndependentZeroReadable"] =
+    String(input.frame.readable);
 }
 
 function applyFractionRoleFocus(input: {

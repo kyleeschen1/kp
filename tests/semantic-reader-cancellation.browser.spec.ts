@@ -15,7 +15,7 @@ test("canonical reader selects counter-orbit cancellation without enabling legac
   );
   await expect(stage).toHaveAttribute(
     "data-kp-reader-equation-zero-witness-recipe",
-    "none"
+    "independent-zero-v1"
   );
   await expect(stage).toHaveAttribute(
     "data-kp-reader-equation-successor-recipe",
@@ -29,6 +29,10 @@ test("canonical reader selects counter-orbit cancellation without enabling legac
   await expect(stage).not.toHaveAttribute("data-kp-reader-annihilation-witness-readable");
   const witness = page.locator("[data-kp-reader-annihilation-witness]");
   await expect(witness).toHaveCSS("opacity", "0");
+  const independentZero = page.locator(
+    "[data-kp-reader-independent-zero-witness]"
+  );
+  await expect(independentZero).toHaveCSS("opacity", "0");
 
   const plusThree = page.locator(
     '[data-kp-reader-equation-material-fragment-id*="after-subtract.lhs.plus3"]'
@@ -46,4 +50,13 @@ test("canonical reader selects counter-orbit cancellation without enabling legac
   const minusCenterY = minusBounds!.y + minusBounds!.height / 2;
   expect(plusCenterY).toBeLessThan(minusCenterY);
   expect(minusCenterY - plusCenterY).toBeGreaterThan(12);
+
+  await page.goto(
+    "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpProgress=620"
+  );
+  await expect(stage).toHaveAttribute("data-kp-reader-independent-zero-phase", "dwell");
+  await expect(stage).toHaveAttribute("data-kp-reader-independent-zero-readable", "true");
+  await expect(independentZero).toHaveCSS("opacity", "1");
+  await expect(independentZero).toContainText("+0");
+  await expect(witness).toHaveCSS("opacity", "0");
 });

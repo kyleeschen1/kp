@@ -112,7 +112,7 @@ test("counter-orbit cancellation compacts survivors only after inverse terms fad
   })[0]!;
   const afterTermsFade = sampleKpEquationLinearRearrangementOwnerMotion({
     ...input,
-    progress: 0.9
+    progress: 0.97
   })[0]!;
 
   assert.equal(Math.abs(whileTermsOrbit.pose.x), 0);

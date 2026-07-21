@@ -3,6 +3,7 @@ export type KpGoldEquationParityFrameId =
   | "subtraction-entry"
   | "subtraction-settled"
   | "cancellation-meet"
+  | "zero-witness-dwell"
   | "cancellation-settled"
   | "successor-synthesis"
   | "final"
@@ -21,6 +22,7 @@ export type KpGoldEquationParityEvidence =
   | "paired-subtraction-entry"
   | "persistent-token-reflow"
   | "witnessed-cancellation"
+  | "independent-zero-witness"
   | "successor-synthesis"
   | "exact-native-handoff"
   | "exact-reverse-seek";
@@ -44,6 +46,11 @@ export const kpGoldEquationParityFrames: readonly KpGoldEquationParityFrame[] = 
     "stable-katex-typography",
     "witnessed-cancellation",
     "persistent-token-reflow"
+  ]),
+  frame("zero-witness-dwell", "forward", 0.62, [
+    "stable-katex-typography",
+    "witnessed-cancellation",
+    "independent-zero-witness"
   ]),
   frame("cancellation-settled", "forward", 0.667, [
     "stable-katex-typography",

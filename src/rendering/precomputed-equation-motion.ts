@@ -26,6 +26,9 @@ import { createKpEquationSuccessorSynthesisPlan } from "./equation-linear-rearra
 import {
   kpEquationWitnessedAnnihilationRuntime
 } from "./equation-witnessed-annihilation-runtime.ts";
+import {
+  createKpIndependentZeroWitnessPlan
+} from "./equation-independent-zero-witness.ts";
 
 export interface KpPrecomputedEquationMotionPlan {
   readonly kind: "precomputed-equation-motion-plan";
@@ -65,6 +68,9 @@ export function createKpPrecomputedEquationMotionPlan(input: {
   ) {
     throw new Error("Witnessed annihilation was not registered by the selected capability pack.");
   }
+  const independentZeroWitnessPlan = createKpIndependentZeroWitnessPlan(
+    input.geometry
+  );
   const measuredGeometry: KpMeasuredEquationTransitionGeometry = {
     ...input.geometry,
     ...(successorSynthesisPlan === undefined
@@ -72,7 +78,10 @@ export function createKpPrecomputedEquationMotionPlan(input: {
       : { successorSynthesisPlan }),
     ...(witnessedAnnihilationPlan === undefined
       ? {}
-      : { witnessedAnnihilationPlan })
+      : { witnessedAnnihilationPlan }),
+    ...(independentZeroWitnessPlan === undefined
+      ? {}
+      : { independentZeroWitnessPlan })
   };
   const layoutPlan = createKpEquationLayoutPlan({
     id: `${input.id}.layout`,

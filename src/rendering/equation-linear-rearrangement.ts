@@ -53,7 +53,7 @@ export function sampleKpEquationLinearRearrangementFrame(
   const persistentReflowProgress =
     kind === "cancel-additive-inverses" &&
       cancellationPresentationRecipe === "counter-orbit-v1"
-      ? smooth(windowProgress(p, 0.8, 0.96))
+      ? smooth(windowProgress(p, 0.94, 0.99))
       : reservationProgress;
   return {
     kind,

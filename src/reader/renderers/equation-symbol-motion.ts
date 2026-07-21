@@ -27,7 +27,8 @@ import type { KpWitnessedAnnihilationBinding } from "../../animation/witnessed-a
 import type { KpSuccessorSynthesisBinding } from "../../animation/successor-synthesis.ts";
 import type { KpEquationTokenMotionFrame } from "../../rendering/semantic-equation-token-renderer.ts";
 import type {
-  KpEquationCancellationPresentationRecipe
+  KpEquationCancellationPresentationRecipe,
+  KpEquationZeroWitnessPresentationRecipe
 } from "../../rendering/equation-presentation-policy.ts";
 
 export interface KpReaderEquationSymbolMotionFrame extends KpEquationVisualFrame<
@@ -45,6 +46,10 @@ export interface KpReaderEquationSymbolMotionFrame extends KpEquationVisualFrame
   readonly witnessedAnnihilation?: {
     readonly contactPoint: { readonly x: number; readonly y: number };
     readonly frame: NonNullable<KpEquationTokenMotionFrame["witnessedAnnihilation"]>;
+  } | undefined;
+  readonly independentZeroWitness?: {
+    readonly contactPoint: { readonly x: number; readonly y: number };
+    readonly frame: NonNullable<KpEquationTokenMotionFrame["independentZeroWitness"]>;
   } | undefined;
 }
 
@@ -70,6 +75,8 @@ export function sampleKpReaderEquationSymbolMotion(input: {
   readonly linearRearrangementKind?: KpEquationLinearRearrangementKind | undefined;
   readonly cancellationPresentationRecipe?:
     KpEquationCancellationPresentationRecipe | undefined;
+  readonly zeroWitnessPresentationRecipe?:
+    KpEquationZeroWitnessPresentationRecipe | undefined;
   readonly witnessedAnnihilationBinding?: KpWitnessedAnnihilationBinding | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
   readonly progress: number;
@@ -102,6 +109,7 @@ export function sampleKpReaderEquationSymbolMotion(input: {
         alignment: input.alignment,
         progress,
         cancellationPresentationRecipe: input.cancellationPresentationRecipe,
+        zeroWitnessPresentationRecipe: input.zeroWitnessPresentationRecipe,
         witnessedAnnihilationBinding: input.witnessedAnnihilationBinding,
         successorSynthesisBinding: input.successorSynthesisBinding
       });
@@ -146,6 +154,15 @@ export function sampleKpReaderEquationSymbolMotion(input: {
           witnessedAnnihilation: {
             contactPoint: operation.geometry.witnessedAnnihilationPlan.contactPoint,
             frame: operation.motion.witnessedAnnihilation
+          }
+        }),
+    ...(operation?.motion.independentZeroWitness === undefined ||
+      operation.geometry.independentZeroWitnessPlan === undefined
+      ? {}
+      : {
+          independentZeroWitness: {
+            contactPoint: operation.geometry.independentZeroWitnessPlan.contactPoint,
+            frame: operation.motion.independentZeroWitness
           }
         })
   };

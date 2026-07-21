@@ -12,6 +12,7 @@ test("gold equation parity contract names every accepted causal beat", () => {
     "subtraction-entry",
     "subtraction-settled",
     "cancellation-meet",
+    "zero-witness-dwell",
     "cancellation-settled",
     "successor-synthesis",
     "final",
@@ -24,7 +25,10 @@ test("gold equation parity contract names every accepted causal beat", () => {
 
 test("forward parity instants are ordered and permille-addressable", () => {
   const forward = kpGoldEquationParityFrames.filter((frame) => frame.direction === "forward");
-  assert.deepEqual(forward.map((frame) => frame.progressPermille), [0, 167, 333, 500, 667, 833, 1_000]);
+  assert.deepEqual(
+    forward.map((frame) => frame.progressPermille),
+    [0, 167, 333, 500, 620, 667, 833, 1_000]
+  );
   assert.ok(forward.every((frame, index) =>
     index === 0 || frame.progress > forward[index - 1]!.progress
   ));
@@ -36,6 +40,8 @@ test("parity contract distinguishes causal operations from endpoint handoff", ()
     .includes("paired-subtraction-entry"));
   assert.ok(kpGoldEquationParityFrame("cancellation-meet").requiredEvidence
     .includes("witnessed-cancellation"));
+  assert.ok(kpGoldEquationParityFrame("zero-witness-dwell").requiredEvidence
+    .includes("independent-zero-witness"));
   assert.ok(kpGoldEquationParityFrame("successor-synthesis").requiredEvidence
     .includes("successor-synthesis"));
   assert.ok(kpGoldEquationParityFrame("final").requiredEvidence

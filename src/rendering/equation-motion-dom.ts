@@ -5,8 +5,12 @@ import type { KpEquationEnclosureChoreographyKind } from "./equation-enclosure-c
 import type { KpEquationMotionPathCandidate } from "./equation-motion-path-planner.ts";
 import type { KpEquationLinearRearrangementKind } from "./equation-linear-rearrangement.ts";
 import type {
-  KpEquationCancellationPresentationRecipe
+  KpEquationCancellationPresentationRecipe,
+  KpEquationZeroWitnessPresentationRecipe
 } from "./equation-presentation-policy.ts";
+import type {
+  KpIndependentZeroWitnessPlan
+} from "./equation-independent-zero-witness.ts";
 import type { KpDotProductRendererPlan } from "./equation-dot-product-traversal.ts";
 import type { KpMatrixVectorRendererPlan } from "./equation-matrix-vector-composition.ts";
 import type { KpMatrixMatrixRendererPlan } from "./equation-matrix-matrix-composition.ts";
@@ -84,6 +88,10 @@ export interface KpMeasuredEquationTransitionGeometry {
     KpEquationLinearRearrangementKind | undefined;
   readonly cancellationPresentationRecipe?:
     KpEquationCancellationPresentationRecipe | undefined;
+  readonly zeroWitnessPresentationRecipe?:
+    KpEquationZeroWitnessPresentationRecipe | undefined;
+  readonly independentZeroWitnessPlan?:
+    KpIndependentZeroWitnessPlan | undefined;
   readonly successorSynthesisBinding?:
     KpSuccessorSynthesisBinding | undefined;
   readonly successorSynthesisPlan?: KpSuccessorSynthesisPlan | undefined;
@@ -189,6 +197,8 @@ export function measureKpEquationTransitionGeometry(input: {
     KpEquationLinearRearrangementKind | undefined;
   readonly cancellationPresentationRecipe?:
     KpEquationCancellationPresentationRecipe | undefined;
+  readonly zeroWitnessPresentationRecipe?:
+    KpEquationZeroWitnessPresentationRecipe | undefined;
   readonly successorSynthesisBinding?:
     KpSuccessorSynthesisBinding | undefined;
   readonly witnessedAnnihilationBinding?:
@@ -263,6 +273,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.cancellationPresentationRecipe === undefined
       ? {}
       : { cancellationPresentationRecipe: input.cancellationPresentationRecipe }),
+    ...(input.zeroWitnessPresentationRecipe === undefined
+      ? {}
+      : { zeroWitnessPresentationRecipe: input.zeroWitnessPresentationRecipe }),
     ...(input.successorSynthesisBinding === undefined
       ? {}
       : { successorSynthesisBinding: input.successorSynthesisBinding }),

@@ -131,7 +131,8 @@
     {
       "id": "s15-independent-zero-witness",
       "title": "Independent zero witness",
-      "status": "planned"
+      "summary": "Added a renderer-neutral independent +0 witness with its own immutable plan, DOM identity, KaTeX rendering, readable dwell, and shared editor-reader timing; visual capture now proves cancelling terms fully clear before +0 appears and +0 clears before compaction.",
+      "status": "complete"
     },
     {
       "id": "s16-cancellation-visual-gate",

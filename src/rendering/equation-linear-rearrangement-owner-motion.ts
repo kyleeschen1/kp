@@ -35,8 +35,13 @@ import type {
 } from "./semantic-equation-token-renderer.ts";
 import type { KpMeasuredEquationTransitionGeometry } from "./equation-motion-dom.ts";
 import type {
-  KpEquationCancellationPresentationRecipe
+  KpEquationCancellationPresentationRecipe,
+  KpEquationZeroWitnessPresentationRecipe
 } from "./equation-presentation-policy.ts";
+import {
+  createKpIndependentZeroWitnessPlan,
+  sampleKpIndependentZeroWitness
+} from "./equation-independent-zero-witness.ts";
 
 export interface KpEquationOwnerMotionAnchor {
   readonly id: string;
@@ -67,6 +72,8 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
   readonly progress: number;
   readonly cancellationPresentationRecipe?:
     KpEquationCancellationPresentationRecipe | undefined;
+  readonly zeroWitnessPresentationRecipe?:
+    KpEquationZeroWitnessPresentationRecipe | undefined;
   readonly witnessedAnnihilationBinding?: KpWitnessedAnnihilationBinding | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
 }): KpEquationLinearRearrangementOwnerFrame {
@@ -122,6 +129,9 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
     ...(input.cancellationPresentationRecipe === undefined
       ? {}
       : { cancellationPresentationRecipe: input.cancellationPresentationRecipe }),
+    ...(input.zeroWitnessPresentationRecipe === undefined
+      ? {}
+      : { zeroWitnessPresentationRecipe: input.zeroWitnessPresentationRecipe }),
     ...(input.witnessedAnnihilationBinding === undefined
       ? {}
       : { witnessedAnnihilationBinding: input.witnessedAnnihilationBinding }),
@@ -134,10 +144,14 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
   };
   const witnessedAnnihilationPlan = createKpEquationWitnessedAnnihilationPlan(base);
   const successorSynthesisPlan = createKpEquationSuccessorSynthesisPlan(base);
+  const independentZeroWitnessPlan = createKpIndependentZeroWitnessPlan(base);
   const geometry = {
     ...base,
     ...(witnessedAnnihilationPlan === undefined ? {} : { witnessedAnnihilationPlan }),
-    ...(successorSynthesisPlan === undefined ? {} : { successorSynthesisPlan })
+    ...(successorSynthesisPlan === undefined ? {} : { successorSynthesisPlan }),
+    ...(independentZeroWitnessPlan === undefined
+      ? {}
+      : { independentZeroWitnessPlan })
   };
   return {
     geometry,
@@ -161,6 +175,9 @@ function sampleLinearRearrangementMotion(
         geometry.witnessedAnnihilationPlan,
         p
       );
+  const independentZeroWitness = geometry.independentZeroWitnessPlan === undefined
+    ? undefined
+    : sampleKpIndependentZeroWitness(geometry.independentZeroWitnessPlan, p);
   const tokens = new Map<string, KpEquationTokenMotionFrameToken>();
   for (const relation of geometry.relations) {
     const sourceTokens = tokensForRelation(
@@ -196,7 +213,8 @@ function sampleLinearRearrangementMotion(
     progress: p,
     tokens: [...tokens.values()],
     linearRearrangement,
-    ...(witnessedAnnihilation === undefined ? {} : { witnessedAnnihilation })
+    ...(witnessedAnnihilation === undefined ? {} : { witnessedAnnihilation }),
+    ...(independentZeroWitness === undefined ? {} : { independentZeroWitness })
   };
 }
 

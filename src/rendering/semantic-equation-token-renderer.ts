@@ -91,6 +91,10 @@ import type { KpWitnessedAnnihilationFrame } from "../animation/witnessed-annihi
 import {
   kpEquationWitnessedAnnihilationRuntime
 } from "./equation-witnessed-annihilation-runtime.ts";
+import {
+  sampleKpIndependentZeroWitness,
+  type KpIndependentZeroWitnessFrame
+} from "./equation-independent-zero-witness.ts";
 
 export interface KpEquationTokenMotionPose {
   readonly opacity: number;
@@ -139,6 +143,7 @@ export interface KpEquationTokenMotionFrame {
     KpMatrixMatrixCompositionProgressFrame | undefined;
   readonly derivativePower?: KpDerivativePowerChoreographyFrame | undefined;
   readonly witnessedAnnihilation?: KpWitnessedAnnihilationFrame | undefined;
+  readonly independentZeroWitness?: KpIndependentZeroWitnessFrame | undefined;
 }
 
 interface EnclosureChoreographyContext {
@@ -283,6 +288,9 @@ export function sampleKpEquationTokenMotion(
         geometry.witnessedAnnihilationPlan,
         p
       );
+  const independentZeroWitness = geometry.independentZeroWitnessPlan === undefined
+    ? undefined
+    : sampleKpIndependentZeroWitness(geometry.independentZeroWitnessPlan, p);
   const enclosureChoreography = createEnclosureChoreographyContext(geometry, p);
   const lineageChoreography = createLineageChoreographyContext(geometry, p);
   const distributionChoreography = createDistributionChoreographyContext(
@@ -404,7 +412,10 @@ export function sampleKpEquationTokenMotion(
       : { derivativePower: derivativePower.frame }),
     ...(witnessedAnnihilation === undefined
       ? {}
-      : { witnessedAnnihilation })
+      : { witnessedAnnihilation }),
+    ...(independentZeroWitness === undefined
+      ? {}
+      : { independentZeroWitness })
   };
 }
 
