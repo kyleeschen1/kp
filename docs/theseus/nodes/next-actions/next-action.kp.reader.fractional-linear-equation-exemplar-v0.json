@@ -34,6 +34,13 @@
       "scope": "s03 canonical x over 2 plus 3 equals 7 provider problem",
       "checkedAt": "2026-07-21T21:45:54.758Z",
       "notes": "Ten provider and verifier tests pass; existing canonical fixture IDs and behavior are preserved."
+    },
+    {
+      "command": "focused fractional provider adapter and trace tests; npm run check:architecture; npm run typecheck",
+      "status": "passed",
+      "scope": "s04 exact intermediate verification",
+      "checkedAt": "2026-07-21T21:48:24.445Z",
+      "notes": "Subtract-three and multiply-two classify as canonical both-side operations; the mapped trace is strict and solution 8 is verified."
     }
   ]
 }

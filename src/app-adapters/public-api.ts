@@ -57,6 +57,12 @@ export {
 } from "./linear-equation-canonical-provider.ts";
 
 export {
+  canonicalFractionalLinearEquationRequests,
+  mapCanonicalFractionalLinearEquationTrace,
+  type KpCanonicalFractionalLinearEquationRequests
+} from "./fractional-linear-equation-canonical-provider.ts";
+
+export {
   createLinearEquationCoordinatedStage,
   type KpLinearEquationCoordinatedRenderers,
   type KpLinearEquationCoordinatedStage

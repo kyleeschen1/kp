@@ -58,7 +58,8 @@
     {
       "id": "s04-intermediate-verification",
       "title": "Verify valid intermediate solution steps",
-      "status": "planned"
+      "summary": "Added a provider-neutral adapter that verifies x/2 + 3 = 7 to x/2 = 4 to x = 8 as exact canonical operations and rejects canonical input drift before rendering.",
+      "status": "complete"
     },
     {
       "id": "s05-semantic-correspondence",
