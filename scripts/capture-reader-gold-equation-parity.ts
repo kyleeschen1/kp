@@ -130,12 +130,12 @@ async function captureReader(page: Page, baseUrl: string): Promise<readonly Surf
           String(progressPermille),
         frame.progressPermille
       );
-      const stage = framePage.locator("[data-kp-reader-equation-stage]");
-      await stage.waitFor();
+      const equationViewport = framePage.locator("[data-kp-reader-equation-viewport]");
+      await equationViewport.waitFor();
       await settle(framePage);
       output.push(await captureSurface({
         page: framePage,
-        surface: stage,
+        surface: equationViewport,
         stageSelector: ":scope",
         ownerSelector: "[data-kp-reader-equation-material-owner-id]",
         fallbackSelector: "[data-kp-reader-equation-anchor-id]",

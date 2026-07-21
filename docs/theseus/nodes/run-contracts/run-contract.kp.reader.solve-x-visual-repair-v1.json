@@ -89,7 +89,8 @@
     {
       "id": "s08-canonical-parity-browser-gate",
       "title": "Canonical parity browser gate",
-      "status": "planned"
+      "summary": "Added a browser parity gate that compares canonical editor and reader cancellation/final frames by semantic role and normalized geometry, verifies shared continuity profile and KaTeX identity, explicitly detects the current oversized reader type, and corrected visual capture to use the equation viewport.",
+      "status": "complete"
     },
     {
       "id": "s09-native-endpoint-laws",

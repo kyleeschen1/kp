@@ -187,6 +187,12 @@
       "status": "passed",
       "scope": "s07 normalized editor-reader frame contract",
       "checkedAt": "2026-07-21T01:35:17.697Z"
+    },
+    {
+      "command": "Canonical editor-reader cross-surface Playwright parity test, TypeScript typecheck, production build, and deterministic visual parity capture",
+      "status": "passed",
+      "scope": "s08 semantic ordering, profile, KaTeX identity, known type-scale detection, and viewport evidence",
+      "checkedAt": "2026-07-21T01:41:32.275Z"
     }
   ],
   "progress": {
