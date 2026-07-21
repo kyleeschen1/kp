@@ -6,6 +6,7 @@ import {
   createKpWitnessedAnnihilationBinding
 } from "../../animation/witnessed-annihilation.ts";
 import { createKpEquationFontReadiness } from "../../rendering/equation-font-readiness.ts";
+import { kpEquationPresentationProfile } from "../../rendering/equation-presentation-policy.ts";
 import {
   applyKpReaderEquationResponsiveFit,
   compileKpReaderEquationMaterialPlan,
@@ -62,6 +63,7 @@ const documentVersion = "1";
 // otherwise race a requested frame when moving between two lesson URLs.
 window.history.scrollRestoration = "manual";
 const animation = createLinearSolveAnimationAsset();
+const presentationProfile = kpEquationPresentationProfile(animation);
 const linearRearrangementBindings = createKpEquationLinearRearrangementBindings(
   animation
 );
@@ -73,6 +75,11 @@ staticSurface.append(templateContent);
 document.body.dataset["kpReaderHydrated"] = "true";
 
 const stage = requireElement<HTMLElement>("[data-kp-reader-equation-stage]");
+stage.dataset["kpReaderEquationPresentationRecipe"] = presentationProfile.recipe;
+stage.dataset["kpReaderEquationCancellationRecipe"] = presentationProfile.cancellation;
+stage.dataset["kpReaderEquationZeroWitnessRecipe"] = presentationProfile.zeroWitness;
+stage.dataset["kpReaderEquationSuccessorRecipe"] = presentationProfile.successor;
+stage.dataset["kpReaderEquationDepthRecipe"] = presentationProfile.depth;
 const viewport = requireElement<HTMLElement>("[data-kp-reader-equation-viewport]");
 const materialFitSurface = requireElement<HTMLElement>(
   "[data-kp-reader-material-fit-surface]"
@@ -101,6 +108,10 @@ const transitionElements = [
   ...stage.querySelectorAll<HTMLElement>("[data-kp-reader-transition]")
 ];
 const witnessedBindings = new Map(animation.transformations.flatMap((transformation) => {
+  if (
+    presentationProfile.cancellation !== "witnessed-annihilation-v1" &&
+    presentationProfile.zeroWitness !== "embedded-v1"
+  ) return [];
   const cancellation = transformation.correspondenceMap?.records.find(
     (record) => record.relation === "cancelation"
   );
@@ -327,7 +338,10 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     layout: context.layout,
     linearRearrangementKind: choreographyStep?.kind,
     witnessedAnnihilationBinding: witnessedBindings.get(transitionId),
-    successorSynthesisBinding: choreographyStep?.successorSynthesisBinding,
+    successorSynthesisBinding:
+      presentationProfile.successor === "successor-synthesis-v1"
+        ? choreographyStep?.successorSynthesisBinding
+        : undefined,
     progress: phaseProgress
   });
   const focusSnapshot = focus.getSnapshot();

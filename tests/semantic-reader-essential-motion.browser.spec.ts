@@ -12,10 +12,12 @@ test("system reduced motion retains algebraic causality without flourish", async
 
   const stage = page.locator("[data-kp-reader-equation-stage]");
   await expect(stage).toHaveAttribute(
-    "data-kp-reader-annihilation-witness-readable",
-    "true"
+    "data-kp-reader-equation-presentation-recipe",
+    "continuity-v1"
   );
+  await expect(stage).not.toHaveAttribute("data-kp-reader-annihilation-witness-readable");
   const witness = page.locator("[data-kp-reader-annihilation-witness]");
+  await expect(witness).toHaveCSS("opacity", "0");
   await expect(witness).toHaveCSS("filter", "none");
   const movingFragments = page.locator(
     '[data-kp-reader-equation-material-owner-id="material-owner.left-inverses-cancel"] ' +

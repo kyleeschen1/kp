@@ -175,6 +175,12 @@
       "status": "passed",
       "scope": "s05 independent typed presentation recipes and compatibility",
       "checkedAt": "2026-07-21T01:29:36.621Z"
+    },
+    {
+      "command": "Focused semantic reader cancellation, essential-motion, and exemplar browser suite plus TypeScript typecheck",
+      "status": "passed",
+      "scope": "s06 reader presentation authority and preservation",
+      "checkedAt": "2026-07-21T01:32:04.828Z"
     }
   ],
   "progress": {

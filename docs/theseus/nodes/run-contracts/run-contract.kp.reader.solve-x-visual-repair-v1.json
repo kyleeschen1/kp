@@ -77,7 +77,8 @@
     {
       "id": "s06-reader-profile-authority",
       "title": "Reader profile authority",
-      "status": "planned"
+      "summary": "Made the shared presentation profile authoritative in the solve-x reader, exposed every selected recipe for diagnostics, and prevented canonical continuity assets from silently enabling legacy witnessed-annihilation or successor-synthesis motifs.",
+      "status": "complete"
     },
     {
       "id": "s07-cross-surface-frame-contract",
