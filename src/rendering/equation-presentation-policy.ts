@@ -17,7 +17,8 @@ export type KpEquationZeroWitnessPresentationRecipe =
 export type KpEquationSuccessorPresentationRecipe =
   | "native-handoff-v1"
   | "successor-synthesis-v1"
-  | "convergence-v1";
+  | "convergence-v1"
+  | "counter-convergence-v1";
 
 export type KpEquationDepthPresentationRecipe =
   | "flat-v1"
@@ -87,7 +88,12 @@ export function kpEquationPresentationProfile(
     successor: readRecipe(
       animation,
       "equationSuccessorPresentationRecipe",
-      ["native-handoff-v1", "successor-synthesis-v1", "convergence-v1"] as const,
+      [
+        "native-handoff-v1",
+        "successor-synthesis-v1",
+        "convergence-v1",
+        "counter-convergence-v1"
+      ] as const,
       baseline.successor
     ),
     depth: readRecipe(

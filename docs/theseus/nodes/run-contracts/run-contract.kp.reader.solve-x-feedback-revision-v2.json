@@ -132,8 +132,8 @@
     {
       "id": "s15-counter-convergence-trajectories",
       "title": "Counter-convergence trajectories",
-      "summary": "Move seven and three on legible opposing upper and lower paths.",
-      "status": "ready"
+      "summary": "Added a typed counter-convergence successor recipe and selected it only for solve-x. It reuses the existing measured successor plan so seven follows the authored upper arc, three the lower arc, and the minus remains a catalyst; convergence-v1 remains available and other assets retain their inferred defaults. Twenty-two focused laws and the full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s16-counter-convergence-junction",

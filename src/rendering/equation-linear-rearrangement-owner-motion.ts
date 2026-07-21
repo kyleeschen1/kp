@@ -165,7 +165,8 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
     relations
   };
   const witnessedAnnihilationPlan = createKpEquationWitnessedAnnihilationPlan(base);
-  const successorSynthesisPlan = input.successorPresentationRecipe === "successor-synthesis-v1"
+  const successorSynthesisPlan = input.successorPresentationRecipe === "successor-synthesis-v1" ||
+      input.successorPresentationRecipe === "counter-convergence-v1"
     ? createKpEquationSuccessorSynthesisPlan(base)
     : undefined;
   const independentZeroWitnessPlan = createKpIndependentZeroWitnessPlan(base);

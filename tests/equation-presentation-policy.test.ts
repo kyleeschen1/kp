@@ -15,7 +15,7 @@ test("canonical linear solve retains semantics but uses the continuity presentat
   assert.equal(policy.recipe, "continuity-v1");
   assert.equal(policy.cancellation, "counter-orbit-v1");
   assert.equal(policy.zeroWitness, "independent-zero-v1");
-  assert.equal(policy.successor, "convergence-v1");
+  assert.equal(policy.successor, "counter-convergence-v1");
   assert.equal(policy.depth, "semantic-depth-v1");
   assert.equal(policy.continuants, "transit-then-reflow-v1");
   assert.equal(policy.applyWitnessedAnnihilation, false);
@@ -51,7 +51,7 @@ test("presentation motifs can be selected independently without changing semanti
       ...animation.metadata,
       equationCancellationPresentationRecipe: "counter-orbit-v1",
       equationZeroWitnessPresentationRecipe: "independent-zero-v1",
-      equationSuccessorPresentationRecipe: "convergence-v1",
+      equationSuccessorPresentationRecipe: "counter-convergence-v1",
       equationDepthPresentationRecipe: "semantic-depth-v1",
       equationContinuantPresentationRecipe: "transit-then-reflow-v1"
     }
@@ -61,7 +61,7 @@ test("presentation motifs can be selected independently without changing semanti
     recipe: "continuity-v1",
     cancellation: "counter-orbit-v1",
     zeroWitness: "independent-zero-v1",
-    successor: "convergence-v1",
+    successor: "counter-convergence-v1",
     depth: "semantic-depth-v1",
     continuants: "transit-then-reflow-v1"
   });

@@ -293,8 +293,12 @@ test("shared witnessed annihilation meets, witnesses, then compacts survivors", 
 });
 
 test("constant operands travel independently on arcs before the derived result appears", () => {
+  const geometry = {
+    ...constantDerivationGeometry(),
+    successorPresentationRecipe: "counter-convergence-v1" as const
+  };
   const converging = sampleKpEquationTokenMotion(
-    constantDerivationGeometry(),
+    geometry,
     0.55
   );
   const operands = converging.tokens.filter(
@@ -309,7 +313,7 @@ test("constant operands travel independently on arcs before the derived result a
   assert.equal(result?.pose.opacity, 0);
 
   const derived = sampleKpEquationTokenMotion(
-    constantDerivationGeometry(),
+    geometry,
     0.72
   );
   const derivedResult = derived.tokens.find(
@@ -322,7 +326,7 @@ test("constant operands travel independently on arcs before the derived result a
   assert.ok(arrivingOperands.every((token) => token.pose.opacity > 0));
   const targetCenter = 72 + 12 / 2;
   for (const token of arrivingOperands) {
-    const native = constantDerivationGeometry().sourceTokens.find(
+    const native = geometry.sourceTokens.find(
       (candidate) => candidate.motionId === token.motionId
     )!;
     const center = native.localRect.left + native.localRect.width / 2;

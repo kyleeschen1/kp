@@ -362,7 +362,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     witnessedAnnihilationBinding: witnessedBindings.get(transitionId),
     successorSynthesisBinding:
       presentationProfile.successor === "successor-synthesis-v1" ||
-      presentationProfile.successor === "convergence-v1"
+      presentationProfile.successor === "convergence-v1" ||
+      presentationProfile.successor === "counter-convergence-v1"
         ? choreographyStep?.successorSynthesisBinding
         : undefined,
     progress: phaseProgress

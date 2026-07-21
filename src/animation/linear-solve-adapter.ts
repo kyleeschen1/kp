@@ -136,7 +136,7 @@ export function createLinearSolveAnimationAsset(): KpAnimationAsset {
       equationMotionPresentationRecipe: "continuity-v1",
       equationCancellationPresentationRecipe: "counter-orbit-v1",
       equationZeroWitnessPresentationRecipe: "independent-zero-v1",
-      equationSuccessorPresentationRecipe: "convergence-v1",
+      equationSuccessorPresentationRecipe: "counter-convergence-v1",
       equationDepthPresentationRecipe: "semantic-depth-v1",
       equationContinuantPresentationRecipe: "transit-then-reflow-v1"
     }
