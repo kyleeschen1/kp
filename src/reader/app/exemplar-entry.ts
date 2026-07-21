@@ -417,6 +417,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   document.body.dataset["kpReaderProgress"] = String(visualSample.progressPermille);
   document.body.dataset["kpReaderMotionMode"] = projection.mode;
   document.body.dataset["kpReaderMotionPreference"] = motionPreference;
+  document.body.dataset["kpReaderPlaybackDirection"] = sample.direction;
   stage.dataset["kpReaderMotionAuthority"] = motion.samplingAuthority;
   document.body.dataset["kpReaderTransition"] = transitionId;
   document.body.dataset["kpReaderFramePlans"] = String(scheduler.inspect().framePlanCount + 1);

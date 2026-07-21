@@ -113,7 +113,8 @@
     {
       "id": "s12-phase-boundary-rewind",
       "title": "Phase boundary and rewind continuity",
-      "status": "planned"
+      "summary": "Exposed reader playback direction and proved with the real physical scroll clock that forward then reverse traversal across both phase boundaries returns visible relation ink to the same subpixel pose and opacity while retaining the same persistent material-owner DOM node.",
+      "status": "complete"
     },
     {
       "id": "s13-equation-type-scale",
