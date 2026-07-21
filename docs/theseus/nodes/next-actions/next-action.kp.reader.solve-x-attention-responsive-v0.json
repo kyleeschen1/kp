@@ -2,8 +2,9 @@
   "id": "next-action.kp.reader.solve-x-attention-responsive-v0",
   "kind": "next-action",
   "title": "Perfect solve-x attention and responsive projection",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp.reader",
+  "summary": "Human review is intentionally tabled; retain the completed Solve x attention-responsive exemplar as unapproved review evidence and do not promote it.",
   "verificationRecords": [
     {
       "command": "npm run baseline:solve-x-attention and visual inspection",
@@ -166,5 +167,8 @@
       "checkedAt": "2026-07-21T20:41:42.240Z",
       "notes": "Six-state contact sheet inspected; 15 production review captures generated. Initial HTML is 35,384 bytes raw and 4,297 gzip with searchable lesson and MathML; no-JavaScript output retains 1,265 text characters, five headings, eight links, and visible static math; rewind error is zero and layout reads remain one."
     }
+  ],
+  "revisitWhen": [
+    "The user explicitly resumes the Solve x human exemplar review."
   ]
 }
