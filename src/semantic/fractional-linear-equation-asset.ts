@@ -60,9 +60,9 @@ export function createFractionalLinearEquationKpAsset(): FractionalLinearEquatio
           part("lhs.plus3", "term", "+3"),
           part("lhs.minus3", "term", "-3"),
           part("equals", "relation", "="),
-          part("rhs.7", "term", "7"),
-          part("rhs.minus", "operator", "−"),
-          part("rhs.3", "term", "3")
+          part("rhs.7", "term", "7", undefined, { successorContribution: "material-input", successorRole: "minuend", successorRank: 0 }),
+          part("rhs.minus", "operator", "−", undefined, { successorContribution: "catalyst", successorRole: "subtraction-operator", successorRank: 0 }),
+          part("rhs.3", "term", "3", undefined, { successorContribution: "material-input", successorRole: "subtrahend", successorRank: 1 })
         ],
         ids.initial,
         ids.subtract
@@ -76,9 +76,9 @@ export function createFractionalLinearEquationKpAsset(): FractionalLinearEquatio
           part("fraction.rule", "artifact", "fraction rule", "fraction-rule"),
           part("fraction.denominator.2", "term", "2", "denominator"),
           part("equals", "relation", "="),
-          part("rhs.7", "term", "7"),
-          part("rhs.minus", "operator", "−"),
-          part("rhs.3", "term", "3")
+          part("rhs.7", "term", "7", undefined, { successorContribution: "material-input", successorRole: "minuend", successorRank: 0 }),
+          part("rhs.minus", "operator", "−", undefined, { successorContribution: "catalyst", successorRole: "subtraction-operator", successorRank: 0 }),
+          part("rhs.3", "term", "3", undefined, { successorContribution: "material-input", successorRole: "subtrahend", successorRank: 1 })
         ],
         ids.afterSubtract,
         ids.cancelAdditive
@@ -92,7 +92,7 @@ export function createFractionalLinearEquationKpAsset(): FractionalLinearEquatio
           part("fraction.rule", "artifact", "fraction rule", "fraction-rule"),
           part("fraction.denominator.2", "term", "2", "denominator"),
           part("equals", "relation", "="),
-          part("rhs.4", "term", "4")
+          part("rhs.4", "term", "4", undefined, { successorTarget: true, successorRole: "evaluated-difference", successorRank: 0 })
         ],
         ids.additiveCancelled,
         ids.simplifyDifference
@@ -109,9 +109,9 @@ export function createFractionalLinearEquationKpAsset(): FractionalLinearEquatio
           part("fraction.denominator.2", "term", "2", "denominator"),
           part("lhs.right-paren", "artifact", "right parenthesis", "delimiter"),
           part("equals", "relation", "="),
-          part("rhs.multiplier.2", "term", "2", "multiplier"),
-          part("rhs.product", "operator", "·"),
-          part("rhs.4", "term", "4")
+          part("rhs.multiplier.2", "term", "2", "multiplier", { successorContribution: "material-input", successorRole: "factor", successorRank: 0 }),
+          part("rhs.product", "operator", "·", undefined, { successorContribution: "catalyst", successorRole: "multiplication-operator", successorRank: 0 }),
+          part("rhs.4", "term", "4", undefined, { successorContribution: "material-input", successorRole: "factor", successorRank: 1 })
         ],
         ids.rightSimplified,
         ids.multiply
@@ -123,9 +123,9 @@ export function createFractionalLinearEquationKpAsset(): FractionalLinearEquatio
         [
           part("lhs.x", "term", "x"),
           part("equals", "relation", "="),
-          part("rhs.multiplier.2", "term", "2", "multiplier"),
-          part("rhs.product", "operator", "·"),
-          part("rhs.4", "term", "4")
+          part("rhs.multiplier.2", "term", "2", "multiplier", { successorContribution: "material-input", successorRole: "factor", successorRank: 0 }),
+          part("rhs.product", "operator", "·", undefined, { successorContribution: "catalyst", successorRole: "multiplication-operator", successorRank: 0 }),
+          part("rhs.4", "term", "4", undefined, { successorContribution: "material-input", successorRole: "factor", successorRank: 1 })
         ],
         ids.multiplied,
         ids.cancelDenominator
@@ -137,7 +137,7 @@ export function createFractionalLinearEquationKpAsset(): FractionalLinearEquatio
         [
           part("lhs.x", "term", "x"),
           part("equals", "relation", "="),
-          part("rhs.8", "term", "8")
+          part("rhs.8", "term", "8", undefined, { successorTarget: true, successorRole: "evaluated-product", successorRank: 0 })
         ],
         ids.denominatorCancelled,
         ids.simplifyProduct
@@ -211,9 +211,12 @@ function equationState(
       id: `${id}.${partValue.path}`,
       kind: partValue.kind,
       label: partValue.label,
-      ...(partValue.structureRole === undefined
+      ...(partValue.structureRole === undefined && partValue.metadata === undefined
         ? {}
-        : { metadata: { equationStructureRole: partValue.structureRole } })
+        : { metadata: {
+            ...(partValue.structureRole === undefined ? {} : { equationStructureRole: partValue.structureRole }),
+            ...(partValue.metadata ?? {})
+          } })
     })),
     provenance: sourceId === undefined
       ? {
@@ -234,10 +237,23 @@ interface Part {
   readonly kind: KpAssetSelector["kind"];
   readonly label: string;
   readonly structureRole?: string;
+  readonly metadata?: Readonly<Record<string, string | number | boolean>>;
 }
 
-function part(path: string, kind: string, label: string, structureRole?: string): Part {
-  return { path, kind, label, ...(structureRole === undefined ? {} : { structureRole }) };
+function part(
+  path: string,
+  kind: string,
+  label: string,
+  structureRole?: string,
+  metadata?: Readonly<Record<string, string | number | boolean>>
+): Part {
+  return {
+    path,
+    kind,
+    label,
+    ...(structureRole === undefined ? {} : { structureRole }),
+    ...(metadata === undefined ? {} : { metadata })
+  };
 }
 
 function transform(

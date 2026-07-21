@@ -72,6 +72,12 @@
       "status": "passed",
       "scope": "s09 timeline-wide no-wrap layout plan",
       "checkedAt": "2026-07-21T22:03:02.292Z"
+    },
+    {
+      "command": "focused fractional animation binding and semantic asset tests",
+      "status": "passed",
+      "scope": "s10 balanced subtract choreography",
+      "checkedAt": "2026-07-21T22:06:18.862Z"
     }
   ]
 }

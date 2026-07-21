@@ -94,7 +94,8 @@
     {
       "id": "s10-subtract-both-sides",
       "title": "Animate subtracting three from both sides",
-      "status": "planned"
+      "summary": "Certified subtract-three as the accepted balanced-introduction choreography and supplied explicit successor metadata for later arithmetic synthesis without changing semantic identity.",
+      "status": "complete"
     },
     {
       "id": "s11-additive-cancellation",
