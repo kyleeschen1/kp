@@ -32,6 +32,9 @@ test("real reader feedback captures a validated reproducible frame without movin
   await host.locator("textarea").fill("The selected symbol changes weight during the handoff.");
   await host.locator("button.save").click();
   await expect(host.locator("output.status")).toHaveText("Saved note 1.");
+  await expect(host.locator("output.inbox-count")).toHaveText("Inbox 1");
+  await page.keyboard.press("Escape");
+  await expect(host.locator("output.launcher-count")).toHaveText("1");
 
   const stateAfter = await page.evaluate(() => ({
     scrollY: window.scrollY,

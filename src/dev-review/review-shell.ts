@@ -5,6 +5,8 @@ export interface KpDevReviewShell {
   readonly panel: HTMLElement;
   readonly content: HTMLElement;
   readonly status: HTMLOutputElement;
+  readonly inboxCount: HTMLOutputElement;
+  setInboxCount(count: number): void;
   open(): void;
   close(): void;
   dispose(): void;
@@ -29,7 +31,15 @@ export function mountKpDevReviewShell(ownerDocument: Document): KpDevReviewShell
   launcher.type = "button";
   launcher.setAttribute("aria-expanded", "false");
   launcher.setAttribute("aria-controls", "review-panel");
-  launcher.innerHTML = `<span aria-hidden="true">✦</span><span>Review</span>`;
+  const launcherIcon = ownerDocument.createElement("span");
+  launcherIcon.setAttribute("aria-hidden", "true");
+  launcherIcon.textContent = "✦";
+  const launcherLabel = ownerDocument.createElement("span");
+  launcherLabel.textContent = "Review";
+  const launcherCount = ownerDocument.createElement("output");
+  launcherCount.className = "launcher-count";
+  launcherCount.hidden = true;
+  launcher.append(launcherIcon, launcherLabel, launcherCount);
 
   const panel = ownerDocument.createElement("section");
   panel.id = "review-panel";
@@ -51,7 +61,15 @@ export function mountKpDevReviewShell(ownerDocument: Document): KpDevReviewShell
   const closeButton = button(ownerDocument, "close", "Close visual review");
   closeButton.type = "button";
   closeButton.textContent = "×";
-  header.append(heading, closeButton);
+  const headerActions = ownerDocument.createElement("div");
+  headerActions.className = "header-actions";
+  const inboxCount = ownerDocument.createElement("output");
+  inboxCount.className = "inbox-count";
+  inboxCount.setAttribute("aria-live", "polite");
+  inboxCount.value = "Inbox 0";
+  inboxCount.setAttribute("aria-label", "Inbox contains 0 notes");
+  headerActions.append(inboxCount, closeButton);
+  header.append(heading, headerActions);
 
   const content = ownerDocument.createElement("div");
   content.className = "content";
@@ -85,6 +103,15 @@ export function mountKpDevReviewShell(ownerDocument: Document): KpDevReviewShell
   launcher.addEventListener("click", open);
   closeButton.addEventListener("click", close);
   root.addEventListener("keydown", onKeyDown);
+  const setInboxCount = (count: number): void => {
+    if (!Number.isInteger(count) || count < 0) throw new RangeError("Inbox count must be a non-negative integer");
+    const noun = count === 1 ? "note" : "notes";
+    inboxCount.value = `Inbox ${count}`;
+    inboxCount.setAttribute("aria-label", `Inbox contains ${count} ${noun}`);
+    launcherCount.value = String(count);
+    launcherCount.hidden = count === 0;
+    launcherCount.setAttribute("aria-label", `${count} ${noun} in inbox`);
+  };
 
   return {
     host,
@@ -93,6 +120,8 @@ export function mountKpDevReviewShell(ownerDocument: Document): KpDevReviewShell
     panel,
     content,
     status,
+    inboxCount,
+    setInboxCount,
     open,
     close,
     dispose() {
@@ -154,6 +183,19 @@ const shellStyles = `
     pointer-events: auto;
   }
   .launcher > [aria-hidden] { color: var(--accent); font-size: .9rem; }
+  .launcher-count {
+    display: grid;
+    min-width: 1.32rem;
+    height: 1.32rem;
+    padding-inline: .28rem;
+    border-radius: 999px;
+    color: var(--ink);
+    background: var(--accent);
+    font-size: .65rem;
+    font-weight: 850;
+    place-items: center;
+  }
+  .launcher-count[hidden] { display: none; }
   .panel {
     width: min(360px, calc(100vw - 24px));
     border: 1px solid color-mix(in srgb, var(--ink) 14%, var(--line));
@@ -187,6 +229,17 @@ const shellStyles = `
     font-size: 1.12rem;
     font-weight: 650;
     letter-spacing: -.015em;
+  }
+  .header-actions { display: flex; align-items: center; gap: .42rem; }
+  .inbox-count {
+    padding: .22rem .45rem;
+    border: 1px solid color-mix(in srgb, var(--relation) 22%, var(--line));
+    border-radius: 999px;
+    color: var(--relation);
+    background: color-mix(in srgb, var(--relation) 6%, transparent);
+    font-size: .62rem;
+    font-weight: 750;
+    white-space: nowrap;
   }
   .close {
     display: grid;

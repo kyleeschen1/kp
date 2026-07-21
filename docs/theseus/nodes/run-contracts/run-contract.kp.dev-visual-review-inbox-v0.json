@@ -157,6 +157,12 @@
       "status": "complete"
     },
     {
+      "id": "s19b-submission-counter",
+      "title": "Durable submission counter",
+      "summary": "A successful server response advances the visible Inbox count and collapsed badge using the durable note sequence; failed submissions leave the count unchanged.",
+      "status": "complete"
+    },
+    {
       "id": "s20-human-exemplar-checkpoint",
       "title": "Human exemplar checkpoint",
       "status": "planned"

@@ -49,6 +49,9 @@ test("composer locks one capture on open and submits with command-enter", async 
   await host.locator("textarea").fill("The +3 changes size during the handoff.");
   await host.locator("textarea").press(process.platform === "darwin" ? "Meta+Enter" : "Control+Enter");
   await expect(host.locator("output.status")).toHaveText("Saved note 1.");
+  await expect(host.locator("output.inbox-count")).toHaveText("Inbox 1");
+  await page.keyboard.press("Escape");
+  await expect(host.locator("output.launcher-count")).toHaveText("1");
 
   const state = await page.evaluate(() => (window as typeof window & {
     reviewState?: { captures: number; submissions: Array<{ comment: string }> }
@@ -87,6 +90,7 @@ test("composer preserves failed text and recaptures only after close and reopen"
   await textarea.fill("Keep this text");
   await host.locator("button.save").click();
   await expect(host.locator("output.status")).toContainText("still here");
+  await expect(host.locator("output.inbox-count")).toHaveText("Inbox 0");
   await expect(textarea).toHaveValue("Keep this text");
   await page.keyboard.press("Escape");
   await host.locator("button.launcher").click();

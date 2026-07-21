@@ -99,6 +99,7 @@ export function mountKpDevReviewComposer(options: {
     try {
       const note = await options.submit({ comment, capture: captured });
       textarea.value = "";
+      options.shell.setInboxCount(note.sequence);
       options.shell.status.value = `Saved note ${note.sequence}.`;
     } catch {
       options.shell.status.value = "Could not save. Your text is still here.";
