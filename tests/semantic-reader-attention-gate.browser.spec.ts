@@ -118,6 +118,20 @@ test("narrow focus stepper provides direct keyboard-native phase navigation", as
     "attention.solve.inspect"
   );
   await expect.poll(() => new URL(page.url()).searchParams.get("kpProgress")).toBe("980");
+
+  await page.reload();
+  await expect(page.locator("body")).toHaveAttribute("data-kp-reader-progress", "980");
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-attention-phase",
+    "attention.solve.inspect"
+  );
+  const restoredStage = await page.locator("[data-kp-reader-equation-stage]").boundingBox();
+  const restoredMasthead = await page.locator(".kp-reader-masthead").boundingBox();
+  expect(restoredStage).not.toBeNull();
+  expect(restoredMasthead).not.toBeNull();
+  expect(restoredStage!.y).toBeGreaterThanOrEqual(
+    restoredMasthead!.y + restoredMasthead!.height + 8
+  );
 });
 
 test("phone projection is one finite workspace followed by a searchable transcript", async ({ page }) => {

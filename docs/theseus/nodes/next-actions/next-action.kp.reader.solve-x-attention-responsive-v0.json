@@ -95,6 +95,76 @@
       "scope": "s15 solve-x attention authoring and validation",
       "checkedAt": "2026-07-21T20:05:45.164Z",
       "notes": "The canonical Markdown now authors twelve phases in three complete cycles covering 0-1000. Validation rejects incomplete/order-broken cycles, gaps, identity drift, invalid progress, empty cues/focus, and unresolved asset refs; mutable author inputs are copied."
+    },
+    {
+      "command": "node --test tests/semantic-reader-attention-projector.test.ts and npm run typecheck",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-21T20:09:31.951Z"
+    },
+    {
+      "command": "node --test semantic reader hydration static prose and solve-x compiler tests plus npm run typecheck",
+      "status": "passed",
+      "scope": "s17 attention static compiler",
+      "checkedAt": "2026-07-21T20:11:47.878Z"
+    },
+    {
+      "command": "node --test semantic reader static prose and solve-x compiler tests plus npm run typecheck",
+      "status": "passed",
+      "scope": "s18 wide stable islands",
+      "checkedAt": "2026-07-21T20:13:35.480Z"
+    },
+    {
+      "command": "semantic reader exemplar and URL restoration Playwright tests plus npm run typecheck",
+      "status": "passed",
+      "scope": "s19 pre-cue motion gating",
+      "checkedAt": "2026-07-21T20:16:22.989Z"
+    },
+    {
+      "command": "npx playwright test semantic reader attention gate and npm run typecheck",
+      "status": "passed",
+      "scope": "s20 wide solve-x gate",
+      "checkedAt": "2026-07-21T20:18:38.106Z"
+    },
+    {
+      "command": "responsive projection unit and live breakpoint Playwright gate plus npm run typecheck",
+      "status": "passed",
+      "scope": "s21 responsive projection selection",
+      "checkedAt": "2026-07-21T20:21:07.051Z"
+    },
+    {
+      "command": "solve-x compiler test, focus-stepper Playwright gate, and npm run typecheck",
+      "status": "passed",
+      "scope": "s22 accessible focus stepper",
+      "checkedAt": "2026-07-21T20:26:07.464Z"
+    },
+    {
+      "command": "attention Playwright gate, solve-x attention baseline capture, visual inspection, and npm run typecheck",
+      "status": "passed",
+      "scope": "s23 phone layout",
+      "checkedAt": "2026-07-21T20:30:26.262Z",
+      "notes": "At 390 by 844 the 362 by 372 focus workspace sits fully below the masthead and above the transcript, contains one cue plus direct controls, has zero stage or review overlap, zero nested vertical scrollers, and no horizontal overflow. The full transcript begins immediately below; the prior 174px sticky overlap and 62vh beat compression are removed."
+    },
+    {
+      "command": "npm test and semantic reader browser release cohort",
+      "status": "passed",
+      "scope": "s24 deterministic and browser release gate",
+      "checkedAt": "2026-07-21T20:41:24.318Z",
+      "notes": "Full architecture, inference, catalog, server, and unit suite passed. Nineteen semantic-reader browser tests passed across attention, no-JavaScript, TOC, URL restoration, atomic rewind, KaTeX, desktop, tablet, and phone; the projection-aware integrated gate was rerun after updating its legacy sticky-stage expectation."
+    },
+    {
+      "command": "npm run typecheck; vite build; npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s24 production closure",
+      "checkedAt": "2026-07-21T20:41:30.566Z",
+      "notes": "Repository typecheck, direct production Vite build, and dev-review production exclusion passed. The nested npm build wrapper was intermittently terminated after its passing typecheck in this execution environment; its exact constituent typecheck and Vite build commands both passed independently."
+    },
+    {
+      "command": "npm run visual:contact-sheet and semantic-reader production capture",
+      "status": "passed",
+      "scope": "s24 deterministic visual and static transcript gate",
+      "checkedAt": "2026-07-21T20:41:42.240Z",
+      "notes": "Six-state contact sheet inspected; 15 production review captures generated. Initial HTML is 35,384 bytes raw and 4,297 gzip with searchable lesson and MathML; no-JavaScript output retains 1,265 text characters, five headings, eight links, and visible static math; rewind error is zero and layout reads remain one."
     }
   ]
 }

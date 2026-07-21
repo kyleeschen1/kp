@@ -34,6 +34,7 @@ test("linear solve algebra trace imports as a sampleable AnimationAsset", () => 
   assert.deepEqual(result.animation.metadata, {
     sourceAnimationId: "linear-equation-solve-x",
     equationMotionPresentationRecipe: "continuity-v1",
+    equationNativeHandoffRecipe: "atomic-v1",
     equationCancellationPresentationRecipe: "counter-orbit-v1",
     equationZeroWitnessPresentationRecipe: "none",
     equationSuccessorPresentationRecipe: "counter-convergence-v1",

@@ -2,7 +2,7 @@ import type {
   KpLessonAttentionPhase,
   KpLessonAttentionPhaseKind,
   KpLessonAttentionPlan
-} from "../document/lesson-document.ts";
+} from "../document/public-api.ts";
 
 export type KpReaderAttentionPrimaryTarget = "prose" | "visual" | "correspondence";
 export type KpReaderAttentionMotionGate = "hold" | "play";

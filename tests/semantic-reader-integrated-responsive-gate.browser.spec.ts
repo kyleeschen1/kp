@@ -34,12 +34,20 @@ test("integrated reader remains stable across desktop, tablet, and phone", async
         expect(evidence.activeTocCount).toBe(1);
         expect(evidence.mastheadTop).toBeGreaterThanOrEqual(-0.5);
         expect(evidence.mastheadContentOverflowPx).toBeLessThanOrEqual(1);
-        expect(evidence.stageTop).toBeGreaterThanOrEqual(
-          evidence.mastheadTop + evidence.mastheadHeight + 8
-        );
-        if (evidence.stackedStory && variant.reviewCheckpoints.some(
+        if (evidence.responsiveProjection !== "focus-stepper") {
+          expect(evidence.stageTop).toBeGreaterThanOrEqual(
+            evidence.mastheadTop + evidence.mastheadHeight + 8
+          );
+        } else {
+          expect(evidence.stagePosition).toBe("static");
+        }
+        if (
+          evidence.stackedStory &&
+          evidence.responsiveProjection !== "focus-stepper" &&
+          variant.reviewCheckpoints.some(
           (checkpoint) => checkpoint === progress
-        )) {
+          )
+        ) {
           expect(
             evidence.activeBeatHeadingTop,
             JSON.stringify({ viewport, route: variant.route, progress, evidence })
@@ -77,6 +85,8 @@ async function integratedEvidence(page: Page): Promise<{
   stackedStory: boolean;
   visibleEquationOverflowPx: number;
   katexIdentity: boolean;
+  responsiveProjection: string | undefined;
+  stagePosition: string;
 }> {
   return page.evaluate(() => {
     const masthead = document.querySelector<HTMLElement>(".kp-reader-masthead");
@@ -151,13 +161,18 @@ async function integratedEvidence(page: Page): Promise<{
         return candidates.some((candidate) =>
           getComputedStyle(candidate).fontFamily.includes("KaTeX")
         );
-      })
+      }),
+      responsiveProjection: document.body.dataset["kpReaderResponsiveProjection"],
+      stagePosition: getComputedStyle(stage.parentElement!).position
     };
   });
 }
 
 async function seekByScroll(page: Page, progressPermille: number): Promise<void> {
   await page.evaluate((target) => {
+    // URL and focus-stepper controls intentionally retain semantic authority
+    // until genuine user scroll input resumes the continuous scroll clock.
+    window.dispatchEvent(new WheelEvent("wheel"));
     const beats = [...document.querySelectorAll<HTMLElement>("[data-kp-beat]")];
     const first = beats[0];
     const last = beats.at(-1);

@@ -194,7 +194,8 @@
     {
       "id": "s24-transcript-route-release-gate",
       "title": "Transcript_route_and_release_gate",
-      "status": "planned"
+      "summary": "The full deterministic, browser, type, architecture, production, no-JavaScript, transcript, URL, rewind, responsive, accessibility, KaTeX, review-exclusion, and visual gates pass. Production capture confirms searchable text and MathML with exact rewind and one layout read.",
+      "status": "complete"
     },
     {
       "id": "s25-human-exemplar-checkpoint",
