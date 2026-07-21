@@ -39,6 +39,13 @@
       "scope": "s07 narrow captured-moment review flow",
       "checkedAt": "2026-07-21T19:41:56.244Z",
       "notes": "At 390x844 the open 366x320.7 sheet begins at y=511.3 below the stage bottom y=379.3, locks checkpoint metadata on open, retains scroll/progress, hides the launcher, and responds live across the 881px reader boundary."
+    },
+    {
+      "command": "npm run visual:contact-sheet plus canonical desktop and phone open-review inspection",
+      "status": "passed",
+      "scope": "s08 review placement visual checkpoint",
+      "checkedAt": "2026-07-21T19:43:03.061Z",
+      "notes": "Accepted for continuation: wide panel is isolated in the prose rail; narrow sheet is singular and bounded below the live stage; closed states are clean; no reader progress or scroll drift. Existing phone scrollytelling compression remains explicitly deferred to s21-s23."
     }
   ]
 }

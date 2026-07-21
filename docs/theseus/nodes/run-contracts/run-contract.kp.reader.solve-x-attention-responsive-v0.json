@@ -98,7 +98,8 @@
     {
       "id": "s08-review-visual-checkpoint",
       "title": "Review_visual_checkpoint",
-      "status": "planned"
+      "summary": "Accepted the review-placement visual stop gate after inspecting the six-state contact sheet and open-review desktop/phone captures. Review chrome no longer occludes the equation, open and closed ownership is singular, and phone lesson compression remains isolated for the later responsive-projection slices.",
+      "status": "complete"
     },
     {
       "id": "s09-handoff-instrumentation",
