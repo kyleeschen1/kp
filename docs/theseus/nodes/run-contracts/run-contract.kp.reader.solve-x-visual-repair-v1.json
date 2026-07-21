@@ -179,7 +179,8 @@
     {
       "id": "s23-sticky-reader-masthead",
       "title": "Sticky reader masthead",
-      "status": "planned"
+      "summary": "Made the compact Kinetic Press masthead a full-width translucent sticky surface, introduced one masthead height token shared by the TOC and equation offsets, and proved desktop and narrow layouts remain globally scrollable, non-overlapping, and keyboard-visible.",
+      "status": "complete"
     },
     {
       "id": "s24-active-toc-state",

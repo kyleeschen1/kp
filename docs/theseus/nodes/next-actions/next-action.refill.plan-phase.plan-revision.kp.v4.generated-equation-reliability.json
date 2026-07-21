@@ -277,6 +277,12 @@
       "status": "passed",
       "scope": "s22 accessible causal motion and deterministic rewind",
       "checkedAt": "2026-07-21T03:25:18.501Z"
+    },
+    {
+      "command": "Desktop and narrow sticky masthead geometry, global-scroll, focus, responsive equation, and URL restoration browser gates plus full-page visual inspection",
+      "status": "passed",
+      "scope": "s23 persistent non-overlapping reader masthead",
+      "checkedAt": "2026-07-21T03:30:20.296Z"
     }
   ],
   "progress": {
