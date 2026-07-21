@@ -39,3 +39,7 @@ export {
   compileKpXPlusThreeLesson,
   compileKpXPlusThreeTeacherZeroLesson
 } from "./x-plus-three-lesson.ts";
+
+export {
+  compileKpFractionalLinearEquationLessonModel
+} from "./fractional-linear-equation-lesson-model.ts";

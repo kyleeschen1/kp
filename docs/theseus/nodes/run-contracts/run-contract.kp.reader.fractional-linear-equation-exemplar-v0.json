@@ -76,7 +76,8 @@
     {
       "id": "s07-searchable-lesson",
       "title": "Author searchable lesson and static fallback",
-      "status": "planned"
+      "summary": "Authored seven plain searchable beats and compiled seven semantic MathML/KaTeX fallback states. The lesson intentionally uses ordinary scroll-scrub with no attention sidecar.",
+      "status": "complete"
     },
     {
       "id": "s08-fraction-geometry",

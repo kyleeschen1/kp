@@ -54,6 +54,12 @@
       "status": "passed",
       "scope": "s06 renderer-neutral composition boundary",
       "checkedAt": "2026-07-21T21:55:39.458Z"
+    },
+    {
+      "command": "focused fractional lesson parser and static prose tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s07 searchable static lesson",
+      "checkedAt": "2026-07-21T21:58:14.594Z"
     }
   ]
 }
