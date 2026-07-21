@@ -166,7 +166,8 @@
     {
       "id": "s22-generated-stress-cohort",
       "title": "Compile hidden generated fractional cases",
-      "status": "planned"
+      "summary": "A deterministic exact-rational provider now generates unseen unit-fraction equations. Sixty-four unique problems compile through all seven presentation states and verify both intermediate operations, while remaining hidden from the human-reviewed visible family.",
+      "status": "complete"
     },
     {
       "id": "s23-overflow-quality-gate",

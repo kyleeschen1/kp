@@ -12,7 +12,9 @@ export {
 export {
   canonicalFractionalLinearProblem,
   canonicalLinearProblem,
-  generateLinearProblem
+  generateLinearProblem,
+  generateUnitFractionLinearProblem,
+  type GenerateUnitFractionLinearProblemInput
 } from "./generator.ts";
 
 export { verifyLinearStep } from "./step-verifier.ts";

@@ -44,5 +44,10 @@ export {
   compileKpFractionalLinearEquationLesson
 } from "./fractional-linear-equation-lesson.ts";
 export {
+  compileKpFractionalLinearStressCase,
+  type KpCompiledFractionalLinearStressCase,
+  type KpFractionalLinearStressState
+} from "./fractional-linear-stress-case.ts";
+export {
   compileKpFractionalLinearEquationLessonModel
 } from "./fractional-linear-equation-lesson-model.ts";
