@@ -29,4 +29,91 @@ test("system reduced motion retains algebraic causality without flourish", async
   expect(transforms).toHaveLength(2);
   expect(transforms.every((transform) => !transform.includes("translate(0px, 0px)")))
     .toBe(true);
+  await expect(stage).toHaveAttribute(
+    "data-kp-reader-equation-effective-depth-recipe",
+    "flat-v1"
+  );
+  await expect(movingFragments.first()).not.toHaveAttribute(
+    "data-kp-reader-equation-semantic-depth",
+    /.+/
+  );
+  await expect(movingFragments.first()).toHaveCSS("filter", "none");
 });
+
+test("explicit full motion restores depth under a reduced system preference", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(
+    "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1" +
+    "&kpProgress=517&kpMotion=full"
+  );
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-motion-mode",
+    "continuous"
+  );
+  const stage = page.locator("[data-kp-reader-equation-stage]");
+  await expect(stage).toHaveAttribute(
+    "data-kp-reader-equation-effective-depth-recipe",
+    "semantic-depth-v1"
+  );
+  const plus = page.locator(
+    '[data-kp-reader-equation-material-fragment-id*="after-subtract.lhs.plus3"]'
+  );
+  await expect(plus).toHaveAttribute(
+    "data-kp-reader-equation-semantic-depth",
+    /.+/
+  );
+  await expect(plus).toHaveCSS("filter", /drop-shadow/);
+});
+
+test("essential causal motion retraces exactly on rewind", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(
+    "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpProgress=480"
+  );
+  await seekByScroll(page, 520);
+  const forward = await cancellationPose(page);
+  await seekByScroll(page, 560);
+  await seekByScroll(page, 520);
+  const rewound = await cancellationPose(page);
+  expect(rewound).toEqual(forward);
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-playback-direction",
+    "rewind"
+  );
+});
+
+async function cancellationPose(page: import("@playwright/test").Page) {
+  return page.locator(
+    '[data-kp-reader-equation-material-owner-id="material-owner.left-inverses-cancel"] ' +
+    "[data-kp-reader-equation-material-fragment-id]"
+  ).evaluateAll((elements) => elements.map((element) => ({
+    transform: (element as HTMLElement).style.transform,
+    opacity: (element as HTMLElement).style.opacity,
+    filter: (element as HTMLElement).style.filter
+  })));
+}
+
+async function seekByScroll(
+  page: import("@playwright/test").Page,
+  progressPermille: number
+): Promise<void> {
+  await page.evaluate((target) => {
+    const beats = [...document.querySelectorAll<HTMLElement>("[data-kp-beat]")];
+    const first = beats[0];
+    const last = beats.at(-1);
+    if (first === undefined || last === undefined) throw new Error("Reader beats unavailable.");
+    const firstRect = first.getBoundingClientRect();
+    const lastRect = last.getBoundingClientRect();
+    const start = window.scrollY + firstRect.top + firstRect.height * 0.36;
+    const end = window.scrollY + lastRect.top + lastRect.height * 0.64;
+    const readerPosition = start + (end - start) * target / 1_000;
+    window.scrollTo(0, readerPosition - window.innerHeight * 0.48);
+  }, progressPermille);
+  await expect(page.locator("body")).toHaveAttribute(
+    "data-kp-reader-progress",
+    String(progressPermille)
+  );
+  await page.evaluate(() => new Promise<void>((resolve) => {
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+  }));
+}

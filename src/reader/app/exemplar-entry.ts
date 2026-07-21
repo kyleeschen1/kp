@@ -353,7 +353,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     cancellationPresentationRecipe: presentationProfile.cancellation,
     zeroWitnessPresentationRecipe: presentationProfile.zeroWitness,
     successorPresentationRecipe: presentationProfile.successor,
-    depthPresentationRecipe: presentationProfile.depth,
+    depthPresentationRecipe:
+      projection.mode === "continuous" ? presentationProfile.depth : "flat-v1",
     witnessedAnnihilationBinding: witnessedBindings.get(transitionId),
     successorSynthesisBinding:
       presentationProfile.successor === "successor-synthesis-v1" ||
@@ -426,6 +427,8 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   progressBar.style.transform = `scaleX(${visualSample.progress})`;
   document.body.dataset["kpReaderProgress"] = String(visualSample.progressPermille);
   document.body.dataset["kpReaderMotionMode"] = projection.mode;
+  stage.dataset["kpReaderEquationEffectiveDepthRecipe"] =
+    projection.mode === "continuous" ? presentationProfile.depth : "flat-v1";
   document.body.dataset["kpReaderMotionPreference"] = motionPreference;
   document.body.dataset["kpReaderPlaybackDirection"] = sample.direction;
   stage.dataset["kpReaderMotionAuthority"] = motion.samplingAuthority;

@@ -271,6 +271,12 @@
       "status": "passed",
       "scope": "s21 calibrated KaTeX semantic depth presentation",
       "checkedAt": "2026-07-21T03:22:29.358Z"
+    },
+    {
+      "command": "Motion policy typecheck plus essential motion, explicit full override, static selector, depth endpoints, and forward-rewind browser gates",
+      "status": "passed",
+      "scope": "s22 accessible causal motion and deterministic rewind",
+      "checkedAt": "2026-07-21T03:25:18.501Z"
     }
   ],
   "progress": {

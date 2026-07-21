@@ -173,7 +173,8 @@
     {
       "id": "s22-motion-accessibility-rewind",
       "title": "Motion accessibility and rewind",
-      "status": "planned"
+      "summary": "Classified semantic depth as decorative: essential and checkpoint projections use flat depth while retaining continuous causal symbol motion where allowed; explicit full motion restores depth even under a reduced system preference, and essential forward-rewind frames retrace exactly.",
+      "status": "complete"
     },
     {
       "id": "s23-sticky-reader-masthead",
