@@ -147,7 +147,8 @@
     {
       "id": "s16-kp-review-skill-workflow",
       "title": "Implement-bounded-review-and-triage-workflow",
-      "status": "planned"
+      "summary": "kp-review-logs now specifies audit-first bounded unread review, explicit history/full-detail escalation, evidence-based diagnosis, mode boundaries, dry-run-first status/cursor triage, and cursor advancement only through actually reviewed notes.",
+      "status": "complete"
     },
     {
       "id": "s17-kp-review-skill-validation",
