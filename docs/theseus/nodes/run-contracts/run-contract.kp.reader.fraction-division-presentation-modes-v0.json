@@ -83,7 +83,8 @@
     {
       "id": "s06-alignment-budget",
       "title": "Gate anchor-to-ink alignment across motion",
-      "status": "planned"
+      "summary": "Promoted fraction-rule alignment from report-only telemetry into a four-edge 0.5px failure budget; the repaired exemplar measures 0px maximum delta over all sampled motion frames.",
+      "status": "complete"
     },
     {
       "id": "s07-preservation-boundary",

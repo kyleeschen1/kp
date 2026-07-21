@@ -49,7 +49,7 @@ try {
     ))
   ];
   const report = {
-    schemaVersion: "kp.fractional-linear-equation-visual-check.v2",
+    schemaVersion: "kp.fractional-linear-equation-visual-check.v3",
     route: "/reader/solve-fractional-linear/",
     viewport: { width: 1280, height: 900 },
     samples,
@@ -72,6 +72,7 @@ try {
 
 async function sampleVisualFrame(page: Page, requestedProgress: number) {
   return page.evaluate((progress) => {
+    const fractionRuleAlignmentTolerancePx = 0.5;
     interface Box { left: number; top: number; right: number; bottom: number; width: number; height: number }
     const box = (element: Element): Box => {
       const rect = element.getBoundingClientRect();
@@ -170,6 +171,12 @@ async function sampleVisualFrame(page: Page, requestedProgress: number) {
         anchorId: fragment.dataset["kpReaderEquationMaterialFragmentId"] ?? "unknown",
         anchorRect,
         inkRect,
+        edgeDeltaPx: {
+          left: inkRect.left - anchorRect.left,
+          top: inkRect.top - anchorRect.top,
+          right: inkRect.right - anchorRect.right,
+          bottom: inkRect.bottom - anchorRect.bottom
+        },
         centerOffsetPx: {
           x: inkRect.left + inkRect.width / 2 -
             (anchorRect.left + anchorRect.width / 2),
@@ -185,6 +192,18 @@ async function sampleVisualFrame(page: Page, requestedProgress: number) {
       ),
       0
     );
+    const maxFractionRuleEdgeDeltaPx = materialFractionRules.reduce(
+      (maximum, rule) => Math.max(
+        maximum,
+        ...Object.values(rule.edgeDeltaPx).map((delta) => Math.abs(delta))
+      ),
+      0
+    );
+    if (maxFractionRuleEdgeDeltaPx > fractionRuleAlignmentTolerancePx) {
+      failures.push(
+        `fraction-rule ink exceeds ${fractionRuleAlignmentTolerancePx}px alignment budget`
+      );
+    }
     const katexFonts = [...new Set(
       [...stage.querySelectorAll<HTMLElement>(".katex")]
         .filter((element) => element.getBoundingClientRect().width > 0)
@@ -246,6 +265,8 @@ async function sampleVisualFrame(page: Page, requestedProgress: number) {
       expectedMaterialFractionRuleCount: expectedMaterialFractionRules.length,
       materialFractionRules,
       maxFractionRuleInkOffsetPx,
+      maxFractionRuleEdgeDeltaPx,
+      fractionRuleAlignmentTolerancePx,
       materialCollisionCount: collisions.length,
       katexFonts,
       failures
