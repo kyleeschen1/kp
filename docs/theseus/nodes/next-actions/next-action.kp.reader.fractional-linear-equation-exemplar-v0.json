@@ -41,6 +41,13 @@
       "scope": "s04 exact intermediate verification",
       "checkedAt": "2026-07-21T21:48:24.445Z",
       "notes": "Subtract-three and multiply-two classify as canonical both-side operations; the mapped trace is strict and solution 8 is verified."
+    },
+    {
+      "command": "focused fractional semantic asset and linear compatibility tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s05 semantic fraction lineage",
+      "checkedAt": "2026-07-21T21:53:52.612Z",
+      "notes": "Seven equation states and six transitions compile semantically with total selector ownership. The focused gate caught and repaired delimiter lifecycle classification before completion."
     }
   ]
 }

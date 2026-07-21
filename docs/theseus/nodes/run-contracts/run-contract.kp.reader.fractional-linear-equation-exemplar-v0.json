@@ -64,7 +64,8 @@
     {
       "id": "s05-semantic-correspondence",
       "title": "Define semantic identity and correspondence",
-      "status": "planned"
+      "summary": "Defined seven semantic equation states and six total correspondence maps. Numerator x, fraction rule, denominator, equality, entered operations, cancellations, and derived constants now have explicit reversible lifecycles independent of DOM geometry.",
+      "status": "complete"
     },
     {
       "id": "s06-composition-boundary",
