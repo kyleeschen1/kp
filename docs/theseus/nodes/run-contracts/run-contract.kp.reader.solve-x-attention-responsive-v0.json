@@ -200,7 +200,8 @@
     {
       "id": "s25-human-exemplar-checkpoint",
       "title": "Human_exemplar_checkpoint",
-      "status": "planned"
+      "summary": "Awaiting human review of wide attention pacing, phone focus-stepper clarity, active cue placement, and the remaining subjective symbol choreography before any pattern promotion.",
+      "status": "in-progress"
     }
   ]
 }
