@@ -1,0 +1,167 @@
+{
+  "id": "run-contract.kp.reader.fractional-linear-equation-exemplar-v0",
+  "kind": "run-contract",
+  "title": "Fractional linear equation exemplar",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.fractional-linear-equation-exemplar-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-21-fractional-linear-equation-exemplar-long-loop-proposal.md",
+      "summary": "User-approved rationale, scope, acceptance criteria, preservation boundary, slice order, deferrals, stop conditions, rollback unit, and promotion criteria."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "focused node tests for semantic, provider, choreography, compiler, and layout changes",
+    "focused Playwright checks for visible, responsive, URL, seek, rewind, accessibility, and production behavior",
+    "npm run visual:contact-sheet",
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:dev-review-production",
+    "npm run theseus -- workspace validate"
+  ],
+  "allowedWork": [
+    "Fractional linear equation semantic trace, exact-rational generator and verifier integration, semantic correspondence, fraction and linear choreography composition, renderer-neutral layout planning, reader content and route, semantic-editor discovery, responsive containment, focused tests, stable visual capture, and durable evidence.",
+    "Reuse existing fraction, cancellation, linear-solve, KaTeX, atomic ownership, reader, URL, static-output, accessibility, and production-closure contracts without treating deferred Solve x attention behavior as approved."
+  ],
+  "disallowedWork": [
+    "Do not implement roots, radicals, exponent laws, function wrapping, distribution, factoring, balance projection, graphs, code, WebGL, or unrelated subject families.",
+    "Do not promote the deferred Solve x attention-responsive pattern, add arbitrary CAS behavior or LLM-authored geometry, introduce card-specific motion coordinates or CSS, or generalize fraction choreography beyond the hidden verification cohort."
+  ],
+  "goal": "Build x over 2 plus 3 equals 7 as one searchable, URL-addressable, reversible fraction-solving exemplar with causal both-side operations, stable KaTeX typography, generated-case validation, and a final human checkpoint before promotion.",
+  "target": "next-action.kp.reader.fractional-linear-equation-exemplar-v0",
+  "slices": [
+    {
+      "id": "s01-approved-contract",
+      "title": "Persist approved proposal and typed contract",
+      "summary": "Persisted the user-approved rationale and exact 25-slice typed boundary; the contract preserves the deferred Solve x review and stops before fraction-family promotion.",
+      "status": "complete"
+    },
+    {
+      "id": "s02-current-baselines",
+      "title": "Capture current fraction and linear solve baselines",
+      "status": "planned"
+    },
+    {
+      "id": "s03-canonical-problem-trace",
+      "title": "Define canonical exact rational problem and trace",
+      "status": "planned"
+    },
+    {
+      "id": "s04-intermediate-verification",
+      "title": "Verify valid intermediate solution steps",
+      "status": "planned"
+    },
+    {
+      "id": "s05-semantic-correspondence",
+      "title": "Define semantic identity and correspondence",
+      "status": "planned"
+    },
+    {
+      "id": "s06-composition-boundary",
+      "title": "Establish renderer neutral composition boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s07-searchable-lesson",
+      "title": "Author searchable lesson and static fallback",
+      "status": "planned"
+    },
+    {
+      "id": "s08-fraction-geometry",
+      "title": "Expose fraction structural geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s09-timeline-layout-plan",
+      "title": "Select timeline wide typography and layout",
+      "status": "planned"
+    },
+    {
+      "id": "s10-subtract-both-sides",
+      "title": "Animate subtracting three from both sides",
+      "status": "planned"
+    },
+    {
+      "id": "s11-additive-cancellation",
+      "title": "Cancel and simplify to x over 2 equals 4",
+      "status": "planned"
+    },
+    {
+      "id": "s12-multiply-both-sides",
+      "title": "Introduce multiplication by two on both sides",
+      "status": "planned"
+    },
+    {
+      "id": "s13-denominator-cancellation",
+      "title": "Cancel denominator with continuous ownership",
+      "status": "planned"
+    },
+    {
+      "id": "s14-product-coalescence",
+      "title": "Coalesce two times four into eight",
+      "status": "planned"
+    },
+    {
+      "id": "s15-native-settlement",
+      "title": "Settle cleanly into native x equals 8",
+      "status": "planned"
+    },
+    {
+      "id": "s16-operation-salience",
+      "title": "Add restrained operation specific salience",
+      "status": "planned"
+    },
+    {
+      "id": "s17-seek-rewind-gate",
+      "title": "Prove exact forward seek and rewind",
+      "status": "planned"
+    },
+    {
+      "id": "s18-reader-card",
+      "title": "Mount searchable reader card",
+      "status": "planned"
+    },
+    {
+      "id": "s19-editor-route",
+      "title": "Add semantic editor discovery and routing",
+      "status": "planned"
+    },
+    {
+      "id": "s20-narrow-presentation",
+      "title": "Add finite nonoverflowing narrow projection",
+      "status": "planned"
+    },
+    {
+      "id": "s21-static-output",
+      "title": "Preserve no JavaScript search print and MathML",
+      "status": "planned"
+    },
+    {
+      "id": "s22-generated-stress-cohort",
+      "title": "Compile hidden generated fractional cases",
+      "status": "planned"
+    },
+    {
+      "id": "s23-overflow-quality-gate",
+      "title": "Enforce collision ink and containment budgets",
+      "status": "planned"
+    },
+    {
+      "id": "s24-release-gate",
+      "title": "Run broad release and visual gates",
+      "status": "planned"
+    },
+    {
+      "id": "s25-human-checkpoint",
+      "title": "Stop for human exemplar review",
+      "status": "planned"
+    }
+  ]
+}

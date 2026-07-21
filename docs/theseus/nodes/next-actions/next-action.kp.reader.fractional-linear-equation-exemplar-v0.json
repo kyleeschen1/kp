@@ -1,0 +1,21 @@
+{
+  "id": "next-action.kp.reader.fractional-linear-equation-exemplar-v0",
+  "kind": "next-action",
+  "title": "Build fractional linear equation exemplar",
+  "status": "ready",
+  "domain": "kp.reader",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-21-fractional-linear-equation-exemplar-long-loop-proposal.md"
+    }
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "scope": "s01 approved proposal and typed contract",
+      "checkedAt": "2026-07-21T21:39:34.591Z"
+    }
+  ]
+}
