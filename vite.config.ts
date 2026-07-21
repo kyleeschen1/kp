@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 
@@ -13,8 +14,12 @@ const solveXMarkdown = readFileSync(
   resolve(projectRoot, "content/lessons/solve-x.md"),
   "utf8"
 );
+const reviewBuildIdentity = readReviewBuildIdentity();
 
 export default defineConfig({
+  define: {
+    __KP_DEV_REVIEW_BUILD__: JSON.stringify(reviewBuildIdentity)
+  },
   plugins: [{
     name: "kp-semantic-reader-route",
     transformIndexHtml: {
@@ -45,3 +50,23 @@ export default defineConfig({
     strictPort: true
   }
 });
+
+function readReviewBuildIdentity(): { commit: string; fingerprint: string; dirty: boolean } {
+  try {
+    const commit = execFileSync("git", ["rev-parse", "--short=12", "HEAD"], {
+      cwd: projectRoot,
+      encoding: "utf8"
+    }).trim();
+    const dirty = execFileSync("git", ["status", "--porcelain", "--untracked-files=no"], {
+      cwd: projectRoot,
+      encoding: "utf8"
+    }).trim().length > 0;
+    return {
+      commit,
+      fingerprint: dirty ? `${commit}-dirty` : commit,
+      dirty
+    };
+  } catch {
+    return { commit: "unknown", fingerprint: "dev-unknown", dirty: true };
+  }
+}

@@ -186,6 +186,11 @@ void fontReadiness.whenReady().then(() => {
   scheduler.invalidate("fonts");
   scheduleScrollSample();
 });
+if (import.meta.env.DEV) {
+  void import("../../dev-review/reader-review-bootstrap.ts").then(({ mountKpReaderDevReview }) => {
+    mountKpReaderDevReview(window);
+  });
+}
 
 function createScrollClock(): KpReaderContinuousScrollClock {
   const geometry = scrollGeometry();

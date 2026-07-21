@@ -147,7 +147,8 @@
     {
       "id": "s18-dev-mount-production-removal",
       "title": "Default dev mount and production removal",
-      "status": "planned"
+      "summary": "The real reader auto-mounts and captures in Vite dev, while production emits no review UI, events, client endpoint strings, bootstrap chunk, or enabled server route.",
+      "status": "complete"
     },
     {
       "id": "s19-reader-end-to-end",

@@ -120,6 +120,12 @@
       "status": "passed",
       "scope": "s17 locked comment capture interaction",
       "checkedAt": "2026-07-20T23:57:08.673Z"
+    },
+    {
+      "command": "npm run build and production closure check plus focused dev mount browser and typed client provider tests",
+      "status": "passed",
+      "scope": "s18 default dev mount with zero production review assets",
+      "checkedAt": "2026-07-21T00:01:17.656Z"
     }
   ],
   "expectedLearning": [
