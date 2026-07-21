@@ -160,6 +160,12 @@
       "status": "passed",
       "scope": "s23 personal theseus-loop skill scaffold and metadata",
       "checkedAt": "2026-07-21T16:09:59.084Z"
+    },
+    {
+      "command": "Ruby YAML and workflow-section validation with no TODO markers",
+      "status": "passed",
+      "scope": "s24 theseus-loop assessment, override, iteration, long, verification, resume, and handoff workflow",
+      "checkedAt": "2026-07-21T16:11:37.434Z"
     }
   ],
   "expectedLearning": [

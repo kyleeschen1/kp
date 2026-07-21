@@ -195,7 +195,8 @@
     {
       "id": "s24-theseus-loop-modes",
       "title": "Implement-iteration-long-and-override-modes",
-      "status": "planned"
+      "summary": "Implemented and validated iteration, long, override, verification, visual-checkpoint, resume, and handoff modes in one skill.",
+      "status": "complete"
     },
     {
       "id": "s25-long-loop-compatibility",
