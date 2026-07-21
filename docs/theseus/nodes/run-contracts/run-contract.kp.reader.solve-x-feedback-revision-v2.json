@@ -144,8 +144,8 @@
     {
       "id": "s17-counter-convergence-gate",
       "title": "Counter-convergence visual gate",
-      "summary": "Prove exact settlement, causal clarity, protected-symbol clearance, and rewind.",
-      "status": "ready"
+      "summary": "Desktop and phone live-stage captures were inspected at six causal instants. The 7 and 3 follow distinct upper/lower approaches, the minus retires before the result appears, 4 is gated until source retirement, protected x and equals stay clear, KaTeX identity remains stable, and exact forward/rewind settlement is covered by the focused browser and unit gates.",
+      "status": "complete"
     },
     {
       "id": "s18-streamlined-zero-default",
