@@ -106,3 +106,17 @@ test("every transition settles through a total atomic native handoff", () => {
 
   assert.equal(animation.metadata?.["equationNativeHandoffRecipe"], "atomic-v1");
 });
+
+test("each operation focuses only its causal symbols", () => {
+  const animation = createFractionalLinearEquationAnimationAsset();
+  const expectedFocusCounts = [3, 2, 3, 3, 2, 3];
+
+  expectedFocusCounts.forEach((expectedCount, index) => {
+    const frame = sampleKpAnimationRuntimeFrame({
+      animation,
+      progress: (index + 0.5) / expectedFocusCounts.length
+    });
+    assert.equal(frame.focusSelectorIds.length, expectedCount);
+    assert.equal(frame.activeAnnotationIds.length, 1);
+  });
+});

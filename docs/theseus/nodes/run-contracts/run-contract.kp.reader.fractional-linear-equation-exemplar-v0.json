@@ -130,7 +130,8 @@
     {
       "id": "s16-operation-salience",
       "title": "Add restrained operation specific salience",
-      "status": "planned"
+      "summary": "Each transformation now exposes one restrained during-operation focus annotation over only its causal symbols; no extra pauses or card-specific styling were added.",
+      "status": "complete"
     },
     {
       "id": "s17-seek-rewind-gate",

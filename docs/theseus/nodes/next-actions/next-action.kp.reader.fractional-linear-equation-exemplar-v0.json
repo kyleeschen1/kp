@@ -128,6 +128,12 @@
       "status": "passed",
       "scope": "s15 native settlement",
       "checkedAt": "2026-07-21T22:15:57.879Z"
+    },
+    {
+      "command": "focused fractional animation tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s16 operation salience",
+      "checkedAt": "2026-07-21T22:17:38.695Z"
     }
   ]
 }
