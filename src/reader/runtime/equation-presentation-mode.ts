@@ -19,6 +19,57 @@ export interface KpReaderEquationPresentationAxes {
   readonly identity: KpReaderEquationIdentityMode;
 }
 
+export const kpReaderEquationPresentationProfileIds = [
+  "explain",
+  "standard",
+  "fluent"
+] as const;
+
+export type KpReaderEquationPresentationProfileId =
+  typeof kpReaderEquationPresentationProfileIds[number];
+
+export interface KpReaderEquationPresentationProfile
+  extends KpReaderEquationPresentationAxes {
+  readonly id: KpReaderEquationPresentationProfileId;
+  readonly label: "Explain" | "Standard" | "Fluent";
+}
+
+export const kpReaderDefaultEquationPresentationProfileId = "standard" as const;
+
+export const kpReaderEquationPresentationProfiles = Object.freeze({
+  explain: profile("explain", "Explain", {
+    derivation: "balanced-operation-v1",
+    identity: "hold-until-settled-v1"
+  }),
+  standard: profile("standard", "Standard", {
+    derivation: "balanced-operation-v1",
+    identity: "omit-transient-v1"
+  }),
+  fluent: profile("fluent", "Fluent", {
+    derivation: "certified-transfer-v1",
+    identity: "omit-transient-v1"
+  })
+} satisfies Record<
+  KpReaderEquationPresentationProfileId,
+  KpReaderEquationPresentationProfile
+>);
+
+export function resolveKpReaderEquationPresentationProfile(
+  id: string | null | undefined
+): KpReaderEquationPresentationProfile {
+  const resolvedId = id === null || id === undefined || id === ""
+    ? kpReaderDefaultEquationPresentationProfileId
+    : id;
+  if (!kpReaderEquationPresentationProfileIds.includes(
+    resolvedId as KpReaderEquationPresentationProfileId
+  )) {
+    throw new Error(`Unknown reader equation presentation profile ${resolvedId}.`);
+  }
+  return kpReaderEquationPresentationProfiles[
+    resolvedId as KpReaderEquationPresentationProfileId
+  ];
+}
+
 /**
  * Presentation axes may project a certified trace, but never author algebra,
  * correspondence, geometry, or timing. Keeping this runtime choice separate
@@ -30,6 +81,14 @@ export function defineKpReaderEquationPresentationAxes<
   assertMember("derivation", axes.derivation, kpReaderEquationDerivationModes);
   assertMember("identity", axes.identity, kpReaderEquationIdentityModes);
   return Object.freeze({ ...axes });
+}
+
+function profile(
+  id: KpReaderEquationPresentationProfileId,
+  label: KpReaderEquationPresentationProfile["label"],
+  axes: KpReaderEquationPresentationAxes
+): KpReaderEquationPresentationProfile {
+  return Object.freeze({ id, label, ...defineKpReaderEquationPresentationAxes(axes) });
 }
 
 function assertMember<const TValue extends string>(

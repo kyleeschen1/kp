@@ -122,6 +122,20 @@
       "scope": "s08 public runtime API types",
       "checkedAt": "2026-07-21T23:42:28.816Z",
       "notes": "Application, node, test, and domain projects accept the new runtime axis contract and export."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/reader-equation-presentation-mode.test.ts",
+      "status": "passed",
+      "scope": "s09 named profile presets",
+      "checkedAt": "2026-07-21T23:44:38.695Z",
+      "notes": "Four tests verify exact Explain, Standard, and Fluent mappings, Standard default selection, immutability, independent axes, and strict unknown-id rejection."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s09 inferred preset API",
+      "checkedAt": "2026-07-21T23:44:39.894Z",
+      "notes": "The preset registry satisfies the complete profile-id record while retaining literal inference through the public runtime API."
     }
   ]
 }

@@ -65,9 +65,15 @@ export {
 } from "./responsive-projection.ts";
 export {
   defineKpReaderEquationPresentationAxes,
+  kpReaderDefaultEquationPresentationProfileId,
   kpReaderEquationDerivationModes,
   kpReaderEquationIdentityModes,
+  kpReaderEquationPresentationProfileIds,
+  kpReaderEquationPresentationProfiles,
+  resolveKpReaderEquationPresentationProfile,
   type KpReaderEquationDerivationMode,
   type KpReaderEquationIdentityMode,
-  type KpReaderEquationPresentationAxes
+  type KpReaderEquationPresentationAxes,
+  type KpReaderEquationPresentationProfile,
+  type KpReaderEquationPresentationProfileId
 } from "./equation-presentation-mode.ts";

@@ -101,7 +101,8 @@
     {
       "id": "s09-profile-presets",
       "title": "Define Explain Standard and Fluent profiles",
-      "status": "planned"
+      "summary": "Mapped Explain to balanced operation plus held identity, Standard to balanced operation without a transient witness, and Fluent to certified transfer without a transient witness; Standard is the strict default.",
+      "status": "complete"
     },
     {
       "id": "s10-profile-url",
