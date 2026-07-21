@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-19
+Last Updated: 2026-07-21
 Status: active
 Active Thread: `threads/cross-domain-tutorial-platform.md`
 Supporting Thread: `threads/semantic-runtime.md`
@@ -58,18 +58,20 @@ second concept supplies evidence for promotion.
 
 ## Active Focus
 
-**Review the proposed polished linear-equation exemplar loop.** The architecture
-walking skeleton is complete and accepted. A bounded 25-slice visual loop for
-exactly the `2x + 3 = 8` concept room is recorded in
-`reviews/2026-07-19-linear-equation-visual-exemplar-loop-proposal.md`. It would
-establish the canonical visual reference, house typography and color roles,
-consistent focus affordances, traditional symbolic choreography, synchronized
-algebra/balance motion, hover-linked prose, and frictionless Explore/Review
-navigation. The plan
-must preserve the verified semantic trace, URLs, publication, provider, and
-failure boundaries and must stop for human visual review before generalizing
-any style, motion, projection, or interaction contract. Implementation is
-awaiting explicit approval.
+**Close the solve-x human exemplar checkpoint and design the responsive
+attention contract.** The semantic-document reader and revised solve-x motion
+have passed their automated release gates. Human review finds the animation
+strong while retaining follow-ups for developer-inbox placement, native-anchor
+handoff, overflow policy, text/animation gaze coordination, and a distinct
+narrow-device interaction projection. No family-wide generalization is
+authorized until that checkpoint is accepted.
+
+The accepted post-checkpoint exemplar order is recorded in
+`decisions/2026-07-21-kp-symbolic-exemplar-sequence-and-responsive-attention.md`:
+missing-middle distribution/factoring, fractions, radicals and exponents,
+functional wrapping, derivatives, integral accumulation, vector/projection,
+and matrix-vector/linear-map coordination. Existing standalone examples are
+reference evidence, not automatically promoted reader products.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
@@ -310,16 +312,20 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Implement the approved plain linear-equation walking skeleton and stop for
-   architecture review.
-2. Perfect the traditional symbolic-manipulation exemplar for `2x + 3 = 8`.
-3. Add and review its optional synchronized abstract balance projection.
-4. Build the missing-middle `(a+b)^2` area model as the second simple demo.
-5. Revisit FTC human review and broader dot-product, BFS, economics,
-   programming, physics, and governed authoring work after the front-door
-   product language is clear.
-6. Defer dynamic package loading until the metadata contract stays stable
-   across these renderer combinations.
+1. Close the solve-x human checkpoint without generalizing its visual recipes.
+2. Decide and test one attentional beat model that sequences prose orientation,
+   visual action, settled explanation, and bidirectional inspection.
+3. Define separate wide scrollytelling and narrow focus-stepper projections of
+   the same searchable, linkable semantic document.
+4. Build the missing-middle distribution/factoring area model.
+5. Promote fractions, radicals/exponents, and functional wrapping before the
+   derivative and integral exemplars.
+6. Follow with derivative/tangent, integral/accumulation, vector/projection,
+   and matrix-vector/linear-map exemplars.
+7. Revisit FTC, BFS, economics, programming, physics, and governed authoring
+   after the front-door symbolic sequence is visually accepted.
+8. Defer dynamic package loading until metadata contracts remain stable across
+   these renderer combinations.
 
 ## Deferred
 

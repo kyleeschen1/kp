@@ -10,6 +10,10 @@
       "kind": "user-intent",
       "intent": "Approved refill option refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability: The user explicitly approved generated-equation reliability and gold calibration as the current phase before missing-middle or broader renderer work.",
       "occurredAt": "2026-07-20T22:58:53.739Z"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-21-kp-symbolic-exemplar-sequence-and-responsive-attention.md"
     }
   ],
   "dependsOn": {
