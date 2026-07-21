@@ -81,6 +81,7 @@ stage.dataset["kpReaderEquationCancellationRecipe"] = presentationProfile.cancel
 stage.dataset["kpReaderEquationZeroWitnessRecipe"] = presentationProfile.zeroWitness;
 stage.dataset["kpReaderEquationSuccessorRecipe"] = presentationProfile.successor;
 stage.dataset["kpReaderEquationDepthRecipe"] = presentationProfile.depth;
+stage.dataset["kpReaderEquationContinuantRecipe"] = presentationProfile.continuants;
 const viewport = requireElement<HTMLElement>("[data-kp-reader-equation-viewport]");
 const materialFitSurface = requireElement<HTMLElement>(
   "[data-kp-reader-material-fit-surface]"

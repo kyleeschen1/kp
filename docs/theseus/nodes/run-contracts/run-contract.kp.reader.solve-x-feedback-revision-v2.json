@@ -102,8 +102,8 @@
     {
       "id": "s10-lane-reservation-policy",
       "title": "Lane reservation policy",
-      "summary": "Reserve motion lanes for persistent continuants before focal transit begins.",
-      "status": "ready"
+      "summary": "Added an independently inferred continuant presentation recipe with a conservative concurrent default and a solve-x-only reserve-then-transit selection. The reader exposes the selected recipe diagnostically; four policy tests prove isolation, fallback, inference, and strict unknown-value rejection, and the full typecheck passes.",
+      "status": "complete"
     },
     {
       "id": "s11-continuant-ordering",

@@ -23,12 +23,17 @@ export type KpEquationDepthPresentationRecipe =
   | "flat-v1"
   | "semantic-depth-v1";
 
+export type KpEquationContinuantPresentationRecipe =
+  | "concurrent-v1"
+  | "reserve-then-transit-v1";
+
 export interface KpEquationPresentationProfile {
   readonly recipe: KpEquationPresentationRecipe;
   readonly cancellation: KpEquationCancellationPresentationRecipe;
   readonly zeroWitness: KpEquationZeroWitnessPresentationRecipe;
   readonly successor: KpEquationSuccessorPresentationRecipe;
   readonly depth: KpEquationDepthPresentationRecipe;
+  readonly continuants: KpEquationContinuantPresentationRecipe;
 }
 
 export interface KpEquationPresentationPolicy extends KpEquationPresentationProfile {
@@ -41,7 +46,8 @@ const defaultProfile: KpEquationPresentationProfile = {
   cancellation: "witnessed-annihilation-v1",
   zeroWitness: "embedded-v1",
   successor: "successor-synthesis-v1",
-  depth: "flat-v1"
+  depth: "flat-v1",
+  continuants: "concurrent-v1"
 };
 
 const continuityProfile: KpEquationPresentationProfile = {
@@ -49,7 +55,8 @@ const continuityProfile: KpEquationPresentationProfile = {
   cancellation: "native-handoff-v1",
   zeroWitness: "none",
   successor: "native-handoff-v1",
-  depth: "flat-v1"
+  depth: "flat-v1",
+  continuants: "concurrent-v1"
 };
 
 export function kpEquationPresentationProfile(
@@ -87,6 +94,12 @@ export function kpEquationPresentationProfile(
       "equationDepthPresentationRecipe",
       ["flat-v1", "semantic-depth-v1"] as const,
       baseline.depth
+    ),
+    continuants: readRecipe(
+      animation,
+      "equationContinuantPresentationRecipe",
+      ["concurrent-v1", "reserve-then-transit-v1"] as const,
+      baseline.continuants
     )
   });
 }
