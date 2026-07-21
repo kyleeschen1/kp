@@ -126,8 +126,8 @@
     {
       "id": "s14-counter-convergence-roles",
       "title": "Counter-convergence roles",
-      "summary": "Represent seven and three as material inputs and the minus sign as a catalyst.",
-      "status": "ready"
+      "summary": "Audited and preserved the existing semantic model rather than duplicating it: seven and three are authored material inputs with upper and lower propagation ranks, minus is a non-contributing catalyst with explicit retirement, and result lineage excludes the catalyst. Eighteen choreography and synthesis laws pass.",
+      "status": "complete"
     },
     {
       "id": "s15-counter-convergence-trajectories",
