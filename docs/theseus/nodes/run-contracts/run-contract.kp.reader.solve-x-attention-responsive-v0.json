@@ -2,8 +2,9 @@
   "id": "run-contract.kp.reader.solve-x-attention-responsive-v0",
   "kind": "run-contract",
   "title": "Solve-x attention and responsive exemplar",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp.reader",
+  "summary": "Human review is intentionally tabled; preserve the completed implementation, evidence, and open subjective checkpoint without promoting the attention-responsive pattern.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -31,6 +32,9 @@
     "npm run check:dev-review-production",
     "npm run review:semantic-reader",
     "npm run theseus -- workspace validate"
+  ],
+  "revisitWhen": [
+    "The user explicitly resumes the Solve x human exemplar review."
   ],
   "allowedWork": [
     "Solve-x reader, semantic lesson document, authoring, static compiler, hydration metadata, attention projection, accessible controls, responsive presentation, equation material ownership, reader-specific developer review placement, focused tests, deterministic captures, and durable evidence.",
