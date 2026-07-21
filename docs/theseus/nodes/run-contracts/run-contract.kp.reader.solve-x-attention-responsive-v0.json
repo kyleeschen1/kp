@@ -134,7 +134,8 @@
     {
       "id": "s14-attention-phase-schema",
       "title": "Attention_phase_schema",
-      "status": "planned"
+      "summary": "Added the optional phased-attention-v1 story sidecar with orient/act/settle/inspect phase kinds and stable phase, beat, checkpoint, global progress, cue, and semantic focus identities. Canonical beat prose remains the searchable source; existing lessons and runtime behavior are unchanged.",
+      "status": "complete"
     },
     {
       "id": "s15-attention-authoring-validation",

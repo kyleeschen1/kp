@@ -46,6 +46,25 @@ export interface KpLessonAnimationStoryBlock extends KpLessonBlockBase {
   readonly asset: KpReaderArtifactRef<"animation-asset">;
   readonly presentation: "scroll-scrub" | "step";
   readonly beats: readonly KpLessonBeat[];
+  readonly attention?: KpLessonAttentionPlan | undefined;
+}
+
+export type KpLessonAttentionPhaseKind = "orient" | "act" | "settle" | "inspect";
+
+export interface KpLessonAttentionPlan {
+  readonly kind: "phased-attention-v1";
+  readonly phases: readonly KpLessonAttentionPhase[];
+}
+
+export interface KpLessonAttentionPhase {
+  readonly id: string;
+  readonly kind: KpLessonAttentionPhaseKind;
+  readonly beatId: string;
+  readonly checkpointId: string;
+  readonly startProgressPermille: number;
+  readonly endProgressPermille: number;
+  readonly cue: string;
+  readonly focusRefs: readonly string[];
 }
 
 export interface KpLessonBeat {

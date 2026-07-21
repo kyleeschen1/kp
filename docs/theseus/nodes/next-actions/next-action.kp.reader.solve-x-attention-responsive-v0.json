@@ -81,6 +81,13 @@
       "scope": "s13 atomic handoff visual checkpoint",
       "checkedAt": "2026-07-21T19:57:08.034Z",
       "notes": "Accepted for continuation: start/interior/seam/final captures show solid equation ink, stable KaTeX metrics, no native/material ghosting, and no endpoint font substitution. Remaining prose salience transitions are isolated to the attention slices."
+    },
+    {
+      "command": "lesson document, authoring, Markdown parser unit cohort and repository typecheck",
+      "status": "passed",
+      "scope": "s14 optional phased attention schema",
+      "checkedAt": "2026-07-21T19:59:45.811Z",
+      "notes": "The optional sidecar represents orient/act/settle/inspect phases with stable phase, beat, checkpoint, progress, cue, and focus identities. Existing document literals and Markdown remain valid and runtime behavior is unchanged."
     }
   ]
 }

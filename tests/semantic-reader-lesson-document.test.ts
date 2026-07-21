@@ -31,6 +31,47 @@ test("lesson IR preserves source locations without mixing them into identity", (
   assert.equal(heading?.id, "solve-x-heading");
 });
 
+test("optional attention phases reference stable lesson and semantic identities", () => {
+  const original = xPlusThreeDocument();
+  const story = original.blocks[1];
+  assert.equal(story?.kind, "animation-story");
+  if (story?.kind !== "animation-story") return;
+  const document: KpLessonDocument = {
+    ...original,
+    blocks: [original.blocks[0]!, {
+      ...story,
+      attention: {
+        kind: "phased-attention-v1",
+        phases: [{
+          id: "attention.read.orient",
+          kind: "orient",
+          beatId: story.beats[0]!.id,
+          checkpointId: story.beats[0]!.checkpoint.id,
+          startProgressPermille: 0,
+          endProgressPermille: 80,
+          cue: "Find the unknown before anything moves.",
+          focusRefs: ["equation.x"]
+        }]
+      }
+    }]
+  };
+
+  assert.deepEqual(validateKpLessonDocument(document), []);
+  const authoredStory = document.blocks[1];
+  assert.equal(authoredStory?.kind, "animation-story");
+  if (authoredStory?.kind !== "animation-story") return;
+  assert.deepEqual(authoredStory.attention?.phases[0], {
+    id: "attention.read.orient",
+    kind: "orient",
+    beatId: "read-equality",
+    checkpointId: "checkpoint.read-equality",
+    startProgressPermille: 0,
+    endProgressPermille: 80,
+    cue: "Find the unknown before anything moves.",
+    focusRefs: ["equation.x"]
+  });
+});
+
 test("lesson validation reports duplicate identity and unordered checkpoints", () => {
   const original = xPlusThreeDocument();
   const story = original.blocks[1];
