@@ -118,3 +118,27 @@ test("counter-orbit cancellation compacts survivors only after inverse terms fad
   assert.equal(Math.abs(whileTermsOrbit.pose.x), 0);
   assert.ok(afterTermsFade.pose.x < 0);
 });
+
+test("explicit cancellation derives a target zero from both inverse terms", () => {
+  const fragments = sampleKpEquationLinearRearrangementOwnerMotion({
+    kind: "cancel-additive-inverses",
+    relationRecordId: "left-inverses-derive-zero",
+    lifecycle: "merge",
+    sourceAnchors: [
+      { id: "source.plus-three", rect: { left: 30, top: 20, width: 18, height: 20 } },
+      { id: "source.minus-three", rect: { left: 54, top: 20, width: 18, height: 20 } }
+    ],
+    targetAnchors: [
+      { id: "target.zero", rect: { left: 38, top: 20, width: 12, height: 20 } }
+    ],
+    progress: 0.75,
+    cancellationPresentationRecipe: "counter-orbit-v1",
+    zeroWitnessPresentationRecipe: "none"
+  });
+
+  assert.equal(fragments.filter(({ side }) => side === "source").length, 2);
+  const zero = fragments.find(({ side }) => side === "target")!;
+  assert.equal(zero.anchorId, "target.zero");
+  assert.ok(zero.pose.opacity > 0);
+  assert.ok(zero.pose.opacity < 1);
+});

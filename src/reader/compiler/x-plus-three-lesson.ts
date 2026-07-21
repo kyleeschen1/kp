@@ -1,5 +1,9 @@
 import { compileKpAnimationAssetSemanticRefs } from "../../animation/asset.ts";
-import { createLinearSolveAnimationAsset } from "../../animation/linear-solve-adapter.ts";
+import type { KpAnimationAsset } from "../../animation/asset.ts";
+import {
+  createLinearSolveAnimationAsset,
+  createLinearSolveTeacherZeroAnimationAsset
+} from "../../animation/linear-solve-adapter.ts";
 import type { KpSemanticAssetObject } from "../../semantic/asset.ts";
 import {
   renderLatexToHtml,
@@ -17,7 +21,36 @@ import { compileKpStaticMathStates } from "./static-math-compiler.ts";
 import { compileKpStaticLessonProse } from "./static-prose-compiler.ts";
 
 export function compileKpXPlusThreeLesson(markdown: string) {
-  const animation = createLinearSolveAnimationAsset();
+  return compileKpXPlusThreeLessonVariant(markdown, {
+    animation: createLinearSolveAnimationAsset(),
+    sourceId: "content/lessons/solve-x.md",
+    documentId: "lesson.solve-x.x-plus-3",
+    compiledId: "compiled.lesson.solve-x.x-plus-3",
+    title: "Solve x + 3 = 7",
+    variant: "streamlined"
+  });
+}
+
+export function compileKpXPlusThreeTeacherZeroLesson(markdown: string) {
+  return compileKpXPlusThreeLessonVariant(markdown, {
+    animation: createLinearSolveTeacherZeroAnimationAsset(),
+    sourceId: "content/lessons/solve-x-teacher-zero.md",
+    documentId: "lesson.solve-x.x-plus-3.teacher-zero",
+    compiledId: "compiled.lesson.solve-x.x-plus-3.teacher-zero",
+    title: "Solve x + 3 = 7 with explicit zero",
+    variant: "teacher-zero"
+  });
+}
+
+function compileKpXPlusThreeLessonVariant(markdown: string, input: {
+  readonly animation: KpAnimationAsset;
+  readonly sourceId: string;
+  readonly documentId: string;
+  readonly compiledId: string;
+  readonly title: string;
+  readonly variant: "streamlined" | "teacher-zero";
+}) {
+  const animation = input.animation;
   const refs = compileKpAnimationAssetSemanticRefs(animation);
   if (refs.diagnostics.length > 0) {
     throw new Error(`canonical x-plus-3 animation is invalid: ${refs.diagnostics[0]!.message}`);
@@ -27,10 +60,10 @@ export function compileKpXPlusThreeLesson(markdown: string) {
     ...object.selectors.map((selector) => selector.id)
   ]);
   const document = parseKpLessonMarkdown({
-    sourceId: "content/lessons/solve-x.md",
-    id: "lesson.solve-x.x-plus-3",
+    sourceId: input.sourceId,
+    id: input.documentId,
     version: "1",
-    title: "Solve x + 3 = 7",
+    title: input.title,
     language: "en",
     markdown
   });
@@ -57,11 +90,11 @@ export function compileKpXPlusThreeLesson(markdown: string) {
     "<head>",
     `<meta charset="utf-8">`,
     `<meta name="viewport" content="width=device-width, initial-scale=1">`,
-    `<title>Solve x + 3 = 7</title>`,
+    `<title>${attribute(input.title)}</title>`,
     `<meta name="description" content="See algebra move through a searchable, shareable explanation.">`,
     `<link rel="stylesheet" href="/src/reader/app/exemplar.css">`,
     "</head>",
-    `<body data-kp-reader="semantic-document">`,
+    `<body data-kp-reader="semantic-document" data-kp-reader-document-id="${attribute(document.id)}" data-kp-reader-document-version="${attribute(document.version)}" data-kp-reader-lesson-variant="${input.variant}">`,
     `<header class="kp-reader-masthead">`,
     `<a class="kp-reader-wordmark" href="/">Kinetic Press</a>`,
     `<span class="kp-reader-tagline">See concepts move</span>`,
@@ -78,7 +111,7 @@ export function compileKpXPlusThreeLesson(markdown: string) {
     "</html>"
   ].join("\n");
   return createKpCompiledLessonArtifact({
-    id: "compiled.lesson.solve-x.x-plus-3",
+    id: input.compiledId,
     version: "1",
     document: { kind: "lesson-document", id: document.id, version: document.version },
     html,
@@ -88,7 +121,7 @@ export function compileKpXPlusThreeLesson(markdown: string) {
 }
 
 function compileEquationExemplarTemplate(
-  animation: ReturnType<typeof createLinearSolveAnimationAsset>
+  animation: KpAnimationAsset
 ): string {
   const objects = new Map(animation.bundle.objects.map((object) => [object.id, object]));
   const states = new Map(animation.bundle.objects.map((object) => [

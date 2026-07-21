@@ -111,6 +111,8 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
     case "enter":
       return input.frame.kind === "balanced-introduction"
         ? sampleBalancedIntroduction(input)
+        : input.frame.kind === "cancel-additive-inverses"
+          ? sampleExplicitCancellationTarget(input)
         : undefined;
     case "cancel":
       return input.frame.kind === "cancel-additive-inverses"
@@ -119,7 +121,9 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
           : sampleCancellation(input)
         : undefined;
     case "merge":
-      return input.frame.kind === "simplify-constant-difference"
+      return input.frame.kind === "cancel-additive-inverses"
+        ? sampleExplicitCancellationTarget(input)
+        : input.frame.kind === "simplify-constant-difference"
         ? input.successorPresentationRecipe === "convergence-v1"
           ? sampleConvergenceConstantDerivation(input)
           : sampleConstantDerivation(input)
@@ -211,6 +215,31 @@ function sampleCounterOrbitCancellation(
         0.14 * input.frame.collapseProgress
     });
   });
+}
+
+function sampleExplicitCancellationTarget(
+  input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
+): readonly KpEquationTokenMotionFrameToken[] {
+  const birth = input.frame.resultRevealProgress;
+  const contact = center(input.relation.source?.bounds);
+  const sources = input.sourceTokens.length === 0
+    ? []
+    : sampleCounterOrbitCancellation(input);
+  const targets = input.targetTokens.map((token) => {
+    const targetCenter = center(token.localRect);
+    const hasMaterialSource = input.sourceTokens.length > 0;
+    return frameToken(token, "target", {
+      opacity: birth,
+      x: hasMaterialSource
+        ? (contact.x - targetCenter.x) * (1 - birth)
+        : -6 * (1 - birth),
+      y: hasMaterialSource
+        ? (contact.y - targetCenter.y) * (1 - birth)
+        : 0,
+      scale: 0.84 + 0.16 * birth
+    });
+  });
+  return [...sources, ...targets];
 }
 
 function sampleConstantDerivation(

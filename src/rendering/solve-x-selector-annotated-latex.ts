@@ -33,6 +33,19 @@ const solveXSegments: Readonly<Record<string, readonly KpSelectorAnnotatedLatexS
     semantic("equation.linear-solve.after-subtract.rhs.minus", "-"),
     semantic("equation.linear-solve.after-subtract.rhs.3", "3")
   ],
+  "equation.linear-solve.teacher-zero": [
+    semantic("equation.linear-solve.teacher-zero.lhs.x", "x"),
+    gap(),
+    semantic("equation.linear-solve.teacher-zero.lhs.plus", "+"),
+    semantic("equation.linear-solve.teacher-zero.lhs.zero", "0"),
+    gap(),
+    semantic("equation.linear-solve.teacher-zero.equals", "="),
+    gap(),
+    semantic("equation.linear-solve.teacher-zero.rhs.7", "7"),
+    gap(),
+    semantic("equation.linear-solve.teacher-zero.rhs.minus", "-"),
+    semantic("equation.linear-solve.teacher-zero.rhs.3", "3")
+  ],
   "equation.linear-solve.left-simplified": [
     semantic("equation.linear-solve.left-simplified.lhs.x", "x"),
     gap(),

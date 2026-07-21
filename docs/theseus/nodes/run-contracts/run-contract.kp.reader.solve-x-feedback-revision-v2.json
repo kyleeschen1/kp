@@ -168,8 +168,8 @@
     {
       "id": "s21-teacher-zero-beat",
       "title": "Teacher zero beat",
-      "summary": "Give x plus zero to x its own searchable, scrollable, seekable, and rewindable beat.",
-      "status": "ready"
+      "summary": "Added a separate teacher-detail lesson and animation asset with five static/searchable checkpoints and four ordered transformations. Cancellation semantically fans +3 and -3 into the target zero, and +0 to x has an independent beat and checkpoint. The compiler emits static MathML and hydration seek points; reference closure, seek/rewind, focused motion, canonical preservation, TypeScript, and architecture gates pass. The artifact remains intentionally unrouted until s22.",
+      "status": "complete"
     },
     {
       "id": "s22-teacher-zero-routing",

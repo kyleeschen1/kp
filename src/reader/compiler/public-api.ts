@@ -35,4 +35,7 @@ export {
   type KpReaderHydrationCheckpoint,
   type KpReaderHydrationManifest
 } from "./hydration-manifest.ts";
-export { compileKpXPlusThreeLesson } from "./x-plus-three-lesson.ts";
+export {
+  compileKpXPlusThreeLesson,
+  compileKpXPlusThreeTeacherZeroLesson
+} from "./x-plus-three-lesson.ts";

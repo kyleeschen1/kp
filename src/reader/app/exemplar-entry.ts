@@ -1,4 +1,7 @@
-import { createLinearSolveAnimationAsset } from "../../animation/linear-solve-adapter.ts";
+import {
+  createLinearSolveAnimationAsset,
+  createLinearSolveTeacherZeroAnimationAsset
+} from "../../animation/linear-solve-adapter.ts";
 import {
   createKpEquationLinearRearrangementBindings
 } from "../../rendering/equation-linear-rearrangement-bindings.ts";
@@ -58,12 +61,15 @@ interface LayoutState {
   readonly contexts: ReadonlyMap<string, TransitionContext>;
 }
 
-const documentId = "lesson.solve-x.x-plus-3";
-const documentVersion = "1";
+const documentId = requiredData(document.body, "kpReaderDocumentId");
+const documentVersion = requiredData(document.body, "kpReaderDocumentVersion");
+const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
 // The semantic URL is the scroll authority. Browser history restoration can
 // otherwise race a requested frame when moving between two lesson URLs.
 window.history.scrollRestoration = "manual";
-const animation = createLinearSolveAnimationAsset();
+const animation = lessonVariant === "teacher-zero"
+  ? createLinearSolveTeacherZeroAnimationAsset()
+  : createLinearSolveAnimationAsset();
 const presentationProfile = kpEquationPresentationProfile(animation);
 const linearRearrangementBindings = createKpEquationLinearRearrangementBindings(
   animation

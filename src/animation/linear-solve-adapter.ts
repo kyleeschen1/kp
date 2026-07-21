@@ -7,7 +7,12 @@ import {
   type KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
 import { createSemanticTransformationRef } from "../semantic/animation.ts";
-import { createLinearSolveKpAssetBundle } from "../semantic/linear-solve-asset.ts";
+import {
+  createLinearSolveKpAssetBundle,
+  createLinearSolveTeacherZeroKpAssetBundle,
+  linearSolveAssetIds,
+  type LinearSolveKpAsset
+} from "../semantic/linear-solve-asset.ts";
 import {
   createEditableSemanticTransformationTree,
   createSemanticTransformationLeaf,
@@ -22,19 +27,61 @@ const linearSolveTransformationDefinitionIds: Readonly<Record<string, string>> =
     "definition.generated.linear-solve.subtract-both-sides",
   "transform.linear-solve.cancel-left-additive-inverse":
     "definition.generated.linear-solve.cancel-additive-inverses",
+  "transform.linear-solve.expose-left-zero":
+    "definition.generated.linear-solve.cancel-additive-inverses",
   "transform.linear-solve.simplify-right-difference":
     "definition.generated.linear-solve.simplify-constant-difference"
 };
 
 export function createLinearSolveAnimationAsset(): KpAnimationAsset {
-  const source = createLinearSolveKpAssetBundle();
+  return createLinearSolveAnimationFromSource(createLinearSolveKpAssetBundle(), {
+    animationId: linearSolveAnimationId,
+    timelineId: linearSolveTimelineId,
+    renderTargetId: linearSolveRenderTargetId,
+    durationMs: 2400,
+    beatCount: 50,
+    cancelTransformationId: linearSolveAssetIds.cancel,
+    dashboardRowId: "animation-linear-solve-solve-x"
+  });
+}
+
+export function createLinearSolveTeacherZeroAnimationAsset(): KpAnimationAsset {
+  return createLinearSolveAnimationFromSource(
+    createLinearSolveTeacherZeroKpAssetBundle(),
+    {
+      animationId: "animation.linear-solve.solve-x.teacher-zero",
+      timelineId: "timeline.linear-solve.teacher-zero",
+      renderTargetId: "render.linear-solve.teacher-zero.equation",
+      durationMs: 3000,
+      beatCount: 62,
+      cancelTransformationId: linearSolveAssetIds.exposeZero,
+      dashboardRowId: "animation-linear-solve-solve-x-teacher-zero"
+    }
+  );
+}
+
+function createLinearSolveAnimationFromSource(
+  source: LinearSolveKpAsset,
+  config: {
+    readonly animationId: string;
+    readonly timelineId: string;
+    readonly renderTargetId: string;
+    readonly durationMs: number;
+    readonly beatCount: number;
+    readonly cancelTransformationId: string;
+    readonly dashboardRowId: string;
+  }
+): KpAnimationAsset {
+  const canonical = config.animationId === linearSolveAnimationId;
   const transformations = source.transformations.map(
     attachLinearSolveDefinitionId
   );
   const transformationIds = transformations.map((transformation) => transformation.id);
   const objectIds = source.bundle.objects.map((object) => object.id);
   const treeRoot = createSemanticTransformationSequence({
-    id: "diagram.linear-solve.sequence",
+    id: canonical
+      ? "diagram.linear-solve.sequence"
+      : "diagram.linear-solve.teacher-zero.sequence",
     label: "Linear solve sequence",
     children: transformations.map((transformation) =>
       createSemanticTransformationLeaf(
@@ -51,7 +98,7 @@ export function createLinearSolveAnimationAsset(): KpAnimationAsset {
   });
 
   return createKpAnimationAsset({
-    id: linearSolveAnimationId,
+    id: config.animationId,
     title: source.bundle.title,
     bundle: source.bundle,
     transformations,
@@ -59,16 +106,20 @@ export function createLinearSolveAnimationAsset(): KpAnimationAsset {
       root: treeRoot,
       annotations: [
         {
-          id: "pause.linear-solve.subtract",
+          id: canonical
+            ? "pause.linear-solve.subtract"
+            : "pause.linear-solve.teacher-zero.subtract",
           kind: "pause",
           targetNodeId: "transform.linear-solve.subtract-both-sides-3",
           placement: "after",
           durationBeats: 1
         },
         {
-          id: "focus.linear-solve.cancel",
+          id: canonical
+            ? "focus.linear-solve.cancel"
+            : "focus.linear-solve.teacher-zero.cancel",
           kind: "focus",
-          targetNodeId: "transform.linear-solve.cancel-left-additive-inverse",
+          targetNodeId: config.cancelTransformationId,
           placement: "during",
           selectorIds: [
             "equation.linear-solve.after-subtract.lhs.plus3",
@@ -76,42 +127,50 @@ export function createLinearSolveAnimationAsset(): KpAnimationAsset {
           ]
         },
         {
-          id: "pause.linear-solve.cancel",
+          id: canonical
+            ? "pause.linear-solve.cancel"
+            : "pause.linear-solve.teacher-zero.cancel",
           kind: "pause",
-          targetNodeId: "transform.linear-solve.cancel-left-additive-inverse",
+          targetNodeId: config.cancelTransformationId,
           placement: "after",
           durationBeats: 1
         }
       ]
     }),
     timeline: {
-      id: linearSolveTimelineId,
-      durationMs: 2400,
-      beatCount: 50
+      id: config.timelineId,
+      durationMs: config.durationMs,
+      beatCount: config.beatCount
     },
     layout: {
-      id: "layout.linear-solve.animation",
+      id: canonical
+        ? "layout.linear-solve.animation"
+        : "layout.linear-solve.teacher-zero.animation",
       kind: "single",
-      targetId: linearSolveRenderTargetId
+      targetId: config.renderTargetId
     },
     renderTargets: [
       {
-        id: linearSolveRenderTargetId,
+        id: config.renderTargetId,
         kind: "equation",
         objectIds,
         transformationIds,
-        timelineId: linearSolveTimelineId
+        timelineId: config.timelineId
       }
     ],
     checks: [
       {
-        id: "check.linear-solve.animation.reference-closure",
+        id: canonical
+          ? "check.linear-solve.animation.reference-closure"
+          : "check.linear-solve.teacher-zero.animation.reference-closure",
         lawId: "animation.reference-closure",
         level: "strict",
-        targetId: linearSolveAnimationId
+        targetId: config.animationId
       },
       {
-        id: "check.linear-solve.animation.seek-rewind",
+        id: canonical
+          ? "check.linear-solve.animation.seek-rewind"
+          : "check.linear-solve.teacher-zero.animation.seek-rewind",
         lawId: "animation.seek-rewind",
         level: "strict",
         targetId: treeRoot.id
@@ -119,14 +178,18 @@ export function createLinearSolveAnimationAsset(): KpAnimationAsset {
     ],
     exportTargets: [
       {
-        id: "export.linear-solve.frames",
+        id: canonical
+          ? "export.linear-solve.frames"
+          : "export.linear-solve.teacher-zero.frames",
         kind: "frame-sequence",
-        artifactId: "artifact.linear-solve.gif.frames"
+        artifactId: canonical
+          ? "artifact.linear-solve.gif.frames"
+          : "artifact.linear-solve.teacher-zero.gif.frames"
       }
     ],
     dashboard: {
-      rowId: "animation-linear-solve-solve-x",
-      tags: ["animation", "equation", "linear-solve"],
+      rowId: config.dashboardRowId,
+      tags: ["animation", "equation", "linear-solve", ...(canonical ? [] : ["teacher-detail"])],
       sourceRefIds: [source.sourceAnimationId]
     },
     metadata: {

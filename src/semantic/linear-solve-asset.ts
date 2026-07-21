@@ -210,6 +210,95 @@ export function createLinearSolveKpAssetBundle(): LinearSolveKpAsset {
   };
 }
 
+export function createLinearSolveTeacherZeroKpAssetBundle(): LinearSolveKpAsset {
+  const canonical = createLinearSolveKpAssetBundle();
+  const teacherZero = createLinearSolveTeacherZeroState();
+  const objects = canonical.bundle.objects.flatMap((object) =>
+    object.id === ids.afterSubtract ? [object, teacherZero] : [object]
+  );
+  const canonicalById = new Map(
+    canonical.transformations.map((transformation) => [transformation.id, transformation])
+  );
+  const transformations = [
+    canonicalById.get(ids.subtract)!,
+    createKpSemanticTransformation({
+      id: ids.exposeZero,
+      transformType: "cancelAdditiveInverses",
+      title: "Make the cancellation result explicit",
+      sourceObjectIds: [ids.afterSubtract],
+      targetObjectIds: [ids.teacherZero],
+      preserves: ["value"],
+      assumptions: ["A term plus its additive inverse simplifies to zero."],
+      lawRefs: [{ id: "law.algebra.additive-inverse", level: "strict" }],
+      correspondenceMap: {
+        id: `${ids.exposeZero}.correspondence`,
+        records: [
+          richRecord("x-persists", "identity", [selectorId(ids.afterSubtract, "lhs.x")], [selectorId(ids.teacherZero, "lhs.x")], "x persists."),
+          richRecord("left-inverses-derive-zero", "fan-in", [selectorId(ids.afterSubtract, "lhs.plus3"), selectorId(ids.afterSubtract, "lhs.minus3")], [selectorId(ids.teacherZero, "lhs.zero")], "+3 and -3 derive zero."),
+          richRecord("left-plus-enters", "introduction", [], [selectorId(ids.teacherZero, "lhs.plus")], "The additive slot remains visible as +0."),
+          richRecord("relation-persists", "identity", [selectorId(ids.afterSubtract, "equals")], [selectorId(ids.teacherZero, "equals")], "Equality persists."),
+          richRecord("right-seven-persists", "identity", [selectorId(ids.afterSubtract, "rhs.7")], [selectorId(ids.teacherZero, "rhs.7")], "7 persists."),
+          richRecord("right-minus-persists", "identity", [selectorId(ids.afterSubtract, "rhs.minus")], [selectorId(ids.teacherZero, "rhs.minus")], "The subtraction operator persists."),
+          richRecord("right-three-persists", "identity", [selectorId(ids.afterSubtract, "rhs.3")], [selectorId(ids.teacherZero, "rhs.3")], "3 persists.")
+        ]
+      },
+      correspondence: [
+        correspondence(ids.afterSubtract, "lhs.x", ids.teacherZero, "lhs.x"),
+        correspondence(ids.afterSubtract, "equals", ids.teacherZero, "equals"),
+        correspondence(ids.afterSubtract, "rhs.7", ids.teacherZero, "rhs.7"),
+        correspondence(ids.afterSubtract, "rhs.minus", ids.teacherZero, "rhs.minus"),
+        correspondence(ids.afterSubtract, "rhs.3", ids.teacherZero, "rhs.3")
+      ]
+    }),
+    createKpSemanticTransformation({
+      id: ids.removeZero,
+      transformType: "simplify-additive-identity",
+      title: "Remove the additive identity",
+      sourceObjectIds: [ids.teacherZero],
+      targetObjectIds: [ids.leftSimplified],
+      preserves: ["value"],
+      assumptions: ["Adding zero does not change a value."],
+      lawRefs: [{ id: "law.algebra.additive-identity", level: "strict" }],
+      correspondenceMap: {
+        id: `${ids.removeZero}.correspondence`,
+        records: [
+          richRecord("x-persists", "identity", [selectorId(ids.teacherZero, "lhs.x")], [selectorId(ids.leftSimplified, "lhs.x")], "x persists."),
+          richRecord("left-plus-exits", "removal", [selectorId(ids.teacherZero, "lhs.plus")], [], "The explicit addition operator exits with zero."),
+          richRecord("left-zero-exits", "removal", [selectorId(ids.teacherZero, "lhs.zero")], [], "The additive identity exits."),
+          richRecord("relation-persists", "identity", [selectorId(ids.teacherZero, "equals")], [selectorId(ids.leftSimplified, "equals")], "Equality persists."),
+          richRecord("right-seven-persists", "identity", [selectorId(ids.teacherZero, "rhs.7")], [selectorId(ids.leftSimplified, "rhs.7")], "7 persists."),
+          richRecord("right-minus-persists", "identity", [selectorId(ids.teacherZero, "rhs.minus")], [selectorId(ids.leftSimplified, "rhs.minus")], "The subtraction operator persists."),
+          richRecord("right-three-persists", "identity", [selectorId(ids.teacherZero, "rhs.3")], [selectorId(ids.leftSimplified, "rhs.3")], "3 persists.")
+        ]
+      },
+      correspondence: [
+        correspondence(ids.teacherZero, "lhs.x", ids.leftSimplified, "lhs.x"),
+        correspondence(ids.teacherZero, "equals", ids.leftSimplified, "equals"),
+        correspondence(ids.teacherZero, "rhs.7", ids.leftSimplified, "rhs.7"),
+        correspondence(ids.teacherZero, "rhs.minus", ids.leftSimplified, "rhs.minus"),
+        correspondence(ids.teacherZero, "rhs.3", ids.leftSimplified, "rhs.3")
+      ]
+    }),
+    canonicalById.get(ids.simplify)!
+  ];
+  return {
+    sourceAnimationId: canonical.sourceAnimationId,
+    bundle: createKpAssetBundle({
+      id: "asset.linear-solve.teacher-zero",
+      title: "Solve x + 3 = 7 with explicit zero",
+      objects
+    }),
+    transformations,
+    diagram: createKpSemanticDiagramSequence({
+      id: "diagram.linear-solve.teacher-zero.sequence",
+      title: "Linear solve sequence with explicit zero",
+      children: transformations.map(createKpTransformationDiagramLeaf)
+    }),
+    drillDownHooks: canonical.drillDownHooks,
+    flashcards: canonical.flashcards
+  };
+}
+
 export function createLinearSolveKpBehavior(): LinearSolveKpBehavior {
   const sample = createLinearSolveTutorialCardSample();
 
@@ -489,7 +578,7 @@ function selectorId(objectId: string, selectorPath: string): string {
 
 function richRecord(
   id: string,
-  relation: "identity" | "introduction" | "cancelation" | "fan-in",
+  relation: "identity" | "introduction" | "removal" | "cancelation" | "fan-in",
   sourceSelectorIds: readonly string[],
   targetSelectorIds: readonly string[],
   summary: string
