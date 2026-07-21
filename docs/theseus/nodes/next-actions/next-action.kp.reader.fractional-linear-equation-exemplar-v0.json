@@ -27,6 +27,13 @@
       "scope": "s02 repeatable fraction and linear reference baseline",
       "checkedAt": "2026-07-21T21:43:23.949Z",
       "notes": "Captured five structural fraction states and three accepted linear reader states. Principal KaTeX is 23.232px; fraction late absorption currently fades and is explicitly not an acceptance reference."
+    },
+    {
+      "command": "focused linear provider tests; npm run check:architecture; npm run typecheck",
+      "status": "passed",
+      "scope": "s03 canonical x over 2 plus 3 equals 7 provider problem",
+      "checkedAt": "2026-07-21T21:45:54.758Z",
+      "notes": "Ten provider and verifier tests pass; existing canonical fixture IDs and behavior are preserved."
     }
   ]
 }

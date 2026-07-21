@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  canonicalFractionalLinearProblem,
   canonicalLinearProblem,
   generateLinearProblem,
   rationalFromDto
@@ -36,6 +37,24 @@ test("canonical fixture is exactly 2x + 3 = 8 with solution 5/2", () => {
   });
   assert.deepEqual(problem.solution, { numerator: "5", denominator: "2" });
   assert.equal(problem.provenance.seed, "canonical-2x-plus-3");
+});
+
+test("fractional exemplar fixture is exactly x/2 + 3 = 7 with solution 8", () => {
+  const problem = canonicalFractionalLinearProblem();
+  assert.deepEqual(problem.equation, {
+    left: {
+      variable: "x",
+      coefficient: { numerator: "1", denominator: "2" },
+      constant: { numerator: "3", denominator: "1" }
+    },
+    right: {
+      variable: "x",
+      coefficient: { numerator: "0", denominator: "1" },
+      constant: { numerator: "7", denominator: "1" }
+    }
+  });
+  assert.deepEqual(problem.solution, { numerator: "8", denominator: "1" });
+  assert.equal(problem.provenance.seed, "canonical-x-over-2-plus-3");
 });
 
 test("seeded generation is stable, bounded, solvable, and schema-valid", () => {
@@ -81,4 +100,3 @@ test("generation rejects impossible or inverted bounds", () => {
     constraints: { ...fractionalRequest.constraints, minimumCoefficient: 2, maximumCoefficient: -2 }
   }), /must not exceed/);
 });
-

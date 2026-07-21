@@ -10,6 +10,7 @@ export {
 } from "./linear-expression.ts";
 
 export {
+  canonicalFractionalLinearProblem,
   canonicalLinearProblem,
   generateLinearProblem
 } from "./generator.ts";

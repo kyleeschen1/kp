@@ -52,7 +52,8 @@
     {
       "id": "s03-canonical-problem-trace",
       "title": "Define canonical exact rational problem and trace",
-      "status": "planned"
+      "summary": "Added an immutable exact-rational provider fixture for x/2 + 3 = 7 with solution 8, preserving the existing integer generator path and canonical 2x + 3 fixture.",
+      "status": "complete"
     },
     {
       "id": "s04-intermediate-verification",

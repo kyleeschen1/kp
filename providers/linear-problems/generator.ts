@@ -7,7 +7,8 @@ import {
   divideRational,
   rational,
   rationalToDto,
-  subtractRational
+  subtractRational,
+  type ExactRational
 } from "./rational.ts";
 
 const PROVIDER_ID = "linear-problems.exact-rational";
@@ -16,6 +17,15 @@ const PROTOCOL_VERSION = "linear-problem.v1";
 
 export function canonicalLinearProblem(): LinearProblemDto {
   return problemDto("canonical-2x-plus-3", 2, 3, 8);
+}
+
+export function canonicalFractionalLinearProblem(): LinearProblemDto {
+  return problemFromRationals(
+    "canonical-x-over-2-plus-3",
+    rational(1n, 2n),
+    rational(3n),
+    rational(7n)
+  );
 }
 
 export function generateLinearProblem(
@@ -41,22 +51,42 @@ export function generateLinearProblem(
 }
 
 function problemDto(seed: string, a: number, b: number, c: number): LinearProblemDto {
+  return problemFromRationals(
+    seed,
+    rational(BigInt(a)),
+    rational(BigInt(b)),
+    rational(BigInt(c))
+  );
+}
+
+function problemFromRationals(
+  seed: string,
+  a: ExactRational,
+  b: ExactRational,
+  c: ExactRational
+): LinearProblemDto {
   const solution = divideRational(
-    subtractRational(rational(BigInt(c)), rational(BigInt(b))),
-    rational(BigInt(a))
+    subtractRational(c, b),
+    a
   );
   return {
-    problemId: `linear-${stableHash(`${PROVIDER_VERSION}:${seed}:${a}:${b}:${c}`)}`,
+    problemId: `linear-${stableHash([
+      PROVIDER_VERSION,
+      seed,
+      rationalHashValue(a),
+      rationalHashValue(b),
+      rationalHashValue(c)
+    ].join(":"))}`,
     equation: {
       left: {
         variable: "x",
-        coefficient: rationalToDto(rational(BigInt(a))),
-        constant: rationalToDto(rational(BigInt(b)))
+        coefficient: rationalToDto(a),
+        constant: rationalToDto(b)
       },
       right: {
         variable: "x",
         coefficient: rationalToDto(rational(0n)),
-        constant: rationalToDto(rational(BigInt(c)))
+        constant: rationalToDto(c)
       }
     },
     solution: rationalToDto(solution),
@@ -67,6 +97,12 @@ function problemDto(seed: string, a: number, b: number, c: number): LinearProble
       seed
     }
   };
+}
+
+function rationalHashValue(value: ExactRational): string {
+  return value.denominator === 1n
+    ? String(value.numerator)
+    : `${value.numerator}/${value.denominator}`;
 }
 
 function integerRange(minimum: number, maximum: number): readonly number[] {
