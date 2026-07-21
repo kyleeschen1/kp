@@ -189,7 +189,8 @@
     {
       "id": "s23-theseus-loop-skill-scaffold",
       "title": "Scaffold-one-theseus-loop-skill",
-      "status": "planned"
+      "summary": "Scaffolded and structurally validated one discoverable personal theseus-loop skill with safe boundaries.",
+      "status": "complete"
     },
     {
       "id": "s24-theseus-loop-modes",

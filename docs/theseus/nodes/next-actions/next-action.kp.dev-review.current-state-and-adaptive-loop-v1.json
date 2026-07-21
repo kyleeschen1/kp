@@ -154,6 +154,12 @@
       "status": "passed",
       "scope": "s22 explainable iteration-long selection, override, approval, and envelope growth",
       "checkedAt": "2026-07-21T16:02:54.786Z"
+    },
+    {
+      "command": "standard skill scaffold creation and Ruby structural YAML validation",
+      "status": "passed",
+      "scope": "s23 personal theseus-loop skill scaffold and metadata",
+      "checkedAt": "2026-07-21T16:09:59.084Z"
     }
   ],
   "expectedLearning": [
