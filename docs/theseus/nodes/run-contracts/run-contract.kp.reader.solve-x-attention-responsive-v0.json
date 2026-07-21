@@ -158,7 +158,8 @@
     {
       "id": "s18-wide-stable-islands",
       "title": "Wide_stable_islands",
-      "status": "planned"
+      "summary": "Opted-in stories now render solid searchable beat copy and compact phase islands beside the sticky visual; inactive text never fades and fallback story styling is unchanged.",
+      "status": "complete"
     },
     {
       "id": "s19-pre-cue-motion-gating",

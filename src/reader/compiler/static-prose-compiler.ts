@@ -67,15 +67,17 @@ function storyHtml(
       `<div id="static.${attribute(block.id)}.${attribute(state.checkpointId)}" data-kp-static-state data-kp-progress="${state.progressPermille}"${index === 0 ? "" : " hidden"}>${state.html}</div>`
     ).join("\n");
   return [
-    `<section id="${attribute(block.id)}" class="kp-animation-story" data-kp-block="${attribute(block.id)}" data-kp-asset="${attribute(block.asset.id)}" data-kp-asset-version="${attribute(block.asset.version)}">`,
+    `<section id="${attribute(block.id)}" class="kp-animation-story" data-kp-block="${attribute(block.id)}" data-kp-asset="${attribute(block.asset.id)}" data-kp-asset-version="${attribute(block.asset.version)}"${block.attention === undefined ? "" : ` data-kp-attention="${block.attention.kind}"`}>`,
     `<div class="kp-animation-static" data-kp-animation-static aria-label="Interactive explanation">`,
     staticStates,
     "</div>",
     `<ol class="kp-animation-beats" aria-label="Explanation steps">`,
     ...block.beats.map((beat) => [
       `<li id="${attribute(beat.id)}" data-kp-beat="${attribute(beat.id)}" data-kp-checkpoint="${beat.checkpoint.progressPermille}" data-kp-focus="${attribute(beat.focusRefs.join(" "))}">`,
+      `<div class="kp-beat-copy">`,
       `<h2>${text(beat.title)}</h2>`,
       `<p>${inlineHtml(beat.content)}</p>`,
+      `</div>`,
       attentionPhasesHtml(block, beat.id),
       "</li>"
     ].join("")),

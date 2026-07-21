@@ -80,6 +80,13 @@ a { color: var(--kp-relation); text-underline-offset: .2em; }
 .kp-animation-beats > li[data-kp-beat-active="true"] { border-left-color: var(--kp-accent); opacity: 1; }
 .kp-animation-beats h2 { margin: 0 0 .6rem; font-family: var(--kp-serif); font-size: clamp(1.45rem, 2.6vw, 2.15rem); font-weight: 600; line-height: 1.1; }
 .kp-animation-beats p { margin: 0; color: var(--kp-muted); font-size: clamp(.98rem, 1.35vw, 1.08rem); }
+.kp-attention-phases { display: grid; gap: .65rem; margin: 1.4rem 0 0; padding: 0; list-style: none; }
+.kp-attention-phases > li { display: grid; align-content: center; min-height: clamp(5.5rem, 14vh, 8.5rem); padding: 1rem 1.1rem; border: 1px solid var(--kp-line); border-left: 3px solid var(--kp-line); border-radius: .65rem; background: color-mix(in srgb, var(--kp-surface) 70%, transparent); }
+.kp-attention-cue { color: var(--kp-ink); font-family: var(--kp-serif); font-size: clamp(.96rem, 1.25vw, 1.06rem); line-height: 1.45; }
+/* Attention is transferred by a solid border and stable copy, never by dimming prose. */
+.kp-animation-story[data-kp-attention="phased-attention-v1"] .kp-animation-beats > li { min-height: clamp(330px, 72vh, 680px); border-left-color: transparent; opacity: 1; transition: none; }
+.kp-animation-story[data-kp-attention="phased-attention-v1"] .kp-animation-beats > li[data-kp-beat-active="true"] { border-left-color: transparent; }
+.kp-animation-story[data-kp-attention="phased-attention-v1"] [data-kp-attention-phase-active="true"] { border-left-color: var(--kp-accent); background: color-mix(in srgb, var(--kp-accent) 7%, var(--kp-surface)); }
 .kp-animation-static { grid-area: visual; position: sticky; top: calc(var(--kp-reader-masthead-height) + clamp(.9rem, 4vh, 2.5rem)); min-width: 0; }
 .kp-animation-static > [data-kp-static-state] { display: grid; place-items: center; min-height: clamp(340px, 62vh, 570px); border: 1px solid var(--kp-line); border-radius: 1.15rem; background: var(--kp-surface); font-size: var(--kp-equation-type-size); }
 body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-state] { display: none; }

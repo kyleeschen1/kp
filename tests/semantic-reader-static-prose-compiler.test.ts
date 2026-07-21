@@ -92,6 +92,8 @@ test("optional attention cues compile as searchable static phase landmarks", () 
   });
 
   assert.match(output.articleHtml, /class="kp-attention-phases"/);
+  assert.match(output.articleHtml, /data-kp-attention="phased-attention-v1"/);
+  assert.match(output.articleHtml, /class="kp-beat-copy"/);
   assert.match(output.articleHtml, /data-kp-attention-phase="attention\.subtract\.orient"/);
   assert.match(output.articleHtml, /data-kp-attention-start="0" data-kp-attention-end="1000"/);
   assert.match(output.articleHtml, /Find the same move on both sides\./);
