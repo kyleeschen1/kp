@@ -165,7 +165,8 @@
     {
       "id": "s19-focused-verification-command",
       "title": "Add-impacted-focused-verification-command",
-      "status": "planned"
+      "summary": "Added an inspect-first impacted verification CLI that explains its selection and executes only after explicit --run.",
+      "status": "complete"
     },
     {
       "id": "s20-persistent-visual-harness",

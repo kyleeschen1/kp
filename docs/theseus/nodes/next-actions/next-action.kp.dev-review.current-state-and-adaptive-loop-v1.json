@@ -130,6 +130,12 @@
       "status": "passed",
       "scope": "s18 deterministic risk-to-verification manifest",
       "checkedAt": "2026-07-21T15:52:45.350Z"
+    },
+    {
+      "command": "focused verification selector tests, inspect command, execution command, and npm run typecheck",
+      "status": "passed",
+      "scope": "s19 inspect-first impacted verification CLI",
+      "checkedAt": "2026-07-21T15:54:54.486Z"
     }
   ],
   "expectedLearning": [

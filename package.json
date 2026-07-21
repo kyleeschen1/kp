@@ -15,6 +15,7 @@
     "build": "npm run typecheck && vite build",
     "check:dev-review-production": "node --disable-warning=ExperimentalWarning scripts/check-dev-review-production-closure.ts",
     "review:logs": "node --disable-warning=ExperimentalWarning scripts/dev-review-cli.ts",
+    "verify:impact": "node --disable-warning=ExperimentalWarning scripts/verify-impact.ts",
     "typecheck": "tsc --project tsconfig.app.json --noEmit && tsc --project tsconfig.node.json --noEmit && tsc --project tsconfig.test.json --noEmit && npm run typecheck:domains",
     "check:architecture": "node --disable-warning=ExperimentalWarning scripts/check-concept-room-boundaries.ts && node --disable-warning=ExperimentalWarning scripts/check-semantic-reader-boundaries.ts",
     "check:reader-parser-isolation": "node --disable-warning=ExperimentalWarning scripts/check-semantic-reader-parser-isolation.ts",
