@@ -88,7 +88,8 @@
     {
       "id": "s09-timeline-layout-plan",
       "title": "Select timeline wide typography and layout",
-      "status": "planned"
+      "summary": "Added a whole-sequence typography planner: the widest state chooses one font size for all seven states, wrapping is forbidden, and impossible fits are reported rather than silently shrinking per frame.",
+      "status": "complete"
     },
     {
       "id": "s10-subtract-both-sides",
