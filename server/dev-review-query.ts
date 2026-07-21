@@ -165,6 +165,7 @@ function summarizeRounds(inbox: KpDevReviewInboxV2): readonly KpDevReviewRoundQu
       sequence: round.sequence,
       label: round.label,
       status: round.status,
+      synthetic: round.synthetic,
       noteCount: notes.length,
       newCount: notes.filter((note) => note.status === "new").length
     };

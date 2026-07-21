@@ -1,4 +1,4 @@
-import type { KpDevReviewCaptureV1, KpDevReviewNoteV1 } from "../../protocols/dev-review-v1.ts";
+import type { KpDevReviewCaptureV1 } from "../../protocols/dev-review-v1.ts";
 import {
   KP_DEV_REVIEW_SHELL_CLOSE_EVENT,
   KP_DEV_REVIEW_SHELL_OPEN_EVENT,
@@ -15,7 +15,7 @@ export function mountKpDevReviewComposer(options: {
   readonly submit: (input: {
     readonly comment: string;
     readonly capture: KpDevReviewCaptureV1;
-  }) => Promise<KpDevReviewNoteV1>;
+  }) => Promise<{ readonly sequence: number }>;
 }): KpDevReviewComposer {
   const ownerDocument = options.shell.host.ownerDocument;
   const intro = ownerDocument.createElement("p");

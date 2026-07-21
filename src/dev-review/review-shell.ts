@@ -6,7 +6,9 @@ export interface KpDevReviewShell {
   readonly content: HTMLElement;
   readonly status: HTMLOutputElement;
   readonly inboxCount: HTMLOutputElement;
+  readonly reviewRound: HTMLOutputElement;
   setInboxCount(count: number): void;
+  setReviewRound(label: string, sequence: number, synthetic: boolean): void;
   open(): void;
   close(): void;
   dispose(): void;
@@ -57,7 +59,11 @@ export function mountKpDevReviewShell(ownerDocument: Document): KpDevReviewShell
   const title = ownerDocument.createElement("h2");
   title.id = "review-title";
   title.textContent = "Review this moment";
-  heading.append(eyebrow, title);
+  const reviewRound = ownerDocument.createElement("output");
+  reviewRound.className = "review-round";
+  reviewRound.setAttribute("aria-live", "polite");
+  reviewRound.value = "Loading review round…";
+  heading.append(eyebrow, title, reviewRound);
   const closeButton = button(ownerDocument, "close", "Close visual review");
   closeButton.type = "button";
   closeButton.textContent = "×";
@@ -112,6 +118,13 @@ export function mountKpDevReviewShell(ownerDocument: Document): KpDevReviewShell
     launcherCount.hidden = count === 0;
     launcherCount.setAttribute("aria-label", `${count} ${noun} in inbox`);
   };
+  const setReviewRound = (label: string, sequence: number, synthetic: boolean): void => {
+    if (label.trim().length === 0) throw new TypeError("Review round label must not be empty");
+    if (!Number.isInteger(sequence) || sequence < 1) {
+      throw new RangeError("Review round sequence must be a positive integer");
+    }
+    reviewRound.value = `${synthetic ? "Imported" : "Round"} ${sequence} · ${label}`;
+  };
 
   return {
     host,
@@ -121,7 +134,9 @@ export function mountKpDevReviewShell(ownerDocument: Document): KpDevReviewShell
     content,
     status,
     inboxCount,
+    reviewRound,
     setInboxCount,
+    setReviewRound,
     open,
     close,
     dispose() {
@@ -229,6 +244,17 @@ const shellStyles = `
     font-size: 1.12rem;
     font-weight: 650;
     letter-spacing: -.015em;
+  }
+  .review-round {
+    display: block;
+    max-width: 14rem;
+    margin-top: .2rem;
+    color: var(--muted);
+    font-size: .63rem;
+    font-weight: 650;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .header-actions { display: flex; align-items: center; gap: .42rem; }
   .inbox-count {

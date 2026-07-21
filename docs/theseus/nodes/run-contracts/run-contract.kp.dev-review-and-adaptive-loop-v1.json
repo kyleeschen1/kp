@@ -105,7 +105,8 @@
     {
       "id": "s09-current-round-shell",
       "title": "Show-current-round-state-in-the-review-shell",
-      "status": "planned"
+      "summary": "The canonical shell now presents its active imported or explicit round and submits immutable captures into that round via v2; empty histories bootstrap a baseline-stamped current round without changing the visual motif.",
+      "status": "complete"
     },
     {
       "id": "s10-current-unread-counter",

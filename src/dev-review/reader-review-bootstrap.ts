@@ -1,4 +1,5 @@
-import { KP_DEV_REVIEW_SCHEMA_VERSION, type KpDevReviewCaptureV1 } from "../../protocols/dev-review-v1.ts";
+import type { KpDevReviewCaptureV1 } from "../../protocols/dev-review-v1.ts";
+import { KP_DEV_REVIEW_SCHEMA_VERSION_V2, type KpDevReviewRoundV2 } from "../../protocols/dev-review-v2.ts";
 import { browserKpDevReviewEnvironmentSource, captureKpDevReviewEnvironment } from "./build-environment.ts";
 import { KpDevReviewCaptureProviderRegistry } from "./capture-provider.ts";
 import { KpDevReviewClient } from "./client.ts";
@@ -33,6 +34,13 @@ export function mountKpReaderDevReview(ownerWindow: Window = window): () => void
   const unregisterReader = registry.register(createKpReaderDevReviewCaptureProvider(frames));
   const shell = mountKpDevReviewShell(ownerDocument);
   const client = new KpDevReviewClient();
+  const currentRound = resolveCurrentRound(client).then((round) => {
+    shell.setReviewRound(round.label, round.sequence, round.synthetic);
+    return round;
+  }).catch((error: unknown) => {
+    shell.reviewRound.value = "Review round unavailable";
+    throw error;
+  });
   const sessionId = getOrCreateKpDevReviewSessionId({
     buildFingerprint: __KP_DEV_REVIEW_BUILD__.fingerprint,
     storage: safeSessionStorage(ownerWindow)
@@ -75,12 +83,16 @@ export function mountKpReaderDevReview(ownerWindow: Window = window): () => void
       };
       return result;
     },
-    submit: ({ comment, capture }) => client.create({
-      schemaVersion: KP_DEV_REVIEW_SCHEMA_VERSION,
-      sessionId,
-      comment,
-      capture
-    })
+    submit: async ({ comment, capture }) => {
+      const round = await currentRound;
+      return client.createNote({
+        schemaVersion: KP_DEV_REVIEW_SCHEMA_VERSION_V2,
+        roundId: round.id,
+        sessionId,
+        comment,
+        capture
+      });
+    }
   });
 
   ownerDocument.body.dataset["kpDevReviewReady"] = "true";
@@ -95,6 +107,22 @@ export function mountKpReaderDevReview(ownerWindow: Window = window): () => void
   };
   ownerWindow.addEventListener("pagehide", dispose, { once: true });
   return dispose;
+}
+
+async function resolveCurrentRound(
+  client: KpDevReviewClient
+): Promise<Pick<KpDevReviewRoundV2, "id" | "label" | "sequence" | "synthetic">> {
+  const state = await client.query();
+  const current = state.rounds.find((round) => round.status === "open");
+  if (current !== undefined) return current;
+  return client.openRound({
+    label: "Current visual review",
+    baseline: {
+      commit: __KP_DEV_REVIEW_BUILD__.commit,
+      fingerprint: __KP_DEV_REVIEW_BUILD__.fingerprint,
+      dirty: __KP_DEV_REVIEW_BUILD__.dirty
+    }
+  });
 }
 
 function safeSessionStorage(ownerWindow: Window): KpDevReviewSessionStorage {

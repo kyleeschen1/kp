@@ -137,6 +137,7 @@ export const kpDevReviewQueryResultSchema = protocolObject({
     sequence: protocolInteger({ min: 1 }),
     label: protocolString({ minLength: 1, maxLength: 120 }),
     status: protocolEnum(["open", "closed"]),
+    synthetic: protocolBoolean(),
     noteCount: protocolInteger({ min: 0 }),
     newCount: protocolInteger({ min: 0 })
   }), { maxLength: 10_000 }),

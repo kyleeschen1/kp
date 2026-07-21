@@ -1,12 +1,16 @@
 import { expect, test } from "@playwright/test";
 
-import { kpDevReviewCreateRequestSchema } from "../protocols/dev-review-schema.ts";
-import type { KpDevReviewCreateRequestV1 } from "../protocols/dev-review-v1.ts";
+import { kpDevReviewCreateRequestV2Schema } from "../protocols/dev-review-v2-schema.ts";
+import type { KpDevReviewCreateRequestV2 } from "../protocols/dev-review-v2.ts";
 
 test("real reader feedback captures a validated reproducible frame without moving the lesson", async ({ page }) => {
-  let request: KpDevReviewCreateRequestV1 | undefined;
-  await page.route("**/api/dev/reviews", async (route) => {
-    request = kpDevReviewCreateRequestSchema.parse(route.request().postDataJSON());
+  let request: KpDevReviewCreateRequestV2 | undefined;
+  await page.route("**/api/dev/reviews/v2/**", async (route) => {
+    if (new URL(route.request().url()).pathname.endsWith("/query")) {
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(queryState()) });
+      return;
+    }
+    request = kpDevReviewCreateRequestV2Schema.parse(route.request().postDataJSON());
     await route.fulfill({
       status: 201,
       contentType: "application/json",
@@ -58,9 +62,13 @@ test("real reader feedback captures a validated reproducible frame without movin
 });
 
 test("an open reader inbox locks a fresh current frame for every submitted note", async ({ page }) => {
-  const requests: KpDevReviewCreateRequestV1[] = [];
-  await page.route("**/api/dev/reviews", async (route) => {
-    const request = kpDevReviewCreateRequestSchema.parse(route.request().postDataJSON());
+  const requests: KpDevReviewCreateRequestV2[] = [];
+  await page.route("**/api/dev/reviews/v2/**", async (route) => {
+    if (new URL(route.request().url()).pathname.endsWith("/query")) {
+      await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(queryState()) });
+      return;
+    }
+    const request = kpDevReviewCreateRequestV2Schema.parse(route.request().postDataJSON());
     requests.push(request);
     await route.fulfill({
       status: 201,
@@ -129,3 +137,35 @@ test("an open reader inbox locks a fresh current frame for every submitted note"
     expect(request.capture.render.fontReady).toBe(true);
   }
 });
+
+function queryState(): unknown {
+  return {
+    query: { scope: "current", limit: 20, detail: "summary" },
+    counts: {
+      lifetime: 0,
+      current: 0,
+      currentNew: 0,
+      historical: 0,
+      matching: 0,
+      byStatus: {
+        new: 0,
+        discussed: 0,
+        grouped: 0,
+        accepted: 0,
+        fixed: 0,
+        verified: 0,
+        dismissed: 0
+      }
+    },
+    rounds: [{
+      id: "round.e2e",
+      sequence: 1,
+      label: "Reader polish",
+      status: "open",
+      synthetic: false,
+      noteCount: 0,
+      newCount: 0
+    }],
+    page: { notes: [], hasMore: false }
+  };
+}

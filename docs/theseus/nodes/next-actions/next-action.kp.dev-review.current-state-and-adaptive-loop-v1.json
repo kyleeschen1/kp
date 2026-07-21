@@ -81,6 +81,12 @@
       "status": "passed",
       "scope": "s08 typed v2 operations, capability-only HTTP transport, legacy compatibility, and production exclusion",
       "checkedAt": "2026-07-21T15:21:56.180Z"
+    },
+    {
+      "command": "focused review shell, composer, reader e2e browser cohort; query and client tests; typecheck; visual exemplar inspection",
+      "status": "passed",
+      "scope": "s09 active round presentation and v2 round-bound reader submissions with canonical shell preserved",
+      "checkedAt": "2026-07-21T15:29:10.296Z"
     }
   ],
   "expectedLearning": [

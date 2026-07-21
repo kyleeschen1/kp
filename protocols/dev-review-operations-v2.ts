@@ -46,6 +46,7 @@ export interface KpDevReviewRoundQuerySummary {
   readonly sequence: number;
   readonly label: string;
   readonly status: KpDevReviewRoundV2["status"];
+  readonly synthetic: boolean;
   readonly noteCount: number;
   readonly newCount: number;
 }
