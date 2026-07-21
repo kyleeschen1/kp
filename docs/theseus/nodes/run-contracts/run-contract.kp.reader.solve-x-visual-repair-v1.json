@@ -119,7 +119,8 @@
     {
       "id": "s13-equation-type-scale",
       "title": "Equation typography scale",
-      "status": "planned"
+      "summary": "Replaced oversized reader equation clamps with one responsive canonical type token used by native measurement, material clones, static/no-JS output, and mobile; browser gate now enforces 0.99–1.01 editor parity.",
+      "status": "complete"
     },
     {
       "id": "s14-counter-orbit-recipe",

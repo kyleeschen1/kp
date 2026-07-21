@@ -39,10 +39,8 @@ test("canonical editor and reader expose comparable continuity frames", async ({
   }
 
   const typeScaleRatio = medianFontSize(readerFinal) / medianFontSize(editorFinal);
-  // This characterization is intentionally tightened in the typography slice;
-  // first it proves that the gate detects the reported oversized reader type.
-  expect(typeScaleRatio).toBeGreaterThan(1.5);
-  expect(typeScaleRatio).toBeLessThan(1.8);
+  expect(typeScaleRatio).toBeGreaterThan(0.99);
+  expect(typeScaleRatio).toBeLessThan(1.01);
 });
 
 async function captureEditorFrame(

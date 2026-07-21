@@ -13,6 +13,7 @@
   --kp-relation: #1f6371;
   --kp-line: #d2d7cd;
   --kp-serif: Iowan Old Style, Palatino Linotype, Book Antiqua, Palatino, Georgia, serif;
+  --kp-equation-type-size: clamp(1.1rem, 1.55vw, 1.2rem);
 }
 
 * { box-sizing: border-box; }
@@ -71,7 +72,7 @@ a { color: var(--kp-relation); text-underline-offset: .2em; }
 .kp-animation-beats h2 { margin: 0 0 .6rem; font-family: var(--kp-serif); font-size: clamp(1.45rem, 2.6vw, 2.15rem); font-weight: 600; line-height: 1.1; }
 .kp-animation-beats p { margin: 0; color: var(--kp-muted); font-size: clamp(.98rem, 1.35vw, 1.08rem); }
 .kp-animation-static { grid-area: visual; position: sticky; top: clamp(2rem, 9vh, 5.5rem); min-width: 0; }
-.kp-animation-static > [data-kp-static-state] { display: grid; place-items: center; min-height: clamp(340px, 62vh, 570px); border: 1px solid var(--kp-line); border-radius: 1.15rem; background: var(--kp-surface); font-size: clamp(1.7rem, 4vw, 3.2rem); }
+.kp-animation-static > [data-kp-static-state] { display: grid; place-items: center; min-height: clamp(340px, 62vh, 570px); border: 1px solid var(--kp-line); border-radius: 1.15rem; background: var(--kp-surface); font-size: var(--kp-equation-type-size); }
 body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-state] { display: none; }
 
 .kp-reader-equation-stage { min-height: clamp(340px, 62vh, 570px); padding: 1.15rem; border: 1px solid var(--kp-line); border-radius: 1.15rem; background: var(--kp-surface); box-shadow: 0 22px 60px rgb(22 35 29 / 7%); overflow: hidden; }
@@ -84,7 +85,7 @@ body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-stat
 .kp-reader-equation-transition { position: absolute; inset: 0; display: block !important; visibility: hidden; }
 .kp-reader-equation-transition[data-kp-reader-transition-active="true"] { visibility: visible; }
 .kp-reader-equation-fit-surface, .kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { position: absolute; inset: 0; }
-.kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { font-size: clamp(1.45rem, 2.6vw, 2rem); }
+.kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { font-size: var(--kp-equation-type-size); }
 .kp-reader-equation-native { position: absolute; inset: 0; display: grid; place-items: center; }
 .kp-reader-equation-state { width: max-content; }
 .kp-reader-equation-state .katex-display { margin: 0; }
@@ -107,6 +108,7 @@ body[data-kp-reader-motion-mode="essential"] .kp-reader-equation-material-owner-
 .kp-reader-equation-hint { margin: .68rem 0 0; color: var(--kp-muted); font-size: .7rem; text-align: center; }
 
 @media (max-width: 880px) {
+  :root { --kp-equation-type-size: clamp(1.05rem, 4.2vw, 1.2rem); }
   .kp-reader-layout { grid-template-columns: 1fr; width: min(100% - 28px, 700px); }
   .kp-lesson-toc { position: static; padding-top: 2rem; }
   .kp-lesson-toc ol { display: flex; flex-wrap: wrap; gap: .6rem 1rem; }
@@ -124,7 +126,6 @@ body[data-kp-reader-motion-mode="essential"] .kp-reader-equation-material-owner-
   .kp-lesson > h1 { font-size: clamp(2.8rem, 16vw, 4.6rem); }
   .kp-reader-equation-stage-heading { display: block; }
   .kp-reader-equation-stage-heading output { display: block; }
-  .kp-reader-equation-measurement, .kp-reader-equation-material-fit-surface { font-size: clamp(1.25rem, 6.4vw, 1.85rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {
