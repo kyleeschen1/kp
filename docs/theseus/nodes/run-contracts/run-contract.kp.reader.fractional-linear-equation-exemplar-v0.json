@@ -124,7 +124,8 @@
     {
       "id": "s15-native-settlement",
       "title": "Settle cleanly into native x equals 8",
-      "status": "planned"
+      "summary": "All six transitions compile diagnostic-free render and material plans with stable owners, ending under the atomic native KaTeX handoff policy.",
+      "status": "complete"
     },
     {
       "id": "s16-operation-salience",

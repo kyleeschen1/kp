@@ -5,7 +5,12 @@ import { compileKpAnimationAssetSemanticRefs } from "../src/animation/asset.ts";
 import {
   createFractionalLinearEquationAnimationAsset
 } from "../src/animation/fractional-linear-equation-adapter.ts";
+import { sampleKpAnimationRuntimeFrame } from "../src/animation/runtime-sampler.ts";
 import { createKpEquationLinearRearrangementBindings } from "../src/rendering/equation-linear-rearrangement-bindings.ts";
+import {
+  compileKpReaderEquationMaterialPlan,
+  projectKpReaderEquationRenderPlan
+} from "../src/reader/renderers/public-api.ts";
 
 test("fractional equation composes into one renderer-neutral animation asset", () => {
   const animation = createFractionalLinearEquationAnimationAsset();
@@ -76,4 +81,28 @@ test("two times four coalesces through explicit product synthesis", () => {
     "transform.fractional-linear.simplify-right-product");
   assert.equal(bindings[5]?.kind, "simplify-constant-product");
   assert.ok(bindings[5]?.successorSynthesisBinding);
+});
+
+test("every transition settles through a total atomic native handoff", () => {
+  const animation = createFractionalLinearEquationAnimationAsset();
+  const transitionCount = animation.transformations.length;
+
+  for (let index = 0; index < transitionCount; index += 1) {
+    const runtimeFrame = sampleKpAnimationRuntimeFrame({
+      animation,
+      progress: (index + 0.5) / transitionCount
+    });
+    const renderPlan = projectKpReaderEquationRenderPlan({
+      animation,
+      runtimeFrame
+    });
+    const materialPlan = compileKpReaderEquationMaterialPlan(renderPlan);
+    assert.deepEqual(renderPlan.diagnostics, []);
+    assert.deepEqual(materialPlan.diagnostics, []);
+    assert.equal(renderPlan.transitions.length, 1);
+    assert.equal(materialPlan.transitions.length, 1);
+    assert.ok(materialPlan.transitions[0]!.owners.length > 0);
+  }
+
+  assert.equal(animation.metadata?.["equationNativeHandoffRecipe"], "atomic-v1");
 });

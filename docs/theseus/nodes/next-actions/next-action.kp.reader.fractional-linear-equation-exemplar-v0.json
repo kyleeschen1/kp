@@ -116,6 +116,18 @@
       "status": "passed",
       "scope": "s14 product coalescence",
       "checkedAt": "2026-07-21T22:14:22.884Z"
+    },
+    {
+      "command": "focused fractional settlement and material tests",
+      "status": "passed",
+      "scope": "s15 native settlement",
+      "checkedAt": "2026-07-21T22:15:56.764Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15 native settlement",
+      "checkedAt": "2026-07-21T22:15:57.879Z"
     }
   ]
 }
