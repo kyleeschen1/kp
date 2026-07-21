@@ -28,3 +28,30 @@ test("semantic editor opens the fractional equation reader route", async ({ page
     .toBeAttached();
   expect(pageErrors).toEqual([]);
 });
+
+for (const viewport of [
+  { width: 390, height: 844 },
+  { width: 360, height: 640 }
+]) {
+  test(`fractional reader stays finite and contained at ${viewport.width}x${viewport.height}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await page.goto("/reader/solve-fractional-linear/", { waitUntil: "networkidle" });
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-reader-responsive-projection",
+      "compact-transcript"
+    );
+
+    const geometry = await page.evaluate(() => {
+      const stage = document.querySelector<HTMLElement>("[data-kp-reader-equation-stage]")!;
+      const beats = [...document.querySelectorAll<HTMLElement>("[data-kp-beat]")];
+      return {
+        horizontalOverflow: document.documentElement.scrollWidth - window.innerWidth,
+        stageHeight: stage.getBoundingClientRect().height,
+        beatHeights: beats.map((beat) => beat.getBoundingClientRect().height)
+      };
+    });
+    expect(geometry.horizontalOverflow).toBeLessThanOrEqual(1);
+    expect(geometry.stageHeight).toBeLessThanOrEqual(viewport.height * 0.52);
+    expect(Math.max(...geometry.beatHeights)).toBeLessThanOrEqual(225);
+  });
+}

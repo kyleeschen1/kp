@@ -154,7 +154,8 @@
     {
       "id": "s20-narrow-presentation",
       "title": "Add finite nonoverflowing narrow projection",
-      "status": "planned"
+      "summary": "Narrow no-attention lessons now select a generic compact transcript: the diagram stays sticky and finite, all prose remains ordinary scrollable text, and 390x844 plus 360x640 gates show no horizontal overflow or oversized beats.",
+      "status": "complete"
     },
     {
       "id": "s21-static-output",

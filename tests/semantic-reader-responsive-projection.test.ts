@@ -18,11 +18,11 @@ test("attention stories switch projection at the reader layout boundary", () => 
   }), "focus-stepper");
 });
 
-test("stories without attention preserve their fallback presentation", () => {
+test("stories without attention use a finite compact transcript when narrow", () => {
   assert.equal(resolveKpReaderResponsiveProjection({
     viewportWidth: 390,
     attentionAvailable: false
-  }), "fallback");
+  }), "compact-transcript");
   assert.equal(resolveKpReaderResponsiveProjection({
     viewportWidth: 1_440,
     attentionAvailable: false

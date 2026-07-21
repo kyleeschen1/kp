@@ -138,6 +138,10 @@ body[data-kp-reader-motion-mode="essential"] .kp-reader-equation-material-owner-
   .kp-reader-equation-viewport { min-height: 190px; }
   body[data-kp-reader-responsive-projection="focus-stepper"] .kp-reader-focus-stepper { display: grid; }
   .kp-animation-beats > li { min-height: 62vh; padding-block: 3rem; }
+  body[data-kp-reader-responsive-projection="compact-transcript"] .kp-animation-story { gap: 1rem; padding-bottom: 4rem; }
+  body[data-kp-reader-responsive-projection="compact-transcript"] .kp-reader-equation-stage { min-height: min(280px, 46svh); }
+  body[data-kp-reader-responsive-projection="compact-transcript"] .kp-reader-equation-viewport { min-height: min(190px, 30svh); }
+  body[data-kp-reader-responsive-projection="compact-transcript"] .kp-animation-beats > li { min-height: clamp(10rem, 28svh, 13rem); padding-block: 1.5rem; opacity: 1; }
   body[data-kp-reader-responsive-projection="focus-stepper"] .kp-animation-story { gap: 2rem; padding-bottom: 5rem; }
   body[data-kp-reader-responsive-projection="focus-stepper"] .kp-animation-static { position: static; }
   body[data-kp-reader-responsive-projection="focus-stepper"] .kp-reader-equation-stage { min-height: 0; padding: .9rem; }

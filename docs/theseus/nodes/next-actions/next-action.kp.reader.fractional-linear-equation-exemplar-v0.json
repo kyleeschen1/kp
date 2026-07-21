@@ -166,6 +166,12 @@
       "scope": "s19 route and discovery",
       "checkedAt": "2026-07-21T22:30:23.619Z",
       "notes": "Gate includes zero page errors and measurable KaTeX fraction and delimiter anchors."
+    },
+    {
+      "command": "responsive projection unit test and three-case fractional browser gate",
+      "status": "passed",
+      "scope": "s20 compact narrow presentation",
+      "checkedAt": "2026-07-21T22:32:34.793Z"
     }
   ]
 }
