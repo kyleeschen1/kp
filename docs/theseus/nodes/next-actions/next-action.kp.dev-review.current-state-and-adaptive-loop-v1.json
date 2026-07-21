@@ -39,6 +39,12 @@
       "status": "passed",
       "scope": "s01 typed contract, done-contract, provenance, and queue hygiene",
       "checkedAt": "2026-07-21T14:47:18.282Z"
+    },
+    {
+      "command": "node --test dev-review acceptance and npm run typecheck",
+      "status": "passed",
+      "scope": "s02 immutable review-round and current-state acceptance boundary",
+      "checkedAt": "2026-07-21T14:49:55.398Z"
     }
   ],
   "expectedLearning": [

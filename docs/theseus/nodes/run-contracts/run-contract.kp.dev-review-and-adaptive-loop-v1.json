@@ -63,7 +63,8 @@
     {
       "id": "s02-review-round-acceptance",
       "title": "Define-review-round-acceptance",
-      "status": "planned"
+      "summary": "Added executable acceptance laws for explicit rounds, bounded current queries, stable cursors, replay-only legacy migration, non-destructive history, and separate current-new versus lifetime counts.",
+      "status": "complete"
     },
     {
       "id": "s03-versioned-round-protocol",
