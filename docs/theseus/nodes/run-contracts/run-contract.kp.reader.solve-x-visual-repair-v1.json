@@ -65,7 +65,8 @@
     {
       "id": "s04-review-browser-proof",
       "title": "Review workflow browser proof",
-      "status": "planned"
+      "summary": "Proved on the real solve-x reader that two notes submitted without closing the panel capture distinct current reader moments, retain route/build/render evidence, increment the inbox counter, and do not move the lesson during note capture or submission.",
+      "status": "complete"
     },
     {
       "id": "s05-typed-presentation-profile",

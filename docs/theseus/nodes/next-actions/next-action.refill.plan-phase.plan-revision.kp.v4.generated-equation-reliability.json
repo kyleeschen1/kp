@@ -157,6 +157,18 @@
       "status": "passed",
       "scope": "s03 visible capture lock, retake behavior, focus, and narrow viewport",
       "checkedAt": "2026-07-21T01:23:03.725Z"
+    },
+    {
+      "command": "Playwright dev review reader, composer, and shell browser suite",
+      "status": "passed",
+      "scope": "s04 distinct per-note reader captures and non-interference",
+      "checkedAt": "2026-07-21T01:26:32.306Z"
+    },
+    {
+      "command": "TypeScript project typecheck and dev-review production closure",
+      "status": "passed",
+      "scope": "s04 type safety and production exclusion",
+      "checkedAt": "2026-07-21T01:26:33.625Z"
     }
   ],
   "progress": {

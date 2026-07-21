@@ -56,3 +56,76 @@ test("real reader feedback captures a validated reproducible frame without movin
   expect(request?.capture.render.ownerIds.length).toBeGreaterThan(0);
   expect(request?.capture.temporalTrace.length).toBeGreaterThan(0);
 });
+
+test("an open reader inbox locks a fresh current frame for every submitted note", async ({ page }) => {
+  const requests: KpDevReviewCreateRequestV1[] = [];
+  await page.route("**/api/dev/reviews", async (route) => {
+    const request = kpDevReviewCreateRequestSchema.parse(route.request().postDataJSON());
+    requests.push(request);
+    await route.fulfill({
+      status: 201,
+      contentType: "application/json",
+      body: JSON.stringify({
+        ...request,
+        id: `review-note.${requests.length}.e2e`,
+        sequence: requests.length,
+        status: "new"
+      })
+    });
+  });
+
+  await page.goto("/reader/solve-x/");
+  await expect(page.locator("body")).toHaveAttribute("data-kp-dev-review-ready", "true");
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForFunction(() => Number(document.body.dataset["kpReaderProgress"]) < 200);
+
+  const host = page.locator("[data-kp-dev-review-shell]");
+  await host.locator("button.launcher").click();
+  await host.locator("textarea").fill("The opening equation needs a steadier handoff.");
+  const firstLockedState = await page.evaluate(() => ({
+    scrollY: window.scrollY,
+    progress: Number(document.body.dataset["kpReaderProgress"])
+  }));
+  await host.locator("button.save").click();
+  await expect(host.locator("output.status")).toHaveText("Saved note 1.");
+  expect(await page.evaluate(() => ({
+    scrollY: window.scrollY,
+    progress: Number(document.body.dataset["kpReaderProgress"])
+  }))).toEqual(firstLockedState);
+
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await page.waitForFunction(
+    (firstProgress) => Number(document.body.dataset["kpReaderProgress"]) > Number(firstProgress) + 400,
+    firstLockedState.progress
+  );
+  await host.locator("textarea").fill("The final equation should settle without a jump.");
+  const secondLockedState = await page.evaluate(() => ({
+    scrollY: window.scrollY,
+    progress: Number(document.body.dataset["kpReaderProgress"])
+  }));
+  await host.locator("button.save").click();
+  await expect(host.locator("output.status")).toHaveText("Saved note 2.");
+  await expect(host.locator("output.inbox-count")).toHaveText("Inbox 2");
+  expect(await page.evaluate(() => ({
+    scrollY: window.scrollY,
+    progress: Number(document.body.dataset["kpReaderProgress"])
+  }))).toEqual(secondLockedState);
+
+  expect(requests).toHaveLength(2);
+  expect(requests.map(({ comment }) => comment)).toEqual([
+    "The opening equation needs a steadier handoff.",
+    "The final equation should settle without a jump."
+  ]);
+  expect(requests[0]?.capture.semantic.progressPermille).toBe(firstLockedState.progress);
+  expect(requests[1]?.capture.semantic.progressPermille).toBe(secondLockedState.progress);
+  expect(requests[1]?.capture.semantic.progressPermille)
+    .toBeGreaterThan((requests[0]?.capture.semantic.progressPermille ?? 0) + 400);
+  expect(requests[1]?.capture.capturedAt).not.toBe(requests[0]?.capture.capturedAt);
+  for (const request of requests) {
+    expect(request.capture.route).toContain("/reader/solve-x/");
+    expect(request.capture.environment.build.fingerprint).not.toBe("");
+    expect(request.capture.semantic.documentId).toBe("lesson.solve-x.x-plus-3");
+    expect(request.capture.render.layoutRevision).toBeGreaterThanOrEqual(0);
+    expect(request.capture.render.fontReady).toBe(true);
+  }
+});
