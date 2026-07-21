@@ -37,13 +37,19 @@ import {
   encodeKpReaderSessionUrl,
   projectKpReaderMotion,
   parseKpReaderMotionPreference,
+  projectKpReaderAttention,
   resolveKpReaderMotionPolicy,
   sampleKpReaderAnimationFrame,
   type KpReaderClockSample,
   type KpReaderContinuousScrollClock,
   type KpReaderFocusSnapshot,
-  type KpReaderMotionPreference
+  type KpReaderMotionPreference,
+  type KpReaderAttentionProjection
 } from "../runtime/public-api.ts";
+import type {
+  KpLessonAttentionPhaseKind,
+  KpLessonAttentionPlan
+} from "../document/public-api.ts";
 
 interface TransitionContext {
   readonly id: string;
@@ -106,6 +112,10 @@ const motionSelect = requireElement<HTMLSelectElement>(
 );
 const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
+const attentionElements = [
+  ...story.querySelectorAll<HTMLElement>("[data-kp-attention-phase]")
+];
+const attention = readAttentionPlan();
 const toc = requireElement<HTMLElement>(".kp-lesson-toc");
 const tocLinks = [...toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
 const accessibleCheckpoints = beats.map((beat) => ({
@@ -344,17 +354,23 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
       systemReducedMotion: reducedMotion.matches
     })
   });
+  const attentionProjection = projectKpReaderAttention({
+    attention,
+    progressPermille: projection.progressPermille
+  });
+  const visualProgressPermille = attentionProjection?.visualProgressPermille
+    ?? projection.progressPermille;
   const visualSample = {
     ...sample,
     // URL restoration can land within a sub-permille physical-scroll residual.
     // Semantic endpoints remain exact geometry and ownership authorities.
-    progress: projection.progressPermille === 0
+    progress: visualProgressPermille === 0
       ? 0
-      : projection.progressPermille === 1_000
+      : visualProgressPermille === 1_000
         ? 1
-        : projection.progress,
-    progressPermille: projection.progressPermille,
-    checkpointId: projection.checkpointId
+        : visualProgressPermille / 1_000,
+    progressPermille: visualProgressPermille,
+    checkpointId: attentionProjection?.checkpointId ?? projection.checkpointId
   };
   const forwardClock = { ...visualSample, direction: "forward" as const };
   const runtimeFrame = sampleKpReaderAnimationFrame({ animation, clock: forwardClock });
@@ -461,8 +477,9 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   );
   syncIndependentZeroWitness(motion.independentZeroWitness);
   applyFocus(focusSnapshot);
-  progressBar.style.transform = `scaleX(${visualSample.progress})`;
-  document.body.dataset["kpReaderProgress"] = String(visualSample.progressPermille);
+  progressBar.style.transform = `scaleX(${projection.progressPermille / 1_000})`;
+  document.body.dataset["kpReaderProgress"] = String(projection.progressPermille);
+  document.body.dataset["kpReaderVisualProgress"] = String(visualProgressPermille);
   document.body.dataset["kpReaderMotionMode"] = projection.mode;
   stage.dataset["kpReaderEquationEffectiveDepthRecipe"] =
     projection.mode === "continuous" ? presentationProfile.depth : "flat-v1";
@@ -471,7 +488,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   stage.dataset["kpReaderMotionAuthority"] = motion.samplingAuthority;
   document.body.dataset["kpReaderTransition"] = transitionId;
   document.body.dataset["kpReaderFramePlans"] = String(scheduler.inspect().framePlanCount + 1);
-  updateActiveBeat(visualSample.progressPermille);
+  updateActiveBeat(projection.progressPermille, attentionProjection);
   if (import.meta.env.DEV) {
     const atMs = performance.now();
     const schedulerState = scheduler.inspect();
@@ -480,11 +497,15 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
       documentId,
       documentVersion,
       assetId: animation.id,
-      checkpointId: visualSample.checkpointId,
-      progressPermille: visualSample.progressPermille,
+      checkpointId: projection.checkpointId,
+      progressPermille: projection.progressPermille,
       projectionId: "equation.symbolic",
       activeTransformationIds: [...runtimeFrame.activeTransformationIds],
       activePhase: runtimeFrame.phase.phaseId,
+      attentionPhase: attentionProjection?.phaseId,
+      attentionKind: attentionProjection?.phaseKind,
+      attentionMotionGate: attentionProjection?.motionGate,
+      visualProgressPermille,
       focusSource: focusSnapshot.activeSource,
       focusRefs: [...focusSnapshot.objectRefs],
       motionPreference,
@@ -651,7 +672,10 @@ function unionAnchorRects(
   return { left, top, width: right - left, height: bottom - top };
 }
 
-function updateActiveBeat(progressPermille: number): void {
+function updateActiveBeat(
+  progressPermille: number,
+  attentionProjection: KpReaderAttentionProjection | undefined
+): void {
   activeBeat = [...beats].sort((left, right) =>
     Math.abs(Number(requiredData(left, "kpCheckpoint")) - progressPermille) -
     Math.abs(Number(requiredData(right, "kpCheckpoint")) - progressPermille)
@@ -663,9 +687,32 @@ function updateActiveBeat(progressPermille: number): void {
     if (active) beat.setAttribute("aria-current", "step");
     else beat.removeAttribute("aria-current");
   }
-  status.value = activeBeat.querySelector("h2")?.textContent?.trim() ?? "Follow the symbols";
+  status.value = attentionProjection?.cue
+    ?? activeBeat.querySelector("h2")?.textContent?.trim()
+    ?? "Follow the symbols";
   syncActiveToc(requiredData(activeBeat, "kpBeat"));
-  focus.set("story", dataRefs(activeBeat));
+  syncActiveAttention(attentionProjection);
+  focus.set("story", attentionProjection?.focusRefs ?? dataRefs(activeBeat));
+}
+
+function syncActiveAttention(
+  projection: KpReaderAttentionProjection | undefined
+): void {
+  if (projection === undefined) {
+    delete document.body.dataset["kpReaderAttentionPhase"];
+    delete document.body.dataset["kpReaderAttentionKind"];
+    delete document.body.dataset["kpReaderAttentionTarget"];
+    delete document.body.dataset["kpReaderAttentionMotionGate"];
+  } else {
+    document.body.dataset["kpReaderAttentionPhase"] = projection.phaseId;
+    document.body.dataset["kpReaderAttentionKind"] = projection.phaseKind;
+    document.body.dataset["kpReaderAttentionTarget"] = projection.primaryTarget;
+    document.body.dataset["kpReaderAttentionMotionGate"] = projection.motionGate;
+  }
+  for (const element of attentionElements) {
+    const active = requiredData(element, "kpAttentionPhase") === projection?.phaseId;
+    element.dataset["kpAttentionPhaseActive"] = String(active);
+  }
 }
 
 function syncActiveToc(activeId: string): void {
@@ -829,6 +876,30 @@ function anchorElementIndex(root: HTMLElement): ReadonlyMap<string, HTMLElement>
 
 function dataRefs(element: HTMLElement): readonly string[] {
   return (element.dataset["kpFocus"] ?? "").split(/\s+/).filter(Boolean);
+}
+
+function readAttentionPlan(): KpLessonAttentionPlan | undefined {
+  if (story.dataset["kpAttention"] === undefined) return undefined;
+  return {
+    kind: "phased-attention-v1",
+    phases: attentionElements.map((element) => ({
+      id: requiredData(element, "kpAttentionPhase"),
+      kind: attentionKind(requiredData(element, "kpAttentionKind")),
+      beatId: requiredData(element.closest<HTMLElement>("[data-kp-beat]")!, "kpBeat"),
+      checkpointId: requiredData(element, "kpCheckpointId"),
+      startProgressPermille: Number(requiredData(element, "kpAttentionStart")),
+      endProgressPermille: Number(requiredData(element, "kpAttentionEnd")),
+      cue: requireDescendant<HTMLElement>(element, ".kp-attention-cue").textContent?.trim() ?? "",
+      focusRefs: dataRefs(element)
+    }))
+  };
+}
+
+function attentionKind(value: string): KpLessonAttentionPhaseKind {
+  if (value === "orient" || value === "act" || value === "settle" || value === "inspect") {
+    return value;
+  }
+  throw new Error(`Unknown reader attention phase kind ${value}.`);
 }
 
 function requiredData(element: HTMLElement, key: string): string {

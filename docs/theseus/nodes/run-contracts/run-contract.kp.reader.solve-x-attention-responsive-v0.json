@@ -164,7 +164,8 @@
     {
       "id": "s19-pre-cue-motion-gating",
       "title": "Pre-cue_and_motion_gating",
-      "status": "planned"
+      "summary": "The solve-x runtime now uses phase cues and semantic focus while remapping only visual progress to hold-play-hold. Body and URL progress remain semantic; no-attention stories retain the original motion path.",
+      "status": "complete"
     },
     {
       "id": "s20-wide-solve-x-gate",
