@@ -6,7 +6,10 @@ import {
 } from "../../animation/linear-solve-adapter.ts";
 import type { KpSemanticAssetObject } from "../../semantic/asset.ts";
 import { createKpSolveXSelectorAnnotatedLatex } from "../../rendering/solve-x-selector-annotated-latex.ts";
-import { createKpCompiledLessonArtifact } from "../document/public-api.ts";
+import {
+  createKpCompiledLessonArtifact,
+  type KpReaderEquationPresentationCapability
+} from "../document/public-api.ts";
 import {
   emitKpReaderHydrationManifest,
   serializeKpReaderHydrationManifest
@@ -100,6 +103,7 @@ function compileKpXPlusThreeLessonVariant(markdown: string, input: {
     tocHtml: prose.tocHtml,
     articleHtml: prose.articleHtml,
     hydrationJson: serializeKpReaderHydrationManifest(hydration),
+    equationPresentation: requireEquationPresentation(hydration.blocks[0]),
     annotateState: (state) => createKpSolveXSelectorAnnotatedLatex({
       objectId: state.id,
       selectorIds: state.selectors.map((selector) => selector.id)
@@ -113,6 +117,17 @@ function compileKpXPlusThreeLessonVariant(markdown: string, input: {
     tocHtml: prose.tocHtml,
     hydration
   });
+}
+
+function requireEquationPresentation(
+  block: {
+    readonly equationPresentation?: KpReaderEquationPresentationCapability | undefined;
+  } | undefined
+) {
+  if (block?.equationPresentation === undefined) {
+    throw new Error("linear equation presentation capability is missing");
+  }
+  return block.equationPresentation;
 }
 
 function equationObjectSequence(

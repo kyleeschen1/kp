@@ -1,7 +1,9 @@
 import type {
+  KpReaderEquationPresentationCapability,
   KpLessonAttentionPlan,
   KpReaderArtifactRef
 } from "../document/public-api.ts";
+import { kpReaderEquationPresentationCapability } from "../document/public-api.ts";
 import type { KpResolvedLessonReferences } from "./reference-resolver.ts";
 import type { KpStaticMathBlock } from "./static-math-compiler.ts";
 
@@ -21,6 +23,7 @@ export interface KpReaderHydrationBlock {
   readonly checkpoints: readonly KpReaderHydrationCheckpoint[];
   readonly focusObjectRefs: readonly string[];
   readonly attention?: KpLessonAttentionPlan | undefined;
+  readonly equationPresentation?: KpReaderEquationPresentationCapability | undefined;
 }
 
 export interface KpReaderHydrationCheckpoint {
@@ -62,6 +65,12 @@ export function emitKpReaderHydrationManifest(
       presentation: block.presentation,
       checkpoints,
       focusObjectRefs: [...asset.objectRefs],
+      equationPresentation: asset.rendererId === "renderer.equation-dom"
+        ? {
+            defaultProfileId: kpReaderEquationPresentationCapability.defaultProfileId,
+            profileIds: [...kpReaderEquationPresentationCapability.profileIds]
+          }
+        : undefined,
       attention: block.attention === undefined ? undefined : {
         kind: block.attention.kind,
         phases: block.attention.phases.map((phase) => ({

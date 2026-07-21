@@ -5,6 +5,7 @@ import {
   renderSelectorAnnotatedLatexToHtml
 } from "../../rendering/katex-adapter.ts";
 import type { KpSelectorAnnotatedLatex } from "../../rendering/selector-annotated-latex.ts";
+import type { KpReaderEquationPresentationCapability } from "../document/public-api.ts";
 
 export interface KpEquationExemplarPageInput {
   readonly animation: KpAnimationAsset;
@@ -17,6 +18,7 @@ export interface KpEquationExemplarPageInput {
   readonly tocHtml: string;
   readonly articleHtml: string;
   readonly hydrationJson: string;
+  readonly equationPresentation: KpReaderEquationPresentationCapability;
   readonly annotateState: (
     state: KpSemanticAssetObject
   ) => KpSelectorAnnotatedLatex | undefined;
@@ -35,7 +37,7 @@ export function compileKpEquationExemplarPage(
     `<meta name="description" content="${attribute(input.description)}">`,
     `<link rel="stylesheet" href="/src/reader/app/exemplar.css">`,
     "</head>",
-    `<body data-kp-reader="semantic-document" data-kp-reader-document-id="${attribute(input.documentId)}" data-kp-reader-document-version="${attribute(input.documentVersion)}" data-kp-reader-lesson-variant="${attribute(input.lessonVariant)}">`,
+    `<body data-kp-reader="semantic-document" data-kp-reader-document-id="${attribute(input.documentId)}" data-kp-reader-document-version="${attribute(input.documentVersion)}" data-kp-reader-lesson-variant="${attribute(input.lessonVariant)}" data-kp-reader-equation-profile-default="${attribute(input.equationPresentation.defaultProfileId)}" data-kp-reader-equation-profiles="${attribute(input.equationPresentation.profileIds.join(","))}">`,
     `<header class="kp-reader-masthead">`,
     `<a class="kp-reader-wordmark" href="/">Kinetic Press</a>`,
     `<span class="kp-reader-tagline">See concepts move</span>`,

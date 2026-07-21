@@ -3,13 +3,15 @@ import test from "node:test";
 
 import {
   defineKpReaderEquationPresentationAxes,
+  defineKpReaderEquationPresentationCapability,
   kpReaderDefaultEquationPresentationProfileId,
   kpReaderEquationDerivationModes,
   kpReaderEquationIdentityModes,
   kpReaderEquationPresentationProfiles,
   resolveKpReaderEquationPresentationProfile,
   type KpReaderEquationPresentationAxes
-} from "../src/reader/runtime/equation-presentation-mode.ts";
+} from "../src/reader/document/public-api.ts";
+import { selectKpReaderEquationPresentation } from "../src/reader/runtime/public-api.ts";
 
 test("derivation and identity presentation axes remain independent", () => {
   const combinations = kpReaderEquationDerivationModes.flatMap((derivation) =>
@@ -59,6 +61,37 @@ test("unknown profile ids fail instead of silently changing pedagogy", () => {
     () => resolveKpReaderEquationPresentationProfile("magical"),
     /Unknown reader equation presentation profile magical/
   );
+});
+
+test("URL and provider selection are bounded by the compiled capability", () => {
+  const capability = defineKpReaderEquationPresentationCapability({
+    defaultProfileId: "standard",
+    profileIds: ["explain", "standard"]
+  });
+  assert.deepEqual(selectKpReaderEquationPresentation({ capability }), {
+    profile: kpReaderEquationPresentationProfiles.standard,
+    source: "default"
+  });
+  assert.deepEqual(selectKpReaderEquationPresentation({
+    capability,
+    requestedProfileId: "explain",
+    source: "url"
+  }), {
+    profile: kpReaderEquationPresentationProfiles.explain,
+    source: "url"
+  });
+  assert.throws(() => selectKpReaderEquationPresentation({
+    capability,
+    requestedProfileId: "fluent",
+    source: "provider"
+  }), /presentation profile fluent is unavailable/);
+});
+
+test("compiled capabilities require an available default", () => {
+  assert.throws(() => defineKpReaderEquationPresentationCapability({
+    defaultProfileId: "standard",
+    profileIds: ["explain"]
+  }), /default profile standard is not available/);
 });
 
 test("presentation axes reject provider-invented modes", () => {

@@ -150,6 +150,34 @@
       "scope": "s10 session and codec API types",
       "checkedAt": "2026-07-21T23:46:54.164Z",
       "notes": "All TypeScript projects accept the required resolved profile id on reader snapshots and kpProfile codec state."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test focused presentation compiler and hydration suites",
+      "status": "passed",
+      "scope": "s11 compiler and provider profile boundary",
+      "checkedAt": "2026-07-21T23:54:44.250Z",
+      "notes": "Thirteen tests pass for inferred profiles, compiled capability metadata, hydration serialization, both equation compilers, unavailable-provider rejection, and required-default validation."
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader-presentation-profile.browser.spec.ts --workers=1",
+      "status": "passed",
+      "scope": "s11 live URL profile projection",
+      "checkedAt": "2026-07-21T23:54:45.442Z",
+      "notes": "Explain projects balanced-operation plus held identity and survives share-link generation; an omitted profile uses the compiler-declared Standard default."
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s11 reader dependency direction",
+      "checkedAt": "2026-07-21T23:54:46.545Z",
+      "notes": "The shared selection vocabulary now lives in the document contract; compiler and runtime consume it through public entry points and both architecture gates pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s11 compiler runtime and browser types",
+      "checkedAt": "2026-07-21T23:54:47.661Z",
+      "notes": "All application, node, browser-test, and domain TypeScript projects pass after the contract relocation and live selection thread."
     }
   ]
 }

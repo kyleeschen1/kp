@@ -18,6 +18,8 @@ test("fractional lesson compiles into the shared searchable equation card", () =
   assert.equal(artifact.document.id, "lesson.solve-x.fractional-linear");
   assert.match(artifact.html, /^<!doctype html>/);
   assert.match(artifact.html, /data-kp-reader-lesson-variant="fractional-linear"/);
+  assert.match(artifact.html, /data-kp-reader-equation-profile-default="standard"/);
+  assert.match(artifact.html, /data-kp-reader-equation-profiles="explain,standard,fluent"/);
   assert.match(artifact.html, /data-kp-reader-exemplar-template/);
   assert.match(artifact.html, /The fraction is not a detour/);
   assert.match(artifact.html, /<math xmlns="http:\/\/www\.w3\.org\/1998\/Math\/MathML"/);
@@ -32,6 +34,10 @@ test("fractional lesson compiles into the shared searchable equation card", () =
     artifact.hydration.blocks[0]?.asset.id,
     "animation.fractional-linear.solve-x-over-2"
   );
+  assert.deepEqual(artifact.hydration.blocks[0]?.equationPresentation, {
+    defaultProfileId: "standard",
+    profileIds: ["explain", "standard", "fluent"]
+  });
 });
 
 test("shared page extraction preserves the canonical solve-x compiler", async () => {

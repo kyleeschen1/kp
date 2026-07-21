@@ -3,7 +3,7 @@ import {
   type KpReaderSessionSnapshot
 } from "./session.ts";
 import { parseKpReaderMotionPreference } from "./motion-policy.ts";
-import { resolveKpReaderEquationPresentationProfile } from "./equation-presentation-mode.ts";
+import { resolveKpReaderEquationPresentationProfile } from "../document/public-api.ts";
 
 const params = {
   lesson: "kpLesson",

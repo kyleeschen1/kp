@@ -35,6 +35,10 @@ test("versioned hydration manifest contains behavior and attention projection bu
     "static.story.solve-x.checkpoint.beat.solve");
   assert.equal(manifest.blocks[0]?.attention?.kind, "phased-attention-v1");
   assert.equal(manifest.blocks[0]?.attention?.phases[1]?.cue, "Watch the equation change.");
+  assert.deepEqual(manifest.blocks[0]?.equationPresentation, {
+    defaultProfileId: "standard",
+    profileIds: ["explain", "standard", "fluent"]
+  });
   const serialized = serializeKpReaderHydrationManifest(manifest);
   assert.equal(serialized.includes("Start with the equation"), false);
   assert.equal(serialized.includes("<span"), false);

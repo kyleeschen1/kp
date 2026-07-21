@@ -34,6 +34,11 @@ export interface KpReaderEquationPresentationProfile
   readonly label: "Explain" | "Standard" | "Fluent";
 }
 
+export interface KpReaderEquationPresentationCapability {
+  readonly defaultProfileId: KpReaderEquationPresentationProfileId;
+  readonly profileIds: readonly KpReaderEquationPresentationProfileId[];
+}
+
 export const kpReaderDefaultEquationPresentationProfileId = "standard" as const;
 
 export const kpReaderEquationPresentationProfiles = Object.freeze({
@@ -54,6 +59,12 @@ export const kpReaderEquationPresentationProfiles = Object.freeze({
   KpReaderEquationPresentationProfile
 >);
 
+export const kpReaderEquationPresentationCapability =
+  defineKpReaderEquationPresentationCapability({
+    defaultProfileId: kpReaderDefaultEquationPresentationProfileId,
+    profileIds: kpReaderEquationPresentationProfileIds
+  });
+
 export function resolveKpReaderEquationPresentationProfile(
   id: string | null | undefined
 ): KpReaderEquationPresentationProfile {
@@ -72,8 +83,8 @@ export function resolveKpReaderEquationPresentationProfile(
 
 /**
  * Presentation axes may project a certified trace, but never author algebra,
- * correspondence, geometry, or timing. Keeping this runtime choice separate
- * from asset recipe metadata prevents a URL or provider from changing truth.
+ * correspondence, geometry, or timing. The shared contract lets compilation
+ * advertise choices without granting runtime selectors semantic authority.
  */
 export function defineKpReaderEquationPresentationAxes<
   const TAxes extends KpReaderEquationPresentationAxes
@@ -81,6 +92,26 @@ export function defineKpReaderEquationPresentationAxes<
   assertMember("derivation", axes.derivation, kpReaderEquationDerivationModes);
   assertMember("identity", axes.identity, kpReaderEquationIdentityModes);
   return Object.freeze({ ...axes });
+}
+
+export function defineKpReaderEquationPresentationCapability<
+  const TCapability extends KpReaderEquationPresentationCapability
+>(capability: TCapability): Readonly<TCapability> {
+  const profileIds = [...new Set(capability.profileIds.map((id) =>
+    resolveKpReaderEquationPresentationProfile(id).id
+  ))];
+  if (profileIds.length === 0) {
+    throw new Error("reader equation presentation capability requires a profile");
+  }
+  if (!profileIds.includes(capability.defaultProfileId)) {
+    throw new Error(
+      `reader equation default profile ${capability.defaultProfileId} is not available`
+    );
+  }
+  return Object.freeze({
+    ...capability,
+    profileIds: Object.freeze(profileIds)
+  });
 }
 
 function profile(

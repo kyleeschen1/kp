@@ -6,7 +6,7 @@ import type { KpReaderMotionPreference } from "./motion-policy.ts";
 import {
   resolveKpReaderEquationPresentationProfile,
   type KpReaderEquationPresentationProfileId
-} from "./equation-presentation-mode.ts";
+} from "../document/public-api.ts";
 
 export interface KpReaderLocation {
   readonly checkpointId?: string | undefined;

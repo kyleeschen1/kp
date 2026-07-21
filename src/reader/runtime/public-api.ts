@@ -65,15 +65,23 @@ export {
 } from "./responsive-projection.ts";
 export {
   defineKpReaderEquationPresentationAxes,
+  defineKpReaderEquationPresentationCapability,
   kpReaderDefaultEquationPresentationProfileId,
   kpReaderEquationDerivationModes,
   kpReaderEquationIdentityModes,
+  kpReaderEquationPresentationCapability,
   kpReaderEquationPresentationProfileIds,
   kpReaderEquationPresentationProfiles,
   resolveKpReaderEquationPresentationProfile,
   type KpReaderEquationDerivationMode,
   type KpReaderEquationIdentityMode,
   type KpReaderEquationPresentationAxes,
+  type KpReaderEquationPresentationCapability,
   type KpReaderEquationPresentationProfile,
   type KpReaderEquationPresentationProfileId
-} from "./equation-presentation-mode.ts";
+} from "../document/public-api.ts";
+export {
+  selectKpReaderEquationPresentation,
+  type KpReaderEquationPresentationSelection,
+  type KpReaderEquationPresentationSelectionSource
+} from "./equation-presentation-selection.ts";

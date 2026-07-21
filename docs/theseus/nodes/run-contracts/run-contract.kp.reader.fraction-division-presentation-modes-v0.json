@@ -113,7 +113,8 @@
     {
       "id": "s11-compiler-selection",
       "title": "Thread profile selection through compiler and reader",
-      "status": "planned"
+      "summary": "Moved the profile vocabulary to the shared document contract, emitted a compiler-owned capability into hydration and page data, bounded URL/provider selection to named available profiles, projected the result in the live reader, and preserved it in share links.",
+      "status": "complete"
     },
     {
       "id": "s12-identity-witness",

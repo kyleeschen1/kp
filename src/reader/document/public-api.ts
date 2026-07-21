@@ -38,3 +38,20 @@ export {
   kpLesson,
   type KpLessonInlineInput
 } from "./authoring.ts";
+export {
+  defineKpReaderEquationPresentationAxes,
+  defineKpReaderEquationPresentationCapability,
+  kpReaderDefaultEquationPresentationProfileId,
+  kpReaderEquationDerivationModes,
+  kpReaderEquationIdentityModes,
+  kpReaderEquationPresentationCapability,
+  kpReaderEquationPresentationProfileIds,
+  kpReaderEquationPresentationProfiles,
+  resolveKpReaderEquationPresentationProfile,
+  type KpReaderEquationDerivationMode,
+  type KpReaderEquationIdentityMode,
+  type KpReaderEquationPresentationAxes,
+  type KpReaderEquationPresentationCapability,
+  type KpReaderEquationPresentationProfile,
+  type KpReaderEquationPresentationProfileId
+} from "./equation-presentation.ts";

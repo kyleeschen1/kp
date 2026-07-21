@@ -40,12 +40,15 @@ import {
   createKpReaderSemanticFocusService,
   createKpReaderSessionSnapshot,
   decodeKpReaderSessionUrl,
+  defineKpReaderEquationPresentationCapability,
   encodeKpReaderSessionUrl,
   projectKpReaderMotion,
   parseKpReaderMotionPreference,
   projectKpReaderAttention,
   resolveKpReaderResponsiveProjection,
+  resolveKpReaderEquationPresentationProfile,
   resolveKpReaderMotionPolicy,
+  selectKpReaderEquationPresentation,
   sampleKpReaderAnimationFrame,
   type KpReaderClockSample,
   type KpReaderContinuousScrollClock,
@@ -77,6 +80,26 @@ interface LayoutState {
 const documentId = requiredData(document.body, "kpReaderDocumentId");
 const documentVersion = requiredData(document.body, "kpReaderDocumentVersion");
 const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
+const compiledEquationPresentation = defineKpReaderEquationPresentationCapability({
+  defaultProfileId: resolveKpReaderEquationPresentationProfile(
+    requiredData(document.body, "kpReaderEquationProfileDefault")
+  ).id,
+  profileIds: requiredData(document.body, "kpReaderEquationProfiles")
+    .split(",")
+    .map((id) => resolveKpReaderEquationPresentationProfile(id).id)
+});
+const requestedEquationProfileId = new URL(window.location.href).searchParams.get(
+  "kpProfile"
+);
+const equationPresentationSelection = selectKpReaderEquationPresentation({
+  capability: compiledEquationPresentation,
+  requestedProfileId: requestedEquationProfileId,
+  source: "url"
+});
+const equationPresentationProfile = equationPresentationSelection.profile;
+document.body.dataset["kpReaderEquationProfile"] = equationPresentationProfile.id;
+document.body.dataset["kpReaderEquationProfileSource"] =
+  equationPresentationSelection.source;
 // The semantic URL is the scroll authority. Browser history restoration can
 // otherwise race a requested frame when moving between two lesson URLs.
 window.history.scrollRestoration = "manual";
@@ -105,6 +128,9 @@ stage.dataset["kpReaderEquationZeroWitnessRecipe"] = presentationProfile.zeroWit
 stage.dataset["kpReaderEquationSuccessorRecipe"] = presentationProfile.successor;
 stage.dataset["kpReaderEquationDepthRecipe"] = presentationProfile.depth;
 stage.dataset["kpReaderEquationContinuantRecipe"] = presentationProfile.continuants;
+stage.dataset["kpReaderEquationProfile"] = equationPresentationProfile.id;
+stage.dataset["kpReaderEquationDerivationMode"] = equationPresentationProfile.derivation;
+stage.dataset["kpReaderEquationIdentityMode"] = equationPresentationProfile.identity;
 const viewport = requireElement<HTMLElement>("[data-kp-reader-equation-viewport]");
 const materialFitSurface = requireElement<HTMLElement>(
   "[data-kp-reader-material-fit-surface]"
@@ -956,7 +982,8 @@ function readerHref(sample: KpReaderClockSample): string {
     progressPermille: sample.progressPermille,
     projectionId: "equation.symbolic",
     focusRefs: focus.getSnapshot().objectRefs,
-    motionPreference
+    motionPreference,
+    equationPresentationProfileId: equationPresentationProfile.id
   }));
 }
 
