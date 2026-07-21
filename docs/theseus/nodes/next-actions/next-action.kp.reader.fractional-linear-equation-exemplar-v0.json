@@ -153,6 +153,19 @@
       "status": "passed",
       "scope": "s18 shared reader card",
       "checkedAt": "2026-07-21T22:26:22.527Z"
+    },
+    {
+      "command": "focused editor library and fractional route tests; direct Vite build",
+      "status": "passed",
+      "scope": "s19 route and discovery",
+      "checkedAt": "2026-07-21T22:30:22.451Z"
+    },
+    {
+      "command": "Playwright fractional routing browser gate",
+      "status": "passed",
+      "scope": "s19 route and discovery",
+      "checkedAt": "2026-07-21T22:30:23.619Z",
+      "notes": "Gate includes zero page errors and measurable KaTeX fraction and delimiter anchors."
     }
   ]
 }

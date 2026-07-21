@@ -6,6 +6,7 @@ import { resolve } from "node:path";
 import { defineConfig } from "vite";
 
 import {
+  compileKpFractionalLinearEquationLesson,
   compileKpXPlusThreeLesson,
   compileKpXPlusThreeTeacherZeroLesson
 } from "./src/reader/compiler/public-api.ts";
@@ -17,12 +18,20 @@ const solveXTeacherZeroRoutePath = resolve(
   projectRoot,
   "reader/solve-x/teacher-zero/index.html"
 );
+const fractionalLinearRoutePath = resolve(
+  projectRoot,
+  "reader/solve-fractional-linear/index.html"
+);
 const solveXMarkdown = readFileSync(
   resolve(projectRoot, "content/lessons/solve-x.md"),
   "utf8"
 );
 const solveXTeacherZeroMarkdown = readFileSync(
   resolve(projectRoot, "content/lessons/solve-x-teacher-zero.md"),
+  "utf8"
+);
+const fractionalLinearMarkdown = readFileSync(
+  resolve(projectRoot, "content/lessons/solve-fractional-linear.md"),
   "utf8"
 );
 const reviewBuildIdentity = readReviewBuildIdentity();
@@ -44,6 +53,11 @@ export default defineConfig({
             solveXTeacherZeroMarkdown
           ).html;
         }
+        if (context.filename === fractionalLinearRoutePath) {
+          return compileKpFractionalLinearEquationLesson(
+            fractionalLinearMarkdown
+          ).html;
+        }
         return html;
       }
     }
@@ -53,7 +67,8 @@ export default defineConfig({
       input: {
         main: resolve(projectRoot, "index.html"),
         "reader-solve-x": solveXRoutePath,
-        "reader-solve-x-teacher-zero": solveXTeacherZeroRoutePath
+        "reader-solve-x-teacher-zero": solveXTeacherZeroRoutePath,
+        "reader-solve-fractional-linear": fractionalLinearRoutePath
       }
     }
   },

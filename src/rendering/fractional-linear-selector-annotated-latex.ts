@@ -89,8 +89,8 @@ export function bindKpFractionalLinearStructuralAnchors(input: {
   }
   const leftParenId = annotated.structuralSelectorIds.find((id) => id.endsWith(".lhs.left-paren"));
   const rightParenId = annotated.structuralSelectorIds.find((id) => id.endsWith(".lhs.right-paren"));
-  const leftParen = input.root.querySelector<HTMLElement>(".mopen");
-  const rightParen = input.root.querySelector<HTMLElement>(".mclose");
+  const leftParen = input.root.querySelector<HTMLElement>(".mopen.delimcenter");
+  const rightParen = input.root.querySelector<HTMLElement>(".mclose.delimcenter");
   if (leftParenId !== undefined && leftParen !== null) bindAnchor(leftParen, leftParenId);
   if (rightParenId !== undefined && rightParen !== null) bindAnchor(rightParen, rightParenId);
 }

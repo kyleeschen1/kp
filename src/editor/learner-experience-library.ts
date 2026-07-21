@@ -12,6 +12,16 @@ export interface KpLearnerExperienceDescriptor {
 
 const learnerExperiences = [
   {
+    id: "solve-fractional-linear-scroll-lesson",
+    kind: "scroll-lesson",
+    title: "Solve a fractional equation",
+    summary:
+      "Watch subtraction, cancellation, and multiplication carry x through a fraction to its solution.",
+    href: "/reader/solve-fractional-linear/",
+    actionLabel: "Review fraction animation",
+    status: "prototype"
+  },
+  {
     id: "solve-x-scroll-lesson",
     kind: "scroll-lesson",
     title: "Solve for x",

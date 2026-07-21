@@ -148,7 +148,8 @@
     {
       "id": "s19-editor-route",
       "title": "Add semantic editor discovery and routing",
-      "status": "planned"
+      "summary": "The Semantic Editor now leads with a review card for /reader/solve-fractional-linear/. The compiled route hydrates all six transitions and binds measurable KaTeX fraction and delimiter geometry without browser errors.",
+      "status": "complete"
     },
     {
       "id": "s20-narrow-presentation",
