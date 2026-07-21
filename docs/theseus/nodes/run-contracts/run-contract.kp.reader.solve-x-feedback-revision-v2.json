@@ -84,8 +84,8 @@
     {
       "id": "s07-review-ui-visual-gate",
       "title": "Review UI visual gate",
-      "summary": "Verify review-panel and masthead presentation across desktop and phone before motion work.",
-      "status": "ready"
+      "summary": "Passed the first exemplar checkpoint. Live desktop and phone captures show underlying annotated content through 86% review chrome, opaque input text, unchanged panel and card geometry, and restrained masthead elevation; five integrated browser tests pass.",
+      "status": "complete"
     },
     {
       "id": "s08-collision-invariant",
