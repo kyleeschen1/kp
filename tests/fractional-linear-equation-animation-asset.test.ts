@@ -57,3 +57,13 @@ test("multiplication enters as one balanced operation on both sides", () => {
     kind: "balanced-introduction"
   });
 });
+
+test("denominator removal has an explicit multiplicative cancellation kind", () => {
+  const bindings = createKpEquationLinearRearrangementBindings(
+    createFractionalLinearEquationAnimationAsset()
+  );
+  assert.deepEqual(bindings[4], {
+    transformationId: "transform.fractional-linear.cancel-denominator",
+    kind: "cancel-multiplicative-inverses"
+  });
+});

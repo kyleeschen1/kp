@@ -90,6 +90,19 @@
       "status": "passed",
       "scope": "s12 multiply both sides choreography",
       "checkedAt": "2026-07-21T22:08:26.424Z"
+    },
+    {
+      "command": "node test fractional animation asset",
+      "status": "passed",
+      "scope": "s13 denominator cancellation",
+      "checkedAt": "2026-07-21T22:11:58.532Z",
+      "notes": "Explicit multiplicative inverse cancellation dispatch passes focused tests."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s13 denominator cancellation",
+      "checkedAt": "2026-07-21T22:11:59.632Z"
     }
   ]
 }

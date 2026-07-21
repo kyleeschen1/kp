@@ -714,6 +714,7 @@ function motifIdsForKind(
   switch (kind) {
     case "balanced-introduction": return ["append-after-shift", "balanced-entry"];
     case "cancel-additive-inverses": return ["cancelation", "meet-collapse"];
+    case "cancel-multiplicative-inverses": return ["cancelation", "meet-collapse"];
     case "simplify-constant-difference": return ["merge-fan-in", "derive-result"];
   }
 }
@@ -726,6 +727,8 @@ function meaningfulMotionReason(
       return "Reserved-space entry communicates that the same inverse operation applies to both sides.";
     case "cancel-additive-inverses":
       return "Meet then collapse communicates additive inverse cancellation.";
+    case "cancel-multiplicative-inverses":
+      return "Meet then collapse communicates multiplicative inverse cancellation.";
     case "simplify-constant-difference":
       return "Token convergence communicates that the operands causally derive the result.";
   }

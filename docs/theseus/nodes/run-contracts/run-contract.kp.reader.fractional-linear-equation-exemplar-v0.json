@@ -112,7 +112,8 @@
     {
       "id": "s13-denominator-cancellation",
       "title": "Cancel denominator with continuous ownership",
-      "status": "planned"
+      "summary": "Denominator and matching multiplier now use explicit multiplicative-inverse cancellation while preserving continuous token ownership.",
+      "status": "complete"
     },
     {
       "id": "s14-product-coalescence",

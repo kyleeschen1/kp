@@ -24,6 +24,7 @@ import type {
 export type KpEquationLinearRearrangementKind =
   | "balanced-introduction"
   | "cancel-additive-inverses"
+  | "cancel-multiplicative-inverses"
   | "simplify-constant-difference";
 
 export function kpEquationLinearRearrangementKindForTransformType(
@@ -34,6 +35,7 @@ export function kpEquationLinearRearrangementKindForTransformType(
     case "multiplyBothSides":
       return "balanced-introduction";
     case "cancelAdditiveInverses": return "cancel-additive-inverses";
+    case "cancelMultiplicativeInverses": return "cancel-multiplicative-inverses";
     case "simplifyConstantDifference": return "simplify-constant-difference";
     default: return undefined;
   }
@@ -71,7 +73,7 @@ export function sampleKpEquationLinearRearrangementFrame(
   const counterOrbitReflowStart = zeroWitnessPresentationRecipe === "none"
     ? 0.78
     : 0.94;
-  const persistentReflowProgress = kind === "cancel-additive-inverses" &&
+  const persistentReflowProgress = isCancellationKind(kind) &&
       cancellationPresentationRecipe === "counter-orbit-v1"
     ? smooth(windowProgress(p, counterOrbitReflowStart, 0.99))
     : transitThenReflow
@@ -113,17 +115,17 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
     case "enter":
       return input.frame.kind === "balanced-introduction"
         ? sampleBalancedIntroduction(input)
-        : input.frame.kind === "cancel-additive-inverses"
+        : isCancellationKind(input.frame.kind)
           ? sampleExplicitCancellationTarget(input)
         : undefined;
     case "cancel":
-      return input.frame.kind === "cancel-additive-inverses"
+      return isCancellationKind(input.frame.kind)
         ? input.cancellationPresentationRecipe === "counter-orbit-v1"
           ? sampleCounterOrbitCancellation(input)
           : sampleCancellation(input)
         : undefined;
     case "merge":
-      return input.frame.kind === "cancel-additive-inverses"
+      return isCancellationKind(input.frame.kind)
         ? sampleExplicitCancellationTarget(input)
         : input.frame.kind === "simplify-constant-difference"
         ? input.successorPresentationRecipe === "convergence-v1"
@@ -133,6 +135,10 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
     default:
       return undefined;
   }
+}
+
+function isCancellationKind(kind: KpEquationLinearRearrangementKind): boolean {
+  return kind === "cancel-additive-inverses" || kind === "cancel-multiplicative-inverses";
 }
 
 function samplePersistentRelation(
