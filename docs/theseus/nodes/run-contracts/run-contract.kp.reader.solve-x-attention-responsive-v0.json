@@ -188,7 +188,8 @@
     {
       "id": "s23-phone-layout",
       "title": "Phone_layout",
-      "status": "planned"
+      "summary": "Phone solve-x now opens on a finite non-sticky equation workspace with one live cue, controls, and stable dimensions; the complete compact transcript follows below for normal scroll and search. Direct URLs render in place and the developer sheet remains below the stage.",
+      "status": "complete"
     },
     {
       "id": "s24-transcript-route-release-gate",

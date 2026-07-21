@@ -120,6 +120,44 @@ test("narrow focus stepper provides direct keyboard-native phase navigation", as
   await expect.poll(() => new URL(page.url()).searchParams.get("kpProgress")).toBe("980");
 });
 
+test("phone projection is one finite workspace followed by a searchable transcript", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route(500));
+  const evidence = await page.evaluate(() => {
+    const masthead = document.querySelector<HTMLElement>(".kp-reader-masthead")!;
+    const stage = document.querySelector<HTMLElement>("[data-kp-reader-equation-stage]")!;
+    const activeCue = document.querySelector<HTMLElement>("[data-kp-reader-attention-status]")!;
+    const transcript = document.querySelector<HTMLElement>(".kp-animation-beats")!;
+    const stageBounds = stage.getBoundingClientRect();
+    const transcriptBounds = transcript.getBoundingClientRect();
+    return {
+      stagePosition: getComputedStyle(stage.parentElement!).position,
+      stageTop: stageBounds.top,
+      stageBottom: stageBounds.bottom,
+      mastheadBottom: masthead.getBoundingClientRect().bottom,
+      cueVisible: activeCue.getBoundingClientRect().height > 0,
+      transcriptTop: transcriptBounds.top,
+      transcriptText: transcript.textContent,
+      documentOverflowPx: document.documentElement.scrollWidth - window.innerWidth,
+      nestedVerticalScrollers: [...document.querySelectorAll<HTMLElement>("body *")]
+        .filter((element) => {
+          const style = getComputedStyle(element);
+          return /(auto|scroll)/.test(style.overflowY) &&
+            element.scrollHeight > element.clientHeight + 1;
+        }).length
+    };
+  });
+  expect(evidence.stagePosition).toBe("static");
+  expect(evidence.stageTop).toBeGreaterThanOrEqual(evidence.mastheadBottom + 8);
+  expect(evidence.stageBottom).toBeLessThanOrEqual(844);
+  expect(evidence.cueVisible).toBe(true);
+  expect(evidence.transcriptTop).toBeGreaterThan(evidence.stageBottom);
+  expect(evidence.transcriptText).toContain("Start with the whole equation");
+  expect(evidence.transcriptText).toContain("Seven minus three is four");
+  expect(evidence.documentOverflowPx).toBeLessThanOrEqual(1);
+  expect(evidence.nestedVerticalScrollers).toBe(0);
+});
+
 async function attentionFrame(page: Page): Promise<unknown> {
   return page.locator("body").evaluate((body) => ({
     semantic: body.dataset["kpReaderProgress"],

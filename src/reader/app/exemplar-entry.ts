@@ -284,7 +284,12 @@ function onResize(): void {
   updateScrollGeometry();
   // A breakpoint changes the document's geometry. Re-anchor the semantic
   // moment so responsive projection cannot silently behave like navigation.
-  scrollToProgress(progressPermille);
+  if (isFocusStepperProjection()) {
+    setExplicitProgress(progressPermille, "controls", false);
+    scrollFocusWorkspaceIntoView();
+  } else {
+    scrollToProgress(progressPermille);
+  }
 }
 
 function applyResponsiveProjection(): void {
@@ -808,6 +813,14 @@ function onAttentionScrub(): void {
 }
 
 function setControlProgress(progressPermille: number): void {
+  setExplicitProgress(progressPermille, "controls", true);
+}
+
+function setExplicitProgress(
+  progressPermille: number,
+  source: "controls" | "url",
+  updateLocation: boolean
+): void {
   const previous = lastSample();
   const phase = attention?.phases.find((candidate, index, phases) =>
     progressPermille >= candidate.startProgressPermille &&
@@ -815,15 +828,15 @@ function setControlProgress(progressPermille: number): void {
       (index === phases.length - 1 && progressPermille === candidate.endProgressPermille))
   );
   controlSample = createKpReaderClockSample({
-    source: "controls",
+    source,
     progress: progressPermille / 1_000,
     previousProgress: previous.progress,
     sequence: previous.sequence + 1,
     checkpointId: phase?.checkpointId
   });
-  scrollToProgress(progressPermille);
+  if (!isFocusStepperProjection()) scrollToProgress(progressPermille);
   scheduler.render(controlSample);
-  settleLocation();
+  if (updateLocation) settleLocation();
 }
 
 function syncActiveToc(activeId: string): void {
@@ -968,7 +981,23 @@ function restoreUrlLocation(): void {
   }
   const progress = session.location.progressPermille;
   if (progress === undefined) return;
-  scrollToProgress(progress);
+  if (isFocusStepperProjection() && attention !== undefined) {
+    setExplicitProgress(progress, "url", false);
+    scrollFocusWorkspaceIntoView();
+  } else {
+    scrollToProgress(progress);
+  }
+}
+
+function isFocusStepperProjection(): boolean {
+  return document.body.dataset["kpReaderResponsiveProjection"] === "focus-stepper";
+}
+
+function scrollFocusWorkspaceIntoView(): void {
+  const masthead = requireElement<HTMLElement>(".kp-reader-masthead");
+  const top = window.scrollY + staticSurface.getBoundingClientRect().top -
+    masthead.getBoundingClientRect().height - 12;
+  window.scrollTo({ top: Math.max(0, top) });
 }
 
 function scrollToProgress(progressPermille: number): void {
