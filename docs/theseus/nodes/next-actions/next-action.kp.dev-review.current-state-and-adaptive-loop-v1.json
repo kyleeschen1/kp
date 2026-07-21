@@ -63,6 +63,12 @@
       "status": "passed",
       "scope": "s05 mixed-history projection and serialized current-round service",
       "checkedAt": "2026-07-21T15:02:11.053Z"
+    },
+    {
+      "command": "node test focused dev review query and round service; npm run typecheck",
+      "status": "passed",
+      "scope": "s06 bounded current-state queries, explicit history, unread cursors, pagination, and compact evidence",
+      "checkedAt": "2026-07-21T15:06:56.459Z"
     }
   ],
   "expectedLearning": [

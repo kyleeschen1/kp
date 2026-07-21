@@ -18,6 +18,11 @@ import type {
 } from "../protocols/dev-review-v1.ts";
 import { projectKpDevReviewV1EventsToSyntheticRounds } from "./dev-review-legacy-round-migration.ts";
 import { KpDevReviewEventStore } from "./dev-review-store.ts";
+import {
+  queryKpDevReviewInbox,
+  type KpDevReviewQueryInput,
+  type KpDevReviewQueryResult
+} from "./dev-review-query.ts";
 
 export interface KpDevReviewRoundInboxServiceOptions {
   readonly now?: () => Date;
@@ -43,6 +48,10 @@ export class KpDevReviewRoundInboxService {
 
   read(): KpDevReviewInboxV2 {
     return projectKpDevReviewRoundInbox(this.#store.readAll());
+  }
+
+  query(input: KpDevReviewQueryInput = {}): KpDevReviewQueryResult {
+    return queryKpDevReviewInbox(this.read(), input);
   }
 
   openRound(input: KpDevReviewOpenRoundInput): Promise<KpDevReviewRoundV2> {

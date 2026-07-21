@@ -87,7 +87,8 @@
     {
       "id": "s06-bounded-review-query",
       "title": "Define-bounded-current-state-queries",
-      "status": "planned"
+      "summary": "Bounded query defaults to the current round, makes history explicit, composes status, route, sequence, and round-scoped unread filters, paginates stably, and keeps full captures opt-in.",
+      "status": "complete"
     },
     {
       "id": "s07-review-index-checkpoint",
