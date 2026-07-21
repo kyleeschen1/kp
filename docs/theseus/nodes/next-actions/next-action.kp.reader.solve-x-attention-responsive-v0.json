@@ -60,6 +60,13 @@
       "scope": "s10 opt-in atomic material handoff",
       "checkedAt": "2026-07-21T19:48:09.660Z",
       "notes": "Across source, epsilon, interior, pre-target, and target samples, every persistent atomic frame has opacity sum one and each owner opacity is exactly zero or one. One-sided retirement/arrival is exact at endpoints; legacy crossfade remains default."
+    },
+    {
+      "command": "33-frame live handoff sampler, solve-x atomic Playwright gate, cross-surface parity, presentation policy, symbol-motion tests, and typecheck",
+      "status": "passed",
+      "scope": "s11 solve-x ownership repair",
+      "checkedAt": "2026-07-21T19:52:14.665Z",
+      "notes": "The former partial samples are now solid: p10 and p990 report material opacity one with no visible native anchors; p0/p1000 report native one and material zero. The recipe is selected by asset metadata, and unrelated equation assets remain crossfade-v1."
     }
   ]
 }

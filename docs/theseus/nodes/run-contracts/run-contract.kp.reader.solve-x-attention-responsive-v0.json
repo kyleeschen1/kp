@@ -116,7 +116,8 @@
     {
       "id": "s11-solve-x-ownership-repair",
       "title": "Solve-x_ownership_repair",
-      "status": "planned"
+      "summary": "Selected atomic-v1 in linear-solve asset metadata, inferred it through the typed presentation profile, and threaded it into reader symbol motion. Live solve-x owner/native opacity is now exactly zero or one at all sampled seams, while other assets keep crossfade-v1 and semantic/cross-surface parity remains intact.",
+      "status": "complete"
     },
     {
       "id": "s12-handoff-rewind-gate",

@@ -1,4 +1,5 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
+import type { KpEquationMaterialHandoffMode } from "./equation-material-owner.ts";
 
 export type KpEquationPresentationRecipe =
   | "semantic-material-v2"
@@ -31,6 +32,7 @@ export type KpEquationContinuantPresentationRecipe =
 
 export interface KpEquationPresentationProfile {
   readonly recipe: KpEquationPresentationRecipe;
+  readonly handoff: KpEquationMaterialHandoffMode;
   readonly cancellation: KpEquationCancellationPresentationRecipe;
   readonly zeroWitness: KpEquationZeroWitnessPresentationRecipe;
   readonly successor: KpEquationSuccessorPresentationRecipe;
@@ -45,6 +47,7 @@ export interface KpEquationPresentationPolicy extends KpEquationPresentationProf
 
 const defaultProfile: KpEquationPresentationProfile = {
   recipe: "semantic-material-v2",
+  handoff: "crossfade-v1",
   cancellation: "witnessed-annihilation-v1",
   zeroWitness: "embedded-v1",
   successor: "successor-synthesis-v1",
@@ -54,6 +57,7 @@ const defaultProfile: KpEquationPresentationProfile = {
 
 const continuityProfile: KpEquationPresentationProfile = {
   recipe: "continuity-v1",
+  handoff: "crossfade-v1",
   cancellation: "native-handoff-v1",
   zeroWitness: "none",
   successor: "native-handoff-v1",
@@ -73,6 +77,12 @@ export function kpEquationPresentationProfile(
   const baseline = recipe === "continuity-v1" ? continuityProfile : defaultProfile;
   return Object.freeze({
     recipe,
+    handoff: readRecipe(
+      animation,
+      "equationNativeHandoffRecipe",
+      ["crossfade-v1", "atomic-v1"] as const,
+      baseline.handoff
+    ),
     cancellation: readRecipe(
       animation,
       "equationCancellationPresentationRecipe",

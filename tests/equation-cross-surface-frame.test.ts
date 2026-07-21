@@ -5,6 +5,7 @@ import { createKpEquationCrossSurfaceFrame } from "../src/rendering/equation-cro
 
 const presentation = {
   recipe: "continuity-v1",
+  handoff: "crossfade-v1",
   cancellation: "native-handoff-v1",
   zeroWitness: "none",
   successor: "native-handoff-v1",

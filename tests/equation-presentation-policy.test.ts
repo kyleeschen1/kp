@@ -13,6 +13,7 @@ test("canonical linear solve retains semantics but uses the continuity presentat
   const policy = kpEquationPresentationPolicy(animation);
 
   assert.equal(policy.recipe, "continuity-v1");
+  assert.equal(policy.handoff, "atomic-v1");
   assert.equal(policy.cancellation, "counter-orbit-v1");
   assert.equal(policy.zeroWitness, "none");
   assert.equal(policy.successor, "counter-convergence-v1");
@@ -34,6 +35,7 @@ test("other equation assets retain the semantic material presentation", () => {
   );
 
   assert.equal(policy.recipe, "semantic-material-v2");
+  assert.equal(policy.handoff, "crossfade-v1");
   assert.equal(policy.cancellation, "witnessed-annihilation-v1");
   assert.equal(policy.zeroWitness, "embedded-v1");
   assert.equal(policy.successor, "successor-synthesis-v1");
@@ -59,6 +61,7 @@ test("presentation motifs can be selected independently without changing semanti
 
   assert.deepEqual(profile, {
     recipe: "continuity-v1",
+    handoff: "atomic-v1",
     cancellation: "counter-orbit-v1",
     zeroWitness: "independent-zero-v1",
     successor: "counter-convergence-v1",

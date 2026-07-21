@@ -14,7 +14,8 @@ import {
   type KpEquationVisualOwnerPose
 } from "../../rendering/equation-visual-frame.ts";
 import {
-  sampleKpEquationMaterialOwnerHandoff
+  sampleKpEquationMaterialOwnerHandoff,
+  type KpEquationMaterialHandoffMode
 } from "../../rendering/equation-material-owner.ts";
 import {
   sampleKpEquationLinearRearrangementOwners,
@@ -88,6 +89,7 @@ export function sampleKpReaderEquationSymbolMotion(input: {
     KpEquationDepthPresentationRecipe | undefined;
   readonly continuantPresentationRecipe?:
     KpEquationContinuantPresentationRecipe | undefined;
+  readonly nativeHandoffMode?: KpEquationMaterialHandoffMode | undefined;
   readonly witnessedAnnihilationBinding?: KpWitnessedAnnihilationBinding | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
   readonly progress: number;
@@ -142,7 +144,8 @@ export function sampleKpReaderEquationSymbolMotion(input: {
         progress
       }),
       input.layout,
-      operation
+      operation,
+      input.nativeHandoffMode
     );
   });
   if (ownersById.size !== owners.length) {
@@ -194,7 +197,8 @@ function sampleOwner(
   easedProgress: number,
   pathOffset: { readonly x: number; readonly y: number },
   layout: KpReaderEquationLayoutSnapshot | undefined,
-  operation: KpEquationLinearRearrangementOwnerFrame | undefined
+  operation: KpEquationLinearRearrangementOwnerFrame | undefined,
+  nativeHandoffMode: KpEquationMaterialHandoffMode | undefined
 ): KpReaderEquationSymbolOwnerPose {
   const source = aligned.sourceBounds;
   const target = aligned.targetBounds;
@@ -202,7 +206,8 @@ function sampleOwner(
     ownerId: owner.id,
     progress,
     sourcePresent: source !== undefined,
-    targetPresent: target !== undefined
+    targetPresent: target !== undefined,
+    ...(nativeHandoffMode === undefined ? {} : { handoffMode: nativeHandoffMode })
   });
   const ownerAnchorIds = new Set([
     ...owner.sourceAnchorIds,

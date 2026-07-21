@@ -109,6 +109,10 @@ async function captureReaderFrame(
     presentation.recipe
   );
   await expect(stage).toHaveAttribute(
+    "data-kp-reader-equation-handoff-recipe",
+    presentation.handoff
+  );
+  await expect(stage).toHaveAttribute(
     "data-kp-reader-equation-cancellation-recipe",
     presentation.cancellation
   );

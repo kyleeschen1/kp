@@ -83,6 +83,7 @@ document.body.dataset["kpReaderHydrated"] = "true";
 
 const stage = requireElement<HTMLElement>("[data-kp-reader-equation-stage]");
 stage.dataset["kpReaderEquationPresentationRecipe"] = presentationProfile.recipe;
+stage.dataset["kpReaderEquationHandoffRecipe"] = presentationProfile.handoff;
 stage.dataset["kpReaderEquationCancellationRecipe"] = presentationProfile.cancellation;
 stage.dataset["kpReaderEquationZeroWitnessRecipe"] = presentationProfile.zeroWitness;
 stage.dataset["kpReaderEquationSuccessorRecipe"] = presentationProfile.successor;
@@ -378,6 +379,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     zeroWitnessPresentationRecipe: presentationProfile.zeroWitness,
     successorPresentationRecipe: presentationProfile.successor,
     continuantPresentationRecipe: presentationProfile.continuants,
+    nativeHandoffMode: presentationProfile.handoff,
     depthPresentationRecipe:
       projection.mode === "continuous" ? presentationProfile.depth : "flat-v1",
     witnessedAnnihilationBinding: witnessedBindings.get(transitionId),

@@ -33,3 +33,19 @@ test("reader native endpoints close ownership and geometry without a visual seam
     expect(materialAuthority.every((opacity) => opacity === 0)).toBe(true);
   }
 });
+
+test("solve-x keeps native and moving owner opacity atomic between endpoints", async ({ page }) => {
+  for (const progress of [1, 10, 20, 323, 343, 657, 677, 990, 999]) {
+    await page.goto(route(progress));
+    const stage = page.locator("[data-kp-reader-equation-stage]");
+    await expect(stage).toHaveAttribute("data-kp-reader-equation-handoff-recipe", "atomic-v1");
+    const opacities = await page.locator(
+      '[data-kp-reader-transition-active="true"] [data-kp-reader-equation-anchor-id], ' +
+      "[data-kp-reader-equation-material-owner-id]"
+    ).evaluateAll((elements) => elements.map((element) =>
+      Number(getComputedStyle(element).opacity)
+    ));
+    expect(opacities.length).toBeGreaterThan(0);
+    expect(opacities.every((opacity) => opacity === 0 || opacity === 1)).toBe(true);
+  }
+});

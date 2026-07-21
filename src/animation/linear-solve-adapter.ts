@@ -197,6 +197,7 @@ function createLinearSolveAnimationFromSource(
       // Preserve the successful canonical motion while newer material motifs
       // remain available semantically for isolated refinement and promotion.
       equationMotionPresentationRecipe: "continuity-v1",
+      equationNativeHandoffRecipe: "atomic-v1",
       equationCancellationPresentationRecipe: "counter-orbit-v1",
       // The compact flagship path omits the optional +0 teaching beat. The
       // recipe remains available for explicit lesson variants.
