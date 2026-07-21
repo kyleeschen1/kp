@@ -138,8 +138,19 @@
       "status": "passed",
       "scope": "s19b durable submission counter",
       "checkedAt": "2026-07-21T00:09:01.706Z"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "s01 replacement run-contract schema and graph integrity",
+      "checkedAt": "2026-07-21T01:14:25.520Z",
+      "notes": "Validated typed run mode, 27-slice limit, broad gate, per-slice commits, preservation boundary, and human stop."
     }
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "Failed solve-x visual review is converted into an advance-approved 27-slice exemplar repair contract; implementation begins with per-note review capture."
+  },
   "expectedLearning": [
     "Approved revision 4 places this planned phase in now."
   ],

@@ -165,7 +165,8 @@
     {
       "id": "s20-human-exemplar-checkpoint",
       "title": "Human exemplar checkpoint",
-      "status": "planned"
+      "summary": "Checkpoint performed and failed visual approval; four durable notes plus diagnosis define a replacement exemplar-repair run. No post-checkpoint generalization was performed.",
+      "status": "complete"
     },
     {
       "id": "s21-recent-note-view",

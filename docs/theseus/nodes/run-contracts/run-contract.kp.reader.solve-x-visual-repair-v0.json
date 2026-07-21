@@ -1,0 +1,174 @@
+{
+  "id": "run-contract.kp.reader.solve-x-visual-repair-v0",
+  "kind": "run-contract",
+  "title": "Solve-x visual parity and review repair",
+  "status": "superseded",
+  "summary": "Superseded immediately by v1 because v0 omitted the typed run mode, slice limit, commit cadence, verification level, and stop conditions accepted by the CLI.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability.json",
+      "summary": "Approved generated-equation reliability target and preservation boundary."
+    }
+  ],
+  "verification": [
+    "npm test",
+    "npm run typecheck",
+    "npx playwright test focused solve-x reader, editor parity, and dev-review cohorts",
+    "npm run build",
+    "npm run check:dev-review-production",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Solve-x reader exemplar, shared typed presentation selection, equation DOM material motion, dev-review capture lifecycle, reader masthead and TOC, focused tests, durable visual checks, and one verified commit per slice.",
+    "Preserve semantic math, searchable prose, URL routing, scroll authority, rewind, static and no-JS output, KaTeX typography identity, and production exclusion of dev review tooling."
+  ],
+  "disallowedWork": [
+    "Do not generalize recipes to generated families, other subjects, editor families, graphs, code, flashcards, or providers before the final human checkpoint.",
+    "Do not use WebGL for equation glyph motion, change mathematical content, add public review infrastructure, upload logs, or convert review notes into Theseus work automatically."
+  ],
+  "goal": "Restore canonical motion clarity in the solve-x reader, repair per-note review capture, prove endpoint continuity, add coherent depth and navigation affordances, and stop for human approval before generalization.",
+  "target": "next-action.refill.plan-phase.plan-revision.kp.v4.generated-equation-reliability",
+  "slices": [
+    {
+      "id": "s01-failed-review-contract",
+      "title": "Failed review contract",
+      "status": "planned"
+    },
+    {
+      "id": "s02-per-note-capture-lifecycle",
+      "title": "Per-note capture lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s03-capture-lock-ui",
+      "title": "Capture lock and retake UI",
+      "status": "planned"
+    },
+    {
+      "id": "s04-review-browser-proof",
+      "title": "Review workflow browser proof",
+      "status": "planned"
+    },
+    {
+      "id": "s05-typed-presentation-profile",
+      "title": "Typed presentation profile",
+      "status": "planned"
+    },
+    {
+      "id": "s06-reader-profile-authority",
+      "title": "Reader profile authority",
+      "status": "planned"
+    },
+    {
+      "id": "s07-cross-surface-frame-contract",
+      "title": "Cross-surface frame contract",
+      "status": "planned"
+    },
+    {
+      "id": "s08-canonical-parity-browser-gate",
+      "title": "Canonical parity browser gate",
+      "status": "planned"
+    },
+    {
+      "id": "s09-native-endpoint-laws",
+      "title": "Native endpoint laws",
+      "status": "planned"
+    },
+    {
+      "id": "s10-alignment-path-repair",
+      "title": "Alignment path repair",
+      "status": "planned"
+    },
+    {
+      "id": "s11-native-handoff-continuity",
+      "title": "Native handoff continuity",
+      "status": "planned"
+    },
+    {
+      "id": "s12-phase-boundary-rewind",
+      "title": "Phase boundary and rewind continuity",
+      "status": "planned"
+    },
+    {
+      "id": "s13-equation-type-scale",
+      "title": "Equation typography scale",
+      "status": "planned"
+    },
+    {
+      "id": "s14-counter-orbit-recipe",
+      "title": "Counter-orbit cancellation recipe",
+      "status": "planned"
+    },
+    {
+      "id": "s15-independent-zero-witness",
+      "title": "Independent zero witness",
+      "status": "planned"
+    },
+    {
+      "id": "s16-cancellation-visual-gate",
+      "title": "Cancellation visual gate",
+      "status": "planned"
+    },
+    {
+      "id": "s17-successor-convergence-recipe",
+      "title": "Successor convergence recipe",
+      "status": "planned"
+    },
+    {
+      "id": "s18-catalyst-and-target-gating",
+      "title": "Catalyst and target gating",
+      "status": "planned"
+    },
+    {
+      "id": "s19-successor-visual-gate",
+      "title": "Successor visual gate",
+      "status": "planned"
+    },
+    {
+      "id": "s20-depth-envelope-contract",
+      "title": "Depth envelope contract",
+      "status": "planned"
+    },
+    {
+      "id": "s21-katex-depth-presentation",
+      "title": "KaTeX depth presentation",
+      "status": "planned"
+    },
+    {
+      "id": "s22-motion-accessibility-rewind",
+      "title": "Motion accessibility and rewind",
+      "status": "planned"
+    },
+    {
+      "id": "s23-sticky-reader-masthead",
+      "title": "Sticky reader masthead",
+      "status": "planned"
+    },
+    {
+      "id": "s24-active-toc-state",
+      "title": "Active table of contents state",
+      "status": "planned"
+    },
+    {
+      "id": "s25-responsive-integrated-gate",
+      "title": "Responsive integrated gate",
+      "status": "planned"
+    },
+    {
+      "id": "s26-production-release-gate",
+      "title": "Production and release gate",
+      "status": "planned"
+    },
+    {
+      "id": "s27-human-exemplar-checkpoint",
+      "title": "Human exemplar checkpoint",
+      "status": "planned"
+    }
+  ]
+}
