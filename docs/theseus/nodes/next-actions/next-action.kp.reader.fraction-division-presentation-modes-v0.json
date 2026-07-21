@@ -87,6 +87,27 @@
       "scope": "s06 impact classification",
       "checkedAt": "2026-07-21T23:38:06.648Z",
       "notes": "The repository classifies the changed visual-runtime gate as high risk and identifies type and focused visual checks for later broad release validation."
+    },
+    {
+      "command": "npm run test:browser:linear-equation-conformance",
+      "status": "passed",
+      "scope": "s07 canonical symbolic preservation",
+      "checkedAt": "2026-07-21T23:39:52.794Z",
+      "notes": "Three browser tests preserve named identities, native endpoints, deterministic direct seek and rewind, resize, and reduced-motion checkpoints."
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s07 canonical visual baseline",
+      "checkedAt": "2026-07-21T23:39:54.208Z",
+      "notes": "Captured 39 desktop and phone visual states without runtime failures after the fraction-only renderer specialization."
+    },
+    {
+      "command": "npm run visual:contact-sheet",
+      "status": "passed",
+      "scope": "s07 human-inspected preservation contact sheet",
+      "checkedAt": "2026-07-21T23:39:55.419Z",
+      "notes": "Six deterministic frames retain the approved prose-card, equation-card, KaTeX, salience, focus, and phone presentation; the corrected fractional midpoint retains its prior composition with aligned rule ink."
     }
   ]
 }

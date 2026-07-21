@@ -89,7 +89,8 @@
     {
       "id": "s07-preservation-boundary",
       "title": "Prove existing equation behavior is preserved",
-      "status": "planned"
+      "summary": "Proved the repair is fraction-rule-specific: canonical glyph contracts, 39 linear-equation baseline states, six contact-sheet frames, and the approved fractional composition remain intact.",
+      "status": "complete"
     },
     {
       "id": "s08-presentation-axes",
