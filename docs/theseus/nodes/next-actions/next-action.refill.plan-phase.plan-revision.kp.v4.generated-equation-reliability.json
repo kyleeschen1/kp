@@ -205,6 +205,12 @@
       "status": "passed",
       "scope": "s10 endpoint-zero reversible alignment path and sequence-wide fit",
       "checkedAt": "2026-07-21T01:55:04.644Z"
+    },
+    {
+      "command": "Native-handoff, alignment-path, and URL-restoration Playwright cohort plus TypeScript typecheck",
+      "status": "passed",
+      "scope": "s11 exact reader endpoint ownership, subpixel geometry, and URL residual closure",
+      "checkedAt": "2026-07-21T01:58:52.185Z"
     }
   ],
   "progress": {

@@ -107,7 +107,8 @@
     {
       "id": "s11-native-handoff-continuity",
       "title": "Native handoff continuity",
-      "status": "planned"
+      "summary": "Integrated native-endpoint law evidence into the reader, made progress 0/1000 exact despite sub-permille physical scroll residuals, and proved source/final native ink has exclusive authority, zero material visibility, and at most 0.5px planned geometry residual.",
+      "status": "complete"
     },
     {
       "id": "s12-phase-boundary-rewind",

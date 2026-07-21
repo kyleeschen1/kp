@@ -7,6 +7,7 @@ import {
 } from "../../animation/witnessed-annihilation.ts";
 import { createKpEquationFontReadiness } from "../../rendering/equation-font-readiness.ts";
 import { kpEquationPresentationProfile } from "../../rendering/equation-presentation-policy.ts";
+import { checkKpEquationNativeEndpointLaw } from "../../rendering/equation-native-endpoint-law.ts";
 import {
   applyKpReaderEquationResponsiveFit,
   compileKpReaderEquationMaterialPlan,
@@ -317,7 +318,13 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   });
   const visualSample = {
     ...sample,
-    progress: projection.progress,
+    // URL restoration can land within a sub-permille physical-scroll residual.
+    // Semantic endpoints remain exact geometry and ownership authorities.
+    progress: projection.progressPermille === 0
+      ? 0
+      : projection.progressPermille === 1_000
+        ? 1
+        : projection.progress,
     progressPermille: projection.progressPermille,
     checkpointId: projection.checkpointId
   };
@@ -349,6 +356,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   });
   const focusSnapshot = focus.getSnapshot();
   const focusedRefs = visualFocusRefs(focusSnapshot);
+  syncNativeEndpointEvidence(motion, context, phaseProgress);
 
   for (const candidate of layout.contexts.values()) {
     const active = candidate.id === transitionId;
@@ -448,6 +456,64 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     previousReviewFrameAtMs = atMs;
     previousReviewScrollY = window.scrollY;
   }
+}
+
+function syncNativeEndpointEvidence(
+  motion: KpReaderEquationSymbolMotionFrame,
+  context: TransitionContext,
+  phaseProgress: number
+): void {
+  const endpoint = phaseProgress === 0
+    ? "source" as const
+    : phaseProgress === 1
+      ? "target" as const
+      : undefined;
+  if (endpoint === undefined) {
+    delete stage.dataset["kpReaderNativeEndpoint"];
+    delete stage.dataset["kpReaderNativeEndpointPassed"];
+    delete stage.dataset["kpReaderNativeEndpointMaxResidual"];
+    delete stage.dataset["kpReaderNativeEndpointFailures"];
+    return;
+  }
+  const aligned = new Map(context.alignment.owners.map((owner) => [owner.ownerId, owner]));
+  const results = motion.owners.map((owner) => {
+    const endpoints = aligned.get(owner.ownerId);
+    const nativeBounds = endpoint === "source"
+      ? endpoints?.sourceBounds
+      : endpoints?.targetBounds;
+    return checkKpEquationNativeEndpointLaw({
+      endpoint,
+      nativePresent: nativeBounds !== undefined,
+      handoff: {
+        ownerId: owner.ownerId,
+        progress: phaseProgress,
+        materialOpacity: owner.materialOpacity,
+        sourceNativeOpacity: owner.sourceNativeOpacity,
+        targetNativeOpacity: owner.targetNativeOpacity,
+        nativeHandoff: owner.sourceNativeOpacity > 0
+          ? "source"
+          : owner.targetNativeOpacity > 0
+            ? "target"
+            : "material"
+      },
+      ...(nativeBounds === undefined
+        ? {}
+        : { nativeBounds, materialBounds: owner.currentBounds })
+    });
+  });
+  const residuals = results.flatMap((result) =>
+    result.maximumGeometryResidualPx === undefined
+      ? []
+      : [result.maximumGeometryResidualPx]
+  );
+  const failureCodes = results.flatMap((result) =>
+    result.failures.map((failure) => `${result.ownerId}:${failure.code}`)
+  );
+  stage.dataset["kpReaderNativeEndpoint"] = endpoint;
+  stage.dataset["kpReaderNativeEndpointPassed"] = String(failureCodes.length === 0);
+  stage.dataset["kpReaderNativeEndpointMaxResidual"] =
+    String(residuals.length === 0 ? 0 : Math.max(...residuals));
+  stage.dataset["kpReaderNativeEndpointFailures"] = failureCodes.join(" ");
 }
 
 function syncAnnihilationWitness(
