@@ -36,6 +36,7 @@ a { color: var(--kp-relation); text-underline-offset: .2em; }
   padding: .72rem max(20px, calc((100vw - 1180px) / 2));
   border-bottom: 1px solid color-mix(in srgb, var(--kp-ink) 14%, transparent);
   background: color-mix(in srgb, var(--kp-paper) 92%, transparent);
+  box-shadow: 0 1px 0 rgb(22 35 29 / 8%), 0 10px 30px rgb(22 35 29 / 6%);
   backdrop-filter: blur(12px);
 }
 .kp-reader-wordmark { color: var(--kp-ink); font-family: var(--kp-serif); font-size: 1.06rem; font-weight: 700; text-decoration: none; }

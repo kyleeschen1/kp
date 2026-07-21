@@ -78,8 +78,8 @@
     {
       "id": "s06-masthead-elevation",
       "title": "Masthead elevation",
-      "summary": "Add restrained contact and diffuse elevation to the sticky reader masthead.",
-      "status": "ready"
+      "summary": "Added a narrow 1px contact shadow plus a diffuse low-alpha 30px elevation field to the translucent sticky masthead. Focused browser tests prove the exact treatment, desktop and phone separation, global scrolling, non-overlap, and keyboard focus.",
+      "status": "complete"
     },
     {
       "id": "s07-review-ui-visual-gate",

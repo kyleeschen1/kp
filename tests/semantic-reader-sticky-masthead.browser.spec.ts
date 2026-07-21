@@ -14,6 +14,10 @@ test("masthead and equation remain non-overlapping sticky surfaces", async ({ pa
     const visual = page.locator(".kp-animation-static");
     await expect(masthead).toBeVisible();
     await expect(visual).toBeVisible();
+    await expect(masthead).toHaveCSS(
+      "box-shadow",
+      "rgba(22, 35, 29, 0.08) 0px 1px 0px 0px, rgba(22, 35, 29, 0.06) 0px 10px 30px 0px"
+    );
 
     await page.evaluate(() => window.scrollBy(0, 180));
     await page.evaluate(() => new Promise<void>((resolve) =>
