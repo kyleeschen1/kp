@@ -185,6 +185,19 @@
       "status": "passed",
       "scope": "s22 generated stress cohort",
       "checkedAt": "2026-07-21T22:38:47.371Z"
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation",
+      "status": "passed",
+      "scope": "s23 visual containment",
+      "checkedAt": "2026-07-21T22:43:57.181Z",
+      "notes": "31 real-browser samples passed ink bounds, no-wrap, stage containment, fraction-rule geometry, font continuity, and non-causal collision budgets; seven screenshots captured to ignored scratch output."
+    },
+    {
+      "command": "focused owner-motion tests; fractional browser gate; node typecheck",
+      "status": "passed",
+      "scope": "s23 visual containment",
+      "checkedAt": "2026-07-21T22:43:58.442Z"
     }
   ]
 }

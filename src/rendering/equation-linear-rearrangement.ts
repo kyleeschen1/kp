@@ -126,6 +126,10 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
           ? sampleCounterOrbitCancellation(input)
           : sampleCancellation(input)
         : undefined;
+    case "exit":
+      return isCancellationKind(input.frame.kind)
+        ? sampleStructuralRetirement(input)
+        : undefined;
     case "merge":
       return isCancellationKind(input.frame.kind)
         ? sampleExplicitCancellationTarget(input)
@@ -137,6 +141,18 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
     default:
       return undefined;
   }
+}
+
+function sampleStructuralRetirement(
+  input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
+): readonly KpEquationTokenMotionFrameToken[] {
+  const retirement = input.frame.collapseProgress;
+  return input.sourceTokens.map((token) => frameToken(token, "source", {
+    opacity: 1 - retirement,
+    x: 0,
+    y: 0,
+    scale: 1 - 0.18 * retirement
+  }));
 }
 
 function isCancellationKind(kind: KpEquationLinearRearrangementKind): boolean {

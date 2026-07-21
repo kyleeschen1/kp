@@ -172,7 +172,8 @@
     {
       "id": "s23-overflow-quality-gate",
       "title": "Enforce collision ink and containment budgets",
-      "status": "planned"
+      "summary": "A stable repo command now checks 31 browser frames and seven visual checkpoints. The gate caught an unsupported structural-retirement lifecycle, which now collapses with denominator cancellation; all wrapping, collision, ink, containment, fraction, and font budgets pass.",
+      "status": "complete"
     },
     {
       "id": "s24-release-gate",
