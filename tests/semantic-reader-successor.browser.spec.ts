@@ -1,17 +1,17 @@
 import { expect, test } from "@playwright/test";
 
-test("solve-x reserves continuant lanes before focal transit", async ({ page }) => {
+test("solve-x clears the focal lane before continuant reflow", async ({ page }) => {
   await page.goto(
     "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpProgress=833"
   );
   const stage = page.locator("[data-kp-reader-equation-stage]");
   await expect(stage).toHaveAttribute(
     "data-kp-reader-equation-continuant-recipe",
-    "reserve-then-transit-v1"
+    "transit-then-reflow-v1"
   );
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-reader-equation-persistent-reflow-progress"
-  ))).toBe(1);
+  ))).toBe(0);
   await expect.poll(async () => Number(await stage.getAttribute(
     "data-kp-reader-equation-focal-transit-progress"
   ))).toBeGreaterThan(0);

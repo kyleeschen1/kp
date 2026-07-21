@@ -319,6 +319,13 @@
       "scope": "s07 review UI visual gate across desktop and phone",
       "checkedAt": "2026-07-21T16:50:09.193Z",
       "notes": "Five browser tests passed; live captures confirm 86% panel alpha, opaque composer, unchanged geometry, and two-layer masthead elevation."
+    },
+    {
+      "command": "dense solve-x successor clearance browser gate and focused scheduling laws",
+      "status": "passed",
+      "scope": "s12 collision-free desktop and phone exemplar",
+      "checkedAt": "2026-07-21T17:06:41.821Z",
+      "notes": "The gate first rejected reserve-first ordering because equals overlapped seven; transit-then-reflow cleared focal ink before continuants moved and then passed dense 1px interpolation."
     }
   ],
   "progress": {

@@ -55,6 +55,35 @@ test("reserve-then-transit settles continuants before focal motion", () => {
   assert.ok(concurrent.focalTransitProgress > 0);
 });
 
+test("transit-then-reflow clears a blocked target lane before continuants move", () => {
+  const transit = sampleKpEquationLinearRearrangementFrame(
+    "simplify-constant-difference",
+    0.5,
+    undefined,
+    "transit-then-reflow-v1"
+  );
+  assert.equal(transit.persistentReflowProgress, 0);
+  assert.ok(transit.focalTransitProgress > 0);
+
+  const cleared = sampleKpEquationLinearRearrangementFrame(
+    "simplify-constant-difference",
+    0.82,
+    undefined,
+    "transit-then-reflow-v1"
+  );
+  assert.equal(cleared.focalTransitProgress, 1);
+  assert.equal(cleared.persistentReflowProgress, 0);
+
+  const reflowing = sampleKpEquationLinearRearrangementFrame(
+    "simplify-constant-difference",
+    0.9,
+    undefined,
+    "transit-then-reflow-v1"
+  );
+  assert.equal(reflowing.focalTransitProgress, 1);
+  assert.ok(reflowing.persistentReflowProgress > 0);
+});
+
 test("linear rearrangement compiles one causal operation subgraph per solve step", () => {
   assert.deepEqual(
     choreography.steps.map((step) => step.kind),

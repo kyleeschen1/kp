@@ -25,7 +25,8 @@ export type KpEquationDepthPresentationRecipe =
 
 export type KpEquationContinuantPresentationRecipe =
   | "concurrent-v1"
-  | "reserve-then-transit-v1";
+  | "reserve-then-transit-v1"
+  | "transit-then-reflow-v1";
 
 export interface KpEquationPresentationProfile {
   readonly recipe: KpEquationPresentationRecipe;
@@ -98,7 +99,7 @@ export function kpEquationPresentationProfile(
     continuants: readRecipe(
       animation,
       "equationContinuantPresentationRecipe",
-      ["concurrent-v1", "reserve-then-transit-v1"] as const,
+      ["concurrent-v1", "reserve-then-transit-v1", "transit-then-reflow-v1"] as const,
       baseline.continuants
     )
   });

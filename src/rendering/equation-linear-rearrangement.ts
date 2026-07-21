@@ -58,9 +58,13 @@ export function sampleKpEquationLinearRearrangementFrame(
   const reservationProgress = smooth(windowProgress(p, 0.1, 0.46));
   const reserveThenTransit = kind === "simplify-constant-difference" &&
     continuantPresentationRecipe === "reserve-then-transit-v1";
+  const transitThenReflow = kind === "simplify-constant-difference" &&
+    continuantPresentationRecipe === "transit-then-reflow-v1";
   const persistentReflowProgress = kind === "cancel-additive-inverses" &&
       cancellationPresentationRecipe === "counter-orbit-v1"
     ? smooth(windowProgress(p, 0.94, 0.99))
+    : transitThenReflow
+      ? smooth(windowProgress(p, 0.82, 0.94))
     : reserveThenTransit
       ? smooth(windowProgress(p, 0.08, 0.26))
       : reservationProgress;

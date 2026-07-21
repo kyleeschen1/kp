@@ -1,5 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 
+import { evaluateKpEquationMotionClearanceSequence } from
+  "../src/rendering/equation-motion-clearance.ts";
+
 const route = (progress: number) =>
   "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1" +
   `&kpProgress=${progress}`;
@@ -107,6 +110,45 @@ test("dense successor sampling remains continuous and exactly retraces", async (
     "data-kp-reader-playback-direction",
     "rewind"
   );
+});
+
+test("dense successor ink remains clear of protected continuants", async ({ page }) => {
+  for (const viewport of [
+    { width: 1280, height: 900 },
+    { width: 390, height: 844 }
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto(route(780));
+    const frames = [];
+    for (let progress = 780; progress <= 940; progress += 4) {
+      await seekByScroll(page, progress);
+      const evidence = await successorEvidence(page);
+      frames.push({
+        progress: progress / 1_000,
+        ink: (["seven", "minus", "three", "x", "equals"] as const).map((id) => ({
+          id,
+          ...evidence[id]
+        }))
+      });
+    }
+    const report = evaluateKpEquationMotionClearanceSequence({
+      frames,
+      requirements: [{
+        id: "solve-x.successor-protected-continuants",
+        movingIds: ["seven", "minus", "three"],
+        protectedIds: ["x", "equals"],
+        minClearancePx: 2
+      }],
+      maxSpatialStepPx: 1,
+      maxProgressStep: 0.004
+    });
+    expect(report.passed, JSON.stringify({
+      first: frames[0],
+      diagnostics: report.diagnostics.slice(0, 3)
+    })).toBe(true);
+    expect(report.minimumClearancePx).not.toBeNull();
+    expect(report.sampledFrameCount).toBeGreaterThanOrEqual(frames.length);
+  }
 });
 
 async function evidenceAt(page: Page, progress: number): Promise<SuccessorEvidence> {

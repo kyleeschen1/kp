@@ -114,8 +114,8 @@
     {
       "id": "s12-solve-x-collision-gate",
       "title": "Solve-x collision gate",
-      "summary": "Prove collision clearance in the exemplar at dense desktop and phone samples.",
-      "status": "ready"
+      "summary": "The dense gate exposed that moving x and equals first still placed equals through seven. Added transit-then-reflow: focal 7 minus 3 clears before x and equals move into the newly free target lane. Five desktop/phone successor browser tests, dense 1px interpolation, fourteen scheduling laws, and the full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s13-seek-rewind-clearance",

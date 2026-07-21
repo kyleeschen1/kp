@@ -138,7 +138,7 @@ export function createLinearSolveAnimationAsset(): KpAnimationAsset {
       equationZeroWitnessPresentationRecipe: "independent-zero-v1",
       equationSuccessorPresentationRecipe: "convergence-v1",
       equationDepthPresentationRecipe: "semantic-depth-v1",
-      equationContinuantPresentationRecipe: "reserve-then-transit-v1"
+      equationContinuantPresentationRecipe: "transit-then-reflow-v1"
     }
   });
 }
