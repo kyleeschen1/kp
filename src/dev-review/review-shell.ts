@@ -258,6 +258,21 @@ const shellStyles = `
   .close:hover { color: var(--ink); background: color-mix(in srgb, var(--line) 42%, transparent); }
   .content { padding: 1rem; }
   .intro { margin: 0 0 .75rem; color: var(--muted); font-size: .78rem; line-height: 1.5; }
+  .capture-row { display: flex; align-items: flex-start; justify-content: space-between; gap: .55rem; }
+  .retake {
+    flex: none;
+    padding: .25rem .45rem;
+    border: 1px solid color-mix(in srgb, var(--relation) 22%, var(--line));
+    border-radius: .45rem;
+    color: var(--relation);
+    background: transparent;
+    font-size: .62rem;
+    font-weight: 750;
+    cursor: pointer;
+  }
+  .retake:hover { background: color-mix(in srgb, var(--relation) 7%, transparent); }
+  .retake[hidden] { display: none; }
+  .retake:disabled { cursor: wait; opacity: .58; }
   .meta { display: flex; flex-wrap: wrap; gap: .34rem; margin: 0 0 .4rem; }
   .meta span {
     padding: .2rem .44rem;

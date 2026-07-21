@@ -24,6 +24,14 @@ export function mountKpDevReviewComposer(options: {
   const meta = ownerDocument.createElement("div");
   meta.className = "meta";
   meta.setAttribute("aria-label", "Captured reader state");
+  const captureRow = ownerDocument.createElement("div");
+  captureRow.className = "capture-row";
+  const retake = ownerDocument.createElement("button");
+  retake.className = "retake";
+  retake.type = "button";
+  retake.textContent = "Retake moment";
+  retake.hidden = true;
+  captureRow.append(meta, retake);
   const route = ownerDocument.createElement("p");
   route.className = "route";
   const form = ownerDocument.createElement("form");
@@ -48,7 +56,7 @@ export function mountKpDevReviewComposer(options: {
   save.disabled = true;
   footer.append(count, save);
   form.append(label, textarea, footer);
-  options.shell.content.append(intro, meta, route, form);
+  options.shell.content.append(intro, captureRow, route, form);
 
   let snapshot: KpDevReviewCaptureV1 | undefined;
   let capturePromise: Promise<KpDevReviewCaptureV1 | undefined> | undefined;
@@ -57,6 +65,8 @@ export function mountKpDevReviewComposer(options: {
 
   const renderCapturePrompt = (): void => {
     meta.replaceChildren(pill(ownerDocument, "Type to capture this moment"));
+    retake.hidden = true;
+    retake.disabled = false;
     route.textContent = "";
   };
   const lockCapture = (): Promise<KpDevReviewCaptureV1 | undefined> => {
@@ -64,16 +74,24 @@ export function mountKpDevReviewComposer(options: {
     if (capturePromise !== undefined) return capturePromise;
     const currentGeneration = generation;
     meta.replaceChildren(pill(ownerDocument, "Capturing state…"));
+    retake.hidden = true;
+    retake.disabled = true;
     route.textContent = "";
     const pending = options.capture().then((capture) => {
       if (generation !== currentGeneration) return undefined;
       snapshot = capture;
       renderCaptureMeta(meta, route, capture);
+      retake.textContent = "Retake moment";
+      retake.hidden = false;
+      retake.disabled = false;
       options.shell.status.value = "Moment captured for this note.";
       return capture;
     }).catch(() => {
       if (generation === currentGeneration) {
         meta.replaceChildren(pill(ownerDocument, "State unavailable"));
+        retake.textContent = "Try capture again";
+        retake.hidden = false;
+        retake.disabled = false;
         options.shell.status.value = "Could not capture this moment. Try saving again.";
       }
       return undefined;
@@ -151,11 +169,19 @@ export function mountKpDevReviewComposer(options: {
       void lockCapture();
     }
   };
+  const onRetake = (): void => {
+    if (submitting || capturePromise !== undefined) return;
+    snapshot = undefined;
+    retake.textContent = "Retake moment";
+    options.shell.status.value = "Retaking the moment for this note…";
+    void lockCapture();
+  };
 
   options.shell.host.addEventListener(KP_DEV_REVIEW_SHELL_OPEN_EVENT, onOpen);
   options.shell.host.addEventListener(KP_DEV_REVIEW_SHELL_CLOSE_EVENT, onClose);
   textarea.addEventListener("input", onTextInput);
   textarea.addEventListener("keydown", onTextKeyDown);
+  retake.addEventListener("click", onRetake);
   form.addEventListener("submit", onSubmit);
 
   return {
@@ -165,9 +191,10 @@ export function mountKpDevReviewComposer(options: {
       options.shell.host.removeEventListener(KP_DEV_REVIEW_SHELL_CLOSE_EVENT, onClose);
       textarea.removeEventListener("input", onTextInput);
       textarea.removeEventListener("keydown", onTextKeyDown);
+      retake.removeEventListener("click", onRetake);
       form.removeEventListener("submit", onSubmit);
       intro.remove();
-      meta.remove();
+      captureRow.remove();
       route.remove();
       form.remove();
     }
@@ -181,6 +208,7 @@ function renderCaptureMeta(
 ): void {
   const semantic = capture.semantic;
   const labels = [
+    "Locked",
     semantic.checkpointId ?? "Current frame",
     semantic.progressPermille === undefined ? undefined : `${semantic.progressPermille / 10}%`,
     semantic.activePhase

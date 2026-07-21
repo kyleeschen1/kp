@@ -175,3 +175,54 @@ test("an obsolete capture cannot unlock a newer note after close and reopen", as
   await expect(host.locator(".meta")).toContainText("story.2");
   await expect(host.locator("button.save")).toBeEnabled();
 });
+
+test("retaking changes only the locked moment and preserves the draft", async ({ page }) => {
+  await page.goto("/");
+  await page.setContent(`<!doctype html><body></body>`);
+  await page.evaluate(async () => {
+    const shellPath = "/src/dev-review/review-shell.ts";
+    const composerPath = "/src/dev-review/review-composer.ts";
+    const shellModule = await import(shellPath);
+    const composerModule = await import(composerPath);
+    const shell = shellModule.mountKpDevReviewShell(document);
+    const state = { captures: 0, submittedProgress: 0 };
+    (window as typeof window & { reviewRetakeState?: typeof state }).reviewRetakeState = state;
+    composerModule.mountKpDevReviewComposer({
+      shell,
+      capture: async () => {
+        const captureNumber = ++state.captures;
+        return {
+          route: `http://localhost/reader/solve-x/?kpProgress=${captureNumber * 100}`,
+          capturedAt: `2026-07-20T20:00:0${captureNumber}.000Z`,
+          environment: { browserName: "Chrome", language: "en-US",
+            viewport: { width: 800, height: 640, devicePixelRatio: 1, scrollX: 0, scrollY: 0 },
+            reducedMotion: false, forcedColors: false, colorScheme: "light",
+            build: { commit: "abc", fingerprint: `dev-${captureNumber}`, dirty: false } },
+          semantic: { checkpointId: `story.${captureNumber}`, progressPermille: captureNumber * 100,
+            activeTransformationIds: [], focusRefs: [] },
+          render: { ownerIds: [] }, temporalTrace: []
+        };
+      },
+      submit: async (input: { comment: string; capture: { semantic: { progressPermille: number } } }) => {
+        state.submittedProgress = input.capture.semantic.progressPermille;
+        return { schemaVersion: "kp.dev-review.v1", sessionId: "review.test.1", comment: input.comment,
+          capture: input.capture, id: "review-note.1.retake", sequence: 1, status: "new" };
+      }
+    });
+  });
+
+  const host = page.locator("[data-kp-dev-review-shell]");
+  await host.locator("button.launcher").click();
+  const textarea = host.locator("textarea");
+  await textarea.fill("Keep this diagnosis while I recapture.");
+  await expect(host.locator(".meta")).toContainText("Locked");
+  await expect(host.locator(".meta")).toContainText("story.1");
+  await host.locator("button.retake").click();
+  await expect(host.locator(".meta")).toContainText("story.2");
+  await expect(textarea).toHaveValue("Keep this diagnosis while I recapture.");
+  await host.locator("button.save").click();
+  const state = await page.evaluate(() => (window as typeof window & {
+    reviewRetakeState?: { captures: number; submittedProgress: number }
+  }).reviewRetakeState);
+  expect(state).toEqual({ captures: 2, submittedProgress: 200 });
+});

@@ -59,7 +59,8 @@
     {
       "id": "s03-capture-lock-ui",
       "title": "Capture lock and retake UI",
-      "status": "planned"
+      "summary": "The composer visibly identifies a locked note moment, exposes checkpoint/progress/phase/route, supports draft-preserving retake and capture retry, and retains canonical focus and narrow-viewport behavior.",
+      "status": "complete"
     },
     {
       "id": "s04-review-browser-proof",

@@ -151,11 +151,17 @@
       "status": "passed",
       "scope": "s02 per-note capture lifecycle, retry stability, async generation safety, real reader preservation",
       "checkedAt": "2026-07-21T01:19:41.348Z"
+    },
+    {
+      "command": "npx playwright test dev-review composer and shell cohorts plus npm run typecheck",
+      "status": "passed",
+      "scope": "s03 visible capture lock, retake behavior, focus, and narrow viewport",
+      "checkedAt": "2026-07-21T01:23:03.725Z"
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Review notes now acquire distinct frame captures without closing the panel; failed saves retain their original locked moment and draft."
+    "summary": "Reviewers can now see and retake the exact locked moment for each note without losing the diagnosis."
   },
   "expectedLearning": [
     "Approved revision 4 places this planned phase in now."
