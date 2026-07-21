@@ -172,6 +172,7 @@ function replaceFragmentVisual(
   visual.style.visibility = "visible";
   visual.style.opacity = "1";
   visual.style.transform = "none";
+  visual.dataset["kpReaderEquationMaterialVisualRevision"] = frame.visualRevision;
   record.element.replaceChildren(visual);
   record.visualRevision = frame.visualRevision;
   record.element.dataset["kpReaderEquationMaterialVisualRevision"] =

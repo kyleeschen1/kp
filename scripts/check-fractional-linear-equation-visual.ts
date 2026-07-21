@@ -129,18 +129,43 @@ async function sampleVisualFrame(page: Page, requestedProgress: number) {
     if (visibleFractionRules.some((item) => item.rect.width < 4 || item.rect.height < 0.5)) {
       failures.push("a visible fraction rule loses measurable ink");
     }
-    const materialFractionRules = [...stage.querySelectorAll<HTMLElement>(
+    const expectedMaterialFractionRules = [...stage.querySelectorAll<HTMLElement>(
       '[data-kp-reader-equation-material-fragment-id$="fraction.rule"]'
-    )].flatMap((fragment) => {
+    )].filter((fragment) => {
       const owner = fragment.closest<HTMLElement>(
         "[data-kp-reader-equation-material-owner-id]"
       );
-      const visual = fragment.querySelector<HTMLElement>(".frac-line");
-      if (owner === null || visual === null ||
-        Number(getComputedStyle(owner).opacity) <= 0.01 ||
-        Number(getComputedStyle(fragment).opacity) <= 0.01) return [];
+      return owner !== null && Number(getComputedStyle(owner).opacity) > 0.01 &&
+        Number(getComputedStyle(fragment).opacity) > 0.01;
+    });
+    const materialFractionRules = expectedMaterialFractionRules.flatMap((fragment) => {
+      const visuals = [...fragment.querySelectorAll<HTMLElement>(
+        ".kp-reader-equation-material-visual"
+      )];
+      const visual = visuals[0];
+      const fragmentRevision =
+        fragment.dataset["kpReaderEquationMaterialVisualRevision"];
+      if (visual === undefined) {
+        failures.push("a visible fraction-rule fragment has no material ink");
+        return [];
+      }
+      if (visuals.length !== 1) {
+        failures.push("a visible fraction-rule fragment has duplicate material ink");
+      }
+      if (fragmentRevision === undefined ||
+        visual.dataset["kpReaderEquationMaterialVisualRevision"] !== fragmentRevision) {
+        failures.push("a visible fraction-rule fragment has stale material ink");
+      }
+      if (visual.dataset["kpReaderMaterialVisualKind"] !== "measured-fraction-rule") {
+        failures.push("a visible fraction-rule fragment uses the wrong visual contract");
+      }
       const anchorRect = box(fragment);
       const inkRect = box(visual);
+      const visualStyle = getComputedStyle(visual);
+      if (!visual.isConnected || visualStyle.visibility === "hidden" ||
+        Number(visualStyle.opacity) <= 0.01 || inkRect.width < 4 || inkRect.height < 0.5) {
+        failures.push("a visible fraction-rule fragment loses measurable material ink");
+      }
       return [{
         anchorId: fragment.dataset["kpReaderEquationMaterialFragmentId"] ?? "unknown",
         anchorRect,
@@ -218,6 +243,7 @@ async function sampleVisualFrame(page: Page, requestedProgress: number) {
       },
       visibleInkCount: ink.length,
       visibleFractionRuleCount: visibleFractionRules.length,
+      expectedMaterialFractionRuleCount: expectedMaterialFractionRules.length,
       materialFractionRules,
       maxFractionRuleInkOffsetPx,
       materialCollisionCount: collisions.length,

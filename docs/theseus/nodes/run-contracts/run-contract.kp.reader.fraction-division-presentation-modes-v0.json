@@ -77,7 +77,8 @@
     {
       "id": "s05-persistence-gate",
       "title": "Require lifecycle-correct visible fraction ink",
-      "status": "planned"
+      "summary": "Made material visuals carry their revision and strengthened the 31-frame gate to reject missing, duplicate, stale, invisible, unmeasurable, or incorrectly classified fraction-rule ink.",
+      "status": "complete"
     },
     {
       "id": "s06-alignment-budget",

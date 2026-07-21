@@ -59,6 +59,20 @@
       "scope": "s04 TypeScript boundaries",
       "checkedAt": "2026-07-21T23:29:22.773Z",
       "notes": "Application, node, test, and domain projects typecheck."
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader-material-owner-layer.browser.spec.ts --workers=1",
+      "status": "passed",
+      "scope": "s05 material visual lifecycle",
+      "checkedAt": "2026-07-21T23:36:03.562Z",
+      "notes": "Persistent owner tests prove visual-revision changes replace stale material ink; all three focused browser tests pass."
+    },
+    {
+      "command": "npm run visual:fractional-linear-equation",
+      "status": "passed",
+      "scope": "s05 visible fraction ink lifecycle gate",
+      "checkedAt": "2026-07-21T23:36:04.676Z",
+      "notes": "The gate requires exactly one current measured-rule visual for every visible rule fragment; 22 expected rule instances render across 31 frames with no missing frames or failures."
     }
   ]
 }

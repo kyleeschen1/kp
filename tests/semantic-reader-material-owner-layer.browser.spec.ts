@@ -67,6 +67,21 @@ test("reader material owners persist by semantic key and sanitize cloned visuals
       clone.querySelector("#nested-a") === null;
     const focused = secondNode.dataset["kpReaderEquationMaterialFocused"];
     const transform = secondNode.style.transform;
+    sourceA.textContent = "y";
+    controller.sync([{
+      ...ownerA,
+      fragments: [{
+        ...ownerA.fragments[0]!,
+        visualRevision: "r2",
+        sourceElement: sourceA
+      }]
+    }]);
+    const revisedClone = firstNode.querySelector<HTMLElement>(
+      ".kp-reader-equation-material-visual"
+    )!;
+    const revisionReplaced = clone.isConnected === false &&
+      revisedClone.dataset["kpReaderEquationMaterialVisualRevision"] === "r2" &&
+      revisedClone.textContent === "y";
     const third = controller.sync([{
       ...ownerA,
       ownerId: "owner.b",
@@ -87,6 +102,7 @@ test("reader material owners persist by semantic key and sanitize cloned visuals
       third,
       retained,
       sanitized,
+      revisionReplaced,
       removedA,
       focused,
       transform,
@@ -108,6 +124,7 @@ test("reader material owners persist by semantic key and sanitize cloned visuals
   expect(result.third.removedOwnerIds).toEqual(["owner.a"]);
   expect(result.retained).toBe(true);
   expect(result.sanitized).toBe(true);
+  expect(result.revisionReplaced).toBe(true);
   expect(result.removedA).toBe(true);
   expect(result.focused).toBe("true");
   expect(result.transform).toContain("translate3d(12px, 0px, 0px)");
