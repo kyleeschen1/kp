@@ -72,8 +72,8 @@
     {
       "id": "s05-review-panel-focus",
       "title": "Review panel focus and stacking",
-      "summary": "Normalize panel focus, contrast, input opacity, and stacking behavior.",
-      "status": "ready"
+      "summary": "Made the canonical relation-color focus ring an explicit shell token and contracted the review host stacking, dialog pointer authority, opaque input surface, and 3px focus affordance. Three focused browser tests pass across real dev mount and narrow shell.",
+      "status": "complete"
     },
     {
       "id": "s06-masthead-elevation",

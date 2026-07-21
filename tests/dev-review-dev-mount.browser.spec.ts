@@ -7,6 +7,12 @@ test("reader mounts the review shell by default in Vite development", async ({ p
   await expect(host.locator("button.launcher")).toBeVisible();
   await host.locator("button.launcher").click();
   await expect(host.locator("textarea")).toBeEnabled();
+  await expect(host).toHaveCSS("z-index", "2147483000");
+  await expect(host.locator("[role=dialog]")).toHaveCSS("pointer-events", "auto");
+  await expect(host.locator("textarea")).toHaveCSS("background-color", "rgb(255, 253, 247)");
+  await host.locator("textarea").focus();
+  await expect(host.locator("textarea")).toHaveCSS("outline-width", "3px");
+  await expect(host.locator("textarea")).toHaveCSS("outline-color", "rgb(31, 99, 113)");
   await expect(host.locator(".meta")).not.toContainText("State unavailable");
   await expect(host.locator(".meta")).toContainText("Type to capture this moment");
   await expect(host.locator(".route")).toBeEmpty();

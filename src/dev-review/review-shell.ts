@@ -164,6 +164,7 @@ const shellStyles = `
     --accent: #df7047;
     --relation: #1f6371;
     --line: #d2d7cd;
+    --focus-ring: var(--relation);
     position: fixed;
     z-index: 2147483000;
     right: 18px;
@@ -177,7 +178,7 @@ const shellStyles = `
   *, *::before, *::after { box-sizing: border-box; }
   button { color: inherit; font: inherit; }
   button:focus-visible, textarea:focus-visible {
-    outline: 3px solid var(--relation);
+    outline: 3px solid var(--focus-ring);
     outline-offset: 4px;
   }
   .launcher {
