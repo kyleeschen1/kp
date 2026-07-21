@@ -172,6 +172,13 @@
       "status": "passed",
       "scope": "s20 compact narrow presentation",
       "checkedAt": "2026-07-21T22:32:34.793Z"
+    },
+    {
+      "command": "five-case fractional browser gate with no-JavaScript and print modes",
+      "status": "passed",
+      "scope": "s21 static output",
+      "checkedAt": "2026-07-21T22:34:57.184Z",
+      "notes": "All seven TeX and MathML states remain searchable; print reveals all states with no runtime measurement errors."
     }
   ]
 }

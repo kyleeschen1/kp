@@ -160,7 +160,8 @@
     {
       "id": "s21-static-output",
       "title": "Preserve no JavaScript search print and MathML",
-      "status": "planned"
+      "summary": "The direct route remains readable without JavaScript, exposes all seven MathML/TeX states to search and assistive tooling, and prints every state plus prose while hiding interactive chrome.",
+      "status": "complete"
     },
     {
       "id": "s22-generated-stress-cohort",

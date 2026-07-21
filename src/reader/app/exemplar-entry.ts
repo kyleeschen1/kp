@@ -196,6 +196,7 @@ const staticPlans = new Map(animation.transformations.map((transformation, index
 const materialLayer = createKpReaderEquationMaterialLayer(
   requireDescendant<HTMLElement>(viewport, "[data-kp-reader-equation-material-layer]")
 );
+let lastMeasuredLayout: LayoutState | undefined;
 
 const scheduler = createKpReaderEquationFrameScheduler<
   KpReaderClockSample,
@@ -358,6 +359,9 @@ function scheduleScrollSample(): void {
 }
 
 function measureLayout(revision: number): LayoutState {
+  if (stage.getClientRects().length === 0 && lastMeasuredLayout !== undefined) {
+    return lastMeasuredLayout;
+  }
   const measured: Omit<TransitionContext, "fit">[] = [];
   for (const element of transitionElements) {
     const id = requiredData(element, "kpReaderTransition");
@@ -407,7 +411,8 @@ function measureLayout(revision: number): LayoutState {
     return [context.id, { ...context, fit }] as const;
   }));
   stage.dataset["kpReaderLayoutReads"] = String(scheduler.inspect().readCount + 1);
-  return { contexts };
+  lastMeasuredLayout = { contexts };
+  return lastMeasuredLayout;
 }
 
 function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
