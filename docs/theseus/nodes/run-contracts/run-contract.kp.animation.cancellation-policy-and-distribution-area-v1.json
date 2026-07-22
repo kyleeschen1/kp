@@ -171,7 +171,8 @@
     {
       "id": "s18-themed-svg-area",
       "title": "Build-KP-themed-SVG-area-model-with-KaTeX-labels",
-      "status": "planned"
+      "summary": "Added the exact two-region area scene with KP theme variables, shared outline and divider geometry, accessible text, stable cross-surface selector ids, and KaTeX HTML labels for 3, x, 2, 3x, and 6.",
+      "status": "complete"
     },
     {
       "id": "s19-area-static-endpoints",

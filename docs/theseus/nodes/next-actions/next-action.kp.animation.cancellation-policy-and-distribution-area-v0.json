@@ -155,6 +155,12 @@
       "status": "passed",
       "scope": "s17 wide side-by-side and phone page-flow layout envelope",
       "checkedAt": "2026-07-22T14:37:18.867Z"
+    },
+    {
+      "command": "focused distribution area SVG, layout, and cross-surface semantic tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s18 exact KP-themed two-region SVG scene with KaTeX labels",
+      "checkedAt": "2026-07-22T14:41:14.731Z"
     }
   ],
   "expectedLearning": [
