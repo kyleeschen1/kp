@@ -23,6 +23,10 @@
   "verification": [
     "theseus validate"
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "Cancellation generation now has strict semantic input decoding, deterministic policy or typed repair, catalog conformance, executable contact laws, and a stable browser gate; cross-category evidence remains pending."
+  },
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."
   ],

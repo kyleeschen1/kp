@@ -24,6 +24,10 @@
   "verification": [
     "theseus validate"
   ],
+  "progress": {
+    "state": "partial",
+    "summary": "Cancellation authors and LLMs can choose only operation authority and teaching goal; renderer recipe, geometry, timing, and typography are rejected. Other content families remain pending."
+  },
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."
   ],

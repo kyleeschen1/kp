@@ -135,7 +135,8 @@
     {
       "id": "s12-guardrail-boundary",
       "title": "Close-quality-and-amortization-guardrail-tranche",
-      "status": "planned"
+      "summary": "Closed the cancellation guardrail tranche with full deterministic tests, architecture and inference gates, production build, production review closure, and partial experiment evidence; primitive amortization remains open for the exact distribution-area exemplar.",
+      "status": "complete"
     },
     {
       "id": "s13-area-exemplar-contract",

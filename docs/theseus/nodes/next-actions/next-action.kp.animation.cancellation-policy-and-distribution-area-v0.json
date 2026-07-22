@@ -119,6 +119,12 @@
       "status": "passed",
       "scope": "s11 strict generated-output policy or repair boundary",
       "checkedAt": "2026-07-22T14:10:27.326Z"
+    },
+    {
+      "command": "npm test; npm run build; npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s12 cancellation guardrail tranche broad release boundary",
+      "checkedAt": "2026-07-22T14:14:51.163Z"
     }
   ],
   "expectedLearning": [
