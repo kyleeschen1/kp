@@ -93,7 +93,8 @@
     {
       "id": "s05-policy-resolver",
       "title": "Resolve-intent-and-topology-deterministically",
-      "status": "planned"
+      "summary": "Added deterministic capability matching: opposing arcs select counter orbit for shared or distinct baselines, direct convergence selects witnessed annihilation only on a shared baseline, and incomplete or unsafe topology remains unresolved.",
+      "status": "complete"
     },
     {
       "id": "s06-typed-repair",
