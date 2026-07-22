@@ -125,6 +125,12 @@
       "status": "passed",
       "scope": "s12 cancellation guardrail tranche broad release boundary",
       "checkedAt": "2026-07-22T14:14:51.163Z"
+    },
+    {
+      "command": "focused distribution area exemplar contract tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s13 exact 3(x+2) and 3x+6 non-generalized contract",
+      "checkedAt": "2026-07-22T14:17:15.324Z"
     }
   ],
   "expectedLearning": [

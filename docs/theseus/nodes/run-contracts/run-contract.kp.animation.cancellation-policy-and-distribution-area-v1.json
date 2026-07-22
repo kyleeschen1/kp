@@ -141,7 +141,8 @@
     {
       "id": "s13-area-exemplar-contract",
       "title": "Freeze-3-times-x-plus-2-area-exemplar",
-      "status": "planned"
+      "summary": "Frozen the exact reversible 3(x+2) and 3x+6 contract: factor and term dimensions, 3x and 6 regions, KaTeX algebra and SVG area surfaces, canonical forward and inverse operations, and mandatory human approval before promotion.",
+      "status": "complete"
     },
     {
       "id": "s14-area-semantic-trace",
