@@ -7,6 +7,7 @@ import {
   bindKpReaderSemanticLinks,
   createKpReaderActiveLocationService,
   createKpReaderContinuousScrollClock,
+  defineKpReaderFrameScheduler,
   createKpReaderLocationSettlement,
   createKpReaderRuntimeRouteDescriptor,
   decodeKpDistributionAreaUrl,
@@ -21,7 +22,6 @@ import {
   createKpDistributionAreaWidthMotionPlan,
   measureKpDistributionAreaLayout,
   measureKpDistributionAreaWidthLayout,
-  type KpDistributionAreaLayoutSnapshot,
   type KpDistributionAreaMaterialTokenId,
   type KpDistributionAreaMotionPlan,
   type KpDistributionAreaTimelineFrame,
@@ -33,6 +33,17 @@ import {
 import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycle.ts";
 
 type Direction = KpDistributionAreaDirection;
+
+interface DistributionFrameInput {
+  readonly progress: number;
+  readonly direction: Direction;
+  readonly settleLocation: boolean;
+}
+
+interface DistributionLayoutPlan {
+  readonly motionPlan: KpDistributionAreaMotionPlan;
+  readonly widthMotionPlan: KpDistributionAreaWidthMotionPlan;
+}
 
 const stage = required<HTMLElement>("[data-kp-distribution-stage]");
 const readerRoute = createKpReaderRuntimeRouteDescriptor({
@@ -68,7 +79,6 @@ let scrollInteractionArmed = !semanticUrlOwnsProgress;
 let scrollFrame = 0;
 let layoutRevision = 0;
 let layoutReadCount = 0;
-let layout: KpDistributionAreaLayoutSnapshot | undefined;
 let motionPlan: KpDistributionAreaMotionPlan | undefined;
 let widthMotionPlan: KpDistributionAreaWidthMotionPlan | undefined;
 let previousReviewFrameAtMs: number | undefined;
@@ -79,6 +89,41 @@ const locationSettlement = createKpReaderLocationSettlement({
   shareLink: share,
   href: semanticUrl
 });
+const frameScheduler = defineKpReaderFrameScheduler<DistributionFrameInput>()({
+  readLayout: ({ revision }) => {
+    // Distribution exposed one-based revisions before adopting the generic
+    // scheduler; retain that diagnostic contract at the adapter boundary.
+    layoutRevision = revision + 1;
+    layoutReadCount += 1;
+    return {
+      layout: measureKpDistributionAreaLayout({
+        algebraRoot,
+        measurementRoot,
+        revision: layoutRevision
+      }),
+      widthLayout: measureKpDistributionAreaWidthLayout({
+        areaRoot,
+        revision: layoutRevision
+      })
+    };
+  },
+  planLayout: ({ layout: nextLayout, widthLayout }): DistributionLayoutPlan => ({
+    motionPlan: createKpDistributionAreaMotionPlan(nextLayout, termSchedule),
+    widthMotionPlan: createKpDistributionAreaWidthMotionPlan(widthLayout, termSchedule)
+  }),
+  planFrame: ({ input, layoutPlan }) => ({ input, layoutPlan }),
+  writeFrame: ({ input, layoutPlan }) => {
+    progress = input.progress;
+    direction = input.direction;
+    motionPlan = layoutPlan.motionPlan;
+    widthMotionPlan = layoutPlan.widthMotionPlan;
+    stage.dataset["kpDistributionLayoutRevision"] = String(layoutRevision);
+    stage.dataset["kpDistributionLayoutReadCount"] = String(layoutReadCount);
+    stage.dataset["kpDistributionSchedule"] = termSchedule.id;
+    renderFrame();
+    if (input.settleLocation) locationSettlement.settle();
+  }
+});
 
 document.body.dataset["kpReaderHydrated"] = "true";
 directionButtons.forEach((button) => button.addEventListener("click", () => {
@@ -88,13 +133,13 @@ directionButtons.forEach((button) => button.addEventListener("click", () => {
   progress = 1 - progress;
   direction = next;
   pointerOwnsProgress = true;
-  render();
+  renderImmediately();
   locationSettlement.settle();
 }));
 scrubber.addEventListener("input", () => {
   pointerOwnsProgress = true;
   progress = Number(scrubber.value) / 1000;
-  render();
+  renderImmediately();
 });
 scrubber.addEventListener("change", () => {
   locationSettlement.settle();
@@ -105,7 +150,7 @@ window.addEventListener("scroll", () => {
   pointerOwnsProgress = false;
   scheduleScroll();
 }, { passive: true });
-window.addEventListener("resize", refreshLayoutAndRender, { passive: true });
+window.addEventListener("resize", () => refreshLayoutAndRender("resize"), { passive: true });
 window.addEventListener("wheel", armScrollInteraction, { passive: true });
 window.addEventListener("touchstart", armScrollInteraction, { passive: true });
 window.addEventListener("keydown", (event) => {
@@ -133,10 +178,10 @@ const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
   development: import.meta.env.DEV,
   reviewMount: "font-ready",
   reflectFontReadyOnBody: true,
-  renderReviewFrame: render,
-  onFontInvalidated: refreshLayoutAndRender,
+  renderReviewFrame: requestRender,
+  onFontInvalidated: () => refreshLayoutAndRender("fonts"),
   onReady: () => {
-    refreshLayoutAndRender();
+    refreshLayoutAndRender("fonts");
     if (!hasSemanticProgress()) scheduleScroll();
   }
 });
@@ -147,9 +192,10 @@ window.addEventListener("pagehide", () => {
   semanticLinkBindings.dispose();
   locationSettlement.dispose();
   scrollClock?.dispose();
+  frameScheduler.dispose();
 }, { once: true });
 
-function render(): void {
+function renderFrame(): void {
   if (fontReadiness.status === "waiting" || motionPlan === undefined || widthMotionPlan === undefined) return;
   progress = clamp01(progress);
   const visualProgress = direction === "forward" ? progress : 1 - progress;
@@ -287,20 +333,18 @@ function widthToken(id: KpDistributionAreaWidthTokenId, pose: KpDistributionArea
   element.style.opacity = String(clamp01(pose.opacity));
 }
 
-function refreshLayoutAndRender(): void {
+function refreshLayoutAndRender(reason: "resize" | "fonts" | "content" = "content"): void {
   if (fontReadiness.status === "waiting") return;
-  layoutRevision += 1;
-  layoutReadCount += 1;
-  layout = measureKpDistributionAreaLayout({ algebraRoot, measurementRoot, revision: layoutRevision });
-  motionPlan = createKpDistributionAreaMotionPlan(layout, termSchedule);
-  widthMotionPlan = createKpDistributionAreaWidthMotionPlan(measureKpDistributionAreaWidthLayout({
-    areaRoot,
-    revision: layoutRevision
-  }), termSchedule);
-  stage.dataset["kpDistributionLayoutRevision"] = String(layoutRevision);
-  stage.dataset["kpDistributionLayoutReadCount"] = String(layoutReadCount);
-  stage.dataset["kpDistributionSchedule"] = termSchedule.id;
-  render();
+  frameScheduler.invalidate(reason);
+  requestRender();
+}
+
+function requestRender(settleLocation = false): void {
+  frameScheduler.render({ progress, direction, settleLocation });
+}
+
+function renderImmediately(): void {
+  frameScheduler.renderNow({ progress, direction, settleLocation: false });
 }
 
 function setOpacity(role: string, opacity: number): void {
@@ -316,8 +360,7 @@ function scheduleScroll(): void {
     clock.updateGeometry(distributionScrollGeometry());
     const visualProgress = clock.samplePosition(distributionReaderLine()).progress;
     progress = direction === "forward" ? visualProgress : 1 - visualProgress;
-    render();
-    locationSettlement.settle();
+    requestRender(true);
   });
 }
 

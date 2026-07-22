@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createKpReaderFrameScheduler,
+  defineKpReaderFrameScheduler,
   type KpReaderFrameClock
 } from "../src/reader/runtime/public-api.ts";
 
@@ -36,7 +37,7 @@ function createTestClock() {
 test("scheduler coalesces input and enforces read plan write ordering", () => {
   const frameClock = createTestClock();
   const events: string[] = [];
-  const scheduler = createKpReaderFrameScheduler({
+  const scheduler = defineKpReaderFrameScheduler<number>()({
     frameClock: frameClock.clock,
     readLayout: ({ revision, reasons }) => {
       events.push(`read:${revision}:${reasons.join("+")}`);
@@ -132,4 +133,22 @@ test("invalidation during a write schedules a separate refresh and dispose cance
   assert.equal(frameClock.pending(), 0);
   assert.equal(scheduler.inspect().disposed, true);
   assert.throws(() => scheduler.render(1), /disposed/);
+});
+
+test("renderNow preserves pipeline ordering for direct manipulation", () => {
+  const frameClock = createTestClock();
+  const writes: number[] = [];
+  const scheduler = defineKpReaderFrameScheduler<number>()({
+    frameClock: frameClock.clock,
+    readLayout: ({ revision }) => revision,
+    planLayout: (layout) => layout,
+    planFrame: ({ input }) => input,
+    writeFrame: (frame) => writes.push(frame)
+  });
+
+  scheduler.render(1);
+  assert.equal(frameClock.pending(), 1);
+  scheduler.renderNow(2);
+  assert.equal(frameClock.pending(), 0);
+  assert.deepEqual(writes, [2]);
 });

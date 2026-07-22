@@ -22,6 +22,7 @@ export interface KpReaderFrameSchedulerState {
 
 export interface KpReaderFrameScheduler<TInput> {
   render(input: TInput): void;
+  renderNow(input: TInput): void;
   invalidate(reason: KpReaderLayoutInvalidationReason): void;
   inspect(): KpReaderFrameSchedulerState;
   dispose(): void;
@@ -132,6 +133,16 @@ export function createKpReaderFrameScheduler<
       latestInput = renderInput;
       inputRevision += 1;
       schedule();
+    },
+    renderNow(renderInput) {
+      if (disposed) throw new Error("Reader frame scheduler is disposed.");
+      latestInput = renderInput;
+      inputRevision += 1;
+      if (scheduledRequestId !== undefined) {
+        frameClock.cancel(scheduledRequestId);
+        scheduledRequestId = undefined;
+      }
+      flush();
     },
     invalidate(reason) {
       if (disposed) return;
