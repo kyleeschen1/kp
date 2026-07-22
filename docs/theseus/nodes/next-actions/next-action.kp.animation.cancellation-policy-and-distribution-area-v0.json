@@ -2,7 +2,7 @@
   "id": "next-action.kp.animation.cancellation-policy-and-distribution-area-v0",
   "kind": "next-action",
   "title": "Govern cancellation policies and build distribution area exemplar",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.animation",
   "sourceRefs": [
     {
@@ -185,6 +185,36 @@
       "status": "passed",
       "scope": "s22 contiguous prose algebra area attention cycles",
       "checkedAt": "2026-07-22T14:51:02.354Z"
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "1867 deterministic unit integration architecture inference and catalog tests",
+      "checkedAt": "2026-07-22T15:15:30.523Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "TypeScript domains and production Vite build including distribution reader route",
+      "checkedAt": "2026-07-22T15:15:31.553Z"
+    },
+    {
+      "command": "npm run visual:cancellation",
+      "status": "passed",
+      "scope": "8 cancellation and existing reader browser checks",
+      "checkedAt": "2026-07-22T15:15:32.579Z"
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "4 editor URL ownership static fallback semantic focus and phone containment browser checks",
+      "checkedAt": "2026-07-22T15:15:33.585Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "Production review closure across 128 files",
+      "checkedAt": "2026-07-22T15:15:34.571Z"
     }
   ],
   "expectedLearning": [

@@ -25,7 +25,9 @@ test("createLinearSolveProgrammingComparisonAnimationAsset composes equation and
     childAnimationIds:
       "animation.linear-solve.solve-x animation.programming.add.execution-trace",
     compositionKind: "synchronized-comparison",
-    clockCoupling: "shared-progress"
+    clockCoupling: "shared-progress",
+    // Composition propagates intent so every equation-bearing catalog asset remains governed.
+    equationCancellationTeachingGoal: "preserve-flow"
   });
   assert.deepEqual(animation.layout, {
     id: "layout.comparison.linear-solve-programming.row",

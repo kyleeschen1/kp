@@ -35,7 +35,8 @@ test("linear solve algebra trace imports as a sampleable AnimationAsset", () => 
     sourceAnimationId: "linear-equation-solve-x",
     equationMotionPresentationRecipe: "continuity-v1",
     equationNativeHandoffRecipe: "atomic-v1",
-    equationCancellationPresentationRecipe: "counter-orbit-v1",
+    // External ports preserve authored teaching intent; policy chooses the renderer recipe later.
+    equationCancellationTeachingGoal: "preserve-flow",
     equationZeroWitnessPresentationRecipe: "none",
     equationSuccessorPresentationRecipe: "counter-convergence-v1",
     equationDepthPresentationRecipe: "semantic-depth-v1",

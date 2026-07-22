@@ -2,7 +2,8 @@
   "id": "run-contract.kp.animation.cancellation-policy-and-distribution-area-v1",
   "kind": "run-contract",
   "title": "Cancellation policy and distribution area exemplar",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -213,7 +214,8 @@
     {
       "id": "s25-release-checkpoint",
       "title": "Run-release-gates-and-stop-for-human-review",
-      "status": "planned"
+      "summary": "Broad release checkpoint passed: 1867 tests, TypeScript and production build, architecture/inference/catalog gates, production review closure, 8 cancellation browser checks, and 4 distribution-area browser checks. Corrected two stale test assertions from the earlier inferred-cancellation migration. Stopped at the required human visual checkpoint; distribution/factoring remains exact-exemplar-only and unpromoted.",
+      "status": "complete"
     }
   ]
 }
