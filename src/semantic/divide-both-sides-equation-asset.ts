@@ -55,9 +55,21 @@ export function createDivideBothSidesEquationKpAsset(): DivideBothSidesEquationK
           part("lhs.fraction.rule", "artifact", "fraction rule", "fraction-rule"),
           part("lhs.fraction.denominator.3", "term", "3", "divisor"),
           part("equals", "relation", "=", "relation"),
-          part("rhs.fraction.numerator.12", "term", "12", "constant"),
-          part("rhs.fraction.rule", "artifact", "fraction rule", "fraction-rule"),
-          part("rhs.fraction.denominator.3", "term", "3", "divisor")
+          part("rhs.fraction.numerator.12", "term", "12", "constant", {
+            successorContribution: "material-input",
+            successorRole: "dividend",
+            successorRank: 0
+          }),
+          part("rhs.fraction.rule", "artifact", "fraction rule", "fraction-rule", {
+            successorContribution: "catalyst",
+            successorRole: "division-operator",
+            successorRank: 0
+          }),
+          part("rhs.fraction.denominator.3", "term", "3", "divisor", {
+            successorContribution: "material-input",
+            successorRole: "divisor",
+            successorRank: 1
+          })
         ],
         ids.initial,
         ids.divide
@@ -69,9 +81,21 @@ export function createDivideBothSidesEquationKpAsset(): DivideBothSidesEquationK
         [
           part("lhs.x", "term", "x", "variable"),
           part("equals", "relation", "=", "relation"),
-          part("rhs.fraction.numerator.12", "term", "12", "constant"),
-          part("rhs.fraction.rule", "artifact", "fraction rule", "fraction-rule"),
-          part("rhs.fraction.denominator.3", "term", "3", "divisor")
+          part("rhs.fraction.numerator.12", "term", "12", "constant", {
+            successorContribution: "material-input",
+            successorRole: "dividend",
+            successorRank: 0
+          }),
+          part("rhs.fraction.rule", "artifact", "fraction rule", "fraction-rule", {
+            successorContribution: "catalyst",
+            successorRole: "division-operator",
+            successorRank: 0
+          }),
+          part("rhs.fraction.denominator.3", "term", "3", "divisor", {
+            successorContribution: "material-input",
+            successorRole: "divisor",
+            successorRank: 1
+          })
         ],
         ids.divided,
         ids.cancelCoefficient
@@ -83,7 +107,11 @@ export function createDivideBothSidesEquationKpAsset(): DivideBothSidesEquationK
         [
           part("lhs.x", "term", "x", "variable"),
           part("equals", "relation", "=", "relation"),
-          part("rhs.4", "term", "4", "constant")
+          part("rhs.4", "term", "4", "constant", {
+            successorTarget: true,
+            successorRole: "evaluated-quotient",
+            successorRank: 0
+          })
         ],
         ids.coefficientCancelled,
         ids.simplifyQuotient
@@ -188,15 +216,23 @@ interface Part {
   readonly kind: KpAssetSelector["kind"];
   readonly label: string;
   readonly structureRole: string;
+  readonly metadata?: Readonly<Record<string, string | number | boolean>> | undefined;
 }
 
 function part(
   path: string,
   kind: KpAssetSelector["kind"],
   label: string,
-  structureRole: string
+  structureRole: string,
+  metadata?: Readonly<Record<string, string | number | boolean>>
 ): Part {
-  return { path, kind, label, structureRole };
+  return {
+    path,
+    kind,
+    label,
+    structureRole,
+    ...(metadata === undefined ? {} : { metadata })
+  };
 }
 
 function equationState(
@@ -216,7 +252,10 @@ function equationState(
       id: `${id}.${partValue.path}`,
       kind: partValue.kind,
       label: partValue.label,
-      metadata: { equationStructureRole: partValue.structureRole }
+      metadata: {
+        equationStructureRole: partValue.structureRole,
+        ...(partValue.metadata ?? {})
+      }
     })),
     provenance: sourceId === undefined
       ? {

@@ -766,6 +766,7 @@ function motifIdsForKind(
     case "cancel-additive-inverses": return ["cancelation", "meet-collapse"];
     case "cancel-multiplicative-inverses": return ["cancelation", "meet-collapse"];
     case "simplify-constant-difference": return ["merge-fan-in", "derive-result"];
+    case "simplify-constant-quotient": return ["merge-fan-in", "derive-result"];
     case "simplify-constant-product": return ["merge-fan-in", "derive-result"];
   }
 }
@@ -784,6 +785,8 @@ function meaningfulMotionReason(
       return "Meet then collapse communicates multiplicative inverse cancellation.";
     case "simplify-constant-difference":
       return "Token convergence communicates that the operands causally derive the result.";
+    case "simplify-constant-quotient":
+      return "Token convergence communicates that the dividend and divisor causally derive the quotient.";
     case "simplify-constant-product":
       return "Token convergence communicates that the factors causally derive the product.";
   }
@@ -794,7 +797,9 @@ function isCancellationKind(kind: KpEquationLinearRearrangementKind): boolean {
 }
 
 function isSuccessorKind(kind: KpEquationLinearRearrangementKind): boolean {
-  return kind === "simplify-constant-difference" || kind === "simplify-constant-product";
+  return kind === "simplify-constant-difference" ||
+    kind === "simplify-constant-quotient" ||
+    kind === "simplify-constant-product";
 }
 
 function kebabCase(value: string): string {

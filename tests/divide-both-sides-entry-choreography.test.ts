@@ -3,12 +3,14 @@ import test from "node:test";
 
 import { createDivideBothSidesEquationAnimationAsset } from "../src/animation/divide-both-sides-equation-adapter.ts";
 import { createKpLinearRearrangementChoreography } from "../src/animation/linear-rearrangement-choreography.ts";
+import { createKpWitnessedAnnihilationBinding } from "../src/animation/witnessed-annihilation.ts";
 import { createKpEquationLinearRearrangementBindings } from "../src/rendering/equation-linear-rearrangement-bindings.ts";
 import type {
   KpMeasuredEquationTransitionEndpoint,
   KpMeasuredEquationTransitionGeometry
 } from "../src/rendering/equation-motion-dom.ts";
 import { sampleKpEquationTokenMotion } from "../src/rendering/semantic-equation-token-renderer.ts";
+import { createKpEquationSuccessorSynthesisPlan } from "../src/rendering/equation-linear-rearrangement.ts";
 import { createDivideBothSidesEquationKpAsset } from "../src/semantic/divide-both-sides-equation-asset.ts";
 import { createKpDivideBothSidesSelectorAnnotatedLatex } from "../src/rendering/divide-both-sides-selector-annotated-latex.ts";
 
@@ -19,14 +21,53 @@ test("divide asset binds a first-class divide-both-sides rearrangement", () => {
     bindings.map((binding) => [binding.transformationId, binding.kind]),
     [
       ["transform.divide-both-sides.divide-by-3", "divide-both-sides"],
-      ["transform.divide-both-sides.cancel-coefficient", "cancel-multiplicative-inverses"]
+      ["transform.divide-both-sides.cancel-coefficient", "cancel-multiplicative-inverses"],
+      ["transform.divide-both-sides.simplify-quotient", "simplify-constant-quotient"]
     ]
   );
   const choreography = createKpLinearRearrangementChoreography(animation);
-  assert.equal(choreography.steps[0]?.kind, "divide-both-sides");
+  assert.deepEqual(choreography.steps.map((step) => step.kind), [
+    "divide-both-sides",
+    "cancel-multiplicative-inverses",
+    "simplify-constant-quotient"
+  ]);
   assert.ok(choreography.steps[0]?.operationSubgraph.nodes.some(
     (node) => node.kind === "introduce-division-structure"
   ));
+});
+
+test("coefficient cancellation certifies one and quotient synthesis owns all inputs", () => {
+  const animation = createDivideBothSidesEquationAnimationAsset();
+  const cancellation = animation.transformations[1]!;
+  const witness = createKpWitnessedAnnihilationBinding({
+    operationId: "kp.algebra.cancel-multiplicative-inverses",
+    transformation: cancellation,
+    bundle: animation.bundle,
+    cancellationRecordId: "coefficient-and-divisor-cancel"
+  });
+  assert.equal(witness.witness.semanticValue.latex, "1");
+  assert.equal(witness.witness.identityKind, "multiplicative");
+
+  const quotient = createKpEquationLinearRearrangementBindings(animation)[2]!;
+  assert.deepEqual(
+    quotient.successorSynthesisBinding?.sourceAnnotations.map((annotation) => [
+      annotation.semanticRole,
+      annotation.contribution,
+      annotation.propagationRank
+    ]),
+    [
+      ["dividend", "material-input", 0],
+      ["division-operator", "catalyst", 0],
+      ["divisor", "material-input", 1]
+    ]
+  );
+  assert.deepEqual(
+    quotient.successorSynthesisBinding?.targetAnnotations.map((annotation) => [
+      annotation.semanticRole,
+      annotation.propagationRank
+    ]),
+    [["evaluated-quotient", 0]]
+  );
 });
 
 test("divide states annotate every semantic glyph and both fraction rules", () => {
@@ -68,6 +109,34 @@ test("matched divisors and rules share one entry clock without deformation", () 
     .every((token) => token.pose.opacity === 1 && token.pose.x === 0 && token.pose.y === 0 && token.pose.scale === 1));
 });
 
+test("quotient inputs converge before four appears and settle to native endpoints", () => {
+  const geometry = quotientGeometry();
+  const converging = sampleKpEquationTokenMotion(geometry, 0.55);
+  const resultAtConvergence = converging.tokens.find((token) =>
+    token.side === "target" && token.motionId.endsWith("rhs.4")
+  );
+  assert.equal(resultAtConvergence?.pose.opacity, 0);
+  const materialInputIds = new Set(
+    geometry.successorSynthesisBinding?.sourceAnnotations
+      .filter((annotation) => annotation.contribution === "material-input")
+      .map((annotation) => annotation.id)
+  );
+  assert.ok(converging.tokens.filter((token) =>
+    token.side === "source" && materialInputIds.has(token.motionId)
+  ).every((token) => token.pose.opacity === 1));
+
+  const derived = sampleKpEquationTokenMotion(geometry, 0.9);
+  assert.ok((derived.tokens.find((token) =>
+    token.side === "target" && token.motionId.endsWith("rhs.4")
+  )?.pose.opacity ?? 0) > 0);
+
+  const settled = sampleKpEquationTokenMotion(geometry, 1);
+  assert.ok(settled.tokens.filter((token) => token.side === "source")
+    .every((token) => token.pose.opacity === 0));
+  assert.ok(settled.tokens.filter((token) => token.side === "target")
+    .every((token) => token.pose.opacity === 1 && token.pose.x === 0 && token.pose.y === 0 && token.pose.scale === 1));
+});
+
 function divideEntryGeometry(): KpMeasuredEquationTransitionGeometry {
   return {
     transitionId: "transition.divide-entry",
@@ -104,6 +173,45 @@ function divideEntryGeometry(): KpMeasuredEquationTransitionGeometry {
         target: endpoint(["structure.left-rule", "structure.right-rule"], 8, 92)
       }
     ]
+  };
+}
+
+function quotientGeometry(): KpMeasuredEquationTransitionGeometry {
+  const animation = createDivideBothSidesEquationAnimationAsset();
+  const binding = createKpEquationLinearRearrangementBindings(animation)[2]!
+    .successorSynthesisBinding!;
+  const sourceIds = binding.sourceAnnotations.map((annotation) => annotation.id);
+  const targetId = binding.targetAnnotations[0]!.id;
+  const geometry: KpMeasuredEquationTransitionGeometry = {
+    transitionId: "transition.quotient",
+    linearRearrangementKind: "simplify-constant-quotient",
+    successorSynthesisBinding: binding,
+    successorPresentationRecipe: "counter-convergence-v1",
+    sourceTokens: [
+      token("persist.x.quotient", 8, 20),
+      token("persist.equals.quotient", 38, 20),
+      ...sourceIds.map((id, index) => token(id, 70 + index * 15, 20))
+    ],
+    targetTokens: [
+      token("target.x.quotient", 8, 20),
+      token("target.equals.quotient", 38, 20),
+      token(targetId, 76, 20)
+    ],
+    relations: [
+      relation("x", ["persist.x.quotient"], ["target.x.quotient"], 0, 0),
+      relation("equals", ["persist.equals.quotient"], ["target.equals.quotient"], 0, 0),
+      {
+        recordId: "quotient-becomes-four",
+        lifecycle: "merge",
+        source: endpoint(sourceIds, 70, 42),
+        target: endpoint([targetId], 76, 12),
+        delta: { x: -8, y: 0, scaleX: 1, scaleY: 1 }
+      }
+    ]
+  };
+  return {
+    ...geometry,
+    successorSynthesisPlan: createKpEquationSuccessorSynthesisPlan(geometry)
   };
 }
 

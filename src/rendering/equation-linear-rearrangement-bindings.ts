@@ -49,5 +49,7 @@ export function createKpEquationLinearRearrangementBindings(
 }
 
 function isSuccessorKind(kind: KpEquationLinearRearrangementKind): boolean {
-  return kind === "simplify-constant-difference" || kind === "simplify-constant-product";
+  return kind === "simplify-constant-difference" ||
+    kind === "simplify-constant-quotient" ||
+    kind === "simplify-constant-product";
 }

@@ -149,7 +149,8 @@
     {
       "id": "s17-divide-settlement",
       "title": "Compose cancellation quotient synthesis and settlement",
-      "status": "planned"
+      "summary": "Cancellation now certifies one, structural retirement is explicit, the right fraction remains material through cancellation, and metadata-backed 12/3 synthesis gates four before exact native settlement.",
+      "status": "complete"
     },
     {
       "id": "s18-divide-gate",

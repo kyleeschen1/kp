@@ -259,6 +259,24 @@
       "status": "passed",
       "scope": "s16 animation and reader dependency direction",
       "checkedAt": "2026-07-22T00:24:25.850Z"
+    },
+    {
+      "command": "node focused divide settlement, identity, and rearrangement tests",
+      "status": "passed",
+      "scope": "s17 certified one witness, structural retirement, persistent quotient material, readiness-gated four synthesis, and exact settlement",
+      "checkedAt": "2026-07-22T00:28:30.338Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s17 quotient successor and cancellation types",
+      "checkedAt": "2026-07-22T00:28:31.612Z"
+    },
+    {
+      "command": "npm run check:inference",
+      "status": "passed",
+      "scope": "s17 inferred choreography and asset API budget",
+      "checkedAt": "2026-07-22T00:28:32.796Z"
     }
   ]
 }

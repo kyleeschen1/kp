@@ -27,6 +27,7 @@ export type KpEquationLinearRearrangementKind =
   | "cancel-additive-inverses"
   | "cancel-multiplicative-inverses"
   | "simplify-constant-difference"
+  | "simplify-constant-quotient"
   | "simplify-constant-product";
 
 export function kpEquationLinearRearrangementKindForTransformType(
@@ -40,6 +41,7 @@ export function kpEquationLinearRearrangementKindForTransformType(
     case "cancelAdditiveInverses": return "cancel-additive-inverses";
     case "cancelMultiplicativeInverses": return "cancel-multiplicative-inverses";
     case "simplifyConstantDifference": return "simplify-constant-difference";
+    case "simplifyConstantQuotient": return "simplify-constant-quotient";
     case "simplifyConstantProduct": return "simplify-constant-product";
     default: return undefined;
   }
@@ -181,7 +183,9 @@ function isCancellationKind(kind: KpEquationLinearRearrangementKind): boolean {
 }
 
 function isSuccessorKind(kind: KpEquationLinearRearrangementKind): boolean {
-  return kind === "simplify-constant-difference" || kind === "simplify-constant-product";
+  return kind === "simplify-constant-difference" ||
+    kind === "simplify-constant-quotient" ||
+    kind === "simplify-constant-product";
 }
 
 function samplePersistentRelation(
