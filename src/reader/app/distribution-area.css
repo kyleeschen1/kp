@@ -20,6 +20,7 @@
   box-shadow: 0 22px 60px rgb(22 35 29 / 7%);
   overflow: hidden;
 }
+body[data-kp-reader-hydrated="true"][data-kp-reader-font-ready="false"] .kp-distribution-visual { visibility: hidden; }
 .kp-distribution-stage__header { display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
 .kp-distribution-stage__header > div:first-child { display: grid; gap: .15rem; min-width: 0; }
 .kp-distribution-stage__header span { color: var(--kp-accent); font-size: .64rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }

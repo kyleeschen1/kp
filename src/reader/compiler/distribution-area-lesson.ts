@@ -58,7 +58,7 @@ function compilePage(tocHtml: string, articleHtml: string): string {
     '<meta name="description" content="See algebraic distribution and geometric area change together.">',
     '<link rel="stylesheet" href="/src/reader/app/distribution-area.css">',
     "</head>",
-    `<body data-kp-reader="distribution-area" data-kp-reader-document-id="${documentId}" data-kp-reader-document-version="1">`,
+    `<body data-kp-reader="distribution-area" data-kp-reader-document-id="${documentId}" data-kp-reader-document-version="1" data-kp-reader-font-ready="false">`,
     '<header class="kp-reader-masthead">',
     '<a class="kp-reader-wordmark" href="/">Kinetic Press</a>',
     '<span class="kp-reader-tagline">See concepts move</span>',

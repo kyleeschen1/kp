@@ -74,6 +74,20 @@
       "scope": "semantic URL round trip",
       "checkedAt": "2026-07-22T16:33:45.696Z",
       "notes": "Six browser tests pass; the share URL preserves lesson, version, checkpoint, exact progress, inverse direction, material owner, TOC state, and cross-surface focus."
+    },
+    {
+      "command": "npx playwright test tests/equation-font-readiness.browser.spec.ts tests/semantic-reader-distribution-area.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "font-ready render gate",
+      "checkedAt": "2026-07-22T16:35:46.798Z",
+      "notes": "Seven checks pass; distribution exposes only font-ready review frames and preserves all reader behavior."
+    },
+    {
+      "command": "node --test tests/semantic-reader-distribution-area-compiler.test.ts",
+      "status": "passed",
+      "scope": "static compiler preservation",
+      "checkedAt": "2026-07-22T16:35:47.916Z",
+      "notes": "Two compiler checks pass, including searchable no-JavaScript output and KaTeX labels outside SVG text."
     }
   ],
   "expectedLearning": [

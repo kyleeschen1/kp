@@ -8,6 +8,7 @@ import {
   attentionPhaseAt,
   createKpDistributionAreaAttentionPlan
 } from "../../animation/distribution-area-exemplar-attention.ts";
+import { createKpEquationFontReadiness } from "../../rendering/equation-font-readiness.ts";
 import { createKpReaderActiveLocationService } from "../runtime/public-api.ts";
 
 type Direction = "forward" | "inverse";
@@ -28,6 +29,7 @@ const activeLocation = createKpReaderActiveLocationService({
 const directionButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-kp-direction-button]")];
 const plan = createKpDistributionAreaForwardMotionPlan();
 const attention = createKpDistributionAreaAttentionPlan();
+const fontReadiness = createKpEquationFontReadiness(document);
 let direction: Direction = readDirection();
 let progress = readProgress();
 let pointerOwnsProgress = false;
@@ -37,6 +39,7 @@ let scrollFrame = 0;
 let previousReviewFrameAtMs: number | undefined;
 let previousReviewScrollY = window.scrollY;
 
+document.body.dataset["kpReaderFontReady"] = String(fontReadiness.status !== "waiting");
 document.body.dataset["kpReaderHydrated"] = "true";
 directionButtons.forEach((button) => button.addEventListener("click", () => {
   const next = button.dataset["kpDirectionButton"];
@@ -86,15 +89,27 @@ for (const element of document.querySelectorAll<HTMLElement>("[data-kp-focus]"))
   element.addEventListener("blur", () => setExternalFocus([]));
 }
 
-render();
-if (!hasSemanticProgress()) scheduleScroll();
-if (import.meta.env.DEV) {
-  void import("../../dev-review/reader-review-bootstrap.ts").then(({ mountKpReaderDevReview }) => {
-    mountKpReaderDevReview(window);
-  });
-}
+const unsubscribeFontReadiness = fontReadiness.subscribe(() => {
+  document.body.dataset["kpReaderFontReady"] = "true";
+  render();
+});
+void fontReadiness.whenReady().then(() => {
+  document.body.dataset["kpReaderFontReady"] = "true";
+  render();
+  if (!hasSemanticProgress()) scheduleScroll();
+  if (import.meta.env.DEV) {
+    void import("../../dev-review/reader-review-bootstrap.ts").then(({ mountKpReaderDevReview }) => {
+      mountKpReaderDevReview(window);
+    });
+  }
+});
+window.addEventListener("pagehide", () => {
+  unsubscribeFontReadiness();
+  fontReadiness.dispose();
+}, { once: true });
 
 function render(): void {
+  if (fontReadiness.status === "waiting") return;
   progress = clamp01(progress);
   const visualProgress = direction === "forward" ? progress : 1 - progress;
   const forward = sampleKpDistributionAreaForwardMotion({ plan, progress: visualProgress });
@@ -163,8 +178,8 @@ function dispatchDevReviewFrame(
     fitScale: 1,
     layoutRevision: 0,
     layoutReadCount: 0,
-    fontRevision: 0,
-    fontReady: document.fonts.status === "loaded",
+    fontRevision: fontReadiness.revision,
+    fontReady: fontReadiness.status !== "waiting",
     ownerIds: [owner],
     ...(previousReviewFrameAtMs === undefined
       ? {}

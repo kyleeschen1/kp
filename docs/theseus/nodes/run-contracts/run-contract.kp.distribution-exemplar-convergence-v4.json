@@ -91,7 +91,8 @@
     {
       "id": "s07",
       "title": "Establish font readiness before motion measurement",
-      "status": "planned"
+      "summary": "Distribution now waits for final equation fonts before rendering, scheduling scroll, mounting capture, or reporting geometry; later loadingdone invalidations rerender the same semantic moment. Seven browser and two compiler checks pass.",
+      "status": "complete"
     },
     {
       "id": "s08",

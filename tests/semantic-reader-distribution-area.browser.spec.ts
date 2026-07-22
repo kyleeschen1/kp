@@ -25,7 +25,17 @@ test("semantic editor opens the synchronized algebra and area exemplar", async (
 });
 
 test("distribution reader mounts review capture outside the visual stage", async ({ page }) => {
+  await page.addInitScript(() => {
+    (window as typeof window & { __kpDistributionReviewFrames?: unknown[] })
+      .__kpDistributionReviewFrames = [];
+    window.addEventListener("kp:reader-dev-review-frame", (event) => {
+      if (!(event instanceof CustomEvent)) return;
+      (window as typeof window & { __kpDistributionReviewFrames: unknown[] })
+        .__kpDistributionReviewFrames.push(event.detail);
+    });
+  });
   await page.goto(`${route}?kpProgress=500`, { waitUntil: "networkidle" });
+  await expect(page.locator("body")).toHaveAttribute("data-kp-reader-font-ready", "true");
   await expect(page.locator("body")).toHaveAttribute("data-kp-dev-review-ready", "true");
   const host = page.locator("[data-kp-dev-review-shell]");
   await expect(host).toHaveAttribute("data-kp-dev-review-placement", "left-prose-rail");
@@ -37,6 +47,14 @@ test("distribution reader mounts review capture outside the visual stage", async
   expect(stage).not.toBeNull();
   expect(panel).not.toBeNull();
   expect(panel!.x + panel!.width).toBeLessThanOrEqual(stage!.x);
+  const latestFrame = await page.evaluate(() =>
+    (window as typeof window & { __kpDistributionReviewFrames: Array<{
+      fontReady: boolean;
+      fontRevision: number;
+    }> }).__kpDistributionReviewFrames.at(-1)
+  );
+  expect(latestFrame?.fontReady).toBe(true);
+  expect(latestFrame?.fontRevision).toBeGreaterThanOrEqual(0);
 });
 
 test("distribution reader keeps one visual owner and reversible native endpoints", async ({ page }) => {
