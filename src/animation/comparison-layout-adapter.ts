@@ -15,6 +15,7 @@ import {
   type KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
 import { createSemanticTransformationRef } from "../semantic/animation.ts";
+import { createKpCancellationPresentationAuthoringMetadata } from "../semantic/cancellation-presentation-authoring.ts";
 import {
   createLatexComparisonObject,
   createLatexFormObject,
@@ -173,7 +174,8 @@ export function createLinearSolveProgrammingComparisonAnimationAsset():
     metadata: {
       childAnimationIds: `${equation.id} ${programming.id}`,
       compositionKind: "synchronized-comparison",
-      clockCoupling: "shared-progress"
+      clockCoupling: "shared-progress",
+      ...createKpCancellationPresentationAuthoringMetadata("preserve-flow")
     }
   });
 }

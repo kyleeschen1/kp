@@ -117,7 +117,8 @@
     {
       "id": "s09-catalog-conformance",
       "title": "Validate-every-cancellation-asset",
-      "status": "planned"
+      "summary": "Added catalog-wide conformance for raw recipe authority, missing or orphaned teaching goals, and unresolved policy. All catalog assets plus the five dedicated reader variants pass; the linear-solve/programming composition now carries inferred cancellation intent.",
+      "status": "complete"
     },
     {
       "id": "s10-cancellation-visual-gate",
