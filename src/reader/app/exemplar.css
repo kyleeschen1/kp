@@ -68,7 +68,7 @@ a { color: var(--kp-relation); text-underline-offset: .2em; }
 
 .kp-animation-story {
   display: grid;
-  grid-template-columns: minmax(18rem, .78fr) minmax(25rem, 1.22fr);
+  grid-template-columns: minmax(14rem, .78fr) minmax(20rem, 1.22fr);
   grid-template-areas: "beats visual";
   gap: clamp(2.5rem, 7vw, 7rem);
   align-items: start;
@@ -172,6 +172,10 @@ body[data-kp-reader-motion-mode="essential"] .kp-reader-equation-material-owner-
   .kp-reader-equation-stage-heading { display: block; }
   .kp-reader-equation-stage-heading output { display: block; }
   .kp-reader-equation-controls { justify-content: flex-end; margin-top: .35rem; }
+}
+
+@media (max-width: 340px) {
+  .kp-reader-mode { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

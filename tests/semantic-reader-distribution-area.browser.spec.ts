@@ -320,3 +320,42 @@ test("distribution reader remains searchable without JavaScript and contained on
   expect(areaBox!.x + areaBox!.width).toBeLessThanOrEqual(stageBox!.x + stageBox!.width + 1);
   await phone.close();
 });
+
+test("distribution preserves its semantic moment through narrow resize without wrapping or overflow", async ({ page }) => {
+  await page.setViewportSize({ width: 900, height: 760 });
+  await page.goto(`${route}?kpProgress=430&kpDirection=forward`, { waitUntil: "networkidle" });
+  const stage = page.locator("[data-kp-distribution-stage]");
+  await expect(stage).toHaveAttribute("data-kp-fit-status", "contained");
+
+  for (const width of [375, 320, 280]) {
+    const previousRevision = Number(await stage.getAttribute("data-kp-distribution-layout-revision"));
+    await page.setViewportSize({ width, height: 700 });
+    await expect.poll(async () => Number(await stage.getAttribute("data-kp-distribution-layout-revision")))
+      .toBeGreaterThan(previousRevision);
+    const containment = await page.evaluate(() => {
+      const stageRect = document.querySelector<HTMLElement>("[data-kp-distribution-stage]")!.getBoundingClientRect();
+      const selectors = [
+        '[data-kp-material-token="left-three"]',
+        '[data-kp-material-token="right-three"]',
+        '[data-kp-material-token="x"]',
+        '[data-kp-material-token="two"]',
+        '[data-kp-area-width-token="x"]',
+        '[data-kp-area-width-token="two"]'
+      ];
+      return {
+        documentOverflow: document.documentElement.scrollWidth - window.innerWidth,
+        allInside: selectors.every((selector) => {
+          const rect = document.querySelector<HTMLElement>(selector)!.getBoundingClientRect();
+          return rect.left >= stageRect.left - 1 && rect.right <= stageRect.right + 1;
+        }),
+        nowrap: [...document.querySelectorAll<HTMLElement>(".kp-distribution-algebra .katex, .kp-distribution-area .katex")]
+          .every((element) => getComputedStyle(element).whiteSpace === "nowrap")
+      };
+    });
+    expect(containment).toEqual({ documentOverflow: 0, allInside: true, nowrap: true });
+    await expect(stage).toHaveAttribute("data-kp-fit-status", "contained");
+    await expect(stage).toHaveAttribute("data-kp-owner", "material");
+    await expect(page.locator("[data-kp-distribution-scrubber]")).toHaveValue("430");
+    await expect(page).toHaveURL(/kpProgress=430/);
+  }
+});

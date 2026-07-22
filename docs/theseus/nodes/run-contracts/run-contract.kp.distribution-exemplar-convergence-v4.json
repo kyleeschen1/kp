@@ -151,7 +151,8 @@
     {
       "id": "s17",
       "title": "Cover resize narrow overflow and wrapping boundaries",
-      "status": "planned"
+      "summary": "KaTeX surfaces are explicitly nowrap, fit status is measured rather than asserted, resizing preserves and remeasures the current semantic moment, shared story minima no longer overflow tablet layouts, and 280px mastheads retain the share link without horizontal scroll.",
+      "status": "complete"
     },
     {
       "id": "s18",

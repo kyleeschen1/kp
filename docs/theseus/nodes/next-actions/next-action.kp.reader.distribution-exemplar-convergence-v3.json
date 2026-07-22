@@ -221,6 +221,20 @@
       "scope": "s16 default parallel integration",
       "checkedAt": "2026-07-22T17:20:09.981Z",
       "notes": "All TypeScript projects and eleven browser checks pass; algebra and geometry share the same inferred parallel schedule id without changing accepted visual behavior."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s17 responsive fit reporting",
+      "checkedAt": "2026-07-22T17:27:36.884Z",
+      "notes": "All TypeScript projects pass with measured document, stage, algebra, and area fit status in review frames."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "s17 responsive and overflow boundaries",
+      "checkedAt": "2026-07-22T17:27:45.228Z",
+      "notes": "Twelve browser checks pass; resize preserves progress and ownership, remeasures layout, keeps every material token inside the stage, retains nowrap KaTeX, and prevents document overflow from 900px through 280px."
     }
   ],
   "expectedLearning": [

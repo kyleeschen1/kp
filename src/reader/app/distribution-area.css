@@ -36,6 +36,7 @@ body[data-kp-reader-hydrated="true"][data-kp-reader-font-ready="false"] .kp-dist
 .kp-distribution-algebra__native { display: grid; place-items: center; }
 .kp-distribution-algebra__native[hidden], .kp-distribution-algebra__material[hidden] { display: none; }
 .kp-distribution-algebra__native .katex-display { margin: 0; }
+.kp-distribution-algebra .katex, .kp-distribution-area .katex { white-space: nowrap; }
 .kp-distribution-algebra__material > span { position: absolute; display: inline-block; transform-origin: center; will-change: left, top, transform, opacity; }
 .kp-distribution-area { position: relative; width: min(100%, 36rem); min-width: 0; margin: 0 auto; aspect-ratio: 600 / 320; }
 .kp-distribution-area svg { display: block; width: 100%; height: 100%; overflow: visible; }

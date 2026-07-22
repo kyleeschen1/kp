@@ -175,14 +175,17 @@ function render(): void {
     button.setAttribute("aria-pressed", String(button.dataset["kpDirectionButton"] === direction));
   }
   share.href = semanticUrl().toString();
-  dispatchDevReviewFrame(phase.id, phase.conceptIds, owner, permille);
+  const fitStatus = distributionFitStatus();
+  stage.dataset["kpFitStatus"] = fitStatus;
+  dispatchDevReviewFrame(phase.id, phase.conceptIds, owner, permille, fitStatus);
 }
 
 function dispatchDevReviewFrame(
   phaseId: string,
   conceptIds: readonly string[],
   owner: string,
-  progressPermille: number
+  progressPermille: number,
+  fitStatus: "contained" | "overflowing"
 ): void {
   if (!import.meta.env.DEV) return;
   const atMs = performance.now();
@@ -203,7 +206,7 @@ function dispatchDevReviewFrame(
     playbackDirection: direction === "forward" ? "forward" : "rewind",
     rendererId: "reader.distribution.composite",
     motionAuthority: pointerOwnsProgress ? "controls" : "scroll",
-    fitStatus: "contained",
+    fitStatus,
     fitScale: 1,
     layoutRevision,
     layoutReadCount,
@@ -217,6 +220,15 @@ function dispatchDevReviewFrame(
   } }));
   previousReviewFrameAtMs = atMs;
   previousReviewScrollY = window.scrollY;
+}
+
+function distributionFitStatus(): "contained" | "overflowing" {
+  const tolerance = 1;
+  const contained = document.documentElement.scrollWidth <= window.innerWidth + tolerance &&
+    [stage, algebraRoot, areaRoot].every((element) =>
+      element.scrollWidth <= element.clientWidth + tolerance
+    );
+  return contained ? "contained" : "overflowing";
 }
 
 function renderMaterial(frame: KpDistributionAreaTimelineFrame): void {
