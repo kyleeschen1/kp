@@ -161,6 +161,12 @@
       "status": "passed",
       "scope": "s18 exact KP-themed two-region SVG scene with KaTeX labels",
       "checkedAt": "2026-07-22T14:41:14.731Z"
+    },
+    {
+      "command": "focused distribution area endpoint, SVG, and semantic trace tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s19 exact searchable native factored and expanded endpoints",
+      "checkedAt": "2026-07-22T14:43:29.755Z"
     }
   ],
   "expectedLearning": [

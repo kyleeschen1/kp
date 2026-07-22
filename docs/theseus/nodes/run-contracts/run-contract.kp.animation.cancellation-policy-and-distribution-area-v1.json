@@ -177,7 +177,8 @@
     {
       "id": "s19-area-static-endpoints",
       "title": "Render-exact-native-area-model-endpoints",
-      "status": "planned"
+      "summary": "Added native factored and expanded endpoint projections: a unified rectangle labeled 3, x+2, and 3(x+2), and a partitioned rectangle labeled 3, x, 2, 3x, and 6. Both retain searchable KaTeX and exclude material or witness ownership.",
+      "status": "complete"
     },
     {
       "id": "s20-area-forward-motion",
