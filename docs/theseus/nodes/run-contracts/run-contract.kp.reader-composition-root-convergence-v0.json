@@ -203,7 +203,14 @@
     {
       "id": "s13",
       "title": "Extract shared semantic-link focus bindings",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s13-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s13-v0",
+      "title": "Extract shared semantic-link focus bindings",
+      "summary": "Shared semantic-link focus bindings are integrated in both readers and verified without changing projection policy.",
+      "status": "complete"
     },
     {
       "id": "s14",

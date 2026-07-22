@@ -1,0 +1,122 @@
+{
+  "id": "next-action.kp.s13-v0",
+  "kind": "next-action",
+  "title": "Extract shared semantic-link focus bindings",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Materialize the shared semantic-link focus binding slice.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reader-composition-root-convergence-v0.json",
+      "summary": "Run contract whose stored slice s13 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.composition-root-convergence-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
+      "summary": "Approved generated-quality and verification-amortization phase."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.reader-composition-convergence-v0.json",
+      "summary": "User-approved priority checkpoint placing composition convergence first."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.reader-composition-root-convergence-v0",
+      "next-action.kp.reader.composition-root-convergence-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.reader.composition-root-convergence-v0"
+  ],
+  "verification": [
+    "node --test focused reader compiler, runtime, route, and descriptor tests",
+    "npm run check:architecture",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:linear-equation",
+    "npm run visual:distribution-area",
+    "npm run check:dev-review-production",
+    "npm run build",
+    "npm run theseus -- workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/semantic-reader-semantic-focus-bindings.test.ts tests/semantic-reader-semantic-focus.test.ts",
+      "status": "passed",
+      "scope": "delegated pointer and keyboard focus contracts",
+      "checkedAt": "2026-07-22T19:41:13.040Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "shared semantic binding typing",
+      "checkedAt": "2026-07-22T19:41:14.248Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "reader runtime boundaries",
+      "checkedAt": "2026-07-22T19:41:15.303Z"
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "shared reader semantic parity",
+      "checkedAt": "2026-07-22T19:41:16.359Z"
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "distribution hover focus and visual parity",
+      "checkedAt": "2026-07-22T19:41:17.419Z"
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "equation visual parity",
+      "checkedAt": "2026-07-22T19:41:18.463Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Both readers now use one disposable delegated semantic-link binding for pointer and keyboard sources while retaining renderer-specific focus projection. The older initial story-salience assertion remains unchanged and outside this slice; the production diff does not touch initial story projection."
+  },
+  "expectedLearning": [
+    "Whether Extract shared semantic-link focus bindings can be completed inside Reader composition-root convergence v0."
+  ],
+  "allowedWork": [
+    "Reader compiler page shells, build-time route manifests, inferred URL codecs, browser lifecycle services, piecewise scroll clocks, frame scheduling, runtime lesson descriptors, production renderer adapters, derived conformance and review descriptors, impact selection, closure, and bundle budgets.",
+    "Compatibility changes required for both accepted readers to consume the shared contracts, provided exact visual, semantic, URL, static-searchability, and responsive parity remains proven."
+  ],
+  "disallowedWork": [
+    "Do not alter accepted equation or distribution semantics, choreography, visual policy, typography, colors, layout, attention behavior, searchable prose, or route meaning.",
+    "Do not add branch scheduling, structured algebra, advanced fraction composition, LLM mutation, new subjects, WebGL generalization, or editor redesign.",
+    "Do not introduce an abstraction used only by tests or only one production reader; integrate it in both readers or defer it.",
+    "Do not edit unrelated user-authored roadmap, thread, decision, or design documents."
+  ],
+  "criteria": [
+    {
+      "id": "shared-delegated-binding",
+      "weight": "high"
+    },
+    {
+      "id": "pointer-keyboard-sources",
+      "weight": "high"
+    },
+    {
+      "id": "selector-policy-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-disposal",
+      "weight": "high"
+    }
+  ]
+}

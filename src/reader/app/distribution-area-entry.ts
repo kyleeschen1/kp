@@ -4,6 +4,7 @@ import {
 } from "../../animation/distribution-area-exemplar-attention.ts";
 import { createKpEquationFontReadiness } from "../../rendering/equation-font-readiness.ts";
 import {
+  bindKpReaderSemanticLinks,
   createKpReaderActiveLocationService,
   createKpReaderRuntimeRouteDescriptor,
   decodeKpDistributionAreaUrl,
@@ -108,13 +109,12 @@ document.addEventListener("pointerdown", (event) => {
   }
 });
 share.addEventListener("click", () => replaceSemanticUrl());
-for (const element of document.querySelectorAll<HTMLElement>("[data-kp-focus]")) {
-  const concepts = element.dataset["kpFocus"]?.split(" ") ?? [];
-  element.addEventListener("pointerenter", () => setExternalFocus(concepts));
-  element.addEventListener("pointerleave", () => setExternalFocus([]));
-  element.addEventListener("focus", () => setExternalFocus(concepts));
-  element.addEventListener("blur", () => setExternalFocus([]));
-}
+const semanticLinkBindings = bindKpReaderSemanticLinks({
+  root: document,
+  selector: "[data-kp-focus]",
+  setFocus: (_source, concepts) => setExternalFocus(concepts),
+  clearFocus: () => setExternalFocus([])
+});
 
 const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
   readiness: fontReadiness,
@@ -133,6 +133,7 @@ const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
 void fontReviewLifecycle.ready;
 window.addEventListener("pagehide", () => {
   fontReviewLifecycle.dispose();
+  semanticLinkBindings.dispose();
 }, { once: true });
 
 function render(): void {

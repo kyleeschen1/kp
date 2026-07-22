@@ -59,6 +59,12 @@ export {
   type KpReaderSemanticFocusService
 } from "./semantic-focus.ts";
 export {
+  bindKpReaderSemanticLinks,
+  readKpReaderSemanticFocusRefs,
+  type KpReaderSemanticLinkBindings,
+  type KpReaderSemanticLinkFocusSource
+} from "./semantic-focus-bindings.ts";
+export {
   createKpReaderControlModel,
   projectKpReaderMotion,
   type KpReaderAccessibleCheckpoint,

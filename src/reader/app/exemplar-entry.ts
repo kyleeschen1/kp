@@ -56,6 +56,7 @@ import {
   createKpReaderClockSample,
   createKpReaderActiveLocationService,
   createKpReaderContinuousScrollClock,
+  bindKpReaderSemanticLinks,
   createKpReaderSemanticFocusService,
   createKpReaderSessionSnapshot,
   createKpReaderRuntimeRouteDescriptor,
@@ -319,10 +320,18 @@ window.addEventListener("wheel", releaseControlAuthority, { passive: true });
 window.addEventListener("touchstart", releaseControlAuthority, { passive: true });
 window.addEventListener("pointerdown", releaseControlAuthority, { passive: true });
 window.addEventListener("keydown", onReaderKeyDown);
-document.addEventListener("pointerover", onSemanticEnter);
-document.addEventListener("pointerout", onSemanticLeave);
-document.addEventListener("focusin", onSemanticEnter);
-document.addEventListener("focusout", onSemanticLeave);
+const semanticLinkBindings = bindKpReaderSemanticLinks({
+  root: document,
+  selector: ".kp-semantic-link",
+  setFocus: (source, refs) => {
+    focus.set(source, refs);
+    renderCurrentSample();
+  },
+  clearFocus: (source) => {
+    focus.clear(source);
+    renderCurrentSample();
+  }
+});
 window.addEventListener("pagehide", dispose, { once: true });
 reducedMotion.addEventListener("change", renderCurrentSample);
 motionSelect.addEventListener("change", onMotionPreferenceChange);
@@ -970,22 +979,6 @@ function setExplicitProgress(
   if (updateLocation) settleLocation();
 }
 
-function onSemanticEnter(event: Event): void {
-  const target = event.target;
-  if (!(target instanceof Element)) return;
-  const link = target.closest<HTMLElement>(".kp-semantic-link");
-  if (link === null) return;
-  focus.set(event.type === "focusin" ? "keyboard" : "pointer", dataRefs(link));
-  renderCurrentSample();
-}
-
-function onSemanticLeave(event: Event): void {
-  const target = event.target;
-  if (!(target instanceof Element) || target.closest(".kp-semantic-link") === null) return;
-  focus.clear(event.type === "focusout" ? "keyboard" : "pointer");
-  renderCurrentSample();
-}
-
 function visualFocusRefs(snapshot: KpReaderFocusSnapshot): readonly string[] {
   // Story-level object refs describe narrative scope, not a request to color an
   // entire equation. Exact selector refs remain visibly salient.
@@ -1242,6 +1235,7 @@ function dispose(): void {
   window.removeEventListener("pointerdown", releaseControlAuthority);
   window.removeEventListener("keydown", onReaderKeyDown);
   fontReviewLifecycle.dispose();
+  semanticLinkBindings.dispose();
   scheduler.dispose();
   scrollClock.dispose();
   focus.dispose();
