@@ -11,6 +11,7 @@ test("learner experience library puts the simplest division exemplar first", () 
   assert.deepEqual(experiences.map(({ id }) => id), [
     "divide-both-sides-scroll-lesson",
     "numerator-split-merge-scroll-lesson",
+    "fractional-transfer-comparison-scroll-lesson",
     "solve-fractional-linear-scroll-lesson",
     "solve-x-scroll-lesson",
     "solve-with-balance-concept-room"
@@ -36,6 +37,16 @@ test("learner experience library puts the simplest division exemplar first", () 
     status: "exemplar"
   });
   assert.deepEqual(experiences[2], {
+    id: "fractional-transfer-comparison-scroll-lesson",
+    kind: "scroll-lesson",
+    title: "Compare equation views",
+    summary:
+      "Switch between the complete balanced proof and a certified fluent transfer for x/2 = 4.",
+    href: "/reader/fractional-transfer/",
+    actionLabel: "Compare proof and shortcut",
+    status: "exemplar"
+  });
+  assert.deepEqual(experiences[3], {
     id: "solve-fractional-linear-scroll-lesson",
     kind: "scroll-lesson",
     title: "Solve a fractional equation",
@@ -45,7 +56,7 @@ test("learner experience library puts the simplest division exemplar first", () 
     actionLabel: "Review fraction animation",
     status: "prototype"
   });
-  assert.deepEqual(experiences[3], {
+  assert.deepEqual(experiences[4], {
     id: "solve-x-scroll-lesson",
     kind: "scroll-lesson",
     title: "Solve for x",

@@ -1,13 +1,21 @@
 import { findKpAssetSelector } from "./asset.ts";
 import { composeCorrespondenceMapsSequence } from "./correspondence.ts";
 import {
+  kpFractionalLinearCertifiedTransferProjectionId
+} from "./fractional-linear-certified-transfer-contract.ts";
+
+export {
+  kpFractionalLinearCertifiedTransferProjectionId,
+  kpFractionalLinearCertifiedTransferProxyRecordId
+} from "./fractional-linear-certified-transfer-contract.ts";
+import {
   createFractionalLinearEquationKpAsset,
   fractionalLinearEquationAssetIds as ids,
   type FractionalLinearEquationKpAsset
 } from "./fractional-linear-equation-asset.ts";
 
 export interface KpCertifiedFluentTransferProjection {
-  readonly id: "projection.fractional-linear.x-over-2.fluent-transfer";
+  readonly id: typeof kpFractionalLinearCertifiedTransferProjectionId;
   readonly kind: "certified-fluent-transfer-projection";
   readonly sourceTraceId: string;
   readonly sourceObjectId: string;
@@ -74,7 +82,7 @@ export function createFractionalLinearCertifiedTransferProjection(
   });
 
   const projection = {
-    id: "projection.fractional-linear.x-over-2.fluent-transfer",
+    id: kpFractionalLinearCertifiedTransferProjectionId,
     kind: "certified-fluent-transfer-projection",
     sourceTraceId: asset.sourceTraceId,
     sourceObjectId: ids.rightSimplified,

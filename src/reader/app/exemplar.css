@@ -97,8 +97,9 @@ body[data-kp-reader-hydrated="true"] .kp-animation-static > [data-kp-static-stat
 .kp-reader-equation-stage-heading output { grid-area: status; min-width: 0; overflow: hidden; color: var(--kp-muted); font-family: var(--kp-serif); font-size: .82rem; text-overflow: ellipsis; white-space: nowrap; }
 .kp-reader-focus-stepper { display: none; }
 .kp-reader-visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-.kp-reader-motion-control { grid-area: control; display: inline-flex; align-items: center; gap: .38rem; margin-left: auto; color: var(--kp-muted); font-size: .65rem; white-space: nowrap; }
-.kp-reader-motion-control select { padding: .2rem 1.35rem .2rem .42rem; border: 1px solid var(--kp-line); border-radius: .4rem; color: var(--kp-ink); background: var(--kp-surface); font: inherit; }
+.kp-reader-equation-controls { grid-area: control; display: flex; align-items: center; gap: .7rem; margin-left: auto; }
+.kp-reader-motion-control, .kp-reader-profile-control { display: inline-flex; align-items: center; gap: .38rem; color: var(--kp-muted); font-size: .65rem; white-space: nowrap; }
+.kp-reader-motion-control select, .kp-reader-profile-control select { padding: .2rem 1.35rem .2rem .42rem; border: 1px solid var(--kp-line); border-radius: .4rem; color: var(--kp-ink); background: var(--kp-surface); font: inherit; }
 .kp-reader-equation-viewport { position: relative; min-height: clamp(245px, 48vh, 440px); overflow: hidden; }
 .kp-reader-equation-transition { position: absolute; inset: 0; display: block !important; visibility: hidden; }
 .kp-reader-equation-transition[data-kp-reader-transition-active="true"] { visibility: visible; }
@@ -170,6 +171,7 @@ body[data-kp-reader-motion-mode="essential"] .kp-reader-equation-material-owner-
   .kp-lesson > h1 { font-size: clamp(2.8rem, 16vw, 4.6rem); }
   .kp-reader-equation-stage-heading { display: block; }
   .kp-reader-equation-stage-heading output { display: block; }
+  .kp-reader-equation-controls { justify-content: flex-end; margin-top: .35rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

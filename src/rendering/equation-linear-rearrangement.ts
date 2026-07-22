@@ -20,10 +20,12 @@ import type {
   KpEquationSuccessorPresentationRecipe,
   KpEquationZeroWitnessPresentationRecipe
 } from "./equation-presentation-policy.ts";
+import { kpFractionalLinearCertifiedTransferProxyRecordId } from "../semantic/fractional-linear-certified-transfer-contract.ts";
 
 export type KpEquationLinearRearrangementKind =
   | "balanced-introduction"
   | "divide-both-sides"
+  | "certified-fraction-transfer"
   | "split-fraction-sum"
   | "merge-fractions"
   | "cancel-additive-inverses"
@@ -40,6 +42,7 @@ export function kpEquationLinearRearrangementKindForTransformType(
     case "multiplyBothSides":
       return "balanced-introduction";
     case "divideBothSides": return "divide-both-sides";
+    case "projectCertifiedFractionTransfer": return "certified-fraction-transfer";
     case "splitFractionSum": return "split-fraction-sum";
     case "mergeFractions": return "merge-fractions";
     case "cancelAdditiveInverses": return "cancel-additive-inverses";
@@ -147,12 +150,17 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
     case "role-change":
       return isFractionStructureRewriteKind(input.frame.kind)
         ? sampleFractionStructureContinuant(input)
+        : input.frame.kind === "certified-fraction-transfer" &&
+            input.relation.recordId === kpFractionalLinearCertifiedTransferProxyRecordId
+          ? sampleCertifiedTransferProxy(input)
         : samplePersistentRelation(input);
     case "enter":
       return input.frame.kind === "divide-both-sides"
         ? sampleMatchedFractionStructureIntroduction(input)
         : input.frame.kind === "balanced-introduction"
         ? sampleBalancedIntroduction(input)
+        : input.frame.kind === "certified-fraction-transfer"
+          ? sampleCertifiedTransferIntroduction(input)
         : isCancellationKind(input.frame.kind)
           ? sampleExplicitCancellationTarget(input)
         : undefined;
@@ -165,6 +173,8 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
     case "exit":
       return isCancellationKind(input.frame.kind)
         ? sampleStructuralRetirement(input)
+        : input.frame.kind === "certified-fraction-transfer"
+          ? sampleCertifiedTransferRetirement(input)
         : undefined;
     case "merge":
       return input.frame.kind === "merge-fractions"
@@ -183,6 +193,52 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
     default:
       return undefined;
   }
+}
+
+function sampleCertifiedTransferProxy(
+  input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
+): readonly KpEquationTokenMotionFrameToken[] {
+  const travel = smooth(windowProgress(input.progress, 0.2, 0.78));
+  const arc = -10 * Math.sin(Math.PI * travel);
+  return [
+    ...input.sourceTokens.map((token) => frameToken(token, "source", {
+      opacity: input.progress === 1 ? 0 : 1,
+      x: (input.relation.delta?.x ?? 0) * travel,
+      y: (input.relation.delta?.y ?? 0) * travel + arc,
+      scale: 1
+    })),
+    ...input.targetTokens.map((token) => frameToken(token, "target", {
+      opacity: input.progress === 1 ? 1 : 0,
+      x: 0,
+      y: 0,
+      scale: 1
+    }))
+  ];
+}
+
+function sampleCertifiedTransferRetirement(
+  input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
+): readonly KpEquationTokenMotionFrameToken[] {
+  const visible = input.progress < 0.28;
+  return input.sourceTokens.map((token) => frameToken(token, "source", {
+    // Structural ink leaves in one frame; a fading rule reads as accidental DOM replacement.
+    opacity: visible ? 1 : 0,
+    x: 0,
+    y: 0,
+    scale: 1
+  }));
+}
+
+function sampleCertifiedTransferIntroduction(
+  input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
+): readonly KpEquationTokenMotionFrameToken[] {
+  const visible = input.progress >= 0.36;
+  return input.targetTokens.map((token) => frameToken(token, "target", {
+    opacity: visible ? 1 : 0,
+    x: 0,
+    y: 0,
+    scale: 1
+  }));
 }
 
 function sampleFractionStructureContinuant(

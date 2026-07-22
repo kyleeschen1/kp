@@ -32,6 +32,16 @@ const learnerExperiences = [
     status: "exemplar"
   },
   {
+    id: "fractional-transfer-comparison-scroll-lesson",
+    kind: "scroll-lesson",
+    title: "Compare equation views",
+    summary:
+      "Switch between the complete balanced proof and a certified fluent transfer for x/2 = 4.",
+    href: "/reader/fractional-transfer/",
+    actionLabel: "Compare proof and shortcut",
+    status: "exemplar"
+  },
+  {
     id: "solve-fractional-linear-scroll-lesson",
     kind: "scroll-lesson",
     title: "Solve a fractional equation",

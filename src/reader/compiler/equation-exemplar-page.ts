@@ -6,6 +6,7 @@ import {
 } from "../../rendering/katex-adapter.ts";
 import type { KpSelectorAnnotatedLatex } from "../../rendering/selector-annotated-latex.ts";
 import type { KpReaderEquationPresentationCapability } from "../document/public-api.ts";
+import { resolveKpReaderEquationPresentationProfile } from "../document/public-api.ts";
 
 export interface KpEquationExemplarPageInput {
   readonly animation: KpAnimationAsset;
@@ -19,6 +20,8 @@ export interface KpEquationExemplarPageInput {
   readonly articleHtml: string;
   readonly hydrationJson: string;
   readonly equationPresentation: KpReaderEquationPresentationCapability;
+  readonly presentationAnimations?: readonly KpAnimationAsset[] | undefined;
+  readonly showEquationProfileControl?: boolean | undefined;
   readonly annotateState: (
     state: KpSemanticAssetObject
   ) => KpSelectorAnnotatedLatex | undefined;
@@ -48,7 +51,11 @@ export function compileKpEquationExemplarPage(
     input.tocHtml,
     input.articleHtml,
     `</main>`,
-    compileKpEquationExemplarTemplate(input.animation, input.annotateState),
+    compileKpEquationExemplarTemplate(input.animation, input.annotateState, {
+      presentationAnimations: input.presentationAnimations,
+      equationPresentation: input.equationPresentation,
+      showEquationProfileControl: input.showEquationProfileControl
+    }),
     `<script type="application/json" data-kp-hydration>${input.hydrationJson}</script>`,
     `<script type="module" src="/src/reader/app/exemplar-entry.ts"></script>`,
     "</body>",
@@ -58,14 +65,28 @@ export function compileKpEquationExemplarPage(
 
 export function compileKpEquationExemplarTemplate(
   animation: KpAnimationAsset,
-  annotateState: KpEquationExemplarPageInput["annotateState"]
+  annotateState: KpEquationExemplarPageInput["annotateState"],
+  options?: {
+    readonly presentationAnimations?: readonly KpAnimationAsset[] | undefined;
+    readonly equationPresentation?: KpReaderEquationPresentationCapability | undefined;
+    readonly showEquationProfileControl?: boolean | undefined;
+  }
 ): string {
-  const objects = new Map(animation.bundle.objects.map((object) => [object.id, object]));
-  const states = new Map(animation.bundle.objects.map((object) => [
+  const animations = [animation, ...(options?.presentationAnimations ?? [])];
+  const objects = new Map(animations.flatMap((candidate) =>
+    candidate.bundle.objects.map((object) => [object.id, object] as const)
+  ));
+  const states = new Map([...objects.values()].map((object) => [
     object.id,
     compileAnnotatedState(object, annotateState)
   ]));
-  const transitions = animation.transformations.map((transformation) => {
+  const transformations = [...new Map(animations.flatMap((candidate) =>
+    candidate.transformations.map((transformation) => [
+      transformation.id,
+      transformation
+    ] as const)
+  )).values()];
+  const transitions = transformations.map((transformation) => {
     const source = transformation.sourceObjectIds.map((id) => {
       if (!objects.has(id)) throw new Error(`missing equation source ${id}`);
       return states.get(id)!;
@@ -90,6 +111,10 @@ export function compileKpEquationExemplarTemplate(
     `<div class="kp-reader-equation-stage" data-kp-reader-equation-stage>`,
     `<div class="kp-reader-equation-stage-heading">`,
     `<span data-kp-reader-stage-kicker>Follow the symbols</span>`,
+    `<div class="kp-reader-equation-controls">`,
+    options?.showEquationProfileControl === true && options.equationPresentation !== undefined
+      ? profileControl(options.equationPresentation)
+      : "",
     `<label class="kp-reader-motion-control">`,
     `<span>Motion</span>`,
     `<select data-kp-reader-motion-preference aria-label="Motion preference">`,
@@ -99,6 +124,7 @@ export function compileKpEquationExemplarTemplate(
     `<option value="static">Static</option>`,
     `</select>`,
     `</label>`,
+    `</div>`,
     `<output data-kp-reader-stage-status aria-live="polite">Read the equality</output>`,
     `</div>`,
     `<nav class="kp-reader-focus-stepper" data-kp-reader-focus-stepper aria-label="Explanation controls">`,
@@ -128,6 +154,22 @@ export function compileKpEquationExemplarTemplate(
     `<p class="kp-reader-equation-hint">Scroll to move the equation. Scroll back to rewind.</p>`,
     `</div>`,
     `</template>`
+  ].join("\n");
+}
+
+function profileControl(
+  capability: KpReaderEquationPresentationCapability
+): string {
+  return [
+    `<label class="kp-reader-profile-control">`,
+    `<span>View</span>`,
+    `<select data-kp-reader-equation-profile-control aria-label="Equation explanation view">`,
+    ...capability.profileIds.map((id) => {
+      const profile = resolveKpReaderEquationPresentationProfile(id);
+      return `<option value="${attribute(profile.id)}">${attribute(profile.label)}</option>`;
+    }),
+    `</select>`,
+    `</label>`
   ].join("\n");
 }
 

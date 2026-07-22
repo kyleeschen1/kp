@@ -421,6 +421,24 @@
       "status": "passed",
       "scope": "s25 semantic projection boundary",
       "checkedAt": "2026-07-22T01:18:36.819Z"
+    },
+    {
+      "command": "node focused certified transfer animation, compiler, profile, and preservation tests",
+      "status": "passed",
+      "scope": "s26 balanced versus fluent asset selection and inferred projection boundaries",
+      "checkedAt": "2026-07-22T01:40:53.733Z"
+    },
+    {
+      "command": "playwright fractional transfer and presentation profile browser gates",
+      "status": "passed",
+      "scope": "s26 Semantic Editor discovery, profile URL, exact seek-rewind, native endpoints, static search, phone containment, and visual snapshots",
+      "checkedAt": "2026-07-22T01:40:54.896Z"
+    },
+    {
+      "command": "typecheck, production build, architecture, dev-review closure, and canonical linear-equation visual capture",
+      "status": "passed",
+      "scope": "s26 boundary and preservation",
+      "checkedAt": "2026-07-22T01:40:55.914Z"
     }
   ]
 }

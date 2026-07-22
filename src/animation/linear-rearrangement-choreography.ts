@@ -864,6 +864,7 @@ function motifIdsForKind(
   switch (kind) {
     case "balanced-introduction": return ["append-after-shift", "balanced-entry"];
     case "divide-both-sides": return ["append-after-shift", "matched-fraction-entry"];
+    case "certified-fraction-transfer": return ["transfer", "certified-projection"];
     case "split-fraction-sum": return ["copy-fan-out", "fraction-structure-split"];
     case "merge-fractions": return ["merge-fan-in", "fraction-structure-merge"];
     case "cancel-additive-inverses": return ["cancelation", "meet-collapse"];
@@ -882,6 +883,8 @@ function meaningfulMotionReason(
       return "Reserved-space entry communicates that the same inverse operation applies to both sides.";
     case "divide-both-sides":
       return "Synchronized fraction structure communicates that the same non-zero divisor applies to both sides.";
+    case "certified-fraction-transfer":
+      return "A continuous presentation proxy compresses a certified balanced multiplication and cancellation without claiming semantic identity.";
     case "split-fraction-sum":
       return "Structural fan-out and operator descent communicate that each numerator term inherits the shared denominator.";
     case "merge-fractions":

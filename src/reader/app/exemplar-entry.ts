@@ -12,6 +12,10 @@ import {
   createNumeratorSplitMergeEquationAnimationAsset
 } from "../../animation/numerator-split-merge-equation-adapter.ts";
 import {
+  createFractionalLinearTransferBalancedAnimationAsset,
+  createFractionalLinearTransferFluentAnimationAsset
+} from "../../animation/fractional-linear-transfer-comparison-adapter.ts";
+import {
   bindKpFractionalLinearStructuralAnchors
 } from "../../rendering/fractional-linear-selector-annotated-latex.ts";
 import {
@@ -37,6 +41,7 @@ import {
   measureKpReaderEquationLayoutSnapshot,
   planKpReaderEquationPerceptualAlignment,
   planKpReaderEquationSequenceResponsiveFit,
+  projectKpCertifiedTransferMaterialPlan,
   projectKpReaderEquationIdentityWitness,
   projectKpReaderEquationRenderPlan,
   sampleKpReaderEquationSymbolMotion,
@@ -120,6 +125,10 @@ const animation = lessonVariant === "teacher-zero"
   ? createLinearSolveTeacherZeroAnimationAsset()
   : lessonVariant === "fractional-linear"
     ? createFractionalLinearEquationAnimationAsset()
+    : lessonVariant === "fractional-transfer"
+      ? equationPresentationProfile.derivation === "certified-transfer-v1"
+        ? createFractionalLinearTransferFluentAnimationAsset()
+        : createFractionalLinearTransferBalancedAnimationAsset()
     : lessonVariant === "divide-both-sides"
       ? createDivideBothSidesEquationAnimationAsset()
     : lessonVariant === "numerator-split-merge"
@@ -134,13 +143,23 @@ const staticSurface = requireElement<HTMLElement>("[data-kp-animation-static]");
 const template = requireElement<HTMLTemplateElement>("template[data-kp-reader-exemplar-template]");
 const templateContent = template.content.cloneNode(true);
 staticSurface.append(templateContent);
-if (lessonVariant === "fractional-linear") bindFractionalStructuralAnchors();
+if (lessonVariant === "fractional-linear" || lessonVariant === "fractional-transfer") {
+  bindFractionalStructuralAnchors();
+}
 if (lessonVariant === "divide-both-sides") bindDivideBothSidesStructuralAnchors();
 if (lessonVariant === "numerator-split-merge") bindNumeratorSplitMergeStructuralAnchors();
 document.body.dataset["kpReaderHydrated"] = "true";
 
 const stage = requireElement<HTMLElement>("[data-kp-reader-equation-stage]");
+const stageKicker = requireElement<HTMLElement>("[data-kp-reader-stage-kicker]");
+if (
+  lessonVariant === "fractional-transfer" &&
+  equationPresentationProfile.derivation === "certified-transfer-v1"
+) {
+  stageKicker.textContent = "Follow the certified shortcut";
+}
 stage.dataset["kpReaderEquationPresentationRecipe"] = presentationProfile.recipe;
+stage.dataset["kpReaderAnimationId"] = animation.id;
 stage.dataset["kpReaderEquationHandoffRecipe"] = presentationProfile.handoff;
 stage.dataset["kpReaderEquationCancellationRecipe"] = presentationProfile.cancellation;
 stage.dataset["kpReaderEquationZeroWitnessRecipe"] = presentationProfile.zeroWitness;
@@ -181,6 +200,12 @@ const progressBar = requireElement<HTMLElement>("[data-kp-reader-progress-bar]")
 const motionSelect = requireElement<HTMLSelectElement>(
   "[data-kp-reader-motion-preference]"
 );
+const equationProfileSelect = document.querySelector<HTMLSelectElement>(
+  "[data-kp-reader-equation-profile-control]"
+);
+if (equationProfileSelect !== null) {
+  equationProfileSelect.value = equationPresentationProfile.id;
+}
 const shareLink = requireElement<HTMLAnchorElement>("[data-kp-reader-share]");
 const beats = [...story.querySelectorAll<HTMLElement>("[data-kp-beat]")];
 const attentionElements = [
@@ -203,7 +228,9 @@ motionSelect.value = motionPreference;
 const fontReadiness = createKpEquationFontReadiness(document);
 const transitionElements = [
   ...stage.querySelectorAll<HTMLElement>("[data-kp-reader-transition]")
-];
+].filter((element) => animation.transformations.some((transformation) =>
+  transformation.id === requiredData(element, "kpReaderTransition")
+));
 const witnessedBindings = new Map(animation.transformations.flatMap((transformation) => {
   if (equationPresentationProfile.identity !== "hold-until-settled-v1") return [];
   if (
@@ -243,7 +270,12 @@ const staticPlans = new Map(animation.transformations.map((transformation, index
   const clock = createKpReaderClockSample({ source: "scroll", progress });
   const runtimeFrame = sampleKpReaderAnimationFrame({ animation, clock });
   const renderPlan = projectKpReaderEquationRenderPlan({ animation, runtimeFrame });
-  return [transformation.id, compileKpReaderEquationMaterialPlan(renderPlan)] as const;
+  return [
+    transformation.id,
+    projectKpCertifiedTransferMaterialPlan(
+      compileKpReaderEquationMaterialPlan(renderPlan)
+    )
+  ] as const;
 }));
 const materialLayer = createKpReaderEquationMaterialLayer(
   requireDescendant<HTMLElement>(viewport, "[data-kp-reader-equation-material-layer]")
@@ -287,6 +319,7 @@ document.addEventListener("focusout", onSemanticLeave);
 window.addEventListener("pagehide", dispose, { once: true });
 reducedMotion.addEventListener("change", renderCurrentSample);
 motionSelect.addEventListener("change", onMotionPreferenceChange);
+equationProfileSelect?.addEventListener("change", onEquationProfileChange);
 attentionPrevious.addEventListener("click", onAttentionPrevious);
 attentionNext.addEventListener("click", onAttentionNext);
 attentionScrubber.addEventListener("input", onAttentionScrub);
@@ -1068,6 +1101,18 @@ function onMotionPreferenceChange(): void {
   settleLocation();
 }
 
+function onEquationProfileChange(): void {
+  if (equationProfileSelect === null) return;
+  const selected = selectKpReaderEquationPresentation({
+    capability: compiledEquationPresentation,
+    requestedProfileId: equationProfileSelect.value,
+    source: "url"
+  });
+  const next = new URL(readerHref(lastSample()));
+  next.searchParams.set("kpProfile", selected.profile.id);
+  window.location.assign(next);
+}
+
 function restoreUrlLocation(): void {
   const session = decodeKpReaderSessionUrl(window.location.href, {
     documentId,
@@ -1207,6 +1252,7 @@ function dispose(): void {
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
   motionSelect.removeEventListener("change", onMotionPreferenceChange);
+  equationProfileSelect?.removeEventListener("change", onEquationProfileChange);
   attentionPrevious.removeEventListener("click", onAttentionPrevious);
   attentionNext.removeEventListener("click", onAttentionNext);
   attentionScrubber.removeEventListener("input", onAttentionScrub);
