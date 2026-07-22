@@ -71,6 +71,20 @@
       "scope": "slice-s06-unit-runtime-conformance",
       "checkedAt": "2026-07-22T23:51:32.663Z",
       "notes": "All 1,916 tests passed, including architecture, inference, concept-catalog, branch-operation, schedule, binding, measured-renderer, runtime, and rewind laws. A load-sensitive inference timing retry passed at 1.68s under the 5s ceiling."
+    },
+    {
+      "command": "npm run test:browser:linear-equation-conformance",
+      "status": "passed",
+      "scope": "slice-s07-rewind-and-symbolic-browser",
+      "checkedAt": "2026-07-22T23:54:24.400Z",
+      "notes": "Three Chromium checks passed for named semantic phases, exact native endpoints, deterministic direct seek and rewind, resize, reduced motion, opacity, and DOM budgets."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "slice-s07-responsive-attention-browser",
+      "checkedAt": "2026-07-22T23:54:24.807Z",
+      "notes": "Eight Chromium checks passed across the reader manifest, including solve-x URL reload/share state, searchable no-JS content, active TOC and ARIA focus, narrow containment, and branch-attention parity between wide scrollytelling and the focus stepper."
     }
   ],
   "expectedLearning": [

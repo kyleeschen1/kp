@@ -92,7 +92,8 @@
     {
       "id": "s07",
       "title": "Prove responsive attention URL search focus rewind and accessibility parity",
-      "status": "planned"
+      "summary": "Browser conformance now explicitly proves the solve-x branch schedule remains selected across wide scrollytelling and the narrow focus stepper while URL progress, searchable fallback, ARIA focus, resize, reduced motion, direct seek, rewind, and native endpoints remain intact.",
+      "status": "complete"
     },
     {
       "id": "s08",
