@@ -1,6 +1,10 @@
 import type { KpReaderArtifactRef } from "../document/public-api.ts";
 import type { KpReaderSessionSnapshot } from "../runtime/public-api.ts";
 import type {
+  KpReaderFrameSchedulerState,
+  KpReaderLayoutInvalidationReason
+} from "../runtime/public-api.ts";
+import type {
   KpReaderRendererAdapter,
   KpReaderRendererController,
   KpReaderRendererRequest
@@ -10,7 +14,9 @@ export interface KpReaderMountedAdapter<TFrame> {
   readonly blockId: string;
   readonly adapterId: string;
   render(frame: TFrame, session: KpReaderSessionSnapshot): void;
-  refresh(): void;
+  renderNow(frame: TFrame, session: KpReaderSessionSnapshot): void;
+  refresh(reason?: KpReaderLayoutInvalidationReason): void;
+  inspect(): KpReaderFrameSchedulerState | undefined;
   dispose(): void;
   readonly disposed: boolean;
 }
@@ -92,9 +98,23 @@ function mountedAdapter<TFrame>(
       };
       controller.render(request);
     },
-    refresh() {
+    renderNow(frame, session) {
       requireActive();
-      controller.refresh();
+      const request: KpReaderRendererRequest<TFrame> = {
+        blockId: input.blockId,
+        asset: input.asset,
+        session,
+        frame
+      };
+      (controller.renderNow ?? controller.render)(request);
+    },
+    refresh(reason) {
+      requireActive();
+      controller.refresh(reason);
+    },
+    inspect() {
+      requireActive();
+      return controller.inspect?.();
     },
     dispose() {
       if (isDisposed) return;

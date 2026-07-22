@@ -287,7 +287,14 @@
     {
       "id": "s20",
       "title": "Integrate a real production renderer adapter boundary",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s20-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s20-v0",
+      "title": "Integrate a real production renderer adapter boundary",
+      "summary": "Both accepted production readers now render through one typed scheduled-adapter lifecycle boundary with full parity.",
+      "status": "complete"
     },
     {
       "id": "s21",

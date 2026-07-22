@@ -19,6 +19,11 @@ export {
   type KpReaderMountedAdapter
 } from "./adapter-registry.ts";
 export {
+  defineKpReaderScheduledRendererAdapter,
+  type KpReaderRendererMountContext,
+  type KpReaderScheduledRendererAdapterOptions
+} from "./scheduled-adapter.ts";
+export {
   projectKpReaderEquationRenderPlan,
   type KpReaderEquationRelationPlan,
   type KpReaderEquationRenderPlan,

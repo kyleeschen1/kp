@@ -7,7 +7,7 @@ import {
   bindKpReaderSemanticLinks,
   createKpReaderActiveLocationService,
   createKpReaderContinuousScrollClock,
-  defineKpReaderFrameScheduler,
+  createKpReaderSessionSnapshot,
   createKpReaderLocationSettlement,
   createKpReaderRuntimeRouteDescriptor,
   decodeKpDistributionAreaUrl,
@@ -17,9 +17,11 @@ import {
   type KpReaderPiecewiseScrollGeometry
 } from "../runtime/public-api.ts";
 import {
+  createKpReaderAdapterRegistry,
   createKpDistributionAreaMotionPlan,
   createKpDistributionAreaTermSchedule,
   createKpDistributionAreaWidthMotionPlan,
+  defineKpReaderScheduledRendererAdapter,
   measureKpDistributionAreaLayout,
   measureKpDistributionAreaWidthLayout,
   type KpDistributionAreaMaterialTokenId,
@@ -30,6 +32,7 @@ import {
   type KpDistributionAreaWidthTokenId,
   type KpDistributionAreaWidthTokenPose
 } from "../renderers/public-api.ts";
+import { createKpReaderArtifactRef } from "../document/public-api.ts";
 import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycle.ts";
 
 type Direction = KpDistributionAreaDirection;
@@ -46,6 +49,7 @@ interface DistributionLayoutPlan {
 }
 
 const stage = required<HTMLElement>("[data-kp-distribution-stage]");
+const story = required<HTMLElement>("[data-kp-asset]");
 const readerRoute = createKpReaderRuntimeRouteDescriptor({
   href: window.location.href,
   documentId: requiredData(document.body, "kpReaderDocumentId"),
@@ -89,8 +93,8 @@ const locationSettlement = createKpReaderLocationSettlement({
   shareLink: share,
   href: semanticUrl
 });
-const frameScheduler = defineKpReaderFrameScheduler<DistributionFrameInput>()({
-  readLayout: ({ revision }) => {
+const distributionRendererHost = {
+  readLayout(revision: number) {
     // Distribution exposed one-based revisions before adopting the generic
     // scheduler; retain that diagnostic contract at the adapter boundary.
     layoutRevision = revision + 1;
@@ -107,12 +111,11 @@ const frameScheduler = defineKpReaderFrameScheduler<DistributionFrameInput>()({
       })
     };
   },
-  planLayout: ({ layout: nextLayout, widthLayout }): DistributionLayoutPlan => ({
-    motionPlan: createKpDistributionAreaMotionPlan(nextLayout, termSchedule),
-    widthMotionPlan: createKpDistributionAreaWidthMotionPlan(widthLayout, termSchedule)
-  }),
-  planFrame: ({ input, layoutPlan }) => ({ input, layoutPlan }),
-  writeFrame: ({ input, layoutPlan }) => {
+  writeFrame(frame: {
+    readonly input: DistributionFrameInput;
+    readonly layoutPlan: DistributionLayoutPlan;
+  }) {
+    const { input, layoutPlan } = frame;
     progress = input.progress;
     direction = input.direction;
     motionPlan = layoutPlan.motionPlan;
@@ -123,7 +126,40 @@ const frameScheduler = defineKpReaderFrameScheduler<DistributionFrameInput>()({
     renderFrame();
     if (input.settleLocation) locationSettlement.settle();
   }
+};
+const rendererRegistry = createKpReaderAdapterRegistry<
+  typeof distributionRendererHost,
+  DistributionFrameInput
+>();
+rendererRegistry.register(defineKpReaderScheduledRendererAdapter<DistributionFrameInput>()({
+  id: "renderer.distribution-composite",
+  readLayout: (host, _mount, { revision }) => host.readLayout(revision),
+  planLayout: (
+    _host,
+    _mount,
+    { layout: nextLayout, widthLayout }
+  ): DistributionLayoutPlan => ({
+    motionPlan: createKpDistributionAreaMotionPlan(nextLayout, termSchedule),
+    widthMotionPlan: createKpDistributionAreaWidthMotionPlan(widthLayout, termSchedule)
+  }),
+  planFrame: (_host, { input, layoutPlan }) => ({ input, layoutPlan }),
+  writeFrame: (host, frame) => host.writeFrame(frame)
+}));
+const renderer = rendererRegistry.mount({
+  adapterId: "renderer.distribution-composite",
+  host: distributionRendererHost,
+  blockId: requiredData(story, "kpBlock"),
+  asset: createKpReaderArtifactRef({
+    kind: "animation-asset",
+    id: requiredData(story, "kpAsset"),
+    version: requiredData(story, "kpAssetVersion")
+  }),
+  session: createKpReaderSessionSnapshot({
+    documentId: readerRoute.documentId,
+    documentVersion: readerRoute.documentVersion
+  })
 });
+stage.dataset["kpReaderRendererAdapter"] = renderer.adapterId;
 
 document.body.dataset["kpReaderHydrated"] = "true";
 directionButtons.forEach((button) => button.addEventListener("click", () => {
@@ -192,7 +228,7 @@ window.addEventListener("pagehide", () => {
   semanticLinkBindings.dispose();
   locationSettlement.dispose();
   scrollClock?.dispose();
-  frameScheduler.dispose();
+  rendererRegistry.disposeAll();
 }, { once: true });
 
 function renderFrame(): void {
@@ -335,16 +371,31 @@ function widthToken(id: KpDistributionAreaWidthTokenId, pose: KpDistributionArea
 
 function refreshLayoutAndRender(reason: "resize" | "fonts" | "content" = "content"): void {
   if (fontReadiness.status === "waiting") return;
-  frameScheduler.invalidate(reason);
+  renderer.refresh(reason);
   requestRender();
 }
 
 function requestRender(settleLocation = false): void {
-  frameScheduler.render({ progress, direction, settleLocation });
+  const frame = { progress, direction, settleLocation };
+  renderer.render(frame, distributionSession(frame));
 }
 
 function renderImmediately(): void {
-  frameScheduler.renderNow({ progress, direction, settleLocation: false });
+  const frame = { progress, direction, settleLocation: false };
+  renderer.renderNow(frame, distributionSession(frame));
+}
+
+function distributionSession(frame: DistributionFrameInput) {
+  return createKpReaderSessionSnapshot({
+    documentId: readerRoute.documentId,
+    documentVersion: readerRoute.documentVersion,
+    checkpointId: checkpointFor(
+      frame.direction === "forward" ? frame.progress : 1 - frame.progress
+    ),
+    progressPermille: Math.round(frame.progress * 1_000),
+    projectionId: "equation-area.distribution",
+    motionPreference: "full"
+  });
 }
 
 function setOpacity(role: string, opacity: number): void {

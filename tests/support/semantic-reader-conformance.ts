@@ -9,6 +9,7 @@ export interface KpSemanticReaderConformanceDescriptor {
   readonly beatId: string;
   readonly route: (progress: number) => string;
   readonly stageSelector: string;
+  readonly rendererAdapterId: string;
   readonly shareSelector: string;
   readonly fontReadyEvidence: "body-attribute" | "document-fonts";
   readonly progressEvidence:
@@ -27,6 +28,10 @@ export async function assertKpSemanticReaderConformance(input: {
   await page.goto(descriptor.route(descriptor.progress), { waitUntil: "networkidle" });
   await expect(page.locator("body")).toHaveAttribute("data-kp-reader", descriptor.readerId);
   await expect(page.locator("body")).toHaveAttribute("data-kp-reader-hydrated", "true");
+  await expect(page.locator(descriptor.stageSelector)).toHaveAttribute(
+    "data-kp-reader-renderer-adapter",
+    descriptor.rendererAdapterId
+  );
   if (descriptor.fontReadyEvidence === "body-attribute") {
     await expect(page.locator("body")).toHaveAttribute("data-kp-reader-font-ready", "true");
   } else {

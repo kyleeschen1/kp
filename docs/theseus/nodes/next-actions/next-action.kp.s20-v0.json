@@ -1,0 +1,144 @@
+{
+  "id": "next-action.kp.s20-v0",
+  "kind": "next-action",
+  "title": "Integrate a real production renderer adapter boundary",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Materialized from stored run-contract slice s20 in Reader composition-root convergence v0.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reader-composition-root-convergence-v0.json",
+      "summary": "Run contract whose stored slice s20 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.composition-root-convergence-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
+      "summary": "Approved generated-quality and verification-amortization phase."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.reader-composition-convergence-v0.json",
+      "summary": "User-approved priority checkpoint placing composition convergence first."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.reader-composition-root-convergence-v0",
+      "next-action.kp.reader.composition-root-convergence-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.reader.composition-root-convergence-v0"
+  ],
+  "verification": [
+    "node --test focused reader compiler, runtime, route, and descriptor tests",
+    "npm run check:architecture",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:linear-equation",
+    "npm run visual:distribution-area",
+    "npm run check:dev-review-production",
+    "npm run build",
+    "npm run theseus -- workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test scheduled adapter registry artifact and frame scheduler tests",
+      "status": "passed",
+      "scope": "adapter lifecycle inference context propagation immediate render invalidation inspection and disposal",
+      "checkedAt": "2026-07-22T20:59:55.320Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "production equation and distribution adapter inference",
+      "checkedAt": "2026-07-22T20:59:56.497Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "runtime renderer and composition boundaries",
+      "checkedAt": "2026-07-22T20:59:57.569Z"
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "production adapter mounts URLs searchability responsiveness and shared lifecycle",
+      "checkedAt": "2026-07-22T20:59:58.635Z"
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "12 distribution choreography ownership measurement URL and responsive parity cases",
+      "checkedAt": "2026-07-22T20:59:59.684Z"
+    },
+    {
+      "command": "npm run visual:cancellation",
+      "status": "passed",
+      "scope": "8 equation cancellation profile native endpoint and cross-surface parity cases",
+      "checkedAt": "2026-07-22T21:00:00.744Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "production instrumentation closure",
+      "checkedAt": "2026-07-22T21:00:01.839Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "production compilation and route bundles",
+      "checkedAt": "2026-07-22T21:00:02.953Z"
+    },
+    {
+      "command": "npm run theseus -- workspace validate",
+      "status": "passed",
+      "scope": "durable project memory integrity",
+      "checkedAt": "2026-07-22T21:00:04.067Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "The previously test-only adapter contract is now a production boundary. Equation and distribution mount semantic block, asset, and session context through the registry; the scheduled adapter owns read-plan-write ordering, immediate frames, invalidation, inspection, and disposal. Both accepted readers pass shared, visual, production, build, and workspace gates without choreography changes."
+  },
+  "expectedLearning": [
+    "Whether Integrate a real production renderer adapter boundary can be completed inside Reader composition-root convergence v0."
+  ],
+  "allowedWork": [
+    "Reader compiler page shells, build-time route manifests, inferred URL codecs, browser lifecycle services, piecewise scroll clocks, frame scheduling, runtime lesson descriptors, production renderer adapters, derived conformance and review descriptors, impact selection, closure, and bundle budgets.",
+    "Compatibility changes required for both accepted readers to consume the shared contracts, provided exact visual, semantic, URL, static-searchability, and responsive parity remains proven."
+  ],
+  "disallowedWork": [
+    "Do not alter accepted equation or distribution semantics, choreography, visual policy, typography, colors, layout, attention behavior, searchable prose, or route meaning.",
+    "Do not add branch scheduling, structured algebra, advanced fraction composition, LLM mutation, new subjects, WebGL generalization, or editor redesign.",
+    "Do not introduce an abstraction used only by tests or only one production reader; integrate it in both readers or defer it.",
+    "Do not edit unrelated user-authored roadmap, thread, decision, or design documents."
+  ],
+  "criteria": [
+    {
+      "id": "production-equation-mount",
+      "weight": "high"
+    },
+    {
+      "id": "production-distribution-mount",
+      "weight": "high"
+    },
+    {
+      "id": "scheduler-lifecycle-ownership",
+      "weight": "high"
+    },
+    {
+      "id": "semantic-request-context",
+      "weight": "high"
+    },
+    {
+      "id": "renderer-parity",
+      "weight": "high"
+    }
+  ]
+}

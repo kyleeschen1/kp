@@ -10,7 +10,9 @@ import { checkKpEquationNativeEndpointLaw } from "../../rendering/equation-nativ
 import {
   applyKpReaderEquationResponsiveFit,
   compileKpReaderEquationMaterialPlan,
+  createKpReaderAdapterRegistry,
   createKpReaderEquationMaterialLayer,
+  defineKpReaderScheduledRendererAdapter,
   measureKpReaderEquationLayoutSnapshot,
   planKpReaderEquationPerceptualAlignment,
   planKpReaderEquationSequenceResponsiveFit,
@@ -30,7 +32,6 @@ import {
   createKpReaderActiveLocationService,
   createKpReaderContinuousScrollClock,
   bindKpReaderSemanticLinks,
-  defineKpReaderFrameScheduler,
   createKpReaderLocationSettlement,
   createKpReaderSemanticFocusService,
   createKpReaderSessionSnapshot,
@@ -56,6 +57,7 @@ import type {
   KpLessonAttentionPhaseKind,
   KpLessonAttentionPlan
 } from "../document/public-api.ts";
+import { createKpReaderArtifactRef } from "../document/public-api.ts";
 import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycle.ts";
 import {
   bindKpReaderEquationLessonStructuralAnchors,
@@ -76,6 +78,11 @@ interface TransitionContext {
 
 interface LayoutState {
   readonly contexts: ReadonlyMap<string, TransitionContext>;
+}
+
+interface EquationRendererHost {
+  readonly readLayout: (revision: number) => LayoutState;
+  readonly writeFrame: (sample: KpReaderClockSample, layout: LayoutState) => void;
 }
 
 const readerRoute = createKpReaderRuntimeRouteDescriptor({
@@ -259,12 +266,29 @@ const materialLayer = createKpReaderEquationMaterialLayer(
 );
 let lastMeasuredLayout: LayoutState | undefined;
 
-const scheduler = defineKpReaderFrameScheduler<KpReaderClockSample>()({
-  readLayout: ({ revision }) => measureLayout(revision),
-  planLayout: (layout) => layout,
-  planFrame: ({ input, layout }) => ({ sample: input, layout }),
-  writeFrame: ({ sample, layout }) => renderSample(sample, layout)
+const rendererRegistry = createKpReaderAdapterRegistry<
+  EquationRendererHost,
+  KpReaderClockSample
+>();
+rendererRegistry.register(defineKpReaderScheduledRendererAdapter<KpReaderClockSample>()({
+  id: "renderer.equation-dom",
+  readLayout: (host, _mount, { revision }) => host.readLayout(revision),
+  planLayout: (_host, _mount, layout) => layout,
+  planFrame: (_host, { input, layout }) => ({ sample: input, layout }),
+  writeFrame: (host, { sample, layout }) => host.writeFrame(sample, layout)
+}));
+const renderer = rendererRegistry.mount({
+  adapterId: "renderer.equation-dom",
+  host: { readLayout: measureLayout, writeFrame: renderSample },
+  blockId: requiredData(story, "kpBlock"),
+  asset: createKpReaderArtifactRef({
+    kind: "animation-asset",
+    id: requiredData(story, "kpAsset"),
+    version: requiredData(story, "kpAssetVersion")
+  }),
+  session: createKpReaderSessionSnapshot({ documentId, documentVersion })
 });
+stage.dataset["kpReaderRendererAdapter"] = renderer.adapterId;
 
 const unsubscribeFocus = focus.subscribe((snapshot) => {
   applyFocus(snapshot);
@@ -272,7 +296,7 @@ const unsubscribeFocus = focus.subscribe((snapshot) => {
 });
 const resizeObserver = new ResizeObserver(() => {
   updateScrollGeometry();
-  scheduler.invalidate("resize");
+  renderer.refresh("resize");
   scheduleScrollSample();
 });
 resizeObserver.observe(viewport);
@@ -314,13 +338,13 @@ const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
   reviewMount: "immediate",
   renderReviewFrame: renderCurrentSample,
   onFontInvalidated: () => {
-    scheduler.invalidate("fonts");
+    renderer.refresh("fonts");
     scheduleScrollSample();
   },
   onReady: () => {
     restoreUrlLocation();
     updateScrollGeometry();
-    scheduler.invalidate("fonts");
+    renderer.refresh("fonts");
     scheduleScrollSample();
     // History writes must wait until the URL-selected scroll position has
     // produced its first frame; otherwise an early scrollend can persist zero.
@@ -421,7 +445,7 @@ function scheduleScrollSample(): void {
   if (scrollFrame !== undefined) return;
   scrollFrame = window.requestAnimationFrame(() => {
     scrollFrame = undefined;
-    scheduler.render(controlSample ?? scrollClock.samplePosition(readerPosition()));
+    renderWithAdapter(controlSample ?? scrollClock.samplePosition(readerPosition()));
   });
 }
 
@@ -477,7 +501,7 @@ function measureLayout(revision: number): LayoutState {
     applyKpReaderEquationResponsiveFit(context.fitSurface, fit);
     return [context.id, { ...context, fit }] as const;
   }));
-  stage.dataset["kpReaderLayoutReads"] = String(scheduler.inspect().readCount + 1);
+  stage.dataset["kpReaderLayoutReads"] = String(rendererInspection().readCount + 1);
   lastMeasuredLayout = { contexts };
   return lastMeasuredLayout;
 }
@@ -627,11 +651,13 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   document.body.dataset["kpReaderPlaybackDirection"] = sample.direction;
   stage.dataset["kpReaderMotionAuthority"] = motion.samplingAuthority;
   document.body.dataset["kpReaderTransition"] = transitionId;
-  document.body.dataset["kpReaderFramePlans"] = String(scheduler.inspect().framePlanCount + 1);
+  document.body.dataset["kpReaderFramePlans"] = String(
+    rendererInspection().framePlanCount + 1
+  );
   updateActiveBeat(projection.progressPermille, attentionProjection);
   if (import.meta.env.DEV) {
     const atMs = performance.now();
-    const schedulerState = scheduler.inspect();
+    const schedulerState = rendererInspection();
     window.dispatchEvent(new CustomEvent("kp:reader-dev-review-frame", { detail: {
       atMs,
       documentId,
@@ -802,7 +828,28 @@ function syncIndependentZeroWitness(
 }
 
 function renderCurrentSample(): void {
-  scheduler.render(lastSample());
+  renderWithAdapter(lastSample());
+}
+
+function renderWithAdapter(sample: KpReaderClockSample): void {
+  renderer.render(sample, createKpReaderSessionSnapshot({
+    documentId,
+    documentVersion,
+    checkpointId: sample.checkpointId,
+    progressPermille: sample.progressPermille,
+    projectionId: "equation.symbolic",
+    focusRefs: focus.getSnapshot().objectRefs,
+    motionPreference,
+    equationPresentationProfileId: equationPresentationProfile.id
+  }));
+}
+
+function rendererInspection() {
+  const inspection = renderer.inspect();
+  if (inspection === undefined) {
+    throw new Error(`Reader adapter ${renderer.adapterId} has no scheduler inspection.`);
+  }
+  return inspection;
 }
 
 function localPhaseProgress(progress: number, phaseIndex: number, phaseCount: number): number {
@@ -938,7 +985,7 @@ function setExplicitProgress(
     checkpointId: phase?.checkpointId
   });
   if (!isFocusStepperProjection()) scrollToProgress(progressPermille);
-  scheduler.render(controlSample);
+  renderWithAdapter(controlSample);
   if (updateLocation) locationSettlement.settle();
 }
 
@@ -1150,7 +1197,7 @@ function dispose(): void {
   fontReviewLifecycle.dispose();
   semanticLinkBindings.dispose();
   locationSettlement.dispose();
-  scheduler.dispose();
+  rendererRegistry.disposeAll();
   scrollClock.dispose();
   focus.dispose();
   unsubscribeFocus();

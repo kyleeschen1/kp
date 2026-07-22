@@ -1,5 +1,9 @@
 import type { KpReaderArtifactRef } from "../document/public-api.ts";
 import type { KpReaderSessionSnapshot } from "../runtime/public-api.ts";
+import type {
+  KpReaderFrameSchedulerState,
+  KpReaderLayoutInvalidationReason
+} from "../runtime/public-api.ts";
 
 export interface KpReaderRendererRequest<TFrame> {
   readonly blockId: string;
@@ -10,7 +14,9 @@ export interface KpReaderRendererRequest<TFrame> {
 
 export interface KpReaderRendererController<TFrame> {
   render(request: KpReaderRendererRequest<TFrame>): void;
-  refresh(): void;
+  renderNow?(request: KpReaderRendererRequest<TFrame>): void;
+  refresh(reason?: KpReaderLayoutInvalidationReason): void;
+  inspect?(): KpReaderFrameSchedulerState;
   dispose(): void;
 }
 
