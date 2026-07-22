@@ -275,7 +275,14 @@
     {
       "id": "s19",
       "title": "Replace equation variant branching with inferred lesson descriptors",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s19-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s19-v0",
+      "title": "Replace equation variant branching with inferred lesson descriptors",
+      "summary": "Equation lesson variant branching is replaced by one inferred production descriptor registry with verified behavior parity.",
+      "status": "complete"
     },
     {
       "id": "s20",

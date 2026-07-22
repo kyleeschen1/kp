@@ -1,30 +1,4 @@
 import {
-  createLinearSolveAnimationAsset,
-  createLinearSolveTeacherZeroAnimationAsset
-} from "../../animation/linear-solve-adapter.ts";
-import {
-  createFractionalLinearEquationAnimationAsset
-} from "../../animation/fractional-linear-equation-adapter.ts";
-import {
-  createDivideBothSidesEquationAnimationAsset
-} from "../../animation/divide-both-sides-equation-adapter.ts";
-import {
-  createNumeratorSplitMergeEquationAnimationAsset
-} from "../../animation/numerator-split-merge-equation-adapter.ts";
-import {
-  createFractionalLinearTransferBalancedAnimationAsset,
-  createFractionalLinearTransferFluentAnimationAsset
-} from "../../animation/fractional-linear-transfer-comparison-adapter.ts";
-import {
-  bindKpFractionalLinearStructuralAnchors
-} from "../../rendering/fractional-linear-selector-annotated-latex.ts";
-import {
-  bindKpDivideBothSidesStructuralAnchors
-} from "../../rendering/divide-both-sides-selector-annotated-latex.ts";
-import {
-  bindKpNumeratorSplitMergeStructuralAnchors
-} from "../../rendering/numerator-split-merge-selector-annotated-latex.ts";
-import {
   createKpEquationLinearRearrangementBindings
 } from "../../rendering/equation-linear-rearrangement-bindings.ts";
 import {
@@ -83,6 +57,10 @@ import type {
   KpLessonAttentionPlan
 } from "../document/public-api.ts";
 import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycle.ts";
+import {
+  bindKpReaderEquationLessonStructuralAnchors,
+  resolveKpReaderEquationLessonDescriptor
+} from "./equation-lesson-descriptor.ts";
 
 interface TransitionContext {
   readonly id: string;
@@ -107,6 +85,7 @@ const readerRoute = createKpReaderRuntimeRouteDescriptor({
 });
 const { documentId, documentVersion } = readerRoute;
 const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
+const lessonDescriptor = resolveKpReaderEquationLessonDescriptor(lessonVariant);
 const compiledEquationPresentation = defineKpReaderEquationPresentationCapability({
   defaultProfileId: resolveKpReaderEquationPresentationProfile(
     requiredData(document.body, "kpReaderEquationProfileDefault")
@@ -127,19 +106,7 @@ const equationPresentationProfile = equationPresentationSelection.profile;
 document.body.dataset["kpReaderEquationProfile"] = equationPresentationProfile.id;
 document.body.dataset["kpReaderEquationProfileSource"] =
   equationPresentationSelection.source;
-const animation = lessonVariant === "teacher-zero"
-  ? createLinearSolveTeacherZeroAnimationAsset()
-  : lessonVariant === "fractional-linear"
-    ? createFractionalLinearEquationAnimationAsset()
-    : lessonVariant === "fractional-transfer"
-      ? equationPresentationProfile.derivation === "certified-transfer-v1"
-        ? createFractionalLinearTransferFluentAnimationAsset()
-        : createFractionalLinearTransferBalancedAnimationAsset()
-    : lessonVariant === "divide-both-sides"
-      ? createDivideBothSidesEquationAnimationAsset()
-    : lessonVariant === "numerator-split-merge"
-      ? createNumeratorSplitMergeEquationAnimationAsset()
-    : createLinearSolveAnimationAsset();
+const animation = lessonDescriptor.createAnimation(equationPresentationProfile);
 const presentationProfile = kpEquationPresentationProfile(animation);
 const linearRearrangementBindings = createKpEquationLinearRearrangementBindings(
   animation
@@ -149,21 +116,17 @@ const staticSurface = requireElement<HTMLElement>("[data-kp-animation-static]");
 const template = requireElement<HTMLTemplateElement>("template[data-kp-reader-exemplar-template]");
 const templateContent = template.content.cloneNode(true);
 staticSurface.append(templateContent);
-if (lessonVariant === "fractional-linear" || lessonVariant === "fractional-transfer") {
-  bindFractionalStructuralAnchors();
-}
-if (lessonVariant === "divide-both-sides") bindDivideBothSidesStructuralAnchors();
-if (lessonVariant === "numerator-split-merge") bindNumeratorSplitMergeStructuralAnchors();
+bindKpReaderEquationLessonStructuralAnchors({
+  root: staticSurface,
+  animation,
+  descriptor: lessonDescriptor
+});
 document.body.dataset["kpReaderHydrated"] = "true";
 
 const stage = requireElement<HTMLElement>("[data-kp-reader-equation-stage]");
 const stageKicker = requireElement<HTMLElement>("[data-kp-reader-stage-kicker]");
-if (
-  lessonVariant === "fractional-transfer" &&
-  equationPresentationProfile.derivation === "certified-transfer-v1"
-) {
-  stageKicker.textContent = "Follow the certified shortcut";
-}
+const lessonStageKicker = lessonDescriptor.stageKicker?.(equationPresentationProfile);
+if (lessonStageKicker !== undefined) stageKicker.textContent = lessonStageKicker;
 stage.dataset["kpReaderEquationPresentationRecipe"] = presentationProfile.recipe;
 stage.dataset["kpReaderAnimationId"] = animation.id;
 stage.dataset["kpReaderEquationHandoffRecipe"] = presentationProfile.handoff;
@@ -411,7 +374,7 @@ function applyResponsiveProjection(): void {
       attentionAvailable: attention !== undefined,
       // The compact transcript is an explicit lesson capability. Treating a
       // missing attention plan as sufficient changed legacy reader geometry.
-      compactTranscriptAvailable: lessonVariant === "fractional-linear"
+      compactTranscriptAvailable: lessonDescriptor.compactTranscriptAvailable
     });
 }
 
@@ -1150,44 +1113,6 @@ function attentionKind(value: string): KpLessonAttentionPhaseKind {
     return value;
   }
   throw new Error(`Unknown reader attention phase kind ${value}.`);
-}
-
-function bindFractionalStructuralAnchors(): void {
-  const states = new Map(animation.bundle.objects.map((state) => [state.id, state]));
-  for (const element of staticSurface.querySelectorAll<HTMLElement>(
-    "[data-kp-reader-equation-state]"
-  )) {
-    const stateId = requiredData(element, "kpReaderEquationState");
-    const state = states.get(stateId);
-    if (state === undefined) throw new Error(`Missing fractional equation state ${stateId}.`);
-    bindKpFractionalLinearStructuralAnchors({ root: element, state });
-  }
-}
-
-function bindDivideBothSidesStructuralAnchors(): void {
-  const states = new Map(animation.bundle.objects.map((state) => [state.id, state]));
-  for (const element of staticSurface.querySelectorAll<HTMLElement>(
-    "[data-kp-reader-equation-state]"
-  )) {
-    const stateId = requiredData(element, "kpReaderEquationState");
-    const state = states.get(stateId);
-    if (state === undefined) throw new Error(`Missing divide-both-sides equation state ${stateId}.`);
-    bindKpDivideBothSidesStructuralAnchors({ root: element, state });
-  }
-}
-
-function bindNumeratorSplitMergeStructuralAnchors(): void {
-  const states = new Map(animation.bundle.objects.map((state) => [state.id, state]));
-  for (const element of staticSurface.querySelectorAll<HTMLElement>(
-    "[data-kp-reader-equation-state]"
-  )) {
-    const stateId = requiredData(element, "kpReaderEquationState");
-    const state = states.get(stateId);
-    if (state === undefined) {
-      throw new Error(`Missing numerator-split-merge equation state ${stateId}.`);
-    }
-    bindKpNumeratorSplitMergeStructuralAnchors({ root: element, state });
-  }
 }
 
 function requiredData(element: HTMLElement, key: string): string {
