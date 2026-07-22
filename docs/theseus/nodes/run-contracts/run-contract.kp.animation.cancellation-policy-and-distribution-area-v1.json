@@ -165,7 +165,8 @@
     {
       "id": "s17-area-layout-envelope",
       "title": "Plan-wide-and-phone-equation-area-geometry",
-      "status": "planned"
+      "summary": "Added contained wide and phone envelopes with left-to-right side-by-side ordering above 760px, readable stacked page flow below it, minimum area height, and no internal scroll rail.",
+      "status": "complete"
     },
     {
       "id": "s18-themed-svg-area",

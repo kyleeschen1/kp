@@ -149,6 +149,12 @@
       "status": "passed",
       "scope": "s16 exemplar-local renderer-neutral reversible presentation plan",
       "checkedAt": "2026-07-22T14:35:16.587Z"
+    },
+    {
+      "command": "focused distribution area responsive layout and presentation tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s17 wide side-by-side and phone page-flow layout envelope",
+      "checkedAt": "2026-07-22T14:37:18.867Z"
     }
   ],
   "expectedLearning": [
