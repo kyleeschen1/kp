@@ -201,7 +201,8 @@
     {
       "id": "s23-area-reader",
       "title": "Compile-searchable-URL-addressable-responsive-reader",
-      "status": "planned"
+      "summary": "Compiled the exact algebra-plus-area exemplar from searchable Markdown into a responsive reader with static first paint, KaTeX-over-SVG labels, single-owner DOM motion, synchronized forward/inverse controls, semantic hover focus, scroll review, and canonical lesson/checkpoint/progress/direction URLs. Focused compiler/motion tests, typecheck, production build, wide and phone visual smoke checks, and containment passed.",
+      "status": "complete"
     },
     {
       "id": "s24-area-editor-and-visual",

@@ -69,3 +69,6 @@ export {
 export {
   compileKpFractionalTransferComparisonLessonModel
 } from "./fractional-transfer-comparison-lesson-model.ts";
+export {
+  compileKpDistributionAreaLesson
+} from "./distribution-area-lesson.ts";

@@ -10,6 +10,7 @@ import {
   compileKpFractionalTransferComparisonLesson,
   compileKpFractionalLinearEquationLesson,
   compileKpNumeratorSplitMergeEquationLesson,
+  compileKpDistributionAreaLesson,
   compileKpXPlusThreeLesson,
   compileKpXPlusThreeTeacherZeroLesson
 } from "./src/reader/compiler/public-api.ts";
@@ -37,6 +38,10 @@ const fractionalTransferRoutePath = resolve(
   projectRoot,
   "reader/fractional-transfer/index.html"
 );
+const distributionAreaRoutePath = resolve(
+  projectRoot,
+  "reader/distribution-area/index.html"
+);
 const solveXMarkdown = readFileSync(
   resolve(projectRoot, "content/lessons/solve-x.md"),
   "utf8"
@@ -59,6 +64,10 @@ const numeratorSplitMergeMarkdown = readFileSync(
 );
 const fractionalTransferMarkdown = readFileSync(
   resolve(projectRoot, "content/lessons/fractional-transfer-comparison.md"),
+  "utf8"
+);
+const distributionAreaMarkdown = readFileSync(
+  resolve(projectRoot, "content/lessons/distribution-area.md"),
   "utf8"
 );
 const reviewBuildIdentity = readReviewBuildIdentity();
@@ -100,6 +109,9 @@ export default defineConfig({
             fractionalTransferMarkdown
           ).html;
         }
+        if (context.filename === distributionAreaRoutePath) {
+          return compileKpDistributionAreaLesson(distributionAreaMarkdown).html;
+        }
         return html;
       }
     }
@@ -113,7 +125,8 @@ export default defineConfig({
         "reader-solve-fractional-linear": fractionalLinearRoutePath,
         "reader-divide-both-sides": divideBothSidesRoutePath,
         "reader-split-merge-fractions": numeratorSplitMergeRoutePath,
-        "reader-fractional-transfer": fractionalTransferRoutePath
+        "reader-fractional-transfer": fractionalTransferRoutePath,
+        "reader-distribution-area": distributionAreaRoutePath
       }
     }
   },
