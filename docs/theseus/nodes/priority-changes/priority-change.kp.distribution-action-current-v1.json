@@ -1,0 +1,51 @@
+{
+  "id": "priority-change.kp.distribution-action-current-v1",
+  "kind": "priority-change",
+  "title": "Select distribution convergence action",
+  "status": "active",
+  "domain": "kp",
+  "summary": "Bind the approved v5 phase ordering to concrete ready actions: distribution convergence is current, while preserved v4 experiments remain pending behind its visual checkpoint.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Bind the approved v5 phase ordering to concrete ready actions: distribution convergence is current, while preserved v4 experiments remain pending behind its visual checkpoint.",
+      "occurredAt": "2026-07-22T16:11:46.000Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v5"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v5",
+    "rationale": "Bind the approved v5 phase ordering to concrete ready actions: distribution convergence is current, while preserved v4 experiments remain pending behind its visual checkpoint.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "next-action.kp.reader.distribution-exemplar-convergence-v1",
+        "to": "now"
+      },
+      {
+        "subject": "next-action.refill.experiment.plan-revision.kp.v4.generated-quality-envelope",
+        "to": "next"
+      },
+      {
+        "subject": "next-action.refill.experiment.plan-revision.kp.v4.primitive-amortization",
+        "to": "later"
+      },
+      {
+        "subject": "next-action.refill.experiment.plan-revision.kp.v4.semantic-llm-boundary",
+        "to": "later"
+      }
+    ],
+    "effectiveAt": "2026-07-22T16:11:46.000Z",
+    "requestedBy": "user"
+  }
+}

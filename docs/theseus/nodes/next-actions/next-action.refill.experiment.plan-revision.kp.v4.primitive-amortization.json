@@ -2,9 +2,9 @@
   "id": "next-action.refill.experiment.plan-revision.kp.v4.primitive-amortization",
   "kind": "next-action",
   "title": "Test primitive-amortization",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp",
-  "summary": "Run a bounded uncertainty-reduction experiment for: Human animation effort should scale with genuinely new visual primitives and renderer topologies, not with the number of generated lessons that compose reviewed primitives. Selection rationale: The approved divide, split-merge, and transfer exemplars will measure whether new effort concentrates in reusable primitives rather than each generated lesson.",
+  "summary": "Preserved behind quality infrastructure and compositional scheduling.",
   "sourceRefs": [
     {
       "kind": "user-intent",
@@ -27,6 +27,9 @@
     "state": "partial",
     "summary": "One inferred cancellation policy now governs six reader assets plus a composed comparison without per-card recipe tuning; the planned algebra-plus-area exemplar remains the next amortization proof."
   },
+  "revisitWhen": [
+    "After generated-quality verification amortization and branch scheduling plus structured algebra are ready for the fraction pressure test."
+  ],
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."
   ],

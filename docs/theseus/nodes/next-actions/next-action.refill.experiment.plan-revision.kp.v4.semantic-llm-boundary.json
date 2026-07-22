@@ -2,9 +2,9 @@
   "id": "next-action.refill.experiment.plan-revision.kp.v4.semantic-llm-boundary",
   "kind": "next-action",
   "title": "Test semantic-llm-boundary",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp",
-  "summary": "Run a bounded uncertainty-reduction experiment for: LLMs can safely edit semantic objects, transformations, correspondence, explanatory focus, and bounded presentation intent while deterministic compilers retain authority over geometry, timing, typography, and rendering. Selection rationale: The approved cancellation guardrail loop requires the semantic LLM boundary experiment so generated intent compiles through deterministic policy resolution or returns typed repair.",
+  "summary": "Preserved until the deterministic compiler boundary is stable.",
   "sourceRefs": [
     {
       "kind": "user-intent",
@@ -28,6 +28,9 @@
     "state": "partial",
     "summary": "Cancellation authors and LLMs can choose only operation authority and teaching goal; renderer recipe, geometry, timing, and typography are rejected. Other content families remain pending."
   },
+  "revisitWhen": [
+    "After branch scheduling, structured algebra, and fraction composition produce stable typed authoring and repair boundaries."
+  ],
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."
   ],

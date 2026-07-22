@@ -2,7 +2,7 @@
   "id": "plan-revision.kp.v4",
   "kind": "plan-revision",
   "title": "Kinetic Press generated-quality roadmap v4",
-  "status": "active",
+  "status": "superseded",
   "domain": "kp",
   "summary": "Treat gold reader parity as the completed foundation; use its human visual feedback to calibrate a generated-equation quality envelope before expanding to geometry, SVG, code, providers, and cross-domain surfaces.",
   "sourceRefs": [
@@ -132,11 +132,12 @@
       }
     ],
     "approval": {
-      "status": "approved",
-      "decidedAt": "2026-07-20T22:58:27.000Z",
+      "status": "superseded",
+      "decidedAt": "2026-07-22T16:11:46.000Z",
       "decidedBy": "user",
-      "rationale": "Reconcile terminal gold-parity evidence with the approved generated-reliability frontier: preserve the completed foundation and move human-reported polish plus reusable quality enforcement into the current generated-equation phase."
+      "rationale": "Superseded by plan-revision.kp.v5."
     },
-    "supersedes": "plan-revision.kp.v3"
+    "supersedes": "plan-revision.kp.v3",
+    "supersededBy": "plan-revision.kp.v5"
   }
 }

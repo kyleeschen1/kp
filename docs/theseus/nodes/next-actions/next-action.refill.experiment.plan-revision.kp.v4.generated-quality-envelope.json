@@ -2,9 +2,9 @@
   "id": "next-action.refill.experiment.plan-revision.kp.v4.generated-quality-envelope",
   "kind": "next-action",
   "title": "Test generated-quality-envelope",
-  "status": "ready",
+  "status": "deferred",
   "domain": "kp",
-  "summary": "Run a bounded uncertainty-reduction experiment for: Dense rendered-frame validation, timeline-wide layout planning, typed repair, and representative human calibration can make established animation families smooth without card-by-card visual tuning. Selection rationale: The approved fraction division suite will test whether dense rendered-frame validation, timeline-wide layout planning, typed repair, and human calibration eliminate card-by-card tuning.",
+  "summary": "Preserved behind the corrected distribution convergence v3 checkpoint; v3 supersedes the resolved v2 planning draft.",
   "sourceRefs": [
     {
       "kind": "user-intent",
@@ -27,6 +27,10 @@
     "state": "partial",
     "summary": "Cancellation generation now has strict semantic input decoding, deterministic policy or typed repair, catalog conformance, executable contact laws, and a stable browser gate; cross-category evidence remains pending."
   },
+  "revisitWhen": [
+    "After next-action.kp.reader.distribution-exemplar-convergence-v2 reaches its required human visual checkpoint and accepted repairs are ready to become shared quality invariants.",
+    "After next-action.kp.reader.distribution-exemplar-convergence-v3 reaches its required human visual checkpoint and accepted repairs are ready to become shared quality invariants."
+  ],
   "expectedLearning": [
     "An approved plan depends on an active assumption without outcome evidence."
   ],

@@ -1,0 +1,49 @@
+{
+  "id": "next-action.kp.reader.distribution-exemplar-convergence-v3",
+  "kind": "next-action",
+  "title": "Converge distribution reader and measured motion",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Restore shared reader review and TOC behavior, replace percentage and opacity substitution with measured KaTeX and cross-surface token lineage, render true factoring choreography, establish amortized reader and temporal contracts, and stop at the exact exemplar visual checkpoint before generalization.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json"
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/app/distribution-area-entry.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/app/exemplar-entry.ts"
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/distribution-canonical-operation.ts"
+    },
+    {
+      "kind": "file",
+      "path": "tests/semantic-reader-distribution-area.browser.spec.ts"
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "plan-revision.kp.v5",
+      "next-action.kp.animation.cancellation-policy-and-distribution-area-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5",
+    "next-action.refill.experiment.plan-revision.kp.v4.generated-quality-envelope",
+    "next-action.refill.experiment.plan-revision.kp.v4.primitive-amortization"
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "focused shared-reader and distribution motion tests",
+    "npm run visual:distribution-area",
+    "npm run check:dev-review-production",
+    "npm run build",
+    "npm run theseus -- workspace validate"
+  ]
+}

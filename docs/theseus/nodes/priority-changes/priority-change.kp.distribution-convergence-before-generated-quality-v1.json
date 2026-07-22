@@ -1,0 +1,59 @@
+{
+  "id": "priority-change.kp.distribution-convergence-before-generated-quality-v1",
+  "kind": "priority-change",
+  "title": "Converge distribution before generated quality",
+  "status": "active",
+  "domain": "kp",
+  "summary": "Human review found shared-reader and measured-motion gaps in the exact distribution exemplar. Make that convergence and its visual checkpoint current; preserve generated-quality, primitive-amortization, and semantic-LLM work behind explicit dependencies so it can be re-evaluated after resolution rather than discarded.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Human review found shared-reader and measured-motion gaps in the exact distribution exemplar. Make that convergence and its visual checkpoint current; preserve generated-quality, primitive-amortization, and semantic-LLM work behind explicit dependencies so it can be re-evaluated after resolution rather than discarded.",
+      "occurredAt": "2026-07-22T16:11:46.000Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v5"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v5",
+    "rationale": "Human review found shared-reader and measured-motion gaps in the exact distribution exemplar. Make that convergence and its visual checkpoint current; preserve generated-quality, primitive-amortization, and semantic-LLM work behind explicit dependencies so it can be re-evaluated after resolution rather than discarded.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "distribution-exemplar-convergence",
+        "to": "now"
+      },
+      {
+        "subject": "generated-quality-verification-amortization",
+        "to": "next"
+      },
+      {
+        "subject": "branch-scheduling-and-structured-algebra",
+        "to": "next"
+      },
+      {
+        "subject": "fraction-composition-primitive-amortization",
+        "to": "later"
+      },
+      {
+        "subject": "semantic-llm-boundary",
+        "to": "later"
+      },
+      {
+        "subject": "symbolic-and-cross-domain-breadth",
+        "to": "someday"
+      }
+    ],
+    "effectiveAt": "2026-07-22T16:11:46.000Z",
+    "requestedBy": "user"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "next-action.kp.reader.distribution-exemplar-convergence-v2",
+  "kind": "next-action",
+  "title": "Converge distribution reader and measured motion",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Superseded before implementation by next-action.kp.reader.distribution-exemplar-convergence-v3, which correctly models the active plan as preferred provenance rather than an unresolved required dependency.",
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v5"
+    ],
+    "preferred": [
+      "next-action.kp.animation.cancellation-policy-and-distribution-area-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5",
+    "next-action.refill.experiment.plan-revision.kp.v4.generated-quality-envelope",
+    "next-action.refill.experiment.plan-revision.kp.v4.primitive-amortization"
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "focused shared-reader and distribution motion tests",
+    "npm run visual:distribution-area",
+    "npm run check:dev-review-production",
+    "npm run build",
+    "npm run theseus -- workspace validate"
+  ]
+}

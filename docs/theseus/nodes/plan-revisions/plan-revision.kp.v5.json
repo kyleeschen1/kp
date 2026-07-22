@@ -1,0 +1,150 @@
+{
+  "id": "plan-revision.kp.v5",
+  "kind": "plan-revision",
+  "title": "Kinetic Press compositional quality roadmap v5",
+  "status": "active",
+  "domain": "kp",
+  "summary": "Converge the distribution exemplar onto shared measured reader contracts, then prove quality and verification amortization before adding branch schedules, structured algebra, advanced fraction composition, governed LLM editing, or subject breadth.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Encode the approved post-distribution sequence as the next Theseus priority, including explicit safeguards against content, test, compilation, and browser-runtime combinatorial explosion.",
+      "summary": "The user explicitly approved the sequenced plan and requested durable priority encoding."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v4.json",
+      "summary": "Approved predecessor containing the generated-quality, primitive-amortization, and semantic-LLM hypotheses retained by this revision."
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/app/distribution-area-entry.ts",
+      "summary": "Human review found bespoke reader, geometry, and inverse-choreography gaps that must converge before generalization."
+    },
+    {
+      "kind": "file",
+      "path": "src/reader/app/exemplar-entry.ts",
+      "summary": "Canonical shared reader behavior for measured motion, active TOC state, font readiness, URL state, and development review."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/distribution-canonical-operation.ts",
+      "summary": "Existing N-ary semantic distribution contract to preserve while presentation scheduling and structured algebra mature."
+    }
+  ],
+  "affects": [
+    "workflow.kp.delivery",
+    "next-action.kp.animation.cancellation-policy-and-distribution-area-v0",
+    "next-action.refill.experiment.plan-revision.kp.v4.generated-quality-envelope",
+    "next-action.refill.experiment.plan-revision.kp.v4.primitive-amortization",
+    "next-action.refill.experiment.plan-revision.kp.v4.semantic-llm-boundary"
+  ],
+  "planRevision": {
+    "schemaVersion": "theseus.plan-revision.v1",
+    "revision": 5,
+    "objective": "Deliver visually beautiful, searchable, URL-addressable semantic cards whose motion, generated variation, verification cost, compilation cost, and learner runtime scale with genuinely new primitives and renderer topologies rather than with lessons or combinatorial presentation cases.",
+    "assumptions": [
+      {
+        "id": "shared-reader-before-generalization",
+        "statement": "A human-reviewed exemplar must use shared reader and measured-motion contracts before its behavior can calibrate generated-family quality.",
+        "status": "active"
+      },
+      {
+        "id": "marginal-cost-follows-topology",
+        "statement": "Adding a lesson or expression within a supported topology should require semantic data and bindings, not custom coordinates, CSS, choreography, routes, or named gates.",
+        "status": "active"
+      },
+      {
+        "id": "verification-amortizes-by-law",
+        "statement": "Primitive laws, topology contracts, manifest-driven reader conformance, covering arrays, and a small gold cohort can replace per-lesson browser and visual gate growth without reducing rigor.",
+        "status": "active"
+      },
+      {
+        "id": "browser-verifies-browser-facts",
+        "statement": "The learner runtime should receive compact verified plans and check only browser-dependent facts such as font readiness, measured geometry, fit, collisions, and renderer availability.",
+        "status": "active"
+      },
+      {
+        "id": "semantic-and-presentation-composition-separate",
+        "statement": "Transformation sequence and parallelism express mathematical state changes, while together, sequential, staggered, and stepped branch schedules remain bounded presentation intent over one semantic operation.",
+        "status": "active"
+      },
+      {
+        "id": "structured-algebra-before-nested-fractions",
+        "statement": "Nested fraction distribution and normalization require stable expression subtrees and explicit normal-form intent rather than LaTeX string concatenation.",
+        "status": "active"
+      },
+      {
+        "id": "llm-authority-remains-bounded",
+        "statement": "LLMs may select verified semantics, correspondence, focus, cadence, and normal-form intent while deterministic compilers retain geometry, timing, typography, responsive adaptation, rendering, and repair authority.",
+        "status": "active"
+      },
+      {
+        "id": "priority-resumption-is-revalidated",
+        "statement": "A corrective priority blocks rather than destroys preserved ready work; after resolution Theseus re-evaluates dependencies, priority, supersession, and new evidence instead of blindly popping a stack.",
+        "status": "active"
+      }
+    ],
+    "phases": [
+      {
+        "id": "gold-equation-reader",
+        "title": "Gold equation reader parity foundation",
+        "objective": "Preserve the completed searchable, scrollable, URL-addressable measured equation reader as the canonical symbolic-motion reference.",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "next-action.kp.perfect-the-reader-gold-equation-card-v0"
+        ]
+      },
+      {
+        "id": "distribution-exemplar-convergence",
+        "title": "Distribution reader and motion convergence",
+        "objective": "Restore shared reader behavior, development review, active TOC state, measured KaTeX endpoint geometry, token-level algebra-to-area label lineage, continuous interpolation, and true factoring choreography while preserving the accepted exact semantic trace, composition, typography, SVG scene, and searchable route; stop for human visual approval before generalization.",
+        "horizon": "now",
+        "status": "planned"
+      },
+      {
+        "id": "generated-quality-verification-amortization",
+        "title": "Generated quality and verification amortization",
+        "objective": "Convert accepted exemplar repairs into shared reader conformance, dense temporal motion checks, primitive and combinator laws, topology fixtures, manifest-generated routes, impact-selected verification, promotion tiers, production-closure checks, and per-route bundle budgets so ordinary lessons add neither bespoke motion code nor named gates.",
+        "horizon": "next",
+        "status": "planned"
+      },
+      {
+        "id": "branch-scheduling-and-structured-algebra",
+        "title": "Composable branch schedules and structured algebra",
+        "objective": "Add dependency-checked together, one-at-a-time, staggered, and stepped schedules over shared semantic branches; derive inverse schedules, URL and accessibility state, and narrow-layout adaptations; then replace distribution string templates with stable expression trees, role binding, verified rewrites, and typed normal-form intent.",
+        "horizon": "next",
+        "status": "planned"
+      },
+      {
+        "id": "fraction-composition-primitive-amortization",
+        "title": "Fraction composition pressure test",
+        "objective": "Prove primitive amortization in order through opaque fraction fan-out, numerator normalization with sequential and parallel evaluation, fraction terms within distributed sums, verified reverse factoring, and a lawful multiply-both-sides, cancel, distribute, and simplify macro; add renderer work only for genuinely new topology and stop for architectural review.",
+        "horizon": "later",
+        "status": "planned"
+      },
+      {
+        "id": "semantic-llm-boundary",
+        "title": "Governed semantic and LLM authoring boundary",
+        "objective": "Expose only stable typed semantic operations, correspondence, focus, cadence, normal-form, and pedagogical compression intent to providers and LLMs; compile deterministically or return typed repair without granting control over DOM, geometry, coordinates, arbitrary keyframes, typography, or rendering.",
+        "horizon": "later",
+        "status": "planned"
+      },
+      {
+        "id": "symbolic-and-cross-domain-breadth",
+        "title": "Symbolic and cross-domain breadth",
+        "objective": "After family promotion, advance through radicals, exponents, functional wrapping, calculus, vectors, matrices, code, economics, FTC, physics, and lazy WebGL only through the accepted reader, scheduling, verification, bundle, and provider contracts.",
+        "horizon": "someday",
+        "status": "planned"
+      }
+    ],
+    "approval": {
+      "status": "approved",
+      "decidedAt": "2026-07-22T16:11:46.000Z",
+      "decidedBy": "user",
+      "rationale": "Make the human-reviewed distribution convergence, verification amortization, compositional scheduling, structured algebra, fraction pressure test, and governed LLM boundary the explicit dependency-ordered frontier before further breadth."
+    },
+    "supersedes": "plan-revision.kp.v4"
+  }
+}

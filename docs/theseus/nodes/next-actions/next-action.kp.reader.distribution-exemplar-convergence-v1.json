@@ -1,0 +1,8 @@
+{
+  "id": "next-action.kp.reader.distribution-exemplar-convergence-v1",
+  "kind": "next-action",
+  "title": "Converge distribution reader and measured motion",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Superseded before implementation by provenance-backed action next-action.kp.reader.distribution-exemplar-convergence-v2; no product work was performed under v1."
+}

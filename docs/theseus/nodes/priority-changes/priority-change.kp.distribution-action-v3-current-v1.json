@@ -1,0 +1,51 @@
+{
+  "id": "priority-change.kp.distribution-action-v3-current-v1",
+  "kind": "priority-change",
+  "title": "Select corrected distribution convergence action",
+  "status": "active",
+  "domain": "kp",
+  "summary": "Make the provenance-correct distribution convergence action current; preserve generated-quality, primitive-amortization, and semantic-LLM work for explicit re-evaluation after the exemplar checkpoint.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Make the provenance-correct distribution convergence action current; preserve generated-quality, primitive-amortization, and semantic-LLM work for explicit re-evaluation after the exemplar checkpoint.",
+      "occurredAt": "2026-07-22T16:17:52.257Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v5"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v5",
+    "rationale": "Make the provenance-correct distribution convergence action current; preserve generated-quality, primitive-amortization, and semantic-LLM work for explicit re-evaluation after the exemplar checkpoint.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "next-action.kp.reader.distribution-exemplar-convergence-v3",
+        "to": "now"
+      },
+      {
+        "subject": "next-action.refill.experiment.plan-revision.kp.v4.generated-quality-envelope",
+        "to": "next"
+      },
+      {
+        "subject": "next-action.refill.experiment.plan-revision.kp.v4.primitive-amortization",
+        "to": "later"
+      },
+      {
+        "subject": "next-action.refill.experiment.plan-revision.kp.v4.semantic-llm-boundary",
+        "to": "later"
+      }
+    ],
+    "effectiveAt": "2026-07-22T16:17:52.257Z",
+    "requestedBy": "user"
+  }
+}
