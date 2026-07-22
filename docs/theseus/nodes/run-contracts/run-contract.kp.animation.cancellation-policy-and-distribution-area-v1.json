@@ -189,7 +189,8 @@
     {
       "id": "s21-area-inverse-motion",
       "title": "Implement-factoring-as-exact-inverse",
-      "status": "planned"
+      "summary": "Added inverse sampling that decomposes six before factor fusion, uses exact non-crossfading expanded/material/factored ownership, and derives geometry directly from complementary forward progress for bit-exact rewind.",
+      "status": "complete"
     },
     {
       "id": "s22-area-attention",

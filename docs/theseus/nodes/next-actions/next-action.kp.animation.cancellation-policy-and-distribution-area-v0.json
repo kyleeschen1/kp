@@ -173,6 +173,12 @@
       "status": "passed",
       "scope": "s20 lockstep fan-out partition and product settlement with exact endpoint ownership",
       "checkedAt": "2026-07-22T14:45:54.141Z"
+    },
+    {
+      "command": "focused distribution area inverse, forward, and factoring choreography tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s21 exact complementary geometry rewind with explicit factoring fusion",
+      "checkedAt": "2026-07-22T14:48:47.546Z"
     }
   ],
   "expectedLearning": [
