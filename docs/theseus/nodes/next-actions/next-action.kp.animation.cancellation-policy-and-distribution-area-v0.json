@@ -143,6 +143,12 @@
       "status": "passed",
       "scope": "s15 exact algebra dimension and area-region semantic links without presentation authority",
       "checkedAt": "2026-07-22T14:32:20.425Z"
+    },
+    {
+      "command": "focused area presentation, cross-surface, trace, distribution choreography, and factoring choreography tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s16 exemplar-local renderer-neutral reversible presentation plan",
+      "checkedAt": "2026-07-22T14:35:16.587Z"
     }
   ],
   "expectedLearning": [
