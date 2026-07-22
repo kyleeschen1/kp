@@ -147,7 +147,8 @@
     {
       "id": "s14-area-semantic-trace",
       "title": "Define-distribution-and-factoring-semantic-trace",
-      "status": "planned"
+      "summary": "Defined a total reversible semantic trace with explicit 3(x+2), 3x+3 dot 2, and 3x+6 states. Canonical distribution and factoring fan out and merge the shared three; exemplar-local arithmetic derives and decomposes six without hiding evaluation inside distribution.",
+      "status": "complete"
     },
     {
       "id": "s15-cross-surface-correspondence",
