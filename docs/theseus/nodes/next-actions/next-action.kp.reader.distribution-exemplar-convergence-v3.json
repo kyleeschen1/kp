@@ -284,6 +284,20 @@
       "scope": "one-time broad verification audit",
       "checkedAt": "2026-07-22T17:45:11.262Z",
       "notes": "Typecheck, shared reader conformance (2), build, production closure, distribution topology/motion laws (12), distribution browser suite (12), and the fallback full deterministic suite (1,880) passed."
+    },
+    {
+      "command": "npm run visual:contact-sheet -- --exemplar distribution-area --base-url http://127.0.0.1:8000 --output tmp/codex/distribution-contact-sheet",
+      "status": "passed",
+      "scope": "s21 deterministic human-review contact sheet",
+      "checkedAt": "2026-07-22T17:49:00.656Z",
+      "notes": "Generated 36 ordered stage captures: six dense visual moments paired forward and inverse across desktop, tablet, and phone. The paired control progresses sum to one timeline and preserve the exact same geometric frame in opposite operation directions."
+    },
+    {
+      "command": "node --test scripts/capture-visual-contact-sheet.test.ts and npm run typecheck",
+      "status": "passed",
+      "scope": "reusable contact-sheet descriptor",
+      "checkedAt": "2026-07-22T17:49:03.112Z",
+      "notes": "Four harness tests and all TypeScript projects pass. The existing solve-x descriptor remains the default; distribution adds route, readiness, capture-target, direction, viewport, and visual-progress data without a second harness."
     }
   ],
   "expectedLearning": [
