@@ -123,7 +123,8 @@
     {
       "id": "s10-cancellation-visual-gate",
       "title": "Add-stable-cancellation-visual-gate",
-      "status": "planned"
+      "summary": "Added npm run visual:cancellation as a stable repo-owned eight-test gate covering editor-reader parity, counter-orbit selection, distinct-baseline division, seek-rewind, native settlement, static searchability, phone containment, URL profiles, and witness exclusion.",
+      "status": "complete"
     },
     {
       "id": "s11-generated-boundary",

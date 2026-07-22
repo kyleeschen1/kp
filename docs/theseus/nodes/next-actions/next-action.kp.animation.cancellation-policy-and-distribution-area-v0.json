@@ -107,6 +107,12 @@
       "status": "passed",
       "scope": "s09 all current catalog cancellation assets",
       "checkedAt": "2026-07-22T14:05:08.595Z"
+    },
+    {
+      "command": "npm run visual:cancellation",
+      "status": "passed",
+      "scope": "s10 eight stable cross-surface route geometry rewind static phone and profile browser checks",
+      "checkedAt": "2026-07-22T14:07:09.169Z"
     }
   ],
   "expectedLearning": [
