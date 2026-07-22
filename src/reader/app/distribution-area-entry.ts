@@ -3,7 +3,12 @@ import {
   createKpDistributionAreaAttentionPlan
 } from "../../animation/distribution-area-exemplar-attention.ts";
 import { createKpEquationFontReadiness } from "../../rendering/equation-font-readiness.ts";
-import { createKpReaderActiveLocationService } from "../runtime/public-api.ts";
+import {
+  createKpReaderActiveLocationService,
+  decodeKpDistributionAreaUrl,
+  encodeKpDistributionAreaUrl,
+  type KpDistributionAreaDirection
+} from "../runtime/public-api.ts";
 import {
   createKpDistributionAreaMotionPlan,
   createKpDistributionAreaTermSchedule,
@@ -20,7 +25,7 @@ import {
   type KpDistributionAreaWidthTokenPose
 } from "../renderers/public-api.ts";
 
-type Direction = "forward" | "inverse";
+type Direction = KpDistributionAreaDirection;
 
 const stage = required<HTMLElement>("[data-kp-distribution-stage]");
 const scrubber = required<HTMLInputElement>("[data-kp-distribution-scrubber]");
@@ -349,14 +354,12 @@ function replaceSemanticUrl(): void {
 }
 
 function semanticUrl(): URL {
-  const url = new URL(window.location.href);
   const visualProgress = direction === "forward" ? progress : 1 - progress;
-  url.searchParams.set("kpLesson", "lesson.algebra.distribution-area");
-  url.searchParams.set("kpVersion", "1");
-  url.searchParams.set("kpCheckpoint", checkpointFor(visualProgress));
-  url.searchParams.set("kpProgress", String(Math.round(progress * 1000)));
-  url.searchParams.set("kpDirection", direction);
-  return url;
+  return new URL(encodeKpDistributionAreaUrl(window.location.href, {
+    checkpoint: checkpointFor(visualProgress),
+    progressPermille: Math.round(progress * 1000),
+    direction
+  }));
 }
 
 function checkpointFor(visualProgress: number): "factored" | "distributed" | "expanded" {
@@ -366,23 +369,20 @@ function checkpointFor(visualProgress: number): "factored" | "distributed" | "ex
 }
 
 function readProgress(): number {
-  const params = new URL(window.location.href).searchParams;
-  const value = params.get("kpProgress");
-  if (value !== null) return clamp01(Number(value) / 1000);
-  const visualProgress = params.get("kpCheckpoint") === "expanded" ? 1
-    : params.get("kpCheckpoint") === "distributed" ? 0.72
+  const state = decodeKpDistributionAreaUrl(window.location.href);
+  if (state.progressPermille !== undefined) return state.progressPermille / 1000;
+  const visualProgress = state.checkpoint === "expanded" ? 1
+    : state.checkpoint === "distributed" ? 0.72
     : 0;
   return direction === "forward" ? visualProgress : 1 - visualProgress;
 }
 
 function readDirection(): Direction {
-  return new URL(window.location.href).searchParams.get("kpDirection") === "inverse"
-    ? "inverse"
-    : "forward";
+  return decodeKpDistributionAreaUrl(window.location.href).direction;
 }
 
 function hasSemanticProgress(): boolean {
-  return new URL(window.location.href).searchParams.has("kpProgress");
+  return decodeKpDistributionAreaUrl(window.location.href).progressPermille !== undefined;
 }
 
 function required<T extends Element>(selector: string): T {

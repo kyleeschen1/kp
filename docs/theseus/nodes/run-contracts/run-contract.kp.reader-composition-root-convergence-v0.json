@@ -167,7 +167,14 @@
     {
       "id": "s10",
       "title": "Migrate distribution direction and progress URLs",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s10-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s10-v0",
+      "title": "Migrate distribution direction and progress URLs",
+      "summary": "Distribution URL codec migration is complete and visually verified.",
+      "status": "complete"
     },
     {
       "id": "s11",

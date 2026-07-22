@@ -41,6 +41,13 @@ export {
   type KpReaderUrlStateCodec
 } from "./url-state-codec.ts";
 export {
+  decodeKpDistributionAreaUrl,
+  encodeKpDistributionAreaUrl,
+  type KpDistributionAreaCheckpoint,
+  type KpDistributionAreaDirection,
+  type KpDistributionAreaUrlState
+} from "./distribution-area-url-codec.ts";
+export {
   createKpReaderSemanticFocusService,
   type KpReaderFocusListener,
   type KpReaderFocusSnapshot,
