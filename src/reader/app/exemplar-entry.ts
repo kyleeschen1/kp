@@ -59,6 +59,7 @@ import type {
 } from "../document/public-api.ts";
 import { createKpReaderArtifactRef } from "../document/public-api.ts";
 import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycle.ts";
+import { mountKpReaderDevelopmentReview } from "./development-review-loader.ts";
 import {
   bindKpReaderEquationLessonStructuralAnchors,
   resolveKpReaderEquationLessonDescriptor
@@ -334,7 +335,7 @@ const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
   readiness: fontReadiness,
   ownerDocument: document,
   ownerWindow: window,
-  development: import.meta.env.DEV,
+  developmentReviewMount: mountKpReaderDevelopmentReview,
   reviewMount: "immediate",
   renderReviewFrame: renderCurrentSample,
   onFontInvalidated: () => {

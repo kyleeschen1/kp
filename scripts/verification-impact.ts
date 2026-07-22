@@ -1,3 +1,5 @@
+import { kpReaderRouteManifest } from "../src/reader/compiler/reader-route-manifest.ts";
+
 export type KpVerificationRisk = "low" | "medium" | "high";
 
 export interface KpVerificationCheck {
@@ -64,6 +66,12 @@ const checks = {
     ["npm", "run", "check:dev-review-production"],
     "high",
     "Prove development review tooling remains unreachable in production."
+  ),
+  readerProductionClosure: check(
+    "reader-production-closure",
+    ["npm", "run", "check:reader-production"],
+    "high",
+    "Prove the route manifest and deployed reader pages form an exact build-only closure."
   ),
   typecheck: check(
     "typecheck",
@@ -164,11 +172,20 @@ const rules: readonly KpVerificationRule[] = [
     reason: "The visible review experience or browser contract changed."
   },
   {
-    id: "reader-app",
-    matches: (path) => path.startsWith("src/reader/app/"),
-    // Reader entries own production-only closure as well as shared browser behavior.
-    checks: [checks.typecheck, checks.readerConformance, checks.build, checks.productionClosure],
-    reason: "A reader application entry changed."
+    id: "reader-system",
+    matches: (path) =>
+      path.startsWith("src/reader/") ||
+      readerLessonSourcePaths.has(path) ||
+      path === "vite.config.ts",
+    checks: [
+      checks.typecheck,
+      checks.architecture,
+      checks.readerConformance,
+      checks.build,
+      checks.readerProductionClosure,
+      checks.productionClosure
+    ],
+    reason: "A manifest reader source, compiler, runtime, renderer, or build route changed."
   },
   {
     id: "distribution-exemplar",
@@ -218,11 +235,16 @@ const releaseChecks = [
   checks.reviewUnit,
   checks.reviewBrowser,
   checks.productionClosure,
+  checks.readerProductionClosure,
   checks.typecheck,
   checks.architecture,
   checks.test,
   checks.build
 ] as const;
+
+const readerLessonSourcePaths = new Set<string>(
+  kpReaderRouteManifest.map((descriptor) => descriptor.sourcePath)
+);
 
 /**
  * Maps touched paths to the smallest known-safe gate. Unknown paths deliberately

@@ -23,7 +23,6 @@ test("font lifecycle orders invalidation, ready work, and deterministic disposal
     readiness,
     ownerDocument: { body } as Document,
     ownerWindow: {} as Window,
-    development: false,
     reviewMount: "immediate",
     reflectFontReadyOnBody: true,
     renderReviewFrame: () => undefined,

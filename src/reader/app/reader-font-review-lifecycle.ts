@@ -10,7 +10,7 @@ export function createKpReaderFontReviewLifecycle(input: {
   readonly readiness: KpEquationFontReadiness;
   readonly ownerDocument: Document;
   readonly ownerWindow: Window;
-  readonly development: boolean;
+  readonly developmentReviewMount?: ((ownerWindow: Window) => void) | undefined;
   readonly reviewMount: "immediate" | "font-ready";
   readonly reflectFontReadyOnBody?: boolean | undefined;
   readonly renderReviewFrame: () => void;
@@ -25,10 +25,8 @@ export function createKpReaderFontReviewLifecycle(input: {
     }
   };
   const mountReview = (): void => {
-    if (!input.development || disposed) return;
-    void import("../../dev-review/reader-review-bootstrap.ts").then(({ mountKpReaderDevReview }) => {
-      if (!disposed) mountKpReaderDevReview(input.ownerWindow);
-    });
+    if (input.developmentReviewMount === undefined || disposed) return;
+    input.developmentReviewMount(input.ownerWindow);
   };
 
   reflectReady();
@@ -36,7 +34,7 @@ export function createKpReaderFontReviewLifecycle(input: {
     reflectReady();
     input.onFontInvalidated();
   });
-  if (input.development) {
+  if (input.developmentReviewMount !== undefined) {
     input.ownerWindow.addEventListener(
       "kp:reader-dev-review-request-frame",
       input.renderReviewFrame
@@ -56,7 +54,7 @@ export function createKpReaderFontReviewLifecycle(input: {
     dispose() {
       if (disposed) return;
       disposed = true;
-      if (input.development) {
+      if (input.developmentReviewMount !== undefined) {
         input.ownerWindow.removeEventListener(
           "kp:reader-dev-review-request-frame",
           input.renderReviewFrame

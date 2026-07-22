@@ -323,7 +323,14 @@
     {
       "id": "s23",
       "title": "Add manifest-aware impact and production-closure gates",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s23-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s23-v0",
+      "title": "Add manifest-aware impact and production-closure gates",
+      "summary": "Added manifest-aware impact selection, exact reader production route closure, and compile-time removal of development review assets.",
+      "status": "complete"
     },
     {
       "id": "s24",

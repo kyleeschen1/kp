@@ -32,8 +32,10 @@ test("distribution reader changes select bounded shared and exemplar gates", () 
   const result = selectKpVerificationImpact(["src/reader/app/distribution-area-entry.ts"]);
   assert.deepEqual(ids(result), [
     "typecheck",
+    "architecture",
     "reader-conformance",
     "build",
+    "reader-production-closure",
     "dev-review-production-closure",
     "distribution-motion-laws",
     "distribution-visual"
@@ -41,6 +43,19 @@ test("distribution reader changes select bounded shared and exemplar gates", () 
   assert.deepEqual(result.unmatchedPaths, []);
   assert.equal(ids(result).includes("test"), false);
   assert.equal(ids(result).includes("focused-visual"), false);
+});
+
+test("manifest and declared lesson changes select reader production closure", () => {
+  for (const path of [
+    "src/reader/compiler/reader-route-manifest.ts",
+    "content/lessons/divide-both-sides.md"
+  ]) {
+    const result = selectKpVerificationImpact([path]);
+    assert.deepEqual(result.unmatchedPaths, []);
+    assert.ok(ids(result).includes("reader-conformance"));
+    assert.ok(ids(result).includes("reader-production-closure"));
+    assert.ok(ids(result).includes("build"));
+  }
 });
 
 test("distribution schedule changes select topology and exemplar gates", () => {
@@ -82,6 +97,7 @@ test("release mode is explicit, broad, and deterministic", () => {
     "dev-review-unit",
     "dev-review-browser",
     "dev-review-production-closure",
+    "reader-production-closure",
     "typecheck",
     "architecture",
     "test",
