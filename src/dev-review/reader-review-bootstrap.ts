@@ -17,6 +17,14 @@ import { getOrCreateKpDevReviewSessionId, type KpDevReviewSessionStorage } from 
 import { mountKpDevReviewShell } from "./review-shell.ts";
 import type { KpDevReviewPointerGeometry } from "./semantic-target.ts";
 
+// Focused test dependency graphs can reach this module without loading the
+// app-wide declaration file, while Vite still injects the value at runtime.
+declare const __KP_DEV_REVIEW_BUILD__: Readonly<{
+  commit: string;
+  fingerprint: string;
+  dirty: boolean;
+}>;
+
 export function mountKpReaderDevReview(ownerWindow: Window = window): () => void {
   const ownerDocument = ownerWindow.document;
   if (ownerDocument.querySelector("[data-kp-dev-review-shell]") !== null) return () => undefined;

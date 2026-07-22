@@ -25,6 +25,7 @@ import {
   type KpDistributionAreaWidthTokenId,
   type KpDistributionAreaWidthTokenPose
 } from "../renderers/public-api.ts";
+import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycle.ts";
 
 type Direction = KpDistributionAreaDirection;
 
@@ -68,7 +69,6 @@ let widthMotionPlan: KpDistributionAreaWidthMotionPlan | undefined;
 let previousReviewFrameAtMs: number | undefined;
 let previousReviewScrollY = window.scrollY;
 
-document.body.dataset["kpReaderFontReady"] = String(fontReadiness.status !== "waiting");
 document.body.dataset["kpReaderHydrated"] = "true";
 directionButtons.forEach((button) => button.addEventListener("click", () => {
   const next = button.dataset["kpDirectionButton"];
@@ -107,9 +107,6 @@ document.addEventListener("pointerdown", (event) => {
     armScrollInteraction();
   }
 });
-if (import.meta.env.DEV) {
-  window.addEventListener("kp:reader-dev-review-request-frame", render);
-}
 share.addEventListener("click", () => replaceSemanticUrl());
 for (const element of document.querySelectorAll<HTMLElement>("[data-kp-focus]")) {
   const concepts = element.dataset["kpFocus"]?.split(" ") ?? [];
@@ -119,23 +116,23 @@ for (const element of document.querySelectorAll<HTMLElement>("[data-kp-focus]"))
   element.addEventListener("blur", () => setExternalFocus([]));
 }
 
-const unsubscribeFontReadiness = fontReadiness.subscribe(() => {
-  document.body.dataset["kpReaderFontReady"] = "true";
-  refreshLayoutAndRender();
-});
-void fontReadiness.whenReady().then(() => {
-  document.body.dataset["kpReaderFontReady"] = "true";
-  refreshLayoutAndRender();
-  if (!hasSemanticProgress()) scheduleScroll();
-  if (import.meta.env.DEV) {
-    void import("../../dev-review/reader-review-bootstrap.ts").then(({ mountKpReaderDevReview }) => {
-      mountKpReaderDevReview(window);
-    });
+const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
+  readiness: fontReadiness,
+  ownerDocument: document,
+  ownerWindow: window,
+  development: import.meta.env.DEV,
+  reviewMount: "font-ready",
+  reflectFontReadyOnBody: true,
+  renderReviewFrame: render,
+  onFontInvalidated: refreshLayoutAndRender,
+  onReady: () => {
+    refreshLayoutAndRender();
+    if (!hasSemanticProgress()) scheduleScroll();
   }
 });
+void fontReviewLifecycle.ready;
 window.addEventListener("pagehide", () => {
-  unsubscribeFontReadiness();
-  fontReadiness.dispose();
+  fontReviewLifecycle.dispose();
 }, { once: true });
 
 function render(): void {

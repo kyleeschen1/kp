@@ -191,7 +191,14 @@
     {
       "id": "s12",
       "title": "Extract shared font and development-review lifecycle",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s12-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s12-v0",
+      "title": "Extract shared font and development-review lifecycle",
+      "summary": "Shared font and development-review lifecycle is integrated and visually verified.",
+      "status": "complete"
     },
     {
       "id": "s13",

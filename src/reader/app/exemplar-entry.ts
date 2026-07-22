@@ -80,6 +80,7 @@ import type {
   KpLessonAttentionPhaseKind,
   KpLessonAttentionPlan
 } from "../document/public-api.ts";
+import { createKpReaderFontReviewLifecycle } from "./reader-font-review-lifecycle.ts";
 
 interface TransitionContext {
   readonly id: string;
@@ -329,33 +330,33 @@ equationProfileSelect?.addEventListener("change", onEquationProfileChange);
 attentionPrevious.addEventListener("click", onAttentionPrevious);
 attentionNext.addEventListener("click", onAttentionNext);
 attentionScrubber.addEventListener("input", onAttentionScrub);
-if (import.meta.env.DEV) {
-  window.addEventListener("kp:reader-dev-review-request-frame", renderCurrentSample);
-}
-
-const unsubscribeFontReadiness = fontReadiness.subscribe(() => {
-  scheduler.invalidate("fonts");
-  scheduleScrollSample();
-});
 updateScrollGeometry();
 // Initial geometry must be measured from final KaTeX fonts. Rendering before
 // this gate creates a visible first-frame font and width swap on slow loads.
-void fontReadiness.whenReady().then(() => {
-  restoreUrlLocation();
-  updateScrollGeometry();
-  scheduler.invalidate("fonts");
-  scheduleScrollSample();
-  // History writes must wait until the URL-selected scroll position has
-  // produced its first frame; otherwise an early scrollend can persist zero.
-  window.requestAnimationFrame(() => {
-    urlAuthorityReady = true;
-  });
+const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
+  readiness: fontReadiness,
+  ownerDocument: document,
+  ownerWindow: window,
+  development: import.meta.env.DEV,
+  reviewMount: "immediate",
+  renderReviewFrame: renderCurrentSample,
+  onFontInvalidated: () => {
+    scheduler.invalidate("fonts");
+    scheduleScrollSample();
+  },
+  onReady: () => {
+    restoreUrlLocation();
+    updateScrollGeometry();
+    scheduler.invalidate("fonts");
+    scheduleScrollSample();
+    // History writes must wait until the URL-selected scroll position has
+    // produced its first frame; otherwise an early scrollend can persist zero.
+    window.requestAnimationFrame(() => {
+      urlAuthorityReady = true;
+    });
+  }
 });
-if (import.meta.env.DEV) {
-  void import("../../dev-review/reader-review-bootstrap.ts").then(({ mountKpReaderDevReview }) => {
-    mountKpReaderDevReview(window);
-  });
-}
+void fontReviewLifecycle.ready;
 
 function createScrollClock(): KpReaderContinuousScrollClock {
   const geometry = scrollGeometry();
@@ -1240,11 +1241,7 @@ function dispose(): void {
   window.removeEventListener("touchstart", releaseControlAuthority);
   window.removeEventListener("pointerdown", releaseControlAuthority);
   window.removeEventListener("keydown", onReaderKeyDown);
-  if (import.meta.env.DEV) {
-    window.removeEventListener("kp:reader-dev-review-request-frame", renderCurrentSample);
-  }
-  unsubscribeFontReadiness();
-  fontReadiness.dispose();
+  fontReviewLifecycle.dispose();
   scheduler.dispose();
   scrollClock.dispose();
   focus.dispose();
