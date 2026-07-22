@@ -249,6 +249,20 @@
       "scope": "s18 inferred conformance descriptors",
       "checkedAt": "2026-07-22T17:32:53.906Z",
       "notes": "Application, test, Node, and domain TypeScript projects pass; each adapter declares only route and evidence differences while shared laws remain inferred and centralized."
+    },
+    {
+      "command": "node --test tests/distribution-area-temporal-laws.test.ts",
+      "status": "passed",
+      "scope": "s19 topology-level temporal laws",
+      "checkedAt": "2026-07-22T17:36:19.145Z",
+      "notes": "Two law suites pass: one dense 13-token cross-surface check covers parallel, sequential, and inverse timelines; a negative fixture proves topology mutation and visible teleportation are rejected while invisible parking is permitted."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s19 reusable law typing",
+      "checkedAt": "2026-07-22T17:36:28.895Z",
+      "notes": "All TypeScript projects pass with sampler-inferred token topology and no distribution-specific dependencies in the generic temporal law module."
     }
   ],
   "expectedLearning": [
