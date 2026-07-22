@@ -1,0 +1,59 @@
+{
+  "id": "next-action.kp.reader.fraction-composition-pressure-test-v0",
+  "kind": "next-action",
+  "title": "Pressure-test fraction composition and primitive amortization",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.semantic.structured-algebra-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:contact-sheet"
+  ],
+  "expectedLearning": [
+    "Whether opaque fraction fan-out, numerator normalization, distributed fraction terms, reverse factoring, and a lawful multi-step solve macro compose from promoted primitives without bespoke routes, coordinates, or gates."
+  ],
+  "allowedWork": [
+    "Pressure-test structured algebra and branch scheduling through the approved fraction composition sequence and add renderer work only for genuinely new topology.",
+    "Stop for architectural and visual review before promoting new fraction behavior beyond the exemplars."
+  ],
+  "disallowedWork": [
+    "Do not start governed LLM mutation, unrelated subject breadth, WebGL work, or custom per-lesson verification gates."
+  ],
+  "criteria": [
+    {
+      "id": "opaque-fraction-fanout",
+      "weight": "high"
+    },
+    {
+      "id": "sequential-parallel-normalization",
+      "weight": "high"
+    },
+    {
+      "id": "lawful-reverse-factoring",
+      "weight": "high"
+    },
+    {
+      "id": "macro-composition",
+      "weight": "high"
+    },
+    {
+      "id": "architecture-review",
+      "weight": "high"
+    }
+  ]
+}

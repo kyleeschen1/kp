@@ -1,6 +1,6 @@
 # KP Roadmap
 
-Last Updated: 2026-07-21
+Last Updated: 2026-07-22
 Status: active
 Active Thread: `threads/cross-domain-tutorial-platform.md`
 Supporting Thread: `threads/semantic-runtime.md`
@@ -58,20 +58,23 @@ second concept supplies evidence for promotion.
 
 ## Active Focus
 
-**Close the solve-x human exemplar checkpoint and design the responsive
-attention contract.** The semantic-document reader and revised solve-x motion
-have passed their automated release gates. Human review finds the animation
-strong while retaining follow-ups for developer-inbox placement, native-anchor
-handoff, overflow policy, text/animation gaze coordination, and a distinct
-narrow-device interaction projection. No family-wide generalization is
-authorized until that checkpoint is accepted.
+**Execute the approved compositional-quality frontier beginning with branch
+scheduling and responsive attention.** The solve-x attention model, wide
+scrollytelling projection, narrow focus stepper, distribution convergence, and
+shared reader composition roots have passed their prior automated and human
+checkpoints. The current exemplar must now prove dependency-checked together,
+sequential, staggered, and stepped branch schedules with exact rewind while
+preserving the accepted semantic document, measured motion, URLs, search,
+focus, accessibility, and production route behavior.
 
-The accepted post-checkpoint exemplar order is recorded in
-`decisions/2026-07-21-kp-symbolic-exemplar-sequence-and-responsive-attention.md`:
-missing-middle distribution/factoring, fractions, radicals and exponents,
-functional wrapping, derivatives, integral accumulation, vector/projection,
-and matrix-vector/linear-map coordination. Existing standalone examples are
-reference evidence, not automatically promoted reader products.
+The dependency order is owned by approved Theseus plan revision
+`plan-revision.kp.v5`: branch scheduling and responsive attention, structured
+algebra, fraction composition pressure testing, governed semantic and LLM
+authoring, then bounded symbolic and cross-domain breadth. The executable
+control record is `run-contract.kp.product-roadmap-v5-program-v0`. Human
+exemplar approval remains mandatory before each subjective visual
+generalization; existing standalone examples remain reference evidence rather
+than automatically promoted reader products.
 
 The accepted correction is recorded in
 `decisions/2026-07-16-kp-phase-ordered-choreography-envelope.md`; the
@@ -312,20 +315,22 @@ Package executable animations as semantic capsules:
 
 ## Near-Term Priorities
 
-1. Close the solve-x human checkpoint without generalizing its visual recipes.
-2. Decide and test one attentional beat model that sequences prose orientation,
-   visual action, settled explanation, and bidirectional inspection.
-3. Define separate wide scrollytelling and narrow focus-stepper projections of
-   the same searchable, linkable semantic document.
-4. Build the missing-middle distribution/factoring area model.
-5. Promote fractions, radicals/exponents, and functional wrapping before the
-   derivative and integral exemplars.
-6. Follow with derivative/tangent, integral/accumulation, vector/projection,
-   and matrix-vector/linear-map exemplars.
-7. Revisit FTC, BFS, economics, programming, physics, and governed authoring
-   after the front-door symbolic sequence is visually accepted.
-8. Defer dynamic package loading until metadata contracts remain stable across
-   these renderer combinations.
+1. Perfect and human-review one solve-x branch-scheduling and responsive-
+   attention exemplar without generalizing its visual recipes.
+2. Replace distribution string templates with stable expression subtrees,
+   semantic role binding, verified rewrites, and typed normal-form intent.
+3. Pressure-test those contracts through opaque fraction fan-out, numerator
+   normalization, distributed fraction terms, reverse factoring, and a lawful
+   multi-step solve macro.
+4. Prove governed semantic and LLM authoring while deterministic compilers
+   retain geometry, timing, typography, responsive adaptation, rendering,
+   validation, and repair authority.
+5. Promote radicals/exponents, functional wrapping, derivatives, integral
+   accumulation, vector/projection, and matrix-vector/linear-map coordination
+   one exemplar checkpoint at a time.
+6. Keep FTC, BFS, economics, programming, physics, course-scale curriculum,
+   dynamic package loading, and broad WebGL work parked until a new priority
+   decision explicitly advances them.
 
 ## Deferred
 

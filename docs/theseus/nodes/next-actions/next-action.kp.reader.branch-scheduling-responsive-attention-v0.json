@@ -22,6 +22,15 @@
     "npm run test:browser:linear-equation-conformance",
     "npm run visual:contact-sheet"
   ],
+  "verificationRecords": [
+    {
+      "command": "rg stale active-focus phrases in roadmap and active thread",
+      "status": "passed",
+      "scope": "project-memory",
+      "checkedAt": "2026-07-22T23:37:27.696Z",
+      "notes": "No stale solve-x checkpoint, attention-under-design, or awaiting-approval language remains in active control sections."
+    }
+  ],
   "expectedLearning": [
     "Whether together, sequential, staggered, and stepped presentation schedules can share one semantic branch operation and lawful inverse without per-case choreography.",
     "Which wide scrollytelling and narrow focus-stepper projection best scaffolds prose-to-symbol attention while preserving URL, search, rewind, and accessibility state."

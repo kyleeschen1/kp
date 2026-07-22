@@ -1,0 +1,208 @@
+{
+  "id": "run-contract.kp.product-roadmap-v5-program-v0",
+  "kind": "run-contract",
+  "title": "KP product roadmap v5 program",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.branch-scheduling-responsive-attention-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
+      "summary": "Approved compositional quality roadmap and dependency order."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.resume-product-after-codex-reliability-v0.json",
+      "summary": "User-authorized product resumption sequence after the reliability tranche."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "npm run typecheck",
+    "npm test",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:contact-sheet",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Reconcile project memory, finish the solve-x branch-scheduling and responsive-attention exemplar, prove structured algebra, pressure-test fraction composition, add governed semantic and LLM authoring, and promote the approved bounded breadth exemplars in dependency order.",
+    "Extract only contracts proven by exemplars, preserve accepted semantic documents and measured-motion ownership, use shared routes and verification, and commit each reversible slice with durable evidence."
+  ],
+  "disallowedWork": [
+    "Do not generalize a subjective visual pattern before its human exemplar approval, bypass dependency order, or overwrite unrelated user-authored roadmap and design work.",
+    "Do not add LLM-authored DOM, CSS, pixels, arbitrary keyframes, unchecked math, course-scale curriculum, dynamic package loading, parked FTC/BFS/economics/programming/physics work, or broad WebGL generalization."
+  ],
+  "goal": "Execute the approved dependency-ordered product frontier from branch scheduling and responsive attention through structured algebra, fraction composition, governed semantic and LLM authoring, and bounded exemplar breadth.",
+  "target": "next-action.kp.reader.branch-scheduling-responsive-attention-v0",
+  "runMode": "run",
+  "maxSlices": 30,
+  "commitCadence": "Commit each independently reversible verified slice with its Theseus evidence; never mix user-authored unrelated document edits into a slice commit.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "H1 HUMAN-EXEMPLAR: stop at every required visual or interaction exemplar checkpoint until the user reviews generated evidence.",
+    "H2 SCOPE: stop if work would exceed the five approved goals, revive a deferred area, or generalize beyond exemplar evidence.",
+    "H3 DEPENDENCY: stop if a later goal would begin before its required predecessor is verified and resolved.",
+    "H4 PRESERVATION: stop if accepted semantic documents, measured-motion ownership, reader routing, URL state, accessibility, or approved visual parity cannot be preserved.",
+    "H5 VERIFICATION: stop if a required focused, boundary, release, or Theseus validation gate fails without a bounded in-scope repair.",
+    "H6 USER-OVERLAP: stop if a required edit cannot be separated from unrelated user-authored worktree changes.",
+    "H7 AUTHORITY: stop if required external mutation or destructive work exceeds the user's approval."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Reconcile roadmap and active thread with completed product state",
+      "summary": "Updated human project memory to match current Theseus truth and preserved the user-authored atlas lane as an unrelated unstaged change.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Audit and stabilize the interrupted branch-scheduling worktree",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Prove the semantic branch-operation contract and dependency validation",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Compile together sequential staggered and stepped schedules with exact inverse",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Integrate the selected schedule through solve-x measured rendering",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Prove branch scheduling unit runtime and conformance laws",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Prove responsive attention URL search focus rewind and accessibility parity",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Capture deterministic wide and narrow branch-attention visual evidence",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Obtain human approval for the branch-scheduling responsive-attention exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Add stable expression subtree identity contracts",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Add semantic algebra role binding over structured expressions",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Add verified rewrite laws and deterministic diagnostics",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Add typed normal-form intent and compiler boundaries",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Migrate the distribution exemplar from string templates to structured algebra",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Run structured-algebra boundary and preservation gates",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Prove opaque fraction fan-out over structured subtrees",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Prove sequential and parallel numerator normalization",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Compose fraction terms inside distributed sums",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Prove verified reverse factoring for fraction expressions",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Compose the lawful fraction solve macro",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Run fraction architecture visual and primitive-amortization checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Add the constrained governed semantic authoring schema",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Add deterministic authoring compilation rejection repair and provenance",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Prove and review one governed LLM authoring exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Promote the radical and exponent exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Promote the functional wrapping exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Promote the derivative and tangent exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Promote the integral accumulation exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Promote the vector and projection exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Promote matrix-vector linear-map coordination and run program release gates",
+      "status": "planned"
+    }
+  ]
+}

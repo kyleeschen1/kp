@@ -1,0 +1,53 @@
+{
+  "id": "next-action.kp.semantic.structured-algebra-v0",
+  "kind": "next-action",
+  "title": "Prove structured algebra and typed normal-form intent",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.reader.branch-scheduling-responsive-attention-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test"
+  ],
+  "expectedLearning": [
+    "Whether stable expression subtrees, semantic role binding, verified rewrites, and typed normal-form intent can replace distribution string templates without changing accepted presentation behavior."
+  ],
+  "allowedWork": [
+    "Add structured expression nodes, role binding, verified rewrite contracts, and typed normal-form intent proven on the accepted distribution exemplar.",
+    "Migrate only the exemplar paths needed to prove the contract while preserving reader, measured-motion, routing, and verification boundaries."
+  ],
+  "disallowedWork": [
+    "Do not begin nested fraction composition, LLM mutation, subject breadth, or family-wide visual generalization."
+  ],
+  "criteria": [
+    {
+      "id": "expression-subtree-identity",
+      "weight": "high"
+    },
+    {
+      "id": "verified-rewrite-law",
+      "weight": "high"
+    },
+    {
+      "id": "typed-normal-form-intent",
+      "weight": "high"
+    },
+    {
+      "id": "accepted-exemplar-preservation",
+      "weight": "high"
+    }
+  ]
+}

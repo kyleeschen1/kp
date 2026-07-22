@@ -1,0 +1,59 @@
+{
+  "id": "next-action.kp.breadth.symbolic-cross-domain-promotion-v0",
+  "kind": "next-action",
+  "title": "Promote symbolic and cross-domain breadth through exemplar gates",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.authoring.governed-semantic-llm-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build",
+    "npm run visual:contact-sheet"
+  ],
+  "expectedLearning": [
+    "Which promoted semantic, scheduling, authoring, renderer, and verification contracts survive capability-opening exemplars across symbolic, calculus, vector, and linear-map domains without combinatorial growth."
+  ],
+  "allowedWork": [
+    "Promote one representative exemplar at a time in the approved order: radicals and exponents, functional wrapping, derivatives, integral accumulation, vector projection, then matrix-vector linear-map coordination.",
+    "Require human visual approval before generalizing each novel family or cross-view combination."
+  ],
+  "disallowedWork": [
+    "Do not revive parked FTC, BFS, economics, programming, physics, course-scale curriculum, dynamic package loading, or broad WebGL work without a new priority decision."
+  ],
+  "criteria": [
+    {
+      "id": "symbolic-promotion",
+      "weight": "high"
+    },
+    {
+      "id": "calculus-coordination",
+      "weight": "high"
+    },
+    {
+      "id": "vector-linear-map-coordination",
+      "weight": "high"
+    },
+    {
+      "id": "verification-amortization",
+      "weight": "high"
+    },
+    {
+      "id": "human-exemplar-approval",
+      "weight": "high"
+    }
+  ]
+}

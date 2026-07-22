@@ -1,10 +1,10 @@
 # Cross-domain Tutorial Platform Thread
 
 Status: active
-Last Updated: 2026-07-21
-Current Next Action: Close the solve-x human checkpoint, then decide the
-wide-screen attentional beat and narrow-screen focus-stepper interaction before
-promoting another symbolic family.
+Last Updated: 2026-07-22
+Current Next Action: Prove dependency-checked branch schedules and exact rewind
+inside the accepted solve-x responsive-attention exemplar, then stop for human
+visual review before structured algebra or family promotion.
 
 ## Goal
 
@@ -28,12 +28,14 @@ accepts the current searchable browser fallback, and authorizes planning one
 polished `2x + 3 = 8` exemplar without generalization. The decision is recorded
 in `decisions/2026-07-19-kp-concept-room-architecture-review.md`.
 
-The visual-exemplar proposal is recorded in
-`reviews/2026-07-19-linear-equation-visual-exemplar-loop-proposal.md`. It uses
-the verified equation trace as truth, the hand-tuned `x + 3 = 7`
-`continuity-v1` presentation as the motion reference, and the FTC learner
-surface as a deliberately simplified composition reference. It is awaiting
-explicit execution approval.
+The visual-exemplar proposal in
+`reviews/2026-07-19-linear-equation-visual-exemplar-loop-proposal.md` supplied
+the verified equation trace, hand-tuned `x + 3 = 7` `continuity-v1` motion
+reference, and deliberately simplified FTC composition reference. Subsequent
+reader loops closed the solve-x attention, responsive, distribution, generated-
+quality, and composition-root checkpoints. Approved plan revision
+`plan-revision.kp.v5` now owns the product dependency order, and
+`run-contract.kp.product-roadmap-v5-program-v0` owns live execution progress.
 
 FTC remains a valuable reviewable artifact, but its human review and the BFS,
 economics, programming, and physics breadth sequence are parked until the
@@ -46,11 +48,11 @@ coordination. The decision and responsive attention constraint are recorded in
 `decisions/2026-07-21-kp-symbolic-exemplar-sequence-and-responsive-attention.md`.
 
 Wide two-column scrollytelling is no longer assumed to be the phone layout.
-Phone screens need a distinct projection because a stacked sticky stage and
-prose rail are too vertically compressed. The leading candidate is a focus
-stepper with one large visual stage, one short active cue, direct controls, and
-an immediately available searchable transcript. The text/animation attention
-model remains under design rather than implementation.
+The solve-x reader now projects the same semantic document, checkpoints, URLs,
+focus refs, transcript, and runtime clock as wide scrollytelling or a narrow
+focus stepper with one substantial visual stage, a short active cue, and direct
+controls. The current work preserves that accepted projection while testing
+presentation-only branch schedules and their exact inverse on one exemplar.
 
 The retained cross-domain decision is to expand through capability-opening
 vertical exemplars instead of either perfecting every equation indefinitely or

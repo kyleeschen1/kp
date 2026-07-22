@@ -1,0 +1,57 @@
+{
+  "id": "next-action.kp.authoring.governed-semantic-llm-v0",
+  "kind": "next-action",
+  "title": "Prove governed semantic and LLM authoring",
+  "status": "ready",
+  "domain": "kp",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.reader.fraction-composition-pressure-test-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run build"
+  ],
+  "expectedLearning": [
+    "Whether an LLM can select verified semantics, correspondence, focus, cadence, and normal-form intent while deterministic compilers retain geometry, timing, typography, responsive adaptation, rendering, validation, and repair authority."
+  ],
+  "allowedWork": [
+    "Add a constrained semantic authoring schema, deterministic compiler and rejection paths, provenance, repair diagnostics, and one governed exemplar workflow."
+  ],
+  "disallowedWork": [
+    "Do not allow LLM-authored DOM, CSS, pixels, arbitrary keyframes, unchecked mathematical claims, or direct mutation outside verified contracts."
+  ],
+  "criteria": [
+    {
+      "id": "bounded-authority",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-compilation",
+      "weight": "high"
+    },
+    {
+      "id": "rejection-and-repair",
+      "weight": "high"
+    },
+    {
+      "id": "provenance-and-audit",
+      "weight": "medium"
+    },
+    {
+      "id": "governed-exemplar",
+      "weight": "high"
+    }
+  ]
+}
