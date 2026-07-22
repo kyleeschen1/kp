@@ -185,7 +185,8 @@
     {
       "id": "s23-merge-motion",
       "title": "Implement exact inverse fraction merge",
-      "status": "planned"
+      "summary": "Implemented the exact inverse merge with native-scale rule and denominator convergence, opaque plus ascent, complete structural lifecycle choreography, atomic endpoint handoff, and deterministic seek-rewind sampling.",
+      "status": "complete"
     },
     {
       "id": "s24-split-gate",

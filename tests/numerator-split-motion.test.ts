@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { createNumeratorSplitEquationAnimationAsset } from "../src/animation/numerator-split-merge-equation-adapter.ts";
+import {
+  createNumeratorSplitEquationAnimationAsset,
+  createNumeratorSplitMergeEquationAnimationAsset
+} from "../src/animation/numerator-split-merge-equation-adapter.ts";
 import { createKpLinearRearrangementChoreography } from "../src/animation/linear-rearrangement-choreography.ts";
 import { createKpEquationLinearRearrangementBindings } from "../src/rendering/equation-linear-rearrangement-bindings.ts";
 import type {
@@ -85,6 +88,66 @@ test("fraction rules and denominators bifurcate at native scale while plus desce
     .every((token) => token.pose.opacity === 1 && token.pose.x === 0 && token.pose.y === 0 && token.pose.scale === 1));
 });
 
+test("inverse merge converges native structures while the plus rises", () => {
+  const animation = createNumeratorSplitMergeEquationAnimationAsset();
+  assert.deepEqual(
+    createKpEquationLinearRearrangementBindings(animation).map((binding) => [
+      binding.transformationId,
+      binding.kind
+    ]),
+    [
+      ["transform.numerator-split-merge.split-sum", "split-fraction-sum"],
+      ["transform.numerator-split-merge.merge-sum", "merge-fractions"]
+    ]
+  );
+  const choreography = createKpLinearRearrangementChoreography(animation);
+  assert.deepEqual(choreography.steps.map((step) => step.kind), [
+    "split-fraction-sum",
+    "merge-fractions"
+  ]);
+  assert.ok(choreography.steps[1]?.operationSubgraph.nodes.some(
+    (node) => node.kind === "merge-fraction-structure"
+  ));
+  assert.ok(choreography.steps[1]?.operationSubgraph.nodes.some(
+    (node) => node.kind === "raise-numerator-operator"
+  ));
+
+  const geometry = mergeGeometry();
+  const middle = sampleKpEquationTokenMotion(geometry, 0.55);
+  const merging = middle.tokens.filter((token) =>
+    token.side === "source" &&
+    (token.motionId.startsWith("source.rule") || token.motionId.startsWith("source.denominator"))
+  );
+  assert.equal(merging.length, 4);
+  assert.ok(merging.every((token) => token.pose.opacity === 1));
+  assert.ok(merging.every((token) => token.pose.scale === 1));
+  assert.ok(merging.some((token) => token.pose.x !== 0));
+
+  const plus = middle.tokens.find((token) => token.motionId === "source.plus");
+  assert.ok(plus);
+  assert.ok(plus.pose.y < 0);
+  assert.equal(plus.pose.opacity, 1);
+
+  const end = sampleKpEquationTokenMotion(geometry, 1);
+  assert.ok(end.tokens.filter((token) => token.side === "source")
+    .every((token) => token.pose.opacity === 0));
+  assert.ok(end.tokens.filter((token) => token.side === "target")
+    .every((token) => token.pose.opacity === 1 && token.pose.x === 0 && token.pose.y === 0 && token.pose.scale === 1));
+});
+
+test("split and merge direct seeks are deterministic in both directions", () => {
+  for (const geometry of [splitGeometry(), mergeGeometry()]) {
+    const firstMiddle = comparableFrame(sampleKpEquationTokenMotion(geometry, 0.55));
+    sampleKpEquationTokenMotion(geometry, 1);
+    const rewindMiddle = comparableFrame(sampleKpEquationTokenMotion(geometry, 0.55));
+    sampleKpEquationTokenMotion(geometry, 0);
+    const replayMiddle = comparableFrame(sampleKpEquationTokenMotion(geometry, 0.55));
+
+    assert.deepEqual(rewindMiddle, firstMiddle);
+    assert.deepEqual(replayMiddle, firstMiddle);
+  }
+});
+
 function splitGeometry(): KpMeasuredEquationTransitionGeometry {
   return {
     transitionId: "transition.numerator-split",
@@ -118,9 +181,42 @@ function splitGeometry(): KpMeasuredEquationTransitionGeometry {
   };
 }
 
+function mergeGeometry(): KpMeasuredEquationTransitionGeometry {
+  return {
+    transitionId: "transition.numerator-merge",
+    linearRearrangementKind: "merge-fractions",
+    sourceTokens: [
+      token("source.2", 10, 10),
+      token("source.x", 22, 10),
+      token("source.rule.left", 8, 30, 30),
+      token("source.denominator.left", 20, 44),
+      token("source.plus", 52, 30),
+      token("source.6", 78, 10),
+      token("source.rule.right", 74, 30, 24),
+      token("source.denominator.right", 82, 44)
+    ],
+    targetTokens: [
+      token("target.2", 30, 10),
+      token("target.x", 42, 10),
+      token("target.plus", 56, 10),
+      token("target.6", 70, 10),
+      token("target.rule", 28, 30, 54),
+      token("target.denominator", 52, 44)
+    ],
+    relations: [
+      relation("coefficient-persists", "persist", ["source.2"], ["target.2"], 20, 0),
+      relation("variable-persists", "persist", ["source.x"], ["target.x"], 20, 0),
+      relation("plus-enters-numerator", "role-change", ["source.plus"], ["target.plus"], 4, -20),
+      relation("constant-persists", "persist", ["source.6"], ["target.6"], -8, 0),
+      relation("fraction-rules-merge", "merge", ["source.rule.left", "source.rule.right"], ["target.rule"], 0, 0),
+      relation("denominators-merge", "merge", ["source.denominator.left", "source.denominator.right"], ["target.denominator"], 0, 0)
+    ]
+  };
+}
+
 function relation(
   recordId: string,
-  lifecycle: "persist" | "role-change" | "split",
+  lifecycle: "persist" | "role-change" | "split" | "merge",
   sourceIds: readonly string[],
   targetIds: readonly string[],
   x: number,
@@ -152,4 +248,12 @@ function token(motionId: string, left: number, top: number, width = 12) {
     localRect: rect,
     element: { style: {}, dataset: {} } as unknown as HTMLElement
   };
+}
+
+function comparableFrame(frame: ReturnType<typeof sampleKpEquationTokenMotion>) {
+  return frame.tokens.map((token) => ({
+    motionId: token.motionId,
+    side: token.side,
+    pose: token.pose
+  }));
 }

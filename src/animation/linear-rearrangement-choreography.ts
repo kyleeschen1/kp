@@ -63,6 +63,8 @@ export interface KpLinearRearrangementSubgraphNode {
     | "introduce-division-structure"
     | "bifurcate-fraction-structure"
     | "lower-numerator-operator"
+    | "merge-fraction-structure"
+    | "raise-numerator-operator"
     | "meet-canceling-terms"
     | "collapse-canceling-terms"
     | "compact-survivors"
@@ -213,7 +215,7 @@ function createStep(
   const records = transformation.correspondenceMap.records;
   const continuantRecords = records.filter((record) =>
     record.relation === "identity" ||
-    (kind === "split-fraction-sum" && record.relation === "role-change")
+    (isFractionStructureRewriteKind(kind) && record.relation === "role-change")
   );
   const continuants = continuantRecords.map((record) =>
     continuantForRecord(transformation, record)
@@ -223,6 +225,8 @@ function createStep(
   );
   const causalRecord = kind === "split-fraction-sum"
     ? causalRecords.find((record) => record.relation === "fan-out")
+    : kind === "merge-fractions"
+      ? causalRecords.find((record) => record.relation === "fan-in")
     : causalRecords[0];
   if (causalRecord === undefined) {
     throw new Error(`Linear rearrangement ${transformation.id} requires a causal record.`);
@@ -240,6 +244,7 @@ function createStep(
     kind,
     continuants,
     causalRecord,
+    causalRecords,
     successorSynthesisBinding
   );
   const lifecycle = lifecycleForStep(
@@ -377,26 +382,36 @@ function vocabularyForStep(
   kind: KpEquationLinearRearrangementKind,
   continuants: readonly KpSemanticContinuant[],
   causalRecord: SelectorCorrespondenceRecord,
+  causalRecords: readonly SelectorCorrespondenceRecord[],
   successorSynthesisBinding: KpSuccessorSynthesisBinding | undefined
 ): KpChoreographyVocabulary {
   const lineageId = `${transformation.id}.derived-result`;
+  const structuralMerge = kind === "merge-fractions";
+  const lineageSourceIds = structuralMerge
+    ? causalRecords.flatMap((record) => record.sourceSelectorIds)
+    : successorSynthesisBinding?.sourceAnnotations
+      .filter((annotation) => annotation.contribution === "material-input")
+      .map((annotation) => annotation.id) ?? causalRecord.sourceSelectorIds;
+  const lineageTargetIds = structuralMerge
+    ? causalRecords.flatMap((record) => record.targetSelectorIds)
+    : successorSynthesisBinding?.targetAnnotations
+      .map((annotation) => annotation.id) ?? causalRecord.targetSelectorIds;
   return {
     id: `vocabulary.${transformation.id}`,
     continuants,
-    representationalLineages: isSuccessorKind(kind)
+    representationalLineages: isSuccessorKind(kind) || structuralMerge
       ? [{
           id: lineageId,
-          meaning: "The constant expression succeeds into its evaluated value.",
+          meaning: structuralMerge
+            ? "Two compatible fraction structures reconcile into one shared structure."
+            : "The constant expression succeeds into its evaluated value.",
           sourceRepresentation: {
             entityId: `${transformation.id}.source-expression`,
-            selectorIds: successorSynthesisBinding?.sourceAnnotations
-              .filter((annotation) => annotation.contribution === "material-input")
-              .map((annotation) => annotation.id) ?? causalRecord.sourceSelectorIds
+            selectorIds: lineageSourceIds
           },
           targetRepresentation: {
             entityId: `${transformation.id}.target-value`,
-            selectorIds: successorSynthesisBinding?.targetAnnotations
-              .map((annotation) => annotation.id) ?? causalRecord.targetSelectorIds
+            selectorIds: lineageTargetIds
           },
           cause: {
             kind: "transformation",
@@ -423,20 +438,19 @@ function vocabularyForStep(
         },
         summary: `${continuant.meaning} It remains opaque while moving.`
       })),
-      ...(isSuccessorKind(kind)
+      ...(isSuccessorKind(kind) || structuralMerge
         ? [{
             id: `${lineageId}.continuity`,
             mode: "causal-derivation" as const,
-            sourceEntityIds: successorSynthesisBinding?.sourceAnnotations
-              .filter((annotation) => annotation.contribution === "material-input")
-              .map((annotation) => annotation.id) ?? causalRecord.sourceSelectorIds,
-            targetEntityIds: successorSynthesisBinding?.targetAnnotations
-              .map((annotation) => annotation.id) ?? causalRecord.targetSelectorIds,
+            sourceEntityIds: lineageSourceIds,
+            targetEntityIds: lineageTargetIds,
             authorityRef: {
               kind: "representational-lineage" as const,
               lineageId
             },
-            summary: "The operands remain visible while converging into the evaluated result."
+            summary: structuralMerge
+              ? "Both fraction structures remain visible while converging into their shared structure."
+              : "The operands remain visible while converging into the evaluated result."
           }]
         : [])
     ],
@@ -518,6 +532,15 @@ function lifecycleForStep(
         summary: record.summary
       });
     }
+  } else if (kind === "merge-fractions") {
+    records.push({
+      id: `${transformation.id}.structural-merge`,
+      kind: "successor",
+      representationalLineageId: `${transformation.id}.derived-result`,
+      sourceEntityIds: causalRecords.flatMap((record) => record.sourceSelectorIds),
+      targetEntityIds: causalRecords.flatMap((record) => record.targetSelectorIds),
+      summary: "Paired fraction rules and denominators reconcile into one shared fraction structure."
+    });
   } else if (isCancellationKind(kind)) {
     records.push({
       id: `${transformation.id}.cancellation`,
@@ -749,6 +772,31 @@ function operationSubgraph(
             dependsOnNodeIds: [bifurcate.id]
           }, release];
         })()
+    : kind === "merge-fractions"
+      ? (() => {
+          const reserve = node(
+            "reserve-space",
+            "reflow",
+            "reserve-space",
+            [focus.id]
+          );
+          const raise = node(
+            "raise-numerator-operator",
+            "act",
+            "raise-numerator-operator",
+            [reserve.id]
+          );
+          const merge = node(
+            "merge-fraction-structure",
+            "act",
+            "merge-fraction-structure",
+            [raise.id]
+          );
+          return [focus, reserve, raise, merge, {
+            ...recognize,
+            dependsOnNodeIds: [merge.id]
+          }, release];
+        })()
     : isCancellationKind(kind)
       ? (() => {
           const hold = node(
@@ -817,6 +865,7 @@ function motifIdsForKind(
     case "balanced-introduction": return ["append-after-shift", "balanced-entry"];
     case "divide-both-sides": return ["append-after-shift", "matched-fraction-entry"];
     case "split-fraction-sum": return ["copy-fan-out", "fraction-structure-split"];
+    case "merge-fractions": return ["merge-fan-in", "fraction-structure-merge"];
     case "cancel-additive-inverses": return ["cancelation", "meet-collapse"];
     case "cancel-multiplicative-inverses": return ["cancelation", "meet-collapse"];
     case "simplify-constant-difference": return ["merge-fan-in", "derive-result"];
@@ -835,6 +884,8 @@ function meaningfulMotionReason(
       return "Synchronized fraction structure communicates that the same non-zero divisor applies to both sides.";
     case "split-fraction-sum":
       return "Structural fan-out and operator descent communicate that each numerator term inherits the shared denominator.";
+    case "merge-fractions":
+      return "Structural convergence and operator ascent communicate that compatible fractions recover one shared numerator and denominator.";
     case "cancel-additive-inverses":
       return "Meet then collapse communicates additive inverse cancellation.";
     case "cancel-multiplicative-inverses":
@@ -856,6 +907,12 @@ function isSuccessorKind(kind: KpEquationLinearRearrangementKind): boolean {
   return kind === "simplify-constant-difference" ||
     kind === "simplify-constant-quotient" ||
     kind === "simplify-constant-product";
+}
+
+function isFractionStructureRewriteKind(
+  kind: KpEquationLinearRearrangementKind
+): boolean {
+  return kind === "split-fraction-sum" || kind === "merge-fractions";
 }
 
 function kebabCase(value: string): string {

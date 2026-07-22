@@ -373,6 +373,24 @@
       "status": "passed",
       "scope": "s22 animation and renderer boundaries",
       "checkedAt": "2026-07-22T00:55:59.352Z"
+    },
+    {
+      "command": "node focused split merge motion and linear rearrangement suites",
+      "status": "passed",
+      "scope": "s23 native structural convergence plus ascent direct seek rewind and existing choreography preservation",
+      "checkedAt": "2026-07-22T01:01:05.935Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s23 merge animation and choreography types",
+      "checkedAt": "2026-07-22T01:01:07.070Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s23 animation and renderer boundaries",
+      "checkedAt": "2026-07-22T01:01:08.097Z"
     }
   ]
 }

@@ -25,6 +25,7 @@ export type KpEquationLinearRearrangementKind =
   | "balanced-introduction"
   | "divide-both-sides"
   | "split-fraction-sum"
+  | "merge-fractions"
   | "cancel-additive-inverses"
   | "cancel-multiplicative-inverses"
   | "simplify-constant-difference"
@@ -40,6 +41,7 @@ export function kpEquationLinearRearrangementKindForTransformType(
       return "balanced-introduction";
     case "divideBothSides": return "divide-both-sides";
     case "splitFractionSum": return "split-fraction-sum";
+    case "mergeFractions": return "merge-fractions";
     case "cancelAdditiveInverses": return "cancel-additive-inverses";
     case "cancelMultiplicativeInverses": return "cancel-multiplicative-inverses";
     case "simplifyConstantDifference": return "simplify-constant-difference";
@@ -106,16 +108,16 @@ export function sampleKpEquationLinearRearrangementFrame(
     structureEntryProgress: kind === "divide-both-sides"
       ? smooth(windowProgress(p, 0.34, 0.72))
       : 0,
-    branchProgress: kind === "split-fraction-sum"
+    branchProgress: isFractionStructureRewriteKind(kind)
       ? smooth(windowProgress(p, 0.18, 0.36))
       : 0,
-    branchTravelProgress: kind === "split-fraction-sum"
+    branchTravelProgress: isFractionStructureRewriteKind(kind)
       ? smooth(windowProgress(p, 0.28, 0.76))
       : 0,
-    branchSettlementProgress: kind === "split-fraction-sum"
+    branchSettlementProgress: isFractionStructureRewriteKind(kind)
       ? smooth(windowProgress(p, 0.84, 0.98))
       : 0,
-    operatorDescentProgress: kind === "split-fraction-sum"
+    operatorDescentProgress: isFractionStructureRewriteKind(kind)
       ? smooth(windowProgress(p, 0.2, 0.72))
       : 0
   };
@@ -139,8 +141,8 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
   switch (input.relation.lifecycle) {
     case "persist":
     case "role-change":
-      return input.frame.kind === "split-fraction-sum"
-        ? sampleSplitContinuant(input)
+      return isFractionStructureRewriteKind(input.frame.kind)
+        ? sampleFractionStructureContinuant(input)
         : samplePersistentRelation(input);
     case "enter":
       return input.frame.kind === "divide-both-sides"
@@ -161,7 +163,9 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
         ? sampleStructuralRetirement(input)
         : undefined;
     case "merge":
-      return isCancellationKind(input.frame.kind)
+      return input.frame.kind === "merge-fractions"
+        ? sampleFractionStructureMerge(input)
+        : isCancellationKind(input.frame.kind)
         ? sampleExplicitCancellationTarget(input)
         : isSuccessorKind(input.frame.kind)
         ? input.successorPresentationRecipe === "convergence-v1"
@@ -177,7 +181,7 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
   }
 }
 
-function sampleSplitContinuant(
+function sampleFractionStructureContinuant(
   input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
 ): readonly KpEquationTokenMotionFrameToken[] {
   const travel = input.relation.lifecycle === "role-change"
@@ -192,6 +196,31 @@ function sampleSplitContinuant(
     })),
     ...input.targetTokens.map((token) => frameToken(token, "target", {
       opacity: input.progress === 1 ? 1 : 0,
+      x: 0,
+      y: 0,
+      scale: 1
+    }))
+  ];
+}
+
+function sampleFractionStructureMerge(
+  input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
+): readonly KpEquationTokenMotionFrameToken[] {
+  const targetCenter = center(input.relation.target?.bounds);
+  const travel = input.frame.branchTravelProgress;
+  const settlement = input.frame.branchSettlementProgress;
+  return [
+    ...input.sourceTokens.map((token) => {
+      const sourceCenter = center(token.localRect);
+      return frameToken(token, "source", {
+        opacity: 1 - settlement,
+        x: (targetCenter.x - sourceCenter.x) * travel,
+        y: (targetCenter.y - sourceCenter.y) * travel,
+        scale: 1
+      });
+    }),
+    ...input.targetTokens.map((token) => frameToken(token, "target", {
+      opacity: settlement,
       x: 0,
       y: 0,
       scale: 1
@@ -257,6 +286,12 @@ function isSuccessorKind(kind: KpEquationLinearRearrangementKind): boolean {
   return kind === "simplify-constant-difference" ||
     kind === "simplify-constant-quotient" ||
     kind === "simplify-constant-product";
+}
+
+function isFractionStructureRewriteKind(
+  kind: KpEquationLinearRearrangementKind
+): boolean {
+  return kind === "split-fraction-sum" || kind === "merge-fractions";
 }
 
 function samplePersistentRelation(
