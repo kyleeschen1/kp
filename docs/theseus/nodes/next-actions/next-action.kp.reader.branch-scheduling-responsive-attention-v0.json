@@ -43,6 +43,13 @@
       "scope": "slice-s03-semantic-branch-contract",
       "checkedAt": "2026-07-22T23:44:01.699Z",
       "notes": "Three tests prove deterministic dependency order and reject duplicate identities, empty or duplicate entity ownership, unknown/self/duplicate dependencies, and cycles."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-branch-schedule.test.ts",
+      "status": "passed",
+      "scope": "slice-s04-schedule-compilers",
+      "checkedAt": "2026-07-22T23:44:52.012Z",
+      "notes": "Five tests prove shared semantics across together, sequential, staggered, and stepped schedules; dependency-respecting normalized windows; bounded sampling; input rejection; and exact inverse reconstruction over 101 samples per strategy."
     }
   ],
   "expectedLearning": [

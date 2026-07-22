@@ -74,7 +74,8 @@
     {
       "id": "s04",
       "title": "Compile together sequential staggered and stepped schedules with exact inverse",
-      "status": "planned"
+      "summary": "Proved four bounded presentation schedules over one semantic operation, dependency-respecting windows, invalid-overlap rejection, endpoint clamping, and exact forward/inverse reconstruction.",
+      "status": "complete"
     },
     {
       "id": "s05",
