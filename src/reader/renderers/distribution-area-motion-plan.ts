@@ -51,16 +51,20 @@ type AnchorReader = (suffix: string) => KpDistributionAreaMeasuredAnchor;
 
 function distributionTokens(progress: number, factored: AnchorReader, distributed: AnchorReader): Readonly<Record<KpDistributionAreaMaterialTokenId, KpDistributionAreaTokenPose>> {
   const factor = factored("factor.3");
+  // Let one readable factor lead the motion before its coincident copy peels away.
+  // This preserves the semantic one-to-many branch without flashing a doubled glyph.
+  const factorSpread = interval(progress, 0.42, 1);
+  const leftFactor = travel(factor, distributed("left.factor.3"), progress, -8);
   return {
     "source-three": hiddenAt(factor),
-    "left-three": travel(factor, distributed("left.factor.3"), progress, -10),
-    "right-three": travel(factor, distributed("right.factor.3"), progress, -24),
-    "left-paren": removing(factored("left-paren"), progress),
+    "left-three": leftFactor,
+    "right-three": travelFromPose(leftFactor, distributed("right.factor.3"), factorSpread, -12),
+    "left-paren": opening(factored("left-paren"), progress),
     x: travel(factored("term.x"), distributed("left.term.x"), progress),
     plus: travel(factored("plus"), distributed("plus"), progress),
     times: introducing(distributed("right.times"), progress, 0.58, 0.9),
     two: travel(factored("term.2"), distributed("right.term.2"), progress),
-    "right-paren": removing(factored("right-paren"), progress),
+    "right-paren": opening(factored("right-paren"), progress),
     six: hiddenAt(distributed("right.factor.3"))
   };
 }
@@ -91,8 +95,21 @@ function travel(from: KpDistributionAreaMeasuredAnchor, to: KpDistributionAreaMe
   };
 }
 
-function removing(anchor: KpDistributionAreaMeasuredAnchor, progress: number): KpDistributionAreaTokenPose {
-  return { ...at(anchor), opacity: 1 - interval(progress, 0.55, 0.92), scale: lerp(1, 0.74, progress) };
+function travelFromPose(from: KpDistributionAreaTokenPose, to: KpDistributionAreaMeasuredAnchor, progress: number, arc = 0): KpDistributionAreaTokenPose {
+  return {
+    x: lerp(from.x, to.center.x, progress),
+    y: lerp(from.y, to.center.y, progress) + arc * Math.sin(Math.PI * progress),
+    opacity: 1,
+    scale: 1
+  };
+}
+
+function opening(anchor: KpDistributionAreaMeasuredAnchor, progress: number): KpDistributionAreaTokenPose {
+  // Parentheses are semantically consumed, so they clear before descendant
+  // tokens cross their old bounds; keeping them through the crossing reads as
+  // punctuation attached to the wrong term on compact expressions.
+  const release = interval(progress, 0.12, 0.42);
+  return { ...at(anchor), opacity: 1 - release, scale: lerp(1, 1.08, release) };
 }
 
 function introducing(anchor: KpDistributionAreaMeasuredAnchor, progress: number, start: number, end: number): KpDistributionAreaTokenPose {

@@ -61,3 +61,23 @@ test("one timeline is continuously sampleable in either direction", () => {
     }
   }
 });
+
+test("parentheses clear before tokens cross their bounds while the duplicated factor follows its source before peeling away", () => {
+  const measured = layout();
+  const plan = createKpDistributionAreaMotionPlan(measured);
+  const start = plan.sample(0);
+  const early = plan.sample(0.12);
+  const middle = plan.sample(0.4);
+
+  assert.equal(early.tokens["left-three"].x, early.tokens["right-three"].x);
+  assert.equal(early.tokens["left-three"].y, early.tokens["right-three"].y);
+  assert.ok(middle.tokens["left-three"].x < middle.tokens["right-three"].x);
+  assert.equal(early.tokens["left-paren"].x, start.tokens["left-paren"].x);
+  assert.equal(middle.tokens["left-paren"].x, start.tokens["left-paren"].x);
+  assert.equal(early.tokens["right-paren"].x, start.tokens["right-paren"].x);
+  assert.equal(middle.tokens["right-paren"].x, start.tokens["right-paren"].x);
+  assert.equal(early.tokens["left-paren"].opacity, 1);
+  assert.equal(early.tokens["right-paren"].opacity, 1);
+  assert.equal(middle.tokens["left-paren"].opacity, 0);
+  assert.equal(middle.tokens["right-paren"].opacity, 0);
+});

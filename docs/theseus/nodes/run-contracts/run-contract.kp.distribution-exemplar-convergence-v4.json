@@ -115,7 +115,8 @@
     {
       "id": "s11",
       "title": "Interpolate opening parentheses smoothly",
-      "status": "planned"
+      "summary": "Parentheses now clear before descendants cross their former bounds, and the duplicated factor follows one readable source before peeling away; focused motion and browser checks pass.",
+      "status": "complete"
     },
     {
       "id": "s12",

@@ -130,6 +130,20 @@
       "scope": "s10 measured algebra browser behavior",
       "checkedAt": "2026-07-22T16:52:36.889Z",
       "notes": "Seven browser checks pass, including exact measured midpoint placement and preserved endpoint, URL, review, searchability, and narrow containment behavior."
+    },
+    {
+      "command": "node --test tests/distribution-area-motion-plan.test.ts",
+      "status": "passed",
+      "scope": "s11 parenthesis and fan-out laws",
+      "checkedAt": "2026-07-22T16:59:55.156Z",
+      "notes": "Three motion-plan laws pass: measured endpoints, bidirectional sampling, stable semantic consumption, and delayed one-to-many factor separation."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "s11 parenthesis browser preservation",
+      "checkedAt": "2026-07-22T17:00:00.912Z",
+      "notes": "Seven distribution reader browser checks remain green after collision-free parenthesis consumption and delayed factor fan-out."
     }
   ],
   "expectedLearning": [
