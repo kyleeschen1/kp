@@ -45,3 +45,17 @@ test("reader uses the compiler-declared Standard profile when the URL omits one"
     "omit-transient-v1"
   );
 });
+
+test("profiles do not invent witnesses for counter-orbit authored cancellations", async ({
+  page
+}) => {
+  const witness = page.locator("[data-kp-reader-annihilation-witness]");
+  for (const profile of ["explain", "standard"] as const) {
+    await page.goto(route(profile).replace("kpProgress=500", "kpProgress=810"));
+    await expect(page.locator("[data-kp-reader-equation-stage]")).toHaveAttribute(
+      "data-kp-reader-identity-witness-state",
+      profile === "explain" ? "waiting" : "omitted"
+    );
+    await expect(witness).toHaveCSS("opacity", "0");
+  }
+});

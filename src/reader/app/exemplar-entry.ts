@@ -25,6 +25,7 @@ import {
   measureKpReaderEquationLayoutSnapshot,
   planKpReaderEquationPerceptualAlignment,
   planKpReaderEquationSequenceResponsiveFit,
+  projectKpReaderEquationIdentityWitness,
   projectKpReaderEquationRenderPlan,
   sampleKpReaderEquationSymbolMotion,
   type KpReaderEquationLayoutSnapshot,
@@ -138,6 +139,10 @@ const materialFitSurface = requireElement<HTMLElement>(
 const annihilationWitness = requireElement<HTMLElement>(
   "[data-kp-reader-annihilation-witness]"
 );
+const identityWitnessValues = new Map(
+  [...annihilationWitness.querySelectorAll<HTMLElement>("[data-kp-reader-identity-value]")]
+    .map((element) => [requiredData(element, "kpReaderIdentityValue"), element] as const)
+);
 const independentZeroWitness = requireElement<HTMLElement>(
   "[data-kp-reader-independent-zero-witness]"
 );
@@ -182,16 +187,19 @@ const transitionElements = [
   ...stage.querySelectorAll<HTMLElement>("[data-kp-reader-transition]")
 ];
 const witnessedBindings = new Map(animation.transformations.flatMap((transformation) => {
+  if (equationPresentationProfile.identity !== "hold-until-settled-v1") return [];
   if (
     presentationProfile.cancellation !== "witnessed-annihilation-v1" &&
     presentationProfile.zeroWitness !== "embedded-v1"
   ) return [];
+  const operationId = cancellationOperationId(transformation.transformType);
+  if (operationId === undefined) return [];
   const cancellation = transformation.correspondenceMap?.records.find(
     (record) => record.relation === "cancelation"
   );
   if (cancellation === undefined) return [];
   return [[transformation.id, createKpWitnessedAnnihilationBinding({
-    operationId: "kp.algebra.cancel-additive-inverses",
+    operationId,
     transformation,
     bundle: animation.bundle,
     cancellationRecordId: cancellation.id
@@ -490,8 +498,11 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     alignment: context.alignment,
     layout: context.layout,
     linearRearrangementKind: choreographyStep?.kind,
-    cancellationPresentationRecipe: presentationProfile.cancellation,
-    zeroWitnessPresentationRecipe: presentationProfile.zeroWitness,
+    cancellationPresentationRecipe: equationPresentationProfile.identity ===
+        "hold-until-settled-v1"
+      ? "witnessed-annihilation-v1"
+      : presentationProfile.cancellation,
+    zeroWitnessPresentationRecipe: "none",
     successorPresentationRecipe: presentationProfile.successor,
     continuantPresentationRecipe: presentationProfile.continuants,
     nativeHandoffMode: presentationProfile.handoff,
@@ -691,16 +702,30 @@ function syncAnnihilationWitness(
   witnessed: KpReaderEquationSymbolMotionFrame["witnessedAnnihilation"],
   decorativeMotion: boolean
 ): void {
-  if (witnessed === undefined) {
-    annihilationWitness.style.opacity = "0";
+  const projection = projectKpReaderEquationIdentityWitness({
+    mode: equationPresentationProfile.identity,
+    witness: witnessed === undefined
+      ? undefined
+      : {
+          latex: witnessed.frame.witness.latex,
+          readable: witnessed.frame.witnessReadable,
+          ready: witnessed.frame.sources.every((source) => source.pose.opacity === 0),
+          progress: witnessed.frame.progress
+        }
+  });
+  stage.dataset["kpReaderIdentityWitnessState"] = projection.state;
+  annihilationWitness.style.opacity = String(projection.opacity);
+  if (witnessed === undefined || projection.latex === undefined) {
     delete stage.dataset["kpReaderAnnihilationPhase"];
     delete stage.dataset["kpReaderAnnihilationWitnessReadable"];
     return;
   }
+  for (const [latex, element] of identityWitnessValues) {
+    element.hidden = latex !== projection.latex;
+  }
   const pose = witnessed.frame.witness.pose;
   annihilationWitness.style.left = `${witnessed.contactPoint.x}px`;
   annihilationWitness.style.top = `${witnessed.contactPoint.y}px`;
-  annihilationWitness.style.opacity = String(pose.opacity);
   annihilationWitness.style.transform =
     `translate(calc(-50% + ${pose.x}px), calc(-50% + ${pose.y}px)) ` +
     `scale(${pose.scale})`;
@@ -711,7 +736,18 @@ function syncAnnihilationWitness(
       `${0.32 * witnessed.frame.inwardPulse}))`;
   stage.dataset["kpReaderAnnihilationPhase"] = witnessed.frame.phase;
   stage.dataset["kpReaderAnnihilationWitnessReadable"] =
-    String(witnessed.frame.witnessReadable);
+    String(projection.readable);
+}
+
+function cancellationOperationId(transformType: string): string | undefined {
+  switch (transformType) {
+    case "cancelAdditiveInverses":
+      return "kp.algebra.cancel-additive-inverses";
+    case "cancelMultiplicativeInverses":
+      return "kp.algebra.cancel-multiplicative-inverses";
+    default:
+      return undefined;
+  }
 }
 
 function syncIndependentZeroWitness(

@@ -54,6 +54,10 @@ export {
   type KpReaderEquationMaterialVisualContract
 } from "./equation-material-visual-contract.ts";
 export {
+  projectKpReaderEquationIdentityWitness,
+  type KpReaderEquationIdentityWitnessProjection
+} from "./equation-identity-witness.ts";
+export {
   createKpReaderEquationFrameScheduler,
   type KpReaderEquationFrameClock,
   type KpReaderEquationFrameScheduler,

@@ -119,7 +119,8 @@
     {
       "id": "s12-identity-witness",
       "title": "Hold or omit identities without transient flashes",
-      "status": "planned"
+      "summary": "Added an atomic certified identity projector for 0 and 1, held only after cancellation material clears and until settlement or omitted completely; pre-rendered both KaTeX values, and refused to activate them for counter-orbit assets after visual review exposed misleading intermediate algebra.",
+      "status": "complete"
     },
     {
       "id": "s13-divide-trace",

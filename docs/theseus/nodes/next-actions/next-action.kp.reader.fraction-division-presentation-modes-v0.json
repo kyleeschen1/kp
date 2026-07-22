@@ -178,6 +178,27 @@
       "scope": "s11 compiler runtime and browser types",
       "checkedAt": "2026-07-21T23:54:47.661Z",
       "notes": "All application, node, browser-test, and domain TypeScript projects pass after the contract relocation and live selection thread."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/reader-equation-identity-witness.test.ts tests/cancellation-witness.test.ts tests/witnessed-annihilation.test.ts",
+      "status": "passed",
+      "scope": "s12 certified identity projection",
+      "checkedAt": "2026-07-22T00:03:39.734Z",
+      "notes": "Thirteen tests prove exact zero and one derivation, atomic 0-or-1 opacity, readiness gating, hold-through-settlement, full omission, witness ownership, and existing annihilation laws."
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader-presentation-profile.browser.spec.ts --workers=1",
+      "status": "passed",
+      "scope": "s12 live non-fabrication boundary",
+      "checkedAt": "2026-07-22T00:03:41.049Z",
+      "notes": "Three browser tests pass; Explain and Standard routing remains stable and neither profile invents a witness for the existing counter-orbit-authored fractional cancellations."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s12 renderer and app identity types",
+      "checkedAt": "2026-07-22T00:03:42.226Z",
+      "notes": "All TypeScript projects accept the additive-or-multiplicative atomic identity projection and pre-rendered KaTeX identity values."
     }
   ]
 }
