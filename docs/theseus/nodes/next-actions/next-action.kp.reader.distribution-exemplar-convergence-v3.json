@@ -45,5 +45,43 @@
     "npm run check:dev-review-production",
     "npm run build",
     "npm run theseus -- workspace validate"
+  ],
+  "expectedLearning": [
+    "Measured token lineage and topology-level laws can replace card-specific motion tuning without weakening semantic authoring contracts.",
+    "Reader chrome and browser facts can be shared while presentation adapters remain content-specific."
+  ],
+  "allowedWork": [
+    "Converge the distribution exemplar and the smallest shared reader and motion contracts it requires.",
+    "Add focused reusable verification that scales by topology and law rather than by lesson."
+  ],
+  "disallowedWork": [
+    "Do not generalize visual policy beyond the reviewed distribution exemplar.",
+    "Do not implement advanced fraction algebra, new subject matter, or LLM mutation."
+  ],
+  "criteria": [
+    {
+      "id": "reader-parity",
+      "weight": "high"
+    },
+    {
+      "id": "measured-token-continuity",
+      "weight": "high"
+    },
+    {
+      "id": "true-factoring-inverse",
+      "weight": "high"
+    },
+    {
+      "id": "responsive-url-review-contract",
+      "weight": "high"
+    },
+    {
+      "id": "amortized-verification-boundary",
+      "weight": "medium"
+    },
+    {
+      "id": "human-contact-sheet-approval",
+      "weight": "high"
+    }
   ]
 }

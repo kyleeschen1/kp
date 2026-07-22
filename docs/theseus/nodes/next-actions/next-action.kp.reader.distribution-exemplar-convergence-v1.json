@@ -4,5 +4,11 @@
   "title": "Converge distribution reader and measured motion",
   "status": "resolved",
   "domain": "kp",
-  "summary": "Superseded before implementation by provenance-backed action next-action.kp.reader.distribution-exemplar-convergence-v2; no product work was performed under v1."
+  "summary": "Superseded before implementation by provenance-backed action next-action.kp.reader.distribution-exemplar-convergence-v2; no product work was performed under v1.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json"
+    }
+  ]
 }

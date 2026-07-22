@@ -1,0 +1,157 @@
+{
+  "id": "run-contract.kp.distribution-exemplar-convergence-v3",
+  "kind": "run-contract",
+  "title": "Distribution exemplar convergence v3",
+  "status": "resolved",
+  "summary": "Superseded before execution by the hygiene-complete v4 contract; no slice or product work began under this draft.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.distribution-exemplar-convergence-v3.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
+      "summary": "Approved compositional quality roadmap and priority ordering."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.distribution-exemplar-convergence-v3.json",
+      "summary": "Approved exemplar target, source boundary, and verification expectations."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "focused shared-reader and distribution motion tests",
+    "npm run visual:distribution-area",
+    "npm run check:dev-review-production",
+    "npm run build",
+    "npm run theseus -- workspace validate"
+  ],
+  "allowedWork": [
+    "Distribution reader presentation, shared reader services needed by the exemplar, review inbox placement, TOC state, URL and scroll behavior, measured KaTeX motion, cross-surface token lineage, factoring inverse choreography, and responsive overflow behavior.",
+    "Focused reusable conformance, temporal continuity, impact selection, production-closure, bundle, build, and visual-contact-sheet verification required to prove the exemplar.",
+    "Small refactors inside touched reader and motion boundaries when independently reversible and required by an approved slice."
+  ],
+  "disallowedWork": [
+    "Do not generalize visual policy to other animation families before the human exemplar checkpoint.",
+    "Do not implement nested fraction composition, structured algebra expansion, new tutorial subjects, or bounded LLM mutation.",
+    "Do not replace semantic or authoring contracts merely to repair presentation.",
+    "Do not edit unrelated user-authored roadmap, thread, decision, or design documents."
+  ],
+  "goal": "Converge the distribution semantic reader into the canonical polished exemplar, prove measured cross-surface motion and reusable reader quality laws, then stop at human visual review before generalization.",
+  "target": "next-action.kp.reader.distribution-exemplar-convergence-v3",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Capture current distribution baseline",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Freeze exemplar acceptance and preservation boundaries",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Map bespoke and shared reader behavior",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Restore non-occluding review inbox",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Restore TOC and accessibility current synchronization",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Verify URL scroll rewind and deep-link behavior",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Establish font readiness before motion measurement",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Give algebraic and geometric tokens stable identities",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Measure source and destination KaTeX geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Build a coherent timeline-wide layout plan",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Interpolate opening parentheses smoothly",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Split the geometric x plus 2 label smoothly",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Synchronize equation and area correspondents",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Remove fading and static-anchor substitution",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Render factoring as a true inverse choreography",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Establish composable sequential and parallel scheduling",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Cover resize narrow overflow and wrapping boundaries",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Extract parameterized shared-reader conformance",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Add topology-level temporal continuity laws",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Audit browser payload compilation and runtime verification",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Produce contact sheet and stop for human review",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Record evidence and re-evaluate deferred priority",
+      "status": "planned"
+    }
+  ]
+}
