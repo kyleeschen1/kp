@@ -85,7 +85,8 @@
     {
       "id": "s06",
       "title": "Verify URL scroll rewind and deep-link behavior",
-      "status": "planned"
+      "summary": "Exact inverse moments now have regression coverage: copied URLs preserve lesson/version/checkpoint/progress/direction and restore the same material owner. Existing URL, scroll, rewind, TOC, focus, and static-searchability behavior remains green across six browser tests.",
+      "status": "complete"
     },
     {
       "id": "s07",

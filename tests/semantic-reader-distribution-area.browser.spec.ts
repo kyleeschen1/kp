@@ -73,6 +73,34 @@ test("distribution reader keeps one visual owner and reversible native endpoints
   await expect(page).toHaveURL(/kpCheckpoint=factored/);
 });
 
+test("distribution share URL round trips an exact inverse moment", async ({ page }) => {
+  await page.goto(`${route}?kpProgress=0&kpDirection=forward`, { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Factor" }).click();
+  const scrubber = page.locator("[data-kp-distribution-scrubber]");
+  await scrubber.fill("640");
+  await scrubber.dispatchEvent("change");
+
+  const shareHref = await page.locator("[data-kp-distribution-share]").getAttribute("href");
+  expect(shareHref).not.toBeNull();
+  const shared = new URL(shareHref!);
+  expect(shared.searchParams.get("kpLesson")).toBe("lesson.algebra.distribution-area");
+  expect(shared.searchParams.get("kpVersion")).toBe("1");
+  expect(shared.searchParams.get("kpCheckpoint")).toBe("distributed");
+  expect(shared.searchParams.get("kpProgress")).toBe("640");
+  expect(shared.searchParams.get("kpDirection")).toBe("inverse");
+
+  await page.goto(shared.toString(), { waitUntil: "networkidle" });
+  await expect(page.locator("[data-kp-distribution-stage]")).toHaveAttribute(
+    "data-kp-direction",
+    "inverse"
+  );
+  await expect(scrubber).toHaveValue("640");
+  await expect(page.locator("[data-kp-distribution-stage]")).toHaveAttribute(
+    "data-kp-owner",
+    "material"
+  );
+});
+
 test("distribution URL restores the exact review moment and semantic cross-surface focus", async ({ page }) => {
   await page.goto(
     `${route}?kpLesson=lesson.algebra.distribution-area&kpVersion=1&kpCheckpoint=distributed&kpProgress=720&kpDirection=forward`,

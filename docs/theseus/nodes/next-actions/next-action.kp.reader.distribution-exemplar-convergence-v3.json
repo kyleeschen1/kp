@@ -67,6 +67,13 @@
       "scope": "shared active-location service",
       "checkedAt": "2026-07-22T16:32:19.254Z",
       "notes": "Eight equation and distribution browser checks pass across URL restoration, native anchors, narrow layout, and exactly-one active TOC/beat semantics."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "semantic URL round trip",
+      "checkedAt": "2026-07-22T16:33:45.696Z",
+      "notes": "Six browser tests pass; the share URL preserves lesson, version, checkpoint, exact progress, inverse direction, material owner, TOC state, and cross-surface focus."
     }
   ],
   "expectedLearning": [
