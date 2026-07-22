@@ -1,0 +1,61 @@
+{
+  "id": "priority-change.kp.reader-composition-convergence-v0",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.reader-composition-convergence-v0",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The approved distribution exemplar exposed duplicated page, route, URL, lifecycle, scheduler, and adapter composition policy. Converge those roots as the first operational tranche of generated-quality and verification amortization before branch scheduling, structured algebra, fraction pressure tests, LLM authoring, or subject breadth.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The approved distribution exemplar exposed duplicated page, route, URL, lifecycle, scheduler, and adapter composition policy. Converge those roots as the first operational tranche of generated-quality and verification amortization before branch scheduling, structured algebra, fraction pressure tests, LLM authoring, or subject breadth.",
+      "occurredAt": "2026-07-22T18:07:49.557Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v5"
+    ],
+    "preferred": [
+      "run-contract.kp.distribution-exemplar-convergence-v4"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5",
+    "run-contract.kp.distribution-exemplar-convergence-v4"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v5",
+    "rationale": "The approved distribution exemplar exposed duplicated page, route, URL, lifecycle, scheduler, and adapter composition policy. Converge those roots as the first operational tranche of generated-quality and verification amortization before branch scheduling, structured algebra, fraction pressure tests, LLM authoring, or subject breadth.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [
+      "run-contract.kp.distribution-exemplar-convergence-v4"
+    ],
+    "changes": [
+      {
+        "subject": "distribution-exemplar-convergence",
+        "to": "complete"
+      },
+      {
+        "subject": "reader-composition-root-convergence",
+        "to": "now"
+      },
+      {
+        "subject": "generated-quality-verification-amortization",
+        "to": "now"
+      },
+      {
+        "subject": "branch-scheduling-and-structured-algebra",
+        "to": "next"
+      },
+      {
+        "subject": "fraction-composition-primitive-amortization",
+        "to": "later"
+      }
+    ],
+    "effectiveAt": "2026-07-22T18:07:49.557Z",
+    "requestedBy": "user"
+  }
+}

@@ -2,9 +2,9 @@
   "id": "next-action.kp.reader.distribution-exemplar-convergence-v3",
   "kind": "next-action",
   "title": "Converge distribution reader and measured motion",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Restore shared reader review and TOC behavior, replace percentage and opacity substitution with measured KaTeX and cross-surface token lineage, render true factoring choreography, establish amortized reader and temporal contracts, and stop at the exact exemplar visual checkpoint before generalization.",
+  "summary": "Distribution convergence is accepted; the next priority is reader composition-root convergence inside verification amortization.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -298,8 +298,19 @@
       "scope": "reusable contact-sheet descriptor",
       "checkedAt": "2026-07-22T17:49:03.112Z",
       "notes": "Four harness tests and all TypeScript projects pass. The existing solve-x descriptor remains the default; distribution adds route, readiness, capture-target, direction, viewport, and visual-progress data without a second harness."
+    },
+    {
+      "command": "human visual review of live distribution reader and 36-frame contact sheet",
+      "status": "passed",
+      "scope": "required exemplar promotion checkpoint",
+      "checkedAt": "2026-07-22T18:07:48.430Z",
+      "notes": "User reported that the result looks great and explicitly approved promotion after reviewing the live reader and deterministic forward/inverse desktop, tablet, and phone captures."
     }
   ],
+  "progress": {
+    "state": "complete",
+    "summary": "The human-approved distribution reader now has measured cross-surface motion, exact reverse factoring, shared reader conformance, topology-level laws, bounded verification, production closure, and deterministic multi-viewport review evidence."
+  },
   "expectedLearning": [
     "Measured token lineage and topology-level laws can replace card-specific motion tuning without weakening semantic authoring contracts.",
     "Reader chrome and browser facts can be shared while presentation adapters remain content-specific."
