@@ -143,7 +143,14 @@
     {
       "id": "s08",
       "title": "Replace regex stage insertion with an explicit story slot",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s08-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s08-v0",
+      "title": "Replace regex stage insertion with an explicit story slot",
+      "summary": "Explicit story-slot migration is complete and visually verified.",
+      "status": "complete"
     },
     {
       "id": "s09",

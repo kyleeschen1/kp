@@ -99,6 +99,22 @@ test("optional attention cues compile as searchable static phase landmarks", () 
   assert.match(output.articleHtml, /Find the same move on both sides\./);
 });
 
+test("animation story slots replace only the visual payload and retain static fallback access", () => {
+  let fallback = "";
+  const output = compileKpStaticLessonProse(document(), {
+    renderAnimationStorySlot: ({ block, staticFallbackHtml }) => {
+      fallback = staticFallbackHtml;
+      return `<div data-custom-story="${block.id}">Custom stage</div>`;
+    }
+  });
+
+  assert.match(fallback, /See this concept move/);
+  assert.match(output.articleHtml, /data-custom-story="story\.solve-x"/);
+  assert.doesNotMatch(output.articleHtml, /See this concept move/);
+  assert.match(output.articleHtml, /<li id="beat\.subtract"/);
+  assert.match(output.articleHtml, /Make the same move on both sides/);
+});
+
 function document() {
   return parseKpLessonMarkdown({
     sourceId: "content/solve-x.md",

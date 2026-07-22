@@ -33,7 +33,11 @@ export function compileKpDistributionAreaLesson(markdown: string) {
     latex: progressPermille === 0 ? "3(x+2)" : progressPermille < 1000 ? "3x+3\\cdot2" : "3x+6",
     label: progressPermille === 0 ? "Factored expression" : progressPermille < 1000 ? "Distributed expression" : "Expanded expression"
   }));
-  const prose = compileKpStaticLessonProse(document, { staticMath });
+  const prose = compileKpStaticLessonProse(document, {
+    staticMath,
+    renderAnimationStorySlot: ({ block }) =>
+      block.id === story.id ? compileStage() : undefined
+  });
   const html = compilePage(prose.tocHtml, prose.articleHtml);
 
   return createKpCompiledLessonArtifact({
@@ -55,13 +59,6 @@ export function compileKpDistributionAreaLesson(markdown: string) {
 }
 
 function compilePage(tocHtml: string, articleHtml: string): string {
-  const articleWithStage = articleHtml.replace(
-      '<div class="kp-animation-static" data-kp-animation-static aria-label="Interactive explanation">',
-      '<div class="kp-animation-static" data-kp-animation-static aria-label="Interactive explanation">'
-    ).replace(
-      /<div id="static\.story\.distribution-area[\s\S]*?<\/div>\n<div id="static\.story\.distribution-area[\s\S]*?<\/div>\n<div id="static\.story\.distribution-area[\s\S]*?<\/div>/,
-      compileStage()
-    );
   return compileKpReaderPageShell({
     title: "See distribution become area · Kinetic Press",
     description: "See algebraic distribution and geometric area change together.",
@@ -82,7 +79,7 @@ function compilePage(tocHtml: string, articleHtml: string): string {
       dataAttribute: "data-kp-distribution-share"
     },
     tocHtml,
-    articleHtml: articleWithStage,
+    articleHtml,
     hydration: {
       dataAttribute: "data-kp-distribution-hydration",
       json: `{"lesson":"${documentId}","version":"1"}`

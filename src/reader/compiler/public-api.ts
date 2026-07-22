@@ -17,7 +17,9 @@ export {
 } from "./reference-resolver.ts";
 export {
   compileKpStaticLessonProse,
-  type KpStaticLessonHtml
+  type KpStaticAnimationStorySlot,
+  type KpStaticLessonHtml,
+  type KpStaticLessonProseOptions
 } from "./static-prose-compiler.ts";
 export {
   compileKpStaticMathStates,
