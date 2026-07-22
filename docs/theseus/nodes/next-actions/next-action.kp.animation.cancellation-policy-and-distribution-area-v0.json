@@ -179,6 +179,12 @@
       "status": "passed",
       "scope": "s21 exact complementary geometry rewind with explicit factoring fusion",
       "checkedAt": "2026-07-22T14:48:47.546Z"
+    },
+    {
+      "command": "focused distribution area attention, cross-surface, and forward-motion tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s22 contiguous prose algebra area attention cycles",
+      "checkedAt": "2026-07-22T14:51:02.354Z"
     }
   ],
   "expectedLearning": [
