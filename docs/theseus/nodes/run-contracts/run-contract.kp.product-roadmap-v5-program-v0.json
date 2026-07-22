@@ -98,7 +98,8 @@
     {
       "id": "s08",
       "title": "Capture deterministic wide and narrow branch-attention visual evidence",
-      "status": "planned"
+      "summary": "Added stable wide and phone branch-entry checkpoints to the manifest-driven visual harness, captured and manually inspected the eight-frame solve-x sheet, and passed production build, closure, budget, and Theseus integrity gates.",
+      "status": "complete"
     },
     {
       "id": "s09",

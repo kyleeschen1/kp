@@ -35,7 +35,7 @@ test("solve-x preserves branch attention across wide and narrow projections", as
   const wideProgress = JSON.parse(
     (await stage.getAttribute("data-kp-reader-equation-branch-progress")) ?? "{}"
   ) as Record<string, number>;
-  expect(wideProgress.lhs).toBe(wideProgress.rhs);
+  expect(wideProgress["lhs"]).toBe(wideProgress["rhs"]);
 
   await page.setViewportSize({ width: 360, height: 760 });
   await expect(body).toHaveAttribute(

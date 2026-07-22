@@ -167,8 +167,10 @@ test("solve-x samples its selected branch schedule through measured rendering", 
   assert.equal(frame.linearRearrangement?.branchScheduleId, step.branchSchedule?.id);
   const branchProgress = frame.linearRearrangement?.scheduledBranchProgress;
   assert.ok(branchProgress !== undefined);
-  assert.ok((branchProgress.lhs ?? 0) > 0 && (branchProgress.lhs ?? 0) < 1);
-  assert.equal(branchProgress.lhs, branchProgress.rhs);
+  assert.ok(
+    (branchProgress["lhs"] ?? 0) > 0 && (branchProgress["lhs"] ?? 0) < 1
+  );
+  assert.equal(branchProgress["lhs"], branchProgress["rhs"]);
   const introduced = frame.owners.flatMap((owner) => owner.fragmentPoses).filter(
     (fragment) => fragment.side === "target" &&
       step.branchOperation?.branches.some((branch) =>

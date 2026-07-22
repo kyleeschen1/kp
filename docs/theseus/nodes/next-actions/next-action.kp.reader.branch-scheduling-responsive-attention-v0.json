@@ -85,6 +85,48 @@
       "scope": "slice-s07-responsive-attention-browser",
       "checkedAt": "2026-07-22T23:54:24.807Z",
       "notes": "Eight Chromium checks passed across the reader manifest, including solve-x URL reload/share state, searchable no-JS content, active TOC and ARIA focus, narrow containment, and branch-attention parity between wide scrollytelling and the focus stepper."
+    },
+    {
+      "command": "npm run visual:contact-sheet",
+      "status": "passed",
+      "scope": "slice-s08-visual-evidence",
+      "checkedAt": "2026-07-22T23:59:22.444Z",
+      "notes": "Eight deterministic captures include wide and phone branch entry at progress 200; manual inspection found paired subtraction visible, readable focus-stepper controls, stable typography, and no horizontal overflow."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "slice-s08-production-build",
+      "checkedAt": "2026-07-22T23:59:23.421Z",
+      "notes": "Typecheck and Vite production build passed after branch scheduling and visual checkpoint additions."
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "slice-s08-reader-production-closure",
+      "checkedAt": "2026-07-22T23:59:24.305Z",
+      "notes": "All seven manifest reader routes passed exact production closure."
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "slice-s08-reader-budgets",
+      "checkedAt": "2026-07-22T23:59:25.145Z",
+      "notes": "All reader routes remained within the five-percent growth limit; solve-x runtime measured 122,211 gzip bytes."
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "slice-s08-dev-review-closure",
+      "checkedAt": "2026-07-22T23:59:26.006Z",
+      "notes": "Development review tooling remained unreachable in the production graph."
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "slice-s08-theseus-integrity",
+      "checkedAt": "2026-07-22T23:59:26.823Z",
+      "notes": "Workspace validation passed with 746 nodes and 10,567 events before recording final slice evidence."
     }
   ],
   "expectedLearning": [

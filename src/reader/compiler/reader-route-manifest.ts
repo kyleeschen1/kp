@@ -103,6 +103,12 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
           viewport: "desktop"
         },
         {
+          id: "subtract-motion",
+          label: "Balanced entry in motion",
+          progressPermille: 200,
+          viewport: "desktop"
+        },
+        {
           id: "subtract-settled",
           label: "Subtract settled",
           progressPermille: 333,
@@ -125,6 +131,12 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
           label: "Solution settled",
           progressPermille: 1_000,
           viewport: "desktop"
+        },
+        {
+          id: "subtract-motion-phone",
+          label: "Balanced entry · phone",
+          progressPermille: 200,
+          viewport: "phone"
         },
         {
           id: "cancel-motion-phone",

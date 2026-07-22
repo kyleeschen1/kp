@@ -26,14 +26,16 @@ test("canonical contact-sheet checkpoints have fixed unique ordering", () => {
     kpSolveXContactSheetCheckpoints.map((checkpoint) => checkpoint.id),
     [
       "read-equality",
+      "subtract-motion",
       "subtract-settled",
       "cancel-motion",
       "cancel-settled",
       "solution-settled",
+      "subtract-motion-phone",
       "cancel-motion-phone"
     ]
   );
-  assert.equal(new Set(kpSolveXContactSheetCheckpoints.map((checkpoint) => checkpoint.id)).size, 6);
+  assert.equal(new Set(kpSolveXContactSheetCheckpoints.map((checkpoint) => checkpoint.id)).size, 8);
 });
 
 test("distribution contact sheet pairs the same visual moments forward and backward", () => {
@@ -54,7 +56,7 @@ test("contact-sheet URLs derive route and query authority from descriptors", () 
   const solve = createKpVisualReviewUrl(
     "solve-x",
     "https://kinetic.press",
-    kpSolveXContactSheetCheckpoints[2]!
+    kpSolveXContactSheetCheckpoints[3]!
   );
   assert.equal(solve.pathname, "/reader/solve-x/");
   assert.equal(solve.searchParams.get("kpLesson"), "lesson.solve-x.x-plus-3");
