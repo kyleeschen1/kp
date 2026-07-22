@@ -68,7 +68,8 @@
     {
       "id": "s03",
       "title": "Prove the semantic branch-operation contract and dependency validation",
-      "status": "planned"
+      "summary": "Added focused laws for stable branch identity, exclusive entity ownership, deterministic topological order, and rejection of malformed or cyclic dependencies.",
+      "status": "complete"
     },
     {
       "id": "s04",

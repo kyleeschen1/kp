@@ -36,6 +36,13 @@
       "scope": "slice-s02-worktree-stabilization",
       "checkedAt": "2026-07-22T23:42:37.206Z",
       "notes": "The interrupted branch-scheduling implementation now compiles across app, node, test, and domain TypeScript boundaries."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-branch-operation.test.ts",
+      "status": "passed",
+      "scope": "slice-s03-semantic-branch-contract",
+      "checkedAt": "2026-07-22T23:44:01.699Z",
+      "notes": "Three tests prove deterministic dependency order and reject duplicate identities, empty or duplicate entity ownership, unknown/self/duplicate dependencies, and cycles."
     }
   ],
   "expectedLearning": [
