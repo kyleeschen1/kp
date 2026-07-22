@@ -169,7 +169,8 @@
     {
       "id": "s20",
       "title": "Audit browser payload compilation and runtime verification",
-      "status": "planned"
+      "summary": "Removed an unused legacy fission/fusion production dependency, proved test-only continuity and conformance code stay out of the route, and added a bounded impact rule for shared reader plus distribution-specific laws and browser verification. Production build, closure, 12 motion laws, 12 browser checks, and 1,880 deterministic tests pass.",
+      "status": "complete"
     },
     {
       "id": "s21",

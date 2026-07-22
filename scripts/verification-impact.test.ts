@@ -28,6 +28,30 @@ test("review client changes add a focused browser gate", () => {
   ]);
 });
 
+test("distribution reader changes select bounded shared and exemplar gates", () => {
+  const result = selectKpVerificationImpact(["src/reader/app/distribution-area-entry.ts"]);
+  assert.deepEqual(ids(result), [
+    "typecheck",
+    "reader-conformance",
+    "build",
+    "dev-review-production-closure",
+    "distribution-motion-laws",
+    "distribution-visual"
+  ]);
+  assert.deepEqual(result.unmatchedPaths, []);
+  assert.equal(ids(result).includes("test"), false);
+  assert.equal(ids(result).includes("focused-visual"), false);
+});
+
+test("distribution schedule changes select topology and exemplar gates", () => {
+  const result = selectKpVerificationImpact(["src/animation/indexed-progress-schedule.ts"]);
+  assert.deepEqual(ids(result), [
+    "typecheck",
+    "distribution-motion-laws",
+    "distribution-visual"
+  ]);
+});
+
 test("cross-boundary changes union checks without duplication", () => {
   const result = selectKpVerificationImpact([
     "protocols/dev-review-v2.ts",

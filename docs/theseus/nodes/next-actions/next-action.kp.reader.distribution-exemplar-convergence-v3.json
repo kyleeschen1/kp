@@ -263,6 +263,27 @@
       "scope": "s19 reusable law typing",
       "checkedAt": "2026-07-22T17:36:28.895Z",
       "notes": "All TypeScript projects pass with sampler-inferred token topology and no distribution-specific dependencies in the generic temporal law module."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/reader/app/distribution-area-entry.ts",
+      "status": "passed",
+      "scope": "bounded distribution verification selection",
+      "checkedAt": "2026-07-22T17:45:08.891Z",
+      "notes": "The reader entry now selects typecheck, shared reader conformance, production build and closure, five topology/motion law files, and the distribution browser suite; it no longer falls through to the repository-wide test gate."
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "distribution production import closure and payload",
+      "checkedAt": "2026-07-22T17:45:10.136Z",
+      "notes": "Production build passed. Removing the unused fission-fusion side-effect import eliminated its 1,762-byte gzip chunk; the entry is 3,294 bytes gzip, and no temporal-law, shared-conformance, dev-review, or fission/fusion marker ships in the route closure."
+    },
+    {
+      "command": "npm run verify:impact -- --path src/reader/app/distribution-area-entry.ts --path scripts/verification-impact.ts --path scripts/verification-impact.test.ts --run",
+      "status": "passed",
+      "scope": "one-time broad verification audit",
+      "checkedAt": "2026-07-22T17:45:11.262Z",
+      "notes": "Typecheck, shared reader conformance (2), build, production closure, distribution topology/motion laws (12), distribution browser suite (12), and the fallback full deterministic suite (1,880) passed."
     }
   ],
   "expectedLearning": [

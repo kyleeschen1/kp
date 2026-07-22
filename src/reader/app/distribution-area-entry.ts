@@ -1,4 +1,3 @@
-import "../../animation/fission-fusion-register.ts";
 import {
   attentionPhaseAt,
   createKpDistributionAreaAttentionPlan

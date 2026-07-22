@@ -83,6 +83,31 @@ const checks = {
     "high",
     "Capture the canonical motion exemplar at deterministic checkpoints."
   ),
+  readerConformance: check(
+    "reader-conformance",
+    ["npm", "run", "test:browser:reader-conformance"],
+    "high",
+    "Exercise shared reader hydration, URL, TOC, review, narrow-fit, and searchability laws."
+  ),
+  distributionUnit: check(
+    "distribution-motion-laws",
+    [
+      "node", "--test",
+      "tests/distribution-area-layout.test.ts",
+      "tests/distribution-area-motion-plan.test.ts",
+      "tests/distribution-area-width-motion-plan.test.ts",
+      "tests/distribution-area-temporal-laws.test.ts",
+      "tests/indexed-progress-schedule.test.ts"
+    ],
+    "medium",
+    "Exercise distribution topology, measured layout, scheduling, continuity, and reverse laws."
+  ),
+  distributionVisual: check(
+    "distribution-visual",
+    ["npm", "run", "visual:distribution-area"],
+    "high",
+    "Exercise distribution motion, direction, URL, review, TOC, and responsive browser behavior."
+  ),
   skill: check(
     "skill-validate",
     [
@@ -139,10 +164,25 @@ const rules: readonly KpVerificationRule[] = [
     reason: "The visible review experience or browser contract changed."
   },
   {
+    id: "reader-app",
+    matches: (path) => path.startsWith("src/reader/app/"),
+    // Reader entries own production-only closure as well as shared browser behavior.
+    checks: [checks.typecheck, checks.readerConformance, checks.build, checks.productionClosure],
+    reason: "A reader application entry changed."
+  },
+  {
+    id: "distribution-exemplar",
+    matches: (path) =>
+      path.includes("distribution-area") ||
+      path === "src/animation/indexed-progress-schedule.ts",
+    checks: [checks.typecheck, checks.distributionUnit, checks.distributionVisual],
+    reason: "The distribution exemplar or its compositional schedule changed."
+  },
+  {
     id: "visual-runtime",
     matches: (path) =>
       path.startsWith("src/semantic-reader/") ||
-      path.startsWith("src/animation/") ||
+      (path.startsWith("src/animation/") && path !== "src/animation/indexed-progress-schedule.ts") ||
       path.includes("equation") ||
       path.includes("visual"),
     checks: [checks.typecheck, checks.focusedVisual],
