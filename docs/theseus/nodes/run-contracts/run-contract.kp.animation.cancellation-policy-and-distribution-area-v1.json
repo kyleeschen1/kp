@@ -99,7 +99,8 @@
     {
       "id": "s06-typed-repair",
       "title": "Return-typed-repair-for-unsupported-combinations",
-      "status": "planned"
+      "summary": "Added a discriminated resolution result with exact source-topology repair, safe two-axis intent repair for distinct baselines, and a manual-review terminal case; repaired intent resolves deterministically to counter orbit.",
+      "status": "complete"
     },
     {
       "id": "s07-adapter-migration",
