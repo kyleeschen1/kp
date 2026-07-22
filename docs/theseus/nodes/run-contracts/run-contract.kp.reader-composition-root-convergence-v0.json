@@ -239,7 +239,14 @@
     {
       "id": "s16",
       "title": "Migrate distribution scrolling to the shared clock",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s16-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s16-v0",
+      "title": "Migrate distribution scrolling to the shared clock",
+      "summary": "Distribution scrolling is migrated to the shared piecewise clock with full browser parity.",
+      "status": "complete"
     },
     {
       "id": "s17",

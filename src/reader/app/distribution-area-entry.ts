@@ -6,11 +6,14 @@ import { createKpEquationFontReadiness } from "../../rendering/equation-font-rea
 import {
   bindKpReaderSemanticLinks,
   createKpReaderActiveLocationService,
+  createKpReaderContinuousScrollClock,
   createKpReaderLocationSettlement,
   createKpReaderRuntimeRouteDescriptor,
   decodeKpDistributionAreaUrl,
   encodeKpDistributionAreaUrl,
-  type KpDistributionAreaDirection
+  type KpDistributionAreaDirection,
+  type KpReaderContinuousScrollClock,
+  type KpReaderPiecewiseScrollGeometry
 } from "../runtime/public-api.ts";
 import {
   createKpDistributionAreaMotionPlan,
@@ -70,6 +73,7 @@ let motionPlan: KpDistributionAreaMotionPlan | undefined;
 let widthMotionPlan: KpDistributionAreaWidthMotionPlan | undefined;
 let previousReviewFrameAtMs: number | undefined;
 let previousReviewScrollY = window.scrollY;
+let scrollClock: KpReaderContinuousScrollClock | undefined;
 const locationSettlement = createKpReaderLocationSettlement({
   ownerWindow: window,
   shareLink: share,
@@ -142,6 +146,7 @@ window.addEventListener("pagehide", () => {
   fontReviewLifecycle.dispose();
   semanticLinkBindings.dispose();
   locationSettlement.dispose();
+  scrollClock?.dispose();
 }, { once: true });
 
 function render(): void {
@@ -307,7 +312,10 @@ function scheduleScroll(): void {
   if (pointerOwnsProgress) return;
   cancelAnimationFrame(scrollFrame);
   scrollFrame = requestAnimationFrame(() => {
-    progress = progressFromScroll();
+    const clock = distributionScrollClock();
+    clock.updateGeometry(distributionScrollGeometry());
+    const visualProgress = clock.samplePosition(distributionReaderLine()).progress;
+    progress = direction === "forward" ? visualProgress : 1 - visualProgress;
     render();
     locationSettlement.settle();
   });
@@ -317,25 +325,30 @@ function armScrollInteraction(): void {
   scrollInteractionArmed = true;
 }
 
-function progressFromScroll(): number {
-  if (beats.length === 0) return progress;
-  const readerLine = window.innerHeight * 0.52;
-  const points = beats.map((beat) => ({
-    center: beat.getBoundingClientRect().top + beat.offsetHeight / 2,
-    progress: Number(beat.dataset["kpCheckpoint"] ?? 0) / 1000
-  }));
-  if (readerLine <= points[0]!.center) return direction === "forward" ? points[0]!.progress : 1 - points[0]!.progress;
-  for (let index = 1; index < points.length; index += 1) {
-    const before = points[index - 1]!;
-    const after = points[index]!;
-    if (readerLine <= after.center) {
-      const local = clamp01((readerLine - before.center) / (after.center - before.center));
-      const visual = lerp(before.progress, after.progress, local);
-      return direction === "forward" ? visual : 1 - visual;
-    }
-  }
-  const visual = points.at(-1)!.progress;
-  return direction === "forward" ? visual : 1 - visual;
+function distributionScrollClock(): KpReaderContinuousScrollClock {
+  scrollClock ??= createKpReaderContinuousScrollClock({
+    id: "clock.reader.distribution-area.scroll",
+    geometry: distributionScrollGeometry(),
+    initialPositionPx: distributionReaderLine(),
+    checkpoints: beats.map((beat) => ({
+      id: requiredData(beat, "kpBeat"),
+      progressPermille: Number(requiredData(beat, "kpCheckpoint"))
+    }))
+  });
+  return scrollClock;
+}
+
+function distributionScrollGeometry(): KpReaderPiecewiseScrollGeometry {
+  return {
+    stops: beats.map((beat) => ({
+      positionPx: beat.getBoundingClientRect().top + beat.offsetHeight / 2,
+      progressPermille: Number(requiredData(beat, "kpCheckpoint"))
+    }))
+  };
+}
+
+function distributionReaderLine(): number {
+  return window.innerHeight * 0.52;
 }
 
 function setActiveBeat(visualProgress: number): void {
@@ -403,10 +416,6 @@ function requiredData(element: HTMLElement, key: string): string {
   const value = element.dataset[key];
   if (value === undefined || value.length === 0) throw new Error(`Missing distribution reader data-${key}.`);
   return value;
-}
-
-function lerp(from: number, to: number, progressValue: number): number {
-  return from + (to - from) * clamp01(progressValue);
 }
 
 function interval(value: number, start: number, end: number): number {
