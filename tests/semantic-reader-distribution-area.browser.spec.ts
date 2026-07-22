@@ -24,6 +24,21 @@ test("semantic editor opens the synchronized algebra and area exemplar", async (
   expect(errors).toEqual([]);
 });
 
+test("distribution reader mounts review capture outside the visual stage", async ({ page }) => {
+  await page.goto(`${route}?kpProgress=500`, { waitUntil: "networkidle" });
+  await expect(page.locator("body")).toHaveAttribute("data-kp-dev-review-ready", "true");
+  const host = page.locator("[data-kp-dev-review-shell]");
+  await expect(host).toHaveAttribute("data-kp-dev-review-placement", "left-prose-rail");
+  await host.locator("button.launcher").click();
+  await expect(host.locator("textarea")).toBeEnabled();
+
+  const stage = await page.locator("[data-kp-distribution-stage]").boundingBox();
+  const panel = await host.locator("[role=dialog]").boundingBox();
+  expect(stage).not.toBeNull();
+  expect(panel).not.toBeNull();
+  expect(panel!.x + panel!.width).toBeLessThanOrEqual(stage!.x);
+});
+
 test("distribution reader keeps one visual owner and reversible native endpoints", async ({ page }) => {
   await page.goto(`${route}?kpProgress=0&kpDirection=forward`, { waitUntil: "networkidle" });
   const stage = page.locator("[data-kp-distribution-stage]");

@@ -55,22 +55,26 @@
     {
       "id": "s01",
       "title": "Capture current distribution baseline",
-      "status": "planned"
+      "summary": "Captured seven forward timeline points at desktop and phone widths; baseline proves current endpoint tests pass but do not catch temporal discontinuity, percentage positioning, missing review chrome, or inverse choreography quality.",
+      "status": "complete"
     },
     {
       "id": "s02",
       "title": "Freeze exemplar acceptance and preservation boundaries",
-      "status": "planned"
+      "summary": "Canonical reference is the accepted x-plus-3 equation reader motion and shared exemplar reader chrome. Acceptance requires continuous measured token motion, coordinated algebra and geometry, true reversible factoring, working TOC/review/URL behavior, and no overflow. Preserve semantic traces, Markdown/searchability, endpoint KaTeX, and authoring contracts. Roll back reader chrome, motion adapter, and verification harness independently; do not promote before human contact-sheet approval.",
+      "status": "complete"
     },
     {
       "id": "s03",
       "title": "Map bespoke and shared reader behavior",
-      "status": "planned"
+      "summary": "Shared and reusable: compiled TOC markup, reader CSS, dev-review bootstrap and placement, font readiness, URL codec concepts, responsive projection, semantic focus, and frame scheduling. Incorrectly embedded in exemplar-entry: TOC/ARIA activation and review-frame lifecycle. Distribution-specific: semantic trace sampling, area SVG projection, cross-surface correspondence, direction controls, and choreography. First rollback unit will extract only reader chrome services and mount them on distribution.",
+      "status": "complete"
     },
     {
       "id": "s04",
       "title": "Restore non-occluding review inbox",
-      "status": "planned"
+      "summary": "Distribution now mounts the shared dev-review inbox, emits temporal semantic/render capture data on render and request, and keeps the wide panel wholly in the left prose rail. Five focused browser tests pass.",
+      "status": "complete"
     },
     {
       "id": "s05",

@@ -29,6 +29,8 @@ let pointerOwnsProgress = false;
 let semanticUrlOwnsProgress = hasSemanticProgress();
 let scrollInteractionArmed = !semanticUrlOwnsProgress;
 let scrollFrame = 0;
+let previousReviewFrameAtMs: number | undefined;
+let previousReviewScrollY = window.scrollY;
 
 document.body.dataset["kpReaderHydrated"] = "true";
 directionButtons.forEach((button) => button.addEventListener("click", () => {
@@ -67,6 +69,9 @@ document.addEventListener("pointerdown", (event) => {
     armScrollInteraction();
   }
 });
+if (import.meta.env.DEV) {
+  window.addEventListener("kp:reader-dev-review-request-frame", render);
+}
 share.addEventListener("click", () => replaceSemanticUrl());
 for (const element of document.querySelectorAll<HTMLElement>("[data-kp-focus]")) {
   const concepts = element.dataset["kpFocus"]?.split(" ") ?? [];
@@ -78,6 +83,11 @@ for (const element of document.querySelectorAll<HTMLElement>("[data-kp-focus]"))
 
 render();
 if (!hasSemanticProgress()) scheduleScroll();
+if (import.meta.env.DEV) {
+  void import("../../dev-review/reader-review-bootstrap.ts").then(({ mountKpReaderDevReview }) => {
+    mountKpReaderDevReview(window);
+  });
+}
 
 function render(): void {
   progress = clamp01(progress);
@@ -116,6 +126,48 @@ function render(): void {
     button.setAttribute("aria-pressed", String(button.dataset["kpDirectionButton"] === direction));
   }
   share.href = semanticUrl().toString();
+  dispatchDevReviewFrame(phase.id, phase.conceptIds, owner, permille);
+}
+
+function dispatchDevReviewFrame(
+  phaseId: string,
+  conceptIds: readonly string[],
+  owner: string,
+  progressPermille: number
+): void {
+  if (!import.meta.env.DEV) return;
+  const atMs = performance.now();
+  window.dispatchEvent(new CustomEvent("kp:reader-dev-review-frame", { detail: {
+    atMs,
+    documentId: "lesson.algebra.distribution-area",
+    documentVersion: "1",
+    assetId: "exemplar.distribution-area.3-times-x-plus-2",
+    checkpointId: checkpointFor(progressPermille / 1000),
+    progressPermille,
+    projectionId: "equation-area.distribution",
+    activeTransformationIds: [`distribution.${direction}`],
+    activePhase: phaseId,
+    focusSource: "story",
+    focusRefs: [...conceptIds],
+    motionPreference: "full",
+    motionMode: "continuous",
+    playbackDirection: direction === "forward" ? "forward" : "rewind",
+    rendererId: "reader.distribution.composite",
+    motionAuthority: pointerOwnsProgress ? "controls" : "scroll",
+    fitStatus: "contained",
+    fitScale: 1,
+    layoutRevision: 0,
+    layoutReadCount: 0,
+    fontRevision: 0,
+    fontReady: document.fonts.status === "loaded",
+    ownerIds: [owner],
+    ...(previousReviewFrameAtMs === undefined
+      ? {}
+      : { frameIntervalMs: atMs - previousReviewFrameAtMs }),
+    scrollDeltaY: window.scrollY - previousReviewScrollY
+  } }));
+  previousReviewFrameAtMs = atMs;
+  previousReviewScrollY = window.scrollY;
 }
 
 function renderMaterial(
