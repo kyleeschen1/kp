@@ -1,0 +1,197 @@
+{
+  "id": "run-contract.kp.reader-composition-root-convergence-v0",
+  "kind": "run-contract",
+  "title": "Reader composition-root convergence v0",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Twenty-six rollback-sized slices convert the accepted exemplars into a reusable reader composition kernel, then stop at a parity contact-sheet checkpoint before closeout.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.composition-root-convergence-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
+      "summary": "Approved generated-quality and verification-amortization phase."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.reader-composition-convergence-v0.json",
+      "summary": "User-approved priority checkpoint placing composition convergence first."
+    }
+  ],
+  "verification": [
+    "node --test focused reader compiler, runtime, route, and descriptor tests",
+    "npm run check:architecture",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:linear-equation",
+    "npm run visual:distribution-area",
+    "npm run check:dev-review-production",
+    "npm run build",
+    "npm run theseus -- workspace validate"
+  ],
+  "allowedWork": [
+    "Reader compiler page shells, build-time route manifests, inferred URL codecs, browser lifecycle services, piecewise scroll clocks, frame scheduling, runtime lesson descriptors, production renderer adapters, derived conformance and review descriptors, impact selection, closure, and bundle budgets.",
+    "Compatibility changes required for both accepted readers to consume the shared contracts, provided exact visual, semantic, URL, static-searchability, and responsive parity remains proven."
+  ],
+  "disallowedWork": [
+    "Do not alter accepted equation or distribution semantics, choreography, visual policy, typography, colors, layout, attention behavior, searchable prose, or route meaning.",
+    "Do not add branch scheduling, structured algebra, advanced fraction composition, LLM mutation, new subjects, WebGL generalization, or editor redesign.",
+    "Do not introduce an abstraction used only by tests or only one production reader; integrate it in both readers or defer it.",
+    "Do not edit unrelated user-authored roadmap, thread, decision, or design documents."
+  ],
+  "goal": "Converge accepted equation and distribution readers onto shared inferred page, route, URL, lifecycle, scheduling, adapter, conformance, review, and payload contracts without changing visible or semantic behavior.",
+  "target": "next-action.kp.reader.composition-root-convergence-v0",
+  "runMode": "run",
+  "maxSlices": 26,
+  "commitCadence": "Commit every independently verified rollback unit; combine analysis-only characterization with the first implementation slice it informs.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop if equation or distribution visual, semantic, URL, static-searchability, focus, review, or responsive parity regresses.",
+    "Stop if a shared abstraction cannot be consumed by both production readers without renderer-specific leakage or type erasure.",
+    "Stop if build routing becomes runtime-eager, unrelated adapters enter a reader bundle, or a route exceeds the approved payload baseline by more than five percent without explicit justification.",
+    "Stop if verification evidence is lost, an unexplained broad failure appears, or work expands into structured algebra, fractions, LLMs, new subjects, WebGL, or editor scope.",
+    "Stop after slice s25 for human review of equation and distribution parity contact sheets; do not execute s26 without new visual approval."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Freeze accepted parity and composition inventory",
+      "summary": "Materialized as next-action.kp.s01-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s01-v0",
+      "title": "Freeze accepted parity and composition inventory",
+      "summary": "Materialized from stored run-contract slice s01 in Reader composition-root convergence v0.",
+      "status": "ready"
+    },
+    {
+      "id": "s02",
+      "title": "Define inferred reader route descriptors",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Create one build-time reader route manifest",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Derive Vite dispatch and inputs from the manifest",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Extract the renderer-neutral reader page shell",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Migrate equation page compilation to the shell",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Migrate distribution page compilation to the shell",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Replace regex stage insertion with an explicit story slot",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Define composable inferred URL state codecs",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Migrate distribution direction and progress URLs",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Converge equation URLs on the shared route descriptor",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Extract shared font and development-review lifecycle",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Extract shared semantic-link focus bindings",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Extract share and history settlement control",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Generalize piecewise beat scroll clocks",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Migrate distribution scrolling to the shared clock",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Generalize the typed reader frame scheduler",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Migrate distribution measurement and rendering to the scheduler",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Replace equation variant branching with inferred lesson descriptors",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Integrate a real production renderer adapter boundary",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Derive shared reader conformance from route descriptors",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Derive visual review captures from route descriptors",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Add manifest-aware impact and production-closure gates",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Enforce per-route bundle and compilation budgets",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Produce parity contact sheets and stop for human review",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Record approval evidence and close the tranche",
+      "status": "planned"
+    }
+  ]
+}

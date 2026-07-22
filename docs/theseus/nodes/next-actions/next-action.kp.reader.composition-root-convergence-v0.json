@@ -1,0 +1,79 @@
+{
+  "id": "next-action.kp.reader.composition-root-convergence-v0",
+  "kind": "next-action",
+  "title": "Converge reader composition roots",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Make accepted reader routes declare content, URL state, lifecycle, rendering, conformance, and review metadata through shared inferred contracts instead of duplicating page and application policy.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.reader-composition-convergence-v0.json"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "priority-change.kp.reader-composition-convergence-v0"
+    ],
+    "preferred": [
+      "next-action.kp.reader.distribution-exemplar-convergence-v3"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5",
+    "next-action.refill.experiment.plan-revision.kp.v4.generated-quality-envelope",
+    "next-action.refill.experiment.plan-revision.kp.v4.primitive-amortization"
+  ],
+  "verification": [
+    "npm run check:architecture",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:linear-equation",
+    "npm run visual:distribution-area",
+    "npm run check:dev-review-production",
+    "npm run build",
+    "npm run theseus -- workspace validate"
+  ],
+  "expectedLearning": [
+    "Whether one inferred route and lifecycle composition contract can serve equation and equation-area readers without erasing renderer-specific motion.",
+    "Whether route, conformance, contact-sheet, and build metadata can share one source while remaining tree-shakeable."
+  ],
+  "allowedWork": [
+    "Reader compiler page shells, build-time route manifests, typed URL codecs, browser lifecycle services, scroll clocks, frame schedulers, lesson runtime descriptors, production adapter integration, conformance descriptors, contact-sheet descriptors, impact selection, production closure, and bundle budgets.",
+    "Small compatibility refactors in the accepted equation and distribution readers required to consume shared composition contracts."
+  ],
+  "disallowedWork": [
+    "Do not change accepted equation or distribution semantics, choreography, typography, color, layout, focus policy, URL meaning, searchable transcripts, or responsive behavior.",
+    "Do not implement branch scheduling, structured algebra, advanced fractions, LLM mutation, new tutorial subjects, WebGL breadth, or editor redesign.",
+    "Do not edit unrelated user-authored roadmap, thread, decision, or design documents."
+  ],
+  "criteria": [
+    {
+      "id": "exact-reader-parity",
+      "weight": "high"
+    },
+    {
+      "id": "inferred-composition-api",
+      "weight": "high"
+    },
+    {
+      "id": "manifest-driven-routing",
+      "weight": "high"
+    },
+    {
+      "id": "production-adapter-use",
+      "weight": "high"
+    },
+    {
+      "id": "bounded-browser-payload",
+      "weight": "high"
+    },
+    {
+      "id": "amortized-verification",
+      "weight": "medium"
+    },
+    {
+      "id": "human-contact-sheet-approval",
+      "weight": "high"
+    }
+  ]
+}
