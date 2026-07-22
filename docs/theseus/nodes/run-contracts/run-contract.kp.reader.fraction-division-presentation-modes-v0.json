@@ -197,7 +197,8 @@
     {
       "id": "s25-transfer-projection",
       "title": "Define certified fluent transfer macro",
-      "status": "planned"
+      "summary": "Defined x over 2 equals 4 to x equals 8 as a certified fluent projection of strict balanced multiplication, cancellation, and product evaluation; proved continuant lineage and explicitly forbade denominator-to-multiplier semantic identity.",
+      "status": "complete"
     },
     {
       "id": "s26-profile-surface",

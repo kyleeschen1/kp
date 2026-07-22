@@ -409,6 +409,18 @@
       "status": "passed",
       "scope": "slice s24 boundary",
       "checkedAt": "2026-07-22T01:13:08.843Z"
+    },
+    {
+      "command": "node focused certified transfer, fractional trace, and presentation profile tests",
+      "status": "passed",
+      "scope": "s25 strict balanced proof projection and proxy non-identity",
+      "checkedAt": "2026-07-22T01:18:35.688Z"
+    },
+    {
+      "command": "npm run typecheck and architecture boundary checks",
+      "status": "passed",
+      "scope": "s25 semantic projection boundary",
+      "checkedAt": "2026-07-22T01:18:36.819Z"
     }
   ]
 }
