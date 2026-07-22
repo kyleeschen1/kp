@@ -347,7 +347,14 @@
     {
       "id": "s25",
       "title": "Produce parity contact sheets and stop for human review",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s25-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s25-v0",
+      "title": "Produce parity contact sheets and stop for human review",
+      "summary": "Produced equation and distribution parity contact sheets and stopped for human visual approval; s26 remains unexecuted.",
+      "status": "complete"
     },
     {
       "id": "s26",

@@ -1,0 +1,98 @@
+{
+  "id": "next-action.kp.s25-v0",
+  "kind": "next-action",
+  "title": "Produce parity contact sheets and stop for human review",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Parity contact sheets are produced and the run is stopped at its mandatory human visual checkpoint.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reader-composition-root-convergence-v0.json",
+      "summary": "Run contract whose stored slice s25 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.composition-root-convergence-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
+      "summary": "Approved generated-quality and verification-amortization phase."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.reader-composition-convergence-v0.json",
+      "summary": "User-approved priority checkpoint placing composition convergence first."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.reader-composition-root-convergence-v0",
+      "next-action.kp.reader.composition-root-convergence-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.reader.composition-root-convergence-v0"
+  ],
+  "verification": [
+    "node --test focused reader compiler, runtime, route, and descriptor tests",
+    "npm run check:architecture",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:linear-equation",
+    "npm run visual:distribution-area",
+    "npm run check:dev-review-production",
+    "npm run build",
+    "npm run theseus -- workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run visual:contact-sheet solve-x to tmp/codex/s25-parity/solve-x",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-22T21:45:26.749Z"
+    },
+    {
+      "command": "npm run visual:contact-sheet distribution-area to tmp/codex/s25-parity/distribution-area",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-22T21:45:27.670Z"
+    },
+    {
+      "command": "human preflight inspection of both assembled contact sheets",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-22T21:45:28.487Z"
+    },
+    {
+      "command": "npm run visual:cancellation",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-22T21:45:29.373Z"
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-22T21:45:30.194Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Generated and inspected the manifest-derived six-frame solve-x sheet and 36-frame distribution sheet. Equation cancellation/profile/cross-surface checks pass 8 of 8; distribution continuity, inverse, URL, focus, no-JS, phone, and resize checks pass 12 of 12. Human visual approval is now required."
+  },
+  "expectedLearning": [
+    "Whether Produce parity contact sheets and stop for human review can be completed inside Reader composition-root convergence v0."
+  ],
+  "allowedWork": [
+    "Reader compiler page shells, build-time route manifests, inferred URL codecs, browser lifecycle services, piecewise scroll clocks, frame scheduling, runtime lesson descriptors, production renderer adapters, derived conformance and review descriptors, impact selection, closure, and bundle budgets.",
+    "Compatibility changes required for both accepted readers to consume the shared contracts, provided exact visual, semantic, URL, static-searchability, and responsive parity remains proven."
+  ],
+  "disallowedWork": [
+    "Do not alter accepted equation or distribution semantics, choreography, visual policy, typography, colors, layout, attention behavior, searchable prose, or route meaning.",
+    "Do not add branch scheduling, structured algebra, advanced fraction composition, LLM mutation, new subjects, WebGL generalization, or editor redesign.",
+    "Do not introduce an abstraction used only by tests or only one production reader; integrate it in both readers or defer it.",
+    "Do not edit unrelated user-authored roadmap, thread, decision, or design documents."
+  ]
+}
