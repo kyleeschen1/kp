@@ -95,6 +95,12 @@
       "status": "passed",
       "scope": "s07 inferred-policy adapter migration with approved visual preservation",
       "checkedAt": "2026-07-22T13:58:56.241Z"
+    },
+    {
+      "command": "focused executable cancellation law and divide choreography tests; npm run typecheck; npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s08 contact readability retirement and rewind laws",
+      "checkedAt": "2026-07-22T14:02:05.719Z"
     }
   ],
   "expectedLearning": [

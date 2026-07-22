@@ -111,7 +111,8 @@
     {
       "id": "s08-contact-laws",
       "title": "Formalize-contact-readability-retirement-and-rewind-laws",
-      "status": "planned"
+      "summary": "Added executable laws for stable source identity, full opacity and separation before contact, readable exact two-axis shared contact, complete post-contact retirement, and rewind equality; the real distinct-baseline divide exemplar passes all laws.",
+      "status": "complete"
     },
     {
       "id": "s09-catalog-conformance",

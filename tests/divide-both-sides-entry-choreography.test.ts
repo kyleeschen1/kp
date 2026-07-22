@@ -3,6 +3,7 @@ import test from "node:test";
 
 import { createDivideBothSidesEquationAnimationAsset } from "../src/animation/divide-both-sides-equation-adapter.ts";
 import { createKpLinearRearrangementChoreography } from "../src/animation/linear-rearrangement-choreography.ts";
+import { checkKpCancellationPresentationLaws } from "../src/animation/cancellation-presentation-laws.ts";
 import { createKpWitnessedAnnihilationBinding } from "../src/animation/witnessed-annihilation.ts";
 import { createKpEquationLinearRearrangementBindings } from "../src/rendering/equation-linear-rearrangement-bindings.ts";
 import { kpEquationPresentationProfile } from "../src/rendering/equation-presentation-policy.ts";
@@ -116,6 +117,24 @@ test("coefficient and divisor follow opposing arcs into their shared midpoint", 
     Math.abs(point.y - meetingCenters[0]!.y) < 0.001
   ));
   assert.deepEqual(sampleKpEquationTokenMotion(geometry, 0.68).tokens, meeting);
+
+  const snapshot = (progress: number) => ({
+    sources: sampleKpEquationTokenMotion(geometry, progress).tokens.map((motion) => {
+      const origin = sourceCenterById.get(motion.motionId)!;
+      return {
+        id: motion.motionId,
+        x: origin.x + motion.pose.x,
+        y: origin.y + motion.pose.y,
+        opacity: motion.pose.opacity
+      };
+    })
+  });
+  assert.deepEqual(checkKpCancellationPresentationLaws({
+    beforeContact: snapshot(0.55),
+    contact: snapshot(0.68),
+    retired: snapshot(0.8),
+    rewindContact: snapshot(0.68)
+  }), []);
 });
 
 test("divide states annotate every semantic glyph and both fraction rules", () => {
