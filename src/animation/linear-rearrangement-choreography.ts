@@ -61,6 +61,8 @@ export interface KpLinearRearrangementSubgraphNode {
     | "move-continuants"
     | "introduce-balanced-terms"
     | "introduce-division-structure"
+    | "bifurcate-fraction-structure"
+    | "lower-numerator-operator"
     | "meet-canceling-terms"
     | "collapse-canceling-terms"
     | "compact-survivors"
@@ -209,12 +211,19 @@ function createStep(
     throw new Error(`Transformation ${transformation.id} is not a complete rearrangement step.`);
   }
   const records = transformation.correspondenceMap.records;
-  const identityRecords = records.filter((record) => record.relation === "identity");
-  const continuants = identityRecords.map((record) =>
+  const continuantRecords = records.filter((record) =>
+    record.relation === "identity" ||
+    (kind === "split-fraction-sum" && record.relation === "role-change")
+  );
+  const continuants = continuantRecords.map((record) =>
     continuantForRecord(transformation, record)
   );
-  const causalRecords = records.filter((record) => record.relation !== "identity");
-  const causalRecord = causalRecords[0];
+  const causalRecords = records.filter((record) =>
+    !continuantRecords.includes(record)
+  );
+  const causalRecord = kind === "split-fraction-sum"
+    ? causalRecords.find((record) => record.relation === "fan-out")
+    : causalRecords[0];
   if (causalRecord === undefined) {
     throw new Error(`Linear rearrangement ${transformation.id} requires a causal record.`);
   }
@@ -492,6 +501,23 @@ function lifecycleForStep(
         summary: record.summary
       });
     }
+  } else if (kind === "split-fraction-sum") {
+    for (const record of causalRecords) {
+      if (record.relation !== "fan-out") {
+        throw new Error(
+          `Split-fraction-sum step ${transformation.id} requires fan-out causal records.`
+        );
+      }
+      records.push({
+        id: `${transformation.id}.${record.id}.copy`,
+        kind: "copy",
+        operationId: "kp.algebra.split-fraction-sum",
+        lineageEdgeId: `${transformation.id}.${record.id}`,
+        sourceEntityIds: record.sourceSelectorIds,
+        targetEntityIds: record.targetSelectorIds,
+        summary: record.summary
+      });
+    }
   } else if (isCancellationKind(kind)) {
     records.push({
       id: `${transformation.id}.cancellation`,
@@ -558,7 +584,7 @@ function continuantForRecord(
   return {
     id: `continuant.${transformation.id}.${record.id}`,
     meaning: record.summary,
-    relation: "identity",
+    relation: record.relation === "role-change" ? "role-change" : "identity",
     source: {
       entityId: record.sourceSelectorIds[0]!,
       selectorIds: record.sourceSelectorIds
@@ -583,10 +609,12 @@ function lineageEdgesForRecord(
   const relation = (() => {
     switch (record.relation) {
       case "identity": return "persist" as const;
+      case "role-change": return "persist" as const;
       case "introduction": return "introduction" as const;
       case "cancelation": return "removal" as const;
       case "removal": return "removal" as const;
       case "fan-in": return "representation-succession" as const;
+      case "fan-out": return "split" as const;
       default:
         throw new Error(
           `Unsupported linear rearrangement relation ${record.relation}.`
@@ -696,6 +724,31 @@ function operationSubgraph(
           dependsOnNodeIds: [introduce.id]
         }, release];
       })()
+    : kind === "split-fraction-sum"
+      ? (() => {
+          const reserve = node(
+            "reserve-space",
+            "reflow",
+            "reserve-space",
+            [focus.id]
+          );
+          const lower = node(
+            "lower-numerator-operator",
+            "act",
+            "lower-numerator-operator",
+            [reserve.id]
+          );
+          const bifurcate = node(
+            "bifurcate-fraction-structure",
+            "act",
+            "bifurcate-fraction-structure",
+            [lower.id]
+          );
+          return [focus, reserve, lower, bifurcate, {
+            ...recognize,
+            dependsOnNodeIds: [bifurcate.id]
+          }, release];
+        })()
     : isCancellationKind(kind)
       ? (() => {
           const hold = node(
@@ -763,6 +816,7 @@ function motifIdsForKind(
   switch (kind) {
     case "balanced-introduction": return ["append-after-shift", "balanced-entry"];
     case "divide-both-sides": return ["append-after-shift", "matched-fraction-entry"];
+    case "split-fraction-sum": return ["copy-fan-out", "fraction-structure-split"];
     case "cancel-additive-inverses": return ["cancelation", "meet-collapse"];
     case "cancel-multiplicative-inverses": return ["cancelation", "meet-collapse"];
     case "simplify-constant-difference": return ["merge-fan-in", "derive-result"];
@@ -779,6 +833,8 @@ function meaningfulMotionReason(
       return "Reserved-space entry communicates that the same inverse operation applies to both sides.";
     case "divide-both-sides":
       return "Synchronized fraction structure communicates that the same non-zero divisor applies to both sides.";
+    case "split-fraction-sum":
+      return "Structural fan-out and operator descent communicate that each numerator term inherits the shared denominator.";
     case "cancel-additive-inverses":
       return "Meet then collapse communicates additive inverse cancellation.";
     case "cancel-multiplicative-inverses":

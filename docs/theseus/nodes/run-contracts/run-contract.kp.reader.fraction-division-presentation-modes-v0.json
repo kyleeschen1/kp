@@ -179,7 +179,8 @@
     {
       "id": "s22-split-motion",
       "title": "Animate bar bifurcation denominator branch and plus descent",
-      "status": "planned"
+      "summary": "Implemented the forward split as first-class choreography: continuants remain opaque, the plus descends by role-change, fraction rules and denominators bifurcate on synchronized native-scale paths, and endpoints hand off atomically without whole-layer crossfade.",
+      "status": "complete"
     },
     {
       "id": "s23-merge-motion",

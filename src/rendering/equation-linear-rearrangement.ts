@@ -24,6 +24,7 @@ import type {
 export type KpEquationLinearRearrangementKind =
   | "balanced-introduction"
   | "divide-both-sides"
+  | "split-fraction-sum"
   | "cancel-additive-inverses"
   | "cancel-multiplicative-inverses"
   | "simplify-constant-difference"
@@ -38,6 +39,7 @@ export function kpEquationLinearRearrangementKindForTransformType(
     case "multiplyBothSides":
       return "balanced-introduction";
     case "divideBothSides": return "divide-both-sides";
+    case "splitFractionSum": return "split-fraction-sum";
     case "cancelAdditiveInverses": return "cancel-additive-inverses";
     case "cancelMultiplicativeInverses": return "cancel-multiplicative-inverses";
     case "simplifyConstantDifference": return "simplify-constant-difference";
@@ -57,6 +59,10 @@ export interface KpEquationLinearRearrangementFrame {
   readonly resultRevealProgress: number;
   readonly recognitionProgress: number;
   readonly structureEntryProgress: number;
+  readonly branchProgress: number;
+  readonly branchTravelProgress: number;
+  readonly branchSettlementProgress: number;
+  readonly operatorDescentProgress: number;
 }
 
 export function sampleKpEquationLinearRearrangementFrame(
@@ -99,6 +105,18 @@ export function sampleKpEquationLinearRearrangementFrame(
     recognitionProgress: smooth(windowProgress(p, 0.76, 0.92)),
     structureEntryProgress: kind === "divide-both-sides"
       ? smooth(windowProgress(p, 0.34, 0.72))
+      : 0,
+    branchProgress: kind === "split-fraction-sum"
+      ? smooth(windowProgress(p, 0.18, 0.36))
+      : 0,
+    branchTravelProgress: kind === "split-fraction-sum"
+      ? smooth(windowProgress(p, 0.28, 0.76))
+      : 0,
+    branchSettlementProgress: kind === "split-fraction-sum"
+      ? smooth(windowProgress(p, 0.84, 0.98))
+      : 0,
+    operatorDescentProgress: kind === "split-fraction-sum"
+      ? smooth(windowProgress(p, 0.2, 0.72))
       : 0
   };
 }
@@ -121,7 +139,9 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
   switch (input.relation.lifecycle) {
     case "persist":
     case "role-change":
-      return samplePersistentRelation(input);
+      return input.frame.kind === "split-fraction-sum"
+        ? sampleSplitContinuant(input)
+        : samplePersistentRelation(input);
     case "enter":
       return input.frame.kind === "divide-both-sides"
         ? sampleMatchedFractionStructureIntroduction(input)
@@ -148,9 +168,60 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
           ? sampleConvergenceConstantDerivation(input)
           : sampleConstantDerivation(input)
         : undefined;
+    case "split":
+      return input.frame.kind === "split-fraction-sum"
+        ? sampleFractionStructureSplit(input)
+        : undefined;
     default:
       return undefined;
   }
+}
+
+function sampleSplitContinuant(
+  input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
+): readonly KpEquationTokenMotionFrameToken[] {
+  const travel = input.relation.lifecycle === "role-change"
+    ? input.frame.operatorDescentProgress
+    : input.frame.branchTravelProgress;
+  return [
+    ...input.sourceTokens.map((token) => frameToken(token, "source", {
+      opacity: input.progress === 1 ? 0 : 1,
+      x: (input.relation.delta?.x ?? 0) * travel,
+      y: (input.relation.delta?.y ?? 0) * travel,
+      scale: 1
+    })),
+    ...input.targetTokens.map((token) => frameToken(token, "target", {
+      opacity: input.progress === 1 ? 1 : 0,
+      x: 0,
+      y: 0,
+      scale: 1
+    }))
+  ];
+}
+
+function sampleFractionStructureSplit(
+  input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
+): readonly KpEquationTokenMotionFrameToken[] {
+  const sourceCenter = center(input.relation.source?.bounds);
+  const travel = input.frame.branchTravelProgress;
+  return [
+    ...input.sourceTokens.map((token) => frameToken(token, "source", {
+      opacity: 1 - input.frame.branchSettlementProgress,
+      x: 0,
+      y: 0,
+      // Fraction rules and denominator glyphs keep their native geometry.
+      scale: 1
+    })),
+    ...input.targetTokens.map((token) => {
+      const targetCenter = center(token.localRect);
+      return frameToken(token, "target", {
+        opacity: input.frame.branchProgress,
+        x: (sourceCenter.x - targetCenter.x) * (1 - travel),
+        y: (sourceCenter.y - targetCenter.y) * (1 - travel),
+        scale: 1
+      });
+    })
+  ];
 }
 
 function sampleMatchedFractionStructureIntroduction(

@@ -349,6 +349,30 @@
       "status": "passed",
       "scope": "s21 renderer dependency boundaries",
       "checkedAt": "2026-07-22T00:50:02.001Z"
+    },
+    {
+      "command": "node focused numerator split motion and semantic tests",
+      "status": "passed",
+      "scope": "s22 first class binding annotated KaTeX native structural branch plus descent and exact endpoints",
+      "checkedAt": "2026-07-22T00:55:54.354Z"
+    },
+    {
+      "command": "node focused linear rearrangement regression suites",
+      "status": "passed",
+      "scope": "s22 preservation of balanced divide cancel and successor choreography",
+      "checkedAt": "2026-07-22T00:55:56.041Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s22 animation rendering semantic and test types",
+      "checkedAt": "2026-07-22T00:55:57.818Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s22 animation and renderer boundaries",
+      "checkedAt": "2026-07-22T00:55:59.352Z"
     }
   ]
 }
