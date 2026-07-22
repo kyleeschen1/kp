@@ -319,6 +319,18 @@
       "status": "passed",
       "scope": "s19 semantic asset and test types",
       "checkedAt": "2026-07-22T00:44:58.817Z"
+    },
+    {
+      "command": "node focused numerator split merge lineage test",
+      "status": "passed",
+      "scope": "s20 total lifecycle rewind semantic compile denominator and fraction rule branching plus role change",
+      "checkedAt": "2026-07-22T00:47:24.786Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s20 correspondence and compiler types",
+      "checkedAt": "2026-07-22T00:47:25.953Z"
     }
   ]
 }

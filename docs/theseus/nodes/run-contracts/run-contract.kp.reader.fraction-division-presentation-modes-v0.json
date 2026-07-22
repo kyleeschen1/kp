@@ -167,7 +167,8 @@
     {
       "id": "s20-split-lineage",
       "title": "Encode denominator copy and plus role change",
-      "status": "planned"
+      "summary": "Encoded coefficient, variable, and constant identity; numerator-plus role change; and fraction-rule and denominator fan-out/fan-in as total reversible correspondence accepted by the semantic transition compiler.",
+      "status": "complete"
     },
     {
       "id": "s21-split-layout",
