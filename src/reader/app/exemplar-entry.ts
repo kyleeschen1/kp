@@ -9,11 +9,17 @@ import {
   createDivideBothSidesEquationAnimationAsset
 } from "../../animation/divide-both-sides-equation-adapter.ts";
 import {
+  createNumeratorSplitMergeEquationAnimationAsset
+} from "../../animation/numerator-split-merge-equation-adapter.ts";
+import {
   bindKpFractionalLinearStructuralAnchors
 } from "../../rendering/fractional-linear-selector-annotated-latex.ts";
 import {
   bindKpDivideBothSidesStructuralAnchors
 } from "../../rendering/divide-both-sides-selector-annotated-latex.ts";
+import {
+  bindKpNumeratorSplitMergeStructuralAnchors
+} from "../../rendering/numerator-split-merge-selector-annotated-latex.ts";
 import {
   createKpEquationLinearRearrangementBindings
 } from "../../rendering/equation-linear-rearrangement-bindings.ts";
@@ -116,6 +122,8 @@ const animation = lessonVariant === "teacher-zero"
     ? createFractionalLinearEquationAnimationAsset()
     : lessonVariant === "divide-both-sides"
       ? createDivideBothSidesEquationAnimationAsset()
+    : lessonVariant === "numerator-split-merge"
+      ? createNumeratorSplitMergeEquationAnimationAsset()
     : createLinearSolveAnimationAsset();
 const presentationProfile = kpEquationPresentationProfile(animation);
 const linearRearrangementBindings = createKpEquationLinearRearrangementBindings(
@@ -128,6 +136,7 @@ const templateContent = template.content.cloneNode(true);
 staticSurface.append(templateContent);
 if (lessonVariant === "fractional-linear") bindFractionalStructuralAnchors();
 if (lessonVariant === "divide-both-sides") bindDivideBothSidesStructuralAnchors();
+if (lessonVariant === "numerator-split-merge") bindNumeratorSplitMergeStructuralAnchors();
 document.body.dataset["kpReaderHydrated"] = "true";
 
 const stage = requireElement<HTMLElement>("[data-kp-reader-equation-stage]");
@@ -1157,6 +1166,20 @@ function bindDivideBothSidesStructuralAnchors(): void {
     const state = states.get(stateId);
     if (state === undefined) throw new Error(`Missing divide-both-sides equation state ${stateId}.`);
     bindKpDivideBothSidesStructuralAnchors({ root: element, state });
+  }
+}
+
+function bindNumeratorSplitMergeStructuralAnchors(): void {
+  const states = new Map(animation.bundle.objects.map((state) => [state.id, state]));
+  for (const element of staticSurface.querySelectorAll<HTMLElement>(
+    "[data-kp-reader-equation-state]"
+  )) {
+    const stateId = requiredData(element, "kpReaderEquationState");
+    const state = states.get(stateId);
+    if (state === undefined) {
+      throw new Error(`Missing numerator-split-merge equation state ${stateId}.`);
+    }
+    bindKpNumeratorSplitMergeStructuralAnchors({ root: element, state });
   }
 }
 

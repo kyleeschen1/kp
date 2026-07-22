@@ -108,18 +108,22 @@ export function sampleKpEquationLinearRearrangementFrame(
     structureEntryProgress: kind === "divide-both-sides"
       ? smooth(windowProgress(p, 0.34, 0.72))
       : 0,
-    branchProgress: isFractionStructureRewriteKind(kind)
-      ? smooth(windowProgress(p, 0.18, 0.36))
+    branchProgress: kind === "split-fraction-sum"
+      ? smooth(windowProgress(p, 0.2, 0.28))
       : 0,
-    branchTravelProgress: isFractionStructureRewriteKind(kind)
-      ? smooth(windowProgress(p, 0.28, 0.76))
-      : 0,
-    branchSettlementProgress: isFractionStructureRewriteKind(kind)
+    branchTravelProgress: kind === "split-fraction-sum"
+      ? smooth(windowProgress(p, 0.2, 0.62))
+      : kind === "merge-fractions"
+        ? smooth(windowProgress(p, 0.22, 0.76))
+        : 0,
+    branchSettlementProgress: kind === "merge-fractions"
       ? smooth(windowProgress(p, 0.84, 0.98))
       : 0,
-    operatorDescentProgress: isFractionStructureRewriteKind(kind)
-      ? smooth(windowProgress(p, 0.2, 0.72))
-      : 0
+    operatorDescentProgress: kind === "split-fraction-sum"
+      ? smooth(windowProgress(p, 0.54, 0.82))
+      : kind === "merge-fractions"
+        ? smooth(windowProgress(p, 0.22, 0.72))
+        : 0
   };
 }
 
@@ -209,18 +213,19 @@ function sampleFractionStructureMerge(
   const targetCenter = center(input.relation.target?.bounds);
   const travel = input.frame.branchTravelProgress;
   const settlement = input.frame.branchSettlementProgress;
+  const handedOff = settlement >= 1;
   return [
     ...input.sourceTokens.map((token) => {
       const sourceCenter = center(token.localRect);
       return frameToken(token, "source", {
-        opacity: 1 - settlement,
+        opacity: handedOff ? 0 : 1,
         x: (targetCenter.x - sourceCenter.x) * travel,
         y: (targetCenter.y - sourceCenter.y) * travel,
         scale: 1
       });
     }),
     ...input.targetTokens.map((token) => frameToken(token, "target", {
-      opacity: settlement,
+      opacity: handedOff ? 1 : 0,
       x: 0,
       y: 0,
       scale: 1
@@ -233,9 +238,10 @@ function sampleFractionStructureSplit(
 ): readonly KpEquationTokenMotionFrameToken[] {
   const sourceCenter = center(input.relation.source?.bounds);
   const travel = input.frame.branchTravelProgress;
+  const handedOff = input.frame.branchProgress > 0;
   return [
     ...input.sourceTokens.map((token) => frameToken(token, "source", {
-      opacity: 1 - input.frame.branchSettlementProgress,
+      opacity: handedOff ? 0 : 1,
       x: 0,
       y: 0,
       // Fraction rules and denominator glyphs keep their native geometry.
@@ -244,7 +250,7 @@ function sampleFractionStructureSplit(
     ...input.targetTokens.map((token) => {
       const targetCenter = center(token.localRect);
       return frameToken(token, "target", {
-        opacity: input.frame.branchProgress,
+        opacity: handedOff ? 1 : 0,
         x: (sourceCenter.x - targetCenter.x) * (1 - travel),
         y: (sourceCenter.y - targetCenter.y) * (1 - travel),
         scale: 1

@@ -391,6 +391,24 @@
       "status": "passed",
       "scope": "s23 animation and renderer boundaries",
       "checkedAt": "2026-07-22T01:01:08.097Z"
+    },
+    {
+      "command": "node focused numerator split compiler, library, and motion tests",
+      "status": "passed",
+      "scope": "slice s24 semantic and deterministic motion",
+      "checkedAt": "2026-07-22T01:13:06.701Z"
+    },
+    {
+      "command": "playwright split-merge reader browser specification",
+      "status": "passed",
+      "scope": "slice s24 route, seek-rewind, no-JavaScript, phone, and visual snapshots",
+      "checkedAt": "2026-07-22T01:13:07.803Z"
+    },
+    {
+      "command": "typecheck, production build, architecture, and dev-review production closure",
+      "status": "passed",
+      "scope": "slice s24 boundary",
+      "checkedAt": "2026-07-22T01:13:08.843Z"
     }
   ]
 }

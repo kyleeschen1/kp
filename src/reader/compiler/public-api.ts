@@ -57,3 +57,9 @@ export {
 export {
   compileKpDivideBothSidesEquationLessonModel
 } from "./divide-both-sides-equation-lesson-model.ts";
+export {
+  compileKpNumeratorSplitMergeEquationLesson
+} from "./numerator-split-merge-equation-lesson.ts";
+export {
+  compileKpNumeratorSplitMergeEquationLessonModel
+} from "./numerator-split-merge-equation-lesson-model.ts";

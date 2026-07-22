@@ -191,7 +191,8 @@
     {
       "id": "s24-split-gate",
       "title": "Gate split-merge clarity containment and rewind",
-      "status": "planned"
+      "summary": "Exposed the split-merge round trip as searchable static and hydrated math, linked it from the Semantic Editor, repaired the atomic native handoff, and passed semantic, deterministic seek-rewind, visual, no-JavaScript, phone, type, build, architecture, and production-closure gates.",
+      "status": "complete"
     },
     {
       "id": "s25-transfer-projection",

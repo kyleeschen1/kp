@@ -22,6 +22,16 @@ const learnerExperiences = [
     status: "exemplar"
   },
   {
+    id: "numerator-split-merge-scroll-lesson",
+    kind: "scroll-lesson",
+    title: "Split and merge a fraction",
+    summary:
+      "Watch one denominator branch across a numerator sum, then run the exact structure backward.",
+    href: "/reader/split-merge-fractions/",
+    actionLabel: "Review split and merge",
+    status: "exemplar"
+  },
+  {
     id: "solve-fractional-linear-scroll-lesson",
     kind: "scroll-lesson",
     title: "Solve a fractional equation",
