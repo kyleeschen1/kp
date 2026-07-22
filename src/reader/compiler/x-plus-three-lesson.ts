@@ -85,11 +85,11 @@ function compileKpXPlusThreeLessonVariant(markdown: string, input: {
   const hydration = emitKpReaderHydrationManifest(resolved, staticMath);
   const variantLink = input.variant === "streamlined"
     ? {
-        href: "/reader/solve-x/teacher-zero/?kpLesson=lesson.solve-x.x-plus-3.teacher-zero&amp;kpVersion=1&amp;kpCheckpoint=beat.make-zero&amp;kpProgress=500",
+        href: "/reader/solve-x/teacher-zero/?kpLesson=lesson.solve-x.x-plus-3.teacher-zero&kpVersion=1&kpCheckpoint=beat.make-zero&kpProgress=500",
         label: "Explain the zero"
       }
     : {
-        href: "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&amp;kpVersion=1&amp;kpCheckpoint=beat.cancel&amp;kpProgress=667",
+        href: "/reader/solve-x/?kpLesson=lesson.solve-x.x-plus-3&kpVersion=1&kpCheckpoint=beat.cancel&kpProgress=667",
         label: "Skip the zero"
       };
   const html = compileKpEquationExemplarPage({

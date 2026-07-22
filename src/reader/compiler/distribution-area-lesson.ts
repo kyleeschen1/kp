@@ -10,6 +10,7 @@ import { createKpCompiledLessonArtifact } from "../document/public-api.ts";
 import { parseKpLessonMarkdown } from "./lesson-markdown-parser.ts";
 import { compileKpStaticLessonProse } from "./static-prose-compiler.ts";
 import { compileKpStaticMathStates } from "./static-math-compiler.ts";
+import { compileKpReaderPageShell } from "./reader-page-shell.ts";
 import { createKpDistributionAreaExemplarSemanticTrace } from "../../semantic/distribution-area-exemplar-trace.ts";
 
 const documentId = "lesson.algebra.distribution-area";
@@ -54,38 +55,40 @@ export function compileKpDistributionAreaLesson(markdown: string) {
 }
 
 function compilePage(tocHtml: string, articleHtml: string): string {
-  return [
-    "<!doctype html>",
-    '<html lang="en">',
-    "<head>",
-    '<meta charset="utf-8">',
-    '<meta name="viewport" content="width=device-width, initial-scale=1">',
-    "<title>See distribution become area · Kinetic Press</title>",
-    '<meta name="description" content="See algebraic distribution and geometric area change together.">',
-    '<link rel="stylesheet" href="/src/reader/app/distribution-area.css">',
-    "</head>",
-    `<body data-kp-reader="distribution-area" data-kp-reader-document-id="${documentId}" data-kp-reader-document-version="1" data-kp-reader-font-ready="false">`,
-    '<header class="kp-reader-masthead">',
-    '<a class="kp-reader-wordmark" href="/">Kinetic Press</a>',
-    '<span class="kp-reader-tagline">See concepts move</span>',
-    '<a class="kp-reader-mode" href="/reader/divide-both-sides/">See equation solving</a>',
-    `<a class="kp-reader-share" href="/reader/distribution-area/" data-kp-distribution-share>Link this moment</a>`,
-    "</header>",
-    '<main class="kp-reader-layout">',
-    tocHtml,
-    articleHtml.replace(
+  const articleWithStage = articleHtml.replace(
       '<div class="kp-animation-static" data-kp-animation-static aria-label="Interactive explanation">',
       '<div class="kp-animation-static" data-kp-animation-static aria-label="Interactive explanation">'
     ).replace(
       /<div id="static\.story\.distribution-area[\s\S]*?<\/div>\n<div id="static\.story\.distribution-area[\s\S]*?<\/div>\n<div id="static\.story\.distribution-area[\s\S]*?<\/div>/,
       compileStage()
-    ),
-    "</main>",
-    `<script type="application/json" data-kp-distribution-hydration>{"lesson":"${documentId}","version":"1"}</script>`,
-    '<script type="module" src="/src/reader/app/distribution-area-entry.ts"></script>',
-    "</body>",
-    "</html>"
-  ].join("\n");
+    );
+  return compileKpReaderPageShell({
+    title: "See distribution become area · Kinetic Press",
+    description: "See algebraic distribution and geometric area change together.",
+    stylesheetHref: "/src/reader/app/distribution-area.css",
+    bodyAttributes: [
+      { name: "data-kp-reader", value: "distribution-area" },
+      { name: "data-kp-reader-document-id", value: documentId },
+      { name: "data-kp-reader-document-version", value: "1" },
+      { name: "data-kp-reader-font-ready", value: "false" }
+    ],
+    modeLink: {
+      href: "/reader/divide-both-sides/",
+      label: "See equation solving"
+    },
+    shareLink: {
+      href: "/reader/distribution-area/",
+      label: "Link this moment",
+      dataAttribute: "data-kp-distribution-share"
+    },
+    tocHtml,
+    articleHtml: articleWithStage,
+    hydration: {
+      dataAttribute: "data-kp-distribution-hydration",
+      json: `{"lesson":"${documentId}","version":"1"}`
+    },
+    entryScriptSrc: "/src/reader/app/distribution-area-entry.ts"
+  });
 }
 
 function compileStage(): string {

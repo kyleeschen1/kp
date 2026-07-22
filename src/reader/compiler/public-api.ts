@@ -81,3 +81,10 @@ export {
   type KpReaderRouteDescriptor,
   type KpReaderRoutePath
 } from "./reader-route-descriptor.ts";
+export {
+  compileKpReaderPageShell,
+  kpReaderHtmlAttribute,
+  type KpReaderHtmlAttribute,
+  type KpReaderPageShellInput,
+  type KpReaderShellLink
+} from "./reader-page-shell.ts";

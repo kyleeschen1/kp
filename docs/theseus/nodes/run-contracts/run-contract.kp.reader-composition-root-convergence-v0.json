@@ -107,17 +107,38 @@
     {
       "id": "s05",
       "title": "Extract the renderer-neutral reader page shell",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s05-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s05-v0",
+      "title": "Extract the renderer-neutral reader page shell",
+      "summary": "Renderer-neutral page shell is defined and focused tests pass.",
+      "status": "complete"
     },
     {
       "id": "s06",
       "title": "Migrate equation page compilation to the shell",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s06-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s06-v0",
+      "title": "Migrate equation page compilation to the shell",
+      "summary": "Equation page shell migration is complete and verified.",
+      "status": "complete"
     },
     {
       "id": "s07",
       "title": "Migrate distribution page compilation to the shell",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s07-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s07-v0",
+      "title": "Migrate distribution page compilation to the shell",
+      "summary": "Both accepted renderer families now consume the shared page shell with parity verified.",
+      "status": "complete"
     },
     {
       "id": "s08",

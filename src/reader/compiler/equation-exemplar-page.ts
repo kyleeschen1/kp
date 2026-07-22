@@ -7,6 +7,7 @@ import {
 import type { KpSelectorAnnotatedLatex } from "../../rendering/selector-annotated-latex.ts";
 import type { KpReaderEquationPresentationCapability } from "../document/public-api.ts";
 import { resolveKpReaderEquationPresentationProfile } from "../document/public-api.ts";
+import { compileKpReaderPageShell } from "./reader-page-shell.ts";
 
 export interface KpEquationExemplarPageInput {
   readonly animation: KpAnimationAsset;
@@ -30,37 +31,35 @@ export interface KpEquationExemplarPageInput {
 export function compileKpEquationExemplarPage(
   input: KpEquationExemplarPageInput
 ): string {
-  return [
-    "<!doctype html>",
-    `<html lang="en">`,
-    "<head>",
-    `<meta charset="utf-8">`,
-    `<meta name="viewport" content="width=device-width, initial-scale=1">`,
-    `<title>${attribute(input.title)}</title>`,
-    `<meta name="description" content="${attribute(input.description)}">`,
-    `<link rel="stylesheet" href="/src/reader/app/exemplar.css">`,
-    "</head>",
-    `<body data-kp-reader="semantic-document" data-kp-reader-document-id="${attribute(input.documentId)}" data-kp-reader-document-version="${attribute(input.documentVersion)}" data-kp-reader-lesson-variant="${attribute(input.lessonVariant)}" data-kp-reader-equation-profile-default="${attribute(input.equationPresentation.defaultProfileId)}" data-kp-reader-equation-profiles="${attribute(input.equationPresentation.profileIds.join(","))}">`,
-    `<header class="kp-reader-masthead">`,
-    `<a class="kp-reader-wordmark" href="/">Kinetic Press</a>`,
-    `<span class="kp-reader-tagline">See concepts move</span>`,
-    `<a class="kp-reader-mode" href="${input.modeLink.href}">${attribute(input.modeLink.label)}</a>`,
-    `<a class="kp-reader-share" href="#${attribute(input.documentId)}" data-kp-reader-share>Link this moment</a>`,
-    `</header>`,
-    `<main class="kp-reader-layout">`,
-    input.tocHtml,
-    input.articleHtml,
-    `</main>`,
-    compileKpEquationExemplarTemplate(input.animation, input.annotateState, {
+  const template = compileKpEquationExemplarTemplate(input.animation, input.annotateState, {
       presentationAnimations: input.presentationAnimations,
       equationPresentation: input.equationPresentation,
       showEquationProfileControl: input.showEquationProfileControl
-    }),
-    `<script type="application/json" data-kp-hydration>${input.hydrationJson}</script>`,
-    `<script type="module" src="/src/reader/app/exemplar-entry.ts"></script>`,
-    "</body>",
-    "</html>"
-  ].join("\n");
+  });
+  return compileKpReaderPageShell({
+    title: input.title,
+    description: input.description,
+    stylesheetHref: "/src/reader/app/exemplar.css",
+    bodyAttributes: [
+      { name: "data-kp-reader", value: "semantic-document" },
+      { name: "data-kp-reader-document-id", value: input.documentId },
+      { name: "data-kp-reader-document-version", value: input.documentVersion },
+      { name: "data-kp-reader-lesson-variant", value: input.lessonVariant },
+      { name: "data-kp-reader-equation-profile-default", value: input.equationPresentation.defaultProfileId },
+      { name: "data-kp-reader-equation-profiles", value: input.equationPresentation.profileIds.join(",") }
+    ],
+    modeLink: input.modeLink,
+    shareLink: {
+      href: `#${input.documentId}`,
+      label: "Link this moment",
+      dataAttribute: "data-kp-reader-share"
+    },
+    tocHtml: input.tocHtml,
+    articleHtml: input.articleHtml,
+    afterMainHtml: [template],
+    hydration: { dataAttribute: "data-kp-hydration", json: input.hydrationJson },
+    entryScriptSrc: "/src/reader/app/exemplar-entry.ts"
+  });
 }
 
 export function compileKpEquationExemplarTemplate(
