@@ -13,6 +13,31 @@ export interface KpCancellationPresentationRequest {
   readonly teachingGoal: KpCancellationTeachingGoal;
 }
 
+export const kpCancellationTeachingGoalMetadataKey =
+  "equationCancellationTeachingGoal";
+
+export function kpCancellationOperationIdForTransformType(
+  transformType: string
+): KpCancellationOperationId | undefined {
+  switch (transformType) {
+    case "cancelAdditiveInverses":
+      return "kp.algebra.cancel-additive-inverses";
+    case "cancelMultiplicativeInverses":
+    case "projectCertifiedFractionTransfer":
+      return "kp.algebra.cancel-multiplicative-inverses";
+    default:
+      return undefined;
+  }
+}
+
+export function createKpCancellationPresentationAuthoringMetadata(
+  teachingGoal: KpCancellationTeachingGoal
+): Readonly<Record<typeof kpCancellationTeachingGoalMetadataKey, KpCancellationTeachingGoal>> {
+  return Object.freeze({
+    [kpCancellationTeachingGoalMetadataKey]: teachingGoal
+  });
+}
+
 /**
  * Authors state semantic authority and a teaching goal; renderer policy remains
  * inferred. This keeps generated lessons durable as visual recipes improve.

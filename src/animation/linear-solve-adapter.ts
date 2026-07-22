@@ -7,6 +7,7 @@ import {
   type KpSemanticTransformation
 } from "../semantic/asset-transformation.ts";
 import { createSemanticTransformationRef } from "../semantic/animation.ts";
+import { createKpCancellationPresentationAuthoringMetadata } from "../semantic/cancellation-presentation-authoring.ts";
 import {
   createLinearSolveKpAssetBundle,
   createLinearSolveTeacherZeroKpAssetBundle,
@@ -198,7 +199,7 @@ function createLinearSolveAnimationFromSource(
       // remain available semantically for isolated refinement and promotion.
       equationMotionPresentationRecipe: "continuity-v1",
       equationNativeHandoffRecipe: "atomic-v1",
-      equationCancellationPresentationRecipe: "counter-orbit-v1",
+      ...createKpCancellationPresentationAuthoringMetadata("preserve-flow"),
       // The compact flagship path omits the optional +0 teaching beat. The
       // recipe remains available for explicit lesson variants.
       equationZeroWitnessPresentationRecipe: "none",

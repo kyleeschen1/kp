@@ -1,5 +1,6 @@
 import { createKpAnimationAsset, type KpAnimationAsset } from "./asset.ts";
 import { createSemanticTransformationRef } from "../semantic/animation.ts";
+import { createKpCancellationPresentationAuthoringMetadata } from "../semantic/cancellation-presentation-authoring.ts";
 import { createKpAssetBundle } from "../semantic/asset.ts";
 import { createKpSemanticTransformation } from "../semantic/asset-transformation.ts";
 import {
@@ -152,7 +153,7 @@ function comparisonAnimation(input: {
       sourceTraceId: input.source.sourceTraceId,
       equationMotionPresentationRecipe: "continuity-v1",
       equationNativeHandoffRecipe: "atomic-v1",
-      equationCancellationPresentationRecipe: "counter-orbit-v1",
+      ...createKpCancellationPresentationAuthoringMetadata("preserve-flow"),
       equationSuccessorPresentationRecipe: "convergence-v1",
       equationDepthPresentationRecipe: "semantic-depth-v1",
       equationContinuantPresentationRecipe: "transit-then-reflow-v1",

@@ -47,10 +47,14 @@ test("other equation assets retain the semantic material presentation", () => {
 
 test("presentation motifs can be selected independently without changing semantics", () => {
   const animation = createLinearSolveAnimationAsset();
+  const {
+    equationCancellationTeachingGoal: _inferredCancellationGoal,
+    ...legacyMetadata
+  } = animation.metadata ?? {};
   const profile = kpEquationPresentationProfile({
     ...animation,
     metadata: {
-      ...animation.metadata,
+      ...legacyMetadata,
       equationCancellationPresentationRecipe: "counter-orbit-v1",
       equationZeroWitnessPresentationRecipe: "independent-zero-v1",
       equationSuccessorPresentationRecipe: "counter-convergence-v1",
@@ -70,6 +74,17 @@ test("presentation motifs can be selected independently without changing semanti
   });
   assert.equal(Object.isFrozen(profile), true);
   assert.equal(animation.transformations.length, 3);
+});
+
+test("inferred cancellation intent cannot be combined with a raw renderer recipe", () => {
+  const animation = createLinearSolveAnimationAsset();
+  assert.throws(() => kpEquationPresentationProfile({
+    ...animation,
+    metadata: {
+      ...animation.metadata,
+      equationCancellationPresentationRecipe: "counter-orbit-v1"
+    }
+  }), /cannot combine a teaching goal with a renderer recipe id/);
 });
 
 test("unknown independent presentation recipes fail at the asset boundary", () => {

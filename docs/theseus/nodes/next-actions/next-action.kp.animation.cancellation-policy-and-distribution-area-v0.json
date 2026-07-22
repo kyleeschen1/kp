@@ -89,6 +89,12 @@
       "status": "passed",
       "scope": "s06 machine-actionable unsupported-policy repair",
       "checkedAt": "2026-07-22T13:53:45.956Z"
+    },
+    {
+      "command": "focused cancellation policy adapter and divide choreography tests; npm run typecheck; npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "s07 inferred-policy adapter migration with approved visual preservation",
+      "checkedAt": "2026-07-22T13:58:56.241Z"
     }
   ],
   "expectedLearning": [

@@ -105,7 +105,8 @@
     {
       "id": "s07-adapter-migration",
       "title": "Migrate-cancellation-assets-to-inferred-policy",
-      "status": "planned"
+      "summary": "Removed raw cancellation recipe ids from all six approved cancellation assets. Policy now derives from semantic cancellation transform authority plus one typed teaching goal, uses conservative two-axis topology before geometry exists, rejects mixed raw and inferred authority, and preserves counter-orbit visuals.",
+      "status": "complete"
     },
     {
       "id": "s08-contact-laws",

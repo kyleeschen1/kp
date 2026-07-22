@@ -1,5 +1,12 @@
 import type { KpAnimationAsset } from "../animation/asset.ts";
 import type { KpEquationMaterialHandoffMode } from "./equation-material-owner.ts";
+import {
+  inferKpCancellationPresentationIntent,
+  kpCancellationOperationIdForTransformType,
+  kpCancellationTeachingGoalMetadataKey,
+  type KpCancellationTeachingGoal
+} from "../semantic/cancellation-presentation-authoring.ts";
+import { resolveKpCancellationPresentation } from "./cancellation-presentation-resolver.ts";
 
 export type KpEquationPresentationRecipe =
   | "semantic-material-v2"
@@ -83,12 +90,12 @@ export function kpEquationPresentationProfile(
       ["crossfade-v1", "atomic-v1"] as const,
       baseline.handoff
     ),
-    cancellation: readRecipe(
-      animation,
-      "equationCancellationPresentationRecipe",
-      ["native-handoff-v1", "witnessed-annihilation-v1", "counter-orbit-v1"] as const,
-      baseline.cancellation
-    ),
+    cancellation: inferredCancellationRecipe(animation) ?? readRecipe(
+        animation,
+        "equationCancellationPresentationRecipe",
+        ["native-handoff-v1", "witnessed-annihilation-v1", "counter-orbit-v1"] as const,
+        baseline.cancellation
+      ),
     zeroWitness: readRecipe(
       animation,
       "equationZeroWitnessPresentationRecipe",
@@ -119,6 +126,53 @@ export function kpEquationPresentationProfile(
       baseline.continuants
     )
   });
+}
+
+function inferredCancellationRecipe(
+  animation: KpAnimationAsset
+): KpEquationCancellationPresentationRecipe | undefined {
+  const goalValue = animation.metadata?.[kpCancellationTeachingGoalMetadataKey];
+  if (goalValue === undefined) return undefined;
+  if (animation.metadata?.["equationCancellationPresentationRecipe"] !== undefined) {
+    throw new Error(
+      "Cancellation authoring cannot combine a teaching goal with a renderer recipe id."
+    );
+  }
+  if (goalValue !== "preserve-flow" && goalValue !== "make-identity-visible") {
+    throw new Error(`Unknown cancellation teaching goal ${String(goalValue)}.`);
+  }
+  const teachingGoal: KpCancellationTeachingGoal = goalValue;
+  const operationIds = animation.transformations.flatMap((transformation) => {
+    const operationId = kpCancellationOperationIdForTransformType(
+      transformation.transformType
+    );
+    return operationId === undefined ? [] : [operationId];
+  });
+  if (operationIds.length === 0) {
+    throw new Error(
+      `Animation ${animation.id} declares cancellation teaching intent without a cancellation transform.`
+    );
+  }
+  const recipes = operationIds.map((operationId) => {
+    const result = resolveKpCancellationPresentation({
+      intent: inferKpCancellationPresentationIntent({ operationId, teachingGoal }),
+      // Asset-level policy is deliberately conservative. Runtime measurement
+      // may prove a shared baseline, but only a two-axis-safe recipe is valid
+      // before geometry exists.
+      topology: { sourceCount: 2, sourceBaselines: "distinct" }
+    });
+    if (result.kind !== "resolved") {
+      throw new Error(
+        `Cancellation policy for ${animation.id} requires ${result.kind}.`
+      );
+    }
+    return result.recipe;
+  });
+  const recipe = recipes[0]!;
+  if (recipes.some((candidate) => candidate !== recipe)) {
+    throw new Error(`Animation ${animation.id} has incompatible cancellation intents.`);
+  }
+  return recipe;
 }
 
 export function kpEquationPresentationPolicy(
