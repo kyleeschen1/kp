@@ -41,12 +41,19 @@ export interface KpReaderRouteVisualReviewProfile {
   readonly checkpoints: readonly KpReaderVisualReviewCheckpoint[];
 }
 
+export interface KpReaderRouteBudgetProfile {
+  readonly compiledHtmlRawBytes: number;
+  readonly compiledHtmlGzipBytes: number;
+  readonly runtimeCodeGzipBytes: number;
+}
+
 export interface KpReaderRouteDescriptor {
   readonly route: KpReaderRoutePath;
   readonly sourcePath: KpReaderLessonSourcePath;
   readonly compile: (markdown: string) => KpCompiledLessonArtifact;
   readonly conformance: KpReaderRouteConformanceProfile;
   readonly review: KpReaderRouteVisualReviewProfile;
+  readonly budget: KpReaderRouteBudgetProfile;
 }
 
 /**
@@ -89,6 +96,13 @@ export function defineKpReaderRoute<const TRoute extends KpReaderRouteDescriptor
   }
   if (descriptor.review.checkpoints.length === 0) {
     throw new Error(`Reader route ${descriptor.route} requires a visual review checkpoint.`);
+  }
+  for (const [metric, value] of Object.entries(descriptor.budget)) {
+    if (!Number.isInteger(value) || value < 1) {
+      throw new Error(
+        `Reader route ${descriptor.route} budget ${metric} must be a positive byte baseline.`
+      );
+    }
   }
   const reviewIds = new Set<string>();
   for (const checkpoint of descriptor.review.checkpoints) {

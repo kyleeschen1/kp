@@ -73,6 +73,12 @@ const checks = {
     "high",
     "Prove the route manifest and deployed reader pages form an exact build-only closure."
   ),
+  readerBudgets: check(
+    "reader-route-budgets",
+    ["npm", "run", "check:reader-budgets"],
+    "high",
+    "Enforce each manifest route's compiled HTML and transitive runtime payload baseline."
+  ),
   typecheck: check(
     "typecheck",
     ["npm", "run", "typecheck"],
@@ -183,6 +189,7 @@ const rules: readonly KpVerificationRule[] = [
       checks.readerConformance,
       checks.build,
       checks.readerProductionClosure,
+      checks.readerBudgets,
       checks.productionClosure
     ],
     reason: "A manifest reader source, compiler, runtime, renderer, or build route changed."
@@ -236,6 +243,7 @@ const releaseChecks = [
   checks.reviewBrowser,
   checks.productionClosure,
   checks.readerProductionClosure,
+  checks.readerBudgets,
   checks.typecheck,
   checks.architecture,
   checks.test,

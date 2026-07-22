@@ -36,6 +36,7 @@ test("distribution reader changes select bounded shared and exemplar gates", () 
     "reader-conformance",
     "build",
     "reader-production-closure",
+    "reader-route-budgets",
     "dev-review-production-closure",
     "distribution-motion-laws",
     "distribution-visual"
@@ -54,6 +55,7 @@ test("manifest and declared lesson changes select reader production closure", ()
     assert.deepEqual(result.unmatchedPaths, []);
     assert.ok(ids(result).includes("reader-conformance"));
     assert.ok(ids(result).includes("reader-production-closure"));
+    assert.ok(ids(result).includes("reader-route-budgets"));
     assert.ok(ids(result).includes("build"));
   }
 });
@@ -98,6 +100,7 @@ test("release mode is explicit, broad, and deterministic", () => {
     "dev-review-browser",
     "dev-review-production-closure",
     "reader-production-closure",
+    "reader-route-budgets",
     "typecheck",
     "architecture",
     "test",

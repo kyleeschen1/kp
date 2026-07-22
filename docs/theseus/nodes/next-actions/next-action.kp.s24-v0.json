@@ -1,0 +1,104 @@
+{
+  "id": "next-action.kp.s24-v0",
+  "kind": "next-action",
+  "title": "Enforce per-route bundle and compilation budgets",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Per-route compilation and runtime bundle budgets are implemented and verified against the accepted build.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reader-composition-root-convergence-v0.json",
+      "summary": "Run contract whose stored slice s24 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.composition-root-convergence-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
+      "summary": "Approved generated-quality and verification-amortization phase."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.reader-composition-convergence-v0.json",
+      "summary": "User-approved priority checkpoint placing composition convergence first."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.reader-composition-root-convergence-v0",
+      "next-action.kp.reader.composition-root-convergence-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.reader.composition-root-convergence-v0"
+  ],
+  "verification": [
+    "node --test focused reader compiler, runtime, route, and descriptor tests",
+    "npm run check:architecture",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:linear-equation",
+    "npm run visual:distribution-area",
+    "npm run check:dev-review-production",
+    "npm run build",
+    "npm run theseus -- workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test scripts/check-reader-route-budgets.test.ts scripts/verification-impact.test.ts tests/semantic-reader-route-budget.test.ts tests/semantic-reader-route-descriptor.test.ts tests/semantic-reader-route-manifest.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-22T21:42:01.216Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-22T21:42:02.229Z"
+    },
+    {
+      "command": "npm run check:reader-budgets",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-22T21:42:03.328Z"
+    },
+    {
+      "command": "npm run check:reader-production",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-22T21:42:04.400Z"
+    },
+    {
+      "command": "npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-22T21:42:05.325Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-22T21:42:06.244Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Every route descriptor now carries accepted compiled-HTML and runtime-closure baselines. Vite emits a build manifest, and one generic gate measures all seven routes transitively, permits at most five-percent growth, and rejects forbidden learner assets."
+  },
+  "expectedLearning": [
+    "Whether Enforce per-route bundle and compilation budgets can be completed inside Reader composition-root convergence v0."
+  ],
+  "allowedWork": [
+    "Reader compiler page shells, build-time route manifests, inferred URL codecs, browser lifecycle services, piecewise scroll clocks, frame scheduling, runtime lesson descriptors, production renderer adapters, derived conformance and review descriptors, impact selection, closure, and bundle budgets.",
+    "Compatibility changes required for both accepted readers to consume the shared contracts, provided exact visual, semantic, URL, static-searchability, and responsive parity remains proven."
+  ],
+  "disallowedWork": [
+    "Do not alter accepted equation or distribution semantics, choreography, visual policy, typography, colors, layout, attention behavior, searchable prose, or route meaning.",
+    "Do not add branch scheduling, structured algebra, advanced fraction composition, LLM mutation, new subjects, WebGL generalization, or editor redesign.",
+    "Do not introduce an abstraction used only by tests or only one production reader; integrate it in both readers or defer it.",
+    "Do not edit unrelated user-authored roadmap, thread, decision, or design documents."
+  ]
+}

@@ -82,6 +82,7 @@ export {
   type KpReaderLessonSourcePath,
   type KpReaderRouteConformanceProfile,
   type KpReaderRouteDescriptor,
+  type KpReaderRouteBudgetProfile,
   type KpReaderRouteVisualReviewProfile,
   type KpReaderVisualReviewCheckpoint,
   type KpReaderVisualReviewViewport,

@@ -335,7 +335,14 @@
     {
       "id": "s24",
       "title": "Enforce per-route bundle and compilation budgets",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s24-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s24-v0",
+      "title": "Enforce per-route bundle and compilation budgets",
+      "summary": "Enforced inferred per-route HTML and transitive runtime budgets with five-percent headroom and forbidden-asset closure.",
+      "status": "complete"
     },
     {
       "id": "s25",

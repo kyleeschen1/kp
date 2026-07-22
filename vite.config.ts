@@ -40,6 +40,7 @@ export default defineConfig({
     }
   }],
   build: {
+    manifest: true,
     rollupOptions: {
       input: {
         main: resolve(projectRoot, "index.html"),

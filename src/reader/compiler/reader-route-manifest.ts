@@ -59,6 +59,14 @@ function singleEquationReview<const TInput extends {
   } as const;
 }
 
+function routeBudget(
+  compiledHtmlRawBytes: number,
+  compiledHtmlGzipBytes: number,
+  runtimeCodeGzipBytes: number
+) {
+  return { compiledHtmlRawBytes, compiledHtmlGzipBytes, runtimeCodeGzipBytes } as const;
+}
+
 const distributionVisualProgress = [0, 360, 500, 650, 820, 1_000] as const;
 const distributionReviewViewports = [
   { id: "desktop", label: "Desktop" },
@@ -125,7 +133,8 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
           viewport: "phone"
         }
       ]
-    }
+    },
+    budget: routeBudget(36_312, 4_503, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/solve-x/teacher-zero/",
@@ -142,7 +151,8 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       title: "Kinetic Press · explicit zero",
       label: "Make the zero visible",
       progressPermille: 500
-    })
+    }),
+    budget: routeBudget(35_935, 3_868, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/solve-fractional-linear/",
@@ -159,7 +169,8 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       title: "Kinetic Press · fractional linear equation",
       label: "Simplify the difference",
       progressPermille: 500
-    })
+    }),
+    budget: routeBudget(62_792, 5_029, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/divide-both-sides/",
@@ -176,7 +187,8 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       title: "Kinetic Press · divide both sides",
       label: "Cancel the coefficient",
       progressPermille: 667
-    })
+    }),
+    budget: routeBudget(32_148, 3_670, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/split-merge-fractions/",
@@ -193,7 +205,8 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       title: "Kinetic Press · split and merge fractions",
       label: "Give each term the denominator",
       progressPermille: 500
-    })
+    }),
+    budget: routeBudget(28_800, 3_448, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/fractional-transfer/",
@@ -210,7 +223,8 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       title: "Kinetic Press · fractional transfer",
       label: "Expose the product",
       progressPermille: 667
-    })
+    }),
+    budget: routeBudget(37_889, 4_078, 120_543)
   }),
   defineKpReaderRoute({
     route: "/reader/distribution-area/",
@@ -254,6 +268,7 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
           }))
         )
       )
-    }
+    },
+    budget: routeBudget(19_237, 3_003, 54_210)
   })
 ]);

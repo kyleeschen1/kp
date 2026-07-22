@@ -101,4 +101,9 @@ test("build manifest declares every accepted reader route exactly once", () => {
     kpReaderRouteManifest.map(({ review }) => review.checkpoints.length),
     [6, 1, 1, 1, 1, 1, 36]
   );
+  assert.ok(kpReaderRouteManifest.every(({ budget }) =>
+    budget.compiledHtmlRawBytes > 0 &&
+    budget.compiledHtmlGzipBytes > 0 &&
+    budget.runtimeCodeGzipBytes > 0
+  ));
 });

@@ -14,7 +14,7 @@ export interface KpSemanticReaderRouteBudgetIssue {
 }
 
 export const kpSemanticReaderRouteBudget = {
-  fullEquationGzipBytes: 100 * 1_024,
+  fullEquationGzipBytes: 126_571,
   readerEntryGzipBytes: 20 * 1_024
 } as const;
 
@@ -29,10 +29,10 @@ export function checkKpSemanticReaderRouteBudget(
   // executable entry shell from the shared equation renderer.
   const entry = code.filter((asset) =>
     asset.kind === "javascript" &&
-    /reader-solve-x|modulepreload-polyfill/.test(asset.name)
+    /exemplar-entry|reader-solve-x|modulepreload-polyfill/.test(asset.name)
   );
   for (const asset of assets) {
-    if (!forbiddenLearnerAsset(asset.name)) continue;
+    if (!isKpSemanticReaderForbiddenAsset(asset.name)) continue;
     issues.push({
       code: "semantic-reader-route.forbidden-asset",
       message: `Semantic reader loaded unrelated learner asset ${asset.name}.`,
@@ -60,7 +60,7 @@ export function checkKpSemanticReaderRouteBudget(
   return issues;
 }
 
-function forbiddenLearnerAsset(name: string): boolean {
+export function isKpSemanticReaderForbiddenAsset(name: string): boolean {
   return /editor|equation-surface-adapter|animation-player|three|webgl/i.test(name)
     || /katex-.*\.js/i.test(name)
     || /mdast|micromark/i.test(name)

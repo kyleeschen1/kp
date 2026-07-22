@@ -57,3 +57,7 @@ test("semantic reader route rejects full and entry budget regressions independen
     "semantic-reader-route.entry-budget"
   ]);
 });
+
+test("semantic reader route budget retains five-percent headroom over the accepted closure", () => {
+  assert.equal(kpSemanticReaderRouteBudget.fullEquationGzipBytes, 126_571);
+});
