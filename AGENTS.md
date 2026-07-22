@@ -15,6 +15,13 @@
 - Reuse the approved scoped npm command throughout a long loop. Extend its committed entrypoint when later slices need new captures instead of requesting approval for each scratch filename.
 - Keep visual outputs disposable unless the repository explicitly adopts them as reviewed goldens; durable evidence should cite the stable npm command and its observable checkpoints.
 
+## Codex execution reliability
+
+- Prefer direct commands that can match audited execution rules. Do not add `zsh -lc`, environment assignments, pipes, redirection, substitutions, or wrapper scripts when the same check has a direct invocation.
+- Do not request or accumulate blanket approval for `node`, shell interpreters, changing `tmp/codex/` filenames, destructive Git commands, or deletion commands. Promote recurring checks into a committed `scripts/` or `tests/` entrypoint and expose them through a stable `npm run` command.
+- During an active Theseus run, derive the progress counter with `npm run --silent loop:status` when available and emit it at slice starts, completions, commit boundaries, and before a stop or final response.
+- Before finalizing an approved run, check durable progress again. Continue while an approved slice remains unless a named contract stop condition fired; otherwise report one explicit outcome: `COMPLETE`, `HUMAN_CHECKPOINT`, `STOP_CONDITION`, `BLOCKED`, `USER_PAUSED`, `CONTRACT_EXHAUSTED`, or `SESSION_INTERRUPTED`.
+
 ## Exemplar-first collaboration
 
 Apply this protocol to subjective visual, motion, interaction, and LLM-generated-output work. Do not add its review ceremony to objective maintenance or exact bug fixes with deterministic acceptance tests.

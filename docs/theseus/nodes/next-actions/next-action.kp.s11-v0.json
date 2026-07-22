@@ -2,9 +2,9 @@
   "id": "next-action.kp.s11-v0",
   "kind": "next-action",
   "title": "Converge equation URLs on the shared route descriptor",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Materialized from stored run-contract slice s11 in Reader composition-root convergence v0.",
+  "summary": "Reconciled child action with its already-complete slice in resolved run-contract.kp.reader-composition-root-convergence-v0.",
   "sourceRefs": [
     {
       "kind": "file",

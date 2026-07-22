@@ -1,0 +1,17 @@
+{
+  "description": "KP loop continuity reminder.",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/env node --disable-warning=ExperimentalWarning \"$(git rev-parse --show-toplevel)/scripts/codex-stop-guard.ts\"",
+            "timeout": 10,
+            "statusMessage": "Checking active Theseus loop"
+          }
+        ]
+      }
+    ]
+  }
+}

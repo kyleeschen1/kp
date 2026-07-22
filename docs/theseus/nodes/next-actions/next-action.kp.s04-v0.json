@@ -2,9 +2,9 @@
   "id": "next-action.kp.s04-v0",
   "kind": "next-action",
   "title": "Derive Vite dispatch and inputs from the manifest",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Materialized from stored run-contract slice s04 in Reader composition-root convergence v0.",
+  "summary": "Reconciled child action with its already-complete slice in resolved run-contract.kp.reader-composition-root-convergence-v0.",
   "sourceRefs": [
     {
       "kind": "file",

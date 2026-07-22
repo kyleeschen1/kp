@@ -1,0 +1,59 @@
+{
+  "id": "next-action.kp.reader.branch-scheduling-responsive-attention-v0",
+  "kind": "next-action",
+  "title": "Prove composable branch scheduling and responsive attention",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "priority-change.kp.resume-product-after-codex-reliability-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5"
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm run test:browser:linear-equation-conformance",
+    "npm run visual:contact-sheet"
+  ],
+  "expectedLearning": [
+    "Whether together, sequential, staggered, and stepped presentation schedules can share one semantic branch operation and lawful inverse without per-case choreography.",
+    "Which wide scrollytelling and narrow focus-stepper projection best scaffolds prose-to-symbol attention while preserving URL, search, rewind, and accessibility state."
+  ],
+  "allowedWork": [
+    "Perfect one approved symbolic exemplar that composes dependency-checked branch schedules with responsive attention projection, exact rewind, URL state, and accessible controls.",
+    "Extract only schedule and projection contracts proven by the exemplar; preserve the accepted semantic document, measured motion ownership, reader shell, and production route behavior."
+  ],
+  "disallowedWork": [
+    "Do not begin structured algebra, nested fraction composition, LLM mutation, subject breadth, or WebGL generalization.",
+    "Do not generalize the visual pattern beyond the exemplar before human approval or add card-specific coordinates, CSS, route logic, or named verification gates."
+  ],
+  "criteria": [
+    {
+      "id": "shared-semantic-operation",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-forward-inverse",
+      "weight": "high"
+    },
+    {
+      "id": "responsive-attention-projection",
+      "weight": "high"
+    },
+    {
+      "id": "url-search-accessibility-parity",
+      "weight": "medium"
+    },
+    {
+      "id": "human-exemplar-approval",
+      "weight": "high"
+    }
+  ]
+}

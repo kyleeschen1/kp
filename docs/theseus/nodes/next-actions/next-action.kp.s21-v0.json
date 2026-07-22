@@ -2,9 +2,9 @@
   "id": "next-action.kp.s21-v0",
   "kind": "next-action",
   "title": "Derive shared reader conformance from route descriptors",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Materialized from stored run-contract slice s21 in Reader composition-root convergence v0.",
+  "summary": "Reconciled child action with its already-complete slice in resolved run-contract.kp.reader-composition-root-convergence-v0.",
   "sourceRefs": [
     {
       "kind": "file",

@@ -1,0 +1,170 @@
+{
+  "id": "run-contract.kp.codex-execution-reliability-v0",
+  "kind": "run-contract",
+  "title": "Codex execution reliability v0",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.codex-execution-reliability-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.codex-reliability-before-product-v0.json",
+      "summary": "Approved reliability priority and exact product resumption order."
+    }
+  ],
+  "verification": [
+    "codex execpolicy check against audited allow and deny examples",
+    "node --test focused loop-status and Stop-hook suites",
+    "skill quick validation for modified Theseus loop skills",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Audit and safely consolidate user-level and KP-project Codex rules, configuration, trusted hooks, repeatable check runners, loop-status reporting, loop skills, repository collaboration instructions, and their focused tests.",
+    "Modify user-level Codex configuration and skills only for the explicitly approved reliability behavior; keep backups and validate syntax before replacement."
+  ],
+  "disallowedWork": [
+    "Do not enable danger-full-access, arbitrary shell or node execution, broad destructive command approval, or approval_policy=never.",
+    "Do not modify KP product runtime, animation behavior, roadmap drafts, cross-domain thread drafts, or the user-authored untracked design documents."
+  ],
+  "goal": "Make routine KP development effectively interruption-free while preserving sandbox safety, require explicit reasons for every early loop stop, and expose durable exact loop and slice progress across sessions.",
+  "target": "next-action.kp.codex-execution-reliability-v0",
+  "runMode": "run",
+  "maxSlices": 20,
+  "commitCadence": "Commit each independently reversible repository unit; record external Codex configuration changes with durable evidence but do not mix them with unrelated project files.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "H1 TARGET-DRIFT: stop if a configuration or rules write would target any path other than the audited user Codex layer, trusted KP project layer, approved skills, or KP repository.",
+    "H2 POLICY-UNSAFE: stop if rules validation cannot exclude broad destructive, arbitrary shell, or arbitrary node approval.",
+    "H3 USER-OVERLAP: stop if required repository edits overlap unrelated user-authored files.",
+    "H4 HOOK-LOOP: stop if the Stop hook can recurse, block legitimate completion, mutate product state, or cannot fail open safely.",
+    "H5 VALIDATION: stop if Codex configuration, execpolicy, skill, hook, or repository tests fail without a bounded in-scope repair.",
+    "H6 AUTHORITY: stop if an external write or policy change requires authority beyond the user approval in this request."
+  ],
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Freeze product resumption checkpoint and reconcile stale completed actions",
+      "summary": "Recorded reliability-now priority with exact product resumption order and reconciled s01-s21 against the resolved composition contract.",
+      "status": "complete"
+    },
+    {
+      "id": "s02",
+      "title": "Inventory active Codex configuration rules hooks and escalation causes",
+      "summary": "Audited effective configuration: 119 brittle global approvals, broad historical entries, no project-local rules, notification-only hooks, and missing auto-review/status configuration.",
+      "status": "complete"
+    },
+    {
+      "id": "s03",
+      "title": "Define audited minimum permission policy and adversarial rule examples",
+      "summary": "Policy fixed: user rules retain only cross-repo safe read-only commands; KP project rules allow direct rg/grep, read-only Git, exact-path add/commit, npm run, and Theseus; destructive and arbitrary interpreter commands remain prompt-reviewed or forbidden. Shell wrappers and ad-hoc executables are not blanket-approved.",
+      "status": "complete"
+    },
+    {
+      "id": "s04",
+      "title": "Back up and consolidate user-level execution rules",
+      "summary": "Backed up the 119-entry global approval file as a non-loading text archive and replaced it with four audited cross-repository read-only rules.",
+      "status": "complete"
+    },
+    {
+      "id": "s05",
+      "title": "Install trusted KP project-local execution rules",
+      "summary": "Installed trusted KP-only rules for direct read-only search/Git, exact-path Git add/commit/mv, npm scripts, Theseus, and the pinned Playwright binary; destructive and arbitrary interpreters remain outside the allow set.",
+      "status": "complete"
+    },
+    {
+      "id": "s06",
+      "title": "Enable automatic approval review without widening the sandbox",
+      "summary": "Enabled approvals_reviewer=auto_review while preserving workspace-write and on-request; strict Codex config parsing passes.",
+      "status": "complete"
+    },
+    {
+      "id": "s07",
+      "title": "Configure native Codex status line and terminal task progress",
+      "summary": "Configured model/reasoning, context remaining, and Git branch in the footer plus task progress, project, and branch in the terminal title; strict config parsing passes.",
+      "status": "complete"
+    },
+    {
+      "id": "s08",
+      "title": "Validate effective execpolicy for safe and unsafe command cohorts",
+      "summary": "Execpolicy allows direct rg, exact-path git add, npm run, and Theseus; arbitrary node, git rm, rm -rf, and shell-wrapped scripts match no allow rule.",
+      "status": "complete"
+    },
+    {
+      "id": "s09",
+      "title": "Implement a compact Theseus loop-status reporter",
+      "summary": "Implemented a compact reporter that derives active run title, exact logical slice ordinal/total, completion counts, blockers, and next slice from the Theseus project snapshot.",
+      "status": "complete"
+    },
+    {
+      "id": "s10",
+      "title": "Add deterministic loop-status tests and fixture coverage",
+      "summary": "Three loop-status fixtures pass for active progress, completed closeout, and absent contract states.",
+      "status": "complete"
+    },
+    {
+      "id": "s11",
+      "title": "Expose the status reporter through stable npm commands",
+      "summary": "Added npm run loop:status and the aggregate test:loop-reliability entry point so routine execution no longer needs ad-hoc node commands.",
+      "status": "complete"
+    },
+    {
+      "id": "s12",
+      "title": "Add slice heartbeat protocol to the adaptive loop skill",
+      "summary": "Added state-derived heartbeat and pre-final continuation gate to adaptive loop skill",
+      "status": "complete"
+    },
+    {
+      "id": "s13",
+      "title": "Add explicit pre-final stop taxonomy to the long-loop skill",
+      "summary": "Added exact early-stop taxonomy and continuation gate to long-loop skill",
+      "status": "complete"
+    },
+    {
+      "id": "s14",
+      "title": "Align typed-autonomy execution and handoff semantics",
+      "summary": "Added heartbeat cadence and stop taxonomy to typed-autonomy skill",
+      "status": "complete"
+    },
+    {
+      "id": "s15",
+      "title": "Encode direct-command and scratch-promotion rules in repository guidance",
+      "summary": "Encoded direct-command discipline, stable npm checks, no blanket scratch/interpreter approvals, exact heartbeats, and named stop outcomes in AGENTS.md",
+      "status": "complete"
+    },
+    {
+      "id": "s16",
+      "title": "Implement a fail-open Theseus-aware Codex Stop hook",
+      "summary": "Implemented a read-only fail-open Stop hook that warns only for unfinished in-project Theseus runs",
+      "status": "complete"
+    },
+    {
+      "id": "s17",
+      "title": "Configure and trust-scope the KP project hook",
+      "summary": "Installed a project-scoped hooks.json that resolves the committed guard from the Git root and requires one-time Codex trust",
+      "status": "complete"
+    },
+    {
+      "id": "s18",
+      "title": "Test hook decisions for active complete and absent contracts",
+      "summary": "Focused hook and loop reliability suite passes 14 tests across unfinished, complete, absent, malformed, out-of-project, config, and policy cases",
+      "status": "complete"
+    },
+    {
+      "id": "s19",
+      "title": "Remove obsolete ad-hoc approvals and verify fresh-session setup",
+      "summary": "Removed historical one-off approvals from active global rules, archived the old set as non-loading text, deleted scratch installers, and added a stable policy checker; one fresh Codex session is required to discard this chat's startup snapshot and trust the project hook",
+      "status": "complete"
+    },
+    {
+      "id": "s20",
+      "title": "Run broad validation record restart requirements and close the tranche",
+      "summary": "Broad reliability, policy, TypeScript, strict-config, skill-structure, and Theseus gates pass; exact product successor is ready and fresh-session trust requirements are documented for handoff",
+      "status": "complete"
+    }
+  ]
+}

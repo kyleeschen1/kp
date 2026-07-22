@@ -1,0 +1,109 @@
+{
+  "id": "next-action.kp.codex-execution-reliability-v0",
+  "kind": "next-action",
+  "title": "Harden Codex execution reliability",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Stable command policy, automatic approval review, durable progress, explicit stop semantics, fail-open continuity hook, tests, and restart handoff are complete",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.codex-reliability-before-product-v0.json"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "priority-change.kp.codex-reliability-before-product-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5"
+  ],
+  "verification": [
+    "codex execpolicy check against audited allow and deny examples",
+    "node --test focused loop-status and Stop-hook suites",
+    "skill quick validation for modified Theseus loop skills",
+    "npm run typecheck",
+    "theseus workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run test:loop-reliability",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-22T23:12:28.523Z",
+      "notes": "14 loop-status, stop-hook, hook-config, and adaptive-loop policy tests passed"
+    },
+    {
+      "command": "npm run check:codex-reliability",
+      "status": "passed",
+      "scope": "policy",
+      "checkedAt": "2026-07-22T23:12:29.510Z",
+      "notes": "Six routine command cohorts allowed and four unsafe broad cohorts matched no allow rule"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-22T23:12:30.312Z",
+      "notes": "Application, Node, test, and domain TypeScript projects passed"
+    },
+    {
+      "command": "theseus workspace validate",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-22T23:12:31.118Z",
+      "notes": "739 nodes and 10477 events valid before closeout mutations"
+    },
+    {
+      "command": "codex --strict-config --version",
+      "status": "passed",
+      "scope": "configuration",
+      "checkedAt": "2026-07-22T23:12:31.908Z",
+      "notes": "Codex CLI 0.144.6 accepted the effective configuration in strict mode"
+    },
+    {
+      "command": "skill frontmatter and stop-taxonomy structural check",
+      "status": "passed",
+      "scope": "skills",
+      "checkedAt": "2026-07-22T23:12:32.721Z",
+      "notes": "All three modified skills retain valid frontmatter boundaries and the required continuation taxonomy; the supplied Python validator was unavailable because PyYAML is absent"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Codex reliability tranche implemented and broadly verified"
+  },
+  "expectedLearning": [
+    "Whether a small audited permission surface plus automatic review can eliminate routine interruptions without weakening destructive-action boundaries.",
+    "Whether explicit stop taxonomy and Theseus-derived heartbeats prevent unexplained early handoffs and make progress legible across sessions."
+  ],
+  "allowedWork": [
+    "Codex user and trusted KP project configuration, rules, hooks, Theseus loop skills, KP loop-status tooling, focused tests, and repository guidance."
+  ],
+  "disallowedWork": [
+    "KP product runtime, animation output, unrelated project planning drafts, danger-full-access, approval_policy=never, arbitrary shell or node approval, and broad destructive command approval."
+  ],
+  "criteria": [
+    {
+      "id": "audited-permission-minimum",
+      "weight": "high"
+    },
+    {
+      "id": "no-arbitrary-execution",
+      "weight": "high"
+    },
+    {
+      "id": "explicit-stop-reasons",
+      "weight": "high"
+    },
+    {
+      "id": "exact-loop-progress",
+      "weight": "high"
+    },
+    {
+      "id": "fresh-session-handoff",
+      "weight": "medium"
+    }
+  ]
+}

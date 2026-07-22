@@ -1,0 +1,55 @@
+{
+  "id": "priority-change.kp.resume-product-after-codex-reliability-v0",
+  "kind": "priority-change",
+  "title": "Priority change priority-change.kp.resume-product-after-codex-reliability-v0",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Product resumption checkpoint is materialized as a fully contracted ready action; the approved plan v5 remains active as roadmap authority",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "The bounded Codex reliability tranche is complete. Resume the preserved approved product frontier without changing its dependency order: branch scheduling and responsive attention now, structured algebra next, then fraction composition, governed LLM authoring, and breadth.",
+      "occurredAt": "2026-07-22T23:11:44.384Z",
+      "summary": "Priority change disposition: checkpoint."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "plan-revision.kp.v5"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v5"
+  ],
+  "priorityChange": {
+    "schemaVersion": "theseus.priority-change.v1",
+    "planRevisionId": "plan-revision.kp.v5",
+    "rationale": "The bounded Codex reliability tranche is complete. Resume the preserved approved product frontier without changing its dependency order: branch scheduling and responsive attention now, structured algebra next, then fraction composition, governed LLM authoring, and breadth.",
+    "disposition": "checkpoint",
+    "affectedRunIds": [],
+    "changes": [
+      {
+        "subject": "branch-scheduling-and-responsive-attention",
+        "to": "now"
+      },
+      {
+        "subject": "structured-algebra",
+        "to": "next"
+      },
+      {
+        "subject": "fraction-composition-pressure-test",
+        "to": "later"
+      },
+      {
+        "subject": "governed-semantic-llm-boundary",
+        "to": "later"
+      },
+      {
+        "subject": "symbolic-and-cross-domain-breadth",
+        "to": "someday"
+      }
+    ],
+    "effectiveAt": "2026-07-22T23:11:44.384Z",
+    "requestedBy": "user"
+  }
+}

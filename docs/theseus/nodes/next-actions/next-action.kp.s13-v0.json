@@ -2,9 +2,9 @@
   "id": "next-action.kp.s13-v0",
   "kind": "next-action",
   "title": "Extract shared semantic-link focus bindings",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Materialize the shared semantic-link focus binding slice.",
+  "summary": "Reconciled child action with its already-complete slice in resolved run-contract.kp.reader-composition-root-convergence-v0.",
   "sourceRefs": [
     {
       "kind": "file",

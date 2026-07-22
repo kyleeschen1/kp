@@ -1,0 +1,60 @@
+prefix_rule(
+    pattern = ["rg"],
+    decision = "allow",
+    justification = "KP repository search is read-only.",
+    match = ["rg -n reader src tests", "rg --files docs/theseus"],
+)
+
+prefix_rule(
+    pattern = ["grep"],
+    decision = "allow",
+    justification = "KP text search is read-only.",
+    match = ["grep -n script package.json"],
+)
+
+prefix_rule(
+    pattern = ["git", ["status", "diff", "log", "show"]],
+    decision = "allow",
+    justification = "Read-only Git inspection is routine KP work.",
+    match = ["git status --short", "git diff --cached --stat", "git log -5 --oneline"],
+)
+
+prefix_rule(
+    pattern = ["git", ["add", "commit", "mv"]],
+    decision = "allow",
+    justification = "KP uses exact-path staging and reversible slice commits under repository Git rules.",
+    match = [
+        "git add scripts/loop-status.ts scripts/loop-status.test.ts",
+        "git commit -m chore: record verified slice",
+        "git mv scripts/old.ts scripts/new.ts",
+    ],
+    not_match = ["git rm scripts/old.ts", "git reset --hard", "git clean -fd"],
+)
+
+prefix_rule(
+    pattern = ["npm", "run"],
+    decision = "allow",
+    justification = "KP exposes repeatable development and verification through reviewed package scripts.",
+    match = ["npm run typecheck", "npm run visual:linear-equation", "npm run loop:status"],
+)
+
+prefix_rule(
+    pattern = ["npm", "test"],
+    decision = "allow",
+    justification = "KP test execution is repeatable and repository-scoped.",
+    match = ["npm test"],
+)
+
+prefix_rule(
+    pattern = ["theseus"],
+    decision = "allow",
+    justification = "Theseus is KP's durable local planning and evidence control plane.",
+    match = ["theseus plan run", "theseus workspace validate", "theseus record progress next-action.sample partial --summary progress"],
+)
+
+prefix_rule(
+    pattern = ["./node_modules/.bin/playwright"],
+    decision = "allow",
+    justification = "The pinned workspace Playwright binary is KP's repeatable browser verifier.",
+    match = ["./node_modules/.bin/playwright test tests/semantic-reader.spec.ts"],
+)
