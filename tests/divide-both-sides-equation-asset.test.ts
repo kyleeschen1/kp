@@ -4,9 +4,14 @@ import test from "node:test";
 import { validateKpAssetBundle } from "../src/semantic/asset.ts";
 import { validateKpSemanticTransformation } from "../src/semantic/asset-transformation.ts";
 import {
+  checkCorrespondenceMapRewindLaw,
+  validateCorrespondenceMap
+} from "../src/semantic/correspondence.ts";
+import {
   createDivideBothSidesEquationKpAsset,
   divideBothSidesEquationAssetIds as ids
 } from "../src/semantic/divide-both-sides-equation-asset.ts";
+import { compileKpSemanticEquationTransitionResult } from "../src/rendering/semantic-equation-transition-compiler.ts";
 
 test("divide-both-sides asset defines the exact four-state trace", () => {
   const asset = createDivideBothSidesEquationKpAsset();
@@ -69,11 +74,65 @@ test("divide-both-sides transformations form a continuous strict-law chain", () 
   }
 });
 
-test("divide-both-sides trace postpones correspondence until the lineage slice", () => {
+test("divide-both-sides trace owns every selector through total reversible correspondence", () => {
   const asset = createDivideBothSidesEquationKpAsset();
 
   for (const transformation of asset.transformations) {
-    assert.equal(transformation.correspondenceMap, undefined);
-    assert.deepEqual(transformation.correspondence, []);
+    const map = transformation.correspondenceMap;
+    assert.ok(map);
+    const sourceSelectors = asset.bundle.objects
+      .filter((object) => transformation.sourceObjectIds.includes(object.id))
+      .flatMap((object) => object.selectors.map((selector) => selector.id));
+    const targetSelectors = asset.bundle.objects
+      .filter((object) => transformation.targetObjectIds.includes(object.id))
+      .flatMap((object) => object.selectors.map((selector) => selector.id));
+
+    assert.deepEqual(validateCorrespondenceMap(map, {
+      sourceSelectorIds: sourceSelectors,
+      targetSelectorIds: targetSelectors
+    }), [], transformation.id);
+    assert.deepEqual(checkCorrespondenceMapRewindLaw(map), [], transformation.id);
+
+    const compiled = compileKpSemanticEquationTransitionResult({
+      transformation,
+      bundle: asset.bundle,
+      unsupportedPolicy: "typed-gap"
+    });
+    assert.equal(compiled.status, "semantic", transformation.id);
+    assert.ok(compiled.ir, transformation.id);
   }
+});
+
+test("divide correspondence distinguishes persistence, entry, cancellation, and synthesis", () => {
+  const asset = createDivideBothSidesEquationKpAsset();
+
+  assert.deepEqual(
+    asset.transformations.map((transformation) =>
+      transformation.correspondenceMap?.records.map((record) => [record.id, record.relation])
+    ),
+    [
+      [
+        ["coefficient-enters-numerator", "identity"],
+        ["variable-enters-numerator", "identity"],
+        ["relation-persists", "identity"],
+        ["constant-enters-numerator", "identity"],
+        ["matched-divisors-enter", "introduction"],
+        ["fraction-rules-enter", "introduction"]
+      ],
+      [
+        ["variable-persists", "identity"],
+        ["relation-persists", "identity"],
+        ["right-numerator-persists", "identity"],
+        ["right-rule-persists", "identity"],
+        ["right-divisor-persists", "identity"],
+        ["coefficient-and-divisor-cancel", "cancelation"],
+        ["left-fraction-rule-retires", "removal"]
+      ],
+      [
+        ["variable-persists", "identity"],
+        ["relation-persists", "identity"],
+        ["quotient-becomes-four", "fan-in"]
+      ]
+    ]
+  );
 });

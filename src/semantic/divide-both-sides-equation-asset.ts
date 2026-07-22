@@ -8,6 +8,7 @@ import {
   createKpSemanticTransformation,
   type KpSemanticTransformation
 } from "./asset-transformation.ts";
+import type { SelectorCorrespondenceRecord } from "./correspondence.ts";
 
 export interface DivideBothSidesEquationKpAsset {
   readonly sourceTraceId: string;
@@ -100,6 +101,26 @@ export function createDivideBothSidesEquationKpAsset(): DivideBothSidesEquationK
         title: "Divide both sides by 3",
         sourceObjectId: ids.initial,
         targetObjectId: ids.divided,
+        correspondence: [
+          identity("coefficient-enters-numerator", ids.initial, "lhs.coefficient.3", ids.divided, "lhs.fraction.numerator.coefficient.3"),
+          identity("variable-enters-numerator", ids.initial, "lhs.x", ids.divided, "lhs.fraction.numerator.x"),
+          identity("relation-persists", ids.initial, "equals", ids.divided, "equals"),
+          identity("constant-enters-numerator", ids.initial, "rhs.12", ids.divided, "rhs.fraction.numerator.12"),
+          record(
+            "matched-divisors-enter",
+            "introduction",
+            [],
+            selectors(ids.divided, "lhs.fraction.denominator.3", "rhs.fraction.denominator.3"),
+            "The same divisor enters beneath both sides."
+          ),
+          record(
+            "fraction-rules-enter",
+            "introduction",
+            [],
+            selectors(ids.divided, "lhs.fraction.rule", "rhs.fraction.rule"),
+            "Fraction rules expose the two whole-side quotients."
+          )
+        ],
         assumption: "Dividing equal quantities by the same non-zero value preserves equality.",
         lawId: "law.equation.divide-both-sides"
       }),
@@ -109,6 +130,27 @@ export function createDivideBothSidesEquationKpAsset(): DivideBothSidesEquationK
         title: "Cancel the coefficient",
         sourceObjectId: ids.divided,
         targetObjectId: ids.coefficientCancelled,
+        correspondence: [
+          identity("variable-persists", ids.divided, "lhs.fraction.numerator.x", ids.coefficientCancelled, "lhs.x"),
+          identity("relation-persists", ids.divided, "equals", ids.coefficientCancelled, "equals"),
+          identity("right-numerator-persists", ids.divided, "rhs.fraction.numerator.12", ids.coefficientCancelled, "rhs.fraction.numerator.12"),
+          identity("right-rule-persists", ids.divided, "rhs.fraction.rule", ids.coefficientCancelled, "rhs.fraction.rule"),
+          identity("right-divisor-persists", ids.divided, "rhs.fraction.denominator.3", ids.coefficientCancelled, "rhs.fraction.denominator.3"),
+          record(
+            "coefficient-and-divisor-cancel",
+            "cancelation",
+            selectors(ids.divided, "lhs.fraction.numerator.coefficient.3", "lhs.fraction.denominator.3"),
+            [],
+            "The non-zero coefficient and matching divisor cancel."
+          ),
+          record(
+            "left-fraction-rule-retires",
+            "removal",
+            selectors(ids.divided, "lhs.fraction.rule"),
+            [],
+            "The left fraction rule retires after cancellation leaves x."
+          )
+        ],
         assumption: "A non-zero factor divided by itself simplifies to one.",
         lawId: "law.algebra.multiplicative-inverse"
       }),
@@ -118,6 +160,22 @@ export function createDivideBothSidesEquationKpAsset(): DivideBothSidesEquationK
         title: "Simplify 12 divided by 3",
         sourceObjectId: ids.coefficientCancelled,
         targetObjectId: ids.solved,
+        correspondence: [
+          identity("variable-persists", ids.coefficientCancelled, "lhs.x", ids.solved, "lhs.x"),
+          identity("relation-persists", ids.coefficientCancelled, "equals", ids.solved, "equals"),
+          record(
+            "quotient-becomes-four",
+            "fan-in",
+            selectors(
+              ids.coefficientCancelled,
+              "rhs.fraction.numerator.12",
+              "rhs.fraction.rule",
+              "rhs.fraction.denominator.3"
+            ),
+            selectors(ids.solved, "rhs.4"),
+            "The exact quotient twelve divided by three derives four."
+          )
+        ],
         assumption: "The exact quotient 12 divided by 3 is 4.",
         lawId: "law.arithmetic.constant-quotient"
       })
@@ -180,6 +238,7 @@ interface TransformationInput {
   readonly title: string;
   readonly sourceObjectId: string;
   readonly targetObjectId: string;
+  readonly correspondence: readonly SelectorCorrespondenceRecord[];
   readonly assumption: string;
   readonly lawId: string;
 }
@@ -192,7 +251,41 @@ function transformation(input: TransformationInput): KpSemanticTransformation {
     sourceObjectIds: [input.sourceObjectId],
     targetObjectIds: [input.targetObjectId],
     preserves: ["value"],
+    correspondenceMap: {
+      id: `${input.id}.correspondence`,
+      records: input.correspondence
+    },
     assumptions: [input.assumption],
     lawRefs: [{ id: input.lawId, level: "strict" }]
   });
+}
+
+function identity(
+  id: string,
+  sourceObjectId: string,
+  sourcePath: string,
+  targetObjectId: string,
+  targetPath: string
+): SelectorCorrespondenceRecord {
+  return record(
+    id,
+    "identity",
+    selectors(sourceObjectId, sourcePath),
+    selectors(targetObjectId, targetPath),
+    `${sourcePath} preserves semantic identity.`
+  );
+}
+
+function record(
+  id: string,
+  relation: SelectorCorrespondenceRecord["relation"],
+  sourceSelectorIds: readonly string[],
+  targetSelectorIds: readonly string[],
+  summary: string
+): SelectorCorrespondenceRecord {
+  return { id, relation, sourceSelectorIds, targetSelectorIds, summary };
+}
+
+function selectors(objectId: string, ...paths: readonly string[]): readonly string[] {
+  return paths.map((path) => `${objectId}.${path}`);
 }

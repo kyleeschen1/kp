@@ -131,7 +131,8 @@
     {
       "id": "s14-divide-correspondence",
       "title": "Define total divide semantic correspondence",
-      "status": "planned"
+      "summary": "Owned every selector through identity, matched introduction, cancellation, removal, or quotient fan-in; rewind and semantic compilation pass.",
+      "status": "complete"
     },
     {
       "id": "s15-divide-layout",
