@@ -179,6 +179,20 @@
       "scope": "s13 cross-surface browser synchronization",
       "checkedAt": "2026-07-22T17:10:13.430Z",
       "notes": "Nine browser checks pass; rendered algebra token progress, geometric width-token progress, and the partition CSS clock agree within subpixel tolerance."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s14 single motion authority",
+      "checkedAt": "2026-07-22T17:12:55.970Z",
+      "notes": "All TypeScript projects pass after removing legacy forward and inverse opacity samplers from the reader entry point."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "s14 discrete ownership",
+      "checkedAt": "2026-07-22T17:13:02.266Z",
+      "notes": "Ten browser checks pass; factored, material, expanded, combined-width, and component-width owners never overlap or crossfade at endpoint handoffs."
     }
   ],
   "expectedLearning": [

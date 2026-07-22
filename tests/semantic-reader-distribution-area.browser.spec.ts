@@ -91,6 +91,38 @@ test("distribution reader keeps one visual owner and reversible native endpoints
   await expect(page).toHaveURL(/kpCheckpoint=factored/);
 });
 
+test("endpoint and material owners switch discretely without static-anchor crossfades", async ({ page }) => {
+  await page.goto(`${route}?kpProgress=0&kpDirection=forward`, { waitUntil: "networkidle" });
+  const stage = page.locator("[data-kp-distribution-stage]");
+  const algebraMaterial = page.locator("[data-kp-algebra-material]");
+  const widthMaterial = page.locator("[data-kp-area-width-material]");
+  const factored = page.locator('[data-kp-native="factored"]');
+  const expanded = page.locator('[data-kp-native="expanded"]');
+
+  await expect(stage).toHaveAttribute("data-kp-algebra-owner", "factored-native");
+  await expect(stage).toHaveAttribute("data-kp-width-owner", "combined-native");
+  await expect(factored).toBeVisible();
+  await expect(algebraMaterial).toBeHidden();
+
+  await page.locator("[data-kp-distribution-scrubber]").fill("1");
+  await expect(stage).toHaveAttribute("data-kp-algebra-owner", "material");
+  await expect(stage).toHaveAttribute("data-kp-width-owner", "material");
+  await expect(factored).toBeHidden();
+  await expect(expanded).toBeHidden();
+  await expect(algebraMaterial).toBeVisible();
+  await expect(widthMaterial).toBeVisible();
+  await expect(page.locator('[data-kp-area-label="combined-width"]')).toHaveCSS("opacity", "0");
+  await expect(page.locator('[data-kp-area-label="x-width"]')).toHaveCSS("opacity", "0");
+
+  await page.locator("[data-kp-distribution-scrubber]").fill("1000");
+  await expect(stage).toHaveAttribute("data-kp-algebra-owner", "expanded-native");
+  await expect(stage).toHaveAttribute("data-kp-width-owner", "components-native");
+  await expect(expanded).toBeVisible();
+  await expect(algebraMaterial).toBeHidden();
+  await expect(widthMaterial).toBeHidden();
+  await expect(page.locator('[data-kp-area-label="x-width"]')).toHaveCSS("opacity", "1");
+});
+
 test("material x follows measured KaTeX anchors instead of percentages", async ({ page }) => {
   await page.goto(`${route}?kpProgress=360&kpDirection=forward`, { waitUntil: "networkidle" });
   const centers = await page.evaluate(() => {

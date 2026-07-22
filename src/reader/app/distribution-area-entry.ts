@@ -1,10 +1,5 @@
 import "../../animation/fission-fusion-register.ts";
 import {
-  createKpDistributionAreaForwardMotionPlan,
-  sampleKpDistributionAreaForwardMotion
-} from "../../animation/distribution-area-exemplar-forward-motion.ts";
-import { sampleKpDistributionAreaInverseMotion } from "../../animation/distribution-area-exemplar-inverse-motion.ts";
-import {
   attentionPhaseAt,
   createKpDistributionAreaAttentionPlan
 } from "../../animation/distribution-area-exemplar-attention.ts";
@@ -45,7 +40,6 @@ const activeLocation = createKpReaderActiveLocationService({
   beats
 });
 const directionButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-kp-direction-button]")];
-const plan = createKpDistributionAreaForwardMotionPlan();
 const attention = createKpDistributionAreaAttentionPlan();
 const fontReadiness = createKpEquationFontReadiness(document);
 let direction: Direction = readDirection();
@@ -135,14 +129,20 @@ function render(): void {
   if (fontReadiness.status === "waiting" || motionPlan === undefined || widthMotionPlan === undefined) return;
   progress = clamp01(progress);
   const visualProgress = direction === "forward" ? progress : 1 - progress;
-  const forward = sampleKpDistributionAreaForwardMotion({ plan, progress: visualProgress });
-  const inverse = sampleKpDistributionAreaInverseMotion({ plan, progress });
-  const owner = direction === "forward" ? forward.owner : inverse.owner;
   const timeline = motionPlan.sample(visualProgress);
   const correspondenceProgress = timeline.phase === "distribution" ? timeline.phaseProgress : 1;
+  const evaluationProgress = timeline.phase === "evaluation" ? timeline.phaseProgress : 0;
+  const owner = visualProgress === 0
+    ? "factored-native"
+    : visualProgress === 1 ? "expanded-native" : "material";
+  const widthOwner = visualProgress === 0
+    ? "combined-native"
+    : visualProgress === 1 ? "components-native" : "material";
 
   stage.dataset["kpDirection"] = direction;
   stage.dataset["kpOwner"] = owner;
+  stage.dataset["kpAlgebraOwner"] = owner;
+  stage.dataset["kpWidthOwner"] = widthOwner;
   stage.dataset["kpCheckpoint"] = checkpointFor(visualProgress);
   stage.style.setProperty("--kp-partition-progress", String(correspondenceProgress));
   factoredNative.hidden = visualProgress !== 0;
@@ -155,8 +155,8 @@ function render(): void {
   setOpacity("x-width", visualProgress === 1 ? 1 : 0);
   setOpacity("two-width", visualProgress === 1 ? 1 : 0);
   setOpacity("left-area", correspondenceProgress);
-  setOpacity("right-pair", correspondenceProgress * (1 - interval(forward.evaluationProgress, 0.52, 0.65)));
-  setOpacity("right-area", interval(forward.evaluationProgress, 0.65, 0.82));
+  setOpacity("right-pair", correspondenceProgress * (1 - interval(evaluationProgress, 0.52, 0.65)));
+  setOpacity("right-area", interval(evaluationProgress, 0.65, 0.82));
   required<SVGLineElement>("[data-kp-area-divider]").style.opacity = String(correspondenceProgress);
 
   const permille = Math.round(visualProgress * 1000);
