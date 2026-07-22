@@ -80,6 +80,7 @@ export {
   kpReaderRouteEntryName,
   kpReaderRouteHtmlPath,
   type KpReaderLessonSourcePath,
+  type KpReaderRouteConformanceProfile,
   type KpReaderRouteDescriptor,
   type KpReaderRoutePath
 } from "./reader-route-descriptor.ts";

@@ -1,4 +1,8 @@
 import { expect, type Browser, type Page } from "@playwright/test";
+import {
+  kpReaderRouteEntryName,
+  type KpReaderRouteDescriptor
+} from "../../src/reader/compiler/reader-route-descriptor.ts";
 
 export interface KpSemanticReaderConformanceDescriptor {
   readonly id: string;
@@ -16,6 +20,31 @@ export interface KpSemanticReaderConformanceDescriptor {
     | { readonly kind: "attribute"; readonly selector: string; readonly name: string }
     | { readonly kind: "value"; readonly selector: string };
   readonly searchableText: string;
+}
+
+export function createKpSemanticReaderConformanceDescriptor(
+  routeDescriptor: KpReaderRouteDescriptor
+): KpSemanticReaderConformanceDescriptor {
+  const profile = routeDescriptor.conformance;
+  return {
+    id: kpReaderRouteEntryName(routeDescriptor.route),
+    readerId: profile.readerId,
+    documentId: profile.documentId,
+    version: profile.version,
+    progress: profile.progressPermille,
+    beatId: profile.beatId,
+    route: (progress) => {
+      const query = new URLSearchParams(profile.query);
+      query.set("kpProgress", String(progress));
+      return `${routeDescriptor.route}?${query}`;
+    },
+    stageSelector: profile.stageSelector,
+    rendererAdapterId: profile.rendererAdapterId,
+    shareSelector: profile.shareSelector,
+    fontReadyEvidence: profile.fontReadyEvidence,
+    progressEvidence: profile.progressEvidence,
+    searchableText: profile.searchableText
+  };
 }
 
 export async function assertKpSemanticReaderConformance(input: {

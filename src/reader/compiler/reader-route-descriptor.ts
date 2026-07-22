@@ -3,10 +3,28 @@ import type { KpCompiledLessonArtifact } from "../document/public-api.ts";
 export type KpReaderRoutePath = `/reader/${string}/`;
 export type KpReaderLessonSourcePath = `content/lessons/${string}.md`;
 
+export interface KpReaderRouteConformanceProfile {
+  readonly readerId: string;
+  readonly documentId: string;
+  readonly version: string;
+  readonly progressPermille: number;
+  readonly beatId: string;
+  readonly query: Readonly<Record<string, string>>;
+  readonly stageSelector: string;
+  readonly rendererAdapterId: string;
+  readonly shareSelector: string;
+  readonly fontReadyEvidence: "body-attribute" | "document-fonts";
+  readonly progressEvidence:
+    | { readonly kind: "attribute"; readonly selector: string; readonly name: string }
+    | { readonly kind: "value"; readonly selector: string };
+  readonly searchableText: string;
+}
+
 export interface KpReaderRouteDescriptor {
   readonly route: KpReaderRoutePath;
   readonly sourcePath: KpReaderLessonSourcePath;
   readonly compile: (markdown: string) => KpCompiledLessonArtifact;
+  readonly conformance: KpReaderRouteConformanceProfile;
 }
 
 /**
@@ -21,6 +39,25 @@ export function defineKpReaderRoute<const TRoute extends KpReaderRouteDescriptor
   }
   if (!descriptor.sourcePath.startsWith("content/lessons/") || !descriptor.sourcePath.endsWith(".md")) {
     throw new Error(`Reader source ${descriptor.sourcePath} must be lesson Markdown.`);
+  }
+  if (!Number.isInteger(descriptor.conformance.progressPermille) ||
+      descriptor.conformance.progressPermille < 0 ||
+      descriptor.conformance.progressPermille > 1_000) {
+    throw new Error(`Reader route ${descriptor.route} requires bounded conformance progress.`);
+  }
+  if (Object.hasOwn(descriptor.conformance.query, "kpProgress")) {
+    throw new Error(`Reader route ${descriptor.route} conformance query must not fix kpProgress.`);
+  }
+  for (const [field, value] of Object.entries({
+    documentId: descriptor.conformance.documentId,
+    beatId: descriptor.conformance.beatId,
+    stageSelector: descriptor.conformance.stageSelector,
+    rendererAdapterId: descriptor.conformance.rendererAdapterId,
+    searchableText: descriptor.conformance.searchableText
+  })) {
+    if (value.trim() === "") {
+      throw new Error(`Reader route ${descriptor.route} conformance ${field} must not be empty.`);
+    }
   }
   return descriptor;
 }

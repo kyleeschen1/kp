@@ -299,7 +299,14 @@
     {
       "id": "s21",
       "title": "Derive shared reader conformance from route descriptors",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s21-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s21-v0",
+      "title": "Derive shared reader conformance from route descriptors",
+      "summary": "Shared browser conformance is manifest-derived and covers all seven accepted reader routes without runtime compiler leakage.",
+      "status": "complete"
     },
     {
       "id": "s22",

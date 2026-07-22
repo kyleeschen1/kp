@@ -33,4 +33,56 @@ test("build manifest declares every accepted reader route exactly once", () => {
       { entry: "reader-distribution-area", html: "reader/distribution-area/index.html" }
     ]
   );
+  assert.deepEqual(
+    kpReaderRouteManifest.map(({ route, conformance }) => ({
+      route,
+      documentId: conformance.documentId,
+      progressPermille: conformance.progressPermille,
+      rendererAdapterId: conformance.rendererAdapterId
+    })),
+    [
+      {
+        route: "/reader/solve-x/",
+        documentId: "lesson.solve-x.x-plus-3",
+        progressPermille: 517,
+        rendererAdapterId: "renderer.equation-dom"
+      },
+      {
+        route: "/reader/solve-x/teacher-zero/",
+        documentId: "lesson.solve-x.x-plus-3.teacher-zero",
+        progressPermille: 500,
+        rendererAdapterId: "renderer.equation-dom"
+      },
+      {
+        route: "/reader/solve-fractional-linear/",
+        documentId: "lesson.solve-x.fractional-linear",
+        progressPermille: 500,
+        rendererAdapterId: "renderer.equation-dom"
+      },
+      {
+        route: "/reader/divide-both-sides/",
+        documentId: "lesson.solve-x.divide-both-sides",
+        progressPermille: 667,
+        rendererAdapterId: "renderer.equation-dom"
+      },
+      {
+        route: "/reader/split-merge-fractions/",
+        documentId: "lesson.fractions.numerator-split-merge",
+        progressPermille: 500,
+        rendererAdapterId: "renderer.equation-dom"
+      },
+      {
+        route: "/reader/fractional-transfer/",
+        documentId: "lesson.solve-x.fractional-transfer-comparison",
+        progressPermille: 667,
+        rendererAdapterId: "renderer.equation-dom"
+      },
+      {
+        route: "/reader/distribution-area/",
+        documentId: "lesson.algebra.distribution-area",
+        progressPermille: 720,
+        rendererAdapterId: "renderer.distribution-composite"
+      }
+    ]
+  );
 });
