@@ -58,6 +58,7 @@ import {
   createKpReaderContinuousScrollClock,
   createKpReaderSemanticFocusService,
   createKpReaderSessionSnapshot,
+  createKpReaderRuntimeRouteDescriptor,
   decodeKpReaderSessionUrl,
   defineKpReaderEquationPresentationCapability,
   encodeKpReaderSessionUrl,
@@ -96,8 +97,12 @@ interface LayoutState {
   readonly contexts: ReadonlyMap<string, TransitionContext>;
 }
 
-const documentId = requiredData(document.body, "kpReaderDocumentId");
-const documentVersion = requiredData(document.body, "kpReaderDocumentVersion");
+const readerRoute = createKpReaderRuntimeRouteDescriptor({
+  href: window.location.href,
+  documentId: requiredData(document.body, "kpReaderDocumentId"),
+  documentVersion: requiredData(document.body, "kpReaderDocumentVersion")
+});
+const { documentId, documentVersion } = readerRoute;
 const lessonVariant = requiredData(document.body, "kpReaderLessonVariant");
 const compiledEquationPresentation = defineKpReaderEquationPresentationCapability({
   defaultProfileId: resolveKpReaderEquationPresentationProfile(

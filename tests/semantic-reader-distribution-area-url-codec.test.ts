@@ -9,6 +9,11 @@ import {
 test("distribution URL codec round trips operation-relative progress and direction", () => {
   const encoded = encodeKpDistributionAreaUrl(
     "https://kinetic.press/reader/distribution-area/?utm_source=teacher&kpProgress=old",
+    {
+      route: "/reader/distribution-area/",
+      documentId: "lesson.algebra.distribution-area",
+      documentVersion: "1"
+    },
     { checkpoint: "distributed", progressPermille: 640, direction: "inverse" }
   );
   assert.equal(new URL(encoded).searchParams.get("utm_source"), "teacher");

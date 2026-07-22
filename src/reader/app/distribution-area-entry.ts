@@ -5,6 +5,7 @@ import {
 import { createKpEquationFontReadiness } from "../../rendering/equation-font-readiness.ts";
 import {
   createKpReaderActiveLocationService,
+  createKpReaderRuntimeRouteDescriptor,
   decodeKpDistributionAreaUrl,
   encodeKpDistributionAreaUrl,
   type KpDistributionAreaDirection
@@ -28,6 +29,11 @@ import {
 type Direction = KpDistributionAreaDirection;
 
 const stage = required<HTMLElement>("[data-kp-distribution-stage]");
+const readerRoute = createKpReaderRuntimeRouteDescriptor({
+  href: window.location.href,
+  documentId: requiredData(document.body, "kpReaderDocumentId"),
+  documentVersion: requiredData(document.body, "kpReaderDocumentVersion")
+});
 const scrubber = required<HTMLInputElement>("[data-kp-distribution-scrubber]");
 const progressOutput = required<HTMLOutputElement>("[data-kp-distribution-progress]");
 const statusOutput = required<HTMLOutputElement>("[data-kp-distribution-status]");
@@ -355,7 +361,7 @@ function replaceSemanticUrl(): void {
 
 function semanticUrl(): URL {
   const visualProgress = direction === "forward" ? progress : 1 - progress;
-  return new URL(encodeKpDistributionAreaUrl(window.location.href, {
+  return new URL(encodeKpDistributionAreaUrl(window.location.href, readerRoute, {
     checkpoint: checkpointFor(visualProgress),
     progressPermille: Math.round(progress * 1000),
     direction
@@ -369,7 +375,7 @@ function checkpointFor(visualProgress: number): "factored" | "distributed" | "ex
 }
 
 function readProgress(): number {
-  const state = decodeKpDistributionAreaUrl(window.location.href);
+  const state = decodeKpDistributionAreaUrl(window.location.href, readerRoute);
   if (state.progressPermille !== undefined) return state.progressPermille / 1000;
   const visualProgress = state.checkpoint === "expanded" ? 1
     : state.checkpoint === "distributed" ? 0.72
@@ -378,11 +384,11 @@ function readProgress(): number {
 }
 
 function readDirection(): Direction {
-  return decodeKpDistributionAreaUrl(window.location.href).direction;
+  return decodeKpDistributionAreaUrl(window.location.href, readerRoute).direction;
 }
 
 function hasSemanticProgress(): boolean {
-  return decodeKpDistributionAreaUrl(window.location.href).progressPermille !== undefined;
+  return decodeKpDistributionAreaUrl(window.location.href, readerRoute).progressPermille !== undefined;
 }
 
 function required<T extends Element>(selector: string): T {

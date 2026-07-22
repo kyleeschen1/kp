@@ -179,7 +179,14 @@
     {
       "id": "s11",
       "title": "Converge equation URLs on the shared route descriptor",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s11-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s11-v0",
+      "title": "Converge equation URLs on the shared route descriptor",
+      "summary": "Shared runtime route identity is integrated in both accepted readers and verified.",
+      "status": "complete"
     },
     {
       "id": "s12",

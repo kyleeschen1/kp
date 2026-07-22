@@ -2,6 +2,7 @@ import {
   composeKpReaderUrlStateCodecs,
   defineKpReaderUrlStateCodec
 } from "./url-state-codec.ts";
+import type { KpReaderRuntimeRouteDescriptor } from "./reader-route-descriptor.ts";
 
 export type KpDistributionAreaDirection = "forward" | "inverse";
 export type KpDistributionAreaCheckpoint = "factored" | "distributed" | "expanded";
@@ -25,14 +26,21 @@ const moment = defineKpReaderUrlStateCodec({
     const checkpoint = checkpointValue === "expanded" || checkpointValue === "distributed"
       ? checkpointValue
       : "factored";
-    return { checkpoint, progressPermille } as const;
+    return {
+      documentId: parameters.get("kpLesson") ?? "",
+      documentVersion: parameters.get("kpVersion") ?? "",
+      checkpoint,
+      progressPermille
+    } as const;
   },
   write(parameters: URLSearchParams, state: {
+    readonly documentId: string;
+    readonly documentVersion: string;
     readonly checkpoint: KpDistributionAreaCheckpoint;
     readonly progressPermille?: number | undefined;
   }) {
-    parameters.set("kpLesson", "lesson.algebra.distribution-area");
-    parameters.set("kpVersion", "1");
+    parameters.set("kpLesson", state.documentId);
+    parameters.set("kpVersion", state.documentVersion);
     parameters.set("kpCheckpoint", state.checkpoint);
     if (state.progressPermille !== undefined) {
       parameters.set("kpProgress", String(state.progressPermille));
@@ -51,17 +59,34 @@ const direction = defineKpReaderUrlStateCodec({
 
 const codec = composeKpReaderUrlStateCodecs({ moment, direction });
 
-export function decodeKpDistributionAreaUrl(input: string | URL): KpDistributionAreaUrlState {
+export function decodeKpDistributionAreaUrl(
+  input: string | URL,
+  expected?: KpReaderRuntimeRouteDescriptor
+): KpDistributionAreaUrlState {
   const state = codec.read(input);
-  return { ...state.moment, direction: state.direction };
+  if (expected !== undefined && state.moment.documentId !== ""
+    && (state.moment.documentId !== expected.documentId
+      || state.moment.documentVersion !== expected.documentVersion)) {
+    throw new Error(
+      `distribution URL targets ${state.moment.documentId}@${state.moment.documentVersion}, expected ${expected.documentId}@${expected.documentVersion}`
+    );
+  }
+  return {
+    checkpoint: state.moment.checkpoint,
+    progressPermille: state.moment.progressPermille,
+    direction: state.direction
+  };
 }
 
 export function encodeKpDistributionAreaUrl(
   baseUrl: string | URL,
+  route: KpReaderRuntimeRouteDescriptor,
   state: KpDistributionAreaUrlState
 ): string {
   return codec.write(baseUrl, {
     moment: {
+      documentId: route.documentId,
+      documentVersion: route.documentVersion,
       checkpoint: state.checkpoint,
       progressPermille: state.progressPermille
     },

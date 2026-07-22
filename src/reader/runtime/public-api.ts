@@ -48,6 +48,10 @@ export {
   type KpDistributionAreaUrlState
 } from "./distribution-area-url-codec.ts";
 export {
+  createKpReaderRuntimeRouteDescriptor,
+  type KpReaderRuntimeRouteDescriptor
+} from "./reader-route-descriptor.ts";
+export {
   createKpReaderSemanticFocusService,
   type KpReaderFocusListener,
   type KpReaderFocusSnapshot,
