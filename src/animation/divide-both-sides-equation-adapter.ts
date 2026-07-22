@@ -87,7 +87,7 @@ export function createDivideBothSidesEquationAnimationAsset(): KpAnimationAsset 
       sourceTraceId: source.sourceTraceId,
       equationMotionPresentationRecipe: "continuity-v1",
       equationNativeHandoffRecipe: "atomic-v1",
-      equationCancellationPresentationRecipe: "counter-orbit-v1",
+      equationCancellationPresentationRecipe: "witnessed-annihilation-v1",
       equationSuccessorPresentationRecipe: "counter-convergence-v1",
       equationDepthPresentationRecipe: "semantic-depth-v1",
       equationContinuantPresentationRecipe: "transit-then-reflow-v1",

@@ -51,3 +51,9 @@ export {
 export {
   compileKpFractionalLinearEquationLessonModel
 } from "./fractional-linear-equation-lesson-model.ts";
+export {
+  compileKpDivideBothSidesEquationLesson
+} from "./divide-both-sides-equation-lesson.ts";
+export {
+  compileKpDivideBothSidesEquationLessonModel
+} from "./divide-both-sides-equation-lesson-model.ts";

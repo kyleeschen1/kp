@@ -6,6 +6,7 @@ import { resolve } from "node:path";
 import { defineConfig } from "vite";
 
 import {
+  compileKpDivideBothSidesEquationLesson,
   compileKpFractionalLinearEquationLesson,
   compileKpXPlusThreeLesson,
   compileKpXPlusThreeTeacherZeroLesson
@@ -22,6 +23,10 @@ const fractionalLinearRoutePath = resolve(
   projectRoot,
   "reader/solve-fractional-linear/index.html"
 );
+const divideBothSidesRoutePath = resolve(
+  projectRoot,
+  "reader/divide-both-sides/index.html"
+);
 const solveXMarkdown = readFileSync(
   resolve(projectRoot, "content/lessons/solve-x.md"),
   "utf8"
@@ -32,6 +37,10 @@ const solveXTeacherZeroMarkdown = readFileSync(
 );
 const fractionalLinearMarkdown = readFileSync(
   resolve(projectRoot, "content/lessons/solve-fractional-linear.md"),
+  "utf8"
+);
+const divideBothSidesMarkdown = readFileSync(
+  resolve(projectRoot, "content/lessons/divide-both-sides.md"),
   "utf8"
 );
 const reviewBuildIdentity = readReviewBuildIdentity();
@@ -58,6 +67,11 @@ export default defineConfig({
             fractionalLinearMarkdown
           ).html;
         }
+        if (context.filename === divideBothSidesRoutePath) {
+          return compileKpDivideBothSidesEquationLesson(
+            divideBothSidesMarkdown
+          ).html;
+        }
         return html;
       }
     }
@@ -68,7 +82,8 @@ export default defineConfig({
         main: resolve(projectRoot, "index.html"),
         "reader-solve-x": solveXRoutePath,
         "reader-solve-x-teacher-zero": solveXTeacherZeroRoutePath,
-        "reader-solve-fractional-linear": fractionalLinearRoutePath
+        "reader-solve-fractional-linear": fractionalLinearRoutePath,
+        "reader-divide-both-sides": divideBothSidesRoutePath
       }
     }
   },

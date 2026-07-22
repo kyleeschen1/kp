@@ -6,8 +6,14 @@ import {
   createFractionalLinearEquationAnimationAsset
 } from "../../animation/fractional-linear-equation-adapter.ts";
 import {
+  createDivideBothSidesEquationAnimationAsset
+} from "../../animation/divide-both-sides-equation-adapter.ts";
+import {
   bindKpFractionalLinearStructuralAnchors
 } from "../../rendering/fractional-linear-selector-annotated-latex.ts";
+import {
+  bindKpDivideBothSidesStructuralAnchors
+} from "../../rendering/divide-both-sides-selector-annotated-latex.ts";
 import {
   createKpEquationLinearRearrangementBindings
 } from "../../rendering/equation-linear-rearrangement-bindings.ts";
@@ -108,6 +114,8 @@ const animation = lessonVariant === "teacher-zero"
   ? createLinearSolveTeacherZeroAnimationAsset()
   : lessonVariant === "fractional-linear"
     ? createFractionalLinearEquationAnimationAsset()
+    : lessonVariant === "divide-both-sides"
+      ? createDivideBothSidesEquationAnimationAsset()
     : createLinearSolveAnimationAsset();
 const presentationProfile = kpEquationPresentationProfile(animation);
 const linearRearrangementBindings = createKpEquationLinearRearrangementBindings(
@@ -119,6 +127,7 @@ const template = requireElement<HTMLTemplateElement>("template[data-kp-reader-ex
 const templateContent = template.content.cloneNode(true);
 staticSurface.append(templateContent);
 if (lessonVariant === "fractional-linear") bindFractionalStructuralAnchors();
+if (lessonVariant === "divide-both-sides") bindDivideBothSidesStructuralAnchors();
 document.body.dataset["kpReaderHydrated"] = "true";
 
 const stage = requireElement<HTMLElement>("[data-kp-reader-equation-stage]");
@@ -1136,6 +1145,18 @@ function bindFractionalStructuralAnchors(): void {
     const state = states.get(stateId);
     if (state === undefined) throw new Error(`Missing fractional equation state ${stateId}.`);
     bindKpFractionalLinearStructuralAnchors({ root: element, state });
+  }
+}
+
+function bindDivideBothSidesStructuralAnchors(): void {
+  const states = new Map(animation.bundle.objects.map((state) => [state.id, state]));
+  for (const element of staticSurface.querySelectorAll<HTMLElement>(
+    "[data-kp-reader-equation-state]"
+  )) {
+    const stateId = requiredData(element, "kpReaderEquationState");
+    const state = states.get(stateId);
+    if (state === undefined) throw new Error(`Missing divide-both-sides equation state ${stateId}.`);
+    bindKpDivideBothSidesStructuralAnchors({ root: element, state });
   }
 }
 

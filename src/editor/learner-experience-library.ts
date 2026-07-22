@@ -12,6 +12,16 @@ export interface KpLearnerExperienceDescriptor {
 
 const learnerExperiences = [
   {
+    id: "divide-both-sides-scroll-lesson",
+    kind: "scroll-lesson",
+    title: "Divide both sides",
+    summary:
+      "Watch 3x = 12 become two matched fractions, cancel, and resolve to x = 4.",
+    href: "/reader/divide-both-sides/",
+    actionLabel: "Review division animation",
+    status: "exemplar"
+  },
+  {
     id: "solve-fractional-linear-scroll-lesson",
     kind: "scroll-lesson",
     title: "Solve a fractional equation",
