@@ -75,7 +75,8 @@
     {
       "id": "s02-cancellation-intent",
       "title": "Define-typed-cancellation-pedagogical-intent",
-      "status": "planned"
+      "summary": "Defined and verified a deeply immutable renderer-neutral cancellation intent vocabulary covering contact, approach, identity beat, retirement, and readability without exposing recipe ids.",
+      "status": "complete"
     },
     {
       "id": "s03-inference-api",
