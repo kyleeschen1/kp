@@ -109,7 +109,8 @@
     {
       "id": "s10",
       "title": "Build a coherent timeline-wide layout plan",
-      "status": "planned"
+      "summary": "Replaced handwritten algebra percentages with a measured KaTeX factored-distributed-expanded timeline; endpoints and midpoints now derive from strict layout snapshots.",
+      "status": "complete"
     },
     {
       "id": "s11",

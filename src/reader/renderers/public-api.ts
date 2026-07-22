@@ -97,3 +97,10 @@ export {
   type KpDistributionAreaMeasuredAnchor,
   type KpDistributionAreaStateId
 } from "./distribution-area-layout.ts";
+export {
+  createKpDistributionAreaMotionPlan,
+  type KpDistributionAreaMaterialTokenId,
+  type KpDistributionAreaMotionPlan,
+  type KpDistributionAreaTimelineFrame,
+  type KpDistributionAreaTokenPose
+} from "./distribution-area-motion-plan.ts";

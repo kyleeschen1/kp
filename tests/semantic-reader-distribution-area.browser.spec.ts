@@ -91,6 +91,25 @@ test("distribution reader keeps one visual owner and reversible native endpoints
   await expect(page).toHaveURL(/kpCheckpoint=factored/);
 });
 
+test("material x follows measured KaTeX anchors instead of percentages", async ({ page }) => {
+  await page.goto(`${route}?kpProgress=360&kpDirection=forward`, { waitUntil: "networkidle" });
+  const centers = await page.evaluate(() => {
+    const center = (selector: string) => {
+      const rect = document.querySelector<HTMLElement>(selector)!.getBoundingClientRect();
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    };
+    const factored = center('[data-kp-distribution-state$="state.factored"] [data-kp-distribution-anchor$="term.x"]');
+    const distributed = center('[data-kp-distribution-state$="state.distributed"] [data-kp-distribution-anchor$="left.term.x"]');
+    return { factored, distributed, material: center('[data-kp-material-token="x"]') };
+  });
+  expect(centers.material.x).toBeCloseTo((centers.factored.x + centers.distributed.x) / 2, 0);
+  expect(centers.material.y).toBeCloseTo((centers.factored.y + centers.distributed.y) / 2, 0);
+  await expect(page.locator("[data-kp-distribution-stage]")).toHaveAttribute(
+    "data-kp-distribution-layout-revision",
+    /[1-9]\d*/
+  );
+});
+
 test("distribution share URL round trips an exact inverse moment", async ({ page }) => {
   await page.goto(`${route}?kpProgress=0&kpDirection=forward`, { waitUntil: "networkidle" });
   await page.getByRole("button", { name: "Factor" }).click();

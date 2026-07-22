@@ -10,6 +10,14 @@ import {
 } from "../../animation/distribution-area-exemplar-attention.ts";
 import { createKpEquationFontReadiness } from "../../rendering/equation-font-readiness.ts";
 import { createKpReaderActiveLocationService } from "../runtime/public-api.ts";
+import {
+  createKpDistributionAreaMotionPlan,
+  measureKpDistributionAreaLayout,
+  type KpDistributionAreaLayoutSnapshot,
+  type KpDistributionAreaMaterialTokenId,
+  type KpDistributionAreaMotionPlan,
+  type KpDistributionAreaTokenPose
+} from "../renderers/public-api.ts";
 
 type Direction = "forward" | "inverse";
 
@@ -19,6 +27,8 @@ const progressOutput = required<HTMLOutputElement>("[data-kp-distribution-progre
 const statusOutput = required<HTMLOutputElement>("[data-kp-distribution-status]");
 const share = required<HTMLAnchorElement>("[data-kp-distribution-share]");
 const material = required<HTMLElement>("[data-kp-algebra-material]");
+const algebraRoot = required<HTMLElement>(".kp-distribution-algebra");
+const measurementRoot = required<HTMLElement>("[data-kp-distribution-measurement]");
 const factoredNative = required<HTMLElement>('[data-kp-native="factored"]');
 const expandedNative = required<HTMLElement>('[data-kp-native="expanded"]');
 const beats = [...document.querySelectorAll<HTMLElement>("[data-kp-beat]")];
@@ -36,6 +46,10 @@ let pointerOwnsProgress = false;
 let semanticUrlOwnsProgress = hasSemanticProgress();
 let scrollInteractionArmed = !semanticUrlOwnsProgress;
 let scrollFrame = 0;
+let layoutRevision = 0;
+let layoutReadCount = 0;
+let layout: KpDistributionAreaLayoutSnapshot | undefined;
+let motionPlan: KpDistributionAreaMotionPlan | undefined;
 let previousReviewFrameAtMs: number | undefined;
 let previousReviewScrollY = window.scrollY;
 
@@ -64,7 +78,7 @@ window.addEventListener("scroll", () => {
   pointerOwnsProgress = false;
   scheduleScroll();
 }, { passive: true });
-window.addEventListener("resize", render, { passive: true });
+window.addEventListener("resize", refreshLayoutAndRender, { passive: true });
 window.addEventListener("wheel", armScrollInteraction, { passive: true });
 window.addEventListener("touchstart", armScrollInteraction, { passive: true });
 window.addEventListener("keydown", (event) => {
@@ -91,11 +105,11 @@ for (const element of document.querySelectorAll<HTMLElement>("[data-kp-focus]"))
 
 const unsubscribeFontReadiness = fontReadiness.subscribe(() => {
   document.body.dataset["kpReaderFontReady"] = "true";
-  render();
+  refreshLayoutAndRender();
 });
 void fontReadiness.whenReady().then(() => {
   document.body.dataset["kpReaderFontReady"] = "true";
-  render();
+  refreshLayoutAndRender();
   if (!hasSemanticProgress()) scheduleScroll();
   if (import.meta.env.DEV) {
     void import("../../dev-review/reader-review-bootstrap.ts").then(({ mountKpReaderDevReview }) => {
@@ -109,7 +123,7 @@ window.addEventListener("pagehide", () => {
 }, { once: true });
 
 function render(): void {
-  if (fontReadiness.status === "waiting") return;
+  if (fontReadiness.status === "waiting" || motionPlan === undefined) return;
   progress = clamp01(progress);
   const visualProgress = direction === "forward" ? progress : 1 - progress;
   const forward = sampleKpDistributionAreaForwardMotion({ plan, progress: visualProgress });
@@ -124,7 +138,7 @@ function render(): void {
   factoredNative.hidden = visualProgress !== 0;
   expandedNative.hidden = visualProgress !== 1;
   material.hidden = visualProgress === 0 || visualProgress === 1;
-  if (!material.hidden) renderMaterial(forward, visualProgress);
+  if (!material.hidden) renderMaterial(visualProgress);
   setOpacity("combined-width", area.combinedWidthOpacity);
   setOpacity("x-width", area.componentWidthOpacity);
   setOpacity("two-width", area.componentWidthOpacity);
@@ -176,8 +190,8 @@ function dispatchDevReviewFrame(
     motionAuthority: pointerOwnsProgress ? "controls" : "scroll",
     fitStatus: "contained",
     fitScale: 1,
-    layoutRevision: 0,
-    layoutReadCount: 0,
+    layoutRevision,
+    layoutReadCount,
     fontRevision: fontReadiness.revision,
     fontReady: fontReadiness.status !== "waiting",
     ownerIds: [owner],
@@ -190,43 +204,35 @@ function dispatchDevReviewFrame(
   previousReviewScrollY = window.scrollY;
 }
 
-function renderMaterial(
-  frame: ReturnType<typeof sampleKpDistributionAreaForwardMotion>,
-  visualProgress: number
-): void {
-  const algebra = frame.algebra;
-  const reflow = algebra.addendReflowProgress;
-  token("source-three", 17, algebra.sourceFactor.opacity, algebra.sourceFactor.scale);
-  const copies = algebra.factorCopies;
-  const leftPath = copies[0]?.pathProgress ?? 0;
-  const rightPath = copies[1]?.pathProgress ?? 0;
-  const evaluationCollapse = interval(frame.evaluationProgress, 0, 0.65);
-  const pairOpacity = 1 - interval(frame.evaluationProgress, 0.52, 0.65);
-  token("left-three", lerp(17, 29, leftPath), copies[0]?.opacity ?? 0, copies[0]?.scale ?? 1, 50 - 9 * Math.sin(Math.PI * leftPath));
-  token("right-three", lerp(lerp(17, 66, rightPath), 75, evaluationCollapse), (copies[1]?.opacity ?? 0) * pairOpacity, copies[1]?.scale ?? 1, 50 - 20 * Math.sin(Math.PI * rightPath) * (1 - evaluationCollapse));
-  token("left-paren", lerp(27, 20, reflow), algebra.groupingOpacity, 1);
-  token("x", lerp(41, 35, reflow), 1, 1);
-  token("plus", lerp(55, 51, reflow), 1, 1);
-  token("times", 73, frame.area.partitionProgress * (1 - interval(frame.evaluationProgress, 0.35, 0.58)), 1);
-  token("two", lerp(lerp(69, 82, reflow), 75, evaluationCollapse), pairOpacity, 1);
-  token("right-paren", lerp(79, 91, reflow), algebra.groupingOpacity, 1);
-  const sixProgress = interval(frame.evaluationProgress, 0.65, 0.82);
-  token("six", 75, sixProgress, lerp(0.82, 1, sixProgress));
+function renderMaterial(visualProgress: number): void {
+  const frame = motionPlan!.sample(visualProgress);
+  for (const [id, pose] of Object.entries(frame.tokens) as Array<
+    [KpDistributionAreaMaterialTokenId, KpDistributionAreaTokenPose]
+  >) token(id, pose);
   material.dataset["kpVisualProgress"] = String(visualProgress);
+  material.dataset["kpTimelinePhase"] = frame.phase;
 }
 
 function token(
-  id: string,
-  leftPercent: number,
-  opacity: number,
-  scale: number,
-  topPercent = 50
+  id: KpDistributionAreaMaterialTokenId,
+  pose: KpDistributionAreaTokenPose
 ): void {
   const element = required<HTMLElement>(`[data-kp-material-token="${id}"]`);
-  element.style.transform = `translate(-50%, -50%) scale(${scale})`;
-  element.style.left = `${leftPercent}%`;
-  element.style.top = `${topPercent}%`;
-  element.style.opacity = String(clamp01(opacity));
+  element.style.transform = `translate(-50%, -50%) scale(${pose.scale})`;
+  element.style.left = `${pose.x}px`;
+  element.style.top = `${pose.y}px`;
+  element.style.opacity = String(clamp01(pose.opacity));
+}
+
+function refreshLayoutAndRender(): void {
+  if (fontReadiness.status === "waiting") return;
+  layoutRevision += 1;
+  layoutReadCount += 1;
+  layout = measureKpDistributionAreaLayout({ algebraRoot, measurementRoot, revision: layoutRevision });
+  motionPlan = createKpDistributionAreaMotionPlan(layout);
+  stage.dataset["kpDistributionLayoutRevision"] = String(layoutRevision);
+  stage.dataset["kpDistributionLayoutReadCount"] = String(layoutReadCount);
+  render();
 }
 
 function setOpacity(role: string, opacity: number): void {
