@@ -36,7 +36,6 @@ import { checkKpEquationNativeEndpointLaw } from "../../rendering/equation-nativ
 import {
   applyKpReaderEquationResponsiveFit,
   compileKpReaderEquationMaterialPlan,
-  createKpReaderEquationFrameScheduler,
   createKpReaderEquationMaterialLayer,
   measureKpReaderEquationLayoutSnapshot,
   planKpReaderEquationPerceptualAlignment,
@@ -57,6 +56,7 @@ import {
   createKpReaderActiveLocationService,
   createKpReaderContinuousScrollClock,
   bindKpReaderSemanticLinks,
+  defineKpReaderFrameScheduler,
   createKpReaderLocationSettlement,
   createKpReaderSemanticFocusService,
   createKpReaderSessionSnapshot,
@@ -296,12 +296,7 @@ const materialLayer = createKpReaderEquationMaterialLayer(
 );
 let lastMeasuredLayout: LayoutState | undefined;
 
-const scheduler = createKpReaderEquationFrameScheduler<
-  KpReaderClockSample,
-  LayoutState,
-  LayoutState,
-  { readonly sample: KpReaderClockSample; readonly layout: LayoutState }
->({
+const scheduler = defineKpReaderFrameScheduler<KpReaderClockSample>()({
   readLayout: ({ revision }) => measureLayout(revision),
   planLayout: (layout) => layout,
   planFrame: ({ input, layout }) => ({ sample: input, layout }),

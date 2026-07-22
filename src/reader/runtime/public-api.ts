@@ -72,6 +72,15 @@ export {
   type KpReaderLocationSettlement
 } from "./location-settlement.ts";
 export {
+  createKpReaderFrameScheduler,
+  defineKpReaderFrameScheduler,
+  type KpReaderFrameClock,
+  type KpReaderFrameScheduler,
+  type KpReaderFrameSchedulerOptions,
+  type KpReaderFrameSchedulerState,
+  type KpReaderLayoutInvalidationReason
+} from "./frame-scheduler.ts";
+export {
   createKpReaderControlModel,
   projectKpReaderMotion,
   type KpReaderAccessibleCheckpoint,

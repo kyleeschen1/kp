@@ -1,41 +1,41 @@
-export type KpReaderEquationLayoutInvalidationReason =
+export type KpReaderLayoutInvalidationReason =
   | "mount"
   | "resize"
   | "fonts"
   | "content";
 
-export interface KpReaderEquationFrameClock {
+export interface KpReaderFrameClock {
   request(callback: FrameRequestCallback): number;
   cancel(requestId: number): void;
 }
 
-export interface KpReaderEquationFrameSchedulerState {
+export interface KpReaderFrameSchedulerState {
   readonly disposed: boolean;
   readonly pending: boolean;
   readonly layoutRevision: number;
-  readonly pendingInvalidationReasons: readonly KpReaderEquationLayoutInvalidationReason[];
+  readonly pendingInvalidationReasons: readonly KpReaderLayoutInvalidationReason[];
   readonly readCount: number;
   readonly layoutPlanCount: number;
   readonly framePlanCount: number;
   readonly writeCount: number;
 }
 
-export interface KpReaderEquationFrameScheduler<TInput> {
+export interface KpReaderFrameScheduler<TInput> {
   render(input: TInput): void;
-  invalidate(reason: KpReaderEquationLayoutInvalidationReason): void;
-  inspect(): KpReaderEquationFrameSchedulerState;
+  invalidate(reason: KpReaderLayoutInvalidationReason): void;
+  inspect(): KpReaderFrameSchedulerState;
   dispose(): void;
 }
 
-export function createKpReaderEquationFrameScheduler<
+export interface KpReaderFrameSchedulerOptions<
   TInput,
   TLayout,
   TLayoutPlan,
   TFrame
->(input: {
+> {
   readonly readLayout: (request: {
     readonly revision: number;
-    readonly reasons: readonly KpReaderEquationLayoutInvalidationReason[];
+    readonly reasons: readonly KpReaderLayoutInvalidationReason[];
   }) => TLayout;
   readonly planLayout: (layout: TLayout) => TLayoutPlan;
   readonly planFrame: (request: {
@@ -44,10 +44,29 @@ export function createKpReaderEquationFrameScheduler<
     readonly layoutPlan: TLayoutPlan;
   }) => TFrame;
   readonly writeFrame: (frame: TFrame) => void;
-  readonly frameClock?: KpReaderEquationFrameClock | undefined;
-}): KpReaderEquationFrameScheduler<TInput> {
+  readonly frameClock?: KpReaderFrameClock | undefined;
+}
+
+/** Pins only the semantic input type while inferring every pipeline stage. */
+export function defineKpReaderFrameScheduler<TInput>() {
+  return <TLayout, TLayoutPlan, TFrame>(
+    input: KpReaderFrameSchedulerOptions<TInput, TLayout, TLayoutPlan, TFrame>
+  ): KpReaderFrameScheduler<TInput> => createKpReaderFrameScheduler(input);
+}
+
+export function createKpReaderFrameScheduler<
+  TInput,
+  TLayout,
+  TLayoutPlan,
+  TFrame
+>(input: KpReaderFrameSchedulerOptions<
+  TInput,
+  TLayout,
+  TLayoutPlan,
+  TFrame
+>): KpReaderFrameScheduler<TInput> {
   const frameClock = input.frameClock ?? browserFrameClock();
-  const invalidationReasons = new Set<KpReaderEquationLayoutInvalidationReason>([
+  const invalidationReasons = new Set<KpReaderLayoutInvalidationReason>([
     "mount"
   ]);
   let disposed = false;
@@ -109,7 +128,7 @@ export function createKpReaderEquationFrameScheduler<
 
   return {
     render(renderInput) {
-      if (disposed) throw new Error("Equation frame scheduler is disposed.");
+      if (disposed) throw new Error("Reader frame scheduler is disposed.");
       latestInput = renderInput;
       inputRevision += 1;
       schedule();
@@ -146,7 +165,7 @@ export function createKpReaderEquationFrameScheduler<
   };
 }
 
-function browserFrameClock(): KpReaderEquationFrameClock {
+function browserFrameClock(): KpReaderFrameClock {
   return {
     request: (callback) => requestAnimationFrame(callback),
     cancel: (requestId) => cancelAnimationFrame(requestId)

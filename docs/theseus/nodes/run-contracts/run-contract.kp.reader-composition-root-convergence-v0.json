@@ -251,7 +251,14 @@
     {
       "id": "s17",
       "title": "Generalize the typed reader frame scheduler",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s17-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s17-v0",
+      "title": "Generalize the typed reader frame scheduler",
+      "summary": "The typed reader frame scheduler is renderer-neutral, inferred, and verified for equation compatibility.",
+      "status": "complete"
     },
     {
       "id": "s18",

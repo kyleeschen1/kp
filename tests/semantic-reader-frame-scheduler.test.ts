@@ -2,14 +2,14 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  createKpReaderEquationFrameScheduler,
-  type KpReaderEquationFrameClock
-} from "../src/reader/renderers/public-api.ts";
+  createKpReaderFrameScheduler,
+  type KpReaderFrameClock
+} from "../src/reader/runtime/public-api.ts";
 
 function createTestClock() {
   let nextId = 1;
   const callbacks = new Map<number, FrameRequestCallback>();
-  const clock: KpReaderEquationFrameClock = {
+  const clock: KpReaderFrameClock = {
     request(callback) {
       const id = nextId++;
       callbacks.set(id, callback);
@@ -36,7 +36,7 @@ function createTestClock() {
 test("scheduler coalesces input and enforces read plan write ordering", () => {
   const frameClock = createTestClock();
   const events: string[] = [];
-  const scheduler = createKpReaderEquationFrameScheduler({
+  const scheduler = createKpReaderFrameScheduler({
     frameClock: frameClock.clock,
     readLayout: ({ revision, reasons }) => {
       events.push(`read:${revision}:${reasons.join("+")}`);
@@ -78,7 +78,7 @@ test("scheduler coalesces input and enforces read plan write ordering", () => {
 test("ordinary frames are write-only until invalidation batches a new read", () => {
   const frameClock = createTestClock();
   const reads: string[] = [];
-  const scheduler = createKpReaderEquationFrameScheduler({
+  const scheduler = createKpReaderFrameScheduler({
     frameClock: frameClock.clock,
     readLayout: ({ revision, reasons }) => {
       reads.push(`${revision}:${reasons.join("+")}`);
@@ -107,9 +107,9 @@ test("ordinary frames are write-only until invalidation batches a new read", () 
 
 test("invalidation during a write schedules a separate refresh and dispose cancels work", () => {
   const frameClock = createTestClock();
-  let scheduler: ReturnType<typeof createKpReaderEquationFrameScheduler<number, number, number, number>>;
+  let scheduler: ReturnType<typeof createKpReaderFrameScheduler<number, number, number, number>>;
   let writes = 0;
-  scheduler = createKpReaderEquationFrameScheduler({
+  scheduler = createKpReaderFrameScheduler({
     frameClock: frameClock.clock,
     readLayout: ({ revision }) => revision,
     planLayout: (layout) => layout,

@@ -69,13 +69,6 @@ export {
   type KpReaderEquationIdentityWitnessProjection
 } from "./equation-identity-witness.ts";
 export {
-  createKpReaderEquationFrameScheduler,
-  type KpReaderEquationFrameClock,
-  type KpReaderEquationFrameScheduler,
-  type KpReaderEquationFrameSchedulerState,
-  type KpReaderEquationLayoutInvalidationReason
-} from "./equation-frame-scheduler.ts";
-export {
   sampleKpReaderEquationSymbolMotion,
   type KpReaderEquationSymbolMotionFrame,
   type KpReaderEquationSymbolOwnerPose
