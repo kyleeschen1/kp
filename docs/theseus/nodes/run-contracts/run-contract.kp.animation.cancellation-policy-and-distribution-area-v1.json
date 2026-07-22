@@ -87,7 +87,8 @@
     {
       "id": "s04-recipe-capabilities",
       "title": "Declare-recipe-topology-and-geometry-capabilities",
-      "status": "planned"
+      "summary": "Declared immutable capabilities for all cancellation recipes, including visible contact, approach, identity beat, baseline topology, contact dimensions, retirement, readability, and source-count limits.",
+      "status": "complete"
     },
     {
       "id": "s05-policy-resolver",
