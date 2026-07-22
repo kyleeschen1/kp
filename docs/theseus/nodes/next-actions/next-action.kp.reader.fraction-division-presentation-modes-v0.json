@@ -2,7 +2,7 @@
   "id": "next-action.kp.reader.fraction-division-presentation-modes-v0",
   "kind": "next-action",
   "title": "Build fraction division presentation modes",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp.reader",
   "sourceRefs": [
     {
@@ -439,6 +439,30 @@
       "status": "passed",
       "scope": "s26 boundary and preservation",
       "checkedAt": "2026-07-22T01:40:55.914Z"
+    },
+    {
+      "command": "npm test and npm run build",
+      "status": "passed",
+      "scope": "s27 broad release: 1810 tests, typecheck, production build, architecture, and inference contracts",
+      "checkedAt": "2026-07-22T01:48:44.836Z"
+    },
+    {
+      "command": "focused three-exemplar and presentation-profile Playwright cohort",
+      "status": "passed",
+      "scope": "s27 routes, URLs, static search, responsive containment, seek-rewind behavior, and visual snapshots: 15 passed",
+      "checkedAt": "2026-07-22T01:48:58.681Z"
+    },
+    {
+      "command": "fractional and linear-equation visual gates plus deterministic contact sheet",
+      "status": "passed",
+      "scope": "s27 visual release: 31 fractional samples with zero failures, 39 baseline states, and 6 contact-sheet captures",
+      "checkedAt": "2026-07-22T01:48:59.809Z"
+    },
+    {
+      "command": "npm run perf:animation and npm run check:dev-review-production",
+      "status": "passed",
+      "scope": "s27 no animation regressions and production review closure; existing transfer and constrained-frame product targets remain visible",
+      "checkedAt": "2026-07-22T01:49:00.830Z"
     }
   ]
 }

@@ -2,7 +2,8 @@
   "id": "run-contract.kp.reader.fraction-division-presentation-modes-v0",
   "kind": "run-contract",
   "title": "Fraction division presentation modes",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -209,7 +210,8 @@
     {
       "id": "s27-release-checkpoint",
       "title": "Run broad gates and stop for human review",
-      "status": "planned"
+      "summary": "Release gates passed for the three approved exemplars. Stopped at the exemplar-first human visual checkpoint without promoting presentation behavior to additional operation families.",
+      "status": "complete"
     }
   ]
 }
