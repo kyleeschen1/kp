@@ -95,6 +95,20 @@
       "scope": "stable token lineage",
       "checkedAt": "2026-07-22T16:38:31.010Z",
       "notes": "Seven compiler and semantic trace checks pass; three states expose sixteen measured anchors and algebra/geometry lineage while preserving reversible correspondence laws."
+    },
+    {
+      "command": "node --test tests/distribution-area-layout.test.ts tests/semantic-reader-distribution-area-compiler.test.ts",
+      "status": "passed",
+      "scope": "measured KaTeX layout snapshot",
+      "checkedAt": "2026-07-22T16:41:18.948Z",
+      "notes": "Five topology and compiler checks pass; incomplete or duplicate anchor topology fails rather than falling back to guessed coordinates."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "layout snapshot types",
+      "checkedAt": "2026-07-22T16:41:20.095Z",
+      "notes": "Application, Node, test, and domain TypeScript projects pass."
     }
   ],
   "expectedLearning": [

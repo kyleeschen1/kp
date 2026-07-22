@@ -103,7 +103,8 @@
     {
       "id": "s09",
       "title": "Measure source and destination KaTeX geometry",
-      "status": "planned"
+      "summary": "A validated distribution layout snapshot now measures all sixteen source/intermediate/target anchors relative to the algebra stage, exposes stable centers and dimensions, and refuses missing or duplicate topology. Five focused tests and full typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s10",

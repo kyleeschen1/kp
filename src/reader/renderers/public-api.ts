@@ -88,3 +88,12 @@ export {
   type KpReaderEquationConformanceIssue,
   type KpReaderEquationResponsiveFitPlan
 } from "./equation-responsive-fit.ts";
+export {
+  createKpDistributionAreaLayoutSnapshot,
+  measureKpDistributionAreaLayout,
+  type KpDistributionAreaAnchorMeasurement,
+  type KpDistributionAreaLayoutRect,
+  type KpDistributionAreaLayoutSnapshot,
+  type KpDistributionAreaMeasuredAnchor,
+  type KpDistributionAreaStateId
+} from "./distribution-area-layout.ts";
