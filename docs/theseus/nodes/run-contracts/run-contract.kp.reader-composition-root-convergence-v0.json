@@ -2,9 +2,9 @@
   "id": "run-contract.kp.reader-composition-root-convergence-v0",
   "kind": "run-contract",
   "title": "Reader composition-root convergence v0",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Twenty-six rollback-sized slices convert the accepted exemplars into a reusable reader composition kernel, then stop at a parity contact-sheet checkpoint before closeout.",
+  "summary": "All 26 approved slices are complete and the human parity checkpoint is accepted.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -359,7 +359,14 @@
     {
       "id": "s26",
       "title": "Record approval evidence and close the tranche",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s26-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s26-v0",
+      "title": "Record approval evidence and close the tranche",
+      "summary": "Recorded explicit human approval and closed the parity tranche.",
+      "status": "complete"
     }
   ]
 }

@@ -2,9 +2,9 @@
   "id": "next-action.kp.reader.composition-root-convergence-v0",
   "kind": "next-action",
   "title": "Converge reader composition roots",
-  "status": "ready",
+  "status": "resolved",
   "domain": "kp",
-  "summary": "Make accepted reader routes declare content, URL state, lifecycle, rendering, conformance, and review metadata through shared inferred contracts instead of duplicating page and application policy.",
+  "summary": "Reader composition-root convergence completed with automated gates and explicit human visual approval.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -33,6 +33,10 @@
     "npm run build",
     "npm run theseus -- workspace validate"
   ],
+  "progress": {
+    "state": "complete",
+    "summary": "All 26 approved slices are complete. Reader composition roots now share inferred route contracts, build routing, URL state, lifecycle, scheduling, renderer adapters, conformance, visual review metadata, production closure, and per-route budgets while preserving accepted equation and distribution parity."
+  },
   "expectedLearning": [
     "Whether one inferred route and lifecycle composition contract can serve equation and equation-area readers without erasing renderer-specific motion.",
     "Whether route, conformance, contact-sheet, and build metadata can share one source while remaining tree-shakeable."
