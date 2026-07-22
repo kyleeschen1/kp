@@ -82,6 +82,9 @@ export {
   type KpReaderLessonSourcePath,
   type KpReaderRouteConformanceProfile,
   type KpReaderRouteDescriptor,
+  type KpReaderRouteVisualReviewProfile,
+  type KpReaderVisualReviewCheckpoint,
+  type KpReaderVisualReviewViewport,
   type KpReaderRoutePath
 } from "./reader-route-descriptor.ts";
 export {

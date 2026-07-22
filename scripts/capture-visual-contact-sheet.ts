@@ -4,6 +4,14 @@ import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 
 import {
+  kpReaderRouteManifest
+} from "../src/reader/compiler/reader-route-manifest.ts";
+import type {
+  KpReaderRouteDescriptor,
+  KpReaderVisualReviewCheckpoint
+} from "../src/reader/compiler/reader-route-descriptor.ts";
+
+import {
   createKpVisualReviewHarness,
   type KpVisualBrowserProfile
 } from "./visual-review-harness.ts";
@@ -12,7 +20,12 @@ const desktop = { viewport: { width: 1280, height: 900 } } as const;
 const tablet = { viewport: { width: 900, height: 900 } } as const;
 const phone = { viewport: { width: 390, height: 844 } } as const;
 
-export type KpVisualContactSheetExemplar = "solve-x" | "distribution-area";
+export type KpVisualContactSheetExemplar =
+  typeof kpReaderRouteManifest[number]["review"]["id"];
+
+export const kpVisualContactSheetExemplars = Object.freeze(
+  kpReaderRouteManifest.map(({ review }) => review.id)
+);
 
 export interface KpVisualContactSheetCheckpoint {
   readonly id: string;
@@ -23,35 +36,9 @@ export interface KpVisualContactSheetCheckpoint {
   readonly visualProgress?: number;
 }
 
-export const kpSolveXContactSheetCheckpoints: readonly KpVisualContactSheetCheckpoint[] = [
-  { id: "read-equality", label: "Read equality", progress: 0, profile: desktop },
-  { id: "subtract-settled", label: "Subtract settled", progress: 333, profile: desktop },
-  { id: "cancel-motion", label: "Cancellation in motion", progress: 500, profile: desktop },
-  { id: "cancel-settled", label: "Cancellation settled", progress: 667, profile: desktop },
-  { id: "solution-settled", label: "Solution settled", progress: 1_000, profile: desktop },
-  { id: "cancel-motion-phone", label: "Cancellation · phone", progress: 500, profile: phone }
-];
-
-const distributionMoments = [0, 360, 500, 650, 820, 1_000] as const;
-const distributionProfiles = [
-  { id: "desktop", label: "Desktop", profile: desktop },
-  { id: "tablet", label: "Tablet", profile: tablet },
-  { id: "phone", label: "Phone", profile: phone }
-] as const;
-
-export const kpDistributionAreaContactSheetCheckpoints: readonly KpVisualContactSheetCheckpoint[] =
-  distributionProfiles.flatMap(({ id: profileId, label: profileLabel, profile }) =>
-    (["forward", "inverse"] as const).flatMap((direction) =>
-      distributionMoments.map((visualProgress) => ({
-        id: `${profileId}-${direction}-${String(visualProgress).padStart(4, "0")}`,
-        label: `${profileLabel} · ${direction === "forward" ? "Distribute" : "Factor"}`,
-        progress: direction === "forward" ? visualProgress : 1_000 - visualProgress,
-        visualProgress,
-        direction,
-        profile
-      }))
-    )
-  );
+export const kpSolveXContactSheetCheckpoints = checkpointsFor("solve-x");
+export const kpDistributionAreaContactSheetCheckpoints =
+  checkpointsFor("distribution-area");
 
 export interface KpVisualContactSheetItem {
   readonly id: string;
@@ -70,6 +57,8 @@ interface KpVisualContactSheetDescriptor {
   readonly checkpoints: readonly KpVisualContactSheetCheckpoint[];
   readonly waitSelector: string;
   readonly captureSelector?: string;
+  readonly columns: number;
+  readonly imageFit: "contain" | "cover";
   readonly url: (baseUrl: string, checkpoint: KpVisualContactSheetCheckpoint) => URL;
 }
 
@@ -115,8 +104,8 @@ export async function captureKpVisualContactSheet(input: {
     const sheetPage = await harness.page({ viewport: { width: 1440, height: 1000 } });
     await sheetPage.setContent(buildKpVisualContactSheetHtml(items, {
       title: descriptor.title,
-      columns: descriptor.id === "reader.distribution-area" ? 3 : 2,
-      imageFit: descriptor.id === "reader.distribution-area" ? "contain" : "cover"
+      columns: descriptor.columns,
+      imageFit: descriptor.imageFit
     }), { waitUntil: "load" });
     const sheet = path.join(outputRoot, "contact-sheet.png");
     await sheetPage.screenshot({ path: sheet, fullPage: true, animations: "disabled" });
@@ -169,36 +158,85 @@ export function buildKpVisualContactSheetHtml(
 }
 
 function descriptorFor(exemplar: KpVisualContactSheetExemplar): KpVisualContactSheetDescriptor {
-  if (exemplar === "distribution-area") {
-    return {
-      id: "reader.distribution-area",
-      title: "Kinetic Press · distribution and area",
-      checkpoints: kpDistributionAreaContactSheetCheckpoints,
-      waitSelector: 'body[data-kp-reader-hydrated="true"][data-kp-reader-font-ready="true"]',
-      captureSelector: "[data-kp-distribution-stage]",
-      url: (baseUrl, checkpoint) => {
-        const url = new URL("/reader/distribution-area/", baseUrl);
-        url.searchParams.set("kpLesson", "lesson.algebra.distribution-area");
-        url.searchParams.set("kpVersion", "1");
-        url.searchParams.set("kpProgress", String(checkpoint.progress));
-        url.searchParams.set("kpDirection", checkpoint.direction ?? "forward");
-        return url;
-      }
-    };
-  }
+  const route = routeFor(exemplar);
+  const { conformance, review } = route;
   return {
-    id: "reader.solve-x.x-plus-3",
-    title: "Kinetic Press · solve x",
-    checkpoints: kpSolveXContactSheetCheckpoints,
-    waitSelector: 'body[data-kp-reader-hydrated="true"]',
-    url: (baseUrl, checkpoint) => {
-      const url = new URL("/reader/solve-x/", baseUrl);
-      url.searchParams.set("kpLesson", "lesson.solve-x.x-plus-3");
-      url.searchParams.set("kpVersion", "1");
-      url.searchParams.set("kpProgress", String(checkpoint.progress));
-      return url;
-    }
+    id: review.id,
+    title: review.title,
+    checkpoints: checkpointsFor(exemplar),
+    waitSelector: conformance.fontReadyEvidence === "body-attribute"
+      ? 'body[data-kp-reader-hydrated="true"][data-kp-reader-font-ready="true"]'
+      : 'body[data-kp-reader-hydrated="true"]',
+    ...(review.capture === "stage"
+      ? { captureSelector: conformance.stageSelector }
+      : {}),
+    columns: review.columns,
+    imageFit: review.imageFit,
+    url: (baseUrl, checkpoint) => visualReviewUrl(route, baseUrl, checkpoint)
   };
+}
+
+export function createKpVisualReviewUrl(
+  exemplar: KpVisualContactSheetExemplar,
+  baseUrl: string,
+  checkpoint: KpVisualContactSheetCheckpoint
+): URL {
+  return visualReviewUrl(routeFor(exemplar), baseUrl, checkpoint);
+}
+
+function visualReviewUrl(
+  route: KpReaderRouteDescriptor,
+  baseUrl: string,
+  checkpoint: KpVisualContactSheetCheckpoint
+): URL {
+  const source = route.review.checkpoints.find(({ id }) => id === checkpoint.id);
+  if (source === undefined) {
+    throw new Error(`Unknown ${route.review.id} visual checkpoint ${checkpoint.id}.`);
+  }
+  const url = new URL(route.route, baseUrl);
+  for (const [name, value] of Object.entries(route.conformance.query)) {
+    url.searchParams.set(name, value);
+  }
+  for (const [name, value] of Object.entries(source.query ?? {})) {
+    url.searchParams.set(name, value);
+  }
+  url.searchParams.set("kpProgress", String(checkpoint.progress));
+  return url;
+}
+
+function checkpointsFor(
+  exemplar: KpVisualContactSheetExemplar
+): readonly KpVisualContactSheetCheckpoint[] {
+  return routeFor(exemplar).review.checkpoints.map(toVisualCheckpoint);
+}
+
+function toVisualCheckpoint(
+  checkpoint: KpReaderVisualReviewCheckpoint
+): KpVisualContactSheetCheckpoint {
+  return {
+    id: checkpoint.id,
+    label: checkpoint.label,
+    progress: checkpoint.progressPermille,
+    profile: profileFor(checkpoint.viewport),
+    ...(checkpoint.direction === undefined ? {} : { direction: checkpoint.direction }),
+    ...(checkpoint.visualProgressPermille === undefined
+      ? {}
+      : { visualProgress: checkpoint.visualProgressPermille })
+  };
+}
+
+function profileFor(
+  viewport: KpReaderVisualReviewCheckpoint["viewport"]
+): KpVisualBrowserProfile {
+  if (viewport === "desktop") return desktop;
+  if (viewport === "tablet") return tablet;
+  return phone;
+}
+
+function routeFor(exemplar: KpVisualContactSheetExemplar): KpReaderRouteDescriptor {
+  const route = kpReaderRouteManifest.find(({ review }) => review.id === exemplar);
+  if (route === undefined) throw new Error(`Unknown visual contact-sheet exemplar: ${exemplar}`);
+  return route;
 }
 
 async function settle(page: import("playwright").Page): Promise<void> {
@@ -239,6 +277,8 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
 }
 
 function parseExemplar(value: string | undefined): KpVisualContactSheetExemplar {
-  if (value === "solve-x" || value === "distribution-area") return value;
+  if (kpVisualContactSheetExemplars.includes(value as KpVisualContactSheetExemplar)) {
+    return value as KpVisualContactSheetExemplar;
+  }
   throw new Error(`Unknown visual contact-sheet exemplar: ${value ?? ""}`);
 }

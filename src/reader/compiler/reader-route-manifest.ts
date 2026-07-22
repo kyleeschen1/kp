@@ -38,6 +38,34 @@ function equationConformance<const TInput extends {
   } as const;
 }
 
+function singleEquationReview<const TInput extends {
+  readonly id: string;
+  readonly title: string;
+  readonly label: string;
+  readonly progressPermille: number;
+}>(input: TInput) {
+  return {
+    id: input.id,
+    title: input.title,
+    capture: "viewport",
+    columns: 2,
+    imageFit: "cover",
+    checkpoints: [{
+      id: "canonical",
+      label: input.label,
+      progressPermille: input.progressPermille,
+      viewport: "desktop"
+    }]
+  } as const;
+}
+
+const distributionVisualProgress = [0, 360, 500, 650, 820, 1_000] as const;
+const distributionReviewViewports = [
+  { id: "desktop", label: "Desktop" },
+  { id: "tablet", label: "Tablet" },
+  { id: "phone", label: "Phone" }
+] as const;
+
 /**
  * Build-time source of truth for reader paths, Markdown inputs, and compilers.
  * Browser entries intentionally do not import this manifest or its compiler graph.
@@ -52,7 +80,52 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       progressPermille: 517,
       beatId: "beat.cancel",
       searchableText: "x+3=7"
-    })
+    }),
+    review: {
+      id: "solve-x",
+      title: "Kinetic Press · solve x",
+      capture: "viewport",
+      columns: 2,
+      imageFit: "cover",
+      checkpoints: [
+        {
+          id: "read-equality",
+          label: "Read equality",
+          progressPermille: 0,
+          viewport: "desktop"
+        },
+        {
+          id: "subtract-settled",
+          label: "Subtract settled",
+          progressPermille: 333,
+          viewport: "desktop"
+        },
+        {
+          id: "cancel-motion",
+          label: "Cancellation in motion",
+          progressPermille: 500,
+          viewport: "desktop"
+        },
+        {
+          id: "cancel-settled",
+          label: "Cancellation settled",
+          progressPermille: 667,
+          viewport: "desktop"
+        },
+        {
+          id: "solution-settled",
+          label: "Solution settled",
+          progressPermille: 1_000,
+          viewport: "desktop"
+        },
+        {
+          id: "cancel-motion-phone",
+          label: "Cancellation · phone",
+          progressPermille: 500,
+          viewport: "phone"
+        }
+      ]
+    }
   }),
   defineKpReaderRoute({
     route: "/reader/solve-x/teacher-zero/",
@@ -63,6 +136,12 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       progressPermille: 500,
       beatId: "beat.make-zero",
       searchableText: "plus three and minus three make zero"
+    }),
+    review: singleEquationReview({
+      id: "teacher-zero",
+      title: "Kinetic Press · explicit zero",
+      label: "Make the zero visible",
+      progressPermille: 500
     })
   }),
   defineKpReaderRoute({
@@ -74,6 +153,12 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       progressPermille: 500,
       beatId: "beat.simplify-difference",
       searchableText: "The fraction is not a detour"
+    }),
+    review: singleEquationReview({
+      id: "fractional-linear",
+      title: "Kinetic Press · fractional linear equation",
+      label: "Simplify the difference",
+      progressPermille: 500
     })
   }),
   defineKpReaderRoute({
@@ -85,6 +170,12 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       progressPermille: 667,
       beatId: "beat.cancel",
       searchableText: "Three copies of x equal twelve"
+    }),
+    review: singleEquationReview({
+      id: "divide-both-sides",
+      title: "Kinetic Press · divide both sides",
+      label: "Cancel the coefficient",
+      progressPermille: 667
     })
   }),
   defineKpReaderRoute({
@@ -96,6 +187,12 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       progressPermille: 500,
       beatId: "beat.split",
       searchableText: "One denominator can govern every term"
+    }),
+    review: singleEquationReview({
+      id: "split-merge-fractions",
+      title: "Kinetic Press · split and merge fractions",
+      label: "Give each term the denominator",
+      progressPermille: 500
     })
   }),
   defineKpReaderRoute({
@@ -107,6 +204,12 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
       progressPermille: 667,
       beatId: "beat.expose-product",
       searchableText: "The same algebra can be shown at different levels of fluency"
+    }),
+    review: singleEquationReview({
+      id: "fractional-transfer",
+      title: "Kinetic Press · fractional transfer",
+      label: "Expose the product",
+      progressPermille: 667
     })
   }),
   defineKpReaderRoute({
@@ -129,6 +232,28 @@ export const kpReaderRouteManifest = defineKpReaderRouteManifest([
         selector: "[data-kp-distribution-scrubber]"
       },
       searchableText: "3(x+2)"
+    },
+    review: {
+      id: "distribution-area",
+      title: "Kinetic Press · distribution and area",
+      capture: "stage",
+      columns: 3,
+      imageFit: "contain",
+      checkpoints: distributionReviewViewports.flatMap(({ id, label }) =>
+        (["forward", "inverse"] as const).flatMap((direction) =>
+          distributionVisualProgress.map((visualProgressPermille) => ({
+            id: `${id}-${direction}-${String(visualProgressPermille).padStart(4, "0")}`,
+            label: `${label} · ${direction === "forward" ? "Distribute" : "Factor"}`,
+            progressPermille: direction === "forward"
+              ? visualProgressPermille
+              : 1_000 - visualProgressPermille,
+            visualProgressPermille,
+            direction,
+            viewport: id,
+            query: { kpDirection: direction }
+          }))
+        )
+      )
     }
   })
 ]);

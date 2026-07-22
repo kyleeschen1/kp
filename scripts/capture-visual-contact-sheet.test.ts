@@ -3,9 +3,23 @@ import test from "node:test";
 
 import {
   buildKpVisualContactSheetHtml,
+  createKpVisualReviewUrl,
   kpDistributionAreaContactSheetCheckpoints,
-  kpSolveXContactSheetCheckpoints
+  kpSolveXContactSheetCheckpoints,
+  kpVisualContactSheetExemplars
 } from "./capture-visual-contact-sheet.ts";
+
+test("route descriptors expose every reader to visual review", () => {
+  assert.deepEqual(kpVisualContactSheetExemplars, [
+    "solve-x",
+    "teacher-zero",
+    "fractional-linear",
+    "divide-both-sides",
+    "split-merge-fractions",
+    "fractional-transfer",
+    "distribution-area"
+  ]);
+});
 
 test("canonical contact-sheet checkpoints have fixed unique ordering", () => {
   assert.deepEqual(
@@ -34,6 +48,30 @@ test("distribution contact sheet pairs the same visual moments forward and backw
       assert.equal(pair[0]!.progress + pair[1]!.progress, 1_000);
     }
   }
+});
+
+test("contact-sheet URLs derive route and query authority from descriptors", () => {
+  const solve = createKpVisualReviewUrl(
+    "solve-x",
+    "https://kinetic.press",
+    kpSolveXContactSheetCheckpoints[2]!
+  );
+  assert.equal(solve.pathname, "/reader/solve-x/");
+  assert.equal(solve.searchParams.get("kpLesson"), "lesson.solve-x.x-plus-3");
+  assert.equal(solve.searchParams.get("kpVersion"), "1");
+  assert.equal(solve.searchParams.get("kpProgress"), "500");
+
+  const inverse = kpDistributionAreaContactSheetCheckpoints.find(
+    ({ direction, visualProgress }) => direction === "inverse" && visualProgress === 360
+  )!;
+  const distribution = createKpVisualReviewUrl(
+    "distribution-area",
+    "https://kinetic.press",
+    inverse
+  );
+  assert.equal(distribution.pathname, "/reader/distribution-area/");
+  assert.equal(distribution.searchParams.get("kpDirection"), "inverse");
+  assert.equal(distribution.searchParams.get("kpProgress"), "640");
 });
 
 test("contact-sheet HTML is deterministic and escapes review labels", () => {

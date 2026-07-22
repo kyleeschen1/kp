@@ -35,13 +35,27 @@ const conformance = {
   },
   searchableText: "test lesson"
 } as const;
+const review = {
+  id: "test",
+  title: "Test review",
+  capture: "viewport",
+  columns: 2,
+  imageFit: "cover",
+  checkpoints: [{
+    id: "canonical",
+    label: "Canonical",
+    progressPermille: 500,
+    viewport: "desktop"
+  }]
+} as const;
 
 test("reader route manifests reject duplicate public and build identities", () => {
   const descriptor = defineKpReaderRoute({
     route: "/reader/test/",
     sourcePath: "content/lessons/test.md",
     compile,
-    conformance
+    conformance,
+    review
   });
   assert.throws(
     () => defineKpReaderRouteManifest([descriptor, descriptor]),
@@ -54,7 +68,8 @@ test("reader route descriptors preserve inferred declarations and derive build n
     route: "/reader/solve-x/teacher-zero/",
     sourcePath: "content/lessons/solve-x-teacher-zero.md",
     compile,
-    conformance
+    conformance,
+    review
   });
 
   assert.equal(descriptor.compile("lesson").html, "lesson");
@@ -67,13 +82,15 @@ test("reader route descriptors reject paths outside shared reader conventions", 
     route: "/reader/missing-trailing-slash" as "/reader/missing-trailing-slash/",
     sourcePath: "content/lessons/test.md",
     compile,
-    conformance
+    conformance,
+    review
   }), /end with/);
   assert.throws(() => defineKpReaderRoute({
     route: "/reader/test/",
     sourcePath: "content/test.txt" as "content/lessons/test.md",
     compile,
-    conformance
+    conformance,
+    review
   }), /lesson Markdown/);
 });
 
@@ -82,12 +99,34 @@ test("reader route descriptors reject ambiguous conformance moments", () => {
     route: "/reader/test/",
     sourcePath: "content/lessons/test.md",
     compile,
-    conformance: { ...conformance, progressPermille: 1_001 }
+    conformance: { ...conformance, progressPermille: 1_001 },
+    review
   }), /bounded conformance progress/);
   assert.throws(() => defineKpReaderRoute({
     route: "/reader/test/",
     sourcePath: "content/lessons/test.md",
     compile,
-    conformance: { ...conformance, query: { kpProgress: "500" } }
+    conformance: { ...conformance, query: { kpProgress: "500" } },
+    review
   }), /must not fix kpProgress/);
+});
+
+test("reader route descriptors require deterministic visual review moments", () => {
+  assert.throws(() => defineKpReaderRoute({
+    route: "/reader/test/",
+    sourcePath: "content/lessons/test.md",
+    compile,
+    conformance,
+    review: { ...review, checkpoints: [] }
+  }), /requires a visual review checkpoint/);
+  assert.throws(() => defineKpReaderRoute({
+    route: "/reader/test/",
+    sourcePath: "content/lessons/test.md",
+    compile,
+    conformance,
+    review: {
+      ...review,
+      checkpoints: [review.checkpoints[0], review.checkpoints[0]]
+    }
+  }), /repeats visual review checkpoint canonical/);
 });

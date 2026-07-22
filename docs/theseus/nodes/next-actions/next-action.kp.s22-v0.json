@@ -1,0 +1,120 @@
+{
+  "id": "next-action.kp.s22-v0",
+  "kind": "next-action",
+  "title": "Derive visual review captures from route descriptors",
+  "status": "resolved",
+  "domain": "kp",
+  "summary": "Manifest-derived visual review capture is implemented and verified.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reader-composition-root-convergence-v0.json",
+      "summary": "Run contract whose stored slice s22 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.composition-root-convergence-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
+      "summary": "Approved generated-quality and verification-amortization phase."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.reader-composition-convergence-v0.json",
+      "summary": "User-approved priority checkpoint placing composition convergence first."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.reader-composition-root-convergence-v0",
+      "next-action.kp.reader.composition-root-convergence-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.reader.composition-root-convergence-v0"
+  ],
+  "verification": [
+    "node --test focused reader compiler, runtime, route, and descriptor tests",
+    "npm run check:architecture",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:linear-equation",
+    "npm run visual:distribution-area",
+    "npm run check:dev-review-production",
+    "npm run build",
+    "npm run theseus -- workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test scripts/capture-visual-contact-sheet.test.ts tests/semantic-reader-route-descriptor.test.ts tests/semantic-reader-route-manifest.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-22T21:23:49.013Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-22T21:23:49.927Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "standard",
+      "checkedAt": "2026-07-22T21:23:50.731Z"
+    },
+    {
+      "command": "npm run visual:contact-sheet for solve-x, distribution-area, and fractional-linear",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-22T21:23:51.547Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "broad",
+      "checkedAt": "2026-07-22T21:23:52.355Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "All seven reader routes now declare visual-review checkpoints; contact-sheet matrices and URLs derive from the typed route manifest while preserving the accepted equation and distribution captures."
+  },
+  "expectedLearning": [
+    "Whether Derive visual review captures from route descriptors can be completed inside Reader composition-root convergence v0."
+  ],
+  "allowedWork": [
+    "Reader compiler page shells, build-time route manifests, inferred URL codecs, browser lifecycle services, piecewise scroll clocks, frame scheduling, runtime lesson descriptors, production renderer adapters, derived conformance and review descriptors, impact selection, closure, and bundle budgets.",
+    "Compatibility changes required for both accepted readers to consume the shared contracts, provided exact visual, semantic, URL, static-searchability, and responsive parity remains proven."
+  ],
+  "disallowedWork": [
+    "Do not alter accepted equation or distribution semantics, choreography, visual policy, typography, colors, layout, attention behavior, searchable prose, or route meaning.",
+    "Do not add branch scheduling, structured algebra, advanced fraction composition, LLM mutation, new subjects, WebGL generalization, or editor redesign.",
+    "Do not introduce an abstraction used only by tests or only one production reader; integrate it in both readers or defer it.",
+    "Do not edit unrelated user-authored roadmap, thread, decision, or design documents."
+  ],
+  "criteria": [
+    {
+      "id": "manifest-derived-review",
+      "weight": "high"
+    },
+    {
+      "id": "all-route-review-coverage",
+      "weight": "high"
+    },
+    {
+      "id": "preserved-contact-matrices",
+      "weight": "high"
+    },
+    {
+      "id": "deterministic-capture-urls",
+      "weight": "high"
+    },
+    {
+      "id": "visual-harness-parity",
+      "weight": "high"
+    }
+  ]
+}

@@ -20,11 +20,33 @@ export interface KpReaderRouteConformanceProfile {
   readonly searchableText: string;
 }
 
+export type KpReaderVisualReviewViewport = "desktop" | "tablet" | "phone";
+
+export interface KpReaderVisualReviewCheckpoint {
+  readonly id: string;
+  readonly label: string;
+  readonly progressPermille: number;
+  readonly viewport: KpReaderVisualReviewViewport;
+  readonly query?: Readonly<Record<string, string>> | undefined;
+  readonly direction?: "forward" | "inverse" | undefined;
+  readonly visualProgressPermille?: number | undefined;
+}
+
+export interface KpReaderRouteVisualReviewProfile {
+  readonly id: string;
+  readonly title: string;
+  readonly capture: "viewport" | "stage";
+  readonly columns: number;
+  readonly imageFit: "contain" | "cover";
+  readonly checkpoints: readonly KpReaderVisualReviewCheckpoint[];
+}
+
 export interface KpReaderRouteDescriptor {
   readonly route: KpReaderRoutePath;
   readonly sourcePath: KpReaderLessonSourcePath;
   readonly compile: (markdown: string) => KpCompiledLessonArtifact;
   readonly conformance: KpReaderRouteConformanceProfile;
+  readonly review: KpReaderRouteVisualReviewProfile;
 }
 
 /**
@@ -57,6 +79,40 @@ export function defineKpReaderRoute<const TRoute extends KpReaderRouteDescriptor
   })) {
     if (value.trim() === "") {
       throw new Error(`Reader route ${descriptor.route} conformance ${field} must not be empty.`);
+    }
+  }
+  if (descriptor.review.id.trim() === "" || descriptor.review.title.trim() === "") {
+    throw new Error(`Reader route ${descriptor.route} requires named visual review metadata.`);
+  }
+  if (!Number.isInteger(descriptor.review.columns) || descriptor.review.columns < 1) {
+    throw new Error(`Reader route ${descriptor.route} requires positive visual review columns.`);
+  }
+  if (descriptor.review.checkpoints.length === 0) {
+    throw new Error(`Reader route ${descriptor.route} requires a visual review checkpoint.`);
+  }
+  const reviewIds = new Set<string>();
+  for (const checkpoint of descriptor.review.checkpoints) {
+    if (checkpoint.id.trim() === "" || checkpoint.label.trim() === "") {
+      throw new Error(`Reader route ${descriptor.route} has an unnamed visual review checkpoint.`);
+    }
+    if (reviewIds.has(checkpoint.id)) {
+      throw new Error(
+        `Reader route ${descriptor.route} repeats visual review checkpoint ${checkpoint.id}.`
+      );
+    }
+    reviewIds.add(checkpoint.id);
+    for (const value of [checkpoint.progressPermille, checkpoint.visualProgressPermille]
+      .filter((candidate): candidate is number => candidate !== undefined)) {
+      if (!Number.isInteger(value) || value < 0 || value > 1_000) {
+        throw new Error(
+          `Reader route ${descriptor.route} has unbounded visual review progress.`
+        );
+      }
+    }
+    if (checkpoint.query !== undefined && Object.hasOwn(checkpoint.query, "kpProgress")) {
+      throw new Error(
+        `Reader route ${descriptor.route} visual review query must not fix kpProgress.`
+      );
     }
   }
   return descriptor;

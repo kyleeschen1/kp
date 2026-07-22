@@ -85,4 +85,20 @@ test("build manifest declares every accepted reader route exactly once", () => {
       }
     ]
   );
+  assert.deepEqual(
+    kpReaderRouteManifest.map(({ review }) => review.id),
+    [
+      "solve-x",
+      "teacher-zero",
+      "fractional-linear",
+      "divide-both-sides",
+      "split-merge-fractions",
+      "fractional-transfer",
+      "distribution-area"
+    ]
+  );
+  assert.deepEqual(
+    kpReaderRouteManifest.map(({ review }) => review.checkpoints.length),
+    [6, 1, 1, 1, 1, 1, 36]
+  );
 });
