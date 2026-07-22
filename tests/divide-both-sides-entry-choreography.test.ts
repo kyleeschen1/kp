@@ -5,6 +5,7 @@ import { createDivideBothSidesEquationAnimationAsset } from "../src/animation/di
 import { createKpLinearRearrangementChoreography } from "../src/animation/linear-rearrangement-choreography.ts";
 import { createKpWitnessedAnnihilationBinding } from "../src/animation/witnessed-annihilation.ts";
 import { createKpEquationLinearRearrangementBindings } from "../src/rendering/equation-linear-rearrangement-bindings.ts";
+import { kpEquationPresentationProfile } from "../src/rendering/equation-presentation-policy.ts";
 import type {
   KpMeasuredEquationTransitionEndpoint,
   KpMeasuredEquationTransitionGeometry
@@ -68,6 +69,53 @@ test("coefficient cancellation certifies one and quotient synthesis owns all inp
     ]),
     [["evaluated-quotient", 0]]
   );
+});
+
+test("coefficient and divisor follow opposing arcs into their shared midpoint", () => {
+  const animation = createDivideBothSidesEquationAnimationAsset();
+  const cancellation = kpEquationPresentationProfile(animation).cancellation;
+  assert.equal(cancellation, "counter-orbit-v1");
+
+  const geometry: KpMeasuredEquationTransitionGeometry = {
+    transitionId: "transition.coefficient-cancellation",
+    linearRearrangementKind: "cancel-multiplicative-inverses",
+    cancellationPresentationRecipe: cancellation,
+    sourceTokens: [
+      token("source.numerator.3", 10, 8),
+      token("source.denominator.3", 50, 32)
+    ],
+    targetTokens: [],
+    relations: [{
+      recordId: "coefficient-and-divisor-cancel",
+      lifecycle: "cancel",
+      source: endpoint(["source.numerator.3", "source.denominator.3"], 10, 52)
+    }]
+  };
+  const orbiting = sampleKpEquationTokenMotion(geometry, 0.55).tokens;
+  assert.deepEqual(orbiting.map((token) => Math.sign(token.pose.y)), [-1, 1]);
+
+  const meeting = sampleKpEquationTokenMotion(geometry, 0.68).tokens;
+  const sourceCenterById = new Map(
+    geometry.sourceTokens.map((token) => [
+      token.motionId,
+      {
+        x: token.localRect.left + token.localRect.width / 2,
+        y: token.localRect.top + token.localRect.height / 2
+      }
+    ])
+  );
+  const meetingCenters = meeting.map((token) =>
+    ({
+      x: sourceCenterById.get(token.motionId)!.x + token.pose.x,
+      y: sourceCenterById.get(token.motionId)!.y + token.pose.y
+    })
+  );
+  assert.ok(meeting.every((token) => token.pose.opacity > 0));
+  assert.ok(meetingCenters.every((point) =>
+    Math.abs(point.x - meetingCenters[0]!.x) < 0.001 &&
+    Math.abs(point.y - meetingCenters[0]!.y) < 0.001
+  ));
+  assert.deepEqual(sampleKpEquationTokenMotion(geometry, 0.68).tokens, meeting);
 });
 
 test("divide states annotate every semantic glyph and both fraction rules", () => {

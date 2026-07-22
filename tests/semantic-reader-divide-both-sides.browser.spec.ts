@@ -14,7 +14,12 @@ test("semantic editor opens the divide-both-sides exemplar", async ({ page }) =>
   await expect(page.getByRole("heading", { name: "Divide both sides", exact: true })).toBeVisible();
   await expect(page.locator("body")).toHaveAttribute("data-kp-reader-lesson-variant", "divide-both-sides");
   await expect(page.locator("body")).toHaveAttribute("data-kp-reader-hydrated", "true");
-  await expect(page.locator("[data-kp-reader-equation-stage] [data-kp-reader-transition]")).toHaveCount(3);
+  const stage = page.locator("[data-kp-reader-equation-stage]");
+  await expect(stage).toHaveAttribute(
+    "data-kp-reader-equation-cancellation-recipe",
+    "counter-orbit-v1"
+  );
+  await expect(stage.locator("[data-kp-reader-transition]")).toHaveCount(3);
   const fractionRuleIds = await page
     .locator("[data-kp-reader-equation-stage] .frac-line[data-kp-reader-selector-id]")
     .evaluateAll((rules) => [

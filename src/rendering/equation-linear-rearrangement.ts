@@ -431,7 +431,12 @@ function sampleCounterOrbitCancellation(
     return frameToken(token, "source", {
       opacity: 1 - input.frame.collapseProgress,
       x: (groupCenter.x - tokenCenter.x) * travel,
-      y: orbitDirection * 14 * orbit,
+      // Same-baseline inverse terms need only the orbit. Fraction factors can
+      // begin above and below one another, so their measured vertical offset
+      // must also close before the cancellation ink retires.
+      y:
+        (groupCenter.y - tokenCenter.y) * travel +
+        orbitDirection * 14 * orbit,
       scale:
         1 -
         0.08 * travel -
