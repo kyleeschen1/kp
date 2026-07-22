@@ -25,6 +25,26 @@ export function defineKpReaderRoute<const TRoute extends KpReaderRouteDescriptor
   return descriptor;
 }
 
+export function defineKpReaderRouteManifest<
+  const TRoutes extends readonly KpReaderRouteDescriptor[]
+>(routes: TRoutes): TRoutes {
+  const seenRoutes = new Set<string>();
+  const seenEntries = new Set<string>();
+  for (const route of routes) {
+    defineKpReaderRoute(route);
+    const entryName = kpReaderRouteEntryName(route.route);
+    if (seenRoutes.has(route.route)) {
+      throw new Error(`Reader route ${route.route} is declared more than once.`);
+    }
+    if (seenEntries.has(entryName)) {
+      throw new Error(`Reader entry ${entryName} is declared more than once.`);
+    }
+    seenRoutes.add(route.route);
+    seenEntries.add(entryName);
+  }
+  return routes;
+}
+
 export function kpReaderRouteEntryName(route: KpReaderRoutePath): string {
   return route.slice(1, -1).replaceAll("/", "-");
 }

@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   defineKpReaderRoute,
+  defineKpReaderRouteManifest,
   kpReaderRouteEntryName,
   kpReaderRouteHtmlPath
 } from "../src/reader/compiler/reader-route-descriptor.ts";
@@ -15,6 +16,18 @@ const compile = (markdown: string) => ({
   html: markdown,
   tocHtml: "",
   hydration: {}
+});
+
+test("reader route manifests reject duplicate public and build identities", () => {
+  const descriptor = defineKpReaderRoute({
+    route: "/reader/test/",
+    sourcePath: "content/lessons/test.md",
+    compile
+  });
+  assert.throws(
+    () => defineKpReaderRouteManifest([descriptor, descriptor]),
+    /declared more than once/
+  );
 });
 
 test("reader route descriptors preserve inferred declarations and derive build names", () => {

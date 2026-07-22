@@ -83,7 +83,14 @@
     {
       "id": "s03",
       "title": "Create one build-time reader route manifest",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s03-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s03-v0",
+      "title": "Create one build-time reader route manifest",
+      "summary": "The build-time reader route manifest is complete and verified.",
+      "status": "complete"
     },
     {
       "id": "s04",

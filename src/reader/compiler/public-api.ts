@@ -74,6 +74,7 @@ export {
 } from "./distribution-area-lesson.ts";
 export {
   defineKpReaderRoute,
+  defineKpReaderRouteManifest,
   kpReaderRouteEntryName,
   kpReaderRouteHtmlPath,
   type KpReaderLessonSourcePath,
