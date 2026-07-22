@@ -31,6 +31,8 @@ body[data-kp-reader-hydrated="true"][data-kp-reader-font-ready="false"] .kp-dist
 .kp-distribution-visual { display: grid; grid-template-columns: minmax(0, 1fr); gap: .15rem; align-items: center; min-height: clamp(360px, 50vh, 455px); }
 .kp-distribution-algebra { position: relative; min-height: 9rem; font-size: clamp(1.35rem, 2.4vw, 2rem); }
 .kp-distribution-algebra__native, .kp-distribution-algebra__material { position: absolute; inset: 0; }
+.kp-distribution-algebra__measurement { position: absolute; inset: 0; visibility: hidden; pointer-events: none; }
+.kp-distribution-algebra__measurement > [data-kp-distribution-state] { position: absolute; inset: 0; display: grid; place-items: center; }
 .kp-distribution-algebra__native { display: grid; place-items: center; }
 .kp-distribution-algebra__native[hidden], .kp-distribution-algebra__material[hidden] { display: none; }
 .kp-distribution-algebra__native .katex-display { margin: 0; }

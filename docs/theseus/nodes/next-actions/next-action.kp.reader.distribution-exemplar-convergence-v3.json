@@ -88,6 +88,13 @@
       "scope": "static compiler preservation",
       "checkedAt": "2026-07-22T16:35:47.916Z",
       "notes": "Two compiler checks pass, including searchable no-JavaScript output and KaTeX labels outside SVG text."
+    },
+    {
+      "command": "node --test tests/semantic-reader-distribution-area-compiler.test.ts tests/distribution-area-exemplar-trace.test.ts",
+      "status": "passed",
+      "scope": "stable token lineage",
+      "checkedAt": "2026-07-22T16:38:31.010Z",
+      "notes": "Seven compiler and semantic trace checks pass; three states expose sixteen measured anchors and algebra/geometry lineage while preserving reversible correspondence laws."
     }
   ],
   "expectedLearning": [

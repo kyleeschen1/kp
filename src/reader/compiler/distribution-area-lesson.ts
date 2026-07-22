@@ -1,10 +1,15 @@
-import { renderLatexToHtml } from "../../rendering/katex-adapter.ts";
+import { renderLatexToHtml, renderSelectorAnnotatedLatexToHtml } from "../../rendering/katex-adapter.ts";
+import {
+  createKpDistributionAreaSelectorAnnotatedLatex,
+  kpDistributionAreaLineageForSelectorId
+} from "../../rendering/distribution-area-selector-annotated-latex.ts";
 import { createKpDistributionAreaExemplarEndpoint } from "../../rendering/distribution-area-exemplar-endpoint.ts";
 import { createKpDistributionAreaExemplarSvgScene } from "../../rendering/distribution-area-exemplar-svg.ts";
 import { createKpCompiledLessonArtifact } from "../document/public-api.ts";
 import { parseKpLessonMarkdown } from "./lesson-markdown-parser.ts";
 import { compileKpStaticLessonProse } from "./static-prose-compiler.ts";
 import { compileKpStaticMathStates } from "./static-math-compiler.ts";
+import { createKpDistributionAreaExemplarSemanticTrace } from "../../semantic/distribution-area-exemplar-trace.ts";
 
 const documentId = "lesson.algebra.distribution-area";
 const assetId = "exemplar.distribution-area.3-times-x-plus-2";
@@ -86,6 +91,7 @@ function compileStage(): string {
   const factored = createKpDistributionAreaExemplarEndpoint("factored");
   const expanded = createKpDistributionAreaExemplarEndpoint("expanded");
   const scene = createKpDistributionAreaExemplarSvgScene();
+  const trace = createKpDistributionAreaExemplarSemanticTrace();
   return [
     '<section class="kp-distribution-stage" data-kp-distribution-stage data-kp-direction="forward" data-kp-owner="factored-native" style="--kp-partition-progress:0">',
     '<header class="kp-distribution-stage__header">',
@@ -97,6 +103,7 @@ function compileStage(): string {
     `<div class="kp-distribution-algebra__native" data-kp-native="factored">${factored.algebra.html}</div>`,
     `<div class="kp-distribution-algebra__native" data-kp-native="expanded" hidden>${expanded.algebra.html}</div>`,
     `<div class="kp-distribution-algebra__material" data-kp-algebra-material hidden>${materialTokens()}</div>`,
+    `<div class="kp-distribution-algebra__measurement" data-kp-distribution-measurement aria-hidden="true">${measurementStates(trace.bundle.objects)}</div>`,
     "</div>",
     '<div class="kp-distribution-area" aria-label="A rectangle of height 3 split into widths x and 2, with areas 3x and 6.">',
     `<svg viewBox="${scene.viewBox}" role="img" aria-hidden="true">`,
@@ -105,13 +112,13 @@ function compileStage(): string {
     `<line data-kp-area-divider x1="${scene.dividerX}" x2="${scene.dividerX}" y1="${scene.outline.y}" y2="${scene.outline.y + scene.outline.height}"/>`,
     `<rect class="kp-distribution-area__outline" x="${scene.outline.x}" y="${scene.outline.y}" width="${scene.outline.width}" height="${scene.outline.height}" rx="3"/>`,
     "</svg>",
-    areaLabel("factor.3", "height", "3", 8, 50),
-    areaLabel("term.x term.2", "combined-width", "x+2", 50, 10),
-    areaLabel("term.x", "x-width", "x", 39.17, 10),
-    areaLabel("term.2", "two-width", "2", 75.83, 10),
-    areaLabel("product.3x", "left-area", "3x", 39.17, 50),
-    areaLabel("factor.3 term.2 product.6", "right-pair", "3\\cdot2", 75.83, 50),
-    areaLabel("product.6", "right-area", "6", 75.83, 50),
+    areaLabel("factor.3", "factor.3", "height", "3", 8, 50),
+    areaLabel("term.x term.2", "sum.x-plus-2", "combined-width", "x+2", 50, 10),
+    areaLabel("term.x", "term.x", "x-width", "x", 39.17, 10),
+    areaLabel("term.2", "term.2", "two-width", "2", 75.83, 10),
+    areaLabel("product.3x", "product.3x", "left-area", "3x", 39.17, 50),
+    areaLabel("factor.3 term.2 product.6", "product.6", "right-pair", "3\\cdot2", 75.83, 50),
+    areaLabel("product.6", "product.6", "right-area", "6", 75.83, 50),
     "</div>",
     "</div>",
     '<label class="kp-distribution-scrubber"><span>Move the concept</span><input type="range" min="0" max="1000" step="1" value="0" data-kp-distribution-scrubber><output data-kp-distribution-progress>0%</output></label>',
@@ -123,18 +130,32 @@ function compileStage(): string {
 
 function materialTokens(): string {
   const tokens = [
-    ["source-three", "factor.3", "3"], ["left-three", "factor.3 product.3x", "3"],
-    ["left-paren", "", "("], ["x", "term.x product.3x", "x"], ["plus", "", "+"],
-    ["right-three", "factor.3 product.6", "3"], ["times", "product.6", "\\cdot"],
-    ["two", "term.2 product.6", "2"], ["right-paren", "", ")"], ["six", "product.6", "6"]
+    ["source-three", "factor.3", "factor.3", "3"], ["left-three", "factor.3 product.3x", "factor.3", "3"],
+    ["left-paren", "", "grouping", "("], ["x", "term.x product.3x", "term.x", "x"], ["plus", "", "operator.plus", "+"],
+    ["right-three", "factor.3 product.6", "factor.3", "3"], ["times", "product.6", "operator.times", "\\cdot"],
+    ["two", "term.2 product.6", "term.2", "2"], ["right-paren", "", "grouping", ")"], ["six", "product.6", "product.6", "6"]
   ] as const;
-  return tokens.map(([id, concepts, latex]) =>
-    `<span data-kp-material-token="${id}"${concepts === "" ? "" : ` data-kp-concept="${concepts}"`}>${renderLatexToHtml(latex, { displayMode: false })}</span>`
+  return tokens.map(([id, concepts, lineage, latex]) =>
+    `<span data-kp-material-token="${id}" data-kp-lineage="${lineage}"${concepts === "" ? "" : ` data-kp-concept="${concepts}"`}>${renderLatexToHtml(latex, { displayMode: false })}</span>`
   ).join("");
 }
 
-function areaLabel(concepts: string, role: string, latex: string, left: number, top: number): string {
-  return `<span class="kp-distribution-area__label" data-kp-area-label="${role}" data-kp-concept="${concepts}" style="--kp-label-left:${left}%;--kp-label-top:${top}%">${renderLatexToHtml(latex, { displayMode: false })}</span>`;
+function measurementStates(objects: readonly { readonly id: string; readonly selectors: readonly { readonly id: string; readonly label?: string | undefined }[] }[]): string {
+  return objects.map((object) => {
+    const annotated = createKpDistributionAreaSelectorAnnotatedLatex(object);
+    let html = renderSelectorAnnotatedLatexToHtml(annotated, { displayMode: true });
+    for (const annotation of annotated.annotations) {
+      html = html.replaceAll(
+        `data-kp-motion-id="${annotation.motionId}"`,
+        `data-kp-distribution-anchor="${annotation.selectorId}" data-kp-lineage="${kpDistributionAreaLineageForSelectorId(annotation.selectorId)}"`
+      );
+    }
+    return `<div data-kp-distribution-state="${object.id}">${html}</div>`;
+  }).join("");
+}
+
+function areaLabel(concepts: string, lineage: string, role: string, latex: string, left: number, top: number): string {
+  return `<span class="kp-distribution-area__label" data-kp-area-label="${role}" data-kp-lineage="${lineage}" data-kp-concept="${concepts}" style="--kp-label-left:${left}%;--kp-label-top:${top}%">${renderLatexToHtml(latex, { displayMode: false })}</span>`;
 }
 
 function conceptFromGeometry(semanticId: string): string {

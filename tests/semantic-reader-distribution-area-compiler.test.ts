@@ -31,3 +31,14 @@ test("distribution area stage keeps KaTeX labels outside SVG text", () => {
   assert.match(html, /data-kp-area-label="left-area"[\s\S]*class="katex"/);
   assert.match(html, /data-kp-concept="factor\.3 term\.2 product\.6"/);
 });
+
+test("distribution area compiles stable measurable algebra and geometry lineage", () => {
+  const { html } = compileKpDistributionAreaLesson(markdown);
+
+  assert.equal((html.match(/data-kp-distribution-state=/g) ?? []).length, 3);
+  assert.equal((html.match(/data-kp-distribution-anchor=/g) ?? []).length, 16);
+  assert.match(html, /data-kp-material-token="source-three" data-kp-lineage="factor\.3"/);
+  assert.match(html, /data-kp-material-token="six" data-kp-lineage="product\.6"/);
+  assert.match(html, /data-kp-area-label="combined-width" data-kp-lineage="sum\.x-plus-2"/);
+  assert.match(html, /data-kp-area-label="right-area" data-kp-lineage="product\.6"/);
+});

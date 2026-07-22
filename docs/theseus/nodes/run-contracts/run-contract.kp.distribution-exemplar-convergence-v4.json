@@ -97,7 +97,8 @@
     {
       "id": "s08",
       "title": "Give algebraic and geometric tokens stable identities",
-      "status": "planned"
+      "summary": "Factored, distributed, and expanded KaTeX states now expose sixteen stable selector anchors; all material fragments and geometric labels expose shared lineage IDs. Seven semantic/compiler checks pass, providing a DOM-shape-independent basis for measurement and scheduling.",
+      "status": "complete"
     },
     {
       "id": "s09",
