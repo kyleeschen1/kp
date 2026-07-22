@@ -18,6 +18,7 @@ import {
   type KpDistributionAreaLayoutSnapshot,
   type KpDistributionAreaMaterialTokenId,
   type KpDistributionAreaMotionPlan,
+  type KpDistributionAreaTimelineFrame,
   type KpDistributionAreaTokenPose,
   type KpDistributionAreaWidthMotionPlan,
   type KpDistributionAreaWidthTokenId,
@@ -137,25 +138,26 @@ function render(): void {
   const forward = sampleKpDistributionAreaForwardMotion({ plan, progress: visualProgress });
   const inverse = sampleKpDistributionAreaInverseMotion({ plan, progress });
   const owner = direction === "forward" ? forward.owner : inverse.owner;
-  const area = forward.area;
+  const timeline = motionPlan.sample(visualProgress);
+  const correspondenceProgress = timeline.phase === "distribution" ? timeline.phaseProgress : 1;
 
   stage.dataset["kpDirection"] = direction;
   stage.dataset["kpOwner"] = owner;
   stage.dataset["kpCheckpoint"] = checkpointFor(visualProgress);
-  stage.style.setProperty("--kp-partition-progress", String(area.partitionProgress));
+  stage.style.setProperty("--kp-partition-progress", String(correspondenceProgress));
   factoredNative.hidden = visualProgress !== 0;
   expandedNative.hidden = visualProgress !== 1;
   material.hidden = visualProgress === 0 || visualProgress === 1;
-  if (!material.hidden) renderMaterial(visualProgress);
+  if (!material.hidden) renderMaterial(timeline);
   widthMaterial.hidden = visualProgress === 0 || visualProgress === 1;
-  if (!widthMaterial.hidden) renderWidthMaterial(area.partitionProgress);
+  if (!widthMaterial.hidden) renderWidthMaterial(correspondenceProgress);
   setOpacity("combined-width", visualProgress === 0 ? 1 : 0);
   setOpacity("x-width", visualProgress === 1 ? 1 : 0);
   setOpacity("two-width", visualProgress === 1 ? 1 : 0);
-  setOpacity("left-area", area.leftAreaLabelOpacity);
-  setOpacity("right-pair", area.partitionProgress * (1 - interval(forward.evaluationProgress, 0.52, 0.65)));
+  setOpacity("left-area", correspondenceProgress);
+  setOpacity("right-pair", correspondenceProgress * (1 - interval(forward.evaluationProgress, 0.52, 0.65)));
   setOpacity("right-area", interval(forward.evaluationProgress, 0.65, 0.82));
-  required<SVGLineElement>("[data-kp-area-divider]").style.opacity = String(area.partitionProgress);
+  required<SVGLineElement>("[data-kp-area-divider]").style.opacity = String(correspondenceProgress);
 
   const permille = Math.round(visualProgress * 1000);
   const phase = attentionPhaseAt(attention, permille);
@@ -214,13 +216,13 @@ function dispatchDevReviewFrame(
   previousReviewScrollY = window.scrollY;
 }
 
-function renderMaterial(visualProgress: number): void {
-  const frame = motionPlan!.sample(visualProgress);
+function renderMaterial(frame: KpDistributionAreaTimelineFrame): void {
   for (const [id, pose] of Object.entries(frame.tokens) as Array<
     [KpDistributionAreaMaterialTokenId, KpDistributionAreaTokenPose]
   >) token(id, pose);
-  material.dataset["kpVisualProgress"] = String(visualProgress);
+  material.dataset["kpVisualProgress"] = String(frame.progress);
   material.dataset["kpTimelinePhase"] = frame.phase;
+  material.dataset["kpTimelinePhaseProgress"] = String(frame.phaseProgress);
 }
 
 function token(

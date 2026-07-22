@@ -36,10 +36,12 @@ test("distribution motion lands exactly on every measured algebra state", () => 
   const expanded = plan.sample(1);
 
   assert.equal(start.tokens.x.x, measured.anchor("factored", "term.x").center.x);
+  assert.equal(start.phaseProgress, 0);
   assert.equal(distributed.tokens.x.x, measured.anchor("distributed", "left.term.x").center.x);
   assert.equal(distributed.tokens["right-three"].x, measured.anchor("distributed", "right.factor.3").center.x);
   assert.equal(expanded.tokens.x.x, measured.anchor("expanded", "left.term.x").center.x);
   assert.equal(expanded.tokens.six.x, measured.anchor("expanded", "right.product.6").center.x);
+  assert.equal(expanded.phaseProgress, 1);
 });
 
 test("one timeline is continuously sampleable in either direction", () => {

@@ -127,7 +127,8 @@
     {
       "id": "s13",
       "title": "Synchronize equation and area correspondents",
-      "status": "planned"
+      "summary": "Algebraic token interpolation, geometric x and 2 splitting, divider growth, region reveal, and area labels now sample one phase progress; browser geometry proves cross-surface agreement.",
+      "status": "complete"
     },
     {
       "id": "s14",

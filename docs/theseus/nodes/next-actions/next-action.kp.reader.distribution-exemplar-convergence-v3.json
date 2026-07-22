@@ -165,6 +165,20 @@
       "scope": "s12 measured geometric split browser behavior",
       "checkedAt": "2026-07-22T17:06:35.669Z",
       "notes": "Eight browser checks pass, including a live assertion that x and 2 occupy intermediate measured positions between the combined label and partition labels."
+    },
+    {
+      "command": "node --test focused distribution motion plans and npm run typecheck",
+      "status": "passed",
+      "scope": "s13 shared correspondence clock",
+      "checkedAt": "2026-07-22T17:10:07.970Z",
+      "notes": "Four motion laws and all TypeScript projects pass after exposing one phase progress to algebra, width tokens, divider, regions, and labels."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "s13 cross-surface browser synchronization",
+      "checkedAt": "2026-07-22T17:10:13.430Z",
+      "notes": "Nine browser checks pass; rendered algebra token progress, geometric width-token progress, and the partition CSS clock agree within subpixel tolerance."
     }
   ],
   "expectedLearning": [

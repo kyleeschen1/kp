@@ -17,6 +17,7 @@ export interface KpDistributionAreaTokenPose {
 export interface KpDistributionAreaTimelineFrame {
   readonly progress: number;
   readonly phase: "distribution" | "evaluation";
+  readonly phaseProgress: number;
   readonly tokens: Readonly<Record<KpDistributionAreaMaterialTokenId, KpDistributionAreaTokenPose>>;
 }
 
@@ -39,10 +40,10 @@ export function createKpDistributionAreaMotionPlan(
       const progress = clamp01(progressValue);
       if (progress <= 0.72) {
         const local = smoothstep(progress / 0.72);
-        return { progress, phase: "distribution", tokens: distributionTokens(local, f, d) };
+        return { progress, phase: "distribution", phaseProgress: local, tokens: distributionTokens(local, f, d) };
       }
       const local = smoothstep((progress - 0.72) / 0.28);
-      return { progress, phase: "evaluation", tokens: evaluationTokens(local, d, e) };
+      return { progress, phase: "evaluation", phaseProgress: local, tokens: evaluationTokens(local, d, e) };
     }
   };
 }

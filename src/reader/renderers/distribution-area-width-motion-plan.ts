@@ -25,7 +25,9 @@ export function createKpDistributionAreaWidthMotionPlan(
     id: `motion-plan.distribution-area-width.r${layout.revision}`,
     layoutRevision: layout.revision,
     sample(progressValue) {
-      const progress = smoothstep(clamp01(progressValue));
+      // The caller supplies the shared, already-eased correspondence clock so
+      // algebra, labels, and the partition cannot drift through double easing.
+      const progress = clamp01(progressValue);
       return {
         x: travel(layout.anchor("source.x"), layout.anchor("target.x"), progress, -6),
         plus: {

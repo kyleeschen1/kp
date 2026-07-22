@@ -133,6 +133,33 @@ test("geometric width tokens travel from one measured KaTeX label into the parti
   await expect(page.locator("[data-kp-area-width-material]")).toBeVisible();
 });
 
+test("algebra and geometry sample one correspondence clock", async ({ page }) => {
+  await page.goto(`${route}?kpProgress=360&kpDirection=forward`, { waitUntil: "networkidle" });
+  const progress = await page.evaluate(() => {
+    const centerX = (selector: string) => {
+      const rect = document.querySelector<HTMLElement>(selector)!.getBoundingClientRect();
+      return rect.left + rect.width / 2;
+    };
+    const normalized = (value: number, from: number, to: number) => (value - from) / (to - from);
+    const algebra = normalized(
+      centerX('[data-kp-material-token="x"]'),
+      centerX('[data-kp-distribution-state$="state.factored"] [data-kp-distribution-anchor$="term.x"]'),
+      centerX('[data-kp-distribution-state$="state.distributed"] [data-kp-distribution-anchor$="left.term.x"]')
+    );
+    const geometry = normalized(
+      centerX('[data-kp-area-width-token="x"]'),
+      centerX('[data-kp-area-width-anchor="source.x"]'),
+      centerX('[data-kp-area-width-anchor="target.x"]')
+    );
+    const cssClock = Number.parseFloat(getComputedStyle(
+      document.querySelector<HTMLElement>("[data-kp-distribution-stage]")!
+    ).getPropertyValue("--kp-partition-progress"));
+    return { algebra, geometry, cssClock };
+  });
+  expect(progress.algebra).toBeCloseTo(progress.geometry, 3);
+  expect(progress.algebra).toBeCloseTo(progress.cssClock, 3);
+});
+
 test("distribution share URL round trips an exact inverse moment", async ({ page }) => {
   await page.goto(`${route}?kpProgress=0&kpDirection=forward`, { waitUntil: "networkidle" });
   await page.getByRole("button", { name: "Factor" }).click();
