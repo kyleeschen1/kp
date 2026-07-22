@@ -15,6 +15,7 @@ export interface KpDistributionAreaAttentionPhase {
   readonly proseDimmed: boolean;
   readonly conceptIds: readonly KpDistributionAreaExemplarConceptId[];
   readonly cue: string;
+  readonly inverseCue: string;
 }
 
 export interface KpDistributionAreaAttentionPlan {
@@ -27,21 +28,21 @@ export function createKpDistributionAreaAttentionPlan(): KpDistributionAreaAtten
     id: "exemplar.distribution-area.3-times-x-plus-2.attention",
     phases: [
       phase("distribute.orient", "distribute", "orient", 0, 80, "prose", false,
-        ["factor.3"], "First, find the shared three."),
+        ["factor.3"], "First, find the shared three.", "The shared three is back outside the group."),
       phase("distribute.act", "distribute", "act", 80, 360, "algebra-and-area", true,
-        ["factor.3", "term.x", "term.2"], "Watch the three reach both terms as the rectangle partitions."),
+        ["factor.3", "term.x", "term.2"], "Watch the three reach both terms as the rectangle partitions.", "Watch both products return their shared three as the rectangle rejoins."),
       phase("distribute.settle", "distribute", "settle", 360, 460, "area", true,
-        ["term.x", "term.2", "product.3x"], "Let the two widths and left area settle."),
+        ["term.x", "term.2", "product.3x"], "Let the two widths and left area settle.", "Let the two widths recombine into x plus two."),
       phase("distribute.inspect", "distribute", "inspect", 460, 500, "all", false,
-        ["factor.3", "term.x", "term.2", "product.3x"], "Pause and inspect the same quantities in both forms."),
+        ["factor.3", "term.x", "term.2", "product.3x"], "Pause and inspect the same quantities in both forms.", "Pause and inspect the common factor in both forms."),
       phase("evaluate.orient", "evaluate", "orient", 500, 570, "prose", false,
-        ["product.6"], "Now focus on the fixed right region."),
+        ["product.6"], "Now focus on the fixed right region.", "Now focus on the area six."),
       phase("evaluate.act", "evaluate", "act", 570, 820, "algebra-and-area", true,
-        ["factor.3", "term.2", "product.6"], "See three times two become the area six."),
+        ["factor.3", "term.2", "product.6"], "See three times two become the area six.", "See area six separate into three times two."),
       phase("evaluate.settle", "evaluate", "settle", 820, 930, "area", true,
-        ["product.6"], "Let six settle in the right region."),
+        ["product.6"], "Let six settle in the right region.", "Let three times two reappear in the right region."),
       phase("evaluate.inspect", "evaluate", "inspect", 930, 1000, "all", false,
-        ["product.3x", "product.6"], "Read the final sum as the two rectangle areas.")
+        ["product.3x", "product.6"], "Read the final sum as the two rectangle areas.", "Begin with the two rectangle areas.")
     ]
   };
 }
@@ -66,7 +67,8 @@ function phase(
   primarySurface: KpDistributionAreaAttentionSurface,
   proseDimmed: boolean,
   conceptIds: readonly KpDistributionAreaExemplarConceptId[],
-  cue: string
+  cue: string,
+  inverseCue: string
 ): KpDistributionAreaAttentionPhase {
-  return { id, beatId, kind, startPermille, endPermille, primarySurface, proseDimmed, conceptIds, cue };
+  return { id, beatId, kind, startPermille, endPermille, primarySurface, proseDimmed, conceptIds, cue, inverseCue };
 }

@@ -66,6 +66,7 @@ directionButtons.forEach((button) => button.addEventListener("click", () => {
   direction = next;
   pointerOwnsProgress = true;
   render();
+  replaceSemanticUrl();
 }));
 scrubber.addEventListener("input", () => {
   pointerOwnsProgress = true;
@@ -163,7 +164,7 @@ function render(): void {
   const phase = attentionPhaseAt(attention, permille);
   stage.dataset["kpAttentionPhase"] = phase.id;
   stage.dataset["kpAttentionKind"] = phase.kind;
-  statusOutput.textContent = phase.cue;
+  statusOutput.textContent = direction === "forward" ? phase.cue : phase.inverseCue;
   setAttentionFocus(phase.conceptIds);
   setActiveBeat(visualProgress);
   scrubber.value = String(Math.round(progress * 1000));

@@ -193,6 +193,20 @@
       "scope": "s14 discrete ownership",
       "checkedAt": "2026-07-22T17:13:02.266Z",
       "notes": "Ten browser checks pass; factored, material, expanded, combined-width, and component-width owners never overlap or crossfade at endpoint handoffs."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15 inverse cue and route contract",
+      "checkedAt": "2026-07-22T17:15:35.330Z",
+      "notes": "All TypeScript projects pass with directional attention cues and immediate semantic URL replacement on operation changes."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "s15 true inverse browser choreography",
+      "checkedAt": "2026-07-22T17:15:41.792Z",
+      "notes": "Eleven browser checks pass; direction switching preserves exact algebra and geometry frames, complements scrubber progress, rewinds the same path, updates the URL, and changes the cue to factoring language."
     }
   ],
   "expectedLearning": [

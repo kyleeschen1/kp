@@ -123,6 +123,44 @@ test("endpoint and material owners switch discretely without static-anchor cross
   await expect(page.locator('[data-kp-area-label="x-width"]')).toHaveCSS("opacity", "1");
 });
 
+test("factoring preserves the current frame and samples the same choreography backward", async ({ page }) => {
+  await page.goto(`${route}?kpProgress=370&kpDirection=forward`, { waitUntil: "networkidle" });
+  const capture = () => page.evaluate(() => {
+    const selectors = [
+      '[data-kp-material-token="left-three"]',
+      '[data-kp-material-token="right-three"]',
+      '[data-kp-material-token="x"]',
+      '[data-kp-material-token="two"]',
+      '[data-kp-area-width-token="x"]',
+      '[data-kp-area-width-token="two"]'
+    ];
+    return {
+      tokens: selectors.map((selector) => {
+        const element = document.querySelector<HTMLElement>(selector)!;
+        const rect = element.getBoundingClientRect();
+        return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, opacity: Number(getComputedStyle(element).opacity) };
+      }),
+      clock: getComputedStyle(document.querySelector<HTMLElement>("[data-kp-distribution-stage]")!)
+        .getPropertyValue("--kp-partition-progress"),
+      cue: document.querySelector<HTMLOutputElement>("[data-kp-distribution-status]")!.textContent
+    };
+  });
+  const forward = await capture();
+  await page.getByRole("button", { name: "Factor" }).click();
+  const inverse = await capture();
+
+  expect(inverse.tokens).toEqual(forward.tokens);
+  expect(inverse.clock).toBe(forward.clock);
+  expect(inverse.cue).not.toBe(forward.cue);
+  await expect(page.locator("[data-kp-distribution-scrubber]")).toHaveValue("630");
+  await expect(page).toHaveURL(/kpProgress=630/);
+  await expect(page).toHaveURL(/kpDirection=inverse/);
+
+  await page.locator("[data-kp-distribution-scrubber]").fill("700");
+  const rewound = await capture();
+  expect(rewound.tokens[2]!.x).not.toBe(forward.tokens[2]!.x);
+});
+
 test("material x follows measured KaTeX anchors instead of percentages", async ({ page }) => {
   await page.goto(`${route}?kpProgress=360&kpDirection=forward`, { waitUntil: "networkidle" });
   const centers = await page.evaluate(() => {

@@ -139,7 +139,8 @@
     {
       "id": "s15",
       "title": "Render factoring as a true inverse choreography",
-      "status": "planned"
+      "summary": "Factoring is now proven as exact reverse sampling of the same measured algebra and geometry frames, with inverse-specific cues and immediately shareable direction state.",
+      "status": "complete"
     },
     {
       "id": "s16",
