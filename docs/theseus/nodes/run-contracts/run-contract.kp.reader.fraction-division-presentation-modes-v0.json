@@ -137,7 +137,8 @@
     {
       "id": "s15-divide-layout",
       "title": "Reserve whole-side fraction geometry",
-      "status": "planned"
+      "summary": "Reserved one scaled centered envelope from the widest and tallest divide state, with stable placements, no wrapping, explicit overflow, and preserved legacy typography behavior.",
+      "status": "complete"
     },
     {
       "id": "s16-divide-entry",

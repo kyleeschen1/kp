@@ -1,8 +1,10 @@
-export interface KpFractionalLinearStateMeasurement {
-  readonly stateId: string;
-  readonly widthPx: number;
-  readonly heightPx: number;
-}
+import {
+  planKpEquationSequenceEnvelope,
+  type KpEquationSequenceStateMeasurement
+} from "./equation-sequence-envelope.ts";
+
+export interface KpFractionalLinearStateMeasurement
+  extends KpEquationSequenceStateMeasurement {}
 
 export interface KpFractionalLinearTypographyPlan {
   readonly kind: "fractional-linear-typography-plan";
@@ -27,33 +29,26 @@ export function planKpFractionalLinearTypography(input: {
   readonly baseFontSizePx?: number;
   readonly minScale?: number;
 }): KpFractionalLinearTypographyPlan {
-  if (input.measurements.length === 0) throw new Error("Typography planning requires measured states.");
-  const horizontalPaddingPx = input.horizontalPaddingPx ?? 24;
-  const baseFontSizePx = input.baseFontSizePx ?? 23.232;
-  const minScale = input.minScale ?? 0.72;
-  const values = [input.viewportWidthPx, horizontalPaddingPx, baseFontSizePx, minScale,
-    ...input.measurements.flatMap(({ widthPx, heightPx }) => [widthPx, heightPx])];
-  if (!values.every(Number.isFinite) || input.viewportWidthPx <= horizontalPaddingPx * 2 ||
-    baseFontSizePx <= 0 || minScale <= 0 || minScale > 1 ||
-    input.measurements.some(({ widthPx, heightPx }) => widthPx <= 0 || heightPx <= 0)) {
-    throw new Error("Typography planning requires finite positive geometry and a scale within (0, 1].");
-  }
-  const widest = input.measurements.reduce((left, right) =>
-    right.widthPx > left.widthPx ? right : left
-  );
-  const availableWidthPx = input.viewportWidthPx - horizontalPaddingPx * 2;
-  const requiredScale = Math.min(1, availableWidthPx / widest.widthPx);
-  const status = requiredScale >= 1 ? "native" : requiredScale >= minScale ? "scaled" : "overflow";
-  const scale = status === "overflow" ? minScale : requiredScale;
+  const envelope = planKpEquationSequenceEnvelope({
+    measurements: input.measurements,
+    viewportWidthPx: input.viewportWidthPx,
+    ...(input.horizontalPaddingPx === undefined
+      ? {}
+      : { horizontalPaddingPx: input.horizontalPaddingPx }),
+    ...(input.baseFontSizePx === undefined
+      ? {}
+      : { baseFontSizePx: input.baseFontSizePx }),
+    ...(input.minScale === undefined ? {} : { minScale: input.minScale })
+  });
   return {
     kind: "fractional-linear-typography-plan",
-    baseFontSizePx,
-    fontSizePx: baseFontSizePx * scale,
-    scale,
-    widestStateId: widest.stateId,
-    widestStateWidthPx: widest.widthPx,
-    availableWidthPx,
+    baseFontSizePx: envelope.baseFontSizePx,
+    fontSizePx: envelope.fontSizePx,
+    scale: envelope.scale,
+    widestStateId: envelope.widestStateId,
+    widestStateWidthPx: envelope.contentWidthPx / envelope.scale,
+    availableWidthPx: envelope.availableWidthPx,
     wrapAllowed: false,
-    status
+    status: envelope.status
   };
 }

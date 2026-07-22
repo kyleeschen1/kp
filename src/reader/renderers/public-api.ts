@@ -4,6 +4,12 @@ export type {
   KpReaderRendererRequest
 } from "./adapter-contract.ts";
 export {
+  planKpEquationSequenceEnvelope,
+  type KpEquationSequenceEnvelopePlan,
+  type KpEquationSequenceStateMeasurement,
+  type KpEquationSequenceStatePlacement
+} from "./equation-sequence-envelope.ts";
+export {
   createKpReaderAdapterRegistry,
   type KpReaderAdapterRegistry,
   type KpReaderMountedAdapter

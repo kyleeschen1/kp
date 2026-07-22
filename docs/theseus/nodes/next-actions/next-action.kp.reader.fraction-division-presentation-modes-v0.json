@@ -223,6 +223,24 @@
       "status": "passed",
       "scope": "s14 correspondence map and compiler types",
       "checkedAt": "2026-07-22T00:12:57.591Z"
+    },
+    {
+      "command": "node focused divide and fractional layout tests",
+      "status": "passed",
+      "scope": "s15 measure-once sequence envelope, stable centering, no-wrap scaling, and legacy planner preservation",
+      "checkedAt": "2026-07-22T00:16:13.884Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15 shared envelope and renderer public API types",
+      "checkedAt": "2026-07-22T00:16:15.123Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s15 reader renderer dependency boundaries",
+      "checkedAt": "2026-07-22T00:16:16.201Z"
     }
   ]
 }
