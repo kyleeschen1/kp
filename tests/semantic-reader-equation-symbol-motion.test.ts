@@ -151,6 +151,37 @@ test("generic fallback keeps continuous geometry and semantic focus", () => {
   );
 });
 
+test("solve-x samples its selected branch schedule through measured rendering", () => {
+  const animation = createLinearSolveAnimationAsset();
+  const step = createKpLinearRearrangementChoreography(animation).steps.find(
+    (candidate) => candidate.kind === "balanced-introduction"
+  )!;
+  const frame = sampleKpReaderEquationSymbolMotion({
+    ...fixture("forward", 0.1),
+    progress: 0.5,
+    linearRearrangementKind: step.kind,
+    branchSchedule: step.branchSchedule
+  });
+
+  assert.equal(frame.samplingAuthority, "operation-specific");
+  assert.equal(frame.linearRearrangement?.branchScheduleId, step.branchSchedule?.id);
+  const branchProgress = frame.linearRearrangement?.scheduledBranchProgress;
+  assert.ok(branchProgress !== undefined);
+  assert.ok((branchProgress.lhs ?? 0) > 0 && (branchProgress.lhs ?? 0) < 1);
+  assert.equal(branchProgress.lhs, branchProgress.rhs);
+  const introduced = frame.owners.flatMap((owner) => owner.fragmentPoses).filter(
+    (fragment) => fragment.side === "target" &&
+      step.branchOperation?.branches.some((branch) =>
+        branch.entityIds.some((entityId) => fragment.anchorId.endsWith(entityId))
+      )
+  );
+  assert.ok(introduced.length > 0);
+  assert.ok(introduced[0]!.pose.opacity > 0 && introduced[0]!.pose.opacity < 1);
+  assert.ok(introduced.every(
+    (fragment) => fragment.pose.opacity === introduced[0]!.pose.opacity
+  ));
+});
+
 test("reader cancellation meets through a readable zero before compaction", () => {
   const animation = createLinearSolveAnimationAsset();
   const transformation = animation.transformations.find(

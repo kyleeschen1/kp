@@ -40,15 +40,10 @@ export function createKpEquationLinearRearrangementBindings(
     const selectedBranchStrategy = animation.metadata?.[
       "equationBranchPresentationStrategy"
     ];
-    if (selectedBranchStrategy !== undefined && kind !== "balanced-introduction") {
-      throw new Error(
-        `Animation ${animation.id} selects branch scheduling for non-balanced operation ${transformation.id}.`
-      );
-    }
     const branchScheduling = kind === "balanced-introduction"
       ? createKpBalancedBranchScheduling({
           transformationId: transformation.id,
-          authorityId: `kp.algebra.${kind}`,
+          authorityId: `kp.algebra.${kebabCase(transformation.transformType)}`,
           targetSelectorIds: causalRecord.targetSelectorIds,
           selectedStrategy: selectedBranchStrategy
         })
@@ -76,4 +71,8 @@ function isSuccessorKind(kind: KpEquationLinearRearrangementKind): boolean {
   return kind === "simplify-constant-difference" ||
     kind === "simplify-constant-quotient" ||
     kind === "simplify-constant-product";
+}
+
+function kebabCase(value: string): string {
+  return value.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
 }

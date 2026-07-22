@@ -402,11 +402,7 @@ function createBalancedBranchScheduling(input: {
 > | undefined {
   const selected = input.animation.metadata?.["equationBranchPresentationStrategy"];
   if (selected === undefined) return undefined;
-  if (input.kind !== "balanced-introduction") {
-    throw new Error(
-      `Animation ${input.animation.id} selects branch scheduling for non-balanced operation ${input.transformation.id}.`
-    );
-  }
+  if (input.kind !== "balanced-introduction") return undefined;
   return createKpBalancedBranchScheduling({
     transformationId: input.transformation.id,
     authorityId: `kp.algebra.${kebabCase(input.transformation.transformType)}`,

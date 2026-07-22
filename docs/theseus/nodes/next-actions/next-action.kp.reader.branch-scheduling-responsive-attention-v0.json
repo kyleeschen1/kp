@@ -50,6 +50,20 @@
       "scope": "slice-s04-schedule-compilers",
       "checkedAt": "2026-07-22T23:44:52.012Z",
       "notes": "Five tests prove shared semantics across together, sequential, staggered, and stepped schedules; dependency-respecting normalized windows; bounded sampling; input rejection; and exact inverse reconstruction over 101 samples per strategy."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/equation-linear-rearrangement-bindings.test.ts tests/semantic-reader-equation-symbol-motion.test.ts",
+      "status": "passed",
+      "scope": "slice-s05-solve-x-integration",
+      "checkedAt": "2026-07-22T23:47:37.469Z",
+      "notes": "Seven focused tests prove canonical/lightweight binding parity and measured operation-specific sampling of the selected together schedule."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s05-integration-boundary",
+      "checkedAt": "2026-07-22T23:47:37.854Z",
+      "notes": "The selected schedule propagates through choreography, lightweight bindings, geometry, renderer, and reader app without violating TypeScript boundaries."
     }
   ],
   "expectedLearning": [

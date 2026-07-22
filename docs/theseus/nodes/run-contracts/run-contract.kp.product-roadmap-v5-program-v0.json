@@ -80,7 +80,8 @@
     {
       "id": "s05",
       "title": "Integrate the selected schedule through solve-x measured rendering",
-      "status": "planned"
+      "summary": "Proved the canonical solve-x together schedule is identical in full choreography and lightweight reader bindings, then reaches measured geometry and operation-specific target-token poses without changing the accepted semantic operation.",
+      "status": "complete"
     },
     {
       "id": "s06",
