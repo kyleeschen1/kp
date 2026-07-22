@@ -161,7 +161,8 @@
     {
       "id": "s19-split-trace",
       "title": "Define reversible numerator split-merge transform",
-      "status": "planned"
+      "summary": "Defined the exact (2x+6)/2 and 2x/2 + 6/2 endpoints as a reversible pair backed by the promoted strict split and merge laws, leaving correspondence and choreography explicitly deferred.",
+      "status": "complete"
     },
     {
       "id": "s20-split-lineage",
