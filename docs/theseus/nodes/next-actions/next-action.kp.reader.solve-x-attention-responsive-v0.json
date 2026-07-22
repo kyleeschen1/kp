@@ -5,6 +5,12 @@
   "status": "deferred",
   "domain": "kp.reader",
   "summary": "Human review is intentionally tabled; retain the completed Solve x attention-responsive exemplar as unapproved review evidence and do not promote it.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reader.solve-x-attention-responsive-v0.json"
+    }
+  ],
   "verificationRecords": [
     {
       "command": "npm run baseline:solve-x-attention and visual inspection",

@@ -12,6 +12,11 @@
       "occurredAt": "2026-07-21T23:20:37.905Z"
     }
   ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.reader.fraction-division-presentation-modes-v0"
+    ]
+  },
   "affects": [
     "plan-revision.kp.v4"
   ],

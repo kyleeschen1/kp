@@ -1,0 +1,88 @@
+{
+  "id": "next-action.kp.animation.cancellation-policy-and-distribution-area-v0",
+  "kind": "next-action",
+  "title": "Govern cancellation policies and build distribution area exemplar",
+  "status": "ready",
+  "domain": "kp.animation",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v4.json"
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md"
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/distribution-canonical-operation.ts"
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.reader.fraction-division-presentation-modes-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v4",
+    "next-action.refill.experiment.plan-revision.kp.v4.generated-quality-envelope",
+    "next-action.refill.experiment.plan-revision.kp.v4.primitive-amortization",
+    "next-action.refill.experiment.plan-revision.kp.v4.semantic-llm-boundary"
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "focused semantic policy renderer compiler and browser tests",
+    "npm run visual:cancellation",
+    "npm run visual:distribution-area",
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "npm run check:dev-review-production",
+    "npm run theseus -- workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "npm run verify:impact -- --path tests/equation-cancellation-policy-inventory.test.ts",
+      "status": "passed",
+      "scope": "s01 high-risk visual-runtime classification and required follow-up checks",
+      "checkedAt": "2026-07-22T13:39:52.490Z"
+    },
+    {
+      "command": "node focused cancellation inventory and presentation policy tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s01 exact six-asset cancellation baseline and repository type boundary",
+      "checkedAt": "2026-07-22T13:39:53.690Z"
+    }
+  ],
+  "expectedLearning": [
+    "Whether typed pedagogical intent and topology-aware policy inference prevent wrong visual-recipe selection without card-specific tuning.",
+    "Whether one reviewed distribution and factoring area-model exemplar proves primitive amortization across synchronized algebra and geometry."
+  ],
+  "allowedWork": [
+    "Add inferred cancellation intent, recipe capabilities, policy resolution, typed repair, catalog conformance, stable visual checks, and one exact 3(x+2) to 3x+6 distribution/factoring area-model reader exemplar.",
+    "Preserve approved fraction behavior and stop after the exact new exemplar reaches its human visual checkpoint."
+  ],
+  "disallowedWork": [
+    "Do not promote distribution or factoring beyond the exact exemplar before human approval.",
+    "Do not implement radicals, functions, derivatives, WebGL, providers, economics, programming, flashcards, or a general layout redesign."
+  ],
+  "criteria": [
+    {
+      "id": "cancellation-policy-inferred",
+      "weight": "high"
+    },
+    {
+      "id": "cancellation-conformance-catalog-wide",
+      "weight": "high"
+    },
+    {
+      "id": "distribution-area-exemplar-complete",
+      "weight": "high"
+    },
+    {
+      "id": "release-gates-pass",
+      "weight": "high"
+    }
+  ]
+}

@@ -1,0 +1,196 @@
+{
+  "id": "run-contract.kp.animation.cancellation-policy-and-distribution-area-v1",
+  "kind": "run-contract",
+  "title": "Cancellation policy and distribution area exemplar",
+  "status": "ready",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.cancellation-policy-and-distribution-area-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.animation.cancellation-policy-and-distribution-area-v0.json",
+      "summary": "Approved target and done contract."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v4.json",
+      "summary": "Approved quality assumptions and missing-middle phase."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/roadmap.md",
+      "summary": "Reviewed near-term category order and preservation boundary."
+    },
+    {
+      "kind": "file",
+      "path": "src/semantic/distribution-canonical-operation.ts",
+      "summary": "Existing canonical distribution semantics."
+    }
+  ],
+  "verification": [
+    "npm run verify:impact -- --path <changed-path>",
+    "focused semantic policy rendering compiler and browser tests",
+    "npm run visual:cancellation",
+    "npm run visual:distribution-area",
+    "npm test",
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:architecture",
+    "npm run check:dev-review-production",
+    "npm run theseus -- workspace validate"
+  ],
+  "allowedWork": [
+    "Add inferred cancellation intent, recipe capabilities, deterministic policy resolution, typed repair, catalog conformance, and stable cancellation visual checks.",
+    "Build only the exact 3(x+2) to 3x+6 synchronized algebra and SVG area-model distribution/factoring reader exemplar, its editor card, responsive projection, and visual gate.",
+    "Record evidence against generated-quality-envelope, primitive-amortization, and semantic-llm-boundary while preserving approved fraction behavior."
+  ],
+  "disallowedWork": [
+    "Do not promote distribution or factoring beyond the exact exemplar before human approval.",
+    "Do not implement radicals, functions, derivatives, WebGL, providers, economics, programming, flashcards, or a general layout redesign.",
+    "Do not permit LLM-controlled geometry timing typography or raw ungoverned recipe selection."
+  ],
+  "goal": "Infer cancellation presentation from typed pedagogical intent and measured topology, enforce catalog-wide conformance, and prove primitive amortization with one searchable synchronized 3(x+2) to 3x+6 distribution/factoring area-model exemplar before human promotion.",
+  "target": "next-action.kp.animation.cancellation-policy-and-distribution-area-v0",
+  "runMode": "run",
+  "maxSlices": 25,
+  "commitCadence": "Commit after each independently verified slice with its Theseus evidence.",
+  "verificationLevel": "broad",
+  "stopConditions": [
+    "Stop immediately if approved fraction visuals or semantic traces regress.",
+    "Stop if the cancellation guardrail requires unapproved migration beyond cancellation assets.",
+    "Stop if the area-model work broadens beyond the exact 3(x+2) to 3x+6 exemplar.",
+    "Stop at the final human visual checkpoint before any family promotion.",
+    "Stop on failed verification that requires subjective judgment or unsafe authority."
+  ],
+  "slices": [
+    {
+      "id": "s01-baseline-inventory",
+      "title": "Inventory-cancellation-assets-and-approved-baselines",
+      "summary": "Pinned the approved cancellation inventory across canonical solve-x, teacher-zero, full fractional, divide-both-sides, balanced transfer, and fluent projection assets; focused tests and typecheck pass.",
+      "status": "complete"
+    },
+    {
+      "id": "s02-cancellation-intent",
+      "title": "Define-typed-cancellation-pedagogical-intent",
+      "status": "planned"
+    },
+    {
+      "id": "s03-inference-api",
+      "title": "Add-inference-first-cancellation-authoring-API",
+      "status": "planned"
+    },
+    {
+      "id": "s04-recipe-capabilities",
+      "title": "Declare-recipe-topology-and-geometry-capabilities",
+      "status": "planned"
+    },
+    {
+      "id": "s05-policy-resolver",
+      "title": "Resolve-intent-and-topology-deterministically",
+      "status": "planned"
+    },
+    {
+      "id": "s06-typed-repair",
+      "title": "Return-typed-repair-for-unsupported-combinations",
+      "status": "planned"
+    },
+    {
+      "id": "s07-adapter-migration",
+      "title": "Migrate-cancellation-assets-to-inferred-policy",
+      "status": "planned"
+    },
+    {
+      "id": "s08-contact-laws",
+      "title": "Formalize-contact-readability-retirement-and-rewind-laws",
+      "status": "planned"
+    },
+    {
+      "id": "s09-catalog-conformance",
+      "title": "Validate-every-cancellation-asset",
+      "status": "planned"
+    },
+    {
+      "id": "s10-cancellation-visual-gate",
+      "title": "Add-stable-cancellation-visual-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s11-generated-boundary",
+      "title": "Route-generated-cancellation-through-policy-or-repair",
+      "status": "planned"
+    },
+    {
+      "id": "s12-guardrail-boundary",
+      "title": "Close-quality-and-amortization-guardrail-tranche",
+      "status": "planned"
+    },
+    {
+      "id": "s13-area-exemplar-contract",
+      "title": "Freeze-3-times-x-plus-2-area-exemplar",
+      "status": "planned"
+    },
+    {
+      "id": "s14-area-semantic-trace",
+      "title": "Define-distribution-and-factoring-semantic-trace",
+      "status": "planned"
+    },
+    {
+      "id": "s15-cross-surface-correspondence",
+      "title": "Link-algebra-factors-products-dimensions-and-areas",
+      "status": "planned"
+    },
+    {
+      "id": "s16-area-presentation-plan",
+      "title": "Compile-exemplar-local-fan-out-and-grouping-intent",
+      "status": "planned"
+    },
+    {
+      "id": "s17-area-layout-envelope",
+      "title": "Plan-wide-and-phone-equation-area-geometry",
+      "status": "planned"
+    },
+    {
+      "id": "s18-themed-svg-area",
+      "title": "Build-KP-themed-SVG-area-model-with-KaTeX-labels",
+      "status": "planned"
+    },
+    {
+      "id": "s19-area-static-endpoints",
+      "title": "Render-exact-native-area-model-endpoints",
+      "status": "planned"
+    },
+    {
+      "id": "s20-area-forward-motion",
+      "title": "Synchronize-forward-distribution-and-partition",
+      "status": "planned"
+    },
+    {
+      "id": "s21-area-inverse-motion",
+      "title": "Implement-factoring-as-exact-inverse",
+      "status": "planned"
+    },
+    {
+      "id": "s22-area-attention",
+      "title": "Coordinate-prose-algebra-and-geometric-salience",
+      "status": "planned"
+    },
+    {
+      "id": "s23-area-reader",
+      "title": "Compile-searchable-URL-addressable-responsive-reader",
+      "status": "planned"
+    },
+    {
+      "id": "s24-area-editor-and-visual",
+      "title": "Add-Semantic-Editor-card-and-stable-visual-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s25-release-checkpoint",
+      "title": "Run-release-gates-and-stop-for-human-review",
+      "status": "planned"
+    }
+  ]
+}

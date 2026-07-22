@@ -1,0 +1,46 @@
+{
+  "id": "next-action.refill.experiment.plan-revision.kp.v4.semantic-llm-boundary",
+  "kind": "next-action",
+  "title": "Test semantic-llm-boundary",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Run a bounded uncertainty-reduction experiment for: LLMs can safely edit semantic objects, transformations, correspondence, explanatory focus, and bounded presentation intent while deterministic compilers retain authority over geometry, timing, typography, and rendering. Selection rationale: The approved cancellation guardrail loop requires the semantic LLM boundary experiment so generated intent compiles through deterministic policy resolution or returns typed repair.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Approved refill option refill.experiment.plan-revision.kp.v4.semantic-llm-boundary: The approved cancellation guardrail loop requires the semantic LLM boundary experiment so generated intent compiles through deterministic policy resolution or returns typed repair.",
+      "occurredAt": "2026-07-22T13:34:53.581Z",
+      "summary": "Requested by user."
+    }
+  ],
+  "dependsOn": {
+    "required": [
+      "next-action.kp.reader.fraction-division-presentation-modes-v0"
+    ]
+  },
+  "affects": [
+    "plan-revision.kp.v4"
+  ],
+  "verification": [
+    "theseus validate"
+  ],
+  "expectedLearning": [
+    "An approved plan depends on an active assumption without outcome evidence."
+  ],
+  "allowedWork": [
+    "Run a bounded uncertainty-reduction experiment for: LLMs can safely edit semantic objects, transformations, correspondence, explanatory focus, and bounded presentation intent while deterministic compilers retain authority over geometry, timing, typography, and rendering."
+  ],
+  "disallowedWork": [
+    "Do not broaden beyond the selected refill option without another approval."
+  ],
+  "criteria": [
+    {
+      "id": "selected-option-addressed",
+      "weight": "high"
+    },
+    {
+      "id": "selection-provenance-preserved",
+      "weight": "high"
+    }
+  ]
+}
