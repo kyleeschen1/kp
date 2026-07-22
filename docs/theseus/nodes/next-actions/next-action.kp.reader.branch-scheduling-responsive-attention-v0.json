@@ -64,6 +64,13 @@
       "scope": "slice-s05-integration-boundary",
       "checkedAt": "2026-07-22T23:47:37.854Z",
       "notes": "The selected schedule propagates through choreography, lightweight bindings, geometry, renderer, and reader app without violating TypeScript boundaries."
+    },
+    {
+      "command": "npm test",
+      "status": "passed",
+      "scope": "slice-s06-unit-runtime-conformance",
+      "checkedAt": "2026-07-22T23:51:32.663Z",
+      "notes": "All 1,916 tests passed, including architecture, inference, concept-catalog, branch-operation, schedule, binding, measured-renderer, runtime, and rewind laws. A load-sensitive inference timing retry passed at 1.68s under the 5s ceiling."
     }
   ],
   "expectedLearning": [

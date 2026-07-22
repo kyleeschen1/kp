@@ -86,7 +86,8 @@
     {
       "id": "s06",
       "title": "Prove branch scheduling unit runtime and conformance laws",
-      "status": "planned"
+      "summary": "Updated strict external-port metadata parity for the new bounded presentation intent and passed the complete 1,916-test unit, runtime, architecture, inference, catalog, and conformance suite.",
+      "status": "complete"
     },
     {
       "id": "s07",
