@@ -121,7 +121,8 @@
     {
       "id": "s12",
       "title": "Split the geometric x plus 2 label smoothly",
-      "status": "planned"
+      "summary": "The geometric x plus 2 is now one selector-annotated KaTeX source whose persistent x and 2 tokens travel to measured partition labels while plus is semantically consumed; no static crossfade occurs in the interior.",
+      "status": "complete"
     },
     {
       "id": "s13",

@@ -90,13 +90,23 @@ export {
 } from "./equation-responsive-fit.ts";
 export {
   createKpDistributionAreaLayoutSnapshot,
+  createKpDistributionAreaWidthLayoutSnapshot,
   measureKpDistributionAreaLayout,
+  measureKpDistributionAreaWidthLayout,
   type KpDistributionAreaAnchorMeasurement,
   type KpDistributionAreaLayoutRect,
   type KpDistributionAreaLayoutSnapshot,
   type KpDistributionAreaMeasuredAnchor,
-  type KpDistributionAreaStateId
+  type KpDistributionAreaStateId,
+  type KpDistributionAreaWidthAnchorId,
+  type KpDistributionAreaWidthLayoutSnapshot
 } from "./distribution-area-layout.ts";
+export {
+  createKpDistributionAreaWidthMotionPlan,
+  type KpDistributionAreaWidthMotionPlan,
+  type KpDistributionAreaWidthTokenId,
+  type KpDistributionAreaWidthTokenPose
+} from "./distribution-area-width-motion-plan.ts";
 export {
   createKpDistributionAreaMotionPlan,
   type KpDistributionAreaMaterialTokenId,

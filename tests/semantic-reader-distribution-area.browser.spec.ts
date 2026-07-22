@@ -110,6 +110,29 @@ test("material x follows measured KaTeX anchors instead of percentages", async (
   );
 });
 
+test("geometric width tokens travel from one measured KaTeX label into the partition labels", async ({ page }) => {
+  await page.goto(`${route}?kpProgress=360&kpDirection=forward`, { waitUntil: "networkidle" });
+  const positions = await page.evaluate(() => {
+    const centerX = (selector: string) => {
+      const rect = document.querySelector<HTMLElement>(selector)!.getBoundingClientRect();
+      return rect.left + rect.width / 2;
+    };
+    return {
+      sourceX: centerX('[data-kp-area-width-anchor="source.x"]'),
+      targetX: centerX('[data-kp-area-width-anchor="target.x"]'),
+      materialX: centerX('[data-kp-area-width-token="x"]'),
+      sourceTwo: centerX('[data-kp-area-width-anchor="source.two"]'),
+      targetTwo: centerX('[data-kp-area-width-anchor="target.two"]'),
+      materialTwo: centerX('[data-kp-area-width-token="two"]')
+    };
+  });
+  expect(positions.materialX).toBeLessThan(positions.sourceX);
+  expect(positions.materialX).toBeGreaterThan(positions.targetX);
+  expect(positions.materialTwo).toBeGreaterThan(positions.sourceTwo);
+  expect(positions.materialTwo).toBeLessThan(positions.targetTwo);
+  await expect(page.locator("[data-kp-area-width-material]")).toBeVisible();
+});
+
 test("distribution share URL round trips an exact inverse moment", async ({ page }) => {
   await page.goto(`${route}?kpProgress=0&kpDirection=forward`, { waitUntil: "networkidle" });
   await page.getByRole("button", { name: "Factor" }).click();

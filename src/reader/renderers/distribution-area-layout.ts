@@ -27,6 +27,17 @@ export interface KpDistributionAreaLayoutSnapshot {
   anchor(stateId: KpDistributionAreaStateId, selectorSuffix: string): KpDistributionAreaMeasuredAnchor;
 }
 
+export type KpDistributionAreaWidthAnchorId =
+  | "source.x" | "source.plus" | "source.two" | "target.x" | "target.two";
+
+export interface KpDistributionAreaWidthLayoutSnapshot {
+  readonly id: string;
+  readonly revision: number;
+  readonly viewport: { readonly width: number; readonly height: number };
+  readonly anchors: readonly (KpDistributionAreaMeasuredAnchor & { readonly selectorId: KpDistributionAreaWidthAnchorId })[];
+  anchor(id: KpDistributionAreaWidthAnchorId): KpDistributionAreaMeasuredAnchor;
+}
+
 const requiredSuffixes: Readonly<Record<KpDistributionAreaStateId, readonly string[]>> = {
   factored: ["factor.3", "left-paren", "term.x", "plus", "term.2", "right-paren"],
   distributed: ["left.factor.3", "left.term.x", "plus", "right.factor.3", "right.times", "right.term.2"],
@@ -60,6 +71,60 @@ export function measureKpDistributionAreaLayout(input: {
     rootRect,
     measurements
   });
+}
+
+export function measureKpDistributionAreaWidthLayout(input: {
+  readonly areaRoot: HTMLElement;
+  readonly revision: number;
+}): KpDistributionAreaWidthLayoutSnapshot {
+  const rootRect = domRect(input.areaRoot.getBoundingClientRect());
+  const measurements = [...input.areaRoot.querySelectorAll<HTMLElement>("[data-kp-area-width-anchor]")]
+    .map((element): KpDistributionAreaAnchorMeasurement => ({
+      stateId: "factored",
+      selectorId: requiredData(element, "kpAreaWidthAnchor"),
+      lineage: requiredData(element, "kpLineage"),
+      rect: domRect(element.getBoundingClientRect())
+    }));
+  return createKpDistributionAreaWidthLayoutSnapshot({ revision: input.revision, rootRect, measurements });
+}
+
+export function createKpDistributionAreaWidthLayoutSnapshot(input: {
+  readonly revision: number;
+  readonly rootRect: KpDistributionAreaLayoutRect;
+  readonly measurements: readonly KpDistributionAreaAnchorMeasurement[];
+}): KpDistributionAreaWidthLayoutSnapshot {
+  if (!Number.isInteger(input.revision) || input.revision < 0) {
+    throw new Error("Distribution width layout revision must be a non-negative integer.");
+  }
+  assertRect(input.rootRect, "Distribution area root");
+  const requiredIds: readonly KpDistributionAreaWidthAnchorId[] = [
+    "source.x", "source.plus", "source.two", "target.x", "target.two"
+  ];
+  const byId = new Map<
+    KpDistributionAreaWidthAnchorId,
+    KpDistributionAreaMeasuredAnchor & { readonly selectorId: KpDistributionAreaWidthAnchorId }
+  >();
+  for (const measurement of input.measurements) {
+    const id = parseWidthAnchorId(measurement.selectorId);
+    assertRect(measurement.rect, `Distribution width anchor ${id}`);
+    if (byId.has(id)) throw new Error(`Distribution width layout repeats anchor ${id}.`);
+    const rect = localRect(measurement.rect, input.rootRect);
+    byId.set(id, { ...measurement, selectorId: id, rect, center: {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2
+    } });
+  }
+  for (const id of requiredIds) {
+    if (!byId.has(id)) throw new Error(`Distribution width layout expected anchor ${id}.`);
+  }
+  const anchors = requiredIds.map((id) => byId.get(id)!);
+  return {
+    id: `layout.distribution-area-width.r${input.revision}`,
+    revision: input.revision,
+    viewport: { width: input.rootRect.width, height: input.rootRect.height },
+    anchors,
+    anchor(id) { return byId.get(id)!; }
+  };
 }
 
 export function createKpDistributionAreaLayoutSnapshot(input: {
@@ -121,6 +186,11 @@ function parseStateId(value: string | undefined): KpDistributionAreaStateId {
   const suffix = value?.split(".state.").at(-1);
   if (suffix === "factored" || suffix === "distributed" || suffix === "expanded") return suffix;
   throw new Error(`Unknown distribution measurement state ${String(value)}.`);
+}
+
+function parseWidthAnchorId(value: string): KpDistributionAreaWidthAnchorId {
+  if (value === "source.x" || value === "source.plus" || value === "source.two" || value === "target.x" || value === "target.two") return value;
+  throw new Error(`Unknown distribution width anchor ${value}.`);
 }
 
 function anchorKey(stateId: KpDistributionAreaStateId, selectorId: string): string {

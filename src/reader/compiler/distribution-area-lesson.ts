@@ -1,4 +1,5 @@
 import { renderLatexToHtml, renderSelectorAnnotatedLatexToHtml } from "../../rendering/katex-adapter.ts";
+import { createKpSelectorAnnotatedLatex } from "../../rendering/selector-annotated-latex.ts";
 import {
   createKpDistributionAreaSelectorAnnotatedLatex,
   kpDistributionAreaLineageForSelectorId
@@ -113,12 +114,17 @@ function compileStage(): string {
     `<rect class="kp-distribution-area__outline" x="${scene.outline.x}" y="${scene.outline.y}" width="${scene.outline.width}" height="${scene.outline.height}" rx="3"/>`,
     "</svg>",
     areaLabel("factor.3", "factor.3", "height", "3", 8, 50),
-    areaLabel("term.x term.2", "sum.x-plus-2", "combined-width", "x+2", 50, 10),
-    areaLabel("term.x", "term.x", "x-width", "x", 39.17, 10),
-    areaLabel("term.2", "term.2", "two-width", "2", 75.83, 10),
+    combinedWidthLabel(),
+    areaLabel("term.x", "term.x", "x-width", "x", 39.17, 10, "target.x"),
+    areaLabel("term.2", "term.2", "two-width", "2", 75.83, 10, "target.two"),
     areaLabel("product.3x", "product.3x", "left-area", "3x", 39.17, 50),
     areaLabel("factor.3 term.2 product.6", "product.6", "right-pair", "3\\cdot2", 75.83, 50),
     areaLabel("product.6", "product.6", "right-area", "6", 75.83, 50),
+    '<div class="kp-distribution-area__width-material" data-kp-area-width-material aria-hidden="true" hidden>',
+    widthMaterialToken("x", "term.x", "term.x", "x"),
+    widthMaterialToken("plus", "", "operator.plus", "+"),
+    widthMaterialToken("two", "term.2", "term.2", "2"),
+    "</div>",
     "</div>",
     "</div>",
     '<label class="kp-distribution-scrubber"><span>Move the concept</span><input type="range" min="0" max="1000" step="1" value="0" data-kp-distribution-scrubber><output data-kp-distribution-progress>0%</output></label>',
@@ -154,8 +160,36 @@ function measurementStates(objects: readonly { readonly id: string; readonly sel
   }).join("");
 }
 
-function areaLabel(concepts: string, lineage: string, role: string, latex: string, left: number, top: number): string {
-  return `<span class="kp-distribution-area__label" data-kp-area-label="${role}" data-kp-lineage="${lineage}" data-kp-concept="${concepts}" style="--kp-label-left:${left}%;--kp-label-top:${top}%">${renderLatexToHtml(latex, { displayMode: false })}</span>`;
+function combinedWidthLabel(): string {
+  const selectorIds = ["source.x", "source.plus", "source.two"] as const;
+  const annotated = createKpSelectorAnnotatedLatex({
+    id: "distribution-area.width-source",
+    expectedSelectorIds: selectorIds,
+    segments: [
+      { kind: "selector", selectorId: "source.x", latex: "x" },
+      { kind: "selector", selectorId: "source.plus", latex: "+" },
+      { kind: "selector", selectorId: "source.two", latex: "2" }
+    ]
+  });
+  let html = renderSelectorAnnotatedLatexToHtml(annotated, { displayMode: false });
+  for (const annotation of annotated.annotations) {
+    const lineage = annotation.selectorId === "source.x"
+      ? "term.x"
+      : annotation.selectorId === "source.two" ? "term.2" : "operator.plus";
+    html = html.replaceAll(
+      `data-kp-motion-id="${annotation.motionId}"`,
+      `data-kp-area-width-anchor="${annotation.selectorId}" data-kp-lineage="${lineage}"`
+    );
+  }
+  return `<span class="kp-distribution-area__label" data-kp-area-label="combined-width" data-kp-lineage="sum.x-plus-2" data-kp-concept="term.x term.2" style="--kp-label-left:50%;--kp-label-top:10%">${html}</span>`;
+}
+
+function widthMaterialToken(id: string, concepts: string, lineage: string, latex: string): string {
+  return `<span data-kp-area-width-token="${id}" data-kp-lineage="${lineage}"${concepts === "" ? "" : ` data-kp-concept="${concepts}"`}>${renderLatexToHtml(latex, { displayMode: false })}</span>`;
+}
+
+function areaLabel(concepts: string, lineage: string, role: string, latex: string, left: number, top: number, widthAnchor?: string): string {
+  return `<span class="kp-distribution-area__label" data-kp-area-label="${role}" data-kp-lineage="${lineage}" data-kp-concept="${concepts}"${widthAnchor === undefined ? "" : ` data-kp-area-width-anchor="${widthAnchor}"`} style="--kp-label-left:${left}%;--kp-label-top:${top}%">${renderLatexToHtml(latex, { displayMode: false })}</span>`;
 }
 
 function conceptFromGeometry(semanticId: string): string {

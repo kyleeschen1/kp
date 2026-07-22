@@ -144,6 +144,27 @@
       "scope": "s11 parenthesis browser preservation",
       "checkedAt": "2026-07-22T17:00:00.912Z",
       "notes": "Seven distribution reader browser checks remain green after collision-free parenthesis consumption and delayed factor fan-out."
+    },
+    {
+      "command": "node --test tests/distribution-area-layout.test.ts tests/distribution-area-width-motion-plan.test.ts",
+      "status": "passed",
+      "scope": "s12 geometric width topology and motion",
+      "checkedAt": "2026-07-22T17:06:21.495Z",
+      "notes": "Four layout and motion laws pass; one measured x plus 2 label splits into exact measured x and 2 destinations and incomplete topology fails closed."
+    },
+    {
+      "command": "npm run typecheck and compiler test",
+      "status": "passed",
+      "scope": "s12 width-token integration",
+      "checkedAt": "2026-07-22T17:06:29.390Z",
+      "notes": "All TypeScript projects and three distribution compiler preservation checks pass with selector-annotated width source geometry."
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "s12 measured geometric split browser behavior",
+      "checkedAt": "2026-07-22T17:06:35.669Z",
+      "notes": "Eight browser checks pass, including a live assertion that x and 2 occupy intermediate measured positions between the combined label and partition labels."
     }
   ],
   "expectedLearning": [

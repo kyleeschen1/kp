@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createKpDistributionAreaLayoutSnapshot,
+  createKpDistributionAreaWidthLayoutSnapshot,
   type KpDistributionAreaAnchorMeasurement,
   type KpDistributionAreaStateId
 } from "../src/reader/renderers/distribution-area-layout.ts";
@@ -47,4 +48,27 @@ test("distribution layout rejects incomplete topology instead of guessing", () =
     rootRect: { left: 0, top: 0, width: 400, height: 160 },
     measurements: measurements().slice(0, -1)
   }), /expanded anchor for right\.product\.6/);
+});
+
+test("distribution width layout requires one measured source and target topology", () => {
+  const ids = ["source.x", "source.plus", "source.two", "target.x", "target.two"];
+  const measurements = ids.map((selectorId, index) => ({
+    stateId: "factored" as const,
+    selectorId,
+    lineage: selectorId,
+    rect: { left: 110 + index * 18, top: 55, width: 10, height: 18 }
+  }));
+  const layout = createKpDistributionAreaWidthLayoutSnapshot({
+    revision: 4,
+    rootRect: { left: 100, top: 40, width: 400, height: 220 },
+    measurements
+  });
+
+  assert.equal(layout.anchor("source.x").center.x, 15);
+  assert.equal(layout.anchor("target.two").center.y, 24);
+  assert.throws(() => createKpDistributionAreaWidthLayoutSnapshot({
+    revision: 4,
+    rootRect: { left: 100, top: 40, width: 400, height: 220 },
+    measurements: measurements.slice(0, -1)
+  }), /expected anchor target\.two/);
 });

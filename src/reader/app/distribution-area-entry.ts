@@ -12,11 +12,16 @@ import { createKpEquationFontReadiness } from "../../rendering/equation-font-rea
 import { createKpReaderActiveLocationService } from "../runtime/public-api.ts";
 import {
   createKpDistributionAreaMotionPlan,
+  createKpDistributionAreaWidthMotionPlan,
   measureKpDistributionAreaLayout,
+  measureKpDistributionAreaWidthLayout,
   type KpDistributionAreaLayoutSnapshot,
   type KpDistributionAreaMaterialTokenId,
   type KpDistributionAreaMotionPlan,
-  type KpDistributionAreaTokenPose
+  type KpDistributionAreaTokenPose,
+  type KpDistributionAreaWidthMotionPlan,
+  type KpDistributionAreaWidthTokenId,
+  type KpDistributionAreaWidthTokenPose
 } from "../renderers/public-api.ts";
 
 type Direction = "forward" | "inverse";
@@ -29,6 +34,8 @@ const share = required<HTMLAnchorElement>("[data-kp-distribution-share]");
 const material = required<HTMLElement>("[data-kp-algebra-material]");
 const algebraRoot = required<HTMLElement>(".kp-distribution-algebra");
 const measurementRoot = required<HTMLElement>("[data-kp-distribution-measurement]");
+const areaRoot = required<HTMLElement>(".kp-distribution-area");
+const widthMaterial = required<HTMLElement>("[data-kp-area-width-material]");
 const factoredNative = required<HTMLElement>('[data-kp-native="factored"]');
 const expandedNative = required<HTMLElement>('[data-kp-native="expanded"]');
 const beats = [...document.querySelectorAll<HTMLElement>("[data-kp-beat]")];
@@ -50,6 +57,7 @@ let layoutRevision = 0;
 let layoutReadCount = 0;
 let layout: KpDistributionAreaLayoutSnapshot | undefined;
 let motionPlan: KpDistributionAreaMotionPlan | undefined;
+let widthMotionPlan: KpDistributionAreaWidthMotionPlan | undefined;
 let previousReviewFrameAtMs: number | undefined;
 let previousReviewScrollY = window.scrollY;
 
@@ -123,7 +131,7 @@ window.addEventListener("pagehide", () => {
 }, { once: true });
 
 function render(): void {
-  if (fontReadiness.status === "waiting" || motionPlan === undefined) return;
+  if (fontReadiness.status === "waiting" || motionPlan === undefined || widthMotionPlan === undefined) return;
   progress = clamp01(progress);
   const visualProgress = direction === "forward" ? progress : 1 - progress;
   const forward = sampleKpDistributionAreaForwardMotion({ plan, progress: visualProgress });
@@ -139,9 +147,11 @@ function render(): void {
   expandedNative.hidden = visualProgress !== 1;
   material.hidden = visualProgress === 0 || visualProgress === 1;
   if (!material.hidden) renderMaterial(visualProgress);
-  setOpacity("combined-width", area.combinedWidthOpacity);
-  setOpacity("x-width", area.componentWidthOpacity);
-  setOpacity("two-width", area.componentWidthOpacity);
+  widthMaterial.hidden = visualProgress === 0 || visualProgress === 1;
+  if (!widthMaterial.hidden) renderWidthMaterial(area.partitionProgress);
+  setOpacity("combined-width", visualProgress === 0 ? 1 : 0);
+  setOpacity("x-width", visualProgress === 1 ? 1 : 0);
+  setOpacity("two-width", visualProgress === 1 ? 1 : 0);
   setOpacity("left-area", area.leftAreaLabelOpacity);
   setOpacity("right-pair", area.partitionProgress * (1 - interval(forward.evaluationProgress, 0.52, 0.65)));
   setOpacity("right-area", interval(forward.evaluationProgress, 0.65, 0.82));
@@ -224,12 +234,31 @@ function token(
   element.style.opacity = String(clamp01(pose.opacity));
 }
 
+function renderWidthMaterial(partitionProgress: number): void {
+  const frame = widthMotionPlan!.sample(partitionProgress);
+  for (const [id, pose] of Object.entries(frame) as Array<
+    [KpDistributionAreaWidthTokenId, KpDistributionAreaWidthTokenPose]
+  >) widthToken(id, pose);
+}
+
+function widthToken(id: KpDistributionAreaWidthTokenId, pose: KpDistributionAreaWidthTokenPose): void {
+  const element = required<HTMLElement>(`[data-kp-area-width-token="${id}"]`);
+  element.style.transform = `translate(-50%, -50%) scale(${pose.scale})`;
+  element.style.left = `${pose.x}px`;
+  element.style.top = `${pose.y}px`;
+  element.style.opacity = String(clamp01(pose.opacity));
+}
+
 function refreshLayoutAndRender(): void {
   if (fontReadiness.status === "waiting") return;
   layoutRevision += 1;
   layoutReadCount += 1;
   layout = measureKpDistributionAreaLayout({ algebraRoot, measurementRoot, revision: layoutRevision });
   motionPlan = createKpDistributionAreaMotionPlan(layout);
+  widthMotionPlan = createKpDistributionAreaWidthMotionPlan(measureKpDistributionAreaWidthLayout({
+    areaRoot,
+    revision: layoutRevision
+  }));
   stage.dataset["kpDistributionLayoutRevision"] = String(layoutRevision);
   stage.dataset["kpDistributionLayoutReadCount"] = String(layoutReadCount);
   render();

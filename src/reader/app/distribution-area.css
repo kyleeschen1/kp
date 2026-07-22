@@ -46,6 +46,9 @@ body[data-kp-reader-hydrated="true"][data-kp-reader-font-ready="false"] .kp-dist
 .kp-distribution-area__outline { fill: none; stroke: var(--kp-concept-line); stroke-width: 2; vector-effect: non-scaling-stroke; }
 .kp-distribution-area line { stroke: var(--kp-concept-line); stroke-width: 2; transform-box: fill-box; transform-origin: center; transform: scaleY(var(--kp-partition-progress)); vector-effect: non-scaling-stroke; }
 .kp-distribution-area__label { position: absolute; left: var(--kp-label-left); top: var(--kp-label-top); display: inline-block; color: var(--kp-ink); font-size: clamp(.85rem, 1.8vw, 1.15rem); transform: translate(-50%, -50%); transition: color 120ms ease; }
+.kp-distribution-area__width-material { position: absolute; inset: 0; color: var(--kp-ink); font-size: clamp(.85rem, 1.8vw, 1.15rem); pointer-events: none; }
+.kp-distribution-area__width-material[hidden] { display: none; }
+.kp-distribution-area__width-material > span { position: absolute; display: inline-block; transform-origin: center; will-change: left, top, transform, opacity; }
 .kp-distribution-area__label[data-kp-area-label="height"] { left: 8%; }
 .kp-distribution-area__label:is([data-kp-area-label="x-width"], [data-kp-area-label="two-width"], [data-kp-area-label="left-area"], [data-kp-area-label="right-pair"], [data-kp-area-label="right-area"]) { opacity: 0; }
 .kp-distribution-scrubber { display: grid; grid-template-columns: auto minmax(7rem, 1fr) 2.6rem; align-items: center; gap: .75rem; color: var(--kp-muted); font-size: .7rem; }
