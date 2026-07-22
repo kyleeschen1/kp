@@ -137,6 +137,12 @@
       "status": "passed",
       "scope": "s14 exact reversible 3(x+2) through 3x+3 dot 2 to 3x+6 semantic trace",
       "checkedAt": "2026-07-22T14:29:15.710Z"
+    },
+    {
+      "command": "focused area exemplar contract, semantic trace, and cross-surface correspondence tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s15 exact algebra dimension and area-region semantic links without presentation authority",
+      "checkedAt": "2026-07-22T14:32:20.425Z"
     }
   ],
   "expectedLearning": [
