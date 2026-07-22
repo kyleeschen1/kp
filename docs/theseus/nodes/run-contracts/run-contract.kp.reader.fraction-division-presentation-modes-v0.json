@@ -143,7 +143,8 @@
     {
       "id": "s16-divide-entry",
       "title": "Animate simultaneous divisor and fraction-bar entry",
-      "status": "planned"
+      "summary": "Both divisors and fraction bars now share one entry clock while numerator material preserves identity; KaTeX structure never scales, endpoints settle exactly, and the complete choreography compiles.",
+      "status": "complete"
     },
     {
       "id": "s17-divide-settlement",

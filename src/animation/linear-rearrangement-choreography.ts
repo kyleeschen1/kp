@@ -60,6 +60,7 @@ export interface KpLinearRearrangementSubgraphNode {
     | "hold-layout"
     | "move-continuants"
     | "introduce-balanced-terms"
+    | "introduce-division-structure"
     | "meet-canceling-terms"
     | "collapse-canceling-terms"
     | "compact-survivors"
@@ -212,7 +213,8 @@ function createStep(
   const continuants = identityRecords.map((record) =>
     continuantForRecord(transformation, record)
   );
-  const causalRecord = records.find((record) => record.relation !== "identity");
+  const causalRecords = records.filter((record) => record.relation !== "identity");
+  const causalRecord = causalRecords[0];
   if (causalRecord === undefined) {
     throw new Error(`Linear rearrangement ${transformation.id} requires a causal record.`);
   }
@@ -236,6 +238,7 @@ function createStep(
     kind,
     continuants,
     causalRecord,
+    causalRecords,
     successorSynthesisBinding
   );
   const lineageEdges = records.flatMap((record) =>
@@ -251,11 +254,13 @@ function createStep(
   });
   const focusEntityIds = focusEntityIdsForStep(
     transformation,
-    causalRecord
+    causalRecord,
+    causalRecords
   );
   const sourceNodeId = `salience.${transformation.id}.cause`;
   const targetNodeId = `salience.${transformation.id}.result`;
-  const hasTarget = causalRecord.targetSelectorIds.length > 0;
+  const causalTargetIds = causalRecords.flatMap((record) => record.targetSelectorIds);
+  const hasTarget = causalTargetIds.length > 0;
   const result = compileKpChoreographyPlan({
     id: `choreography.${transformation.id}`,
     timelineRefId: animation.timeline?.id ?? `timeline.${animation.id}`,
@@ -278,7 +283,7 @@ function createStep(
         ...(hasTarget
           ? [{
               id: targetNodeId,
-              entityIds: causalRecord.targetSelectorIds,
+              entityIds: causalTargetIds,
               role: "target" as const,
               readinessThreshold: 0.72
             }]
@@ -443,6 +448,7 @@ function lifecycleForStep(
   kind: KpEquationLinearRearrangementKind,
   continuants: readonly KpSemanticContinuant[],
   causalRecord: SelectorCorrespondenceRecord,
+  causalRecords: readonly SelectorCorrespondenceRecord[],
   successorSynthesisBinding: KpSuccessorSynthesisBinding | undefined
 ): KpChoreographyLifecycle {
   const records: KpChoreographyLifecycleRecord[] = continuants.map(
@@ -467,6 +473,25 @@ function lifecycleForStep(
       targetEntityIds: causalRecord.targetSelectorIds,
       summary: "Equal inverse terms enter only after both sides reserve space."
     });
+  } else if (kind === "divide-both-sides") {
+    for (const record of causalRecords) {
+      if (record.relation !== "introduction") {
+        throw new Error(
+          `Divide-both-sides step ${transformation.id} requires introduction-only causal records.`
+        );
+      }
+      records.push({
+        id: `${transformation.id}.${record.id}.introduction`,
+        kind: "introduction",
+        cause: {
+          kind: "semantic-introduction",
+          authorityId: "kp.algebra.divide-both-sides#matched-division-structure"
+        },
+        sourceEntityIds: [],
+        targetEntityIds: record.targetSelectorIds,
+        summary: record.summary
+      });
+    }
   } else if (isCancellationKind(kind)) {
     records.push({
       id: `${transformation.id}.cancellation`,
@@ -481,6 +506,19 @@ function lifecycleForStep(
       targetEntityIds: [],
       summary: "The additive inverse pair meets and collapses before survivor compaction."
     });
+    for (const record of causalRecords.filter((candidate) => candidate.relation === "removal")) {
+      records.push({
+        id: `${transformation.id}.${record.id}.retirement`,
+        kind: "elimination",
+        cause: {
+          kind: "consumption",
+          authorityId: `${transformation.id}#${record.id}.structural-retirement`
+        },
+        sourceEntityIds: record.sourceSelectorIds,
+        targetEntityIds: [],
+        summary: record.summary
+      });
+    }
   } else {
     const materialSourceIds = successorSynthesisBinding?.sourceAnnotations
       .filter((annotation) => annotation.contribution === "material-input")
@@ -547,6 +585,7 @@ function lineageEdgesForRecord(
       case "identity": return "persist" as const;
       case "introduction": return "introduction" as const;
       case "cancelation": return "removal" as const;
+      case "removal": return "removal" as const;
       case "fan-in": return "representation-succession" as const;
       default:
         throw new Error(
@@ -590,10 +629,14 @@ function lineageEdgesForRecord(
 
 function focusEntityIdsForStep(
   transformation: KpSemanticTransformation,
-  causalRecord: SelectorCorrespondenceRecord
+  causalRecord: SelectorCorrespondenceRecord,
+  causalRecords: readonly SelectorCorrespondenceRecord[]
 ): readonly string[] {
   if (causalRecord.sourceSelectorIds.length > 0) {
     return causalRecord.sourceSelectorIds;
+  }
+  if (causalRecords.length > 1) {
+    return causalRecords.flatMap((record) => record.targetSelectorIds);
   }
   const records = transformation.correspondenceMap!.records;
   return records
@@ -624,7 +667,7 @@ function operationSubgraph(
     "release-focus",
     [recognize.id]
   );
-  const nodes = kind === "balanced-introduction"
+  const nodes = kind === "balanced-introduction" || kind === "divide-both-sides"
     ? (() => {
         const reserve = node(
           "reserve-space",
@@ -639,9 +682,13 @@ function operationSubgraph(
           [reserve.id]
         );
         const introduce = node(
-          "introduce-balanced-terms",
+          kind === "divide-both-sides"
+            ? "introduce-division-structure"
+            : "introduce-balanced-terms",
           "act",
-          "introduce-balanced-terms",
+          kind === "divide-both-sides"
+            ? "introduce-division-structure"
+            : "introduce-balanced-terms",
           [move.id]
         );
         return [focus, reserve, move, introduce, {
@@ -715,6 +762,7 @@ function motifIdsForKind(
 ): readonly string[] {
   switch (kind) {
     case "balanced-introduction": return ["append-after-shift", "balanced-entry"];
+    case "divide-both-sides": return ["append-after-shift", "matched-fraction-entry"];
     case "cancel-additive-inverses": return ["cancelation", "meet-collapse"];
     case "cancel-multiplicative-inverses": return ["cancelation", "meet-collapse"];
     case "simplify-constant-difference": return ["merge-fan-in", "derive-result"];
@@ -728,6 +776,8 @@ function meaningfulMotionReason(
   switch (kind) {
     case "balanced-introduction":
       return "Reserved-space entry communicates that the same inverse operation applies to both sides.";
+    case "divide-both-sides":
+      return "Synchronized fraction structure communicates that the same non-zero divisor applies to both sides.";
     case "cancel-additive-inverses":
       return "Meet then collapse communicates additive inverse cancellation.";
     case "cancel-multiplicative-inverses":

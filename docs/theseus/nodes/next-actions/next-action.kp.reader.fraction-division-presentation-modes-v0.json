@@ -241,6 +241,24 @@
       "status": "passed",
       "scope": "s15 reader renderer dependency boundaries",
       "checkedAt": "2026-07-22T00:16:16.201Z"
+    },
+    {
+      "command": "node focused divide entry and linear rearrangement tests",
+      "status": "passed",
+      "scope": "s16 first-class divide binding, annotated KaTeX structure, synchronized undeformed entry, endpoint settlement, and choreography compilation",
+      "checkedAt": "2026-07-22T00:24:23.454Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s16 animation, rendering, semantic, and test types",
+      "checkedAt": "2026-07-22T00:24:24.648Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s16 animation and reader dependency direction",
+      "checkedAt": "2026-07-22T00:24:25.850Z"
     }
   ]
 }

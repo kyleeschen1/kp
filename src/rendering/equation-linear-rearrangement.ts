@@ -23,6 +23,7 @@ import type {
 
 export type KpEquationLinearRearrangementKind =
   | "balanced-introduction"
+  | "divide-both-sides"
   | "cancel-additive-inverses"
   | "cancel-multiplicative-inverses"
   | "simplify-constant-difference"
@@ -35,6 +36,7 @@ export function kpEquationLinearRearrangementKindForTransformType(
     case "subtractBothSides":
     case "multiplyBothSides":
       return "balanced-introduction";
+    case "divideBothSides": return "divide-both-sides";
     case "cancelAdditiveInverses": return "cancel-additive-inverses";
     case "cancelMultiplicativeInverses": return "cancel-multiplicative-inverses";
     case "simplifyConstantDifference": return "simplify-constant-difference";
@@ -52,6 +54,7 @@ export interface KpEquationLinearRearrangementFrame {
   readonly collapseProgress: number;
   readonly resultRevealProgress: number;
   readonly recognitionProgress: number;
+  readonly structureEntryProgress: number;
 }
 
 export function sampleKpEquationLinearRearrangementFrame(
@@ -91,7 +94,10 @@ export function sampleKpEquationLinearRearrangementFrame(
     meetProgress: smooth(windowProgress(p, 0.42, 0.68)),
     collapseProgress: smooth(windowProgress(p, 0.62, 0.8)),
     resultRevealProgress: smooth(windowProgress(p, 0.68, 0.88)),
-    recognitionProgress: smooth(windowProgress(p, 0.76, 0.92))
+    recognitionProgress: smooth(windowProgress(p, 0.76, 0.92)),
+    structureEntryProgress: kind === "divide-both-sides"
+      ? smooth(windowProgress(p, 0.34, 0.72))
+      : 0
   };
 }
 
@@ -115,7 +121,9 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
     case "role-change":
       return samplePersistentRelation(input);
     case "enter":
-      return input.frame.kind === "balanced-introduction"
+      return input.frame.kind === "divide-both-sides"
+        ? sampleMatchedFractionStructureIntroduction(input)
+        : input.frame.kind === "balanced-introduction"
         ? sampleBalancedIntroduction(input)
         : isCancellationKind(input.frame.kind)
           ? sampleExplicitCancellationTarget(input)
@@ -141,6 +149,19 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
     default:
       return undefined;
   }
+}
+
+function sampleMatchedFractionStructureIntroduction(
+  input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
+): readonly KpEquationTokenMotionFrameToken[] {
+  const entry = input.frame.structureEntryProgress;
+  return input.targetTokens.map((token) => frameToken(token, "target", {
+    opacity: entry,
+    x: 0,
+    y: 8 * (1 - entry),
+    // KaTeX fraction rules and divisors enter without geometric deformation.
+    scale: 1
+  }));
 }
 
 function sampleStructuralRetirement(
