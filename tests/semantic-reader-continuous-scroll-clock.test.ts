@@ -71,3 +71,33 @@ test("subscribers observe one immutable sample per supplied position", () => {
   clock.samplePosition(400);
   assert.deepEqual(seen, [0.1, 0.2]);
 });
+
+test("piecewise beat stops interpolate continuously across unequal narrative spans", () => {
+  const piecewise = {
+    stops: [
+      { positionPx: 100, progressPermille: 0 },
+      { positionPx: 300, progressPermille: 430 },
+      { positionPx: 900, progressPermille: 780 },
+      { positionPx: 1_100, progressPermille: 1_000 }
+    ]
+  } as const;
+
+  assert.equal(sampleKpReaderScrollProgress(0, piecewise), 0);
+  assert.equal(sampleKpReaderScrollProgress(200, piecewise), 0.215);
+  assert.equal(sampleKpReaderScrollProgress(600, piecewise), 0.605);
+  assert.equal(sampleKpReaderScrollProgress(1_200, piecewise), 1);
+
+  const clock = createKpReaderContinuousScrollClock({
+    id: "clock.story.piecewise",
+    geometry: piecewise,
+    checkpoints
+  });
+  assert.equal(clock.samplePosition(600).direction, "forward");
+  assert.equal(clock.samplePosition(200).direction, "rewind");
+  assert.throws(() => clock.updateGeometry({
+    stops: [
+      { positionPx: 100, progressPermille: 100 },
+      { positionPx: 200, progressPermille: 1_000 }
+    ]
+  }), /must span progress 0 through 1000/);
+});

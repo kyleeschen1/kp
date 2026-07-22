@@ -227,7 +227,14 @@
     {
       "id": "s15",
       "title": "Generalize piecewise beat scroll clocks",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s15-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s15-v0",
+      "title": "Generalize piecewise beat scroll clocks",
+      "summary": "Piecewise beat scroll-clock support is complete and ready for distribution migration.",
+      "status": "complete"
     },
     {
       "id": "s16",

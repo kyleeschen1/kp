@@ -5,10 +5,23 @@ import {
   type KpReaderPlaybackClock
 } from "./playback-clock.ts";
 
-export interface KpReaderScrollGeometry {
+export interface KpReaderLinearScrollGeometry {
   readonly startPx: number;
   readonly endPx: number;
 }
+
+export interface KpReaderPiecewiseScrollStop {
+  readonly positionPx: number;
+  readonly progressPermille: number;
+}
+
+export interface KpReaderPiecewiseScrollGeometry {
+  readonly stops: readonly KpReaderPiecewiseScrollStop[];
+}
+
+export type KpReaderScrollGeometry =
+  | KpReaderLinearScrollGeometry
+  | KpReaderPiecewiseScrollGeometry;
 
 export interface KpReaderScrollCheckpoint {
   readonly id: string;
@@ -33,7 +46,10 @@ export function createKpReaderContinuousScrollClock(input: {
   const listeners = new Set<KpReaderClockListener>();
   let disposed = false;
   let sequence = 0;
-  const initialProgress = progressAt(input.initialPositionPx ?? geometry.startPx, geometry);
+  const initialPosition = input.initialPositionPx ?? (
+    "stops" in geometry ? geometry.stops[0]!.positionPx : geometry.startPx
+  );
+  const initialProgress = progressAt(initialPosition, geometry);
   let snapshot = createKpReaderClockSample({
     source: "scroll",
     progress: initialProgress,
@@ -89,12 +105,14 @@ export function sampleKpReaderScrollProgress(
 
 function progressAt(positionPx: number, geometry: KpReaderScrollGeometry): number {
   if (!Number.isFinite(positionPx)) throw new Error("scroll position must be finite");
+  if ("stops" in geometry) return piecewiseProgressAt(positionPx, geometry.stops);
   return Math.min(1, Math.max(0,
     (positionPx - geometry.startPx) / (geometry.endPx - geometry.startPx)
   ));
 }
 
 function validateGeometry(geometry: KpReaderScrollGeometry): KpReaderScrollGeometry {
+  if ("stops" in geometry) return { stops: validateStops(geometry.stops) };
   if (!Number.isFinite(geometry.startPx) || !Number.isFinite(geometry.endPx)) {
     throw new Error("scroll geometry must be finite");
   }
@@ -102,6 +120,51 @@ function validateGeometry(geometry: KpReaderScrollGeometry): KpReaderScrollGeome
     throw new Error("scroll geometry end must follow start");
   }
   return { ...geometry };
+}
+
+function validateStops(
+  stops: readonly KpReaderPiecewiseScrollStop[]
+): readonly KpReaderPiecewiseScrollStop[] {
+  if (stops.length < 2) throw new Error("piecewise scroll geometry needs at least two stops");
+  let previousPosition = Number.NEGATIVE_INFINITY;
+  let previousProgress = -1;
+  const validated = stops.map((stop) => {
+    if (!Number.isFinite(stop.positionPx) || stop.positionPx <= previousPosition) {
+      throw new Error("piecewise scroll stop positions must be finite and strictly increasing");
+    }
+    if (!Number.isInteger(stop.progressPermille)
+      || stop.progressPermille < 0
+      || stop.progressPermille > 1_000
+      || stop.progressPermille < previousProgress) {
+      throw new Error("piecewise scroll progress must be ordered integers from 0 through 1000");
+    }
+    previousPosition = stop.positionPx;
+    previousProgress = stop.progressPermille;
+    return { ...stop };
+  });
+  if (validated[0]!.progressPermille !== 0
+    || validated.at(-1)!.progressPermille !== 1_000) {
+    throw new Error("piecewise scroll geometry must span progress 0 through 1000");
+  }
+  return validated;
+}
+
+function piecewiseProgressAt(
+  positionPx: number,
+  stops: readonly KpReaderPiecewiseScrollStop[]
+): number {
+  if (positionPx <= stops[0]!.positionPx) return 0;
+  for (let index = 1; index < stops.length; index += 1) {
+    const before = stops[index - 1]!;
+    const after = stops[index]!;
+    if (positionPx <= after.positionPx) {
+      const local = (positionPx - before.positionPx) /
+        (after.positionPx - before.positionPx);
+      return (before.progressPermille
+        + (after.progressPermille - before.progressPermille) * local) / 1_000;
+    }
+  }
+  return 1;
 }
 
 function validateCheckpoints(

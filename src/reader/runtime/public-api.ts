@@ -24,6 +24,9 @@ export {
   createKpReaderContinuousScrollClock,
   sampleKpReaderScrollProgress,
   type KpReaderContinuousScrollClock,
+  type KpReaderLinearScrollGeometry,
+  type KpReaderPiecewiseScrollGeometry,
+  type KpReaderPiecewiseScrollStop,
   type KpReaderScrollCheckpoint,
   type KpReaderScrollGeometry
 } from "./continuous-scroll-clock.ts";
