@@ -108,6 +108,10 @@ export {
   type KpDistributionAreaWidthTokenPose
 } from "./distribution-area-width-motion-plan.ts";
 export {
+  createKpDistributionAreaTermSchedule,
+  type KpDistributionAreaTermLaneId
+} from "./distribution-area-term-schedule.ts";
+export {
   createKpDistributionAreaMotionPlan,
   type KpDistributionAreaMaterialTokenId,
   type KpDistributionAreaMotionPlan,

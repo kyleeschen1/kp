@@ -207,6 +207,20 @@
       "scope": "s15 true inverse browser choreography",
       "checkedAt": "2026-07-22T17:15:41.792Z",
       "notes": "Eleven browser checks pass; direction switching preserves exact algebra and geometry frames, complements scrubber progress, rewinds the same path, updates the URL, and changes the cue to factoring language."
+    },
+    {
+      "command": "node --test indexed schedule and distribution motion suites",
+      "status": "passed",
+      "scope": "s16 composable scheduling laws",
+      "checkedAt": "2026-07-22T17:20:02.301Z",
+      "notes": "Seven laws pass: inferred lane identities support parallel, sequential, and stagger timing; the same measured motion plan executes sequential term distribution without a bespoke case; endpoints remain exact."
+    },
+    {
+      "command": "npm run typecheck and visual:distribution-area",
+      "status": "passed",
+      "scope": "s16 default parallel integration",
+      "checkedAt": "2026-07-22T17:20:09.981Z",
+      "notes": "All TypeScript projects and eleven browser checks pass; algebra and geometry share the same inferred parallel schedule id without changing accepted visual behavior."
     }
   ],
   "expectedLearning": [

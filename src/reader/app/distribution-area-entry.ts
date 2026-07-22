@@ -7,6 +7,7 @@ import { createKpEquationFontReadiness } from "../../rendering/equation-font-rea
 import { createKpReaderActiveLocationService } from "../runtime/public-api.ts";
 import {
   createKpDistributionAreaMotionPlan,
+  createKpDistributionAreaTermSchedule,
   createKpDistributionAreaWidthMotionPlan,
   measureKpDistributionAreaLayout,
   measureKpDistributionAreaWidthLayout,
@@ -41,6 +42,7 @@ const activeLocation = createKpReaderActiveLocationService({
 });
 const directionButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-kp-direction-button]")];
 const attention = createKpDistributionAreaAttentionPlan();
+const termSchedule = createKpDistributionAreaTermSchedule();
 const fontReadiness = createKpEquationFontReadiness(document);
 let direction: Direction = readDirection();
 let progress = readProgress();
@@ -257,13 +259,14 @@ function refreshLayoutAndRender(): void {
   layoutRevision += 1;
   layoutReadCount += 1;
   layout = measureKpDistributionAreaLayout({ algebraRoot, measurementRoot, revision: layoutRevision });
-  motionPlan = createKpDistributionAreaMotionPlan(layout);
+  motionPlan = createKpDistributionAreaMotionPlan(layout, termSchedule);
   widthMotionPlan = createKpDistributionAreaWidthMotionPlan(measureKpDistributionAreaWidthLayout({
     areaRoot,
     revision: layoutRevision
-  }));
+  }), termSchedule);
   stage.dataset["kpDistributionLayoutRevision"] = String(layoutRevision);
   stage.dataset["kpDistributionLayoutReadCount"] = String(layoutReadCount);
+  stage.dataset["kpDistributionSchedule"] = termSchedule.id;
   render();
 }
 

@@ -145,7 +145,8 @@
     {
       "id": "s16",
       "title": "Establish composable sequential and parallel scheduling",
-      "status": "planned"
+      "summary": "Typed inferred lane schedules now compose parallel, sequential, and staggered execution. Algebra and geometry receive one injected schedule, and sequential distribution reuses the same motion planner rather than adding a case-specific renderer.",
+      "status": "complete"
     },
     {
       "id": "s17",

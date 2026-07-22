@@ -3,6 +3,7 @@ import test from "node:test";
 
 import { createKpDistributionAreaLayoutSnapshot, type KpDistributionAreaAnchorMeasurement, type KpDistributionAreaStateId } from "../src/reader/renderers/distribution-area-layout.ts";
 import { createKpDistributionAreaMotionPlan } from "../src/reader/renderers/distribution-area-motion-plan.ts";
+import { createKpIndexedProgressSchedule, kpSequence } from "../src/animation/indexed-progress-schedule.ts";
 
 const suffixes: Readonly<Record<KpDistributionAreaStateId, readonly string[]>> = {
   factored: ["factor.3", "left-paren", "term.x", "plus", "term.2", "right-paren"],
@@ -82,4 +83,20 @@ test("parentheses clear before tokens cross their bounds while the duplicated fa
   assert.equal(early.tokens["right-paren"].opacity, 1);
   assert.equal(middle.tokens["left-paren"].opacity, 0);
   assert.equal(middle.tokens["right-paren"].opacity, 0);
+});
+
+test("a sequential term policy reuses the same motion plan without a bespoke choreography", () => {
+  const measured = layout();
+  const schedule = createKpIndexedProgressSchedule({
+    id: "schedule.distribution-area.terms.sequence",
+    ids: ["left", "right"],
+    strategy: kpSequence()
+  });
+  const plan = createKpDistributionAreaMotionPlan(measured, schedule);
+  const halfwayThroughDistribution = plan.sample(0.36);
+
+  assert.equal(plan.scheduleId, schedule.id);
+  assert.equal(halfwayThroughDistribution.tokens.x.x, measured.anchor("distributed", "left.term.x").center.x);
+  assert.equal(halfwayThroughDistribution.tokens.two.x, measured.anchor("factored", "term.2").center.x);
+  assert.equal(plan.sample(0.72).tokens.two.x, measured.anchor("distributed", "right.term.2").center.x);
 });

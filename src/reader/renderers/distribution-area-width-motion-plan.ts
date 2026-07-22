@@ -2,6 +2,11 @@ import type {
   KpDistributionAreaMeasuredAnchor,
   KpDistributionAreaWidthLayoutSnapshot
 } from "./distribution-area-layout.ts";
+import type { KpIndexedProgressSchedule } from "../../animation/indexed-progress-schedule.ts";
+import {
+  createKpDistributionAreaTermSchedule,
+  type KpDistributionAreaTermLaneId
+} from "./distribution-area-term-schedule.ts";
 
 export type KpDistributionAreaWidthTokenId = "x" | "plus" | "two";
 
@@ -15,27 +20,31 @@ export interface KpDistributionAreaWidthTokenPose {
 export interface KpDistributionAreaWidthMotionPlan {
   readonly id: string;
   readonly layoutRevision: number;
+  readonly scheduleId: string;
   sample(progress: number): Readonly<Record<KpDistributionAreaWidthTokenId, KpDistributionAreaWidthTokenPose>>;
 }
 
 export function createKpDistributionAreaWidthMotionPlan(
-  layout: KpDistributionAreaWidthLayoutSnapshot
+  layout: KpDistributionAreaWidthLayoutSnapshot,
+  termSchedule: KpIndexedProgressSchedule<KpDistributionAreaTermLaneId> = createKpDistributionAreaTermSchedule()
 ): KpDistributionAreaWidthMotionPlan {
   return {
     id: `motion-plan.distribution-area-width.r${layout.revision}`,
     layoutRevision: layout.revision,
+    scheduleId: termSchedule.id,
     sample(progressValue) {
       // The caller supplies the shared, already-eased correspondence clock so
       // algebra, labels, and the partition cannot drift through double easing.
       const progress = clamp01(progressValue);
+      const lanes = termSchedule.sample(progress);
       return {
-        x: travel(layout.anchor("source.x"), layout.anchor("target.x"), progress, -6),
+        x: travel(layout.anchor("source.x"), layout.anchor("target.x"), lanes.left, -6),
         plus: {
           ...at(layout.anchor("source.plus")),
           opacity: 1 - interval(progress, 0.18, 0.52),
           scale: lerp(1, 1.08, interval(progress, 0.18, 0.52))
         },
-        two: travel(layout.anchor("source.two"), layout.anchor("target.two"), progress, -6)
+        two: travel(layout.anchor("source.two"), layout.anchor("target.two"), lanes.right, -6)
       };
     }
   };

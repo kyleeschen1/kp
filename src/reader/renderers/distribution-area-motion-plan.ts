@@ -2,6 +2,11 @@ import type {
   KpDistributionAreaLayoutSnapshot,
   KpDistributionAreaMeasuredAnchor
 } from "./distribution-area-layout.ts";
+import type { KpIndexedProgressSchedule } from "../../animation/indexed-progress-schedule.ts";
+import {
+  createKpDistributionAreaTermSchedule,
+  type KpDistributionAreaTermLaneId
+} from "./distribution-area-term-schedule.ts";
 
 export type KpDistributionAreaMaterialTokenId =
   | "source-three" | "left-three" | "right-three"
@@ -24,11 +29,13 @@ export interface KpDistributionAreaTimelineFrame {
 export interface KpDistributionAreaMotionPlan {
   readonly id: string;
   readonly layoutRevision: number;
+  readonly scheduleId: string;
   sample(progress: number): KpDistributionAreaTimelineFrame;
 }
 
 export function createKpDistributionAreaMotionPlan(
-  layout: KpDistributionAreaLayoutSnapshot
+  layout: KpDistributionAreaLayoutSnapshot,
+  termSchedule: KpIndexedProgressSchedule<KpDistributionAreaTermLaneId> = createKpDistributionAreaTermSchedule()
 ): KpDistributionAreaMotionPlan {
   const f = (suffix: string) => layout.anchor("factored", suffix);
   const d = (suffix: string) => layout.anchor("distributed", suffix);
@@ -36,11 +43,12 @@ export function createKpDistributionAreaMotionPlan(
   return {
     id: `motion-plan.distribution-area.r${layout.revision}`,
     layoutRevision: layout.revision,
+    scheduleId: termSchedule.id,
     sample(progressValue) {
       const progress = clamp01(progressValue);
       if (progress <= 0.72) {
         const local = smoothstep(progress / 0.72);
-        return { progress, phase: "distribution", phaseProgress: local, tokens: distributionTokens(local, f, d) };
+        return { progress, phase: "distribution", phaseProgress: local, tokens: distributionTokens(local, termSchedule.sample(local), f, d) };
       }
       const local = smoothstep((progress - 0.72) / 0.28);
       return { progress, phase: "evaluation", phaseProgress: local, tokens: evaluationTokens(local, d, e) };
@@ -50,21 +58,26 @@ export function createKpDistributionAreaMotionPlan(
 
 type AnchorReader = (suffix: string) => KpDistributionAreaMeasuredAnchor;
 
-function distributionTokens(progress: number, factored: AnchorReader, distributed: AnchorReader): Readonly<Record<KpDistributionAreaMaterialTokenId, KpDistributionAreaTokenPose>> {
+function distributionTokens(
+  progress: number,
+  lanes: Readonly<Record<KpDistributionAreaTermLaneId, number>>,
+  factored: AnchorReader,
+  distributed: AnchorReader
+): Readonly<Record<KpDistributionAreaMaterialTokenId, KpDistributionAreaTokenPose>> {
   const factor = factored("factor.3");
   // Let one readable factor lead the motion before its coincident copy peels away.
   // This preserves the semantic one-to-many branch without flashing a doubled glyph.
-  const factorSpread = interval(progress, 0.42, 1);
-  const leftFactor = travel(factor, distributed("left.factor.3"), progress, -8);
+  const factorSpread = interval(lanes.right, 0.42, 1);
+  const leftFactor = travel(factor, distributed("left.factor.3"), lanes.left, -8);
   return {
     "source-three": hiddenAt(factor),
     "left-three": leftFactor,
     "right-three": travelFromPose(leftFactor, distributed("right.factor.3"), factorSpread, -12),
     "left-paren": opening(factored("left-paren"), progress),
-    x: travel(factored("term.x"), distributed("left.term.x"), progress),
+    x: travel(factored("term.x"), distributed("left.term.x"), lanes.left),
     plus: travel(factored("plus"), distributed("plus"), progress),
-    times: introducing(distributed("right.times"), progress, 0.58, 0.9),
-    two: travel(factored("term.2"), distributed("right.term.2"), progress),
+    times: introducing(distributed("right.times"), lanes.right, 0.58, 0.9),
+    two: travel(factored("term.2"), distributed("right.term.2"), lanes.right),
     "right-paren": opening(factored("right-paren"), progress),
     six: hiddenAt(distributed("right.factor.3"))
   };
