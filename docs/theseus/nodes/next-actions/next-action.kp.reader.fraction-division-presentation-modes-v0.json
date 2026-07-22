@@ -331,6 +331,24 @@
       "status": "passed",
       "scope": "s20 correspondence and compiler types",
       "checkedAt": "2026-07-22T00:47:25.953Z"
+    },
+    {
+      "command": "node focused split merge and divide layout tests",
+      "status": "passed",
+      "scope": "s21 widest split endpoint native KaTeX hierarchy stable centering no wrap and phone scale",
+      "checkedAt": "2026-07-22T00:49:59.812Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s21 layout public API types",
+      "checkedAt": "2026-07-22T00:50:00.938Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "s21 renderer dependency boundaries",
+      "checkedAt": "2026-07-22T00:50:02.001Z"
     }
   ]
 }

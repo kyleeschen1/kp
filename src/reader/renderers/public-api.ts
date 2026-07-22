@@ -10,6 +10,10 @@ export {
   type KpEquationSequenceStatePlacement
 } from "./equation-sequence-envelope.ts";
 export {
+  planKpNumeratorSplitMergeLayout,
+  type KpNumeratorSplitMergeLayoutPlan
+} from "./numerator-split-merge-layout.ts";
+export {
   createKpReaderAdapterRegistry,
   type KpReaderAdapterRegistry,
   type KpReaderMountedAdapter

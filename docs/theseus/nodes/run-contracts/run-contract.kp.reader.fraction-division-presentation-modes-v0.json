@@ -173,7 +173,8 @@
     {
       "id": "s21-split-layout",
       "title": "Plan widest split state and hierarchy geometry",
-      "status": "planned"
+      "summary": "Added a strict split-merge layout planner that requires the split endpoint to own the width budget, preserves native KaTeX hierarchy, centers both endpoints in one measured envelope, and chooses one phone scale without wrapping.",
+      "status": "complete"
     },
     {
       "id": "s22-split-motion",
