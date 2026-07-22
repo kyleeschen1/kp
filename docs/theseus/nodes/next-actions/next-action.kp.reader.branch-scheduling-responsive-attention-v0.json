@@ -29,6 +29,13 @@
       "scope": "project-memory",
       "checkedAt": "2026-07-22T23:37:27.696Z",
       "notes": "No stale solve-x checkpoint, attention-under-design, or awaiting-approval language remains in active control sections."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "slice-s02-worktree-stabilization",
+      "checkedAt": "2026-07-22T23:42:37.206Z",
+      "notes": "The interrupted branch-scheduling implementation now compiles across app, node, test, and domain TypeScript boundaries."
     }
   ],
   "expectedLearning": [

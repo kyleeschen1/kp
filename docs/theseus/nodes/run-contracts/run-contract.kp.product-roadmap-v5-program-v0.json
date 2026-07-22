@@ -62,7 +62,8 @@
     {
       "id": "s02",
       "title": "Audit and stabilize the interrupted branch-scheduling worktree",
-      "status": "planned"
+      "summary": "Recovered the interrupted branch-scheduling patch, removed duplicate progress state, centralized balanced scheduling for choreography and lightweight reader bindings, and restored repository-wide type safety.",
+      "status": "complete"
     },
     {
       "id": "s03",

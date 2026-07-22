@@ -319,7 +319,8 @@ export function sampleKpEquationTokenMotion(
         p,
         geometry.cancellationPresentationRecipe,
         geometry.continuantPresentationRecipe,
-        geometry.zeroWitnessPresentationRecipe
+        geometry.zeroWitnessPresentationRecipe,
+        geometry.branchSchedule
       );
   const dotProductTraversal = geometry.dotProductTraversalPlan === undefined
     ? undefined
@@ -614,6 +615,7 @@ function sampleRelation(
       frame: linearRearrangement,
       cancellationPresentationRecipe: geometry.cancellationPresentationRecipe,
       continuantPresentationRecipe: geometry.continuantPresentationRecipe,
+      branchSchedule: geometry.branchSchedule,
       successorPresentationRecipe: geometry.successorPresentationRecipe,
       successorSynthesisBinding: geometry.successorSynthesisBinding,
       successorSynthesisPlan: geometry.successorSynthesisPlan

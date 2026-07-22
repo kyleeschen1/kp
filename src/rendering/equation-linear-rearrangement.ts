@@ -21,6 +21,7 @@ import type {
   KpEquationZeroWitnessPresentationRecipe
 } from "./equation-presentation-policy.ts";
 import { kpFractionalLinearCertifiedTransferProxyRecordId } from "../semantic/fractional-linear-certified-transfer-contract.ts";
+import type { KpSemanticBranchSchedule } from "../animation/branch-schedule.ts";
 
 export type KpEquationLinearRearrangementKind =
   | "balanced-introduction"
@@ -68,6 +69,8 @@ export interface KpEquationLinearRearrangementFrame {
   readonly branchTravelProgress: number;
   readonly branchSettlementProgress: number;
   readonly operatorDescentProgress: number;
+  readonly branchScheduleId?: string | undefined;
+  readonly scheduledBranchProgress?: Readonly<Record<string, number>> | undefined;
 }
 
 export function sampleKpEquationLinearRearrangementFrame(
@@ -78,7 +81,8 @@ export function sampleKpEquationLinearRearrangementFrame(
   continuantPresentationRecipe?:
     KpEquationContinuantPresentationRecipe | undefined,
   zeroWitnessPresentationRecipe?:
-    KpEquationZeroWitnessPresentationRecipe | undefined
+    KpEquationZeroWitnessPresentationRecipe | undefined,
+  branchSchedule?: KpSemanticBranchSchedule | undefined
 ): KpEquationLinearRearrangementFrame {
   const p = clamp01(progress);
   const reservationProgress = smooth(windowProgress(p, 0.1, 0.46));
@@ -99,6 +103,9 @@ export function sampleKpEquationLinearRearrangementFrame(
     : reserveThenTransit
       ? smooth(windowProgress(p, 0.08, 0.26))
       : reservationProgress;
+  const scheduledBranchProgress = kind === "balanced-introduction" && branchSchedule !== undefined
+    ? branchSchedule.sample(windowProgress(p, 0.38, 0.7))
+    : undefined;
   return {
     kind,
     reservationProgress,
@@ -126,7 +133,13 @@ export function sampleKpEquationLinearRearrangementFrame(
       ? smooth(windowProgress(p, 0.54, 0.82))
       : kind === "merge-fractions"
         ? smooth(windowProgress(p, 0.22, 0.72))
-        : 0
+        : 0,
+    ...(branchSchedule === undefined
+      ? {}
+      : {
+          branchScheduleId: branchSchedule.id,
+          ...(scheduledBranchProgress === undefined ? {} : { scheduledBranchProgress })
+        })
   };
 }
 
@@ -144,6 +157,7 @@ export function sampleKpEquationLinearRearrangementRelation(input: {
     KpEquationSuccessorPresentationRecipe | undefined;
   readonly continuantPresentationRecipe?:
     KpEquationContinuantPresentationRecipe | undefined;
+  readonly branchSchedule?: KpSemanticBranchSchedule | undefined;
 }): readonly KpEquationTokenMotionFrameToken[] | undefined {
   switch (input.relation.lifecycle) {
     case "persist":
@@ -380,9 +394,18 @@ function sampleBalancedIntroduction(
   input: Parameters<typeof sampleKpEquationLinearRearrangementRelation>[0]
 ): readonly KpEquationTokenMotionFrameToken[] {
   return input.targetTokens.map((token, index) => {
-    // Balanced operations must read as simultaneous even when the terms enter
-    // from independently directed diagonals.
-    const entry = smooth(windowProgress(input.progress, 0.38, 0.7));
+    const selectorId = input.relation.target?.selectorIds[index];
+    const scheduledBranch = selectorId === undefined
+      ? undefined
+      : input.branchSchedule?.operation.branches.find((branch) =>
+          branch.entityIds.includes(selectorId)
+        );
+    const entry = scheduledBranch === undefined
+      ? smooth(windowProgress(input.progress, 0.38, 0.7))
+      : input.frame.scheduledBranchProgress?.[scheduledBranch.id];
+    if (entry === undefined) {
+      throw new Error(`Balanced branch schedule does not cover selector ${selectorId ?? token.motionId}.`);
+    }
     const direction = index % 2 === 0 ? -1 : 1;
     return frameToken(token, "target", {
       opacity: entry,

@@ -43,6 +43,10 @@ import {
   createKpSuccessorSynthesisBindingFromMetadata,
   type KpSuccessorSynthesisBinding
 } from "./successor-synthesis.ts";
+import {
+  createKpBalancedBranchScheduling,
+  type KpBalancedBranchScheduling
+} from "./equation-balanced-branch-scheduling.ts";
 
 export const kpLinearRearrangementTiming = {
   orientEnd: 0.14,
@@ -85,6 +89,9 @@ export interface KpLinearRearrangementStep {
     readonly id: string;
     readonly nodes: readonly KpLinearRearrangementSubgraphNode[];
   };
+  readonly branchOperation?: KpBalancedBranchScheduling["branchOperation"] | undefined;
+  readonly branchSchedules?: KpBalancedBranchScheduling["branchSchedules"] | undefined;
+  readonly branchSchedule?: KpBalancedBranchScheduling["branchSchedule"] | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
 }
 
@@ -343,6 +350,12 @@ function createStep(
       `Linear rearrangement choreography failed: ${result.gaps[0]?.message ?? "unknown gap"}`
     );
   }
+  const branchScheduling = createBalancedBranchScheduling({
+    animation,
+    transformation,
+    kind,
+    causalRecord
+  });
   return {
     transformationId: transformation.id,
     kind,
@@ -371,10 +384,35 @@ function createStep(
       accessibilityMode: "full"
     }),
     operationSubgraph: operationSubgraph(transformation.id, kind),
+    ...(branchScheduling === undefined ? {} : branchScheduling),
     ...(successorSynthesisBinding === undefined
       ? {}
       : { successorSynthesisBinding })
   };
+}
+
+function createBalancedBranchScheduling(input: {
+  readonly animation: KpAnimationAsset;
+  readonly transformation: KpSemanticTransformation;
+  readonly kind: KpEquationLinearRearrangementKind;
+  readonly causalRecord: SelectorCorrespondenceRecord;
+}): Pick<
+  KpLinearRearrangementStep,
+  "branchOperation" | "branchSchedules" | "branchSchedule"
+> | undefined {
+  const selected = input.animation.metadata?.["equationBranchPresentationStrategy"];
+  if (selected === undefined) return undefined;
+  if (input.kind !== "balanced-introduction") {
+    throw new Error(
+      `Animation ${input.animation.id} selects branch scheduling for non-balanced operation ${input.transformation.id}.`
+    );
+  }
+  return createKpBalancedBranchScheduling({
+    transformationId: input.transformation.id,
+    authorityId: `kp.algebra.${kebabCase(input.transformation.transformType)}`,
+    targetSelectorIds: input.causalRecord.targetSelectorIds,
+    selectedStrategy: selected
+  });
 }
 
 function vocabularyForStep(

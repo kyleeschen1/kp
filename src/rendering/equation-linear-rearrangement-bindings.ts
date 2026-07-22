@@ -7,10 +7,17 @@ import {
   kpEquationLinearRearrangementKindForTransformType,
   type KpEquationLinearRearrangementKind
 } from "./equation-linear-rearrangement.ts";
+import {
+  createKpBalancedBranchScheduling,
+  type KpBalancedBranchScheduling
+} from "../animation/equation-balanced-branch-scheduling.ts";
 
 export interface KpEquationLinearRearrangementBinding {
   readonly transformationId: string;
   readonly kind: KpEquationLinearRearrangementKind;
+  readonly branchOperation?: KpBalancedBranchScheduling["branchOperation"] | undefined;
+  readonly branchSchedules?: KpBalancedBranchScheduling["branchSchedules"] | undefined;
+  readonly branchSchedule?: KpBalancedBranchScheduling["branchSchedule"] | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
 }
 
@@ -30,9 +37,26 @@ export function createKpEquationLinearRearrangementBindings(
         `Linear rearrangement ${transformation.id} requires a causal correspondence.`
       );
     }
+    const selectedBranchStrategy = animation.metadata?.[
+      "equationBranchPresentationStrategy"
+    ];
+    if (selectedBranchStrategy !== undefined && kind !== "balanced-introduction") {
+      throw new Error(
+        `Animation ${animation.id} selects branch scheduling for non-balanced operation ${transformation.id}.`
+      );
+    }
+    const branchScheduling = kind === "balanced-introduction"
+      ? createKpBalancedBranchScheduling({
+          transformationId: transformation.id,
+          authorityId: `kp.algebra.${kind}`,
+          targetSelectorIds: causalRecord.targetSelectorIds,
+          selectedStrategy: selectedBranchStrategy
+        })
+      : undefined;
     return [{
       transformationId: transformation.id,
       kind,
+      ...(branchScheduling === undefined ? {} : branchScheduling),
       ...(isSuccessorKind(kind)
         ? {
             successorSynthesisBinding:

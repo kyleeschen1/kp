@@ -28,6 +28,7 @@ import type {
   KpWitnessedAnnihilationBinding,
   KpWitnessedAnnihilationPlan
 } from "../animation/witnessed-annihilation.ts";
+import type { KpSemanticBranchSchedule } from "../animation/branch-schedule.ts";
 
 export type KpEquationRepresentationalSuccessionKind =
   "opposite-corner-seed";
@@ -89,6 +90,7 @@ export interface KpMeasuredEquationTransitionGeometry {
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
     KpEquationLinearRearrangementKind | undefined;
+  readonly branchSchedule?: KpSemanticBranchSchedule | undefined;
   readonly cancellationPresentationRecipe?:
     KpEquationCancellationPresentationRecipe | undefined;
   readonly zeroWitnessPresentationRecipe?:
@@ -204,6 +206,7 @@ export function measureKpEquationTransitionGeometry(input: {
     KpEquationRepresentationalSuccessionKind | undefined;
   readonly linearRearrangementKind?:
     KpEquationLinearRearrangementKind | undefined;
+  readonly branchSchedule?: KpSemanticBranchSchedule | undefined;
   readonly cancellationPresentationRecipe?:
     KpEquationCancellationPresentationRecipe | undefined;
   readonly zeroWitnessPresentationRecipe?:
@@ -285,6 +288,9 @@ export function measureKpEquationTransitionGeometry(input: {
     ...(input.linearRearrangementKind === undefined
       ? {}
       : { linearRearrangementKind: input.linearRearrangementKind }),
+    ...(input.branchSchedule === undefined
+      ? {}
+      : { branchSchedule: input.branchSchedule }),
     ...(input.cancellationPresentationRecipe === undefined
       ? {}
       : { cancellationPresentationRecipe: input.cancellationPresentationRecipe }),

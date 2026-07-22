@@ -49,6 +49,7 @@ import {
   createKpIndependentZeroWitnessPlan,
   sampleKpIndependentZeroWitness
 } from "./equation-independent-zero-witness.ts";
+import type { KpSemanticBranchSchedule } from "../animation/branch-schedule.ts";
 
 export interface KpEquationOwnerMotionAnchor {
   readonly id: string;
@@ -87,6 +88,7 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
     KpEquationDepthPresentationRecipe | undefined;
   readonly continuantPresentationRecipe?:
     KpEquationContinuantPresentationRecipe | undefined;
+  readonly branchSchedule?: KpSemanticBranchSchedule | undefined;
   readonly witnessedAnnihilationBinding?: KpWitnessedAnnihilationBinding | undefined;
   readonly successorSynthesisBinding?: KpSuccessorSynthesisBinding | undefined;
 }): KpEquationLinearRearrangementOwnerFrame {
@@ -154,6 +156,9 @@ export function sampleKpEquationLinearRearrangementOwners(input: {
     ...(input.continuantPresentationRecipe === undefined
       ? {}
       : { continuantPresentationRecipe: input.continuantPresentationRecipe }),
+    ...(input.branchSchedule === undefined
+      ? {}
+      : { branchSchedule: input.branchSchedule }),
     ...(input.witnessedAnnihilationBinding === undefined
       ? {}
       : { witnessedAnnihilationBinding: input.witnessedAnnihilationBinding }),
@@ -194,7 +199,8 @@ function sampleLinearRearrangementMotion(
     p,
     geometry.cancellationPresentationRecipe,
     geometry.continuantPresentationRecipe,
-    geometry.zeroWitnessPresentationRecipe
+    geometry.zeroWitnessPresentationRecipe,
+    geometry.branchSchedule
   );
   const witnessedAnnihilation = geometry.witnessedAnnihilationPlan === undefined
     ? undefined
@@ -306,6 +312,7 @@ export function sampleKpEquationLinearRearrangementOwnerMotion(input: {
     KpEquationContinuantPresentationRecipe | undefined;
   readonly zeroWitnessPresentationRecipe?:
     KpEquationZeroWitnessPresentationRecipe | undefined;
+  readonly branchSchedule?: KpSemanticBranchSchedule | undefined;
 }): readonly KpEquationOwnerFragmentMotion[] {
   const sourceTokens = input.sourceAnchors.map(tokenForAnchor);
   const targetTokens = input.targetAnchors.map(tokenForAnchor);
@@ -337,10 +344,12 @@ export function sampleKpEquationLinearRearrangementOwnerMotion(input: {
       input.progress,
       input.cancellationPresentationRecipe,
       input.continuantPresentationRecipe,
-      input.zeroWitnessPresentationRecipe
+      input.zeroWitnessPresentationRecipe,
+      input.branchSchedule
     ),
     cancellationPresentationRecipe: input.cancellationPresentationRecipe,
-    continuantPresentationRecipe: input.continuantPresentationRecipe
+    continuantPresentationRecipe: input.continuantPresentationRecipe,
+    branchSchedule: input.branchSchedule
   });
   return (sampled ?? []).map((fragment) => ({
     anchorId: fragment.motionId,

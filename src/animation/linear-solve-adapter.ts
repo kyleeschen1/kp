@@ -205,7 +205,10 @@ function createLinearSolveAnimationFromSource(
       equationZeroWitnessPresentationRecipe: "none",
       equationSuccessorPresentationRecipe: "counter-convergence-v1",
       equationDepthPresentationRecipe: "semantic-depth-v1",
-      equationContinuantPresentationRecipe: "transit-then-reflow-v1"
+      equationContinuantPresentationRecipe: "transit-then-reflow-v1",
+      // Keep the accepted balanced entry while proving alternate presentation
+      // schedules over the same subtract-both-sides semantic operation.
+      ...(canonical ? { equationBranchPresentationStrategy: "together" } : {})
     }
   });
 }

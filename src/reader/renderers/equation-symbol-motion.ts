@@ -26,6 +26,7 @@ import type { KpEquationLinearRearrangementKind } from "../../rendering/equation
 import type { KpReaderEquationLayoutSnapshot } from "./equation-layout-snapshot.ts";
 import type { KpWitnessedAnnihilationBinding } from "../../animation/witnessed-annihilation.ts";
 import type { KpSuccessorSynthesisBinding } from "../../animation/successor-synthesis.ts";
+import type { KpSemanticBranchSchedule } from "../../animation/branch-schedule.ts";
 import type { KpEquationTokenMotionFrame } from "../../rendering/semantic-equation-token-renderer.ts";
 import type {
   KpEquationCancellationPresentationRecipe,
@@ -79,6 +80,7 @@ export function sampleKpReaderEquationSymbolMotion(input: {
   readonly alignment: KpReaderEquationPerceptualAlignmentPlan;
   readonly layout?: KpReaderEquationLayoutSnapshot | undefined;
   readonly linearRearrangementKind?: KpEquationLinearRearrangementKind | undefined;
+  readonly branchSchedule?: KpSemanticBranchSchedule | undefined;
   readonly cancellationPresentationRecipe?:
     KpEquationCancellationPresentationRecipe | undefined;
   readonly zeroWitnessPresentationRecipe?:
@@ -126,6 +128,7 @@ export function sampleKpReaderEquationSymbolMotion(input: {
         successorPresentationRecipe: input.successorPresentationRecipe,
         depthPresentationRecipe: input.depthPresentationRecipe,
         continuantPresentationRecipe: input.continuantPresentationRecipe,
+        branchSchedule: input.branchSchedule,
         witnessedAnnihilationBinding: input.witnessedAnnihilationBinding,
         successorSynthesisBinding: input.successorSynthesisBinding
       });

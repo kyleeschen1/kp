@@ -553,6 +553,7 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
     alignment: context.alignment,
     layout: context.layout,
     linearRearrangementKind: choreographyStep?.kind,
+    branchSchedule: choreographyStep?.branchSchedule,
     cancellationPresentationRecipe: equationPresentationProfile.identity ===
         "hold-until-settled-v1"
       ? "witnessed-annihilation-v1"
@@ -576,11 +577,23 @@ function renderSample(sample: KpReaderClockSample, layout: LayoutState): void {
   if (motion.linearRearrangement === undefined) {
     delete stage.dataset["kpReaderEquationPersistentReflowProgress"];
     delete stage.dataset["kpReaderEquationFocalTransitProgress"];
+    delete stage.dataset["kpReaderEquationBranchSchedule"];
+    delete stage.dataset["kpReaderEquationBranchProgress"];
   } else {
     stage.dataset["kpReaderEquationPersistentReflowProgress"] =
       String(motion.linearRearrangement.persistentReflowProgress);
     stage.dataset["kpReaderEquationFocalTransitProgress"] =
       String(motion.linearRearrangement.focalTransitProgress);
+    if (motion.linearRearrangement.branchScheduleId === undefined) {
+      delete stage.dataset["kpReaderEquationBranchSchedule"];
+      delete stage.dataset["kpReaderEquationBranchProgress"];
+    } else {
+      stage.dataset["kpReaderEquationBranchSchedule"] =
+        motion.linearRearrangement.branchScheduleId;
+      stage.dataset["kpReaderEquationBranchProgress"] = JSON.stringify(
+        motion.linearRearrangement.scheduledBranchProgress
+      );
+    }
   }
   const focusedRefs = visualFocusRefs(focusSnapshot);
   syncNativeEndpointEvidence(motion, context, phaseProgress);
