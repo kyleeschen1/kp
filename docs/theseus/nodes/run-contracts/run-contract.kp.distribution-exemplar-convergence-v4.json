@@ -79,7 +79,8 @@
     {
       "id": "s05",
       "title": "Restore TOC and accessibility current synchronization",
-      "status": "planned"
+      "summary": "A shared active-location runtime now owns TOC highlighting, aria-current location, beat activation, and aria-current step for both equation and distribution readers. Eight cross-route browser checks pass.",
+      "status": "complete"
     },
     {
       "id": "s06",

@@ -82,6 +82,16 @@ test("distribution URL restores the exact review moment and semantic cross-surfa
   await expect(stage).toHaveAttribute("data-kp-owner", "material");
   await expect(stage).toHaveAttribute("data-kp-checkpoint", "distributed");
   await expect(page.locator("[data-kp-distribution-scrubber]")).toHaveValue("720");
+  const toc = page.locator(".kp-lesson-toc");
+  await expect(toc).toHaveAttribute("data-kp-toc-active-id", "beat.distribute");
+  await expect(toc.locator('[data-kp-toc-active="true"]')).toHaveAttribute(
+    "aria-current",
+    "location"
+  );
+  await expect(page.locator('[data-kp-beat="beat.distribute"]')).toHaveAttribute(
+    "aria-current",
+    "step"
+  );
 
   await page.getByRole("button", { name: "three" }).hover();
   await expect(page.locator('[data-kp-area-label="height"]')).toHaveAttribute(

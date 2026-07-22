@@ -8,6 +8,7 @@ import {
   attentionPhaseAt,
   createKpDistributionAreaAttentionPlan
 } from "../../animation/distribution-area-exemplar-attention.ts";
+import { createKpReaderActiveLocationService } from "../runtime/public-api.ts";
 
 type Direction = "forward" | "inverse";
 
@@ -20,6 +21,10 @@ const material = required<HTMLElement>("[data-kp-algebra-material]");
 const factoredNative = required<HTMLElement>('[data-kp-native="factored"]');
 const expandedNative = required<HTMLElement>('[data-kp-native="expanded"]');
 const beats = [...document.querySelectorAll<HTMLElement>("[data-kp-beat]")];
+const activeLocation = createKpReaderActiveLocationService({
+  toc: required<HTMLElement>(".kp-lesson-toc"),
+  beats
+});
 const directionButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-kp-direction-button]")];
 const plan = createKpDistributionAreaForwardMotionPlan();
 const attention = createKpDistributionAreaAttentionPlan();
@@ -255,7 +260,7 @@ function setActiveBeat(visualProgress: number): void {
     const checkpoint = Number(beat.dataset["kpCheckpoint"] ?? 0) / 1000;
     if (visualProgress >= checkpoint) selected = beat;
   }
-  for (const beat of beats) beat.dataset["kpBeatActive"] = String(beat === selected);
+  if (selected !== undefined) activeLocation.sync(requiredData(selected, "kpBeat"));
 }
 
 function setAttentionFocus(concepts: readonly string[]): void {
@@ -317,6 +322,12 @@ function required<T extends Element>(selector: string): T {
   const element = document.querySelector<T>(selector);
   if (element === null) throw new Error(`Missing distribution reader element ${selector}.`);
   return element;
+}
+
+function requiredData(element: HTMLElement, key: string): string {
+  const value = element.dataset[key];
+  if (value === undefined || value.length === 0) throw new Error(`Missing distribution reader data-${key}.`);
+  return value;
 }
 
 function lerp(from: number, to: number, progressValue: number): number {

@@ -60,6 +60,13 @@
       "scope": "review inbox rollback unit",
       "checkedAt": "2026-07-22T16:30:16.221Z",
       "notes": "Five browser tests pass, including development capture readiness and a geometry assertion that the open review panel ends before the distribution stage begins."
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader-active-toc.browser.spec.ts tests/semantic-reader-distribution-area.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "shared active-location service",
+      "checkedAt": "2026-07-22T16:32:19.254Z",
+      "notes": "Eight equation and distribution browser checks pass across URL restoration, native anchors, narrow layout, and exactly-one active TOC/beat semantics."
     }
   ],
   "expectedLearning": [

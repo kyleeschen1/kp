@@ -28,6 +28,10 @@ export {
   type KpReaderScrollGeometry
 } from "./continuous-scroll-clock.ts";
 export {
+  createKpReaderActiveLocationService,
+  type KpReaderActiveLocationService
+} from "./active-location.ts";
+export {
   decodeKpReaderSessionUrl,
   encodeKpReaderSessionUrl
 } from "./lesson-url-codec.ts";

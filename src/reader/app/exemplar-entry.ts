@@ -54,6 +54,7 @@ import {
 } from "../renderers/public-api.ts";
 import {
   createKpReaderClockSample,
+  createKpReaderActiveLocationService,
   createKpReaderContinuousScrollClock,
   createKpReaderSemanticFocusService,
   createKpReaderSessionSnapshot,
@@ -215,7 +216,7 @@ const attention = readAttentionPlan();
 focusStepper.hidden = attention === undefined;
 applyResponsiveProjection();
 const toc = requireElement<HTMLElement>(".kp-lesson-toc");
-const tocLinks = [...toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
+const activeLocation = createKpReaderActiveLocationService({ toc, beats });
 const accessibleCheckpoints = beats.map((beat) => ({
   id: requiredData(beat, "kpBeat"),
   label: beat.querySelector("h2")?.textContent?.trim() ?? requiredData(beat, "kpBeat"),
@@ -867,16 +868,10 @@ function updateActiveBeat(
     Math.abs(Number(requiredData(right, "kpCheckpoint")) - progressPermille)
   )[0];
   if (activeBeat === undefined) return;
-  for (const beat of beats) {
-    const active = beat === activeBeat;
-    beat.dataset["kpBeatActive"] = String(active);
-    if (active) beat.setAttribute("aria-current", "step");
-    else beat.removeAttribute("aria-current");
-  }
+  activeLocation.sync(requiredData(activeBeat, "kpBeat"));
   status.value = attentionProjection?.cue
     ?? activeBeat.querySelector("h2")?.textContent?.trim()
     ?? "Follow the symbols";
-  syncActiveToc(requiredData(activeBeat, "kpBeat"));
   syncActiveAttention(attentionProjection);
   focus.set("story", attentionProjection?.focusRefs ?? dataRefs(activeBeat));
 }
@@ -967,26 +962,6 @@ function setExplicitProgress(
   if (!isFocusStepperProjection()) scrollToProgress(progressPermille);
   scheduler.render(controlSample);
   if (updateLocation) settleLocation();
-}
-
-function syncActiveToc(activeId: string): void {
-  let activeCount = 0;
-  for (const link of tocLinks) {
-    const href = link.getAttribute("href") ?? "";
-    const linkId = href.startsWith("#") ? decodeURIComponent(href.slice(1)) : "";
-    const active = linkId === activeId;
-    link.dataset["kpTocActive"] = String(active);
-    if (active) {
-      link.setAttribute("aria-current", "location");
-      activeCount += 1;
-    } else {
-      link.removeAttribute("aria-current");
-    }
-  }
-  if (activeCount !== 1) {
-    throw new Error(`Reader TOC expected one link for active location ${activeId}.`);
-  }
-  toc.dataset["kpTocActiveId"] = activeId;
 }
 
 function onSemanticEnter(event: Event): void {
