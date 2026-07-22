@@ -235,6 +235,20 @@
       "scope": "s17 responsive and overflow boundaries",
       "checkedAt": "2026-07-22T17:27:45.228Z",
       "notes": "Twelve browser checks pass; resize preserves progress and ownership, remeasures layout, keeps every material token inside the stage, retains nowrap KaTeX, and prevents document overflow from 900px through 280px."
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "s18 parameterized shared-reader contract",
+      "checkedAt": "2026-07-22T17:32:47.352Z",
+      "notes": "Two descriptor-driven browser checks pass; solve-x and distribution prove hydration, font readiness, review availability, exact progress and reload, one active TOC location, share URL identity, narrow containment, and JavaScript-free searchability through one runner."
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s18 inferred conformance descriptors",
+      "checkedAt": "2026-07-22T17:32:53.906Z",
+      "notes": "Application, test, Node, and domain TypeScript projects pass; each adapter declares only route and evidence differences while shared laws remain inferred and centralized."
     }
   ],
   "expectedLearning": [

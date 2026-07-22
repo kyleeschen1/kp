@@ -157,7 +157,8 @@
     {
       "id": "s18",
       "title": "Extract parameterized shared-reader conformance",
-      "status": "planned"
+      "summary": "A typed descriptor-driven conformance runner now verifies equation and distribution readers through the same hydration, font, review, URL, TOC, reload, narrow containment, and static searchability laws; adapter-specific evidence stays declarative.",
+      "status": "complete"
     },
     {
       "id": "s19",

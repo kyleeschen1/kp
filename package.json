@@ -29,6 +29,7 @@
     "preview": "vite preview --port 8000 --strictPort",
     "test:browser:katex": "playwright test tests/katex-transition.browser.spec.ts --project=chromium",
     "test:browser:linear-equation-conformance": "playwright test tests/linear-equation-symbolic-conformance.browser.spec.ts --project=chromium",
+    "test:browser:reader-conformance": "playwright test tests/semantic-reader-shared-conformance.browser.spec.ts --project=chromium --workers=1",
     "test:browser:dashboard": "playwright test tests/project-dashboard.browser.spec.ts --project=chromium",
     "smoke:linear-equation": "playwright test tests/linear-equation-concept-room-smoke.browser.spec.ts --project=chromium",
     "visual:editor-cards": "node --disable-warning=ExperimentalWarning scripts/capture-editor-cards.ts",
