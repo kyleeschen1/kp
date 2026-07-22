@@ -183,7 +183,8 @@
     {
       "id": "s20-area-forward-motion",
       "title": "Synchronize-forward-distribution-and-partition",
-      "status": "planned"
+      "summary": "Added forward sampling that synchronizes factor-copy travel with partition reveal, delays six until 3 times 2 is visible, and assigns exactly one owner at every frame: factored native, transient material, or expanded native.",
+      "status": "complete"
     },
     {
       "id": "s21-area-inverse-motion",
