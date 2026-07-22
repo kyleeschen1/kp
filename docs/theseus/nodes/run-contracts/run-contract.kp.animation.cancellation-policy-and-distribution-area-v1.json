@@ -129,7 +129,8 @@
     {
       "id": "s11-generated-boundary",
       "title": "Route-generated-cancellation-through-policy-or-repair",
-      "status": "planned"
+      "summary": "Added a strict unknown-input decoder for generated cancellation: authorized operation plus teaching goal and topology produces a governed recipe or typed repair, while recipe, timing, font, geometry, and any other extra fields are rejected.",
+      "status": "complete"
     },
     {
       "id": "s12-guardrail-boundary",

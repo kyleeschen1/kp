@@ -113,6 +113,12 @@
       "status": "passed",
       "scope": "s10 eight stable cross-surface route geometry rewind static phone and profile browser checks",
       "checkedAt": "2026-07-22T14:07:09.169Z"
+    },
+    {
+      "command": "focused generated cancellation boundary and resolver tests; npm run typecheck",
+      "status": "passed",
+      "scope": "s11 strict generated-output policy or repair boundary",
+      "checkedAt": "2026-07-22T14:10:27.326Z"
     }
   ],
   "expectedLearning": [
