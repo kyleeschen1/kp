@@ -125,7 +125,8 @@
     {
       "id": "s13-divide-trace",
       "title": "Define exact divide-both-sides trace",
-      "status": "planned"
+      "summary": "Defined the exact 3x=12 four-state division trace with promoted strict laws and an explicit correspondence-free boundary.",
+      "status": "complete"
     },
     {
       "id": "s14-divide-correspondence",

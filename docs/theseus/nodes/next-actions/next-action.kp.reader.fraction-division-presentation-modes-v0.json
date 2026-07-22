@@ -199,6 +199,18 @@
       "scope": "s12 renderer and app identity types",
       "checkedAt": "2026-07-22T00:03:42.226Z",
       "notes": "All TypeScript projects accept the additive-or-multiplicative atomic identity projection and pre-rendered KaTeX identity values."
+    },
+    {
+      "command": "node focused divide-both-sides asset test",
+      "status": "passed",
+      "scope": "s13 exact four-state trace, strict canonical laws, and deferred correspondence",
+      "checkedAt": "2026-07-22T00:08:48.393Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s13 semantic asset and test TypeScript boundaries",
+      "checkedAt": "2026-07-22T00:08:54.310Z"
     }
   ]
 }
