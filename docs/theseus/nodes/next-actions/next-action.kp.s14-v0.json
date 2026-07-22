@@ -1,0 +1,128 @@
+{
+  "id": "next-action.kp.s14-v0",
+  "kind": "next-action",
+  "title": "Extract share and history settlement control",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Materialized from stored run-contract slice s14 in Reader composition-root convergence v0.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reader-composition-root-convergence-v0.json",
+      "summary": "Run contract whose stored slice s14 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.composition-root-convergence-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
+      "summary": "Approved generated-quality and verification-amortization phase."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.reader-composition-convergence-v0.json",
+      "summary": "User-approved priority checkpoint placing composition convergence first."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.reader-composition-root-convergence-v0",
+      "next-action.kp.reader.composition-root-convergence-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.reader.composition-root-convergence-v0"
+  ],
+  "verification": [
+    "node --test focused reader compiler, runtime, route, and descriptor tests",
+    "npm run check:architecture",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:linear-equation",
+    "npm run visual:distribution-area",
+    "npm run check:dev-review-production",
+    "npm run build",
+    "npm run theseus -- workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/semantic-reader-location-settlement.test.ts tests/semantic-reader-lesson-url-codec.test.ts tests/semantic-reader-distribution-area-url-codec.test.ts",
+      "status": "passed",
+      "scope": "atomic settlement and URL laws",
+      "checkedAt": "2026-07-22T20:22:35.640Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "shared location settlement typing",
+      "checkedAt": "2026-07-22T20:22:37.478Z"
+    },
+    {
+      "command": "npm run check:architecture",
+      "status": "passed",
+      "scope": "reader runtime boundaries",
+      "checkedAt": "2026-07-22T20:22:38.839Z"
+    },
+    {
+      "command": "npx playwright test tests/semantic-reader-url-restoration.browser.spec.ts --project=chromium --workers=1",
+      "status": "passed",
+      "scope": "equation URL settlement and restoration",
+      "checkedAt": "2026-07-22T20:22:40.216Z"
+    },
+    {
+      "command": "npm run test:browser:reader-conformance",
+      "status": "passed",
+      "scope": "shared reader URL parity",
+      "checkedAt": "2026-07-22T20:22:41.664Z"
+    },
+    {
+      "command": "npm run visual:distribution-area",
+      "status": "passed",
+      "scope": "distribution share URL and visual parity",
+      "checkedAt": "2026-07-22T20:22:42.806Z"
+    },
+    {
+      "command": "npm run visual:linear-equation",
+      "status": "passed",
+      "scope": "equation visual parity",
+      "checkedAt": "2026-07-22T20:22:43.912Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Equation and distribution readers now share one authority-aware controller that computes each settled href once, updates the share target and browser history together, supports equation debounce, and cancels pending work on disposal."
+  },
+  "expectedLearning": [
+    "Whether Extract share and history settlement control can be completed inside Reader composition-root convergence v0."
+  ],
+  "allowedWork": [
+    "Reader compiler page shells, build-time route manifests, inferred URL codecs, browser lifecycle services, piecewise scroll clocks, frame scheduling, runtime lesson descriptors, production renderer adapters, derived conformance and review descriptors, impact selection, closure, and bundle budgets.",
+    "Compatibility changes required for both accepted readers to consume the shared contracts, provided exact visual, semantic, URL, static-searchability, and responsive parity remains proven."
+  ],
+  "disallowedWork": [
+    "Do not alter accepted equation or distribution semantics, choreography, visual policy, typography, colors, layout, attention behavior, searchable prose, or route meaning.",
+    "Do not add branch scheduling, structured algebra, advanced fraction composition, LLM mutation, new subjects, WebGL generalization, or editor redesign.",
+    "Do not introduce an abstraction used only by tests or only one production reader; integrate it in both readers or defer it.",
+    "Do not edit unrelated user-authored roadmap, thread, decision, or design documents."
+  ],
+  "criteria": [
+    {
+      "id": "atomic-href-settlement",
+      "weight": "high"
+    },
+    {
+      "id": "share-history-consistency",
+      "weight": "high"
+    },
+    {
+      "id": "authority-gate",
+      "weight": "high"
+    },
+    {
+      "id": "debounced-disposal",
+      "weight": "high"
+    }
+  ]
+}

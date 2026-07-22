@@ -57,6 +57,7 @@ import {
   createKpReaderActiveLocationService,
   createKpReaderContinuousScrollClock,
   bindKpReaderSemanticLinks,
+  createKpReaderLocationSettlement,
   createKpReaderSemanticFocusService,
   createKpReaderSessionSnapshot,
   createKpReaderRuntimeRouteDescriptor,
@@ -126,9 +127,6 @@ const equationPresentationProfile = equationPresentationSelection.profile;
 document.body.dataset["kpReaderEquationProfile"] = equationPresentationProfile.id;
 document.body.dataset["kpReaderEquationProfileSource"] =
   equationPresentationSelection.source;
-// The semantic URL is the scroll authority. Browser history restoration can
-// otherwise race a requested frame when moving between two lesson URLs.
-window.history.scrollRestoration = "manual";
 const animation = lessonVariant === "teacher-zero"
   ? createLinearSolveTeacherZeroAnimationAsset()
   : lessonVariant === "fractional-linear"
@@ -266,12 +264,20 @@ const equationObjectRefs = new Set(animation.bundle.objects.map((object) => obje
 const focus = createKpReaderSemanticFocusService(allowedFocusRefs);
 let activeBeat = beats[0];
 let scrollClock = createScrollClock();
-let settleTimer: number | undefined;
 let scrollFrame: number | undefined;
 let previousReviewFrameAtMs: number | undefined;
 let previousReviewScrollY = window.scrollY;
 let urlAuthorityReady = false;
 let controlSample: KpReaderClockSample | undefined;
+// The semantic URL is the scroll authority. Browser history restoration can
+// otherwise race a requested frame when moving between two lesson URLs.
+const locationSettlement = createKpReaderLocationSettlement({
+  ownerWindow: window,
+  shareLink,
+  href: () => readerHref(lastSample()),
+  canSettle: () => urlAuthorityReady,
+  scrollRestoration: "manual"
+});
 
 const staticPlans = new Map(animation.transformations.map((transformation, index) => {
   const progress = (index + 0.5) / animation.transformations.length;
@@ -304,7 +310,7 @@ const scheduler = createKpReaderEquationFrameScheduler<
 
 const unsubscribeFocus = focus.subscribe((snapshot) => {
   applyFocus(snapshot);
-  updateShareLink(lastSample());
+  locationSettlement.updateShare();
 });
 const resizeObserver = new ResizeObserver(() => {
   updateScrollGeometry();
@@ -315,7 +321,7 @@ resizeObserver.observe(viewport);
 
 window.addEventListener("scroll", onScroll, { passive: true });
 window.addEventListener("resize", onResize, { passive: true });
-window.addEventListener("scrollend", settleLocation, { passive: true });
+window.addEventListener("scrollend", locationSettlement.settle, { passive: true });
 window.addEventListener("wheel", releaseControlAuthority, { passive: true });
 window.addEventListener("touchstart", releaseControlAuthority, { passive: true });
 window.addEventListener("pointerdown", releaseControlAuthority, { passive: true });
@@ -439,8 +445,7 @@ function readerViewportAnchorFraction(): number {
 
 function onScroll(): void {
   scheduleScrollSample();
-  if (settleTimer !== undefined) window.clearTimeout(settleTimer);
-  settleTimer = window.setTimeout(settleLocation, 180);
+  locationSettlement.schedule(180);
 }
 
 function onReaderKeyDown(event: KeyboardEvent): void {
@@ -976,7 +981,7 @@ function setExplicitProgress(
   });
   if (!isFocusStepperProjection()) scrollToProgress(progressPermille);
   scheduler.render(controlSample);
-  if (updateLocation) settleLocation();
+  if (updateLocation) locationSettlement.settle();
 }
 
 function visualFocusRefs(snapshot: KpReaderFocusSnapshot): readonly string[] {
@@ -1021,18 +1026,6 @@ function ownerMatchesFocus(
   });
 }
 
-function settleLocation(): void {
-  if (!urlAuthorityReady) return;
-  const sample = lastSample();
-  const href = readerHref(sample);
-  window.history.replaceState(null, "", href);
-  shareLink.href = href;
-}
-
-function updateShareLink(sample: KpReaderClockSample): void {
-  shareLink.href = readerHref(sample);
-}
-
 function readerHref(sample: KpReaderClockSample): string {
   const base = new URL(window.location.href);
   if (activeBeat !== undefined) base.hash = requiredData(activeBeat, "kpBeat");
@@ -1072,7 +1065,7 @@ function onMotionPreferenceChange(): void {
     // Storage is an enhancement; the current session and URL remain valid.
   }
   renderCurrentSample();
-  settleLocation();
+  locationSettlement.settle();
 }
 
 function onEquationProfileChange(): void {
@@ -1222,7 +1215,6 @@ function requireDescendant<T extends Element>(root: Element, selector: string): 
 
 function dispose(): void {
   if (scrollFrame !== undefined) window.cancelAnimationFrame(scrollFrame);
-  if (settleTimer !== undefined) window.clearTimeout(settleTimer);
   resizeObserver.disconnect();
   reducedMotion.removeEventListener("change", renderCurrentSample);
   motionSelect.removeEventListener("change", onMotionPreferenceChange);
@@ -1234,8 +1226,10 @@ function dispose(): void {
   window.removeEventListener("touchstart", releaseControlAuthority);
   window.removeEventListener("pointerdown", releaseControlAuthority);
   window.removeEventListener("keydown", onReaderKeyDown);
+  window.removeEventListener("scrollend", locationSettlement.settle);
   fontReviewLifecycle.dispose();
   semanticLinkBindings.dispose();
+  locationSettlement.dispose();
   scheduler.dispose();
   scrollClock.dispose();
   focus.dispose();

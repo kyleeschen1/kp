@@ -6,6 +6,7 @@ import { createKpEquationFontReadiness } from "../../rendering/equation-font-rea
 import {
   bindKpReaderSemanticLinks,
   createKpReaderActiveLocationService,
+  createKpReaderLocationSettlement,
   createKpReaderRuntimeRouteDescriptor,
   decodeKpDistributionAreaUrl,
   encodeKpDistributionAreaUrl,
@@ -69,6 +70,11 @@ let motionPlan: KpDistributionAreaMotionPlan | undefined;
 let widthMotionPlan: KpDistributionAreaWidthMotionPlan | undefined;
 let previousReviewFrameAtMs: number | undefined;
 let previousReviewScrollY = window.scrollY;
+const locationSettlement = createKpReaderLocationSettlement({
+  ownerWindow: window,
+  shareLink: share,
+  href: semanticUrl
+});
 
 document.body.dataset["kpReaderHydrated"] = "true";
 directionButtons.forEach((button) => button.addEventListener("click", () => {
@@ -79,7 +85,7 @@ directionButtons.forEach((button) => button.addEventListener("click", () => {
   direction = next;
   pointerOwnsProgress = true;
   render();
-  replaceSemanticUrl();
+  locationSettlement.settle();
 }));
 scrubber.addEventListener("input", () => {
   pointerOwnsProgress = true;
@@ -87,7 +93,7 @@ scrubber.addEventListener("input", () => {
   render();
 });
 scrubber.addEventListener("change", () => {
-  replaceSemanticUrl();
+  locationSettlement.settle();
 });
 window.addEventListener("scroll", () => {
   if (semanticUrlOwnsProgress && !scrollInteractionArmed) return;
@@ -108,7 +114,7 @@ document.addEventListener("pointerdown", (event) => {
     armScrollInteraction();
   }
 });
-share.addEventListener("click", () => replaceSemanticUrl());
+share.addEventListener("click", locationSettlement.settle);
 const semanticLinkBindings = bindKpReaderSemanticLinks({
   root: document,
   selector: "[data-kp-focus]",
@@ -132,8 +138,10 @@ const fontReviewLifecycle = createKpReaderFontReviewLifecycle({
 });
 void fontReviewLifecycle.ready;
 window.addEventListener("pagehide", () => {
+  share.removeEventListener("click", locationSettlement.settle);
   fontReviewLifecycle.dispose();
   semanticLinkBindings.dispose();
+  locationSettlement.dispose();
 }, { once: true });
 
 function render(): void {
@@ -182,7 +190,7 @@ function render(): void {
   for (const button of directionButtons) {
     button.setAttribute("aria-pressed", String(button.dataset["kpDirectionButton"] === direction));
   }
-  share.href = semanticUrl().toString();
+  locationSettlement.updateShare();
   const fitStatus = distributionFitStatus();
   stage.dataset["kpFitStatus"] = fitStatus;
   dispatchDevReviewFrame(phase.id, phase.conceptIds, owner, permille, fitStatus);
@@ -301,7 +309,7 @@ function scheduleScroll(): void {
   scrollFrame = requestAnimationFrame(() => {
     progress = progressFromScroll();
     render();
-    replaceSemanticUrl();
+    locationSettlement.settle();
   });
 }
 
@@ -351,10 +359,6 @@ function setExternalFocus(concepts: readonly string[]): void {
     const own = element.dataset["kpConcept"]?.split(" ") ?? [];
     element.dataset["kpExternalFocus"] = String(own.some((concept) => concepts.includes(concept)));
   }
-}
-
-function replaceSemanticUrl(): void {
-  window.history.replaceState(null, "", semanticUrl());
 }
 
 function semanticUrl(): URL {

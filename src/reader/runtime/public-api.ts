@@ -65,6 +65,10 @@ export {
   type KpReaderSemanticLinkFocusSource
 } from "./semantic-focus-bindings.ts";
 export {
+  createKpReaderLocationSettlement,
+  type KpReaderLocationSettlement
+} from "./location-settlement.ts";
+export {
   createKpReaderControlModel,
   projectKpReaderMotion,
   type KpReaderAccessibleCheckpoint,

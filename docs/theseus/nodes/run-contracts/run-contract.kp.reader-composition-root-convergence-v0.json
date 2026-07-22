@@ -215,7 +215,14 @@
     {
       "id": "s14",
       "title": "Extract share and history settlement control",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s14-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s14-v0",
+      "title": "Extract share and history settlement control",
+      "summary": "Shared share/history settlement control is integrated in both readers and broadly verified.",
+      "status": "complete"
     },
     {
       "id": "s15",
