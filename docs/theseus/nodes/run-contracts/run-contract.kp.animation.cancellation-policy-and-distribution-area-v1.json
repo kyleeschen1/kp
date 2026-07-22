@@ -207,7 +207,8 @@
     {
       "id": "s24-area-editor-and-visual",
       "title": "Add-Semantic-Editor-card-and-stable-visual-gate",
-      "status": "planned"
+      "summary": "Placed the distribution-area exemplar first in the Semantic Editor lesson library and added npm run visual:distribution-area. The four-test browser gate covers editor navigation, single-owner endpoint settlement, forward/inverse preservation, URL restoration, cross-surface hover focus, no-JavaScript searchability, KaTeX-over-SVG structure, and 360px containment; all focused tests pass.",
+      "status": "complete"
     },
     {
       "id": "s25-release-checkpoint",

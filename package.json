@@ -34,6 +34,7 @@
     "visual:editor-cards": "node --disable-warning=ExperimentalWarning scripts/capture-editor-cards.ts",
     "visual:linear-equation": "node --disable-warning=ExperimentalWarning scripts/capture-linear-equation-visual-baseline.ts",
     "visual:cancellation": "playwright test tests/semantic-reader-cancellation.browser.spec.ts tests/semantic-reader-divide-both-sides.browser.spec.ts tests/semantic-reader-presentation-profile.browser.spec.ts tests/equation-canonical-cross-surface-parity.browser.spec.ts --project=chromium --workers=1",
+    "visual:distribution-area": "playwright test tests/semantic-reader-distribution-area.browser.spec.ts --project=chromium --workers=1",
     "visual:contact-sheet": "node --disable-warning=ExperimentalWarning scripts/capture-visual-contact-sheet.ts",
     "visual:reader-gold-parity": "npm run build && node --disable-warning=ExperimentalWarning scripts/capture-reader-gold-equation-parity.ts",
     "baseline:semantic-reader": "node --disable-warning=ExperimentalWarning scripts/capture-semantic-reader-baseline.ts",

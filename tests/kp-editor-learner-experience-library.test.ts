@@ -5,10 +5,11 @@ import {
   createKpLearnerExperienceLibrary
 } from "../src/editor/learner-experience-library.ts";
 
-test("learner experience library puts the simplest division exemplar first", () => {
+test("learner experience library puts the synchronized distribution exemplar first", () => {
   const experiences = createKpLearnerExperienceLibrary();
 
   assert.deepEqual(experiences.map(({ id }) => id), [
+    "distribution-area-scroll-lesson",
     "divide-both-sides-scroll-lesson",
     "numerator-split-merge-scroll-lesson",
     "fractional-transfer-comparison-scroll-lesson",
@@ -17,6 +18,16 @@ test("learner experience library puts the simplest division exemplar first", () 
     "solve-with-balance-concept-room"
   ]);
   assert.deepEqual(experiences[0], {
+    id: "distribution-area-scroll-lesson",
+    kind: "scroll-lesson",
+    title: "See distribution become area",
+    summary:
+      "Watch 3(x+2) become 3x+6 while the same rectangle partitions in lockstep.",
+    href: "/reader/distribution-area/",
+    actionLabel: "Review algebra and area",
+    status: "prototype"
+  });
+  assert.deepEqual(experiences[1], {
     id: "divide-both-sides-scroll-lesson",
     kind: "scroll-lesson",
     title: "Divide both sides",
@@ -26,7 +37,7 @@ test("learner experience library puts the simplest division exemplar first", () 
     actionLabel: "Review division animation",
     status: "exemplar"
   });
-  assert.deepEqual(experiences[1], {
+  assert.deepEqual(experiences[2], {
     id: "numerator-split-merge-scroll-lesson",
     kind: "scroll-lesson",
     title: "Split and merge a fraction",
@@ -36,7 +47,7 @@ test("learner experience library puts the simplest division exemplar first", () 
     actionLabel: "Review split and merge",
     status: "exemplar"
   });
-  assert.deepEqual(experiences[2], {
+  assert.deepEqual(experiences[3], {
     id: "fractional-transfer-comparison-scroll-lesson",
     kind: "scroll-lesson",
     title: "Compare equation views",
@@ -46,7 +57,7 @@ test("learner experience library puts the simplest division exemplar first", () 
     actionLabel: "Compare proof and shortcut",
     status: "exemplar"
   });
-  assert.deepEqual(experiences[3], {
+  assert.deepEqual(experiences[4], {
     id: "solve-fractional-linear-scroll-lesson",
     kind: "scroll-lesson",
     title: "Solve a fractional equation",
@@ -56,7 +67,7 @@ test("learner experience library puts the simplest division exemplar first", () 
     actionLabel: "Review fraction animation",
     status: "prototype"
   });
-  assert.deepEqual(experiences[4], {
+  assert.deepEqual(experiences[5], {
     id: "solve-x-scroll-lesson",
     kind: "scroll-lesson",
     title: "Solve for x",

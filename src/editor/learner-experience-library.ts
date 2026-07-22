@@ -12,6 +12,16 @@ export interface KpLearnerExperienceDescriptor {
 
 const learnerExperiences = [
   {
+    id: "distribution-area-scroll-lesson",
+    kind: "scroll-lesson",
+    title: "See distribution become area",
+    summary:
+      "Watch 3(x+2) become 3x+6 while the same rectangle partitions in lockstep.",
+    href: "/reader/distribution-area/",
+    actionLabel: "Review algebra and area",
+    status: "prototype"
+  },
+  {
     id: "divide-both-sides-scroll-lesson",
     kind: "scroll-lesson",
     title: "Divide both sides",
