@@ -155,7 +155,14 @@
     {
       "id": "s09",
       "title": "Define composable inferred URL state codecs",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s09-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s09-v0",
+      "title": "Define composable inferred URL state codecs",
+      "summary": "Composable inferred URL codec foundation is complete and verified.",
+      "status": "complete"
     },
     {
       "id": "s10",

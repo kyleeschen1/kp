@@ -1,0 +1,98 @@
+{
+  "id": "next-action.kp.s09-v0",
+  "kind": "next-action",
+  "title": "Define composable inferred URL state codecs",
+  "status": "ready",
+  "domain": "kp",
+  "summary": "Materialized from stored run-contract slice s09 in Reader composition-root convergence v0.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reader-composition-root-convergence-v0.json",
+      "summary": "Run contract whose stored slice s09 was materialized into a child action."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/next-actions/next-action.kp.reader.composition-root-convergence-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
+      "summary": "Approved generated-quality and verification-amortization phase."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/priority-changes/priority-change.kp.reader-composition-convergence-v0.json",
+      "summary": "User-approved priority checkpoint placing composition convergence first."
+    }
+  ],
+  "dependsOn": {
+    "preferred": [
+      "run-contract.kp.reader-composition-root-convergence-v0",
+      "next-action.kp.reader.composition-root-convergence-v0"
+    ]
+  },
+  "affects": [
+    "next-action.kp.reader.composition-root-convergence-v0"
+  ],
+  "verification": [
+    "node --test focused reader compiler, runtime, route, and descriptor tests",
+    "npm run check:architecture",
+    "npm run test:browser:reader-conformance",
+    "npm run visual:linear-equation",
+    "npm run visual:distribution-area",
+    "npm run check:dev-review-production",
+    "npm run build",
+    "npm run theseus -- workspace validate"
+  ],
+  "verificationRecords": [
+    {
+      "command": "node --test tests/semantic-reader-url-state-codec.test.ts",
+      "status": "passed",
+      "scope": "URL codec laws",
+      "checkedAt": "2026-07-22T18:33:04.888Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "inferred codec typing",
+      "checkedAt": "2026-07-22T18:33:05.917Z"
+    }
+  ],
+  "progress": {
+    "state": "complete",
+    "summary": "Added inferred composable URL codecs with disjoint parameter ownership, unrelated-query preservation, and canonical ordering."
+  },
+  "expectedLearning": [
+    "Whether Define composable inferred URL state codecs can be completed inside Reader composition-root convergence v0."
+  ],
+  "allowedWork": [
+    "Reader compiler page shells, build-time route manifests, inferred URL codecs, browser lifecycle services, piecewise scroll clocks, frame scheduling, runtime lesson descriptors, production renderer adapters, derived conformance and review descriptors, impact selection, closure, and bundle budgets.",
+    "Compatibility changes required for both accepted readers to consume the shared contracts, provided exact visual, semantic, URL, static-searchability, and responsive parity remains proven."
+  ],
+  "disallowedWork": [
+    "Do not alter accepted equation or distribution semantics, choreography, visual policy, typography, colors, layout, attention behavior, searchable prose, or route meaning.",
+    "Do not add branch scheduling, structured algebra, advanced fraction composition, LLM mutation, new subjects, WebGL generalization, or editor redesign.",
+    "Do not introduce an abstraction used only by tests or only one production reader; integrate it in both readers or defer it.",
+    "Do not edit unrelated user-authored roadmap, thread, decision, or design documents."
+  ],
+  "criteria": [
+    {
+      "id": "inferred-codec-composition",
+      "weight": "high"
+    },
+    {
+      "id": "disjoint-parameter-ownership",
+      "weight": "high"
+    },
+    {
+      "id": "unrelated-query-preservation",
+      "weight": "high"
+    },
+    {
+      "id": "canonical-sorting",
+      "weight": "medium"
+    }
+  ]
+}

@@ -36,6 +36,11 @@ export {
   encodeKpReaderSessionUrl
 } from "./lesson-url-codec.ts";
 export {
+  composeKpReaderUrlStateCodecs,
+  defineKpReaderUrlStateCodec,
+  type KpReaderUrlStateCodec
+} from "./url-state-codec.ts";
+export {
   createKpReaderSemanticFocusService,
   type KpReaderFocusListener,
   type KpReaderFocusSnapshot,
