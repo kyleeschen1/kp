@@ -81,7 +81,8 @@
     {
       "id": "s03-inference-api",
       "title": "Add-inference-first-cancellation-authoring-API",
-      "status": "planned"
+      "summary": "Added and verified an inference-first cancellation authoring API: callers provide an authorized operation id and teaching goal, and receive immutable renderer-neutral intent with no recipe-id surface.",
+      "status": "complete"
     },
     {
       "id": "s04-recipe-capabilities",
