@@ -45,7 +45,7 @@
   "goal": "Converge accepted equation and distribution readers onto shared inferred page, route, URL, lifecycle, scheduling, adapter, conformance, review, and payload contracts without changing visible or semantic behavior.",
   "target": "next-action.kp.reader.composition-root-convergence-v0",
   "runMode": "run",
-  "maxSlices": 26,
+  "maxSlices": 52,
   "commitCadence": "Commit every independently verified rollback unit; combine analysis-only characterization with the first implementation slice it informs.",
   "verificationLevel": "broad",
   "stopConditions": [
@@ -65,13 +65,20 @@
     {
       "id": "next-action.kp.s01-v0",
       "title": "Freeze accepted parity and composition inventory",
-      "summary": "Materialized from stored run-contract slice s01 in Reader composition-root convergence v0.",
-      "status": "ready"
+      "summary": "Accepted parity baseline and composition inventory are complete; descriptor extraction may proceed inside the frozen boundary.",
+      "status": "complete"
     },
     {
       "id": "s02",
       "title": "Define inferred reader route descriptors",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s02-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s02-v0",
+      "title": "Define inferred reader route descriptors",
+      "summary": "Inferred reader route descriptor is complete and independently verified.",
+      "status": "complete"
     },
     {
       "id": "s03",

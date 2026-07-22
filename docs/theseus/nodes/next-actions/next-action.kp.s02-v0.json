@@ -1,15 +1,15 @@
 {
-  "id": "next-action.kp.s01-v0",
+  "id": "next-action.kp.s02-v0",
   "kind": "next-action",
-  "title": "Freeze accepted parity and composition inventory",
+  "title": "Define inferred reader route descriptors",
   "status": "ready",
   "domain": "kp",
-  "summary": "Materialized from stored run-contract slice s01 in Reader composition-root convergence v0.",
+  "summary": "Materialized from stored run-contract slice s02 in Reader composition-root convergence v0.",
   "sourceRefs": [
     {
       "kind": "file",
       "path": "docs/theseus/nodes/run-contracts/run-contract.kp.reader-composition-root-convergence-v0.json",
-      "summary": "Run contract whose stored slice s01 was materialized into a child action."
+      "summary": "Run contract whose stored slice s02 was materialized into a child action."
     },
     {
       "kind": "file",
@@ -48,42 +48,24 @@
   ],
   "verificationRecords": [
     {
-      "command": "npm run check:architecture",
-      "status": "passed",
-      "scope": "architecture",
-      "checkedAt": "2026-07-22T18:15:53.839Z"
-    },
-    {
-      "command": "npm run test:browser:reader-conformance",
-      "status": "passed",
-      "scope": "browser parity",
-      "checkedAt": "2026-07-22T18:15:54.972Z"
-    },
-    {
-      "command": "node --test tests/semantic-reader-route-budget.test.ts tests/semantic-reader-lesson-url-codec.test.ts tests/semantic-reader-continuous-scroll-clock.test.ts tests/semantic-reader-equation-frame-scheduler.test.ts tests/semantic-reader-distribution-area-compiler.test.ts",
-      "status": "passed",
-      "scope": "focused baseline",
-      "checkedAt": "2026-07-22T18:15:56.150Z"
-    },
-    {
       "command": "node --test tests/semantic-reader-route-descriptor.test.ts",
       "status": "passed",
-      "scope": "descriptor",
-      "checkedAt": "2026-07-22T18:15:57.205Z"
+      "scope": "descriptor contract",
+      "checkedAt": "2026-07-22T18:16:42.462Z"
     },
     {
       "command": "npm run typecheck",
       "status": "passed",
-      "scope": "typing",
-      "checkedAt": "2026-07-22T18:15:58.239Z"
+      "scope": "inferred API typing",
+      "checkedAt": "2026-07-22T18:16:43.513Z"
     }
   ],
   "progress": {
     "state": "complete",
-    "summary": "Frozen parity baselines and mapped duplicated route, page-shell, URL, lifecycle, clock, scheduler, conformance, review, and payload responsibilities; no accepted behavior changed."
+    "summary": "Added an inferred route descriptor, convention validation, and derived entry/HTML names with focused tests."
   },
   "expectedLearning": [
-    "Whether Freeze accepted parity and composition inventory can be completed inside Reader composition-root convergence v0."
+    "Whether Define inferred reader route descriptors can be completed inside Reader composition-root convergence v0."
   ],
   "allowedWork": [
     "Reader compiler page shells, build-time route manifests, inferred URL codecs, browser lifecycle services, piecewise scroll clocks, frame scheduling, runtime lesson descriptors, production renderer adapters, derived conformance and review descriptors, impact selection, closure, and bundle budgets.",
@@ -97,20 +79,20 @@
   ],
   "criteria": [
     {
-      "id": "accepted-parity-baseline",
+      "id": "inferred-literal-api",
       "weight": "high"
     },
     {
-      "id": "composition-duplication-inventory",
+      "id": "path-convention-validation",
       "weight": "high"
     },
     {
-      "id": "preservation-boundary",
-      "weight": "high"
-    },
-    {
-      "id": "rollback-map",
+      "id": "build-name-derivation",
       "weight": "medium"
+    },
+    {
+      "id": "zero-runtime-coupling",
+      "weight": "high"
     }
   ]
 }
