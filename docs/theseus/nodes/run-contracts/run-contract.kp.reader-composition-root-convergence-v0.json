@@ -95,7 +95,14 @@
     {
       "id": "s04",
       "title": "Derive Vite dispatch and inputs from the manifest",
-      "status": "planned"
+      "summary": "Materialized as next-action.kp.s04-v0.",
+      "status": "skipped"
+    },
+    {
+      "id": "next-action.kp.s04-v0",
+      "title": "Derive Vite dispatch and inputs from the manifest",
+      "summary": "Manifest-derived Vite routing is complete and verified.",
+      "status": "complete"
     },
     {
       "id": "s05",

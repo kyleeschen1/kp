@@ -6,69 +6,20 @@ import { resolve } from "node:path";
 import { defineConfig } from "vite";
 
 import {
-  compileKpDivideBothSidesEquationLesson,
-  compileKpFractionalTransferComparisonLesson,
-  compileKpFractionalLinearEquationLesson,
-  compileKpNumeratorSplitMergeEquationLesson,
-  compileKpDistributionAreaLesson,
-  compileKpXPlusThreeLesson,
-  compileKpXPlusThreeTeacherZeroLesson
-} from "./src/reader/compiler/public-api.ts";
+  kpReaderRouteEntryName,
+  kpReaderRouteHtmlPath
+} from "./src/reader/compiler/reader-route-descriptor.ts";
+import { kpReaderRouteManifest } from "./src/reader/compiler/reader-route-manifest.ts";
 
 const apiTarget = process.env["API_TARGET"] ?? "http://127.0.0.1:8001";
 const projectRoot = fileURLToPath(new URL(".", import.meta.url));
-const solveXRoutePath = resolve(projectRoot, "reader/solve-x/index.html");
-const solveXTeacherZeroRoutePath = resolve(
-  projectRoot,
-  "reader/solve-x/teacher-zero/index.html"
-);
-const fractionalLinearRoutePath = resolve(
-  projectRoot,
-  "reader/solve-fractional-linear/index.html"
-);
-const divideBothSidesRoutePath = resolve(
-  projectRoot,
-  "reader/divide-both-sides/index.html"
-);
-const numeratorSplitMergeRoutePath = resolve(
-  projectRoot,
-  "reader/split-merge-fractions/index.html"
-);
-const fractionalTransferRoutePath = resolve(
-  projectRoot,
-  "reader/fractional-transfer/index.html"
-);
-const distributionAreaRoutePath = resolve(
-  projectRoot,
-  "reader/distribution-area/index.html"
-);
-const solveXMarkdown = readFileSync(
-  resolve(projectRoot, "content/lessons/solve-x.md"),
-  "utf8"
-);
-const solveXTeacherZeroMarkdown = readFileSync(
-  resolve(projectRoot, "content/lessons/solve-x-teacher-zero.md"),
-  "utf8"
-);
-const fractionalLinearMarkdown = readFileSync(
-  resolve(projectRoot, "content/lessons/solve-fractional-linear.md"),
-  "utf8"
-);
-const divideBothSidesMarkdown = readFileSync(
-  resolve(projectRoot, "content/lessons/divide-both-sides.md"),
-  "utf8"
-);
-const numeratorSplitMergeMarkdown = readFileSync(
-  resolve(projectRoot, "content/lessons/numerator-split-merge.md"),
-  "utf8"
-);
-const fractionalTransferMarkdown = readFileSync(
-  resolve(projectRoot, "content/lessons/fractional-transfer-comparison.md"),
-  "utf8"
-);
-const distributionAreaMarkdown = readFileSync(
-  resolve(projectRoot, "content/lessons/distribution-area.md"),
-  "utf8"
+const readerBuildRoutes = kpReaderRouteManifest.map((descriptor) => ({
+  descriptor,
+  filename: resolve(projectRoot, kpReaderRouteHtmlPath(descriptor.route)),
+  markdown: readFileSync(resolve(projectRoot, descriptor.sourcePath), "utf8")
+}));
+const readerBuildRouteByFilename = new Map(
+  readerBuildRoutes.map((route) => [route.filename, route] as const)
 );
 const reviewBuildIdentity = readReviewBuildIdentity();
 
@@ -81,38 +32,10 @@ export default defineConfig({
     transformIndexHtml: {
       order: "pre",
       handler(html, context) {
-        if (context.filename === solveXRoutePath) {
-          return compileKpXPlusThreeLesson(solveXMarkdown).html;
-        }
-        if (context.filename === solveXTeacherZeroRoutePath) {
-          return compileKpXPlusThreeTeacherZeroLesson(
-            solveXTeacherZeroMarkdown
-          ).html;
-        }
-        if (context.filename === fractionalLinearRoutePath) {
-          return compileKpFractionalLinearEquationLesson(
-            fractionalLinearMarkdown
-          ).html;
-        }
-        if (context.filename === divideBothSidesRoutePath) {
-          return compileKpDivideBothSidesEquationLesson(
-            divideBothSidesMarkdown
-          ).html;
-        }
-        if (context.filename === numeratorSplitMergeRoutePath) {
-          return compileKpNumeratorSplitMergeEquationLesson(
-            numeratorSplitMergeMarkdown
-          ).html;
-        }
-        if (context.filename === fractionalTransferRoutePath) {
-          return compileKpFractionalTransferComparisonLesson(
-            fractionalTransferMarkdown
-          ).html;
-        }
-        if (context.filename === distributionAreaRoutePath) {
-          return compileKpDistributionAreaLesson(distributionAreaMarkdown).html;
-        }
-        return html;
+        const route = readerBuildRouteByFilename.get(context.filename);
+        return route === undefined
+          ? html
+          : route.descriptor.compile(route.markdown).html;
       }
     }
   }],
@@ -120,13 +43,10 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(projectRoot, "index.html"),
-        "reader-solve-x": solveXRoutePath,
-        "reader-solve-x-teacher-zero": solveXTeacherZeroRoutePath,
-        "reader-solve-fractional-linear": fractionalLinearRoutePath,
-        "reader-divide-both-sides": divideBothSidesRoutePath,
-        "reader-split-merge-fractions": numeratorSplitMergeRoutePath,
-        "reader-fractional-transfer": fractionalTransferRoutePath,
-        "reader-distribution-area": distributionAreaRoutePath
+        ...Object.fromEntries(readerBuildRoutes.map(({ descriptor, filename }) => [
+          kpReaderRouteEntryName(descriptor.route),
+          filename
+        ]))
       }
     }
   },
