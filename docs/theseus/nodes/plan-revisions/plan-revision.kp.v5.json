@@ -101,6 +101,16 @@
       "command": "npm run typecheck",
       "status": "passed",
       "checkedAt": "2026-07-23T20:16:54.138Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-theseus-adapter.test.ts tests/semantic-animation-workbench-lifecycle.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:20:54.334Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:20:59.286Z"
     }
   ],
   "planRevision": {

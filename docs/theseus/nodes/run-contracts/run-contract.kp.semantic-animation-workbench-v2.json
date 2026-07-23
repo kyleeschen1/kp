@@ -110,7 +110,8 @@
     {
       "id": "s09",
       "title": "Add the Theseus read adapter",
-      "status": "planned"
+      "summary": "Added a read-only structural Theseus adapter that derives active queued blocked complete and not-scheduled execution from durable node or slice state, with explicit diagnostics for conflicts stale progress missing slices and unsupported states.",
+      "status": "complete"
     },
     {
       "id": "s10",
