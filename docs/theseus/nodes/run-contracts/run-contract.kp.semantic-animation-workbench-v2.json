@@ -116,7 +116,8 @@
     {
       "id": "s10",
       "title": "Add the review-evidence adapter",
-      "status": "planned"
+      "summary": "Added a pure review-evidence adapter over compact query results, joining asset phase and descriptor-route claims to stable capture identity while separating current and historical evidence and diagnosing unscoped or ambiguous notes; the append-only source remained byte-stable.",
+      "status": "complete"
     },
     {
       "id": "s11",

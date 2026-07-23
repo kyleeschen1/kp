@@ -111,6 +111,21 @@
       "command": "npm run typecheck",
       "status": "passed",
       "checkedAt": "2026-07-23T20:20:59.286Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-review-adapter.test.ts tests/dev-review-schema.test.ts server/dev-review-query.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:25:00.348Z"
+    },
+    {
+      "command": "npm run review:logs -- audit",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:25:07.088Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:25:11.298Z"
     }
   ],
   "planRevision": {
