@@ -69,7 +69,8 @@
     {
       "id": "next-action.project.s15-v0",
       "title": "Run structured-algebra boundary and preservation gates",
-      "status": "planned"
+      "summary": "Structured algebra is closed behind semantic-only contracts with exact renderer projection, full reader conformance, and durable visual evidence.",
+      "status": "complete"
     },
     {
       "id": "s16",
