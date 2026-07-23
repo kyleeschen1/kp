@@ -2,7 +2,8 @@
   "id": "run-contract.kp.semantic-animation-workbench-v2",
   "kind": "run-contract",
   "title": "KP Semantic Animation Workbench v2",
-  "status": "ready",
+  "status": "resolved",
+  "summary": "Closed automatically after all stored run-contract slices were completed or skipped.",
   "sourceRefs": [
     {
       "kind": "file",
@@ -192,32 +193,38 @@
     {
       "id": "s22",
       "title": "Define quadratic semantic branching",
-      "status": "planned"
+      "summary": "Superseded by the approved authoritative-roadmap Workbench successor contract; preserved there by stable intent and explicit checkpoints.",
+      "status": "skipped"
     },
     {
       "id": "s23",
       "title": "Compile quadratic solution paths",
-      "status": "planned"
+      "summary": "Superseded by the approved authoritative-roadmap Workbench successor contract; preserved there by stable intent and explicit checkpoints.",
+      "status": "skipped"
     },
     {
       "id": "s24",
       "title": "Add quadratic visual choreography",
-      "status": "planned"
+      "summary": "Superseded by the approved authoritative-roadmap Workbench successor contract; preserved there by stable intent and explicit checkpoints.",
+      "status": "skipped"
     },
     {
       "id": "s25",
       "title": "Publish quadratic through Workbench",
-      "status": "planned"
+      "summary": "Superseded by the approved authoritative-roadmap Workbench successor contract; preserved there by stable intent and explicit checkpoints.",
+      "status": "skipped"
     },
     {
       "id": "s26",
       "title": "Extract second-consumer contracts",
-      "status": "planned"
+      "summary": "Superseded by the approved authoritative-roadmap Workbench successor contract; preserved there by stable intent and explicit checkpoints.",
+      "status": "skipped"
     },
     {
       "id": "s27",
       "title": "Run successor release gates",
-      "status": "planned"
+      "summary": "Superseded by the approved authoritative-roadmap Workbench successor contract; preserved there by stable intent and explicit checkpoints.",
+      "status": "skipped"
     }
   ]
 }

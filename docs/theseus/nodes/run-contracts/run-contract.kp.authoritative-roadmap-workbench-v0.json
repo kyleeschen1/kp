@@ -1,0 +1,197 @@
+{
+  "id": "run-contract.kp.authoritative-roadmap-workbench-v0",
+  "kind": "run-contract",
+  "title": "KP Authoritative Roadmap and Workbench",
+  "status": "resolved",
+  "summary": "Contract scaffold rejected before execution because the compact add-run-contract surface omitted required long-run hygiene fields; superseded by corrected v1.",
+  "sourceRefs": [
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/milestones/milestone.kp.long-term-semantic-product-plan-v0.json",
+      "summary": "Run-contract target that explains why this generated contract exists."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-authoritative-roadmap-workbench-successor-loop-proposal.md",
+      "summary": "Human-approved exact 30-slice order, authority boundary, verification cadence, rollback units, and visual checkpoints."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-23-kp-authoritative-product-roadmap-projection.md",
+      "summary": "Accepted single-authority roadmap and derived Workbench projection decision."
+    }
+  ],
+  "verification": [
+    "npm run typecheck",
+    "npm test",
+    "npm run test:browser:animation-workbench",
+    "npm run visual:exponent-radical",
+    "npm run visual:contact-sheet",
+    "npm run build",
+    "theseus workspace validate"
+  ],
+  "allowedWork": [
+    "Extend generic Theseus plan phases and run slices with backward-compatible roadmap metadata and explicit linkage.",
+    "Activate KP plan revision v6 with completed capability landmarks and the accepted future coverage ledger without authorizing deferred implementation.",
+    "Project the authoritative roadmap into a simple sortable Workbench table and stabilize Workbench search, review typing, radical rewind, and one quadratic exemplar."
+  ],
+  "disallowedWork": [
+    "Do not create a second roadmap store, duplicate execution state, parse Markdown as the operational database, or fabricate animation representations.",
+    "Do not implement arithmetic, logarithm, trigonometry, geometry, probability, data, or cross-domain animations in this contract.",
+    "Do not redesign Agenda, replace review persistence, rewrite graph history, add dynamic loading, publish quadratic, or generalize beyond the two human checkpoints."
+  ],
+  "goal": "Establish one authoritative complete product roadmap, project it into a simple sortable Workbench table, eliminate Workbench and review rebuild flicker, fix exact power-to-radical rewind settlement, and resume quadratic work through its visual checkpoint.",
+  "target": "milestone.kp.long-term-semantic-product-plan-v0",
+  "slices": [
+    {
+      "id": "s01",
+      "title": "Freeze-compatibility-and-authority-baselines",
+      "status": "planned"
+    },
+    {
+      "id": "s02",
+      "title": "Add-generic-plan-phase-v2-fields",
+      "status": "planned"
+    },
+    {
+      "id": "s03",
+      "title": "Preserve-v1-plan-compatibility",
+      "status": "planned"
+    },
+    {
+      "id": "s04",
+      "title": "Preserve-roadmap-fields-through-projections",
+      "status": "planned"
+    },
+    {
+      "id": "s05",
+      "title": "Link-run-slices-to-plan-phases",
+      "status": "planned"
+    },
+    {
+      "id": "s06",
+      "title": "Preserve-linkage-through-mutation",
+      "status": "planned"
+    },
+    {
+      "id": "s07",
+      "title": "Diagnose-plan-run-linkage-drift",
+      "status": "planned"
+    },
+    {
+      "id": "s08",
+      "title": "Run-Theseus-package-release-gate",
+      "status": "planned"
+    },
+    {
+      "id": "s09",
+      "title": "Define-KP-roadmap-v6",
+      "status": "planned"
+    },
+    {
+      "id": "s10",
+      "title": "Activate-KP-roadmap-v6",
+      "status": "planned"
+    },
+    {
+      "id": "s11",
+      "title": "Bind-successor-slices-to-v6",
+      "status": "planned"
+    },
+    {
+      "id": "s12",
+      "title": "Discover-the-active-approved-plan",
+      "status": "planned"
+    },
+    {
+      "id": "s13",
+      "title": "Project-read-only-roadmap-rows",
+      "status": "planned"
+    },
+    {
+      "id": "s14",
+      "title": "Extend-Workbench-authority-laws",
+      "status": "planned"
+    },
+    {
+      "id": "s15",
+      "title": "Prove-retained-domain-coverage",
+      "status": "planned"
+    },
+    {
+      "id": "s16",
+      "title": "Add-roadmap-sort-and-filters",
+      "status": "planned"
+    },
+    {
+      "id": "s17",
+      "title": "Render-the-simple-roadmap-table",
+      "status": "planned"
+    },
+    {
+      "id": "s18",
+      "title": "Preserve-route-keyboard-and-responsive-use",
+      "status": "planned"
+    },
+    {
+      "id": "s19",
+      "title": "Link-only-real-animation-representations",
+      "status": "planned"
+    },
+    {
+      "id": "s20",
+      "title": "Make-Workbench-search-incremental",
+      "status": "planned"
+    },
+    {
+      "id": "s21",
+      "title": "Preserve-player-and-review-identity",
+      "status": "planned"
+    },
+    {
+      "id": "s22",
+      "title": "Stabilize-review-typing",
+      "status": "planned"
+    },
+    {
+      "id": "s23",
+      "title": "Gate-per-keypress-lifecycle-work",
+      "status": "planned"
+    },
+    {
+      "id": "s24",
+      "title": "Add-radical-source-endpoint-regression",
+      "status": "planned"
+    },
+    {
+      "id": "s25",
+      "title": "Define-composite-native-settlement",
+      "status": "planned"
+    },
+    {
+      "id": "s26",
+      "title": "Integrate-exact-radical-handoff",
+      "status": "planned"
+    },
+    {
+      "id": "s27",
+      "title": "Workbench-and-radical-human-checkpoint",
+      "status": "planned"
+    },
+    {
+      "id": "s28",
+      "title": "Define-quadratic-semantic-branching",
+      "status": "planned"
+    },
+    {
+      "id": "s29",
+      "title": "Compile-quadratic-solution-paths",
+      "status": "planned"
+    },
+    {
+      "id": "s30",
+      "title": "Add-quadratic-visual-choreography",
+      "status": "planned"
+    }
+  ]
+}
