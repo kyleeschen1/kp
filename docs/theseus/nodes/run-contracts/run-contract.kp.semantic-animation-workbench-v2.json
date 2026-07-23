@@ -146,7 +146,8 @@
     {
       "id": "s15",
       "title": "Reuse the live preview",
-      "status": "planned"
+      "summary": "Mounted concrete Workbench selections through the existing editor player shell and hydration lifecycle, preserved direct seek rewind diagnostics and disposal behavior, exposed planned entries as explicit non-playable previews, and added a stable scoped Chromium acceptance command.",
+      "status": "complete"
     },
     {
       "id": "s16",

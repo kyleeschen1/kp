@@ -1,11 +1,21 @@
 import type {
   KpSemanticAnimationWorkbenchQueryResult
 } from "./semantic-animation-workbench-query.ts";
+import type {
+  KpEditorAnimationDescriptor
+} from "./animation-descriptor.ts";
+import {
+  renderKpEditorAnimationDiagnosticsLoading
+} from "./animation-diagnostics.ts";
+import {
+  renderKpEditorAnimationPlayerShell
+} from "./animation-player-shell.ts";
 
 export function renderKpSemanticAnimationWorkbenchShell(input: {
   readonly query: string;
   readonly results: readonly KpSemanticAnimationWorkbenchQueryResult[];
   readonly selectedAnimationId?: string;
+  readonly selectedDescriptor?: KpEditorAnimationDescriptor;
 }): string {
   return `<section class="kp-animation-workbench" data-kp-animation-workbench aria-labelledby="kp-animation-workbench-title">
     <header class="kp-animation-workbench__header">
@@ -26,7 +36,11 @@ export function renderKpSemanticAnimationWorkbenchShell(input: {
         ${renderResults(input.results, input.selectedAnimationId)}
       </aside>
       <main class="kp-animation-workbench__detail" data-kp-animation-workbench-detail>
-        ${renderSelectedSummary(input.results, input.selectedAnimationId)}
+        ${renderSelectedSummary(
+          input.results,
+          input.selectedAnimationId,
+          input.selectedDescriptor
+        )}
       </main>
     </div>
   </section>`;
@@ -67,7 +81,8 @@ function renderResults(
 
 function renderSelectedSummary(
   results: readonly KpSemanticAnimationWorkbenchQueryResult[],
-  selectedAnimationId: string | undefined
+  selectedAnimationId: string | undefined,
+  selectedDescriptor: KpEditorAnimationDescriptor | undefined
 ): string {
   const selected =
     results.find(
@@ -91,11 +106,39 @@ function renderSelectedSummary(
       <div><dt>Execution</dt><dd>${escapeHtml(selected.lifecycle.execution)}</dd></div>
       <div><dt>Playability</dt><dd>${escapeHtml(selected.lifecycle.playability)}</dd></div>
     </dl>
-    <div class="kp-animation-workbench__preview-placeholder">
-      <p class="eyebrow">Preview</p>
-      <p>${selected.lifecycle.playability === "playable" ? "The next slice mounts the existing live player here." : "This animation is planned and has no playable asset yet."}</p>
-    </div>
+    ${renderPreview(selected, selectedDescriptor)}
   </article>`;
+}
+
+function renderPreview(
+  selected: KpSemanticAnimationWorkbenchQueryResult["entry"],
+  descriptor: KpEditorAnimationDescriptor | undefined
+): string {
+  if (selected.lifecycle.playability !== "playable") {
+    return `<section class="kp-animation-workbench__planned-preview" data-kp-animation-workbench-planned-preview>
+      <p class="eyebrow">Planned animation</p>
+      <h3>No playable asset yet</h3>
+      <p>The canonical identity is approved for planning, but no player or representation will be fabricated before publication.</p>
+    </section>`;
+  }
+  if (
+    descriptor === undefined ||
+    descriptor.animationId !== selected.identity.animationId
+  ) {
+    return `<section class="kp-animation-workbench__planned-preview" data-kp-animation-workbench-preview-error>
+      <p class="eyebrow">Preview unavailable</p>
+      <h3>Catalog descriptor could not be resolved</h3>
+      <p>The Workbench will not mount a player against a mismatched identity.</p>
+    </section>`;
+  }
+  return `<section class="kp-animation-workbench__live-preview editor-animation-library" data-kp-animation-workbench-live-preview data-kp-editor-animation-library data-kp-editor-animation-id="${escapeHtml(descriptor.animationId)}" data-kp-editor-animation-descriptor-id="${escapeHtml(descriptor.id)}">
+    <div class="kp-animation-workbench__preview-heading">
+      <p class="eyebrow">Existing live player</p>
+      <h3>${escapeHtml(descriptor.title)}</h3>
+    </div>
+    ${renderKpEditorAnimationPlayerShell({ descriptor })}
+    ${renderKpEditorAnimationDiagnosticsLoading(descriptor)}
+  </section>`;
 }
 
 function escapeHtml(value: string): string {

@@ -171,6 +171,30 @@
       "command": "npm run typecheck",
       "status": "passed",
       "checkedAt": "2026-07-23T20:49:11.829Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-shell.test.ts tests/semantic-animation-workbench-data.test.ts tests/kp-editor-animation-player-shell.test.ts tests/kp-editor-animation-playback-session.test.ts",
+      "status": "passed",
+      "scope": "s15 Workbench live-preview reuse and planned-item boundary",
+      "checkedAt": "2026-07-23T20:54:51.539Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s15 Workbench runtime integration and repository TypeScript boundaries",
+      "checkedAt": "2026-07-23T20:54:56.673Z"
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "s15 Chromium live-player seek rewind hydration and planned-item no-player boundary",
+      "checkedAt": "2026-07-23T20:55:02.102Z"
+    },
+    {
+      "command": "npm run build",
+      "status": "passed",
+      "scope": "s15 production closure with reused Workbench player runtime",
+      "checkedAt": "2026-07-23T20:55:09.446Z"
     }
   ],
   "planRevision": {

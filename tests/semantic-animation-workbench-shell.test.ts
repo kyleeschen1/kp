@@ -7,12 +7,19 @@ import {
 import type {
   KpSemanticAnimationWorkbenchQueryResult
 } from "../src/editor/semantic-animation-workbench-query.ts";
+import {
+  createKpEditorAnimationLibrary
+} from "../src/editor/animation-library.ts";
 
 test("Workbench shell renders a labeled search and two-pane control surface", () => {
   const html = renderKpSemanticAnimationWorkbenchShell({
     query: `radical "rewrite"`,
     results: [result("animation.radical", "Power to radical")],
-    selectedAnimationId: "animation.radical"
+    selectedAnimationId: "animation.radical",
+    selectedDescriptor: {
+      ...createKpEditorAnimationLibrary()[0]!,
+      animationId: "animation.radical"
+    }
   });
 
   assert.match(html, /data-kp-animation-workbench/);
@@ -23,6 +30,24 @@ test("Workbench shell renders a labeled search and two-pane control surface", ()
   assert.match(html, /data-action="show-editor"/);
   assert.match(html, /data-kp-animation-workbench-result="animation.radical"/);
   assert.match(html, /data-kp-animation-workbench-selection="animation.radical"/);
+  assert.match(html, /data-kp-animation-workbench-live-preview/);
+  assert.match(html, /data-kp-editor-animation-player/);
+});
+
+test("Workbench shell never mounts a player for planned items", () => {
+  const planned = result(
+    "animation.algebra.quadratic.solution-branching",
+    "Quadratic solution branching",
+    true
+  );
+  const html = renderKpSemanticAnimationWorkbenchShell({
+    query: "quadratic",
+    results: [planned],
+    selectedAnimationId: planned.entry.identity.animationId
+  });
+
+  assert.match(html, /data-kp-animation-workbench-planned-preview/);
+  assert.doesNotMatch(html, /data-kp-editor-animation-player/);
 });
 
 test("Workbench shell renders one top-level result per canonical entry", () => {
@@ -44,7 +69,8 @@ test("Workbench shell renders one top-level result per canonical entry", () => {
 
 function result(
   animationId: string,
-  title: string
+  title: string,
+  planned = false
 ): KpSemanticAnimationWorkbenchQueryResult {
   return {
     score: 0,
@@ -57,8 +83,10 @@ function result(
         title,
         aliases: [`alias.${animationId}`],
         familyIds: [],
-        provenance: { kind: "catalog", descriptorId: `editor.${animationId}` },
-        availability: "concrete"
+        provenance: planned
+          ? { kind: "approved-plan", sourcePath: "plan.md" }
+          : { kind: "catalog", descriptorId: `editor.${animationId}` },
+        availability: planned ? "planned" : "concrete"
       },
       summary: `${title} summary`,
       tags: [],
@@ -66,12 +94,12 @@ function result(
       lifecycle: {
         schemaVersion: "kp.animation-lifecycle-facets.v1",
         roadmap: "untracked",
-        execution: "complete",
-        maturity: "approved",
-        approval: "approved",
+        execution: planned ? "not-scheduled" : "complete",
+        maturity: planned ? "proposed" : "approved",
+        approval: planned ? "unapproved" : "approved",
         review: "unreviewed",
         verification: "unknown",
-        playability: "playable"
+        playability: planned ? "planned-only" : "playable"
       },
       controlIds: [],
       diagnostics: []

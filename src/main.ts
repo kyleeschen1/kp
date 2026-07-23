@@ -108,8 +108,9 @@ let projectDashboardSelectedAgendaRowId: string | undefined;
 let projectDashboardTocOnly = false;
 let projectDashboardSelectedKatexFixtureId: string | undefined;
 let selectedEquationAnimationId: string | undefined;
+const editorAnimationDescriptors = createKpEditorAnimationLibrary();
 let selectedEditorAnimationDescriptorId = selectKpEditorAnimationDescriptor(
-  createKpEditorAnimationLibrary(),
+  editorAnimationDescriptors,
   readKpEditorAnimationSelection(window.location.search)
 ).id;
 type Graph3DWebGLClient = typeof import("./rendering/graph-webgl-three.ts");
@@ -407,11 +408,25 @@ function renderAnimationWorkbenchView(): void {
   )
     ? route.animationId
     : results[0]?.entry.identity.animationId;
+  const selectedEntry = results.find(
+    ({ entry }) => entry.identity.animationId === selectedAnimationId
+  )?.entry;
+  const selectedProvenance = selectedEntry?.identity.provenance;
+  const selectedDescriptor =
+    selectedProvenance?.kind === "catalog"
+      ? editorAnimationDescriptors.find(
+          (descriptor) => descriptor.id === selectedProvenance.descriptorId
+        )
+      : undefined;
   appRoot.innerHTML = renderKpSemanticAnimationWorkbenchShell({
     query: route.query,
     results,
-    ...(selectedAnimationId === undefined ? {} : { selectedAnimationId })
+    ...(selectedAnimationId === undefined ? {} : { selectedAnimationId }),
+    ...(selectedDescriptor === undefined ? {} : { selectedDescriptor })
   });
+  hydrateKpEditorAnimationSurfaces(appRoot);
+  hydrateKpEditorAnimationLiveDiagnostics(appRoot);
+  hydrateKpEditorAnimationPlayers(appRoot);
 }
 
 function filterAnimationWorkbenchFromInput(input: HTMLInputElement): void {

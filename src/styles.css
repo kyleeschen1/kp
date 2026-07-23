@@ -3152,12 +3152,29 @@ h2 {
   overflow-wrap: anywhere;
 }
 
-.kp-animation-workbench__preview-placeholder {
+.kp-animation-workbench__planned-preview {
   min-height: 12rem;
   padding: 1.2rem;
   border: 1px dashed rgba(34, 62, 50, 0.3);
   border-radius: 0.8rem;
   background: rgba(240, 245, 238, 0.72);
+}
+
+.kp-animation-workbench__planned-preview h3,
+.kp-animation-workbench__preview-heading h3 {
+  margin: 0.25rem 0;
+}
+
+.kp-animation-workbench__live-preview {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(34, 62, 50, 0.13);
+  border-radius: 0.85rem;
+  background: rgba(248, 249, 245, 0.82);
+}
+
+.kp-animation-workbench__live-preview .editor-animation-player {
+  margin-top: 1rem;
 }
 
 @media (max-width: 760px) {
