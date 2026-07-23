@@ -140,7 +140,8 @@
     {
       "id": "s14",
       "title": "Render canonical results",
-      "status": "planned"
+      "summary": "Connected the shell to a default index derived directly from catalog and durable seed controls, rendered one selectable searchable row per canonical animation with nested aliases and representation counts, and synchronized canonical selection and query state to the Workbench URL.",
+      "status": "complete"
     },
     {
       "id": "s15",

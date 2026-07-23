@@ -161,6 +161,16 @@
       "command": "npm run build",
       "status": "passed",
       "checkedAt": "2026-07-23T20:44:42.602Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-data.test.ts tests/semantic-animation-workbench-shell.test.ts tests/semantic-animation-workbench-query.test.ts tests/semantic-animation-workbench-index.test.ts tests/semantic-animation-workbench-route.test.ts",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:49:05.890Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "checkedAt": "2026-07-23T20:49:11.829Z"
     }
   ],
   "planRevision": {

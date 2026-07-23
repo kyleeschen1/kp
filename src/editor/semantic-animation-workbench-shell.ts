@@ -1,5 +1,11 @@
+import type {
+  KpSemanticAnimationWorkbenchQueryResult
+} from "./semantic-animation-workbench-query.ts";
+
 export function renderKpSemanticAnimationWorkbenchShell(input: {
   readonly query: string;
+  readonly results: readonly KpSemanticAnimationWorkbenchQueryResult[];
+  readonly selectedAnimationId?: string;
 }): string {
   return `<section class="kp-animation-workbench" data-kp-animation-workbench aria-labelledby="kp-animation-workbench-title">
     <header class="kp-animation-workbench__header">
@@ -12,26 +18,84 @@ export function renderKpSemanticAnimationWorkbenchShell(input: {
     </header>
     <label class="kp-animation-workbench__search">
       <span>Search animations</span>
-      <input type="search" value="${escapeHtml(input.query)}" placeholder="Try radical, tangent, quadratic, or a family…" autocomplete="off" data-kp-animation-workbench-query />
+      <input type="search" value="${escapeHtml(input.query)}" placeholder="Try radical, tangent, quadratic, or a family…" autocomplete="off" data-action="filter-animation-workbench" data-kp-animation-workbench-query />
       <small>Search title, aliases, families, motifs, lifecycle, and representations.</small>
     </label>
     <div class="kp-animation-workbench__layout">
       <aside class="kp-animation-workbench__results" aria-label="Animation results">
-        <div class="kp-animation-workbench__empty" data-kp-animation-workbench-results>
-          <p class="eyebrow">Canonical index</p>
-          <h2>Results are ready to connect</h2>
-          <p>The next slice renders one row per animation from the derived index.</p>
-        </div>
+        ${renderResults(input.results, input.selectedAnimationId)}
       </aside>
       <main class="kp-animation-workbench__detail" data-kp-animation-workbench-detail>
-        <div class="kp-animation-workbench__empty">
-          <p class="eyebrow">Selected animation</p>
-          <h2>Choose an animation to inspect</h2>
-          <p>Concrete items will reuse the existing player. Planned items will remain visibly non-playable.</p>
-        </div>
+        ${renderSelectedSummary(input.results, input.selectedAnimationId)}
       </main>
     </div>
   </section>`;
+}
+
+function renderResults(
+  results: readonly KpSemanticAnimationWorkbenchQueryResult[],
+  selectedAnimationId: string | undefined
+): string {
+  if (results.length === 0) {
+    return `<div class="kp-animation-workbench__empty" data-kp-animation-workbench-results>
+      <p class="eyebrow">0 canonical animations</p>
+      <h2>No matching animation</h2>
+      <p>Try a title, alias, family, motif, lifecycle state, or representation.</p>
+    </div>`;
+  }
+  return `<div data-kp-animation-workbench-results>
+    <div class="kp-animation-workbench__results-header">
+      <p class="eyebrow">${results.length} canonical ${results.length === 1 ? "animation" : "animations"}</p>
+      <p>Representations stay nested beneath their source.</p>
+    </div>
+    <ol class="kp-animation-workbench__result-list">${results
+      .map(({ entry, matchedValues }) => {
+        const identity = entry.identity;
+        const selected = identity.animationId === selectedAnimationId;
+        return `<li data-kp-animation-workbench-result="${escapeHtml(identity.animationId)}">
+          <button type="button" data-action="select-animation-workbench-result" data-kp-animation-id="${escapeHtml(identity.animationId)}" aria-pressed="${selected}">
+            <span class="kp-animation-workbench__result-title">${escapeHtml(identity.title)}</span>
+            <span class="kp-animation-workbench__result-meta">${escapeHtml(entry.lifecycle.playability)} · ${entry.representations.length} ${entry.representations.length === 1 ? "representation" : "representations"}</span>
+            ${identity.aliases.length === 0 ? "" : `<span class="kp-animation-workbench__result-aliases">${identity.aliases.slice(0, 3).map(escapeHtml).join(" · ")}</span>`}
+            ${matchedValues.length === 0 ? "" : `<span class="kp-animation-workbench__result-match">Matched ${matchedValues.slice(0, 2).map(escapeHtml).join(", ")}</span>`}
+          </button>
+        </li>`;
+      })
+      .join("")}</ol>
+  </div>`;
+}
+
+function renderSelectedSummary(
+  results: readonly KpSemanticAnimationWorkbenchQueryResult[],
+  selectedAnimationId: string | undefined
+): string {
+  const selected =
+    results.find(
+      ({ entry }) => entry.identity.animationId === selectedAnimationId
+    )?.entry ?? results[0]?.entry;
+  if (selected === undefined) {
+    return `<div class="kp-animation-workbench__empty">
+      <p class="eyebrow">Selected animation</p>
+      <h2>Nothing selected</h2>
+      <p>Change the search to return to the canonical index.</p>
+    </div>`;
+  }
+  return `<article class="kp-animation-workbench__selection" data-kp-animation-workbench-selection="${escapeHtml(selected.identity.animationId)}">
+    <p class="eyebrow">Canonical animation</p>
+    <h2>${escapeHtml(selected.identity.title)}</h2>
+    <code>${escapeHtml(selected.identity.animationId)}</code>
+    <p>${escapeHtml(selected.summary)}</p>
+    <dl>
+      <div><dt>Families</dt><dd>${selected.identity.familyIds.length === 0 ? "Not assigned" : selected.identity.familyIds.map(escapeHtml).join(", ")}</dd></div>
+      <div><dt>Representations</dt><dd>${selected.representations.length}</dd></div>
+      <div><dt>Execution</dt><dd>${escapeHtml(selected.lifecycle.execution)}</dd></div>
+      <div><dt>Playability</dt><dd>${escapeHtml(selected.lifecycle.playability)}</dd></div>
+    </dl>
+    <div class="kp-animation-workbench__preview-placeholder">
+      <p class="eyebrow">Preview</p>
+      <p>${selected.lifecycle.playability === "playable" ? "The next slice mounts the existing live player here." : "This animation is planned and has no playable asset yet."}</p>
+    </div>
+  </article>`;
 }
 
 function escapeHtml(value: string): string {

@@ -85,6 +85,15 @@ import {
 import {
   renderKpSemanticAnimationWorkbenchShell
 } from "./editor/semantic-animation-workbench-shell.ts";
+import {
+  createKpSemanticAnimationWorkbenchIndex
+} from "./editor/semantic-animation-workbench-data.ts";
+import {
+  queryKpSemanticAnimationWorkbench
+} from "./editor/semantic-animation-workbench-query.ts";
+import {
+  writeKpSemanticAnimationWorkbenchRoute
+} from "./editor/semantic-animation-workbench-route.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -126,6 +135,8 @@ const graph3DWebGLVisibilityObservers = new WeakMap<
   HTMLElement,
   IntersectionObserver
 >();
+const animationWorkbenchIndex =
+  createKpSemanticAnimationWorkbenchIndex();
 
 declare global {
   interface Window {
@@ -218,6 +229,9 @@ appRoot.addEventListener("click", (event) => {
     case "show-animation-workbench":
       navigateToView("animation-workbench");
       renderAnimationWorkbenchView();
+      return;
+    case "select-animation-workbench-result":
+      selectAnimationWorkbenchResult(button);
       return;
     case "show-ftc-tutorial":
       navigateToView("ftc-tutorial");
@@ -333,6 +347,9 @@ appRoot.addEventListener("input", (event) => {
     case "toggle-project-dashboard-toc":
       toggleProjectDashboardTocFromInput(event.target);
       return;
+    case "filter-animation-workbench":
+      filterAnimationWorkbenchFromInput(event.target);
+      return;
   }
 });
 
@@ -381,9 +398,62 @@ function renderAnimationWorkbenchView(): void {
   const route = readKpSemanticAnimationWorkbenchRoute(
     window.location.search
   );
+  const results = queryKpSemanticAnimationWorkbench(
+    animationWorkbenchIndex,
+    route.query
+  );
+  const selectedAnimationId = results.some(
+    ({ entry }) => entry.identity.animationId === route.animationId
+  )
+    ? route.animationId
+    : results[0]?.entry.identity.animationId;
   appRoot.innerHTML = renderKpSemanticAnimationWorkbenchShell({
-    query: route.query
+    query: route.query,
+    results,
+    ...(selectedAnimationId === undefined ? {} : { selectedAnimationId })
   });
+}
+
+function filterAnimationWorkbenchFromInput(input: HTMLInputElement): void {
+  const route = readKpSemanticAnimationWorkbenchRoute(
+    window.location.search
+  );
+  window.history.replaceState(
+    null,
+    "",
+    writeKpSemanticAnimationWorkbenchRoute(window.location.search, {
+      query: input.value,
+      ...(route.animationId === undefined
+        ? {}
+        : { animationId: route.animationId }),
+      ...(route.representationId === undefined
+        ? {}
+        : { representationId: route.representationId })
+    })
+  );
+  renderAnimationWorkbenchView();
+  const query = appRoot.querySelector<HTMLInputElement>(
+    "[data-kp-animation-workbench-query]"
+  );
+  query?.focus();
+  query?.setSelectionRange(query.value.length, query.value.length);
+}
+
+function selectAnimationWorkbenchResult(button: HTMLButtonElement): void {
+  const animationId = button.dataset["kpAnimationId"];
+  if (animationId === undefined) return;
+  const route = readKpSemanticAnimationWorkbenchRoute(
+    window.location.search
+  );
+  window.history.replaceState(
+    null,
+    "",
+    writeKpSemanticAnimationWorkbenchRoute(window.location.search, {
+      query: route.query,
+      animationId
+    })
+  );
+  renderAnimationWorkbenchView();
 }
 
 async function renderFtcTutorialView(): Promise<void> {
