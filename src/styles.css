@@ -3133,6 +3133,46 @@ h2 {
   margin: 1.5rem 0;
 }
 
+.kp-animation-workbench__metadata {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(34, 62, 50, 0.14);
+}
+
+.kp-animation-workbench__metadata > p {
+  max-width: 48rem;
+  color: #56655e;
+  line-height: 1.55;
+}
+
+.kp-animation-workbench__tags {
+  margin-top: 1.25rem;
+}
+
+.kp-animation-workbench__tags h4 {
+  margin: 0 0 0.55rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.kp-animation-workbench__tags ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.kp-animation-workbench__tags li {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid rgba(34, 62, 50, 0.13);
+  border-radius: 999px;
+  background: rgba(239, 243, 239, 0.78);
+  font-size: 0.75rem;
+}
+
 .kp-animation-workbench__identity-facts div {
   padding: 0.8rem;
   border: 1px solid rgba(34, 62, 50, 0.11);
@@ -3170,7 +3210,8 @@ h2 {
   margin-top: 0.75rem;
 }
 
-.kp-animation-workbench__representation-list button {
+.kp-animation-workbench__representation-list button,
+.kp-animation-workbench__representation-list a {
   display: grid;
   gap: 0.15rem;
   min-width: 10rem;
@@ -3179,17 +3220,21 @@ h2 {
   border-radius: 0.7rem;
   background: rgba(246, 248, 243, 0.78);
   color: inherit;
+  font: inherit;
+  text-decoration: none;
   text-align: left;
   cursor: pointer;
 }
 
 .kp-animation-workbench__representation-list button:hover,
-.kp-animation-workbench__representation-list button[aria-pressed="true"] {
+.kp-animation-workbench__representation-list button[aria-pressed="true"],
+.kp-animation-workbench__representation-list a:hover {
   border-color: rgba(38, 113, 77, 0.36);
   background: rgba(214, 232, 220, 0.64);
 }
 
-.kp-animation-workbench__representation-list button:focus-visible {
+.kp-animation-workbench__representation-list button:focus-visible,
+.kp-animation-workbench__representation-list a:focus-visible {
   outline: 3px solid rgba(38, 113, 77, 0.3);
   outline-offset: 2px;
 }
@@ -3350,7 +3395,7 @@ h2 {
 }
 
 .kp-animation-workbench__live-preview {
-  margin-top: 1.5rem;
+  margin-top: 0.85rem;
   padding: 1rem;
   border: 1px solid rgba(34, 62, 50, 0.13);
   border-radius: 0.85rem;
@@ -3408,7 +3453,8 @@ h2 {
     display: grid;
   }
 
-  .kp-animation-workbench__representation-list button {
+  .kp-animation-workbench__representation-list button,
+  .kp-animation-workbench__representation-list a {
     width: 100%;
     min-width: 0;
   }

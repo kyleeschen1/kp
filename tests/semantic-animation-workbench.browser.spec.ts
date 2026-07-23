@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 const radicalId = "animation.generated.radical.square-root-as-power";
 const quadraticId = "animation.algebra.quadratic.solution-branching";
+const linearSolveId = "animation.linear-solve.solve-x";
 
 test.beforeEach(async ({ page }) => {
   await mockReviewInbox(page);
@@ -73,6 +74,27 @@ test("Workbench reuses the live player and preserves direct seek and rewind", as
     page.locator("[data-kp-editor-animation-player]")
   ).toHaveAttribute("data-kp-editor-animation-id", radicalId);
 
+  const order = await page.evaluate(() => {
+    const selection = document.querySelector(
+      "[data-kp-animation-workbench-selection]"
+    );
+    const children = [
+      selection?.querySelector("h2"),
+      selection?.querySelector("[data-kp-editor-animation-player]"),
+      selection?.querySelector(
+        "[data-kp-animation-workbench-acceptance]"
+      ),
+      selection?.querySelector("[data-kp-animation-workbench-metadata]")
+    ];
+    return children.map((element) =>
+      element === null || element === undefined
+        ? -1
+        : [...selection!.querySelectorAll("*")].indexOf(element)
+    );
+  });
+  expect(order.every((position) => position >= 0)).toBe(true);
+  expect(order).toEqual([...order].sort((left, right) => left - right));
+
   const switchedPlayer = workbench.locator("[data-kp-editor-animation-player]");
   const scrubber = switchedPlayer.locator(
     '[data-action="seek-editor-animation"]'
@@ -89,6 +111,49 @@ test("Workbench reuses the live player and preserves direct seek and rewind", as
     "data-kp-editor-animation-direction",
     "rewind"
   );
+});
+
+test("Workbench exposes review capture for playable and planned animations", async ({
+  page
+}) => {
+  for (const route of [
+    `/?view=animation-workbench&q=radical&workbenchAnimation=${radicalId}`,
+    `/?view=animation-workbench&q=quadratic&workbenchAnimation=${quadraticId}`
+  ]) {
+    await page.goto(route);
+    await expect(page.locator("body")).toHaveAttribute(
+      "data-kp-dev-review-ready",
+      "true"
+    );
+    const host = page.locator("[data-kp-dev-review-shell]");
+    await expect(host.locator("button.launcher")).toBeVisible();
+    await expect(host).toHaveAttribute(
+      "data-kp-dev-review-placement",
+      "left-prose-rail"
+    );
+    await host.locator("button.launcher").click();
+    await expect(host.locator("textarea")).toBeEnabled();
+    await host.locator("textarea").fill("Review this Workbench moment.");
+    await expect(host.locator(".meta")).toContainText("Locked");
+  }
+});
+
+test("Workbench links a catalog animation to its real learner lesson", async ({
+  page
+}) => {
+  await page.goto(
+    `/?view=animation-workbench&q=${linearSolveId}&workbenchAnimation=${linearSolveId}`
+  );
+  const lesson = page.locator(
+    '[data-kp-representation-id^="learner-experience."]'
+  );
+  await expect(lesson).toHaveAttribute("href", "/reader/solve-x/");
+  await expect(lesson).toContainText("lesson");
+  await lesson.click();
+  await expect(page).toHaveURL(/\/reader\/solve-x\//);
+  await expect(
+    page.locator("[data-kp-reader-equation-stage]")
+  ).toBeVisible();
 });
 
 test("Workbench planned quadratic never mounts a player", async ({ page }) => {

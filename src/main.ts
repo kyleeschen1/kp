@@ -109,6 +109,9 @@ import {
   renderKpAnimationWorkbenchReviewPanel
 } from "./editor/semantic-animation-workbench-review.ts";
 import {
+  loadKpAnimationWorkbenchDevelopmentReview
+} from "./editor/semantic-animation-workbench-review-capture-loader.ts";
+import {
   resolveKpAnimationWorkbenchRepresentation
 } from "./editor/semantic-animation-workbench-representation-selection.ts";
 
@@ -149,6 +152,9 @@ let activeView:
   | "ftc-tutorial"
   | "animation-workbench" = "editor";
 let viewRevision = 0;
+let disposeAnimationWorkbenchDevelopmentReview:
+  | (() => void)
+  | undefined;
 const graph3DWebGLVisibilityObservers = new WeakMap<
   HTMLElement,
   IntersectionObserver
@@ -185,6 +191,7 @@ document.addEventListener("visibilitychange", () => {
 });
 
 window.addEventListener("pagehide", () => {
+  disposeAnimationWorkbenchReviewCapture();
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
 });
@@ -398,6 +405,7 @@ async function compileDocument(): Promise<void> {
 function renderEditor(): void {
   activeView = "editor";
   viewRevision += 1;
+  disposeAnimationWorkbenchReviewCapture();
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
@@ -417,6 +425,7 @@ function renderEditor(): void {
 function renderAnimationWorkbenchView(): void {
   activeView = "animation-workbench";
   const revision = ++viewRevision;
+  disposeAnimationWorkbenchReviewCapture();
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
@@ -462,6 +471,7 @@ function renderAnimationWorkbenchView(): void {
   hydrateKpEditorAnimationSurfaces(appRoot);
   hydrateKpEditorAnimationLiveDiagnostics(appRoot);
   hydrateKpEditorAnimationPlayers(appRoot);
+  void mountAnimationWorkbenchReviewCapture(revision);
   if (selectedEntry !== undefined) {
     void hydrateAnimationWorkbenchAcceptance(
       appRoot,
@@ -474,6 +484,24 @@ function renderAnimationWorkbenchView(): void {
       revision
     );
   }
+}
+
+async function mountAnimationWorkbenchReviewCapture(
+  revision: number
+): Promise<void> {
+  if (loadKpAnimationWorkbenchDevelopmentReview === undefined) return;
+  const client = await loadKpAnimationWorkbenchDevelopmentReview();
+  if (activeView !== "animation-workbench" || revision !== viewRevision) {
+    return;
+  }
+  disposeAnimationWorkbenchReviewCapture();
+  disposeAnimationWorkbenchDevelopmentReview =
+    client.mountKpAnimationWorkbenchDevReview(window);
+}
+
+function disposeAnimationWorkbenchReviewCapture(): void {
+  disposeAnimationWorkbenchDevelopmentReview?.();
+  disposeAnimationWorkbenchDevelopmentReview = undefined;
 }
 
 async function hydrateAnimationWorkbenchAcceptance(
@@ -801,6 +829,7 @@ function isEditableTarget(target: EventTarget | null): boolean {
 async function renderFtcTutorialView(): Promise<void> {
   activeView = "ftc-tutorial";
   const revision = ++viewRevision;
+  disposeAnimationWorkbenchReviewCapture();
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
@@ -877,6 +906,7 @@ async function renderProjectDashboardView(
 ): Promise<void> {
   activeView = "dashboard";
   const revision = ++viewRevision;
+  disposeAnimationWorkbenchReviewCapture();
   projectDashboardQuery = query;
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);

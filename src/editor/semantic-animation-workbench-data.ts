@@ -11,6 +11,9 @@ import {
   createKpEditorAnimationLibrary
 } from "./animation-library.ts";
 import {
+  createKpLearnerExperienceLibrary
+} from "./learner-experience-library.ts";
+import {
   projectKpAnimationCatalogToWorkbench
 } from "./semantic-animation-workbench-catalog-adapter.ts";
 import {
@@ -61,7 +64,8 @@ export function createKpSemanticAnimationWorkbenchIndex():
     ],
     representations: projectKpAnimationRepresentations({
       catalogEntries,
-      descriptors
+      descriptors,
+      learnerExperiences: createKpLearnerExperienceLibrary()
     }),
     theseus
   });

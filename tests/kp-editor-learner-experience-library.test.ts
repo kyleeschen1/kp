@@ -25,7 +25,8 @@ test("learner experience library puts the synchronized distribution exemplar fir
       "Watch 3(x+2) become 3x+6 while the same rectangle partitions in lockstep.",
     href: "/reader/distribution-area/",
     actionLabel: "Review algebra and area",
-    status: "prototype"
+    status: "prototype",
+    animationIds: ["exemplar.distribution-area.3-times-x-plus-2"]
   });
   assert.deepEqual(experiences[1], {
     id: "divide-both-sides-scroll-lesson",
@@ -35,7 +36,8 @@ test("learner experience library puts the synchronized distribution exemplar fir
       "Watch 3x = 12 become two matched fractions, cancel, and resolve to x = 4.",
     href: "/reader/divide-both-sides/",
     actionLabel: "Review division animation",
-    status: "exemplar"
+    status: "exemplar",
+    animationIds: ["animation.divide-both-sides.solve-3x-equals-12"]
   });
   assert.deepEqual(experiences[2], {
     id: "numerator-split-merge-scroll-lesson",
@@ -45,7 +47,8 @@ test("learner experience library puts the synchronized distribution exemplar fir
       "Watch one denominator branch across a numerator sum, then run the exact structure backward.",
     href: "/reader/split-merge-fractions/",
     actionLabel: "Review split and merge",
-    status: "exemplar"
+    status: "exemplar",
+    animationIds: ["animation.numerator-split-merge.round-trip"]
   });
   assert.deepEqual(experiences[3], {
     id: "fractional-transfer-comparison-scroll-lesson",
@@ -55,7 +58,11 @@ test("learner experience library puts the synchronized distribution exemplar fir
       "Switch between the complete balanced proof and a certified fluent transfer for x/2 = 4.",
     href: "/reader/fractional-transfer/",
     actionLabel: "Compare proof and shortcut",
-    status: "exemplar"
+    status: "exemplar",
+    animationIds: [
+      "animation.fractional-linear.x-over-2.balanced-proof",
+      "animation.fractional-linear.x-over-2.fluent-projection"
+    ]
   });
   assert.deepEqual(experiences[4], {
     id: "solve-fractional-linear-scroll-lesson",
@@ -65,7 +72,8 @@ test("learner experience library puts the synchronized distribution exemplar fir
       "Watch subtraction, cancellation, and multiplication carry x through a fraction to its solution.",
     href: "/reader/solve-fractional-linear/",
     actionLabel: "Review fraction animation",
-    status: "prototype"
+    status: "prototype",
+    animationIds: ["animation.fractional-linear.solve-x-over-2"]
   });
   assert.deepEqual(experiences[5], {
     id: "solve-x-scroll-lesson",
@@ -75,6 +83,7 @@ test("learner experience library puts the synchronized distribution exemplar fir
       "Scroll through a short explanation and watch each symbol find its next place.",
     href: "/reader/solve-x/",
     actionLabel: "Open scroll lesson",
-    status: "exemplar"
+    status: "exemplar",
+    animationIds: ["animation.linear-solve.solve-x"]
   });
 });

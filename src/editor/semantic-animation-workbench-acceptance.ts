@@ -99,7 +99,7 @@ export function renderKpAnimationAcceptanceBrief(
   return `<section class="kp-animation-workbench__acceptance" data-kp-animation-workbench-acceptance="${escapeHtml(brief.animationId)}" aria-labelledby="kp-animation-workbench-acceptance-title">
     <div class="kp-animation-workbench__section-heading">
       <p class="eyebrow">Acceptance brief</p>
-      <h3 id="kp-animation-workbench-acceptance-title">What to check</h3>
+      <h3 id="kp-animation-workbench-acceptance-title">What I should see</h3>
       <p>Derived from the selected animation’s existing evidence.</p>
     </div>
     <ol class="kp-animation-workbench__acceptance-list">

@@ -24,6 +24,17 @@ test("semantic readers dock left only while their two-column layout is active", 
   }), "captured-moment-sheet");
 });
 
+test("the animation Workbench keeps review capture visible without crowding narrow layouts", () => {
+  assert.equal(resolveKpDevReviewPlacement({
+    surface: "animation-workbench",
+    viewportWidth: KP_DEV_REVIEW_READER_WIDE_MIN_WIDTH
+  }), "left-prose-rail");
+  assert.equal(resolveKpDevReviewPlacement({
+    surface: "animation-workbench",
+    viewportWidth: 390
+  }), "captured-moment-sheet");
+});
+
 test("review placement rejects unusable viewport evidence", () => {
   assert.throws(() => resolveKpDevReviewPlacement({
     surface: "semantic-reader",

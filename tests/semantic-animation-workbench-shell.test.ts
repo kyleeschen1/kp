@@ -47,6 +47,19 @@ test("Workbench shell renders a labeled search and two-pane control surface", ()
   );
   assert.match(html, /Loading semantic law checks/);
   assert.match(html, /data-kp-animation-workbench-static-hint/);
+  assert.match(html, /What I should see/);
+  assert.match(html, /data-kp-animation-workbench-metadata/);
+  const titleIndex = html.indexOf("<h2>Power to radical</h2>");
+  const playerIndex = html.indexOf("data-kp-editor-animation-player");
+  const acceptanceIndex = html.indexOf(
+    "data-kp-animation-workbench-acceptance="
+  );
+  const metadataIndex = html.indexOf(
+    "data-kp-animation-workbench-metadata"
+  );
+  assert.ok(titleIndex < playerIndex);
+  assert.ok(playerIndex < acceptanceIndex);
+  assert.ok(acceptanceIndex < metadataIndex);
   assert.equal(
     [
       "roadmap",
@@ -128,7 +141,7 @@ function result(
         availability: planned ? "planned" : "concrete"
       },
       summary: `${title} summary`,
-      tags: [],
+      tags: ["algebra", "reviewable"],
       representations: planned
         ? []
         : [

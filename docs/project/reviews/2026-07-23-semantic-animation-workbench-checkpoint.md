@@ -33,17 +33,28 @@ visual implementation has not started.
    evidence explicitly.
 8. Keyboard search and traversal, system reduced motion, static checkpoints,
    and the 390-pixel stacked layout remain usable.
+9. The selected animation appears immediately below its canonical title;
+   `What I should see` follows the player controls; tags, lifecycle,
+   representations, and review history form the lower metadata region.
+10. The development review capture control remains visible for playable and
+    planned items, docks left on wide layouts, and becomes a bounded sheet on
+    narrow layouts.
+11. A learner lesson appears only when the existing learner-experience
+    registry explicitly names the same animation. The solve-x animation opens
+    its real animated reader route; radical and derivative do not fabricate
+    lesson links while dedicated lesson sources are absent.
 
 ## Stable evidence
 
 - `npm run visual:animation-workbench` produced six current wide/narrow
   captures and one contact sheet. The manifest observed one player for radical,
   one for derivative, zero for quadratic, seven lifecycle facets on every
-  item, an available local review projection, and no horizontal overflow.
-- `npm run test:browser:animation-workbench` passed five Chromium acceptance
-  cases.
-- `npm test` passed 2,024 tests after refreshing the approved central-route
-  legacy-exception evidence for the Workbench view.
+  item, one review capture control per item, an available local review
+  projection, and no horizontal overflow.
+- `npm run test:browser:animation-workbench` passed seven Chromium acceptance
+  cases, including review capture and an actual Workbench-to-lesson handoff.
+- `npm test` passed 2,026 tests after extending the learner-experience
+  relationship contract.
 - `npm run build` passed type-checking and production bundling.
 - `npm run check:dev-review-production` proved the development review client
   and endpoint were erased from production output.

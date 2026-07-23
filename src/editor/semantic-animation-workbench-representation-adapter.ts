@@ -1,6 +1,9 @@
 import type {
   KpEditorAnimationDescriptor
 } from "./animation-descriptor.ts";
+import type {
+  KpLearnerExperienceDescriptor
+} from "./learner-experience-library.ts";
 import {
   writeKpEditorAnimationSelection
 } from "./animation-selection-route.ts";
@@ -16,6 +19,7 @@ import {
 export function projectKpAnimationRepresentations(input: {
   readonly catalogEntries: readonly KpAnimationWorkbenchCatalogEntry[];
   readonly descriptors: readonly KpEditorAnimationDescriptor[];
+  readonly learnerExperiences?: readonly KpLearnerExperienceDescriptor[];
   readonly editorPathname?: string;
 }): readonly KpAnimationRepresentationRelationship[] {
   const identities = input.catalogEntries.map((entry) => entry.identity);
@@ -23,7 +27,7 @@ export function projectKpAnimationRepresentations(input: {
     identities.map((identity) => identity.animationId)
   );
   const editorPathname = input.editorPathname ?? "/";
-  const relationships = input.descriptors
+  const descriptorRelationships = input.descriptors
     .filter((descriptor) => knownAnimationIds.has(descriptor.animationId))
     .flatMap((descriptor) => {
       const href = `${editorPathname}${writeKpEditorAnimationSelection(
@@ -54,6 +58,29 @@ export function projectKpAnimationRepresentations(input: {
 
       return [editor, ...sample];
     });
+  const learnerRelationships = (input.learnerExperiences ?? []).flatMap(
+    (experience) =>
+      experience.animationIds
+        .filter((animationId) => knownAnimationIds.has(animationId))
+        .map((animationId) =>
+          createKpAnimationRepresentationRelationship({
+            animationId,
+            representationId:
+              `learner-experience.${experience.id}.${animationId}`,
+            kind:
+              experience.kind === "scroll-lesson"
+                ? "lesson"
+                : "concept-room",
+            label: experience.title,
+            href: experience.href,
+            playable: true
+          })
+        )
+  );
+  const relationships = [
+    ...descriptorRelationships,
+    ...learnerRelationships
+  ];
 
   assertKpAnimationRepresentationRelationships({
     identities,

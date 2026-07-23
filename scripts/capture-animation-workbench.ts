@@ -49,6 +49,8 @@ const captures: {
   lifecycleFacetCount: number;
   representationCount: number;
   reviewState: string;
+  reviewCaptureCount: number;
+  reviewCapturePlacement: string;
   horizontalOverflowPx: number;
 }[] = [];
 
@@ -72,6 +74,18 @@ try {
           )
           .waitFor();
         await settleReview(page);
+        await page.waitForFunction(
+          () => document.body.dataset["kpDevReviewReady"] === "true"
+        );
+        const reviewCapture = page.locator(
+          "[data-kp-dev-review-shell]"
+        );
+        const reviewCaptureCount = await reviewCapture.count();
+        if (reviewCaptureCount !== 1) {
+          throw new Error(
+            `${exemplar.animationId} expected one review capture control, received ${reviewCaptureCount}.`
+          );
+        }
 
         const players = page.locator("[data-kp-editor-animation-player]");
         const playerCount = await players.count();
@@ -128,6 +142,11 @@ try {
             (await page
               .locator("[data-kp-animation-workbench-review]")
               .getAttribute("data-review-state")) ?? "missing",
+          reviewCaptureCount,
+          reviewCapturePlacement:
+            (await reviewCapture.getAttribute(
+              "data-kp-dev-review-placement"
+            )) ?? "missing",
           horizontalOverflowPx
         });
       } finally {
@@ -198,7 +217,7 @@ async function renderContactSheet(
       const image = await readFile(path.resolve(item.file));
       return `<figure>
         <img src="data:image/png;base64,${image.toString("base64")}" alt="${escapeHtml(item.id)}">
-        <figcaption><strong>${escapeHtml(item.id)}</strong><code>${escapeHtml(item.animationId)}</code><span>${item.viewport.width}×${item.viewport.height} · ${item.playerCount} player · ${item.representationCount} representations · review ${escapeHtml(item.reviewState)}</span></figcaption>
+        <figcaption><strong>${escapeHtml(item.id)}</strong><code>${escapeHtml(item.animationId)}</code><span>${item.viewport.width}×${item.viewport.height} · ${item.playerCount} player · ${item.representationCount} representations · review ${escapeHtml(item.reviewState)} · capture ${escapeHtml(item.reviewCapturePlacement)}</span></figcaption>
       </figure>`;
     })
   );

@@ -5,6 +5,9 @@ import {
   createKpEditorAnimationLibrary
 } from "../src/editor/animation-library.ts";
 import {
+  createKpLearnerExperienceLibrary
+} from "../src/editor/learner-experience-library.ts";
+import {
   projectKpAnimationCatalogToWorkbench
 } from "../src/editor/semantic-animation-workbench-catalog-adapter.ts";
 import {
@@ -22,7 +25,8 @@ function createProjection() {
   });
   const relationships = projectKpAnimationRepresentations({
     catalogEntries,
-    descriptors
+    descriptors,
+    learnerExperiences: createKpLearnerExperienceLibrary()
   });
   return { catalogEntries, descriptors, relationships };
 }
@@ -31,7 +35,8 @@ test("representation adapter projects editor descriptors and sample cards", () =
   const { descriptors, relationships } = createProjection();
   const expectedCount =
     descriptors.length +
-    descriptors.filter((descriptor) => descriptor.sampleId !== undefined).length;
+    descriptors.filter((descriptor) => descriptor.sampleId !== undefined).length +
+    1;
 
   assert.equal(relationships.length, expectedCount);
   assert.equal(
@@ -40,6 +45,19 @@ test("representation adapter projects editor descriptors and sample cards", () =
     ).size,
     relationships.length
   );
+});
+
+test("existing learner lessons remain subordinate representations", () => {
+  const { relationships } = createProjection();
+  const lesson = relationships.find(
+    (relationship) =>
+      relationship.animationId === "animation.linear-solve.solve-x" &&
+      relationship.kind === "lesson"
+  );
+
+  assert.equal(lesson?.href, "/reader/solve-x/");
+  assert.equal(lesson?.playable, true);
+  assert.match(lesson?.representationId ?? "", /^learner-experience\./);
 });
 
 test("radical representations stay beneath one canonical identity", () => {

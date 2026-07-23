@@ -108,42 +108,62 @@ function renderSelectedSummary(
       <p>Change the search to return to the canonical index.</p>
     </div>`;
   }
+  const selectedRepresentation = selected.representations.find(
+    (representation) =>
+      representation.representationId === selectedRepresentationId
+  );
+  const acceptance = renderKpAnimationAcceptanceBrief(
+    deriveKpAnimationAcceptanceBrief({
+      entry: selected,
+      lawEvidence:
+        selected.lifecycle.playability === "playable"
+          ? "loading"
+          : "unavailable"
+    })
+  );
   return `<article class="kp-animation-workbench__selection" data-kp-animation-workbench-selection="${escapeHtml(selected.identity.animationId)}">
     <p class="eyebrow">Canonical animation</p>
     <h2>${escapeHtml(selected.identity.title)}</h2>
-    <code>${escapeHtml(selected.identity.animationId)}</code>
-    <p>${escapeHtml(selected.summary)}</p>
-    <dl class="kp-animation-workbench__identity-facts">
-      <div><dt>Families</dt><dd>${selected.identity.familyIds.length === 0 ? "Not assigned" : selected.identity.familyIds.map(escapeHtml).join(", ")}</dd></div>
-      <div><dt>Representations</dt><dd>${selected.representations.length}</dd></div>
-    </dl>
-    ${renderRepresentationSwitcher(
-      selected.representations,
-      selectedRepresentationId
-    )}
-    ${renderLifecycleFacets(selected.lifecycle)}
-    ${renderKpAnimationAcceptanceBrief(
-      deriveKpAnimationAcceptanceBrief({
-        entry: selected,
-        lawEvidence:
-          selected.lifecycle.playability === "playable"
-            ? "loading"
-            : "unavailable"
-      })
-    )}
-    ${renderKpAnimationWorkbenchReviewPanel({
-      animationId: selected.identity.animationId,
-      state: "loading"
-    })}
     ${renderPreview(
       selected,
       selectedDescriptor,
-      selected.representations.find(
-        (representation) =>
-          representation.representationId === selectedRepresentationId
-      )
+      selectedRepresentation,
+      acceptance
     )}
+    <section class="kp-animation-workbench__metadata" data-kp-animation-workbench-metadata aria-labelledby="kp-animation-workbench-metadata-title">
+      <div class="kp-animation-workbench__section-heading">
+        <p class="eyebrow">Catalog and workflow</p>
+        <h3 id="kp-animation-workbench-metadata-title">Animation details</h3>
+      </div>
+      <p>${escapeHtml(selected.summary)}</p>
+      <code>${escapeHtml(selected.identity.animationId)}</code>
+      ${renderTags(selected.tags)}
+      <dl class="kp-animation-workbench__identity-facts">
+        <div><dt>Families</dt><dd>${selected.identity.familyIds.length === 0 ? "Not assigned" : selected.identity.familyIds.map(escapeHtml).join(", ")}</dd></div>
+        <div><dt>Representations</dt><dd>${selected.representations.length}</dd></div>
+      </dl>
+      ${renderLifecycleFacets(selected.lifecycle)}
+      ${renderRepresentationSwitcher(
+        selected.representations,
+        selectedRepresentationId
+      )}
+      ${renderKpAnimationWorkbenchReviewPanel({
+        animationId: selected.identity.animationId,
+        state: "loading"
+      })}
+    </section>
   </article>`;
+}
+
+function renderTags(tags: readonly string[]): string {
+  return `<section class="kp-animation-workbench__tags" aria-labelledby="kp-animation-workbench-tags-title">
+    <h4 id="kp-animation-workbench-tags-title">Tags</h4>
+    ${
+      tags.length === 0
+        ? "<p>None assigned</p>"
+        : `<ul>${tags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("")}</ul>`
+    }
+  </section>`;
 }
 
 function renderRepresentationSwitcher(
@@ -166,17 +186,35 @@ function renderRepresentationSwitcher(
         ? `<p data-kp-animation-workbench-no-representations>No representation has been published.</p>`
         : `<div class="kp-animation-workbench__representation-list" role="group" aria-label="Animation representations">
             ${ordered
-              .map(
-                (representation) =>
-                  `<button type="button" data-action="select-animation-workbench-representation" data-kp-representation-id="${escapeHtml(representation.representationId)}" aria-pressed="${representation.representationId === selectedRepresentationId}">
-                    <span>${escapeHtml(representation.label)}</span>
-                    <small>${escapeHtml(representation.kind)} · ${representation.playable ? "playable" : "static"}</small>
-                  </button>`
+              .map((representation) =>
+                renderRepresentationControl(
+                  representation,
+                  selectedRepresentationId
+                )
               )
               .join("")}
           </div>`
     }
   </section>`;
+}
+
+function renderRepresentationControl(
+  representation: KpAnimationRepresentationRelationship,
+  selectedRepresentationId: string | undefined
+): string {
+  const content = `<span>${escapeHtml(representation.label)}</span>
+    <small>${escapeHtml(representation.kind)} · ${representation.playable ? "playable" : "static"}</small>`;
+  if (
+    representation.href !== undefined &&
+    (representation.kind === "lesson" ||
+      representation.kind === "concept-room" ||
+      representation.kind === "export")
+  ) {
+    return `<a href="${escapeHtml(representation.href)}" data-kp-representation-id="${escapeHtml(representation.representationId)}">${content}</a>`;
+  }
+  return `<button type="button" data-action="select-animation-workbench-representation" data-kp-representation-id="${escapeHtml(representation.representationId)}" aria-pressed="${representation.representationId === selectedRepresentationId}">
+    ${content}
+  </button>`;
 }
 
 function renderLifecycleFacets(
@@ -208,14 +246,15 @@ function renderLifecycleFacets(
 function renderPreview(
   selected: KpSemanticAnimationWorkbenchQueryResult["entry"],
   descriptor: KpEditorAnimationDescriptor | undefined,
-  representation: KpAnimationRepresentationRelationship | undefined
+  representation: KpAnimationRepresentationRelationship | undefined,
+  acceptance: string
 ): string {
   if (selected.lifecycle.playability !== "playable") {
     return `<section class="kp-animation-workbench__planned-preview" data-kp-animation-workbench-planned-preview>
       <p class="eyebrow">Planned animation</p>
       <h3>No playable asset yet</h3>
       <p>The canonical identity is approved for planning, but no player or representation will be fabricated before publication.</p>
-    </section>`;
+    </section>${acceptance}`;
   }
   if (
     descriptor === undefined ||
@@ -225,15 +264,15 @@ function renderPreview(
       <p class="eyebrow">Preview unavailable</p>
       <h3>Catalog descriptor could not be resolved</h3>
       <p>The Workbench will not mount a player against a mismatched identity.</p>
-    </section>`;
+    </section>${acceptance}`;
   }
   return `<section class="kp-animation-workbench__live-preview editor-animation-library" data-kp-animation-workbench-live-preview data-kp-editor-animation-library data-kp-editor-animation-id="${escapeHtml(descriptor.animationId)}" data-kp-editor-animation-descriptor-id="${escapeHtml(descriptor.id)}"${representation === undefined ? "" : ` data-kp-animation-workbench-representation="${escapeHtml(representation.representationId)}"`}>
     <div class="kp-animation-workbench__preview-heading">
-      <p class="eyebrow">${representation === undefined ? "Existing live player" : `${escapeHtml(representation.kind)} representation`}</p>
-      <h3>${escapeHtml(descriptor.title)}</h3>
+      <p class="eyebrow">${representation === undefined ? "Live animation" : `${escapeHtml(representation.kind)} representation`}</p>
     </div>
     ${renderKpEditorAnimationPlayerShell({ descriptor })}
     <p class="kp-animation-workbench__static-hint" data-kp-animation-workbench-static-hint>For a non-animated view, choose <strong>static checkpoints</strong> in the player’s Presentation control.</p>
+    ${acceptance}
     ${renderKpEditorAnimationDiagnosticsLoading(descriptor)}
   </section>`;
 }
