@@ -70,7 +70,8 @@
     {
       "id": "s03",
       "title": "Preserve-v1-plan-compatibility",
-      "status": "planned"
+      "summary": "Added exact v1 plan-node round-trip coverage; 13 focused tests pass, the package build passes, and the rebuilt CLI validates all 760 KP nodes and 10992 events without migration.",
+      "status": "complete"
     },
     {
       "id": "s04",
