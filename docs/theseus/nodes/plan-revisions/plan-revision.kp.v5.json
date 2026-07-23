@@ -69,6 +69,18 @@
       "status": "passed",
       "scope": "s05 subordinate representation closure and identity boundaries: 6 tests passed.",
       "checkedAt": "2026-07-23T20:02:12.651Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-authority.test.ts tests/semantic-animation-workbench-seeds.test.ts tests/semantic-animation-workbench-identity.test.ts tests/semantic-animation-workbench-representation.test.ts tests/semantic-animation-workbench-lifecycle.test.ts",
+      "status": "passed",
+      "scope": "s06 Workbench foundation cohort: 15 authority identity representation and lifecycle tests passed.",
+      "checkedAt": "2026-07-23T20:06:09.214Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s06 Workbench foundation contracts and repository TypeScript boundaries.",
+      "checkedAt": "2026-07-23T20:06:19.047Z"
     }
   ],
   "planRevision": {

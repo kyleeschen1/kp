@@ -92,7 +92,8 @@
     {
       "id": "s06",
       "title": "Define lifecycle facets",
-      "status": "planned"
+      "summary": "Added independent roadmap execution maturity review verification and playability facets with no collapsed overall status; incompatible planned-complete approved-proposed and promoted-unapproved states are rejected.",
+      "status": "complete"
     },
     {
       "id": "s07",
