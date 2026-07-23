@@ -155,7 +155,9 @@
     {
       "id": "s16",
       "title": "Add-roadmap-sort-and-filters",
-      "status": "planned"
+      "summary": "Added pure deterministic roadmap queries for canonical order, name, topic, horizon, and state; ascending/descending order; combined exact topic/horizon/state filters; and sorted topic facets. Five focused tests and repository typecheck pass.",
+      "status": "complete",
+      "planPhaseId": "authoritative-roadmap-workbench"
     },
     {
       "id": "s17",
