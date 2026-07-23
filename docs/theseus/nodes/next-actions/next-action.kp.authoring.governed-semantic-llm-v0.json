@@ -30,11 +30,18 @@
       "scope": "focused",
       "checkedAt": "2026-07-23T13:23:53.512Z",
       "notes": "Schema accepts only verified semantic references, registered operation/correspondence/focus/cadence/normal-form/compression intent, and rejects presentation or raw math authority."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/governed-semantic-compiler.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T13:32:46.944Z",
+      "notes": "Four compiler acceptance, repair, provenance, and unsafe-authority tests passed."
     }
   ],
   "progress": {
     "state": "partial",
-    "summary": "Starting the constrained semantic authoring schema before compilation, repair, provenance, or exemplar promotion."
+    "summary": "Constrained request schema and deterministic compiler with typed rejection, local repair patches, exact source and operation resolution, and immutable provenance are implemented; one governed exemplar remains."
   },
   "expectedLearning": [
     "Whether an LLM can select verified semantics, correspondence, focus, cadence, and normal-form intent while deterministic compilers retain geometry, timing, typography, responsive adaptation, rendering, validation, and repair authority."

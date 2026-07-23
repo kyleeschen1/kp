@@ -117,7 +117,8 @@
     {
       "id": "s23",
       "title": "Add deterministic authoring compilation rejection repair and provenance",
-      "status": "planned"
+      "summary": "Added deterministic governed semantic compilation against verified source revisions and exact operation pins. Invalid references, roles, correspondence, normal forms, provenance, and unsafe author authority return typed repair diagnostics with no fallback; accepted plans derive immutable governance and provenance with stable fingerprints.",
+      "status": "complete"
     },
     {
       "id": "s24",
