@@ -10,6 +10,10 @@ import {
 import {
   renderKpEditorAnimationPlayerShell
 } from "./animation-player-shell.ts";
+import {
+  deriveKpAnimationAcceptanceBrief,
+  renderKpAnimationAcceptanceBrief
+} from "./semantic-animation-workbench-acceptance.ts";
 
 export function renderKpSemanticAnimationWorkbenchShell(input: {
   readonly query: string;
@@ -106,6 +110,15 @@ function renderSelectedSummary(
       <div><dt>Execution</dt><dd>${escapeHtml(selected.lifecycle.execution)}</dd></div>
       <div><dt>Playability</dt><dd>${escapeHtml(selected.lifecycle.playability)}</dd></div>
     </dl>
+    ${renderKpAnimationAcceptanceBrief(
+      deriveKpAnimationAcceptanceBrief({
+        entry: selected,
+        lawEvidence:
+          selected.lifecycle.playability === "playable"
+            ? "loading"
+            : "unavailable"
+      })
+    )}
     ${renderPreview(selected, selectedDescriptor)}
   </article>`;
 }

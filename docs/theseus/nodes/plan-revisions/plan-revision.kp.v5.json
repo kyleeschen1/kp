@@ -195,6 +195,24 @@
       "status": "passed",
       "scope": "s15 production closure with reused Workbench player runtime",
       "checkedAt": "2026-07-23T20:55:09.446Z"
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/semantic-animation-workbench-acceptance.test.ts tests/semantic-animation-workbench-shell.test.ts tests/semantic-animation-workbench-data.test.ts",
+      "status": "passed",
+      "scope": "s16 acceptance provenance and missing-evidence behavior",
+      "checkedAt": "2026-07-23T21:01:43.194Z"
+    },
+    {
+      "command": "npm run typecheck",
+      "status": "passed",
+      "scope": "s16 acceptance brief TypeScript boundaries",
+      "checkedAt": "2026-07-23T21:01:48.247Z"
+    },
+    {
+      "command": "npm run test:browser:animation-workbench",
+      "status": "passed",
+      "scope": "s16 Chromium law-check hydration and planned missing-evidence rendering",
+      "checkedAt": "2026-07-23T21:01:52.566Z"
     }
   ],
   "planRevision": {

@@ -152,7 +152,8 @@
     {
       "id": "s16",
       "title": "Derive the acceptance brief",
-      "status": "planned"
+      "summary": "Added a provenance-first acceptance brief that asynchronously reads each concrete asset's declared law checks, surfaces exact maturity approval and verification facets plus current feedback, and names evidence gaps for loading missing review or unpublished planned assets without creating parallel acceptance prose.",
+      "status": "complete"
     },
     {
       "id": "s17",

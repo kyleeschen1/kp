@@ -32,6 +32,8 @@ test("Workbench shell renders a labeled search and two-pane control surface", ()
   assert.match(html, /data-kp-animation-workbench-selection="animation.radical"/);
   assert.match(html, /data-kp-animation-workbench-live-preview/);
   assert.match(html, /data-kp-editor-animation-player/);
+  assert.match(html, /data-kp-animation-workbench-acceptance/);
+  assert.match(html, /Loading semantic law checks/);
 });
 
 test("Workbench shell never mounts a player for planned items", () => {
@@ -48,6 +50,10 @@ test("Workbench shell never mounts a player for planned items", () => {
 
   assert.match(html, /data-kp-animation-workbench-planned-preview/);
   assert.doesNotMatch(html, /data-kp-editor-animation-player/);
+  assert.match(
+    html,
+    /Semantic law checks will appear when a concrete animation asset is published/
+  );
 });
 
 test("Workbench shell renders one top-level result per canonical entry", () => {

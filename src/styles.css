@@ -3161,8 +3161,47 @@ h2 {
 }
 
 .kp-animation-workbench__planned-preview h3,
-.kp-animation-workbench__preview-heading h3 {
+.kp-animation-workbench__preview-heading h3,
+.kp-animation-workbench__section-heading h3 {
   margin: 0.25rem 0;
+}
+
+.kp-animation-workbench__acceptance {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(34, 62, 50, 0.13);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.kp-animation-workbench__acceptance-list {
+  display: grid;
+  gap: 0.7rem;
+  padding-left: 1.25rem;
+}
+
+.kp-animation-workbench__acceptance-list li {
+  padding-left: 0.25rem;
+}
+
+.kp-animation-workbench__acceptance-list span,
+.kp-animation-workbench__acceptance-list small {
+  display: block;
+}
+
+.kp-animation-workbench__acceptance-list small {
+  color: rgba(34, 62, 50, 0.66);
+  overflow-wrap: anywhere;
+}
+
+.kp-animation-workbench__missing-evidence {
+  padding: 0.75rem;
+  border-radius: 0.65rem;
+  background: rgba(142, 98, 35, 0.09);
+}
+
+.kp-animation-workbench__missing-evidence ul {
+  margin-bottom: 0;
 }
 
 .kp-animation-workbench__live-preview {

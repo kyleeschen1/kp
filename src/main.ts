@@ -94,6 +94,14 @@ import {
 import {
   writeKpSemanticAnimationWorkbenchRoute
 } from "./editor/semantic-animation-workbench-route.ts";
+import { loadKpAnimationAsset } from "./animation/catalog-loader.ts";
+import {
+  deriveKpAnimationAcceptanceBrief,
+  renderKpAnimationAcceptanceBrief
+} from "./editor/semantic-animation-workbench-acceptance.ts";
+import type {
+  KpSemanticAnimationWorkbenchIndexEntry
+} from "./editor/semantic-animation-workbench-index.ts";
 
 const app = document.querySelector<HTMLDivElement>("#app");
 
@@ -392,7 +400,7 @@ function renderEditor(): void {
 
 function renderAnimationWorkbenchView(): void {
   activeView = "animation-workbench";
-  viewRevision += 1;
+  const revision = ++viewRevision;
   disposeKpEditorAnimationPlayers(appRoot);
   disposeKpEditorEquationStageHotPathCaches(appRoot);
   disposeGraph3DWebGL(appRoot);
@@ -427,6 +435,47 @@ function renderAnimationWorkbenchView(): void {
   hydrateKpEditorAnimationSurfaces(appRoot);
   hydrateKpEditorAnimationLiveDiagnostics(appRoot);
   hydrateKpEditorAnimationPlayers(appRoot);
+  if (selectedEntry !== undefined) {
+    void hydrateAnimationWorkbenchAcceptance(
+      appRoot,
+      selectedEntry,
+      revision
+    );
+  }
+}
+
+async function hydrateAnimationWorkbenchAcceptance(
+  root: ParentNode,
+  entry: KpSemanticAnimationWorkbenchIndexEntry,
+  revision: number
+): Promise<void> {
+  const container = root.querySelector<HTMLElement>(
+    "[data-kp-animation-workbench-acceptance]"
+  );
+  if (container === null || entry.lifecycle.playability !== "playable") {
+    return;
+  }
+  try {
+    const { animation } = await loadKpAnimationAsset(
+      entry.identity.animationId
+    );
+    if (revision !== viewRevision || !container.isConnected) return;
+    container.outerHTML = renderKpAnimationAcceptanceBrief(
+      deriveKpAnimationAcceptanceBrief({
+        entry,
+        lawChecks: animation.checks,
+        lawEvidence: "available"
+      })
+    );
+  } catch {
+    if (revision !== viewRevision || !container.isConnected) return;
+    container.outerHTML = renderKpAnimationAcceptanceBrief(
+      deriveKpAnimationAcceptanceBrief({
+        entry,
+        lawEvidence: "unavailable"
+      })
+    );
+  }
 }
 
 function filterAnimationWorkbenchFromInput(input: HTMLInputElement): void {
