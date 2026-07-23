@@ -2,7 +2,7 @@
   "id": "plan-revision.kp.v5",
   "kind": "plan-revision",
   "title": "Kinetic Press compositional quality roadmap v5",
-  "status": "active",
+  "status": "superseded",
   "domain": "kp",
   "summary": "Converge the distribution exemplar onto shared measured reader contracts, then prove quality and verification amortization before adding branch schedules, structured algebra, advanced fraction composition, governed LLM editing, or subject breadth.",
   "sourceRefs": [
@@ -508,11 +508,12 @@
       }
     ],
     "approval": {
-      "status": "approved",
-      "decidedAt": "2026-07-22T16:11:46.000Z",
+      "status": "superseded",
+      "decidedAt": "2026-07-23T23:15:57.000Z",
       "decidedBy": "user",
-      "rationale": "Make the human-reviewed distribution convergence, verification amortization, compositional scheduling, structured algebra, fraction pressure test, and governed LLM boundary the explicit dependency-ordered frontier before further breadth."
+      "rationale": "Superseded by plan-revision.kp.v6."
     },
-    "supersedes": "plan-revision.kp.v4"
+    "supersedes": "plan-revision.kp.v4",
+    "supersededBy": "plan-revision.kp.v6"
   }
 }

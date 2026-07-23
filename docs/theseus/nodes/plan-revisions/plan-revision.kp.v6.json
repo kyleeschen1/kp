@@ -1,0 +1,513 @@
+{
+  "id": "plan-revision.kp.v6",
+  "kind": "plan-revision",
+  "title": "Kinetic Press authoritative product roadmap v6",
+  "status": "active",
+  "domain": "kp",
+  "summary": "The sole approved product-roadmap authority for completed semantic-animation capabilities, current Workbench and radical work, the next quadratic exemplar, and the ordered future curriculum and cross-domain coverage ledger.",
+  "sourceRefs": [
+    {
+      "kind": "user-intent",
+      "intent": "Use one authoritative sortable roadmap that includes finished work, current animation/editor work, arithmetic, logarithms, trigonometry, geometry, data, and cross-domain motifs without replicating state across the dashboard.",
+      "summary": "The user approved the recommended architecture-pressure order and the 30-slice successor loop."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-authoritative-roadmap-workbench-successor-loop-proposal.md",
+      "summary": "Human-approved execution order, preservation boundaries, rollback units, and visual checkpoints for this successor loop."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-23-kp-authoritative-product-roadmap-projection.md",
+      "summary": "Decision that the active approved Theseus plan is the sole roadmap authority and the Workbench is a read-only projection."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/reviews/2026-07-23-kp-capability-pressure-domain-order-next-step-review.md",
+      "summary": "Accepted architecture-pressure sequence and robust future coverage ledger across arithmetic, precalculus, geometry, probability, data, and cross-domain work."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-23-kp-capability-pressure-and-arithmetic-expansion.md",
+      "summary": "Accepted arithmetic cohort and rule that architectural pressure precedes curricular breadth."
+    },
+    {
+      "kind": "file",
+      "path": "docs/project/decisions/2026-07-17-kp-cross-domain-tutorial-platform-roadmap.md",
+      "summary": "Accepted cross-domain sequence for programming, economics, physics, and governed authoring."
+    },
+    {
+      "kind": "file",
+      "path": "docs/theseus/nodes/plan-revisions/plan-revision.kp.v5.json",
+      "summary": "Approved predecessor whose completed compositional and governed-authoring capabilities remain visible as roadmap landmarks."
+    }
+  ],
+  "affects": [
+    "milestone.kp.long-term-semantic-product-plan-v0",
+    "run-contract.kp.authoritative-roadmap-workbench-v1",
+    "workflow.kp.delivery"
+  ],
+  "planRevision": {
+    "schemaVersion": "theseus.plan-revision.v2",
+    "revision": 6,
+    "objective": "Grow Kinetic Press through reusable semantic and visual primitives: preserve accepted exemplars, finish the authoritative Workbench and exact radical settlement, pressure-test quadratic branching next, then expand through calculus, linear algebra, arithmetic, precalculus, geometry/data, and cross-domain explanations in architecture-amortizing order.",
+    "assumptions": [
+      {
+        "id": "single-roadmap-authority",
+        "statement": "The active approved Theseus plan is the only product-roadmap authority; the Workbench and summaries derive from it and do not own parallel lifecycle state.",
+        "status": "active"
+      },
+      {
+        "id": "run-contract-execution-authority",
+        "statement": "An approved typed run contract, not a planned roadmap row, authorizes implementation and owns live slice status and verification.",
+        "status": "active"
+      },
+      {
+        "id": "architecture-pressure-order",
+        "statement": "Near-term exemplars are ordered by the reusable semantic, scheduling, rendering, and multi-view pressure they apply rather than by textbook chapter order.",
+        "status": "validated"
+      },
+      {
+        "id": "exemplar-before-promotion",
+        "statement": "Subjective motion and interaction work perfects one independently reversible exemplar and stops for human review before family-wide promotion.",
+        "status": "validated"
+      },
+      {
+        "id": "native-math-settlement",
+        "statement": "Animated mathematical fragments may move independently, but exact native KaTeX owns the settled expression and its typography and spacing.",
+        "status": "active"
+      },
+      {
+        "id": "semantic-renderer-boundary",
+        "statement": "Semantic objects own mathematical identity, lineage, laws, and intent; renderers own geometry, timing, typography, routes, and accessibility.",
+        "status": "validated"
+      },
+      {
+        "id": "future-coverage-is-not-authorization",
+        "statement": "Later and someday rows retain robust product coverage but do not authorize implementation until a reviewed run contract links to them.",
+        "status": "active"
+      }
+    ],
+    "phases": [
+      {
+        "id": "gold-equation-reader",
+        "title": "Gold equation reader",
+        "objective": "Maintain the accepted balanced-equation reader as the reference for measured motion, native settlement, responsive layout, and exact seek and rewind.",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "next-action.kp.perfect-the-reader-gold-equation-card-v0"
+        ],
+        "topic": "Platform · Reader",
+        "architectureBenefit": "Canonical measured-motion and native-settlement reference.",
+        "rationale": "Every later symbolic animation needs one stable presentation benchmark.",
+        "canonicalExemplar": "Solve 4x + 7 = 19"
+      },
+      {
+        "id": "distribution-factoring-grammar",
+        "title": "Distribution and factoring grammar",
+        "objective": "Represent fan-out distribution, collection, factoring, ordering, and reversible choreography through shared semantic roles and laws.",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "run-contract.kp.product-roadmap-v5-continuation-v2"
+        ],
+        "topic": "Algebra · Symbolic manipulation",
+        "architectureBenefit": "Shared one-to-many lineage and reversible scheduling.",
+        "rationale": "Distribution was the first pressure test beyond one-to-one token motion.",
+        "canonicalExemplar": "Distribute 3(x + 2)"
+      },
+      {
+        "id": "fraction-composition-architecture",
+        "title": "Fraction composition architecture",
+        "objective": "Carry opaque fractions through distribution, normalization, composition, reverse factoring, and a complete solve trace without renderer-owned algebra.",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "run-contract.kp.product-roadmap-v5-continuation-v2"
+        ],
+        "topic": "Algebra · Fractions",
+        "architectureBenefit": "Opaque subtree identity and schedule-independent composition.",
+        "rationale": "It proves structured algebra can compose without flattening fractions into glyph tricks.",
+        "canonicalExemplar": "Solve 2/3(x + 6) = 10"
+      },
+      {
+        "id": "generated-symbolic-transform-library",
+        "title": "Generated symbolic transform library",
+        "objective": "Compile governed symbolic requests into verified semantic animation fixtures while keeping providers outside math text, timing, geometry, and rendering authority.",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "run-contract.kp.semantic.generated-transform-library-v0"
+        ],
+        "topic": "Platform · Generation",
+        "architectureBenefit": "Reusable verified-operation pipeline with bounded LLM authority.",
+        "rationale": "Generation becomes safe only after the semantic and rendering ownership boundary is enforceable.",
+        "canonicalExemplar": "Generated expand square as product"
+      },
+      {
+        "id": "derivative-secant-to-tangent",
+        "title": "Derivative secant-to-tangent",
+        "objective": "Synchronize a finite difference quotient, moving graph point, secant slope, and tangent limit from one shared parameter.",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "run-contract.kp.product-roadmap-v5-continuation-v2"
+        ],
+        "topic": "Calculus · Derivatives",
+        "architectureBenefit": "Shared-clock multi-representation convergence.",
+        "rationale": "It is the smallest strong pressure test for symbolic, graph, and limit continuity.",
+        "canonicalExemplar": "Secant to tangent for f(x) = x^3"
+      },
+      {
+        "id": "governed-semantic-authoring",
+        "title": "Governed semantic authoring",
+        "objective": "Accept provider-shaped semantic intent only after exact operation, role, law, lifecycle, pacing, provenance, and normal-form verification.",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "run-contract.kp.semantic.generated-transform-library-v0"
+        ],
+        "topic": "Platform · Authoring",
+        "architectureBenefit": "Provider-independent compiler and authority firewall.",
+        "rationale": "The authoring boundary must be proven before subject breadth multiplies generated assets.",
+        "canonicalExemplar": "Governed exponent and radical requests"
+      },
+      {
+        "id": "semantic-animation-workbench",
+        "title": "Semantic Animation Workbench",
+        "objective": "Provide one searchable editor surface for canonical animations, real representations, acceptance evidence, lifecycle state, and item-scoped review.",
+        "horizon": "now",
+        "status": "complete",
+        "evidence": [
+          "run-contract.kp.semantic-animation-workbench-v2"
+        ],
+        "topic": "Platform · Editor",
+        "architectureBenefit": "Unified inspection control plane over existing authorities.",
+        "rationale": "A single exploration surface became necessary once exemplar and representation counts grew.",
+        "canonicalExemplar": "Animation Library Workbench"
+      },
+      {
+        "id": "authoritative-roadmap-workbench",
+        "title": "Authoritative roadmap Workbench",
+        "objective": "Project the active approved plan into a simple sortable Workbench table while preserving one roadmap authority and stable incremental interaction.",
+        "horizon": "now",
+        "status": "active",
+        "evidence": [
+          "run-contract.kp.authoritative-roadmap-workbench-v1"
+        ],
+        "topic": "Platform · Product control",
+        "architectureBenefit": "Discoverable roadmap without replicated lifecycle state.",
+        "rationale": "Product progress and future coverage must remain legible before more animation families are added.",
+        "canonicalExemplar": "Sortable Workbench roadmap table"
+      },
+      {
+        "id": "radical-native-settlement",
+        "title": "Exact radical native settlement",
+        "objective": "Eliminate reverse-playback flicker by recomposing independently moving exponent fragments into one measured source block and handing off to the exact native radical endpoint.",
+        "horizon": "now",
+        "status": "active",
+        "evidence": [
+          "run-contract.kp.authoritative-roadmap-workbench-v1"
+        ],
+        "topic": "Algebra · Exponents and radicals",
+        "architectureBenefit": "Composite fragment motion with exact typographic endpoint ownership.",
+        "rationale": "The remaining radical defect isolates a reusable native-settlement problem before broader fractional powers.",
+        "canonicalExemplar": "Rewrite x^(1/2) as sqrt(x)"
+      },
+      {
+        "id": "quadratic-semantic-branching",
+        "title": "Quadratic semantic branching",
+        "objective": "Model completing the square and quadratic-formula paths as explicit lawful branches that converge on verified roots.",
+        "horizon": "now",
+        "status": "planned",
+        "topic": "Algebra · Quadratics",
+        "architectureBenefit": "Branch scheduling, convergence, and alternative solution-path semantics.",
+        "rationale": "Quadratics apply the highest next architectural pressure after the Workbench and radical settlement stabilize.",
+        "canonicalExemplar": "Solve x^2 - 5x + 6 = 0"
+      },
+      {
+        "id": "integral-accumulation",
+        "title": "Integral accumulation",
+        "objective": "Synchronize partition refinement, region accumulation, symbolic sums, and the limiting integral.",
+        "horizon": "next",
+        "status": "planned",
+        "topic": "Calculus · Integrals",
+        "architectureBenefit": "Many-object refinement and accumulation under one semantic clock.",
+        "rationale": "It follows branching because it adds large synchronized collections and limit continuity.",
+        "canonicalExemplar": "Riemann sums converging to area"
+      },
+      {
+        "id": "vector-dot-projection",
+        "title": "Vector and dot-product projection",
+        "objective": "Coordinate vector components, geometric projection, magnitude, angle, and dot-product notation.",
+        "horizon": "next",
+        "status": "planned",
+        "topic": "Linear algebra · Vectors",
+        "architectureBenefit": "Coordinate-to-geometry identity across multiple views.",
+        "rationale": "It pressure-tests persistent identity between symbolic components and spatial objects.",
+        "canonicalExemplar": "Project one vector onto another"
+      },
+      {
+        "id": "matrix-linear-map",
+        "title": "Matrix-vector linear map",
+        "objective": "Show matrix entries, row computations, basis movement, and geometric transformation as one linear map.",
+        "horizon": "next",
+        "status": "planned",
+        "topic": "Linear algebra · Matrices",
+        "architectureBenefit": "Grid structure, nested composition, and spatial transformation.",
+        "rationale": "It compounds vector identity with structured table semantics and coordinated geometry.",
+        "canonicalExemplar": "Apply a 2 by 2 matrix to a vector"
+      },
+      {
+        "id": "exact-fraction-quantity-models",
+        "title": "Exact fractions and quantity models",
+        "objective": "Synchronize exact KaTeX fractions with partitioned circles, bars or areas, and number-line positions through shared quantity identity.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Arithmetic · Fractions",
+        "architectureBenefit": "One quantity model projected into symbolic and concrete representations.",
+        "rationale": "Fractions are the first arithmetic cohort because they stress synchronized multi-view identity rather than only digit motion.",
+        "canonicalExemplar": "Add 1/3 and 1/4 with synchronized models"
+      },
+      {
+        "id": "multidigit-addition",
+        "title": "Multi-digit addition",
+        "objective": "Coordinate column addition, place-value exchange, regrouping marks, and a base-ten or area representation.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Arithmetic · Addition",
+        "architectureBenefit": "Persistent place-value identity and carry scheduling.",
+        "rationale": "Addition establishes the reusable place-exchange primitive before harder written algorithms.",
+        "canonicalExemplar": "278 + 156"
+      },
+      {
+        "id": "multidigit-subtraction",
+        "title": "Multi-digit subtraction",
+        "objective": "Coordinate decomposition across place values, borrowing notation, and quantity removal without losing digit identity.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Arithmetic · Subtraction",
+        "architectureBenefit": "Reverse place exchange and dependency-aware scheduling.",
+        "rationale": "Subtraction reuses addition's place model while adding reverse exchange and zero-crossing dependencies.",
+        "canonicalExemplar": "402 - 178"
+      },
+      {
+        "id": "multidigit-multiplication",
+        "title": "Multi-digit multiplication",
+        "objective": "Synchronize partial products, place shifts, the written algorithm, and an area decomposition.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Arithmetic · Multiplication",
+        "architectureBenefit": "Two-dimensional decomposition and partial-result composition.",
+        "rationale": "Multiplication extends distribution and place-value primitives into a concrete arithmetic algorithm.",
+        "canonicalExemplar": "23 times 14"
+      },
+      {
+        "id": "multidigit-division",
+        "title": "Multi-digit division",
+        "objective": "Coordinate grouping, partial quotients, repeated subtraction, place descent, and remainder semantics.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Arithmetic · Division",
+        "architectureBenefit": "Iterative state, nested steps, and quotient-remainder invariants.",
+        "rationale": "Division is sequenced after the other operations because it composes their primitives into a longer dependency chain.",
+        "canonicalExemplar": "732 divided by 6"
+      },
+      {
+        "id": "ratios-rates-percent-units",
+        "title": "Ratios, rates, percent, and units",
+        "objective": "Preserve quantity and unit identity through ratio tables, double number lines, percent scaling, and unit conversion.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Arithmetic · Proportional reasoning",
+        "architectureBenefit": "Unit-aware scaling across linked representations.",
+        "rationale": "This closes the arithmetic cohort by turning exact operations into applied proportional structure.",
+        "canonicalExemplar": "Scale a recipe and convert to percent"
+      },
+      {
+        "id": "rational-expressions",
+        "title": "Rational expressions",
+        "objective": "Animate common denominators, restrictions, cancellation, complex fractions, and rational equation solving with exact subtree identity.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Precalculus · Rational expressions",
+        "architectureBenefit": "Domain constraints plus fraction composition at algebraic scale.",
+        "rationale": "It is the first post-arithmetic reuse of the opaque-fraction and cancellation architecture.",
+        "canonicalExemplar": "Add and simplify rational expressions"
+      },
+      {
+        "id": "polynomial-algebra",
+        "title": "Polynomial algebra",
+        "objective": "Cover collection, multiplication, factoring, long or synthetic division, remainder identity, and root-factor correspondence.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Precalculus · Polynomials",
+        "architectureBenefit": "Large symbolic schedules and reversible decomposition.",
+        "rationale": "Polynomial breadth amortizes distribution and quadratic branching before introducing new function families.",
+        "canonicalExemplar": "Factor and divide a cubic polynomial"
+      },
+      {
+        "id": "exponent-logarithm-laws",
+        "title": "Exponent and logarithm laws",
+        "objective": "Cover product, quotient, power, zero, negative, and inverse log laws with fluent identity omissions such as x^1 and exact explanatory traces.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Precalculus · Exponents and logarithms",
+        "architectureBenefit": "Nested operator rewrites, fluent projections, and inverse-function continuity.",
+        "rationale": "This generalizes the approved exponent motifs only after the radical endpoint contract is exact.",
+        "canonicalExemplar": "Expand and recombine logarithms"
+      },
+      {
+        "id": "fractional-power-radical-generalization",
+        "title": "Fractional-power and radical generalization",
+        "objective": "Generalize fractional powers to higher radical indices, persistent numerator powers, reverse playback, and negative exponents that become reciprocal radical expressions.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Precalculus · Radicals",
+        "architectureBenefit": "Parameterized composite morphs with persistent index and radicand structure.",
+        "rationale": "The explicitly recorded negative-exponent case belongs after the square-root exemplar proves exact composite settlement.",
+        "canonicalExemplar": "Rewrite x^(-2/3) as a reciprocal cube-root expression"
+      },
+      {
+        "id": "functions-coordinate-algebra",
+        "title": "Functions and coordinate algebra",
+        "objective": "Coordinate evaluation, composition, inverse functions, graph transforms, domain and range, intercepts, and piecewise structure.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Precalculus · Functions",
+        "architectureBenefit": "Symbolic-to-graph identity and parameterized transform families.",
+        "rationale": "Function choreography reuses the derivative multi-view clock at broader curricular scale.",
+        "canonicalExemplar": "Transform and compose two functions"
+      },
+      {
+        "id": "equations-inequalities-systems",
+        "title": "Equations, inequalities, and systems",
+        "objective": "Cover equivalence-preserving solves, interval branches, sign reversals, substitution, elimination, and intersections.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Precalculus · Relations",
+        "architectureBenefit": "Constraint sets, branching intervals, and multi-equation identity.",
+        "rationale": "This broadens the gold reader only after shared branch semantics exist.",
+        "canonicalExemplar": "Solve a two-variable system by elimination"
+      },
+      {
+        "id": "trigonometry",
+        "title": "Trigonometry",
+        "objective": "Synchronize unit-circle motion, triangle ratios, graphs, identities, inverse branches, and periodic wrapping.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Precalculus · Trigonometry",
+        "architectureBenefit": "Periodic clocks and three-way geometric-symbolic-graph identity.",
+        "rationale": "Trigonometry benefits from the mature multi-view and branch machinery built by calculus and functions.",
+        "canonicalExemplar": "Trace sine across the unit circle and graph"
+      },
+      {
+        "id": "sequences-large-operators",
+        "title": "Sequences and large operators",
+        "objective": "Animate indexed sequences, recurrence, finite and infinite series, sigma and product notation, and convergence.",
+        "horizon": "later",
+        "status": "planned",
+        "topic": "Precalculus · Sequences",
+        "architectureBenefit": "Indexed traversal, folding, and large-operator structure.",
+        "rationale": "Sequences reuse accumulation while introducing discrete index ownership and recurrence.",
+        "canonicalExemplar": "Build a geometric series from partial sums"
+      },
+      {
+        "id": "euclidean-geometry",
+        "title": "Euclidean geometry",
+        "objective": "Cover construction, congruence, similarity, the Pythagorean theorem, area, surface area, and volume with diagram-linked proof steps.",
+        "horizon": "someday",
+        "status": "planned",
+        "topic": "Geometry · Euclidean",
+        "architectureBenefit": "Diagram topology, proof correspondence, and spatial decomposition.",
+        "rationale": "Geometry starts after core symbolic multi-view contracts because diagrams add a distinct spatial authoring surface.",
+        "canonicalExemplar": "Rearrangement proof of the Pythagorean theorem"
+      },
+      {
+        "id": "measurement-units-scale",
+        "title": "Measurement, units, and scale",
+        "objective": "Link dimensions, conversions, scale drawings, coordinate geometry, and error or precision to visible quantities.",
+        "horizon": "someday",
+        "status": "planned",
+        "topic": "Geometry · Measurement",
+        "architectureBenefit": "Typed units, dimensional invariants, and scale-preserving transforms.",
+        "rationale": "Measurement extends the proportional-reasoning unit model into spatial contexts.",
+        "canonicalExemplar": "Convert and scale a floor plan"
+      },
+      {
+        "id": "probability",
+        "title": "Probability",
+        "objective": "Cover sample spaces, tree diagrams, combinatorics, conditional probability, independence, and expected value.",
+        "horizon": "someday",
+        "status": "planned",
+        "topic": "Data · Probability",
+        "architectureBenefit": "Weighted branching, path aggregation, and conditional state.",
+        "rationale": "Probability reuses branch semantics while adding weights and aggregated outcomes.",
+        "canonicalExemplar": "Conditional probability tree"
+      },
+      {
+        "id": "data-statistics",
+        "title": "Data and statistics",
+        "objective": "Coordinate tables, distributions, center, spread, sampling, uncertainty, and data-to-graph transformations.",
+        "horizon": "someday",
+        "status": "planned",
+        "topic": "Data · Statistics",
+        "architectureBenefit": "Dataset identity across tables, plots, summaries, and uncertainty views.",
+        "rationale": "Data work follows probability because it requires stable collection identity and uncertainty semantics.",
+        "canonicalExemplar": "Transform a dataset into linked plots and summaries"
+      },
+      {
+        "id": "programming-algorithms",
+        "title": "Programming and algorithms",
+        "objective": "Synchronize code execution, variable state, data structures, and graph traversal for BFS and Dijkstra-style explanations.",
+        "horizon": "someday",
+        "status": "planned",
+        "topic": "Cross-domain · Programming",
+        "architectureBenefit": "Trace semantics and synchronized code-state-diagram views.",
+        "rationale": "Programming is the first cross-domain pressure test because its execution state is explicit and verifiable.",
+        "canonicalExemplar": "BFS traversal across code, queue, and graph"
+      },
+      {
+        "id": "economics-parametric",
+        "title": "Economics and parametric models",
+        "objective": "Link equations, curves, parameter changes, intersections, and narrative interpretation in supply-demand models.",
+        "horizon": "someday",
+        "status": "planned",
+        "topic": "Cross-domain · Economics",
+        "architectureBenefit": "Parameterized graph systems and narrative-to-model correspondence.",
+        "rationale": "Economics reuses graph and intersection semantics with domain-specific explanatory prose.",
+        "canonicalExemplar": "Supply and demand equilibrium shift"
+      },
+      {
+        "id": "physics-work-energy",
+        "title": "Physics work and energy",
+        "objective": "Synchronize force, displacement, energy equations, graphs, and diagrams through a conserved physical model.",
+        "horizon": "someday",
+        "status": "planned",
+        "topic": "Cross-domain · Physics",
+        "architectureBenefit": "Quantity conservation across symbolic, graph, and spatial representations.",
+        "rationale": "Physics combines unit-aware arithmetic, calculus, diagrams, and conservation after those primitives mature.",
+        "canonicalExemplar": "Work-energy theorem across force and motion"
+      },
+      {
+        "id": "cross-domain-governed-authoring",
+        "title": "Cross-domain governed authoring",
+        "objective": "Extend the verified semantic-authoring boundary to domain adapters while preserving exact source provenance and renderer independence.",
+        "horizon": "someday",
+        "status": "planned",
+        "topic": "Platform · Governed generation",
+        "architectureBenefit": "Domain-extensible generation without provider-owned presentation.",
+        "rationale": "Cross-domain generation comes last so governance is tested against mature hand-authored references in each domain.",
+        "canonicalExemplar": "Governed multi-domain tutorial request"
+      }
+    ],
+    "approval": {
+      "status": "approved",
+      "decidedAt": "2026-07-23T23:15:57.000Z",
+      "decidedBy": "user",
+      "rationale": "Replace the narrow compositional-quality plan with the user-approved authoritative product roadmap: retain completed capability landmarks, make the current Workbench/radical/quadratic sequence explicit, and preserve the accepted arithmetic, precalculus, geometry/data, and cross-domain coverage ledger without authorizing deferred implementation."
+    },
+    "supersedes": "plan-revision.kp.v5"
+  }
+}

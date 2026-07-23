@@ -106,12 +106,16 @@
     {
       "id": "s09",
       "title": "Define-KP-roadmap-v6",
-      "status": "planned"
+      "summary": "Defined plan-revision.kp.v6 as a ready v2 successor with 35 ordered phases, seven authority assumptions, complete capability landmarks, current Workbench and radical work, quadratic next, and retained arithmetic, precalculus, geometry/data, and cross-domain coverage. Preview reports zero failures and digest sha256:961a6a5ad147c68117b4f96685d6135fa153ba3d05825be3496cbc442e1b2517.",
+      "status": "complete",
+      "planPhaseId": "authoritative-roadmap-workbench"
     },
     {
       "id": "s10",
       "title": "Activate-KP-roadmap-v6",
-      "status": "planned"
+      "summary": "Atomically activated digest-bound plan-revision.kp.v6 under the user's approval; v5 is superseded with bidirectional lineage, v6 is the sole active approved revision, workspace validation passes with 761 nodes and 11019 events, and no graph history was rewritten.",
+      "status": "complete",
+      "planPhaseId": "authoritative-roadmap-workbench"
     },
     {
       "id": "s11",
