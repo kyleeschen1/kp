@@ -94,7 +94,8 @@
     {
       "id": "s07",
       "title": "Diagnose-plan-run-linkage-drift",
-      "status": "planned"
+      "summary": "Added deterministic plan-run linkage diagnostics for missing, duplicate executable, superseded, and unknown phase links; materialization aliases are excluded and the result is exposed through structured plan reports. 14 focused tests and typecheck pass.",
+      "status": "complete"
     },
     {
       "id": "s08",
