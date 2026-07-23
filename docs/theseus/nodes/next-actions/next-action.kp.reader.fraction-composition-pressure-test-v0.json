@@ -38,6 +38,13 @@
       "scope": "focused",
       "checkedAt": "2026-07-23T01:04:28.370Z",
       "notes": "Sequential and parallel schedules share the same verified numerator-normalization branches; denominator drift is rejected."
+    },
+    {
+      "command": "node --disable-warning=ExperimentalWarning --test tests/fraction-distributed-sum-composition.test.ts tests/fraction-numerator-normalization.test.ts",
+      "status": "passed",
+      "scope": "focused",
+      "checkedAt": "2026-07-23T01:06:12.890Z",
+      "notes": "Verified normalized quotient branches compose into one ordered sum with explicit identity lineage."
     }
   ],
   "progress": {

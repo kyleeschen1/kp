@@ -87,7 +87,8 @@
     {
       "id": "s18",
       "title": "Compose fraction terms inside distributed sums",
-      "status": "planned"
+      "summary": "Composed the independently normalized quotient branches into one structured distributed sum, preserving authored order and exact term identities. Focused composition tests and typecheck passed.",
+      "status": "complete"
     },
     {
       "id": "s19",
