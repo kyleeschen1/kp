@@ -141,7 +141,9 @@
     {
       "id": "s14",
       "title": "Extend-Workbench-authority-laws",
-      "status": "planned"
+      "summary": "Expanded the exhaustive Workbench authority law: Theseus alone owns plan selection, phase order, phase status, phase metadata, and execution state; the derived index owns no source facts. Missing or overlapping ownership now fails. Eight focused tests and repository typecheck pass.",
+      "status": "complete",
+      "planPhaseId": "authoritative-roadmap-workbench"
     },
     {
       "id": "s15",

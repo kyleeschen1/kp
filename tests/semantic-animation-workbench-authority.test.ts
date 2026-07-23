@@ -24,6 +24,17 @@ test("Workbench authority map assigns every fact to one existing authority", () 
     authorityForKpAnimationWorkbenchFact(map, "execution-state").id,
     "theseus"
   );
+  for (const fact of [
+    "roadmap-plan-selection",
+    "roadmap-phase-order",
+    "roadmap-phase-status",
+    "roadmap-phase-metadata"
+  ] as const) {
+    assert.equal(
+      authorityForKpAnimationWorkbenchFact(map, fact).id,
+      "theseus"
+    );
+  }
   assert.equal(
     authorityForKpAnimationWorkbenchFact(map, "approval-evidence").id,
     "promotion-evidence"
@@ -78,5 +89,18 @@ test("Workbench authority map rejects empty authorities and missing facts", () =
   assert.throws(
     () => authorityForKpAnimationWorkbenchFact(map, "execution-state"),
     /must have exactly one authority; found 0/
+  );
+
+  assert.throws(
+    () =>
+      assertSingleAuthorityPerFact([
+        {
+          id: "animation-catalog",
+          label: "Catalog",
+          owns: ["canonical-animation-identity"],
+          sourceBoundary: "catalog"
+        }
+      ]),
+    /missing source ownership/
   );
 });

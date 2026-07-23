@@ -5,16 +5,23 @@ export type KpAnimationWorkbenchAuthorityId =
   | "promotion-evidence"
   | "development-review";
 
+export const KP_ANIMATION_WORKBENCH_FACTS = [
+  "canonical-animation-identity",
+  "concrete-playability",
+  "representation-relationships",
+  "roadmap-plan-selection",
+  "roadmap-phase-order",
+  "roadmap-phase-status",
+  "roadmap-phase-metadata",
+  "execution-state",
+  "maturity-state",
+  "approval-evidence",
+  "current-review-state",
+  "review-history"
+] as const;
+
 export type KpAnimationWorkbenchFact =
-  | "canonical-animation-identity"
-  | "concrete-playability"
-  | "representation-relationships"
-  | "execution-state"
-  | "roadmap-priority"
-  | "maturity-state"
-  | "approval-evidence"
-  | "current-review-state"
-  | "review-history";
+  (typeof KP_ANIMATION_WORKBENCH_FACTS)[number];
 
 export interface KpAnimationWorkbenchAuthority {
   readonly id: KpAnimationWorkbenchAuthorityId;
@@ -45,8 +52,15 @@ const authorities = [
   {
     id: "theseus",
     label: "Theseus",
-    owns: ["execution-state", "roadmap-priority"],
-    sourceBoundary: "Repository-owned plans, run contracts, actions, and evidence"
+    owns: [
+      "roadmap-plan-selection",
+      "roadmap-phase-order",
+      "roadmap-phase-status",
+      "roadmap-phase-metadata",
+      "execution-state"
+    ],
+    sourceBoundary:
+      "The sole active approved plan plus repository-owned run contracts, actions, and evidence"
   },
   {
     id: "promotion-evidence",
@@ -105,5 +119,13 @@ export function assertSingleAuthorityPerFact(
       }
       owners.set(fact, authority.id);
     }
+  }
+  const missing = KP_ANIMATION_WORKBENCH_FACTS.filter(
+    (fact) => !owners.has(fact)
+  );
+  if (missing.length > 0) {
+    throw new Error(
+      `Workbench authority map is missing source ownership for: ${missing.join(", ")}.`
+    );
   }
 }
